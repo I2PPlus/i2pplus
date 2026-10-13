@@ -10,22 +10,19 @@ package net.i2p.router.crypto.ratchet;
  * and adds and removes require inserting and deleting entries in array.
  * For containers holding up to hundreds of items, the performance difference is
  * less than 50%.</p>
- *
  * <p>To help with performance, the container includes an optimization when
  * removing keys: instead of compacting its array immediately, it leaves the
  * removed entry marked as deleted. The entry can then be re-used for the same
  * key or compacted later in a single garbage collection of all removed entries.
  * This garbage collection must be performed whenever the array needs to be grown,
  * or when the map size or entry values are retrieved.</p>
- *
  * <p>It is possible to iterate over the items in this container using
  * {@link #keyAt(int)} and {@link #valueAt(int)}. Iterating over keys using
  * <code>keyAt(int)</code> with ascending values of index returns keys
  * in ascending order. In the case of <code>valueAt(int)</code>, values
  * corresponding to keys are returned in ascending order.</p>
- *
+ * <p>
  * I2P - as of 0.9.48, changed to use chars for the index, max value 65535
- *
  * <p>Note that this container keeps its mappings in an array data structure, using
  * a binary search to find keys. The implementation is not intended to be appropriate
  * for data structures that may contain large numbers of items. It is generally
@@ -33,20 +30,18 @@ package net.i2p.router.crypto.ratchet;
  * and adds and removes require inserting and deleting entries in array.
  * For containers holding up to hundreds of items, the performance difference is
  * less than 50%.</p>
- *
  * <p>To help with performance, the container includes an optimization when
  * removing keys: instead of compacting its array immediately, it leaves the
  * removed entry marked as deleted. The entry can then be re-used for the same
  * key or compacted later in a single garbage collection of all removed entries.
  * This garbage collection must be performed whenever the array needs to be grown,
  * or when the map size or entry values are retrieved.</p>
- *
  * <p>It is possible to iterate over the items in this container using
  * {@link #keyAt(int)} and {@link #valueAt(int)}. Iterating over keys using
  * <code>keyAt(int)</code> with ascending values of the index returns keys
  * in ascending order. In the case of <code>valueAt(int)</code>, values
  * corresponding to the keys are returned in ascending order.</p>
- *
+ * <p>
  * I2P - as of 0.9.48, changed to use chars for the index, max value 65535
  *
  * @param <E> type of objects stored in this sparse array
@@ -200,7 +195,6 @@ class SparseArray<E> implements Cloneable {
 
     /**
      * Removes the mapping at the specified index.
-     *
      * <p>For indices outside of the range <code>0...size()-1</code>,
      * a {@link ArrayIndexOutOfBoundsException} is thrown.
      * </p>
@@ -224,7 +218,6 @@ class SparseArray<E> implements Cloneable {
      *
      * @param index Index to begin at
      * @param size Number of mappings to remove
-     *
      *             <p>For indices outside of the range <code>0...size()-1</code>,
      *             the behavior is undefined.</p>
      */
@@ -318,12 +311,10 @@ class SparseArray<E> implements Cloneable {
      * Given an index in the range <code>0...size()-1</code>, returns
      * the key from the <code>index</code>th key-value mapping that this
      * SparseArray stores.
-     *
      * <p>The keys corresponding to indices in ascending order are guaranteed to
      * be in ascending order, e.g., <code>keyAt(0)</code> will return the
      * smallest key and <code>keyAt(size()-1)</code> will return the largest
      * key.</p>
-     *
      * <p>For indices outside of the range <code>0...size()-1</code>,
      * a {@link ArrayIndexOutOfBoundsException} is thrown.
      * </p>
@@ -348,13 +339,11 @@ class SparseArray<E> implements Cloneable {
      * Given an index in the range <code>0...size()-1</code>, returns
      * the value from the <code>index</code>th key-value mapping that this
      * SparseArray stores.
-     *
      * <p>The values corresponding to indices in ascending order are guaranteed
      * to be associated with keys in ascending order, e.g.,
      * <code>valueAt(0)</code> will return the value associated with the
      * smallest key and <code>valueAt(size()-1)</code> will return the value
      * associated with the largest key.</p>
-     *
      * <p>For indices outside of the range <code>0...size()-1</code>,
      * a {@link ArrayIndexOutOfBoundsException} is thrown.
      * </p>
@@ -380,7 +369,6 @@ class SparseArray<E> implements Cloneable {
      * Given an index in the range <code>0...size()-1</code>, sets a new
      * value for the <code>index</code>th key-value mapping that this
      * SparseArray stores.
-     *
      * <p>For indices outside of the range <code>0...size()-1</code>,
      * a {@link ArrayIndexOutOfBoundsException} is thrown.
      * </p>
@@ -518,7 +506,6 @@ class SparseArray<E> implements Cloneable {
 
     /**
      * {@inheritDoc}
-     *
      * <p>This implementation composes a string by iterating over its mappings. If
      * this map contains itself as a value, the string "(this Map)"
      * will appear in its place.

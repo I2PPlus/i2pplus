@@ -23,7 +23,7 @@ public class Restarter implements Runnable {
 
     /**
      * Perform a soft restart of the router.
-     *
+     * <p>
      * This method gracefully restarts all major router components in sequence:
      * <ul>
      * <li>Stops the client manager</li>
@@ -34,7 +34,7 @@ public class Restarter implements Runnable {
      * <li>Restarts the client manager and message pool</li>
      * <li>Rebuilds router info and marks router as alive</li>
      * </ul>
-     *
+     * <p>
      * The restart process is designed to minimize downtime and maintain
      * network connectivity where possible.
      */

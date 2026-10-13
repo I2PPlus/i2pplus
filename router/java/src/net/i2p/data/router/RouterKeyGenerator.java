@@ -30,11 +30,11 @@ import net.i2p.util.Log;
  * Generates routing keys from hashes using date-based modification to prevent Sybil attacks.
  * Transforms input hashes by appending current GMT date (yyyyMMdd format) and computing SHA256.
  * The modification data changes daily at midnight GMT to randomize routing keys consistently.
- *
+ * <p>
  * The transformation takes the original hash, appends the bytes of the current mod data,
  * then returns the SHA256 of that concatenation. This makes Sybil attacks much harder
  * as she needs to essentially take over the whole keyspace.
- *
+ * <p>
  * Note: generateDateBasedModData() should be called after midnight GMT once per day
  * to generate the correct routing keys.
  *
@@ -168,7 +168,7 @@ public class RouterKeyGenerator extends RoutingKeyGenerator {
     /**
      * Generate a modified (yet consistent) hash from the origKey by generating the
      * SHA256 of the targetKey with the current modData appended to it
-     *
+     * <p>
      * This makes Sybil's job a lot harder, as she needs to essentially take over the
      * whole keyspace.
      *

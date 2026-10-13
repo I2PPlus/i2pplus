@@ -43,10 +43,10 @@ import net.i2p.util.SystemVersion;
  * Coordinate the runtime operation and configuration of a single I2PTunnel.
  * An I2PTunnel tracks one or more I2PTunnelTasks and one or more I2PSessions.
  * Usually one of each.
- *
+ * <p>
  * These objects are bundled together under a TunnelControllerGroup where the
  * entire group is stored / loaded from a single config file.
- *
+ * <p>
  * This is the class used by several plugins to create tunnels, so
  * take care to maintain the public methods as a stable API.
  */
@@ -283,10 +283,10 @@ public class TunnelController implements Logging {
      * The config may contain a large number of options - only ones that begin in
      * the prefix should be used (and, in turn, that prefix should be stripped off
      * before being interpreted by this controller)
-     *
+     * <p>
      * If config contains the "configFile" property, it will be set as the config path
      * and may be retrieved with getConfigFile().
-     *
+     * <p>
      * Defaults in config properties are not recommended, they may or may not be honored.
      *
      * @param config original key=value mapping non-null
@@ -301,10 +301,10 @@ public class TunnelController implements Logging {
      * The config may contain a large number of options - only ones that begin in
      * the prefix should be used (and, in turn, that prefix should be stripped off
      * before being interpreted by this controller)
-     *
+     * <p>
      * If config contains the "configFile" property, it will be set as the config path
      * and may be retrieved with getConfigFile().
-     *
+     * <p>
      * Defaults in config properties are not recommended, they may or may not be honored.
      *
      * @param config original key=value mapping non-null
@@ -331,7 +331,7 @@ public class TunnelController implements Logging {
 
     /**
      * The I2PTunnel
-     *
+     * <p>
      * for advanced plugin usage
      * @return the I2PTunnel client built around this controller, which holds the I2CP
      *         session and runs the tunnel on {@link #startTunnel()}
@@ -402,7 +402,7 @@ public class TunnelController implements Logging {
     /**
      * Creates alternate Destination with the same encryption keys as the primary Destination,
      * but a different signing key.
-     *
+     * <p>
      * Must have already called createPrivateKey() successfully.
      * Does nothing unless option OPT_ALT_PKF is set with the privkey file name.
      * Does nothing if the file already exists.

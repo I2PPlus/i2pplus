@@ -16,7 +16,7 @@ import java.util.Locale;
  * Wrapper class for whatever logging system I2P uses.  This class should be
  * instantiated and kept as a variable for each class it is used by, e.g.
  * <code>private final Log _log = context.logManager().getLog(MyClassName.class);</code>
- *
+ * <p>
  * If there is anything in here that doesn't make sense, turn off your computer and go fly a kite.
  *
  * @author jrandom
@@ -213,7 +213,6 @@ public class Log {
 
     /**
      * The repeat suppressor backing the {@code *Throttled} methods.
-     *
      * <p>Lazily created: most logging classes never throttle anything, and this class is
      * instantiated for every class that logs.
      */
@@ -221,7 +220,6 @@ public class Log {
 
     /**
      * Log a message at the given priority, collapsing repeats of the same condition.
-     *
      * <p>The first occurrence of {@code key} is always written. After that, an
      * occurrence is written once {@link LogSuppressor#DEFAULT_BURST} repeats have
      * accumulated or {@link LogSuppressor#DEFAULT_WINDOW_MS} have passed, and the line

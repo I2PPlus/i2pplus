@@ -17,7 +17,7 @@ import org.eclipse.jetty.server.handler.gzip.GzipHandler;
 
 /**
  * Block certain Host headers to prevent DNS rebinding attacks.
- *
+ * <p>
  * This Handler wraps the ContextHandlerCollection, which handles
  * all the webapps (not just routerconsole).
  * Therefore, this protects all the webapps.
@@ -140,7 +140,7 @@ public class HostCheckHandler extends GzipHandler
 
     /**
      * Should we allow a request with this Host header?
-     *
+     * <p>
      * ref: https://en.wikipedia.org/wiki/DNS_rebinding
      *
      * @param host the HTTP Host header, null ok

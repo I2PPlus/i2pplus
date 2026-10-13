@@ -59,7 +59,7 @@ public class SOCKSUDPWrapper implements Source, Sink {
 
     /**
      * Use the cached header, which should have the host string and port
-     *
+     * <p>
      * May throw RuntimeException from underlying sink
      * @throws RuntimeException if the wrapped sink fails to send the data
      * @since 0.9.53 added fromPort and toPort parameters

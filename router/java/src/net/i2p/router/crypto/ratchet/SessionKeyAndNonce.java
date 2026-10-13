@@ -6,7 +6,7 @@ import net.i2p.data.SessionKey;
 
 /**
  * Session key with nonce and optional handshake state for ratchet message encryption and decryption operations, supporting nonces up to 65535
- *
+ * <p>
  * This is what is returned from RatchetTagSet.consume().
  * RatchetSKM puts it in a RatchetEntry and returns it to ECIESAEADEngine.
  *

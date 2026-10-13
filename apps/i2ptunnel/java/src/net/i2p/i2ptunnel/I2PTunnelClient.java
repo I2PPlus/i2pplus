@@ -128,13 +128,13 @@ public class I2PTunnelClient extends I2PTunnelClientBase {
      * Set the read idle timeout for newly-created connections (in
      * milliseconds).  After this time expires without data being reached from
      * the I2P network, the connection itself will be closed.
-     *
+     * <p>
      * Less than or equal to 0 means forever.
      * Default -1 (forever) as of 0.9.36 for standard tunnels,
      * but extending classes may override.
      * Prior to that, default was 5 minutes, but did not work
      * due to streaming bugs.
-     *
+     * <p>
      * Applies only to future connections;
      * calling this does not affect existing connections.
      *
@@ -145,7 +145,7 @@ public class I2PTunnelClient extends I2PTunnelClientBase {
     /**
      * Get the read idle timeout for newly-created connections (in
      * milliseconds).
-     *
+     * <p>
      * Less than or equal to 0 means forever.
      * Default -1 (forever) as of 0.9.36 for standard tunnels,
      * but extending classes may override.

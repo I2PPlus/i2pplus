@@ -43,7 +43,7 @@ public class MessageWrapper {
      * Garlic wrap a message from a client or this router, destined for a router,
      * to hide the contents from the OBEP.
      * Caller must call acked() or fail() on the returned object.
-     *
+     * <p>
      * ELGAMAL ONLY. Both from and to must support ElGamal.
      *
      * @param ctx router context, used for the session key manager and the random
@@ -283,7 +283,7 @@ public class MessageWrapper {
      * to hide the contents from the IBGW.
      * Uses a supplied one-time session key tag for AES or AEAD encryption,
      * avoiding ElGamal or X25519.
-     *
+     * <p>
      * Used by OCMJH for DSM.
      *
      * @param ctx the router context
@@ -302,7 +302,7 @@ public class MessageWrapper {
      * to hide the contents from the IBGW.
      * Uses a supplied session key and session tag for AES encryption,
      * avoiding ElGamal.
-     *
+     * <p>
      * Used by above and for DLM replies in HDLMJ.
      *
      * @param ctx the router context
@@ -325,7 +325,7 @@ public class MessageWrapper {
      * to hide the contents from the IBGW.
      * Uses a supplied session key and session tag for ratchet encryption,
      * avoiding full ECIES.
-     *
+     * <p>
      * Used by above and for DLM replies in HDLMJ.
      *
      * @param ctx the router context

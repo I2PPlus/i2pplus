@@ -14,10 +14,10 @@ interface EstablishState {
 
     /**
      * Parse the contents of the buffer as part of the handshake.
-     *
+     * <p>
      * All data must be copied out of the buffer as Reader.processRead()
      * will return it to the pool.
-     *
+     * <p>
      * If there are additional data in the buffer after the handshake is complete,
      * the EstablishState is responsible for passing it to NTCPConnection.
      *

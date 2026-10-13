@@ -61,7 +61,7 @@ import java.nio.charset.StandardCharsets;
  *   $method /$site/$path $protocolVersion
  *   (deprecated) $method /eepproxy/$site/$path $protocolVersion
  * </pre>
- *
+ * <p>
  * CONNECT (HTTPS) supported since 0.9.11.
  * Note: http://i2p/$b64key/... and /eepproxy/$site/... not recommended
  * for browsers due to broken relative links and cookies.
@@ -132,7 +132,6 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
      * ({@code ConnectionManager.checkSynBurst}) records a strike for exceeding
      * {@code tempBanSynBurst} SYNs in {@code tempBanSynRate} ms and autobans
      * on a second strike within 60 seconds.
-     *
      * <p>The gate is pure insurance: browsers already self-limit parallel
      * connections per host (typically 6 over HTTP/1.1, fewer under HTTP/2),
      * and keep-alive means steady-state concurrency per destination is low.
@@ -141,7 +140,6 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
      * 5th+ parallel request would make a browser asset silently fail -- while
      * still bounding an out-of-control client (hundreds of connections) far
      * below the network-path burst that trips the remote SYN-burst gate.
-     *
      * <p>A permit is acquired before {@code createI2PSocket()} and released when
      * the I2P socket is closed (after the tunnel-runner completes).  With I2P
      * keepalive the socket is reopened per request, so the permit lifecycle
@@ -331,7 +329,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
     /**
      * This constructor always starts the tunnel (ignoring the i2cp.delayOpen option).
      * It is used to add a client to an existing socket manager.
-     *
+     * <p>
      * As of 0.9.20 this is fast, and does NOT connect the manager to the router,
      * or open the local socket. You MUST call startRunning() for that.
      *
@@ -351,7 +349,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
 
     /**
      * Create an HTTP proxy client on the given local port.
-     *
+     * <p>
      * Since 0.9.20 this is fast, and does NOT connect the manager to the router,
      * or open the local socket. You MUST call startRunning() for that.
      *
@@ -2375,7 +2373,6 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
 
     /**
      * Parse the empty-response retry count from a client option value.
-     *
      * <p>Clamps to {@code >= 0}; malformed or negative input falls back to 0.
      * Pure decision — no context access, safe for unit tests.
      *
@@ -2396,7 +2393,6 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
     /**
      * Scale the reconnect attempt budget by the entity size already verified
      * from this exchange's Content-Length header.
-     *
      * <p>Body-resume reconnects run after response headers have arrived, so
      * the size is known and verifiable; the budget gains one attempt per
      * {@link I2PTunnelRunner#RETRY_RAMP_UNIT_BYTES} of entity, capped at 9x
@@ -2446,7 +2442,6 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
      * build replacement tunnels. Budget exhaustion is handled separately by the
      * loop's exit condition, so this method only answers the "should we bail early
      * on a dead pool" question.
-     *
      * <p>A {@code poolState == -2} (unknown: standalone client, or the reflective
      * check failed) deliberately does NOT fail fast — there is no live router pool
      * to observe, so the budget is the only sane bound. Mirroring the initial-connect
@@ -2592,7 +2587,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
      * Read the first line unbuffered, then subsequent lines.
      * We can't use a BufferedReader for POST because we can't have readahead,
      * since we are passing the stream on to I2PTunnelRunner for the POST data.
-     *
+     * <p>
      * Warning - DataHelper limits line length
      */
     private static class InputReader {
@@ -2743,7 +2738,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
     /**
      * Change various parts of the URI.
      * String parameters are all non-encoded.
-     *
+     * <p>
      * Scheme always preserved.
      * Userinfo always cleared.
      * Host changed if non-null.

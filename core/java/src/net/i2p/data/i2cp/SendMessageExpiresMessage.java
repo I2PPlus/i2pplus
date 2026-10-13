@@ -21,7 +21,7 @@ import java.util.Date;
 
 /**
  * Same as SendMessageMessage, but with an expiration to be passed to the router
- *
+ * <p>
  * As of 0.8.4, retrofitted to use DateAndFlags. Backwards compatible.
  *
  * @author zzz

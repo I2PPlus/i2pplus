@@ -35,7 +35,7 @@ import net.i2p.util.SecureFile;
 
 /**
  * General helper functions used by all UIs.
- *
+ * <p>
  * This class is also used by Android.
  * Maintain as a stable API and take care not to break Android.
  *

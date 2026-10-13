@@ -12,7 +12,7 @@ import net.i2p.util.SimpleTimer2;
 /**
  * Gather fragments of I2NPMessages at a tunnel endpoint, making them available
  * for reading when complete.
- *
+ * <p>
  * Warning - this is all unsynchronized here - receivers must implement synchronization
  *
  */
@@ -164,7 +164,7 @@ class FragmentedMessage {
 
     /**
      * Count the non-null fragment slots from 0 through the high-water mark.
-     *
+     * <p>
      * Slots above {@code highFragmentNum} cannot be non-null: both
      * {@link #receive} overloads raise the mark to at least the index they store
      * into, and the mark is never lowered, so scanning past it cannot add to the
@@ -173,7 +173,7 @@ class FragmentedMessage {
      * with {@link #isComplete()}, {@link #getCompleteSize()},
      * {@link #writeComplete} and {@link #releaseFragments}, all of which already
      * stop at the mark.
-     *
+     * <p>
      * Static and driven by its parameters so the scan can be exercised without
      * an I2PAppContext. The high-water mark is passed in rather than read in the
      * loop condition: it is only ever increased, and passing it as an argument

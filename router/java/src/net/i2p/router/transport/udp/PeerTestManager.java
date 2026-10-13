@@ -36,14 +36,14 @@ import net.i2p.util.SimpleTimer2;
 /**
  *  Entry points are runTest() to start a new test as Alice,
  *  and receiveTest() for all received test packets.
- *
+ * <p>
  *  IPv6 info: All Alice-Bob and Alice-Charlie communication is via IPv4.
  *  The Bob-Charlie communication may be via IPv6, however Charlie must
  *  be IPv4-capable.
  *  The IP address (of Alice) in the message must be IPv4 if present,
  *  as we only support testing of IPv4.
  *  Testing of IPv6 could be added in the future.
- *
+ * <p>
  *  From udp.html on the website:
 
 <p>The automation of collaborative reachability testing for peers is
@@ -326,7 +326,7 @@ class PeerTestManager {
 
         /**
          *  Decide what to do under the instance lock, then send outside it.
-         *
+         * <p>
          *  The decision reads and clears _currentTest, so it needs the lock; the
          *  send builds a packet and can block, and holding the lock across that
          *  would stall runTest() and every receiveTest() path.  The state
@@ -580,10 +580,10 @@ class PeerTestManager {
 
     /**
      *  Reset all state and call testComplete(). We are Alice.
-     *
+     * <p>
      *  call from a synchronized method
      *
-     *  @since 0.9.57
+     * @since 0.9.57
      */
     private void fail() {
         // so testComplete() will return UNKNOWN
@@ -599,12 +599,11 @@ class PeerTestManager {
     /**
      * Evaluate the info we have and act accordingly, since the test has either timed out or
      * we have successfully received the second PeerTest from a Charlie.
-     *
+     * <p>
      * call from a synchronized method
-     *
+     * <p>
      * Old SSU 1 test result state machine:
      * ref: SSU 1 doc http://i2p-projekt.i2p/en/docs/transport/ssu
-     *
      *<pre>
      * If Alice does not get msg 5:  FIREWALLED
      *
@@ -615,9 +614,8 @@ class PeerTestManager {
      * .. If Alice gets msgs 4/5/7 and IP/port match:  OK
      * .. If Alice gets msgs 4/5/7 and IP/port do not match:  SYMNAT
      *</pre>
-     *
+     * <p>
      * New SSU 1/2 test result state machine:
-     *
      *<pre>
      * If Alice does not get msg 5:
      * .. If Alice does not get msg 4:  UNKNOWN
@@ -636,9 +634,8 @@ class PeerTestManager {
      * .. If Alice gets msgs 4/5/7 and IP does not match, port matches:  OK, address change?
      * .. If Alice gets msgs 4/5/7 and both IP and port do not match:  OK, address change?
      *</pre>
-     *
+     * <p>
      * Simplified version:
-     *
      *<pre>
      * 4 5 7  Result             Notes
      * -----  ------             -----
@@ -657,7 +654,6 @@ class PeerTestManager {
 
     /**
      *  Complete the given test.
-     *
      *  <p>The test is passed in rather than re-read from {@link #_currentTest},
      *  so a caller that decided to complete a specific test cannot end up
      *  completing its successor: {@link ContinueTimer#timeReached()} releases the
@@ -776,13 +772,13 @@ class PeerTestManager {
 
     /**
      * Entry point for all out-of-session packets, messages 5-7 only.
-     *
+     * <p>
      * SSU 2 only.
-     *
+     * <p>
      * Receive a test message of some sort from the given peer, queueing up any packet
      * that should be sent in response, or if its a reply to our own current testing,
      * adjusting our test state.
-     *
+     * <p>
      * We could be Alice or Charlie.
      *
      * @param from non-null
@@ -820,13 +816,13 @@ class PeerTestManager {
 
     /**
      * Entry point for all in-session incoming packets.
-     *
+     * <p>
      * SSU 2 only.
-     *
+     * <p>
      * Receive a test message of some sort from the given peer, queueing up any packet
      * that should be sent in response, or if its a reply to our own current testing,
      * adjusting our test state.
-     *
+     * <p>
      * We could be Alice, Bob, or Charlie.
      *
      * @param from non-null
@@ -850,7 +846,7 @@ class PeerTestManager {
      * after this, or maybe it's in a different packet.
      * Check for RI, if not found, return true to retry, unless retryCount is at the limit.
      * Creates the timer if retryCount == 0.
-     *
+     * <p>
      * We are Alice for msg 4, Charlie for msg 2.
      *
      * @return true if RI found, false to delay and retry.
@@ -873,15 +869,15 @@ class PeerTestManager {
     /**
      *  Look up the RouterInfo a Peer Test message refers to, with a short
      *  negative cache.
-     *
+     * <p>
      *  DelayTest retries on a 50ms doubling backoff, so a miss would otherwise be
      *  re-probed on every retry.  The cache is single-entry: it only collapses the
      *  closely spaced retries of one hash, and concurrent tests for different
      *  hashes do not share it.  Only misses are cached, so a hit is never stale.
      *
-     *  @param h the hash to look up, non-null
-     *  @return the RouterInfo, or null if not found (or looked up too recently)
-     *  @since 0.9.71+
+     * @param h the hash to look up, non-null
+     * @return the RouterInfo, or null if not found (or looked up too recently)
+     * @since 0.9.71+
      */
     private RouterInfo lookupRIForTest(Hash h) {
         RouterInfo ri = _context.netDb().lookupRouterInfoLocally(h);
@@ -926,13 +922,13 @@ class PeerTestManager {
 
     /**
      * Called from above for in-session 1-4 or the PTCallback via processPayload() for out-of-session 5-7
-     *
+     * <p>
      * SSU 2 only.
-     *
+     * <p>
      * Receive a test message of some sort from the given peer, queueing up any packet
      * that should be sent in response, or if its a reply to our own current testing,
      * adjusting our test state.
-     *
+     * <p>
      * We could be Alice, Bob, or Charlie.
      *
      * @param from non-null
@@ -1990,7 +1986,7 @@ class PeerTestManager {
 
     /**
      * Send RI and Peer Test. SSU2 only. We are Bob.
-     *
+     * <p>
      * Msg 2 Bob to Charlie with Alice's RI
      * Msg 4 Bob to Alice with Charlie's RI
      *

@@ -22,7 +22,7 @@ import net.i2p.stat.Rate;
 /**
  * Renders the graphs list (/graphs.jsp) and the single-stat page (/graph.jsp),
  * plus the graph display configuration form.
- *
+ * <p>
  * Stateless across requests except for per-request form state set via the
  * {@code setXxx()} accessors; preferences are read from context properties.
  */
@@ -129,7 +129,6 @@ public class GraphHelper extends FormHandler {
 
     /**
      * The auto-refresh delay a page render should actually use.
-     *
      * <p>Refreshing is pointless while graph generation is unavailable, and hammering a console
      * that cannot render is worse than showing nothing, so the delay is suppressed for that one
      * render. It is deliberately not persisted: graph generation can come back, and writing the
@@ -190,7 +189,6 @@ public class GraphHelper extends FormHandler {
 
     /**
      * Resolves the requested events mode against the mode in force.
-     *
      * <p>An absent or empty parameter means "not specified", and the mode already in force -
      * which came from {@code routerconsole.graphEvents} - stands. It must not be read as a
      * request for events: the enlarged-graph link only emits {@code showEvents} when events
@@ -199,7 +197,6 @@ public class GraphHelper extends FormHandler {
      * to events and contradicted the configured default. The two URL-building sites disagreed
      * about whether the parameter is always present; this makes the reader tolerant of its
      * absence instead.
-     *
      * <p>The value is also parsed symmetrically with the way it is written. One link emits
      * {@code showEvents=1} and the image sources emit {@code showEvents=true|false}, but the
      * reader recognised only the literal string {@code "false"} - so {@code showEvents=0}, a
@@ -473,7 +470,6 @@ public class GraphHelper extends FormHandler {
 
     /**
      * Emit one tile per active group, each plotting its members as overlaid lines.
-     *
      * <p>A group appears only when at least two members are enabled and carry data, so
      * enabling a single stat is never silently turned into a combined plot.
      *

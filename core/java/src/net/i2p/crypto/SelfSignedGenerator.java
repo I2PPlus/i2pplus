@@ -42,9 +42,9 @@ import net.i2p.util.RandomSource;
  * storing in a Keystore with KeyStoreUtil.storePrivateKey().
  * All done programatically, no keytool, no BC libs, no sun classes.
  * Ref: RFC 2459, RFC 5280
- *
+ * <p>
  * This is coded to create a cert that is similar to what comes out of keytool.
- *
+ * <p>
  * NOTE: Recommended use is via KeyStoreUtil.createKeys() and related methods.
  * This API may not be stable.
  *
@@ -667,7 +667,7 @@ public final class SelfSignedGenerator {
      * As of 0.9.34, adds 127.0.0.1 and ::1 to the SAN also
      * 5) Authority Key Identifier
      * (not necessarily output in that order)
-     *
+     * <p>
      * Ref: RFC 5280
      *
      * @param pubbytes the DER-encoded public key bit string the extension identifier is derived from

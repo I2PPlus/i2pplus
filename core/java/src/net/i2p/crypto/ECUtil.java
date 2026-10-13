@@ -9,12 +9,11 @@ import java.security.spec.EllipticCurve;
 
 /**
  * Elliptic curve utility functions for cryptographic operations.
- *
+ * <p>
  * This class provides essential mathematical operations for elliptic curve cryptography
  * used throughout I2P, including scalar multiplication, point operations,
  * and curve parameter handling. It supports multiple curve types with optimized
  * implementations for common cryptographic operations.
- *
  * <p>Key operations include:</p>
  * <ul>
  * <li>Scalar multiplication of curve points</li>

@@ -13,10 +13,9 @@ import java.util.SortedSet;
  * Doesn't do copying like CopyOnWriteArraySet.
  * Unmodifiable, thread-safe.
  * Null elements are not permitted.
- *
+ * <p>
  * The Collection constructors are not recommended for large sets
  * as duplicate check is O(n**2).
- *
  *
  * @param <E> type of elements in this set
  * @since 0.9.55

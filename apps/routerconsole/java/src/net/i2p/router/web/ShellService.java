@@ -24,7 +24,7 @@ import net.i2p.util.SystemVersion;
  * Alternative to ShellCommand for plugins based on ProcessBuilder, which
  * manages
  * a process and keeps track of it's state by maintaining a Process object.
- *
+ * <p>
  * Keeps track of the process, and reports start/stop status correctly
  * on configplugins. When running a ShellService from a clients.config file,
  * the user MUST pass -shellservice.name in the args field in clients.config
@@ -37,14 +37,14 @@ import net.i2p.util.SystemVersion;
  * to match the expected value. If this is not the case, i.e.
  * (-shellservice.name != plugin.name), you must not use $PLUGIN in your
  * clients.config file.
- *
+ * <p>
  * The recommended way to use this tool is to manage a single forked
  * app/process,
  * with a single ShellService, in a single plugin.
- *
+ * <p>
  * When you are writing your clients.config file, please take note that $PLUGIN
  * will be derived from the `shellservice.name` field in the config file args.
- *
+ * <p>
  * Works on Windows, OSX, and Linux.
  *
  * @since 1.6.0/0.9.52, moved from net.i2p.app in 0.9.53

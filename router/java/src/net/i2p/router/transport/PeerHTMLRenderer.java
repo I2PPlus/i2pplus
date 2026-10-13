@@ -13,13 +13,13 @@ import net.i2p.util.Translate;
 /**
  * HTML rendering of peers (flag, capability bar, identity block) for the
  * NetDb, PeerHelper, and tunnel pages.
- *
+ * <p>
  * Extracted from {@link CommSystemFacadeImpl} (2026-09-06) so the peer-render
  * cluster, its RouterInfo/capacity caches, and its i18n state live apart from
  * the facade core. The facade retains thin {@code commSystem()} delegators so
  * the public API is unchanged; collaborators (country lookup, reverse-DNS)
  * are injected rather than fetched through {@code commSystem()} round-trips.
- *
+ * <p>
  * Pure memory-independent decisions (bandwidth classification, visible-cap
  * cleanup) are package-visible statics so they can be tested without a running
  * router; see {@code PeerHTMLRendererDecisionTest}.
@@ -231,7 +231,7 @@ public class PeerHTMLRenderer {
     /**
      * Localized country display name for a two-letter code. Names needing no
      * translation (single words, already localized) are returned verbatim.
-     *
+     * <p>
      * Shared by {@link #renderPeerHTML} and {@link #renderPeerFlag}; extracting
      * it removes the duplicated lookup-and-translate branch from both.
      *
@@ -252,7 +252,7 @@ public class PeerHTMLRenderer {
      * reverse lookups are enabled and the resolver offers a distinct, known
      * name; otherwise returns the raw IP. Non-blocking-the lookup is served
      * from the rDNS cache and a background lookup is queued on a miss.
-     *
+     * <p>
      * Deduplicates the resolver branch formerly duplicated across
      * {@link #renderPeerHTML} and {@link #renderPeerFlag}; the flag renderer
      * adds the raw-IP suffix itself when the name differs.
@@ -273,7 +273,7 @@ public class PeerHTMLRenderer {
     /**
      * Highest-priority bandwidth capability char present in the caps string,
      * or "?" when none is advertised.
-     *
+     * <p>
      * Priority follows {@link RouterInfo#BW_CAPABILITY_CHARS} order, so a peer
      * advertising both a high and a low class is classified at its high end.
      * This is the decision the former {@code getCapacityCached} inline loop

@@ -18,7 +18,7 @@ import java.util.Set;
  * you could define an EventDispatcherImpl attribute called
  * <code>_event</code> (as suggested in EventDispatcherImpl documentation)
  * and cut'n'paste the following default implementation:
- *
+ * <p>
  * <code>
  * public EventDispatcher getEventDispatcher() { return _event; }
  * public void attachEventDispatcher(IEventDispatcher e) { _event.attachEventDispatcher(e.getEventDispatcher()); }
@@ -30,7 +30,7 @@ import java.util.Set;
  * public void unIgnoreEvents() { _event.unIgnoreEvents(); }
  * public Object waitEventValue(String n) { return _event.waitEventValue(n); }
  * </code>
- *
+ * <p>
  * Deprecated - Used only by I2PTunnel
  *
  * @author human

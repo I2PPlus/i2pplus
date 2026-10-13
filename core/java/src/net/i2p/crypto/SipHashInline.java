@@ -12,16 +12,16 @@ package net.i2p.crypto;
 
 /**
  * SipHash implementation with hand inlining the SIPROUND.
- *
+ * <p>
  * To know details about SipHash, see;
  * "a fast short-input PRF" https://www.131002.net/siphash/
- *
+ * <p>
  * SIPROUND is defined in siphash24.c that can be downloaded from the above
  * site.  Following license notice is subject to change based on the licensing
  * policy of siphash24.c.
- *
+ * <p>
  * I2P mods: add off/len version
- *
+ * <p>
  * For constant keys see net.i2p.util.SipHash
  *
  * @since 0.9.5, Moved to net.i2p.crypto and public since 0.9.27

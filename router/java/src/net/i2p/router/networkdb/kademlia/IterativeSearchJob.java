@@ -175,7 +175,6 @@ public class IterativeSearchJob extends FloodSearchJob {
     /**
      * Collect one candidate's fingerprint keys into the reusable scratch
      * buffers, without claiming them.
-     *
      * <p>Masked IPs are packed into a {@code long} via
      * {@link FloodfillPeerSelector#maskedIPKey(byte[], int)} (whose IPv4/IPv6
      * marker bit keeps the address families apart), ports into an {@code int},
@@ -215,7 +214,6 @@ public class IterativeSearchJob extends FloodSearchJob {
     /**
      * Is any key of the candidate collected by {@link #collectFingerprint}
      * already claimed by a peer this search has queried?
-     *
      * <p>Test-only: the caller may still reject the candidate on other
      * grounds and must then claim nothing.
      *
@@ -771,7 +769,7 @@ public class IterativeSearchJob extends FloodSearchJob {
             /**
              * If it's a RI lookup, not from a client, and we're already connected, just ask directly
              * This also saves the ElG encryption for us and the decryption for the ff
-             *
+             * <p>
              * There's no anonymity reason to use an expl. tunnel... the main reason is to limit
              * connections to the ffs. But if we're already connected, do it the fast and easy way.
              */

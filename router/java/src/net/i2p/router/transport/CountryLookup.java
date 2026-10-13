@@ -32,13 +32,13 @@ import net.i2p.util.SystemVersion;
 
 /**
  * Country-code lookup, caching, and strict-country policy for the router.
- *
+ * <p>
  * Extracted from {@link CommSystemFacadeImpl} (2026-09-06) so the country
  * cluster - a per-peer country cache with periodic cleanup, over-capacity
  * eviction, strict-country gating, and startup GeoIP queueing - lives apart
  * from the facade core.  The facade retains thin delegation stubs so the
  * public static and {@code commSystem()} APIs are unchanged.
- *
+ * <p>
  * All pure decision logic (cache eviction decisions, memory-independent
  * helpers) is exposed as package-visible static methods so it can be tested
  * without a running router; see {@code CountryLookupDecisionTest}.
@@ -92,7 +92,7 @@ public class CountryLookup {
     /**
      * Collect the IPs for all routers in the DB, and queue them for lookup,
      * then fire off the periodic lookup task for the first time.
-     *
+     * <p>
      * As of 0.9.32, works only for literal IPs, ignores host names.
      */
     private class QueueAll extends SimpleTimer2.TimedEvent {
@@ -228,7 +228,7 @@ public class CountryLookup {
      * Uses the transport IP first because that lookup is fast, then the IP from the netDb.
      * Not recommended for our local router hash, as we may not be either in the cache or netdb,
      * or may not be publishing an IP.
-     *
+     * <p>
      * As of 0.9.32, works only for literal IPs, returns null for hostnames.
      *
      * @param peer not ourselves - use getOurCountry() for that
@@ -363,7 +363,7 @@ public class CountryLookup {
 
     /**
      * Domain name from a reverse DNS hostname.
-     *
+     * <p>
      * Multi-part TLDs (co.uk, com.au, ...) are recognized so the registrable
      * domain is returned rather than a bare second-level label.
      *
@@ -435,7 +435,7 @@ public class CountryLookup {
     /**
      * Return first IP (v4 or v6) we find, any transport.
      * Not validated, may be local, etc.
-     *
+     * <p>
      * As of 0.9.32, works only for literal IPs, returns null for host names.
      *
      * @param ri the RouterInfo whose addresses are scanned for a literal IP
@@ -457,7 +457,7 @@ public class CountryLookup {
     /**
      * Return first valid IP (v4 or v6) we find, any transport.
      * Local and other invalid IPs will not be returned.
-     *
+     * <p>
      * As of 0.9.32, works only for literal IPs, returns null for host names.
      *
      * @param ri the RouterInfo whose addresses are scanned for a publicly routable IP
@@ -559,7 +559,7 @@ public class CountryLookup {
 
     /**
      * Remove stale and unresolved ("xx") entries from the country cache.
-     *
+     * <p>
      * An entry is expired when its timestamp is strictly older than
      * {@code expiryMs}; "xx" (unresolved) entries are always dropped. Called
      * both periodically from {@link #getCountry(Hash)} and as the first stage
@@ -590,7 +590,7 @@ public class CountryLookup {
 
     /**
      * Bring an over-capacity country cache back under its size bound.
-     *
+     * <p>
      * First advances the expired-entry pass via {@link #evictExpired}; if
      * still at or above {@code maxSize}, drops the oldest quarter by
      * timestamp. The redundant removeIf()/stream cascade in the original

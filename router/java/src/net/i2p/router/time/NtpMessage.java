@@ -11,41 +11,40 @@ import net.i2p.util.RandomSource;
 /**
  * This class represents a NTP message, as specified in RFC 2030.  The message
  * format is compatible with all versions of NTP and SNTP.
- *
+ * <p>
  * This class does not support the optional authentication protocol, and
  * ignores the key ID and message digest fields.
- *
+ * <p>
  * For convenience, this class exposes message values as native Java types, not
  * the NTP-specified data formats.  For example, timestamps are
  * stored as doubles (as opposed to the NTP unsigned 64-bit fixed point
  * format).
- *
+ * <p>
  * However, the constructor NtpMessage(byte[]) and the method toByteArray()
  * allow the import and export of the raw NTP message format.
- *
+ * <p>
  *
  * Usage example
- *
+ * <p>
  * // Send message
  * DatagramSocket socket = new DatagramSocket();
  * InetAddress address = InetAddress.getByName("ntp.cais.rnp.br");
  * byte[] buf = new NtpMessage().toByteArray();
  * DatagramPacket packet = new DatagramPacket(buf, buf.length, address, 123);
  * socket.send(packet);
- *
+ * <p>
  * // Get response
  * socket.receive(packet);
  * System.out.println(msg.toString());
- *
+ * <p>
  * Comments for member variables are taken from RFC2030 by David Mills,
  * University of Delaware.
- *
+ * <p>
  * Number format conversion code in NtpMessage(byte[] array) and toByteArray()
  * inspired by http://www.pps.jussieu.fr/~jch/enseignement/reseaux/
  * NTPMessage.java which is copyright (c) 2003 by Juliusz Chroboczek
- *
  * <h2>Year 2036 compliance</h2>
- *
+ * <p>
  * Prior to 0.9.50, this supported years 1900-2035.
  * As of 0.9.50, this supports years 1968-2104 and is year-2036 compliant.
  * All double timestamps are the actual seconds since 1900.
@@ -55,7 +54,7 @@ import net.i2p.util.RandomSource;
  * i.e. 1968-2104.
  * All math and comparisons on timestamps must be on the double values,
  * never on the raw NTP-format byte arrays.
- *
+ * <p>
  * refs:
  * https://docs.ntpsec.org/latest/rollover.html
  * https://www.eecis.udel.edu/~mills/y2k.html
@@ -78,7 +77,7 @@ class NtpMessage {
      * This is a two-bit code warning of an impending leap second to be
      * inserted/deleted in the last minute of the current day.  Its values
      * may be as follows:
-     *
+     * <p>
      * Value     Meaning
      * -----     -------
      * 0         no warning
@@ -100,7 +99,7 @@ class NtpMessage {
 
     /**
      * This value indicates the mode, with values defined as follows:
-     *
+     * <p>
      * Mode     Meaning
      * ----     -------
      * 0        reserved
@@ -111,7 +110,7 @@ class NtpMessage {
      * 5        broadcast
      * 6        reserved for NTP control message
      * 7        reserved for private use
-     *
+     * <p>
      * In unicast and anycast modes, the client sets this field to 3 (client)
      * in the request and the server sets it to 4 (server) in the reply. In
      * multicast mode, the server sets this field to 5 (broadcast).
@@ -122,7 +121,7 @@ class NtpMessage {
     /**
      * This value indicates the stratum level of the local clock, with values
      * defined as follows:
-     *
+     * <p>
      * Stratum  Meaning
      * ----------------------------------------------
      * 0        unspecified or unavailable
@@ -182,7 +181,7 @@ class NtpMessage {
      * reference source according to the following list. If the external
      * reference is one of those listed, the associated code should be used.
      * Codes for sources not listed can be contrived as appropriate.
-     *
+     * <p>
      * Code     External Reference Source
      * ----     -------------------------
      * LOCL     uncalibrated local clock used as a primary reference for
@@ -364,7 +363,7 @@ class NtpMessage {
      * Will read 8 bytes of a message beginning at <code>pointer</code>
      * and return it as a double, according to the NTP 64-bit timestamp
      * format.
-     *
+     * <p>
      * 2036-compliant as of 0.9.50
      *
      * @param array 8 bytes starting at pointer
@@ -386,7 +385,7 @@ class NtpMessage {
 
     /**
      * Encodes a timestamp in the specified position in the message.
-     *
+     * <p>
      * 2036-compliant as of 0.9.50.
      * Timestamps before 1968 will be encoded as Jan. 1968.
      * Timestamps after Feb. 2104 will be encoded as Feb. 2104.

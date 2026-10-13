@@ -20,10 +20,10 @@ import net.i2p.util.Log;
  * Simple form handler base class - does not depend on servlets or jsp,
  * but instead the subclasses are populated with javabean properties.  e.g.
  * &lt;jsp:setProperty name="handler" property="*" /&gt;
- *
+ * <p>
  * The form is "processed" after the properties are set and the first output
  * property is retrieved - either getAll(), getNotices() or getErrors().
- *
+ * <p>
  * This Handler will only process a single POST. The jsp bean must be declared scope=request.
  */
 public abstract class FormHandler {
@@ -194,7 +194,7 @@ public abstract class FormHandler {
 
     /**
      * Resolve which operation the user actually requested.
-     *
+     * <p>
      * Forms commonly carry both a hidden action=blah fallback (so Enter-key
      * submission triggers the default save) and real submit buttons named
      * action with their own values. When a button is clicked, the browser
@@ -250,7 +250,7 @@ public abstract class FormHandler {
     /**
      * Implement this to perform the final processing (in turn, adding formNotice
      * and formError messages, etc)
-     *
+     * <p>
      * Will only be called if _action is non-null and the nonce is valid.
      */
     protected abstract void processForm();

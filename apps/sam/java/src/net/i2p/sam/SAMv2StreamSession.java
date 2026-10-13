@@ -38,7 +38,7 @@ import net.i2p.util.Log;
 class SAMv2StreamSession extends SAMStreamSession {
     /**
      * Create a new SAM STREAM session.
-     *
+     * <p>
      * Caller MUST call start().
      *
      * @param dest Base64-encoded destination and private keys (same format as PrivateKeyFile)
@@ -57,7 +57,7 @@ class SAMv2StreamSession extends SAMStreamSession {
 
     /**
      * Create a new SAM STREAM session.
-     *
+     * <p>
      * Caller MUST call start().
      *
      * @param destStream Input stream containing the destination and private keys (same format as PrivateKeyFile)

@@ -209,7 +209,7 @@ class PacketBuilder2 {
      * Will a packet to 'peer' that already has 'numFragments' fragments
      * totalling 'curDataSize' bytes fit another fragment?
      * This includes the 3 byte block overhead, but NOT the 5 byte followon fragment overhead.
-     *
+     * <p>
      * This doesn't leave anything for acks or anything else.
      *
      * @param peer supplies the MTU and address family for the overhead
@@ -359,7 +359,7 @@ class PacketBuilder2 {
     /**
      * This builds a data packet (PAYLOAD_TYPE_DATA).
      * See the methods below for the other message types.
-     *
+     * <p>
      * Note that while the UDP message spec allows for more than one fragment in a message,
      * this method writes exactly one fragment.
      * For no fragments use buildAck().
@@ -755,7 +755,7 @@ class PacketBuilder2 {
     /**
      * Build a new series of SessionConfirmed packets for the given peer,
      * encrypting it as necessary.
-     *
+     * <p>
      * If the RI is large enough that it is fragmented, this will still only return
      * a single Session Confirmed message. The remaining RI blocks will be passed to
      * the establish state via confirmedPacketsSent(), and the state will

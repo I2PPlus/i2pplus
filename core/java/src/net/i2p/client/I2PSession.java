@@ -28,9 +28,9 @@ import java.util.Set;
  * <p>Define the standard means of sending and receiving messages on the
  * I2P network by using the I2CP (the client protocol).  This is done over a
  * bidirectional TCP socket.
- *
+ * <p>
  * End to end encryption in I2PSession was disabled in release 0.6.
- *
+ * <p>
  * Periodically the router will ask the client to authorize a new set of
  * tunnels to be allocated to the client, which the client can accept by sending a
  * {@link net.i2p.data.LeaseSet} signed by the {@link net.i2p.data.Destination}.
@@ -44,7 +44,7 @@ public interface I2PSession {
       * Send a new message to the given destination, containing the specified
       * payload, returning true if the router feels confident that the message
       * was delivered.
-      *
+      * <p>
       * WARNING: It is recommended that you use a method that specifies the protocol and ports.
       *
       * @param dest location to send the message
@@ -58,7 +58,7 @@ public interface I2PSession {
       * Send a new message to the given destination, containing the specified
       * payload, returning true if the router feels confident that the message
       * was delivered.
-      *
+      * <p>
       * WARNING: It is recommended that you use a method that specifies the protocol and ports.
       *
       * @param dest location to send the message
@@ -86,10 +86,9 @@ public interface I2PSession {
 
     /**
      * End-to-End Crypto is disabled, tags and keys are ignored!
-     *
+     * <p>
      * Like sendMessage above, except the key used and the tags sent are exposed to the
      * application.  <p>
-     *
      * If some application layer message delivery confirmation is used,
      * rather than i2p's (slow) built in confirmation via guaranteed delivery mode, the
      * application can update the SessionKeyManager, ala:
@@ -251,7 +250,7 @@ public interface I2PSession {
      * Send a message and request an asynchronous notification of delivery status.
      * Notifications will be delivered at least up to the expiration specified in the options,
      * or 60 seconds if not specified.
-     *
+     * <p>
      * See I2PSessionMuxedImpl for proto/port details.
      * See SendMessageOptions for option details.
      *
@@ -299,7 +298,7 @@ public interface I2PSession {
      * Instruct the router that the message received was abusive (including how
      * abusive on a 1-100 scale) in the hopes the router can do something to
      * minimize receiving abusive messages like that in the future.
-     *
+     * <p>
      * Unused. Not fully implemented.
      *
      * @param msgId message that was abusive (or -1 for not message related)
@@ -310,7 +309,7 @@ public interface I2PSession {
 
     /**
      * Instruct the I2PSession where it should send event notifications
-     *
+     * <p>
      * WARNING: It is recommended that you use a method that specifies the protocol and ports.
      *
      * @param lsnr listener to retrieve events
@@ -451,16 +450,15 @@ public interface I2PSession {
      /**
       * Ask the router to lookup a Destination by host name.
       * Blocking. Waits a max of 10 seconds by default.
-      *
+      * <p>
       * This only makes sense for a b32 hostname, OR outside router context.
       * Inside router context, just query the naming service.
       * Outside router context, this does NOT query the context naming service.
       * Do that first if you expect a local addressbook.
-      *
+      * <p>
       * This will log a warning for non-b32 in router context.
-      *
+      * <p>
       * Suggested implementation:
-      *
       * <pre>
       *  if (name.length() == 60 &amp;&amp; name.toLowerCase(Locale.US).endsWith(".b32.i2p")) {
       *      if (session != null)
@@ -493,7 +491,7 @@ public interface I2PSession {
       *      return rv;
       *  }
       * </pre>
-      *
+      * <p>
       * Requires router side to be 0.9.11 or higher. If the router is older,
       * this will return null immediately.
       *
@@ -597,7 +595,7 @@ public interface I2PSession {
 
     /**
      * Listen on specified protocol and port.
-     *
+     * <p>
      * An existing listener with the same proto and port is replaced.
      * Only the listener with the best match is called back for each message.
      *

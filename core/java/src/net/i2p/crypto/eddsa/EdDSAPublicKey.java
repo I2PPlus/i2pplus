@@ -86,15 +86,14 @@ public class EdDSAPublicKey implements EdDSAKey, PublicKey {
      * <p>
      * This implements the following specs:
      * <ul>
-     * <li>General encoding: https://tools.ietf.org/html/rfc8410</li>
-     * <li>Key encoding: https://tools.ietf.org/html/rfc8032</li>
+     * <li>General encoding: <a href="https://tools.ietf.org/html/rfc8410">RFC 8410</a></li>
+     * <li>Key encoding: <a href="https://tools.ietf.org/html/rfc8032">RFC 8032</a></li>
      * </ul>
      * <p>
      * For keys in older formats, decoding and then re-encoding is sufficient to
      * migrate them to the canonical encoding.
      * <p>
      * Relevant spec quotes:
-     *
      * <pre>
      *      In the X.509 certificate, the subjectPublicKeyInfo field has the
      *      SubjectPublicKeyInfo type, which has the following ASN.1 syntax:
@@ -104,7 +103,6 @@ public class EdDSAPublicKey implements EdDSAKey, PublicKey {
      *        subjectPublicKey  BIT STRING
      *      }
      * </pre>
-     *
      * <pre>
      *      AlgorithmIdentifier  ::=  SEQUENCE  {
      *        algorithm   OBJECT IDENTIFIER,
@@ -113,7 +111,6 @@ public class EdDSAPublicKey implements EdDSAKey, PublicKey {
      *
      *      For all of the OIDs, the parameters MUST be absent.
      * </pre>
-     *
      * <pre>
      *      id-Ed25519   OBJECT IDENTIFIER ::= { 1 3 101 112 }
      * </pre>

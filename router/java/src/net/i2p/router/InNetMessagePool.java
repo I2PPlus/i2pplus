@@ -21,11 +21,9 @@ import net.i2p.util.Log;
 /**
  * Receives and dispatches inbound network messages with configurable processing modes.
  * Handles message routing, job queuing, and concurrent processing for efficient inbound traffic management.
- *
  * <p>Dispatching can operate in different modes configured by transport layer:
  * - Direct dispatch on caller thread (low latency),
  * - Queued dispatch with threaded processing for higher concurrency.</p>
- *
  * <p>Thread-safe queues from java.util.concurrent provide efficient,
  * lock-free concurrency, minimizing blocking and wake overhead.</p>
  */
@@ -122,7 +120,6 @@ public class InNetMessagePool implements Service {
 
     /**
      * Adds a new inbound message to be processed.
-     *
      * <p>The message is either dispatched directly or queued for processing,
      * depending on configuration. It supports detection of duplicates, expired
      * messages, and dispatches messages to appropriate handlers or jobs.</p>

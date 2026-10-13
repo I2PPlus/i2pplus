@@ -148,14 +148,12 @@ public class I2PTunnelRunner extends I2PAppThread implements DoneCallback {
     /**
      * Wall-clock ceiling on one entity's resume/reconnect sequence (ms),
      * independent of Content-Length.
-     *
      * <p>The cycle caps in {@link #stallCycleLimit(long)} and
      * {@link #totalCycleLimit(long)} bound attempt <i>count</i>, but each
      * attempt may block for a full connect timeout, so a large entity's
      * 29x-scaled budget can keep a runner busy for hours against a
      * destination that is answering but never finishing. This deadline is
      * the only bound expressed in the unit the browser actually waits in.
-     *
      * <p>Set well above what the baseline caps can consume (4 empty-reconnect
      * cycles, each bounded by a connect timeout) so ordinary small-entity
      * reconnects are never cut short; it only bounds the size-scaled ramp.
@@ -166,7 +164,6 @@ public class I2PTunnelRunner extends I2PAppThread implements DoneCallback {
 
     /**
      * Largest Content-Length that may enlarge the retry ramp (bytes).
-     *
      * <p>The ramp exists because a genuinely long transfer survives
      * proportionally more tunnel-pool churn than a small file. A
      * Content-Length beyond this is not a long transfer, it is an upstream
@@ -252,7 +249,6 @@ public class I2PTunnelRunner extends I2PAppThread implements DoneCallback {
     /**
      * Whether the first-response deadline has elapsed for the current
      * request attempt (pure predicate).
-     *
      * <p>The deadline only ever arms before the first response byte: once
      * any upstream byte has arrived the watchdog retires permanently and
      * {@link #BODY_STALL_READ_TIMEOUT_MS} takes over. An unset anchor means
@@ -315,7 +311,6 @@ public class I2PTunnelRunner extends I2PAppThread implements DoneCallback {
 
     /**
      * Size-scaled cap on consecutive no-progress resume cycles.
-     *
      * <p>A long transfer lives through proportionally more tunnel-pool churn
      * than a small file, so the stall budget ramps by one cycle per
      * {@link #RETRY_RAMP_UNIT_BYTES} of the entity's verified Content-Length.
@@ -334,7 +329,6 @@ public class I2PTunnelRunner extends I2PAppThread implements DoneCallback {
 
     /**
      * Size-scaled cap on total body-resume cycles regardless of progress.
-     *
      * <p>Progress resets the stall counter, but every resume attempt counts
      * against this absolute cap, so it must grow with the entity the same way
      * {@link #stallCycleLimit(long)} does: one cycle per
@@ -353,7 +347,6 @@ public class I2PTunnelRunner extends I2PAppThread implements DoneCallback {
     /**
      * Whether a resume sequence has run past its wall-clock deadline. Pure
      * decision so the bound can be pinned without a live transfer.
-     *
      * <p>The cycle caps in {@link #stallCycleLimit(long)} and
      * {@link #totalCycleLimit(long)} bound attempt <i>count</i>, not elapsed
      * time: every attempt may block for a full connect timeout, so a large
@@ -396,7 +389,6 @@ public class I2PTunnelRunner extends I2PAppThread implements DoneCallback {
      * Progress-based budget for body-resume cycles. Pure decision state so
      * the {@link #resumeIncompleteBody} loop stays thin and tests can pin
      * stall-reset and absolute-cap behaviour without a live transfer.
-     *
      * <p>Only consecutive no-progress cycles count against the size-scaled
      * stall cap ({@link #stallCycleLimit(long)}; baseline
      * {@link #MAX_EMPTY_RECONNECT_CYCLES}); any forward progress resets that
@@ -495,7 +487,6 @@ public class I2PTunnelRunner extends I2PAppThread implements DoneCallback {
          * with a transient status (408/502/503/504) rather than a real stall —
          * a gateway timeout must not eat the empty/stall budget, or the next
          * non-Range retry would be blocked for an unrelated reason.
-         *
          * <p>Only the stall charge is refunded. The total count stays
          * consumed so {@link #totalCycleLimit(long)} remains an absolute cap
          * over ALL attempts; refunding it would let a persistently
@@ -595,7 +586,6 @@ public class I2PTunnelRunner extends I2PAppThread implements DoneCallback {
      * Callback for reconnecting via a second route when the first attempt
      * completes with zero upstream bytes, or dies mid-body with an incomplete
      * Content-Length response (Range resume).
-     *
      * <p>Used by the HTTP client proxy to transparently retry an idempotent
      * GET/HEAD against a fresh I2P connection (a new tunnel) without tearing
      * down the browser socket (a silent zero-byte close becomes
@@ -835,7 +825,6 @@ public class I2PTunnelRunner extends I2PAppThread implements DoneCallback {
 
     /**
      * Set the reconnect callback used for the empty-response retry.
-     *
      * <p>When set, and this is a no-request-body transfer (GET/HEAD, i.e. the
      * {@code toI2P} forwarder was never started) that completes with zero
      * upstream bytes, {@link #run()} will call the callback to obtain a fresh
@@ -939,7 +928,6 @@ public class I2PTunnelRunner extends I2PAppThread implements DoneCallback {
     /**
      * Invoke the no-data failure callback when a transfer completes (or aborts)
      * without delivering any bytes from the I2P peer.
-     *
      * <p>This is the single choke point behind the "empty response" class of bugs:
      * without it, a connection that is established to the proxy but never yields an
      * upstream byte (server unresponsive, reset before first data, or the executor
@@ -950,7 +938,6 @@ public class I2PTunnelRunner extends I2PAppThread implements DoneCallback {
      * this is what turns a silent empty close into a surfaced 5xx. The base
      * implementation simply dispatches to the configured {@link FailCallback} or
      * {@link #onTimeout}.
-     *
      * <p>Safe to call from any completion or exception path; {@link #_noDataHandled}
      * guarantees the callback runs at most once even when several paths race.
      * Run even when {@code totalSent > 0} (post body) — the absence of a response
@@ -986,7 +973,6 @@ public class I2PTunnelRunner extends I2PAppThread implements DoneCallback {
     /**
      * Whether a transfer with the given upstream byte count and handling state
      * should trigger the no-data failure callback.
-     *
      * <p>This is the decision behind the "empty response" fix: the failure callback
      * must fire iff no upstream bytes were received (an empty transfer is still a
      * failure even when a POST body was sent upstream) and the callback has not
@@ -1004,7 +990,6 @@ public class I2PTunnelRunner extends I2PAppThread implements DoneCallback {
 
     /**
      * Whether an empty-upstream transfer should be retried on a fresh I2P connection.
-     *
      * <p>The HTTP client proxy re-sends an idempotent (GET/HEAD) request against a fresh
      * I2P connection after a transfer that produced no upstream bytes, instead of closing
      * the browser socket with nothing (which the browser reports as
@@ -1031,7 +1016,6 @@ public class I2PTunnelRunner extends I2PAppThread implements DoneCallback {
     /**
      * Whether an incomplete Content-Length body should be resumed via HTTP Range
      * on a fresh I2P connection (new tunnel).
-     *
      * <p>Used when the browser has already been sent response headers with a
      * definite Content-Length, but the upstream stream died (tunnel failure,
      * write timeout, stall) after only part of the entity arrived. I2P delays
@@ -1066,7 +1050,6 @@ public class I2PTunnelRunner extends I2PAppThread implements DoneCallback {
     /**
      * Whether a non-Range full re-request is safe after a transient status
      * (408/502/503/504) aborted a Range resume attempt.
-     *
      * <p>Used by the resume loop instead of {@link #shouldResumeIncompleteBody}
      * while the fallback is pending: the response stream's header-written
      * state was reset when it swallowed the failed resume headers, so the
@@ -1092,7 +1075,6 @@ public class I2PTunnelRunner extends I2PAppThread implements DoneCallback {
     /**
      * Rewrite a buffered GET/HEAD request to resume at {@code start} via a
      * Range header, replacing any Range the browser already sent.
-     *
      * <p>The header is inserted immediately before the terminating blank line
      * of the header block. {@code start <= 0} returns the request unchanged
      * (full entity; no Range needed). A request with no header terminator is
@@ -1219,7 +1201,6 @@ public class I2PTunnelRunner extends I2PAppThread implements DoneCallback {
     /**
      * Whether the buffered initial request is safe to re-send on a fresh connection
      * in the "empty response" retry.
-     *
      * <p>A request is retryable iff it is idempotent and carries no streamed body, so
      * re-sending it cannot duplicate a submission or split a byte stream mid-body. Only
      * GET and HEAD qualify: they have no request body by definition and repeating them
@@ -1324,7 +1305,6 @@ public class I2PTunnelRunner extends I2PAppThread implements DoneCallback {
 
     /**
      * Choose the stream a re-driven receive forwarder reads from.
-     *
      * <p>The caller-provided stream always wins when present: the dual-race
      * winner is delivered as a {@link PushbackInputStream} whose buffer holds
      * the first response byte the race already consumed, and reacquiring
@@ -1498,7 +1478,6 @@ public class I2PTunnelRunner extends I2PAppThread implements DoneCallback {
 
     /**
      * Resume an incomplete Content-Length body on a fresh I2P connection.
-     *
      * <p>Rotates to a new tunnel via {@link ReconnectCallback}, re-sends the
      * buffered GET/HEAD with {@code Range: bytes=N-} for the undelivered
      * remainder, and splices the second response body onto the browser stream
@@ -1785,7 +1764,6 @@ public class I2PTunnelRunner extends I2PAppThread implements DoneCallback {
 
     /**
      * Periodic tick enforcing {@link #INITIAL_RESPONSE_TIMEOUT_MS}.
-     *
      * <p>Deliberately does NOT stop on {@code finished}: that flag flips when
      * the forwarders end, before run()'s empty-response reconnect loop has
      * re-driven the request on a fresh socket — exactly when a new attempt

@@ -15,11 +15,11 @@ import net.i2p.data.Destination;
 
 /**
  * Bridge to I2PSocket.
- *
+ * <p>
  * This extends Socket to make porting apps easier.
  * Methods throw IOExceptions like Sockets do, rather than returning
  * null for some methods.
- *
+ * <p>
  * StandardSockets are always bound, and always start out connected
  * (unless connectDelay is &gt; 0).
  * You may not create an unbound StandardSocket.

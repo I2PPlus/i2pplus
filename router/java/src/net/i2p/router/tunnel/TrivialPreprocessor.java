@@ -15,9 +15,9 @@ import net.i2p.util.SimpleByteCache;
  * turn it into the minimum number of fragmented preprocessed blocks, sending
  * each of those out.  This does not coalesce message fragments or delay for more
  * optimal throughput.
- *
+ * <p>
  * See FragmentHandler Javadoc for tunnel message fragment format
- *
+ * <p>
  * Not instantiated directly except in unit tests; see BatchedPreprocessor
  */
 class TrivialPreprocessor implements TunnelGateway.QueuePreprocessor {
@@ -55,7 +55,7 @@ class TrivialPreprocessor implements TunnelGateway.QueuePreprocessor {
     /**
      * Return true if there were messages remaining, and we should queue up
      * a delayed flush to clear them
-     *
+     * <p>
      * NOTE: Unused here, see BatchedPreprocessor override, super is not called.
      */
     public boolean preprocessQueue(List<PendingGatewayMessage> pending, TunnelGateway.Sender sender, TunnelGateway.Receiver rec) {
@@ -282,12 +282,11 @@ class TrivialPreprocessor implements TunnelGateway.QueuePreprocessor {
 
     /**
      * Calculate the size of the instructions for a pending message.
+     * Does NOT include 4 for the message ID if the message will be fragmented;
+     * call getInstructionAugmentationSize() for that.
      *
      * @param msg the pending gateway message
      * @return generally 3 or 35 or 39 for first fragment, 7 for subsequent fragments.
-     *
-     *         Does NOT include 4 for the message ID if the message will be fragmented;
-     *         call getInstructionAugmentationSize() for that.
      */
     protected static int getInstructionsSize(PendingGatewayMessage msg) {
         if (msg.getFragmentNumber() > 0)

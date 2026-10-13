@@ -355,11 +355,9 @@ public interface TunnelManagerFacade extends Service {
      * while queued, no tunnels available) — a liveness signal that the
      * pools need rebuilding now.  Each pool's internal ensure throttle
      * still applies, so a failure storm cannot become a build storm.
-     *
      * <p>The pool maps are keyed by the <b>local</b> client (source)
      * destination hash, never the remote destination: passing a remote
      * hash finds no pools and silently does nothing.
-     *
      * <p>Additive ABI: this method and its {@code int} return both postdate
      * 0.9.70+ (no release ever shipped a {@code void} variant), so
      * implementations and callers only ever saw this signature; callers may

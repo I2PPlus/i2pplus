@@ -11,7 +11,7 @@ package net.i2p.router;
 
 /**
  * Interface for router-internal executable tasks. Defines job timing, execution, and failure handling for scheduled operations within the job queue system.
- *
+ * <p>
  * For use by the router only. Not to be used by applications or plugins.
  */
 public interface Job {

@@ -184,7 +184,7 @@ public class CachedIteratorCollection<E> extends AbstractCollection<E> {
 
     /**
      * Returns a cached iterator over the elements in this collection.
-     *
+     * <p>
      * Each thread gets its own iterator instance that is reused and reset on each call.
      * If the current thread's cached iterator is still in use (hasNext() not yet exhausted),
      * a new iterator is allocated to allow safe nested iteration.

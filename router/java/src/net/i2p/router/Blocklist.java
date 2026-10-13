@@ -43,31 +43,31 @@ import net.i2p.util.SystemVersion;
 /**
  * Manage blocking by IP address, in a manner similar to the Banlist,
  * which blocks by router hash.
- *
+ * <p>
  * We also try to keep the two lists in sync: if a router at a given IP is
  * blocked, we will also banlist it "forever" (until the next reboot).
- *
+ * <p>
  * While the reverse case (blocking the IP of a router banlisted forever)
  * is not automatic, the transports will call add() below to block the IP,
  * which allows the transports to terminate an inbound connection before
  * the router ident handshake.
- *
+ * <p>
  * And the on-disk blocklist can also contain router hashes to be banlisted.
- *
+ * <p>
  * So, this class maintains three separate lists:
  * <pre>
  * 1) The list of IP ranges, read in from a file at startup
  * 2) The list of hashes, read in from the same file
  * 3) A list of single IPs, initially empty, added to as needed
  * </pre>
- *
+ * <p>
  * Read in the IP blocklist from a file, store it in-memory as efficiently
  * as we can, and perform tests against it as requested.
- *
+ * <p>
  * When queried for a peer that is blocklisted but isn't banlisted,
  * banlist it forever, then go back to the file to get the original
  * entry so we can add the reason to the banlist text.
- *
+ * <p>
  * On-disk blocklist supports IPv4 only.
  * In-memory supports both IPv4 and IPv6.
  */
@@ -562,7 +562,7 @@ public class Blocklist {
    /**
     * Read in and parse the blocklist.
     * The blocklist need not be sorted, and may contain overlapping entries.
-    *
+    * <p>
     * Acceptable formats (IPV4 only):
     * #comment (# must be in column 1)
     * comment:IP-IP
@@ -573,18 +573,18 @@ public class Blocklist {
     * IP
     * hostname (DNS looked up at list readin time, not dynamically, so may not be much use)
     * 44-byte Base64 router hash
-    *
+    * <p>
     * Acceptable formats (IPV6 only):
     * comment:IPv6 (must replace : with ; e.g. abcd;1234;0;12;;ff)
     * IPv6 (must replace : with ; e.g. abcd;1234;0;12;;ff)
-    *
+    * <p>
     * No whitespace allowed after the last ':'.
-    *
+    * <p>
     * For further information and downloads:
     * http://www.bluetack.co.uk/forums/index.php?autocom=faq&CODE=02&qid=17
     * http://blocklist.googlepages.com/
     * http://www.cymru.com/Documents/bogon-list.html
-    *
+    * <p>
     * Must call allocate() before and merge() after.
     *
     * @param blocklist out parameter, entries stored here
@@ -1211,7 +1211,7 @@ public class Blocklist {
     /**
      * The in-memory blocklist is an array of longs, with the format ((from IP) << 32) | (to IP)
      * The XOR is so the signed sort is in normal (unsigned) order.
-     *
+     * <p>
      * So the size is (cough) almost 2MB for the 240,000 line splist.txt.
      */
     private static long toEntry(byte[] ip1, byte[] ip2) {
@@ -1293,7 +1293,7 @@ public class Blocklist {
 
     /**
      * We don't keep the comment field in-memory, so we have to go back out to the file to find it.
-     *
+     * <p>
      * Put this in a job because we're looking for the actual line in the blocklist file, this could take a while.
      */
     private void banlist(Hash peer, byte[] ip) {
@@ -1423,7 +1423,7 @@ public class Blocklist {
 
     /**
      * Single IPs blocked until restart. Unsorted.
-     *
+     * <p>
      * Public for console only, not a public API
      * As of 0.9.57, will not contain IPs permanently banned,
      * except for ones banned permanently after being added to the transient list.
@@ -1439,7 +1439,7 @@ public class Blocklist {
 
     /**
      * Single IPs blocked until restart. Unsorted.
-     *
+     * <p>
      * Public for console only, not a public API
      *
      * @return a copy, unsorted
@@ -1455,7 +1455,7 @@ public class Blocklist {
 
     /**
      * IP ranges blocked until restart. Sorted, but as signed longs, so 128-255 are first
-     *
+     * <p>
      * Public for console only, not a public API
      *
      * @param max maximum entries to return

@@ -50,7 +50,7 @@ import net.i2p.util.SystemVersion;
 
 /**
  * Comprehensive key generation facility for I2P cryptographic operations.
- *
+ * <p>
  * This class provides methods to generate various types of cryptographic keys
  * used throughout the I2P network, including:
  * <ul>
@@ -58,7 +58,6 @@ import net.i2p.util.SystemVersion;
  * <li>Symmetric session keys (AES)</li>
  * <li>Key derivation and conversion utilities</li>
  * </ul>
- *
  * <p>Supports both legacy algorithms (DSA, ElGamal) and modern
  * cryptographic schemes (EdDSA, ECDSA) with configurable parameters
  * for security and performance optimization.</p>
@@ -319,7 +318,7 @@ public final class KeyGenerator {
 
     /**
      * DSA-SHA1 only.
-     *
+     * <p>
      * Same as above but different return type
      *
      * @return pair of keys

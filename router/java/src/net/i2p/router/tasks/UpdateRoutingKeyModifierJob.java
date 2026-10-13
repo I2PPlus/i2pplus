@@ -44,12 +44,12 @@ public class UpdateRoutingKeyModifierJob extends JobImpl {
 
     /**
      * Update the routing key modifier if needed.
-     *
+     * <p>
      * This job runs periodically (every 15 minutes maximum) to ensure
      * the routing key modifier is updated daily at midnight. The routing
      * key modifier is used in cryptographic operations and must be updated
      * regularly for security.
-     *
+     * <p>
      * If the modifier data changes, notifies the network database that
      * routing keys have changed.
      */

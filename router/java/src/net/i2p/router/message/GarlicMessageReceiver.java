@@ -27,10 +27,10 @@ import java.util.concurrent.atomic.AtomicInteger;
  * Handles the reception and decryption of GarlicMessages. Decrypts the garlic message using
  * the appropriate keys, validates each garlic clove, and passes valid cloves to the configured
  * {@link CloveReceiver} for dispatch.
- *
+ * <p>
  * This class supports decryption keys of various types including ElGamal, ECIES, and PQ keys,
  * and performs key selection based on availability.
- *
+ * <p>
  * The receiver can be configured to target a specific client destination, allowing session-key
  * and tunnel settings to be applied accordingly.
  */

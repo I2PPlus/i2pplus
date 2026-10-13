@@ -15,11 +15,11 @@ import net.i2p.util.SystemVersion;
  * Check for or download an updated version of a plugin.
  * A plugin is a standard .sud file with a 40-byte signature,
  * a 16-byte version, and a .zip file.
- *
+ * <p>
  * So we get the current version and update URL for the installed plugin,
  * then fetch the first 56 bytes of the URL, extract the version,
  * and compare.
- *
+ * <p>
  * Moved from web/ and turned into an Updater.
  *
  * @author zzz

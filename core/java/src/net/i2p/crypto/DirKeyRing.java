@@ -37,9 +37,9 @@ public class DirKeyRing implements KeyRing {
      * Load a public key from the certificate in the given scope.
      * Cert must be in the file (escaped keyName).crt,
      * and have a CN == keyName.
-     *
+     * <p>
      * This DOES do a revocation check.
-     *
+     * <p>
      * CN check unsupported on Android.
      *
      * @param keyName the key name, also the expected certificate CN

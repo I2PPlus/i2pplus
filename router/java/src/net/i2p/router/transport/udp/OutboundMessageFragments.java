@@ -47,7 +47,6 @@ class OutboundMessageFragments {
     /**
      * Ceiling on any wait taken here, so one peer reporting a long delay cannot
      * stall the pool.
-     *
      * <p>Doubled on a host {@link SystemVersion#isSlow()}, where the extra
      * millisecond buys nothing but headroom. Package-visible so tests assert
      * against the value in force rather than a literal: hardcoding it made
@@ -57,7 +56,6 @@ class OutboundMessageFragments {
     static final int MAX_WAIT_MS = SystemVersion.isSlow() ? 1000 : 500;
     /**
      * Floor on any wait taken here.
-     *
      * <p>A round that allocated nothing has to cost a bounded wait. It used to cost none:
      * see {@link #foldSendDelay}.
      */
@@ -204,7 +202,7 @@ class OutboundMessageFragments {
     /**
      * Add the peer to the list of peers wanting to transmit something.
      * This wakes up the packet pusher if it is sleeping.
-     *
+     * <p>
      * Avoid synchronization where possible.
      * There are small chances of races.
      * There are larger chances of adding the PeerState "behind" where
@@ -258,12 +256,9 @@ class OutboundMessageFragments {
 
     /**
      * Fetch all the packets for a message volley.
-     *
      * <p>Blocks while no peer can send, then gives up after at most {@link #MAX_WAIT_MS}
      * rather than waiting indefinitely, so this returns even when nothing became sendable.
-     *
      * <p>NOT thread-safe. Called by the PacketPusher thread only.
-     *
      * <p>If this is ever changed to retry internally instead of returning null, it must
      * also break on thread interruption. Shutdown interrupts the pusher, and once that
      * interrupt has been consumed every later wait returns immediately, which would turn
@@ -522,11 +517,9 @@ class OutboundMessageFragments {
 
 /**
  * Fold one peer's reported delay into the smallest delay seen so far this round.
- *
  * <p>A peer reports {@code 0} to mean it wants a prompt retry: its retransmit timer has
  * elapsed, or it is holding a message past its lifetime and should be failed out. That is a
  * reason to retry soon, not a reason not to wait.
- *
  * <p>Folding {@code 0} in literally is what made this loop burn a core. The round minimum
  * started at {@link Integer#MAX_VALUE} and was only ever lowered, so a single peer reporting
  * {@code 0} pinned it there for everyone. The end-of-round test is {@code nextSendDelay > 0},
@@ -545,7 +538,6 @@ class OutboundMessageFragments {
 
     /**
      * How long to block after a full round allocated nothing.
-     *
      * <p>Always at least {@link #MIN_WAIT_MS}, so a round that produced nothing cannot turn
      * into a spin, and never more than {@link #MAX_WAIT_MS}, so one peer reporting a long delay
      * cannot stall the pool.

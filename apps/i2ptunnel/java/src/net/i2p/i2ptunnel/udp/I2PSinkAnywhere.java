@@ -8,7 +8,6 @@ import net.i2p.data.Destination;
 /**
  * I2P sink implementation that sends datagrams to any destination
  * specified in each {@link #send} call, rather than a fixed destination.
- *
  * <p>Supports both repliable and raw datagram modes. When not in raw mode,
  * data is wrapped with {@link I2PDatagramMaker} before sending.</p>
  */

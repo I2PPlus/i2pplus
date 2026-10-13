@@ -20,7 +20,7 @@ import java.util.Properties;
 
 /**
  * Define the standard means of interacting with the I2P system
- *
+ * <p>
  * An I2PClient contains no state, it is just a facility for creating private key files
  * and generating sessions from existing private key files.
  *
@@ -53,16 +53,16 @@ public interface I2PClient {
 
     /**
      * For router-&gt;client payloads.
-     *
+     * <p>
      * If false, the router will send the MessageStatus,
      * the client must respond with a ReceiveMessageBegin,
      * the router will send the MessagePayload,
      * and the client respond with a ReceiveMessageEnd.
-     *
+     * <p>
      * If true, the router will send the MessagePayload immediately,
      * and will not send a MessageStatus.
      * The client will not send ReceiveMessageBegin or ReceiveMessageEnd.
-     *
+     * <p>
      * Default false, but the implementation in this package sets to true.
      *
      * @since 0.9.4
@@ -103,7 +103,7 @@ public interface I2PClient {
      * using the specified options to both connect to the router, to instruct
      * the router how to handle the new session, and to configure the end to end
      * encryption.
-     *
+     * <p>
      * As of 0.9.19, defaults in options are honored.
      *
      * @param destKeyStream location from which to read the Destination, PrivateKey, and SigningPrivateKey from,
@@ -118,7 +118,7 @@ public interface I2PClient {
     /**
      * Create a new destination with the default certificate creation properties and store
      * it, along with the private encryption and signing keys at the specified location.
-     *
+     * <p>
      * Caller must close stream.
      *
      * @param destKeyStream stream to write the destination and keys to
@@ -133,7 +133,7 @@ public interface I2PClient {
      * It will have a null certificate for DSA 1024/160 and KeyCertificate otherwise.
      * This is not bound to the I2PClient, you must supply the data back again
      * in createSession().
-     *
+     * <p>
      * Caller must close stream.
      *
      * @param destKeyStream location to write out the destination, PrivateKey, and SigningPrivateKey,
@@ -149,7 +149,7 @@ public interface I2PClient {
     /**
      * Create a new destination with the given certificate and store it, along with the private
      * encryption and signing keys at the specified location.
-     *
+     * <p>
      * Caller must close stream.
      *
      * @param destKeyStream stream to write the destination and keys to

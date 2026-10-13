@@ -15,7 +15,7 @@ import net.i2p.util.SystemVersion;
 /**
  * This class represents a tunnel gateway with multiple hops that accepts messages,
  * then coalesces and fragments them before sending them down the tunnel.
- *
+ * <p>
  * The processing flow is:
  * <ol>
  * <li>add an I2NPMessage (and optionally, the target router or tunnel)</li>
@@ -24,10 +24,10 @@ import net.i2p.util.SystemVersion;
  * <li>Fragments are sent to Sender, encrypted, and delivered to the Receiver</li>
  * <li>Receiver directs the message to the next tunnel hop or endpoint</li>
  * </ol>
- *
+ * <p>
  * This class uses specialized CoDel queues to manage queue delays and bufferbloat.
  * The outbound gateway uses a priority queue, while inbound uses a bounded non-priority queue.
- *
+ * <p>
  * Thread safety:
  * <ul>
  * <li>_prequeue is a thread-safe blocking queue managing pending messages</li>
@@ -121,7 +121,7 @@ class PumpedTunnelGateway extends TunnelGateway {
 
     /**
      * A gateway for a single tunnel hop.
-     *
+     * <p>
      * Outbound gateways use an unbounded priority queue;
      * inbound gateways use a bounded blocking queue.
      *
@@ -192,7 +192,7 @@ class PumpedTunnelGateway extends TunnelGateway {
     /**
      * Adds a message to be sent down the tunnel.
      * If the prequeue is full, the message is dropped and a statistic is updated.
-     *
+     * <p>
      * This method is optimized for outbound gateways and called by TPTG for inbound.
      *
      * @param msg the message to send
@@ -233,10 +233,10 @@ class PumpedTunnelGateway extends TunnelGateway {
 
     /**
      * Pumps messages from the internal prequeue into the processing queue.
-     *
+     * <p>
      * This method tries to drain a bounded number of messages from _prequeue into the provided queueBuf,
      * then adds them to the internal _queue for preprocessing and fragmentation.
-     *
+     * <p>
      * Expired messages are removed after preprocessing, outside the synchronization block, to reduce contention.
      *
      * @param queueBuf an empty list used as a temporary buffer for messages (will be cleared before return)

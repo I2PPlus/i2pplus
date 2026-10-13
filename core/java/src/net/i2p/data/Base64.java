@@ -10,7 +10,6 @@ import java.util.Locale;
 
 /**
  * Encodes and decodes to and from Base64 notation.
- *
  * <p>
  * Change Log:
  * </p>
@@ -21,7 +20,6 @@ import java.util.Locale;
  * <li>v1.3.4 - Fixed when "improperly padded stream" error was thrown at the wrong time.</li>
  * <li>v1.3.3 - Fixed I/O streams which were totally messed up.</li>
  * </ul>
- *
  * <p>
  * I am placing this code in the Public Domain. Do with it as you will.
  * This software comes with no guarantees or warranties but with
@@ -29,7 +27,7 @@ import java.util.Locale;
  * Please visit <a href="http://iharder.net/xmlizable">http://iharder.net/xmlizable</a>
  * periodically to check for updates or to contribute improvements.
  * </p>
- *
+ * <p>
  * Modified by jrandom for i2p, using safeEncode / safeDecode to create filesystem and URL safe
  * base64 values (replacing / with ~, and + with -)
  *
@@ -99,13 +97,13 @@ public class Base64 {
 
     /**
      * Decodes data from Base64 notation using the I2P alphabet.
-     *
+     * <p>
      * As of 0.9.14, does not require trailing '=' if remaining bits are zero.
      * Prior to that, trailing 1, 2, or 3 chars were ignored.
-     *
+     * <p>
      * As of 0.9.14, trailing garbage after an '=' will cause an error.
      * Prior to that, it was ignored.
-     *
+     * <p>
      * As of 0.9.14, whitespace will cause an error.
      * Prior to that, it was ignored.
      *
@@ -550,16 +548,16 @@ public class Base64 {
      * returns it as a string.
      * Equivalent to calling
      * <code>new String( decode( s ) )</code>
-     *
+     * <p>
      * As of 0.9.14, decodes as UTF-8. Prior to that, it used the platform's encoding.
      * For best results, decoded data should be 7 bit.
-     *
+     * <p>
      * As of 0.9.14, does not require trailing '=' if remaining bits are zero.
      * Prior to that, trailing 1, 2, or 3 chars were ignored.
-     *
+     * <p>
      * As of 0.9.14, trailing garbage after an '=' will cause an error.
      * Prior to that, it was ignored.
-     *
+     * <p>
      * As of 0.9.14, whitespace will cause an error.
      * Prior to that, it was ignored.
      *
@@ -578,13 +576,13 @@ public class Base64 {
      * the decoded byte array. The chars are looked up in the DECODABET
      * directly, so no UTF-8 byte[] copy of the string is made. The caller
      * must have verified that every char is ASCII.
-     *
+     * <p>
      * As of 0.9.14, does not require trailing '=' if remaining bits are zero.
      * Prior to that, trailing 1, 2, or 3 chars were ignored.
-     *
+     * <p>
      * As of 0.9.14, trailing garbage after an '=' will cause an error.
      * Prior to that, it was ignored.
-     *
+     * <p>
      * As of 0.9.14, whitespace will cause an error.
      * Prior to that, it was ignored.
      *

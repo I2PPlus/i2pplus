@@ -422,7 +422,6 @@ public class RouterConsoleRunner implements RouterApp {
 
     /**
      * Handler tree:
-     *
      * <pre>
      * Server
      *     HandlerCollection

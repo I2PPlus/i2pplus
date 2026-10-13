@@ -20,10 +20,10 @@ import java.util.jar.Manifest;
  * The build date as set in i2p.jar,
  * and reasonable min and max values for the current time,
  * to be used as sanity checks.
- *
+ * <p>
  * Idea taken from Chrome, which assumes any clock more than
  * 2 days before or 1 year after the build date is bad.
- *
+ * <p>
  * Not maintained as a public API, not for use by plugins or applications.
  *
  * @since 0.9.25 modded from FileDumpHelper

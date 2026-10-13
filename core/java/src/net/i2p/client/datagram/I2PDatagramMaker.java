@@ -46,7 +46,7 @@ public final class I2PDatagramMaker {
     /**
      * An I2PDatagramMaker able to create I2P repliable datagrams going to be
      * sent through the specified I2PSession.
-     *
+     * <p>
      * Does NOT support LS2 offline keys!
      *
      * @param session I2PSession used to send I2PDatagrams through
@@ -78,20 +78,20 @@ public final class I2PDatagramMaker {
 
     /**
      * Make a repliable I2P datagram containing the specified payload.
-     *
+     * <p>
      * Format is:
      * <ol>
      * <li>Destination (387+ bytes)
      * <li>Signature (40+ bytes, type and length as implied by signing key type in the Destination)
      * <li>Payload
      * </ol>
-     *
+     * <p>
      * Maximum datagram size is ~64KB, so maximum payload size is a little less.
      * Practical maximum is a few KB less due to
      * Destination and Garlic overhead. 10 KB or less is recommended for best results.
-     *
+     * <p>
      * For DSA_SHA1 Destinations, the signature is of the SHA-256 Hash of the payload.
-     *
+     * <p>
      * As of 0.9.14, for non-DSA_SHA1 Destinations, the signature is of the payload itself.
      *
      * @param payload non-null Bytes to be contained in the I2P datagram.

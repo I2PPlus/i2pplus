@@ -13,12 +13,12 @@ import net.i2p.client.streaming.I2PSocketAddress;
 
 /**
  * Bridge to I2PServerSocket.
- *
+ * <p>
  * This extends ServerSocket to make porting apps easier.
  * accept() returns a real Socket (a StandardSocket).
  * accept() throws IOExceptions like ServerSockets do, rather than returning
  * null or throwing I2PExceptions.
- *
+ * <p>
  * StandardServerSockets are always bound.
  * You may not create an unbound StandardServerSocket.
  * Create this through the SocketManager.

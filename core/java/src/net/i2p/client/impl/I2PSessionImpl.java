@@ -84,7 +84,7 @@ import net.i2p.util.VersionComparator;
 /**
  * Implementation of an I2P session running over TCP.  This class is NOT thread safe -
  * only one thread should send messages at any given time
- *
+ * <p>
  * Public only for clearCache().
  * Except for methods defined in I2PSession and I2CPMessageEventListener,
  * not maintained as a public API, not for external use.
@@ -230,7 +230,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
     protected static final int CACHE_MAX_SIZE = SystemVersion.isSlow() ? 64 : 256;
     /**
      * Cache of Destination lookups, keyed by a Hash or a String.
-     *
+     * <p>
      * Since 0.9.11 the key may be a String as well as a Hash.
      *
      * @since 0.8.9
@@ -356,9 +356,9 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
     /**
      * Create a new session, reading the Destination, PrivateKey, and SigningPrivateKey
      * from the destKeyStream, and using the specified options to connect to the router
-     *
+     * <p>
      * As of 0.9.19, defaults in options are honored.
-     *
+     * <p>
      * This does NOT validate consistency of the destKeyStream,
      * e.g. pubkey/privkey match or valid offline sig. The router does that.
      *
@@ -383,7 +383,6 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
      * @param opts subsession options if any, may be null
      * @return a new subsession, non-null
      * @since 0.9.21
-     *
      *
      */
     @Override
@@ -673,7 +672,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
     /**
      * Load up the destKeyFile for our Destination, PrivateKey, and SigningPrivateKey.
      * As of 0.9.38, loads the offline data also. See PrivateKeyFile.
-     *
+     * <p>
      * This does NOT validate consistency of the destKeyStream,
      * e.g. pubkey/privkey match or valid offline sig. The router does that.
      *
@@ -742,11 +741,11 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
     /**
      * Connect to the router and establish a session.  This call blocks until
      * a session is granted.
-     *
+     * <p>
      * Should be threadsafe, other threads will block until complete.
      * Disconnect / destroy from another thread may be called simultaneously and
      * will (should?) interrupt the connect.
-     *
+     * <p>
      * Connecting a primary session will not automatically connect subsessions.
      * Connecting a subsession will automatically connect the primary session
      * if not previously connected.
@@ -1142,13 +1141,13 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
     /**
      * The I2CPMessageEventListener callback.
      * Receive notification of some I2CP message and handle it if possible.
-     *
+     * <p>
      * We route the message based on message type AND session ID.
-     *
+     * <p>
      * The following types never contain a session ID and are not routable to
      * a subsession:
      * BandwidthLimitsMessage, DestReplyMessage
-     *
+     * <p>
      * The following types may not contain a valid session ID
      * even when intended for a subsession, so we must take special care:
      * SessionStatusMessage
@@ -1428,7 +1427,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
 
     /**
      * Tear down the session, and do NOT reconnect.
-     *
+     * <p>
      * Blocks if session has not been fully started.
      */
     @Override
@@ -1436,7 +1435,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
 
     /**
      * Tear down the session, and do NOT reconnect.
-     *
+     * <p>
      * Will interrupt an open in progress.
      * Calls sessionlistener.disconnected()
      *
@@ -1924,16 +1923,16 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
     /**
      * Ask the router to lookup a Destination by host name.
      * Blocking. Waits a max of 10 seconds by default.
-     *
+     * <p>
      * This only makes sense for a b32 hostname, OR outside router context.
      * Inside router context, just query the naming service.
      * Outside router context, this does NOT query the context naming service.
      * Do that first if you expect a local addressbook.
-     *
+     * <p>
      * This will log a warning for non-b32 in router context.
-     *
+     * <p>
      * See interface for suggested implementation.
-     *
+     * <p>
      * Requires router side to be 0.9.11 or higher. If the router is older,
      * this will return null immediately.
      *

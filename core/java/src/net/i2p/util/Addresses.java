@@ -540,9 +540,9 @@ public abstract class Addresses {
 /**
  * Caching version of InetAddress.getByName(host).getAddress(), which is slow.
  * Caches numeric addresses only. Will resolve but not cache DNS addresses.
- *
+ * <p>
  * DEPRECATED for IPs in RouterAddresses, blocklists, etc.; use getIPOnly() instead.
- *
+ * <p>
  * Behavior differences from InetAddress.getByName():
  * <ul>
  * <li>Does not allow numeric IPs of the form d.d.d, d.d, or d (considered mistakes)
@@ -589,10 +589,10 @@ public abstract class Addresses {
 /**
  * Caching version of InetAddress.getByName(host).getAddress(), which is slow.
  * Resolves literal IP addresses only without DNS lookups. Returns null for hostnames.
- *
+ * <p>
  * PREFERRED for IPs in RouterAddresses, blocklists, etc. over getIP()
  * because it avoids getByName() in most cases.
- *
+ * <p>
  * Behavior differences from InetAddress.getByName():
  * <ul>
  * <li>Does not allow numeric IPs of the form d.d.d, d.d, or d (considered mistakes)
@@ -633,7 +633,7 @@ public abstract class Addresses {
  * For literal IP addresses, same as getIP(String).
  * For hostnames, returns the preferred type (IPv4/v6) if available, else the other type.
  * Will resolve but not cache DNS hostnames.
- *
+ * <p>
  * Behavior differences from InetAddress.getByName():
  * <ul>
  * <li>Returns null for null or empty host (vs. 127.0.0.1 in InetAddress)
@@ -684,10 +684,10 @@ public abstract class Addresses {
  * For literal IP addresses, same as getIP(String).
  * For hostnames, may return multiple addresses (both IPv4 and IPv6), even if unreachable.
  * Will resolve but not cache DNS hostnames.
- *
+ * <p>
  * Note: Order and number of results are platform-specific and depend on JVM options
  * (java.net.preferIPv4Stack, java.net.preferIPv6Addresses) and caching layers.
- *
+ * <p>
  * Behavior differences from InetAddress.getByName():
  * <ul>
  * <li>Returns null for null or empty host (vs. 127.0.0.1 in InetAddress)

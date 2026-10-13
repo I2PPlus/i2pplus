@@ -76,7 +76,7 @@ public class VerifiedDestination extends Destination {
      * They can be used for a second-level domain, for example, to sign the
      * Destination for a third-level domain. Or for a central authority
      * to approve a destination.
-     *
+     * <p>
      * We define a Signed Certificate as follows:
      * - length: Either 44 or 72 bytes
      * - contents:
@@ -86,11 +86,11 @@ public class VerifiedDestination extends Destination {
      * the identity and keys of the signing Destination.
      * Data which is signed: The first 384 bytes of the Destination
      * (i.e. the Public Key and Signing Public Key, WITHOUT the Certificate)
-     *
+     * <p>
      * It is not appropriate to enforce a particular delegation scheme here.
      * The application will need to apply additional steps to select
      * an appropriate signing Destination and verify the signature.
-     *
+     * <p>
      * See PrivateKeyFile.verifySignature() for sample verification code.
      *
      * @return true if the signed certificate payload length is valid

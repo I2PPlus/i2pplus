@@ -61,38 +61,34 @@ class DefinitionParser {
      * <li>The word &amp;quot;deny&amp;quot;.  This threshold is always breached, i.e. no connection attempts
      *   will be allowed.</li>
      * </ul>
-     *
+     * <p>
      * The default threshold applies to any remote destinations that are not explicitly
      * listed in the definition or in any of the referenced files.  To set a default
      * threshold use the keyword "default".  The following are examples of default thresholds:
-     *
      * <pre>
      * 15/5 default
      * allow default
      * deny default
      * </pre>
-     *
+     * <p>
      * Explicit thresholds are applied to a remote destination listed in the definition itself.
      * Examples:
-     *
      * <pre>
      * 15/5 explicit asdfasdfasdf.b32.i2p
      * allow explicit fdsafdsafdsa.b32.i2p
      * deny explicit qwerqwerqwer.b32.i2p
      * </pre>
-     *
+     * <p>
      * For convenience it is possible to maintain a list of destinations in a file and define
      * a threshold for all of them in bulk.  Examples:
-     *
      * <pre>
      * 15/5 file /path/throttled_destinations.txt
      * deny file /path/forbidden_destinations.txt
      * allow file /path/unlimited_destinations.txt
      * </pre>
-     *
+     * <p>
      * Recorders keep track of connection attempts made by a remote destination, and if that
      * breaches a certain threshold, that destination gets recorded in a given file.  Examples:
-     *
      * <pre>
      * 30/5 record /path/aggressive.txt
      * 60/5 record /path/very_aggressive.txt

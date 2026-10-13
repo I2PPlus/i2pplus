@@ -10,7 +10,7 @@ import net.i2p.router.RouterContext;
 /**
  * Ask a connected peer for his RI.
  * Modified from SingleSearchJob.
- *
+ * <p>
  * Mainly for older routers. As of 0.9.55, transports will
  * periodically send their RI.
  * Some old routers may not respond or may send DSRM,

@@ -19,11 +19,11 @@ import net.i2p.util.Log;
 
 /**
  * Utility class providing common transport operations and configurations.
- *
+ * <p>
  * This class contains static methods and constants used throughout
  * the transport system for address validation, port management,
  * IPv6 configuration, and network utility functions.
- *
+ * <p>
  * <strong>Key Features:</strong>
  * <ul>
  * <li>IPv4 and IPv6 address validation and parsing</li>
@@ -33,7 +33,7 @@ import net.i2p.util.Log;
  * <li>Geographic IP filtering and validation</li>
  * <li>Transport-specific constants and defaults</li>
  * </ul>
- *
+ * <p>
  * <strong>IPv6 Support:</strong>
  * <ul>
  * <li>Configuration options for NTCP and SSU transports</li>
@@ -41,7 +41,7 @@ import net.i2p.util.Log;
  * <li>Port assignment and range checking</li>
  * <li>Compatibility helpers for mixed IPv4/IPv6 environments</li>
  * </ul>
- *
+ * <p>
  * <strong>Network Utilities:</strong>
  * <ul>
  * <li>Port assignment strategies (random vs. configured)</li>
@@ -215,15 +215,12 @@ public abstract class TransportUtil {
 
     /**
      * Is the RouterAddress usable for tunnel building?
-     *
      * <p>SSU requires protocol v2 plus a valid IP/port or an introduction; SSU2 requires a
      * valid IP/port or an introduction; NTCP/NTCP2 require a valid IP/port.
-     *
      * <p>Lives here rather than in {@code TunnelPeerSelector} because both the tunnel
      * selectors and {@code ProfileOrganizer} need it, and the latter must not reach into
      * {@code tunnel.pool} — that package already depends on {@code peermanager}, so the
      * reverse edge would close a cycle.
-     *
      * <p>Pure decision: no context access, safe for unit tests.
      *
      * @param ra the router address to check (non-null)
@@ -252,11 +249,9 @@ public abstract class TransportUtil {
 
     /**
      * Does this RouterInfo carry at least one address we could still send to?
-     *
      * <p>A peer whose addresses have all expired or become unusable cannot be selected for
      * a build and cannot be pre-connected to, so admitting it to a selection tier only
      * produces a candidate that is guaranteed to fail. Gate promotion on this.
-     *
      * <p>Pure decision: takes the RouterInfo rather than consulting the netdb, so callers
      * holding an entry do not pay for a second lookup.
      *
@@ -438,7 +433,7 @@ public abstract class TransportUtil {
 
     /**
      * Is this a valid port for us or a remote router?
-     *
+     * <p>
      * ref: http://i2p-projekt.i2p/en/docs/ports
      * ref: https://cs.chromium.org/chromium/src/net/base/port_util.cc
      *

@@ -6,12 +6,11 @@ import net.i2p.util.SimpleByteCache;
 
 /**
  * Abstract base class for HMAC (Hash-based Message Authentication Code) operations.
- *
+ * <p>
  * This class provides the foundation for HMAC algorithm implementations
  * used throughout I2P for message authentication and integrity verification.
  * It defines the standard interface for calculating and verifying HMAC values
  * with various hash algorithms.
- *
  * <p>Key operations include:</p>
  * <ul>
  * <li>HMAC calculation with given key and message data</li>
@@ -19,7 +18,6 @@ import net.i2p.util.SimpleByteCache;
  * <li>Support for different hash algorithms (SHA-1, SHA-256)</li>
  * <li>Integration with I2P's session key management</li>
  * </ul>
- *
  * <p><strong>Implementation Note:</strong> As of 0.9.42, this class serves
  * as an abstract base. See {@code net.i2p.router.transport.udp.SSUHMACGenerator}
  * for SSU-specific HMAC implementation and {@code SHA256Generator} for

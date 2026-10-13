@@ -22,7 +22,6 @@ import net.i2p.util.SystemVersion;
  * Contains a really simple ClientApp "structure" and some static methods
  * so they can be used both by LoadClientAppsJob and by the configuration
  * page in the router console.
- *
  * <pre>
  *
  * clients.config format:
@@ -64,7 +63,6 @@ import net.i2p.util.SystemVersion;
  * If the delay is greater than or equal to zero, it will be run
  * in a new thread, and exceptions will be logged but not propagated
  * to the console.
- *
  * </pre>
  */
 public class ClientAppConfig {

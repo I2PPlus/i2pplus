@@ -35,7 +35,7 @@ import java.util.concurrent.atomic.AtomicLong;
  * coordinating the log limits, and storing the set of log records pending.
  * This also fires off a LogWriter thread that pulls pending records off and
  * writes them where appropriate.
- *
+ * <p>
  * As of 0.9.41, this class may be overridden via I2PAppContext.setLogManager()
  */
 public class LogManager implements Flushable {

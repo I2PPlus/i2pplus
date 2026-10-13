@@ -2,7 +2,7 @@ package net.i2p.stat;
 
 /**
  * Centralized rate period constants for memory-optimized statistics collection.
- *
+ * <p>
  * This class provides standardized period arrays for rate statistics to ensure
  * consistency across the codebase while minimizing memory footprint.
  *

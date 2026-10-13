@@ -573,7 +573,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
 
     /**
      * Display help information through the given logger.
-     *
+     * <p>
      * Does not fire any events to the logger
      *
      * @param l logger to receive events and output
@@ -614,9 +614,9 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
      * Configure the extra I2CP options to use in any subsequent I2CP sessions.
      * Generic options used for clients and servers
      * Usage: "clientoptions[ key=value]*" .
-     *
+     * <p>
      * Event "clientoptions_onResult" = "ok" on completion.
-     *
+     * <p>
      * Deprecated To be made private, use setClientOptions().
      * This does NOT update a running TunnelTask.
      *
@@ -666,7 +666,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
      * Generic options used for clients and servers.
      * This DOES update a running TunnelTask, but NOT the session.
      * A more efficient runClientOptions().
-     *
+     * <p>
      * Defaults in opts properties are not recommended, they may or may not be honored.
      *
      * @param opts non-null
@@ -685,7 +685,6 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
     /**
      * Run the server pointing at the host and port specified using the private i2p
      * destination loaded from the specified file. <p>
-     *
      * Event "serverTaskId" = Integer(taskId) after the tunnel has been started (or -1 on error)
      * Also sets the event "openServerResult" = "ok" or "error" (displaying "Ready!" on the logger after
      * 'ok').  So, success = serverTaskId != -1 and openServerResult = ok.
@@ -744,7 +743,6 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
      * Run the HTTP server pointing at the host and port specified using the private i2p
      * destination loaded from the specified file, replacing the HTTP headers
      * so that the Host: specified is the one spoofed. <p>
-     *
      * Event "serverTaskId" = Integer(taskId) after the tunnel has been started (or -1 on error)
      * Also sets the event "openServerResult" = "ok" or "error" (displaying "Ready!" on the logger after
      * 'ok').  So, success = serverTaskId != -1 and openServerResult = ok.
@@ -781,7 +779,6 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
      * destination loaded from the specified file, replacing the HTTP headers
      * so that the Host: specified is the one spoofed. Also runs an HTTP proxy for
      * bidirectional communications on the same tunnel destination.<p>
-     *
      * Event "serverTaskId" = Integer(taskId) after the tunnel has been started (or -1 on error)
      * Also sets the event "openServerResult" = "ok" or "error" (displaying "Ready!" on the logger after
      * 'ok').  So, success = serverTaskId != -1 and openServerResult = ok.
@@ -818,10 +815,9 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
     /**
      * Run the server pointing at the host and port specified using the private i2p
      * destination loaded from the given base64 stream. <p>
-     *
      * Deprecated? Why run a server with a private destination?
      * Not available from the war GUI
-     *
+     * <p>
      * Event "serverTaskId" = Integer(taskId) after the tunnel has been started (or -1 on error)
      * Also sets the event "openServerResult" = "ok" or "error" (displaying "Ready!" on the logger after
      * 'ok').  So, success = serverTaskId != -1 and openServerResult = ok.
@@ -850,7 +846,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
     /**
      * Run the client on the given port number pointing at the specified destination
      * (either the base64 of the destination or file:fileNameContainingDestination).
-     *
+     * <p>
      * Event "clientTaskId" = Integer(taskId) after the tunnel has been started (or -1 on error)
      * Also sets the event "openClientResult" = "error" or "ok" (before setting the value to "ok" it also
      * adds "Ready! Port #" to the logger as well).  In addition, it will also set "clientLocalPort" =
@@ -901,7 +897,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
 
     /**
      * Run an HTTP client on the given port number
-     *
+     * <p>
      * Event "httpclientTaskId" = Integer(taskId) after the tunnel has been started (or -1 on error).
      * Also sets "httpclientStatus" = "ok" or "error" after the client tunnel has started.
      * parameter sharedClient is a String, either "true" or "false"
@@ -966,7 +962,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
 
     /**
      * Run a CONNECT client on the given port number
-     *
+     * <p>
      * Event "connectclientTaskId" = Integer(taskId) after the tunnel has
      * been started (or -1 on error).
      *
@@ -1027,7 +1023,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
 
     /**
      * Run an IRC client on the given port number
-     *
+     * <p>
      * Event "ircclientTaskId" = Integer(taskId) after the tunnel has been started (or -1 on error).
      * Also sets "ircclientStatus" = "ok" or "error" after the client tunnel has started.
      * parameter sharedClient is a String, either "true" or "false"
@@ -1084,7 +1080,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
 
     /**
      * Run an SOCKS tunnel on the given port number
-     *
+     * <p>
      * Event "sockstunnelTaskId" = Integer(taskId) after the
      * tunnel has been started (or -1 on error).  Also sets
      * "openSOCKSTunnelResult" = "ok" or "error" after the client tunnel has
@@ -1133,7 +1129,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
 
     /**
      * Run an SOCKS IRC tunnel on the given port number
-     *
+     * <p>
      * Event "socksirctunnelTaskId" = Integer(taskId) after the
      * tunnel has been started (or -1 on error).
      *
@@ -1270,7 +1266,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
     /**
      * Specify the i2cp host and port
      * Deprecated - only used by CLI
-     *
+     * <p>
      * Event "configResult" = "ok" or "error" after the configuration has been specified
      *
      * @param args an optional leading -s for SSL, then the I2CP host and port
@@ -1325,7 +1321,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
     /**
      * Specify whether to use its own destination for each outgoing tunnel
      * Deprecated - only used by CLI
-     *
+     * <p>
      * Event "owndestResult" = "ok" or "error" after the configuration has been specified
      *
      * @param args {yes or no}
@@ -1345,7 +1341,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
 
     /**
      * Specify the hostname / IP address of the interface that the tunnels should bind to
-     *
+     * <p>
      * Event "listen_onResult" = "ok" or "error" after the interface has been specified
      *
      * @param args exactly one: the interface hostname or IP to bind to
@@ -1364,7 +1360,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
 
     /**
      * Specify the read timeout going to be used for newly-created I2PSockets
-     *
+     * <p>
      * Event "read_timeoutResult" = "ok" or "error" after the interface has been specified
      *
      * @param args exactly one: the read timeout in ms; negative waits forever
@@ -1390,7 +1386,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
      * Generate a new keypair.
      * Does NOT support non-default sig types.
      * Deprecated - only used by CLI
-     *
+     * <p>
      * Event "genkeysResult" = "ok" or "error" after the generation is complete
      *
      * @param args {privateKeyFilename, publicKeyFilename} or {privateKeyFilename}
@@ -1434,7 +1430,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
      * Generate a new keypair.
      * Does NOT support non-default sig types.
      * Deprecated - only used by CLI
-     *
+     * <p>
      * Event "privateKey" = base64 of the privateKey stream and
      * sets the event "publicDestination" = base64 of the destination
      *
@@ -1451,7 +1447,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
      * Exit the JVM if there are no more tasks left running.  If there are tunnels
      * running, it returns.
      * Deprecated - only used by CLI
-     *
+     * <p>
      * Event "quitResult" = "error" if there are tasks running (but if there
      * aren't, well, there's no point in setting the quitResult to "ok", now is there?)
      *
@@ -1468,7 +1464,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
     /**
      * Retrieve a list of currently running tasks
      * Deprecated - only used by CLI
-     *
+     * <p>
      * Event "listDone" = "done" after dumping the tasks to
      * the logger
      *
@@ -1485,7 +1481,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
     /**
      * Close the given task (or all tasks), optionally forcing them to die a hard
      * death
-     *
+     * <p>
      * Event "closeResult" = "ok" after the closing is complete
      *
      * @param args {jobNumber}, {"forced", jobNumber}, {"forced", "all"}, {"destroy", jobNumber}, {"destroy", "all"}
@@ -1538,7 +1534,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
     /**
      * Run all of the commands in the given file (one command per line)
      * Deprecated - only used by CLI
-     *
+     * <p>
      * Event "runResult" = "ok" or "error" after the closing is complete
      *
      * @param args exactly one: the path to a file of commands, one per line
@@ -1570,7 +1566,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
     /**
      * Perform a lookup of the name specified
      * Deprecated - only used by CLI
-     *
+     * <p>
      * Event "lookupResult" = base64 of the destination, or an error message
      *
      * @param args {name}
@@ -1604,7 +1600,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
     /**
      * Start up a ping task with the specified args (currently supporting -ns, -h, -l)
      * Deprecated - only used by CLI
-     *
+     * <p>
      * Event "pingTaskId" = Integer of the taskId, or -1
      *
      * @param allargs arguments to pass to the I2Ping task
@@ -1858,7 +1854,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
      * may support naming servers later. "file:&lt;filename&gt;" is also supported,
      * where filename is a file that either contains a binary Destination structure,
      * or the Base64 encoding of that structure.
-     *
+     * <p>
      * Since file:&lt;filename&gt; isn't really used, this method is deprecated,
      * just call context.namingService.lookup() directly.
      * @deprecated Don't use i2ptunnel for lookup! Use I2PAppContext.getGlobalContext().namingService().lookup(name) from i2p.jar

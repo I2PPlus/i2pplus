@@ -15,7 +15,7 @@ import java.io.OutputStream;
 
 /**
  * Defines the base functionality of API messages
- *
+ * <p>
  * As of 0.9.48, does NOT extend DataStructure.
  *
  * @author jrandom

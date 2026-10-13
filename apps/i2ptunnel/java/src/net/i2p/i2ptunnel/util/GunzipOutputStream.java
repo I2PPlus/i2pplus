@@ -16,14 +16,14 @@ import net.i2p.util.Log;
  * Gunzip implementation per
  * <a href="http://www.faqs.org/rfcs/rfc1952.html">RFC 1952</a>, reusing
  * java's standard CRC32 and Inflater and InflaterOutputStream implementations.
- *
+ * <p>
  * Note that the underlying InflaterOutputStream cannot be reused after close(),
  * so we don't have a Reusable version of this.
- *
+ * <p>
  * Sets up GunzipOutputStream -- InflaterOutputStream -- CRC32OutputStream -- uncompressedStream
- *
+ * <p>
  * Not a public API, subject to change, not for external use.
- *
+ * <p>
  * Modified from net.i2p.util.ResettableGZIPInputStream to use Java 6 InflaterOutputstream
  * @since 0.9.21, public since 0.9.50 for LocalHTTPServer, moved to util in 0.9.62
  */

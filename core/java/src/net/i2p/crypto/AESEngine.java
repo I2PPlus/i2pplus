@@ -14,12 +14,11 @@ import net.i2p.util.SimpleByteCache;
 
 /**
  * Abstract base class for AES cipher operations in I2P.
- *
+ * <p>
  * This class provides the interface and common functionality for AES encryption
  * and decryption operations. The base implementation contains placeholder methods
  * that log warnings when called. The actual AES implementation is provided
  * by {@link CryptixAESEngine} which extends this class.
- *
  * <p>This design pattern allows for:</p>
  * <ul>
  * <li>Consistent API across different AES implementations</li>
@@ -217,7 +216,7 @@ public class AESEngine {
     /**
      * Return random bytes for padding the data to a mod 16 size so that it is
      * at least minPaddedSize
-     *
+     * <p>
      * Public for ElGamalAESEngine.
      * Not a public API, not for external use.
      *
@@ -237,7 +236,7 @@ public class AESEngine {
     /**
      * Return size for padding the data to a mod 16 size so that it is
      * at least minPaddedSize
-     *
+     * <p>
      * Public for ElGamalAESEngine.
      * Not a public API, not for external use.
      *

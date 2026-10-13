@@ -19,17 +19,17 @@ import java.util.Properties;
  * Connect via I2CP and ask the router to look up
  * the lease of a hash, convert it to a Destination and return it.
  * Obviously this can take a while.
- *
+ * <p>
  * All calls are blocking and return null on failure.
  * Timeout is 15 seconds.
  * To do: Add methods that allow specifying the timeout.
- *
+ * <p>
  * As of 0.8.3, standard I2PSessions support lookups,
  * including multiple lookups in parallel, and overriding
  * the default timeout.
  * Using an existing I2PSession is much more efficient and
  * flexible than using this class.
- *
+ * <p>
  * Public since 0.9.45 only for main(). Not a public API.
  */
 public class LookupDest {

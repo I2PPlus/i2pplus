@@ -13,12 +13,12 @@ import net.i2p.data.i2np.I2NPMessage;
 
 /**
  * A GarlicConfig that holds a single I2NPMessage payload with no sub-cloves.
- *
+ * <p>
  * This is the leaf node in the garlic clove tree. Every clove in an outbound
  * GarlicMessage is a PayloadGarlicConfig wrapping one I2NPMessage (DataMessage,
  * DeliveryStatusMessage, DatabaseStoreMessage, etc.) along with its delivery
  * instructions.
- *
+ * <p>
  * Also used directly by netdb MessageWrapper and tunnel TestJob for single-clove
  * garlic wrapping.
  */

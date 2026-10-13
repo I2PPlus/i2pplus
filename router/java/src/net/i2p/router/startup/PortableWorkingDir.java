@@ -8,40 +8,39 @@ import net.i2p.util.SystemVersion;
 
 /**
  * Provides a relative working directory for i2p based upon properties set by the parent process.
- *
+ * <p>
  * This is used together with the Browser Bundle.
- *
+ * <p>
  * This class is slim/light because the initial config is deployed by
  * I2PCtrl.js if the config directory is missing from the relative directory it's using,
  * and if any migrations is needed, I2PCtrl.js will do that part.
- *
+ * <p>
  * In the future BB might have flavors or plugins which would be apps normally distributed
  * with default install of i2p, and other plugins available. I2PCtrl.js will manage these
  * since it's closer to the end-user via browser options and GUI.
- *
+ * <p>
  *
  * Just FYI:
  * In the context of a BB:
- *
+ * <p>
  * On OSX it has to look 3 paths up, but for the other two, only one.
- *
+ * <p>
  * OSX Path: I2PBrowser.app/Contents/MacOS/firefox
- *
+ * <p>
  * OSX =&gt; ../../../I2PBrowser-Data/I2P
  * Linux/Windows =&gt; ../I2PBrowser-Data/I2P
- *
+ * <p>
  * ---- However,
- *
+ * <p>
  * The javascript plugin I2PCtrl.js is setting correct working and base directory so this class can be quite dumb.
- *
+ * <p>
  * Working directory is where we have most of our config, and keys.
- *
+ * <p>
  * Base directory is where we usually find the wrapper config (on normal installs) together with jars and
  * static files in an I2P installation.
- *
+ * <p>
  * Portable uses both, with the key usage being that I2P is extracted from (whatever) to a base directory,
  * but still has it's config separate in the working directory.
- *
  *
  * @author (who to blame) Meeh
  * @version 0.2
@@ -114,7 +113,7 @@ public class PortableWorkingDir {
     /**
      * Redirect stdout and stderr to a wrapper.log file if there is no wrapper,
      * unless system property I2P_DISABLE_OUTPUT_OVERRIDE is set.
-     *
+     * <p>
      * If there is no -Dwrapper.log=/path/to/wrapper.log on the java command line
      * to specify a log file, check for existence of wrapper.log in CWD,
      * for backward compatibility in old installations (don't move it).

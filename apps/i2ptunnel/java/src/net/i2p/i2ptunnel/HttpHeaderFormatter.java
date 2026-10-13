@@ -33,7 +33,6 @@ public class HttpHeaderFormatter {
      * REQUEST_LINE
      * Header-Name: value
      * ...
-     *
      * </pre>
      *
      * @param headers the HTTP headers map (header name to list of values)

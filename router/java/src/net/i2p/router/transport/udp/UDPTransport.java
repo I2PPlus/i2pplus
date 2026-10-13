@@ -1130,7 +1130,7 @@ public class UDPTransport extends TransportImpl {
 
     /**
      * Published IP, IPv4 only.
-     *
+     * <p>
      * Reads the cached IPv4 address rather than scanning _currentAddresses,
      * so this does not take the address-list monitor. For the per-packet
      * comparison, prefer {@link #isCurrentIPv4(byte[])} over copying the array.
@@ -1435,9 +1435,9 @@ public class UDPTransport extends TransportImpl {
      * Someone we tried to contact gave us what they think our IP address is.
      * Right now, we just blindly trust them, changing our IP and port on a
      * whim.  this is not good ;)
-     *
+     * <p>
      * Slight enhancement - require two different peers in a row to agree
-     *
+     * <p>
      * Todo:
      * - Much better tracking of troublemakers
      * - Disable if we have good local address or UPnP
@@ -1718,7 +1718,7 @@ public class UDPTransport extends TransportImpl {
     /**
      * Whether the reported (peer-observed) port should be discarded in favour
      * of the currently configured external listen port.
-     *
+     * <p>
      * The port is pinned when the operator fixed it ({@code fixedPort} with a
      * known listen port) or when the peer reported no port at all.
      *
@@ -1850,7 +1850,7 @@ public class UDPTransport extends TransportImpl {
      * our firewall is changing our port), unless overridden by the property.
      * We must have an accurate external port when firewalled, or else
      * our signature of the SessionCreated packet will be invalid.
-     *
+     * <p>
      * As of 0.9.58, returns false if status is UNKNOWN
      * @return the is port fixed
      */
@@ -1893,7 +1893,6 @@ public class UDPTransport extends TransportImpl {
 
     /**
      * Measured round trip time to a peer over SSU.
-     *
      * <p>PeerState seeds its RTT at 0 and only assigns a real value from an
      * observed round trip, so 0 here means the session has not measured yet.
      * Callers treat that as unknown, not as an impossibly good peer.
@@ -1910,7 +1909,6 @@ public class UDPTransport extends TransportImpl {
 
     /**
      * When {@link #getEstimatedRTT(Hash)} was measured, on the router clock.
-     *
      * <p>Always {@link #RTT_TIME_CURRENT}: SSU refreshes a session's RTT on
      * every acknowledgement, so whatever this returns was measured by traffic
      * the session is carrying now. There is no reading here that can go stale
@@ -2584,7 +2582,7 @@ public class UDPTransport extends TransportImpl {
     /**
      * Reject a floodfill router that we have no history with, or that has
      * rejected tunnel creation far more often than it has agreed.
-     *
+     * <p>
      * Be less aggressive about rejecting floodfills when firewalled, as we need more peers.
      * Temporary - let NTCP2 deal with them (prop. 165).
      *
@@ -2616,7 +2614,7 @@ public class UDPTransport extends TransportImpl {
 
     /**
      * Select the bid tier for a message to an unestablished peer.
-     *
+     * <p>
      * Try to maintain at least 5 peers (30 for v6) so we can determine our IP address and
      * we have a selection to run peer tests with.  If we are firewalled, and we don't have
      * enough peers that volunteered to also introduce us, also bid aggressively so we are
@@ -2748,10 +2746,8 @@ public class UDPTransport extends TransportImpl {
     /**
      * Is an established peer idle past the threshold in both directions, and so
      * due for teardown and re-establishment rather than continued selection?
-     *
      * <p>Pure decision, extracted from {@link #send(OutNetMessage)} so the truth
      * table can be pinned in a test without a router.
-     *
      * <p>This predicate is deliberately <em>time-only</em>, where the code it
      * replaces also required {@code getConsecutiveFailedSends() > 2}. That counter is
      * incremented from exactly one place, {@link #failed(OutboundMessageState, boolean)},
@@ -2762,7 +2758,6 @@ public class UDPTransport extends TransportImpl {
      * answering {@link #isEstablished(Hash)} true, so peer selection keeps choosing peers
      * we have not heard from in days. Of the hop records on expired builds, 85% had this
      * shape and only 15% had been heard from within 3 seconds.
-     *
      * <p>The slack is intentional. {@link #MAX_IDLE_TIME} is {@link #EXPIRE_TIMEOUT}, 20
      * minutes, which already governed this drop and which the consecutive-failure path
      * relaxes toward. A peer silent in both directions for twenty minutes is not carrying
@@ -2984,12 +2979,12 @@ public class UDPTransport extends TransportImpl {
 
     /**
      * Update our IPv4 address and optionally tell the router to rebuild and republish the router info.
-     *
+     * <p>
      * If PROP_EXTERNAL_HOST is set, use those addresses (comma/space separated).
      * If a hostname is configured in that property, use it.
      * As of 0.9.32, a hostname is resolved here into one or more addresses
      * and the IPs are published, to implement proposal 141.
-     *
+     * <p>
      * A max of one v4 and one v6 address will be set. Significant changes both
      * here and in NTCP would be required to publish multiple v4 or v6 addresses.
      *
@@ -3382,9 +3377,9 @@ public class UDPTransport extends TransportImpl {
      * Simple storage of IP and port, since
      * we don't put them in the real, published RouterAddress anymore
      * if we are firewalled.
-     *
+     * <p>
      * Side effect: Sets our MTU
-     *
+     * <p>
      * Caller must sync on _rebuildLock
      *
      * @since 0.9.18
@@ -4414,7 +4409,7 @@ if (_alive)
 
     /**
      * Whether an UNKNOWN reachability update should reschedule a peer test.
-     *
+     * <p>
      * UNKNOWN is only a click-flag, never stored; any UNKNOWN result against
      * UNKNOWN always repeats the test. States with an unknown IPv6 component
      * also repeat on an IPv6 test (independent of the IPv4 component), while the
@@ -4443,7 +4438,7 @@ if (_alive)
 
     /**
      * Collapse a merged status when the transport runs in IPv6-only mode.
-     *
+     * <p>
      * The IPv4 component cannot be tested, so any merged state with an IPv4
      * UNKNOWN component becomes the matching DISABLED state.
      *
@@ -4466,7 +4461,7 @@ if (_alive)
 
     /**
      * Collapse a merged status when the router has no IPv6 address to publish.
-     *
+     * <p>
      * The IPv6 component of the status is dropped and only the IPv4 result
      * matters; in particular a firewalled-or-ok v6 component cannot turn the
      * IPv4 result into a paradox (firewalled-&gt;OK-&gt;firewalled+OK thrash),
@@ -4497,7 +4492,7 @@ if (_alive)
     /**
      * Whether the status transition must be confirmed by a second test before
      * it is committed, to prevent thrashing between OK and firewalled.
-     *
+     * <p>
      * Any jump into, out of, or between the firewalled group is staged as
      * pending confirmation; for IPv4, leaving the IPv4-unknown group is also
      * staged (an IPv6-unrelated UNKNOWN result must not flip IPv4 flapping).
@@ -4587,13 +4582,13 @@ if (_alive)
 
     /**
      * Pick a Bob (if we are Alice) or a Charlie (if we are Bob).
-     *
+     * <p>
      * For Bob (as called from PeerTestEvent below), returns an established IPv4/v6 peer.
      * While the protocol allows Alice to select an unestablished Bob, we don't support that.
-     *
+     * <p>
      * For Charlie (as called from PeerTestManager), returns an established IPv4 or IPv6 peer.
      * (doesn't matter how Bob and Charlie communicate)
-     *
+     * <p>
      * Any returned peer must advertise an IPv4 address to prove it is IPv4-capable.
      * Ditto for v6.
      *

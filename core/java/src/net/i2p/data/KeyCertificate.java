@@ -9,7 +9,6 @@ import java.io.OutputStream;
 
 /**
  * Specialized certificate for defining cryptographic key types used in I2P identities.
- *
  * <p>KeyCertificate specifies the encryption and signature algorithms for I2P identities:</p>
  * <ul>
  * <li><strong>Signature Type:</strong> Algorithm used for signing (2 bytes)</li>
@@ -17,14 +16,12 @@ import java.io.OutputStream;
  * <li><strong>Excess Data:</strong> Additional key-specific data if needed</li>
  * <li><strong>Optimized:</strong> Frequently used, so has dedicated class for performance</li>
  * </ul>
- *
  * <p><strong>Format Structure:</strong></p>
  * <ul>
  * <li><strong>Header:</strong> 4 bytes total (2-byte sig type + 2-byte crypto type)</li>
  * <li><strong>Signature Data:</strong> Optional excess data for signature algorithm</li>
  * <li><strong>Encryption Data:</strong> Optional excess data for encryption algorithm</li>
  * </ul>
- *
  * <p><strong>Supported Combinations:</strong></p>
  * <ul>
  * <li><strong>ElGamal + DSA-SHA1:</strong> Legacy combination (crypto type 0x0000)</li>
@@ -32,14 +29,12 @@ import java.io.OutputStream;
  * <li><strong>ElGamal + ECDSA-P256:</strong> Modern signing with legacy encryption</li>
  * <li><strong>X25519 + Ed25519:</strong> Modern combination (both algorithms)</li>
  * </ul>
- *
  * <p><strong>Predefined Certificates:</strong></p>
  * <ul>
  * <li><strong>Ed25519:</strong> ElGamal + Ed25519 signing key</li>
  * <li><strong>ECDSA256:</strong> ElGamal + ECDSA-P256 signing key</li>
  * <li><strong>X25519_Ed25519:</strong> X25519 encryption + Ed25519 signing</li>
  * </ul>
- *
  * <p><strong>Usage:</strong></p>
  * <ul>
  * <li><strong>Identity Specification:</strong> Defines algorithms for {@link Destination}</li>
@@ -47,14 +42,12 @@ import java.io.OutputStream;
  * <li><strong>Backward Compatibility:</strong> Supports legacy and modern algorithms</li>
  * <li><strong>Future Proofing:</strong> Extensible for new algorithm combinations</li>
  * </ul>
- *
  * <p><strong>Migration Path:</strong></p>
  * <ul>
  * <li><strong>Legacy:</strong> ElGamal encryption (assumed 0x0000) with various signing</li>
  * <li><strong>Modern:</strong> X25519 encryption with Ed25519 signing</li>
  * <li><strong>Transition:</strong> Mixed combinations during migration period</li>
  * </ul>
- *
  * <p><strong>Performance Considerations:</strong></p>
  * <ul>
  * <li><strong>Frequently Used:</strong> Every Destination contains a KeyCertificate</li>

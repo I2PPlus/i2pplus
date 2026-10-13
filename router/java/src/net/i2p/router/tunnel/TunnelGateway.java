@@ -29,7 +29,7 @@ import net.i2p.util.SimpleTimer2;
  * pleases (e.g. wrap it as necessary and enqueue it onto the OutNetMessagePool,
  * or if debugging, verify that it can be decrypted properly)</li>
  * </ol>
- *
+ * <p>
  * Unused directly - see PumpedTunnelGateway, ThrottledPumpedTunnelGateway, and TunnelGatewayZeroHop overrides.
  */
 abstract class TunnelGateway {
@@ -90,7 +90,7 @@ abstract class TunnelGateway {
      * Add a message to be sent down the tunnel, either sending it now (perhaps
      * coalesced with other pending messages) or after a brief pause (_flushFrequency).
      * If it is queued up past its expiration, it is silently dropped.
-     *
+     * <p>
      * UNUSED - see overrides
      *
      * @param msg message to be sent through the tunnel

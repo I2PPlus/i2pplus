@@ -12,7 +12,7 @@ import net.i2p.util.Log;
  * We are the outbound gateway - we created this outbound tunnel.
  * Receive the outbound message after it has been preprocessed and encrypted,
  * then forward it on to the first hop in the tunnel.
- *
+ * <p>
  * Not used for zero-hop OBGWs.
  */
 class OutboundReceiver implements TunnelGateway.Receiver {
@@ -183,7 +183,7 @@ class OutboundReceiver implements TunnelGateway.Receiver {
         /**
          * Record a failed send to the first hop and fail the tunnel only once
          * the failure is not just a burst.
-         *
+         * <p>
          * The job is shared by every message on this tunnel and is only
          * deduped while queued, so one congested second runs it many times.
          * TunnelCreatorConfig collapses the burst, spaces the failures out,

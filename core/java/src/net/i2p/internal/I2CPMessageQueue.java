@@ -12,7 +12,7 @@ import java.io.Closeable;
  * This interface contains methods to access two queues,
  * one for transmission and one for receiving.
  * The methods are identical to those in java.util.concurrent.BlockingQueue.
- *
+ * <p>
  * Reading may be done in a thread using the QueuedI2CPMessageReader class.
  * Non-blocking writing may be done directly with offer().
  *
@@ -57,7 +57,6 @@ public abstract class I2CPMessageQueue implements Closeable {
 
     /**
      * How many messages are waiting to be received, for diagnostics.
-     *
      * <p>A queue that stays non-empty means the client is not draining it, which is the
      * reason {@link #offer(I2CPMessage)} fails and the only explanation for a client that
      * has stopped answering.

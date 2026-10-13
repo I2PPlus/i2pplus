@@ -8,11 +8,11 @@ import net.i2p.router.web.FormHandler;
 
 /**
  *  The new user wizard.
- *
+ * <p>
  *  This handler has request scope (as all FormHandlers must), so it controls
  *  the test via the helper, which has session scope.
  *
- *  @since 0.9.38
+ * @since 0.9.38
  */
 public class WizardHandler extends FormHandler {
 

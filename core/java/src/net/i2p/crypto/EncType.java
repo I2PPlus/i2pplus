@@ -9,7 +9,7 @@ import java.util.Locale;
 /**
  * Defines the properties for various encryption types
  * that I2P supports or may someday support.
- *
+ * <p>
  * All PublicKeys and PrivateKeys have a type.
  * Note that a EncType specifies both an algorithm and parameters, so that
  * we may change primes or curves for a given algorithm.
@@ -284,7 +284,6 @@ public enum EncType {
 
     /**
      * Checks if this is a post-quantum encryption type.
-     *
      *
      * @return true if this is a PQ type
      * @since 0.9.67

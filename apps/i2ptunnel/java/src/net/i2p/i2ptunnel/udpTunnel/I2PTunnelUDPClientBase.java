@@ -24,19 +24,19 @@ import net.i2p.util.EventDispatcher;
  * Base client class that sets up an I2P Datagram client destination.
  * The UDP side is not implemented here, as there are at least
  * two possibilities:
- *
+ * <p>
  * 1) UDP side is a "server"
  * Example: Streamr Consumer
  * - Configure a destination host and port
  * - External application sends no data
  * - Extending class must have a constructor with host and port arguments
- *
+ * <p>
  * 2) UDP side is a client/server
  * Example: SOCKS UDP (DNS requests?)
  * - configure an inbound port and a destination host and port
  * - External application sends and receives data
  * - Extending class must have a constructor with host and 2 port arguments
- *
+ * <p>
  * So the implementing class must create a UDPSource and/or UDPSink,
  * and must call setSink().
  */

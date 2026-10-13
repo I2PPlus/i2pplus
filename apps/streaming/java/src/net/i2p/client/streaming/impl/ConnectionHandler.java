@@ -21,7 +21,7 @@ import net.i2p.util.SystemVersion;
 
 /**
  * Receive new connection attempts
- *
+ * <p>
  * Use a bounded queue to limit the damage from SYN floods,
  * router overload, or a slow client
  *
@@ -118,14 +118,12 @@ class ConnectionHandler {
 
     /**
      * Compute the effective SYN accept-queue timeout for an inbound SYN.
-     *
      * <p>A queued SYN is reset via {@code SynReaper} after this window, so it
      * bounds how long a client waits for a connection the server never got
      * around to accepting.  A fixed low clamp (e.g. the historical 10s) fails
      * fast on genuinely dead tunnels but also expires slow-but-alive handshakes
      * on a high-latency / congested fabric, which surfaces as empty pages to
      * every client.  So the clamp is made evidence-gated and RTT-aware:
-     *
      * <p><b>Gate (#4).</b> The clamp fires only when there is positive evidence of
      * a real stall, not mere latency: {@code buildSuccess} below
      * {@link #SYN_STRESS_THRESHOLD} <b>and</b> the recent SYN expire rate
@@ -133,7 +131,6 @@ class ConnectionHandler {
      * ({@link I2PSocketManagerFull#getSynExprExpireThresh()}, default 60).  A
      * server that is draining its SYN queue — even on a slow tunnel — is treated
      * as healthy and keeps the full configured window.
-     *
      * <p><b>RTT-aware floor (#2).</b> When the clamp does fire, the window is not
      * a flat constant: the floor rises with the sampled round-trip time
      * {@code rttMs}.  On a fast fabric the floor is {@link #SYN_STRESS_MIN_TIMEOUT}
@@ -141,7 +138,6 @@ class ConnectionHandler {
      * slow-but-alive tunnel keeps substantially longer than the historical 10s and
      * its handshake has room to complete.  The result is always capped at the
      * configured timeout and never exceeds it.
-     *
      * <p>No data never triggers the clamp: a NaN build success (stand-alone
      * streaming or early startup) returns the configured timeout unchanged, an
      * unknown expire rate ({@code < 0}) is treated as "no evidence" (no clamp), and
@@ -210,7 +206,6 @@ class ConnectionHandler {
      * Tunnel build success fraction, sampled at most once per
      * {@link #SYN_STRESS_SAMPLE_INTERVAL} to avoid per-packet StatManager
      * lookups (each {@code SystemVersion} probe is six RateStat reads).
-     *
      * <p>Outside a router context (stand-alone streaming) there are no tunnel
      * statistics at all — report NaN so the configured timeout is kept.
      * {@code SystemVersion} reports 0% both for "no tunnel events yet" and for
@@ -234,13 +229,11 @@ class ConnectionHandler {
 
     /**
      * Recent SYN expire rate, sampled on the same interval as build success.
-     *
      * <p>Counts SYNs added to the accept queue ({@code _synQueueProcessed}) and
      * SYNs later removed by {@code SynReaper} without being accepted
      * ({@code _synQueueExpired}).  The window resets whenever a full
      * {@link #SYN_STRESS_SAMPLE_INTERVAL} elapses, so the rate reflects the
      * most recent tunnel-health window rather than the ever since startup.
-     *
      * <p>Until the first window completes there is <em>no evidence</em>, which is
      * reported as {@code -1} so the adaptive clamp never fires on startup.
      *
@@ -318,7 +311,6 @@ class ConnectionHandler {
      * configured value — re-read on each call so a router.config change or
      * Tuner override applies without a restart — is used.  A negative override
      * clears any earlier explicit value and falls back to the configuration.
-     *
      * <p>Pure decision helper, extracted so the override-vs-config precedence
      * is unit-testable without a router context.
      *
@@ -333,7 +325,6 @@ class ConnectionHandler {
 
     /**
      * A recent round-trip time sample in milliseconds, or 0 when unavailable.
-     *
      * <p>On a hosted (server) connection there is no handshake RTT to read before
      * the connection exists, so the adaptive floor uses the SYN accept-queue
      * <em>residence time</em> as a direct proxy for how long the server takes to
@@ -349,14 +340,12 @@ class ConnectionHandler {
 
     /**
      * Record how long a freshly accepted SYN spent in the accept queue.
-     *
      * <p>Called from the accept loop immediately before a fresh SYN is handed to
      * {@code receiveConnection()}.  The enqueue timestamp (stamped in
      * {@code receiveNewSyn}) is removed and the residence time becomes the
      * sampled {@link #getRttMs()} input to the adaptive SYN timeout.  The sample
      * is lightly smoothed toward the previous value so a single slow acceptance
      * does not swing the floor all the way to configured on its own.
-     *
      * <p>Retransmitted and poison SYNs never reach this point, so only genuinely
      * fresh handshakes are measured.
      *
@@ -557,7 +546,7 @@ class ConnectionHandler {
 
     /**
      * Receive new connection attempts
-     *
+     * <p>
      * Use a bounded queue to limit the damage from SYN floods,
      * router overload, or a slow client
      *
@@ -743,7 +732,7 @@ class ConnectionHandler {
      * 2. Client retransmits SYN before receiving SYN-ACK (RTT > RTO)
      * 3. Server destroys the old connection (which the client already completed handshake on)
      * 4. Client's data arrives on dead stream IDs - dropped forever
-     *
+     * <p>
      * Instead, we just re-send the SYN-ACK for the existing connection, which is
      * the standard TCP behavior for retransmitted SYNs.
      *
@@ -776,7 +765,6 @@ class ConnectionHandler {
      * queue: " + packet) printed only stream IDs and flags — no peer hash, no
      * queue pressure, no timeout — so a flood of these read as identical
      * trailing-colon lines that could not be attributed or rate-assessed.
-     *
      * <p>This surfaces the data needed to tell "one flooding dest" apart from
      * "many legit clients the app never accepted":
      * <ul>
@@ -785,7 +773,6 @@ class ConnectionHandler {
      * <li>current queue depth vs max, so a spike is visible as near-full;</li>
      * <li>the effective accept timeout that expired it (evidence-gated clamp).</li>
      * </ul>
-     *
      * <p>Idempotent and side-effect free so it can be unit-tested; the appends
      * to {@code out} let the same formatting be reused for other SYN expiry
      * reports (e.g. DEBUG-level summaries) without duplicating the format.
@@ -834,7 +821,6 @@ class ConnectionHandler {
 
     /**
      * Accept-queue bookkeeping for one enqueued SYN.
-     *
      * <p>Holds the enqueue clock-time and the accept-timeout snapshot taken at
      * that moment. The timeout is snapshotted because the adaptive
      * {@link #getEffectiveAcceptTimeout()} moves as tunnel health changes; the
@@ -866,7 +852,6 @@ class ConnectionHandler {
     /**
      * Periodic reaper that removes SYN packets from the accept queue after
      * their accept timeout has elapsed, sending a reset if it was a SYN.
-     *
      * <p>Replaces two per-SYN {@code TimedEvent}s (one at enqueue in
      * {@link #receiveNewSyn(Packet)}, one at dequeue in the accept worker) with
      * a single self-rescheduling event that scans the enqueue table every
@@ -874,7 +859,6 @@ class ConnectionHandler {
      * timer events per second; this is O(1) posts per second regardless of
      * load. The time-between-sweeps bound means a SYN may persist at most
      * one interval past its timeout — negligible against 10s+ accept timeouts.
-     *
      * <p>The two-argument removal on the concurrent map is atomic against the
      * worker's refresh, so a packet that was re-quoted after this sweep read its
      * entry is left alone for the next sweep.

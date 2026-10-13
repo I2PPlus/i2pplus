@@ -7,29 +7,29 @@ import net.i2p.util.Log;
 
 /**
  * Default implementation of the SegmentedNetworkDatabaseFacade.
- *
+ * <p>
  * This is a datastructure which manages (3+Clients) "sub-netDbs" on behalf of an
  * I2P router, each representing it's own view of the network. Normally, these sub-netDb's
  * are identified by the hash of the primary session belonging to the client who "owns"
  * a particular sub-netDb.
- *
+ * <p>
  * There is one "Special" netDb which has a non-hash name. This is used for the operation of
  * router itself and not clients, in particular when acting as a floodfill:
- *
+ * <p>
  * - Main NetDB: This is the netDb we use if or when we become a floodfill, and for
  * direct interaction with other routers on the network, such as when we are communicating
  * with a floodfill.
- *
+ * <p>
  * It is possible that it may be advantageous some day to have other netDb's for specific use
  * cases, but that is not the purpose of this class at this time.
- *
+ * <p>
  * And there are an unlimited number of "Client" netDbs. These sub-netDbs are
  * intended to contain only the information required to operate them, and as such
  * most of them are very small, containing only a few LeaseSets belonging to clients.
  * Each one corresponds to a Destination which can receive information from the
  * netDb, and can be indexed either by it's hash or by it's base32 address. This index
  * is known as the 'dbid' or database id.
- *
+ * <p>
  * Users of this class should strive to always access their sub-netDbs via the
  * explicit DBID of the destination recipient, or using the DBID of the special
  * netDb when it's appropriate to route the netDb entry to one of the special tables.

@@ -56,10 +56,10 @@ public class EepPost extends EepGet {
      * If the field's value is a File object, then that file is uploaded, and if the field's value is
      * a String object, the value is posted for that particular field.
      * Multiple values for one field name is not currently supported.
-     *
+     * <p>
      * Large files will be copied to a temp file.
      * For large String content, consider the post(File) method.
-     *
+     * <p>
      * Note: param field values must be String or File.
      *
      * @param fields the field names and values to submit, each value a String or a File
@@ -296,10 +296,10 @@ public class EepPost extends EepGet {
 
     /**
      * Command-line entry point for EepPost. See usage() for the full option list.
-     *
+     * <p>
      * Usage: eeppost [-p 127.0.0.1:4444 | -c] [-n #retries] [-o outputFile]
      * [-s key=value] | [-f key=file] url
-     *
+     * <p>
      * At least one -s (string field) or -f (file field) is required. All timeouts
      * are in seconds: -t is the inactivity timeout, -v the header timeout, and
      * -w the total timeout, which is unlimited by default.

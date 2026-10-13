@@ -22,7 +22,6 @@ import net.i2p.util.OrderedProperties;
 /**
  * Implementation of LeaseSet2 as specified in
  * <a href="https://geti2p.net/spec/proposals/123-new-netdb-entries">Proposal 123: New NetDb Entries</a>.
- *
  * <p>LeaseSet2 provides several enhancements over the original LeaseSet format:</p>
  * <ul>
  * <li>Support for multiple encryption keys with server preference ordering</li>
@@ -31,7 +30,6 @@ import net.i2p.util.OrderedProperties;
  * <li>Options and statistics support</li>
  * <li>Blinded and encrypted LeaseSet support</li>
  * </ul>
- *
  * <p>Key differences from LeaseSet:</p>
  * <ul>
  * <li>Uses {@link #getPublished()} for version comparison instead of lease dates</li>
@@ -85,7 +83,7 @@ public class LeaseSet2 extends LeaseSet {
     /**
      * Published timestamp, as received.
      * Different than getDate() or getEarliestLeaseDate(), which are the earliest lease expiration.
-     *
+     * <p>
      * Use this for LS2 version comparison, NOT getEarliestLeaseDate(), because
      * that will return -1 for EncryptedLS and MetaLS.
      *
@@ -224,7 +222,7 @@ public class LeaseSet2 extends LeaseSet {
 
     /**
      * Add an encryption key.
-     *
+     * <p>
      * Encryption keys should be added in order of server preference, most-preferred first.
      *
      * @param key the key to append; the first one added becomes the key returned
@@ -245,7 +243,7 @@ public class LeaseSet2 extends LeaseSet {
 
     /**
      * This returns all the keys. getEncryptionKey() returns the first one.
-     *
+     * <p>
      * Encryption keys should be in order of server preference, most-preferred first.
      * Client behavior should be to select the first key with a supported encryption type.
      * Clients may use other selection algorithms based on encryption support, relative performance, and other factors.

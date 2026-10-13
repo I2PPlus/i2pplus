@@ -151,7 +151,7 @@ class LogRecordFormatter {
     /**
      * Truncate or pad to exactly {@code size} chars; if truncated,
      * keeps the suffix and prefixes with "..." so column width stays constant.
-     *
+     * <p>
      * Used for the thread, source, and priority columns so every log line has
      * fixed-width output regardless of the underlying name length.
      *

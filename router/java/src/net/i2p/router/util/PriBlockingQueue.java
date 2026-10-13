@@ -89,7 +89,7 @@ public class PriBlockingQueue<E extends PQEntry> extends PriorityBlockingQueue<E
      * Inserts the specified element into this queue if it is not full,
      * applying sequence timestamp to ensure FIFO ordering within priority.
      * Returns false if the queue has reached its maximum size.
-     *
+     * <p>
      * The capacity check is best-effort: size() and offer() are not atomic,
      * so the queue may briefly exceed _maxSize under concurrent insertions.
      * PriorityBlockingQueue is unbounded, so an exact atomic bound would

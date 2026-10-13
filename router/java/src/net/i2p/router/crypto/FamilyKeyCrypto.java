@@ -84,7 +84,7 @@ public class FamilyKeyCrypto {
 
     /**
      * For signing and verification.
-     *
+     * <p>
      * If the context property netdb.family.name is set, this can be used for signing,
      * else only for verification.
      *

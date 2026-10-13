@@ -28,7 +28,7 @@ import java.util.Collection;
 /**
  * Contain all of the state about a UDP connection to a peer.
  * This is instantiated only after a connection is fully established.
- *
+ * <p>
  * Public only for UI peers page. Not a public API, not for external use.
  */
 public class PeerState {
@@ -372,17 +372,17 @@ public class PeerState {
 
     /**
      * IPv4 minimum MTU.
-     *
+     * <p>
      * Sized so a 1044 byte tunnel data message still fits in two packets: that
      * needs 522 fragment bytes each, plus 46 for SSU, 20 for IP and 8 for UDP,
      * giving 596. This leaves headroom above that floor (the smallest value
      * meeting the floor and the alignment rule below would be 604) because the
      * ACK allowance has to fit as well.
-     *
+     * <p>
      * The IPv4 IP and UDP headers are 28 bytes, so the SSU payload area is
      * 620 - 28 = 592, which is 37 whole 16-byte blocks.
      * PacketBuilder2.buildPacket() requires that alignment for its padding.
-     *
+     * <p>
      * ACKs also have to fit, especially 1 + (4 * MAX_RESEND_ACKS_SMALL), so the
      * max acks are reduced when the small MTU is in use. That is a best effort:
      * a 2646 byte maximum-size message needs about 5 fragments at this MTU
@@ -404,21 +404,17 @@ public class PeerState {
 
     /**
      * IPv4 maximum MTU.
-     *
      * <p>The size is set by two constraints.
-     *
      * <p>First, 1480 bytes are needed to carry a maximum-size I2NP message as
      * two fragments: 2646 / 2 = 1323 data bytes each, plus 157 bytes of
      * per-packet SSU and datagram overhead (74 + 46 + 1 + 4 * 9, the last term
      * covering the fragment block header and four nine-byte ACK allowances).
-     *
      * <p>Second, the IPv4 IP and UDP headers are 28 bytes, so the SSU payload
      * area must be a whole number of 16-byte blocks for
      * PacketBuilder2.buildPacket() to pad correctly. 1480 would leave 1452
      * bytes, which is not a multiple of 16; the next aligned size is
      * 1484 - 28 = 1456 = 91 * 16. 1484 is therefore the smallest value that
      * meets both constraints.
-     *
      * <p>Measurements put most small I2NP messages well below this; messages
      * of 1900 to 4500 bytes do not fit any live network MTU anyway.
      */
@@ -787,7 +783,7 @@ public class PeerState {
      * Replaces the two-pass pattern of finishMessages() + allocateSend() with a single pass
      * through _outboundMessages. Cleans up completed/expired messages and selects messages
      * to send in one iteration.
-     *
+     * <p>
      * Sets _cachedOutboundCount for hasOutbound() and _cachedOldestLifetime for getNextDelay().
      * Does NOT scan _outboundQueue for oldest start time — the _outboundMessages
      * iteration is sufficient for the delay heuristic, avoiding per-volley
@@ -977,7 +973,7 @@ public class PeerState {
      * under _sendWindowBytesRemainingLock (capped at the full window); a total
      * failure of the first outbound message destroys the peer with
      * REASON_FRAME_TIMEOUT and drops it.
-     *
+     * <p>
      * Logging is suppressed for banlisted peers.
      *
      * @param failed the collected failed states, never empty
@@ -1375,7 +1371,7 @@ public class PeerState {
      * returning true if the full size can be decremented, false if it
      * cannot.  If it is not decremented, the window size remaining is
      * not adjusted at all.
-     *
+     * <p>
      * Caller should synch
      */
     private boolean allocateSendingBytes(OutboundMessageState state, long now) {
@@ -1604,7 +1600,7 @@ public class PeerState {
 
     /**
      * Compute the RTO to apply after a congestion signal.
-     *
+     * <p>
      * Congestion must not inflate RTO. RFC 6298 §5.5 doubling applies to
      * retransmit-timer expiry, not every retransmit volley (which includes
      * fast retransmit). Doubling here under sustained loss drove avgRTO to
@@ -1635,7 +1631,7 @@ public class PeerState {
     /**
      * Whether enough time has elapsed since the last congestion response to
      * allow another one. Pure so the cooldown policy is unit-testable.
-     *
+     * <p>
      * The cooldown is {@code max(rto, CONGESTION_COOLDOWN_MIN_MS)} so a low
      * RTO cannot shrink the gap to ~1s and collapse the window every second
      * under sustained loss.
@@ -1897,7 +1893,7 @@ public class PeerState {
     /**
      * Adjust upward if a large packet was successfully sent without retransmission.
      * Adjust downward if a packet was retransmitted.
-     *
+     * <p>
      * Caller should synch on this
      *
      * @param maxPktSz the largest packet that was sent
@@ -1980,12 +1976,12 @@ public class PeerState {
          * Report the current retransmit ratio to the profile when it crosses a 5% bucket
          * boundary since the last report. Bucketing keeps profile writes to at most one
          * per bucket change per connection.
-         *
+         * <p>
          * No report until the connection has transmitted at least
          * {@link ProfileOrganizer#PROP_LOSSY_MIN_PACKETS} packets, so the ratio is only
          * ever based on a meaningful sample. The bucket is not advanced in that case, so
          * the first bucket change after the minimum is reached still fires.
-         *
+         * <p>
          * Caller must hold _outboundLock.
          *
          * @since 0.9.71+
@@ -2008,7 +2004,7 @@ public class PeerState {
     public int getRTT() {return _rtt;}
     /**
      * Retransmission timeout.
-     *
+     * <p>
      * Clamped to the current [MIN_RTO, MAX_RTO] so a peer that inflated
      * before the Tuner cut the ceiling is not stuck on a stale high RTO.
      *
@@ -2018,7 +2014,7 @@ public class PeerState {
 
     /**
      * Clamp a raw RTO estimate into the active [minRto, maxRto] window.
-     *
+     * <p>
      * Extracted from {@link #getRTO()} so telemetry can report the value a
      * packet actually waits under — raw estimates can sit outside the window
      * (set at INIT_RTO, then re-clamped only on the next RTT sample) and
@@ -2345,7 +2341,7 @@ public class PeerState {
 
     /**
      * An ACK of a fragment was received.
-     *
+     * <p>
      * SSU 2 only.
      *
      * @param f the SSU2 fragment whose acknowledgement has arrived
@@ -2543,7 +2539,7 @@ public class PeerState {
 
     /**
      * Transfer the basic activity/state from the old peer to the current peer
-     *
+     * <p>
      * SSU 1 or 2.
      *
      * @param oldPeer non-null

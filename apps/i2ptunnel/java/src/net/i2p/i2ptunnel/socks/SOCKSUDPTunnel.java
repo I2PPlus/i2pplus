@@ -23,19 +23,19 @@ import net.i2p.i2ptunnel.udpTunnel.I2PTunnelUDPClientBase;
 
 /**
  * A Datagram Tunnel that can have multiple bidirectional ports on the UDP side.
- *
+ * <p>
  * TX:
  * (multiple SOCKSUDPPorts -&gt; ) I2PSink
- *
+ * <p>
  * RX:
  * (SOCKSUDPWrapper in multiple SOCKSUDPPorts &lt;- ) MultiSink &lt;- I2PSource
- *
+ * <p>
  * The replies must be to the same I2CP toPort as the outbound fromPort.
  * If the server does not honor that, the replies will be dropped.
- *
+ * <p>
  * The replies must be repliable. Raw datagrams are not supported, and would
  * require a unique source port for each target.
- *
+ * <p>
  * Preliminary, untested, possibly incomplete.
  */
 public class SOCKSUDPTunnel extends I2PTunnelUDPClientBase {

@@ -125,7 +125,7 @@ public class CoDelBlockingQueue<E extends CDQEntry> extends LinkedBlockingQueue<
      * Quote:
      * Below a target of 5 ms, utilization suffers for some conditions and traffic loads;
      * above 5 ms there is very little or no improvement in utilization.
-     *
+     * <p>
      * I2P: Lowered to 5ms for reduced latency in high-performance scenarios
      */
     private static final int DEFAULT_CODEL_TARGET = 5;
@@ -135,7 +135,7 @@ public class CoDelBlockingQueue<E extends CDQEntry> extends LinkedBlockingQueue<
     /**
      * Quote:
      * A setting of 100 ms works well across a range of RTTs from 10 ms to 1 second
-     *
+     * <p>
      * I2P: Lowered to 50ms for faster reaction to congestion
      */
     private static final int DEFAULT_CODEL_INTERVAL = 50;

@@ -29,7 +29,7 @@ import net.i2p.util.SimpleTimer2;
 
 /**
  * Tracks peer capabilities and manages the periodic profile reorganization cycle.
- *
+ * <p>
  * Responsibilities:
  * - Maintains `_peersByCapability` index (character → Set of Hash) for quick capability lookups
  * - Runs Reorg on SimpleTimer2 which calls ProfileOrganizer.reorganize() at adaptive intervals
@@ -37,7 +37,7 @@ import net.i2p.util.SimpleTimer2;
  * - Periodically stores profiles to disk via ProfilePersistenceHelper (every 15 min)
  * - Loads stored profiles from disk on startup in a background thread
  * - Selects peers for PeerTestJob via selectPeers(criteria) — PURPOSE_TEST only
- *
+ * <p>
  * Profile persistence:
  * - Only Tier 1 (Active) and Tier 2 (Passive) profiles are written to disk
  * - Gossip-only (Tier 3) profiles are kept in memory but never persisted
@@ -124,7 +124,7 @@ class PeerManager {
         public Reorg() {super(_context.simpleTimer2(), REORGANIZE_TIME);}
         /**
          * Start a reorg thread when the timer fires.
-         *
+         * <p>
          * A fresh thread per fire: a Thread cannot be restarted once it has
          * terminated, so reusing one and guarding on isAlive() throws
          * IllegalThreadStateException from the second fire onward and stops
@@ -137,7 +137,7 @@ class PeerManager {
     /**
      * Reorganize the profiles. Also periodically store them,
      * and delete very old ones.
-     *
+     * <p>
      * This takes too long to run on the SimpleTimer2 queue
      *
      * @since 0.9.10
@@ -267,13 +267,11 @@ class PeerManager {
     /**
      * Is this peer in a bandwidth tier too low to be worth remembering across a
      * restart?
-     *
      * <p>K, L, M and Unknown are the tiers a peer advertises when it cannot or will
      * not commit bandwidth. Their profiles are still tracked in memory, where they
      * matter to selection and to the fast/high-cap tiers; what is not worth the
      * disk is the persisted history of a peer whose RouterInfo already tells us it
      * will not host a tunnel usefully.
-     *
      * <p>A missing or unreadable RouterInfo is <em>not</em> treated as low
      * bandwidth: absence of evidence is not evidence, and refusing to persist a peer
      * we simply have not looked up yet would discard the very profiles a floodfill
@@ -354,7 +352,6 @@ class PeerManager {
 
     /**
      * Requests RouterInfos for stored profiles whose peer the netdb cannot resolve.
-     *
      * <p>Scheduled once loading finishes, then every
      * {@link RouterInfoRefresher#MISSING_ROUTERINFO_MIN_INTERVAL_MS}. The lookups are
      * fire-and-forget, so the timer thread only issues them and returns; the netdb
@@ -398,7 +395,7 @@ class PeerManager {
     /**
      * Find some peers that meet the criteria and we have the netDb info for locally.
      * Returned list will not include ourselves.
-     *
+     * <p>
      * Only supports PURPOSE_TEST — used exclusively by PeerTestJob.
      * Other purpose constants were removed; add new purposes as needed.
      *

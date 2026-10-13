@@ -251,14 +251,14 @@ public class BuildHandler implements Runnable {
 
     /**
      * Concurrent next-hop lookup limit for the current request.
-     *
+     * <p>
      * Within {@link #STARTUP_LOOKUP_BOOST_MS} of startup the full ceiling
      * applies regardless of participating count: the netDb is still filling,
      * so cache misses dominate and the proportional formula would clamp
      * concurrency to near its floor exactly when inbound builds queue up.
      * Afterward, scale with transit population as before, floored at
      * minLimit so a drained pool can't zero out lookups.
-     *
+     * <p>
      * Pure decision — safe for unit tests.
      *
      * @param numTunnels current participating (transit) tunnel count
@@ -281,10 +281,10 @@ public class BuildHandler implements Runnable {
      * lookups for one key into a single network round trip. Without this,
      * N builds missing the same popular hop would burn N slots to run one
      * search and starve unrelated keys.
-     *
+     * <p>
      * The limit is soft: racing handler threads may transiently overshoot
      * by at most the thread count, which is harmless.
-     *
+     * <p>
      * Pure decision on its map argument — safe for unit tests.
      *
      * @param inFlight distinct next-hop keys currently being resolved
@@ -315,7 +315,7 @@ public class BuildHandler implements Runnable {
      * Release one build request's attachment to an in-flight lookup key,
      * dropping the key entry once its last waiting request completes so
      * released slots become visible to new arrivals.
-     *
+     * <p>
      * Pure decision on its map argument — safe for unit tests.
      *
      * @param inFlight distinct next-hop keys currently being resolved
@@ -332,7 +332,7 @@ public class BuildHandler implements Runnable {
     /**
      * Schedule an independent deadline that releases this request's lookup
      * attachment if neither callback has done so by then.
-     *
+     * <p>
      * Slot release must never depend solely on the netdb callbacks: any
      * silent path between attach and callback registration (a dropped job,
      * a search that never schedules, a constructor failure) would leak the
@@ -616,7 +616,6 @@ public class BuildHandler implements Runnable {
 
     /**
      * Age below which a ban is treated as having landed during the build.
-     *
      * <p>A tunnel build takes tens of seconds, so a ban recorded seconds ago
      * cannot have been visible to the peer selector that dispatched this
      * request. Longer than that, the ban predates the request and selection
@@ -629,7 +628,6 @@ public class BuildHandler implements Runnable {
     /**
      * Minimum gap between banned-next-hop rejection warnings, and the number
      * suppressed in between.
-     *
      * <p>One line per rejection buried the real warnings: a starved pool can
      * reject hundreds of builds a minute, all identical, which is exactly when
      * the log is needed for something else.
@@ -640,7 +638,6 @@ public class BuildHandler implements Runnable {
 
     /**
      * Classify why a next-hop peer is banlisted, for the rejection log.
-     *
      * <p>Pure and static so the classification is testable without a banlist.
      * Keyed on how long the banlist has held the peer
      * ({@code Banlist.getBanAge}), not on the ban's duration class: a peer
@@ -1301,7 +1298,7 @@ public class BuildHandler implements Runnable {
 
     /**
      * Actually process the request and send the reply.
-     *
+     * <p>
      * Todo: Replies are not subject to RED for bandwidth reasons,
      * and the bandwidth is not credited to any tunnel.
      * If we did credit the reply to the tunnel, it would
@@ -2010,7 +2007,6 @@ public class BuildHandler implements Runnable {
     /**
      * Count one next-hop outcome and, at most once per
      * {@link #NEXT_HOP_SUMMARY_INTERVAL_MS}, log the ratio at WARN.
-     *
      * <p>This exists because the failure was invisible: 42% of handled inbound
      * builds hit the hop-contact timeout, but the only record was one DEBUG
      * line per event, so an eepsite silently stopped serving and nothing at

@@ -27,17 +27,17 @@ import net.i2p.util.Log;
  * Currently, the comm system doesn't even inject any lag, though it could (later).
  * It does honor the standard transport stats though, but no TCP or UDP specific
  * ones (since UDP and TCP are not implemented).
- *
+ * <p>
  * Typically, VMCommSystem is enabled by developers when it is desirable to
  * test the router without enabling a real comm system.  For a variety of
  * testing purposes, it can be advantageous to start the router in a mode
  * where contact with the actual network is disabled.
- *
+ * <p>
  * VMCommSystem can be enabled with the following setting in the
  * router.config file:
- *
+ * <p>
  * i2p.vmCommSystem=true
- *
+ * <p>
  * FOR DEBUGGING AND LOCAL TESTING ONLY.
  */
 public class VMCommSystem extends CommSystemFacade {

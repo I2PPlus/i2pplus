@@ -23,7 +23,7 @@ import net.i2p.util.SimpleTimer2;
  * Maintains a 1200-entry ring buffer (20 min at 1s resolution) and
  * flushes to /tmp/i2p-bandwidth.dat every 60 seconds so data survives
  * page refreshes and router restarts.
- *
+ * <p>
  * Started automatically by Router.startup().
  * Accessed by SidebarRenderer.getDataAttributes() to populate the
  * canvas minigraph with real data instead of interpolated RRD points.

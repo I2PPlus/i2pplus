@@ -7,9 +7,9 @@ import net.i2p.router.transport.udp.SSU2Payload.AckBlock;
  * Container of a long array representing set and unset bits.
  * When a bit higher than the current size + offset is set,
  * the offset shifts up and the lowest set bits are lost.
- *
+ * <p>
  * Also contains methods to convert to/from an ACK block.
- *
+ * <p>
  * Locking: Most methods are synchronized here.
  * Do not call methods with the PeerState2 lock held, chance of deadlock.
  *
@@ -193,7 +193,7 @@ class SSU2Bitfield {
     /**
      * Compute the number of message numbers (bits) the bitfield for an ACK block
      * must cover, without allocating one.
-     *
+     * <p>
      * Pure and package-visible so the hostile-input case can be tested directly.
      *
      * @param thru the highest acked message number
@@ -273,15 +273,15 @@ class SSU2Bitfield {
 
     /**
      * Callback for all bits set in this bitfield but not set in bf2.
-     *
+     * <p>
      * If this offset is greater than bf2's highest bit set, i.e. this bitfield
      * is completely newer, calls back for all bits in this bitfield.
-     *
+     * <p>
      * If this highest bit set is less than than bf2's offset, i.e. this bitfield
      * is completely older, the callback will not be called.
-     *
+     * <p>
      * Synchs on this and then on bf2.
-     *
+     * <p>
      * Usage: this is the received acks, bf2 is previously acked,
      * callback for each newly acked.
      *

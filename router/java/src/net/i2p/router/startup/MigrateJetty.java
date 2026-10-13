@@ -21,13 +21,13 @@ import net.i2p.util.VersionComparator;
  * Also migrate the old configure.dtd to configure_9_3.dtd.
  * Reference: https://github.com/jetty/jetty.project/issues/12881
  * </p>
- *
+ * <p>
  * First migration, as of 0.9.30:
  * <p>
  * Migrate the clients.config and jetty.xml files
  * from Jetty 5/6 to Jetty 7/8.
  * Also migrate jetty.xml from Jetty 7/8 to Jetty 9.
- *
+ * <p>
  * For each client for class org.mortbay.jetty.Server:
  * <pre>
  *  Let $D be the dir that jetty.xml is in (usually ~/.i2p/eepsite)
@@ -42,7 +42,7 @@ import net.i2p.util.VersionComparator;
  * </pre>
  * Copies clients.config to clients.config.jetty6;
  * Saves new clients.config.
- *
+ * <p>
  * Does NOT preserve port number, thread counts, etc. in the migration to 7/8.
  * DOES preserve everything in the migration to 9.
  */

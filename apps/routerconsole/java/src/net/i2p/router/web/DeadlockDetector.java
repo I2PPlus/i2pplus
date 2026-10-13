@@ -14,11 +14,11 @@ import net.i2p.util.SimpleTimer2;
 /**
  *  Periodic check
  *  ref: https://dzone.com/articles/how-detect-java-deadlocks
- *
+ * <p>
  *  In routerconsole because java.lang.management is
  *  not available in Android.
  *
- *  @since 0.9.55, public since 0.9.56
+ * @since 0.9.55, public since 0.9.56
  */
 public class DeadlockDetector extends SimpleTimer2.TimedEvent {
 

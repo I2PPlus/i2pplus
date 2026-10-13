@@ -25,7 +25,6 @@ public class QueuedI2CPMessageReader extends I2CPMessageReader {
     private volatile boolean registered;
     /**
      *  Set while a worker is serving this reader.
-     *
      *  <p>I2CP messages for one session are order-dependent, so exactly one worker may
      *  touch a reader at a time. Correctness would otherwise rest on the ready queue never
      *  holding two entries for the same reader; claiming it before serving turns that into
@@ -101,7 +100,6 @@ public class QueuedI2CPMessageReader extends I2CPMessageReader {
 
     /**
      *  Drain at most maxMessages, then return even if the queue is not empty.
-     *
      *  <p>The bound is what stops one backed-up client from starving every other in-JVM
      *  client. Workers are pooled, so a reader that only returns once its queue is empty
      *  lets a payload flood hold a worker indefinitely while unrelated clients' queues
@@ -130,7 +128,6 @@ public class QueuedI2CPMessageReader extends I2CPMessageReader {
 
     /**
      *  Give up ownership after a pass.
-     *
      *  <p>Reports only that the reader is still registered, which is not the same as having
      *  more to send: the dispatcher decides what to reoffer from the pass result and
      *  {@link #needsService}.
@@ -145,7 +142,6 @@ public class QueuedI2CPMessageReader extends I2CPMessageReader {
 
     /**
      *  Whether this reader is still reading and has messages waiting for a worker.
-     *
      *  <p>This is the question the dispatcher's idle tick asks. It is deliberately not the
      *  same as {@link #release}: release reports only that the reader is still registered,
      *  which says nothing about whether its queue holds anything.
@@ -167,18 +163,15 @@ public class QueuedI2CPMessageReader extends I2CPMessageReader {
 
     /**
      * Shared dispatcher pool that multiplexes all internal I2CP message readers.
-     *
      * <p>The ready queue holds readers that have work: one arrives at registration, is handed
      * back after a pass that filled its budget, and is picked up again by the idle tick if a
      * message turns up for it later. A reader that drained is left out, so on an idle system the
      * queue empties, {@link #IDLE_POLL_MS} actually parks a worker instead of timing out against
      * a queue the workers keep refilling themselves, and surplus workers can retire. The idle cost
      * is therefore a single worker however many clients are connected.
-     *
      * <p>Reoffering after a full pass goes to the back of the queue, so a client with a backlog
      * cannot monopolise the pool. Readers picked up by the idle tick are offered in no particular
      * order, which only matters when several become ready in the same tick.
-     *
      * <p>The pool never falls to zero workers while a reader is registered. Nothing wakes
      * a pool that has gone to sleep, so a reader stranded without one would sit on a queue
      * nobody drains until it filled, at which point the router starts failing to send to
@@ -205,7 +198,6 @@ public class QueuedI2CPMessageReader extends I2CPMessageReader {
         static final long IDLE_POLL_MS = 5;
         /**
          *  Ceiling on concurrent workers, started on demand rather than up front.
-         *
          *  <p>Only reached while several clients are backed up at once; at that point one
          *  worker per client would be unbounded, and 8 concurrent workers is already far
          *  more than the queue drain rate needs.
@@ -262,7 +254,6 @@ public class QueuedI2CPMessageReader extends I2CPMessageReader {
         /**
          *  Reserve a retirement slot for the calling worker, shedding at most one worker
          *  per idle tick.
-         *
          *  <p>Every parked worker notices the same idle moment, so a plain surplus check would
          *  let all of them decide to leave before any of them is counted, collapsing the pool
          *  to zero and restarting it. Spacing the retirements by one tick steps the pool down
@@ -282,7 +273,6 @@ public class QueuedI2CPMessageReader extends I2CPMessageReader {
 
         /**
          *  Offer every registered reader that has messages waiting.
-         *
          *  <p>A reader whose queue was drained is not requeued by the worker that served it,
          *  so this is how a message arriving afterwards is still noticed. Called once per
          *  idle tick, which bounds the cost to one pass over the registered readers per

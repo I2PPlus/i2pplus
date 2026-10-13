@@ -311,11 +311,11 @@ class I2CPMessageProducer {
      * We only calculate on a one-second basis, so large messages
      * (compared to the one-second limit) may exceed the limits.
      * Tuned for streaming, may not work well for large datagrams.
-     *
+     * <p>
      * This does poorly with low rate limits since it doesn't credit
      * bandwidth across two periods. So the limit is rounded up,
      * and the min limit is set to 2x the typ size, above.
-     *
+     * <p>
      * Blocking so this could be very bad for retransmissions,
      * as it could clog StreamingTimer.
      * Waits are somewhat "fair" using ReentrantLock.
@@ -326,7 +326,7 @@ class I2CPMessageProducer {
      * the same thread anyway... Also note that small messages may
      * go ahead of large ones that are waiting for the next window.
      * Also, threads waiting a second time go to the back of the line.
-     *
+     * <p>
      * Since this is at the I2CP layer, it includes streaming overhead,
      * streaming acks and retransmissions,
      * gzip overhead (or "underhead" for compression),

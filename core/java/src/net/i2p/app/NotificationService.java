@@ -4,9 +4,8 @@ package net.i2p.app;
  * A service to send messages to users.
  * This service is currently provided by desktopgui (when supported and enabled).
  * Other applications may support this interface in the future.
- *
+ * <p>
  * Example usage:
- *
  * <pre>
  *     ClientAppManager cmgr = _context.clientAppManager();
  *     if (cmgr != null) {

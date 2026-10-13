@@ -6,12 +6,10 @@ import java.io.OutputStream;
 
 /**
  * Abstract output stream that limits writes and provides completion callback.
- *
  * <p>This class extends FilterOutputStream to provide a framework for
  * implementing output streams with write limitations or size restrictions.
  * It tracks completion state and calls a callback when the stream
  * is finished, preventing multiple completion attempts.</p>
- *
  * <p>Subclasses implement specific limiting behavior while inheriting
  * callback functionality and completion state management. Useful for
  * implementing streams that need to enforce size limits or provide

@@ -12,7 +12,6 @@ import net.i2p.util.Log;
 
 /**
  * Start, track, and expire the I2PTunnelDCCClients.
- *
  * <pre>
  *
  *                                            direct conn
@@ -23,7 +22,6 @@ import net.i2p.util.Log;
  *        SEND    ---&gt; I2PTunnelIRCClient --&gt; IRC server --&gt; I2TunnelIRCClient -----&gt;
  *        RESUME  &lt;--- I2PTunnelIRCClient &lt;-- IRC server &lt;-- I2TunnelIRCClient &lt;-----
  *        ACCEPT  ---&gt; I2PTunnelIRCClient --&gt; IRC server --&gt; I2TunnelIRCClient -----&gt;
- *
  * </pre>
  *
  * @since 0.8.9

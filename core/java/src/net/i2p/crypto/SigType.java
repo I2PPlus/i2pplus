@@ -16,7 +16,7 @@ import net.i2p.util.SystemVersion;
 /**
  * Defines the properties for various signature types
  * that I2P supports or may someday support.
- *
+ * <p>
  * All Signatures, SigningPublicKeys, and SigningPrivateKeys have a type.
  * Note that a SigType specifies both an algorithm and parameters, so that
  * we may change primes or curves for a given algorithm.
@@ -124,7 +124,7 @@ public enum SigType {
 
     /**
      * Pubkey 32 bytes; privkey 32 bytes; hash 64 bytes; sig 64 bytes
-     *
+     * <p>
      * Due to bugs in previous versions, minimum version is 0.9.17.
      *
      * @since 0.9.15
@@ -339,7 +339,7 @@ public enum SigType {
     /**
      * A private, unshared MessageDigest instance for this signature type,
      * in its initial state.
-     *
+     * <p>
      * A MessageDigest is stateful and not thread safe, so the prototype is
      * never returned directly; it is cloned on every call. Cloning skips the
      * JCA provider lookup (algorithm string hashing plus provider list
@@ -398,7 +398,6 @@ public enum SigType {
     /**
      * Create a Hash instance for this signature type.
      *
-     *
      * @return the hash instance
      * @throws UnsupportedOperationException if not supported
      * @since 0.9.9
@@ -440,7 +439,6 @@ public enum SigType {
 
     /**
      * Checks if this signature type is available in the JVM.
-     *
      *
      * @return true if supported in this JVM
      * @since 0.9.12

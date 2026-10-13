@@ -14,7 +14,7 @@ import net.i2p.util.Log;
 
 /**
  * This is the class used for outbound packets.
- *
+ * <p>
  * coordinate local attributes about a packet - send time, ack time, number of
  * retries, etc.
  */
@@ -196,7 +196,6 @@ class PacketLocal extends Packet implements MessageOutputStream.WriteStatus {
     /**
      * RTT sample for an ACKed packet: time between its last transmission and
      * its ACK.
-     *
      * <p>Unlike {@link #getAckTime()} (which measures lifetime since creation
      * and is used for the {@code stream.sendsBeforeAck} stat), this excludes
      * queueing delay: a packet may sit in the outbound queue (pacing, choke,
@@ -218,7 +217,6 @@ class PacketLocal extends Packet implements MessageOutputStream.WriteStatus {
 
     /**
      * Pure RTT sample computation: ACK time minus last transmission time.
-     *
      * <p>The sample is only meaningful when the packet was transmitted exactly
      * once (RFC 6298 section 3); resend bookkeeping is left to the caller so
      * this helper stays testable without router context.
@@ -520,7 +518,6 @@ class PacketLocal extends Packet implements MessageOutputStream.WriteStatus {
 
     /**
      * Pure decision rule for the write-timeout ACK-starvation fail-fast.
-     *
      * <p>When a {@code waitForCompletion} reaches its write timeout with this
      * packet still unacknowledged, the send should be treated as failed (rather
      * than silently timing out and dropping the payload) <em>only</em> when the
@@ -529,7 +526,6 @@ class PacketLocal extends Packet implements MessageOutputStream.WriteStatus {
      * but alive, and this packet's ACK is likely merely coalesced or lost — we
      * must NOT fail it (avoid a false positive that would truncate a legitimate
      * slow-but-progressing transfer).
-     *
      * <p>This was extracted as a pure static method so the fail-fast rule is
      * unit-testable without a live {@link Connection} (mirrors the
      * {@code getAdaptiveSynTimeout} evidence-gated pattern).
@@ -583,7 +579,6 @@ class PacketLocal extends Packet implements MessageOutputStream.WriteStatus {
     /**
      * Whether this packet's payload has been released and it can no longer be
      * (re)transmitted.
-     *
      * <p>Both {@link #ackReceived()} and {@link #cancelled()} call
      * {@code releasePayload()}, which returns this packet's buffer to the shared
      * outbound payload cache and clears {@code _payload}. Once either has run the
@@ -591,7 +586,6 @@ class PacketLocal extends Packet implements MessageOutputStream.WriteStatus {
      * payload and crash the I2CP write. {@link #isCancelled()} alone is
      * insufficient: an ACKed-but-not-cancelled packet also has a released
      * payload.
-     *
      * <p>This is the discriminator the retransmit timer uses to skip packets that
      * were acknowledged or cancelled <em>after</em> it snapshotted the outbound
      * set (a use-after-release TOCTOU between {@code Connection.ackPackets} and

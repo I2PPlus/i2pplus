@@ -84,19 +84,18 @@ public class DecayingBloomFilter {
 
     /**
      * Default sizing rationale.
-     *
+     * <p>
      * The rates below are theoretical false positive rates for a filter of
      * 2^m bits with k hash functions, (1 - e^(-k*n/m))^k, evaluated at
      * n = 600 * KBps entries: one message per second per KBps of share,
      * accumulated over a 600 second decay window. They are not measurements.
      * The formula understates the rate once the filter is close to full, so
      * treat the high figures at the end of each line as optimistic.
-     *
+     * <p>
      * The larger m values are chosen by the caller, which also steps k down to
      * hold k*ln(2) roughly constant: 23/11, then 10 above m=23, then 9 above
      * m=26. m is capped at 29, which is where KeySelector's offset formula
      * stops fitting in a 32 byte key.
-     *
      * <pre>
      *  m=23, k=11:
      *  Theoretical false positive rate for   16 KBps: 1.17E-21
@@ -339,7 +338,6 @@ public class DecayingBloomFilter {
     /**
      * Smallest exponent whose false positive rate stays at or under the target
      * for the given number of entries, at the optimal k for that exponent.
-     *
      * <p>Uses p ~= exp(-(ln2)^2/2 * 2^m / n), which is the standard optimal-k
      * Bloom bound. It reproduces the table in {@link #DEFAULT_M}: for
      * n=614400 it gives m=24 for a 1.48E-3 target, against 23 measured.
@@ -432,7 +430,7 @@ public class DecayingBloomFilter {
      * Encode a long entry into the byte array that gets hashed. Negative
      * values are stored as their magnitude with the top bit of the first byte
      * set as the sign, so a long and its negation stay distinct.
-     *
+     * <p>
      * Single source of truth for the long-to-entry conversion, shared by
      * add(long) and isKnown(long) so the two cannot drift apart.
      *
@@ -475,7 +473,7 @@ public class DecayingBloomFilter {
      * Add a long entry to the filter. The number of low order
      * bits used is determined by the entryBytes parameter used on creation of the
      * filter.
-     *
+     * <p>
      * Only for filters built with 8 or fewer bytes per entry, since a long
      * cannot be encoded any wider. Use add(byte[], int, int) otherwise.
      *
@@ -493,7 +491,7 @@ public class DecayingBloomFilter {
 
     /**
      * Check if an entry is already known without adding it
-     *
+     * <p>
      * Only for filters built with 8 or fewer bytes per entry, since a long
      * cannot be encoded any wider.
      *
@@ -583,7 +581,6 @@ public class DecayingBloomFilter {
 
     /**
      * Decay the filter, moving the current buffer to the previous.
-     *
      * <p>The buffer that becomes the new current one is reset to a freshly
      * allocated array rather than zeroed in place. Zeroing in place is a memset
      * of the whole filter held under the write lock, and every add() takes the

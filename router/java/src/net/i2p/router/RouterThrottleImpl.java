@@ -101,7 +101,7 @@ public class RouterThrottleImpl implements RouterThrottle {
     /**
      * Should we accept any more data from the network for any sort of message,
      * taking into account our current load, or should we simply slow down?
-     *
+     * <p>
      * FIXME only called by SSU Receiver, not NTCP!
      * FIXME should put warning on the console
      * FIXME or should we do this at all? We have Codel queues all over now...
@@ -322,7 +322,7 @@ public class RouterThrottleImpl implements RouterThrottle {
      * This is the estimated number of 1 KB tunnel messages that we'll see in
      * 10 minute lifetime of an exploratory tunnel. We use it as a baseline
      * minimum for estimating tunnel bandwidth, if accepted.
-     *
+     * <p>
      * 600 KB in 10 minutes equals ~4 KBps - increased from 200 for better
      * bandwidth allocation per transit tunnel.
      */

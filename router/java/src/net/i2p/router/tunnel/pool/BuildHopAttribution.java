@@ -4,18 +4,15 @@ import java.util.Locale;
 
 /**
  * Attributes an expired build to the hop position that failed to answer.
- *
  * <p>Why this exists: every expired build was logged with per-hop state, but
  *  only once per minute under a global throttle, so roughly 1 in 19,000 expiries
  *  was visible. Sample counts that thin cannot answer "which hop position fails?"
  *  — 18 samples named 47 distinct peers. This class turns the same per-hop state
  *  into rate stats on every expiry, which is the only way to see the distribution
  *  rather than an anecdote.
- *
  * <p>The first observation on this router was that Hop1 (the first *remote* hop;
  *  Hop0 is ourselves) accounted for the most silent hops, which is what makes the
  *  first-hop failure cooldown the most consequential tuning parameter.
- *
  * <p>Pure and static so the stat-name derivation is unit-testable without a
  *  router; the caller supplies the already-computed classification from
  *  {@link BuildExecutor#classifyExpiredHop}.
@@ -28,7 +25,6 @@ public class BuildHopAttribution {
 
     /**
      * Build the stat name for one hop position and classification.
-     *
      * <p>Shape: {@code tunnel.buildExpired.Hop1.establishedSilent}. Lower-cased
      *  and stripped of non-alphanumerics so a classification containing a space or
      *  comma still yields one legal stat name — those come from
@@ -56,7 +52,6 @@ public class BuildHopAttribution {
 
     /**
      * Whether this hop position is worth counting as a peer failure.
-     *
      * <p>Hop0 is this router and several classifications are expected states
      *  rather than failures — {@code selfExpected} on the gateway, and an
      *  unassigned hop that simply was not needed. Counting those would make the
@@ -75,7 +70,6 @@ public class BuildHopAttribution {
 
     /**
      * Whether a classification means the peer never answered at all.
-     *
      * <p>This is the distinction that matters for the build path: an established
      *  peer that stays silent is a different problem from a peer that was never
      *  reachable, and they warrant opposite responses. Confirmed 18/18 and then
@@ -92,7 +86,6 @@ public class BuildHopAttribution {
 
     /**
      * The peer-failure classifications worth registering a stat for.
-     *
      * <p>A fixed set, not the full hop-index x classification cross-product:
      * {@link net.i2p.stat.StatManager#addRateData} silently drops names that were
      * never registered, so an open-ended name generator records nothing at all.
@@ -113,7 +106,6 @@ public class BuildHopAttribution {
 
     /**
      * The hop positions worth registering a stat for.
-     *
      * <p>Hop0 is this router, so it can never be a peer failure.
      *
      * @return zero-based hop indexes, in registration order

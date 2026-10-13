@@ -26,12 +26,12 @@ import net.i2p.util.SystemVersion;
 
 /**
  * Periodic statistics collection and aggregation system.
- *
+ * <p>
  * This event runs every minute to collect, aggregate, and coalesce
  * router performance statistics. It gathers metrics from all major
  * router components and updates the statistics framework for monitoring
  * and analysis.
- *
+ * <p>
  * <strong>Statistics Collected:</strong>
  * <ul>
  * <li>Network metrics - peer counts, bandwidth usage</li>
@@ -40,7 +40,7 @@ import net.i2p.util.SystemVersion;
  * <li>Router health - job queue lag, processing times</li>
  * <li>Communication system - send/receive rates, error counts</li>
  * </ul>
- *
+ * <p>
  * <strong>Features:</strong>
  * <ul>
  * <li>Automatic cache clearing when memory is low</li>
@@ -48,7 +48,7 @@ import net.i2p.util.SystemVersion;
  * <li>Performance trend monitoring</li>
  * <li>Data available via /stats.jsp and /graphs.jsp</li>
  * </ul>
- *
+ * <p>
  * This data is essential for router performance monitoring,
  * troubleshooting, and capacity planning. The statistics are
  * used by the router console to display real-time performance
@@ -130,11 +130,11 @@ public class CoalesceStatsEvent extends SimpleTimer2.TimedEvent {
 
     /**
      * Collect and coalesce router statistics.
-     *
+     * <p>
      * This method is called periodically to gather various router metrics
      * including network statistics, peer counts, memory usage, and tunnel performance.
      * The collected data is used for monitoring and performance analysis.
-     *
+     * <p>
      * Statistics collected include:
      * <ul>
      * <li>Peer counts (known, active, fast, high capacity, etc.)</li>
@@ -169,7 +169,7 @@ public class CoalesceStatsEvent extends SimpleTimer2.TimedEvent {
 
     /**
      * Gather this cycle's statistics and coalesce them into the Rates.
-     *
+     * <p>
      * Called every Router.COALESCE_TIME by timeReached(), which guarantees the
      * reschedule and contains any exception this throws, so nothing here needs
      * its own try/catch.

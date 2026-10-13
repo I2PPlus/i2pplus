@@ -87,7 +87,7 @@ import net.i2p.data.DataHelper;
 import java.nio.charset.StandardCharsets;
 /**
  * Loads trusted ASCII certs from ~/.i2p/certificates/ and $I2P/certificates/.
- *
+ * <p>
  * TODO extend SSLSocketFactory
  *
  * @author zzz
@@ -129,7 +129,7 @@ public class I2PSSLSocketFactory {
      * X25519 in Java 13 but may be pulled in to 12 (can't use our unsigned provider)
      * Ed25519 in Java 13 (but we can use our provider)
      * ref: https://openjdk.java.net/jeps/332
-     *
+     * <p>
      * ref: http://docs.oracle.com/javase/7/docs/technotes/guides/security/SunProviders.html
      * Unmodifiable.
      * Public for RouterConsoleRunner.
@@ -248,11 +248,11 @@ public class I2PSSLSocketFactory {
 
     /**
      * Returns a socket to the host.
-     *
+     * <p>
      * A host argument that's an IP address (instead of a host name)
      * is not recommended, as this will probably fail
      * SSL certificate validation.
-     *
+     * <p>
      * Hostname validation is skipped for localhost addresses, but you still
      * must trust the certificate.
      *
@@ -270,11 +270,11 @@ public class I2PSSLSocketFactory {
 
     /**
      * Returns a socket to the host.
-     *
+     * <p>
      * An InetAddress argument created with an IP address (instead of a host name)
      * is not recommended, as this will perform a reverse DNS lookup to
      * get the host name for certificate validation, which will probably then fail.
-     *
+     * <p>
      * Hostname validation is skipped for localhost addresses, but you still
      * must trust the certificate.
      *
@@ -296,7 +296,7 @@ public class I2PSSLSocketFactory {
      * Validate the hostname.
      * Warning - be sure to remove [] from IPv6 addresses in host parameter if you
      * got it from URI.getHost().
-     *
+     * <p>
      * ref: https://developer.android.com/training/articles/security-ssl.html
      * ref: http://op-co.de/blog/posts/java_sslsocket_mitm/
      * ref: http://kevinlocke.name/bits/2012/10/03/ssl-certificate-verification-in-dispatch-and-asynchttpclient/
@@ -349,7 +349,7 @@ public class I2PSSLSocketFactory {
 
     /**
      * From Apache PublicSuffixMatcherLoader.getDefault()
-     *
+     * <p>
      * https://publicsuffix.org/list/effective_tld_names.dat
      * What does this get us?
      * Deciding whether to issue or accept an SSL wildcard certificate for *.public.suffix.
@@ -530,7 +530,7 @@ public class I2PSSLSocketFactory {
      * Select protocols and cipher suites to be used
      * based on configured inclusion and exclusion lists
      * as well as enabled and supported protocols and cipher suites.
-     *
+     * <p>
      * Adapted from Jetty SslContextFactory.java
      *
      * @param socket the socket whose enabled protocols and cipher suites are narrowed
@@ -546,7 +546,7 @@ public class I2PSSLSocketFactory {
      * Select protocols and cipher suites to be used
      * based on configured inclusion and exclusion lists
      * as well as enabled and supported protocols and cipher suites.
-     *
+     * <p>
      * Adapted from Jetty SslContextFactory.java
      *
      * @param socket the server socket whose enabled protocols and cipher suites are narrowed
@@ -568,7 +568,7 @@ public class I2PSSLSocketFactory {
      * Select protocols to be used
      * based on configured inclusion and exclusion lists
      * as well as enabled and supported protocols.
-     *
+     * <p>
      * Adapted from Jetty SslContextFactory.java
      *
      * @param enabledProtocols Array of enabled protocols
@@ -584,7 +584,7 @@ public class I2PSSLSocketFactory {
      * Select cipher suites to be used
      * based on configured inclusion and exclusion lists
      * as well as enabled and supported cipher suite lists.
-     *
+     * <p>
      * Adapted from Jetty SslContextFactory.java
      *
      * @param enabledCipherSuites Array of enabled cipher suites

@@ -127,7 +127,7 @@ public class CreateLeaseSetMessage extends I2CPMessageImpl {
 
     /**
      * Read the message body from the input stream.
-     *
+     * <p>
      * The signing and encryption private keys precede the LeaseSet but carry no
      * type or length prefix, so their sizes cannot be known up front. The
      * historical reader assumed DSA (20 bytes) + ElGamal (256 bytes); an external

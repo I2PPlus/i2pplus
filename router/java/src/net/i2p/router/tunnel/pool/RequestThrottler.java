@@ -19,7 +19,7 @@ import net.i2p.util.SimpleTimer2;
 /**
  * Throttles incoming tunnel requests earlier than ParticipatingThrottler,
  * with higher limits and more frequent cleanup.
- *
+ * <p>
  * Checks various router characteristics and decides whether to throttle,
  * ban, or disconnect routers based on request count, version, bandwidth,
  * and system load.

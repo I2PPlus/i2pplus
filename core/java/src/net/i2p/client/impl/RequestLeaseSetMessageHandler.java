@@ -131,7 +131,7 @@ class RequestLeaseSetMessageHandler extends HandlerImpl {
     /**
      * Do we send a LeaseSet or a LeaseSet2?
      * As of 0.9.69, always use LS2 unless the router doesn't support it
-     *
+     * <p>
      * Side effect: sets _ls2Type
      *
      * @param session the session whose LeaseSet2 preference is consulted, and

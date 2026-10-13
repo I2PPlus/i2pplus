@@ -47,11 +47,10 @@ import java.util.Map;
 
 /**
  * Comprehensive utility class for I2P signing keys and digital signatures.
- *
+ * <p>
  * This class provides essential methods for converting between I2P's native key formats
  * and standard Java cryptographic key representations, as well as utilities for
  * signature encoding/decoding and key validation.
- *
  * <p>Key functionalities include:</p>
  * <ul>
  * <li>Conversion between I2P and Java key formats</li>
@@ -748,12 +747,12 @@ public final class SigUtil {
 
     /**
      * Encode raw signature bytes (r || s) into ASN.1 DER SEQUENCE format.
-     *
+     * <p>
      * See http://download.oracle.com/javase/1.5.0/docs/guide/security/CryptoSpec.html
-     *
+     * <p>
      * Convert to BigInteger and back so we have the minimum length representation, as required.
      * r and s are always non-negative.
-     *
+     * <p>
      * Only supports sigs up to about 252 bytes. See code to fix BER encoding for this before you
      * add a SigType with bigger signatures.
      *
@@ -768,30 +767,31 @@ public final class SigUtil {
     }
 
     /**
-     * http://download.oracle.com/javase/1.5.0/docs/guide/security/CryptoSpec.html
+     * Encode two {@link BigInteger} values ({@code r}, {@code s}) into an ASN.1 DER
+     * {@code SEQUENCE} of two {@code INTEGER} values. {@code r} and {@code s} are
+     * always non-negative.
+     * <p>
+     * Only supports sigs up to about 65530 bytes. See code to fix BER encoding for this before you
+     * add a SigType with bigger signatures.
+     * <p>
+     * The output is an ASN.1 DER SEQUENCE of two INTEGER values, {@code r} and {@code s}, in that order:
      * <pre>
-     *  Signature Format: ASN.1 sequence of two INTEGER values: r and s, in that order:
-     *                                SEQUENCE ::= { r INTEGER, s INTEGER }
+     *  SEQUENCE ::= { r INTEGER, s INTEGER }
      *
-     * http://en.wikipedia.org/wiki/Abstract_Syntax_Notation_One
      *  30 -- tag indicating SEQUENCE
      *  xx - length in octets
      *
-     * 02 -- tag indicating INTEGER
+     *  02 -- tag indicating INTEGER
      *  xx - length in octets
      *  xxxxxx - value
      * </pre>
-     *
-     * Encode two BigInteger values (r, s) into ASN.1 DER SEQUENCE format.
-     * r and s are always non-negative.
-     *
-     * Only supports sigs up to about 65530 bytes. See code to fix BER encoding for this before you
-     * add a SigType with bigger signatures.
      *
      * @param r non-negative
      * @param s non-negative
      * @return ASN.1 DER-encoded SEQUENCE { r INTEGER, s INTEGER }
      * @throws IllegalArgumentException if too big
+     * @see <a href="http://download.oracle.com/javase/1.5.0/docs/guide/security/CryptoSpec.html">Java Cryptography Architecture Reference Guide</a>
+     * @see <a href="http://en.wikipedia.org/wiki/Abstract_Syntax_Notation_One">Abstract Syntax Notation One</a>
      * @since 0.9.25, split out from sigBytesToASN1(byte[])
      */
     public static byte[] sigBytesToASN1(BigInteger r, BigInteger s) {

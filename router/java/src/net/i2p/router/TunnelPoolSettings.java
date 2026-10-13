@@ -226,7 +226,7 @@ public class TunnelPoolSettings {
 
     /**
      * If there are no tunnels to build with, will this pool allow 0 hop tunnels?
-     *
+     * <p>
      * As of 0.9.44, same goes for exploratory:
      * Prior to 0.9.35, generally true for client.
      * As of 0.9.35, generally false for client, but true if
@@ -415,7 +415,7 @@ public class TunnelPoolSettings {
      * How many bytes to match to determine if a router's IP is too close to another's
      * to be in the same tunnel
      * (1-4, 0 to disable)
-     *
+     * <p>
      * Support removed in the ClientPeerSelector in 0.8.6; restored in 0.9.53
      *
      * @return 0-4 Number of bytes to match to determine if peers in the same IP range should

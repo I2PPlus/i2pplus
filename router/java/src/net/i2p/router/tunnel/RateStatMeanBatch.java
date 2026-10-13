@@ -8,12 +8,10 @@ import net.i2p.router.RouterContext;
  * {@code addRateData} per flush, so a hot path that samples a level once per
  * message or per 1KB fragment pays one stat lookup and one monitor per rate
  * period instead of one per sample.
- *
  * <p>Which statistics may be batched this way is a semantic question, not a
  * performance one, and this class only answers it for one kind of stat.
  * {@link net.i2p.stat.Rate#addData} accumulates a total and an event count per
  * period, and every reader divides them:
- *
  * <ul>
  * <li>A <b>mean</b> stat — one that samples a level (queue depth, fragments
  * per message, write delay) — is read as {@code total / eventCount}.  N
@@ -28,7 +26,6 @@ import net.i2p.router.RouterContext;
  * a stat has to resolve a {@link net.i2p.stat.RateStat} handle once and
  * call {@code addData} per event instead.</li>
  * </ul>
- *
  * <p>Safe for concurrent {@link #add}: producers accumulate into
  * {@link LongAdder}s and only the flushing thread resets them, so a sample can
  * straddle a flush boundary — which for a mean only moves one sample from one
@@ -105,7 +102,6 @@ class RateStatMeanBatch {
 
     /**
      * Divide, guarding the empty batch.
-     *
      * <p>Integer division, so a mean is truncated toward zero: the error is
      * always in [0, 1) of a unit — under one unit, never a unit in the
      * over-reporting direction — on a quantity that was never more precise

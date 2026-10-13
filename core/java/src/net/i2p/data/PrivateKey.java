@@ -18,7 +18,6 @@ import javax.security.auth.Destroyable;
 
 /**
  * Private (secret) key for the asymmetric encryption of an I2P destination.
- *
  * <p>Type and length:</p>
  * <ul>
  * <li>The {@link EncType} is fixed at construction and never changes, and
@@ -33,7 +32,6 @@ import javax.security.auth.Destroyable;
  * reports {@link #isDestroyed()} and {@link #length()} still returns the
  * type's length but the data is gone.</li>
  * </ul>
- *
  * <p>Caching:</p>
  * <ul>
  * <li>The derived public key is cached in memory: the first
@@ -44,7 +42,6 @@ import javax.security.auth.Destroyable;
  * and no create() factory method - build the key directly, or read it
  * from a {@link PrivateKeyFile}.</li>
  * </ul>
- *
  * <p>Thread safety:</p>
  * <ul>
  * <li>Not thread-safe. The data cannot be reassigned once set, but the

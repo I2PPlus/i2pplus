@@ -40,7 +40,6 @@ class ClientPeerSelector extends TunnelPeerSelector {
     private static final int CONNECTING_PREF_ATTEMPTS = 5;
     /**
      * How many first-hop candidates to fetch at once.
-     *
      * <p>The quality loop can only iterate while it has a candidate to reject, so asking the
      * tiers for exactly one left it a single attempt per refill and the 16-attempt budget went
      * largely unspent. A small batch lets one tier scan serve several attempts. Only the
@@ -51,7 +50,6 @@ class ClientPeerSelector extends TunnelPeerSelector {
     private static final int FIRST_HOP_CANDIDATES = 4;
     /**
      * Build success below which the first hop draws on both the Fast and HighCapacity tiers.
-     *
      * <p>The two tiers hold different peers: Fast is speed-ranked, HighCapacity is
      * proven-reliability. Below this the network is not delivering often enough for the
      * distinction to earn its cost, and taking from only one of them needlessly halves the
@@ -62,7 +60,6 @@ class ClientPeerSelector extends TunnelPeerSelector {
     static final double WIDEN_BUILD_SUCCESS = 0.50;
     /**
      * Fast-tier size below which the first hop draws on both tiers regardless of build success.
-     *
      * <p>A small Fast tier cannot supply {@link #FIRST_HOP_CANDIDATES} candidates however
      * healthy the network looks, so the batch is worth completing from the other tier even when
      * success is high. The same 300 marks the point where cross-pool diversity engages, so both
@@ -74,7 +71,6 @@ class ClientPeerSelector extends TunnelPeerSelector {
     /**
      * Build success below which the first-hop quality loop starts one tier lower, accepting
      * peers with only a connecting transport session rather than requiring an established one.
-     *
      * <p>Distinct from {@link #WIDEN_BUILD_SUCCESS}: this widens the <em>transport</em>
      * requirement, which costs build latency, so it waits until success is closer to healthy.
      *
@@ -163,7 +159,7 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
      * concurrent builds in the same batch target diverse first-hop peers —
      * stacking multiple build requests on one peer floods it and makes the
      * first build answer slower.
-     *
+     * <p>
      * The first hop is the last element of the returned list (endpoint-first
      * order).  If the selected first hop is excluded, selection retries up to
      * {@code MAX_DIVERSITY_RETRIES} times before returning the last result, so
@@ -327,7 +323,6 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
     /**
      * Whether a post-finalize selection is too short to build and must be
      * discarded for a redraw.
-     *
      * <p>Pure decision helper for the shortfall guard in {@code selectPeers()},
      * extracted for unit testing. A selection is discarded only when it holds
      * fewer than {@link #MIN_STRUCTURAL_NON_SELF_HOPS} non-self hops — that is,
@@ -1149,13 +1144,11 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
 
     /**
      * Reduce a first-hop candidate batch to the single peer the quality loop accepted.
-     *
      * <p>When the loop accepted a candidate it is the one to keep, and it is the head of the set
      * because every attempt takes {@code iterator().next()}. When nothing was accepted the loop
      * has already ejected everything it vetted and rejected, so whatever remains was never
      * cleared — kept deliberately rather than discarded, since returning empty costs the cycle
      * a build outright.
-     *
      * <p>No side effects beyond the set, so unit tests exercise it directly.
      *
      * @param matches the candidate batch, modified to hold at most the accepted peer
@@ -1179,11 +1172,9 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
 
     /**
      * Whether the first hop should draw candidates from both the Fast and HighCapacity tiers.
-     *
      * <p>True when the network is struggling, or when the Fast tier is too small to fill the
      * candidate batch on its own. Either way, taking from one tier alone needlessly shrinks the
      * pool the quality loop chooses from.
-     *
      * <p>Pure decision — no context access, safe for unit tests.
      *
      * @param buildSuccess the build success ratio in [0.0, 1.0]
@@ -1203,7 +1194,6 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
     /**
      * Add Fast-tier candidates until the batch is full, used when the first hop is widening
      * past the HighCapacity tier it started from.
-     *
      * <p>Passes the batch's full size and lets the selector compute the shortfall — the
      * same accounting {@link ProfileOrganizer#remainingToSelect} does for every other
      * caller, so the top-up cannot drift from the tiers beneath it.
@@ -1222,7 +1212,6 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
      * Tries the same tier cascade as selectFirstHop (HighCap → Fast →
      * Active → NotFailing) with the ejected peer excluded, so the slot
      * isn't wasted.  At most 3 refills per build cycle.
-     *
      * <p>Refills the whole {@link #FIRST_HOP_CANDIDATES} batch rather than a
      * single peer. The quality loop is budgeted for 16 attempts, and a batch
      * that shrinks by one per ejection reaches that budget by draining rather
@@ -1374,7 +1363,6 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
      */
     /**
      * Log the quality tier that actually produced this build's first hop.
-     *
      * <p>The first-hop quality ladder relaxes its reachability requirement as
      * attempts accumulate: tiers 0 and 1 require the peer to be established or
      * connecting, tier 2 requires neither.  A gateway taken at tier 2 is
@@ -1382,7 +1370,6 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
      * build request — which is indistinguishable, from the outside, from a
      * peer that went silent.  This line is the only way to tell those apart
      * after the fact.
-     *
      * <p>Rate limited to one line per {@link #TIER_LOG_INTERVAL_MS} per tier so
      * a busy build loop cannot turn the diagnosis into the noise it is meant
      * to explain; the counters accumulate regardless and are reported in the
@@ -1432,7 +1419,6 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
 
     /**
      * Build first-hop quality tier.  Pure so the ladder is testable.
-     *
      * <p>Tier 0 and 1 require an established or connecting peer; tier 2
      * requires neither.  The ladder reaches tier 2 after
      * {@link #CONNECTING_PREF_ATTEMPTS} rejections, which is the point where
@@ -1560,7 +1546,6 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
      * Tops {@code rv} up to {@code min} hops from the tier ladder, inserting
      * new middle hops before the vetted first hop so rv keeps its
      * [endpoint .. first hop] order.
-     *
      * <p>The ladder only ever widens on genuine scarcity: banlisted, ghost,
      * first-hop-failing and chronically failing peers are rejected by the tier
      * gates before a candidate is ever collected, so a wider tier is more
@@ -1980,7 +1965,6 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
      * Selected hops whose placement would give a single peer concurrent
      * entry and exit visibility across this destination's pools — the
      * pairing that enables traffic correlation. Two rules are checked:
-     *
      * <ul>
      * <li>inbound selection: the chosen IBGW already serves as the OBEP
      * of one of our active outbound tunnels</li>
@@ -2365,7 +2349,7 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
     /**
      * A Set of Hashes that automatically adds to the
      * Set in the contains() check.
-     *
+     * <p>
      * So we don't need to generate the exclude set up front.
      *
      * @since 0.9.58
@@ -2422,7 +2406,7 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
     /**
      * A Set of Hashes that automatically adds to the
      * Set in the contains() check.
-     *
+     * <p>
      * So we don't need to generate the exclude set up front.
      *
      * @since 0.9.58

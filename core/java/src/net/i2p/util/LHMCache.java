@@ -7,7 +7,6 @@ import java.util.Map;
  *  A LinkedHashMap with a maximum size, for use as
  *  an LRU cache. Unsynchronized.
  *
- *
  *  @param <K> type of keys in this cache
  *  @param <V> type of values in this cache
  *  @since 0.9.3

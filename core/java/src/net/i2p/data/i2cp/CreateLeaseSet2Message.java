@@ -24,12 +24,12 @@ import net.i2p.util.ByteArrayStream;
  * LeaseSet types, including LS2, Meta, and Encrypted.
  * Revocation keys are not present.
  * Multiple public/private encryption keys are possible.
- *
+ * <p>
  * For LS2:
  * Same as CreateLeaseSetMessage, but has a netdb type before
  * the LeaseSet. PrivateKeys are serialized after the LeaseSet,
  * not before, so we can infer the types from the LeaseSet.
- *
+ * <p>
  * For Meta LS:
  * PrivateKeys are not present.
  *

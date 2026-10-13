@@ -19,13 +19,13 @@ import net.i2p.util.Log;
 
 /**
  * Manages session tags and keys for a single ratchet direction with automatic key generation, supporting both inbound lookahead and on-demand outbound operations
- *
+ * <p>
  * For outbound, uses very little memory. Tags and keys are generated on demand.
  * See proposal 144.
- *
+ * <p>
  * For inbound, generates tags in advance, maintaining minSize lookahead.
  * Keys are generated as required.
- *
+ * <p>
  * Caller must synch on all methods.
  *
  * @since 0.9.44
@@ -343,13 +343,13 @@ class RatchetTagSet implements TagSetHandle {
      * For inbound and outbound: Expiration.
      * Expiration is getDate() + getTimeout() if acked.
      * Before acked, uses _created + _timeout (full lifetime).
-     *
+     * <p>
      * Previously this used Math.min(_timeout, SESSION_PENDING_DURATION_MS)
      * which capped unacked ES tagsets at 3 minutes instead of their designed
      * 10-minute SESSION_LIFETIME_MAX_MS. With i2cp.disableLoopback=true,
      * the NSR round-trip through the full tunnel path could exceed 3 minutes,
      * causing tags to expire before the first ES message arrived.
-     *
+     * <p>
      * NSR tagsets are unaffected — they have _timeout = SESSION_PENDING_DURATION_MS
      * (3 min), so the min() was a no-op for them.
      *

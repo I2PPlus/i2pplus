@@ -8,7 +8,7 @@ import net.i2p.router.web.HelperBase;
 
 /**
  * The new user wizard.
- *
+ * <p>
  * This bean has SESSION scope so the results may be retrieved.
  * All necessary methods are synchronized.
  *

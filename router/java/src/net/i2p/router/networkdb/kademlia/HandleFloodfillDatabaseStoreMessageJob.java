@@ -127,7 +127,7 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                  * their client tunnel.
                  * In this role, the only LeaseSet store that should be rejected
                  * is the subDb's client's own LeaseSet.
-                 *
+                 * <p>
                  * Currently, the 'floodfill' netDb will be excluded
                  * from directly receiving a client LeaseSet, due to the
                  * way the selection of FloodFill routers are selected

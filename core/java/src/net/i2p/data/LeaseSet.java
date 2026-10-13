@@ -26,7 +26,6 @@ import java.util.Set;
 
 /**
  * Defines the set of leases that a destination currently has available for routing messages.
- *
  * <p>LeaseSet is the fundamental routing structure in I2P, containing:</p>
  * <ul>
  * <li><strong>Destination:</strong> The service endpoint identity</li>
@@ -35,14 +34,12 @@ import java.util.Set;
  * <li><strong>Leases:</strong> List of tunnel endpoints and their validity periods</li>
  * <li><strong>Signature:</strong> Cryptographic signature proving authenticity</li>
  * </ul>
- *
  * <p><strong>Lease Structure:</strong></p>
  * <ul>
  * <li><strong>Gateway:</strong> Router identity that hosts the tunnel endpoint</li>
  * <li><strong>Tunnel ID:</strong> Unique identifier for the tunnel on the gateway</li>
  * <li><strong>Expiration:</strong> Time when the lease becomes invalid</li>
  * </ul>
- *
  * <p><strong>Encryption Support (Legacy):</strong></p>
  * <ul>
  * <li><strong>⚠️ SECURITY WARNING:</strong> Encryption is poorly designed and probably insecure</li>
@@ -51,7 +48,6 @@ import java.util.Set;
  * <li><strong>No Indication:</strong> Encrypted leases appear identical to unencrypted ones</li>
  * <li><strong>Keyring Required:</strong> Routers need desthash and key to decrypt</li>
  * </ul>
- *
  * <p><strong>Encryption Process:</strong></p>
  * <ul>
  * <li><strong>Client Side:</strong> Encryption performed in I2CP client</li>
@@ -59,7 +55,6 @@ import java.util.Set;
  * <li><strong>Network:</strong> Encrypted form transmitted to floodfills</li>
  * <li><strong>Access:</strong> Decrypted leases only available via {@link #getLease(int)}</li>
  * </ul>
- *
  * <p><strong>Usage:</strong></p>
  * <ul>
  * <li><strong>Routing:</strong> Primary mechanism for message delivery in I2P</li>
@@ -67,7 +62,6 @@ import java.util.Set;
  * <li><strong>Mobility:</strong> Leases can be updated as endpoints change</li>
  * <li><strong>Discovery:</strong> Published to network database for lookup</li>
  * </ul>
- *
  * <p><strong>Security Considerations:</strong></p>
  * <ul>
  * <li><strong>Signature Verification:</strong> Always verify LeaseSet signatures</li>
@@ -75,7 +69,6 @@ import java.util.Set;
  * <li><strong>Encryption Avoidance:</strong> Legacy encryption should not be used</li>
  * <li><strong>Modern Alternatives:</strong> Use LeaseSet2, EncryptedLeaseSet, or MetaLeaseSet</li>
  * </ul>
- *
  * <p><strong>Migration Path:</strong></p>
  * <ul>
  * <li><strong>LeaseSet2:</strong> Enhanced format with better security and features</li>
@@ -83,12 +76,11 @@ import java.util.Set;
  * <li><strong>MetaLeaseSet:</strong> Advanced routing and load balancing</li>
  * </ul>
  * leases and the original leaseset signature.
- *
+ * <p>
  * Revocation (zero leases) isn't used anywhere. In addition:
  * - A revoked leaseset has an EarliestLeaseDate of -1, so it will never be stored successfully.
  * - Revocation of an encrypted leaseset will explode.
  * - So having an included signature at all is pointless?
- *
  *
  * @author jrandom
  */
@@ -126,13 +118,13 @@ public class LeaseSet extends DatabaseEntry {
      * Unlimited before 0.6.3;
      * 6 as of 0.6.3;
      * Increased in version 0.9.
-     *
+     * <p>
      * Leasesets larger than 6 should be used with caution,
      * as each lease adds 44 bytes, and routers older than version 0.9
      * will not be able to connect as they will throw an exception in
      * readBytes(). Also, the churn will be quite rapid, leading to
      * frequent netdb stores and transmission on existing connections.
-     *
+     * <p>
      * However we increase it now in case some hugely popular eepsite arrives.
      * Strategies elsewhere in the router to efficiently handle
      * large leasesets are TBD.
@@ -252,7 +244,7 @@ public class LeaseSet extends DatabaseEntry {
 
     /**
      * Record the local client that received this leaseset.
-     *
+     * <p>
      * As of 0.9.65, no longer sets receivedAsReply to true
      *
      * @param localClient may be null
@@ -325,7 +317,7 @@ public class LeaseSet extends DatabaseEntry {
      * This is the date that should be used in comparisons for leaseSet age - to
      * determine which LeaseSet was published more recently (later earliestLeaseSetDate
      * means it was published later)
-     *
+     * <p>
      * Warning - do not use this for version comparison for LeaseSet2.
      * Use LeaseSet2.getPublished() instead.
      *

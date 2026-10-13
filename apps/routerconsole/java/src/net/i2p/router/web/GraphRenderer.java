@@ -68,7 +68,6 @@ class GraphRenderer {
 
     /**
      * Fill for the wide, chrome-less sidebar sparkline.
-     *
      * <p>Neutral on purpose: that tile carries no legend and no labels, so its colour must
      * not read as a first plot from the themed palette.
      */
@@ -76,13 +75,11 @@ class GraphRenderer {
 
     /**
      * Stroke width for the line overlaid on a filled plot.
-     *
      * <p>The line drawn over a filled area is not the plot line, so
      * {@code --graph_plotLineWidth} and its plain, wide and condensed siblings do not apply to
      * it; it has {@code --graph_plotLineWidthFilled}. It used to be half the plot width, which
      * tied an edge that exists to keep the fill readable to a weight chosen for a line that is
      * not being drawn.
-     *
      * <p>Reads only the filled family. An edge on a fill does not take its weight from the plot
      * line it sits on - letting it track that meant the two could never be set apart - but it
      * does answer the same three questions the plot line does, through its own plain, wide and
@@ -109,7 +106,6 @@ class GraphRenderer {
 
     /**
      * Stroke width for the sidebar sparkline.
-     *
      * <p>A legibility decision: at 250x50 with nothing else drawn, a hairline nearly vanishes.
      * See {@link #lineWidth}.
      */
@@ -117,7 +113,6 @@ class GraphRenderer {
 
     /**
      * Stroke width for a tile carrying enough periods that a heavier line would merge them.
-     *
      * <p>A legibility decision, and the reason a theme's width is not obeyed unconditionally.
      * See {@link #lineWidth}.
      */
@@ -128,7 +123,6 @@ class GraphRenderer {
 
     /**
      * The arrow on an axis break, which no theme draws.
-     *
      * <p>Already rrd4j's own default, so setting it is stating the intent rather than
      * changing anything - which is the point: it used to be set for two of the four themes
      * only, implying the arrow was a dark-theme decision when it never was.
@@ -152,7 +146,6 @@ class GraphRenderer {
     private static final int SIZE_TITLE = 12;
     /**
      * Headroom left under the data minimum, as a fraction of the window's data range.
-     *
      * <p>Proportional rather than absolute, so it behaves the same for a rate that
      * hovers around 0.05 and one that sits at 100,000.
      *
@@ -442,7 +435,6 @@ class GraphRenderer {
 
     /**
      * Render a graph with every series, including the primary, drawn as a line.
-     *
      * <p>Used for combined graphs. Filling the primary would put a solid block behind the
      * other series and hide any that cross it, which defeats the point of overlaying them.
      *
@@ -586,7 +578,6 @@ class GraphRenderer {
 
     /**
      * Caps how many points are plotted so that each has room to be drawn.
-     *
      * <p>Uncapped, the renderer is handed roughly one point per pixel, and once
      * points are closer together than a pixel a value change falls inside a
      * single column with no width to draw across. The cap is derived from the
@@ -685,11 +676,9 @@ class GraphRenderer {
     /**
      * Choose the y-axis floor for a window, so a series that lives in a narrow band far
      * from zero is not flattened against a zero baseline.
-     *
      * <p>Only the floor is ever returned. The ceiling and the tick rounding are left to
      * rrd4j, which snaps the floor down to cover any value that does not fit and
      * otherwise rounds both ends to its own idea of a sensible label value.
-     *
      * <p>Pure, so the decision can be unit tested without a router, an RRD or a clock.
      *
      * @param dataMin  smallest finite value in the window, NaN if none
@@ -716,12 +705,10 @@ class GraphRenderer {
 
 /**
  * Measure the window's data range so {@link #axisFloor} has something to scale.
- *
  * <p>The values cannot be taken off the definition before the graph is built:
  * rrd4j computes them internally, while rendering. So this reads the same window
  * from the listener's already-open RRD - the read {@link RrdGraph} performs a
  * moment later anyway - and reduces it in one pass.
- *
  * <p>Skipped entirely when a floor could not take effect anyway: {@code forceZero}
  * asks for the historical axis, and {@link #usesMrtgScaling} means rrd4j rebuilds
  * the range itself.
@@ -782,7 +769,6 @@ class GraphRenderer {
 
     /**
      * Fold one series into the running range, ignoring missing and infinite points.
-     *
      * <p>One pass over a primitive array: no boxing, no sorting, nothing
      * allocated per point.
      *
@@ -820,12 +806,10 @@ class GraphRenderer {
 
     /**
      * Whether rrd4j scales the value axis itself, ignoring a floor set on the definition.
-     *
      * <p>With {@link RrdGraphDef#setAltYMrtg(boolean)} on, rrd4j's MRTG range expansion
      * rebuilds the y range from the maximum alone and pins the floor at zero, so a floor
      * set on the definition cannot move it. Small graphs turn the option off, which is why
      * they are the ones the data-driven floor helps.
-     *
      * <p>Mirrors the decision in {@link #configureGridAndRendering} so the two cannot
      * drift apart, and is only read after {@link #configureBaseAndDecimals} has filled in
      * {@code noDecimalPlace}.
@@ -963,7 +947,6 @@ class GraphRenderer {
     /**
      * Draw the primary as a filled area, which is how a single-value graph has always
      * been rendered.
-     *
      * <p>The one exception is the wide, chrome-less sparkline used in the sidebar, which
      * stays a neutral grey: it is drawn small and unlabelled, so it takes a colour from
      * neither the theme nor the plot palette and must not imply a second series.
@@ -1042,12 +1025,10 @@ class GraphRenderer {
 
     /**
      * Declare and plot every extra series of a combined graph.
-     *
      * <p>Each member becomes its own datasource drawn as a line, never an area,
      * with a per-series colour and its description in the legend. Areas are
      * reserved for the primary series: filling several overlaid series hides
      * whichever one is behind.
-     *
      * <p>The max/min/avg/now summary block is emitted for the first extra
      * series only when there is exactly one, matching the long-standing
      * combined-bandwidth graph; with more, four legend lines per series would
@@ -1109,10 +1090,8 @@ class GraphRenderer {
 
     /**
      * Stroke width for a plotted series.
-     *
      * <p>Three cases are decided here rather than by the theme, because each is a fact about
      * one layout rather than a look the console wants:
-     *
      * <ul>
      * <li>Grouped graphs stack up to six lines on one axis and are drawn thinner so they
      * stay separable and the dense case does not fill in.</li>
@@ -1121,7 +1100,6 @@ class GraphRenderer {
      * <li>A tile carrying many periods is drawn thinner for the same reason the grouped
      * case is: the series is crowded.</li>
      * </ul>
-     *
      * <p>Everything else - an ordinary plot, including one carrying a group of series - takes
      * its weight from the theme. Grouping used to short-circuit to a hard-coded
      * {@code ALL_LINES_WIDTH} of 1.5 before any variable was read, which meant
@@ -1151,7 +1129,6 @@ class GraphRenderer {
 
     /**
      * Whether a frame is the wide, chrome-less sidebar sparkline.
-     *
      * <p>Identified by its exact size with every other element hidden, which is the only
      * combination the console requests and the only one drawn unlabelled.
      */
@@ -1162,7 +1139,6 @@ class GraphRenderer {
 
     /**
      * Whether a tile is carrying enough periods that a thicker line would merge them.
-     *
      * <p>A wide tile keeps the thicker line because it has room to show the crowding; the
      * narrow form is what needs thinning.
      */
@@ -1173,12 +1149,10 @@ class GraphRenderer {
     /**
      * Whether a tile is narrow and carrying condensed data, and so takes the theme's condensed
      * plot width.
-     *
      * <p>Separate from {@link #isCrowdedTile} because the two answer different questions.
      * A crowded tile has enough periods that any width merges the series, so it takes a fixed
      * hairline. A condensed tile is merely narrow for the number of periods it carries, so the
      * weight stays the theme's to set - thinner than an ordinary plot, but not a hairline.
-     *
      * <p>Deliberately independent of smoothing. Smoothing used to exempt a tile from this,
      * because an unsmoothed polyline crowds where a rounded curve does not - but smoothing is
      * itself only a default, and a stepped series is what a user asking for step gets. Gating
@@ -1195,7 +1169,6 @@ class GraphRenderer {
 
     /**
      * Periods at or above which a narrow unsmoothed tile counts as condensed.
-     *
      * <p>The graphs page's narrow variant packs a few hundred minutes into a sub-400px frame;
      * well below this a narrow tile has room for its points to separate.
      */
@@ -1203,7 +1176,6 @@ class GraphRenderer {
 
 /**
  * The colour for an extra series: plot ordinal 1, i.e. the theme's second hue.
- *
  * <p>A frame carries at most two plots ({@link GraphGroups#MAX_SERIES}), so
  * "which colour is the extra series" has exactly one answer and it is a
  * themeable one. The two-series bandwidth graph predates grouping and keeps the
@@ -1220,10 +1192,8 @@ class GraphRenderer {
 
     /**
      * Which plot slot an extra series occupies.
-     *
      * <p>The primary always takes slot 0, so extras start at 1 and, since a frame carries at
      * most two plots, every extra past the first clamps onto slot 1.
-     *
      * <p>Every per-plot lookup for an extra series goes through here — its stroke colour, its
      * fill and its value shading. They used to compute the ordinal separately and one of them
      * disagreed, which gave a series one plot's colour and another plot's gradient.
@@ -1247,7 +1217,6 @@ class GraphRenderer {
 
     /**
      * The value-shade stops an extra series would be drawn with.
-     *
      * <p>Exposed so a test can check that the extra series asks for its own plot's stops rather
      * than a neighbouring plot's. Comparing colours could not catch that, because every shipped
      * theme draws both plots flat and a flat plot has no stops to compare.
@@ -1291,7 +1260,6 @@ class GraphRenderer {
 
     /**
      * The stops that shade one plot line by its value, or null for a flat line.
-     *
      * <p>Passed per line rather than set once on the definition, so two plots on one axis are
      * shaded independently - the same independence their colours have.
      *
@@ -1412,7 +1380,6 @@ class GraphRenderer {
 
     /**
      * Hand the theme's dot pattern to the renderer.
-     *
      * <p>A theme may state only the dot length, in which case jrobin derives the gap from
      * the stroke width. When it states a gap too, that value is used unless it would merge
      * the dots, which is decided in {@code RrdGraphConstants.minimumDashGap}. A dot length
@@ -1431,7 +1398,6 @@ class GraphRenderer {
 
     /**
      * Apply the theme's colours to the graph definition.
-     *
      * <p>Every one of them is the theme's to state in its own {@code console.css}; this class
      * holds only the fallbacks for a stylesheet that declares nothing, so a frame reads as
      * part of the page it is drawn on.

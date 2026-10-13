@@ -71,7 +71,6 @@ public class GraphListener implements RateSummaryListener {
     private int _rows;
     /**
      * Consecutive write failures at which the report stops being routine.
-     *
      * <p>No longer a teardown threshold. A momentary I/O error used to detach the
      * listener here, which converted a transient fault into a permanent hole in the
      * graph and then left it unfilled for up to a full sync interval. Retirement is
@@ -84,7 +83,6 @@ public class GraphListener implements RateSummaryListener {
     private volatile long _lastUpdateSuccess;
     /**
      * Wall-clock ms when this listener took its Rate registration, or 0 if never.
-     *
      * <p>The origin for how long a listener that has never written has had the chance
      * to write. Measured from the router's graphing start instead, a listener created a
      * second ago inherits the age of the whole graphing session and is reported as
@@ -102,7 +100,6 @@ public class GraphListener implements RateSummaryListener {
     private volatile long _backfillCount;
     /**
      * Coalesce count of the Rate when this listener attached.
-     *
      * <p>{@link Rate#getCoalesceCount()} counts from the Rate's construction, and a
      * stat registered at router startup has been coalescing long before the console
      * attaches to it. Comparing that absolute count against this listener's own write
@@ -115,7 +112,6 @@ public class GraphListener implements RateSummaryListener {
     private volatile long _updateBaseline;
     /**
      * Steps proven lost because the Rate no longer retains them.
-     *
      * <p>The retained-sample ring holds a fixed handful of coalesces, so a listener
      * that was unreachable for longer than that can never recover the intervening
      * steps. Those are reported once rather than retried forever, which needs a
@@ -127,7 +123,6 @@ public class GraphListener implements RateSummaryListener {
     private volatile long _unrecoverableSteps;
     /**
      * Coalesce delta at which {@link #_unrecoverableSteps} was last charged.
-     *
      * <p>Keyed on the coalesce delta rather than on the drift because the coalesce
      * delta only ever grows, so each lost step is charged exactly once even when the
      * drift dips back to zero after a heal and climbs again.
@@ -213,7 +208,6 @@ public class GraphListener implements RateSummaryListener {
 
     /**
      * The ledger invariant: coalesces the Rate produced, minus steps this listener stored.
-     *
      * <p>Positive means a coalesce produced a sample this listener never put into the
      * RRD, which is a provably lost step rather than an inference from a stalled
      * write. Zero is the only healthy value; negative is not reachable, because a
@@ -226,7 +220,6 @@ public class GraphListener implements RateSummaryListener {
 
     /**
      * Record that the drift on this listener cannot be backfilled.
-     *
      * <p>Charged against the coalesce delta rather than the drift, which only grows,
      * so every lost step is charged exactly once. A later heal that drops the drift
      * back to zero and a further outage both still get reported.
@@ -327,7 +320,6 @@ public class GraphListener implements RateSummaryListener {
 
     /**
      * Value to store for a period, given the totals the rate hands its listeners.
-     *
      * <p>Pure so the backfill path and the live path cannot drift apart: a backfilled
      * step recorded with a different rule than the live steps around it would put a
      * spike in the middle of an otherwise consistent trace.
@@ -351,7 +343,6 @@ public class GraphListener implements RateSummaryListener {
 
     /**
      * Record a step that is now in the RRD, advancing the write ledger.
-     *
      * <p>Synchronized because the count is the numerator of the drift invariant the
      * watchdog reads: a lost increment here is reported as a lost step, so the ledger
      * has to be exact rather than a volatile increment that the delivery thread and
@@ -370,13 +361,11 @@ public class GraphListener implements RateSummaryListener {
 
     /**
      * Count a failed write and report it, without giving up the listener.
-     *
      * <p>Below the threshold this is routine and rate limited; from the threshold on it
      * is an ERROR naming the rate, because a streak this long is not going to clear
      * itself and the operator has to know which graph is affected. Reported every
      * {@link #MAX_CONSECUTIVE_ERRORS} failures rather than on every one, so a rate with
      * a persistently failing RRD cannot turn the log into the stall it used to avoid.
-     *
      * <p>Deliberately does not call {@link #stopListening()}. Retiring on a transient
      * I/O error left a hole in the graph that nothing refilled for up to a full sync
      * interval, and the detach was indistinguishable from a real fault in the logs.
@@ -412,12 +401,10 @@ public class GraphListener implements RateSummaryListener {
 
     /**
      * Replay retained samples whose steps this listener never stored, oldest first.
-     *
      * <p>Recovery for a listener that missed a few steps while nothing was obviously
      * wrong: the values are still in the Rate's retained-sample ring, and an archive
      * step is empty forever once nothing writes it, so writing them late beats losing
      * them.
-     *
      * <p>{@code RrdDb.store} rejects any timestamp not strictly newer than the last
      * one stored, so a sample that lands on or before {@link #getLastStoredTimeMs()} is
      * skipped rather than attempted: the write path has already covered the recent
@@ -483,7 +470,6 @@ public class GraphListener implements RateSummaryListener {
 
     /**
      * Truncate a wall-clock stamp to the whole second an RRD actually stores.
-     *
      * <p>Pure because the whole skip rule is this truncation applied against
      * {@link #getLastStoredTimeMs()}: comparing raw milliseconds would let a sample
      * 999ms into a step the listener already stored look newer than it is, and the
@@ -497,13 +483,11 @@ public class GraphListener implements RateSummaryListener {
 
     /**
      * Can a listener still recover its drift, or are the missing steps gone?
-     *
      * <p>The Rate retains a fixed, small ring of coalesces. Once every retained sample
      * is already stored, the steps the listener missed are older than anything the
      * Rate remembers, and no amount of retrying will produce them. Telling those two
      * cases apart is what keeps the watchdog from re-attempting a hopeless backfill
      * every ten seconds and from calling a permanent gap a transient one.
-     *
      * <p>Pure, so the boundary is unit tested without a Rate, an RRD or a clock.
      *
      * @param lastStoredTimeMs newest stored step from {@link #getLastStoredTimeMs()}
@@ -525,7 +509,6 @@ public class GraphListener implements RateSummaryListener {
 
     /**
      * Whether the open RRD handle can still take a write.
-     *
      * <p>Distinct from {@link #isDetached()}: a detached listener has no handle at
      * all, whereas this can be false for a listener that still holds a handle which
      * something else has already closed. That is the cheapest fault to heal, since
@@ -542,7 +525,7 @@ public class GraphListener implements RateSummaryListener {
 
     /**
      * Whether this listener has stopped recording.
-     *
+     * <p>
      * A detached listener keeps its entry in GraphGenerator's rate-to-listener
      * map, so the generator uses this to notice that it needs re-creating.
      *
@@ -553,7 +536,6 @@ public class GraphListener implements RateSummaryListener {
 
     /**
      * Whether this listener is still the one its Rate notifies on coalesce.
-     *
      * <p>Distinct from {@link #isDetached()}: a Rate holds exactly one summary
      * listener, so registering a replacement silently orphans this instance while its
      * RRD stays open. That instance is attached - so it renders fine and the console
@@ -567,7 +549,6 @@ public class GraphListener implements RateSummaryListener {
 
     /**
      * Does {@code self} still own a Rate's summary-listener registration?
-     *
      * <p>Reference identity, deliberately not {@link #equals(Object)}: two listeners
      * for the same Rate are {@code equals} but only one of them is ever called, so
      * only reference equality answers "is this instance the live one".
@@ -596,7 +577,6 @@ public class GraphListener implements RateSummaryListener {
     /**
      * Datasource id to the stat it records, so a log line can name the stat rather than
      * the 20-character munge JRobin requires.
-     *
      * <p>Bounded by the distinct stat-and-period pairs ever graphed - one entry each,
      * replaced in place when a listener is rebuilt - so it holds no per-rebuild state.
      *
@@ -606,7 +586,6 @@ public class GraphListener implements RateSummaryListener {
 
     /**
      * Record which stat a datasource id stands for.
-     *
      * <p>Called when a listener opens its RRD, which is the only place the id is minted.
      *
      * @param id the 20-character datasource id from {@link #createName}
@@ -621,7 +600,6 @@ public class GraphListener implements RateSummaryListener {
 
     /**
      * Translate a datasource id back to the stat it records.
-     *
      * <p>The ids are a hash of the stat name, so they cannot be inverted - a log line
      * quoting one names nothing an operator can look up. Pass every id a human reads
      * through here.
@@ -645,7 +623,6 @@ public class GraphListener implements RateSummaryListener {
 
     /**
      * Open (or re-open) the RRD database and take the Rate's summary registration.
-     *
      * <p>The ledger baseline is taken before the file is touched, not after: a
      * coalesce that happens while this method is opening the database is a step the
      * listener was never registered for, so it is lost and the drift has to say so.
@@ -666,13 +643,11 @@ public class GraphListener implements RateSummaryListener {
 
     /**
      * Re-obtain the RRD handle, keeping this listener registered and its ledger intact.
-     *
      * <p>The cheapest heal there is, for the case where the handle is closed but the
      * listener itself, its Rate registration and its recorded history all survive.
      * Rebuilding instead would work too, at the cost of a new listener, a new
      * renderer and a window in which the rate has no listener at all - so the ladder
      * tries this first.
-     *
      * <p>Neither the ledger baseline nor the write count is reset: the drift is the
      * fault being healed, and a heal that quietly rebased it would hide the very loss
      * it is repairing.
@@ -687,12 +662,10 @@ public class GraphListener implements RateSummaryListener {
 
     /**
      * Build the RRD handle, sample and renderer for this listener.
-     *
      * <p>Split out of {@link #startListening()} so {@link #reopen()} can obtain a new
      * handle without touching the Rate. Does no I/O on any rate's monitor: it is
      * called from the sync task and from the health watchdog, never from a
      * Rate-synchronized callback.
-     *
      * <p>The three fields are published together, at the end and only on success, so
      * a failure part-way through leaves the listener detached rather than attached
      * with a null sample that the delivery thread would dereference.
@@ -829,7 +802,6 @@ public class GraphListener implements RateSummaryListener {
 
     /**
      * Stop listening and close the RRD database.
-     *
      * <p>The registration on the Rate is dropped only if this instance still holds it,
      * so tearing down a superseded listener cannot silence its live replacement.
      */
@@ -843,11 +815,9 @@ public class GraphListener implements RateSummaryListener {
 
     /**
      * Release the RRD handle, leaving the Rate registration alone.
-     *
      * <p>Shared by {@link #stopListening()} and {@link #reopen()}: the only difference
      * between tearing a listener down and healing it is whether the Rate keeps
      * pointing at this instance, and that has to be the caller's decision.
-     *
      * <p>The handle is cleared before it is closed, so a delivery thread that is
      * midway through a write sees a null database and skips rather than writing to a
      * handle that is on its way out.
@@ -874,13 +844,11 @@ public class GraphListener implements RateSummaryListener {
 
     /**
      * Drop our registration on the Rate, but only if we still hold it.
-     *
      * <p>{@link Rate} keeps a single summary listener, so an instance tearing down
      * after a newer one has registered would otherwise stop the newer one being
      * called. The newer one keeps its open RRD and still reports itself attached,
      * so recording dies with no write error, no detach, and no exception anywhere
      * - every health check keeps saying healthy.
-     *
      * <p>{@link Rate#clearSummaryListener} does the ownership test and the clear as
      * one atomic operation, so a registration that appears between the two cannot be
      * dropped. A clear that finds the registration already gone is the ordinary
@@ -957,7 +925,6 @@ public class GraphListener implements RateSummaryListener {
     /**
      * As {@link #renderGraph}, but emitting the plot geometry and series as JSON
      * rather than drawing the graph.
-     *
      * <p>A graph is served as an {@code <img>}, so its SVG is an isolated document and a
      * client cannot read the numbers out of it. This is the separate request that carries
      * them, for a cursor readout.
@@ -992,7 +959,6 @@ public class GraphListener implements RateSummaryListener {
 
     /**
      * Render this stat with any number of extra series overlaid as lines.
-     *
      * <p>Every series shares one axis, so the caller must supply stats that measure the
      * same thing; see {@link GraphGroups} for the sanctioned groupings.
      *
@@ -1056,7 +1022,6 @@ public class GraphListener implements RateSummaryListener {
 
     /**
      * Render this stat with any number of extra series, every series drawn as a line.
-     *
      * <p>Identical to {@link #renderGraph(OutputStream, int, int, boolean, boolean, boolean,
      * boolean, int, int, boolean, List, String, boolean)} except that the primary is a line
      * rather than a filled area, so no member of the group is hidden behind another.

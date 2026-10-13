@@ -479,7 +479,6 @@ public class LogsHelper extends HelperBase {
 
 /**
  * Apply an ordered table of literal rewrites.
- *
  * <p>Equivalent to chaining {@link String#replace(CharSequence, CharSequence)}
  * down the table in order, so a rewrite routinely matches text an earlier one
  * produced. A rewrite whose needle is absent costs one indexOf and allocates
@@ -582,11 +581,11 @@ public class LogsHelper extends HelperBase {
     /**
      * Read in the last few lines of a (newline delimited) textfile, or null if
      * the file doesn't exist.
-     *
+     * <p>
      * Same as FileUtil.readTextFile but uses platform encoding,
      * not UTF-8, since the wrapper log cannot be configured:
      * http://stackoverflow.com/questions/14887690/how-do-i-get-the-tanuki-wrapper-log-files-to-be-utf-8-encoded
-     *
+     * <p>
      * Warning - this inefficiently allocates a StringBuilder of size maxNumLines*80,
      * so don't make it too big.
      * Warning - converts \r\n to \n

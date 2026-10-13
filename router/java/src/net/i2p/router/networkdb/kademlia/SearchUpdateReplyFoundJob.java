@@ -16,7 +16,7 @@ import net.i2p.util.Log;
 
 /**
  * Called after a match to a db search is found
- *
+ * <p>
  * Used only by SearchJob which is only used by ExploreJob
  */
 class SearchUpdateReplyFoundJob extends JobImpl implements ReplyJob {

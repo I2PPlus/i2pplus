@@ -22,7 +22,7 @@ import java.nio.charset.StandardCharsets;
 /**
  * Utility class providing methods to parse and write files in config file
  * format, and subscription file format.
- *
+ * <p>
  * TODO: switch to the DataHelper loadProps/storeProps methods?
  *
  * @author Ragnarok

@@ -10,28 +10,28 @@ import net.i2p.router.NetworkDatabaseFacade;
  * clients are obtaining from the network database, and prevents information
  * intended for clients from entering the table used by the router for
  * Floodfill operations.
- *
+ * <p>
  * The benefit of this is that we can use this to provide an effective barrier
  * against "Context-Confusion" attacks which exploit the fact that messages sent
  * to clients can update the routing table used by a floodfill, providing
  * evidence that the floodfill hosts the corresponding client. When applied
  * correctly, so that every client uses a unique subDb, the entire class of attack
  * should be neutralized.
- *
+ * <p>
  * The drawback of this is that it makes the netDb less efficient. Clients and
  * Floodfills who share a netDb can update the tables used by those netDbs when
  * a Client encounters an entry obtained by a Floodfill or vice-versa. Clients also
  * must sometimes search the netDb for keys that are owned by other clients or by
  * a co-located Floodfill, if one exists.
- *
+ * <p>
  * In some contexts, it makes sense to view all the tables at once, especially when
  * viewing information from the UI. The functions 'getLeases*', 'getRouters*', and
  * 'getLocalClient*' are provided for this purpose.
- *
+ * <p>
  * In the future, this could also be extended to provide Whanau-like functionality
  * by determining when clients and the local floodfill disagree on the content of a
  * leaseSet.
- *
+ * <p>
  * See implementation: FloodfillNetworkDatabaseSegmentor
  *
  * @author idk

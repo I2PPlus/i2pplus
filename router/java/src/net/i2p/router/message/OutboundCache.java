@@ -16,7 +16,6 @@ import net.i2p.util.SimpleTimer2;
 
 /**
  * Helper cache manager for outbound message optimization in OCMOSJ.
- *
  * <p>This class maintains several caches to optimize outbound message routing and delivery:
  * <ul>
  * <li>LeaseSet cache - minimizes overhead by reusing our own LeaseSet.</li>
@@ -25,12 +24,10 @@ import net.i2p.util.SimpleTimer2;
  * <li>Last reply request cache - ensures periodic replies to detect failed tunnels.</li>
  * <li>Multihomed cache - tracks LeaseSets for multihomed routers.</li>
  * </ul>
- *
  * <p>All caches use ConcurrentHashMap with tuned initial capacity, load factor, and concurrency level
  * to allow safe concurrent access and high throughput with low contention.
  * Tunnel caches have been converted from HashMaps with explicit synchronization to ConcurrentHashMaps
  * for consistent concurrency management without external locking.
- *
  * <p>Cache cleaning occurs periodically with a configurable interval, removing expired entries
  * to balance memory use and cache freshness.
  */
@@ -341,7 +338,6 @@ public class OutboundCache {
      * message of a new stream (streaming SYN carrying the fresh-connection
      * marker), so an HTTP/protocol retry does not ride the same tunnel that
      * stalled the prior connection.
-     *
      * <p>This is pure decision logic - identity comparison only, no router
      * context - extracted so the rotation behaviour is unit-testable.
      *
@@ -367,7 +363,6 @@ public class OutboundCache {
     /**
      * Decide whether a send to a destination whose LeaseSet was not found
      * locally should be skipped without performing a lookup.
-     *
      * <p>Failure can be confirmed or transient. A destination whose LeaseSet
      * was valid within {@code transientGraceMs} is a <em>transient gap</em>:
      * skipping must only deduplicate concurrent sends (one real probe every

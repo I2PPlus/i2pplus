@@ -9,10 +9,10 @@ import java.util.zip.Deflater;
 /**
  * Provide a cache of reusable GZIP streams, each handling up to 40 KB output without
  * expansion.
- *
+ * <p>
  * This compresses to memory only. Retrieve the compressed data with getData().
  * There is no facility to compress to an output stream.
- *
+ * <p>
  * Do NOT use this for compression of unlimited-size data, as it will
  * expand, but never release, the BAOS memory buffer.
  */

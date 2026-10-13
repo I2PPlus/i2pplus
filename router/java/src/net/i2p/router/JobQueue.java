@@ -34,7 +34,7 @@ import net.i2p.util.SystemVersion;
 /**
  * Prioritizes and executes router jobs with preference for earlier scheduled tasks.
  * Manages job queues, timing, and thread pool execution for router-internal operations only.
- *
+ * <p>
  * For use by the router only. Not to be used by applications or plugins.
  */
 public class JobQueue {
@@ -62,7 +62,6 @@ public class JobQueue {
      * Maintained exclusively through {@link #offerReady}, {@link #removeReady},
      * {@link #takeReady}, {@link #addTimed} and {@link #removeTimed} so that no
      * queue mutation can leave it stale.
-     *
      * <p>Membership is released at <em>dispatch</em>, not at completion:
      * {@link JobImpl#requeue} is called from {@code runJob()} on the running job
      * itself, so holding the entry until completion would swallow every
@@ -476,7 +475,7 @@ public class JobQueue {
      * Average lag time for jobs waiting in the queue.
      * This is the average delay between when jobs were supposed to start
      * and the current time across all ready jobs.
-     *
+     * <p>
      * Uses weakly-consistent iteration on each BlockingQueue — concurrent
      * additions/removals may be missed or double-counted, but the result
      * is a sufficient approximation for diagnostics and scoring.
@@ -897,7 +896,7 @@ public class JobQueue {
 
         /**
          * Pump jobs from the scheduling queue to the runner queue.
-         *
+         * <p>
          * The iteration and removal of _timedJobs happens outside the lock
          * because ConcurrentSkipListSet supports safe concurrent iteration.
          * Only the wait/notify signaling needs _jobLock, reducing contention
@@ -1140,11 +1139,10 @@ public class JobQueue {
     /**
      * Count the number of TestJob instances currently queued in the job queue.
      * This includes both ready jobs and timed jobs waiting to be executed.
-     *
+     * <p>
      * O(1): maintained by the queue-mutation helpers, because the pumper samples
      * it on every pass and walking three collections under _jobLock was
      * measurable work for a stat that only feeds a graph.
-     *
      * <p>Counts a pumper-promoted job in {@link #_timedJobsReady} as queued.
      * Those jobs are due to run now, so omitting them understated the queue;
      * this matches the {@code jobQueue.testJobCount} description and the

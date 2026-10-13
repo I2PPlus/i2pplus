@@ -102,7 +102,7 @@ public class ConsolePasswordManager extends RouterPasswordManager {
 
     /**
      * Decode a fixed-width hex string into exactly hex.length()/2 bytes.
-     *
+     * <p>
      * DELIBERATE DEVIATION from the DataHelper canonical-source rule:
      * DataHelper.fromHexString() decodes via BigInteger and returns the
      * minimum-length, sign-aware representation - a leading '0' nibble is

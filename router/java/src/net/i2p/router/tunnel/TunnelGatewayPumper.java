@@ -19,15 +19,15 @@ import net.i2p.util.SimpleTimer2;
 /**
  * TunnelGatewayPumper runs a pool of threads that process PumpedTunnelGateway instances which need
  * messages pushed through preprocessing and sending.
- *
+ * <p>
  * This class is thread-safe and designed to manage concurrent producers (calling wantsPumping)
  * and multiple consumer threads (pumper threads).
- *
+ * <p>
  * Shutdown coordination:
  * - The stopPumping() method sets a stop flag and enqueues a special poison pill for each thread.
  * - Threads detect the poison pill and exit cleanly.
  * - Threads are interrupted and joined to ensure complete termination.
- *
+ * <p>
  * Thread safety notes:
  * - Uses a LinkedBlockingQueue with bounded capacity for backpressure.
  * - Uses a concurrent Set to track backlogged gateways for requeueing.

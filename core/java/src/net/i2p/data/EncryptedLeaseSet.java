@@ -27,7 +27,6 @@ import java.util.Set;
 /**
  * Implementation of EncryptedLeaseSet as specified in
  * <a href="https://geti2p.net/spec/proposals/123-new-netdb-entries">Proposal 123: New NetDb Entries</a>.
- *
  * <p>EncryptedLeaseSet provides privacy and authentication enhancements over standard LeaseSet2:</p>
  * <ul>
  * <li>LeaseSet content is encrypted using authenticated encryption</li>
@@ -36,7 +35,6 @@ import java.util.Set;
  * <li>Requires authentication data for decryption</li>
  * <li>Protects tunnel endpoints from unauthorized discovery</li>
  * </ul>
- *
  * <p><strong>Key Features:</strong></p>
  * <ul>
  * <li><strong>Authentication Types:</strong> Supports DH, PSK, and no authentication</li>
@@ -44,21 +42,18 @@ import java.util.Set;
  * <li><strong>Encryption:</strong> Content encrypted with ChaCha20-Poly1305 AEAD</li>
  * <li><strong>Access Control:</strong> Fine-grained control over who can decrypt the LeaseSet</li>
  * </ul>
- *
  * <p><strong>Usage:</strong></p>
  * <ul>
  * <li>Services requiring restricted access to tunnel endpoints</li>
  * <li>Private services with authenticated client access</li>
  * <li>Situations where tunnel endpoint discovery must be controlled</li>
  * </ul>
- *
  * <p><strong>Authentication Methods:</strong></p>
  * <ul>
  * <li>{@link BlindData#AUTH_NONE} - No authentication required</li>
  * <li>{@link BlindData#AUTH_DH} - Diffie-Hellman key exchange authentication</li>
  * <li>{@link BlindData#AUTH_PSK} - Pre-shared key authentication</li>
  * </ul>
- *
  * <p><strong>Implementation Status:</strong> PRELIMINARY - Subject to change as the proposal evolves</p>
  *
  * @since 0.9.38
@@ -430,7 +425,7 @@ public class EncryptedLeaseSet extends LeaseSet2 {
 
     /**
      * This must be used instead of getDestination().getHash().
-     *
+     * <p>
      * Overridden because we have a blinded key, not a dest.
      * This is the hash of the signing public key type and the signing public key.
      * Throws IllegalStateException if not initialized.
@@ -898,7 +893,7 @@ public class EncryptedLeaseSet extends LeaseSet2 {
 
     /**
      * Overridden to decrypt if possible, and verify inner sig also.
-     *
+     * <p>
      * Must call setDestination() prior to this if attempting decryption.
      * Must call setClientKey() prior to this if attempting decryption.
      *
@@ -911,7 +906,7 @@ public class EncryptedLeaseSet extends LeaseSet2 {
 
     /**
      * Decrypt if possible, and verify inner sig also.
-     *
+     * <p>
      * Must call setDestination() prior to this if attempting decryption.
      *
      * @param clientKey PrivateKey for DH or PSK, or null if none

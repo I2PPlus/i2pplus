@@ -36,10 +36,10 @@ import java.nio.charset.StandardCharsets;
 /**
  * A naming service based on a single file using the "hosts.txt" format.
  * Supports adds, removes, and listeners.
- *
+ * <p>
  * All methods here are case-sensitive.
  * Conversion to lower case is done in HostsTxtNamingService.
- *
+ * <p>
  * This does NOT provide .b32.i2p or {b64} resolution.
  * It also does not do any caching.
  * Use from HostsTxtNamingService or chain with another NamingService

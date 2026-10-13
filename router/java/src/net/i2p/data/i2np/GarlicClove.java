@@ -19,7 +19,7 @@ import net.i2p.util.Log;
 /**
  * Contains one deliverable message encrypted to a router along with instructions
  * and a certificate 'paying for' the delivery.
- *
+ * <p>
  * Note that certificates are always the null certificate at this time, others are unimplemented.
  *
  * @author jrandom

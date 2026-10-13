@@ -46,7 +46,6 @@ class ProfilePersistenceHelper {
     /**
      * Age beyond which a peer that is also absent from the network database is
      * treated as gone, making its profile file deletable at any store size.
-     *
      * <p>Seven days. The previous logic used a 24-hour activity threshold and
      * separately deleted K/L/M/Unknown bandwidth peers regardless of age, so a peer
      * merely quiet overnight could lose its learned history. Those peers are no
@@ -109,7 +108,7 @@ class ProfilePersistenceHelper {
 
     /**
      * Record the number of profile files on disk and publish it for graphing.
-     *
+     * <p>
      * Every path that recomputes the count routes through here rather than
      * assigning the field directly, so the graphed gauge cannot drift from the
      * value the store actually holds.
@@ -163,7 +162,6 @@ _context.statManager().createRequiredRateStat(STAT_STORED_PROFILES,
 
     /**
      * Write the data from the profile to the file.
-     *
      * <p>A rare, benign failure mode: a concurrent purge
      * ({@link #purgeExcessProfiles}) or expiry sweep can remove the profile,
      * or its shard directory ({@code peerProfiles/pX}), between
@@ -717,7 +715,6 @@ List<PeerProfile> profiles = new ArrayList<>(Math.min(LIMIT_PROFILES, freshFiles
     /**
      * Peers whose profile was loaded while the netdb held no RouterInfo, collected
      * during {@link #readProfiles()}.
-     *
      * <p>These profiles are kept on disk but inert until the RouterInfo is fetched
      * again, so the caller needs the list to go and request it. Empty when no
      * collection has been supplied.
@@ -760,14 +757,12 @@ List<PeerProfile> profiles = new ArrayList<>(Math.min(LIMIT_PROFILES, freshFiles
     /**
      * Is a profile file genuinely stale, and therefore deletable whatever the
      * store size?
-     *
      * <p>Both conditions are required. Absence from the network database alone
      * means the RouterInfo expired, which happens routinely while a peer is
      * offline for an hour; inactivity alone means the peer has not been heard
      * from recently, which is equally routine. Only the conjunction identifies a
      * profile whose peer has been gone long enough that its learned history is
      * worth nothing.
-     *
      * <p>Pure decision, safe for unit tests.
      *
      * @param absentFromNetDb true if no usable RouterInfo is held for the peer
@@ -790,12 +785,10 @@ List<PeerProfile> profiles = new ArrayList<>(Math.min(LIMIT_PROFILES, freshFiles
     /**
      * How many surplus (non-stale) profiles to delete to bring the store back
      * to the retention floor.
-     *
      * <p>Stale profiles are deleted independently of this, so this counts only
      * the additional trimming that the store being over its floor justifies. It
      * is zero below the floor, which is what makes "never delete below the floor
      * unless genuinely stale" hold regardless of how many profiles are active.
-     *
      * <p>Pure decision, safe for unit tests.
      *
      * @param storedFiles profile files currently on disk
@@ -814,7 +807,6 @@ List<PeerProfile> profiles = new ArrayList<>(Math.min(LIMIT_PROFILES, freshFiles
 
     /**
      * Delete profile files that are no longer worth keeping.
-     *
      * <p>Two rules, in this order:
      * <ol>
      * <li>a profile that is {@linkplain #isGenuinelyStale genuinely stale} is
@@ -824,7 +816,6 @@ List<PeerProfile> profiles = new ArrayList<>(Math.min(LIMIT_PROFILES, freshFiles
      * </ol>
      * Staleness therefore decides <em>whether</em> a file may go and the store size
      * decides only <em>how many</em>.
-     *
      * <p>Low-bandwidth peers are excluded where it belongs, on the write path in
      * {@code PeerManager.storeProfile()}, so no K/L/M/Unknown profile is created in
      * the first place. This method used to remove them instead, ahead of any age
@@ -832,7 +823,6 @@ List<PeerProfile> profiles = new ArrayList<>(Math.min(LIMIT_PROFILES, freshFiles
      * by accident got the right answer: files already on disk from before that
      * check existed still age out here, through the stale bucket or the surplus
      * trim.
-     *
      * <p>Ordering uses the profile's own recorded activity rather than the file's
      * modification time, because profiles are rewritten whenever they are stored
      * and so carry a fresh mtime even for a peer long gone.

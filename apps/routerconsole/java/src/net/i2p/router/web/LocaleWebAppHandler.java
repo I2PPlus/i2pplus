@@ -17,7 +17,7 @@ import org.eclipse.jetty.webapp.WebAppContext;
 /**
  * Convert foo.jsp to foo_xx.jsp for language xx.
  * This is appropriate for jsps with large amounts of text.
- *
+ * <p>
  * Also, as of 0.8.2, rewrite "/" and "/index.html" to "/index.jsp",
  * and "/foo" to "/foo.jsp".
  *

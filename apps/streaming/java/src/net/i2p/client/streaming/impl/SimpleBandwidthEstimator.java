@@ -9,15 +9,15 @@ import net.i2p.util.Log;
  * A Westwood+ bandwidth estimator with
  * a first stage anti-aliasing low pass filter based on RTT,
  * and the time-varying Westwood filter based on inter-arrival time.
- *
+ * <p>
  * Ref: TCP Westwood: End-to-End Congestion Control for Wired/Wireless Networks
  * Casetti et al
  * (Westwood)
- *
+ * <p>
  * Ref: End-to-End Bandwidth Estimation for Congestion Control in Packet Networks
  * Grieco and Mascolo
  * (Westwood+)
- *
+ * <p>
  * Adapted from: Linux kernel tcp_westwood.c (GPLv2)
  *
  * @since 0.9.46

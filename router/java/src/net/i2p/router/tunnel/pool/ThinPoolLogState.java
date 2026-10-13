@@ -2,10 +2,8 @@ package net.i2p.router.tunnel.pool;
 
 /**
  * Decides when a thin-pool warning is worth repeating.
- *
  * <p>Pure so the repetition policy is unit-testable without a router, and so the
  * policy is stated once rather than implied by wherever a log call happens to sit.
- *
  * <p>The executor calls into this path on every tick, several times a second,
  * while a pool's healthy count changes on the order of minutes. Warning per call
  * reprinted one unchanged value hundreds of times a minute, which both buries the
@@ -24,7 +22,6 @@ public class ThinPoolLogState {
 
     /**
      * Whether a thin-pool warning should be emitted for the observed healthy count.
-     *
      * <p>Logs the first observation, then only when the count differs from the last
      * one logged. Returning true for a repeated value would reintroduce the flood;
      * suppressing a genuine return to a previously seen value would hide a
@@ -42,7 +39,6 @@ public class ThinPoolLogState {
 
     /**
      * Format the thin-pool warning body.
-     *
      * <p>Pure, so the wording is unit-testable and cannot drift from the counts the
      * policy decides on.
      *

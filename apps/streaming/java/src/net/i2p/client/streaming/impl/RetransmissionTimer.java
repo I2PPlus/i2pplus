@@ -8,7 +8,6 @@ import net.i2p.util.SimpleTimer2;
  * Per-destination timer for scheduling packet retransmissions.
  * Uses dedicated SimpleTimer2 shards (not the router-global one) to isolate
  * streaming timer events from contention with other subsystems.
- *
  * <p>The events are spread over {@link #SHARDS} independent timers, so a
  * connection whose timer queue is saturated by retransmission/ack events
  * cannot hold up an unrelated connection's handshake or keepalive. Each shard

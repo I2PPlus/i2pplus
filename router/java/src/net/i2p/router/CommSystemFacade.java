@@ -76,7 +76,6 @@ public abstract class CommSystemFacade implements Service {
 
     /**
      * How many peers we have sent a message to in the last minute.
-     *
      * <p>Narrower than {@link #countActivePeers()} in both respects that matter: send
      * only, and a one-minute window rather than the transport's active window. The
      * pair answers different questions - how many peers we can reach against how many
@@ -509,7 +508,7 @@ public abstract class CommSystemFacade implements Service {
     /**
      * These must be increasing in "badness" (see TransportManager.java),
      * but UNKNOWN must be last.
-     *
+     * <p>
      * We are able to receive unsolicited connections
      * on all enabled transports
      */

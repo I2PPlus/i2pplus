@@ -94,7 +94,7 @@ public class FortunaRandomSource extends RandomSource implements EntropyHarveste
      * as well as sun's, kaffe's, and classpath's implementation INCLUDES NEGATIVE VALUES.
      * Ok, so we're going to have it return between 0 and n (including 0, excluding n), since
      * that's what it has been used for.
-     *
+     * <p>
      * Unlike Java's Random, which throws IAE, this returns 0 if n is 0.
      *
      * @param n non-negative
@@ -153,7 +153,7 @@ public class FortunaRandomSource extends RandomSource implements EntropyHarveste
     /**
      * Like the modified nextInt, nextLong(n) returns a random number from 0 through n,
      * including 0, excluding n.
-     *
+     * <p>
      * Unlike Java's Random, which throws IAE, this returns 0 if n is 0.
      *
      * @param n non-negative
@@ -276,7 +276,7 @@ public class FortunaRandomSource extends RandomSource implements EntropyHarveste
     /**
      * Pull the next numBits of random data off the fortuna instance (returning 0
      * through 2^numBits-1
-     *
+     * <p>
      * Caller must synchronize!
      * @param numBits how many random bits to return, at least 1
      * @return a value in the range 0 through 2^numBits - 1

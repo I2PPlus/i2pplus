@@ -41,7 +41,7 @@ import net.i2p.util.SecureFileOutputStream;
  * This helper class reads and writes files in the
  * same "eepPriv.dat" format used by the client code.
  * The format is:
- *<pre>
+ * <pre>
  *     - Destination (387 bytes if no certificate, otherwise longer)
  *        - Public key (256 bytes), random data as of 0.9.57 (except for RouterPrivateKeyFile)
  *        - Signing Public key (128 bytes)
@@ -60,12 +60,12 @@ import net.i2p.util.SecureFileOutputStream;
  *        - Transient Signing Private key (length as specified by transient sig type)
  *
  *     Total: 663 or more bytes for ElGamal, may be smaller for other enc. types
- *</pre>
- *
+ * </pre>
+ * <p>
  * Destination encryption keys have been unused since 0.6 (2005).
  * As of 0.9.57, new Destination encryption public keys are simply random data,
  * and encryption private keys may be random data or all zeros.
- *
+ * <p>
  * This class is extended by net.i2p.data.router.RouterPrivateKeyFile.
  * RouterIdentity encryption keys ARE used and must be valid.
  *
@@ -93,15 +93,15 @@ public class PrivateKeyFile {
     /**
      *  Create a new PrivateKeyFile, or modify an existing one, with various
      *  types of Certificates.
-     *
+     * <p>
      *  Changing a Certificate does not change the public or private keys.
      *  But it does change the Destination Hash, which effectively makes it
      *  a new Destination. In other words, don't change the Certificate on
      *  a Destination you've already registered in a hosts.txt key add form.
-     *
+     * <p>
      *  Copied and expanded from that in Destination.java
      *
-     *  @param args command line arguments
+     * @param args command line arguments
      */
     public static void main(String[] args) {
         String stype = null;
@@ -580,13 +580,13 @@ public class PrivateKeyFile {
 
     /**
      *  Create with the default signature type if nonexistent.
-     *
+     * <p>
      *  Also reads in the file to get the privKey and signingPrivKey,
      *  which aren't available from I2PClient.
      *
-     *  @return the destination for this key file, creating it if the file does not exist
-     *  @throws I2PException if creation fails
-     *  @throws IOException if file operations fail
+     * @return the destination for this key file, creating it if the file does not exist
+     * @throws I2PException if creation fails
+     * @throws IOException if file operations fail
      */
     public Destination createIfAbsent() throws I2PException, IOException {
         return createIfAbsent(I2PClient.DEFAULT_SIGTYPE);
@@ -594,15 +594,15 @@ public class PrivateKeyFile {
 
     /**
      *  Create with the specified signature type if nonexistent.
-     *
+     * <p>
      *  Also reads in the file to get the privKey and signingPrivKey,
      *  which aren't available from I2PClient.
      *
-     *  @param type the signature type to use
-     *  @return the destination for this key file, creating it if the file does not exist
-     *  @throws I2PException if creation fails
-     *  @throws IOException if file operations fail
-     *  @since 0.9.26
+     * @param type the signature type to use
+     * @return the destination for this key file, creating it if the file does not exist
+     * @throws I2PException if creation fails
+     * @throws IOException if file operations fail
+     * @since 0.9.26
      */
     public Destination createIfAbsent(SigType type) throws I2PException, IOException {
         if (!this.file.exists()) {
@@ -620,11 +620,11 @@ public class PrivateKeyFile {
     /**
      *  Create with the specified signature and encryption types if nonexistent.
      *  Private for now, only for router.keys.dat testing.
-     *
+     * <p>
      *  Also reads in the file to get the privKey and signingPrivKey,
      *  which aren't available from I2PClient.
      *
-     *  @since 0.9.42
+     * @since 0.9.42
      */
     private Destination createIfAbsent(SigType type, EncType ptype)
             throws I2PException, IOException {
@@ -697,7 +697,7 @@ public class PrivateKeyFile {
      *
      *  @return the destination, reading it from the file if it is not already set
      *  @throws I2PSessionException if reading fails
-     *  @throws IOException if file operations fail
+     * @throws IOException if file operations fail
      *  @throws DataFormatException if data is malformed
      */
     public Destination getDestination() throws I2PSessionException, IOException, DataFormatException {
@@ -985,7 +985,7 @@ public class PrivateKeyFile {
      *  Write the keys to the file.
      *  Copied from I2PClientImpl.createDestination()
      *
-     *  @throws IOException if file operations fail
+     * @throws IOException if file operations fail
      *  @throws DataFormatException if data encoding fails
      */
     public void write() throws IOException, DataFormatException {
@@ -1006,11 +1006,11 @@ public class PrivateKeyFile {
     /**
      *  Verify that the PublicKey matches the PrivateKey, and
      *  the SigningPublicKey matches the SigningPrivateKey.
-     *
+     * <p>
      *  NOTE this will fail for Destinations containing random padding for the enc. key
      *
-     *  @return true if both key pairs match, false otherwise
-     *  @since 0.9.16
+     * @return true if both key pairs match, false otherwise
+     * @since 0.9.16
      */
     public boolean validateKeyPairs() {
         try {
@@ -1066,7 +1066,6 @@ public class PrivateKeyFile {
 
     /**
      *  Verify the signature on a destination.
-     *
      *  <p>Sample code that goes through all the hosts.txt files and tries
      *  everybody.  You need to be in the $I2P directory or have a local
      *  hosts.txt for this to work.  Doubt this is what you want as it is

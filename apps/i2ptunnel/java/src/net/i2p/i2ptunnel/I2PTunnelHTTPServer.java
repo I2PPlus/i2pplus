@@ -413,7 +413,6 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
 
     /**
      * Set the I/O stall timeout in ms (called by Tuner via reflection).
-     *
      * <p>The floor matches the Tuner's own floor: a window below
      * {@link #STALL_WINDOW_FLOOR_MS} is shorter than any pause in a bulk
      * transfer, so it aborts healthy downloads rather than freeing threads.
@@ -554,7 +553,6 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
 
     /**
      * Stall window for a body that has already moved {@code bytesTransferred}.
-     *
      * <p>The configured window is right for a small response but wrong for a
      * bulk one: over a congested path a 45MB transfer routinely pauses for
      * many seconds between copy steps, and a single fixed window either kills
@@ -617,7 +615,6 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
 
     /**
      * Which side of a stalled body transfer stopped making progress.
-     *
      * <p>Read and write stamps are updated either side of the same copy step,
      * so a body blocked mid-write ages both equally: the read that fed the
      * blocked write is stamped, then the write never completes to stamp
@@ -626,7 +623,6 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
      * meaningful bytes and then gone quiet is sitting in a blocked write,
      * because a blocked read would have had nothing to hand the previous
      * write.
-     *
      * <p>Reporting the ambiguous case as the source is actively misleading: a
      * 45MB download that stalled after 3.2MB was logged as "local backend
      * silent" while the same backend served the whole file in 4ms on a fresh
@@ -2182,7 +2178,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
          * KB/s), which is expected latency — not a stall. On true idle the
          * Sender thread is interrupted (breaking any blocking {@code read()}),
          * and an IOException propagates to the finally-block cleanup.
-         *
+         * <p>
          * Used for keepalive responses (must wait before the next request)
          * and as a fallback when async handoff is not taken.
          *
@@ -2938,7 +2934,6 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
         /**
          * Abort this transfer without ever running it, closing both ends so the
          * connection is torn down promptly.
-         *
          * <p>Used when the body cannot be handed to the I/O pool. Running the
          * body on the caller's handler thread instead would pin that thread for
          * the whole transfer, which is how one saturated body starves the
@@ -3104,7 +3099,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
     /**
      * From I2P to server: socket non-null, in null.
      * From server to I2P: socket null, in non-null.
-     *
+     * <p>
      * Note: This does not handle RFC 2616 header line splitting,
      * which is obsoleted in RFC 7230.
      *
@@ -3242,7 +3237,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
 
     /**
      * Read a line terminated by newline, with a total read timeout.
-     *
+     * <p>
      * Warning - strips \n but not \r
      * Warning - 8KB line length limit as of 0.7.13, @throws IOException if exceeded
      * Warning - not UTF-8

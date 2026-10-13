@@ -17,7 +17,7 @@ import net.i2p.util.VersionComparator;
 
 /**
  * Check for an updated su3 version.
- *
+ * <p>
  * Take the update URL
  * then fetch the first 56 bytes of the URL, extract the version,
  * and compare to current full router version.

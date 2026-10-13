@@ -149,7 +149,7 @@ abstract class StoreJob extends JobImpl {
 
     /**
      * Send the key to the next batch of peers.
-     *
+     * <p>
      * Synchronized to enforce parallelization limits and prevent dups
      */
     private void sendNext() {
@@ -191,7 +191,7 @@ abstract class StoreJob extends JobImpl {
      * Send a series of searches to the next available peers as selected by
      * the routing table, but making sure no more than PARALLELIZATION are outstanding
      * at any time
-     *
+     * <p>
      * Caller should synchronize to enforce parallelization limits and prevent dups
      */
     private synchronized void continueSending() {
@@ -451,12 +451,12 @@ abstract class StoreJob extends JobImpl {
      * Send a leaseset store message out the client tunnel,
      * with the reply to come back through a client tunnel.
      * Stores are garlic encrypted to hide the identity from the OBEP.
-     *
+     * <p>
      * This makes it harder for an exploratory OBEP or IBGW to correlate it
      * with one or more destinations. Since we are publishing the leaseset,
      * it's easy to find out that an IB tunnel belongs to this dest, and
      * it isn't much harder to do the same for an OB tunnel.
-     *
+     * <p>
      * As a side benefit, client tunnels should be faster and more reliable than
      * exploratory tunnels.
      *
@@ -623,7 +623,7 @@ abstract class StoreJob extends JobImpl {
      * Send a leaseset store message out an exploratory tunnel,
      * with the reply to come back through a exploratory tunnel.
      * Stores are garlic encrypted to hide the identity from the OBEP.
-     *
+     * <p>
      * Only for Meta LS2, for now.
      *
      * @param msg must contain a leaseset
@@ -781,7 +781,7 @@ abstract class StoreJob extends JobImpl {
 
     /**
      * Job to verify successful store delivery and trigger next steps.
-     *
+     * <p>
      * Called after sending a dbStore to a peer successfully,
      * marking the store as successful.
      */
@@ -872,7 +872,7 @@ abstract class StoreJob extends JobImpl {
 
     /**
      * Job to handle failed store attempts.
-     *
+     * <p>
      * Called when a particular peer failed to respond before the timeout was
      * reached, or if the peer could not be contacted at all.
      */
@@ -926,7 +926,7 @@ abstract class StoreJob extends JobImpl {
 
     /**
      * Handle successful completion of the store operation.
-     *
+     * <p>
      * Called when the required redundancy level is reached.
      */
     protected void succeed() {
@@ -938,7 +938,7 @@ abstract class StoreJob extends JobImpl {
 
     /**
      * Handle failed completion of the store operation.
-     *
+     * <p>
      * Called when the store operation has exhausted all options.
      */
     protected void fail() {

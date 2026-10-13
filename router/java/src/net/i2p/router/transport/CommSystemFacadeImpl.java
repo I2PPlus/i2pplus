@@ -37,12 +37,12 @@ import net.i2p.util.Translate;
 
 /**
  * Primary implementation of the communication system facade for I2P network operations.
- *
+ * <p>
  * This class provides the main interface between the router core and
  * all transport protocols. It coordinates message sending,
  * peer management, address configuration, and network monitoring
  * while abstracting the underlying transport details.
- *
+ * <p>
  * <strong>Core Responsibilities:</strong>
  * <ul>
  * <li>Message routing and delivery across all transports</li>
@@ -54,7 +54,7 @@ import net.i2p.util.Translate;
  * <li>Geographic IP filtering and country blocking</li>
  * <li>Communication system status and health monitoring</li>
  * </ul>
- *
+ * <p>
  * <strong>Transport Integration:</strong>
  * <ul>
  * <li>Manages NTCP, UDP, and SSU transports</li>
@@ -62,7 +62,7 @@ import net.i2p.util.Translate;
  * <li>Coordinates address updates across protocols</li>
  * <li>Provides unified API for router components</li>
  * </ul>
- *
+ * <p>
  * <strong>Configuration Features:</strong>
  * <ul>
  * <li>Transport enable/disable controls</li>
@@ -71,7 +71,7 @@ import net.i2p.util.Translate;
  * <li>Network monitoring and testing options</li>
  * <li>IPv4 and IPv6 addressing support</li>
  * </ul>
- *
+ * <p>
  * <strong>Security Features:</strong>
  * <ul>
  * <li>Geographic IP filtering</li>
@@ -94,7 +94,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
 
     /**
      * Property to disable all network connections for testing purposes.
-     *
+     * <p>
      * When this property is set to true, the communication
      * system will not establish any outbound connections or accept
      * inbound connections. This is useful for testing scenarios
@@ -278,12 +278,12 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
 
     /**
      * Start the communication system and all transport protocols.
-     *
+     * <p>
      * This method initializes the communication system, starts all
      * configured transports, and begins network operations. It handles
      * transport discovery, address configuration, and peer management
      * setup.
-     *
+     * <p>
      * <strong>Startup Process:</strong>
      * <ul>
      * <li>Initialize geographic IP filtering</li>
@@ -305,14 +305,14 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
 
     /**
      * Cannot be restarted after calling this. Use restart() for that.
-     *
+     * <p>
      * Gracefully shutdown the communication system.
-     *
+     * <p>
      * This method performs a clean shutdown of all transport
      * protocols and network operations. It stops accepting
      * new connections, closes existing ones, and performs
      * cleanup of system resources.
-     *
+     * <p>
      * <strong>Shutdown Process:</strong>
      * <ul>
      * <li>Stop network monitoring</li>
@@ -332,12 +332,12 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
 
     /**
      * Restart the communication system.
-     *
+     * <p>
      * This method performs a complete restart of all transport
      * protocols while preserving router state. It stops all
      * transports, reinitializes system components, and restarts
      * network operations.
-     *
+     * <p>
      * <strong>Restart Process:</strong>
      * <ul>
      * <li>Stop all transport protocols gracefully</li>
@@ -376,7 +376,6 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
 
     /**
      * {@inheritDoc}
-     *
      * <p>The javadoc on this method said "in the last minute" already, while
      * {@link #countActivePeers()} above it says five. Only the latter is inaccurate:
      * every transport's active window is sixty seconds. The send-only count is the
@@ -403,13 +402,12 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
 
     /**
      * The framed average clock skew of connected peers in milliseconds, or the clock offset if we cannot answer.
+     * A positive number means our clock is ahead of theirs.
+     * Todo: change List to milliseconds
+     *
      * @param percentToInclude 1-100
      * @return The framed average clock skew of connected peers in milliseconds, or the clock offset if we cannot answer.
      *         Average is calculated over the middle "percentToInclude" peers.
-     *
-     *         A positive number means our clock is ahead of theirs.
-     *
-     *         Todo: change List to milliseconds
      */
     @Override
     public long getFramedAveragePeerClockSkew(int percentToInclude) {
@@ -438,11 +436,11 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
 
     /**
      * Process and route an outbound message through the transport system.
-     *
+     * <p>
      * This method is the central entry point for sending messages
      * to other I2P peers. It selects appropriate transport,
      * handles message queuing, and manages delivery tracking.
-     *
+     * <p>
      * <strong>Message Processing:</strong>
      * <ul>
      * <li>Transport selection based on destination</li>
@@ -586,9 +584,9 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
 
     /**
      * Render the status of the transport manager to the console as HTML.
-     *
+     * <p>
      * As of 0.9.31, only outputs UPnP status.
-     *
+     * <p>
      * Warning - blocking, very slow, queries the active UPnP router,
      * will take many seconds if it has vanished.
      */
@@ -609,12 +607,12 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
 
      /**
       * Create router addresses for all configured transport protocols.
-      *
+      * <p>
       * This method generates RouterAddress objects for each
       * transport protocol based on current configuration and
       * network conditions. It handles address discovery,
       * validation, and format conversion.
-      *
+      * <p>
       * <strong>Address Creation:</strong>
       * <ul>
       * <li>Iterates through all registered transports</li>
@@ -759,9 +757,9 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
 
     /**
      * Pluggable transports. Not for NTCP or SSU.
-     *
+     * <p>
      * Do not call from transport constructor. Transport must be ready to be started.
-     *
+     * <p>
      * Following transport methods will be called:
      * setListener()
      * externalAddressReceived() (zero or more times, one for each known address)
@@ -776,7 +774,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
 
     /**
      * Pluggable transports. Not for NTCP or SSU.
-     *
+     * <p>
      * Following transport methods will be called:
      * setListener(null)
      * stopListening();
@@ -862,7 +860,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
      * Uses the transport IP first because that lookup is fast, then the IP from the netDb.
      * Not recommended for our local router hash, as we may not be either in the cache or netdb,
      * or may not be publishing an IP.
-     *
+     * <p>
      * As of 0.9.32, works only for literal IPs, returns null for hostnames.
      *
      * @param peer not ourselves - use getOurCountry() for that

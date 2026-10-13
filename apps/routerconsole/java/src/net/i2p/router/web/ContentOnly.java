@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletRequest;
  * are rendered and the shared head/sidebar chrome is skipped, so auto-refresh
  * ticks transfer and parse a fraction of the full page. Full-page requests
  * (no contentonly parameter) are unaffected.
- *
+ * <p>
  * Pages opt in by gating each refresh target with
  * {@link #render(HttpServletRequest, String)}; the chrome guards in head.jsi
  * and sidebar.jsi are shared by every console page.

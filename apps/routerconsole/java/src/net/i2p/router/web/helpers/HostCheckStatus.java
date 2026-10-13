@@ -18,9 +18,7 @@ import net.i2p.data.DataHelper;
 
 /**
  * Whether each site in the Sites of Interest listing is still worth showing.
- *
  * <p>A site can fail in two independent ways, so two sources are consulted.
- *
  * <p><b>Addressbook membership.</b> The router resolves names through
  * {@code BlockfileNamingService}, backed by {@code hostsdb.blockfile} - the live addressbook,
  * which is much larger than the {@code hosts.txt} shipped at install and accumulates
@@ -28,23 +26,18 @@ import net.i2p.data.DataHelper;
  * it is not shown. Membership is therefore asked of {@code NamingService} rather than read
  * from any file: {@code hosts.txt} is only the seed the database was built from and says
  * nothing about what is live.
- *
  * <p><b>Probe status.</b> The addressbook checker periodically probes the sites it knows and
  * appends the outcome to {@code addressbook/hosts_check.txt}, one CSV row per probe:
- *
  * <pre>
  *  # Format: timestamp,host,reachable,category,responseTime,leaseSetTypes
  *  1791429608769,exil3.i2p,y,forum,34765,[6,4]
  * </pre>
- *
  * <p>A site in the addressbook whose latest probe failed is hidden and reappears when a later
  * probe succeeds. A site in the addressbook that has not been probed yet is shown: absence of
  * a result is not evidence of failure, so a cold cache must not empty the page.
- *
  * <p>Only the host column and the reachable flag are read. The trailing field contains commas
  * of its own ({@code [6,4]}); that is harmless because the fields of interest come first and
  * the split is positional.
- *
  * <p>Probe results are cached for one ping interval, since they cannot change any faster than
  * the checker refreshes them.
  *
@@ -96,7 +89,6 @@ public class HostCheckStatus {
 
     /**
      * The probe results, cached for the current ping interval.
-     *
      * <p>Callers rendering a whole list should fetch once and use
      * {@link #isDown(String, boolean, Map)} per entry, rather than re-reading per entry.
      *
@@ -111,7 +103,6 @@ public class HostCheckStatus {
 
     /**
      * Hostnames the operator has blacklisted, cached on the same cycle as the probe results.
-     *
      * <p>This is the susidns/addressbook blacklist, one lowercased hostname per line. It is
      * not the router's {@code Banlist}, which is a separate peer-hash mechanism with
      * expiry: the two answer different questions, and a hostname can be blacklisted here
@@ -127,7 +118,6 @@ public class HostCheckStatus {
 
     /**
      * Reload both files if the cache has expired.
-     *
      * <p>They are refreshed together on purpose: the checker rewrites both, so they have the
      * same cadence, and one timestamp for the pair means a page render can never mix a fresh
      * blacklist with stale probe results. Freshness is keyed on the timestamp rather than on
@@ -153,7 +143,6 @@ public class HostCheckStatus {
 
     /**
      * Whether a site should be hidden from the listing.
-     *
      * <p>A site is hidden when it is not in the addressbook at all, or when its latest probe
      * failed. A site in the addressbook with no probe result is shown, because untested is
      * not the same as down.
@@ -173,7 +162,6 @@ public class HostCheckStatus {
 
     /**
      * Whether a hostname is blacklisted.
-     *
      * <p>A blacklisted host is never offered as a link, whatever the probe results say. That
      * is a stronger rule than "down": the operator has said they do not want it reached, so a
      * successful probe does not earn it a place back.
@@ -188,7 +176,6 @@ public class HostCheckStatus {
 
     /**
      * Record one entry of the blacklist, which is a bare hostname per line.
-     *
      * <p>Comments and blank lines are skipped and the name is lowercased, so the file stays
      * usable if it is ever hand-edited. A line carrying anything other than a hostname is
      * ignored rather than stored, since a malformed entry must not silently blank a link.
@@ -208,7 +195,6 @@ public class HostCheckStatus {
 
     /**
      * Extract the host from a link's URL.
-     *
      * <p>Strips the scheme, any path, any port, and lowercases the result. Returns null when
      * there is no host to extract, which is also the signal that the link is not a site the
      * addressbook could ever hold.
@@ -232,10 +218,8 @@ public class HostCheckStatus {
 
     /**
      * Whether a host is one the addressbook can hold, i.e. an I2P name.
-     *
      * <p>Links to clearnet or to the console's own paths are always shown; only .i2p names
      * can be judged down.
-     *
      * <p>A {@code .b32.i2p} name is deliberately included: it is an I2P name, and the naming
      * service resolves it. It is left in scope even though resolving one can reach the
      * network, because the listing is not expected to contain them.
@@ -249,7 +233,6 @@ public class HostCheckStatus {
 
     /**
      * Record one row of the results file.
-     *
      * <p>Comments and blank lines are skipped, as is any row whose reachable flag is neither
      * {@code y} nor {@code n}, so a half-written row cannot be mistaken for a verdict and hide
      * a working site. Hosts are lowercased so lookups need not worry about case. Later rows
@@ -276,7 +259,6 @@ public class HostCheckStatus {
 
     /**
      * Convert a configured ping interval to milliseconds.
-     *
      * <p>Follows the checker's own convention: a trailing {@code M} means minutes, anything
      * else means hours. The config in use reads {@code pingInterval=1}, which means one hour
      * rather than one minute.

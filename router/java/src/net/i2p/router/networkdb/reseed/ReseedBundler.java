@@ -30,9 +30,9 @@ import net.i2p.util.VersionComparator;
  * Copy a random selection of 'count' router infos from configDir/netDb
  * to 'toDir'. Skip your own router info, and old, hidden, unreachable, and
  * introduced routers, and those from bad countries.
- *
+ * <p>
  * Much easier than the one in installer/tools since we have a running router.
- *
+ * <p>
  * Caller must delete file when done.
  *
  * @since 0.9.19 modified from BundleRouterInfos in installer/tools,
@@ -61,7 +61,7 @@ public class ReseedBundler {
      * a random selection of 'count' router infos from configDir/netDb
      * to 'toDir'. Skip your own router info, and old, hidden, unreachable, and
      * introduced routers, and those from bad countries.
-     *
+     * <p>
      * The file will be in the temp directory. Caller must move or delete.
      *
      * @param count how many router infos to bundle; at least MINIMUM are required unless fewer qualify

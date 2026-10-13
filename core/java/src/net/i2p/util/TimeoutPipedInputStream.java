@@ -8,11 +8,11 @@ import java.net.SocketTimeoutException;
 /**
  *  Adds setReadTimeout().
  *  Must be used with a TimeoutPipedOutputStream.
- *
+ * <p>
  *  To support InternalSocket.setSoTimeout().
  *  Package private, not a part of the public API, not for general use.
  *
- *  @since 0.9.34
+ * @since 0.9.34
  */
 class TimeoutPipedInputStream extends PipedInputStream {
 

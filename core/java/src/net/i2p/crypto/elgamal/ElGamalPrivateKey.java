@@ -6,7 +6,7 @@ import javax.crypto.interfaces.DHPrivateKey;
 
 /**
  * Interface for ElGamal private keys.
- *
+ * <p>
  * This interface defines the contract for ElGamal private keys, extending both
  * the ElGamalKey interface and the standard DHPrivateKey interface. ElGamal
  * private keys contain the secret exponent x used for decryption operations

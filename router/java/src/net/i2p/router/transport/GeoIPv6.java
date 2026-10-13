@@ -36,7 +36,7 @@ import net.i2p.util.Log;
 /**
  * Generate compressed geoipv6.dat.gz file, and
  * lookup entries in it.
- *
+ * <p>
  * Public only for command line use,
  * not a public API, not for external use.
  */
@@ -133,7 +133,7 @@ public class GeoIPv6 {
    /**
     * Read in and parse multiple IPv6 geoip CSV files,
     * merge them, and write out a gzipped binary IPv6 geoip file.
-    *
+    * <p>
     * Acceptable input formats (IPv6 only):
     * <pre>
     * #comment (# must be in column 1)
@@ -143,12 +143,11 @@ public class GeoIPv6 {
     * Country code case-insensitive.
     * Fields 1, 2, and 5 are used; fields 3, 4, and 6 are ignored.
     * This is identical to the format of the MaxMind GeoLite IPv6 file.
-    *
+    * <p>
     * Example:
     * <pre>
     * "2001:200::", "2001:200:ffff:ffff:ffff:ffff:ffff:ffff", "42540528726795050063891204319802818560", "42540528806023212578155541913346768895", "JP", "Japan"
     * </pre>
-    *
     * <pre>
     * Output format:
     * Bytes 0-9: Magic number "I2PGeoIPv6"
@@ -163,7 +162,7 @@ public class GeoIPv6 {
     *       2 byte country code LOWER case (ASCII)
     * Data must be sorted (SIGNED twos complement), no overlap
     * </pre>
-    *
+    * <p>
     * SLOW. For preprocessing only!
     *
     * @return true if the merged database was written, false on an I/O error
@@ -337,9 +336,9 @@ public class GeoIPv6 {
 
     /**
      * Merge and compress CSV files to I2P compressed format
-     *
+     * <p>
      * GeoIPv6 infile1.csv[.gz] [infile2.csv[.gz]...] outfile.dat.gz
-     *
+     * <p>
      * Used to create the file for distribution, do not comment out
      * @param args command line arguments
      */

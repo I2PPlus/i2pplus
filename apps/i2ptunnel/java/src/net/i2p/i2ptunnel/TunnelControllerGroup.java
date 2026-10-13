@@ -369,7 +369,6 @@ public class TunnelControllerGroup implements ClientApp {
     /**
      * Clamp and set the maximum concurrent client connections, 4 to 16384.
      * The Tuner I2PTunnelClientRunnerMaxParam stays within this same range.
-     *
      * <p>Enforces a one-way invariant against the Tuner-managed admission gate
      * ({@link #clientDefaultMaxConnections}): the worker pool may never be shrunk
      * below what the gate admits. Connections are served thread-per-connection with
@@ -401,7 +400,6 @@ public class TunnelControllerGroup implements ClientApp {
      * override. Kept separate from {@link #clientRunnerMax} (the shared HTTP proxy
      * executor ceiling) because that cap bounds the worker pool, whereas this cap
      * gates the accept loop from over-dispatching before a handler thread exists.
-     *
      * <p>An explicit per-tunnel override always wins over this default; the Tuner
      * can only move the floor for tunnels that leave the cap at default. Raised
      * under sustained load to defer connection shedding (which the browser reports
@@ -453,7 +451,7 @@ public class TunnelControllerGroup implements ClientApp {
      * As of 0.9.4, when in RouterContext, will return null
      * if the TCG has not yet been started by the router.
      * As of 0.9.41, that's true for Android as well.
-     *
+     * <p>
      * In Android, this should be used for all calls except from LoadClientsJob,
      * as we do not want to instantiate TCG too early. Android must do null
      * checks on the return value.
@@ -479,7 +477,7 @@ public class TunnelControllerGroup implements ClientApp {
      * When in RouterContext, will return null (except in Android)
      * if the TCG has not yet been started by the router.
      * In Android, if the old instance uses a stale context, it will replace it.
-     *
+     * <p>
      * In Android, this should only be called from LoadClientsJob, as we do not
      * want to instantiate TCG too early.
      *
@@ -989,7 +987,7 @@ public class TunnelControllerGroup implements ClientApp {
      * Prior to 0.9.20, also started the tunnels.
      * As of 0.9.20, does not start the tunnels, you must call startup()
      * or getInstance() instead of loadControllers().
-     *
+     * <p>
      * DEPRECATED for use outside this class. Use startup() or getInstance().
      *
      * @param cfgFile the config file or directory to read the tunnel definitions from
@@ -1612,7 +1610,7 @@ public class TunnelControllerGroup implements ClientApp {
 
     /**
      * Retrieve a list of tunnels known.
-     *
+     * <p>
      * Side effect: if the tunnels have not been loaded from config yet, they
      * will be.
      *
@@ -1628,7 +1626,7 @@ public class TunnelControllerGroup implements ClientApp {
 
     /**
      * Retrieve a list of tunnels known.
-     *
+     * <p>
      * Side effect: if the tunnels have not been loaded from config yet, they
      * will be.
      *
@@ -1714,7 +1712,6 @@ public class TunnelControllerGroup implements ClientApp {
 
     /**
      * The executor pool for client tunnel tasks.
-     *
      * <p>Read path is lock-free in steady state ({@link #_executor} is
      * volatile): the common case is a null-and-no-change return with no
      * synchronized acquisition, so per-request callers
@@ -1767,7 +1764,6 @@ public class TunnelControllerGroup implements ClientApp {
      * ceiling. Registration records the tunnel's explicit {@code
      * i2ptunnel.server.threads} cap (or -1 to follow the Tuner-managed
      * default), rebalancing every live pool to make room for the newcomer.
-     *
      * <p>Tasks are short-lived (µs-scale), so core threads handle bursts via a
      * bounded queue. Overflow throws {@link java.util.concurrent.RejectedExecutionException}
      * (AbortPolicy) rather than running the handler inline on the accept thread,
@@ -2063,7 +2059,6 @@ public class TunnelControllerGroup implements ClientApp {
      * still surfaces as {@link java.util.concurrent.RejectedExecutionException}
      * to that tunnel's accept path only. Idle threads are reclaimed after the
      * keepalive window via {@code allowCoreThreadTimeOut}.
-     *
      * <p>Core must equal max when a real queue is present: with core 0 the
      * ThreadPoolExecutor offers to the queue before creating any worker, so
      * tasks would sit unrun until the queue filled.
@@ -2117,7 +2112,6 @@ public class TunnelControllerGroup implements ClientApp {
      * and on server start/stop; must run under {@link #_serverExecutorLock}.
      * The global budget is a cap on the sum, so reducing one tunnel's share or
      * removing a tunnel frees budget for the rest.
-     *
      * <p>Claims are load-aware: a tunnel with queued or active work claims its
      * full ceiling, while an idle tunnel claims only a base share so a busy
      * sibling (e.g. a tracker under announce flood) receives the budget when
@@ -2163,7 +2157,6 @@ public class TunnelControllerGroup implements ClientApp {
     /**
      * Load-aware claim for one server tunnel's share of the global handler
      * budget. Pure decision, no router context.
-     *
      * <p>When the sum of per-tunnel ceilings exceeds the budget, proportional
      * cutting of equal full-cap claims starves the busy tunnel just as much as
      * an idle one. Scaling the claim by observed load gives queued/active work
@@ -2192,7 +2185,6 @@ public class TunnelControllerGroup implements ClientApp {
 
     /**
      * Grow one server's handler pool to match the load it is actually seeing.
-     *
      * <p>Called from the accept loop before the admission gate, because that is
      * the only place queue depth is visible at the moment it matters.
      * {@link #rebalanceServerExecutors()} runs on pool registration and on
@@ -2201,7 +2193,6 @@ public class TunnelControllerGroup implements ClientApp {
      * demand sizing had exactly that: pools created at one thread, refusing
      * connections with an almost-empty queue, because nothing ever asked them
      * to grow.
-     *
      * <p>Grows only. Shrinking here would thrash the limit on every lull and
      * buy nothing — {@code allowCoreThreadTimeOut(true)} means a generous
      * limit costs no threads while a pool is quiet, since its workers are
@@ -2246,7 +2237,6 @@ public class TunnelControllerGroup implements ClientApp {
      * tunnels, preserving each tunnel's ceiling ({@code desired}) and a shared
      * floor. Pure decision, no router context: lets the Tuner shrink or grow
      * one budget while the per-tunnel pools inherit exactly their share.
-     *
      * <p>When the ceilings sum at or below the budget, every tunnel gets its
      * ceiling. Above the budget, the excess is cut proportionally (rounded
      * down, remainder to the last tunnel) so the grand total equals the budget
@@ -2295,7 +2285,6 @@ public class TunnelControllerGroup implements ClientApp {
 
     /**
      * Worker threads one server tunnel needs, from its own demand alone.
-     *
      * <p>Each server tunnel is sized independently. There is no global budget
      * to divide, because dividing one is what made the busiest eepsite
      * unusable: every open server tunnel was charged a floor first, so with
@@ -2305,14 +2294,12 @@ public class TunnelControllerGroup implements ClientApp {
      * their reservations. Those idle pools were not consuming threads anyway —
      * {@code allowCoreThreadTimeOut(true)} reclaims them after the keepalive —
      * so the budget bought contention and nothing else.
-     *
      * <p>Sizing is the load itself: every queued task needs a thread and every
      * busy thread already has one, so {@code queueDepth + active + headroom}
      * is both the minimum that keeps up and the size at which nothing queues.
      * A dormant tunnel sits at {@link #SERVER_HANDLER_IDLE} and grows on its
      * own demand. The per-tunnel ceiling still applies, so one destination
      * cannot take the whole machine.
-     *
      * <p>Pure decision, no router context, so the policy is testable.
      *
      * @param queueDepth tasks waiting for a handler thread
@@ -2332,13 +2319,11 @@ public class TunnelControllerGroup implements ClientApp {
 
     /**
      * Scale per-pool demands down to a global ceiling, proportionally.
-     *
      * <p>A safety valve against exhausting the heap, not a budget the pools
      * compete for: each pool is sized by its own demand first, and only if the
      * total is genuinely unsupportable is every pool trimmed together.
      * Trimming is proportional to demand, so the busiest tunnel keeps the
      * largest share and no pool drops below {@link #SERVER_HANDLER_IDLE}.
-     *
      * <p>Pure, so the allocation policy is testable without a group.
      *
      * @param demand  per-pool thread demand, indexed to match the pools
@@ -2394,7 +2379,6 @@ public class TunnelControllerGroup implements ClientApp {
     /**
      * Create a bounded executor that runs inbound server-tunnel connection
      * handlers.
-     *
      * <p>Handlers are dispatched off the accept thread so a single slow
      * connection cannot stall connection admission. Overflow uses
      * {@link java.util.concurrent.ThreadPoolExecutor.AbortPolicy}: when the fixed worker set and its
@@ -2407,7 +2391,6 @@ public class TunnelControllerGroup implements ClientApp {
      * attempt expire and be RESET under load. The rejection is surfaced to
      * {@code I2PTunnelServer.run()}, which closes the connection but keeps
      * accepting new ones.
-     *
      * <p>Exposed package-visible (static) so tests can assert the overflow
      * semantics without a live {@link I2PAppContext}.
      *
@@ -2423,7 +2406,6 @@ public class TunnelControllerGroup implements ClientApp {
     /**
      * As {@link #createServerExecutor(int, AtomicLong)} but with an explicit
      * worker keepalive.
-     *
      * <p>The production keepalive is {@link #SERVER_KEEPALIVE_MS} (30s), which a
      * test cannot wait out: the I2PTunnel suite is run with a 15s per-test
      * timeout, so asserting on core-thread expiry at the real interval always

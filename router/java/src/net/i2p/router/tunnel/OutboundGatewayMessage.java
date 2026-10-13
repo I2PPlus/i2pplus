@@ -55,7 +55,7 @@ class OutboundGatewayMessage extends PendingGatewayMessage implements CDPQEntry 
      * After the fragmenter, they will be OutNetMessages with priority 400.
      * We use the same 100-500 priority as OutNetMessage so the stats
      * in CoDelPriorityBlockingQueue work.
-     *
+     * <p>
      * We could - perhaps - have BatchedPreprocessor pass the max priority of
      * any message fragment in a TunnelDataMessage to the OutboundReceiver, to
      * set the OutNetMessage priority - but that may just make more of an

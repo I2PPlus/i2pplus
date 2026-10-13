@@ -27,14 +27,12 @@ import net.i2p.util.SystemVersion;
 
         /**
          * Counts selections discarded because every candidate was banlisted.
-         *
          * <p>Exists to keep the discard branch above honest. The change that
          * replaced restoring the banned selection with discarding it was
          * originally justified by a build-capacity figure that no measurement
          * supported, and the branch then recorded 0 occurrences over roughly
          * two hours. Rather than re-assert a benefit, this counter makes the
          * frequency observable so the branch can be re-evaluated on evidence.
-         *
          * <p>Must be created before use: {@code StatManager.addRateData} on an
          * unregistered name silently drops the sample.
          *
@@ -47,7 +45,6 @@ import net.i2p.util.SystemVersion;
 
         /**
          * Record a discarded selection, creating the stat on first use.
-         *
          * <p>{@code StatManager.addRateData} silently drops samples for an
          * unregistered name, so creation is not optional here. No "already
          * created" guard is needed because {@code createRequiredRateStat} is
@@ -77,7 +74,6 @@ import net.i2p.util.SystemVersion;
     /**
      * Peers from the last selection that were all ghosts, handed to the redraw in
      * {@link #selectPeers(TunnelPoolSettings)}.
-     *
      * <p>A field rather than a return value because the ghost filter sits deep inside
      * {@link #selectPeersInternal} and the retry belongs beside the existing cooldown
      * retry, in the one method that already sequences attempts. Per-thread: two selections
@@ -168,7 +164,6 @@ import net.i2p.util.SystemVersion;
 
     /**
      * Select peers, additionally excluding a set the caller has decided on.
-     *
      * <p>Used for the ghost retry: the client pools exclude peers that turned out to be
      * ghosts and redraw, so exploratory has to be able to do the same rather than restore
      * a selection the peer measurements just rejected.

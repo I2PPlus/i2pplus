@@ -61,7 +61,7 @@ public class RandomSource extends SecureRandom implements EntropyHarvester {
      * as well as sun's, kaffe's, and classpath's implementation INCLUDES NEGATIVE VALUES.
      * Ok, so we're going to have it return between 0 and n (including 0, excluding n), since
      * thats what it has been used for.
-     *
+     * <p>
      * This code unused, see FortunaRandomSource override
      */
     @Override
@@ -86,7 +86,7 @@ public class RandomSource extends SecureRandom implements EntropyHarvester {
     /**
      * Like the modified nextInt, nextLong(n) returns a random number from 0 through n,
      * including 0, excluding n.
-     *
+     * <p>
      * This code unused, see FortunaRandomSource override
      * NOPMD - nextLong(long) doesn't override SecureRandom (added in Java 17)
      */
@@ -99,7 +99,7 @@ public class RandomSource extends SecureRandom implements EntropyHarvester {
 
     /**
      * Not part of java.util.SecureRandom, but added since Fortuna supports it.
-     *
+     * <p>
      * This code unused, see FortunaRandomSource override
      *
      * @param buf the array to fill with random bytes

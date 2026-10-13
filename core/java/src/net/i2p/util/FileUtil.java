@@ -23,10 +23,10 @@ import java.util.zip.ZipFile;
 import java.nio.charset.StandardCharsets;
 /**
  * General helper methods for messing with files
- *
+ * <p>
  * These are static methods that do NOT convert arguments
  * to absolute paths for a particular context and directory.
- *
+ * <p>
  * Callers should ALWAYS provide absolute paths as arguments,
  * and should NEVER assume files are in the current working directory.
  */
@@ -86,7 +86,7 @@ public class FileUtil {
     /**
      * Extract every entry of the zip archive into targetDir, creating missing
      * parent directories as needed.
-     *
+     * <p>
      * Since 0.7.12, any files inside the zip that have a .jar.pack or .war.pack suffix
      * are transparently unpacked to a .jar or .war file using unpack200.
      * Logs at WARN level to wrapper.log
@@ -200,7 +200,7 @@ public class FileUtil {
      * There doesn't seem to be any library function to do this,
      * so we basically go through all the motions of extractZip() above,
      * unzipping everything but throwing away the data.
-     *
+     * <p>
      * Todo: verify zip header? Although this would break the undocumented
      * practice of renaming the i2pupdate.sud file to i2pupdate.zip and
      * letting the unzip method skip over the leading 56 bytes of
@@ -262,7 +262,7 @@ public class FileUtil {
 
     /**
      * The unpacker implementation class, resolved once by {@link #findPack200Class}.
-     *
+     * <p>
      * Set to null permanently when no unpacker is on the classpath, so we do not
      * retry the (failing) class lookup on every .pack entry in an update zip.
      */
@@ -270,7 +270,7 @@ public class FileUtil {
 
     /**
      * Locate a Pack200 unpacker.
-     *
+     * <p>
      * The JDK's own java.util.jar.Pack200 was removed in Java 14, so on every
      * Java we support the only implementation is the io.pack200 fork, shipped as
      * lib/pack200.jar in the update payload itself. Loading it reflectively keeps
@@ -297,7 +297,7 @@ public class FileUtil {
     /**
      * Unpack a .pack stream with the io.pack200 fork, discovered at runtime so the
      * jar is not required at compile time.
-     *
+     * <p>
      * Caller must close streams
      *
      * @throws IOException on unpack error or if the library is unavailable.
@@ -319,7 +319,7 @@ public class FileUtil {
     /**
      * Read in the last few lines of a (newline delimited) textfile, or null if
      * the file doesn't exist.
-     *
+     * <p>
      * Warning - this inefficiently allocates a StringBuilder of size maxNumLines*80,
      * so don't make it too big.
      * Warning - converts \r\n to \n
@@ -361,7 +361,7 @@ public class FileUtil {
      * Dump the contents of the given path (relative to the root) to the output
      * stream.  The path must not go above the root, either - if it does, it will
      * throw a FileNotFoundException
-     *
+     * <p>
      * Closes the OutputStream out on successful completion
      * but leaves it open when throwing IOE.
      *

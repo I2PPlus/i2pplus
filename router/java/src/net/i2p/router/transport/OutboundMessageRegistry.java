@@ -95,7 +95,7 @@ public class OutboundMessageRegistry {
      * continue waiting for further replies - if it should continue, the matched
      * message remains in the registry, but if it shouldn't continue, the matched
      * message is removed from the registry.
-     *
+     * <p>
      * This is called only by InNetMessagePool.
      *
      * @param message Payload received that may be a reply to something we sent

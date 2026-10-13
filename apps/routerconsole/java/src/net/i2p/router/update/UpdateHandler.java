@@ -17,7 +17,7 @@ import net.i2p.update.*;
  * {@link net.i2p.crypto.TrustedUpdate}, and if it's authentic the payload
  * of the signed update file is unpacked and the router is restarted to complete
  * the update process.</p>
- *
+ * <p>
  * This does not do any checking, that is handled by the NewsFetcher.
  */
 class UpdateHandler implements Updater {

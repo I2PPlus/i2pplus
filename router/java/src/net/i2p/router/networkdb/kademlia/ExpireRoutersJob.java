@@ -23,7 +23,7 @@ import net.i2p.util.SystemVersion;
 /**
  * Go through the routing table pick routers that are
  * out of date, but don't expire routers we're actively connected to.
- *
+ * <p>
  * We could in the future use profile data, netdb total size, a Kademlia XOR distance,
  * or other criteria to minimize netdb size, but for now we just use _facade's
  * validate(), which is a sliding expiration based on netdb size.

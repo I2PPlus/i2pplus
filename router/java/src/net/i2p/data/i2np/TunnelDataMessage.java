@@ -15,7 +15,7 @@ import net.i2p.util.ByteCache;
 
 /**
  * Defines the message sent between routers as part of the tunnel delivery
- *
+ * <p>
  * The tunnel ID is changed in-place by TunnelParticipant.send(), so
  * we can't reuse the checksum on output, but we still subclass
  * FastI2NPMessageImpl so we don't verify the checksum on input...
@@ -42,7 +42,7 @@ public class TunnelDataMessage extends FastI2NPMessageImpl {
      * between different TunnelDataMessage instances or the fragment handler's cache, etc), until
      * it is finally released back into the cache when written to the next peer (or explicitly by
      * the fragment handler's completion). Setting this to false just increases memory churn.
-     *
+     * <p>
      * This is tricky to get right and avoid data corruption.
      */
     private static final boolean PIPELINED_CACHE = true;

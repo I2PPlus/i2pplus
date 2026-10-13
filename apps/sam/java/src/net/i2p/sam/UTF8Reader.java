@@ -11,15 +11,15 @@ import java.nio.charset.StandardCharsets;
 
 /**
  * An unbuffered version of InputStreamReader.
- *
+ * <p>
  * Does not read any extra characters, as long as input is well-formed.
  * This permits the partial reading of an InputStream as UTF-8
  * and then passing the remainder of the input stream elsewhere.
  * This isn't the most robust for malformed input, so it
  * may not be appropriate for e.g. HTTP headers.
- *
+ * <p>
  * Not thread-safe, obviously.
- *
+ * <p>
  * May be moved to net.i2p.util if anybody else needs it.
  *
  * @since 0.9.24 somewhat adapted from net.i2p.util.TranslateReader

@@ -37,7 +37,7 @@ import net.i2p.util.VersionComparator;
  * Data for a new connection being established, where the remote peer has
  * initiated the connection with us.  In other words, they are Alice and
  * we are Bob.
- *
+ * <p>
  * SSU2 only.
  *
  * @since 0.9.54
@@ -68,7 +68,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
     /**
      * Start a new handshake with the given incoming packet,
      * which must be a Session Request or Token Request.
-     *
+     * <p>
      * Caller must then check getState() and build a
      * Retry or Session Created in response.
      *
@@ -286,7 +286,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
      * For most errors here we throw a RIException with a reason code,
      * which is caught in processPayload() to create a PeerStateDestroyed
      * and send a termination with that reason.
-     *
+     * <p>
      * Plain DataFormatExceptions indicate you may not respond in-session.
      */
     public void gotRI(RouterInfo ri, boolean isHandshake, boolean flood) throws DataFormatException {
@@ -1078,7 +1078,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
      * Receive the last messages in the handshake, and create the PeerState.
      * If the message is fragmented, store the data for reassembly and return,
      * unless this was the last one.
-     *
+     * <p>
      * Exceptions thrown from here are fatal.
      *
      * @param packet the SessionConfirmed message, header encryption removed

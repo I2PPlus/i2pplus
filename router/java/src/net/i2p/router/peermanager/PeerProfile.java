@@ -15,9 +15,9 @@ import net.i2p.util.SystemVersion;
 
 /**
  * Copied from http://www.i2p2.i2p/how_peerselection.html
- *
+ * <p>
  * See also main() below for additional commentary by zzz.
- *
+ * <p>
  * Currently, there is no 'ejection' strategy to get rid of the profiles for peers that
  * are no longer active (or when the network consists of thousands of peers, to get rid
  * of peers that are performing poorly). However, the size of each profile is fairly small,
@@ -26,7 +26,7 @@ import net.i2p.util.SystemVersion;
  * Once it becomes necessary, we can simply compact the poorly performing profiles
  * (keeping only the most basic data) and maintain hundreds of thousands of profiles
  * in memory. Beyond that size, we can simply eject the peers (e.g. keeping the best 100,000).
- *
+ * <p>
  * TODO most of the methods should be synchronized.
  */
 
@@ -435,7 +435,6 @@ public class PeerProfile {
 
     /**
      * How long a recorded first-hop RTT stays usable.
-     *
      * <p>Four hours rather than the {@link RateConstants#ONE_HOUR} Active tier
      * period that {@link #getLastSendSuccessful()} uses. Link latency is a
      * slow-changing property of a path, and it is now refreshed continuously by
@@ -444,7 +443,6 @@ public class PeerProfile {
      * how long a value outlives the session that produced it. An hour threw away
      * measurements of peers we simply had not talked to lately, which is what
      * left the profiles page 97% blank.
-     *
      * <p>The cost is that a peer whose session has gone away keeps its latency
      * standing for up to four hours, and the low-latency bar is absolute, so a
      * stale value is trusted as though current. If peer counts or the fast-tier
@@ -465,7 +463,6 @@ public class PeerProfile {
      * Absolute floor for the low-latency flag, in ms. This is the binding
      * criterion: a peer counts as low latency only if its direct-link RTT is at
      * or below this value.
-     *
      * <p>This replaced a {@code 0.5 * mean} relative test. The relative form was
      * unsound for two reasons. First, the population it divided came from a
      * decaying, self-selecting sample: an RTT is valid for one hour and
@@ -477,7 +474,6 @@ public class PeerProfile {
      * mean was 86ms, so the bar sat at 43ms — below the population's own median
      * of 60ms, which demoted two thirds of every measured peer rather than a
      * tail.
-     *
      * <p>A fixed 100ms admits 69% and evicts 31% on that same population, which
      * is the discrimination the flag was meant to provide. It also does not
      * move as the sample decays, which was the defect that made the relative
@@ -489,14 +485,12 @@ public class PeerProfile {
 
     /**
      * The one smoothing applied to every latency measurement, whatever measured it.
-     *
      * <p>Peer latency reaches the profile from three directions — a peer test's
      * whole-tunnel round trip, the direct-link RTT a transport has measured for a
      * live session, and an SSU/NTCP handshake. They are different quantities, but
      * they are averaged the same way so that any one of them can be compared with
      * any other: a value damped 25% per sample behaves the same whether the sample
      * came from a tunnel round trip or a handshake.
-     *
      * <p>An unknown or zero current value is replaced rather than averaged. A
      * measurement is evidence; the absence of one is not, and damping toward zero
      * would manufacture latency out of missing data.
@@ -513,17 +507,14 @@ public class PeerProfile {
 
     /**
      * Record the transport's measured round trip time to this peer.
-     *
      * <p>This is the direct link cost, which is what first-hop selection needs.
      * A value of 0 means the session has not measured yet and is stored as
      * unknown rather than as zero latency.
-     *
      * <p>Damped through {@link #dampLatency(float, float)}, the same smoothing the
      * peer-test average uses, so a single session's noisy sample cannot set the
      * value on its own. A value that has already gone stale is replaced rather
      * than damped: {@link #getFirstHopRtt} has declared it unknown, so averaging
      * toward it would let expired evidence drag a fresh measurement back.
-     *
      * <p>A sample older than the one already held is discarded outright. This is
      * the single choke point every measurement passes through - the sampling pass,
      * the pre-connect probe and the handshake recorder all land here - so the
@@ -547,7 +538,6 @@ public class PeerProfile {
 
     /**
      * The direct-link RTT to this peer, or -1 when it is unknown or stale.
-     *
      * <p>Stale means older than the Active tier window. That window is the one
      * already applied to {@link #getLastSendSuccessful()}, so a first-hop RTT
      * is treated with the same freshness rules as the rest of the profile's
@@ -574,12 +564,10 @@ public class PeerProfile {
 
     /**
      * Whether this peer counts as low latency, judged on its direct link.
-     *
      * <p>The single low-latency decision: {@link #recalculateLowLatency()} is a thin
      * wrapper over this, so the flag is derived one way everywhere. Two
      * implementations of the same comparison is how the flag ends up disagreeing
      * with itself depending on which pass happened to run last.
-     *
      * <p>Two drivers, both required, because either alone is misleading:
      * <ul>
      * <li>an absolute ceiling, so a peer is never low latency merely because
@@ -587,7 +575,6 @@ public class PeerProfile {
      * <li>the population boundary, so on a fast network a peer at the
      * absolute ceiling is still not low if it sits at the typical value.</li>
      * </ul>
-     *
      * <p>Only the direct link is consulted. Latency to this peer has nothing to
      * do with how long a build or test involving other peers took.
      *
@@ -893,7 +880,6 @@ public class PeerProfile {
     public float getIntegrationValue() {return _integrationValue;}
     /**
      * EWMA average of the tunnel test response time.
-     *
      * <p>Returns 0 if the data is older than 1 hour, treating the peer as
      * untested. This ensures stale peers are re-tested rather than selected
      * for tunnel builds based on outdated latency data.</p>
@@ -965,7 +951,6 @@ public class PeerProfile {
 
     /**
      * Update the peer test time average from a new measurement.
-     *
      * <p>Damped through {@link #dampLatency(float, float)}, the same smoothing every
      * other latency writer uses, so a test result and a transport RTT and a
      * handshake all accumulate into a comparable average.
@@ -992,17 +977,14 @@ public class PeerProfile {
 
     /**
      * Recalculate the low-latency flag from the measured direct-link RTT.
-     *
      * <p>The only low-latency decision in the codebase: both callers — the
      * reorganize sampling pass and the recorder that runs when a measurement
      * arrives — come through here, so the flag cannot be derived two different
      * ways from the same field.
-     *
      * <p>Judged on the direct link to this peer, not on how long a test through a
      * multi-hop tunnel took. {@link #getPeerTestTimeAverage()} is the round trip
      * across every hop of that tunnel, so using it here measured the latency of
      * hops the peer was merely a member of.
-     *
      * <p>An unmeasured peer keeps whatever was persisted: absent evidence is not
      * evidence of high latency.
      *
@@ -1015,14 +997,12 @@ void recalculateLowLatency() {
     /**
      * Recompute the low-latency flag, optionally against a calibrated
      * per-transport floor instead of the absolute one.
-     *
      * <p>This remains the single low-latency decision; the calibrated floor only
      * supplies an alternative bar and never a separate verdict. It is
      * deliberately one-directional: the floor is derived from measured link
      * latencies across all peers, and nothing about this peer's tier membership
      * feeds back into it, so no cycle can tighten the bar in response to the
      * tiers that bar itself produces.
-     *
      * <p>A null or negative {@code calibratedFloorMs} means the transport has no
      * calibrated opinion yet, and the absolute rule applies unchanged - so on a
      * cold router the behaviour here is identical to it being absent.
@@ -1037,18 +1017,15 @@ void recalculateLowLatency() {
 
     /**
      * Recompute the low-latency flag against the calibrated bounds.
-     *
      * <p>This remains the single low-latency decision; the calibrated values only
      * supply alternative bars and never a separate verdict. It is deliberately
      * one-directional: the floors are derived from measured link latencies across
      * all peers, and nothing about this peer's tier membership feeds back into
      * them, so no cycle can tighten a bar in response to the tiers that bar
      * itself produces.
-     *
      * <p>A null or negative value means that bound has no calibrated opinion yet
      * and is skipped, leaving the absolute rule to decide alone. On a cold router
      * both are null, so behaviour is identical to their absence.
-     *
      * <p>Both calibrated bounds can only ever widen the absolute rule, never
      * narrow it: the Organizer clamps the transport floor to at least
      * {@code LOW_LATENCY_FLOOR_MS / multiple}, and the cohort floor is applied
@@ -1320,7 +1297,7 @@ void recalculateLowLatency() {
      * demonstrated capability, not recency.  Freshness is handled by
      * selection gates (isLowLatency, getIsActive, hasValidRouterInfo)
      * rather than by eroding the data.
-     *
+     * <p>
      * At most one measurement per minute is folded in, so the running total is
      * drained on a one-minute cadence.
      */
@@ -1365,7 +1342,6 @@ void recalculateLowLatency() {
 
     /**
      * Caller must next call updateValues().
-     *
      * <p>No peak throughput value is decayed: coalescing only folds a new
      * measurement into the peak arrays and never erases demonstrated capacity.
      *
@@ -1423,7 +1399,7 @@ void recalculateLowLatency() {
      * TunnelHistory:   2 RateStats, 2 rates each -            4 rates total
      * ---                                    ---------
      * 7                                      23 rates total
-     *
+     * <p>
      * shrinkProfile() / shrinkDBProfile() drop the PeerProfile
      * and DBProfile RateStats; TunnelHistory RateStats are final
      * and retained. Re-created lazily on the next expand.

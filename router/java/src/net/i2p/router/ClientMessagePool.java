@@ -73,7 +73,7 @@ public class ClientMessagePool {
     }
     /**
      * Add a new client message with knowledge of whether it's remote.
-     *
+     * <p>
      * If we're coming from the client subsystem itself, we already know whether
      * the target is definitely remote and as such don't need to recheck
      * ourselves, but if we aren't certain, we want it to check for us.

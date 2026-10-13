@@ -318,7 +318,7 @@ class UDPAddress {
 
     /**
      * The InetAddress for the router address's host, looked up on first use.
-     *
+     * <p>
      * Hostnames are not resolved; a host that is not a literal IP address
      * gives a null address.
      *
@@ -353,7 +353,7 @@ class UDPAddress {
 
     /**
      * The InetAddress for the introducer at index i, looked up on first use.
-     *
+     * <p>
      * Hostnames are not resolved; a host that is not a literal IP address
      * gives a null address.
      *
@@ -506,7 +506,7 @@ class UDPAddress {
      * Caching version of InetAddress.getByName(host), which is slow.
      * Caches numeric IPs only.
      * As of 0.9.32, will NOT resolve hostnames.
-     *
+     * <p>
      * Unlike InetAddress.getByName(), we do NOT allow numeric IPs
      * of the form d.d.d, d.d, or d, as these are almost certainly mistakes.
      *

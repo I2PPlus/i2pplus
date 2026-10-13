@@ -65,7 +65,7 @@ public class I2PClientImpl implements I2PClient {
      * Create a destination with a DSA 1024/160 signature type and a null certificate.
      * This is not bound to the I2PClient, you must supply the data back again
      * in createSession().
-     *
+     * <p>
      * Caller must close stream.
      *
      * @param destKeyStream location to write out the destination, PrivateKey, and SigningPrivateKey,
@@ -81,7 +81,7 @@ public class I2PClientImpl implements I2PClient {
      * It will have a null certificate for DSA 1024/160 and KeyCertificate otherwise.
      * This is not bound to the I2PClient, you must supply the data back again
      * in createSession().
-     *
+     * <p>
      * Caller must close stream.
      *
      * @param destKeyStream location to write out the destination, PrivateKey, and SigningPrivateKey,
@@ -103,12 +103,12 @@ public class I2PClientImpl implements I2PClient {
     /**
      * Create the destination with the given payload and write it out along with
      * the PrivateKey and SigningPrivateKey to the destKeyStream
-     *
+     * <p>
      * If cert is a KeyCertificate, the signing keypair will be of the specified type.
      * The KeyCertificate data must be .............................
      * The padding if any will be randomized. The extra key data if any will be set in the
      * key cert.
-     *
+     * <p>
      * Caller must close stream.
      *
      * @param destKeyStream location to write out the destination, PrivateKey, and SigningPrivateKey,

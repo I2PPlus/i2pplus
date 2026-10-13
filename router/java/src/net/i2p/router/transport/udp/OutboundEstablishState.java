@@ -138,7 +138,7 @@ class OutboundEstablishState {
      * Handshake packets are tiny (~200B) and infrequent per-peer,
      * so the bandwidth cost of flat retransmission is negligible.
      * The OB_MESSAGE_TIMEOUT (2.5s) bounds total retransmits per establishment phase.
-     *
+     * <p>
      * Was 1000ms with exponential doubling (max gap 16s).
      * Reduced to 500ms, now 200ms for sub-100ms message delivery.
      */
@@ -344,7 +344,7 @@ class OutboundEstablishState {
      * session was created properly.  If it wasn't, all the SessionCreated
      * remnants are dropped (perhaps they were spoofed, etc) so that we can
      * receive another one
-     *
+     * <p>
      * Generates session key and mac key.
      *
      * @return true if valid
@@ -570,7 +570,6 @@ class OutboundEstablishState {
 
     /**
      * Whether the state machine has already scheduled a resend.
-     *
      * <p>Derived rather than counted: the first send stamps {@code _lastSend} with the
      * same clock reading as {@code _establishBegin}, so a strictly later stamp means a
      * subsequent send. This is what lets the establishment deadline be extended only

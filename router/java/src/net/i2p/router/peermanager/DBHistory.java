@@ -12,16 +12,15 @@ import net.i2p.util.Log;
 
 /**
  * History of NetDb related activities (lookups, replies, stores, etc).
- *
+ * <p>
  * Tracks per-peer database interaction counters and timestamps:
  * - Successful/failed lookups
  * - Unprompted store messages (new vs known peers)
  * - Lookup reply quality (new/invalid/duplicate peers)
  * - Store verification success/failure
- *
+ * <p>
  * All counters use AtomicLong and timestamps use volatile for
  * thread-safe access from NetDB message handlers and transport threads.
- *
  * <p><b>Combined responsiveness rate.</b> {@link #getFailedLookupRate()} is a
  * single rate covering <em>both</em> lookups and stores: every resolved lookup
  * and every verified store adds 0, every failed lookup and every failed store
@@ -119,7 +118,6 @@ public class DBHistory {
     /**
      * How often this peer failed to answer a NetDb request, in 10 minute and
      * 1 hour periods.
-     *
      * <p>Despite the name, the rate covers stores as well as lookups: a resolved
      * lookup and a verified store both add 0, a failed lookup and a failed store
      * verification both add 1. Read it as "fraction of NetDb requests this peer
@@ -139,7 +137,6 @@ public class DBHistory {
 
     /**
      * Note that the peer was not only able to respond to the lookup, but sent us the data we wanted!
-     *
      * <p>Also feeds the combined failure rate with a success (0).
      */
     public void lookupSuccessful() {
@@ -151,7 +148,6 @@ public class DBHistory {
 
     /**
      * Note that the peer failed to respond to the db lookup in any way
-     *
      * <p>Also feeds the combined failure rate with a failure (1).
      */
     public void lookupFailed() {
@@ -163,7 +159,6 @@ public class DBHistory {
 
     /**
      * Note that we successfully stored to a floodfill peer and verified the result by asking another floodfill peer
-     *
      * <p>Also feeds the combined failure rate with a success (0), and the
      * network-wide "peer.failedLookupRate" statistic with a success (0).
      *
@@ -177,7 +172,6 @@ public class DBHistory {
 
     /**
      * Note that floodfill verify failed
-     *
      * <p>Also feeds the combined failure rate with a failure (1). The
      * network-wide "peer.failedLookupRate" statistic is deliberately not fed
      * here, so a store failure is counted against this peer but only dilutes
@@ -240,7 +234,6 @@ public class DBHistory {
 
     /**
      * How often the lookup and store counters decay, as a whole interval.
-     *
      * <p>Eight hours, matching {@link
      * net.i2p.router.peermanager.TunnelHistory#DECAY_INTERVAL_MS}. At fifteen minutes
      * a peer forgot its own record faster than it could accumulate one, so a good
@@ -257,7 +250,6 @@ public class DBHistory {
      */
     /**
      * Apply the lookup and store counter decay if its interval has elapsed.
-     *
      * <p>Does not coalesce the {@link RateStat}s, which stay on the caller's own
      * cadence. See the method of the same name on {@link
      * net.i2p.router.peermanager.TunnelHistory} for why that separation matters.
@@ -276,7 +268,6 @@ public class DBHistory {
 
     /**
      * Coalesce the rate statistics and decay the lookup and store counters.
-     *
      * <p>Mirrors {@link TunnelHistory#coalesceStats()}: the RateStats are folded
      * unconditionally, and the lifetime counters only once
      * {@link #decayLifetimeCounters(long)} finds its interval has elapsed.

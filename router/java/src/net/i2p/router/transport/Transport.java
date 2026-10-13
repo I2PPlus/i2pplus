@@ -18,19 +18,19 @@ import net.i2p.router.OutNetMessage;
 
 /**
  * Core interface for I2P transport protocols.
- *
+ * <p>
  * This interface defines the contract for all transport implementations
  * that enable I2P routers to communicate with each other. Transports
  * handle message sending, receiving, peer management, and network
  * address configuration.
- *
+ * <p>
  * <strong>Transport Types:</strong>
  * <ul>
  * <li>NTCP - Stream-based TCP transport with encryption</li>
  * <li>UDP - Datagram-based transport with reliability</li>
  * <li>SSU - Sessionless UDP for introduction</li>
  * </ul>
- *
+ * <p>
  * <strong>Implementation Requirements:</strong>
  * <ul>
  * <li>Implement all interface methods for proper functionality</li>
@@ -39,7 +39,7 @@ import net.i2p.router.OutNetMessage;
  * <li>Provide proper error handling and logging</li>
  * <li>Integrate with TransportManager lifecycle</li>
  * </ul>
- *
+ * <p>
  * <strong>Plugin Development:</strong>
  * To implement a new transport plugin:
  * <ol>
@@ -48,7 +48,7 @@ import net.i2p.router.OutNetMessage;
  * <li>Ensure proper configuration and discovery</li>
  * <li>Test with existing I2P network compatibility</li>
  * </ol>
- *
+ * <p>
  * <strong>Note:</strong> API is subject to change. Please contact the
  * I2P development team if you're writing a new transport or
  * transport plugin to ensure compatibility and guidance.
@@ -169,7 +169,7 @@ public interface Transport {
 
     /**
      * Request to send a message to the specified router.
-     *
+     * <p>
      * This method allows the transport to evaluate whether it can
      * and wants to send a message to the target router. The transport
      * may decline based on current load, peer reputation, or
@@ -184,13 +184,13 @@ public interface Transport {
 
     /**
      * Asynchronously send a message to the specified peer.
-     *
+     * <p>
      * This method handles the actual message transmission. If the send
      * operation succeeds, it queues up any follow-up jobs defined in
      * msg.getOnSendJob() and registers them with OutboundMessageRegistry
      * (if the message has a reply selector). If the send fails,
      * it queues up any failure handling jobs from msg.getOnFailedSendJob().
-     *
+     * <p>
      * The method should return immediately and perform the actual sending
      * asynchronously to avoid blocking the calling thread.
      *
@@ -200,12 +200,10 @@ public interface Transport {
 
     /**
      * The transport's own measured round trip time to a peer.
-     *
      * <p>This is the direct link cost of reaching the peer, which is what
      * first-hop selection needs. It is deliberately distinct from
      * {@code PeerProfile.getTunnelTestTimeAverage()}, which is the round trip
      * through an entire multi-hop tunnel and is not a valid measure of one hop.
-     *
      * <p>Implementations that do not track latency return 0, which callers
      * must read as <em>unknown</em> rather than as zero latency. Unknown is
      * never treated as slow.
@@ -219,13 +217,11 @@ public interface Transport {
     /**
      * When {@link #getEstimatedRTT(Hash)} last measured this peer, on the router
      * clock.
-     *
      * <p>A transport that measures once per session and then holds the number -
      * NTCP2, whose only round trip is its handshake - returns the handshake time,
      * not the present. Reporting {@code now} instead would let a reading hours
      * old pass as fresh and keep resetting the profile's staleness window, which
      * is what stops it from ever expiring.
-     *
      * <p>A transport whose reading is refreshed by ongoing traffic, such as SSU2
      * on acknowledgement, has nothing to report: the value it returns is current
      * by construction, and it returns {@link #RTT_TIME_CURRENT}.
@@ -262,11 +258,11 @@ public interface Transport {
 
     /**
      * All addresses this transport is currently listening on.
-     *
+     * <p>
      * This method returns the complete list of RouterAddress objects
      * representing all network endpoints (both IPv4 and IPv6) that
      * this transport is actively listening for connections on.
-     *
+     * <p>
      * This method replaces the older getCurrentAddress() method
      * to support multiple addresses per transport.
      *
@@ -276,11 +272,11 @@ public interface Transport {
 
     /**
      * The first currently listening address of specified IP version.
-     *
+     * <p>
      * This method returns the first RouterAddress matching the requested
      * IP version from the list of current addresses. This is useful
      * when a specific address type is needed rather than all addresses.
-     *
+     * <p>
      * Note: An address without a host component is considered IPv4.
      * This method replaces the older getCurrentAddress() method.
      *
@@ -298,7 +294,7 @@ public interface Transport {
 
     /**
      * Request transport to update its addresses based on current conditions.
-     *
+     * <p>
      * This method asks the transport to re-evaluate its current
      * network configuration and update its advertised addresses accordingly.
      * The transport should consider:
@@ -344,12 +340,12 @@ public interface Transport {
 
     /**
      * Notify transport of an external address change event.
-     *
+     * <p>
      * This method informs the transport that its external address has
      * changed due to various sources like UPnP discovery, interface
      * changes, or configuration updates. The transport should evaluate
      * whether to accept this change based on the source and current state.
-     *
+     * <p>
      * <strong>Call Conditions:</strong>
      * <ul>
      * <li>Should NOT be called if IP didn't change from source's perspective</li>
@@ -357,7 +353,7 @@ public interface Transport {
      * <li>May be called multiple times (once for IPv4, once for IPv6)</li>
      * <li>Transport should validate source before accepting</li>
      * </ul>
-     *
+     * <p>
      * <strong>Timing:</strong>
      * Can be called before startListening() to set initial address,
      * or after transport is already running.
@@ -376,7 +372,7 @@ public interface Transport {
      * May be called multiple times for IPv4 or IPv6.
      * The transport should also do its own checking on whether to accept
      * notifications from this source.
-     *
+     * <p>
      * This can be called after the transport is running.
      * @param source the address source whose address has gone away
      * @param ipv6 true for IPv6, false for IPv4
@@ -398,12 +394,12 @@ public interface Transport {
 
     /**
      * The internal port that the transport wants forwarded via UPnP.
-     *
+     * <p>
      * This method returns the preferred internal port that the
      * transport would like to have mapped to an external port through
      * UPnP port forwarding. This is different from the actual
      * listening port because UPnP may map a different external port.
-     *
+     * <p>
      * <strong>Note:</strong>
      * This cannot be determined from getCurrentAddress() because:
      * <ul>
@@ -418,7 +414,7 @@ public interface Transport {
 
     /**
      * The event listener for transport-related notifications.
-     *
+     * <p>
      * The listener will be notified of various transport events
      * such as message availability, peer status changes, and
      * transport state changes. Only one listener can be active
@@ -430,7 +426,7 @@ public interface Transport {
 
     /**
      * The unique style identifier for this transport.
-     *
+     * <p>
      * This method returns a string that uniquely identifies the
      * transport type (e.g., "NTCP", "UDP", "SSU"). This
      * is used for configuration, logging, and transport selection.
@@ -441,11 +437,11 @@ public interface Transport {
 
     /**
      * The list of peers this transport has established connections with.
-     *
+     * <p>
      * This method returns the current set of peer hashes that
      * have successfully completed connection establishment. These are
      * peers that the transport can actively communicate with.
-     *
+     * <p>
      * <strong>Note:</strong> The returned list may or may not be
      * modifiable depending on implementation. Callers should not
      * modify the returned list directly.
@@ -476,12 +472,12 @@ public interface Transport {
 
     /**
      * Detailed peer count statistics by IP version and direction.
-     *
+     * <p>
      * This method returns an array containing peer counts broken
      * down by IP version and connection direction. This provides
      * detailed visibility into transport usage patterns and
      * network composition.
-     *
+     * <p>
      * <strong>Array Format:</strong>
      * <ul>
      * <li>Version 1 (8 bytes): IPv4 inbound/outbound counts</li>
@@ -509,12 +505,12 @@ public interface Transport {
 
     /**
      * The list of clock skew measurements from peer communications.
-     *
+     * <p>
      * This method returns a list of measured clock differences
      * (in milliseconds) between this router and various peers.
      * Clock skew is important for network time synchronization
      * and can affect message validation and routing.
-     *
+     * <p>
      * <strong>Historical Note:</strong> This method previously
      * returned a Vector, now returns a List as of 0.9.46.
      *
@@ -540,12 +536,12 @@ public interface Transport {
 
     /**
      * The current reachability status of this transport.
-     *
+     * <p>
      * This method returns the transport's ability to establish
      * and maintain connections with other peers. The status indicates
      * whether the transport can successfully communicate through
      * firewalls, NAT, and network restrictions.
-     *
+     * <p>
      * <strong>Historical Note:</strong> This method previously
      * returned a short value, now returns a Status enum as of 0.9.20.
      *
@@ -580,11 +576,11 @@ public interface Transport {
 
     /**
      * Check if peer was unreachable on last outbound attempt.
-     *
+     * <p>
      * This method determines whether the last attempt to contact
      * the specified peer failed due to reachability issues.
      * This is specifically for outbound connection attempts only.
-     *
+     * <p>
      * <strong>Important Notes:</strong>
      * <ul>
      * <li>This is NOT reset if the peer contacts us successfully</li>
@@ -613,13 +609,13 @@ public interface Transport {
 
     /**
      * Check if a connection attempt is in progress for the given peer.
-     *
+     * <p>
      * This method returns true when the transport has accepted a message
      * for this peer and initiated a connection handshake, but the
      * handshake has not yet completed. Unlike isEstablished(), which
      * only returns true for fully-connected peers, this method detects
      * connections that are still being set up.
-     *
+     * <p>
      * Used by the tunnel build system to distinguish between peers that
      * are genuinely unreachable vs. peers that just need more time for
      * the initial NTCP2/SSU2 handshake.
@@ -632,12 +628,12 @@ public interface Transport {
 
     /**
      * Suggest that transport may disconnect from specified peer.
-     *
+     * <p>
      * This method provides an advisory recommendation that the
      * transport should consider disconnecting from the specified peer.
      * The transport may choose to ignore this suggestion based on
      * its own criteria and current state.
-     *
+     * <p>
      * <strong>Advisory Nature:</strong>
      * <ul>
      * <li>Transport is not required to disconnect</li>
@@ -653,12 +649,12 @@ public interface Transport {
 
     /**
      * Force immediate disconnection from specified peer.
-     *
+     * <p>
      * This method commands the transport to immediately terminate
      * the connection to the specified peer. Unlike mayDisconnect(),
      * this is not advisory - the transport must comply and
      * disconnect as soon as possible.
-     *
+     * <p>
      * <strong>Use Cases:</strong>
      * <ul>
      * <li>Peer misbehavior or protocol violations</li>

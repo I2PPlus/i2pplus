@@ -55,9 +55,9 @@ public class TunnelGatewayMessage extends FastI2NPMessageImpl {
      * Warning, at the IBGW, where the message was read in,
      * this will be an UnknownI2NPMessage.
      * If you need a real message class, use UnknownI2NPMessage.convert().
-     *
+     * <p>
      * Warning, will be null after message has been written.
-     *
+     * <p>
      * Note that if you change the expiration on the embedded message it will
      * mess up the checksum of this message, so don't do that.
      * @return the message carried onward through the tunnel, held as an

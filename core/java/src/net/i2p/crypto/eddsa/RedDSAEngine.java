@@ -8,7 +8,6 @@ import java.security.MessageDigest;
  * Signing and verification for REdDSA using SHA-512 and the Ed25519 curve.
  * Ref: Zcash Protocol Specification, Version 2018.0-beta-33 [Overwinter+Sapling]
  * Sections 4.1.6.1, 4.1.6.2, 5.4.6
- *
  * <p>
  * The EdDSA sign and verify algorithms do not interact well with
  * the Java Signature API, as one or more update() methods must be
@@ -29,7 +28,6 @@ import java.security.MessageDigest;
  * </li><li>If doing additional one-shot signs or verifies with this object, you must
  * call setParameter(ONE_SHOT_MODE) each time
  * </li></ol>
- *
  * <p>
  * Option 2:
  * </p><ol>

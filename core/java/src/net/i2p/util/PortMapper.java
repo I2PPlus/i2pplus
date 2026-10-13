@@ -109,7 +109,7 @@ public class PortMapper {
     /**
      * To indicate presence, alternative to WebAppStarter.isWebappRunning().
      * For actual base URL, use getConsoleURL()
-     *
+     * <p>
      * Note: This is only the webapp. Also requires TCG running to be useful.
      * The webapp does not start TCG.
      *

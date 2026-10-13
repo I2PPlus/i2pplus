@@ -131,7 +131,6 @@ class PacketDispatcher {
      * Route (con, packet) to the shard owning the connection and return
      * promptly; wait for space only while that shard's queue is full.  Records
      * the target shard's queue depth and any producer-blind back-pressure.
-     *
      * <p>The 1ms back-pressure wait runs OUTSIDE the read lock: a saturated
      * shard must not pin the lock, or {@link #shutdown()} / {@link #resize(int)}
      * (which need the write lock to flip {@code _running} / rebuild the shard

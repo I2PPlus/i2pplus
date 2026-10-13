@@ -9,11 +9,11 @@ import java.util.concurrent.atomic.AtomicReferenceArray;
  * These are designed to be small caches. Unlike ByteCache, the arrays are
  * not zeroed before being returned to the cache, so a caller that needs
  * cleanup must zero the array itself.
- *
+ * <p>
  * A single global cleanup task runs once a minute over all caches and halves
  * any cache that has been underfilled for 90 seconds, so the array sizes of
  * an idle program are not retained indefinitely.
- *
+ * <p>
  * Only the static methods are public here.
  *
  * @since 0.8.3
@@ -83,7 +83,7 @@ public final class SimpleByteCache {
 
     /**
      * Cache responsible for objects of the given size.
-     *
+     * <p>
      * There is one cache per size for the life of the JVM, and cacheSize is
      * (re)applied to it whenever it differs from the size the cache already
      * holds: a later call with a different cacheSize resizes the shared cache,
@@ -221,7 +221,6 @@ public final class SimpleByteCache {
  * A set of {@link SimpleByteCache}, keyed by array size. Open addressed with
  * linear probing: lookups are lock-free and unboxed, and only putIfAbsent and
  * the occasional growth take the lock.
- *
  * <p>Values are read through an AtomicReferenceArray, which both marks the
  * occupied slots - every int is a legal key, so there is no value to spare
  * as an empty-slot sentinel - and publishes each cache's fully built internals.

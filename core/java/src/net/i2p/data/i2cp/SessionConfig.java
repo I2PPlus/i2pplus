@@ -71,10 +71,10 @@ public class SessionConfig extends DataStructureImpl {
     /**
      * If the client authorized this session more than the specified period ago,
      * refuse it, since it may be a replay attack.
-     *
+     * <p>
      * Really? See also ClientManager.REQUEST_LEASESET_TIMEOUT.
      * If I2CP replay attacks are a thing, there's a lot more to do.
-     *
+     * <p>
      * Maximum age of a session authorization in milliseconds.
      */
     private static final long OFFSET_VALIDITY = 3 * (long) 60 * 1000;
@@ -136,11 +136,11 @@ public class SessionConfig extends DataStructureImpl {
     /**
      * Configure the session with the given options;
      * keys and values 255 bytes (not chars) max each
-     *
+     * <p>
      * Defaults in SessionConfig options are, in general, NOT honored.
      * Defaults are not serialized out-of-JVM, and the router does not recognize defaults in-JVM.
      * Client side must promote defaults to the primary map.
-     *
+     * <p>
      * Does NOT make a copy.
      *
      * @param options Properties for this session
@@ -288,10 +288,10 @@ public class SessionConfig extends DataStructureImpl {
 
     /**
      * Verify that the signature matches the destination's signing public key.
-     *
+     * <p>
      * Note that this also returns false if the creation date is too far in the
      * past or future. See tooOld() and getCreationDate().
-     *
+     * <p>
      * As of 0.9.38, validates the offline signature if included.
      *
      * @return true only if the signature matches

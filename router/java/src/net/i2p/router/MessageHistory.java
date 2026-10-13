@@ -18,7 +18,6 @@ import net.i2p.util.SystemVersion;
 
 /**
  * Logs router message traffic for debugging and network analysis. Records inbound and outbound messages with timestamps when enabled, providing detailed traffic history for troubleshooting.
- *
  * <p>This is always instantiated in context and WriteJob runs every minute,
  * (except on Android, we don't set up the WriteJob)
  * but unless router.keepHistory=true it does nothing.

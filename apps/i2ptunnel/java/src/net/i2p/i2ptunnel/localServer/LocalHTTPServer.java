@@ -35,7 +35,7 @@ import net.i2p.util.Translate;
 import java.nio.charset.StandardCharsets;
 /**
  * Very simple web server.
- *
+ * <p>
  * Serve local files in the docs/ directory, for CSS and images in
  * error pages, using the reserved address proxy.i2p
  * (similar to p.p in privoxy).
@@ -95,16 +95,16 @@ public abstract class LocalHTTPServer {
         "<img src=\"http://proxy.i2p/themes/console/default/images/i2plogo.png\" alt=\"I2P+ Router Console\" border=0>";
     /**
      * Very simple web server.
-     *
+     * <p>
      * Serve local files in the docs/ directory, for CSS and images in
      * error pages, using the reserved address proxy.i2p
      * (similar to p.p in privoxy).
      * This solves the problems with including links to the router console,
      * as assuming the router console is at 127.0.0.1 leads to broken
      * links if it isn't.
-     *
+     * <p>
      * Ignore all request headers (If-Modified-Since, etc.)
-     *
+     * <p>
      * There is basic protection here -
      * FileUtil.readFile() prevents traversal above the base directory -
      * but inproxy/gateway ops would be wise to block proxy.i2p to prevent

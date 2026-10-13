@@ -21,9 +21,9 @@ import net.i2p.util.PortMapper;
 /**
  * Listen for connections on the specified port, and toss them onto the client manager's
  * set of connections once they are established.
- *
+ * <p>
  * This is not used for internal (in-JVM) connections - see ClientManager and QueuedClientConnectionRunner.
- *
+ * <p>
  * Note that this is extended by SSLClientListenerRunner for SSL,
  * and by DomainClientListenerRunner in Android for domain sockets.
  *

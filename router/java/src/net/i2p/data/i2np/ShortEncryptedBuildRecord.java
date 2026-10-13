@@ -4,7 +4,7 @@ package net.i2p.data.i2np;
  * Small records.
  * 218 bytes.
  * Preliminary, see proposal 157.
- *
+ * <p>
  * Note that these are layer-encrypted and layer-decrypted in-place.
  * Do not cache.
  *

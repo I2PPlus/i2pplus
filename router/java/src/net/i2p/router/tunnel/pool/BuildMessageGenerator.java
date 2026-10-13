@@ -188,7 +188,7 @@ abstract class BuildMessageGenerator {
 
     /**
      * Encrypt the records so their hop ident is visible at the appropriate times.
-     *
+     * <p>
      * Note that this layer-encrypts the build records for the message in-place.
      * Only call this once for a given message.
      *

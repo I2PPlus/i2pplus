@@ -794,9 +794,9 @@ public class TunnelPoolManager implements TunnelManagerFacade {
     /**
      * This will be called twice, once by the inbound and once by the outbound pool.
      * Synched with buildTunnels() above.
-     *
+     * <p>
      * Must be called AFTER deregistration by the client manager.
-     *
+     * <p>
      * Uses delayed cleanup to allow tunnels to continue operating
      * until they naturally expire. Prevents pool collapse when client disconnects.
      * @param destination the hash of the client whose pools are scheduled for removal; a
@@ -985,7 +985,6 @@ public class TunnelPoolManager implements TunnelManagerFacade {
     /**
      * Background reachability probe over the peers a client pool would
      * provisionally use as a first hop.
-     *
      * <p>Selection samples a bounded slice of the high-capacity tier
      * ({@link net.i2p.router.peermanager.ProfileOrganizer#maxCandidateSample}),
      * so an unconnectable peer can sit in that tier indefinitely and be drawn
@@ -995,7 +994,6 @@ public class TunnelPoolManager implements TunnelManagerFacade {
      * blame. This job supplies that missing signal by pre-connecting to a
      * bounded slice and letting
      * {@code TunnelPeerSelector.PreConnectFailJob} demote whatever fails.
-     *
      * <p>Sweep, pause, sweep: each pass probes at most
      * {@link #PROBE_BATCH} peers and then waits {@link #PROBE_INTERVAL}, so the
      * whole tier is covered over several passes without a burst of outbound
@@ -1015,14 +1013,12 @@ public class TunnelPoolManager implements TunnelManagerFacade {
         private static final long STARTUP_DELAY = 5 * 60 * 1000L;
         /**
          * A peer we have built through this recently needs no probe.
-         *
          * <p>Deliberately generous, and comfortably wider than one build cycle:
          * a peer we are already successfully sending through is confirmed for
          * as long as that keeps being true, so the only peers worth spending
          * budget on are the idle ones the sweep exists to find. A narrow window
          * would re-probe the peers working hardest, which is where the budget
          * is least useful.
-         *
          * <p>Widening this constant reduces coverage — it widens the skip set,
          * not the probe set — so it is only safe because the test below keys on
          * our own send successes rather than on incidental inbound traffic.
@@ -1037,7 +1033,6 @@ public class TunnelPoolManager implements TunnelManagerFacade {
         static final int PROBE_BATCH_STEADY = 128;
         /**
          * Wall clock wanted for one pass over the whole tier, while young.
-         *
          * <p>A young router has measured nothing, so the tier is unpopulated
          * with first-hop latency and nothing can be judged until it is covered.
          * Twenty minutes reaches a full sweep quickly without turning the probe
@@ -1067,7 +1062,6 @@ public class TunnelPoolManager implements TunnelManagerFacade {
         /**
          * Gap between passes, derived from the tier size so a full sweep takes a
          * predictable wall-clock time whatever the population.
-         *
          * <p>Computing the interval from {@code targetPass * batch / bandSize}
          * rather than fixing it means the same cadence holds at 200 peers or
          * 2000: a small tier is not over-probed and a large one is not starved.
@@ -1136,7 +1130,6 @@ public class TunnelPoolManager implements TunnelManagerFacade {
 
         /**
          * Probe one bounded slice of the provisionally-selectable fast tier.
-         *
          * <p>Selection asks for {@code howMany} candidates through the same
          * {@code selectHighCapacityPeers} entry point, so the population here is
          * exactly the one a client pool would draw from — not the whole tier.
@@ -1173,7 +1166,6 @@ public class TunnelPoolManager implements TunnelManagerFacade {
 
         /**
          * Whether this peer has traffic recent enough that probing adds nothing.
-         *
          * <p>Only our own successful sends count. Inbound hearing is deliberately
          * ignored: {@link PeerProfile#getLastHeardFrom} advances on DHT replies,
          * explore traffic and transit acknowledgments, so it marks most of the
@@ -1877,13 +1869,13 @@ public class TunnelPoolManager implements TunnelManagerFacade {
     /**
      * For reliability reasons, don't allow a peer in more than x% of
      * client and exploratory tunnels.
-     *
+     * <p>
      * This also will prevent a single huge-capacity (or malicious) peer from
      * taking all the tunnels in the network (although it would be nice to limit
      * the % of total network tunnels to 10% or so, but that appears to be
      * too low to set as a default here... much lower than 33% will push client
      * tunnels out of the fast tier into high cap or beyond...)
-     *
+     * <p>
      * Possible improvement - restrict based on count per IP, or IP block,
      * to slightly increase costs of collusion
      *
@@ -1938,7 +1930,6 @@ public class TunnelPoolManager implements TunnelManagerFacade {
      * The relief factor actually applied to the participation share, combining
      * the three inputs. Pure, so the precedence between them is testable
      * without a router.
-     *
      * <p>Firewalled and incomplete-LeaseSet are both hard signals that the first
      * hop pool is too narrow, and either one takes full relief regardless of
      * what aggregate build success says. Build success is the weakest signal
@@ -1960,7 +1951,6 @@ public class TunnelPoolManager implements TunnelManagerFacade {
     /**
      * Graded relief factor for the per-peer participation share, from tunnel
      * build success. Pure: no state, no clock, no logging.
-     *
      * <p>Returns 1.0 (no relief) at or above {@link #SHARE_RELIEF_TOP} and 2.0
      * (the pre-existing full relief) at or below {@link #SHARE_RELIEF_BOTTOM},
      * interpolating linearly between. A build success of 1.0 is passed in when
@@ -1994,7 +1984,6 @@ public class TunnelPoolManager implements TunnelManagerFacade {
 
     /**
      * Whether a peer's share of tunnel participation exceeds the limit. Pure.
-     *
      * <p>The {@code +1} on both numerator and denominator is the historical
      * form. It equals the unsmoothed integer share exactly whenever the total
      * is at least ten times the count, and inflates it for smaller pools (a

@@ -313,10 +313,10 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
 
     /**
      * Create the manager if it doesn't exist, AND connect it to the router and build tunnels.
-     *
+     * <p>
      * Sets the this.sockMgr field if it is null, or if we want a new one.
      * This may take a LONG time if building a new manager.
-     *
+     * <p>
      * We need a socket manager before getDefaultOptions() and most other things
      * @throws IllegalStateException if the I2CP configuration is b0rked so
      *                               badly that we cant create a socketManager
@@ -430,7 +430,7 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
 
     /**
      * For NON-SHARED clients (ownDest = true).
-     *
+     * <p>
      * As of 0.9.20 this is fast, and does NOT connect the manager to the router.
      * Call verifySocketManager() for that.
      *
@@ -444,7 +444,7 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
 
     /**
      * Create a disconnected socket manager for the tunnel, with no private key file.
-     *
+     * <p>
      * As of 0.9.20 this is fast, and does NOT connect the manager to the router.
      * Call verifySocketManager() for that.
      *
@@ -463,7 +463,7 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
     /**
      * Create a disconnected socket manager for the tunnel, loading the
      * persistent client dest from pkf if it is non-null.
-     *
+     * <p>
      * As of 0.9.20 this is fast, and does NOT connect the manager to the router.
      * Call verifySocketManager() for that.
      *
@@ -481,7 +481,7 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
      * Create a disconnected socket manager for the tunnel, loading the
      * persistent client dest from pkf if it is non-null, and logging any
      * key file error to log.
-     *
+     * <p>
      * As of 0.9.20 this is fast, and does NOT connect the manager to the router.
      * Call verifySocketManager() for that.
      *
@@ -632,10 +632,10 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
     /**
      * Actually open the local socket and start working on incoming connections.
      * *Must* be called by derived classes after initialization.
-     *
+     * <p>
      * This will be fast if i2cp.delayOpen is true, but could take
      * a LONG TIME if it is false, as it connects to the router and builds tunnels.
-     *
+     * <p>
      * Extending classes must check the value of boolean open after calling
      * super.startRunning(), if false then something went wrong.
      */
@@ -803,7 +803,6 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
      * Create a new I2PSocket towards to the specified destination,
      * adding it to the list of connections actually managed by this
      * tunnel.
-     *
      * <p>With multiple inbound or outbound tunnels configured
      * ({@code inbound.quantity > 1} or {@code outbound.quantity > 1}),
      * the session's tunnel pool has multiple tunnels. If a connect attempt
@@ -1012,7 +1011,6 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
      * Whether the outer HTTP connect loop should retry after a failure.
      * createI2PSocketWithFailover already walked every tunnel leg; this
      * decides whether to re-enter that walk.
-     *
      * <p>Policy: always allow at least one timeout retry so a pool that was
      * mid-build when the first walk started can finish its replacements.
      * While {@code poolBuilding}, allow a second timeout wait (the in-flight
@@ -1114,7 +1112,6 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
     /**
      * Compute the connect timeout to apply to one failover leg under a
      * shared deadline. Pure decision — no clock access, safe for unit tests.
-     *
      * <p>Three behaviors the raw clamp lacked: a caller that requested no
      * timeout at all ({@code requestedMs <= 0}, which streaming can report
      * when its effective connect window is not yet established) gets
@@ -1144,7 +1141,6 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
      * One-shot deadline extension for a request whose outbound tunnel pool is
      * still building when the shared deadline runs out. Pure decision — no
      * clock access, safe for unit tests.
-     *
      * <p>Pool state 0 means the pool exists with no valid tunnel yet but
      * builds are in progress: no connect leg can succeed until one lands,
      * and a healthy first build finishes well inside the grace window.
@@ -1425,7 +1421,6 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
      * accept loop admits a connection. Reads the Tuner-managed default dynamically
      * so the floor can move without a tunnel restart, unless this tunnel declared an
      * explicit {@value #PROP_MAX_CONNECTIONS} override (which always wins).
-     *
      * <p>The Tuner raises this gate under sustained load so excess inbound
      * connections are handed to executor threads instead of being shed (a shed close
      * with zero bytes is what an HTTP proxy browser reports as an empty response),
@@ -1588,9 +1583,9 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
      * Note that the tunnel can be reopened after this by calling startRunning().
      * This may not release all resources. In particular, the I2PSocketManager remains
      * and it may have timer threads that continue running.
-     *
+     * <p>
      * To release all resources permanently, call destroy().
-     *
+     * <p>
      * Does nothing if open is already false.
      * Sets open = false but does not notifyAll().
      *
@@ -1701,7 +1696,7 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
     /**
      * Manage a connection in a separate thread. This only works if
      * you do not override manageConnection().
-     *
+     * <p>
      * This is run in a thread from an unlimited-size thread pool,
      * so it may block or run indefinitely.
      *

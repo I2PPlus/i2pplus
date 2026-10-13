@@ -22,14 +22,14 @@ import net.i2p.util.Log;
  * I2PTunnelOutproxyRunner forwards data bidirectionally between two connected sockets:
  * one representing an external socket connection and the other an I2P socket connection.
  * It continuously transfers data until either side closes the connection or an error occurs.
- *
+ * <p>
  * The class manages two internal forwarding threads to handle each direction of the data flow,
  * maintains counters of bytes sent and received, and allows optional initial data to be sent
  * on either socket upon startup.
- *
+ * <p>
  * A user-provided callback can be invoked if no data (beyond initial data) is received before
  * the connection closes, enabling handling of timeouts or failures.
- *
+ * <p>
  * This class is designed for internal use within the I2P tunnel infrastructure and is not
  * maintained as a stable public API.
  *
@@ -74,7 +74,7 @@ public class I2PTunnelOutproxyRunner extends I2PAppThread {
 
     /**
      * Create a runner that forwards between one external socket and one tunnel.
-     *
+     * <p>
      * Does not start itself. Caller must call start().
      *
      * @param s external socket connection

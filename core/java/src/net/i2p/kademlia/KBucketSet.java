@@ -34,9 +34,8 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
  * may eventually be split to a max of number of bits in data type
  * (160 for SHA1Hash or 256 for Hash),
  * times 2**(B-1) for Kademlia value B.
- *
+ * <p>
  * Refactored from net.i2p.router.networkdb.kademlia
- *
  *
  * @param <T> type of SimpleDataStructure objects stored in buckets
  * @since 0.9.2 in i2psnark, moved to core in 0.9.10
@@ -51,7 +50,7 @@ public class KBucketSet<T extends SimpleDataStructure> {
      * buckets are not locked. Users may see buckets that have more than
      * the maximum k entries, or may have adds and removes silently fail
      * when they appear to succeed.
-     *
+     * <p>
      * Closest values are in bucket 0, furthest are in the last bucket.
      */
     private final List<KBucket<T>> _buckets;
@@ -219,7 +218,7 @@ public class KBucketSet<T extends SimpleDataStructure> {
 
     /**
      * Creates two or more new buckets. The old bucket is replaced and discarded.
-     *
+     * <p>
      * Caller must hold write lock
      * The bucket should be splittable (range start != range end).
      *
@@ -370,7 +369,6 @@ public class KBucketSet<T extends SimpleDataStructure> {
 
     /**
      * Add all entries in all buckets to the provided collector.
-     *
      * <p>The read lock is held only long enough to copy the bucket references
      * out of the list, then released before the collector runs. Collectors do
      * netDb, banlist and profile lookups, so holding the lock across the pass
@@ -521,7 +519,7 @@ public class KBucketSet<T extends SimpleDataStructure> {
     /**
      * Returned list is a copy of the bucket list, closest first,
      * with the actual buckets (not a copy).
-     *
+     * <p>
      * Primarily for testing. You shouldn't ever need to get all the buckets.
      * Use getClosest() or getAll() instead to get the keys.
      *

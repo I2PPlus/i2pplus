@@ -19,12 +19,9 @@ import net.i2p.util.I2PAppThread;
  * HTTP client runner that filters response headers to enforce the
  * "Connection: close" header, ensuring browsers treat the connection as non-persistent,
  * even if the server doesn't comply.
- *
  * <p>This class is internal and not part of a stable public API.
- *
  * <p>Implements proper resource cleanup, supports optional keep-alive for both I2P and browser sockets,
  * and uses background threading for non-blocking socket closure when appropriate.
- *
  * <p><b>Thread Safety:</b> This class is not thread-safe. It is expected to be used by a single connection thread.
  */
 public class I2PTunnelHTTPClientRunner extends I2PTunnelRunner {
@@ -60,7 +57,6 @@ public class I2PTunnelHTTPClientRunner extends I2PTunnelRunner {
 
     /**
      * {@inheritDoc}
-     *
      * <p>True here: an HTTP request/response strictly precedes its response,
      * so a peer that never sends the first byte must be torn down by the
      * initial-response deadline instead of hanging the runner forever (read

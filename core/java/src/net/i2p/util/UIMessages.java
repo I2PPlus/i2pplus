@@ -10,7 +10,7 @@ import java.util.List;
  * A queue of messages, where each has an ID number.
  * Provide the ID back to the clear call, so you don't
  * erase messages you haven't seen yet.
- *
+ * <p>
  * Thread-safe.
  *
  * @since 0.9.33 adapted from SnarkManager
@@ -154,7 +154,6 @@ public class UIMessages {
 
     /**
      * Represents a single UI message with a unique identifier.
-     *
      * <p>Each message contains a sequential ID number and the message text.
      * The ID is used to track which messages have been viewed and to
      * selectively clear messages from the queue.</p>

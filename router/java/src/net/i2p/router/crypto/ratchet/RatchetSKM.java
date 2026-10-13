@@ -63,7 +63,7 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
      * Keep unused inbound session tags around for this long (a few minutes longer than
      * session tags are used on the outbound side so that no reasonable network lag
      * can cause failed decrypts)
-     *
+     * <p>
      * This is also the max idle time for an outbound session.
      */
     static final long SESSION_LIFETIME_MAX_MS = SESSION_TAG_DURATION_MS + 2 * 60 * 1000L;
@@ -450,11 +450,11 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
 
     /**
      * Takes the next outbound session tag and key for sending a message to the target.
-     *
+     * <p>
      * If this returns null, no session is set up yet, and a New Session message should be sent.
-     *
+     * <p>
      * If this returns non-null, the tag in the RatchetEntry will be non-null.
-     *
+     * <p>
      * If the SessionKeyAndNonce contains a HandshakeState, then the session setup is in progress,
      * and a New Session Reply message should be sent.
      * Otherwise, an Existing Session message should be sent.
@@ -613,11 +613,11 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
 
     /**
      * Determines whether a session key was received for the given session tag.
-     *
+     * <p>
      * If one was, it is discarded and returned along with the decryption
      * key it was received with (via tagsReceived(...)).  returns null if no session key
      * matches
-     *
+     * <p>
      * If the return value has null data, it will have a non-null HandshakeState.
      *
      * @param tag the ratchet session tag to consume
@@ -1426,7 +1426,7 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
          * First tag was received for this inbound (ES) tagset.
          * Find the corresponding outbound (ES) tagset in _unackedTagSets,
          * move it to _tagSets, and remove all others from _unackedTagSets.
-         *
+         * <p>
          * Note: We do NOT remove remaining inbound tags from _inboundTagSets here.
          * The addTags() sliding window in consume() already handles tag lifecycle —
          * generating new tags ahead and trimming old ones via expireTag(). Purging

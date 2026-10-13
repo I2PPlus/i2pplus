@@ -166,7 +166,7 @@ class FileLogWriter extends LogWriter {
 
     /**
      * Rotate to the next file (or the first file if this is the first call)
-     *
+     * <p>
      * Caller must synch
      */
     private void rotateFile() {
@@ -216,7 +216,7 @@ class FileLogWriter extends LogWriter {
 
     /**
      * Next file in the rotation.
-     *
+     * <p>
      * Caller must sync.
      *
      * @return the next file
@@ -248,7 +248,7 @@ class FileLogWriter extends LogWriter {
 
     /**
      * Retrieve the first file, updating the rotation number accordingly
-     *
+     * <p>
      * Caller must synch
      * @return the first file
      */

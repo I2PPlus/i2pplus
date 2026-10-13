@@ -7,7 +7,7 @@ import net.i2p.I2PAppContext;
  * Sent from the OBEP to the tunnel creator via an inbound tunnel.
  * Contains a variable number of encrypted records.
  * This message must be garlic-encrypted to hide the contents from the OBGW.
- *
+ * <p>
  * Preliminary, see proposal 157.
  *
  * @since 0.9.50

@@ -15,7 +15,7 @@ import java.nio.charset.StandardCharsets;
  * https://secure.wikimedia.org/wikipedia/en/wiki/ZIP_%28file_format%29
  * http://download.oracle.com/javase/1.5.0/docs/api/java/util/zip/ZipFile.html
  * http://bugs.sun.com/view_bug.do?bug_id=6646605
- *
+ * <p>
  * Code modified from:
  * http://www.flattermann.net/2009/01/read-a-zip-file-comment-with-java/
  * Beerware.

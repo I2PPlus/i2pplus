@@ -16,11 +16,11 @@ import java.util.Locale;
 /**
  * Encodes and decodes to and from Base32 notation.
  * Ref: RFC 3548
- *
+ * <p>
  * Don't bother with '=' padding characters on encode or
  * accept them on decode (i.e. don't require 5-character groups).
  * No whitespace allowed.
- *
+ * <p>
  * Decode accepts upper or lower case.
  *
  * @author zzz

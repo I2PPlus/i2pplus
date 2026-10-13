@@ -59,12 +59,12 @@ import net.i2p.util.SystemVersion;
 
 /**
  * Manage geoip lookup in a file with the Tor geoip format.
- *
+ * <p>
  * The lookup is expensive, so a lookup is queued with add().
  * The actual lookup of multiple IPs is fired with lookup().
  * To get a country for an IP, use get() which returns a lower-case,
  * generally two-letter country code or null.
- *
+ * <p>
  * Everything here uses longs, since Java is signed-only, the file is
  * sorted by unsigned, and we don't store the table in memory
  * (unlike in Blocklist.java, where it's in-memory so we want to be
@@ -196,7 +196,7 @@ public class GeoIP {
     /**
      * Blocking lookup of all pending IPs.
      * Results will be added to the table and available via get() after completion.
-     *
+     * <p>
      * Public for BundleRouterInfos
      */
 
@@ -1003,7 +1003,7 @@ public class GeoIP {
     /**
      * Detect and fix character-reversed words from MaxMind ASN DB.
      * e.g. "eteicoS esiacnarF uD enohpeletoidaR" -> "Societe France Du RadioTelephone"
-     *
+     * <p>
      * Four-pass detection:
      * 1. Word-by-word: words starting lowercase and ending uppercase are likely reversed.
      * 2. Full-string: try reversing the entire name for compound words without spaces.
@@ -1013,7 +1013,7 @@ public class GeoIP {
      * 5. Combined: char-reversal then word-order (catches both like "tsohxuled sa gnidart...").
      * Also detects "as trading" pattern which strongly signals word-order is reversed.
      * Picks whichever pass scores highest (known-word matches + title-case words).
-     *
+     * <p>
      * AS numbers must be stripped before calling this (see normalizeOrgName).
      */
     private static String fixReversedWords(String name) {
@@ -1226,7 +1226,7 @@ public class GeoIP {
      * 1. Its first letter is lowercase and last letter is uppercase
      * (e.g. "puorG" → "Group"), OR
      * 2. Reversing its letters yields a known word (e.g. "CSJP" → "PJSC").
-     *
+     * <p>
      * Leading/trailing non-letter characters are ignored for the letter check
      * so that ")puorG" and "talasite(" are correctly detected.
      */
@@ -1511,14 +1511,14 @@ public class GeoIP {
    /**
     * Read in and parse the country file.
     * The file need not be sorted.
-    *
+    * <p>
     * Acceptable formats:
     * #comment (# must be in column 1)
     * code,full name
-    *
+    * <p>
     * Example:
     * US,UNITED STATES
-    *
+    * <p>
     * To create:
     * wget http://ip-to-country.webhosting.info/downloads/ip-to-country.csv.zip
     * unzip ip-to-country.csv.zip
@@ -1559,19 +1559,19 @@ public class GeoIP {
    /**
     * Read in and parse the geoip file.
     * The geoip file must be sorted, and may not contain overlapping entries.
-    *
+    * <p>
     * Acceptable formats (IPV4 only):
     * #comment (# must be in column 1)
     * integer IP,integer IP, country code
-    *
+    * <p>
     * Example:
     * 121195296,121195327,IT
-    *
+    * <p>
     * This is identical to the Tor geoip file, which can be found in
     * src/config/geoip in their distribution, or /usr/local/lib/share/tor/geoip
     * in their installation.
     * Thanks to Tor for finding a source for the data, and the format script.
-    *
+    * <p>
     * To create:
     * wget http://ip-to-country.webhosting.info/downloads/ip-to-country.csv.zip
     * unzip ip-to-country.csv.zip
@@ -1651,7 +1651,7 @@ public class GeoIP {
     /**
      * Put our country code in the config, where others (such as Timestamper) can get it,
      * and it will be there next time at startup.
-     *
+     * <p>
      * Does nothing in I2PAppContext
      * @param ts the timestamp of the geoip file that was read, greater than zero
      */
@@ -1745,7 +1745,7 @@ public class GeoIP {
 
     /**
      * Bans routers located in a specified country.
-     *
+     * <p>
      * This method iterates through all known routers in the network database
      * and adds those located in the specified country to the banlist.
      * Routers are banned indefinitely with a reason message that reflects

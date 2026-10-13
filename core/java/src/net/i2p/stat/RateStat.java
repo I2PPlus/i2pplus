@@ -64,7 +64,6 @@ public class RateStat {
 
     /**
      * Constructor taking pre-built rates, for tests that need a rate which throws.
-     *
      * <p>The public constructor cannot express this because it always builds working
      * rates, and a {@code Rate} cannot be made to fail without a fault injected into
      * it. The isolation in {@link #coalesceStats()} is only worth anything if it can
@@ -88,7 +87,6 @@ public class RateStat {
     /**
      * Route coalesced samples for every rate in this stat through {@code delivery}
      * instead of calling the summary listener inline.
-     *
      * <p>Set by {@link StatManager} immediately after construction. A setter rather
      * than a constructor argument so the public constructor signature — and its
      * callers — are unaffected.
@@ -139,7 +137,6 @@ public class RateStat {
 
     /**
      * Retained coalesced samples for backfill, oldest first.
-     *
      * <p>Read from the shortest-period rate ({@code _rates[0]}, periods being held
      * in ascending order) because that is the rate whose steps its RRD stores, and
      * therefore the one a listener writing history has to replay.
@@ -176,14 +173,12 @@ public void addData(long value) {
 
     /**
      * Coalesce every period's rate, isolating each one.
-     *
      * <p>A rate that throws must not stop its siblings. {@link StatManager} walks
      * every stat in one pass on the coalesce timer, so an exception escaping here
      * would abandon every stat later in that pass: their rates would silently stop
      * coalescing, their listeners would stop receiving samples, and their graphs
      * would freeze with nothing logged anywhere - which is exactly the failure this
      * method exists to make impossible.
-     *
      * <p>The first failure is remembered with the period that produced it, so
      * {@link StatManager} can name the offending stat rather than only counting
      * anonymous failures.

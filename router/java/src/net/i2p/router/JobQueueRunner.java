@@ -86,7 +86,7 @@ class JobQueueRunner extends I2PThread {
 
     /**
      * Resolve the cached RateStat handles for the three per-job stats.
-     *
+     * <p>
      * Every job used to pay three string-keyed ConcurrentHashMap lookups in
      * StatManager, and each handle then fans out to a synchronized Rate per
      * period - nine monitor acquisitions per job across three periods. The

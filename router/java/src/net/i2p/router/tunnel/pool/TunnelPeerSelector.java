@@ -273,7 +273,6 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
 
     /**
      * Peers requested from the high-capacity tier in a keepalive cycle.
-     *
      * <p>Set deeper than {@link #KEEPALIVE_TARGET_TIERS} because the fast and
      * high-capacity tiers are both ranked on throughput, so their top entries overlap
      * heavily and equal depth returns nearly the same peers twice. Only
@@ -281,7 +280,6 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
      * request costs set insertions and a counter, not sends: the budget check runs
      * first in the loop, and a peer past the budget is tallied without ever reaching
      * the stale check or the RouterInfo lookup.
-     *
      * <p>Measured over an 85-minute run at equal depth, the union collapsed from ~395
      * to ~203 peers while the action budget held at 200 — so servicing never fell,
      * only the surplus above budget did. Deeper high-cap selection lifted the union
@@ -1054,7 +1052,6 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
      * Whether strict client-pool pre-qualification should be applied to a
      * candidate peer.  Never for exploratory selections and never during the
      * startup grace period; otherwise always.
-     *
      * <p>This used to also switch off below {@link #ATTACK_THRESHOLD}, on the
      * reasoning that a pool collapse is worsened by rejecting candidates that
      * merely lack recent activity.  That reasoning inverted the problem:
@@ -1078,7 +1075,6 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
     /**
      * Which quality of connectivity evidence a candidate must show to be
      * pre-qualified, as a function of how well tunnel building is going.
-     *
      * <p>This replaces the previous all-or-nothing switch that disabled
      * pre-qualification entirely once build success fell below
      * {@link #ATTACK_THRESHOLD}.  That switch was self-defeating: the peers it
@@ -1089,7 +1085,6 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
      * {@code FarEndUnknown} at roughly 5:1 over {@code FarEndUnreachable}, and
      * build success oscillating in the 29-46% band directly beneath the
      * threshold.
-     *
      * <p>Under stress the bar is raised, not lowered.  {@link #QUALITY_STRICT}
      * accepts only a recent successful test or a live transport session — the
      * evidence that a peer is actually reachable — whereas
@@ -1098,7 +1093,6 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
      * builds are failing is the correct response: a collapse means the
      * marginal peer we can still reach is worth more than the marginal peer we
      * merely hope is reachable.
-     *
      * <p>Exploratory pools and the startup grace period never pre-qualify at
      * all, so they do not consult this.
      *
@@ -1122,18 +1116,15 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
 
     /**
      * Pre-qualification signal check at the given strictness.
-     *
      * <p>At {@link #QUALITY_RELAXED} this is exactly {@link
      * #hasConnectivitySignal(PeerProfile, long, long)}: recent contact, a
      * recent successful test, or any favourable acceptance history.
-     *
      * <p>At {@link #QUALITY_STRICT} only the two strong signals count — a
      * successful tunnel test inside the activity window, or a live transport
      * session (passed in by the caller, which already knows it).  Recent
      * contact alone is not enough: a peer that is merely sending us traffic
      * is not thereby known to accept an inbound build request, which is what
      * this gate is protecting against.
-     *
      * <p>Pure decision — no context access, safe for unit tests.
      *
      * @param profile the peer profile, may be null when no session is live
@@ -1209,7 +1200,6 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
     /**
      * Whether the exclude caps are currently relaxed, and by how much build success
      * has to recover before they are enforced again.
-     *
      * <p>Wider than {@link #ATTACK_THRESHOLD} on purpose: relaxing the caps widens
      * the peer pool, which raises build success, which would otherwise release the
      * relaxation immediately and put the caps back — a loop that ratchets the peer
@@ -1222,7 +1212,6 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
 
     /**
      * Latch for the exclude-cap relaxation, shared by every selection.
-     *
      * <p>Process-wide on purpose: the caps are a property of the router's current
      * state, not of one selection, so two concurrent selections must not disagree
      * about whether the pool is relaxed.
@@ -1252,7 +1241,6 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
      * router is within its first {@link #STARTUP_WARNING_SUPPRESS_MS} of
      * uptime (when the ratio is not yet meaningful).  A ratio of 0.0 (no
      * data) relaxes as well, matching the conservative startup behavior.
-     *
      * <p><b>P4:</b> {@code alreadyRelaxed} is the latch, and this is where the
      * hysteresis actually lives.  The previous form derived the decision from
      * {@code buildSuccess} alone, which is a plain threshold wearing
@@ -1263,7 +1251,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
      * therefore flipped the caps on every crossing.  Passing the prior state
      * makes the band real: enter below {@link #ATTACK_THRESHOLD}, leave at or
      * above {@link #ATTACK_RELAX_EXIT}, hold in between.
-     *
+     * <p>
      * Pure decision — no context access and no shared state, safe for unit tests.
      *
      * @param configured the configured exclude caps, possibly null or empty
@@ -1435,21 +1423,18 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
      * <ol><li>Inbound and we are hidden -
      * Exclude all unless connected.
      * This is taken care of in ClientPeerSelector and TunnelPeerSelector selectPeers(), not here.
-     *
      * <li>We are IPv6-only.
      * Exclude all v4-only peers, unless connected
      * This is taken care of here.
-     *
      * <li>We have NTCP or SSU disabled.
      * Exclude all incompatible peers, unless connected
      * This is taken care of here.
-     *
      * <li>Minimum version check, if we are some brand-new sig type,
      * or are using some new tunnel build method.
      * Not currently used, but this is where to implement the checks if needed.
      * Make sure that ClientPeerSelector and TunnelPeerSelector selectPeers() call this when needed.
      * </ol>
-     *
+     * <p>
      * As of 0.9.58, this a set with only toAdd, for use in ProfileOrganizer.
      * The set will be populated via the contains() calls.
      *
@@ -1773,13 +1758,13 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
      * allows an attacker who runs two routers with hashes far apart
      * to maximize his chances of those two routers being at opposite
      * ends of a tunnel.
-     *
+     * <p>
      * Previous Previous:
      * d(l, h) - d(r, h)
-     *
+     * <p>
      * Previous:
      * d((H(l+h), h) - d(H(r+h), h)
-     *
+     * <p>
      * Now:
      * SipHash using h to generate the SipHash keys
      * then siphash(l) - siphash(r)
@@ -2207,7 +2192,6 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
     /**
      * Fetch a peer RouterInfo for a message we address to it, preferring the
      * unvalidated store lookup.
-     *
      * <p>The peer reached this point through selection or through the already
      * established transport, so it passed store-time validation, and the
      * build requestor accepts unvalidated cached entries. Running the full
@@ -2215,7 +2199,6 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
      * slow-router checks) per peer per cycle bought nothing, and for
      * {@link #keepAlive} it ran for up to 200 already-established peers a
      * cycle purely to build an OutNetMessage.
-     *
      * <p>Unvalidated first, validating second — the same ordering
      * {@link BuildRequestor} uses for every hop of a build request, so a
      * pre-connect addresses the RouterInfo a build would. The fallback runs
@@ -2268,7 +2251,6 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
      * Creates a low-priority dummy OutNetMessage that causes the transport
      * layer to initiate a connection. Used to pre-warm connections for
      * first-hop peers before the build message is sent.
-     *
      * <p>A failed send is treated as evidence of unreachability rather than
      * a transient transport hiccup: a pre-connect probe has no reply to wait
      * for, so the transport giving up on it means the peer could not be
@@ -2282,7 +2264,6 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
      */
     /**
      * What a pre-connect probe actually achieved.
-     *
      * <p>Returned so a caller can tell "the peer was asked and the transport took the message"
      * from "the peer was never really asked", which the previous {@code void} signature made
      * indistinguishable. Only the latter means anything about the peer.
@@ -2306,16 +2287,13 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
 
     /**
      * Per-cycle tally of why keepalive did not act on the peers it selected.
-     *
      * <p>Added because the candidate pool was observed shrinking from roughly 395 peers per
      * cycle to roughly 203, and the pre-existing log line only reported how many
      * peers were kept alive, never how many were dropped on the way. Without a reason for each
      * drop, an eroding pool and a busy pool look identical from the outside.
-     *
      * <p>Note that the fall from 395 to 203 is <em>supply</em>, not delivery: the action
      * budget sits at 200, so the cycle was servicing its full budget in both periods and
      * only the surplus above it collapsed.
-     *
      * <p>{@link #describe} is pure so the summary can be asserted in a test without a router.
      *
      * @since 0.9.71+
@@ -2330,7 +2308,6 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
 
         /**
          * Peers the selector asked for, before any filtering.
-         *
          * <p>This is the per-tier request doubled for the two tiers, not a count of
          * anything on the wire.
          */
@@ -2338,13 +2315,11 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
 
 /**
  * Distinct peers the two tier selectors returned.
- *
  * <p>Named {@code candidates} rather than {@code delivered} because it is fixed
  * before the cycle sends anything: it measures supply, not delivery. A previous
  * field name of {@code delivered} sat on this same value and read as
  * "203 delivered of 400 requested", which was mistaken twice for a fall in
  * successful keepalives when it only ever showed the candidate pool.
- *
  * <p>May exceed {@link #budget}, which is the sum of the two nominal tier
  * requests rather than a cap. {@code selectFastPeers} backfills from the
  * high-capacity tier when the fast tier cannot fill its depth, and each
@@ -2391,7 +2366,6 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
 
         /**
          * Summarise the cycle.
-         *
          * <p>Reports supply ({@code candidates} of {@code budget}) separately from
          * delivery ({@code actedOn}), because conflating them hides which of the two
          * actually fell.
@@ -2418,7 +2392,6 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
 
         /**
          * Peers selected but never acted on for any reason.
-         *
          * <p>Every selected peer must land in exactly one bucket, so this is the check that
          * the accounting has not lost a path.
          *
@@ -2438,7 +2411,6 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
      * Send a {@link DatabaseLookupMessage} to a peer so it answers with our
      * RouterInfo, which forces a full session handshake rather than the empty
      * {@code DataMessage} that would leave the peer with nothing to reply to.
-     *
      * <p>The RouterInfo is fetched unvalidated first, and peers with no usable
      * transport address are skipped here rather than inside {@code establish()},
      * so a peer with dead addresses cannot trigger a ban.
@@ -2498,13 +2470,11 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
 
     /**
      * Extract the transport's measured direct-link RTT and record it on the peer.
-     *
      * <p>The probe goes out over one specific transport and that transport
      * already maintains a per-peer round trip time, so the first-hop latency
      * tier selection needs is available here for free. Reading it from the
      * transport also keeps it honest: it is the cost of the one hop, not the
      * cost of a multi-hop tunnel that merely contained this peer.
-     *
      * <p>A freshly established session has not measured yet and reports 0,
      * which is discarded rather than stored as a fast peer; the next pass picks
      * it up.
@@ -2523,12 +2493,10 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
 
     /**
      * Demotes a peer that could not be reached by a pre-connect probe.
-     *
      * <p>Fired from {@link OutNetMessage}'s failed-send path, so it runs only
      * after the transport has exhausted its own retries for the probe. That
      * distinguishes it from a single dropped packet: by then the peer has
      * failed to answer across every transport we hold.
-     *
      * <p>Uses {@link ProfileOrganizer#demoteIfUnreachableNow} rather than the
      * three-strike path because send-failure strikes already exist for
      * in-use tunnels and count a congested path as much as a dead peer. A
@@ -2561,12 +2529,10 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
 
     /**
      * Act on a pre-connect probe that could not be delivered.
-     *
      * <p>Separated from the job so the decision is testable without a
      * transport and a job queue: a probe that failed every transport retry
      * means the peer is not reachable, so it leaves the fast tiers at once
      * rather than after the three-strike send-failure path.
-     *
      * <p>Demotion is immediate because unlike a send failure on a live tunnel,
      * this has no ambiguity to accumulate against — there was no reply at all.
      * Waiting for strikes leaves exactly the peers this sweep exists to find
@@ -2587,7 +2553,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
      * within the dynamic activity window. The window adapts to network
      * visibility: 500+ active peers use 1 hour, 200+ use 2 hours, 100+ use
      * 4 hours, fewer than 100 use 8 hours (fresh router building up picture).
-     *
+     * <p>
      * Stale peers are skipped during first-hop selection and keepalive to
      * avoid wasting resources on peers that are likely offline. Skipped
      * during the first 15 minutes of uptime (startup grace).
@@ -2605,7 +2571,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
      * within the dynamic activity window.  The window adapts to network
      * visibility: 500+ active peers use 1 hour, 200+ use 2 hours, 100+ use
      * 4 hours, fewer than 100 use 8 hours (fresh router building up picture).
-     *
+     * <p>
      * Unprofiled peers (never-heard-of) are never stale — excluding them
      * would starve the pool of newcomers during recovery — the activity
      * window below only applies once we have profile data to judge.
@@ -2634,7 +2600,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
      * visibility.  When we hear from many peers, we can be selective (short window).
      * When the router is fresh or the network is sparse, use a wider window to
      * avoid starving peer pools.
-     *
+     * <p>
      * The base window (from active-peer count) is scaled by the Tuner-controlled
      * multiplier ({@link #setWindowMultiplier}) and floored to at least 6 hours
      * when build success is in the degraded/purgatory band, so good peers whose
@@ -2653,7 +2619,6 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
     /**
      * Compute the activity window for peer selection from the base ladder only,
      * scaled by whatever multiplier the availability gate has granted.
-     *
      * <p>The {@code buildSuccess} argument is ignored. It used to drive an acute
      * floor that pinned the window at 4h whenever build success was in the
      * degraded band, but build success measures <em>outcomes</em>, not peer
@@ -2685,7 +2650,6 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
     /**
      * Number of fast peers at or above which the peer set is considered well
      * supplied and the activity window is never widened on availability grounds.
-     *
      * <p>Deliberately far below the ~1000 a healthy router typically holds: the
      * question is not "is the network healthy" but "are we short of the peers
      * selection would otherwise use". Only then is trading recency for pool
@@ -2703,7 +2667,6 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
      * metric. This is the single gate on widening the activity window, shared by
      * the Tuner param, the pool starvation bypass and
      * {@link #getActivityWindow(RouterContext)} so the three cannot drift apart.
-     *
      * <p>Rules, in order:
      * <ol>
      * <li>Above {@link #SCARCE_FAST_PEERS} the window is never widened, no
@@ -2716,7 +2679,6 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
      * <li>Below the threshold the multiplier ramps linearly to the ceiling as
      * fast peers approach zero.</li>
      * </ol>
-     *
      * <p>Pure, so the policy is testable without a router, and public because the
      * Tuner and the pool both consult it. A single shared definition of "we are
      * short of peers" is the whole point; two copies would drift apart and
@@ -2796,18 +2758,15 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
 
     /**
      * Publish the current activity-window multiplier.
-     *
      * <p>The multiplier was a private field with no visible output, so a
      * multiplier stuck at its floor looked identical to a healthy one. During
      * a build slump that made the one control meant to relieve the slump
      * impossible to diagnose from the console: the window policy could be
      * inert and nothing on {@code /stats} or {@code /tuning} would say so.
-     *
      * <p>StatManager has no gauge setter, so the level is published as a rate
      * sample and recorded only when the value actually changes. That keeps the
      * stat's average equal to the current multiplier instead of an average
      * over the history, and avoids a sample on every selection.
-     *
      * <p>Neither the stat creation nor the data call may propagate: this runs
      * from {@link TunnelPool}'s emergency path, and a failing instrument must
      * not stop an emergency build. Failures are logged at WARN — which is how
@@ -2858,7 +2817,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
     /**
      * Periodically called to keep transport sessions alive for top-tier peers and
      * proactively establish connections to Fast/HighCap peers before builds need them.
-     *
+     * <p>
      * This prevents the natural session aging that drops the active peer count from
      * ~600 to ~300 in the first 30 minutes, which starves first-hop selection and
      * causes tunnel pool collapse.

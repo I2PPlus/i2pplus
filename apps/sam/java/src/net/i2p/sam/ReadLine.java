@@ -21,7 +21,7 @@ class ReadLine {
 
     /**
      * Read a line terminated by newline, with a total read timeout.
-     *
+     * <p>
      * Warning - strips \n but not \r
      * Warning - 8KB line length limit as of 0.7.13, @throws IOException if exceeded
      *

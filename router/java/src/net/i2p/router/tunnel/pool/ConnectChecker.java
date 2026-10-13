@@ -64,11 +64,11 @@ import net.i2p.util.Log;
 
     /**
      * Can "from" connect to "to" based on published addresses?
-     *
+     * <p>
      * This is intended for tunnel candidates, where we already have
      * the RI. Will not force RI lookups.
      * Either from or to may be us.
-     *
+     * <p>
      * This is best effort, as we can't know for sure.
      * Published addresses or introducers may have changed.
      * Even if a can't connect to b, they may already be connected
@@ -157,10 +157,10 @@ import net.i2p.util.Log;
 
     /**
      * Can we connect to "to" based on published addresses?
-     *
+     * <p>
      * This is intended for tunnel candidates, where we already have
      * the RI. Will not force RI lookups.
-     *
+     * <p>
      * This is best effort, as we can't know for sure.
      * Does not check isEstablished(); do that first.
      *
@@ -179,10 +179,10 @@ import net.i2p.util.Log;
 
     /**
      * Can "from" connect to us based on published addresses?
-     *
+     * <p>
      * This is intended for tunnel candidates, where we already have
      * the RI. Will not force RI lookups.
-     *
+     * <p>
      * This is best effort, as we can't know for sure.
      * Does not check isEstablished(); do that first.
      *

@@ -17,7 +17,7 @@ import net.i2p.util.SecureFile;
  * An address book for storing human readable names mapped to base64 i2p
  * destinations. AddressBooks can be created from local and remote files, merged
  * together, and written out to local files.
- *
+ * <p>
  * Methods are NOT thread-safe.
  *
  * @author Ragnarok
@@ -68,9 +68,9 @@ class AddressBook implements Iterable<Map.Entry<String, HostTxtEntry>> {
      * address book at subscription has not changed since the last time it was
      * read or cannot be read, return an empty AddressBook.
      * Set a maximum size of the remote book to make it a little harder for a malicious book-sender.
-     *
+     * <p>
      * Yes, the EepGet fetch() is done in this constructor.
-     *
+     * <p>
      * This stores the subscription in a temporary file and does not read the whole thing into memory.
      * An AddressBook created with this constructor may not be modified or written using write().
      * It may be a merge source (an parameter for another AddressBook's merge())
@@ -292,7 +292,7 @@ class AddressBook implements Iterable<Map.Entry<String, HostTxtEntry>> {
      * Merge this AddressBook with AddressBook other, writing messages about new addresses
      * or conflicts to log. Addresses in AddressBook other that are not in this AddressBook
      * are added to this AddressBook.
-     *
+     * <p>
      * In case of a conflict, addresses in this AddressBook take precedence
      *
      * @param other An AddressBook to merge with.

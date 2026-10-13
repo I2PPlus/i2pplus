@@ -4,7 +4,7 @@ import java.security.spec.AlgorithmParameterSpec;
 
 /**
  * Parameter specification for ElGamal key generation.
- *
+ * <p>
  * This class specifies the parameters used when generating ElGamal key pairs,
  * particularly the size of the prime modulus in bits. The prime size determines
  * the security level of the generated keys, with larger sizes providing stronger

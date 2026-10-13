@@ -14,12 +14,12 @@ import net.i2p.util.Log;
 
 /**
  * FIFO-based bandwidth limiter for managing inbound and outbound traffic.
- *
+ * <p>
  * This class provides bandwidth management using First-In-First-Out
  * queues for both inbound and outbound traffic. It implements
  * token bucket algorithm to control data rates and prevent burst
  * traffic patterns.
- *
+ * <p>
  * <strong>Core Features:</strong>
  * <ul>
  * <li>FIFO request queuing for fair bandwidth allocation</li>
@@ -29,7 +29,7 @@ import net.i2p.util.Log;
  * <li>Thread-safe operations with atomic counters</li>
  * <li>Request satisfaction and partial fulfillment handling</li>
  * </ul>
- *
+ * <p>
  * <strong>Concurrency Strategy:</strong>
  * <ul>
  * <li>Java 5: Used synchronized ArrayList with head/tail access</li>
@@ -37,7 +37,7 @@ import net.i2p.util.Log;
  * <li>Request polling from queue head for efficiency</li>
  * <li>Partial request satisfaction with push-back mechanism</li>
  * </ul>
- *
+ * <p>
  * <strong>Algorithm:</strong>
  * <ul>
  * <li>Token refill at fixed intervals</li>
@@ -289,12 +289,11 @@ public class FIFOBandwidthLimiter {
     /**
      * Request some bytes, reusing the given request if possible.
      * Does not block.
-     *
+     * <p>
      * If the candidate is a SimpleRequest that is complete (fully
      * allocated and not aborted), it is reset and re-queued, avoiding a new
      * allocation. If the candidate is the shared no-op request and the
      * shortcut still applies, it is returned as-is.
-     *
      * <p>The reuse check, reset, and re-queue are serialized on the pending
      * inbound queue so the SimpleRequest is never doubled up by concurrent
      * allocators or concurrent reuse of the same candidate.
@@ -326,7 +325,6 @@ public class FIFOBandwidthLimiter {
      * (fully allocated) and not aborted. The check and the reset are performed
      * together under the pending inbound queue lock, so the request cannot be
      * observed by an allocator, reset twice, or re-queued by two threads.
-     *
      * <p>This deliberately acquires the pending queue lock <i>before</i> the
      * request lock, matching the ordering used by the satisfy/refill paths.
      * Acquiring them in the opposite order (request lock then queue lock) can
@@ -387,7 +385,7 @@ public class FIFOBandwidthLimiter {
     /**
      * Request some bytes, reusing the given request if possible.
      * Does not block.
-     *
+     * <p>
      * If the candidate is a SimpleRequest that is complete (fully
      * allocated and not aborted), it is reset and re-queued, avoiding a new
      * allocation. If the candidate is the shared no-op request and the
@@ -421,7 +419,6 @@ public class FIFOBandwidthLimiter {
      * (fully allocated) and not aborted. The check and the reset are performed
      * together under the pending outbound queue lock, so the request cannot be
      * observed by an allocator, reset twice, or re-queued by two threads.
-     *
      * <p>This deliberately acquires the pending queue lock <i>before</i> the
      * request lock, matching the ordering used by the satisfy/refill paths.
      * Acquiring them in the opposite order (request lock then queue lock) can

@@ -19,7 +19,7 @@ import net.i2p.util.SimpleByteCache;
 
 /**
  * Defines the base message implementation.
- *
+ * <p>
  * Note: No longer extends DataStructureImpl as of 0.9.48
  *
  * @author jrandom
@@ -89,7 +89,6 @@ public abstract class I2NPMessageImpl implements I2NPMessage {
     /**
      * Read the header, then read the rest into buffer, then call
      * readMessage in the implemented message type
-     *
      * <pre>
      *  Specifically:
      *  1 byte type (if caller didn't read already, as specified by the type param

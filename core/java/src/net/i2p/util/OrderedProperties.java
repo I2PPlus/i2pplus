@@ -19,13 +19,12 @@ import java.util.Set;
  * Properties map that has its keySet ordered consistently (via the key's lexicographical ordering).
  * This is useful in environments where maps must stay the same order (e.g. for signature verification)
  * This does NOT support remove against the iterators / etc.
+ * Now unsorted until the keyset or entryset is requested.
+ * The class is unsynchronized.
+ * The keySet() and entrySet() methods return ordered sets.
+ * Others - such as the enumerations values(), keys(), propertyNames() - do not.
  *
  * @author zzz Rewritten
- *
- *         Now unsorted until the keyset or entryset is requested.
- *         The class is unsynchronized.
- *         The keySet() and entrySet() methods return ordered sets.
- *         Others - such as the enumerations values(), keys(), propertyNames() - do not.
  */
 public class OrderedProperties extends Properties {
 

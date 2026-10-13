@@ -54,7 +54,7 @@ class LookupDestJob extends JobImpl {
 
     /**
      * One of h or name non-null.
-     *
+     * <p>
      * For hash or b32 name, the dest will be returned if the LS can be found,
      * even if the dest uses unsupported crypto.
      *

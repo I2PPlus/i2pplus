@@ -20,13 +20,13 @@ import net.i2p.util.SimpleTimer2;
 /**
  * Small, stub version of PeerState2, for handling destroy acks
  * with possible tokens in them.
- *
+ * <p>
  * This is the "closing state" as defined in QUIC RFC-9000 section 10.2.1.
  * Unlike in QUIC, we do increment the packet number for every sent
  * destroy packet. Also, we retain the header and body decryption keys,
  * and we do process any tokens received.
  * We only respond when receiving data or a termination with a non-ack reason.
- *
+ * <p>
  * Does not extend PeerState2 or PeerState.
  *
  * @since 0.9.57

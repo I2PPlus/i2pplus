@@ -11,7 +11,7 @@ package net.i2p.data.i2np;
 
 /**
  * Base interface for all I2NP messages
- *
+ * <p>
  * Note: No longer extends DataStructure as of 0.9.48
  *
  * @author jrandom
@@ -64,7 +64,7 @@ public interface I2NPMessage {
      * Read the body into the data structures, after the initial type byte and
      * the uniqueId / expiration, using the current class's format as defined by
      * the I2NP specification
-     *
+     * <p>
      * Implementations must not read more than dataSize,
      * or throw I2NPMessageException or IndexOutOfBoundsException if they do.
      *

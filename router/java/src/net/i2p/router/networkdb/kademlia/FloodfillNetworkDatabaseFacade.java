@@ -441,7 +441,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
     /**
      * Whether sendStore should wide-flood the entry via flood() when this
      * router participates in floodfill.
-     *
+     * <p>
      * Floodfill participants wide-flood both RouterInfos (existing) and
      * LeaseSets so published LSs reach the routing-key-closest peers that
      * lookups query, not only the few peers chosen for the reply-based
@@ -462,7 +462,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
     /**
      * How many FloodfillStoreJob instances sendStore should schedule
      * alongside (or instead of) a wide flood.
-     *
+     * <p>
      * Floodfill + RouterInfo: 0 — wide flood only (existing; no reply-based job).
      * Floodfill + LeaseSet: 1 — wide flood covers propagation; this job
      * supplies reply-based success/failure callbacks and verify accounting.
@@ -880,9 +880,9 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
 
     /**
      * Lookup using exploratory tunnels.
-     *
+     * <p>
      * Caller should check negative cache and/or banlist before calling.
-     *
+     * <p>
      * Begin a kademlia style search for the key specified, which can take up to timeoutMs and
      * will fire the appropriate jobs on success or timeout (or if the kademlia search completes
      * without any match)
@@ -896,7 +896,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
 
     /**
      * Lookup using the client's tunnels.
-     *
+     * <p>
      * Caller should check negative cache and/or banlist before calling.
      * Every path either schedules a search or queues onFailedLookupJob —
      * never returns without notifying the caller.

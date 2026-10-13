@@ -14,7 +14,6 @@ import net.i2p.util.SystemVersion;
 
 /**
  * Implementation of the SHA-1 secure hash algorithm as specified in FIPS PUB 180-2.
- *
  * <p>The FIPS PUB 180-2 standard specifies four secure hash algorithms (SHA-1,
  * SHA-256, SHA-384 and SHA-512) for computing a condensed representation of
  * electronic data (message).  When a message of any length &lt; 2^^64 bits (for
@@ -24,7 +23,6 @@ import net.i2p.util.SystemVersion;
  * Secure hash algorithms are typically used with other cryptographic
  * algorithms, such as digital signature algorithms and keyed-hash message
  * authentication codes, or in the generation of random numbers (bits).</p>
- *
  * <p>The four hash algorithms specified in this "SHS" standard are called
  * secure because, for a given algorithm, it is computationally infeasible
  * 1) to find a message that corresponds to a given message digest, or 2)
@@ -33,11 +31,9 @@ import net.i2p.util.SystemVersion;
  * different message digest.  This will result in a verification failure when
  * the secure hash algorithm is used with a digital signature algorithm or a
  * keyed-hash message authentication algorithm.</p>
- *
  * <p>A "SHS change notice" adds a SHA-224 algorithm for interoperability,
  * which, like SHA-1 and SHA-256, operates on 512-bit blocks and 32-bit words,
  * but truncates the final digest and uses distinct initialization values.</p>
- *
  * <p><b>References:</b></p>
  * <ol>
  * <li> NIST FIPS PUB 180-2, "Secure Hash Signature Standard (SHS) with
@@ -101,7 +97,6 @@ public final class SHA1 extends MessageDigest implements Cloneable {
 
     /**
      * Creates a SHA1 object with default initial state.
-     *
      * <p><strong>Performance Note:</strong> For optimal performance, use {@link #getInstance()}
      * instead of direct construction. getInstance() will return the JVM's native
      * MessageDigest implementation if it's faster than the local implementation.</p>
@@ -116,7 +111,6 @@ public final class SHA1 extends MessageDigest implements Cloneable {
 
     /**
      * Returns the fastest available SHA-1 MessageDigest implementation.
-     *
      * <p>This method automatically selects between the local SHA1 implementation
      * and the JVM's native MessageDigest based on performance characteristics.
      * On most systems, the JVM's native implementation is preferred for speed.</p>
@@ -147,10 +141,10 @@ public final class SHA1 extends MessageDigest implements Cloneable {
 
     /**
      * Returns the digest length in bytes.
-     *
+     * <p>
      * Can be used to allocate your own output buffer when
      * computing multiple digests.
-     *
+     * <p>
      * Overrides the protected abstract method of
      * <code>java.security.MessageDigestSpi</code>.
      *
@@ -163,7 +157,7 @@ public final class SHA1 extends MessageDigest implements Cloneable {
 
     /**
      * Reset and then initialize the digest context.
-     *
+     * <p>
      * Overrides the protected abstract method of
      * <code>java.security.MessageDigestSpi</code>.
      */
@@ -195,7 +189,7 @@ public final class SHA1 extends MessageDigest implements Cloneable {
     /**
      * Updates the digest using the specified byte.
      * Requires internal buffering, and may be slow.
-     *
+     * <p>
      * Overrides the protected abstract method of
      * java.security.MessageDigestSpi.
      *
@@ -216,10 +210,10 @@ public final class SHA1 extends MessageDigest implements Cloneable {
     /**
      * Updates the digest using the specified array of bytes,
      * starting at the specified offset.
-     *
+     * <p>
      * Input length can be any size. May require internal buffering,
      * if input blocks are not multiple of 64 bytes.
-     *
+     * <p>
      * Overrides the protected abstract method of
      * java.security.MessageDigestSpi.
      *
@@ -275,10 +269,10 @@ public final class SHA1 extends MessageDigest implements Cloneable {
      * value as a byte[20] array. Once engineDigest has been called,
      * the engine will be automatically reset as specified in the
      * JavaSecurity MessageDigest specification.
-     *
+     * <p>
      * For faster operations with multiple digests, allocate your own
      * array and use engineDigest(byte[], int offset, int len).
-     *
+     * <p>
      * Overrides the protected abstract method of
      * java.security.MessageDigestSpi.
      *
@@ -299,7 +293,7 @@ public final class SHA1 extends MessageDigest implements Cloneable {
      * Completes the hash computation by performing final operations
      * such as padding. Once engineDigest has been called, the engine
      * will be automatically reset (see engineReset).
-     *
+     * <p>
      * Overrides the protected abstract method of
      * java.security.MessageDigestSpi.
      *
@@ -418,7 +412,7 @@ public final class SHA1 extends MessageDigest implements Cloneable {
      * Updates the digest using the specified array of bytes,
      * starting at the specified offset, but an implied length
      * of exactly 64 bytes.
-     *
+     * <p>
      * Requires no internal buffering, but assumes a fixed input size,
      * in which the required padding bytes may have been added.
      *
@@ -754,7 +748,7 @@ public final class SHA1 extends MessageDigest implements Cloneable {
 
     /**
      * Test the GNU and the JVM's implementations for speed
-     *
+     * <p>
      * Results: 2011-05 eeepc Atom
      *  <pre>
      *  JVM strlen  GNU ms  JVM  ms

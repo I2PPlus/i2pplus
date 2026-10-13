@@ -51,7 +51,7 @@ public class PublishLocalRouterInfoJob extends JobImpl {
      * Actually no, we need this soon if we are a new router or
      * other routers have forgotten about us, else
      * we can't build IB exploratory tunnels.
-     *
+     * <p>
      * First publish after netdb ready is now done via state machine
      * in Router.setNetDbReady(), so we probably don't need this anymore
      */

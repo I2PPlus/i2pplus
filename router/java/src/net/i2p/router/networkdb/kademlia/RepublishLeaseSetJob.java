@@ -25,7 +25,7 @@ import net.i2p.util.Log;
 
 /**
  * Periodically republishes a local LeaseSet to the network database.
- *
+ * <p>
  * Handles the lifecycle of lease set publication including:
  * <ul>
  * <li>Initial publication after sufficient uptime (deferred until target tunnels built)</li>
@@ -35,7 +35,7 @@ import net.i2p.util.Log;
  * <li>Floodfill verification after repeated failures</li>
  * <li>Cleanup when the client is no longer local</li>
  * </ul>
- *
+ * <p>
  * Thread-safe via concurrent maps across instances.
  */
 public class RepublishLeaseSetJob extends JobImpl {
@@ -66,13 +66,11 @@ public class RepublishLeaseSetJob extends JobImpl {
     /**
      * How long before a LeaseSet expires we start insisting the pool holds
      * genuinely fresh tunnels, rather than minting whatever is on hand.
-     *
      * <p>The mint used to be purely reactive: expiry came into range, we asked
      * the pool for a copy and signed whatever it held.  Since a LeaseSet's date
      * is the <em>earliest</em> lease end, one near-floor lease caps the whole
      * copy, which is how published sets ended up at 76-120s.  Starting the
      * supply check this far ahead leaves time to wait for a build.
-     *
      * <p>Three minutes is chosen against {@code EXPIRY_WINDOW} (4m) so the check
      * engages one interval before the renew path does, and against
      * {@link #EMERGENCY_REMINT_WINDOW} (2m) so there is a full minute of
@@ -90,7 +88,6 @@ public class RepublishLeaseSetJob extends JobImpl {
      * {@code TunnelPool.LEASE_MIN_REMAINING_MS}. A tunnel with less than this
      * remaining is refused for publication, so a LeaseSet minted from a healthy
      * pool cannot present below it.
-     *
      * <p>This is the correct yardstick for the anomaly check. An earlier
      * version compared against the ~600s design target, which is unreachable in
      * practice: a LeaseSet's expiry is the <em>minimum</em> across its leases, so
@@ -116,7 +113,6 @@ public class RepublishLeaseSetJob extends JobImpl {
     /**
      * Whether a LeaseSet expiry is short enough to indicate the inbound pool
      * could not supply a viable lease.
-     *
      * <p>The threshold is the pool's eligibility floor, not the design target:
      * presenting <em>at or below</em> the floor means no lease in the copy had
      * the minimum remaining life the pool requires to publish, which is the
@@ -606,7 +602,6 @@ public class RepublishLeaseSetJob extends JobImpl {
 
     /**
      * How long to hold off a further re-mint after one that changed nothing.
-     *
      * <p>A re-mint inside the emergency window is permitted even when it does not
      * extend the stored copy, because a thin copy the pool can still serve beats
      * letting the LeaseSet die. That exemption is what makes the loop possible:
@@ -615,7 +610,6 @@ public class RepublishLeaseSetJob extends JobImpl {
      * emergency window and re-arms immediately. Measured in production that was
      * roughly one re-mint per second per pool, all of it re-advertising the same
      * two aging leases.
-     *
      * <p>The hold-off is deliberately not a fixed interval. It is half the time
      * the stored copy has left, so however close to expiry the copy is, a
      * further attempt is always scheduled before it can lapse. A fixed floor
@@ -625,7 +619,6 @@ public class RepublishLeaseSetJob extends JobImpl {
      * constant is right for both. Five minutes, the obvious choice, would let a
      * sixty-second copy lapse unrepublished for four minutes, which is the exact
      * outage the emergency path exists to prevent.
-     *
      * <p>Always strictly less than {@code timeUntilExpiry} for any positive
      * value, which is the invariant that matters: holding off can never be the
      * reason a LeaseSet lapses unrepublished.
@@ -661,7 +654,7 @@ public class RepublishLeaseSetJob extends JobImpl {
      * keep the local LeaseSet perpetually close to expiry.  Schedules the
      * successor based on the fresh copy's expiry so a thin extension is
      * re-flooded before it can die.
-     *
+     * <p>
      * Re-mints are gated on the pool actually holding enough viable tunnels:
      * a pool at its target count with aging leases never rebuilds on its own
      * (the pool only replaces within its proactive expiry window), so an
@@ -677,7 +670,7 @@ public class RepublishLeaseSetJob extends JobImpl {
      * re-mint a different earliest lease date, so the floodfill accepts and
      * re-floods it, and a thin copy the pool can still serve beats letting
      * the stored copy die while the deferral waits for capacity.
-     *
+     * <p>
      * Inside the emergency window ({@link #EMERGENCY_REMINT_WINDOW}) the
      * required-count gate is skipped entirely: any single viable lease in the
      * pool triggers an immediate re-mint rather than a deferral.  This is the
@@ -690,7 +683,6 @@ public class RepublishLeaseSetJob extends JobImpl {
      */
     /**
      * Whether two lease sets advertise exactly the same tunnels.
-     *
      * <p>Compares tunnel ids as a set, so a re-mint that merely reorders the
      * same leases is recognised as a no-op. This is the loop's true cause: inside
      * the emergency window the viability gate is skipped, so a pool that cannot
@@ -896,14 +888,12 @@ public class RepublishLeaseSetJob extends JobImpl {
      */
     /**
      * Whether the pool can sign anything at all right now.
-     *
      * <p>Deliberately a starvation test, not a sufficiency test. Being below the
      * target lease count is an ordinary, already-handled condition: {@link
      * #shouldRemint} defers on it and falls back to a thin copy after a bounded
      * number of attempts. Re-deciding it here with a second threshold and a
      * second counter meant the two mechanisms shadowed each other, and a pool
      * that was merely one lease short could defer indefinitely.
-     *
      * <p>So the question here is strictly "is there anything publishable at
      * all", read from the pool's own LeaseSet -- the same input the surrounding
      * decision already uses -- rather than from raw tunnel state.

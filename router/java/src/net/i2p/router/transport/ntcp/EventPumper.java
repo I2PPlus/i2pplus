@@ -50,11 +50,9 @@ import net.i2p.util.TryCache;
 /**
  * The main NTCP NIO event loop thread responsible for high-throughput, low-latency
  * handling of inbound and outbound NTCP connections using non-blocking I/O.
- *
  * <p>This class is optimized for minimal overhead and maximum event dispatch efficiency.
  * All hot paths (e.g., {@link #processRead}, {@link #processWrite}, {@link #runDelayedEvents})
  * avoid synchronization, allocations, and unnecessary syscalls.
- *
  * <p>Key performance characteristics:
  * <ul>
  *   <li>Fixed 200ms selector timeout for consistent latency</li>
@@ -167,7 +165,7 @@ class EventPumper implements Runnable {
     /**
      * Do we use direct buffers for reading? Default false.
      * NOT recommended as we don't keep good track of them so they will leak.
-     *
+     * <p>
      * Unsupported, set USE_DIRECT above.
      *
      * @see java.nio.ByteBuffer
@@ -185,7 +183,6 @@ class EventPumper implements Runnable {
 
     /**
      * Fixed size class for NTCP2 data-phase write frames.
-     *
      * <p>Each frame carries up to {@link NTCPConnection#BUFFER_SIZE} payload bytes
      * plus the 16-byte MAC (see {@link OutboundNTCP2State#MAC_SIZE}) and a 2-byte
      * length header. The buffer must be a constant size for pooling: the previous
@@ -213,7 +210,6 @@ class EventPumper implements Runnable {
     /**
      * Acquire a fixed-size NTCP2 frame buffer for the next data-phase frame.
      * High-frequency path in the writer threads.
-     *
      * <p>The caller writes the frame into the returned buffer and hands it to the
      * connection via {@code wantsWrite(data, 0, len)}. The pumper later returns it
      * to the pool via {@link #releaseWriteBuf(byte[])} once the frame has fully
@@ -231,7 +227,6 @@ class EventPumper implements Runnable {
 
     /**
      * Return an NTCP2 frame buffer to the pool.
-     *
      * <p>Only buffers of the exact {@link #WRITE_BUFSIZE} class are accepted, so
      * handshake and termination buffers that happen to drain through the same write
      * path never enter this pool. The buffer is discarded, not pooled, when the
@@ -506,7 +501,7 @@ class EventPumper implements Runnable {
 
     /**
      * Convert a raw window counter into a per-second rate.
-     *
+     * <p>
      * Both pumper loop stats describe rates ("loops/s"), so both must be divided by
      * the window length. Reporting the raw idle count instead made that series read
      * about five times too large on the five-second window, which also made it
@@ -536,7 +531,7 @@ class EventPumper implements Runnable {
 
     /**
      * Publish both pumper loop rates, normalised by the same window.
-     *
+     * <p>
      * Both stats are documented as a rate, so both are divided here rather than at the
      * call site. Publishing them from one place is deliberate: the original defect was a
      * raw idle count published beside a normalised total, which no test of either helper
@@ -953,7 +948,7 @@ class EventPumper implements Runnable {
 
     /**
      * Refresh the cached snapshot of the one-minute inbound accept rate.
-     *
+     * <p>
      * The expensive part — aggregating the {@link Rate} buckets — requires the
      * global Rate monitor and only happens once per refresh interval; every
      * accepted connection in between reads the four volatile fields lock-free.
@@ -994,7 +989,7 @@ class EventPumper implements Runnable {
      * Decide whether an inbound NTCP connection should be probabilistically
      * rejected because the accept rate is spiking well above the recent baseline
      * while the router is already heavily loaded with connections.
-     *
+     * <p>
      * This is the pure decision half of {@link #shouldAllowInboundEstablishment()}.
      * It performs no locking and takes raw counters instead of a {@link Rate}, so
      * the hot accept path never blocks on the global Rate monitor. The arithmetic
@@ -1416,7 +1411,7 @@ class EventPumper implements Runnable {
 
     /**
      * Try to write the queued buffers for the connection.
-     *
+     * <p>
      * Single-writer contract: this must only be called on the pumper thread
      * (via processWrite(SelectionKey) for OP_WRITE events). Producer threads
      * call wantsWrite() to register interest; they never write to the socket
@@ -1497,7 +1492,6 @@ class EventPumper implements Runnable {
      * the drain continues; a zero-byte write means the socket buffer is full and the
      * caller must keep OP_WRITE interest, unless the queue is empty and fully drained,
      * in which case interest can be dropped.
-     *
      * <p>Buffers are returned to the pool once their frame is fully flushed. Only
      * the fixed-size NTCP2 frame class re-enters the pool; smaller handshake and
      * termination buffers are left alone. The release happens on the pumper thread
@@ -1537,7 +1531,6 @@ class EventPumper implements Runnable {
 
     /**
      * Return a fully drained NTCP2 frame buffer to the pool.
-     *
      * <p>Invoked from {@link #writeOneBuffer} on the pumper thread right after the
      * buffer leaves the connection's write queue. Only arrays of the pooled
      * {@link #WRITE_BUFSIZE} class are returned; everything else (handshake,
@@ -1701,7 +1694,6 @@ class EventPumper implements Runnable {
      * configuration misuse (blocking-mode channel), invalid arguments, or an
      * internal defect - only tears down the local connection so an internal bug
      * never blames (and blacks out) a healthy remote peer.
-     *
      * <p>Classified by exception type rather than class-name substrings: name
      * matching silently misreads e.g. NotYetConnectedException as OTHER and
      * blames a peer for a local IllegalBlockingModeException.

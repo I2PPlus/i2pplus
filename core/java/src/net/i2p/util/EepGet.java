@@ -459,15 +459,15 @@ public class EepGet {
 
     /**
      * Command-line entry point for EepGet.
-     *
+     * <p>
      * Usage: eepget [-p 127.0.0.1:4444 | -c] [-n #retries] [-e etag] [-o outputFile]
      * [-t inactivityTimeout] [-u username] [-x password]
      * [-h name=value] [-m markSize] [-l lineLen] url
-     *
+     * <p>
      * All timeouts are in seconds. The header timeout is not settable from the
      * command line; it comes from the eepget.connectTimeout property, and the
      * -t option sets the inactivity timeout instead (eepget.inactivityTimeout).
-     *
+     * <p>
      * As of 0.9.45, supports https and redirect to https
      *
      * @param args command-line arguments, parsed by this method against the
@@ -1079,7 +1079,7 @@ public class EepGet {
 
     /**
      * Blocking fetch, returning true if the URL was retrieved, false if all retries failed.
-     *
+     * <p>
      * Uses the timeouts configured when this instance was created: the header
      * timeout defaults to {@link #DEFAULT_CONNECT_TIMEOUT} (90 seconds), the total
      * timeout to none, and the inactivity timeout to
@@ -1093,7 +1093,7 @@ public class EepGet {
      * Blocking fetch, timing out individual attempts if the HTTP response headers
      * don't come back in the time given.  If the timeout is zero or less, this will
      * wait indefinitely.
-     *
+     * <p>
      * Total timeout default none, inactivity timeout default
      * {@link #DEFAULT_INACTIVITY_TIMEOUT} (5 minutes).
      *
@@ -1106,7 +1106,7 @@ public class EepGet {
 
     /**
      * Blocking fetch.
-     *
+     * <p>
      * The three timeouts are independent: the header timeout covers the wait for
      * the response status line and headers of each attempt, the total timeout
      * covers the whole operation including retries and backoff, and the
@@ -2211,7 +2211,7 @@ public class EepGet {
     /**
      * Handles a redirect or proxy-auth response, either transferring control to a new
      * (possibly https) fetch or fixing up the URL and retrying.
-     *
+     * <p>
      * Also reached after a 407 proxy-auth response, to retry through the proxy.
      *
      * @param timeout the fetch timeout, may be null
@@ -2968,7 +2968,7 @@ public class EepGet {
      * As of 0.9.14, If name is If-None-Match or If-Modified-Since,
      * this will replace the etag or last-modified value given in the constructor.
      * Note that headers may be subsequently modified or removed in the I2PTunnel HTTP Client proxy.
-     *
+     * <p>
      * In proxied SSLEepGet, these headers are sent to the remote server, NOT the proxy.
      *
      * @param name header name
@@ -3047,12 +3047,12 @@ public class EepGet {
 
     /**
      * Parse the args in an authentication header.
-     *
+     * <p>
      * Modified from LoadClientAppsJob.
      * All keys are mapped to lower case.
      * Double quotes around values are stripped.
      * Ref: RFC 2617
-     *
+     * <p>
      * Public for I2PTunnelHTTPClientBase; use outside of tree at own risk, subject to change or removal
      *
      * @param args non-null, starting after "Digest " or "Basic "

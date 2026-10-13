@@ -15,7 +15,7 @@ import net.i2p.util.Log;
  * This offset will ideally be periodically updated so as to serve as the difference
  * between the local computer's current time and the time as known by some reference
  * (such as an NTP synchronized clock).
- *
+ * <p>
  * RouterClock is a subclass of Clock with access to router transports.
  * Configuration permitting, it will block clock offset changes
  * which would increase peer clock skew.
@@ -278,10 +278,10 @@ public class RouterClock extends Clock {
      * Do really simple clock slewing, like NTP but without jitter prevention.
      * Slew the clock toward the desired offset, but only up to a maximum slew rate,
      * and never let the clock go backwards because of slewing.
-     *
+     * <p>
      * Take care to only access the volatile variables once for speed and to
      * avoid having another thread change them
-     *
+     * <p>
      * This is called about a zillion times a second, so we can do the slewing right
      * here rather than in some separate thread to keep it simple.
      * Avoiding backwards clocks when updating in a thread would be hard too.

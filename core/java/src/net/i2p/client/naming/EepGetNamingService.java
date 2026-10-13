@@ -18,18 +18,18 @@ import net.i2p.util.EepGet;
 /**
  * A network-based naming service using HTTP, with in-memory caching.
  * Fetches from one or more remote (in-i2p) CGI services using HTTP GET.
- *
+ * <p>
  * The remote HTTP service takes a CGI parameter and must return (only) the
  * 516-byte Base64 destination, or hostname=dest.
  * A trailing \n or \r\n is acceptable.
- *
+ * <p>
  * Should be used from MetaNamingService, after HostsTxtNamingService.
  * Cannot be used as the only NamingService! Be sure any naming service hosts
  * are in hosts.txt.
  * Supports caching, b32, and b64.
- *
+ * <p>
  * Sample config to put in configadvanced.jsp (restart required):
- *
+ * <p>
  * i2p.naming.impl=net.i2p.client.naming.MetaNamingService
  * i2p.nameservicelist=net.i2p.client.naming.HostsTxtNamingService,net.i2p.client.naming.EepGetNamingService
  * i2p.naming.eepget.list=http://namingservice.i2p/cgi-bin/lkup.cgi?host=,http://i2host.i2p/cgi-bin/i2hostquery?

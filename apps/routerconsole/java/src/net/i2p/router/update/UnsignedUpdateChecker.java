@@ -15,10 +15,10 @@ import net.i2p.util.SystemVersion;
 /**
  *  Does a simple EepHead to get the last-modified header.
  *  Moved from NewsFetcher and turned into an UpdateTask.
- *
+ * <p>
  *  Overrides UpdateRunner for convenience, does not use super's Eepget StatusListener
  *
- *  @since 0.9.4
+ * @since 0.9.4
  */
 class UnsignedUpdateChecker extends UpdateRunner {
     private final long _ms;

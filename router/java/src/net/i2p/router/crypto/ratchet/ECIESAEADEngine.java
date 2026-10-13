@@ -45,7 +45,7 @@ import net.i2p.util.Log;
 
 /**
  * ECIES+AEAD encryption engine providing New Session, New Session Reply, and Existing Session message handling
- *
+ * <p>
  * No, this does not extend ElGamalAESEngine or AEADEngine or CryptixAEADEngine.
  *
  * @since 0.9.44
@@ -111,7 +111,7 @@ public final class ECIESAEADEngine {
     /**
      * Caller MUST call startup() to get threaded generation.
      * Will still work without, will just generate inline.
-     *
+     * <p>
      * startup() is called from RatchetSKM constructor so it's deferred until we need it.
      * @param ctx the router context used to obtain the log, stats and sub-engines
      */
@@ -186,7 +186,7 @@ public final class ECIESAEADEngine {
      * and using tags from the specified key manager.
      * This works according to the
      * ECIES+AEAD algorithm in the data structure spec.
-     *
+     * <p>
      * Warning - use the correct SessionKeyManager. Clients should instantiate their own.
      * Clients using I2PAppContext.sessionKeyManager() may be correlated with the router,
      * unless you are careful to use different keys.
@@ -529,7 +529,7 @@ public final class ECIESAEADEngine {
 
     /**
      * Scenario 1: New Session Message
-     *
+     * <p>
      * Begin with 80 bytes, ECIES encrypted, containing:
      * <pre>
      * - 32 byte Elligator2 key
@@ -697,7 +697,6 @@ public final class ECIESAEADEngine {
 
     /**
      * Scenario 1A: New Session Message Anonymous
-     *
      * <pre>
      * - 32 byte ephemeral key (NOT Elligator2)
      * - payload (7 bytes minimum for DateTime block)
@@ -802,7 +801,7 @@ public final class ECIESAEADEngine {
 
     /**
      * Scenario 2: New Session Reply Message
-     *
+     * <p>
      * Begin with 56 bytes, containing:
      * <pre>
      * - 8 byte SessionTag
@@ -968,13 +967,12 @@ public final class ECIESAEADEngine {
 
     /**
      * Scenario 3: Existing Session Message
-     *
      * <pre>
      * - 8 byte SessionTag
      * - payload
      * - 16 byte MAC
      * </pre>
-     *
+     * <p>
      * If anything doesn't match up in decryption, it returns null
      *
      * @param tag 8 bytes for ad, same as first 8 bytes of data
@@ -1170,7 +1168,7 @@ public final class ECIESAEADEngine {
 
     /**
      * Scenario 1: New Session Message
-     *
+     * <p>
      * Begin with 80 bytes, ECIES encrypted, containing:
      * <pre>
      * - 32 byte Elligator2 key
@@ -1254,7 +1252,6 @@ public final class ECIESAEADEngine {
 
     /**
      * Scenario 1A: New Session Message from an anonymous source.
-     *
      * <pre>
      * - 32 byte ephemeral key (NOT Elligator2)
      * - payload
@@ -1296,7 +1293,7 @@ public final class ECIESAEADEngine {
 
     /**
      * Scenario 2: New Session Reply Message
-     *
+     * <p>
      * Begin with 56 bytes, containing:
      * <pre>
      * - 8 byte SessionTag
@@ -1382,7 +1379,6 @@ public final class ECIESAEADEngine {
 
     /**
      * Scenario 3: Existing Session Message
-     *
      * <pre>
      * - 8 byte SessionTag
      * - payload
@@ -1413,10 +1409,9 @@ public final class ECIESAEADEngine {
      * Create an Existing Session Message to an anonymous target
      * using the given session key and tag, for netdb DSM/DSRM replies.
      * Called from MessageWrapper.
-     *
+     * <p>
      * No datetime, no next key, no acks, no ack requests.
      * n=0, ad=null.
-     *
      * <pre>
      * - 8 byte SessionTag
      * - payload
@@ -1543,7 +1538,6 @@ public final class ECIESAEADEngine {
         }
         /**
          * Process an options field from the payload.
-         *
          * <p>Intentionally a log-only no-op. This router never emits an
          * OPTIONS block (no option bytes are negotiated in
          * {@code createPayload()}) and no local state transition, tag,
@@ -1595,7 +1589,6 @@ public final class ECIESAEADEngine {
         }
         /**
          * Process a termination field from the payload.
-         *
          * <p>Intentionally a log-only no-op. Ratchet sessions here end by
          * ratchet key rotation or by the session expiring in
          * {@code RatchetSKM.aggressiveExpire()}, never by a peer-sent
@@ -1611,7 +1604,6 @@ public final class ECIESAEADEngine {
         }
         /**
          * Process a PN field from the payload.
-         *
          * <p>Intentionally a log-only no-op. The message number block is an
          * optional advisory hint for out-of-order reassembly; ratchet
          * decryption here is authenticated per message and does not dedupe by

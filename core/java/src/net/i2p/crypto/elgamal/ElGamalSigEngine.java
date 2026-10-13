@@ -15,9 +15,8 @@ import java.security.SignatureException;
 
 /**
  * ElG signatures with SHA-256
- *
+ * <p>
  * ref: <a href=https://en.wikipedia.org/wiki/ElGamal_signature_scheme>https://en.wikipedia.org/wiki/ElGamal_signature_scheme</a>
- *
  *
  * @deprecated unused, unsupported by SigType or SigUtil, may need constant-time fixes
  * @since 0.9.25

@@ -52,18 +52,18 @@ class BuildReplyHandler {
      * This contains the result of decrypting the build request
      * or reply record, including the decrypted properties field,
      * if present.
-     *
+     * <p>
      * For requests, the code is 0 if the decrypt was successful
      * or -1 if the record was not found or the decrypt failed.
-     *
+     * <p>
      * For replies, the code is from the reply record, 0-255.
      * The code is usually 0 for ACCEPT or 30 for REJECT_BANDWIDTH.
      * The code is -1 if the record was not found or the decrypt failed.
-     *
+     * <p>
      * The Properties is usually null, but if non-null, will contain
      * bandwidth request/reply options as specified in proposal 168,
      * or other options to be defined later.
-     *
+     * <p>
      * If the code is -1, or it's a non-ECIES build record,
      * or the properties field in the record was empty,
      * the returned properties here will be null.
@@ -89,7 +89,7 @@ class BuildReplyHandler {
     /**
      * Decrypt the tunnel build reply records.  This overwrites the contents of the reply.
      * Thread safe (no state).
-     *
+     * <p>
      * Note that this layer-decrypts the build records in-place.
      * Do not call this more than once for a given message.
      *
@@ -152,7 +152,7 @@ class BuildReplyHandler {
 
     /**
      * Decrypt the record (removing the layers of reply encryption) and read out the status
-     *
+     * <p>
      * Note that this layer-decrypts the build records in-place.
      * Do not call this more than once for a given message.
      * Do not call for blank hops.

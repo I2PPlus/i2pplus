@@ -19,7 +19,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Precalculate the Y and K for ElGamal encryption operations.
- *
+ * <p>
  * This class precalcs a set of values on its own thread, using those transparently
  * when a new instance is created.  By default, the minimum threshold for creating
  * new values for the pool is 50, and the max pool size is 200 (30 and 100 on a
@@ -30,11 +30,11 @@ import java.util.concurrent.atomic.AtomicInteger;
  * that the CPU isn't hosed during startup.  These three parameters are controlled by
  * java environmental variables and can be adjusted via:
  * -Dcrypto.yk.precalc.min=40 -Dcrypto.yk.precalc.max=100 -Dcrypto.yk.precalc.delay=60000
- *
+ * <p>
  * (delay is milliseconds)
- *
+ * <p>
  * To disable precalculation, set min to 0
- *
+ * <p>
  * Tradeoff: the pool now normally sits near the minimum rather than near the
  * maximum, so a sustained burst can drain it and cost a foreground modular
  * exponentiation per message until the precalc thread catches up.  Raise

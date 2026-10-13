@@ -16,10 +16,10 @@ public interface I2PSessionMuxedListener extends I2PSessionListener {
      * Will be called only if you register via
      * setSessionListener() or addSessionListener().
      * And if you are doing that, just use I2PSessionListener.
-     *
+     * <p>
      * If you register via addSessionListener(),
      * this will be called only for the proto(s) and toport(s) you register for.
-     *
+     * <p>
      * After this is called, the client should call receiveMessage(msgId), or
      * discardMessage(msgId) to drop it without decompressing it. A message the
      * client never claims is dropped by the session's unclaimed-message sweep
@@ -36,15 +36,15 @@ public interface I2PSessionMuxedListener extends I2PSessionListener {
 
     /**
      * Instruct the client that the given session has received a message
-     *
+     * <p>
      * Will be called only if you register via addMuxedSessionListener().
      * Will be called only for the proto(s) and toport(s) you register for.
-     *
+     * <p>
      * After this is called, the client should call receiveMessage(msgId), or
      * discardMessage(msgId) to drop it without decompressing it. A message the
      * client never claims is dropped by the session's unclaimed-message sweep
      * (every 60 seconds), which logs a warning naming the message ID.
-     *
+     * <p>
      * Only one listener is called for a given message, even if more than one
      * have registered. See I2PSessionDemultiplexer for details.
      *
@@ -62,7 +62,7 @@ public interface I2PSessionMuxedListener extends I2PSessionListener {
     /** Instruct the client that the session specified seems to be under attack
      * and that the client may wish to move its destination to another router.
      * All registered listeners will be called.
-     *
+     * <p>
      * Unused. Not fully implemented.
      *
      * @param session session to report abuse to

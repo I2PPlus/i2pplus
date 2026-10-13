@@ -25,7 +25,7 @@ import net.i2p.data.router.RouterInfo;
 /**
  * Defines the message a router sends to another router to test the network
  * database reachability, as well as the reply message sent back.
- *
+ * <p>
  * TODO: Don't decompress and recompress RouterInfos at the OBEP and IBGW.
  * Could this even change the message length or corrupt things?
  *

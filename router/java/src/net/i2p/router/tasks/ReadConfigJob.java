@@ -19,10 +19,10 @@ import net.i2p.util.Log;
  * This isn't advertised as a feature,
  * but it could be used, for example, to change bandwidth limits
  * at certain times of day.
- *
+ * <p>
  * Unfortunately it will also read the file back in every time the
  * router writes it.
- *
+ * <p>
  * We must keep this enabled, as it's the only way for people
  * to set routerconsole.advanced=true without restarting.
  */
@@ -59,17 +59,17 @@ public class ReadConfigJob extends JobImpl {
 
     /**
      * Check for and reload router configuration if file has changed.
-     *
+     * <p>
      * This job runs periodically to detect external configuration changes.
      * If the router.config file has been modified since last check, it will
      * be reloaded and the last read timestamp updated.
-     *
+     * <p>
      * The check interval varies based on console mode:
      * <ul>
      *   <li>Normal mode: every 60 seconds</li>
      *   <li>Advanced mode: every 90 seconds</li>
      * </ul>
-     *
+     * <p>
      * Note: This will also trigger when the router itself writes the config file,
      * but that's acceptable behavior.
      */

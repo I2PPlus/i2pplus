@@ -44,18 +44,17 @@ import net.i2p.data.DataHelper;
 /**
  * <p>BigInteger that takes advantage of the jbigi library for the modPow operation,
  * which accounts for a massive segment of the processing cost of asymmetric crypto.
- *
+ * <p>
  * The jbigi library itself is basically just a JNI wrapper around the
  * GMP library - a collection of insanely efficient routines for dealing with
  * big numbers.</p>
- *
+ * <p>
  * There are three environmental properties for configuring this component: <ul>
  * <li><b>jbigi.enable</b>: whether to use the native library (defaults to "true")</li>
  * <li><b>jbigi.impl</b>: select which resource to use as the native implementation</li>
  * <li><b>jbigi.ref</b>: the file specified in this parameter may contain a resource
  * name to override jbigi.impl (defaults to "jbigi.cfg")</li>
  * </ul>
- *
  * <p>If jbigi.enable is set to false, this class won't even attempt to use the
  * native library, but if it is set to true (or is not specified), it will first
  * check the platform specific library path for the "jbigi" library, as defined by
@@ -67,7 +66,6 @@ import net.i2p.data.DataHelper;
  * described below.  If there is still no matching resource, or if that resource
  * is not a valid OS/architecture specific library, the NativeBigInteger will
  * revert to using the pure java implementation.</p>
- *
  * <p>When attempting to load the native implementation as a resource from the CLASSPATH,
  * the NativeBigInteger will make use of the jcpuid component which runs some assembly
  * code to determine the current CPU implementation, such as "pentium4" or "zen3".
@@ -76,7 +74,6 @@ import net.i2p.data.DataHelper;
  * If that resource exists, we use it.  If it doesn't (or the jcpuid component fails),
  * we try a generic native implementation using "none" for the CPU e.g.
  * "net/i2p/util/jbigi-windows-none_64.dll".</p>
- *
  * <p>Running this class by itself does a basic unit test and benchmarks the
  * NativeBigInteger.modPow vs. the BigInteger.modPow by running a 2Kbit op 100
  * times.  At the end of each test, if the native implementation is loaded this will
@@ -86,7 +83,6 @@ import net.i2p.data.DataHelper;
  * java run time:          68067ms (673ms each)
  * native = 8.947066860593239% of pure java time
  * </pre>
- *
  * <p>If the native implementation is not loaded, it will start by saying:</p>
  * <pre>WARN: Native BigInteger library jbigi not loaded - using pure java</pre>
  * <p>Then go on to run the test, finally outputting:</p>
@@ -113,10 +109,10 @@ public class NativeBigInteger extends BigInteger {
      * Do we want to dump some basic success/failure info to stderr during
      * initialization?  this would otherwise use the Log component, but this makes
      * it easier for other systems to reuse this class
-     *
+     * <p>
      * Well, we really want to use Log so if you are one of those "other systems"
      * then comment out the I2PAppContext usage below.
-     *
+     * <p>
      * Set to false if not in router context, so scripts using TrustedUpdate
      */
     private static boolean _doLog = System.getProperty("jbigi.dontLog") == null
@@ -190,12 +186,12 @@ public class NativeBigInteger extends BigInteger {
 
     /**
      * CPU architecture compatibility lists, in order of preference.
-     *
+     * <p>
      * The list is organized by the chronological evolution of architectures.
      * Totally unrelated architectures have separate lists. Sequences of
      * architectures that aren't backwards compatible (performance wise) for
      * some reasons have also been separated out.
-     *
+     * <p>
      * Really this could be represented by a DAG, but the benefits don't
      * outweigh the implementation time.
      */
@@ -711,7 +707,6 @@ public class NativeBigInteger extends BigInteger {
      * If it can find a custom built jbigi.dll / libjbigi.so, it'll use that.  Otherwise
      * it'll try to look in the classpath for the correct library (see loadFromResource).
      * If the user specifies -Djbigi.enable=false it'll skip all of this.</p>
-     *
      * <pre>
      * Load order (using linux naming with cpu type "xxx")
      * - filesystem libjbigi.so
@@ -842,7 +837,6 @@ public class NativeBigInteger extends BigInteger {
      * files "win-686", "win-athlon", "freebsd-p4", "linux-p3", where each
      * of those files contain the correct binary file for a native library (e.g.
      * windows DLL, or a *nix .so).  </p>
-     *
      * <p>This is a pretty ugly hack, using the general technique illustrated by the
      * onion FEC libraries.  It works by pulling the resource, writing out the
      * byte stream to a temporary file, loading the native library from that file.

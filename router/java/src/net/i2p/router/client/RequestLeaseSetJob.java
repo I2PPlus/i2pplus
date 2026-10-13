@@ -55,7 +55,6 @@ class RequestLeaseSetJob extends JobImpl {
     private static final long TIMEOUT_JITTER_MS = 2000;
     /**
      * Default wait for the client to make room in its I2CP queue before giving up.
-     *
      * <p>Deliberately far shorter than the request timeout this failure would otherwise
      * cost: a client that is draining at all has usually freed a slot within a few
      * dispatcher passes, and a client that is wedged should be failed quickly so the

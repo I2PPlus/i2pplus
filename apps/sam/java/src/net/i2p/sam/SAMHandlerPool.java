@@ -31,7 +31,7 @@ import net.i2p.util.Log;
 
 /**
  * Shared NIO selector-based handler pool for SAM v3 control connections.
- *
+ * <p>
  * Replaces the thread-per-connection model for SAM v3 handlers with a single
  * selector thread reading all handler sockets and dispatching complete command
  * lines inline. Commands are processed serially per-connection in the order

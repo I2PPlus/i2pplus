@@ -25,12 +25,9 @@ import net.i2p.util.RandomSource;
 
 /**
  * Handler for DatabaseLookupMessage received on floodfills.
- *
  * <p>This class verifies incoming lookup messages, applies throttling and banning policies,
  * and builds appropriate jobs for accepted lookups. Unacceptable lookups are logged and dropped.</p>
- *
  * <p>It tracks lookup statistics such as received, dropped, handled, and matched lookups via the statManager.</p>
- *
  * <p>Supports floodfill and non-floodfill router modes, with special handling for floodfill peers and
  * exploratory lookups.</p>
  */
@@ -74,7 +71,6 @@ public class FloodfillDatabaseLookupMessageHandler implements HandlerJobBuilder 
 
     /**
      * Creates a job to handle an incoming DatabaseLookupMessage, or returns null if the lookup should be dropped.
-     *
      * <p>This method performs several checks, including: floodfill participation, sender identity,
      * whether the lookup is for this router, throttling, banning, and lookup type compatibility.
      * Logs details about accepted or dropped lookups and updates statistics.</p>

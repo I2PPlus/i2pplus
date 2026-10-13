@@ -7,13 +7,11 @@ import net.i2p.I2PAppContext;
  * (or more) sides haven't closed the stream yet.  In addition, the
  * stream must be using the BULK profile, rather than the INTERACTIVE
  * profile.</p>
- *
  * <h2>Entry conditions:</h2>
  * <ul>
  * <li>Packets sent and ACKs received.</li>
  * <li>At least one direction is not closed</li>
  * </ul>
- *
  * <h2>Events:</h2>
  * <ul>
  * <li>Packets received (which may or may not ACK the ones sent)</li>
@@ -22,7 +20,6 @@ import net.i2p.I2PAppContext;
  * <li>Message sending fails (error talking to the session)</li>
  * <li>Message sending fails (too many resends)</li>
  * </ul>
- *
  * <h2>Next states:</h2>
  * <ul>
  * <li>{@link SchedulerClosing closing} - after both sending and receiving a CLOSE</li>

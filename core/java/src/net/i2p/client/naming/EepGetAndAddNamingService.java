@@ -16,17 +16,17 @@ import java.util.Locale;
 /**
  * Simple extension to EepGetNamingService to append what we find to hosts.txt,
  * so we only have to do an EepGet query once.
- *
+ * <p>
  * Note that there is little protection - there are a lot of validity checks in addressbook that are
  * not included here.
- *
+ * <p>
  * MUST be used from MetaNamingService, after HostsTxtNamingService.
  * Cannot be used as the only NamingService! Be sure any naming service hosts
  * are in hosts.txt. If this isn't after HostsTxtNamingService, you will
  * clog up your hosts.txt with duplicate entries.
- *
+ * <p>
  * Sample config to put in configadvanced.jsp (restart required):
- *
+ * <p>
  * i2p.naming.impl=net.i2p.client.naming.MetaNamingService
  * i2p.nameservicelist=net.i2p.client.naming.HostsTxtNamingService,net.i2p.client.naming.EepGetAndAddNamingService
  * i2p.naming.eepget.list=http://stats.i2p/cgi-bin/hostquery.cgi?a=,http://i2host.i2p/cgi-bin/i2hostquery?

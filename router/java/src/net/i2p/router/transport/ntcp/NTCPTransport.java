@@ -59,13 +59,13 @@ import net.i2p.util.VersionComparator;
 
 /**
  * Non-blocking TCP (NTCP) transport implementation for I2P.
- *
+ * <p>
  * This class provides the primary TCP-based transport for I2P
  * communication using Java NIO for non-blocking I/O operations.
  * It supports both NTCP 1 and NTCP 2 protocols with
  * advanced features like connection pooling, bandwidth management,
  * and sophisticated peer management.
- *
+ * <p>
  * <strong>Protocol Features:</strong>
  * <ul>
  * <li>NTCP 1: Basic encrypted TCP transport</li>
@@ -75,7 +75,7 @@ import net.i2p.util.VersionComparator;
  * <li>IPv4 and IPv6 support</li>
  * <li>Automatic protocol negotiation</li>
  * </ul>
- *
+ * <p>
  * <strong>Architecture:</strong>
  * <ul>
  * <li>Non-blocking I/O with NIO channels</li>
@@ -84,7 +84,7 @@ import net.i2p.util.VersionComparator;
  * <li>Connection state machines for establishment</li>
  * <li>Peer reputation and cost-based routing</li>
  * </ul>
- *
+ * <p>
  * <strong>Connection Management:</strong>
  * <ul>
  * <li>Multiple bid tiers (fast, slow, high-cost)</li>
@@ -715,7 +715,6 @@ public class NTCPTransport extends TransportImpl {
 
     /**
      * Whether the message is too large for NTCP2 to carry.
-     *
      * <p>The passed-in dataSize assumes a 16-byte header; NTCP2 uses a 9-byte
      * header, so there are 7 bytes to spare over the NTCP2 maximum.
      *
@@ -816,7 +815,6 @@ public class NTCPTransport extends TransportImpl {
 
     /**
      * Whether a DatabaseStoreMessage stored our own RouterInfo under our own key.
-     *
      * <p>Such a store is looped-back control info: the router already has its own
      * RouterInfo, so the message must not be handed to the send pipeline as data;
      * only the optional flood spike (see {@link #isRouterInfoStoreFlood}) is relevant.
@@ -1074,14 +1072,12 @@ public Collection<NTCPConnection> getPeers() {
 
   /**
    * Round trip time measured for this peer during the NTCP2 handshake.
-   *
    * <p>Answers from the session itself rather than from any estimate, so the
    * value has exactly one source: {@link NTCPConnection#getEstimatedRTT()},
    * written once when the handshake completes. Previously this inherited the
    * interface default of 0, which meant no NTCP2 peer was ever considered to
    * have a measured latency, and every profile first-hop RTT derived from a
    * transport reading stayed empty.
-   *
    * <p>Returns 0 when there is no session or the session has not finished
    * establishing; callers already treat 0 as unknown rather than as an
    * impossibly good peer.
@@ -1099,7 +1095,6 @@ public int getEstimatedRTT(Hash peer) {
 
    /**
     * When {@link #getEstimatedRTT(Hash)} was measured for this peer.
-    *
     * <p>NTCP2 has no acknowledgement to refresh its reading, so the value is
     * the handshake's for the life of the session and this reports when that
     * handshake completed. A caller that stamps the present onto the value
@@ -1253,7 +1248,6 @@ public int getEstimatedRTT(Hash peer) {
     /**
      * Selects the port to listen on.
      * Private helper for {@link #startListening()}.
-     *
      * <p>An address handed back by SSU configuration wins; otherwise the NTCP
      * port is used if SSU (the usual port oracle) is disabled, falling back to
      * the SSU-discovered port.
@@ -1274,7 +1268,6 @@ public int getEstimatedRTT(Hash peer) {
     /**
      * Whether a saved local address should be skipped for publishing.
      * Pure decision helper for {@link #restoreSavedLocalAddresses(int, boolean)}.
-     *
      * <p>Internet-facing saved addresses are skipped when their family is
      * firewalled; IPv6 additionally honors the explicit i2p.ipv6.firewalled
      * property when UDP is enabled.
@@ -1297,7 +1290,6 @@ public int getEstimatedRTT(Hash peer) {
     /**
      * Restores the saved local addresses as the published address set.
      * Private helper for {@link #startListening()}.
-     *
      * <p>Only reached when no address could be bound or configured. Firewalled
      * families are dropped from the set; if no publishable address remains, an
      * outbound-only NTCP2 address is published instead.
@@ -1341,7 +1333,6 @@ public int getEstimatedRTT(Hash peer) {
      * Fills in an outbound-only NTCP2 address when saved addresses were
      * partially or fully skipped. Private helper for
      * {@link #restoreSavedLocalAddresses(int, boolean)}.
-     *
      * <p>With nothing published an outbound NTCP2 address covering both families
      * is published; when only one family was skipped, a single-family outbound
      * marker is merged in.
@@ -1401,11 +1392,11 @@ public int getEstimatedRTT(Hash peer) {
      * Only called by externalAddressReceived().
      * Calls replaceAddress() or removeAddress().
      * To remove all addresses, call replaceAddress(null) directly.
-     *
+     * <p>
      * Doesn't actually restart unless addr is non-null and
      * the port is different from the current listen port.
      * If addr is null, removes the addresses specified (v4 or v6)
-     *
+     * <p>
      * If we had interface addresses before, we lost them.
      *
      * @param addr may be null to indicate remove the address
@@ -1458,7 +1449,7 @@ public int getEstimatedRTT(Hash peer) {
      * Only does something if port > 0 and port != current bound port
      * (or there's no current port, or the configured interface or hostname changed).
      * If we are changing the bound port, this restarts everything, which takes a long time.
-     *
+     * <p>
      * call from synchronized method
      *
      * @param port the requested bind port, does nothing if <= 0
@@ -1542,7 +1533,6 @@ public int getEstimatedRTT(Hash peer) {
     /**
      * Resolves the configured bind target to an IP address.
      * Private helper for {@link #bindAddress(int)}.
-     *
      * <p>An unresolvable configured interface is reported and treated as a
      * wildcard bind (the published address keeps the configured host name).
      *
@@ -1564,7 +1554,6 @@ public int getEstimatedRTT(Hash peer) {
     /**
      * Builds the RouterAddress to publish for a specific-interface bind.
      * Private helper for {@link #bindAddress(int)}.
-     *
      * <p>The address identifies the bound host and port with the standard NTCP2
      * options, so a host-specific bind is announced even though every inbound
      * listener shares the transport's cost model.
@@ -1588,7 +1577,6 @@ public int getEstimatedRTT(Hash peer) {
     /**
      * Whether the transport is already listening on the requested address.
      * Pure decision helper for {@link #bindAddress(int)}.
-     *
      * <p>An exact match on the bound address short-circuits, as does a hostname
      * bind on the same port as an existing wildcard bind - changing from wildcard
      * to a specified host would otherwise force a needless restart.
@@ -1609,7 +1597,6 @@ public int getEstimatedRTT(Hash peer) {
     /**
      * Whether a UDP port change is external-only and needs no NTCP restart.
      * Pure decision helper for {@link #bindAddress(int)}.
-     *
      * <p>When UDP's external port changed to the port being bound but the
      * internal port stayed, the NAT mapping moved; NTCP keeps listening on the
      * internal port and just republishes.
@@ -1985,7 +1972,6 @@ public int getEstimatedRTT(Hash peer) {
     /**
      * Whether an address family has already contributed an address to the
      * configured-IP list. Pure decision helper for {@link #getConfiguredIP()}.
-     *
      * <p>Hostnames may resolve to several addresses; at most one IPv4 and one
      * IPv6 address are published.
      *
@@ -2002,7 +1988,6 @@ public int getEstimatedRTT(Hash peer) {
     /**
      * Whether the configured hostname is absent or unusable.
      * Pure decision helper for {@link #getConfiguredIP()}.
-     *
      * <p>Empty, whitespace-only, and the literal "null" (from a cleared config)
      * values are all treated as unset.
      *
@@ -2085,7 +2070,7 @@ public int getEstimatedRTT(Hash peer) {
      * May be called multiple times for IPv4 or IPv6.
      * The transport should also do its own checking on whether to accept
      * notifications from this source.
-     *
+     * <p>
      * This can be called after the transport is running.
      *
      * @param source defined in Transport.java
@@ -2285,7 +2270,7 @@ public int getEstimatedRTT(Hash peer) {
     /**
      * If we didn't used to be forwarded, and we have an address,
      * and we are configured to use UPnP, update our RouterAddress
-     *
+     * <p>
      * Don't do anything now. If it fails, we don't know if it's
      * because there is no firewall, or if the firewall rejected the request.
      * So we just use the SSU reachability status
@@ -2321,7 +2306,6 @@ public int getEstimatedRTT(Hash peer) {
     /**
      * Decides the reachability status that does not depend on live inbound
      * connections. Pure decision helper for {@link #getReachabilityStatus()}.
-     *
      * <p>Mirrors the ordering of the original cascades exactly: both families
      * firewalled yields rejection before the liveness check, and a router with no
      * published address reports firewalled only once it has been up long enough
@@ -2350,7 +2334,6 @@ public int getEstimatedRTT(Hash peer) {
     /**
      * Decides the reachability status from recent inbound activity of each
      * address family. Pure decision helper for {@link #getReachabilityStatus()}.
-     *
      * <p>When either family has seen an inbound connection recently, the verdict
      * is positive for both families unless the other family is explicitly
      * firewalled, disabled, or simply absent.
@@ -2397,7 +2380,6 @@ public int getEstimatedRTT(Hash peer) {
     /**
      * Decides the reachability status after the live inbound-connection scan.
      * Pure decision helper for {@link #getReachabilityStatus()}.
-     *
      * <p>Half-OK verdicts fall back to the per-family status of the working
      * family; a family that reports OK only because of a live connection and is
      * the only working family reports as reachable.
@@ -2427,7 +2409,6 @@ public int getEstimatedRTT(Hash peer) {
     /**
      * Whether an address family is disabled by the IPv6 configuration.
      * Pure decision helper for {@link #getReachabilityStatus()}.
-     *
      * <p>An IPv6-disabled router publishes no IPv6 addresses and an
      * IPv6-only router publishes no IPv4 addresses; anything in between enables
      * both families.
@@ -2459,7 +2440,6 @@ public int getEstimatedRTT(Hash peer) {
     /**
      * Whether the auto-host setting wants to publish an externally detected IP.
      * Pure decision helper for {@link #externalAddressReceived(byte[], boolean, int)}.
-     *
      * <p>Hostname configuration trumps auto-IP (encoded as "false"), a value of
      * "always" ignores reachability, otherwise "true" takes effect only when SSU
      * reports the address as usable.
@@ -2477,7 +2457,6 @@ public int getEstimatedRTT(Hash peer) {
      * Whether the configured hostname should be published in place of the current
      * host.
      * Pure decision helper for {@link #externalAddressReceived(byte[], boolean, int)}.
-     *
      * <p>Only when auto-IP is off, a hostname is configured, and it differs from
      * the currently published host does the configuration win.
      *
@@ -2494,7 +2473,6 @@ public int getEstimatedRTT(Hash peer) {
     /**
      * Whether a previously auto-published address should be dropped.
      * Pure decision helper for {@link #externalAddressReceived(byte[], boolean, int)}.
-     *
      * <p>Auto-IP hosts are removed when the notify source stops reporting a usable
      * address (e.g. a follow-up SSU peer test determined the router is still
      * firewalled).
@@ -2511,7 +2489,6 @@ public int getEstimatedRTT(Hash peer) {
     /**
      * Whether the address should carry the full NTCP2 option set.
      * Pure decision helper for {@link #externalAddressReceived(byte[], boolean, int)}.
-     *
      * <p>The full options are added for IPv4 always, and for IPv6 when the
      * notification carried a usable host or IPv6 is the only enabled family;
      * otherwise the router publishes an outbound-only NTCP2 address instead.
@@ -2529,7 +2506,6 @@ public int getEstimatedRTT(Hash peer) {
     /**
      * Selects the port to publish for the NTCP address.
      * Private helper for {@link #externalAddressReceived(byte[], boolean, int)}.
-     *
      * <p>An explicit configured port trumps everything, and the notification port
      * is only used when auto-port is enabled. A mismatch between the UDP-detected
      * external port and the explicitly configured port is logged - the NAT is
@@ -2561,7 +2537,6 @@ public int getEstimatedRTT(Hash peer) {
     /**
      * Handles a notification that carries no host at all.
      * Private helper for {@link #externalAddressReceived(byte[], boolean, int)}.
-     *
      * <p>When a configured IPv6 address is removed (SSU2 told us to drop it) and
      * the IPv4 address still advertises the IPv6 capability, nothing is published;
      * if the IPv4 address lacks the capability, an outbound-only IPv6 marker is
@@ -2600,13 +2575,13 @@ public int getEstimatedRTT(Hash peer) {
      * for now we don't. Just go through and if we have one inbound connection,
      * we must be good. As we drop idle connections pretty quickly, this will
      * be fairly accurate.
-     *
+     * <p>
      * We have to be careful here because much of the router console code assumes
      * that the reachability status is really just the UDP status.
-     *
+     * <p>
      * This only returns OK, DISABLED, or UNKNOWN for IPv4 and IPv6.
      * We leave the FIREWALLED status for UDP.
-     *
+     * <p>
      * Previously returned short, now enum as of 0.9.20
      * @return the reachability status
      */

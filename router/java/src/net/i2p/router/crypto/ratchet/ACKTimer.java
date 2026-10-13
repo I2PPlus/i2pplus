@@ -11,7 +11,7 @@ import net.i2p.util.SimpleTimer2;
 /**
  * Timer for sending ratchet-layer acknowledgments when application responses are delayed,
  * supporting NS, NSR, ACK requests, and forward next key blocks.
- *
+ * <p>
  * The vast majority of these will be cancelled before firing,
  * when streaming sends a response.
  * This should only fire if streaming drops completely,

@@ -4,14 +4,14 @@ import net.i2p.data.DateAndFlags;
 
 /**
  * Advanced options attached to a single outgoing I2CP message.
- *
+ * <p>
  * Note that the packing of options into the 16-bit flags field is
  * is subject to change. Therefore, for now, this is only recommended
  * within RouterContext.
- *
+ * <p>
  * Static methods are for OutboundClientMessageOneShotJob to decode the
  * flags field on the router side.
- *
+ * <p>
  * GzipOption flags are as of 0.9.36, are client-side only, and are
  * not included in the flags field or sent to the router.
  */

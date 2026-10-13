@@ -23,9 +23,9 @@ import java.util.concurrent.CopyOnWriteArrayList;
  * style: this class should be instantiated and kept as a variable by
  * each object it is used by, ala:
  * <code>private final EventDispatcher _event = new EventDispatcher();</code>
- *
+ * <p>
  * Deprecated - Used only by I2PTunnel
- *
+ * <p>
  * If there is anything in here that doesn't make sense, turn off
  * your computer and go fly a kite - (c) 2004 by jrandom
  *

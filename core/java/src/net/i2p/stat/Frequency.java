@@ -2,12 +2,12 @@ package net.i2p.stat;
 
 /**
  * Manage the calculation of a moving average event frequency over a certain period.
- *
+ * <p>
  * This provides lifetime, and rolling average, frequency counts.
  * Unlike Rate, it does not support "bucketed" averages.
  * There is no tracking of the event frequency in the current or last bucket.
  * There are no buckets at all.
- *
+ * <p>
  * Depending on what you want, a rolling average might be better than buckets.
  * Or not.
  */
@@ -129,7 +129,6 @@ public class Frequency {
 
     /**
      * Recalculate, but only update the lastEvent if eventOccurred
-     *
      * <p>The clock read is taken before the monitor, not inside it. It is a leaf
      * call - currentTimeMillis is served from the vDSO and takes no Java lock - so
      * holding this monitor across it makes every concurrent event queue behind a
@@ -137,7 +136,6 @@ public class Frequency {
      * cost of {@link FrequencyStat#eventOccurred()} on a three-period stat from
      * 166ns to 145ns per event; uncontended it changes nothing, because the clock
      * read costs the same either way when there is no queue.
-     *
      * <p>It is also safe to move. {@code now} is only ever differenced against
      * {@code _lastEvent}, which is still read and written under the monitor, so the
      * only effect is that the thread which loses the race computes its interval

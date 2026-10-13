@@ -22,17 +22,15 @@ import net.i2p.util.Log;
 /**
  * The primary (mux) session for a SAMv3 client, sharing a single I2P
  * destination across multiple protocol subsessions (STREAM, DATAGRAM, RAW).
- *
+ * <p>
  * Extends {@link SAMv3StreamSession} to inherit the I2PSession setup;
  * the streaming acceptor thread ({@code StreamAcceptor}) accepts I2P
  * connections and dispatches them to the correct subsession by protocol
  * and port, via {@link SAMv3StreamSession#queueSocket(I2PSocket)}.
- *
  * <p>The master session itself is not directly usable for data transfer —
  * all streaming, datagram, and raw operations are delegated to registered
  * subsessions. Calling {@link #connectAsync}, {@link #accept}, or
  * {@link #startForwardingIncoming} on this instance throws unconditionally.
- *
  * <p>Under heavy tracker traffic, the accept loop may see thousands of
  * connections per minute. Overflow logging is rate-limited to avoid
  * flooding the router log when subsession queues fill faster than
@@ -56,7 +54,7 @@ class MasterSession extends SAMv3StreamSession implements SAMDatagramReceiver, S
     /**
      * Build a Session according to information
      * registered with the given nickname.
-     *
+     * <p>
      * Caller MUST call start().
      *
      * @param nick nickname of the session
@@ -103,7 +101,6 @@ class MasterSession extends SAMv3StreamSession implements SAMDatagramReceiver, S
      * master session. The subsession gets its own protocol/port binding
      * and is registered in the global sessions database so incoming
      * connections can be dispatched to it.
-     *
      * <p>Sessions are mutually exclusive on (protocol, port) — two
      * subsessions may not listen on the same protocol and port.
      *
@@ -417,12 +414,10 @@ class MasterSession extends SAMv3StreamSession implements SAMDatagramReceiver, S
      * and dispatches them to the appropriate subsession by matching the
      * local port to the subsession's listen port. If no exact match is
      * found, falls back to a subsession listening on port 0 (any port).
-     *
      * <p>Each accepted socket is offered to the subsession's queue via
      * {@link SAMv3StreamSession#queueSocket(I2PSocket)}. If the queue
      * is full (the PHP client is not keeping up), the socket is reset
      * and an overflow is logged (rate-limited to avoid flooding).
-     *
      * <p>Runs for the lifetime of the master session; stopped by
      * {@link MasterSession#close()}.
      */

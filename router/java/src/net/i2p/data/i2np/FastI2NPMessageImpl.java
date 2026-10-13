@@ -15,15 +15,15 @@ import net.i2p.util.Log;
 /**
  * Ignore, but save, the SHA-256 checksum in the full 16-byte header when read in.
  * Use the same checksum when writing out.
- *
+ * <p>
  * This is a savings for NTCP in,
  * and for NTCP-in to NTCP-out for TunnelDataMessages.
  * It's also a savings for messages embedded in other messages.
  * Note that SSU does not use the SHA-256 checksum.
- *
+ * <p>
  * Subclasses must take care to set _hasChecksum to false to invalidate it
  * if the message payload changes between reading and writing.
- *
+ * <p>
  * It isn't clear where, if anywhere, we actually need to send a checksum.
  * For point-to-point messages over NTCP where we know the router version
  * of the peer, we could add a method to skip checksum generation.

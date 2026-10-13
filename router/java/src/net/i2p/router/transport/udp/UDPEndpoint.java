@@ -53,10 +53,10 @@ class UDPEndpoint implements SocketListener {
 
     /**
      *  Caller should call getListenPort() after this to get the actual bound port and determine success .
-     *
+     * <p>
      *  Can be restarted.
      *
-     *  @throws SocketException if no port could be bound to _bindAddress
+     * @throws SocketException if no port could be bound to _bindAddress
      */
     public synchronized void startup() throws SocketException {
         if (_log.shouldDebug())
@@ -175,7 +175,7 @@ class UDPEndpoint implements SocketListener {
 
     /**
      * Blocking call to receive the next inbound UDP packet from any peer.
-     *
+     * <p>
      * UNIT TESTING ONLY. Direct from the socket.
      * In normal operation, UDPReceiver thread injects to PacketHandler queue.
      *

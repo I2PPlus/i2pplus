@@ -11,13 +11,13 @@ import net.i2p.util.Log;
  * &lt;li&gt;A first-stage anti-aliasing low-pass filter based on RTT&lt;/li&gt;
  * &lt;li&gt;A time-varying EWMA filter based on inter-arrival time&lt;/li&gt;
  * &lt;/ul&gt;
- *
+ * <p>
  * &lt;p&gt;This estimator is adapted from the Linux kernel's &lt;code&gt;tcp_westwood.c&lt;/code&gt;
  * implementation and the Westwood+ research paper.&lt;/p&gt;
- *
+ * <p>
  * &lt;p&gt;Ref: &lt;em&gt;TCP Westwood: End-to-End Congestion Control for Wired/Wireless Networks&lt;/em&gt; - Casetti et al.&lt;/p&gt;
  * &lt;p&gt;Ref: &lt;em&gt;End-to-End Bandwidth Estimation for Congestion Control in Packet Networks&lt;/em&gt; - Grieco and Mascolo.&lt;/p&gt;
- *
+ * <p>
  * &lt;p&gt;Adapted for I2P streaming transport in 0.9.49.&lt;/p&gt;
  */
 public class SimpleBandwidthEstimator implements BandwidthEstimator {

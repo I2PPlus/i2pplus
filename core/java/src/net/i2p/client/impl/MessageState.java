@@ -9,7 +9,7 @@ import net.i2p.util.Log;
 
 /**
  * Contains the state of a payload message being sent to a peer.
- *
+ * <p>
  * Originally was a general-purpose waiter.
  * Then we got rid of guaranteed delivery.
  * Then we stopped waiting for accept in best-effort delivery.

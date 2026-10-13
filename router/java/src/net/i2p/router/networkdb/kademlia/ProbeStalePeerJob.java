@@ -23,7 +23,7 @@ import net.i2p.util.Log;
  * for their RouterInfo.  If they respond, lastHeardFrom/lastHeardAbout are
  * updated, making them pass the proof-of-life check in
  * ProfileOrganizer.isSelectable().
- *
+ * <p>
  * During startup, probes ALL peers aggressively to quickly identify which
  * cached routers are still online.  After startup, falls back to probing
  * only stale peers (old RouterInfo, no recent proof of life).
@@ -196,7 +196,6 @@ class ProbeStalePeerJob extends JobImpl {
     /**
      * Score a peer for startup probing priority.
      * Higher score = probe sooner.
-     *
      * <p>Pure function of the RouterInfo: no context access, so it is directly
      * unit-testable and can be computed once per candidate instead of once per
      * comparison.

@@ -22,7 +22,7 @@ public interface MessageSelector {
      * If this returns true, the job specified by OutNetMessage.getOnReplyJob()
      * will be run for every OutNetMessage associated with this selector
      * (by InNetMessagePool), after calling setMessage() for that ReplyJob.
-     *
+     * <p>
      * WARNING this is called from within OutboundMessageSelector.getOriginalMessages()
      * inside a lock and can lead to deadlocks if the selector does too much in isMatch().
      * Until the lock is removed, take care to keep it simple.

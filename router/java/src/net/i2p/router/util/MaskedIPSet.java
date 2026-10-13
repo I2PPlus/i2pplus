@@ -48,9 +48,9 @@ public class MaskedIPSet extends HashSet<String> {
     /**
      * The Set of IPs for this peer, with a given mask.
      * Includes the comm system's record of the IP, and all netDb addresses.
-     *
+     * <p>
      * As of 0.9.24, returned set will include netdb family as well.
-     *
+     * <p>
      * This gets the peer from the netdb without validation,
      * for efficiency and to avoid deadlocks.
      * Peers are presumed to be validated elsewhere.
@@ -79,7 +79,7 @@ public class MaskedIPSet extends HashSet<String> {
     /**
      * The Set of IPs for this peer, with a given mask.
      * Includes the comm system's record of the IP, and all netDb addresses.
-     *
+     * <p>
      * As of 0.9.24, returned set will include netdb family as well.
      *
      * @param ctx router context used to look up the peer in the netdb and comm system
@@ -93,7 +93,7 @@ public class MaskedIPSet extends HashSet<String> {
     /**
      * The Set of IPs for this peer, with a given mask.
      * Includes the comm system's record of the IP, and all netDb addresses.
-     *
+     * <p>
      * As of 0.9.24, returned set will include netdb family as well.
      *
      * @param ctx router context supplying the peer's recorded comm system IP

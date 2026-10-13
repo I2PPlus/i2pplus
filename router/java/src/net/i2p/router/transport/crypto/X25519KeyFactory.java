@@ -18,7 +18,6 @@ import net.i2p.util.SystemVersion;
  * It's important to do this in a separate thread, because if we run out,
  * the pairs are generated in the NTCP Pumper thread,
  * and it can fall behind.
- *
  * <p>Pool sizes scale dynamically based on memory headroom, CPU pressure,
  * and connection demand. The Tuner calls {@link #refreshPoolSize()} every
  * 30 seconds to adapt to changing conditions.</p>
@@ -79,7 +78,6 @@ public class X25519KeyFactory extends I2PThread implements KeyFactory {
 
     /**
      * Dynamically compute target pool sizes based on real-time system signals.
-     *
      * <p>Signals used:
      * <ul>
      * <li>Free memory headroom — more free memory = larger pool budget</li>
@@ -88,7 +86,6 @@ public class X25519KeyFactory extends I2PThread implements KeyFactory {
      * <li>Empty queue events — zero empties = low demand shrinks pool</li>
      * <li>Active peers — more connections = more key demand</li>
      * </ul>
-     *
      * <p>Memory budget: up to 2% of free heap when active, 0.5% when idle.</p>
      *
      * @since 0.9.70+

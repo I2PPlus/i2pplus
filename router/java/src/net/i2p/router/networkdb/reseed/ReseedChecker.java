@@ -17,7 +17,7 @@ import net.i2p.util.SimpleTimer2;
  * Checks whether reseeding of the network database is necessary and initiates reseed requests.
  * This class manages reseed triggers based on network status, router uptime/downtime,
  * peer count, and configuration flags.
- *
+ * <p>
  * All reseeding must be done through this instance.
  * Access through {@code context.netDb().reseedChecker()}, others should not instantiate this class directly.
  *

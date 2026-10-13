@@ -11,7 +11,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Defines a wrapper for SHA-256 operation.
- *
+ * <p>
  * As of release 0.8.7, uses java.security.MessageDigest by default.
  * As of release 0.9.25, uses only MessageDigest.
  * GNU-Crypto gnu.crypto.hash.Sha256Standalone

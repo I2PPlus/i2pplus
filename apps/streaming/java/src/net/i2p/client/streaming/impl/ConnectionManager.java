@@ -407,7 +407,6 @@ class ConnectionManager {
      * Autoban property: how many DISTINCT burst windows inside
      * {@link #STRIKE_WINDOW_MS} a dest must trip before the SYN-burst gate
      * autobans it. Default 3.
-     *
      * <p>A single burst window is not abuse: a browser page load, a client with
      * a high concurrent-stream ceiling, or a peer resuming after a pause can all
      * legitimately cross the sub-second threshold. Two was low enough that a
@@ -415,7 +414,6 @@ class ConnectionManager {
      * demands sustained tripping of the gate. Raise it further on a
      * high-legitimate-traffic router, or set {@link #PROP_AUTOBAN} 0 to turn
      * off autoban entirely (which also disables the refusal-based ban).
-     *
      * <p>Values below 2 are raised to 2: a single window must never ban alone.
      * Tunable via i2p.streaming.tempBanStrikes.
      * @since 0.9.71+
@@ -492,7 +490,6 @@ class ConnectionManager {
      * and the increment happen inside a single per-key {@code compute()}, so
      * two SYNs racing the gate can no longer both observe "room left" and
      * admit past the ceiling (the check-then-add this replaced).
-     *
      * <p>Refusal leaves the counter untouched, so a rejected SYN never costs
      * the dest anything. An unknown dest (null hash) is admitted without
      * accounting, matching the old gate's "no hash, no budget" behavior.
@@ -580,7 +577,6 @@ class ConnectionManager {
 
     /**
      * Decrement a connect-attempt waiter count without ever going negative.
-     *
      * <p>Waiters are released from a {@code finally} around the wait loop, so
      * an abandoned or failed attempt always drains its own increment exactly
      * once and a double release can only stop at zero.
@@ -603,14 +599,12 @@ class ConnectionManager {
     /**
      * Pure reconciliation step for one dest: how much of a ledger count that
      * exceeds the live connection table should survive this sweep.
-     *
      * <p>The excess is only dropped when the SAME excess was recorded by the
      * previous sweep (the candidate), which means it persisted across a whole
      * sweep interval and therefore cannot be an in-flight reservation
      * admitted moments before the first sweep. Counts at or below the table
      * are never raised: the ledger only ever shrinks toward observed reality,
      * so a sweep can free leaked slots but can never hand out new ones.
-     *
      * <p>Even a repeated candidate cannot shrink below the bound-token floor.
      * A release followed by a re-reserve can return the count to the same
      * value while the observed snapshot still shows the old, smaller table
@@ -641,7 +635,6 @@ class ConnectionManager {
      * See {@link #reconcileStreamCount(int, int, Integer, int)} for the policy;
      * this walks the ledger, records or clears per-dest candidates, and prunes
      * candidates for dests that have left the ledger.
-     *
      * <p>A rebase is applied with a compare-and-set on the count we read, so a
      * reserve or release landing mid-sweep makes us skip that dest rather than
      * overwrite the newer value.
@@ -725,7 +718,6 @@ class ConnectionManager {
      * first its reservation token, and only if no token was bound, its remote
      * peer (a connection built outside the reservation protocol, so the slot
      * must still be drained or the budget leaks forever).
-     *
      * <p>The release is claimed on the connection first: any path may reach
      * here for a connection whose slot was already returned (a hard-disconnect
      * sweep racing an async teardown, or a teardown after the sweeper
@@ -835,7 +827,6 @@ class ConnectionManager {
      * path: an existing window is bumped in place rather than replaced, and the
      * window/burst limits are read from cached volatile fields refreshed by the
      * BanExpiry sweeper. Call only for a validated SYN source.
-     *
      * <p>The autoban policy is a parameter, snapshotted once per SYN by the
      * caller, so one SYN can never be counted under one policy and then
      * recorded (or not) under a different one that changed mid-evaluation.
@@ -907,7 +898,6 @@ class ConnectionManager {
      * only milliseconds long, so keying forgiveness to the window start (the
      * pre-0.9.71+ value) forgave a strike almost immediately and the
      * multi-strike autoban never fired.
-     *
      * <p>{@link #strikeTime} is the time of the MOST RECENT strike, so the
      * window is rolling: a dest must produce every one of its strikes inside
      * {@link #STRIKE_WINDOW_MS} of the previous one to reach the ban count.
@@ -950,7 +940,6 @@ class ConnectionManager {
      * Whether {@code last} has aged out of the forgiveness window (or was
      * stamped in the future by a clock adjustment, which is treated the same
      * way so a skewed clock can never ban).
-     *
      * <p>Single source of truth: the decision function uses it to choose BAN
      * vs RECORD, and the recorder uses it to decide whether a RECORD extends
      * the running strike count or restarts it at 1. Sharing it keeps those two
@@ -973,7 +962,6 @@ class ConnectionManager {
      * {@link #STRIKE_WINDOW_MS} of each other is this trip a BAN, i.e. the
      * demonstrable pattern of sustained abuse. After the window the count is
      * forgiven and a new one RECORDs instead.
-     *
      * <p>Forgiveness ages from the most recent strike time, so the window is
      * rolling and the clock starts when the strike was recorded, not when the
      * (millisecond-scale) burst window began.
@@ -1044,7 +1032,6 @@ class ConnectionManager {
      * Repeat trips in an already-struck window: no-op, return false. Second
      * distinct window inside the strike window: leave the original strike in
      * place (the ban supersedes further strikes), return true.
-     *
      * <p>Autoban is re-checked live here (the callers already gate
      * checkSynBurst() on a per-SYN snapshot): if enforcement is switched off
      * between the trip and this record, no strike may be stored, or the map
@@ -1087,7 +1074,6 @@ class ConnectionManager {
      * then blasting retransmitted SYNs against them; without this gate every hit
      * makes {@code ConnectionHandler.resendSynAck} mint and enqueue a fresh
      * SYN-ACK, consuming CPU and egress, and the connection never establishes.
-     *
      * <p>This routes the retransmit through the <em>same</em> per-destination
      * sub-second burst window as fresh SYNs, so a dest that crosses the burst
      * threshold in {@link #PROP_TEMP_BAN_STRIKES} DISTINCT windows within the
@@ -1141,7 +1127,6 @@ class ConnectionManager {
     /**
      * The cap to <em>report</em> in refusal log messages: the Tuner's current
      * override when it has armed one, otherwise the user-configured ceiling.
-     *
      * <p>This deliberately differs from {@link #getEffectiveMaxStreams()}, which
      * min's the override against the user ceiling and is the real enforcement
      * limit at the per-destination stream budget gate
@@ -1678,7 +1663,6 @@ class ConnectionManager {
 
     /**
      * The payload to send in a limit-response SYN/CLOSE, or null for a RESET.
-     *
      * <p>Pure decision helper (extracted from {@code receiveConnection}):
      * the "reset" limit action, an empty action, and port 443 (the synth
      * HTTPS over I2P port, which must not be tricked into a text payload)
@@ -1791,7 +1775,6 @@ class ConnectionManager {
     /**
      * Pick a new random stream ID for the con and assign it,
      * taking care to avoid duplicates, and put it in the connection table.
-     *
      * <p>Binds this stream's budget reservation here, inside the same critical
      * section that publishes the ID, so the token becomes the source of truth
      * for the slot from the moment the ID is visible to teardown paths. An
@@ -2330,7 +2313,7 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
      * Drop every connection, sending a RESET instead of a CLOSE handshake.
      * This will not close the ServerSocket.
      * This will not kill the timer threads.
-     *
+     * <p>
      * CAN continue to use the manager.
      */
     public void disconnectAllHard() {
@@ -2387,7 +2370,7 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
      * Kill all connections and the timers.
      * Don't bother sending close packets.
      * As of 0.9.17, this will close the ServerSocket, killing one thread in accept().
-     *
+     * <p>
      * CANNOT continue to use the manager or restart.
      *
      * @since 0.9.7
@@ -2593,7 +2576,6 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
      * table still held the connection. A hard-killed or already-unlinked stream
      * would otherwise silently lose every lifetime stat, and with them the
      * retransmission ratios the Tuner reads for its loss decisions.
-     *
      * <p>RTT and send-window are the exception: they are only published once a
      * real sample exists, since a connection killed during connect holds class
      * defaults rather than observations.

@@ -39,7 +39,7 @@ import net.i2p.util.Log;
 /**
  * Static methods to build GarlicMessages from a GarlicConfig, for both
  * ElGamal/AES and ECIES (X25519 + PQ) encryption schemes.
- *
+ * <p>
  * All methods are stateless and thread-safe.
  */
 public class GarlicMessageBuilder {

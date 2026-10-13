@@ -16,7 +16,7 @@ import net.i2p.util.SyntheticREDQueue;
  * Participates in a tunnel at an intermediate hop (not gateway or endpoint).
  * Handles message dispatching, bandwidth throttling, fragment reassembly,
  * and next-hop routing.
- *
+ * <p>
  * Optimized for hosting many tunnels efficiently.
  */
 class TunnelParticipant {

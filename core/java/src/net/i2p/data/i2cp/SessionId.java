@@ -18,7 +18,7 @@ import java.io.OutputStream;
 /**
  * Defines the token passed between the router and client to associate messages
  * with a particular session.  These IDs are not globally unique.
- *
+ * <p>
  * As of 0.9.48, does NOT extend DataStructureImpl.
  *
  * @author jrandom

@@ -19,7 +19,6 @@ import net.i2p.util.Log;
 /**
  * InputStream implementation that accepts messages arriving out of order
  * and presents the data in proper sequence for reading.
- *
  * <p>This class buffers incoming data blocks and reorders them transparently,
  * ensuring a continuous byte stream to the caller. It supports:
  * <ul>
@@ -29,16 +28,12 @@ import net.i2p.util.Log;
  *   <li>EOF signaling via closeReceived()</li>
  *   <li>Error propagation via streamErrorOccurred()</li>
  * </ul>
- *
  * <p><b>Thread Safety:</b> This class is synchronized internally and safe for use by one reader thread
  * and potentially multiple message-receiving threads.
- *
  * <p><b>Performance:</b> Designed for high-throughput scenarios such as large file downloads.
  * Avoids unnecessary copying by using ByteArray references.
- *
  * <p><b>Lifecycle:</b> The stream can be closed locally or receive an EOF signal remotely.
  * Once closed, no further reads or message receptions are allowed.
- *
  * <p><b>Usage:</b>
  * <pre>
  * I2PSession -> MessageHandler -> PacketHandler -> ConnectionPacketHandler -> MessageInputStream
@@ -109,7 +104,6 @@ class MessageInputStream extends InputStream {
      * instead of the actual payload to prevent memory accumulation while still allowing
      * canAccept() to return true for retransmits of already-processed messages.
      * This enables proper handling of late-arriving duplicate packets after stream closure.
-     *
      * <p>Note: the payload size of this sentinel is 0, so it does not count toward
      * {@link #_readyDataSize} or buffer limits.  See {@link #canAccept(long, int)}.
      */
@@ -199,7 +193,7 @@ class MessageInputStream extends InputStream {
 
     /**
      * Determines whether the stream can accept a new message.
-     *
+     * <p>
      * Accepts zero-length or duplicate packets always.
      *
      * @param messageId The sequence ID of the message
@@ -407,7 +401,7 @@ class MessageInputStream extends InputStream {
 
     /**
      * Accepts a newly received message block.
-     *
+     * <p>
      * If the message is next in sequence, it's added to the ready list and contiguous out-of-order
      * messages are promoted.
      *
@@ -502,7 +496,6 @@ class MessageInputStream extends InputStream {
     /**
      * Reads up to {@code length} bytes into the {@code target} array at {@code offset}.
      * Blocks until data is available or timeout occurs.
-     *
      * <p>The lock is held only during state checks, waits, and index updates.
      * The actual {@link System#arraycopy} is performed outside the synchronized
      * block to reduce contention with the receive thread ({@link #messageReceived}).

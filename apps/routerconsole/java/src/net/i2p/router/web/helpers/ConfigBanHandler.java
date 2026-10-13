@@ -281,12 +281,12 @@ public class ConfigBanHandler extends FormHandler {
 
     /**
      * Validate custom capability ban patterns.
-     *
+     * <p>
      * Capability letters are case-sensitive: lowercase 'f' is floodfill,
      * uppercase letters are the remaining tiers and flags. Input is
      * validated per character and passed through as entered - no sorting,
      * no case folding.
-     *
+     * <p>
      * Separates multiple patterns with comma or space. A pattern may carry
      * an exclusion group after '!': "G!f" bans G routers unless floodfill;
      * exclusions require at least one required character.

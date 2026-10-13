@@ -1337,7 +1337,6 @@ class TunnelRenderer {
     /**
      * Append one tunnel row: direction badge, test status, expiry bar,
      * latency, data transferred, and the peer cells.
-     *
      * <p>Terminates the row only - the caller closes {@code </tbody>} once,
      * after the last row.
      *

@@ -19,10 +19,10 @@ import net.i2p.util.SimpleByteCache;
  * won't return true for this type. Load tests use DataMessage, for example.
  * Also, those classes include an additional length field that we can't use here.
  * See InboundMessageDistributor.
- *
+ * <p>
  * There is no setData() method, the only way to create one of these is to
  * read it with readMessage() (i.e., it came from some other router)
- *
+ * <p>
  * As of 0.8.12 this class is working. It is used at the IBGW to reduce the processing
  * required. For zero-hop IB tunnels, the convert() method is used to reconstitute
  * a standard message class.
@@ -85,7 +85,7 @@ public class UnknownI2NPMessage extends FastI2NPMessageImpl {
     /**
      * Attempt to convert this message to a known message class.
      * This does the delayed verification using the saved checksum.
-     *
+     * <p>
      * Used by TunnelGatewayZeroHop.
      *
      * @return the message as its known subclass, verified against the saved checksum

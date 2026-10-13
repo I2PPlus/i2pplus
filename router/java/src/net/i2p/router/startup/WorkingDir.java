@@ -19,27 +19,27 @@ import net.i2p.util.SystemVersion;
 
 /**
  * Provides the working directory for i2p.
- *
+ * <p>
  * For the location, first try the system property i2p.dir.config
  * Next try $HOME/.i2p on linux or %LOCALAPPDATA%\I2P on Windows.
- *
+ * <p>
  * If the dir exists, return it.
  * Otherwise, attempt to create it, and copy files from the base directory.
  * To successfully copy, the base install dir must be the system property i2p.dir.base
  * or else must be in $CWD.
- *
+ * <p>
  * If I2P was run from the install directory in the past,
  * and migrateOldData = true, copy the
  * necessary data files (except i2psnark/) over to the new working directory.
- *
+ * <p>
  * Otherwise, just copy over a limited number of files over.
- *
+ * <p>
  * Do not ever copy or move the old i2psnark/ directory, as if the
  * old and new locations are on different file systems, this could
  * be quite slow.
- *
+ * <p>
  * Modify some files while copying, see methods below.
- *
+ * <p>
  * After migration, the router will run using the new directory.
  * The wrapper, however, must be stopped and restarted from the new script - until then,
  * it will continue to write to wrapper.log* in the old directory.
@@ -63,7 +63,7 @@ public class WorkingDir {
     /**
      * Only call this once on router invocation.
      * Caller should store the return value for future reference.
-     *
+     * <p>
      * This also redirects stdout and stderr to a wrapper.log file if there is no wrapper present,
      * unless system property I2P_DISABLE_OUTPUT_OVERRIDE is set.
      *
@@ -294,7 +294,7 @@ public class WorkingDir {
     /**
      *  Redirect stdout and stderr to a wrapper.log file if there is no wrapper,
      *  unless system property I2P_DISABLE_OUTPUT_OVERRIDE is set.
-     *
+     * <p>
      *  If there is no -Dwrapper.log=/path/to/wrapper.log on the java command line
      *  to specify a log file, check for existence of wrapper.log in CWD,
      *  for backward compatibility in old installations (don't move it).
@@ -302,8 +302,8 @@ public class WorkingDir {
      *  Create if it doesn't exist, and append to it if it does.
      *  Put the location in the environment as an absolute path, so logs.jsp can find it.
      *
-     *  @param dir if null, use Java temp dir; System property wrapper.logfile overrides
-     *  @since 0.8.13
+     * @param dir if null, use Java temp dir; System property wrapper.logfile overrides
+     * @since 0.8.13
      */
     private static void setupSystemOut(String dir) {
         if (SystemVersion.hasWrapper())
@@ -335,7 +335,7 @@ public class WorkingDir {
     /**
      * Files and directories from the base install to copy over.
      * None of these should be included in i2pupdate.zip
-     *
+     * <p>
      * The user should not delete these in the old location, leave them as templates for new users
      */
     private static final String MIGRATE_BASE =

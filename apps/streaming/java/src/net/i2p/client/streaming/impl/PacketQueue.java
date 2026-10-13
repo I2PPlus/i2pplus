@@ -297,7 +297,7 @@ class PacketQueue implements SendMessageStatusListener, Closeable {
 
     /**
      * SendMessageStatusListener interface
-     *
+     * <p>
      * Tell the client of an update in the send status for a message
      * previously sent with I2PSession.sendMessage().
      * Multiple calls for a single message ID are possible.

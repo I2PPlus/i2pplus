@@ -12,10 +12,10 @@ package net.i2p.client;
 /**
  * Define a means for the router to asynchronously notify the client that a
  * new message is available or the router is under attack.
- *
+ * <p>
  * A client must implement and register this via addSessionListener()
  * to receive messages.
- *
+ * <p>
  * If you wish to get notification of the protocol, from port, and to port,
  * or wish to get notification of certain protocols and ports only,
  * you must use I2PSessionMuxedListener and addMuxedSessionListener() instead.
@@ -26,7 +26,7 @@ public interface I2PSessionListener {
     /**
      * Instruct the client that the given session has received a message with
      * size # of bytes.
-     *
+     * <p>
      * After this is called, the client should call receiveMessage(msgId).
      * A message can be dropped without being read by calling
      * discardMessage(msgId), which avoids the decompression cost.
@@ -44,7 +44,7 @@ public interface I2PSessionListener {
 
     /** Instruct the client that the session specified seems to be under attack
      * and that the client may wish to move its destination to another router.
-     *
+     * <p>
      * Unused. Not fully implemented.
      *
      * @param session session to report abuse to

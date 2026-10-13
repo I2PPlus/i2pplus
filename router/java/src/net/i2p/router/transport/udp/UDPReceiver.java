@@ -13,7 +13,7 @@ import net.i2p.util.SystemVersion;
  * Receives raw UDP datagrams off the wire as fast as possible, controlled by
  * the bandwidth limiter and the router's throttle. Pushes received packets
  * into the PacketHandler queue.
- *
+ * <p>
  * There is a UDPReceiver for each UDPEndpoint. It contains a thread but no queue.
  * Received packets are queued in the common PacketHandler queue.
  */

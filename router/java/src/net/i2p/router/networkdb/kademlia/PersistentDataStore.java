@@ -130,7 +130,7 @@ public class PersistentDataStore extends TransientDataStore {
 
     /**
      * Stop the writer thread and clear the in-memory store.
-     *
+     * <p>
      * The read job is not stopped: it is a recurring SimpleTimer2 event with no
      * cancellation flag, so it keeps rescanning until the router's graceful
      * shutdown begins and runJob() returns early. A rescan after this point
@@ -381,7 +381,7 @@ public class PersistentDataStore extends TransientDataStore {
 
         /**
          * Signal the write loop to exit.
-         *
+         * <p>
          * Sets the quit flag and wakes the writer so it leaves
          * {@code waitForNextCycle()}. The loop writes the batch it already
          * drained before it re-checks the flag, so entries queued before the
@@ -659,7 +659,7 @@ public class PersistentDataStore extends TransientDataStore {
      * This was mostly for manual reseeding, i.e. the user manually
      * copies RI files to the directory. Nobody does this,
      * so this is run way too often.
-     *
+     * <p>
      * But it's also for migrating and reading the files after a reseed.
      * Reseed task calls wakeup() on completion.
      * As of 0.9.4, also initiates an automatic reseed if necessary.

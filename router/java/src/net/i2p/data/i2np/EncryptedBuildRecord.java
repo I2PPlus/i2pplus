@@ -11,7 +11,7 @@ import net.i2p.data.SimpleDataStructure;
  * ElGamal-encrypted request or response.
  * 528 bytes. Previously stored in a ByteArray.
  * May or may not be AES layer-encrypted.
- *
+ * <p>
  * Note that these are layer-encrypted and layer-decrypted in-place.
  * Do not cache.
  *

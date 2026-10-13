@@ -10,7 +10,7 @@ import net.i2p.data.Hash;
 /**
  * A Set of Hashes that automatically adds to the
  * Set in the contains() check.
- *
+ * <p>
  * So we don't need to generate the exclude set up front.
  * Less object churn and copying.
  *

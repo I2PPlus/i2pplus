@@ -87,7 +87,7 @@ class SAMUtils {
 
     /**
      * Check whether a base64-encoded {dest,privkey,signingprivkey[,offlinesig]} is valid
-     *
+     * <p>
      * This only checks that the length is correct. It does not validate
      * for pubkey/privkey match, or check the signatures.
      *
@@ -156,11 +156,11 @@ class SAMUtils {
 
     /**
      * Parse SAM parameters, and put them into a Properties object
-     *
+     * <p>
      * Modified from EepGet.
      * COMMAND and OPCODE are mapped to upper case; keys, values, and ping data are not.
      * Double quotes around values are stripped.
-     *
+     * <p>
      * Possible input:
      * <pre>
      *  COMMAND
@@ -178,10 +178,10 @@ class SAMUtils {
      *  COMMAND, OPCODE, and keys may not have '=' or whitespace unless escaped
      *  Duplicate keys not allowed
      * </pre>
-     *
+     * <p>
      * A key without a value is not allowed by the spec, but is
      * returned with the value "true".
-     *
+     * <p>
      * COMMAND is returned as the value of the key ""COMMAND"".
      * OPCODE, or the remainder of the PING/PONG line if any, is returned as the value of the key ""OPCODE"".
      *

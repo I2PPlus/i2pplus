@@ -40,7 +40,7 @@ public class HostTxtParser {
      * starting with '#' or ';' are considered comments, and ignored. Lines that
      * are obviously not in the format key=value are also ignored.
      * The key is converted to lower case.
-     *
+     * <p>
      * Returned map will not contain null ("remove") entries.
      *
      * @param input
@@ -130,7 +130,7 @@ public class HostTxtParser {
     /**
      * Return a Map using the contents of the File file. See parse(BufferedReader)
      * for details of the input format.
-     *
+     * <p>
      * Returned map will not contain null ("remove") entries.
      *
      * @param file
@@ -149,7 +149,7 @@ public class HostTxtParser {
     /**
      * Return a Map using the contents of the File file. If file cannot be read,
      * use map instead, and write the result to where file should have been.
-     *
+     * <p>
      * Returned map will not contain null ("remove") entries.
      *
      * @param file

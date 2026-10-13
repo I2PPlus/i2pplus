@@ -15,7 +15,7 @@ import net.i2p.data.KeysAndCert;
 /**
  * Defines the unique identifier of a router, including any certificate or
  * public key.
- *
+ * <p>
  * As of 0.9.9 this data structure is immutable after the two keys and the certificate
  * are set; attempts to change them will throw an IllegalStateException.
  *
@@ -34,10 +34,10 @@ public class RouterIdentity extends KeysAndCert {
      * This router specified that they should not be used as a part of a tunnel,
      * nor queried for the netDb, and that disclosure of their contact information
      * should be limited.
-     *
+     * <p>
      * This is ONLY if the certificate is a hidden type.
      * Hidden mode may also be specified with a capability in the RouterInfo.
-     *
+     * <p>
      * Not recommended for direct use.
      * Use of RouterInfo.isHidden() (which calls this) is preferred.
      * @return true if the certificate type limits this router's reachability

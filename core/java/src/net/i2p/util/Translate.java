@@ -19,7 +19,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * for "en" and return the original string.
  * Support real-time language changing with the routerconsole.lang
  * and routerconsole.country properties.
- *
+ * <p>
  * To change language in router context, set the context properties PROP_LANG and PROP_COUNTRY.
  * To change language in app context, set the System properties PROP_LANG and PROP_COUNTRY.
  *

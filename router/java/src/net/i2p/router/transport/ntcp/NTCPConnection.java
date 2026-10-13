@@ -52,7 +52,7 @@ import net.i2p.util.SystemVersion;
  * Coordinates a connection to a single peer using NTCP 1 or NTCP 2 protocols.
  * Manages the complete connection lifecycle including establishment,
  * message encryption/decryption, bandwidth management, and graceful shutdown.
- *
+ * <p>
  * Public only for UI peers page. Not a public API, not for external use.
  *
  * @since 0.9.16
@@ -146,7 +146,6 @@ public class NTCPConnection implements Closeable {
     /**
      * Round trip time of the handshake that established this session, in ms, or
      * 0 when it has not been measured.
-     *
      * <p>Both NTCP2 establishment paths already compute this to derive clock
      * skew - {@code now - getCreated()} at the point the peer's timestamp
      * arrives - but discarded it, so the transport had no latency to report and
@@ -154,7 +153,6 @@ public class NTCPConnection implements Closeable {
      * every NTCP2 peer. With that answer, every consumer of a direct-link
      * latency reading stayed empty: the profile's first-hop RTT was never
      * populated, and the low-latency flag never turned on for NTCP2 peers.
-     *
      * <p>Measured once, at establishment, and never updated afterwards: it
      * describes the handshake this session was built on, and the profile-level
      * smoothing in {@code PeerProfile.setFirstHopRtt} is what carries it
@@ -168,7 +166,6 @@ public class NTCPConnection implements Closeable {
     /**
      * When {@link #_establishmentRtt} was measured, on the router clock, so a
      * reader can tell a handshake-time reading from a current one.
-     *
      * <p>Kept beside the value rather than derived from session age, so the
      * measurement's timestamp is the handshake's own and cannot drift if the
      * reader is called at a different moment.
@@ -612,7 +609,6 @@ public class NTCPConnection implements Closeable {
 
   /**
    * Round trip time of the handshake that established this session.
-   *
    * <p>Recorded once when establishment completes, from the same
    * {@code now - getCreated()} interval the clock-skew calculation already
    * performs, and not refreshed for the life of the session. The session's
@@ -627,7 +623,6 @@ public class NTCPConnection implements Closeable {
 
   /**
    * Record the handshake round trip time, once the establishment completes.
-   *
    * <p>First writer wins. Both establishment directions converge here, so
    * whichever observes VERIFIED first supplies the sample and a late second
    * observation cannot overwrite it - the value has exactly one source per
@@ -663,7 +658,6 @@ void noteEstablishmentRtt(int rttMs) {
   /**
    * Whether a candidate handshake timing should become this session's recorded
    * latency.
-   *
    * <p>Extracted as a pure predicate so the rule is testable without a router
    * context and a live socket. Two rejections, both about not inventing a
    * measurement: a non-positive interval means the clock did not advance, and
@@ -965,10 +959,10 @@ void noteEstablishmentRtt(int rttMs) {
 
     /**
      *  Inject a DatabaseStoreMessage with our RouterInfo. NTCP 1 or 2.
-     *
+     * <p>
      *  Externally, this is only called by NTCPTransport for outbound cons,
      *  before the con is established, but we know what version it is.
-     *
+     * <p>
      *  Internally, may be called for outbound or inbound, but only after the
      *  con is established, so we know what the version is.
      */
@@ -984,7 +978,7 @@ void noteEstablishmentRtt(int rttMs) {
     /**
      * Prepare the next I2NP message for transmission.  This should be run from
      * the Writer thread pool. NTCP 1 or 2.
-     *
+     * <p>
      * This is the entry point as called from Writer.Runner.run()
      *
      * @param prep an instance of PrepBuffer to use as scratch space
@@ -1100,7 +1094,6 @@ void noteEstablishmentRtt(int rttMs) {
 
     /**
      *  NTCP2 frame-size contribution of one message.
-     *
      *  <p>The NTCP2 block header (3 bytes, see {@link NTCP2Payload#BLOCK_HEADER_SIZE})
      *  replaces NTCP1's 16-byte I2NP framing, so a message adds roughly 7 bytes less
      *  than its serialized size to a frame. The exact figure mirrors the established
@@ -1117,7 +1110,6 @@ void noteEstablishmentRtt(int rttMs) {
 
     /**
      *  Whether a secondary message fits within the preferred NTCP2 payload cap.
-     *
      *  <p>The cap keeps frames near the preferred 5 KB working size instead of
      *  filling the whole 16 KB buffer, so a trailing message is added only while
      *  the accumulated frame size (MAC plus already-packed blocks) stays under
@@ -1134,7 +1126,6 @@ void noteEstablishmentRtt(int rttMs) {
 
     /**
      *  Whether an unsolicited datetime block may be packed into the frame.
-     *
      *  <p>Scheduled by {@link #_nextMetaTime}; the block is a 2-byte type, 2-byte
      *  length and 4-byte datetime, and is only added while the frame still fits in
      *  the full 16 KB buffer after its 3-byte block header.
@@ -1152,7 +1143,6 @@ void noteEstablishmentRtt(int rttMs) {
 
     /**
      *  Whether an unsolicited RouterInfo block may be attempted.
-     *
      *  <p>Scheduled by {@link #_nextInfoTime}; the heuristic estimate of 1024 bytes
      *  is only a first gate - the block is discarded and retried later if its real
      *  size does not fit (see {@link #canFitRouterInfoBlock}).
@@ -1170,7 +1160,6 @@ void noteEstablishmentRtt(int rttMs) {
 
     /**
      *  Whether the serialized RouterInfo block actually fits in the frame.
-     *
      *  <p>This is the authoritative check after the 1024-byte estimate in
      *  {@link #canSendRouterInfoBlock}.
      *
@@ -1185,7 +1174,6 @@ void noteEstablishmentRtt(int rttMs) {
 
     /**
      *  Whether a received NTCP2 frame length is sane.
-     *
      *  <p>A frame always carries a 16-byte MAC at minimum; anything shorter is
      *  definitely corrupt and the connection is torn down rather than buffered.
      *
@@ -1211,7 +1199,6 @@ void noteEstablishmentRtt(int rttMs) {
 
     /**
      *  Whether the outbound queue is too backlogged to accept new messages.
-     *
      *  <p>There is a 15 second grace period right after connection establishment so
      *  messages queued for a brand-new connection are not refused, then the decision
      *  is delegated to the bandwidth limiter's backlog flag.
@@ -1253,7 +1240,6 @@ void noteEstablishmentRtt(int rttMs) {
      *  Whether a RouterInfo we just stored is strictly newer than whatever was
      *  stored before (or there was no previous copy, so the store is new).
      *  copy claims a later publication time.
-     *
      *  <p>Used on the flood path in {@link NTCP2Payload.PayloadCallback#gotRI}.
 
      *  @param old the previously stored RouterInfo, or null if this is a new store
@@ -1268,7 +1254,6 @@ void noteEstablishmentRtt(int rttMs) {
     /**
      *  Whether the whole frame can be decrypted in place, bypassing the scratch
      *  buffer.
-     *
      *  <p>Requires being at a frame boundary ({@code received == 0}) with the full
      *  announced frame already present in the pumper's buffer, so the ciphertext
      *  can be overwritten in place zero-copy.
@@ -1286,7 +1271,6 @@ void noteEstablishmentRtt(int rttMs) {
     /**
      *  Whether the buffered (split-frame) read path needs a fresh destination
      *  buffer for the announced frame.
-     *
      *  <p>Only at a frame boundary with no existing buffer large enough does the
      *  read state allocate; otherwise the partially filled buffer is reused.
      *
@@ -1303,7 +1287,7 @@ void noteEstablishmentRtt(int rttMs) {
     /**
      * Prepare the next I2NP message for transmission.  This should be run from
      * the Writer thread pool.
-     *
+     * <p>
      * Caller must synchronize on _writeLock.
      *
      * @param buf we use buf.enencrypted only
@@ -1566,7 +1550,6 @@ void noteEstablishmentRtt(int rttMs) {
      *  This constructs the payload from the blocks, using the
      *  tmp byte array, then encrypts the payload and
      *  passes it to the pumper for writing.
-     *
      *  <p>The frame bytes go into a fixed-size pooled buffer (see
      *  {@link EventPumper#acquireWriteBuf()}) instead of a per-frame allocation:
      *  frames are variable-length, so the old {@code new byte[2 + framelen]} rarely
@@ -1656,7 +1639,7 @@ void noteEstablishmentRtt(int rttMs) {
     /**
      *  The FifoBandwidthLimiter.CompleteListener callback.
      *  Does the delayed read.
-     *
+     * <p>
      *  Fires on the limiter thread when the throttled request completes, and
      *  synchronously on the closing thread when close() aborts the request.
      *  The ownership hand-off in removeIBRequest() guarantees the attached
@@ -1855,7 +1838,7 @@ void noteEstablishmentRtt(int rttMs) {
     /**
      * The contents of the buffer have been encrypted / padded / etc and have
      * been fully allocated for the bandwidth limiter.
-     *
+     * <p>
      * Only enqueues the buffer and registers write interest. The socket write
      * itself is performed exclusively by the pumper thread in
      * EventPumper.processWrite(): this single-writer contract guarantees that
@@ -2051,20 +2034,20 @@ void noteEstablishmentRtt(int rttMs) {
 
     /**
      *  Connection must be established!
-     *
+     * <p>
      *  The contents of the buffer include some fraction of one or more
      *  encrypted and encoded I2NP messages.  individual i2np messages are
      *  encoded as "sizeof(data)+data+pad+crc", and those are encrypted
      *  with the session key and the last 16 bytes of the previous encrypted
      *  i2np message.
-     *
+     * <p>
      *  The NTCP connection now owns the buffer
      *  BUT it must copy out the data
      *  as reader will call EventPumper.releaseBuf().
-     *
+     * <p>
      *  This is the entry point as called from Reader.processRead()
      *
-     *  @param buf the buffer containing encrypted data
+     * @param buf the buffer containing encrypted data
      */
     void recvEncryptedI2NP(ByteBuffer buf) {
         if (isBanned()) {return;}
@@ -2150,7 +2133,7 @@ void noteEstablishmentRtt(int rttMs) {
 
     /**
      * We are Alice. NTCP2 only.
-     *
+     * <p>
      * Caller MUST call recvEncryptedI2NP() after, for any remaining bytes in receive buffer
      *
      * @param sender use to send to Bob
@@ -2177,7 +2160,7 @@ void noteEstablishmentRtt(int rttMs) {
 
     /**
      * We are Bob. NTCP2 only.
-     *
+     * <p>
      * Caller MUST call recvEncryptedI2NP() after, for any remaining bytes in receive buffer
      *
      * @param sender use to send to Alice
@@ -2274,7 +2257,7 @@ void noteEstablishmentRtt(int rttMs) {
 
     /**
      * Read the encrypted message
-     *
+     * <p>
      * Call all methods from synchronized parent method.
      *
      * @since 0.9.36
@@ -2394,7 +2377,6 @@ void noteEstablishmentRtt(int rttMs) {
         /**
          *  Allocate the scratch buffer for the announced frame on the buffered
          *  (split-frame) read path.
-         *
          *  <p>A pooled 16 KB buffer is used for regular frames; oversized frames get
          *  a one-off allocation since the pool only holds the fixed 16 KB class and
          *  a pooled buffer would be too small. A previous pooled buffer that is too
@@ -2421,10 +2403,10 @@ void noteEstablishmentRtt(int rttMs) {
          *  Length is _framelen
          *  Side effects: Sets _received = -2, increments _frameCount and _blockCount if valid,
          *  calls destroy() and sets _terminated if termination block received or if invalid.
-         *
+         * <p>
          *  Does not call close() on failure. Caller MUST call delayedClose() if this returns false.
          *
-         *  @return success, false for fatal error (AEAD) only
+         * @return success, false for fatal error (AEAD) only
          */
         private boolean decryptAndProcess(byte[] data, int off) {
             if (isBanned()) {return false;}
@@ -2609,7 +2591,7 @@ void noteEstablishmentRtt(int rttMs) {
      * After an AEAD failure, read a random number of bytes,
      * with a brief timeout, and then fail.
      * This replaces _curReadState, so no more messages will be received.
-     *
+     * <p>
      * Call this only on data phase AEAD failure.
      * For other failures, use sendTermination().
      *
@@ -2637,7 +2619,7 @@ void noteEstablishmentRtt(int rttMs) {
     /**
      * After an AEAD failure, read a random number of bytes,
      * with a brief timeout, and then fail.
-     *
+     * <p>
      * Call all methods from synchronized parent method.
      *
      * @since 0.9.36

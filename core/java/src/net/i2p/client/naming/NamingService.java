@@ -288,7 +288,7 @@ public abstract class NamingService {
      * depending on the implementation.
      * Warning - This will bring the whole database into memory
      * if options is null, empty, or unsupported, use with caution.
-     *
+     * <p>
      * This implementation calls getEntries(options) and returns a SortedMap.
      * Subclasses should override if they store base64 natively.
      *
@@ -314,7 +314,7 @@ public abstract class NamingService {
      * Output is not necessarily sorted, implementation dependent.
      * Output may or may not contain comment lines, implementation dependent.
      * Caller must close writer.
-     *
+     * <p>
      * This implementation calls getBase64Entries().
      * Subclasses should override if they store in a hosts.txt format natively.
      *
@@ -331,7 +331,7 @@ public abstract class NamingService {
      * Output is not necessarily sorted, implementation dependent.
      * Output may or may not contain comment lines, implementation dependent.
      * Caller must close writer.
-     *
+     * <p>
      * This implementation calls getBase64Entries(options).
      * Subclasses should override if they store in a hosts.txt format natively.
      *
@@ -647,10 +647,10 @@ public abstract class NamingService {
     /**
      * For NamingServices that support multiple Destinations for a single hostname,
      * return all of them.
-     *
+     * <p>
      * It is recommended that the returned list is in order of priority, highest-first,
      * but this is NamingService-specific.
-     *
+     * <p>
      * Not recommended for resolving Base 32 addresses;
      * whether this does resolve Base 32 addresses
      * in the form {52 chars}.b32.i2p is NamingService-specific.
@@ -666,20 +666,20 @@ public abstract class NamingService {
     /**
      * For NamingServices that support multiple Destinations and Properties for a single hostname,
      * return all of them.
-     *
+     * <p>
      * It is recommended that the returned list is in order of priority, highest-first,
      * but this is NamingService-specific.
-     *
+     * <p>
      * If storedOptions is non-null, it must be a List that supports null entries.
      * If the returned value (the List of Destinations) is non-null,
      * the same number of Properties objects will be added to storedOptions.
      * If no properties were found for a given Destination, the corresponding
      * entry in the storedOptions list will be null.
-     *
+     * <p>
      * Not recommended for resolving Base 32 addresses;
      * whether this does resolve Base 32 addresses
      * in the form {52 chars}.b32.i2p is NamingService-specific.
-     *
+     * <p>
      * This implementation simply calls lookup().
      * Subclasses implementing multiple destinations per hostname should override.
      *
@@ -752,7 +752,7 @@ public abstract class NamingService {
      * and this is the only Destination, removes the entire entry.
      * If additional Destinations remain, it only removes the
      * specified Destination from the entry.
-     *
+     * <p>
      * This implementation simply calls lookup() and remove().
      * Subclasses implementing multiple destinations per hostname,
      * or with more efficient implementations, should override.
@@ -821,7 +821,7 @@ public abstract class NamingService {
 
     /**
      * Is this an i2p hostname?
-     *
+     * <p>
      * ref: https://www.rfc-editor.org/rfc/rfc9476.html
      *
      * @param hostname non-null
@@ -836,7 +836,7 @@ public abstract class NamingService {
     /**
      * Is this a b32 hostname?
      * Does NOT validate the base32 part except for length.
-     *
+     * <p>
      * ref: https://www.rfc-editor.org/rfc/rfc9476.html
      *
      * @param hostname non-null
@@ -856,7 +856,7 @@ public abstract class NamingService {
      * Is this a blinded ("b33") hostname?
      * Does NOT validate the base32 part except for length.
      * See Blinding.decode() for full validation.
-     *
+     * <p>
      * ref: https://www.rfc-editor.org/rfc/rfc9476.html
      *
      * @param hostname non-null
@@ -875,7 +875,7 @@ public abstract class NamingService {
     /**
      * WARNING - for use by I2PAppContext only - others must use
      * I2PAppContext.namingService()
-     *
+     * <p>
      * Create a naming service instance, choosing the implementation from the
      * "i2p.naming.impl" system property (defaulting to the router or client
      * implementation according to the context type). This is a factory, not a

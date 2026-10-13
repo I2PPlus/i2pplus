@@ -77,7 +77,7 @@ import net.i2p.util.Translate;
 /**
  * Core router implementation that manages I2P node lifecycle, configuration, and subsystem coordination.
  * Handles startup/shutdown, router info management, bandwidth capabilities, and provides the main entry point for both embedded and standalone router operation.
- *
+ * <p>
  * For embedded use, instantiate, call setKillVMOnEnd(false), and then call runRouter().
  */
 public class Router implements RouterClock.ClockShiftListener {
@@ -211,9 +211,9 @@ public class Router implements RouterClock.ClockShiftListener {
      * Instantiation only. Starts no threads. Does not install updates.
      * RouterContext is created but not initialized.
      * You must call runRouter() after any constructor to start things up.
-     *
+     * <p>
      * Config file name is "router.config" unless router.configLocation set in system properties.
-     *
+     * <p>
      * See two-arg constructor for more information.
      *
      * @throws IllegalStateException since 0.9.19 if another router with this config is running
@@ -224,9 +224,9 @@ public class Router implements RouterClock.ClockShiftListener {
      * Instantiation only. Starts no threads. Does not install updates.
      * RouterContext is created but not initialized.
      * You must call runRouter() after any constructor to start things up.
-     *
+     * <p>
      * Config file name is "router.config" unless router.configLocation set in envProps or system properties.
-     *
+     * <p>
      * See two-arg constructor for more information.
      *
      * @param envProps may be null
@@ -238,7 +238,7 @@ public class Router implements RouterClock.ClockShiftListener {
      * Instantiation only. Starts no threads. Does not install updates.
      * RouterContext is created but not initialized.
      * You must call runRouter() after any constructor to start things up.
-     *
+     * <p>
      * See two-arg constructor for more information.
      *
      * @param configFilename may be null
@@ -250,18 +250,18 @@ public class Router implements RouterClock.ClockShiftListener {
      * Instantiation only. Starts no threads. Does not install updates.
      * RouterContext is created but not initialized.
      * You must call runRouter() after any constructor to start things up.
-     *
+     * <p>
      * If configFilename is non-null, configuration is read in from there.
      * Else if envProps is non-null, configuration is read in from the
      * location given in the router.configLocation property.
      * Else it's read in from the System property router.configLocation.
      * Else from the file "router.config".
-     *
+     * <p>
      * The most important properties are i2p.dir.base (the install directory, may be read-only)
      * and i2p.dir.config (the user's configuration/data directory).
-     *
+     * <p>
      * i2p.dir.base defaults to user.dir (CWD) but should almost always be set.
-     *
+     * <p>
      * i2p.dir.config default depends on OS, user name (to detect if running as a service or not),
      * and auto-detection of whether there appears to be previous data files in the base dir.
      * See WorkingDir for details.
@@ -288,19 +288,19 @@ public class Router implements RouterClock.ClockShiftListener {
         /**
          * We need the user directory figured out by now, so figure it out here rather than
          * in the RouterContext() constructor.
-         *
+         * <p>
          * We have not read the config file yet. Therefore the base and config locations
          * are determined solely by properties (first envProps then System), for the purposes
          * of initializing the user's config directory if it did not exist.
-         *
+         * <p>
          * If the base dir and/or config dir are set in the config file, they wil be used after
          * the initialization of the (possibly different) dirs determined by WorkingDir.
          * So for now, it doesn't make much sense to set the base or config dirs in the config file -
          * use properties instead. If for some reason, distros need this, we can revisit it.
-         *
+         * <p>
          * Then add it to envProps (but not _config, we don't want it in the router.config file)
          * where it will then be available to all via _context.dir()
-         *
+         * <p>
          * This call also migrates all files to the new working directory, including router.config
          */
 
@@ -410,7 +410,7 @@ public class Router implements RouterClock.ClockShiftListener {
      * Initializes the RouterContext.
      * Starts some threads. Does not install updates.
      * All this was in the constructor.
-     *
+     * <p>
      * Could block for 10 seconds or forever if waiting for entropy
      *
      * @since 0.8.12
@@ -490,7 +490,7 @@ public class Router implements RouterClock.ClockShiftListener {
     /**
      * Configure the router to kill the JVM when the router shuts down, as well
      * as whether to explicitly halt the JVM during the hard fail process.
-     *
+     * <p>
      * Defaults to true. Set to false for embedded before calling runRouter()
      *
      * @param shouldDie true to kill VM on shutdown, false for embedded use
@@ -521,7 +521,6 @@ public class Router implements RouterClock.ClockShiftListener {
 
     /**
      * An unmodifiable set of all configuration property names.
-     *
      * <p>Warning: this is a live view of the configuration - use
      * {@link #saveConfig()} or {@link #saveConfig(String, String)} when you
      * modify the returned set, otherwise the router may race with a concurrent
@@ -541,9 +540,9 @@ public class Router implements RouterClock.ClockShiftListener {
     /**
      * Our current router info.
      * Warning, may be null if called very early.
-     *
+     * <p>
      * Warning - risk of deadlock - do not call while holding locks
-     *
+     * <p>
      * Note: Due to lock contention, especially during a
      * rebuild of the router info, this may take a long time.
      * For determining the current status of the router, use
@@ -579,7 +578,7 @@ public class Router implements RouterClock.ClockShiftListener {
     /**
      * Caller must ensure info is valid - no validation done here.
      * Not for external use.
-     *
+     * <p>
      * Warning - risk of deadlock - do not call while holding locks
      *
      * @param info the router info to adopt as ours; the caller must ensure it is valid
@@ -676,7 +675,7 @@ public class Router implements RouterClock.ClockShiftListener {
      * This is for embedded use.
      * Standard standalone installation uses main() instead, which
      * checks for updates and then calls this.
-     *
+     * <p>
      * This may take quite a while, especially if NTP fails
      * or the system lacks entropy
      *
@@ -745,7 +744,7 @@ public class Router implements RouterClock.ClockShiftListener {
      * This updates the config with all settings found in the file.
      * It does not clear the config first, so settings not found in
      * the file will remain in the config.
-     *
+     * <p>
      * This is synchronized with saveConfig().
      * Not for external use.
      */
@@ -987,9 +986,9 @@ public class Router implements RouterClock.ClockShiftListener {
      * Rebuild and republish our routerInfo since something significant
      * has changed.
      * This is a non-blocking rebuild.
-     *
+     * <p>
      * Not for external use.
-     *
+     * <p>
      * Warning - risk of deadlock - do not call while holding locks
      */
     public void rebuildRouterInfo() {rebuildRouterInfo(false);}
@@ -998,7 +997,7 @@ public class Router implements RouterClock.ClockShiftListener {
      * Rebuild and republish our routerInfo since something significant
      * has changed.
      * Not for external use.
-     *
+     * <p>
      * Warning - risk of deadlock - do not call while holding locks
      *
      * @param blockingRebuild ignored, operation is always nonblocking
@@ -1417,9 +1416,9 @@ public class Router implements RouterClock.ClockShiftListener {
     /**
      * Rebuild a new identity the hard way - delete all of our old identity
      * files, then reboot the router.
-     *
+     * <p>
      * Calls exit(), never returns.
-     *
+     * <p>
      * Not for external use.
      */
     @SuppressWarnings("java:S1181")
@@ -1453,7 +1452,7 @@ public class Router implements RouterClock.ClockShiftListener {
              * Check to see if processor changed since last time we ran, or if we detected a different
              * processor model due to CPUID code changes, or if we changed 32/64 bit.
              * If so, delete the old jbigi.so file, to protect against a JVM crash.
-             *
+             * <p>
              * We do this before calling elGamalEngine(), which calls NBI.
              * We take care not to access the NBI class yet.
              */
@@ -1789,26 +1788,26 @@ public class Router implements RouterClock.ClockShiftListener {
 
     /**
      * Non-blocking shutdown.
-     *
+     * <p>
      * Call this if we want the router to kill itself as soon as we aren't
      * participating in any more tunnels (etc).  This will not block and doesn't
      * guarantee any particular time frame for shutting down.  To shut the
      * router down immediately, use {@link #shutdown}.  If you want to cancel
      * the graceful shutdown (prior to actual shutdown ;), call
      * {@link #cancelGracefulShutdown}.
-     *
+     * <p>
      * Exit code will be EXIT_GRACEFUL.
-     *
+     * <p>
      * Shutdown delay will be from zero to 11 minutes.
      */
     public void shutdownGracefully() {shutdownGracefully(EXIT_GRACEFUL);}
 
     /**
      * Non-blocking shutdown.
-     *
+     * <p>
      * Call this with EXIT_HARD or EXIT_HARD_RESTART for a non-blocking,
      * hard, non-graceful shutdown with a brief delay to allow a UI response
-     *
+     * <p>
      * Returns silently if a final shutdown is already in progress.
      *
      * @param exitCode one of the EXIT_* values, non-negative
@@ -1831,7 +1830,7 @@ public class Router implements RouterClock.ClockShiftListener {
 
     /**
      * Cancel any prior request to shut the router down gracefully.
-     *
+     * <p>
      * Returns silently if a final shutdown is already in progress.
      */
     public void cancelGracefulShutdown() {
@@ -1875,7 +1874,7 @@ public class Router implements RouterClock.ClockShiftListener {
     /**
      * Save the current config options (returning true if save was
      * successful, false otherwise)
-     *
+     * <p>
      * Synchronized with file read in getConfig()
      *
      * @return true if the properties were written, false if the write failed
@@ -1958,10 +1957,10 @@ public class Router implements RouterClock.ClockShiftListener {
      * A "soft" restart, primarily of the comm system, after a port change or large step-change in system time.
      * Does not stop the whole JVM, so it is safe even in the absence of the wrapper.
      * This is not a graceful restart - all peer connections are dropped immediately.
-     *
+     * <p>
      * As of 0.8.8, this returns immediately and does the actual restart in a separate thread.
      * Poll isAlive() if you need to know when the restart is complete.
-     *
+     * <p>
      * Not recommended for external use.
      */
     public synchronized void restart() {
@@ -1984,7 +1983,7 @@ public class Router implements RouterClock.ClockShiftListener {
      * No other options allowed, for now
      * Instantiates Router(), and either installs updates and exits,
      * or calls runRouter().
-     *
+     * <p>
      * Not recommended for embedded use.
      * Applications bundling I2P should instantiate a Router and call runRouter().
      *
@@ -2082,12 +2081,12 @@ public class Router implements RouterClock.ClockShiftListener {
 
     /**
      * How long this router was down before it started, or 0 if unknown.
-     *
+     * <p>
      * This may be used for a determination of whether to regenerate keys, for example.
      * We use the timestamp of the previous ping file left behind on crash,
      * as set by isOnlyRouterRunning(), if present.
      * Otherwise, the last STOPPED entry in the event log.
-     *
+     * <p>
      * May take a while to run the first time, if it has to go through the event log.
      * Once called, the result is cached.
      *

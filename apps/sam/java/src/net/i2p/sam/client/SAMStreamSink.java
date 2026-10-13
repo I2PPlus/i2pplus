@@ -32,9 +32,9 @@ import java.nio.charset.StandardCharsets;
  * Swiss army knife tester.
  * Saves our transient b64 destination to myKeyFile where SAMStreamSend can get it.
  * Saves received data to a file (in sinkDir).
- *
+ * <p>
  * Usage: SAMStreamSink [options] myKeyFile sinkDir
- *
+ * <p>
  * See apps/sam/doc/README-test.txt for info on test setup.
  * Receives data in one of 7 modes.
  * Optionally uses SSL.

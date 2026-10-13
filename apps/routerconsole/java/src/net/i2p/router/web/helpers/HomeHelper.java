@@ -333,10 +333,8 @@ public class HomeHelper extends HelperBase {
 
     /**
      * Drop sites that are gone from the Sites of Interest listing.
-     *
      * <p>Applies only to the favourites shown on the home and sitemap pages. The config
      * table is left complete so a link that is merely down can still be seen and removed.
-     *
      * <p>A site is dropped when the naming service cannot resolve it, or when the addressbook
      * checker's last probe of it failed. A site that resolves but has not been probed yet is
      * kept, so a cold results file does not empty the page. Links that are not I2P names -

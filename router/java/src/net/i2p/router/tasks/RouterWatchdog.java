@@ -16,12 +16,12 @@ import net.i2p.util.SystemVersion;
 
 /**
  * Router health monitor and automatic recovery system.
- *
+ * <p>
  * This watchdog runs continuously to monitor router health and detect
  * potentially hung or unresponsive states. It checks various system
  * components including job queue processing, client responsiveness,
  * and network connectivity.
- *
+ * <p>
  * <strong>Monitoring Checks:</strong>
  * <ul>
  * <li>Job queue liveliness - detects stuck jobs</li>
@@ -29,7 +29,7 @@ import net.i2p.util.SystemVersion;
  * <li>Network error rates - detects connectivity issues</li>
  * <li>Communication system status - checks network health</li>
  * </ul>
- *
+ * <p>
  * <strong>Recovery Actions:</strong>
  * <ul>
  * <li>Logs detailed system status when problems detected</li>
@@ -37,7 +37,7 @@ import net.i2p.util.SystemVersion;
  * <li>May force JVM restart after consecutive failures</li>
  * <li>Configurable via watchdog.haltOnHang property</li>
  * </ul>
- *
+ * <p>
  * The watchdog runs every minute and will attempt recovery
  * if problems persist across multiple consecutive checks.
  * This helps prevent router from becoming completely unresponsive

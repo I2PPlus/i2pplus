@@ -84,7 +84,6 @@ public final class MLKEM {
 
     /**
      * Bob side.
-     *
      * <p>Fails if the public key is not a well formed ML-KEM public key of the
      * given parameter set, or if the type is not an ML-KEM type.
      *
@@ -112,14 +111,12 @@ public final class MLKEM {
 
     /**
      * Alice side.
-     *
      * <p>Decapsulation implements the implicit rejection required by FIPS 203
      * section 7.3: a ciphertext that is malformed, truncated, tampered with, or
      * addressed to a different key never raises. Instead the shared secret is
      * replaced by a pseudorandom value derived from the decapsulation key and
      * the rejected ciphertext, so the result simply does not match the peer's.
      * The replacement is deterministic, so retrying learns nothing.
-     *
      * <p>A caller that needs to authenticate the peer must therefore compare
      * the returned secret against the expected one, because no exception
      * distinguishes a bad ciphertext. A mismatched 32 byte secret is the only

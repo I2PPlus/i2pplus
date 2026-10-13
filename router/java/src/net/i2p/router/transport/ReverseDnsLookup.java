@@ -38,7 +38,7 @@ import net.i2p.util.Translate;
 
 /**
  * Reverse-DNS resolver and cache for the comm system.
- *
+ * <p>
  * Owns all reverse-DNS state that previously lived in
  * {@link CommSystemFacadeImpl}: the size-limited in-memory IP-to-hostname
  * cache with persistent file backup, the background lookup executor used by
@@ -46,14 +46,14 @@ import net.i2p.util.Translate;
  * {@link #getLocalHostName(String)} lookups, and the periodic cache file
  * writer. The facade retains thin delegation stubs so external callers are
  * unaffected.
- *
+ * <p>
  * The cache is backed by a disk file that is safely read and written using the
  * writer's own snapshot, so a crash mid-write cannot corrupt existing entries.
  * Entries expire in memory after {@link #EXPIRE_TIME} and are evicted from
  * disk if older than {@link #EVICT_THRESHOLD}. Cache size is bounded by
  * memory-based limits (see {@link #maxCacheSize(boolean, boolean)}) with
  * automatic eviction of expired and then oldest entries.
- *
+ * <p>
  * Supports migration from older cache file formats missing timestamps.
  *
  * @since 0.9.71
@@ -124,7 +124,7 @@ public class ReverseDnsLookup {
      * In-memory reverse DNS cache storing IP-to-hostname mappings.
      * Backed by ConcurrentHashMap for lock-free reads. Entries are
      * periodically flushed to disk and expired entries are cleaned up.
-     *
+     * <p>
      * Keys are IP addresses as Strings. Values are CacheEntry objects
      * containing hostname and timestamp.
      */
@@ -137,7 +137,7 @@ public class ReverseDnsLookup {
 
     /**
      * rDNS cache entry lifetime in hours, based on available memory.
-     *
+     * <p>
      * Routers with less than 512 MB keep entries for 24 h; routers with at
      * least 1 GB keep them for 48 h; everything else for 36 h. This bounds
      * how stale a cached hostname may be before it is re-resolved, trading
@@ -160,7 +160,7 @@ public class ReverseDnsLookup {
 
     /**
      * Maximum rDNS cache size, based on available memory.
-     *
+     * <p>
      * Caches 8000 entries on very limited routers, 24000 on routers with at
      * least 1 GB, and 16000 otherwise. The bound prevents the persistence
      * file and the in-memory map from growing without limit on the control
@@ -183,7 +183,7 @@ public class ReverseDnsLookup {
 
     /**
      * Whether a full cache should evict entries at an accelerated rate.
-     *
+     * <p>
      * When the cache exceeds 90% of its maximum size, the TTL applied by
      * {@link #entryExpired(long, long, boolean)} is halved so eviction keeps
      * up with insertion load. Choosing the threshold as a percentage of the
@@ -201,7 +201,7 @@ public class ReverseDnsLookup {
 
     /**
      * Whether a cache entry has outlived its permitted lifetime.
-     *
+     * <p>
      * "unknown" entries (failed lookups) expire after a short fixed window so
      * dead IPs are re-probed; all other entries use the caller-supplied base
      * TTL, which itself may be halved by {@link #accelerateEviction(int, int)}.
@@ -218,7 +218,7 @@ public class ReverseDnsLookup {
 
     /**
      * Whether an entry read from the persistence file is fresh enough to reuse.
-     *
+     * <p>
      * Applies only at startup when the file is loaded; entries older than the
      * eviction threshold are skipped so a long-idle router does not resurrect
      * months-old hostnames.
@@ -234,7 +234,7 @@ public class ReverseDnsLookup {
 
     /**
      * Create the resolver and its background executor.
-     *
+     * <p>
      * The executor is started eagerly so the queue-size rate stat is ready
      * before the first lookup, avoiding a first-hit initialization stall on
      * the page-rendering path.
@@ -456,7 +456,7 @@ public class ReverseDnsLookup {
 
     /**
      * Stop the periodic cache writer and shut down the lookup executor.
-     *
+     * <p>
      * Cancels the background cache-file timer and the rDNS executor, waiting
      * up to 5 seconds for in-flight lookups to drain before force-interrupting
      * them, and clears the in-flight marker set so a later restart does not
@@ -554,7 +554,7 @@ public class ReverseDnsLookup {
 
     /**
      * Load the persistence file into the in-memory cache at startup.
-     *
+     * <p>
      * Skips "#" comment lines and entries older than the eviction threshold,
      * then schedules the periodic cache-file writer task ({@code RDNSCacheFileWriter}).
      * A missing file
@@ -596,7 +596,7 @@ public class ReverseDnsLookup {
 
     /**
      * Serialize a cache entry for persistence.
-     *
+     * <p>
      * Format is "ip,hostname,timestamp" — one line per entry. The timestamp
      * enables expiration and startup filtering, and distinguishes the current
      * format from the two-part legacy format (see {@link #rdnsEntryFromString}).
@@ -611,7 +611,7 @@ public class ReverseDnsLookup {
 
     /**
      * Parse a persisted line back into a cache entry.
-     *
+     * <p>
      * Three-part lines carry an explicit timestamp. Two-part lines are the
      * pre-timestamp legacy format and are migrated with the current time.
      * Any other shape returns null and the caller skips the line.
@@ -751,7 +751,7 @@ public class ReverseDnsLookup {
     /**
      * Decide whether a cache insert must run a full-cache cleanup sweep.
      * See {@link #needRdnscacheSweep(int, int, int)} for the amortization rule.
-     *
+     * <p>
      * Sweeping on every put when the cache sits at its cap is O(n) per insert
      * and shows up as CHM iterator churn on the rDNS hot path. Instead the
      * sweep is amortized: once the map is at/over its cap it runs at most
@@ -759,7 +759,7 @@ public class ReverseDnsLookup {
      * cap in steady state), while exceeding the cap by more than
      * {@link #MAX_SLACK} entries still sweeps immediately so the memory bound
      * stays hard.
-     *
+     * <p>
      * A benign race on the shared {@code _rdnsCleanupCounter} only changes
      * which insert triggers the sweep; it never under-sweeps below the slack
      * guard (the size check is made against the live map by the caller).

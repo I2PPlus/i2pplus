@@ -46,7 +46,6 @@ import net.i2p.util.VersionComparator;
  * Handles the server-side (Bob) of the NTCP 2 handshake process,
  * including cryptographic operations, peer verification, and
  * transition to the data phase.
- *
  * <p>This class manages the complete inbound NTCP 2 connection lifecycle:
  * <ul>
  * <li>Receives and processes Alice's handshake messages (1 and 3)</li>
@@ -56,13 +55,11 @@ import net.i2p.util.VersionComparator;
  * <li>Establishes data phase keys (ChaChaPoly + SipHash)</li>
  * <li>Handles clock skew detection and peer banlisting</li>
  * </ul>
- *
  * <p>State transitions:
  * <pre>
  * IB_INIT -&gt; IB_NTCP2_INIT -&gt; IB_NTCP2_GOT_X -&gt; IB_NTCP2_GOT_PADDING
  *      -&gt; IB_NTCP2_SENT_Y -&gt; IB_NTCP2_GOT_RI -&gt; VERIFIED
  * </pre>
- *
  * <p>Threading: All methods are synchronized. Caller must hold locks when
  * invoking methods that modify state.
  *
@@ -138,11 +135,9 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
     /**
      * Entry point for receiving data on an inbound NTCP connection.
      * Parses the contents of the buffer as part of the handshake.
-     *
      * <p>Delegates to receiveInbound() for actual processing.
      * All data is copied out of the buffer as Reader.processRead()
      * will return it to the pool.
-     *
      * <p>If there are additional data in the buffer after the handshake is complete,
      * this EstablishState is responsible for passing it to NTCPConnection.
      *
@@ -166,16 +161,13 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
 
     /**
      * Receives bytes as part of an inbound connection (Bob's perspective).
-     *
      * <p>This method dispatches to the appropriate handler based on state:
      * <ul>
      * <li>{@link State#IB_INIT}: Waits for sufficient data to determine NTCP version</li>
      * <li>{@link #STATES_NTCP2}: Delegates to receiveInboundNTCP2()</li>
      * </ul>
-     *
      * <p>For NTCP 2, this method receives messages 1 and 3 from Alice,
      * and sends messages 2 and 4 in response.
-     *
      * <p>All data must be copied out of the buffer as Reader.processRead()
      * will return it to the pool.
      *
@@ -275,7 +267,6 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
 
     /**
      * Validates an inbound peer's identity and eligibility for connection.
-     *
      * <p>Performs the following checks after receiving Alice's RouterIdentity in message 3:
      * <ul>
      * <li>Banlist checks (permanent, hostile, temporary)</li>
@@ -283,7 +274,6 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
      * <li>Clock skew validation and adjustment</li>
      * <li>Clock update (desperate one-time adjustment)</li>
      * </ul>
-     *
      * <p>Side effects:
      * <ul>
      * <li>Sets _msg3p2FailReason when returning false</li>
@@ -356,10 +346,8 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
 
     /**
      * Validates the network ID from a peer's RouterInfo.
-     *
      * <p>NTCP 2 only. This is called when storing the RouterInfo in the network
      * database fails, to validate the network identifier before rejecting the connection.
-     *
      * <p>Side effects when returning false:
      * <ul>
      * <li>Sets _msg3p2FailReason to REASON_BANNED</li>
@@ -393,12 +381,12 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
      * Decoded X must be in _X.
      * Remaining part of msg1 must be in _X or src.
      * Padding if any is still in src and will be read here.
-     *
+     * <p>
      * Side effect: Sets state to IB_NTCP2_GOT_MSG1, IB_NTCP2_GOT_PADDING, or a failure state.
-     *
+     * <p>
      * we are Bob, so receive these bytes as part of an inbound connection
      * This method receives messages 1 and 3, and sends message 2.
-     *
+     * <p>
      * All data must be copied out of the buffer as Reader.processRead()
      * will return it to the pool.
      *
@@ -650,7 +638,6 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
 
     /**
      * Message 2 of the NTCP 2 handshake, built and queued for sending to Alice.
-     *
      * <p>Message 2 contains:
      * <ul>
      * <li>Bob's Noise public key (Y), 32 bytes</li>
@@ -658,10 +645,8 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
      * <li>Padding (variable length, 0-64 bytes)</li>
      * <li>AES-CBC MAC (16 bytes)</li>
      * </ul>
-     *
      * <p>The IV for CBC encryption must be in _prevEncrypted (extracted from
      * the last 16 bytes of Alice's X in message 1).
-     *
      * <p>After sending, transitions to IB_NTCP2_SENT_Y and waits for message 3.
      *
      * @since 0.9.36
@@ -728,7 +713,6 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
 
     /**
      * Performs key derivation for the NTCP 2 data phase and transitions connection state.
-     *
      * <p>This method is called after successfully receiving and validating message 3.
      * It performs the following:
      * <ul>
@@ -738,19 +722,16 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
      * <li>Processes any "extra" data in the buffer for the data phase</li>
      * <li>Zeros out sensitive key material</li>
      * </ul>
-     *
      * <p>On success (_msg3p2FailReason &lt; 0):
      * <ul>
      * <li>Calls con.finishInboundEstablishment() with keys and states</li>
      * <li>Transitions to VERIFIED state</li>
      * </ul>
-     *
      * <p>On failure (_msg3p2FailReason &gt;= 0):
      * <ul>
      * <li>Calls con.failInboundEstablishment() with termination reason</li>
      * <li>Transitions to CORRUPT state</li>
      * </ul>
-     *
      * <p>Note: If you don't call this method, call fail() directly.
      *
      * @param buf ByteBuffer possibly containing "extra" data for immediate processing
@@ -805,9 +786,7 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
 
     /**
      * Validates Alice's RouterInfo and extracts the static key for comparison.
-     *
      * <p>This is a PayloadCallback method invoked during message 3 processing.
-     *
      * <p>Validations performed:
      * <ul>
      * <li>Ensures RouterInfo contains an NTCP2-capable address</li>
@@ -818,7 +797,6 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
      * <li>Validates router version, capabilities, and network ID</li>
      * <li>Stores RouterInfo in the network database</li>
      * </ul>
-     *
      * <p>Side effects:
      * <ul>
      * <li>Sets _msg3p2FailReason on validation failure</li>
@@ -1001,7 +979,6 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
 
     /**
      * Receives and validates Alice's option preferences from message 3.
-     *
      * <p>Parses the options byte array into an NTCP2Options object containing
      * negotiated parameters like congestion control and flags.
      *
@@ -1023,7 +1000,6 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
 
     /**
      * Receives padding information from message 3.
-     *
      * <p>NTCP 2 padding is handled differently - the actual padding data is
      * not separately tracked in this implementation.
      *
@@ -1082,7 +1058,6 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
 
     /**
      * Handles handshake failure by transitioning to CORRUPT state and cleaning up.
-     *
      * <p>Overrides the base implementation to additionally destroy the Noise
      * handshake state for security.
      *
@@ -1104,10 +1079,8 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
 
     /**
      * Releases buffers and resources held by this state machine.
-     *
      * <p>Must be called exactly once when the handshake completes (success or failure).
      * Caller must hold synchronization.
-     *
      * <p>Actions:
      * <ul>
      * <li>Releases _curEncrypted buffer if verification failed (passed to NTCPConnection on success)</li>
@@ -1140,7 +1113,6 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
 
     /**
      * Converts a termination reason code to a human-readable string.
-     *
      * <p>Reason codes are defined in NTCPConnection and used in termination
      * messages to indicate why a connection failed.
      *

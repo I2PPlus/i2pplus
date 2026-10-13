@@ -14,7 +14,6 @@ import java.util.Arrays;
 /**
  * Base class for I2P data structures holding a single byte array in a
  * protected {@link #_data} field.
- *
  * <p>What the base class actually provides:</p>
  * <ul>
  *   <li><strong>Length:</strong> {@link #length()} is abstract, and subclasses
@@ -39,7 +38,6 @@ import java.util.Arrays;
  *       requires the data to be random - subclasses with structured data
  *       override it.</li>
  * </ul>
- *
  * <p>Not provided here:</p>
  * <ul>
  *   <li><strong>No cache:</strong> there is no LRU or any other cache in this

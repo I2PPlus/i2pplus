@@ -49,11 +49,11 @@ import net.i2p.util.VersionComparator;
 /**
  * The central resource coordinating updates.
  * This must be registered with the context.
- *
+ * <p>
  * The UpdateManager starts and stops all updates,
  * prevents multiple updates as appropriate,
  * and controls notification to the user.
- *
+ * <p>
  * Version notes: For news and unsigned updates, use
  * Long.toString(modtime).
  *

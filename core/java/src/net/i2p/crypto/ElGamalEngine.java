@@ -16,15 +16,13 @@ import java.math.BigInteger;
 
 /**
  * ElGamal cryptographic engine for I2P encryption and signature operations.
- *
+ * <p>
  * This class implements the ElGamal public-key cryptosystem for encrypting data
  * up to 222 bytes in size. It incorporates integrity protection by prepending
  * a random byte and SHA-256 hash to data before encryption, which are
  * verified and stripped during decryption.
- *
  * <p><strong>Note:</strong> ECIES or post-quantum schemes are preferred for new
  * applications, but this engine remains in active use by existing code.</p>
- *
  * <p>The encryption process:</p>
  * <ol>
  * <li>Generate random nonce byte</li>
@@ -50,7 +48,7 @@ public final class ElGamalEngine {
      * The ElGamal engine should only be constructed and accessed through the
      * application context.  This constructor should only be used by the
      * appropriate application context itself.
-     *
+     * <p>
      * Starts the YK precalc thread if context is RouterContext or Android.
      *
      * @param context application context supplying the log manager and the YK
@@ -91,6 +89,9 @@ public final class ElGamalEngine {
 
     /**
      * Encrypt the data to the public key.
+     * If the cleartext is smaller than 222 bytes, it is recommended that the caller pad
+     * the cleartext to 222 bytes with random data, as the encrypted data may otherwise
+     * contain a substantial number of zeros.
      *
      * @param data data to encrypt, must be 222 bytes or less
      * @param publicKey public key encrypt to
@@ -100,25 +101,6 @@ public final class ElGamalEngine {
      *         padded with leading zeros.
      *         The parts appear to always be 256 bytes or less, in other words,
      *         bytes 0 and 257 are always zero.
-     *
-     *         cleartext is smaller than 222 bytes, it is recommended that the caller pad
-     *         the cleartext to 222 bytes with random data.
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *         As the encrypted data may contain a substantial number of zeros if the
      */
     public byte[] encrypt(byte[] data, PublicKey publicKey) {
         if ((data == null) || (data.length > ELG_CLEARTEXT_LENGTH)) throw new IllegalArgumentException("Data to encrypt must be <= 222 bytes");

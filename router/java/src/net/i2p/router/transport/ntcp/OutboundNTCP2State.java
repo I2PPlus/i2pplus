@@ -28,7 +28,7 @@ import net.i2p.util.Log;
 /**
  *
  * NTCP 2 only. We are Alice.
- *
+ * <p>
  * Also contains static constants and methods used by InboundEstablishState for NTCP2.
  * Does not extend EstablishBase.
  *
@@ -190,7 +190,7 @@ class OutboundNTCP2State implements EstablishState {
 
     /**
      * Parse the contents of the buffer as part of the handshake.
-     *
+     * <p>
      * All data must be copied out of the buffer as Reader.processRead()
      * will return it to the pool.
      */
@@ -347,12 +347,12 @@ class OutboundNTCP2State implements EstablishState {
     /**
      * We are Alice, so receive these bytes as part of an outbound connection.
      * This method receives message 2, and sends message 3.
-     *
+     * <p>
      * IV (CBC from msg 1) must be in _bobIV
-     *
+     * <p>
      * All data must be copied out of the buffer as Reader.processRead()
      * will return it to the pool.
-     *
+     * <p>
      * Caller must synch
      */
     private void receiveOutbound(ByteBuffer src) {
@@ -452,7 +452,7 @@ class OutboundNTCP2State implements EstablishState {
     /**
      * We are Alice.
      * Write the 3rd message.
-     *
+     * <p>
      * Caller must synch
      */
     private void prepareOutbound3() {
@@ -627,7 +627,7 @@ class OutboundNTCP2State implements EstablishState {
 
     /**
      * Only call once.
-     *
+     * <p>
      * Caller must synch
      */
     private void releaseBufs(boolean isVerified) {

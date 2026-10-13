@@ -387,7 +387,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
 
     /**
      * Returns the blind data cache used by this database.
-     *
+     * <p>
      * We still always use a single blind cache in the main Db(for now),
      * see issue #421 on i2pgit.org/i2p-hackers/i2p.i2p for details.
      * This checks if we're the main DB already and returns our blind
@@ -834,7 +834,6 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
 
     /**
      * Look up a LeaseSet, locally first.
-     *
      * <p>Searches remotely if the LeaseSet is not held locally, is not
      * negative-cached, and is not a local destination this router hosts.
      *
@@ -851,7 +850,6 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     /**
      * Lookup using the client's tunnels
      * Use lookupDestination() if you don't need the LS or don't need it validated.
-     *
      * <p>A negative-cached key is not searched again: the failure job is run
      * instead. A client sub-NetDb local miss for a destination this router
      * hosts also fails without a search, since only the main NetDb holds such
@@ -949,7 +947,6 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      * Unconditionally lookup using the client's tunnels, with no jobs.
      * No local lookup and no LeaseSet validation. Use this to refresh a
      * LeaseSet before expiration.
-     *
      * <p>The one check that does apply is the negative cache: a
      * negative-cached key returns without searching, since a recent search
      * already established that the key is unresolvable. Nothing is sent to the
@@ -968,7 +965,6 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
 
     /**
      * Unconditionally lookup using the client's tunnels.
-     *
      * <p>Same negative-cache suppression as the two-argument overload: a
      * negative-cached key is not searched again and the failure job is run
      * instead. Nothing is searched if the router is uninitialized.
@@ -1109,10 +1105,9 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     /**
      * Lookup using the client's tunnels
      * Succeeds even if LS validation and store fails due to unsupported sig type, expired, etc.
-     *
+     * <p>
      * Note that there are not separate success and fail jobs. Caller must call
      * lookupDestinationLocally() in the job to determine success.
-     *
      * <p>The finished job is also run, without any search, if the router is
      * uninitialized or the key is negative-cached.
      *
@@ -1170,7 +1165,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
 
     /**
      * Look up a RouterInfo, resolving over the network when not cached locally.
-     *
+     * <p>
      * Screening (country/capability bans, blocklists) applies only to an
      * entry we actually hold; a screened-out entry fails the callback
      * instead of succeeding. A cache miss always starts a real search:
@@ -1274,7 +1269,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     /**
      * Determine whether the given router should be banlisted due to being:
      * - an unreachable L-tier router (CAPABILITY_BW12),
-     *
+     * <p>
      * This is typically used to filter out low-performing routers.
      *
      * @param ri the router info to evaluate
@@ -1655,7 +1650,6 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      * Queues the LeaseSet for future republishing. First publications are queued
      * immediately; subsequent republishes are batched within a 15-second window
      * to reduce job queue pressure.
-     *
      * <p>Proactively starts republishing 3 minutes before lease expiration to ensure
      * network propagation has ample time before the lease expires.</p>
      */
@@ -1877,7 +1871,6 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
 
     /**
      * Validates whether the given LeaseSet is acceptable as valid and current based on current known parameters.
-     *
      * <p>This method performs several checks including:</p>
      * <ul>
      * <li>Verifying the key matches the LeaseSet destination.</li>
@@ -1885,7 +1878,6 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      * <li>Checking if the LeaseSet is too old (expired).</li>
      * <li>Checking if the LeaseSet expires too far in the future.</li>
      * </ul>
-     *
      * <p>Note: Unlike RouterInfos, this validation is only done once at storage time.
      * Afterward, {@code LeaseSet.isCurrent()} should be used to check currency.</p>
      *
@@ -2063,7 +2055,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
 
     /**
      * Store the leaseSet.
-     *
+     * <p>
      * If the store fails due to unsupported crypto, it will negative cache
      * the hash until restart.
      *
@@ -2251,11 +2243,11 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
 
     /**
      * Determine whether an incoming LeaseSet may replace the currently stored copy.
-     *
+     * <p>
      * The anti-clobber rule: a strictly-newer incoming copy always replaces the
      * stored copy; an equal- or older-dated incoming copy is rejected so a late
      * echo or duplicate cannot clobber fresher data (see {@link #isNewer}).
-     *
+     * <p>
      * Exception: when the stored copy has lapsed - its latest lease ends within
      * {@link net.i2p.router.Router#CLOCK_FUDGE_FACTOR} of {@code now} - the stored copy
      * carries no reachability value, so any incoming copy (still validated by the
@@ -2279,7 +2271,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     /**
      * Determine whether this routerInfo will be accepted as valid and current given what we know now.
      * Call this only on first store, to check the key and signature once.
-     *
+     * <p>
      * If the store fails due to unsupported crypto, it will banlist the router hash until restart
      * and then throw UnsupportedCrytpoException.
      *
@@ -2349,7 +2341,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     /**
      * Determine whether this routerInfo will be accepted as valid and current
      * given what we know now.
-     *
+     * <p>
      * Call this before each use, to check expiration
      *
      * @param routerInfo the router info to validate
@@ -2449,7 +2441,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
 
     /**
      * Checks if the router's uptime is long enough to begin validating other routers.
-     *
+     * <p>
      * The minimum uptime is determined by the property "router.validateRoutersAfter" (in minutes),
      * or defaults to 20 minutes.
      *
@@ -2469,7 +2461,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
 
     /**
      * Computes the expiration time for a RouterInfo based on current network conditions.
-     *
+     * <p>
      * The expiration time can be customized via the "router.expireRouterInfo" property (in hours),
      * or defaults based on the number of existing routers or whether this is a floodfill.
      *
@@ -2497,7 +2489,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
 
     /**
      * Checks if the given router should be blocked due to country restrictions.
-     *
+     * <p>
      * This includes:
      * - Strict country mode
      * - Hidden mode
@@ -2606,7 +2598,7 @@ return false;
 
      /**
       * Determines whether the given router qualifies as an XG router that should be blocked.
-      *
+      * <p>
       * An XG router is defined as:
       * - Has the G capability (no tunnels)
       * - Has the X (unlimited bandwidth) capability
@@ -2649,7 +2641,7 @@ return false;
 
     /**
      * Checks if the given router is running a version older than the minimum allowed.
-     *
+     * <p>
      * If so, it bans the router until restart.
      *
      * @param routerInfo the RouterInfo to evaluate
@@ -2718,7 +2710,6 @@ return false;
     /**
      * Look up a peer's RouterInfo without running the full
      * {@link #validate(RouterInfo)} ban cascade.
-     *
      * <p>{@link #lookupLocallyWithoutValidation(Hash)} returns any database
      * entry, so the entry type is checked here; {@link #lookupRouterInfoLocally(Hash)}
      * would have done that plus the validation. Callers must only use the result
@@ -2738,7 +2729,6 @@ return false;
 
     /**
      * Checks if the router has no valid addresses or introducers and has been published too long ago.
-     *
      * <p>Only applies once the router is past the 54 minute "introduced" window
      * and while still inside the startup grace period ({@code dontFail}) is
      * skipped, so a fresh router is never dropped on this check.
@@ -2835,7 +2825,6 @@ return false;
     /**
      * Whether an otherwise-acceptable RouterInfo has aged past
      * {@link #computeAdjustedExpiration(int)} and should now be dropped.
-     *
      * <p>This is the last-resort stale-entry policy, applied after the address,
      * introducer, expiration-property, and short-expiration checks. It only
      * runs once the local router has been up long enough
@@ -2871,7 +2860,7 @@ return false;
 
     /**
      * Store the routerInfo.
-     *
+     * <p>
      * If the store fails due to unsupported crypto, it will banlist
      * the router hash until restart and then throw UnsupportedCrytpoException.
      *
@@ -2888,7 +2877,7 @@ return false;
 
     /**
      * Store the routerInfo.
-     *
+     * <p>
      * If the store fails due to unsupported crypto, it will banlist
      * the router hash until restart and then throw UnsupportedCrytpoException.
      *
@@ -2939,7 +2928,7 @@ return false;
     /**
      * If the validate fails, call this
      * to determine if it was because of unsupported crypto.
-     *
+     * <p>
      * If so, this will banlist-forever the router hash or permanently negative cache the dest hash,
      * and then throw the exception. Otherwise it does nothing.
      *
@@ -3101,7 +3090,7 @@ return false;
      * Begin a kademlia-style iterative search for the key, which can take up
      * to timeoutMs and will fire the appropriate jobs on success or timeout
      * (or if the search completes without any match).
-     *
+     * <p>
      * Abstract because only a concrete facade knows how to reach floodfills;
      * {@link FloodfillNetworkDatabaseFacade} implements this with
      * IterativeSearchJob. Data-plane callers such as {@link #lookupRouterInfo}

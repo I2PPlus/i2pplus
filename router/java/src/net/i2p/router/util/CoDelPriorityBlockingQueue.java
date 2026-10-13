@@ -56,7 +56,7 @@ public class CoDelPriorityBlockingQueue<E extends CDPQEntry> extends PriBlocking
      * Quote:
      * Below a target of 5 ms, utilization suffers for some conditions and traffic loads;
      * above 5 ms there is very little or no improvement in utilization.
-     *
+     * <p>
      * I2P: Lowered to 5ms for reduced latency in high-performance scenarios
      */
     private static final int DEFAULT_CODEL_TARGET = 5;
@@ -68,7 +68,7 @@ public class CoDelPriorityBlockingQueue<E extends CDPQEntry> extends PriBlocking
     /**
      * Quote:
      * A setting of 100 ms works well across a range of RTTs from 10 ms to 1 second
-     *
+     * <p>
      * I2P: Lowered to 50ms for faster reaction to congestion
      */
     private static final int DEFAULT_CODEL_INTERVAL = 50;
@@ -147,7 +147,6 @@ public class CoDelPriorityBlockingQueue<E extends CDPQEntry> extends PriBlocking
      */
     /**
      * Description for a queue's mean delay stat.
-     *
      * <p>Names the queue because several queues publish the same measure: OBGW and
      * UDP-Sender both come through here, and IBGW, UDP-Receiver and UDP-MessageReceiver
      * register theirs by hand. A single shared description left five graphs in the list
@@ -164,7 +163,6 @@ public class CoDelPriorityBlockingQueue<E extends CDPQEntry> extends PriBlocking
 
     /**
      * Description for a queue's per-priority drop-delay stat.
-     *
      * <p>Names the queue as well as the priority, for the same reason: without it
      * {@code codel.OBGW.drop.0} and {@code codel.UDP-Sender.drop.0} were two graphs with
      * the same name.

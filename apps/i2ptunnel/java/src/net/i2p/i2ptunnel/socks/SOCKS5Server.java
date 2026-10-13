@@ -42,12 +42,11 @@ import net.i2p.util.SipHash;
  * and extended commands including Tor RESOLVE for hostname resolution.
  * It supports UDP ASSOCIATE commands and provides outproxy connectivity
  * through both SOCKS and HTTP CONNECT methods.</p>
- *
  * <p>The server includes security features like localhost blocking, IP-to-domain
  * mapping, and integrates with I2P naming service for destination
  * resolution. It also supports torsocks compatibility through
  * hostname caching mechanisms.</p>
- *
+ * <p>
  * Supports torsocks as of 0.9.57.
  */
 class SOCKS5Server extends SOCKSServer {
@@ -609,7 +608,7 @@ class SOCKS5Server extends SOCKSServer {
      * We got a UDP associate command.
      * Loop here looking for more, never return normally,
      * or else I2PSocksTunnel will create a streaming lib connection.
-     *
+     * <p>
      * RFC 1928 defines one UDP relay per TCP control connection, but a client
      * may open more; each additional ASSOCIATE request gets its own local port.
      * The loop ends on any other command, or on a closed control connection.

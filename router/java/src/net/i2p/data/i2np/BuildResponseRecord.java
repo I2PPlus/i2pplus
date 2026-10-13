@@ -10,11 +10,10 @@ import net.i2p.data.SessionKey;
 
 /**
  * Class that creates an encrypted tunnel build message record.
- *
+ * <p>
  * The reply record is the same size as the request record (528 bytes).
- *
+ * <p>
  * When decrypted:
- *
  * <pre>
  * Bytes 0-31 contain the hash of bytes 32-527
  * Bytes 32-526 contain random data.

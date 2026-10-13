@@ -13,27 +13,27 @@ import java.util.concurrent.CopyOnWriteArrayList;
  * A "synthetic" queue that does not store data but estimates the average queue size
  * assuming a fixed output bandwidth, and applies the Random Early Detection (RED)
  * algorithm to decide probabilistically whether to accept or drop packets.
- *
+ * <p>
  * The purpose is to model queue behavior and preemptively drop packets to prevent congestion
  * before an actual queue is affected downstream.
- *
+ * <p>
  * The average queue size is measured in bytes and is updated continuously, assuming the
  * queue drains at a constant rate defined at construction.
- *
+ * <p>
  * Packet acceptance is based on the RED algorithm, which uses the current average queue size
  * and the offered packet size to calculate a drop probability. The drop probability is adjusted
  * by a factor parameter and limited by configurable minimum and maximum queue size thresholds.
- *
+ * <p>
  * This class also incorporates a Westwood+ bandwidth estimator that updates bandwidth estimates
  * based on acknowledged packet sizes and timing, using an exponential weighted moving average (EWMA).
  * Both bandwidth and queue size estimates are only updated when packets are accepted.
- *
+ * <p>
  * The implementation is adapted from the Linux kernel tcp_westwood.c logic and follows
  * established research including:
  * - Random Early Detection Gateways for Congestion Avoidance (Floyd &amp; Jacobson)
  * - TCP Westwood: End-to-End Congestion Control for Wired/Wireless Networks (Casetti et al.)
  * - End-to-End Bandwidth Estimation for Congestion Control (Grieco &amp; Mascolo)
- *
+ * <p>
  * Note: minThB (minimum threshold) must be less than maxThB (maximum threshold) for correct RED operation.
  *
  * @since 0.9.50 adapted from streaming; moved from transport in 0.9.62
@@ -202,11 +202,11 @@ public class SyntheticREDQueue implements BandwidthEstimator {
 
     /**
      * With the given bandwidth and queue size thresholds.
-     *
+     * <p>
      * Queue size thresholds:
      * - minThB: queue size in bytes to start probabilistically dropping packets
      * - maxThB: queue size in bytes at which all packets are dropped (100% drop probability)
-     *
+     * <p>
      * NOTE: minThB must be less than maxThB for proper operation.
      *
      * @param ctx the I2P application context
@@ -291,7 +291,7 @@ public class SyntheticREDQueue implements BandwidthEstimator {
 
     /**
      * Offer a packet to the queue.
-     *
+     * <p>
      * The decision to accept or drop the packet is made based on RED algorithm using
      * the current average queue size and the offered packet size with a drop probability.
      * If packet is accepted, the queue size and bandwidth estimators are updated.
@@ -561,7 +561,6 @@ public class SyntheticREDQueue implements BandwidthEstimator {
      * omitting the average queue size. The queue size is an internal RED estimator depth, useful
      * when diagnosing the estimator at DEBUG but noise on an operator-facing summary row, so the
      * I2PSnark netstatus debug section uses this form instead of {@link #toString()}.
-     *
      * <p>Values are separated by a bullet, matching the multi-value debug spans in {@code KRPC}.
      * Inline HTML is deliberate: this method exists only for that single debug row.
      *

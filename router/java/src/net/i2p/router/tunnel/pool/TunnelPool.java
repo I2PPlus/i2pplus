@@ -205,7 +205,6 @@ public class TunnelPool {
      *  Congestion / slow destinations must not mass-remove healthy tunnels
      *  at the hard-failure bar (4), but a tunnel that times out dozens of
      *  times with no successful tests still rotates out.
-     *
      * <p><b>Must stay strictly above {@link #SOFT_DEGRADED_FOR_ENSURE}.</b>
      *  The gap between the two is the pre-emptive build window: at the
      *  degraded count the ensure gate starts seeing a deficit and builds
@@ -236,7 +235,6 @@ public class TunnelPool {
     /**
      * Absolute ceiling on builds in flight per pool and direction, applied to
      *  every build path including the pre-emergency burst.
-     *
      * <p>Bounds the damage from any single path bypassing the normal guards.
      *  Without it a pool that stays below the emergency threshold starts a
      *  burst on every cycle while its builds neither complete nor fail, and the
@@ -265,7 +263,6 @@ public class TunnelPool {
 
     /**
      * Fold a completed test duration into the rolling average.
-     *
      * <p>Pure so the smoothing is testable without a router.
      *
      * @param avg  current average, 0 if none
@@ -280,7 +277,6 @@ public class TunnelPool {
 
     /**
      * Next test timeout multiplier for a given rolling average.
-     *
      * <p>Pure. Rises when tests are consistently slow so a slow-but-alive
      *  tunnel is not condemned for exceeding a window that was never long
      *  enough for it, and falls back when they are not. Capped at
@@ -421,7 +417,6 @@ public class TunnelPool {
     private volatile boolean _everHadHealthyTunnel;
       /**
        * Last healthy count emitted in a thin-pool warning, or -1 before any.
-       *
        * <p>The executor ticks far faster than the pool's health changes, so warning
        *  per tick reprinted an unchanged 2/8 hundreds of times a minute. That is
        *  worse than noisy: it buries the build failures it sits next to, and a
@@ -463,7 +458,6 @@ public class TunnelPool {
 
     /**
      * Lease-material target override, or 0 when none is active.
-     *
      * <p>A pool normally replenishes toward {@link #getEffectiveTarget()}: enough
      *  tunnels to serve traffic. That is the right target most of the time, but it
      *  is blind to a second question. A pool can sit at full size while holding
@@ -472,7 +466,6 @@ public class TunnelPool {
      *  active, so a near-expiry tunnel is retained indefinitely and never counted
      *  as fresh by {@code countFreshTunnels}. The result is an inbound pool that
      *  looks healthy by count and cannot sign a LeaseSet worth publishing.
-     *
      * <p>This field bridges that gap, by way of pruning only.
      *  {@code RepublishLeaseSetJob} raises it when a mint is imminent and the
      *  pool cannot supply viable leases; {@link #pruneExcessTunnels} then offers
@@ -482,7 +475,6 @@ public class TunnelPool {
      *  least 2, so folding it into {@link #getEffectiveTarget} as a floor could
      *  never move the number. Build pressure comes from the shortfall, not from
      *  inflating the target.
-     *
      * <p>The alternative to pruning here is raising
      *  {@link #LEASE_MIN_REMAINING_MS} permanently, which buys the same effect by
      *  making every tunnel past a fixed age ineligible -- sustained extra build
@@ -587,11 +579,9 @@ public class TunnelPool {
     static final long MAX_TUNNEL_LIFETIME_MS = 11L * 60 * 1000;
     /**
      * Tunnels must have at least this much remaining life to be published.
-     *
      * <p>The lease ends {@link #LEASE_SAFETY_MARGIN} before the tunnel expires
      *  and the lease end is floored 60s out, so a tunnel closer to death than this
      *  would produce a lease ending after the gateway stops routing.
-     *
      * <p>Raised from two minutes to three. This is the admission gate for
      *  LeaseSet leases, and it is what pins published LeaseSets near the floor:
      *  a LeaseSet's staleness is judged on its <em>latest</em> lease (see
@@ -599,13 +589,11 @@ public class TunnelPool {
      *  two-minute lease cap the advertised lifetime of the whole set. Client
      *  destinations were publishing LeaseSets at 76-120s rather than the 600s the
      *  {@code leaseMaxDuration} cap allows.
-     *
      * <p>Three minutes is the compromise that still admits tunnels: a tunnel
      *  lives 11 minutes, so it is eligible for roughly the first 8. Ten minutes
      *  would only be satisfiable in a tunnel's first minute and would starve the
      *  pools. {@link #getLeaseViabilityWindow} is the matching window the
      *  re-mint side already uses.
-     *
      * <p>Effect on pool size: the floor is also an eligibility gate, so a pool
      *  short on fresh tunnels now publishes a <em>smaller</em> LeaseSet rather
      *  than one full of short-lived leases.
@@ -647,7 +635,6 @@ public class TunnelPool {
 
     /**
      * Tunnel lifetime from config or default (11 minutes).
-     *
      * <p>The tunnel outlives its own published lease by
      *  {@link #LEASE_SAFETY_MARGIN} (60s).  That difference is the grace
      *  period, and it is what makes the advertised value land on the I2P
@@ -657,12 +644,10 @@ public class TunnelPool {
      *  peers see ~10m.  Shortening the tunnel below the cap would drag the
      *  advertised lease down with it — a 10m tunnel advertises only 9m — so the
      *  tunnel is deliberately held one grace period above the lease cap.
-     *
      * <p>Hard-capped at 11m: other routers afford a 1m grace period beyond the
      *  standard 10m lifetime and no more, so a longer tunnel would be paid for
      *  during a window no LeaseSet covers and would outlive what peers will
      *  tolerate caching.
-     *
      * <p>Tunable via i2p.tunnel.lifetime (default: 660000, capped at 660000).
      *
      * @param ctx the router context
@@ -761,7 +746,7 @@ public class TunnelPool {
      * so peers re-fetch our LeaseSet sooner than the 11-minute tunnel lifetime.
      * The tunnel itself continues to process messages; only the cached
      * LeaseSet on the requesting side expires earlier, triggering a re-fetch.
-     *
+     * <p>
      * The 5-minute republish cycle re-floods (or re-mints) well before a lease
      * dies: the re-mint floor re-signs any stored copy under 10 minutes, and
      * the reschedule anchors each check inside the 5-minute expiry window.
@@ -1081,13 +1066,11 @@ public class TunnelPool {
     /**
      * Select a tunnel to serve as a test round's partner, preferring partners
      *  that have demonstrated they work.
-     *
      * <p>Distinct from {@link #selectTunnel()}, which serves the live data
      *  path and must keep its uniform-random choice: changing that would alter
      *  which tunnel carries real traffic, which is well outside what a
      *  diagnosis warrants.  This is used only where a test round picks the leg
      *  its reply comes back through.
-     *
      * <p>A test round is a composite of the tunnel under test and the partner
      *  the reply arrives through, and a single pass/fail bit cannot separate
      *  them.  Choosing partners uniformly at random therefore injects a source
@@ -1096,7 +1079,6 @@ public class TunnelPool {
      *  status gate, because those gates inspect the tunnel and never its
      *  peers.  Ranked preference costs nothing and cannot reject a working
      *  partner, because every tier falls through to the existing behaviour.
-     *
      * <p>Preference order, best first:
      *  <ol>
      *    <li>tested GOOD <em>and</em> carrying recent real traffic — the only
@@ -1106,7 +1088,6 @@ public class TunnelPool {
      *    <li>carrying real traffic, status not yet known</li>
      *    <li>anything passing the scan gates (the previous behaviour)</li>
      *  </ol>
-     *
      * <p>Deliberately a preference and not a filter.  A transport-level
      *  reachability probe on the gateway was considered and rejected: the
      *  gateway is a peer we may hold no session with, or an established but
@@ -1259,7 +1240,6 @@ public class TunnelPool {
 
     /**
      * Why a pool could not supply a tunnel, as counts rather than prose.
-     *
      * <p>A bare "No tunnels available" cannot distinguish an empty pool from a
      *  full one whose tunnels are all ineligible, and the two call for opposite
      *  responses: the first is a build-supply problem, the second an eligibility
@@ -1298,7 +1278,6 @@ public class TunnelPool {
 
     /**
      * Count the pool by selection outcome. Pure: no lock, no clock, no logging.
-     *
      * <p>A tunnel is counted as usable when it clears the same gates
      *  {@link #passesScanGates} applies and is not set aside, so a pool reporting
      *  {@code usable=0} against a non-zero pool count has tunnels it is refusing
@@ -1380,7 +1359,7 @@ public class TunnelPool {
      *  By using this instead of the random selectTunnel(),
      *  we force some locality in OBEP-IBGW connections to minimize
      *  those connections network-wide.
-     *
+     * <p>
      * Does not check for backlogged next peer.
      *  Does not return an expired tunnel.
      *
@@ -1662,7 +1641,6 @@ public class TunnelPool {
      *  still pass tests while failing every data-phase send, so counting
      *  them as healthy would hold the ensure gate at the long throttle
      *  while the pool cannot carry traffic.
-     *
      * <p>Also excludes tunnels whose next hop is <b>backlogged</b>. A
      *  backlogged peer is congested, not healthy: it can pass tests and still
      *  time out every data-phase send, which is exactly the condition that
@@ -1697,18 +1675,15 @@ public class TunnelPool {
     /**
      * Record how many tunnels the health counts excluded for want of a local
      * transport session, alongside the count that survived the filter.
-     *
      * <p>Without this the zombie exclusion is unobservable: the counts silently
      * changed what they report, and nothing in the log or the stats graph showed
      * how many tunnels the filter actually caught. A pool reporting 6 healthy of 8
      * because two are zombies is a very different situation from one reporting 6
      * healthy of 6, and only the excluded count tells them apart.
-     *
      * <p>Both figures are passed in rather than re-read from the sibling count,
      * because that count calls back into here: reading it here would recurse. The
      * two counts also filter differently (healthy additionally drops soft-degraded
      * and backlogged tunnels), so their totals are not derivable from each other.
-     *
      * <p>The stat is written on every pass, including zero, so the rate graph
      * shows the pool as healthy-or-zombie rather than simply going silent when
      * there are no zombies. The log line is rate-limited because these counts run
@@ -1734,7 +1709,6 @@ public class TunnelPool {
     /**
      * Whether this tunnel's local path is unusable because we hold no transport
      * session to the peer we actually send through.
-     *
      * <p>A tunnel is a crypto path above the transport, and it resolves its hop
      * per message. So when a transport session dies the {@code TunnelInfo} and its
      * lease survive untouched: nothing marks the tunnel failed, and
@@ -1742,19 +1716,16 @@ public class TunnelPool {
      * soft failures and next-hop backlog -- keeps counting it. The result is a
      * zombie that occupies a pool slot and inflates every healthy/usable figure the
      * pool and its throttles are driven by, while carrying nothing.
-     *
      * <p>The peer index is direction-dependent, which is the trap here. Mirroring
      * {@code BuildRequestor.getBuildRequestPeer}: for an inbound tunnel
      * {@code getPeer(0)} is the peer we send to, but for outbound {@code getPeer(0)}
      * is the gateway we want to <em>reach</em> and {@code getPeer(1)} is our next
      * hop. Checking {@code getPeer(0)} unconditionally would query a session we
      * never had for every outbound tunnel and mark them all dead.
-     *
      * <p>Only the local hop can be checked. Hops beyond it are inside the network
      * and are reached <em>through</em> the tunnel, so we hold no session to them;
      * a failure there is indistinguishable from a far-end failure. That limit is
      * why this is a complement to the tester rather than a replacement for it.
-     *
      * <p>A tunnel is only excluded when its local session has been <em>lost</em>
      * since it was built, never merely absent. {@link TunnelInfo#hadLocalHopSession()}
      * snapshots the state at {@link #addTunnel}, when the session must have existed
@@ -1783,7 +1754,6 @@ public class TunnelPool {
 
     /**
      * Whether the tunnel's next hop is backlogged, meaning congested.
-     *
      * <p>Pure enough to be a named predicate: a length-1 tunnel has no next
      *  hop to be congested, so it is never treated as backlogged. Extracted so
      *  the ensure gate and any future caller agree on what "backlogged" means
@@ -1836,7 +1806,6 @@ public class TunnelPool {
      *  {@link #pruneExcessTunnels} can offer up the ones that are no longer
      *  advertiseable until the pool has enough. Not a build target -- see
      *  {@link #_leaseSurgeNeed}.
-     *
      * <p>Monotonic: a later request never lowers the requirement, so a second
      *  mint asking for less cannot relax pruning that an earlier one still needs.
      *
@@ -2346,7 +2315,6 @@ public class TunnelPool {
     /**
      * Schedule early expiry for the least lease-material GOOD tunnels while a
      *  lease surge is active.
-     *
      * <p>Counts tunnels with at least {@link #LEASE_MIN_REMAINING_MS} of life
      *  left -- the same bar {@code selectLeaseTunnels} applies -- and prunes the
      *  soonest-expiring offenders until that many advertiseable tunnels remain, or
@@ -2354,7 +2322,6 @@ public class TunnelPool {
      *  are never pruned: they may still be carrying client data, and evicting
      *  those to gain fresher replacements would trade LeaseSet lifetime for a data
      *  path outage, which is the worse failure.
-     *
      * <p>Deliberately one-sided. This only ever gives up tunnels that cannot be
      *  advertised; it never raises the target itself, so a pool already stocked
      *  with fresh tunnels is left alone.
@@ -2384,7 +2351,6 @@ public class TunnelPool {
      * Tunnels a lease surge may schedule for early expiry: GOOD, past the lease
      *  admission floor (so they can no longer be advertised), not already being
      *  pruned, and not recently active.
-     *
      * <p>Split out from {@link #pruneForLeaseSurge} as a pure function because
      *  this is the decision that can remove a tunnel from the pool, and it needs
      *  to be testable without standing up a populated pool. Soonest-expiry-first
@@ -2504,7 +2470,6 @@ public class TunnelPool {
     /**
      * How many usable tunnels above the target the pool may hold before a
      * further build must replace a non-GOOD tunnel instead of being added.
-     *
      * <p>A healthy pool keeps a 2-tunnel buffer (target + 2) so a tunnel lost
      * to expiry or test failure still leaves a full target's worth of usable
      * leases while replacements build.  Under tunnel stress (build success
@@ -2512,7 +2477,6 @@ public class TunnelPool {
      * (target + 1): replacement builds trigger sooner, so the pool regains
      * coverage instead of hoarding near-dead tunnels, and the buffer restores
      * itself once build success recovers.
-     *
      * <p>A NaN rate (no data yet, e.g. early startup) is treated as healthy —
      * missing stats are not evidence of an attack, and the pool must not shrink
      * its buffer before it has any statistics to act on.
@@ -3035,11 +2999,11 @@ public class TunnelPool {
 
     /**
      * Build a LeaseSet from a list of tunnels.
-     *
+     * <p>
      * This is the single canonical LeaseSet construction path for this pool;
      * all callers (periodic republish and synchronous tunnel removal) build
      * their LeaseSet here so the inclusion rules stay consistent.
-     *
+     * <p>
      * Rules:
      * <ul>
      * <li>FAILED tunnels are never included.</li>
@@ -3293,7 +3257,6 @@ public class TunnelPool {
 
     /**
      * The identity a lease for this tunnel is keyed on: its receive tunnel id.
-     *
      * <p>Two tunnels sharing a receive tunnel id are the same lease, so this is what decides
      *  whether an offered tunnel adds anything.
      *
@@ -3308,7 +3271,6 @@ public class TunnelPool {
     /**
      * Assemble the Lease objects for the selected tunnels: the single zero-hop
      * lease (if any), then the quality-sorted GOOD tunnels.
-     *
      * <p>Package-visible so the assembly can be exercised directly: the guarantee that matters
      *  here is that every tunnel offered yields a lease, and that is a property of this method
      *  rather than of the tunnels the router happened to build when the test ran.
@@ -3414,7 +3376,6 @@ public class TunnelPool {
      */
     /**
      * Whether a published LeaseSet is too small to count as a working set.
-     *
      * <p>Half the target is the same line the pool's own "thin pool" fast-path uses
      *  ({@code healthy < target / 2}), so the two signals now agree on which tier
      *  matters instead of one covering everything and the other covering half of it.
@@ -3526,7 +3487,7 @@ public class TunnelPool {
 
     /**
      * Mark a tunnel failed without blaming any peer.
-     *
+     * <p>
      * Called from {@code PooledTunnelCreatorConfig.tunnelFailedFirstHop()}
      *  when a data-phase first-hop send-failure streak reaches the fatal
      *  threshold.  The first-hop send-failure path records spaced, decayed
@@ -3651,7 +3612,6 @@ public class TunnelPool {
 
     /**
      * Name the hops of a failed tunnel so a data-phase failure is attributable.
-     *
      * <p>{@code TunnelInfo#toString()} identifies the tunnel only by nickname,
      *  which for a client tunnel is the destination nickname — so every soft
      *  failure in a pool looked identical and there was no way to tell whether
@@ -3787,20 +3747,17 @@ public class TunnelPool {
 
     /**
      * Whether a failure report is a repeat of a condemnation already made.
-     *
      * <p>A condemned tunnel is retained until it expires and is replaced
      * immediately, so it keeps receiving work and keeps reporting failures for
      * its whole remaining lifetime. Re-processing those reports only re-logs,
      * asks the pool for a replacement it already has, and lets the failure
      * counter of a retained tunnel climb without bound.
-     *
      * <p>The test is "would {@code fail()} change anything", not "is this the
      * terminal state". A soft-only cascade marks the tunnel FAILING and leaves
      * it there; requiring the hard counter to be tripped as well meant a
      * retained-but-soft-failing tunnel was re-condemned on every subsequent
      * status-3 timeout, and the observed effect was one WARN per failure with
      * the count running past a thousand on a single tunnel inside an hour.
-     *
      * <p>The one case that must still proceed is the escalation from a
      * soft-only FAILING tunnel to a hard FAILED one, because that is the report
      * which actually removes the tunnel from selection.
@@ -3823,7 +3780,7 @@ public class TunnelPool {
      *  decision.  Soft removals pass the soft counter while
      *  getConsecutiveFailures() may still be 0 — fail() would no-op on the
      *  hard counter alone.
-     *
+     * <p>
      * The tunnel is marked, not dropped: {@link #passesScanGates(TunnelInfo,
      *  long, boolean)} and the usable counts already exclude FAILING and
      *  FAILED tunnels, so it stops receiving work and stops holding a good
@@ -4030,10 +3987,10 @@ public class TunnelPool {
      * Proactively republish the LeaseSet when all tunnels are healthy (all > 5 min expiry).
      * This ensures the LeaseSet always has fresh lifetime and prevents orphaned LeaseSets
      * where the LeaseSet is technically valid but all leases have expired.
-     *
+     * <p>
      * Unlike refreshLeaseSet() which republishes when tunnels are EXPIRING SOON,
      * this republishes when tunnels are ALL HEALTHY to reset the LeaseSet lifetime.
-     *
+     * <p>
      * Called for every alive pool on every build loop iteration, so the cheap
      * checks (throttle timestamp, then usable count) run before anything that
      * takes the pool-wide tunnel lock.
@@ -4094,7 +4051,6 @@ public class TunnelPool {
     /**
      * Count unexpired tunnels when all of them expire beyond the given
      * threshold.
-     *
      * <p>Applies the same zombie exclusion as {@link #getHealthyTunnelCount()} and
      * {@link #getUsableTunnelCount()}, but deliberately records no rate stat: this
      * is a yes/no probe for the lease republish decision, and it can return early
@@ -4495,11 +4451,9 @@ public class TunnelPool {
 
         /**
          * Order leases by end time, breaking ties on tunnel identity.
-         *
          * <p>Ordering by end time is the point of this comparator: a tunnel set that has not
          * changed has to serialise to the same LeaseSet, or the router republishes identical
          * leases and the floodfill does needless work.
-         *
          * <p>The tie-break is not cosmetic, it is the whole correctness of the LeaseSet.
          * A {@link TreeSet} discards any element its comparator calls equal, and end times
          * collide constantly: {@link #computeLeaseEndDate} clamps to {@code now + maxLeaseMs}
@@ -4964,7 +4918,6 @@ public class TunnelPool {
      *  expiration.  Pure so the lifetime/grace relationship is testable without
      *  a live tunnel: the lease must end before the gateway stops routing, and
      *  must never be advertised beyond the configured maximum.
-     *
      * <p>The three steps are, in order: subtract {@link #LEASE_SAFETY_MARGIN}
      *  so peers re-fetch while the gateway still routes; clamp to
      *  {@code now + maxLeaseMs} so nobody caches us for the full lifetime; and
@@ -5291,7 +5244,6 @@ public class TunnelPool {
      * Live tunnels whose lease is inside the pre-build window, published by the
      *  last sweep so {@link net.i2p.router.tunnel.pool.BuildExecutor}'s dispatch
      *  ordering can read it without taking the pool lock.
-     *
      * <p>Published rather than computed on demand because the executor scores
      *  every wanting pool on every dispatch cycle. Walking the pool's tunnels
      *  per score would be O(tunnels x pools) per cycle, behind a lock the pool
@@ -5557,14 +5509,14 @@ public class TunnelPool {
      *  stronger evidence than a tunnel test, so the tunnel has not failed and
      *  must stay selectable and in the pool.  A test failure on such a tunnel
      *  is a reply-path false negative.
-     *
+     * <p>
      * Proof is direction-neutral: InboundEndpointProcessor stamps only after
      *  the tunnel's crypto verified, and OutboundClientMessageOneShotJob's
      *  SendSuccessJob stamps only after the remote peer replied to the
      *  message.  Neither dispatch nor a bare gateway accept reaches either
      *  call site, so the old inbound-only restriction no longer describes
      *  what the marker means.
-     *
+     * <p>
      * FAILED (3+ consecutive failures) is dead and is NOT cleared here.  A
      *  traffic stamp proves one packet got through, which is not evidence
      *  against three consecutive failed tests; only a real passing test (or a
@@ -5574,7 +5526,7 @@ public class TunnelPool {
      *  excluded from {@link #getUsableTunnelCount()} and
      *  {@link #getHealthyTunnelCount()} while marked, and ages out at natural
      *  expiry — retention cannot strand it as usable.
-     *
+     * <p>
      * UNTESTED tunnels that have delivered verified bytes are promoted to
      *  GOOD outright as well.  A tunnel that received real end-to-end traffic
      *  is proven to work — waiting for a TestJob that may never be scheduled
@@ -5585,7 +5537,7 @@ public class TunnelPool {
      *  Verified-bytes is required for UNTESTED (not just recency) because
      *  such a tunnel has never passed an explicit test, so its only proof is
      *  actual data arrival.
-     *
+     * <p>
      * Called from the periodic pool maintenance sweep (~15s).
      * @since 0.9.71+
      */
@@ -5670,7 +5622,6 @@ public class TunnelPool {
 
       /**
        * Variant taking the build timeout rate, which the hot path already has.
-       *
        * <p>A thin pool's in-flight budget has to account for builds that will
        * never complete. Each failed attempt occupies a slot for the whole
        * timeout — 17 to 33 seconds — so at a 50% timeout rate a budget of six
@@ -5679,7 +5630,6 @@ public class TunnelPool {
        * drains. Measured on a live router at 47% build success with timeouts at
        * 51%: pre-emergency fired 10,620 times across five outbound pools while
        * several sat at zero outbound tunnels.
-       *
        * <p>Scaling the budget up as the timeout rate rises gives a failing pool
        * room for enough concurrent attempts to land a replacement inside a
        * single timeout window, which is the only way a pool with a high failure
@@ -5807,7 +5757,6 @@ public class TunnelPool {
     /**
      * Whether a deficit-build batch must wait.  Pure decision helper so
      *  throttle policy is unit-testable without a router context.
-     *
      * <p>Policy: {@link #DEFICIT_THROTTLE_MS} (30s) when the pool still has
      *  healthy usable tunnels; {@link #DEFICIT_DEGRADED_MS} (10s) while the
      *  published LeaseSet is incomplete, or the pool is soft-degraded-
@@ -5869,7 +5818,6 @@ public class TunnelPool {
     /**
      * Whether ensureSufficientTunnels() must wait for this pool.  Pure
      *  decision helper for unit tests.
-     *
      * <p>Policy: {@link #ENSURE_THROTTLE_MS} (15s) normally;
      *  {@link #ENSURE_DEGRADED_MS} (5s) while the published LeaseSet is
      *  incomplete (thin reachability), or when some usable tunnels are
@@ -5879,7 +5827,6 @@ public class TunnelPool {
      *  tunnels &lt;= 1 — a pool of soft-degraded tunnels looks full to
      *  getUsableTunnelCount() while failing every data-phase send, so the
      *  long gate would starve replacements during a half-open outage.
-     *
      * <p>Compatibility overload: callers that only have a single usable count
      *  treat it as both usable and healthy. See
      *  {@link #isEnsureThrottled(long, long, int, int, boolean)} for the full
@@ -5920,7 +5867,6 @@ public class TunnelPool {
      * Whether ensureSufficientTunnels() must wait for this pool, using
      *  separate usable and healthy counts and a removal-time signal.  Pure
      *  decision helper.
-     *
      * <p>Policy: {@link #ENSURE_THROTTLE_MS} (15s) normally;
      *  {@link #ENSURE_DEGRADED_MS} (5s) while the published LeaseSet is
      *  incomplete (thin reachability), or when some usable tunnels are
@@ -5951,7 +5897,6 @@ public class TunnelPool {
      * Whether ensureSufficientTunnels() must wait for this pool, using
      *  separate usable and healthy counts, a removal-time signal, and the
      *  number of builds in flight.  Pure decision helper.
-     *
      * <p>Policy: {@link #ENSURE_THROTTLE_MS} (15s) normally;
      *  {@link #ENSURE_DEGRADED_MS} (5s) while the published LeaseSet is
      *  incomplete (thin reachability), or when some usable tunnels are
@@ -6114,7 +6059,6 @@ public class TunnelPool {
     /**
      * Raise the peer-selection activity window to its ceiling because a pool
      *  has no usable tunnels, and publish the new value.
-     *
      * <p>Deliberately not a reset: the multiplier only ever increases here, so
      *  a transient collapse does not immediately withdraw the widened window
      *  from pools that are still starved. Recovery is the Tuner's job, and its

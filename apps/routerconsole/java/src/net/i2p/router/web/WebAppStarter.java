@@ -25,13 +25,13 @@ import org.eclipse.jetty.webapp.WebAppContext;
 /**
  * Add, start or stop a webapp.
  * Add to the webapp classpath if specified in webapps.config.
- *
+ * <p>
  * Sadly, setting Class-Path in MANIFEST.MF doesn't work for jetty wars.
  * See WebAppConfiguration for more information.
  * but let's just do it in webapps.config.
- *
+ * <p>
  * No, wac.addClassPath() does not work. For more info see:
- *
+ * <p>
  * http://servlets.com/archive/servlet/ReadMsg?msgId=511113&amp;listName=jetty-support
  *
  * @since 0.7.12
@@ -100,7 +100,7 @@ public class WebAppStarter {
      * Prior to 0.9.28, was not guaranteed to throw on failure.
      * Not for routerconsole.war, it's started in RouterConsoleRunner.
      * Not for plugins, use 5-arg method.
-     *
+     * <p>
      * As of 0.9.34, the appName will be registered with the PortMapper.
      *
      * @param ctx router context supplying the temp dir, logging and PortMapper
@@ -118,7 +118,7 @@ public class WebAppStarter {
     /**
      * Adds and starts.
      * Not for routerconsole.war, it's started in RouterConsoleRunner.
-     *
+     * <p>
      * The appName will be registered with the PortMapper.
      *
      * @param ctx router context supplying the temp dir, logging and PortMapper
@@ -254,7 +254,7 @@ public class WebAppStarter {
     /**
      * Stop it and remove the context.
      * Throws just about anything, caller would be wise to catch Throwable
-     *
+     * <p>
      * Warning, this will NOT work during shutdown, because
      * the console is already unregistered.
      *
@@ -311,7 +311,7 @@ public class WebAppStarter {
      * Determine if a webapp is running.
      * Warning, this will NOT work during shutdown, because
      * the console is already unregistered.
-     *
+     * <p>
      * As of 0.9.34, the appName will be registered with the PortMapper,
      * and PortMapper.isRegistered() will be more efficient than this.
      *
@@ -391,7 +391,7 @@ public class WebAppStarter {
 
     /**
      * See comments in ConfigClientsHandler
-     *
+     * <p>
      * Warning, this will NOT work during shutdown, because
      * the console is already unregistered.
      *

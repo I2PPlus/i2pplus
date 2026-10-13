@@ -60,7 +60,7 @@ public class StatisticsManager {
 
     /**
      * Retrieve a snapshot of the statistics that should be published.
-     *
+     * <p>
      * This includes all standard options (as of 0.9.24, network ID and caps)
      * @return the statistics as an unsigned Properties set
      */
@@ -71,7 +71,7 @@ public class StatisticsManager {
 
     /**
      * Retrieve a snapshot of the statistics that should be published.
-     *
+     * <p>
      * This includes all standard options (as of 0.9.24, network ID and caps)
      *
      * @param h current router hash, non-null
@@ -182,7 +182,7 @@ public class StatisticsManager {
      * <pre>
      *  average
      * </pre>
-     *
+     * <p>
      * Previous format:
      * <pre>
      *  avg;extreme avg;pct of lifetime avg;
@@ -258,7 +258,7 @@ public class StatisticsManager {
      * <pre>
      *  0;0;0;percent or event count
      * </pre>
-     *
+     * <p>
      * Previous format: see above
      */
     private String renderRate(Rate rate, double fudgeQuantity) {

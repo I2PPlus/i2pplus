@@ -14,9 +14,8 @@ import java.util.List;
  * Simple rate calculator for periodically sampled data points - determining an
  * average value over a period, the number of events in that period, the maximum number
  * of events (using the interval between events), and lifetime data.
- *
+ * <p>
  * If value is always a constant, you should be using Frequency instead.
- *
  * <p><b>Step arithmetic.</b> A rate's RRD database is created with an archive step
  * of {@code period/1000}, so the archive step index a sample belongs to is exactly
  * {@link #archiveStep archiveStep}(timestampMs, period). {@link #coalesce()}
@@ -27,7 +26,6 @@ import java.util.List;
  * current step and counted by {@link #getCoalesceBacklogCollapses()}, because a
  * rate keeps only the current partial period and cannot reconstruct the steps it
  * missed.
- *
  * <p><b>What a listener receives.</b> {@link RateSummaryListener#add} cannot carry
  * a timestamp — its signature is fixed by implementors outside this package — so a
  * listener that writes to storage derives the sample's step from
@@ -41,7 +39,6 @@ public class Rate {
 
     /**
      * One coalesced sample, retained so a healed listener can backfill missed steps.
-     *
      * <p>The {@link #timestampMs} field is the sample's archive step stamp and is
      * the reason this class exists: {@code RateSummaryListener.add} reports no
      * timestamp, so without it a listener has no way to write the sample into the
@@ -130,7 +127,6 @@ public class Rate {
     /**
      * Wall clock of the last successful coalesce, kept apart from
      * {@link #_lastCoalesceDate} on purpose.
-     *
      * <p>{@code _lastCoalesceDate} is now the point this rate's period grid has
      * reached, so {@code now - _lastCoalesceDate} is only the grid error — normally
      * a few milliseconds of timer jitter. It is not how long the data accrued, and
@@ -185,7 +181,6 @@ public class Rate {
     /**
      * Number of {@link #coalesce()} calls that declined to coalesce because the
      * rate period had not yet elapsed.
-     *
      * <p>One skip per cycle is normal — the coalesce timer does not divide evenly
      * into the rate period, so most periods are visited once before they are due
      * and are skipped. A count that grows much faster than that indicates the rate
@@ -200,7 +195,6 @@ public class Rate {
 
     /**
      * Number of {@link #coalesce()} calls that actually coalesced.
-     *
      * <p>Paired with a storage listener's own written-step count, this is the
      * ledger invariant: the two must agree over the window since that listener
      * attached, and any positive drift is a step that was never recorded.
@@ -215,7 +209,6 @@ public class Rate {
     /**
      * How many steps {@link #coalesce()} gave up on because the timer had been
      * starved for more than one whole period.
-     *
      * <p>Each one is a whole period of aggregate data that will never reach
      * storage: a rate holds only the current partial period, so the steps it
      * missed cannot be reconstructed afterwards. Zero is the healthy state, and
@@ -231,7 +224,6 @@ public class Rate {
 
     /**
      * Retained coalesced samples, oldest first, for a listener to backfill from.
-     *
      * <p>Only the last {@link #RECENT_SAMPLE_RING} successful coalesces are kept,
      * in a fixed ring: this runs on the coalesce path under two monitors and
      * must not grow the heap. Never null.
@@ -254,7 +246,6 @@ public class Rate {
 
     /**
      * The archive step a sample stamped {@code timestampMs} belongs to.
-     *
      * <p>A rate's RRD is created with an archive step of {@code period/1000} (see
      * {@code GraphListener.startListening}), so the step index is simply
      * {@code timestampMs / period} and nothing else needs to know {@code arcStep}.
@@ -273,7 +264,6 @@ public class Rate {
     /**
      * The timestamp a coalesce due after {@code lastCoalesce} must stamp its
      * sample with: the next point on this rate's own period grid.
-     *
      * <p>Stamping {@code now} instead puts a late tick's aggregate into whichever
      * step the current wall clock falls in, not the step whose data it is. With a
      * 50s coalesce timer and a 60s period that is the common case, and the
@@ -294,7 +284,6 @@ public class Rate {
      * Whether a coalesce arriving at {@code now} is further than one whole
      * period behind its grid, and must therefore collapse its backlog into the
      * current step rather than stamp the step it is nominally due for.
-     *
      * <p>Replaying the missed steps is not an option: a rate retains only the
      * current partial period, so the aggregates for steps already gone were never
      * held anywhere. Writing the backlog into the current step is the only
@@ -542,7 +531,6 @@ public class Rate {
      * If value is always a constant, you should be using Frequency instead.
      * If eventDuration is nonzero, then the various get*Saturation*() and get*EventTime()
      * methods will also return nonzero.
-     *
      * <pre>
      * There are at least 4 possible strategies for eventDuration:
      *
@@ -586,7 +574,6 @@ public class Rate {
     /**
      * Coalesce the current period's data into the last period.
      * If the measured period is less than the rate period minus slack, this is a no-op.
-     *
      * <p>The no-op path is counted ({@link #getCoalesceSkips}) because it is
      * otherwise invisible: no log, no counter, no exception. A rate stuck skipping
      * stops feeding its summary listener, and therefore its RRD database, while
@@ -594,18 +581,15 @@ public class Rate {
      * count exists to make observable. Slack guards early visits only — it decides
      * whether a period is due yet, and nothing about what the sample is stamped
      * with, so it cannot make a late visit land in the wrong step.
-     *
      * <p>The sample is stamped with the step it is due for
      * ({@link #coalesceDueMs}) and the grid is advanced to that same instant, so
      * the steps stay exactly one period apart however much the timer drifts. A
      * backlog deeper than one period cannot be replayed and is collapsed into the
      * current step instead, counted by {@link #getCoalesceBacklogCollapses()}.
-     *
      * <p>Being on the grid makes a rate coalesce once per period even when the
      * timer visits more often than the period elapses, which is the point: an RRD
      * holds one value per step, so the samples that used to land two steps apart
      * left every intervening step empty.
-     *
      * <p>This runs on the shared coalesce timer while {@link StatManager} holds its
      * monitor, so it does no I/O and takes no lock: the counters are updated under
      * this rate's monitor, the ring entry is a fixed array write, and the listener
@@ -693,7 +677,6 @@ public class Rate {
     /**
      * Route coalesced samples through {@code delivery} instead of calling the
      * summary listener inline.
-     *
      * <p>Owned by {@link StatManager} so that one delivery thread serves the whole
      * rate table; passing it in per rate would mean a thread per rate. Pass null
      * to restore inline delivery.
@@ -707,7 +690,6 @@ public class Rate {
 
     /**
      * Clear the summary listener, but only if it is still the one registered.
-     *
      * <p>A plain {@link #setSummaryListener} clear is not safe here. Listeners
      * outlive the registration that created them — a console torn down after a
      * replacement has already registered its own listener would clear the
@@ -716,7 +698,6 @@ public class Rate {
      * nothing re-arms it: the rate goes permanently unrecorded with nothing logged.
      * Tearing down something you no longer own must be a no-op, which is what the
      * identity test below provides.
-     *
      * <p>Identity, not equality: two distinct listeners for one rate compare equal
      * (they implement {@code equals} by rate), but only one of them is ever the
      * registered instance, so {@code equals} would let the wrong one clear.

@@ -36,7 +36,7 @@ import net.i2p.stat.RateStat;
 /**
  * This is where we implement semi-Kademlia with the floodfills, by selecting
  * floodfills closest to a given key for searches and stores.
- *
+ * <p>
  * Warning - most methods taking a key as an argument require the routing key,
  * not the original key.
  */
@@ -99,11 +99,11 @@ public class FloodfillPeerSelector extends PeerSelector {
     /**
      * Pick out peers with the floodfill capacity set, returning them first, but then
      * after they're complete, sort via kademlia.
-     *
+     * <p>
      * Walks the kbuckets with a FloodfillSelectionCollector, which gathers floodfill
      * peers in groups (good floodfills first, then bad, then non-floodfills sorted by
      * Kademlia distance to the key).
-     *
+     * <p>
      * Does not prefer the floodfill peers that are directly connected.
      * List will not include our own hash. Returns new list, may be modified.
      *
@@ -171,7 +171,6 @@ public class FloodfillPeerSelector extends PeerSelector {
      * Build the floodfill candidate list with only the cheap per-peer checks:
      * the exclusion set, the two banlist tiers, and the unreachable capability
      * flag. No profile is touched.
-     *
      * <p>{@link #peerSendsBadReplies(Hash)} is deliberately not applied here —
      * it takes ProfileOrganizer's read lock and then four synchronized Rate reads
      * per peer, which on a healthy router is ~1000 lock acquisitions and ~4000
@@ -205,20 +204,19 @@ public class FloodfillPeerSelector extends PeerSelector {
     /**
      * Sort the floodfills. The challenge here is to keep the good ones at the front
      * and the bad ones at the back. If they are all good or bad, searches and stores won't work well.
-     *
+     * <p>
      * List will not include our own hash. Returns new list, may be modified.
+     * Sorted by closest to the key if &gt; maxNumRouters, otherwise not.
+     * The list is in 3 groups - sorted by routing key within each group.
+     * Group 1: No store or lookup failure in a long time, and
+     * lookup fail rate no more than 1.5 * average
+     * Group 2: No store or lookup failure in a little while or
+     * success newer than failure
+     * Group 3: All others
      *
      * @param key the ROUTING key (NOT the original key)
      * @param maxNumRouters max to return
      * @param kbuckets unused, retained for signature compatibility; null is accepted
-     *
-     *                 Sorted by closest to the key if &gt; maxNumRouters, otherwise not
-     *                 The list is in 3 groups - sorted by routing key within each group.
-     *                 Group 1: No store or lookup failure in a long time, and
-     *                 lookup fail rate no more than 1.5 * average
-     *                 Group 2: No store or lookup failure in a little while or
-     *                 success newer than failure
-     *                 Group 3: All others
      * @return floodfills closest to the key that are not banlisted forever
      */
     List<Hash> selectFloodfillParticipants(Hash key, int maxNumRouters, KBucketSet<Hash> kbuckets) {
@@ -762,7 +760,7 @@ public class FloodfillPeerSelector extends PeerSelector {
         /**
          * The first howMany matching entries, floodfills with the 'f' mark in their
          * NetDb except for banlisted ones; non-floodfills only if there aren't enough floodfills.
-         *
+         * <p>
          * The list is in 3 groups - unsorted (shuffled) within each group.
          * Group 1: NetDb published less than 3h ago, no bad send in last 30m.
          * Group 2: All others

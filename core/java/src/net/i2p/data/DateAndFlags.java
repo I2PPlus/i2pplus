@@ -15,14 +15,14 @@ import java.util.Date;
 /**
  * A six-byte Date and 2 bytes of flags, since a Date won't encroach
  * on the top two bytes until the year 10889.
- *
+ * <p>
  * The flag format is not specified here. The bits may be used in
  * an application-specific manner. The application should
  * be designed so that a flags value of 0 is the default, for
  * compatibility with an 8-byte Date.
- *
+ * <p>
  * See extending class net.i2p.client.SendMessageOptions for more info.
- *
+ * <p>
  * If we really need some more bits we could use the first few bits
  * of the third byte.
  *

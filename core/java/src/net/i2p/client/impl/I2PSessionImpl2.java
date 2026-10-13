@@ -36,7 +36,7 @@ import net.i2p.util.SimpleTimer2;
 
 /**
  * Thread safe implementation of an I2P session running over TCP.
- *
+ * <p>
  * Unused directly, see I2PSessionMuxedImpl extension.
  *
  * @author jrandom
@@ -75,7 +75,7 @@ class I2PSessionImpl2 extends I2PSessionImpl {
 
     /**
      * For extension by I2PSessionMuxedImpl
-     *
+     * <p>
      * Create a new session, reading the Destination, PrivateKey, and SigningPrivateKey
      * from the destKeyStream, and using the specified options to connect to the router
      *
@@ -94,7 +94,7 @@ class I2PSessionImpl2 extends I2PSessionImpl {
 
     /**
      * For extension by SubSession via I2PSessionMuxedImpl
-     *
+     * <p>
      * Create a new session, reading the Destination, PrivateKey, and SigningPrivateKey
      * from the destKeyStream, and using the specified options to connect to the router
      *
@@ -173,10 +173,10 @@ class I2PSessionImpl2 extends I2PSessionImpl {
      * Don't bother if really small. Three 66-byte messages will fit in one tunnel message.
      * Four messages don't fit no matter how small. So below 66 it isn't worth it.
      * See ConnectionOptions.java in the streaming lib for similar calculations.
-     *
+     * <p>
      * Since we still have to pass it through gzip -0 the CPU savings is trivial but it's
      * the best we can do for now. See below. i2cp.gzip defaults to SHOULD_COMPRESS = true.
-     *
+     * <p>
      * Perhaps the http server (which does its own compression) and P2P apps
      * (with generally uncompressible data) should set to false.
      */
@@ -369,10 +369,10 @@ class I2PSessionImpl2 extends I2PSessionImpl {
          * Sadly there is no way to send something completely uncompressed in a backward-compatible way,
          * so we have to still send it in a gzip format, which adds 23 bytes (2.4% for a 960-byte msg)
          * (10 byte header + 5 byte block header + 8 byte trailer)
-         *
+         * <p>
          * In the future we can add a one-byte magic number != 0x1F to signal an uncompressed msg
          * (Gzip streams start with 0x1F 0x8B 0x08) assuming we don't need the CRC-32 that comes with gzip?
-         *
+         * <p>
          * Maybe implement this soon in receiveMessage() below so we are ready
          * in case we ever make an incompatible network change.
          * This would save 22 of the 23 bytes and a little CPU.
@@ -500,11 +500,11 @@ class I2PSessionImpl2 extends I2PSessionImpl {
     /**
      * Only call this with nonzero status, i.e. for outbound messages
      * whose MessageState may be queued on _sendingStates.
-     *
+     * <p>
      * Even when using sendBestEffort(), this is a waste, because the
      * MessageState is removed from _sendingStates immediately and
      * so the lookup here fails.
-     *
+     * <p>
      * This is now pretty much avoided since streaming now sets
      * i2cp.messageReliability = none, which forces sendNoEffort() instead of sendBestEffort(),
      * so the router won't send us any MSM's for outbound traffic.

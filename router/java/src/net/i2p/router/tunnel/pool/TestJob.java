@@ -49,7 +49,7 @@ import net.i2p.util.SystemVersion;
  * Sends a garlic-encrypted DeliveryStatusMessage through the tunnel and validates the reply.
  * Now includes adaptive backoff, avoids over-penalizing peers on transient failures,
  * and limits the number of concurrent tunnel tests to avoid overwhelming the router.
- *
+ * <p>
  * First tests are not queued one job at a time: offers go to a bounded
  * first-test buffer ({@link #offerFirstTest}) that a single paced pump job
  * drains in small batches under the in-flight gates, so build bursts cannot
@@ -169,7 +169,6 @@ public class TestJob extends JobImpl {
     static final int TEST_ROUND_BYTES = 1024;
     /**
      *  Grace period before a tunnel's first test failure can count against it.
-     *
      *  <p>A tunnel that is condemned before it has had a realistic chance to
      *  settle and carry traffic can never prove itself, and a pool in that
      *  state cannot reach steady state.  Measured on a live router: outbound
@@ -178,7 +177,6 @@ public class TestJob extends JobImpl {
      *  four-strike threshold condemn a failing tunnel in ~90s.  Nothing
      *  distinguished "this tunnel is dead" from "this tunnel is ninety seconds
      *  old".
-     *
      *  <p>Must exceed the fastest path to condemnation — four strikes at the
      *  30s minimum retest interval is 120s — or a young tunnel can still
      *  reach the threshold inside its own grace and the loop is not broken.
@@ -194,7 +192,6 @@ public class TestJob extends JobImpl {
     /**
      *  Probe the far endpoint of a tunnel whose test round just failed, and
      *  record whether it was still reachable.
-     *
      *  <p>A round times out, the tunnel is charged, and the pool loses it.  The
      *  charge assumes the far endpoint was gone, but nothing records whether
      *  that was true.  Two very different faults produce the same verdict: the
@@ -204,19 +201,16 @@ public class TestJob extends JobImpl {
      *  The first is a data-path fault; the second is a fault in the test's own
      *  pass criterion, and the remedy is opposite.  One counter cannot tell
      *  them apart, so this splits the population.
-     *
      *  <p>Observational only: it never gates selection, never alters the
      *  charge, and never changes timing, so it cannot itself change behaviour.
      *  It runs only on rounds that have already failed and are already being
      *  charged.
-     *
      *  <p>Two signals are read rather than one, because
      *  {@link CommSystemFacade#isEstablished} and
      *  {@link CommSystemFacade#wasUnreachable} both default to {@code false}
      *  in the interface and only their implementations answer.  A lookup that
      *  misses therefore reports "reachable" silently; recording both makes that
      *  failure mode visible in the data instead of hiding it.
-     *
      *  <p>Caveats, so the result is not over-read: "established" means reachable
      *  <em>now</em>, not that the peer was reachable when the message was sent
      *  and chose not to answer; and it does not separate a send failure from a
@@ -250,7 +244,6 @@ public class TestJob extends JobImpl {
 
     /**
      *  Classify a failed round's far endpoint into exactly one bucket.
-     *
      *  <p>Unreachable outranks established, because a peer that is both
      *  currently reachable and recently unreachable is a peer that was gone and
      *  has since returned — which is the case where the tunnel's condemnation
@@ -276,7 +269,6 @@ public class TestJob extends JobImpl {
      *  observed but not charged.  Without this, the fastest retest interval
      *  plus a four-strike threshold condemns a new tunnel in about 90s — a
      *  sixth of its lifetime — and the pool never settles.
-     *
      *  <p>Split out of {@link #testFailed}, which is already well past the
      *  complexity budget, so this does not add to it.
      *
@@ -517,16 +509,13 @@ public class TestJob extends JobImpl {
     }
     /**
      *  Minimum gap between two tests of the <b>same already-tested</b> tunnel.
-     *
      *  <p>The retest delay is derived from the observed success rate and can
      *  bottom out near {@link #getMinTestDelay}, so a pool full of healthy,
      *  fast-testing tunnels can re-enter the queue faster than tests complete.
      *  That fills the job queue with test work and starves the builds and
      *  dispatches that actually move a pool. A floor bounds the retest rate.
-     *
      *  <p>Applies only to retests. A tunnel's <b>first</b> test is never
      *  delayed, so pool population is unaffected.
-     *
      *  <p>An <b>expedited</b> test bypasses the floor. Expedited is set when a
      *  pool is critical, in deficit, or has zero active tunnels, and those are
      *  exactly the states where a long gap would leave a pool empty — the
@@ -649,16 +638,16 @@ public class TestJob extends JobImpl {
      *  coverageThreshold of a pool's active tunnels under test at once),
      *  and the absolute per-pool cap.  With defaults the Tuner budget
      *  (effectively unlimited) is superseded by the coverage cap.
-     *
+     * <p>
      *  Takes a pre-fetched active count: callers that already needed it
      *  (criticality checks, zero-active bypasses) avoid a second O(tunnels)
      *  scan inside this method.
      *
-     *  @param ctx the router context
-     *  @param pool the client pool, never null
-     *  @param activeCount the pool's active tunnel count, fetched by the caller
-     *  @return maximum concurrent test claims for this pool
-     *  @since 0.9.71+
+     * @param ctx the router context
+     * @param pool the client pool, never null
+     * @param activeCount the pool's active tunnel count, fetched by the caller
+     * @return maximum concurrent test claims for this pool
+     * @since 0.9.71+
      */
     private static int getClientPoolTestBudget(RouterContext ctx, TunnelPool pool, int activeCount) {
         int coverageCap = Math.max(1, (int) Math.ceil(activeCount * getPoolCoverageThreshold(ctx)));
@@ -769,11 +758,11 @@ public class TestJob extends JobImpl {
      * Hard limit for total TestJob instances (queued + active).
      * Above this threshold, no new tests are scheduled until count decreases.
      * Prevents ever-increasing backlogs that could cause job lag.
-     *
+     * <p>
      * Scales down under job queue pressure to prevent TestJobs from
      * starving critical router jobs, but never below half the base
      * limit — see {@link #scaleHardLimit(int, long)}.
-     *
+     * <p>
      * Tunable via i2p.tunnel.testJob.hardLimit (default: 512 fast / 384 slow)
      * @param ctx the router context
      * @return the pressure-scaled hard limit
@@ -914,7 +903,6 @@ public class TestJob extends JobImpl {
      * {@code addRateData()} records real rates instead of reporting invalid
      * names.  Called once per router context from
      * {@code TunnelPoolManager}'s constructor.
-     *
      *  <p>Units: every batch rate is an event count (value 1 per event), so a
      *  rate of N means N events in the period.  {@code testBufferOffered} and
      *  {@code testBufferRejected} count candidates, {@code testBufferDropped}
@@ -959,7 +947,7 @@ public class TestJob extends JobImpl {
 
     /**
      * Name of a per-direction test outcome stat.
-     *
+     * <p>
      * A successful test emits no log line at all, so counters are the only way
      * to see test health by direction — without them "no outbound tests passed"
      * and "passing tests are not logged" are indistinguishable in a log review.
@@ -997,7 +985,6 @@ public class TestJob extends JobImpl {
      * {@link #registerDirectionStats}, excluding the pass/fail pair which
      * {@link #directionStat(boolean, boolean)} spells itself.  Held in
      * registration order.
-     *
      * <p>Declared in one place so a test can assert the registered set.  A
      * stat that is registered but never emitted sits at zero forever and
      * reads as "this never happens" rather than "this is broken", which is
@@ -1013,7 +1000,7 @@ public class TestJob extends JobImpl {
     /**
      * Register the per-direction test outcome stats written by
      * {@link #testSuccessful(int)} and by the test-failure handler.
-     *
+     * <p>
      * The failure counters are written before the inbound traffic exemption is
      * evaluated, so they include failures the exemption later suppresses; the
      * size of that gap is how much the exemption is masking.
@@ -1063,7 +1050,7 @@ public class TestJob extends JobImpl {
 
     /**
      * Record one per-direction test outcome event.
-     *
+     * <p>
      * All four stats are declared {@code (count)}, so every emission must pass
      * a unit value.  The emitters already keep the round-trip time in
      * {@code tunnel.testSuccessTime} / {@code tunnel.testFailedTime}; handing
@@ -1153,7 +1140,6 @@ public class TestJob extends JobImpl {
     /**
      * Credit a completed test round's bytes to the tunnel that carried it, for
      * the per-peer throughput profile only.
-     *
      * <p>{@code realTraffic} is false and must stay false.  A test round is
      * the tunnel under test carrying its own probe, so crediting it as real
      * traffic would stamp {@link TunnelCreatorConfig#getLastTransferred()} —
@@ -1163,7 +1149,6 @@ public class TestJob extends JobImpl {
      * test trust, which is decided on exactly that clock.  The exemption
      * budget is unaffected, since only
      * {@link TunnelCreatorConfig#recordRealTraffic()} refills it.
-     *
      * <p>Static and taking the tunnel as an argument, so the call site itself
      * is testable: asserting on {@code TunnelCreatorConfig} directly would
      * pass even if this passed the wrong flag.
@@ -1213,7 +1198,6 @@ public class TestJob extends JobImpl {
      * round, and its slots), and the first-test buffer, its key set, the pump
      * flag, and the gauges are cleared — a buffered candidate or an inflated
      * gauge would otherwise outlive the tunnels it describes.
-     *
      * <p>Must be paired with {@link #endBatchReset(RouterContext)}; until then
      * the context accepts no new test work.
      *
@@ -1402,7 +1386,6 @@ public class TestJob extends JobImpl {
      * sweep, last chance) now route through {@link #offerFirstTest}, which
      * applies the in-flight gates at drain time; this gate remains for
      * direct scheduling.
-     *
      * <p>Advisory only: it decides whether an instance is worth creating but
      * claims nothing, so a rejection needs no rollback.  The atomic slot
      * claim happens once, in {@link #claimBatchSlot}, when the instance is
@@ -1702,7 +1685,6 @@ public class TestJob extends JobImpl {
     /**
      *  Whether the tunnel expires so soon it is not worth testing — it has
      *  already been pruned for early expiry.
-     *
      *  <p>A tunnel the pool explicitly admitted for a last-chance test is
      *  exempt until that admission's deadline: the sweep keeps stale UNTESTED
      *  tunnels with {@link TunnelPool#LAST_CHANCE_MIN_LIFE_MS} (60s) of life
@@ -2578,16 +2560,13 @@ static List<PendingTest> prioritizeBatch(List<PendingTest> scan, long now) {
       /**
        * Tier rank of a candidate's first hop, best first: {@code 0} fast,
        * {@code 1} high-capacity, {@code 2} untiered.
-       *
        * <p>Reads the tier live from the profile rather than from a snapshot, so
        * a promotion that lands while a candidate waits is reflected without the
        * buffer having to be rewritten.
-       *
        * <p>Only the first hop is consulted: it is the peer the test's probe
        * reaches first, so its quality decides whether the tunnel is worth
        * testing promptly. Deeper hops sit behind peers this router has not yet
        * spoken to on this build.
-       *
        * <p>Without a context, or for a candidate whose config has no readable
        * peer array, the candidate ranks untiered rather than being dropped from
        * the batch.
@@ -2637,7 +2616,7 @@ static List<PendingTest> prioritizeBatch(List<PendingTest> scan, long now) {
     /**
      * Drain one batch from the first-test buffer and dispatch admitted
      * candidates directly (no per-tunnel queue entry).
-     *
+     * <p>
      * The pop runs under the buffer lock with zero evaluation — gate checks
      * call pool.getActiveTunnelCount(), which takes the pool's tunnel lock,
      * and taking pool locks under the buffer lock both stalls every offer
@@ -2900,7 +2879,6 @@ static List<PendingTest> prioritizeBatch(List<PendingTest> scan, long now) {
     /**
      *  Arm {@code next} as the active round and return the permits held by the
      *  round it supersedes.
-     *
      *  <p>This closes a permit leak. Every release path — the reply handler,
      *  the timeout handler, {@link #abandonRound}, and
      *  {@link #cancelForReset} — reaches the permits only after
@@ -2911,7 +2889,6 @@ static List<PendingTest> prioritizeBatch(List<PendingTest> scan, long now) {
      *  it sits at {@code maxConcurrent}, at which point every subsequent test
      *  is refused with {@link InFlightRefusal#GLOBAL_CAP} and no test dispatches
      *  at all while tunnel builds continue normally.
-     *
      *  <p>Swapping and releasing together makes the accounting correct by
      *  construction rather than by auditing each caller. The release is a no-op
      *  when the prior round already returned its own permit (a CAS on the
@@ -3603,7 +3580,6 @@ static List<PendingTest> prioritizeBatch(List<PendingTest> scan, long now) {
 
       /**
        *  Get the current test timeout, adapted to the rolling average duration.
-       *
        *  <p>The adaptive state lives on the pool, not on this job: a
        *  {@code TestJob} is constructed per build-request batch, so per-instance
        *  state resets to 1.0 before it can ever accumulate and the adaptation
@@ -3727,7 +3703,6 @@ static List<PendingTest> prioritizeBatch(List<PendingTest> scan, long now) {
 
     /**
      *  Apply the minimum retest gap to a computed delay.
-     *
      *  <p>Pure, so the floor and its exemption are testable without a router.
      *
      *  @param delayMs   the delay the success-rate scaling produced
@@ -3933,7 +3908,6 @@ static List<PendingTest> prioritizeBatch(List<PendingTest> scan, long now) {
      *  the time left in the traffic window, clamped to
      *  [{@link #EBB_RETRY_FLOOR_MS}, {@link #ACTIVE_GOOD_EBB_RETRY_MS}], or
      *  the normal retest delay when there is nothing left to wait for.
-     *
      *  <p>Unclamped, the remaining window is up to
      *  {@link #TRAFFIC_DEFER_MS}, which is long enough for the tunnel to
      *  expire out from under the retest chain — scheduleRetest() refuses a
@@ -3958,7 +3932,6 @@ static List<PendingTest> prioritizeBatch(List<PendingTest> scan, long now) {
      *  Whether a failed round should be deferred instead of charged to the
      *  tunnel under test, because the partner tunnel — the one the round was
      *  actually routed through — is itself suspect.
-     *
      *  <p>A test of an inbound tunnel is sent out through an outbound partner
      *  and answered back down the tunnel under test; a test of an outbound
      *  tunnel is the mirror image.  The round therefore fails for two
@@ -3972,7 +3945,6 @@ static List<PendingTest> prioritizeBatch(List<PendingTest> scan, long now) {
      *  paired pool to rebuild and eventually fails the tunnel if it never
      *  recovers, and data-phase send failures still report independently of
      *  any test.
-     *
      *  <p>A null partner defers: with no reply leg at all there was no reply
      *  for any reason, so the round is no evidence about the tunnel.
      *
@@ -4005,7 +3977,6 @@ static List<PendingTest> prioritizeBatch(List<PendingTest> scan, long now) {
      *  {@link #MAX_REPLY_PARTNER_DEFERRALS}: once spent the caller falls
      *  through and charges the tunnel, so a reply path that never recovers
      *  cannot shield a dead tunnel indefinitely.
-     *
      *  <p>Split out of {@link #testFailed}, which is already well past the
      *  complexity budget, so this does not add to it.
      *
@@ -4037,19 +4008,16 @@ static List<PendingTest> prioritizeBatch(List<PendingTest> scan, long now) {
      */
     /**
      * Record blame evidence when a tunnel test fails and our own next hop has no session.
-     *
      * <p>A tunnel test is an onion: the message traverses every hop and any hop that
      * cannot forward drops it silently, so the round trip reports only "somewhere
      * between us and the far end". The single hop we can name is the peer we send
      * through, and only when we hold no session to it is the fault local rather than
      * beyond us. Anything else stays unattributed -- blaming a peer for a failure we
      * cannot place on it is how a good peer ends up ghosted.
-     *
      * <p>Uses {@link BuildRequestor#getBuildRequestPeer} rather than a fixed index:
      * the peer we send through is {@code getPeer(0)} inbound but {@code getPeer(1)}
      * outbound, where {@code getPeer(0)} is the gateway we are trying to reach.
      * Checking the wrong index would blame a peer we never contacted.
-     *
      * <p>Records the observation only. It does not fail the tunnel early -- the
      * failure path owns that decision and its threshold -- and it does not penalise
      * the peer, because one missed session is indistinguishable from a peer
@@ -4356,13 +4324,13 @@ static List<PendingTest> prioritizeBatch(List<PendingTest> scan, long now) {
     /**
      * Compute the tunnel test failure window: how long a test may take before
      * the tunnel is declared failed.
-     *
+     * <p>
      * When a recent successful-test measurement exists, the window is 2x that
      * average — a test answered in ~2.3s is almost certainly dead if it needs
      * more than ~4.6s.  Before any measurements exist, fall back to mainline's
      * formula (3x transport send processing + 2.5s per hop), which assumes a
      * slow network so early tests don't false-fail.
-     *
+     * <p>
      * Always clamped to [minPeriod, maxPeriod], with min &lt;= max enforced by
      * construction so a crossed config can't widen the window unintentionally.
      * The pending-message expiration (and thus the reply selector) is tied to
@@ -4452,7 +4420,7 @@ static List<PendingTest> prioritizeBatch(List<PendingTest> scan, long now) {
 
     /**
      *  Handle a test round whose paired pool had no tunnel to pair with.
-     *
+     * <p>
      *  A partner shortage is a property of the pools, not of this tunnel, so
      *  the round defers instead of failing: on a server pool a failed test
      *  would drop a healthy inbound tunnel out of the published LeaseSet.
@@ -4468,9 +4436,9 @@ static List<PendingTest> prioritizeBatch(List<PendingTest> scan, long now) {
      *  budget is the termination condition and the tunnel is failed when it
      *  is exhausted.
      *
-     *  @param paired pool that could not supply a partner, may be null
-     *  @param direction "inbound" or "outbound", for the log line
-     *  @since 0.9.71+
+     * @param paired pool that could not supply a partner, may be null
+     * @param direction "inbound" or "outbound", for the log line
+     * @since 0.9.71+
      */
     private void deferForMissingPartner(TunnelPool paired, String direction) {
         _deferredCount++;

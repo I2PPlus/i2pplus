@@ -654,7 +654,7 @@ class SAMv3Handler extends SAMv1Handler
      * so the caller's worker thread is never blocked. Error responses
      * (CONNECTION_REFUSED, CANT_REACH_PEER, TIMEOUT, etc.) are sent
      * asynchronously by the ConnectTask.
-     *
+     * <p>
      * Supports SILENT mode to suppress status messages.
      *
      * @param props the parsed message properties

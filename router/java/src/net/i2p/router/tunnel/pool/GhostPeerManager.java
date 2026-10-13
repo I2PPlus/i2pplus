@@ -13,15 +13,12 @@ import net.i2p.util.Log;
 
 /**
  * Temporarily excludes unresponsive peers from tunnel build selection.
- *
  * <p>A peer is excluded only after
  * {@code i2p.tunnel.ghostPeer.timeoutThreshold} consecutive timeouts
  * (strikes); earlier timeouts are tracked but do not exclude the peer on their
  * own.
- *
  * <p>The exclusion is flat and short — {@link #DEFAULT_COOLDOWN_MS}, with no
  * escalation for repeat timeouts.
- *
  * <p>Escalation was removed because it bought nothing. The cooldown this mark
  * governs is not the one that keeps a failed peer out of selection:
  * {@code TunnelPeerSelector.FIRST_HOP_FAIL_COOLDOWN_MS} is five minutes, and
@@ -34,14 +31,12 @@ import net.i2p.util.Log;
  * is the only thing it is uniquely positioned to do: the mark also gates
  * promotion in roles the first-hop cooldown does not cover, and a recovered
  * peer should be back in those roles within a minute or two.
- *
  * <p>What a silently dead peer is protected by is eviction, not escalation.
  * {@code BuildExecutor.penalizeTimeout} demotes the contacted hop from the
  * fast and high-cap tiers on the same failure, and the three-strike
  * {@code demoteIfUnreachable} still runs for the failures that do not indict
  * the peer. A peer that is dead leaves the candidate set on evidence, not on a
  * timer.
- *
  * <p>Tracked marks are hard-bounded at {@link #MAX_TRACKED_PEERS} (expired
  * marks evicted first, then those nearest to expiry), and the *active*
  * exclusion set is separately hard-bounded at {@link #MAX_ACTIVE_GHOSTS} by
@@ -51,7 +46,6 @@ import net.i2p.util.Log;
  * it is meant to protect.  Deactivation keeps {@code offenses} and
  * {@code markedAt}, so the strike history survives and a peer that times out
  * again still counts toward {@code timeoutThreshold}.
- *
  * <p>The active exclusion count is cached so {@link #getGhostCount()} is a
  * volatile read on the hot path instead of a full map scan; its sweep deadline
  * is bucketed to {@link #COUNT_GRANULARITY_MS} so scattered expiry times cost
@@ -97,7 +91,6 @@ private static boolean isUnderAttack(double buildSuccess) {
  * fresh timeout the strike count resets, so a peer that recovered and later has
  * one bad day starts the count over rather than being excluded on its first
  * strike.
- *
  * <p>This no longer governs a cooldown — the exclusion is flat
  * ({@link #DEFAULT_COOLDOWN_MS}) — but it still governs whether a timeout is a
  * first strike or a repeat one when the threshold is above 1.
@@ -207,7 +200,6 @@ static final long OFFENSE_DECAY_MS = 30 * 60 * 1000L;
 
     /**
      * Record that a peer timed out during tunnel build.
-     *
      * <p>The peer is excluded only once its strike count reaches the
      * configured threshold ({@code i2p.tunnel.ghostPeer.timeoutThreshold},
      * at least 1); earlier strikes are recorded without excluding it, so the
@@ -431,7 +423,6 @@ static final long OFFENSE_DECAY_MS = 30 * 60 * 1000L;
      * Record successful tunnel participation by a peer.
      * Clears ghost status immediately, including its offense history — a peer
      * that just routed a tunnel is proven live.
-     *
      * <p>Called for every peer on every successful build, so the overwhelming
      * majority of calls find no mark present. Only a call that actually removed
      * a mark is counted: a success from a peer that was never excluded is not a
@@ -518,12 +509,10 @@ static final long OFFENSE_DECAY_MS = 30 * 60 * 1000L;
     /**
      * Count of active ghost exclusions whose peer sits in the fast or
      * high-capacity tier, a peer in both tiers counted once.
-     *
      * <p>Needed to pair with {@link ProfileOrganizer#getFastOrHighCapCount()}: an
      * all-tier ghost count divided by a tier size overstates, because most marks
      * land on peers that were never in the preferred tier and would not have
      * competed for those slots.
-     *
      * <p>Iterates the tracked marks, bounded by {@link #MAX_TRACKED_PEERS} and
      * filtered to active ones, so it is not a hot-path call — the health scorer
      * polls it once per tuning cycle.

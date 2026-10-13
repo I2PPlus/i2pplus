@@ -11,24 +11,24 @@ import net.i2p.util.SystemVersion;
  * flush task.  This is a very simple threshold algorithm - as soon as there is
  * enough data for a full tunnel message, it is sent. If after the delay there still
  * isn't enough data, what is available is sent and padded.
- *
+ * <p>
  * As explained in the tunnel document, the preprocessor has a lot of potential
  * flexibility in delay, padding, or even reordering. We keep things relatively
  * simple for now.
- *
+ * <p>
  * However much of the efficiency results from the clients selecting the correct MTU
  * in the streaming lib such that the maximum-size streaming lib message fits in an
  * integral number of tunnel messages.
  * See ConnectionOptions in the streaming lib for details.
- *
+ * <p>
  * Aside from obvious goals of minimizing delay and padding, we also want to minimize
  * the number of tunnel messages a message occupies, to minimize the impact of a router
  * dropping a tunnel message. So there is some benefit in starting a message in a new
  * tunnel message, especially if it will fit perfectly if we do that (a 964 or 1956 byte
  * message, for example).
- *
+ * <p>
  * An idea for the future...
- *
+ * <p>
  * If we are in the middle of a tunnel msg and starting a new i2np msg, and this one won't
  * fit, let's look to see if we have something that would fit instead by reordering:
  * if (allocated &gt; 0 &amp;&amp; msg.getFragment == 0) {
@@ -104,7 +104,7 @@ class BatchedPreprocessor extends TrivialPreprocessor {
      * The lower the value, the more we are willing to send off
      * a tunnel msg that isn't full so the next message can start
      * in a new tunnel msg to minimize fragmentation.
-     *
+     * <p>
      * This should be at most FULL_SIZE - (39 + a few), since
      * you want to at least fit in the instructions and a few bytes.
      */
@@ -131,10 +131,10 @@ class BatchedPreprocessor extends TrivialPreprocessor {
      * Scale the flush delay inversely with buffer pressure so that
      * near-full buffers flush almost immediately (low latency) while
      * near-empty buffers wait longer (better aggregation).
-     *
+     * <p>
      * Pressure is the max of buffer fullness (allocated/FULL_SIZE)
      * and queue pressure (pending.size/FORCE_BATCH_FLUSH), bounded [0,1].
-     *
+     * <p>
      * delay = MIN_FLUSH_DELAY + (getSendDelay() - MIN_FLUSH_DELAY) * (1 - pressure)
      */
     private long computePendingDelay(long allocated, int pendingSize) {

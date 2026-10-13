@@ -6,13 +6,11 @@ import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * Collapses repeated occurrences of the same log message.
- *
  * <p>Some conditions repeat thousands of times a minute - a peer resetting a connection,
  * a tunnel failing to build - and each occurrence is individually uninteresting while
  * the volume hides the messages that matter. At a few thousand lines a minute the log
  * also stops being readable during an incident and starts costing real disk through
  * rotation.
- *
  * <p>A caller passes a stable {@code key} identifying the condition and logs through
  * {@link Log#warnThrottled} and friends. The first occurrence is always written; after
  * that, an occurrence is written when either enough repeats have accumulated
@@ -20,13 +18,11 @@ import java.util.concurrent.atomic.AtomicLong;
  * whichever comes first, and the line states how many were collapsed. A condition that
  * fires once an hour is never hidden; one that fires two thousand times a minute is
  * reduced to a couple of lines a minute that still say how big it was.
- *
  * <p>Keys are scoped to the {@link Log} instance, which {@code LogManager} caches per
  * class, so state is effectively per logging class and keys cannot collide across
  * classes. The key table is bounded: entries whose window has long expired are pruned
  * when it grows past {@link #MAX_KEYS}, so a caller that keys on something unique per
  * occurrence - a peer hash, say - cannot leak.
- *
  * <p>Instances are thread-safe.
  *
  * @since 0.9.71+
@@ -84,7 +80,7 @@ public class LogSuppressor {
 
     /**
      * Create a suppressor with the default burst and window.
-     *
+     * <p>
      * A suppressor allows {@code _burst} messages through before suppressing for
      * {@code _windowMs}, so a repeated error is logged without flooding the log.
      */
@@ -105,7 +101,6 @@ public class LogSuppressor {
 
     /**
      * Decide whether one occurrence of {@code key} should be written.
-     *
      * <p>Pure, so the policy can be pinned by test without a clock or a logger. The
      * first occurrence of a key always reports; afterwards a report is due once the
      * repeats since the last one reach {@code burst}, or once {@code windowMs} have
@@ -164,7 +159,6 @@ public class LogSuppressor {
 
     /**
      * Drop bookkeeping for keys that can no longer report.
-     *
      * <p>Called on every recorded occurrence once the table is over its cap, so a caller
      * that keys per-occurrence settles at the cap instead of growing forever. Cheap
      * because it only runs when the table is already large.

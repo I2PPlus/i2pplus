@@ -16,7 +16,6 @@ import net.i2p.crypto.SigType;
 
 /**
  * Base class for data structures stored in the I2P network database (NetDb).
- *
  * <p>DatabaseEntry provides common infrastructure for NetDb-storable objects:</p>
  * <ul>
  *   <li><strong>Core Types:</strong> Base for {@link LeaseSet} and {@link net.i2p.data.router.RouterInfo}</li>
@@ -24,7 +23,6 @@ import net.i2p.crypto.SigType;
  *   <li><strong>Common Operations:</strong> Shared methods for hashing, routing, and signing</li>
  *   <li><strong>Integrity Protection:</strong> Prevents modification after signing</li>
  * </ul>
- *
  * <p><strong>Key Features:</strong></p>
  * <ul>
  *   <li><strong>SHA-256 Hash:</strong> Unique identifier for database storage and lookup</li>
@@ -33,7 +31,6 @@ import net.i2p.crypto.SigType;
  *   <li><strong>Signatures:</strong> Cryptographic signatures for authenticity verification</li>
  *   <li><strong>Type Constants:</strong> Standardized type identifiers for all NetDb entries</li>
  * </ul>
- *
  * <p><strong>Supported Entry Types:</strong></p>
  * <ul>
  *   <li>{@link #KEY_TYPE_ROUTERINFO} - Router information and capabilities</li>
@@ -41,7 +38,6 @@ import net.i2p.crypto.SigType;
  *   <li>{@link #KEY_TYPE_LS2} - Modern LeaseSet2 format</li>
  *   <li>{@link #KEY_TYPE_META_LS2} - MetaLeaseSet for advanced routing</li>
  * </ul>
- *
  * <p><strong>Integrity Protection:</strong></p>
  * <ul>
  *   <li><strong>Immutable After Signing:</strong> Objects cannot be modified once signed</li>
@@ -49,7 +45,6 @@ import net.i2p.crypto.SigType;
  *   <li><strong>NetDb Protection:</strong> Prevents corruption of network database</li>
  *   <li><strong>Message Safety:</strong> Protects I2NP messages from tampering</li>
  * </ul>
- *
  * <p><strong>Usage Patterns:</strong></p>
  * <ul>
  *   <li><strong>Network Storage:</strong> Entries stored in distributed hash table</li>
@@ -57,7 +52,6 @@ import net.i2p.crypto.SigType;
  *   <li><strong>Cache Management:</strong> Timestamp-based expiration and refresh</li>
  *   <li><strong>Floodfill:</strong> Distribution of new and updated entries</li>
  * </ul>
- *
  * <p><strong>Security Considerations:</strong></p>
  * <ul>
  *   <li><strong>Signature Verification:</strong> Always verify before trusting entries</li>
@@ -65,7 +59,6 @@ import net.i2p.crypto.SigType;
  *   <li><strong>Hash Collision:</strong> Verify SHA-256 hash matches content</li>
  *   <li><strong>Routing Key Security:</strong> Protect against routing attacks</li>
  * </ul>
- *
  * <p><strong>Implementation Notes:</strong></p>
  * <ul>
  *   <li><strong>0.8.2:</strong> Initial implementation with retrofitting</li>
@@ -73,7 +66,6 @@ import net.i2p.crypto.SigType;
  *   <li><strong>Thread Safety:</strong> Protection not guaranteed to be thread-safe</li>
  *   <li><strong>Object Reuse:</strong> Do not reuse DatabaseEntry instances</li>
  * </ul>
- *
  * <p><strong>Warning:</strong></p>
  * <ul>
  *   <li><strong>Direct Modification:</strong> Avoid modifying internal byte[] objects</li>
@@ -254,7 +246,7 @@ public abstract class DatabaseEntry extends DataStructureImpl {
 
     /**
      * Returns the raw payload data, excluding the signature, to be signed by sign().
-     *
+     * <p>
      * Most callers should use writeBytes() or toByteArray() instead.
      *
      * @return the raw payload data, or null on error (for example, if this is a RouterInfo,
@@ -388,12 +380,11 @@ public abstract class DatabaseEntry extends DataStructureImpl {
 
     /**
      * Marks this entry as received via published mode.
+     * Use this carefully, when updating the flag make sure the old and new
+     * leaseSet are actually equivalent, or simply copy the reply value,
+     * as copyStoreMetadata() in KademliaNetworkDatabaseFacade does.
      *
      * @since 0.9.58 moved up from LeaseSet
-     *
-     *        use this carefully, when updating the flag make sure the old and new
-     *        leaseSet are actually equivalent, or simply copy the reply value,
-     *        as copyStoreMetadata() in KademliaNetworkDatabaseFacade does.
      */
     public void setReceivedAsPublished() {
         _receivedAsPublished = true;

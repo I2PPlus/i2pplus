@@ -22,7 +22,6 @@ import net.i2p.util.Addresses;
 
 /**
  * Web interface bean for editing and configuring I2P tunnel settings.
- *
  * <p>Warning - This class is not part of the i2ptunnel API,
  * it has been moved from the jar to the war.
  * Usage by classes outside of i2ptunnel.war is deprecated.</p>

@@ -20,7 +20,7 @@ import net.i2p.util.OrderedProperties;
 /**
  * Request the other side to send us what they think the current time is.
  * Only supported from client to router.
- *
+ * <p>
  * Since 0.8.7, optionally include a version string.
  * Since 0.9.11, optionally include options.
  */

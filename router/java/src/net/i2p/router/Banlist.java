@@ -110,13 +110,11 @@ public class Banlist {
         public long expireOn;
         /**
          * When this ban was first recorded, per the i2p clock; 0 when unknown.
-         *
          * <p>Separate from {@link #expireOn} because the ban duration varies by
          * class and by transport, so the start time cannot be derived from the
          * expiry. Needed to answer "was this peer already banned when the build
          * was dispatched, or did the ban land mid-flight" — the two need
          * different fixes, and only the duration was previously observable.
-         *
          * <p>On a re-ban that keeps the older, longer expiry this retains the
          * <em>original</em> start time: what matters is how long the banlist
          * has been holding this peer, not when the latest report arrived.
@@ -377,11 +375,11 @@ public class Banlist {
 
     /**
      * Check if router capabilities match any of the custom ban patterns.
-     *
+     * <p>
      * A pattern may carry an exclusion group after '!': "G!f" matches
      * routers with G in their caps unless they are also floodfills.
      * Exclusions require at least one required character.
-     *
+     * <p>
      * Comparison is case-sensitive throughout: capability letters are
      * case-significant (lowercase 'f' is floodfill, uppercase letters are
      * separate meanings), so neither the stored patterns nor the router's
@@ -398,7 +396,7 @@ public class Banlist {
     /**
      * Pure decision helper: match a capabilities string against a
      * comma/space-separated list of capability ban patterns.
-     *
+     * <p>
      * Each pattern is a set of required characters, optionally followed by
      * '!'. A router matches when it carries every required character and
      * none of the excluded ones. A pattern with an empty required part can
@@ -1166,7 +1164,6 @@ public class Banlist {
 
     /**
      * How long the banlist has been holding a peer, in milliseconds.
-     *
      * <p>This is the discriminator between the two reasons a build request
      * arrives naming a banlisted peer, which need different fixes:
      * <ul>
@@ -1194,7 +1191,6 @@ public class Banlist {
 
     /**
      * Reason recorded when the peer was banlisted.
-     *
      * <p>Diagnostic only. A rejected tunnel build says a peer was banned but not
      * why, so a burst of rejections cannot be attributed to a cause; without it
      * the only way to find out which subsystem is banning peers is to add

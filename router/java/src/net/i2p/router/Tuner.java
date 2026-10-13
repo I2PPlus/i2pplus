@@ -61,7 +61,6 @@ import net.i2p.util.SystemVersion;
 /**
  * General-purpose adaptive tuner. Observes network and system stats,
  *  adjusts tunable parameters to optimize router performance.
- *
  * <p>Runs every 5 seconds via {@link SimpleTimer2}. Each tick samples
  * transport worker-stage CPU and updates the transport thread pool params;
  * every 15th-second tick runs the full cycle for all other params. Each
@@ -74,7 +73,6 @@ import net.i2p.util.SystemVersion;
  *   <li>Accelerate rollback when param diverges from default</li>
  *   <li>Call applyValue() to push the new value to the router</li>
  * </ol>
- *
  * <p>New parameters are added by extending {@link BaseParam} and
  * implementing:
  * <ul>
@@ -83,7 +81,6 @@ import net.i2p.util.SystemVersion;
  *   <li>{@code getObservedStat(RouterContext)} — read primary signal</li>
  *   <li>{@code computeTarget(double)} — feedback logic with cross-refs</li>
  * </ul>
- *
  * <p>Params can be tuned live via the console UI or persisted to
  * {@code autotune.config} (separate from {@code router.config}).
  * Auto-revert to factory defaults triggers when system health drops
@@ -226,7 +223,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
     /**
      * Read the names of threads this cycle has not classified yet.
-     *
      * <p>Caching a thread id's stage is sound because a running thread is never
      * renamed: every {@code setName} call in the router sits inside a thread
      * factory, before the thread starts.  An id whose CPU counter ran backwards
@@ -273,7 +269,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      * Thread-id keyed sample state for {@link #sampleStageCpu()}: per live
      * thread, which {@link #CPU_STAGES} entry its name matched and the CPU
      * nanoseconds recorded at the previous sample.
-     *
      * <p>Open addressed with linear probing.  Entries are never deleted one by
      * one: a cycle republishes the still-live ids into a spare table and swaps
      * it in, so a dead thread's stage and baseline leave together.
@@ -374,7 +369,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         /**
          * Start a sample cycle: carry stage and CPU baseline forward for the
          * given live thread ids and make them the table's contents.
-         *
          * <p>An id the previous generation did not hold enters
          *  {@link #UNRESOLVED} with {@link #NO_CPU}; an id no longer reported
          *  drops out.  A reused id whose predecessor was still live one cycle
@@ -729,7 +723,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
     /**
      * Returns current heap memory pressure as a ratio from 0.0 (no pressure)
      * to 1.0 (heap full). Used to scale cache sizes and buffer pools.
-     *
      * <p>Public because it is the router-wide reading for this signal, and
      * tunables outside this class size themselves against it too.
      *
@@ -746,7 +739,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
     /**
      * Manages the autotune.config file — separate from router.config.
-     *
      * <p>Stores tuner metadata (value, default, min, max, step) for each
      * param, and is the only file the tuner persists to. Each param's
      * {@code applyValue()} sets the runtime value in the live subsystem
@@ -757,7 +749,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      * one-time legacy cleanup in {@code purgeOldTunerProps()}, which
      * deletes pre-autotune.config {@code tuner.*} keys and sets the
      * migration marker.
-     *
      * <p>Writes are throttled: values are marked dirty and flushed to
      * disk at most once per 5 minutes ({@link #save()}). Use
      * {@link #forceSave()} for unconditional writes (e.g. shutdown).
@@ -1213,13 +1204,11 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
     /**
      * Record that a param's tuning cycle threw.
-     *
      * <p>A throwing param is invisible: the cycle handler swallows it, the
      *  param never updates, and nothing anywhere shows it as dead. That is how
      *  {@code i2p.tunnel.build.requestTimeout} sat permanently inert — it threw
      *  on every cycle for the life of the router and the only evidence was a
      *  repeated stack trace in a log file nobody reads.
-     *
      * <p>Two things make it visible now: a counter on
      *  {@code tuner.paramUpdateFailed} that appears on {@code /stats}, and a
      *  per-param rate limit so a permanently broken param logs once with its
@@ -1715,7 +1704,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
     /**
      * Base class for tunable params with history tracking and auto-revert.
-     *
      * <p>Each param wraps a single router configuration value. The tuning
      * loop reads an observed stat, computes a target, and applies it:
      * <pre>
@@ -1726,12 +1714,10 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      * target   = accelerateRollback(target, current, defaultValue)
      * applyValue(target)
      * </pre>
-     *
      * <p>Min/max/step ranges are stored in {@code autotune.config} and
      * can be changed at runtime via the console UI (no restart needed).
      * Factory defaults are captured on first run and persisted for
      * auto-revert when system health is degraded.
-     *
      * <p>Thread safety: all fields are accessed only from the Tuner
      * timer thread, except {@code _override} and {@code _autoTuning}
      * which are set from the console form handler.
@@ -1859,7 +1845,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
         /**
          * A tunable parameter with the given name, description and subsystem.
-         *
          * <p>The {@code defaultValue} is the code-level default for this
          * parameter. It is captured as {@link #_factoryDefault} and used
          * as the authoritative source of truth for auto-revert decisions,
@@ -2101,7 +2086,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
         /**
          * Re-read min/max/step from autotune.config — live update, no restart.
-         *
          * <p>Called once per tuning cycle before computeTarget(). Clamps
          * loaded ranges to constructor limits to prevent stale config
          * values from exceeding actual setter limits. Also clamps the
@@ -2140,13 +2124,11 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
         /**
          * Re-read the default value from autotune.config for live updates.
-         *
          * <p>Called once per tuning cycle. When a user saves a new default
          *  via the console form, this method picks it up and uses it as the
          *  auto-revert target. If the persisted default differs from the
          *  factory default (code-level default), it is treated as stale and
          *  ignored — the factory default is the authoritative source of truth.
-         *
          * <p>A stale default is a persistent config state, not a recurring
          *  event: it stays in autotune.config until edited, so re-announcing it
          *  every cycle produced thousands of identical WARN lines for a
@@ -2180,7 +2162,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
         /**
          * Persist a tuned value to autotune.config.
-         *
          * <p>Writes are throttled: the value is marked dirty and flushed
          * to disk at most once per 5 minutes by {@link AutotuneConfig#save()}.
          * This avoids excessive I/O from params that change every cycle.
@@ -2195,7 +2176,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
         /**
          * A manual override value. Disables auto-tuning until cleared.
-         *
          * <p>Called from the console form handler when a user manually
          * sets a param value. Setting value &lt; 0 re-enables auto-tuning.
          * The override is applied immediately via {@link #applyValue} and
@@ -2269,7 +2249,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         protected abstract int getRuntimeValue();
         /**
          * Observed stat value used for autotuning.
-         *
          * <p>{@code ctx} is always this param's own context: {@link Tuner} takes a
          * single {@code RouterContext}, hands the same instance to every
          * {@code BaseParam} constructor, and both call sites pass {@link #_ctx}.
@@ -2294,7 +2273,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
         /**
          * Fetch an additional stat value for cross-reference decisions.
-         *
          * <p>Cross-reference stats are used alongside the primary stat to
          * make more informed tuning decisions. For example, a streaming
          * param might use {@code transport.sendProcessingTime} as its
@@ -2316,7 +2294,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
         /**
          * Fetch an additional stat value using the 1-hour average.
-         *
          * <p>Useful for less time-sensitive decisions where we want to
          * confirm a trend rather than react to a short-term spike.
          * For example, build success rate should be checked over an
@@ -2337,7 +2314,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
         /**
          * Fetch an additional stat value using the 10-minute average.
-         *
          * <p>The 10-minute period is a medium-term signal — slower to react than
          * the 60s period but less prone to gaps from brief idle windows. Use this
          * as the first fallback when the 60s stat has no recent events, since most
@@ -2358,7 +2334,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
         /**
          * Fetch the event count for an additional stat using the 60s period.
-         *
          * <p>For event-count stats where {@code addRateData(name, 1)} is called,
          * {@link #getAdditionalStat} returns {@code getAverageValue()} which is
          * always 1.0 when events exist. This method returns the raw event count
@@ -2379,7 +2354,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
         /**
          * Fetch an additional stat value using the 5-minute average.
-         *
          * <p>Useful for medium-term decisions that need more signal than
          * a 60s spike but faster reaction than a 1-hour trend. For example,
          * retransmit ratio over 5 minutes filters out transient bursts
@@ -2416,7 +2390,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
         /**
          * Recent streaming retransmission rate for this tuning cycle.
-         *
          * <p>One place to compute the rate so every streaming param asks the
          * same question with the same units, instead of each one re-inventing
          * a threshold against {@code sendDuplicateSize} (a mean message size
@@ -2437,7 +2410,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
         /**
          * Compute actual tunnel build success rate from event counts.
-         *
          * <p>The build success/failure/timeout stats are event-count markers
          * ({@code addRateData(name, 100, 0)}), so {@link #getAdditionalStat}
          * <p>BuildExecutor emits these stats as 0-100 integer percentages with
@@ -2471,7 +2443,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
          * under-utilized. Returns the new (shrunk) thread count when the pool
          * utilization is below {@code idleThreshold} and more than {@code min}
          * threads are allocated, otherwise {@code -1} (no change).
-         *
          * <p>Utilization is the ratio of threads actively doing work to the
          * total pool size. When this sits near zero for an extended window the
          * extra threads are just parked — there is no point keeping them around,
@@ -2496,7 +2467,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
         /**
          * Fetch the total CoDel drop event count across all priority levels.
-         *
          * <p>CoDelPriorityBlockingQueue emits per-priority stats with names like
          * {@code codel.UDP-Sender.drop.0}, {@code codel.UDP-Sender.drop.100}, etc.
          * This method sums the event counts across all priorities.
@@ -2526,7 +2496,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         /**
          * Fetch observed RTT, falling back to {@code udp.sendConfirmTime}
          * when the primary stat has no events (lightly loaded router).
-         *
          * <p>The primary stat is typically a streaming-specific metric
          * (e.g. {@code stream.lifetimeRTT}) which only fires when active
          * streaming connections exist. On a lightly loaded router, this
@@ -2643,7 +2612,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         /**
          * Main tuning loop for this param. Called each tune cycle: every 5s
          * for transport thread pool params, every 15s for all others.
-         *
          * <p>Sequence:
          * <ol>
          *   <li>Read observed stat via {@link #getObservedStat}</li>
@@ -2691,7 +2659,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
         /**
          * Auto-revert to the factory default when system health is severely degraded.
-         *
          * <p>Uses {@link #_factoryDefault} (the code-level default captured at
          * construction time) rather than {@link #_defaultValue} which may have
          * been overwritten by stale persisted values from {@link #refreshDefault}.
@@ -2789,7 +2756,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
     /**
      * Reflection helper for calling streaming class methods across module boundaries.
-     *
      * <p>The streaming module depends on router, not vice versa, so we use
      * reflection to call static getters/setters on I2PSocketManagerFull.
      * Class lookup is cached after first successful resolution.
@@ -2838,7 +2804,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
     /**
      * Reflection helper for ConnectionOptions and Connection static methods.
-     *
      * <p>Unlike {@link StreamingReflector}, this reflector caches failed
      * lookups and retries on each cycle. This handles the case where
      * streaming isn't loaded yet at tuner startup — the reflector will
@@ -3047,13 +3012,11 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
         /**
          * Tunes the tunnel IV filter size.
-         *
          * <p>The filter rejects repeated tunnel IVs, so an undersized filter
          * shows up as legitimate tunnel data being dropped, which costs
          * throughput and adds latency. The exponent is therefore driven by the
          * entries actually seen in the last decay window, not by the configured
          * share, and the share is never on its own a reason to shrink.
-         *
          * <p>The ceiling is the largest exponent whose two buffers fit in the
          * filter's share of the heap. See
          * {@code wip/decaying-filter-adaptive-sizing-20260928.md}.
@@ -3216,7 +3179,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      */
     /**
      * Lowest value either establish-timeout param may be tuned to.
-     *
      * <p>Measured on a live router: at 2250 the outbound path abandoned roughly 117
      *  session establishments per minute, every one expiring on the deadline rather than
      *  on an observed peer failure, and 99.6% of them inside the SSU2 token exchange,
@@ -3234,7 +3196,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
     /**
      * Target establish timeout for an observed mean handshake duration.
-     *
      * <p>Four times the observed mean, floored by the param's own minimum. The floor must
      *  come from {@code min} rather than a literal: a hardcoded floor here can sit far
      *  below the value the setter enforces, and {@link BaseParam#clamp} walks the stored
@@ -4857,7 +4818,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
     /**
      * Streaming retransmission rate at or above which a path counts as lossy:
      * send-window growth is held and windows start backing off.
-     *
      * <p>Previously every streaming param compared {@code sendDuplicateSize}
      * — a <i>mean message size in bytes</i> (sampled &times;16) — against
      * 500/1000/2000, so "is this path losing packets?" was really "is the
@@ -4874,7 +4834,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
     /**
      * Streaming retransmission rate at or above which loss is severe enough
      * to take the doubled shrink step instead of the ordinary one.
-     *
      * <p>Split from {@link #STREAM_LOSSY_RATE} so a mildly lossy path still
      * backs off (single step) but is not torn down at full aggression every
      * cycle — before this split, {@code sendDuplicateSize > 1000} put every
@@ -4887,7 +4846,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
     /**
      * Compute the recent streaming retransmission rate.
-     *
      * <p>The 60-second send/duplicate event counts are the freshest signal
      * and are always available while traffic flows: {@code PacketQueue}
      * samples both counters once per 16 events, so the ratio of their event
@@ -4897,7 +4855,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      * packet resent exactly once contributes no duplicate events — the
      * returned rate is therefore a conservative (under-counting) estimate of
      * retransmission pressure.
-     *
      * <p>The closed-stream per-mille ratios are consulted only as a fallback:
      * they are emitted when a stream is torn down, so they are the better
      * signal once available but say nothing during startup or on a long-lived
@@ -4950,7 +4907,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
     /**
      * Clean-path climb for a window-sized parameter: {@code max(step, current / 4)}.
-     *
      * <p>Near the bottom of the range this degenerates to the plain linear
      * {@code step} so a parameter parked at {@code min} cannot take a
      * disproportionate jump, but once it has room the growth is geometric —
@@ -4968,13 +4924,11 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
     /**
      * Compute the streaming congestion-window target from the bandwidth-delay product.
-     *
      * <p>How big the pipe can be depends on the real streaming message size: the
      * congestion window counts messages, and each message carries up to
      * {@code messageSize} payload bytes (default 1730, two tunnel messages).  Using
      * the historical 4096 there under-sized the target by ~2.4x and capped sustained
      * throughput below what the network could carry.
-     *
      * <p>Returned value is clamped into {@code [min, max]}.  Returns {@code -1} when
      * there is no usable signal (no bandwidth, or an RTT too short to measure), so the
      * caller can fall back to holding its current value.
@@ -4997,7 +4951,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
     /**
      * Compute the streaming max-window ceiling target for one tuning cycle.
-     *
      * <p>The ceiling bounds in-flight messages per connection. It is an upper
      * bound, not a reservation — in-flight data still tracks the ACK-driven
      * congestion window — so a high ceiling never loads a slow path; it only
@@ -5012,7 +4965,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      * congestion, memory pressure) and climbs on a clean path, bounded upward
      * and gated on heap headroom so a large jump can never be the event that
      * pushes the heap into pressure.
-     *
      * <p>The clean-path climb is hyper-responsive: with strong headroom
      * (heap below 40%) it takes four steps per cycle, with moderate headroom
      * (below 50%) two, and at 50% or above it holds until memory frees rather
@@ -5021,7 +4973,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      * strong cycles (~20s) instead of ~4 slow minutes; every climb is still
      * bounded by {@code max} and scaled down by health dampening in
      * {@code BaseParam.update()}.
-     *
      * <p>Below the recovery floor ({@code max(min, defaultValue / 2)}) and
      * otherwise healthy, the ceiling climbs two steps toward the factory
      * default; under hard signals it shrinks half a step but never below the
@@ -5847,11 +5798,9 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
     /**
      * NTCP send finisher queue capacity. Scales with send path load.
-     *
      * <p>Primary signal: {@code ntcp.sendTime} (ms). Cross-refs:
      * {@code ntcp.writeQueueFull}, {@code ntcp.sendQueueSize},
      * {@code jobQueue.jobLag}.
-     *
      * <p>Increases when send path is congested (high send time + queue
      * buildup). Decreases when send path is fast and queue is empty.
      *
@@ -5923,11 +5872,9 @@ public class Tuner extends SimpleTimer2.TimedEvent {
     /**
      * UDP packet handler thread count. Dynamically adjusts based on
      * packet processing latency and transit load.
-     *
      * <p>Primary signal: {@code udp.pushTime} (ms, time to push packet
      * to handler). Cross-refs: {@code tunnel.participating InBps},
      * {@code jobQueue.jobLag}, system load, memory pressure.
-     *
      * <p>Increases when push time is high and CPU/system have headroom.
      * Decreases when push time is low and no heavy transit. Supports
      * dynamic thread addition/removal via
@@ -6455,7 +6402,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      * (router.defaultProcessingTimeThrottle, read by RouterThrottleImpl). When
      * the 1-minute sendProcessingTime average stays above this for the sustain
      * window, tunnel requests are rejected as transient overload.
-     *
+     * <p>
      * The target tracks the router's *stable* processing baseline (10-minute
      * average), not the live spiking value, so a router that routinely runs at
      * higher latency raises its own threshold instead of throttling on its
@@ -6506,10 +6453,8 @@ public class Tuner extends SimpleTimer2.TimedEvent {
     /**
      * Tunnel rejection curve steepness. Higher exponent = sharper transition
      * from accepting to rejecting.
-     *
      * <p>Primary signal: {@code tunnel.buildSuccessRate}. Cross-refs:
      * {@code tunnel.concurrentBuilds}, {@code transport.sendMessageFailureLifetime}.
-     *
      * <p>Increases when build success drops (reject tunnels more aggressively).
      * Decreases when builds succeed consistently (accept more tunnels).
      *
@@ -6925,11 +6870,9 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
     /**
      * Max retransmission timeout. Caps the upper bound for streaming RTO.
-     *
      * <p>Primary signal: {@code stream.con.initialRTT.out} with
      * {@code udp.sendConfirmTime} fallback. Cross-refs:
      * {@code stream.con.sendDuplicateSize}, {@code stream.con.lifetimeRTT}.
-     *
      * <p>Increases when duplicates detected (congestion). Decreases when
      * connection is healthy with low loss.
      *
@@ -7305,7 +7248,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
     /**
      * Compute the target for {@code CongestionAvoidanceGrowthParam}.
-     *
      * <p>Extracted as a static method for unit testing, matching
      * {@link #maxSlowStartWindow}.
      *
@@ -7476,7 +7418,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
     /**
      * Compute the target for {@code SlowStartGrowthParam}.
-     *
      * <p>Extracted as a static method for unit testing, matching
      * {@link #congestionAvoidanceGrowthTarget}.
      *
@@ -7956,7 +7897,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
         /**
          * Read the current effective override the Tuner believes is in force.
-         *
          * <p>An override of 0 means the Tuner has never armed (the user's configured
          * per-host maxConcurrent ceiling governs). The framework derives the persisted
          * default from this value and force-applies it on the first tick, so reporting
@@ -7984,7 +7924,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
         /**
          * Compute the elastic, demand-following stream ceiling.
-         *
          * <p>The cap is a headroom knob, not a DoS throttle: abuse is already shed at
          * the refusal layer by the SYN-rate gate and the 24h auto-ban, so the ceiling's
          * job is to keep legitimate streams flowing on locally hosted services and the
@@ -7992,7 +7931,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
          * therefore push the ceiling UP toward the user's configured {@code maxConcurrent}
          * ceiling (the streaming layer {@code min(user, override)} never lets us exceed
          * it); only genuine latency/distress pulls it DOWN, and only one step at a time.
-         *
          * <p>Signals consumed (all registered live streaming / system stats):
          * <ul>
          *   <li>{@code stream.con.throttledHour}/{@code stream.con.throttledMinute} —
@@ -8032,7 +7970,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
     /**
      * Pure decision logic for the stream ceiling.
-     *
      * <p>Demand-following elasticity: raise the ceiling as legitimate demand or
      * cap-refusals appear so locally hosted services and the HTTP proxy keep
      * flowing; only genuine router starvation ({@code distress}) pulls it down, and
@@ -8861,7 +8798,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
         /**
          * Compute the target value from memory headroom.
-         *
          * <p>This parameter bounds a memory store, so memory is the only input it
          *  needs. It previously took {@code peer.fastPeerCount} and an hourly
          *  profile-count trend instead, which made it a memory cap governed by peer
@@ -8872,7 +8808,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
          *  stay there, shedding roughly 80 profiles a minute against a network
          *  database of more than 5000 peers. The cap could not respond to the churn
          *  because the churn was the reason the gate never opened.
-         *
          * <p>Peer count is retained only as a tiebreak on how much headroom to
          *   grant, so a growing profile store is not penalised while memory is free
          *  and a shrinking one is not expanded while memory is tight.
@@ -8978,7 +8913,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
     /**
      * Lossy peer demotion threshold.
-     *
+     * <p>
      * Dynamic version of {@link ProfileOrganizer#PROP_LOSSY_THRESHOLD}: the demotion
      * bar is set from the average loss ratio measured across all peers with fresh
      * loss data, multiplied by the loss factor property (default 1.5), clamped to the
@@ -9215,13 +9150,11 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
     /**
      * Build request reply timeout.
-     *
      * <p>Primary signal: {@code tunnel.buildTimeoutRate} (0-100, 1-minute average
      * timeout percentage).  The ratio is volume-independent — 5 timeouts in 10
      * builds (50%) correctly triggers a ramp, while 5 timeouts in 200 builds
      * (2.5%) does not.  The raw expire count ({@code tunnel.buildClientExpire})
      * inflates with build volume and causes the tuner to over-react at scale.
-     *
      * <p>Secondary signals: concurrentBuilds (storm detection),
      * buildSuccessRate (overall health), testSuccessTime (actual tunnel latency),
      * dropLoadBacklog (queue pressure).
@@ -9423,14 +9356,12 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
     /**
      * Tunes maximum concurrent tunnel builds based on success rate and backlog.
-     *
      * <p>Primary signal: {@code tunnel.buildSuccessRate} (0.0-1.0).
      * Cross-refs: {@code tunnel.concurrentBuilds}, {@code tunnel.buildClientExpire},
      * {@code tunnel.dropLoadBacklog}, {@code tunnel.testSuccessTime},
      * {@code jobQueue.jobLag}, {@code udp.avgSendWindow}, {@code udp.congestionOccurred},
      * {@code tunnel.buildRequestTime}, {@code tunnel.buildHandler.queueSize},
      * {@code tunnel.nextHopLookupSuccessTime}, {@code router.tunnelBacklog}.
-     *
      * <p>Increases when builds fail or hit banned/rejected peers (need more
      * attempts to find cooperative peers). Decreases only under transport
      * congestion, CPU pressure, or handler backup.  The old death-spiral
@@ -9582,7 +9513,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
     /**
      * Next window multiplier for a tuning cycle, keyed on peer supply.
-     *
      * <p>Pure so the policy is testable without a router. The multiplier is the
      *  ceiling {@link net.i2p.router.tunnel.pool.TunnelPeerSelector#windowMultiplierFor}
      *  allows for the current fast-peer count, and widening applies in one step
@@ -9614,7 +9544,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
     /**
      * Tunes the peer-selection activity-window multiplier to the recency window
      *  that peer supply actually warrants.
-     *
      * <p>The window exists to trade recency for pool thickness when, and only
      *  when, the router is short of the peers selection would otherwise use. An
      *  earlier version drove it from {@code tunnel.buildSuccessRate} instead,
@@ -9624,7 +9553,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      *  window to it closed a positive feedback loop — worse builds widened the
      *  window, admitting older peers, which worsened the builds — and did so
      *  while ample fast and high-capacity peers sat unused.
-     *
      * <p>The sole gate is now peer supply, shared with
      *  {@link net.i2p.router.tunnel.pool.TunnelPeerSelector} and the pool
      *  starvation bypass so all three callers agree. Above
@@ -9632,7 +9560,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      *  fast peers the multiplier stays at its floor regardless of build success.
      *  The one exception is the startup grace period, where a cold profile set
      *  makes every peer look stale for want of test history rather than fault.
-     *
      * <p>Value is a multiplier (1-4) applied to the base activity window.
      *
      * @since 0.9.70+
@@ -9704,7 +9631,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
     /**
      * Tunes the maximum concurrent next-hop RouterInfo lookups.
-     *
      * <p>Primary signal: {@code tunnel.dropLookupThrottle} (dropped builds from lookup limit).
      * Cross-refs: {@code tunnel.pendingLookupQueue} (pending lookup queue depth),
      *             {@code tunnel.buildClientExpire} (timed-out builds).
@@ -9764,15 +9690,12 @@ public class Tuner extends SimpleTimer2.TimedEvent {
     /**
      * Tunes the percentage of participating tunnels used to throttle
      * concurrent next-hop RI lookups for incoming tunnel build requests.
-     *
      * <p>Controls how aggressively concurrent lookups scale with tunnel count.
      * The effective limit is:
      * {@code max(minLimit, min(maxLimit, numTunnels * percent / 100))}.
-     *
      * <p>Primary signal: {@code tunnel.nextHopLookupSuccessTime} (ms).
      * Cross-refs: {@code tunnel.pendingLookupQueue}, {@code tunnel.dropLookupThrottle},
      *             {@code tunnel.rejectTimeout}.
-     *
      * <p>Policy is starvation-first: a backed-up queue or lookup drops with a
      * responsive netdb means demand exceeds concurrency, so the limit rises
      * aggressively — lowering it there ratchets toward the floor and converts
@@ -9832,7 +9755,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
     /**
      * Pure starvation-first decision for next-hop lookup concurrency
      *  (see PercentLookupLimitParam):
-     *
      * <ul>
      *    <li>queue full or overflowing while lookups succeed in time →
      *        demand exceeds the lid; raise aggressively so queued entries
@@ -9842,7 +9764,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      *    <li>fast and quiet → more vetting is cheap</li>
      *    <li>anything else (mixed signals) → hold</li>
      *  </ul>
-     *
+     * <p>
      * Static and package visible for tests.
      *
      * @param current current percent value
@@ -9871,11 +9793,9 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
     /**
      * Tunes NTCP reader thread count based on send path latency.
-     *
      * <p>Primary signal: {@code ntcp.sendTime} (ms, message send latency).
      * Cross-refs: {@code ntcp.writeQueueFull}, {@code ntcp.sendBacklogTime},
      * {@code jobQueue.jobLag}.
-     *
      * <p>Increases when send is slow/backlogged and CPU has headroom.
      * Decreases when send is fast, no backlog, and CPU is idle.
      * Supports dynamic thread addition/removal via
@@ -9981,11 +9901,9 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
     /**
      * Tunes NTCP writer thread count based on send path latency.
-     *
      * <p>Primary signal: {@code ntcp.sendTime} (ms, message send latency).
      * Cross-refs: {@code ntcp.writeQueueFull}, {@code ntcp.sendBacklogTime},
      * {@code jobQueue.jobLag}.
-     *
      * <p>Increases when send is slow/backlogged and CPU has headroom.
      * Decreases when send is fast, no backlog, and CPU is idle.
      * Supports dynamic thread addition/removal via
@@ -10095,10 +10013,8 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
     /**
      * Tunes NTCP failsafe iteration frequency based on connection count.
-     *
      * <p>Primary signal: {@code ntcp.failsafeIterationTime} (ms, iteration duration).
      * Cross-refs: {@code ntcp.pumperKeySetSize} (connection count), {@code jobQueue.jobLag} (CPU).
-     *
      * <p>Increases interval under high connection counts to reduce pumper overhead.
      * Decreases interval under low connection counts for faster idle detection.
      *
@@ -10756,7 +10672,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      * Pure CWIN growth/shrink decision for the max send window, extracted from
      * {@code MaxSendWindowParam#computeTarget} so the branches are unit-testable
      * without a Tuner context.
-     *
      * <p>Priority: memory-critical shrink, death-spiral growth, failsafe/MTU
      * shrink, congestion-growth, high-usage growth, stale-ratchet recovery,
      * clean-path pre-ramp, low-usage shrink. The shrink branch never drives the
@@ -10852,10 +10767,8 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
     /**
      * Compute the target value for {@code MaxSlowStartWindowParam}.
-     *
      * <p>This is extracted to a static method for unit testing,
      * matching the pattern of {@link #sendWindowTarget}.
-     *
      * <p>Clean-path increases are exponential: a cycle adds
      * {@code max(step, current / 4)}, so a healthy cap climbs from the
      * recovery floor to {@code max} in ~8 cycles (~2 minutes on the 15s
@@ -10989,12 +10902,10 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
     /**
      * Tunes NTCP send pool capacity based on peer count, latency, backlog, and eviction rate.
-     *
      * <p>The send pool is the shared handoff buffer between producer threads
      * (I2CP handlers, tunnel gateways) and the EventPumper dispatch path.
      * With priority eviction, lower-priority transit messages are evicted to
      * make room for client data — but excessive evictions signal undersizing.
-     *
      * <p>Signals:
      * <ul>
      *   <li>Primary: {@code ntcp.sendPool.utilization} (pct 0–100)</li>
@@ -11692,7 +11603,6 @@ protected int computeTarget(double observed) {
      * Pure decision logic for the I2PTunnel server handler pool size.
      * Extracted (package-visible, static) so unit tests can exercise the policy
      * without a live {@link RouterContext}.
-     *
      * <p>Signals:
      * <ul>
      *   <li>{@code queueDepth} — handler tasks waiting for a free pool thread.</li>
@@ -11801,7 +11711,6 @@ protected int computeTarget(double observed) {
      *  ({@code i2p.streaming.receiveWorkerThreads}). Extracted (package-visible,
      *  static) so unit tests can exercise the policy without a live
      *  {@link RouterContext}.
-     *
      * <p>Signals:
      *  <ul>
      *    <li>{@code backlogged} — 60s avg of {@code stream.receiveBacklogged}
@@ -11812,7 +11721,6 @@ protected int computeTarget(double observed) {
      *    <li>{@code jobLag} — 60s avg of {@code jobQueue.jobLag} (CPU pressure),
      *        NaN when unknown.
      *  </ul>
-     *
      * <p>Policy (throughput / latency / reliability):
      *  <ul>
      *    <li>Grow by one shard when producers were blind on a full queue this
@@ -11864,7 +11772,6 @@ protected int computeTarget(double observed) {
      * Pure decision logic for the Tuner-managed default client concurrent-connection
      *  cap (i2ptunnel.maxConnections default). Extracted (package-visible, static) so
      *  unit tests can exercise the policy without a live {@link RouterContext}.
-     *
      * <p>Signals:
      *  <ul>
      *    <li>{@code shedRate} — events/minute of {@code i2ptunnel.clientConnectionShed}.
@@ -11877,7 +11784,6 @@ protected int computeTarget(double observed) {
      *    <li>{@code current}/{@code min}/{@code max} — the current default (per-tunnel
      *        overrides are untouched), floor, and ceiling.</li>
      *  </ul>
-     *
      * <p>Policy: any shed (admission-gate overflow or executor-full rejection) is the
      *  unambiguous overload signal — grow the gate decisively and fast so excess
      *  connections are admitted and served instead of dropped as empty responses. The
@@ -11939,7 +11845,6 @@ protected int computeTarget(double observed) {
      * Tunes the Tuner-managed default per-tunnel cap on server handler threads.
      * Primary signal: serverHandler.queueDepth (tasks waiting for a handler thread).
      * Cross-refs: jobQueue.jobLag (CPU pressure), serverHandler.blockingHandleTime.
-     *
      * <p>Each server tunnel owns a private handler pool sized at most this cap
      * (unless the tunnel sets an explicit {@code i2ptunnel.server.threads}
      * override); the pools are summed under the global budget tuned by
@@ -11994,7 +11899,7 @@ protected int computeTarget(double observed) {
      * absorbs bursts without closing connections, at the cost of holding an
      * I2PSocket per queued task; too small a buffer rejects connections under
      * load even though the handler pool is not yet saturated.
-     *
+     * <p>
      * Policy: grow toward the ceiling as the observed backlog (queueDepth, 60s
      * avg) approaches the current capacity, grow a little when backlog >50 but
      * still clear of the cap and no CPU pressure, and shrink back toward the
@@ -12071,7 +11976,6 @@ protected int computeTarget(double observed) {
      * Pure growth policy for the global Server→Client I/O budget.
      *  Extracted (package-visible, static) so unit tests can exercise the
      *  policy without a live RouterContext.
-     *
      * <p>Observed is active workers + queued transfers across per-tunnel
      *  pools. Ratio near 1.0 means the budget is saturated (or bodies are
      *  queueing); the step doubles the current budget so a download burst
@@ -12113,7 +12017,7 @@ protected int computeTarget(double observed) {
      *  the handler thread continues to cleanup. Lower values free threads
      *  faster when peers are unresponsive; higher values tolerate legitimate
      *  slow transfers without premature cancellation.
-     *
+     * <p>
      * Signal: delta stall events per tuning cycle. A high stall rate means
      *  the current timeout is too aggressive (legitimate transfers being killed);
      *  tightening further would make it worse. A low stall rate means we can
@@ -12133,9 +12037,7 @@ protected int computeTarget(double observed) {
 
     /**
      * Next I/O stall window for an observed per-cycle stall delta.
-     *
      * <p>Pure, so the policy is testable without a router.
-     *
      * <p>The window only <b>loosens above the floor</b> when transfers are
      *  being cut off, and relaxes back to the floor when they are not. It never
      *  goes below the floor, and there is deliberately no "no stalls, tighten"
@@ -12220,19 +12122,16 @@ protected int computeTarget(double observed) {
      * Pure decision logic for the I2PTunnel server handler queue capacity.
      * Extracted (package-visible, static) so unit tests can exercise the policy
      * without a live {@link RouterContext}.
-     *
      * <p>The queue is the admission buffer between the accept loop and the
      * handler pool. {@code queueDepth} (60s avg) is how deeply it is actually
      * used. Growing it widens the burst window; shrinking it bounds memory
      * (each queued task holds an {@code I2PSocket}).
-     *
      * <p>Signals:
      * <ul>
      *   <li>{@code queueDepth} — handler tasks waiting for a free pool thread.</li>
      *   <li>{@code jobLag} — {@code jobQueue.jobLag} as a CPU-pressure veto: never
      *       grow the buffer on a swap/busy box.</li>
      * </ul>
-     *
      * <p>Idle handling converges the buffer to {@link #SERVER_BACKLOG_IDLE_FLOOR}
      * rather than to {@code min}: a too-large buffer shrinks, a too-small one grows,
      * so a quiet server retains a burst buffer and can never be parked at the hard
@@ -12561,7 +12460,6 @@ protected int computeTarget(double observed) {
     static class SystemHealth {
         /**
          * Floor applied to each factor before the composite is computed.
-         *
          * <p>The composite is a weighted geometric mean, so its factors
          * multiply: one factor that saturates at 0.0 drives the product — and
          * therefore the health shown on the tuning page — to exactly 0% no
@@ -12601,7 +12499,6 @@ protected int computeTarget(double observed) {
 
         /**
          * Weighted geometric mean of the available factors.
-         *
          * <p>NaN factors mean "insufficient data" and are skipped along with
          * their weights, so the remaining weights are renormalized to 1.0.
          * Every participating factor is floored at {@link #MIN_FACTOR_SCORE}
@@ -12863,7 +12760,6 @@ protected int computeTarget(double observed) {
          * Message send latency: how long an outbound message waits in the
          * transport send queue ({@code transport.sendProcessingTime}).
          * ≤1s → 1.0, 4s → 0.5, ≥10s → 0.0.
-         *
          * <p>Anchored on what the router itself treats as normal versus
          * congested: {@code RouterThrottleImpl} documents ~25ms for NTCP and
          * ~1000ms for SSU as ordinary (SSU includes ack time and can be much
@@ -12897,7 +12793,6 @@ protected int computeTarget(double observed) {
          * pool tunnel builds actually draw from.  Up to
          * {@link #GHOST_TIER_FREE} of the tier excluded is free; the factor then
          * ramps to 0.0 at {@link #GHOST_TIER_ZERO}.
-         *
          * <p>Fraction, not absolute count: marks accrue routinely (a few per
          * minute against multi-minute cooldowns), expire on their own, and clear
          * the moment the peer answers, so any fixed count threshold fires on every
@@ -12905,7 +12800,6 @@ protected int computeTarget(double observed) {
          * tier keeps a large router free while still catching the case that
          * matters, where exclusions consume enough of the preferred pool to starve
          * selection.
-         *
          * <p>Numerator and denominator must cover the same population: the count is
          * tier-matched, because dividing an all-tier ghost count by a tier size
          * would overstate whenever the tier is smaller than the ghost population.
@@ -13195,17 +13089,14 @@ protected int computeTarget(double observed) {
         /**
          * Congestion: fraction of message send outcomes that triggered a
          * window-reduction (congestion) event.
-         *
          * <p>The denominator is {@code udp.sendConfirmTime}, which fires once per
          * ACKed message, so this is a true per-message congestion rate rather than
          * a per-packet count. {@code udp.congestionOccurred} fires per RTO-timeout
          * or fast-retransmit window reduction.
-         *
          * <p>Thresholds are calibrated for UDP/SSU over a lossy anonymizing overlay,
          * where normal AIMD keeps a busy router in the 5-15% band. A wired-TCP-style
          * 5% cap would flag healthy routers as congested.
          * &lt;=5% congestion &rarr; 1.0, 25% &rarr; 0.0.
-         *
          * <p>Requires at least 100 confirmed sends in the period for a stable ratio.
          */
         private double scoreCongestion() {
@@ -13733,7 +13624,6 @@ protected int computeTarget(double observed) {
      * Tunes the high-load job lag threshold in RequestThrottler.
      * Higher = more tolerant (only rejects under severe lag).
      * Lower = more sensitive (rejects sooner under moderate lag).
-     *
      * <p>Hysteresis dead-band: tighten (decrease threshold) when avg jobLag &gt; 200ms,
      * loosen (increase threshold) when avg jobLag &lt; 50ms.  The 150ms dead-band
      * between 50ms and 200ms prevents flip-flopping when lag oscillates near the
@@ -13758,7 +13648,6 @@ protected int computeTarget(double observed) {
         }
         /**
          * Compute the target value based on observed stat and configured limits.
-         *
          * <p>Hysteresis: observed &gt; 200ms → tighten (decrease threshold);
          * observed &lt; 50ms → loosen (increase threshold).  The 150ms
          * dead-band (50–200) prevents oscillation near the boundary.
@@ -13778,7 +13667,6 @@ protected int computeTarget(double observed) {
 
     /**
      * Tunes the high-load CPU threshold in RequestThrottler.
-     *
      * <p>Intentionally static — CPU threshold is system-dependent (depends on
      * core count and hardware), not load-reactive.  Autotuning is present for
      * UI consistency with other params.
@@ -13810,19 +13698,16 @@ protected int computeTarget(double observed) {
     /**
      * Tunes the moderate-load job lag threshold in RequestThrottler.
      * Controls when low-share peers start being disconnected.
-     *
      * <p>Independently tunes based on observed jobLag (not derived from
      * {@link RequestThrottler#getHighLoadLagMs()}) to avoid lockstep
      * oscillation with {@link RequestHighLoadLagParam}.  Uses a secondary
      * signal ({@code jobQueue.readyJobs}) to break coupling when both params
      * share the same primary lag signal.
-     *
      * <p>Hysteresis dead-band: tighten when avg jobLag &gt; 100ms OR
      * readyJobs &gt; 20; loosen when avg jobLag &lt; 30ms AND readyJobs &lt; 5.
      * The asymmetric dead-band (30–100ms primary) plus the queue-depth
      * cross-reference prevents correlated oscillation with the high-load
      * param (which uses a 50–200ms dead-band on the same primary signal).
-     *
      * <p>Ceiling invariant: always stays at least {@code _step} below
      * {@link RequestThrottler#getHighLoadLagMs()} to maintain the
      * ordering moderate &lt; high.
@@ -13846,7 +13731,6 @@ protected int computeTarget(double observed) {
         }
         /**
          * Compute the target value based on observed stat and configured limits.
-         *
          * <p>Uses independent thresholds on the primary signal (jobLag) and
          * a secondary signal (readyJobs) to decouple from the high-load param.
          * Tighten when lag &gt; 100ms or queue depth &gt; 20; loosen only when
@@ -14145,7 +14029,6 @@ protected int computeTarget(double observed) {
      */
     /**
      * Whether a build success rate counts as healthy for a tuning walk.
-     *
      * <p>Four params gate their walk on {@code observed > 80}: the first-hop
      * cooldown, first-hop threshold, stale-build threshold and concurrency
      * throttle. This router runs 70-77% success, so all four saw "not healthy"
@@ -14153,7 +14036,6 @@ protected int computeTarget(double observed) {
      * true, and each walked to one of its bounds and stayed there -- the cooldown
      * pinned at its 600s ceiling while the concurrency throttle sat at its 50%
      * maximum.
-     *
      * <p>80% is a healthy-I2P target, not this network's operating point, so using
      * it as a walk gate means the gate never opens. 50% still separates the broken
      * case (single digits) from the working one without demanding a target this

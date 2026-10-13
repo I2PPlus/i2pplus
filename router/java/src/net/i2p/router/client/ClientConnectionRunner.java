@@ -60,7 +60,7 @@ import net.i2p.util.SimpleTimer2;
 
 /**
  * Bridge the router and the client - managing state for a client.
- *
+ * <p>
  * As of release 0.9.21, multiple sessions are supported on a single
  * I2CP connection. These sessions share tunnels and some configuration.
  *
@@ -768,7 +768,7 @@ class ClientConnectionRunner {
      * delivered (or failed delivery)
      * Note that this sends the Guaranteed status codes, even though we only support best effort.
      * Doesn't do anything if i2cp.messageReliability = "none"
-     *
+     * <p>
      * Do not use for status = STATUS_SEND_ACCEPTED; use ackSendMessage() for that.
      *
      * @param dest the client whose session is notified; no notification if it has none
@@ -953,7 +953,7 @@ class ClientConnectionRunner {
 
     /**
      * Synchronously deliver the message to the current runner
-     *
+     * <p>
      * Failure indication is available as of 0.9.29.
      * Fails on e.g. queue overflow to client, client dead, etc.
      *
@@ -970,7 +970,7 @@ class ClientConnectionRunner {
 
     /**
      * Synchronously deliver the message to the current runner
-     *
+     * <p>
      * Failure indication is available as of 0.9.29.
      * Fails on e.g. queue overflow to client, client dead, etc.
      *
@@ -1037,7 +1037,7 @@ class ClientConnectionRunner {
      * LeaseSet, after which the onCreateJob is queued up.  If that doesn't occur
      * within the timeout specified, queue up the onFailedJob.  This call does not
      * block.
-     *
+     * <p>
      * Job args are always null, may need some fixups if we start using them.
      *
      * @param h the Destination's hash
@@ -1286,7 +1286,6 @@ class ClientConnectionRunner {
 
     /**
      * Send a message, allowing the transport up to timeoutMs to accept it.
-     *
      * <p>For messages whose loss costs more than a short wait. The default is
      * {@link #doSend}: a socket-backed runner hands the message to a writer thread
      * that buffers it regardless, so there is nothing to wait for here. Subclasses
@@ -1330,7 +1329,7 @@ class ClientConnectionRunner {
 
     /**
      * The FloodfillNetworkDatabaseFacade for this runner, the client netDb.
-     *
+     * <p>
      * If a session has not been created yet, it will return null.
      *
      * @return the client netdb or null if no session was created yet

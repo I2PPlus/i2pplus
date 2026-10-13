@@ -64,7 +64,7 @@ public class ConfigAdvancedHandler extends FormHandler {
     /**
      * The user made changes to the config and wants to save them, so
      * lets go ahead and do so.
-     *
+     * <p>
      * We saved the previous config in the form, so we do a diff between the two.
      * This will reduce the chance of undoing some change that happened in-between.
      */

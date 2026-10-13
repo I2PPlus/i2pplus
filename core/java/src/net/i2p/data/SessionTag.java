@@ -16,9 +16,9 @@ import java.util.Arrays;
 
 /**
  * 32 bytes, usually of random data.
- *
+ * <p>
  * Not recommended for external use, subject to change.
- *
+ * <p>
  * As of 0.9.44, does NOT extend SimpleDataStructure, to save space
  */
 public class SessionTag {

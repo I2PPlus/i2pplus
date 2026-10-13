@@ -24,22 +24,18 @@ import org.jfree.svg.SvgColor;
 /**
  * The display values a graph frame draws with, overridable per theme with CSS custom
  * properties.
- *
  * <p>Seventeen variables cover every themed part of a tile: the two plot strokes and fills,
  * the series dot pattern, both stroke widths, the text colour, the axis rules, both grids and
  * their dot patterns, the plot background, the edge shading, the restart rule, and the
  * gridline a tile too small for a minor grid keeps.
- *
  * <p>Fonts are the exception and are not here. A graph reads {@code --monospaced} and
  * {@code --bodyfont} from the console's own font stylesheet, so a second pair here could only
  * disagree with the page it is drawn on.
- *
  * <p><b>The stylesheet is the canonical statement of a theme's look.</b> The values held in
  * this class are one fallback set - light's, because light is the console's default look -
  * reached only when a theme's stylesheet declares nothing at all: an unknown theme name, or a
  * layout with no stylesheet. Neither case has a theme identity to honour, so nothing here is
  * per-theme; anything that genuinely differs between themes differs in the CSS.
- *
  * <p>A theme opts in by declaring variables in its {@code console.css}:
  * <pre>
  * :root{
@@ -51,11 +47,9 @@ import org.jfree.svg.SvgColor;
  * </pre>
  * Anything absent keeps the built-in default, so no theme has to be edited and a typo in one
  * declaration costs that one value rather than the whole frame.
- *
  * <p>Not every stroke width is the theme's: {@link GraphRenderer} overrides it for a grouped
  * axis, a crowded tile and the sidebar sparkline, because those are legibility decisions about
  * one layout rather than a look.
- *
  * <h2>Why the file is read server-side</h2>
  * A graph image is served as {@code <img src="/viewstat.jsp?...">}, which makes the SVG an
  * isolated document: page CSS does not reach it and page custom properties are invisible
@@ -63,7 +57,6 @@ import org.jfree.svg.SvgColor;
  * cannot reach, so the theme's own stylesheet is parsed here and the resolved values are
  * handed to the renderer. That also means {@code getComputedStyle} is not involved and the
  * minigraph's client-side path does not apply here.
- *
  * <h2>Caching</h2>
  * One small file per theme, parsed at most once and held in a
  * {@link ConcurrentHashMap}, since every graph tile on a console page asks for the same
@@ -76,7 +69,6 @@ public final class GraphThemeColors {
 
     /**
      * Where the console keeps its themes, relative to the router base directory.
-     *
      * <p>{@code docs/themes/console}, which is where the theme picker scans
      * ({@code ConfigUIHelper}) and where an installed router puts them - not under
      * {@code webapps}, which holds the deployed console war. Getting this wrong is silent:
@@ -138,7 +130,6 @@ public final class GraphThemeColors {
 
     /**
      * Stroke width, in pixels, of a plot line on a narrow tile carrying condensed data.
-     *
      * <p>Distinct from {@link #VAR_PLOT_LINE_WIDTH} because the ordinary weight is tuned for a
      * series with room to separate. Pack the same number of points into a narrower frame and
      * the polyline's segments crowd together, so the weight that reads well on a roomy plot
@@ -150,7 +141,6 @@ public final class GraphThemeColors {
 
     /**
      * Stroke width, in pixels, of the line drawn over a filled plot.
-     *
      * <p>Its own variable because it is not the plot line. {@link #VAR_PLOT_LINE_WIDTH} and its
      * siblings state how heavy a plot <em>line</em> is; this one states how heavy the edge over
      * a fill is, and the two are chosen for different jobs. It used to be half the plot width,
@@ -164,7 +154,6 @@ public final class GraphThemeColors {
     /**
      * Stroke width, in pixels, of the line over a filled plot on a frame past
      * {@link #WIDE_WIDTH}.
-     *
      * <p>The filled family needs its own wide variant for the same reason the plot family does:
      * a longer series shows a thinner stroke's gaps more readily. Without it a wide filled
      * graph was stuck on the ordinary filled weight, so raising
@@ -178,7 +167,6 @@ public final class GraphThemeColors {
 
     /**
      * Stroke width, in pixels, of the line over a filled plot on a narrow, condensed frame.
-     *
      * <p>The third member of the filled family, matching the plot family's plain, wide and
      * condensed. Without it the filled edge had only one weight, so a narrow filled graph drew
      * the same edge as a roomy one - which is the crowding the condensed slot exists to answer,
@@ -194,7 +182,6 @@ public final class GraphThemeColors {
     /**
      * Frame width, in pixels, past which {@link #VAR_PLOT_LINE_WIDTH_WIDE} replaces
      * {@link #VAR_PLOT_LINE_WIDTH}.
-     *
      * <p>A layout constant rather than a theme choice: a tile is drawn wider when the console
      * has room for it, and a longer series shows a thinner stroke's gaps more readily, so the
      * two are the same decision seen from either end.
@@ -206,7 +193,6 @@ public final class GraphThemeColors {
     /**
      * Frame width, in pixels, at or below which a condensed plot takes
      * {@link #VAR_PLOT_LINE_WIDTH_CONDENSED}.
-     *
      * <p>A layout constant, like {@link #WIDE_WIDTH}: the question is whether the points have
      * room to separate, which is a property of the frame rather than of the theme.
      *
@@ -243,21 +229,18 @@ public final class GraphThemeColors {
 
     /**
      * How long a parse may be reused even when the timestamp looks unchanged, in ms.
-     *
      * <p>The timestamp check is what normally keeps this current, and it means an edit is
      * visible on the very next page load. This interval is the fallback for a filesystem
      * that does not maintain last-modified reliably - a network mount, some container
      * overlays, or a coarse timestamp that hides two saves in the same second. Re-reading
      * on a timer as well costs one small file read per interval, which is nothing next to
      * rendering the graph itself.
-     *
      * <p>Not a static final so tests can shorten it instead of sleeping.
      */
     static long maxCacheAgeMs = 30_000L;
 
     /**
      * A theme's parsed declarations and the timestamps they were parsed from.
-     *
      * <p>The timestamp is what makes a theme edit visible without a restart. The minigraph
      * picks up a CSS change on page refresh because the browser re-reads the stylesheet;
      * these colours are resolved on the server, so nothing would re-read them and an edit
@@ -282,7 +265,6 @@ public final class GraphThemeColors {
 
     /**
      * Fallback stroke for each plot, used only when a theme declares no {@code --graph_plotLine<N>}.
-     *
      * <p>Light's pair, because light is the console's default look. A theme with a palette of
      * its own states it in its own {@code console.css}, which is where the palette belongs: a
      * derivation here could not also be canonical, since a stylesheet may declare any colour
@@ -294,9 +276,7 @@ public final class GraphThemeColors {
 
     /**
      * Fallback fill for each plot, used only when a theme declares no {@code --graph_plotFill<N>}.
-     *
      * <p>Light's pair, alpha included, for the reason given on {@link #PLOT_LINE}.
-     *
      * <p>The fills are translucent because a frame carries two of them and they overlap
      * wherever the series cross. At the 78-86% the fills used to carry, the crossing was so
      * nearly opaque that neither series read through it - the shape you most want to see was
@@ -328,7 +308,6 @@ public final class GraphThemeColors {
 
     /**
      * Fallback series dot length, used only when a theme declares no {@code --graph_plotDash}.
-     *
      * <p>Zero asks for a solid line, which is what a frame with no theme to be should draw.
      * Every shipped theme asks for a solid series of its own, so none of them relies on it.
      */
@@ -351,7 +330,6 @@ public final class GraphThemeColors {
 
     /**
      * Fallback axis rule colour, used only when a theme declares no {@code --graph_axisColor}.
-     *
      * <p>The text ink, since an axis carries the labels that sit along it.
      */
     private static final Color AXIS_COLOR_DEFAULT = new Color(51, 51, 63);
@@ -389,12 +367,10 @@ public final class GraphThemeColors {
     /**
      * Fallback plot-line stroke width, used only when a theme declares no
      * {@code --graph_plotLineWidth}.
-     *
      * <p>Light's, and what every shipped theme declares today. The renderer has separate
      * reasons to draw a thinner or thicker line - a dense tile, the sidebar sparkline - and
      * those stay in {@code GraphRenderer} rather than here: they are legibility decisions
      * about one layout, not something a theme picks.
-     *
      * <p>Pinned to what every shipped theme declares, so a console whose stylesheet cannot be
      * read draws its plots the same weight as one that can.
      */
@@ -403,11 +379,9 @@ public final class GraphThemeColors {
     /**
      * Fallback plot-line stroke width past {@link #WIDE_WIDTH}, used only when a theme
      * declares no {@code --graph_plotLineWidthWide}.
-     *
      * <p>Equal to {@link #PLOT_LINE_WIDTH_DEFAULT}, which is what the width rule did before
      * either variable existed. The two are separate so a theme can weight a long series more
      * heavily without changing the rest of the console.
-     *
      * <p>Was 2.5 while every shipped theme declared 4, for the same reason as
      * {@link #PLOT_LINE_WIDTH_DEFAULT}.
      */
@@ -416,7 +390,6 @@ public final class GraphThemeColors {
     /**
      * Fallback plot-line stroke width for a narrow, condensed plot, used only when a theme
      * declares no {@code --graph_plotLineWidthCondensed}.
-     *
      * <p>Equal to {@link #PLOT_LINE_WIDTH_DEFAULT}, so a theme that says nothing about the
      * condensed case gets the same weight as an ordinary plot and only the themes that
      * declare the variable opt into the thinner condensed weight.
@@ -426,7 +399,6 @@ public final class GraphThemeColors {
     /**
      * Fallback stroke width for the line over a filled plot, used only when a theme declares no
      * {@code --graph_plotLineWidthFilled}.
-     *
      * <p>What the old half-the-plot-width rule produced for every shipped theme, so a theme
      * that omits the variable draws the same edge it drew before the variable existed.
      */
@@ -435,7 +407,6 @@ public final class GraphThemeColors {
     /**
      * Fallback for {@link #VAR_PLOT_LINE_WIDTH_FILLED_WIDE}, used only when a theme declares no
      * such variable.
-     *
      * <p>What the old half-the-plot-width rule produced for a wide plot of every shipped theme
      * (4 &times; 0.5), so an ordinary theme draws the same wide filled edge it drew before the
      * variable existed.
@@ -445,7 +416,6 @@ public final class GraphThemeColors {
     /**
      * Fallback for {@link #VAR_PLOT_LINE_WIDTH_FILLED_CONDENSED}, used only when a theme
      * declares no such variable.
-     *
      * <p>Two thirds of {@link #PLOT_LINE_WIDTH_FILLED_DEFAULT}, the same step the plot family
      * takes from its ordinary width to its condensed one (2 of 3). The old coupled rule gave a
      * condensed filled edge the ordinary filled weight, which is what made a narrow filled graph
@@ -486,19 +456,15 @@ public final class GraphThemeColors {
 
     /**
      * The stops that shade plot lines by their value, or null when lines are drawn flat.
-     *
      * <p>A plot line's declaration is read for this as well as for {@link #lineColor}, so a
      * theme opts in by naming two or more colours where it used to name one:
-     *
      * <pre>
      *   --graph_plotLine1:#2ec23e40 #f0000008 #d0000008;
      * </pre>
-     *
      * <p>The line is then drawn with a vertical gradient across the plot area, so the colour at
      * a point is the colour for the value at that point - height <em>is</em> the value. The
      * declared single colour still does its other jobs: it is the legend swatch, and it is what
      * is drawn when the plot area is too short to span.
-     *
      * <p>Read per plot, so the two lines on one axis are shaded independently like every other
      * plot colour. A theme can shade one line by value and leave the other flat.
      *
@@ -519,7 +485,6 @@ public final class GraphThemeColors {
 
     /**
      * The fill colour for a plot on a frame.
-     *
      * <p>A {@code linear-gradient()} declaration has no single colour, so its first stop is
      * reported here: that is the ink the fill is made of. {@link #pathPaint} returns the whole
      * wash.
@@ -537,13 +502,11 @@ public final class GraphThemeColors {
 
     /**
      * The fill for a plot as something to paint with: a colour, or a vertical gradient.
-     *
      * <p>A gradient needs a length to span, and the area under a series is a vertical wash,
      * so the frame's height is the caller's to supply. Only the CSS default direction - top
      * to bottom, which is what the minigraph's own fill variables use - is painted; a stated
      * direction this class cannot honour is treated as no opinion rather than a guess, and
      * the fill comes out as its ink.
-     *
      * <p>Two stops are painted as a {@link GradientPaint} and three or more as a
      * {@link LinearGradientPaint}, which is the only one of the two that holds an arbitrary
      * number. Either way the stops are spread evenly down the span, so a third stop lands a
@@ -583,7 +546,6 @@ public final class GraphThemeColors {
 
     /**
      * The dot ink length for the pattern that distinguishes the second plot from the first.
-     *
      * <p>{@code --graph_plotDash} takes either a bare length or a CSS dash pair:
      * <pre>
      *   --graph_plotDash:1        a 1px dot, gap derived from the line width
@@ -604,7 +566,6 @@ public final class GraphThemeColors {
     /**
      * The space after each dot, as stated by the theme, or zero when the renderer should
      * derive it from the line width.
-     *
      * <p>A stated value is not a promise: {@link org.rrd4j.graph.RrdGraphConstants} raises
      * anything too tight to keep the dots apart, because with round caps each dot lays down
      * {@code dot + width} of ink and a gap at or below the width merges them into a solid
@@ -779,7 +740,6 @@ public final class GraphThemeColors {
 
     /**
      * Stroke width of a plot line on a tile no wider than {@link #WIDE_WIDTH}.
-     *
      * <p>A renderer decision outranks this one - see {@link GraphRenderer} for the dense-tile
      * and sparkline widths - so a theme sets the weight of an ordinary plot, not every plot.
      *
@@ -821,7 +781,6 @@ public final class GraphThemeColors {
 
     /**
      * Stroke width of the line drawn over a filled plot.
-     *
      * <p>Independent of {@link #plotLineWidth(File, String)} and its siblings: this is an edge
      * on a fill, not a plot line, and the two are set for different reasons.
      *
@@ -867,7 +826,6 @@ public final class GraphThemeColors {
 
     /**
      * One declared length, bounded, or the built-in fallback.
-     *
      * <p>An absent variable and an unusable one are the same case on purpose: both mean the
      * theme has no opinion, so both fall back rather than failing the render.
      *
@@ -924,7 +882,6 @@ public final class GraphThemeColors {
 
     /**
      * Read one or two whitespace- or comma-separated lengths.
-     *
      * <p>Longer lists are refused rather than truncated. CSS would cycle an odd-length
      * {@code stroke-dasharray} to make it even, but the minimum-gap rule below is stated
      * for a single dot and gap, and silently dropping the rest would render something the
@@ -954,7 +911,6 @@ public final class GraphThemeColors {
 
     /**
      * The colour a theme declared, or null when it declared nothing usable.
-     *
      * <p>An absent variable and an unparseable one are the same case on purpose: both mean
      * "this theme has no opinion about this slot", so both fall back to the default.
      */
@@ -965,7 +921,6 @@ public final class GraphThemeColors {
 
     /**
      * The ink a declaration names: a colour, or the first stop of a gradient.
-     *
      * <p>A gradient is a wash rather than a colour, so a caller that wants one colour - a
      * legend swatch, an alpha check - gets the ink the wash is made of.
      */
@@ -977,7 +932,6 @@ public final class GraphThemeColors {
 
     /**
      * The colour stops of a {@code linear-gradient()} declaration, in the order written.
-     *
      * <p>A leading direction is skipped rather than obeyed: an area under a series is a
      * vertical wash, so only the endpoints say anything, and a direction this class cannot
      * paint is a no-op rather than a guess. A stop's stated position is dropped for the same
@@ -1005,7 +959,6 @@ public final class GraphThemeColors {
 
     /**
      * Split a gradient's own stop list on its commas, ignoring commas inside parentheses.
-     *
      * <p>A plain split would cut {@code rgba(0,0,0,.5)} into three fragments that parse as
      * nothing, which discarded the whole declaration and quietly drew a flat colour instead of
      * the gradient that was asked for. Splitting on top-level commas only keeps a colour
@@ -1075,7 +1028,6 @@ public final class GraphThemeColors {
 
     /**
      * The theme's declarations, re-parsed whenever the stylesheet changes.
-     *
      * <p>A cached entry is reused while the file's last-modified stamp is unchanged and the
      * entry is younger than {@link #maxCacheAgeMs}, so the cost of a warm lookup is one
      * stat() rather than a re-read. The stamp is checked before the cache is consulted for a
@@ -1149,7 +1101,6 @@ public final class GraphThemeColors {
 
     /**
      * Forget every parsed theme.
-     *
      * <p>Not needed in normal operation: both the timestamp and the interval already pick
      * up edits. This exists so a caller that has just rewritten a stylesheet can force a
      * re-read without waiting.

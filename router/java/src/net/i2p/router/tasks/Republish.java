@@ -17,12 +17,10 @@ import net.i2p.util.SimpleTimer2;
 
 /**
  * Router information publisher for network database synchronization.
- *
  * <p>This class periodically publishes the router's RouterInfo to the
  * distributed network database (netdb) to ensure the router remains
  * discoverable and reachable by other peers. Regular publication
  * is essential for maintaining network connectivity and participation.</p>
- *
  * <p><strong>Publication Process:</strong></p>
  * <ul>
  *   <li>Retrieves current RouterInfo from router</li>
@@ -31,7 +29,6 @@ import net.i2p.util.SimpleTimer2;
  *   <li>Handles clock skew and timestamp issues</li>
  *   <li>Triggers identity rebuild if needed</li>
  * </ul>
- *
  * <p><strong>Error Handling:</strong></p>
  * <ul>
  *   <li>Detects and handles clock skew issues</li>
@@ -39,7 +36,6 @@ import net.i2p.util.SimpleTimer2;
  *   <li>Logs detailed error information for debugging</li>
  *   <li>Recovers from temporary network issues</li>
  * </ul>
- *
  * <p><strong>Clock Skew Detection:</strong></p>
  * <ul>
  *   <li>Detects large time discrepancies (>60 seconds)</li>
@@ -47,7 +43,6 @@ import net.i2p.util.SimpleTimer2;
  *   <li>Prevents network database rejection</li>
  *   <li>Maintains router identity continuity</li>
  * </ul>
- *
  * <p><strong>Network Integration:</strong></p>
  * <ul>
  *   <li>Ensures router remains discoverable by peers</li>
@@ -55,7 +50,6 @@ import net.i2p.util.SimpleTimer2;
  *   <li>Supports network topology and routing</li>
  *   <li>Enables tunnel building and peer connections</li>
  * </ul>
- *
  * <p>Regular publication is critical for router participation in the
  * I2P network. Without periodic republishing, routers would
  * become unreachable and unable to participate in tunnel creation
@@ -79,11 +73,11 @@ public class Republish extends SimpleTimer2.TimedEvent {
 
     /**
      * Publish the router's info to the network database.
-     *
+     * <p>
      * Retrieves the current RouterInfo and publishes it to the netdb.
      * If the RouterInfo is invalid (due to clock skew or other issues),
      * attempts to rebuild the router identity.
-     *
+     * <p>
      * This method handles clock skew detection and will trigger a router
      * identity rebuild if significant time discrepancies are detected.
      */

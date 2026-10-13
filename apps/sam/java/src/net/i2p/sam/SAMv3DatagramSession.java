@@ -34,7 +34,7 @@ class SAMv3DatagramSession extends SAMDatagramSession implements Session, SAMDat
     /**
      * build a DatagramSession according to informations registered
      * with the given nickname
-     *
+     * <p>
      * Caller MUST call start().
      *
      * @param nick nickname of the session
@@ -81,7 +81,7 @@ class SAMv3DatagramSession extends SAMDatagramSession implements Session, SAMDat
     /**
      * Build a Datagram Session on an existing i2p session
      * registered with the given nickname
-     *
+     * <p>
      * Caller MUST call start().
      *
      * @param nick nickname of the session

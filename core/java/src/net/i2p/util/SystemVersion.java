@@ -245,7 +245,7 @@ public abstract class SystemVersion {
     /**
      * Returns the OS of the system running I2P as a lower-case string
      * for reference in clients.config and plugin.config files.
-     *
+     * <p>
      * matches the conventions of the Go cross compiler
      *
      * @return the OS of the system running I2P as a lower-case string
@@ -277,7 +277,7 @@ public abstract class SystemVersion {
     /**
      * Returns the architecture of the system running I2P as a string
      * for reference in clients.config and plugin.config files.
-     *
+     * <p>
      * matches the conventions of the Go cross compiler
      *
      * @return the architecture of the system running I2P as a string
@@ -990,7 +990,7 @@ public abstract class SystemVersion {
 
     /**
      * Retrieve System Load as percentage (100% equals full system load)
-     *
+     * <p>
      * The MXBean query is a native /proc read and is cached for
      * {@link #SYSTEM_LOAD_CACHE_MS}, because this sits on the per-request path
      * of both tunnel throttlers while the underlying load average moves on a
@@ -1055,7 +1055,6 @@ public abstract class SystemVersion {
     /**
      * The canonical tunnel build success ratio: successes over all settled builds,
      * 0.0 to 1.0, for a stated window.
-     *
      * <p>This is the single source of truth. Three implementations existed and none of them
      * agreed: {@code ProfileOrganizer} read {@code getCurrentEventCount()} - the
      * <em>current partial</em> period - while asking for the ten minute rate, so it sampled a
@@ -1066,7 +1065,6 @@ public abstract class SystemVersion {
      * {@code ClientPeerSelector} first-hop selection - so a partial-period reading could
      * intermittently drop it under the attack threshold and switch all three to their
      * defensive behaviour on noise.
-     *
      * <p>Counts events over the last <em>completed</em> window rather than the current
      * partial one, so the reading does not depend on where in the period it was sampled.
      * Partial-period sampling was what made the old value swing, and swing under the attack

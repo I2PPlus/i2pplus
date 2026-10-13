@@ -250,7 +250,7 @@ class ClientManager {
 
     /**
      * Test whether the ClientManager is running.
-     *
+     * <p>
      * As of 0.9.45, this returns true iff the ClientManager is running.
      * Prior to that, it also required all external I2CP listeners
      * that were registered to be running.
@@ -564,7 +564,7 @@ class ClientManager {
      * LeaseSet, after which the onCreateJob is queued up.  If that doesn't occur
      * within the timeout specified, queue up the onFailedJob.  This call does not
      * block.
-     *
+     * <p>
      * UNUSED, the call below without jobs is always used.
      *
      * @param dest Destination from which the LeaseSet's authorization should be requested

@@ -38,7 +38,6 @@ import net.i2p.util.VersionComparator;
 
 /**
  * Utility class for creating and dispatching tunnel build request messages.
- *
  * <p>This class handles:
  * <ul>
  * <li>Preparation of tunnel hop IDs</li>
@@ -48,7 +47,6 @@ import net.i2p.util.VersionComparator;
  * <li>Garlic encryption for inbound builds</li>
  * <li>Timeout and failure handling</li>
  * </ul>
- *
  * <p>Paired tunnels are always used (as of 0.9.50+) to improve client
  * isolation and prevent correlation across tunnel pools.
  */
@@ -174,7 +172,6 @@ public abstract class BuildRequestor {
        * outbound tunnels.  BuildExecutor's per-peer pacing guard must target
        * the same peer the dispatch code sends the request to, so both use
        * this single derivation.
-       *
        * <p>Returns null for a config too short to have a hop 1. Exploratory
        * pools build length-1 tunnels whose peer array holds only the gateway,
        * so asking for hop 1 would throw and abandon the build outright — which
@@ -208,7 +205,6 @@ public abstract class BuildRequestor {
     /**
      * Paired tunnels are always used for client tunnels to prevent correlation
      * between different clients or tunnel pools.
-     *
      * <p>Historically this was configurable via {@code router.usePairedTunnels},
      * but it is now permanently enabled for security reasons.
      *
@@ -319,7 +315,7 @@ public abstract class BuildRequestor {
      * traffic would correlate otherwise-isolated clients. If the pool has no
      * tunnel yet (cold start), an exploratory tunnel bootstraps the first
      * builds until the pool can pair with its own.
-     *
+     * <p>
      * On failure, the hops of a timed-out or refused build are cooled down
      * out of selection (see BuildExecutor.penalizeTimeout / cooldownFailedPeers),
      * so retries reselect peers rather than retrying the same failing set.

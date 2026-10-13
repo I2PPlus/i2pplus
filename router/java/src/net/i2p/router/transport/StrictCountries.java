@@ -5,7 +5,6 @@ import java.util.Arrays;
 /**
  * Maintains list of countries with strict application restrictions.
  * Maintain a list of countries that may have tight restrictions on applications like ours.
- *
  * <p>The country set is stored as a sorted array of case-normalized 2-letter
  * integer keys so {@link #contains(String)} performs no per-call String
  * allocation (callers such as {@code Router.isHidden} check this on the hot

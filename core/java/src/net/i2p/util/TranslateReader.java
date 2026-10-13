@@ -19,17 +19,17 @@ import net.i2p.I2PAppContext;
 import java.nio.charset.StandardCharsets;
 /**
  * Filters a reader, replacing the gettext-style tags described below as they are read.
- *
+ * <p>
  * Strings are tagged with _("translateme")
  * or _("translate {0} me", "foo")
- *
+ * <p>
  * Max two parameters.
  * String and parameters must be double-quoted (no ngettext, no tagged parameters).
  * Escape quotes inside quote with \".
  * Commas and spaces between args are optional.
  * Entire tag (from '_' to ')') must be on one line.
  * Multiple tags allowed on one line.
- *
+ * <p>
  * Also will extract strings to a dummy java file for postprocessing by xgettext - see main().
  *
  * @since 0.9.8

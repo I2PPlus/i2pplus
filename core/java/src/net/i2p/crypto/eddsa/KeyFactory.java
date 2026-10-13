@@ -15,11 +15,10 @@ import java.security.spec.X509EncodedKeySpec;
 
 /**
  * Java Security Provider KeyFactory implementation for EdDSA (Edwards-curve Digital Signature Algorithm).
- *
+ * <p>
  * This class provides the bridge between EdDSA-specific key specifications and the standard
  * Java Cryptography Architecture (JCA) KeyFactory interface. It enables conversion between
  * different key representations and supports standard encoding formats for interoperability.
- *
  * <p><strong>Supported Operations:</strong>
  * <ul>
  *   <li><strong>Key Generation:</strong> Create EdDSA keys from specifications</li>
@@ -27,7 +26,6 @@ import java.security.spec.X509EncodedKeySpec;
  *   <li><strong>Standard Encoding:</strong> Support for PKCS#8 and X.509 formats</li>
  *   <li><strong>Key Specification:</strong> Extract key parameters from existing keys</li>
  * </ul>
- *
  * <p><strong>Supported Key Specifications:</strong>
  * <ul>
  *   <li>{@link EdDSAPublicKeySpec} - EdDSA-specific public key specification</li>
@@ -35,7 +33,6 @@ import java.security.spec.X509EncodedKeySpec;
  *   <li>{@link PKCS8EncodedKeySpec} - Standard PKCS#8 private key encoding (since 0.9.25)</li>
  *   <li>{@link X509EncodedKeySpec} - Standard X.509 public key encoding (since 0.9.25)</li>
  * </ul>
- *
  * <p><strong>Usage Example:</strong>
  * <pre>
  * // Create KeyFactory instance
@@ -48,10 +45,8 @@ import java.security.spec.X509EncodedKeySpec;
  * // Convert to standard X.509 format
  * X509EncodedKeySpec x509Spec = keyFactory.getKeySpec(publicKey, X509EncodedKeySpec.class);
  * </pre>
- *
  * <p><strong>Thread Safety:</strong> This class is thread-safe and can be used concurrently
  * by multiple threads. Key objects created by this factory are immutable and thread-safe.
- *
  * <p><strong>Security Considerations:</strong>
  * <ul>
  *   <li>Private key material is handled securely during conversion</li>
@@ -76,16 +71,15 @@ public final class KeyFactory extends KeyFactorySpi {
 
     /**
      * Generates an EdDSA private key from the provided key specification.
-     *
+     * <p>
      * This method converts various key specification formats into EdDSA private keys,
-     * supporting both EdDSA-specific specifications and standard PKCS#8 encoding.
+     * supporting both EdDSA-specific specifications and, since 0.9.25, standard
+     * {@link PKCS8EncodedKeySpec} encoding.
      *
      * @param keySpec the key specification to convert
      * @return the generated EdDSA private key
      * @throws InvalidKeySpecException if the key specification is unsupported or malformed
      * @since 0.9.15
-     *
-     *        Supports PKCS8EncodedKeySpec since version 0.9.25.
      */
     @Override
     protected PrivateKey engineGeneratePrivate(KeySpec keySpec) throws InvalidKeySpecException {
@@ -100,16 +94,15 @@ public final class KeyFactory extends KeyFactorySpi {
 
     /**
      * Generates an EdDSA public key from the provided key specification.
-     *
+     * <p>
      * This method converts various key specification formats into EdDSA public keys,
-     * supporting both EdDSA-specific specifications and standard X.509 encoding.
+     * supporting both EdDSA-specific specifications and, since 0.9.25, standard
+     * {@link X509EncodedKeySpec} encoding.
      *
      * @param keySpec the key specification to convert
      * @return the generated EdDSA public key
      * @throws InvalidKeySpecException if the key specification is unsupported or malformed
      * @since 0.9.15
-     *
-     *        Supports X509EncodedKeySpec since version 0.9.25.
      */
     @Override
     protected PublicKey engineGeneratePublic(KeySpec keySpec) throws InvalidKeySpecException {
@@ -124,7 +117,7 @@ public final class KeyFactory extends KeyFactorySpi {
 
     /**
      * Returns a specification (key material) of the given key object.
-     *
+     * <p>
      * This method extracts the underlying key parameters from EdDSA keys and
      * converts them into the requested specification format.
      *
@@ -156,7 +149,7 @@ public final class KeyFactory extends KeyFactorySpi {
 
     /**
      * Translates a key object from one provider to another.
-     *
+     * <p>
      * This method would allow conversion between EdDSA keys from different
      * security providers, but currently no other EdDSA providers are known
      * or supported in the I2P environment.

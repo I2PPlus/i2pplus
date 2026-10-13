@@ -11,7 +11,7 @@ import net.i2p.stat.RateStat;
 
 /**
  * Estimate how many of our tunnels the peer can join per hour.
- *
+ * <p>
  * Combines measured tunnel accept/reject/fail rates across three time windows
  * (10 min, 1 hour, 1 day) with capability-based penalties and bonuses
  * (congestion caps, unreachable, established connection, XOR distance).
@@ -224,16 +224,14 @@ class CapacityCalculator {
      * This is perhaps the most critical part of the peer ranking and selection
      * system, so adjust with great care and testing to ensure good network
      * performance and prevent congestion collapse.
-     *
+     * <p>
      * The baseline or "growth factor" is 5.
      * Rejects will not reduce the baseline. Failures will.
+     * Let A = accepts, R = rejects, F = fails.
      *
      * @param acceptStat Accept counter (1 = 1 accept)
      * @param rejectStat Reject counter (1 = 1 reject)
      * @param failedStat Failed counter (100 = 1 fail)
-     *
-     *                   Let A = accects, R = rejects, F = fails
-     *
      * @return estimated and adjusted accepts per hour, for the given period
      *         which is, more or less, max(0, 5 + (A * (A / (A + 2R))) - (4 * F))
      */

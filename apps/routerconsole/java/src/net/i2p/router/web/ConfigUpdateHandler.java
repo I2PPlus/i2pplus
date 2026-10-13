@@ -39,7 +39,7 @@ public class ConfigUpdateHandler extends FormHandler {
     public static final String PROP_NEWS_URL = "router.newsURL";
     /**
      *  current default, i2pnews.i2p, run by echelon
-     *
+     * <p>
      *  NOTE: If you change, also change in Android:
      *  app/src/main/java/net/i2p/android/apps/NewsFetcher.java
      */

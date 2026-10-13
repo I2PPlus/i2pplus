@@ -249,7 +249,6 @@ public class EstablishmentManager {
     /**
      * Extra establishment budget granted to an outbound attempt once a resend has been
      * scheduled and still failed.
-     *
      * <p>Additive rather than an absolute like the inbound {@code IB_RETRY_SENT_MAX_TIME}.
      * The inbound figure is 5x its retransmit delay, but the outbound delay is 300ms
      * against the inbound 1000ms, so 5x would be 1500ms - already below the base
@@ -263,7 +262,6 @@ public class EstablishmentManager {
 
     /**
      * Minimum gap between "Corrupt SessionConfirmed" reports.
-     *
      * <p>This one warning was 9.2% of an entire log - roughly 180 lines a minute - and it
      * carries no reason, so the volume bought no information. Two causes are folded into
      * this one catch: a peer that legitimately failed the handshake and then sent
@@ -277,7 +275,6 @@ public class EstablishmentManager {
 
     /**
      * The inbound establishment base deadline, as the Tuner has it set.
-     *
      * <p>Exposed so the inbound state machine can schedule its next send from the same budget
      * the expiry check uses. When those two were derived independently they drifted, and a state
      * could become due for a retransmission while still short of its deadline - which the
@@ -305,13 +302,11 @@ public class EstablishmentManager {
 
     /**
      * The deadline an inbound attempt was actually given.
-     *
      * <p>This was written as a disjunction - {@code lifetime > base || (retried && lifetime >=
      * retryBudget)} - which never extended anything. The first clause expires the attempt at the
      * base on its own, so the second could only matter when the retry budget was the smaller of
      * the two, and then it made a retried attempt die <em>sooner</em>. Observed live: with a
      * 4000ms base and a 3750ms retry budget, a retried attempt died at 3751ms.
-     *
      * <p>The predicate now asks this method for the deadline, so the two cannot disagree and the
      * retry budget means what {@code IB_RETRY_SENT_MAX_TIME} exists for: five retransmit delays
      * of extra patience for an attempt that has already tried again.
@@ -397,7 +392,6 @@ public class EstablishmentManager {
 
     /**
      * Completion time above which a handshake counts as slow.
-     *
      * <p>The recorded {@code udp.*EstablishTime} stats only expose a mean, and the mean is
      * useless for sizing the deadline: measured live, successful outbound handshakes
      * average 196ms, so 4x the mean targets 784ms - below the 2250 that abandoned 117
@@ -855,7 +849,6 @@ public class EstablishmentManager {
 
     /**
      * Whether an outbound establishment attempt has run out of time.
-     *
      * <p>Mirrors {@link #hasInboundEstablishExpired} for the outbound direction, which
      * until now had no equivalent: the outbound deadline was a flat
      * {@code lifetime >= MAX_OB_ESTABLISH_TIME} with no retry grace, while the inbound
@@ -984,7 +977,7 @@ public class EstablishmentManager {
      * Send the message to its specified recipient by establishing a connection
      * with them and sending it off.  This call does not block, and on failure,
      * the message is failed.
-     *
+     * <p>
      * Note - if we go back to multiple PacketHandler threads, this may need more locking.
      *
      * @param msg the outbound message to send, queued if we are at the concurrency limit
@@ -1392,7 +1385,7 @@ public class EstablishmentManager {
 
     /**
      * Got a SessionRequest OR a TokenRequest (initiates an inbound establishment)
-     *
+     * <p>
      * SSU 2 only.
      * @param from the sender's IP and port, not yet a trusted peer identity
      * @param state as looked up in PacketHandler, but null unless retransmitted or retry sent
@@ -1529,12 +1522,12 @@ public class EstablishmentManager {
     /**
      * Send a Retry packet with a termination code, for a rejection
      * of a session/token request. No InboundEstablishState2 required.
-     *
+     * <p>
      * SSU 2 only.
      * The inbound packet was superficially validated for type, netID, and version,
      * so we have basic probing resistance.
      * The Retry packet encryption is low-cost, chacha only.
-     *
+     * <p>
      * Rate limited to MAX_TERMINATIONS per peer every FAILSAFE_INTERVAL
      *
      * @param fromPacket header already decrypted, must be session or token request
@@ -1589,7 +1582,7 @@ public class EstablishmentManager {
 
     /**
      * Got a SessionConfirmed, should only happen as part of an inbound establishment.
-     *
+     * <p>
      * SSU 2 only.
      * @param state non-null
      * @param packet header decrypted only
@@ -1630,7 +1623,7 @@ public class EstablishmentManager {
 
     /**
      * Got a SessionCreated (in response to our outbound SessionRequest)
-     *
+     * <p>
      * SSU 2 only.
      *
      * @param state non-null
@@ -1666,7 +1659,7 @@ public class EstablishmentManager {
 
     /**
      * Got a Retry (in response to our outbound SessionRequest or TokenRequest)
-     *
+     * <p>
      * SSU 2 only.
      * @param state the outbound attempt that our Retry went to, null if we sent none
      * @param packet header decrypted only, the Retry itself is parsed by the state
@@ -1700,7 +1693,7 @@ public class EstablishmentManager {
 
     /**
      * Got a SessionDestroy on an established conn
-     *
+     * <p>
      * SSU 2
      *
      * @param from the sender, logged only - the authenticated state decides what to drop
@@ -1715,7 +1708,7 @@ public class EstablishmentManager {
 
     /**
      * Got a SessionDestroy during outbound establish
-     *
+     * <p>
      * SSU 2
      *
      * @param from the sender, which keys the outbound state to abandon
@@ -1735,16 +1728,16 @@ public class EstablishmentManager {
 
     /**
      * Got a SessionDestroy - maybe during an inbound establish?
-     *
+     * <p>
      * A SessionDestroy received before a session exists is only informational:
      * there is no state to drop, and a peer that never completed an
      * establishment has nothing to tear down. The inbound establish is
      * abandoned by its own IES2 timeout rather than by this packet, which is
      * why there is no inbound-state lookup here.
-     *
+     * <p>
      * As this packet was essentially unauthenticated (i.e. intro key, not session key)
      * we just log it as it could be spoofed.
-     *
+     * <p>
      * SSU 2
      *
      * @param from the unauthenticated sender, logged only as it may be spoofed
@@ -1932,7 +1925,7 @@ public class EstablishmentManager {
 
     /**
      * Send our info immediately, bundled with the ACK of packet 0.
-     *
+     * <p>
      * The two messages share a packet, so this stays separate from
      * sendAck0() rather than being folded into it: sendAck0() may run before
      * the PeerState exists, and only this path needs the peer's RouterInfo.
@@ -2025,9 +2018,9 @@ public class EstablishmentManager {
      * This handles both initial send and retransmission of Session Created,
      * and, for SSU2, send of Retry.
      * Retry is never retransmitted except in response to a retransmitted Token Request.
-     *
+     * <p>
      * This may be called more than once.
-     *
+     * <p>
      * Caller must synch on state.
      */
     private void sendCreated(InboundEstablishState state) {
@@ -2076,9 +2069,9 @@ public class EstablishmentManager {
     /**
      * This handles both initial send and retransmission of SessionRequest,
      * and, for SSU2, initial send and retransmission of Token Request.
-     *
+     * <p>
      * This may be called more than once.
-     *
+     * <p>
      * Caller must synch on state.
      */
     private void sendRequest(OutboundEstablishState state) {
@@ -2134,7 +2127,7 @@ public class EstablishmentManager {
      * Send RelayRequests to multiple introducers.
      * This may be called multiple times, it sets the nonce the first time only
      * Caller should probably synch on state.
-     *
+     * <p>
      * SSU 2
      *
      * @param state the outbound state to walk through the introducers of; must be
@@ -2269,7 +2262,7 @@ public class EstablishmentManager {
 
     /**
      * We are Alice, send a RelayRequest to Bob.
-     *
+     * <p>
      * SSU 2 only.
      *
      * @param charlie must be SSU2
@@ -2315,7 +2308,7 @@ public class EstablishmentManager {
     /**
      * We are Alice, we sent a RelayRequest to Bob and got a RelayResponse back.
      * Time and version already checked by caller.
-     *
+     * <p>
      * SSU 2 only.
      *
      * @param bob the introducer's established session, we are answering its relay
@@ -2463,7 +2456,7 @@ public class EstablishmentManager {
     /**
      * Called from PacketHandler.
      * Accelerate response to RelayResponse if we haven't sent it yet.
-     *
+     * <p>
      * SSU 2 only.
      *
      * @param id non-null
@@ -2758,7 +2751,7 @@ public class EstablishmentManager {
     /**
      * SSU 2.
      * For SSU 2, it contains a full router info, so it may be fragmented.
-     *
+     * <p>
      * Caller must synch on state.
      */
     private void sendConfirmation(OutboundEstablishState state) {
@@ -3193,7 +3186,7 @@ public class EstablishmentManager {
      */
     /**
      * Resolves the "udp.inboundTokenLifetime" RateStat, caching the handle.
-     *
+     * <p>
      * The stat is created in this class's constructor and never replaced, so
      * after the first successful lookup this is a single volatile read. A
      * stat that is not registered yet is not cached, so a later call retries.
@@ -3336,9 +3329,8 @@ public class EstablishmentManager {
 
     /**
      * Not threaded, because we're holding the token cache locks anyway.
-     *
+     * <p>
      * Format:
-     *
      * <pre>
      *  4 ourIPv4addr ourIPv4port
      *  6 ourIPv6addr ourIPv6port

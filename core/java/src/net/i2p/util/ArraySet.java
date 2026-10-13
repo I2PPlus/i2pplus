@@ -13,11 +13,10 @@ import java.util.Set;
  * Much more space-efficient than HashSet.
  * Unsynchronized, not thread-safe.
  * Null elements are not permitted.
- *
+ * <p>
  * Not appropriate for large Sets that are modified.
  * add(), remove(), and contains() are O(n).
  * Warning: addAll() and the Collection constructor are O(n**2).
- *
  *
  * @param <E> type of elements in this set
  * @since 0.9.25, moved to net.i2p.util in 0.9.55
@@ -80,7 +79,7 @@ public class ArraySet<E> extends AbstractSet<E> implements Set<E> {
      * A fixed capacity of max(MAX_CAPACITY, c.size()), which may be more than
      * the resulting set size if there are duplicates in c.
      * Adds over capacity will throw a SetFullException.
-     *
+     * <p>
      * Warning: O(n**2).
      *
      * @param c the collection to copy
@@ -93,7 +92,7 @@ public class ArraySet<E> extends AbstractSet<E> implements Set<E> {
      * A fixed capacity of max(capacity, c.size()), which may be more than
      * the resulting set size if there are duplicates in c.
      * Adds over capacity will throw a SetFullException.
-     *
+     * <p>
      * Warning: O(n**2).
      *
      * @param c the collection to copy

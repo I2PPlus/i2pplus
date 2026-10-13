@@ -42,11 +42,11 @@ import net.i2p.util.OrderedProperties;
 /**
  * Defines the data that a router either publishes to the global routing table or
  * provides to trusted peers.
- *
+ * <p>
  * For efficiency, the methods and structures here are now unsynchronized.
  * Initialize the RI with readBytes(), or call the setters and then sign() in a single thread.
  * Don't change it after that.
- *
+ * <p>
  * To ensure integrity of the RouterInfo, methods that change an element of the
  * RouterInfo will throw an IllegalStateException after the RouterInfo is signed.
  *
@@ -328,7 +328,7 @@ public class RouterInfo extends DatabaseEntry {
     /**
      * Configure a set of options or statistics that the router can expose.
      * Makes a copy.
-     *
+     * <p>
      * Warning, clears all capabilities.
      *
      * @param options if null, clears current options

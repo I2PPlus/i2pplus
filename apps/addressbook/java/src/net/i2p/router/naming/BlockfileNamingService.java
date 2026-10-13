@@ -53,7 +53,7 @@ import net.metanotion.util.skiplist.SkipList;
 import java.nio.charset.StandardCharsets;
 /**
  * A naming service using the net.metanotion BlockFile database.
- *
+ * <p>
  * This database contains the following skiplists:
  * <pre>
  *
@@ -91,9 +91,8 @@ import java.nio.charset.StandardCharsets;
  *             "a":   The time added (Java long time in ms)
  *             "s":   The original source of the entry (typically a file name or subscription URL)
  *             others TBD
- *
  * </pre>
- *
+ * <p>
  * All host names are converted to lower case.
  *
  * @since 0.8.7, moved from core to addressbook in 0.9.31
@@ -144,7 +143,7 @@ public class BlockfileNamingService extends DummyNamingService {
     /**
      * Opens the database at hostsdb.blockfile or creates a new
      * one and imports entries from hosts.txt, userhosts.txt, and privatehosts.txt.
-     *
+     * <p>
      * If not in router context, the database will be opened read-only
      * unless the property i2p.naming.blockfile.writeInAppContext is true.
      * Not designed for multiple instantiations or simultaneous use by multiple JVMs.
@@ -374,7 +373,7 @@ public class BlockfileNamingService extends DummyNamingService {
 
     /**
      * Blockfile must be writable of course.
-     *
+     * <p>
      * Version 1->2: Add reverse skiplist and populate
      * Version 2->3: Re-populate reverse skiplist as version 2 didn't keep it updated
      * after the upgrade. No change to format.
@@ -466,7 +465,7 @@ public class BlockfileNamingService extends DummyNamingService {
      * Save new version number in blockfile after upgrade.
      * Blockfile must be writable, of course.
      * Side effect: sets _version field
-     *
+     * <p>
      * Caller must synchronize
      * @since 0.9.26 pulled out of upgrade()
      */
@@ -637,7 +636,7 @@ public class BlockfileNamingService extends DummyNamingService {
      * Caller must synchronize.
      * Fails without exception on error (logs only).
      * Returns without logging if no reverse skiplist (version 1).
-     *
+     * <p>
      * We store one or more hostnames for a given hash.
      * The skiplist key is a signed Integer, the first 4 bytes of the dest hash.
      * For convenience (since we have a serializer already) we use
@@ -1597,7 +1596,7 @@ public class BlockfileNamingService extends DummyNamingService {
      * Return all of the entries found in the first list found, or in the list
      * specified in lookupOptions. Does not aggregate all destinations found
      * in all lists.
-     *
+     * <p>
      * If storedOptions is non-null, it must be a List that supports null entries.
      * If the returned value (the List of Destinations) is non-null,
      * the same number of Properties objects will be added to storedOptions.
@@ -1630,7 +1629,7 @@ public class BlockfileNamingService extends DummyNamingService {
 
     /**
      * Add a Destination to an existing hostname's entry in the addressbook.
-     *
+     * <p>
      * This does not prevent adding b32. Caller must check.
      *
      * @param options NamingService-specific, may be null
@@ -2050,7 +2049,7 @@ public class BlockfileNamingService extends DummyNamingService {
     /**
      * Same as DataHelper.readProperties, UTF-8, unsorted,
      * except that values may up to 4K bytes.
-     *
+     * <p>
      * Throws DataFormatException on duplicate key
      *
      * @param in stream to read the mapping from

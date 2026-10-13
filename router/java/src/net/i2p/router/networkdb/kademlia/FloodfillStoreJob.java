@@ -18,7 +18,7 @@ import net.i2p.router.RouterContext;
 
 /**
  * This class extends StoreJob to fire off a FloodfillVerifyStoreJob after a successful store.
- *
+ * <p>
  * Stores through this class always request a reply.
  */
 class FloodfillStoreJob extends StoreJob {

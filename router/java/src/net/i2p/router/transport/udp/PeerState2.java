@@ -34,9 +34,9 @@ import net.i2p.util.SimpleTimer2;
 /**
  * Contain all of the state about a UDP connection to a peer.
  * This is instantiated only after a connection is fully established.
- *
+ * <p>
  * Public only for UI peers page. Not a public API, not for external use.
- *
+ * <p>
  * SSU2 only.
  *
  * @since 0.9.54
@@ -191,7 +191,6 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
      * A session with a remote peer over SSU2: the connection ids, the four
      * cipher states and the header encryption keys are all fixed here, so the
      * transport can build one without a separate handshake step.
-     *
      * <p>If inbound, caller MUST immediately call setWeRelayToThemAs() (if nonzero) and sendAck0().
      *
      * @param ctx the router context
@@ -320,14 +319,12 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
      * Expire complete or timed-out entries from _sentMessages, walking an
      * incremental cursor instead of rescanning the whole map and every fragment
      * list on every tick.
-     *
      * <p>The cursor holds a snapshot of the map taken when it runs dry;
      * entries acked in the meantime are skipped by the identity check, and
      * newly added entries are picked up on the next refill.  An entry is
      * removed only when every fragment's message is complete or expired, so it
      * never expires early.  One pass covers the whole cursor, so retention
      * matches the old full scan's single tick.
-     *
      * <p>Only called from {@link #finishAndAllocate} on the PacketPusher
      * thread, so the cursor needs no synchronization.  Failure detection is
      * unaffected: that is the "ahead &gt; BITFIELD_SIZE" check in
@@ -723,7 +720,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
 
     /**
      * Connection migration attempt while in MIGRATION_STATE_NONE.
-     *
+     * <p>
      * A packet from a host different from the current remote host starts a
      * migration only when it passes the pure {@link #shouldInitiateMigration}
      * classifier (IP family match, highest-set ordering rule, validated source).
@@ -731,7 +728,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
      * migration has already reset the state before this runs. Sending is limited
      * only while a challenge is actually outstanding; a refused migration must
      * not freeze the verified path.
-     *
+     * <p>
      * Must be called with {@code _migrationLock} held.
      *
      * @param from source address of the received packet, or null
@@ -776,11 +773,11 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
 
     /**
      * Connection migration attempt while in MIGRATION_STATE_PENDING.
-     *
+     * <p>
      * The packet source is classified by the pure {@link #decidePendingMigration}
      * method; this method applies the side effects (cancel/timeout state reset,
      * path-challenge retransmission with exponential backoff).
-     *
+     * <p>
      * Must be called with {@code _migrationLock} held.
      *
      * @param from source address of the received packet, or null
@@ -840,7 +837,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
     /**
      * Decide whether a packet from a new source address may initiate a
      * connection migration while the connection is in MIGRATION_STATE_NONE.
-     *
+     * <p>
      * The source IP family must match the current remote host, the packet must
      * be the highest sequence received so far (QUIC ordering rule, protects
      * against reordered packets driving a migration to an attacker-chosen

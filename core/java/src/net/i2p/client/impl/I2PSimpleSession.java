@@ -58,7 +58,7 @@ public class I2PSimpleSession extends I2PSessionImpl2 {
     /**
      * Connect to the router and establish a session.  This call blocks until
      * a session is granted.
-     *
+     * <p>
      * NOT threadsafe, do not call from multiple threads.
      *
      * @throws I2PSessionException if there is a configuration error or the router is

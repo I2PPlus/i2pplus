@@ -10,12 +10,12 @@ package net.i2p.router.transport;
 
 /**
  * Abstract base implementation for I2P transport protocols.
- *
+ * <p>
  * This class provides common functionality and default implementations
  * for transport protocols. It handles the boilerplate operations
  * that most transports need, allowing concrete implementations
  * to focus on protocol-specific logic.
- *
+ * <p>
  * <strong>Core Features:</strong>
  * <ul>
  *   <li>Peer connection management and state tracking</li>
@@ -26,14 +26,14 @@ package net.i2p.router.transport;
  *   <li>Clock skew monitoring and compensation</li>
  *   <li>Reachability testing and status tracking</li>
  * </ul>
- *
+ * <p>
  * <strong>Extending Classes:</strong>
  * <ul>
  *   <li>NTCPTransport - Stream-based TCP with encryption</li>
  *   <li>UDPTransport - Datagram-based with reliability</li>
  *   <li>SSUTransport - Sessionless UDP for introductions</li>
  * </ul>
- *
+ * <p>
  * <strong>Thread Safety:</strong>
  * This implementation uses concurrent collections and proper
  * synchronization to handle multiple threads accessing
@@ -415,7 +415,7 @@ public abstract class TransportImpl implements Transport {
     /**
      * Nonblocking call to pull the next outbound message
      * off the queue.
-     *
+     * <p>
      * Only used by NTCP. SSU does not call.
      *
      * @return the next highest-priority message or null if none available
@@ -579,9 +579,9 @@ public abstract class TransportImpl implements Transport {
      * send is successful, queue up any msg.getOnSendJob job, and register it
      * with the OutboundMessageRegistry (if it has a reply selector).  If the
      * send fails, queue up any msg.getOnFailedSendJob
-     *
+     * <p>
      * Only used by NTCP. SSU overrides.
-     *
+     * <p>
      * Non-blocking: uses priority eviction when the pool is full.
      * Higher-priority messages (client data) evict lower-priority (transit).
      *
@@ -627,7 +627,7 @@ public abstract class TransportImpl implements Transport {
     /**
      * This message is called whenever a new message is added to the send pool,
      * and it should not block
-     *
+     * <p>
      * Only used by NTCP. SSU throws UOE.
      */
     protected abstract void outboundMessageReady();
@@ -686,12 +686,12 @@ public abstract class TransportImpl implements Transport {
     /**
      *  What address are we currently listening to?
      *  Replaces getCurrentAddress()
-     *
+     * <p>
      *  Note: An address without a host is considered IPv4.
      *
-     *  @param ipv6 true for IPv6 only; false for IPv4 only
-     *  @return first matching address or null
-     *  @since IPv6
+     * @param ipv6 true for IPv6 only; false for IPv4 only
+     * @return first matching address or null
+     * @since IPv6
      */
     public RouterAddress getCurrentAddress(boolean ipv6) {
         synchronized(_currentAddresses) {
@@ -723,14 +723,14 @@ public abstract class TransportImpl implements Transport {
 
     /**
      *  Is the given IP the current external IPv4 address?
-     *
+     * <p>
      *  Equivalent to comparing against {@link #getCurrentAddress(boolean)}
      *  with ipv6 false, but without taking the address-list monitor. For the
      *  hot inbound path (per-packet "did this come from us?" check).
      *
-     *  @param ip the IP to test, may be null
-     *  @return true if we currently have an IPv4 address equal to ip
-     *  @since 0.9.71+
+     * @param ip the IP to test, may be null
+     * @return true if we currently have an IPv4 address equal to ip
+     * @since 0.9.71+
      */
     public boolean isCurrentIPv4(byte[] ip) {
         byte[] current = _currentIPv4;
@@ -963,13 +963,13 @@ public abstract class TransportImpl implements Transport {
      *  May be called multiple times for IPv4 or IPv6.
      *  The transport should also do its own checking on whether to accept
      *  notifications from this source.
-     *
+     * <p>
      *  This can be called before startListening() to set an initial address,
      *  or after the transport is running.
      *
-     *  @param source defined in Transport.java
-     *  @param ip typ. IPv4 or IPv6 non-local; may be null to indicate IPv4 failure or port info only
-     *  @param port 0 for unknown or unchanged
+     * @param source defined in Transport.java
+     * @param ip typ. IPv4 or IPv6 non-local; may be null to indicate IPv4 failure or port info only
+     * @param port 0 for unknown or unchanged
      */
     public abstract void externalAddressReceived(AddressSource source, byte[] ip, int port);
 
@@ -981,24 +981,24 @@ public abstract class TransportImpl implements Transport {
      *  May be called multiple times for IPv4 or IPv6.
      *  The transport should also do its own checking on whether to accept
      *  notifications from this source.
-     *
+     * <p>
      *  This can be called after the transport is running.
-     *
+     * <p>
      *  This implementation does nothing. Transports should override if they want notification.
      *
-     *  @param source defined in Transport.java
-     *  @since 0.9.20
+     * @param source defined in Transport.java
+     * @since 0.9.20
      */
     public void externalAddressRemoved(AddressSource source, boolean ipv6) { /* no-op */ }
 
     /**
      *  Notify a transport of the results of trying to forward a port.
-     *
+     * <p>
      *  This implementation does nothing. Transports should override if they want notification.
      *
-     *  @param ip may be null
-     *  @param port the internal port
-     *  @param externalPort the external port, which for now should always be the same as
+     * @param ip may be null
+     * @param port the internal port
+     * @param externalPort the external port, which for now should always be the same as
      *                      the internal port if the forwarding was successful.
      */
     public void forwardPortStatus(byte[] ip, int port, int externalPort, boolean success, String reason) { /* no-op */ }
@@ -1128,7 +1128,7 @@ public abstract class TransportImpl implements Transport {
          * The legacy treatment for the peer has been to unban them because if any transport
          * can reach them, then we shouldn't banlist them. But, we really shouldn't be here
          * if they're HARD banned.
-         *
+         * <p>
          * Maintain the legacy treatment, but check to see if they were even HARD banned in
          * the first place (we've been unbanning everybody who reaches here, whether they're
          * banned or not), then mark it with an warning-level log entry.

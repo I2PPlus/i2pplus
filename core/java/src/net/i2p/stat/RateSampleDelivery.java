@@ -9,7 +9,6 @@ import net.i2p.util.Log;
 
 /**
  * Delivers coalesced rate samples to {@link RateSummaryListener}s off the coalesce thread.
- *
  * <p>This exists because the natural place to notify a summary listener — inline in
  * {@link Rate#coalesce()} — puts two things on one thread that must not be there.
  * {@code coalesce()} runs on the shared {@code SimpleTimer2} pool, which has a
@@ -20,13 +19,11 @@ import net.i2p.util.Log;
  * shared scratch file. A slow or stalled disk therefore blocks a pool thread while
  * it holds two monitors, and the whole router's periodic scheduling degrades with
  * it — silently, because a blocked thread neither throws nor logs.
- *
  * <p>Moving delivery here decouples the two concerns. The counters a rate exposes
  * ({@code getLastTotalValue()} and friends) are still updated synchronously under
  * the rate's own monitor, so nothing that reads coalesced statistics changes
  * behaviour; only the listener callback moves. A stalled disk now costs graph
  * history and nothing else.
- *
  * <p>The queue is bounded, and what happens when it fills is the whole point of
  * this class. Storage can only hold one value per archive step, so two samples
  * for the same step are not two pieces of history — only the newer one is
@@ -34,11 +31,9 @@ import net.i2p.util.Log;
  * (see {@link #submit}) instead of queueing behind it: that is not a loss, and
  * counting it as one would be a lie. Only when the hard capacity is reached is
  * something genuinely evicted, which is counted by {@link #getOverruns()}.
- *
  * <p>Samples for a single rate are delivered in order because delivery is
  * single-threaded and the queue is FIFO, which {@code Rate} relies on: an RRD
  * rejects a sample whose timestamp does not advance.
- *
  * <p>The consumer holds no monitor when it calls a listener, and never takes a
  * {@code Rate}, {@code RateStat} or {@code StatManager} lock, so a listener
  * blocked in I/O cannot keep a rate from coalescing.
@@ -126,10 +121,8 @@ class RateSampleDelivery {
 
     /**
      * Queue one coalesced sample for delivery.
-     *
      * <p>Never blocks and never throws: this is on the coalesce path, where a
      * stall is the failure being guarded against.
-     *
      * <p>If the tail entry is the same listener and belongs to the same archive
      * step, it is replaced rather than appended to. Storage holds one value per
      * step, so the older of the two can never be written and the newer is the
@@ -223,7 +216,6 @@ class RateSampleDelivery {
 
     /**
      * Samples replaced by a newer sample for the same archive step and listener.
-     *
      * <p>Not a loss: storage keeps one value per step, so the replaced sample
      * could not have been written. Counted because "how many samples were merged
      * away" is otherwise unanswerable from the outside.
@@ -256,7 +248,6 @@ class RateSampleDelivery {
     /**
      * How long the oldest pending sample has been waiting, from the step stamp
      * {@link Rate#coalesce()} gave it.
-     *
      * <p>This is the live signal that the consumer has stopped making progress,
      * and it keeps rising while a listener is wedged — which is exactly when
      * {@link #getOverruns()} stops being able to report anything useful.
@@ -288,7 +279,6 @@ class RateSampleDelivery {
     /**
      * Stop accepting samples, then wait briefly for the consumer to finish what it
      * already holds.
-     *
      * <p>The join is what makes teardown ordering meaningful. Without it, a caller
      * that closes the listeners' databases immediately after this returns can race
      * an in-flight delivery and fail a write against a closed backend. The wait is
@@ -342,7 +332,6 @@ class RateSampleDelivery {
 
     /**
      * Write any overrun the consumer has not yet reported, at ERROR.
-     *
      * <p>Reported here rather than from {@link #submit} because submit runs under
      * the {@code Rate} and {@code StatManager} monitors on the shared coalesce
      * timer, where a log call that can block is not allowed. The cost is that a

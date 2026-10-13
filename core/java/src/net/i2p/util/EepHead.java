@@ -25,7 +25,7 @@ import net.i2p.I2PAppContext;
  * </pre>
  * Other use cases (command line, listeners, etc...) lightly- or un-tested.
  * Note that this follows redirects! This may not be what you want or expect.
- *
+ * <p>
  * Writing from scratch rather than extending EepGet would maybe have been less bloated memory-wise.
  * This way gets us redirect handling, among other benefits.
  *

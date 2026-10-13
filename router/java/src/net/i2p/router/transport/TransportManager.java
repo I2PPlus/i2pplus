@@ -57,13 +57,13 @@ import static net.i2p.router.transport.Transport.AddressSource.*;
 
 /**
  * Central coordinator for all I2P transport protocols.
- *
+ * <p>
  * This class manages the lifecycle, configuration, and coordination
  * of all enabled transport protocols (NTCP, UDP, SSU, etc.).
  * It provides unified access to transport functionality and handles
  * transport-specific operations like address management, peer discovery,
  * and message routing.
- *
+ * <p>
  * <strong>Core Responsibilities:</strong>
  * <ul>
  *   <li>Transport lifecycle management (start/stop/restart)</li>
@@ -74,7 +74,7 @@ import static net.i2p.router.transport.Transport.AddressSource.*;
  *   <li>Bandwidth allocation and coordination</li>
  *   <li>Transport event handling and notifications</li>
  * </ul>
- *
+ * <p>
  * <strong>Transport Support:</strong>
  * <ul>
  *   <li>Built-in transports: NTCP, UDP, SSU</li>
@@ -82,17 +82,17 @@ import static net.i2p.router.transport.Transport.AddressSource.*;
  *   <li>IPv4 and IPv6 addressing</li>
  *   <li>Automatic transport selection and failover</li>
  * </ul>
- *
+ * <p>
  * <strong>UPnP Integration:</strong>
  * Automatically starts and manages UPnP service for
  * NAT traversal and port forwarding discovery.
- *
+ * <p>
  * <strong>API Access:</strong>
  * This class is primarily internal to the router. Only a few
  * methods are public for console and Android integration.
  * External components should use CommSystemFacadeImpl for
  * transport access rather than calling this class directly.
- *
+ * <p>
  * <strong>Note:</strong> This is not intended as a public API
  * for external use. Implementation details may change without notice.
  */
@@ -268,12 +268,12 @@ public class TransportManager implements TransportEventListener {
 
     /**
      * Register and start a pluggable transport.
-     *
+     * <p>
      * This method registers a new pluggable transport (not NTCP or SSU)
      * with the transport manager and starts it if this is the first
      * transport being registered. The method handles validation,
      * initialization, and lifecycle management.
-     *
+     * <p>
      * <strong>Process:</strong>
      * <ul>
      *   <li>Validates transport is not built-in (NTCP/UDP)</li>
@@ -309,12 +309,12 @@ public class TransportManager implements TransportEventListener {
 
     /**
      * Stop and unregister a pluggable transport.
-     *
+     * <p>
      * This method gracefully shuts down a pluggable transport
      * (not NTCP or SSU) and removes it from the
      * transport registry. The method handles cleanup,
      * listener removal, and address updates.
-     *
+     * <p>
      * <strong>Process:</strong>
      * <ul>
      *   <li>Validates transport is not built-in (NTCP/UDP)</li>
@@ -342,7 +342,7 @@ public class TransportManager implements TransportEventListener {
 
     /**
      * The X25519 key factory used by transports.
-     *
+     * <p>
      * This method returns the key factory that provides
      * X25519 key pairs for transport encryption operations.
      * The factory is used by NTCP and UDP transports for
@@ -701,7 +701,6 @@ public class TransportManager implements TransportEventListener {
 
     /**
      *  How many peers we have sent to in the last minute, summed across transports.
-     *
      * <p>Each transport owns the window, so this is a strict sum and not a union: a
      * peer reachable over both NTCP and UDP counts on each. The transports maintain
      * this by summing two such counts, matching how {@link #countActivePeers()} is
@@ -842,7 +841,7 @@ public class TransportManager implements TransportEventListener {
 
     /**
      * The list of peer hashes with established connections, may be empty.
-     *
+     * <p>
      * The result is an unmodifiable snapshot shared across callers for up to
      * {@link #ESTABLISHED_CACHE_TTL} ms. Merging cost two list allocations
      * plus two full traversals of the NTCP and SSU connection tables, and
@@ -940,7 +939,7 @@ public class TransportManager implements TransportEventListener {
      * This may be different from that advertised in the netDb,
      * as the peer may be hidden, or connect from a different IP, or
      * change his netDb later, in an attempt to avoid restrictions.
-     *
+     * <p>
      * For blocking purposes, etc. it's worth checking both
      * the netDb addresses and this address.
      *
@@ -1257,7 +1256,7 @@ public class TransportManager implements TransportEventListener {
 
     /**
      * Handle incoming I2NP message from a peer.
-     *
+     * <p>
      * This method is called by transports when they receive an
      * I2NP message that needs to be processed by the router.
      * The TransportManager acts as a central message dispatcher
@@ -1279,12 +1278,12 @@ public class TransportManager implements TransportEventListener {
 
     /**
      * Handle transport address change notifications.
-     *
+     * <p>
      * This method is called when any transport reports a
      * change in its advertised addresses. The TransportManager
      * coordinates address updates across all transports and
      * updates the router's published information accordingly.
-     *
+     * <p>
      * This method is typically called by transports in response
      * to:
      * <ul>
@@ -1374,14 +1373,14 @@ public class TransportManager implements TransportEventListener {
 
     /**
      * Render transport status information as HTML for console display.
-     *
+     * <p>
      * As of 0.9.31, only outputs UPnP status.
-     *
+     * <p>
      * This method generates detailed HTML status for all
      * transports, including connection counts, peer information,
      * bandwidth usage, and transport-specific statistics. The output
      * is used by the router console for transport monitoring.
-     *
+     * <p>
      * Warning - blocking, very slow, queries the active UPnP router,
      * will take many seconds if it has vanished.
      *
@@ -1423,12 +1422,12 @@ public class TransportManager implements TransportEventListener {
 
     /**
      * Periodically ensures we have enough outbound connections to Fast peers.
-     *
+     * <p>
      * The transport layer creates outbound connections on-demand when a message
      *  needs to be sent. However, in low-traffic scenarios or when the I2P+ pre-send
      *  check blocks sends to unconnected peers, outbound connections can dry up,
      *  causing tunnel build failures ("first hop unreachable").
-     *
+     * <p>
      * This maintainer runs every 60 seconds, checks how many outbound connections
      *  we have to Fast/HiCap peers, and proactively establishes new ones if the count
      *  is below the threshold.

@@ -67,7 +67,6 @@ public class BloomFilterIVValidator implements IVValidator {
      * Construct the validator, choosing a starting filter size from the
      * configured share and the heap, then leaving the size to be retuned from
      * measured load.
-     *
      * <p>The initial choice deliberately favours the fixed-memory filter over
      * the set: a pair of 2^23 bit arrays is 2 MB whatever the traffic, whereas
      * the set costs about 72 bytes per entry and is unbounded until its cap.
@@ -205,7 +204,6 @@ public class BloomFilterIVValidator implements IVValidator {
 
     /**
      * Chooses the filter exponent from measured load and the heap budget.
-     *
      * <p>Deliberately never shrinks on a low throughput or share-bandwidth
      * reading. Both are guesses about load rather than evidence that the
      * filter is too big, and cutting capacity on them is how a router ends up
@@ -255,7 +253,6 @@ public class BloomFilterIVValidator implements IVValidator {
 
         /**
          * Decide the exponent for one cycle.
-         *
          * <p>Static and free of router state so it can be tested directly.
          *
          * @param currentM the exponent in force, 0 when the set is in use

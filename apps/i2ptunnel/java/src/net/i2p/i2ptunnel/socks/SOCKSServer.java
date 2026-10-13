@@ -226,7 +226,7 @@ abstract class SOCKSServer {
 
     /**
      * Act as a https client to connect to a CONNECT outproxy.
-     *
+     * <p>
      * Caller must send success or error to local socks client.
      * Caller must close destSock and pout.
      *

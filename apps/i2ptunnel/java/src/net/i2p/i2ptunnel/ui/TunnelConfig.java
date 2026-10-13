@@ -36,7 +36,7 @@ import net.i2p.util.PasswordManager;
 /**
  * Helper class to generate a valid TunnelController configuration from provided
  * settings.
- *
+ * <p>
  * This class is also used by Android.
  * Maintain as a stable API and take care not to break Android.
  *
@@ -1661,7 +1661,7 @@ public class TunnelConfig {
 
     /**
      * Parse the args submitted in the custom options field.
-     *
+     * <p>
      * Modified from EepGet.parseAuthArgs()
      * Spaces or tabs separate args.
      * Args may be single- or double-quoted if they contain spaces or tabs.

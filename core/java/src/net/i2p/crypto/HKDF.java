@@ -10,12 +10,11 @@ import javax.crypto.SecretKey;
 
 /**
  * HMAC-based Key Derivation Function (HKDF) implementation using HMAC-SHA256.
- *
+ * <p>
  * This class implements the HKDF algorithm as specified in RFC 5869 for
  * deriving cryptographic keys from input key material. It provides secure key
  * expansion functionality essential for I2P's cryptographic operations including
  * session key generation and key derivation.
- *
  * <p>Features and capabilities:
  * <ul>
  * <li>HMAC-SHA256 based derivation for cryptographic security</li>

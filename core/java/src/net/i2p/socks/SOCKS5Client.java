@@ -32,7 +32,7 @@ public class SOCKS5Client {
 
     /**
      * Act as a SOCKS 5 client to connect to a proxy
-     *
+     * <p>
      * Will throw and close sock on all errors.
      * Caller must close sock on success.
      *
@@ -47,7 +47,7 @@ public class SOCKS5Client {
 
     /**
      * Act as a SOCKS 5 client to connect to a proxy
-     *
+     * <p>
      * Will throw and close sock on all errors.
      * Caller must close sock on success.
      *
@@ -75,7 +75,7 @@ public class SOCKS5Client {
 
     /**
      * Act as a SOCKS 5 client to connect to a proxy
-     *
+     * <p>
      * Will throw and close pin and pout on all errors.
      * Caller must close pin and pout on success.
      *
@@ -91,7 +91,7 @@ public class SOCKS5Client {
 
     /**
      * Act as a SOCKS 5 client to connect to a proxy
-     *
+     * <p>
      * Will throw and close pin and pout on all errors.
      * Caller must close pin and pout on success.
      *

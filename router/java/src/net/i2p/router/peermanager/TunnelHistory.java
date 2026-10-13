@@ -244,7 +244,6 @@ public class TunnelHistory {
 
     /**
      * How often the lifetime counters decay, as a whole interval.
-     *
      * <p>Eight hours, not fifteen minutes. At 3/4 per interval the shorter period
      * made a peer forget its own record faster than it could accumulate one: 50
      * accepted builds fell to 21 within an hour and 5 within four, so a *good*
@@ -260,14 +259,12 @@ public class TunnelHistory {
 
     /**
      * Apply the lifetime-counter decay if its interval has elapsed.
-     *
      * <p>Deliberately does not coalesce the {@link RateStat}s. Those are folded by
      * {@link #coalesceStats()} on the caller's own cadence, and folding them again
      * here would advance their windows twice as often as the statistic's consumers
      * expect. A caller that only wants the decay — the tier reorganise walking every
      * candidate — can call this cheaply: one volatile read and one comparison, with
      * real work only on the pass that actually crosses the interval.
-     *
      * <p>Must be called with the write lock held when called from the reorganise, so
      * the tier membership being read and the counters being decayed are consistent.
      *
@@ -285,7 +282,6 @@ public class TunnelHistory {
 
     /**
      * Coalesce the rate statistics and periodically decay lifetime counters.
-     *
      * <p>Lifetime counters ({@link #_lifetimeAgreedTo}, {@link #_lifetimeRejected},
      * {@link #_lifetimeTimedOut}, {@link #_lifetimeFailed}) are decayed at 75%
      * per 15 minutes (matching {@link DBHistory}).  This prevents unbounded

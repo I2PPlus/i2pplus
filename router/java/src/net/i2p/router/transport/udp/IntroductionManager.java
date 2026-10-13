@@ -150,9 +150,9 @@ class IntroductionManager {
      * are locally known (duh) and have published their own SSU address (duh^2).
      * The picked peers have their info tacked on to the ssuOptions parameter for
      * use in the SSU RouterAddress.
-     *
+     * <p>
      * Try to use "good" peers (i.e. reachable, active)
-     *
+     * <p>
      * Also, ping all idle peers that were introducers in the last 2 hours,
      * to keep the connection up, since the netDb can have quite stale information,
      * and we want to keep our introducers valid.
@@ -434,12 +434,12 @@ class IntroductionManager {
      *  We are Bob and we got this from Alice.
      *  Send Alice's RI and a RelayIntro to Charlie, or reject with a RelayResponse to Alice.
      *  We should already have a session with Charlie and definitely with Alice.
-     *
+     * <p>
      *  SSU 2 only.
      *
      * @param alice the peer that asked us to relay
      * @param data the encrypted request, with the timestamp in the first 4 bytes
-     *  @since 0.9.55
+     * @since 0.9.55
      *
      */
     void receiveRelayRequest(PeerState2 alice, byte[] data) {
@@ -590,7 +590,7 @@ class IntroductionManager {
 
     /**
      * Processes a relay introduction message received from another peer.
-     *
+     * <p>
      * This method is responsible for initiating a HolePunch to the specified
      * destination peer ('Alice') and preparing a RelayResponse to be sent back
      * to the originating peer ('Bob'). It is designed for use with the SSU 2 protocol.
@@ -667,11 +667,11 @@ class IntroductionManager {
      *  after this, or maybe it's in a different packet.
      *  Check for RI, if not found, return true to retry, unless retryCount is at the limit.
      *  Creates the timer if retryCount == 0.
-     *
+     * <p>
      *  SSU 2 only.
      *
-     *  @return DELAYED if should retry (no RI), DROPPED on fatal error, or REPLIED if we replied to Bob with a RelayResponse
-     *  @since 0.9.55
+     * @return DELAYED if should retry (no RI), DROPPED on fatal error, or REPLIED if we replied to Bob with a RelayResponse
+     * @since 0.9.55
      */
     private boolean receiveRelayIntro(PeerState2 bob, Hash alice, byte[] data, int retryCount) {
         RouterInfo aliceRI = null;
@@ -742,10 +742,10 @@ class IntroductionManager {
      *  We are Charlie and we got this from Bob.
      *  Send a HolePunch to Alice, who will soon be sending us a SessionRequest.
      *  And send a RelayResponse to bob.
-     *
+     * <p>
      *  SSU 2 only.
      *
-     *  @since 0.9.55
+     * @since 0.9.55
      */
     private boolean receiveRelayIntro(PeerState2 bob, Hash alice, byte[] data, RouterInfo aliceRI) {
         long nonce = DataHelper.fromLong(data, 0, 4);
@@ -860,17 +860,17 @@ class IntroductionManager {
     /**
      *  We are Bob and we got this from Charlie, OR
      *  we are Alice and we got this from Bob.
-     *
+     * <p>
      *  If we are Bob, send to Alice.
      *  If we are Alice, send a SessionRequest to Charlie.
      *  We should already have a session with Charlie, but not necessarily with Alice.
-     *
+     * <p>
      *  SSU 2 only.
      *
      * @param peer the peer that answered our relay request
      * @param status the status code the peer replied with
      * @param data the encrypted response, with the nonce and timestamp first
-     *  @since 0.9.55
+     * @since 0.9.55
      *
          */
     @SuppressWarnings("UnconditionalIfStatement")
@@ -943,12 +943,12 @@ class IntroductionManager {
     /**
      *  We are Alice and we got this from Charlie.
      *  Send a SessionRequest to Charlie, whether or not we got the Relay Response already.
-     *
+     * <p>
      *  SSU 2 only, out-of-session.
      *
      * @param charlie the peer we were relaying to
      * @param data the encrypted response, with the nonce and timestamp first
-     *  @since 0.9.55
+     * @since 0.9.55
      *
          */
     void receiveHolePunch(RemoteHostId charlie, byte[] data) {

@@ -15,7 +15,6 @@ import java.io.OutputStream;
 
 /**
  * Base interface defining standard binary representation for I2P data structures.
- *
  * <p>DataStructure provides the foundation for all I2P protocol data:</p>
  * <ul>
  *   <li><strong>Binary Protocol:</strong> Defines exact bit-level representation</li>
@@ -23,7 +22,6 @@ import java.io.OutputStream;
  *   <li><strong>Network Compatibility:</strong> Ensures consistent data encoding</li>
  *   <li><strong>Validation:</strong> Built-in integrity and format checking</li>
  * </ul>
- *
  * <p><strong>Core Operations:</strong></p>
  * <ul>
  *   <li>{@link #readBytes(InputStream)} - Deserialize from binary stream</li>
@@ -31,7 +29,6 @@ import java.io.OutputStream;
  *   <li><strong>Format Compliance:</strong> Follows I2P data structure specification</li>
  *   <li><strong>Error Handling:</strong> Proper exception reporting for invalid data</li>
  * </ul>
- *
  * <p><strong>Integrity Protection:</strong></p>
  * <ul>
  *   <li><strong>Immutable After Initialization:</strong> Prevents modification after deserialization</li>
@@ -39,7 +36,6 @@ import java.io.OutputStream;
  *   <li><strong>NetDb Protection:</strong> Safeguards network database from corruption</li>
  *   <li><strong>Message Safety:</strong> Protects I2NP messages during transmission</li>
  * </ul>
- *
  * <p><strong>Usage Throughout I2P:</strong></p>
  * <ul>
  *   <li><strong>I2NP Messages:</strong> All protocol messages implement DataStructure</li>
@@ -48,7 +44,6 @@ import java.io.OutputStream;
  *   <li><strong>Cryptography:</strong> Keys, signatures, and certificates</li>
  *   <li><strong>Routing:</strong> Tunnel IDs, leases, and routing information</li>
  * </ul>
- *
  * <p><strong>Implementation Guidelines:</strong></p>
  * <ul>
  *   <li><strong>Do Not Reuse:</strong> Create new instances for each data element</li>
@@ -56,7 +51,6 @@ import java.io.OutputStream;
  *   <li><strong>Corruption Prevention:</strong> Multiple protection layers but not foolproof</li>
  *   <li><strong>Direct Modification:</strong> Avoid modifying internal byte[] arrays</li>
  * </ul>
- *
  * <p><strong>Security Considerations:</strong></p>
  * <ul>
  *   <li><strong>Input Validation:</strong> Always validate deserialized data</li>
@@ -64,7 +58,6 @@ import java.io.OutputStream;
  *   <li><strong>Exception Handling:</strong> Properly handle DataFormatException</li>
  *   <li><strong>Memory Safety:</strong> Be cautious with direct byte array access</li>
  * </ul>
- *
  * <p><strong>Performance Aspects:</strong></p>
  * <ul>
  *   <li><strong>Efficient Serialization:</strong> Optimized for network transmission</li>
@@ -72,7 +65,6 @@ import java.io.OutputStream;
  *   <li><strong>Fast Validation:</strong> Quick integrity and format checking</li>
  *   <li><strong>Memory Management:</strong> Careful allocation and cleanup</li>
  * </ul>
- *
  * <p><strong>Common Implementations:</strong></p>
  * <ul>
  *   <li>{@link DataStructureImpl} - Base class with common functionality</li>
@@ -88,7 +80,7 @@ public interface DataStructure /* extends Serializable */ {
     /**
      * Load up the current object with data from the given stream.  Data loaded
      * this way must match the I2P data structure specification.
-     *
+     * <p>
      * Warning - many classes will throw IllegalStateException if data is already set.
      *
      * @param in stream to read from
@@ -116,7 +108,7 @@ public interface DataStructure /* extends Serializable */ {
 
     /**
      * Load the structure from the provided base64 string.
-     *
+     * <p>
      * Warning - many classes will throw IllegalStateException if data is already set.
      * Warning - many classes will throw IllegalArgumentException if data is the wrong size.
      *
@@ -134,7 +126,7 @@ public interface DataStructure /* extends Serializable */ {
 
     /**
      * Loads structure from the data provided
-     *
+     * <p>
      * Warning - many classes will throw IllegalStateException if data is already set.
      * Warning - many classes will throw IllegalArgumentException if data is the wrong size.
      *

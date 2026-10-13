@@ -9,24 +9,20 @@ import net.i2p.data.Hash;
 /**
  * Records which destinations had a streaming stall, so the router can prefer a
  * different outbound tunnel when sending to them again.
- *
  * <p>The signal lives in core because the two layers that need it cannot see
  * each other: {@code apps/streaming} is compiled against core and
  * ministreaming only, so it cannot reference a router class, and the router
  * cannot reach into a streaming connection. Core is the one place both already
  * depend on, so the channel is this small static registry.
- *
  * <p>Keyed by the remote destination only. The streaming layer can identify
  * its peer but not its own local destination — {@code I2PSession} does not
  * expose it and {@code I2PAppContext} has no accessor — so a local/remote pair
  * key could not be built from the streaming side. A stalled path is a property
  * of the path, not of which local client happened to use it, so the shared key
  * is also the more honest one.
- *
  * <p>Deliberately tunnel-agnostic: the registry records that a destination
  * stalled and when; the router decides what to do, because tunnel selection is
  * a router concern.
- *
  * <p>This is a hint, never a veto. A destination whose every tunnel is inside
  * its cooldown must still be sent to, so the registry only answers "was this
  * marked" and the caller is responsible for falling back.

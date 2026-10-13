@@ -19,11 +19,10 @@ import java.util.Map;
 
 /**
  * Key pair generator for EdDSA (Edwards-curve Digital Signature Algorithm) keys.
- *
+ * <p>
  * This implementation generates EdDSA key pairs with a default key size of 256 bits
  * using the Ed25519 curve, which provides strong security with excellent performance
  * characteristics. EdDSA is the recommended signature algorithm for new I2P applications.
- *
  * <p>Generated keys are suitable for:</p>
  * <ul>
  * <li>Digital signatures and verification</li>

@@ -11,7 +11,7 @@ import net.i2p.router.RouterContext;
  * Async writer class so that if a client app hangs, it won't take down the
  * whole router with it (otherwise the JobQueue would block until the client
  * reads from their i2cp socket, causing all sorts of bad things to happen)
- *
+ * <p>
  * For external I2CP connections only.
  */
 class ClientWriterRunner implements Runnable {
@@ -51,7 +51,7 @@ class ClientWriterRunner implements Runnable {
 
     /**
      * Add this message to the writer's queue
-     *
+     * <p>
      * Nonblocking, throws exception if queue is full
      * @param msg the message to add
      * @throws I2CPMessageException if the queue is full

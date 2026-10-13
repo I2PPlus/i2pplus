@@ -213,7 +213,7 @@ class ClientMessageEventListener implements I2CPMessageReader.I2CPMessageEventLi
      * sending the DisconnectMessage... but right now the client will send _us_ a
      * DisconnectMessage in return, and not wait around for our DisconnectMessage.
      * So keep it simple.
-     *
+     * <p>
      * Defaults in SessionConfig options are, in general, NOT honored.
      * In-JVM client side must promote defaults to the primary map.
      */
@@ -490,7 +490,6 @@ class ClientMessageEventListener implements I2CPMessageReader.I2CPMessageEventLi
 
     /**
      * Validate a ReceiveMessageBeginMessage before any retained payload is read.
-     *
      * <p>The router keeps a single payload map per connection, not per session, so
      * a message that names a message id alone is not enough to authorize access.
      * The message must also name a live session on this connection. Session-level
@@ -511,7 +510,6 @@ class ClientMessageEventListener implements I2CPMessageReader.I2CPMessageEventLi
 
     /**
      * Validate a ReceiveMessageEndMessage before the retained payload is released.
-     *
      * <p>Uses the same rule as {@link #classifyReceiveBegin}: the message must name
      * a live session on this connection, and the payload must actually be retained.
      * A message id that is not retained needs no action, so it is reported
@@ -528,10 +526,10 @@ class ClientMessageEventListener implements I2CPMessageReader.I2CPMessageEventLi
 
     /**
      * The client asked for a message, so we send it to them.
-     *
+     * <p>
      * This is only when not in fast receive mode.
      * In the default fast receive mode, data is sent in MessageReceivedJob.
-     *
+     * <p>
      * A message naming no live session is dropped, as is a message for which no
      * payload is retained; see {@link #classifyReceiveBegin}.
      */
@@ -564,7 +562,7 @@ class ClientMessageEventListener implements I2CPMessageReader.I2CPMessageEventLi
     /**
      * The client told us that the message has been received completely, so the
      * retained payload is released.
-     *
+     * <p>
      * The message must name a live session on this connection. The payload map
      * is per connection rather than per session, so a message id alone would
      * otherwise let a client release a payload it was never sent.
@@ -837,10 +835,10 @@ class ClientMessageEventListener implements I2CPMessageReader.I2CPMessageEventLi
      * Message's Session ID ignored. This doesn't support removing previously set options.
      * Nor do we bother with message.getSessionConfig().verifySignature() ... should we?
      * Nor is the Date checked.
-     *
+     * <p>
      * Note that this does NOT update the few options handled in
      * ClientConnectionRunner.sessionEstablished(). Those can't be changed later.
-     *
+     * <p>
      * Defaults in SessionConfig options are, in general, NOT honored.
      * In-JVM client side must promote defaults to the primary map.
      */
@@ -889,7 +887,7 @@ class ClientMessageEventListener implements I2CPMessageReader.I2CPMessageEventLi
      * Divide router limit by 1.5 for overhead.
      * This could someday give a different answer to each client.
      * But it's not enforced anywhere.
-     *
+     * <p>
      * protected for unit test override
      *
      * @param message the client's bandwidth query, which carries no data

@@ -443,7 +443,7 @@ public class TrustedUpdate {
      * Verifies the signature of a signed update file, and if it's valid and the
      * file's version is newer than the given current version, migrates the data
      * out of <code>signedFile</code> and into <code>outputFile</code>.
-     *
+     * <p>
      * As of 0.8.8, the embedded file must be a zip file with
      * a standard zip header and a UTF-8 zip file comment
      * matching the version in the sud header. This prevents spoofing the version,

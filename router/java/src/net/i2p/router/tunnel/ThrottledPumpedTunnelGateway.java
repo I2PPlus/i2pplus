@@ -9,13 +9,13 @@ import net.i2p.util.SyntheticREDQueue;
 /**
  * Specialized pumped tunnel gateway for inbound gateways (IBGWs) that throttles messages
  * by checking bandwidth usage before queuing them.
- *
+ * <p>
  * This class drops messages early based on bandwidth heuristics to more efficiently
  * preserve network and system resources compared to processing fragments.
- *
+ * <p>
  * The drop decision is made here instead of deeper in the tunnel to allow dropping
  * whole I2NP messages, where message type and size are known accurately.
- *
+ * <p>
  * Thread safety and behavior otherwise follows PumpedTunnelGateway.
  *
  * @since 0.7.9
@@ -29,7 +29,7 @@ class ThrottledPumpedTunnelGateway extends PumpedTunnelGateway {
 
     /**
      * A pump-driven gateway that drops excess messages based on estimated bandwidth.
-     *
+     * <p>
      * Allocated bandwidth value is retrieved from config or set to reasonable default.
      *
      * @param context the router context supplying the bandwidth allocation
@@ -61,13 +61,13 @@ class ThrottledPumpedTunnelGateway extends PumpedTunnelGateway {
 
     /**
      * Adds a message to the inbound gateway after a bandwidth-based drop check.
-     *
+     * <p>
      * Drops messages early based on estimated size and bandwidth usage, tracking statistics.
-     *
+     * <p>
      * We do this here instead of in the InboundGatewayReceiver because it is
      * much smarter to drop whole I2NP messages, where we know the message type
      * and length, rather than tunnel messages containing I2NP fragments.
-     *
+     * <p>
      * Hard to do this exactly, but we'll assume 2:1 batching for the purpose
      * of estimating outgoing size. We assume that it's the outbound bandwidth that
      * is the issue...

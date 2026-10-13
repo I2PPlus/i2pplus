@@ -2,12 +2,10 @@ package net.i2p.router.peermanager;
 
 /**
  * Reliability classification for floodfill peers based on proven request-handling history.
- *
  * <p>Floodfills start as {@link #UNKNOWN} when they advertise the floodfill capability
  * but have no verified lookup/store handling history. They are promoted through
  * {@link #OK} to {@link #GOOD} based on successful lookup responses tracked in
  * {@link DBHistory}.
- *
  * <p>This categorization is used to limit how many lookups are sent to unproven
  * floodfills, preventing overload while still probing them sporadically.
  *

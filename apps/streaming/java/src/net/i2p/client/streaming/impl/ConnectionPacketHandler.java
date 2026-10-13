@@ -40,11 +40,9 @@ class ConnectionPacketHandler {
 
     /**
      * Register the live stream RTT and send-window stats.
-     *
      * <p>Separated from the constructor so a test can register against a fresh
      * {@link StatManager} without building a whole handler — the same shape as
      * {@link ConnectionManager#registerRtxRatioStats(StatManager)}.
-     *
      * <p>Both are {@code createRequiredRateStat} because StatManager silently
      * discards data for a name it was never told about. That failure mode is
      * invisible from the console: the stat reads "not present" rather than
@@ -64,14 +62,12 @@ class ConnectionPacketHandler {
     /**
      * Whether this received message is the one that samples the receive-side
      * size stat and, from it, the live stream RTT and send window.
-     *
      * <p>One predicate for all three, because the live RTT and window are
      * deliberately written inside the same block as the existing size sample:
      * the cost stays two extra stat writes per sampled message rather than two
      * per packet. Sharing the predicate is what stops the cadences drifting
      * apart later — the mask alone would let a change to one silently leave the
      * other per-packet.
-     *
      * <p>Pure predicate — no state, no router, safe for unit tests.
      *
      * @param receiveMsgCount monotonically increasing count of messages this
@@ -685,7 +681,6 @@ class ConnectionPacketHandler {
      * Credit increment for the deterministic congestion-avoidance ratchet.
      * Accumulated in 16.16 fixed-point; each whole unit corresponds to one
      * packet-in-flight increment on the congestion window.
-     *
      * <p>The expected value equals {@code effAcked / (caFactor * windowSize)},
      * which is the probability that the old random gate would have
      * incremented.
@@ -727,7 +722,7 @@ class ConnectionPacketHandler {
 
     /**
      * Make sure this packet is ok and that we can continue processing its data.
-     *
+     * <p>
      * SIDE EFFECT:
      * Sets the SendStreamId and RemotePeer for the con,
      * using the packet's ReceiveStreamId and OptionalFrom,

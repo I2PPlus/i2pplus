@@ -9,14 +9,14 @@ import net.i2p.util.Log;
 /**
  * Blocking thread to grab new packets off the outbound fragment
  * pool and toss them onto the outbound packet queues.
- *
+ * <p>
  * This class runs a dedicated thread that continuously pulls batches of
  * UDP packets from the OutboundMessageFragments pool and sends them out
  * through appropriate UDPEndpoints based on the packet IP version.
- *
+ * <p>
  * Thread safety is improved by using concurrent safe collections and
  * volatile flag visibility.
- *
+ * <p>
  * Endpoint selection currently picks the first matching endpoint for IPv4 or IPv6.
  */
 class PacketPusher implements Runnable {
@@ -48,7 +48,6 @@ class PacketPusher implements Runnable {
     /**
      * Starts the packet pusher thread.
      * This method is synchronized to prevent concurrent startups/shutdowns.
-     *
      * <p>Left at {@link Thread#NORM_PRIORITY}, which is what {@link I2PThread} sets. This
      * was the only router thread at MAX_PRIORITY, so when the pool had nothing to send its
      * spin preempted every other router thread; a local inefficiency became a router-wide
@@ -112,10 +111,9 @@ class PacketPusher implements Runnable {
     /**
      * Sends a single UDP packet directly out by selecting an appropriate UDPEndpoint.
      * This bypasses the outbound fragment pool's queue and only blocks if the endpoint queue is full.
-     *
+     * <p>
      * Endpoint selection tries to match the packet's IP version to an endpoint's
      * IP version.
-     *
      * <p>Tracked limitation: the first endpoint of the matching family wins, so
      * packets to different peers on the same family can leave over different
      * sockets. A per-peer endpoint affinity would keep a session on one socket

@@ -309,41 +309,41 @@ public class ResettableGZIPInputStream extends InflaterInputStream {
     /**
      * Essentially a SequenceInputStream(in, new ByteArrayInputStream(new byte[1])),
      * except that this is resettable.
-     *
+     * <p>
      * Unsupported:
      * - available() doesn't include the extra byte
      * - skip() doesn't skip the extra byte
-     *
+     * <p>
      * Why? otherwise the inflater finished() is wrong when the compressed payload
      * (in between the 10 byte header and the 8 byte footer) is a multiple of 512 bytes,
      * which caused read(buf, off, len) above to fail.
      * Happened every time with 1042 byte compressed router infos, for example.
-     *
+     * <p>
      * Details:
-     *
+     * <p>
      * Warning with Inflater nowrap = true:
-     *
+     * <p>
      * "Note: When using the 'nowrap' option it is also necessary to provide an extra "dummy" byte as input.
      * This is required by the ZLIB native library in order to support certain optimizations."
-     *
+     * <p>
      * http://docs.oracle.com/javase/1.5.0/docs/api/java/util/zip/Inflater.html
-     *
+     * <p>
      * This is for sure:
-     *
+     * <p>
      * "This is not nearly specific enough to be useful.  Where in the compressed byte array is the
      * extra 'dummy' byte" expected?  What is it to contain? When calling setInput() is the 'len'
      * argument incremented to include the dummy byte or not?"
-     *
+     * <p>
      * http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=4795299
-     *
+     * <p>
      * This is useless:
-     *
+     * <p>
      * http://www.java-forums.org/new-java/38604-decompress-un-gzip-byte.html
-     *
+     * <p>
      * This seems to be the definitive answer:
-     *
+     * <p>
      * "The fix simply involves copying the byte array and tacking a single null byte on to the end."
-     *
+     * <p>
      * http://code.google.com/p/google-apps-sso-sample/issues/detail?id=8
      *
      * @since 0.8.12

@@ -23,9 +23,7 @@ import net.i2p.util.Log;
  * the I2CP overhead, not in the packet itself.
  * This is the class used for inbound packets.
  * For local state saved for outbound packets, see the PacketLocal extension.
- *
  * <p>
- *
  * Contain a single packet transferred as part of a streaming connection.
  * The data format is as follows:<ul>
  * <li>{@link #getSendStreamId sendStreamId} [4 byte value]</li>
@@ -40,7 +38,6 @@ import net.i2p.util.Log;
  * <li>option data specified by those flags [0 or more bytes]</li>
  * <li>payload [remaining packet size]</li>
  * </ul>
- *
  * <p>The flags field above specifies some metadata about the packet, and in
  * turn may require certain additional data to be included.  The flags are
  * as follows (with any data structures specified added to the options area
@@ -57,14 +54,12 @@ import net.i2p.util.Log;
  * <li>{@link #FLAG_ECHO}: no option data</li>
  * <li>{@link #FLAG_NO_ACK}: no option data - this appears to be unused, we always ack, even for the first packet</li>
  * </ol>
- *
  * <p>If the signature is included, it uses the Destination's DSA key
  * to sign the entire header and payload with the space in the options
  * for the signature being set to all zeroes.</p>
- *
  * <p>If the sequenceNum is 0 and the SYN is not set, this is a plain ACK
  * packet that should not be ACKed</p>
- *
+ * <p>
  * NOTE: All setters unsynchronized.
  */
 class Packet {
@@ -311,7 +306,7 @@ class Packet {
     /**
      * List of packet sequence numbers below the getAckThrough() value
      * have not been received.  this may be null.
-     *
+     * <p>
      * Warning: This is different than getNACKs() in PacketLocal
      *
      * @return List of packet sequence numbers not ACKed, or null if there are none.
@@ -328,7 +323,7 @@ class Packet {
      * How long is the creator of this packet going to wait before
      * resending this packet (if it hasn't yet been ACKed).  The
      * value is seconds since the packet was created.
-     *
+     * <p>
      * Unused.
      * Broken before release 0.7.8
      * Not to be used without sanitizing for huge values.
@@ -422,7 +417,7 @@ class Packet {
 
     /**
      * The signature on the packet (only included if the flag for it is set)
-     *
+     * <p>
      * Warning, may be typed wrong on incoming packets for EdDSA
      * before verifySignature() is called.
      *
@@ -672,7 +667,6 @@ class Packet {
     /**
      * How many option bytes to reserve for the signature when this packet is
      * written, which is also how many bytes the signature covers.
-     *
      * <p>For a packet read from the network this is the number of option bytes
      * the signature really occupied. That can be more than the signature
      * length: without a FROM field the type is guessed from the option bytes
@@ -703,7 +697,6 @@ class Packet {
     /**
      * Recast the signature to the signing key's type when the bytes we read are
      * long enough to be a signature of that type.
-     *
      * <p>{@link #readPacket} cannot know the signature type when the packet
      * carries no FROM field - a stray CLOSE or RESET packet - and guesses it
      * from the option length. That guess is wrong whenever another type shares
@@ -1031,7 +1024,6 @@ class Packet {
 
     /**
      * Format as a string builder for logging.
-     *
      * <p>Not gated on the log level: every caller builds this from inside a log
      * message that has already passed its own shouldXxx() test, so gating the
      * description on INFO meant a WARN or ERROR about a packet logged an empty

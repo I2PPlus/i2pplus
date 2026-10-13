@@ -18,7 +18,6 @@ public class PooledTunnelCreatorConfig extends TunnelCreatorConfig {
     private volatile boolean _bypassPacing;
     /**
      * I2NP message ID of the most recent build request sent for this config.
-     *
      * <p>This is the join key between the send side ({@code BuildRequestor}
      * logs it as {@code [MsgID ...]}, on both the direct and exploratory send
      * paths) and the expiry side ({@code
@@ -27,7 +26,6 @@ public class PooledTunnelCreatorConfig extends TunnelCreatorConfig {
      * Without it, "established, silent" is indistinguishable between a hop that
      * never answered and a reply that was lost, which is why no amount of
      * deadline tuning could be shown to help.
-     *
      * <p>0 means not yet sent, or not a {@code PooledTunnelCreatorConfig}.
      * Written on the build executor thread and read on the expiry path, hence
      * volatile; a stale read costs only a missing correlation ID, never
@@ -84,7 +82,7 @@ public class PooledTunnelCreatorConfig extends TunnelCreatorConfig {
      * We failed to contact the first hop for an outbound tunnel,
      * so immediately stop using it.
      * For outbound non-zero-hop tunnels only.
-     *
+     * <p>
      * Does not blame any peer: first-hop send failures are local congestion,
      * not a dead peer.  Proportional blame still accumulated ~50 points per
      * failure per hop — 8 consecutive failures banlisted the first hop and
@@ -104,7 +102,7 @@ public class PooledTunnelCreatorConfig extends TunnelCreatorConfig {
      * failures are approaching the fatal threshold.  A direct transport send
      * forces the connection up again, so the next tunnel message is not
      * queued behind a stale session.
-     *
+     * <p>
      * Gated by {@link #shouldPreConnect(int)}, so the DatabaseLookupMessage
      * round-trip only ever reaches a hop the router has not yet given up on.
      *
@@ -120,7 +118,7 @@ public class PooledTunnelCreatorConfig extends TunnelCreatorConfig {
 
     /**
      * Whether a first-hop send-failure streak warrants a pre-connect re-warm.
-     *
+     * <p>
      * Fires only on the strike immediately below
      * {@link #FIRST_HOP_FAILURE_THRESHOLD} — the last point at which the
      * tunnel is still alive to benefit.  Earlier strikes have not yet
@@ -225,7 +223,6 @@ public class PooledTunnelCreatorConfig extends TunnelCreatorConfig {
 
     /**
      * Record the I2NP message ID of a build request just sent for this config.
-     *
      * <p>A config may be retried, so this holds the most recent attempt rather
      * than the first; the expiry report wants the send that actually went out.
      *

@@ -21,7 +21,7 @@ import java.util.Date;
 /**
  * Tell the other side what time it is.
  * Only supported from router to client.
- *
+ * <p>
  * Since 0.8.7, optionally include a version string.
  */
 public class SetDateMessage extends I2CPMessageImpl {

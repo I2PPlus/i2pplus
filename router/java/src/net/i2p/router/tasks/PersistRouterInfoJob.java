@@ -21,12 +21,12 @@ import net.i2p.util.SecureFileOutputStream;
 
 /**
  * Router information persistence and synchronization job.
- *
+ * <p>
  * This job is responsible for persisting the router's RouterInfo
  * to disk whenever it changes. The RouterInfo contains critical
  * router identity, capabilities, addresses, and statistics that
  * must be preserved across restarts and shared with the network.
- *
+ * <p>
  * <strong>RouterInfo Contents:</strong>
  * <ul>
  *   <li>Router identity (public keys, certificates)</li>
@@ -35,7 +35,7 @@ import net.i2p.util.SecureFileOutputStream;
  *   <li>Performance statistics and bandwidth limits</li>
  *   <li>Current router status and options</li>
  * </ul>
- *
+ * <p>
  * <strong>Persistence Process:</strong>
  * <ul>
  *   <li>Retrieves current RouterInfo from router</li>
@@ -44,7 +44,7 @@ import net.i2p.util.SecureFileOutputStream;
  *   <li>Employs atomic file writing for safety</li>
  *   <li>Handles errors gracefully with detailed logging</li>
  * </ul>
- *
+ * <p>
  * <strong>File Safety:</strong>
  * <ul>
  *   <li>Uses SecureFileOutputStream for atomic writes</li>
@@ -52,7 +52,7 @@ import net.i2p.util.SecureFileOutputStream;
  *   <li>Prevents partial writes and corruption</li>
  *   <li>Ensures consistent state across restarts</li>
  * </ul>
- *
+ * <p>
  * This job is triggered automatically whenever RouterInfo is updated
  * due to address changes, capability changes, or periodic
  * refreshes. The persisted file is used for router startup
@@ -80,11 +80,11 @@ public class PersistRouterInfoJob extends JobImpl {
 
     /**
      * Save the current router information to disk.
-     *
+     * <p>
      * This job writes the router's RouterInfo to the router.info file
      * in the router directory. It uses a synchronized block to ensure
      * thread-safe access to the router info file.
-     *
+     * <p>
      * The file is written using SecureFileOutputStream to ensure atomic
      * writes and prevent corruption. Any errors during the write process
      * are logged but do not prevent the job from completing.

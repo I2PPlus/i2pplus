@@ -50,7 +50,7 @@ import net.i2p.I2PAppContext;
 /**
  * Simple helper to query the appropriate router for data necessary to render
  * the summary sections on the router console.
- *
+ * <p>
  * For the full summary bar use renderSummaryBar()
  */
 public class SidebarHelper extends HelperBase {
@@ -727,7 +727,7 @@ public class SidebarHelper extends HelperBase {
 
 /**
  * How many active identities have we spoken with recently.
- *
+ * <p>
  * Counted over a one-hour window, and the underlying scan walks every tracked
  * profile while holding the profile organizer's reorganize read lock - the lock
  * tunnel peer selection contends on. Cached for one refresh interval, like the

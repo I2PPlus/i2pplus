@@ -23,14 +23,14 @@ import net.i2p.util.OrderedProperties;
 
 /**
  * Defines a method of communicating with a router
- *
+ * <p>
  * For efficiency, the options methods and structures here are unsynchronized.
  * Initialize the structure with readBytes(), or call the setOptions().
  * Don't change it after that.
- *
+ * <p>
  * To ensure integrity of the RouterInfo, methods that change an element of the
  * RouterInfo will throw an IllegalStateException after the RouterInfo is signed.
- *
+ * <p>
  * Expiration is accepted and returned, but the router MUST write all zeros:
  * the field is ignored on readin and a non-zero value fails the signature
  * check. Implementing expiration, or any other use of the field, requires
@@ -88,7 +88,7 @@ public class RouterAddress extends DataStructureImpl {
      * Retrieve the weighted cost of this address, relative to other methods of
      * contacting this router.  The value 0 means free and 255 means really expensive.
      * No value above 255 is allowed.
-     *
+     * <p>
      * Unused before 0.7.12
      * @return 0-255
      */
@@ -99,11 +99,11 @@ public class RouterAddress extends DataStructureImpl {
     /**
      * Configure the weighted cost of using the address.
      * No value negative or above 255 is allowed.
-     *
+     * <p>
      * WARNING - do not change cost on a published address or it will break the RI sig.
      * There is no check here.
      * Rarely used, use 3-arg constructor.
-     *
+     * <p>
      * NTCP is set to 10 and SSU to 5 by default, unused before 0.7.12
      *
      * @param cost 0-255, where 0 is free and 255 is most expensive
@@ -147,7 +147,7 @@ public class RouterAddress extends DataStructureImpl {
     /**
      * Caching version of InetAddress.getByName(getOption("host")).getAddress(), which is slow.
      * Caches numeric host names, and negative caches also.
-     *
+     * <p>
      * As of 0.9.32, this works for literal IP addresses only, and does NOT resolve host names.
      * If a host name is specified in the options, this will return null.
      * Use getHost() if you need the host name.

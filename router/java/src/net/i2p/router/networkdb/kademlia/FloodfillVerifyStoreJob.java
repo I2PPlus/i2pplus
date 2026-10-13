@@ -31,7 +31,7 @@ import net.i2p.util.Log;
 
 /**
  * Two-phase floodfill store verification.
- *
+ * <p>
  * Phase 1 queries the peer we stored to, confirming it still holds a fresh
  * entry (store acceptance that outlives the DSM reply). Phase 2 waits longer
  * for the flood to propagate, then queries a different floodfill. A missing
@@ -265,7 +265,7 @@ class FloodfillVerifyStoreJob extends JobImpl {
     /**
      * Run the current phase: first ask the peer we stored to, then a
      * different floodfill after the flood-check delay has elapsed.
-     *
+     * <p>
      * Phase 1 failure (missing/stale at the store peer) resends immediately.
      * Phase 2 missing/stale retries the same peer once, then resends.
      */

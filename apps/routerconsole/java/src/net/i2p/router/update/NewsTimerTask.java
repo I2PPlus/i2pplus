@@ -14,7 +14,7 @@ import net.i2p.util.SimpleTimer2;
  * Task to periodically look for updates to the news.xml, and to keep
  * track of whether that has an announcement for a new version.
  * Also looks for unsigned updates.
- *
+ * <p>
  * Runs forever on instantiation, can't be stopped.
  *
  * @since 0.9.4 moved from NewsFetcher

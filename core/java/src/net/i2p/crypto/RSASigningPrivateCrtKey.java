@@ -15,12 +15,12 @@ import java.security.spec.RSAKeyGenParameterSpec;
 /**
  * A SigningPrivateKey that retains the Chinese Remainder Theorem
  * parameters, so it can be converted back to a Java CRT key.
- *
+ * <p>
  * By preserving the CRT parameters across a Java to I2P to Java
  * conversion, we speed up signing by about 3.3x, and
  * the parameters are correctly serialized in PEM format
  * when stored to a keystore.
- *
+ * <p>
  * The CRT parameters are NOT retained when this object is
  * serialized via getData().
  *

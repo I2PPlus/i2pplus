@@ -235,7 +235,7 @@ public class ConfigBanHelper extends HelperBase {
 
     /**
      * Get the checked status of the next-hop ban option.
-     *
+     * <p>
      * When enabled (default), peers resolved from the network that we are
      * not directly connected to - transit next hops as well as client
      * tunnel endpoints - are subject to policy bans like any other peer.

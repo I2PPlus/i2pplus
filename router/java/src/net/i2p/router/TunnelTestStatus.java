@@ -47,7 +47,6 @@ public enum TunnelTestStatus {
     /**
      * Whether a tunnel in this status must be withheld from healthy capacity
      * counts and from endpoint selection.
-     *
      * <p>Defined here rather than at each call site because the counting and
      * selection paths previously disagreed: the scan gates excluded both
      * {@link #FAILED} and {@link #FAILING} while the usable-count helpers

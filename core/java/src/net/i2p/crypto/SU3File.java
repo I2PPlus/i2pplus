@@ -295,7 +295,7 @@ public class SU3File {
      * The ContentType is the trust domain for the content.
      * The signer and signature will be checked with the
      * trusted certificates for that type.
-     *
+     * <p>
      * This does not check the signature, but it will fail if the signer is unknown,
      * unless setVerifySignature(false) has been called.
      *
@@ -311,7 +311,7 @@ public class SU3File {
     /**
      * The file type is advisory and is application-dependent.
      * The following values are defined but any value 0-255 is allowed.
-     *
+     * <p>
      * This does not check the signature, but it will fail if the signer is unknown,
      * unless setVerifySignature(false) has been called.
      *

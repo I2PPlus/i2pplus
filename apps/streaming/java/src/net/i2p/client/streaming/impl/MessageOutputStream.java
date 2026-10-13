@@ -16,22 +16,22 @@ import net.i2p.util.SystemVersion;
  * An OutputStream implementation that buffers data and forwards it
  * to a {@link DataReceiver} in chunks upon buffer full or flush.
  * Provides throttling and blocking behavior according to the data receiver's needs.
- *
+ * <p>
  * This class maintains an internal buffer with configurable size limits,
  * supports resizing the buffer size during operation (only effective when buffer is empty),
  * and allows passive flushes after inactivity delays to avoid excessive buffering.
- *
+ * <p>
  * MessageOutputStream -> ConnectionDataReceiver -> Connection -> PacketQueue -> I2PSession
- *
+ * <p>
  * Thread safety:
  * - Write operations synchronize on an internal data lock when manipulating the buffer.
  * - Waiting for buffer acceptance and completion is done outside synchronization to avoid blocking other threads.
- *
+ * <p>
  * Performance:
  * - Uses a shared ByteCache for buffer byte arrays to reduce allocations.
  * - Supports a passive flush mechanism to flush buffered data after inactivity.
  * - Minimizes locking time by doing blocking waits outside of synchronized blocks.
- *
+ * <p>
  * Note:
  * - Buffer resizing only affects the max size used to determine flush boundaries,
  *   buffer reallocation does not occur dynamically.
@@ -768,7 +768,7 @@ class MessageOutputStream extends OutputStream {
          * Performs the actual flush of buffered data, if any.
          * If data is available and the passive flush delay has elapsed,
          * writes data to the data receiver and resets the buffer.
-         *
+         * <p>
          * Handles null WriteStatus gracefully to avoid NullPointerException.
          */
         private void doFlush() {

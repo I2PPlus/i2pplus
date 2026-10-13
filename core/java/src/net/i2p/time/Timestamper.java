@@ -6,7 +6,7 @@ package net.i2p.time;
  * containing only what is needed to keep external apps
  * compiled with old libs from breaking, since
  * net.i2p.util.Clock returns a Timestamper in getTimestamper()
- *
+ * <p>
  * Deprecated outside of the router.
  */
 public class Timestamper implements Runnable {

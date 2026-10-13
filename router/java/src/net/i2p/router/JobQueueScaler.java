@@ -14,17 +14,17 @@ import net.i2p.util.SystemVersion;
 
 /**
  * Dynamic job runner scaling controller for the JobQueue.
- *
+ * <p>
  * Monitors queue metrics (ready job count, lag) and automatically scales
  * the number of JobQueueRunner threads up or down based on load conditions.
- *
+ * <p>
  * <strong>Scaling Algorithm:</strong>
  * <ul>
  *   <li>Scale UP when: readyJobs > activeRunners * scaleUpJobsRatio OR maxLag > scaleUpLagThreshold</li>
  *   <li>Scale DOWN when: readyJobs &lt; activeRunners AND avgLag &lt; scaleDownLagThreshold (sustained)</li>
  *   <li>Bounds: min runners = max(4, cores), max runners = min(2 * router.maxJobRunners, RAM-based limit)</li>
  * </ul>
- *
+ * <p>
  * <strong>Resource Saturation Gates:</strong>
  * Scale-up is suppressed (not just limited) when the bottleneck is resource
  * saturation rather than thread count. Emergency signals (critical lag,
@@ -35,7 +35,7 @@ import net.i2p.util.SystemVersion;
  *   <li>Network congestion: tunnel.buildSuccessRate &lt; 50%</li>
  *   <li>Bandwidth saturation: bwLimiter.outboundDelayedTime > 500ms</li>
  * </ul>
- *
+ * <p>
  * <strong>Feedback Mechanism:</strong>
  * <ul>
  *   <li>Captures pre-scale metrics before adding runners</li>

@@ -19,7 +19,7 @@ import net.i2p.I2PAppContext;
  * Retries may be given; zero for no retries.
  * If the server does not return a Content-Length header of the correct size,
  * the fetch will fail.
- *
+ * <p>
  * Useful for checking .sud versions
  *
  * @author zzz

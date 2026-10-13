@@ -53,9 +53,7 @@ import net.i2p.util.UIMessages;
 
 /**
  * Backend bean for I2P tunnel management web interface.
- *
  * <p>Simple accessor for exposing tunnel info, but also an ugly form handler.</p>
- *
  * <p>Warning - This class is not part of the i2ptunnel API,
  * it has been moved from the jar to the war.
  * Usage by classes outside of i2ptunnel.war is deprecated.</p>
@@ -2074,7 +2072,7 @@ public class IndexBean {
      * Decrypt a property using an in-memory key, for
      * interaction with the UI only, using ChaCha20.
      * IV is SHA256(k).
-     *
+     * <p>
      * These are transient keys by design, but are persisted
      * to hide restarts. They are hidden inputs in the edit form.
      * Storage in config files is not encrypted.
@@ -2100,7 +2098,7 @@ public class IndexBean {
     /**
      * Encrypt a property using an in-memory key, for interaction with the UI only,
      * using ChaCha20. IV is SHA256(k).
-     *
+     * <p>
      * These are transient keys by design, but are persisted to hide restarts.
      * They are hidden inputs in the edit form. Storage in config files is not encrypted.
      *

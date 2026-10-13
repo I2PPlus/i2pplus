@@ -77,14 +77,14 @@ class Zones {
     /**
      * Read in and parse the continent file.
      * The file need not be sorted.
-     *
+     * <p>
      * Format:
      * #comment (# must be in column 1)
      * country code,continent code
-     *
+     * <p>
      * Example:
      * US,NA
-     *
+     * <p>
      * Modified from GeoIP.readCountryFile()
      * ref: http://dev.maxmind.com/geoip/legacy/codes/country_continent/
      */

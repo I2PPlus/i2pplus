@@ -50,12 +50,11 @@ public enum SigContext {
 
     /**
      * Algorithm parameter specification for personalized hash contexts in digital signatures.
-     *
+     * <p>
      * This class implements {@link AlgorithmParameterSpec} to provide context-specific
      * data for cryptographic signature operations using personalized hash functions.
      * The context data is used as domain separation to prevent signature replay attacks
      * across different I2P protocols and data types.
-     *
      * <p><strong>Purpose and Security:</strong>
      * <ul>
      *   <li>Domain separation between different I2P protocols</li>
@@ -63,7 +62,6 @@ public enum SigContext {
      *   <li>Implementation of Proposal 148 for enhanced signature security</li>
      *   <li>Context-specific hash personalization for BLAKE signature engines</li>
      * </ul>
-     *
      * <p><strong>Format and Validation:</strong>
      * <ul>
      *   <li>Context data must be exactly 16 ASCII bytes</li>
@@ -71,7 +69,6 @@ public enum SigContext {
      *   <li>Invalid lengths throw {@link IllegalArgumentException}</li>
      *   <li>Data is stored as raw bytes for cryptographic operations</li>
      * </ul>
-     *
      * <p><strong>Usage:</strong>
      * <pre>
      * // Get context specification for datagram signatures
@@ -80,7 +77,6 @@ public enum SigContext {
      * // Apply to signature engine
      * signatureEngine.setParameter(spec);
      * </pre>
-     *
      * <p><strong>Supported Contexts:</strong>
      * <ul>
      *   <li>SC_DATAGRAM - Datagram protocol signatures</li>
@@ -92,7 +88,6 @@ public enum SigContext {
      *   <li>SC_SU3 - SU3 file format signatures</li>
      *   <li>SC_TEST - Test context for development</li>
      * </ul>
-     *
      * <p><strong>Thread Safety:</strong> This class is immutable and thread-safe.
      * The returned byte array should not be modified by callers.
      *
@@ -124,7 +119,7 @@ public enum SigContext {
 
         /**
          * Returns the raw context data for cryptographic operations.
-         *
+         * <p>
          * The returned array is the internal storage and should not be modified.
          *
          * @return the 16-byte context data as a byte array, or null if no context is set

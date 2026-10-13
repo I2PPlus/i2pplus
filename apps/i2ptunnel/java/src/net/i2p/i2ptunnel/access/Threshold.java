@@ -5,7 +5,6 @@ package net.i2p.i2ptunnel.access;
  * <p>
  * Defined by maximum connection attempts over a time period in seconds.
  *
- *
  */
 class Threshold {
 

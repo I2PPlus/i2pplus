@@ -18,7 +18,7 @@ import java.io.OutputStream;
 /**
  * Defines the message ID of a message delivered between a router and a client
  * in a particular session.  These IDs are not globally unique.
- *
+ * <p>
  * As of 0.9.48, does NOT extend DataStructureImpl.
  *
  * @author jrandom

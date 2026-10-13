@@ -45,7 +45,7 @@ import net.i2p.util.TempDirScanner;
  * environments to operate concurrently within the same JVM - particularly useful
  * for stubbing out implementations of the rooted components and simulating the
  * software's interaction between multiple instances.</p>
- *
+ * <p>
  * As a simplification, there is also a global context - if some component needs
  * access to one of the singletons but doesn't have its own context from which
  * to root itself, it binds to the I2PAppContext's getGlobalContext(), which is
@@ -127,7 +127,7 @@ public class I2PAppContext {
     /**
      * Pull the default context, creating a new one if necessary, else using
      * the first one created.
-     *
+     * <p>
      * Warning - do not save the returned value, or the value of any methods below,
      * in a static field, or you will get the old context if a new router is
      * started in the same JVM after the first is shut down,
@@ -212,7 +212,7 @@ public class I2PAppContext {
      * to avoid creating additional contexts, which may spawn numerous
      * additional resources and threads, and may be the cause of logging
      * problems or hard-to-isolate bugs.
-     *
+     * <p>
      * NOT a public API, for use by RouterContext only, NOT for external use.
      *
      * @param doInit should this context be used as the global one (if necessary)?
@@ -366,7 +366,6 @@ public class I2PAppContext {
      * The only thing that may be useful in here is the lib/ dir
      * containing the .jars.
      *
-     *
      * @return dir constant for the life of the context
      * @since 0.7.6
      */
@@ -379,7 +378,6 @@ public class I2PAppContext {
      * In installations originally installed with 0.7.5 or earlier, and in
      * "portable" installations, this will be the same as the base dir.
      *
-     *
      * @return dir constant for the life of the context
      * @since 0.7.6
      */
@@ -389,7 +387,6 @@ public class I2PAppContext {
      * Where the router keeps its files.
      * Applications should not use this.
      * The same as the config dir for now.
-     *
      *
      * @return dir constant for the life of the context
      * @since 0.7.6
@@ -403,7 +400,6 @@ public class I2PAppContext {
      * Was the same as the system temp dir prior to that.
      * Which was a problem for multi-user installations.
      *
-     *
      * @return dir constant for the life of the context
      * @since 0.7.6
      */
@@ -415,7 +411,6 @@ public class I2PAppContext {
      * The same as the config dir for now.
      * (i.e. ~/.i2p, NOT ~/.i2p/logs)
      *
-     *
      * @return dir constant for the life of the context
      * @since 0.7.6
      */
@@ -425,7 +420,6 @@ public class I2PAppContext {
      * Where applications may store data.
      * The same as the config dir for now, but may change in the future.
      * Apps should be careful not to overwrite router files.
-     *
      *
      * @return dir constant for the life of the context
      * @since 0.7.6
@@ -438,7 +432,6 @@ public class I2PAppContext {
      * first call in this context, and is deleted on JVM exit.
      * Applications should create their own directory inside this directory
      * to avoid collisions with other apps.
-     *
      *
      * @return dir constant for the life of the context
      * @since 0.7.6
@@ -676,7 +669,7 @@ public class I2PAppContext {
      * Access the configuration attributes of this context, listing the properties
      * provided during the context construction, as well as the ones included in
      * System.getProperties.
-     *
+     * <p>
      * WARNING - not overridden in RouterContext, doesn't contain router config settings,
      * use getProperties() instead.
      *
@@ -711,7 +704,7 @@ public class I2PAppContext {
     /**
      * Add a callback, which will fire upon changes in the property
      * given in the specific callback.
-     *
+     * <p>
      * This is an intentional no-op in a plain I2PAppContext: its properties are
      * only populated in the constructor, so there is nothing to notify. A
      * subclass that allows properties to change at runtime overrides this to
@@ -750,13 +743,13 @@ public class I2PAppContext {
      * data.  This component allows transparent operation of the
      * ElGamal/AES+SessionTag algorithm, and contains all of the session tags
      * for one particular application.
-     *
+     * <p>
      * This is deprecated for client use, it should be used only by the router
      * as its own key manager. Not that clients are doing end-to-end crypto anyway.
-     *
+     * <p>
      * For client crypto within the router,
      * use RouterContext.clientManager.getClientSessionKeyManager(dest)
-     *
+     * <p>
      * As of 0.9.15, this returns a dummy SessionKeyManager in I2PAppContext.
      * The dummy SKM does NOT handle session tags.
      * Overridden in RouterContext to return the full TransientSessionKeyManager.
@@ -992,7 +985,7 @@ public class I2PAppContext {
      * into something we can route.  This is context specific because we
      * may want to test out how things react when peers don't agree on
      * how to skew.
-     *
+     * <p>
      * As of 0.9.16, returns null in I2PAppContext.
      * You must be in RouterContext to get a generator.
      *
@@ -1026,7 +1019,7 @@ public class I2PAppContext {
 
     /**
      * The random source for this context, created on first use.
-     *
+     * <p>
      * The first caller initializes it, holding a lock so that concurrent
      * callers share one instance; every later caller gets that same object.
      * The instance is a FortunaRandomSource, seeded from /dev/urandom and
@@ -1144,7 +1137,7 @@ public class I2PAppContext {
     /**
      * The ClientAppManager for this context. Overridden in RouterContext to
      * return the RouterAppManager.
-     *
+     * <p>
      * As of 0.9.30 this returns non-null in I2PAppContext and null in a router
      * context. Prior to that, it returned null always.
      *
@@ -1157,12 +1150,12 @@ public class I2PAppContext {
 
     /**
      * How long this router was down before it started, or 0 if unknown.
-     *
+     * <p>
      * This may be used for a determination of whether to regenerate keys, for example.
      * We use the timestamp of the previous ping file left behind on crash,
      * as set by isOnlyRouterRunning(), if present.
      * Otherwise, the last STOPPED entry in the event log.
-     *
+     * <p>
      * May take a while to run the first time, if it has to go through the event log.
      * Once called, the result is cached.
      *

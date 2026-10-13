@@ -112,7 +112,6 @@ public class I2PTunnelConnectClient extends I2PTunnelHTTPClientBase implements R
     /**
      * Execute a runnable task on the thread pool, freeing the accept thread
      * to handle the next connection.
-     *
      * <p>Both {@link I2PTunnelRunner} and {@link I2PTunnelOutproxyRunner}
      * manage their own socket cleanup in their finally blocks, so the
      * caller no longer needs to close sockets after this returns.

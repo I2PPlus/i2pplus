@@ -12,12 +12,11 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * Cache the objects frequently used to reduce memory churn. The ByteArray
  * should be held onto as long as the data referenced in it is needed.
- *
+ * <p>
  * For small arrays where the management of valid bytes in ByteArray
  * and prezeroing isn't required, use SimpleByteArray instead.
- *
+ * <p>
  * Heap size control - survey of usage:
- *
  * <pre>
  * +---------------------------------------------------------------------+
  * |   Size    |   Max   |  MaxMem  | From                               |

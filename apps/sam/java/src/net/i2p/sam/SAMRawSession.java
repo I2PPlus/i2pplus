@@ -50,7 +50,7 @@ class SAMRawSession extends SAMMessageSession {
 
     /**
      * Create a new SAM RAW session.
-     *
+     * <p>
      * Caller MUST call start().
      *
      * @param destStream Input stream containing the destination and private keys (same format as PrivateKeyFile)

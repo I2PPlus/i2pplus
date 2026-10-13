@@ -325,7 +325,7 @@ public class EdDSAEngine extends Signature {
     /**
      * Is the 32 byte little-endian value in {@code s} strictly less than
      * {@link EdDSABlinding#ORDER}?
-     *
+     * <p>
      * Equivalent to {@code _ble.toBigInteger(s).compareTo(EdDSABlinding.ORDER) < 0}
      * without allocating a BigInteger and a reversed copy of the input. This is
      * a fixed 32 iteration borrow chain: every byte is read and every byte is
@@ -352,7 +352,7 @@ public class EdDSAEngine extends Signature {
     /**
      * To efficiently sign all the data in one shot, if it is available,
      * use this method, which will avoid copying the data.
-     *
+     * <p>
      * Same as:
      * <pre>
      * setParameter(ONE_SHOT_MODE)
@@ -373,7 +373,7 @@ public class EdDSAEngine extends Signature {
     /**
      * To efficiently sign all the data in one shot, if it is available,
      * use this method, which will avoid copying the data.
-     *
+     * <p>
      * Same as:
      * <pre>
      * setParameter(ONE_SHOT_MODE)
@@ -398,7 +398,7 @@ public class EdDSAEngine extends Signature {
     /**
      * To efficiently verify all the data in one shot, if it is available,
      * use this method, which will avoid copying the data.
-     *
+     * <p>
      * Same as:
      * <pre>
      * setParameter(ONE_SHOT_MODE)
@@ -420,7 +420,7 @@ public class EdDSAEngine extends Signature {
     /**
      * To efficiently verify all the data in one shot, if it is available,
      * use this method, which will avoid copying the data.
-     *
+     * <p>
      * Same as:
      * <pre>
      * setParameter(ONE_SHOT_MODE)
@@ -444,7 +444,7 @@ public class EdDSAEngine extends Signature {
     /**
      * To efficiently verify all the data in one shot, if it is available,
      * use this method, which will avoid copying the data.
-     *
+     * <p>
      * Same as:
      * <pre>
      * setParameter(ONE_SHOT_MODE)
@@ -468,7 +468,7 @@ public class EdDSAEngine extends Signature {
     /**
      * To efficiently verify all the data in one shot, if it is available,
      * use this method, which will avoid copying the data.
-     *
+     * <p>
      * Same as:
      * <pre>
      * setParameter(ONE_SHOT_MODE)

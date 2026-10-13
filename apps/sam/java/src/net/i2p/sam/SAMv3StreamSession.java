@@ -40,11 +40,11 @@ import net.i2p.util.Log;
 
 /**
  * SAMv3 STREAM session class.
- *
+ * <p>
  * Manages I2P streaming connections via the SAM v3 bridge. Supports
  * three modes: outgoing CONNECT, incoming ACCEPT (via a queue fed by
  * {@link MasterSession}), and FORWARD (proxy to a local host:port).
- *
+ * <p>
  * For subsessions created under a {@link MasterSession}, incoming
  * I2P sockets are placed on {@link #_acceptQueue} by the master's
  * acceptor thread and consumed by dedicated per-subsession accept
@@ -83,7 +83,7 @@ class SAMv3StreamSession extends SAMStreamSession implements Session {
     /**
      * Create a new SAM STREAM session, according to information
      * registered with the given nickname
-     *
+     * <p>
      * Caller MUST call start().
      *
      * @param login the nickname this session is registered under
@@ -102,7 +102,7 @@ class SAMv3StreamSession extends SAMStreamSession implements Session {
     /**
      * Build a Stream Session on an existing I2P session
      * registered with the given nickname
-     *
+     * <p>
      * Caller MUST call start().
      *
      * @param login nickname of the session
@@ -123,7 +123,7 @@ class SAMv3StreamSession extends SAMStreamSession implements Session {
      * Put a socket on the accept queue. Called by
      * {@code MasterSession.StreamAcceptor} when an I2P connection arrives
      * and matches this subsession's listen protocol and port.
-     *
+     * <p>
      * Only for subsessions created with the 5-arg constructor;
      * the 1-arg constructor sets {@link #_acceptQueue} to null and
      * this method throws {@link IllegalStateException}.
@@ -186,7 +186,7 @@ class SAMv3StreamSession extends SAMStreamSession implements Session {
      * unregisters from the pool, then hands the blocking connect to a shared
      * connector thread pool.  Returns immediately — the caller's worker is
      * never blocked by an I2P connection attempt.
-     *
+     * <p>
      * The ConnectTask handles all error reporting and pipe setup so the
      * calling worker is free to process other commands immediately.
      *
@@ -339,7 +339,7 @@ class SAMv3StreamSession extends SAMStreamSession implements Session {
      * socket. Validation is synchronous; the blocking accept runs in a
      * dedicated thread so pool workers are never blocked waiting for an
      * incoming I2P connection.
-     *
+     * <p>
      * Multiple simultaneous accepts are allowed (v3.2+).
      * Accepts and forwarding may not be done at the same time.
      *
@@ -493,7 +493,6 @@ class SAMv3StreamSession extends SAMStreamSession implements Session {
      * Runs in its own thread, accepting from the I2P server socket
      * and connecting to the local forwarding target. Each accepted
      * I2P socket is bridged to the local socket via {@link Pipe}.
-     *
      * <p>Created by the FORWARD command handler. Only one forwarder
      * may be active per session at a time.
      *
@@ -616,13 +615,12 @@ class SAMv3StreamSession extends SAMStreamSession implements Session {
      * Bidirectional byte copier between a local socket and an I2P socket.
      * Created by CONNECT and FORWARDDIRECT handlers to shuttle data
      * between the SAM client's TCP connection and the I2P network.
-     *
+     * <p>
      * Instances are registered as handlers in {@link SessionsDB} so
      * that the client's worker thread can return immediately and
      * data transfer continues on the NIO thread pool. The handler's
      * {@link Handler#handle(Selector)} method copies available data
      * on each NIO select tick.
-     *
      * <p>When either side reaches end-of-stream, {@link Handler#close()}
      * is called to tear down both channels and remove this handler
      * from the sessions database. Idle timeout is checked periodically

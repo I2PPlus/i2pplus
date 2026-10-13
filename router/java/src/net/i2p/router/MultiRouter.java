@@ -17,31 +17,30 @@ import net.i2p.data.router.RouterInfo;
  * any objects not booted through one of the RouterContexts. Each of these
  * contexts are configured through a simple properties file (where the name=value
  * contained in them are used for the context's getProperty(name)). <p>
- *
  * <b>Usage:</b><pre>
  * MultiRouter numberRouters
  * </pre>
- *
+ * <p>
  * Each routerContext specified is used to boot up a single router. It is HIGHLY
  * recommended that those context files contain a few base env properties: <ul>
  *  <li>loggerFilenameOverride=rN/logs/log-router-#.txt</li>
  *  <li>router.configLocation=rN/router.config</li>
  * </ul>
  * (where "rN" is an instance number, such as r0 or r9).
- *
+ * <p>
  * Optionally, i2p.vmCommSystem=true can be enabled.
- *
+ * <p>
  * i2p.vmCommSystem=true tells the router to use an in-VM comm system for sending
  * messages back and forth between routers (see net.i2p.transport.VMCommSystem).
- *
+ * <p>
  * However, the default comm system implementation is usually preferred since
  * enabling the VMCommSystem will bypass UDP and TCP, and therefore will not
  * provide a test bed for many important I2P systems.
- *
+ * <p>
  * To make the router console work, either run from a directory containing
  * lib/, webapps/, docs/, etc., or point i2p.dir.base to a directory containing the
  * above.
- *
+ * <p>
  * The multirouter waits until all of the routers are shut down (which none will
  * do on their own, so as before, you'll want to kill the proc or ^C it).
  */

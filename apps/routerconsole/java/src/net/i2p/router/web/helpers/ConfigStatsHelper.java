@@ -160,7 +160,6 @@ public class ConfigStatsHelper extends HelperBase {
     public String getCurrentStatLabel() { return statLabel(_currentStatName); }
     /**
      * The short name shown beside a stat's checkbox on the configstats page.
-     *
      * <p>An ordinary stat name is a dotted subsystem path such as
      * {@code tunnel.buildTimeout}, and the subsystem is dropped because the section
      * header already states it. A pool's rates are named for the tunnel instead:
@@ -190,7 +189,6 @@ public class ConfigStatsHelper extends HelperBase {
 
     /**
      * Shorten a stat name to what fits beside its checkbox.
-     *
      * <p>The rules are ordered rather than alphabetical: {@code receive} rewrites to
      * {@code RX}, which the later {@code RXBps} rule expands again to {@code ReceiveBps},
      * so the chain may not be reordered. Every rule names a stat actually seen on the

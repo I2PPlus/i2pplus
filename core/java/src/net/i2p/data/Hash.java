@@ -14,7 +14,6 @@ import java.io.InputStream;
 /**
  * A 32-byte SHA-256 hash, used throughout I2P as a destination, router, or
  * tunnel identifier and as an integrity value for hashed data.
- *
  * <p>Creating a Hash:</p>
  * <ul>
  * <li>{@link #create(byte[])} and its siblings go through a static
@@ -30,13 +29,11 @@ import java.io.InputStream;
  * wraps them; it does not hash the stream. To hash arbitrary data, use
  * {@link #calculateHash()} or a SHA256Generator.</li>
  * </ul>
- *
  * <p>Rendering:</p>
  * <ul>
  * <li>{@link #toBase64()} caches its result in a volatile field.</li>
  * <li>{@link #toBase32()} caches its result the same way.</li>
  * </ul>
- *
  * <p>Comparison:</p>
  * <ul>
  * <li>{@link #hashCode()} is the precomputed value of the first 4 bytes, held
@@ -46,7 +43,6 @@ import java.io.InputStream;
  * not class-specific, so another 32-byte SimpleDataStructure such as a
  * {@link SessionKey} holding the same bytes compares equal to a Hash.</li>
  * </ul>
- *
  * <p>Thread safety:</p>
  * <ul>
  * <li>The data cannot be reassigned once set, so a Hash that is safely
@@ -80,12 +76,12 @@ public class Hash extends SimpleDataStructure {
 
     /**
      * Pull from cache or return new
-     *
+     * <p>
      * WARNING - If the SDS is found in the cache, the passed-in
      * byte array will be returned to the SimpleByteCache for reuse.
      * Do NOT save a reference to the passed-in data, or use or modify it,
      * after this call.
-     *
+     * <p>
      * Ignore this warning and you WILL corrupt the cache or other data structures.
      *
      * @param data the 32 bytes to wrap, with null yielding a hash whose data is null

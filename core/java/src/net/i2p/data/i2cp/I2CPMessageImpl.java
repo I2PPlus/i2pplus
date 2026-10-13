@@ -19,7 +19,7 @@ import java.io.OutputStream;
 
 /**
  * Defines the base message implementation.
- *
+ * <p>
  * As of 0.9.48, does NOT extend DataStructureImpl.
  *
  * @author jrandom

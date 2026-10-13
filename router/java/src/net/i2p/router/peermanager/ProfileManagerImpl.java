@@ -34,7 +34,6 @@ public class ProfileManagerImpl implements ProfileManager {
      * Note that it took msToSend to send a message of size bytesSent to the peer over the transport.
      * This should only be called if the transport considered the send successful.
      * Non-blocking. Will not update the profile if we can't get the lock.
-     *
      * <p>This runs per message, so the cost is one
      * {@code getOrCreateProfileNonblocking} — a {@code tryReadLock()} plus a map
      * probe — and, on the rare miss, one {@code tryWriteLock()} to insert the
@@ -55,7 +54,6 @@ public class ProfileManagerImpl implements ProfileManager {
     /**
      * Record the packet-loss (retransmit) ratio measured by the transport for a peer.
      * Non-blocking. Will not update the profile if we can't get the lock.
-     *
      * <p>Note on the write lock below: {@link ProfileOrganizer#demoteIfLossy} does
      * attempt the reorganize write lock, but it uses {@code tryWriteLock()}, which
      * returns immediately rather than waiting, and the caller is already committed
@@ -156,7 +154,7 @@ public class ProfileManagerImpl implements ProfileManager {
 
     /**
      * Note that a router did not respond to a tunnel join.
-     *
+     * <p>
      * Since TunnelHistory doesn't have a timeout stat, pretend we were
      * rejected for bandwidth reasons.
      */
@@ -172,7 +170,7 @@ public class ProfileManagerImpl implements ProfileManager {
     /**
      * Note that a tunnel that the router is participating in
      * was successfully tested with the given round trip latency
-     *
+     * <p>
      * Non-blocking. Will not update the profile if we can't get the lock.
      */
     @Override
@@ -235,7 +233,7 @@ public class ProfileManagerImpl implements ProfileManager {
 
     /**
      * Note that the peer was able to return the valid data for a db lookup
-     *
+     * <p>
      * This will force creation of DB stats
      * Non-blocking. Will not update the profile if we can't get the lock.
      */
@@ -255,7 +253,7 @@ public class ProfileManagerImpl implements ProfileManager {
     /**
      * Note that the peer was unable to reply to a db lookup - either with data or with
      * a lookupReply redirecting the user elsewhere
-     *
+     * <p>
      * This will force creation of DB stats
      * Non-blocking. Will not update the profile if we can't get the lock.
      */
@@ -277,7 +275,7 @@ public class ProfileManagerImpl implements ProfileManager {
      * know about, oldPeers routers that the local router already knew about, the given invalid
      * routers that were invalid in some way, and the duplicate number of routers that we explicitly
      * asked them not to send us, but they did anyway
-     *
+     * <p>
      * Non-blocking. Will not update the profile if we can't get the lock.
      */
     @Override
@@ -296,7 +294,7 @@ public class ProfileManagerImpl implements ProfileManager {
 
     /**
      * Note that the local router received a db lookup from the given peer
-     *
+     * <p>
      * Non-blocking. Will not update the profile if we can't get the lock.
      */
     @Override
@@ -308,7 +306,7 @@ public class ProfileManagerImpl implements ProfileManager {
 
     /**
      * Note that the local router received an unprompted db store from the given peer
-     *
+     * <p>
      * Non-blocking. Will not update the profile if we can't get the lock.
      */
     @Override
@@ -325,9 +323,9 @@ public class ProfileManagerImpl implements ProfileManager {
     /**
      * Note that we've confirmed a successful send of db data to the peer (though we haven't
      * necessarily requested it again from them, so they /might/ be lying)
-     *
+     * <p>
      * As of 0.9.53 we update the DbResponseTime.
-     *
+     * <p>
      * This will force creation of DB stats
      *
      * @param responseTimeMs the measured send duration in milliseconds, used
@@ -348,7 +346,7 @@ public class ProfileManagerImpl implements ProfileManager {
     /**
      * Note that we've verified a successful send of db data to the floodfill peer
      * by querying another floodfill.
-     *
+     * <p>
      * This will force creation of DB stats
      */
     @Override
@@ -369,7 +367,7 @@ public class ProfileManagerImpl implements ProfileManager {
      * Compute floodfill reliability from DBHistory.
      * Updates the peer's reliability classification based on
      * successful/failed lookup and store counts.
-     *
+     * <p>
      * Thresholds:
      * - UNKNOWN: 0 successful lookups (probing target)
      * - OK: 1-4 successful lookups with &gt;=50% success rate
@@ -404,7 +402,7 @@ public class ProfileManagerImpl implements ProfileManager {
     /**
      * Note that we were unable to confirm a successful send of db data to
      * the peer, at least not within our timeout period
-     *
+     * <p>
      * This will force creation of DB stats
      */
     @Override
@@ -446,7 +444,6 @@ public class ProfileManagerImpl implements ProfileManager {
      * through this metric.  If msToReceive is negative, there was no timing information
      * available.
      * Non-blocking. Will not update the profile if we can't get the lock.
-     *
      * <p>Same per-message cost profile as {@link #messageSent}, and the same
      * decision to leave it alone: one {@code tryReadLock()} plus a map probe on
      * the hot path, with no lock escalation that could block the caller.

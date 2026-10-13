@@ -44,7 +44,7 @@ import net.i2p.util.VersionComparator;
  * Reseed handler that fetches router infos from configured seed URLs.
  * Uses the built-in URL list unless "i2p.reseedURL" is overridden.
  * Writes results to ./netDb/. Logs to console, router log, and wrapper log.
- *
+ * <p>
  * Moved from ReseedHandler in routerconsole; see ReseedChecker for additional validation.
  */
 public class Reseeder {
@@ -67,7 +67,7 @@ public class Reseeder {
      * NOTE - URLs that are in both the standard and SSL groups must use the same hostname,
      * so the reseed process will not download from both.
      * Ports are supported as of 0.9.14.
-     *
+     * <p>
      * NOTE - Each seedURL must be a directory, it must end with a '/',
      * it can't end with 'index.html', for example. Both because of how individual file
      * URLs are constructed, and because SSLEepGet doesn't follow redirects.
@@ -80,13 +80,13 @@ public class Reseeder {
      * See also the reseed forum http://zzz.i2p/forums/18
      * and the reseed setup and testing guide
      * https://geti2p.net/en/get-involved/guides/reseed
-     *
+     * <p>
      * All supported reseed hosts need a corresponding reseed (SU3)
      * signing certificate installed in the router.
-     *
+     * <p>
      * All supported reseed hosts with selfsigned SSL certificates
      * need the corresponding SSL certificate installed in the router.
-     *
+     * <p>
      * While this implementation supports SNI, others may not, so
      * SNI requirements are noted.
      *
@@ -486,7 +486,7 @@ public class Reseeder {
 
         /**
          * Performs reseed operation using configured URLs or defaults.
-         *
+         * <p>
          * &lt;p&gt;Builds a list of URIs to use for reseeding based on current
          * configuration and SSL settings, then delegates to the reseed method
          * that accepts a URI list.
@@ -506,7 +506,7 @@ public class Reseeder {
 
         /**
          * Builds the list of URIs to use for reseed based on configured properties and defaults.
-         *
+         * <p>
          * &lt;p&gt;Handles default URLs, SSL enablement/disablement, shuffling,
          * and filtering based on SNI support.
          *
@@ -609,7 +609,7 @@ public class Reseeder {
 
         /**
          * Attempts to fetch router information files from the specified list of URIs.
-         *
+         * <p>
          * &lt;p&gt;Tracks the number of routerinfos successfully fetched and stops
          * when minimum targets are met or when shutdown in progress.
          *

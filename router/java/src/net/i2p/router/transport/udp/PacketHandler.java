@@ -20,7 +20,7 @@ import net.i2p.util.SystemVersion;
  * relay packets will go to the relay manager.  At the moment, this is
  * an actual pool of packet handler threads, each pulling off the inbound
  * receiver's queue and pushing them as necessary.
- *
+ * <p>
  * Supports dynamic thread count adjustment via {@link #adjustThreads()}.
  * @since 0.9.14 (dynamic resizing since 0.9.70+)
  */
@@ -271,7 +271,7 @@ class PacketHandler {
         /**
          * Initial handling, called for every packet.
          * Find the state and call the correct receivePacket() variant.
-         *
+         * <p>
          * Classify the packet by source IP/port, into 4 groups:
          * <ol>
          * <li>Established session
@@ -319,12 +319,12 @@ class PacketHandler {
      * Decrypt the header and hand off to the state for processing.
      * Packet is trial-decrypted, so fallback
      * processing is possible if this returns false.
-     *
+     * <p>
      * Possible messages here are Session Request, Token Request, Session Confirmed, or Peer Test.
      * Data messages out-of-order from Session Confirmed, or following a
      * Session Confirmed that was lost, or in-order but before the Session Confirmed was processed,
      * will handed to the state to be queued for deferred handling.
-     *
+     * <p>
      * Min packet data size: 56 (token request) if state is null; 40 (data) if state is non-null
      *
      * @param state must be version 2, but will be null for session request unless retransmitted
@@ -497,9 +497,9 @@ class PacketHandler {
      * Packet is trial-decrypted, so fallback
      * processing is possible if this returns false.
      * But that's probably not necessary.
-     *
+     * <p>
      * Possible messages here are Session Created or Retry
-     *
+     * <p>
      * Min packet data size: 56 (retry)
      *
      * @param state must be version 2, non-null

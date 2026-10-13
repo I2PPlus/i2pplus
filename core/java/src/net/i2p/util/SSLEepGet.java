@@ -37,9 +37,9 @@ import net.i2p.socks.SOCKS5Client;
  * As of 0.9.45, supports redirect to https (redirect to http will still fail).
  * Fails on bad certs (must have a valid cert chain)
  * Self-signed certs or CAs not in the JVM key store must be loaded to be trusted.
- *
+ * <p>
  * Since 0.8.2, loads additional trusted CA certs from $I2P/certificates/ssl/ and ~/.i2p/certificates/ssl/
- *
+ * <p>
  * Since 0.9.33, HTTP proxies (CONNECT) supported. Proxy auth not supported.
  *
  * @author zzz
@@ -308,7 +308,7 @@ public class SSLEepGet extends EepGet {
      * Loads certs from location of javax.net.ssl.keyStore property,
      * else from $JAVA_HOME/lib/security/jssacacerts,
      * else from $JAVA_HOME/lib/security/cacerts.
-     *
+     * <p>
      * Then adds certs found in the $I2P/certificates/ssl/ directory
      * and in the ~/.i2p/certificates/ssl/ directory.
      *

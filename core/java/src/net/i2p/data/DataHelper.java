@@ -59,7 +59,6 @@ import java.util.zip.Deflater;
 import java.nio.charset.StandardCharsets;
 /**
  * Comprehensive utility class for I2P data structure serialization, encoding, and manipulation.
- *
  * <p>DataHelper provides essential utilities for working with I2P data structures:</p>
  * <ul>
  * <li><strong>Serialization:</strong> Read/write primitive types to/from streams</li>
@@ -68,7 +67,6 @@ import java.nio.charset.StandardCharsets;
  * <li><strong>Conversion:</strong> Between different data representations</li>
  * <li><strong>Utilities:</strong> Common operations on collections and arrays</li>
  * </ul>
- *
  * <p><strong>Core Operations:</strong></p>
  * <ul>
  * <li><strong>Primitive I/O:</strong> readLong(), writeLong(), readString(), writeString()</li>
@@ -77,7 +75,6 @@ import java.nio.charset.StandardCharsets;
  * <li><strong>Properties:</strong> readProperties(), writeProperties() for metadata</li>
  * <li><strong>Collections:</strong> toMap(), toString() for data structures</li>
  * </ul>
- *
  * <p><strong>Encoding Support:</strong></p>
  * <ul>
  * <li><strong>Base64:</strong> Standard and URL-safe variants with/without padding</li>
@@ -85,7 +82,6 @@ import java.nio.charset.StandardCharsets;
  * <li><strong>Hex:</strong> Hexadecimal encoding for debugging and display</li>
  * <li><strong>UTF-8:</strong> String encoding with proper byte handling</li>
  * </ul>
- *
  * <p><strong>Data Structure Support:</strong></p>
  * <ul>
  * <li><strong>Arrays:</strong> Efficient reading/writing of byte arrays</li>
@@ -93,7 +89,6 @@ import java.nio.charset.StandardCharsets;
  * <li><strong>Dates:</strong> Timestamp handling with proper timezones</li>
  * <li><strong>Properties:</strong> Key-value pair serialization</li>
  * </ul>
- *
  * <p><strong>Validation and Safety:</strong></p>
  * <ul>
  * <li><strong>Bounds Checking:</strong> Prevent buffer overflows and underflows</li>
@@ -101,7 +96,6 @@ import java.nio.charset.StandardCharsets;
  * <li><strong>Size Limits:</strong> Protection against excessive memory allocation</li>
  * <li><strong>Format Validation:</strong> Data structure integrity checks</li>
  * </ul>
- *
  * <p><strong>Performance Features:</strong></p>
  * <ul>
  * <li><strong>Buffer Reuse:</strong> ByteArrayStream for efficient operations</li>
@@ -109,7 +103,6 @@ import java.nio.charset.StandardCharsets;
  * <li><strong>Bulk Operations:</strong> Optimized for large data sets</li>
  * <li><strong>Memory Management:</strong> Careful allocation and cleanup</li>
  * </ul>
- *
  * <p><strong>Common Use Cases:</strong></p>
  * <ul>
  * <li><strong>Network Protocol:</strong> I2NP message serialization</li>
@@ -118,7 +111,6 @@ import java.nio.charset.StandardCharsets;
  * <li><strong>Data Storage:</strong> File format serialization</li>
  * <li><strong>Debugging:</strong> Hex dumps and data inspection</li>
  * </ul>
- *
  * <p><strong>Thread Safety:</strong></p>
  * <ul>
  * <li><strong>Static Methods:</strong> All operations are thread-safe</li>
@@ -238,7 +230,7 @@ public class DataHelper {
     /**
      * Read a mapping from the stream, as defined by the I2P data structure spec,
      * and store it into a Properties object.
-     *
+     * <p>
      * A mapping is a set of key / value pairs. It starts with a 2 byte Integer (ala readLong(rawStream, 2))
      * defining how many bytes make up the mapping.  After that comes that many bytes making
      * up a set of UTF-8 encoded characters. The characters are organized as key=value;.
@@ -248,7 +240,7 @@ public class DataHelper {
      * for the value. Finally after that comes the literal UTF-8 character ';'. This key=value;
      * is repeated until there are no more bytes (not characters!) left as defined by the
      * first two byte integer.
-     *
+     * <p>
      * As of 0.9.18, throws DataFormatException on duplicate key
      *
      * @param rawStream stream to read the mapping from
@@ -266,7 +258,7 @@ public class DataHelper {
 
     /**
      * Ditto, load into an existing properties
-     *
+     * <p>
      * As of 0.9.18, throws DataFormatException on duplicate key
      * Does NOT enforce key ordering.
      *
@@ -287,7 +279,7 @@ public class DataHelper {
 
     /**
      * Ditto, load into an existing properties
-     *
+     * <p>
      * As of 0.9.18, throws DataFormatException on duplicate key
      *
      * @param rawStream stream to read the mapping from
@@ -349,7 +341,7 @@ public class DataHelper {
      * Property keys and values must not contain '=' or ';', this is not checked and they are not escaped
      * Keys and values must be 255 bytes or less,
      * Formatted length must not exceed 65535 bytes
-     *
+     * <p>
      * Properties from the defaults table of props (if any) are not written out by this method.
      *
      * @param rawStream stream to write to
@@ -369,13 +361,13 @@ public class DataHelper {
      * Property keys and values must not contain '=' or ';', this is not checked and they are not escaped
      * Keys and values must be 255 bytes or less,
      * Formatted length must not exceed 65535 bytes
-     *
+     * <p>
      * Properties from the defaults table of props (if any) are not written out by this method.
-     *
+     * <p>
      * jrandom disabled UTF-8 in mid-2004, for performance reasons,
      * i.e. slow foo.getBytes("UTF-8")
      * Re-enable it so we can pass UTF-8 tunnel names through the I2CP SessionConfig.
-     *
+     * <p>
      * Use utf8 = false for RouterAddress (fast, non UTF-8)
      * Use utf8 = true for SessionConfig (slow, UTF-8)
      *
@@ -396,13 +388,13 @@ public class DataHelper {
      * Property keys and values must not contain '=' or ';', this is not checked and they are not escaped
      * Keys and values must be 255 bytes or less,
      * Formatted length must not exceed 65535 bytes
-     *
+     * <p>
      * Properties from the defaults table of props (if any) are not written out by this method.
-     *
+     * <p>
      * jrandom disabled UTF-8 in mid-2004, for performance reasons,
      * i.e. slow foo.getBytes("UTF-8")
      * Re-enable it so we can pass UTF-8 tunnel names through the I2CP SessionConfig.
-     *
+     * <p>
      * Use utf8 = false for RouterAddress (fast, non UTF-8)
      * Use utf8 = true for SessionConfig (slow, UTF-8)
      *
@@ -460,7 +452,7 @@ public class DataHelper {
      * Formatted length must not exceed 65535 bytes
      * Strings will be UTF-8 encoded in the byte array.
      * Warning - confusing method name, Properties is the source.
-     *
+     * <p>
      * Properties from the defaults table of props (if any) are not written out by this method.
      *
      * @param target returned array as specified in data structure spec
@@ -509,7 +501,7 @@ public class DataHelper {
      * See readProperties() for the format.
      * Warning - confusing method name, Properties is the target.
      * Strings must be UTF-8 encoded in the byte array.
-     *
+     * <p>
      * As of 0.9.18, throws DataFormatException on duplicate key
      *
      * @param source byte array holding the UTF-8 encoded props, in readProperties() format
@@ -564,7 +556,7 @@ public class DataHelper {
      * Keys and values must be 255 bytes or less,
      * Formatted length must not exceed 65535 bytes
      * Warning - confusing method name, Properties is the source.
-     *
+     * <p>
      * Properties from the defaults table of props (if any) are not written out by this method.
      *
      * @param opts properties to serialize
@@ -616,16 +608,16 @@ public class DataHelper {
 
     /**
      * A more efficient Properties.load
-     *
+     * <p>
      * Some of the other differences:
      * - UTF-8 encoding, not ISO-8859-1
      * - No escaping! This does not process or drop backslashes
      * - '#' or ';' starts a comment line, but '!' does not
      * - Leading whitespace is not trimmed
      * - '=' is the only key-termination character (not ':' or whitespace)
-     *
+     * <p>
      * As of 0.9.10, an empty value is allowed.
-     *
+     * <p>
      * As in Java Properties, duplicate keys are allowed, last one wins.
      *
      * @param props the properties object to load into
@@ -706,9 +698,9 @@ public class DataHelper {
      * Note that this does not escape the \r or \n that are unescaped in loadProps() above.
      * As of 0.8.1, file will be mode 600 (best effort; group read/write is
      * also granted where POSIX permissions are supported, e.g. 660 on Linux).
-     *
+     * <p>
      * Properties from the defaults table of props (if any) are not written out by this method.
-     *
+     * <p>
      * Leading or trailing whitespace in values is not checked but
      * will be trimmed by loadProps()
      *
@@ -1189,7 +1181,7 @@ public class DataHelper {
     /**
      * Write out a string to the stream as specified by the I2P data structure spec.  Note that the max
      * size for a string allowed by the spec is 255 bytes.
-     *
+     * <p>
      * WARNING - this method destroys the encoding, and therefore violates
      * the data structure spec.
      *
@@ -1218,7 +1210,7 @@ public class DataHelper {
     /**
      * Write out a string to the stream as specified by the I2P data structure spec.  Note that the max
      * size for a string allowed by the spec is 255 bytes.
-     *
+     * <p>
      * This method correctly uses UTF-8
      *
      * @param out stream to write string
@@ -1252,7 +1244,6 @@ public class DataHelper {
     /**
      * Helper util to compare two objects, including null handling.
      * <p>
-     *
      * This treats (null == null) as true, and (null == (!null)) as false.
      *
      * @param lhs first object, may be null
@@ -1270,10 +1261,8 @@ public class DataHelper {
     /**
      * Run a deep comparison across the two collections.
      * <p>
-     *
      * This treats (null == null) as true, (null == (!null)) as false, and then
      * comparing each element via eq(object, object). <p>
-     *
      * If the size of the collections are not equal, the comparison returns false.
      * The collection order should be consistent, as this simply iterates across both and compares
      * based on the value of each at each step along the way.
@@ -1298,10 +1287,9 @@ public class DataHelper {
 
     /**
      * Run a comparison on the byte arrays, byte by byte.  <p>
-     *
      * This treats (null == null) as true, (null == (!null)) as false,
      * and unequal length arrays as false.
-     *
+     * <p>
      * Variable time.
      *
      * @param lhs first byte array, may be null
@@ -1555,9 +1543,9 @@ public class DataHelper {
      * This is different than InputStream.skip(), in that it
      * does repeated reads until the full amount is skipped.
      * To fix findbugs issues with skip().
-     *
+     * <p>
      * Guaranteed to skip exactly n bytes or throw an IOE.
-     *
+     * <p>
      * http://stackoverflow.com/questions/14057720/robust-skipping-of-data-in-a-java-io-inputstream-and-its-subtypes
      * http://stackoverflow.com/questions/11511093/java-inputstream-skip-return-value-near-end-of-file
      *
@@ -1603,7 +1591,7 @@ public class DataHelper {
     /**
      * This is different than InputStream.read(target), in that it
      * does repeated reads until the full data is received.
-     *
+     * <p>
      * As of 0.9.27, throws EOFException if the full length is not read.
      *
      * @param in the input stream
@@ -1621,7 +1609,7 @@ public class DataHelper {
      * for a nonzero offset, in that it
      * returns the new offset (== old offset + length).
      * It also does repeated reads until the full data is received.
-     *
+     * <p>
      * WARNING - Broken for nonzero offset before 0.9.27.
      * As of 0.9.27, throws EOFException if the full length is not read.
      *
@@ -1780,7 +1768,7 @@ public class DataHelper {
      * Use only in HTML.
      * Thresholds are a little lower than in formatDuration() also,
      * as precision is less important in the GUI than in logging.
-     *
+     * <p>
      * Negative numbers handled correctly.
      *
      * @param ms the duration in milliseconds
@@ -1897,9 +1885,9 @@ public class DataHelper {
     /**
      * This is binary, i.e. multiples of 1024.
      * For decimal, see formatSize2Decimal().
-     *
+     * <p>
      * Caller should append 'B' or 'b' as appropriate.
-     *
+     * <p>
      * No space between the number and the letter.
      * NOTE: formatSize2() recommended in most cases for readability
      *
@@ -1940,7 +1928,7 @@ public class DataHelper {
     /**
      * This is binary, i.e. multiples of 1024.
      * For decimal, see formatSize2Decimal().
-     *
+     * <p>
      * Caller should append 'B' or 'b' as appropriate.
      * Like formatSize but with a non-breaking space after the number
      * This seems consistent with most style guides out there.
@@ -1958,7 +1946,7 @@ public class DataHelper {
     /**
      * This is binary, i.e. multiples of 1024.
      * For decimal, see formatSize2Decimal().
-     *
+     * <p>
      * Caller should append 'B' or 'b' as appropriate,
      * Like formatSize but with a space after the number
      * This seems consistent with most style guides out there.
@@ -2009,7 +1997,7 @@ public class DataHelper {
     /**
      * This is decimal, i.e. multiples of 1000.
      * For binary, see formatSize2().
-     *
+     * <p>
      * Caller should append 'B' or 'b' as appropriate.
      * Like formatSize but with a space after the number
      * This seems consistent with most style guides out there.
@@ -2025,7 +2013,7 @@ public class DataHelper {
     /**
      * This is decimal, i.e. multiples of 1000.
      * For binary, see formatSize2().
-     *
+     * <p>
      * Caller should append 'B' or 'b' as appropriate.
      * Like formatSize but with a space after the number
      * This seems consistent with most style guides out there.
@@ -2178,11 +2166,11 @@ public class DataHelper {
      * Compress the data and return a new GZIP compressed byte array.
      * The compressed data conforms to RFC 1952,
      * with a 10-byte gzip header and a 8-byte gzip checksum footer.
-     *
+     * <p>
      * Prior to 0.9.29, this would return a zero-length output
      * for a zero-length input. As of 0.9.29, output is valid for
      * a zero-length input also.
-     *
+     * <p>
      * As of 0.9.47, this uses a level of MEDIUM_COMPRESSION,
      * which is a good space/speed tradeoff.
      * Prior to that, it used MAX_COMPRESSION.
@@ -2200,11 +2188,11 @@ public class DataHelper {
      * Compress the data and return a new GZIP compressed byte array.
      * The compressed data conforms to RFC 1952,
      * with a 10-byte gzip header and a 8-byte gzip checksum footer.
-     *
+     * <p>
      * Prior to 0.9.29, this would return a zero-length output
      * for a zero-length input. As of 0.9.29, output is valid for
      * a zero-length input also.
-     *
+     * <p>
      * As of 0.9.47, this uses a level of MEDIUM_COMPRESSION,
      * which is a good space/speed tradeoff.
      * Prior to that, it used MAX_COMPRESSION.
@@ -2224,7 +2212,7 @@ public class DataHelper {
      * Compress the data and return a new GZIP compressed byte array.
      * The compressed data conforms to RFC 1952,
      * with a 10-byte gzip header and a 8-byte gzip checksum footer.
-     *
+     * <p>
      * Prior to 0.9.29, this would return a zero-length output
      * for a zero-length input. As of 0.9.29, output is valid for
      * a zero-length input also.
@@ -2272,7 +2260,7 @@ public class DataHelper {
     /**
      * Fast NO_COMPRESSION.
      * 135x faster for 23 bytes, 15x faster for 1752 bytes.
-     *
+     * <p>
      * Ref: RFC 1951, RFC 1952, ResettableGzipOutputStream
      *
      * @param len 32767 max
@@ -2306,7 +2294,7 @@ public class DataHelper {
 
     /**
      * The shared output buffer for decompress().
-     *
+     * <p>
      * A holder class rather than a static field of DataHelper, so the lookup is
      * done once and I2PAppContext is still not initialized until the first call.
      * The entry size is invariant, so the cache never needs resizing.
@@ -2383,7 +2371,7 @@ public class DataHelper {
     /**
      * Fast NO_COMPRESSION.
      * ~30x faster for typ. lengths, ~20x faster for 4 KB or more.
-     *
+     * <p>
      * Ref: RFC 1951, RFC 1952, ResettableGzipOutputStream
      *
      * @param in in[off + 10] MUST BE VALIDATED == 1 before calling this.
@@ -2477,7 +2465,7 @@ public class DataHelper {
     /**
      * Roughly the same as orig.getBytes("ISO-8859-1") but much faster and
      * will not throw an exception.
-     *
+     * <p>
      * Warning - misnamed, converts to ISO-8859-1.
      *
      * @param orig non-null, truncates to 8-bit chars
@@ -2495,7 +2483,7 @@ public class DataHelper {
     /**
      * Same as s.split(regex) but caches the compiled pattern for speed.
      * This saves about 10 microseconds (Bulldozer) on subsequent invocations.
-     *
+     * <p>
      * Note: For an input "" this returns [""], not a zero-length array.
      * This is the same behavior as String.split().
      *
@@ -2515,7 +2503,7 @@ public class DataHelper {
     /**
      * Same as s.split(regex, limit) but caches the compiled pattern for speed.
      * This saves about 10 microseconds (Bulldozer) on subsequent invocations.
-     *
+     * <p>
      * Note: For an input "" this returns [""], not a zero-length array.
      * This is the same behavior as String.split().
      *
@@ -2576,7 +2564,7 @@ public class DataHelper {
      * Same as Collections.sort(), but guaranteed not to throw an IllegalArgumentException if the
      * sort is unstable. As of Java 7, TimSort will throw an IAE if the underlying sort order
      * changes during the sort.
-     *
+     * <p>
      * This catches the IAE, retries once, and then returns.
      * If an IAE is thrown twice, this method will return, with the list possibly unsorted.
      *
@@ -2602,7 +2590,7 @@ public class DataHelper {
      * Same as Arrays.sort(), but guaranteed not to throw an IllegalArgumentException if the
      * sort is unstable. As of Java 7, TimSort will throw an IAE if the underlying sort order
      * changes during the sort.
-     *
+     * <p>
      * This catches the IAE, retries once, and then returns.
      * If an IAE is thrown twice, this method will return, with the array possibly unsorted.
      *
@@ -2626,7 +2614,6 @@ public class DataHelper {
 
     /**
      * The throwable's message, never null.
-     *
      * <p>{@link Throwable#getMessage()} returns null routinely, and not only for
      * exotic exceptions: a stream that dies mid-read produces an
      * {@link java.io.IOException} with no message at all. Four sites in the HTTP
@@ -2634,7 +2621,6 @@ public class DataHelper {
      * anyway, and each threw a {@link NullPointerException} from inside its own
      * catch block - which replaced the diagnostic it was trying to log with a
      * stack trace, and left the original failure unexplained.
-     *
      * <p>Falls back to the throwable's class name, because "what failed" is
      * recoverable from the type even when there is no message, whereas the bare
      * string "null" would make two different failures read identically in a log.

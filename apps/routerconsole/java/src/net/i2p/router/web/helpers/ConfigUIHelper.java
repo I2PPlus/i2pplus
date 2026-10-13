@@ -12,7 +12,6 @@ import net.i2p.router.web.RouterConsoleRunner;
 
 /**
  * Helper class for rendering and processing user interface configuration pages in the I2P router console.
- *
  * <p>This class provides methods to generate HTML for various UI configuration sections including:
  * <ul>
  * <li>Theme selection and display options</li>
@@ -20,11 +19,9 @@ import net.i2p.router.web.RouterConsoleRunner;
  * <li>Language selection interface</li>
  * <li>Console password management forms</li>
  * </ul>
- *
  * <p>The class extends {@link HelperBase} and uses the router context to access configuration
  * properties and internationalization messages. All methods return HTML strings that can be
  * directly embedded in JSP pages.
- *
  * <p>Key functionality includes:
  * <ul>
  * <li>Scanning for available themes from filesystem and configuration</li>
@@ -44,14 +41,12 @@ public class ConfigUIHelper extends HelperBase {
 
     /**
      * Generates HTML for theme selection and display options configuration.
-     *
      * <p>Renders a section containing:
      * <ul>
      * <li>Available theme selection with radio buttons and thumbnails</li>
      * <li>Universal theming checkbox for applying themes across all apps</li>
      * <li>Alternative font (Sora) selection option</li>
      * </ul>
-     *
      * <p>Themes are discovered from the filesystem and user configuration properties.
      * The current theme is pre-selected based on router configuration.
      *
@@ -94,13 +89,11 @@ public class ConfigUIHelper extends HelperBase {
 
     /**
      * Generates HTML for mobile console and app embedding configuration options.
-     *
      * <p>Renders checkboxes for:
      * <ul>
      * <li>Forcing the mobile console interface to be used</li>
      * <li>Embedding I2PSnark and I2PMail applications within the console</li>
      * </ul>
-     *
      * <p>Includes a tooltip recommendation to enable universal theming when embedding
      * applications for consistent visual appearance.
      *
@@ -126,11 +119,9 @@ public class ConfigUIHelper extends HelperBase {
 
     /**
      * Retrieves all available themes from the filesystem and user configuration.
-     *
      * <p>Scans the docs/themes/console directory for theme directories and also
      * checks for user-installed themes defined in router configuration properties.
      * The default theme is always included as a fallback.
-     *
      * <p>Themes are returned in alphabetical order using a TreeSet for natural sorting.
      *
      * @return a sorted Set containing all available theme names (untranslated)
@@ -229,15 +220,12 @@ public class ConfigUIHelper extends HelperBase {
 
     /**
      * Generates HTML for language selection interface.
-     *
      * <p>Renders radio buttons for all available languages with their corresponding
      * flag icons and display names. The current language is pre-selected based on
      * the router's language configuration.
-     *
      * <p>Supports both ISO 639-1 two-letter codes and ISO 639-2 three-letter codes.
      * Languages with country-specific variants include the country name in parentheses.
      * The "Untagged strings" option is only shown for advanced users.
-     *
      * <p>Performs intelligent language matching by first trying the full language+country
      * code, then falling back to the language-only code, and finally defaulting to English.
      *
@@ -310,14 +298,12 @@ public class ConfigUIHelper extends HelperBase {
 
     /**
      * Generates HTML for console password management interface.
-     *
      * <p>Renders a form for managing router console authentication including:
      * <ul>
      * <li>Display of existing configured users with deletion options</li>
      * <li>Input fields for adding new username and password</li>
      * <li>Help text for password recovery and configuration guidance</li>
      * </ul>
-     *
      * <p>The delete user button is hidden when no users are configured.
      * When users exist, shows a table with checkboxes for removal and the current usernames.
      * Always includes fields for adding new users.

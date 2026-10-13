@@ -6,7 +6,6 @@ import net.i2p.data.SimpleDataStructure;
 /**
  * Removes a random element, but only if the bucket hasn't changed in 5 minutes.
  *
- *
  * @param <T> type of SimpleDataStructure objects in the bucket
  * @since 0.9.2 in i2psnark, moved to core in 0.9.10
  */

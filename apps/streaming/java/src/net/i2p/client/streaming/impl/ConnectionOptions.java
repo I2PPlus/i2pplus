@@ -16,7 +16,6 @@ import net.i2p.util.SystemVersion;
 
 /**
  * Define the current options for the con (and allow custom tweaking midstream).
- *
  * <p>Static fields with {@code volatile} and class-level setters (e.g.,
  * {@link #setInitialRTO(int)}, {@link #setMaxWindowSize(int)}) are
  * globally shared and adjusted by the Tuner.  Per-connection fields are
@@ -110,7 +109,6 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
 
     /**
      * Nanosecond time source for the RTO-doubling gap.
-     *
      * <p>Package-visible and replaceable so the gap can be tested without burning
      * real time: the guard is {@link #MIN_RTO_DOUBLE_GAP_MS} at minimum, so a
      * test that exercises it honestly has to wait a second per iteration.
@@ -163,7 +161,6 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
     /**
      * How long an established connection may keep a packet in flight with no forward
      * progress before it is force-closed, in ms.
-     *
      * <p>Deliberately its own setting rather than a product of {@code maxResends} and
      * {@code maxRTO}. {@code maxResends} is the per-<em>packet</em> budget and governs
      * loss tolerance; multiplying it by an RTO cap produced a four-minute connection
@@ -970,7 +967,6 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
     /**
      * Whether every packet on this connection must be signed, or only
      * SYN/FIN-class packets.
-     *
      * <p>Defaults to false, and no property or GUI setting exposes it: it is
      * only ever set in-process via {@link #setRequireFullySigned(boolean)} and
      * carried to a new connection when options are copied from an existing
@@ -1042,7 +1038,6 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
 
     /**
      * Whether a real RTT sample has ever been recorded for this connection.
-     *
      * <p>Until the first sample arrives, {@link #getRTT} and
      * {@link #getWindowSize} hold the class defaults rather than a
      * measurement. A connection torn down before that — a hard kill during
@@ -1067,7 +1062,6 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
 
     /**
      * Smoothed RTT. Not public, use updateRTT().
-     *
      * <p>The value is NOT clamped to maxRtt here: clamping the smoothed value
      * lets a stale outlier pin steady-state RTT at the ceiling, which in turn
      * pins RTO at its max and locks the recovery cadence. Single samples are
@@ -1083,7 +1077,6 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
 
     /**
      * Pure clamp for a raw RTT sample before it enters the smoother.
-     *
      * <p>A clearly pathological single sample (e.g. tens of seconds from a
      * stale reference after a long idle) must not inject a step into the
      * smoothed RTT / RTO; the sample is reined to the per-connection ceiling
@@ -1184,7 +1177,6 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
 
     /**
      * Update the smoothed RTT with a new measurement.
-     *
      * <p>The dropout sample is clamped before entering the smoother
      * ({@link #clampRttSample}) so a single pathological reading can never pin
      * the smoothed RTT (and thus the RTO recovery cadence) at the ceiling. The

@@ -156,7 +156,7 @@ public final class DSAEngine {
 
     /**
      * Generic signature type.
-     *
+     * <p>
      * Warning, nonstandard for EdDSA, double-hashes, not recommended.
      *
      * @param signature the signature to verify
@@ -183,7 +183,7 @@ public final class DSAEngine {
      * Generic signature type.
      * If you have a Java pubkey, use this, so you don't lose the key parameters,
      * which may be different than the ones defined in SigType.
-     *
+     * <p>
      * Warning, nonstandard for EdDSA, double-hashes, not recommended.
      *
      * @param signature the signature to verify
@@ -341,7 +341,7 @@ public final class DSAEngine {
 
     /**
      * Generic signature type.
-     *
+     * <p>
      * Warning, nonstandard for EdDSA, double-hashes, not recommended.
      *
      * @param hash SHA1Hash, Hash, Hash384, or Hash512
@@ -366,7 +366,7 @@ public final class DSAEngine {
      * Generic signature type.
      * If you have a Java privkey, use this, so you don't lose the key parameters,
      * which may be different than the ones defined in SigType.
-     *
+     * <p>
      * Warning, nonstandard for EdDSA, double-hashes, not recommended.
      *
      * @param hash SHA1Hash, Hash, Hash384, or Hash512
@@ -528,7 +528,7 @@ public final class DSAEngine {
 
     /**
      * Generic raw verify any type
-     *
+     * <p>
      * Warning, nonstandard for EdDSA, double-hashes, not recommended.
      *
      * @return true if valid, false otherwise
@@ -547,7 +547,7 @@ public final class DSAEngine {
      * Generic raw verify any type.
      * If you have a Java pubkey, use this, so you don't lose the key parameters,
      * which may be different than the ones defined in SigType.
-     *
+     * <p>
      * Warning, nonstandard for EdDSA, double-hashes, not recommended.
      *
      * @param pubKey Java key
@@ -633,7 +633,7 @@ public final class DSAEngine {
 
     /**
      * Generic raw sign any type.
-     *
+     * <p>
      * Warning, nonstandard for EdDSA, double-hashes, not recommended.
      *
      * @param hash SHA1Hash, Hash, Hash384, or Hash512
@@ -650,7 +650,7 @@ public final class DSAEngine {
 
     /**
      * Generic raw sign any type.
-     *
+     * <p>
      * Warning, nonstandard for EdDSA, double-hashes, not recommended.
      *
      * @param hash SHA1Hash, Hash, Hash384, or Hash512

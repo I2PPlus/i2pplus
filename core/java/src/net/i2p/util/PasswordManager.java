@@ -12,7 +12,7 @@ import java.security.NoSuchAlgorithmException;
 /**
  * Manage both plaintext and salted/hashed password storage in
  * router.config.
- *
+ * <p>
  * There's no state here, so instantiate at will.
  *
  * @since 0.9.4
@@ -197,7 +197,7 @@ public class PasswordManager {
      * Straight MD5, no salt
      * Will return the MD5 sum of "user:subrealm:pw", compatible with Jetty
      * and RFC 2617.
-     *
+     * <p>
      * Updated in 0.9.26 to use UTF-8, as implied in RFC 7616/7617
      * See also http://stackoverflow.com/questions/7242316/what-encoding-should-i-use-for-http-basic-authentication
      * http://stackoverflow.com/questions/702629/utf-8-characters-mangled-in-http-basic-auth-username
@@ -216,7 +216,7 @@ public class PasswordManager {
      * Straight MD5, no salt
      * Will return the MD5 sum of the data, compatible with Jetty
      * and RFC 2617.
-     *
+     * <p>
      * Updated in 0.9.26 to use UTF-8, as implied in RFC 7616/7617
      * See also http://stackoverflow.com/questions/7242316/what-encoding-should-i-use-for-http-basic-authentication
      *

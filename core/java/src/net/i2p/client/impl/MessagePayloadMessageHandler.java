@@ -21,7 +21,7 @@ import net.i2p.data.i2cp.ReceiveMessageEndMessage;
  * Handle I2CP MessagePayloadMessages from the router delivering the contents
  * of a message by accepting it, decrypting the payload, adding it to the set of
  * received messages, and telling the router that it has been received correctly.
- *
+ * <p>
  * We don't really decrypt (no more end-to-end crypto)
  *
  * @author jrandom
@@ -73,7 +73,7 @@ class MessagePayloadMessageHandler extends HandlerImpl {
 
     /**
      * Decrypt the payload
-     *
+     * <p>
      * We don't really decrypt (no more end-to-end crypto)
      * If we do, we need to use the correct key manager in the decrypt() call below
      *

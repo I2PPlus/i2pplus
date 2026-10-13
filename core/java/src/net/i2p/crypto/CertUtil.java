@@ -114,7 +114,7 @@ public final class CertUtil {
     /**
      * Modified from:
      * http://www.exampledepot.com/egs/java.security.cert/ExportCert.html
-     *
+     * <p>
      * Writes a certificate in base64 format.
      * Does NOT close the stream. Throws on all errors.
      *
@@ -133,7 +133,7 @@ public final class CertUtil {
     /**
      * Modified from:
      * http://www.exampledepot.com/egs/java.security.cert/ExportCert.html
-     *
+     * <p>
      * Writes a private key in base64 format.
      * Does NOT close the stream. Throws on all errors.
      *
@@ -152,7 +152,7 @@ public final class CertUtil {
     /**
      * Modified from:
      * http://www.exampledepot.com/egs/java.security.cert/ExportCert.html
-     *
+     * <p>
      * Writes data in base64 format.
      * Does NOT close the stream. Throws on all errors.
      *
@@ -175,7 +175,7 @@ public final class CertUtil {
     /**
      * Get the set of Subject Alternative Names, including
      * DNSNames, RFC822Names, IPv4 and v6 addresses as strings.
-     *
+     * <p>
      * see X509Certificate.getSubjectAlternativeNames()
      *
      * @param cert the certificate to extract names from
@@ -199,7 +199,7 @@ public final class CertUtil {
 
     /**
      * Get a value out of the subject distinguished name.
-     *
+     * <p>
      * Warning - unsupported in Android (no javax.naming), returns null.
      *
      * @param cert certificate whose subject X500Principal is searched
@@ -213,7 +213,7 @@ public final class CertUtil {
 
     /**
      * Get a value out of the issuer distinguished name.
-     *
+     * <p>
      * Warning - unsupported in Android (no javax.naming), returns null.
      *
      * @param cert certificate whose issuer X500Principal is searched
@@ -228,7 +228,7 @@ public final class CertUtil {
 
     /**
      * Get a value out of a X500Principal.
-     *
+     * <p>
      * Warning - unsupported in Android (no javax.naming), returns null.
      *
      * @param p the X500Principal
@@ -275,7 +275,7 @@ public final class CertUtil {
     /**
      * Get the Java public key from a X.509 certificate file.
      * Throws if the certificate is invalid (e.g. expired).
-     *
+     * <p>
      * This DOES check for revocation.
      *
      * @param kd the certificate file
@@ -295,7 +295,7 @@ public final class CertUtil {
     /**
      * Get the certificate from a X.509 certificate file.
      * Throws if the certificate is invalid (e.g. expired).
-     *
+     * <p>
      * This does NOT check for revocation.
      * This verifies the signature, assuming it is self-signed,
      * but will not throw an exception,
@@ -391,7 +391,7 @@ public final class CertUtil {
      * Get one or more certificates from an input stream.
      * Throws if any certificate is invalid (e.g. expired).
      * Does NOT close the stream.
-     *
+     * <p>
      * This does NOT check for revocation.
      *
      * @param in the input stream to read from

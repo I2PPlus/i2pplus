@@ -369,7 +369,6 @@ public final class CryptixAESEngine extends AESEngine {
      * in several JVMs.
      * Make USE_SYSTEM_AES above non-final to run this.
      * You also must comment out the length check in encrypt() and decrypt() above.
-     *
      * <pre>
      *  JVM	Cryptix (ms)	System (ms)
      *  Sun	 8662		n/a
@@ -379,7 +378,7 @@ public final class CryptixAESEngine extends AESEngine {
      *  gij	51130		761693 (!)
      *  jrockit	 9780		n/a
      * </pre>
-     *
+     * <p>
      * Speed ups with AES-NI:
      * May 2014 AMD Hexcore 100K runs (1024 bytes):
      * <pre>
@@ -387,7 +386,7 @@ public final class CryptixAESEngine extends AESEngine {
      *  OpenJDK 6	3314		  5030
      *  OpenJDK 7	3285		  2476
      * </pre>
-     *
+     * <p>
      * Cryptix is faster for data smaller than 704 bytes.
      */
 }

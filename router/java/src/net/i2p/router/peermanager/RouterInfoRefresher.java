@@ -2,19 +2,16 @@ package net.i2p.router.peermanager;
 
 /**
  * Per-cycle state for the promotion deferral on a stale RouterInfo.
- *
  * <p>Promotion into the fast or high-capacity tier reads whatever RouterInfo the
  * network database currently holds. A RouterInfo older than an hour is likely
  * superseded — routers republish hourly — so promoting on one buys a tier slot
  * that may not survive a build. {@link ProfileOrganizer} therefore holds such a
  * promotion back and simply leaves the peer out of the tier; nothing is fetched
  * and no network work is done on the peer's behalf.
- *
  * <p>What a cycle needs to remember is therefore only its own bounds and its two
  * counters: the staleness threshold, the tier sizes the starvation guard compares
  * against, how many promotions were held, and how many went ahead on a RouterInfo
  * already known to be stale.
- *
  * <p>Locking: confined to the reorganisation write lock, which is also the only
  * caller. Nothing here is written from a job or a selection thread.
  *
@@ -50,7 +47,6 @@ class RouterInfoRefresher {
 
     /**
      * Open a cycle, resetting the per-cycle counters.
-     *
      * <p>There is nothing to stagger here. The earlier startup grace period, quota
      * and queue rotation only ever throttled how many lookups a cycle could issue;
      * with no lookup to issue, each cycle now judges every candidate, and a fresh
@@ -149,7 +145,6 @@ class RouterInfoRefresher {
     /**
      * Peers looked up per drain when catching up on profiles loaded without a
      * RouterInfo, giving roughly 64 lookups a minute.
-     *
      * <p>Faster than {@link #MAX_ADDRESS_REFRESHES} on purpose. That cap is sized for
      * held promotion candidates, a trickle of a few per reorganize; a router coming
      * back from downtime may hold thousands of profiles whose RouterInfo has since
@@ -162,7 +157,6 @@ class RouterInfoRefresher {
     static final int MISSING_ROUTERINFO_BATCH = 32;
     /**
      * Minimum gap between missing-RouterInfo drains, in ms.
-     *
      * <p>Sets the rate at {@link #MISSING_ROUTERINFO_BATCH} per interval, about 64 a
      * minute, so a couple of thousand profiles take roughly half an hour to recover.
      *
@@ -171,7 +165,6 @@ class RouterInfoRefresher {
     static final long MISSING_ROUTERINFO_MIN_INTERVAL_MS = 30 * 1000L;
     /**
      * Ceiling on remembered peers missing a RouterInfo.
-     *
      * <p>The set is a recovery list, not a backlog to be worked off exhaustively. Past
      * this size the extra peers are not worth the memory and the lookups: they are
      * peers the netdb has already stopped telling us about.
@@ -185,7 +178,6 @@ class RouterInfoRefresher {
 
     /**
      * Peers whose promotion was held for want of a usable address, awaiting a lookup.
-     *
      * <p>Enqueued from the promotion scan, which runs under the reorganize write lock, and
      * drained after that lock is released, so adds and the poll can overlap across threads.
      * The methods below are therefore synchronized: the critical sections are a single add or
@@ -204,13 +196,11 @@ class RouterInfoRefresher {
     /**
      * Ask for a RouterInfo lookup for a peer held out of the tiers for want of a usable
      * address.
-     *
      * <p>A held peer cannot be refreshed directly - that is precisely why it is held, since
      * it has no address to send to - so the only way to re-qualify it is an iterative lookup
      * via other routers. This only records the request; {@link #takeAddressRefreshBatch(long)}
      * issues it, because the scan that fills this queue runs under the reorganize write lock
      * and must not do network work there.
-     *
      * <p>Bounded by {@link #MAX_ADDRESS_REFRESHES}, so a scan over thousands of profiles
      * cannot enqueue thousands of lookups.
      *
@@ -281,7 +271,6 @@ class RouterInfoRefresher {
 
     /**
      * Note that a stored profile was loaded for a peer the netdb cannot resolve.
-     *
      * <p>Until the RouterInfo comes back the profile is inert: peer selection needs an
      * address to send to, and {@link ProfileOrganizer#isExcludedFromProfiling(Hash)}
      * declines to profile a peer with no RouterInfo. The capacity, latency and

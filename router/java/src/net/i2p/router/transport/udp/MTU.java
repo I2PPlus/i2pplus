@@ -18,7 +18,7 @@ import java.io.Serializable;
 /**
  * The MTU for the network interface of an address.
  * Not available until Java 6 / Android API 9.
- *
+ * <p>
  * Public only for command line test.
  * Not for external use, not a public API.
  *
@@ -33,12 +33,12 @@ public class MTU {
     /**
      * The MTU for the socket interface, if available.
      * Not available for Java 5.
-     *
+     * <p>
      * Note that we don't return the value for the default interface if
      * we can't find the address. Finding the default interface is hard,
      * although we could perhaps just look for the first non-loopback address.
      * But the MTU of the default route probably isn't relevant.
-     *
+     * <p>
      * For SSU2 MTU, values lower than PeerState2.MIN_MTU may be returned,
      * so the caller can determine if SSU2 should be supported.
      *

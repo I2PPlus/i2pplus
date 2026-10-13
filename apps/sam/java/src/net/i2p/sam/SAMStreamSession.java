@@ -91,7 +91,7 @@ class SAMStreamSession implements SAMMessageSess {
 
     /**
      * Create a new SAM STREAM session.
-     *
+     * <p>
      * Caller MUST call start().
      *
      * @param dest Base64-encoded destination and private keys,
@@ -109,7 +109,7 @@ class SAMStreamSession implements SAMMessageSess {
 
     /**
      * Create a new SAM STREAM session.
-     *
+     * <p>
      * Caller MUST call start().
      *
      * @param destStream Input stream containing the binary destination and private keys,
@@ -670,7 +670,7 @@ class SAMStreamSession implements SAMMessageSess {
     /**
      * SAM STREAM socket reader, running in its own thread.  It forwards
      * forward data to/from an I2P socket.
-     *
+     * <p>
      * Declared static: this base reader holds no reference to the enclosing
      * SAMStreamSession instance, so it does not need an implicit outer handle.
      *

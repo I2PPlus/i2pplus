@@ -25,7 +25,7 @@ import net.i2p.util.SimpleTimer2;
  * Handle fragments at the endpoint of a tunnel, peeling off fully completed
  * I2NPMessages when they arrive, and dropping fragments if they take too long
  * to arrive.
- *
+ * <p>
  * From tunnel-alt.html:
 
 <p>When the gateway wants to deliver data through the tunnel, it first
@@ -105,7 +105,7 @@ class FragmentHandler {
     private final boolean _isInbound;
     /**
      * Per-thread I2NP message reader, used for inbound data only.
-     *
+     * <p>
      * I2NPMessageHandler is NOT threadsafe because it caches the message it last
      * parsed in an instance field that readMessage() and lastRead() share, and
      * a single FragmentHandler is called by every UDPHandle thread reading tunnel
@@ -251,7 +251,7 @@ class FragmentHandler {
     /**
      * The two byte ranges the inbound verifier must hash, in the order they must
      * be fed to the digest: {payloadOffset, payloadLength, ivOffset, ivLength}.
-     *
+     * <p>
      * The preprocessed buffer holds the IV at the front, but the spec hashes the
      * payload followed by the IV, so the IV range is returned second even though
      * it comes first in the buffer.  Hashing IV first would yield a different

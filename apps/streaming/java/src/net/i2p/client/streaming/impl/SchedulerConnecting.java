@@ -5,12 +5,10 @@ import net.i2p.I2PAppContext;
 /**
  * <p>Scheduler used once we've sent our SYN but it hasn't been ACKed yet.
  * This connection may or may not be locally created.</p>
- *
  * <h2>Entry conditions:</h2>
  * <ul>
  * <li>Packets sent but none ACKed</li>
  * </ul>
- *
  * <h2>Events:</h2>
  * <ul>
  * <li>Packets received (which may or may not ACK the ones sent)</li>
@@ -18,7 +16,6 @@ import net.i2p.I2PAppContext;
  * <li>Connection establishment timeout</li>
  * <li>RESET received</li>
  * </ul>
- *
  * <h2>Next states:</h2>
  * <ul>
  * <li>{@link SchedulerConnectedBulk connected} - after receiving an ACK</li>
@@ -56,7 +53,6 @@ class SchedulerConnecting extends SchedulerImpl {
     /**
      * Handle an event on a connecting connection. Checks for connect
      * timeout and sends available data when the send time arrives.
-     *
      * <p>The timeout gate uses the connection's effective connect window
      * ({@link Connection#getEffectiveConnectWindow()}) rather than the raw un-scaled
      * connectTimeout.  That window is the (connectDelay + connectTimeout) base scaled by

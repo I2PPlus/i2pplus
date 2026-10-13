@@ -555,7 +555,6 @@ class Connection {
      *  Compute the effective connect timeout (ms) an outbound connect will wait, as used
      *  by both {@link #waitForConnect(int)} and the SYN give-up budget in
      *  {@link #getMaxSynSends()}.
-     *
      *  <p>Scales the desired base window ({@code connectDelay + connectTimeout}, or just
      *  {@code connectTimeout}) by the Tuner connect-timeout multiplier, then applies the
      *  {@link #CONNECT_TIMEOUT_FLOOR_MS} floor and the absolute {@code maxConnectTimeoutMs}
@@ -653,7 +652,6 @@ class Connection {
      *  derived from the measured path RTT once evidence exists.  With the default 9s
      *  interval and 12 sends the fallback budget is 108s, safely past the 75s
      *  connect-window cap on a no-evidence dead path.
-     *
      *  <p>This is the <em>per-connection floor</em> for the connect path:
      *  {@link #getMaxSynSends()} raises the effective give-up count as needed so the
      *  retransmit budget never expires before the connect window
@@ -706,7 +704,6 @@ class Connection {
 
     /**
      *  Whether this connection has unacknowledged data it could be stuck behind.
-     *
      *  <p>Read without {@link #_outboundPacketsLock}: the verdict is evaluated from a
      *  timer as well as from the ACK path, and taking the send lock from the timer
      *  invites the established ordering problem with the bandwidth estimator. The
@@ -722,13 +719,11 @@ class Connection {
     /**
      *  Decide whether the retransmit timer has gone long enough without forward ACK
      *  progress to call it a stall.
-     *
      *  <p>Time, not a count of firings. RTO doubles on every firing for an established
      *  connection, so "two firings" is about three seconds early in a connection's life
      *  and over a minute late in one that has been running - the same number meaning two
      *  very different things, and always far too eager at the start. A duration has one
      *  meaning.
-     *
      *  <p>Requires an established session. Before the handshake completes there is no
      *  forward ACK progress to be missing, so a connection still setting up cannot be
      *  stalled; counting its ordinary SYN retransmissions produced a large volume of
@@ -751,7 +746,6 @@ class Connection {
 
     /**
      *  Whether this firing should produce a stall warning, given the latch state.
-     *
      *  <p>The stall condition holds for as long as the path is stuck and the timer
      *  keeps firing, so an unconditional warning emits once per RTO tick. That produced
      *  over 90,000 identical lines in under an hour here, which is worse than no report
@@ -769,7 +763,6 @@ class Connection {
 
     /**
      * Delay before the next retransmit-timer fire.
-     *
      * <p>An overdue head-of-line packet is worth exactly one immediate attempt.
      * Before this, every subsequent ACK re-armed the timer with {@code schedule(0)},
      * so on a stalled connection each arriving ACK enqueued another immediate run.
@@ -778,7 +771,6 @@ class Connection {
      * that pool, every graph in the router stops recording at once. After the first
      * immediate attempt the timer falls back to a full RTO, which still bounds
      * recovery time without letting the queue grow per ACK.
-     *
      * <p>Pure decision, extracted so the once-only rule can be pinned by tests.
      *
      * @param now current clock value in ms
@@ -806,14 +798,12 @@ class Connection {
     /**
      * Compute the inter-SYN retransmit interval for an outbound connection, evidence-gated
      * and RTT-aware.
-     *
      * <p>SYN retransmission uses a fixed interval (no backoff — there is no congestion to
      * manage before the connection is established), so the total SYN budget is {@code
      * maxSynResends * interval}.  The historical behavior is a fixed {@code initialRtoMs}
      * (default 9000) for every connection, which overshoots the 30s connect timeout on a
      * dead path (12 * 9s = 108s) and under-utilizes the window on a healthy path whose
      * round-trip is far below the default.
-     *
      * <p><b>Gate.</b> The measured RTT {@code measuredRttMs} is <em>positive</em> only when
      * there is genuine path evidence for this peer (a valid analytic ACK, or a dampened RTT
      * seeded from the TCB cache for a recently-contacted destination — see
@@ -822,9 +812,8 @@ class Connection {
      * past its initial default), and this returns the configured {@code initialRtoMs}
      * unchanged.  A path with no measurement is treated conservatively rather than
      * fast-failed, because shrinking the interval without evidence would be guessing.
-     *
-     * <p><b>RTT-aware interval.</b> With evidence, the interval becomes {@code headroomPct%
-     * * measuredRttMs}, floored at {@link #SYN_RTO_MIN} (no storm on a fast fabric) and
+     * <p><b>RTT-aware interval.</b> With evidence, the interval becomes
+     * {@code headroomPct% * measuredRttMs}, floored at {@link #SYN_RTO_MIN} (no storm on a fast fabric) and
      * capped at the configured {@code initialRtoMs} (never worse than the current default,
      * so a genuinely slow-but-alive path keeps its handshake room).  A measured RTT below
      * the 9000ms default therefore packs more SYN attempts into the connect window
@@ -850,7 +839,6 @@ class Connection {
     /**
      *  Compute the effective number of SYN sends before this connection gives up, used by
      *  {@link #getMaxSynSends()} on each give-up decision.
-     *
      *  <p>The total SYN budget is {@code sends * synIntervalMs} (fixed interval, no backoff).
      *  With RTT evidence the interval can collapse toward {@link #SYN_RTO_MIN} (750ms), so a
      *  fixed {@code configuredMax} budget can end well before {@link #waitForConnect(int)}'s
@@ -878,7 +866,6 @@ class Connection {
     /**
      * Minimum spacing (ms) between SYN-ACK re-sends to an existing connection in
      * response to retransmitted SYNs.
-     *
      * <p>This is the <em>floor</em>: the live spacing used by
      * {@link #shouldResendSynAck(long)} is the connection's own
      * {@link #getSynRetransmitInterval()} — the same RTT-aware interval the client
@@ -886,7 +873,6 @@ class Connection {
      * SYN-ACK response even as the Tuner adapts the initial RTO.  At 3s the server
      * skipped every other retransmit, starving lossy I2P paths where the initial
      * SYN-ACK was lost and each re-send must traverse a degraded tunnel.
-     *
      * <p>The amplification bound is preserved by the resend cap
      * ({@link #computeSynAckResendCap(long, long)}): spacing
      * ensures one answer per RTO, the count cap hard-bounds the total.
@@ -898,7 +884,6 @@ class Connection {
     /**
      * Maximum number of SYN-ACK re-sends to an existing connection in response to
      * retransmitted SYNs, per connection lifetime.
-     *
      * <p>Used when no connection window is configured (connect timeout absent).
      * The live cap is {@link #computeSynAckResendCap(long, long)}, derived from the
      * client's effective connect window so a connection that spins in a half-open
@@ -935,12 +920,10 @@ class Connection {
     /**
      * Decide whether to re-send a SYN-ACK for an existing connection in response to
      * a retransmitted SYN.
-     *
      * <p>Bound is applied <em>before</em> the SYN-ACK is minted so a throttled
      * retransmit costs nothing (no packet object, no signature, no enqueue).  The
      * decision is purely a function of connection send history and wall clock, which
      * keeps the hot path branch-free and the rule testable without a running router.
-     *
      * <p><b>Rules.</b> A re-send is allowed when:
      * <ol>
      *   <li>fewer than {@code maxResends} re-sends have already been performed
@@ -1109,7 +1092,6 @@ class Connection {
 
     /**
      * The fixed interval between SYN retransmits for this connection, evidence-gated.
-     *
      * <p>Delegate for {@link #computeSynRetransmitInterval(int, int)} using this
      * connection's current path evidence ({@code ConnectionOptions#getRTT()} is a real
      * measurement only once {@code ConnectionOptions#receivedAck()} is true — either a
@@ -1130,7 +1112,6 @@ class Connection {
      *  the retransmit budget (count * inter-SYN interval) covers the connect window, so the
      *  retransmit timer cannot tear this connection down while {@link #waitForConnect(int)}
      *  is still waiting.
-     *
      *  <p>The base window mirrors {@link ConnectionManager#connect}: connectDelay is added to
      *  connectTimeout only on the delayed-SYN path, which is exactly how waitForConnect is
      *  invoked there ({@code connectDelay + connectTimeout}).
@@ -1145,7 +1126,6 @@ class Connection {
 
     /**
      *  Assemble the un-scaled base connect window (ms) for a connection's options.
-     *
      *  <p>connectDelay is added to connectTimeout only on the delayed-SYN path (both
      *  set), so the base matches how {@link ConnectionManager#connect} invokes
      *  {@code waitForConnect(int)} — there the SYN has not yet been sent and {@code
@@ -1167,7 +1147,6 @@ class Connection {
      *  The total time (ms) from connection creation during which this connecting
      *  connection may wait for its SYN to be acknowledged before the connect path
      *  tears the handshake down.
-     *
      *  <p>This is the single authoritative connect window shared by
      *  {@link #waitForConnect(int)}, {@link #getMaxSynSends()}, and
      *  {@link SchedulerConnecting}, so no path can tear an unacknowledged SYN down
@@ -1177,7 +1156,6 @@ class Connection {
      *  waitForConnect — scaled by the Tuner's connect-timeout multiplier, floored at
      *  {@link #CONNECT_TIMEOUT_FLOOR_MS}, and capped at the absolute max connect
      *  timeout.
-     *
      *  <p>Using the raw un-scaled connectTimeout here (as SchedulerConnecting once did)
      *  lets the scheduler race ahead of waitForConnect on high-RTT paths where the
      *  Tuner has raised the multiplier above 100%, killing the handshake with a generic
@@ -1349,7 +1327,6 @@ class Connection {
     /**
      *  The slow-start threshold a freshly constructed connection starts with,
      *  clamped so it can never exceed the connection's window ceiling.
-     *
      *  <p>{@code ConnectionPacketHandler.adjustWindow()} picks its growth path on
      *  {@code window < ssthresh}: below is exponential slow start, at or above is
      *  linear congestion avoidance. The ceiling from
@@ -1361,7 +1338,6 @@ class Connection {
      *  above the window ceiling — and then {@code window < ssthresh} is permanently
      *  true, the deficit-multiplier recovery path in congestion avoidance never
      *  runs, and every window change is governed by the slow-start branch alone.
-     *
      *  <p>Both inputs are Tuner-tunable over overlapping ranges
      *  ({@code maxWindowSize} 512-8192, {@code maxSlowStartWindow} 128-8192), so
      *  nothing else maintains the {@code ssthresh <= ceiling} invariant; this is
@@ -1393,15 +1369,14 @@ class Connection {
     /**
      * This doesn't "send a choke". Rather, it blocks if the outbound window is full,
      * thus choking the sender that calls this.
-     *
+     * <p>
      * Block until there is an open outbound packet slot or the write timeout expires.
      * PacketLocal is the only caller, generally with -1.
-     *
+     * <p>
      * A persist timer prevents deadlock when the remote chokes us (window=1) and
      * then never sends an unchoke signal.  After RTO (min 5s), we auto-unchoke and
      * allow the retransmission mechanism to restore the window, with exponential
      * backoff so a persistently choked peer does not cause a tight probe loop.
-     *
      * <p>The wait loop polls every 50ms (instead of 250ms) to reduce latency
      * when an ACK arrives to free a window slot.
      *
@@ -1517,11 +1492,9 @@ class Connection {
      *  stream responds to its own RTT and delivered-bandwidth estimate, and the
      *  Tuner still pulls the floor down under memory or loss pressure while
      *  {@link #ABSOLUTE_MAX_WINDOW} bounds every stream unconditionally.
-     *
      *  <p>Before any ACK sample exists the ceiling falls back to the global
      *  floor, so an uncalibrated stream ramps exactly as before (bounded by
      *  slow-start's ssthresh and the global ceiling).
-     *
      *  <p>The result is cached for {@link #BDP_CACHE_MS} so a persistently full
      *  window (the app keeps writing, the choke loop keeps blocking) does not
      *  re-lock the synchronized estimator and re-read RTT on every write
@@ -1578,7 +1551,6 @@ class Connection {
      *  {@code min(absMax, max(globalMax, floor, headroom * bwe * rtt))}, falling
      *  back to {@code min(absMax, max(globalMax, floor))} when no bandwidth
      *  sample exists yet.
-     *
      *  <p>The Tuner global is the FLOOR of the cap, never its ceiling: a
      *  measured-goodput BDP term that binds downward is self-defeating — the
      *  window gets pinned at the floor, measured goodput cannot grow past the
@@ -1658,7 +1630,6 @@ class Connection {
     /**
      * Whether a completed packet release should emit a
      * {@code stream.chokeSizeEnd} sample.
-     *
      * <p>Pure helper for the send branch of {@link #packetSendChoke(long)} so the
      * sampling cadence is unit-testable without a router. The caller increments
      * its counter once per successful send and emits when this returns true.
@@ -1674,12 +1645,10 @@ class Connection {
     /**
      * Whether a first-block iteration should emit a {@code stream.chokeSizeBegin}
      * sample.
-     *
      * <p>Pure helper for the wait branch of {@link #packetSendChoke(long)}. The
      * stat exists to tell the Tuner how deep the outbound window was when we
      * started blocking, so it must be emitted while {@code started} is still
      * false — that is, on the iterations that actually observe the window full.
-     *
      * <p>The prior expression combined {@code !started} with a power-of-two mask
      * on a counter incremented in the same statement, so the only iterations that
      * could satisfy both were the 1st (counter=1) and the 17th — and the 17th
@@ -1698,12 +1667,10 @@ class Connection {
     /**
      * Decide whether a connection is delivering far below its own established
      * rate, is fully stalled, or is healthy.
-     *
      * <p>Pure, so the arming rules are testable without a router. The order
      * matters: a hard stall is reported even when the baseline is unknown,
      * because "no bytes at all" is unambiguous on its own, while a throttle
      * verdict is only available once there is a baseline to compare against.
-     *
      * <p>A throttle requires {@code observedBps > 0}. A window that saw no bytes
      * is either a stall — which the grace above already covers — or simply a
      * quiet window, and a latency-bound stream produces those routinely, so
@@ -1730,7 +1697,6 @@ class Connection {
     /**
      * Decide the stall verdict for one window, told whether anything is actually in
      * flight to be stalled on.
-     *
      * <p>{@code outstandingData} is the guard against the false positive that made this
      * detector harmful: a download that is simply waiting on a slow peer sends nothing,
      * so nothing is acknowledged, so an ACK-only rule concludes the path is dead and
@@ -1778,7 +1744,6 @@ class Connection {
 
     /**
      * Fold a completed goodput sample into the baseline EWMA.
-     *
      * <p>Pure. The baseline tracks capacity changes rather than freezing at the
      * first observation, but it moves slowly enough that a transient dip does
      * not immediately become the new reference the next window is judged
@@ -1806,7 +1771,6 @@ class Connection {
     /**
      * Roll the goodput sample forward, returning the rate of the window that
      * just closed.
-     *
      * <p>Pure. A window that closed having seen no bytes reports 0, which the
      * caller feeds to {@link #updatedBaseline} — a quiet window must not be
      * allowed to pull the baseline to zero and disarm the detector.
@@ -1826,7 +1790,6 @@ class Connection {
     /**
      * Record acknowledged progress and, when a goodput window has closed, fold
      * its rate into the baseline and evaluate the floor.
-     *
      * <p>Called from the ACK path outside {@code _outboundPacketsLock}. Only
      * the rising edge of a verdict is reported, so a persistently throttled
      * connection does not re-report on every ACK.
@@ -1859,7 +1822,6 @@ class Connection {
 
     /**
      * Roll the baseline forward and report the verdict for one closed window.
-     *
      * <p>The baseline is only moved by a window that met the floor, or by a
      * long enough run of windows that did not. Letting a single slow window
      * pull the baseline down is what makes a self-referential floor disarm
@@ -1901,7 +1863,6 @@ class Connection {
     }
     /**
      *  Periodic evaluation of the throughput floor.
-     *
      *  <p>The ACK path can only reach the floor while bytes are being
      *  acknowledged, so a connection that has gone entirely quiet would never
      *  be examined and a hard stall would be undetectable from there. This
@@ -1985,11 +1946,9 @@ class Connection {
     /**
      *  Publish a stall to the router so outbound tunnel selection can prefer a
      *  different path for this destination.
-     *
      *  <p>Only STALLED marks, not THROTTLED: a slow-but-delivering path is not
      *  proven dead, and rotating on it would churn a destination that simply has
      *  no better route. A hard stall is unambiguous.
-     *
      *  <p>The connection is deliberately left open. Egress is chosen per message
      *  in the router, so the router can move this stream onto another tunnel
      *  without touching it, and the client sees a retransmitted gap rather than
@@ -2014,7 +1973,6 @@ class Connection {
      *  scales with the number of CONSECUTIVE loss events since the last
      *  recovery, so a single failed packet does not collapse the connection
      *  while persistent loss still backs off.
-     *
      *  <p>The 0.9.71+ profile ("ramp fast, decline slowly") makes every tier
      *  gentler than the classic halves/quarters — a first strike cuts only
      *  1/8, a second another 1/4, and persistent loss settles at half — so a
@@ -2054,7 +2012,6 @@ class Connection {
      *  The bandwidth-derived slow-start threshold anchor: the packets the pipe
      *  can hold, estimated as measured bandwidth times the effective RTT times
      *  the growth factor, floored at the given minimum.
-     *
      *  <p>The effective RTT is floored at {@link #SS_THRESH_BW_ANCHOR_MIN_RTT}
      *  (1s): a raw sub-second min-RTT would otherwise shrink the anchor below
      *  the classic fast-retransmit floor (16 packets) on a healthy path, and
@@ -2074,7 +2031,6 @@ class Connection {
 
     /**
      *  Whether a congestion episode's lost window has been fully recovered.
-     *
      *  <p>Recovery is declared once the ACK stream has passed the congestion
      *  mark <em>and</em> no retransmits remain outstanding. The window itself
      *  need not be empty: a pipe dribbling data must not stay locked in the
@@ -2103,7 +2059,6 @@ class Connection {
      *  than ACK count means a stale lone strike cannot keep the window
      *  depressed forever, while true back-to-back loss (strikes inside the RTT
      *  window) still escalates.
-     *
      *  <p>Pure and side-effect free for unit testing; call sites apply the
      *  result and refresh {@code _lastLossStrikeTime} under
      *  {@code _outboundPacketsLock}.
@@ -2128,7 +2083,6 @@ class Connection {
     /**
      * Pure predicate: has the oldest unacked packet been in flight beyond the
      * worst-case retransmit budget, measured from CREATION?
-     *
      * <p>The worst case is one transmission per RTO for the full per-packet
      * retransmit budget, which the caller computes from the configured
      * {@code maxResends * maxRto} before calling. Anchoring the budget at
@@ -2160,7 +2114,6 @@ class Connection {
     /**
      * Pure predicate: has the remote sent nothing at all for a full inactivity
      * window, while unacked packets are still in flight?
-     *
      * <p>An ACK (or a data packet) is emitted by a live remote on receipt within
      * the ack window, so a connection that has unacked in-flight packets AND has
      * received zero bytes for the configured inactivity timeout can no longer be
@@ -2175,7 +2128,6 @@ class Connection {
      * {@code i2p.streaming.stallGiveupMs} = 90s) fires — a tighter wall-clock deadline so the
      * application gets EOF within ~one inactivity window instead of hanging on a
      * zombie stream it can never resume.
-     *
      * <p>Anchoring at the last RECEIVED packet (not the last send) is deliberate:
      * resume mode refreshes the last send time on every retransmit, so a
      * last-send-anchored check would defer forever. A receive-anchored check only
@@ -2210,7 +2162,6 @@ class Connection {
 
     /**
      * Effective inactivity window for the remote-silence bound.
-     *
      * <p>The predicate requires a positive window and is silently disarmed by a
      * {@code <= 0} configured timeout, which would leave a dead path hanging
      * until the creation-anchored backstop
@@ -2232,7 +2183,6 @@ class Connection {
      * Pure decision: has the number of HARD send attempts (sends that took the
      * router's reply as something to retry after, i.e. not router soft failures)
      * exceeded the retransmit budget?
-     *
      * <p>A router soft failure (NO_TUNNELS / EXPIRED / LOCAL) means the message
      * was never put on the tunnel fabric, so the attempt is not evidence of
      * on-wire loss. Counting soft-failure-triggered resends against
@@ -2257,7 +2207,6 @@ class Connection {
     /**
      * Pure decision: should an exhausted per-packet retransmit budget close the
      * connection?
-     *
      * <p>Once a connection has made forward progress (any packet acknowledged) it
      * may carry an in-flight download with app-level state to preserve. A single
      * head-of-line packet that exhausts its budget is then evidence of a
@@ -2267,7 +2216,6 @@ class Connection {
      * Such connections keep the packet in the window and keep retransmitting —
      * they resume — instead of closing. Only a connection that never got a single
      * packet through (connect phase, nothing to resume) keeps the fatal close.
-     *
      * <p>The {@code budgetExhausted} input already excludes SYN and CLOSE
      * packets: connect-phase give-up is decided separately
      * ({@link #synGiveUpBudgetExceeded(int, int, int)} with a distinct error),
@@ -2288,7 +2236,6 @@ class Connection {
     /**
      *  Pure decision: has the retransmit loop exceeded the SYN give-up budget
      *  after excluding soft-failure-triggered resends?
-     *
      *  <p>Mirror of {@link #hardResendBudgetExceeded(int, int, int)} for the
      *  SYN-phase give-up.  A SYN resent only because the router reported a soft
      *  failure (e.g. NO_LEASESET while its LeaseSet fetch is in flight) never
@@ -2311,7 +2258,6 @@ class Connection {
     /**
      * Pure decision: should this packet's retransmit be paced through the paced
      * queue rather than sent directly?
-     *
      * <p>The first {@link #IMMEDIATE_RETX_BURST} packets of a timer fire are sent
      * directly to avoid flooding the I2CP queue with a single-timer-fire burst.
      * Beyond that, pacing spreads the load. Packets already transmitted
@@ -2392,7 +2338,6 @@ class Connection {
      *  Trigger immediate retransmission of unacked packets after a soft failure
      *  (e.g., tunnel expiry, no tunnels). This schedules the retransmit event
      *  with zero delay to retry sending on a new tunnel without waiting for RTO.
-     *
      *  <p>Immediate reschedules are rate-limited: when the router soft-fails
      *  every message (STATUS_SEND_FAILURE_NO_LEASESET while the LeaseSet fetch for
      *  a fresh destination is still in flight), each report used to cancel the
@@ -2446,7 +2391,6 @@ class Connection {
     /**
      *  Pure decision: is this soft-failure report too close to the last
      *  permitted immediate retransmit to fire another now?
-     *
      *  <p>Derived from {@link #scheduleSoftFailureRetransmit()}; extracted for
      *  testability.  A report at exactly {@code minSpacingMs} after the last is
      *  allowed, mirroring the strict-inequality pacing of the retransmit timer.
@@ -2572,7 +2516,6 @@ class Connection {
 
     /**
      *  Process the acks and nacks received in a packet.
-     *
      *  <p>Note: the returned list is a reused, internally-owned buffer
      *  ({@code _ackedList}) that is cleared at the start of the next
      *  {@code ackPackets()} call. Callers MUST fully consume it before the
@@ -2930,7 +2873,7 @@ class Connection {
      * outbound connection. Only set to false on disconnect.
      * For outbound, use getHighestAckedThrough() &gt;= 0 also,
      * to determine if the connection is up.
-     *
+     * <p>
      * In general, this is true until either:
      * - CLOSE received and CLOSE sent and our CLOSE is acked
      * - RESET received or sent
@@ -3590,11 +3533,9 @@ if (!on) {
 
     /**
      *  The window to restore when the remote unchokes us.
-     *
      *  <p>Restores the pre-choke window and nothing more, capped at the current
      *  per-stream ceiling so a window saved under a more generous ceiling cannot
      *  jump the queue past what the pipe and heap allow now.
-     *
      *  <p>The window deliberately does <em>not</em> consider {@code ssthresh}.
      *  Folding it in (the old {@code max(saved, ssthresh)}) made every unchoke
      *  restore the ceiling instead of the demonstrated window, because ssthresh
@@ -4039,7 +3980,7 @@ if (!on) {
      *  Re-sends the oldest unacked packet as a probe. If the original was lost,
      *  the probe fills the gap and the peer's ACK triggers fast recovery.
      *  If the original was delivered, the duplicate triggers ackImmediately().
-     *
+     * <p>
      *  Re-armed in ackPackets() whenever the head of the window is stuck while
      *  later packets are ACKed, so a single lost head-of-line packet is probed
      *  at ~2*RTT instead of waiting on an RTO that partial-ACK push-back keeps
@@ -4154,7 +4095,7 @@ if (!on) {
          *  pending timer. Used by scheduleSoftFailureRetransmit() so that
          *  a soft-failure notification triggers a retransmit without
          *  waiting for the current RTO to elapse.
-         *
+         * <p>
          *  Unlike pushBackRTO(), this always schedules a new timer event
          *  rather than relying on reschedule(..., false) which won't
          *  shorten a running timer.
@@ -4787,13 +4728,12 @@ synchronized boolean checkRetransmitStall() {
 
         /**
          * Retransmit the packet if we need to.
-         *
+         * <p>
          * ackImmediately() above calls directly in here, so
          * we have to use forceReschedule() instead of schedule() below,
          * to prevent duplicates in the timer queue.
-         *
+         * <p>
          * Don't synchronize this, deadlock with ackPackets-&gt;ackReceived-&gt;SimpleTimer2.cancel
-         *
          * <p>Historical note on the lock warning: SimpleTimer2 now invokes
          * TimedEvent.timeReached()/run() outside any SimpleTimer2 monitor
          * (only checkAndPrepareRun/updateStateAfterRun are brief synchronized

@@ -26,26 +26,22 @@ import net.i2p.util.VersionComparator;
 
 /**
  * Periodically tests selected peers to gather real-time performance data and update peer profiles.
- *
  * <p>This job runs continuously when enabled, selecting peers based on bandwidth tier, reachability,
  * and version compatibility. Tests are performed by sending a DatabaseStoreMessage containing the
  * peer's own RouterInfo back to itself through the tunnel system, measuring response times and
  * connectivity.</p>
- *
  * <p><b>Peer Selection Criteria:</b></p>
  * <ul>
  * <li>High-bandwidth tiers (O, P, X) with reachability capability</li>
  * <li>Version 0.9.57+ for compatibility</li>
  * <li>Configurable concurrency based on system resources</li>
  * </ul>
- *
  * <p><b>Performance Impact:</b></p>
  * <ul>
  * <li>Adaptive delays based on system load and uptime</li>
  * <li>CPU throttling when load exceeds 80%</li>
  * <li>Automatic timeout adjustment based on historical test times</li>
  * </ul>
- *
  * <p><b>Future Considerations:</b></p>
  * <ul>
  * <li>Evaluate necessity of peer testing in current network conditions</li>
@@ -134,14 +130,12 @@ public class PeerTestJob extends JobImpl {
 
     /**
      * Calculates the delay before starting the next round of peer tests.
-     *
      * <p>Three-phase decay based on uptime:</p>
      * <ul>
      * <li>0–4 hours (startup): 3s — aggressively profile all fast peers</li>
      * <li>4–12 hours (warm-up): 5s — ramp down while keeping data fresh</li>
      * <li>12+ hours (steady): 8s — maintenance cadence</li>
      * </ul>
-     *
      * <p>User override via {@link #PROP_PEER_TEST_DELAY} is respected for the steady-state
      * value only; startup and warm-up phases use hardcoded values.</p>
      *
@@ -161,7 +155,6 @@ public class PeerTestJob extends JobImpl {
 
     /**
      * Determines the timeout for individual peer tests with automatic adjustment.
-     *
      * <p>Ensures timeout is never set below the average successful test time
      * to avoid false timeouts during normal operation.</p>
      *
@@ -179,14 +172,12 @@ public class PeerTestJob extends JobImpl {
 
     /**
      * Determines the number of peers to test concurrently based on router uptime.
-     *
      * <p>Three-phase decay:</p>
      * <ul>
      * <li>0–4 hours (startup): 4 — profile all fast peers quickly</li>
      * <li>4–12 hours (warm-up): 3 — ramp down</li>
      * <li>12+ hours (steady): 1 — maintenance cadence</li>
      * </ul>
-     *
      * <p>Concurrency is limited to 1 when CPU load exceeds 95% to prevent system overload.</p>
      *
      * @return number of peers to test in parallel
@@ -205,7 +196,6 @@ public class PeerTestJob extends JobImpl {
 
     /**
      * Starts the peer testing process with adaptive initial delay.
-     *
      * <p>Schedules the first test run based on router uptime:</p>
      * <ul>
      * <li>If uptime &lt; 3 minutes: wait 3 minutes before starting</li>
@@ -230,7 +220,6 @@ public class PeerTestJob extends JobImpl {
 
     /**
      * Stops the peer testing process gracefully.
-     *
      * <p>The current test round will complete, but no new rounds will be scheduled.</p>
      */
     public synchronized void stopTesting() {
@@ -269,7 +258,7 @@ public class PeerTestJob extends JobImpl {
 
     /**
      * Main job execution loop that performs peer testing with adaptive scheduling.
-     *
+     * <p>
      * Process flow:
      * <ol>
      * <li>Check if testing should continue</li>
@@ -277,7 +266,6 @@ public class PeerTestJob extends JobImpl {
      * <li>Test each selected peer</li>
      * <li>Adapt next run delay based on system conditions</li>
      * </ol>
-     *
      * <p><b>Adaptive Behavior:</b></p>
      * <ul>
      * <li>Double delay if job lag > 300ms (system overload)</li>
@@ -335,14 +323,12 @@ public class PeerTestJob extends JobImpl {
 
     /**
      * Selects peers for testing based on performance and capability criteria.
-     *
      * <p><b>Selection Criteria:</b></p>
      * <ul>
      * <li><b>Primary candidates:</b> Version 0.9.57+, reachable, high bandwidth (O/P/X)</li>
      * <li><b>Penalized:</b> Low bandwidth tiers (K/L/M/N) or unreachable - set capacity bonus to -30</li>
      * <li><b>Excluded:</b> Missing local RouterInfo or profile</li>
      * </ul>
-     *
      * <p><b>Performance Impact:</b></p>
      * <ul>
      * <li>Uses cached lookups to minimize database queries</li>
@@ -544,11 +530,9 @@ public class PeerTestJob extends JobImpl {
 
     /**
      * Cached peer data to eliminate repeated lookups and string parsing.
-     *
      * <p>This class consolidates all frequently accessed peer information into a single
      * object, reducing database queries and improving performance during peer testing.
      * All data is immutable once created, making it thread-safe for concurrent testing.</p>
-     *
      * <p><b>Performance Benefits:</b></p>
      * <ul>
      * <li>Single netDb lookup instead of multiple calls</li>

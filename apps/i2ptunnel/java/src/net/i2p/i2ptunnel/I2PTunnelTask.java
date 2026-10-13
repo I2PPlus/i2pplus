@@ -82,7 +82,7 @@ public abstract class I2PTunnelTask extends EventDispatcherImpl {
      * Note that the tunnel can be reopened after this by calling startRunning().
      * This may not release all resources. In particular, the I2PSocketManager remains
      * and it may have timer threads that continue running.
-     *
+     * <p>
      * To release all resources permanently, call destroy().
      *
      * @param forced true to interrupt an in-progress build, false to close gracefully
@@ -94,7 +94,7 @@ public abstract class I2PTunnelTask extends EventDispatcherImpl {
      * Note that the tunnel cannot be reopened after this by calling startRunning(),
      * as it may destroy the underlying socket manager, depending on implementation.
      * This should release all resources.
-     *
+     * <p>
      * The implementation here simply calls close(true).
      * Extending classes should override to release all resources.
      *

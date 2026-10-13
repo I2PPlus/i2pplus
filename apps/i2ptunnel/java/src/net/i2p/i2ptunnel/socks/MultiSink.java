@@ -32,7 +32,7 @@ public class MultiSink<S extends Sink> implements Source, Sink {
 
     /**
      * Send to a single sink looked up by toPort
-     *
+     * <p>
      * May throw RuntimeException from underlying sinks
      *
      * @param from sending destination, passed along to the sink, may be null

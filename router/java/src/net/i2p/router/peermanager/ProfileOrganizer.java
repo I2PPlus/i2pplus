@@ -53,7 +53,7 @@ import net.i2p.util.SystemVersion;
  * Categorizes peers into performance tiers (fast, high-capacity, well-integrated)
  * based on historical metrics from PeerProfile. Requires periodic reorganize() calls
  * to update peer classifications for optimal tunnel selection.
- *
+ * <p>
  * Tier assignment during reorganize():
  * 1. All profiles are iterated in capacity order (via InverseCapacityComparator)
  * 2. Expired/unreachable/low-bandwidth peers are filtered out
@@ -67,7 +67,7 @@ import net.i2p.util.SystemVersion;
  * until a newer publication arrives on its own. Nothing is fetched on the peer's
  * behalf, unless holding the promotion would starve the tier it would have joined —
  * see {@link #shouldDeferPromotionOnStaleRouterInfo}.
- *
+ * <p>
  * Concurrency: ReentrantReadWriteLock protects all tier maps.
  * reorganize() acquires the write lock; selection methods use the read lock.
  * getOrCreateProfileNonblocking() uses try-lock escalation for lock-free reads.
@@ -79,7 +79,6 @@ public class ProfileOrganizer {
             Comparator.comparingDouble(PeerProfile::getCapacityValue);
     /**
      * Eviction order: least recently active first, then lowest capacity.
-     *
      * <p>Activity is the newest of last-sent-successfully, last-heard-from and
      * last-heard-about, matching {@link #isStaleAbsentPeer}. Ties fall through to
      * {@link #CAPACITY_COMPARATOR} so two equally idle peers are separated on what
@@ -136,7 +135,6 @@ public class ProfileOrganizer {
 
     /**
      * Profiles with recent activity, as of the last completed reorganisation.
-     *
      * <p>Computed during the reorganisation walk rather than on demand:
      * {@link #countActivePeersInLastHour()} iterates every profile while holding
      * _reorganizeLock, which is the lock tunnel peer selection contends on, and CoalesceStatsEvent
@@ -202,7 +200,6 @@ public class ProfileOrganizer {
     /**
      * Skip reasons from the promotion scan in flight, reported by
      * {@link #drainPromotionSkipTally()}.
-     *
      * <p>Guarded by the write lock every caller already holds; see
      * {@link #recordPromotionSkip}.
      *
@@ -219,7 +216,6 @@ public class ProfileOrganizer {
 
     /**
      * Shortest gap between two full tier-refill scans.
-     *
      * <p>Well under the reorganise interval, so the debounce can never delay a
      * refill past the next cycle that would have done it anyway.
      *
@@ -232,7 +228,6 @@ public class ProfileOrganizer {
      * Every tier this object retains, in a fixed order, so a pass that must read
      * the whole retained population walks one collection instead of repeating
      * itself per map.
-     *
      * <p>Assigned in the constructor once all four maps exist. The maps are
      * themselves final and are never replaced, so this never needs rebuilding.
      *
@@ -271,7 +266,6 @@ public class ProfileOrganizer {
        * Calibrated cohort latency floor across fast peers with data, computed
        * during each reorganize by {@link #computeAverageLowLatencyRtt()} and
        * read through {@link #getAverageLowLatencyRTT()}.
-       *
        * <p>Previously documented as tightening the low-latency threshold to 1.5x
        * the cohort average, but no caller ever consulted it: the value was
        * recomputed every cycle and discarded. It is now calibrated as the mean of
@@ -309,7 +303,6 @@ public class ProfileOrganizer {
      * {@link #PROP_LOW_LATENCY_MULTIPLE}. Three is deliberately permissive:
      * roughly half of all peers fall within two times a top-50 floor, so this
      * admits the fast end of each transport's population and rejects the tail.
-     *
      * <p>Read at construction rather than per decision so the bar cannot shift
      * underneath a cycle, and held at a sane minimum so a misconfigured value
      * cannot make the floor vacuous.
@@ -355,7 +348,6 @@ public class ProfileOrganizer {
     public static final int DEFAULT_MAX_ROUTERINFO_AGE_HOURS = 2;
     /**
      * RouterInfo age past which a tier promotion is held back, in ms.
-     *
      * <p>Separate from {@link #PROP_MAX_ROUTERINFO_AGE_HOURS}, which is the bar
      * a RouterInfo must clear to be selected at all. That bar is deliberately
      * loose (2h) because a proof of life can stand in for a fresh RouterInfo;
@@ -363,11 +355,9 @@ public class ProfileOrganizer {
      * where the RouterInfo itself is likely to have been superseded: routers
      * republish hourly, so anything older than one publishing interval has a
      * good chance of describing a peer that has since changed.
-     *
      * <p>Holding a promotion costs the peer a tier slot and nothing else — no
      * lookup is issued, so the only way a held peer re-enters is by being
      * republished to, or by showing proof of life.
-     *
      * <p>Set to 0 or less to disable the deferral entirely, which restores plain
      * promotion on whatever the netdb holds.
      *
@@ -457,7 +447,6 @@ public class ProfileOrganizer {
     private static final double MIN_TUNNEL_ACCEPTANCE_RATIO = 0.4;
     /**
      * Lifetime requests a peer needs before its acceptance ratio may exclude it.
-     *
      * <p>Package-visible because the tiers apply different floors to it and the
      * boundary between "judged" and "not judged" is exactly the difference. The
      * high-capacity tier passes this value and the fast tier passes one, so the
@@ -513,7 +502,6 @@ public class ProfileOrganizer {
     private static final int MIN_FAST_QUALITY_COUNT = 500;
     /**
      * Upper bound on the soft-purge tier size, in peers.
-     *
      * <p>Caps {@link #softPurgeThreshold(int)} so that on a large network the
      * threshold stays reachable rather than scaling without limit.
      *
@@ -670,7 +658,6 @@ public class ProfileOrganizer {
     public static void setDefaultMaxProfiles(int val) { _defaultMaxProfiles = Math.max(MIN_MAX_PROFILES, Math.min(ABSOLUTE_MAX_PROFILES, val)); }
     /**
      * Ceiling on profiles held in memory, in profiles.
-     *
      * <p>Bounds the RAM store only. What is kept <em>on disk</em> is governed
      * separately by {@link #MAX_STORED_PROFILE_FILES}, so raising this to let the
      * router use more of its persisted knowledge does not shorten the retention of
@@ -679,13 +666,11 @@ public class ProfileOrganizer {
     public static final int ABSOLUTE_MAX_PROFILES = 10000;
     /**
      * Profile files retained on disk before surplus ones are trimmed.
-     *
      * <p>Deliberately a different number, and a different concern, from
      * {@link #ABSOLUTE_MAX_PROFILES}: that one bounds profiles held in memory,
      * this one bounds what is kept on disk so it survives a restart. Using one
      * constant for both meant that lowering the disk floor would silently lower
      * the memory ceiling too.
-     *
      * <p>Below this count no file is deleted unless the peer is genuinely stale,
      * so the floor costs nothing while the store is smaller than it and only
      * starts trimming once the store exceeds it.
@@ -695,7 +680,6 @@ public class ProfileOrganizer {
     public static final int MAX_STORED_PROFILE_FILES = 10000;
     /**
      * Floor for the in-memory profile cap, in profiles.
-     *
      * <p>Low enough that a small-heap router still runs; {@link #getDefaultMaxProfiles()}
      * returns this instead of {@link #ABSOLUTE_MAX_PROFILES} on a slow system.
      */
@@ -1162,14 +1146,12 @@ public class ProfileOrganizer {
 
     /**
      * How many slots are still free in a cascade's destination set.
-     *
      * <p>Every tier selector takes {@code howMany} as the <em>total</em> the caller wants
      * held in {@code matches} when the cascade returns, and every tier — the first one
      * included — asks for only the shortfall this reports. That single convention is what
      * keeps the arithmetic in one place: a call site that pre-subtracts
      * {@code matches.size()} itself is a second copy of this computation, and the two
      * copies disagree the moment one of them drifts.
-     *
      * <p>The failure mode that makes it worth centralising: a caller that sized an
      * {@link net.i2p.util.ArraySet} to exactly {@code howMany} has already filled part of
      * it by the time a later tier runs, so a tier that wrote {@code howMany} again would
@@ -1188,7 +1170,6 @@ public class ProfileOrganizer {
 
     /**
      * Whether a cascade still has slots left to fill.
-     *
      * <p>A guard, not a computation the callers should repeat: every tier-selector
      * shortfall branch needs the same {@code remaining > 0} question, and writing it as
      * {@code matches.size() < howMany} in ten places is what let one site drift.
@@ -1821,7 +1802,6 @@ public class ProfileOrganizer {
     /**
      * Fraction of a tier population that must carry a usable first-hop RTT before
      * latency is allowed to influence tier membership.
-     *
      * <p>A low-latency decision taken over a small measured subset describes that
      * subset, not the tier: the peers we happen to have sessions with are the
      * ones we have been talking to, so an early sample is drawn from whoever was
@@ -1842,14 +1822,12 @@ public class ProfileOrganizer {
     /**
      * Refresh direct-link RTT for tier peers that already have a transport
      * session, and re-judge their low-latency standing.
-     *
      * <p>Decoupled from the build pre-connect on purpose. The pre-connect is a
      * one-shot probe fired to force establishment, so it reads the transport at
      * the least informative moment: a session that was just created has not
      * completed a round trip and reports zero. This samples instead from sessions
      * that have been up long enough to have measured, which is the value the
      * latency tiers actually want.
-     *
      * <p>Peers with no session are skipped rather than probed. Probing here would
      * re-create the problem above: establishing a session to measure it is what
      * makes the measurement unavailable.
@@ -1909,7 +1887,6 @@ public class ProfileOrganizer {
 
     /**
      * Add this peer's best measured latency to its winning transport's baseline.
-     *
      * <p>The same transport whose value {@link #sampleFirstHopRtt} recorded: the
      * fastest of the peer's sessions. A peer with no readable latency contributes
      * nothing, which is correct - a baseline describes measured links.
@@ -1943,7 +1920,6 @@ public class ProfileOrganizer {
 
     /**
      * Publish this cycle's baselines and report them as stats.
-     *
      * <p>The stat is what makes the calibration observable rather than assumed:
      * a baseline of 0 means the transport has not yet gathered enough samples,
      * and the low-latency judgement is running on the absolute floor unchanged.
@@ -1988,7 +1964,6 @@ public class ProfileOrganizer {
     /**
      * The calibrated latency floor for a transport style, or -1 when that
      * transport has not gathered enough samples to have an opinion.
-     *
      * <p>Callers must treat -1 as "no calibrated opinion" and fall back to the
      * absolute rule, never as "this peer qualifies".
      *
@@ -2029,7 +2004,6 @@ public class ProfileOrganizer {
     /**
      * Scale a calibrated baseline into the latency a peer may sit under and
      * still count as low latency.
-     *
      * <p>The baseline is the mean of a style's fastest samples, so it is a
      * measure of where a transport's population <em>starts</em>, not where it
      * ends. Judging a peer against the raw baseline rejects the entire body of
@@ -2037,7 +2011,6 @@ public class ProfileOrganizer {
      * is disqualified, which is a far stricter bar than
      * {@link #_lowLatencyBaselineMultiple} describes and the opposite of the
      * widening this bound is supposed to provide.
-     *
      * <p>Saturates rather than wraps, so an extreme baseline cannot overflow into
      * a negative bound that would read as "unknown" and silently disable the
      * check, nor a small positive one that would reject the whole population.
@@ -2050,13 +2023,11 @@ public class ProfileOrganizer {
      */
     /**
      * Report how much of each tier holds a current first-hop RTT.
-     *
      * <p>This is the question the other stats cannot answer. Tier size says how
      * many peers exist, and the baseline stats say how many samples fed the
      * floor, but neither says how many peers hold a reading that is still
      * inside the validity window - a tier can be fully counted and largely
      * unmeasured while looking identical to a healthy one from outside.
-     *
      * <p>Reported as a count against nothing rather than a ratio, because a ratio
      * computed over a shrinking tier flatters itself.
      *
@@ -2104,7 +2075,6 @@ public class ProfileOrganizer {
     /**
      * Scale a calibrated baseline into the latency a peer may sit under and
      * still count as low latency.
-     *
      * <p>Pure arithmetic, extracted so the overflow and sentinel rules can be
      * exercised without a router context.
      *
@@ -2126,7 +2096,6 @@ public class ProfileOrganizer {
     /**
      * The qualifying latency threshold for a peer, from the calibrated baseline
      * of the transport that measured it.
-     *
      * <p>This is what the profile actually compares against - the baseline scaled
      * by {@link #PROP_LOW_LATENCY_MULTIPLE} - as opposed to
      * {@link #getCalibratedLatencyFloorMs(Hash)}, which returns the unscaled
@@ -2143,7 +2112,6 @@ public class ProfileOrganizer {
     /**
      * The qualifying latency threshold for the fast cohort, from the cohort
      * baseline of its fastest members.
-     *
      * <p>Scaled on the same terms as {@link #getCalibratedLatencyThresholdMs(Hash)}
      * so the two bounds stay comparable; a cohort mean and a transport baseline
      * are the same kind of quantity and neither is a cutoff on its own.
@@ -2160,11 +2128,9 @@ public class ProfileOrganizer {
      * Bounded random sample of the retained peers for RTT measurement, capped at
      * {@link #DEFAULT_MIN_CANDIDATE_SAMPLE} with a rotated start so successive
      * cycles do not always read the same prefix.
-     *
      * <p>Sampling is safe here because a peer's RTT is a property of its transport
      * session, not an accumulator: a peer missed this cycle is measured in a
      * later one.
-     *
      * <p>Covers every tier the Organizer retains, not just the two the fast tier
      * is drawn from. A profile outside the fast and high-capacity tiers can still
      * hold the only current measurement of a peer that later qualifies, and
@@ -2249,12 +2215,10 @@ public class ProfileOrganizer {
 
     /**
      * Peers in either the fast or the high-capacity tier, counting each peer once.
-     *
      * <p>A peer can be both, so neither tier contains the other and adding the two
      * counts over-reports. This is the number the profile-tier graph needs for its
      * high-capacity line to be a true subset of the fast line, rather than merely a
      * smaller number that happens to be plotted beside it.
-     *
      * <p>Walks the smaller tier and probes the larger, so the cost is
      * {@code O(min(fast, highCap))} once per coalesce rather than a full merge.
      *
@@ -2275,7 +2239,6 @@ public class ProfileOrganizer {
     /**
      * Live size of the fast or high-capacity union, a peer in both tiers counted
      * once.  Read-locked, so it is safe to call outside a coalesce pass.
-     *
      * <p>Callers that already hold the write lock — {@code reorganize()} — must
      * call the package-visible {@link #fastOrHighCapCount()} directly; going
      * through this accessor would re-enter the lock.
@@ -2628,7 +2591,6 @@ public class ProfileOrganizer {
     /**
      * Reinserts all active profiles into the tier maps.  Must be called with
      * the write lock held.
-     *
      * <p>Also opens the promotion-deferral cycle, which the tier rebuild is the
      * only place that can judge: a promotion is the moment a stale RouterInfo
      * starts costing something, and this loop is the sole promotion path that
@@ -2681,7 +2643,6 @@ public class ProfileOrganizer {
      * test other cheap conditions first).
      * <p>
      * No side effects — safe to evaluate without holding locks.
-     *
      * <p>Tunnel acceptance is required by the fast-tier passes and not by the
      * high-capacity pass. The two tiers do different jobs: high capacity is the
      * reservoir the fast tier is seeded from, so gating it on acceptance leaves
@@ -2950,7 +2911,6 @@ public class ProfileOrganizer {
 
     /**
      * Evicts peers that stopped qualifying since the tiers were last rebuilt.
-     *
      * <p>This is a within-window catch, not the mechanism that turns the tiers
      * over. The rebuild at step 4 clears both tiers and repopulates them through
      * {@link #lockedPromoteProfileToTiers}, which applies acceptance, congestion,
@@ -2958,20 +2918,17 @@ public class ProfileOrganizer {
      * that is already disqualified therefore never survives the rebuild, and the
      * only thing left for this pass to remove is a peer that qualified at rebuild
      * time and stopped qualifying during the reorg window that followed.
-     *
      * <p>The consequence for anyone reading the stats: with the rebuild doing the
      * filtering, every reason counts near zero in steady state, and that is the
      * expected reading rather than evidence that a gate is inert. An all-zero
      * {@code peer.tierEvicted.*} series over many cycles means "nothing degraded
      * mid-window", not "eviction is disabled". The gates this pass duplicates are
      * still load-bearing, but they live in the promotion path.
-     *
      * <p>Two reasons have no promotion-path counterpart and so are this pass's
      * own: {@link PurgeReason#UNREACHABLE}, which tests a momentary transport flag
      * that promotion never reads, and {@link PurgeReason#BANNED}, which promotion
      * covers only through {@link #passesBasicGates}. Those two are the ones to
      * watch when diagnosing.
-     *
      * <p>Must be called with the write lock held.
      *
      * @param now current time in ms
@@ -3005,7 +2962,6 @@ public class ProfileOrganizer {
 
     /**
      * Why a peer was evicted from a tier.
-     *
      * <p>Carries a stable lowercase key for the stat name. The whole point of
      * counting these is to compare them across cycles, and a message that embeds
      * a peer hash or a peer count would make every cycle a new stat name.
@@ -3043,7 +2999,6 @@ public class ProfileOrganizer {
 
     /**
      * Publish per-reason eviction counts for this reorganize cycle.
-     *
      * <p>Registered at the point of use, as with the other tier stats: StatManager
      * drops a name it has never been told about, so a name registered only in the
      * constructor would publish nothing at all. All five are registered every
@@ -3099,19 +3054,16 @@ public class ProfileOrganizer {
 
     /**
      * The smallest tier size at which peers may be evicted for a soft reason.
-     *
      * <p>Scaled to the number of known profiles rather than fixed, because a fixed
      * count means different things at different network sizes: demanding 500
      * peers of a 5,000-profile network is a real constraint, while demanding the
      * same of an 800-profile network is simply unreachable, which silently
      * disables the eviction entirely and lets the tier decay one-way.
-     *
      * <p>One tenth of the known profiles, capped at {@link #MAX_SOFT_PURGE_FLOOR}:
      * the fraction keeps the requirement proportionate on small networks, and the
      * cap stops it becoming so large on a big one that no tier ever qualifies.
      * Below roughly {@code MAX_SOFT_PURGE_FLOOR * 10} profiles the cap is not
      * reached, so a small router is held to the proportionate bar.
-     *
      * <p>Pure decision — no context access, safe for unit tests.
      *
      * @param knownProfiles the number of profiles the router knows about
@@ -3126,18 +3078,15 @@ public class ProfileOrganizer {
 
     /**
      * Why a peer listed in a tier should be evicted, or null to keep it.
-     *
      * <p>Extracted from {@link #purgeUnusableFromMap} so the precedence and the
      * gating are testable without a router context. The order is a precedence,
      * not a set of independent checks: a banned peer is reported as banned even
      * if it is also unreachable, because that is the most actionable fact about
      * it and the one an operator greps for.
-     *
      * <p>The three categorical reasons apply at any tier size. The two soft ones
      * require {@code softEvictionAllowed}, which the caller derives from the
      * population-scaled threshold, so a starved tier keeps peers that are merely
      * underperforming while still losing the ones that must not be there at all.
-     *
      * <p>Pure decision — no context access, safe for unit tests.
      *
      * @param banned               the peer is banlisted
@@ -3167,14 +3116,12 @@ public class ProfileOrganizer {
 
     /**
      * Evicts every peer in one tier map that {@link #purgeReasonFor} rejects.
-     *
      * <p>Acceptance is an eviction criterion for <em>both</em> tiers, even where
      * high-capacity admission ignores it. A peer that declines too many of our
      * build requests is wasted work whichever tier lists it, and leaving such a
      * peer listed in the fast tier in particular means it keeps being offered as
      * a first hop. Admission is the permissive side of that trade; this is what
      * stops the permissiveness from accumulating poor accepters.
-     *
      * <p>Only {@code PurgeReason.BANNED} and {@code PurgeReason.UNREACHABLE} can
      * be first to fire here for a peer the rebuild had already admitted; the
      * other three are re-checks of gates the rebuild applied. See
@@ -3362,7 +3309,6 @@ private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, P
     /**
      * Remove profile files that are no longer worth keeping: those whose peer is
      * genuinely stale at any size, and those beyond the disk retention floor.
-     *
      * <p>See {@link ProfilePersistenceHelper#purgeExcessProfiles} for the two rules and
      * why neither lets a recently active peer be deleted for its bandwidth tier.
      */
@@ -3416,7 +3362,6 @@ private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, P
 
     /**
      * How many of the given capacities are strictly above the mean.
-     *
      * <p>Scanned rather than derived from an index into the sorted array: the
      * mean is a repeated value whenever capacities cluster, and
      * {@code Arrays.binarySearch} returns only <em>some</em> index among equal
@@ -3753,12 +3698,10 @@ private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, P
     /**
      * Select the {@code k}-th fastest qualifying profile (1-based) without
      * sorting the whole candidate set.
-     *
      * <p>Holds the {@code k} fastest profiles seen so far in an unsorted bounded
      * array plus the index of the slowest: a slower profile is discarded in
      * O(1), one that displaces the slowest costs a {@code k}-element rescan.
      * Worst case O(n·k), and {@code k} is at most 51 for the only caller.
-     *
      * <p>Ties in speed may resolve to a different peer of equal speed than a
      * full sort would have picked; only the boundary value is read.
      *
@@ -3804,13 +3747,11 @@ private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, P
     /**
      * Fetch a peer's local RouterInfo without re-running the network database's
      * {@code validate()}.
-     *
      * <p>Every caller here reads raw RouterInfo content (tier, capabilities,
      * addresses) and applies its own gate, so nothing depends on validation
      * rejecting an entry that is present — it already ran when the entry was
      * stored.  Callers must not use this to evict: the validating lookup's
      * failure path calls {@code fail(key)}, which is the netDb's job.
-     *
      * <p>Falls back to {@code lookupRouterInfoLocally} on a miss, needed only
      * for {@code DummyNetworkDatabaseFacade}: it serves
      * {@code lookupRouterInfoLocally} from its own map and returns null from
@@ -3833,13 +3774,11 @@ private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, P
     /**
      * Check if a peer should be excluded from profiling.
      * Excludes low bandwidth tiers (K, L, M, Unknown) and G cap (no tunnels).
-     *
      * <p>This is the single gate in front of profile creation, and it covers all
      * three ways one can be made: {@link #getOrCreateProfileNonblocking},
      * {@link #addProfile} (which is how stored profiles are loaded at startup), and
      * the periodic sweep. A peer failing it therefore has no profile at all, so it
      * costs no RAM and cannot be written to disk.
-     *
      * <p>The bandwidth half of this check was documented here but never performed:
      * the body tested only the no-tunnels capability, while the tier test sat in
      * {@link #isLowBandwidthTierName} with no caller in the codebase. Peers advertising
@@ -3858,7 +3797,6 @@ private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, P
 
     /**
      * Should a peer advertising these capabilities and bandwidth tier be profiled?
-     *
      * <p>Pure decision form of {@link #isExcludedFromProfiling(Hash)}, so the rule
      * can be pinned without a RouterInfo or a network database.
      *
@@ -3904,7 +3842,6 @@ private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, P
      * advertised bandwidth tier and capabilities.  Requires X/P/O bandwidth
      * tier and no D (congestion), E (severe congestion), G (no tunnels),
      * or U (firewalled/unreachable) capability flags.
-     *
      * <p>Bandwidth tier is a fact about the peer rather than an observation
      * that can erode, so these peers are eligible for fast-tier fast-track
      * regardless of measured throughput.
@@ -3989,7 +3926,6 @@ private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, P
      * is the per-attempt lottery size, not the whole reachable set: the scan
      * start is rotated (see {@link #lockedSelectPeers}) so selections are
      * spread across the tier instead of re-examining its first few entries.
-     *
      * <p>This floor, not the {@code howMany * 20} term, is what governs
      * single-hop selection: every first-hop and last-hop call passes
      * {@code howMany = 1}, giving {@code max(20, MIN)}.  The floor therefore
@@ -3998,7 +3934,6 @@ private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, P
      * that loop is what stands between a build and a gateway that cannot
      * receive it.  A thin sample makes the loop run dry and descend rather
      * than reject.
-     *
      * <p>Raised from 64 to {@link #DEFAULT_MIN_CANDIDATE_SAMPLE} (256).  Note
      * this is 12x the {@code howMany * 20} term the formula intends, so the
      * constant is the operative value for hop selection and is treated as a
@@ -4100,7 +4035,6 @@ private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, P
     /**
      * Collects up to {@link #maxCandidateSample} candidates from a tier and hands them to
      * {@link #lockedPickLowestPriority}.
-     *
      * <p>The scan start is a random offset into the tier.  Tier maps are plain
      * HashMaps, so iteration order is stable across calls; without the offset
      * every hop of every pool examined the same prefix, which both starved the
@@ -4258,7 +4192,6 @@ private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, P
     /**
      * Which profile a promotion pass should act on: the live one when the map has
      * it, the caller's otherwise.
-     *
      * <p>The TreeSet's copy may be stale, so the live profile decides. Making the
      * choice a named decision is what lets the promotion and its log reach the same
      * object — they used to decide separately, so the log printed the copy's
@@ -4275,7 +4208,6 @@ private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, P
 
     /**
      * Whether a tier scan starved badly enough to be worth reporting.
-     *
      * <p>All five skip reasons participate. The guard used to sum only four of the
      * five it was about to pass to the logger, so a tier emptied purely by sub-tier
      * slicing produced no warning — the one starvation cause with a dedicated counter
@@ -4303,7 +4235,6 @@ private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, P
     /**
      * Selects the lowest-priority candidates, penalizing moderately-lossy peers.
      * Must be called with the read lock held.
-     *
      * <p>Both lossy thresholds are resolved once for the whole list rather than
      * per candidate.  The lottery draw uses {@link ThreadLocalRandom} rather
      * than {@code _context.random()}: it only breaks ties among peers that have
@@ -4339,7 +4270,6 @@ private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, P
 
     /**
      * Choose up to {@code howMany} candidates in ascending priority order.
-     *
      * <p>This loop is the reason the peer-selection callers may size a fixed-capacity
      * {@link net.i2p.util.ArraySet} to exactly the number of peers they asked for:
      * <ul>
@@ -4353,7 +4283,6 @@ private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, P
      * would throw at runtime rather than degrade. The bound {@code s < howMany && s < sz} is
      * therefore load-bearing, and it is pinned by
      * {@code PeerSelectionBoundTest.picksNeverExceedHowMany} and its neighbours.
-     *
      * <p>Distinctness falls out of the swap rather than from a membership test: the chosen
      * entry is moved to index {@code s} and the next inner scan starts at {@code s + 1}, so an
      * entry already picked can never be revisited. {@code candidates} and {@code priority} are
@@ -4426,7 +4355,6 @@ private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, P
     /**
      * Claim a candidate's IP/port/family fingerprint in {@code keys},
      * reporting whether anything was already claimed.
-     *
      * <p>Load-bearing asymmetry: the peer is rejected if <em>any</em> of its keys
      * was already present, but <em>all</em> of its keys are added either way, so
      * a peer colliding on its last key still leaves its earlier keys claimed.
@@ -4461,7 +4389,6 @@ private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, P
     /**
      * Fingerprint key for one masked IP, byte-identical to the key
      * {@code MaskedIPSet.maskedIP} builds for the same address and mask.
-     *
      * <p>Format: a family-delimiting leading char ('.' for IPv4, ':' for IPv6,
      * which also doubles the matched byte count), then two '0'-offset hex
      * nibbles per matched byte.  The leading char differs by address family and
@@ -4544,13 +4471,11 @@ private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, P
     /**
      * Returns false when the peer is us, banlisted, or recently failed as
      * first hop.
-     *
      * <p>The self check is first because this is the chokepoint every
      * selection path funnels through, including
      * {@link #selectRemainderFromAllPeers} via {@link #isSelectable(Hash, double)}.
      * The local RouterInfo is present in our own netdb, so we are a legitimate
      * entry in every candidate pool.
-     *
      * <p>Note that we are <em>supposed</em> to be in the tunnel we build, at
      * one end: {@code ClientPeerSelector.finalizeSelection} inserts us
      * directly, and {@code ExploratoryPeerSelector} adds us to its exclude
@@ -4563,7 +4488,6 @@ private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, P
      * peers did not, so the two protections could disagree. Checking here
      * rather than in each selection loop means no present or future path can
      * reintroduce the gap.
-     *
      * <p>Scope, stated precisely because it was previously overstated: this
      * guard has not been shown to fix any observed build failure. A router
      * appearing in an expiring-build log line is expected — it is the
@@ -4873,14 +4797,12 @@ private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, P
      * the notFailing structures.  Safe to call between reorganize cycles —
      * does not add duplicates to _notFailingPeersList.
      * Must be called with write lock held.
-     *
      * <p>The three tier thresholds are passed in rather than read here. Each one
      * costs a walk of the whole network database, and this runs once per profile
      * in a scan, so reading them per profile made a single pass cost
      * profiles-times-a-database-scan. They depend only on network size and the
      * active peer count, neither of which changes during a pass, so the caller
      * fetches them once for the whole scan.
-     *
      * <p>A promotion whose RouterInfo is older than
      * {@link #PROP_ROUTERINFO_REFRESH_AGE_MS} and which has no proof of life is
      * held back, leaving the peer out of the tier — see
@@ -4900,7 +4822,6 @@ private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, P
     /**
      * Evaluate a profile for promotion to the tiers, reporting whether the only
      * thing that stopped it was an unusable transport address.
-     *
      * <p>The return value exists for {@link #promoteToFillTiers()}, whose
      * underfill log line wants to distinguish a candidate held back by policy
      * from a candidate that was never examined. That line used to carry a local
@@ -5063,24 +4984,7 @@ private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, P
     }
 
     /**
-     * Whether this peer's stored RouterInfo is stale enough that promoting on it
-     * risks a build failure.
-     *
-     * <p>Reads the same staleness notion {@link #hasValidRouterInfo} uses — older
-     * than the threshold and no proof of life — against the shorter
-     * {@link #PROP_ROUTERINFO_REFRESH_AGE_MS}. Proof of life exempts working
-     * peers, which is what keeps the affected population small: a peer we have
-     * talked to in the last hour is judged on what it just told us, not on how
-     * old its last publication is.
-     *
-     * @param profile the profile being promoted
-     * @param now current time in ms
-     * @return whether the stored RouterInfo is too old to promote on
-     * @since 0.9.72
-     */
-    /**
      * Does this peer's RouterInfo carry no address we could still send to?
-     *
      * <p>Reads the netdb unvalidated, matching what selection and the build requestor do, so
      * the gate cannot reject a peer on stricter grounds than the path that would later use
      * it. A missing entry counts as "no usable address": we cannot prove otherwise, and
@@ -5097,6 +5001,21 @@ private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, P
         return !TransportUtil.hasUsableTransportAddress((RouterInfo) de);
     }
 
+    /**
+     * Whether this peer's stored RouterInfo is stale enough that promoting on it
+     * risks a build failure.
+     * <p>Reads the same staleness notion {@link #hasValidRouterInfo} uses — older
+     * than the threshold and no proof of life — against the shorter
+     * {@link #PROP_ROUTERINFO_REFRESH_AGE_MS}. Proof of life exempts working
+     * peers, which is what keeps the affected population small: a peer we have
+     * talked to in the last hour is judged on what it just told us, not on how
+     * old its last publication is.
+     *
+     * @param profile the profile being promoted
+     * @param now current time in ms
+     * @return whether the stored RouterInfo is too old to promote on
+     * @since 0.9.72
+     */
     private boolean promotionNeedsRouterInfoRefresh(PeerProfile profile, long now) {
         // No open cycle means no hold, so skip the netDb read entirely: with the
         // property disabled this costs nothing per candidate.
@@ -5109,12 +5028,10 @@ private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, P
     /**
      * Whether a RouterInfo is old enough that promoting on it risks a build
      * failure: published before the threshold and no proof of life.
-     *
      * <p>An absent RouterInfo is not stale, it is missing, and is not this
      * predicate's business: {@link #isHighBandwidthCapable} and
      * {@link #isFastTierCapable} already refuse to promote a peer with no
      * RouterInfo at all, so there is no promotion here to hold.
-     *
      * <p>Pure decision — no context access, safe for unit tests.
      *
      * @param info the peer's stored RouterInfo, may be null
@@ -5134,7 +5051,6 @@ private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, P
     /**
      * Apply the hold to one tier insert: leave the peer out of the tier, or let
      * it in.
-     *
      * <p>The starvation guard is the reason this is not a plain veto.  A tier
      * that is already at its configured minimum is one the fallback passes
      * would defend anyway, so leaving a stale peer out of it costs nothing
@@ -5170,13 +5086,11 @@ private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, P
     /**
      * Whether a promotion may be held back on a stale RouterInfo without
      * risking the tier it would join.
-     *
      * <p>The floor is the tier's configured minimum, which is also what
      * {@link #fillFastTierFallbacks} and {@link #fillHighCapFallback} drive the
      * tier back up to and what {@link #restorePreservedPeers} protects at half.
      * At or above the minimum the tier can afford to leave the peer out; below
      * it, it cannot.
-     *
      * <p>Pure decision — no context access, safe for unit tests.
      *
      * @param tierSize current size of the tier the peer would join
@@ -5202,7 +5116,6 @@ private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, P
 
     /**
      * Publish the promotion-deferral counters for the cycle just finished.
-     *
      * <p>{@code peer.routerInfoRefreshNeeded} is a population, so it is written
      * every cycle including zero — a flat zero line is the signal that nothing
      * is being held back. The stale-promotion count is an event count and
@@ -5225,13 +5138,11 @@ private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, P
 
     /**
      * Counts one promotion skip against its reason.
-     *
      * <p>The per-peer line stays at DEBUG because a single pass walks the whole
      * capacity-ordered profile set — about 4,300 evaluations on the live router,
      * several passes a minute. Logging each one at INFO would bury the log; the
      * question being answered is which gate is doing the excluding, and that is a
      * distribution rather than a list.
-     *
      * <p>Not synchronised: every caller holds the write lock, and the tally is
      * cleared by whichever scan is about to report it.
      *
@@ -5281,7 +5192,6 @@ private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, P
 
     /**
      * Why {@link #skipsPromotion} would skip this profile, or null when it would not.
-     *
      * <p>The one place the decision is made. The caller used to re-derive two of the
      * five gates so it could log them, which meant a peer held back by congestion,
      * loss probation, a strict country or low tunnel acceptance printed
@@ -5289,7 +5199,6 @@ private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, P
      * gates passed" while the peer was in fact skipped. Returning the reason from the
      * decision itself is what stops the log from guessing, and stops the two from
      * drifting apart again.
-     *
      * <p>Short-circuits on the first gate that fires, in the order the original
      * disjunction evaluated them. The boolean result is unchanged, because the
      * original was a pure OR over the same five conditions.
@@ -5430,7 +5339,6 @@ private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, P
 
     /**
      * Summarise why the selection tiers could not be filled.
-     *
      * <p>Short because there were no candidates left to try is a discovery problem; short
      * because every candidate was gated out is a policy problem. Those call for different
      * fixes, and from outside the reorg they look identical, so the breakdown is reported
@@ -5543,7 +5451,6 @@ private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, P
      * no longer low-latency.  Called from PeerTestJob when a test result
      * arrives that contradicts the peer's tier membership.  Non-blocking — only
      * acts if the peer is currently in the fast tier.
-     *
      * <p>High-capacity membership is deliberately left alone. It is earned from
      * capacity and throughput rather than latency, so a latency judgement does
      * not speak to it; see the comment in the body.
@@ -5569,7 +5476,6 @@ private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, P
 
     /**
      * Whether losing the low-latency flag revokes membership of the fast tier.
-     *
      * <p>Fast-tier membership is the latency promotion, so losing the flag
      * revokes it. High-capacity membership is <em>not</em> revoked by this
      * signal: it is earned from advertised capacity and sustained throughput, so
@@ -5631,14 +5537,12 @@ private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, P
      */
     /**
      * The single recorder for a measured direct-link RTT.
-     *
      * <p>Every path that holds a transport measurement — the reorganize sampling
      * pass, the pre-connect warm-up, a handshake — funnels through here, so the
      * field is written one way and re-derived one way. Callers that only need the
      * write (no stat, because they report a cycle aggregate instead) call
      * {@link #recordFirstHopRtt}; callers that hold a peer hash instead of a
      * profile call {@link #noteFirstHopRtt}.
-     *
      * <p>Owns the profile write so callers holding a transport measurement do
      * not have to know how the value is stored or aged out. The value decays
      * on the existing Active tier window, so a first-hop latency never
@@ -5813,7 +5717,6 @@ private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, P
 
     /**
      * Release the reorganize write lock, then refresh peers held out of the tiers.
-     *
      * <p>The single exit point for every path that runs a tier refill under the lock. Doing
      * the refresh here rather than at each call site is deliberate: a call site that forgot
      * it would leave the queue to fill and never drain, and there were ten of them. It has to
@@ -5829,7 +5732,6 @@ private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, P
 
     /**
      * Issue RouterInfo lookups for peers held out of the tiers for want of a usable address.
-     *
      * <p>Called after the reorganize write lock is released. Doubly bounded - a per-drain
      * batch and a minimum interval between drains - so neither a large scan nor a burst of
      * demotions can turn this into a request flood.
@@ -5981,7 +5883,6 @@ private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, P
 
     /**
      * Demote a peer from fast/high-cap tiers when its direct-link latency is poor.
-     *
      * <p>{@code responseTimeMs} is the round trip through an entire multi-hop
      * tunnel, which {@code TestJob.noteSuccess} attributes to every peer in that
      * tunnel. That is a reasonable profile statistic but the wrong input for
@@ -5990,7 +5891,6 @@ private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, P
      * first-hop threshold. In production that evicted a large share of the fast
      * tier on a latency distribution taken across the wrong hops, shrinking the
      * candidate pool and leaving slower survivors.
-     *
      * <p>The tier decision therefore uses {@link PeerProfile#getFirstHopRtt},
      * measured on the direct link. The passed-in tunnel time is not consulted.
      * A peer with no recorded first-hop RTT is left alone: unknown is not slow.
@@ -6007,7 +5907,6 @@ private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, P
 
     /**
      * Whether a measured first-hop RTT warrants removal from the fast tiers.
-     *
      * <p>Pure so the policy is testable without a populated profile. An unknown
      * measurement (negative) is never slow: we have not probed the peer, and
      * evicting on absent evidence would drain the tier of exactly the peers we
@@ -6025,7 +5924,6 @@ private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, P
     /**
      * Remove a peer from the fast/high-cap tiers if its measured direct-link RTT
      * reaches the low-latency threshold.
-     *
      * <p>The threshold is unchanged at {@code router.peerTestTimeout * 2}; only the
      * measurement changed, from a whole tunnel to one hop.
      *
@@ -6078,7 +5976,6 @@ private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, P
     /**
      * Whether a peer's tunnel acceptance is bad enough to exclude it, given its
      * counts and the sample floor the tier in question applies.
-     *
      * <p>Pure decision — no context access, safe for unit tests. The tiers differ
      * in the floor they pass, and that difference is the whole point: high capacity
      * is the reservoir the fast tier seeds from and cannot afford to judge a peer on
@@ -6530,7 +6427,6 @@ private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, P
 
     /**
      * Fallback tier size for a threshold that scales with network size.
-     *
      * <p>Networks at or below {@link #SCALING_THRESHOLD} known routers use the
      * configured base; above it the base scales with a fraction of the network.
      *
@@ -6546,7 +6442,6 @@ private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, P
 
     /**
      * Ceiling on the fast tier from the number of reachable peers.
-     *
      * <p>1.5x headroom over active for near-active peers, never below {@code base}.
      *
      * @param active peers reachable over any transport
@@ -6560,9 +6455,7 @@ private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, P
 
     /**
      * Ceiling on the high-capacity tier from the number of reachable peers.
-     *
      * <p>One per reachable peer, never below {@code base}.
-     *
      * <p>Was {@code active * 2}. That asks for more members than there are peers to
      * put in them: at 1221 active peers it set a target of 2442 for a tier that
      * tops out around 700, so the target could never be met, the early return in
@@ -6592,7 +6485,6 @@ private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, P
 
     /**
      * Variant taking the network size, for callers that already know it.
-     *
      * <p>{@code getKnownRouters()} walks every entry in the network database, which is
      * far too expensive to repeat once per candidate.
      *
@@ -6816,7 +6708,6 @@ private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, P
      * yet created at boot, or an empty window), the ratio is 1.0 — no data
      * means neutral, not "under attack"; a missing-stat 0.0 put the router
      * into permanent attack mode before stats existed.
-     *
      * <p>The cache covers the no-data path too: on fallback the cached 1.0 is
      * (re)stamped so a missing StatManager early in boot cannot turn every
      * per-candidate call into a fresh 6-lookup scan.
@@ -6826,7 +6717,6 @@ private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, P
      */
     /**
      * Maps an unknown build-success reading onto a neutral 1.0.
-     *
      * <p>An absent stat, or a window in which nothing has settled yet, is not evidence of
      * failure. Reading it as anything else would trip {@link #isLowBuildSuccess()} and switch
      * off profile eviction, lengthen ghost cooldowns and put the first-hop selector into its
@@ -6889,7 +6779,6 @@ private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, P
        * Calibrated latency floor across fast peers with data, computed during each
        * {@link #reorganize()} as the mean of the fastest samples rather than of the
        * whole population.
-       *
        * <p>This is a second bound on the low-latency judgement, not a second
        * judgement: a peer must satisfy both the per-transport calibrated floor and
        * this cohort floor. It is measured from peer-test response times, a

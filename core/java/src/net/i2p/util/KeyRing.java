@@ -7,7 +7,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Thread-safe mapping from router hashes to session keys.
- *
+ * <p>
  * Extends ConcurrentHashMap for concurrent access to cryptographic key storage.
  */
 public class KeyRing extends ConcurrentHashMap<Hash, SessionKey> {

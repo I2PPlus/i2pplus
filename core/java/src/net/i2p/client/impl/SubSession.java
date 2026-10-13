@@ -17,16 +17,16 @@ import java.util.Properties;
 
 /**
  * An additional session using another session's connection.
- *
+ * <p>
  * A subsession uses the same connection to the router as the primary session,
  * but has a different Destination. It uses the same tunnels as the primary
  * but has its own leaseset. It must use the same encryption keys as the primary
  * so that garlic encryption/decryption works.
- *
+ * <p>
  * The message handler map and message producer are reused from primary.
- *
+ * <p>
  * Does NOT reuse the session listener ????
- *
+ * <p>
  * While the I2CP protocol, in theory, allows for fully independent sessions
  * over the same I2CP connection, this is not currently supported by the router.
  *
@@ -96,11 +96,11 @@ class SubSession extends I2PSessionMuxedImpl {
     /**
      * Connect to the router and establish a session.  This call blocks until
      * a session is granted.
-     *
+     * <p>
      * Should be threadsafe, other threads will block until complete.
      * Disconnect / destroy from another thread may be called simultaneously and
      * will (should?) interrupt the connect.
-     *
+     * <p>
      * Connecting a subsession will automatically connect the primary session
      * if not previously connected.
      *
@@ -204,7 +204,7 @@ class SubSession extends I2PSessionMuxedImpl {
     /**
      * Tear down the session, and do NOT reconnect.
      * As of 0.9.67, this does NOT destroy the primary session.
-     *
+     * <p>
      * Blocks if session has not been fully started.
      */
     @Override
@@ -237,7 +237,7 @@ class SubSession extends I2PSessionMuxedImpl {
     /**
      * Called by the message handler
      * on reception of DestReplyMessage
-     *
+     * <p>
      * This will never happen, as the dest reply message does not contain a session ID.
      */
     @Override
@@ -248,7 +248,7 @@ class SubSession extends I2PSessionMuxedImpl {
     /**
      * Called by the message handler
      * on reception of DestReplyMessage
-     *
+     * <p>
      * This will never happen, as the dest reply message does not contain a session ID.
      *
      * @param h non-null
@@ -313,16 +313,16 @@ class SubSession extends I2PSessionMuxedImpl {
     /**
      * Ask the router to lookup a Destination by host name.
      * Blocking. Waits a max of 10 seconds by default.
-     *
+     * <p>
      * This only makes sense for a b32 hostname, OR outside router context.
      * Inside router context, just query the naming service.
      * Outside router context, this does NOT query the context naming service.
      * Do that first if you expect a local addressbook.
-     *
+     * <p>
      * This will log a warning for non-b32 in router context.
-     *
+     * <p>
      * See interface for suggested implementation.
-     *
+     * <p>
      * Requires router side to be 0.9.11 or higher. If the router is older,
      * this will return null immediately.
      */

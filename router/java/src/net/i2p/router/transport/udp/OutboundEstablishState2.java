@@ -36,7 +36,7 @@ import net.i2p.util.Log;
  * Data for a new connection being established, where we initiated the
  * connection with a remote peer.  In other words, we are Alice and
  * they are Bob.
- *
+ * <p>
  * SSU2 only.
  *
  * @since 0.9.54
@@ -122,21 +122,21 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
 
     /**
      *  Prepare to start a new handshake with the given peer.
-     *
+     * <p>
      *  Caller must then check getState() and build a
      *  Token Request or Session Request to send to the peer.
      *
-     *  @param ctx the router context
-     *  @param transport the UDP transport
-     *  @param claimedAddress an IP/port based RemoteHostId, or null if unknown
-     *  @param remoteHostId non-null, == claimedAddress if direct, or a hash-based one if indirect
-     *  @param remotePeer must have supported sig type
-     *  @param needIntroduction should we ask Bob to be an introducer for us?
+     * @param ctx the router context
+     * @param transport the UDP transport
+     * @param claimedAddress an IP/port based RemoteHostId, or null if unknown
+     * @param remoteHostId non-null, == claimedAddress if direct, or a hash-based one if indirect
+     * @param remotePeer must have supported sig type
+     * @param needIntroduction should we ask Bob to be an introducer for us?
      *                          ignored unless allowExtendedOptions is true
-     *  @param introKey Bob's introduction key, as published in the netdb
-     *  @param ra the router address
-     *  @param addr non-null
-     *  @param version the SSU2 version
+     * @param introKey Bob's introduction key, as published in the netdb
+     * @param ra the router address
+     * @param addr non-null
+     * @param version the SSU2 version
      */
     public OutboundEstablishState2(RouterContext ctx, UDPTransport transport, RemoteHostId claimedAddress,
                                    RemoteHostId remoteHostId, RouterIdentity remotePeer,
@@ -263,7 +263,7 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
      *  We must regenerate the handshake state if we get a new token, because
      *  we only save the full encrypted packet for retransmission, and
      *  the encryption changes if the token does.
-     *
+     * <p>
      *  caller must synch
      */
     private void createNewState(RouterAddress addr) {

@@ -12,13 +12,13 @@ import net.i2p.i2ptunnel.udp.*;
  * Implements a UDP port and Socks encapsulation / decapsulation.
  * This is for a single port. If there is demuxing for multiple
  * ports, it happens outside of here.
- *
+ * <p>
  * TX:
  *   UDPSource -&gt; SOCKSUDPUnwrapper -&gt; (I2PSink in SOCKSUDPTunnel)
- *
+ * <p>
  * RX:
  *   UDPSink &lt;- SOCKSUDPWrapper ( &lt;- MultiSink &lt;- I2PSource in SOCKSUDPTunnel)
- *
+ * <p>
  * The Unwrapper passes headers to the Wrapper through a cache.
  * MultiSink routes packets based on toPort.
  */

@@ -16,14 +16,14 @@ import net.i2p.util.SystemVersion;
 
 /**
  * Monitors transit tunnels for idle behavior.
- *
+ * <p>
  * This class periodically scans participating tunnels and drops those that
  * have carried no traffic at all since joining — but only as a pressure
  * valve: culling is skipped unless the transit population is near the
  * configured capacity, because every dropped tunnel looks like a failed
  * tunnel to its originator. With defaults, quiet-but-alive tunnels live out
  * their full lifetime; expiration handles normal lifecycle.
- *
+ * <p>
  * Configurable properties:
  * - router.idleTunnelDetectionPeriod: Time before checking for idle (default: 300000ms)
  * - router.idleTunnelMinMessages: Minimum messages to not be considered idle (default: 1)

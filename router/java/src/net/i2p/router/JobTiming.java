@@ -12,7 +12,7 @@ import net.i2p.util.Clock;
 
 /**
  * Define the timing requirements and statistics for a particular job
- *
+ * <p>
  * For use by the router only. Not to be used by applications or plugins.
  */
 public class JobTiming implements Clock.ClockUpdateListener {
@@ -64,7 +64,6 @@ public class JobTiming implements Clock.ClockUpdateListener {
 
     /**
      * Record the actual start.
-     *
      * <p>The caller supplies the timestamp because JobQueueRunner already
      * reads the clock once per job and reuses that value for the run start,
      * the queue-wait origin and the lag origin; a second read here only added
@@ -91,7 +90,6 @@ public class JobTiming implements Clock.ClockUpdateListener {
 
     /**
      * Record the actual end.
-     *
      * <p>As with {@link #start(long)}, the caller passes in a clock reading
      * it already needs, keeping the duration consistent with the timestamp
      * JobQueueRunner takes around updateStats().

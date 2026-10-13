@@ -566,11 +566,11 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
      * Set the read idle timeout for newly-created connections (in milliseconds).
      * After this time expires without data being reached from the I2P network,
      * the connection itself will be closed.
-     *
+     * <p>
      * Less than or equal to 0 means forever.
      * Default -1 (forever) as of 0.9.36 for standard tunnels, but extending classes may override.
      * Prior to that, default was 5 minutes, but did not work due to streaming bugs.
-     *
+     * <p>
      * Applies only to future connections; calling this does not affect existing connections.
      *
      * @param ms socket read idle timeout in milliseconds; zero or less means no
@@ -663,7 +663,6 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
      *  queue is already drowning. Pure decision, no router context: called
      *  from the accept loop after accept() and before a handler thread is
      *  consumed.
-     *
      *  <p>Admission policy (high throughput, minimal drops):
      *  <ul>
      *    <li>Hard stop near queue capacity (would hit AbortPolicy anyway).</li>
@@ -743,7 +742,6 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
      *  rejects are not connection-cap rejects; conflating them made every
      *  saturated-queue drop look like a maxConnections trip (and logged
      *  maxConnections=0 when the cap was unlimited).
-     *
      *  <p>The queue-full metrics line is emitted by {@link #warnQueueFull}
      *  with real pool active/max/queue values; this method only rate-limits
      *  and closes so a flood cannot spam the log.
@@ -815,7 +813,7 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
 
     /**
      * Get the read idle timeout for newly-created connections (in milliseconds).
-     *
+     * <p>
      * Less than or equal to 0 means forever.
      * Default -1 (forever) as of 0.9.36 for standard tunnels, but extending classes may override.
      * Prior to that, default was 5 minutes, but did not work due to streaming bugs.
@@ -842,10 +840,10 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
      *  Note that the tunnel can be reopened after this by calling startRunning().
      *  This does not release all resources. In particular, the I2PSocketManager remains
      *  and it may have timer threads that continue running.
-     *
+     * <p>
      *  To release all resources permanently, call destroy().
      *
-     *  @return true if the tunnel was closed successfully, false if connections exist and forced is false
+     * @return true if the tunnel was closed successfully, false if connections exist and forced is false
      */
     public synchronized boolean close(boolean forced) {
         if (!open) return true;
@@ -1016,7 +1014,7 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
 
     /**
      * Runs the I2PTunnelServer to accept and handle incoming connections asynchronously.
-     *
+     * <p>
      * Accepts connections in a loop, submitting each to the thread pool via CompletableFuture.
      * Handles expected exceptions with retries and logs errors. On shutdown, gracefully terminates the pool.
      */
@@ -1219,7 +1217,7 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
      * This is run in a thread from a limited-size thread pool via Handler.run(),
      * except for a standard server (this class, no extension, as determined in getUsePool()),
      * it is run directly in the acceptor thread (see run()).
-     *
+     * <p>
      * Handles an incoming I2P connection by forwarding it to the local TCP destination.
      * <p>
      * This method is called by the server socket's acceptance thread when a new

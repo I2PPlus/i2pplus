@@ -23,7 +23,7 @@ import net.i2p.util.SystemVersion;
  * read the enclosed tunnel request, decide how to reply, write the reply,
  * encrypt the reply record, and return a TunnelBuildMessage to forward on to
  * the next hop.
- *
+ * <p>
  * There is only one of these.
  * Instantiated by BuildHandler.
  *
@@ -48,7 +48,7 @@ class BuildMessageProcessor {
     /**
      * For N typical part tunnels and rejecting 50%, that's 12N requests per hour.
      * This is the equivalent of (12N/600) KBps through the IVValidator filter.
-     *
+     * <p>
      * Target false positive rate is 1E-5 or lower
      *
      * @since 0.9.24
@@ -108,7 +108,7 @@ class BuildMessageProcessor {
      * reply key and IV.  The original, encrypted record targeting us is removed from the request
      * message (so that the reply can be placed in that position after going through the decrypted
      * request record).
-     *
+     * <p>
      * Note that this layer-decrypts the build records in-place.
      * Do not call this more than once for a given message.
      *

@@ -13,14 +13,12 @@ import java.util.TreeSet;
 /**
  * Registry of graph groupings: sets of stats that answer the same question and share a
  * unit, so they can be drawn as one multi-series plot instead of several small ones.
- *
  * <p>Every member of a group is either a count or a duration or a rate, and the members of
  * one group always agree on which. That constraint is the whole point. Combining stats
  * whose units differ produces a plot that looks meaningful and is not: a count against a
  * byte count, or a per-second rate against a total, flattens the smaller series into the
  * baseline and reads as "nothing happening". Members were therefore checked against their
  * declaring code rather than their names.
- *
  * <p>Grouping is opt-in via {@link #PROP_COMBINE} and only takes effect where at least two
  * members are already enabled, so enabling a single stat of a group is never silently
  * changed into a combined plot.
@@ -34,7 +32,6 @@ public final class GraphGroups {
 
     /**
      * Most series drawn on one plot.
-     *
      * <p>Every group is now at or under {@link #MAX_SERIES}: no frame combines more than
      * two, because a tile is too small to read a third line and two hues are all the
      * palette needs. This stays as a hard cap so a group added later cannot silently
@@ -45,12 +42,10 @@ public final class GraphGroups {
     /**
      * Marker at the head of a group id built from an In/Out bandwidth pair rather than
      * declared in the registry.
-     *
      * <p>Pool names come from configuration, so the two rates a pool publishes cannot be
      * listed in advance: an HTTP proxy is only there if the user named it one. The marker
      * keeps such an id recognisable, and keeps {@link #members} from treating an arbitrary
      * string as a group.
-     *
      * <p>Not a plausible stat prefix: rate names are dotted subsystem paths
      * ({@code netDb.successTime}) or, for pools, bracketed.
      */
@@ -363,7 +358,6 @@ public final class GraphGroups {
     /**
      * Subsystem each group belongs to, used to build the {@code [Subsystem] } prefix
      * that makes the graph list sort by area.
-     *
      * <p>Deliberately untranslated and kept out of {@link #TITLES}: a title is a
      * translation <i>key</i> ({@link net.i2p.util.Translate} returns the key for English
      * and falls back to it when a bundle lookup misses), so folding a prefix into the
@@ -413,7 +407,6 @@ public final class GraphGroups {
 
     /**
      * The sort prefix for a group, ready to prepend to a title.
-     *
      * <p>Untranslated by design, see {@link #SUBSYSTEMS}.
      *
      * @param groupId a group id, or null
@@ -428,7 +421,6 @@ public final class GraphGroups {
 
     /**
      * The subsystem a group belongs to.
-     *
      * <p>A generated In/Out pair is not in {@link #SUBSYSTEMS}; it is a pool rate and
      * answers "how much is this service carrying", so it sorts with the other service
      * graphs under the pool subsystem.
@@ -450,7 +442,6 @@ public final class GraphGroups {
 
     /**
      * The display name of a group, for use as a combined graph title.
-     *
      * <p>A generated pair is named after the directionless half the two rates share, with
      * the brackets a pool name carries dropped: {@code [skank.i2p]} is already a name, and
      * nesting it inside the title's own brackets reads as markup.
@@ -563,7 +554,6 @@ public final class GraphGroups {
 
     /**
      * The In/Out pairs the enabled stats form.
-     *
      * <p>Only pairs the user has switched on both halves of are returned: a group id for a
      * half-enabled pair would render as an empty tile, and pairing must never turn a single
      * enabled stat into a combined plot. Stats the registry already claims are skipped, so
@@ -643,7 +633,6 @@ public final class GraphGroups {
 
     /**
      * The enabled members of a group, capped at {@link #MAX_SERIES}.
-     *
      * <p>Never null; an empty list means the group has too few enabled members to be worth
      * combining.
      *
@@ -669,7 +658,6 @@ public final class GraphGroups {
 
     /**
      * Whether a group should be drawn as one plot.
-     *
      * <p>Requires the opt-in, at least two enabled members, and no event-graph mode:
      * events change what a datasource means, so they are not combined.
      *

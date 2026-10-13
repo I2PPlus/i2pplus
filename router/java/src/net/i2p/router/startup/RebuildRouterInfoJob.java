@@ -22,11 +22,11 @@ import net.i2p.util.SecureFileOutputStream;
 /**
  * This used be called from StartAcceptingClientsJob but is now disabled.
  * It is still called once from LoadRouterInfoJob (but not run as a Job).
- *
+ * <p>
  * The following comments appear to be incorrect...
  * it rebuilds if the router.info file does not exist.
  * There is no check for a router.info.rebuild file.
- *
+ * <p>
  * If the file router.info.rebuild exists, rebuild the router info and republish.
  * This is useful for dhcp or other situations where the router addresses change -
  * simply create the router.info.rebuild file after modifying router.config and within

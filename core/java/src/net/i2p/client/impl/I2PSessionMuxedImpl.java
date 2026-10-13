@@ -25,14 +25,14 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * I2PSession with protocol and ports
- *
+ * <p>
  * Streaming lib has been modified to send I2PSession.PROTO_STREAMING but
  * still receives all. It sends with fromPort and toPort = 0, and receives on all ports.
- *
+ * <p>
  * No datagram apps have been modified yet.
- *
+ * <p>
  * Therefore the compatibility situation is as follows:
- *
+ * <p>
  * Compatibility:
  * old streaming -&gt; new streaming: sends proto anything, rcvs proto anything
  * new streaming -&gt; old streaming: sends PROTO_STREAMING, ignores rcvd proto
@@ -40,12 +40,12 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * new datagram -&gt; old datagram: sends PROTO_DATAGRAM, ignores rcvd proto
  * In all the above cases, streaming and datagram receive traffic for the other
  * protocol, same as before.
- *
+ * <p>
  * old datagram -&gt; new muxed: doesn't work because the old sends proto 0 but the udp side
  *                            of the mux registers with PROTO_DATAGRAM, so the datagrams
  *                            go to the streaming side, same as before.
  * old streaming -&gt; new muxed: works
- *
+ * <p>
  * Typical Usage:
  * Streaming + datagrams:
  * I2PSocketManager sockMgr = getSocketManager();
@@ -54,7 +54,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  *         * or *
  *        session.addSessionListener(myI2PSessionListener, I2PSession.PROTO_DATAGRAM, I2PSession.PORT_ANY);
  *        session.sendMessage(dest, payload, I2PSession.PROTO_DATAGRAM, fromPort, toPort);
- *
+ * <p>
  * Datagrams only, with multiple ports:
  *        I2PClient client = I2PClientFactory.createClient();
  *        ...
@@ -63,7 +63,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  *         * or *
  *        session.addSessionListener(myI2PSessionListener, I2PSession.PROTO_DATAGRAM, I2PSession.PORT_ANY);
  *        session.sendMessage(dest, payload, I2PSession.PROTO_DATAGRAM, fromPort, toPort);
- *
+ * <p>
  * Multiple streaming ports:
  *        Needs some streaming lib hacking
  *
@@ -123,17 +123,17 @@ class I2PSessionMuxedImpl extends I2PSessionImpl2 {
 
     /**
      *  Listen on specified protocol and port.
-     *
+     * <p>
      *  An existing listener with the same proto and port is replaced.
      *  Only the listener with the best match is called back for each message.
      *
-     *  @param lsnr the listener to add
-     *  @param proto 1-254 or PROTO_ANY (0) for all; recommended:
+     * @param lsnr the listener to add
+     * @param proto 1-254 or PROTO_ANY (0) for all; recommended:
      *               I2PSession.PROTO_STREAMING
      *               I2PSession.PROTO_DATAGRAM
      *               255 disallowed
      *
-     *  @param port 1-65535 or PORT_ANY (0) for all
+     * @param port 1-65535 or PORT_ANY (0) for all
      */
     @Override
     public void addSessionListener(I2PSessionListener lsnr, int proto, int port) {
@@ -255,20 +255,20 @@ class I2PSessionMuxedImpl extends I2PSessionImpl2 {
 
     /**
      *  See SendMessageOptions for option details.
-     *
+     * <p>
      *  Always uses sendNoEffort for now.
      *
-     *  @param proto 1-254 or 0 for unset; recommended:
+     * @param proto 1-254 or 0 for unset; recommended:
      *               I2PSession.PROTO_UNSPECIFIED
      *               I2PSession.PROTO_STREAMING
      *               I2PSession.PROTO_DATAGRAM
      *               255 disallowed
      *
-     *  @param fromPort 1-65535 or 0 for unset
-     *  @param toPort 1-65535 or 0 for unset
-     *  @param options to be passed to the router
-     *  @return true always
-     *  @since 0.9.2
+     * @param fromPort 1-65535 or 0 for unset
+     * @param toPort 1-65535 or 0 for unset
+     * @param options to be passed to the router
+     * @return true always
+     * @since 0.9.2
      */
     @Override
     public boolean sendMessage(Destination dest, byte[] payload, int offset, int size, int proto, int fromPort, int toPort, SendMessageOptions options) throws I2PSessionException {
@@ -281,7 +281,7 @@ class I2PSessionMuxedImpl extends I2PSessionImpl2 {
 
     /**
      * Send a message and request an asynchronous notification of delivery status.
-     *
+     * <p>
      * See I2PSessionMuxedImpl for proto/port details.
      * See SendMessageOptions for option details.
      *

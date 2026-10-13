@@ -19,7 +19,6 @@ import net.i2p.util.RandomSource;
 
 /**
  * Builds jobs to process garlic messages received outside tunnels. Handles floodfill netdb operations and garlic routing for direct peer communications.
- *
  * <p>This is the handler for garlic message not received down a tunnel, which is the
  * case for floodfills receiving netdb messages.
  * It is not the handler for garlic messages received down a tunnel,

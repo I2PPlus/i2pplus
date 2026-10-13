@@ -21,15 +21,15 @@ import net.i2p.util.Log;
 /**
  * NtpClient - an NTP client for Java.  This program connects to an NTP server
  * and prints the response to the console.
- *
+ * <p>
  * The local clock offset calculation is implemented according to the SNTP
  * algorithm specified in RFC 2030.
- *
+ * <p>
  * Note that on windows platforms, the current time-of-day timestamp is limited
  * to an resolution of 10ms and adversely affects the accuracy of the results.
- *
+ * <p>
  * Public only for main(), not a public API, not for external use.
- *
+ * <p>
  * 2036-compliant as of 0.9.50, see NtpMessage.
  *
  * @author Adam Buckley
@@ -234,13 +234,13 @@ public class NtpClient {
 
     /**
      * Main entry point for the NtpClient program.
-     *
+     * <p>
      * Usage:
      * java -jar i2p/lib/router.jar NtpClient [-6] [servers...]
-     *
+     * <p>
      * The optional "-6" flag forces IPv6 DNS lookups.
      * If no servers are specified, the default "pool.ntp.org" is used.
-     *
+     * <p>
      * This program queries the specified NTP servers and prints the current time along with stratum and offset information.
      *
      * @param args command-line arguments; optionally "-6" followed by list of NTP servers

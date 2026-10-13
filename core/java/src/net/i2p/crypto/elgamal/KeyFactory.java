@@ -18,12 +18,11 @@ import java.security.spec.X509EncodedKeySpec;
 
 /**
  * Java Security Provider KeyFactory implementation for ElGamal public-key cryptosystem.
- *
+ * <p>
  * This class provides the bridge between ElGamal-specific key specifications and the standard
  * Java Cryptography Architecture (JCA) KeyFactory interface. It enables conversion between
  * different key representations and supports standard encoding formats for ElGamal operations
  * within the I2P network.
- *
  * <p><strong>Supported Operations:</strong>
  * <ul>
  *   <li><strong>Key Generation:</strong> Create ElGamal keys from specifications</li>
@@ -31,7 +30,6 @@ import java.security.spec.X509EncodedKeySpec;
  *   <li><strong>Standard Encoding:</strong> Support for PKCS#8 and X.509 formats</li>
  *   <li><strong>Key Specification:</strong> Extract key parameters from existing keys</li>
  * </ul>
- *
  * <p><strong>Supported Key Specifications:</strong>
  * <ul>
  *   <li>{@link ElGamalPublicKeySpec} - ElGamal-specific public key specification</li>
@@ -39,7 +37,6 @@ import java.security.spec.X509EncodedKeySpec;
  *   <li>{@link PKCS8EncodedKeySpec} - Standard PKCS#8 private key encoding</li>
  *   <li>{@link X509EncodedKeySpec} - Standard X.509 public key encoding</li>
  * </ul>
- *
  * <p><strong>Usage Example:</strong>
  * <pre>
  * // Create KeyFactory instance
@@ -53,10 +50,8 @@ import java.security.spec.X509EncodedKeySpec;
  * // Convert to standard PKCS#8 format
  * PKCS8EncodedKeySpec pkcs8Spec = keyFactory.getKeySpec(privateKey, PKCS8EncodedKeySpec.class);
  * </pre>
- *
  * <p><strong>Thread Safety:</strong> This class is thread-safe and can be used concurrently
  * by multiple threads. Key objects created by this factory are immutable and thread-safe.
- *
  * <p><strong>Security Considerations:</strong>
  * <ul>
  *   <li>Private key material is handled securely during conversion</li>
@@ -77,7 +72,7 @@ public final class KeyFactory extends KeyFactorySpi {
 
     /**
      * Generates an ElGamal private key from the provided key specification.
-     *
+     * <p>
      * This method converts various key specification formats into ElGamal private keys,
      * supporting both ElGamal-specific specifications and standard PKCS#8 encoding.
      *
@@ -99,7 +94,7 @@ public final class KeyFactory extends KeyFactorySpi {
 
     /**
      * Generates an ElGamal public key from the provided key specification.
-     *
+     * <p>
      * This method converts various key specification formats into ElGamal public keys,
      * supporting both ElGamal-specific specifications and standard X.509 encoding.
      *
@@ -121,7 +116,7 @@ public final class KeyFactory extends KeyFactorySpi {
 
     /**
      * Returns a specification (key material) of the given key object.
-     *
+     * <p>
      * This method extracts the underlying key parameters from ElGamal keys and
      * converts them into the requested specification format.
      *
@@ -155,7 +150,7 @@ public final class KeyFactory extends KeyFactorySpi {
 
     /**
      * Translates a key object from one provider to another.
-     *
+     * <p>
      * This method would allow conversion between ElGamal keys from different
      * security providers, but currently no other ElGamal providers are known
      * or supported in the I2P environment.

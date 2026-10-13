@@ -33,7 +33,6 @@ import net.i2p.util.SimpleTimer2;
 
 /**
  * Handle the actual processing and forwarding of messages through the various tunnels.
- *
  * <pre>
  * For each type of tunnel, it creates a chain of handlers, as follows:
  *
@@ -69,7 +68,6 @@ import net.i2p.util.SimpleTimer2;
  *     Inbound Gateway &gt; 0 hops:
  *       ThrottledPumpedTunnelGateway
  *         BatchedRouterPreprocessor -&gt; InboundSender -&gt; InboundGatewayReceiver -&gt; OutNetMessagePool
- *
  * </pre>
  */
 public class TunnelDispatcher implements Service {
@@ -180,13 +178,11 @@ public class TunnelDispatcher implements Service {
  * Cached handles for the three per-transit-message counters reported by
  * {@link #dispatch(TunnelDataMessage, Hash)} and
  * {@link #dispatch(TunnelGatewayMessage)}.
- *
  * <p>These cannot be batched: N calls of {@code addRateData(name, 1)} give a
  * period total of N <em>and</em> an event count of N, and both are read —
  * {@code GraphListener} stores the count when total equals count, and the
  * Tuner reads {@code Rate.getLastEventCount()} directly. Batching would keep
  * the plotted value right and drop the count to one per flush.
- *
  * <p>What they do not need is the string-keyed map lookup and log-level check
  * on every call. Resolved after {@link #initializeStats()} so the handles can
  * only ever alias an already-registered stat.
@@ -452,7 +448,6 @@ public class TunnelDispatcher implements Service {
  * Single pass over the expiration queue that both recomputes
  * {@link #_lastParticipatingExpiration} and drops entries the maps no
  * longer hold.
- *
  * <p>Ordering is deliberate: the running maximum is folded in <em>before</em>
  * the orphan test, so a pruned entry still contributes to the maximum and
  * {@link #remove(HopConfig)} still compares against the same value it always
@@ -540,7 +535,6 @@ public class TunnelDispatcher implements Service {
  * a no-op unless {@code stat.full} is set, and StatManager discards
  * {@code addRateData} for an unregistered stat, so these failure and abuse
  * signals would silently never appear in the default configuration.
- *
  * <p>Package-visible and static so a unit test can assert the registration
  * without standing up a whole router.
  *

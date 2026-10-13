@@ -192,7 +192,7 @@ public class ClientManagerFacadeImpl extends ClientManagerFacade implements Inte
      * Request that a particular client authorize the Leases contained in the LeaseSet,
      * after which the onCreateJob is queued up.  If that doesn't occur within the timeout
      * specified, queue up the onFailedJob.  This call does not block.
-     *
+     * <p>
      * UNUSED, the call below without jobs is always used.
      *
      * @param dest Destination from which the LeaseSet's authorization should be requested

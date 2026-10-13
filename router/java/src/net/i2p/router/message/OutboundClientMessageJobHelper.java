@@ -32,7 +32,6 @@ import net.i2p.util.Log;
 
 /**
  * Static methods to create a Garlic Message with one or more cloves, as follows:
- *
  * <pre>
  *
  * GarlicMessage
@@ -48,9 +47,8 @@ import net.i2p.util.Log;
  *     Data Clove (required)
  *         Destination delivery instructions
  *         Data Message
- *
  * </pre>
- *
+ * <p>
  * The low-level construction is in GarlicMessageBuilder.
  */
 class OutboundClientMessageJobHelper {
@@ -64,14 +62,14 @@ class OutboundClientMessageJobHelper {
      * Inside the message are two cloves: one containing the payload with instructions for
      * delivery to the (now local) destination, and the other containing a DeliveryStatusMessage with
      * instructions for delivery to an inbound tunnel of this router.
-     *
+     * <p>
      * How the DeliveryStatusMessage is wrapped can vary - it can be simply sent to a tunnel (as above),
      * wrapped in a GarlicMessage and source routed a few hops before being tunneled, source routed the
      * entire way back, or not wrapped at all - in which case the payload clove contains a SourceRouteBlock
      * and a request for a reply.
-     *
+     * <p>
      * For now, its just a tunneled DeliveryStatusMessage
-     *
+     * <p>
      * Allow the app to specify the data clove directly, which enables OutboundClientMessage to resend the
      * same payload (including expiration and unique id) in different garlics (down different tunnels).
      * This is called from OCMOSJ.
@@ -133,7 +131,7 @@ class OutboundClientMessageJobHelper {
     /**
      * Make the top-level config, with a data clove, an optional ack clove, and
      * an optional leaseset clove.
-     *
+     * <p>
      * The returned GarlicConfig will have the recipientPublicKey set.
      *
      * @param dataClove may be null for ECIES-layer ack

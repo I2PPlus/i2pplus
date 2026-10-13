@@ -21,27 +21,26 @@ import java.util.Set;
  * a pending split, or the behavior of the supplied trimmer,
  * as explained below.
  * The creator is responsible for splits.
- *
+ * <p>
  * This class has no knowledge of the DHT base used for XORing,
  * and thus there are no validity checks in add/remove.
- *
+ * <p>
  * The begin and end values are immutable.
  * All entries in this bucket will have at least one bit different
  * from us in the range [begin, end] inclusive.
  * Splits must be implemented by creating two new buckets
  * and discarding this one.
- *
+ * <p>
  * The keys are kept in a Set and are NOT sorted by last-seen.
  * Per-key last-seen-time, failures, etc. must be tracked elsewhere.
- *
+ * <p>
  * If this bucket is full (i.e. begin == end &amp;&amp; size == max)
  * then add() will call KBucketTrimmer.trim() do
  * (possibly) remove older entries, and indicate whether
  * to add the new entry. If the trimmer returns true without
  * removing entries, this KBucket will exceed the max size.
- *
+ * <p>
  * Refactored from net.i2p.router.networkdb.kademlia
- *
  *
  * @param <T> type of SimpleDataStructure objects stored in this bucket
  * @since 0.9.2 in i2psnark, moved to core in 0.9.10

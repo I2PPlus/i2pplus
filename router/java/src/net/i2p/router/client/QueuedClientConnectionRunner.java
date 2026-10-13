@@ -68,7 +68,6 @@ class QueuedClientConnectionRunner extends ClientConnectionRunner {
 
     /**
      * Send the I2CPMessage, giving the client's queue up to timeoutMs to make room.
-     *
      * <p>The in-JVM dispatcher drains this queue every few milliseconds, so a full queue
      * means the client is briefly behind rather than gone. Refusing the message outright
      * costs far more than the wait does: a dropped LeaseSet request spends a whole request
@@ -93,7 +92,6 @@ class QueuedClientConnectionRunner extends ClientConnectionRunner {
 
     /**
      * The error for a client that is not draining its I2CP queue.
-     *
      * <p>Names the client's side of the queue rather than saying only that a write
      * failed, because that is the fact the operator needs: the router's own writer is
      * healthy and the client is the side that has stopped reading.

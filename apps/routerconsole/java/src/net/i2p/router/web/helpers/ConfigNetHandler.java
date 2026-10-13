@@ -20,7 +20,7 @@ import net.i2p.util.Addresses;
 /**
  * Handler to deal with form submissions from the main config form and act
  * upon the values.
- *
+ * <p>
  * Used for both /config and /confignet
  */
 public class ConfigNetHandler extends FormHandler {

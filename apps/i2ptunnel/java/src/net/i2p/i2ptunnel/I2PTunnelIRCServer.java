@@ -100,7 +100,6 @@ public class I2PTunnelIRCServer extends I2PTunnelServer implements Runnable {
 
     /**
      * Construct an IRC client tunnel server.
-     *
      * <p>The cloak key is generated on first use from a random 32 bytes when no
      * passphrase is configured. The options supply the WEBIRC and cloaking
      * settings, and the configuration must be valid to contact the router.
@@ -330,7 +329,7 @@ public class I2PTunnelIRCServer extends I2PTunnelServer implements Runnable {
 
     /**
      * Read a line terminated by newline, with a total read timeout.
-     *
+     * <p>
      * Warning - strips \n but not \r
      * Warning - 8KB line length limit as of 0.7.13, @throws IOException if exceeded
      * Warning - not UTF-8

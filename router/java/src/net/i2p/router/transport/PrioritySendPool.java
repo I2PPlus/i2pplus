@@ -6,17 +6,14 @@ import net.i2p.router.OutNetMessage;
 
 /**
  * Priority-aware bounded send pool for NTCP transport.
- *
  * <p>Client messages (PRIORITY_MY_DATA=1000) are always dequeued before
  * transit messages (PRIORITY_PARTICIPATING=200). When the pool is full
  * and a higher-priority message arrives, the lowest-priority message
  * is evicted. Non-blocking: never stalls the caller.
- *
  * <p>Sorted array with binary search insertion — optimal for the small
  * bounded sizes (64–8192) used by the NTCP send path. Synchronized
  * on a private lock; contention is minimal because the thread that
  * offers almost always polls immediately (handoff pattern).
- *
  * <p>The live region is {@code [_head, _messages.size())}: dequeue is a plain
  * index bump, and the drained prefix is dropped wholesale once it is at least
  * half the array, which keeps the insertion shift proportional to the live
@@ -64,7 +61,6 @@ public final class PrioritySendPool {
 
     /**
      * Non-blocking offer with priority eviction.
-     *
      * <p>If the pool has room, the message is inserted in sorted position
      * and the method returns {@code true}. If the pool is full and the
      * incoming message has strictly higher priority than the lowest-priority

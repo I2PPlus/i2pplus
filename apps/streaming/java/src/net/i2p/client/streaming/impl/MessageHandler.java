@@ -112,7 +112,7 @@ class MessageHandler implements I2PSessionMuxedListener {
 
     /**
      * Notify the client that the session has been terminated.
-     *
+     * <p>
      * The listeners are not cleared here, so they are notified again after a
      * subsequent connection and disconnection.
      *

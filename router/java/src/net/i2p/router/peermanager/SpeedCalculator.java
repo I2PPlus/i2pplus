@@ -8,7 +8,7 @@ import net.i2p.router.RouterContext;
 /**
  * Quantify how fast the peer is based on advertised bandwidth tier,
  * measured latency, congestion capability, and actual tunnel throughput.
- *
+ * <p>
  * Scoring:
  * - Base score from bandwidth tier (X=10000, P=5000, O=2500, N=1250, M=625, L=312, K=125)
  * - RTT penalty reduces score for high-latency peers (linear: factor = max(0.1, 1 - RTT/16s))

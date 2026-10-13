@@ -48,7 +48,7 @@ import net.i2p.util.Log;
  * is sending and receiving data through the streaming library using an
  * I2PSocketManager, it should not attempt to call I2PSession's setSessionListener
  * or receive any messages with its .receiveMessage
- *
+ * <p>
  * This is what I2PSocketManagerFactory.createManager() returns.
  * Direct instantiation by others is deprecated.
  */
@@ -251,7 +251,7 @@ public class I2PSocketManagerFull implements I2PSocketManager {
 
     /**
      * Create a modified copy of the current options, to be used in a setDefaultOptions() call.
-     *
+     * <p>
      * Defaults in opts are honored: a property absent from opts keeps its
      * current value rather than reverting to the default.
      *
@@ -387,7 +387,7 @@ public class I2PSocketManagerFull implements I2PSocketManager {
 
     /**
      * The accept() call.
-     *
+     * <p>
      * This only listens on the primary session. There is no way to get
      * incoming connections on a subsession.
      *
@@ -408,7 +408,7 @@ public class I2PSocketManagerFull implements I2PSocketManager {
      /**
       * Ping the specified peer, returning true if they replied to the ping within
       * the timeout specified, false otherwise.  This call blocks.
-      *
+      * <p>
       * Uses the ports from the default options.
       *
       * @param peer Destination to ping
@@ -426,7 +426,7 @@ public class I2PSocketManagerFull implements I2PSocketManager {
      /**
       * Ping the specified peer, returning true if they replied to the ping within
       * the timeout specified, false otherwise.  This call blocks.
-      *
+      * <p>
       * Uses the ports specified.
       *
       * @param peer Destination to ping
@@ -472,7 +472,7 @@ public class I2PSocketManagerFull implements I2PSocketManager {
      /**
       * Ping the specified peer, returning true if they replied to the ping within
       * the timeout specified, false otherwise.  This call blocks.
-      *
+      * <p>
       * Uses the ports specified.
       *
       * @param peer Destination to ping
@@ -582,7 +582,7 @@ public class I2PSocketManagerFull implements I2PSocketManager {
       * Returns non-null socket.
       * This method does not throw exceptions, but methods on the returned socket
       * may throw exceptions if the socket or socket manager is closed.
-      *
+      * <p>
       * This only listens on the primary session. There is no way to get
       * incoming connections on a subsession.
       *
@@ -595,7 +595,7 @@ public class I2PSocketManagerFull implements I2PSocketManager {
 
     /**
      * Like getServerSocket but returns a real ServerSocket for easier porting of apps.
-     *
+     * <p>
      * This only listens on the primary session. There is no way to get
      * incoming connections on a subsession.
      *
@@ -795,7 +795,7 @@ public class I2PSocketManagerFull implements I2PSocketManager {
     /**
      * Destroy the socket manager, freeing all the associated resources.  This
      * method will block until all the managed sockets are closed.
-     *
+     * <p>
      * CANNOT be restarted.
      */
     public void destroySocketManager() {
@@ -1086,7 +1086,6 @@ public class I2PSocketManagerFull implements I2PSocketManager {
      * fabric (high RTT) must keep a longer window than a fast one so that SYNs
      * aren't expired before the handshake completes. Dynamically adjustable by
      * the Tuner.
-     *
      * <p>0 (the unset default) selects {@code ConnectionHandler.SYN_RTT_SCALE_DEFAULT}
      * (4), so the RTT-aware floor stays active out of the box.
      *

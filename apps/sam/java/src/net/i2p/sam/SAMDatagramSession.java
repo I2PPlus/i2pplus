@@ -58,7 +58,7 @@ class SAMDatagramSession extends SAMMessageSession {
 
     /**
      * Create a new SAM DATAGRAM session.
-     *
+     * <p>
      * Caller MUST call start().
      *
      * @param destStream Input stream containing the destination keys

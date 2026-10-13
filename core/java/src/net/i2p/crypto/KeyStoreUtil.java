@@ -72,10 +72,10 @@ public final class KeyStoreUtil {
 
     /**
      * SHA1 hashes
-     *
+     * <p>
      * No reports of some of these in a Java keystore but just to be safe...
      * CNNIC ones are in Ubuntu keystore.
-     *
+     * <p>
      * In comments below are the serial numer, CN, and OU
      */
     private static final String[] BLACKLIST_SHA1 = new String[] {
@@ -286,7 +286,7 @@ public final class KeyStoreUtil {
      * Use this for keystores containing selfsigned certs where the
      * user will be expected to renew an expiring cert.
      * Use this for Jetty keystores, where we aren't doing the loading ourselves.
-     *
+     * <p>
      * If a cert isn't valid, it will probably cause bigger problems later when it's used.
      *
      * @param f the keystore file to read the certificates from
@@ -315,7 +315,7 @@ public final class KeyStoreUtil {
      * Use this for keystores containing selfsigned certs where the
      * user will be expected to renew an expiring cert.
      * Use this for keystores we are feeding to an SSLContext and ServerSocketFactory.
-     *
+     * <p>
      * We added support for self-signed certs in 0.8.3 2011-01, with a 10-year expiration.
      * We still don't generate them by default. We don't expect anybody's
      * certs to expire until 2021.
@@ -454,7 +454,7 @@ public final class KeyStoreUtil {
     /**
      * Load all X509 Certs from a directory and add them to the
      * trusted set of certificates in the key store
-     *
+     * <p>
      * This DOES check for revocation.
      *
      * @param dir the directory containing certificate files
@@ -499,7 +499,7 @@ public final class KeyStoreUtil {
     /**
      * Load an X509 Cert from a file and add it to the
      * trusted set of certificates in the key store
-     *
+     * <p>
      * This does NOT check for revocation.
      *
      * @param file the file to read the certificate from
@@ -516,7 +516,7 @@ public final class KeyStoreUtil {
     /**
      * Load an X509 Cert from a file and add it to the
      * trusted set of certificates in the key store
-     *
+     * <p>
      * This DOES check for revocation, IF cs is non-null.
      *
      * @param file the file to read the certificate from
@@ -571,10 +571,10 @@ public final class KeyStoreUtil {
     /**
      * Create a keypair and store it in the keystore at ks, creating it if necessary.
      * Use default keystore password, valid days, algorithm, and key size.
-     *
+     * <p>
      * As of 0.9.35, default algorithm and size depends on cname. If it appears to be
      * a CA, it will use EC/256. Otherwise, it will use RSA/2048.
-     *
+     * <p>
      * Warning, may take a long time.
      *
      * @param ks path to the keystore
@@ -598,10 +598,10 @@ public final class KeyStoreUtil {
     /**
      * Create a keypair and store it in the keystore at ks, creating it if necessary.
      * Use default keystore password, valid days, algorithm, and key size.
-     *
+     * <p>
      * As of 0.9.35, default algorithm and size depends on cname. If it appears to be
      * a CA, it will use EC/256. Otherwise, it will use RSA/2048.
-     *
+     * <p>
      * Warning, may take a long time.
      *
      * @param ks path to the keystore
@@ -628,10 +628,10 @@ public final class KeyStoreUtil {
 
     /**
      * Create a keypair and store it in the keystore at ks, creating it if necessary.
-     *
+     * <p>
      * For new code, the createKeysAndCRL() with the SigType argument is recommended over this one,
      * as it throws exceptions, and returns the certificate and CRL.
-     *
+     * <p>
      * Warning, may take a long time.
      *
      * @param ks path to the keystore
@@ -662,10 +662,10 @@ public final class KeyStoreUtil {
 
     /**
      * Create a keypair and store it in the keystore at ks, creating it if necessary.
-     *
+     * <p>
      * For new code, the createKeysAndCRL() with the SigType argument is recommended over this one,
      * as it throws exceptions, and returns the certificate and CRL.
-     *
+     * <p>
      * Warning, may take a long time.
      *
      * @param ks path to the keystore
@@ -716,7 +716,7 @@ public final class KeyStoreUtil {
     /**
      * New way - Native Java, does not call out to keytool.
      * Create a keypair and store it in the keystore at ks, creating it if necessary.
-     *
+     * <p>
      * This returns the public key, private key, certificate, and CRL in an array.
      * All of these are Java classes. Keys may be converted to I2P classes with SigUtil.
      * The private key and selfsigned cert are stored in the keystore.
@@ -725,7 +725,7 @@ public final class KeyStoreUtil {
      * CertUtil.saveCert() if desired.
      * The CRL is not stored by this method, store it with
      * CertUtil.saveCRL() or CertUtil.exportCRL() if desired.
-     *
+     * <p>
      * Throws on all errors.
      * Warning, may take a long time.
      *
@@ -767,7 +767,7 @@ public final class KeyStoreUtil {
     /**
      * New way - Native Java, does not call out to keytool.
      * Create a keypair and store it in the keystore at ks, creating it if necessary.
-     *
+     * <p>
      * This returns the public key, private key, certificate, and CRL in an array.
      * All of these are Java classes. Keys may be converted to I2P classes with SigUtil.
      * The private key and selfsigned cert are stored in the keystore.
@@ -776,7 +776,7 @@ public final class KeyStoreUtil {
      * CertUtil.saveCert() if desired.
      * The CRL is not stored by this method, store it with
      * CertUtil.saveCRL() or CertUtil.exportCRL() if desired.
-     *
+     * <p>
      * Throws on all errors.
      * Warning, may take a long time.
      *
@@ -831,7 +831,7 @@ public final class KeyStoreUtil {
     /**
      * New way - Native Java, does not call out to keytool.
      * Create a keypair and store it in the keystore at ks, creating it if necessary.
-     *
+     * <p>
      * This returns the public key, private key, certificate, and CRL in an array.
      * All of these are Java classes. Keys may be converted to I2P classes with SigUtil.
      * The private key and selfsigned cert are stored in the keystore.
@@ -840,7 +840,7 @@ public final class KeyStoreUtil {
      * CertUtil.saveCert() if desired.
      * The CRL is not stored by this method, store it with
      * CertUtil.saveCRL() or CertUtil.exportCRL() if desired.
-     *
+     * <p>
      * Throws on all errors.
      * Warning, may take a long time.
      *
@@ -872,7 +872,7 @@ public final class KeyStoreUtil {
     /**
      * New way - Native Java, does not call out to keytool.
      * Create a keypair and store it in the keystore at ks, creating it if necessary.
-     *
+     * <p>
      * This returns the public key, private key, certificate, and CRL in an array.
      * All of these are Java classes. Keys may be converted to I2P classes with SigUtil.
      * The private key and selfsigned cert are stored in the keystore.
@@ -881,7 +881,7 @@ public final class KeyStoreUtil {
      * CertUtil.saveCert() if desired.
      * The CRL is not stored by this method, store it with
      * CertUtil.saveCRL() or CertUtil.exportCRL() if desired.
-     *
+     * <p>
      * Throws on all errors.
      * Warning, may take a long time.
      *
@@ -936,7 +936,7 @@ public final class KeyStoreUtil {
     /**
      * OLD way - keytool
      * Create a keypair and store it in the keystore at ks, creating it if necessary.
-     *
+     * <p>
      * Warning, may take a long time.
      *
      * @param ks path to the keystore

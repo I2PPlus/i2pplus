@@ -339,7 +339,7 @@ public class OutNetMessage implements CDPQEntry {
 
     /**
      * The transports that have failed to deliver this message.
-     *
+     * <p>
      * As of 0.9.55, changed from a Set to a List
      *
      * @return the list of failed transports

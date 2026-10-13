@@ -144,11 +144,11 @@ public class RouterContext extends I2PAppContext {
     /**
      * Properties where the defaults must be different from those
      * in I2PAppContext.
-     *
+     * <p>
      * Unless we are explicitly disabling the timestamper, we want to use it.
      * We need this now as the new timestamper default is disabled (so we don't
      * have each I2PAppContext creating their own SNTP queries all the time)
-     *
+     * <p>
      * Set more PRNG buffers, as the default is now small for the I2PAppContext.
      */
 
@@ -722,7 +722,7 @@ public class RouterContext extends I2PAppContext {
      * into something we can route.  This is context specific because we
      * may want to test out how things react when peers don't agree on
      * how to skew.
-     *
+     * <p>
      * Returns same thing as routerKeyGenerator()
      *
      * @return non-null
@@ -781,12 +781,12 @@ public class RouterContext extends I2PAppContext {
 
     /**
      * How long this router was down before it started, or 0 if unknown.
-     *
+     * <p>
      * This may be used for a determination of whether to regenerate keys, for example.
      * We use the timestamp of the previous ping file left behind on crash,
      * as set by isOnlyRouterRunning(), if present.
      * Otherwise, the last STOPPED entry in the event log.
-     *
+     * <p>
      * May take a while to run the first time, if it has to go through the event log.
      * Once called, the result is cached.
      *

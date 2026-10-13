@@ -50,16 +50,16 @@ public final class I2PDatagramDissector {
     /**
      * Load an I2P repliable datagram into the dissector.
      * Does NOT verify the signature.
-     *
+     * <p>
      * Format is:
      * <ol>
      * <li>Destination (387+ bytes)
      * <li>Signature (40+ bytes, type and length as implied by signing key type in the Destination)
      * <li>Payload
      * </ol>
-     *
+     * <p>
      * For DSA_SHA1 Destinations, the signature is of the SHA-256 Hash of the payload.
-     *
+     * <p>
      * As of 0.9.14, for non-DSA_SHA1 Destinations, the signature is of the payload itself.
      *
      * @param dgram non-null I2P repliable datagram to be loaded
@@ -137,7 +137,7 @@ public final class I2PDatagramDissector {
      * Extract the hash of the payload of an I2P repliable datagram (previously
      * loaded with the loadI2PDatagram() method), verifying the datagram
      * signature.
-     *
+     * <p>
      * As of 0.9.14, for signature types other than DSA_SHA1, this returns null.
      *
      * @return The hash of the payload of the I2P repliable datagram
@@ -177,7 +177,7 @@ public final class I2PDatagramDissector {
      * Extract the hash of the payload of an I2P repliable datagram (previously
      * loaded with the loadI2PDatagram() method), without verifying the datagram
      * signature.
-     *
+     * <p>
      * As of 0.9.14, for signature types other than DSA_SHA1, this returns null.
      *
      * @return The hash of the payload of the I2P repliable datagram

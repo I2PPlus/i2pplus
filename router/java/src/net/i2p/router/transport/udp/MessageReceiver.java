@@ -23,7 +23,7 @@ import net.i2p.router.util.CoDelPriorityBlockingQueue;
  * Pull fully completed fragments off the {@link InboundMessageFragments} queue,
  * parse 'em into I2NPMessages, and stick them on the
  * {@link net.i2p.router.InNetMessagePool} by way of the {@link UDPTransport}.
- *
+ * <p>
  * Supports dynamic thread count adjustment via {@link #setThreadCount(int)}.
  * @since 0.9.14 (dynamic resizing since 0.9.70+)
  */

@@ -62,18 +62,14 @@ import org.freenetproject.ForwardPortStatus;
  * This file modded somewhat to remove freenet-specific stuff,
  * but most of the glue to I2P is in UPnPManager (which was written
  * from scratch and is not the Limewire one referred to below).
- *
+ * <p>
  * ==================
- *
+ * <p>
  * This plugin implements UP&amp;P support on a Freenet node.
+ * Some code has been borrowed from Limewire, see com.limegroup.gnutella.UPnPManager.
+ * Public only for command line usage. Not a public API, not for external use.
  *
  * @author Florent Daigni&egrave;re &lt;nextgens@freenetproject.org&gt;
- *
- *
- *         some code has been borrowed from Limewire : @see com.limegroup.gnutella.UPnPManager
- *
- *         Public only for command line usage. Not a public API, not for external use.
- *
  * @see "http://www.upnp.org/"
  * @see "http://en.wikipedia.org/wiki/Universal_Plug_and_Play"
  * @since 0.7.4
@@ -203,7 +199,7 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
     /**
      * As we only support a single active IGD, and we don't currently have any way
      * to get any IPv6 addresses, this will return at most one IPv4 address.
-     *
+     * <p>
      * Blocking!!!
      *
      * @return array of length 1 containing an IPv4 address, or null
@@ -1585,12 +1581,12 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
      * If the SSDP notify or search response sockets listen on more than one interface,
      * cybergarage can get our IP address wrong, and then we send the wrong one
      * to the UPnP device, which will reject it if it enforces strict addressing.
-     *
+     * <p>
      * For example, if we have interfaces 192.168.1.1 and 192.168.2.1, we could
      * get a response from 192.168.1.99 on the 192.168.2.1 interface, but when
      * we send something to 192.168.1.99 it will go out the 192.168.1.1 interface
      * with a request to forward to 192.168.2.1.
-     *
+     * <p>
      * So return the address of ours that is closest to his.
      *
      * @return our address or deflt on failure

@@ -9,7 +9,7 @@ import net.i2p.data.TunnelId;
 
 /**
  * Defines the general configuration for a hop in a tunnel.
- *
+ * <p>
  * This is used for both participating tunnels and tunnels we create.
  * Data only stored for tunnels we create should be in
  * TunnelCreatorConfig to save space.
@@ -233,7 +233,7 @@ public class HopConfig {
      * This returns the number of processed messages since the last time this was called,
      * and resets the count. It should only be called by code that updates the router stats.
      * See TunnelDispatcher.updateParticipatingStats().
-     *
+     * <p>
      * The counter is sampled once so the returned delta and the stored baseline
      * refer to the same read; a concurrent increment lands in the next window.
      *

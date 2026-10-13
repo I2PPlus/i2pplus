@@ -17,13 +17,12 @@ import java.util.concurrent.atomic.AtomicReferenceArray;
  * A least recently used cache with a max size, for SimpleDataStructures.
  * The index to the cache is the first 4 bytes of the data, so
  * the data must be sufficiently random.
- *
+ * <p>
  * This caches the SDS objects, and also uses SimpleByteCache to cache
  * the unused byte arrays themselves
- *
+ * <p>
  * Following is sample usage:
- *  <pre>
- *
+ * <pre>
  * private static final SDSCache&lt; Foo&gt; _cache = new SDSCache(Foo.class, LENGTH, 1024);
  *
  * public static Foo create(byte[] data) {
@@ -37,7 +36,6 @@ import java.util.concurrent.atomic.AtomicReferenceArray;
  * public static Foo create(InputStream in) throws IOException {
  *  return _cache.get(in);
  *  }
- *
  * </pre>
  *
  * @author zzz
@@ -186,12 +184,10 @@ public class SDSCache<V extends SimpleDataStructure> {
      * ConcurrentHashMap&lt;Integer, WeakReference&lt;V&gt;&gt; so the hot lookup
      * neither hashes an Integer nor boxes the key - the first 4 bytes of a
      * SimpleDataStructure almost always fall outside the Integer cache.
-     *
      * <p>Occupancy is marked by the AtomicReferenceArray rather than by the key,
      * since every int is a legal key (a hash of ff ff ff ff is -1). Its
      * release/acquire ordering also means a reader that sees a reference sees
      * its key and everything the writer did before publishing it.
-     *
      * <p>As with the map it replaces, a collected value keeps its slot until the
      * key is written again, so the table grows with the number of distinct keys
      * seen rather than with the number of live entries.

@@ -30,13 +30,13 @@ import java.nio.charset.StandardCharsets;
 /**
  * Simple implementation of DNS over HTTPS.
  * Also sets the local clock from the received date header.
- *
+ * <p>
  * Warning - not thread-safe. Create new instances as necessary.
- *
+ * <p>
  * As of 0.9.49, this supports the RFC 8484 (DNS) format only.
  * Does NOT support the JSON format (used prior to 0.9.49)
  * or RFC 7858 (DNS over TLS).
- *
+ * <p>
  * https://developers.google.com/speed/public-dns/docs/dns-over-https
  * https://developers.cloudflare.com/1.1.1.1/dns-over-https/json-format/
  * https://github.com/curl/curl/wiki/DNS-over-HTTPS

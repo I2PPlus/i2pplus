@@ -15,7 +15,6 @@ import java.io.OutputStream;
 /**
  * Tunnel identifier: a 32-bit unsigned value, held in a long, that names a
  * tunnel within the network database and in lease sets.
- *
  * <p>Value:</p>
  * <ul>
  * <li>Valid range is 1 to {@link #MAX_ID_VALUE} (0xffffffff). 0 is reserved
@@ -26,7 +25,6 @@ import java.io.OutputStream;
  * <li>Uniqueness is only local: each router picks and enforces its own IDs,
  * nothing here generates or checks them.</li>
  * </ul>
- *
  * <p>Comparison:</p>
  * <ul>
  * <li>{@link #equals(Object)} requires an instance of TunnelId, so unlike
@@ -35,7 +33,6 @@ import java.io.OutputStream;
  * <li>{@link #hashCode()} is the low 32 bits of the ID, which is the whole
  * valid range.</li>
  * </ul>
- *
  * <p>Mutability and thread safety:</p>
  * <ul>
  * <li>Not immutable: the ID is a plain non-volatile long that

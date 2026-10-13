@@ -11,7 +11,7 @@ package net.i2p.router.peermanager;
 /**
  * Defines the criteria for selecting a set of peers for use when searching the
  * PeerManager.
- *
+ * <p>
  * Only used by PeerTestJob (PURPOSE_TEST).
  *
  * @since moved from router to peermanager in 0.9.40

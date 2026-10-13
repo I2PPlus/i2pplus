@@ -61,7 +61,7 @@ public class I2PSOCKSTunnel extends I2PTunnelClientBase {
 
     /**
      * Create a SOCKS proxy on the given local port.
-     *
+     * <p>
      * Since 0.9.20 this is fast, and does NOT connect the manager to the router,
      * or open the local socket. You MUST call startRunning() for that.
      *

@@ -143,11 +143,11 @@ public class SAMBridge implements Runnable, ClientApp {
     /**
      * Build a new SAM bridge.
      * NOT recommended for external use.
-     *
+     * <p>
      * Opens the listener socket but does NOT start the thread, and there's no
      * way to do that externally.
      * Use main(), or use the other constructor and call startup().
-     *
+     * <p>
      * Deprecated for external use, to be made private.
      *
      * @param listenHost hostname to listen for SAM connections on ("0.0.0.0" for all)
@@ -168,11 +168,11 @@ public class SAMBridge implements Runnable, ClientApp {
     /**
      * Build a new SAM bridge.
      * NOT recommended for external use.
-     *
+     * <p>
      * Opens the listener socket but does NOT start the thread, and there's no
      * way to do that externally.
      * Use main(), or use the other constructor and call startup().
-     *
+     * <p>
      * Deprecated for external use, to be made private.
      *
      * @param listenHost    hostname to listen for SAM connections on ("0.0.0.0" for
@@ -642,17 +642,15 @@ public class SAMBridge implements Runnable, ClientApp {
 
     /**
      * Usage:
-     *
      * <pre>
      * SAMBridge [ keyfile [listenHost ] listenPort [ name=val ]* ]
      * </pre>
-     *
+     * <p>
      * or:
-     *
      * <pre>
      * SAMBridge [ name=val ]*
      * </pre>
-     *
+     * <p>
      * name=val options are passed to the I2CP code to build a session,
      * allowing the bridge to specify an alternate I2CP host and port, tunnel
      * depth, etc.
@@ -742,17 +740,15 @@ public class SAMBridge implements Runnable, ClientApp {
 
     /**
      * Usage:
-     *
      * <pre>
      * SAMBridge [ keyfile [listenHost ] listenPort [ name=val ]* ]
      * </pre>
-     *
+     * <p>
      * or:
-     *
      * <pre>
      * SAMBridge [ name=val ]*
      * </pre>
-     *
+     * <p>
      * name=val options are passed to the I2CP code to build a session,
      * allowing the bridge to specify an alternate I2CP host and port, tunnel
      * depth, etc.

@@ -6,7 +6,7 @@ import java.util.Properties;
  * SAMSecureSessionInterface is used for implementing interactive authentication
  * to SAM applications. It needs to be implemented by a class for Desktop and
  * Android applications and passed to the SAM bridge when constructed.
- *
+ * <p>
  * It is NOT required that a SAM API have this feature. It is recommended that
  * it be implemented for platforms which have a very hostile malware landscape
  * like Android.

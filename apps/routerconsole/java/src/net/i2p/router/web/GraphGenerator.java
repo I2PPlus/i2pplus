@@ -39,10 +39,10 @@ import org.rrd4j.core.RrdNioBackendFactory;
 /**
  * A thread started by RouterConsoleRunner that checks the configuration for
  * stats to be tracked via jrobin, and adds or deletes RRDs as necessary.
- *
+ * <p>
  * This also contains methods to generate xml or graph image output.
  * The rendering for graphs is in GraphRenderer.
- *
+ * <p>
  * To control memory, the number of simultaneous renderings is limited.
  */
 public class GraphGenerator implements Runnable, ClientApp {
@@ -65,7 +65,6 @@ public class GraphGenerator implements Runnable, ClientApp {
     private boolean _healthStarted;
     /**
      * Whether this instance configured the shared RRD backend factory.
-     *
      * <p>{@code RrdBackendFactory.getDefaultFactory()} is a process-wide singleton, so
      * closing it from a {@link Shutdown} that never configured it would pull the
      * backend out from under every other graph listener still recording. Set at the
@@ -97,7 +96,6 @@ public class GraphGenerator implements Runnable, ClientApp {
     private static final int HEARTBEAT_TICKS = 20;
     /**
      * Watchdog period.
-     *
      * <p>Short enough that the next occurrence of a silently dead data path names its
      * own cause while somebody is still looking at the log, and long enough that a
      * healthy router does no measurable work. Deliberately separate from the 90s sync
@@ -136,7 +134,6 @@ public class GraphGenerator implements Runnable, ClientApp {
 
     /**
      * Route rrd4j diagnostics into the router log.
-     *
      * <p>The vendored rrd4j in apps/jrobin is built without a classpath, so it
      * cannot log through I2P itself and ships with all of its own logging
      * stripped. That is why a permanently cancelled flush schedule produced no
@@ -265,7 +262,6 @@ public class GraphGenerator implements Runnable, ClientApp {
 
     /**
      * Start the 10s health watchdog, at most once.
-     *
      * <p>Idempotent on purpose: {@code runGenerator()} is the only caller and runs
      * once, but a second scheduler would mean two threads applying the heal ladder to
      * the same listeners concurrently, which is how a REOPEN ends up racing a REBUILD
@@ -295,7 +291,6 @@ public class GraphGenerator implements Runnable, ClientApp {
 
     /**
      * Stop the health watchdog if one was started.
-     *
      * <p>Never called from a watchdog task: a scheduler that awaits its own
      * termination from inside a task cannot terminate, and the bounded wait would
      * become an unbounded stall.
@@ -355,7 +350,6 @@ public class GraphGenerator implements Runnable, ClientApp {
 
 /**
  * Why a graph listener is not producing RRD writes.
- *
  * <p>The non-OK values are distinct faults with distinct fixes, so the staleness
  * report names them individually: a single "nothing is being written" count
  * cannot tell an operator which one to go and fix.
@@ -404,7 +398,6 @@ public class GraphGenerator implements Runnable, ClientApp {
 
         /**
          * Whether this cause is a fault that loses recorded data.
-         *
          * <p>Everything except {@link #OK} and {@link #RATE_IDLE}: an idle rate records
          * nothing because nothing is happening, not because recording is broken.
          *
@@ -415,7 +408,6 @@ public class GraphGenerator implements Runnable, ClientApp {
 
     /**
      * Floor applied to a rate's period when deciding whether its listener is stale.
-     *
      * <p>Sub-minute rates can legitimately go minutes between coalesces, and 2x a few
      * hundred milliseconds would flag them from their first tick onwards.
      *
@@ -425,7 +417,6 @@ public class GraphGenerator implements Runnable, ClientApp {
 
     /**
      * Count and oldest age for one {@link StaleCause}.
-     *
      * <p>Deliberately free of router context and of synchronization: a tally is built
      * and read entirely within the single-threaded sync task, and keeping it plain lets
      * the report wording be unit tested without a running router.
@@ -464,7 +455,6 @@ public class GraphGenerator implements Runnable, ClientApp {
 
         /**
          * Add one listener to this tally, naming it.
-         *
          * <p>The name is what makes the report actionable: a count of stalled listeners
          * with no names leaves the operator to diff every rate on the page against the
          * graphs, which is exactly the work the report exists to save.
@@ -537,7 +527,6 @@ public class GraphGenerator implements Runnable, ClientApp {
     private static final String staleAgeSinceLastWrite = "since last write";
     /**
      * Origin wording for an age with no earlier write to measure back from.
-     *
      * <p>The listener's own attach time, not the router's graphing start: only the
      * listener knows how long it has had the chance to write.
      *
@@ -567,7 +556,6 @@ public class GraphGenerator implements Runnable, ClientApp {
 
     /**
      * Decide whether a listener is stalled, and why.
-     *
      * <p>Pure decision logic, split out of the sync task so the thresholds can be pinned
      * by unit tests without a router or an RRD file.
      *
@@ -637,13 +625,11 @@ public class GraphGenerator implements Runnable, ClientApp {
 
     /**
      * Split "the rate has nothing to say" out of the causes that lose data.
-     *
      * <p>A listener that has never written, or has stopped writing, looks identical
      * whether its RRD writes are failing or whether nothing in the router is feeding its
      * rate at all. Only the first loses data. Event count settles it: a rate with no
      * events in its last completed period had nothing to hand the listener, so there is
      * nothing being lost.
-     *
      * <p>Event count rather than coalesce count, deliberately. Coalescing is driven by the
      * StatManager sweep and happens on schedule whether or not any data arrives, so it
      * keeps advancing for a rate nobody is updating. That made the coalesce form unable
@@ -667,7 +653,6 @@ public class GraphGenerator implements Runnable, ClientApp {
 
     /**
      * Compose the write-stall log line.
-     *
      * <p>Pure: a function of the three tallies, so both the wording and the count
      * attribution can be unit tested without a router.
      *
@@ -712,12 +697,10 @@ public class GraphGenerator implements Runnable, ClientApp {
      * Loud failure for a silently stalled data path: logs an ERROR when any attached
      * listener is not recording, naming the cause per listener class rather than
      * reporting one ambiguous count.
-     *
      * <p>Called from both the 90s sync task and the 10s watchdog, so the report is
      * throttled on its own numbers rather than on which task happened to run: an
      * unchanged stall is repeated every {@link #REPORT_REPEAT_MS}, a changed one
      * immediately, and the first occurrence is never throttled at all.
-     *
      * <p>A single INFO follows once the stall clears, so the ERROR has a visible
      * ending rather than being indistinguishable from a router still losing data.
      */
@@ -827,7 +810,6 @@ public class GraphGenerator implements Runnable, ClientApp {
 
     /**
      * Whether the coalesce sweep has missed enough cycles that no rate can be recording.
-     *
      * <p>Pure threshold test, separated from the manager lookup so it can be pinned by
      * unit tests. A sweep is considered stalled once it is older than twice the shortest
      * rate period: the coalesce timer runs every 50s and the shortest period is one
@@ -843,7 +825,6 @@ public class GraphGenerator implements Runnable, ClientApp {
 
     /**
      * Grace period before a coalesce sweep that has never run counts as a stall.
-     *
      * <p>One coalesce interval ({@code Router.COALESCE_TIME}, 50s) plus one shortest
      * rate period, rounded up to two staleness periods.
      *
@@ -853,7 +834,6 @@ public class GraphGenerator implements Runnable, ClientApp {
 
     /**
      * Whether the shared coalesce sweep should be reported as stalled right now.
-     *
      * <p>Separate from {@link #isCoalesceSweepStalled(long)} so the start-up window can
      * be pinned by tests. Until a sweep has ever completed its age is reported as -1,
      * meaning "none ever", which that function quite correctly calls stalled. At
@@ -890,7 +870,6 @@ public class GraphGenerator implements Runnable, ClientApp {
 
     /**
      * How long the coalesce sweep has been absent, for the report.
-     *
      * <p>Always a real, non-negative figure: the caller only reaches this once the
      * absence has already exceeded the normal cadence, so any sentinel would be
      * meaningless noise in an operator-facing line. A sweep that has never run has no
@@ -909,7 +888,6 @@ public class GraphGenerator implements Runnable, ClientApp {
 
     /**
      * Render how long the coalesce sweep has been absent.
-     *
      * <p>Pure, so the sentinel handling can be pinned by test. The bug this exists to
      * prevent: the accessor reports an unknown age as {@code -1}, and an earlier
      * version interpolated that straight into the operator-facing ERROR, producing
@@ -932,7 +910,6 @@ public class GraphGenerator implements Runnable, ClientApp {
 
     /**
      * Does a configured rate need a listener rebuilt?
-     *
      * <p>Three distinct faults, each of which leaves the rate unrecorded for the rest of
      * the router's life while every observable state still reads healthy: the RRD was
      * closed after repeated write failures ({@code detached}), the map lost its listener
@@ -953,7 +930,6 @@ public class GraphGenerator implements Runnable, ClientApp {
      * Re-create any listener that has stopped recording, so neither a transient write
      * failure nor a lost Rate registration can silently retire a graph for the
      * remaining life of the router.
-     *
      * <p>A detached listener stays in the rate-to-listener map, so it is never rebuilt
      * by adjustDatabases(): that only adds rates missing from the old spec. The same
      * holds for a listener that kept its open RRD but lost the registration, and for a
@@ -977,7 +953,6 @@ public class GraphGenerator implements Runnable, ClientApp {
 
     /**
      * Replace a listener for a rate, releasing the old one first.
-     *
      * <p>Shared with the health watchdog's REBUILD step so there is exactly one
      * definition of what retiring a listener means: the old handle is released before
      * the replacement re-opens the same file, and the stale entry leaves the listener
@@ -1021,7 +996,6 @@ public class GraphGenerator implements Runnable, ClientApp {
 
     /**
      * What the watchdog may do about one rate's listener.
-     *
      * <p>Ordered by cost, and the order is the whole point: every rung keeps more of
      * the existing recording than the one above it.
      *
@@ -1032,7 +1006,6 @@ public class GraphGenerator implements Runnable, ClientApp {
         NONE,
         /**
          * The Rate no longer points at this listener but the listener itself is fine.
-         *
          * <p>Never returned: a lost registration is repaired by REBUILD, which also
          * covers a listener that was never attached in the first place. Re-pointing the
          * Rate at a listener another instance may have claimed would make two listeners
@@ -1050,10 +1023,8 @@ public class GraphGenerator implements Runnable, ClientApp {
 
     /**
      * Cheapest action that can restore recording for one rate.
-     *
      * <p>Pure decision logic, ordered cheapest first, so the cost ordering is pinned by
      * unit tests rather than by reading the ladder at the call site.
-     *
      * <p>The first row is also the spec-churn guard: a listener that is mapped, attached
      * and registered can only ever reach BACKFILL or NONE, never REOPEN or REBUILD, so
      * re-reading a changed {@code stat.summaries} string cannot close and reopen a
@@ -1083,7 +1054,6 @@ public class GraphGenerator implements Runnable, ClientApp {
 
     /**
      * How many retained samples one backfill attempt should ask for.
-     *
      * <p>Bounded by the drift, since asking for more steps than are missing wastes a
      * list copy every tick, and capped at {@link #MAX_BACKFILL_STEPS} so a listener
      * that fell thousands of steps behind does not ask for a list that long - the
@@ -1134,12 +1104,10 @@ public class GraphGenerator implements Runnable, ClientApp {
 
     /**
      * Name the mechanism behind positive ledger drift.
-     *
      * <p>These are the three candidates that were indistinguishable from the console
      * during the incident this exists for: a coalesce that never happened, a sample
      * that queued and never drained, and a sample that arrived and was not written.
      * Each has a different fix, so the report has to pick one.
-     *
      * <p>Pure, so the mapping from counters to mechanism is unit tested without a
      * router, a StatManager or a clock.
      *
@@ -1166,7 +1134,6 @@ public class GraphGenerator implements Runnable, ClientApp {
 
     /**
      * Compose the ledger-drift log line.
-     *
      * <p>Pure and single-line, so the wording and the six StatManager counters can be
      * asserted in a unit test. The counters are the point of the line: an operator
      * reading "pending climbing with oldest-pending-age climbing" knows the consumer is
@@ -1207,7 +1174,6 @@ public class GraphGenerator implements Runnable, ClientApp {
 
     /**
      * One watchdog tick: report a stalled data path, then apply the heal ladder.
-     *
      * <p>Holds no lock across I/O and does no RRD work itself beyond the backfill the
      * ladder asks for. Wrapped in a Throwable catch because an escaping exception
      * silences a fixed-rate scheduled task permanently, which would remove the very
@@ -1229,12 +1195,10 @@ public class GraphGenerator implements Runnable, ClientApp {
 
     /**
      * Walk every listener, heal what can be healed, and report what could not be.
-     *
      * <p>Iterates {@link #_listeners} rather than the rate map so that "mapped" is a
      * real question: a listener that is alive but has lost its map entry is exactly the
      * REBUILD case the ladder exists for, and iterating the map would never see it.
      * The map's own dead entries are handled by {@link #reviveDetachedListeners()}.
-     *
      * <p>The ledger reports at WARN, not ERROR, because it describes drift the ladder
      * has usually already repaired, and a single INFO marks its clearing.
      */
@@ -1320,11 +1284,9 @@ public class GraphGenerator implements Runnable, ClientApp {
 
     /**
      * Track whether the tracked rates are still coalescing at all.
-     *
      * <p>Tested over a window rather than a single tick: a 60s rate coalesces on one
      * tick in six, so comparing against the previous tick alone would report "the rates
      * stopped" five times out of six.
-     *
      * <p>Not synchronized, and deliberately so: only the single watchdog thread ever
      * calls it, whereas {@link #stop()} holds this instance's monitor across a bounded
      * scheduler shutdown wait. Synchronizing here would let a shutdown stall the
@@ -1345,7 +1307,6 @@ public class GraphGenerator implements Runnable, ClientApp {
 
     /**
      * Decide whether a repeated report is due, and remember the decision.
-     *
      * <p>Pure enough to unit test and free of router context, so the "first report is
      * never throttled, a changed one is never delayed, an unchanged one repeats on a
      * timer" rule is pinned by tests rather than by reading the caller.
@@ -1361,7 +1322,6 @@ public class GraphGenerator implements Runnable, ClientApp {
 
         /**
          * Decide whether this report is due, and remember the decision.
-         *
          * <p>Synchronized because the stall report is reached from the 90s sync task and
          * the 10s watchdog, which run on different threads.
          *
@@ -1382,7 +1342,6 @@ public class GraphGenerator implements Runnable, ClientApp {
 
     /**
      * Shuts down the health watchdog and the scheduler, unregistering the app.
-     *
      * <p>The watchdog goes first: it is the task that would notice the sync task
      * hanging, so it has to be shut down before the thing it watches, not after.
      */
@@ -1558,7 +1517,6 @@ public class GraphGenerator implements Runnable, ClientApp {
 
     /**
      * Start tracking a rate by creating a new GraphListener for it.
-     *
      * <p>Single choke point for every listener creation, so it is also where "one live
      * listener per rate" is enforced. Both the 90s sync task and the 10s watchdog can
      * decide to rebuild the same rate within one interval; without this the second
@@ -1961,7 +1919,6 @@ GraphListener lsnr = _listenerByRate.get(rate);
 
     /**
      * Resolve a stat.summaries string to the Rates it names.
-     *
      * <p>A token that is not statName.period, names an unknown stat or carries a
      * non-numeric period is skipped rather than failing the sync tick.
      *
@@ -1995,7 +1952,6 @@ GraphListener lsnr = _listenerByRate.get(rate);
 
     /**
      * Collect the listeners for the enabled members of a graph group.
-     *
      * <p>Members are returned in the group's legend order, not in listener order, so the
      * colours and legend entries stay put as stats are enabled and disabled. Members whose
      * RRD has not been created yet are skipped: a stat that has never been sampled has no
@@ -2158,7 +2114,6 @@ GraphListener lsnr = _listenerByRate.get(rate);
     private class Shutdown implements Runnable {
         /**
          * Close all persistent RRDs and clean up.
-         *
          * <p>Ordered: watchdog, sync task, listeners, backend factory. The factory is
          * last because closing it while a listener still holds a handle leaves that
          * handle half-closed, and it is only closed at all by the instance that
@@ -2184,7 +2139,6 @@ GraphListener lsnr = _listenerByRate.get(rate);
 
     /**
      * Close the shared RRD backend factory, but only if this instance configured it.
-     *
      * <p>{@code RrdBackendFactory.getDefaultFactory()} is a singleton, so a second
      * {@link GraphGenerator} shutting down after the one that configured it would
      * otherwise stop the flush pool out from under every listener still recording.

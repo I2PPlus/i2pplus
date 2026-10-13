@@ -40,9 +40,9 @@ import net.i2p.util.SystemVersion;
  *  off the necessary activities if the load allows.  If nothing wants to build any tunnels,
  *  it waits for a short period before looping again (or until it is told that something
  *  changed, such as a tunnel failed, new client started up, or tunnel creation was aborted).
- *
+ * <p>
  * Note that the default 11 minute tunnel expiration is assumed in here.
- *
+ * <p>
  * As of 0.8.11, inbound request handling is done in a separate thread.
  */
 public class BuildExecutor implements Runnable {
@@ -86,7 +86,6 @@ public class BuildExecutor implements Runnable {
     /**
      * Elevated ceiling when urgent demand cannot be served at the current one.
      *  Pure, so the rule is testable without a router.
-     *
      * <p>Elevates only for the urgent pool's own build plus headroom, bounded by
      *  the ceiling's own maximum, and only when there is not already room under
      *  it. An ordinary deficit does not elevate: that demand is served a pool
@@ -115,7 +114,6 @@ public class BuildExecutor implements Runnable {
     /**
      * Pure form of the dispatch score, so the ordering can be pinned without
      *  building pools.
-     *
      * <p>Tiers, highest first:
      * <ol>
      * <li>collapsed (no usable tunnel) — a pool with no service at all;</li>
@@ -124,14 +122,12 @@ public class BuildExecutor implements Runnable {
      * <li>deficit against target;</li>
      * <li>paired balance — the direction behind its pair.</li>
      * </ol>
-     *
      * <p>Expiry sits above deficit and below near-collapse deliberately. A pool
      *  holding fewer tunnels than target but with hours on its leases can wait a
      *  cycle; a pool whose leases lapse in the pre-build window is losing its
      *  service in minutes and the replacement needs that same window to build.
      *  It stays below near-collapse so a genuinely thin pool is never starved by
      *  a merely time-urgent one.
-     *
      * <p>The expiry bonus is capped at {@link #MAX_EXPIRY_BONUS} tunnels, so a
      *  pool that keeps producing near-expiry tunnels cannot accumulate unbounded
      *  priority — the urgency is consumed when the lease lapses.
@@ -409,12 +405,12 @@ public class BuildExecutor implements Runnable {
      * When a pool exceeds _consecutiveFailureThreshold, builds are
      * paused for _poolBackoffMs to prevent build storms.
      * Maps: TunnelPool -> [consecutiveFailures, backoffUntilMs]
-     *
+     * <p>
      * Threshold of 5 allows transient failures (network hiccups, slow peers)
      * without triggering premature backoff.  Previous threshold of 3 caused
      * cascading pool collapses: 3 failures → backoff → tunnels expire →
      * EMERGENCY → more failures → higher backoff counter → death spiral.
-     *
+     * <p>
      * Backoff of 12s is long enough to avoid build storms but short enough
      * that tunnels expiring during backoff can be rebuilt before the pool
      * fully collapses.  Previous 8s was too short to prevent repeated storms
@@ -848,7 +844,6 @@ public class BuildExecutor implements Runnable {
 
     /**
      * Bit marking a window entry as an inbound build.
-     *
      * <p>Packed into the same byte as the result ordinal so one write records both
      * and a concurrent reader can never see a result attributed to the wrong
      * direction. {@link Result} has nine values, so ordinals 0-8 leave the top
@@ -858,7 +853,6 @@ public class BuildExecutor implements Runnable {
 
     /**
      * Mask selecting the result ordinal out of a packed entry.
-     *
      * <p>An explicit mask rather than {@code ~INBOUND_BIT}: the complement of
      * {@code 0x80} keeps every high bit set, and applying it to the sign-extended
      * {@code byte} leaves bit 7 in place, so an inbound entry indexed
@@ -869,7 +863,6 @@ public class BuildExecutor implements Runnable {
 
     /**
      * Pack a build outcome and its direction into one window entry.
-     *
      * <p>Pure decision — no state, safe for unit tests.
      *
      * @param result the build outcome
@@ -905,7 +898,6 @@ public class BuildExecutor implements Runnable {
 
     /**
      * Update success/failure/timeout counters and calculate adaptive timeout.
-     *
      * <p>The per-direction success rates and the aggregate are all computed from
      * this one window in this one pass. That is deliberate: smoothing computed
      * separately would give each rate its own sampling noise, and a per-direction
@@ -1024,11 +1016,11 @@ public class BuildExecutor implements Runnable {
      * Calculate adaptive timeouts based on recorded build outcomes.
      * Starts from mainline's base values (13s/10s) and adjusts
      * marginally in either direction based on success rate.
-     *
+     * <p>
      * Adaptive ranges:
      * REQUEST_TIMEOUT:   13s base, 10-18s range
      * FIRST_HOP_TIMEOUT: 10s base, 8-15s range
-     *
+     * <p>
      * Also adjusts concurrent build capacity based on timeout rate
      * to prevent overwhelming the IB reply path.
      *
@@ -1130,14 +1122,12 @@ public class BuildExecutor implements Runnable {
     private static final int LENGTH_BASELINE = 3;
     /**
      * Build completion time above which a build counts as slow.
-     *
      * <p>Half the floor the build reply deadline is clamped to in
      *  {@link #calculateAdaptiveTimeoutFromSuccess}. Half rather than the deadline itself, so the
      *  count stays selective:
      *  anything it records is a build that would have been at risk of expiring had the budget
      *  been at its floor. If nearly every build were counted the stat would just mirror
      *  {@code tunnel.buildClientSuccess} and say nothing new, and if none were it would be dead.
-     *
      * <p>This exists for the same reason as {@code udp.*EstablishSlow}. The success stats
      *  record a duration but expose only a mean, and build latency is right-skewed, so the mean
      *  says little about the builds that nearly timed out - which are exactly the ones a reply
@@ -1174,7 +1164,7 @@ public class BuildExecutor implements Runnable {
 
     /**
      * Calculate adaptive timeout based on tunnel characteristics and network conditions.
-     *
+     * <p>
      * Convenience wrapper for single-config callers; scans that evaluate many
      * configs in one pass should fetch the two invariant inputs once and call
      * {@link #calculateAdaptiveTimeout(PooledTunnelCreatorConfig, int, long)}.
@@ -1189,7 +1179,7 @@ public class BuildExecutor implements Runnable {
 
     /**
      * Cached-variant of {@link #calculateAdaptiveTimeout(PooledTunnelCreatorConfig)}.
-     *
+     * <p>
      * The CPU load and RTT floor do not vary per config, only the tunnel length
      * and direction do, so a scan over many in-flight builds fetches them once
      * and passes them in.  {@link SystemVersion#getCPULoadAvg()} is already
@@ -1208,13 +1198,12 @@ public class BuildExecutor implements Runnable {
 
     /**
      * Pure arithmetic for the adaptive build timeout.
-     *
+     * <p>
      * Extracted from {@link #calculateAdaptiveTimeout(PooledTunnelCreatorConfig, int, long)}
      * so the term ordering can be pinned by unit tests without a router context.
      * The terms are applied in a fixed order — length, then system load, then
      * the outbound reply-path surcharge, then the RTT floor as a lower bound —
      * so that result is bit-identical to the original inline implementation.
-     *
      * <p>Outbound builds get a longer budget because the build reply returns
      * through an IB exploratory tunnel; when those are congested OB builds time
      * out at roughly twice the rate of IB builds, and the SSU2 handshake alone
@@ -1232,14 +1221,12 @@ public class BuildExecutor implements Runnable {
      */
     /**
      * The adjustment to add to the base build timeout, from the success rate alone.
-     *
      * <p>The timeout rate is deliberately not an input. It used to be, and reaching that
      *  branch was itself a bug worth recording: the test sat after {@code successRate > 0.50},
      *  so the intended +7s was unreachable for every success rate above half - exactly the band
      *  where a high timeout rate is most expensive, a timeout burning a whole build slot where
      *  a reject costs a round trip. Reordering fixed the reachability and the +7s then did
      *  what it said.
-     *
      * <p>It no longer belongs here. The +7s was justified while an outbound session
      *  establishment was abandoning ~117 handshakes a minute at 2250ms: a build waiting on
      *  one of those genuinely needed more time. That deadline is now floored at 4000ms and
@@ -1248,7 +1235,6 @@ public class BuildExecutor implements Runnable {
      *  11.8 minute window either side of that change, build success fell from 64.5% to
      *  56.0% (-8.5pp, 4.2 sigma) and throughput 12%, with the timeout-to-reject ratio
      *  worsening from 1.55:1 to 3.2:1 - the signature of builds waiting rather than failing.
-     *
      * <p>The timeout rate still drives the concurrency throttle below, which is the lever
      *  that reduces occupancy. One signal, one lever: timeouts should shrink the amount of
      *  work in flight, not inflate how long each item may hold a slot.
@@ -1272,7 +1258,6 @@ public class BuildExecutor implements Runnable {
 
     /**
      * Combine the Tuner's base timeout with the success-rate adjustment.
-     *
      * <p>Pure, and deliberately unclamped. The base is already bounded by the
      *  Tuner's own range, and the final budget is bounded by
      *  {@link #computeAdaptiveTimeout} through {@code MAX_ADAPTIVE_TIMEOUT_MS}, so
@@ -1281,7 +1266,6 @@ public class BuildExecutor implements Runnable {
      *  collapsed onto 30s, and with the base at 10s the FAST (-3s) branch collapsed up
      *  to 10s. Logged samples sat pinned at the 30s ceiling 75% of the time, which is
      *  what a degenerate ladder looks like from outside.
-     *
      * <p>Extracted from the adaptive-timeout update so that reachability of every
      *  branch across the base range is unit-testable without a router. While the
      *  arithmetic lived only inside the instance method, the sole way to test it was
@@ -1300,7 +1284,6 @@ public class BuildExecutor implements Runnable {
     /**
      * The concurrency ceiling for one throttle crossing: 20% off the current value,
      *  never below 60% of base.
-     *
      * <p>Scaling the current value rather than the base is what makes this a ramp. The
      *  previous form took 80% of base and clamped with 60% of base, and since 0.8x is
      *  always greater than 0.6x the clamp could never bind: the value was pinned at a
@@ -1324,7 +1307,6 @@ public class BuildExecutor implements Runnable {
 
     /**
      * The concurrency ceiling for one restore step: a small step toward base.
-     *
      * <p>Stepping by a sixteenth rather than a quarter keeps recovery slower than the
      *  20% the throttle removes, so a transient spike does not put the router back at
      *  full concurrency and straight into another throttle crossing. The previous
@@ -1343,7 +1325,6 @@ public class BuildExecutor implements Runnable {
 
     /**
      * Scale a base build timeout for hop count, system load and direction.
-     *
      * <p>The length, load and direction terms are added to the base, then the
      *  measured RTT floor replaces the sum if it is larger, so a peer that
      *  cannot answer within its own round trip still gets its chance.
@@ -1383,11 +1364,9 @@ public class BuildExecutor implements Runnable {
 
     /**
      * Describe the peers an expired build was routed through, at DEBUG.
-     *
      * <p>An expire is counted as a single outcome, but each one silently also
      *  costs a test round and a test partner, so the reason a peer looked
      *  selectable and then never answered is the signal worth having.
-     *
      * <p>Each hop is labelled with its role, and the hop where the local router
      *  legitimately belongs is identified as ours rather than reported as a
      *  peer. A router is one end of every tunnel it builds —
@@ -1398,14 +1377,12 @@ public class BuildExecutor implements Runnable {
      *  depends on direction: inbound puts us at the last hop, outbound at the
      *  first. An appearance at any <em>other</em> index is the thing worth
      *  noticing, and is labelled as unexpected.
-     *
      * <p>The three reachability fields are separate because they imply
      *  different fixes. A peer already known unreachable is a selection filter
      *  that did not fire. A peer never established and silent is a draw that
      *  reached past the activity window. A peer that is established and still
      *  silent accepts a connection and then ignores build requests, which
      *  neither recency nor reachability filtering will address.
-     *
      * <p>{@code wasUnreachable} and {@code isConnecting} are declared on
      *  {@link CommSystemFacade} with a {@code false} default and are only
      *  meaningful through the live implementation, which is what
@@ -1449,7 +1426,6 @@ public class BuildExecutor implements Runnable {
 
     /**
      * The peer holds an established connection but did not answer the build request.
-     *
      * <p>This is the signature that recency and reachability filtering cannot address: the
      *  peer accepts the connection and then ignores build requests, so it looks healthy to
      *  every filter that exists and still consumes a share of the timeout budget.
@@ -1474,7 +1450,6 @@ public class BuildExecutor implements Runnable {
 
     /**
      * Reduce one hop of an expired build to a single classification token.
-     *
      * <p>Order matters: an unreachable peer is reported as such even if a connection flag is
      *  also set, because "we already know this peer is dead" is the more actionable fact and
      *  the one that indicts selection rather than the peer.
@@ -1516,7 +1491,6 @@ public class BuildExecutor implements Runnable {
 
     /**
      * Rate-limit the per-expiry report.
-     *
      * <p>Expired builds arrive at roughly twenty a minute on a degraded router, which is far
      *  too often to read individually but not often enough to summarise losslessly. One
      *  representative report a minute is enough to identify which pattern dominates; the
@@ -1538,7 +1512,6 @@ public class BuildExecutor implements Runnable {
 
     /**
      * Report an expired build on a single line, naming every hop and its state.
-     *
      * <p>Build timeouts are the largest unexplained loss on this router - roughly twice the
      *  rejection rate - and the DEBUG dump that already existed could not be read, because
      *  the class logs at INFO in practice and a six-line dump per expiry at twenty expiries a
@@ -1591,7 +1564,6 @@ public class BuildExecutor implements Runnable {
 
     /**
      * Append the build request's I2NP message ID, when known.
-     *
      * <p>This is the join key to the {@code [MsgID ...]} emitted by
      *  {@code BuildRequestor} on send. With it, an expiring build can be traced
      *  to a specific send and the "hop never answered" and "reply lost" cases
@@ -1616,7 +1588,6 @@ public class BuildExecutor implements Runnable {
 
     /**
      * Record which hop position failed to answer, for every expired build.
-     *
      * <p>Counts one rate stat per (position, classification) pair, skipping
      *  ourselves and the states that are expected rather than failures, so the
      *  resulting distribution answers "where do builds die?" without relying on
@@ -1718,7 +1689,6 @@ public class BuildExecutor implements Runnable {
 
     /**
      * Config index at which the local router sits as this tunnel's gateway.
-     *
      * <p>{@code TunnelPool.createConfig} reverses the selected peer list into
      *  the config, so config index 0 is the last selected peer.
      *  {@code ClientPeerSelector.finalizeSelection} inserts the local router at
@@ -1990,7 +1960,7 @@ public class BuildExecutor implements Runnable {
      *  no-reply events, so the profile penalty and ghost mark go to the
      *  contacted hop only.  The per-tier expire stat and the didNotReply
      *  debug log stay per-hop for accounting and triage.
-     *
+     * <p>
      * Every non-self hop is additionally cooled down out of the immediate
      *  retry selection ({@link #cooldownFailedPeers(PooledTunnelCreatorConfig)}),
      *  since any of them may have been the silent one.
@@ -2057,7 +2027,6 @@ public class BuildExecutor implements Runnable {
 
     /**
      * Whether an expired build's contacted hop should be charged a ghost mark.
-     *
      * <p>A ghost mark is a peer exclusion, so it should rest on evidence that
      * indicts the peer.  When the contacted hop is
      * {@link #HOP_ESTABLISHED_SILENT established but silent} it is not: the
@@ -2065,7 +2034,6 @@ public class BuildExecutor implements Runnable {
      * reply is equally consistent with the request being dropped inside the
      * peer, the reply being lost on the return path, or our own path being the
      * problem.  Charging that case excludes peers for a fault they may not own.
-     *
      * <p>It is also the dominant bucket.  On a live router under stress the
      * contacted-hop expiries split roughly 27.7/min established-silent against
      * 4.3/min unreachable and 4.7/min merely reachable, so this single decision
@@ -2073,7 +2041,6 @@ public class BuildExecutor implements Runnable {
      * the exclusion set growing faster than {@code ghostMarksCleared} can
      * retire it — the observed 82/min in against 15/min out — which was
      * steadily shrinking the pool selection draws from.
-     *
      * <p>Every other classification still charges: unreachable, handshake
      * unfinished and plain reachable all leave the peer as the best available
      * explanation for the expiry.  The selection-scope cooldown from
@@ -2549,11 +2516,11 @@ public class BuildExecutor implements Runnable {
      * build request to a first-hop peer that already has a build in flight —
      * stacking requests on one peer floods it and makes the first build
      * answer slower.  Zero-hop tunnels build inline, unguarded.
-     *
+     * <p>
      * Early ban filtering: checks if the first-hop is banned before
      * dispatching the build, preventing wasted build slots on peers
      * that will reject the request.  Saves 12-18 build slots per minute.
-     *
+     * <p>
      * Stale build pruning: skips builds that would timeout before being
      * dispatched (queue wait + expected build time > timeout budget),
      * reducing wasted builds that would timeout anyway.
@@ -2701,7 +2668,7 @@ public class BuildExecutor implements Runnable {
      *  Prevents stacking multiple build requests onto a single peer while
      *  allowing bursts to different peers.  Emergency builds bypass this via
      *  {@link PooledTunnelCreatorConfig#isBypassPacing()}.
-     *
+     * <p>
      * Also skips peers that have recently failed as first hops more than
      *  {@link #_firstHopFailureThreshold} times within the cooldown window.
      *
@@ -3371,7 +3338,7 @@ public class BuildExecutor implements Runnable {
      *  most 1 consecutive failure) used for proactive replacement, plus
      *  aggregates: zero-hop fallback count, GOOD count and their total
      *  latency.
-     *
+     * <p>
      * Length-1 tunnels always land in fallbackCount and never fill the
      *  expiry buckets, so pools that don't explicitly request zero-hop
      *  tunnels keep building replacements until the fallback is gone.

@@ -16,7 +16,7 @@ import java.util.concurrent.atomic.AtomicLong;
  * This offset will ideally be periodically updated so as to serve as the difference
  * between the local computer's current time and the time as known by some reference
  * (such as an NTP synchronized clock).
- *
+ * <p>
  * Protected members are used in the subclass RouterClock,
  * which has access to a router's transports (particularly peer clock skews)
  * to second-guess the sanity of clock adjustments.
@@ -122,7 +122,7 @@ public class Clock implements Timestamper.UpdateListener {
     /**
      * Specify how far away from the "correct" time the computer is - a positive
      * value means that the system time is slow, while a negative value means the system time is fast.
-     *
+     * <p>
      * Warning - overridden in RouterClock
      *
      * @param offsetMs the delta from System.currentTimeMillis() (NOT the delta from now())

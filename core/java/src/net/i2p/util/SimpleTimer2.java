@@ -15,9 +15,9 @@ import net.i2p.I2PAppContext;
  * Scheduled event executor backed by ScheduledThreadPoolExecutor.
  * Replaces the legacy SimpleTimer (deleted; had lock contention issues).
  * Supports cancel and reschedule. Events must NOT block.
- *
+ * <p>
  * All timer events should extend TimedEvent and use schedule()/cancel() directly.
- *
+ * <p>
  * A saturation watchdog samples this pool from a thread of its own and warns
  * when every worker has stayed occupied with a backlog behind it: a
  * ScheduledThreadPoolExecutor never grows past {@link #THREADS}, so two
@@ -78,7 +78,6 @@ public class SimpleTimer2 {
     /**
      * Consecutive samples that must show progress before a quiet episode is called
      * over.
-     *
      * <p>Without it a single completing task ends the episode, so a timer that finishes
      * something every few minutes reports the same condition on every threshold window
      * instead of once.
@@ -103,7 +102,6 @@ public class SimpleTimer2 {
      * population of those will bury a two-thread pool. The count is what tells the
      * saturation report the queue is being flooded by immediate reschedules rather
      * than by ordinary periodic work.
-     *
      * <p>Incremented only on the zero-delay path, so the steady-state cost is nil.
      *
      * @since 0.9.71+
@@ -222,14 +220,12 @@ public class SimpleTimer2 {
 
     /**
      * Decide what one saturation sample means.
-     *
      * <p>The pool counts as saturated only when both halves hold: every worker
      * is occupied ({@code activeCount >= poolSize}) <i>and</i> at least
      * {@link #WATCHDOG_MIN_QUEUE} events are waiting behind them. Either half
      * alone is noise - the queue also holds delayed events that are not due yet,
      * and both workers being busy is ordinary whenever two events happen to run
      * at once.
-     *
      * <p>{@code consecutiveSaturatedSamples} counts the samples <i>before</i>
      * this one, so a threshold of N reports on the (N+1)th consecutive
      * saturated sample: "more than N samples", not "N". {@code episodeReported}
@@ -258,18 +254,15 @@ public class SimpleTimer2 {
 
     /**
      * Decide what one "nothing finished" sample means.
-     *
      * <p>This is the cheap form of "a periodic event stopped firing": the
      * executor's own completed-task counter not advancing across samples means
      * nothing this timer runs is finishing, regardless of what the pool size
      * says. It deliberately does not track individual events - that would mean
      * bookkeeping on every scheduling and every run.
-     *
      * <p>An executor that has never completed a task is treated as idle, not
      * wedged: a timer with nothing scheduled on it is not a failure, and
      * warning about one would bury the real reports. A wedge that starts before
      * the first completion is still caught by {@link #evaluateSaturation}.
-     *
      * <p>The quiet period is calibrated against the timer's own worst observed gap
      * rather than its mean interval. A mean is the wrong statistic here: a
      * coalescing timer runs in dense bursts, so its mean interval is dominated by
@@ -299,7 +292,6 @@ public class SimpleTimer2 {
 
     /**
      * Decide what one "nothing finished" sample means, given whether work was actually due.
-     *
      * <p>Added parameter {@code workDue}: when nothing is due there is nothing to be
      * late for, so the sample is {@link WatchdogDecision#OK} regardless of history. The
      * calibration below then only judges timers that genuinely had work and did not run
@@ -381,14 +373,12 @@ public class SimpleTimer2 {
     /**
      * Samples this timer on its own daemon thread and reports a pool that has
      * stopped keeping up.
-     *
      * <p>It cannot run on the pool it watches: a wedged pool has no spare
      * worker to run the watchdog on, which is the whole failure. It also does
      * nothing but read counters, so no event running on this timer can delay
      * it. Every sample is four counter reads and a few field writes - no
      * allocation, no synchronization beyond the monitor it sleeps on - so it is
      * free to leave running for the life of the router.
-     *
      * <p>Everything below is touched only by the watchdog thread, except
      * {@code _stopped}, which is guarded by the watchdog monitor.
      */
@@ -453,7 +443,6 @@ public class SimpleTimer2 {
 
         /**
          * Sample every {@link #WATCHDOG_INTERVAL_MS} until {@link #shutdown()}.
-         *
          * <p>The stopped test and the wait share the monitor, so shutdown()
          * cannot land between them and leave this thread parked for the rest
          * of the interval - hence no interrupt is needed.
@@ -500,7 +489,6 @@ public class SimpleTimer2 {
 
         /**
          * Is a task actually due on this timer right now?
-         *
          * <p>A pool that has completed nothing may be idle or wedged, and completion
          * counts cannot tell them apart - only this can. It is a property of the work
          * offered, not of the timer's history, so unlike a calibrated gap threshold it
@@ -556,7 +544,6 @@ public class SimpleTimer2 {
 
         /**
          * Warn once per episode of a pool that completes nothing at all.
-         *
          * <p>The bar is the timer's own longest observed gap, learned as the timer
          * comes and goes, rather than its mean interval. See {@link #evaluateStall}.
          */
@@ -699,11 +686,11 @@ public class SimpleTimer2 {
 
     /**
      * State of a given TimedEvent.
-     *
+     * <p>
      * valid transitions:
      * {IDLE,CANCELLED,RUNNING} -&gt; SCHEDULED [ -&gt; SCHEDULED ]* -&gt; RUNNING -&gt; {IDLE,CANCELLED,SCHEDULED}
      * {IDLE,CANCELLED,RUNNING} -&gt; SCHEDULED [ -&gt; SCHEDULED ]* -&gt; CANCELLED
-     *
+     * <p>
      * anything else is invalid.
      */
     private enum TimedEventState {
@@ -717,7 +704,7 @@ public class SimpleTimer2 {
     /**
      * Base class for timer events. Extend this and use schedule()/cancel()
      * directly instead of going through SimpleTimer2.
-     *
+     * <p>
      * Synchronization is on this to avoid queue duplicates.
      * schedule() is idempotent if already scheduled.
      * reschedule() and forceReschedule() replace the existing timer.

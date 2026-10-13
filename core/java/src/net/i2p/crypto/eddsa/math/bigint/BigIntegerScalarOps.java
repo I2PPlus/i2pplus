@@ -7,7 +7,7 @@ import java.math.BigInteger;
 
 /**
  * BigInteger-based implementation of scalar operations for EdDSA cryptography.
- *
+ * <p>
  * This class provides fundamental scalar arithmetic operations required for EdDSA
  * signature schemes, including modular reduction and scalar multiplication with addition.
  * All operations are performed modulo the subgroup order l, ensuring results remain

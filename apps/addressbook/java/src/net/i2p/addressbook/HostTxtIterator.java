@@ -19,10 +19,10 @@ import net.i2p.util.Log;
  * A class to iterate through a hosts.txt or config file without
  * reading the whole thing into memory.
  * Keys are always converted to lower case.
- *
+ * <p>
  * Callers should iterate all the way through or call close()
  * to ensure the underlying stream is closed.
- *
+ * <p>
  * This is not used for config files.
  * It is only used for subscriptions.
  *

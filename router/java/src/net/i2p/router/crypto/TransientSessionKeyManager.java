@@ -37,12 +37,12 @@ import net.i2p.util.SimpleTimer2;
  * Implement the session key management, but keep everything in memory (don't write to disk).
  * However, this being java, we cannot guarantee that the keys aren't swapped out to disk so
  * this should not be considered secure in that sense.
- *
+ * <p>
  * The outbound and inbound sides are completely independent, each with their own keys and tags.
- *
+ * <p>
  * For a new session, outbound tags are not considered delivered until an ack is received.
  * Otherwise, the loss of the first message would render all subsequent messages undecryptable.
- *
+ * <p>
  * For an existing session, outbound tags are immediately considered delivered, and are later
  * revoked if the ack times out. This prevents massive stream slowdown caused by repeated tag
  * delivery after the minimum tag threshold is reached. Included tags pushes messages above the
@@ -50,24 +50,24 @@ import net.i2p.util.SimpleTimer2;
  * seen by the streaming lib, they aren't accounted for in the window size, and one or more of a
  * series of large messages is likely to be dropped, either due to high fragmentation or drop
  * priorities at the tunnel OBEP.
- *
+ * <p>
  * For this to work, the minimum tag threshold and tag delivery quantity defined in
  * GarlicMessageBuilder must be chosen with streaming lib windows sizes in mind.
  * If a single TagSet is not delivered, there will be no stall as long as the current window
  * size is smaller than the minimum tag threshold. Additional TagSets will be sent before the
  * acked tags completely run out. See below. All subsequent messages will fail to decrypt.
  * See ConnectionOptions in streaming for more information.
- *
+ * <p>
  * There are large inefficiencies caused by the repeated delivery of tags in a new session.
  * With an initial streaming window size of 6 and 40 tags per delivery, a web server would
  * deliver up to 240 tags (7680 bytes, not including bundled leaseset, etc.) in the first
  * volley of the response.
- *
+ * <p>
  * Could the two directions be linked somehow, such that the initial request could contain a
  * key or tags for the response?
- *
+ * <p>
  * Should the tag threshold and quantity be adaptive?
- *
+ * <p>
  * Todo: Switch to ConcurrentHashMaps and ReadWriteLocks, only get write lock during cleanup
  */
 public class TransientSessionKeyManager extends SessionKeyManager {
@@ -95,7 +95,7 @@ public class TransientSessionKeyManager extends SessionKeyManager {
      * Keep unused inbound session tags around for this long (a few minutes longer than
      * session tags are used on the outbound side so that no reasonable network lag
      * can cause failed decrypts)
-     *
+     * <p>
      * This is also the max idle time for an outbound session.
      */
     private static final long SESSION_LIFETIME_MAX_MS = SESSION_TAG_DURATION_MS + 2 * 60 * 1000L;
@@ -123,7 +123,7 @@ public class TransientSessionKeyManager extends SessionKeyManager {
      *  know when tags will be bundled, so the tag size must be subtracted from the
      *  maximum I2NP size or transport limit.
      * </pre>
-     *
+     * <p>
      * Issues with too small a value:
      * <pre>
      *  - When tags are sent, a reply leaseset (~1KB) is always bundled. Maybe we don't need
@@ -132,13 +132,13 @@ public class TransientSessionKeyManager extends SessionKeyManager {
      *  window size? Should the threshold and the number of sent tags be variable based on
      *  the message rate?
      * </pre>
-     *
+     * <p>
      * We have to be very careful if we implement an adaptive scheme, since the key manager
      * is per-router, not per-local-dest. Or maybe that's a bad idea, and we need to move to
      * a per-dest manager. This needs further investigation.
-     *
+     * <p>
      * So a value somewhat higher than the low threshold seems appropriate.
-     *
+     * <p>
      * Use care when adjusting these values. See ConnectionOptions in streaming,
      * and TransientSessionKeyManager in crypto, for more information.
      *
@@ -226,7 +226,7 @@ public class TransientSessionKeyManager extends SessionKeyManager {
     /**
      * Retrieve the session key currently associated with encryption to the target,
      * or null if a new session key should be generated.
-     *
+     * <p>
      * Warning - don't generate a new session if this returns null, it's racy, use getCurrentOrNewKey()
      * @return the current key
      */
@@ -276,7 +276,7 @@ public class TransientSessionKeyManager extends SessionKeyManager {
     /**
      * Associate a new session key with the specified target.  Metrics to determine
      * when to expire that key begin with this call.
-     *
+     * <p>
      * Racy if called after getCurrentKey() to check for a current session;
      * use getCurrentOrNewKey() in that case.
      *
@@ -391,13 +391,11 @@ public class TransientSessionKeyManager extends SessionKeyManager {
     /**
      * Take note of the fact that the given sessionTags associated with the key for
      * encryption to the target have been sent.
-     *
      * <p>Delivered tags are never usable straight away: every tag set starts
      * unacked and only moves into the usable set when the peer acks it through
      * {@link #tagsAcked(PublicKey, SessionKey, TagSetHandle)}. The ack is what
      * proves the peer received the tags, so the implementation waits for it
      * unconditionally rather than pipelining on how much was sent.
-     *
      * <p>If the session does not exist yet it is created here, so the first ack
      * also establishes the session. A tag set delivered under a different
      * session key than the session currently holds is a rekey: the existing tag

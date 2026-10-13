@@ -13,7 +13,6 @@ import net.i2p.I2PAppContext;
 /**
  * Interface for transforming a hash into the key under which it is stored in
  * the network database (KBucketSet).
- *
  * <p>What the interface defines:</p>
  * <ul>
  * <li>{@link #getRoutingKey(Hash)} maps a hash to a routing key. The
@@ -26,7 +25,6 @@ import net.i2p.I2PAppContext;
  * <li>{@link #getInstance()} returns the generator of the global context,
  * which is null unless that context is a router context.</li>
  * </ul>
- *
  * <p>Availability:</p>
  * <ul>
  * <li>Not available in a plain I2PAppContext - I2PAppContext.routingKeyGenerator()
@@ -65,7 +63,7 @@ public abstract class RoutingKeyGenerator {
 
     /**
      * Routing key for a key.
-     *
+     * <p>
      * The result depends on the mod data of the implementing generator, so
      * compare getLastChanged() before reusing a previously derived key.
      *

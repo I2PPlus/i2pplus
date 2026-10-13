@@ -66,7 +66,7 @@ class I2PSocketOptionsImpl implements I2PSocketOptions {
     /**
      * Max buffer size, connect timeout, read timeout, and write timeout
      * from properties. Does not set local port or remote port.
-     *
+     * <p>
      * A property absent from opts, or one that does not parse as an integer,
      * falls back to the corresponding default.
      *
@@ -79,7 +79,7 @@ class I2PSocketOptionsImpl implements I2PSocketOptions {
     /**
      * Max buffer size, connect timeout, read timeout, and write timeout
      * from properties. Does not set local port or remote port.
-     *
+     * <p>
      * Only the properties present in opts are applied; anything absent from
      * opts keeps the value this object already has, so a partial opts
      * overrides only what it names.
@@ -157,12 +157,12 @@ class I2PSocketOptionsImpl implements I2PSocketOptions {
 
     /**
      * Base time to wait for the ACK from a SYN, in milliseconds.
-     *
+     * <p>
      * The stored value is un-scaled; the effective connect window adds the
      * connect delay on the delayed-SYN path, is scaled by the connect timeout
      * multiplier, and is capped at the absolute max connect timeout, so a
      * stored value above that cap waits no longer than the cap.
-     *
+     * <p>
      * Default 30 seconds.
      *
      * @return milliseconds to wait, or a non-positive value for no connect
@@ -175,9 +175,9 @@ class I2PSocketOptionsImpl implements I2PSocketOptions {
 
     /**
      * Define how long we will wait for the ACK from a SYN, in milliseconds.
-     *
+     * <p>
      * The value is stored un-scaled; see {@link #getConnectTimeout()}.
-     *
+     * <p>
      * Default 30 seconds.
      *
      * @param ms timeout in ms, &lt;= 0 for no connect timeout
@@ -191,7 +191,7 @@ class I2PSocketOptionsImpl implements I2PSocketOptions {
      * What is the longest we'll block on the input stream while waiting
      * for more data.  If this value is exceeded, the read() throws
      * SocketTimeoutException.
-     *
+     * <p>
      * WARNING: Default -1 (unlimited), which is probably not what you want.
      *
      * @return timeout in ms, 0 for nonblocking, -1 for forever
@@ -205,7 +205,7 @@ class I2PSocketOptionsImpl implements I2PSocketOptions {
      * What is the longest we'll block on the input stream while waiting
      * for more data.  If this value is exceeded, the read() throws
      * SocketTimeoutException.
-     *
+     * <p>
      * WARNING: Default -1 (unlimited), which is probably not what you want.
      *
      * @param ms timeout in ms, 0 for nonblocking, -1 for forever
@@ -220,7 +220,7 @@ class I2PSocketOptionsImpl implements I2PSocketOptions {
      * this amount has been exceeded, subsequent .write calls will block until
      * either some data is removed or the connection is closed.  If this is
      * less than or equal to zero, there is no limit (warning: can eat ram)
-     *
+     * <p>
      * Default is {@link #DEFAULT_BUFFER_SIZE}, which is platform-dependent.
      *
      * @return buffer size limit, in bytes
@@ -235,7 +235,7 @@ class I2PSocketOptionsImpl implements I2PSocketOptions {
      * this amount has been exceeded, subsequent .write calls will block until
      * either some data is removed or the connection is closed.  If this is
      * less than or equal to zero, there is no limit (warning: can eat ram)
-     *
+     * <p>
      * Default is {@link #DEFAULT_BUFFER_SIZE}, which is platform-dependent.
      *
      * @param numBytes How much data will we accept that hasn't been written out yet.
@@ -250,7 +250,7 @@ class I2PSocketOptionsImpl implements I2PSocketOptions {
      * for the data to flush.  If this value is exceeded, the write() throws
      * InterruptedIOException.  If this is less than or equal to zero, there
      * is no timeout.
-     *
+     * <p>
      * Default -1 (unlimited)
      * @return the write timeout
      */
@@ -264,7 +264,7 @@ class I2PSocketOptionsImpl implements I2PSocketOptions {
      * for the data to flush.  If this value is exceeded, the write() throws
      * InterruptedIOException.  If this is less than or equal to zero, there
      * is no timeout.
-     *
+     * <p>
      * Default -1 (unlimited)
      * @param ms wait time to block on the output stream while waiting for the data to flush.
      */

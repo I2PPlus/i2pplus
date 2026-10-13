@@ -18,11 +18,11 @@ import net.i2p.data.router.RouterInfo;
 
 /**
  * Configuration and content for a garlic message containing one or more cloves.
- *
+ * <p>
  * This is the top-level container for a GarlicMessage's cloves, their delivery
  * instructions, and the recipient's encryption key. Individual clove payloads
  * are represented by PayloadGarlicConfig.
- *
+ * <p>
  * Despite the name, instances of this class hold the actual clove references,
  * not just configuration metadata.
  */
@@ -70,7 +70,7 @@ class GarlicConfig {
      * delivery instructions and decide what to do process it locally as an I2NPMessage,
      * forward it as an I2NPMessage to a router, forward it as an I2NPMessage to a Destination,
      * or forward it as an I2NPMessage to a tunnel.
-     *
+     * <p>
      * Used only if recipient public key is not set.
      *
      * @param info the recipient router info

@@ -28,7 +28,7 @@ class HopProcessor {
      * Length in bytes of the per-hop IV preceding the message data (16).
      * The tunnel crypto encrypts the IV both before and after using it at each
      * hop so as to prevent a certain type of replay/confirmation attack.
-     *
+     * <p>
      * See: http://osdir.com/ml/network.i2p/2005-07/msg00031.html
      */
     static final int IV_LENGTH = 16;

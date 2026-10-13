@@ -21,10 +21,10 @@ import net.i2p.util.SimpleTimer2;
  * Count how often we have accepted a tunnel with the peer as the previous or next hop.
  * We limit each peer to a percentage of all participating tunnels, subject to minimum
  * and maximum values for the limit.
- *
+ * <p>
  * This offers basic protection against simple attacks but is not a complete solution,
  * as by design, we don't know the originator of a tunnel request.
- *
+ * <p>
  * This also effectively limits the number of tunnels between any given pair of routers,
  * which probably isn't a bad thing.
  *
@@ -83,7 +83,6 @@ public class ParticipatingThrottler {
 
     /**
      * Minimum interval between two full load-score recomputations, in ms.
-     *
      * <p>The score is consulted on every throttled participating request and
      * is shared with {@code RequestThrottler}, but its inputs are all coarse:
      * job queue lag in whole milliseconds, a 60s-smoothed CPU load, a
@@ -107,7 +106,6 @@ public class ParticipatingThrottler {
     /**
      * Minimum interval between re-reading the two limit inputs that cannot
      * change under us within a request, in ms.
-     *
      * <p>{@code router.maxParticipatingTunnels} is a static configuration
      * property and {@code getSystemLoad()} reports a load average; both were
      * re-read on every participating request even though neither moves on a
@@ -360,7 +358,7 @@ public class ParticipatingThrottler {
      * Relaxes limits when we have spare capacity (bandwidth headroom + available transit slots).
      * Enforces a floor (2 for low-share/unreachable, 5 for normal) to prevent zero limits
      * from integer division truncation at low percentage values.
-     *
+     * <p>
      * Only the two inputs that cannot move under us - the
      * {@code router.maxParticipatingTunnels} property and the system load
      * average - are served from a {@link #LIMIT_INVARIANT_CACHE_MS} cache.
@@ -510,7 +508,7 @@ public class ParticipatingThrottler {
 
     /**
      * Handles joins from routers whose held RouterInfo carries no version.
-     *
+     * <p>
      * Minor infraction: the offending join is answered with a transient
      * reject (the caller maps Result.REJECT accordingly) and only repeated
      * no-version offenses within {@link #NO_VERSION_ESCALATION_MS} graduate
@@ -739,7 +737,7 @@ public class ParticipatingThrottler {
      * curve left when the router is under load. Shared by
      * ParticipatingThrottler and RequestThrottler; both the score and the
      * RateStat handle are cached per context.
-     *
+     * <p>
      * Publication order matters: the score and its context are written before
      * the timestamp, so a thread that sees a fresh timestamp also sees the
      * matching score. Concurrent callers may both compute - the worst case is

@@ -11,7 +11,7 @@ import net.i2p.util.Log;
 
 /**
  * Maintain the outbound fragmentation for resending, for a single message.
- *
+ * <p>
  * All methods are thread-safe.
  */
 class OutboundMessageState implements CDPQEntry {
@@ -67,7 +67,7 @@ class OutboundMessageState implements CDPQEntry {
 
     /**
      * "injected" message from the establisher.
-     *
+     * <p>
      * Called from UDPTransport.
      * @param context the router context supplying the clock and bandwidth manager
      * @param msg the message to fragment and send
@@ -80,7 +80,7 @@ class OutboundMessageState implements CDPQEntry {
 
     /**
      * Normal constructor.
-     *
+     * <p>
      * Called from OutboundMessageFragments.
      * @param context the router context supplying the clock and bandwidth manager
      * @param m the outbound message carrying the payload and its send options

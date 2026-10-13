@@ -19,7 +19,7 @@ import javax.crypto.spec.DHPublicKeySpec;
 
 /**
  * Implementation of ElGamal public keys.
- *
+ * <p>
  * This class provides a concrete implementation of the ElGamalPublicKey interface,
  * representing the public component of an ElGamal key pair. It stores the public
  * value y = g^x mod p and the ElGamal parameters (prime p and generator g), and

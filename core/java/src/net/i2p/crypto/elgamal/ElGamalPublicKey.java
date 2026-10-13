@@ -6,7 +6,7 @@ import javax.crypto.interfaces.DHPublicKey;
 
 /**
  * Interface for ElGamal public keys.
- *
+ * <p>
  * This interface defines the contract for ElGamal public keys, extending both
  * the ElGamalKey interface and the standard DHPublicKey interface. ElGamal
  * public keys contain the public value y = g^x mod p used for encryption operations

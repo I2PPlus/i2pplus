@@ -21,7 +21,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * Listeners register with either addListener() or addMuxedListener(),
  * depending on whether they want to hear about the
  * protocol, from port, and to port for every received message.
- *
+ * <p>
  * messageAvailable() only calls one listener, not all that apply.
  * The others call all listeners.
  *

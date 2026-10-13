@@ -36,7 +36,7 @@ class PluginStopper extends PluginStarter {
 
     /**
      *  Stop all running plugins
-     *
+     * <p>
      *  this shouldn't throw anything
      */
     private void stopPlugins() {

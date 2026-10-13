@@ -48,7 +48,6 @@ import net.i2p.util.Log;
  * Send a client message out an outbound tunnel and into an inbound
  * tunnel on the target leaseSet.  This also (sometimes) bundles the sender's leaseSet and
  * a DeliveryStatusMessage (for ACKing any sessionTags used in the garlic).
- *
  * <p>
  * This class is where we make several important decisions about
  * what to send and what path to send it over. These decisions
@@ -58,7 +57,6 @@ import net.i2p.util.Log;
  * <li>Streaming performance and reliability
  * <li>Overall network performance and connection congestion
  * </ul>
- *
  * <p>
  * For the outbound message, we build and encrypt a garlic message,
  * after making the following decisions:
@@ -68,7 +66,6 @@ import net.i2p.util.Log;
  * <li>Whether to bundle an encrypted DeliveryStatusMessage to be returned
  * to us as an acknowledgement
  * </ul>
- *
  * <p>
  * Also, we make the following path selection decisions:
  * <ul>
@@ -78,22 +75,18 @@ import net.i2p.util.Log;
  * <li>If a DeliveryStatusMessage is bundled, What inbound client tunnel of ours
  * do we specify to receive it
  * </ul>
- *
  * <p>
  * Note that the 4th tunnel in the DeliveryStatusMessage's round trip (his outbound tunnel)
  * is not selected by us, it is chosen by the recipient.
- *
  * <p>
  * If a DeliveryStatusMessage is sent, a listener is registered to wait for its reply.
  * When a reply is received, or the timeout is reached, this is noted
  * and will influence subsequent bundling and path selection decisions.
- *
  * <p>
  * Path selection decisions are cached and reused if still valid and if
  * previous deliveries were apparently successful. This significantly
  * reduces out-of-order delivery and network connection congestion.
  * Caching is based on the local/remote destination pair.
- *
  * <p>
  * Bundling decisions, and both messaging and reply expiration times, are generally
  * set here but may be overridden by the client on a per-message basis.
@@ -146,22 +139,22 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
 
     /**
      * NOTE: Changed as of 0.9.2.
-     *
+     * <p>
      * Defaults to true.
-     *
+     * <p>
      * If the client's config specifies shouldBundleReplyInfo=true, messages sent from
      * that client to any peers will periodically include the sending destination's
      * current LeaseSet (allowing the recipient to reply without having to do a full
      * netDb lookup).  This should improve performance during the initial negotiations.
-     *
+     * <p>
      * For clients that do not publish their LeaseSet, this option must be true
      * for any reply to be possible.
-     *
+     * <p>
      * Setting to "false" may save significant outbound bandwidth, especially if
      * the client is configured with a large number of inbound tunnels (Leases).
      * If replies are still required, this may shift the bandwidth burden to
      * the far-end client and the floodfill.
-     *
+     * <p>
      * There are several cases where "false" is may be appropriate:
      * <ul><li>
      * Unidirectional communication, no reply required
@@ -526,12 +519,12 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
 
     /**
      * Choose a lease from his leaseset to send the message to.
-     *
+     * <p>
      * Side effects:
      * Sets _lease.
      * Sets _wantACK if it's new or changed.
      * Sets _encryptionKey.
-     *
+     * <p>
      * Does several checks to see if we can actually send to this leaseset,
      * and returns nonzero failure code if unable to.
      *
@@ -1073,7 +1066,7 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
     /**
      * Pick an arbitrary outbound tunnel to send the message through, or null if
      * there aren't any around
-     *
+     * <p>
      * Rather than pick one at random, pick the "closest" to the lease,
      * to minimize network OBEP - IBGW connections?
      * This would also eliminate a connection when OBEP == IBGW.
@@ -1092,7 +1085,6 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
      * that connection yet and the swap is transparent.  The chosen tunnel is
      * recorded as the cached tunnel with a fresh start time, so all subsequent
      * messages of the stream stay on it (no per-packet flapping).
-     *
      * <p>Called with {@code _cache.tunnelCache} locked.
      *
      * @return the rotated tunnel, or null when there is no cached tunnel or it
@@ -1320,7 +1312,6 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
     /**
      * Whether the current (source, destination) pair is inside a stall
      * cooldown, and rotation is enabled.
-     *
      * <p>Always a hint. When true the caller prefers another tunnel but must
      * still return one — a destination whose every tunnel is inside a
      * cooldown has to keep using one of them, or the send fails outright and
@@ -1372,9 +1363,7 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
 
     /**
      * Whether a failed send should be charged to the outbound tunnel.
-     *
      * <p>Pure, so the blame rule is testable without a router.
-     *
      * <p>A destination this router hosts produces its own reply, so a missing
      * one is our own fault — a saturated handler pool, an aborted body, a slow
      * upstream — and says nothing about the tunnel that delivered the request.
@@ -1394,7 +1383,6 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
 
     /**
      * Whether this router hosts the given destination.
-     *
      * <p>The registry lookup is not pure, so it is kept out of
      * {@link #shouldBlameOutboundTunnel(int, boolean)} and pinned by tests at
      * the decision level instead.

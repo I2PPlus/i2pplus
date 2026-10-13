@@ -49,7 +49,7 @@ public class DecayingHashSet extends DecayingBloomFilter {
      * soft target, not a hard ceiling: memory is bounded by roughly two
      * windows of traffic rather than by this number, because forcing a decay
      * sooner than an entry's lifetime would drop live entries.
-     *
+     * <p>
      * Measured cost at this cap with 16 byte entries: about 9 MB, roughly
      * 72 bytes per entry including the map node and the wrapper.
      *
@@ -67,7 +67,6 @@ public class DecayingHashSet extends DecayingBloomFilter {
      * The cap actually in force: {@link #DEFAULT_MAX_ENTRIES} unless a test
      * asked for a smaller one so it can cross the threshold cheaply, or the
      * router lowered it to hold memory down.
-     *
      * <p>A set has no fixed memory cost, so unlike a bloom filter it can only
      * be bounded by refusing growth: reaching the cap retires the older buffer
      * even if its entries have not expired. That trades duplicate detection
@@ -178,7 +177,6 @@ public class DecayingHashSet extends DecayingBloomFilter {
 
     /**
      * Change the entry cap while running, for the router's low-memory path.
-     *
      * <p>Lowering it takes effect at once: the next add() over the new cap
      * triggers a decay, which may retire entries that have not yet expired.
      * Raising it does not resurrect anything already retired.
@@ -269,14 +267,14 @@ public class DecayingHashSet extends DecayingBloomFilter {
 
     /**
      * Force a decay cycle if the entry count exceeds the soft cap.
-     *
+     * <p>
      * A decay must never run more often than the decay interval: the swap in
      * {@link #decay()} drops the older buffer, and doing that before that
      * buffer has aged out would forget entries that are still live, turning
      * this duplicate/replay filter into a source of false negatives. So when
      * the cap is exceeded we decay only if at least one interval has passed
      * since the last decay, and otherwise leave it to the scheduled event.
-     *
+     * <p>
      * Best-effort: races are harmless (an extra decay, or a one-entry
      * overshoot). Under sustained overload this holds up to about two
      * windows of entries rather than the cap.

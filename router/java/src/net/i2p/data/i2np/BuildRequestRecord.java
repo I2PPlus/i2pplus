@@ -28,18 +28,18 @@ import net.i2p.util.Log;
  * The original 222-byte ElGamal format, the new 464-byte ECIES format,
  * and the newest 154-byte ECIES format.
  * See proposal 152 and 157 for details on the new formats.
- *
+ * <p>
  * Two formats were supported as of 0.9.48, three as of 0.9.51.
- *
+ * <p>
  * None of the readXXX() calls are cached. For efficiency,
  * they should only be called once.
- *
+ * <p>
  * Original ElGamal format:
- *
+ * <p>
  * Holds the unencrypted 222-byte tunnel request record,
  * with a constructor for ElGamal decryption and a method for ElGamal encryption.
  * Iterative AES encryption/decryption is done elsewhere.
- *
+ * <p>
  * Cleartext:
  * <pre>
  * bytes     0-3: tunnel ID to receive messages as
@@ -55,19 +55,19 @@ import net.i2p.util.Log;
  * bytes 189-192: next message ID
  * bytes 193-221: uninterpreted / random padding
  * </pre>
- *
+ * <p>
  * Encrypted:
  * <pre>
  * bytes    0-15: First 16 bytes of router hash
  * bytes  16-527: ElGamal encrypted block (discarding zero bytes at elg[0] and elg[257])
  * </pre>
- *
+ * <p>
  * ECIES long record format, ref: proposal 152:
- *
+ * <p>
  * Holds the unencrypted 464-byte tunnel request record,
  * with a constructor for ECIES decryption and a method for ECIES encryption.
  * Iterative AES encryption/decryption is done elsewhere.
- *
+ * <p>
  * Cleartext:
  * <pre>
  * bytes     0-3: tunnel ID to receive messages as, nonzero
@@ -86,7 +86,7 @@ import net.i2p.util.Log;
  * bytes     x-x: other data as implied by flags or options
  * bytes   x-463: random padding
  * </pre>
- *
+ * <p>
  * Encrypted:
  * <pre>
  * bytes    0-15: Hop's truncated identity hash
@@ -94,13 +94,13 @@ import net.i2p.util.Log;
  * bytes  48-511: ChaCha20 encrypted BuildRequestRecord
  * bytes 512-527: Poly1305 MAC
  * </pre>
- *
+ * <p>
  * ECIES short record format, ref: proposal 157:
- *
+ * <p>
  * Holds the unencrypted 154-byte tunnel request record,
  * with a constructor for ECIES decryption and a method for ECIES encryption.
  * Iterative AES encryption/decryption is done elsewhere.
- *
+ * <p>
  * Cleartext:
  * <pre>
  * bytes     0-3: tunnel ID to receive messages as, nonzero
@@ -116,7 +116,7 @@ import net.i2p.util.Log;
  * bytes     x-x: other data as implied by flags or options
  * bytes   x-153: random padding
  * </pre>
- *
+ * <p>
  * Encrypted:
  * <pre>
  * bytes    0-15: Hop's truncated identity hash
@@ -577,10 +577,10 @@ public class BuildRequestRecord {
      * Decrypts an encrypted build request record.
      * Decrypt the data from the specified record, writing the decrypted record into this instance's
      * data buffer
-     *
+     * <p>
      * Caller MUST check that first 16 bytes of our hash matches first 16 bytes of encryptedRecord
      * before calling this. Not checked here.
-     *
+     * <p>
      * The ChaCha reply key and IV will be available via the getters
      * after this call if ourKey is ECIES.
      * @param ctx the router context
@@ -685,7 +685,7 @@ public class BuildRequestRecord {
      * Creates a new ElGamal build request record.
      * Populate this instance with data.  A new buffer is created to contain the data, with the
      * necessary randomized padding.
-     *
+     * <p>
      * ElGamal only. ECIES constructor below.
      *
      * @param ctx the application context
@@ -748,7 +748,7 @@ public class BuildRequestRecord {
      * Creates a new ECIES long build request record.
      * Populate this instance with data.  A new buffer is created to contain the data, with the
      * necessary randomized padding.
-     *
+     * <p>
      * ECIES long record only. ElGamal constructor above.
      *
      * @param ctx the application context
@@ -806,7 +806,7 @@ public class BuildRequestRecord {
      * Creates a new ECIES short build request record.
      * Populate this instance with data.  A new buffer is created to contain the data, with the
      * necessary randomized padding.
-     *
+     * <p>
      * ECIES short record only. ElGamal constructor above.
      *
      * @param ctx the application context

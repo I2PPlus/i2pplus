@@ -15,7 +15,6 @@ import java.util.Arrays;
 
 /**
  * Message payload container for I2P communications with encryption support.
- *
  * <p>Payload provides message content delivery in I2P:</p>
  * <ul>
  * <li><strong>Message Content:</strong> Contains actual data being delivered</li>
@@ -23,7 +22,6 @@ import java.util.Arrays;
  * <li><strong>I2CP Protocol:</strong> Primarily used in client-router communication</li>
  * <li><strong>Legacy Feature:</strong> Previously supported end-to-end encryption</li>
  * </ul>
- *
  * <p><strong>Historical Context:</strong></p>
  * <ul>
  * <li><strong>End-to-End Encryption:</strong> Previously encrypted messages between clients</li>
@@ -31,7 +29,6 @@ import java.util.Arrays;
  * <li><strong>Current Usage:</strong> Use get/setEncryptedData() methods instead</li>
  * <li><strong>I2CP Focus:</strong> Now mainly used for I2CP message transport</li>
  * </ul>
- *
  * <p><strong>Current Structure:</strong></p>
  * <ul>
  * <li><strong>Encrypted Data:</strong> Primary payload content for transmission</li>
@@ -39,7 +36,6 @@ import java.util.Arrays;
  * <li><strong>Size Limits:</strong> Maximum 64KB to prevent OOM attacks</li>
  * <li><strong>Format Compliance:</strong> Follows I2P data structure specification</li>
  * </ul>
- *
  * <p><strong>Usage Patterns:</strong></p>
  * <ul>
  * <li><strong>Modern Usage:</strong> Use getEncryptedData()/setEncryptedData() for payload</li>
@@ -47,7 +43,6 @@ import java.util.Arrays;
  * <li><strong>Legacy Support:</strong> getUnencryptedData() for backward compatibility</li>
  * <li><strong>Size Management:</strong> Monitor payload size to prevent resource exhaustion</li>
  * </ul>
- *
  * <p><strong>Security Considerations:</strong></p>
  * <ul>
  * <li><strong>Size Validation:</strong> Enforce 64KB maximum payload size</li>
@@ -55,7 +50,6 @@ import java.util.Arrays;
  * <li><strong>Content Validation:</strong> Verify payload integrity and format</li>
  * <li><strong>Encryption Context:</strong> Understand current encryption model in I2P</li>
  * </ul>
- *
  * <p><strong>Performance Aspects:</strong></p>
  * <ul>
  * <li><strong>Efficient Storage:</strong> Minimal overhead for payload data</li>
@@ -63,7 +57,6 @@ import java.util.Arrays;
  * <li><strong>Memory Management:</strong> Careful allocation and cleanup</li>
  * <li><strong>Size Checking:</strong> Quick validation of payload limits</li>
  * </ul>
- *
  * <p><strong>Migration Notes:</strong></p>
  * <ul>
  * <li><strong>From End-to-End:</strong> Previously handled client-to-client encryption</li>
@@ -88,7 +81,7 @@ public class Payload extends DataStructureImpl {
 
     /**
      * Retrieve the unencrypted body of the message.
-     *
+     * <p>
      * Deprecated.
      * Unless you are doing encryption, use getEncryptedData() instead.
      *
@@ -102,7 +95,7 @@ public class Payload extends DataStructureImpl {
     /**
      * Populate the message body with data.  This does not automatically encrypt
      * yet.
-     *
+     * <p>
      * Deprecated.
      * Unless you are doing encryption, use setEncryptedData() instead.
      *

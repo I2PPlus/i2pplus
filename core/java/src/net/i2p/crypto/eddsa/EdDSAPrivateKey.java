@@ -104,7 +104,6 @@ public class EdDSAPrivateKey implements EdDSAKey, PrivateKey {
      * migrate them to the canonical encoding.
      * <p>
      * Relevant spec quotes:
-     *
      * <pre>
      *      OneAsymmetricKey ::= SEQUENCE {
      *        version Version,
@@ -122,7 +121,6 @@ public class EdDSAPrivateKey implements EdDSAKey, PrivateKey {
      *      PublicKey ::= BIT STRING
      *      Attributes ::= SET OF Attribute
      * </pre>
-     *
      * <pre>
      *      ... when encoding a OneAsymmetricKey object, the private key is wrapped
      *      in a CurvePrivateKey object and wrapped by the OCTET STRING of the
@@ -130,7 +128,6 @@ public class EdDSAPrivateKey implements EdDSAKey, PrivateKey {
      *
      *      CurvePrivateKey ::= OCTET STRING
      * </pre>
-     *
      * <pre>
      *      AlgorithmIdentifier  ::=  SEQUENCE  {
      *        algorithm   OBJECT IDENTIFIER,
@@ -139,7 +136,6 @@ public class EdDSAPrivateKey implements EdDSAKey, PrivateKey {
      *
      *      For all of the OIDs, the parameters MUST be absent.
      * </pre>
-     *
      * <pre>
      *      id-Ed25519   OBJECT IDENTIFIER ::= { 1 3 101 112 }
      * </pre>

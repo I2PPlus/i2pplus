@@ -883,7 +883,6 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
      * material is redacted, and every remaining value is stripped of line
      * breaks and capped, so a hostile upstream cannot forge extra log lines
      * or grow the log without bound.
-     *
      * <p>Non-secret protocol parameters (qop, nc, algorithm, realm, uri) are
      * kept because they are what makes a failed handshake diagnosable, but
      * they are attacker-controlled, so they pass through
@@ -936,13 +935,11 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
      * reached through the proxy. Non-.i2p hosts are handed to the outproxy
      * plugin, which opens a raw socket from this machine, so a request for
      * 127.0.0.1 or 10.x would otherwise reach the router itself or the LAN.
-     *
      * <p>The host is parsed as an address rather than matched with string
      * prefixes, so every address in a blocked block is caught (not only
      * 10.0.x.x or 172.16.x.x) while a name that merely looks similar
      * (10.0.example.com) is not. Bracketed IPv6 literals, zone ids, and
      * v4-mapped forms are normalized first.</p>
-     *
      * <p>Public so the SOCKS4a and SOCKS5 servers, which hand non-.i2p
      * targets to the same outproxy plugin, apply one policy rather than a
      * narrower copy of it.</p>
@@ -986,7 +983,6 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
      * Determine whether an IPv4 host is in a blocked non-routable block:
      * loopback, "this network", RFC 1918 private, link-local, carrier-grade
      * NAT, benchmarking, documentation, multicast, and reserved space.
-     *
      * <p>A host made only of digits and dots that is not a strict dotted quad
      * (127.1, 2130706433) is an ambiguous address literal rather than a name,
      * so it is blocked too; such a host cannot be a resolvable name, as no
@@ -1226,7 +1222,7 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
     /**
      * Load the error page header file, e.g. foo => errordir/foo-header_xx.ht for lang xx,
      * or errordir/foo-header.ht, or the backup byte array on fail.
-     *
+     * <p>
      * .ht files must be UTF-8 encoded and use \r\n terminators so the
      * HTTP headers are conformant.
      * We can't use FileUtil.readFile() because it strips \r
@@ -1242,7 +1238,7 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
     /**
      * Load the error page header file, e.g. foo => errordir/foo-header_xx.ht for lang xx,
      * or errordir/foo-header.ht, or the backup byte array on fail.
-     *
+     * <p>
      * .ht files must be UTF-8 encoded and use \r\n terminators so the
      * HTTP headers are conformant.
      * We can't use FileUtil.readFile() because it strips \r
@@ -1651,7 +1647,7 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
 
     /**
      * Write the closing HTML footer and flush it down the stream.
-     *
+     * <p>
      * Public only for LocalHTTPServer, not for general use
      * @param out the output stream to write to
      * @throws java.io.IOException on write error
@@ -1663,7 +1659,7 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
 
     /**
      * Write the closing HTML footer and flush it down the writer.
-     *
+     * <p>
      * Public only for LocalHTTPServer, not for general use
      * @param out the writer to write to
      * @throws java.io.IOException on write error

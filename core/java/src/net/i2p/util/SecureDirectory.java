@@ -117,14 +117,12 @@ public class SecureDirectory extends File {
     /**
      * Tries to set the permissions to 700 (or 770 when this directory was
      * requested group-accessible), ignores errors.
-     *
      * <p>Uses the {@link java.nio.file.attribute.PosixFilePermission} API rather
      * than {@link File#setReadable}: the {@code File} setters take an
      * {@code ownerOnly} flag, so there is no way to grant the <i>group</i>
      * without also granting <i>others</i> — {@code setReadable(true, false)}
      * yields 777, not 770. {@code SecureFileOutputStream.setGroupPerms()} sets
      * file permissions the same way for the same reason.
-     *
      * <p>The execute bit matters as much as read here: a group can read a file
      * inside a directory it cannot traverse, so a group-traversable parent is
      * what actually makes group-readable log files reachable.

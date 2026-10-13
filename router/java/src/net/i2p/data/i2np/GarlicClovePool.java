@@ -5,10 +5,10 @@ import net.i2p.I2PAppContext;
 /**
  * Pool for reusing GarlicClove instances across message parsing.
  * Reduces per-clove allocation in the hot garlic message loop.
- *
+ * <p>
  * Cloves are acquired, populated via setters, used, then released back
  * to the pool for reuse. The pool expands dynamically when empty.
- *
+ * <p>
  * Thread-safe for single-producer/single-consumer use (typical garlic
  * message parsing pattern). Not safe for concurrent acquire/release.
  */

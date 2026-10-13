@@ -16,7 +16,7 @@ import net.i2p.util.SimpleTimer2;
  * to the same remote peer.
  * This is intended for "temporal" sharing at connection open/close time,
  * not "ensemble" sharing during a connection. Ref. RFC 2140.
- *
+ * <p>
  * There is a TCB share per ConnectionManager (i.e. per local Destination)
  * so that there is no information leakage to other Destinations on the
  * same router.

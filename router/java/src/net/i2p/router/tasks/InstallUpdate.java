@@ -18,12 +18,11 @@ import net.i2p.util.SystemVersion;
 
 /**
  * Automatic I2P router update installer and processor.
- *
+ * <p>
  * This class handles the complete update process when an i2pupdate.zip
  * file is present in the router or base directory. It performs a
  * comprehensive update including verification, extraction, cleanup,
  * and restart procedures.
- *
  * <p><strong>Update Process:</strong></p>
  * <ul>
  * <li>Searches for i2pupdate.zip in router dir or base dir</li>
@@ -35,7 +34,6 @@ import net.i2p.util.SystemVersion;
  * <li>Cleans up native libraries (jbigi, jcpuid)</li>
  * <li>Removes update file and restarts JVM</li>
  * </ul>
- *
  * <p><strong>Error Handling:</strong></p>
  * <ul>
  * <li>Renames failed updates to "BAD-i2pupdate.zip"</li>
@@ -43,14 +41,12 @@ import net.i2p.util.SystemVersion;
  * <li>Handles permission issues gracefully</li>
  * <li>Performs cleanup even on partial failures</li>
  * </ul>
- *
  * <p><strong>Restart Behavior:</strong></p>
  * <ul>
  * <li>With wrapper: Automatic restart after update</li>
  * <li>Without wrapper: Manual restart required</li>
  * <li>Exit code: Router.EXIT_HARD_RESTART</li>
  * </ul>
- *
  * <p>If no update file is found, performs routine maintenance
  * including native library cleanup and deletion list processing.</p>
  *
@@ -139,7 +135,7 @@ public class InstallUpdate {
      * so the new ones will be extracted.
      * We do this after the restart, not after the extract, because it's safer, and
      * because people may upgrade their jbigi.jar file manually.
-     *
+     * <p>
      * Copied from NativeBigInteger, which we can't access here or the
      * libs will get loaded.
      */

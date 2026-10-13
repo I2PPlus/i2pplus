@@ -21,11 +21,11 @@ import net.i2p.util.Log;
 
 /**
  * Send a message directly to another router (not through a tunnel).
- *
+ * <p>
  * Used by HandleGarlicMessageJob to forward decrypted cloves to their
  * target router or tunnel gateway. Also used by netdb for database
  * store/lookup replies.
- *
+ * <p>
  * Safe to run inline via runJob(). If the RouterInfo for the Hash is not
  * found locally, it will queue a lookup and register itself to be run
  * again when the lookup succeeds or times out.

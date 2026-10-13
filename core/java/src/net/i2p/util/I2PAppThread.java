@@ -17,7 +17,7 @@ import java.util.concurrent.CopyOnWriteArraySet;
  * rather than a static router-wide listener list,
  * so that an OOM in an app won't call the router listener
  * to shutdown the whole router.
- *
+ * <p>
  * This is preferred for application use.
  * See {@link I2PThread} for features.
  */

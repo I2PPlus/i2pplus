@@ -100,7 +100,7 @@ public class LeaseSetKeys {
 
     /**
      * Client with multiple keys
-     *
+     * <p>
      * The ONLY valid combinations are X25519 + ElG or X25519 + (MLKEM512 OR MLKEM768 OR MLKEM1024).
      * Other combinations will throw IllegalArgumentException.
      *
@@ -148,7 +148,7 @@ public class LeaseSetKeys {
 
     /**
      * Key with which a LeaseSet can be revoked (by republishing it with no Leases)
-     *
+     * <p>
      * Deprecated, unused
      * @return the revocation key
      */

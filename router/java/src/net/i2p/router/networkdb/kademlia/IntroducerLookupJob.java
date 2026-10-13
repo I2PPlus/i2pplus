@@ -23,7 +23,7 @@ import net.i2p.util.Log;
 /**
  * Background maintenance job that keeps introducer RouterInfos warm in the
  * local netDb.
- *
+ * <p>
  * Unreachable (U-cap) peers publish SSU2 introducers as router hashes (the
  * "ih0".."ih4" options on their SSU/SSU2 addresses). When we need an inbound
  * connection from such a peer - or need to reach one ourselves -
@@ -33,7 +33,7 @@ import net.i2p.util.Log;
  * reviews the introducers of known unreachable peers on a slow schedule and
  * issues remote RouterInfo lookups for any introducer missing locally, so
  * hole-punching has its prerequisites ready before a connection is attempted.
- *
+ * <p>
  * Pacing and politeness toward floodfills:
  * a randomized 5-7 minute cycle whose query phase is capped at 30s wall time
  * per cycle (no per-cycle count cap), at most {@link #MAX_CONCURRENT_LOOKUPS}

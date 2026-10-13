@@ -10,7 +10,7 @@ import java.util.Map;
  * Immutable OrderedProperties, to reduce object churn
  * in LS2 where it's expected to be empty.
  * Returned from DataHelper.readProperties(in, null).
- *
+ * <p>
  * All methods that modify will throw UnsupportedOperationException,
  * except clear() and remove() which do nothing.
  *

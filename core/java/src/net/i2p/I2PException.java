@@ -11,7 +11,7 @@ package net.i2p;
 
 /**
  * Base class of I2P exceptions
- *
+ * <p>
  * This was originally used to provide chained exceptions, but
  * those were added to Exception in Java 1.4, so this class provides nothing
  * extra at the moment.

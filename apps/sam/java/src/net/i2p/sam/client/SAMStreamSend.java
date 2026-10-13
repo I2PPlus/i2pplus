@@ -29,9 +29,9 @@ import java.nio.charset.StandardCharsets;
 /**
  * Swiss army knife tester.
  * Sends a file (datafile) to a peer (b64 dest in peerDestFile).
- *
+ * <p>
  * Usage: SAMStreamSend [options] peerDestFile dataFile
- *
+ * <p>
  * See apps/sam/doc/README-test.txt for info on test setup.
  * Sends data in one of 5 modes.
  * Optionally uses SSL.

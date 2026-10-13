@@ -22,7 +22,7 @@ final class SSU2Header {
     /**
      * Thread-scoped scratch for the trial decrypts, which run 3-6 times per
      * inbound datagram on the UDP handle threads.
-     *
+     * <p>
      * Safe because a trial-decrypted Header never escapes the calling method:
      * acceptTrialDecrypt() copies the bytes into the packet, and no caller
      * stores the Header. One scratch per header size, because Header.toString()
@@ -50,7 +50,7 @@ final class SSU2Header {
     /**
      * Session Request and Session Created only. 64 bytes.
      * Packet is unmodified.
-     *
+     * <p>
      * The returned Header is scratch, valid only until the next trial decrypt
      * on this thread. It must not be retained.
      *
@@ -72,7 +72,7 @@ final class SSU2Header {
     /**
      * Retry, Token Request, Peer Test only. 32 bytes.
      * Packet is unmodified.
-     *
+     * <p>
      * The returned Header is scratch, valid only until the next trial decrypt
      * on this thread. It must not be retained.
      *
@@ -94,7 +94,7 @@ final class SSU2Header {
     /**
      * Session Confirmed and data phase. 16 bytes.
      * Packet is unmodified.
-     *
+     * <p>
      * The returned Header is scratch, valid only until the next trial decrypt
      * on this thread. It must not be retained.
      *
@@ -176,7 +176,7 @@ final class SSU2Header {
     /**
      * Decrypt bytes 0-15 to header.
      * Packet is unmodified.
-     *
+     * <p>
      * First 8 bytes uses key1 and the next-to-last 12 bytes as the IV.
      * Next 8 bytes uses key2 and the last 12 bytes as the IV.
      */
@@ -335,7 +335,7 @@ final class SSU2Header {
 
     /**
      * First 16 bytes.
-     *
+     * <p>
      * First 8 bytes uses key1 and the next-to-last 12 bytes as the IV.
      * Next 8 bytes uses key2 and the last 12 bytes as the IV.
      *

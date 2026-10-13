@@ -13,7 +13,7 @@ import net.i2p.util.SystemVersion;
 
 /**
  * Threaded factory for pre-calculating Elligator2-encoded X25519 key pairs to prevent Diffie-Hellman computation bottlenecks in critical paths
- *
+ * <p>
  * Try to keep DH pairs at the ready. It's important to do this in a separate thread, because
  * if we run out, the pairs are generated in the NTCP Pumper thread, and it can fall behind.
  *

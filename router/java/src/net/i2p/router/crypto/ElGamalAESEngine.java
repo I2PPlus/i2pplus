@@ -30,7 +30,7 @@ import net.i2p.util.SimpleByteCache;
 /**
  * Handles the actual ElGamal+AES encryption and decryption scenarios using the
  * supplied keys and data.
- *
+ * <p>
  * No, this does not extend AESEngine or CryptixAESEngine.
  *
  * @since 0.9.38 moved from net.i2p.crypto
@@ -77,7 +77,7 @@ public final class ElGamalAESEngine {
      * and using tags from the specified key manager.
      * This works according to the
      * ElGamal+AES algorithm in the data structure spec.
-     *
+     * <p>
      * Warning - use the correct SessionKeyManager. Clients should instantiate their own.
      * Clients using I2PAppContext.sessionKeyManager() may be correlated with the router,
      * unless you are careful to use different keys.
@@ -338,7 +338,7 @@ public final class ElGamalAESEngine {
      * - data
      * - random bytes, padding the total size to greater than paddedSize with a mod 16 = 0
      * </pre>
-     *
+     * <p>
      * If anything doesn't match up in decryption, it falls back to decryptNewSession
      *
      * @param foundTags set which is filled with any sessionTags found during decryption
@@ -386,7 +386,7 @@ public final class ElGamalAESEngine {
      * - data
      * - random bytes, padding the total size to greater than paddedSize with a mod 16 = 0
      * </pre>
-     *
+     * <p>
      * If anything doesn't match up in decryption, return null.  Otherwise, return
      * the decrypted data and update the session as necessary.  If the sentTag is not null,
      * consume it, but if it is null, record the keys, etc as part of a new session.
@@ -470,7 +470,7 @@ public final class ElGamalAESEngine {
      * Encrypt the unencrypted data to the target.  The total size returned will be
      * no less than the paddedSize parameter, but may be more.  This method uses the
      * ElGamal+AES algorithm in the data structure spec.
-     *
+     * <p>
      * Unused externally, only called by below (i.e. newKey is always null)
      *
      * @param data the plaintext to encrypt
@@ -514,18 +514,18 @@ public final class ElGamalAESEngine {
      * Encrypt the data to the target using the given key and deliver the specified tags
      * No new session key
      * This is the one called from GarlicMessageBuilder and is the primary entry point.
-     *
+     * <p>
      * Re: padded size: The AES block adds at least 39 bytes of overhead to the data, and
      * that is included in the minimum size calculation.
-     *
+     * <p>
      * In the router, we always use garlic messages. A garlic message with a single
      * clove and zero data is about 84 bytes, so that's 123 bytes minimum. So any paddingSize
      * &lt;= 128 is a no-op as every message will be at least 128 bytes
      * (Streaming, if used, adds more overhead).
-     *
+     * <p>
      * Outside the router, with a client using its own message format, the minimum size
      * is 48, so any paddingSize &lt;= 48 is a no-op.
-     *
+     * <p>
      * Not included in the minimum is a 32-byte session tag for an existing session,
      * or a 514-byte ElGamal block and several 32-byte session tags for a new session.
      * So the returned encrypted data will be at least 32 bytes larger than paddedSize.
@@ -669,7 +669,7 @@ public final class ElGamalAESEngine {
 
     /**
      * Generate the first 16 bytes of the SHA-256 hash of the data.
-     *
+     * <p>
      * Here we are careful to use the SHA256Generator method that does not
      * generate a Hash object or cache the result.
      *
@@ -699,7 +699,7 @@ public final class ElGamalAESEngine {
      * - data
      * - random bytes, padding the total size to greater than paddedSize with a mod 16 = 0
      * </pre>
-     *
+     * <p>
      * Note: package private for ElGamalTest.testAES()
      *
      * @param data the plaintext to encrypt into the AES area

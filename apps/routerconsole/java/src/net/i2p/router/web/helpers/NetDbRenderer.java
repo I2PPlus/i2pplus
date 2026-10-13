@@ -145,12 +145,10 @@ class NetDbRenderer {
 
 /**
  * Memoized "{0} ago" translations.
- *
  * <p>{@link Translate#getString} rebuilds a {@code MessageFormat} and
  * re-parses the pattern on every call, and a full /netdb page asks for this
  * text once or twice per router row. Keying on the already-formatted duration
  * string is therefore exact and callers may pass dynamic ages freely.
- *
  * <p>Entries are dropped wholesale when the UI language changes; a race
  * between two render threads can only cost a redundant translation, never a
  * wrong result.
@@ -1441,7 +1439,6 @@ class NetDbRenderer {
 
 /**
  * Overview tallies for the sorted router list, memoized for a few seconds.
- *
  * <p>Counting costs a country lookup, an option read and a transport
  * classification per known router, and the sorted list is only replaced on
  * its own expiry — so the list's identity is the stamp the tallies belong
@@ -1934,7 +1931,6 @@ class NetDbRenderer {
 
 /**
  * Renders a single RouterInfo, isolating any failure to this one entry.
- *
  * <p>The netdb listing streams progressively, so an exception escaping a
  * single render would truncate the rest of the page with no way to re-render.
  *
@@ -2112,7 +2108,6 @@ class NetDbRenderer {
 
 /**
  * Resident memory in whole megabytes, for the local row's "Memory usage" cell.
- *
  * <p>Memoized because {@code renderRoutersToWriter} hands every row in a list
  * the same isLocal flag, so this would otherwise run once per row rather than
  * once per page. The rate itself averages over a minute, longer than any

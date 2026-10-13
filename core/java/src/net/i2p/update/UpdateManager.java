@@ -10,7 +10,7 @@ import java.util.Map;
 /**
  * The central resource coordinating updates.
  * This must be registered with the context.
- *
+ * <p>
  * The UpdateManager starts and stops all updates,
  * and controls notification to the user.
  *

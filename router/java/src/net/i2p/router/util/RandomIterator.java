@@ -44,7 +44,7 @@ public class RandomIterator<E> implements Iterator<E> {
      * Mapping indicating which items were served (by index).
      * if served[i] then the item with index i in the list
      * has already been served.
-     *
+     * <p>
      * Note it is possible to save memory here by using
      * BitSet rather than a boolean array, however it will
      * increase the running time slightly.
@@ -59,7 +59,7 @@ public class RandomIterator<E> implements Iterator<E> {
     /**
      * The random number generator has a great influence
      * on the running time of this iterator.
-     *
+     * <p>
      * See, for instance,
      * <a href="http://www.qbrundage.com/michaelb/pubs/essays/random_number_generation" title="http://www.qbrundage.com/michaelb/pubs/essays/random_number_generation" target="_blank">http://www.qbrundage.com/michaelb/pubs/e&#8230;</a>
      * for some implementations, which are faster than java.util.Random.

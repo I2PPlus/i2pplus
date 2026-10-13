@@ -41,7 +41,6 @@ public class StatManager {
 
     /**
      * Total coalesce failures isolated since startup, across all stats.
-     *
      * <p>Nonzero means at least one stat stopped recording. It is reported rather
      * than absorbed because the failure it counts is silent by nature: a skipped
      * rate produces no exception for anyone to notice.
@@ -50,7 +49,6 @@ public class StatManager {
 
     /**
      * Clock value of the last completed coalesce sweep, or 0 if none has run.
-     *
      * <p>This is a heartbeat for the whole stat subsystem. The sweep runs on the
      * shared coalesce timer, so it can stop without any exception: the task is
      * simply queued behind other work and never runs. Nothing inside the stats
@@ -142,7 +140,6 @@ public class StatManager {
     /**
      * Resolve a frequency stat by name, creating it if it does not exist yet, and
      * return the handle to it.
-     *
      * <p>Lets a caller on a repeated event stop re-resolving the name. The handle
      * stays valid until {@link #removeFrequencyStat} or {@link #shutdown}; there is
      * deliberately no handle-invalidation step, because dropping one would cost the
@@ -171,7 +168,6 @@ public class StatManager {
 
     /**
      * Remove a frequency stat by name.
-     *
      * <p>Any handle previously returned by {@link #getOrCreateFrequencyStat} is
      * orphaned by this and must not be used again.
      *
@@ -217,7 +213,6 @@ public class StatManager {
     /**
      * Resolve a rate stat by name, creating it if it does not exist yet, and return
      * the handle to it.
-     *
      * <p>Lets a caller reporting the same stat repeatedly avoid the string-keyed
      * map lookup that {@link #addRateData(String, long)} pays on every call.
      * Resolution is check-then-act, not a single
@@ -227,7 +222,6 @@ public class StatManager {
      * exactly one stat is built and the delivery queue is attached before that
      * stat is published. The handle is therefore usable the instant this
      * returns.
-     *
      * <p>The handle is not invalidated when the stat is removed: a stale handle
      * keeps updating an orphaned stat, which is inert rather than harmful, and
      * detecting that would cost the lookup this exists to remove. It is valid
@@ -256,7 +250,6 @@ public class StatManager {
 
     /**
      * Sum of {@link Rate#getCoalesceSkips()} across every rate in the table.
-     *
      * <p>A rate normally skips one coalesce per period, so this grows steadily and
      * is not by itself a problem. It is reported so that a rate which stopped
      * coalescing entirely can be told apart from one that is merely visited early.
@@ -274,7 +267,6 @@ public class StatManager {
     /**
      * Sum of {@link Rate#getCoalesceBacklogCollapses()} across every rate in the
      * table.
-     *
      * <p>Unlike a skip, a collapse is permanent: the steps it abandoned can never
      * be written, so every count here is a gap in the graph data. Zero is the
      * healthy state. A nonzero value points at the shared coalesce timer rather
@@ -293,7 +285,6 @@ public class StatManager {
 
     /**
      * Samples evicted because the delivery queue hit its hard capacity.
-     *
      * <p>Unlike {@link RateSampleDelivery#getSuperseded()} this must never happen:
      * same-step supersession means a slow consumer does not grow the queue, so
      * reaching the cap means the consumer is not draining at all. Surfaced here
@@ -309,7 +300,6 @@ public class StatManager {
 
     /**
      * Samples replaced in place by a newer value for the same archive step.
-     *
      * <p>High but non-zero is normal under load and is not loss - only one value
      * per step is storable and the newest is the correct one. A count that stops
      * advancing while {@link #getSamplePending()} climbs means the consumer has
@@ -334,7 +324,6 @@ public class StatManager {
 
     /**
      * Age of the oldest sample still waiting for delivery.
-     *
      * <p>The direct measure of delivery lag, and therefore the only signal that
      * distinguishes a stalled consumer from a rate that has stopped coalescing:
      * both leave the graph frozen, but only the second one drains this queue.
@@ -348,7 +337,6 @@ public class StatManager {
 
     /**
      * Remove a rate stat by name.
-     *
      * <p>Any handle previously returned by {@link #getOrCreateRateStat} is
      * orphaned by this and must not be used again.
      *
@@ -399,7 +387,6 @@ public class StatManager {
     /**
      * Coalesce all rate stats and periodically coalesce frequency stats, isolating
      * every stat from every other.
-     *
      * <p>Isolation is the whole point of this method. It runs as one pass over the
      * whole table on the shared coalesce timer, so a single exception escaping a
      * stat would abandon every stat later in the pass: their rates would stop
@@ -447,7 +434,6 @@ public class StatManager {
 
     /**
      * How long ago the last coalesce sweep completed, or -1 if none ever has.
-     *
      * <p>Callers use this to distinguish a rate that will not coalesce from a
      * coalesce task that is not running. A sweep older than a few rate periods
      * means the latter, which no counter inside this package can report.
@@ -476,7 +462,6 @@ public class StatManager {
 
     /**
      * Count an isolated coalesce failure and log it, naming the stat at fault.
-     *
      * <p>ERROR rather than WARN because the failure is silent data loss, and
      * {@code logger.defaultLevel} is ERROR: a WARN would be suppressed in a default
      * configuration and the loss would go unnoticed. ERROR also reaches the
@@ -504,7 +489,6 @@ public class StatManager {
 
     /**
      * Total coalesce failures isolated since startup.
-     *
      * <p>Zero is the healthy state. Nonzero means at least one stat has silently
      * stopped recording; the log line names which one.
      *

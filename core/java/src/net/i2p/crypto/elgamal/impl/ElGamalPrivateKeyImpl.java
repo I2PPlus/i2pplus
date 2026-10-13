@@ -20,7 +20,7 @@ import javax.crypto.spec.DHPrivateKeySpec;
 
 /**
  * Implementation of ElGamal private keys.
- *
+ * <p>
  * This class provides a concrete implementation of the ElGamalPrivateKey interface,
  * representing the private component of an ElGamal key pair. It stores the secret
  * exponent x and the ElGamal parameters (prime p and generator g), and supports

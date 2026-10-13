@@ -21,12 +21,12 @@ import org.eclipse.jetty.webapp.WebAppContext;
  * This allows us to reference classes that are not in the classpath
  * specified in wrapper.config, since old installations have
  * individual jars and not lib/*.jar specified in wrapper.config.
- *
+ * <p>
  * A sample line in webapps.config is:
  * webapps.appname.classpath=foo.jar,$I2P/lib/bar.jar
  * Unless $I2P is specified the path will be relative to $I2P/lib for
  * webapps in the installation and appDir/plugins/appname/lib for plugins.
- *
+ * <p>
  * webapps.config is used because setting Class-Path in MANIFEST.MF does not
  * work for jetty wars, and because WebAppContext.addClassPath() is not
  * usable here. Jars that are already on the system class path are skipped

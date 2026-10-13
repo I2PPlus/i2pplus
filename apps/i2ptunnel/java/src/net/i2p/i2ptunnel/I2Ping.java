@@ -52,7 +52,6 @@ public class I2Ping extends I2PTunnelClientBase {
 
     /**
      * Construct a ping tunnel client over an existing command.
-     *
      * <p>The command line to run must be carried in tunnel.getOptions as
      * "command".
      *

@@ -3,7 +3,6 @@ package net.i2p.router.peermanager;
 /**
  * A latency baseline for one transport, built from the round trip times that
  * transport has actually measured.
- *
  * <p>Purpose: an absolute millisecond threshold cannot judge two transports at
  * once. A threshold tuned for NTCP2 is either unreachable for SSU2, so every
  * SSU2 peer looks slow, or so loose for NTCP2 that it admits links that cause
@@ -11,7 +10,6 @@ package net.i2p.router.peermanager;
  * so the peer is excluded for carrying the protocol it happens to speak.
  * Per-protocol baselines remove that: each transport is judged against what it
  * can achieve on its own.
- *
  * <p>The baseline is the mean of the {@link #SAMPLES_FOR_BASELINE} <em>fastest</em>
  * retained samples, not of all of them. This is the same estimator TCP uses to
  * derive its floor for retransmission timeout, and it is chosen here for one
@@ -21,13 +19,11 @@ package net.i2p.router.peermanager;
  * becoming slow would be scored against a baseline that had already drifted to
  * accommodate it. Keying on the floor keeps the bar steady while the tail is
  * allowed to move.
- *
  * <p>The trade-off is deliberate and worth stating: the floor only ever reflects
  * the best links seen recently, so if an entire path to one protocol degrades,
  * the baseline stays optimistic and its peers score worse. That is the intended
  * reading - degradation should show up - but it means the baseline is not
  * relative to current conditions.
- *
  * <p>Instances are not thread-safe. The intended lifecycle is one instance per
  * transport, built once per sampling cycle from that cycle's measurements, then
  * read for the duration of the cycle.
@@ -115,7 +111,6 @@ public class ProtocolRttBaseline {
 
     /**
      * The calibrated floor for this transport, or -1 when unknown.
-     *
      * <p>Returns -1 rather than a guess below {@link #SAMPLES_FOR_BASELINE}
      * samples. Callers must treat that as "no calibrated opinion available" and
      * fall back to their absolute rules - never as "this peer is fine".
@@ -130,7 +125,6 @@ public class ProtocolRttBaseline {
     /**
      * The calibrated floor, clamped so it can never fall below
      * {@code floorMs / multiple}.
-     *
      * <p>The clamp is the guard against a freakishly low population tightening
      * the bar below what an absolute rule would have used. A single 1 ms sample
      * among fifty would otherwise put the baseline at a few milliseconds and
@@ -175,7 +169,6 @@ public class ProtocolRttBaseline {
 
     /**
      * Whether a measurement qualifies against a calibrated baseline.
-     *
      * <p>Never true when the baseline is unknown, so a caller cannot treat a
      * missing baseline as permission.
      *

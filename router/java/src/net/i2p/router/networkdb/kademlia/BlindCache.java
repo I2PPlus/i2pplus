@@ -314,7 +314,7 @@ class BlindCache {
      * Load from file.
      * Format:
      * sigtype,bsigtype,authtype,timestamp,b64 pubkey,[b64 secret],[b64 auth privkey],[b64 dest]
-     *
+     * <p>
      * If timestamp is positive, it's a creation date;
      * if negative, it's a negative expiration date.
      */
@@ -384,7 +384,7 @@ class BlindCache {
     /**
      * Format:
      * sigtype,bsigtype,authtype,timestamp,b64 pubkey,[b64 secret],[b64 auth privkey],[b64 dest]
-     *
+     * <p>
      * If timestamp is positive, it's a creation date;
      * if negative, it's a negative expiration date.
      */
@@ -449,7 +449,7 @@ class BlindCache {
     /**
      * Format:
      * sigtype,bsigtype,authtype,timestamp,b64 pubkey,[b64 secret],[b64 auth privkey],[b64 dest]
-     *
+     * <p>
      * If timestamp is positive, it's a creation date;
      * if negative, it's a negative expiration date.
      */
