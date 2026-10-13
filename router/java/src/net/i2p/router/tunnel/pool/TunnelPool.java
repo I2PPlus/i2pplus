@@ -5634,10 +5634,45 @@ public class TunnelPool {
        * @return true to skip the build cycle
        */
       private boolean shouldSkipDueToInProgress(int safeActive, int target, int inProgress) {
+          return shouldSkipDueToInProgress(safeActive, target, inProgress,
+                                           getBuildTimeoutRate());
+      }
+
+      /**
+       * Variant taking the build timeout rate, which the hot path already has.
+       *
+       * <p>A thin pool's in-flight budget has to account for builds that will
+       * never complete. Each failed attempt occupies a slot for the whole
+       * timeout — 17 to 33 seconds — so at a 50% timeout rate a budget of six
+       * yields roughly three landable tunnels per timeout rather than six, and
+       * the pool replaces fewer tunnels per cycle than it loses while it still
+       * drains. Measured on a live router at 47% build success with timeouts at
+       * 51%: pre-emergency fired 10,620 times across five outbound pools while
+       * several sat at zero outbound tunnels.
+       *
+       * <p>Scaling the budget up as the timeout rate rises gives a failing pool
+       * room for enough concurrent attempts to land a replacement inside a
+       * single timeout window, which is the only way a pool with a high failure
+       * rate can recover at all. It is bounded by
+       * {@link #MAX_INPROGRESS_PER_POOL_DIR}, so the spend stays capped.
+       *
+       * @param timeoutRate fraction of builds timing out in [0.0, 1.0]
+       * @return true if the in-flight budget is exhausted
+       * @since 0.9.71+
+       */
+      private boolean shouldSkipDueToInProgress(int safeActive, int target, int inProgress,
+                                                double timeoutRate) {
           int cap;
-          if (safeActive > 0) {
-              cap = (safeActive < target) ? Math.min(Math.max(target * 2, 4), 6)
-                                          : Math.max(target + 1, 2);
+          if (safeActive > 0 && safeActive < target) {
+              // A thin pool banks a budget for the attempts it expects to lose.
+              // Six at a 0% timeout rate rising to the cap at 100%, so a pool
+              // that is failing can still field enough attempts to recover.
+              double lossFactor = 1.0 + Math.max(0.0, Math.min(1.0, timeoutRate));
+              cap = Math.min(Math.max(target * 2, 4), 6);
+              cap = (int) Math.min(Math.round(cap * lossFactor),
+                                   MAX_INPROGRESS_PER_POOL_DIR);
+          } else if (safeActive > 0) {
+              cap = Math.max(target + 1, 2);
           } else {
               cap = Math.min(target + 2, 8);
           }
