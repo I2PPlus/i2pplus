@@ -64,6 +64,21 @@ class RequestLeaseSetJob extends JobImpl {
      * @since 0.9.71+
      */
     static final long DEFAULT_SEND_WAIT = 1000;
+
+    /**
+     * Property overriding {@link #DEFAULT_SEND_ATTEMPTS}: how many times to try
+     * the send before the request is declared failed.
+     */
+    static final String PROP_SEND_ATTEMPTS = "router.requestLeaseSetSendAttempts";
+
+    /**
+     * Attempts before giving up on a backed-up client. The router's request
+     * timeout is around a minute, so with a one-second first wait and doubling,
+     * five attempts span roughly 15 seconds — the client has to read one message
+     * in that time, and anything that cannot is not going to recover inside the
+     * request timeout either.
+     */
+    static final int DEFAULT_SEND_ATTEMPTS = 5;
     /**
      * Create the job.
      *
@@ -232,20 +247,46 @@ class RequestLeaseSetJob extends JobImpl {
             msg = rmsg;
         }
 
-        try {
-            // Wait briefly rather than drop: the client only has to read one more message,
-            // and losing the request costs the full request timeout plus a tunnel rebuild.
-            long waitMs = getContext().getProperty(PROP_SEND_WAIT, DEFAULT_SEND_WAIT);
-            _runner.doSendWait(msg, waitMs);
-            if (_log.shouldInfo())
-                _log.info("LeaseSet request sent to client, scheduling timeout check for " + _requestState);
-            getContext().jobQueue().addJob(new CheckLeaseRequestStatus());
-        } catch (I2CPMessageException ime) {
-            getContext().statManager().addRateData("client.requestLeaseSetDropped", 1);
-            _log.error("Error sending I2CP message requesting the LeaseSet: " + ime.getMessage()
-                       + " (" + ime + ")", ime);
-            failEarlyRequest("Error sending I2CP message");
+        // A client whose I2CP queue is full is not necessarily a dead client — it is one
+        // that has not drained fast enough yet. Declaring the request failed on the first
+        // refusal costs the whole request timeout plus another LeaseSet lookup through the
+        // netdb, so retry with a growing wait before giving up. Each attempt only asks the
+        // client to read one more message, so the router side stays cheap.
+        int attempts = Math.max(1, getContext().getProperty(PROP_SEND_ATTEMPTS, DEFAULT_SEND_ATTEMPTS));
+        long waitMs = getContext().getProperty(PROP_SEND_WAIT, DEFAULT_SEND_WAIT);
+        I2CPMessageException lastFailure = null;
+        for (int attempt = 1; attempt <= attempts; attempt++) {
+            try {
+                _runner.doSendWait(msg, waitMs);
+                if (_log.shouldInfo())
+                    _log.info("LeaseSet request sent to client, scheduling timeout check for " + _requestState);
+                getContext().jobQueue().addJob(new CheckLeaseRequestStatus());
+                return;
+            } catch (I2CPMessageException ime) {
+                lastFailure = ime;
+                if (attempt == attempts) {break;}
+                // The client's queue has a fixed capacity, so waiting longer is the only
+                // lever this side has; grow it so a slow client gets a fair chance to
+                // drain rather than a fixed second repeatedly failing.
+                long nextWait = waitMs * attempt * 2;
+                if (_log.shouldWarn())
+                    _log.warn("I2CP queue full sending the LeaseSet request (attempt " +
+                              attempt + " of " + attempts + ") -> retrying in " + nextWait +
+                              "ms [" + ime.getMessage() + "]");
+                try {
+                    Thread.sleep(nextWait);
+                } catch (InterruptedException ie) {
+                    Thread.currentThread().interrupt();
+                    break;
+                }
+            }
         }
+        getContext().statManager().addRateData("client.requestLeaseSetDropped", 1);
+        _log.warn("Giving up on the LeaseSet request after " + attempts +
+                  " attempts -> the client is not draining its I2CP queue" +
+                  (lastFailure != null ? " [" + lastFailure.getMessage() + "]" : "") +
+                  " " + _requestState);
+        failEarlyRequest("Error sending I2CP message");
     }
 
     /**
