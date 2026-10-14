@@ -1972,12 +1972,25 @@ public class BuildExecutor implements Runnable {
         int concurrent = _currentlyBuildingMap.size();
         if (_log.shouldInfo() && concurrent > 0) {
             long now2 = _context.clock().now();
-            long oldestAge = now2 - getOldestBuildingCreation();
             int expiredCount = expired != null ? expired.size() : 0;
+            // Report the oldest build against the deadline the expiry scan applied
+            // to it, not the base timeout, so `overdue` means exactly "past its own
+            // deadline and still in the map" - the invariant that used to be
+            // unmeasurable because the base understates the per-config deadline.
+            PooledTunnelCreatorConfig oldest = getOldestBuildingConfiguration();
+            long oldestAge = 0, oldestDeadline = 0;
+            boolean overdue = false;
+            if (oldest != null) {
+                oldestAge = now2 - oldest.getConfig(0).getCreation();
+                oldestDeadline = calculateAdaptiveTimeout(oldest, cpuLoad, rttFloor);
+                overdue = oldestDeadline > 0 && oldestAge >= oldestDeadline;
+            }
             _log.info("Building map: " + concurrent +
                       " expired: " + expiredCount +
                       " oldestAge: " + oldestAge + "ms" +
-                      " adaptiveTimeout: " + _adaptiveTimeout + "ms");
+                      " oldestDeadline: " + oldestDeadline + "ms" +
+                      " overdue: " + overdue +
+                      " baseTimeout: " + _adaptiveTimeout + "ms");
         }
         allowed = applyConcurrentReduction(allowed, concurrent);
         if (allowed == 0 && shouldLogBudgetExhausted(_context.clock().now())) {
@@ -2037,20 +2050,30 @@ public class BuildExecutor implements Runnable {
 
     /**
      * Get the creation timestamp of the oldest entry in _currentlyBuildingMap.
-     *  Used for diagnostic logging only.
+    /**
+     * The oldest build in the building map, by the creation time of its first hop.
+     * Used for diagnostic logging only.
      *
-     * @return creation time of oldest build, or 0 if map is empty
+     * <p>Returns the config rather than its creation time so callers can apply
+     * that build's own deadline to it. Reporting the shared base timeout beside
+     * an age is misleading: the expiry scan decides per config, adding tunnel
+     * length, outbound direction, CPU load and the RTT floor, so the deadline
+     * in force for the oldest build is routinely well above the base.
+     *
+     * @return the oldest config, or null when the map is empty
      * @since 0.9.71+
      */
-    private long getOldestBuildingCreation() {
+    private PooledTunnelCreatorConfig getOldestBuildingConfiguration() {
+        PooledTunnelCreatorConfig oldestCfg = null;
         long oldest = Long.MAX_VALUE;
         for (PooledTunnelCreatorConfig cfg : _currentlyBuildingMap.values()) {
             long c = cfg.getConfig(0).getCreation();
             if (c > 0 && c < oldest) {
                 oldest = c;
+                oldestCfg = cfg;
             }
         }
-        return oldest == Long.MAX_VALUE ? 0 : oldest;
+        return oldestCfg;
     }
 
     /**
@@ -2246,7 +2269,10 @@ public class BuildExecutor implements Runnable {
                 if (_log.shouldDebug()) {
                     int building = _currentlyBuildingMap.size();
                     int recently = _recentlyBuildingMap.size();
-                    long buildingAge = building > 0 ? _context.clock().now() - getOldestBuildingCreation() : 0;
+                    PooledTunnelCreatorConfig oldestCfg = getOldestBuildingConfiguration();
+                    long buildingAge = (building > 0 && oldestCfg != null)
+                        ? _context.clock().now() - oldestCfg.getConfig(0).getCreation()
+                        : 0;
                     _log.debug("BldExecutor loop tick: building: " + building +
                               " recently: " + recently +
                               " buildingOldestAge: " + buildingAge + "ms" +
