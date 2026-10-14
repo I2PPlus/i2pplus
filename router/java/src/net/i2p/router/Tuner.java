@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
+import java.lang.reflect.Method;
 import net.i2p.I2PAppContext;
 import net.i2p.router.transport.CommSystemFacadeImpl;
 import net.i2p.router.transport.udp.PeerState;
@@ -552,7 +553,9 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
     /**
      * Per-pool test budget for client tunnels — high enough to never throttle.
-     *  Global caps (maxQueuedTests, hardLimit) protect the job queue instead. */
+     * Global caps (maxQueuedTests, hardLimit) protect the job queue instead.
+     */
+
     private static volatile int testClientBudget = 256;
 
     /**
@@ -2910,7 +2913,9 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             resolve();
             if (connectionCls == null) return -1;
             try {
-                return (Integer) connectionCls.getMethod(methodName).invoke(null);
+                Method m = connectionCls.getMethod(methodName);
+                makeAccessible(m);
+                return (Integer) m.invoke(null);
             } catch (Throwable t) {
                 reportReflectorFailure(methodName, t);
                 return -1;
@@ -2922,10 +2927,33 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             resolve();
             if (connectionCls == null) return;
             try {
-                connectionCls.getMethod(methodName, int.class).invoke(null, value);
+                Method m = connectionCls.getMethod(methodName, int.class);
+                makeAccessible(m);
+                m.invoke(null, value);
             } catch (Throwable t) {
                 reportReflectorFailure(methodName, t);
             }
+        }
+
+        /**
+         * Permit the reflective call.
+         *
+         * <p>The member being reached is public static on a public class, so on a
+         * single classpath nothing should need this. It is needed anyway: the
+         * streaming jar is reached across a boundary the default access check does
+         * not cross, and the resulting IllegalAccessException is indistinguishable
+         * from a missing method at the call site. Four streaming params - max window,
+         * max retransmissions, max SYN resends and connect timeout multiplier - have
+         * silently done nothing for the life of that check.
+         *
+         * @param m the method to make callable
+         * @since 0.9.71+
+         */
+        private static void makeAccessible(Method m) {
+            // setAccessible rather than trySetAccessible because the source level is
+            // 8; if the boundary cannot be crossed the exception propagates to the
+            // caller's Throwable handler, which reports it once per method.
+            m.setAccessible(true);
         }
 
         /**
@@ -4887,7 +4915,9 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      *  streaming layer actually applies: i2ptunnel builds socket manager options
      *  without maxMessageSize, so connections fall back to this default.  Hardcoded
      *  here because the router module cannot reference the streaming app constant.
-     * @since 0.9.71+ */
+     * @since 0.9.71+
+     */
+
     private static final int STREAM_MSG_SIZE_DEFAULT = 1730;
 
     /**
@@ -5104,15 +5134,23 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
     /**
      * Heap % below which the streaming ceiling takes the full four-step jump.
-     * @since 0.9.71+ */
+     * @since 0.9.71+
+     */
+
     private static final double STRONG_CLEAN_MEM_PCT = 40.0;
     /**
      * Heap % below which a clean path may take a two-step climb; holds at or
-     *  above this until memory frees. @since 0.9.71+ */
+     * above this until memory frees.
+     *
+     * @since 0.9.71+
+     */
+
     private static final double CLIMB_HEADROOM_MEM_PCT = 50.0;
     /**
      * Heap % above which the streaming ceiling shrinks half a step.
-     * @since 0.9.71+ */
+     * @since 0.9.71+
+     */
+
     private static final double SHRINK_MEM_PCT = 60.0;
 
     /**
@@ -12913,7 +12951,9 @@ protected int computeTarget(double observed) {
 
         /**
          * Share of the fast or high-capacity tier that ghost exclusions may consume
-         *  before the factor starts to bite, and the share at which it bottoms out. */
+         * before the factor starts to bite, and the share at which it bottoms out.
+         */
+
         static final double GHOST_TIER_FREE = 0.10;
         /** Share of the tier at which the ghost-exclusion factor bottoms out at 0.0. */
         static final double GHOST_TIER_ZERO = 0.25;
