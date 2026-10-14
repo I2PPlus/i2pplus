@@ -1621,7 +1621,7 @@ public class TunnelPool {
     int getUsableTunnelCount() {
         long now = _context.clock().now();
         int count = 0;
-        int zombies = 0;
+        List<TunnelInfo> zombies = null;
         _tunnelsLock.lock();
         try {
             for (TunnelInfo t : _tunnels) {
@@ -1629,10 +1629,17 @@ public class TunnelPool {
                 if (t.getTunnelFailed() || t.getTestStatus().isUnusable()) continue;
                 // Same zombie exclusion as getHealthyTunnelCount: without a session
                 // to our next hop this tunnel cannot carry anything.
-                if (isLocalHopUnreachable(t)) {zombies++; countZombieTransport(t); continue;}
+                if (isLocalHopUnreachable(t)) {
+                    if (zombies == null) {zombies = new ArrayList<>(4);}
+                    zombies.add(t);
+                    continue;
+                }
                 count++;
             }
         } finally {_tunnelsLock.unlock();}
+        // Attributing the exclusions reads the netdb, so it is done outside the
+        // pool lock: taking a netdb lock while holding this one is a lock-ordering
+        // hazard, and the pool lock is held far more often than this is needed.
         reportZombies(ZOMBIE_STAT_USABLE, count, zombies);
         return count;
     }
@@ -1656,7 +1663,7 @@ public class TunnelPool {
     int getHealthyTunnelCount() {
         long now = _context.clock().now();
         int count = 0;
-        int zombies = 0;
+        List<TunnelInfo> zombies = null;
         _tunnelsLock.lock();
         try {
             for (TunnelInfo t : _tunnels) {
@@ -1667,10 +1674,17 @@ public class TunnelPool {
                 // No transport session to our next hop: the tunnel survives as a
                 // zombie, so counting it here is what lets a pool report 8/8 healthy
                 // while delivering nothing.
-                if (isLocalHopUnreachable(t)) {zombies++; continue;}
+                if (isLocalHopUnreachable(t)) {
+                    if (zombies == null) {zombies = new ArrayList<>(4);}
+                    zombies.add(t);
+                    continue;
+                }
                 count++;
             }
         } finally {_tunnelsLock.unlock();}
+        // This is the hot path - the pre-emergency and ensure gates read healthy
+        // count far more often than usable - so excluding the transport attribution
+        // here left the split blank on the very window that matters most.
         reportZombies(ZOMBIE_STAT_HEALTHY, count, zombies);
         return count;
     }
@@ -1698,14 +1712,25 @@ public class TunnelPool {
      * @param excluded the number dropped for want of a local transport session
      * @since 0.9.71+
      */
-    private void reportZombies(String stat, int kept, int excluded) {
+    private void reportZombies(String stat, int kept, List<TunnelInfo> zombies) {
+        int excluded = zombies == null ? 0 : zombies.size();
         _context.statManager().addRateData(stat, excluded);
         if (excluded == 0) {return;}
+        // Attribute every exclusion, then name one on the warning so the split is
+        // readable in the log without consulting the stats page. The warning is
+        // throttled to one per interval, so a single sample is all that can be
+        // shown; the per-exclusion rate stats carry the full picture.
+        String sample = null;
+        for (TunnelInfo t : zombies) {
+            String bucket = countZombieTransport(t);
+            if (sample == null) {sample = bucket;}
+        }
         long now = _context.clock().now();
         if (!_log.shouldLog(Log.WARN) || now < _nextZombieLog) {return;}
         _nextZombieLog = now + ZOMBIE_LOG_INTERVAL_MS;
         _log.warn("Pool health excludes " + excluded + " of " + (kept + excluded)
                   + " tunnels with no transport session to their local hop -> Kept: " + kept
+                  + "; transport: " + sample
                   + " [" + toString() + "]");
     }
 
@@ -1791,7 +1816,7 @@ public class TunnelPool {
      * @param t the zombie tunnel whose local hop session was lost
      * @since 0.9.71+
      */
-    private void countZombieTransport(TunnelInfo t) {
+    private String countZombieTransport(TunnelInfo t) {
         int idx = t.isInbound() ? 0 : 1;
         String style = null;
         if (idx < t.getLength()) {
@@ -1806,8 +1831,9 @@ public class TunnelPool {
                 }
             }
         }
-        _context.statManager().addRateData("tunnel.poolZombieTransport." +
-                                          zombieTransportBucket(style), 1);
+        String bucket = zombieTransportBucket(style);
+        _context.statManager().addRateData("tunnel.poolZombieTransport." + bucket, 1);
+        return bucket;
     }
 
     /**
