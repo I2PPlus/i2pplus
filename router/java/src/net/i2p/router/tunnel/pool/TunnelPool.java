@@ -1779,6 +1779,10 @@ public class TunnelPool {
         for (TunnelInfo t : zombies) {
             String bucket = countZombieTransport(t);
             if (sample == null) {sample = bucket;}
+            // Attribution is a map lookup on the transport side, so it runs per
+            // exclusion rather than being sampled: the split is only worth having
+            // if it covers the exclusions rather than a fraction of them.
+            countSessionLossCause(localHop(t));
         }
         long now = _context.clock().now();
         if (!_log.shouldLog(Log.WARN) || now < _nextZombieLog) {return;}
@@ -1788,6 +1792,54 @@ public class TunnelPool {
                   + "; transport: " + sample
                   + " [" + toString() + "]");
     }
+
+    /**
+     * The peer whose transport session this tunnel sends through, or null when there
+     * is none. Direction-dependent, mirroring
+     * {@code BuildRequestor.getBuildRequestPeer}.
+     *
+     * @param t the pool tunnel; may be null or zero-length
+     * @return the local hop, or null
+     * @since 0.9.71+
+     */
+    private Hash localHop(TunnelInfo t) {
+        if (t == null || t.getLength() <= 1) {return null;}
+        int idx = t.isInbound() ? 0 : 1;
+        return idx < t.getLength() ? t.getPeer(idx) : null;
+    }
+
+    /**
+     * Attribute one zombie exclusion to this router or to the peer, and count it.
+     *
+     * <p>The transport records the idle closes it performs, so the question can be
+     * answered from a fact rather than inferred reachability: a peer we closed an
+     * idle session to is one this router declined to keep talking to. Everything
+     * else - a peer that went away, a path that broke, a session closed for another
+     * reason - is not attributable and stays UNKNOWN, which is the honest answer
+     * when the evidence does not support one.
+     *
+     * @param hop the zombie's local hop; may be null
+     * @since 0.9.71+
+     */
+    private void countSessionLossCause(Hash hop) {
+        SessionLoss loss;
+        if (hop == null) {
+            loss = SessionLoss.UNKNOWN;
+        } else {
+            boolean established = _context.commSystem().isEstablished(hop);
+            boolean failsafe = _context.commSystem().wasFailsafeClosed(hop, FAILSAFE_CLOSE_WINDOW_MS);
+            loss = classifySessionLoss(true, established, failsafe);
+        }
+        _context.statManager().addRateData("tunnel.poolZombieSessionLoss." + loss.name(), 1);
+    }
+
+    /**
+     * How recently a transport must have closed an idle session for the loss to be
+     * attributed to this router. Matches the memory the transport keeps.
+     *
+     * @since 0.9.71+
+     */
+    private static final long FAILSAFE_CLOSE_WINDOW_MS = 10 * 60 * 1000L;
 
     /**
      * Whether this tunnel's local path is unusable because we hold no transport

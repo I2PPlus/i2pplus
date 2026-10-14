@@ -934,6 +934,107 @@ public class NTCPTransport extends TransportImpl {
      * @return true if the connection is not closed and has completed the
      *         handshake
      */
+    /**
+     * How far back a failsafe close keeps its peer attributable.
+     * <p>Long enough that a pool noticing the loss later in its own walk still
+     * finds the cause, short enough that the structure stays small and a peer
+     * reconnecting is not blamed for the connection it lost minutes ago.
+     *
+     * @since 0.9.71+
+     */
+    private static final long FAILSAFE_CLOSE_MEMORY_MS = 10 * 60 * 1000L;
+
+    /**
+     * Upper bound on peers remembered for failsafe closes. Chosen so the worst-case
+     * scan finds an evictable entry in bounded time on the close path, which is
+     * already the expensive one.
+     *
+     * @since 0.9.71+
+     */
+    private static final int MAX_FAILSAFE_CLOSE_MEMORY = 1024;
+
+    /**
+     * Peers this transport closed an idle session to, and when.
+     * <p>A closed session is indistinguishable from a dead peer by anyone who only
+     * sees the absence, so the fact is recorded here and read back by the pool that
+     * has to attribute the loss. Bounded by age and by count; once full the oldest
+     * entry is dropped rather than refusing to record, because the newest close is
+     * the one most likely to be the cause being investigated.
+     *
+     * @since 0.9.71+
+     */
+    private final Map<Hash, Long> _failsafeClosesAt = new ConcurrentHashMap<>(64);
+
+    /**
+     * Record that an idle session to this peer was just closed.
+     *
+     * @param peer the peer whose session was closed
+     * @param now current time in ms
+     * @since 0.9.71+
+     */
+    void noteFailsafeClose(Hash peer, long now) {
+        if (peer == null) {return;}
+        if (_failsafeClosesAt.size() >= MAX_FAILSAFE_CLOSE_MEMORY
+            && !pruneFailsafeCloses(now)) {
+            // Still full after dropping the expired entries: give up the oldest one
+            // rather than dropping the newest close, which is the likelier cause.
+            Map.Entry<Hash, Long> oldest = null;
+            for (Map.Entry<Hash, Long> e : _failsafeClosesAt.entrySet()) {
+                if (oldest == null || e.getValue().longValue() < oldest.getValue().longValue()) {
+                    oldest = e;
+                }
+            }
+            if (oldest != null) {_failsafeClosesAt.remove(oldest.getKey());}
+        }
+        _failsafeClosesAt.put(peer, Long.valueOf(now));
+    }
+
+    /**
+     * Drop remembered closes that have aged out of the memory window.
+     *
+     * @param now current time in ms
+     * @return true when at least one entry was removed
+     * @since 0.9.71+
+     */
+    private boolean pruneFailsafeCloses(long now) {
+        boolean removed = false;
+        for (Iterator<Map.Entry<Hash, Long>> it = _failsafeClosesAt.entrySet().iterator(); it.hasNext(); ) {
+            Map.Entry<Hash, Long> e = it.next();
+            if (!failsafeCloseStillRemembered(e.getValue().longValue(), now, FAILSAFE_CLOSE_MEMORY_MS)) {
+                it.remove();
+                removed = true;
+            }
+        }
+        return removed;
+    }
+
+    /**
+     * Whether a remembered close is still inside its memory window. Pure decision
+     * helper for unit tests.
+     *
+     * @param closedAt when the session was closed in ms, or 0 when never
+     * @param now current time in ms
+     * @param window how long the close stays remembered; non-positive remembers
+     *               nothing
+     * @return true when the close is still recent enough to be reported
+     * @since 0.9.71+
+     */
+    static boolean failsafeCloseStillRemembered(long closedAt, long now, long window) {
+        if (closedAt <= 0 || window <= 0) {return false;}
+        long age = now - closedAt;
+        return age >= 0 && age < window;
+    }
+
+    /**
+     * @since 0.9.71+
+     */
+    @Override
+    public boolean wasFailsafeClosed(Hash peer, long withinMs) {
+        Long at = _failsafeClosesAt.get(peer);
+        if (at == null) {return false;}
+        return failsafeCloseStillRemembered(at.longValue(), _context.clock().now(), withinMs);
+    }
+
     @Override
     public boolean isEstablished(Hash dest) {
             NTCPConnection con = _conByIdent.get(dest);

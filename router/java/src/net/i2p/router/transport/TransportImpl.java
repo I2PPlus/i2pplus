@@ -1065,6 +1065,22 @@ public abstract class TransportImpl implements Transport {
     public boolean isEstablished(Hash peer) {return false;}
 
     /**
+     * Whether this transport closed a session to the peer for idleness recently.
+     *
+     * <p>A peer whose session we closed ourselves is not a peer that went away: it
+     * is one we declined to keep talking to. Callers use the distinction to
+     * attribute a later loss of connectivity, where guessing is worse than not
+     * knowing, so the default is a false rather than an approximation.
+     *
+     * @param peer the peer to ask about
+     * @param withinMs how far back counts as recent; non-positive means nothing
+     *                 is recent
+     * @return true when this transport closed a session to the peer that recently
+     * @since 0.9.71+
+     */
+    public boolean wasFailsafeClosed(Hash peer, long withinMs) {return false;}
+
+    /**
      * Check if a connection attempt is in progress for the given peer.
      * Default returns false.  NTCP2 and SSU2 transports that have an async
      * handshake phase should override to report in-progress connections.

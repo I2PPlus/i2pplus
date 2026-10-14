@@ -825,6 +825,24 @@ public class TransportManager implements TransportEventListener {
     }
 
     /**
+     * Whether any transport closed a session to this peer for idleness recently.
+     * True when at least one transport remembers such a close, which is enough to
+     * attribute a connectivity loss to this router rather than to the peer.
+     *
+     * @param peer the peer to ask about
+     * @param withinMs how far back counts as recent; non-positive means nothing is
+     * @return true when some transport closed a session to the peer that recently
+     * @since 0.9.71+
+     */
+    boolean wasFailsafeClosed(Hash peer, long withinMs) {
+        for (Transport t : _transports.values()) {
+            if (t.wasFailsafeClosed(peer, withinMs))
+                return true;
+        }
+        return false;
+    }
+
+    /**
      * Check if any transport has a connection attempt in progress for the peer.
      *
      * @param peer hash of the peer to check

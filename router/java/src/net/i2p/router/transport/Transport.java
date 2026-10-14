@@ -608,6 +608,22 @@ public interface Transport {
     public boolean isEstablished(Hash peer);
 
     /**
+     * Whether this transport closed a session to the given peer for idleness within
+     * the given window.
+     * <p>True means this router declined to keep talking to the peer, which is not
+     * the same as the peer having gone away. Transports without a notion of closing
+     * idle sessions return false, and callers must read that as "no information"
+     * rather than as evidence about the peer.
+     *
+     * @param peer the peer to ask about, non-null
+     * @param withinMs how far back counts as recent in ms; non-positive means
+     *                 nothing is recent
+     * @return true when this transport closed a session to the peer that recently
+     * @since 0.9.71+
+     */
+    public boolean wasFailsafeClosed(Hash peer, long withinMs);
+
+    /**
      * Check if a connection attempt is in progress for the given peer.
      * <p>
      * This method returns true when the transport has accepted a message

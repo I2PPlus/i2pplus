@@ -482,6 +482,13 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     }
 
     /**
+     * @since 0.9.71+
+     */
+    public boolean wasFailsafeClosed(Hash peer, long withinMs) {
+        return _manager.wasFailsafeClosed(peer, withinMs);
+    }
+
+    /**
      * Established peers.
      *
      * @return a new list, may be modified

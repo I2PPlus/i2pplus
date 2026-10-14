@@ -171,6 +171,25 @@ public abstract class CommSystemFacade implements Service {
     public abstract boolean isEstablished(Hash peer);
 
     /**
+     * Whether any transport closed a session to the given peer for idleness within
+     * the given window.
+     *
+     * <p>True means this router declined to keep talking to the peer, which is the
+     * opposite of the peer having gone away. Callers attribute a later loss of
+     * connectivity with it, and must treat a false as "no information" rather than
+     * as evidence the peer is at fault: only a transport that remembers the close
+     * can answer, and an answer of false covers never-established, still-open, and
+     * closed-for-other-reasons alike.
+     *
+     * @param peer the peer to ask about, non-null
+     * @param withinMs how far back counts as recent in ms; non-positive means
+     *                 nothing is recent
+     * @return true when some transport closed a session to the peer that recently
+     * @since 0.9.71+
+     */
+    public abstract boolean wasFailsafeClosed(Hash peer, long withinMs);
+
+    /**
      * Check if any transport has a connection attempt in progress
      * for the given peer (handshake started but not yet complete).
      *

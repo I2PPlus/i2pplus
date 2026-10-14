@@ -647,6 +647,14 @@ class EventPumper implements Runnable {
 
                     if (closeIdleOrSendRouterInfo(con, now, expire, _failsafeIterationFreq)) {
                         failsafeCloses++;
+                        // Remember which peer lost its session and why. A pool that
+                        // later finds a tunnel unusable through this peer cannot tell
+                        // our idle close from the peer dying, and the difference
+                        // decides which side is at fault.
+                        RouterIdentity closedPeer = con.getRemotePeer();
+                        if (closedPeer != null) {
+                            _transport.noteFailsafeClose(closedPeer.calculateHash(), now);
+                        }
                     }
                 } catch (CancelledKeyException ignored) { /* ignored */ }
             }

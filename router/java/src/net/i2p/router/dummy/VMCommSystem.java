@@ -81,6 +81,11 @@ public class VMCommSystem extends CommSystemFacade {
     public int countActiveSendPeers()  { return Math.max(_commSystemFacades.size() - 1, 0); }
     /** Return whether established */
     public boolean isEstablished(Hash peer) { return _commSystemFacades.containsKey(peer); }
+
+    /**
+     * @since 0.9.71+
+     */
+    public boolean wasFailsafeClosed(Hash peer, long withinMs) {return false;}
     /** Return the established */
 
     public List<Hash> getEstablished() {
