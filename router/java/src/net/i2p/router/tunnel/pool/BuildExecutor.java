@@ -2049,17 +2049,21 @@ public class BuildExecutor implements Runnable {
         // a slot; snapshotting it before subtracted the entries being evicted here.
         int concurrent = _currentlyBuildingMap.size();
         if (_log.shouldInfo() && concurrent > 0) {
-            long now2 = _context.clock().now();
+            // Report against the same `now` the expiry scan above used. Reading the
+            // clock a second time here made a build sitting exactly on its deadline
+            // read as overdue while the scan had correctly kept it: one such pass was
+            // logged in 3290, and that was the probe disagreeing with itself rather
+            // than the router retaining a build.
             int expiredCount = expired != null ? expired.size() : 0;
-            // Report the oldest build against the deadline the expiry scan applied
-            // to it, not the base timeout, so `overdue` means exactly "past its own
-            // deadline and still in the map" - the invariant that used to be
-            // unmeasurable because the base understates the per-config deadline.
+            // Reported against the deadline the expiry scan applied to this build,
+            // not the base timeout, so `overdue` means exactly "past its own deadline
+            // and still in the map" - the invariant that used to be unmeasurable
+            // because the base understates the per-config deadline.
             PooledTunnelCreatorConfig oldest = getOldestBuildingConfiguration();
             long oldestAge = 0, oldestDeadline = 0;
             boolean overdue = false;
             if (oldest != null) {
-                oldestAge = now2 - oldest.getConfig(0).getCreation();
+                oldestAge = now - oldest.getConfig(0).getCreation();
                 oldestDeadline = calculateAdaptiveTimeout(oldest, cpuLoad, rttFloor);
                 overdue = oldestDeadline > 0 && oldestAge >= oldestDeadline;
             }
