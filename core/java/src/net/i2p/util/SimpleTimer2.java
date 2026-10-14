@@ -20,7 +20,7 @@ import net.i2p.I2PAppContext;
  * <p>
  * A saturation watchdog samples this pool from a thread of its own and warns
  * when every worker has stayed occupied with a backlog behind it: a
- * ScheduledThreadPoolExecutor never grows past {@link #THREADS}, so two
+ * ScheduledThreadPoolExecutor never grows past {@link #DEFAULT_THREADS}, so two
  * blocked events starve every periodic event on this timer without throwing
  * anything or writing anything to the log.
  *
@@ -37,7 +37,93 @@ public class SimpleTimer2 {
         return I2PAppContext.getGlobalContext().simpleTimer2();
     }
 
-    private static final int THREADS = 2;
+    /**
+     * Default worker count. Two was the original value and is enough only while
+     * the timer's total event volume stays below what two threads can service: the
+     * pool never grows past this figure, so a persistent backlog shows up as
+     * execution latency rather than as a rejected task or a warning anywhere else.
+     * <p>A live router measured a 16s median / 30s p90 execution delay across many
+     * event types - ACKTimer, KillTimer, BodyWatchdog, DelayedCloser, Cleaner,
+     * RemoveExpired - which is the signature of a volume-saturated pool rather than
+     * of the two-blocked-events wedge the saturation watchdog exists to catch. That
+     * watchdog samples occupancy and queue depth at an instant, so it reports a wedge
+     * but is blind to a backlog whose events merely run back-to-back.
+     *
+     * @since 0.9.71+
+     */
+    static final int DEFAULT_THREADS = 4;
+
+    /**
+     * How many workers this timer runs. Configurable because the right value is a
+     * property of total event volume, which varies with the router's tunnels,
+     * peers and services, and is not knowable where the class is written.
+     *
+     * @since 0.9.71+
+     */
+    private int _threads;
+
+    /**
+     * Resolve the worker count for a context. Pure decision helper for unit tests.
+     *
+     * @param configured a requested worker count, non-positive meaning unset
+     * @return the worker count, never below the original two
+     * @since 0.9.71+
+     */
+    static int resolveThreads(int configured) {
+        if (configured <= 0) { return DEFAULT_THREADS; }
+        // Two is the floor the class was built around: below it a single blocked
+        // event starves everything, which is strictly worse than a backlog.
+        return Math.max(2, configured);
+    }
+
+    /**
+     * How many workers to run for a given backlog. Pure decision helper for unit
+     * tests.
+     *
+     * <p>The trigger and the release are deliberately far apart. A timer that grows
+     * at 2s of backlog and shrinks at 1.9s would oscillate between two thread counts
+     * for as long as the load sat near the threshold, and every step reallocates
+     * threads. Shrinking only on a genuinely clean reading costs a little recovery
+     * time and removes the oscillation entirely.
+     *
+     * @param backlogMs the worst recent execution delay in ms, 0 when nothing is late
+     * @param current the worker count now in effect
+     * @param max the ceiling; non-positive falls back to {@link #MAX_THREADS} rather
+     *            than being read as "no ceiling", so a caller passing a bad value
+     *            cannot disable the bound
+     * @param growMs backlog at or above which a worker is added
+     * @param shrinkMs backlog at or below which a worker is released
+     * @return the worker count to move to, never below {@link #MIN_THREADS} and
+     *         never above the ceiling in force
+     * @since 0.9.71+
+     */
+    public static int desiredThreads(int backlogMs, int current, int max, int growMs, int shrinkMs) {
+        int ceiling = max > 0 ? max : MAX_THREADS;
+        int target = (backlogMs >= growMs && backlogMs > 0)
+            ? current + 1
+            : (backlogMs <= shrinkMs ? current - 1 : current);
+        if (target < MIN_THREADS) {target = MIN_THREADS;}
+        if (target > ceiling) {target = ceiling;}
+        return target;
+    }
+
+    /**
+     * The floor on worker count. Below two, one blocked event starves every periodic
+     * event on this timer, which is a worse failure than any backlog.
+     *
+     * @since 0.9.71+
+     */
+    private static final int MIN_THREADS = 2;
+
+    /**
+     * Ceiling on automatic worker growth. The timer is shared by everything, so an
+     * unbounded count would let one busy subsystem take the process with it; this
+     * leaves ample headroom over the observed need without letting a runaway grow
+     * without limit.
+     *
+     * @since 0.9.71+
+     */
+    private static final int MAX_THREADS = 16;
 
     /**
      * How often the saturation watchdog samples this pool. Long enough to be
@@ -57,7 +143,7 @@ public class SimpleTimer2 {
     static final int WATCHDOG_SATURATION_SAMPLES = 3;
     /**
      * Queue depth that turns full occupancy into a backlog rather than a
-     * coincidence. With {@link #THREADS} workers, this means at least this
+     * coincidence. With {@link #DEFAULT_THREADS} workers, this means at least this
      * many events are waiting behind running ones. Not zero: the queue also
      * holds delayed events that are not due yet, so depth alone proves nothing.
      *
@@ -87,6 +173,80 @@ public class SimpleTimer2 {
     static final int WATCHDOG_RECOVERY_SAMPLES = 3;
 
     private final ScheduledThreadPoolExecutor _executor;
+
+    /**
+     * Recent execution delays, newest overwriting oldest. The control signal for
+     * worker count is how far behind the timer is running, not how busy it is at an
+     * instant: an executor whose events merely run back-to-back looks idle between
+     * them while every event is late. That is the failure mode a fixed worker count
+     * cannot fix and an instantaneous check cannot see.
+     *
+     * @since 0.9.71+
+     */
+    private final long[] _recentDelayMs = new long[DELAY_SAMPLES];
+
+    /** Next slot in {@link #_recentDelayMs}. */
+    private int _delayIdx;
+
+    /**
+     * Record one execution delay for the backlog reading.
+     *
+     * @param delayMs how late the event ran in ms; non-positive is not recorded
+     * @since 0.9.71+
+     */
+    private void recordDelay(long delayMs) {
+        if (delayMs <= 0) {return;}
+        _recentDelayMs[_delayIdx++ % DELAY_SAMPLES] = delayMs;
+    }
+
+    /**
+     * The worst recent execution delay. This is the control signal for the worker
+     * count: an executor whose events run back-to-back looks idle between them, so
+     * occupancy and queue depth at an instant prove nothing, while the delay is what
+     * the router actually experiences.
+     *
+     * @return the worst recorded delay in ms, or 0 when nothing has been late
+     * @since 0.9.71+
+     */
+    public long getBacklogMs() {
+        long worst = 0;
+        for (int i = 0; i < DELAY_SAMPLES; i++) {
+            if (_recentDelayMs[i] > worst) {worst = _recentDelayMs[i];}
+        }
+        return worst;
+    }
+
+    /**
+     * Move the worker count. Grows and shrinks: shrinking relies on the pool being
+     * allowed to reap idle workers, which a scheduled executor does not do by
+     * default.
+     *
+     * @param threads the worker count, below the floor is raised to it
+     * @since 0.9.71+
+     */
+    public synchronized void setThreadCount(int threads) {
+        int target = Math.max(MIN_THREADS, threads);
+        if (target > MAX_THREADS) {target = MAX_THREADS;}
+        if (target == _threads) {return;}
+        _threads = target;
+        _executor.setCorePoolSize(target);
+        // Without this the pool never gives a thread back, so growth would be
+        // one-way and a busy spell would be permanent.
+        _executor.allowCoreThreadTimeOut(true);
+        _executor.setKeepAliveTime(60, TimeUnit.SECONDS);
+    }
+
+    /** The worker count now in effect.
+     * @return the current worker count */
+    public int getThreadCount() {return _threads;}
+
+
+    /**
+     * How many execution delays are kept for the backlog reading.
+     *
+     * @since 0.9.71+
+     */
+    private static final int DELAY_SAMPLES = 32;
     private final String _name;
     private final AtomicInteger _count = new AtomicInteger();
     private final I2PAppContext _context;
@@ -142,7 +302,13 @@ public class SimpleTimer2 {
     protected SimpleTimer2(I2PAppContext context, String name, boolean prestartAllThreads) {
         _context = context;
         _name = name;
-        _executor = new CustomScheduledThreadPoolExecutor(THREADS, new CustomThreadFactory());
+        // Deliberately no property read here. The tuning console persists this
+        // param to autotune.config, which lives in the router module and cannot be
+        // read from core; reading router.config instead would both bypass that
+        // store and install a value the console never wrote. Automatic sizing starts
+        // here and is driven by the measured backlog alone.
+        _threads = DEFAULT_THREADS;
+        _executor = new CustomScheduledThreadPoolExecutor(_threads, new CustomThreadFactory());
         if (prestartAllThreads)
             _executor.prestartAllCoreThreads();
         context.addShutdownTask(_onShutdown);
@@ -958,9 +1124,14 @@ public class SimpleTimer2 {
                     long delay = _future.getDelay(TimeUnit.MILLISECONDS);
                     if (delay > 100)
                         _log.warn("Early exec " + this + " (" + delay + "ms)");
-                    else if (delay < -1000)
+                    else if (delay < -1000) {
+                        // Recorded whether or not anything is logged: the backlog
+                        // reading drives the worker count, so it must not depend on a
+                        // log level being enabled.
+                        _pool.recordDelay(-delay);
                         _log.warn("Late exec " + this + " (" + (0 - delay) + "ms)" +
                                   (delay < -5000 ? _pool.debug() : ""));
+                    }
                 } else {
                     _log.warn("No future: " + this);
                 }
