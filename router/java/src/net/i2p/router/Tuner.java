@@ -2776,8 +2776,16 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             // Retrying a target that already failed to take effect is not tuning:
             // it emits the same log line every cycle while the value never moves.
             boolean repeatingNoEffect = target == _lastAppliedTarget;
-            if (_log.shouldInfo() && !repeatingNoEffect)
-                _log.info(_name + " changing from " + current + " to " + target + " (default: " + _defaultValue + ")");
+            String reason = decisionReason();
+            if (_log.shouldInfo() && !repeatingNoEffect) {
+                if (reason != null) {
+                    _log.info(_name + " changing from " + current + " to " + target +
+                              " (default: " + _defaultValue + ") -> " + reason);
+                } else {
+                    _log.info(_name + " changing from " + current + " to " + target +
+                              " (default: " + _defaultValue + ")");
+                }
+            }
             applyValue(target);
             persistValue(_ctx, target);
             if (getRuntimeValue() == current) {
