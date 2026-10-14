@@ -626,7 +626,19 @@ class Connection {
      * @since 0.9.70+
      */
     public static void setGlobalMaxWindowSize(int val) {
+        int old = maxWindowSize;
         maxWindowSize = Math.max(128, Math.min(ABSOLUTE_MAX_WINDOW, val));
+        // Independent witness for the tuner's apply. It logs the value it asked for;
+        // this logs the value that actually landed, so a write the tuner believes
+        // succeeded shows up as a tuner line with no line here.
+        if (old != maxWindowSize) {
+            // A static setter cannot use the instance log, and resolving one eagerly
+            // would pull the log manager in at class-load time; this is the change
+            // path only, so laziness costs nothing.
+            I2PAppContext.getGlobalContext().logManager().getLog(Connection.class).info(
+                "Global max window changing from " + old + " to " + maxWindowSize +
+                " messages (ceiling floor for every stream)");
+        }
     }
 
     /** Number of remaining unchoke assertions to send. */

@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
+import net.i2p.I2PAppContext;
 import net.i2p.router.transport.CommSystemFacadeImpl;
 import net.i2p.router.transport.udp.PeerState;
 import net.i2p.router.transport.Transport;
@@ -1790,6 +1791,24 @@ public class Tuner extends SimpleTimer2.TimedEvent {
          * worker thread pools must shed parked threads and grow on CPU signals
          * without waiting for latency events.
          */
+        /**
+         * The target most recently applied, or 0 when the last take effect. Used to
+         * tell a param that is genuinely moving from one that is stuck retrying the
+         * same value.
+         *
+         * @since 0.9.71+
+         */
+        private int _lastAppliedTarget;
+
+        /**
+         * Whether an ineffective apply has already been reported for this param, so
+         * it is logged once instead of on every tuning cycle.
+         *
+         * @since 0.9.71+
+         */
+        private boolean _noEffectReported;
+
+        /** Whether this param's value is being driven by CPU load rather than its own stat. */
         protected boolean _cpuDriven;
         /** Rolling window of recent tunable values for trend analysis. */
         protected final int[] _valueHistory;
@@ -2713,23 +2732,43 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             // Fast rollback: when current has diverged from _defaultValue and the stat
             // has moved against the divergence, snap back faster (2x step)
             int current = getRuntimeValue();
-            if (target != current) {
-                boolean divergedUp = current > _defaultValue;
-                boolean divergedDown = current < _defaultValue;
-                boolean statMovedAgainst = (divergedUp && target < current) ||
-                                           (divergedDown && target > current);
-                if (statMovedAgainst && Math.abs(target - current) > _step) {
-                    // accelerate rollback: 2x step in the revert direction
-                    int fastStep = _step * 2;
-                    if (target < current)
-                        target = Math.max(target, current - fastStep);
-                    else
-                        target = Math.min(target, current + fastStep);
+            if (target == current) {
+                // Converged. Forget any ineffective-apply state so a genuinely new
+                // move later is reported again.
+                _lastAppliedTarget = 0;
+                _noEffectReported = false;
+                return;
+            }
+            boolean divergedUp = current > _defaultValue;
+            boolean divergedDown = current < _defaultValue;
+            boolean statMovedAgainst = (divergedUp && target < current) ||
+                                       (divergedDown && target > current);
+            if (statMovedAgainst && Math.abs(target - current) > _step) {
+                // accelerate rollback: 2x step in the revert direction
+                int fastStep = _step * 2;
+                if (target < current)
+                    target = Math.max(target, current - fastStep);
+                else
+                    target = Math.min(target, current + fastStep);
+            }
+            // Retrying a target that already failed to take effect is not tuning:
+            // it emits the same log line every cycle while the value never moves.
+            boolean repeatingNoEffect = target == _lastAppliedTarget;
+            if (_log.shouldInfo() && !repeatingNoEffect)
+                _log.info(_name + " changing from " + current + " to " + target + " (default: " + _defaultValue + ")");
+            applyValue(target);
+            persistValue(_ctx, target);
+            if (getRuntimeValue() == current) {
+                _lastAppliedTarget = target;
+                if (!_noEffectReported) {
+                    _noEffectReported = true;
+                    _log.warn(_name + " target " + target +
+                              " did not take effect -> Runtime still reports " + current +
+                              "; repeat attempts will not be logged");
                 }
-                if (_log.shouldInfo())
-                    _log.info(_name + " changing from " + current + " to " + target + " (default: " + _defaultValue + ")");
-                applyValue(target);
-                persistValue(_ctx, target);
+            } else {
+                _lastAppliedTarget = 0;
+                _noEffectReported = false;
             }
         }
 
@@ -2821,8 +2860,16 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                 try {
                     connectionOptionsCls = Class.forName("net.i2p.client.streaming.impl.ConnectionOptions");
                     connectionCls = Class.forName("net.i2p.client.streaming.impl.Connection");
-                } catch (ClassNotFoundException e) {
-                    // streaming not loaded yet — don't cache, retry next cycle
+                } catch (Throwable t) {
+                    // Streaming not loaded yet is the ordinary case and says nothing;
+                    // any other failure means the reflector is permanently blind and
+                    // every param that goes through it will silently no-op. Only the
+                    // former may stay quiet.
+                    if (!(t instanceof ClassNotFoundException)) {
+                        I2PAppContext.getGlobalContext().logManager().getLog(Tuner.class)
+                            .warn("Cannot resolve streaming classes for auto-tuning -> "
+                                  + "streaming params will not be applied", t);
+                    }
                     return;
                 }
                 resolved = true;
@@ -2851,13 +2898,20 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             }
         }
 
+        /**
+         * Whether a failure has already been reported for a reflector method, so a
+         * permanent one is logged once rather than on every tuning cycle.
+         */
+        private static final Set<String> reported = new java.util.concurrent.ConcurrentHashMap<String, Boolean>().keySet(true);
+
         /** Call a getter on Connection via reflection. */
         static int invokeConnectionInt(String methodName) {
             resolve();
             if (connectionCls == null) return -1;
             try {
                 return (Integer) connectionCls.getMethod(methodName).invoke(null);
-            } catch (Exception e) {
+            } catch (Throwable t) {
+                reportReflectorFailure(methodName, t);
                 return -1;
             }
         }
@@ -2868,8 +2922,28 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             if (connectionCls == null) return;
             try {
                 connectionCls.getMethod(methodName, int.class).invoke(null, value);
-            } catch (Exception e) {
-                // ignore
+            } catch (Throwable t) {
+                reportReflectorFailure(methodName, t);
+            }
+        }
+
+        /**
+         * Report a reflector failure once per method.
+         *
+         * <p>A getter returning -1 is indistinguishable from "unknown" at the call
+         * site, where it becomes a plausible-looking fallback value, so a silently
+         * swallowed exception here reads as a healthy runtime reading downstream.
+         *
+         * @param methodName the reflector method that failed
+         * @param t what went wrong
+         */
+        private static void reportReflectorFailure(String methodName, Throwable t) {
+            if (reported.add(methodName)) {
+                // Resolved lazily and only on the failure path: holding a Log in a
+                // static field would pull the log manager in at class-load time.
+                I2PAppContext.getGlobalContext().logManager().getLog(Tuner.class)
+                    .warn("Streaming reflector call " + methodName + " failed -> ignoring it now, "
+                          + "but any param it backs cannot be auto-tuned", t);
             }
         }
     }
