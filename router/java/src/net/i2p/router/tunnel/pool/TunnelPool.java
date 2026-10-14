@@ -1832,6 +1832,97 @@ public class TunnelPool {
     }
 
     /**
+     * Why a tunnel's local transport session was lost.
+     *
+     * @since 0.9.71+
+     */
+    enum SessionLoss {
+        /** The peer would still answer: this router closed the session. */
+        OURSIDE,
+        /** The peer would not answer: the peer or the path to it is gone. */
+        PEER_DEAD,
+        /** Not enough is known to attribute the loss. */
+        UNKNOWN
+    }
+
+    /**
+     * Attribute a lost local transport session to our side or the peer's.
+     *
+     * <p>A zombie proves only that a session which existed at build time is gone
+     * now. It does not say why, and the two causes point at completely different
+     * fixes: our side closing idle sessions is a policy question, while a dead
+     * peer is not. This separates them without the transport needing to know
+     * anything about tunnels - the pool asks whether the peer would still answer
+     * an establishment.
+     *
+     * <p>Returns UNKNOWN whenever the inputs cannot support a conclusion, because
+     * attributing a loss wrongly sends the next investigation in the wrong
+     * direction, which is worse than not classifying it.
+     *
+     * @param hadSessionAtBuild true when a session to the local hop existed when
+     *                          the tunnel was built
+     * @param establishedNow true when a session to that hop exists now
+     * @param peerReachable true when the peer would still answer an establishment
+     * @return the attribution, or UNKNOWN when it cannot be determined
+     * @since 0.9.71+
+     */
+    static SessionLoss classifySessionLoss(boolean hadSessionAtBuild, boolean establishedNow,
+                                           boolean peerReachable) {
+        // A session we never observed existed cannot be attributed to either side.
+        if (!hadSessionAtBuild) {return SessionLoss.UNKNOWN;}
+        // The session is back: a re-connect, not a loss worth attributing.
+        if (establishedNow) {return SessionLoss.UNKNOWN;}
+        if (!peerReachable) {return SessionLoss.PEER_DEAD;}
+        return SessionLoss.OURSIDE;
+    }
+
+    /**
+     * How long a local transport session must stay missing before the tunnel is
+     * dropped rather than merely excluded from the health counts.
+     * <p>The session can come back on its own, and rebuilding a tunnel that its
+     * peer was about to re-establish anyway is pure churn. Waiting this long
+     * costs a slot that is not carrying traffic either way, and is recovered the
+     * moment the build lands.
+     *
+     * @since 0.9.71+
+     */
+    private static final long LOST_SESSION_DROP_HYSTERESIS_MS = 120_000L;
+
+    /**
+     * Whether a tunnel whose local session is gone should be dropped from the pool.
+     *
+     * <p>Excluding a zombie from the health counts is not enough: it stays in the
+     * pool, occupying a slot that carries nothing, until the normal pruning walk
+     * happens to remove it. Only tunnels never stamped with a first-seen-session
+     * timestamp are kept, since there is no evidence of how long the session has
+     * been missing and dropping them would be a guess.
+     *
+     * @param firstMissingAt when the session was first seen gone, in ms, or 0 if
+     *                       never recorded
+     * @param now current time in ms
+     * @param hysteresis how long the session must stay missing before the drop
+     * @return true when the tunnel should be removed
+     * @since 0.9.71+
+     */
+    static boolean shouldDropForLostSession(long firstMissingAt, long now, long hysteresis) {
+        if (firstMissingAt <= 0) {return false;}
+        if (hysteresis <= 0) {return false;}
+        return now >= firstMissingAt + hysteresis;
+    }
+
+    /**
+     * Last time a lost-session cause was sampled. The probe reaches the transport
+     * and must not run per exclusion, so one sample per interval is all the split
+     * needs to accumulate.
+     *
+     * @since 0.9.71+
+     */
+    private volatile long _lastSessionLossProbe;
+
+    /** Interval between lost-session attribution samples. */
+    private static final long SESSION_LOSS_PROBE_INTERVAL_MS = 10_000L;
+
+    /**
      * Normalise a RouterInfo transport style into one of the known transports.
      *
      * <p>A zombie is a tunnel whose transport session died after the build
