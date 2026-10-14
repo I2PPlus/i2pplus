@@ -165,4 +165,42 @@ public class TunnelPoolZombieTransportTest {
         long missing = 1_000_000L;
         assertTrue(TunnelPool.shouldDropForLostSession(missing, missing + 300_000L, 120_000L));
     }
+
+    // ---- stampLostSession ----
+
+    /**
+     * The first pass to notice records now. A tunnel that was never observed
+     * missing has nothing to preserve.
+     */
+    @Test
+    public void testFirstObservationStampsNow() {
+        assertEquals(1_000_000L, TunnelPool.stampLostSession(0L, 1_000_000L));
+        assertEquals(1_000_000L, TunnelPool.stampLostSession(-1L, 1_000_000L));
+    }
+
+    /**
+     * The rule the drop depends on: later passes must not reset the start of the
+     * duration, or a session that never comes back would keep restarting the
+     * hysteresis clock and never accumulate enough to be dropped.
+     */
+    @Test
+    public void testLaterPassKeepsFirstObservation() {
+        assertEquals(1_000_000L, TunnelPool.stampLostSession(1_000_000L, 1_500_000L));
+        assertEquals(1_000_000L, TunnelPool.stampLostSession(1_000_000L, 9_000_000L));
+    }
+
+    /**
+     * Stamp and drop compose into the duration the drop is measured against, which
+     * is the whole point of not resetting it.
+     */
+    @Test
+    public void testStampFeedsTheHysteresis() {
+        long first = 1_000_000L;
+        long later = first + 60_000L;
+        long recorded = TunnelPool.stampLostSession(first, later);
+        // sixty seconds in, still inside the two-minute hysteresis
+        assertFalse(TunnelPool.shouldDropForLostSession(recorded, later, 120_000L));
+        // once it passes, the drop fires - which a reset would have prevented
+        assertTrue(TunnelPool.shouldDropForLostSession(recorded, recorded + 120_000L, 120_000L));
+    }
 }

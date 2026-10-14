@@ -110,6 +110,12 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
      * @since 0.9.71+
      */
     private volatile boolean _localHopSessionEstablished;
+
+    /**
+     * When the local transport session was first seen missing. Zero when the session
+     * is present, which is also the state for a tunnel that never lost it.
+     */
+    private volatile long _localHopMissingSince;
     /**
      * Bytes verified on this tunnel since the last per-peer profile update.
      * A {@link LongAdder} because it is bumped once per 1KB fragment and does
@@ -380,6 +386,20 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
      */
     public void setLocalHopSessionEstablished(boolean established) {
         _localHopSessionEstablished = established;
+    }
+
+    /**
+     * When the local transport session was first seen missing, or 0 when present.
+     */
+    public long getLocalHopMissingSince() {return _localHopMissingSince;}
+
+    /**
+     * Record or clear when the local transport session was first seen missing.
+     *
+     * @param when the time in ms, or 0 to mark the session present
+     */
+    public void setLocalHopMissingSince(long when) {
+        _localHopMissingSince = when;
     }
 
     /**

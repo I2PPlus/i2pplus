@@ -265,6 +265,37 @@ public interface TunnelInfo {
     public boolean hadLocalHopSession();
 
     /**
+     * When this tunnel's local transport session was first seen missing, or 0 when
+     * it is present or was never observed missing.
+     *
+     * <p>A zombie tunnel — one whose local session is gone but which is still in the
+     * pool — occupies a slot that carries nothing until the normal pruning walk
+     * removes it, and every health count has to exclude it on the way past. The
+     * timestamp is what lets the pool tell a transient loss, which recovers on its
+     * own, from a sustained one that is only costing a slot. Dropping on the first
+     * observation would trade the wasted slot for rebuild churn, since a peer whose
+     * session is re-establishing is not a peer to build away from.
+     *
+     * <p>Recorded by the pool's health walk and cleared when the session returns, so
+     * a value here survives across passes and measures duration rather than being
+     * reset on each lookup. Zero means never observed missing.
+     *
+     * @return the time in ms the session was first seen missing, or 0
+     * @since 0.9.71+
+     */
+    public long getLocalHopMissingSince();
+
+    /**
+     * Record or clear when this tunnel's local transport session was first seen
+     * missing.
+     *
+     * @param when the time in ms the session was first seen missing, or 0 to mark
+     *             the session present
+     * @since 0.9.71+
+     */
+    public void setLocalHopMissingSince(long when);
+
+    /**
      * Record whether this tunnel held a transport session to its local hop at build
      * time. Called once, by the pool, as the tunnel is added.
      *

@@ -1683,8 +1683,10 @@ public class TunnelPool {
                 if (isLocalHopUnreachable(t)) {
                     if (zombies == null) {zombies = new ArrayList<>(4);}
                     zombies.add(t);
+                    stampLostSession(t, now);
                     continue;
                 }
+                clearLostSession(t);
                 count++;
             }
         } finally {_tunnelsLock.unlock();}
@@ -1728,8 +1730,10 @@ public class TunnelPool {
                 if (isLocalHopUnreachable(t)) {
                     if (zombies == null) {zombies = new ArrayList<>(4);}
                     zombies.add(t);
+                    stampLostSession(t, now);
                     continue;
                 }
+                clearLostSession(t);
                 count++;
             }
         } finally {_tunnelsLock.unlock();}
@@ -1908,6 +1912,100 @@ public class TunnelPool {
         if (firstMissingAt <= 0) {return false;}
         if (hysteresis <= 0) {return false;}
         return now >= firstMissingAt + hysteresis;
+    }
+
+    /**
+     * The value to record for a tunnel whose local transport session has just been
+     * observed missing. Pure decision helper for unit tests.
+     *
+     * <p>The existing timestamp survives every later pass. Resetting it would restart
+     * the hysteresis clock each time a tunnel was looked at, so a session that never
+     * came back would never accumulate enough duration to be dropped — the opposite
+     * of what the drop exists to do.
+     *
+     * @param currentMissingAt the timestamp already recorded, or 0 when this is the
+     *                         first pass to notice
+     * @param now current time in ms
+     * @return the timestamp to store
+     * @since 0.9.71+
+     */
+    static long stampLostSession(long currentMissingAt, long now) {
+        return currentMissingAt > 0 ? currentMissingAt : now;
+    }
+
+    /**
+     * Record that this tunnel's local transport session was seen missing, keeping
+     * the first observation as the start of the duration.
+     *
+     * @param t the tunnel; must not be null
+     * @param now current time in ms
+     * @since 0.9.71+
+     */
+    private void stampLostSession(TunnelInfo t, long now) {
+        t.setLocalHopMissingSince(stampLostSession(t.getLocalHopMissingSince(), now));
+    }
+
+    /**
+     * Clear the missing-session timestamp when the session is back, so a tunnel
+     * that reconnects does not carry a duration towards its next loss.
+     *
+     * @param t the tunnel; must not be null
+     * @since 0.9.71+
+     */
+    private void clearLostSession(TunnelInfo t) {
+        if (t.getLocalHopMissingSince() != 0) {
+            t.setLocalHopMissingSince(0);
+        }
+    }
+
+    /**
+     * Remove tunnels whose local transport session has been gone long enough that
+     * keeping them costs more than rebuilding.
+     *
+     * <p>A zombie occupies a slot that every health count has to exclude on its way
+     * past, and it stays in the pool until the ordinary non-good prune removes it.
+     * Dropping it after the hysteresis frees the slot for a build that can actually
+     * carry traffic.
+     *
+     * <p>Two protections keep this from being aggressive, because a session loss is
+     * often transient: the tunnel must have been without its session for the full
+     * hysteresis, and it must pass the same {@link #isPrunableNonGood} test the
+     * ordinary prune applies — so a tunnel that is still GOOD and still published in
+     * a LeaseSet is never removed here, however long its session has been gone.
+     * Removing one of those would break client connections during the propagation
+     * window, which is exactly the hazard that prune documents.
+     *
+     * @return the number of tunnels dropped
+     * @since 0.9.71+
+     */
+    private int dropLostSessionTunnels() {
+        long now = _context.clock().now();
+        List<TunnelInfo> toDrop = null;
+        _tunnelsLock.lock();
+        try {
+            for (int i = 0; i < _tunnels.size(); i++) {
+                TunnelInfo t = _tunnels.get(i);
+                long missingSince = t.getLocalHopMissingSince();
+                if (missingSince <= 0) {continue;}
+                if (!shouldDropForLostSession(missingSince, now, LOST_SESSION_DROP_HYSTERESIS_MS)) {continue;}
+                if (!isPrunableNonGood(t, isServerPool())) {continue;}
+                if (toDrop == null) {toDrop = new ArrayList<>(2);}
+                toDrop.add(t);
+            }
+        } finally {_tunnelsLock.unlock();}
+        if (toDrop == null) {return 0;}
+        int dropped = 0;
+        for (TunnelInfo t : toDrop) {
+            removeTunnel(t);
+            dropped++;
+        }
+        if (dropped > 0 && _log.shouldInfo()) {
+            long secs = LOST_SESSION_DROP_HYSTERESIS_MS / 1000;
+            _log.info("Dropping " + dropped + " tunnels -> Transport session gone over " + secs +
+                      "s [" + toString() + "]");
+        }
+        _context.statManager().addRateData("tunnel.poolLostSessionDropped", dropped);
+        return dropped;
     }
 
     /**
@@ -6618,8 +6716,9 @@ public class TunnelPool {
         try {
             _lastEnsureTime = nowEnsure;
             // Clear out dead tunnels before counting, so FAILING/FAILED tunnels
-            // don't inflate the count and block replacement builds.
+            // and long-zombie tunnels don't inflate the count and block replacement builds.
             pruneNonGoodTunnels();
+            dropLostSessionTunnels();
             int target = getEffectiveTarget();
             int effectiveTarget = computeEffectiveTarget(target);
             long now = _context.clock().now();
