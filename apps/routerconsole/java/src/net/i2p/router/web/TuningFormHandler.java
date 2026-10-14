@@ -290,6 +290,8 @@ public class TuningFormHandler extends FormHandler {
 // Router
         t = new Tunable("router.buildHandlerThreads", "routerBuildhandlerthreads", HAS_RANGE | HAS_DEFAULT | HAS_OVERRIDE);
         TUNED.add(t);
+        t = new Tunable("i2p.timer.threads", "timerThreads", HAS_RANGE | HAS_DEFAULT | HAS_OVERRIDE);
+        TUNED.add(t);
 // Transit throttles
         t = new Tunable("router.defaultProcessingTimeThrottle", "routerDefaultprocessingtimethrottle", HAS_RANGE | HAS_DEFAULT | HAS_OVERRIDE);
         TUNED.add(t);

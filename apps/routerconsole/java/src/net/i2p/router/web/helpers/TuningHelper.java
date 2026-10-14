@@ -90,6 +90,7 @@ public class TuningHelper extends HelperBase {
         DISPLAY_NAMES.put("router.transitThrottleFactor", _x("Transit Throttle Factor"));
         DISPLAY_NAMES.put("router.throttleRejectExponent", _x("Throttle Reject Exponent"));
         DISPLAY_NAMES.put("router.maxParticipatingTunnels", _x("Maximum Participating Tunnels"));
+        DISPLAY_NAMES.put("i2p.timer.threads", _x("Timer Threads"));
         DISPLAY_NAMES.put("router.buildHandlerMaxQueue", _x("Build Handler Maximum Queue"));
         DISPLAY_NAMES.put("i2p.tunnel.goodDeficitThrottle", _x("Rebuild Throttle Interval"));
         DISPLAY_NAMES.put("router.tunnel.perTunnelBweDivisor", _x("Per-Tunnel Bandwidth Divisor"));
@@ -217,6 +218,7 @@ public class TuningHelper extends HelperBase {
         PARAM_DESCRIPTIONS.put("PASSIVE_FLUSH_DELAY", _x("Nagle flush delay (ms)."));
         PARAM_DESCRIPTIONS.put("i2p.streaming.maxSlowStartWindow", _x("Max congestion window during slow start."));
         PARAM_DESCRIPTIONS.put("i2p.streaming.maxInboundBuffer", _x("Per-connection inbound buffer cap (bytes)."));
+        PARAM_DESCRIPTIONS.put("i2p.timer.threads", _x("Timer worker threads; higher reduces event delay."));
         PARAM_DESCRIPTIONS.put("MAX_STREAMS", _x("Dynamic cap on concurrent streams per destination."));
         PARAM_DESCRIPTIONS.put("i2p.streaming.maxSynResends", _x("Total SYN attempts before giving up on a handshake."));
         PARAM_DESCRIPTIONS.put("i2p.streaming.maxRTO", _x("Max retransmission timeout (ms)."));
