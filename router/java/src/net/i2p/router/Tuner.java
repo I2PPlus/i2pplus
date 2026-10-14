@@ -2913,7 +2913,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             resolve();
             if (connectionCls == null) return -1;
             try {
-                Method m = connectionCls.getMethod(methodName);
+                Method m = connectionCls.getDeclaredMethod(methodName);
                 makeAccessible(m);
                 return (Integer) m.invoke(null);
             } catch (Throwable t) {
@@ -2927,7 +2927,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             resolve();
             if (connectionCls == null) return;
             try {
-                Method m = connectionCls.getMethod(methodName, int.class);
+                Method m = connectionCls.getDeclaredMethod(methodName, int.class);
                 makeAccessible(m);
                 m.invoke(null, value);
             } catch (Throwable t) {
@@ -2946,6 +2946,13 @@ public class Tuner extends SimpleTimer2.TimedEvent {
          * max retransmissions, max SYN resends and connect timeout multiplier - have
          * silently done nothing for the life of that check.
          *
+         * <p>The lookup reaching this uses {@link Class#getDeclaredMethod} rather
+         * than {@link Class#getMethod}, because the members being called are not all
+         * public - the streaming module declares some of them package-private, and
+         * getMethod sees only public ones, so it reports a missing method for one
+         * that is merely non-public. This override is what then makes reaching that
+         * non-public member legal.
+         *
          * @param m the method to make callable
          * @since 0.9.71+
          */
@@ -2955,6 +2962,8 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             // caller's Throwable handler, which reports it once per method.
             m.setAccessible(true);
         }
+
+
 
         /**
          * Report a reflector failure once per method.
