@@ -1673,11 +1673,16 @@ public class TunnelPool {
         long now = _context.clock().now();
         int count = 0;
         List<TunnelInfo> zombies = null;
+        List<TunnelInfo> considered = null;
         _tunnelsLock.lock();
         try {
             for (TunnelInfo t : _tunnels) {
                 if (t.getExpiration() <= now) continue;
                 if (t.getTunnelFailed() || t.getTestStatus().isUnusable()) continue;
+                // Denominator population: everything this walk could see. Collected
+                // here only so the netdb read can happen after the lock is released.
+                if (considered == null) {considered = new ArrayList<>(16);}
+                considered.add(t);
                 // Same zombie exclusion as getHealthyTunnelCount: without a session
                 // to our next hop this tunnel cannot carry anything.
                 if (isLocalHopUnreachable(t)) {
@@ -1693,6 +1698,7 @@ public class TunnelPool {
         // Attributing the exclusions reads the netdb, so it is done outside the
         // pool lock: taking a netdb lock while holding this one is a lock-ordering
         // hazard, and the pool lock is held far more often than this is needed.
+        countLocalHopTransports(considered);
         reportZombies(ZOMBIE_STAT_USABLE, count, zombies);
         return count;
     }
@@ -1717,6 +1723,7 @@ public class TunnelPool {
         long now = _context.clock().now();
         int count = 0;
         List<TunnelInfo> zombies = null;
+        List<TunnelInfo> considered = null;
         _tunnelsLock.lock();
         try {
             for (TunnelInfo t : _tunnels) {
@@ -1724,6 +1731,11 @@ public class TunnelPool {
                 if (t.getTunnelFailed() || t.getTestStatus().isUnusable()) continue;
                 if (t.getSoftFailures() >= SOFT_DEGRADED_FOR_ENSURE) continue;
                 if (isBackloggedNextHop(t)) continue;
+                // Denominator population for this walk: its own filters applied
+                // first, so numerator and denominator describe the same set.
+                // Collected here only so the netdb read happens after the lock.
+                if (considered == null) {considered = new ArrayList<>(16);}
+                considered.add(t);
                 // No transport session to our next hop: the tunnel survives as a
                 // zombie, so counting it here is what lets a pool report 8/8 healthy
                 // while delivering nothing.
@@ -1740,6 +1752,7 @@ public class TunnelPool {
         // This is the hot path - the pre-emergency and ensure gates read healthy
         // count far more often than usable - so excluding the transport attribution
         // here left the split blank on the very window that matters most.
+        countLocalHopTransports(considered);
         reportZombies(ZOMBIE_STAT_HEALTHY, count, zombies);
         return count;
     }
@@ -2109,6 +2122,25 @@ public class TunnelPool {
      * @since 0.9.71+
      */
     private String countZombieTransport(TunnelInfo t) {
+        String bucket = localHopTransportBucket(t);
+        _context.statManager().addRateData("tunnel.poolZombieTransport." + bucket, 1);
+        return bucket;
+    }
+
+    /**
+     * The transport a tunnel's local hop uses, folded to one of the known names.
+     * <p>Shared by the zombie split and the all-hops denominator so both read the
+     * same address the same way. That matters more than it looks: the style is taken
+     * from the peer's first published address, which is an arbitrary choice for a
+     * peer advertising several transports. Applying the same arbitrary choice to both
+     * sides means the bias cancels in the ratio instead of compounding.
+     *
+     * @param t the pool tunnel; may be null
+     * @return one of NTCP, NTCP2, SSU, SSU2, or unknown
+     * @since 0.9.71+
+     */
+    private String localHopTransportBucket(TunnelInfo t) {
+        if (t == null) {return zombieTransportBucket(null);}
         int idx = t.isInbound() ? 0 : 1;
         String style = null;
         if (idx < t.getLength()) {
@@ -2123,9 +2155,31 @@ public class TunnelPool {
                 }
             }
         }
-        String bucket = zombieTransportBucket(style);
-        _context.statManager().addRateData("tunnel.poolZombieTransport." + bucket, 1);
-        return bucket;
+        return zombieTransportBucket(style);
+    }
+
+    /**
+     * Count the local hop's transport for every tunnel in the walk.
+     *
+     * <p>This is the denominator the zombie split is read against. A proportion
+     * without its base rate is unfalsifiable: 98% of zombies being NTCP2 means the
+     * transport is implicated only if NTCP2 is *not* 98% of tunnels generally. Read
+     * this count beside {@code tunnel.poolZombieTransport.*} over the same window.
+     *
+     * <p>The population is exactly the tunnels this health walk could see - unexpired
+     * and not already failed or untestable - which is the population the zombie
+     * exclusions are drawn from. Both walks count it over their own population, so
+     * each contributes a consistent pair.
+     *
+     * @param tunnels the tunnels the walk considered; may be null
+     * @since 0.9.71+
+     */
+    private void countLocalHopTransports(List<TunnelInfo> tunnels) {
+        if (tunnels == null) {return;}
+        for (TunnelInfo t : tunnels) {
+            _context.statManager().addRateData("tunnel.poolLocalHopTransport." +
+                                              localHopTransportBucket(t), 1);
+        }
     }
 
     /**

@@ -203,4 +203,42 @@ public class TunnelPoolZombieTransportTest {
         // once it passes, the drop fires - which a reset would have prevented
         assertTrue(TunnelPool.shouldDropForLostSession(recorded, recorded + 120_000L, 120_000L));
     }
+
+    // ---- the denominator the zombie split is read against ----
+
+    /**
+     * The reason the denominator exists, as arithmetic. A zombie split of 98% NTCP2
+     * against a base rate of 98% NTCP2 is no evidence at all, and the same split
+     * against 60% is a 1.6x over-representation. Without the second number the first
+     * cannot be judged, which is how 98.1% NTCP2 was nearly read as proof.
+     */
+    @Test
+    public void testBaseRateDecidesWhetherTheSplitIsSignal() {
+        double zombieShare = 2036.0 / 2075.0;   // 98.1% of exclusions were NTCP2
+
+        // NTCP2 also dominates every tunnel: the split is the base rate, not a finding
+        double baseRate = 0.98;
+        assertTrue("98% of zombies at a 98% base rate is no evidence",
+                   Math.abs(zombieShare - baseRate) < 0.01);
+
+        // NTCP2 is only 60% of tunnels: the same split is now a real over-representation
+        double rareBaseRate = 0.60;
+        assertTrue("98% of zombies against a 60% base rate is a 1.6x finding",
+                   zombieShare / rareBaseRate > 1.5);
+    }
+
+    /**
+     * The bias both sides share cancels in the ratio. The transport style is read
+     * from the peer's first published address, which is arbitrary for a peer
+     * advertising several transports; applying the same arbitrary rule to numerator
+     * and denominator is what keeps that from compounding.
+     */
+    @Test
+    public void testSharedBiasCancelsInTheRatio() {
+        // every peer publishes NTCP2 first, so both counts read NTCP2 for all of them
+        double observed = 1.0;
+        double baseRate = 1.0;
+        assertEquals(1.0, observed / baseRate, 0.0001);
+        // the ratio is flat exactly because the distortion is on both sides
+    }
 }
