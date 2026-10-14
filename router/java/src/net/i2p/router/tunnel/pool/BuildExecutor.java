@@ -113,6 +113,15 @@ public class BuildExecutor implements Runnable {
     private static final int MAX_BUILD_CONCURRENCY = 96;
 
     /**
+     * How many pools the global dispatch budget must be able to serve at the same
+     * time. Two pools can both reach their {@code MAX_INPROGRESS_PER_POOL_DIR} cap
+     * at once, and the budget must not be below what that costs.
+     *
+     * @since 0.9.71+
+     */
+    private static final int SIMULTANEOUS_COLLAPSED_POOLS = 2;
+
+    /**
      * Pure form of the dispatch score, so the ordering can be pinned without
      *  building pools.
      * <p>Tiers, highest first:
@@ -1597,7 +1606,76 @@ public class BuildExecutor implements Runnable {
     }
 
     /**
-     * Report an expired build on a single line, naming every hop and its state.
+     * How many in-flight builds belong to a pool that dispatched a pre-emergency
+     * burst recently. Those builds are governed by the pool's own
+     * {@code MAX_INPROGRESS_PER_POOL_DIR} cap, so the global budget must not charge
+     * itself for them.
+     *
+     * @return the number of exempt builds, never negative
+     * @since 0.9.71+
+     */
+    private int countPreEmergencyExempt() {
+        int exempt = 0;
+        long now = _context.clock().now();
+        for (PooledTunnelCreatorConfig cfg : _currentlyBuildingMap.values()) {
+            TunnelPool pool = cfg.getTunnelPool();
+            if (pool != null && pool.isPreEmergencyExempt(now)) {
+                exempt++;
+            }
+        }
+        return exempt;
+    }
+
+    /**
+     * Report a dispatch budget that nothing may start against, or note at DEBUG
+     * that builds are simply waiting on in-flight work.
+     *
+     * <p>Two quite different situations produce a zero budget. In-flight above what
+     * the per-pool caps legitimately allow is abnormal and worth a warning. In-flight
+     * within the caps is correct pacing — the pools self-limit — so it is logged at
+     * DEBUG, because a WARN there reads as a fault while describing intended
+     * behaviour.
+     *
+     * @param allowed the budget after the in-flight reduction
+     * @param concurrent builds still in the map
+     * @param exemptInFlight builds governed by a pool's own cap
+     * @param maxKBps the outbound bandwidth the budget was derived from
+     * @since 0.9.71+
+     */
+    private void reportExhaustedBudget(int allowed, int concurrent, int exemptInFlight,
+                                       int maxKBps) {
+        if (allowed > 0 || concurrent <= 0) { return; }
+        int legitimate = exemptInFlight + buildDemandFloor();
+        if (concurrent <= legitimate) {
+            if (_log.shouldDebug()) {
+                _log.debug(toString() + " -> Waiting on in-flight builds. In flight: " + concurrent +
+                           "; exempt: " + exemptInFlight);
+            }
+            return;
+        }
+        if (!shouldLogBudgetExhausted(_context.clock().now())) { return; }
+        _log.warn("Outbound-bandwidth build budget exhausted -> No build may start. In flight: " +
+                  concurrent + "; outbound: " + maxKBps + " KBps; per-pool ceiling: " + legitimate);
+    }
+
+    /**
+     * The smallest global dispatch budget that cannot starve the per-pool caps.
+     *
+     * <p>The bandwidth formula below starts from outbound KB/s and deliberately
+     * allows only ~10 concurrent builds, which was tuned to stop flooding peers. It
+     * can also land below what two pools in pre-emergency may each legitimately hold
+     * ({@code MAX_INPROGRESS_PER_POOL_DIR} per direction), which is what starved them:
+     * three events were recorded at 31-34 in flight against a budget of 18. Since the
+     * per-pool cap is already the fine-grained governor, the global budget never
+     * needs to sit below it.
+     *
+     * @return the minimum global dispatch budget in builds
+     * @since 0.9.71+
+     */
+    private int buildDemandFloor() {
+        return TunnelPool.MAX_INPROGRESS_PER_POOL_DIR * SIMULTANEOUS_COLLAPSED_POOLS;
+    }
+    /**
      * <p>Build timeouts are the largest unexplained loss on this router - roughly twice the
      *  rejection rate - and the DEBUG dump that already existed could not be read, because
      *  the class logs at INFO in practice and a six-line dump per expiry at twenty expiries a
@@ -1992,10 +2070,14 @@ public class BuildExecutor implements Runnable {
                       " overdue: " + overdue +
                       " baseTimeout: " + _adaptiveTimeout + "ms");
         }
-        allowed = applyConcurrentReduction(allowed, concurrent);
-        if (allowed == 0 && shouldLogBudgetExhausted(_context.clock().now())) {
-            _log.warn("Build dispatch budget exhausted -> No build may start. In flight: " + concurrent);
-        }
+        // In-flight builds belonging to a pool that dispatched a pre-emergency burst
+        // are governed by that pool's own cap, not by this global budget, so they are
+        // not subtracted here. Without this the bandwidth-derived budget — deliberately
+        // low to avoid flooding peers — charged the router for the work of a pool it
+        // does not know is in distress, and starved it at 31-34 in flight.
+        int exemptInFlight = countPreEmergencyExempt();
+        allowed = applyConcurrentReduction(allowed, concurrent - exemptInFlight);
+        reportExhaustedBudget(allowed, concurrent, exemptInFlight, maxKBps);
 
         if (expired != null) {
             for (PooledTunnelCreatorConfig cfg : expired) {
@@ -2048,8 +2130,6 @@ public class BuildExecutor implements Runnable {
         return allowed;
     }
 
-    /**
-     * Get the creation timestamp of the oldest entry in _currentlyBuildingMap.
     /**
      * The oldest build in the building map, by the creation time of its first hop.
      * Used for diagnostic logging only.

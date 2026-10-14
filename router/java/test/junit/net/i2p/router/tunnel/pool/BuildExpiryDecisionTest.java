@@ -150,4 +150,52 @@ public class BuildExpiryDecisionTest {
         allowed = BuildExecutor.applyConcurrentReduction(allowed, inFlight);
         assertEquals(4, allowed);
     }
+
+    // ---- exempt (pre-emergency) in-flight ----
+
+    /**
+     * The case that was starving pools: 34 builds in flight, of which 32 belong to
+     * pools holding their own per-pool cap. Only the two that do not are charged
+     * against the global budget, so the budget is not exhausted by work it does
+     * not govern.
+     */
+    @Test
+    public void testExemptInFlightIsNotChargedToTheBudget() {
+        int allowed = 18;
+        int concurrent = 34;
+        int exempt = 32;
+        assertEquals(16, BuildExecutor.applyConcurrentReduction(allowed, concurrent - exempt));
+    }
+
+    /**
+     * With no exemption the same 34 in flight exhausts the budget, which is the
+     * behaviour that produced the starvation this exemption removes.
+     */
+    @Test
+    public void testSameInFlightWithoutExemptionExhausts() {
+        assertEquals(0, BuildExecutor.applyConcurrentReduction(18, 34 - 0));
+    }
+
+    /**
+     * Exemption larger than the in-flight count must not make the argument
+     * negative and thereby hand back an inflated budget: the reduction already
+     * treats a non-positive count as "nothing to subtract".
+     */
+    @Test
+    public void testExemptionLargerThanInFlightIsNotNegative() {
+        int allowed = 18;
+        int concurrent = 31;
+        int exempt = 32;
+        assertEquals(allowed, BuildExecutor.applyConcurrentReduction(allowed, concurrent - exempt));
+    }
+
+    /**
+     * A partial exemption charges only the difference, so a pool that recovered is
+     * charged for its own builds again: 34 in flight with 20 still exempt leaves 14
+     * to charge against a budget of 18.
+     */
+    @Test
+    public void testPartialExemptionChargesTheRemainder() {
+        assertEquals(4, BuildExecutor.applyConcurrentReduction(18, 34 - 20));
+    }
 }

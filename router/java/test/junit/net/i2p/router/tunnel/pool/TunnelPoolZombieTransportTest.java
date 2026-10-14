@@ -1,6 +1,8 @@
 package net.i2p.router.tunnel.pool;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
@@ -38,5 +40,45 @@ public class TunnelPoolZombieTransportTest {
     @Test
     public void testAbsentStyleFoldsToUnknown() {
         assertEquals("unknown", TunnelPool.zombieTransportBucket(null));
+    }
+
+    // ---- isPreEmergencyBurstLive ----
+
+    /** A pool that never burst is never exempt. */
+    @Test
+    public void testNeverBurstIsNotExempt() {
+        assertFalse(TunnelPool.isPreEmergencyBurstLive(0L, 1_000_000L, 90_000L));
+        assertFalse(TunnelPool.isPreEmergencyBurstLive(-1L, 1_000_000L, 90_000L));
+    }
+
+    /** Inside the window the burst still governs the pool's in-flight builds. */
+    @Test
+    public void testLiveBurstIsExempt() {
+        long burst = 1_000_000L;
+        assertTrue(TunnelPool.isPreEmergencyBurstLive(burst, burst, 90_000L));
+        assertTrue(TunnelPool.isPreEmergencyBurstLive(burst, burst + 89_999L, 90_000L));
+    }
+
+    /** Exactly at the window edge the exemption lapses. */
+    @Test
+    public void testBurstEdgeIsNotExempt() {
+        long burst = 1_000_000L;
+        assertFalse(TunnelPool.isPreEmergencyBurstLive(burst, burst + 90_000L, 90_000L));
+        assertFalse(TunnelPool.isPreEmergencyBurstLive(burst, burst + 200_000L, 90_000L));
+    }
+
+    /** A burst timestamp in the future is not live until it is reached. */
+    @Test
+    public void testFutureBurstIsNotExempt() {
+        long burst = 1_000_000L;
+        assertFalse(TunnelPool.isPreEmergencyBurstLive(burst, burst - 1L, 90_000L));
+    }
+
+    /** A non-positive window disables the exemption rather than exempting everything. */
+    @Test
+    public void testNonPositiveWindowDisablesExemption() {
+        long burst = 1_000_000L;
+        assertFalse(TunnelPool.isPreEmergencyBurstLive(burst, burst + 1L, 0L));
+        assertFalse(TunnelPool.isPreEmergencyBurstLive(burst, burst + 1L, -1L));
     }
 }

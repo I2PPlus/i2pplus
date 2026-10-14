@@ -549,6 +549,57 @@ public class TunnelPool {
      */
     private volatile long _lastEnsureTime;
 
+    /**
+     * Last time this pool dispatched a pre-emergency burst, or 0 if it never has.
+     * <p>The executor reads this to decide which in-flight builds are governed by
+     * this pool's own {@link #MAX_INPROGRESS_PER_POOL_DIR} cap rather than by the
+     * global dispatch budget. Without that separation the global budget — derived
+     * from outbound bandwidth and therefore deliberately low — subtracts the work
+     * of a pool it does not know is in distress, and starves it.
+     *
+     * @since 0.9.71+
+     */
+    private volatile long _preEmergencyBurstAt;
+
+    /**
+     * How long a pre-emergency burst keeps its in-flight builds exempt from the
+     * global dispatch budget. Long enough to cover the replenishment the burst was
+     * started for and the timeouts that follow it, short enough that a pool which
+     * recovered stops being exempt.
+     *
+     * @since 0.9.71+
+     */
+    private static final long PRE_EMERGENCY_EXEMPT_WINDOW_MS = 90_000L;
+
+    /**
+     * Whether this pool dispatched a pre-emergency burst recently enough that its
+     * in-flight builds are governed by the per-pool cap instead of the global
+     * budget. Pure decision helper for unit tests.
+     *
+     * @param burstAt last pre-emergency burst time in ms, or 0 if never
+     * @param now current time in ms
+     * @param window how long a burst keeps its builds exempt
+     * @return true when in-flight builds of this pool bypass the global reduction
+     * @since 0.9.71+
+     */
+    static boolean isPreEmergencyBurstLive(long burstAt, long now, long window) {
+        if (burstAt <= 0) { return false; }
+        if (window <= 0) { return false; }
+        return now >= burstAt && now - burstAt < window;
+    }
+
+    /**
+     * Package-visible for the build executor: whether this pool's in-flight builds
+     * should bypass the global dispatch budget.
+     *
+     * @param now current time in ms
+     * @return true when a pre-emergency burst is still recent
+     * @since 0.9.71+
+     */
+    boolean isPreEmergencyExempt(long now) {
+        return isPreEmergencyBurstLive(_preEmergencyBurstAt, now, PRE_EMERGENCY_EXEMPT_WINDOW_MS);
+    }
+
             /** Default early expiration time for pruned tunnels (120 seconds) */
     static final long DEFAULT_PRUNE_EARLY_EXPIRY = 120L * 1000;
     private static final String PROP_PRUNE_EARLY_EXPIRY = "router.pruneEarlyExpiryDelay";
@@ -6419,8 +6470,12 @@ public class TunnelPool {
                   }
               }
               // Stamp only once builds were actually started, so the floor paces
-              // dispatches rather than a decision that came to nothing.
+              // dispatches rather than a decision that came to nothing. The burst
+              // timestamp is what tells the executor these builds are governed by
+              // this pool's own cap and must not be subtracted from the global
+              // bandwidth-derived budget.
               _lastEnsureTime = nowPre;
+              _preEmergencyBurstAt = nowPre;
               return;
           }
 
