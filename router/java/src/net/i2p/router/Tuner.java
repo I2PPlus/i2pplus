@@ -1015,6 +1015,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         _params.add(new RTOMultiplierParam());
         _params.add(new MaxRttParam());
         _params.add(new MaxSlowStartWindowParam());
+        _params.add(new TimerThreadsParam());
         MaxWindowSizeParam maxWindowSize = new MaxWindowSizeParam();
         _params.add(maxWindowSize);
         // Fast cycle: a single fast stream's throughput is pinned to this
@@ -5028,17 +5029,18 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      * <p>The ceiling bounds in-flight messages per connection. It is an upper
      * bound, not a reservation — in-flight data still tracks the ACK-driven
      * congestion window — so a high ceiling never loads a slow path; it only
-     * removes a throttle from a fast one. The former logic additionally shrunk
-     * the ceiling whenever the bandwidth-delay product fell below current, but
-     * that bandwidth is measured <i>through</i> the current ceiling: on a capped
-     * connection a low average is an artifact of the cap, not evidence the cap
-     * should drop, and ratcheting the cap down on that artifact produced a
-     * down-only spiral (a sub-ceiling bandwidth read-out justifies shrinking
-     * the cap, which lowers the read-out further, ...). The ceiling therefore
-     * shrinks ONLY on hard negative signals (duplicate retransmits, gateway
-     * congestion, memory pressure) and climbs on a clean path, bounded upward
-     * and gated on heap headroom so a large jump can never be the event that
-     * pushes the heap into pressure.
+     * removes a throttle from a fast one.
+     * <p>The former logic additionally shrunk the ceiling whenever the
+     * bandwidth-delay product fell below current, but that bandwidth is measured
+     * <i>through</i> the current ceiling: on a capped connection a low average
+     * is an artifact of the cap, not evidence the cap should drop, and ratcheting
+     * the cap down on that artifact produced a down-only spiral (a sub-ceiling
+     * bandwidth read-out justifies shrinking the cap, which lowers the read-out
+     * further, ...).
+     * <p>The ceiling therefore shrinks ONLY on hard negative signals (duplicate
+     * retransmits, gateway congestion, memory pressure) and climbs on a clean
+     * path, bounded upward and gated on heap headroom so a large jump can never
+     * be the event that pushes the heap into pressure.
      * <p>The clean-path climb is hyper-responsive: with strong headroom
      * (heap below 40%) it takes four steps per cycle, with moderate headroom
      * (below 50%) two, and at 50% or above it holds until memory frees rather
@@ -5125,6 +5127,60 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      * high-bandwidth paths the window can reach ~15.7 MB/s
      * (8192 messages &times; 1730 bytes / 0.89 s RTT).
      */
+    private class TimerThreadsParam extends BaseParam {
+
+        TimerThreadsParam() {
+            // No observed stat: the timer reports its own backlog directly rather
+            // than through a RateStat, so the reading is exact and costs nothing.
+            super("i2p.timer.threads", "Timer Threads",
+                  SUB_ROUTER,
+                  2, 16, 1, null, _context, null, 2);
+        }
+
+        /**
+         * How far behind the timer is running, in ms. Zero when nothing is late.
+         * <p>This rather than an occupancy or queue-depth reading because an executor
+         * whose events run back-to-back looks idle between them: the queue is often
+         * empty at any instant while every event is late. The delay is what the router
+         * experiences, so it is what the worker count is sized against.
+         *
+         * @return the worst recent execution delay in ms
+         * @since 0.9.71+
+         */
+        private double timerBacklogMs() {
+            long backlog = _context.simpleTimer2().getBacklogMs();
+            return backlog > 0 ? (double) backlog : 0.0;
+        }
+
+        protected void applyValue(int value) {
+            _context.simpleTimer2().setThreadCount(value);
+        }
+
+        protected int getRuntimeValue() {
+            return _context.simpleTimer2().getThreadCount();
+        }
+
+        protected double getObservedStat(RouterContext ctx) {
+            // A reading of zero means nothing is late, which is a valid signal to
+            // shrink; NaN means the timer could not be asked, which is not.
+            double backlog = timerBacklogMs();
+            return Double.isNaN(backlog) ? Double.NaN : backlog;
+        }
+
+        protected int computeTarget(double observed) {
+            if (Double.isNaN(observed))
+                return getRuntimeValue();
+            return SimpleTimer2.desiredThreads((int) Math.min(observed, Integer.MAX_VALUE),
+                                               getRuntimeValue(), _max,
+                                               TIMER_GROW_MS, TIMER_SHRINK_MS);
+        }
+    }
+
+    /** Backlog at or above which the timer gains a worker, in ms. */
+    private static final int TIMER_GROW_MS = 5_000;
+    /** Backlog at or below which the timer releases a worker, in ms. */
+    private static final int TIMER_SHRINK_MS = 1_000;
+
     private class MaxWindowSizeParam extends BaseParam {
 
         MaxWindowSizeParam() {
