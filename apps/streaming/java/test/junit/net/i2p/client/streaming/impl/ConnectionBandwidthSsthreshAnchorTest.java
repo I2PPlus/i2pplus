@@ -99,4 +99,56 @@ public class ConnectionBandwidthSsthreshAnchorTest {
         // zero factor yields 0 before the floor -> floor wins
         assertEquals(16, Connection.bandwidthSsthreshAnchor(1f, 500, 0, 16));
     }
+
+    /**
+     * The never-measured sentinel. _minRtt starts at Integer.MAX_VALUE, so a plain
+     * max() against the 1s floor passes 24 days of round trip straight into the BDP
+     * product. Observed in the live router as 48804 "MinRTT: 2147483647" lines, so
+     * this is not a hypothetical input.
+     */
+    @Test
+    public void testNeverMeasuredSentinelFloorsLikeUnset() {
+        // 1 packet/ms against the 1s floor -> 1000, not a BDP against 24 days
+        assertEquals(1000, Connection.bandwidthSsthreshAnchor(1f, Integer.MAX_VALUE, 1, 16));
+        // same answer as the unset case, which is the whole point
+        assertEquals(Connection.bandwidthSsthreshAnchor(1f, 0, 1, 16),
+                     Connection.bandwidthSsthreshAnchor(1f, Integer.MAX_VALUE, 1, 16));
+    }
+
+    /**
+     * The sentinel must not be allowed to reach the BDP product even at a bandwidth
+     * where the arithmetic would overflow into a small anchor: the floor wins before
+     * any multiplication can wrap.
+     */
+    @Test
+    public void testSentinelDoesNotOverflowIntoAFlooredAnchor() {
+        // tiny bandwidth: 0.0000001 * MAX_VALUE would wrap to a nonsense figure
+        int withSentinel = Connection.bandwidthSsthreshAnchor(0.0000001f, Integer.MAX_VALUE, 2, 16);
+        // it must match the 1s-floor answer, not a wrapped value below the floor
+        assertEquals(16, withSentinel);
+        assertEquals(Connection.bandwidthSsthreshAnchor(0.0000001f, 0, 2, 16), withSentinel);
+    }
+
+    /**
+     * A real measurement is used as-is. The fix must not throw away valid readings,
+     * so a plausible min-RTT above the floor still scales the anchor.
+     */
+    @Test
+    public void testPlausibleMinRttStillScalesTheAnchor() {
+        // 1 packet/ms * 2500ms = 2500, not floored back to 1000
+        assertEquals(2500, Connection.bandwidthSsthreshAnchor(1f, 2500, 1, 16));
+        // at the plausible ceiling the value is still believed
+        assertEquals(60000, Connection.bandwidthSsthreshAnchor(1f,
+                     Connection.MAX_PLAUSIBLE_MIN_RTT_MS, 1, 16));
+    }
+
+    /**
+     * Just past the plausible ceiling the value is treated as the sentinel and
+     * floored, so a stale or corrupt reading cannot inflate the anchor.
+     */
+    @Test
+    public void testImplausibleMinRttIsFloored() {
+        assertEquals(1000, Connection.bandwidthSsthreshAnchor(1f,
+                     Connection.MAX_PLAUSIBLE_MIN_RTT_MS + 1, 1, 16));
+    }
 }

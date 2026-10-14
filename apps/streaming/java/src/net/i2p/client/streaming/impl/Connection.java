@@ -655,6 +655,17 @@ class Connection {
     static final int SS_THRESH_BW_ANCHOR_MIN_RTT = 1000;
 
     /**
+     * The longest min-RTT believed to be a measurement. Anything at or above it is
+     * treated as the never-measured sentinel rather than a reading: a real minimum
+     * round trip inside the network is seconds at the very most, and the sentinel is
+     * 24 days. Without the distinction the bandwidth anchor is computed against the
+     * sentinel and the result is not a bandwidth estimate at all.
+     *
+     * @since 0.9.71+
+     */
+    static final int MAX_PLAUSIBLE_MIN_RTT_MS = 60_000;
+
+    /**
      *  Give up resending an unacked SYN after this many sends.
      *  SYN retransmission uses a fixed RTO interval (no backoff — there is no
      *  congestion to manage before the connection is established), so the total
@@ -2037,9 +2048,16 @@ class Connection {
      *  @return anchor in packets, never below {@code floor}
      */
     static int bandwidthSsthreshAnchor(float bwEstPacketsPerMs, int minRttMs, int factor, int floor) {
-        int effRttMs = Math.max(minRttMs, SS_THRESH_BW_ANCHOR_MIN_RTT);
+        // A min-RTT that has never been measured is Integer.MAX_VALUE, not zero, so a
+        // plain max() against the floor passes it straight through and computes the BDP
+        // against 24 days of round trip. Substitute the floor instead: the sentinel and
+        // anything implausibly long say the same thing, which is "not measured".
+        int sanitised = (minRttMs > 0 && minRttMs <= MAX_PLAUSIBLE_MIN_RTT_MS)
+            ? minRttMs : 0;
+        int effRttMs = Math.max(sanitised, SS_THRESH_BW_ANCHOR_MIN_RTT);
         return Math.max(Math.round(bwEstPacketsPerMs * effRttMs * factor), floor);
     }
+
 
     /**
      *  Whether a congestion episode's lost window has been fully recovered.
@@ -3949,7 +3967,12 @@ if (!on) {
         if (remotePeer != null) {buf.append("[").append(remotePeer.calculateHash().toBase32().substring(0,8)).append("]");}
         else {buf.append("Unknown");}
         long now = _context.clock().now();
-        if  (_log.shouldInfo()) {
+        // Gated on debug, not info. toString() is called by whatever log line or
+        // exception message happens to name a connection, so at info this block
+        // emitted a full per-stream report for every one of those - 27064 lines in
+        // six hours, which buried the diagnostics the log exists to carry. It is
+        // detail for investigating one connection, which is what debug is for.
+        if  (_log.shouldDebug()) {
             buf.append("\n* Up: ").append(DataHelper.formatDuration(now - _createdOn));
             buf.append("; Window size: ").append(_options.getWindowSize());
             buf.append("; Congestion window: ").append(_congestionWindowEnd - _highestAckedThrough.get());
