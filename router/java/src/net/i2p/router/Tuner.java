@@ -2734,6 +2734,21 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return target;
         }
 
+        /**
+         * Why the current target was chosen, for the change line. Optional.
+         *
+         * <p>Returned as a short clause appended after an arrow, so the line reads as
+         * event then cause. It is asked only on a cycle that actually moves the value,
+         * which is what keeps a diagnostic like this from becoming a per-cycle dump
+         * while still tracing every decision that had an effect.
+         *
+         * @return the reason, or null when the param has nothing to report
+         * @since 0.9.71+
+         */
+        protected String decisionReason() {
+            return null;
+        }
+
         /** Apply the target value, accelerating rollback when diverged from default. */
         private void applyTarget(int target) {
             // Fast rollback: when current has diverged from _defaultValue and the stat
@@ -5182,6 +5197,96 @@ public class Tuner extends SimpleTimer2.TimedEvent {
     }
 
     /**
+     * Say why the streaming ceiling took the value it did. Pure, so the wording and
+     * the branch it names can be pinned by tests.
+     *
+     * <p>The ceiling's direction is decided by three gated signals and the branch
+     * that shrinks is reached only when one of them is true. Reproducing those gates
+     * here rather than instrumenting the branch itself keeps the diagnostic next to
+     * the policy it explains, and because it is emitted only when the value actually
+     * moves, a run of it reads as a trace of the decisions the router made rather
+     * than as a per-cycle dump.
+     *
+     * <p>This exists because the two disagreed on a live router: the ceiling spent
+     * three quarters of a run stepping down by half a step while every one of the
+     * three signals measured below its threshold, and no amount of reading the stats
+     * page could say which gate was open. Naming the values alongside the verdict is
+     * what makes that visible in one line.
+     *
+     * @param failLifetime stat {@code transport.sendMessageFailureLifetime} in ms, or NaN
+     * @param lossRate streaming retransmission rate 0.0-1.0, or NaN
+     * @param memPct stat {@code jobQueue.memoryUsedPercent} in %, or NaN
+     * @return a short clause naming the verdict and the values behind it, never null
+     * @since 0.9.71+
+     */
+    static String maxWindowDecision(double failLifetime, double lossRate, double memPct) {
+        boolean congested = !Double.isNaN(failLifetime) && failLifetime > CONGESTION_GATE_MS;
+        boolean dropping = isStreamLossy(lossRate);
+        double memPressure = !Double.isNaN(memPct) ? memPct : 0.0;
+        StringBuilder sb = new StringBuilder(48);
+        if (dropping) {
+            sb.append("loss ").append(pct(lossRate));
+        }
+        if (congested) {
+            appendSep(sb);
+            sb.append("congestion ").append(secs(failLifetime));
+        }
+        if (memPressure > SHRINK_MEM_PCT) {
+            appendSep(sb);
+            sb.append("memory ").append(wholePct(memPct));
+        }
+        if (sb.length() > 0) {
+            sb.append(" -> shrink");
+            return sb.toString();
+        }
+        // No gate open, so the direction came from the heap bands. An unmeasured heap
+        // is never read as maximum headroom: holding is the only safe answer when
+        // nothing is known, and reading NaN as 0% would climb on a signal that does
+        // not exist.
+        if (Double.isNaN(memPct)) {
+            return "heap no signal -> hold";
+        }
+        if (memPressure < STRONG_CLEAN_MEM_PCT) {
+            return "clean " + wholePct(memPct) + " heap -> climb";
+        }
+        if (memPressure < CLIMB_HEADROOM_MEM_PCT) {
+            return "moderate " + wholePct(memPct) + " heap -> climb";
+        }
+        return "tight " + wholePct(memPct) + " heap -> hold";
+    }
+
+    /**
+     * The gateway send-failure lifetime above which the ceiling treats the path as
+     * congested.
+     *
+     * @since 0.9.71+
+     */
+    private static final long CONGESTION_GATE_MS = 8000L;
+
+    /** A separator for a reason with more than one clause. */
+    private static void appendSep(StringBuilder sb) {
+        if (sb.length() > 0) {sb.append("; ");}
+    }
+
+    /** A value already expressed in percent, as a whole-percent string. */
+    private static String wholePct(double percent) {
+        if (Double.isNaN(percent)) {return "no signal";}
+        return Math.round(percent) + "%";
+    }
+
+    /** A fraction as a whole-percent string; NaN becomes "no signal". */
+    private static String pct(double rate) {
+        if (Double.isNaN(rate)) {return "no signal";}
+        return Math.round(rate * 100.0d) + "%";
+    }
+
+    /** A millisecond duration as a seconds string with one decimal. */
+    private static String secs(double ms) {
+        if (Double.isNaN(ms)) {return "no signal";}
+        return String.format(java.util.Locale.US, "%.1fs", ms / 1000.0d);
+    }
+
+    /**
      * Heap % below which the streaming ceiling takes the full four-step jump.
      * @since 0.9.71+
      */
@@ -5305,6 +5410,18 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             double memPct = getAdditionalStat(_context, "jobQueue.memoryUsedPercent");
             return computeStreamingMaxWindowTarget(current, _min, _max, _step, _defaultValue,
                                                    failLifetime, lossRate, memPct);
+        }
+
+        /**
+         * Name the gate that decided the ceiling's direction.
+         * <p>Reads the same three signals {@link #computeTarget} decides from. Asked
+         * only on a cycle that moves the value, so the extra reads cost nothing.
+         */
+        @Override
+        protected String decisionReason() {
+            return maxWindowDecision(getAdditionalStat(_context, "transport.sendMessageFailureLifetime"),
+                                     getStreamingLossRate(_context),
+                                     getAdditionalStat(_context, "jobQueue.memoryUsedPercent"));
         }
     }
 
