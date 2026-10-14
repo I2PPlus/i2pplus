@@ -83,6 +83,37 @@ public class TunnelPoolThrottleTest {
         assertTrue(TunnelPool.isEnsureThrottled(last + 3_000L, last, 5, false));
     }
 
+    /**
+     * The pre-emergency shape: a pool carrying non-healthy tunnels that cannot
+     * be advertised (usable &gt; 1) while healthy is below a quarter of target,
+     * with builds already in flight. The burst must fire at most once per
+     * collapse floor, because a batch of builds expiring together reaches this
+     * branch once per timeout with no change to the pool's health between them.
+     */
+    @Test
+    public void testPreEmergencyBurstPacedWhileBuildsInFlight() {
+        long last = 1_000_000L;
+        // 1/8 healthy, four builds in flight, usable still 4 -> collapse floor
+        assertFalse(TunnelPool.isEnsureThrottled(last + ENSURE_COLLAPSED_MS, last,
+                 4, 1, false, 0L, 4));
+        assertTrue(TunnelPool.isEnsureThrottled(last + ENSURE_COLLAPSED_MS - 1, last,
+                 4, 1, false, 0L, 4));
+        // one millisecond past the floor releases the next burst
+        assertTrue(TunnelPool.isEnsureThrottled(last + ENSURE_COLLAPSED_MS - 1, last,
+                 2, 1, false, 0L, 16));
+    }
+
+    /**
+     * The counterweight: an empty pool with nothing in flight must not wait on
+     * any floor, or the outage is extended while nothing consumes capacity.
+     */
+    @Test
+    public void testPreEmergencyEmptyPoolIdleFiresAtOnce() {
+        long last = 1_000_000L;
+        // one second after a run, nothing usable, nothing building
+        assertFalse(TunnelPool.isEnsureThrottled(last + 1_000L, last, 0, 0, false, 0L, 0));
+    }
+
     // --- isEnsureThrottled (5-arg: separate healthy count) ---
 
     @Test

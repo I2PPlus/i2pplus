@@ -20,7 +20,10 @@ import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Predicate;
 import net.i2p.data.DataHelper;
+import net.i2p.data.DatabaseEntry;
 import net.i2p.data.Hash;
+import net.i2p.data.router.RouterAddress;
+import net.i2p.data.router.RouterInfo;
 import net.i2p.data.Lease;
 import net.i2p.data.i2cp.MessageStatusMessage;
 import net.i2p.stat.RateConstants;
@@ -1626,7 +1629,7 @@ public class TunnelPool {
                 if (t.getTunnelFailed() || t.getTestStatus().isUnusable()) continue;
                 // Same zombie exclusion as getHealthyTunnelCount: without a session
                 // to our next hop this tunnel cannot carry anything.
-                if (isLocalHopUnreachable(t)) {zombies++; continue;}
+                if (isLocalHopUnreachable(t)) {zombies++; countZombieTransport(t); continue;}
                 count++;
             }
         } finally {_tunnelsLock.unlock();}
@@ -1750,6 +1753,61 @@ public class TunnelPool {
         // A null peer means the slot was never assigned, which the caller's own
         // checks already treat as "not yet usable"; not our signal to report.
         return nextHop != null && !_context.commSystem().isEstablished(nextHop);
+    }
+
+    /**
+     * Normalise a RouterInfo transport style into one of the known transports.
+     *
+     * <p>A zombie is a tunnel whose transport session died after the build
+     * completed, so peer selection is not the cause and cannot fix it: the
+     * candidate had a session when the build succeeded. What does point at the
+     * cause is which transport lost that session, and RouterInfo carries the
+     * style as a free-form string, so the values published into the netdb are
+     * folded here before they are used as a stat name.
+     *
+     * @param style the style from the peer's RouterAddress, or null when the
+     *              peer has no address we can read
+     * @return NTCP, NTCP2, SSU, SSU2, or unknown
+     * @since 0.9.71+
+     */
+    static String zombieTransportBucket(String style) {
+        if (style == null) {return "unknown";}
+        if ("NTCP2".equals(style)) {return "NTCP2";}
+        if ("NTCP".equals(style)) {return "NTCP";}
+        if ("SSU2".equals(style)) {return "SSU2";}
+        if ("SSU".equals(style)) {return "SSU";}
+        return "unknown";
+    }
+
+    /**
+     * Attribute one zombie exclusion to the transport its local hop used.
+     *
+     * <p>Counted per exclusion rather than per warning so the split survives the
+     * warning's rate limit. The style is read from the peer's first published
+     * address, which is an approximation: a peer publishing several transports
+     * is counted under whichever appears first, so a skewed split towards one
+     * transport should be read as a lead rather than a measurement.
+     *
+     * @param t the zombie tunnel whose local hop session was lost
+     * @since 0.9.71+
+     */
+    private void countZombieTransport(TunnelInfo t) {
+        int idx = t.isInbound() ? 0 : 1;
+        String style = null;
+        if (idx < t.getLength()) {
+            Hash hop = t.getPeer(idx);
+            if (hop != null) {
+                DatabaseEntry de = _context.netDb().lookupLocallyWithoutValidation(hop);
+                if (de instanceof RouterInfo) {
+                    for (RouterAddress ra : ((RouterInfo) de).getAddresses()) {
+                        style = ra.getTransportStyle();
+                        break;
+                    }
+                }
+            }
+        }
+        _context.statManager().addRateData("tunnel.poolZombieTransport." +
+                                          zombieTransportBucket(style), 1);
     }
 
     /**
@@ -6288,6 +6346,24 @@ public class TunnelPool {
           int target = getEffectiveTarget();
           int healthy = getHealthyTunnelCount();
           if (target > 0 && healthy >= 0 && healthy < target * PRE_EMERGENCY_FRACTION) {
+              // Pace the burst with the same collapsed-pool floor the deferred path
+              // uses below. This branch used to run on every event that reached it,
+              // so a batch of builds expiring together dispatched one burst per
+              // timeout for a pool whose health had not changed between them - five
+              // bursts inside 25ms was observed against a pool sitting at 1/8. The
+              // gate still passes at once when the pool is empty with nothing in
+              // flight, which is the case the burst exists for; it only stops the
+              // same shortfall from being charged for several times over.
+              long nowPre = _context.clock().now();
+              if (isEnsureThrottled(nowPre, _lastEnsureTime, getUsableTunnelCount(),
+                                    healthy, _hasIncompleteLeaseSet,
+                                    _lastRemovalTime, getInProgressCount())) {
+                  if (_log.shouldDebug()) {
+                      _log.debug(toString() + " -> Skipping pre-emergency burst -> throttled (" +
+                                 (nowPre - _lastEnsureTime) + "ms since last)");
+                  }
+                  return;
+              }
               // This path bypasses the throttle, but it must not bypass the
               // in-progress caps: a burst started on every cycle with no ceiling
               // is what drove a pool to 99 concurrent builds.
@@ -6316,6 +6392,9 @@ public class TunnelPool {
                       _manager.getExecutor().buildTunnel(cfg);
                   }
               }
+              // Stamp only once builds were actually started, so the floor paces
+              // dispatches rather than a decision that came to nothing.
+              _lastEnsureTime = nowPre;
               return;
           }
 
