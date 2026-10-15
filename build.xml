@@ -1662,7 +1662,7 @@
       failonerror="false"
       charset="utf-8"
       author="no"
-      additionalparam="-notimestamp -stylesheetFile tools/javadoc/javadoc.css -quiet -Xmaxwarns 100000 -nodeprecated -nosince"
+      additionalparam="-notimestamp -stylesheetFile ${basedir}/tools/javadoc/jdk8/javadoc.css -quiet -Xmaxwarns 100000 -nodeprecated -nosince"
       doctitle="I2P+ Javadocs [${release.number}-${i2p.build.number}${build.extra}]"
       windowtitle="Javadocs [I2P+ ${release.number}+] - API Version ${api.version}+"
       excludepackagenames="com.mpatric.mp3agic">
@@ -1801,11 +1801,11 @@
         </not>
       </condition>
     </fail>
-    <copy quiet="true" verbose="false" file="tools/javadoc/navigation-jav8.js" tofile="./dist/javadoc/navigation.js" overwrite="true"/>
+    <copy quiet="true" verbose="false" file="tools/javadoc/jdk8/navigation-jav8.js" tofile="./dist/javadoc/navigation.js" overwrite="true"/>
     <delete quiet="true" file="./dist/javadoc/script.js"/>
     <exec executable="sh" failonerror="false">
       <arg value="-c"/>
-      <arg value="sh tools/javadoc/javadoc-postprocess.sh"/>
+      <arg value="sh tools/javadoc/jdk8/javadoc-postprocess.sh"/>
     </exec>
     <if>
       <isset property="htmlmin.present"/>
