@@ -150,13 +150,6 @@ public final class GraphGroups {
         // rejection isolates the peer's contribution - a build that timed out says
         // about as much about the path as about the hop, so timeoutRate stays on its
         // own graph and the two here are the pair that name a peer's behaviour.
-        //
-        // Both are percentages over the same window and the same denominator, so
-        // they share an axis, and together they do not sum to 100: the remainder is
-        // buildTimeoutRate, which is plotted separately on purpose.
-        g.put("buildOutcomeRate", Arrays.asList(
-                "tunnel.buildSuccessRate", "tunnel.buildFailureRate"));
-
         // Message-level send against receive bandwidth, both bytes per second over
         // the same window. The question is how much I2P is actually carrying in
         // each direction, and neither direction is half the story: a floodfill
@@ -327,8 +320,7 @@ public final class GraphGroups {
         t.put("buildRejectReceived", "Build Rejections Received");
         t.put("buildInboundOutcome", "Inbound Build Success");
         t.put("buildOutboundOutcome", "Outbound Build Success");
-        t.put("buildSuccessByDirection", "Build Success Average (Combined)");
-        t.put("buildOutcomeRate", "Build Success & Rejection Rates");
+        t.put("buildSuccessByDirection", "Build Success by Direction");
         t.put("bwMessageRate", "Message Bandwidth");
         t.put("rdnsExecutor", "rDNS Executor");
         t.put("ntcpSendFinisher", "Send Finisher");
