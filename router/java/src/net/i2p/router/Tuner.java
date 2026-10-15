@@ -5243,11 +5243,13 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      * @param byteLossRate byte-weighted retransmission rate 0.0-1.0, or NaN
      * @param dupEvents resend event count behind {@code lossRate}, 0 when unread
      * @param sendEvents send event count behind {@code lossRate}, 0 when unread
+     * @param avgDupSize mean bytes per retransmitted message, or NaN when unread
      * @return a short clause naming the verdict and the values behind it, never null
      * @since 0.9.71+
      */
     static String maxWindowDecision(double failLifetime, double lossRate, double memPct,
-                                    double byteLossRate, long dupEvents, long sendEvents) {
+                                    double byteLossRate, long dupEvents, long sendEvents,
+                                    double avgDupSize) {
         boolean congested = !Double.isNaN(failLifetime) && failLifetime > CONGESTION_GATE_MS;
         boolean dropping = isStreamLossy(lossRate);
         double memPressure = !Double.isNaN(memPct) ? memPct : 0.0;
@@ -5267,6 +5269,14 @@ public class Tuner extends SimpleTimer2.TimedEvent {
               // literal divisor would silently report a wrong rate rather than
               // fail when it moves again.
               .append(String.format("%.1f", dupEvents / (STAT_PERIOD / 1000.0d)));
+        }
+        // The resend size, labelled with its window: it is read on the 5 minute
+        // window, not the 60 s the event counts come from, so leaving it bare
+        // would invite the same cross-window comparison the labels above prevent.
+        if (!Double.isNaN(avgDupSize) && avgDupSize >= 0.0d) {
+            appendSep(sb);
+            sb.append("dupSize=").append(String.format("%.0f", avgDupSize))
+              .append("B(5m)");
         }
         if (congested) {
             appendSep(sb);
@@ -5567,7 +5577,40 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                                      getAdditionalStat(_context, "jobQueue.memoryUsedPercent"),
                                      byteWeightedLossRate(),
                                      (long) getAdditionalEventCount(_context, "stream.con.sendDuplicateSize"),
-                                     (long) getAdditionalEventCount(_context, "stream.con.sendMessageSize"));
+                                     (long) getAdditionalEventCount(_context, "stream.con.sendMessageSize"),
+                                     averageDuplicateMessageSize());
+        }
+
+        /**
+         * Mean size in bytes of a retransmitted message, or NaN when unread.
+         *
+         * <p>The discriminator the two loss ratios cannot supply. The event-count
+         * ratio counts every resend alike and the byte ratio weights by bytes, so
+         * their divergence says the two disagree but not whether the resends are
+         * small control-plane messages that a byte-in-flight window can ignore or
+         * real payload that it cannot. This is the size of an average resend.
+         *
+         * <p>Both inputs are recorded at the same stream-close event over the same
+         * 5-minute window, so the two window means divide into the size. The
+         * byte figure cannot be recovered from {@code stream.rtxRatioBytes}: that
+         * stat records 1000*dupBytes/bytesSent per close, so its mean is a mean of
+         * per-stream ratios and dividing it into anything to get a size is invalid.
+         *
+         * <p>Bounded by the streams that closed inside the window, so it is a
+         * closure-biased lifetime figure rather than a true traffic-rate one: one
+         * long stream closing in the window contributes its whole lifetime.
+         *
+         * @return bytes per retransmitted message, or NaN when either input is absent
+         * @since 0.9.71+
+         */
+        private double averageDuplicateMessageSize() {
+            double dupBytes = getAdditionalStat5Min(_context, "stream.con.lifetimeDupBytesSent");
+            double dupMessages = getAdditionalStat5Min(_context, "stream.con.lifetimeDupMessagesSent");
+            if (Double.isNaN(dupBytes) || Double.isNaN(dupMessages) || dupMessages <= 0.0d
+                || dupBytes < 0.0d) {
+                return Double.NaN;
+            }
+            return dupBytes / dupMessages;
         }
 
         /**

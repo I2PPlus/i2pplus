@@ -1244,7 +1244,8 @@ class ConnectionManager {
         _context.statManager().createRateStat("stream.con.lifetimeMessagesReceived", "Number of messages we receive on a stream", "Stream", RATES);
         _context.statManager().createRateStat("stream.con.lifetimeBytesSent", "How many bytes we send on a stream", "Stream", RATES);
         _context.statManager().createRateStat("stream.con.lifetimeBytesReceived", "How many bytes we receive on a stream", "Stream", RATES);
-        _context.statManager().createRateStat("stream.con.lifetimeDupMessagesSent", "Number of duplicate messages we send on a stream", "Stream", RATES);
+        _context.statManager().createRateStat("stream.con.lifetimeDupMessagesSent", "Number of duplicate messages we send on a stream", "Stream", EVENT_RATES);
+        _context.statManager().createRateStat("stream.con.lifetimeDupBytesSent", "How many bytes we resend on a stream", "Stream", EVENT_RATES);
         _context.statManager().createRateStat("stream.con.lifetimeDupMessagesReceived", "Number of duplicate messages we receive on a stream", "Stream", RATES);
         registerRtxRatioStats(_context.statManager());
         _context.statManager().createRequiredRateStat("stream.con.lifetimeRTT", "Final RTT when a stream closes", "Stream", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR });
@@ -2611,6 +2612,12 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
         _context.statManager().addRateData("stream.con.lifetimeBytesSent", con.getLifetimeBytesSent(), con.getLifetime());
         _context.statManager().addRateData("stream.con.lifetimeBytesReceived", con.getLifetimeBytesReceived(), con.getLifetime());
         _context.statManager().addRateData("stream.con.lifetimeDupMessagesSent", con.getLifetimeDupMessagesSent(), con.getLifetime());
+        // Absolute resend volume, not a ratio. stream.rtxRatioBytes records
+        // 1000*dupBytes/bytesSent per close, so its mean is a mean of per-stream
+        // ratios and cannot be divided into anything to recover a message size.
+        // The byte and message counts are recorded at the same close event on the
+        // same periods, so their window means divide into a size.
+        _context.statManager().addRateData("stream.con.lifetimeDupBytesSent", con.getLifetimeDupBytesSent(), con.getLifetime());
         _context.statManager().addRateData("stream.con.lifetimeDupMessagesReceived", con.getLifetimeDupMessagesReceived(), con.getLifetime());
         // Retransmission ratio in per-mille (resends per 1000 messages sent) — a
         // path-loss signal independent of message size, unlike sendDuplicateSize (bytes).

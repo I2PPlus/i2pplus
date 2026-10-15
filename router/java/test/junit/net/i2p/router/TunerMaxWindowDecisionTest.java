@@ -30,7 +30,7 @@ public class TunerMaxWindowDecisionTest {
     /** A clean path with heap headroom says so, and says climb. */
     @Test
     public void cleanWithHeadroomReportsClimb() {
-        String r = Tuner.maxWindowDecision(CLEAN_MS, CLEAN_LOSS, CLEAN_HEAP, Double.NaN, 0, 0);
+        String r = Tuner.maxWindowDecision(CLEAN_MS, CLEAN_LOSS, CLEAN_HEAP, Double.NaN, 0, 0, Double.NaN);
         assertTrue("should name the climb: " + r, r.endsWith("climb"));
         assertTrue("should report the heap: " + r, r.contains("9% heap"));
         assertTrue("no gate should be named: " + r, r.contains("clean 9% heap -> climb"));
@@ -39,7 +39,7 @@ public class TunerMaxWindowDecisionTest {
     /** Loss above the gate names loss and the shrink verdict. */
     @Test
     public void lossyNamesLossAndShrinks() {
-        String r = Tuner.maxWindowDecision(CLEAN_MS, 0.35, CLEAN_HEAP, Double.NaN, 0, 0);
+        String r = Tuner.maxWindowDecision(CLEAN_MS, 0.35, CLEAN_HEAP, Double.NaN, 0, 0, Double.NaN);
         assertTrue("should name loss: " + r, r.startsWith("loss 35%"));
         assertTrue("should say shrink: " + r, r.endsWith("shrink"));
     }
@@ -47,7 +47,7 @@ public class TunerMaxWindowDecisionTest {
     /** Congestion names the duration in seconds, not raw milliseconds. */
     @Test
     public void congestedNamesSeconds() {
-        String r = Tuner.maxWindowDecision(12_500L, CLEAN_LOSS, CLEAN_HEAP, Double.NaN, 0, 0);
+        String r = Tuner.maxWindowDecision(12_500L, CLEAN_LOSS, CLEAN_HEAP, Double.NaN, 0, 0, Double.NaN);
         assertTrue("should name congestion with a readable duration: " + r,
                    r.contains("congestion 12.5s"));
         assertTrue("should say shrink: " + r, r.endsWith("shrink"));
@@ -56,7 +56,7 @@ public class TunerMaxWindowDecisionTest {
     /** Memory above the gate names memory, expressed as a percent. */
     @Test
     public void memoryPressureNamesMemory() {
-        String r = Tuner.maxWindowDecision(CLEAN_MS, CLEAN_LOSS, 71.0, Double.NaN, 0, 0);
+        String r = Tuner.maxWindowDecision(CLEAN_MS, CLEAN_LOSS, 71.0, Double.NaN, 0, 0, Double.NaN);
         assertTrue("should name memory: " + r, r.contains("memory 71%"));
         assertTrue("should say shrink: " + r, r.endsWith("shrink"));
     }
@@ -67,7 +67,7 @@ public class TunerMaxWindowDecisionTest {
      */
     @Test
     public void multipleGatesAreAllNamed() {
-        String r = Tuner.maxWindowDecision(12_500L, 0.35, 71.0, Double.NaN, 0, 0);
+        String r = Tuner.maxWindowDecision(12_500L, 0.35, 71.0, Double.NaN, 0, 0, Double.NaN);
         assertTrue("should name all three: " + r,
                    r.contains("loss 35%") && r.contains("congestion 12.5s")
                    && r.contains("memory 71%"));
@@ -81,7 +81,7 @@ public class TunerMaxWindowDecisionTest {
      */
     @Test
     public void tightHeapHolds() {
-        String r = Tuner.maxWindowDecision(CLEAN_MS, CLEAN_LOSS, 55.0, Double.NaN, 0, 0);
+        String r = Tuner.maxWindowDecision(CLEAN_MS, CLEAN_LOSS, 55.0, Double.NaN, 0, 0, Double.NaN);
         assertTrue("should say hold: " + r, r.endsWith("hold"));
         assertTrue("should say tight, not clean: " + r, r.contains("tight 55% heap -> hold"));
     }
@@ -89,7 +89,7 @@ public class TunerMaxWindowDecisionTest {
     /** Moderate heap is the two-step climb band. */
     @Test
     public void moderateHeapClimbs() {
-        String r = Tuner.maxWindowDecision(CLEAN_MS, CLEAN_LOSS, 45.0, Double.NaN, 0, 0);
+        String r = Tuner.maxWindowDecision(CLEAN_MS, CLEAN_LOSS, 45.0, Double.NaN, 0, 0, Double.NaN);
         assertTrue("should say moderate: " + r, r.contains("moderate 45% heap -> climb"));
         assertTrue("should say climb: " + r, r.endsWith("climb"));
     }
@@ -101,7 +101,7 @@ public class TunerMaxWindowDecisionTest {
      */
     @Test
     public void nanHeapNeverReadsAsMaximumHeadroom() {
-        String r = Tuner.maxWindowDecision(CLEAN_MS, CLEAN_LOSS, Double.NaN, Double.NaN, 0, 0);
+        String r = Tuner.maxWindowDecision(CLEAN_MS, CLEAN_LOSS, Double.NaN, Double.NaN, 0, 0, Double.NaN);
         assertTrue("NaN heap must read as no signal: " + r, r.contains("no signal"));
         assertTrue("an unmeasured heap must hold, not climb: " + r, r.endsWith("hold"));
     }
@@ -109,7 +109,7 @@ public class TunerMaxWindowDecisionTest {
     /** A NaN loss rate is not lossy, so the path climbs rather than shrinking. */
     @Test
     public void nanLossIsNotLossy() {
-        String r = Tuner.maxWindowDecision(CLEAN_MS, Double.NaN, CLEAN_HEAP, Double.NaN, 0, 0);
+        String r = Tuner.maxWindowDecision(CLEAN_MS, Double.NaN, CLEAN_HEAP, Double.NaN, 0, 0, Double.NaN);
         assertTrue("a missing loss signal must not shrink: " + r, r.endsWith("climb"));
     }
 
@@ -117,27 +117,27 @@ public class TunerMaxWindowDecisionTest {
     @Test
     public void lossThresholdIsInclusive() {
         assertTrue("exactly at the gate is lossy",
-                   Tuner.maxWindowDecision(CLEAN_MS, 0.20, CLEAN_HEAP, Double.NaN, 0, 0).endsWith("shrink"));
+                   Tuner.maxWindowDecision(CLEAN_MS, 0.20, CLEAN_HEAP, Double.NaN, 0, 0, Double.NaN).endsWith("shrink"));
         assertTrue("just below is not",
-                   Tuner.maxWindowDecision(CLEAN_MS, 0.1999, CLEAN_HEAP, Double.NaN, 0, 0).endsWith("climb"));
+                   Tuner.maxWindowDecision(CLEAN_MS, 0.1999, CLEAN_HEAP, Double.NaN, 0, 0, Double.NaN).endsWith("climb"));
     }
 
     /** The congestion gate is strictly greater-than, in milliseconds. */
     @Test
     public void congestionGateIsStrictlyAbove() {
         assertTrue("at the gate is not congested",
-                   !Tuner.maxWindowDecision(8_000L, CLEAN_LOSS, CLEAN_HEAP, Double.NaN, 0, 0).contains("congestion"));
+                   !Tuner.maxWindowDecision(8_000L, CLEAN_LOSS, CLEAN_HEAP, Double.NaN, 0, 0, Double.NaN).contains("congestion"));
         assertTrue("one ms above is",
-                   Tuner.maxWindowDecision(8_001L, CLEAN_LOSS, CLEAN_HEAP, Double.NaN, 0, 0).contains("congestion"));
+                   Tuner.maxWindowDecision(8_001L, CLEAN_LOSS, CLEAN_HEAP, Double.NaN, 0, 0, Double.NaN).contains("congestion"));
     }
 
     /** The memory gate is strictly greater-than, at 60 percent. */
     @Test
     public void memoryGateIsStrictlyAbove() {
         assertTrue("at 60 is not pressure",
-                   !Tuner.maxWindowDecision(CLEAN_MS, CLEAN_LOSS, 60.0, Double.NaN, 0, 0).contains("memory"));
+                   !Tuner.maxWindowDecision(CLEAN_MS, CLEAN_LOSS, 60.0, Double.NaN, 0, 0, Double.NaN).contains("memory"));
         assertTrue("above 60 is",
-                   Tuner.maxWindowDecision(CLEAN_MS, CLEAN_LOSS, 60.1, Double.NaN, 0, 0).contains("memory"));
+                   Tuner.maxWindowDecision(CLEAN_MS, CLEAN_LOSS, 60.1, Double.NaN, 0, 0, Double.NaN).contains("memory"));
     }
 
     /**
@@ -155,7 +155,7 @@ public class TunerMaxWindowDecisionTest {
      */
     @Test
     public void reasonCarriesBothSignals() {
-        String r = Tuner.maxWindowDecision(CLEAN_MS, 0.40, CLEAN_HEAP, 0.10, 370, 545);
+        String r = Tuner.maxWindowDecision(CLEAN_MS, 0.40, CLEAN_HEAP, 0.10, 370, 545, 1391.0d);
         assertTrue("must name the event-count reading: " + r, r.contains("40%"));
         assertTrue("must name the byte reading: " + r, r.contains("10%"));
         assertTrue("must distinguish the two: " + r,
@@ -180,6 +180,11 @@ public class TunerMaxWindowDecisionTest {
         // The three count pairs are separated, not run together.
         assertTrue("count pairs must be separated: " + r,
                    r.contains("dupEvents=370; dupEvents/s="));
+        // The resend size carries its own window label: it is read on the 5 minute
+        // window while the counts above are 60 s, so a bare figure would invite the
+        // cross-window comparison the labels exist to prevent.
+        assertTrue("resend size must carry its window: " + r,
+                   r.contains("dupSize=1391B(5m)"));
     }
 
     /**
@@ -188,7 +193,7 @@ public class TunerMaxWindowDecisionTest {
      */
     @Test
     public void reasonCarriesBothSignalsOnClimb() {
-        String r = Tuner.maxWindowDecision(CLEAN_MS, 0.05, CLEAN_HEAP, 0.04, 0, 0);
+        String r = Tuner.maxWindowDecision(CLEAN_MS, 0.05, CLEAN_HEAP, 0.04, 0, 0, Double.NaN);
         assertTrue("climb reason must carry both: " + r,
                    r.contains("5%") && r.contains("4%"));
         assertTrue("climb reason must label the windows too: " + r,
@@ -197,6 +202,10 @@ public class TunerMaxWindowDecisionTest {
         // emitted as zeros, which would read as a measured no-loss window.
         assertFalse("no event data must not fabricate counts: " + r,
                     r.contains("dupEvents="));
+        // An unread size is dropped, not printed as zero: a 0-byte resend is not a
+        // thing, so a zero would read as measured evidence for a tiny resend.
+        assertFalse("unread resend size must not fabricate a size: " + r,
+                    r.contains("dupSize="));
     }
 
     /**
@@ -206,7 +215,7 @@ public class TunerMaxWindowDecisionTest {
      */
     @Test
     public void missingByteSignalIsNotZero() {
-        String r = Tuner.maxWindowDecision(CLEAN_MS, 0.40, CLEAN_HEAP, Double.NaN, 0, 0);
+        String r = Tuner.maxWindowDecision(CLEAN_MS, 0.40, CLEAN_HEAP, Double.NaN, 0, 0, Double.NaN);
         assertTrue("NaN must read as no signal: " + r, r.contains("no signal"));
         // the byte slot must read "no signal", never a percent of its own
         String byteSlot = r.substring(r.indexOf("vs ") + 3);
