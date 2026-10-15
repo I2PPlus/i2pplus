@@ -38,27 +38,27 @@ built from a per-platform staging directory under `/tmp/build-i2p/pkg-installer/
 the payload is seeded from `prepUpdate` and then refined per platform (wrapper
 dirs, jbigi natives, scripts, Windows CRLF). All output goes to `dist/`.
 
-| Task                            | Description                                                     | Output                                   |
-| ------------------------------- | --------------------------------------------------------------- | ---------------------------------------- |
-| `./gradlew installer`           | Full all-platform installer (Ant `installer`)                   | `dist/install.jar`                       |
-| `./gradlew installerexe`        | Wrap the full installer in a Windows exe (launch4j)             | `dist/i2pinstall.exe`                    |
-| `./gradlew installer-nowindows` | No-windows installer                                            | `dist/i2pinstall_<ver>.jar`              |
-| `./gradlew installer-linux`     | Linux-only installer                                            | `dist/i2pinstall_<ver>_linux-only.jar`   |
-| `./gradlew installer-freebsd`   | FreeBSD-only installer                                          | `dist/i2pinstall_<ver>_freebsd-only.jar` |
-| `./gradlew installer-osx`       | OSX-only installer                                              | `dist/i2pinstall_<ver>_osx-only.jar`     |
-| `./gradlew installer2app`       | Wrap the OSX installer as a `.app` bundle                       | `dist/i2pinstall_<ver>_osx.tar.bz2`      |
-| `./gradlew installer-windows`   | Windows-only installer exe (skips the broken Ant move)          | `dist/i2pinstall_<ver>_windows.exe`      |
-| `./gradlew installer5*`         | Same family using IzPack 5 (compiler auto-downloaded)          | (same names)                             |
-| `./gradlew installer5exe`       | Windows exe from the IzPack 5 jar (izpack2exe.py, not launch4j) | `dist/i2pinstall.exe`                    |
-| `./gradlew installer-all`       | Build every platform installer                                  |                                          |
-| `./gradlew downloadIzpack5`     | Download or update the IzPack 5 distribution                   |                                          |
-| `./gradlew izpackPanelJar`      | Build the panel jar the IzPack 5 compiler loads `<panel classname=...>` from (Ant `izpack-panel-jar`) | `build/izpack-panel/izpack-i2p.jar` |
+| Task                            | Description                                                                                           | Output                                   |
+| ------------------------------- | ----------------------------------------------------------------------------------------------------- | ---------------------------------------- |
+| `./gradlew installer`           | Full all-platform installer (Ant `installer`)                                                         | `dist/install.jar`                       |
+| `./gradlew installerexe`        | Wrap the full installer in a Windows exe (launch4j)                                                   | `dist/i2pinstall.exe`                    |
+| `./gradlew installer-nowindows` | No-windows installer                                                                                  | `dist/i2pinstall_<ver>.jar`              |
+| `./gradlew installer-linux`     | Linux-only installer                                                                                  | `dist/i2pinstall_<ver>_linux-only.jar`   |
+| `./gradlew installer-freebsd`   | FreeBSD-only installer                                                                                | `dist/i2pinstall_<ver>_freebsd-only.jar` |
+| `./gradlew installer-osx`       | OSX-only installer                                                                                    | `dist/i2pinstall_<ver>_osx-only.jar`     |
+| `./gradlew installer2app`       | Wrap the OSX installer as a `.app` bundle                                                             | `dist/i2pinstall_<ver>_osx.tar.bz2`      |
+| `./gradlew installer-windows`   | Windows-only installer exe (skips the broken Ant move)                                                | `dist/i2pinstall_<ver>_windows.exe`      |
+| `./gradlew installer5*`         | Same family using IzPack 5 (compiler auto-downloaded)                                                 | (same names)                             |
+| `./gradlew installer5exe`       | Windows exe from the IzPack 5 jar (izpack2exe.py, not launch4j)                                       | `dist/i2pinstall.exe`                    |
+| `./gradlew installer-all`       | Build every platform installer                                                                        |                                          |
+| `./gradlew downloadIzpack5`     | Download or update the IzPack 5 distribution                                                          |                                          |
+| `./gradlew izpackPanelJar`      | Build the panel jar the IzPack 5 compiler loads `<panel classname=...>` from (Ant `izpack-panel-jar`) | `build/izpack-panel/izpack-i2p.jar`      |
 
 #### Panel and langpack checks
 
-| Task                              | Description                                                                     |
-| --------------------------------- | ------------------------------------------------------------------------------- |
-| `./gradlew izpackPanelTest`       | Run `LocalizedResourcesTest` against the panel jar. Needs no built installer      |
+| Task                              | Description                                                                           |
+| --------------------------------- | ------------------------------------------------------------------------------------- |
+| `./gradlew izpackPanelTest`       | Run `LocalizedResourcesTest` against the panel jar. Needs no built installer          |
 | `./gradlew izpackBrandingCheck`   | Run `BrandingSuppressedTest` against `dist/install.jar` (Ant `izpack-branding-check`) |
 
 Neither is wired into `installer5`, because `izpackPanelTest` guards the panel
