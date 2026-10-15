@@ -56,12 +56,16 @@
 </p>
 
 <h2>Supported Vendors</h2>
-<table border="1" style="padding:4px;border-collapse:collapse">
+<table class="doc-table">
     <caption>Supported CPU vendors and implementations</caption>
-    <tr><th>Vendor</th><th>Family Range</th><th>Implementation</th></tr>
-    <tr><td>Intel</td><td>Family 4, 6, 7, 15</td><td>IntelInfoImpl</td></tr>
-    <tr><td>AMD</td><td>Family 5–26</td><td>AMDInfoImpl</td></tr>
-    <tr><td>VIA/Centaur</td><td>Family 6 (C3/Nano)</td><td>VIAInfoImpl</td></tr>
+    <thead>
+        <tr><th>Vendor</th><th>Family Range</th><th>Implementation</th></tr>
+    </thead>
+    <tbody>
+        <tr><td>Intel</td><td>Family 4, 6, 7, 15</td><td>IntelInfoImpl</td></tr>
+        <tr><td>AMD</td><td>Family 5–26</td><td>AMDInfoImpl</td></tr>
+        <tr><td>VIA/Centaur</td><td>Family 6 (C3/Nano)</td><td>VIAInfoImpl</td></tr>
+    </tbody>
 </table>
 
 <h2>Callers Within I2P</h2>
