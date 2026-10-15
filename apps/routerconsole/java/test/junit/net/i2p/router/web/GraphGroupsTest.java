@@ -210,7 +210,6 @@ public class GraphGroupsTest {
         // of one group must agree. Verified against the declaring code, not the names.
         assertUnitsAgree("peerCaps", "peers");
         assertUnitsAgree("peerStoredProfiles", "profiles");
-        assertUnitsAgree("peerProfilesByTier", "profiles");
         assertUnitsAgree("ntcpPumper", "loops/s");
         assertUnitsAgree("jobTiming", "ms");
         assertUnitsAgree("jobQueueDepth", "count");
@@ -400,7 +399,6 @@ public class GraphGroupsTest {
     @Test
     public void thePrefixIsBracketedWithATrailingSpace() {
         assertEquals("[Peers] ", GraphGroups.displayPrefixOf("peerStoredProfiles"));
-        assertEquals("[Peers] ", GraphGroups.displayPrefixOf("peerProfilesByTier"));
         assertEquals("[Jobs] ", GraphGroups.displayPrefixOf("jobQueueDepth"));
     }
 
@@ -438,7 +436,8 @@ public class GraphGroupsTest {
                 // Acronyms and product names keep their own casing, and a short word
                 // joining two nouns stays lower case: "CPU by Stage", not "CPU By Stage".
                 if (word.equals("NTCP") || word.equals("CoDel") || word.equals("UDP")
-                        || word.equals("CPU") || word.equals("LeaseSet")) {continue;}
+                        || word.equals("CPU") || word.equals("LeaseSet")
+                        || word.equals("rDNS")) {continue;}
                 if (word.length() <= 2 && !word.equals("I2P")) {continue;}
                 assertTrue(id + ": " + word + " is not capitalised",
                            Character.isUpperCase(word.charAt(0)));

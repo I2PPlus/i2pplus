@@ -328,10 +328,10 @@ public final class GraphGroups {
         t.put("buildInboundOutcome", "Inbound Build Success");
         t.put("buildOutboundOutcome", "Outbound Build Success");
         t.put("buildSuccessByDirection", "Build Success Average (Combined)");
-        t.put("buildOutcomeRate", "Build Success and Rejection Rates");
+        t.put("buildOutcomeRate", "Build Success & Rejection Rates");
         t.put("bwMessageRate", "Message Bandwidth");
         t.put("rdnsExecutor", "rDNS Executor");
-        t.put("ntcpSendFinisher", "NTCP Send Finisher");
+        t.put("ntcpSendFinisher", "Send Finisher");
         t.put("buildRejectBanned", "Builds Refused as Banned");
         t.put("netDbLookupTime", "Lookup Time");
         t.put("udpRto", "UDP Retransmission Timeouts");
