@@ -38,7 +38,10 @@ import { refreshElements } from "/js/refreshElements.js";
      * @returns {void}
      */
     const initRefresh = () => {
-      if (countries) { refreshElements("#netdboverview table tbody", url, REFRESH_INTERVAL_SHORT); }
+      if (countries) {
+        refreshElements("#netdbcountrylist tbody", url, REFRESH_INTERVAL_SHORT);
+        refreshElements("#netdbversions, #netdbtiers, #netdbcongestion, #netdbtransports", url, REFRESH_INTERVAL_SHORT);
+      }
       else if (hasRI) { refreshElements(".netdbentry", url, REFRESH_INTERVAL); }
     };
 

@@ -190,7 +190,10 @@ function positionKey(el) {
     parts.unshift(Array.prototype.indexOf.call(parent.children, node));
     // Stop climbing at an identified ancestor: everything above it is the page
     // skeleton, and everything below it is the part that shifts.
-    if (parent.id) { break; }
+    if (parent.id) {
+      parts.unshift(parent.id);
+      break;
+    }
     node = parent;
   }
   return parts.join("/");
