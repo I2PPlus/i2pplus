@@ -961,7 +961,7 @@ public class I2PTunnelRunner extends I2PAppThread implements DoneCallback {
         }
         if (_log.shouldLog(Log.DEBUG)) {
             _log.debug("No data received from peer" + (e != null ? " (" + e + ")" : "") +
-                       " -> invoking failure callback, totalSent=" + totalSent);
+                       " -> Invoking failure callback, totalSent: " + totalSent);
         }
         if (_onFail != null) {
             _onFail.onFail(e);
@@ -2040,7 +2040,7 @@ public class I2PTunnelRunner extends I2PAppThread implements DoneCallback {
             _keepAliveSocket = false;
             onNoDataFailure(ex);
         } catch (IllegalStateException ise) {
-            if (_log.shouldWarn()) {_log.warn("gnu?", ise);}
+            if (_log.shouldWarn()) {_log.warn("I2CP session error", ise);}
             _keepAliveI2P = false;
             _keepAliveSocket = false;
             onNoDataFailure(ise);
@@ -2174,8 +2174,8 @@ public class I2PTunnelRunner extends I2PAppThread implements DoneCallback {
          */
         @Override
         public void run() {
-            String from = i2ps.getThisDestination().calculateHash().toBase64().substring(0,8);
-            String to = i2ps.getPeerDestination().calculateHash().toBase64().substring(0,8);
+            String from = i2ps.getThisDestination().calculateHash().toBase64().substring(0,6);
+            String to = i2ps.getPeerDestination().calculateHash().toBase64().substring(0,6);
 
             if (_log.shouldLog(Log.DEBUG)) {_log.debug(direction + " Forwarding between [" + from + "] and [" + to + "]");}
 

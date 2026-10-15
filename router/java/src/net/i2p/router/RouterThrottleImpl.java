@@ -237,13 +237,14 @@ public class RouterThrottleImpl implements RouterThrottle {
                     int v = _context.random().nextInt(100);
                     if (v < probAccept*100) { // ok
                         if (_log.shouldInfo()) {
-                            _log.info("Probabalistically accepting Tunnel Request (p=" + probAccept
-                                      + " v=" + v + " avg=" + avg + " current=" + numTunnels + ")");
+                            _log.info("Probabalistically accepting Tunnel Request (p: " + probAccept
+                                      + " v: " + v + " avg: " + avg
+                                      + " current: " + numTunnels + ")");
                         }
                     } else {
                         if (_log.shouldWarn()) {
-                            _log.warn("Probabalistically refusing Tunnel Request (avg=" + avg
-                                      + " current=" + numTunnels + ")");
+                            _log.warn("Probabalistically refusing Tunnel Request (avg: " + avg
+                                      + " current: " + numTunnels + ")");
                         }
                         if (probAccept <= 0.5) {
                             setTunnelStatus("[rejecting/overload]" + _x("Rejecting most tunnel requests" + ":<br>" + _x("High number of requests")));
@@ -275,8 +276,8 @@ public class RouterThrottleImpl implements RouterThrottle {
                 probAccept = probAccept * probAccept; // square the decelerator for test times
                 int v = _context.random().nextInt(100);
                 if (v < probAccept*100 && _log.shouldInfo()) { // ok
-                    _log.info("Probabalistically accepting Tunnel Request (p=" + probAccept
-                              + " v=" + v + " test time avg 1m=" + avg1m + " 1h=" + avg1h + ")");
+                    _log.info("Probabalistically accepting Tunnel Request (p: " + probAccept
+                              + " v: " + v + " test time avg 1m: " + avg1m + " 1h: " + avg1h + ")");
                 }
             }
         }
@@ -397,8 +398,10 @@ public class RouterThrottleImpl implements RouterThrottle {
             probReject = 1;
             reject = true;
             _log.warn("Rejecting participating tunnel -> Insufficient bandwidth available" +
-                      "\n* Available: " + availBps + "; Maximum allocated: " + maxKBps + "; In use: " + used +
-                      "\n* Active tunnels: " + numTunnels + "; Estimated bandwidth required = " + bytesAllocated);
+                      "\n* Available: " + availBps + " * Maximum allocated: " + maxKBps +
+                      " * In use: " + used +
+                      "\n* Active tunnels: " + numTunnels +
+                      " * Estimated bandwidth required: " + bytesAllocated);
         } else {
             // limit at 90% - 4KBps (see above)
             float maxBps = (maxKBps * 1024f * 0.9f) - MIN_AVAILABLE_BPS;
@@ -408,8 +411,8 @@ public class RouterThrottleImpl implements RouterThrottle {
                 reject = false;
                 if (_log.shouldDebug()) {
                     _log.debug("Accept avail / maxK / used " + availBps + " / " + maxKBps + " / "
-                               + used + "\n* pReject = 0 numTunnels = " + numTunnels
-                               + " est = " + bytesAllocated);
+                               + used + "\n* pReject: 0 * numTunnels: " + numTunnels
+                               + " * est: " + bytesAllocated);
                 }
             } else {
                 // Configurable steepness of rejection curve (default: 10)
@@ -424,13 +427,15 @@ public class RouterThrottleImpl implements RouterThrottle {
                 if (reject) {
                     if (_log.shouldWarn()) {
                         _log.warn("Reject avail / maxK / used " + availBps + " / " + maxKBps + " / " +
-                                  used + "\n* pReject = " + probReject + " pFull = " + pctFull + " numTunnels = " + numTunnels +
-                                  " rand = " + rand + " est = " + bytesAllocated);
+                                  used + "\n* pReject: " + probReject + " * pFull: " + pctFull +
+                                  " * numTunnels: " + numTunnels +
+                                  " * rand: " + rand + " * est: " + bytesAllocated);
                     }
                 } else if (_log.shouldDebug()) {
                     _log.debug("Accept avail / maxK / used " + availBps + " / " + maxKBps + " / "
-                           + used + "\n* pReject = " + probReject + " pFull = " + pctFull + " numTunnels = " + numTunnels
-                           + " rand = " + rand + " est = " + bytesAllocated);
+                           + used + "\n* pReject: " + probReject + " * pFull: " + pctFull +
+                           " * numTunnels: " + numTunnels
+                           + " * rand: " + rand + " * est: " + bytesAllocated);
                 }
             }
         }

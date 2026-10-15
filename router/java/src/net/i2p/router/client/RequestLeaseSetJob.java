@@ -190,8 +190,9 @@ class RequestLeaseSetJob extends JobImpl {
         SessionId id = _runner.getSessionId(dest.calculateHash());
         if (id == null) {
             if (_log.shouldWarn())
-                _log.warn("No SessionId for destination " + dest.calculateHash().toBase32().substring(0,8) +
-                          " in RequestLeaseSetJob");
+                _log.warn("No SessionId for destination [" +
+                          dest.calculateHash().toBase32().substring(0,8) +
+                          "] in RequestLeaseSetJob");
             failEarlyRequest("No SessionId for destination");
             return;
         }
@@ -270,7 +271,7 @@ class RequestLeaseSetJob extends JobImpl {
                 long nextWait = waitMs * attempt * 2;
                 if (_log.shouldWarn())
                     _log.warn("I2CP queue full sending the LeaseSet request (attempt " +
-                              attempt + " of " + attempts + ") -> retrying in " + nextWait +
+                              attempt + " of " + attempts + ") -> Retrying in " + nextWait +
                               "ms [" + ime.getMessage() + "]");
                 try {
                     Thread.sleep(nextWait);
@@ -282,9 +283,9 @@ class RequestLeaseSetJob extends JobImpl {
         }
         getContext().statManager().addRateData("client.requestLeaseSetDropped", 1);
         _log.warn("Giving up on the LeaseSet request after " + attempts +
-                  " attempts -> the client is not draining its I2CP queue" +
+                  " attempts -> The client is not draining its I2CP queue" +
                   (lastFailure != null ? " [" + lastFailure.getMessage() + "]" : "") +
-                  " " + _requestState);
+                  "\n* " + _requestState);
         failEarlyRequest("Error sending I2CP message");
     }
 

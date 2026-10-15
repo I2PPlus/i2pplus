@@ -229,8 +229,8 @@ public class TransportManager implements TransportEventListener {
         String proxy = System.getProperty(PROP_JAVA_PROXY1);
         if (proxy != null && !proxy.isEmpty()) {
             String msg = "UPnP disabled by system property " + PROP_JAVA_PROXY1 + '=' + proxy +
-                         "\nI2P connections will not be proxied." +
-                         "\nReseeding will be proxied.";
+                         "\n* I2P connections will not be proxied." +
+                         "\n* Reseeding will be proxied.";
             _log.logAlways(Log.WARN, msg);
             rv = true;
         } else if (!SystemVersion.isMac() && Boolean.parseBoolean(System.getProperty(PROP_JAVA_PROXY2))) {
@@ -242,8 +242,8 @@ public class TransportManager implements TransportEventListener {
                 List<Proxy> p = ps.select(new URI("socket://192.168.1.1:1234"));
                 if (p.get(0).type() != Proxy.Type.DIRECT) {
                     String msg = "UPnP disabled by system property " + PROP_JAVA_PROXY2 + "=true" +
-                                 "\nI2P connections will not be proxied." +
-                                 "\nReseeding will be proxied.";
+                                 "\n* I2P connections will not be proxied." +
+                                 "\n* Reseeding will be proxied.";
                     _log.logAlways(Log.WARN, msg);
                     rv = true;
                 } else {
@@ -1261,7 +1261,8 @@ public class TransportManager implements TransportEventListener {
                         // misbehaviour we never observed. The stat on the line above is
                         // already recorded, so the case remains visible in the aggregate.
                         if (_log.shouldWarn())
-                            _log.warn("Unreachable on any transport -> not banned (no ghost manager yet) [" +
+                            _log.warn("Unreachable on any transport -> Not banned" +
+                                      " (no ghost manager yet) [" +
                                                           peer.toBase64().substring(0,6) + "]");
                     }
                 }

@@ -324,8 +324,9 @@ public final class ECIESAEADEngine {
             } else {
                 decrypted = null;
                 if (_log.shouldWarn()) {
-                    _log.warn("NewSessionReply decryption failure -> Tag found but no state and too small (" +
-                              data.length + " bytes) for NewSessionReply (minimum " + (KEYLEN + KEYLEN + MACLEN + MACLEN) + " bytes)");
+                    _log.warn("NewSessionReply decryption failure -> Tag found but no state" +
+                              "\n* Too small: " + data.length + " bytes for NewSessionReply" +
+                              " (minimum " + (KEYLEN + KEYLEN + MACLEN + MACLEN) + " bytes)");
                 }
             }
             if (decrypted == null) {
@@ -840,7 +841,7 @@ public final class ECIESAEADEngine {
         if (k == null) {
             // very unlikely
             if (_log.shouldDebug())
-                _log.debug("ElG2 decode fail NewSessionReply");
+                _log.debug("ElGamal2 decryption failed for NewSessionReply");
             data[TAGLEN + KEYLEN - 1] = yy31;
             state.destroy();
             return null;
@@ -1160,9 +1161,11 @@ public final class ECIESAEADEngine {
             if (_log.shouldWarn())
                 _log.warn("ECIES ExistingSession encryption failure");
         } else if (_log.shouldDebug())
-            _log.debug("Encrypting as ExistingSession\n * To: " + target + "\n* Key " + re.key + "\n* Tag: " + re.tag.toBase64() +
-                       (re.nextForwardKey != null ? " fwd key: " + re.nextForwardKey : "") +
-                       (re.nextReverseKey != null ? " rev key: " + re.nextReverseKey : "") + " -> " + rv.length + " bytes");
+            _log.debug("Encrypting as ExistingSession\n* To: " + target + "\n* Key: " + re.key +
+                       "\n* Tag: " + re.tag.toBase64() +
+                       (re.nextForwardKey != null ? "\n* Forward key: " + re.nextForwardKey : "") +
+                       (re.nextReverseKey != null ? "\n* Reverse key: " + re.nextReverseKey : "") +
+                       "\n* Result: " + rv.length + " bytes");
         return rv;
     }
 
@@ -1578,7 +1581,7 @@ public final class ECIESAEADEngine {
             if (skm != null)
                 skm.receivedACK(remote, id, n);
             else if (_log.shouldWarn())
-                _log.warn("ACK in NS/NSR?");
+                _log.warn("ACK received during NewSession or NewSessionReply -> Ignored");
         }
         /** Process an ack request field from the payload */
 

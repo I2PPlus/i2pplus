@@ -285,7 +285,9 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                         if (_log.shouldWarn()) {
                             logged = true;
                             _log.warn("Dropping unsolicited NetDbStore of " + cap + (isFF ? " Floodfill" : " Router") +
-                                      " [" + key.toBase64().substring(0,6) + "] and banning for 24h -> Invalid Router version: " + v);
+                                      " [" + key.toBase64().substring(0,6) + "]" +
+                                      " and banning for 24h" +
+                                      "\n* Invalid Router version: " + v);
                             getContext().banlist().banlistRouter(key, "Invalid Router version (" + v + ")", null, null, now + 24L * 60 * 60 * 1000);
                             _banLogger.logBan(key, _riIP, "Invalid Router version (" + v + ")", 24L * 60 * 60 * 1000, ri);
                         }
@@ -350,9 +352,14 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                                             if (_log.shouldWarn() && !logged) {
                                                 logged = true;
                                                 int percentage = Math.min(pdrop * 100 / 128, 100);
-                                                _log.warn("Dropping unsolicited NetDbStore of new " + cap + (isFF ? " Floodfill" : " Router") +
-                                                          " [" + key.toBase64().substring(0,6) + "] with distance " + distance +
-                                                          " -> Drop probability: " + percentage + "%");
+                                                _log.warn("Dropping unsolicited NetDbStore" +
+                                                          " of new " + cap +
+                                                          (isFF ? " Floodfill" : " Router") +
+                                                          " [" +
+                                                          key.toBase64().substring(0,6) + "]" +
+                                                          " with distance " + distance +
+                                                          "\n* Drop probability: " +
+                                                          percentage + "%");
                                             }
                                             shouldStore = false;
                                             if (_message.getReplyToken() > 0) {wasNew = true;} // still flood if requested
@@ -422,14 +429,17 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                     else {
                         if (_log.shouldInfo()) {
                             _log.info("[" + _facade + "]"
-                                      + " Newer RouterInfo [" + key.toBase64().substring(0,6) + "] encountered in DbStore Message"
-                                      + ") with a newer published date (" + ri.getPublished() + ") than our local copy ("
-                                      + prevNetDb.getPublished() + ")");
+                                      + " Newer RouterInfo [" + key.toBase64().substring(0,6) + "]"
+                                      + " encountered in DbStore Message"
+                                      + "\n* Published date: " + ri.getPublished() +
+                                      " is newer than local copy: " + prevNetDb.getPublished());
                         }
                         if (!ri.getIdentity().getPublicKey().equals(prevNetDb.getIdentity().getPublicKey())) {
                             if (_log.shouldWarn()) {
                                 _log.warn("Dropping unsolicited NetDbStore of " + cap + (isFF ? " Floodfill" : " Router") +
-                                          " [" + key.toBase64().substring(0,6) + "] and banning for 8h -> Inconsistent public keys");
+                                          " [" + key.toBase64().substring(0,6) + "]" +
+                                          " and banning for 8h" +
+                                          "\n* Inconsistent public keys");
                             }
                             getContext().banlist().banlistRouter(key, "Inconsistent public keys", null, null, now + 8L * 60 * 60 * 1000);
                             _banLogger.logBan(key, _riIP, "Inconsistent public keys", 8L * 60 * 60 * 1000, ri);
@@ -437,7 +447,9 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                         } else if (!ri.getIdentity().getSigningPublicKey().equals(prevNetDb.getIdentity().getSigningPublicKey())) {
                             if (_log.shouldWarn()) {
                                 _log.warn("Dropping unsolicited NetDbStore of " + cap + (isFF ? " Floodfill" : " Router") +
-                                          " [" + key.toBase64().substring(0,6) + "] and banning for 8h -> Inconsistent signing keys");
+                                          " [" + key.toBase64().substring(0,6) + "]" +
+                                          " and banning for 8h" +
+                                          "\n* Inconsistent signing keys");
                             }
                             getContext().banlist().banlistRouter(key, "Inconsistent signing keys", null, null, now + 8L * 60 * 60 * 1000);
                             _banLogger.logBan(key, _riIP, "Inconsistent signing keys", 8L * 60 * 60 * 1000, ri);

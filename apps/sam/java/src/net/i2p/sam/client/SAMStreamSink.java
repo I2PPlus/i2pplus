@@ -390,7 +390,7 @@ public class SAMStreamSink {
                                             dest[dlen++] = b;
                                         } else if (dlen == dest.length) {
                                             dlen++;
-                                            _log.error("first line overflow on accept");
+                                            _log.error("First line overflow on accept");
                                         }
                                     }
                                 }
@@ -471,7 +471,7 @@ public class SAMStreamSink {
                 if (_log.shouldDebug())
                     _log.debug("Connection " + sink.getConnectionId() + " closed to " + sink.getDestination());
             } else {
-                _log.error("not connected to " + id + " but we were just closed?");
+                _log.error("Not connected to " + id + " but the connection was just closed?");
             }
         }
 
@@ -487,7 +487,7 @@ public class SAMStreamSink {
             if (sink != null) {
                 sink.received(data, offset, length);
             } else {
-                _log.error("not connected to " + id + " but we received " + length + "?");
+                _log.error("Not connected to " + id + " but received " + length + "?");
             }
         }
 
@@ -535,7 +535,7 @@ public class SAMStreamSink {
             Sink sink;
             synchronized (_remotePeers) {
                 if (_remotePeers.isEmpty()) {
-                    _log.error("not connected but we received datagram " + length + "?");
+                    _log.error("Not connected but received datagram " + length + "?");
                     return;
                 }
                 sink = _remotePeers.values().iterator().next();
@@ -552,7 +552,7 @@ public class SAMStreamSink {
             Sink sink;
             synchronized (_remotePeers) {
                 if (_remotePeers.isEmpty()) {
-                    _log.error("not connected but we received raw " + length + "?");
+                    _log.error("Not connected but received raw " + length + "?");
                     return;
                 }
                 sink = _remotePeers.values().iterator().next();
@@ -620,7 +620,7 @@ public class SAMStreamSink {
                                     dest[dlen++] = b;
                                 } else if (dlen == dest.length) {
                                     dlen++;
-                                    _log.error("first line overflow on accept");
+                                    _log.error("First line overflow on accept");
                                 }
                             }
                         }
@@ -892,7 +892,7 @@ public class SAMStreamSink {
 
             File out = File.createTempFile("sink", ".dat", sinkDir);
             if (_log.shouldWarn())
-                _log.warn("outputting to " + out);
+                _log.warn("Outputting to " + out);
             _out = new FileOutputStream(out);
             _started = _context.clock().now();
         }

@@ -768,7 +768,8 @@ public class SSLEepGet extends EepGet {
                     else
                         _proxy = ((SSLSocketFactory) SSLSocketFactory.getDefault())
                                 .createSocket(_proxy, host, port, true);
-                    if (_log.shouldDebug()) _log.debug(_proxyType + " proxy headers read completely");
+                    if (_log.shouldDebug())
+                        _log.debug("Proxy headers read completely for " + _proxyType);
                 } else if (ip != null) {
                     // DoH, create the socket with the IP, then create the SSL socket with the host
                     // So that SNI and cert validation works

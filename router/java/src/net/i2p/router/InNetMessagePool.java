@@ -260,8 +260,9 @@ public class InNetMessagePool implements Service {
                 if (job != null) {
                     if (_log.shouldLog(Log.DEBUG)) {
                         _log.debug("Setting ReplyJob (" + job + ") for original message: " + omsg +
-                            "; with reply message [id: " + messageBody.getUniqueId() + " Class: " +
-                            messageBody.getClass().getSimpleName() + "] full message: " + messageBody);
+                            "\n* With reply message id: " + messageBody.getUniqueId() +
+                            " * Class: " + messageBody.getClass().getSimpleName() +
+                            "\n* Full message: " + messageBody);
                     } else if (_log.shouldLog(Log.INFO)) {
                         _log.info("Setting a ReplyJob (" + job + ") for original message class " +
                             omsg.getClass().getSimpleName() + " with reply message class " +
@@ -277,8 +278,9 @@ public class InNetMessagePool implements Service {
             }
         }
         if (_log.shouldLog(Log.DEBUG)) {
-            _log.debug("Finished processing DeliveryStatusMessage (allowMatches = false) from Router " + fromRouter +
-                " / " + fromRouterHash + " origMessages.size() = " + sz + " message: " + messageBody);
+            _log.debug("Finished processing DeliveryStatusMessage (allowMatches: false)" +
+                " from Router " + fromRouter + " / " + fromRouterHash +
+                "\n* origMessages.size: " + sz + " * message: " + messageBody);
         }
         return true; // jobFound
     }

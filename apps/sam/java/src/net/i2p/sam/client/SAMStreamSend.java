@@ -265,7 +265,7 @@ public class SAMStreamSend {
                 if (_log.shouldDebug())
                     _log.debug("Connection " + sender.getConnectionId() + " closed to " + sender.getDestination());
             } else {
-                _log.error("not connected to " + id + " but we were just closed?");
+                _log.error("Not connected to " + id + " but the connection was just closed?");
             }
         }
     }
@@ -486,7 +486,7 @@ public class SAMStreamSend {
                         _samOut.write(msg);
                         _samOut.flush();
                     }
-                    _log.debug("STREAM CONNECT sent, waiting for STREAM STATUS...");
+                    _log.debug("STREAM CONNECT sent, waiting for STREAM STATUS");
                     boolean ok = _eventHandler.waitForStreamStatusReply();
                     if (!ok)
                         throw new IOException("STREAM CONNECT failed");

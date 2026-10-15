@@ -624,9 +624,10 @@ class FloodfillVerifyStoreJob extends JobImpl {
      */
     private void failStoreCheck(StoreCheckResult result, long delayMs) {
         if (_log.shouldWarn()) {
-            _log.warn("Floodfill store check failed for [" + _key.toBase32().substring(0,8) + "] -> Store peer [" +
-                      _target.toBase64().substring(0,6) + "] " +
-                      (result == StoreCheckResult.MISSING ? "doesn't have the key" : "returned a stale entry"));
+            _log.warn("Floodfill store check failed for [" + _key.toBase32().substring(0,8) +
+                      "] -> Store peer [" + _target.toBase64().substring(0,6) + "] " +
+                      (result == StoreCheckResult.MISSING ? "doesn't have the key"
+                                                          : "returned a stale entry"));
         }
         if (_sentTo != null) {getContext().profileManager().dbStoreFailed(_sentTo);}
         getContext().statManager().addRateData("netDb.floodfillVerifyPhase1Fail", delayMs);

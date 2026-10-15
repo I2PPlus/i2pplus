@@ -574,7 +574,7 @@ class SAMv3Handler extends SAMv1Handler
         SessionRecord rec = null;
 
         if ( session != null ) {
-            _log.error("v3 control socket cannot be used for STREAM");
+            _log.error("V3 control socket cannot be used for STREAM");
             try {
                 notifyStreamResult(true, "I2P_ERROR", "v3 control socket cannot be used for STREAM");
             } catch (IOException e) { /* ignored */ }

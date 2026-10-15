@@ -124,7 +124,7 @@ public class DeadlockDetector extends SimpleTimer2.TimedEvent {
         } catch (Throwable t) {
             // class not found, unsupportedoperation, ...
             Log log = ctx.logManager().getLog(DeadlockDetector.class);
-            log.warn("fail", t);
+            log.warn("Fail", t);
             return false;
         }
         return true;

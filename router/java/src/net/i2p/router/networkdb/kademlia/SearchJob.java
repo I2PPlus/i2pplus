@@ -449,7 +449,7 @@ public class SearchJob extends JobImpl {
     private List<Hash> getClosestRouters(Hash key, int numClosest, Set<Hash> alreadyChecked) {
         Hash rkey = getContext().routingKeyGenerator().getRoutingKey(key);
         if (_log.shouldDebug()) {
-            _log.debug("Checked current routing key [" + rkey.toBase64().substring(0,10) +
+            _log.debug("Checked current routing key [" + rkey.toBase64().substring(0,6) +
                        "] for [" + key.toBase64().substring(0,6) + "]");
         }
         return _peerSelector.selectNearestExplicit(rkey, numClosest, alreadyChecked, _facade.getKBuckets());
@@ -857,7 +857,7 @@ public class SearchJob extends JobImpl {
         if (!ok) {
             // race between adding deferred and search completing
             if (_log.shouldWarn()) {
-                _log.warn("Race deferred before searchCompleting?  our onFind=" + _onSuccess + " new one: " + onFind);
+                _log.warn("Deferred race before searchCompleting * our onFind: " + _onSuccess + " * new one: " + onFind);
             }
             // the following /shouldn't/ be necessary, but it doesn't hurt
             _facade.searchComplete(_state.getTarget());

@@ -648,7 +648,8 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
                 break;
             }
             if (_log.shouldWarn()) {
-                _log.warn("Skipping UNREACHABLE Gateway [" + l.getGateway().toBase64().substring(0,8) + "] for " + _toString);
+                _log.warn("Skipping UNREACHABLE gateway [" +
+                          l.getGateway().toBase64().substring(0,6) + "] for " + _toString);
             }
         }
         if (_lease == null) {
@@ -854,8 +855,8 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
         }
         if (_log.shouldInfo()) {
             _log.info("Dispatching to " + _toString + " via OB tunnel " + _outTunnel.getSendTunnelId(0) +
-                      " -> lease tunnel " + _lease.getTunnelId() + " @ GW [" +
-                      _lease.getGateway().toBase32().substring(0, 6) + "]");
+                      " -> Lease tunnel " + _lease.getTunnelId() + " @ GW [" +
+                      _lease.getGateway().toBase64().substring(0, 6) + "]");
         }
 
         DispatchJob dispatchJob = new DispatchJob(msg, selector, onReply, onFail);
@@ -941,12 +942,16 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
                 }
                 if (_log.shouldDebug()) {
                     _log.debug("[Job " + OutboundClientMessageOneShotJob.this.getJobId()
-                              + "] Dispatch details: outTunnel=" + _outTunnel
-                              + " sendTunnelId=" + (_outTunnel != null ? _outTunnel.getSendTunnelId(0) : "null")
-                              + " lease=" + _lease
-                              + " leaseGateway=" + (_lease != null ? _lease.getGateway() : "null")
-                              + " leaseTunnelId=" + (_lease != null ? _lease.getTunnelId() : "null")
-                              + " msgSize=" + (_msg != null ? _msg.getMessageSize() : 0));
+                              + "] Dispatch details" +
+                              "\n* outTunnel: " + _outTunnel +
+                              " * sendTunnelId: " +
+                              (_outTunnel != null ? _outTunnel.getSendTunnelId(0) : "null") +
+                              "\n* lease: " + _lease +
+                              " * leaseTunnelId: " +
+                              (_lease != null ? _lease.getTunnelId() : "null") +
+                              " * msgSize: " + (_msg != null ? _msg.getMessageSize() : 0) +
+                              "\n* leaseGateway: " +
+                              (_lease != null ? _lease.getGateway() : "null"));
                 }
                 TunnelInfo failover = selectOutboundTunnel(_to);
                 if (failover != null && !failover.equals(_outTunnel)) {
@@ -1120,8 +1125,9 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
              _cache.tunnelCache.remove(_hashPair);
              _cache.tunnelStartTime.remove(_hashPair);
              if (_log.shouldWarn()) {
-                 _log.warn("New connection -> rotation saturated for " + _toString
-                           + ", evicting outbound tunnel [" + cached + "] so the retry re-selects");
+                  _log.warn("New connection -> Rotation saturated for " + _toString
+                            + " -> Evicting outbound tunnel"
+                            + "\n* " + cached + " so the retry re-selects");
              }
              return null;
          }
@@ -1129,7 +1135,8 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
         _cache.tunnelStartTime.put(_hashPair, Long.valueOf(getContext().clock().now()));
         _wantACK = true;
         if (_log.shouldWarn()) {
-            _log.warn("New connection -> rotating outbound tunnel to [" + rotated + "] for " + _toString);
+             _log.warn("New connection -> Rotating outbound tunnel for " + _toString
+                       + "\n* " + rotated);
         }
         return rotated;
     }
@@ -1202,17 +1209,17 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
         }
         if (_log.shouldWarn()) {
             String lsInfo = _leaseSet != null ?
-                ("LS=" + _leaseSet.getHash().toBase32().substring(0, 8) +
-                 " leases=" + _leaseSet.getLeaseCount() +
-                 " current=" + _leaseSet.isCurrent(Router.CLOCK_FUDGE_FACTOR)) :
-                "LS=null";
+                ("LS: [" + _leaseSet.getHash().toBase32().substring(0, 8) + "]" +
+                 " * leases: " + _leaseSet.getLeaseCount() +
+                 " * current: " + _leaseSet.isCurrent(Router.CLOCK_FUDGE_FACTOR)) :
+                "LS: null";
             if (!statusToString.isEmpty() && !statusToString.equals("Unknown status")) {
                 // LS-not-found is routine (cooldown, negative cache) — demote to info;
                 // LookupLeaseSetFailedJob or the cooldown skip already logged at info.
                 int level = (status == MessageStatusMessage.STATUS_SEND_FAILURE_NO_LEASESET)
                     ? Log.INFO : Log.WARN;
                 _log.log(level, "Send FAIL to " + _toString + " after " + sendTime + "ms -> " +
-                          statusToString + " (" + lsInfo + ")");
+                          statusToString + "\n* " + lsInfo);
             } else {
                 _log.warn("Sending of " + _clientMessageId + " to " + _toString +
                           " failed after " + sendTime + "ms (Status code: " + status + ")");

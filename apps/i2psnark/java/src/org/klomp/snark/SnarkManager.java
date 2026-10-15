@@ -2813,9 +2813,9 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
             }
             if (_log.shouldDebug()) {
                 _log.debug(
-                        "i2cp host ["
+                        "I2CP host ["
                                 + i2cpHost
-                                + "] i2cp port "
+                                + "] I2CP port "
                                 + port
                                 + " opts ["
                                 + opts

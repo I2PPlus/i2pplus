@@ -243,10 +243,10 @@ class JobQueueScaler implements Runnable {
         finalMax = Math.max(getMinRunnersDynamic(), finalMax);
 
         if (_log.shouldInfo()) {
-            _log.info("Max runners calculation: configured=" + configuredMax +
-                     ", target=" + targetMax + ", ramBased=" + ramBasedMax +
-                     ", freeMemBased=" + freeMemoryBasedMax + ", final=" + finalMax +
-                     " (maxMemory=" + (maxMemory/MB) + "MB, used=" + (usedMemory/MB) + "MB)");
+            _log.info("Max runners calculation: configured: " + configuredMax +
+                     " * target: " + targetMax + " * ramBased: " + ramBasedMax +
+                     "\n* freeMemBased: " + freeMemoryBasedMax + " * final: " + finalMax +
+                     " * maxMemory: " + (maxMemory/MB) + "MB * used: " + (usedMemory/MB) + "MB");
         }
 
         return finalMax;
@@ -585,8 +585,9 @@ class JobQueueScaler implements Runnable {
             if (_loadEpisodeStart == 0) {
                 _loadEpisodeStart = now;
                 if (_log.shouldDebug()) {
-                    _log.debug("Load episode started: maxLag=" + maxLag + "ms (>" + maxLagThreshold +
-                               "), messageDelay=" + messageDelay + "ms (>" + msgDelayThresholdRec + ")");
+                    _log.debug("Load episode started: maxLag: " + maxLag + "ms" +
+                               " (>" + maxLagThreshold + ") * messageDelay: " + messageDelay +
+                               "ms (>" + msgDelayThresholdRec + ")");
                 }
             }
         } else if (_loadEpisodeStart > 0) {
@@ -595,8 +596,9 @@ class JobQueueScaler implements Runnable {
                 _context.statManager().addRateData("jobQueue.loadRecoveryTime", recoveryTime);
                 _lastRecoveryTime = recoveryTime;
                 if (_log.shouldInfo()) {
-                    _log.info("Load episode recovered in " + recoveryTime + "ms (maxLag=" + maxLag +
-                              "ms, msgDelay=" + messageDelay + "ms)");
+                    _log.info("Load episode recovered in " + recoveryTime + "ms" +
+                              " (maxLag: " + maxLag + "ms," +
+                              " msgDelay: " + messageDelay + "ms)");
                 }
             }
             _loadEpisodeStart = 0;
@@ -614,16 +616,22 @@ class JobQueueScaler implements Runnable {
 
         // Debug logging every 10 seconds to trace scaler decisions
         if (_log.shouldDebug() && (_periodicCheckCount % 10 == 0)) {
-            _log.debug("JobQueueScaler check: runners=" + activeRunners + "/" + maxRunners +
-                      ", readyJobs=" + readyJobs + ", maxLag=" + maxLag + "ms, avgLag=" + avgLag + "ms, " +
-                      "messageDelay=" + messageDelay + "ms, baselineDelay=" + baselineMsgDelay + "ms, " +
-                      "cpuLoad=" + cpuLoad + "%, gcPause=" + gcPause + "ms, bwDelay=" + bwDelay + "ms, " +
-                      "queueGrowth=" + queueGrowth + ", delayDelta=" + delayDelta + ", " +
-                      "activeJobMaxDuration=" + activeJobMaxDuration + "ms, avgJobDuration=" + avgJobDuration + "ms, " +
-                      "inCooldown=" + inCooldown + ", timeSinceLastScale=" + timeSinceLastScale + "ms, " +
-                      "scalingDisabled=" + _scalingUpDisabled + ", extendedCooldown=" + _isInExtendedCooldown +
-                      ", preScaleSnapshot=" + (_preScaleSnapshot != null) +
-                      ", droppedJobs=" + jobsBeingDropped);
+            _log.debug("JobQueueScaler check: runners: " + activeRunners + "/" + maxRunners +
+                      " * readyJobs: " + readyJobs + " * maxLag: " + maxLag + "ms" +
+                      " * avgLag: " + avgLag + "ms" +
+                      "\n* messageDelay: " + messageDelay + "ms" +
+                      " * baselineDelay: " + baselineMsgDelay + "ms" +
+                      " * cpuLoad: " + cpuLoad + "% * gcPause: " + gcPause + "ms" +
+                      " * bwDelay: " + bwDelay + "ms" +
+                      "\n* queueGrowth: " + queueGrowth + " * delayDelta: " + delayDelta +
+                      " * activeJobMaxDuration: " + activeJobMaxDuration + "ms" +
+                      " * avgJobDuration: " + avgJobDuration + "ms" +
+                      "\n* inCooldown: " + inCooldown +
+                      " * timeSinceLastScale: " + timeSinceLastScale + "ms" +
+                      "\n* scalingDisabled: " + _scalingUpDisabled +
+                      " * extendedCooldown: " + _isInExtendedCooldown +
+                      " * preScaleSnapshot: " + (_preScaleSnapshot != null) +
+                      " * droppedJobs: " + jobsBeingDropped);
         }
 
         // Check if we need to evaluate feedback from last scale-up
@@ -648,13 +656,13 @@ class JobQueueScaler implements Runnable {
                 _consecutiveFailedScaleUps = 0;
                 _isInExtendedCooldown = false;
                 if (_log.shouldInfo()) {
-                    _log.info("CIRCUIT BREAKER RESET: Cooldown expired, allowing scale-up attempts");
+                    _log.info("Circuit breaker reset: cooldown expired, allowing scale-up attempts");
                 }
             } else if (!jobsBeingDropped) {
                 checkScaleDown(activeRunners, readyJobs, maxLag, avgLag, minRunners, inCooldown);
                 return;
             } else if (_log.shouldInfo()) {
-                _log.info("CIRCUIT BREAKER BYPASS: Jobs being dropped, allowing emergency scale-up");
+                _log.info("Circuit breaker bypass: jobs being dropped, allowing emergency scale-up");
             }
         }
 
@@ -710,22 +718,24 @@ class JobQueueScaler implements Runnable {
                         if (_log.shouldInfo()) {
                             StringBuilder info = new StringBuilder(128);
                             if (criticalLag)
-                                info.append("Critical delay=").append(effectiveDelay);
+                                info.append("Critical delay: ").append(effectiveDelay);
                             if (criticalSlowJobs)
-                                info.append(" Active job duration=").append(activeJobMaxDuration).append("ms");
+                                info.append(" Active job duration: ").append(activeJobMaxDuration)
+                                    .append("ms");
                             if (hasTrendSignal)
-                                info.append("Trend signal: queueGrowth=").append(queueGrowth)
-                                    .append(", delayDelta=").append(delayDelta);
+                                info.append("Trend signal: queueGrowth: ").append(queueGrowth)
+                                    .append(" * delayDelta: ").append(delayDelta);
                             if (jobsBeingDropped)
                                 info.append(" Jobs being dropped");
                             if (testJobsDominant)
-                                info.append(" TestJobs=").append(testJobCount)
+                                info.append(" TestJobs: ").append(testJobCount)
                                     .append(" (").append(testJobCount * 100 / Math.max(activeRunners, 1))
                                     .append("% of runners)");
                             if (suppressNormal && emergencySignal)
-                                info.append(" Emergency override (cpu=").append(cpuLoad)
-                                    .append("%, gc=").append(gcPause).append("ms)");
-                            info.append(" > threshold=").append(lagThreshold).append("ms. Scaling immediately. Runners: ")
+                                info.append(" Emergency override (cpu: ").append(cpuLoad)
+                                    .append("% * gc: ").append(gcPause).append("ms)");
+                            info.append(" > threshold: ").append(lagThreshold)
+                                .append("ms. Scaling immediately. Runners: ")
                                 .append(activeRunners).append("/").append(maxRunners)
                                 .append(", Ready jobs: ").append(readyJobs);
                             _log.info(info.toString());
@@ -738,8 +748,10 @@ class JobQueueScaler implements Runnable {
                 // Suppressed by resource saturation — don't accumulate scale-up checks
                 _consecutiveScaleUpChecks = 0;
                 if (_log.shouldDebug()) {
-                    _log.debug("Scale-up suppressed: cpuLoad=" + cpuLoad + "%, gcPause=" + gcPause +
-                              "ms, bwDelay=" + bwDelay + "ms, networkCongested=" + networkCongested);
+                    _log.debug("Scale-up suppressed: cpuLoad: " + cpuLoad +
+                               "% * gcPause: " + gcPause + "ms" +
+                               " * bwDelay: " + bwDelay + "ms" +
+                               " * networkCongested: " + networkCongested);
                 }
             }
         }
@@ -806,8 +818,8 @@ class JobQueueScaler implements Runnable {
             && (double) testJobCount / activeRunners > 0.25;
         if (testJobsDominant) {
             if (_log.shouldDebug()) {
-                _log.debug("Scale-down blocked: testJobs=" + testJobCount +
-                          ", activeRunners=" + activeRunners);
+                _log.debug("Scale-down blocked: testJobs: " + testJobCount +
+                          " * activeRunners: " + activeRunners);
             }
             return;
         }
@@ -899,8 +911,10 @@ class JobQueueScaler implements Runnable {
             if (_consecutiveFailedScaleUps >= MAX_CONSECUTIVE_FAILED_SCALES) {
                 _scalingUpDisabled = true;
                 if (_log.shouldInfo()) {
-                    _log.info("CIRCUIT BREAKER OPEN: Scaling up disabled due to " +
-                              _consecutiveFailedScaleUps + " failed attempts. Jobs may be CPU-bound. Retrying in " + (cooldown / 1000) + "s.");
+                    _log.info("Circuit breaker open: scaling up disabled due to " +
+                              _consecutiveFailedScaleUps + " failed attempts" +
+                              "\n* Jobs may be CPU-bound" +
+                              " -> Retrying in " + (cooldown / 1000) + "s");
                 }
             }
         } else {
@@ -995,8 +1009,8 @@ class JobQueueScaler implements Runnable {
             _context.simpleTimer2().addEvent(new AutoReleaseEvent(reason, count), autoReleaseMs);
         }
         if (_log.shouldInfo()) {
-            _log.info("requestRunners: +" + count + " (" + reason +
-                      "), floor=" + _externalFloor.get());
+            _log.info("Requested " + count + " runners (" + reason + ")"
+                      + " -> Floor: " + _externalFloor.get());
         }
     }
 
@@ -1016,8 +1030,8 @@ class JobQueueScaler implements Runnable {
         });
         recalcExternalFloor();
         if (_log.shouldInfo()) {
-            _log.info("releaseRunners: -" + count + " (" + reason +
-                      "), floor=" + _externalFloor.get());
+            _log.info("Released " + count + " runners (" + reason + ")"
+                      + " -> Floor: " + _externalFloor.get());
         }
     }
 

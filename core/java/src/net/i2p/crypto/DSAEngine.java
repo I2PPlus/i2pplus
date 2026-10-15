@@ -231,7 +231,7 @@ public final class DSAEngine {
             try {
                 w = s.modInverse(CryptoConstants.dsaq);
             } catch (ArithmeticException ae) {
-                _log.warn("modInverse() error", ae);
+                _log.warn("Invalid signature: modInverse() failed for s value", ae);
                 return false;
             }
             byte[] data = hash.getData();

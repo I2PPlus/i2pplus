@@ -126,16 +126,16 @@ class PersistNews {
                     rv.add(entry);
                 } else {
                     if (log.shouldWarn())
-                        log.warn("load error from " + file);
+                        log.warn("Load error from " + file);
                     error = true;
                 }
             } catch (ParserException pe) {
                 if (log.shouldWarn())
-                    log.warn("load error from " + file, pe);
+                    log.warn("Load error from " + file, pe);
                 error = true;
             } catch (IOException ioe) {
                 if (log.shouldWarn())
-                    log.warn("load error from " + file, ioe);
+                    log.warn("Load error from " + file, ioe);
                 error = true;
             } finally {
                 if (in != null) try { in.close(); } catch (IOException ioe) { /* ignored */ }

@@ -1541,7 +1541,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                 bp._autoTuning = true;
                 bp._override = -1;
                 if (_log.shouldInfo())
-                    _log.info(bp._name + " restored from " + prev + " to " + factory);
+                    _log.info("Restored " + bp._name + " from " + prev + " to " + factory);
             }
         }
         _autotune.forceSave();
@@ -1940,8 +1940,9 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                     int prev = _defaultValue;
                     _defaultValue = Math.max(_min, Math.min(_max, _defaultValue));
                     if (_log.shouldWarn())
-                        _log.warn(_name + " default clamped: " + prev + " -> " + _defaultValue +
-                                   " (range " + _min + "-" + _max + ")");
+                        _log.warn("Clamped default for " + _name + ": " + prev +
+                                  " -> " + _defaultValue +
+                                  " (range " + _min + "-" + _max + ")");
                 }
                 // 2. Heal persisted default to code factory default when stale
                 //    Catches in-range corruptions (e.g. 2600 for MinResendDelay)
@@ -1951,7 +1952,8 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                     int prev = _defaultValue;
                     _defaultValue = Math.max(_min, Math.min(_max, _factoryDefault));
                     if (_log.shouldWarn())
-                        _log.warn(_name + " default healed: " + prev + " -> " + _defaultValue);
+                        _log.warn("Healed default for " + _name + ": " + prev +
+                                  " -> " + _defaultValue);
                     defaultHealed = true;
                 }
                 int parsedExisting;
@@ -1975,7 +1977,8 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                 int prev = initial;
                 initial = _defaultValue;
                 if (_log.shouldWarn())
-                    _log.warn(_name + " persisted value " + prev + " healed up to default " + initial);
+                    _log.warn("Healed persisted value " + prev +
+                              " up to default " + initial + " for " + _name);
                 _autotune.setProperty(_keyValue, String.valueOf(initial));
                 changed = true;
             }
@@ -1984,7 +1987,8 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             // (prevents stale out-of-range values lingering in the file)
             if (raw != _initialValue) {
                 if (_log.shouldWarn())
-                    _log.warn(_name + " persisted value " + raw + " clamped to " + _initialValue +
+                    _log.warn("Clamped persisted value " + raw +
+                              " to " + _initialValue + " for " + _name +
                               " (range " + _min + "-" + _max + ")");
                 _autotune.setProperty(_keyValue, String.valueOf(_initialValue));
                 changed = true;
@@ -2139,7 +2143,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             if (val < _min || val > _max) {
                 int clamped = Math.max(_min, Math.min(_max, val));
                 if (_log.shouldInfo())
-                    _log.info(_name + " persisted value " + val + " clamped to " + clamped +
+                    _log.info("Clamped persisted value " + val + " to " + clamped + " for " + _name +
                               " (range " + _min + "-" + _max + ")");
                 _autotune.setProperty(_keyValue, String.valueOf(clamped));
             }
@@ -2170,15 +2174,16 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             // and overriding _defaultValue would break auto-revert below.
             if (persistedDefault != _factoryDefault) {
                 if (_log.shouldDebug() && !_staleDefaultLogged) {
-                    _log.debug(_name + " stale persisted default " + persistedDefault +
-                               " ignored, using factory default " + _factoryDefault);
+                    _log.debug("Ignoring stale persisted default " + persistedDefault +
+                               " for " + _name + " -> Using factory default " + _factoryDefault);
                     _staleDefaultLogged = true;
                 }
                 return;
             }
             if (persistedDefault != _defaultValue) {
                 if (_log.shouldInfo())
-                    _log.info(_name + " default changed from " + _defaultValue + " to " + persistedDefault);
+                    _log.info("Changed default for " + _name + " from " + _defaultValue +
+                              " to " + persistedDefault);
                 _defaultValue = persistedDefault;
             }
         }
@@ -2214,7 +2219,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                 int clamped = Math.max(_min, Math.min(_max, value));
                 int prev = getRuntimeValue();
                 if (_log.shouldInfo())
-                    _log.info(_name + " override set from " + prev + " to " + clamped +
+                    _log.info("Set override for " + _name + " from " + prev + " to " + clamped +
                               " (value: " + value + ", range " + _min + "-" + _max + ")");
                 applyValue(clamped);
                 persistValue(_ctx, clamped);
@@ -2251,7 +2256,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             try {
                 obsVal = getObservedStat(_ctx);
             } catch (Exception e) {
-                if (_log.shouldDebug()) _log.debug(_name + " snapshot stat unavailable", e);
+                if (_log.shouldDebug()) _log.debug("Snapshot stat unavailable for " + _name, e);
             }
             return new ParamSnapshot(_name, _description, _subsystem, getCurrentValue(),
                                      _defaultValue, _min, _max, _step, _autoTuning,
@@ -2701,7 +2706,8 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                 int current = getRuntimeValue();
                 if (_initialValue != current) {
                     if (_log.shouldInfo())
-                        _log.info(_name + " restoring persisted value " + _initialValue + " (current: " + current + ")");
+                        _log.info("Restoring persisted value " + _initialValue + " for " + _name +
+                                  " (current: " + current + ")");
                     applyValue(_initialValue);
                     persistValue(_ctx, _initialValue);
                 }
@@ -2738,7 +2744,9 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                 int current = getRuntimeValue();
                 if (current != _factoryDefault && !_reverted) {
                     if (_log.shouldInfo())
-                        _log.info(_name + " auto-reverting from " + current + " to factory default " + _factoryDefault + " (health: " + _health.getScore() + ")");
+                        _log.info("Auto-reverting " + _name + " from " + current +
+                                  " to factory default " + _factoryDefault +
+                                  " (health: " + _health.getScore() + ")");
                     applyValue(_factoryDefault);
                     persistValue(_ctx, _factoryDefault);
                     _reverted = true;
@@ -2775,7 +2783,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             // The runtime read is only needed to tell a real clamp from a deadband
             // no-op, so it is deferred until the value was actually clamped.
             if (unclamped != target && target != getRuntimeValue() && _log.shouldWarn())
-                _log.warn(_name + " target " + unclamped + " clamped to " + target +
+                _log.warn("Clamped target " + unclamped + " to " + target + " for " + _name +
                           " (range " + _min + "-" + _max + ")");
             return target;
         }
@@ -2825,10 +2833,10 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             String reason = decisionReason();
             if (_log.shouldInfo() && !repeatingNoEffect) {
                 if (reason != null) {
-                    _log.info(_name + " changing from " + current + " to " + target +
+                    _log.info("Changing " + _name + " from " + current + " to " + target +
                               " (default: " + _defaultValue + ") -> " + reason);
                 } else {
-                    _log.info(_name + " changing from " + current + " to " + target +
+                    _log.info("Changing " + _name + " from " + current + " to " + target +
                               " (default: " + _defaultValue + ")");
                 }
             }
@@ -2838,7 +2846,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                 _lastAppliedTarget = target;
                 if (!_noEffectReported) {
                     _noEffectReported = true;
-                    _log.warn(_name + " target " + target +
+                    _log.warn("Target " + target + " for " + _name +
                               " did not take effect -> Runtime still reports " + current +
                               "; repeat attempts will not be logged");
                 }
@@ -2944,7 +2952,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                     if (!(t instanceof ClassNotFoundException)) {
                         I2PAppContext.getGlobalContext().logManager().getLog(Tuner.class)
                             .warn("Cannot resolve streaming classes for auto-tuning -> "
-                                  + "streaming params will not be applied", t);
+                                  + "Streaming params will not be applied", t);
                     }
                     return;
                 }
@@ -3052,8 +3060,8 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                 // Resolved lazily and only on the failure path: holding a Log in a
                 // static field would pull the log manager in at class-load time.
                 I2PAppContext.getGlobalContext().logManager().getLog(Tuner.class)
-                    .warn("Streaming reflector call " + methodName + " failed -> ignoring it now, "
-                          + "but any param it backs cannot be auto-tuned", t);
+                    .warn("Streaming reflector call " + methodName + " failed -> Ignoring it now"
+                          + "\n* Any param it backs cannot be auto-tuned", t);
             }
         }
     }

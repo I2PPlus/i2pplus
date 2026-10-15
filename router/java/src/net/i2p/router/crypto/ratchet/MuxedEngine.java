@@ -101,14 +101,17 @@ final class MuxedEngine {
                     if (ok)
                         return rv;
                     if (_log.shouldInfo())
-                        _log.info("ElGamal cloveset error after Ratchet? " + preferRatchet);
+                        _log.info("ElGamal cloveset parse failed after Ratchet attempt -> " +
+                                  (preferRatchet ? "Discarding" : "Trying Ratchet DH"));
                 } catch (DataFormatException dfe) {
                     if (_log.shouldInfo())
-                        _log.info("ElGamal cloveset error after Ratchet? " + preferRatchet, dfe);
+                        _log.info("ElGamal cloveset parse failed after Ratchet attempt -> " +
+                                  (preferRatchet ? "Discarding" : "Trying Ratchet DH"), dfe);
                 }
             } else {
                 if (_log.shouldInfo())
-                    _log.info("ElGamal decrypt failed after Ratchet? " + preferRatchet);
+                    _log.info("ElGamal decrypt failed after Ratchet attempt -> " +
+                              (preferRatchet ? "Discarding message" : "Trying Ratchet DH"));
             }
             keyManager.reportDecryptResult(false, false);
         }

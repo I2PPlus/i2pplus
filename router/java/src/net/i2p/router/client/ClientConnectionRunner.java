@@ -1424,13 +1424,13 @@ class ClientConnectionRunner {
                     _log.info("Updating message status for message " + _messageId + " to "
                               + MessageStatusMessage.getStatusString(msg.getStatus())
                               + " for " + _sessId
-                              + " (with nonce=2), retrying after "
+                              + " (with nonce: 2), retrying after "
                               + (_context.clock().now() - _lastTried));
             } else {
                 if (_log.shouldDebug())
                     _log.debug("Updating message status for message " + _messageId + " to "
                                + MessageStatusMessage.getStatusString(msg.getStatus())
-                               + " for " + _sessId + " (with nonce=2)");
+                               + " for " + _sessId + " (with nonce: 2)");
             }
 
             try {

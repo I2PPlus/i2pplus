@@ -2673,7 +2673,8 @@ class Connection {
                         // resends would skew the loss-recovery accounting.
                         _activeResends.updateAndGet(v -> Math.max(0, v - 1));
                         if (_log.shouldDebug()) {
-                            _log.debug("Active resend of " + p + " successful -> " + _activeResends + " resends remaining...");
+                            _log.debug("Active resend of " + p + " successful -> " +
+                                       _activeResends + " resends remaining");
                         }
                     }
                 }
@@ -3025,7 +3026,8 @@ class Connection {
                 // timeout slot.
                 if (cro > 0 && cro < cso && getUnackedPacketsSent() <= 0) {
                     if (_log.shouldInfo()) {
-                        _log.info("Rcv close -> send close -> last ACKed, skip TIME-WAIT for " + toString());
+                        _log.info("Rcv close -> Send close -> Last ACKed, skip TIME-WAIT for " +
+                                  toString());
                     }
                     // They sent the first CLOSE.
                     // We do not need to enter TIME-WAIT, we are done.
@@ -3107,7 +3109,8 @@ class Connection {
         DisconnectEvent() {
             super();
             if (_log.shouldInfo()) {
-                _log.info("Disconnect timer initiated on connection to " + getRemotePeerString() + " -> 5 minutes to drop...");
+                _log.info("Disconnect timer initiated on connection to " +
+                          getRemotePeerString() + " -> 5 minutes to drop");
             }
         }
         /**
@@ -3828,7 +3831,7 @@ if (!on) {
          */
         public void timeReached() {
             if (_log.shouldDebug()) {
-                _log.debug("Invoking inactivity timer on connection to " + getRemotePeerString() + "...");
+                _log.debug("Invoking inactivity timer on connection to " + getRemotePeerString());
             }
             // uh, nothing more to do...
             if (!_connected.get()) {
@@ -3889,7 +3892,8 @@ if (!on) {
                 case ConnectionOptions.INACTIVITY_ACTION_SEND:
                     if (_closeSentOn.get() <= 0 && _closeReceivedOn.get() <= 0) {
                         if (_log.shouldInfo()) {
-                            _log.info("Sending some data to " + getRemotePeerString() + " due to inactivity...");
+                            _log.info("Sending some data to " + getRemotePeerString() +
+                                      " due to inactivity");
                         }
                         _receiver.send(null, 0, 0, true);
                         break;
@@ -4212,8 +4216,7 @@ if (!on) {
                         _log.warn(Connection.this + " no forward ACK progress for "
                                   + (getRetransmitStallAgeMs(_context.clock().now()) / 1000L)
                                   + "s across " + _retransmitCount
-                                  + " retransmit firings; the tunnel is NOT being rotated"
-                                  + " - this is reported, not acted on");
+                                  + " retransmit firings");
                     }
                 }
             } else if (_retransmitStallLogged) {
@@ -4361,7 +4364,8 @@ if (!on) {
                                                                          _options.getMaxResends());
                 if (budgetExhaustionClosesConnection(budgetExhausted, forwardProgress)) {
                     if (_log.shouldDebug()) {
-                        _log.debug(Connection.this + " packet " + packet + " resent too many times, closing...");
+                        _log.debug(Connection.this + " packet " + packet +
+                                   " resent too many times, closing");
                     }
                     packet.cancelled();
                     if (_connectionError == null) {setConnectionError(ERR_RETRANSMIT_LIMIT);}
@@ -4385,7 +4389,7 @@ if (!on) {
                     int maxClose = getCloseReceivedOn() > 0 ? 3 : 8;
                     if (packet.getNumSends() >= maxClose) {
                         if (_log.shouldDebug()) {
-                            _log.debug(Connection.this + " too many close resends, closing...");
+                            _log.debug(Connection.this + " too many close resends, closing");
                         }
                         packet.cancelled();
                         disconnect(false);
@@ -4408,7 +4412,7 @@ if (!on) {
                     // waitForConnect() returns "Connection timed out: SYN not
                     // acknowledged" instead of the generic "Connection failed".
                     if (_log.shouldDebug()) {
-                        _log.debug(Connection.this + " too many SYN resends, closing...");
+                        _log.debug(Connection.this + " too many SYN resends, closing");
                     }
                     packet.cancelled();
                     if (_connectionError == null) {setConnectionError(ERR_SYN_NOT_ACKNOWLEDGED);}

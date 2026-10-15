@@ -148,7 +148,8 @@ class I2CPMessageProducer {
             if (key.length() > 255 || val.length() > 255) {
                 if (_log.shouldWarn())
                     _log.warn("Not passing on property [" + key
-                            + "] in the session config, key or value is too long (max = 255) \n* Value: " + val);
+                            + "] in the session config, key or value is too long (max: 255)"
+                            + "\n* Value: " + val);
                 continue;
             }
             props.setProperty(key, val);
@@ -262,7 +263,8 @@ class I2CPMessageProducer {
         SendMessageMessage msg;
         SessionId sid = session.getSessionId();
         if (sid == null) {
-            _log.error(session.toString() + " cannot send message, session closed", new Exception());
+            _log.error("Cannot send message, session closed: " + session.toString(),
+                       new Exception());
             return;
         }
         Payload data = createPayload(payload);
@@ -298,7 +300,8 @@ class I2CPMessageProducer {
             return;
         SessionId sid = session.getSessionId();
         if (sid == null) {
-            _log.error(session.toString() + " cannot send message, session closed", new Exception());
+            _log.error("Cannot send message, session closed: " + session.toString(),
+                       new Exception());
             return;
         }
         Payload data = createPayload(payload);
@@ -472,7 +475,8 @@ class I2CPMessageProducer {
         msg.setLeaseSet(leaseSet);
         SessionId sid = session.getSessionId();
         if (sid == null) {
-            _log.error(session.toString() + " cannot create LeaseSet, session closed", new Exception());
+            _log.error("Cannot create LeaseSet, session closed: " + session.toString(),
+                       new Exception());
             throw new I2PSessionException("Session closed");
         }
         msg.setSessionId(sid);
@@ -506,7 +510,8 @@ class I2CPMessageProducer {
         msg.setSessionConfig(cfg);
         SessionId sid = session.getSessionId();
         if (sid == null) {
-            _log.error(session.toString() + " cannot update config, session closed", new Exception());
+            _log.error("Cannot update config, session closed: " + session.toString(),
+                       new Exception());
             return;
         }
         msg.setSessionId(sid);

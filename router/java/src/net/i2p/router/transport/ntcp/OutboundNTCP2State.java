@@ -263,7 +263,7 @@ class OutboundNTCP2State implements EstablishState {
             throw new IllegalStateException(this + " -> Unexpected prepareOutbound()");
         }
         if (_log.shouldDebug())
-            _log.debug(this + "send X");
+            _log.debug(this + "\n* Send X");
         // write options directly to tmp, offset 32, will encrypt in-place
         // network ID cross-check, proposal 147
         _tmp[KEY_SIZE] = (byte) (_context.router().getNetworkID());
@@ -503,7 +503,7 @@ class OutboundNTCP2State implements EstablishState {
         }
         // send it all at once
         if (_log.shouldDebug())
-            _log.debug("Sending message #3, part 1 is:\n" + HexDump.dump(tmp, 0, MSG3P1_SIZE));
+            _log.debug("Sending message #3, part 1 is:\n* " + HexDump.dump(tmp, 0, MSG3P1_SIZE));
         _con.wantsWrite(tmp);
         if (_log.shouldDebug())
             _log.debug("After message #3: " + _handshakeState.toString());

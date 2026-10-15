@@ -760,7 +760,7 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
             int max = _maxConnections;
             _log.warn("Connection cap reached for " + remoteHost + ':' + remotePort +
                       " (maxConnections=" + max + ", active=" + _activeConnections.get() +
-                      ") -> rejecting new connection");
+                      ") -> Rejecting new connection");
         }
     }
 
@@ -784,7 +784,7 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
                   " (queue=" + queueDepth + '/' + cap +
                   ", pool=" + active + '/' + threads +
                   ", slots=" + _activeConnections.get() +
-                  ") -> rejecting new connection");
+                  ") -> Rejecting new connection");
     }
 
     /**
@@ -1113,7 +1113,8 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
                 _log.warn("Reconnecting to router after restart");
                 reconnectServerSocket();
             } catch (I2PException ipe) {
-                _log.warn("Error accepting server socket connection -> attempting to recover... (" + ipe.getMessage() + ")");
+                _log.warn("Error accepting server socket connection -> Attempting to recover... (" +
+                          ipe.getMessage() + ")");
                 closeSilently(i2ps);
                 if (!recoverServerSocket()) {
                     break;

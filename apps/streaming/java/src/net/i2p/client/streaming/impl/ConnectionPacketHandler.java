@@ -169,7 +169,8 @@ class ConnectionPacketHandler {
             if ((seqNum > 0) || (packet.getPayloadSize() > 0) ||
                  (packet.isFlagSet(Packet.FLAG_SYNCHRONIZE | Packet.FLAG_CLOSE))) {
                 if (_log.shouldWarn())
-                    _log.warn("Received a data packet after hard disconnect on " + con + " -> Sending RESET...");
+                    _log.warn("Received a data packet after hard disconnect on " + con +
+                              " -> Sending RESET");
                 // the following will send a RESET
                 con.disconnect(false);
             } else {
@@ -262,7 +263,7 @@ class ConnectionPacketHandler {
                 con.disconnect(false);
             } else {
                 if (_log.shouldWarn())
-                    _log.warn("Inbound buffer exceeded on " + con + " -> Choking and dropping...");
+                    _log.warn("Inbound buffer exceeded on " + con + " -> Choking and dropping");
                 con.setChoking(true);
             }
             packet.releasePayload();

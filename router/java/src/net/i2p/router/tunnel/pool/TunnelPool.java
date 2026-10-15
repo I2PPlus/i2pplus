@@ -846,7 +846,7 @@ public class TunnelPool {
         _rateName = "[" + name + "] " + (_settings.isInbound() ? "InBps" : "OutBps");
         refreshSettings();
         ctx.statManager().createRequiredRateStat("tunnel.matchLease", "How often our Outbound Endpoint matches their Inbound Gateway", "Tunnels",
-                                         new long[] {60L * 60 * 1000});
+                                         RateConstants.SHORT_TERM_RATES);
     }
 
     /**
@@ -1801,8 +1801,9 @@ public class TunnelPool {
         if (!_log.shouldLog(Log.WARN) || now < _nextZombieLog) {return;}
         _nextZombieLog = now + ZOMBIE_LOG_INTERVAL_MS;
         _log.warn("Pool health excludes " + excluded + " of " + (kept + excluded)
-                  + " tunnels with no transport session to their local hop -> Kept: " + kept
-                  + "; transport: " + sample
+                  + " tunnels with no transport session to their local hop"
+                  + " -> Kept: " + kept
+                  + "\n* transport: " + sample
                   + " [" + toString() + "]");
     }
 
@@ -2246,7 +2247,7 @@ public class TunnelPool {
         if (count > 0 && count > _leaseSurgeNeed) {
             _leaseSurgeNeed = count;
             if (_log.shouldDebug()) {
-                _log.debug(toString() + " -> lease surge needs " + count);
+                _log.debug(toString() + " -> Lease surge needs " + count);
             }
         }
     }
@@ -2261,7 +2262,7 @@ public class TunnelPool {
         if (_leaseSurgeNeed != 0) {
             _leaseSurgeNeed = 0;
             if (_log.shouldDebug()) {
-                _log.debug(toString() + " -> lease surge cleared");
+                _log.debug(toString() + " -> Lease surge cleared");
             }
         }
     }
@@ -3103,8 +3104,8 @@ public class TunnelPool {
             if (!replaceNonGoodTunnel(info, gatewayId, now, usable, maxUsable, target)) {
                 if (_log.shouldDebug()) {
                     _log.debug(toString() + " -> Pool at capacity, all tunnels GOOD (" +
-                              usable + " >= max " + maxUsable + ", target=" + target +
-                              ") \n* " + info);
+                              usable + " >= max " + maxUsable + ", target: " + target +
+                              ")\n* " + info);
                 }
                 return false;
             }
@@ -3170,8 +3171,8 @@ public class TunnelPool {
         swapInReplacement(replacee, info, gatewayId, now);
         if (_log.shouldWarn()) {
             _log.warn(toString() + " -> Replaced non-GOOD tunnel at cap (" +
-                      usable + " >= max " + maxUsable + ", target=" + target +
-                      ") \n* Removed: " + replacee.getTestStatus() +
+                      usable + " >= max " + maxUsable + ", target: " + target +
+                      ")\n* Removed: " + replacee.getTestStatus() +
                       "\n* Added: " + info);
         }
         return true;
@@ -3762,7 +3763,7 @@ public class TunnelPool {
         if (_log.shouldInfo())
             _log.info(toString() + " -> Rotated out oldest lease (" +
                       rotated.getGateway() + "/" + rotated.getTunnelId() +
-                      ") for floodfill propagation, earliest=" + earliest);
+                      ") for floodfill propagation, earliest: " + earliest);
         if (rotatedOut != null) {
             markRotatedOut(rotated, tunnels, rotatedOut);
         }
@@ -4010,7 +4011,7 @@ public class TunnelPool {
         long now = _context.clock().now();
         if (_log.shouldInfo() && shouldLogSendFailure(now, _lastSendFailureLogTime)) {
             _lastSendFailureLogTime = now;
-            _log.info(toString() + " -> Data-phase failure (status=" + status +
+            _log.info(toString() + " -> Data-phase failure (status: " + status +
                       (soft ? ", soft" : "") +
                       ") for tunnel, failures now " + failures +
                       "\n* " + cfg + describeHops(cfg));
@@ -4060,8 +4061,8 @@ public class TunnelPool {
         for (int hop = 0; hop < len; hop++) {
             Hash peer = cfg.getPeer(hop);
             if (peer == null) {continue;}
-            rv.append("\n*   hop ").append(hop).append(": ")
-              .append(peer.toBase32().substring(0, 6));
+            rv.append("\n*   hop ").append(hop).append(": [")
+              .append(peer.toBase64().substring(0, 6)).append(']');
         }
         return rv.toString();
     }
@@ -4248,9 +4249,9 @@ public class TunnelPool {
         if (_log.shouldWarn()) {
             _log.warn("Marking " + (cfg.isInbound() ? "inbound" : "outbound") +
                       " tunnel " + (isDead ? "FAILED" : "FAILING") +
-                      " -> retained until expiry (" + failures +
-                      " failures, remaining=" + size() + ")" +
-                      (isDead ? ", dead" : "") + " \n* " + cfg);
+                      " -> Retained until expiry (" + failures +
+                      " failures, remaining: " + size() + ")" +
+                      (isDead ? ", dead" : "") + "\n* " + cfg);
         }
         // Retention is a liveness signal: capacity must recover immediately,
         // not on the throttled schedule removeTunnel() used to drive.
@@ -4537,7 +4538,8 @@ public class TunnelPool {
             }
             _lastRefreshTime = now;
             if (_log.shouldDebug()) {
-                _log.debug(toString() + "\n* Refreshing LeaseSet (force=" + effectiveForce + ", count=" + size() + ")");
+                _log.debug(toString() + "\n* Refreshing LeaseSet" +
+                           " (force: " + effectiveForce + ", count: " + size() + ")");
             }
             publishRefreshedLeaseSet(now);
             // On each publish cycle, clean out tunnels that haven't passed
@@ -4818,7 +4820,10 @@ public class TunnelPool {
                 long now = _context.clock().now();
                 if (now - _lastFallbackWarnTime > 30_000L) {
                     _lastFallbackWarnTime = now;
-                    _log.warn(toString() + "\n* Refusing to build a fallback (zero-hop) tunnel for a non-exploratory pool with zero-hop disabled (usable: " + usable + ")");
+                    _log.warn(toString()
+                              + "\n* Refusing to build a fallback (zero-hop) tunnel"
+                              + "\n* Non-exploratory pool with zero-hop disabled"
+                              + " (usable: " + usable + ")");
                 }
             }
             return false;
@@ -5118,7 +5123,7 @@ public class TunnelPool {
         if (toPrune <= 0) {
             if (_log.shouldInfo()) {
                 _log.info("Keeping " + toRemove.size() + " non-GOOD tunnels as LS fallback " +
-                          "(good=" + goodCount + ", reserve=" + reserve + ")");
+                          "(good: " + goodCount + ", reserve: " + reserve + ")");
             }
             return;
         }
@@ -5128,7 +5133,8 @@ public class TunnelPool {
             String boost = _consecutiveEmergencies > 0 ?
                 " (dynamic target " + Math.min(target + _consecutiveEmergencies, target + MAX_EMERGENCY_BOOST) + ")" : "";
             _log.info("Pruning " + toRemove.size() + " non-GOOD tunnels from " + toString() +
-                      " (good=" + goodCount + ", remaining=" + (goodCount + reserve) + ")" + boost);
+                      " (good: " + goodCount + ", remaining: " + (goodCount + reserve) + ")"
+                      + boost);
         }
         removeTunnelsBatch(toRemove);
         // Refresh LeaseSet after batch removal (normally done per-tunnel in removeTunnel).
@@ -5225,9 +5231,9 @@ public class TunnelPool {
         if (wouldDropBelowTarget(poolSize, toRemove.size())) {return;}
         if (_log.shouldInfo()) {
             _log.info(toString() + " -> Pruning " + toRemove.size() +
-                      " non-published tunnels after LeaseSet publish " +
-                      "(published " + publishedGateways.size() + " gateways, " +
-                      "pool total " + poolSize + ")");
+                      " non-published tunnels after LeaseSet publish" +
+                      "\n* Published: " + publishedGateways.size() + " gateways" +
+                      " * pool total: " + poolSize);
         }
         removeTunnelsBatch(toRemove);
         // Batch removal bypasses removeTunnel() which normally triggers
@@ -5315,9 +5321,10 @@ public class TunnelPool {
         int afterPrune = currentSize - removeCount;
         if (afterPrune >= effectiveTarget) {return false;}
         if (_log.shouldInfo()) {
-            _log.info(toString() + " -> Skipping non-published prune — would drop below target " +
-                      "(" + currentSize + " total, " + removeCount + " candidates, " +
-                      "target " + effectiveTarget + ", after prune " + afterPrune + ")");
+            _log.info(toString() + " -> Skipping non-published prune" +
+                      " - would drop below target" +
+                      "\n* Total: " + currentSize + " * candidates: " + removeCount +
+                      " * target: " + effectiveTarget + " * after prune: " + afterPrune);
         }
         return true;
     }
@@ -5874,8 +5881,9 @@ public class TunnelPool {
             }
         }
         if (offered > 0 && _log.shouldInfo()) {
-            _log.info(toString() + " -> Offered " + offered + " last-chance test(s) for " +
-                      "stale UNTESTED tunnel(s) expiring within the pre-build window");
+            _log.info(toString() + " -> Offered " + offered +
+                      " last-chance test(s) for stale UNTESTED tunnel(s)" +
+                      "\n* Expiring within the pre-build window");
         }
     }
 
@@ -5987,9 +5995,10 @@ public class TunnelPool {
                 long age = now - lastTraffic;
                 cfg.clearTestFailures();
                 if (_log.shouldWarn()) {
-                    _log.warn(toString() + " -> Marked tunnel GOOD on traffic... \n* " +
-                              cfg + " -> " + ts + " promoted, marked GOOD (verified bytes " +
-                              cfg.getVerifiedBytesTransferred() + ", last real traffic " + age + "ms ago)");
+                    _log.warn(toString() + " -> Marked tunnel GOOD on traffic" +
+                              "\n* " + cfg + " -> " + ts + " promoted, marked GOOD" +
+                              "\n* Verified bytes: " + cfg.getVerifiedBytesTransferred() +
+                              " * last real traffic: " + age + "ms ago");
                 }
             }
         } finally {_tunnelsLock.unlock();}
@@ -6096,7 +6105,7 @@ public class TunnelPool {
             if (_log.shouldDebug()) {
                 _log.debug(toString() + " -> Skipping build: inProgress(" +
                           inProgress + ") >= cap " + cap +
-                          " (target=" + target + ", safeActive=" + safeActive + ")");
+                          " (target: " + target + ", safeActive: " + safeActive + ")");
             }
             return true;
         }
@@ -6115,7 +6124,7 @@ public class TunnelPool {
         if (inProgress > 0 && safeActive > 0 && now - _lastDeficitBuildTime < 5000) {
             if (_log.shouldDebug()) {
                 _log.debug(toString() + " -> Skipping build: last deficit build " +
-                          (now - _lastDeficitBuildTime) + "ms ago, inProgress=" + inProgress);
+                          (now - _lastDeficitBuildTime) + "ms ago, inProgress: " + inProgress);
             }
             return true;
         }
@@ -6151,8 +6160,8 @@ public class TunnelPool {
             if (_log.shouldDebug()) {
                 _log.debug(toString() + " -> Skipping deficit build: rate-limited (" +
                           (now - _lastDeficitBuildTime) + "ms since last, " +
-                          currentInProgress + " in progress, safe=" +
-                          stats.safeActive + ", healthy=" + healthySafe + ")");
+                          currentInProgress + " in progress, safe: " +
+                          stats.safeActive + ", healthy: " + healthySafe + ")");
             }
             return;
         }
@@ -6170,11 +6179,12 @@ public class TunnelPool {
             if (_log.shouldInfo()) {
                 String boost = _consecutiveEmergencies > 0 ?
                     " [boosted +" + _consecutiveEmergencies + "]" : "";
-                _log.info(toString() + " -> Proactive: " + stats.safeActive +
-                          " safe (" + countHealthySafe(stats) + " healthy) + " +
-                          stats.nearExpiry + " expiring + " + stats.failingCount +
-                          " failing, building " + needed +
-                          " replacements (deficit=" + deficit + ", ip=" + currentInProgress + ")" + boost);
+                _log.info(toString() + " -> Proactive: building " + needed +
+                          " replacements" + boost +
+                          "\n* Safe: " + stats.safeActive +
+                          " (" + countHealthySafe(stats) + " healthy)" +
+                          " * expiring: " + stats.nearExpiry + " * failing: " + stats.failingCount +
+                          "\n* Deficit: " + deficit + " * in progress: " + currentInProgress);
             }
             _lastDeficitBuildTime = now;
             // Collapsed pools (zero safe, tunnels expiring) are effectively
@@ -6516,10 +6526,10 @@ public class TunnelPool {
             int fastPeers = ctx.profileOrganizer().countFastPeers();
             _context.statManager().addRateData("tunnel.poolStarvationDeclined", fastPeers);
             if (_log.shouldWarn()) {
-                _log.warn(toString() + " -> Starvation: pool empty but peer supply is ample " +
-                          "(" + fastPeers + " fast peers, " +
-                          "threshold " + TunnelPeerSelector.SCARCE_FAST_PEERS +
-                          "), not widening the peer activity window");
+                _log.warn(toString() + " -> Starvation: pool empty but peer supply is ample" +
+                          "\n* Fast peers: " + fastPeers + " * threshold: " +
+                          TunnelPeerSelector.SCARCE_FAST_PEERS +
+                          " * not widening the peer activity window");
             }
             return;
         }
@@ -6533,7 +6543,7 @@ public class TunnelPool {
         if (_log.shouldWarn()) {
             _log.warn(toString() + " -> Starvation: peer activity window multiplier " +
                       before + " -> " + TunnelPeerSelector.getWindowMultiplier() +
-                      " (zero usable tunnels, peer supply scarce)");
+                      "\n* Zero usable tunnels * peer supply scarce");
         }
     }
 
@@ -6737,8 +6747,8 @@ public class TunnelPool {
                                     healthy, _hasIncompleteLeaseSet,
                                     _lastRemovalTime, getInProgressCount())) {
                   if (_log.shouldDebug()) {
-                      _log.debug(toString() + " -> Skipping pre-emergency burst -> throttled (" +
-                                 (nowPre - _lastEnsureTime) + "ms since last)");
+                       _log.debug(toString() + " -> Skipping pre-emergency burst -> Throttled (" +
+                                  (nowPre - _lastEnsureTime) + "ms since last)");
                   }
                   return;
               }
@@ -6756,12 +6766,12 @@ public class TunnelPool {
               boolean initialFill = healthy == 0 && !_everHadHealthyTunnel;
               if (initialFill) {
                   if (_log.shouldDebug())
-                      _log.debug(toString() + " -> Pre-emergency (" + healthy + "/" +
-                                 target + " healthy) -> initial fill, starting " +
-                                 PRE_EMERGENCY_BURST + " builds immediately");
+                       _log.debug(toString() + " -> Pre-emergency (" + healthy + "/" +
+                                  target + " healthy) -> Initial fill, starting " +
+                                  PRE_EMERGENCY_BURST + " builds");
               } else if (_log.shouldWarn()) {
                   _log.warn(toString() + " -> Pre-emergency (" + healthy + "/" +
-                            target + " healthy) -> starting " + PRE_EMERGENCY_BURST + " builds immediately");
+                            target + " healthy) -> Starting " + PRE_EMERGENCY_BURST + " builds");
               }
               int budget = Math.max(0, MAX_INPROGRESS_PER_POOL_DIR - getInProgressCount());
               for (int i = 0; i < PRE_EMERGENCY_BURST && i < budget; i++) {
@@ -6898,8 +6908,8 @@ public class TunnelPool {
             int needed = Math.min(deficit, room);
             if (needed <= 0) {
                 if (_log.shouldInfo()) {
-                    _log.info(toString() + " -> Skipping fresh build: inProgress=" + inProgress +
-                              " >= cap " + cap + " (target=" + target + ", fresh=" + fresh + ")");
+                    _log.info(toString() + " -> Skipping fresh build: inProgress: " + inProgress +
+                              " >= cap " + cap + " (target: " + target + ", fresh: " + fresh + ")");
                 }
                 return;
             }
@@ -6924,8 +6934,9 @@ public class TunnelPool {
     private boolean isFreshBuildEligible() {
         if (!_alive || !isServerPool()) {
             if (_log.shouldDebug()) {
-                _log.debug(toString() + " -> Skipping fresh build: alive=" + _alive +
-                          ", inbound=" + _settings.isInbound() + ", exploratory=" + _settings.isExploratory());
+                _log.debug(toString() + " -> Skipping fresh build: alive: " + _alive +
+                          ", inbound: " + _settings.isInbound() +
+                          ", exploratory: " + _settings.isExploratory());
             }
             return false;
         }
@@ -7021,8 +7032,8 @@ public class TunnelPool {
             int inProgress = getInProgressCount();
             if (inProgress >= cap) {
                 if (_log.shouldDebug()) {
-                    _log.debug(toString() + " -> buildReplacementTunnels: capping at " +
-                              inProgress + " in-progress (limit " + cap + ")");
+                    _log.debug(toString() + " -> Capping at " +
+                               inProgress + " in-progress (limit " + cap + ")");
                 }
                 return;
             }
@@ -7389,8 +7400,9 @@ public class TunnelPool {
             _context.commSystem().isEstablished(tbrTarget) ||
             _context.commSystem().isConnecting(tbrTarget)) {return false;}
         if (_log.shouldInfo()) {
-            _log.info("configureNewTunnel: TBR target [" + tbrTarget.toBase64().substring(0,6) +
-                      "] not connected, pre-connecting for next attempt \n* " + cfg);
+            _log.info("TBR target [" + tbrTarget.toBase64().substring(0,6) +
+                      "] not connected, pre-connecting for next attempt" +
+                      "\n* " + cfg);
         }
         TunnelPeerSelector.preConnectTo(_context, tbrTarget);
         return true;
@@ -7476,7 +7488,7 @@ public class TunnelPool {
                 recordBuildOutcome(false, _context.clock().now());
                 updatePairedProfile(cfg, true);
                 if (_log.shouldInfo()) {
-                    _log.info("Build failed for " + toString() + " -> reason=" + result);
+                    _log.info("Build failed for " + toString() + " -> Reason: " + result);
                 }
                 break;
 
@@ -7485,8 +7497,8 @@ public class TunnelPool {
                 recordBuildOutcome(true, _context.clock().now());
                 updatePairedProfile(cfg, false);
                 if (_log.shouldInfo()) {
-                    _log.info("Build failed for " + toString() + " -> reason=" + result +
-                              " (consecutiveTimeouts=" + _consecutiveBuildTimeouts.get() + ")");
+                    _log.info("Build failed for " + toString() + " -> Reason: " + result +
+                              " (consecutive timeouts: " + _consecutiveBuildTimeouts.get() + ")");
                 }
                 ensureSufficientTunnels();
                 break;
@@ -7495,7 +7507,7 @@ public class TunnelPool {
                 // Not a real failure (e.g., fallback skipping) — don't penalize
                 updatePairedProfile(cfg, false);
                 if (_log.shouldInfo()) {
-                    _log.info("Build failed for " + toString() + " -> reason=" + result);
+                    _log.info("Build failed for " + toString() + " -> Reason: " + result);
                 }
                 ensureSufficientTunnels();
                 break;
@@ -7702,7 +7714,8 @@ public class TunnelPool {
         // Check for common failure patterns
         if (failures > 8 && uptime > 10L * 60 * 1000) {
             _log.info("High tunnel failure rate detected for " + toString() +
-                      ": " + failures + " consecutive failures. Consider checking network connectivity and peer selection.");
+                      ": " + failures + " consecutive failures" +
+                      "\n* Consider checking network connectivity and peer selection");
 
             // Suggest configuration adjustments
             if (getSettings().getLength() > 3) {

@@ -39,7 +39,9 @@ public class LogsHelperRewritesTest {
         "| ERROR  | [[&#10004;]]=[[&#10004;]] and [[&#10008;]]=[[&#10008;]]",
         "<a href=\"/x?a=1&amp;b=2\">click</a> and &lt;a href=x&gt;esc&lt;/a&gt;",
         "| INFO   | " + repeat("padding", 50),
-        "truefalse" + "]]" + ":  " + "false positives"
+        "truefalse" + "]]" + ":  " + "false positives",
+        "| INFO   | Inbound states [abc123] * Outbound states [def456] -> Queued: 2 * Intros: 1",
+        "| INFO   | no separator here, just a * and ** and a trailing * "
     };
 
     /**
@@ -91,6 +93,7 @@ public class LogsHelperRewritesTest {
         msg = msg.replace("not publishing old one: RouterInfo:", "not publishing old one:");
         msg = msg.replace("Publishing our RouterInfo after delay: RouterInfo:", "Publishing our RouterInfo after delay:");
         msg = msg.replace(":  ", ": ");
+        msg = msg.replace(" * ", " \u2022 "); // inline file-log separator -> console bullet
         return msg;
     }
 

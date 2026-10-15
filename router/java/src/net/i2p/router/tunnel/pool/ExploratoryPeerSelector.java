@@ -141,7 +141,7 @@ import net.i2p.util.SystemVersion;
             // checkTunnel() rejected the selection — honor the never-null
             // contract so callers can rely on isEmpty() without null checks.
             if (log.shouldDebug())
-                log.debug("EPS checkTunnel failed -> empty selection");
+                log.debug("EPS checkTunnel failed -> Empty selection");
             return Collections.emptyList();
         }
         return rv;
@@ -198,10 +198,10 @@ import net.i2p.util.SystemVersion;
             int cooldownExcluded = addFreshCooldownExclusions(_exploratoryCooldowns, cooldownCutoff, exclude);
             cooldownExcluded += addFreshCooldownExclusions(_peerCooldowns, cooldownCutoff, exclude);
             if (log.shouldDebug())
-                log.debug("EPS cooldown: own=" + _exploratoryCooldowns.size() +
-                          " shared=" + _peerCooldowns.size() +
-                          " excluded=" + cooldownExcluded +
-                          " from=" + Thread.currentThread().getName());
+                log.debug("EPS cooldown: own: " + _exploratoryCooldowns.size() +
+                          " * shared: " + _peerCooldowns.size() +
+                          " * excluded: " + cooldownExcluded +
+                          " * from: " + Thread.currentThread().getName());
         }
 
         // Per-pool diversity: exclude peers already in an active tunnel of this pool.
@@ -211,7 +211,8 @@ import net.i2p.util.SystemVersion;
         Set<Hash> poolPeers = getPeersInPool(ctx, pool);
         exclude.addAll(poolPeers);
         if (log.shouldInfo() && !poolPeers.isEmpty())
-            log.info("EPS per-pool exclusion: " + poolPeers.size() + " peers in active tunnels from=" + Thread.currentThread().getName());
+            log.info("EPS per-pool exclusion: " + poolPeers.size() +
+                     " peers in active tunnels * from: " + Thread.currentThread().getName());
         // Cross-pool diversity: when the fast tier is large enough, exclude peers
         // in ANY active tunnel across ALL pools. Forces exploratory builds to use
         // different fast peers than client pools, driving variability and ensuring
@@ -229,7 +230,9 @@ import net.i2p.util.SystemVersion;
             if (allActive.size() < fastCount * ClientPeerSelector.CROSS_POOL_EXCLUSION_RATIO) {
                 exclude.addAll(allActive);
                 if (log.shouldInfo())
-                    log.info("EPS cross-pool exclusion: " + allActive.size() + " peers in ANY active tunnel from=" + Thread.currentThread().getName());
+                    log.info("EPS cross-pool exclusion: " + allActive.size() +
+                             " peers in ANY active tunnel" +
+                             " * from: " + Thread.currentThread().getName());
             } else if (log.shouldDebug()) {
                 log.debug("EPS cross-pool exclusion skipped: " + allActive.size() + " of " + fastCount +
                           " fast peers in active tunnels (ratio exceeds " + ClientPeerSelector.CROSS_POOL_EXCLUSION_RATIO + ")");
@@ -302,8 +305,8 @@ import net.i2p.util.SystemVersion;
                 Hash peer = closest.iterator().next();
                 if (isFirstHopFailing(ctx, peer)) {
                     if (log.shouldInfo())
-                        log.info("EPS closest hop " + peer.toBase64().substring(0,6) +
-                                 " previously failed as first hop, retrying...");
+                        log.info("EPS closest hop [" + peer.toBase64().substring(0,6) +
+                                 "] previously failed as first hop -> Retrying");
                     closestExclude.add(peer);
                     closest.clear();
                     ctx.profileOrganizer().selectNotFailingPeers(1, closestExclude, closest, false, ipRestriction, ipSet, true);
@@ -313,8 +316,8 @@ import net.i2p.util.SystemVersion;
                 } else if (!ctx.commSystem().isEstablished(peer)) {
                     if (ctx.commSystem().wasUnreachable(peer)) {
                         if (log.shouldInfo())
-                            log.info("EPS closest hop " + peer.toBase64().substring(0,6) +
-                                     " is unreachable, retrying selection...");
+                            log.info("EPS closest hop [" + peer.toBase64().substring(0,6) +
+                                     "] is unreachable -> Retrying selection");
                         closestExclude.add(peer);
                         closest.clear();
                         ctx.profileOrganizer().selectNotFailingPeers(1, closestExclude, closest, false, ipRestriction, ipSet, true);
@@ -323,8 +326,8 @@ import net.i2p.util.SystemVersion;
                         }
                     } else if (!ctx.commSystem().isConnecting(peer)) {
                         if (log.shouldInfo())
-                            log.info("EPS pre-connecting to closest hop " +
-                                     peer.toBase64().substring(0,6) + " for tunnel build");
+                            log.info("EPS pre-connecting to closest hop [" +
+                                     peer.toBase64().substring(0,6) + "] for tunnel build");
                         preConnectTo(ctx, peer);
                     }
                 }
@@ -366,23 +369,23 @@ import net.i2p.util.SystemVersion;
                     Hash peer = furthest.iterator().next();
                     if (isFirstHopFailing(ctx, peer)) {
                         if (log.shouldInfo())
-                            log.info("EPS furthest hop " + peer.toBase64().substring(0,6) +
-                                     " previously failed as first hop, retrying...");
+                            log.info("EPS furthest hop [" + peer.toBase64().substring(0,6) +
+                                     "] previously failed as first hop -> Retrying");
                         exclude.add(peer);
                         furthest.clear();
                         ctx.profileOrganizer().selectFastPeers(1, exclude, furthest, ipRestriction, ipSet);
                     } else if (!ctx.commSystem().isEstablished(peer)) {
                         if (ctx.commSystem().wasUnreachable(peer)) {
                             if (log.shouldInfo())
-                                log.info("EPS furthest hop " + peer.toBase64().substring(0,6) +
-                                         " is unreachable, retrying selection...");
+                                log.info("EPS furthest hop [" + peer.toBase64().substring(0,6) +
+                                         "] is unreachable -> Retrying selection");
                             exclude.add(peer);
                             furthest.clear();
                             ctx.profileOrganizer().selectFastPeers(1, exclude, furthest, ipRestriction, ipSet);
                         } else if (!ctx.commSystem().isConnecting(peer)) {
                             if (log.shouldInfo())
-                                log.info("EPS pre-connecting to furthest hop " +
-                                         peer.toBase64().substring(0,6) + " for tunnel build");
+                                log.info("EPS pre-connecting to furthest hop [" +
+                                         peer.toBase64().substring(0,6) + "] for tunnel build");
                             preConnectTo(ctx, peer);
                         }
                     }
@@ -495,7 +498,8 @@ import net.i2p.util.SystemVersion;
             rv.removeIf(peer -> peer != null && banlist.isBanlisted(peer));
             if (rv.isEmpty()) {
                 if (log.shouldWarn()) {
-                    log.warn("EPS all selected peers were banlisted -> discarding selection for redraw");
+                    log.warn("EPS all selected peers were banlisted"
+                             + " -> Discarding selection for redraw");
                 }
                 if (ctx != null && ctx.statManager() != null) {
                     noteAllBannedDiscard(ctx);
@@ -532,9 +536,9 @@ import net.i2p.util.SystemVersion;
                     }
                 }
                 if (log.shouldDebug())
-                    log.debug("EPS cooldown record: recorded=" + recorded +
-                              " rvSize=" + rv.size() +
-                              " from=" + Thread.currentThread().getName());
+                    log.debug("EPS cooldown record: recorded: " + recorded +
+                              " * rvSize: " + rv.size() +
+                              " * from: " + Thread.currentThread().getName());
                 // Bound the own map: entries expire on read, but sweep only
                 // when the map is large (mirrors prunePeerMaps()).
                 if (_exploratoryCooldowns.size() > FAILURE_MAP_MAX_SIZE) {

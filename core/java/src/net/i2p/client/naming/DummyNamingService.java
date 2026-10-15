@@ -88,7 +88,7 @@ public class DummyNamingService extends NamingService {
                     return d;
                 }
             } catch (I2PSessionException i2pse) {
-                _log.warn("couldn't lookup b32", i2pse);
+                _log.warn("Failed to look up base32 address", i2pse);
             }
         }
 

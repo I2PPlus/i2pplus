@@ -1590,11 +1590,13 @@ public class PeerState {
         _retransmitTimer.set(now + _rto);
         if (_log.shouldInfo()) {
             _log.info("[" + _remotePeer.toBase64().substring(0,6) + "] Estimated bandwidth: " +
-                      DataHelper.formatSize2Decimal((long) (bwe * 1000), false) + "b/s \n* " +
-                      "Congestion, RTO: " + oldRto + "ms -> " + _rto + "ms; Timer: " + oldTimer + "ms -> " + _rto +
-                      "ms; Window: " + congestionAt + " bytes -> " + _sendWindowBytes.get() +
-                      " bytes; SST: " + oldsst + " -> " + _slowStartThreshold +
-                      "; FastRetransmit? " + _fastRetransmit);
+                      DataHelper.formatSize2Decimal((long) (bwe * 1000), false) + "b/s" +
+                      "\n* Congestion RTO: " + oldRto + "ms -> " + _rto + "ms" +
+                      " * Timer: " + oldTimer + "ms -> " + _rto + "ms" +
+                      "\n* Window: " + congestionAt + " bytes -> " +
+                      _sendWindowBytes.get() + " bytes" +
+                      " * SST: " + oldsst + " -> " + _slowStartThreshold +
+                      " * FastRetransmit: " + _fastRetransmit);
         }
     }
 
@@ -2387,21 +2389,20 @@ public class PeerState {
             if (_log.shouldDebug()) {
                 if (state.getFragmentCount() > 1) {
                     _log.debug("Received partial ACK of [MsgID " + state.getMessageId() + "] from [" +
-                               _remotePeer.toBase64().substring(0,6) + "] ->  Newly-acked: " + ackedSize +
-                               " bytes, now complete for: " + state);
+                               _remotePeer.toBase64().substring(0,6) + "] -> Newly-acked: " +
+                               ackedSize + " bytes, now complete for: " + state);
                 } else {
                     _log.debug("Received ACK of [MsgID " + state.getMessageId() + "] from [" +
-                               _remotePeer.toBase32().substring(0,6) + "] after " + lifetime +
+                               _remotePeer.toBase64().substring(0,6) + "] after " + lifetime +
                                " and " + numSends + " sends");
                 }
             }
         } else {
             if (_log.shouldDebug()) {
-                _log.debug("Received partial ACK of [MsgID " + state.getMessageId() + "] from [" + _remotePeer.toBase64().substring(0,6)
-                      + "] after " + lifetime + " and " + numSends + " sends ->"
-                      + " Complete? false"
-                      + "; Newly-acked: " + ackedSize
-                      + " bytes; Fragment: " + f.num
+                _log.debug("Received partial ACK of [MsgID " + state.getMessageId() + "] from ["
+                      + _remotePeer.toBase64().substring(0,6) + "] after " + lifetime + " and "
+                      + numSends + " sends -> Complete: false"
+                      + "\n* Newly-acked: " + ackedSize + " bytes * Fragment: " + f.num
                       + " for: " + state);
             }
         }

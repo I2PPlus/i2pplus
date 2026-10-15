@@ -641,16 +641,25 @@ class ClientManager {
         if (destHash == null) {return true;}
         ClientConnectionRunner runner = getRunner(destHash);
         if (runner == null) {
-            if (_log.shouldDebug()) {_log.debug("Should Publish LeaseSet: No runner for " + destHash.toBase32().substring(0,8));}
+            if (_log.shouldDebug()) {
+                _log.debug("Should Publish LeaseSet: No runner for [" +
+                           destHash.toBase32().substring(0,8) + "]");
+            }
             return true;
         }
         SessionConfig config = runner.getConfig(destHash);
         if (config == null) {
-            if (_log.shouldDebug()) {_log.debug("Should Publish LeaseSet: No config for " + destHash.toBase32().substring(0,8));}
+            if (_log.shouldDebug()) {
+                _log.debug("Should Publish LeaseSet: No config for [" +
+                           destHash.toBase32().substring(0,8) + "]");
+            }
             return true;
         }
         String prop = config.getOptions().getProperty(ClientManagerFacade.PROP_CLIENT_ONLY);
-        if (_log.shouldDebug()) {_log.debug("Should Publish LeaseSet: " + destHash.toBase32().substring(0,8) + " dontPublishLeaseSet=" + prop);}
+        if (_log.shouldDebug()) {
+            _log.debug("Should Publish LeaseSet: [" + destHash.toBase32().substring(0,8) +
+                       "] dontPublishLeaseSet: " + prop);
+        }
         return !Boolean.parseBoolean(prop);
     }
 

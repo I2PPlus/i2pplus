@@ -237,7 +237,7 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
                 log.debug("ClientPeerSelector " + length + (isInbound ? " Inbound" : " Outbound") +
                           ", " + ex.excluder.getReasonsSummary() +
                          "\n* Cooldowns: " + ex.peerCooldownExcluded + " shared(" + _peerCooldowns.size() +
-                         "), firstHopFails=" + ex.firstHopFailCount +
+                         "), firstHopFails: " + ex.firstHopFailCount +
                          (ex.firstPeerExclusions != null && !ex.firstPeerExclusions.isEmpty() ?
                           ", " + ex.firstPeerExclusions.size() + " first-hop diversity" : ""));
             }
@@ -258,7 +258,7 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
                 List<Hash> unusable = new ArrayList<>(preFinalize);
                 if (log.shouldDebug()) {
                     log.debug("CPS finalize emptied an approved selection (" + unusable.size() +
-                              " unusable peers) -> redrawing once with them excluded");
+                              " unusable peers) -> Redrawing once with them excluded");
                 }
                 SelectionExclusions retry = buildExclusions(settings, isInbound,
                                                             params.buildSuccess, length);
@@ -298,7 +298,7 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
             if (log.shouldWarn()) {
                 log.warn("CPS selection unusable for " + settings.getDestinationNickname() +
                          " (" + (isInbound ? "in" : "out") + "): " + (rv.size() - 1) +
-                         "/" + min + " hops -> discarding for redraw");
+                         "/" + min + " hops -> Discarding for redraw");
             }
             return Collections.emptyList();
         }
@@ -820,14 +820,15 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
             // still honoured, because they express a hard network policy
             // (no US peers, say) rather than a preference about this hop's role.
             if (log.shouldWarn()) {
-                log.warn("CPS no endpoint peer under role exclusions -> retrying against raw exclusions");
+                log.warn("CPS no endpoint peer under role exclusions"
+                         + " -> Retrying against raw exclusions");
             }
             ctx.profileOrganizer().selectAllNotFailingPeers(1, rawExclude, matches, false,
                     params.ipRestriction, params.ipSet);
         }
         if (matches.isEmpty()) {
             if (log.shouldWarn()) {
-                log.warn("CPS no endpoint peer found after all fallbacks -> aborting selection");
+                log.warn("CPS no endpoint peer found after all fallbacks -> Aborting selection");
             }
             return false;
         }
@@ -999,8 +1000,8 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
                     ctx.profileOrganizer().selectAllNotFailingPeers(1, softExclude, matches, false);
                 }
                 if (!matches.isEmpty() && log.shouldInfo()) {
-                    log.info("Soft fallback: found peer bypassing no-signal exclusion: " +
-                             matches.get(0).toBase64().substring(0, 6));
+                    log.info("Soft fallback: found peer bypassing no-signal exclusion: [" +
+                             matches.get(0).toBase64().substring(0, 6) + "]");
                 }
             }
         }
@@ -1045,8 +1046,8 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
                 // peers with persistent problems.
                 if (isFirstHopFailing(ctx, firstHop)) {
                     if (log.shouldInfo()) {
-                        log.info("First hop " + firstHop.toBase64().substring(0,6) +
-                                 " previously failed as first hop, retrying...");
+                        log.info("First hop [" + firstHop.toBase64().substring(0,6) +
+                                 "] previously failed as first hop -> Retrying");
                     }
                     matches.remove(firstHop);
                     // Refill: re-select a replacement so the slot isn't wasted
@@ -1062,8 +1063,8 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
                 // first hop only, so middle/last hops can still be filled.
                 if (ex.firstHopCooldowns != null && ex.firstHopCooldowns.contains(firstHop)) {
                     if (log.shouldInfo()) {
-                        log.info("First hop " + firstHop.toBase64().substring(0,6) +
-                                 " is on shared selection cooldown, retrying...");
+                        log.info("First hop [" + firstHop.toBase64().substring(0,6) +
+                                 "] is on shared selection cooldown -> Retrying");
                     }
                     matches.remove(firstHop);
                     if (refills < 3 && matches.isEmpty()) {
@@ -1075,8 +1076,8 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
                 }
                 if (isStalePeer(ctx, firstHop, params.buildSuccess)) {
                     if (log.shouldInfo()) {
-                        log.info("First hop " + firstHop.toBase64().substring(0,6) +
-                                 " is stale (no contact >4hrs), retrying selection...");
+                        log.info("First hop [" + firstHop.toBase64().substring(0,6) +
+                                 "] is stale (no contact >4hrs) -> Retrying selection");
                     }
                     matches.remove(firstHop);
                     if (refills < 3 && matches.isEmpty()) {
@@ -1120,8 +1121,8 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
         if (matches.isEmpty() && qualityAttempts >= 16) {
             if (log.shouldDebug()) {
                 log.debug("First-hop quality loop exhausted " + qualityAttempts +
-                          " candidates without a match; build will be attempted " +
-                          "with a degraded candidate if available");
+                          " candidates without a match" +
+                          "\n* Build will be attempted with a degraded candidate if available");
             }
         }
         // preConnectTo: warm up the transport session so the TBR delivery
@@ -1407,13 +1408,13 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
             boolean connecting = ctx.commSystem().isConnecting(firstHop);
             log.info("First hop accepted at tier " + tier + " after " + attempt + "/" + attempts +
                      " attempts (" + remaining + " left, " + _tierLogCount.get(key) + " since last log)" +
-                     " established=" + established + " connecting=" + connecting +
-                     " buildSuccess=" + String.format("%.2f", buildSuccess) +
-                     " fastTier=" + po.getFastPeerCount() +
-                     " highCap=" + po.getHighCapPeerCount() +
-                     " sample=" + po.getEffectiveCandidateSample(ctx) +
+                     "\n* established: " + established + " * connecting: " + connecting +
+                     " * buildSuccess: " + String.format("%.2f", buildSuccess) +
+                     "\n* fastTier: " + po.getFastPeerCount() +
+                     " * highCap: " + po.getHighCapPeerCount() +
+                     " * sample: " + po.getEffectiveCandidateSample(ctx) +
                      (established || connecting ? "" : "  <-- NO transport session") +
-                     " " + firstHop.toBase32().substring(0, 6));
+                     " [" + firstHop.toBase64().substring(0, 6) + "]");
         }
     }
 
@@ -1532,9 +1533,9 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
                 }
             } else {
                 if (log.shouldWarn()) {
-                    log.warn("CPS not enough peers for " + settings.getDestinationNickname() +
-                             " (" + (settings.isInbound() ? "in" : "out") + "): rv=" + rv.size() +
-                             " min=" + min + " length=" + length);
+                     log.warn("CPS not enough peers for " + settings.getDestinationNickname() +
+                              " (" + (settings.isInbound() ? "in" : "out") + "): rv: " + rv.size() +
+                              " min: " + min + " length: " + length);
                 }
                 return Collections.emptyList();
             }
@@ -1569,7 +1570,7 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
             int unblocked = ex.excluder.relaxNoSignalExclusions();
             if (unblocked > 0 && log.shouldInfo()) {
                 log.info("Relaxing no-signal exclusion: " + unblocked +
-                         " untested peers now available -> retrying fallback selection");
+                         " untested peers now available -> Retrying fallback selection");
             }
             added += collectFromTier(rv, min, params, ex);
             if (rv.size() < min)
@@ -1821,7 +1822,8 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
             if (!checkTunnel(isInbound, false, rv)) {
                 if (log.shouldWarn()) {
                     log.warn("CPS checkTunnel failed for " + settings.getDestinationNickname() +
-                             " (" + (settings.isInbound() ? "in" : "out") + ") rv=" + formatPeerList(rv));
+                             " (" + (settings.isInbound() ? "in" : "out") + ")" +
+                             " rv: " + formatPeerList(rv));
                 }
                 // No blanket client cooldown here: checkTunnel already blames
                 // the specific peers of the failing edge via tunnelTimedOut(),
@@ -2294,7 +2296,7 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
         for (Hash peer : peers) {
             if (ghostManager.isGhost(peer)) {
                 if (log.shouldDebug()) {
-                    log.debug("Skipping ghost peer [" + peer.toBase32().substring(0, 6) +"]");
+                    log.debug("Skipping ghost peer [" + peer.toBase64().substring(0, 6) +"]");
                 }
             } else {
                 filtered.add(peer);
@@ -2332,7 +2334,7 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
         for (Hash peer : peers) {
             if (peer != null && banlist.isBanlisted(peer)) {
                 if (log.shouldDebug()) {
-                    log.debug("Skipping banlisted peer [" + peer.toBase32().substring(0, 6) + "]");
+                    log.debug("Skipping banlisted peer [" + peer.toBase64().substring(0, 6) + "]");
                 }
             } else {
                 filtered.add(peer);
@@ -2340,7 +2342,7 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
         }
 
         if (filtered.isEmpty() && !peers.isEmpty() && log.shouldWarn()) {
-            log.warn("All selected peers were banlisted -> discarding selection for redraw");
+            log.warn("All selected peers were banlisted -> Discarding selection for redraw");
         }
 
         return filtered;

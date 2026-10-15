@@ -187,7 +187,8 @@ class OutboundEstablishState {
         _introductionNonce = -1;
         if (addr.getIntroducerCount() > 0) {
             if (_log.shouldDebug())
-                _log.debug("new outbound establish to " + remotePeer.calculateHash() + ", with address: " + addr);
+                _log.debug("New outbound establish to " + remotePeer.calculateHash() +
+                           ", with address: " + addr);
             _currentState = OutboundState.OB_STATE_PENDING_INTRO;
         } else {
             _currentState = OutboundState.OB_STATE_UNKNOWN;
@@ -531,7 +532,7 @@ class OutboundEstablishState {
             return false;
         long now = _context.clock().now();
         if (_log.shouldInfo())
-            _log.info(toString() + " accelerating Session Request by " + (_nextSend - now) + "ms");
+            _log.info("Accelerating Session Request by " + (_nextSend - now) + "ms " + toString());
         _nextSend = now;
         return true;
     }

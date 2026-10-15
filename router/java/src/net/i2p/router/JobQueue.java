@@ -247,7 +247,7 @@ public class JobQueue {
     public void addJob(Job job) {
         if (job == null || !_alive) {
             if (_log.shouldWarn() && job != null) {
-                _log.warn("JobQueue.addJob: job=" + job + ", alive=" + _alive + ", returning");
+                _log.warn("Add job blocked: job: " + job + " * alive: " + _alive);
             }
             return;
         }
@@ -259,7 +259,7 @@ public class JobQueue {
         long now = _context.clock().now();
         long start = job.getTiming().getStartAfter();
         if (start > now + 3*24*60*60*1000L && _log.shouldWarn()) {
-            _log.warn(job + " scheduled far in the future: " + (new Date(start)));
+            _log.warn("Scheduled far in the future: " + job + " -> " + (new Date(start)));
         }
         // O(1) index lookup; it covers _timedJobsReady too, whose jobs the pumper has
         // promoted and which are as ready as those in _readyJobs.
@@ -269,13 +269,15 @@ public class JobQueue {
         if (!alreadyExists) {
             // _timedJobs is ConcurrentSkipListSet — safe to modify outside the lock.
             boolean removed = removeTimed(job);
-            if (removed && _log.shouldWarn()) {_log.warn(job + " removed from queue and rescheduled -> Duplicate instance");}
+            if (removed && _log.shouldWarn()) {_log.warn("Removed " + job + " from queue and"
+                                                         + " rescheduled -> Duplicate instance");}
 
             // Don't re-add if it was already in _timedJobs (duplicate from requeue while still scheduled)
             if (!removed) {
                 if (shouldDrop(job, numReady)) {
                     if (_log.shouldWarn() && job.getName().contains("Remove Slow")) {
-                        _log.warn("Dropping RemoveSlowTunnelsJob: numReady=" + numReady + ", maxLag=" + getMaxLag());
+                        _log.warn("Dropping RemoveSlowTunnelsJob: numReady: " + numReady
+                                  + " * maxLag: " + getMaxLag());
                     }
                     job.dropped();
                     dropped = true;
@@ -318,7 +320,8 @@ public class JobQueue {
             _context.statManager().addRateData("jobQueue.droppedJobs", 1);
             _droppedJobsCount.incrementAndGet();
             if (_log.shouldWarn()) {
-                _log.warn(job + " dropped due to backlog -> " + numReady + " jobs already queued");
+                _log.warn("Dropped " + job + " due to backlog -> "
+                          + numReady + " jobs already queued");
             }
             String key = job.getName();
             JobStats stats = _jobStats.get(key);
@@ -343,7 +346,7 @@ public class JobQueue {
     public void addJobToTop(Job job) {
         if (job == null || !_alive) {
             if (_log.shouldWarn() && job != null) {
-                _log.warn("JobQueue.addJobToTop: job=" + job + ", alive=" + _alive + ", returning");
+                _log.warn("Add job to top blocked: job: " + job + " * alive: " + _alive);
             }
             return;
         }
@@ -352,7 +355,8 @@ public class JobQueue {
             // Promote any scheduled copy so the job runs once (now) instead of
             // twice (now, plus again when the timed copy matures).
             if (removeTimed(job) && _log.shouldWarn()) {
-                _log.warn(job + " removed from queue and promoted to top -> Duplicate instance");
+                _log.warn("Removed " + job + " from queue and promoted"
+                          + " to top -> Duplicate instance");
             }
             // remove() is O(n) on a LinkedBlockingQueue but the queue is always small (< 100).
             // Calling it unconditionally on all three avoids a second linear
@@ -824,7 +828,8 @@ public class JobQueue {
     synchronized void addRunners(int count) {
         if (!_allowParallelOperation || !_alive) {
             if (_log.shouldDebug())
-                _log.debug("addRunners BLOCKED: allowParallel=" + _allowParallelOperation + ", alive=" + _alive);
+                _log.debug("Add runners blocked: allowParallel: " + _allowParallelOperation
+                           + " * alive: " + _alive);
             return;
         }
 

@@ -417,7 +417,7 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
         OutboundSession sess = getSession(target);
         if (sess == null) {
             if (_log.shouldWarn())
-                _log.warn("registerTimer() but no session found for "  + target);
+                _log.warn("Cannot register timer, no session found for " + target);
             return false;
         }
         return sess.registerTimer(d, timer);
@@ -679,7 +679,8 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
             }
         } else {
             if (_log.shouldInfo())
-                _log.info(tag + " not found in Tagset \n* " + tagSet);
+                _log.info("Tag " + tag.toBase64() + " not found in session tag set" +
+                          "\n* " + tagSet);
         }
         return key;
     }
@@ -1108,7 +1109,8 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
                 _tagSet = tagset;
                 _state = null;
                 if (_log.shouldDebug())
-                    _log.debug("New Outbound Session -> rk = " + rk + " tk = " + tk + " 1st tagset:\n" + tagset);
+                    _log.debug("New Outbound Session -> Root key: " + rk +
+                               " * Tagset key: " + tk + "\n* 1st tag set:\n* " + tagset);
             } else {
                 // We are Alice
                 // This is an OUTBOUND NS, we make an INBOUND tagset for the NSR
@@ -1116,7 +1118,8 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
                 // store the state so we can find the right session when we receive the NSR
                 _state = state;
                 if (_log.shouldDebug())
-                    _log.debug("New Inbound Session -> rk = " + rk + " tk = " + tk + " 1st tagset:\n" + tagset);
+                    _log.debug("New Inbound Session -> Root key: " + rk +
+                               " * Tagset key: " + tk + "\n* 1st tag set:\n* " + tagset);
             }
         }
 
@@ -1148,8 +1151,12 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
                 RatchetTagSet tagset_ba = new RatchetTagSet(_hkdf, rk, split.k_ba,
                                                             now, 0, -1);
                 if (_log.shouldDebug()) {
-                    _log.debug("Update Inbound Session -> rk = " + rk + " tk = " + split.k_ab + " ES tagset:\n" + tagset_ab);
-                    _log.debug("Pending Outbound Session -> rk = " + rk + " tk = " + split.k_ba + " ES tagset:\n" + tagset_ba);
+                    _log.debug("Update Inbound Session -> Root key: " + rk +
+                               " * Tagset key: " + split.k_ab +
+                               "\n* Existing Session tag set:\n* " + tagset_ab);
+                    _log.debug("Pending Outbound Session -> Root key: " + rk +
+                               " * Tagset key: " + split.k_ba +
+                               "\n* Existing Session tag set:\n* " + tagset_ba);
                 }
                 synchronized (_unackedTagSets) {
                     _unackedTagSets.add(tagset_ba);
@@ -1165,8 +1172,12 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
                                                             now, 0, -1,
                                                             MIN_RCV_WINDOW_ES, MAX_RCV_WINDOW_ES);
                 if (_log.shouldDebug()) {
-                    _log.debug("Update Outbound Session -> rk = " + rk + " tk = " + split.k_ab + " ES tagset:\n" + tagset_ab);
-                    _log.debug("Update Inbound Session -> rk = " + rk + " tk = " + split.k_ba + " ES tagset:\n" + tagset_ba);
+                    _log.debug("Update Outbound Session -> Root key: " + rk +
+                               " * Tagset key: " + split.k_ab +
+                               "\n* Existing Session tag set:\n* " + tagset_ab);
+                    _log.debug("Update Inbound Session -> Root key: " + rk +
+                               " * Tagset key: " + split.k_ba +
+                               "\n* Existing Session tag set:\n* " + tagset_ba);
                 }
                 synchronized (_unackedTagSets) {
                     _tagSet = tagset_ab;
@@ -1458,9 +1469,10 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
                     }
                 }
                 if (_log.shouldDebug())
-                    _log.debug("First tag received from Inbound ES\n" + set +
-                               " but no corresponding Outbound ES set found, unacked size: " + _unackedTagSets.size() +
-                               " acked size: " + ((_tagSet != null) ? 1 : 0));
+                    _log.debug("First tag received from Inbound Existing Session\n* " + set +
+                               "\n* No corresponding Outbound Existing Session tag set found" +
+                               " * Unacked size: " + _unackedTagSets.size() +
+                               " * Acked size: " + ((_tagSet != null) ? 1 : 0));
             }
         }
 
@@ -1687,11 +1699,11 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
             ReplyCallback callback = _callbacks.remove(key);
             if (callback != null) {
                 if (_log.shouldInfo())
-                    _log.info("ACK rcvd ID " + id + " n=" + n + " callback " + callback);
+                    _log.info("ACK received ID: " + id + " * n: " + n + " * callback: " + callback);
                 callback.onReply();
             } else {
                 if (_log.shouldInfo())
-                    _log.info("ACK rcvd ID " + id + " n=" + n + ", no callback");
+                    _log.info("ACK received ID: " + id + " * n: " + n + " -> No callback");
             }
         }
 

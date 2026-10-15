@@ -1654,8 +1654,9 @@ public class BuildExecutor implements Runnable {
             return;
         }
         if (!shouldLogBudgetExhausted(_context.clock().now())) { return; }
-        _log.warn("Outbound-bandwidth build budget exhausted -> No build may start. In flight: " +
-                  concurrent + "; outbound: " + maxKBps + " KBps; per-pool ceiling: " + legitimate);
+        _log.warn("Outbound-bandwidth build budget exhausted -> No build may start" +
+                  "\n* In flight: " + concurrent + " * outbound: " + maxKBps + " KBps" +
+                  " * per-pool ceiling: " + legitimate);
     }
 
     /**
@@ -1697,7 +1698,7 @@ public class BuildExecutor implements Runnable {
         buf.append(cfg.isInbound() ? "inbound" : "outbound");
         buf.append(' ').append(destination != null ? destination : "exploratory");
         buf.append(", ").append(length).append(length == 1 ? " hop" : " hops");
-        buf.append(", gateway=Hop").append(gatewayHop < 0 ? "?" : String.valueOf(gatewayHop));
+        buf.append(", gateway: Hop").append(gatewayHop < 0 ? "?" : String.valueOf(gatewayHop));
         appendRequestMsgId(buf, cfg);
         for (int hop = 0; hop < length; hop++) {
             Hash peer = cfg.getPeer(hop);
@@ -1707,11 +1708,11 @@ public class BuildExecutor implements Runnable {
                 assigned && !isUs && commSystem.wasUnreachable(peer),
                 assigned && !isUs && commSystem.isEstablished(peer),
                 assigned && !isUs && commSystem.isConnecting(peer));
-            buf.append(" | Hop").append(hop).append('=');
+            buf.append(" | Hop").append(hop).append(": ");
             if (assigned && !isUs) {
                 PeerProfile profile = _context.profileOrganizer().getProfileNonblocking(peer);
                 long lastHeardFrom = (profile != null) ? profile.getLastHeardFrom() : 0;
-                buf.append(peer.toBase64(), 0, 6);
+                buf.append('[').append(peer.toBase64(), 0, 6).append(']');
                 buf.append(' ').append(classification);
                 buf.append(" heard ");
                 buf.append(lastHeardFrom > 0 ? describeAge(now - lastHeardFrom) + " ago" : "never");
@@ -1747,7 +1748,7 @@ public class BuildExecutor implements Runnable {
         // wasRecentlyBuilding()), a different value from the I2NP message ID.
         // Reusing that token for a second ID would make the two ambiguous in
         // the same log stream.
-        if (msgId != 0) {buf.append(", reqMsgId=").append(msgId);}
+        if (msgId != 0) {buf.append(", reqMsgId: ").append(msgId);}
     }
 
     /**
@@ -1837,10 +1838,10 @@ public class BuildExecutor implements Runnable {
             }
             PeerProfile profile = _context.profileOrganizer().getProfileNonblocking(peer);
             long lastHeardFrom = (profile != null) ? profile.getLastHeardFrom() : 0;
-            buf.append(peer.toBase64().substring(0, 6));
-            buf.append(", unreachable=").append(commSystem.wasUnreachable(peer));
-            buf.append(", established=").append(commSystem.isEstablished(peer));
-            buf.append(", connecting=").append(commSystem.isConnecting(peer));
+            buf.append('[').append(peer.toBase64().substring(0, 6)).append(']');
+            buf.append(", unreachable: ").append(commSystem.wasUnreachable(peer));
+            buf.append(", established: ").append(commSystem.isEstablished(peer));
+            buf.append(", connecting: ").append(commSystem.isConnecting(peer));
             buf.append(", last heard from ");
             if (lastHeardFrom > 0) {
                 buf.append(describeAge(now - lastHeardFrom)).append(" ago");
@@ -2419,11 +2420,12 @@ public class BuildExecutor implements Runnable {
 
                 if (noInboundOrOutbound) {
                     if (_log.shouldDebug()) {
-                        _log.debug("No inbound or outbound tunnels -> freeTunnels: " + freeTunnelCount +
-                                  " outboundTunnels: " + outboundTunnelCount +
-                                  " mgr: " + (mgr != null) +
-                                  " buildingMap: " + _currentlyBuildingMap.size() +
-                                  " allowed: " + allowed + " wanted: " + wanted.size());
+                        _log.debug("No inbound or outbound tunnels" +
+                                  "\n* freeTunnels: " + freeTunnelCount +
+                                  " * outboundTunnels: " + outboundTunnelCount +
+                                  " * mgr: " + (mgr != null) +
+                                  " * buildingMap: " + _currentlyBuildingMap.size() +
+                                  " * allowed: " + allowed + " * wanted: " + wanted.size());
                     }
                     // Kickstart inbound/outbound tunnels if missing to avoid stall
                     if (mgr != null) {
@@ -2748,7 +2750,7 @@ public class BuildExecutor implements Runnable {
         if (cfg.getLength() > 1 && !cfg.isBypassPacing() && hasBuildInFlightToFirstHop(cfg)) {
             _context.statManager().addRateData("tunnel.buildPacedOut", 1);
             if (_log.shouldDebug()) {
-                _log.debug("buildTunnel() GATED (pacing): first hop already in flight for " + cfg);
+                _log.debug("Build gated (pacing): first hop already in flight for " + cfg);
             }
             // Never sent to the network, so no timeout will fire — remove it
             // now or the pool's _inProgress count leaks upward forever,
@@ -2793,7 +2795,7 @@ public class BuildExecutor implements Runnable {
                 Hash peer = cfg.getPeer(hop);
                 if (peer != null && banlist.isBanlisted(peer)) {
                     if (_log.shouldDebug()) {
-                        _log.debug("buildTunnel() GATED (ban): hop " + hop +
+                        _log.debug("Build gated (ban): hop " + hop +
                                    " [" + peer.toBase64().substring(0, 6) +
                                    "] is banned for " + cfg);
                     }
@@ -2816,7 +2818,7 @@ public class BuildExecutor implements Runnable {
                 // Prune if we've used >threshold% of the timeout budget before dispatch
                 if (elapsed > (timeoutBudget * _staleBuildThresholdPct / 100)) {
                     if (_log.shouldDebug()) {
-                        _log.debug("buildTunnel() GATED (stale): elapsed " + (elapsed / 1000) + "s of " +
+                        _log.debug("Build gated (stale): elapsed " + (elapsed / 1000) + "s of " +
                                   (timeoutBudget / 1000) + "s budget for " + cfg);
                     }
                     _context.statManager().addRateData("tunnel.buildStalePruned", 1);
@@ -2839,7 +2841,8 @@ public class BuildExecutor implements Runnable {
             if (buildPeer != null && !_context.commSystem().isEstablished(buildPeer)) {
                 _context.statManager().addRateData("tunnel.buildNoSession", 1);
                 if (_log.shouldDebug()) {
-                    _log.debug("buildTunnel() GATED (no session): first hop has no session for " + cfg);
+                    _log.debug("Build gated (no session): first hop has no session for "
+                               + cfg);
                 }
                 cfg.getTunnelPool().removeInProgress(cfg);
                 return;
@@ -2856,7 +2859,7 @@ public class BuildExecutor implements Runnable {
         boolean ok = BuildRequestor.request(_context, cfg, this, _adaptiveFirstHopTimeout);
         if (!ok) {
             if (_log.shouldDebug()) {
-                _log.debug("buildTunnel() BuildRequestor.request() returned false for " + cfg);
+                _log.debug("BuildRequestor.request() returned false for " + cfg);
             }
             return;
         }

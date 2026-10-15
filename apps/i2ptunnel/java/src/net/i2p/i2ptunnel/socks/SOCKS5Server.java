@@ -129,7 +129,7 @@ class SOCKS5Server extends SOCKSServer {
 
         switch (method) {
           case Method.USERNAME_PASSWORD:
-            _log.debug("username/password authentication required");
+            _log.debug("Username/Password authentication required");
             sendInitReply(Method.USERNAME_PASSWORD, out);
             verifyPassword(in, out, client);
             return;
@@ -502,12 +502,12 @@ class SOCKS5Server extends SOCKSServer {
             throw new SOCKSException("Error in destination format");
         } catch (IOException e) {
             if (_log.shouldWarn())
-                _log.warn("socks error", e);
+                _log.warn("SOCKS error", e);
             sendFailureReply(Reply.HOST_UNREACHABLE, out);
             throw new SOCKSException("Connection error", e);
         } catch (I2PException e) {
             if (_log.shouldWarn())
-                _log.warn("socks error", e);
+                _log.warn("SOCKS error", e);
             sendFailureReply(Reply.HOST_UNREACHABLE, out);
             throw new SOCKSException("Connection error", e);
         }

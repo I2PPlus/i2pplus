@@ -335,7 +335,7 @@ public class GraphGenerator implements Runnable, ClientApp {
                 for (GraphListener lsnr : _listeners) {
                     if (lsnr.isDetached()) {detached++;}
                 }
-                _log.debug("graph heartbeat: tick " + _ticks + ", listeners=" + _listeners.size()
+                _log.debug("Graph heartbeat: tick " + _ticks + ", listeners=" + _listeners.size()
                            + " detached=" + detached + " running=" + _isRunning);
             }
             // Health check: silently stopping the data path leaves the .jrb files

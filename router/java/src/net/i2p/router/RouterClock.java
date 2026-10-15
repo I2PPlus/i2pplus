@@ -132,7 +132,7 @@ public class RouterClock extends Clock {
             if (!_isSystemClockBad && (offsetMs > MAX_OFFSET || offsetMs < 0 - MAX_OFFSET)) {
                 Log log = getLog();
                 if (log.shouldWarn())
-                    log.warn("Maximum offset shift exceeded [" + offsetMs + "], NOT HONORING IT");
+                    log.warn("Maximum offset shift exceeded [" + offsetMs + "] -> Not honoring it");
                 return;
             }
 
@@ -148,7 +148,7 @@ public class RouterClock extends Clock {
 
             // let's be perfect
             if (delta == 0) {
-                getLog().debug("Not changing offset, delta=0");
+                getLog().debug("Not changing offset, delta: 0");
                 _alreadyChanged = true;
                 return;
             }
@@ -183,13 +183,15 @@ public class RouterClock extends Clock {
 
                         if (log.shouldWarn())
                             log.warn("Ignoring clock offset of " + offsetMs + "ms (current: " + _offset +
-                                       "ms) as it would increase peer clock skew from " + currentPeerClockSkew +
+                                       "ms)\n* Would increase peer clock skew from " +
+                                       currentPeerClockSkew +
                                        "ms to " + predictedPeerClockSkew + "ms (Stratum: " + stratum + ")");
                         return;
                     } else {
                         if (log.shouldInfo())
                             log.info("Approving clock offset of " + offsetMs + "ms (current: " + _offset +
-                                       "ms) as it will decrease peer clock skew from " + currentPeerClockSkew +
+                                       "ms)\n* Will decrease peer clock skew from " +
+                                       currentPeerClockSkew +
                                        "ms to " + predictedPeerClockSkew + "ms (Stratum: " + stratum + ")");
                     }
             } // check sanity

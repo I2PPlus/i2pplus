@@ -283,7 +283,10 @@ class MessageReceiver {
                     off += len;
                 }
                 if (off != sz) {
-                    if (_log.shouldWarn()) {_log.warn("Hmm, offset of the fragments = " + off + " while the state says " + sz);}
+                    if (_log.shouldWarn()) {
+                        _log.warn("Fragment reassembly offset mismatch: assembled: " + off +
+                                  " * expected: " + sz);
+                    }
                     return null;
                 }
                 m = I2NPMessageImpl.fromRawByteArray(_context, data, 0, sz, handler);
@@ -299,8 +302,10 @@ class MessageReceiver {
                 if (state.getFragmentCount() > 1) {ba = buf;}
                 else {ba = state.getFragments()[0];}
                 byte[] data = ba.getData();
-                _log.warn("Message invalid: " + state + " PeerState: " + _transport.getPeerState(state.getFrom()) +
-                          "\n* DUMP:\n" + HexDump.dump(data, 0, sz) + "\n* RAW:\n" + Base64.encode(data, 0, sz), ime);
+                _log.warn("Message invalid: " + state + " * PeerState: " +
+                          _transport.getPeerState(state.getFrom()) +
+                          "\n* DUMP:\n* " + HexDump.dump(data, 0, sz) +
+                          "* RAW:\n* " + Base64.encode(data, 0, sz), ime);
             }
             if (state.getFragments()[0].getData()[0] == DatabaseStoreMessage.MESSAGE_TYPE) {
                 PeerState ps = _transport.getPeerState(state.getFrom());

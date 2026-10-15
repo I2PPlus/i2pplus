@@ -1374,8 +1374,10 @@ public class EstablishmentManager {
             int percent = probAccept > 128 ? 100 : (probAccept / 128) * 100;
             if (probAccept >= 128 || _context.random().nextInt(128) < probAccept) {
                 if (_log.shouldWarn()) {
-                    _log.warn("[SSU] Dropping incoming connection (" + (percent >= 1 ? Math.max(percent,100) : "1") + "% chance)" +
-                              " -> Previous / current connections per minute: " + last + " / " + (int) (currentRate * 60*1000));
+                    _log.warn("[SSU] Dropping incoming connection (" +
+                              (percent >= 1 ? Math.max(percent,100) : "1") + "% chance)" +
+                              "\n* Previous / current connections per minute: " + last + " / " +
+                              (int) (currentRate * 60*1000));
                  }
                  return false;
             }
@@ -2350,7 +2352,8 @@ public class EstablishmentManager {
             if (!SSU2Util.validateSig(_context, SSU2Util.RELAY_RESPONSE_PROLOGUE,
                                      bobHash, null, data, spk)) {
                 if (_log.shouldWarn()) {
-                    _log.warn("[SSU] Signature failed RelayResponse (" + parseReason(code) + ") as Alice from:\n" + signerRI);
+                    _log.warn("[SSU] Signature failed RelayResponse (" + parseReason(code) +
+                              ") as Alice from:\n* " + signerRI);
                 }
                 istate = INTRO_STATE_FAILED;
                 charlie2.setIntroState(bobHash, istate);
@@ -2489,7 +2492,9 @@ public class EstablishmentManager {
             nonce = DataHelper.fromLong(cb._respData, 0, 4);
             // check signature below
         } catch (Exception e) {
-            if (_log.shouldWarn() && !shouldSuppressException(e)) {_log.warn("[SSU] BAD HolePunch packet:\n" + HexDump.dump(data, off, len), e);}
+            if (_log.shouldWarn() && !shouldSuppressException(e)) {
+                _log.warn("[SSU] BAD HolePunch packet:\n* " + HexDump.dump(data, off, len), e);
+            }
             return;
         } finally {chacha.destroy();}
 
@@ -2828,10 +2833,10 @@ public class EstablishmentManager {
                     _log.warn("[SSU] Giving up on inbound establishment from "
                               + cur.getRemoteHostId() + " after " + cur.getLifetime(now)
                               + "ms in state " + istate
-                              + " (budget " + budget + "ms, retried=" + isRetrySent
-                              + ", base=" + MAX_IB_ESTABLISH_TIME.get()
-                              + ", retryBudget=" + IB_RETRY_SENT_MAX_TIME
-                              + ", suppressed " + getInboundGiveupSuppressed() + ")");
+                              + "\n* Budget: " + budget + "ms * Retried: " + isRetrySent
+                              + " * Base: " + MAX_IB_ESTABLISH_TIME.get() + "ms"
+                              + "\n* Retry budget: " + IB_RETRY_SENT_MAX_TIME + "ms"
+                              + " * Suppressed: " + getInboundGiveupSuppressed());
                 }
                 iter.remove(); // took too long
                 inboundState = cur;
@@ -2901,7 +2906,8 @@ public class EstablishmentManager {
 
                   case IB_STATE_UNKNOWN:
                     // Can't happen, always call receiveSessionRequest() before putting in map
-                    if (_log.shouldError()) {_log.error("hrm, state is unknown for " + inboundState);}
+                    if (_log.shouldError()) {_log.error("Establishment state unknown for " +
+                                                        inboundState);}
                     break;
 
                   default:
@@ -3723,7 +3729,8 @@ public class EstablishmentManager {
                     int claimed = _outboundByClaimedAddress.size();
                     int hash = _outboundByHash.size();
                     _log.debug("Inbound states [" + iactive + "] * Outbound states [" + oactive + "] -> " +
-                               "Queued: " + queued + "; Intros: " + live + "; Claimed: " + claimed + "; Hash: " + hash);
+                               "Queued: " + queued + " * Introductions: " + live +
+                               " * Claimed: " + claimed + " * Hash: " + hash);
                 }
             }
             _activity = 0;

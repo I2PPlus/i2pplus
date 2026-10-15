@@ -97,7 +97,7 @@ public class TestSwarm {
                 flooder.closed();
                 _log.debug("Connection " + flooder.getConnectionId() + " closed to " + flooder.getDestination());
             } else {
-                _log.error("Not connected to " + id + " but we were just closed?");
+                _log.error("Not connected to " + id + " but the connection was just closed?");
             }
         }
         public void streamDataReceived(int id, byte[] data, int offset, int length) {
@@ -109,7 +109,7 @@ public class TestSwarm {
             if (flooder != null) {
                 flooder.received(length, value);
             } else {
-                _log.error("not connected to " + id + " but we received " + value + "?");
+                _log.error("Not connected to " + id + " but received " + value + "?");
             }
         }
         public void streamConnectedReceived(String dest, int id) {

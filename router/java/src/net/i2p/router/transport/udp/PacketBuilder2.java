@@ -519,9 +519,12 @@ class PacketBuilder2 {
             off += MAC_LEN;
             if (_log.shouldDebug()) {
                 if (off + ipHeaderSize > currentMTU) {
-                    _log.info("[SSU] Packet + header is larger than peer's current MTU (" + currentMTU + " bytes) " +
-                              packet + "; Packet: " + off + " bytes; Header: " + ipHeaderSize + "bytes; Data: " + dataSize + " bytes; " +
-                              "Fragments: " + DataHelper.toString(fragments));
+                    _log.info("[SSU] Packet + header is larger than peer's current MTU (" +
+                              currentMTU + " bytes)" +
+                              "\n* Packet: " + off + " bytes * Header: " + ipHeaderSize + " bytes" +
+                              " * Data: " + dataSize + " bytes" +
+                              "\n* Fragments: " + DataHelper.toString(fragments) +
+                              "\n* " + packet);
                 }
             } else if (_log.shouldInfo()) {
                 _log.info("[SSU] Packet + header is larger than peer's current MTU (" + currentMTU + " bytes)");
@@ -882,9 +885,9 @@ class PacketBuilder2 {
         int total = pkt.getLength();
         if (_log.shouldInfo())
             _log.info("[SSU] Building " + count + " fragmented SessionConfirmed packets -> " +
-                      " Max data: " + max +
-                      "; RouterInfo block size: " + blockSize +
-                      "; Total data size: " + total + " bytes");
+                      "Max data: " + max + " bytes" +
+                      "\n* RouterInfo block size: " + blockSize + " bytes" +
+                      " * Total data size: " + total + " bytes");
 
         // fix up packet0 by putting the byte array back
         // and encrypting the header
@@ -1264,7 +1267,8 @@ class PacketBuilder2 {
             throw new RuntimeException("Bad msg 1 out", gse);
         }
         if (_log.shouldDebug())
-            _log.debug("[SSU] After message 1: " + state + '\n' + net.i2p.util.HexDump.dump(data, off, pkt.getLength()));
+            _log.debug("[SSU] After message 1: " + state + "\n* " +
+                       net.i2p.util.HexDump.dump(data, off, pkt.getLength()));
         SSU2Header.encryptHandshakeHeader(packet, hdrKey1, hdrKey2);
         if (_log.shouldDebug())
             _log.debug("[SSU] HandshakeHeader -> [Key1: " + Base64.encode(hdrKey1) + "] [Key2: " + Base64.encode(hdrKey2) + "]");

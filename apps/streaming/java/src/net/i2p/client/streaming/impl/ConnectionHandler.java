@@ -603,7 +603,7 @@ class ConnectionHandler {
      * @throws SocketTimeoutException if a timeout was previously set with setSoTimeout and the timeout has been reached.
      */
     public Connection accept(long timeoutMs) throws RouterRestartException, ConnectException, SocketTimeoutException {
-        if (_log.shouldDebug()) {_log.debug("Accept with timeout of " + timeoutMs + "ms called...");}
+        if (_log.shouldDebug()) {_log.debug("Accept with timeout of " + timeoutMs + "ms called");}
 
         if (!_active) {
             // Drain any remaining results
@@ -671,7 +671,7 @@ class ConnectionHandler {
      */
     private void reReceivePacket(Packet packet) {
         if (packet == null) {
-            if (_log.shouldWarn()) {_log.warn("Received null packet, ignoring...");}
+            if (_log.shouldWarn()) {_log.warn("Received null packet -> Ignoring");}
             return;
         }
         Connection con = _manager.getConnectionByOutboundId(packet.getReceiveStreamId());
@@ -704,7 +704,7 @@ class ConnectionHandler {
      */
     private void sendReset(Packet packet) {
         if (packet == null) {
-            if (_log.shouldWarn()) {_log.warn("Received NULL packet, cannot send RESET...");}
+            if (_log.shouldWarn()) {_log.warn("Received null packet, cannot send RESET");}
             return;
         }
         ByteArray ba = _cache.acquire();

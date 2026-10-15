@@ -1466,7 +1466,7 @@ public class TunnelControllerGroup implements ClientApp {
         File cfgFile = assureConfigFile(tc);
         if (!FileUtil.rename(cfgFile, new File(cfgFile.getAbsolutePath() + ".bak")) &&
             !cfgFile.delete() && _log.shouldWarn())
-            _log.warn("could not delete config file" + cfgFile.toString());
+            _log.warn("Could not delete config file " + cfgFile);
         if (!shouldMigrate())
             saveConfig();
     }

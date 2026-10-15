@@ -433,7 +433,7 @@ public class SingleFileNamingService extends NamingService {
             }
             return rv;
         } catch (IOException ioe) {
-            _log.error("getEntries error", ioe);
+            _log.error("Error reading entries file", ioe);
             return Collections.emptyMap();
         } finally {
             releaseReadLock();
@@ -492,7 +492,7 @@ public class SingleFileNamingService extends NamingService {
             }
             return rv;
         } catch (IOException ioe) {
-            _log.error("getEntries error", ioe);
+            _log.error("Error reading entries file", ioe);
             return Collections.emptyMap();
         } finally {
             releaseReadLock();
@@ -550,7 +550,7 @@ public class SingleFileNamingService extends NamingService {
             }
             return rv;
         } catch (IOException ioe) {
-            _log.error("getNames error", ioe);
+            _log.error("Error reading names file", ioe);
             return Collections.emptySet();
         } finally {
             releaseReadLock();
@@ -580,7 +580,7 @@ public class SingleFileNamingService extends NamingService {
                 return rv;
             }
         } catch (IOException ioe) {
-            _log.error("size() error", ioe);
+            _log.error("Error counting entries", ioe);
             return -1;
         } finally {
             releaseReadLock();

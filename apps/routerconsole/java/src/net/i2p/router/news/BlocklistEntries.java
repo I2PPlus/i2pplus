@@ -97,28 +97,28 @@ public class BlocklistEntries {
         Log log = ctx.logManager().getLog(BlocklistEntries.class);
         String[] ss = DataHelper.split(sig, ":", 2);
         if (ss.length != 2) {
-            log.error("blocklist feed bad sig: " + sig);
+            log.error("Blocklist feed bad sig: " + sig);
             return false;
         }
         SigType type = SigType.parseSigType(ss[0]);
         if (type == null) {
-            log.error("blocklist feed bad sig: " + sig);
+            log.error("Blocklist feed bad sig: " + sig);
             return false;
         }
         if (!type.isAvailable()) {
-            log.error("blocklist feed sigtype unavailable: " + sig);
+            log.error("Blocklist feed sigtype unavailable: " + sig);
             return false;
         }
         byte[] bsig = Base64.decode(ss[1]);
         if (bsig == null) {
-            log.error("blocklist feed bad sig: " + sig);
+            log.error("Blocklist feed bad sig: " + sig);
             return false;
         }
         Signature ssig;
         try {
             ssig = new Signature(type, bsig);
         } catch (IllegalArgumentException iae) {
-            log.error("blocklist feed bad sig: " + sig);
+            log.error("Blocklist feed bad sig: " + sig);
             return false;
         }
 
@@ -128,10 +128,10 @@ public class BlocklistEntries {
         try {
             pubkey = ring.getKey(signer, CONTENT_ROUTER, type);
         } catch (IOException ioe) {
-            log.error("blocklist feed error", ioe);
+            log.error("Blocklist feed error", ioe);
             return false;
         } catch (GeneralSecurityException gse) {
-            log.error("blocklist feed error", gse);
+            log.error("Blocklist feed error", gse);
             return false;
         }
         if (pubkey == null) {
@@ -144,15 +144,15 @@ public class BlocklistEntries {
                 try {
                     pubkey = ring.getKey(signer, CONTENT_ROUTER, type);
                 } catch (IOException ioe) {
-                    log.error("blocklist feed error", ioe);
+                    log.error("Blocklist feed error", ioe);
                     return false;
                 } catch (GeneralSecurityException gse) {
-                    log.error("blocklist feed error", gse);
+                    log.error("Blocklist feed error", gse);
                     return false;
                 }
             }
             if (pubkey == null) {
-                log.error("unknown signer for blocklist feed: " + signer);
+                log.error("Unknown signer for blocklist feed: " + signer);
                 return false;
             }
         }
@@ -160,7 +160,7 @@ public class BlocklistEntries {
         try {
             spubkey = SigUtil.fromJavaKey(pubkey, type);
         } catch (GeneralSecurityException gse) {
-            log.error("blocklist feed bad sig: " + sig, gse);
+            log.error("Blocklist feed bad sig: " + sig, gse);
             return false;
         }
         StringBuilder buf = new StringBuilder(256);
@@ -174,9 +174,9 @@ public class BlocklistEntries {
         byte[] data = DataHelper.getUTF8(buf.toString());
         boolean rv = ctx.dsa().verifySignature(ssig, data, spubkey);
         if (rv)
-            log.info("blocklist feed sig ok");
+            log.info("Blocklist feed sig ok");
         else
-            log.error("blocklist feed sig verify fail: " + signer);
+            log.error("Blocklist feed sig verify fail: " + signer);
         verified = rv;
         return rv;
     }

@@ -507,7 +507,8 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
                         if (service == null) {
                             service = current2.getService(WAN_PPP_CONNECTION);
                             if (service == null && _log.shouldWarn())
-                                    _log.warn(_router.getFriendlyName() + " doesn't have any recognized connection type; we won't be able to use it!");
+                                    _log.warn("No recognized connection type on device " +
+                                              _router.getFriendlyName() + " -> Cannot use it");
                         }
                     }
                     if (service != null) {
@@ -789,7 +790,7 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
                         // so we don't attempt to add to the other lists below
                         iter.remove();
                         if (_log.shouldWarn())
-                            _log.warn("open() failed on new HTTP server socket: " + addr);
+                            _log.warn("Failed to open new HTTP server socket: " + addr);
                     }
                 }
             }
@@ -863,7 +864,8 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
             }
 
             if (_log.shouldDebug())
-                _log.debug("Current sockets:\nHTTP: " + hlist + "\nSearch response: " + list + "\nNotify: " + nlist);
+                _log.debug("Current sockets:\n* HTTP: " + hlist +
+                           "\n* Search response: " + list + "\n* Notify: " + nlist);
         }
     }
 

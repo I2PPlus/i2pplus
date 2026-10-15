@@ -87,7 +87,8 @@ import net.i2p.util.Log;
             if (ctx.commSystem().isEstablished(to)) {
                 if (ctx.commSystem().wasUnreachable(to)) {
                     if (log.shouldWarn()) {
-                        log.warn("canConnect: we control from, but [" + to.toString().substring(0,6) + "] is unreachable");
+                        log.warn("Cannot connect: we control from, but [" +
+                                 to.toString().substring(0,6) + "] is unreachable");
                     }
                     return false;
                 }
@@ -99,7 +100,8 @@ import net.i2p.util.Log;
             if (ctx.commSystem().isEstablished(from)) {
                 if (ctx.commSystem().wasUnreachable(from)) {
                     if (log.shouldWarn()) {
-                        log.warn("canConnect: we control to, but [" + from.toString().substring(0,6) + "] is unreachable");
+                        log.warn("Cannot connect: we control to, but [" +
+                                 from.toString().substring(0,6) + "] is unreachable");
                     }
                     return false;
                 }
@@ -142,10 +144,10 @@ import net.i2p.util.Log;
                 if (ctx.commSystem().wasUnreachable(from) ||
                     ctx.commSystem().wasUnreachable(to)) {
                     if (log.shouldWarn()) {
-                        log.warn("canConnect: non-self pair rejected - [" +
-                                 from.toString().substring(0,6) + "] unreachable=" +
-                                 ctx.commSystem().wasUnreachable(from) + ", [" +
-                                 to.toString().substring(0,6) + "] unreachable=" +
+                        log.warn("Cannot connect: non-self pair rejected - [" +
+                                 from.toString().substring(0,6) + "] unreachable: " +
+                                 ctx.commSystem().wasUnreachable(from) + " * [" +
+                                 to.toString().substring(0,6) + "] unreachable: " +
                                  ctx.commSystem().wasUnreachable(to));
                     }
                     return false;

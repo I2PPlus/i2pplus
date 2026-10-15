@@ -92,8 +92,12 @@ public class LogsHelper extends HelperBase {
 
 /**
  * The middle of the rewrite chain, run after the double-bracket cleanup and
- * before the bullet rewrite. The un-ticking has to see the "&#10004;" and
- * "&#10008;" that the first table produces.
+ * before the newline-bullet rewrite. The un-ticking has to see the "&#10004;"
+ * and "&#10008;" that the first table produces. The last entry converts the
+ * inline {@code " * "} value separator that source log messages write for the
+ * file log into the bullet separator the console renders. The literal
+ * {@code \u2022} is used rather than {@code &bullet;} so the rewrite cannot be
+ * broken by the HTML escaping that runs before this chain.
  *
  * @since 0.9.72+
  */
@@ -104,7 +108,8 @@ public class LogsHelper extends HelperBase {
         {"[IRC Client] Outbound message", "[IRC Client] &#11165;"},
         {"not publishing old one: RouterInfo:", "not publishing old one:"},
         {"Publishing our RouterInfo after delay: RouterInfo:", "Publishing our RouterInfo after delay:"},
-        {":  ", ": "}
+        {":  ", ": "},
+        {" * ", " \u2022 "} // file-log value separator -> console bullet
     };
 
 /**

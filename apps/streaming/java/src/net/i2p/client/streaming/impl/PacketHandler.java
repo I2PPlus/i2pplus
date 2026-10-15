@@ -307,7 +307,7 @@ class PacketHandler {
             }
         } else if (packet.isFlagSet(Packet.FLAG_SYNCHRONIZE)) {
             if (log.shouldWarn())
-                log.warn("Received SYN packet with wrong IDs -> Sending RESET...");
+                log.warn("Received SYN packet with wrong IDs -> Sending RESET");
             sendReset(packet);
             packet.releasePayload();
         } else {
@@ -420,7 +420,7 @@ class PacketHandler {
         } else if (queueIfNoConn) {
             // route orphan (non-SYN) packets through the handler's queue too
             if (log.shouldWarn())
-                log.warn("Packet " + packet + " belongs to no connections, putting on SYN queue...");
+                log.warn("Packet " + packet + " belongs to no connections, putting on SYN queue");
             if (log.shouldDebug()) {
                 StringBuilder buf = new StringBuilder(128);
                 for (Connection c : manager.listConnections()) {

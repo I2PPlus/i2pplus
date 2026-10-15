@@ -38,7 +38,7 @@ class SchedulerReceived extends SchedulerImpl {
     public void eventOccurred(Connection con) {
         if (con.getUnackedPacketsReceived() <= 0) {
             if (_log.shouldWarn())
-                _log.warn("hmm, state is received, but no unacked packets received?");
+                _log.warn("State received but no unacked packets remain");
             return;
         }
 

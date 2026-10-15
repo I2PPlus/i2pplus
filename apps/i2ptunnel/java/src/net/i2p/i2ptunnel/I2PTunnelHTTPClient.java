@@ -1416,7 +1416,8 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                         byte[] hData = Base32.decode(destination.substring(0, 52));
                         if (hData != null) {
                             if (_log.shouldInfo()) {
-                                _log.info("[HTTPClient] Looking up b32 in-session: " + destination);
+                                _log.info("[HTTPClient] Looking up base32 address in-session: " +
+                                          destination);
                             }
                             Hash hash = Hash.create(hData);
                             clientDest = lookupMs > 0 ? sess.lookupDest(hash, lookupMs) : null;
@@ -1614,9 +1615,9 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                 Hash destHash = clientDest.calculateHash();
                 if (!tryAcquireConnPermit(destHash)) {
                     if (_log.shouldWarn()) {
-                        _log.warn(getPrefix(requestId) + "Connection limit reached for " +
-                                  destHash.toBase32().substring(0, 6) +
-                                  " (" + MAX_CONNS_PER_DEST + " concurrent)");
+                        _log.warn(getPrefix(requestId) + "Connection limit reached for [" +
+                                  destHash.toBase32().substring(0, 8) +
+                                  "] (" + MAX_CONNS_PER_DEST + " concurrent)");
                     }
                     throw new IOException("Too many concurrent connections to " +
                                           destHash.toBase32().substring(0, 6));

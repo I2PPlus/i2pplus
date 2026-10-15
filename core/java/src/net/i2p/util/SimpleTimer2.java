@@ -699,12 +699,11 @@ public class SimpleTimer2 {
             _saturationReported = true;
             log().warn("Timer pool saturated for at least " +
                        (episodeForMs(_saturatedSamples) / 1000) + "s: " + _name +
-                       " active " + active + '/' + pool + ", " + queued +
-                       " events queued behind it, " + (completed - _saturatedCompleted) +
-                       " tasks completed during the episode, " +
-                       _immediateReschedules.getAndSet(0) +
-                       " immediate reschedules requested - periodic events are not" +
-                       " firing; a high immediate count means something is re-arming itself" +
+                       "\n* Active: " + active + '/' + pool + " * Queued behind it: " + queued +
+                       "\n* Completed during episode: " + (completed - _saturatedCompleted) +
+                       " * Immediate reschedules: " + _immediateReschedules.getAndSet(0) +
+                       "\n* Periodic events are not firing" +
+                       "\n* A high immediate count means something is re-arming itself" +
                        " on every event rather than waiting");
         }
 

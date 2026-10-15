@@ -2088,7 +2088,9 @@ public class UDPTransport extends TransportImpl {
             if (!remoteId.equals(oldID)) {
                 // leak fix, remove old address
                 if (_log.shouldInfo())
-                    _log.info(remotePeer + " changed address FROM " + oldID + " TO " + remoteId);
+                    _log.info("Changed address for [" +
+                              remotePeer.toBase64().substring(0,6) + "]" +
+                              " from " + oldID + " to " + remoteId);
                 PeerState oldPeer2 = _peersByRemoteHost.remove(oldID);
                 // different ones in the two maps? shouldn't happen
                 if (oldPeer2 != oldPeer && oldPeer2 != null) {

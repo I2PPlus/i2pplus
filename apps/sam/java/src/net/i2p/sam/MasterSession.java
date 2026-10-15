@@ -203,7 +203,7 @@ class MasterSession extends SAMv3StreamSession implements SAMDatagramReceiver, S
             return "Duplicate ID " + nick;
         }
         if (_log.shouldWarn())
-            _log.warn("added " + style + " proto " + listenProtocol + " port " + listenPort);
+            _log.warn("Added " + style + " proto " + listenProtocol + " port " + listenPort);
 
         sess.start();
         // all ok
@@ -227,7 +227,8 @@ class MasterSession extends SAMv3StreamSession implements SAMDatagramReceiver, S
             sess.close();
             // TODO if 0/0, add back this as listener?
             if (_log.shouldWarn())
-                _log.warn("removed " + sess + " proto " + sess.getListenProtocol() + " port " + sess.getListenPort());
+                _log.warn("Removed " + sess + " proto " + sess.getListenProtocol() +
+                          " port " + sess.getListenPort());
         } else {
             ok = false;
         }

@@ -336,7 +336,8 @@ public abstract class BuildRequestor {
                 : mgr.selectInboundExploratoryTunnel(farEnd);
 
             if (expl == null && log.shouldInfo()) {
-                log.info("No existing exploratory tunnels for " + cfg + " -> allowing zero-hop build");
+                log.info("No existing exploratory tunnels for " + cfg
+                         + " -> Allowing zero-hop build");
             }
             return expl; // null => zero-hop fallback
         }
@@ -686,7 +687,7 @@ public abstract class BuildRequestor {
                 props.setProperty(PROP_MIN_BW, Integer.toString(min / 1000));
                 props.setProperty(PROP_REQ_BW, Integer.toString(req / 1000));
                 if (log.shouldDebug()) {
-                    log.debug("BW props for hop " + hopIndex + ": min=" + min + ", req=" + req);
+                    log.debug("BW props for hop " + hopIndex + ": min: " + min + " * req: " + req);
                 }
             }
 
@@ -745,10 +746,11 @@ public abstract class BuildRequestor {
                 if (log.shouldInfo()) {
                     int estCount = ctx.commSystem().getEstablished() != null ?
                         ctx.commSystem().getEstablished().size() : 0;
-                    log.info("First hop " + hopPeer.toBase64().substring(0, 8) +
-                             " connected but no reply | estCount=" + estCount +
-                             " | fast=" + ctx.profileOrganizer().isFast(hopPeer) +
-                             " | hc=" + ctx.profileOrganizer().isHighCapacity(hopPeer));
+                    log.info("First hop [" + hopPeer.toBase64().substring(0, 6) +
+                             "] connected but no reply" +
+                             "\n* estCount: " + estCount +
+                             " * fast: " + ctx.profileOrganizer().isFast(hopPeer) +
+                             " * hc: " + ctx.profileOrganizer().isHighCapacity(hopPeer));
                 }
                 _exec.buildComplete(_cfg, OTHER_FAILURE, "No reply from first hop");
                 ctx.profileManager().tunnelTimedOut(hopPeer);
@@ -777,16 +779,18 @@ public abstract class BuildRequestor {
                     StringBuilder sb = new StringBuilder(256);
                     sb.append("First hop ").append(backlogged ? "backlogged" : "unreachable")
                       .append(" for ").append(_cfg)
-                      .append("\n * Peer [").append(hopPeer.toBase64().substring(0, 8)).append("]")
-                      .append(" | inEst=").append(ctx.commSystem().getEstablished().contains(hopPeer))
-                      .append(" | estCount=").append(estCount);
+                      .append("\n* Peer [").append(hopPeer.toBase64().substring(0, 6)).append("]")
+                      .append(" * inEst: ")
+                      .append(ctx.commSystem().getEstablished().contains(hopPeer))
+                      .append(" * estCount: ").append(estCount);
                     // Presence-only check: this is for logging only, unvalidated lookup is sufficient
                     DatabaseEntry de = ctx.netDb().lookupLocallyWithoutValidation(hopPeer);
-                    sb.append(" | ri=").append(de != null && de.getType() == DatabaseEntry.KEY_TYPE_ROUTERINFO)
-                      .append(" | connecting=").append(connecting)
-                      .append(" | backlog=").append(backlogged)
-                      .append(" | fast=").append(ctx.profileOrganizer().isFast(hopPeer))
-                      .append(" | hc=").append(ctx.profileOrganizer().isHighCapacity(hopPeer));
+                    sb.append("\n* ri: ")
+                      .append(de != null && de.getType() == DatabaseEntry.KEY_TYPE_ROUTERINFO)
+                      .append(" * connecting: ").append(connecting)
+                      .append(" * backlog: ").append(backlogged)
+                      .append(" * fast: ").append(ctx.profileOrganizer().isFast(hopPeer))
+                      .append(" * hc: ").append(ctx.profileOrganizer().isHighCapacity(hopPeer));
                     log.info(sb.toString());
                 }
                 if (preConnectFallback(ctx, hopPeer, _cfg, _exec)) {
@@ -838,7 +842,8 @@ public abstract class BuildRequestor {
             return true;
         } catch (Exception e) {
             if (log.shouldWarn()) {
-                log.warn("Pre-connect fallback retry failed for " + peer.toBase64().substring(0, 6), e);
+                log.warn("Pre-connect fallback retry failed for [" +
+                         peer.toBase64().substring(0, 6) + "]", e);
             }
             return false;
         }

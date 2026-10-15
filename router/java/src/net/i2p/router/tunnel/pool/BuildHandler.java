@@ -982,7 +982,7 @@ public class BuildHandler implements Runnable {
                     _log.warn("Dropping Tunnel Request -> Next peer ["
                               + nextPeer.toBase64().substring(0,6) + "] is banned ("
                               + banSeverity(_context.banlist().getBanAge(nextPeer))
-                              + (cause != null ? ", cause=" + cause : "")
+                              + (cause != null ? ", cause: " + cause : "")
                               + ")" + (suppressed > 1 ? " [" + suppressed + " rejections]" : ""));
                 }
             }
@@ -1042,7 +1042,9 @@ public class BuildHandler implements Runnable {
                 String fromHash = from != null ? from.toString() : "Unknown";
                 if (handleTime > 0) {
                     _log.debug(String.format(
-                        "Build tunnel request [MsgID: %s] handled in %dms %s %n* Decrypted in: %dms; Elapsed time since received: %dms%n* From: %s %s",
+                        "Build tunnel request [MsgID: %s] handled in %dms %s" +
+                        " %n* Decrypted in: %dms * Elapsed time since received: %dms" +
+                        " %n* From: %s %s",
                         msgId, handleTime, nextHop, decryptTime, timeSinceReceived, fromHash, req));
                 } else {
                     _log.debug(String.format(

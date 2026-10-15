@@ -2295,7 +2295,7 @@ public int getEstimatedRTT(Hash peer) {
             // but we probably only get here if the port is auto,
             // otherwise createNTCPAddress() would have done it already
             if (_log.shouldInfo())
-                _log.info("old host: " + ohost + " Config: " + name + " New: " + name);
+                _log.info("Old host: " + ohost + " Config: " + name + " New: " + name);
             newProps.setProperty(RouterAddress.PROP_HOST, name);
             if (cost == NTCP2_OUTBOUND_COST)
                 cost = DEFAULT_COST;

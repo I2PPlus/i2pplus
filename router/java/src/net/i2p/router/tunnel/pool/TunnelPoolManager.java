@@ -906,8 +906,8 @@ public class TunnelPoolManager implements TunnelManagerFacade {
                 // Check if client re-registered during delay
                 if (_context.clientManager().isLocal(_destination)) {
                     if (_log.shouldInfo()) {
-                        _log.info("Cancelling delayed pool removal - client re-registered: " +
-                                  _destination.toBase32().substring(0,8));
+                        _log.info("Cancelling delayed pool removal - client re-registered: [" +
+                                  _destination.toBase32().substring(0,8) + "]");
                     }
                     return;
                 }
@@ -1115,7 +1115,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
                 getContext().statManager().addRateData("tunnel.fastTierProbe", probed);
                 if (_mgr._log.shouldDebug()) {
                     _mgr._log.debug("Fast tier probe pass: " + probed + " of " + batch +
-                                    " slots used, band=" + bandSize + ", next in " +
+                                    " slots used, band: " + bandSize + ", next in " +
                                     (interval / 1000) + "s");
                 }
             } catch (RuntimeException re) {
@@ -1376,8 +1376,9 @@ public class TunnelPoolManager implements TunnelManagerFacade {
             if (readyCount > maxWaiting || maxLag >= 500 || avgLag >= 500) {
                 interval = 2 * 60 * 1000L; // 2m
                 if (_mgr._log.shouldWarn()) {
-                    _mgr._log.warn("Job queue overloaded (Ready jobs: " + readyCount + ", Max lag: " + maxLag +
-                                   "ms, Avg lag: " + avgLag + "ms) -> Increasing interval to 2m...");
+                    _mgr._log.warn("Job queue overloaded (Ready jobs: " + readyCount +
+                                   ", Max lag: " + maxLag + "ms, Avg lag: " + avgLag +
+                                   "ms) -> Increasing interval to 2m");
                 }
             }
             if (_mgr._log.shouldInfo())
@@ -1495,8 +1496,9 @@ public class TunnelPoolManager implements TunnelManagerFacade {
 
         int configuredThreshold = _context.getProperty(PROP_SLOW_TUNNEL_THRESHOLD, DEFAULT_SLOW_THRESHOLD_MS);
         if (_log.shouldInfo()) {
-            _log.info("Replace slow tunnels: avg latency = " + String.format("%.0f", avg) + "ms, min latency = " +
-                      minLatency + "ms, configured threshold = " + configuredThreshold + "ms");
+            _log.info("Replace slow tunnels: avg latency: " + String.format("%.0f", avg) +
+                      "ms * min latency: " + minLatency + "ms * configured threshold: " +
+                      configuredThreshold + "ms");
         }
         double threshold;
         if (configuredThreshold > 0) {
@@ -2040,10 +2042,10 @@ public class TunnelPoolManager implements TunnelManagerFacade {
         if (now - last < SHARE_LIMIT_LOG_INTERVAL_MS) {return;}
         _lastShareLimitLog = now;
         _log.info("Participation share limit " + basePct + "% -> " + max + "%"
-                  + " (buildSuccess=" + Math.round(buildSuccess * 100) + "%"
-                  + ", firewalled=" + firewalled
-                  + ", incompleteLeaseSet=" + incompleteLeaseSet
-                  + "), excluding " + excluded + " peers");
+                  + "\n* buildSuccess: " + Math.round(buildSuccess * 100) + "%"
+                  + " * firewalled: " + firewalled
+                  + " * incompleteLeaseSet: " + incompleteLeaseSet
+                  + " * excluded: " + excluded + " peers");
     }
 
     /**
@@ -2147,9 +2149,9 @@ public class TunnelPoolManager implements TunnelManagerFacade {
 
             if (!hasInbound || !hasOutbound) {
                 if (_log.shouldWarn()) {
-                    _log.warn("Detected missing pool for registered client: " +
+                    _log.warn("Detected missing pool for registered client: [" +
                               h.toBase32().substring(0,8) +
-                              " (inbound=" + hasInbound + ", outbound=" + hasOutbound + ")");
+                              "] (inbound: " + hasInbound + ", outbound: " + hasOutbound + ")");
                 }
 
                 // Cancel any pending cleanup for this destination
@@ -2157,8 +2159,8 @@ public class TunnelPoolManager implements TunnelManagerFacade {
                 if (cleanup != null) {
                     cleanup.cancelCleanup();
                     if (_log.shouldInfo()) {
-                        _log.info("Cancelled delayed cleanup for re-registered client: " +
-                                  h.toBase32().substring(0,8));
+                        _log.info("Cancelled delayed cleanup for re-registered client: [" +
+                                  h.toBase32().substring(0,8) + "]");
                     }
                 }
 
@@ -2168,13 +2170,13 @@ public class TunnelPoolManager implements TunnelManagerFacade {
                     buildTunnels(dest, settings);
                     recovered++;
                     if (_log.shouldWarn()) {
-                        _log.warn("RECOVERY: Created new tunnel pools for client: " +
-                                  h.toBase32().substring(0,8));
+                        _log.warn("Recovery: created new tunnel pools for client: [" +
+                                  h.toBase32().substring(0,8) + "]");
                     }
                 } catch (Exception e) {
                     if (_log.shouldError()) {
-                        _log.error("Failed to recover pools for client: " +
-                                   h.toBase32().substring(0,8), e);
+                        _log.error("Failed to recover pools for client: [" +
+                                   h.toBase32().substring(0,8) + "]", e);
                     }
                 }
             }

@@ -1423,14 +1423,10 @@ void noteEstablishmentRtt(int rttMs) {
             padlen += _context.random().nextInt(1 + range);
         if (_log.shouldDebug())
             _log.debug("Padding params:" +
-                      " Data size: " + dataSize + "b" +
-                      "; Avail: " + availForPad + "b" +
-                      "; MinSend: " + minSend +
-                      "; MaxSend: " + maxSend +
-                      "; Min: " + min +
-                      "; Max: " + max +
-                      "; Range: " + range +
-                      "; Padlen: " + padlen + "b");
+                      "\n* Data size: " + dataSize + "b * Avail: " + availForPad + "b" +
+                      " * MinSend: " + minSend + " * MaxSend: " + maxSend +
+                      "\n* Min: " + min + " * Max: " + max + " * Range: " + range +
+                      " * Padlen: " + padlen + "b");
         return padlen;
     }
 
@@ -1786,7 +1782,7 @@ void noteEstablishmentRtt(int rttMs) {
     void recv(ByteBuffer buf) {
         if (isClosed()) {
             if (_log.shouldWarn())
-                _log.warn("recv() on closed con");
+                _log.warn("Ignoring recv() on closed connection");
             // We own the buffer; return it to the pool rather than leaking it.
             EventPumper.releaseBuf(buf);
             return;

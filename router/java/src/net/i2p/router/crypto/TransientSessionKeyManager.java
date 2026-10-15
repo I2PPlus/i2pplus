@@ -958,9 +958,12 @@ public class TransientSessionKeyManager extends SessionKeyManager {
                         }
                     }
                     if (_log.shouldWarn())
-                        _log.warn(_consecutiveFailures + " consecutive failed TagSet deliveries to [" + _currentKey.toBase64().substring(0,6) + "]"
-                                  + "\n* Reverting to full ElG and un-ACKing " + unacked + " UnACKed tag sets, with "
-                                  + acked + " remaining ACKed TagSets");
+                        _log.warn("Failed to deliver " + _consecutiveFailures
+                                  + " consecutive session tag sets to ["
+                                  + _currentKey.toBase64().substring(0,6) + "]"
+                                  + "\n* Reverting to full ElGamal and unacknowledged delivery"
+                                  + "\n* Unacknowledged tag sets: " + unacked
+                                  + " * Remaining acknowledged: " + acked);
                 }
             }
         }

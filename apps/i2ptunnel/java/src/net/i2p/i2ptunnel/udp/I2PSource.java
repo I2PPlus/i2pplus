@@ -131,7 +131,7 @@ public class I2PSource implements Source {
                     sink.send(null, fromPort, toPort, msg);
                 } else {
                     if (log.shouldWarn())
-                        log.warn("dropping message with unknown protocol " + proto);
+                        log.warn("Dropping message with unknown protocol " + proto);
                 }
             } catch(Exception e) {
                 if (log.shouldWarn())

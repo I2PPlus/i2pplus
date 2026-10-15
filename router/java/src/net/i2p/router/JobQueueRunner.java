@@ -154,9 +154,10 @@ class JobQueueRunner extends I2PThread {
                 if (duration > 1500) {
                     _context.statManager().addRateData("jobQueue.jobRunSlow", duration, duration);
                     if (_log.shouldWarn() && doStart-origStartAfter > 100) {
-                        _log.warn(_currentJob + " completed in " + duration + "ms -> Lag: " + (doStart-origStartAfter) + "ms");
+                        _log.warn("Completed " + _currentJob + " in " + duration
+                                  + "ms -> Lag: " + (doStart-origStartAfter) + "ms");
                     } else if (_log.shouldInfo()) {
-                        _log.warn(_currentJob + " completed in " + duration + "ms");
+                        _log.warn("Completed " + _currentJob + " in " + duration + "ms");
                     }
                 }
 

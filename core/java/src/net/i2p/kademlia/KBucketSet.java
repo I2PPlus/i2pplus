@@ -721,7 +721,7 @@ public class KBucketSet<T extends SimpleDataStructure> {
         try {
             rv = (T) _us.getClass().getDeclaredConstructor().newInstance();
         } catch (Exception e) {
-            _log.error("fail", e);
+            _log.error("Failed to create key instance", e);
             throw new RuntimeException(e);
         }
         if (dlen == len) {

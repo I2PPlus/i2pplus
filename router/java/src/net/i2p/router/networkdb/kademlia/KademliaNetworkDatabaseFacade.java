@@ -1348,7 +1348,8 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         if (data != null && data.isRouterInfo()) {
             _ds.remove(key);
             if (_log.shouldDebug()) {
-                _log.debug("Removed RouterInfo from NetDb: " + key.toBase32().substring(0, 8));
+                _log.debug("Removed RouterInfo from NetDb: [" +
+                           key.toBase64().substring(0, 6) + "]");
             }
         }
     }
@@ -1360,7 +1361,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         if (data != null && data.isRouterInfo()) {
             _ds.remove(key);
             if (_log.shouldDebug()) {
-                _log.debug("Removed from NetDb: " + key.toBase32().substring(0, 8));
+                _log.debug("Removed from NetDb: [" + key.toBase64().substring(0, 6) + "]");
             }
         }
     }
@@ -1712,7 +1713,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
                 _context.jobQueue().removeJob(job);
                 if (_log.shouldDebug()) {
                     _log.debug("Cancelled queued republish job for [" + hash.toBase32().substring(0, 8) +
-                               "] -> will reschedule with latest LeaseSet");
+                               "] -> Will reschedule with latest LeaseSet");
                 }
             }
             jobs.clear();
@@ -1922,7 +1923,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         // Retrieve destination ID string, fallback to LeaseSet hash base32 if null
         Destination dest = leaseSet.getDestination();
         String id = (dest != null ? dest.toBase32() : leaseBase32);
-        String idShort = id.substring(0, 6);  // Shortened ID for logs and messages
+        String idShort = id.substring(0, 8);  // Shortened ID for logs and messages
 
         // Reject old (expired) LeaseSets
         err = checkExpiredLeaseSet(key, leaseSet, earliest, latest, now, idShort);
@@ -1992,7 +1993,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         if (!isEarliestStale && !isLatestStale) {return null;}
         long age = now - earliest;
         if (_log.shouldWarn()) {
-            _log.warn("Old LeaseSet [" + idShort + "] -> rejecting store..." +
+            _log.warn("Old LeaseSet [" + idShort + "] -> Rejecting store" +
                       "\n* First expired: " + new Date(earliest) +
                       "\n* Last expired: " + new Date(latest) +
                       "\n* " + leaseSet);
@@ -2029,13 +2030,14 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         long age = latest - now;
         if (_log.shouldWarn()) {
             long earliest = leaseSet.getEarliestLeaseDate();
-            _log.warn("checkFutureExpiration REJECT [" + idShort + "]" +
-                      "\n* type=" + type +
-                      "\n* now=" + now +
-                      "\n* latest=" + latest + " (age=" + DataHelper.formatDuration(age) + ")" +
-                      "\n* earliest=" + earliest + " (age=" + DataHelper.formatDuration(earliest - now) + ")" +
-                      "\n* leaseCount=" + leaseSet.getLeaseCount() +
-                      "\n* futureLimit=" + futureLimit);
+            _log.warn("Rejecting LeaseSet with future expiration [" + idShort + "]" +
+                      "\n* type: " + type +
+                      "\n* now: " + now +
+                      "\n* latest: " + latest + " (age: " + DataHelper.formatDuration(age) + ")" +
+                      "\n* earliest: " + earliest +
+                      " (age: " + DataHelper.formatDuration(earliest - now) + ")" +
+                      "\n* leaseCount: " + leaseSet.getLeaseCount() +
+                      "\n* futureLimit: " + futureLimit);
         }
         return "Future LeaseSet for [" + idShort + "] expiring in " + DataHelper.formatDuration(age);
     }
@@ -2101,17 +2103,18 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         if (err != null) {
             if (_log.shouldWarn()) {
                 long now = _context.clock().now();
-                StringBuilder sb = new StringBuilder("store VALIDATION FAILED [" + key.toBase32().substring(0, 8) + "]");
-                sb.append(" type=").append(leaseSet.getType());
-                sb.append(" leaseCount=").append(leaseSet.getLeaseCount());
-                sb.append(" earliest=").append(leaseSet.getEarliestLeaseDate());
-                sb.append(" latest=").append(leaseSet.getLatestLeaseDate());
+                StringBuilder sb = new StringBuilder("Store validation failed [" +
+                                                     key.toBase32().substring(0, 8) + "]");
+                sb.append("\n* type: ").append(leaseSet.getType());
+                sb.append(" * leaseCount: ").append(leaseSet.getLeaseCount());
+                sb.append(" * earliest: ").append(leaseSet.getEarliestLeaseDate());
+                sb.append(" * latest: ").append(leaseSet.getLatestLeaseDate());
+                sb.append(" * now: ").append(now);
                 if (leaseSet instanceof LeaseSet2) {
                     LeaseSet2 ls2 = (LeaseSet2) leaseSet;
-                    sb.append(" published=").append(ls2.getPublished());
-                    sb.append(" expires=").append(ls2.getExpires());
+                    sb.append("\n* published: ").append(ls2.getPublished());
+                    sb.append(" * expires: ").append(ls2.getExpires());
                 }
-                sb.append(" now=").append(now);
                 _log.warn(sb.toString());
             }
             throw new IllegalArgumentException("Invalid NetDbStore attempt -> " + err);
@@ -3530,7 +3533,7 @@ return false;
             String hostname = ns.reverseLookup(key);
             if (hostname != null) {return hostname;}
         }
-        return key.toBase32().substring(0, 6);
+        return "[" + key.toBase32().substring(0, 8) + "]";
     }
 
     /** Job to refresh client LeaseSets periodically. Only for client NetDB - refreshes LeaseSets we're actively using. */

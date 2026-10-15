@@ -711,7 +711,8 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
             if (ackImmediate) {_ackTimer.scheduleImmediate();}
         } catch (Exception e) {
             if (shouldLogDebug) {
-                _log.warn("[SSU] Received BAD encrypted packet from: " + from + this + '\n' + HexDump.dump(data, off, len), e);
+                _log.warn("[SSU] Received BAD encrypted packet from: " + from + this +
+                          "\n* " + HexDump.dump(data, off, len), e);
             } else if (_log.shouldWarn()) {
                 _log.warn("[SSU] Received BAD encrypted packet from: " + from);
             }
@@ -1182,10 +1183,10 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
             ackbf.forEachAndNot(_ackedMessages, this);
         } catch (Exception e) {
             if (_log.shouldWarn()) {
-                _log.warn("[SSU] Received Bad ACK block\n" +
+                _log.warn("[SSU] Received Bad ACK block\n* " +
                           SSU2Bitfield.toString(ackThru, acks, ranges, (ranges != null ? ranges.length / 2 : 0)) +
-                          "\nACK through " + ackThru + " acks " + acks +
-                          (ranges != null ? " Ranges:\n" + HexDump.dump(ranges) : "") + this, e);
+                          "\n* ACK through " + ackThru + " acks " + acks +
+                          (ranges != null ? " Ranges:\n* " + HexDump.dump(ranges) : "") + this, e);
             }
         }
     }
@@ -1374,7 +1375,8 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
              }
              if (off != sz) {
                  if (_log.shouldWarn()) {
-                     _log.warn("[SSU] Hmm, offset of the fragments = " + off + " while the state says " + sz);
+                     _log.warn("[SSU] Fragment reassembly offset mismatch: assembled: " + off +
+                               " * expected: " + sz);
                  }
                  return;
              }

@@ -304,7 +304,7 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
         }
 
         if (ip != null) {_transport.setIP(aliceHash, ip);}
-        if (_log.shouldDebug()) {_log.debug(prefix() + "verification successful for " + _con);}
+        if (_log.shouldDebug()) {_log.debug(prefix() + "Verification successful for " + _con);}
 
         // Adjust skew calculation now that we know RTT
         // rtt from receiving #1 to receiving #3
@@ -462,7 +462,9 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
                        } catch (UnknownHostException uhe) {
                            ip = "unknown";
                        }
-                       _log.warn("[NTCP] BAD NTCP2 handshake #1 from " + ip + ", all bytes received but handshake failed -> Invalid encryption");
+                        _log.warn("[NTCP] BAD NTCP2 handshake #1 from " + ip +
+                                  " -> Invalid encryption" +
+                                  "\n* All bytes received but handshake failed");
                        _transport.getPumper().trackInvalidEncryption(_con.getRemoteIP(), null);
                       fail("\n* BAD Establishment handshake message #1: X = " + Base64.encode(_X, 0, KEY_SIZE) + " remaining = " + src.remaining(), gse);
                   }

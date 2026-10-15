@@ -99,9 +99,9 @@ public class BuildCorrelationIdTest {
         String peers = invokeAppend(new StringBuilder(), cfg).toString();
 
         assertTrue("WARN reporter must carry the ID, got: " + warn,
-                   warn.contains("reqMsgId=" + cfg.getLastRequestMsgId()));
+                   warn.contains("reqMsgId: " + cfg.getLastRequestMsgId()));
         assertTrue("DEBUG reporter must carry the ID too, got: " + peers,
-                   peers.contains("reqMsgId=" + cfg.getLastRequestMsgId()));
+                   peers.contains("reqMsgId: " + cfg.getLastRequestMsgId()));
     }
 
     @Test
@@ -109,7 +109,7 @@ public class BuildCorrelationIdTest {
         String out = invokeAppend(new StringBuilder(), config()).toString();
         assertFalse("an unset ID must be omitted entirely so a real zero is never "
                     + "mistaken for a message ID, got: " + out,
-                    out.contains("reqMsgId="));
+                    out.contains("reqMsgId: "));
     }
 
     @Test
@@ -121,7 +121,7 @@ public class BuildCorrelationIdTest {
         String out = invokeAppend(new StringBuilder(), configWithId(99L)).toString();
         assertFalse("must not reuse the replyId token, got: " + out,
                     out.contains("replyId="));
-        assertTrue("must use reqMsgId, got: " + out, out.contains("reqMsgId="));
+        assertTrue("must use reqMsgId, got: " + out, out.contains("reqMsgId: "));
     }
 
     @Test
@@ -129,7 +129,7 @@ public class BuildCorrelationIdTest {
         // Built once per expiry and the line is meant to stay one line.
         String out = invokeAppend(new StringBuilder(), configWithId(Long.MAX_VALUE)).toString();
         assertTrue("appended fragment grew unexpectedly: " + out,
-                   out.length() <= ", reqMsgId=".length() + MAX_ID_CHARS);
+                   out.length() <= ", reqMsgId: ".length() + MAX_ID_CHARS);
     }
 
     @Test

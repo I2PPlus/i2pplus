@@ -2452,13 +2452,15 @@ public class ProfileOrganizer {
             // Step 9: Log and record stats
             if (_log.shouldInfo()) {
                 _log.info("Profiles reorganized: " + expiredCount + " expired, " +
-                          profileCount + " retained. Thresholds -> " +
-                          "Cap: " + num(_thresholdCapacityValue) +
-                          ", Spd: " + num(_thresholdSpeedValue) +
-                          ", Int: " + num(_thresholdIntegrationValue) +
-                          " -> Fast peers: " + _fastPeers.size() + " (added " + added + " via fallback)" +
-                          ", HighCap peers: " + _highCapacityPeers.size() + " (added " + highCapAdded + " via fallback)" +
-                          ", Quality peers: " + qualityCount);
+                          profileCount + " retained" +
+                          "\n* Thresholds -> Cap: " + num(_thresholdCapacityValue) +
+                          " * Spd: " + num(_thresholdSpeedValue) +
+                          " * Int: " + num(_thresholdIntegrationValue) +
+                          "\n* Fast peers: " + _fastPeers.size() +
+                          " (added " + added + " via fallback)" +
+                          " * HighCap peers: " + _highCapacityPeers.size() +
+                          " (added " + highCapAdded + " via fallback)" +
+                          "\n* Quality peers: " + qualityCount);
             }
 
             long total = System.currentTimeMillis() - start;
@@ -3030,12 +3032,12 @@ public class ProfileOrganizer {
         sm.addRateData("peer.tierEvicted.softPurgeActive",
                        (fastSoft ? 1 : 0) + (highCapSoft ? 1 : 0), 60L * 1000);
         if (_log.shouldInfo()) {
-            _log.info("Tier eviction: banned " + count(reasons, PurgeReason.BANNED) +
-                      ", unreachable " + count(reasons, PurgeReason.UNREACHABLE) +
-                      ", not-capable " + count(reasons, PurgeReason.NOT_CAPABLE) +
-                      ", failures " + count(reasons, PurgeReason.FAILURES) +
-                      ", acceptance " + count(reasons, PurgeReason.ACCEPTANCE) +
-                      " (soft purge threshold " + threshold + ")");
+            _log.info("Tier eviction: banned: " + count(reasons, PurgeReason.BANNED) +
+                      " * unreachable: " + count(reasons, PurgeReason.UNREACHABLE) +
+                      " * not-capable: " + count(reasons, PurgeReason.NOT_CAPABLE) +
+                      " * failures: " + count(reasons, PurgeReason.FAILURES) +
+                      " * acceptance: " + count(reasons, PurgeReason.ACCEPTANCE) +
+                      "\n* Soft purge threshold: " + threshold);
         }
     }
 
@@ -3157,7 +3159,7 @@ public class ProfileOrganizer {
                     isLowTunnelAcceptance(profile, buildSuccess, now, 1));
             if (reason != null) {
                 if (_log.shouldDebug()) {
-                    _log.debug("Purging peer [" + peer.toBase32().substring(0, 6) +
+                    _log.debug("Purging peer [" + peer.toBase64().substring(0, 6) +
                                "] from " + tierName + " tier: " + reason.getKey());
                 }
                 it.remove();
@@ -4184,8 +4186,8 @@ private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, P
             String tier = peers == _fastPeers ? "fast"
                           : peers == _highCapacityPeers ? "highcapacity" : "tier";
             _log.warn("Peer " + tier + " tier returned no candidates after " + examined +
-                      " examined (excluded=" + skipExcluded + " gated=" + skipGated +
-                      " subtier=" + skipSliced + " ip=" + skipIp + " rtt=" + skipRtt + ")");
+                      " examined\n* excluded: " + skipExcluded + " * gated: " + skipGated +
+                      " * subtier: " + skipSliced + " * ip: " + skipIp + " * rtt: " + skipRtt);
         }
     }
 
@@ -4855,7 +4857,8 @@ private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, P
             GhostPeerManager ghostMgr = tmf.getGhostPeerManager();
             if (ghostMgr != null && ghostMgr.isGhost(peer)) {
                 if (_log.shouldDebug()) {
-                    _log.debug("Skipping ghost peer from promotion: " + peer.toBase32().substring(0, 6));
+                    _log.debug("Skipping ghost peer from promotion [" +
+                               peer.toBase64().substring(0, 6) + "]");
                 }
                 return false;
             }
@@ -4867,9 +4870,9 @@ private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, P
         if (skipReason != null) {
             recordPromotionSkip(skipReason);
             if (_log.shouldDebug()) {
-                _log.debug("Skipping peer [" + peer.toBase32().substring(0, 6) +
+                _log.debug("Skipping peer [" + peer.toBase64().substring(0, 6) +
                            "] from promotion: " + skipReason +
-                           " staleProfile=" + (profile != notFailingProfile));
+                           " * staleProfile: " + (profile != notFailingProfile));
             }
             return false;
         }
@@ -4891,7 +4894,7 @@ private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, P
             _context.statManager().addRateData("tunnel.promotionHeldNoAddress", 1);
             _refresher.requestAddressRefresh(peer);
             if (_log.shouldDebug())
-                _log.debug("Holding promotion for [" + peer.toBase32().substring(0, 6) +
+                _log.debug("Holding promotion for [" + peer.toBase64().substring(0, 6) +
                            "]: RouterInfo has no usable transport address");
             return true;
         }
@@ -5076,7 +5079,7 @@ private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, P
             return true;
         }
         if (_log.shouldDebug()) {
-            _log.debug("Promoting peer [" + peer.toBase32().substring(0, 6) +
+            _log.debug("Promoting peer [" + peer.toBase64().substring(0, 6) +
                        "] on a stale RouterInfo: tier at " + tierSize + " below floor " + safeFloor);
         }
         _refresher.noteStalePromotion();
@@ -5262,8 +5265,8 @@ private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, P
             return;
 
         if (_log.shouldDebug()) {
-            _log.debug("promoteToFillTiers: fast=" + fastBefore + "/" + fastTarget +
-                       " highCap=" + highCapBefore + "/" + highCapTarget);
+            _log.debug("Promoting peers to fill tiers: fast: " + fastBefore + "/" + fastTarget +
+                       " * highCap: " + highCapBefore + "/" + highCapTarget);
         }
 
         // Fetch once for the whole scan; promotion checks per profile would
@@ -5311,12 +5314,12 @@ private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, P
                 boolean nowFast = _fastPeers.containsKey(peer);
                 boolean nowHighCap = _highCapacityPeers.containsKey(peer);
                 if (nowFast != wasFast || nowHighCap != wasHighCap) {
-                    _log.info("Promoted peer [" + peer.toBase32().substring(0, 6) +
-                              "] fast=" + wasFast + "->" + nowFast +
-                              " highCap=" + wasHighCap + "->" + nowHighCap +
-                              " capBonus=" + promoted.getCapacityBonus() +
-                              " raw=" + promoted.getCapacityBonusRaw() +
-                              " liveProfile=" + (promoted == liveProfile));
+                    _log.info("Promoted peer [" + peer.toBase64().substring(0, 6) +
+                              "] fast: " + wasFast + " -> " + nowFast +
+                              " * highCap: " + wasHighCap + " -> " + nowHighCap +
+                              "\n* capBonus: " + promoted.getCapacityBonus() +
+                              " * raw: " + promoted.getCapacityBonusRaw() +
+                              " * liveProfile: " + (promoted == liveProfile));
                 }
             }
         }
@@ -5352,19 +5355,19 @@ private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, P
      * @param examined candidates walked, including those rejected by a gate
      * @param alreadyTiered candidates skipped because already in both tiers
      * @param heldNoAddress candidates that cleared every gate except having no usable address
-     * @return a single line naming the shortfall and its causes
+     * @return the shortfall and its causes, wrapped onto continuation lines
      * @since 0.9.71+
      */
     static String describeTierFill(String where, int fast, int fastTarget,
                                    int highCap, int highCapTarget,
                                    int examined, int alreadyTiered, int heldNoAddress) {
         return "Tiers underfilled in " + where
-               + ": fast=" + fast + "/" + fastTarget
-               + " highCap=" + highCap + "/" + highCapTarget
-               + " examined=" + examined
-               + " alreadyTiered=" + alreadyTiered
-               + " heldNoAddress=" + heldNoAddress
-               + " (heldNoAddress>0 means a policy gate, examined==0 means no candidates)";
+               + ": fast: " + fast + "/" + fastTarget
+               + " * highCap: " + highCap + "/" + highCapTarget
+               + "\n* examined: " + examined
+               + " * alreadyTiered: " + alreadyTiered
+               + " * heldNoAddress: " + heldNoAddress
+               + "\n* heldNoAddress>0 means a policy gate, examined==0 means no candidates";
     }
 
     /**
@@ -5382,7 +5385,7 @@ private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, P
                 boolean inHighCap = _highCapacityPeers.containsKey(peer);
                 if (inFast || inHighCap) {
                     if (_log.shouldInfo()) {
-                        _log.info("Demoting peer [" + peer.toBase32().substring(0, 6) +
+                        _log.info("Demoting peer [" + peer.toBase64().substring(0, 6) +
                                   "] from fast/high-cap tiers due to stale RouterInfo / no proof of life");
                     }
                     if (inFast) removeFastPeer(peer);
@@ -5408,8 +5411,8 @@ private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, P
             boolean inHighCap = _highCapacityPeers.containsKey(peer);
             if (inFast || inHighCap) {
                 if (_log.shouldInfo()) {
-                    _log.info("Demoting peer [" + peer.toBase32().substring(0, 6) +
-                              "] from fast/high-cap tiers due to high latency (capacityBonus = -30)");
+                    _log.info("Demoting peer [" + peer.toBase64().substring(0, 6) +
+                              "] from fast/high-cap tiers due to high latency (capacityBonus: -30)");
                 }
                 if (inFast) removeFastPeer(peer);
                 if (inHighCap) _highCapacityPeers.remove(peer);
@@ -5434,7 +5437,7 @@ private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, P
             boolean inHighCap = _highCapacityPeers.containsKey(peer);
             if (inFast || inHighCap) {
                 if (_log.shouldInfo()) {
-                    _log.info("Demoting peer [" + peer.toBase32().substring(0, 6) +
+                    _log.info("Demoting peer [" + peer.toBase64().substring(0, 6) +
                               "] from fast/high-cap tiers due to congestion cap (D/E)");
                 }
                 if (inFast) removeFastPeer(peer);
@@ -5463,7 +5466,7 @@ private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, P
           try {
               if (demotesFastTier(_fastPeers.containsKey(peer), isLowLatency(peer))) {
                   if (_log.shouldInfo()) {
-                      _log.info("Demoting peer [" + peer.toBase32().substring(0, 6) +
+                      _log.info("Demoting peer [" + peer.toBase64().substring(0, 6) +
                                 "] from the fast tier: no longer low-latency");
                   }
                   removeFastPeer(peer);
@@ -5517,7 +5520,7 @@ private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, P
             boolean inHighCap = _highCapacityPeers.containsKey(peer);
             if (inFast || inHighCap) {
                 if (_log.shouldInfo()) {
-                    _log.info("Demoting peer [" + peer.toBase32().substring(0, 6) +
+                    _log.info("Demoting peer [" + peer.toBase64().substring(0, 6) +
                               "] from fast/high-cap tiers: banned");
                 }
                 if (inFast) removeFastPeer(peer);
@@ -5609,7 +5612,7 @@ private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, P
             boolean inHighCap = _highCapacityPeers.containsKey(peer);
             if (inFast || inHighCap) {
                 if (_log.shouldInfo()) {
-                    _log.info("Demoting peer [" + peer.toBase32().substring(0, 6) +
+                    _log.info("Demoting peer [" + peer.toBase64().substring(0, 6) +
                               "] from fast/high-cap tiers: unreachable");
                 }
                 _context.statManager().addRateData("tunnel.firstHopUnreachableDemoted", 1);
@@ -5636,7 +5639,7 @@ private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, P
             boolean inHighCap = _highCapacityPeers.containsKey(peer);
             if (inFast || inHighCap) {
                 if (_log.shouldInfo()) {
-                    _log.info("Demoting peer [" + peer.toBase32().substring(0, 6) +
+                    _log.info("Demoting peer [" + peer.toBase64().substring(0, 6) +
                               "] from fast/high-cap tiers due to no tunnel built recently");
                 }
                 if (inFast) removeFastPeer(peer);
@@ -5701,7 +5704,7 @@ private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, P
             boolean inHighCap = _highCapacityPeers.containsKey(peer);
             if (inFast || inHighCap) {
                 if (_log.shouldInfo()) {
-                    _log.info("Demoting peer [" + peer.toBase32().substring(0, 6) +
+                    _log.info("Demoting peer [" + peer.toBase64().substring(0, 6) +
                               "] from fast/high-cap tiers after " + DEMOTE_STRIKE_THRESHOLD +
                               " unreachable first-hop failures");
                 }
@@ -5749,7 +5752,7 @@ private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, P
             } catch (RuntimeException re) {
                 // a lookup that cannot be started is not worth aborting the batch over
                 _log.log(Log.WARN, "Could not refresh held peer [" +
-                          peer.toBase32().substring(0, 6) + "]", re);
+                          peer.toBase64().substring(0, 6) + "]", re);
             }
         }
         _context.statManager().addRateData("tunnel.promotionRefreshIssued", batch.size());
@@ -5940,7 +5943,7 @@ private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, P
             boolean inHighCap = _highCapacityPeers.containsKey(peer);
             if (inFast || inHighCap) {
                 if (_log.shouldInfo()) {
-                    _log.info("Demoting peer [" + peer.toBase32().substring(0, 6) +
+                    _log.info("Demoting peer [" + peer.toBase64().substring(0, 6) +
                               "] from fast/high-cap tiers due to high first hop RTT: " +
                               firstHopRttMs + "ms (threshold: " + (timeout * 2) + "ms)");
                 }
@@ -6050,9 +6053,10 @@ private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, P
         double threshold = highStress ? 0.10 : 0.20;
         if (ratio >= threshold) return false;
         if (_log.shouldDebug()) {
-            _log.debug("Demoting peer from fast tier (startup): " +
-                       profile.getPeer().toBase32().substring(0, 6) +
-                       " ratio: " + String.format("%.2f", ratio * 100) + "% below " + String.format("%.0f", threshold * 100) + "% threshold");
+            _log.debug("Demoting peer from fast tier (startup): [" +
+                       profile.getPeer().toBase64().substring(0, 6) +
+                       "]\n* ratio: " + String.format("%.2f", ratio * 100) + "% below " +
+                       String.format("%.0f", threshold * 100) + "% threshold");
         }
         return true;
     }
@@ -6083,19 +6087,22 @@ private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, P
         if (lastBwReject > 0 && (now - lastBwReject) < TUNNEL_DEMOTION_COOLDOWN_MS) {
             if (_log.shouldDebug()) {
                 long remaining = (TUNNEL_DEMOTION_COOLDOWN_MS - (now - lastBwReject)) / 60000;
-                _log.debug("Demoting peer from high-cap tier (bandwidth cooldown active): " +
-                           profile.getPeer().toBase32().substring(0, 6) +
-                           " ratio: " + String.format("%.2f", ratio * 100) + "% (" + agreed + " accept / " +
-                           rejected + " reject / " + timedOut + " timeout), cooldown: " + remaining + "min remaining");
+                 _log.debug("Demoting peer from high-cap tier (bandwidth cooldown active): [" +
+                            profile.getPeer().toBase64().substring(0, 6) +
+                            "]\n* ratio: " + String.format("%.2f", ratio * 100) + "%" +
+                            " (" + agreed + " accept / " + rejected + " reject / " +
+                            timedOut + " timeout)" +
+                            "\n* Cooldown: " + remaining + " min remaining");
             }
             return true;
         }
 
         if (_log.shouldDebug()) {
-            _log.debug("Demoting peer from high-cap tier due to low tunnel acceptance: " +
-                       profile.getPeer().toBase32().substring(0, 6) +
-                       " ratio: " + String.format("%.2f", ratio * 100) + "% (" + agreed + " accept / " +
-                       rejected + " reject / " + timedOut + " timeout)");
+             _log.debug("Demoting peer from high-cap tier due to low tunnel acceptance: [" +
+                        profile.getPeer().toBase64().substring(0, 6) +
+                        "]\n* ratio: " + String.format("%.2f", ratio * 100) + "%" +
+                        " (" + agreed + " accept / " + rejected + " reject / " +
+                        timedOut + " timeout)");
         }
         return true;
     }
@@ -6240,7 +6247,7 @@ private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, P
         if (profile.isLossy()) {
             profile.clearLossy();
             if (_log.shouldDebug()) {
-                _log.debug("Peer [" + profile.getPeer().toBase32().substring(0, 6) +
+                _log.debug("Peer [" + profile.getPeer().toBase64().substring(0, 6) +
                            "] re-admitted after loss probation: loss score " +
                            profile.getLossScore(_context.clock().now()));
             }
@@ -6270,7 +6277,7 @@ private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, P
                 // readmission conditions are met.
                 profile.setLossySince(_context.clock().now());
                 if ((wasFast || wasHighCap) && _log.shouldDebug()) {
-                    _log.debug("Demoting peer [" + peer.toBase32().substring(0, 6) +
+                    _log.debug("Demoting peer [" + peer.toBase64().substring(0, 6) +
                                "] from fast/high-cap tiers: loss " + profile.getLossScore(_context.clock().now()));
                 }
             }
