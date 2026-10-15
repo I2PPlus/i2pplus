@@ -180,7 +180,19 @@ class ConnectionManager {
      * @since 0.9.71+
      */
     static final long[] RTX_RATIO_RATES = { RateConstants.ONE_MINUTE, RateConstants.FIVE_MINUTES,
-                                            RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR };
+                                             RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR };
+
+    /**
+     * Sample periods for the send-event counters whose ratio the streaming
+     * ceiling reads. The five-minute period is required so the event-count
+     * ratio can be compared against {@link #RTX_RATIO_RATES} on the same
+     * window — without it the two signals live on different clocks and every
+     * comparison mixes a 60 s event figure with a 5 min byte figure.
+     *
+     * @since 0.9.71+
+     */
+    static final long[] EVENT_RATES = { RateConstants.ONE_MINUTE, RateConstants.FIVE_MINUTES,
+                                        RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR };
 
     /**
      * Register the stream-close retransmission ratio stats, including the
@@ -1265,8 +1277,8 @@ class ConnectionManager {
           _context.statManager().createRequiredRateStat("stream.con.stallDetected", "Streams that stopped delivering bytes entirely", "Stream", RATES);
           _context.statManager().createRequiredRateStat("stream.con.throttleDetected", "Streams delivering far below their own established rate", "Stream", RATES);
         // Stats for PacketQueue
-        _context.statManager().createRequiredRateStat("stream.con.sendMessageSize", "Size of a message sent on a connection", "Stream", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR });
-        _context.statManager().createRequiredRateStat("stream.con.sendDuplicateSize", "Size of a message resent on a connection", "Stream", RATES);
+        _context.statManager().createRequiredRateStat("stream.con.sendMessageSize", "Size of a message sent on a connection", "Stream", EVENT_RATES);
+        _context.statManager().createRequiredRateStat("stream.con.sendDuplicateSize", "Size of a message resent on a connection", "Stream", EVENT_RATES);
         // Always schedule the sweeper: it bounds the per-dest burst/strike/ban
         // maps and refreshes the cached autoban config, even when autoban
         // enforcement (i2p.streaming.autoban=0) is off.
