@@ -6509,9 +6509,15 @@ public class TunnelPool {
         int allowed = TunnelPeerSelector.windowMultiplierFor(ctx);
         if (allowed <= before) {
             TunnelPeerSelector.publishWindowMultiplier(ctx);
+            // Trended as well as logged. The one-shot warning answers the question
+            // once; a rate stat whose value is the fast-peer count at decline time
+            // answers it over a window, which is what decides whether the gate is
+            // reading a real supply or a profile that selection cannot use.
+            int fastPeers = ctx.profileOrganizer().countFastPeers();
+            _context.statManager().addRateData("tunnel.poolStarvationDeclined", fastPeers);
             if (_log.shouldWarn()) {
                 _log.warn(toString() + " -> Starvation: pool empty but peer supply is ample " +
-                          "(" + ctx.profileOrganizer().countFastPeers() + " fast peers, " +
+                          "(" + fastPeers + " fast peers, " +
                           "threshold " + TunnelPeerSelector.SCARCE_FAST_PEERS +
                           "), not widening the peer activity window");
             }

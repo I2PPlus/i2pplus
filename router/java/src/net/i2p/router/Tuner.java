@@ -2376,6 +2376,48 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         }
 
         /**
+         * When the window behind a stat's event count last completed, in ms, or
+         * NaN when it cannot be determined.
+         *
+         * <p>A coalesced {@link Rate} stamps the wall clock of every coalesce, and
+         * coalescing is what closes a period, so this advances exactly once per
+         * window. It is the identity of the window, which is what a caller needs to
+         * tell "a new reading exists" from "the same reading as last cycle".
+         * <p>The event count itself cannot serve: two periods can carry identical
+         * counts, an idle period repeats (0, 0) forever, and a count of zero means
+         * the ratio is undefined rather than low. Any of those reads as "unchanged"
+         * and freezes a decision that depends on it.
+         *
+         * @param ctx the router context
+         * @param statName the stat to query
+         * @return the last coalesce time in ms, or NaN
+         * @since 0.9.71+
+         */
+        protected double getStatPeriodStamp(RouterContext ctx, String statName) {
+            RateStat rs = ctx.statManager().getRate(statName);
+            if (rs == null) return Double.NaN;
+            Rate rate = rs.getRate(STAT_PERIOD);
+            if (rate == null) return Double.NaN;
+            return rate.getLastCoalesceNow();
+        }
+
+        /**
+         * Whether a signal reading is from a window that closed since the stored
+         * stamp. Pure, so the gate can be pinned without a router.
+         *
+         * @param periodStamp the current window's close time, or NaN
+         * @param lastStamp the close time this decision was last taken on, or NaN
+         * @return true when the reading is new enough to act on; an unknown stamp
+         *         returns true so an unreadable signal falls back to the prior
+         *         behaviour rather than freezing the param
+         * @since 0.9.71+
+         */
+        static boolean signalIsFresh(double periodStamp, double lastStamp) {
+            if (Double.isNaN(periodStamp)) { return true; }
+            return periodStamp != lastStamp;
+        }
+
+        /**
          * Fetch an additional stat value using the 5-minute average.
          * <p>Useful for medium-term decisions that need more signal than
          * a 60s spike but faster reaction than a 1-hour trend. For example,
@@ -2725,7 +2767,14 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             // unclamped current or dampening pushes target outside range
             int unclamped = target;
             target = Math.max(_min, Math.min(_max, target));
-            if (target != unclamped && _log.shouldWarn())
+            // Only warn on a clamp that actually moved the value. The target often
+            // lands inside [min, max] but within a step of the current value, where
+            // computeTarget returns current unchanged; warning there reported a
+            // clamp that never happened, which for the worst offender was 249
+            // identical lines an hour.
+            // The runtime read is only needed to tell a real clamp from a deadband
+            // no-op, so it is deferred until the value was actually clamped.
+            if (unclamped != target && target != getRuntimeValue() && _log.shouldWarn())
                 _log.warn(_name + " target " + unclamped + " clamped to " + target +
                           " (range " + _min + "-" + _max + ")");
             return target;
@@ -5370,8 +5419,20 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return getObservedRTT(_context, _statName);
         }
 
+        /** Close time of the loss window this decision was last taken on. */
+        private double _lastLossStamp = Double.NaN;
+
         /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
+            // Act at most once per closed 60s window. The tuner ticks every 5s while
+            // the event counts only change when a window closes, so without this the
+            // same reading drove up to 12 identical steps - a measured cascade of
+            // 2560 -> 512 in 35s, about 2000 units of travel from one reading.
+            double stamp = getStatPeriodStamp(_context, "stream.con.sendMessageSize");
+            if (!signalIsFresh(stamp, _lastLossStamp)) {
+                return getRuntimeValue();
+            }
+            _lastLossStamp = stamp;
             int current = getRuntimeValue();
             double failLifetime = getAdditionalStat(_context, "transport.sendMessageFailureLifetime");
             double lossRate = getStreamingLossRate(_context);
@@ -6739,12 +6800,28 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return rate.getAverageValue();
         }
 
+        /**
+         * The raw target the formula produces, recorded as a rate stat.
+         *
+         * <p>This exists because the units of the Tuner's raw integers were only
+         * ever inferred: the logged clamp showed target 1500 against min 2000, and
+         * observed 38-55 ms, and those two are consistent with 0.1 ms units (making
+         * the min 200 ms) or with ms units and a different reading, but not with
+         * both at once. A stat whose value is the target as computed settles it
+         * from the next window instead of another round of inference.
+         *
+         * @since 0.9.71+
+         */
+        private static final String THROTTLE_TARGET_STAT =
+            "router.defaultProcessingTimeThrottleTarget";
+
         /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // Target ~4x the stable baseline, so the throttle only fires on
             // latency well above normal operation.
             int target = (int) (observed * 4);
+            _context.statManager().addRateData(THROTTLE_TARGET_STAT, target);
             // Hysteresis: leave alone when already close to target.
             if (current >= target - _step && current <= target + _step)
                 return current;
