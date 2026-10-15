@@ -5241,6 +5241,8 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      * @param lossRate event-count streaming retransmission rate 0.0-1.0, or NaN
      * @param memPct stat {@code jobQueue.memoryUsedPercent} in %, or NaN
      * @param byteLossRate byte-weighted retransmission rate 0.0-1.0, or NaN
+     * @param dupEvents resend event count behind {@code lossRate}, 0 when unread
+     * @param sendEvents send event count behind {@code lossRate}, 0 when unread
      * @return a short clause naming the verdict and the values behind it, never null
      * @since 0.9.71+
      */
@@ -5259,7 +5261,12 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         if (dupEvents > 0 && sendEvents > 0) {
             appendSep(sb);
             sb.append("dupEvents=").append(dupEvents)
-              .append(" dupEvents/s=").append(String.format("%.1f", dupEvents / 60.0));
+              .append("; dupEvents/s=")
+              // Divided by the constant the counts were read on, not a literal:
+              // STAT_PERIOD has already moved once in this line of work, and a
+              // literal divisor would silently report a wrong rate rather than
+              // fail when it moves again.
+              .append(String.format("%.1f", dupEvents / (STAT_PERIOD / 1000.0d)));
         }
         if (congested) {
             appendSep(sb);

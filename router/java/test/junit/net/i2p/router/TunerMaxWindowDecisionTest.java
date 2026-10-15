@@ -146,14 +146,40 @@ public class TunerMaxWindowDecisionTest {
      * same as a data one, the byte-weighted ratio weighs by bytes - so a divergence
      * between them is the evidence that decides which one should drive the ceiling.
      * Emitting only the firing gate would hide exactly that case.
+     *
+     * <p>Each signal carries its window label, because two heads have argued from a
+     * window the tuner does not read: the event-count ratio is the last completed
+     * 60 s period and the byte ratio is a 5 min mean, so a bare pair of percentages
+     * invites exactly the wrong comparison. The absolute counts ride along because
+     * a threshold cannot be set from ratios alone.
      */
     @Test
     public void reasonCarriesBothSignals() {
-        String r = Tuner.maxWindowDecision(CLEAN_MS, 0.40, CLEAN_HEAP, 0.10);
+        String r = Tuner.maxWindowDecision(CLEAN_MS, 0.40, CLEAN_HEAP, 0.10, 370, 545);
         assertTrue("must name the event-count reading: " + r, r.contains("40%"));
         assertTrue("must name the byte reading: " + r, r.contains("10%"));
         assertTrue("must distinguish the two: " + r,
                    r.contains("events") && r.contains("bytes"));
+        // The window labels are the point of the change; a bare percent pair passes
+        // the assertion above without them, so pin the labels explicitly.
+        assertTrue("event signal must carry its window: " + r,
+                   r.contains("events(60s)"));
+        assertTrue("byte signal must carry its window: " + r,
+                   r.contains("bytes(5m)"));
+        // Absolute counts ride along, and the derived rate is per second.
+        assertTrue("absolute event counts must be logged: " + r,
+                   r.contains("dupEvents=370"));
+        // The rate is derived from the constant the counts were read on, so the
+        // expectation is derived from that constant too. Asserting a literal here
+        // would pin the divisor at 60 s by hand and fail the day STAT_PERIOD
+        // legitimately changes, which is the drift this is meant to catch.
+        String expectedRate = String.format("%.1f", 370.0 / (Tuner.STAT_PERIOD / 1000.0d));
+        assertTrue("duplicate rate must be derived from STAT_PERIOD, expected "
+                   + expectedRate + ": " + r,
+                   r.contains("dupEvents/s=" + expectedRate));
+        // The three count pairs are separated, not run together.
+        assertTrue("count pairs must be separated: " + r,
+                   r.contains("dupEvents=370; dupEvents/s="));
     }
 
     /**
@@ -162,9 +188,15 @@ public class TunerMaxWindowDecisionTest {
      */
     @Test
     public void reasonCarriesBothSignalsOnClimb() {
-        String r = Tuner.maxWindowDecision(CLEAN_MS, 0.05, CLEAN_HEAP, 0.04);
+        String r = Tuner.maxWindowDecision(CLEAN_MS, 0.05, CLEAN_HEAP, 0.04, 0, 0);
         assertTrue("climb reason must carry both: " + r,
                    r.contains("5%") && r.contains("4%"));
+        assertTrue("climb reason must label the windows too: " + r,
+                   r.contains("events(60s)") && r.contains("bytes(5m)"));
+        // With no events to report the count clause is dropped rather than
+        // emitted as zeros, which would read as a measured no-loss window.
+        assertFalse("no event data must not fabricate counts: " + r,
+                    r.contains("dupEvents="));
     }
 
     /**
