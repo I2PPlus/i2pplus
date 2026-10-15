@@ -5015,7 +5015,14 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      *
      * @since 0.9.71+
      */
-    private static final double STREAM_LOSSY_RATE = 0.20d;
+    /**
+     * Streaming retransmission rate at or above which loss is called lossy.
+     * Package-visible so the ceiling's dead-band can be derived from it in tests
+     * rather than re-declared as a second literal that could drift from it.
+     *
+     * @since 0.9.71+
+     */
+    static final double STREAM_LOSSY_RATE = 0.20d;
 
     /**
      * Streaming retransmission rate at or above which loss is severe enough
@@ -5231,19 +5238,25 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      * what makes that visible in one line.
      *
      * @param failLifetime stat {@code transport.sendMessageFailureLifetime} in ms, or NaN
-     * @param lossRate streaming retransmission rate 0.0-1.0, or NaN
+     * @param lossRate event-count streaming retransmission rate 0.0-1.0, or NaN
      * @param memPct stat {@code jobQueue.memoryUsedPercent} in %, or NaN
+     * @param byteLossRate byte-weighted retransmission rate 0.0-1.0, or NaN
      * @return a short clause naming the verdict and the values behind it, never null
      * @since 0.9.71+
      */
-    static String maxWindowDecision(double failLifetime, double lossRate, double memPct) {
+    static String maxWindowDecision(double failLifetime, double lossRate, double memPct,
+                                    double byteLossRate) {
         boolean congested = !Double.isNaN(failLifetime) && failLifetime > CONGESTION_GATE_MS;
         boolean dropping = isStreamLossy(lossRate);
         double memPressure = !Double.isNaN(memPct) ? memPct : 0.0;
-        StringBuilder sb = new StringBuilder(48);
-        if (dropping) {
-            sb.append("loss ").append(pct(lossRate));
-        }
+        StringBuilder sb = new StringBuilder(64);
+        // Both signals, always. They weigh different denominators - the event-count
+        // ratio weighs a control packet the same as a data one, the byte-weighted
+        // ratio weighs by bytes - so a divergence between them is the evidence that
+        // decides which should drive this ceiling. Emitting only the gate that fired
+        // hides exactly the case worth seeing.
+        sb.append("loss ").append(pct(lossRate)).append(" events vs ")
+          .append(pct(byteLossRate)).append(" bytes");
         if (congested) {
             appendSep(sb);
             sb.append("congestion ").append(secs(failLifetime));
@@ -5252,7 +5265,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             appendSep(sb);
             sb.append("memory ").append(wholePct(memPct));
         }
-        if (sb.length() > 0) {
+        if (dropping || congested || memPressure > SHRINK_MEM_PCT) {
             sb.append(" -> shrink");
             return sb.toString();
         }
@@ -5261,15 +5274,15 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         // nothing is known, and reading NaN as 0% would climb on a signal that does
         // not exist.
         if (Double.isNaN(memPct)) {
-            return "heap no signal -> hold";
+            return sb.toString() + " -> heap no signal -> hold";
         }
         if (memPressure < STRONG_CLEAN_MEM_PCT) {
-            return "clean " + wholePct(memPct) + " heap -> climb";
+            return sb.toString() + " -> clean " + wholePct(memPct) + " heap -> climb";
         }
         if (memPressure < CLIMB_HEADROOM_MEM_PCT) {
-            return "moderate " + wholePct(memPct) + " heap -> climb";
+            return sb.toString() + " -> moderate " + wholePct(memPct) + " heap -> climb";
         }
-        return "tight " + wholePct(memPct) + " heap -> hold";
+        return sb.toString() + " -> tight " + wholePct(memPct) + " heap -> hold";
     }
 
     /**
@@ -5279,6 +5292,72 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      * @since 0.9.71+
      */
     private static final long CONGESTION_GATE_MS = 8000L;
+
+    /**
+     * Fraction of the lossy threshold below which the ceiling may climb again.
+     *
+     * <p>The same threshold would otherwise serve both directions, so a signal
+     * sitting on it crosses it repeatedly and the ceiling bangs between the floor
+     * and the cap without resting in between - which is what a measured 50-second
+     * limit cycle looked like before this gap existed.
+     *
+     * @since 0.9.71+
+     */
+    private static final double CEILING_CLIMB_FRACTION = 0.5;
+
+    /**
+     * Windows the signal must hold one direction before the ceiling moves in it.
+     *
+     * <p>A single reading is one period of a small-sample ratio, which crosses a
+     * threshold on its own. Two consecutive periods in the same direction is the
+     * cheapest debounce that still reacts within a loss episode rather than after
+     * it.
+     *
+     * @since 0.9.71+
+     */
+    static final int CEILING_CONFIRM_WINDOWS = 2;
+
+    /** The ceiling should shrink. */
+    static final int CEILING_SHRINK = 1;
+    /** The ceiling should climb. */
+    static final int CEILING_CLIMB = -1;
+    /** The ceiling should hold where it is. */
+    static final int CEILING_HOLD = 0;
+
+    /**
+     * Which way the ceiling wants to move, with a dead-band between the two
+     * directions. Pure, so the band and the confirm count can be pinned without a
+     * router.
+     *
+     * <p>The dead-band is the point. One threshold serving both directions means the
+     * signal only has to sit on it, and a small-sample ratio sits on it by
+     * construction. Shrinking at the full lossy threshold and climbing at half of it
+     * leaves a band where the honest answer is "unchanged", which is what lets the
+     * ceiling rest at an intermediate value.
+     *
+     * <p>Boundaries: shrink is inclusive at {@code STREAM_LOSSY_RATE} and above;
+     * climb is inclusive at {@code STREAM_LOSSY_RATE * CEILING_CLIMB_FRACTION} and
+     * below; the open interval between them is the dead-band. A direction is
+     * returned only after {@code CEILING_CONFIRM_WINDOWS} consecutive windows in
+     * that zone — a single reading is one period of a small-sample ratio.
+     *
+     * @param lossRate event-count retransmission rate 0.0-1.0, or NaN
+     * @param riseShrink consecutive windows already held in the shrink direction
+     * @param riseClimb consecutive windows already held in the climb direction
+     * @return the direction to move, or {@link #CEILING_HOLD}
+     * @since 0.9.71+
+     */
+    static int ceilingDirection(double lossRate, int riseShrink, int riseClimb) {
+        if (Double.isNaN(lossRate)) return CEILING_HOLD;
+        double climbAt = STREAM_LOSSY_RATE * CEILING_CLIMB_FRACTION;
+        if (lossRate >= STREAM_LOSSY_RATE) {
+            return riseShrink + 1 >= CEILING_CONFIRM_WINDOWS ? CEILING_SHRINK : CEILING_HOLD;
+        }
+        if (lossRate <= climbAt) {
+            return riseClimb + 1 >= CEILING_CONFIRM_WINDOWS ? CEILING_CLIMB : CEILING_HOLD;
+        }
+        return CEILING_HOLD;
+    }
 
     /** A separator for a reason with more than one clause. */
     private static void appendSep(StringBuilder sb) {
@@ -5422,6 +5501,12 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         /** Close time of the loss window this decision was last taken on. */
         private double _lastLossStamp = Double.NaN;
 
+        /** Consecutive windows in the shrink direction. */
+        private int _riseShrink;
+
+        /** Consecutive windows in the climb direction. */
+        private int _riseClimb;
+
         /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             // Act at most once per closed 60s window. The tuner ticks every 5s while
@@ -5437,6 +5522,24 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             double failLifetime = getAdditionalStat(_context, "transport.sendMessageFailureLifetime");
             double lossRate = getStreamingLossRate(_context);
             double memPct = getAdditionalStat(_context, "jobQueue.memoryUsedPercent");
+            // Update confirm counts from the raw signal zone, not the gated
+            // return. Gating the count on the return deadlocks at zero:
+            // ceilingDirection returns HOLD until the count is reached, so the
+            // count never reaches it and the ceiling freezes permanently.
+            double climbAt = STREAM_LOSSY_RATE * CEILING_CLIMB_FRACTION;
+            if (Double.isNaN(lossRate)) {
+                _riseShrink = 0; _riseClimb = 0;
+            } else if (lossRate >= STREAM_LOSSY_RATE) {
+                _riseShrink++; _riseClimb = 0;
+            } else if (lossRate <= climbAt) {
+                _riseClimb++; _riseShrink = 0;
+            }
+            // dead-band: leave both unchanged — a brief dip during an episode
+            // should not reset the confirm count
+            int want = ceilingDirection(lossRate, _riseShrink, _riseClimb);
+            if (want == CEILING_HOLD) {
+                return current;
+            }
             return computeStreamingMaxWindowTarget(current, _min, _max, _step, _defaultValue,
                                                    failLifetime, lossRate, memPct);
         }
@@ -5450,7 +5553,24 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         protected String decisionReason() {
             return maxWindowDecision(getAdditionalStat(_context, "transport.sendMessageFailureLifetime"),
                                      getStreamingLossRate(_context),
-                                     getAdditionalStat(_context, "jobQueue.memoryUsedPercent"));
+                                     getAdditionalStat(_context, "jobQueue.memoryUsedPercent"),
+                                     byteWeightedLossRate());
+        }
+
+        /**
+         * The byte-weighted retransmission ratio, in the same units as the loss rate.
+         *
+         * <p>Read separately from the event-count path because the two are computed
+         * from different counters, and a divergence between them is the signal worth
+         * seeing in the decision line.
+         *
+         * @return the byte-weighted rate 0.0-1.0, or NaN when unavailable
+         * @since 0.9.71+
+         */
+        private double byteWeightedLossRate() {
+            double perMille = getAdditionalStat5Min(_context, "stream.rtxRatioBytes");
+            if (Double.isNaN(perMille) || perMille < 0.0d) {return Double.NaN;}
+            return Math.min(perMille / 1000.0d, 1.0d);
         }
     }
 
