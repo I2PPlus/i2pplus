@@ -5245,18 +5245,22 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      * @since 0.9.71+
      */
     static String maxWindowDecision(double failLifetime, double lossRate, double memPct,
-                                    double byteLossRate) {
+                                    double byteLossRate, long dupEvents, long sendEvents) {
         boolean congested = !Double.isNaN(failLifetime) && failLifetime > CONGESTION_GATE_MS;
         boolean dropping = isStreamLossy(lossRate);
         double memPressure = !Double.isNaN(memPct) ? memPct : 0.0;
-        StringBuilder sb = new StringBuilder(64);
-        // Both signals, always. They weigh different denominators - the event-count
-        // ratio weighs a control packet the same as a data one, the byte-weighted
-        // ratio weighs by bytes - so a divergence between them is the evidence that
-        // decides which should drive this ceiling. Emitting only the gate that fired
-        // hides exactly the case worth seeing.
-        sb.append("loss ").append(pct(lossRate)).append(" events vs ")
-          .append(pct(byteLossRate)).append(" bytes");
+        StringBuilder sb = new StringBuilder(96);
+        // Both signals with their window labels, so no reader can compare a 60 s
+        // event figure against a 5 min byte figure - the failure mode that
+        // recurred three times across two heads. The absolute counts are the
+        // data R5 needs to set the veto threshold.
+        sb.append("loss ").append(pct(lossRate)).append(" events(60s) vs ")
+          .append(pct(byteLossRate)).append(" bytes(5m)");
+        if (dupEvents > 0 && sendEvents > 0) {
+            appendSep(sb);
+            sb.append("dupEvents=").append(dupEvents)
+              .append(" dupEvents/s=").append(String.format("%.1f", dupEvents / 60.0));
+        }
         if (congested) {
             appendSep(sb);
             sb.append("congestion ").append(secs(failLifetime));
@@ -5554,7 +5558,9 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return maxWindowDecision(getAdditionalStat(_context, "transport.sendMessageFailureLifetime"),
                                      getStreamingLossRate(_context),
                                      getAdditionalStat(_context, "jobQueue.memoryUsedPercent"),
-                                     byteWeightedLossRate());
+                                     byteWeightedLossRate(),
+                                     (long) getAdditionalEventCount(_context, "stream.con.sendDuplicateSize"),
+                                     (long) getAdditionalEventCount(_context, "stream.con.sendMessageSize"));
         }
 
         /**
