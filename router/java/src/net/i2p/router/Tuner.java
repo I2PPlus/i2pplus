@@ -2396,7 +2396,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         protected double getStatPeriodStamp(RouterContext ctx, String statName) {
             RateStat rs = ctx.statManager().getRate(statName);
             if (rs == null) return Double.NaN;
-            Rate rate = rs.getRate(STAT_PERIOD);
+            Rate rate = rs.getRate(RateConstants.FIVE_MINUTES);
             if (rate == null) return Double.NaN;
             return rate.getLastCoalesceNow();
         }
@@ -5238,28 +5238,33 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      * what makes that visible in one line.
      *
      * @param failLifetime stat {@code transport.sendMessageFailureLifetime} in ms, or NaN
-     * @param lossRate event-count streaming retransmission rate 0.0-1.0, or NaN
+     * @param lossRate the signal that DRIVES the ceiling — the true byte-weighted rate,
+     *        see {@link #trueByteWeightedLossRate()}. 0.0-1.0, or NaN when unread
      * @param memPct stat {@code jobQueue.memoryUsedPercent} in %, or NaN
-     * @param byteLossRate byte-weighted retransmission rate 0.0-1.0, or NaN
-     * @param dupEvents resend event count behind {@code lossRate}, 0 when unread
-     * @param sendEvents send event count behind {@code lossRate}, 0 when unread
+     * @param dupEvents resend event count behind the event-count ratio, 0 when unread
+     * @param sendEvents send event count behind the event-count ratio, 0 when unread
      * @param avgDupSize mean bytes per retransmitted message, or NaN when unread
+     * @param eventRatio event-count streaming retransmission ratio 0.0-1.0, or NaN
+     *        — observation only; it must not decide the verdict, which is why it is a
+     *        separate parameter and not this method's {@code lossRate}
      * @return a short clause naming the verdict and the values behind it, never null
      * @since 0.9.71+
+     * @see #maxWindowDecisionFrom for the named-argument entry point callers should use
      */
     static String maxWindowDecision(double failLifetime, double lossRate, double memPct,
-                                    double byteLossRate, long dupEvents, long sendEvents,
-                                    double avgDupSize) {
+                                    long dupEvents, long sendEvents,
+                                    double avgDupSize, double eventRatio) {
         boolean congested = !Double.isNaN(failLifetime) && failLifetime > CONGESTION_GATE_MS;
         boolean dropping = isStreamLossy(lossRate);
         double memPressure = !Double.isNaN(memPct) ? memPct : 0.0;
         StringBuilder sb = new StringBuilder(96);
-        // Both signals with their window labels, so no reader can compare a 60 s
-        // event figure against a 5 min byte figure - the failure mode that
-        // recurred three times across two heads. The absolute counts are the
-        // data R5 needs to set the veto threshold.
-        sb.append("loss ").append(pct(lossRate)).append(" events(60s) vs ")
-          .append(pct(byteLossRate)).append(" bytes(5m)");
+        // The driver first, tagged with the signal that decided, so no reader infers
+        // the non-driving one caused the verdict. `lossRate` is the driver by
+        // contract; `eventRatio` is the observation, and the two must not be
+        // confused — the ceiling decides on `lossRate` and only reports
+        // `eventRatio`.
+        sb.append("driver=bytes(5m) loss ").append(pct(lossRate))
+          .append(" trueByte; events(60s)=").append(pct(eventRatio));
         if (dupEvents > 0 && sendEvents > 0) {
             appendSep(sb);
             sb.append("dupEvents=").append(dupEvents)
@@ -5290,6 +5295,14 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             sb.append(" -> shrink");
             return sb.toString();
         }
+        // No driver at all is never a reason to climb. computeTarget holds on a NaN
+        // loss rate via the dead-band and documents that contract; without this the
+        // line would print "climb" from the heap band on a ceiling that actually
+        // held, which is the same class of disagreement the driver tag exists to
+        // prevent.
+        if (Double.isNaN(lossRate)) {
+            return sb.toString() + " -> hold";
+        }
         // No gate open, so the direction came from the heap bands. An unmeasured heap
         // is never read as maximum headroom: holding is the only safe answer when
         // nothing is known, and reading NaN as 0% would climb on a signal that does
@@ -5304,6 +5317,37 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return sb.toString() + " -> moderate " + wholePct(memPct) + " heap -> climb";
         }
         return sb.toString() + " -> tight " + wholePct(memPct) + " heap -> hold";
+    }
+
+    /**
+     * Assemble the ceiling's decision reason from its signals, with the two loss
+     * rates named so the slot assignment cannot be transposed.
+     *
+     * <p>This seam exists because {@link #maxWindowDecision} takes seven positional
+     * parameters and the two loss rates are the pair most easily swapped. A previous
+     * commit passed the event-count ratio where the true byte-weighted rate belonged,
+     * so the line reported a verdict the ceiling had not taken — and no test caught
+     * it, because every test called {@code maxWindowDecision} directly with the
+     * driver already in the driver slot. The function was right and the wiring was
+     * wrong. Naming the two rates here states the mapping in one place and makes it
+     * directly testable.
+     *
+     * @param failLifetime stat {@code transport.sendMessageFailureLifetime} in ms, or NaN
+     * @param driverRate the true byte-weighted rate that decides — 0.0-1.0, or NaN
+     * @param eventRate the event-count ratio, reported but not deciding — 0.0-1.0, or NaN
+     * @param memPct stat {@code jobQueue.memoryUsedPercent} in %, or NaN
+     * @param dupEvents resend event count behind {@code eventRate}, 0 when unread
+     * @param sendEvents send event count behind {@code eventRate}, 0 when unread
+     * @param avgDupSize mean bytes per retransmitted message, or NaN when unread
+     * @return a short clause naming the verdict and the values behind it, never null
+     * @since 0.9.71+
+     */
+    static String maxWindowDecisionFrom(double failLifetime, double driverRate,
+                                        double eventRate, double memPct,
+                                        long dupEvents, long sendEvents,
+                                        double avgDupSize) {
+        return maxWindowDecision(failLifetime, driverRate, memPct, dupEvents,
+                                 sendEvents, avgDupSize, eventRate);
     }
 
     /**
@@ -5541,7 +5585,15 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             _lastLossStamp = stamp;
             int current = getRuntimeValue();
             double failLifetime = getAdditionalStat(_context, "transport.sendMessageFailureLifetime");
-            double lossRate = getStreamingLossRate(_context);
+            // Primary signal: the true byte-weighted retransmission rate (total
+            // resent bytes / total sent bytes over the 5-minute window). The
+            // event-count ratio reads ~52 % on this router and drives the ceiling
+            // to the floor; the mean-of-ratios byte stat reads ~3 % and understates
+            // loss. The true byte-weighted figure is the right measure for a
+            // byte-in-flight ceiling. It stays in the decision log for observation.
+            // NaN (no 5-min data yet) reads as HOLD via the dead-band, never as
+            // climb on no evidence.
+            double lossRate = trueByteWeightedLossRate();
             double memPct = getAdditionalStat(_context, "jobQueue.memoryUsedPercent");
             // Update confirm counts from the raw signal zone, not the gated
             // return. Gating the count on the return deadlocks at zero:
@@ -5572,13 +5624,19 @@ public class Tuner extends SimpleTimer2.TimedEvent {
          */
         @Override
         protected String decisionReason() {
-            return maxWindowDecision(getAdditionalStat(_context, "transport.sendMessageFailureLifetime"),
-                                     getStreamingLossRate(_context),
-                                     getAdditionalStat(_context, "jobQueue.memoryUsedPercent"),
-                                     byteWeightedLossRate(),
-                                     (long) getAdditionalEventCount(_context, "stream.con.sendDuplicateSize"),
-                                     (long) getAdditionalEventCount(_context, "stream.con.sendMessageSize"),
-                                     averageDuplicateMessageSize());
+            // Assembled through a named seam so the slot assignment is testable.
+            // The previous version called maxWindowDecision directly with the two
+            // rates in the opposite positions, which no test could catch because
+            // every test called maxWindowDecision with the driver already in the
+            // driver slot - the function was right and the wiring was wrong.
+            return maxWindowDecisionFrom(
+                       getAdditionalStat(_context, "transport.sendMessageFailureLifetime"),
+                       trueByteWeightedLossRate(),
+                       getStreamingLossRate(_context),
+                       getAdditionalStat(_context, "jobQueue.memoryUsedPercent"),
+                       (long) getAdditionalEventCount(_context, "stream.con.sendDuplicateSize"),
+                       (long) getAdditionalEventCount(_context, "stream.con.sendMessageSize"),
+                       averageDuplicateMessageSize());
         }
 
         /**
@@ -5614,19 +5672,37 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         }
 
         /**
-         * The byte-weighted retransmission ratio, in the same units as the loss rate.
+         * The true byte-weighted retransmission rate: total bytes resent divided by
+         * total bytes sent over the window.
          *
-         * <p>Read separately from the event-count path because the two are computed
-         * from different counters, and a divergence between them is the signal worth
-         * seeing in the decision line.
+         * <p>Unlike {@code stream.rtxRatioBytes} this is not a mean of
+         * per-connection ratios. That stat records 1000*dupBytes/bytesSent once per
+         * closed connection, so its window mean is a mean of ratios: a three-message
+         * connection that resent everything counts the same as a
+         * three-thousand-message connection that resent one record, and on this
+         * router it reads 3.47 % while the byte-weighted figure reads 39-58 %. This
+         * method divides the window's total resent bytes by its total sent bytes, so
+         * a connection that carried most of the bytes in the window carries most of
+         * the weight — the quantity a byte-in-flight ceiling actually needs.
          *
-         * @return the byte-weighted rate 0.0-1.0, or NaN when unavailable
+         * <p>Both inputs are recorded at the same stream-close event over the same
+         * 5-minute window, so the two window means divide into a rate.
+         *
+         * <p>Bounded by the streams that closed inside the window, so it is a
+         * closure-biased lifetime figure rather than a true traffic-rate one: one
+         * long stream closing in the window contributes its whole lifetime.
+         *
+         * @return the byte-weighted rate 0.0-1.0, or NaN when either input is absent
          * @since 0.9.71+
          */
-        private double byteWeightedLossRate() {
-            double perMille = getAdditionalStat5Min(_context, "stream.rtxRatioBytes");
-            if (Double.isNaN(perMille) || perMille < 0.0d) {return Double.NaN;}
-            return Math.min(perMille / 1000.0d, 1.0d);
+        private double trueByteWeightedLossRate() {
+            double dupBytes = getAdditionalStat5Min(_context, "stream.con.lifetimeDupBytesSent");
+            double sentBytes = getAdditionalStat5Min(_context, "stream.con.lifetimeBytesSent");
+            if (Double.isNaN(dupBytes) || Double.isNaN(sentBytes) || sentBytes <= 0.0d
+                || dupBytes < 0.0d) {
+                return Double.NaN;
+            }
+            return Math.min(dupBytes / sentBytes, 1.0d);
         }
     }
 
