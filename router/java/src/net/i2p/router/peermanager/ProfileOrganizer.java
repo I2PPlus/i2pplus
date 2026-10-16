@@ -2451,16 +2451,18 @@ public class ProfileOrganizer {
 
             // Step 9: Log and record stats
             if (_log.shouldInfo()) {
+                // Fallback additions are the event; zero is the norm and stays
+                // out of the line so the three tier counts fit one row.
+                String fastExtra = added > 0 ? " (fallback +" + added + ')' : "";
+                String capExtra = highCapAdded > 0 ? " (fallback +" + highCapAdded + ')' : "";
                 _log.info("Profiles reorganized: " + expiredCount + " expired, " +
                           profileCount + " retained" +
-                          "\n* Thresholds -> Cap: " + num(_thresholdCapacityValue) +
-                          " * Spd: " + num(_thresholdSpeedValue) +
-                          " * Int: " + num(_thresholdIntegrationValue) +
-                          "\n* Fast peers: " + _fastPeers.size() +
-                          " (added " + added + " via fallback)" +
-                          " * HighCap peers: " + _highCapacityPeers.size() +
-                          " (added " + highCapAdded + " via fallback)" +
-                          "\n* Quality peers: " + qualityCount);
+                          "\n* Thresholds -> Capacity: " + num(_thresholdCapacityValue) +
+                          " * Speed: " + num(_thresholdSpeedValue) +
+                          " * Integration: " + num(_thresholdIntegrationValue) +
+                          "\n* Fast peers: " + _fastPeers.size() + fastExtra +
+                          " * HighCap peers: " + _highCapacityPeers.size() + capExtra +
+                          " * Quality peers: " + qualityCount);
             }
 
             long total = System.currentTimeMillis() - start;
@@ -5357,19 +5359,17 @@ private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, P
             }
         }
 
+        // Drain every scan so the tally cannot accumulate across cycles; the
+        // skips are evidence for the shortfall, so they log inside its line.
+        String skips = drainPromotionSkipTally();
         if (_fastPeers.size() < fastTarget || _highCapacityPeers.size() < highCapTarget) {
             _context.statManager().addRateData("peermanager.tiersUnderfilled", 1);
             if (_log.shouldInfo())
                 _log.info(describeTierFill("promoteToFillTiers",
                                            _fastPeers.size(), fastTarget,
                                            _highCapacityPeers.size(), highCapTarget,
-                                           examined, alreadyTiered, heldNoAddress));
-        }
-        if (_log.shouldInfo()) {
-            String skips = drainPromotionSkipTally();
-            if (!skips.isEmpty()) {
-                _log.info("Promotion skips: " + examined + " examined" + skips);
-            }
+                                           examined, alreadyTiered, heldNoAddress,
+                                           skips));
         }
     }
 
@@ -5429,7 +5429,10 @@ private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, P
      * <p>Short because there were no candidates left to try is a discovery problem; short
      * because every candidate was gated out is a policy problem. Those call for different
      * fixes, and from outside the reorg they look identical, so the breakdown is reported
-     * rather than inferred.
+     * rather than inferred. How to read it: held-no-address above zero is a policy gate;
+     * examined zero means no candidates were found. That guide lives here, not in the
+     * emitted line. Zero counters report the absence of an event and stay out; the skip
+     * tally rides along as evidence for this same shortfall.
      *
      * @param where the caller, for attribution
      * @param fast the fast-tier size achieved
@@ -5437,19 +5440,25 @@ private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, P
      * @param highCap the high-capacity-tier size achieved
      * @param highCapTarget the high-capacity-tier size wanted
      * @param examined candidates walked, including those rejected by a gate
-     * @param alreadyTiered candidates skipped because already in both tiers
-     * @param heldNoAddress candidates that cleared every gate except having no usable address
+     * @param alreadyTiered candidates skipped because already in both tiers, omitted when zero
+     * @param heldNoAddress candidates that cleared every gate except having no usable address, omitted when zero
+     * @param skips the drained skip tally with its own {@code "\n* "} prefix, or empty
      * @return the shortfall and its causes, wrapped onto continuation lines
      * @since 0.9.71+
      */
     static String describeTierFill(String where, int fast, int fastTarget,
                                    int highCap, int highCapTarget,
-                                   int examined, int alreadyTiered, int heldNoAddress) {
-        return "Tiers underfilled in " + where
-               + "\n* Fast: " + fast + "/" + fastTarget + " * High cap: " + highCap + "/" + highCapTarget
-               + "\n* Examined: " + examined + " * Already tiered: " + alreadyTiered
-               + " * Held no address: " + heldNoAddress
-               + "\n* Held no address above zero means a policy gate * Examined zero means no candidates";
+                                   int examined, int alreadyTiered, int heldNoAddress,
+                                   String skips) {
+        StringBuilder sb = new StringBuilder(128);
+        sb.append("Tiers underfilled in ").append(where)
+          .append("\n* Fast: ").append(fast).append('/').append(fastTarget)
+          .append(" * High cap: ").append(highCap).append('/').append(highCapTarget)
+          .append("\n* Examined: ").append(examined);
+        if (alreadyTiered > 0) {sb.append(" * Already tiered: ").append(alreadyTiered);}
+        if (heldNoAddress > 0) {sb.append(" * Held no address: ").append(heldNoAddress);}
+        if (skips != null && !skips.isEmpty()) {sb.append(skips);}
+        return sb.toString();
     }
 
     /**

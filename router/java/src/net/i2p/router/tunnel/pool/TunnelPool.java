@@ -6201,8 +6201,8 @@ public class TunnelPool {
                           " replacements" + boost +
                           "\n* Safe: " + stats.safeActive +
                           " (" + countHealthySafe(stats) + " healthy)" +
-                          " * expiring: " + stats.nearExpiry + " * failing: " + stats.failingCount +
-                          "\n* Deficit: " + deficit + " * in progress: " + currentInProgress);
+                          " * Expiring: " + stats.nearExpiry + " * Failing: " + stats.failingCount +
+                          " * Deficit: " + deficit + " * In progress: " + currentInProgress);
             }
             _lastDeficitBuildTime = now;
             // Collapsed pools (zero safe, tunnels expiring) are effectively

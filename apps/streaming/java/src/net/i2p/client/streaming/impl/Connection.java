@@ -2414,7 +2414,8 @@ class Connection {
         _nextSendFreshConnection = true;
         _retransmitEvent.forceRescheduleNow();
         if (_log.shouldInfo()) {
-            _log.info("[" + this + "] Scheduled immediate retransmit after soft failure");
+            _log.info("Soft failure -> Scheduled immediate retransmit to " +
+                      getRemotePeerString() + " on stream " + streamIds());
         }
     }
 
