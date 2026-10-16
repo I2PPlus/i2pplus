@@ -319,7 +319,7 @@ public class RepublishLeaseSetJob extends JobImpl {
     /** Handle expired lease set */
     private void handleExpiredLeaseSet(LeaseSet ls, String name) {
         if (_log.shouldWarn()) {
-            _log.warn("LeaseSet EXPIRED - triggering immediate rebuild for " + name +
+            _log.warn("LeaseSet EXPIRED -> Triggering immediate rebuild" + name +
                       " [" + shortHash() + "]");
         }
         // Send the pool's current leases so the client re-signs fresh tunnels,
@@ -410,8 +410,8 @@ public class RepublishLeaseSetJob extends JobImpl {
         boolean expiring = timeUntilExpiry <= EXPIRY_WINDOW;
         if (expiring) {
             if (_log.shouldInfo()) {
-                _log.info("LeaseSet expiring soon for " + name + " [" + shortHash() +
-                          "] (expires in " + (timeUntilExpiry / 1000) + "s) — requesting immediate renew");
+                _log.info("LeaseSet expiring soon" + name + " [" + shortHash() +
+                          "] (expires in " + (timeUntilExpiry / 1000) + "s) * Requesting immediate renew");
             }
             lastPubLog = null;
         }
@@ -431,7 +431,7 @@ public class RepublishLeaseSetJob extends JobImpl {
         // republish cycle alive so it re-mints before the lease expires.
         if (!getContext().clientManager().shouldPublishLeaseSet(_dest)) {
             if (_log.shouldInfo()) {
-                _log.info("Local-only LeaseSet maintenance for " + name + " [" + shortHash() +
+                _log.info("Local-only LeaseSet maintenance" + name + " [" + shortHash() +
                            "] (not published to network)");
             }
             _lastPublished = now;
@@ -447,9 +447,9 @@ public class RepublishLeaseSetJob extends JobImpl {
         // always re-mints immediately — never waits behind the gate.
         if (expiring) {
             if (_log.shouldInfo()) {
-                _log.info("Published LeaseSet for " + name + " [" + shortHash() +
+                _log.info("Published LeaseSet" + name + " [" + shortHash() +
                           "] expires in " + (timeUntilExpiry / 1000) +
-                          "s — re-minting instead of flooding dying copy");
+                          "s * Re-minting instead of re-flooding");
             }
             refloatLeaseSet(ls, name, now, timeUntilExpiry);
             return;
@@ -721,11 +721,11 @@ public class RepublishLeaseSetJob extends JobImpl {
         LeaseSet fresh = getFreshPoolLeaseSet();
         long freshTimeUntilExpiry = fresh != null ? fresh.getEarliestLeaseDate() - now : 0;
         if (_log.shouldInfo()) {
-            _log.info("refloatLeaseSet " + name + " [" + shortHash() + "]" +
-                      " storedExpiry=" + DataHelper.formatDuration(timeUntilExpiry) +
-                      " freshExpiry=" + DataHelper.formatDuration(freshTimeUntilExpiry) +
-                      " extendsExpiry=" + (freshTimeUntilExpiry > timeUntilExpiry) +
-                      " freshLeases=" + (fresh != null ? fresh.getLeaseCount() : 0));
+            _log.info("Re-minting lease set (refloatLeaseSet)" + name + " [" + shortHash() + "]" +
+                      "\n* Stored expiry: " + DataHelper.formatDuration(timeUntilExpiry) +
+                      " * Fresh expiry: " + DataHelper.formatDuration(freshTimeUntilExpiry) +
+                      " * Extends expiry: " + (freshTimeUntilExpiry > timeUntilExpiry) +
+                      " * Fresh leases: " + (fresh != null ? fresh.getLeaseCount() : 0));
         }
         TunnelPool pool = getContext().tunnelManager().getInboundPool(_dest);
         int freshCount = countFreshLeases(fresh, now);
@@ -769,7 +769,7 @@ public class RepublishLeaseSetJob extends JobImpl {
             Integer seen = _supplyDeferrals.merge(_dest, 1, Integer::sum);
             pool.requestFreshTunnelBuild();
             if (_log.shouldInfo()) {
-                _log.info("Waiting on fresh tunnels for " + name + " [" + shortHash() +
+                _log.info("Waiting on fresh tunnels" + name + " [" + shortHash() +
                           "] — pool is not stocked for a mint in " +
                           (timeUntilExpiry / 1000) + "s (attempt " + seen + "/" +
                           MAX_SUPPLY_DEFERRALS + ")");
@@ -788,9 +788,9 @@ public class RepublishLeaseSetJob extends JobImpl {
             // of spinning, while still asking the pool for replacements so the
             // re-mint becomes meaningful once capacity arrives.
             if (_log.shouldInfo()) {
-                _log.info("Holding off ineffective re-mint for " + name + " [" + shortHash() +
+                _log.info("Holding off ineffective re-mint" + name + " [" + shortHash() +
                           "] — same " + freshCount + " leases, expiry still " +
-                          (timeUntilExpiry / 1000) + "s, next attempt in " +
+                          (timeUntilExpiry / 1000) + "s\n* Next attempt in " +
                           ((backoff - sinceLastIneffective) / 1000) + "s");
             }
             if (pool != null) {pool.requestFreshTunnelBuild();}
@@ -808,14 +808,14 @@ public class RepublishLeaseSetJob extends JobImpl {
             // repeating at WARN; it is the steady state of a pool waiting on
             // builds, and saying so 170 times a burst buries the real alarms.
             if (_log.shouldWarn() && emergency && !ineffective) {
-                _log.warn("Re-minting LeaseSet for " + name + " [" + shortHash() +
-                          "] under emergency window (" + (timeUntilExpiry / 1000) +
-                          "s to expiry, " + freshCount + "/" + target + " viable leases)");
+                _log.warn("Re-minting LeaseSet" + name + " [" + shortHash() +
+                          "] under emergency window\n* " + (timeUntilExpiry / 1000) +
+                          "s to expiry, " + freshCount + "/" + target + " viable leases");
             } else if (_log.shouldInfo()) {
-                _log.info("Requesting re-mint of LeaseSet for " + name + " [" + shortHash() +
-                          "] (extends expiry from " + (timeUntilExpiry / 1000) +
+                _log.info("Requesting re-mint of LeaseSet" + name + " [" + shortHash() +
+                          "]\n* Extends expiry from " + (timeUntilExpiry / 1000) +
                           "s to " + (freshTimeUntilExpiry / 1000) + "s, " +
-                          freshCount + "/" + target + " viable leases)");
+                          freshCount + "/" + target + " viable leases");
             }
             getContext().clientManager().requestLeaseSet(_dest, fresh);
             _remintDefers.remove(_dest);
@@ -833,7 +833,7 @@ public class RepublishLeaseSetJob extends JobImpl {
             AtomicInteger defers = _remintDefers.computeIfAbsent(_dest, k -> new AtomicInteger(0));
             if (freshCount > 0 && defers.getAndIncrement() >= MAX_REMINT_DEFERS) {
                 if (_log.shouldWarn()) {
-                    _log.warn("Re-mint for " + name + " [" + shortHash() +
+                    _log.warn("Re-mint" + name + " [" + shortHash() +
                               "] falling back after " + defers.get() +
                               " deferred tries (" + freshCount + "/" + target + " viable leases)");
                 }
@@ -844,7 +844,7 @@ public class RepublishLeaseSetJob extends JobImpl {
                 requested = true;
             } else {
                 if (_log.shouldInfo()) {
-                    _log.info("Deferring re-mint for " + name + " [" + shortHash() +
+                    _log.info("Deferring re-mint" + name + " [" + shortHash() +
                               "] — " + freshCount + "/" + target +
                               " viable leases, requesting build");
                 }
@@ -856,7 +856,7 @@ public class RepublishLeaseSetJob extends JobImpl {
             // recovers; the expiry path triggers the rebuild once the copy
             // finally dies.
             if (_log.shouldInfo()) {
-                _log.info("No inbound pool for " + name + " [" + shortHash() +
+                _log.info("No inbound pool" + name + " [" + shortHash() +
                           "], keeping cycle alive until expiry");
             }
         }
@@ -868,10 +868,10 @@ public class RepublishLeaseSetJob extends JobImpl {
               Long lastWarn = _lastShortExpiryLog.get(_dest);
               if (lastWarn == null || (now - lastWarn > SHORT_EXPIRY_LOG_INTERVAL)) {
                   _lastShortExpiryLog.put(_dest, now);
-                  _log.warn("LeaseSet for " + name + " [" + shortHash() +
+                  _log.warn("LeaseSet" + name + " [" + shortHash() +
                             "] expiring in only " + (effectiveExpiry / 1000) +
                             "s, under the " + (LEASE_ELIGIBILITY_FLOOR_MS / 1000) +
-                            "s pool lease floor — no lease in the copy had enough life to publish");
+                            "s pool lease floor\n* No lease in the copy had enough life to publish");
               }
           }
         scheduleRepublish(computeNextRepublish(effectiveExpiry));
@@ -1129,7 +1129,7 @@ public class RepublishLeaseSetJob extends JobImpl {
                 Long lastVerifyLog = _lastVerifyLogTime.get(_ls.getHash());
                 if (globalCount / 3 > MAX_FLOODFILL_VERIFICATIONS) {
                     if (_log.shouldWarn()) {
-                        _log.warn("Floodfill verification maxed out for" + name + " [" +
+                        _log.warn("Floodfill verification maxed out" + name + " [" +
                                   _ls.getHash().toBase32().substring(0, 8) +
                                   "] -> falling back to retry directly");
                     }

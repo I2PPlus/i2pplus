@@ -738,7 +738,7 @@ public class BuildHandler implements Runnable {
         if (rtt < 0) {rtt = 0;}
         if (_log.shouldInfo()) {
             _log.info("Handled reply [MsgID " + msg.getUniqueId() + "] in " + rtt + "ms -> " +
-                      (delay > 0 ? "Waited " + delay + "ms for config \n* " : "") + cfg);
+                      (delay > 0 ? "Waited " + delay + "ms for config\n* " : "") + cfg);
         }
         List<Integer> order = cfg.getReplyOrder();
         BuildReplyHandler.Result statuses[] = _buildReplyHandler.decrypt(msg, cfg, order);
@@ -2026,6 +2026,10 @@ public class BuildHandler implements Runnable {
     static boolean countNextHopOutcome(int outcome, Log log, long now) {
         if (outcome < 0 || outcome >= NEXT_HOP_OUTCOMES) {return false;}
         _nextHopOutcomes[outcome].incrementAndGet();
+        // Seed the window start on the first outcome so the first summary
+        // measures a real window; with the counter left at zero the window
+        // was the epoch and the line read "handled in 1792120172s".
+        _nextHopSummaryLog.compareAndSet(0, now);
         if (log == null || !log.shouldWarn()) {return false;}
         long last = _nextHopSummaryLog.get();
         if (now - last < NEXT_HOP_SUMMARY_INTERVAL_MS) {return false;}
@@ -2063,7 +2067,8 @@ public class BuildHandler implements Runnable {
      *
      * @param counts [replied, timedOut, dropped]
      * @param windowMs window the counts cover
-     * @return a single-line WARN summary
+     * @return a WARN summary on two lines, plus a third naming the suspect
+     *         when the unanswered rate reaches the flag threshold
      * @since 0.9.71+
      */
     static String nextHopSummaryText(long[] counts, long windowMs) {
@@ -2072,10 +2077,10 @@ public class BuildHandler implements Runnable {
         long dropped = counts[2];
         long handled = replied + timedOut;
         int pct = handled > 0 ? (int) Math.round((double) timedOut * 100d / handled) : 0;
-        return "Next-hop contact: " + handled + " handled in " + (windowMs / 1000) + "s, " +
-               replied + " replied, " + timedOut + " timed out (" + pct + "%), " +
-               dropped + " dropped" +
-               (pct >= 20 ? " -- high unanswered rate, suspect unreachable/firewalled peers" : "");
+        return "Next-hop contact: " + handled + " handled in " + (windowMs / 1000) + "s" +
+               " * Replied: " + replied + " * Timed out: " + timedOut + " (" + pct + "%)" +
+               " * Dropped: " + dropped +
+               (pct >= 20 ? "\n* High unanswered rate -> Suspect unreachable/firewalled peers" : "");
     }
 
     /**

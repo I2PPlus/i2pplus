@@ -332,4 +332,23 @@ public class ProfileOrganizerPromotionTest {
             }
         }
     }
+
+    /**
+     * The tally renders reasons as prose labels with the first letter
+     * capitalised; every reason the gate can return must have a label, and
+     * an unmapped reason must pass through unchanged rather than vanish.
+     */
+    @Test
+    public void promotionSkipLabelsAreProse() {
+        assertEquals("Loss probation", ProfileOrganizer.promotionSkipLabel("lossProbation"));
+        assertEquals("Not peer selectable", ProfileOrganizer.promotionSkipLabel("notPeerSelectable"));
+        assertEquals("Excessive failures", ProfileOrganizer.promotionSkipLabel("excessiveFailures"));
+        assertEquals("Strict country", ProfileOrganizer.promotionSkipLabel("strictCountry"));
+        assertEquals("Congested", ProfileOrganizer.promotionSkipLabel("congested"));
+        assertEquals("Low tunnel acceptance (fast)",
+                     ProfileOrganizer.promotionSkipLabel("lowTunnelAcceptance.fast"));
+        assertEquals("Low tunnel acceptance (high cap)",
+                     ProfileOrganizer.promotionSkipLabel("lowTunnelAcceptance.highCap"));
+        assertEquals("someNewReason", ProfileOrganizer.promotionSkipLabel("someNewReason"));
+    }
 }

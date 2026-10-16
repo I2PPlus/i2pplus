@@ -86,7 +86,7 @@ public class KeepAliveTallyTest {
         t.keepalived = 20;
         t.preConnected = 30;
         String line = t.describe(true);
-        assertTrue(line, line.contains("50 acted of 210 candidates from a 400 budget"));
+        assertTrue(line, line.contains("50 acted of 210 candidates, budget 400"));
         assertTrue(line, line.contains("aggressive"));
         // The old wording claimed candidates were delivered; that is the misreading this guards.
         assertFalse(line, line.contains("delivered"));
@@ -118,13 +118,13 @@ public class KeepAliveTallyTest {
         t.unprocessed = 7;
         String line = t.describe(false);
         assertTrue(line, line.contains("normal"));
-        assertTrue(line, line.contains("cooldown=1"));
-        assertTrue(line, line.contains("stale=2"));
-        assertTrue(line, line.contains("recent=3"));
-        assertTrue(line, line.contains("noRouterInfo=4"));
-        assertTrue(line, line.contains("noAddress=5"));
-        assertTrue(line, line.contains("noTransport=6"));
-        assertTrue(line, line.contains("unprocessed=7"));
+        assertTrue(line, line.contains("Cooldown: 1"));
+        assertTrue(line, line.contains("Stale: 2"));
+        assertTrue(line, line.contains("Recent: 3"));
+        assertTrue(line, line.contains("No RouterInfo: 4"));
+        assertTrue(line, line.contains("No Address: 5"));
+        assertTrue(line, line.contains("No Transport: 6"));
+        assertTrue(line, line.contains("Unprocessed: 7"));
     }
 
     /**
@@ -135,8 +135,8 @@ public class KeepAliveTallyTest {
     public void anEmptyCycleStillReports() {
         TunnelPeerSelector.KeepAliveTally t = full(0);
         String line = t.describe(false);
-        assertTrue(line, line.contains("0 acted of 0 candidates from a 400 budget"));
-        assertTrue(line, line.contains("noAddress=0"));
+        assertTrue(line, line.contains("0 acted of 0 candidates, budget 400"));
+        assertTrue(line, line.contains("No Address: 0"));
     }
 
     @Test
@@ -147,7 +147,7 @@ public class KeepAliveTallyTest {
         t.keepalived = 200;
         t.unprocessed = 200;
         String line = t.describe(false);
-        assertTrue(line, line.contains("unprocessed=200"));
+        assertTrue(line, line.contains("Unprocessed: 200"));
         assertEquals(0, t.unaccounted());
     }
 }

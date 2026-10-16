@@ -2371,7 +2371,8 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
          * actually fell.
          *
          * @param aggressive whether this was an aggressive cycle
-         * @return a single line naming candidates, acted-on peers and every skip reason
+         * @return the cycle summary on three lines: supply and delivery, then the
+         *         skip reasons split across two {@code \n* } continuation lines
          */
         String describe(boolean aggressive) {
             StringBuilder buf = new StringBuilder(192);
@@ -2379,14 +2380,17 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
                .append(preConnected).append(" pre-connects (")
                .append(aggressive ? "aggressive" : "normal").append(", ")
                .append(actedOn()).append(" acted of ").append(candidates)
-               .append(" candidates from a ").append(budget).append(" budget")
-               .append(") skipped: cooldown=").append(skipCooldown)
-               .append(" stale=").append(skipStale)
-               .append(" recent=").append(skipRecent)
-               .append(" noRouterInfo=").append(skipNoRouterInfo)
-               .append(" noAddress=").append(skipNoAddress)
-               .append(" noTransport=").append(skipNoTransport)
-               .append(" unprocessed=").append(unprocessed);
+               .append(" candidates, budget ").append(budget).append(")")
+               .append("\n* Skipped: ").append(skipCooldown + skipStale + skipRecent
+                                                      + skipNoRouterInfo + skipNoAddress
+                                                      + skipNoTransport)
+               .append(" * Cooldown: ").append(skipCooldown)
+               .append(" * Stale: ").append(skipStale)
+               .append(" * Recent: ").append(skipRecent)
+               .append(" * No RouterInfo: ").append(skipNoRouterInfo)
+               .append("\n* No Address: ").append(skipNoAddress)
+               .append(" * No Transport: ").append(skipNoTransport)
+               .append(" * Unprocessed: ").append(unprocessed);
             return buf.toString();
         }
 

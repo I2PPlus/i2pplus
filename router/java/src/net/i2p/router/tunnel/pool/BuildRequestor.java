@@ -429,9 +429,9 @@ public abstract class BuildRequestor {
         }
 
         if (log.shouldInfo()) {
-            log.info("Sending Inbound TunnelBuildRequest [MsgID " + msg.getUniqueId() + "] for " + cfg +
+            log.info("Sending build request [MsgID " + msg.getUniqueId() + "] for " + cfg +
                      "\n* Via: " + pairedTunnel + " to [" + ibgw.toBase64().substring(0,6) +
-                      "] -> Awaiting reply [MsgID " + cfg.getReplyMessageId() + "]...");
+                      "] -> Awaiting reply [MsgID " + cfg.getReplyMessageId() + "]");
         }
         ctx.tunnelDispatcher().dispatchOutbound(msg, pairedTunnel.getSendTunnelId(0), ibgw);
         return true;
@@ -507,10 +507,10 @@ public abstract class BuildRequestor {
                 // Recorded before dispatch so an expiry can be joined back to this send.
                 cfg.setLastRequestMsgId(msg.getUniqueId());
                 if (log.shouldInfo()) {
-                    log.info("Sending outbound TunnelBuildRequest via exploratory tunnel to [" +
+                    log.info("Sending build request via exploratory tunnel to [" +
                              nextHop.toBase64().substring(0,6) + "] for " + cfg +
-                             "\n* Via: " + outTunnel + " Reply via: " + pairedTunnel +
-                             " [MsgID " + msg.getUniqueId() + "]");
+                             "\n* Via: " + outTunnel +
+                             "\n* Reply via: " + pairedTunnel + " [MsgID " + msg.getUniqueId() + "]");
                 }
                 ctx.tunnelDispatcher().dispatchOutbound(msg, outTunnel.getSendTunnelId(0), nextHop);
                 return;
@@ -531,7 +531,7 @@ public abstract class BuildRequestor {
 
         cfg.setLastRequestMsgId(msg.getUniqueId());
         if (log.shouldInfo()) {
-            log.info("Sending outbound TunnelBuildRequest direct to [" + nextHop.toBase64().substring(0,6) + "] for " + cfg +
+            log.info("Sending build request direct to [" + nextHop.toBase64().substring(0,6) + "] for " + cfg +
                      "\n* Reply via: " + pairedTunnel + " [MsgID " + msg.getUniqueId() + "]");
         }
 

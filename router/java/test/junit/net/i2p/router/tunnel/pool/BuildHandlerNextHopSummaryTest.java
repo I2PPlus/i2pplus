@@ -27,7 +27,7 @@ public class BuildHandlerNextHopSummaryTest {
         // 42% unanswered: the rate observed in production.
         String s = BuildHandler.nextHopSummaryText(new long[] {100, 72, 5}, 300_000);
         assertTrue("must name the counts: " + s,
-                   s.contains("172 handled") && s.contains("100 replied") && s.contains("72 timed out"));
+                   s.contains("172 handled") && s.contains("Replied: 100") && s.contains("Timed out: 72"));
         assertTrue("must show 42%: " + s, s.contains("(42%)"));
     }
 

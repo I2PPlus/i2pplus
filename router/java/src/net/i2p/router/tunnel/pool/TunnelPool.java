@@ -3528,7 +3528,7 @@ public class TunnelPool {
             // fall back to degraded tunnels — wait for a test cycle to complete.
             if (!_hasGoodLeaseSet) {
                 if (_log.shouldInfo()) {
-                    _log.info(toString() + "\n* Deferring LeaseSet publication — no GOOD tunnels yet");
+                    _log.info(toString() + " -> Deferring LeaseSet publication — no GOOD tunnels yet");
                 }
                 return null;
             }
@@ -3760,10 +3760,14 @@ public class TunnelPool {
         long earliest = leases.first().getEndTime();
         if (!shouldRotateLease(earliest)) {return;}
         Lease rotated = leases.pollFirst();
-        if (_log.shouldInfo())
-            _log.info(toString() + " -> Rotated out oldest lease (" +
-                      rotated.getGateway() + "/" + rotated.getTunnelId() +
-                      ") for floodfill propagation, earliest: " + earliest);
+        if (_log.shouldInfo()) {
+            long delta = earliest - _context.clock().now();
+            _log.info(toString() + " -> Rotated out oldest lease ([" +
+                      rotated.getGateway().toBase64().substring(0, 6) + "]/" +
+                      rotated.getTunnelId() + ") for floodfill propagation" +
+                      "\n* Earliest lease " + (delta >= 0 ? "ends in " : "ended ") +
+                      DataHelper.formatDuration(Math.abs(delta)) + (delta >= 0 ? "" : " ago"));
+        }
         if (rotatedOut != null) {
             markRotatedOut(rotated, tunnels, rotatedOut);
         }
@@ -4013,8 +4017,8 @@ public class TunnelPool {
             _lastSendFailureLogTime = now;
             _log.info(toString() + " -> Data-phase failure (status: " + status +
                       (soft ? ", soft" : "") +
-                      ") for tunnel, failures now " + failures +
-                      "\n* " + cfg + describeHops(cfg));
+                      "), failures now " + failures +
+                      "\n* " + tunnelLabel() + describeHops(cfg));
         }
         boolean overBar = exceedsRemovalThreshold(failures, soft);
         if (overBar) {
@@ -4023,7 +4027,7 @@ public class TunnelPool {
                 _log.warn(toString() + " -> Marking tunnel failing after " +
                           failures +
                           (soft ? " soft" : " cumulative") +
-                          " failures (data-phase + test)\n* " + cfg);
+                          " failures (data-phase + test)\n* " + tunnelLabel());
             }
             failWithCount(cfg, failures);
             tellProfileFailed(cfg);
@@ -4051,20 +4055,35 @@ public class TunnelPool {
      *  hop across many failures is the one to penalise.
      *
      * @param cfg the tunnel that failed, may be null
-     * @return a loggable hop summary, never null
+     * @return a {@code  * Hops: [a] -> [b]} segment, empty when no hops are known
      * @since 0.9.71+
      */
     private static String describeHops(TunnelInfo cfg) {
         if (cfg == null) {return "";}
-        StringBuilder rv = new StringBuilder(96);
+        StringBuilder rv = new StringBuilder(64);
         int len = cfg.getLength();
         for (int hop = 0; hop < len; hop++) {
             Hash peer = cfg.getPeer(hop);
             if (peer == null) {continue;}
-            rv.append("\n*   hop ").append(hop).append(": [")
-              .append(peer.toBase64().substring(0, 6)).append(']');
+            if (rv.length() == 0) {rv.append(" * Hops: ");}
+            else {rv.append(" -> ");}
+            rv.append('[').append(peer.toBase64().substring(0, 6)).append(']');
         }
         return rv.toString();
+    }
+
+    /**
+     * Identify a tunnel by its owning destination's base32 prefix. The pool
+     * prefix of the calling messages already carries the nickname, and the
+     * full config toString would repeat it and restate a failure count the
+     * message has just incremented.
+     *
+     * @return "Tunnel [base32-8]" for client pools, "Tunnel" for exploratory
+     * @since 0.9.71+
+     */
+    private String tunnelLabel() {
+        Hash dest = _settings.getDestination();
+        return dest != null ? "Tunnel [" + dest.toBase32().substring(0, 8) + "]" : "Tunnel";
     }
 
     /**
@@ -4251,7 +4270,7 @@ public class TunnelPool {
                       " tunnel " + (isDead ? "FAILED" : "FAILING") +
                       " -> Retained until expiry (" + failures +
                       " failures, remaining: " + size() + ")" +
-                      (isDead ? ", dead" : "") + "\n* " + cfg);
+                      (isDead ? ", dead" : "") + "\n* " + tunnelLabel());
         }
         // Retention is a liveness signal: capacity must recover immediately,
         // not on the throttled schedule removeTunnel() used to drive.
@@ -4520,7 +4539,7 @@ public class TunnelPool {
         // Skip LeaseSet refresh for ping tunnels - they're short-lived and don't publish LeaseSets
         if (isPingPool()) {
             if (_log.shouldDebug()) {
-                _log.debug(toString() + "\n* Skipping LeaseSet refresh - ping tunnel");
+                _log.debug(toString() + " -> Skipping LeaseSet refresh (ping tunnel)");
             }
             return;
         }
@@ -4830,7 +4849,7 @@ public class TunnelPool {
         }
 
         if (_log.shouldInfo()) {
-            _log.info(toString() + "\n* Building a fallback tunnel (usable: " + usable + ")");
+            _log.info(toString() + " -> Building a fallback tunnel (usable: " + usable + ")");
         }
         // runs inline, since its 0hop
         _manager.getExecutor().buildTunnel(configureNewTunnel(true));
@@ -4856,7 +4875,7 @@ public class TunnelPool {
         if (getInProgressCount() >= 2) {return false;}
 
         if (_log.shouldInfo()) {
-            _log.info(toString() + "\n* Building bootstrap tunnel (usable: " + usable + ", inProgress: " + getInProgressCount() + ")");
+            _log.info(toString() + " -> Building bootstrap tunnel (usable: " + usable + ", in progress: " + getInProgressCount() + ")");
         }
         // Build a 2-hop tunnel (not zero-hop) to provide a reply path
         // forceZeroHop=false allows normal peer selection for 2-hop tunnel
@@ -5030,7 +5049,7 @@ public class TunnelPool {
             long minExpiry = now + 3L * 60 * 1000;
             if (earliestExpiry <= 0 || earliestExpiry < minExpiry) {
                 if (_log.shouldInfo())
-                    _log.info(toString() + "\n* Cached LeaseSet expiring soon — rebuilding");
+                    _log.info(toString() + " -> Cached LeaseSet expiring soon — rebuilding");
                 cacheValid = false;
             }
         }
@@ -5131,10 +5150,9 @@ public class TunnelPool {
         if (toRemove.size() > toPrune) {toRemove = keepBestReserve(toRemove, toPrune);}
         if (_log.shouldInfo()) {
             String boost = _consecutiveEmergencies > 0 ?
-                " (dynamic target " + Math.min(target + _consecutiveEmergencies, target + MAX_EMERGENCY_BOOST) + ")" : "";
+                " * Dynamic target: " + Math.min(target + _consecutiveEmergencies, target + MAX_EMERGENCY_BOOST) : "";
             _log.info("Pruning " + toRemove.size() + " non-GOOD tunnels from " + toString() +
-                      " (good: " + goodCount + ", remaining: " + (goodCount + reserve) + ")"
-                      + boost);
+                      "\n* Good: " + goodCount + " * Remaining: " + (goodCount + reserve) + boost);
         }
         removeTunnelsBatch(toRemove);
         // Refresh LeaseSet after batch removal (normally done per-tunnel in removeTunnel).
@@ -7402,7 +7420,7 @@ public class TunnelPool {
         if (_log.shouldInfo()) {
             _log.info("TBR target [" + tbrTarget.toBase64().substring(0,6) +
                       "] not connected, pre-connecting for next attempt" +
-                      "\n* " + cfg);
+                      "\n* " + tunnelLabel());
         }
         TunnelPeerSelector.preConnectTo(_context, tbrTarget);
         return true;

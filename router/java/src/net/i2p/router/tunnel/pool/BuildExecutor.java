@@ -2068,12 +2068,9 @@ public class BuildExecutor implements Runnable {
                 oldestDeadline = calculateAdaptiveTimeout(oldest, cpuLoad, rttFloor);
                 overdue = oldestDeadline > 0 && oldestAge >= oldestDeadline;
             }
-            _log.info("Building map: " + concurrent +
-                      " expired: " + expiredCount +
-                      " oldestAge: " + oldestAge + "ms" +
-                      " oldestDeadline: " + oldestDeadline + "ms" +
-                      " overdue: " + overdue +
-                      " baseTimeout: " + _adaptiveTimeout + "ms");
+            _log.info("Building map: " + concurrent + " * Expired: " + expiredCount +
+                      "\n* Oldest age: " + oldestAge + "ms * Oldest deadline: " + oldestDeadline + "ms" +
+                      " * Overdue: " + overdue + " * Base timeout: " + _adaptiveTimeout + "ms");
         }
         // In-flight builds belonging to a pool that dispatched a pre-emergency burst
         // are governed by that pool's own cap, not by this global budget, so they are

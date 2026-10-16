@@ -3496,8 +3496,8 @@ static List<PendingTest> prioritizeBatch(List<PendingTest> scan, long now) {
 
         if (_log.shouldDebug()) {
             _log.debug("Sending " + (useEncryption ? "" : "unencrypted ") + "garlic test [#" + _testId +
-                       "] exp=" + DataHelper.formatDuration(m.getMessageExpiration() - ctx.clock().now()) +
-                       " testPeriod=" + testPeriod + "ms \n* " +
+                       "] exp: " + DataHelper.formatDuration(m.getMessageExpiration() - ctx.clock().now()) +
+                       " testPeriod: " + testPeriod + "ms\n* " +
                        _outTunnel + " / " + _replyTunnel);
         }
 
@@ -3672,7 +3672,7 @@ static List<PendingTest> prioritizeBatch(List<PendingTest> scan, long now) {
         _cfg.clearExpeditedTest();
 
         if (_log.shouldDebug()) {
-            _log.debug("Tunnel Test [#" + _testId + "] succeeded in " + ms + "ms \n* " + _cfg + " (Success rate: " +
+            _log.debug("Tunnel Test [#" + _testId + "] succeeded in " + ms + "ms\n* " + _cfg + " (Success rate: " +
                        String.format("%.1f%%", getSuccessRate() * 100) + ")");
         }
 
@@ -4065,9 +4065,10 @@ static List<PendingTest> prioritizeBatch(List<PendingTest> scan, long now) {
                 _partnerDeferrals = 0;
             } else {
                 if (_log.shouldWarn()) {
-                    _log.warn("Tunnel Test failed -> partner " + partner +
+                    _log.warn("Tunnel Test failed -> Partner is not usable" +
                               (_partnerFallback ? " (exploratory fallback)" : "") +
-                              " is not usable \n* Deferring test of " + _cfg +
+                               "\n* Partner: " + partner.getGateway().toBase64().substring(0, 6) +
+                              "\n* Deferring test of " + _cfg +
                               " (" + _partnerDeferrals + "/" + MAX_PARTNER_DEFERRALS + ")");
                 }
                 deferForMissingPartner(_pool.getPairedPool(),

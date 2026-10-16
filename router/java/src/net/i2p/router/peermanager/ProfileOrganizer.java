@@ -5158,9 +5158,32 @@ private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, P
     }
 
     /**
+     * Display form of a promotion skip reason: prose words with the first
+     * letter capitalised, so the tally reads as a list of reasons rather than
+     * as code identifiers. The identifiers themselves stay greppable in the
+     * per-peer DEBUG line and in {@link #promotionSkipReason}.
+     *
+     * @param reason the reason {@link #promotionSkipReason} returned
+     * @return the tally display form; the reason unchanged when unmapped
+     * @since 0.9.71+
+     */
+    static String promotionSkipLabel(String reason) {
+        switch (reason) {
+            case "notPeerSelectable":            return "Not peer selectable";
+            case "excessiveFailures":            return "Excessive failures";
+            case "strictCountry":                return "Strict country";
+            case "congested":                    return "Congested";
+            case "lossProbation":                return "Loss probation";
+            case "lowTunnelAcceptance.fast":     return "Low tunnel acceptance (fast)";
+            case "lowTunnelAcceptance.highCap":  return "Low tunnel acceptance (high cap)";
+            default:                             return reason;
+        }
+    }
+
+    /**
      * Formats the promotion skip tally and clears it.
      *
-     * @return {@code \n* } continuation lines of {@code reason: count} pairs
+     * @return {@code \n* } continuation lines of {@code Label: count} pairs
      *         (packed to about 80 chars per line), or the empty string when
      *         nothing was skipped since the last call
      * @since 0.9.71+
@@ -5170,7 +5193,7 @@ private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, P
         StringBuilder buf = new StringBuilder(128);
         int line = 0;
         for (Map.Entry<String, Integer> e : _promotionSkipTally.entrySet()) {
-            String pair = e.getKey() + ": " + e.getValue().intValue();
+            String pair = promotionSkipLabel(e.getKey()) + ": " + e.getValue().intValue();
             if (buf.length() == 0 || line + pair.length() + 3 > 80) {
                 buf.append("\n* ");
                 line = 3;
@@ -5372,12 +5395,10 @@ private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, P
                                    int highCap, int highCapTarget,
                                    int examined, int alreadyTiered, int heldNoAddress) {
         return "Tiers underfilled in " + where
-               + ": fast: " + fast + "/" + fastTarget
-               + " * highCap: " + highCap + "/" + highCapTarget
-               + "\n* examined: " + examined
-               + " * alreadyTiered: " + alreadyTiered
-               + " * heldNoAddress: " + heldNoAddress
-               + "\n* heldNoAddress>0 means a policy gate, examined==0 means no candidates";
+               + "\n* Fast: " + fast + "/" + fastTarget + " * High cap: " + highCap + "/" + highCapTarget
+               + "\n* Examined: " + examined + " * Already tiered: " + alreadyTiered
+               + " * Held no address: " + heldNoAddress
+               + "\n* Held no address above zero means a policy gate * Examined zero means no candidates";
     }
 
     /**
@@ -5396,7 +5417,7 @@ private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, P
                 if (inFast || inHighCap) {
                     if (_log.shouldInfo()) {
                         _log.info("Demoting peer [" + peer.toBase64().substring(0, 6) +
-                                  "] from fast/high-cap tiers due to stale RouterInfo / no proof of life");
+                                  "] from fast/high-cap tiers — stale RouterInfo, no proof of life");
                     }
                     if (inFast) removeFastPeer(peer);
                     if (inHighCap) _highCapacityPeers.remove(peer);
@@ -5954,8 +5975,8 @@ private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, P
             if (inFast || inHighCap) {
                 if (_log.shouldInfo()) {
                     _log.info("Demoting peer [" + peer.toBase64().substring(0, 6) +
-                              "] from fast/high-cap tiers due to high first hop RTT: " +
-                              firstHopRttMs + "ms (threshold: " + (timeout * 2) + "ms)");
+                              "] from fast/high-cap tiers — first hop RTT " +
+                              firstHopRttMs + "ms above threshold " + (timeout * 2) + "ms");
                 }
                 if (inFast) removeFastPeer(peer);
                 if (inHighCap) _highCapacityPeers.remove(peer);
