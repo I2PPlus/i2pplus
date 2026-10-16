@@ -47,8 +47,10 @@ import net.i2p.data.DataHelper;
 import net.i2p.data.Destination;
 import net.i2p.data.Hash;
 import net.i2p.util.EventDispatcher;
+import net.i2p.stat.RateConstants;
 import net.i2p.util.Log;
 import net.i2p.util.SimpleTimer2;
+import net.i2p.util.SystemVersion;
 
 import java.nio.charset.StandardCharsets;
 /**
@@ -209,7 +211,42 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
      */
     static final int IO_POOL_FLOOR = 8;
     /** Maximum global I/O budget (Tuner max must match). @since 0.9.71+ */
-    static final int IO_THREADS_MAX = 256;
+    static final int IO_THREADS_MAX = maxIOThreads();
+
+    /**
+     * Sample periods for the I/O transfer load stat. Five minutes is included
+     * because a body transfer holds its thread for the whole transfer, so the
+     * per-minute view is noisy while the five-minute one shows the trend the
+     * operator needs against the pool's ceiling.
+     */
+    private static final long[] IO_TRANSFER_RATES = {
+        RateConstants.ONE_MINUTE, RateConstants.FIVE_MINUTES,
+        RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR };
+
+    /**
+     * Heap-derived ceiling on the I/O transfer budget.
+     *
+     * <p>Each I/O thread holds 16 KB of buffer plus a 16 KB BufferedInputStream
+     * and is blocked for the whole of a body transfer, so a thread costs roughly
+     * an order of magnitude more than a runner-pool task, which finishes in
+     * microseconds. Costing the divisor accordingly: 4 MB per thread rather than
+     * the 2 MB the runner pool uses. At 8 GB that is 2048 threads, adding roughly
+     * 190 MB to a 1.2 GB footprint — comfortable, and still large headroom over
+     * the few hundred concurrent transfers a 40 K-client tracker produces at a
+     * 30-minute announce interval.
+     *
+     * <p>The ceiling is burst headroom, not residency: {@code allowCoreThreadTimeOut}
+     * with a 30-second keepalive reaps threads half a minute after their last
+     * task, so an idle pool costs nothing whatever the ceiling says.
+     *
+     * @return the memory-feasible I/O thread ceiling, in [1024, 16384]
+     * @since 0.9.71+
+     */
+    public static int maxIOThreads() {
+        return Math.max(1024, Math.min(16384,
+                (int) (SystemVersion.getMaxMemory() / (4L * 1024 * 1024))));
+    }
+
     /**
      * Idle timeout for Server→Client transfers (ms). If no read/write progress
      * occurs for this long, the transfer is considered stalled and cancelled.
@@ -380,7 +417,16 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
         if (n == 0) {return;}
         int budget = ioTransferThreads;
         int[] desired = new int[n];
-        for (int i = 0; i < n; i++) {desired[i] = budget;}
+        int w = 0;
+        for (ThreadPoolExecutor ex : _ioPools.values()) {
+            int load = ex != null && !ex.isShutdown()
+                    ? ex.getActiveCount() + ex.getQueue().size() : 0;
+            // An idle pool requests nothing rather than the whole budget. The old
+            // code asked for the full budget from every pool, so an idle eepsite
+            // had as much claim on a proportional cut as a tracker under load, and
+            // the tracker's share fell as the tunnel count rose.
+            desired[w++] = load > 0 ? budget : IO_POOL_FLOOR;
+        }
         int[] alloc = TunnelControllerGroup.allocateServerThreads(budget, desired, IO_POOL_FLOOR);
         // Soft-floor: never starve a live tunnel below IO_POOL_FLOOR even when
         // the global budget cannot cover every pool. Brief oversubscription is
@@ -524,6 +570,35 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
      *                     failure through the Sender rather than throwing
      * @since 0.9.71+
      */
+    /**
+     * Publish a pool's load for the operator-facing view on /stats and the graphs
+     * page.
+     *
+     * <p>Explicitly *not* the Tuner's input, despite the name matching its param:
+     * {@code I2PTunnelServerIOTransferParam.getObservedStat} reads the live
+     * {@link #getIOTransferActiveCount()} total instead, on the fast five-second
+     * cycle, so the ceiling reacts to load in seconds rather than to a rate
+     * window. An earlier revision of this javadoc claimed this stat unblocked that
+     * policy — it does not, and the frozen pool it was meant to explain was
+     * caused by {@link #rebalanceIOPools()} splitting the budget equally across
+     * every pool, which left a busy tracker at the 8-thread floor alongside nine
+     * idle eepsites. Load-weighting that rebalance is the fix; this stat is how an
+     * operator sees the same pressure over time.
+     *
+     * @param ioPool the pool to sample; ignored if null or shut down
+     * @since 0.9.71+
+     */
+    private static void sampleIOLoad(ThreadPoolExecutor ioPool) {
+        if (ioPool == null || ioPool.isShutdown()) {return;}
+        I2PAppContext ctx = I2PAppContext.getGlobalContext();
+        if (ctx == null) {return;}
+        ctx.statManager().createRequiredRateStat("i2ptunnel.serverIO.activeCount",
+                "Active plus queued I/O transfer threads", "I2PTunnel",
+                IO_TRANSFER_RATES);
+        ctx.statManager().addRateData("i2ptunnel.serverIO.activeCount",
+                                      ioPool.getActiveCount() + ioPool.getQueue().size());
+    }
+
     static boolean handOffBody(ThreadPoolExecutor pool, Sender s, String desc)
             throws IOException {
         return handOffBody(pool, s, desc, null);
@@ -571,6 +646,13 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
             task.run();
             return false;
         }
+        // Publish the pool's load on every transfer so the operator-facing stat has
+        // per-window history, not just the moments the pool was already full. No
+        // growth happens here: raising the budget is the Tuner's job — it reads
+        // getIOTransferActiveCount() live on the fast cycle and
+        // setIOTransferThreads rebalances every pool — which leaves handOffBody's
+        // abort below as the overload valve it is documented to be.
+        sampleIOLoad(pool);
         try {
             pool.execute(task);
             return true;
@@ -580,6 +662,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
             // whole transfer, driving the runner pool to 0 free threads and
             // stalling every other request to this service. Abort instead so
             // the client fails fast and retries on a fresh connection.
+            sampleIOLoad(pool);
             long aborts = _bodyAbortCount.incrementAndGet();
             s.abort(new IOException("I/O transfer pool saturated, body aborted (" + aborts
                                     + " this session): " + desc, ree));
@@ -1108,7 +1191,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
         _spoofHost = (spoofHost != null && !spoofHost.trim().isEmpty()) ? spoofHost.trim() : null;
         getTunnel().getContext().statManager().createRateStat("i2ptunnel.httpserver.blockingHandleTime",
                                                               "How long the blocking handle takes to complete",
-                                                              "Tunnels [HTTPServer]", new long[] { 60*1000, 10*60*1000, 3*60*60*1000 });
+                                                              "Tunnels [HTTPServer]", IO_TRANSFER_RATES);
         readTimeout = DEFAULT_HTTP_READ_TIMEOUT;
         _blocklistManager = new BlocklistManager(_log, HTTP_BLOCKLIST_CLIENT_LIMIT);
     }
@@ -2276,26 +2359,33 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
          * @throws IOException if the transfer goes idle for the stall timeout,
          *                     fails, or the pool rejects the task
          */
-        private void runOnIO(Sender s, String desc) throws IOException {
-            ThreadPoolExecutor ioPool = _ioPool != null ? _ioPool.get() : null;
-            Future<?> f;
-            if (ioPool == null) {
-                // Headless/unit path: no owning server, run inline rather than drop.
-                s.run();
-                return;
-            }
-            try {
-                f = ioPool.submit(s);
-            } catch (RejectedExecutionException ree) {
-                // I/O pool saturated — fall back to inline to avoid dropping the
-                // connection entirely. The handler thread is pinned, but this is
-                // a transient overload, not a permanent state.
-                if (_log.shouldWarn()) {
-                    _log.warn("[HTTPServer] I/O pool saturated, falling back to inline " + desc);
-                }
-                s.run();
-                return;
-            }
+         private void runOnIO(Sender s, String desc) throws IOException {
+             ThreadPoolExecutor ioPool = _ioPool != null ? _ioPool.get() : null;
+             Future<?> f;
+             if (ioPool == null) {
+                 // Headless/unit path: no owning server, run inline rather than drop.
+                 s.run();
+                 return;
+             }
+             // Publish load every transfer, matching handOffBody. Growth is the
+             // Tuner's job — setIOTransferThreads rebalances every live pool — so
+             // nothing grows here and the inline fallback below stays the
+             // overload valve it is documented to be.
+             sampleIOLoad(ioPool);
+             try {
+                 f = ioPool.submit(s);
+             } catch (RejectedExecutionException ree) {
+                 // I/O pool saturated — fall back to inline to avoid dropping the
+                 // connection entirely. The handler thread is pinned, but this is
+                 // a transient overload, not a permanent state.
+                 sampleIOLoad(ioPool);
+                 if (_log.shouldWarn()) {
+                     _log.warn("[HTTPServer] I/O pool saturated, falling back to inline " + desc);
+                 }
+                 s.run();
+                 return;
+             }
+             sampleIOLoad(ioPool);
             final long stallMs = ioStallTimeoutMs;
             final long pollMs = Math.max(1_000L, Math.min(stallMs / 10, 5_000L));
             final long started = System.nanoTime();

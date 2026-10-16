@@ -19,6 +19,7 @@ import java.util.Properties;
 import java.util.Set;
 import java.lang.reflect.Method;
 import net.i2p.I2PAppContext;
+import net.i2p.i2ptunnel.I2PTunnelHTTPServer;
 import net.i2p.router.transport.CommSystemFacadeImpl;
 import net.i2p.router.transport.udp.PeerState;
 import net.i2p.router.transport.Transport;
@@ -5246,15 +5247,12 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      * what makes that visible in one line.
      *
      * @param failLifetime stat {@code transport.sendMessageFailureLifetime} in ms, or NaN
-     * @param lossRate the signal that DRIVES the ceiling — the true byte-weighted rate,
-     *        see {@link #trueByteWeightedLossRate()}. 0.0-1.0, or NaN when unread
+     * @param lossRate the driver signal — the true byte-weighted rate, 0.0-1.0, or NaN
      * @param memPct stat {@code jobQueue.memoryUsedPercent} in %, or NaN
      * @param dupEvents resend event count behind the event-count ratio, 0 when unread
      * @param sendEvents send event count behind the event-count ratio, 0 when unread
      * @param avgDupSize mean bytes per retransmitted message, or NaN when unread
-     * @param eventRatio event-count streaming retransmission ratio 0.0-1.0, or NaN
-     *        — observation only; it must not decide the verdict, which is why it is a
-     *        separate parameter and not this method's {@code lossRate}
+     * @param eventRatio event-count ratio, 0.0-1.0, or NaN — observation only, never the driver
      * @return a short clause naming the verdict and the values behind it, never null
      * @since 0.9.71+
      * @see #maxWindowDecisionFrom for the named-argument entry point callers should use
@@ -12589,9 +12587,17 @@ protected int computeTarget(double observed) {
     private class I2PTunnelServerIOTransferParam extends BaseParam {
 
         I2PTunnelServerIOTransferParam() {
+            // Ceiling from available heap, matching the I/O pool's own derived
+            // maximum. The two must agree: a Tuner max above the pool's ceiling
+            // would let the policy command a budget the pool clamps away, and one
+            // below it would strand reachable headroom on a router that can
+            // afford it. 4 MB per thread because an I/O thread holds 16 KB of
+            // buffer plus a 16 KB BufferedInputStream and is blocked for a whole
+            // body transfer, against microsecond runner tasks at 2 MB each.
             super("i2ptunnel.serverIO.threads", "I2PTunnel I/O transfer threads",
                   SUB_TUNNEL,
-                   8, 256, 4, "i2ptunnel.serverIO.activeCount", _context);
+                    8, I2PTunnelHTTPServer.maxIOThreads(), 4,
+                    "i2ptunnel.serverIO.activeCount", _context);
         }
 
         protected void applyValue(int value) {
