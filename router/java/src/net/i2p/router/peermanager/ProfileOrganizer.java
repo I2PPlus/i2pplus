@@ -2409,7 +2409,7 @@ public class ProfileOrganizer {
             if (_log.shouldInfo()) {
                 String skips = drainPromotionSkipTally();
                 if (!skips.isEmpty()) {
-                    _log.info("Rebuild promotion skips: " + skips);
+                    _log.info("Rebuild promotion skips:" + skips);
                 }
             }
 
@@ -5160,16 +5160,26 @@ private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, P
     /**
      * Formats the promotion skip tally and clears it.
      *
-     * @return one line naming each reason and its count, or the empty string when
+     * @return {@code \n* } continuation lines of {@code reason: count} pairs
+     *         (packed to about 80 chars per line), or the empty string when
      *         nothing was skipped since the last call
      * @since 0.9.71+
      */
     private String drainPromotionSkipTally() {
         if (_promotionSkipTally.isEmpty()) {return "";}
         StringBuilder buf = new StringBuilder(128);
-        buf.append("Promotion skips:");
+        int line = 0;
         for (Map.Entry<String, Integer> e : _promotionSkipTally.entrySet()) {
-            buf.append(' ').append(e.getKey()).append('=').append(e.getValue());
+            String pair = e.getKey() + ": " + e.getValue().intValue();
+            if (buf.length() == 0 || line + pair.length() + 3 > 80) {
+                buf.append("\n* ");
+                line = 3;
+            } else {
+                buf.append(" * ");
+                line += 3;
+            }
+            buf.append(pair);
+            line += pair.length();
         }
         _promotionSkipTally.clear();
         return buf.toString();
@@ -5335,7 +5345,7 @@ private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, P
         if (_log.shouldInfo()) {
             String skips = drainPromotionSkipTally();
             if (!skips.isEmpty()) {
-                _log.info(skips + " of " + examined + " examined");
+                _log.info("Promotion skips: " + examined + " examined" + skips);
             }
         }
     }
