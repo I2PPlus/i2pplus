@@ -2020,7 +2020,11 @@ public class TunnelControllerGroup implements ClientApp {
      */
     static void rebalanceRunnerPoolsNow() {
         TunnelControllerGroup g = instance;
-        if (g != null) {g.rebalanceAllRunnerPools();}
+        if (g == null) {return;}
+        long now = g._context != null ? g._context.clock().now() : System.currentTimeMillis();
+        if (now - _lastRebalanceAt < REBALANCE_THROTTLE_MS) {return;}
+        _lastRebalanceAt = now;
+        g.rebalanceAllRunnerPools();
     }
 
     /**
@@ -2091,6 +2095,12 @@ public class TunnelControllerGroup implements ClientApp {
     /** Last elevation warning per tunnel, for {@link #shouldLogElevation}. */
     private static final Map<Object, Long> _lastElevationLog =
         new ConcurrentHashMap<>(8);
+
+    /** Minimum interval between rebalances triggered from the accept hot path. */
+    private static final long REBALANCE_THROTTLE_MS = 5_000L;
+
+    /** Last time a hot-path rebalance was run. */
+    private static volatile long _lastRebalanceAt = 0L;
 
     /**
      * Whether to log an elevation for this tunnel now. Rate-limited per tunnel, so a
@@ -2195,9 +2205,9 @@ public class TunnelControllerGroup implements ClientApp {
         }
         I2PAppContext ctx = _context;
         Log log = ctx != null ? ctx.logManager().getLog(TunnelControllerGroup.class) : null;
-        if (log != null && log.shouldWarn()) {
-            log.warn("Runner pool elevation released after " + (done - base)
-                     + " tasks idle -> threads " + release + " back to "
+        if (log != null && log.shouldInfo()) {
+            log.info("Runner pool elevation released after " + (done - base)
+                     + " tasks idle -> Threads " + release + " back to "
                      + runnerCeilingFor(h));
         }
     }
@@ -2276,7 +2286,7 @@ public class TunnelControllerGroup implements ClientApp {
             I2PAppContext ctx = _context;
             Log log = ctx != null ? ctx.logManager().getLog(TunnelControllerGroup.class) : null;
             if (log != null && log.shouldWarn() && shouldLogElevation(key, ctx.clock().now())) {
-                log.warn("Runner pool elevated above its ceiling -> threads " + current
+                log.warn("Runner pool elevated above its ceiling -> Threads " + current
                          + " to " + want + " (ceiling " + ceiling + ", queued "
                          + queueDepth + ", active " + active + ")");
             }
