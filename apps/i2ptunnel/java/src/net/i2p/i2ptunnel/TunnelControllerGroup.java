@@ -2134,6 +2134,27 @@ public class TunnelControllerGroup implements ClientApp {
     }
 
     /**
+     * Whether a pinned pool with this backlog should be elevated past its ceiling.
+     *
+     * <p>Pure, so the trigger can be pinned without a group or a live pool. It
+     * requires the queue to be at least half of {@link #RUNNER_BURST_QUEUE}: a
+     * submit that finds every worker busy plus one task in flight looks identical
+     * to real backlog at that instant, and elevating on that race produces churn —
+     * measured live as 256-&gt;384 three times in twenty minutes on a tracker, with
+     * the decay clawing it back each time.
+     *
+     * @param queueDepth queued tasks in the pool
+     * @param currentThreads the pool's present maximum
+     * @param ceiling the live ceiling for this tunnel
+     * @return true when the backlog justifies elevating past the ceiling
+     * @since 0.9.71+
+     */
+    static boolean shouldElevateRunner(int queueDepth, int currentThreads, int ceiling) {
+        if (queueDepth < RUNNER_BURST_QUEUE / 2) {return false;}
+        return currentThreads >= Math.max(RUNNER_POOL_FLOOR, ceiling);
+    }
+
+    /**
      * Note that a submit found this pool quiet, and drop a stale elevation if the
      * tunnel has done enough work while quiet to say the burst is over.
      *
@@ -2174,8 +2195,8 @@ public class TunnelControllerGroup implements ClientApp {
         }
         I2PAppContext ctx = _context;
         Log log = ctx != null ? ctx.logManager().getLog(TunnelControllerGroup.class) : null;
-        if (log != null && log.shouldInfo()) {
-            log.info("Runner pool elevation released after " + (done - base)
+        if (log != null && log.shouldWarn()) {
+            log.warn("Runner pool elevation released after " + (done - base)
                      + " tasks idle -> threads " + release + " back to "
                      + runnerCeilingFor(h));
         }
@@ -2225,9 +2246,18 @@ public class TunnelControllerGroup implements ClientApp {
         if (current < ceiling) {
             // Work is arriving and the pool is below its ceiling: grow to the ceiling.
             want = ceiling;
-        } else if (queueDepth > 0) {
-            // At the ceiling with work still queued: a tunnel whose traffic exceeds
-            // its configured budget. Elevate rather than reject.
+        } else if (shouldElevateRunner(queueDepth, current, ceiling)) {
+            // At the ceiling with a genuinely backed-up queue: a tunnel whose
+            // traffic exceeds its configured budget. Elevate rather than reject.
+            //
+            // The backlog test demands half the burst queue, not any queued task.
+            // Measured live on a tracker: every elevation fired with queued 1,
+            // because a submit that finds every worker busy plus one task in flight
+            // looks identical to one that finds real backlog. Elevating on that
+            // race ratcheted 256->384 three times in twenty minutes and forced the
+            // decay to claw it back each time. The 64-slot queue exists to absorb
+            // exactly this micro-burst, so half of it full is the first honest
+            // signal that the burst is not micro.
             want = elevatedRunnerMax(current, ceiling);
             elevated = want > current;
         } else {

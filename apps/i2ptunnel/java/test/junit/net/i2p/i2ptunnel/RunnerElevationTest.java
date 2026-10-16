@@ -123,6 +123,36 @@ public class RunnerElevationTest {
     }
 
     /**
+     * Elevation requires a genuinely backed-up queue, not momentary saturation.
+     *
+     * <p>This is a live-measured regression: on a tracker, every elevation fired
+     * with {@code queued 1} — a submit that finds every worker busy plus one task
+     * in flight is indistinguishable, at that instant, from real backlog. The
+     * result was 256->384 three times in twenty minutes with the decay clawing it
+     * back each time: pure churn. Half the 64-slot burst queue is the first honest
+     * signal that the burst is not micro.
+     */
+    @Test
+    public void elevationRequiresBacklogNotSaturation() {
+        // The burst queue holds 64; the trigger sits at half of it.
+        int trigger = TunnelControllerGroup.RUNNER_BURST_QUEUE / 2;
+        assertEquals(32, trigger);
+
+        // Below the trigger - including the measured queued 1 - no elevation.
+        assertFalse("a single queued task must not elevate",
+                   TunnelControllerGroup.shouldElevateRunner(1, 256, 256));
+        assertFalse("one short of the trigger must not elevate",
+                   TunnelControllerGroup.shouldElevateRunner(trigger - 1, 256, 256));
+        // At the trigger, with the pool already at its ceiling: elevate.
+        assertTrue("half the burst queue with the pool pinned must elevate",
+                  TunnelControllerGroup.shouldElevateRunner(trigger, 256, 256));
+        // Below the ceiling, growth to the ceiling is a separate concern and is not
+        // an elevation - a half-empty queue there must not escalate.
+        assertFalse("below the ceiling must grow, not elevate",
+                   TunnelControllerGroup.shouldElevateRunner(trigger, 128, 256));
+    }
+
+    /**
      * The floor is released once the pool has done as much work while quiet as it
      * had threads at the peak — and not before.
      */
