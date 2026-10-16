@@ -1844,8 +1844,13 @@ public class TunnelControllerGroup implements ClientApp {
      * @since 0.9.71+
      */
     ThreadPoolExecutor getServerRunnerExecutor(I2PTunnelServer server, int ceiling) {
-        int want = ceiling > 0 ? ceiling : clientDefaultMaxConnections;
-        return getRunnerExecutor(server, want);
+        // Store 0 for "no explicit per-tunnel cap" rather than resolving it here.
+        // Resolving it snapshots the Tuner-managed default as it stands when this
+        // tunnel starts: rebalanceRunnerPools() then divides the frozen number
+        // forever, so raising the tuner default (or the memory ceiling) leaves the
+        // budget unspent and the pool at its startup size. Storing 0 keeps the
+        // derivation live at every rebalance.
+        return getRunnerExecutor(server, ceiling > 0 ? ceiling : 0);
     }
 
     /**
@@ -1860,8 +1865,10 @@ public class TunnelControllerGroup implements ClientApp {
      */
     ThreadPoolExecutor getClientRunnerExecutor(I2PTunnel tunnel, int ceiling) {
         if (tunnel == null) {return getClientExecutor();}
-        int want = ceiling > 0 ? ceiling : clientDefaultMaxConnections;
-        return getRunnerExecutor(tunnel, want);
+        // Store 0 for "follow the default" rather than resolving it here, for the
+        // same reason as getServerRunnerExecutor: resolving freezes the
+        // Tuner-managed default as it stands when this tunnel starts.
+        return getRunnerExecutor(tunnel, ceiling > 0 ? ceiling : 0);
     }
 
     /**
@@ -1948,7 +1955,10 @@ public class TunnelControllerGroup implements ClientApp {
         int[] desired = new int[n];
         int idx = 0;
         for (RunnerHandler h : _runnerPools.values()) {
-            int cap = h.ceiling > 0 ? h.ceiling : clientDefaultMaxConnections;
+            // Read now, not the stored number: a tunnel that started while the
+            // Tuner default was low must still take the default's current value,
+            // otherwise raising the budget leaves it unspent.
+            int cap = runnerCeilingFor(h);
             ThreadPoolExecutor ex = h.executor;
             int q = ex != null ? ex.getQueue().size() : 0;
             int a = ex != null ? ex.getActiveCount() : 0;
@@ -2030,15 +2040,253 @@ public class TunnelControllerGroup implements ClientApp {
     }
 
     /**
+     * The runner ceiling for one pool, read now rather than remembered.
+     *
+     * @param h the pool's state; may be null
+     * @return the explicit cap, or the Tuner-managed default as it stands now,
+     *         never below the per-tunnel floor
+     * @since 0.9.71+
+     */
+    static int runnerCeilingFor(RunnerHandler h) {
+        if (h == null) {return Math.max(RUNNER_POOL_FLOOR, clientDefaultMaxConnections);}
+        int cap = h.ceiling > 0 ? h.ceiling : clientDefaultMaxConnections;
+        // An elevation is a floor, not a replacement: the pool never shrinks below it
+        // on the next rebalance, but a rise in the Tuner default is still adopted.
+        if (h.elevatedMax > cap) {cap = h.elevatedMax;}
+        return Math.max(RUNNER_POOL_FLOOR, cap);
+    }
+
+    /**
+     * How many threads a pool pinned at {@code current} with work queued may be
+     * elevated to above its ceiling, and how often the elevation is logged.
+     *
+     * <p>Both are deliberate: a bounded multiple keeps one tunnel from claiming an
+     * unbounded share of the memory budget, and a log interval keeps a tracker
+     * under sustained load from writing thousands of identical lines — the earlier
+     * saturation warning rotated a 100 MB log file every fifteen minutes.
+     *
+     * @param currentThreads the pool's present maximum
+     * @param ceiling the live ceiling for this tunnel
+     * @return the elevated maximum, or {@code currentThreads} when no elevation applies
+     * @since 0.9.71+
+     */
+    static int elevatedRunnerMax(int currentThreads, int ceiling) {
+        int cap = Math.max(RUNNER_POOL_FLOOR, ceiling);
+        if (currentThreads < cap) {return cap;}
+        // Already at or above the ceiling with work still queued: override upward.
+        return cap + Math.max(cap / 2, 32);
+    }
+
+    /** Minimum interval between elevation warnings for one tunnel. */
+    private static final long RUNNER_ELEVATION_LOG_INTERVAL_MS = 5 * 60 * 1000L;
+
+    /**
+     * Bound on tracked tunnels for {@link #_lastElevationLog}, cleared wholesale
+     * when reached. The map is keyed by tunnel instance, which is bounded by the
+     * number of tunnels this router runs, so the cap only guards against a leak
+     * from tunnels created and destroyed repeatedly.
+     */
+    private static final int MAX_TRACKED_ELEVATION_TUNNELS = 64;
+
+    /** Last elevation warning per tunnel, for {@link #shouldLogElevation}. */
+    private static final Map<Object, Long> _lastElevationLog =
+        new ConcurrentHashMap<>(8);
+
+    /**
+     * Whether to log an elevation for this tunnel now. Rate-limited per tunnel, so a
+     * sustained burst is reported once per interval rather than once per request.
+     *
+     * @param key the tunnel identity used as the map key
+     * @param now current time in ms
+     * @return true when the caller should log at WARN
+     * @since 0.9.71+
+     */
+    boolean shouldLogElevation(Object key, long now) {
+        Long last = _lastElevationLog.get(key);
+        if (last != null && (now - last) < RUNNER_ELEVATION_LOG_INTERVAL_MS) {return false;}
+        if (_lastElevationLog.size() >= MAX_TRACKED_ELEVATION_TUNNELS) {
+            _lastElevationLog.clear();
+        }
+        _lastElevationLog.put(key, now);
+        return true;
+    }
+
+    /**
+     * Whether an elevation has gone stale and should be released.
+     *
+     * <p>Pure, so the decay rule can be pinned without a group or a live pool.
+     * The rule: a pool elevated to {@code elevatedMax} gives the shared budget
+     * back once it has completed that many tasks since demand last stopped. Work
+     * rather than seconds, because the tunnels that get elevated are the ones that
+     * accumulate idle observations quickly — a wall-clock interval would be far too
+     * generous for a tracker idling between announce batches and far too tight for a
+     * browser idling between page loads.
+     *
+     * @param completed the pool's completed-task count now
+     * @param idleSince the completed count when demand last stopped, or 0 if none
+     * @param elevatedMax the pool's present floor, or 0 if it was never elevated
+     * @return true when the floor should be released
+     * @since 0.9.71+
+     */
+    static boolean shouldReleaseElevation(long completed, long idleSince, int elevatedMax) {
+        if (elevatedMax <= 0 || idleSince <= 0L || completed < idleSince) {return false;}
+        return completed - idleSince >= elevatedMax;
+    }
+
+    /**
+     * Note that a submit found this pool quiet, and drop a stale elevation if the
+     * tunnel has done enough work while quiet to say the burst is over.
+     *
+     * <p>The rule is expressed in work, not seconds: the floor is released once the
+     * pool has completed at least {@link #elevatedMax} tasks since demand last
+     * stopped. A wall-clock interval would be arbitrary for a tracker that idles for
+     * a second between announce batches and for a browser that idles for a minute
+     * between page loads; counting completed work is self-scaling, because the
+     * tunnels that get elevated are the ones that can accumulate idle observations
+     * quickly. Any further demand through {@link #growRunnerExecutorForLoad} clears
+     * the baseline, so a burst with short lulls keeps its headroom.
+     *
+     * <p>This is why the method is separate from the grow: the caller's fast path is
+     * one atomic queue read, and only a pool that was actually elevated pays for
+     * the decay check.
+     *
+     * @param key the runner-pool key, which is the accepting {@link I2PTunnelServer}
+     * @since 0.9.71+
+     */
+    void noteRunnerIdle(Object key) {
+        if (key == null) {return;}
+        RunnerHandler h = _runnerPools.get(key);
+        if (h == null || h.elevatedMax <= 0) {return;}
+        ThreadPoolExecutor ex = h.executor;
+        if (ex == null || ex.isShutdown()) {return;}
+        // Busier than the reference: demand has restarted, so measure from here.
+        long done = ex.getCompletedTaskCount();
+        long base = h.idleSinceCompleted;
+        if (base <= 0L || done < base) {h.idleSinceCompleted = done; return;}
+        // Enough work has gone through while quiet: give the shared budget back.
+        if (!shouldReleaseElevation(done, base, h.elevatedMax)) {return;}
+        int release = h.elevatedMax;
+        synchronized (_runnerPoolLock) {
+            h.elevatedMax = 0;
+            h.idleSinceCompleted = 0L;
+            int cap = runnerCeilingFor(h);
+            if (cap < ex.getMaximumPoolSize()) {resizeRunnerExecutor(ex, cap);}
+        }
+        I2PAppContext ctx = _context;
+        Log log = ctx != null ? ctx.logManager().getLog(TunnelControllerGroup.class) : null;
+        if (log != null && log.shouldInfo()) {
+            log.info("Runner pool elevation released after " + (done - base)
+                     + " tasks idle -> threads " + release + " back to "
+                     + runnerCeilingFor(h));
+        }
+    }
+
+    /**
+     * Grow one server tunnel's runner pool to match the load it is actually seeing,
+     * elevating past the ceiling and warning when demand warrants.
+     *
+     * <p>Called immediately before a runner submit rather than from the accept loop:
+     * the accept loop owns the server handler pool, and a grow there would rebalance
+     * on connections that never reach the runner at all. Growing here means the pool
+     * is sized at the moment the work is handed to it, and the ceiling is read live,
+     * so it also picks up a raised Tuner default.
+     *
+     * <p>Grows only — this method never shrinks. Releasing an elevation once the
+     * tunnel has gone quiet is {@link #noteRunnerIdle}'s job, and for a different
+     * reason: shrinking on a momentary lull would thrash the limit, whereas
+     * {@code allowCoreThreadTimeOut(true)} means a generous maximum costs no threads
+     * while the pool is idle, its workers being reclaimed either way.
+     *
+     * @param key the runner-pool key, which is the accepting {@link I2PTunnelServer}
+     * @param queueDepth queued tasks in the pool
+     * @param active busy runners in the pool
+     * @return the pool's maximum after any growth, or 0 when there is no pool yet
+     * @since 0.9.71+
+     */
+    int growRunnerExecutorForLoad(Object key, int queueDepth, int active) {
+        if (key == null) {return 0;}
+        RunnerHandler h = _runnerPools.get(key);
+        if (h == null) {return 0;}
+        ThreadPoolExecutor ex = h.executor;
+        if (ex == null || ex.isShutdown()) {return 0;}
+        int ceiling = runnerCeilingFor(h);
+        int current = ex.getMaximumPoolSize();
+        int want;
+        boolean elevated = false;
+        if (queueDepth <= 0 && active < current) {
+            // Idle: not this method's business beyond recording that demand stopped,
+            // which resets the decay reference so any burst restarts the clock.
+            if (h.elevatedMax > 0) {h.idleSinceCompleted = ex.getCompletedTaskCount();}
+            return current;
+        }
+        // Demand is present, so the pool has not gone quiet: forget any idle
+        // baseline. The next quiet stretch starts measuring from here.
+        h.idleSinceCompleted = 0L;
+        if (current < ceiling) {
+            // Work is arriving and the pool is below its ceiling: grow to the ceiling.
+            want = ceiling;
+        } else if (queueDepth > 0) {
+            // At the ceiling with work still queued: a tunnel whose traffic exceeds
+            // its configured budget. Elevate rather than reject.
+            want = elevatedRunnerMax(current, ceiling);
+            elevated = want > current;
+        } else {
+            want = current;
+        }
+        if (want <= current) {return current;}
+        synchronized (_runnerPoolLock) {
+            resizeRunnerExecutor(ex, want);
+            // Remember the elevation as a floor so the next rebalanceRunnerPools()
+            // does not compute a share from the un-elevated ceiling and shrink the
+            // pool straight back. It is a floor and not the cap, so a later rise in
+            // the Tuner default is still adopted.
+            if (elevated && want > h.elevatedMax) {h.elevatedMax = want;}
+        }
+        if (elevated) {
+            I2PAppContext ctx = _context;
+            Log log = ctx != null ? ctx.logManager().getLog(TunnelControllerGroup.class) : null;
+            if (log != null && log.shouldWarn() && shouldLogElevation(key, ctx.clock().now())) {
+                log.warn("Runner pool elevated above its ceiling -> threads " + current
+                         + " to " + want + " (ceiling " + ceiling + ", queued "
+                         + queueDepth + ", active " + active + ")");
+            }
+        }
+        return ex.getMaximumPoolSize();
+    }
+
+    /**
      * Per-tunnel runner pool state: the explicit per-tunnel ceiling and the
      * lazily created executor.
+     *
+     * <p>{@code ceiling} is the tunnel's own configured cap, or {@code 0} when it
+     * follows the Tuner-managed default. It is deliberately NOT the resolved number:
+     * resolving it at registration freezes the default as it stood then, and
+     * {@link #rebalanceRunnerPools()} would keep dividing the frozen figure after
+     * the default had grown. Callers ask {@link #runnerCeilingFor(RunnerHandler)}
+     * for the live value.
      * @since 0.9.71+
      */
     static class RunnerHandler {
         /**
-         * The maximum number of worker threads this tunnel's pool may grow to.
+         * This tunnel's explicit runner-thread cap, or 0 to follow the
+         * Tuner-managed default at each rebalance.
          */
         volatile int ceiling;
+        /**
+         * The highest this pool has been elevated to under demand, or 0. Kept
+         * separate from {@link #ceiling} so the two compose: an elevation survives
+         * the next rebalance, and a later rise in the Tuner default is still
+         * picked up. Decays back to 0 once the pool has done enough work while
+         * quiet, because the budget is shared and a one-off spike must not
+         * reallocate it permanently.
+         */
+        volatile int elevatedMax;
+        /**
+         * The pool's completed-task count as last observed while it was busy.
+         * Decay measures idle work against this, so the rule is expressed in the
+         * pool's own throughput rather than in wall-clock seconds.
+         */
+        volatile long idleSinceCompleted;
         /**
          * The per-tunnel pool, created on first use; null until then.
          */
