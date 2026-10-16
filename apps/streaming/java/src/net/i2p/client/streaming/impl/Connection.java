@@ -3060,7 +3060,10 @@ class Connection {
         _floorCheckEvent.cancel();
         _inputStream.streamErrorOccurred(new IOException("Socket closed"));
 
-        if (_log.shouldInfo()) {_log.info("Connection disconnect complete\n" + toString());}
+        if (_log.shouldInfo()) {
+            _log.info("Disconnect complete -> Disconnected from " + getRemotePeerString() +
+                      " on stream: " + streamIds());
+        }
         // Counted before the publisher so a failure below still records that
         // this teardown ran; compared with stream.connectionCreated it separates
         // a stream that never finished disconnecting from one whose stats were
@@ -3951,20 +3954,20 @@ if (!on) {
      */
     public MessageOutputStream getOutputStream() {return _outputStream;}
 
+    /** Receive/send stream IDs as {@code "recv/send"}, {@code "Unknown"} when not yet assigned. */
+    private String streamIds() {
+        long r = _receiveStreamId.get();
+        long s = _sendStreamId.get();
+        return (r > 0 ? Packet.toId(r) : "Unknown") + '/' + (s > 0 ? Packet.toId(s) : "Unknown");
+    }
+
     /**
      * Human-readable summary of this connection.
      */
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder(256);
-        buf.append("Connection: ");
-        long id = _receiveStreamId.get();
-        if (id > 0) {buf.append(Packet.toId(id));}
-        else {buf.append("Unknown");}
-        buf.append('/');
-        id = _sendStreamId.get();
-        if (id > 0) {buf.append(Packet.toId(id));}
-        else {buf.append("Unknown");}
+        buf.append("Connection: ").append(streamIds());
         if (_isInbound) {buf.append(" from ");}
         else {buf.append(" to ");}
         Destination remotePeer = getRemotePeer();
