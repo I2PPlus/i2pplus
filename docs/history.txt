@@ -1,3 +1,131 @@
+2026-10-16 dr|z3d
+  * I2PTunnel: Size runner pools from live demand instead of freezing the default
+    at startup, and reclaim and shed server runner threads at the submit site
+  * Peermanager: Format promotion skip tallies as wrapped key: value lines and
+    drop the duplicated header
+
+2026-10-15 dr|z3d
+  * Logging: Unify message style — key: value pairs, bracketed hash truncations,
+    capitalized arrow results, wrapped lines, expanded acronyms
+  * Tuner: Label both loss signals with their window and log absolute counts in
+    the ceiling decision; derive the dup-events rate from STAT_PERIOD and pin
+    the labels in the decision test; log the mean retransmitted-message size so
+    the loss signal can be classified; drive the ceiling off the true
+    byte-weighted loss rate and pin its driver slot
+  * Streaming: Register a 5-minute period on the send-event stats so both loss
+    signals share a window
+  * Console: Fix graph title casing, drop stale peerProfilesByTier test refs,
+    consolidate the build-success graph tiles, and refresh netdb sections
+    individually keyed by element id
+  * Build: Make coverage opt-in, pin JUnit 4.13.2, keep test cleanup
+    config-cache safe; realign the installer task table; style the CPU vendor
+    table; relocate jdk8 assets and switch doc URLs to https
+
+2026-10-14 dr|z3d
+  * Tuner: Emit the ceiling decision reason on the change line, name the gate
+    that decides the streaming ceiling, drop the aggregate loss fallback it
+    saturated, pace the ceiling by closed window, and fix the ceiling's
+    confirm deadlock with a two-window band
+  * Tunnel: Expire builds past their deadline and floor the dispatch budget;
+    order dispatch by lease expiry; let a thin pool budget for builds that
+    will time out; charge a ghost mark only when the contacted hop's state
+    indicts it; cap ghost exclusion at ten minutes; attribute expired builds
+    to the hop that went silent; count a cleared ghost mark only when one was
+    present; report the oldest build against the scan's own deadline
+  * NTCP: Record idle closes so a lost session can be attributed to this router
+  * Core: Size the shared timer from its measured backlog instead of a fixed
+    two threads; expose the timer worker count beside its backlog signal
+  * Streaming: Stop the never-measured min-RTT reaching the bandwidth anchor;
+    publish the live stream RTT and send window; report a streaming reflector
+    failure instead of silently no-oping
+
+2026-10-13 dr|z3d
+  * Tunnel: Let a thin pool budget for the builds that will time out; test the
+    pre-qualification bar and the ghost-charge blame rule
+  * Client: Retry a backed-up I2CP queue with growing waits before failing the
+    LeaseSet request; stop reporting a message-not-buffered race as a router error
+  * Streaming: Pin the live RTT and window stats cadence; steer the streaming
+    timeouts and windows off a live RTT instead of setup cost
+  * I2PTunnel: Log what failed instead of throwing NullPointerException from the
+    error path
+  * Console: Group the message-level bandwidth pair and fold the two tier frames
+    into one
+
+2026-10-12 dr|z3d
+  * Peermanager: Calibrate latency per transport and count it at startup; judge
+    low latency against calibrated bounds that can only widen the absolute rule;
+    add a per-protocol latency baseline estimator; date latency samples honestly;
+    stop the tier cascade overflow; stop demoting high-capacity peers on latency
+    alone; stop promoting peers whose RouterInfo has no usable address; keep
+    profiles we cannot resolve and fetch their RouterInfo; pin the tier
+    admission floor, decay interval and fill debounce boundaries; read this
+    cycle's peer count in the tier purge; document the tier purge
+  * Tunnel: Gate the immediate tier eviction on the ghost-charge verdict; hold
+    the ghost exclusion to a flat 90s; keep the adaptive build ladder from
+    collapsing onto its own bounds; log thin-pool state changes instead of every
+    executor tick; correlate expired builds with the send that caused them; stop
+    the first-hop cooldown walk from pinning at its ceiling
+  * Transport: Record the NTCP2 handshake RTT so peers reached over NTCP2 have a
+    measured latency; assert the send-pool wait cap against the constant in force
+  * UDP: Assert the send-pool wait cap against the constant in force
+  * Console: Remove the thirteen stats that were registered and never written;
+    wire the gauges that had no caller; correct the stat name that discarded every
+    emission; group the build outcome rates and per-direction outcomes; keep one
+    sticky-sidebar listener per refresh; guard the graph image when a page renders
+    without one
+  * Router: Report a stopped service as idle rather than a stalled graph; never
+    offer a blacklisted site as a link on /home; relink the primary profiles
+    sidebar link; account for every keepalive peer so a shrinking pool names its
+    own cause
+
+2026-10-11 dr|z3d
+  * Tunnel: Test the pre-qualification bar and the ghost-charge blame rule
+  * Peermanager: Judge each tier on its own evidence; stop the tier cascade
+    overflow; spend the first-hop budget; derive latency and skip reasons one way
+  * Console: Hold a crosshair cursor while the readout shows and keep the overlay
+    inside the plot
+  * Javadoc: Tag paragraph breaks, even out tag spacing, attach orphaned blocks,
+    expand restated tags, document all published subsystems, document the densest
+    undocumented classes, repair truncated descriptions and clear boilerplate,
+    normalise tag padding and indentation, align wrapped tag continuations, order
+    param and tag blocks and align asterisk columns, clear remaining alignment
+    and param-echo defects
+  * Style: Drop the remaining debug blocks, commented-out code, decorative
+    comment banners, and trailing whitespace; restore public access on
+    documented nested-class constructors; restore the final newline
+
+2026-10-10 dr|z3d
+  * Logging: Unify message style — key: value pairs, bracketed hash truncations,
+    capitalized arrow results, wrapped lines, expanded acronyms
+
+2026-10-09 dr|z3d
+  * Peermanager: Stop profiling low-bandwidth peers and stop shedding the rest;
+    stop promoting peers whose RouterInfo has no usable address; refresh RouterInfo
+    for peers held out of the tiers and report why the tiers stay short; pin the
+    peer-pick write bound
+  * Tunnel: Exclude a tunnel only when its local hop session was lost; count a
+    cleared ghost mark only when one was present; register hop-attribution stats;
+    attribute expired builds to the hop that went silent; attribute test failures
+    to the local hop; stop counting tunnels with no transport session as healthy;
+    let the build budget follow measured completion time; stop banning unreachable
+    peers when no ghost manager is available; stop banning peers we have no route
+    to; ghost peers unreachable on all transports instead of banning them; clear
+    the persistent unreachable flag when a peer reconnects inbound
+  * Console: Never offer a blacklisted site as a link on /home; hide a Sites of
+    Interest link the router can no longer reach; relink the primary profiles
+    sidebar link
+  * Router: Reap half-open peers and report what the diagnostics measure; account
+    for every keepalive peer
+  * Streaming: Report the duplicate CLOSE safety net once a minute
+  * Javadoc: Document undocumented members, normalise indentation, fix broken
+    references and stale tags, document the densest undocumented classes and clear
+    every javadoc error
+  * Graphs: Add a hover readout with a crosshair, level lines and legend-matched
+    swatches; hide what exists rather than throwing on a missing overlay part
+  * Console: Dark theme tweaks for the graphs crosshair; light/classic graph
+    crosshair and tooltip customizations; drop the graph theme colours test
+  * Build: Bump to -25+
+
 2026-10-08 dr|z3d
   * Graphs: Add a hover readout with a crosshair, per-series level line and
     legend-matched swatches, served by a format=meta request that skips the
