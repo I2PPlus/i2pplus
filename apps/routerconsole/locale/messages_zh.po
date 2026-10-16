@@ -121,7 +121,7 @@ msgstr "GC 暂停所花费的时间（毫秒）"
 msgid "Peers without a published IP address"
 msgstr "没有已发布 IP 地址的对等方"
 
-msgid "Average tunnel build success %"
+msgid "Average tunnel build success (%)"
 msgstr "平均隧道建立成功百分比"
 
 msgid "Memory used by the JVM"

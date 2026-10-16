@@ -123,7 +123,7 @@ msgstr "GC-də dayandırılmış vaxt (ms)"
 msgid "Peers without a published IP address"
 msgstr "Dərc edilmiş IP ünvanı olmayan həmkarlar"
 
-msgid "Average tunnel build success %"
+msgid "Average tunnel build success (%)"
 msgstr "Orta tunel qurma uğuru %"
 
 msgid "Memory used by the JVM"

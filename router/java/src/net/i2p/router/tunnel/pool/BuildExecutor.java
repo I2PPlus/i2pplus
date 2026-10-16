@@ -730,8 +730,8 @@ public class BuildExecutor implements Runnable {
         // two directions reconcile with the aggregate. The aggregate alone cannot
         // answer whether inbound or outbound is the failing direction, and the two
         // do not fail for the same reasons; see buildDirectionStat.
-        _context.statManager().createRequiredRateStat(buildDirectionStat(true, "SuccessRate"), "Inbound build success rate (0-100)", "Tunnels", RATES);
-        _context.statManager().createRequiredRateStat(buildDirectionStat(false, "SuccessRate"), "Outbound build success rate (0-100)", "Tunnels", RATES);
+        _context.statManager().createRequiredRateStat(buildDirectionStat(true, "SuccessRate"), "Inbound build success rate (%)", "Tunnels", RATES);
+        _context.statManager().createRequiredRateStat(buildDirectionStat(false, "SuccessRate"), "Outbound build success rate (%)", "Tunnels", RATES);
         _context.statManager().createRequiredRateStat("tunnel.buildTimeout", "Build timed out (count)", "Tunnels", RATES);
         _context.statManager().createRequiredRateStat("tunnel.buildReject", "Build rejected (count)", "Tunnels", RATES);
         _context.statManager().createRequiredRateStat("tunnel.buildNoTunnels", "Build returned NO_TUNNELS (count)", "Tunnels", RATES);

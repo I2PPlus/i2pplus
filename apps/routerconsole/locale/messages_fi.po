@@ -123,7 +123,7 @@ msgstr "Keskeytetty aika GC:ssä (ms)"
 msgid "Peers without a published IP address"
 msgstr "Vertaisversiot, joilla ei ole julkaistua IP-osoitetta"
 
-msgid "Average tunnel build success %"
+msgid "Average tunnel build success (%)"
 msgstr "Keskimääräinen tunnelin rakentamisen onnistuminen %"
 
 msgid "Memory used by the JVM"

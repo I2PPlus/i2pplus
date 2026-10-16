@@ -123,7 +123,7 @@ msgstr "Tijd doorgebracht gepauzeerd in GC (ms)"
 msgid "Peers without a published IP address"
 msgstr "Peers zonder gepubliceerd IP-adres"
 
-msgid "Average tunnel build success %"
+msgid "Average tunnel build success (%)"
 msgstr "Gemiddeld succespercentage tunnelbouw"
 
 msgid "Memory used by the JVM"

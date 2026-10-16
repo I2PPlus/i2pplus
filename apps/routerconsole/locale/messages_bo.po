@@ -121,7 +121,7 @@ msgstr "GC ནང་གནུབ་ལས་ཟོས་པའི་དུས་
 msgid "Peers without a published IP address"
 msgstr "IP ཁ་བྱང་སྤེལ་མེད་པའི་མཐུད་སྣེ།"
 
-msgid "Average tunnel build success %"
+msgid "Average tunnel build success (%)"
 msgstr "གདོང་ལམ་བཟོ་སྐྲུན་ལེགས་གྲུབ་ཀྱི་ཆ་སྙོམས། %"
 
 msgid "Memory used by the JVM"

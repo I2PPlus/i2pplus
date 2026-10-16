@@ -101,7 +101,7 @@ public class CoalesceStatsEvent extends SimpleTimer2.TimedEvent {
         sm.createRequiredRateStat("router.activeThreads", _x("Total number of threads in use"), "Router", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR });
         sm.createRequiredRateStat("router.gcPauseTime", _x("Time spent paused in GC (ms)"), "Router", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR });
         sm.createRequiredRateStat("router.unreachablePeers", _x("Peers without a published IP address"), "Router", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR });
-        sm.createRequiredRateStat("tunnel.buildSuccessAvg", _x("Average tunnel build success %"), "Tunnels", RateConstants.TUNNEL_RATES);
+        sm.createRequiredRateStat("tunnel.buildSuccessAvg", _x("Average tunnel build success (%)"), "Tunnels", RateConstants.TUNNEL_RATES);
         // Counters recorded at the point the condition fires. Without a definition
         // they accumulate in memory but never reach /stats, so each one had to be
         // recovered by grepping the log to tell an inactive gate from a silent one.

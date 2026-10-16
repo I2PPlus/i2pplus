@@ -123,7 +123,7 @@ msgstr ""
 msgid "Peers without a published IP address"
 msgstr ""
 
-msgid "Average tunnel build success %"
+msgid "Average tunnel build success (%)"
 msgstr ""
 
 msgid "Memory used by the JVM"

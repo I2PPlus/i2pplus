@@ -121,7 +121,7 @@ msgstr "GC에서 일시 중지된 시간(ms)"
 msgid "Peers without a published IP address"
 msgstr "게시된 IP 주소가 없는 피어"
 
-msgid "Average tunnel build success %"
+msgid "Average tunnel build success (%)"
 msgstr "평균 터널 빌드 성공 %"
 
 msgid "Memory used by the JVM"

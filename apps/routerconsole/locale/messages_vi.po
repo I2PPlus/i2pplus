@@ -121,7 +121,7 @@ msgstr "Thời gian tạm dừng trong GC (ms)"
 msgid "Peers without a published IP address"
 msgstr "Các máy ngang hàng không có địa chỉ IP được công bố"
 
-msgid "Average tunnel build success %"
+msgid "Average tunnel build success (%)"
 msgstr "Tỷ lệ xây dựng đường hầm trung bình thành công"
 
 msgid "Memory used by the JVM"

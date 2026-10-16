@@ -132,7 +132,7 @@ msgstr "זמן שחלף בהשהיה ב-GC (ms)"
 msgid "Peers without a published IP address"
 msgstr "peers ללא כתובת IP מפורסמת"
 
-msgid "Average tunnel build success %"
+msgid "Average tunnel build success (%)"
 msgstr "ממוצע אחוז הצלחה בבניית מנהורים"
 
 msgid "Memory used by the JVM"

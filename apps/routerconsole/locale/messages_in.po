@@ -121,7 +121,7 @@ msgstr "Waktu yang dihabiskan dijeda dalam GC (ms)"
 msgid "Peers without a published IP address"
 msgstr "Rekan tanpa alamat IP yang dipublikasikan"
 
-msgid "Average tunnel build success %"
+msgid "Average tunnel build success (%)"
 msgstr "Rata-rata keberhasilan pembangunan terowongan %"
 
 msgid "Memory used by the JVM"

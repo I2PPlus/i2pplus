@@ -131,7 +131,7 @@ msgstr "الوقت المستغرق في التوقف مؤقتًا في GC (مل
 msgid "Peers without a published IP address"
 msgstr "الأقران بدون عنوان IP منشور"
 
-msgid "Average tunnel build success %"
+msgid "Average tunnel build success (%)"
 msgstr "متوسط نجاح بناء النفق %"
 
 msgid "Memory used by the JVM"

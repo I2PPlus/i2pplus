@@ -132,7 +132,7 @@ msgstr "เวลาที่หยุดอยู่ในGC(ms)"
 msgid "Peers without a published IP address"
 msgstr "peerที่ไม่มีที่อยู่IPที่เผยแพร่"
 
-msgid "Average tunnel build success %"
+msgid "Average tunnel build success (%)"
 msgstr "เปอร์เซ็นต์ความสำเร็จเฉลี่ยในการสร้างอุโมงคม"
 
 msgid "Memory used by the JVM"

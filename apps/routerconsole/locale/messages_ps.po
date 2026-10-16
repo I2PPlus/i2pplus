@@ -132,7 +132,7 @@ msgstr "په GC کې د درولو پر مهال تېر شوی وخت (ms)"
 msgid "Peers without a published IP address"
 msgstr "پرته له خپور شوې IP پتې peerونه"
 
-msgid "Average tunnel build success %"
+msgid "Average tunnel build success (%)"
 msgstr "د ټونل د جوړولو د بریا اوسط فیصده"
 
 msgid "Memory used by the JVM"

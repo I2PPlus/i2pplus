@@ -132,7 +132,7 @@ msgstr "Muda wa kusimama kwenye GC (ms)"
 msgid "Peers without a published IP address"
 msgstr "Peer bila anwani ya IP iliyochapishwa"
 
-msgid "Average tunnel build success %"
+msgid "Average tunnel build success (%)"
 msgstr "Asilimia ya wastani ya kujenga tuneli kwa mafanikio"
 
 msgid "Memory used by the JVM"

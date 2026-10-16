@@ -124,7 +124,7 @@ msgstr "GC-s peatatud aeg (ms)"
 msgid "Peers without a published IP address"
 msgstr "Avaldatud IP-aadressita kaaslased"
 
-msgid "Average tunnel build success %"
+msgid "Average tunnel build success (%)"
 msgstr "tunneli ehitamise keskmine edu %"
 
 msgid "Memory used by the JVM"

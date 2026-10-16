@@ -125,7 +125,7 @@ msgstr "Время, проведенное в паузе в сборщике м�
 msgid "Peers without a published IP address"
 msgstr "Узлы без опубликованного IP-адреса"
 
-msgid "Average tunnel build success %"
+msgid "Average tunnel build success (%)"
 msgstr "Средний процент успешности строительства туннеля"
 
 msgid "Memory used by the JVM"

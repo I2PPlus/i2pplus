@@ -125,7 +125,7 @@ msgstr "Timp petrecut întrerupt în GC (ms)"
 msgid "Peers without a published IP address"
 msgstr "Peers fără o adresă IP publicată"
 
-msgid "Average tunnel build success %"
+msgid "Average tunnel build success (%)"
 msgstr "Succesul mediu la construirea tunelului %"
 
 msgid "Memory used by the JVM"

@@ -123,7 +123,7 @@ msgstr "जीसी (एमएस) में बिताया गया स�
 msgid "Peers without a published IP address"
 msgstr "प्रकाशित आईपी पता नहीं वाले पीयर"
 
-msgid "Average tunnel build success %"
+msgid "Average tunnel build success (%)"
 msgstr "औसत टंनल निर्माण सफलता प्रतिशत"
 
 msgid "Memory used by the JVM"

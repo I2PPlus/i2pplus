@@ -123,7 +123,7 @@ msgstr "Temps aturat en la GC (ms)"
 msgid "Peers without a published IP address"
 msgstr "Peers sense adreça IP publicada"
 
-msgid "Average tunnel build success %"
+msgid "Average tunnel build success (%)"
 msgstr "Percentatge mitjà d’èxit de construcció de túnels"
 
 msgid "Memory used by the JVM"

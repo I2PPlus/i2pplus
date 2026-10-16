@@ -123,7 +123,7 @@ msgstr "GC (ms) এ বিরতি দেওয়া সময় কাটা
 msgid "Peers without a published IP address"
 msgstr "প্রকাশিত IP ঠিকানাবিহীন পিয়ার"
 
-msgid "Average tunnel build success %"
+msgid "Average tunnel build success (%)"
 msgstr "গড় টানেল নির্মাণ সাফল্যের হার %"
 
 msgid "Memory used by the JVM"
