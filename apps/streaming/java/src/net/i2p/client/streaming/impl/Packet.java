@@ -1029,6 +1029,9 @@ class Packet {
      * description on INFO meant a WARN or ERROR about a packet logged an empty
      * string - the one thing that makes such a message useless. The bulky
      * parts (the NACK list, offline key material) stay behind shouldDebug().
+     * The description is two lines: the header (stream IDs and sequence
+     * number), then one {@code " * "} continuation line carrying the flags,
+     * options and payload size together.
      *
      * @return a buffer holding the human readable form of this packet, ready to
      *         be appended to a log message
@@ -1043,7 +1046,7 @@ class Packet {
         toFlagString(buf);
         ByteArray payload = _payload;
         if (payload != null && payload.getValid() > 0) {
-            buf.append("\n* Data: ").append(payload.getValid()).append(" bytes");
+            buf.append(" * Data: ").append(payload.getValid()).append(" bytes");
         }
         return buf;
     }
