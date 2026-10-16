@@ -26,7 +26,7 @@ public class I2PTunnelHTTPServerIOTest extends TestCase {
         ThreadPoolExecutor pool = I2PTunnelHTTPServer.createIOExecutor(4);
         assertNotNull("I/O pool must not be null", pool);
         assertFalse("I/O pool must not be shutdown", pool.isShutdown());
-        assertTrue("I/O pool core size respects floor", pool.getCorePoolSize() >= I2PTunnelHTTPServer.IO_POOL_FLOOR);
+        assertTrue("I/O pool core size respects floor", pool.getCorePoolSize() >= I2PTunnelHTTPServer.ioPoolFloor());
         pool.shutdownNow();
     }
 
@@ -183,10 +183,11 @@ public class I2PTunnelHTTPServerIOTest extends TestCase {
             I2PTunnelHTTPServer.setIOTransferThreads(64);
             assertEquals(64, I2PTunnelHTTPServer.getIOTransferThreads());
 
-            // Clamp test — floor is IO_POOL_FLOOR (8), not 2
+            // Clamp test — the budget clamps to the absolute floor, not the
+            // per-pool floor (which is derived from the budget itself)
             I2PTunnelHTTPServer.setIOTransferThreads(1);
             assertEquals("Minimum should be the I/O pool floor",
-                         I2PTunnelHTTPServer.IO_POOL_FLOOR,
+                         I2PTunnelHTTPServer.ioPoolFloor(),
                          I2PTunnelHTTPServer.getIOTransferThreads());
 
             I2PTunnelHTTPServer.setIOTransferThreads(10_000);
@@ -244,7 +245,7 @@ public class I2PTunnelHTTPServerIOTest extends TestCase {
         ThreadPoolExecutor pool = I2PTunnelHTTPServer.createIOExecutor(4);
         try {
             int cap = I2PTunnelHTTPServer.ioQueueCap(
-                    Math.max(I2PTunnelHTTPServer.IO_POOL_FLOOR, 4));
+                    Math.max(I2PTunnelHTTPServer.ioPoolFloor(), 4));
             assertTrue("queue capacity floor", cap >= 32);
             assertEquals("executor queue must match ioQueueCap",
                          cap, pool.getQueue().remainingCapacity());
@@ -276,7 +277,7 @@ public class I2PTunnelHTTPServerIOTest extends TestCase {
     public void testHandOffAbortsRatherThanPinningHandlerThread() throws Exception {
         final CountDownLatch blocker = new CountDownLatch(1);
         ThreadPoolExecutor pool = I2PTunnelHTTPServer.createIOExecutor(
-                I2PTunnelHTTPServer.IO_POOL_FLOOR);
+                I2PTunnelHTTPServer.ioPoolFloor());
         try {
             int workers = pool.getCorePoolSize();
             int cap = I2PTunnelHTTPServer.ioQueueCap(workers);
@@ -327,7 +328,7 @@ public class I2PTunnelHTTPServerIOTest extends TestCase {
     public void testHandOffAbortDoesNotRunTheBody() throws Exception {
         final CountDownLatch blocker = new CountDownLatch(1);
         ThreadPoolExecutor pool = I2PTunnelHTTPServer.createIOExecutor(
-                I2PTunnelHTTPServer.IO_POOL_FLOOR);
+                I2PTunnelHTTPServer.ioPoolFloor());
         try {
             int workers = pool.getCorePoolSize();
             int cap = I2PTunnelHTTPServer.ioQueueCap(workers);

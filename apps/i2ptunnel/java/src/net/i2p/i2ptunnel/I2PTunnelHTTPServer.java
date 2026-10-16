@@ -204,11 +204,12 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
     static volatile int ioTransferThreads =
         Math.max(32, Math.min(128, Runtime.getRuntime().availableProcessors() * 4));
     /**
-     * Absolute floor for a live server tunnel's I/O pool. Sized so several
-     * concurrent downloads can start without queueing past the browser's
-     * body-stall window.
+     * Absolute floor for the global I/O budget. Two transfers minimum so a
+     * quiet router can still serve a page and its assets; the per-tunnel
+     * floor is derived from the budget in {@link #ioPoolFloor()}.
      * @since 0.9.71+
      */
+    static final int IO_THREADS_MIN = 2;
     /** Maximum global I/O budget (Tuner max must match). @since 0.9.71+ */
     static final int IO_THREADS_MAX = maxIOThreads();
     /**
@@ -546,25 +547,30 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
      * fair share, so it shrinks as pools multiply and always leaves the
      * majority of the budget for pressure-based distribution.
      *
-     * @return the per-pool floor, never below 2
+     * @return the per-pool floor, never below {@link #IO_THREADS_MIN}
      * @since 0.9.71+
      */
     static int ioPoolFloor() {
         synchronized (_ioExecutorLock) {
             int pools = Math.max(1, _ioPools.size());
-            int share = Math.max(2, ioTransferThreads / (pools * 4));
+            int share = Math.max(IO_THREADS_MIN, ioTransferThreads / (pools * 4));
             return share;
         }
     }
 
     /**
      * Set the I/O transfer pool size (called by Tuner via reflection).
+     * Clamped to the absolute bounds only: the per-pool floor is derived from
+     * the budget it would clamp against, so using it here would make the
+     * setter path-dependent — a set could never lower the budget below a
+     * quarter of its previous value. The per-pool floor is enforced where it
+     * is used, at allocation in {@link #rebalanceIOPools()}.
      *
-     * @param val new pool size (clamped to [{@link #ioPoolFloor()}, {@link #IO_THREADS_MAX}])
+     * @param val new pool size (clamped to [{@link #IO_THREADS_MIN}, {@link #IO_THREADS_MAX}])
      * @since 0.9.71+
      */
     public static void setIOTransferThreads(int val) {
-        ioTransferThreads = Math.max(ioPoolFloor(), Math.min(IO_THREADS_MAX, val));
+        ioTransferThreads = Math.max(IO_THREADS_MIN, Math.min(IO_THREADS_MAX, val));
         rebalanceAllIOPools();
     }
 
