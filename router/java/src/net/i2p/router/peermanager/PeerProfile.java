@@ -236,11 +236,26 @@ public class PeerProfile {
     }
 
     /**
+     * Half-life of the decayed loss score: with no new transport report the
+     * score halves every 15 minutes, continuously. Chosen so a transient
+     * congestion episode (a 25-40% retransmit ratio) falls back under the
+     * 0.20 lossy threshold in roughly 20-40 minutes instead of the hour-plus
+     * an hourly-quantized decay imposed, while a peer that keeps reporting
+     * loss stays gated — each report re-inflates the score through the max()
+     * fold in {@link #setLossRatio}.
+     *
+     * @since 0.9.71+
+     */
+    static final long LOSS_DECAY_HALF_LIFE_MS = 15 * 60 * 1000L;
+
+    /**
      * Decayed loss score, the maximum of all loss ratios reported within the
-     * last few hours, with time-based decay (50% per hour since the last
-     * report, capped at 4 hours). Unlike {@link #getLossRatio()} this retains
-     * loss memory when the transport stops reporting, so a demoted peer does
-     * not look clean again merely because its last sample went stale.
+     * last few hours, with continuous time-based decay: 50% every
+     * {@link #LOSS_DECAY_HALF_LIFE_MS} since the last report, capped at 16
+     * half-lives (4 hours, effectively zero). Unlike {@link #getLossRatio()}
+     * this retains loss memory when the transport stops reporting, so a
+     * demoted peer does not look clean again merely because its last sample
+     * went stale.
      *
      * @param now current time in ms
      * @return the decayed loss score, 0.0 if no loss was ever reported
@@ -248,11 +263,11 @@ public class PeerProfile {
      */
     public float getLossScore(long now) {
         if (_lossScore <= 0.0f) return 0.0f;
-        long hoursSinceUpdate = (now - _lossScoreLastUpdate) / (60 * 60 * 1000L);
-        if (hoursSinceUpdate <= 0) return _lossScore;
-        // Decay by 50% per hour, cap at 4 hours (effectively zero)
-        float decay = (float) Math.pow(0.5, Math.min(hoursSinceUpdate, 4));
-        return _lossScore * decay;
+        long ms = now - _lossScoreLastUpdate;
+        if (ms <= 0) return _lossScore;
+        // Continuous decay, 50% per half-life, capped at 16 half-lives (4 h)
+        double halfLives = Math.min(ms / (double) LOSS_DECAY_HALF_LIFE_MS, 16.0);
+        return (float) (_lossScore * Math.pow(0.5, halfLives));
     }
 
     /**

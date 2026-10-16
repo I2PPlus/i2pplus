@@ -201,10 +201,26 @@ public class PeerProfileTest {
         PeerProfile profile = new PeerProfile(_ctx, Hash.create(new byte[Hash.HASH_LENGTH]));
         long now = System.currentTimeMillis();
         profile.setLossRatio(0.5f, now);
-        // 50% per hour decay, capped at 4 hours (floor = 0.5 * 0.5^4)
-        assertEquals(0.25f, profile.getLossScore(now + 60 * 60 * 1000L), 0.001f);
-        assertEquals(0.125f, profile.getLossScore(now + 2 * 60 * 60 * 1000L), 0.001f);
-        assertEquals(0.03125f, profile.getLossScore(now + 10 * 60 * 60 * 1000L), 0.001f);
+        // Continuous 50%-per-15-minute decay: half a half-life leaves
+        // 0.5 * 2^-0.5, one half-life 0.25, two 0.125
+        assertEquals(0.35355f, profile.getLossScore(now + 7 * 60 * 1000L + 30 * 1000L), 0.001f);
+        assertEquals(0.25f, profile.getLossScore(now + 15 * 60 * 1000L), 0.001f);
+        assertEquals(0.125f, profile.getLossScore(now + 30 * 60 * 1000L), 0.001f);
+        // Capped at 16 half-lives (4 h): 0.5 * 2^-16, and never negative
+        assertEquals(0.0000076f, profile.getLossScore(now + 4 * 60 * 60 * 1000L), 0.000001f);
+        assertEquals(profile.getLossScore(now + 4 * 60 * 60 * 1000L),
+                     profile.getLossScore(now + 10 * 60 * 60 * 1000L), 0.000001f);
+    }
+
+    @Test
+    public void testLossScoreDoesNotDecayBeforeUpdate() {
+        Assume.assumeTrue("No RouterContext available", _ctx != null);
+        PeerProfile profile = new PeerProfile(_ctx, Hash.create(new byte[Hash.HASH_LENGTH]));
+        long now = System.currentTimeMillis();
+        profile.setLossRatio(0.5f, now);
+        // No decay at the report instant, and none for a clock going backwards
+        assertEquals(0.5f, profile.getLossScore(now), 0.001f);
+        assertEquals(0.5f, profile.getLossScore(now - 60 * 60 * 1000L), 0.001f);
     }
 
     @Test

@@ -215,6 +215,16 @@ public class ProfileOrganizer {
     private long _lastTierFillScan;
 
     /**
+     * Whether either tier was under its target at the last tier-fill scan.
+     * Widens the loss-readmit fast-track while short (see
+     * {@link #lossyReadmitAllowed}); recomputed on every scan, so it lags a
+     * demotion by at most the fill debounce.
+     *
+     * @since 0.9.71+
+     */
+    private volatile boolean _tiersShort;
+
+    /**
      * Shortest gap between two full tier-refill scans.
      * <p>Well under the reorganise interval, so the debounce can never delay a
      * refill past the next cycle that would have done it anyway.
@@ -599,6 +609,16 @@ public class ProfileOrganizer {
      * @since 0.9.71+ (reduced from 30 min)
      */
     private static final long LOSS_READMIT_MIN_AGE = 10 * 60 * 1000L;
+    /**
+     * Fast-track readmission: a fresh loss report below this ratio clears the
+     * minimum age even when the tiers are full — near-spotless evidence is
+     * proof enough of recovery. When either tier is under target the
+     * fast-track widens to any fresh below-threshold report (see
+     * {@link #lossyReadmitAllowed}): a short tier cannot afford to hold a
+     * peer out for a clean-but-not-spotless measurement.
+     * @since 0.9.71+
+     */
+    private static final float LOSS_FAST_TRACK_RATIO = 0.05f;
     /**
      * Selection penalty for moderately-lossy peers: their random priority
      * range is multiplied by this factor, so they are this many times less
@@ -5296,6 +5316,10 @@ private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, P
         int fastBefore = _fastPeers.size();
         int highCapBefore = _highCapacityPeers.size();
 
+        // Publish the shortfall before the early return so a full tier
+        // clears the flag too; the readmit fast-track reads it lock-free.
+        _tiersShort = fastBefore < fastTarget || highCapBefore < highCapTarget;
+
         if (fastBefore >= fastTarget && highCapBefore >= highCapTarget)
             return;
 
@@ -6259,10 +6283,11 @@ private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, P
 
     /**
      * True if the peer's decayed loss score is at or above
-     * {@link #PROP_LOSSY_THRESHOLD}. The score decays by 50% per hour since
-     * the last transport report, so a peer stays gated for roughly an hour
-     * after a severe loss episode even if the transport goes quiet — the
-     * decay, not a freshness window, provides the slow forgiveness.
+     * {@link #PROP_LOSSY_THRESHOLD}. The score decays continuously by 50%
+     * every 15 minutes since the last transport report, so a transient
+     * congestion episode clears the gate in tens of minutes while a peer that
+     * keeps reporting loss stays gated — each report re-inflates the score.
+     * The decay, not a freshness window, provides the slow forgiveness.
      *
      * @param profile profile carrying the decayed loss score to test against the threshold
      * @param now current time in ms
@@ -6304,7 +6329,8 @@ private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, P
      * Fast-track: peers with a fresh clean loss report (loss ratio below 5%
      * within the lossy freshness window, default 10 min) are readmitted
      * immediately regardless of the minimum age, accelerating tier recovery
-     * after brief congestion episodes.
+     * after brief congestion episodes. While either tier is under target the
+     * fast-track widens to any fresh below-threshold report.
      *
      * @param profile profile holding the demotion timestamp and the last reported loss ratio
      * @param now current time in ms
@@ -6312,17 +6338,43 @@ private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, P
      * @since 0.9.71+
      */
     private boolean shouldReadmitLossy(PeerProfile profile, long now) {
-        long since = profile.getLossySince();
-        if (since <= 0) return true;
-        float threshold = getLossyThreshold(_context);
-        boolean freshClean = now - profile.getLossRatioLastUpdate() < _context.getProperty(PROP_LOSSY_WINDOW, DEFAULT_LOSSY_WINDOW) &&
-                             profile.getLossRatio() < threshold;
-        // Fast-track: peer has fresh clean evidence (loss ratio below threshold
-        // within the freshness window) AND the loss ratio is very low (<5%),
-        // indicating recovery from brief congestion.  Skip the minimum age
-        // requirement to accelerate tier re-admission.
-        if (freshClean && profile.getLossRatio() < 0.05f) return true;
-        if (now - since < LOSS_READMIT_MIN_AGE) return false;
+        return lossyReadmitAllowed(profile.getLossRatio(), profile.getLossRatioLastUpdate(),
+                                   profile.getLossySince(), now,
+                                   _context.getProperty(PROP_LOSSY_WINDOW, DEFAULT_LOSSY_WINDOW),
+                                   LOSS_READMIT_MIN_AGE, getLossyThreshold(_context),
+                                   LOSS_FAST_TRACK_RATIO, _tiersShort);
+    }
+
+    /**
+     * Pure decision behind {@link #shouldReadmitLossy}, pinned by tests.
+     * A peer never demoted is always allowed. Otherwise the transport must
+     * have reported within the freshness window a ratio below the demotion
+     * threshold; that fresh-clean evidence admits immediately when the ratio
+     * is near-spotless ({@code fastTrackRatio}) or when the tiers are short
+     * ({@code tiersShort}) — a short tier cannot afford to hold a peer out
+     * for a clean-but-not-spotless measurement — and otherwise only after
+     * the minimum age has passed. A stale or absent report is never evidence
+     * of recovery.
+     *
+     * @param lossRatio last loss ratio reported by the transport, 0.0 = healthy
+     * @param ratioLastUpdate when that ratio was reported, in ms
+     * @param lossySince when the peer was demoted for loss, 0 if never
+     * @param now current time in ms
+     * @param freshWindowMs how old the last report may be and still count as fresh
+     * @param minAgeMs minimum time since demotion before a not-spotless report admits
+     * @param threshold the lossy demotion threshold the ratio must fall below
+     * @param fastTrackRatio ratio below which the minimum age is skipped
+     * @param tiersShort whether either tier is under target, widening the fast track
+     * @return true if the peer may be re-admitted
+     * @since 0.9.71+
+     */
+    static boolean lossyReadmitAllowed(float lossRatio, long ratioLastUpdate, long lossySince, long now,
+                                       long freshWindowMs, long minAgeMs, float threshold,
+                                       float fastTrackRatio, boolean tiersShort) {
+        if (lossySince <= 0) return true;
+        boolean freshClean = now - ratioLastUpdate < freshWindowMs && lossRatio < threshold;
+        if (freshClean && (lossRatio < fastTrackRatio || tiersShort)) return true;
+        if (now - lossySince < minAgeMs) return false;
         return freshClean;
     }
 
