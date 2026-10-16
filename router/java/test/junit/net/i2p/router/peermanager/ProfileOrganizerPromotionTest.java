@@ -351,4 +351,35 @@ public class ProfileOrganizerPromotionTest {
                      ProfileOrganizer.promotionSkipLabel("lowTunnelAcceptance.highCap"));
         assertEquals("someNewReason", ProfileOrganizer.promotionSkipLabel("someNewReason"));
     }
+
+    /**
+     * A promotion is logged as the tier transition that happened, not as a
+     * pair of booleans: unchanged membership reports no event. A peer that
+     * gained nothing returns null so the caller logs nothing.
+     */
+    @Test
+    public void promotionTransitionNamesOnlyGainedTiers() {
+        assertEquals("none -> fast", ProfileOrganizer.promotionTransition(false, false, true, false));
+        assertEquals("none -> highCap", ProfileOrganizer.promotionTransition(false, false, false, true));
+        assertEquals("highCap -> fast", ProfileOrganizer.promotionTransition(false, true, true, true));
+        assertEquals("fast -> highCap", ProfileOrganizer.promotionTransition(true, false, true, true));
+        assertEquals("none -> fast + highCap", ProfileOrganizer.promotionTransition(false, false, true, true));
+        assertNull(ProfileOrganizer.promotionTransition(false, true, false, true));
+        assertNull(ProfileOrganizer.promotionTransition(false, false, false, false));
+    }
+
+    /**
+     * Default values (zero bonus, live profile) explain nothing and must not
+     * be printed; only non-default evidence earns the continuation line.
+     */
+    @Test
+    public void promotionEvidenceOmitsDefaults() {
+        assertNull(ProfileOrganizer.promotionEvidence(0, 0, true));
+        assertEquals("\n* capBonus: 3", ProfileOrganizer.promotionEvidence(3, 0, true));
+        assertEquals("\n* raw: -2", ProfileOrganizer.promotionEvidence(0, -2, true));
+        assertEquals("\n* capBonus: 3 * raw: 5", ProfileOrganizer.promotionEvidence(3, 5, true));
+        String stale = ProfileOrganizer.promotionEvidence(0, 0, false);
+        assertTrue("stale copy reported: " + stale,
+                   stale != null && stale.contains("No live profile"));
+    }
 }

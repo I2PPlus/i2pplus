@@ -5346,13 +5346,13 @@ private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, P
             if (_log.shouldInfo()) {
                 boolean nowFast = _fastPeers.containsKey(peer);
                 boolean nowHighCap = _highCapacityPeers.containsKey(peer);
-                if (nowFast != wasFast || nowHighCap != wasHighCap) {
-                    _log.info("Promoted peer [" + peer.toBase64().substring(0, 6) +
-                              "] fast: " + wasFast + " -> " + nowFast +
-                              " * highCap: " + wasHighCap + " -> " + nowHighCap +
-                              "\n* capBonus: " + promoted.getCapacityBonus() +
-                              " * raw: " + promoted.getCapacityBonusRaw() +
-                              " * liveProfile: " + (promoted == liveProfile));
+                String transition = promotionTransition(wasFast, wasHighCap, nowFast, nowHighCap);
+                if (transition != null) {
+                    String evidence = promotionEvidence(promoted.getCapacityBonus(),
+                                                        promoted.getCapacityBonusRaw(),
+                                                        promoted == liveProfile);
+                    _log.info("Promoted peer [" + peer.toBase64().substring(0, 6) + "] " + transition +
+                              (evidence != null ? evidence : ""));
                 }
             }
         }
@@ -5371,6 +5371,57 @@ private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, P
                 _log.info("Promotion skips: " + examined + " examined" + skips);
             }
         }
+    }
+
+    /**
+     * Describe a tier promotion as a {@code from -> to} transition, naming only
+     * the tiers actually gained. Logging unchanged membership (a tier that was
+     * and stayed true) reports no event and buries the one that happened, so a
+     * scan that changed nothing returns null and the caller logs nothing.
+     * This method only adds; a lost tier is never reported here.
+     *
+     * @param wasFast     in the fast tier before the promotion
+     * @param wasHighCap  in the high-capacity tier before the promotion
+     * @param nowFast     in the fast tier after the promotion
+     * @param nowHighCap  in the high-capacity tier after the promotion
+     * @return e.g. {@code "highCap -> fast"}, {@code "none -> highCap"};
+     *         null when no tier was gained
+     * @since 0.9.71+
+     */
+    static String promotionTransition(boolean wasFast, boolean wasHighCap,
+                                      boolean nowFast, boolean nowHighCap) {
+        boolean gainedFast = nowFast && !wasFast;
+        boolean gainedCap = nowHighCap && !wasHighCap;
+        if (!gainedFast && !gainedCap) {return null;}
+        String from = wasFast ? "fast" : (wasHighCap ? "highCap" : "none");
+        StringBuilder to = new StringBuilder(20);
+        if (gainedFast) {to.append("fast");}
+        if (gainedCap) {
+            if (to.length() > 0) {to.append(" + ");}
+            to.append("highCap");
+        }
+        return from + " -> " + to;
+    }
+
+    /**
+     * Evidence line for a promotion log: only the values that explain
+     * something. A zero bonus or raw adds nothing to read, and a live-profile
+     * match is the normal case — only the anomaly (the promoted object was
+     * not the live profile) earns its place. Returns null when every value
+     * is default, so the log line stays one line for a routine promotion.
+     *
+     * @param bonus         the capacity bonus applied
+     * @param raw           the unclamped bonus the bonus was derived from
+     * @param promotedIsLive  whether the promoted object was the live profile
+     * @return a {@code "\n* "} continuation line, or null when all default
+     * @since 0.9.71+
+     */
+    static String promotionEvidence(int bonus, int raw, boolean promotedIsLive) {
+        StringBuilder sb = new StringBuilder(48);
+        if (bonus != 0) {sb.append("\n* capBonus: ").append(bonus);}
+        if (raw != 0) {sb.append(sb.length() > 0 ? " * " : "\n* ").append("raw: ").append(raw);}
+        if (!promotedIsLive) {sb.append(sb.length() > 0 ? " * " : "\n* ").append("No live profile -> Promoted a possibly stale profile copy");}
+        return sb.length() > 0 ? sb.toString() : null;
     }
 
     /**
