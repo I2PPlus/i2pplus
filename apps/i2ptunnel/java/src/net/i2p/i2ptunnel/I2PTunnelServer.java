@@ -187,6 +187,14 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
      * Created in run(); null until then.
      */
     protected volatile ThreadPoolExecutor _clientExecutor;
+    /**
+     * The controller group that owns this tunnel's runner pool, cached from
+     * {@link TunnelControllerGroup#getInstance()} once in {@link #run()}. Cached
+     * because the singleton accessor synchronizes on the class object, which a
+     * per-request call would turn into contention across every tunnel thread.
+     * @since 0.9.71+
+     */
+    protected volatile TunnelControllerGroup _tcg;
     private final Map<Integer, InetSocketAddress> _socketMap = new ConcurrentHashMap<>(4);
     private volatile StatefulConnectionFilter _filter;
 
@@ -1021,6 +1029,7 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
     public void run() {
         i2pss = sockMgr.getServerSocket();
         TunnelControllerGroup tcg = TunnelControllerGroup.getInstance();
+        _tcg = tcg;
         ThreadPoolExecutor serverExec;
         if (tcg != null) {
             serverExec = tcg.getServerExecutor(this, _serverThreadOverride);
@@ -1030,6 +1039,18 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
         } else {
             _clientExecutor = new TunnelControllerGroup.CustomThreadPoolExecutor();
             serverExec = null;
+        }
+        // Registered here as well as in I2PTunnelClientBase, because this class
+        // does not extend it: a server-only router would otherwise have no
+        // registration at all, and StatManager.addRateData drops an unregistered
+        // stat at debug level, so the runner-pool rejections this counts would
+        // vanish silently. createRequiredRateStat is idempotent, so the shared
+        // name is safe to declare twice.
+        if (getTunnel().getContext() != null) {
+            getTunnel().getContext().statManager().createRequiredRateStat(
+                "i2ptunnel.clientConnectionShed",
+                "Server tunnel runner-pool rejections", "I2PTunnel",
+                TunnelControllerGroup.RATES);
         }
 
         while (open) {

@@ -271,6 +271,68 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
     }
 
     /**
+     * Grow this tunnel's runner pool if work is backing up, immediately before a
+     * submit.
+     *
+     * <p>The fast path is one atomic load of the queue depth, so a request that
+     * finds a free pool pays nothing. Only when the queue holds work is
+     * {@code getActiveCount()} consulted, because that takes the pool's mainLock and
+     * would otherwise be a per-request monitor acquisition on a busy tunnel.
+     *
+     * <p>Growing here rather than in the accept loop is deliberate: the accept loop
+     * owns the server handler pool, and the runner pool is only reachable from a
+     * request that has already been parsed.
+     *
+     * @since 0.9.71+
+     */
+     private void growRunnerPoolForSubmit() {
+         TunnelControllerGroup tcg = _tcg;
+         ThreadPoolExecutor ex = _clientExecutor;
+         if (tcg == null || ex == null || ex.isShutdown()) {return;}
+         int q = ex.getQueue().size();
+         if (q <= 0) {
+             // Nothing queued. The idle observation is what lets a stale elevation
+             // decay, so it must be reported even on the quiet path — a pool that was
+             // elevated under load otherwise holds its floor on the shared budget
+             // forever. noteRunnerIdle returns immediately for a pool that was never
+             // elevated, so an unelevated tunnel pays one map lookup.
+             tcg.noteRunnerIdle(this);
+             return;
+         }
+         tcg.growRunnerExecutorForLoad(this, q, ex.getActiveCount());
+     }
+
+    /**
+     * Report a runner-pool rejection to the Tuner and the log.
+     *
+     * <p>The shed stat is the point of this method. It is the unambiguous overload
+     * signal {@code I2PTunnelClientRunnerMaxParam} grows on, and the server paths
+     * that reject never wrote it: {@code i2ptunnel.clientConnectionShed} read
+     * "No lifetime events" on a live router that was rejecting about 1.7 requests
+     * a second. Without the write the Tuner reads such a tunnel as idle and decays
+     * its runner budget toward the floor while the tunnel rejects at its share.
+     *
+     * <p>The active-thread sample is taken here because this is the only instant
+     * the pool is observably pinned; the accept-loop sample is taken before the
+     * work starts and reads low. Closing the connection is left to the caller,
+     * which knows what it opened.
+     *
+     * @param tunnelId the tunnel identifier for the log line
+     * @param peerB32 the client's base32 address for the log line
+     * @since 0.9.71+
+     */
+    private void reportRunnerShed(String tunnelId, String peerB32) {
+        TunnelControllerGroup.sampleRunnerActiveThreads(_clientExecutor);
+        I2PAppContext ctx = getTunnel().getContext();
+        if (ctx != null) {
+            ctx.statManager().addRateData("i2ptunnel.clientConnectionShed", 1L);
+        }
+        if (_log.shouldWarn())
+            _log.warn("[HTTPServer] Executor pool saturated, rejecting request " + tunnelId
+                      + (peerB32 != null ? "\n* Client: " + peerB32 : ""));
+    }
+
+    /**
      * Maximum queued body tasks for an I/O pool with {@code threads} workers.
      * The queue is bounded so a saturated pool cannot park an unbounded number
      * of sockets with their browser and I2P streams open; overflow runs the
@@ -1424,14 +1486,27 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 if (keepalive) {
                     t.run();
                 } else {
+                    // Size the pool at the moment the work is handed to it. The queue
+                    // depth is a lock-free read, so the common path costs one atomic
+                    // load; getActiveCount() takes the pool's mainLock and is only
+                    // paid when the queue is actually backing up.
+                    growRunnerPoolForSubmit();
                     try {
                         _clientExecutor.execute(t);
                     } catch (RejectedExecutionException ree) {
-                        try { sendError(socket, ERR_UNAVAILABLE); } catch (IOException ioe) { /* ignore */ }
-                        try { socket.close(); } catch (IOException ioe) { /* ignore */ }
-                        if (_log.shouldWarn())
-                            _log.warn("[HTTPServer] Executor pool saturated, rejecting request " + tunnelId + "\n* Client: " + peerB32);
-                        return;
+                        // Recover rather than drop: one load-aware rebalance and a
+                        // retry, as the client path does. An idle sibling runner
+                        // pool may be sitting on budget this tunnel needs.
+                        TunnelControllerGroup.rebalanceRunnerPoolsNow();
+                        try {
+                            _clientExecutor.execute(t);
+                        } catch (RejectedExecutionException ree2) {
+                            // Still full after rebalance.
+                            reportRunnerShed(tunnelId, peerB32);
+                            try { sendError(socket, ERR_UNAVAILABLE); } catch (IOException ioe) { /* ignore */ }
+                            try { socket.close(); } catch (IOException ioe) { /* ignore */ }
+                            return;
+                        }
                     }
                 }
 
@@ -1694,17 +1769,31 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 catch (IOException ioe) { /* ignored */ }
             });
         runner.setExecutor(_clientExecutor);
+        growRunnerPoolForSubmit();
         try {
             _clientExecutor.execute(runner);
         } catch (RejectedExecutionException ree) {
-            // All client runner threads busy - kill the connection rather than wedge
-            if (_log.shouldWarn())
-                _log.warn("443 handler pool saturated -> Closing connection...");
-            // also close the raw TCP socket opened above - the runner never ran, so its
-            // cleanup never runs
-            try {s.close();}
-            catch (IOException ioe) { /* ignored */ }
-            socket.close();
+            // One load-aware rebalance and a retry before shedding: an idle sibling
+            // runner pool may release budget to this one.
+            TunnelControllerGroup.rebalanceRunnerPoolsNow();
+            try {
+                _clientExecutor.execute(runner);
+            } catch (RejectedExecutionException ree2) {
+                // All client runner threads busy, even after rebalance. Report it so
+                // the Tuner can grow this tunnel's share instead of reading it idle.
+                String peerB32;
+                try {
+                    peerB32 = socket.getPeerDestination().toBase32();
+                } catch (RuntimeException re) {
+                    peerB32 = null;
+                }
+                reportRunnerShed(getTunnelLogId(socket.getThisDestination()), peerB32);
+                // also close the raw TCP socket opened above - the runner never ran, so its
+                // cleanup never runs
+                try {s.close();}
+                catch (IOException ioe) { /* ignored */ }
+                socket.close();
+            }
         }
         return true;
     }
