@@ -3101,6 +3101,19 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             }
         }
 
+        /** Call a static double getter via reflection.
+         *  Returns {@code -1.0d} when the class or method cannot be resolved —
+         *  a sentinel the caller must treat as "no data", not as a measurement. */
+        static double invokeGetDouble(String methodName) {
+            Class<?> c = getCLS();
+            if (c == null) return -1.0d;
+            try {
+                return (Double) c.getMethod(methodName).invoke(null);
+            } catch (Exception e) {
+                return -1.0d;
+            }
+        }
+
         /** Call a static int setter via reflection. */
         static void invokeSetInt(String methodName, int value) {
             Class<?> c = getCLS();
@@ -5244,7 +5257,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      * three quarters of a run stepping down by half a step while every one of the
      * three signals measured below its threshold, and no amount of reading the stats
      * page could say which gate was open. Naming the values alongside the verdict is
-     * what makes that visible in one line.
+     * what makes that visible in the log.
      *
      * @param failLifetime stat {@code transport.sendMessageFailureLifetime} in ms, or NaN
      * @param lossRate the driver signal — the true byte-weighted rate, 0.0-1.0, or NaN
@@ -5253,7 +5266,8 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      * @param sendEvents send event count behind the event-count ratio, 0 when unread
      * @param avgDupSize mean bytes per retransmitted message, or NaN when unread
      * @param eventRatio event-count ratio, 0.0-1.0, or NaN — observation only, never the driver
-     * @return a short clause naming the verdict and the values behind it, never null
+     * @return the verdict on the first line, then the values behind it on
+     *         {@code \n* } evidence lines, never null
      * @since 0.9.71+
      * @see #maxWindowDecisionFrom for the named-argument entry point callers should use
      */
@@ -5263,66 +5277,64 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         boolean congested = !Double.isNaN(failLifetime) && failLifetime > CONGESTION_GATE_MS;
         boolean dropping = isStreamLossy(lossRate);
         double memPressure = !Double.isNaN(memPct) ? memPct : 0.0;
-        StringBuilder sb = new StringBuilder(96);
+        boolean memory = memPressure > SHRINK_MEM_PCT;
+        StringBuilder sb = new StringBuilder(128);
         // The driver first, tagged with the signal that decided, so no reader infers
         // the non-driving one caused the verdict. `lossRate` is the driver by
         // contract; `eventRatio` is the observation, and the two must not be
         // confused — the ceiling decides on `lossRate` and only reports
         // `eventRatio`.
-        sb.append("driver=bytes(5m) loss ").append(pct(lossRate))
-          .append(" trueByte; events(60s)=").append(pct(eventRatio));
+        sb.append("\n* Driver: bytes(5m) loss ").append(pct(lossRate))
+          .append(" trueByte * Events(60s): ").append(pct(eventRatio));
         if (dupEvents > 0 && sendEvents > 0) {
-            appendSep(sb);
-            sb.append("dupEvents=").append(dupEvents)
-              .append("; dupEvents/s=")
+            sb.append("\n* Dup events: ").append(dupEvents)
+              .append(" * Dup events/s: ")
               // Divided by the constant the counts were read on, not a literal:
               // STAT_PERIOD has already moved once in this line of work, and a
               // literal divisor would silently report a wrong rate rather than
               // fail when it moves again.
               .append(String.format("%.1f", dupEvents / (STAT_PERIOD / 1000.0d)));
+            if (!Double.isNaN(avgDupSize) && avgDupSize >= 0.0d) {
+                sb.append(" * Dup size: ").append(String.format("%.0f", avgDupSize)).append("B(5m)");
+            }
+        } else if (!Double.isNaN(avgDupSize) && avgDupSize >= 0.0d) {
+            // The resend size, labelled with its window: it is read on the 5 minute
+            // window, not the 60 s the event counts come from, so leaving it bare
+            // would invite the same cross-window comparison the labels above prevent.
+            sb.append("\n* Dup size: ").append(String.format("%.0f", avgDupSize)).append("B(5m)");
         }
-        // The resend size, labelled with its window: it is read on the 5 minute
-        // window, not the 60 s the event counts come from, so leaving it bare
-        // would invite the same cross-window comparison the labels above prevent.
-        if (!Double.isNaN(avgDupSize) && avgDupSize >= 0.0d) {
-            appendSep(sb);
-            sb.append("dupSize=").append(String.format("%.0f", avgDupSize))
-              .append("B(5m)");
+        if (congested || memory) {
+            sb.append("\n*");
+            if (congested) {sb.append(" Congestion: ").append(secs(failLifetime));}
+            if (memory) {sb.append(congested ? " * Memory: " : " Memory: ").append(wholePct(memPct));}
         }
-        if (congested) {
-            appendSep(sb);
-            sb.append("congestion ").append(secs(failLifetime));
-        }
-        if (memPressure > SHRINK_MEM_PCT) {
-            appendSep(sb);
-            sb.append("memory ").append(wholePct(memPct));
-        }
-        if (dropping || congested || memPressure > SHRINK_MEM_PCT) {
-            sb.append(" -> shrink");
-            return sb.toString();
+        // The verdict leads, so the caller's line reads
+        // "Changing ... -> Shrink" and the evidence follows.
+        if (dropping || congested || memory) {
+            return "Shrink" + sb;
         }
         // No driver at all is never a reason to climb. computeTarget holds on a NaN
         // loss rate via the dead-band and documents that contract; without this the
-        // line would print "climb" from the heap band on a ceiling that actually
+        // line would print "Climb" from the heap band on a ceiling that actually
         // held, which is the same class of disagreement the driver tag exists to
         // prevent.
         if (Double.isNaN(lossRate)) {
-            return sb.toString() + " -> hold";
+            return "Hold (no driver signal)" + sb;
         }
         // No gate open, so the direction came from the heap bands. An unmeasured heap
         // is never read as maximum headroom: holding is the only safe answer when
         // nothing is known, and reading NaN as 0% would climb on a signal that does
         // not exist.
         if (Double.isNaN(memPct)) {
-            return sb.toString() + " -> heap no signal -> hold";
+            return "Hold (no heap signal)" + sb;
         }
         if (memPressure < STRONG_CLEAN_MEM_PCT) {
-            return sb.toString() + " -> clean " + wholePct(memPct) + " heap -> climb";
+            return "Climb (clean " + wholePct(memPct) + " heap)" + sb;
         }
         if (memPressure < CLIMB_HEADROOM_MEM_PCT) {
-            return sb.toString() + " -> moderate " + wholePct(memPct) + " heap -> climb";
+            return "Climb (moderate " + wholePct(memPct) + " heap)" + sb;
         }
-        return sb.toString() + " -> tight " + wholePct(memPct) + " heap -> hold";
+        return "Hold (tight " + wholePct(memPct) + " heap)" + sb;
     }
 
     /**
@@ -5428,11 +5440,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return riseClimb + 1 >= CEILING_CONFIRM_WINDOWS ? CEILING_CLIMB : CEILING_HOLD;
         }
         return CEILING_HOLD;
-    }
-
-    /** A separator for a reason with more than one clause. */
-    private static void appendSep(StringBuilder sb) {
-        if (sb.length() > 0) {sb.append("; ");}
     }
 
     /** A value already expressed in percent, as a whole-percent string. */
@@ -12609,7 +12616,7 @@ protected int computeTarget(double observed) {
         }
 
         protected double getObservedStat(RouterContext ctx) {
-            return I2PTunnelReflector.invokeGetInt("getIOTransferActiveCount");
+            return I2PTunnelReflector.invokeGetDouble("getIOMaxPoolUtilization");
         }
 
         protected int computeTarget(double observed) {
@@ -12621,16 +12628,19 @@ protected int computeTarget(double observed) {
      * Pure growth policy for the global Server→Client I/O budget.
      *  Extracted (package-visible, static) so unit tests can exercise the
      *  policy without a live RouterContext.
-     * <p>Observed is active workers + queued transfers across per-tunnel
-     *  pools. Ratio near 1.0 means the budget is saturated (or bodies are
-     *  queueing); the step doubles the current budget so a download burst
-     *  cannot wait out a +2-per-cycle crawl (64→128→256). Between 70–90%
-     *  utilization growth is still aggressive (max(8, current/4)). Shrink
-     *  only below 20% so a quiet router does not ratchet the budget down
-     *  mid-incident.
+     * <p>Observed is the busiest pool's utilization — active plus queued
+     *  transfers divided by that pool's present maximum — not a global sum.
+     *  Ten pools sharing one budget means the summed pressure divided by the
+     *  budget reads low even when one pool is saturated; the per-pool ratio
+     *  makes a saturated pool visible regardless of how quiet the others are.
+     *  Above 90% the step doubles the current budget so a download burst
+     *  cannot wait out a +2-per-cycle crawl; between 70–90% growth is
+     *  still aggressive. Below 20% the budget shrinks by one so a quiet
+     *  router does not hold threads it does not need.
      *
      * @param current current runtime budget (clamped to [min,max] first)
-     * @param observed active+queued pressure; NaN or negative leaves value unchanged
+     * @param observed the busiest pool's utilization rate; NaN or negative
+     *        leaves the value unchanged
      * @param min inclusive lower bound
      * @param max inclusive upper bound
      * @return target budget in [min, max]
@@ -12640,15 +12650,14 @@ protected int computeTarget(double observed) {
         if (current < min) {current = min;}
         if (current > max) {current = max;}
         if (Double.isNaN(observed) || observed < 0) {return current;}
-        double ratio = (observed + 1.0) / (current + 1.0);
         int target;
-        if (ratio > 0.9) {
+        if (observed > 0.9) {
             long step = Math.max(16L, (long) current);
             target = (int) Math.min((long) max, (long) current + step);
-        } else if (ratio > 0.7) {
+        } else if (observed > 0.7) {
             int step = Math.max(8, current / 4);
             target = Math.min(max, current + step);
-        } else if (ratio < 0.2 && current > min) {
+        } else if (observed < 0.2 && current > min) {
             target = Math.max(min, current - 1);
         } else {
             target = current;
