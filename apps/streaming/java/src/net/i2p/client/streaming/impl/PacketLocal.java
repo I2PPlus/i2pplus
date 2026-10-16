@@ -387,16 +387,16 @@ class PacketLocal extends Packet implements MessageOutputStream.WriteStatus {
 
         final int nackCount = _nackCount.get();
         if (nackCount > 0)
-            buf.append(" NACKed ").append(nackCount).append(" times");
+            buf.append(" * NACKed ").append(nackCount).append(" times");
 
         synchronized(this) {
             if (_ackOn > 0)
-                buf.append(" ACK after ").append(getAckTime()).append("ms");
+                buf.append(" * ACK after ").append(getAckTime()).append("ms");
         }
 
         int numSends = _numSends.get();
         if (numSends > 1)
-            buf.append("Sent ").append(numSends).append(" times");
+            buf.append(" * Sent ").append(numSends).append(" times");
 
         if (isFlagSet(FLAG_SYNCHRONIZE |
                       FLAG_CLOSE |
@@ -404,7 +404,7 @@ class PacketLocal extends Packet implements MessageOutputStream.WriteStatus {
 
             Connection con = _connection;
             if (con != null) {
-                buf.append(" from ");
+                buf.append(" * From ");
                 Destination local = _session.getMyDestination();
                 if (local != null)
                     buf.append("[").append(local.calculateHash().toBase32().substring(0,8)).append("]");
@@ -413,7 +413,7 @@ class PacketLocal extends Packet implements MessageOutputStream.WriteStatus {
                 buf.append(" to ");
                 Destination remote = con.getRemotePeer();
                 if (remote != null)
-                    buf.append("[").append(remote.calculateHash().toBase32().substring(0,8)).append("] ");
+                    buf.append("[").append(remote.calculateHash().toBase32().substring(0,8)).append("]");
                 else
                     buf.append("[unknown]");
 

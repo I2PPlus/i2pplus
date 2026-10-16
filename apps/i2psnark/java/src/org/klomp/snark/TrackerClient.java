@@ -1081,7 +1081,7 @@ public class TrackerClient implements Runnable {
                     // when the failure is that every tracker is failing at once.
                     if (_log.shouldWarn()) {
                         _log.warn("Error communicating with tracker [" +
-                                  I2PSnarkUtil.trackerB32ToHostname(tr.announce) + "]: " + ioe);
+                                  I2PSnarkUtil.trackerB32ToHostname(tr.announce) + "]\n* " + ioe);
                     }
                     tr.trackerProblems = ioe.getMessage();
                     String tplc = normalizeTrackerProblem(tr.trackerProblems);

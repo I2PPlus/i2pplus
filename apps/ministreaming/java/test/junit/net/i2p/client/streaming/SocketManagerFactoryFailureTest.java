@@ -83,7 +83,7 @@ public class SocketManagerFactoryFailureTest {
     public void aRealFaultStillReadsAsAnError() {
         String msg = I2PSocketManagerFactory.describeSessionFailure(
                 new I2PSessionException("refused", new IOException("connection refused")), "w-2");
-        assertTrue(msg, msg.startsWith("Error creating session for socket manager"));
+        assertTrue(msg, msg.startsWith("Error creating socket manager session"));
         assertTrue("the cause must be surfaced for a real fault", msg.contains("connection refused"));
     }
 
@@ -113,7 +113,7 @@ public class SocketManagerFactoryFailureTest {
     public void aNullFailureStillNamesTheThread() {
         String msg = I2PSocketManagerFactory.describeSessionFailure(null, "w-5");
         assertTrue(msg, msg.contains("[w-5]"));
-        assertTrue(msg, msg.contains("no exception given"));
+        assertTrue(msg, msg.contains("No exception given"));
     }
 
     @Test

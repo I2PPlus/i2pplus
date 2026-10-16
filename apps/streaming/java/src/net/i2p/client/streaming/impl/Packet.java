@@ -1043,7 +1043,7 @@ class Packet {
         toFlagString(buf);
         ByteArray payload = _payload;
         if (payload != null && payload.getValid() > 0) {
-            buf.append("\n* Data: ").append(payload.getValid()).append(" bytes;");
+            buf.append("\n* Data: ").append(payload.getValid()).append(" bytes");
         }
         return buf;
     }
@@ -1070,29 +1070,29 @@ class Packet {
         if (isFlagSet(FLAG_CLOSE)) {buf.append(" CLOSE");}
         if (isFlagSet(FLAG_RESET)) {buf.append(" RESET");}
         if (isFlagSet(FLAG_ECHO)) {buf.append(" ECHO");}
-        if (isFlagSet(FLAG_FROM_INCLUDED)) {buf.append(" from ").append(_optionFrom != null ? _optionFrom.size() : 0).append(" bytes;");}
         if (isFlagSet(FLAG_NO_ACK)) {buf.append(" NACK");}
         else {buf.append(" ACK ").append(getAckThrough());}
+        if (isFlagSet(FLAG_FROM_INCLUDED)) {buf.append(" * From: ").append(_optionFrom != null ? _optionFrom.size() : 0).append(" bytes");}
         if (_nacks != null && debug) {
             buf.append(" NACK");
             for (int i = 0; i < _nacks.length; i++) {buf.append(' ').append(_nacks[i]);}
         }
-        if (isFlagSet(FLAG_DELAY_REQUESTED)) buf.append(" DELAY ").append(_optionDelay).append("ms;");
-        if (isFlagSet(FLAG_MAX_PACKET_SIZE_INCLUDED)) buf.append(" MAXSIZE ").append(_optionMaxSize).append(" bytes");
-        if (isFlagSet(FLAG_PROFILE_INTERACTIVE)) buf.append("; INTERACTIVE");
-        if (isFlagSet(FLAG_SIGNATURE_REQUESTED)) buf.append("; SIGREQ");
+        if (isFlagSet(FLAG_DELAY_REQUESTED)) buf.append(" * DELAY ").append(_optionDelay).append("ms");
+        if (isFlagSet(FLAG_MAX_PACKET_SIZE_INCLUDED)) buf.append(" * MAXSIZE ").append(_optionMaxSize).append(" bytes");
+        if (isFlagSet(FLAG_PROFILE_INTERACTIVE)) buf.append(" * INTERACTIVE");
+        if (isFlagSet(FLAG_SIGNATURE_REQUESTED)) buf.append(" * SIGREQ");
         if (isFlagSet(FLAG_SIGNATURE_OFFLINE) && debug) {
-            if (_transientExpires != 0) {buf.append("; TRANSEXP ").append(new Date(_transientExpires));}
+            if (_transientExpires != 0) {buf.append(" * TRANSEXP ").append(new Date(_transientExpires));}
             else {buf.append(" (No expiration)");}
             if (_transientSigningPublicKey != null) {
                 buf.append(" TRANSKEY ").append(_transientSigningPublicKey.getType()).append(':').append(_transientSigningPublicKey.toBase64());
             } else {buf.append(" (No key data)");}
-            if (_offlineSignature != null) {buf.append("\n* Offline Signature: ").append(_offlineSignature.getType());}
+            if (_offlineSignature != null) {buf.append(" * Offline Signature: ").append(_offlineSignature.getType());}
             else {buf.append(" (No offline signature data)");}
         }
         if (isFlagSet(FLAG_SIGNATURE_INCLUDED)) {
             if (_optionSignature != null) {
-                buf.append("\n* Signature: ").append(_optionSignature.getType());
+                buf.append(" * Signature: ").append(_optionSignature.getType());
                 if (_optionSigLen > 0 && _optionSigLen != _optionSignature.length()) {
                     // the type guessed in readPacket() did not cover every option byte
                     buf.append(" in ").append(_optionSigLen).append(" option bytes");

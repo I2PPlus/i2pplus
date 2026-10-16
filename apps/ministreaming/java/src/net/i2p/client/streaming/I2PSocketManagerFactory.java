@@ -333,10 +333,10 @@ public class I2PSocketManagerFactory {
     static String describeSessionFailure(I2PSessionException ise, String threadName) {
         StringBuilder sb = new StringBuilder(96);
         sb.append(isSessionInterrupt(ise) ? "Socket manager session creation interrupted on ["
-                                          : "Error creating session for socket manager on [");
+                                          : "Error creating socket manager session on [");
         sb.append(threadName).append(']');
         if (ise == null) {
-            return sb.append(" -> no exception given").toString();
+            return sb.append(" -> No exception given").toString();
         }
         String msg = ise.getMessage();
         sb.append(" -> ").append(msg == null || msg.isEmpty() ? ise.toString() : msg);

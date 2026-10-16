@@ -3760,7 +3760,7 @@ if (!on) {
           long expiry = hasTimeout ? _context.clock().now() + totalTimeout : 0;
           long start = _context.clock().now();
           if (_log.shouldInfo()) {
-              _log.info("waitForConnect() starting for " + _remotePeer + " (timeout=" + (hasTimeout ? totalTimeout : 0) + "ms)");
+              _log.info("waitForConnect() starting for " + _remotePeer + " (timeout: " + (hasTimeout ? totalTimeout : 0) + "ms)");
           }
           while (true) {
               if (_connected.get() && (_receiveStreamId.get() > 0) && (_sendStreamId.get() > 0)) {
@@ -4556,14 +4556,13 @@ synchronized boolean checkRetransmitStall() {
                 }
                 return true;
             }
-            if (remoteSilentTooLong(_lastReceivedOn,
-                                    effectiveInactivityTimeout(_options.getInactivityTimeout(),
-                                                               REMOTE_SILENT_FALLBACK_MS),
-                                    now)) {
+            long inactivityWindow = effectiveInactivityTimeout(_options.getInactivityTimeout(),
+                                                               REMOTE_SILENT_FALLBACK_MS);
+            if (remoteSilentTooLong(_lastReceivedOn, (int) inactivityWindow, now)) {
                 if (_log.shouldWarn()) {
-                    _log.warn(Connection.this + " remote silent for the inactivity window (" +
-                              (now - _lastReceivedOn) + "ms idle, timeout " +
-                              _options.getInactivityTimeout() + "ms), forcing disconnect");
+                    _log.warn(Connection.this + " remote silent for the inactivity window" +
+                              "\n* Idle: " + (now - _lastReceivedOn) + "ms * Timeout: " +
+                              inactivityWindow + "ms -> Forcing disconnect");
                 }
                 return true;
             }
