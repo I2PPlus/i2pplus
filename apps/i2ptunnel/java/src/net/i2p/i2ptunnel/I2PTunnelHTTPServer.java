@@ -209,10 +209,8 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
      * body-stall window.
      * @since 0.9.71+
      */
-    static final int IO_POOL_FLOOR = 8;
     /** Maximum global I/O budget (Tuner max must match). @since 0.9.71+ */
     static final int IO_THREADS_MAX = maxIOThreads();
-
     /**
      * Sample periods for the I/O transfer load stat. Five minutes is included
      * because a body transfer holds its thread for the whole transfer, so the
@@ -299,7 +297,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
         synchronized (_ioExecutorLock) {
             ThreadPoolExecutor ex = _ioPools.get(this);
             if (ex == null || ex.isShutdown()) {
-                ex = createIOExecutor(IO_POOL_FLOOR);
+                ex = createIOExecutor(ioPoolFloor());
                 _ioPools.put(this, ex);
             }
             rebalanceIOPools();
@@ -362,12 +360,22 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
         TunnelControllerGroup.sampleRunnerActiveThreads(_clientExecutor);
         I2PAppContext ctx = getTunnel().getContext();
         if (ctx != null) {
+            // No try/catch: StatManager.addRateData silently DEBUGs for
+            // unregistered stats, never throws. The stat is registered in
+            // I2PTunnelServer, which runs before any accept can reach here.
             ctx.statManager().addRateData("i2ptunnel.clientConnectionShed", 1L);
         }
+        long now = ctx != null ? ctx.clock().now() : System.currentTimeMillis();
+        if (now - _lastShedLog < SHED_LOG_THROTTLE_MS) {return;}
+        _lastShedLog = now;
         if (_log.shouldWarn())
             _log.warn("[HTTPServer] Executor pool saturated, rejecting request " + tunnelId
                       + (peerB32 != null ? "\n* Client: " + peerB32 : ""));
     }
+
+    /** Minimum interval between shed warnings for this listener. */
+    private static final long SHED_LOG_THROTTLE_MS = 5 * 60 * 1000L;
+    private volatile long _lastShedLog;
 
     /**
      * Maximum queued body tasks for an I/O pool with {@code threads} workers.
@@ -393,7 +401,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
      * @since 0.9.71+
      */
     static ThreadPoolExecutor createIOExecutor(int threads) {
-        int n = Math.max(IO_POOL_FLOOR, threads);
+        int n = Math.max(ioPoolFloor(), threads);
         ThreadPoolExecutor ex = new ThreadPoolExecutor(n, n,
             30L, TimeUnit.SECONDS,
             new LinkedBlockingQueue<Runnable>(ioQueueCap(n)),
@@ -425,14 +433,14 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
             // code asked for the full budget from every pool, so an idle eepsite
             // had as much claim on a proportional cut as a tracker under load, and
             // the tracker's share fell as the tunnel count rose.
-            desired[w++] = load > 0 ? budget : IO_POOL_FLOOR;
+            desired[w++] = load > 0 ? budget : ioPoolFloor();
         }
-        int[] alloc = TunnelControllerGroup.allocateServerThreads(budget, desired, IO_POOL_FLOOR);
-        // Soft-floor: never starve a live tunnel below IO_POOL_FLOOR even when
+        int[] alloc = TunnelControllerGroup.allocateServerThreads(budget, desired, ioPoolFloor());
+        // Soft-floor: never starve a live tunnel below ioPoolFloor() even when
         // the global budget cannot cover every pool. Brief oversubscription is
         // preferable to body Senders queueing past the browser body-stall.
         for (int i = 0; i < alloc.length; i++) {
-            if (alloc[i] < IO_POOL_FLOOR) {alloc[i] = IO_POOL_FLOOR;}
+            if (alloc[i] < ioPoolFloor()) {alloc[i] = ioPoolFloor();}
         }
         int idx = 0;
         for (ThreadPoolExecutor ex : _ioPools.values()) {
@@ -501,13 +509,62 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
     }
 
     /**
+     * The busiest pool's utilization: its active plus queued transfers divided
+     * by its present maximum, as a rate that may exceed 1.0 when the queue is
+     * backing up past the pool's ceiling.
+     *
+     * <p>The growth signal must be per-pool, not a global sum. Ten pools
+     * sharing one budget means the summed pressure divided by the budget reads
+     * low even when one pool is saturated — a tracker under load can sit at its
+     * allocation while the global ratio stays below the growth step. This
+     * returns the busiest pool's own utilization against its own maximum, so a
+     * saturated pool is visible regardless of how quiet the others are.
+     *
+     * @return the busiest pool's utilization rate, or 0.0 when no pools exist
+     * @since 0.9.71+
+     */
+    public static double getIOMaxPoolUtilization() {
+        synchronized (_ioExecutorLock) {
+            double max = 0.0d;
+            for (ThreadPoolExecutor ex : _ioPools.values()) {
+                if (ex == null || ex.isShutdown()) {continue;}
+                int cap = ex.getMaximumPoolSize();
+                if (cap <= 0) {continue;}
+                double util = (double) (ex.getActiveCount() + ex.getQueue().size()) / (double) cap;
+                if (util > max) {max = util;}
+            }
+            return max;
+        }
+    }
+
+    /**
+     * The floor for one I/O pool, proportional to the budget and pool count.
+     *
+     * <p>A fixed floor scales linearly with tunnel count and can consume the
+     * whole budget before any load-based allocation — ten pools at a floor of
+     * 8 leave 16 of 96 threads for load. The floor is a quarter of one pool's
+     * fair share, so it shrinks as pools multiply and always leaves the
+     * majority of the budget for pressure-based distribution.
+     *
+     * @return the per-pool floor, never below 2
+     * @since 0.9.71+
+     */
+    static int ioPoolFloor() {
+        synchronized (_ioExecutorLock) {
+            int pools = Math.max(1, _ioPools.size());
+            int share = Math.max(2, ioTransferThreads / (pools * 4));
+            return share;
+        }
+    }
+
+    /**
      * Set the I/O transfer pool size (called by Tuner via reflection).
      *
-     * @param val new pool size (clamped to [{@link #IO_POOL_FLOOR}, {@link #IO_THREADS_MAX}])
+     * @param val new pool size (clamped to [{@link #ioPoolFloor()}, {@link #IO_THREADS_MAX}])
      * @since 0.9.71+
      */
     public static void setIOTransferThreads(int val) {
-        ioTransferThreads = Math.max(IO_POOL_FLOOR, Math.min(IO_THREADS_MAX, val));
+        ioTransferThreads = Math.max(ioPoolFloor(), Math.min(IO_THREADS_MAX, val));
         rebalanceAllIOPools();
     }
 
@@ -1991,8 +2048,9 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
             } else if (address.isAnyLocalAddress()) { // check for 0.0.0.0 response (DNS blocking)
                 if (!hostname.equals("::") && !hostname.equals("0.0.0.0")) {
                     if (_log.shouldWarn()) {
-                        _log.warn("[HTTPServer] DNS server appears to be blocking requests to " + hostname + " " + tunnelId +
-                                  " -> Sending Error 403 \n* Client: " + peerB32);
+                        _log.warn("[HTTPServer] DNS server appears to be blocking requests -> Sending Error 403" +
+                                  "\n* Host: " + hostname + " * Tunnel: " + tunnelId +
+                                  "\n* Client: " + peerB32);
                     }
                     try {sendError(socket, ERR_FORBIDDEN);}
                     catch (IOException ioe) { /* ignored */ }
@@ -2824,11 +2882,11 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 long writeAgeMs = (nowNanos - _body.getLastWriteNanos()) / 1_000_000L;
                 String side = classifyStalledSide(readAgeMs, writeAgeMs,
                                                  _body.getBytesTransferred());
-                _log.warn("[HTTPServer] Async body stalled on the " + side +
-                          " - read idle " + readAgeMs + "ms, write idle " + writeAgeMs + "ms" +
-                          " after " + _body.getBytesTransferred() + " bytes transferred" +
-                          " (window " + stallMs + "ms), closing" +
-                          _body.getName());
+                _log.warn("[HTTPServer] Async body stalled on the " + side + " -> Closing" +
+                          "\n* Read idle: " + readAgeMs + "ms * Write idle: " + writeAgeMs +
+                          "ms * Transferred: " + _body.getBytesTransferred() + " bytes" +
+                          " * Window: " + stallMs + "ms" +
+                          "\n* Body: " + _body.getName());
             }
             closeQuietly(_browserin);
             closeQuietly(_serverin);

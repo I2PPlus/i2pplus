@@ -84,7 +84,7 @@ public class IOPoolSizingTest {
         ioTransferBudget(I2PTunnelHTTPServer.IO_THREADS_MAX);
         ioTransferBudget(1);
         assertTrue("floor must hold below the minimum",
-                   I2PTunnelHTTPServer.getIOTransferThreads() >= I2PTunnelHTTPServer.IO_POOL_FLOOR);
+                   I2PTunnelHTTPServer.getIOTransferThreads() >= I2PTunnelHTTPServer.ioPoolFloor());
     }
 
     /** Restore the process-wide budget so the value does not leak between tests. */

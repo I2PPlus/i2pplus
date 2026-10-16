@@ -52,11 +52,11 @@ public class I2PTunnelHTTPServerBodyStartTest {
     @Test
     public void testIOPoolFloorAllowsConcurrentBodies() {
         assertTrue("I/O pool floor too low for concurrent downloads: " +
-                   I2PTunnelHTTPServer.IO_POOL_FLOOR,
-                   I2PTunnelHTTPServer.IO_POOL_FLOOR >= 8);
+                   I2PTunnelHTTPServer.ioPoolFloor(),
+                   I2PTunnelHTTPServer.ioPoolFloor() >= 8);
         _pool = I2PTunnelHTTPServer.createIOExecutor(1);
         assertTrue("pool must respect raised floor",
-                   _pool.getCorePoolSize() >= I2PTunnelHTTPServer.IO_POOL_FLOOR);
+                   _pool.getCorePoolSize() >= I2PTunnelHTTPServer.ioPoolFloor());
         assertTrue("core == max for fixed pool",
                    _pool.getCorePoolSize() == _pool.getMaximumPoolSize());
     }
@@ -66,7 +66,7 @@ public class I2PTunnelHTTPServerBodyStartTest {
     public void testSetIOTransferThreadsClamp() {
         I2PTunnelHTTPServer.setIOTransferThreads(1);
         assertTrue("minimum budget too low: " + I2PTunnelHTTPServer.getIOTransferThreads(),
-                   I2PTunnelHTTPServer.getIOTransferThreads() >= I2PTunnelHTTPServer.IO_POOL_FLOOR);
+                   I2PTunnelHTTPServer.getIOTransferThreads() >= I2PTunnelHTTPServer.ioPoolFloor());
         I2PTunnelHTTPServer.setIOTransferThreads(10_000);
         assertTrue("maximum budget wrong: " + I2PTunnelHTTPServer.getIOTransferThreads(),
                    I2PTunnelHTTPServer.getIOTransferThreads() <= I2PTunnelHTTPServer.IO_THREADS_MAX);
@@ -78,7 +78,7 @@ public class I2PTunnelHTTPServerBodyStartTest {
      */
     @Test
     public void testAllocateRespectsIOPoolFloor() {
-        int floor = I2PTunnelHTTPServer.IO_POOL_FLOOR;
+        int floor = I2PTunnelHTTPServer.ioPoolFloor();
         int n = 10;
         int budget = n * floor;
         int[] desired = new int[n];
@@ -131,7 +131,7 @@ public class I2PTunnelHTTPServerBodyStartTest {
         };
         OutputStream out = new ByteArrayOutputStream();
 
-        _pool = I2PTunnelHTTPServer.createIOExecutor(I2PTunnelHTTPServer.IO_POOL_FLOOR);
+        _pool = I2PTunnelHTTPServer.createIOExecutor(I2PTunnelHTTPServer.ioPoolFloor());
         final I2PTunnelHTTPServer.Sender sender =
                 new I2PTunnelHTTPServer.Sender(out, in, "test Server -> Client", null);
 
