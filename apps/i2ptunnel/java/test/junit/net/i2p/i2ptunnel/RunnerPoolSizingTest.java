@@ -28,10 +28,16 @@ public class RunnerPoolSizingTest extends TestCase {
         assertTrue(TunnelControllerGroup.shouldElevateRunner(32, 64, 64));
     }
 
-    /** At the burst threshold but already at ceiling: no elevation. */
-    public void testAtBurstThresholdAtCeilingDoesNotElevate() {
-        assertFalse(TunnelControllerGroup.shouldElevateRunner(32, 64, 64));
-        assertFalse(TunnelControllerGroup.shouldElevateRunner(33, 65, 64));
+    /** At the burst threshold but below the ceiling: grow within the ceiling, not past it. */
+    public void testBelowCeilingDoesNotElevate() {
+        assertFalse(TunnelControllerGroup.shouldElevateRunner(32, 33, 64));
+        assertFalse(TunnelControllerGroup.shouldElevateRunner(63, 63, 64));
+    }
+
+    /** At the burst threshold with threads at or past the ceiling: elevate. */
+    public void testAtBurstThresholdAtCeilingElevates() {
+        assertTrue(TunnelControllerGroup.shouldElevateRunner(32, 64, 64));
+        assertTrue(TunnelControllerGroup.shouldElevateRunner(33, 65, 64));
     }
 
     /** Ceiling below floor: floor wins, elevation requires reaching floor. */
