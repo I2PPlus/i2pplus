@@ -48,9 +48,9 @@
   <target name="dependVersion">
     <!-- Force the dependency on the RouterVersion as depend doesn't recognize constant changes  -->
     <dependset>
-      <srcfilelist dir="." files="build/obj/net/i2p/router/RouterVersion.class"/>
-      <targetfilelist dir="." files="build/obj/net/i2p/router/Router.class"/>
-      <targetfilelist dir="." files="build/obj/net/i2p/router/StatisticsManager.class"/>
+      <srcfilelist dir="${build.dir}" files="obj/net/i2p/router/RouterVersion.class"/>
+      <targetfilelist dir="${build.dir}" files="obj/net/i2p/router/Router.class"/>
+      <targetfilelist dir="${build.dir}" files="obj/net/i2p/router/StatisticsManager.class"/>
     </dependset>
   </target>
 
@@ -439,7 +439,7 @@
         <pathelement location="${build.dir}/obj_cobertura"/>
         <pathelement location="${build.dir}/obj"/>
         <pathelement location="${core.java.build.dir}/i2p.jar"/>
-        <pathelement location="../../build/jbigi.jar"/>
+        <pathelement location="${build.root}build/jbigi.jar"/>
         <pathelement location="${with.clover}"/>
         <pathelement location="${with.cobertura}"/>
       </classpath>
@@ -494,7 +494,7 @@
         <pathelement location="${build.dir}/testobj"/>
         <pathelement location="${core.java.build.dir}/i2ptest.jar"/>
         <pathelement location="${apps.i2ptunnel.java.build.dir}/i2ptunnel.jar"/>
-        <pathelement location="../../build/jbigi.jar"/>
+        <pathelement location="${build.root}build/jbigi.jar"/>
         <pathelement location="${with.clover}"/>
         <pathelement location="${with.cobertura}"/>
       </classpath>

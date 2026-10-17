@@ -156,7 +156,7 @@
         <pathelement location="${core.java.build.dir}/i2ptest.jar"/>
         <pathelement location="${core.java.build.dir}/i2p.jar"/>
         <pathelement location="${ministreaming.java.build.dir}/mstreaming.jar"/>
-        <pathelement location="../../build/jbigi.jar"/>
+        <pathelement location="${build.root}build/jbigi.jar"/>
         <pathelement location="${with.clover}"/>
         <pathelement location="${with.cobertura}"/>
       </classpath>
