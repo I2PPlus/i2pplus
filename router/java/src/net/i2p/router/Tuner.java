@@ -2476,7 +2476,10 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             double sendEvents = getAdditionalEventCount(ctx, "stream.con.sendMessageSize");
             double rtxPerMille = getAdditionalStat5Min(ctx, "stream.rtxRatio");
             double rtxBytesPerMille = getAdditionalStat5Min(ctx, "stream.rtxRatioBytes");
-            return streamingLossRate(dupEvents, sendEvents, rtxPerMille, rtxBytesPerMille);
+            double dupMessages = getAdditionalStat5Min(ctx, "stream.con.lifetimeDupMessagesSent");
+            double messagesSent = getAdditionalStat5Min(ctx, "stream.con.lifetimeMessagesSent");
+            return streamingLossRate(dupEvents, sendEvents, dupMessages, messagesSent,
+                                     rtxPerMille, rtxBytesPerMille);
         }
 
         /**
@@ -5085,8 +5088,45 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      */
     static double streamingLossRate(double dupEvents, double sendEvents,
                                     double rtxPerMille, double rtxBytesPerMille) {
+        return streamingLossRate(dupEvents, sendEvents, Double.NaN, Double.NaN,
+                                 rtxPerMille, rtxBytesPerMille);
+    }
+
+    /**
+     * The retransmission rate, preferring the volume-weighted view.
+     * <p>The primary path counts observed events. The fallback that replaced it
+     * matters when no events were observed in the window but connections did
+     * close: the per-mille message ratio is computed per connection as
+     * {@code 1000 * dupMessagesSent / messagesSent}, so a connection that sent
+     * three messages and retransmitted a few records thousands per mille.
+     * Averaged over closings it saturates the rate at 1.0 - 100% loss - while the
+     * byte-weighted ratio for the same window reads around 2%. The aggregate
+     * counters divide the same quantities as sums rather than as an average of
+     * ratios, so a three-message connection contributes three to the denominator
+     * instead of one vote of equal weight, and the result tracks the volume that
+     * was actually carried.
+     *
+     * @param dupEvents duplicate-send events observed, or NaN
+     * @param sendEvents send events observed, or NaN
+     * @param dupMessages duplicate messages sent over the window, or NaN
+     * @param messagesSent messages sent over the window, or NaN
+     * @param rtxPerMille per-connection message retransmit ratio in per-mille
+     * @param rtxBytesPerMille byte-weighted retransmit ratio in per-mille
+     * @return retransmission rate in [0.0, 1.0], or NaN when there is no signal
+     * @since 0.9.71+
+     */
+    static double streamingLossRate(double dupEvents, double sendEvents,
+                                    double dupMessages, double messagesSent,
+                                    double rtxPerMille, double rtxBytesPerMille) {
         if (!Double.isNaN(sendEvents) && sendEvents > 0 && !Double.isNaN(dupEvents)) {
             double rate = dupEvents / sendEvents;
+            if (rate < 0.0d) return 0.0d;
+            if (rate > 1.0d) return 1.0d;
+            return rate;
+        }
+        // Volume-weighted aggregates, ahead of the per-mille ratios.
+        if (!Double.isNaN(messagesSent) && messagesSent > 0 && !Double.isNaN(dupMessages)) {
+            double rate = dupMessages / messagesSent;
             if (rate < 0.0d) return 0.0d;
             if (rate > 1.0d) return 1.0d;
             return rate;
@@ -5094,7 +5134,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         if (!Double.isNaN(rtxBytesPerMille) && rtxBytesPerMille >= 0.0d)
             return Math.min(1.0d, rtxBytesPerMille / 1000.0d);
         if (!Double.isNaN(rtxPerMille) && rtxPerMille >= 0.0d)
-            return Math.min(1.0d, rtxPerMille / 1000.0d);
+            return Math.min(1.0d, Math.min(rtxPerMille, 1000.0d) / 1000.0d);
         return Double.NaN;
     }
 
