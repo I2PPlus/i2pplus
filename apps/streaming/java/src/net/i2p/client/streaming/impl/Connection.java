@@ -3963,12 +3963,24 @@ if (!on) {
     }
 
     /**
+     * First 8 characters of the local destination's base32 hash, so a log line
+     * names which of this router's services owns the stream. "unknown" until
+     * the session has a local destination.
+     *
+     * @since 0.9.71+
+     */
+    private String localTag() {
+        Destination local = _session.getMyDestination();
+        return local != null ? local.calculateHash().toBase32().substring(0, 8) : "unknown";
+    }
+
+    /**
      * Human-readable summary of this connection.
      */
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder(256);
-        buf.append("Connection: ").append(streamIds());
+        buf.append("Connection [").append(localTag()).append("]: ").append(streamIds());
         if (_isInbound) {buf.append(" from ");}
         else {buf.append(" to ");}
         Destination remotePeer = getRemotePeer();
@@ -4457,7 +4469,7 @@ if (!on) {
                             burstCount++;
                             if (softPass) {packet.incrementSoftResends();}
                             if (_log.shouldInfo()) {
-                                _log.info(Connection.this + " resent packet " + packet);
+                                _log.info(Connection.this + " resending packet (count: " + packet.getNumSends() + ", seq " + packet.getSequenceNum() + ") " + packet.formatAsString(false));
                             }
                             if (nResends == 1) {_activeResends.incrementAndGet();}
                             sentAny = true;
@@ -4480,7 +4492,7 @@ if (!on) {
                             if (_outboundQueue.enqueue(packet)) {
                                 if (softPass) {packet.incrementSoftResends();}
                                 if (_log.shouldInfo()) {
-                                    _log.info(Connection.this + " resent packet " + packet);
+                                    _log.info(Connection.this + " resending packet (count: " + packet.getNumSends() + ", seq " + packet.getSequenceNum() + ") " + packet.formatAsString(false));
                                 }
                                 if (nResends == 1) {_activeResends.incrementAndGet();}
                                 sentAny = true;

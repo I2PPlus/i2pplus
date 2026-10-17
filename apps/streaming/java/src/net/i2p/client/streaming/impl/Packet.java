@@ -1023,7 +1023,7 @@ class Packet {
     }
 
     /**
-     * Format as a string builder for logging.
+     * Format as a string builder for logging, full form.
      * <p>Not gated on the log level: every caller builds this from inside a log
      * message that has already passed its own shouldXxx() test, so gating the
      * description on INFO meant a WARN or ERROR about a packet logged an empty
@@ -1037,11 +1037,29 @@ class Packet {
      *         be appended to a log message
      */
     protected StringBuilder formatAsString() {
+        return formatAsString(true);
+    }
+
+    /**
+     * Format as a string builder for logging.
+     *
+     * @param withContext when {@code false}, omit the facts the caller's own
+     *        message already carries - the stream-ID header and the sequence
+     *        number here, the send count and the connection pair in
+     *        {@link PacketLocal}: a caller that leads with the connection
+     *        prefix must not print them a second time
+     * @return a buffer holding the human readable form of this packet, ready to
+     *         be appended to a log message
+     * @since 0.9.71+
+     */
+    protected StringBuilder formatAsString(boolean withContext) {
         StringBuilder buf = new StringBuilder(64);
-        buf.append("[StreamID From: ").append(toId(_receiveStreamId))
-           .append(" / To: ").append(toId(_sendStreamId)).append("]");
-        if (_sequenceNum != 0 || isFlagSet(FLAG_SYNCHRONIZE)) {
-            buf.append(" [").append(_sequenceNum).append("]");
+        if (withContext) {
+            buf.append("[Stream ").append(toId(_receiveStreamId))
+               .append('/').append(toId(_sendStreamId)).append(']');
+            if (_sequenceNum != 0 || isFlagSet(FLAG_SYNCHRONIZE)) {
+                buf.append(" [").append(_sequenceNum).append(']');
+            }
         }
         toFlagString(buf);
         ByteArray payload = _payload;
@@ -1074,8 +1092,11 @@ class Packet {
         if (isFlagSet(FLAG_RESET)) {buf.append(" RESET");}
         if (isFlagSet(FLAG_ECHO)) {buf.append(" ECHO");}
         if (isFlagSet(FLAG_NO_ACK)) {buf.append(" NACK");}
-        else {buf.append(" ACK ").append(getAckThrough());}
-        if (isFlagSet(FLAG_FROM_INCLUDED)) {buf.append(" * From: ").append(_optionFrom != null ? _optionFrom.size() : 0).append(" bytes");}
+        else if (getAckThrough() > 0 || !isFlagSet(FLAG_SYNCHRONIZE)) {
+            // A SYN with ackThrough 0 has no ACK context yet - "ACK 0" is noise
+            buf.append(" ACK ").append(getAckThrough());
+        }
+        if (isFlagSet(FLAG_FROM_INCLUDED)) {buf.append(" * FROM: ").append(_optionFrom != null ? _optionFrom.size() : 0).append(" bytes");}
         if (_nacks != null && debug) {
             buf.append(" NACK");
             for (int i = 0; i < _nacks.length; i++) {buf.append(' ').append(_nacks[i]);}

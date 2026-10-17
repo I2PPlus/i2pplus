@@ -181,7 +181,7 @@ public class PacketSignatureLayoutTest {
             assertFalse("precondition: INFO logging is off", log.shouldInfo());
             String desc = p.toString();
             assertTrue("a packet is identified even with INFO off: " + desc,
-                       desc.contains("StreamID"));
+                       desc.contains("Stream "));
             assertTrue("the flags are reported: " + desc, desc.contains("CLOSE"));
             assertTrue("the signature type is reported: " + desc,
                        desc.contains(KEY_TYPE.toString()));

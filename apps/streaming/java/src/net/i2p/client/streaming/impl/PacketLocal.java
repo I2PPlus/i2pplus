@@ -383,7 +383,21 @@ class PacketLocal extends Packet implements MessageOutputStream.WriteStatus {
      */
     @Override
     public StringBuilder formatAsString() {
-        StringBuilder buf = super.formatAsString();
+        return formatAsString(true);
+    }
+
+    /**
+     * {@inheritDoc}
+     * <p>
+     * With {@code withContext} false this drops the send count and the
+     * connection pair - the caller's connection prefix already names both
+     * endpoints, and the count rides in its message.
+     *
+     * @since 0.9.71+
+     */
+    @Override
+    public StringBuilder formatAsString(boolean withContext) {
+        StringBuilder buf = super.formatAsString(withContext);
 
         final int nackCount = _nackCount.get();
         if (nackCount > 0)
@@ -395,10 +409,10 @@ class PacketLocal extends Packet implements MessageOutputStream.WriteStatus {
         }
 
         int numSends = _numSends.get();
-        if (numSends > 1)
+        if (numSends > 1 && withContext)
             buf.append(" * Sent ").append(numSends).append(" times");
 
-        if (isFlagSet(FLAG_SYNCHRONIZE |
+        if (withContext && isFlagSet(FLAG_SYNCHRONIZE |
                       FLAG_CLOSE |
                       FLAG_RESET)) {
 
