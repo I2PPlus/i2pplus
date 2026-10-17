@@ -282,6 +282,16 @@ public abstract class NetworkDatabaseFacade implements Service {
 
     /** Debug only - all user info moved to NetDbRenderer in router console */
     public void renderStatusHTML(Writer out) throws IOException {}
+
+    /**
+     * Debug overview stats: total keys, bucket count, per-bucket capacity
+     * and fullest bucket size, as {keys, buckets, capacity, fullest}.
+     * Null where the facade has no kademlia buckets.
+     *
+     * @return the stats, or null
+     * @since 0.9.71
+     */
+    public long[] getDebugStats() {return null;}
     /**
      * All known LeaseSets for display.
      *

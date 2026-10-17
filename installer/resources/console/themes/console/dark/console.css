@@ -2487,6 +2487,7 @@ a[href^="/netdb"]:hover span{color:var(--hover)}
 .debug_container:not(.buckets){columns:2 600px}
 .debug_container:empty::after{content:"None";display:inline-block;font-style:italic}
 .debug_container+h3,.debug_outboundsessions{margin-top:-1px}
+.debug_graphs{margin: 0 auto 2px;width:calc(100% - 8px);border:var(--border);box-shadow:var(--border_table);background:#000}
 .debug_outboundtarget td:last-child,.skm_key td:last-child{width:1%;white-space:nowrap}
 .debug_pubkey{max-width:300px;display:inline-block;vertical-align:bottom;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .debug_targetinfo{line-height:1.4;white-space:normal;word-break:break-all}
@@ -2494,8 +2495,8 @@ a[href^="/netdb"]:hover span{color:var(--hover)}
 .debug_version{color:#aa0;font-weight:700}
 .skm_dest,#skm_dest{letter-spacing:0;text-transform:none;font-size:80%}
 .skm_key td,.debug_outboundtarget td{background:linear-gradient(180deg,#002000,#000)}
+#bucketSet{margin:-13px 0 12px 0}
 #bucketSet code{user-select:all}
-#bucketSet{margin:0 3px -5px}
 #debugDHT,#debugStats,.bucketCount,#bucketSet{font-size:110%}
 #debugDHT{margin:1px 0 10px}
 #debug h2,#debug h3{border-radius:0}
@@ -2511,6 +2512,7 @@ a[href^="/netdb"]:hover span{color:var(--hover)}
 #debug li:last-child{padding-bottom:2px}
 #debug{line-height:1.4;padding-bottom:11px}
 #debug table{margin-top:-13px}
+#debug table#updateworkers{margin-top:-1px}
 #debug #sockets{margin-bottom:0}
 #debug th,#debug td{text-align:left;padding:5px 10px}
 #debug th{padding:7px 10px}
@@ -2524,6 +2526,7 @@ a[href^="/netdb"]:hover span{color:var(--hover)}
 #debug .tx_header th::before{background:url(images/favicon.svg) no-repeat center center/20px}
 #debug .tab a{width:unset}
 #debug #tx_summary .infohelp{margin:15px auto 5px}
+#debugstats.ring-grid{margin:-1px auto 14px;width:calc(100% - 16px);border:var(--border);box-shadow:var(--border_table)}
 #portmapper th:last-child,#portmapper td:last-child,#sockets td:last-child{text-align:left}
 #portmapper td:first-child,#sockets td:first-child{font-weight:700}
 #samstats{margin:14px 0 26px!important;width:calc(100% - 8px);margin-top:12px;width:calc(100% - 12px);box-shadow:var(--border_table),0 0 0 2px #141 inset,0 0 0 3px #000 inset;background:var(--badge)}

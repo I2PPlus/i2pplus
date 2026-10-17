@@ -8,8 +8,11 @@ import java.net.InetSocketAddress;
 import java.text.Collator;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -454,6 +457,33 @@ public class PortMapper {
      * @throws IOException if the writer rejects any of the table's write calls
      * @since 0.9.20
      */
+    /**
+     * Snapshot of the service names registered for port forwarding with their
+     * bound addresses, for the consolidated debug view.
+     *
+     * @return a copy of the map of service name to address, never null
+     * @since 0.9.71
+     */
+    public Map<String, InetSocketAddress> getForwardedServices() {return new HashMap<>(_dir);}
+
+    /**
+     * Snapshot of the eepsite URLs registered with the port mapper.
+     *
+     * @return a copy of the set of URLs, never null
+     * @since 0.9.71
+     */
+    public Set<String> getEepsites() {return new HashSet<>(_eepsites);}
+
+    /**
+     * Render a bind address the way the status tables show it: a wildcard
+     * becomes the router's display address or the default host.
+     *
+     * @param ip bound address, may be a wildcard
+     * @return displayable host, never null
+     * @since 0.9.71
+     */
+    public static String displayHost(String ip) {return convertWildcard(ip, DEFAULT_HOST);}
+
     public void renderStatusHTML(Writer out) throws IOException {
         List<String> services = new ArrayList<>(_dir.keySet());
         out.write("<h2 id=debug_portmapper>Port Mapper</h2>\n" + "<table id=portmapper>\n<thead>\n<tr><th>Service</th><th>Host</th><th>Port</th></tr>\n</thead>\n");
@@ -461,7 +491,7 @@ public class PortMapper {
         for (String s : services) {
             InetSocketAddress ia = _dir.get(s);
             if (ia == null) continue;
-            out.write("<tr><td>" + s + "</td><td>" + convertWildcard(ia.getHostName(), DEFAULT_HOST) + "</td><td>" + ia.getPort() + "</td></tr>\n");
+            out.write("<tr><td>" + s + "</td><td>" + displayHost(ia.getHostName()) + "</td><td>" + ia.getPort() + "</td></tr>\n");
         }
         if (!_eepsites.isEmpty()) {
             out.write("<tr class=separator><td colspan=3></tr>\n<tr><th>Eepsite<th>URL<th>\n");

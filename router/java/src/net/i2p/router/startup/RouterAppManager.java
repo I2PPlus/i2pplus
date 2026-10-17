@@ -7,13 +7,14 @@ import java.io.Writer;
 import java.text.Collator;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import net.i2p.app.*;
+import net.i2p.data.DataHelper;
 import net.i2p.router.RouterContext;
 import net.i2p.util.Log;
 
@@ -245,51 +246,78 @@ public class RouterAppManager extends ClientAppManagerImpl {
      * @throws IOException if writing the HTML to the writer fails
      * @since 0.9.6
      */
+    /**
+     * Debug overview counts as {tracked, running, registered}.
+     *
+     * @return the counts, never null
+     * @since 0.9.71
+     */
+    public int[] getDebugCounts() {
+        int running = 0;
+        for (ClientApp app : _clients.keySet()) {
+            if (app.getState() == ClientAppState.RUNNING) {running++;}
+        }
+        return new int[] {_clients.size(), running, _registered.size()};
+    }
+
     public void renderStatusHTML(Writer out) throws IOException {
         StringBuilder buf = new StringBuilder(1024);
-        buf.append("<h2>App Manager</h2>");
-        buf.append("<h3>Tracked</h3>");
-        buf.append("<div class=debug_container>");
-        toString1(buf);
-        buf.append("</div>");
-        buf.append("<h3>Registered</h3>");
-        buf.append("<div class=debug_container>");
-        toString2(buf);
-        buf.append("</div>");
+        List<String[]> rows = buildRows(_clients, _registered);
+        buf.append("<h2>App Manager</h2>\n<table id=apps>\n<thead>\n" +
+                  "<tr><th>State</th><th>Name</th><th>Class</th><th>Args</th></tr>\n</thead>\n");
+        for (String[] row : rows) {
+            buf.append("<tr><td><span class=\"appdot ").append(dotClass(row[0])).append("\"></span>").append(row[0])
+               .append("</td><td>").append(DataHelper.escapeHTML(row[1]))
+               .append("</td><td>").append(row[2])
+               .append("</td><td>").append(DataHelper.escapeHTML(row[3])).append("</td></tr>\n");
+        }
+        buf.append("</table>\n");
         out.append(buf);
     }
 
     /**
-     * Append debug HTML of the tracked clients to the buffer.
-     * @since 0.9.6
+     * Merge the tracked and registered app maps into one row set of
+     * {state, name, class, args}, sorted by name. Tracked apps report their
+     * live state and launch args; registered apps that were never tracked
+     * report "Registered" with no args.
+     * Pure, for unit tests.
+     *
+     * @param clients tracked apps to their launch args
+     * @param registered all registered apps by name
+     * @return one row per app, never null
+     * @since 0.9.71
      */
-    private void toString1(StringBuilder buf) {
-        List<String> list = new ArrayList<>(_clients.size());
-        for (Map.Entry<ClientApp, String[]> entry : _clients.entrySet()) {
-            ClientApp key = entry.getKey();
-            String[] val = entry.getValue();
-            list.add("<b>" + key.getName() + ":</b> " + key.getClass().getName() + ' ' + Arrays.toString(val) + " <i>" + key.getState() + "</i><br>");
+    static List<String[]> buildRows(Map<ClientApp, String[]> clients, Map<String, ClientApp> registered) {
+        List<String[]> rows = new ArrayList<>(clients.size() + registered.size());
+        Set<ClientApp> tracked = new HashSet<>(clients.size());
+        for (Map.Entry<ClientApp, String[]> entry : clients.entrySet()) {
+            ClientApp app = entry.getKey();
+            tracked.add(app);
+            String args = entry.getValue() != null ? Arrays.toString(entry.getValue()) : "—";
+            rows.add(new String[] {app.getState().toString(), app.getName(), app.getClass().getName(), args});
         }
-        Collections.sort(list, Collator.getInstance());
-        for (String e : list) {
-            buf.append(e);
+        for (Map.Entry<String, ClientApp> entry : registered.entrySet()) {
+            if (tracked.contains(entry.getValue())) {continue;}
+            rows.add(new String[] {"Registered", entry.getKey(), entry.getValue().getClass().getName(), "—"});
         }
+        rows.sort(Comparator.comparing(r -> r[1], Collator.getInstance()));
+        return rows;
     }
 
     /**
-     * Append debug HTML of the registered clients to the buffer.
-     * @since 0.9.6
+     * Map an app state to its status dot colour: green running, yellow in
+     * transition, red failed, grey stopped or never started.
+     *
+     * @param state the app state name
+     * @return a shared.css .appdot colour class, never null
+     * @since 0.9.71
      */
-    private void toString2(StringBuilder buf) {
-        List<String> list = new ArrayList<>(_registered.size());
-        for (Map.Entry<String, ClientApp> entry : _registered.entrySet()) {
-            String key = entry.getKey();
-            ClientApp val = entry.getValue();
-            list.add("<b>" + key + ":</b> " + val.getClass().getName() + "]<br>");
-        }
-        Collections.sort(list, Collator.getInstance());
-        for (String e : list) {
-            buf.append(e);
+    static String dotClass(String state) {
+        switch (state) {
+            case "RUNNING": return "green";
+            case "STARTING": case "STOPPING": case "INITIALIZED": case "UNINITIALIZED": return "yellow";
+            case "START_FAILED": return "red";
+            default: return "grey";
         }
     }
 }

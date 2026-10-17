@@ -16,6 +16,7 @@ import net.i2p.util.Log;
 class InternalSocketRunner extends I2PAppThread {
     private final I2PTunnelClientBase client;
     private final int port;
+    private final String label;
     private ServerSocket ss;
     private volatile boolean open;
 
@@ -25,10 +26,21 @@ class InternalSocketRunner extends I2PAppThread {
      * @param client the tunnel client that handles each socket accepted internally
      */
     InternalSocketRunner(I2PTunnelClientBase client) {
+        this(client, client.getClass().getSimpleName());
+    }
+
+    /**
+     * Does not start the runner, caller must call start()
+     *
+     * @param client the tunnel client that handles each socket accepted internally
+     * @param label service name shown for this port on the debug page
+     */
+    InternalSocketRunner(I2PTunnelClientBase client, String label) {
         super("Internal:" + client.getLocalPort());
         setDaemon(true);
         this.client = client;
         this.port = client.getLocalPort();
+        this.label = label;
     }
 
     /**
@@ -37,7 +49,7 @@ class InternalSocketRunner extends I2PAppThread {
     @Override
     public final void run() {
         try {
-            this.ss = new InternalServerSocket(this.port);
+            this.ss = new InternalServerSocket(this.port, this.label);
             this.open = true;
             while (this.open) {
                 Socket s = this.ss.accept();

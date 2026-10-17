@@ -287,6 +287,18 @@ public class MuxedSKM extends SessionKeyManager {
         _ec.renderStatusHTML(out);
     }
 
+    /** Sums the debug stats of both key managers, null if neither tracks them. */
+    @Override
+    public long[] getDebugStats() {
+        long[] a = _elg.getDebugStats();
+        long[] b = _ec.getDebugStats();
+        if (a == null) {return b;}
+        if (b == null) {return a;}
+        long[] rv = new long[a.length];
+        for (int i = 0; i < a.length; i++) {rv[i] = a[i] + b[i];}
+        return rv;
+    }
+
     /**
      *  ElG only
      */

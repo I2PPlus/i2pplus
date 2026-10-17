@@ -304,6 +304,100 @@ public class KBucketSet<T extends SimpleDataStructure> {
     }
 
     /**
+     * Number of buckets in this set.
+     *
+     * @return the bucket count
+     * @since 0.9.71
+     */
+    public int getBucketCount() {
+        getReadLock();
+        try {
+            return _buckets.size();
+        } finally {
+            releaseReadLock();
+        }
+    }
+
+    /**
+     * The number of entries a single bucket holds before splitting.
+     *
+     * @return the per-bucket capacity
+     * @since 0.9.71
+     */
+    public int getBucketCapacity() {return BUCKET_SIZE;}
+
+    /**
+     * The entry count of the fullest bucket, to spot eviction pressure.
+     *
+     * @return zero or more
+     * @since 0.9.71
+     */
+    public int getFullestBucketSize() {
+        int max = 0;
+        getReadLock();
+        try {
+            for (KBucket<T> b : _buckets) {
+                int n = b.getKeyCount();
+                if (n > max) {max = n;}
+            }
+        } finally {
+            releaseReadLock();
+        }
+        return max;
+    }
+
+    /**
+     * The key this set is rooted on; bucket ranges are bit positions of the
+     * XOR distance from this key.
+     *
+     * @return non-null
+     * @since 0.9.71
+     */
+    public T getRoot() {return _us;}
+
+    /**
+     * The B value: the number of subranges the key space is split into at
+     * the top level.
+     *
+     * @return one or more
+     * @since 0.9.71
+     */
+    public int getBucketBValue() {return B_VALUE;}
+
+    /**
+     * Snapshot of every bucket for the debug console, one row per bucket:
+     * {index, bucket count, range begin, range end, key count, keys} as
+     * strings. Ranges are bit positions of the XOR distance from the root
+     * key. Keys are the entry keys' toString() values, comma-separated,
+     * empty if the bucket is empty.
+     *
+     * @return non-null, empty if no buckets exist
+     * @since 0.9.71
+     */
+    public List<String[]> getDebugBucketRows() {
+        getReadLock();
+        try {
+            int len = _buckets.size();
+            List<String[]> rv = new ArrayList<String[]>(len);
+            String total = String.valueOf(len);
+            for (int i = 0; i < len; i++) {
+                KBucket<T> b = _buckets.get(i);
+                StringBuilder keys = new StringBuilder(64);
+                for (T key : b.getEntries()) {
+                    if (keys.length() > 0) keys.append(',');
+                    keys.append(key.toString());
+                }
+                rv.add(new String[] {String.valueOf(i + 1), total,
+                        String.valueOf(b.getRangeBegin()), String.valueOf(b.getRangeEnd()),
+                        String.valueOf(b.getKeyCount()), keys.toString()});
+            }
+            return rv;
+        } finally {
+            releaseReadLock();
+        }
+    }
+
+    /**
      * Remove a peer from its bucket.
      *
      * @param entry the peer to remove
@@ -868,15 +962,22 @@ public class KBucketSet<T extends SimpleDataStructure> {
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder(1024);
-        buf.append("<div class=\"debug_container buckets\">").append("<div id=bucketSet><b>Bucket Set rooted on:</b> <code>").append(_us.toString()).append("</code> <br>").append("<b>Totals:</b> ").append(size()).append(" keys in ").append(_buckets.size()).append(" buckets").append(" &nbsp;<b>Max bucket size:</b> ").append(BUCKET_SIZE).append(" entries &nbsp;<b>B value:</b> ").append(B_VALUE).append("</div>\n");
+        buf.append("<div class=\"debug_container buckets\">")
+           .append("<p id=bucketSet class=infohelp><b>Bucket Set rooted on:</b> <code>")
+           .append(_us.toString()).append("</code> <br>").append("<b>Totals:</b> ")
+           .append(size()).append(" keys in ").append(_buckets.size())
+           .append(" buckets").append(" &nbsp;<b>Max bucket size:</b> ")
+           .append(BUCKET_SIZE).append(" entries &nbsp;<b>B value:</b> ")
+           .append(B_VALUE).append("</p>\n");
         getReadLock();
         try {
             int len = _buckets.size();
             for (int i = 0; i < len; i++) {
                 KBucket<T> b = _buckets.get(i);
-                buf.append("<div class=bucketCount><b>Bucket ").append(i + 1).append("/").append(len).append(":</b> ");
-                buf.append(b.toString().replace(" : [", "</div><div class=bucketsContainer><span class=bucket>").replace(", ", " </span><span class=bucket>").replace("]", "</span></div>"));
-                buf.append("<br>\n");
+                buf.append("<div class=bucketCount><b>Bucket ").append(i + 1).append("/").append(len).append(":</b> ")
+                   .append(b.toString().replace(" : [", "</div><div class=bucketsContainer><span class=bucket>")
+                   .replace(", ", " </span><span class=bucket>").replace("]", "</span></div>"))
+                   .append("<br>\n");
             }
         } finally {
             releaseReadLock();

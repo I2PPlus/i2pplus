@@ -195,4 +195,32 @@ public class KBucketSetTest extends TestCase {
         KBucketSet<Hash> maxB = new KBucketSet<Hash>(context, us, 5, 8);
         assertNotNull(maxB.getBuckets());
     }
+
+    public void testDebugStatGetters() {
+        assertTrue(set.size() > 0);
+        assertTrue(set.getBucketCount() > 0);
+        assertEquals(K, set.getBucketCapacity());
+        int fullest = set.getFullestBucketSize();
+        assertTrue(fullest > 0);
+        assertTrue(fullest <= set.getBucketCapacity());
+        // the fullest bucket holds at least as many as the average
+        assertTrue(fullest * set.getBucketCount() >= set.size() / 2);
+    }
+
+    public void testDebugBucketRows() {
+        List<String[]> rows = set.getDebugBucketRows();
+        assertEquals(set.getBucketCount(), rows.size());
+        int total = 0;
+        for (String[] r : rows) {
+            assertEquals(6, r.length);
+            int count = Integer.parseInt(r[4]);
+            total += count;
+            assertEquals(count, r[5].isEmpty() ? 0 : r[5].split(",").length);
+        }
+        assertEquals(set.size(), total);
+        // buckets tile the whole 256-bit distance range
+        assertEquals("0", rows.get(0)[2]);
+        assertEquals("255", rows.get(rows.size() - 1)[3]);
+        assertEquals(set.getRoot(), usHash);
+    }
 }

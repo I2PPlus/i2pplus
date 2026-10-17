@@ -9,14 +9,19 @@ import java.io.IOException;
 import java.io.Writer;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.text.Collator;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.*;
@@ -97,8 +102,8 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
     private static final boolean DEFAULT_ENABLE_TORRENT_UPDATES = false;
 
     /**
-     * Starts the update handlers for the router, plugins, news and the desktop GUI,
-     * then registers itself with the client app manager.
+     * Creates the manager; the update handlers for the router, plugins, news
+     * and the desktop GUI are registered and checks scheduled in startup().
      * @param ctx router context supplying the update policy, timers and logging
      * @param listener client app manager to register this with and to notify of state changes
      * @param args command line arguments, unused
@@ -1547,7 +1552,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
     /**
      * Equals on updater, type and method only
      */
-    private static class RegisteredUpdater implements Comparable<RegisteredUpdater> {
+    static class RegisteredUpdater implements Comparable<RegisteredUpdater> {
         /**
          * The Updater this registration invokes.
          */
@@ -1567,6 +1572,11 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
 
         /**
          * Record an Updater for the given type, method and priority.
+         *
+         * @param u the updater to run
+         * @param t the update type it handles
+         * @param m the fetch method it uses
+         * @param priority ordering weight, higher priorities consulted first
          */
         public RegisteredUpdater(Updater u, UpdateType t, UpdateMethod m, int priority) {
             updater = u; type = t; method = m; this.priority = priority;
@@ -1580,8 +1590,8 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
         }
 
         /**
-         * Whether h code is present.
-         * @return whether h code is present
+         * Hash code consistent with equals().
+         * @return a hash code consistent with equals()
          */
         @Override
         public int hashCode() {return updater.hashCode() ^ type.hashCode() ^ method.hashCode();}
@@ -1608,7 +1618,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
     /**
      * Equals on checker, type and method only
      */
-    private static class RegisteredChecker implements Comparable<RegisteredChecker> {
+    static class RegisteredChecker implements Comparable<RegisteredChecker> {
         /**
          * The Checker this registration invokes.
          */
@@ -1628,6 +1638,11 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
 
         /**
          * Record a Checker for the given type, method and priority.
+         *
+         * @param u the checker to consult
+         * @param t the update type it checks
+         * @param m the fetch method it reports on
+         * @param priority ordering weight, higher priorities consulted first
          */
         public RegisteredChecker(Checker u, UpdateType t, UpdateMethod m, int priority) {
             checker = u; type = t; method = m; this.priority = priority;
@@ -1641,8 +1656,8 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
         }
 
         /**
-         * Whether h code is present.
-         * @return whether h code is present
+         * Hash code consistent with equals().
+         * @return a hash code consistent with equals()
          */
         @Override
         public int hashCode() {return checker.hashCode() ^ type.hashCode() ^ method.hashCode();}
@@ -1669,7 +1684,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
     /**
      * Equals on type and ID only
      */
-    private static class UpdateItem {
+    static class UpdateItem {
         /**
          * The update type this item identifies.
          */
@@ -1681,6 +1696,9 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
 
         /**
          * Identify an installed update by type and plugin name.
+         *
+         * @param t the update type
+         * @param id the plugin name, or empty for the type itself
          */
         public UpdateItem(UpdateType t, String id) {
             type = t;
@@ -1688,8 +1706,8 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
         }
 
         /**
-         * Whether h code is present.
-         * @return whether h code is present
+         * Hash code consistent with equals().
+         * @return a hash code consistent with equals()
          */
         @Override
         public int hashCode() {return type.hashCode() ^ id.hashCode();}
@@ -1714,7 +1732,11 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
         }
     }
 
-    private static class Version implements Comparable<Version> {
+    /**
+     * The version string of an installed or downloaded update, ordered
+     * numerically or by date against other versions.
+     */
+    static class Version implements Comparable<Version> {
         /**
          * The version string, either a number or an ISO date.
          */
@@ -1722,6 +1744,8 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
 
         /**
          * Wrap the version string for comparison and display.
+         *
+         * @param version the version string, either a number or an ISO date
          */
         public Version(String version) {this.versionStr = version;}
 
@@ -1731,8 +1755,8 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
         public int compareTo(Version r) {return VersionComparator.comp(versionStr, r.versionStr);}
 
         /**
-         * Whether h code is present.
-         * @return whether h code is present
+         * Hash code consistent with equals().
+         * @return a hash code consistent with equals()
          */
         @Override
         public int hashCode() {return versionStr.hashCode();}
@@ -1756,7 +1780,11 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
         }
     }
 
-    private static class VersionAvailable extends Version {
+    /**
+     * An update that exists upstream, with its download sources per method
+     * and an optional reason it cannot currently be fetched.
+     */
+    static class VersionAvailable extends Version {
         /**
          * The oldest installed version that can update to this one.
          */
@@ -1772,6 +1800,11 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
 
         /**
          * Puts the method and sources in the map. The map may be added to later.
+         *
+         * @param version the available version string
+         * @param min the minimum compatible version, or empty for none
+         * @param method the update method these sources belong to
+         * @param updateSources where the update can be fetched from
          */
         public VersionAvailable(String version, String min, UpdateMethod method, List<URI> updateSources) {
             super(version);
@@ -1782,6 +1815,9 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
 
         /**
          * Available but can't be downloaded due to constraint.
+         *
+         * @param version the available version string
+         * @param constraint why it cannot be downloaded, shown to the user
          */
         public VersionAvailable(String version, String constraint) {
             super(version);
@@ -1797,8 +1833,8 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
         public boolean equals(Object o) {return super.equals(o) && (o instanceof VersionAvailable);}
 
         /**
-         * Whether h code is present.
-         * @return whether h code is present
+         * Hash code consistent with equals().
+         * @return a hash code consistent with equals()
          */
         @Override
         public int hashCode() {return super.hashCode();} // findbugs
@@ -1826,61 +1862,275 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
         }
     }
 
-    /** Render update manager status HTML for debug page. */
+    /**
+     * Debug overview counts as {installed, downloaded, available}, where
+     * available counts items with an update available from any source,
+     * including the internal placeholder.
+     *
+     * @return the counts, never null
+     * @since 0.9.71
+     */
+    public int[] getDebugCounts() {
+        return new int[] {_installed.size(), _downloaded != null ? _downloaded.size() : 0, _available.size()};
+    }
+
+    /**
+     * Render update manager status HTML for the debug page as one table
+     * with two sections - update items, then registered checkers,
+     * updaters and post-processors - sharing a column grid so the content
+     * aligns. Name, type and method lead, then role, and status is a
+     * colored dot with the state as a tooltip.
+     */
     @Override
     public void renderStatusHTML(Writer out) throws IOException {
-        StringBuilder buf = new StringBuilder(1024);
-        buf.append("<h2>Update Manager</h2>\n").append("<h3>Installed</h3>\n").append("<div class=debug_container>");
-        toString(buf, _installed);
-        buf.append("</div>\n").append("<h3>Available</h3>\n").append("<div class=debug_container>");
-        toString(buf, _available);
-        buf.append("</div>\n");
-        if (_downloaded != null) {
-            buf.append("<h3>Downloaded</h3>\n").append("<div class=debug_container>");
-            toString(buf, _downloaded);
-            buf.append("</div>\n");
+        Map<UpdateType, Set<UpdateMethod>> checkMethods = new HashMap<>();
+        for (RegisteredChecker rc : _registeredCheckers) {
+            checkMethods.computeIfAbsent(rc.type, k -> new HashSet<>()).add(rc.method);
         }
-        buf.append("<h3>Registered Checkers</h3>\n").append("<div class=debug_container>\n");
-        toString(buf, _registeredCheckers);
-        buf.append("</div>\n").append("<h3>Registered Updaters</h3>\n");
-        buf.append("<div class=debug_container>");
-        toString(buf, _registeredUpdaters);
-        buf.append("</div>\n").append("<h3>Registered PostProcessors</h3>");
-        buf.append("<div class=debug_container>");
-        toString(buf, _registeredPostProcessors.values());
-        buf.append("</div>\n").append("<h3>Active Checkers</h3>\n");
-        if (_activeCheckers != null) {
-            buf.append("<h3>Active Checkers</h3>\n");
-            buf.append("<div class=debug_container>");
-            toString(buf, _activeCheckers);
-            buf.append("</div>\n");
+        List<String[]> items = buildItemRows(_installed, _downloaded, _available, checkMethods);
+        Map<UpdateType, String> typeVersions = new HashMap<>();
+        for (Map.Entry<UpdateItem, Version> e : _installed.entrySet()) {
+            if (e.getKey().id.isEmpty()) {typeVersions.put(e.getKey().type, fmtVersion(e.getValue().versionStr));}
         }
-        if (_downloaders != null) {
-            buf.append("<h3>Active Updaters</h3>\n").append("<div class=debug_container>");
-            toString(buf, _downloaders);
-            buf.append("</div>\n");
-        }
-        out.append(buf);
+        List<String[]> workers = buildWorkerRows(_registeredCheckers, _registeredUpdaters, _registeredPostProcessors,
+                                                 _activeCheckers, _downloaders, typeVersions);
+        out.append("<h2>Update Manager</h2>\n");
+        out.append(buildUpdateTable(items, workers));
     }
 
-    /** Dump collection to HTML for debug page. */
-    private static void toString(StringBuilder buf, Collection<?> col) {
-        List<String> list = new ArrayList<>(col.size());
-        for (Object o : col) {list.add(o.toString());}
-        Collections.sort(list);
-        for (String e : list) {buf.append(e).append("<br>");}
+    /**
+     * Build the two-section table from the rows of buildItemRows
+     * {status, type, name, installed, available, methods} and buildWorkerRows
+     * {active, role, class, type, method, version}. Item-only and worker-only
+     * columns carry an em-dash in the other section.
+     * Package-visible for testing.
+     *
+     * @param items one row per update item
+     * @param workers one row per registered worker
+     * @return the table html, never null
+     */
+    static String buildUpdateTable(List<String[]> items, List<String[]> workers) {
+        String headers = "<tr><th>Name</th><th>Type</th><th>Method</th><th>Role</th>" +
+                         "<th>Installed/Version</th><th>Available</th><th>Status</th></tr>\n";
+        StringBuilder buf = new StringBuilder((items.size() + workers.size()) * 96 + 512);
+        buf.append("<table id=updatemgr>\n");
+        buf.append("<thead>\n<tr><th colspan=7>Update Items (").append(items.size()).append(")</th></tr>\n").
+            append(headers).append("</thead>\n<tbody>\n");
+        for (String[] row : items) {
+            buf.append("<tr><td>").append(DataHelper.escapeHTML(row[2]))
+               .append("</td><td>").append(row[1])
+               .append("</td><td>").append(DataHelper.escapeHTML(row[5]))
+               .append("</td><td>—</td><td>").append(DataHelper.escapeHTML(row[3]))
+               .append("</td><td>").append(DataHelper.escapeHTML(row[4]))
+               .append("</td><td><span class=\"appdot ").append(dotClass(row[0]))
+               .append("\" title=\"").append(row[0]).append("\"></span></td></tr>\n");
+        }
+        buf.append("</tbody>\n");
+        buf.append("<thead>\n<tr><th colspan=7>Update Workers (").append(workers.size()).append(")</th></tr>\n").
+            append(headers).append("</thead>\n<tbody>\n");
+        for (String[] row : workers) {
+            buf.append("<tr><td>").append(DataHelper.escapeHTML(row[2]))
+               .append("</td><td>").append(row[3])
+               .append("</td><td>").append(row[4])
+               .append("</td><td>").append(row[1])
+               .append("</td><td>").append(DataHelper.escapeHTML(row[5]))
+               .append("</td><td>—</td><td><span class=\"appdot ").append(dotClass(row[0]))
+               .append("\" title=\"").append(row[0]).append("\"></span></td></tr>\n");
+        }
+        buf.append("</tbody>\n</table>\n");
+        return buf.toString();
     }
 
-    /** Dump map to HTML for debug page. */
-    private static void toString(StringBuilder buf, Map<?, ?> map) {
-        List<String> list = new ArrayList<>(map.size());
-        for (Map.Entry<?, ?> entry : map.entrySet()) {
-            String key = entry.getKey().toString();
-            String val = entry.getValue().toString();
-            list.add("<b>" + key + ":</b> " + val + "<br>");
+    /**
+     * Merge the installed, downloaded and available maps into one row set of
+     * {status, type, name, installed, available, methods}, sorted by name.
+     * Methods lists the update methods registered as checkers for the
+     * item's type.
+     * An item present in more than one map yields a single row; the status
+     * reflects the most advanced stage: Downloaded, then Available, then
+     * Installed. Items with no id (non-plugin updates) get a display name
+     * derived from their type. Null maps are treated as empty.
+     * Pure, for unit tests.
+     *
+     * @param installed downloaded and installed versions by item
+     * @param downloaded downloaded but not installed versions by item
+     * @param available versions reported by checkers by item
+     * @param checkMethods update methods registered as checkers, by type
+     * @return one row per item, never null
+     * @since 0.9.71
+     */
+    static List<String[]> buildItemRows(Map<UpdateItem, Version> installed, Map<UpdateItem, Version> downloaded,
+                                        Map<UpdateItem, VersionAvailable> available,
+                                        Map<UpdateType, Set<UpdateMethod>> checkMethods) {
+        Map<UpdateItem, Version> inst = installed != null ? installed : Collections.emptyMap();
+        Map<UpdateItem, Version> dl = downloaded != null ? downloaded : Collections.emptyMap();
+        Map<UpdateItem, VersionAvailable> av = available != null ? available : Collections.emptyMap();
+        Set<UpdateItem> items = new HashSet<>(inst.size() + dl.size() + av.size());
+        items.addAll(inst.keySet());
+        items.addAll(dl.keySet());
+        items.addAll(av.keySet());
+        List<String[]> rows = new ArrayList<>(items.size());
+        for (UpdateItem item : items) {
+            String status = dl.containsKey(item) ? "Downloaded" : av.containsKey(item) ? "Available" : "Installed";
+            String instStr = inst.containsKey(item) ? fmtVersion(inst.get(item).versionStr) : "—";
+            String availStr = "—";
+            if (av.containsKey(item)) {
+                VersionAvailable va = av.get(item);
+                availStr = fmtVersion(va.versionStr);
+                if (va.constraint != null) {availStr += " (" + va.constraint + ')';}
+            }
+            Set<UpdateMethod> methods = checkMethods != null ? checkMethods.get(item.type) : null;
+            String methodStr = "—";
+            if (methods != null && !methods.isEmpty()) {
+                List<String> names = new ArrayList<>(methods.size());
+                for (UpdateMethod m : methods) {names.add(m.name());}
+                Collections.sort(names);
+                methodStr = String.join(", ", names);
+            }
+            rows.add(new String[] {status, item.type.name(), itemDisplayName(item.type, item.id), instStr, availStr, methodStr});
         }
-        Collections.sort(list);
-        for (String e : list) {buf.append(e);}
+        rows.sort(Comparator.comparing((String[] r) -> r[2], Collator.getInstance()));
+        return rows;
+    }
+
+    /**
+     * Display name for an update item. Plugin items are named by their
+     * plugin id; blocklist items combine their id with the type
+     * ("Sybil Blocklist"); geoip ids are already readable; the remaining
+     * unnamed per-type items get a readable name from their type instead
+     * of a dash.
+     * Package-visible for testing.
+     *
+     * @param type the update type
+     * @param id the item id, empty for non-plugin items
+     * @return a display name, never null
+     * @since 0.9.71
+     */
+    static String itemDisplayName(UpdateType type, String id) {
+        switch (type) {
+            case BLOCKLIST: return id.isEmpty() ? "Blocklist" : capitalize(id) + " Blocklist";
+            case GEOIP: return id.isEmpty() ? "GeoIP Database" : capitalize(id);
+            case ROUTER_SIGNED: return "Signed Update";
+            case ROUTER_SIGNED_SU3: return "Signed Update (SU3)";
+            case ROUTER_DEV_SU3: return "Development Update (SU3)";
+            case ROUTER_UNSIGNED: return "Unsigned Update";
+            case NEWS:
+            case NEWS_SU3: return "News Feed";
+            case API: return "API Update";
+            case TYPE_DUMMY: return "Internal Placeholder";
+            default: return !id.isEmpty() ? id : type.name();
+        }
+    }
+
+    /**
+     * The installed version string registered for a worker's type, or a
+     * dash when that type has no installed version.
+     *
+     * @param typeVersions installed version strings by type, may be null
+     * @param type the worker's update type
+     * @return the version or an em-dash
+     */
+    private static String versionFor(Map<UpdateType, String> typeVersions, UpdateType type) {
+        String v = typeVersions != null ? typeVersions.get(type) : null;
+        return v != null ? v : "—";
+    }
+
+    /**
+     * Upper-case the first character, leaving the rest as-is.
+     *
+     * @param s the string to capitalize, not null
+     * @return the capitalized string
+     */
+    private static String capitalize(String s) {
+        return s.isEmpty() ? s : Character.toUpperCase(s.charAt(0)) + s.substring(1);
+    }
+
+    /**
+     * Merge the registered checkers, updaters and post-processors into one
+     * row set of {active, role, class, type, method, version}, sorted by
+     * role then class. A checker is active when a running task matches its
+     * type and method; an updater when it is in a running task's remaining
+     * list; post-processors have no running state. Null collections are
+     * treated as empty.
+     * Pure, for unit tests.
+     *
+     * @param checkers registered checkers
+     * @param updaters registered updaters
+     * @param postProcessors registered post-processors by type id
+     * @param activeCheckers currently running check tasks
+     * @param downloaders currently running update tasks to their remaining updaters
+     * @param typeVersions installed version strings by type, for the worker's Installed/Version cell
+     * @return one row per registration, never null
+     * @since 0.9.71
+     */
+    static List<String[]> buildWorkerRows(Collection<RegisteredChecker> checkers, Collection<RegisteredUpdater> updaters,
+                                          Map<Integer, UpdatePostProcessor> postProcessors,
+                                          Collection<UpdateTask> activeCheckers,
+                                          Map<UpdateTask, List<RegisteredUpdater>> downloaders,
+                                          Map<UpdateType, String> typeVersions) {
+        Set<String> activeCheckerKeys = new HashSet<>();
+        if (activeCheckers != null) {
+            for (UpdateTask t : activeCheckers) {activeCheckerKeys.add(t.getType() + " " + t.getMethod());}
+        }
+        Set<RegisteredUpdater> activeUpdaters = new HashSet<>();
+        if (downloaders != null) {
+            for (List<RegisteredUpdater> l : downloaders.values()) {activeUpdaters.addAll(l);}
+        }
+        List<String[]> rows = new ArrayList<>();
+        if (checkers != null) {
+            for (RegisteredChecker r : checkers) {
+                boolean active = activeCheckerKeys.contains(r.type + " " + r.method);
+                rows.add(new String[] {active ? "Active" : "Idle", "Checker", r.checker.getClass().getSimpleName(),
+                                       r.type.name(), r.method.name(), versionFor(typeVersions, r.type)});
+            }
+        }
+        if (updaters != null) {
+            for (RegisteredUpdater r : updaters) {
+                rows.add(new String[] {activeUpdaters.contains(r) ? "Active" : "Idle", "Updater", r.updater.getClass().getSimpleName(),
+                                       r.type.name(), r.method.name(), versionFor(typeVersions, r.type)});
+            }
+        }
+        if (postProcessors != null) {
+            for (Map.Entry<Integer, UpdatePostProcessor> e : postProcessors.entrySet()) {
+                rows.add(new String[] {"—", "PostProcessor", e.getValue().getClass().getSimpleName(),
+                                       e.getKey().toString(), "—", "—"});
+            }
+        }
+        rows.sort(Comparator.comparing((String[] r) -> r[1], Collator.getInstance()).thenComparing(r -> r[2], Collator.getInstance()));
+        return rows;
+    }
+
+    /**
+     * Format a 13-digit version string as a date, otherwise as-is.
+     *
+     * @param versionStr the raw version string
+     * @return a display string, never null
+     * @since 0.9.71
+     */
+    static String fmtVersion(String versionStr) {
+        if (versionStr.length() == 13) {
+            try {return DataHelper.formatTime(Long.parseLong(versionStr));}
+            catch (NumberFormatException nfe) { /* not a date, fall through */ }
+        }
+        return versionStr;
+    }
+
+    /**
+     * Map an item or worker status to its status dot colour: green for
+     * installed or active, yellow for an available update, blue for a
+     * downloaded update awaiting install, grey otherwise.
+     *
+     * @param status the row status
+     * @return a shared.css .appdot colour class, never null
+     * @since 0.9.71
+     */
+    static String dotClass(String status) {
+        switch (status) {
+            case "Installed": case "Active": return "green";
+            case "Available": return "yellow";
+            case "Downloaded": return "blue";
+            default: return "grey";
+        }
     }
 
 }

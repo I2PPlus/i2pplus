@@ -2,10 +2,9 @@ package net.i2p.router.crypto.ratchet;
 
 import com.southernstorm.noise.protocol.HandshakeState;
 import java.io.IOException;
-import java.io.Serializable;
 import java.io.Writer;
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -15,6 +14,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.atomic.LongAdder;
 import net.i2p.crypto.EncType;
 import net.i2p.crypto.HKDF;
 import net.i2p.crypto.KeyPair;
@@ -44,6 +44,15 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
     private final HashMap<PublicKey, List<OutboundSession>> _pendingOutboundSessions;
     /** Map allowing us to go from a SessionTag to the containing RatchetTagSet */
     private final ConcurrentHashMap<RatchetSessionTag, RatchetTagSet> _inboundTagSets;
+    /**
+     * Lifetime counters for the debug page, incremented only at
+     * low-frequency events (session add/replace, inbound set completion,
+     * tag lookup miss), never per tag.
+     */
+    private final LongAdder _sessionsCreated = new LongAdder();
+    private final LongAdder _sessionsReplaced = new LongAdder();
+    private final LongAdder _inboundCompleted = new LongAdder();
+    private final LongAdder _tagMisses = new LongAdder();
     /** The router context */
     protected final RouterContext _context;
     private volatile boolean _alive;
@@ -627,6 +636,7 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
         RatchetTagSet tagSet;
         tagSet = _inboundTagSets.remove(tag);
         if (tagSet == null) {
+            _tagMisses.increment();
             return null;
         }
         boolean firstInbound;
@@ -671,6 +681,7 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
                     _log.debug("Inbound ES Tag " + key.getNonce() + " consumed: " + tag.toBase64() + "\n* " + tagSet);
             }
             if (state != null) {
+                _inboundCompleted.increment();
                 // O(tags_in_set) removal using the tagset's registered tags,
                 // instead of O(total_tags) scan of the entire _inboundTagSets map.
                 for (RatchetSessionTag t : tagSet.getRegisteredTags()) {
@@ -700,11 +711,16 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
         synchronized (_outboundSessions) {
             OutboundSession old = _outboundSessions.putIfAbsent(sess.getTarget(), sess);
             boolean rv = old == null;
+            if (rv) {
+                _sessionsCreated.increment();
+            }
             if (!rv) {
                 if (isInbound && old.getEstablishedDate() < _context.clock().now() - SESSION_REPLACE_AGE) {
                     // He restarted with same key, or something went wrong. Start over.
                     _outboundSessions.put(sess.getTarget(), sess);
                     rv = true;
+                    _sessionsCreated.increment();
+                    _sessionsReplaced.increment();
                     if (_log.shouldWarn())
                         _log.warn("Replaced old session, received new session request for " + sess.getTarget());
                 } else {
@@ -880,119 +896,260 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
     }
 
     /**
-     * Render the session status HTML.
+     * {@inheritDoc}
+     * Snapshot counts only, no key material.
+     */
+    @Override
+    public long[] getDebugStats() {
+        return new long[] {_inboundTagSets.size(), _outboundSessions.size(),
+                           _sessionsCreated.sum(), _sessionsReplaced.sum(),
+                           _inboundCompleted.sum(), _tagMisses.sum()};
+    }
+
+    /**
+     * Render the session status HTML as three tables: inbound tag
+     * sets, outbound sessions, and outbound tag sets, each with a totals
+     * line, plus a line of lifetime counters.
      */
     @Override
     public void renderStatusHTML(Writer out) throws IOException {
         StringBuilder buf = new StringBuilder(1024);
         boolean isPQ = _type != EncType.ECIES_X25519;
-
-        // inbound
-        buf.append("<h3 class=debug_inboundsessions>").append(isPQ ? "PQ ": "")
-           .append("Ratchet Inbound sessions</h3>\n<table>\n");
-        Map<PublicKey, Set<RatchetTagSet>> inboundSets = getRatchetTagSetsByPublicKey();
-        int total = 0;
-        int totalSets = 0;
         long now = _context.clock().now();
-        Comparator<RatchetTagSet> comp = new RatchetTagSetComparator();
-        List<RatchetTagSet> sets = new ArrayList<>();
-        for (Map.Entry<PublicKey, Set<RatchetTagSet>> e : inboundSets.entrySet()) {
-            PublicKey skey = e.getKey();
-            sets.clear();
-            sets.addAll(e.getValue());
-            Collections.sort(sets, comp);
-            totalSets += sets.size();
-            buf.append("<tr><td><b>From public key:</b> ")
-               .append(toString(skey))
-               .append("</td><td><b>Sets:</b> ")
-               .append(sets.size())
-               .append("</td></tr>\n<tr class=expiry>\n<td colspan=2>\n<ul>\n");
-            for (RatchetTagSet ts : sets) {
-                synchronized(ts) {
-                    int size = ts.size();
-                    total += size;
-                    buf.append("<li><b>ID: ");
-                    int id = ts.getID();
-                    if (id == RatchetTagSet.DEBUG_IB_NSR)
-                        buf.append("NSR");
-                    else if (id == RatchetTagSet.DEBUG_SINGLE_ES)
-                        buf.append("ES");
-                    else
-                        buf.append(id);
-                    buf.append('/').append(ts.getDebugID());
-                    long expires = ts.getExpiration() - now;
-                    buf.append(" expires in:</b> ").append(DataHelper.formatDuration2(expires)).append(" with ");
-                    buf.append(size).append('+').append(ts.remaining() - size).append(" tags remaining</li>\n");
-                }
-            }
-            buf.append("</ul>\n</td>\n</tr>\n");
-            out.append(buf);
-            buf.setLength(0);
-        }
-        buf.append("<tr><th colspan=2>Total inbound tags: ").append(total).append(" (")
-           .append(DataHelper.formatSize2(8 * (long)total)).append("B); sets: ").append(totalSets)
-           .append("; sessions: ")
-           .append(inboundSets.size())
-           .append("</th></tr>\n</table><h3 class=debug_outboundsessions>")
-           .append(isPQ ? "PQ " : "")
-           .append("Ratchet Outbound sessions</h3>\n<table>\n");
 
-        // outbound
-        totalSets = 0;
+        buf.append("<h3>").append(isPQ ? "PQ " : "").append("Ratchet Inbound sessions</h3>\n");
+        Map<PublicKey, Set<RatchetTagSet>> inboundSets = getRatchetTagSetsByPublicKey();
+        List<String[]> inbound = buildInboundRows(inboundSets, now);
+        if (inbound.isEmpty()) {
+            buf.append("<p class=infohelp>No inbound sessions.</p>\n");
+        } else {
+            buf.append("<table>\n<thead>\n" +
+                      "<tr><th>Peer</th><th>Set</th><th>Expires in</th><th>Tags</th><th>Remaining</th></tr>\n</thead>\n");
+            for (String[] row : inbound) {
+                buf.append("<tr><td>").append(row[0]).append("</td><td>").append(row[1])
+                   .append("</td><td>").append(row[2]).append("</td><td>").append(row[3])
+                   .append("</td><td>").append(row[4]).append("</td></tr>\n");
+            }
+            buf.append("</table>\n");
+        }
+
+        buf.append("<h3>").append(isPQ ? "PQ " : "").append("Ratchet Outbound sessions</h3>\n");
         Set<OutboundSession> outbound = getOutboundSessions();
-        for (OutboundSession sess : outbound) {
-            sets.clear();
-            sets.addAll(sess.getTagSets());
-            Collections.sort(sets, comp);
-            totalSets += sets.size();
-            buf.append("<tr class=debug_outboundtarget>\n<td>\n<div class=debug_targetinfo>\n<b>To public key:</b> ")
-               .append(toString(sess.getTarget()))
-               .append("<br>\n<b>Established:</b> ")
-               .append(DataHelper.formatDuration2(now - sess.getEstablishedDate()))
-               .append(" ago<br>\n<b>Last Used:</b> ")
-               .append(DataHelper.formatDuration2(now - sess.getLastUsedDate()))
-               .append(" ago<br>\n<b>Last Rcvd:</b> ")
-               .append(DataHelper.formatDuration2(now - sess.getLastReceivedDate()))
-               .append(" ago<br>\n");
-            SessionKey sk = sess.getCurrentKey();
-            if (sk != null)
-                buf.append("<b>Session key:</b> ").append(sk.toBase64()).append("/n");
-            buf.append("</div>\n</td>\n<td><b>Sets:</b> ")
-               .append(sets.size())
-               .append("</td>\n</tr>\n<tr>\n<td colspan=2>\n<ul>\n");
-            for (RatchetTagSet ts : sets) {
-                synchronized(ts) {
-                    long expires = ts.getExpiration() - now;
-                    if (expires <= 0)
-                        continue;
-                    int size = ts.remaining();
-                    buf.append("<li><b>ID: ");
-                    int id = ts.getID();
-                    if (id == RatchetTagSet.DEBUG_OB_NSR)
-                        buf.append("NSR");
-                    else
-                        buf.append(id);
-                    buf.append('/').append(ts.getDebugID());
-                    if (ts.getAcked())
-                        buf.append(" acked");
-                    buf.append(" created:</b> ").append(DataHelper.formatTime(ts.getCreated()))
-                       .append(" <b>last used:</b> ").append(DataHelper.formatTime(ts.getDate()));
-                    buf.append(" <b>expires in:</b> ").append(DataHelper.formatDuration2(expires)).append(" with ");
-                    buf.append(size).append(" tags remaining");
-                    if (ts.getNextKey() != null)
-                        buf.append(" <b>NK sent</b>");
-                }
-                buf.append("</li>\n");
+        List<String[]> obSessions = buildOutboundRows(outbound, now);
+        if (obSessions.isEmpty()) {
+            buf.append("<p class=infohelp>No outbound sessions.</p>\n");
+        } else {
+            List<String[]> obSets = buildOutboundSetRows(outbound, now);
+            buf.append("<table>\n<thead>\n" +
+                      "<tr><th>Peer</th><th>Established</th><th>Last Used</th><th>Last Rcvd</th><th>Sets</th></tr>\n</thead>\n");
+            for (String[] row : obSessions) {
+                buf.append("<tr><td>").append(row[0]).append("</td><td>").append(row[1])
+                   .append("</td><td>").append(row[2]).append("</td><td>").append(row[3])
+                   .append("</td><td>").append(row[4]).append("</td></tr>\n");
             }
-            buf.append("</ul>\n</td>\n</tr>\n");
-            out.append(buf);
-            buf.setLength(0);
-        }
-        buf.append("<tr><th colspan=2>Total sets: ").append(totalSets)
-           .append("; sessions: ").append(outbound.size())
-           .append("</th></tr>\n</table>\n");
+            buf.append("</table>\n");
 
+            buf.append("<table>\n<thead>\n" +
+                      "<tr><th>Peer</th><th>Set</th><th>Acked</th><th>Created</th><th>Last Used</th><th>Expires in</th><th>Remaining</th><th>NK sent</th></tr>\n</thead>\n");
+            for (String[] row : obSets) {
+                buf.append("<tr><td>").append(row[0]).append("</td><td>").append(row[1])
+                   .append("</td><td>").append(row[2]).append("</td><td>").append(row[3])
+                   .append("</td><td>").append(row[4]).append("</td><td>").append(row[5])
+                   .append("</td><td>").append(row[6]).append("</td><td>").append(row[7]).append("</td></tr>\n");
+            }
+            buf.append("</table>\n");
+        }
+
+        long created = _sessionsCreated.sum();
+        long replaced = _sessionsReplaced.sum();
+        long completed = _inboundCompleted.sum();
+        long misses = _tagMisses.sum();
+        if (created + replaced + completed + misses > 0) {
+            buf.append("<p class=infohelp>").append(summaryText(created, replaced, completed, misses)).append("</p>\n");
+        }
         out.append(buf);
+    }
+
+    /**
+     * Unified debug rows for the consolidated client-SKM table: one row per
+     * inbound tag set, outbound session and outbound tag set, sharing the
+     * columns {kind, peer, set, acked, created, established, last used,
+     * last received, expires in, tags, remaining, NK sent}. Cells that do
+     * not apply to a row's kind are an em-dash.
+     * Only for the debug console.
+     *
+     * @return the rows, never null, empty if no sessions
+     * @since 0.9.71
+     */
+    public List<String[]> getDebugRows() {
+        long now = _context.clock().now();
+        return unifyRows(buildInboundRows(getRatchetTagSetsByPublicKey(), now),
+                         buildOutboundRows(getOutboundSessions(), now),
+                         buildOutboundSetRows(getOutboundSessions(), now));
+    }
+
+    /**
+     * The session counters line, or null when all counters are zero.
+     * Only for the debug console.
+     *
+     * @return the summary text, or null
+     * @since 0.9.71
+     */
+    public String getDebugSummary() {
+        long created = _sessionsCreated.sum();
+        long replaced = _sessionsReplaced.sum();
+        long completed = _inboundCompleted.sum();
+        long misses = _tagMisses.sum();
+        if (created + replaced + completed + misses <= 0) {return null;}
+        return summaryText(created, replaced, completed, misses);
+    }
+
+    private static String summaryText(long created, long replaced, long completed, long misses) {
+        return "Sessions created: " + created + "; replaced: " + replaced +
+               "; inbound sessions completed: " + completed + "; inbound tag misses: " + misses;
+    }
+
+    /**
+     * Map the three per-kind row shapes of buildInboundRows,
+     * buildOutboundRows and buildOutboundSetRows into the shared
+     * 12-column layout, padding non-applicable cells with an em-dash.
+     * The session row's set count is dropped, as it is derivable from
+     * the set rows. Pure, for unit tests.
+     *
+     * @param inbound rows from buildInboundRows
+     * @param sessions rows from buildOutboundRows
+     * @param sets rows from buildOutboundSetRows
+     * @return the unified rows, in inbound, session, set order
+     * @since 0.9.71
+     */
+    static List<String[]> unifyRows(List<String[]> inbound, List<String[]> sessions, List<String[]> sets) {
+        String dash = "—";
+        List<String[]> rv = new ArrayList<>(inbound.size() + sessions.size() + sets.size());
+        for (String[] r : inbound) {
+            rv.add(new String[] {"Inbound", r[0], r[1], dash, dash, dash, dash, dash, r[2], r[3], r[4], dash});
+        }
+        for (String[] r : sessions) {
+            rv.add(new String[] {"Session", r[0], dash, dash, dash, r[1], r[2], r[3], dash, dash, dash, dash});
+        }
+        for (String[] r : sets) {
+            rv.add(new String[] {"Set", r[0], r[1], r[2], r[3], dash, r[4], dash, r[5], dash, r[6], r[7]});
+        }
+        return rv;
+    }
+
+    /**
+     * Label a peer by its full base64 public key.
+     *
+     * @param key the peer's public key, may be null
+     * @return the base64 key, or "null", never null
+     * @since 0.9.71
+     */
+    static String keyLabel(PublicKey key) {
+        return key == null ? "null" : key.toBase64();
+    }
+
+    /**
+     * Label a tag set as its id (NSR for a new-session-request set, ES for a
+     * single established-session set) followed by its debug id.
+     *
+     * @param id the tag set id, one of the RatchetTagSet DEBUG constants or a session number
+     * @param debugID the per-set debug sequence number
+     * @return a label like "NSR/12", never null
+     * @since 0.9.71
+     */
+    static String setIdLabel(int id, int debugID) {
+        String s;
+        if (id == RatchetTagSet.DEBUG_IB_NSR || id == RatchetTagSet.DEBUG_OB_NSR) {
+            s = "NSR";
+        } else if (id == RatchetTagSet.DEBUG_SINGLE_ES) {
+            s = "ES";
+        } else {
+            s = Integer.toString(id);
+        }
+        return s + '/' + debugID;
+    }
+
+    /**
+     * One row per inbound tag set of {peer, set, expires in, tags,
+     * remaining}, sorted by peer then set. The caller must have already
+     * dropped null-key and expired sets.
+     * Pure, for unit tests.
+     *
+     * @param sets inbound tag sets by peer key
+     * @param now the current time in ms
+     * @return one row per set, never null
+     * @since 0.9.71
+     */
+    static List<String[]> buildInboundRows(Map<PublicKey, Set<RatchetTagSet>> sets, long now) {
+        List<String[]> rows = new ArrayList<>();
+        for (Map.Entry<PublicKey, Set<RatchetTagSet>> e : sets.entrySet()) {
+            String peer = keyLabel(e.getKey());
+            for (RatchetTagSet ts : e.getValue()) {
+                synchronized (ts) {
+                    rows.add(new String[] {peer, setIdLabel(ts.getID(), ts.getDebugID()),
+                                           DataHelper.formatDuration2(ts.getExpiration() - now),
+                                           Integer.toString(ts.size()), Integer.toString(ts.remaining())});
+                }
+            }
+        }
+        rows.sort(Comparator.comparing((String[] r) -> r[0]).thenComparing(r -> r[1]));
+        return rows;
+    }
+
+    /**
+     * One row per outbound session of {peer, established, last used, last
+     * received, sets}, sorted by peer.
+     * Pure, for unit tests.
+     *
+     * @param sessions the outbound sessions
+     * @param now the current time in ms
+     * @return one row per session, never null
+     * @since 0.9.71
+     */
+    static List<String[]> buildOutboundRows(Collection<OutboundSession> sessions, long now) {
+        List<String[]> rows = new ArrayList<>(sessions.size());
+        for (OutboundSession sess : sessions) {
+            rows.add(new String[] {keyLabel(sess.getTarget()),
+                                   DataHelper.formatDuration2(now - sess.getEstablishedDate()) + " ago",
+                                   DataHelper.formatDuration2(now - sess.getLastUsedDate()) + " ago",
+                                   DataHelper.formatDuration2(now - sess.getLastReceivedDate()) + " ago",
+                                   Integer.toString(sess.getTagSets().size())});
+        }
+        rows.sort(Comparator.comparing(r -> r[0]));
+        return rows;
+    }
+
+    /**
+     * One row per live (not yet expired) outbound tag set of {peer, set,
+     * acked, created, last used, expires in, remaining, NK sent}, sorted by
+     * peer then set.
+     * Pure, for unit tests.
+     *
+     * @param sessions the outbound sessions
+     * @param now the current time in ms
+     * @return one row per live tag set, never null
+     * @since 0.9.71
+     */
+    static List<String[]> buildOutboundSetRows(Collection<OutboundSession> sessions, long now) {
+        List<String[]> rows = new ArrayList<>();
+        for (OutboundSession sess : sessions) {
+            String peer = keyLabel(sess.getTarget());
+            for (RatchetTagSet ts : sess.getTagSets()) {
+                synchronized (ts) {
+                    long expires = ts.getExpiration() - now;
+                    if (expires <= 0) {continue;}
+                    rows.add(new String[] {peer, setIdLabel(ts.getID(), ts.getDebugID()),
+                                           ts.getAcked() ? "yes" : "no",
+                                           DataHelper.formatTime(ts.getCreated()),
+                                           DataHelper.formatTime(ts.getDate()),
+                                           DataHelper.formatDuration2(expires),
+                                           Integer.toString(ts.remaining()),
+                                           ts.getNextKey() != null ? "yes" : "no"});
+                }
+            }
+        }
+        rows.sort(Comparator.comparing((String[] r) -> r[0]).thenComparing(r -> r[1]));
+        return rows;
     }
 
     /**
@@ -1005,20 +1162,9 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
     }
 
     /**
-     * Just for the HTML method above so we can see what's going on easier
-     * Earliest first
-     */
-    private static class RatchetTagSetComparator implements Comparator<RatchetTagSet>, Serializable {
-         /** Compare two entries for ordering */
-         public int compare(RatchetTagSet l, RatchetTagSet r) {
-             return l.getDebugID() - r.getDebugID();
-        }
-    }
-
-    /**
      * The state for a crypto session to a single public key
      */
-    private class OutboundSession {
+    class OutboundSession {
         private final PublicKey _target;
         private final HandshakeState _state;
         private ReplyCallback _NScallback;

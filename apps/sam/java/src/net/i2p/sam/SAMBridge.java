@@ -1044,15 +1044,12 @@ public class SAMBridge implements Runnable, ClientApp {
             out.write("<p><i>No SAM sessions</i></p>\n");
             return;
         }
-        out.write("<table id=samsessions>\n<thead><tr><th>Nickname</th>" +
-                  "<th>Style</th><th>Destination</th><th>Handler IP</th>" +
-                  "<th>State</th><th>Last Accessed</th></tr></thead>\n<tbody>\n");
+        List<String[]> rows = new ArrayList<String[]>(sessions.size());
         for (Map.Entry<String, SessionRecord> entry : sessions.entrySet()) {
             String nick = entry.getKey();
             SessionRecord rec = entry.getValue();
             SAMv3Handler handler = rec.getHandler();
             String dest = rec.getDest();
-            String destShort = dest.length() > 12 ? dest.substring(0, 12) + "..." : dest;
             String ip = handler != null ? handler.getClientIP() : "?";
             String style;
             if (handler != null) {
@@ -1082,23 +1079,55 @@ public class SAMBridge implements Runnable, ClientApp {
             } else {
                 state = "idle";
             }
-            long lastAccess = rec.getLastAccessed();
-            String lastAccessStr = DataHelper.formatTime(lastAccess);
-            out.write("<tr><td>");
-            out.write(DataHelper.escapeHTML(nick));
-            out.write("</td><td>");
-            out.write(style);
-            out.write("</td><td>");
-            out.write(DataHelper.escapeHTML(destShort));
-            out.write("</td><td>");
-            out.write(DataHelper.escapeHTML(ip));
-            out.write("</td><td>");
-            out.write(state);
-            out.write("</td><td>");
-            out.write(DataHelper.escapeHTML(lastAccessStr));
-            out.write("</td></tr>\n");
+            String lastAccessStr = DataHelper.formatTime(rec.getLastAccessed());
+            rows.add(new String[] {nick, style, dest, ip, state, lastAccessStr});
         }
-        out.write("</tbody>\n</table>\n");
+        out.write(buildSessionTable(rows));
+        out.write('\n');
+    }
+
+    /**
+     * Build the session table from rows of
+     * {nickname, style, destination, handler IP, state, last accessed}.
+     * The state cell carries a colored dot so the table reads at a glance.
+     * Package-visible for testing.
+     *
+     * @param rows one entry per session
+     * @return the table html, never null
+     * @since 0.9.71
+     */
+    static String buildSessionTable(List<String[]> rows) {
+        StringBuilder buf = new StringBuilder(rows.size() * 128 + 128);
+        buf.append("<table id=samsessions><thead><tr><th>Nickname</th>" +
+                   "<th>Style</th><th>Destination</th><th>Handler IP</th>" +
+                   "<th>State</th><th>Last Accessed</th></tr></thead>\n<tbody>\n");
+        for (String[] r : rows) {
+            buf.append("<tr><td>").append(DataHelper.escapeHTML(r[0])).
+                append("</td><td>").append(r[1]).
+                append("</td><td>").append(DataHelper.escapeHTML(r[2])).
+                append("</td><td>").append(DataHelper.escapeHTML(r[3])).
+                append("</td><td><span class=\"appdot ").append(stateDotClass(r[4])).
+                append("\"></span>").append(r[4]).
+                append("</td><td>").append(DataHelper.escapeHTML(r[5])).
+                append("</td></tr>\n");
+        }
+        buf.append("</tbody>\n</table>");
+        return buf.toString();
+    }
+
+    /**
+     * Dot color for a session state: control is a live session, forwarding
+     * and stolen are data paths, idle has no session yet, orphan lost its
+     * handler.
+     *
+     * @param state one of control, forwarding, stolen, idle, orphan
+     * @return the css modifier class, empty for the grey default
+     */
+    static String stateDotClass(String state) {
+        if ("control".equals(state)) {return "green";}
+        if ("forwarding".equals(state) || "stolen".equals(state)) {return "blue";}
+        if ("orphan".equals(state)) {return "red";}
+        return "";
     }
 
     /**

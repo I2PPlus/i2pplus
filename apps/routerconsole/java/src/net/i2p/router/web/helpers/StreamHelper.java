@@ -95,6 +95,41 @@ public class StreamHelper extends HelperBase {
         return r != null ? r.getLastEventCount() : 0;
     }
 
+    /**
+     * Count open streaming sockets by direction, walking the tunnel
+     * controllers the same way the stream tables do. Used by the debug
+     * overview tile.
+     *
+     * @param tcg the controller group, or null before router init
+     * @return {inbound, outbound} socket counts, or null if tcg is null
+     * @since 0.9.71
+     */
+    static int[] countStreams(TunnelControllerGroup tcg) {
+        if (tcg == null) {return null;}
+        int in = 0, out = 0;
+        List<TunnelController> controllers = tcg.getControllers();
+        if (controllers == null) {return new int[] {0, 0};}
+        for (TunnelController controller : controllers) {
+            I2PTunnel tunnel = controller.getTunnel();
+            if (tunnel == null) {continue;}
+            List<I2PTunnelTask> tasks = tunnel.getTasks();
+            if (tasks == null) {continue;}
+            for (I2PTunnelTask task : tasks) {
+                if (task == null || !task.isOpen()) {continue;}
+                I2PSocketManager mgr = task.getSocketManager();
+                if (mgr == null) {continue;}
+                Set<I2PSocket> sockets = mgr.listSockets();
+                if (sockets == null) {continue;}
+                boolean inbound = (task instanceof I2PTunnelServer);
+                for (I2PSocket sock : sockets) {
+                    if (sock == null || sock.isClosed()) {continue;}
+                    if (inbound) {in++;} else {out++;}
+                }
+            }
+        }
+        return new int[] {in, out};
+    }
+
     private void renderStreamsHTML(Writer out) throws IOException {
         TunnelControllerGroup tcg = TunnelControllerGroup.getInstance();
         if (tcg == null) {

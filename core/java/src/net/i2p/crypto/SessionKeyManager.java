@@ -245,6 +245,17 @@ public class SessionKeyManager {
     }
 
     /**
+     * Debug overview stats as
+     * {inbound tags, outbound sessions, sessions created, sessions
+     * replaced, inbound sets completed, inbound tag misses}.
+     * Null for managers that do not track them.
+     *
+     * @return the stats, or null
+     * @since 0.9.71
+     */
+    public long[] getDebugStats() {return null;}
+
+    /**
      * Fail tags for the given target, key, and tag set handle.
      *
      * @param target the destination whose tags are being considered

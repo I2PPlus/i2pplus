@@ -33,7 +33,7 @@ public class RingRenderer {
     public static final String MODE_LATENCY = "latency";
     /** Mode: dual-arc ratio (green + red arcs showing a proportion) */
     public static final String MODE_RATIO = "ratio";
-    /** Mode: neutral (green/yellow/gray, never red — for uptime, metrics that aren't inherently bad) */
+    /** Mode: neutral (green/yellow/cyan, never red — for uptime, metrics that aren't inherently bad) */
     public static final String MODE_NEUTRAL = "neutral";
     /** Mode: anomaly — color by deviation from the router's own baseline, not an absolute cap */
     public static final String MODE_ANOMALY = "anomaly";
@@ -70,7 +70,7 @@ public class RingRenderer {
      * @param score  0.0–1.0 fill level, or &lt; 0 for "collecting" (gray)
      * @param label  short label displayed below the percentage
      * @param value  value string displayed in the center
-     * @param mode   color mode (MODE_HEALTH, MODE_ACTIVITY, MODE_LATENCY)
+     * @param mode   color mode, one of the MODE_* constants
      * @return inline SVG markup
      * @since 0.9.70+
      */
@@ -84,7 +84,7 @@ public class RingRenderer {
      * @param score   0.0–1.0 fill level, or &lt; 0 for "collecting" (gray)
      * @param label   short label displayed below the percentage
      * @param value   value string displayed in the center
-     * @param mode    color mode (MODE_HEALTH, MODE_ACTIVITY, MODE_LATENCY)
+     * @param mode    color mode, one of the MODE_* constants
      * @param history recent data points for sparkline, or null to omit
      * @return inline SVG markup
      * @since 0.9.70+
@@ -99,7 +99,7 @@ public class RingRenderer {
      * @param score    0.0–1.0 fill level, or &lt; 0 for "collecting" (gray)
      * @param label    short label displayed below the percentage
      * @param value    value string displayed in the center
-     * @param mode     color mode (MODE_HEALTH, MODE_ACTIVITY, MODE_LATENCY)
+     * @param mode     color mode, one of the MODE_* constants
      * @param history  recent data points for sparkline, or null to omit
      * @param plotType PLOT_BARS or PLOT_LINE (defaults to PLOT_LINE when null)
      * @return inline SVG markup
@@ -118,7 +118,7 @@ public class RingRenderer {
      * @param score    0.0–1.0 fill level, or &lt; 0 for "collecting" (gray)
      * @param label    short label displayed below the percentage
      * @param value    value string displayed in the center
-     * @param mode     color mode (MODE_HEALTH, MODE_ACTIVITY, MODE_LATENCY)
+     * @param mode     color mode, one of the MODE_* constants
      * @param history  recent data points for sparkline, or null to omit
      * @param plotType PLOT_BARS or PLOT_LINE (defaults to PLOT_LINE when null)
      * @param forcedColor explicit CSS class ("green"/"yellow"/"red"/"gray"), or null
@@ -299,7 +299,7 @@ public class RingRenderer {
      * @param label   short label
      * @param value   value string in the center
      * @param details tooltip lines, or null/empty for no tooltip
-     * @param mode    color mode (MODE_HEALTH, MODE_ACTIVITY, MODE_LATENCY)
+     * @param mode    color mode, one of the MODE_* constants
      * @return HTML for the ring-cell div
      * @since 0.9.70+
      */
@@ -314,7 +314,7 @@ public class RingRenderer {
      * @param label   short label
      * @param value   value string in the center
      * @param details tooltip lines, or null/empty for no tooltip
-     * @param mode    color mode (MODE_HEALTH, MODE_ACTIVITY, MODE_LATENCY)
+     * @param mode    color mode, one of the MODE_* constants
      * @param history recent data points for sparkline, or null to omit
      * @return HTML for the ring-cell div
      * @since 0.9.70+
@@ -332,7 +332,7 @@ public class RingRenderer {
      * @param label   short label
      * @param value   value string in the center
      * @param details tooltip lines, or null/empty for no tooltip
-     * @param mode    color mode (MODE_HEALTH, MODE_ACTIVITY, MODE_LATENCY)
+     * @param mode    color mode, one of the MODE_* constants
      * @param history recent data points for sparkline, or null to omit
      * @param forcedColor explicit CSS class ("green"/"yellow"/"red"/"gray"), or null
      * @return HTML for the ring-cell div

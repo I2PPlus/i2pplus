@@ -9,6 +9,7 @@ package net.i2p.router.networkdb.kademlia;
 
 import java.io.IOException;
 import java.io.Writer;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
@@ -3344,15 +3345,100 @@ return false;
     public boolean isNegativeCachedForever(Hash key) {return key != null && _negativeCache.getBadDest(key) != null;}
 
     /**
-     * Render the KBucket contents as HTML. Writes nothing before startup().
+     * Render the KBucket summary and a per-bucket table.
+     * Writes nothing before startup(). The individual keys are not listed;
+     * they carry no diagnostic value and made the page unreadable.
      *
      * @param out where to write the HTML
      * @throws IOException on write errors
      */
     @Override
     public void renderStatusHTML(Writer out) throws IOException {
-        if (_kb == null) {return;}
-        out.write(_kb.toString().replace("\n", "<br>\n"));
+        KBucketSet<Hash> kb = _kb;
+        if (kb == null) {return;}
+        List<String[]> rows = kb.getDebugBucketRows();
+        StringBuilder buf = new StringBuilder(rows.size() * 64 + 256);
+        String root = kb.getRoot().toString();
+        String shown = root.length() > 12 ? root.substring(0, 8) + "…" : root;
+        buf.append("<p id=bucketSet class=infohelp><b>Bucket Set rooted on:</b> <code title=\"").append(root).
+            append("\">").append(shown).
+            append("</code> (our router hash) <br><b>Totals:</b> ").append(kb.size()).append(" keys in ").append(rows.size()).
+            append(" buckets &nbsp;<b>Max bucket size:</b> ").append(kb.getBucketCapacity()).
+            append(" entries &nbsp;<b>B value:</b> ").append(kb.getBucketBValue()).append("</p>\n");
+        buf.append(buildBucketTable(rows, kb.getBucketCapacity()));
+        buf.append('\n');
+        out.write(buf.toString());
+    }
+
+    /**
+     * Build the bucket table from the rows of
+     * {@link KBucketSet#getDebugBucketRows()}: bucket index, XOR-distance bit
+     * range, entry count as a details/summary disclosure whose expanded
+     * content is the entry hashes linked to their netdb entries, and fill as
+     * a percentage of capacity.
+     * Package-visible for testing.
+     *
+     * @param rows the bucket rows
+     * @param capacity the per-bucket capacity, greater than zero
+     * @return the table html, never null
+     */
+    static String buildBucketTable(List<String[]> rows, int capacity) {
+        StringBuilder buf = new StringBuilder(rows.size() * 128 + 128);
+        buf.append("<table id=dhtbuckets><thead><tr><th>Bucket</th><th>Key range</th><th>Entries</th><th>Fill</th></tr></thead>\n<tbody>\n");
+        int last = rows.size() - 1;
+        for (int i = 0; i <= last; i++) {
+            String[] r = rows.get(i);
+            int count = Integer.parseInt(r[4]);
+            int pct = Math.round(100.0f * count / capacity);
+            String end = i == 0 && last > 0 ? " (closest)" : i == last && last > 0 ? " (furthest)" : "";
+            buf.append("<tr><td>").append(r[0]).
+                append("</td><td title=\"XOR distance from us, bits ").append(r[2]).append('-').append(r[3]).append(end).
+                append("\">").append(r[2]).append('-').append(r[3]).
+                append("</td><td>");
+            if (count > 0) {
+                buf.append("<details><summary>").append(r[4]).append("</summary>").append(entryLinks(r[5])).append("</details>");
+            } else {
+                buf.append('0');
+            }
+            buf.append("</td><td class=bar><span class=percentBarOuter><span class=percentBarInner style=\"width:").
+                append(Math.min(100, pct)).append("%\"><span class=percentBarText>").append(pct).
+                append("%</span></span></span></td></tr>\n");
+        }
+        buf.append("</tbody></table>");
+        return buf.toString();
+    }
+
+    /**
+     * Comma-separated entry hashes as netdb lookup links, sorted for stable
+     * display, truncated to six characters with the full hash in the title.
+     *
+     * @param keys comma-separated base64 hashes, may be empty
+     * @return the chips html, or an em-dash if there are no keys
+     */
+    static String entryLinks(String keys) {
+        if (keys == null || keys.isEmpty()) return "—";
+        List<String> list = new ArrayList<String>(Arrays.asList(keys.split(",")));
+        Collections.sort(list);
+        StringBuilder buf = new StringBuilder(keys.length() + list.size() * 48);
+        for (String k : list) {
+            if (buf.length() > 0) buf.append(' ');
+            String shown = k.length() > 6 ? k.substring(0, 6) : k;
+            buf.append("<span class=routerHash><a href=\"netdb?r=").append(k).
+                append("\" title=\"").append(k).append("\">").append(shown).append("</a></span>");
+        }
+        return buf.toString();
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * Reads the live bucket set under its read lock.
+     */
+    @Override
+    public long[] getDebugStats() {
+        KBucketSet<Hash> kb = _kb;
+        if (kb == null) {return null;}
+        return new long[] {kb.size(), kb.getBucketCount(), kb.getBucketCapacity(), kb.getFullestBucketSize()};
     }
 
     /**

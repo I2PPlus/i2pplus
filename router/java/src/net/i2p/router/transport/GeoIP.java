@@ -569,6 +569,11 @@ public class GeoIP {
         if (asnFile == null) {return null;}
         com.maxmind.db.Reader rv = new com.maxmind.db.Reader(asnFile);
         if (_log.shouldDebug()) {_log.debug("Opened ASN Database, Metadata: " + rv.getMetadata());}
+        // db-ip embeds its product version (e.g. "2.13.0-27") in the metadata description
+        Map<String, String> desc = rv.getMetadata().getDescription();
+        String ver = desc != null ? desc.get("en") : null;
+        if (ver == null || ver.isEmpty()) {ver = Long.toString(asnFile.lastModified());}
+        notifyVersion(_context, "ASN", ver);
         return rv;
     }
 
@@ -1639,11 +1644,25 @@ public class GeoIP {
      */
     static void notifyVersion(I2PAppContext ctx, String subtype, long version) {
         if (version <= 0) {return;}
+        notifyVersion(ctx, subtype, Long.toString(version));
+    }
+
+    /**
+     * Tell the update manager, with a version string as-is, e.g. the
+     * product version embedded in a database's metadata.
+     *
+     * @param ctx the application context whose client app manager holds the registered update manager
+     * @param subtype the updater subtype recorded against the GEOIP update type, e.g. "ASN"
+     * @param version the version being reported; null or empty is ignored
+     * @since 0.9.71
+     */
+    static void notifyVersion(I2PAppContext ctx, String subtype, String version) {
+        if (version == null || version.isEmpty()) {return;}
         ClientAppManager cmgr = ctx.clientAppManager();
         if (cmgr != null) {
             UpdateManager umgr = (UpdateManager) cmgr.getRegisteredApp(UpdateManager.APP_NAME);
             if (umgr != null) {
-                umgr.notifyInstalled(UpdateType.GEOIP, subtype, Long.toString(version));
+                umgr.notifyInstalled(UpdateType.GEOIP, subtype, version);
             }
         }
     }

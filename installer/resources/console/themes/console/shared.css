@@ -11,6 +11,11 @@ html:not([lang=en]) #graphs label input,html:not([lang=en]) #graphs label select
 html:not([lang=en]) #graphs .nowrap{min-width:600px;font-size:90%}
 html:not([lang=en]) #graphs .nowrap b{min-width:200px}
 html:not([lang=en]) #graphs .optionlist{columns:600px auto}
+.bar .percentBarOuter,.bar .percentBarInner,.bar .percentBarText{display:inline-block}
+.bar .percentBarOuter,.bar .percentBarText{width:96px;height:14px}
+.bar .percentBarOuter{position:relative}
+.bar .percentBarInner{position:absolute;left:0;top:0}
+.debug_graphs{padding:1.5% 0}
 .leaseset .ekey,.leaseset .stype{margin-left:2px!important;float:right}
 .expanded #ffstatus,#ffconf:hover #ffstatus{opacity:0}
 .hasExpandedElement #floodfillconfig{margin-bottom:-1px;display:table!important}
@@ -21,6 +26,8 @@ html:not([lang=en]) #graphs .optionlist{columns:600px auto}
 .toggle:not(.expanded) .tIn,.toggle:not(.expanded) .tOut{min-width:40px;display:inline-block!important}
 .toggleElementsActive .tIn,.toggleElementsActive .tOut{margin:-3px 0;padding:4px 6px 4px 26px;display:inline-block;box-shadow:var(--bevel)}
 .tunnelwarn th{color:#900}
+.yes,.no{width:16px;height:16px;display:inline-block;vertical-align:middle;font-size:0;background:var(--yes) no-repeat center calc(50% - 1px)/14px}
+.no{background:var(--no) no-repeat center calc(50% - 1px)/12px}
 #advfilter,#tnlfilter{display:inline-block;position:absolute}
 #advfilter button,#tnlfilter button{margin:0 0 0 -24px;padding:5px;display:inline-block;width:24px;height:26px;min-width:0;font-size:0;border:0;box-shadow:none;background:var(--no) no-repeat center center/10px;mix-blend-mode:luminosity}
 #advfilter button:hover,#advfilter input:focus+button,#tnlfilter button:hover,#tnlfilter input:focus+button{mix-blend-mode:normal}
@@ -46,6 +53,7 @@ html:not([lang=en]) #graphs .optionlist{columns:600px auto}
 #banconfig .suboption{padding:3px 8px 4px}
 #banconfig .nowrap{margin:0 4px 0 0;min-width:160px;text-align:right}
 #banSummary ul:empty{display:none}
+#client_skms td:nth-child(2){font-family:var(--monospaced);font-size:90%}
 #compactLookup{margin:-12px auto 16px;width:50%;min-width:500px}
 #compactLookup{margin-top:15px;position:sticky !important;top:-1px;z-index:999;box-shadow:var(--border_table)}
 #compactLookup #netdblookup button,#compactLookup #netdblookup input, #compactLookup #netdblookup select{margin:0 !important;width:calc(100% - 4px);min-width:0!important;display:inline-block;vertical-align:middle}
@@ -158,6 +166,16 @@ html:not(.advmode) #tuning input[type=number]{min-width:0!important;text-align:c
 .ring .ring-pct.green{fill:#2ecc71}
 .ring .ring-pct.red{fill:#e74c3c}
 .ring .ring-pct.yellow{fill:#f39c12}
+.appdot{display:inline-block;width:9px;height:9px;border-radius:50%;background:#999;margin-right:5px;vertical-align:middle}
+.appdot.green{background:#2ecc71}
+.appdot.yellow{background:#f39c12}
+.appdot.red{background:#e74c3c}
+.appdot.blue{background:#3498db}
+a.ring-cell-link{text-decoration:none;color:inherit}
+.debug_graphs{display:flex;flex-wrap:wrap;gap:12px;margin:12px 0}
+.graph-cell{flex:1 1 calc(50% - 6px);min-width:250px;max-width:800px;text-align:center}
+.graph-cell img{width:100%;height:auto}
+.graph-label{font-weight:bold;font-size:smaller}
 .ring-grid{margin:-15px auto -2px;padding:8px 4px;width:calc(100% - 8px);display:grid;grid-template-columns:repeat(8,1fr)!important;gap:4px;text-align:center;border-radius:0 0 4px 4px}
 .ring-grid .ring{margin:8px}
 .spark-bar{opacity:.35}

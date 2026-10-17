@@ -26,7 +26,8 @@ public class SAMDebugHelper extends HelperBase {
 
     /**
      * Render the full SAM debug page content (rings + session table).
-     * @return the s a m d helper
+     *
+     * @return the rendered html, or an empty string when writing to a writer
      */
     public String getSAMDHelper() {
         try {
@@ -47,7 +48,7 @@ public class SAMDebugHelper extends HelperBase {
     private void renderSAMD(Writer out) throws IOException {
         SAMBridge bridge = getBridge();
         if (bridge == null) {
-            out.write("<p class=infohelp>");
+            out.write("<p class=infohelp id=noSAM>");
             out.write(_t("SAM bridge is not running."));
             out.write("</p>\n");
             return;

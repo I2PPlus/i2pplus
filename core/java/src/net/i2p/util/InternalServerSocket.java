@@ -9,7 +9,9 @@ import java.net.Socket;
 import java.nio.channels.ServerSocketChannel;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -32,6 +34,7 @@ public class InternalServerSocket extends ServerSocket {
             new ConcurrentHashMap<>(4);
     private final BlockingQueue<InternalSocket> _acceptQueue;
     private final Integer _port;
+    private final String _label;
     private volatile boolean _running;
 
     // private static Log _log = I2PAppContext.getGlobalContext().logManager().getLog(InternalServerSocket.class);
@@ -44,8 +47,22 @@ public class InternalServerSocket extends ServerSocket {
      * @throws IOException if the port is not positive, or another server socket already holds it
      */
     public InternalServerSocket(int port) throws IOException {
+        this(port, null);
+    }
+
+    /**
+     * Claim an internal port, naming the service that holds it so debug views
+     * can show what listens there instead of a bare port number.
+     *
+     * @param port &gt; 0
+     * @param label human-readable service name, or null for none
+     * @throws IOException if the port is not positive, or another server socket already holds it
+     * @since 0.9.71
+     */
+    public InternalServerSocket(int port, String label) throws IOException {
         if (port <= 0) throw new IOException("Bad port: " + port);
         _port = Integer.valueOf(port);
+        _label = label;
         InternalServerSocket previous = _sockets.putIfAbsent(_port, this);
         if (previous != null) throw new IOException("Internal port in use: " + port);
         _running = true;
@@ -166,6 +183,28 @@ public class InternalServerSocket extends ServerSocket {
      * @throws IOException if the writer rejects the HTML fragment
      * @since 0.9.33
      */
+    /**
+     * The service name given at construction, if any.
+     *
+     * @return the label, or null for an unlabelled socket
+     * @since 0.9.71
+     */
+    public String getLabel() {return _label;}
+
+    /**
+     * All currently claimed internal ports with their optional service labels.
+     *
+     * @return a copy of the map of port to label (null value for unlabelled sockets), never null
+     * @since 0.9.71
+     */
+    public static Map<Integer, String> getPortLabels() {
+        Map<Integer, String> rv = new HashMap<>(_sockets.size());
+        for (Map.Entry<Integer, InternalServerSocket> e : _sockets.entrySet()) {
+            rv.put(e.getKey(), e.getValue()._label);
+        }
+        return rv;
+    }
+
     public static void renderStatusHTML(Writer out) throws IOException {
         out.write("<h2 id=debug_sockets>Internal Server Sockets</h2>\n<table id=sockets>\n");
         List<Integer> ports = new ArrayList<>(_sockets.keySet());
