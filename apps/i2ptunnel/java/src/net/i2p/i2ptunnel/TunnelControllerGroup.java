@@ -2169,7 +2169,7 @@ public class TunnelControllerGroup implements ClientApp {
      * tunnel has done enough work while quiet to say the burst is over.
      *
      * <p>The rule is expressed in work, not seconds: the floor is released once the
-     * pool has completed at least {@link #elevatedMax} tasks since demand last
+     * pool has completed at least {@code elevatedMax} tasks since demand last
      * stopped. A wall-clock interval would be arbitrary for a tracker that idles for
      * a second between announce batches and for a browser that idles for a minute
      * between page loads; counting completed work is self-scaling, because the

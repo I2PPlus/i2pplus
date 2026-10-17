@@ -662,6 +662,18 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                                       ioPool.getActiveCount() + ioPool.getQueue().size());
     }
 
+    /**
+     * Hand off the response body to the I/O transfer pool, or run it inline
+     * when the pool is null or shut down.
+     *
+     * @param pool the I/O executor to submit to; null or shut down forces an inline run
+     * @param s the Sender to run; null does nothing and reports false
+     * @param desc descriptive name for error messages
+     * @return true if the body was submitted asynchronously, false if it ran inline
+     * @throws IOException part of the handoff API's signature; the body reports every
+     *                     failure through the Sender rather than throwing
+     * @since 0.9.71+
+     */
     static boolean handOffBody(ThreadPoolExecutor pool, Sender s, String desc)
             throws IOException {
         return handOffBody(pool, s, desc, null);
