@@ -1,29 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>I2P Internal Communication Package</title>
+    <title>Same-JVM router-client queues</title>
 </head>
 <body>
 <p>
-    Internal communication interfaces for router and client within
-    same JVM, using queues instead of socket-based I2CP.
-</p>
-
-<p>
-    This package provides:
-</p>
-<ul>
-<li>Direct message passing between router and client</li>
-<li>Queue-based I2CP communication</li>
-<li>In-JVM communication optimization</li>
-<li>Reduced serialization overhead</li>
-</ul>
-
-<p>
-    When a router and client are running in the same JVM, this
-    package allows them to communicate directly using queues rather than
-    serializing messages over socket streams. This provides improved
-    performance and reduced overhead compared to standard I2CP communication.
+    Internal communication between a router and a client running in the same JVM, using queues instead of socket-based I2CP (the Invisible Internet Client Protocol), to avoid the serialization and socket overhead. Not for use by apps, clients or plugins.
 </p>
 </body>
 </html>

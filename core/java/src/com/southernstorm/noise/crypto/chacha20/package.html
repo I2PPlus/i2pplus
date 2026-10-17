@@ -1,33 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Noise ChaCha20 Crypto Package</title>
+    <title>ChaCha20 stream cipher</title>
 </head>
 <body>
 <p>
-    ChaCha20 stream cipher primitive for Noise protocol framework,
-    moved from router to core in 0.9.39.
+    ChaCha20 is a fast stream cipher designed by Daniel J. Bernstein; combined with the Poly1305 MAC it forms an authenticated-encryption (AEAD) construction, which stays fast even without hardware AES support. This is a pure-Java port from the Noise for Java library, used by I2P's Noise protocol implementations for session encryption.
 </p>
 
 <p>
-    This package provides:
-</p>
-<ul>
-<li>ChaCha20 stream cipher implementation</li>
-<li>High-performance symmetric encryption</li>
-<li>Integration with Noise protocol framework</li>
-<li>Secure key scheduling and state management</li>
-</ul>
-
-<p>
-    ChaCha20 is a modern stream cipher that provides excellent
-    performance and security. It's used in I2P's Noise protocol
-    implementations for secure key exchange and encrypted transport
-    communications. Moved to core to make it available across
-    I2P components.
-
-<p>
-    Since 0.9.39.
+    See also: <a href="https://datatracker.ietf.org/doc/html/rfc8439">RFC 8439</a>.
 </p>
 </body>
 </html>

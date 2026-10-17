@@ -1,41 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>I2P Tunnel Package</title>
+    <title>Preconfigured client and server tunnels</title>
 </head>
 <body>
 <p>
-    Implementation of preconfigured tunnels for both clients and servers, with a comprehensive UI for tunnel management and configuration.
-    Includes special-purpose tunnels for IRC, SOCKS, HTTP, and standard client/server tunnels.
+    Implementation of preconfigured tunnels for clients and servers, including special-purpose tunnels for IRC, SOCKS, HTTP and streaming. The entry point is TunnelControllerGroup, started from clients.config; tunnel configuration is stored in i2ptunnel.config. The primary API consists of TunnelControllerGroup and TunnelController; other classes may not be maintained as a stable API.
 </p>
 
-<p>
-    This package provides the core tunneling infrastructure that allows external applications
-    to communicate through the I2P network. It supports various tunnel types including:
-</p>
 <ul>
-<li><strong>Client Tunnels:</strong> Allow external applications to connect to I2P destinations</li>
-<li><strong>Server Tunnels:</strong> Expose local services to the I2P network</li>
-<li><strong>HTTP Tunnels:</strong> Web proxy and server tunneling for browsers</li>
-<li><strong>SOCKS Tunnels:</strong> Generic SOCKS proxy for TCP applications</li>
-<li><strong>IRC Tunnels:</strong> Specialized tunneling for IRC clients</li>
-<li><strong>Streamr Tunnels:</strong> Bidirectional streaming tunnels</li>
+<li><strong>Client tunnels:</strong> let external applications connect out to I2P destinations</li>
+<li><strong>Server tunnels:</strong> expose local services to the I2P network</li>
+<li><strong>HTTP proxy and server tunnels:</strong> browser-friendly web access</li>
+<li><strong>SOCKS tunnels:</strong> generic SOCKS proxy for TCP applications</li>
+<li><strong>IRC tunnels:</strong> DCC and CTCP handling for IRC clients</li>
+<li><strong>StreamR tunnels:</strong> adaptive-rate streaming</li>
+<li><strong>UDP tunnels:</strong> datagram bridging for DNS and voice</li>
 </ul>
 
 <p>
-    The entry point is TunnelControllerGroup, which is started from clients.config.
-    Individual tunnel configuration is stored in i2ptunnel.config.
-    The primary API consists of TunnelControllerGroup and TunnelController.
-    Other classes may not be maintained as a stable API.
+    The web interface for creating and editing tunnels is in {@link net.i2p.i2ptunnel.web}.
 </p>
-
-<p>
-    <strong>Key Components:</strong>
-</p>
-<ul>
-<li>TunnelControllerGroup - Manages collections of tunnels</li>
-<li>TunnelController - Controls individual tunnel lifecycle</li>
-<li>Various tunnel implementation classes for different protocols</li>
-</ul>
 </body>
 </html>

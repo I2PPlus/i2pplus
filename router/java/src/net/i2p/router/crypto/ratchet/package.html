@@ -1,35 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>I2P Router Crypto Ratchet Package</title>
+    <title>Double Ratchet session encryption</title>
 </head>
 <body>
 <p>
-    Implementation of ECIES-X25519-AEAD-Ratchet cryptographic protocol
-    (I2P proposal 144), providing forward secrecy and enhanced security
-    for I2P transport communications.
+    The Double Ratchet with X25519 key agreement and ECIES hybrid encryption, used by the NTCP2 and SSU transports for session encryption. It provides forward secrecy - compromising current key material does not expose past sessions - and post-compromise security, recovering after a few message exchanges. Not for use by apps, clients or plugins.
 </p>
 
 <p>
-    This package provides:
-</p>
-<ul>
-<li>Double ratchet algorithm implementation</li>
-<li>X25519 key exchange integration</li>
-<li>AEAD (Authenticated Encryption with Associated Data)</li>
-<li>ECIES (Elliptic Curve Integrated Encryption Scheme)</li>
-<li>Key derivation and rotation</li>
-</ul>
-
-<p>
-    The ratchet protocol provides forward secrecy by regularly rotating
-    encryption keys, ensuring that compromising long-term keys does not
-    compromise past communications. This implementation follows proposal 144
-    for integrating ECIES with X25519 and AEAD.
-</p>
-
-<p>
-    Since 0.9.44. Subject to change, not a public API, not for external use.
+    See also: <a href="https://signal.org/docs/specifications/doubleratchet/">The Double Ratchet Algorithm</a>.
 </p>
 </body>
 </html>

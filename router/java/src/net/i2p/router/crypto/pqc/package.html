@@ -1,26 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>I2P Post-Quantum Cryptography Package</title>
+    <title>Post-quantum hybrid KEM</title>
 </head>
 <body>
 <p>
-Post-quantum cryptographic algorithms for I2P.
+    Post-quantum hybrid key encapsulation built on the bundled Bouncy Castle ML-KEM primitives. Hybrid schemes combine X25519 with ML-KEM so that a break of either primitive alone does not expose session keys, protecting long-term confidentiality against future quantum attacks. Not for use by apps, clients or plugins.
 </p>
+
 <p>
-This package provides implementations of post-quantum cryptographic algorithms
-designed to resist attacks from quantum computers. These algorithms are
-intended for future-proofing I2P's cryptographic infrastructure against
-advances in quantum computing.
+    See also: <a href="https://csrc.nist.gov/pubs/fips/203/final">FIPS 203 (ML-KEM)</a> &bull; <a href="https://www.bouncycastle.org/">Bouncy Castle</a>.
 </p>
-<p>
-Supported algorithms include:
-</p>
-<ul>
-<li>Lattice-based cryptography (Kyber, Dilithium)</li>
-<li>Code-based cryptography</li>
-<li>Hash-based signatures</li>
-<li>Multivariate cryptography</li>
-</ul>
 </body>
 </html>

@@ -1,60 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>I2P Router Tasks Package</title>
+    <title>Periodic maintenance jobs</title>
 </head>
 <body>
 <p>
-    Periodic maintenance tasks and background jobs for I2P router operations.
+    Periodic maintenance jobs: stats coalescing, cryptographic algorithm checks, liveliness marking, out-of-memory handling, thread dumps, the watchdog, graceful shutdown and soft restart, update installation, republishing and config reloading. Not for use by apps, clients or plugins.
 </p>
-
-<p>
-    This package contains various maintenance tasks, background jobs, and periodic operations that keep the I2P router running smoothly. These tasks handle everything from network exploration and peer management to statistics collection and system maintenance.
-</p>
-
-<p><b>Key Components:</b></p>
-<ul>
-<li>CoalesceStatsEvent - Aggregates and processes statistics</li>
-<li>CryptoChecker - Checks cryptographic algorithm availability</li>
-<li>GracefulShutdown - Coordinates clean router shutdown</li>
-<li>InstallUpdate - Handles software update installation</li>
-<li>MarkLiveliness - Periodic liveliness marker for multi-instance detection</li>
-<li>OOMListener - Handles out-of-memory conditions</li>
-<li>ReadConfigJob - Reloads router configuration</li>
-<li>Republish - Periodically publishes router info</li>
-<li>Restarter - Performs soft router restart</li>
-<li>RouterWatchdog - Monitors router health and performance</li>
-<li>ThreadDump - Generates thread dumps for diagnostics</li>
-</ul>
-
-<p><b>Main Functionality:</b></p>
-<ul>
-<li>Periodic statistics aggregation and coalescing</li>
-<li>Router health monitoring and watchdog recovery</li>
-<li>Cryptographic algorithm availability verification</li>
-<li>Configuration reloading and updates</li>
-<li>Graceful shutdown and restart coordination</li>
-<li>Software update installation</li>
-<li>Router info persistence and publication</li>
-<li>Thread dump generation for diagnostics</li>
-<li>Memory and out-of-memory condition handling</li>
-<li>Permission fixer for Windows</li>
-</ul>
-
-<p><b>Task Types:</b></p>
-<ul>
-<li>Jobs - Scheduled tasks in the router job queue</li>
-<li>Threads - Long-running background processes</li>
-<li>TimedEvents - Periodic timer-based operations</li>
-<li>One-time tasks - Single execution maintenance tasks</li>
-</ul>
-
-<p><b>Usage Notes:</b></p>
-<ul>
-<li>Internal router maintenance operations only</li>
-<li>Not part of the public API</li>
-<li>Essential for router stability and performance</li>
-<li>Coordinated through Router.java task scheduler</li>
-</ul>
 </body>
 </html>

@@ -1,53 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>I2P Transport System Package</title>
+    <title>Transport framework and bandwidth throttling</title>
 </head>
 <body>
 <p>
-    Transport layer implementations and management for I2P network communication.
+    Transport framework: the transport lifecycle and pool management, connection handling and bandwidth throttling for the transports (NTCP2 over TCP, SSU over UDP) that carry I2P messages between routers, plus NAT traversal via UPnP and GeoIP country lookups. Not for use by apps, clients or plugins.
 </p>
-
-<p>
-    This package provides the transport system that enables I2P to communicate over various underlying network protocols. The transport layer sits below the I2P routing layer and above the network stack, providing abstraction and management of different communication methods.
-</p>
-
-<p><b>Key Components:</b></p>
-<ul>
-<li>TransportManager - Coordinates all transport protocols</li>
-<li>Transport - Base interface for transport implementations</li>
-<li>CommSystemFacadeImpl - High-level communication system implementation</li>
-<li>TransportImpl - Base implementation for transports</li>
-<li>TransportEventListener - Handles transport events</li>
-<li>TransportBid - Transport selection bid mechanism</li>
-<li>FIFOBandwidthLimiter - Per-connection bandwidth management</li>
-</ul>
-
-<p><b>Supported Transport Types:</b></p>
-<ul>
-<li>NTCP2 - New TCP transport with improved security and performance</li>
-<li>SSU - Secure UDP transport for firewall traversal</li>
-<li>Custom transports - Extensible framework for new protocols</li>
-</ul>
-
-<p><b>Main Functionality:</b></p>
-<ul>
-<li>Transport protocol management and coordination</li>
-<li>Connection establishment and maintenance</li>
-<li>Message delivery over various protocols</li>
-<li>Transport selection and failover</li>
-<li>Bandwidth management and throttling</li>
-<li>Connection monitoring and statistics</li>
-<li>Transport-specific encryption and authentication</li>
-<li>NAT traversal and firewall compatibility</li>
-</ul>
-
-<p><b>Usage Notes:</b></p>
-<ul>
-<li>Provides abstraction over underlying network protocols</li>
-<li>Supports multiple simultaneous transports</li>
-<li>Essential for network connectivity and peer communication</li>
-<li>Integrates with tunnel and routing systems</li>
-</ul>
 </body>
 </html>

@@ -1,36 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>I2P Time Synchronization Package</title>
+    <title>Time synchronization interface</title>
 </head>
 <body>
 <p>
-    Time synchronization utilities and interfaces for I2P applications.
+    Time synchronization interface (Timestamper) and the build timestamp. The router's implementation, including the NTP client, is in {@link net.i2p.router.time}.
 </p>
-
-<p>
-    This package provides the core time synchronization functionality needed by I2P applications
-    to maintain accurate clocks and coordinate timing across the distributed network.
-    The full router-specific implementation is now in net.i2p.router.time, while this package
-    contains the essential interfaces and utilities that are available to all I2P applications.
-</p>
-
-<p>
-    <strong>Key Components:</strong>
-</p>
-<ul>
-<li><strong>Time Synchronization:</strong> Interfaces for coordinating time with network peers</li>
-<li><strong>Clock Skew Management:</strong> Handling of time differences between routers</li>
-<li><strong>NTP Integration:</strong> Network Time Protocol support for accurate timekeeping</li>
-</ul>
-
-<p>
-    <strong>Usage Notes:</strong>
-</p>
-<ul>
-<li>Applications should use the interfaces in this package for time-related operations</li>
-<li>Router-specific time synchronization implementation is in net.i2p.router.time</li>
-<li>Proper time synchronization is critical for I2P's security and performance</li>
-</ul>
 </body>
 </html>

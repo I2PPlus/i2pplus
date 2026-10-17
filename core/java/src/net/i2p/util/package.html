@@ -1,23 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>I2P Core Utilities Package</title>
+    <title>General utility classes</title>
 </head>
 <body>
 <p>
-Core utility classes and helper functions used throughout the I2P router and applications.
+    General utility classes shared across the core libraries and the router:
 </p>
-<p>
-This package provides essential functionality including:
-</p>
+
 <ul>
-<li>String manipulation and formatting utilities</li>
-<li>Collection helpers and data structures</li>
-<li>File I/O and stream utilities</li>
-<li>Mathematical and conversion functions</li>
-<li>Time and date handling</li>
+<li>Logging (Log, LogManager, LogWriter outputs)</li>
+<li>HTTP fetches through the proxy (EepGet)</li>
+<li>String and encoding helpers (see also {@link net.i2p.data.DataHelper})</li>
+<li>Collection and map helpers</li>
+<li>File and I/O helpers</li>
+<li>Thread and executor helpers</li>
 <li>Network address utilities</li>
-<li>Concurrency and synchronization helpers</li>
+<li>Random sources (RandomSource, FortunaRandomSource)</li>
+<li>Native BigInteger support via the jbigi library</li>
+<li>System version and memory checks</li>
 </ul>
+
+<p>
+    Classes here may be changed or moved without notice.
+</p>
 </body>
 </html>

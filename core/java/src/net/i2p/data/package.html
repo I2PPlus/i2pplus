@@ -1,29 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>I2P Data Structures Package</title>
+    <title>Core data structures</title>
 </head>
 <body>
 <p>
-    These classes define the common data structures used by the various I2P protocols.
+    Common data structures used by the I2P protocols: Destination, LeaseSet, PublicKey, Signature, Certificate and their friends. All implement the Data interface for serialization to and from the network wire format.
 </p>
-
 <p>
-    This package contains the fundamental data structures that form the backbone of I2P's communication protocols, including:
-</p>
-
-<ul>
-<li><strong>Destination:</strong> Complete I2P destination containing public keys and signing information</li>
-<li><strong>LeaseSet:</strong> Routing information for establishing tunnels to destinations</li>
-<li><strong>RouterInfo:</strong> Router identification and network contact information</li>
-<li><strong>TunnelId:</strong> Unique identifiers for tunnel segments</li>
-<li><strong>SessionKey:</strong> Encryption keys for secure communication</li>
-<li><strong>Signature:</strong> Digital signatures for authentication and integrity</li>
-<li><strong>Certificate:</strong> Certificate structures for router identification and capabilities</li>
-</ul>
-
-<p>
-    All data structures implement proper serialization and deserialization for network transmission, with built-in validation and type safety. These classes are designed to be immutable where possible and provide efficient memory usage for high-throughput routing operations.
+    Router-specific structures (RouterInfo, RouterIdentity, RouterAddress) are in {@link net.i2p.data.router}; the I2CP wire messages are in {@link net.i2p.data.i2cp}.
 </p>
 </body>
 </html>

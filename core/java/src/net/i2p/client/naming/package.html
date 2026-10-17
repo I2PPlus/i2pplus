@@ -1,29 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>I2P Naming Service Package</title>
+    <title>Naming service interface</title>
 </head>
 <body>
 <p>
-    Naming service for resolving human-readable names to I2P destinations,
-    providing a standard interface without JNDI complexity.
+    Naming service for resolving human-readable names (such as ident.i2p) into I2P destinations, providing a standard interface without JNDI complexity, with:
 </p>
 
-<p>
-    This package provides:
-</p>
 <ul>
 <li>Hostname to Destination resolution</li>
-<li>Configurable naming service implementations</li>
-<li>Hosts.txt file support</li>
+<li>hosts.txt file support</li>
+<li>Subscription-based updates</li>
 <li>Caching of resolved names</li>
-<li>Subscription-based address book updates</li>
 </ul>
 
 <p>
-    The default implementation uses a simple hosts.txt driven system, but this
-    can be overridden by specifying the "i2p.naming.impl" environment
-    property to point to a custom naming service implementation.
+    The implementation is selected by the i2p.naming.impl property: {@link net.i2p.router.naming.BlockfileNamingService} in the router, {@link net.i2p.client.naming.HostsTxtNamingService} for standalone clients.
 </p>
 </body>
 </html>

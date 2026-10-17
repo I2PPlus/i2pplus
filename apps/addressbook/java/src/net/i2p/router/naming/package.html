@@ -1,28 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>I2P Router Naming Package</title>
+    <title>Blockfile naming service</title>
 </head>
 <body>
 <p>
-    The default naming service implementation for the I2P router, using the
-    BlockfileNamingService based on the Metanotion BlockFile Database.
-</p>
-
-<p>
-    This package provides:
-</p>
-<ul>
-<li>Host name to I2P destination resolution</li>
-<li>Local hostname database management</li>
-<li>Subscription-based host list updates</li>
-<li>Integration with the address book application</li>
-<li>Efficient lookup operations</li>
-</ul>
-
-<p>
-    The BlockfileNamingService is the default NamingService, providing
-    persistent storage and fast lookups for hostnames within the I2P network.
+    The router's default naming service, BlockfileNamingService, backed by the Metanotion BlockFile database ({@link net.metanotion}) in hostsdb.dat. Resolves hosts.txt and subscription-supplied names to destinations. Registered with the router by the addressbook webapp.
 </p>
 </body>
 </html>

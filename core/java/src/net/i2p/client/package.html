@@ -1,15 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>I2P Client SDK Package</title>
+    <title>I2P client SDK interfaces</title>
 </head>
 <body>
 <p>
     Interfaces and factories for the base I2P SDK used to develop applications that communicate through I2P.
-</p>
-
-<p>
-    Implementation moved to net.i2p.client.impl in 0.9.21.
 </p>
 
 <p>
@@ -23,11 +19,11 @@
 <ul>
     <li>{@link net.i2p.client.datagram} - for applications that want their messages to be both authenticated and repliable</li>
     <li>{@link net.i2p.client.naming} - for applications that want to resolve readable names into {@link net.i2p.data.Destination}s</li>
-    <li>net.i2p.client.streaming - for applications that want to use a streaming API to provide reliable in order message delivery (<b>note</b>: the streaming library is packaged seperate from the main SDK - in the mstreaming.jar and streaming.jar)</li>
+    <li>{@link net.i2p.client.streaming} - for applications that want to use a streaming API to provide reliable in order message delivery (<b>note</b>: the streaming library is packaged seperate from the main SDK - in the mstreaming.jar and streaming.jar)</li>
 </ul>
 
 <p>
-    The {@link net.i2p.client.I2PSession} implementation itself communicates with the I2P router by the I2CP (the client protocol).
+    The {@link net.i2p.client.I2PSession} implementation itself communicates with the I2P router over I2CP, the Invisible Internet Client Protocol.
 </p>
 </body>
 </html>

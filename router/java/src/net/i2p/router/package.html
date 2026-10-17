@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>I2P Router Package</title>
+    <title>Router application core</title>
 </head>
 <body>
 <p>
@@ -17,24 +17,18 @@
 </p>
 
 <p>
-    For applications bundling I2P router, instantiate Router and call runRouter(), or use Router.main() or RouterLaunch. Most public methods in Router are maintained as a stable I2P for those bundling router.
+    For applications bundling I2P router, instantiate Router and call runRouter(), or use Router.main() or RouterLaunch. Most public methods in Router are maintained as a stable API for those bundling router.
 </p>
 
 <p>
-    Message flow:
+    Message flow: received bytes go from the kernel through NIO readers into
+    the transport - NTCP2 (TCP) per-connection queues, or SSU (UDP) reassembly with RED
+    and CoDel queue management and a retransmission window - then up to the
+    tunnel layer and bandwidth limiter; sent messages take the reverse path
+    through fragmentation and writers back to the kernel. As a middle hop, a
+    message moves from the inbound network message pool through the inbound
+    gateway queues to the outbound endpoint and the outbound network message
+    pool.
 </p>
-
-<div style="overflow-x: auto; width: 100%;">
-<div class="flow">
-NTCP2 ────────────────────────────── SSU ──────────────────────────────────────
-kernel→NIO→Reader → <span class="ntcp2">NTCP2 PerConn PriQ→Frag</span> → Writer→NIO→Kernel
-                    ↑
-kernel→Reader→CodelQ → <span class="ssu">SSU Reasm→RED→Codel/PriQ→Frag→Win/ReTX→OMF→CodelQ</span> → Writer→Kernel
-                    ↓
-<span class="tunnel">Tunnels / Bandwidth Limiter</span> ↔──────────────┘
-
-Middle Hop: <span class="middle">InNet MsgPool → IBGW RED-Codel/Pri-FragQ → OBEP → OutNet MsgPool</span>
-</div>
-</div>
 </body>
 </html>

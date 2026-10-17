@@ -1,28 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Transport Cryptography Package</title>
+    <title>Transport session cryptography</title>
 </head>
 <body>
 <p>
-    Cryptographic operations for I2P transport protocols, including key exchange
-    algorithms, session key management, and transport-layer encryption.
-</p>
-
-<p>
-    This package provides:
-</p>
-<ul>
-<li>Diffie-Hellman key exchange for transport establishment</li>
-<li>Session key generation and management</li>
-<li>Transport-specific encryption implementations</li>
-<li>Cryptographic material for NTCP and SSU transports</li>
-<li>Key agreement protocols for peer authentication</li>
-</ul>
-
-<p>
-    Essential for establishing secure, authenticated communication channels
-    between I2P routers over various transport protocols.
+    Transport-layer key agreement: the X25519 key factory used by the NTCP2 and SSU2 session handshakes for peer authentication and session encryption. Not for use by apps, clients or plugins.
 </p>
 </body>
 </html>
