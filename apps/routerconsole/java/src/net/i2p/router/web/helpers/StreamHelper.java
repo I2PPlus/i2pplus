@@ -154,10 +154,51 @@ public class StreamHelper extends HelperBase {
     }
 
     /**
+     * Read the average event weight (duration in ms) from a rate stat,
+     * returning 0 if unavailable.
+     * @return the stat average duration
+     * @since 0.9.71
+     */
+    private double getStatAvgDuration(String name, long period) {
+        RateStat rs = _context.statManager().getRate(name);
+        if (rs == null) return 0;
+        Rate r = rs.getRate(period);
+        if (r == null) return 0;
+        long count = r.getCurrentEventCount();
+        if (count > 0)
+            return (double) r.getCurrentTotalEventTime() / count;
+        count = r.getLastEventCount();
+        return count > 0 ? (double) r.getLastTotalEventTime() / count : 0;
+    }
+
+    /**
+     * Convert a byte-count stat's average value and average duration into a
+     * bytes/sec rate. The stream lifetime byte stats record each closed
+     * connection's total bytes weighted by its lifetime, so
+     * avgValue/avgDuration is the mean throughput of the streams that closed
+     * in the window; streams that never close report nothing.
+     *
+     * @param avgBytesPerConn average lifetime bytes per closed connection
+     * @param avgLifetimeMs average closed-connection lifetime in ms
+     * @return the average rate in bytes/s, 0 when either input is missing
+     * @since 0.9.71
+     */
+    static double closedStreamRateBps(double avgBytesPerConn, double avgLifetimeMs) {
+        if (avgBytesPerConn <= 0 || avgLifetimeMs <= 0 ||
+            Double.isNaN(avgLifetimeMs) || Double.isInfinite(avgLifetimeMs))
+            return 0;
+        return avgBytesPerConn / avgLifetimeMs * 1000;
+    }
+
+    /**
      * Render the streaming health ring dashboard.
      */
     private void renderStreamStats(Writer out, int totalSockets) throws IOException {
-        double rtt = getStatAvg("stream.con.lifetimeRTT", RateConstants.ONE_MINUTE);
+        // Live RTT samples are recorded whenever a connection's RTT updates;
+        // the lifetime stat is only recorded at close, so it goes stale while
+        // long-lived connections run.
+        double rtt = getStatAvg("stream.rtt", RateConstants.ONE_MINUTE);
+        if (rtt <= 0) rtt = getStatAvg("stream.con.lifetimeRTT", RateConstants.ONE_MINUTE);
         if (rtt <= 0) rtt = getStatAvg("stream.con.initialRTT.out", RateConstants.ONE_MINUTE);
         String rttStr = rtt > 0 ? (rtt >= 1000 ? String.format("%.1fs", rtt / 1000) : (int) rtt + "ms") : "\u2014";
         double rttScore = rtt > 0 ? Math.max(0, 1.0 - rtt / 15000) : -1;
@@ -173,8 +214,12 @@ public class StreamHelper extends HelperBase {
         String connRateStr = connRate > 0 ? String.format("%.1f/s", connRate) : (connEvents1m > 0 ? "0/s" : "\u2014");
         double connScore = connRate > 0 ? Math.min(connRate / 5.0, 1.0) : -1;
 
-        double sendBps = getStatAvg("stream.con.lifetimeBytesSent", RateConstants.ONE_MINUTE);
-        double recvBps = getStatAvg("stream.con.lifetimeBytesReceived", RateConstants.ONE_MINUTE);
+        double sendBps = closedStreamRateBps(
+                getStatAvg("stream.con.lifetimeBytesSent", RateConstants.ONE_MINUTE),
+                getStatAvgDuration("stream.con.lifetimeBytesSent", RateConstants.ONE_MINUTE));
+        double recvBps = closedStreamRateBps(
+                getStatAvg("stream.con.lifetimeBytesReceived", RateConstants.ONE_MINUTE),
+                getStatAvgDuration("stream.con.lifetimeBytesReceived", RateConstants.ONE_MINUTE));
         double totalBps = sendBps + recvBps;
         String tpStr = totalBps > 0 ? formatKBps(totalBps) : "\u2014";
         double tpScore = totalBps > 0 ? Math.min(totalBps / 100000.0, 1.0) : -1;
@@ -183,16 +228,21 @@ public class StreamHelper extends HelperBase {
         if (totalSockets == 0) activeScore = -1;
 
         out.write("<div id=streamstats>");
-        out.write(RingRenderer.renderRingCell(activeScore, "Active", String.valueOf(totalSockets),
-                  new String[]{"Open streaming connections"}));
-        out.write(RingRenderer.renderRingCell(rttScore, "RTT", rttStr,
-                  new String[]{"Round-trip time (1 min avg)"}));
-        out.write(RingRenderer.renderRingCell(retransScore, "Retrans", retransStr,
-                  new String[]{"Retransmit rate (1 min avg)"}));
-        out.write(RingRenderer.renderRingCell(connScore, "Conns/s", connRateStr,
-                  new String[]{"Connection rate (1 min avg)"}));
-        out.write(RingRenderer.renderRingCell(tpScore, "Throughput", tpStr,
-                  new String[]{"Send+receive rate (1 min avg)"}));
+        out.write(RingRenderer.renderRingCell(activeScore, _t("Active"), String.valueOf(totalSockets),
+                  new String[]{_t("Open streaming connections"), _t("Full at {0}", 100)},
+                  RingRenderer.MODE_ACTIVITY));
+        out.write(RingRenderer.renderRingCell(rttScore, _t("RTT"), rttStr,
+                  new String[]{_t("Round-trip time (live samples, 1 min)")},
+                  RingRenderer.MODE_HEALTH));
+        out.write(RingRenderer.renderRingCell(retransScore, _t("Retrans"), retransStr,
+                  new String[]{_t("Share of sends needing retransmit (1 min)")},
+                  RingRenderer.MODE_HEALTH));
+        out.write(RingRenderer.renderRingCell(connScore, _t("Conns/s"), connRateStr,
+                  new String[]{_t("Created + received (1 min)"), _t("Full at {0}/s", 5)},
+                  RingRenderer.MODE_ACTIVITY));
+        out.write(RingRenderer.renderRingCell(tpScore, _t("Throughput"), tpStr,
+                  new String[]{_t("Mean rate of streams closed in the last minute")},
+                  RingRenderer.MODE_ACTIVITY));
         out.write("</div>\n");
     }
 

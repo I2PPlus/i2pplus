@@ -15,6 +15,9 @@ import net.i2p.router.transport.Transport;
 import net.i2p.router.transport.udp.UDPTransport;
 import net.i2p.router.web.HelperBase;
 import net.i2p.router.web.TuningFormHandler;
+import net.i2p.stat.Rate;
+import net.i2p.stat.RateConstants;
+import net.i2p.stat.RateStat;
 
 /**
  * Helper for the transport tuning page (tuning.jsp).
@@ -549,9 +552,9 @@ public class TuningHelper extends HelperBase {
 
     /**
      * Render an inline SVG sparkline.
-     * Diverging bar chart: center line = default value.
-     * Green bars above = value above default (tuned up).
-     * Red bars below = value below default (tuned down).
+     * Diverging bar chart: center line = default value, bars in the single
+     * tuner graph colour, above the line when tuned up and below when tuned
+     * down. Newest sample on the left.
      */
     private static String renderSparkline(int[] values, int defaultValue) {
         int n = values.length;
@@ -579,7 +582,7 @@ public class TuningHelper extends HelperBase {
 
         int halfH = ph / 2;
 
-        // diverging bars: green above center, red below
+        // diverging bars: above center when tuned up, below when tuned down
         // newest on left, oldest on right
         int barW = Math.max(1, pw / n);
         for (int i = 0; i < n; i++) {
@@ -604,6 +607,114 @@ public class TuningHelper extends HelperBase {
     }
 
     /**
+     * Maps each Tuner subsystem metric identifier (as reported by
+     * {@link Tuner.SubsystemScore#details}) to the stat that backs it and a
+     * value format, so ring tooltips can show live values. Metrics with no
+     * backing stat are absent and omitted from the tooltip - a bare
+     * identifier without a value tells the reader nothing.
+     * <p>
+     * Format is one of: "ms" (duration average), "pct" (0-100 average),
+     * "pct1000" (per-mille average), "count" (events in the last minute),
+     * "num" (plain average).
+     *
+     * @since 0.9.71
+     */
+    private static final Map<String, String[]> METRIC_STATS = new HashMap<>();
+    static {
+        // Router
+        METRIC_STATS.put("jobQueue.jobLag", new String[] {"jobQueue.jobLag", "ms"});
+        METRIC_STATS.put("readyJobs", new String[] {"jobQueue.readyJobs", "num"});
+        METRIC_STATS.put("droppedJobs", new String[] {"jobQueue.droppedJobs", "count"});
+        // Tunnel
+        METRIC_STATS.put("tunnel.buildSuccessRate", new String[] {"tunnel.buildSuccessRate", "pct"});
+        METRIC_STATS.put("buildHandler.queueSize", new String[] {"tunnel.buildHandler.queueSize", "num"});
+        METRIC_STATS.put("buildBanHit", new String[] {"tunnel.buildBanHit", "count"});
+        // Transit
+        METRIC_STATS.put("bwLimiter.queue", new String[] {"bwLimiter.participatingBandwidthQueue", "num"});
+        // Transport
+        METRIC_STATS.put("transport.sendProcessingTime", new String[] {"transport.sendProcessingTime", "ms"});
+        METRIC_STATS.put("sendMessageFailureLifetime", new String[] {"transport.sendMessageFailureLifetime", "ms"});
+        METRIC_STATS.put("sendMessageSize", new String[] {"transport.sendMessageSize", "num"});
+        METRIC_STATS.put("ntcp.sendPool.utilization", new String[] {"ntcp.sendPool.utilization", "num"});
+        METRIC_STATS.put("udp.avgRTO", new String[] {"udp.avgRTO", "ms"});
+        // NetDB
+        METRIC_STATS.put("router.knownPeers", new String[] {"router.knownPeers", "num"});
+        METRIC_STATS.put("netDb.lookupsDropped", new String[] {"netDb.lookupsDropped", "count"});
+        METRIC_STATS.put("netDb.floodThrottled", new String[] {"netDb.floodThrottled", "count"});
+        METRIC_STATS.put("netDb.ackTime", new String[] {"netDb.ackTime", "ms"});
+        // Streaming
+        METRIC_STATS.put("RTT", new String[] {"stream.rtt", "ms"});
+        METRIC_STATS.put("rtx ratio", new String[] {"stream.rtxRatio", "pct1000"});
+        METRIC_STATS.put("reset rate", new String[] {"stream.resetReceived", "count"});
+        // I2CP
+        METRIC_STATS.put("serverHandler.queueDepth", new String[] {"i2ptunnel.serverHandler.queueDepth", "num"});
+        METRIC_STATS.put("client.sendDropped", new String[] {"client.sendDropped", "count"});
+        // Peers
+        METRIC_STATS.put("peer.fastPeerCount", new String[] {"peer.fastPeerCount", "num"});
+        METRIC_STATS.put("peer.highCapPeerCount", new String[] {"peer.highCapPeerCount", "num"});
+        METRIC_STATS.put("router.unreachablePeers", new String[] {"router.unreachablePeers", "num"});
+        METRIC_STATS.put("router.activePeers", new String[] {"router.activePeers", "num"});
+        // Congestion
+        METRIC_STATS.put("udp.congestionOccurred", new String[] {"udp.congestionOccurred", "count"});
+        METRIC_STATS.put("udp.retransmitEvents", new String[] {"udp.retransmitEvents", "count"});
+        METRIC_STATS.put("udp.sendExpired", new String[] {"udp.sendExpired", "count"});
+        METRIC_STATS.put("inNetPool.dropped", new String[] {"inNetPool.dropped", "count"});
+    }
+
+    /**
+     * Format one metric value for a ring tooltip.
+     *
+     * @param format one of "ms", "pct", "pct1000", "count", "num"
+     * @param avg the 1-minute average event value
+     * @param count1m events in the last minute (current partial window preferred)
+     * @return the formatted value, or null when the metric has no data to show
+     * @since 0.9.71
+     */
+    static String formatMetricValue(String format, double avg, long count1m) {
+        switch (format) {
+            case "ms":
+                if (avg <= 0 || Double.isNaN(avg)) return null;
+                return avg >= 1000 ? String.format("%.1fs", avg / 1000) : (long) avg + "ms";
+            case "pct":
+                return (avg > 0 ? (int) avg : 0) + "%";
+            case "pct1000":
+                return (avg > 0 ? String.format("%.1f", avg / 10) : "0") + "%";
+            case "count":
+                return (count1m > 0 ? count1m : 0) + "/min";
+            default: // "num"
+                return String.valueOf(avg > 0 ? (long) avg : 0);
+        }
+    }
+
+    /**
+     * Resolve a subsystem's metric identifiers to tooltip lines carrying each
+     * stat's live value, e.g. "jobQueue.jobLag: 12ms". Metrics with no mapping
+     * or no stat are skipped; returns null when nothing resolves, so the ring
+     * simply gets no tooltip instead of an identifier list.
+     *
+     * @param metrics the metric identifiers from the subsystem score, may be null
+     * @return tooltip lines, or null if none resolve
+     * @since 0.9.71
+     */
+    private String[] metricDetails(String[] metrics) {
+        if (metrics == null || metrics.length == 0) return null;
+        List<String> lines = new ArrayList<>(metrics.length);
+        for (String m : metrics) {
+            String[] info = METRIC_STATS.get(m);
+            if (info == null) continue;
+            RateStat rs = _context.statManager().getRate(info[0]);
+            if (rs == null) continue;
+            Rate r = rs.getRate(RateConstants.ONE_MINUTE);
+            if (r == null) continue;
+            long count = r.getCurrentEventCount() > 0 ? r.getCurrentEventCount() : r.getLastEventCount();
+            String val = formatMetricValue(info[1], r.getAverageValue(), count);
+            if (val != null)
+                lines.add(info[0] + ": " + val);
+        }
+        return lines.isEmpty() ? null : lines.toArray(new String[0]);
+    }
+
+    /**
      * Render the subsystem ring chart dashboard.
      * Returns an HTML div with a grid of SVG ring charts, one per subsystem.
      * NaN-scored subsystems show a gray "collecting..." ring.
@@ -622,12 +733,13 @@ public class TuningHelper extends HelperBase {
         buf.append("<div id=tuningstats>");
 
         for (Tuner.SubsystemScore ss : scores) {
+            String[] details = metricDetails(ss.details);
             if (Double.isNaN(ss.score)) {
-                buf.append(RingRenderer.renderRingCell(-1, ss.label, "\u2014", ss.details));
+                buf.append(RingRenderer.renderRingCell(-1, ss.label, "\u2014", details));
             } else {
                 int pct = (int) (ss.score * 100);
                 String pctStr = pct + "%";
-                buf.append(RingRenderer.renderRingCell(ss.score, ss.label, pctStr, ss.details));
+                buf.append(RingRenderer.renderRingCell(ss.score, ss.label, pctStr, details));
             }
         }
 

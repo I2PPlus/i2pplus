@@ -67,19 +67,23 @@ public class SAMDebugHelper extends HelperBase {
         double sessionScore = sessionCount > 0 ? Math.min((double) sessionCount / sessionMax, 1.0) : -1;
         double handlerScore = handlerCount > 0 ? Math.min((double) handlerCount / handlerMax, 1.0) : -1;
         double poolScore = poolSize > 0 ? Math.min((double) poolActive / poolSize, 1.0) : -1;
-        double queueScore = queueSize > 0 ? Math.min((double) queueSize / queueMax, 1.0) : -1;
+        // A growing backlog is a problem, not activity - score the free capacity
+        double queueScore = queueSize >= 0 ? Math.max(0, 1.0 - (double) queueSize / queueMax) : -1;
         double stolenScore = handlerCount > 0 ? Math.min((double) stolenCount / Math.max(handlerCount, 1), 1.0) : -1;
 
         out.write("<div id=samstats>");
-        out.write(RingRenderer.renderRingCell(sessionScore, "Sessions", String.valueOf(sessionCount),
-                  new String[]{_t("Active sessions in SessionsDB")}, RingRenderer.MODE_ACTIVITY));
-        out.write(RingRenderer.renderRingCell(poolScore, "Workers", poolActive + "/" + poolSize,
+        out.write(RingRenderer.renderRingCell(sessionScore, _t("Sessions"), String.valueOf(sessionCount),
+                  new String[]{_t("Active sessions in SessionsDB"), _t("Full at {0}", sessionMax)},
+                  RingRenderer.MODE_ACTIVITY));
+        out.write(RingRenderer.renderRingCell(poolScore, _t("Workers"), poolActive + "/" + poolSize,
                   new String[]{_t("Active / pool worker threads")}, RingRenderer.MODE_ACTIVITY));
-        out.write(RingRenderer.renderRingCell(queueScore, "Queue", String.valueOf(queueSize),
-                  new String[]{_t("Pending commands in pool")}, RingRenderer.MODE_ACTIVITY));
-        out.write(RingRenderer.renderRingCell(handlerScore, "Handlers", String.valueOf(handlerCount),
-                  new String[]{_t("Connected pool handlers")}, RingRenderer.MODE_ACTIVITY));
-        out.write(RingRenderer.renderRingCell(stolenScore, "Stolen", String.valueOf(stolenCount),
+        out.write(RingRenderer.renderRingCell(queueScore, _t("Queue"), String.valueOf(queueSize),
+                  new String[]{_t("Pending commands: {0} of {1}", queueSize, queueMax)},
+                  RingRenderer.MODE_HEALTH));
+        out.write(RingRenderer.renderRingCell(handlerScore, _t("Handlers"), String.valueOf(handlerCount),
+                  new String[]{_t("Connected pool handlers"), _t("Full at {0}", handlerMax)},
+                  RingRenderer.MODE_ACTIVITY));
+        out.write(RingRenderer.renderRingCell(stolenScore, _t("Stolen"), String.valueOf(stolenCount),
                   new String[]{_t("Sockets stolen for data streaming")}, RingRenderer.MODE_NEUTRAL));
         out.write("</div>\n");
 

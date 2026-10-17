@@ -596,9 +596,11 @@ class ProfileOrganizerRenderer {
     }
 
     /**
-     * Render the profile summary rings above the profile table: total profile
-     * count, share displayed for the current mode, the display cutoff window,
-     * tier counts, activity, and DB health.
+     * Render the profile summary rings above the profile table: eight rings
+     * per page. The all-profiles page shows total count, share displayed,
+     * cutoff window, tier counts, activity and DB health; the tier pages
+     * show the tier count, latency boundary and mean tier RTT, loss, hourly
+     * freshness, activity and DB health.
      *
      * @param out the writer to render to
      * @param mode the page mode (0=all profiles, 1=fast tier, 2=high capacity tier)
@@ -615,7 +617,17 @@ class ProfileOrganizerRenderer {
         int storeBad = 0;
         Set<Hash> fastSet = sel.fastSet;
         Set<Hash> hcSet = sel.highCapSet;
+        long now = _context.clock().now();
+        long rttSum = 0;
+        int rttCount = 0;
+        int heard1h = 0;
         for (PeerProfile prof : order) {
+            int rtt = prof.getFirstHopRtt(now);
+            if (rtt > 0) {
+                rttSum += rtt;
+                rttCount++;
+            }
+            if (prof.getLastHeardFrom() > now - 3600000L) {heard1h++;}
             DBHistory dbh = prof.getDBHistory();
             if (dbh != null) {
                 lookupsGood += dbh.getSuccessfulLookups();
@@ -645,9 +657,8 @@ class ProfileOrganizerRenderer {
         if (mode == 1) {renderTierCountRing(buf, fastSet.size(), total, _t("Fast"), "{0} fast peer", "{0} fast peers");}
         else if (mode == 2) {renderTierCountRing(buf, order.size(), total, _t("High Cap"), "{0} high capacity peer", "{0} high capacity peers");}
 
-        // Share of profiles displayed
+        // Share of profiles displayed (all page only - tier pages always show the full tier)
         if (mode == 0) {
-            // All page: share of total
             if (total > 0) {
                 double shown = (double) order.size() / total;
                 buf.append(RingRenderer.renderRingCell(shown, _t("Displayed"), pct(shown),
@@ -659,48 +670,53 @@ class ProfileOrganizerRenderer {
                           new String[]{_t("Share of total profiles shown")},
                           RingRenderer.MODE_ACTIVITY, null));
             }
-        } else {
-            // Tier pages: share of this tier displayed
-            int tierSize = (mode == 1) ? fastSet.size() : order.size();
-            if (tierSize > 0) {
-                double shown = (double) order.size() / tierSize;
-                String tierLabel = (mode == 1) ? _t("Fast") : _t("High Cap");
-                buf.append(RingRenderer.renderRingCell(shown, _t("Displayed"), pct(shown),
-                          new String[]{order.size() + " / " + tierSize + " " + tierLabel + " " + _t("peers")},
-                          RingRenderer.MODE_ACTIVITY, null));
-            } else {
-                buf.append(RingRenderer.renderRingCell(-1, _t("Displayed"), "\u2014",
-                          new String[]{_t("Share of tier profiles shown")},
-                          RingRenderer.MODE_ACTIVITY, null));
-            }
         }
 
         // Display cutoff: stale profiles not heard from within this window are hidden
-        double windowScore = sel.hideWindow > 0 ? Math.min(sel.hideWindow / (4*60*60*1000.0), 1.0) : -1;
         if (mode == 0) {
+            double windowScore = sel.hideWindow > 0 ? Math.min(sel.hideWindow / (4*60*60*1000.0), 1.0) : -1;
             buf.append(RingRenderer.renderRingCell(windowScore, _t("Window"),
                       sel.hideWindow > 0 ? DataHelper.formatDuration(sel.hideWindow) : "\u2014",
                       new String[]{ngettext("{0} stale profile hidden", "{0} stale profiles hidden", sel.older)},
                       RingRenderer.MODE_NEUTRAL, null));
         }
 
-        // Tier pages: fast-tier latency boundary and tier loss picture instead of Total
+        // Tier pages: fast-tier latency boundary and tier health instead of Total
         if (mode != 0) {
+            // The membership threshold rises when network latency rises, so a
+            // growing threshold means a degrading network - score the headroom
             double fastRTT = _organizer.getFastRTTThreshold();
-            double rttScore = fastRTT > 0 ? Math.min(fastRTT / 2000.0, 1.0) : -1;
+            double rttScore = fastRTT > 0 ? Math.max(0.0, 1.0 - fastRTT / 2000.0) : -1;
             buf.append(RingRenderer.renderRingCell(rttScore, _t("Fast RTT"),
                       fastRTT > 0 ? Math.round(fastRTT) + "ms" : "\u2014",
-                      new String[]{_t("Max RTT for fast-tier membership (ms)")},
-                      RingRenderer.MODE_NEUTRAL, null));
+                      new String[]{_t("Max RTT for fast-tier membership"),
+                                   _t("Rises with network latency")},
+                      RingRenderer.MODE_HEALTH, null));
 
             float avgLoss = (mode == 1) ? _organizer.getFastAverageLossRatio()
                                         : _organizer.getHighCapAverageLossRatio();
             double lossScore = avgLoss > 0.0f ? Math.max(0.0, 1.0 - avgLoss) : -1;
             buf.append(RingRenderer.renderRingCell(lossScore, _t("Loss"),
                       avgLoss > 0.0f ? pct(avgLoss) : "\u2014",
-                      new String[]{mode == 1 ? _t("Average loss of fast-tier peers (%)")
-                                             : _t("Average loss of high-capacity peers (%)")},
+                      new String[]{mode == 1 ? _t("Average loss of fast-tier peers")
+                                             : _t("Average loss of high-capacity peers")},
                       RingRenderer.MODE_HEALTH, null));
+
+            // Mean direct-link RTT measured across the tier's peers
+            double avgRtt = rttCount > 0 ? (double) rttSum / rttCount : -1;
+            buf.append(RingRenderer.renderRingCell(avgRtt > 0 ? Math.max(0.0, 1.0 - avgRtt / 2000.0) : -1,
+                      _t("RTT"), avgRtt > 0 ? Math.round(avgRtt) + "ms" : "\u2014",
+                      new String[]{_t("Average direct-link RTT of tier peers"),
+                                   Messages.getString("{0} of {1} measured", rttCount, order.size(), _context)},
+                      RingRenderer.MODE_LATENCY, null));
+
+            // Freshness of the tier within a fixed hour
+            double recent = order.size() > 0 ? (double) heard1h / order.size() : -1;
+            buf.append(RingRenderer.renderRingCell(recent, _t("1h Contact"),
+                      order.size() > 0 ? pct(recent) : "\u2014",
+                      new String[]{_t("Heard from in the last hour"),
+                                   Messages.getString("{0} of {1} tier peers", heard1h, order.size(), _context)},
+                      RingRenderer.MODE_ACTIVITY, null));
         }
 
         // All page: tier counts after the window ring
@@ -726,7 +742,8 @@ class ProfileOrganizerRenderer {
         if (lookupTotal > 0) {
             double good = (double) lookupsGood / lookupTotal;
             buf.append(RingRenderer.renderRingCell(good, _t("Lookups"), pct(good),
-                      new String[]{_t("Lookup success rate")},
+                      new String[]{_t("Lookup success rate"),
+                                   Messages.getString("{0} of {1} lookups", lookupsGood, lookupTotal, _context)},
                       RingRenderer.MODE_HEALTH, null));
         } else {
             buf.append(RingRenderer.renderRingCell(-1, _t("Lookups"), "\u2014",
@@ -739,7 +756,8 @@ class ProfileOrganizerRenderer {
         if (storeTotal > 0) {
             double good = (double) storeGood / storeTotal;
             buf.append(RingRenderer.renderRingCell(good, _t("Stores"), pct(good),
-                      new String[]{_t("Store success rate")},
+                      new String[]{_t("Store success rate"),
+                                   Messages.getString("{0} of {1} peers", storeGood, storeTotal, _context)},
                       RingRenderer.MODE_HEALTH, null));
         } else {
             buf.append(RingRenderer.renderRingCell(-1, _t("Stores"), "\u2014",
@@ -909,35 +927,39 @@ class ProfileOrganizerRenderer {
         // Peer count leads, identical to the sidebar count
         double score = stats.known > 0 ? Math.min(stats.known / 2000.0, 1.0) : -1;
         buf.append(RingRenderer.renderRingCell(score, _t("Floodfills"), String.valueOf(stats.known),
-                  new String[]{_t("Known floodfills")}, RingRenderer.MODE_NEUTRAL, null));
+                  new String[]{_t("Known floodfills"), _t("Full at {0}", 2000)},
+                  RingRenderer.MODE_NEUTRAL, null));
 
         // Reachability
         if (stats.known > 0) {
             double reach = (double) stats.listed / stats.known;
             buf.append(RingRenderer.renderRingCell(reach, _t("Reachable"), pct(reach),
-                      new String[]{_t("Reachable")},
+                      new String[]{_t("Reachable, unbanlisted and heard from"),
+                                   Messages.getString("{0} of {1} known", stats.listed, stats.known, _context)},
                       RingRenderer.MODE_HEALTH, null));
         } else {
             buf.append(RingRenderer.renderRingCell(-1, _t("Reachable"), "\u2014",
-                      new String[]{_t("Reachable")},
+                      new String[]{_t("Reachable, unbanlisted and heard from")},
                       RingRenderer.MODE_HEALTH, null));
         }
 
         // Banned
         buf.append(RingRenderer.renderRingCell(stats.banned == 0 ? 1 : Math.max(0.0, 1.0 - stats.banned / 50.0),
                   _t("Banned"), String.valueOf(stats.banned),
-                  new String[]{_t("Banned")},
+                  new String[]{_t("Active bans of floodfill-capable peers"),
+                               _t("of {0} known", stats.known)},
                   RingRenderer.MODE_HEALTH, null));
 
-        // 1h failure rate
+        // 1h failure rate - ring shows the healthy remainder, center the failure share
         if (stats.failCount > 0) {
             double fail = stats.failPctSum / (stats.failCount * 100.0);
-            buf.append(RingRenderer.renderRingCell(1.0 - fail, _t("No-Fail"), pct(fail),
-                      new String[]{_t("No lookup failures (1h)")},
+            buf.append(RingRenderer.renderRingCell(1.0 - fail, _t("Fail"), pct(fail),
+                      new String[]{_t("Lookup failures in the last hour"),
+                                   _t("across {0} listed peers", stats.failCount)},
                       RingRenderer.MODE_HEALTH, null));
         } else {
-            buf.append(RingRenderer.renderRingCell(-1, _t("No-Fail"), "\u2014",
-                      new String[]{_t("No lookup failures (1h)")},
+            buf.append(RingRenderer.renderRingCell(-1, _t("Fail"), "\u2014",
+                      new String[]{_t("Lookup failures in the last hour")},
                       RingRenderer.MODE_HEALTH, null));
         }
 
@@ -946,7 +968,8 @@ class ProfileOrganizerRenderer {
             double avgMs = (double) stats.respMsSum / stats.respCount;
             buf.append(RingRenderer.renderRingCell(Math.max(0.0, 1.0 - avgMs / 15000.0),
                       _t("Response"), DataHelper.formatDuration2((long) avgMs).replace("&nbsp;", ""),
-                      new String[]{_t("Lookup response time (1h)")},
+                      new String[]{_t("Lookup response time (1h)"),
+                                   _t("{0} peers measured", stats.respCount)},
                       RingRenderer.MODE_LATENCY, null));
         } else {
             buf.append(RingRenderer.renderRingCell(-1, _t("Response"), "\u2014",
@@ -958,7 +981,8 @@ class ProfileOrganizerRenderer {
         if (stats.listed > 0) {
             double recent = (double) stats.recentlyHeard / stats.listed;
             buf.append(RingRenderer.renderRingCell(recent, _t("1h Contact"), pct(recent),
-                      new String[]{_t("Contacted within 1h")},
+                      new String[]{_t("Contacted within 1h"),
+                                   Messages.getString("{0} of {1} listed", stats.recentlyHeard, stats.listed, _context)},
                       RingRenderer.MODE_ACTIVITY, null));
         } else {
             buf.append(RingRenderer.renderRingCell(-1, _t("1h Contact"), "\u2014",
@@ -971,7 +995,8 @@ class ProfileOrganizerRenderer {
         if (total > 0) {
             double good = (double) stats.lookupsGood / total;
             buf.append(RingRenderer.renderRingCell(good, _t("Lookups"), pct(good),
-                      new String[]{_t("Lookup success rate")},
+                      new String[]{_t("Lookup success rate"),
+                                   Messages.getString("{0} of {1} lookups", stats.lookupsGood, total, _context)},
                       RingRenderer.MODE_HEALTH, null));
         } else {
             buf.append(RingRenderer.renderRingCell(-1, _t("Lookups"), "\u2014",
@@ -984,7 +1009,8 @@ class ProfileOrganizerRenderer {
         if (storeTotal > 0) {
             double good = (double) stats.storeGood / storeTotal;
             buf.append(RingRenderer.renderRingCell(good, _t("Stores"), pct(good),
-                      new String[]{_t("Store success rate")},
+                      new String[]{_t("Store success rate"),
+                                   Messages.getString("{0} of {1} peers", stats.storeGood, storeTotal, _context)},
                       RingRenderer.MODE_HEALTH, null));
         } else {
             buf.append(RingRenderer.renderRingCell(-1, _t("Stores"), "\u2014",

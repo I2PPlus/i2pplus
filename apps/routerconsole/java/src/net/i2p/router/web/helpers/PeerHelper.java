@@ -192,9 +192,26 @@ public class PeerHelper extends HelperBase {
     }
 
     /**
+     * Get the 1-minute event count of a RateStat, preferring the current partial
+     * window. For count-type stats whose event value carries no information
+     * (e.g. peer.testTimeout always records 1), this is the meaningful signal -
+     * the average would read a constant 1.0.
+     * @return events in the last minute, 0 if unavailable
+     * @since 0.9.71
+     */
+    private double getStatCount1m(String name) {
+        RateStat rs = _context.statManager().getRate(name);
+        if (rs == null) return 0;
+        Rate r = rs.getRate(RateConstants.ONE_MINUTE);
+        if (r == null) return 0;
+        long cur = r.getCurrentEventCount();
+        return cur > 0 ? cur : r.getLastEventCount();
+    }
+
+    /**
      * Render peer-landscape ring dashboard above the transport summary table.
-     * Ten rings: Active, Fast, HighCap, Quality, Floodfill, Known,
-     * Active%, Unreachable, Banned, Test Fail.
+     * Ten rings: Active, Fast, HighCap, Reliable, Floodfill, Known,
+     * Profiles, Unreachable, Banned, Test Fail.
      * @since 0.9.70+
      */
     private void renderPeerRings(Writer out) throws IOException {
@@ -208,7 +225,6 @@ public class PeerHelper extends HelperBase {
         int quality = (int) getStatAvg("peer.qualityPeerCount");
         int profileCount = (int) getStatAvg("peer.profileCount");
         int activeProfileCount = (int) getStatAvg("peer.activeProfileCount");
-        double testTimeout = getStatAvg("peer.testTimeout");
 
         StringBuilder buf = new StringBuilder(4096);
         buf.append("<div id=peerstats>");
@@ -217,62 +233,83 @@ public class PeerHelper extends HelperBase {
         String activeStr = active > 0 ? String.valueOf(active) : "\u2014";
         double activeScore = active > 0 ? Math.min(active / 200.0, 1.0) : -1;
         buf.append(RingRenderer.renderRingCell(activeScore, _t("Active"), activeStr,
-                  new String[]{_t("Peers reached in the last 60s")}, RingRenderer.MODE_ACTIVITY));
+                  new String[]{_t("Peers reached in the last 60s"), _t("Full at {0}", 200)},
+                  RingRenderer.MODE_ACTIVITY));
 
         // 2. Fast
         String fastStr = fast > 0 ? String.valueOf(fast) : "\u2014";
         double fastScore = fast > 0 && known > 0 ? Math.min((double) fast / known, 1.0) : -1;
         buf.append(RingRenderer.renderRingCell(fastScore, _t("Fast"), fastStr,
-                  new String[]{_t("Low-latency peers for tunnel participation")}, RingRenderer.MODE_ACTIVITY));
+                  new String[]{_t("Low-latency peers for tunnel participation"),
+                               _t("{0} of {1} known", fast, known)},
+                  RingRenderer.MODE_ACTIVITY));
 
         // 3. HighCap
         String hcStr = highCap > 0 ? String.valueOf(highCap) : "\u2014";
         double hcScore = highCap > 0 && known > 0 ? Math.min((double) highCap / known, 1.0) : -1;
         buf.append(RingRenderer.renderRingCell(hcScore, _t("HighCap"), hcStr,
-                  new String[]{_t("High-bandwidth peers for many tunnels")}, RingRenderer.MODE_ACTIVITY));
+                  new String[]{_t("High-bandwidth peers for many tunnels"),
+                               _t("{0} of {1} known", highCap, known)},
+                  RingRenderer.MODE_ACTIVITY));
 
         // 4. Reliable
         String qStr = quality > 0 ? String.valueOf(quality) : "\u2014";
         double qScore = quality > 0 && known > 0 ? Math.min((double) quality / known, 1.0) : -1;
         buf.append(RingRenderer.renderRingCell(qScore, _t("Reliable"), qStr,
-                  new String[]{_t("High-capacity peers with good acceptance")}, RingRenderer.MODE_ACTIVITY));
+                  new String[]{_t("Peers with good acceptance and recent activity"),
+                               _t("{0} of {1} known", quality, known)},
+                  RingRenderer.MODE_ACTIVITY));
 
         // 5. Floodfill
         String ffStr = integrated > 0 ? String.valueOf(integrated) : "\u2014";
         double ffScore = integrated > 0 && known > 0 ? Math.min((double) integrated / known, 1.0) : -1;
         buf.append(RingRenderer.renderRingCell(ffScore, _t("Floodfill"), ffStr,
-                  new String[]{_t("Peers that store and serve NetDb info")}, RingRenderer.MODE_ACTIVITY));
+                  new String[]{_t("Peers that store and serve NetDb info"),
+                               _t("{0} of {1} known", integrated, known)},
+                  RingRenderer.MODE_ACTIVITY));
 
         // 6. Known
         String knownStr = known > 0 ? String.valueOf(known) : "\u2014";
-        buf.append(RingRenderer.renderRingCell(1.0, _t("Known"), knownStr,
-                  new String[]{_t("Total entries in network database")}, RingRenderer.MODE_NEUTRAL));
+        double knownScore = known > 0 ? Math.min(known / 5000.0, 1.0) : -1;
+        buf.append(RingRenderer.renderRingCell(knownScore, _t("Known"), knownStr,
+                  new String[]{_t("Total entries in network database"), _t("Full at {0}", 5000)},
+                  RingRenderer.MODE_NEUTRAL));
 
-        // 7. Active%
+        // 7. Profiles
         String apStr = (activeProfileCount > 0 && profileCount > 0) ?
                        (activeProfileCount * 100 / profileCount) + "%" : "\u2014";
         double apScore = (activeProfileCount > 0 && profileCount > 0) ?
                          Math.min((double) activeProfileCount / profileCount, 1.0) : -1;
-        buf.append(RingRenderer.renderRingCell(apScore, _t("Active"), apStr,
-                  new String[]{_t("Profiles with activity in the last hour")}, RingRenderer.MODE_HEALTH));
+        buf.append(RingRenderer.renderRingCell(apScore, _t("Profiles"), apStr,
+                  new String[]{_t("Profiles with activity in the last hour"),
+                               _t("{0} of {1} stored", activeProfileCount, profileCount)},
+                  RingRenderer.MODE_HEALTH));
 
         // 8. Unreachable
         String unStr = String.valueOf(unreachable);
         double unScore = known > 0 ? Math.max(0, 1.0 - (double) unreachable / known) : 1.0;
         buf.append(RingRenderer.renderRingCell(unScore, _t("Unreachable"), unStr,
-                  new String[]{_t("Peers without a reachable address")}, RingRenderer.MODE_HEALTH));
+                  new String[]{_t("Peers without a published address"),
+                               _t("{0} of {1} known", unreachable, known)},
+                  RingRenderer.MODE_HEALTH));
 
         // 9. Banned
         String banStr = String.valueOf(banned);
         double banScore = banned > 0 ? Math.max(0, 1.0 - banned / 50.0) : 1.0;
         buf.append(RingRenderer.renderRingCell(banScore, _t("Banned"), banStr,
-                  new String[]{_t("Peers excluded from all interactions")}, RingRenderer.MODE_HEALTH));
+                  new String[]{_t("Peers excluded from all interactions"),
+                               _t("{0} of {1} known", banned, known)},
+                  RingRenderer.MODE_HEALTH));
 
-        // 10. Test Fail
-        String tfStr = testTimeout > 0 ? String.format("%.1f", testTimeout) + _t("/min") : "\u2014";
-        double tfScore = testTimeout > 0 ? Math.max(0, 1.0 - testTimeout / 10.0) : 1.0;
+        // 10. Test Fail - a count stat, the event value is always 1, so the
+        // signal is the number of events in the window, not the average
+        double testFails = getStatCount1m("peer.testTimeout");
+        String tfStr = testFails > 0 ? String.format("%.0f", testFails) + _t("/min") : "\u2014";
+        double tfScore = testFails > 0 ? Math.max(0, 1.0 - testFails / 10.0) : 1.0;
         buf.append(RingRenderer.renderRingCell(tfScore, _t("Test Fail"), tfStr,
-                  new String[]{_t("Connectivity test failures per minute")}, RingRenderer.MODE_HEALTH));
+                  new String[]{_t("Connectivity test failures in the last minute"),
+                               _t("Empty at {0}/min", 10)},
+                  RingRenderer.MODE_HEALTH));
 
         buf.append("</div>");
         out.write(buf.toString());

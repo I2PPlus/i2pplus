@@ -9,13 +9,13 @@ import java.util.Set;
 
 import net.i2p.client.streaming.I2PSocket;
 import net.i2p.client.streaming.I2PSocketManager;
+import net.i2p.data.DataHelper;
 import net.i2p.i2ptunnel.I2PTunnel;
 import net.i2p.i2ptunnel.I2PTunnelServer;
 import net.i2p.i2ptunnel.I2PTunnelTask;
 import net.i2p.i2ptunnel.TunnelController;
 import net.i2p.i2ptunnel.TunnelControllerGroup;
 import net.i2p.router.networkdb.kademlia.FloodfillNetworkDatabaseFacade;
-import net.i2p.router.networkdb.kademlia.KademliaNetworkDatabaseFacade;
 import net.i2p.router.web.HelperBase;
 import net.i2p.stat.Rate;
 import net.i2p.stat.RateStat;
@@ -227,7 +227,7 @@ public class HealthHelper extends HelperBase {
         // Need a baseline: weight recent 10m more than 1h
         double baseline = (b10 > 0 ? 2.0 * b10 : 0) + (b1h > 0 ? b1h : 0);
         int n = (b10 > 0 ? 1 : 0) + (b1h > 0 ? 1 : 0);
-        if (n == 0 || baseline <= 0) return new Anomaly(null, null);
+        if (n == 0 || baseline <= 0) return new Anomaly("gray", null);
         baseline /= n;
         if (Double.isNaN(baseline) || Double.isInfinite(baseline))
             return new Anomaly("gray", null);
@@ -290,18 +290,19 @@ public class HealthHelper extends HelperBase {
      * Resource: Bandwidth, CPU, Memory | Latency: BW Delay, Job Lag, Msg Lag | Job: Job Queue, Threads
      */
     private void renderPerfSection(Writer out) throws IOException {
-        // Bandwidth utilization
+        // Bandwidth utilization: the worst of the two directions, each against its own cap
         double sendBps = getStatAvg("bw.sendBps");
         if (Double.isNaN(sendBps) || Double.isInfinite(sendBps)) sendBps = 0;
         double recvBps = getStatAvg("bw.receiveBps");
         if (Double.isNaN(recvBps) || Double.isInfinite(recvBps)) recvBps = 0;
         int outLimit = _context.bandwidthLimiter().getOutboundKBytesPerSecond() * 1024;
         int inLimit = _context.bandwidthLimiter().getInboundKBytesPerSecond() * 1024;
-        double maxBw = Math.max(inLimit, outLimit);
-        double bwUtil = maxBw > 0 ? (sendBps + recvBps) / maxBw : 0;
+        double bwUtil = bwUtilization(sendBps, recvBps, inLimit, outLimit);
         String bwPct = bwUtil > 0 ? (int) (bwUtil * 100) + "%" : "0%";
-        String bwDetail = maxBw > 0 ? formatBW((long) (sendBps + recvBps)) + " / " + formatBW(maxBw) : "\u2014";
-        double bwScore = maxBw > 0 ? Math.max(0, 1.0 - bwUtil) : -1;
+        String[] bwTip = new String[] {
+            _t("Out: {0} / {1}", formatBW(sendBps), formatBW(outLimit)),
+            _t("In: {0} / {1}", formatBW(recvBps), formatBW(inLimit))};
+        double bwScore = (inLimit > 0 || outLimit > 0) ? Math.max(0, 1.0 - bwUtil) : -1;
         double[] sendHist = getStatHistory("bw.sendBps");
         double[] recvHist = getStatHistory("bw.receiveBps");
         double[] bwHist = null;
@@ -358,13 +359,17 @@ public class HealthHelper extends HelperBase {
         double uptimeScore = uptimeMs > 0 ? Math.min((double) uptimeMs / (24L * 3600 * 1000), 1.0) : -1;
 
         out.write(RingRenderer.renderRingCell(bwScore, _t("Bandwidth"), bwPct,
-                  new String[]{bwDetail}, RingRenderer.MODE_ACTIVITY, bwHist));
+                  bwTip, RingRenderer.MODE_HEALTH, bwHist));
         out.write(RingRenderer.renderRingCell(cpuScore, _t("CPU"), cpuStr,
-                  new String[]{_t("CPU load average")}, RingRenderer.MODE_HEALTH, cpuHist));
+                  new String[]{_t("JVM CPU load average"),
+                               _t("{0} cores", Runtime.getRuntime().availableProcessors())},
+                  RingRenderer.MODE_HEALTH, cpuHist));
         out.write(RingRenderer.renderRingCell(memScore, _t("Memory"), memStr,
-                  new String[]{_t("Memory usage")}, RingRenderer.MODE_HEALTH, memHist));
+                  new String[]{_t("Used: {0} / {1} max", formatMB(memUsed), formatMB(maxMem))},
+                  RingRenderer.MODE_HEALTH, memHist));
         out.write(RingRenderer.renderRingCell(uptimeScore, _t("Uptime"), uptimeStr,
-                  new String[]{_t("Router uptime")}, RingRenderer.MODE_NEUTRAL, null));
+                  new String[]{_t("Since {0}", DataHelper.formatDate(_context.clock().now() - uptimeMs))},
+                  RingRenderer.MODE_NEUTRAL, null));
         Anomaly lagAnom = getAnomaly("jobQueue.jobLag", 1.0);
         Anomaly delayAnom = getAnomaly("transport.sendProcessingTime", 1.0);
         Anomaly readyAnom = getAnomaly("jobQueue.readyJobs", 0);
@@ -375,7 +380,8 @@ public class HealthHelper extends HelperBase {
         out.write(RingRenderer.renderRingCell(readyScore, _t("Job Queue"), readyStr,
                   withDetail(_t("Ready jobs waiting in queue"), readyAnom.detail), RingRenderer.MODE_ANOMALY, readyHist, readyAnom.color));
         out.write(RingRenderer.renderRingCell(threadScore, _t("Threads"), threadStr,
-                  new String[]{_t("Active JVM threads")}, RingRenderer.MODE_NEUTRAL, threadHist));
+                  new String[]{_t("Active JVM threads"), _t("Empty at {0}", 500)},
+                  RingRenderer.MODE_NEUTRAL, threadHist));
     }
 
     /**
@@ -443,11 +449,14 @@ public class HealthHelper extends HelperBase {
         out.write(RingRenderer.renderRingCell(rtoScore, _t("SSU RTO"), rtoStr,
                   withDetail(_t("SSU retransmission timeout"), rtoAnom.detail), RingRenderer.MODE_ANOMALY, rtoHist, rtoAnom.color));
         out.write(RingRenderer.renderRingCell(connScore, _t("Conns/s"), connStr,
-                  new String[]{_t("NTCP connections established per second")}, RingRenderer.MODE_ACTIVITY, null));
+                  new String[]{_t("New NTCP connections (1 min)"), _t("Full at {0}/s", 2)},
+                  RingRenderer.MODE_ACTIVITY, null));
         out.write(RingRenderer.renderRingCell(msgScore, _t("Msgs/s"), msgStr,
-                  new String[]{_t("Messages delivered per second")}, RingRenderer.MODE_ACTIVITY, null));
+                  new String[]{_t("Messages delivered (1 min)"), _t("Full at {0}/s", 30)},
+                  RingRenderer.MODE_ACTIVITY, null));
         out.write(RingRenderer.renderRingCell(rttScore, _t("RTT"), rttStr,
-                  new String[]{_t("End-to-end message round trip time")}, RingRenderer.MODE_HEALTH, rttHist));
+                  new String[]{_t("End-to-end client message round trip")},
+                  RingRenderer.MODE_HEALTH, rttHist));
         out.write(RingRenderer.renderRingCell(timeoutScore, _t("Timeout"), timeoutStr,
                   withDetail(_t("Tunnel build timeout rate"), timeoutAnom.detail), RingRenderer.MODE_ANOMALY, timeoutHist, timeoutAnom.color));
         out.write(RingRenderer.renderRingCell(buildTimeScore, _t("Tunnel Build"), buildTimeStr,
@@ -459,10 +468,8 @@ public class HealthHelper extends HelperBase {
      * Peers: Active Peers, Known Peers | Role: Clients, Transit | Health: Build Success, NetDB, Uptime | Security: Banned
      */
     private void renderNetworkSection(Writer out) throws IOException {
-        // Known Peers (in-memory / on-disk)
+        // Known Peers (in-memory)
         int knownPeers = _context.netDb().getKnownRouters();
-        int storedRouters = 0;
-        KademliaNetworkDatabaseFacade kf = (KademliaNetworkDatabaseFacade) _context.netDb();
         String knownStr = String.valueOf(knownPeers);
         double knownScore = knownPeers > 0 ? Math.min(knownPeers / 5000.0, 1.0) : 0;
 
@@ -486,9 +493,8 @@ public class HealthHelper extends HelperBase {
         int[] streamCounts = countActiveStreams();
         int totalStreams = streamCounts[0] + streamCounts[1];
         String streamStr = totalStreams > 0 ? String.valueOf(totalStreams) : "\u2014";
-        String streamDetail = "In: " + streamCounts[0] + " / Out: " + streamCounts[1];
+        String streamDetail = _t("In: {0} / Out: {1}", streamCounts[0], streamCounts[1]);
         double streamScore = totalStreams > 0 ? Math.min(totalStreams / 50.0, 1.0) : -1;
-        double[] streamHist = getStatHistory("stream.connectionCreated");
 
         // NetDB lookup time
         double netdb = getStatAvg("netDb.successTime");
@@ -508,22 +514,31 @@ public class HealthHelper extends HelperBase {
         double bannedScore = banned > 0 ? Math.max(0, 1.0 - banned / 100.0) : 1.0;
 
         out.write(RingRenderer.renderRingCell(peerScore, _t("Active Peers"), peerStr,
-                  new String[]{_t("Active peers (last 60s)")}, RingRenderer.MODE_ACTIVITY, peerHist));
+                  new String[]{_t("Reached in the last 60s"), _t("Full at {0}", 1000)},
+                  RingRenderer.MODE_ACTIVITY, peerHist));
         out.write(RingRenderer.renderRingCell(knownScore, _t("Known Peers"), knownStr,
-                  new String[]{_t("Known routers in network database")}, RingRenderer.MODE_ACTIVITY, null));
+                  new String[]{_t("In the network database"), _t("Full at {0}", 5000)},
+                  RingRenderer.MODE_ACTIVITY, null));
         out.write(RingRenderer.renderRingCell(clientScore, _t("Clients"), clientStr,
-                  new String[]{_t("Active I2CP clients")}, RingRenderer.MODE_NEUTRAL, null));
+                  new String[]{_t("I2CP clients connected"), _t("Full at {0}", 20)},
+                  RingRenderer.MODE_NEUTRAL, null));
         out.write(RingRenderer.renderRingCell(tunnelScore, _t("Transit"), tunnelStr,
-                  new String[]{_t("Transit tunnels hosted")}, RingRenderer.MODE_ACTIVITY, null));
+                  new String[]{_t("Transit tunnels hosted"), _t("Full at {0}", 200)},
+                  RingRenderer.MODE_ACTIVITY, null));
         out.write(RingRenderer.renderRingCell(streamScore, _t("Streams"), streamStr,
-                  new String[]{streamDetail}, RingRenderer.MODE_NEUTRAL, streamHist));
+                  new String[]{streamDetail, _t("Full at {0}", 50)},
+                  RingRenderer.MODE_NEUTRAL, null));
         out.write(RingRenderer.renderRingCell(buildScore, _t("Build Success"), buildStr,
-                  new String[]{_t("Tunnel build success rate")}, RingRenderer.MODE_HEALTH, buildHist));
+                  new String[]{_t("Tunnel build success rate (1 min)")},
+                  RingRenderer.MODE_HEALTH, buildHist));
         Anomaly netdbAnom = getAnomaly("netDb.successTime", 1.0);
         out.write(RingRenderer.renderRingCell(netdbScore, _t("NetDB"), netdbStr,
                   withDetail(_t("NetDB lookup time"), netdbAnom.detail), RingRenderer.MODE_ANOMALY, netdbHist, netdbAnom.color));
         out.write(RingRenderer.renderRingCell(bannedScore, _t("Banned"), bannedStr,
-                  new String[]{_t("Total banned peers")}, RingRenderer.MODE_NEUTRAL, null));
+                  new String[]{_t("Peers excluded from all interactions"),
+                               _t("{0} of {1} known", (int) banned, knownPeers),
+                               _t("Empty at {0}", 100)},
+                  RingRenderer.MODE_NEUTRAL, null));
     }
 
     /**
@@ -558,13 +573,15 @@ public class HealthHelper extends HelperBase {
         double ffScore = ffVerify > 0 ? Math.max(0, 1.0 - ffVerify / 5000.0) : -1;
         double[] ffHist = getStatHistory("netDb.floodfillVerifyOK");
 
-        // Hit Rate
+        // Hit Rate - a floodfill legitimately returns not-found often, so this
+        // is shown as neutral information, never as health red
         double lookupsMatched = getStatCount("netDb.lookupsMatched");
         double lookupsHandled = getStatCount("netDb.lookupsHandled");
         double hitRate = lookupsHandled > 0 ? lookupsMatched / lookupsHandled : 0;
         String hitStr = lookupsHandled > 0 ? (int) (hitRate * 100) + "%" : "\u2014";
         double hitScore = lookupsHandled > 0 ? hitRate : -1;
-        double[] hitHist = getStatHistory("netDb.lookupsMatched");
+        double[] hitHist = ratioHistory(getStatHistory("netDb.lookupsMatched"),
+                                        getStatHistory("netDb.lookupsHandled"));
 
         // Lookups/s
         double lookups = getStatCount("netDb.lookupsHandled") / 60.0;
@@ -584,22 +601,29 @@ public class HealthHelper extends HelperBase {
         double[] storeHist = getStatHistory("netDb.storeHandled");
 
         out.write(RingRenderer.renderRingCell(leaseSetScore, _t("LeaseSets"), leaseSetStr,
-                  new String[]{_t("Stored LeaseSets in floodfill")}, RingRenderer.MODE_NEUTRAL, null));
+                  new String[]{_t("Stored LeaseSets"), _t("Full at {0}", 300)},
+                  RingRenderer.MODE_NEUTRAL, null));
         out.write(RingRenderer.renderRingCell(hitScore, _t("Cache Hit"), hitStr,
-                  new String[]{_t("NetDB lookup success rate")}, RingRenderer.MODE_HEALTH, hitHist));
+                  new String[]{_t("Matched {0} of {1} lookups (1 min)", (long) lookupsMatched, (long) lookupsHandled)},
+                  RingRenderer.MODE_NEUTRAL, hitHist));
         Anomaly ackAnom = getAnomaly("netDb.ackTime", 1.0);
         out.write(RingRenderer.renderRingCell(ffScore, _t("Flood Verify"), ffStr,
-                  new String[]{_t("Floodfill verify time")}, RingRenderer.MODE_HEALTH, ffHist));
+                  new String[]{_t("Floodfill verify time (1 min)")},
+                  RingRenderer.MODE_HEALTH, ffHist));
         out.write(RingRenderer.renderRingCell(ackScore, _t("NetDB ACK"), ackStr,
                   withDetail(_t("NetDB peer acknowledge time"), ackAnom.detail), RingRenderer.MODE_ANOMALY, ackHist, ackAnom.color));
         out.write(RingRenderer.renderRingCell(lookupScore, _t("Lookups/s"), lookupStr,
-                  new String[]{_t("NetDB lookups handled per second")}, RingRenderer.MODE_ACTIVITY, lookupHist));
+                  new String[]{_t("Lookups handled (1 min)"), _t("Full at {0}/s", 10)},
+                  RingRenderer.MODE_ACTIVITY, lookupHist));
         out.write(RingRenderer.renderRingCell(opScore, _t("Requests/s"), opStr,
-                  new String[]{_t("Combined store + lookup operations per second")}, RingRenderer.MODE_ACTIVITY, null));
+                  new String[]{_t("Stores + lookups (1 min)"), _t("Full at {0}/s", 15)},
+                  RingRenderer.MODE_ACTIVITY, null));
         out.write(RingRenderer.renderRingCell(storeScore, _t("Stores/s"), storeStr,
-                  new String[]{_t("NetDB store messages handled per second")}, RingRenderer.MODE_ACTIVITY, storeHist));
+                  new String[]{_t("Stores handled (1 min)"), _t("Full at {0}/s", 5)},
+                  RingRenderer.MODE_ACTIVITY, storeHist));
         out.write(RingRenderer.renderRingCell(lsScore, _t("LS Timeout"), lsStr,
-                  new String[]{_t("LeaseSet request timeouts (last minute)")}, RingRenderer.MODE_HEALTH, null));
+                  new String[]{_t("LeaseSet request timeouts (last minute)"), _t("Empty at {0}", 10)},
+                  RingRenderer.MODE_HEALTH, null));
     }
 
     /** Count active I2P streaming connections across all tunnel controllers. Returns [inCount, outCount] */
@@ -636,6 +660,49 @@ public class HealthHelper extends HelperBase {
         if (anomalyDetail != null)
             return new String[]{desc, anomalyDetail};
         return new String[]{desc};
+    }
+
+    /**
+     * Bandwidth utilization: the worst of the two directions, each measured against
+     * its own cap, so a saturated outbound link reads 100% even with an idle inbound
+     * one. A direction with a 0 cap (unlimited) contributes 0.
+     *
+     * @param sendBps current send rate in bytes/s
+     * @param recvBps current receive rate in bytes/s
+     * @param inLimit inbound cap in bytes/s, 0 for unlimited
+     * @param outLimit outbound cap in bytes/s, 0 for unlimited
+     * @return utilization 0.0-1.0+, may exceed 1.0 when over cap
+     * @since 0.9.71
+     */
+    static double bwUtilization(double sendBps, double recvBps, int inLimit, int outLimit) {
+        double sendUtil = outLimit > 0 ? sendBps / outLimit : 0;
+        double recvUtil = inLimit > 0 ? recvBps / inLimit : 0;
+        return Math.max(sendUtil, recvUtil);
+    }
+
+    /**
+     * Element-wise ratio of two history arrays, NaN where the denominator is
+     * missing or non-positive, so the sparkline plots the same quantity the
+     * ring shows.
+     *
+     * @param num numerator history (e.g. matched lookups), may be null
+     * @param den denominator history (e.g. handled lookups), may be null
+     * @return the ratio history, or null if either input is null or the lengths differ
+     * @since 0.9.71
+     */
+    static double[] ratioHistory(double[] num, double[] den) {
+        if (num == null || den == null || num.length != den.length) return null;
+        double[] out = new double[num.length];
+        for (int i = 0; i < num.length; i++) {
+            double n = num[i], d = den[i];
+            out[i] = (Double.isNaN(n) || Double.isNaN(d) || d <= 0) ? Double.NaN : n / d;
+        }
+        return out;
+    }
+
+    /** Format a byte count as whole megabytes */
+    private static String formatMB(double bytes) {
+        return (long) (bytes / (1024 * 1024)) + " MB";
     }
 
     /** Compact duration: 230s, 24m, 3h, 2d, 1mo (plain text, no HTML) */
