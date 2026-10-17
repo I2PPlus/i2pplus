@@ -9,6 +9,9 @@ import org.junit.Test;
  * {@link Tuner#computeIOTransferTarget}, extracted from
  * {@code I2PTunnelServerIOTransferParam#computeTarget}.
  *
+ * <p>Observed is a utilization ratio (0.0 - 1.0+), as returned by
+ * {@code getIOMaxPoolUtilization()}, not an absolute count.
+ *
  * <p>Covers reactive growth under saturation (double per cycle), aggressive
  * growth under partial load, idle shrink, and clamping to [min,max].
  *
@@ -22,8 +25,8 @@ public class TunerIOTransferTargetTest {
 
     @Test
     public void idleShrinksTowardFloor() {
-        // 2 of 32 → ratio well under 0.2
-        assertEquals(31, Tuner.computeIOTransferTarget(CURRENT, 2, MIN, MAX));
+        // 2 busy of 32 -> ratio 0.0625, well under 0.2
+        assertEquals(31, Tuner.computeIOTransferTarget(CURRENT, 2.0 / CURRENT, MIN, MAX));
     }
 
     @Test
@@ -33,37 +36,37 @@ public class TunerIOTransferTargetTest {
 
     @Test
     public void moderateLoadHolds() {
-        // ~50% utilization → no change
-        assertEquals(CURRENT, Tuner.computeIOTransferTarget(CURRENT, 16, MIN, MAX));
+        // 50% utilization -> no change
+        assertEquals(CURRENT, Tuner.computeIOTransferTarget(CURRENT, 0.5, MIN, MAX));
     }
 
     @Test
     public void highUtilizationGrowsAggressively() {
-        // ratio > 0.7 → step = max(8, current/4) = 8
-        int target = Tuner.computeIOTransferTarget(CURRENT, 24, MIN, MAX);
+        // 0.7 < ratio <= 0.9 -> step = max(8, current/4) = 8
+        int target = Tuner.computeIOTransferTarget(CURRENT, 0.75, MIN, MAX);
         assertTrue("expected growth, got " + target, target > CURRENT);
         assertEquals(CURRENT + 8, target);
     }
 
     @Test
     public void saturationDoublesBudget() {
-        // ratio > 0.9 → step = max(16, current) = current (true double)
-        int target = Tuner.computeIOTransferTarget(CURRENT, 32, MIN, MAX);
+        // ratio > 0.9 -> step = max(16, current) = current (true double)
+        int target = Tuner.computeIOTransferTarget(CURRENT, 0.95, MIN, MAX);
         assertEquals(CURRENT * 2, target);
         // larger current doubles
-        assertEquals(128, Tuner.computeIOTransferTarget(64, 64, MIN, MAX));
+        assertEquals(128, Tuner.computeIOTransferTarget(64, 0.95, MIN, MAX));
     }
 
     @Test
     public void largeCurrentTakesBigStep() {
-        // step = max(16, 128) = 128 → 256
-        assertEquals(256, Tuner.computeIOTransferTarget(128, 128, MIN, MAX));
+        // step = max(16, 128) = 128 -> 256
+        assertEquals(256, Tuner.computeIOTransferTarget(128, 1.0, MIN, MAX));
     }
 
     @Test
     public void clampsAtMax() {
-        assertEquals(MAX, Tuner.computeIOTransferTarget(MAX, MAX, MIN, MAX));
-        assertEquals(MAX, Tuner.computeIOTransferTarget(MAX - 4, MAX - 4, MIN, MAX));
+        assertEquals(MAX, Tuner.computeIOTransferTarget(MAX, 1.0, MIN, MAX));
+        assertEquals(MAX, Tuner.computeIOTransferTarget(MAX - 4, 1.0, MIN, MAX));
     }
 
     @Test
@@ -79,8 +82,8 @@ public class TunerIOTransferTargetTest {
 
     @Test
     public void queueBacklogTriggersGrowth() {
-        // active+queued pressure: 40 reported against budget 32
-        int target = Tuner.computeIOTransferTarget(32, 40, MIN, MAX);
+        // queued transfers push utilization above 1.0 (active + queued over budget)
+        int target = Tuner.computeIOTransferTarget(32, 40.0 / 32, MIN, MAX);
         assertTrue("backlog must grow budget, got " + target, target > 32);
     }
 }
