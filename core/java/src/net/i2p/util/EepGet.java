@@ -1281,9 +1281,9 @@ public class EepGet {
         if (_log.shouldWarn())
             if (_url.contains("&") && _url.contains("info_hash")) {
                 if (_url.startsWith("https"))
-                    _log.warn("Eepget error: All attempts failed for [" + _url.substring(0, truncate) + "...]");
+                    _log.warn("Eepget error: All attempts failed\n* Request: " + _url.substring(0, truncate) + "...");
                 else
-                    _log.warn("Eepget error: All attempts failed for [" + _url.substring(7, truncate) + "...]");
+                    _log.warn("Eepget error: All attempts failed\n* Request: " + _url.substring(7, truncate) + "...");
             } else {
                 _log.warn("Eepget error: All attempts failed for [" + _url + "]");
             }
