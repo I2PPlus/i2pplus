@@ -5,6 +5,7 @@
   <property name="build.dir" value="${build.root}router/java/build"/>
 
   <property name="apps.i2ptunnel.java.build.dir" value="${build.root}apps/i2ptunnel/java/build"/>
+  <property name="ministreaming.java.build.dir" value="${build.root}apps/ministreaming/java/build"/>
   <property name="core.java.build.dir" value="${build.root}core/java/build"/>
 
   <property name="apps.i2ptunnel.java.build.dir" value="${apps.i2ptunnel.java.build.dir}"/>
@@ -494,6 +495,7 @@
         <pathelement location="${build.dir}/testobj"/>
         <pathelement location="${core.java.build.dir}/i2ptest.jar"/>
         <pathelement location="${apps.i2ptunnel.java.build.dir}/i2ptunnel.jar"/>
+        <pathelement location="${ministreaming.java.build.dir}/mstreaming.jar"/>
         <pathelement location="${build.root}build/jbigi.jar"/>
         <pathelement location="${with.clover}"/>
         <pathelement location="${with.cobertura}"/>
