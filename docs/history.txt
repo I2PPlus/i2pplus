@@ -1,8 +1,39 @@
+2026-10-17 dr|z3d
+  * Peermanager: Decay peer loss continuously with a 15-minute half-life
+    instead of hourly steps, and admit fresh below-threshold reports
+    immediately while either tier is under target
+  * Tuner: Weight the streaming loss rate by carried volume instead of
+    per-connection ratios
+  * Console:
+    - Read the bandwidth ring off worst-direction utilization against
+      per-direction caps, compute streaming throughput from closed-stream
+      byte stats, and prefer live stream RTT samples
+    - Fix the peer test-fail, fast-tier RTT, SAM queue and cache-hit rings,
+      and rename the No-Fail ring to Fail to match its center value
+    - Show live stat values in Tuner tooltips, and add counts, caps and
+      context to health, peers, streaming and SAM tooltips
+    - Drop the always-100% Displayed ring and add mean tier RTT and
+      1-hour-contact rings to the tier pages
+  * Logging: Lead resend lines with the local destination and print each
+    fact once, and fold packet payload size onto the packet flag line
+
 2026-10-16 dr|z3d
-  * I2PTunnel: Size runner pools from live demand instead of freezing the default
-    at startup, and reclaim and shed server runner threads at the submit site
+  * I2PTunnel:
+    - Size runner pools from live demand instead of freezing the default
+      at startup, and reclaim and shed server runner threads at the submit site
+    - Grow the server-to-client I/O transfer pools on demand and bound
+      the global budget by free heap, elevate runner pools on sustained backlog
+      rather than momentary saturation, and throttle hot-path rebalances to once
+      per five seconds
   * Peermanager: Format promotion skip tallies as wrapped key: value lines and
     drop the duplicated header
+  * Tuner: Add a Tuner parameter for the I/O transfer budget driven by the
+    busiest pool's utilization, and lead the ceiling decision with its verdict
+    followed by grouped evidence lines
+  * Logging: Rewrite tunnel-failure, promotion, disconnect and retransmit lines
+    in event -> result form with bracketed hashes, merged tally lines, prose
+    tally keys, and no legends or zero counters
+  * Console: Tweak stat labels and refresh translations
 
 2026-10-15 dr|z3d
   * Logging: Unify message style — key: value pairs, bracketed hash truncations,
