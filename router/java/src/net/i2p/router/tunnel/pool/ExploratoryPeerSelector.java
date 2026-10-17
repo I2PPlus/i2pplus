@@ -356,12 +356,12 @@ import net.i2p.util.SystemVersion;
             if (pickFurthest) {
                 ArraySet<Hash> furthest = new ArraySet<>(1);
                 if (log.shouldInfo())
-                    log.info("EPS SANFP OBEP exclude " + formatExcludedPeers(exclude));
+                    log.info("Exploratory outbound endpoint needs the furthest hop -> Excluding: " + formatExcludedPeers(exclude));
                 ctx.profileOrganizer().selectActiveNotFailingPeers(1, exclude, furthest, ipRestriction, ipSet);
                 if (furthest.isEmpty()) {
                     // ANFP does not fall back to non-connected
                     if (log.shouldInfo())
-                        log.info("EPS SFP OBEP exclude " + formatExcludedPeers(exclude));
+                        log.info("No connected peer for the furthest hop -> Retrying with fast peers, excluding: " + formatExcludedPeers(exclude));
                     ctx.profileOrganizer().selectFastPeers(1, exclude, furthest, ipRestriction, ipSet);
                 }
                 // D1: Post-selection first-hop quality check for furthest hop

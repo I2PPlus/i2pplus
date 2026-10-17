@@ -1137,7 +1137,7 @@ class Packet {
         catch (IOException ioe) {
             // Optional pcap debugging aid; never let a write failure halt packet processing.
             Log l = I2PAppContext.getCurrentContext().logManager().getLog(Packet.class);
-            if (l.shouldDebug()) {l.debug("pcap write failed on " + toString(), ioe);}
+            if (l.shouldDebug()) {l.debug("Pcap write failed on " + toString(), ioe);}
         }
     }
 }

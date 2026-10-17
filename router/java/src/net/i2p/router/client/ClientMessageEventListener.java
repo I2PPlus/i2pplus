@@ -328,7 +328,7 @@ class ClientMessageEventListener implements I2CPMessageReader.I2CPMessageEventLi
         int status = _runner.sessionEstablished(cfg);
         if (status != SessionStatusMessage.STATUS_CREATED) {
             // For now, we do NOT send a SessionStatusMessage - see javadoc above
-            if (_log.shouldError()) {_log.error("Session establish failed: code = " + status);}
+            if (_log.shouldError()) {_log.error("Session establish failed; code: " + status);}
             String msg;
             if (status == SessionStatusMessage.STATUS_DUP_DEST) {msg = "Duplicate destination";}
             // not in spec, change to INVALID if we send it
@@ -535,7 +535,7 @@ class ClientMessageEventListener implements I2CPMessageReader.I2CPMessageEventLi
      */
     private void handleReceiveBegin(ReceiveMessageBeginMessage message) {
         if (_runner.isDead()) {return;}
-        if (_log.shouldDebug()) {_log.debug("Handling receive begin: id = " + message.getMessageId());}
+        if (_log.shouldDebug()) {_log.debug("Handling receive begin; id: " + message.getMessageId());}
         Payload payload = _runner.getPayload(new MessageId(message.getMessageId()));
         ReceiveRequest request = classifyReceiveBegin(_runner.getConfig(message.sessionId()), payload);
         if (request != ReceiveRequest.ALLOWED) {

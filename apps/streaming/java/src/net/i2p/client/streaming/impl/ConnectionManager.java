@@ -1930,7 +1930,7 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
                   }
                   if (admitted) {
                       if (_log.shouldDebug()) {
-                          _log.debug("Reusing pooled connection to " + destHash.toBase64().substring(0,6));
+                          _log.debug("Reusing pooled connection to [" + destHash.toBase64().substring(0,6) + "]");
                       }
                       // Skip to post-creation setup (fromPool=true — skip cooldown)
                       return finalizeConnection(pooled, peer, opts, connectStart, true);
@@ -2055,7 +2055,7 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
           con.eventOccurred();
 
            if (_log.shouldDebug())
-               _log.debug("Connect() conDelay = " + opts.getConnectDelay());
+               _log.debug("Connect() conDelay: " + opts.getConnectDelay());
            if (opts.getConnectDelay() <= 0) {
                con.waitForConnect();
             } else {
@@ -2453,7 +2453,7 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
             // Evict stale entries
             if (pc.isStale(maxIdle, now)) {
                 if (_log.shouldDebug()) {
-                    _log.debug("Evicting stale pooled connection to " + destHash.toBase64().substring(0, 6));
+                    _log.debug("Evicting stale pooled connection to [" + destHash.toBase64().substring(0, 6) + "]");
                 }
                 pc.connection.disconnect(false, false);
                 continue;
@@ -2462,7 +2462,7 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
             if (pc.connection.getIsConnected() && pc.connection.getConnectionError() == null) {
                 pc.touch(now);
                 if (_log.shouldDebug()) {
-                    _log.debug("Reusing pooled connection to " + destHash.toBase64().substring(0, 6) +
+                    _log.debug("Reusing pooled connection to [" + destHash.toBase64().substring(0, 6) + "]" +
                                " (idle " + (now - pc.pooledAt) + "ms)");
                 }
                 return pc.connection;
@@ -2510,7 +2510,7 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
         pool.addLast(pc);
 
         if (_log.shouldDebug()) {
-            _log.debug("Pooled connection to " + destHash.toBase64().substring(0, 6) +
+            _log.debug("Pooled connection to [" + destHash.toBase64().substring(0, 6) + "]" +
                        " (pool size: " + pool.size() + ")");
         }
     }
@@ -2722,8 +2722,8 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
         if (timeoutMs > getMaxPingTimeout())
             timeoutMs = getMaxPingTimeout();
         if (_log.shouldInfo()) {
-            _log.info(String.format("About to ping %s port %d from port %d timeout=%d blocking=%b",
-                      peer.calculateHash().toString(), toPort, fromPort, timeoutMs, blocking));
+            _log.info(String.format("About to ping %s port %d from port %d timeout: %d" + (blocking ? " blocking" : ""),
+                      peer.calculateHash().toString(), toPort, fromPort, timeoutMs));
         }
 
         _outboundQueue.enqueue(packet);
@@ -2772,7 +2772,7 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
         if (timeoutMs > getMaxPingTimeout())
             timeoutMs = getMaxPingTimeout();
         if (_log.shouldInfo()) {
-            _log.info(String.format("About to ping %s port %d from port %d timeout=%d payload=%d",
+            _log.info(String.format("About to ping %s port %d from port %d timeout: %d payload: %d",
                       peer.calculateHash().toString(), toPort, fromPort, timeoutMs, payload.length));
         }
 
@@ -2837,8 +2837,8 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
         if (timeoutMs > getMaxPingTimeout())
             timeoutMs = getMaxPingTimeout();
         if (_log.shouldInfo()) {
-            _log.info(String.format("About to ping %s port %d from port %d timeout=%d blocking=%b via subsession",
-                      peer.calculateHash().toString(), toPort, fromPort, timeoutMs, blocking));
+            _log.info(String.format("About to ping %s port %d from port %d timeout: %d" + (blocking ? " blocking" : "") + " via subsession",
+                      peer.calculateHash().toString(), toPort, fromPort, timeoutMs));
         }
 
         _outboundQueue.enqueue(packet);
@@ -2886,7 +2886,7 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
         if (timeoutMs > getMaxPingTimeout())
             timeoutMs = getMaxPingTimeout();
         if (_log.shouldInfo()) {
-            _log.info(String.format("About to ping %s port %d from port %d timeout=%d payload=%d via subsession",
+            _log.info(String.format("About to ping %s port %d from port %d timeout: %d payload: %d via subsession",
                       peer.calculateHash().toString(), toPort, fromPort, timeoutMs, payload.length));
         }
 

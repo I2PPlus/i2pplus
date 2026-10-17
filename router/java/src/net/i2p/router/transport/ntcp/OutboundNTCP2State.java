@@ -486,7 +486,7 @@ class OutboundNTCP2State implements EstablishState {
         int newoff = NTCP2Payload.writePayload(tmp, MSG3P1_SIZE, blocks);
         int expect = MSG3P1_SIZE + msg3p2len;
         if (newoff != expect)
-            throw new IllegalStateException("Message #3 size mismatch -> expected " + expect + "bytes, got " + newoff);
+            throw new IllegalStateException("Message #3 size mismatch -> Expected " + expect + " bytes, got " + newoff);
         try {
             _handshakeState.writeMessage(tmp, 0, tmp, MSG3P1_SIZE, msg3p2len);
         } catch (GeneralSecurityException gse) {

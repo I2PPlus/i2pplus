@@ -224,7 +224,7 @@ class MailPart {
         if (multipart) {beginBody = (int) counter.getRead() + 1;} // EOFOnMatch will eat the \n
         else {
             int c = in.read(); // swallow the \n
-            if (c != '\n' && _log.shouldDebug()) {_log.debug("wasn't a \\n, it was " + c);}
+            if (c != '\n' && _log.shouldDebug()) {_log.debug("Wasn't a \\n, it was " + c);}
             beginBody = (int) counter.getRead();
         }
 

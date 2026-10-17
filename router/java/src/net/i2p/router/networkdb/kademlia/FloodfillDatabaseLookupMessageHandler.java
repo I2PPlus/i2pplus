@@ -110,7 +110,7 @@ public class FloodfillDatabaseLookupMessageHandler implements HandlerJobBuilder 
         final boolean shouldThrottle = !isSenderUs && _facade.shouldThrottleLookup(dlm.getFrom(), dlm.getReplyTunnel());
         final boolean shouldBan = !isBanned && _facade.shouldBanLookup(dlm.getFrom(), dlm.getReplyTunnel());
         if (shouldThrottle && _log.shouldDebug()) {
-            _log.debug("Throttling lookup from " + dlm.getFrom().toBase64().substring(0, 6));
+            _log.debug("Throttling lookup from [" + dlm.getFrom().toBase64().substring(0, 6) + "]");
         }
         final boolean shouldAccept = shouldAcceptLookup(isSenderUs, shouldThrottle, shouldBan, ourRI, floodfillMode, isFF, type);
         final int maxLookups = isFF ? 60 : 30;

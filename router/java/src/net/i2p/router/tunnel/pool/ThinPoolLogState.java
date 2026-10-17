@@ -50,6 +50,6 @@ public class ThinPoolLogState {
      */
     public static String formatThinPool(String poolName, int healthy, int target) {
         return poolName + " -> Thin pool (" + healthy + "/" + target
-               + " healthy) -> fast-path pre-build";
+               + " healthy) -> Fast-path pre-build";
     }
 }

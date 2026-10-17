@@ -2438,7 +2438,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
             recordFirstHopFail(ctx, peer);
             Log log = ctx.logManager().getLog(TunnelPeerSelector.class);
             if (log.shouldInfo())
-                log.info("Skipping pre-connect to " + peer.toBase64().substring(0,6) +
+                log.info("Skipping pre-connect to [" + peer.toBase64().substring(0,6) + "]" +
                          " — no valid SSU or NTCP address");
             return PreConnectOutcome.NO_USABLE_ADDRESS;
         }

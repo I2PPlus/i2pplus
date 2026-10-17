@@ -174,8 +174,8 @@ public class I2PTunnelOutproxyRunner extends I2PAppThread {
 
             if (onTimeout != null) {
                 if (_log.shouldDebug()) {
-                    _log.debug("Runner has a timeout job, totalReceived = " + totalReceived.get()
-                            + " totalSent = " + totalSent.get() + " job = " + onTimeout);
+                    _log.debug("Runner has a timeout job; total received: " + totalReceived.get()
+                            + "; total sent: " + totalSent.get() + "; job: " + onTimeout);
                 }
                 if (totalReceived.get() <= 0) {
                     onTimeout.onFail(null);
@@ -193,7 +193,7 @@ public class I2PTunnelOutproxyRunner extends I2PAppThread {
                 _log.debug("Error forwarding (" + ex.getMessage() + ")");
         } catch (IllegalStateException ise) {
             if (_log.shouldWarn())
-                _log.warn("gnu?", ise);
+                _log.warn("Forwarding interrupted by illegal state", ise);
         } catch (RuntimeException e) {
             if (_log.shouldError())
                 _log.error("Internal error", e);

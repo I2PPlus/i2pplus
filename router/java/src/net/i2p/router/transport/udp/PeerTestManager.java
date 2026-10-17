@@ -502,7 +502,7 @@ class PeerTestManager {
                                                    test.getAliceIP().getAddress(), test.getAlicePort(), spk);
                 if (data == null) {
                     if (_log.shouldWarn())
-                        _log.warn("sig fail");
+                        _log.warn("Peer test signature failure");
                      testComplete(test);
                      return;
                 }

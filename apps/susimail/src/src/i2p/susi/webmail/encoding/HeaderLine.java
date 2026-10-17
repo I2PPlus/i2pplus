@@ -297,7 +297,7 @@ public class HeaderLine extends Encoding {
 								// probably Base64 exceeded DECODE_MAX
 								// Keep going and output what we got, if any
 								if (_log.shouldDebug()) {
-									_log.debug("q-w " + enc, eof);
+									_log.debug("Quoted-word decode hit end of data; encoding: " + enc);
 									_log.debug(HexDump.dump(encodedWord));
 								}
 							}
@@ -334,12 +334,12 @@ public class HeaderLine extends Encoding {
 							lastCharWasQuoted = true;
 							continue;
 						} catch (IOException e1) {
-							_log.error("q-w " + enc, e1);
+							_log.error("Quoted-word decode failed; encoding: " + enc + "; " + e1.getMessage());
 							if (_log.shouldDebug()) {
 								_log.debug(net.i2p.util.HexDump.dump(encodedWord));
 							}
 						} catch (RuntimeException e1) {
-							_log.error("q-w " + enc, e1);
+							_log.error("Quoted-word decode failed; encoding: " + enc, e1);
 							if (_log.shouldDebug()) {
 								_log.debug(net.i2p.util.HexDump.dump(encodedWord));
 							}

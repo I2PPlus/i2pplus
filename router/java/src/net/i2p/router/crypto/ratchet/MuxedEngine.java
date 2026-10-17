@@ -60,15 +60,15 @@ final class MuxedEngine {
                 try {
                     rv = _context.garlicMessageParser().readCloveSet(dec, 0);
                     if (rv == null && _log.shouldInfo())
-                        _log.info("AES cloveset error after AES? " + preferRatchet);
+                        _log.info("AES decryption produced an unparseable message");
                 } catch (DataFormatException dfe) {
                     if (_log.shouldInfo())
-                        _log.info("AES cloveset error after AES? " + preferRatchet, dfe);
+                        _log.info("AES decryption produced an unparseable message", dfe);
                 }
                 return rv;
             } else {
                 if (debug)
-                    _log.debug("AES tag not found after Ratchet? " + preferRatchet);
+                    _log.debug("AES tag not found");
             }
         }
         if (!preferRatchet) {
@@ -101,11 +101,11 @@ final class MuxedEngine {
                     if (ok)
                         return rv;
                     if (_log.shouldInfo())
-                        _log.info("ElGamal cloveset parse failed after Ratchet attempt -> " +
+                        _log.info("ElGamal decryption produced an unparseable message after Ratchet attempt -> " +
                                   (preferRatchet ? "Discarding" : "Trying Ratchet DH"));
                 } catch (DataFormatException dfe) {
                     if (_log.shouldInfo())
-                        _log.info("ElGamal cloveset parse failed after Ratchet attempt -> " +
+                        _log.info("ElGamal decryption produced an unparseable message after Ratchet attempt -> " +
                                   (preferRatchet ? "Discarding" : "Trying Ratchet DH"), dfe);
                 }
             } else {

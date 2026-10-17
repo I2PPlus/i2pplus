@@ -358,7 +358,7 @@ public class DBHistory {
             _failedLookupRate.load(props, "dbHistory.failedLookupRate", true);
             _log.debug("Loading dbHistory.failedLookupRate");
         } catch (IllegalArgumentException iae) {
-            _log.warn("Db History Failed Lookup rate is corrupt (" + iae.getMessage() + ") -> resetting...");
+            _log.warn("Db History Failed Lookup rate is corrupt (" + iae.getMessage() + ") -> Resetting...");
         }
 
         try {_invalidReplyRate.load(props, "dbHistory.invalidReplyRate", true);}

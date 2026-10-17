@@ -496,7 +496,7 @@ public class RequestThrottler {
                 if (_log.shouldWarn()) {
                     _log.warn("Transit request burst from Router [" + routerId + "] -> " +
                               "Offense " + offenses + (banTime > 0 ?
-                              (" -> banning for " + (banTime / 60000) + "m") : " -> throttling request"));
+                              (" -> Banning for " + (banTime / 60000) + "m") : " -> Throttling request"));
                 }
                 if (banTime > 0) {
                     String ipPort = TransportImpl.getRouterIPPort(ri);

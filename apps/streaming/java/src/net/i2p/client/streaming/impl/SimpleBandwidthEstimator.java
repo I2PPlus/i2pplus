@@ -95,7 +95,7 @@ class SimpleBandwidthEstimator implements BandwidthEstimator {
             _acked = 0;
             _tAck = now;
             if (_log.shouldDebug())
-                _log.debug("first sample packets: " + acked + " deltaT: " + deltaT + ' ' + this);
+                _log.debug("First sample packets: " + acked + " deltaT: " + deltaT + ' ' + this);
         } else {
             _acked += acked;
             // anti-aliasing filter
@@ -156,7 +156,7 @@ class SimpleBandwidthEstimator implements BandwidthEstimator {
             }
             deltaT -= (long) numrtts * rtt;
             if (_log.shouldDebug())
-                _log.debug("decayed " + numrtts + " times, new _bK_ns_est: " + _bK_ns_est + ' ' + this);
+                _log.debug("Decayed " + numrtts + " times, new _bK_ns_est: " + _bK_ns_est + ' ' + this);
         }
         float bkdt;
         if (packets > 0) {

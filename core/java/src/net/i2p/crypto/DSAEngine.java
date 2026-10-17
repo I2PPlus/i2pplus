@@ -291,7 +291,7 @@ public final class DSAEngine {
             try {
                 return altSignSHA1(data, offset, length, signingKey);
             } catch (GeneralSecurityException gse) {
-                if (_log.shouldWarn()) _log.warn("Lib Sign Fail, privkey = " + signingKey, gse);
+                if (_log.shouldWarn()) _log.warn("Library signing failed -> Falling back to native", gse);
                 // now try TheCrypto
             }
         }

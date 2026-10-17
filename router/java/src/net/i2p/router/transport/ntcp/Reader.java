@@ -151,7 +151,7 @@ public class Reader {
             }
         }
         if (_log.shouldDebug())
-            _log.debug("wantsRead: " + con + " already live? " + already);
+            _log.debug("wantsRead: " + con + (already ? "; already live" : "; not live"));
     }
 
     /**

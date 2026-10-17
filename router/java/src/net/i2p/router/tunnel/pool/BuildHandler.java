@@ -1324,10 +1324,10 @@ public class BuildHandler implements Runnable {
             _context.statManager().addRateData("tunnel.rejectHostile", 1);
             if (from != null) {
                 _context.commSystem().mayDisconnect(from);
-                _banLogger.logBan(from, getIPPortFromHash(from), "Hostile Tunnel Request (IBGW+OBEP)", bantime);
-                _context.banlist().banlistRouter(from, "Hostile Tunnel Request (IBGW+OBEP)", null, null, System.currentTimeMillis() + bantime);
+                _banLogger.logBan(from, getIPPortFromHash(from), "Hostile Tunnel Request (Inbound Gateway & Outbound Endpoint)", bantime);
+                _context.banlist().banlistRouter(from, "Hostile Tunnel Request (Inbound Gateway & Outbound Endpoint)", null, null, System.currentTimeMillis() + bantime);
                 if (shouldLog) {_log.warn("Banning [" + fromPeer + "] for " + period + "m -> Hostile Tunnel Request (Inbound Gateway & Outbound Endpoint)");}
-            } else if (shouldLog) {_log.warn("Dropping HOSTILE Tunnel Request from UNKNOWN -> IBGW+OBEP");}
+            } else if (shouldLog) {_log.warn("Dropping hostile tunnel request from unknown router -> Inbound Gateway & Outbound Endpoint");}
             return;
         }
         if (ourId <= 0 || ourId > TunnelId.MAX_ID_VALUE || nextId <= 0 || nextId > TunnelId.MAX_ID_VALUE) {

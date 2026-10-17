@@ -253,7 +253,7 @@ public class BlacklistBean extends BaseBean {
         } catch (Exception e) {
             // Log at debug level only for HostChecker to avoid spam
             if (_log.shouldDebug()) {
-                _log.debug("Error checking b32 blacklist for " + b32 + ": " + e.getMessage());
+                _log.debug("Error checking base32 address blacklist for " + b32 + ": " + e.getMessage());
             }
         }
         return false;

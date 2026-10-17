@@ -118,7 +118,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
             new I2PTunnel(args);
         } catch (IllegalArgumentException iae) {
             Log log = I2PAppContext.getGlobalContext().logManager().getLog(I2PTunnel.class);
-            log.error("invalid argument", iae);
+            log.error("Invalid argument", iae);
             System.exit(1);
         }
     }
@@ -520,7 +520,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
         try {
             return InetAddress.getByName(hostArg);
         } catch (UnknownHostException uhe) {
-            l.log("unknown host");
+            l.log("Unknown host");
             _log.error(getPrefix() + "Error resolving " + hostArg, uhe);
             notifyEvent("serverTaskId", Integer.valueOf(-1));
             throw new IllegalArgumentException(getPrefix() + "Error resolving " + hostArg + uhe.getMessage());
@@ -540,7 +540,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
         try {
             portNum = Integer.parseInt(portArg);
         } catch (NumberFormatException nfe) {
-            l.log("invalid port");
+            l.log("Invalid port");
             _log.error(getPrefix() + "Port specified is not valid: " + portArg, nfe);
             notifyEvent("serverTaskId", Integer.valueOf(-1));
             return -1;
@@ -866,7 +866,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
             try {
                 portNum = Integer.parseInt(args[0]);
             } catch (NumberFormatException nfe) {
-                l.log("invalid port");
+                l.log("Invalid port");
                 _log.error(getPrefix() + "Port specified is not valid: " + args[0], nfe);
                 notifyEvent("clientTaskId", Integer.valueOf(-1));
             }
@@ -912,7 +912,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
             try {
                 clientPort = Integer.parseInt(args[0]);
             } catch (NumberFormatException nfe) {
-                l.log("invalid port");
+                l.log("Invalid port");
                 _log.error(getPrefix() + "Port specified is not valid: " + args[0], nfe);
                 notifyEvent("httpclientTaskId", Integer.valueOf(-1));
             }
@@ -1038,7 +1038,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
             try {
                 portNum = Integer.parseInt(args[0]);
             } catch (NumberFormatException nfe) {
-                l.log("invalid port");
+                l.log("Invalid port");
                 _log.error(getPrefix() + "Port specified is not valid: " + args[0], nfe);
                 notifyEvent("ircclientTaskId", Integer.valueOf(-1));
             }
@@ -1096,7 +1096,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
             try {
                 portNum = Integer.parseInt(args[0]);
             } catch (NumberFormatException nfe) {
-                l.log("invalid port");
+                l.log("Invalid port");
                 _log.error(getPrefix() + "Port specified is not valid: " + args[0], nfe);
                 notifyEvent("sockstunnelTaskId", Integer.valueOf(-1));
             }
@@ -1144,7 +1144,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
             try {
                 portNum = Integer.parseInt(args[0]);
             } catch (NumberFormatException nfe) {
-                l.log("invalid port");
+                l.log("Invalid port");
                 _log.error(getPrefix() + "Port specified is not valid: " + args[0], nfe);
                 notifyEvent("socksirctunnelTaskId", Integer.valueOf(-1));
             }
@@ -1188,7 +1188,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
             try {
                 hostAddr = InetAddress.getByName(args[0]);
             } catch (UnknownHostException uhe) {
-                l.log("unknown host");
+                l.log("Unknown host");
                 _log.error(getPrefix() + "Error resolving " + args[0], uhe);
                 notifyEvent("streamrtunnelTaskId", Integer.valueOf(-1));
                 return;
@@ -1198,7 +1198,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
             try {
                 portNum = Integer.parseInt(args[1]);
             } catch (NumberFormatException nfe) {
-                l.log("invalid port");
+                l.log("Invalid port");
                 _log.error(getPrefix() + "Port specified is not valid: " + args[0], nfe);
                 notifyEvent("streamrtunnelTaskId", Integer.valueOf(-1));
             }
@@ -1235,7 +1235,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
             try {
                 portNum = Integer.parseInt(args[0]);
             } catch (NumberFormatException nfe) {
-                l.log("invalid port");
+                l.log("Invalid port");
                 _log.error(getPrefix() + "Port specified is not valid: " + args[0], nfe);
                 notifyEvent("streamrtunnelTaskId", Integer.valueOf(-1));
             }
@@ -1246,7 +1246,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
             if (!privKeyFile.isAbsolute())
                 privKeyFile = new File(_context.getConfigDir(), args[1]);
             if (!privKeyFile.canRead()) {
-                l.log("private key file does not exist");
+                l.log("Private key file does not exist");
                 _log.error(getPrefix() + "Private key file does not exist or is not readable: " + args[1]);
                 notifyEvent("serverTaskId", Integer.valueOf(-1));
                 return;

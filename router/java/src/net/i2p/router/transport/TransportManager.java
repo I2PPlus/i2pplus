@@ -1252,7 +1252,7 @@ public class TransportManager implements TransportEventListener {
                     TunnelManagerFacade tmf = _context.tunnelManager();
                     GhostPeerManager ghostMgr = tmf != null ? tmf.getGhostPeerManager() : null;
                     if (ghostMgr != null) {
-                        _banLogger.logBan(peer, _peerIP, "Unreachable on any transport -> ghosted", 0, targetRI);
+                        _banLogger.logBan(peer, _peerIP, "Unreachable on any transport -> Marked unreachable", 0, targetRI);
                         ghostMgr.recordTimeout(peer);
                     } else {
                         // No pool manager yet (very early startup). There is no evidence of

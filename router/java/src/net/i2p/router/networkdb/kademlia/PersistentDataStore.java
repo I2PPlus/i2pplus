@@ -1102,13 +1102,13 @@ public class PersistentDataStore extends TransientDataStore {
 
                 if (isSlow) {
                     if (_log.shouldInfo()) {
-                        _log.info("Deleting slow (" + bw + ") RouterInfo: " + key.toBase64().substring(0, 6) + "...");
+                        _log.info("Deleting slow (" + bw + ") RouterInfo: [" + key.toBase64().substring(0, 6) + "]");
                     }
                     file.delete();
                     deletedCount++;
                 } else if (isDegraded) {
                     if (_log.shouldInfo()) {
-                        _log.info("Deleting degraded (" + bw + ") RouterInfo: " + key.toBase64().substring(0, 6) + "...");
+                        _log.info("Deleting degraded (" + bw + ") RouterInfo: [" + key.toBase64().substring(0, 6) + "]");
                     }
                     file.delete();
                     deletedCount++;

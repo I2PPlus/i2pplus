@@ -943,7 +943,7 @@ public class POP3MailBox implements NewMailListener {
                         connected = false;
                     }
                 }
-            } else if (_log.shouldDebug()) {_log.debug("not connected after reconnect");}
+            } else if (_log.shouldDebug()) {_log.debug("Not connected after reconnect");}
         }
         return null;
     }

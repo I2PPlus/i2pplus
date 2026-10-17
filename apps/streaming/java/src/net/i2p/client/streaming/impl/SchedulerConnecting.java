@@ -85,13 +85,13 @@ class SchedulerConnecting extends SchedulerImpl {
         long timeTillSend = con.getNextSendTime() - _context.clock().now();
         if ( (timeTillSend <= 0) && (con.getNextSendTime() > 0) ) {
             if (_log.shouldDebug())
-                _log.debug("send next on " + con);
+                _log.debug("Send next on " + con);
             con.sendAvailable();
             con.setNextSendTime(-1);
         } else {
             if (con.getNextSendTime() > 0) {
                 if (_log.shouldDebug())
-                    _log.debug("time till send: " + timeTillSend + " on " + con);
+                    _log.debug("Time till send: " + timeTillSend + " on " + con);
                 reschedule(timeTillSend, con);
             } else if (window > 0) {
                 // no pending send; re-check the connect timeout when it elapses

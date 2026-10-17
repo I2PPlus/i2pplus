@@ -1131,7 +1131,7 @@ public class RepublishLeaseSetJob extends JobImpl {
                     if (_log.shouldWarn()) {
                         _log.warn("Floodfill verification maxed out" + name + " [" +
                                   _ls.getHash().toBase32().substring(0, 8) +
-                                  "] -> falling back to retry directly");
+                                  "] -> Falling back to retry directly");
                     }
                     _lookupInProgress.set(false);
                     requeueRepublish();

@@ -663,7 +663,7 @@ public class Daemon {
             StringBuilder buf = new StringBuilder(16);
             final int sz = dests.size();
             for (int i = 0; i < sz; i++) {
-                buf.append(dests.get(i).toBase64().substring(0, 6));
+                buf.append('[').append(dests.get(i).toBase64().substring(0, 6)).append(']');
                 if (i != sz - 1)
                     buf.append(", ");
             }
@@ -671,7 +671,7 @@ public class Daemon {
                        " destinations for " + name +
                        " (" + buf + ')' +
                        " do not include" +
-                       " (" + olddest.substring(0, 6) + ')' +
+                       " [" + olddest.substring(0, 6) + ']' +
                        " [" + addressbook.getLocation() + "]");
         }
     }

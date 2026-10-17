@@ -417,7 +417,7 @@ class SAMv2StreamSession extends SAMStreamSession {
                 runningLock.notifyAll();
             }
             if (_log.shouldDebug())
-                _log.debug("new limit set for socket reader " + id + " : " + (nolimit ? "NOLIMIT" : limit + " bytes"));
+                _log.debug("New limit set for socket reader " + id + " : " + (nolimit ? "NOLIMIT" : limit + " bytes"));
         }
 
         /**

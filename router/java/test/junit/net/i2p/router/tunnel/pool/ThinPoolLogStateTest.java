@@ -85,6 +85,6 @@ public class ThinPoolLogStateTest {
         String msg = ThinPoolLogState.formatThinPool("Outbound Client Pool", 2, 8);
         assertTrue(msg, msg.contains("2/8"));
         assertTrue(msg, msg.contains("Thin pool"));
-        assertTrue(msg, msg.contains("fast-path pre-build"));
+        assertTrue(msg, msg.contains("Fast-path pre-build"));
     }
 }

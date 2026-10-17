@@ -406,8 +406,8 @@ class MasterSession extends SAMv3StreamSession implements SAMDatagramReceiver, S
      */
     private void messageReceived(byte[] msg, int proto, int fromPort, int toPort) {
         if (_log.shouldWarn())
-            _log.warn("Unhandled message received, length = " + msg.length +
-                " protocol: " + proto + " from port: " + fromPort + " to port: " + toPort);
+            _log.warn("Unhandled message received; length: " + msg.length +
+                "; protocol: " + proto + "; from port: " + fromPort + "; to port: " + toPort);
     }
 
     /**

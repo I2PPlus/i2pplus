@@ -615,7 +615,7 @@ class SAMv3Handler extends SAMv1Handler
         streamSession = ctl.streamSession;
         if (streamSession==null || !ctl.sessionReady) {
             if (_log.shouldDebug())
-                _log.debug("specified ID is not a stream session");
+                _log.debug("Specified ID is not a stream session");
             try {
                 notifyStreamResult(true, "I2P_ERROR",  "specified ID " + nick + " is not a STREAM session");
             } catch (IOException e) { /* ignored */ }

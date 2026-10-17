@@ -153,8 +153,8 @@ public class DecayingHashSet extends DecayingBloomFilter {
         // no decay may run before one interval has passed
         _lastDecayNanos = System.nanoTime();
         if (_log.shouldDebug())
-            _log.debug("New DHS " + name + " entryBytes = " + entryBytes +
-                     " cycle (s) = " + (durationMs / 1000));
+            _log.debug("New DHS " + name + "; entry bytes: " + entryBytes +
+                     "; cycle seconds: " + (durationMs / 1000));
     }
 
     /**

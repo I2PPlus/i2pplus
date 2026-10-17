@@ -216,7 +216,7 @@ public final class ElGamalEngine {
         if (ok) {
             return rv;
         }
-        if (_log.shouldDebug()) _log.debug("Doesn't match hash data = " + Base64.encode(rv), new Exception("Doesn't match"));
+        if (_log.shouldDebug()) _log.debug("Doesn't match hash data: " + Base64.encode(rv), new Exception("Doesn't match"));
         return null;
     }
 }

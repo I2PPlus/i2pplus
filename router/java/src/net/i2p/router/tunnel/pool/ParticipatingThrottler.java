@@ -536,7 +536,7 @@ public class ParticipatingThrottler {
         }
         if (_log.shouldWarn()) {
             _log.warn("Join from Router [" + h.toBase64().substring(0,6) + "] with no version" +
-                      " -> rejecting transient (offense " + off[0] + ')');
+                      " -> Rejecting transient (offense " + off[0] + ')');
         }
         if (!isBanned && off[0] >= NO_VERSION_BAN_THRESHOLD &&
             "true".equals(context.getProperty("router.banlist.enableNoVersionBan", "true"))) {

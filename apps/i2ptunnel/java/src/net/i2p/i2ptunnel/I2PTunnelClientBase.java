@@ -1601,7 +1601,7 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
         }
 
         if (_log.shouldDebug()) {
-            _log.debug("close() called: forced = " + forced + " open = " + open + " sockMgr = " + sockMgr);
+            _log.debug("close() called; " + (forced ? "forced" : "not forced") + "; " + (open ? "open" : "closed") + "; sockMgr: " + sockMgr);
         }
         if (forced) {
             Thread tb = _tunnelBuilder;

@@ -363,7 +363,7 @@ public class RouterTimestamper extends Timestamper {
             if (i == 0) {
                 if (Math.abs(delta) < MAX_VARIANCE) {
                     if (_log != null && _log.shouldInfo())
-                        _log.info("a single SNTP query was within the tolerance (" + delta + "ms)");
+                        _log.info("A single SNTP query was within the tolerance (" + delta + "ms)");
                     // If less than a half second on the first try, we're in good shape
                     _wellSynced = Math.abs(delta) < 500;
                     break;

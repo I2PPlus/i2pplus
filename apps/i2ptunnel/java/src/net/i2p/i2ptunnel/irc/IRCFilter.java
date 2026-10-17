@@ -630,7 +630,7 @@ abstract class IRCFilter {
             } else {
                 // "reverse/firewall DCC" - send it through without tracking
                 Log log = new Log(IRCFilter.class);
-                log.logAlways(Log.WARN, "Reverse / Firewall DCC, port = 0");
+                log.logAlways(Log.WARN, "Reverse / Firewall DCC, port: 0");
                 port = cPort;
             }
         } else if (type.equals("ACCEPT")) {

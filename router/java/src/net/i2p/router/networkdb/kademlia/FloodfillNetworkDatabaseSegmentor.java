@@ -117,7 +117,7 @@ public class FloodfillNetworkDatabaseSegmentor extends SegmentedNetworkDatabaseF
     @Override
     public NetworkDatabaseFacade clientNetDB(Hash id) {
         if (_log.shouldDebug())
-            _log.debug("Looked up ClientNetDB: " + (id != null ? id.toBase32().substring(0,8) : "main"));
+            _log.debug("Looked up ClientNetDB: " + (id != null ? "[" + id.toBase32().substring(0,8) + "]" : "main"));
         if (id != null){
             NetworkDatabaseFacade fndf = getSubNetDB(id);
             if (fndf != null)

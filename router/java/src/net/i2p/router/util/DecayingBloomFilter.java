@@ -282,8 +282,8 @@ public class DecayingBloomFilter {
             _decayEvent.schedule(_durationMs);
         }
         if (_log.shouldWarn())
-           _log.warn("New DecayingBloomFilter " + name + " m = " + m + " k = " + k + " entryBytes = " + entryBytes +
-                     " numExtenders = " + numExtenders + " cycle (s) = " + (durationMs / 1000));
+           _log.warn("New DecayingBloomFilter " + name + "; m: " + m + "; k: " + k + "; entry bytes: " + entryBytes +
+                     "; extenders: " + numExtenders + "; cycle seconds: " + (durationMs / 1000));
         context.addShutdownTask(new Shutdown());
     }
 
@@ -706,7 +706,7 @@ public class DecayingBloomFilter {
         try {
             boolean rv = _reorganizeLock.writeLock().tryLock(5000, TimeUnit.MILLISECONDS);
             if (!rv)
-                _log.error("no lock, size is: " + _reorganizeLock.getQueueLength(), new Exception("rats"));
+                _log.error("No lock, size is: " + _reorganizeLock.getQueueLength(), new Exception("rats"));
             return rv;
         } catch (InterruptedException ie) {
             Thread.currentThread().interrupt();

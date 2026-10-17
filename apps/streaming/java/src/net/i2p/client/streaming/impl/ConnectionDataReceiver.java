@@ -109,10 +109,10 @@ class ConnectionDataReceiver implements MessageOutputStream.DataReceiver {
         }
 
         if (_log.shouldDebug()) {
-            _log.debug("writeData called: size=" + size + ", doSend=" + doSend +
-                       ", closed=" + con.getOutputStream().getClosed() +
-                       ", closeSentOn=" + con.getCloseSentOn() +
-                       ", unacked=" + con.getUnackedPacketsReceived());
+            _log.debug("writeData called; size: " + size + "; " + (doSend ? "sending" : "not sending") +
+                       "; output " + (con.getOutputStream().getClosed() ? "closed" : "open") +
+                       "; closeSentOn: " + con.getCloseSentOn() +
+                       "; unacked: " + con.getUnackedPacketsReceived());
         }
 
         if (doSend) {

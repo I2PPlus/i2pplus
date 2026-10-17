@@ -613,7 +613,7 @@ public class SingleFileNamingService extends NamingService {
         try {
             boolean rv = _fileLock.writeLock().tryLock(10000, TimeUnit.MILLISECONDS);
             if ((!rv) && _log.shouldWarn())
-                _log.warn("no lock, size is: " + _fileLock.getQueueLength(), new Exception("rats"));
+                _log.warn("No lock, size is: " + _fileLock.getQueueLength(), new Exception("rats"));
             return rv;
         } catch (InterruptedException ie) { /* ignored */ }
         return false;

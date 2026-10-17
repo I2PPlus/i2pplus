@@ -650,9 +650,9 @@ class MessageInputStream extends InputStream {
     public void close() {
         synchronized (_dataLock) {
             if (_log.shouldDebug()) {
-                _log.debug("close(): ready blocks=" + _readyDataBlocks.size()
-                        + ", not ready blocks=" + _notYetReadyBlocks.size()
-                        + ", highest ready block=" + _highestReadyBlockId);
+                _log.debug("close(): ready blocks: " + _readyDataBlocks.size()
+                        + "; not ready blocks: " + _notYetReadyBlocks.size()
+                        + "; highest ready block: " + _highestReadyBlockId);
             }
 
             _readyDataBlocks.clear();

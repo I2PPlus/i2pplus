@@ -281,7 +281,7 @@ public class TestJob extends JobImpl {
         }
         getContext().statManager().addRateData(directionStat(_cfg.isInbound(), "GraceDeferred"), 1);
         if (_log.shouldDebug()) {
-            _log.debug("Tunnel Test failed -> too young to judge \n* Deferring test of " + _cfg);
+            _log.debug("Tunnel Test failed -> Too young to judge\n* Deferring test of " + _cfg);
         }
         if (!scheduleRetest(false)) {
             cleanupTunnelTracking();
@@ -1084,7 +1084,7 @@ public class TestJob extends JobImpl {
         _excludedPartner = partner;
         if (scheduleRetest(true)) {
             if (_log.shouldDebug()) {
-                _log.debug("Tunnel Test failed -> confirming " + _cfg +
+                _log.debug("Tunnel Test failed -> Confirming " + _cfg +
                            " against a different partner before charging");
             }
             return true;
@@ -2608,7 +2608,7 @@ static List<PendingTest> prioritizeBatch(List<PendingTest> scan, long now) {
         if (now - last >= DENIAL_LOG_INTERVAL_MS && state.lastDenialLog.compareAndSet(last, now)) {
             Log log = ctx.logManager().getLog(TestJob.class);
             if (log.shouldInfo()) {
-                log.info("Batched first-test denied (" + reason + ") -> candidates stay buffered");
+                log.info("Batched first-test denied (" + reason + ") -> Candidates stay buffered");
             }
         }
     }
@@ -4481,7 +4481,7 @@ static List<PendingTest> prioritizeBatch(List<PendingTest> scan, long now) {
         } else {
             ctx.statManager().addRateData("tunnel.testDeferred", _cfg.getLength());
             if (_log.shouldWarn()) {
-                _log.warn("No " + direction + " tunnel for test of " + _cfg + " \n* Deferring (" +
+                _log.warn("No " + direction + " tunnel for test of " + _cfg + "\n* Deferring (" +
                           _deferredCount + "/" + MAX_DEFERRED + " -> Pool may be recovering...)");
             }
         }

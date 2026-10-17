@@ -302,7 +302,7 @@ public class PeerTestJob extends JobImpl {
             if (lag > 2000) {
                 // System under heavy load — skip this round entirely
                 if (_log.shouldWarn()) {
-                    _log.warn("Extreme Job lag (" + lag + "ms) -> skipping peer test round");
+                    _log.warn("Extreme Job lag (" + lag + "ms) -> Skipping peer test round");
                 }
                 delay = baseDelay * 5;
             } else if (lag > 300 || SystemVersion.getCPULoadAvg() > 80) {
@@ -310,7 +310,7 @@ public class PeerTestJob extends JobImpl {
                 double multiplier = 1.0 + (lag / 500.0);
                 delay = Math.min((long)(baseDelay * multiplier), 5 * 60 * 1000L);
                 if (_log.shouldWarn()) {
-                    _log.info("High Job lag (" + lag + "ms) -> scaling delay to " + delay + "ms (base: " + baseDelay + "ms)");
+                    _log.info("High Job lag (" + lag + "ms) -> Scaling delay to " + delay + "ms (base: " + baseDelay + "ms)");
                 }
             } else {
                 delay = baseDelay;
@@ -380,7 +380,7 @@ public class PeerTestJob extends JobImpl {
             List<Hash> peerHashes = manager.selectTestPeersNonBlocking(needed * 4);
             if (peerHashes == null) {
                 if (_log.shouldDebug())
-                    _log.debug("Read lock held by reorganize -> skipping peer test round");
+                    _log.debug("Read lock held by reorganize -> Skipping peer test round");
                 return peers;
             }
 
@@ -699,7 +699,7 @@ public class PeerTestJob extends JobImpl {
                 try {
                     getContext().profileOrganizer().demoteIfNotLowLatency(_peer);
                     if (_log.shouldInfo())
-                        _log.info("Demoting [" + _shortHash + "] -> test timeout");
+                        _log.info("Demoting [" + _shortHash + "] -> Test timeout");
                 } catch (NumberFormatException nfe) { /* ignored */ }
             }
         }

@@ -379,7 +379,7 @@ class MessageOutputStream extends OutputStream {
         WriteStatus ws = null;
 
         if (_log.shouldDebug() && _valid > 0) {
-            _log.debug("flush() called with valid bytes = " + _valid);
+            _log.debug("flush() called, valid bytes: " + _valid);
         }
 
         synchronized (_dataLock) {

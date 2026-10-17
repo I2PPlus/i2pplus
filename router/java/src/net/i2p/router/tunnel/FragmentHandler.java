@@ -200,7 +200,7 @@ class FragmentHandler {
                 if (off < 0) {
                     _context.statManager().addRateData("tunnel.corruptMessage", 1);
                     if (_log.shouldWarn())
-                        _log.warn("Corrupt fragment received: off = " + off);
+                        _log.warn("Corrupt fragment received; offset: " + off);
                     return false;
                 }
                 offset = off;
@@ -208,9 +208,9 @@ class FragmentHandler {
         } catch (ArrayIndexOutOfBoundsException aioobe) {
             _context.statManager().addRateData("tunnel.corruptMessage", 1);
             if (_log.shouldDebug())
-                _log.warn("Corrupt fragment received: offset = " + offset, aioobe);
+                _log.warn("Corrupt fragment received; offset: " + offset, aioobe);
             else if (_log.shouldWarn())
-                _log.warn("Corrupt fragment received: offset = " + offset + "\n* Array Index Out of Bounds Exception: " + aioobe);
+                _log.warn("Corrupt fragment received; offset: " + offset + "\n* Array Index Out of Bounds Exception: " + aioobe);
             return false;
         } catch (NullPointerException npe) {
             if (_log.shouldDebug())

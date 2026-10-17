@@ -1177,7 +1177,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
             int rangeCount = ranges != null ? ranges.length / 2 : 0;
             SSU2Bitfield ackbf = SSU2Bitfield.fromACKBlock(ackThru, acks, ranges, rangeCount);
             if (shouldLogDebug) {
-                _log.debug("[SSU] Received new ACK block from " + _remotePeer.toBase64().substring(0, 6) + ' ' +
+                _log.debug("[SSU] Received new ACK block from [" + _remotePeer.toBase64().substring(0, 6) + "] " +
                            SSU2Bitfield.toString(ackThru, acks, ranges, rangeCount));
             }
             ackbf.forEachAndNot(_ackedMessages, this);
