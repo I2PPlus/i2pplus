@@ -63,7 +63,7 @@
       includeAntRuntime="false"
       encoding="UTF-8"
       destdir="${build.dir}/buildDemo/obj"
-      classpath="${core.java.build.dir}/i2p.jar:./build/mstreaming.jar">
+      classpath="${core.java.build.dir}/i2p.jar:${build.dir}/mstreaming.jar">
       <compilerarg line="${javac.compilerargs}"/>
     </javac>
   </target>
@@ -371,7 +371,7 @@
       <fileset dir="${junit.reports.dir}/ministreaming/junit/"/>
     </replaceregexp>
   </target>
-  <target name="test" depends="junit.test"/>
+  <target name="test" depends="junit.test, compileDemo"/>
   <!-- test reports -->
   <target name="junit.report">
     <junitreport todir="${java.io.tmpdir}/build-i2p/reports/ministreaming/junit">
