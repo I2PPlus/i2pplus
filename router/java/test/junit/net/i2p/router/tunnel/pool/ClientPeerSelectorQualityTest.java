@@ -3,7 +3,9 @@ package net.i2p.router.tunnel.pool;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import org.junit.Test;
@@ -64,7 +66,8 @@ public class ClientPeerSelectorQualityTest {
 
     /** Compare two peers through the full cascade. */
     private static int cascadeCompare(Set<Hash> exclude, PeerProfile pa, PeerProfile pb) {
-        return ClientPeerSelector.compareQuality(hash(1), hash(2), exclude, pa, pb, NOW, THIRTY_MINUTES);
+        return ClientPeerSelector.compareQuality(hash(1), hash(2), exclude, pa, pb,
+                                                 java.util.Collections.emptyMap(), NOW, THIRTY_MINUTES);
     }
 
     @Test
@@ -219,5 +222,30 @@ public class ClientPeerSelectorQualityTest {
         PeerProfile pa = goodActiveFast();
         PeerProfile pb = goodActiveFast();
         assertEquals(0, cascadeCompare(null, pa, pb));
+    }
+
+    /**
+     * The proven stage must read the caller-supplied snapshot, never the live
+     * shared {@code _provenResponders} map. Regression for the TimSort crash:
+     * build threads mutate that map concurrently, so a comparator reading it
+     * mid-sort violates its general contract. Here the shared map marks p2 as
+     * proven while the snapshot marks p1; reading the snapshot must yield a
+     * negative result (p1 first), reading the shared map would yield positive.
+     */
+    @Test
+    public void testProvenStageReadsSnapshotNotSharedMap() {
+        Hash p1 = hash(1);
+        Hash p2 = hash(2);
+        TunnelPeerSelector._provenResponders.put(p2, NOW - 1000L);
+        try {
+            Map<Hash, Long> snapshot = new HashMap<>();
+            snapshot.put(p1, NOW - 1000L);
+            PeerProfile pa = goodActiveFast();
+            PeerProfile pb = goodActiveFast();
+            int c = ClientPeerSelector.compareQuality(p1, p2, null, pa, pb, snapshot, NOW, THIRTY_MINUTES);
+            assertTrue("proven stage must follow the snapshot (p1 first), not the shared map", c < 0);
+        } finally {
+            TunnelPeerSelector._provenResponders.remove(p2);
+        }
     }
 }

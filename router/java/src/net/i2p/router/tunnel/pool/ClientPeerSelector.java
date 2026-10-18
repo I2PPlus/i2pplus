@@ -1978,8 +1978,10 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
         // whole entrySet, removeIf-ing, and sorting every entry. Only the eligible
         // candidates are collected.
         List<Hash> rv = new ArrayList<>(16);
+        Map<Hash, Long> stamps = new HashMap<>(32);
         for (Map.Entry<Hash, Long> e : _provenResponders.entrySet()) {
-            if (!isProvenResponder(e.getValue(), now)) {continue;}
+            long stamp = e.getValue();
+            if (!isProvenResponder(stamp, now)) {continue;}
             Hash h = e.getKey();
             if (h.equals(ctx.routerHash())) {continue;}
             if (excludePeers != null && excludePeers.contains(h)) {continue;}
@@ -1988,11 +1990,13 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
             if (cd != null && now - cd < PEER_SELECTION_COOLDOWN_MS) {continue;}
             if (ctx.netDb().lookupLocallyWithoutValidation(h) == null) {continue;}
             rv.add(h);
+            stamps.put(h, stamp);
         }
-        // Order the eligible candidates freshest-first. Every rv key is present in
-        // _provenResponders, so the comparator reads its timestamp from the map.
-        rv.sort((a, b) -> Long.compare(_provenResponders.getOrDefault(b, 0L),
-                                       _provenResponders.getOrDefault(a, 0L)));
+        // Order the eligible candidates freshest-first from the local snapshot.
+        // Reading the shared map inside the comparator let build-thread puts
+        // and stale-entry sweeps change the order mid-sort, and TimSort threw
+        // "Comparison method violates its general contract!".
+        rv.sort((a, b) -> Long.compare(stamps.get(b), stamps.get(a)));
         // Anti-concentration: randomize within the freshest few so repeated
         // swaps never funnel this destination's traffic through one popular
         // proven peer (a magnet hop is a monitoring target)
@@ -2116,9 +2120,17 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
         for (Hash h : peers) {
             profiles.put(h, ctx.profileOrganizer().getProfile(h));
         }
+        // Snapshot the proven-responder timestamps the same way: the shared
+        // map is written by build threads, and a comparator that re-reads it
+        // can violate its contract mid-sort (TimSort throws).
+        Map<Hash, Long> proven = new HashMap<>(peers.size() * 4 / 3 + 1);
+        for (Hash h : peers) {
+            Long t = _provenResponders.get(h);
+            if (t != null) {proven.put(h, t);}
+        }
         peers.sort((p1, p2) -> compareQuality(p1, p2, exclude,
                                               profiles.get(p1), profiles.get(p2),
-                                              now, thirtyMinutes));
+                                              proven, now, thirtyMinutes));
     }
 
     /**
@@ -2132,17 +2144,20 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
      * @param exclude peers to deprioritize, or null
      * @param prof1 first peer's profile, or null
      * @param prof2 second peer's profile, or null
+     * @param proven local snapshot of proven-responder timestamps (peer hash to
+     *               time); must not be the live shared map, or the sort's
+     *               contract can be violated mid-flight by build-thread writes
      * @param now current time from the router clock
      * @param thirtyMinutes activity window in ms
      * @return negative, zero, or positive
      * @since 0.9.71+ (extracted from peerQualityComparator)
      */
     static int compareQuality(Hash p1, Hash p2, Set<Hash> exclude, PeerProfile prof1, PeerProfile prof2,
-                               long now, long thirtyMinutes) {
+                               Map<Hash, Long> proven, long now, long thirtyMinutes) {
         int c = compareExcluded(p1, p2, exclude);
         if (c != 0) {return c;}
-        long t1 = _provenResponders.getOrDefault(p1, 0L);
-        long t2 = _provenResponders.getOrDefault(p2, 0L);
+        long t1 = proven.getOrDefault(p1, 0L);
+        long t2 = proven.getOrDefault(p2, 0L);
         c = compareProven(t1, t2, now);
         if (c != 0) {return c;}
         c = compareReliability(prof1, prof2);
