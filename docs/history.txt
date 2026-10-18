@@ -1,3 +1,17 @@
+2026-10-18 dr|z3d
+  * Console:
+    - Overhaul the debug pages with overview rings, aligned tables and state
+      dots; translate headers and tab labels and style the tables around
+      embedded peer links
+    - Render ratchet and DHT debug peers as router-info references, and
+      client session-key peers as plain destination hashes
+    - Fix the Streams tab showing as active on the port-mapper debug page
+  * NetDB: Trim stale routing entries and widen buckets and search limits
+  * Peermanager: Keep the capacity bonus live-only, purging stale values
+    from the profiles file on load
+  * Transport: Report the ASN database build date, not its description,
+    to the update manager
+
 2026-10-17 dr|z3d
   * Peermanager: Decay peer loss continuously with a 15-minute half-life
     instead of hourly steps, and admit fresh below-threshold reports
