@@ -85,6 +85,13 @@ class ClientPeerSelector extends TunnelPeerSelector {
 private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
     /** Pre-connect cooldown: peers connected within this window don't need pre-connect again. */
     private static final long PRECONNECT_COOLDOWN_MS = 5 * 60 * 1000L;
+    /**
+     * Soft ceiling on {@link #_lastPreConnect}. Once exceeded, entries past the
+     * cooldown are swept, so the map cannot grow without bound across a long
+     * uptime as the router pre-connects to ever more distinct peers.
+     * @since 0.9.71+
+     */
+    static final int MAX_PRECONNECT_MAP_SIZE = 1024;
     /** Property to enable/disable conditional pre-connect in selectFirstHop. */
     static final String PROP_PRECONNECT_OPTIMIZE = "i2p.tunnel.preConnect.optimize";
     /** Default: true. */
@@ -1137,6 +1144,12 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
             if (shouldPreConnect(ctx, candidate)) {
                 preConnectTo(ctx, candidate);
                 _lastPreConnect.put(candidate, ctx.clock().now());
+                // Size-gated sweep: entries past the cooldown can never be read
+                // as "recently connected", so drop them to bound the map. Gated
+                // on size so the common (small-map) case pays nothing.
+                if (_lastPreConnect.size() > MAX_PRECONNECT_MAP_SIZE) {
+                    pruneStalePreConnect(_lastPreConnect, ctx.clock().now());
+                }
             }
         }
         // Shortfall fallback below reuses the (wrapped) exclude
@@ -1346,6 +1359,26 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
 
     /** Tracks the last time preConnectTo was successfully called per peer. */
     private static final ConcurrentHashMap<Hash, Long> _lastPreConnect = new ConcurrentHashMap<>();
+
+    /**
+     * Drop pre-connect records older than the cooldown window. An entry is only
+     * ever read as "connected within the last {@link #PRECONNECT_COOLDOWN_MS}"
+     * (see {@link #wasRecentlyConnected}), so once it ages past that window it
+     * can never change a decision again — it is dead weight. Without this sweep
+     * the map grows with every distinct peer the router pre-connects to over its
+     * lifetime. Weakly-consistent iteration, so it never blocks a concurrent
+     * {@link #recordPreConnect}.
+     *
+     * @param map the pre-connect history to prune in place
+     * @param now the router clock value to age entries against
+     * @return the number of entries removed
+     * @since 0.9.71+
+     */
+    static int pruneStalePreConnect(ConcurrentHashMap<Hash, Long> map, long now) {
+        int before = map.size();
+        map.entrySet().removeIf(e -> now - e.getValue() >= PRECONNECT_COOLDOWN_MS);
+        return before - map.size();
+    }
 
     /**
      * First-hop quality tier for the current attempt: 0 = prefer
