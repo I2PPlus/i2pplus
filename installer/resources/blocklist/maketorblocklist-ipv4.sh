@@ -8,7 +8,9 @@
 input_file="torbulkexitlist"
 output_file="blocklist_tor.txt"
 
-# Parse optional --host and --port arguments that override the default proxy
+# Parse optional --host and --port arguments that override the default proxy.
+# --port 0 means no proxy at all: fetch directly, bypassing the default,
+# any --host value, and an inherited http_proxy environment variable.
 host="127.0.0.1"
 port="4444"
 while [ $# -gt 0 ]; do
@@ -36,7 +38,12 @@ while [ $# -gt 0 ]; do
   esac
 done
 
-http_proxy=${http_proxy:-"http://${host}:${port}"}
+if [ "$port" = "0" ]; then
+  direct=true
+else
+  direct=false
+  http_proxy=${http_proxy:-"http://${host}:${port}"}
+fi
 UA="Mozilla/5.0 (X11; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0"
 
 # Variables
@@ -55,11 +62,20 @@ if [ -f $input_file ]; then
 fi
 
 # Download the latest list from Tor Project
-echo " > Downloading the latest list from Tor Project via specified proxy $http_proxy..."
-curl -s -A "$UA" -o $input_file -x $http_proxy $url
-if [ $? -ne 0 ]; then
-  echo " > Failed to download the latest list using proxy ${http_proxy}. Please check your proxy settings and try again."
-  exit 1
+if $direct; then
+  echo " > Downloading the latest list from Tor Project directly (no proxy)..."
+  curl -s -A "$UA" --noproxy '*' -o $input_file $url
+  if [ $? -ne 0 ]; then
+    echo " > Failed to download the latest list directly. Please check your network connection and try again."
+    exit 1
+  fi
+else
+  echo " > Downloading the latest list from Tor Project via specified proxy $http_proxy..."
+  curl -s -A "$UA" -o $input_file -x $http_proxy $url
+  if [ $? -ne 0 ]; then
+    echo " > Failed to download the latest list using proxy ${http_proxy}. Please check your proxy settings and try again."
+    exit 1
+  fi
 fi
 
 # Count the number of IPs in the file
