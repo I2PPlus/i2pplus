@@ -1,5 +1,6 @@
 package net.i2p.client.streaming.impl;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -2516,8 +2517,11 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
     }
 
     /**
-     * Periodic pool cleanup — evicts stale connections.
-     * Called from timer or on shutdown.
+     * Periodic pool cleanup — evicts stale connections, then drops the buckets
+     * they leave behind. Without the second step the {@link #_streamPools} key
+     * set grows with every destination the manager has ever pooled a stream to:
+     * an emptied deque is still a map entry, and a destination that is never
+     * requested again is never drained by {@link #acquireFromPool}.
      */
     void cleanupPool() {
         long now = _context.clock().now();
@@ -2530,6 +2534,26 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
                 pc.connection.disconnect(false, false);
             }
         }
+        pruneEmptyPoolBuckets(_streamPools);
+    }
+
+    /**
+     * Remove destination buckets whose connection deque has gone empty, so a
+     * destination that is no longer contacted does not keep a (now-empty) pool
+     * entry alive forever. {@link #returnToPool} recreates a bucket on demand via
+     * {@code computeIfAbsent}, so dropping an empty one is safe. Weakly-consistent
+     * iteration, so it never blocks a concurrent pool acquire/return. Generic over
+     * the value type so the prune is testable without constructing a
+     * {@code PooledConnection}.
+     *
+     * @param pools the per-destination pool map to prune in place
+     * @return the number of empty buckets removed
+     * @since 0.9.71+
+     */
+    static int pruneEmptyPoolBuckets(Map<Hash, ? extends Collection<?>> pools) {
+        int before = pools.size();
+        pools.entrySet().removeIf(e -> e.getValue().isEmpty());
+        return before - pools.size();
     }
     /**
      * Register outbound id.
@@ -3124,6 +3148,13 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
             // persistent abuser accumulating toward the ban while an isolated spike
             // (e.g. a legit announce rollout) fades to nothing within a few sweeps.
             _refusalCounter.decay(2);
+            // Drain stale pooled connections and drop their empty buckets on the
+            // same 60s cadence. acquireFromPool only ages out a destination's
+            // pool when that destination is requested again, so a destination
+            // that goes quiet would otherwise keep its pooled connections (and
+            // the map entry) forever. No-op when pooling is off.
+            if (isPoolEnabled())
+                cleanupPool();
             if (!_stopped)
                 schedule(PERIOD);
         }
