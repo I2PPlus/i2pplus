@@ -20,6 +20,7 @@ import org.mockito.junit.MockitoRule;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Properties;
 
 /**
  * Stress test the MessageInputStream
@@ -35,11 +36,38 @@ public class MessageInputStreamTest {
 
     @Mock private PacketLocal packetLocal;
 
+    /** Saved JVM-global statics, restored in tearDown so we leak no state. */
+    private int _savedGlobalWindow;
+    private int _savedMaxInboundBuffer;
+
     @Before
     public void setUp() {
         _context = I2PAppContext.getGlobalContext();
         _log = _context.logManager().getLog(MessageInputStreamTest.class);
-        _options = new ConnectionOptions();
+
+        // Pin deterministic sizing instead of inheriting it from the JVM-global
+        // System.getProperties() (the no-arg ConnectionOptions()'s source) and the
+        // mutable statics Connection.maxWindowSize / ConnectionOptions.maxInboundBuffer.
+        // Those are shared across the whole test JVM, so another test that tuned
+        // them made the canAccept() byte/DoS arithmetic here fail only when the
+        // full suite ran in one JVM (the failing set changed from run to run).
+        // The byte-limit canAccept() tests assume inboundBufferSize is an exact
+        // multiple of maxMessageSize; the real default (8MB cap) is NOT (8388608
+        // is not divisible by 1730), so the tests only passed in isolation because
+        // SystemVersion.isSlow() shrank the window and made the derived buffer an
+        // exact multiple. We pin maxInboundBuffer to maxMessageSize * maxWindowSize
+        // so the constructor derives an exact-multiple buffer (numMsgs = window)
+        // and a packet count above it, and pin the global window ceiling so
+        // getMaxWindowSize() returns 2048 exactly. All statics are restored in
+        // tearDown so we leak no state to other tests.
+        _savedMaxInboundBuffer = ConnectionOptions.getMaxInboundBufferStatic();
+        ConnectionOptions.setMaxInboundBufferStatic(1730 * 2048);
+        _savedGlobalWindow = Connection.getGlobalMaxWindowSize();
+        Connection.setGlobalMaxWindowSize(Connection.ABSOLUTE_MAX_WINDOW);
+        Properties defaults = new Properties();
+        defaults.setProperty(ConnectionOptions.PROP_MAX_MESSAGE_SIZE, "1730");
+        defaults.setProperty(ConnectionOptions.PROP_MAX_WINDOW_SIZE, "2048");
+        _options = new ConnectionOptions(defaults);
 
         in = new MessageInputStream(_context, _options.getMaxMessageSize(), _options.getMaxWindowSize(), _options.getInboundBufferSize(), _options.getMaxPacketCount());
     }
@@ -47,6 +75,8 @@ public class MessageInputStreamTest {
     @After
     public void tearDown() {
         in.close();
+        Connection.setGlobalMaxWindowSize(_savedGlobalWindow);
+        ConnectionOptions.setMaxInboundBufferStatic(_savedMaxInboundBuffer);
     }
 
     @Test
