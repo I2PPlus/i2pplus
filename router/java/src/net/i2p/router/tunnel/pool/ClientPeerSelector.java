@@ -3,8 +3,8 @@ package net.i2p.router.tunnel.pool;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Comparator;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -1973,21 +1973,26 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
      */
     private List<Hash> provenCandidates(Set<Hash> excludePeers) {
         long now = ctx.clock().now();
-        List<Map.Entry<Hash, Long>> entries = new ArrayList<>(_provenResponders.entrySet());
-        entries.removeIf(e -> !isProvenResponder(e.getValue(), now));
-        entries.sort(Map.Entry.<Hash, Long>comparingByValue().reversed());
-        List<Hash> rv = new ArrayList<>(entries.size());
-        for (Map.Entry<Hash, Long> e : entries) {
+        Banlist banlist = ctx.banlist();
+        // Filter at read time over the (bounded) shared map instead of copying the
+        // whole entrySet, removeIf-ing, and sorting every entry. Only the eligible
+        // candidates are collected.
+        List<Hash> rv = new ArrayList<>(16);
+        for (Map.Entry<Hash, Long> e : _provenResponders.entrySet()) {
+            if (!isProvenResponder(e.getValue(), now)) {continue;}
             Hash h = e.getKey();
             if (h.equals(ctx.routerHash())) {continue;}
             if (excludePeers != null && excludePeers.contains(h)) {continue;}
-            Banlist banlist = ctx.banlist();
             if (banlist != null && banlist.isBanlisted(h)) {continue;}
             Long cd = _peerCooldowns.get(h);
             if (cd != null && now - cd < PEER_SELECTION_COOLDOWN_MS) {continue;}
             if (ctx.netDb().lookupLocallyWithoutValidation(h) == null) {continue;}
             rv.add(h);
         }
+        // Order the eligible candidates freshest-first. Every rv key is present in
+        // _provenResponders, so the comparator reads its timestamp from the map.
+        rv.sort((a, b) -> Long.compare(_provenResponders.getOrDefault(b, 0L),
+                                       _provenResponders.getOrDefault(a, 0L)));
         // Anti-concentration: randomize within the freshest few so repeated
         // swaps never funnel this destination's traffic through one popular
         // proven peer (a magnet hop is a monitoring target)
@@ -2104,26 +2109,16 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
         }
         long now = ctx.clock().now();
         long thirtyMinutes = 30 * 60 * 1000L;
-        peers.sort(peerQualityComparator(exclude, now, thirtyMinutes));
-    }
-
-    /**
-     * Build a comparator that orders peers by tunnel-building quality: excluded
-     * peers last, then by acceptance ratio, activity recency, and tunnel-test latency.
-     * <p>
-     * Stage order is significant — each stage short-circuits the ones below it.
-     *
-     * @param exclude peers to deprioritize, or null
-     * @param now current time from the router clock
-     * @param thirtyMinutes activity window in ms
-     * @return a comparator that orders peers best-first through the quality cascade
-     * @since 0.9.70+
-     */
-    Comparator<Hash> peerQualityComparator(Set<Hash> exclude, long now, long thirtyMinutes) {
-        return (p1, p2) -> compareQuality(p1, p2, exclude,
-                                          ctx.profileOrganizer().getProfile(p1),
-                                          ctx.profileOrganizer().getProfile(p2),
-                                          now, thirtyMinutes);
+        // Fetch each peer's profile exactly once. getProfile() takes a blocking
+        // read lock, so calling it inside the comparator cost 2·n·log n lock
+        // acquisitions per selection; the comparator now reads this map instead.
+        Map<Hash, PeerProfile> profiles = new HashMap<>(peers.size() * 4 / 3 + 1);
+        for (Hash h : peers) {
+            profiles.put(h, ctx.profileOrganizer().getProfile(h));
+        }
+        peers.sort((p1, p2) -> compareQuality(p1, p2, exclude,
+                                              profiles.get(p1), profiles.get(p2),
+                                              now, thirtyMinutes));
     }
 
     /**
