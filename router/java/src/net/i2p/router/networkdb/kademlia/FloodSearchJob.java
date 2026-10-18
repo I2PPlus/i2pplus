@@ -14,7 +14,7 @@ import net.i2p.util.SystemVersion;
  * Base class for flood-based search operations with fallback to Kademlia.
  * <p>
  * Implements flood-based search strategy sending queries to floodfill peers.
- * If no successful match is received within half the allowed timeout,
+ * If no successful match is received within the allowed timeout,
  * falls back to standard Kademlia iterative search through normal channels.
  * This reduces spurious lookups caused by response delays from floodfill peers.
  * <p>
@@ -49,15 +49,15 @@ abstract class FloodSearchJob extends JobImpl {
 
     /**
      * Prepares a flood search for one key: records the target, the callbacks and the lease-set
-     * flag, then derives the deadline from the requested timeout. The timeout is halved for the
-     * flood phase so an iterative search can still start after it; a timeout of 0 or 1 ms divides
-     * down to zero and is left alone rather than being shortened to nothing.
+     * flag, then derives the deadline from the requested timeout. The halving by
+     * FLOOD_SEARCH_TIME_FACTOR is undone by the guard that follows it, so the full
+     * timeout currently applies to the flood phase.
      * @param ctx router context supplying the clock and log manager
      * @param facade floodfill database the key is looked up in
      * @param key the hash being searched for
      * @param onFind may be null
      * @param onFailed may be null
-     * @param timeoutMs search timeout in ms, halved for a flood lookup
+     * @param timeoutMs search timeout in ms, applied in full to the flood deadline
      * @param isLease true to search for a lease set rather than a router info
      */
     public FloodSearchJob(RouterContext ctx, FloodfillNetworkDatabaseFacade facade, Hash key, Job onFind, Job onFailed, int timeoutMs, boolean isLease) {

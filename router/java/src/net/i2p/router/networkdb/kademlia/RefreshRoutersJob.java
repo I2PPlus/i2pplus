@@ -205,7 +205,7 @@ class RefreshRoutersJob extends JobImpl {
 
     /**
      * Processes the next router(s) in the list to determine whether to refresh their info.
-     * Processes up to MAX_PER_CYCLE routers per invocation for faster coverage.
+     * Processes up to router.refreshBatchSize routers (default 5) per invocation for faster coverage.
      * @since 0.9.70
      */
     private void processNextRouterForRefresh() {

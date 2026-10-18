@@ -168,7 +168,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
 
     /**
      * Map of remote destination Hash to last access time for LeaseSets we're using as a client.
-     * Used to refresh remote LeaseSets we're actively accessing and remove after 90s inactivity.
+     * Used to refresh remote LeaseSets we're actively accessing and remove after 150s inactivity.
      */
     private final ConcurrentHashMap<Hash, Long> _clientLeaseSetAccessTime = new ConcurrentHashMap<>(32);
 
@@ -219,8 +219,8 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     /**
      * If we have less than this many routers left, don't drop any more,
      * even if they're failing or doing bad stuff.
-     * As of 0.9.4, we make this LOWER than the min for reseeding, so
-     * a reseed will be forced if necessary.
+     * As of 0.9.4, this equals the min for reseeding, so dropping stops
+     * at the point where a reseed is forced.
      */
     protected static final int MIN_REMAINING_ROUTERS = MIN_RESEED;
 
@@ -2478,7 +2478,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      * The expiration time can be customized via the "router.expireRouterInfo" property (in hours),
      * or defaults based on the number of existing routers or whether this is a floodfill.
      *
-     * @param existingRouters the number of routers currently in the KBucket
+     * @param existingRouters the number of routers currently stored on disk
      * @return the adjusted expiration time in milliseconds
      */
     private long computeAdjustedExpiration(int existingRouters) {
@@ -2691,7 +2691,7 @@ return false;
      *
      * @param routerInfo the RouterInfo to evaluate
      * @param now current timestamp in milliseconds
-     * @param existing number of existing routers
+     * @param existing number of routers currently stored on disk
      * @param caps the capabilities string of the router
      * @param routerId the short ID of the router
      * @return a descriptive string if the router should be dropped, null otherwise
@@ -2842,14 +2842,14 @@ return false;
      * introducer, expiration-property, and short-expiration checks. It only
      * runs once the local router has been up long enough
      * ({@link #isUptimeLongEnough(long)}) and never for the local router, and it
-     * is suppressed while the KBucket has fewer than
-     * {@link #MIN_REMAINING_ROUTERS} routers, so a thinning network does not
+     * is suppressed while fewer than
+     * {@link #MIN_REMAINING_ROUTERS} routers are stored on disk, so a thinning network does not
      * drop down to nothing. Capabilities are not consulted here;
      * {@link #checkAddressesAndIntroducers} is the check for missing transports.
      *
      * @param routerInfo the RouterInfo to evaluate
      * @param upLongEnough true if the local router has been up long enough
-     * @param existing the current number of routers in the KBucket
+     * @param existing the number of routers currently stored on disk
      * @param routerId the short ID of the router
      * @param isUs true if the router is the local router
      * @return a descriptive string if the router should be dropped, null otherwise

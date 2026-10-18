@@ -246,9 +246,6 @@ public class DBHistory {
     private static final long DECAY_DENOMINATOR = 4;
 
     /**
-     * Coalesce the rate stats and periodically decay the counters.
-     */
-    /**
      * Apply the lookup and store counter decay if its interval has elapsed.
      * <p>Does not coalesce the {@link RateStat}s, which stay on the caller's own
      * cadence. See the method of the same name on {@link
@@ -280,8 +277,7 @@ public class DBHistory {
         decayLifetimeCounters(System.currentTimeMillis());
     }
 
-    /** Apply decay to a counter. Keeps the same rate as divide-by-3 hourly
-     * but spreads it over 15-minute intervals for smoother response. */
+    /** Apply decay to a counter. 3/4 per 8 h = ~1% after 128 hours. */
     private void decayCounter(AtomicLong counter, String name) {
         long val = counter.get();
         if (val > 0) {

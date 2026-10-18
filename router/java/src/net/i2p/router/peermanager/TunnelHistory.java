@@ -62,29 +62,29 @@ public class TunnelHistory {
     /**
      * Total tunnels the peer has agreed to participate in
      *
-     * @return the count since the last decay, applied every 15 minutes by
-     *         {@link #coalesceStats()}
+     * @return the count since the last decay, applied every 8 hours by
+     *         {@link #decayLifetimeCounters(long)}
      */
     public long getLifetimeAgreedTo() {return _lifetimeAgreedTo.get();}
     /**
      * Total tunnels the peer has refused to participate in (does not include timeouts)
      *
-     * @return the count since the last decay, applied every 15 minutes by
-     *         {@link #coalesceStats()}
+     * @return the count since the last decay, applied every 8 hours by
+     *         {@link #decayLifetimeCounters(long)}
      */
     public long getLifetimeRejected() {return _lifetimeRejected.get();}
     /**
      * Total tunnel builds to this peer that timed out without a response
      *
-     * @return the count since the last decay, applied every 15 minutes by
-     *         {@link #coalesceStats()}
+     * @return the count since the last decay, applied every 8 hours by
+     *         {@link #decayLifetimeCounters(long)}
      */
     public long getLifetimeTimedOut() {return _lifetimeTimedOut.get();}
     /**
      * Total tunnels the peer has agreed to participate in that were later marked as failed prematurely
      *
-     * @return the count since the last decay, applied every 15 minutes by
-     *         {@link #coalesceStats()}
+     * @return the count since the last decay, applied every 8 hours by
+     *         {@link #decayLifetimeCounters(long)}
      */
     public long getLifetimeFailed() {return _lifetimeFailed.get();}
     /**
@@ -246,10 +246,10 @@ public class TunnelHistory {
      * How often the lifetime counters decay, as a whole interval.
      * <p>Eight hours, not fifteen minutes. At 3/4 per interval the shorter period
      * made a peer forget its own record faster than it could accumulate one: 50
-     * accepted builds fell to 21 within an hour and 5 within four, so a *good*
+     * accepted builds fell to 16 within an hour and under 1 within four, so a *good*
      * history decayed exactly as fast as a bad one. Eight hours gives a half-life
-     * near 5.6 hours, so an established record takes about 32 hours to fall to 1%
-     * and a peer's last few hours of behaviour dominate its ratio.
+     * near 19 hours, so an established record takes about 128 hours to fall to 1%
+     * and a peer's last few days of behaviour dominate its ratio.
      *
      * @since 0.9.71+
      */
@@ -284,7 +284,7 @@ public class TunnelHistory {
      * Coalesce the rate statistics and periodically decay lifetime counters.
      * <p>Lifetime counters ({@link #_lifetimeAgreedTo}, {@link #_lifetimeRejected},
      * {@link #_lifetimeTimedOut}, {@link #_lifetimeFailed}) are decayed at 75%
-     * per 15 minutes (matching {@link DBHistory}).  This prevents unbounded
+     * per 8 hours (matching {@link DBHistory}).  This prevents unbounded
      * growth across restarts and ensures stale history does not permanently
      * block peers from tiers.  Recency is handled by the RateStats
      * (10-minute and 1-hour windows) and by selection gates.
@@ -297,7 +297,7 @@ public class TunnelHistory {
         decayLifetimeCounters(_context.clock().now());
     }
 
-    /** Apply decay to a counter. 3/4 per 15 min = ~1% after 4 hours. */
+    /** Apply decay to a counter. 3/4 per 8 h = ~1% after 128 hours. */
     private void decayCounter(AtomicLong counter, String name) {
         long val = counter.get();
         if (val > 0) {

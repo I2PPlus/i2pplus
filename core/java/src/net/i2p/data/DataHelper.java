@@ -62,7 +62,7 @@ import java.nio.charset.StandardCharsets;
  * <p>DataHelper provides essential utilities for working with I2P data structures:</p>
  * <ul>
  * <li><strong>Serialization:</strong> Read/write primitive types to/from streams</li>
- * <li><strong>Encoding:</strong> Base64 and Base32 encoding/decoding</li>
+ * <li><strong>Encoding:</strong> Hex encoding/decoding (Base64 and Base32 live in their own classes)</li>
  * <li><strong>Validation:</strong> Data format verification and bounds checking</li>
  * <li><strong>Conversion:</strong> Between different data representations</li>
  * <li><strong>Utilities:</strong> Common operations on collections and arrays</li>
@@ -70,15 +70,13 @@ import java.nio.charset.StandardCharsets;
  * <p><strong>Core Operations:</strong></p>
  * <ul>
  * <li><strong>Primitive I/O:</strong> readLong(), writeLong(), readString(), writeString()</li>
- * <li><strong>Base64:</strong> encode(), decode() with filesystem-safe variants</li>
- * <li><strong>Base32:</strong> encodeBase32(), decodeBase32() for addresses</li>
+ * <li><strong>Hex:</strong> toHexString(), fromHexString() for display and debugging</li>
  * <li><strong>Properties:</strong> readProperties(), writeProperties() for metadata</li>
  * <li><strong>Collections:</strong> toMap(), toString() for data structures</li>
  * </ul>
  * <p><strong>Encoding Support:</strong></p>
  * <ul>
- * <li><strong>Base64:</strong> Standard and URL-safe variants with/without padding</li>
- * <li><strong>Base32:</strong> RFC 3548 compliant for .b32.i2p addresses</li>
+ * <li><strong>Base64/Base32:</strong> provided by the {@link Base64} and {@link Base32} classes, not here</li>
  * <li><strong>Hex:</strong> Hexadecimal encoding for debugging and display</li>
  * <li><strong>UTF-8:</strong> String encoding with proper byte handling</li>
  * </ul>
@@ -107,7 +105,7 @@ import java.nio.charset.StandardCharsets;
  * <ul>
  * <li><strong>Network Protocol:</strong> I2NP message serialization</li>
  * <li><strong>Configuration:</strong> Properties file handling</li>
- * <li><strong>Address Display:</strong> Base32 encoding for .b32.i2p</li>
+ * <li><strong>Address Display:</strong> via the Base32 class for .b32.i2p</li>
  * <li><strong>Data Storage:</strong> File format serialization</li>
  * <li><strong>Debugging:</strong> Hex dumps and data inspection</li>
  * </ul>
@@ -506,7 +504,8 @@ public class DataHelper {
      *
      * @param source byte array holding the UTF-8 encoded props, in readProperties() format
      * @param offset starting offset in source
-     * @param target the {@link Properties} to fill in; it is not read
+     * @param target the {@link Properties} to fill in; existing keys are read
+     *               to detect duplicates
      * @return the offset just past the last byte consumed, ready for the next field
      * @throws DataFormatException if the data is malformed
      */
@@ -679,10 +678,6 @@ public class DataHelper {
                 }
                 String key = line.substring(0, split);
                 String val = line.substring(split + 1).trim();
-                // Unescape line breaks after loading.
-                // Remember: "\" needs escaping both for regex and string.
-
-
                 // as of 0.9.10, an empty value is allowed
                 if (forceLowerCase) {
                     props.setProperty(key.toLowerCase(Locale.US), val);
@@ -695,7 +690,7 @@ public class DataHelper {
 
     /**
      * Writes the props to the file, unsorted (unless props is an OrderedProperties)
-     * Note that this does not escape the \r or \n that are unescaped in loadProps() above.
+     * Note that this does not escape the \r or \n in values.
      * As of 0.8.1, file will be mode 600 (best effort; group read/write is
      * also granted where POSIX permissions are supported, e.g. 660 on Linux).
      * <p>
@@ -706,8 +701,8 @@ public class DataHelper {
      *
      * @param props properties to store
      * @param file the file to write to
-     * @throws IllegalArgumentException if a key contains any of "#=\n" or starts with ';',
-     *                                  or a value contains '#' or '\n'
+     * @throws IllegalArgumentException if a key contains any of "#=; " or a CR or LF,
+     *                                  or a value contains '#' or a CR or LF
      * @throws IOException if there is an IO error
      */
     public static void storeProps(Properties props, File file) throws IOException {
@@ -1429,7 +1424,7 @@ public class DataHelper {
      *
      * @param lhs first byte array, may be null
      * @param rhs second byte array, may be null
-     * @return null if either arg is null or the args are not equal length
+     * @return an empty array if either arg is null or the args are not equal length
      */
     public static final byte[] xor(byte[] lhs, byte[] rhs) {
         if ((lhs == null) || (rhs == null) || (lhs.length != rhs.length)) return new byte[0];
@@ -2421,7 +2416,7 @@ public class DataHelper {
      * instead of an UnsupportedEncodingException if no UTF-8, for ease of use.
      *
      * @param orig the string to encode as UTF-8
-     * @return null if orig is null
+     * @return the UTF-8 bytes, an empty array if orig is null
      * @throws RuntimeException never thrown - StandardCharsets.UTF_8 is always available
      */
     public static byte[] getUTF8(String orig) {
@@ -2469,7 +2464,7 @@ public class DataHelper {
      * Warning - misnamed, converts to ISO-8859-1.
      *
      * @param orig non-null, truncates to 8-bit chars
-     * @return a copy of the byte array, or null
+     * @return the ISO-8859-1 bytes of orig
      * @since 0.9.5
      */
     public static byte[] getASCII(String orig) {

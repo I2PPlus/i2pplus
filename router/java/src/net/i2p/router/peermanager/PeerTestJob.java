@@ -195,12 +195,9 @@ public class PeerTestJob extends JobImpl {
     }
 
     /**
-     * Starts the peer testing process with adaptive initial delay.
-     * <p>Schedules the first test run based on router uptime:</p>
-     * <ul>
-     * <li>If uptime &lt; 3 minutes: wait 3 minutes before starting</li>
-     * <li>Otherwise: start immediately with configured delay</li>
-     * </ul>
+     * Starts the peer testing process.
+     * <p>Schedules the first test run with the configured delay. If uptime is
+     * under 3 minutes, the log notes that testing will commence shortly.</p>
      *
      * @param manager the peer manager to use for peer selection
      */
@@ -268,8 +265,9 @@ public class PeerTestJob extends JobImpl {
      * </ol>
      * <p><b>Adaptive Behavior:</b></p>
      * <ul>
-     * <li>Double delay if job lag > 300ms (system overload)</li>
-     * <li>Double delay if CPU load > 80% (resource conservation)</li>
+     * <li>Skip the round and multiply delay by 5 if job lag > 2000ms</li>
+     * <li>Scale delay proportionally to lag (1 + lag/500, capped at 5 min) if
+     *     job lag > 300ms or CPU load > 80%</li>
      * <li>Normal delay otherwise</li>
      * </ul>
      */
@@ -325,9 +323,11 @@ public class PeerTestJob extends JobImpl {
      * Selects peers for testing based on performance and capability criteria.
      * <p><b>Selection Criteria:</b></p>
      * <ul>
-     * <li><b>Primary candidates:</b> Version 0.9.57+, reachable, high bandwidth (O/P/X)</li>
-     * <li><b>Penalized:</b> Low bandwidth tiers (K/L/M/N) or unreachable - set capacity bonus to -30</li>
-     * <li><b>Excluded:</b> Missing local RouterInfo or profile</li>
+     * <li><b>Priority:</b> peers recorded from slow tunnels, tested first</li>
+     * <li><b>Regular:</b> all profiled peers with a RouterInfo and version
+     *     0.9.57+, sorted by tier priority then staleness</li>
+     * <li><b>Excluded:</b> Missing local RouterInfo or profile, or a version
+     *     older than 0.9.57</li>
      * </ul>
      * <p><b>Performance Impact:</b></p>
      * <ul>

@@ -52,7 +52,8 @@ public interface KBucket<T extends SimpleDataStructure> {
     /**
      * Add the peer to the bucket
      *
-     * @param key the key to store, rejected when the bucket is full
+     * @param key the key to store; a full bucket may still accept it if the
+     *            trimmer makes room
      * @return true if added
      */
     public boolean add(T key);

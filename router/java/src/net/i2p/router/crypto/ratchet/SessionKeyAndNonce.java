@@ -70,7 +70,7 @@ class SessionKeyAndNonce extends SessionKey {
     /**
      * For inbound ES, else 0
      *
-     * @return the i d
+     * @return the session ID
      * @since 0.9.46
      */
     public int getID() {
@@ -79,7 +79,7 @@ class SessionKeyAndNonce extends SessionKey {
 
     /**
      * For inbound ES, else null.
-     * For NSR, use getHansdhakeState().getRemotePublicKey().getPublicKey().
+     * For NSR, use getHandshakeState().getRemotePublicKey().getPublicKey().
      *
      * @return the remote key
      * @since 0.9.46

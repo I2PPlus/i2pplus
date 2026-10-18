@@ -70,7 +70,8 @@ import net.i2p.util.SystemVersion;
  * <p>
  * Concurrency: ReentrantReadWriteLock protects all tier maps.
  * reorganize() acquires the write lock; selection methods use the read lock.
- * getOrCreateProfileNonblocking() uses try-lock escalation for lock-free reads.
+ * getOrCreateProfileNonblocking() uses try-lock escalation so a read path never
+ * blocks on the write lock.
  */
 public class ProfileOrganizer {
     /** Threshold below which the network is considered under attack */
@@ -348,26 +349,18 @@ public class ProfileOrganizer {
     public static void setDefaultMinFastPeers(int val) { _defaultMinFastPeers = Math.max(50, Math.min(2000, val)); }
 
     /**
-     * Property key naming the RouterInfo age past which a promotion is held back,
-     * in hours.
+     * Property key naming the RouterInfo age past which a RouterInfo is treated
+     * as stale and must show proof of life to be selected, in hours.
      */
     public static final String PROP_MAX_ROUTERINFO_AGE_HOURS = "profileOrganizer.maxRouterInfoAgeHours";
     /**
-     * Default RouterInfo age past which a tier promotion is held back, in hours.
+     * Default RouterInfo age past which a RouterInfo is treated as stale and
+     * must show proof of life to be selected, in hours.
      */
     public static final int DEFAULT_MAX_ROUTERINFO_AGE_HOURS = 2;
     /**
-     * RouterInfo age past which a tier promotion is held back, in ms.
-     * <p>Separate from {@link #PROP_MAX_ROUTERINFO_AGE_HOURS}, which is the bar
-     * a RouterInfo must clear to be selected at all. That bar is deliberately
-     * loose (2h) because a proof of life can stand in for a fresh RouterInfo;
-     * this one is a promotion-time policy with no such fallback, so it is set
-     * where the RouterInfo itself is likely to have been superseded: routers
-     * republish hourly, so anything older than one publishing interval has a
-     * good chance of describing a peer that has since changed.
-     * <p>Holding a promotion costs the peer a tier slot and nothing else — no
-     * lookup is issued, so the only way a held peer re-enters is by being
-     * republished to, or by showing proof of life.
+     * Property key naming the RouterInfo age past which a tier promotion is
+     * held back, in ms.
      * <p>Set to 0 or less to disable the deferral entirely, which restores plain
      * promotion on whatever the netdb holds.
      *
@@ -1084,8 +1077,8 @@ public class ProfileOrganizer {
     /**
      * The number of quality peers currently in the fast tier.
      * A quality peer is fast and either high-capacity or has proven throughput.
-     * Used by the renderer to gate demotion of failing peers — when the tier
-     * is healthy (&ge;300 quality peers), non-ok peers are evicted instantly.
+     * The count gates fast-tier promotion internally: at or above
+     * MIN_FAST_QUALITY_COUNT (500) the tier is treated as healthy.
      *
      * @return the count of quality fast peers
      * @since 0.9.71+
@@ -2459,8 +2452,8 @@ public class ProfileOrganizer {
             int activeCount = countActiveProfiles(now);
 
             // Step 6e: Compute average peer test RTT across fast peers with data.
-            // When the fast tier is large enough, PeerProfile.recalculateLowLatency()
-            // uses 1.5× this average instead of the fixed timeout-based cap.
+            // getCohortLatencyThresholdMs() scales this average by the configured
+            // baseline multiple (default 3) into a fast-tier latency bound.
             _averageLowLatencyRTT = computeAverageLowLatencyRTT();
 
             // Step 7: Update global thresholds
@@ -5131,6 +5124,16 @@ private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, P
      * RouterInfo age past which a promotion is held back, in ms.  Read once per
      * reorganisation cycle rather than cached per candidate, because that is
      * the only place it is consulted.
+     * <p>Separate from {@link #PROP_MAX_ROUTERINFO_AGE_HOURS}, which is the bar
+     * a RouterInfo must clear to be selected at all. That bar is deliberately
+     * loose (2h) because a proof of life can stand in for a fresh RouterInfo;
+     * this one is a promotion-time policy with no such fallback, so it is set
+     * where the RouterInfo itself is likely to have been superseded: routers
+     * republish hourly, so anything older than one publishing interval has a
+     * good chance of describing a peer that has since changed.
+     * <p>Holding a promotion costs the peer a tier slot and nothing else — no
+     * lookup is issued, so the only way a held peer re-enters is by being
+     * republished to, or by showing proof of life.
      *
      * @return the staleness threshold in ms; &lt;= 0 disables the hold
      * @since 0.9.72
@@ -5514,8 +5517,9 @@ private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, P
     }
 
     /**
-     * Immediately demote a peer from fast/high-cap tiers if its capacityBonus is -30
-     * (UI shows ✖ for high latency). Non-blocking.
+     * Immediately demote a peer from fast/high-cap tiers. The caller must have
+     * already judged the peer high-latency; this only performs the tier
+     * removal. Non-blocking.
      *
      * @param peer hash of the peer to demote
      */
@@ -5539,8 +5543,9 @@ private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, P
     }
 
     /**
-     * Immediately demote a peer from fast/high-cap tiers if it has a congestion cap (D/E).
-     * Sets capacityBonus = -30 so the UI reflects the demotion immediately.
+     * Immediately demote a peer from fast/high-cap tiers. The caller must have
+     * already judged the peer congested (cap D/E); this only performs the tier
+     * removal.
      * Non-blocking - only acts if the peer is currently in those tiers.
      *
      * @param peer hash of the peer to demote
@@ -5622,8 +5627,8 @@ private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, P
     }
 
     /**
-     * Immediately demote a peer from fast/high-cap tiers if it is banned.
-     * Sets capacityBonus = -30 so the UI reflects the demotion immediately.
+     * Immediately demote a peer from fast/high-cap tiers. The caller must have
+     * already confirmed the ban; this only performs the tier removal.
      * Non-blocking - only acts if the peer is currently in those tiers.
      * @param peer hash of the peer to demote
      * @since 0.9.71+
@@ -5647,12 +5652,6 @@ private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, P
         }
     }
 
-    /**
-     * Immediately demote a peer from fast/high-cap tiers if it is unreachable.
-     * Sets capacityBonus = -30 so the UI reflects the demotion immediately.
-     * Non-blocking - only acts if the peer is currently in those tiers.
-     * @since 0.9.71+
-     */
     /**
      * The single recorder for a measured direct-link RTT.
      * <p>Every path that holds a transport measurement — the reorganize sampling
@@ -5741,8 +5740,9 @@ private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, P
     }
 
     /**
-     * Immediately demote a peer from fast/high-cap tiers if it has G cap (no tunnels).
-     * Sets capacityBonus = -30 so the UI reflects the demotion immediately.
+     * Immediately demote a peer from fast/high-cap tiers. The caller must have
+     * already judged the peer to have built no tunnel recently; this only
+     * performs the tier removal.
      * Non-blocking - only acts if the peer is currently in those tiers.
      *
      * @param peer hash of the peer to demote
@@ -6072,26 +6072,6 @@ private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, P
     }
 
     /**
-     * Check if peer has low tunnel acceptance ratio (< 40%).
-     * Peers with no tunnel test history (totalRequests == 0) are
-     * considered low — they have no evidence of tunnel-building
-     * reliability and must not be placed in fast/high-cap tiers.
-     * Uses persisted accept/reject counts even with low sample sizes at startup.
-     * Also checks for recent bandwidth rejections and applies cooldown.
-     * <p>
-     * Takes the build success ratio as a parameter — it is fetched once per
-     * selection and passed down; {@link #getTunnelBuildSuccess()} performs 6
-     * stat lookups and must never run per candidate peer.
-     *
-     * @param profile the peer profile
-     * @param buildSuccess the tunnel build success ratio in [0.0, 1.0]
-     * @param now current time in ms
-     * @param minRequestsForJudgement how many lifetime requests the peer needs before
-     *        its acceptance ratio is allowed to exclude it at all
-     * @return whether low tunnel acceptance (true = exclude from fast/high-cap tiers)
-     * @since 0.9.71+
-     */
-    /**
      * Whether a peer's tunnel acceptance is bad enough to exclude it, given its
      * counts and the sample floor the tier in question applies.
      * <p>Pure decision — no context access, safe for unit tests. The tiers differ
@@ -6119,6 +6099,27 @@ private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, P
         return ratio < bar;
     }
 
+    /**
+     * Check if peer has low tunnel acceptance ratio, decided from its lifetime
+     * accept/reject counts via {@link #excludedOnAcceptance}, then refined by
+     * the low-sample or mature path.
+     * Peers with no tunnel test history are judged by recent activity instead:
+     * an alive peer is allowed into the tiers to accumulate data, a stale one
+     * is excluded.
+     * The mature path also honours a recent bandwidth-rejection cooldown.
+     * <p>
+     * Takes the build success ratio as a parameter — it is fetched once per
+     * selection and passed down; {@link #getTunnelBuildSuccess()} performs 6
+     * stat lookups and must never run per candidate peer.
+     *
+     * @param profile the peer profile
+     * @param buildSuccess the tunnel build success ratio in [0.0, 1.0]
+     * @param now current time in ms
+     * @param minRequestsForJudgement how many lifetime requests the peer needs before
+     *        its acceptance ratio is allowed to exclude it at all
+     * @return whether low tunnel acceptance (true = exclude from fast/high-cap tiers)
+     * @since 0.9.71+
+     */
     private boolean isLowTunnelAcceptance(PeerProfile profile, double buildSuccess, long now,
                                          int minRequestsForJudgement) {
         TunnelHistory th = profile.getTunnelHistory();
@@ -6256,9 +6257,9 @@ private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, P
     /**
      * Check if a peer has had recent tunnel failures (failed tests or builds).
      * Used to gate fast/high-cap tier admission when tier counts are healthy.
-     * Requires more than 3 failures in the last hour AND either a failure
-     * ratio above 30% or more than 5 absolute failures/hour — peers with
-     * 1-3 transient failures during a network blip stay in tiers rather
+     * Requires more than 15 failures in the last hour AND a failure ratio
+     * above 30% of agreed + rejected + failed — peers with
+     * 1-15 transient failures during a network blip stay in tiers rather
      * than being purged.  This prevents tier collapse during brief
      * network-wide events where many peers experience isolated failures.
      * @return true if the peer has sustained recent tunnel failures
@@ -6277,7 +6278,7 @@ private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, P
         long rejected = th.getLifetimeRejected();
         long total = agreed + rejected + failCount;
         if (total > 0 && (double) failCount / total > 0.3) return true;
-        // Reject peers with high absolute failure count (>15 failures/hour)
+        // Many failures but a low ratio — a busy peer, not a failing one
         return false;
     }
 
@@ -6948,7 +6949,8 @@ private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, P
      * Compute average peer test response time across fast peers with data.
      * Pure decision — no write lock required; reads the already-rebuilt _fastPeers.
      *
-     * @return the average RTT in ms, 0 if fewer than 3 peers have data
+     * @return the average RTT in ms, 0 if fewer than
+     *         {@link ProtocolRttBaseline#SAMPLES_FOR_BASELINE} peers have data
      * @since 0.9.71+
      */
     private float computeAverageLowLatencyRTT() {

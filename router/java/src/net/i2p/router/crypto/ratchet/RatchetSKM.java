@@ -73,7 +73,7 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
      * session tags are used on the outbound side so that no reasonable network lag
      * can cause failed decrypts)
      * <p>
-     * This is also the max idle time for an outbound session.
+     * This is also the session idle timeout used by TransientSessionKeyManager.
      */
     static final long SESSION_LIFETIME_MAX_MS = SESSION_TAG_DURATION_MS + 2 * 60 * 1000L;
 
@@ -1174,9 +1174,9 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
         private long _lastUsed;
         private long _lastReceived;
         /**
-         * Before the first ack, all tagsets go here. These are never expired, we rely
-         * on the callers to call failTags() or ackTags() to remove them from this list.
-         * Actually we now do a failsafe expire.
+         * Before the first ack, all tagsets go here. These are dropped by
+         * clear() when the session's tag state is reset or the session dies;
+         * a failsafe expire also removes stale sets.
          * Unsynchronized, sync to use.
          * No particular order.
          */
@@ -1191,10 +1191,10 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
         private SimpleTimer2.TimedEvent _ackTimer;
         private Destination _destination;
         /**
-         * True after the first tagset is acked.
-         * Upon repeated failures, we may revert back to false.
-         * This prevents us getting "stuck" forever, using tags that weren't acked
-         * to deliver the next set of tags.
+         * Intended to be true after the first tagset is acked, reverting to
+         * false on repeated failures so tag delivery is not stuck forever on
+         * unacked tags. Currently never written, so getAckReceived() is always
+         * false.
          */
         private volatile boolean _acked;
 

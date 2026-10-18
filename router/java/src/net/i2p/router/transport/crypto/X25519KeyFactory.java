@@ -20,7 +20,7 @@ import net.i2p.util.SystemVersion;
  * and it can fall behind.
  * <p>Pool sizes scale dynamically based on memory headroom, CPU pressure,
  * and connection demand. The Tuner calls {@link #refreshPoolSize()} every
- * 30 seconds to adapt to changing conditions.</p>
+ * 15 seconds to adapt to changing conditions.</p>
  *
  * @since 0.9.36 from DHSessionKeyFactory.PrecalcRunner
  */
@@ -170,7 +170,7 @@ public class X25519KeyFactory extends I2PThread implements KeyFactory {
     }
 
     /**
-     * Called by the Tuner every 30 seconds. Manages fill ceiling (_maxSize)
+     * Called by the Tuner every 15 seconds. Manages fill ceiling (_maxSize)
      * based on demand and memory pressure. Does NOT override the Tuner-set
      * _minSize — the Tuner owns that value via setMinSize().
      *

@@ -543,7 +543,7 @@ public final class ECIESAEADEngine {
      * - 16 byte MAC
      * </pre>
      *
-     * @param data 96 bytes minimum
+     * @param data 103 bytes minimum
      * @return null if decryption fails
      */
     private CloveSet decryptNewSession(byte[] data, PrivateKey targetPrivateKey, RatchetSKM keyManager)
@@ -816,7 +816,7 @@ public final class ECIESAEADEngine {
      * </pre>
      *
      * @param tag 8 bytes, same as first 8 bytes of data
-     * @param data 56 bytes minimum
+     * @param data 72 bytes minimum
      * @param oldState will be cloned here, then destroyed on failure
      * @param keyManager the session key manager for this handshake
      * @return null if decryption fails
@@ -1036,15 +1036,16 @@ public final class ECIESAEADEngine {
         return new CloveSet(pc.cloveSet.toArray(arr), Certificate.NULL_CERT, 0, pc.datetime);
     }
 
-    /*
-     * With optional AD.
-     * Decrypts IN PLACE. Decrypted data will be at encrypted[offset:offset + len - 16].
-     *
-     * @param ad may be null
-     * @return success
-     */
+    /** Per-thread ChaCha-Poly cipher state, reused to avoid per-decrypt allocation. */
     private static final ThreadLocal<ChaChaPolyCipherState> _chachaLocal = ThreadLocal.withInitial(ChaChaPolyCipherState::new);
 
+    /**
+     * With optional AD. Decrypts IN PLACE. Decrypted data will be at
+     * encrypted[offset:offset + len - 16].
+     *
+     * @param ad optional associated data, may be null
+     * @return true if the MAC verified and the data was decrypted in place
+     */
     private boolean decryptAEADBlock(byte[] ad, byte[] encrypted, int offset, int encryptedLen, SessionKey key,
                                     long n) {
         ChaChaPolyCipherState chacha = _chachaLocal.get();
@@ -1131,7 +1132,7 @@ public final class ECIESAEADEngine {
         if (priv == null) {
             if (_log.shouldDebug())
                 _log.debug("Encrypting as Null \n* Target: " + target);
-            // N-in-IK, unused
+            // N-in-IK, used for anonymous garlic messages
             return encryptNewSession(cloves, target);
         }
         RatchetEntry re = keyManager.consumeNextAvailableTag(target);
@@ -1414,7 +1415,7 @@ public final class ECIESAEADEngine {
      * Called from MessageWrapper.
      * <p>
      * No datetime, no next key, no acks, no ack requests.
-     * n=0, ad=null.
+     * n=0, ad = the 8-byte session tag.
      * <pre>
      * - 8 byte SessionTag
      * - payload
@@ -1896,7 +1897,8 @@ public final class ECIESAEADEngine {
         /**
          * Take a pooled DateTimeBlock for this expiry, or allocate one
          *
-         * @param time the expiry in milliseconds since the epoch, as sent on the wire
+         * @param time the expiry in milliseconds since the epoch (written to the
+         *             wire as 4-byte seconds)
          * @return a DateTimeBlock carrying time
          */
         DateTimeBlock acquireDateTime(long time) {
@@ -1924,7 +1926,7 @@ public final class ECIESAEADEngine {
         /**
          * Take a pooled AckBlock for these acknowledgements, or allocate one
          *
-         * @param acks the sequence numbers of the messages being acknowledged
+         * @param acks the packed acks, each id &lt;&lt; 16 | n, for the messages being acknowledged
          * @return an AckBlock listing acks, in the order given
          */
         AckBlock acquireAck(List<Integer> acks) {

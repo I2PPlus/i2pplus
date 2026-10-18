@@ -140,7 +140,7 @@ public class MLKEMKeyFactory extends I2PThread implements KeyFactory {
     public int getSize() { return _keys.size(); }
 
     /**
-     * Called by the Tuner every 30 seconds. Adjusts max pool size
+     * Called by the Tuner every 15 seconds. Adjusts max pool size
      * based on demand.
      *
      * @since 0.9.70+

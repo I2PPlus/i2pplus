@@ -34,7 +34,7 @@ import java.util.Set;
  * The keys are kept in a Set and are NOT sorted by last-seen.
  * Per-key last-seen-time, failures, etc. must be tracked elsewhere.
  * <p>
- * If this bucket is full (i.e. begin == end &amp;&amp; size == max)
+ * If this bucket is full (i.e. begin == end &amp;&amp; size &gt;= max)
  * then add() will call KBucketTrimmer.trim() do
  * (possibly) remove older entries, and indicate whether
  * to add the new entry. If the trimmer returns true without

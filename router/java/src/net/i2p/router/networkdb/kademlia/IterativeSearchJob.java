@@ -572,7 +572,7 @@ public class IterativeSearchJob extends FloodSearchJob {
                 return;
             }
             Iterator<Hash> iter = new RandomIterator<>(all);
-            // Limit non-FF to 3, because we don't sort the FFs ahead of the non-FFS,
+            // Limit non-FF to MAX_NON_FF, because we don't sort the FFs ahead of the non-FFS,
             // so once we get some FFs we want to be sure to query them
             for (int i = 0; iter.hasNext() && i < MAX_NON_FF; i++) {floodfillPeers.add(iter.next());}
         }

@@ -34,7 +34,8 @@ public class PublishLocalRouterInfoJob extends JobImpl {
 
     /**
      * Don't store if somebody else stored it recently.
-     * Must be less than PUBLISH_DELAY * 3 / 16 (see getDelay())
+     * Publishes within this window of the last store are skipped;
+     * the normal publish interval is getDelay(), 7-11 minutes.
      */
     private static final long MIN_PUBLISH_DELAY = 9L*60*1000;
 

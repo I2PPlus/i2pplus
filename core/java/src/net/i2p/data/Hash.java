@@ -67,7 +67,7 @@ public class Hash extends SimpleDataStructure {
 
     /** Length of SHA-256 hash in bytes. */
     public static final int HASH_LENGTH = 32;
-    /** Placeholder all-zero hash for testing. */
+    /** Placeholder all-zero hash, used as a stand-in when no real router hash is known. */
     public static final Hash FAKE_HASH = new Hash(new byte[HASH_LENGTH]);
     /** Initial cache capacity, scaled by available memory by SDSCache. */
     private static final int CACHE_SIZE = 2048;
@@ -84,9 +84,11 @@ public class Hash extends SimpleDataStructure {
      * <p>
      * Ignore this warning and you WILL corrupt the cache or other data structures.
      *
-     * @param data the 32 bytes to wrap, with null yielding a hash whose data is null
+     * @param data the 32 bytes to wrap
      * @return the cached or new hash
-     * @throws IllegalArgumentException if data is not the correct number of bytes
+     * @throws NullPointerException if data is null
+     * @throws RuntimeException if data is not the correct number of bytes
+     *         (SDSCache wraps the constructor's IllegalArgumentException)
      * @since 0.8.3
      */
     public static Hash create(byte[] data) {

@@ -580,7 +580,7 @@ class RatchetTagSet implements TagSetHandle {
     }
 
     /**
-     * For outbound, call after consumeNextTag().
+     * For outbound, call after consumeNext().
      * Also called by consume() to catch up for inbound.
      *
      * @return a key and nonce, non-null

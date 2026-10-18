@@ -729,7 +729,7 @@ public class KBucketSet<T extends SimpleDataStructure> {
         // number of fixed bits, out of B_VALUE - 1 bits
         int fixed = 0;
         int bsz = 1 + end - begin;
-        // compute fixed = B_VALUE - log2(bsz)
+        // compute fixed = (B_VALUE - 1) - log2(bsz)
         // e.g for B=4, B_FACTOR=8, sz 4-> fixed 1, sz 2->fixed 2, sz 1 -> fixed 3
         while (bsz < B_FACTOR) {
             fixed++;
@@ -845,8 +845,9 @@ public class KBucketSet<T extends SimpleDataStructure> {
         }
 
         /**
-         * Bucket index for the given key.
-         * @return 0 to max-1 or -1 for us
+         * XOR distance range number for the given key — the B-aligned bucket
+         * range containing the key's distance from us.
+         * @return the range number, or -1 for us
          */
         public int getRange(T key) {
             Integer rv;

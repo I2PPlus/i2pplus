@@ -128,7 +128,7 @@ public class ProtocolRttBaseline {
      * <p>The clamp is the guard against a freakishly low population tightening
      * the bar below what an absolute rule would have used. A single 1 ms sample
      * among fifty would otherwise put the baseline at a few milliseconds and
-     * make the multipleshreshold far stricter than the absolute floor it
+     * make the multiple threshold far stricter than the absolute floor it
      * replaces. With the clamp the calibrated bar is always at least as
      * permissive as the absolute one, so introducing calibration can only widen
      * the set of qualifying peers, never narrow it.

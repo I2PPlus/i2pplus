@@ -22,8 +22,9 @@ import net.i2p.util.Log;
  * attempted, failed, successful, and replied peers to coordinate
  * concurrent search operations and prevent duplicate queries.
  * <p>
- * Thread-safe implementation using synchronized collections and atomic
- * counters for safe concurrent access from multiple search jobs.
+ * Thread safety: the collections are plain and guarded by synchronized blocks
+ * on each collection, with volatile timing fields; a few read-only size checks
+ * in toString() run unlocked. Safe for concurrent access from multiple search jobs.
  *
  * @since 0.9.16
  */

@@ -43,7 +43,7 @@ final class MuxedPQEngine {
     /**
      * The minimum new session size for the given encryption type.
      *
-     * @return the min n s size
+     * @return the minimum new-session message size in bytes
      */
     private static int getMinNSSize(EncType type) {
         switch(type) {

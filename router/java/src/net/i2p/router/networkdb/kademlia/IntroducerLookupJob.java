@@ -35,7 +35,7 @@ import net.i2p.util.Log;
  * hole-punching has its prerequisites ready before a connection is attempted.
  * <p>
  * Pacing and politeness toward floodfills:
- * a randomized 5-7 minute cycle whose query phase is capped at 30s wall time
+ * a randomized 3-7 minute cycle whose query phase is capped at 30s wall time
  * per cycle (no per-cycle count cap), at most {@link #MAX_CONCURRENT_LOOKUPS}
  * searches in flight, per-introducer exponential backoff after failures, and
  * a dedup/backoff map shared across cycles (which also gates keys already
@@ -83,8 +83,8 @@ class IntroducerLookupJob extends JobImpl {
     /** Maximum remote searches in flight during the query phase. */
     private static final int MAX_CONCURRENT_LOOKUPS = 4;
     /**
-     * Issue floor: IterativeSearchJob floors RouterInfo lookup deadlines at
-     * 2s anyway, so a search with less budget left is not worth issuing.
+     * Issue floor: IterativeSearchJob never lets the RouterInfo lookup maximum
+     * drop below 5s, so a search with less budget left is not worth issuing.
      */
     private static final int MIN_USEFUL_TIMEOUT_MS = 2000;
     /** Re-attempt gate while a lookup may still be in flight (fails == 0). */

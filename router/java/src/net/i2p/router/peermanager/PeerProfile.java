@@ -88,7 +88,7 @@ public class PeerProfile {
     private transient volatile float _lossRatio;
     /** When _lossRatio was last reported by the transport. */
     private transient volatile long _lossRatioLastUpdate;
-    /** Decayed loss score (max of past score and reported ratio, 50% per hour time decay). Not persisted. */
+    /** Decayed loss score (max of past score and reported ratio, 50% per 15 min time decay). Not persisted. */
     private transient volatile float _lossScore;
     /** When _lossScore was last updated. */
     private transient volatile long _lossScoreLastUpdate;
@@ -382,8 +382,8 @@ public class PeerProfile {
      * Also mark active if it is connected, as this will tend to encourage use
      * of already-connected peers.
      *
-     * @param period must be one of the periods in the RateStat constructors below
-     *               (5*60*1000 or 60*60*1000)
+     * @param period look-back window in ms (10 minutes for the tier checks,
+     *               1 hour for the capacity calculator)
      * @param now the current clock reading in milliseconds
      * @return true if active
      * @since 0.9.58
@@ -553,10 +553,9 @@ public class PeerProfile {
 
     /**
      * The direct-link RTT to this peer, or -1 when it is unknown or stale.
-     * <p>Stale means older than the Active tier window. That window is the one
-     * already applied to {@link #getLastSendSuccessful()}, so a first-hop RTT
-     * is treated with the same freshness rules as the rest of the profile's
-     * active-tier evidence rather than inventing a second decay scheme.
+     * <p>Stale means older than {@link #FIRST_HOP_RTT_VALIDITY_MS} (4 hours),
+     * a window sized for the direct-link RTT itself rather than borrowed from
+     * the tier freshness windows.
      *
      * @param now current time in ms
      * @return the RTT in ms, or -1 if never measured or older than the window
@@ -587,7 +586,7 @@ public class PeerProfile {
      * <ul>
      * <li>an absolute ceiling, so a peer is never low latency merely because
      * the whole network has slowed and every average rose with it;</li>
-     * <li>the population boundary, so on a fast network a peer at the
+     * <li>an absolute floor, so on a fast network a peer at the
      * absolute ceiling is still not low if it sits at the typical value.</li>
      * </ul>
      * <p>Only the direct link is consulted. Latency to this peer has nothing to
@@ -1185,7 +1184,8 @@ void recalculateLowLatency() {
     /**
      * This is the speed value
      *
-     * @return the average of the three fastest one-minute data transfers, on a per-tunnel basis,
+     * @return the average of the eight fastest one-minute data transfers (four
+     *         on slow JVMs), on a per-tunnel basis,
      *         through this peer. Ever. Peaks are never decayed; only a higher
      *         measurement can raise them, and a lower one is ignored. Freshness
      *         is judged by the selection gates, not by eroding these values.
@@ -1409,11 +1409,11 @@ void recalculateLowLatency() {
 
     /**
      * RateStat memory per expanded profile:
-     * PeerProfile:     3 RateStats (was 5; 2 dead removed), 3-5 Rates each - ~15 rates total
-     * DBHistory:       2 RateStats, 2 rates each -            4 rates total
-     * TunnelHistory:   2 RateStats, 2 rates each -            4 rates total
+     * PeerProfile:     3 RateStats (was 5; 2 dead removed), 1-3 Rates each -   6 rates total
+     * DBHistory:       2 RateStats, 1-2 rates each -                           3 rates total
+     * TunnelHistory:   2 RateStats, 2 rates each -                             4 rates total
      * ---                                    ---------
-     * 7                                      23 rates total
+     * 7                                      13 rates total
      * <p>
      * shrinkProfile() / shrinkDBProfile() drop the PeerProfile
      * and DBProfile RateStats; TunnelHistory RateStats are final

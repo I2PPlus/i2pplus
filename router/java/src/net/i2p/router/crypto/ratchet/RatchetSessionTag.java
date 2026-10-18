@@ -81,7 +81,7 @@ public class RatchetSessionTag {
 
     /**
      * We assume the data has enough randomness in it, so use 4 bytes for speed.
-     * @return whether h code is present
+     * @return the hash code
      */
     @Override
     public int hashCode() {

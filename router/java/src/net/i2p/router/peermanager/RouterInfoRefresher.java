@@ -133,9 +133,10 @@ class RouterInfoRefresher {
     int deferredCount() { return _deferred; }
 
     /**
-     * starvation guard
+     * The promotions the starvation guard let through on a RouterInfo that was
+     * already known to be stale.
      *
-     * @return promotions let through on a stale RouterInfo this cycle, by the
+     * @return stale promotions counted since the last beginCycle()
      * @since 0.9.72
      */
     int promotedStaleCount() { return _promotedStale; }

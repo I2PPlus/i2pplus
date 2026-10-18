@@ -13,7 +13,7 @@ import java.util.List;
  * @since 0.9.2 in i2psnark, moved to core in 0.9.10
  */
 public class RandomTrimmer<T extends SimpleDataStructure> implements KBucketTrimmer<T> {
-    /** The router context, used for timing. */
+    /** The app context, used for its random() source. */
     protected final I2PAppContext _ctx;
     private final int _max;
 
