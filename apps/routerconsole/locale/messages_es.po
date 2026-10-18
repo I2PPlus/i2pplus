@@ -126,23 +126,53 @@ msgstr "Compañeros sin una dirección IP publicada"
 msgid "Average tunnel build success (%)"
 msgstr "% de éxito promedio en la construcción de túneles"
 
+msgid "Tier promotions held back for a peer with no usable address"
+msgstr ""
+"Promociones de nivel retenidas para un compañero sin dirección "
+"utilizable"
+
+msgid "RouterInfo refreshes issued for peers held out of the tiers"
+msgstr ""
+"Actualizaciones de RouterInfo emitidas para compañeros mantenidos fuera "
+"de los niveles"
+
+msgid "Tier scans that left the fast or high-capacity tier short of target"
+msgstr ""
+"Análisis de niveles que dejaron al nivel rápido o de alta capacidad por "
+"debajo del objetivo"
+
+msgid "RouterInfos requested for stored profiles that had none"
+msgstr "RouterInfos solicitadas para perfiles almacenados que no tenían"
+
+msgid "Build timeouts recorded against a peer as a ghost mark"
+msgstr ""
+"Tiempos de espera de construcción registrados a un compañero como marca "
+"fantasma"
+
+msgid "Ghost marks cleared by a successful build reply"
+msgstr ""
+"Marcas fantasma borradas tras una respuesta de construcción exitosa"
+
+msgid "Peers currently excluded as ghosts"
+msgstr "Compañeros excluidos actualmente como fantasmas"
+
+msgid "Ghost peers in the fast or high-capacity tiers"
+msgstr "Compañeros fantasma en los niveles rápido o de alta capacidad"
+
+msgid "Duplicate CLOSE safety-net messages sent"
+msgstr "Mensajes duplicados de red de seguridad CLOSE enviados"
+
 msgid "Memory used by the JVM"
 msgstr "Memoria utilizada por la JVM"
 
 msgid "maximum"
 msgstr "máximo"
 
-msgid "No transports"
-msgstr "No hay transportes (¿ocultos o iniciándose?)"
-
 msgid "Unsupported signature type"
 msgstr "Tipo de firma no soportado"
 
 msgid "No support for our signature type"
 msgstr "No hay soporte para nuestro tipo de firma"
-
-msgid "Unreachable on any transport"
-msgstr "Inalcanzable sobre cualquier transporte"
 
 msgid "Cannot enumerate UPnP devices on Android."
 msgstr "No se pueden enumerar los dispositivos UPnP en Android."
@@ -839,6 +869,9 @@ msgstr "Consola"
 
 msgid "To enable SSL access for the Router Console, see the commented <code>clients.config</code> file located in your I2P application directory for more information. You will need to edit the RouterConsoleRunner config file located in the directory: "
 msgstr "Para habilitar el acceso SSL para la consola del enrutador, consulte el archivo <code>clients.config</code>. Deberá editar el archivo de configuración RouterConsoleRunner ubicado en el directorio:"
+
+msgid "No client session key managers."
+msgstr "No hay gestores de claves de sesión de cliente."
 
 msgid "Save disabled, edit the router.config file to make changes"
 msgstr "Guardado deshabilitado, edite el archivo router.config para realizar cambios"
@@ -2052,20 +2085,34 @@ msgstr "mejorado"
 msgid "vs baseline"
 msgstr "vs línea de base"
 
+#, java-format
+msgid "Out: {0} / {1}"
+msgstr "Salida: {0} / {1}"
+
+#, java-format
+msgid "In: {0} / {1}"
+msgstr "Entrada: {0} / {1}"
+
 msgid "CPU"
 msgstr "CPU"
 
-msgid "CPU load average"
-msgstr "Promedio de carga de CPU"
+msgid "JVM CPU load average"
+msgstr "Carga media de CPU de la JVM"
+
+#, java-format
+msgid "{0} cores"
+msgstr "{0} núcleos"
 
 msgid "Memory"
 msgstr "Memoria"
 
-msgid "Memory usage"
-msgstr "Uso de memoria"
+#, java-format
+msgid "Used: {0} / {1} max"
+msgstr "En uso: {0} / {1} máx."
 
-msgid "Router uptime"
-msgstr "Tiempo de actividad del enrutador"
+#, java-format
+msgid "Since {0}"
+msgstr "Desde {0}"
 
 msgid "Job Lag"
 msgstr "Retraso de trabajos"
@@ -2091,6 +2138,10 @@ msgstr "Hilos"
 msgid "Active JVM threads"
 msgstr "Hilos JVM activos"
 
+#, java-format
+msgid "Empty at {0}"
+msgstr "Vacío a {0}"
+
 msgid "NTCP Estab"
 msgstr "Establecido NTCP"
 
@@ -2112,20 +2163,24 @@ msgstr "Tiempo de espera de retransmisión SSU"
 msgid "Conns/s"
 msgstr "Conns/s"
 
-msgid "NTCP connections established per second"
-msgstr "Conexiones NTCP establecidas por segundo"
+#, java-format
+msgid "Full at {0}/s"
+msgstr "Lleno a {0}/s"
+
+msgid "New NTCP connections (1 min)"
+msgstr "Nuevas conexiones NTCP (1 min)"
 
 msgid "Msgs/s"
 msgstr "Msgs/s"
 
-msgid "Messages delivered per second"
-msgstr "Mensajes entregados por segundo"
+msgid "Messages delivered (1 min)"
+msgstr "Mensajes entregados (1 min)"
 
 msgid "RTT"
 msgstr "RTT"
 
-msgid "End-to-end message round trip time"
-msgstr "Tiempo de ida y vuelta de extremo a extremo de los mensajes"
+msgid "End-to-end client message round trip"
+msgstr "Ida y vuelta de mensajes de cliente de extremo a extremo"
 
 msgid "Timeout"
 msgstr "Tiempo de espera"
@@ -2139,20 +2194,28 @@ msgstr "Construcción de túnel"
 msgid "Client tunnel build latency"
 msgstr "Latencia de construcción del túnel del cliente"
 
+#, java-format
+msgid "In: {0} / Out: {1}"
+msgstr "Entrada: {0} / Salida: {1}"
+
 msgid "Active Peers"
 msgstr "Pares activos"
 
-msgid "Active peers (last 60s)"
-msgstr "Pares activos (últimos 60s)"
+#, java-format
+msgid "Full at {0}"
+msgstr "Lleno a {0}"
+
+msgid "Reached in the last 60s"
+msgstr "Contactados en los últimos 60 s"
 
 msgid "Known Peers"
 msgstr "Pares conocidos"
 
-msgid "Known routers in network database"
-msgstr "Routers conocidos en la base de datos de red"
+msgid "In the network database"
+msgstr "En la base de datos de la red"
 
-msgid "Active I2CP clients"
-msgstr "Clientes I2CP activos"
+msgid "I2CP clients connected"
+msgstr "Clientes I2CP conectados"
 
 msgid "Transit"
 msgstr "Tránsito"
@@ -2166,8 +2229,8 @@ msgstr "Flujos"
 msgid "Build Success"
 msgstr "Construir el éxito"
 
-msgid "Tunnel build success rate"
-msgstr "Tasa de éxito de construcción de túnel"
+msgid "Tunnel build success rate (1 min)"
+msgstr "Tasa de éxito en la construcción de túneles (1 min)"
 
 msgid "NetDB"
 msgstr "NetDB"
@@ -2178,26 +2241,31 @@ msgstr "Tiempo de búsqueda en NetDB"
 msgid "Banned"
 msgstr "Excluido"
 
-msgid "Total banned peers"
-msgstr "Total de pares bloqueados"
+msgid "Peers excluded from all interactions"
+msgstr "Compañeros excluidos de todas las interacciones."
+
+#, java-format
+msgid "{0} of {1} known"
+msgstr "{0} de {1} conocidos"
 
 msgid "LeaseSets"
 msgstr "Conjuntos de arrendamiento"
 
-msgid "Stored LeaseSets in floodfill"
-msgstr "LeaseSets almacenados en el nodo de inundación"
+msgid "Stored LeaseSets"
+msgstr "LeaseSets almacenados"
 
 msgid "Cache Hit"
 msgstr "Accierto de caché"
 
-msgid "NetDB lookup success rate"
-msgstr "Tasa de éxito de búsqueda en NetDB"
+#, java-format
+msgid "Matched {0} of {1} lookups (1 min)"
+msgstr "{0} de {1} búsquedas con coincidencia (1 min)"
 
 msgid "Flood Verify"
 msgstr "Verificación de inundación"
 
-msgid "Floodfill verify time"
-msgstr "tiempo de verificación del nodo de inundación"
+msgid "Floodfill verify time (1 min)"
+msgstr "Tiempo de verificación Floodfill (1 min)"
 
 msgid "NetDB ACK"
 msgstr "ACK NetDB"
@@ -2208,20 +2276,20 @@ msgstr "Tiempo de acuse de recibo de par NetDB"
 msgid "Lookups/s"
 msgstr "Búsquedas/s"
 
-msgid "NetDB lookups handled per second"
-msgstr "Búsquedas de NetDB procesadas por segundo"
+msgid "Lookups handled (1 min)"
+msgstr "Búsquedas atendidas (1 min)"
 
 msgid "Requests/s"
 msgstr "Solicitudes/s"
 
-msgid "Combined store + lookup operations per second"
-msgstr "Operaciones combinadas de almacenamiento + búsqueda por segundo"
+msgid "Stores + lookups (1 min)"
+msgstr "Almacenamientos + búsquedas (1 min)"
 
 msgid "Stores/s"
 msgstr "Almacenamientos/s"
 
-msgid "NetDB store messages handled per second"
-msgstr "Mensajes de almacenamiento de NetDB procesados por segundo"
+msgid "Stores handled (1 min)"
+msgstr "Almacenamientos atendidos (1 min)"
 
 msgid "LS Timeout"
 msgstr "Tiempo de espera LS"
@@ -3205,6 +3273,9 @@ msgstr "Ver perfil"
 msgid "Configure peer"
 msgstr "Configurar par"
 
+msgid "Memory usage"
+msgstr "Uso de memoria"
+
 msgid "Hidden"
 msgstr "Oculto"
 
@@ -3348,8 +3419,8 @@ msgstr "Pares de alto ancho de banda para muchos túneles"
 msgid "Reliable"
 msgstr "Confiable"
 
-msgid "High-capacity peers with good acceptance"
-msgstr "Compañeros de alta capacidad con buena aceptación."
+msgid "Peers with good acceptance and recent activity"
+msgstr "Compañeros con buena aceptación y actividad reciente"
 
 msgid "Peers that store and serve NetDb info"
 msgstr "Pares que almacenan y sirven información de NetDb"
@@ -3360,17 +3431,21 @@ msgstr "Conocidos"
 msgid "Total entries in network database"
 msgstr "Entradas totales en la base de datos de la red"
 
+msgid "Profiles"
+msgstr "Perfiles"
+
 msgid "Profiles with activity in the last hour"
 msgstr "Perfiles con actividad en la última hora"
+
+#, java-format
+msgid "{0} of {1} stored"
+msgstr "{0} de {1} almacenados"
 
 msgid "Unreachable"
 msgstr "Inalcanzable"
 
-msgid "Peers without a reachable address"
-msgstr "Compañeros sin una dirección accesible"
-
-msgid "Peers excluded from all interactions"
-msgstr "Compañeros excluidos de todas las interacciones."
+msgid "Peers without a published address"
+msgstr "Compañeros sin dirección publicada"
 
 msgid "/min"
 msgstr "/min"
@@ -3378,8 +3453,12 @@ msgstr "/min"
 msgid "Test Fail"
 msgstr "Prueba fallida"
 
-msgid "Connectivity test failures per minute"
-msgstr "Fallos de pruebas de conectividad por minuto"
+msgid "Connectivity test failures in the last minute"
+msgstr "Fallos de prueba de conectividad en el último minuto"
+
+#, java-format
+msgid "Empty at {0}/min"
+msgstr "Vacío a {0}/min"
 
 msgid "Peer Connections"
 msgstr "Conexiones entre pares"
@@ -3653,26 +3732,40 @@ msgstr[1] "{0} perfiles obsoletos ocultos"
 msgid "Share of total profiles shown"
 msgstr "Proporción del total de perfiles mostrados"
 
-msgid "peers"
-msgstr "compañeros"
-
-msgid "Share of tier profiles shown"
-msgstr "Proporción de perfiles de nivel mostrados"
-
 msgid "Window"
 msgstr "Ventana"
 
 msgid "Fast RTT"
 msgstr "RTT rápido"
 
-msgid "Max RTT for fast-tier membership (ms)"
-msgstr "RTT máximo para pertenecer al nivel rápido (ms)"
+msgid "Max RTT for fast-tier membership"
+msgstr "RTT máximo para pertenecer al nivel rápido"
 
-msgid "Average loss of fast-tier peers (%)"
-msgstr "Pérdida media de los pares del nivel rápido (%)"
+msgid "Rises with network latency"
+msgstr "Aumenta con la latencia de la red"
 
-msgid "Average loss of high-capacity peers (%)"
-msgstr "Pérdida media de los pares de alta capacidad (%)"
+msgid "Average loss of fast-tier peers"
+msgstr "Pérdida media de compañeros del nivel rápido"
+
+msgid "Average loss of high-capacity peers"
+msgstr "Pérdida media de compañeros de alta capacidad"
+
+msgid "Average direct-link RTT of tier peers"
+msgstr "RTT medio de enlace directo de los compañeros de nivel"
+
+#, java-format
+msgid "{0} of {1} measured"
+msgstr "{0} de {1} medidos"
+
+msgid "1h Contact"
+msgstr "Contacto 1h"
+
+msgid "Heard from in the last hour"
+msgstr "Con actividad en la última hora"
+
+#, java-format
+msgid "{0} of {1} tier peers"
+msgstr "{0} de {1} compañeros de nivel"
 
 msgid "Heard from within the display cutoff"
 msgstr "Escuchado dentro del límite de visualización"
@@ -3683,11 +3776,19 @@ msgstr "Búsquedas"
 msgid "Lookup success rate"
 msgstr "Tasa de éxito de búsqueda"
 
+#, java-format
+msgid "{0} of {1} lookups"
+msgstr "{0} de {1} búsquedas"
+
 msgid "Stores"
 msgstr "Almacenamientos"
 
 msgid "Store success rate"
 msgstr "Tasa de éxito de almacenamiento"
+
+#, java-format
+msgid "{0} of {1} peers"
+msgstr "{0} de {1} compañeros"
 
 msgid "Definitions"
 msgstr "Definiciones"
@@ -3760,11 +3861,25 @@ msgstr "¿cuántos pares nuevos nos han indicado últimamente?"
 msgid "Known floodfills"
 msgstr "Nodos de inundación conocidos"
 
-msgid "No-Fail"
-msgstr "Sin fallos"
+msgid "Reachable, unbanlisted and heard from"
+msgstr "Accesible, sin banlistar y con actividad reciente"
 
-msgid "No lookup failures (1h)"
-msgstr "Sin fallos de búsqueda (1h)"
+msgid "Active bans of floodfill-capable peers"
+msgstr "Baneos activos de compañeros capaces de hacer de Floodfill"
+
+#, java-format
+msgid "of {0} known"
+msgstr "de {0} conocidos"
+
+msgid "Fail"
+msgstr "Fallo"
+
+msgid "Lookup failures in the last hour"
+msgstr "Fallos de búsqueda en la última hora"
+
+#, java-format
+msgid "across {0} listed peers"
+msgstr "entre {0} compañeros listados"
 
 msgid "Response"
 msgstr "Respuesta"
@@ -3772,11 +3887,16 @@ msgstr "Respuesta"
 msgid "Lookup response time (1h)"
 msgstr "Tiempo de respuesta de búsqueda (1h)"
 
-msgid "1h Contact"
-msgstr "Contacto 1h"
+#, java-format
+msgid "{0} peers measured"
+msgstr "{0} compañeros medidos"
 
 msgid "Contacted within 1h"
 msgstr "Contactado en 1h"
+
+#, java-format
+msgid "{0} of {1} listed"
+msgstr "{0} de {1} listados"
 
 msgid "1h Fail Rate"
 msgstr "Tasa de fallos a 1h"
@@ -3814,17 +3934,33 @@ msgstr "Todos"
 msgid "SAM bridge is not running."
 msgstr "El puente SAM no está en ejecución."
 
+msgid "Sessions"
+msgstr "Sesiones"
+
 msgid "Active sessions in SessionsDB"
 msgstr "Sesiones activas en SessionsDB"
+
+msgid "Workers"
+msgstr "Trabajadores"
 
 msgid "Active / pool worker threads"
 msgstr "Hilos activos / del grupo"
 
-msgid "Pending commands in pool"
-msgstr "Comandos pendientes en el grupo"
+msgid "Queue"
+msgstr "Cola"
+
+#, java-format
+msgid "Pending commands: {0} of {1}"
+msgstr "Comandos pendientes: {0} de {1}"
+
+msgid "Handlers"
+msgstr "Manejadores"
 
 msgid "Connected pool handlers"
 msgstr "Manejadores de grupo conectados"
+
+msgid "Stolen"
+msgstr "Robados"
 
 msgid "Sockets stolen for data streaming"
 msgstr "Sockets capturados para streaming de datos"
@@ -4143,9 +4279,6 @@ msgstr "Mostrar todas las conexiones actuales con pares"
 msgid "Router health overview"
 msgstr "Resumen del estado del enrutador"
 
-msgid "Profiles"
-msgstr "Perfiles"
-
 msgid "Show recent peer performance profiles"
 msgstr "Mostrar perfiles de rendimiento de los pares recientes"
 
@@ -4454,6 +4587,27 @@ msgid "1 event"
 msgid_plural "{0} events"
 msgstr[0] "1 evento"
 msgstr[1] "{0} eventos"
+
+msgid "Open streaming connections"
+msgstr "Conexiones de streaming abiertas"
+
+msgid "Round-trip time (live samples, 1 min)"
+msgstr "Tiempo de ida y vuelta (muestras en vivo, 1 min)"
+
+msgid "Retrans"
+msgstr "Retrans."
+
+msgid "Share of sends needing retransmit (1 min)"
+msgstr "Proporción de envíos que requieren retransmisión (1 min)"
+
+msgid "Created + received (1 min)"
+msgstr "Creados + recibidos (1 min)"
+
+msgid "Throughput"
+msgstr "Rendimiento"
+
+msgid "Mean rate of streams closed in the last minute"
+msgstr "Tasa media de flujos cerrados en el último minuto"
 
 msgid "sent"
 msgstr "enviado"
@@ -4842,6 +4996,9 @@ msgstr "Exponente de rechazo por limitación"
 msgid "Maximum Participating Tunnels"
 msgstr "Máximo de túneles participantes"
 
+msgid "Timer Threads"
+msgstr "Hilos de temporizador"
+
 msgid "Build Handler Maximum Queue"
 msgstr "Cola máxima del manejador de construcción"
 
@@ -5195,6 +5352,11 @@ msgstr "Ventana de congestión máxima durante el inicio lento."
 
 msgid "Per-connection inbound buffer cap (bytes)."
 msgstr "Límite de búfer entrante por conexión (bytes)."
+
+msgid "Timer worker threads; higher reduces event delay."
+msgstr ""
+"Hilos de trabajo del temporizador; un valor más alto reduce el retraso "
+"de eventos."
 
 msgid "Dynamic cap on concurrent streams per destination."
 msgstr "Límite dinámico de flujos concurrentes por destino."
@@ -7017,6 +7179,15 @@ msgstr "configurar las aplicaciones web"
 msgid "The Java web applications listed below are started by the webConsole client and run in the same JVM as the router. They are usually web applications accessible through the router console. They may be complete applications (e.g. i2psnark), front-ends to another client or application which must be separately enabled (e.g. susidns, i2ptunnel), or have no web interface at all (e.g. addressbook)."
 msgstr "Las aplicaciones web Java listadas debajo son iniciadas por el cliente webConsole y ejecutadas en la misma JVM que el router. Habitualmente son aplicaciones web accesibles a través de la consola del router. Pueden ser aplicaciones completas (ej. i2psnark), interfaces de otro cliente o aplicación que debería habilitarse por separado (ej. susidns, i2ptunnel), o no tienen interfaz web en absoluto (ej. addressbook)."
 
+msgid "Router Session Key Manager"
+msgstr "Gestor de claves de sesión del enrutador"
+
+msgid "Client Session Key Managers"
+msgstr "Gestores de claves de sesión de cliente"
+
+msgid "Router DHT"
+msgstr "DHT del enrutador"
+
 msgid "Open in new tab"
 msgstr "Abrir en una nueva pestaña"
 
@@ -7591,14 +7762,20 @@ msgstr "Periodo minimo de prueba de túnel en milisegundos. Las pruebas de túne
 msgid "Maximum tunnel test period in milliseconds. Tunnel tests never wait longer than this for a reply, even on high-latency paths. [Default is 50000 (50 seconds)]"
 msgstr "Periodo maximo de prueba de túnel en milisegundos. Las pruebas de túnel nunca esperan mas de este tiempo para una respuesta, incluso en rutas de alta latencia. [Por defecto es 50000 (50 segundos)]"
 
-msgid "Number of tunnel build timeouts before a peer is marked as a ghost (blacklisted for tunnel participation). Higher values tolerate more transient failures. [Default is 3]"
-msgstr "Numero de tiempos de espera de construccion de túnel antes de que un par sea marcado como fantasma (incluido en lista negra para participacion en túneles). Valores mas altos toleran mas fallos transitorios. [Por defecto es 3]"
+msgid "Number of tunnel build timeouts before a peer is marked as a ghost (excluded from tunnel participation). Higher values tolerate more transient failures. [Default is 1]"
+msgstr ""
+"Número de tiempos de espera de construcción de túneles antes de que un "
+"compañero sea marcado como fantasma (excluido de la participación en "
+"túneles). Valores más altos toleran más fallos transitorios. [El valor "
+"predeterminado es 1]"
 
-msgid "Cooldown period in milliseconds before a ghost-marked peer can be considered for tunnel participation again. Shorter values allow faster peer reuse. [Default is 180000 (3 minutes)]"
-msgstr "Periodo de enfriamiento en milisegundos antes de que un par marcado como fantasma pueda ser considerado nuevamente para participacion en túneles. Valores mas cortos permiten una reutilizacion mas rapida de pares. [Por defecto es 180000 (3 minutos)]"
-
-msgid "Cooldown period in milliseconds for ghost-marked peers during attack mode. Longer cooldowns limit exposure to potentially malicious peers during high-stress periods. [Default is 300000 (5 minutes)]"
-msgstr "Periodo de enfriamiento en milisegundos para pares marcados como fantasma durante el modo de ataque. Enfriamientos mas largos limitan la exposicion a pares potencialmente maliciosos durante periodos de alto estres. [Por defecto es 300000 (5 minutos)]"
+msgid "Cooldown period in milliseconds before a ghost-marked peer can be promoted into the tunnel peer tiers again. Shorter values return recovered peers to service faster. [Default is 90000 (90 seconds)]"
+msgstr ""
+"Período de enfriamiento en milisegundos antes de que un compañero "
+"marcado como fantasma pueda volver a ascender a los niveles de "
+"compañeros de túnel. Valores más cortos devuelven antes al servicio a "
+"los compañeros recuperados. [El valor predeterminado es 90000 (90 "
+"segundos)]"
 
 msgid "Minimum number of incoming tunnel build requests accepted per peer per clean window. Prevents starving peers during low-traffic periods. [Default is 10]"
 msgstr "Numero minimo de solicitudes de construccion de túnel entrantes aceptadas por par por ventana limpia. Evita privar a los pares durante periodos de bajo trafico. [Por defecto es 10]"
@@ -10028,3 +10205,35 @@ msgstr "Siguiente"
 
 msgid "Finished"
 msgstr "Terminado"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -128,23 +128,46 @@ msgstr "Однорангові пристрої без опубліковано�
 msgid "Average tunnel build success (%)"
 msgstr "Середня успішність будівництва тунелю %"
 
+msgid "Tier promotions held back for a peer with no usable address"
+msgstr "Підвищення в рівні, відкладені для вузла без придатної адреси"
+
+msgid "RouterInfo refreshes issued for peers held out of the tiers"
+msgstr ""
+"Оновлення RouterInfo, надіслані для вузлів, утримуваних поза рівнями"
+
+msgid "Tier scans that left the fast or high-capacity tier short of target"
+msgstr ""
+"Сканування рівнів, після яких швидкий або ємний рівень не досяг мети"
+
+msgid "RouterInfos requested for stored profiles that had none"
+msgstr "Запити RouterInfo для збережених профілів, у яких їх не було"
+
+msgid "Build timeouts recorded against a peer as a ghost mark"
+msgstr "Тайм-аути збирання, зафіксовані за вузлом як позначка «привид»"
+
+msgid "Ghost marks cleared by a successful build reply"
+msgstr "Позначки «привид», зняті успішною відповіддю збирання"
+
+msgid "Peers currently excluded as ghosts"
+msgstr "Вузли, що зараз виключаються як привиди"
+
+msgid "Ghost peers in the fast or high-capacity tiers"
+msgstr "Вузли-привиди у швидкому або ємному рівнях"
+
+msgid "Duplicate CLOSE safety-net messages sent"
+msgstr "Надіслано дублікати захисних повідомлень CLOSE"
+
 msgid "Memory used by the JVM"
 msgstr "Пам'ять, що використовується JVM"
 
 msgid "maximum"
 msgstr "максимум"
 
-msgid "No transports"
-msgstr "Немає транспортних протоколів (в прихованому режимі чи запущений нещодавно?)"
-
 msgid "Unsupported signature type"
 msgstr "Непідтримуваний тип підпису"
 
 msgid "No support for our signature type"
 msgstr "Немає підтримки для нашого типу підпису"
-
-msgid "Unreachable on any transport"
-msgstr "Недосяжний через жодний транспортний протокол"
 
 msgid "Cannot enumerate UPnP devices on Android."
 msgstr "Неможливо просканувати пристрої UPnP на Android."
@@ -842,6 +865,9 @@ msgstr "Консоль"
 
 msgid "To enable SSL access for the Router Console, see the commented <code>clients.config</code> file located in your I2P application directory for more information. You will need to edit the RouterConsoleRunner config file located in the directory: "
 msgstr "Щоб увімкнути доступ до SSL для консолі маршрутизатора, див. Файл коментованих <code>clients.config</code>, розташований у вашому каталозі додатків i2p для отримання додаткової інформації. Вам потрібно буде відредагувати файл конфігурації Routerconsoverunner, розташований у каталозі:"
+
+msgid "No client session key managers."
+msgstr "Немає менеджерів ключів клієнтських сесій."
 
 msgid "Save disabled, edit the router.config file to make changes"
 msgstr "Збереження вимкнено, відредагуйте файл router.config для внесення змін"
@@ -2058,20 +2084,34 @@ msgstr "покращений"
 msgid "vs baseline"
 msgstr "проти базової лінії"
 
+#, java-format
+msgid "Out: {0} / {1}"
+msgstr "Вих.: {0} / {1}"
+
+#, java-format
+msgid "In: {0} / {1}"
+msgstr "Вх.: {0} / {1}"
+
 msgid "CPU"
 msgstr "CPU"
 
-msgid "CPU load average"
-msgstr "Середнє навантаження CPU"
+msgid "JVM CPU load average"
+msgstr "Середнє навантаження CPU JVM"
+
+#, java-format
+msgid "{0} cores"
+msgstr "{0} ядер"
 
 msgid "Memory"
 msgstr "Пам''ять"
 
-msgid "Memory usage"
-msgstr "Використання пам''яті"
+#, java-format
+msgid "Used: {0} / {1} max"
+msgstr "Використано: {0} / {1} макс."
 
-msgid "Router uptime"
-msgstr "Час роботи маршрутизатора"
+#, java-format
+msgid "Since {0}"
+msgstr "З {0}"
 
 msgid "Job Lag"
 msgstr "Затримка завдань"
@@ -2097,6 +2137,10 @@ msgstr "Потоки"
 msgid "Active JVM threads"
 msgstr "Активні потоки JVM"
 
+#, java-format
+msgid "Empty at {0}"
+msgstr "Порожньо при {0}"
+
 msgid "NTCP Estab"
 msgstr "NTCP встановл."
 
@@ -2118,20 +2162,24 @@ msgstr "Час повторної передачі SSU"
 msgid "Conns/s"
 msgstr "З''єдн./с"
 
-msgid "NTCP connections established per second"
-msgstr "NTCP-з''єднання, встановлені за секунду"
+#, java-format
+msgid "Full at {0}/s"
+msgstr "Повно при {0}/с"
+
+msgid "New NTCP connections (1 min)"
+msgstr "Нові з'єднання NTCP (1 хв)"
 
 msgid "Msgs/s"
 msgstr "Повід./с"
 
-msgid "Messages delivered per second"
-msgstr "Повідомлення, доставлені за секунду"
+msgid "Messages delivered (1 min)"
+msgstr "Доставлені повідомлення (1 хв)"
 
 msgid "RTT"
 msgstr "RTT"
 
-msgid "End-to-end message round trip time"
-msgstr "Час кінцевого обміну повідомленням"
+msgid "End-to-end client message round trip"
+msgstr "Скрізний час обороту повідомлень клієнта"
 
 msgid "Timeout"
 msgstr "Час очікування"
@@ -2145,20 +2193,28 @@ msgstr "Побудова тунелю"
 msgid "Client tunnel build latency"
 msgstr "Затримка побудови клієнтського тунелю"
 
+#, java-format
+msgid "In: {0} / Out: {1}"
+msgstr "Вх.: {0} / Вих.: {1}"
+
 msgid "Active Peers"
 msgstr "Активні вузли"
 
-msgid "Active peers (last 60s)"
-msgstr "Активні вузли (останні 60с)"
+#, java-format
+msgid "Full at {0}"
+msgstr "Повно при {0}"
+
+msgid "Reached in the last 60s"
+msgstr "Досягнуті за останні 60 с"
 
 msgid "Known Peers"
 msgstr "Відомі вузли"
 
-msgid "Known routers in network database"
-msgstr "Відомі маршрутизатори у мережевій базі даних"
+msgid "In the network database"
+msgstr "У базі даних мережі"
 
-msgid "Active I2CP clients"
-msgstr "Активні клієнти I2CP"
+msgid "I2CP clients connected"
+msgstr "Підключені клієнти I2CP"
 
 msgid "Transit"
 msgstr "Транзит"
@@ -2172,8 +2228,8 @@ msgstr "Потоки"
 msgid "Build Success"
 msgstr "Домагайтеся успіху"
 
-msgid "Tunnel build success rate"
-msgstr "Частота успішної побудови тунелю"
+msgid "Tunnel build success rate (1 min)"
+msgstr "Успішність збирання тунелів (1 хв)"
 
 msgid "NetDB"
 msgstr "NetDB"
@@ -2184,26 +2240,31 @@ msgstr "Час пошуку NetDB"
 msgid "Banned"
 msgstr "Забанений"
 
-msgid "Total banned peers"
-msgstr "Усього заблокованих вузлів"
+msgid "Peers excluded from all interactions"
+msgstr "Однолітків виключено з усіх взаємодій"
+
+#, java-format
+msgid "{0} of {1} known"
+msgstr "{0} з {1} відомих"
 
 msgid "LeaseSets"
 msgstr "LeaseSet-и"
 
-msgid "Stored LeaseSets in floodfill"
-msgstr "Збережені LeaseSets у вузлі затоплення"
+msgid "Stored LeaseSets"
+msgstr "Збережені LeaseSet-и"
 
 msgid "Cache Hit"
 msgstr "Потрапляння в кеш"
 
-msgid "NetDB lookup success rate"
-msgstr "Частота успішного пошуку NetDB"
+#, java-format
+msgid "Matched {0} of {1} lookups (1 min)"
+msgstr "Збіг у {0} з {1} пошуків (1 хв)"
 
 msgid "Flood Verify"
 msgstr "Перевірка Flood"
 
-msgid "Floodfill verify time"
-msgstr "час перевірки вузла затоплення"
+msgid "Floodfill verify time (1 min)"
+msgstr "Час перевірки Floodfill (1 хв)"
 
 msgid "NetDB ACK"
 msgstr "NetDB ACK"
@@ -2214,20 +2275,20 @@ msgstr "Час підтвердження вузла NetDB"
 msgid "Lookups/s"
 msgstr "Пошуки/с"
 
-msgid "NetDB lookups handled per second"
-msgstr "Пошуки NetDB, оброблені за секунду"
+msgid "Lookups handled (1 min)"
+msgstr "Оброблені пошуки (1 хв)"
 
 msgid "Requests/s"
 msgstr "Запити/с"
 
-msgid "Combined store + lookup operations per second"
-msgstr "Сумарні операції збереження + пошуку за секунду"
+msgid "Stores + lookups (1 min)"
+msgstr "Збереження + пошуки (1 хв)"
 
 msgid "Stores/s"
 msgstr "Збереж./с"
 
-msgid "NetDB store messages handled per second"
-msgstr "Повідомлення збереження NetDB, оброблені за секунду"
+msgid "Stores handled (1 min)"
+msgstr "Оброблені збереження (1 хв)"
 
 msgid "LS Timeout"
 msgstr "LS час очікування"
@@ -3211,6 +3272,9 @@ msgstr "Переглянути профіль"
 msgid "Configure peer"
 msgstr "Налаштування однорангового вузла"
 
+msgid "Memory usage"
+msgstr "Використання пам''яті"
+
 msgid "Hidden"
 msgstr "Приховано"
 
@@ -3354,8 +3418,8 @@ msgstr "Однорангові вузли з високою пропускною
 msgid "Reliable"
 msgstr "Надійний"
 
-msgid "High-capacity peers with good acceptance"
-msgstr "Однолітки з високим потенціалом і хорошим визнанням"
+msgid "Peers with good acceptance and recent activity"
+msgstr "Вузли з добрим прийманням і нещодавньою активністю"
 
 msgid "Peers that store and serve NetDb info"
 msgstr "Піри, які зберігають і обслуговують інформацію NetDb"
@@ -3366,17 +3430,21 @@ msgstr "Відомі"
 msgid "Total entries in network database"
 msgstr "Загальна кількість записів у базі даних мережі"
 
+msgid "Profiles"
+msgstr "Профілі"
+
 msgid "Profiles with activity in the last hour"
 msgstr "Профілі з активністю за останню годину"
+
+#, java-format
+msgid "{0} of {1} stored"
+msgstr "{0} з {1} збережено"
 
 msgid "Unreachable"
 msgstr "Недоступність"
 
-msgid "Peers without a reachable address"
-msgstr "Піри без доступної адреси"
-
-msgid "Peers excluded from all interactions"
-msgstr "Однолітків виключено з усіх взаємодій"
+msgid "Peers without a published address"
+msgstr "Вузли без опублікованої адреси"
 
 msgid "/min"
 msgstr "/хв"
@@ -3384,8 +3452,12 @@ msgstr "/хв"
 msgid "Test Fail"
 msgstr "Помилка тесту"
 
-msgid "Connectivity test failures per minute"
-msgstr "Помилки тесту підключення за хвилину"
+msgid "Connectivity test failures in the last minute"
+msgstr "Збої тесту зв'язності за останню хвилину"
+
+#, java-format
+msgid "Empty at {0}/min"
+msgstr "Порожньо при {0}/хв"
 
 msgid "Peer Connections"
 msgstr "Однорангові з''єднання"
@@ -3662,26 +3734,40 @@ msgstr[2] "{0} застарілих профілів приховано"
 msgid "Share of total profiles shown"
 msgstr "Частка показаних профілів від загальної кількості"
 
-msgid "peers"
-msgstr "ровесники"
-
-msgid "Share of tier profiles shown"
-msgstr "Частка показаних профілів рівнів"
-
 msgid "Window"
 msgstr "Вікно"
 
 msgid "Fast RTT"
 msgstr "Швидкий RTT"
 
-msgid "Max RTT for fast-tier membership (ms)"
-msgstr "Максимальний RTT для входження до швидкісного рівня (мс)"
+msgid "Max RTT for fast-tier membership"
+msgstr "Макс. RTT для входу до швидкого рівня"
 
-msgid "Average loss of fast-tier peers (%)"
-msgstr "Середні втрати для швидкісних пірів (%)"
+msgid "Rises with network latency"
+msgstr "Зростає із затримкою мережі"
 
-msgid "Average loss of high-capacity peers (%)"
-msgstr "Середні втрати для високопродуктивних пірів (%)"
+msgid "Average loss of fast-tier peers"
+msgstr "Середня втрата вузлів швидкого рівня"
+
+msgid "Average loss of high-capacity peers"
+msgstr "Середня втрата ємних вузлів"
+
+msgid "Average direct-link RTT of tier peers"
+msgstr "Середній RTT прямого каналу вузлів рівня"
+
+#, java-format
+msgid "{0} of {1} measured"
+msgstr "{0} з {1} виміряно"
+
+msgid "1h Contact"
+msgstr "Контакт 1 год"
+
+msgid "Heard from in the last hour"
+msgstr "Подавали ознаки життя за останню годину"
+
+#, java-format
+msgid "{0} of {1} tier peers"
+msgstr "{0} з {1} вузлів рівня"
 
 msgid "Heard from within the display cutoff"
 msgstr "Чутий протягом межі відображення"
@@ -3692,11 +3778,19 @@ msgstr "Пошуки"
 msgid "Lookup success rate"
 msgstr "Частота успішного пошуку"
 
+#, java-format
+msgid "{0} of {1} lookups"
+msgstr "{0} з {1} пошуків"
+
 msgid "Stores"
 msgstr "Збереження"
 
 msgid "Store success rate"
 msgstr "Частота успішного збереження"
+
+#, java-format
+msgid "{0} of {1} peers"
+msgstr "{0} з {1} вузлів"
 
 msgid "Definitions"
 msgstr "Умовні позначення"
@@ -3769,11 +3863,25 @@ msgstr "про скількох нових вузлів вони розпові�
 msgid "Known floodfills"
 msgstr "Відомі вузли затоплення"
 
-msgid "No-Fail"
-msgstr "Без відмов"
+msgid "Reachable, unbanlisted and heard from"
+msgstr "Доступний, не забанений і подає ознаки життя"
 
-msgid "No lookup failures (1h)"
-msgstr "Немає невдач пошуку (1 год)"
+msgid "Active bans of floodfill-capable peers"
+msgstr "Активні бани вузлів, здатних бути floodfill"
+
+#, java-format
+msgid "of {0} known"
+msgstr "з {0} відомих"
+
+msgid "Fail"
+msgstr "Помилка"
+
+msgid "Lookup failures in the last hour"
+msgstr "Збої пошуку за останню годину"
+
+#, java-format
+msgid "across {0} listed peers"
+msgstr "серед {0} перелічених вузлів"
 
 msgid "Response"
 msgstr "Відповідь"
@@ -3781,11 +3889,16 @@ msgstr "Відповідь"
 msgid "Lookup response time (1h)"
 msgstr "Час відповіді на пошук (1 год)"
 
-msgid "1h Contact"
-msgstr "Контакт 1 год"
+#, java-format
+msgid "{0} peers measured"
+msgstr "{0} вузлів виміряно"
 
 msgid "Contacted within 1h"
 msgstr "Контакт протягом 1 год"
+
+#, java-format
+msgid "{0} of {1} listed"
+msgstr "{0} з {1} перелічено"
 
 msgid "1h Fail Rate"
 msgstr "1 год відмови"
@@ -3823,17 +3936,33 @@ msgstr "Все"
 msgid "SAM bridge is not running."
 msgstr "Міст SAM не запущено."
 
+msgid "Sessions"
+msgstr "Сесії"
+
 msgid "Active sessions in SessionsDB"
 msgstr "Активні сесії в SessionsDB"
+
+msgid "Workers"
+msgstr "Робочі потоки"
 
 msgid "Active / pool worker threads"
 msgstr "Активні / робочі потоки пулу"
 
-msgid "Pending commands in pool"
-msgstr "Очікувані команди у пулі"
+msgid "Queue"
+msgstr "Черга"
+
+#, java-format
+msgid "Pending commands: {0} of {1}"
+msgstr "Команди в черзі: {0} з {1}"
+
+msgid "Handlers"
+msgstr "Обробники"
 
 msgid "Connected pool handlers"
 msgstr "Підключені обробники пулу"
+
+msgid "Stolen"
+msgstr "Перехоплено"
 
 msgid "Sockets stolen for data streaming"
 msgstr "Сокети вилучено для потокового передавання даних"
@@ -4152,9 +4281,6 @@ msgstr "Показати всі поточні однорангові підкл
 msgid "Router health overview"
 msgstr "Огляд стану маршрутизатора"
 
-msgid "Profiles"
-msgstr "Профілі"
-
 msgid "Show recent peer performance profiles"
 msgstr "Показати останні профілі ефективності однорангового"
 
@@ -4465,6 +4591,27 @@ msgid_plural "{0} events"
 msgstr[0] "{0} події"
 msgstr[1] "{0} події"
 msgstr[2] "{0} події"
+
+msgid "Open streaming connections"
+msgstr "Відкриті потокові з'єднання"
+
+msgid "Round-trip time (live samples, 1 min)"
+msgstr "Час обороту (живі вибірки, 1 хв)"
+
+msgid "Retrans"
+msgstr "Ретранс."
+
+msgid "Share of sends needing retransmit (1 min)"
+msgstr "Частка відправлень, що потребували повторної передачі (1 хв)"
+
+msgid "Created + received (1 min)"
+msgstr "Створено + отримано (1 хв)"
+
+msgid "Throughput"
+msgstr "Пропускна здатність"
+
+msgid "Mean rate of streams closed in the last minute"
+msgstr "Середня швидкість закриття потоків за останню хвилину"
 
 msgid "sent"
 msgstr "надіслано"
@@ -4853,6 +5000,9 @@ msgstr "Показник степеня відхилення обмеження"
 msgid "Maximum Participating Tunnels"
 msgstr "Максимум тунелів участі"
 
+msgid "Timer Threads"
+msgstr "Потоки таймера"
+
 msgid "Build Handler Maximum Queue"
 msgstr "Максимальна черга обробника побудов"
 
@@ -5206,6 +5356,9 @@ msgstr "Максимальне вікно перевантаження під ч
 
 msgid "Per-connection inbound buffer cap (bytes)."
 msgstr "Обмеження вхідного буфера на з'єднання (байти)."
+
+msgid "Timer worker threads; higher reduces event delay."
+msgstr "Робочі потоки таймера; більше значення зменшує затримку подій."
 
 msgid "Dynamic cap on concurrent streams per destination."
 msgstr "Динамічне обмеження одночасних потоків на одне призначення."
@@ -7028,6 +7181,15 @@ msgstr "конфігурація веб-додатків"
 msgid "The Java web applications listed below are started by the webConsole client and run in the same JVM as the router. They are usually web applications accessible through the router console. They may be complete applications (e.g. i2psnark), front-ends to another client or application which must be separately enabled (e.g. susidns, i2ptunnel), or have no web interface at all (e.g. addressbook)."
 msgstr "Веб -додатки Java, перелічені нижче, запущені клієнтом WebConsole і запускаються в тому ж JVM, що і маршрутизатор. Зазвичай вони є веб -додатками, доступними через консоль маршрутизатора. Вони можуть бути повними програмами (наприклад, i2psnark), передніми до іншого клієнта або програми, які повинні бути ввімкнено (наприклад, DNS, I2PTunnel) або взагалі не мати веб-інтерфейсу (наприклад, адреса)."
 
+msgid "Router Session Key Manager"
+msgstr "Менеджер ключів сесій маршрутизатора"
+
+msgid "Client Session Key Managers"
+msgstr "Менеджери ключів клієнтських сесій"
+
+msgid "Router DHT"
+msgstr "DHT маршрутизатора"
+
 msgid "Open in new tab"
 msgstr "Відкрити в новій вкладці"
 
@@ -7602,14 +7764,17 @@ msgstr "Мінімальний період тесту тунелю в мілі�
 msgid "Maximum tunnel test period in milliseconds. Tunnel tests never wait longer than this for a reply, even on high-latency paths. [Default is 50000 (50 seconds)]"
 msgstr "Максимальний період тесту тунелю в мілісекундах. Тести тунелів ніколи не чекають довше цього на відповідь, навіть на шляхах з високою затримкою. [Стандартно 50000 (50 секунд)]"
 
-msgid "Number of tunnel build timeouts before a peer is marked as a ghost (blacklisted for tunnel participation). Higher values tolerate more transient failures. [Default is 3]"
-msgstr "Кількість тайм-аутів побудови тунелю, перш ніж вузол буде позначено як привид (занесено до чорного списку для участі в тунелі). Вищі значення допускають більше тимчасових помилок. [Стандартно 3]"
+msgid "Number of tunnel build timeouts before a peer is marked as a ghost (excluded from tunnel participation). Higher values tolerate more transient failures. [Default is 1]"
+msgstr ""
+"Число тайм-аутів збирання тунелю, після яких вузол позначається як "
+"привид (виключається з участі в тунелях). Більші значення допускають "
+"більше тимчасових збоїв. [Типове — 1]"
 
-msgid "Cooldown period in milliseconds before a ghost-marked peer can be considered for tunnel participation again. Shorter values allow faster peer reuse. [Default is 180000 (3 minutes)]"
-msgstr "Період охолодження в мілісекундах, перш ніж позначений як привид вузол може знову розглядатися для участі в тунелі. Коротші значення дозволяють швидше повторно використовувати вузли. [Стандартно 180000 (3 хвилини)]"
-
-msgid "Cooldown period in milliseconds for ghost-marked peers during attack mode. Longer cooldowns limit exposure to potentially malicious peers during high-stress periods. [Default is 300000 (5 minutes)]"
-msgstr "Період охолодження в мілісекундах для позначених як привид вузлів під час режиму атаки. Довші періоди охолодження обмежують контакт з потенційно зловмисними вузлами під час періодів високого навантаження. [Стандартно 300000 (5 хвилин)]"
+msgid "Cooldown period in milliseconds before a ghost-marked peer can be promoted into the tunnel peer tiers again. Shorter values return recovered peers to service faster. [Default is 90000 (90 seconds)]"
+msgstr ""
+"Період охолодження в мілісекундах, перш ніж позначений як привид вузол "
+"зможе знову бути підвищеним до рівнів вузлів тунелю. Менші значення "
+"швидше повертають відновлені вузли в стрій. [Типове — 90000 (90 секунд)]"
 
 msgid "Minimum number of incoming tunnel build requests accepted per peer per clean window. Prevents starving peers during low-traffic periods. [Default is 10]"
 msgstr "Мінімальна кількість вхідних запитів на побудову тунелю, прийнятих на вузол за чисте вікно. Запобігає голодуванню вузлів у періоди низького трафіку. [Стандартно 10]"
@@ -10039,3 +10204,35 @@ msgstr "Наступна"
 
 msgid "Finished"
 msgstr "Готово"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

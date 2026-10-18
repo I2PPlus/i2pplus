@@ -135,23 +135,45 @@ msgstr "peers ללא כתובת IP מפורסמת"
 msgid "Average tunnel build success (%)"
 msgstr "ממוצע אחוז הצלחה בבניית מנהורים"
 
+msgid "Tier promotions held back for a peer with no usable address"
+msgstr "קידומי רמה נעצרו עבור peer ללא כתובת שמישה"
+
+msgid "RouterInfo refreshes issued for peers held out of the tiers"
+msgstr "רענוני RouterInfo שהונפקו עבור peers שנשמרו מחוץ לרמות"
+
+msgid "Tier scans that left the fast or high-capacity tier short of target"
+msgstr ""
+"סריקות רמה שהשאירו את הרמה המהירה או בעלת הקיבולת הגבוהה מתחת ליעד"
+
+msgid "RouterInfos requested for stored profiles that had none"
+msgstr "בקשות RouterInfo עבור פרופילים שמורים שלא היו להם"
+
+msgid "Build timeouts recorded against a peer as a ghost mark"
+msgstr "פקיעות זמן בנייה שנרשמו נגד peer בתור סימון ghost"
+
+msgid "Ghost marks cleared by a successful build reply"
+msgstr "סימוני ghost שנוקו בתשובת בנייה מוצלחת"
+
+msgid "Peers currently excluded as ghosts"
+msgstr "peers שנפסלים כרגע כ-ghost"
+
+msgid "Ghost peers in the fast or high-capacity tiers"
+msgstr "peers מסוג ghost ברמה המהירה או בעלת הקיבולת הגבוהה"
+
+msgid "Duplicate CLOSE safety-net messages sent"
+msgstr "הודעות רשת ביטחון CLOSE כפולות שנשלחו"
+
 msgid "Memory used by the JVM"
 msgstr "זיכרון בשימוש JVM"
 
 msgid "maximum"
 msgstr "מרבי"
 
-msgid "No transports"
-msgstr "אין transports"
-
 msgid "Unsupported signature type"
 msgstr "סוג חתימה שאינו נתמך"
 
 msgid "No support for our signature type"
 msgstr "אין תמיכה בסוג החתימה שלנו"
-
-msgid "Unreachable on any transport"
-msgstr "לא נגיש באף transport"
 
 msgid "Cannot enumerate UPnP devices on Android."
 msgstr "לא ניתן להציג את מכשירי ה-UPnP ב-Android."
@@ -848,6 +870,9 @@ msgstr "מסוף"
 
 msgid "To enable SSL access for the Router Console, see the commented <code>clients.config</code> file located in your I2P application directory for more information. You will need to edit the RouterConsoleRunner config file located in the directory: "
 msgstr "כדי להפעיל גישת SSL למסוף הנתב, עיין בקובץ המוערב <code>clients.config</code> הממוקם בתיקיית היישום של I2P למידע נוסף. תצטרך לערוך את קובץ ההגדרות RouterConsoleRunner הממוקם בתיקייה: "
+
+msgid "No client session key managers."
+msgstr "אין מנהלי מפתחות הפעלה של לקוחות."
 
 msgid "Save disabled, edit the router.config file to make changes"
 msgstr "השמירה מושבתת, ערוך את קובץ router.config כדי לבצע שינויים"
@@ -2061,20 +2086,34 @@ msgstr "משופר"
 msgid "vs baseline"
 msgstr "לעומת הבסיס"
 
+#, java-format
+msgid "Out: {0} / {1}"
+msgstr "יציאה: {0} / {1}"
+
+#, java-format
+msgid "In: {0} / {1}"
+msgstr "כניסה: {0} / {1}"
+
 msgid "CPU"
 msgstr "CPU"
 
-msgid "CPU load average"
-msgstr "ממוצע עומס CPU"
+msgid "JVM CPU load average"
+msgstr "ממוצע עומס CPU של ה-JVM"
+
+#, java-format
+msgid "{0} cores"
+msgstr "{0} ליבות"
 
 msgid "Memory"
 msgstr "זיכרון"
 
-msgid "Memory usage"
-msgstr "שימוש בזיכרון"
+#, java-format
+msgid "Used: {0} / {1} max"
+msgstr "בשימוש: {0} / {1} מרבי"
 
-msgid "Router uptime"
-msgstr "זמן פעילות הנתב"
+#, java-format
+msgid "Since {0}"
+msgstr "מאז {0}"
 
 msgid "Job Lag"
 msgstr "השהיית משימות"
@@ -2100,6 +2139,10 @@ msgstr "תהלילונים"
 msgid "Active JVM threads"
 msgstr "תהלילוני JVM פעילים"
 
+#, java-format
+msgid "Empty at {0}"
+msgstr "ריק ב-{0}"
+
 msgid "NTCP Estab"
 msgstr "NTCP Estab"
 
@@ -2121,20 +2164,24 @@ msgstr "זמן קצוב לשידור חוזר של SSU"
 msgid "Conns/s"
 msgstr "חיבורים/s"
 
-msgid "NTCP connections established per second"
-msgstr "חיבורי NTCP שהוקמו בשנייה"
+#, java-format
+msgid "Full at {0}/s"
+msgstr "מלא ב-{0}/ש"
+
+msgid "New NTCP connections (1 min)"
+msgstr "חיבורי NTCP חדשים (דקה)"
 
 msgid "Msgs/s"
 msgstr "הודעות/s"
 
-msgid "Messages delivered per second"
-msgstr "הודעות שנמסרו בשנייה"
+msgid "Messages delivered (1 min)"
+msgstr "הודעות שנמסרו (דקה)"
 
 msgid "RTT"
 msgstr "RTT"
 
-msgid "End-to-end message round trip time"
-msgstr "זמן ההשלמה העגול להודעה מקצה לקצה"
+msgid "End-to-end client message round trip"
+msgstr "זמן סיבוב הלוך-חזור של הודעות לקוח מקצה לקצה"
 
 msgid "Timeout"
 msgstr "זמן קצוב"
@@ -2148,20 +2195,28 @@ msgstr "בניית מנהור"
 msgid "Client tunnel build latency"
 msgstr "השהיית בניית מנהור לקוח"
 
+#, java-format
+msgid "In: {0} / Out: {1}"
+msgstr "כניסה: {0} / יציאה: {1}"
+
 msgid "Active Peers"
 msgstr "peers פעילים"
 
-msgid "Active peers (last 60s)"
-msgstr "peers פעילים (60 שניות אחרונות)"
+#, java-format
+msgid "Full at {0}"
+msgstr "מלא ב-{0}"
+
+msgid "Reached in the last 60s"
+msgstr "הגיעו אליהם ב-60 השניות האחרונות"
 
 msgid "Known Peers"
 msgstr "peers ידועים"
 
-msgid "Known routers in network database"
-msgstr "נתבים ידועים במסד נתוני הרשת"
+msgid "In the network database"
+msgstr "במסד הנתונים של הרשת"
 
-msgid "Active I2CP clients"
-msgstr "לקוחות I2CP פעילים"
+msgid "I2CP clients connected"
+msgstr "לקוחות I2CP מחוברים"
 
 msgid "Transit"
 msgstr "מעבור"
@@ -2175,8 +2230,8 @@ msgstr "זרימות"
 msgid "Build Success"
 msgstr "הצלחת בנייה"
 
-msgid "Tunnel build success rate"
-msgstr "שיעור הצלחת בניית המנהורים"
+msgid "Tunnel build success rate (1 min)"
+msgstr "שיעור הצלחת בניית מנהרות (דקה)"
 
 msgid "NetDB"
 msgstr "NetDB"
@@ -2187,26 +2242,31 @@ msgstr "זמן חיפוש ב-NetDB"
 msgid "Banned"
 msgstr "חסומים"
 
-msgid "Total banned peers"
-msgstr "סה\"כ של peers חסומים"
+msgid "Peers excluded from all interactions"
+msgstr "peers שחסומים מכל אינטראקציה"
+
+#, java-format
+msgid "{0} of {1} known"
+msgstr "{0} מתוך {1} מוכרים"
 
 msgid "LeaseSets"
 msgstr "LeaseSets"
 
-msgid "Stored LeaseSets in floodfill"
-msgstr "LeaseSets המאוחסנים ב-floodfill"
+msgid "Stored LeaseSets"
+msgstr "LeaseSets שמורים"
 
 msgid "Cache Hit"
 msgstr "פגיעה במטמון"
 
-msgid "NetDB lookup success rate"
-msgstr "שיעור הצלחת החיפושים ב-NetDB"
+#, java-format
+msgid "Matched {0} of {1} lookups (1 min)"
+msgstr "הותאמו {0} מתוך {1} חיפושים (דקה)"
 
 msgid "Flood Verify"
 msgstr "אימות floodfill"
 
-msgid "Floodfill verify time"
-msgstr "זמן אימות floodfill"
+msgid "Floodfill verify time (1 min)"
+msgstr "זמן אימות Floodfill (דקה)"
 
 msgid "NetDB ACK"
 msgstr "NetDB ACK"
@@ -2217,20 +2277,20 @@ msgstr "זמן אישור ה-peer ב-NetDB"
 msgid "Lookups/s"
 msgstr "חיפושים/s"
 
-msgid "NetDB lookups handled per second"
-msgstr "חיפושי NetDB שטופלו בשנייה"
+msgid "Lookups handled (1 min)"
+msgstr "חיפושים שטופלו (דקה)"
 
 msgid "Requests/s"
 msgstr "בקשות/s"
 
-msgid "Combined store + lookup operations per second"
-msgstr "פעולות משולבות של אחסון + חיפוש בשנייה"
+msgid "Stores + lookups (1 min)"
+msgstr "אחסונים + חיפושים (דקה)"
 
 msgid "Stores/s"
 msgstr "אחסנים/s"
 
-msgid "NetDB store messages handled per second"
-msgstr "הודעות אחסון של NetDB שטופלו בשנייה"
+msgid "Stores handled (1 min)"
+msgstr "אחסונים שטופלו (דקה)"
 
 msgid "LS Timeout"
 msgstr "זמן קצוב LS"
@@ -3214,6 +3274,9 @@ msgstr "הצג פרופיל"
 msgid "Configure peer"
 msgstr "הגדר peer"
 
+msgid "Memory usage"
+msgstr "שימוש בזיכרון"
+
 msgid "Hidden"
 msgstr "מוסתר"
 
@@ -3357,8 +3420,8 @@ msgstr "peers ברוחב פס גבוה למספר רב של מנהורים"
 msgid "Reliable"
 msgstr "אמין"
 
-msgid "High-capacity peers with good acceptance"
-msgstr "peers בקיבולת גבוהה עם שיעור קיבול גבוה"
+msgid "Peers with good acceptance and recent activity"
+msgstr "peers עם קבלה טובה ופעילות עדכנית"
 
 msgid "Peers that store and serve NetDb info"
 msgstr "peers ששומרים ומגישים מידע NetDb"
@@ -3369,17 +3432,21 @@ msgstr "ידועים"
 msgid "Total entries in network database"
 msgstr "סה\"כ הרשומות במסד נתוני הרשת"
 
+msgid "Profiles"
+msgstr "פרופילים"
+
 msgid "Profiles with activity in the last hour"
 msgstr "פרופילים עם פעילות בשעה האחרונה"
+
+#, java-format
+msgid "{0} of {1} stored"
+msgstr "{0} מתוך {1} שמורים"
 
 msgid "Unreachable"
 msgstr "לא נגיש"
 
-msgid "Peers without a reachable address"
-msgstr "peers ללא כתובת נגישה"
-
-msgid "Peers excluded from all interactions"
-msgstr "peers שחסומים מכל אינטראקציה"
+msgid "Peers without a published address"
+msgstr "peers ללא כתובת מפורסמת"
 
 msgid "/min"
 msgstr "/min"
@@ -3387,8 +3454,12 @@ msgstr "/min"
 msgid "Test Fail"
 msgstr "כישלון בדיקה"
 
-msgid "Connectivity test failures per minute"
-msgstr "כישלונות בדיקת חיבוריות בדקה"
+msgid "Connectivity test failures in the last minute"
+msgstr "כשלונות בדיקת יכולת התחברות בדקה האחרונה"
+
+#, java-format
+msgid "Empty at {0}/min"
+msgstr "ריק ב-{0}/ד"
 
 msgid "Peer Connections"
 msgstr "חיבורי peer"
@@ -3662,26 +3733,40 @@ msgstr[1] "{0} פרופילים ישנים מוסתרים"
 msgid "Share of total profiles shown"
 msgstr "חלק מסך הפרופילים המוצגים"
 
-msgid "peers"
-msgstr "peers"
-
-msgid "Share of tier profiles shown"
-msgstr "חלק מפרופילי הרמה המוצגים"
-
 msgid "Window"
 msgstr "חלון"
 
 msgid "Fast RTT"
 msgstr "RTT מהיר"
 
-msgid "Max RTT for fast-tier membership (ms)"
-msgstr "RTT מרבי לחברות ברמת מהירות (ms)"
+msgid "Max RTT for fast-tier membership"
+msgstr "RTT מרבי לחברות ברמה המהירה"
 
-msgid "Average loss of fast-tier peers (%)"
-msgstr "אובדן ממוצע של peers ברמת מהירות (%)"
+msgid "Rises with network latency"
+msgstr "עולה עם סבך הרשת"
 
-msgid "Average loss of high-capacity peers (%)"
-msgstr "אובדן ממוצע של peers בקיבולת גבוהה (%)"
+msgid "Average loss of fast-tier peers"
+msgstr "ממוצע אובדן peers מהרמה המהירה"
+
+msgid "Average loss of high-capacity peers"
+msgstr "ממוצע אובדן peers בעלי קיבולת גבוהה"
+
+msgid "Average direct-link RTT of tier peers"
+msgstr "ממוצע RTT של קישור ישיר של peers מהרמה"
+
+#, java-format
+msgid "{0} of {1} measured"
+msgstr "{0} מתוך {1} נמדדו"
+
+msgid "1h Contact"
+msgstr "מגע של 1h"
+
+msgid "Heard from in the last hour"
+msgstr "שמעו מהם בשעה האחרונה"
+
+#, java-format
+msgid "{0} of {1} tier peers"
+msgstr "{0} מתוך {1} peers מהרמה"
 
 msgid "Heard from within the display cutoff"
 msgstr "נשמע ממנו בתוך תקופת התצוגה"
@@ -3692,11 +3777,19 @@ msgstr "חיפושים"
 msgid "Lookup success rate"
 msgstr "שיעור הצלחת חיפושים"
 
+#, java-format
+msgid "{0} of {1} lookups"
+msgstr "{0} מתוך {1} חיפושים"
+
 msgid "Stores"
 msgstr "אחסונים"
 
 msgid "Store success rate"
 msgstr "שיעור הצלחת אחסון"
+
+#, java-format
+msgid "{0} of {1} peers"
+msgstr "{0} מתוך {1} peers"
 
 msgid "Definitions"
 msgstr "מונחים"
@@ -3769,11 +3862,25 @@ msgstr "לכמה peers חדשים הם דיווחו לנו לאחרונה?"
 msgid "Known floodfills"
 msgstr "floodfill ידועים"
 
-msgid "No-Fail"
-msgstr "ללא כישלונות"
+msgid "Reachable, unbanlisted and heard from"
+msgstr "נגיש, לא חסום, ושמעו ממנו לאחרונה"
 
-msgid "No lookup failures (1h)"
-msgstr "אין כישלונות חיפוש (1h)"
+msgid "Active bans of floodfill-capable peers"
+msgstr "חסימות פעילות של peers המסוגלים לשמש Floodfill"
+
+#, java-format
+msgid "of {0} known"
+msgstr "מתוך {0} מוכרים"
+
+msgid "Fail"
+msgstr "כשל"
+
+msgid "Lookup failures in the last hour"
+msgstr "כשלונות חיפוש בשעה האחרונה"
+
+#, java-format
+msgid "across {0} listed peers"
+msgstr "מתוך {0} peers רשומים"
 
 msgid "Response"
 msgstr "תגובה"
@@ -3781,11 +3888,16 @@ msgstr "תגובה"
 msgid "Lookup response time (1h)"
 msgstr "זמן תגובת חיפוש (1h)"
 
-msgid "1h Contact"
-msgstr "מגע של 1h"
+#, java-format
+msgid "{0} peers measured"
+msgstr "{0} peers נמדדו"
 
 msgid "Contacted within 1h"
 msgstr "נמצא בקשר תוך 1h"
+
+#, java-format
+msgid "{0} of {1} listed"
+msgstr "{0} מתוך {1} רשומים"
 
 msgid "1h Fail Rate"
 msgstr "שיעור כישלונים 1h"
@@ -3823,17 +3935,33 @@ msgstr "הכל"
 msgid "SAM bridge is not running."
 msgstr "גשר ה-SAM אינו פעיל."
 
+msgid "Sessions"
+msgstr "הפעלות"
+
 msgid "Active sessions in SessionsDB"
 msgstr "הפעלות פעילות ב-SessionsDB"
+
+msgid "Workers"
+msgstr "תהליכונים עובדים"
 
 msgid "Active / pool worker threads"
 msgstr "תהלילוני עבודה פעילים / תהלילוני pool"
 
-msgid "Pending commands in pool"
-msgstr "פקודות ממתינות ב-pool"
+msgid "Queue"
+msgstr "תור"
+
+#, java-format
+msgid "Pending commands: {0} of {1}"
+msgstr "פקודות ממתינות: {0} מתוך {1}"
+
+msgid "Handlers"
+msgstr "מטפלים"
 
 msgid "Connected pool handlers"
 msgstr "מטפלי pool מחוברים"
+
+msgid "Stolen"
+msgstr "גנובים"
 
 msgid "Sockets stolen for data streaming"
 msgstr "Sockets שנחטפו להזרמת נתונים"
@@ -4152,9 +4280,6 @@ msgstr "הצג את כל חיבורי ה-peer הנוכחיים"
 msgid "Router health overview"
 msgstr "סקירת תקינות הנתב"
 
-msgid "Profiles"
-msgstr "פרופילים"
-
 msgid "Show recent peer performance profiles"
 msgstr "הצג פרופילי ביצועים אחרונים של peer"
 
@@ -4463,6 +4588,27 @@ msgid "1 event"
 msgid_plural "{0} events"
 msgstr[0] "אירוע אחד"
 msgstr[1] "{0} אירועים"
+
+msgid "Open streaming connections"
+msgstr "חיבורי הזרמה פתוחים"
+
+msgid "Round-trip time (live samples, 1 min)"
+msgstr "זמן סיבוב (דגימות חיות, דקה)"
+
+msgid "Retrans"
+msgstr "שחזורים"
+
+msgid "Share of sends needing retransmit (1 min)"
+msgstr "מנת השליחות שדורשות שידור חוזר (דקה)"
+
+msgid "Created + received (1 min)"
+msgstr "נוצרו + התקבלו (דקה)"
+
+msgid "Throughput"
+msgstr "נפח העברה"
+
+msgid "Mean rate of streams closed in the last minute"
+msgstr "ממוצע קצב הזרמות שנסגרו בדקה האחרונה"
 
 msgid "sent"
 msgstr "נשלחו"
@@ -4851,6 +4997,9 @@ msgstr "מעריך דחיית האטה"
 msgid "Maximum Participating Tunnels"
 msgstr "מספר מנהורים משתתפים מרבי"
 
+msgid "Timer Threads"
+msgstr "תהליכוני טיימר"
+
 msgid "Build Handler Maximum Queue"
 msgstr "תור מרבי למטפל בבניות"
 
@@ -5204,6 +5353,9 @@ msgstr "חלון עומס מרבי במהלך Slow Start."
 
 msgid "Per-connection inbound buffer cap (bytes)."
 msgstr "מגבלת חוצץ נכנס לכל חיבור (bytes)."
+
+msgid "Timer worker threads; higher reduces event delay."
+msgstr "תהליכוני עבודה של הטיימר; ערך גבוה יותר מפחית השהי אירועים."
 
 msgid "Dynamic cap on concurrent streams per destination."
 msgstr "מגבלה דינמית לזרימות מקביליות לכל יעד."
@@ -7026,6 +7178,15 @@ msgstr "הגדרות יישומי רשת"
 msgid "The Java web applications listed below are started by the webConsole client and run in the same JVM as the router. They are usually web applications accessible through the router console. They may be complete applications (e.g. i2psnark), front-ends to another client or application which must be separately enabled (e.g. susidns, i2ptunnel), or have no web interface at all (e.g. addressbook)."
 msgstr "יישומי ה-Java לרשת המפורטים למטה מופעלים על ידי לקוח webConsole ורצים באותו JVM כמו הנתב. בדרך כלל מדובר ביישומי רשת הנגישים דרך מסוף הנתב. הם עשויים להיות יישונים שלמים (לדוגמה i2psnark), ממשקי חזית ללקוח או ליישום אחר שיש להפעיל בנפרד (לדוגמה susidns, i2ptunnel), או ללא ממשק רשת כלל (לדוגמה addressbook)."
 
+msgid "Router Session Key Manager"
+msgstr "מנהל מפתחות ההפעלה של הנתב"
+
+msgid "Client Session Key Managers"
+msgstr "מנהלי מפתחות הפעלה של לקוחות"
+
+msgid "Router DHT"
+msgstr "DHT של הנתב"
+
 msgid "Open in new tab"
 msgstr "פתח בלשונית חדשה"
 
@@ -7600,14 +7761,17 @@ msgstr "תקופת בדיקת המנהור המזערית במילישניות. 
 msgid "Maximum tunnel test period in milliseconds. Tunnel tests never wait longer than this for a reply, even on high-latency paths. [Default is 50000 (50 seconds)]"
 msgstr "תקופת בדיקת המנהור המרבית במילישניות. בדיקות מנהורים לעולם אינן ממתינות יותר מכך לתשובה, גם בנתיבים בעלי השהייה גבוהה. [ברירת המחדל היא 50000 (50 שניות)]"
 
-msgid "Number of tunnel build timeouts before a peer is marked as a ghost (blacklisted for tunnel participation). Higher values tolerate more transient failures. [Default is 3]"
-msgstr "מספר פסקי הזמן של בניית המנהורים לפני ש-peer מסומן כרוח (נחסם מהשתתפות במנהורים). ערכים גבוהים יותר מתאימים לכשלים חולפים רבים יותר. [ברירת המחדל היא 3]"
+msgid "Number of tunnel build timeouts before a peer is marked as a ghost (excluded from tunnel participation). Higher values tolerate more transient failures. [Default is 1]"
+msgstr ""
+"מספר פקיעות זמן בניית מנהור לפני ש-peer מסומן כ-ghost (נפסל מהשתתפות "
+"במנהורים). ערכים גבוהים יותר סובלים יותר כשלונות זמניים. [ברירת המחדל "
+"היא 1]"
 
-msgid "Cooldown period in milliseconds before a ghost-marked peer can be considered for tunnel participation again. Shorter values allow faster peer reuse. [Default is 180000 (3 minutes)]"
-msgstr "תקופת זמן המתנה במילישניות לפני ש-peer המסומן כרוח ניתן לשקול שוב להשתתפות במנהורים. ערכים קצרים יותר מאפשרים שימוש חוזר מהיר יותר ב-peers. [ברירת המחדל היא 180000 (3 דקות)]"
-
-msgid "Cooldown period in milliseconds for ghost-marked peers during attack mode. Longer cooldowns limit exposure to potentially malicious peers during high-stress periods. [Default is 300000 (5 minutes)]"
-msgstr "תקופת זמן המתנה במילישניות עבור peers המסומנים כרוח במצב תקפה. זמני המתנה ארוכים יותר מגבילים את החשיפה ל-peers שעלולים להיות זדוניים בתקופות לחץ גבוה. [ברירת המחדל היא 300000 (5 דקות)]"
+msgid "Cooldown period in milliseconds before a ghost-marked peer can be promoted into the tunnel peer tiers again. Shorter values return recovered peers to service faster. [Default is 90000 (90 seconds)]"
+msgstr ""
+"תקופת קירור במילישניות לפני ש-peer שסומן כ-ghost יוכל לחזור להתקדם לרמות "
+"ה-peers של המנהור. ערכים קצרים יותר מחזירים peers שהתאוששו לשירות מהר "
+"יותר. [ברירת המחדל היא 90000 (90 שניות)]"
 
 msgid "Minimum number of incoming tunnel build requests accepted per peer per clean window. Prevents starving peers during low-traffic periods. [Default is 10]"
 msgstr "המספר המזערי של בקשות בניית מנהורים נכנסות המתקבלות לכל peer בכל חלון נקי. מונע מלעילת peers בתקופות תעבורה נמוכה. [ברירת המחדל היא 10]"
@@ -10037,3 +10201,35 @@ msgstr "הבא"
 
 msgid "Finished"
 msgstr "סיים"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

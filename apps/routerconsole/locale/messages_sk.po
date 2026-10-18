@@ -128,23 +128,46 @@ msgstr "Közzétett IP-cím nélküli társak"
 msgid "Average tunnel build success (%)"
 msgstr "Átlagos alagútépítési siker %"
 
+msgid "Tier promotions held back for a peer with no usable address"
+msgstr "Povýšenia do tieru zadržané pre peer bez použiteľnej adresy"
+
+msgid "RouterInfo refreshes issued for peers held out of the tiers"
+msgstr "Obnovy RouterInfo vydané pre peerov držaných mimo tier"
+
+msgid "Tier scans that left the fast or high-capacity tier short of target"
+msgstr ""
+"Skeny tieru, po ktorých rýchly alebo vysokokapacitný tier nedosiahol "
+"cieľ"
+
+msgid "RouterInfos requested for stored profiles that had none"
+msgstr "RouterInfo vyžiadané pre uložené profily, ktoré žiadne nemali"
+
+msgid "Build timeouts recorded against a peer as a ghost mark"
+msgstr "Časové limity zostavenia zaznamenané peerovi ako značka ghost"
+
+msgid "Ghost marks cleared by a successful build reply"
+msgstr "Značky ghost vymazané úspešnou odpoveďou zostavenia"
+
+msgid "Peers currently excluded as ghosts"
+msgstr "Peerovia aktuálne vylúčení ako ghost"
+
+msgid "Ghost peers in the fast or high-capacity tiers"
+msgstr "Ghost peerovia v rýchlom alebo vysokokapacitnom tieri"
+
+msgid "Duplicate CLOSE safety-net messages sent"
+msgstr "Odoslané duplicitné ochranné správy CLOSE"
+
 msgid "Memory used by the JVM"
 msgstr "Pamäť používaná JVM"
 
 msgid "maximum"
 msgstr "maximum"
 
-msgid "No transports"
-msgstr "Nincs átvitel (rejtett vagy indul)?"
-
 msgid "Unsupported signature type"
 msgstr "Nem támogatott aláírástípus"
 
 msgid "No support for our signature type"
 msgstr "Az aláírástípusunk nem támogatott"
-
-msgid "Unreachable on any transport"
-msgstr "Egyik átvitelen sem érhető el"
 
 msgid "Cannot enumerate UPnP devices on Android."
 msgstr "Nem lehet felsorolni az UPnP eszközöket Androidon."
@@ -842,6 +865,9 @@ msgstr "Konzol"
 
 msgid "To enable SSL access for the Router Console, see the commented <code>clients.config</code> file located in your I2P application directory for more information. You will need to edit the RouterConsoleRunner config file located in the directory: "
 msgstr "További információkért lásd a kommentált <code>clients.config</code> fájl az SSL -hozzáférés engedélyezéséhez az I2P Alkalmazáskönyvtárban található megjegyzéseket. Szerkesztenie kell a RouterConsolerunner konfigurációs fájlt, amely a könyvtárban található:"
+
+msgid "No client session key managers."
+msgstr "Žiadni správcovia kľúčov klientských relácií."
 
 msgid "Save disabled, edit the router.config file to make changes"
 msgstr "Mentés letiltva, szerkessze meg a router.config fájlt a változtásokhoz."
@@ -2058,20 +2084,34 @@ msgstr "zlepšila"
 msgid "vs baseline"
 msgstr "vs. základná línia"
 
+#, java-format
+msgid "Out: {0} / {1}"
+msgstr "Odchádzajúce: {0} / {1}"
+
+#, java-format
+msgid "In: {0} / {1}"
+msgstr "Prichádzajúce: {0} / {1}"
+
 msgid "CPU"
 msgstr "CPU"
 
-msgid "CPU load average"
-msgstr "Priemerné zaťaženie CPU"
+msgid "JVM CPU load average"
+msgstr "Priemerné zaťaženie CPU JVM"
+
+#, java-format
+msgid "{0} cores"
+msgstr "{0} jadier"
 
 msgid "Memory"
 msgstr "Memória"
 
-msgid "Memory usage"
-msgstr "Memóriahasználat"
+#, java-format
+msgid "Used: {0} / {1} max"
+msgstr "Využité: {0} / {1} max"
 
-msgid "Router uptime"
-msgstr "Doba behu routera"
+#, java-format
+msgid "Since {0}"
+msgstr "Od {0}"
 
 msgid "Job Lag"
 msgstr "Munka késleltetése"
@@ -2097,6 +2137,10 @@ msgstr "Vlákna"
 msgid "Active JVM threads"
 msgstr "Aktívne vlákna JVM"
 
+#, java-format
+msgid "Empty at {0}"
+msgstr "Prázdne pri {0}"
+
 msgid "NTCP Estab"
 msgstr "NTCP naviazanie"
 
@@ -2118,20 +2162,24 @@ msgstr "Časový limit retransmisie SSU"
 msgid "Conns/s"
 msgstr "Spojení/s"
 
-msgid "NTCP connections established per second"
-msgstr "Počet naviazaných NTCP spojení za sekundu"
+#, java-format
+msgid "Full at {0}/s"
+msgstr "Plné pri {0}/s"
+
+msgid "New NTCP connections (1 min)"
+msgstr "Nové spojenia NTCP (1 min)"
 
 msgid "Msgs/s"
 msgstr "Správ/s"
 
-msgid "Messages delivered per second"
-msgstr "Doručené správy za sekundu"
+msgid "Messages delivered (1 min)"
+msgstr "Doručené správy (1 min)"
 
 msgid "RTT"
 msgstr "RTT"
 
-msgid "End-to-end message round trip time"
-msgstr "Čas obojsmerného prenosu end-to-end správ"
+msgid "End-to-end client message round trip"
+msgstr "Obehová doba správ klienta end-to-end"
 
 msgid "Timeout"
 msgstr "Časový limit"
@@ -2145,20 +2193,28 @@ msgstr "Budovanie tunela"
 msgid "Client tunnel build latency"
 msgstr "Latencia budovania klientského tunela"
 
+#, java-format
+msgid "In: {0} / Out: {1}"
+msgstr "Prichádzajúce: {0} / Odchádzajúce: {1}"
+
 msgid "Active Peers"
 msgstr "Aktívne peers"
 
-msgid "Active peers (last 60s)"
-msgstr "Aktívne peers (posledných 60s)"
+#, java-format
+msgid "Full at {0}"
+msgstr "Plné pri {0}"
+
+msgid "Reached in the last 60s"
+msgstr "Oslovení za posledných 60 s"
 
 msgid "Known Peers"
 msgstr "Známe peers"
 
-msgid "Known routers in network database"
-msgstr "Známe routery v sieťovej databáze"
+msgid "In the network database"
+msgstr "V databáze siete"
 
-msgid "Active I2CP clients"
-msgstr "Aktívni I2CP klienti"
+msgid "I2CP clients connected"
+msgstr "Pripojení klienti I2CP"
 
 msgid "Transit"
 msgstr "Tranzit"
@@ -2172,8 +2228,8 @@ msgstr "Folyamok"
 msgid "Build Success"
 msgstr "Építési siker"
 
-msgid "Tunnel build success rate"
-msgstr "Miera úspešnosti budovania tunelov"
+msgid "Tunnel build success rate (1 min)"
+msgstr "Úspešnosť zostavovania tunelov (1 min)"
 
 msgid "NetDB"
 msgstr "NetDB"
@@ -2184,26 +2240,31 @@ msgstr "Čas vyhľadávania NetDB"
 msgid "Banned"
 msgstr "Kitiltva"
 
-msgid "Total banned peers"
-msgstr "Celkový počet banovaných peerov"
+msgid "Peers excluded from all interactions"
+msgstr "Partneri boli vylúčení zo všetkých interakcií"
+
+#, java-format
+msgid "{0} of {1} known"
+msgstr "{0} z {1} známych"
 
 msgid "LeaseSets"
 msgstr "LeaseSet-ek"
 
-msgid "Stored LeaseSets in floodfill"
-msgstr "Uložené LeaseSet-y vo floodfilli"
+msgid "Stored LeaseSets"
+msgstr "Uložené LeaseSets"
 
 msgid "Cache Hit"
 msgstr "Zásah do vyrovnávacej pamäte"
 
-msgid "NetDB lookup success rate"
-msgstr "Miera úspešnosti vyhľadávania NetDB"
+#, java-format
+msgid "Matched {0} of {1} lookups (1 min)"
+msgstr "Zhoda pri {0} z {1} vyhľadávaní (1 min)"
 
 msgid "Flood Verify"
 msgstr "Overenie floodu"
 
-msgid "Floodfill verify time"
-msgstr "Čas overovania floodfillu"
+msgid "Floodfill verify time (1 min)"
+msgstr "Čas overovania Floodfill (1 min)"
 
 msgid "NetDB ACK"
 msgstr "NetDB potvrdenie"
@@ -2214,20 +2275,20 @@ msgstr "Čas potvrdenia peeru v NetDB"
 msgid "Lookups/s"
 msgstr "Vyhľadávaní/s"
 
-msgid "NetDB lookups handled per second"
-msgstr "Spracované vyhľadávania NetDB za sekundu"
+msgid "Lookups handled (1 min)"
+msgstr "Spracované vyhľadávania (1 min)"
 
 msgid "Requests/s"
 msgstr "Požiadaviek/s"
 
-msgid "Combined store + lookup operations per second"
-msgstr "Kombinované operácie uloženia + vyhľadávania za sekundu"
+msgid "Stores + lookups (1 min)"
+msgstr "Uloženia + vyhľadávania (1 min)"
 
 msgid "Stores/s"
 msgstr "Uložení/s"
 
-msgid "NetDB store messages handled per second"
-msgstr "Spracované správy uloženia NetDB za sekundu"
+msgid "Stores handled (1 min)"
+msgstr "Spracované uloženia (1 min)"
 
 msgid "LS Timeout"
 msgstr "Časový limit LS"
@@ -3211,6 +3272,9 @@ msgstr "Profil megtekintése"
 msgid "Configure peer"
 msgstr "Peer konfigurálása"
 
+msgid "Memory usage"
+msgstr "Memóriahasználat"
+
 msgid "Hidden"
 msgstr "Rejtett"
 
@@ -3354,8 +3418,8 @@ msgstr "Partneri s vysokou šírkou pásma pre mnohé tunely"
 msgid "Reliable"
 msgstr "Spoľahlivý"
 
-msgid "High-capacity peers with good acceptance"
-msgstr "Vysokokapacitní kolegovia s dobrým prijatím"
+msgid "Peers with good acceptance and recent activity"
+msgstr "Peerovia s dobrým prijímaním a nedávnou aktivitou"
 
 msgid "Peers that store and serve NetDb info"
 msgstr "Partneri, ktorí ukladajú a poskytujú informácie NetDb"
@@ -3366,17 +3430,21 @@ msgstr "Ismert"
 msgid "Total entries in network database"
 msgstr "Celkový počet záznamov v databáze siete"
 
+msgid "Profiles"
+msgstr "Profil"
+
 msgid "Profiles with activity in the last hour"
 msgstr "Profily s aktivitou za poslednú 1 hodinu"
+
+#, java-format
+msgid "{0} of {1} stored"
+msgstr "{0} z {1} uložených"
 
 msgid "Unreachable"
 msgstr "Nem elérhető"
 
-msgid "Peers without a reachable address"
-msgstr "Vrstovníci bez dostupnej adresy"
-
-msgid "Peers excluded from all interactions"
-msgstr "Partneri boli vylúčení zo všetkých interakcií"
+msgid "Peers without a published address"
+msgstr "Peerovia bez zverejnenej adresy"
 
 msgid "/min"
 msgstr "/min"
@@ -3384,8 +3452,12 @@ msgstr "/min"
 msgid "Test Fail"
 msgstr "Test zlyhal"
 
-msgid "Connectivity test failures per minute"
-msgstr "Zlyhania testu pripojenia za minútu"
+msgid "Connectivity test failures in the last minute"
+msgstr "Zlyhania testu konektivity v poslednej minúte"
+
+#, java-format
+msgid "Empty at {0}/min"
+msgstr "Prázdne pri {0}/min"
 
 msgid "Peer Connections"
 msgstr "Távoli csatlakozások"
@@ -3662,26 +3734,40 @@ msgstr[2] "{0} zastaraných profilov skrytých"
 msgid "Share of total profiles shown"
 msgstr "Podiel zobrazených celkových profilov"
 
-msgid "peers"
-msgstr "társak"
-
-msgid "Share of tier profiles shown"
-msgstr "Podiel zobrazených profilov vrstiev"
-
 msgid "Window"
 msgstr "Okno"
 
 msgid "Fast RTT"
 msgstr "Rýchla RTT"
 
-msgid "Max RTT for fast-tier membership (ms)"
-msgstr "Maximálna RTT pre členstvo v rýchlej vrstve (ms)"
+msgid "Max RTT for fast-tier membership"
+msgstr "Max. RTT pre členstvo v rýchlom tieri"
 
-msgid "Average loss of fast-tier peers (%)"
-msgstr "Priemerná strata peerov v rýchlej vrstve (%)"
+msgid "Rises with network latency"
+msgstr "Rastie s latenciou siete"
 
-msgid "Average loss of high-capacity peers (%)"
-msgstr "Priemerná strata peerov s vysokou kapacitou (%)"
+msgid "Average loss of fast-tier peers"
+msgstr "Priemerná strata peerov rýchleho tieru"
+
+msgid "Average loss of high-capacity peers"
+msgstr "Priemerná strata vysokokapacitných peerov"
+
+msgid "Average direct-link RTT of tier peers"
+msgstr "Priemerné RTT priameho spojenia peerov tieru"
+
+#, java-format
+msgid "{0} of {1} measured"
+msgstr "{0} z {1} meraných"
+
+msgid "1h Contact"
+msgstr "Kontakt 1h"
+
+msgid "Heard from in the last hour"
+msgstr "Ozvali sa za poslednú hodinu"
+
+#, java-format
+msgid "{0} of {1} tier peers"
+msgstr "{0} z {1} peerov tieru"
 
 msgid "Heard from within the display cutoff"
 msgstr "Počuté v rámci hranice zobrazenia"
@@ -3692,11 +3778,19 @@ msgstr "Vyhľadania"
 msgid "Lookup success rate"
 msgstr "Miera úspešnosti vyhľadania"
 
+#, java-format
+msgid "{0} of {1} lookups"
+msgstr "{0} z {1} vyhľadávaní"
+
 msgid "Stores"
 msgstr "Uloženia"
 
 msgid "Store success rate"
 msgstr "Miera úspešnosti uloženia"
+
+#, java-format
+msgid "{0} of {1} peers"
+msgstr "{0} z {1} peerov"
 
 msgid "Definitions"
 msgstr "Definície"
@@ -3769,11 +3863,25 @@ msgstr "A közelmúltban hány új társról szóltak nekünk?"
 msgid "Known floodfills"
 msgstr "Známe floodfill routery"
 
-msgid "No-Fail"
-msgstr "Bez zlyhania"
+msgid "Reachable, unbanlisted and heard from"
+msgstr "Dostupní, nebanovaní a ozývajúci sa"
 
-msgid "No lookup failures (1h)"
-msgstr "Žiadne zlyhania vyhľadania (1h)"
+msgid "Active bans of floodfill-capable peers"
+msgstr "Aktívne bany peerov spôsobilých byť floodfill"
+
+#, java-format
+msgid "of {0} known"
+msgstr "z {0} známych"
+
+msgid "Fail"
+msgstr "Zlyhanie"
+
+msgid "Lookup failures in the last hour"
+msgstr "Zlyhania vyhľadávania za poslednú hodinu"
+
+#, java-format
+msgid "across {0} listed peers"
+msgstr "medzi {0} uvedenými peermi"
 
 msgid "Response"
 msgstr "Odozva"
@@ -3781,11 +3889,16 @@ msgstr "Odozva"
 msgid "Lookup response time (1h)"
 msgstr "Čas odozvy vyhľadania (1h)"
 
-msgid "1h Contact"
-msgstr "Kontakt 1h"
+#, java-format
+msgid "{0} peers measured"
+msgstr "{0} peerov meraných"
 
 msgid "Contacted within 1h"
 msgstr "Kontaktovaný v poslednej 1h"
+
+#, java-format
+msgid "{0} of {1} listed"
+msgstr "{0} z {1} uvedených"
 
 msgid "1h Fail Rate"
 msgstr "Sikertelen ráta 1 óra alatt"
@@ -3823,17 +3936,33 @@ msgstr "Összes"
 msgid "SAM bridge is not running."
 msgstr "SAM bridge nie je spustený."
 
+msgid "Sessions"
+msgstr "Relácie"
+
 msgid "Active sessions in SessionsDB"
 msgstr "Aktívne relácie v SessionsDB"
+
+msgid "Workers"
+msgstr "Pracovné vlákna"
 
 msgid "Active / pool worker threads"
 msgstr "Aktívne / pool worker vlákna"
 
-msgid "Pending commands in pool"
-msgstr "Čakajúce príkazy v pooli"
+msgid "Queue"
+msgstr "Fronta"
+
+#, java-format
+msgid "Pending commands: {0} of {1}"
+msgstr "Čakajúce príkazy: {0} z {1}"
+
+msgid "Handlers"
+msgstr "Obsluhy"
 
 msgid "Connected pool handlers"
 msgstr "Pripojené pool handlery"
+
+msgid "Stolen"
+msgstr "Ukradnuté"
 
 msgid "Sockets stolen for data streaming"
 msgstr "Sockety ukradnuté pre dátový streaming"
@@ -4152,9 +4281,6 @@ msgstr "Minden jelenlegi társ csatlakozás megjelenítése"
 msgid "Router health overview"
 msgstr "Prehľad stavu routera"
 
-msgid "Profiles"
-msgstr "Profil"
-
 msgid "Show recent peer performance profiles"
 msgstr "A legutóbbi társ teljesítmény profilok megjelenítése"
 
@@ -4465,6 +4591,27 @@ msgid_plural "{0} events"
 msgstr[0] "{0} udalosť"
 msgstr[1] "{0} udalosti"
 msgstr[2] "{0} udalostí"
+
+msgid "Open streaming connections"
+msgstr "Otvorené streamingové spojenia"
+
+msgid "Round-trip time (live samples, 1 min)"
+msgstr "Obehová doba (živé vzorky, 1 min)"
+
+msgid "Retrans"
+msgstr "Retrans."
+
+msgid "Share of sends needing retransmit (1 min)"
+msgstr "Podiel odoslaní vyžadujúcich opakovanie (1 min)"
+
+msgid "Created + received (1 min)"
+msgstr "Vytvorené + prijaté (1 min)"
+
+msgid "Throughput"
+msgstr "Priepustnosť"
+
+msgid "Mean rate of streams closed in the last minute"
+msgstr "Priemerná miera streamov uzavretých v poslednej minúte"
 
 msgid "sent"
 msgstr "odoslané"
@@ -4853,6 +5000,9 @@ msgstr "Exponent odmietnutia škrtenia"
 msgid "Maximum Participating Tunnels"
 msgstr "Maximálny počet zúčastnených tunelov"
 
+msgid "Timer Threads"
+msgstr "Vlákna časovača"
+
 msgid "Build Handler Maximum Queue"
 msgstr "Maximálna fronta obsluhy budovania"
 
@@ -5206,6 +5356,10 @@ msgstr "Maximálne okno preťaženia počas pomalého štartu."
 
 msgid "Per-connection inbound buffer cap (bytes)."
 msgstr "Limit prichádzajúcej vyrovnávacej pamäte na pripojenie (bajty)."
+
+msgid "Timer worker threads; higher reduces event delay."
+msgstr ""
+"Pracovné vlákna časovača; vyššia hodnota znižuje oneskorenie udalostí."
 
 msgid "Dynamic cap on concurrent streams per destination."
 msgstr "Dynamický limit súbežných streamov na jeden cieľ."
@@ -7028,6 +7182,15 @@ msgstr "Konfigurálja a Webappokat"
 msgid "The Java web applications listed below are started by the webConsole client and run in the same JVM as the router. They are usually web applications accessible through the router console. They may be complete applications (e.g. i2psnark), front-ends to another client or application which must be separately enabled (e.g. susidns, i2ptunnel), or have no web interface at all (e.g. addressbook)."
 msgstr "Az alább felsorolt Java webalkalmazásokat a webConsole kliens indítja el, és ugyanabban a JVM-ben futnak, mint az útválasztó. Általában az útválasztókonzolon keresztül elérhető webalkalmazások. Lehetnek komplett alkalmazások (pl. i2psnark), egy másik kliens vagy alkalmazás előfelületei, amelyeket külön kell engedélyezni (pl. susidns, i2ptunnel), vagy egyáltalán nem rendelkeznek webes felülettel (pl. címjegyzék)."
 
+msgid "Router Session Key Manager"
+msgstr "Správca kľúčov relácií routera"
+
+msgid "Client Session Key Managers"
+msgstr "Správcovia kľúčov klientských relácií"
+
+msgid "Router DHT"
+msgstr "DHT routera"
+
 msgid "Open in new tab"
 msgstr "Megnyitás új lapon"
 
@@ -7602,14 +7765,17 @@ msgstr "Minimális alagútteszt idő ezredmásodpercben. [Alapértelmezés 45000
 msgid "Maximum tunnel test period in milliseconds. Tunnel tests never wait longer than this for a reply, even on high-latency paths. [Default is 50000 (50 seconds)]"
 msgstr "Maximálna doba testu tunela v milisekundách. Tunelové testy nikdy nečakajú na odpoveď dlhšie, a to ani na cestách s vysokou latenciou. [Predvolená hodnota je 50 000 (50 sekúnd)]"
 
-msgid "Number of tunnel build timeouts before a peer is marked as a ghost (blacklisted for tunnel participation). Higher values tolerate more transient failures. [Default is 3]"
-msgstr "Počet časových limitov budovania tunela predtým, ako je partner označený ako duch (na čiernej listine pre účasť v tuneli). Vyššie hodnoty tolerujú viac prechodných porúch. [Predvolená hodnota je 3]"
+msgid "Number of tunnel build timeouts before a peer is marked as a ghost (excluded from tunnel participation). Higher values tolerate more transient failures. [Default is 1]"
+msgstr ""
+"Počet časových limitov zostavenia tunela, po ktorom je peer označený ako "
+"ghost (vylúčený z účasti v tuneloch). Vyššie hodnoty strpia viac "
+"dočasných výpadkov. [Predvolená je 1]"
 
-msgid "Cooldown period in milliseconds before a ghost-marked peer can be considered for tunnel participation again. Shorter values allow faster peer reuse. [Default is 180000 (3 minutes)]"
-msgstr "Lehűlési idő ezredmásodpercben, mielőtt egy szellemként jelölt társ újra figyelembe vehető. [Alapértelmezés 180000 (3 perc)] [Default is 180000 (3 minutes)]"
-
-msgid "Cooldown period in milliseconds for ghost-marked peers during attack mode. Longer cooldowns limit exposure to potentially malicious peers during high-stress periods. [Default is 300000 (5 minutes)]"
-msgstr "Lehűlési idő ezredmásodpercben a szellemként jelölt társak számára támadási módban. [Alapértelmezés 300000 (5 perc)] [Alapértelmezés 300000 (5 perc)]"
+msgid "Cooldown period in milliseconds before a ghost-marked peer can be promoted into the tunnel peer tiers again. Shorter values return recovered peers to service faster. [Default is 90000 (90 seconds)]"
+msgstr ""
+"Doba ochladenia v milisekundách, kým môže byť peer označený ako ghost "
+"opäť povýšený do tierov peerov tunela. Nižšie hodnoty rýchlejšie vracajú "
+"zotavených peerov do služby. [Predvolená je 90000 (90 sekúnd)]"
 
 msgid "Minimum number of incoming tunnel build requests accepted per peer per clean window. Prevents starving peers during low-traffic periods. [Default is 10]"
 msgstr "Minimális számú bejövő alagútépítési kérés elfogadva társanként tisztítási ablakonként. [Alapértelmezés 10] [Default is 10]"
@@ -10039,3 +10205,35 @@ msgstr "Következő"
 
 msgid "Finished"
 msgstr "Befejeződött"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

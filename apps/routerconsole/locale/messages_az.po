@@ -126,23 +126,52 @@ msgstr "Dərc edilmiş IP ünvanı olmayan həmkarlar"
 msgid "Average tunnel build success (%)"
 msgstr "Orta tunel qurma uğuru %"
 
-msgid "Memory used by the JVM"
+msgid "Tier promotions held back for a peer with no usable address"
 msgstr ""
+"İşlək adresi olmayan həmkar üçün səviyyəyə yüksəltmələr geri saxlanıldı"
+
+msgid "RouterInfo refreshes issued for peers held out of the tiers"
+msgstr ""
+"Səviyyələrdən kənarda saxlanılan həmkarlar üçün buraxılan RouterInfo "
+"yeniləmələri"
+
+msgid "Tier scans that left the fast or high-capacity tier short of target"
+msgstr ""
+"Sürətli və ya yüksək tutumlu səviyyəni hədəfdən aşağı qoyan səviyyə "
+"skanları"
+
+msgid "RouterInfos requested for stored profiles that had none"
+msgstr ""
+"Heç bir RouterInfo-su olmayan saxlanmış profillər üçün sorğulanan "
+"RouterInfo-lar"
+
+msgid "Build timeouts recorded against a peer as a ghost mark"
+msgstr ""
+"Həmkar əleyhinə ghost işarəsi kimi qeydə alınan qurma vaxtının keçmələri"
+
+msgid "Ghost marks cleared by a successful build reply"
+msgstr "Uğurlu qurma cavabı ilə silinən ghost işarələri"
+
+msgid "Peers currently excluded as ghosts"
+msgstr "Hazırda ghost kimi kənarlaşdırılan həmkarlar"
+
+msgid "Ghost peers in the fast or high-capacity tiers"
+msgstr "Sürətli və ya yüksək tutumlu səviyyələrdəki ghost həmkarlar"
+
+msgid "Duplicate CLOSE safety-net messages sent"
+msgstr "Göndərilən dublikat CLOSE təhlükəsizlik şəbəkəsi mesajları"
+
+msgid "Memory used by the JVM"
+msgstr "JVM-in istifadə etdiyi yaddaş"
 
 msgid "maximum"
-msgstr ""
-
-msgid "No transports"
-msgstr "Nəqliyyat yoxdur (gizli və ya başlamaq?)"
+msgstr "maksimum"
 
 msgid "Unsupported signature type"
 msgstr "Dəstəklənməyən imza növü"
 
 msgid "No support for our signature type"
 msgstr "İmza tipimiz üçün dəstək yoxdur"
-
-msgid "Unreachable on any transport"
-msgstr "Hər hansı bir nəqliyyatda əlçatmazdır"
 
 msgid "Cannot enumerate UPnP devices on Android."
 msgstr "Android-da UPnP cihazlarını siyahılaşdırmaq mümkün deyil."
@@ -839,6 +868,9 @@ msgstr "Konsol"
 
 msgid "To enable SSL access for the Router Console, see the commented <code>clients.config</code> file located in your I2P application directory for more information. You will need to edit the RouterConsoleRunner config file located in the directory: "
 msgstr "Router Konsolu üçün SSL-ə girişi aktivləşdirmək üçün ətraflı məlumat üçün <code></code> I2P tətbiq kataloqunuzda yerləşən şərh edilmiş clients.config faylına baxın. Kataloqda yerləşən RouterConsoleRunner konfiqurasiya faylını redaktə etməlisiniz:"
+
+msgid "No client session key managers."
+msgstr "Müştər sessiya açar menecerləri yoxdur."
 
 msgid "Save disabled, edit the router.config file to make changes"
 msgstr "Qeyd etmək deaktiv edilib, dəyişiklik etmək üçün router.config faylını redaktə edin"
@@ -1896,10 +1928,10 @@ msgid "Bandwidth Usage"
 msgstr "Bant genişliyi istifadəsi"
 
 msgid "Graph combining is not enabled"
-msgstr ""
+msgstr "Qrafiklərin birləşdirilməsi aktiv deyil"
 
 msgid "Not enough stats enabled to combine"
-msgstr ""
+msgstr "Birləşdirmək üçün kifayət qədər statistika aktiv deyil"
 
 #, java-format
 msgid "ending {0} ago"
@@ -2017,22 +2049,22 @@ msgid "Add a glow effect to graph lines"
 msgstr "Diaqram xətlərinə parıltı effekti əlavə et"
 
 msgid "Smooth lines"
-msgstr ""
+msgstr "Hamar xətlər"
 
 msgid "Use bezier curves to plot graphs"
-msgstr ""
+msgstr "Qrafikləri çəkmək üçün Bezier əyrilərindən istifadə edin"
 
 msgid "Filled paths"
-msgstr ""
+msgstr "Dolu yollar"
 
 msgid "Use filled areas for graphs"
-msgstr ""
+msgstr "Qrafiklər üçün dolu sahələrdən istifadə edin"
 
 msgid "Combine graphs"
-msgstr ""
+msgstr "Qrafikləri birləşdirin"
 
 msgid "Merge related graphs into a plot"
-msgstr ""
+msgstr "Əlaqəli qrafikləri bir qrafikdə birləşdirin"
 
 msgid "Select Stats"
 msgstr "Stats seçin"
@@ -2052,20 +2084,34 @@ msgstr "təkmilləşdirilmişdir"
 msgid "vs baseline"
 msgstr "bazaya qarşı"
 
+#, java-format
+msgid "Out: {0} / {1}"
+msgstr "Çıxan: {0} / {1}"
+
+#, java-format
+msgid "In: {0} / {1}"
+msgstr "Girən: {0} / {1}"
+
 msgid "CPU"
 msgstr "CPU"
 
-msgid "CPU load average"
-msgstr "CPU yük ortalaması"
+msgid "JVM CPU load average"
+msgstr "JVM CPU yükünün ortalaması"
+
+#, java-format
+msgid "{0} cores"
+msgstr "{0} nüvə"
 
 msgid "Memory"
 msgstr "Yaddaş"
 
-msgid "Memory usage"
-msgstr "Yaddaş istifadəsi"
+#, java-format
+msgid "Used: {0} / {1} max"
+msgstr "İstifadə: {0} / {1} maksimum"
 
-msgid "Router uptime"
-msgstr "Ruterin iş vaxtı"
+#, java-format
+msgid "Since {0}"
+msgstr "{0}-dən"
 
 msgid "Job Lag"
 msgstr "İş Gecikmesi"
@@ -2091,6 +2137,10 @@ msgstr "Threadlər"
 msgid "Active JVM threads"
 msgstr "Aktiv JVM threadləri"
 
+#, java-format
+msgid "Empty at {0}"
+msgstr "{0} olduqda boş"
+
 msgid "NTCP Estab"
 msgstr "NTCP Qurulma"
 
@@ -2112,20 +2162,24 @@ msgstr "SSU yenidən ötürmə vaxt aşımı"
 msgid "Conns/s"
 msgstr "Bağlantı/s"
 
-msgid "NTCP connections established per second"
-msgstr "Saniyədə qurulan NTCP bağlantıları"
+#, java-format
+msgid "Full at {0}/s"
+msgstr "{0}/san olduqda dolu"
+
+msgid "New NTCP connections (1 min)"
+msgstr "Yeni NTCP bağlantıları (1 dəq)"
 
 msgid "Msgs/s"
 msgstr "Mesaj/s"
 
-msgid "Messages delivered per second"
-msgstr "Saniyədə çatdırılan mesajlar"
+msgid "Messages delivered (1 min)"
+msgstr "Çatdırılan mesajlar (1 dəq)"
 
 msgid "RTT"
 msgstr "RTT"
 
-msgid "End-to-end message round trip time"
-msgstr "Uçdan-uca mesaj gediş-gəliş vaxtı"
+msgid "End-to-end client message round trip"
+msgstr "Müştər mesajlarının ucdan-uca get-gəl vaxtı"
 
 msgid "Timeout"
 msgstr "Vaxt aşımı"
@@ -2139,20 +2193,28 @@ msgstr "Tunel Qurma"
 msgid "Client tunnel build latency"
 msgstr "Müştəri tuneli qurma gecikməsi"
 
+#, java-format
+msgid "In: {0} / Out: {1}"
+msgstr "Girən: {0} / Çıxan: {1}"
+
 msgid "Active Peers"
 msgstr "Aktiv Peerlər"
 
-msgid "Active peers (last 60s)"
-msgstr "Aktiv peerlər (son 60s)"
+#, java-format
+msgid "Full at {0}"
+msgstr "{0} olduqda dolu"
+
+msgid "Reached in the last 60s"
+msgstr "Son 60 saniyədə əlaqə qurulub"
 
 msgid "Known Peers"
 msgstr "Tanınan Peerlər"
 
-msgid "Known routers in network database"
-msgstr "Şəbəkə verilənlər bazasındakı tanınan ruterlər"
+msgid "In the network database"
+msgstr "Şəbəkə verilənlər bazasında"
 
-msgid "Active I2CP clients"
-msgstr "Aktiv I2CP müştəriləri"
+msgid "I2CP clients connected"
+msgstr "Qoşulmuş I2CP müştəriləri"
 
 msgid "Transit"
 msgstr "Tranzit"
@@ -2166,8 +2228,8 @@ msgstr "Axınlar"
 msgid "Build Success"
 msgstr "Uğur yaradın"
 
-msgid "Tunnel build success rate"
-msgstr "Tunel qurma uğur dərəcəsi"
+msgid "Tunnel build success rate (1 min)"
+msgstr "Tunel qurma uğur nisbəti (1 dəq)"
 
 msgid "NetDB"
 msgstr "NetDB"
@@ -2178,26 +2240,31 @@ msgstr "NetDB axtarış vaxtı"
 msgid "Banned"
 msgstr "Qadağan olunmuş"
 
-msgid "Total banned peers"
-msgstr "Ümumi qadağan edilmiş peerlər"
+msgid "Peers excluded from all interactions"
+msgstr "Həmyaşıdları bütün qarşılıqlı əlaqədən kənarlaşdırılır"
+
+#, java-format
+msgid "{0} of {1} known"
+msgstr "Məlum {1}-dən {0}"
 
 msgid "LeaseSets"
 msgstr "İcarəyə Dəstlər"
 
-msgid "Stored LeaseSets in floodfill"
-msgstr "Floodfilldə saxlanılan LeaseSetlər"
+msgid "Stored LeaseSets"
+msgstr "Saxlanmış LeaseSet-lər"
 
 msgid "Cache Hit"
 msgstr "Keş Tapılması"
 
-msgid "NetDB lookup success rate"
-msgstr "NetDB axtarış uğur dərəcəsi"
+#, java-format
+msgid "Matched {0} of {1} lookups (1 min)"
+msgstr "Axtarışlardan {0}/{1} uyğun gəldi (1 dəq)"
 
 msgid "Flood Verify"
 msgstr "Floodfill Yoxlaması"
 
-msgid "Floodfill verify time"
-msgstr "daşqın nodu vaxtını yoxlayır"
+msgid "Floodfill verify time (1 min)"
+msgstr "Floodfill yoxlama vaxtı (1 dəq)"
 
 msgid "NetDB ACK"
 msgstr "NetDB Təsdiqi"
@@ -2208,20 +2275,20 @@ msgstr "NetDB peer təsdiq vaxtı"
 msgid "Lookups/s"
 msgstr "Axtarış/s"
 
-msgid "NetDB lookups handled per second"
-msgstr "Saniyədə emal edilən NetDB axtarışları"
+msgid "Lookups handled (1 min)"
+msgstr "Emal edilən axtarışlar (1 dəq)"
 
 msgid "Requests/s"
 msgstr "Sorğu/s"
 
-msgid "Combined store + lookup operations per second"
-msgstr "Saniyədə birləşmiş saxlama + axtarış əməliyyatları"
+msgid "Stores + lookups (1 min)"
+msgstr "Yadda saxlamalar + axtarışlar (1 dəq)"
 
 msgid "Stores/s"
 msgstr "Saxlama/s"
 
-msgid "NetDB store messages handled per second"
-msgstr "Saniyədə emal edilən NetDB saxlama mesajları"
+msgid "Stores handled (1 min)"
+msgstr "Emal edilən yadda saxlamalar (1 dəq)"
 
 msgid "LS Timeout"
 msgstr "LS Vaxt Aşımı"
@@ -3205,6 +3272,9 @@ msgstr "Profilə baxın"
 msgid "Configure peer"
 msgstr "Peer-i konfiqurasiya edin"
 
+msgid "Memory usage"
+msgstr "Yaddaş istifadəsi"
+
 msgid "Hidden"
 msgstr "Gizli"
 
@@ -3348,8 +3418,8 @@ msgstr "Bir çox tunel üçün yüksək bant genişliyi olan həmyaşıdları"
 msgid "Reliable"
 msgstr "Etibarlı"
 
-msgid "High-capacity peers with good acceptance"
-msgstr "Yaxşı qəbul edilən yüksək tutumlu həmyaşıdlar"
+msgid "Peers with good acceptance and recent activity"
+msgstr "Qəbulu yaxşı olan və son vaxtlar aktiv həmkarlar"
 
 msgid "Peers that store and serve NetDb info"
 msgstr "NetDb məlumatını saxlayan və xidmət edən həmyaşıdlar"
@@ -3360,17 +3430,21 @@ msgstr "Məlumdur"
 msgid "Total entries in network database"
 msgstr "Şəbəkə verilənlər bazasındakı ümumi qeydlər"
 
+msgid "Profiles"
+msgstr "Profillər"
+
 msgid "Profiles with activity in the last hour"
 msgstr "Son 1 saat ərzində aktivliyi olan profillər"
+
+#, java-format
+msgid "{0} of {1} stored"
+msgstr "{1}-dən {0} saxlanılıb"
 
 msgid "Unreachable"
 msgstr "Əlçatmaz"
 
-msgid "Peers without a reachable address"
-msgstr "Əlçatan ünvanı olmayan həmyaşıdlar"
-
-msgid "Peers excluded from all interactions"
-msgstr "Həmyaşıdları bütün qarşılıqlı əlaqədən kənarlaşdırılır"
+msgid "Peers without a published address"
+msgstr "Dərc edilmiş adresi olmayan həmkarlar"
 
 msgid "/min"
 msgstr "/dəq"
@@ -3378,8 +3452,12 @@ msgstr "/dəq"
 msgid "Test Fail"
 msgstr "Test Uğursuzluğu"
 
-msgid "Connectivity test failures per minute"
-msgstr "Bağlantı testində dəqiqədə uğursuzluqlar"
+msgid "Connectivity test failures in the last minute"
+msgstr "Son dəqiqədə bağlantı testi uğursuzluqları"
+
+#, java-format
+msgid "Empty at {0}/min"
+msgstr "{0}/dəq olduqda boş"
 
 msgid "Peer Connections"
 msgstr "Peer Əlaqələri"
@@ -3572,6 +3650,8 @@ msgstr "Aşağı gecikmə"
 
 msgid "Round trip time to this peer on the direct link, as measured by the transport"
 msgstr ""
+"Nəqliyyatın ölçdüyü kimi, bu həmkara birbaşa bağlantı üzərindən get-gəl "
+"vaxtı"
 
 msgid "Packets retransmitted / packets sent, as reported by the UDP transport"
 msgstr "Yenidən göndərilən paketlər / göndərilən paketlər, UDP nəqliyyatı tərəfindən bildirildiyi kimi"
@@ -3653,26 +3733,40 @@ msgstr[1] "{0} köhnə profil gizlədilib"
 msgid "Share of total profiles shown"
 msgstr "Göstərilən ümumi profillərin payı"
 
-msgid "peers"
-msgstr "həmyaşıdları"
-
-msgid "Share of tier profiles shown"
-msgstr "Göstərilən təbəqə profillərinin payı"
-
 msgid "Window"
 msgstr "Pəncərə"
 
 msgid "Fast RTT"
 msgstr "Sürətli RTT"
 
-msgid "Max RTT for fast-tier membership (ms)"
-msgstr "Sürətli təbəqəyə üzvlük üçün maksimum RTT (ms)"
+msgid "Max RTT for fast-tier membership"
+msgstr "Sürətli səviyyə üzvlüyü üçün maksimum RTT"
 
-msgid "Average loss of fast-tier peers (%)"
-msgstr "Sürətli təbəqə həmyaşıdlarının orta itkisi (%)"
+msgid "Rises with network latency"
+msgstr "Şəbəkə gecikməsi ilə artır"
 
-msgid "Average loss of high-capacity peers (%)"
-msgstr "Yüksək tutumlu həmyaşıdların orta itkisi (%)"
+msgid "Average loss of fast-tier peers"
+msgstr "Sürətli səviyyə həmkarlarının orta itirisi"
+
+msgid "Average loss of high-capacity peers"
+msgstr "Yüksək tutumlu həmkarların orta itirisi"
+
+msgid "Average direct-link RTT of tier peers"
+msgstr "Səviyyə həmkarlarının orta birbaşa bağlantı RTT-si"
+
+#, java-format
+msgid "{0} of {1} measured"
+msgstr "{1}-dən {0} ölçülüb"
+
+msgid "1h Contact"
+msgstr "1 saat Ǝlaqə"
+
+msgid "Heard from in the last hour"
+msgstr "Son saatda xəbər verib"
+
+#, java-format
+msgid "{0} of {1} tier peers"
+msgstr "Səviyyə həmkarlarından {0}/{1}"
 
 msgid "Heard from within the display cutoff"
 msgstr "Göstərmə həddi daxilindən eşidildi"
@@ -3683,11 +3777,19 @@ msgstr "Axtarışlar"
 msgid "Lookup success rate"
 msgstr "Axtarış uğur dərəcəsi"
 
+#, java-format
+msgid "{0} of {1} lookups"
+msgstr "Axtarışlardan {0}/{1}"
+
 msgid "Stores"
 msgstr "Saxlamalar"
 
 msgid "Store success rate"
 msgstr "Saxlama uğur dərəcəsi"
+
+#, java-format
+msgid "{0} of {1} peers"
+msgstr "Həmkarlardan {0}/{1}"
 
 msgid "Definitions"
 msgstr "Təyinlər"
@@ -3760,11 +3862,25 @@ msgstr "son vaxtlar bizə neçə yeni həmyaşıdları haqqında danışdılar?"
 msgid "Known floodfills"
 msgstr "Məlum daşın qovşaqları"
 
-msgid "No-Fail"
-msgstr "Uğursuzluqsuz"
+msgid "Reachable, unbanlisted and heard from"
+msgstr "Əlçatan, banlanmamış və son vaxtlar xəbər verən"
 
-msgid "No lookup failures (1h)"
-msgstr "Axtarış uğursuzluğu yoxdur (1 saat)"
+msgid "Active bans of floodfill-capable peers"
+msgstr "Floodfill qabiliyyətli həmkarlara aktiv banlar"
+
+#, java-format
+msgid "of {0} known"
+msgstr "məlum {0}-dan"
+
+msgid "Fail"
+msgstr "Uğursuz"
+
+msgid "Lookup failures in the last hour"
+msgstr "Son saatda axtarış uğursuzluqları"
+
+#, java-format
+msgid "across {0} listed peers"
+msgstr "siyahıya alınmış {0} həmkar arasında"
 
 msgid "Response"
 msgstr "Cavab"
@@ -3772,11 +3888,16 @@ msgstr "Cavab"
 msgid "Lookup response time (1h)"
 msgstr "Axtarış cavab vaxtı (1 saat)"
 
-msgid "1h Contact"
-msgstr "1 saat Ǝlaqə"
+#, java-format
+msgid "{0} peers measured"
+msgstr "{0} həmkar ölçüldü"
 
 msgid "Contacted within 1h"
 msgstr "1 saat ərzində əlaqə saxlanılıb"
+
+#, java-format
+msgid "{0} of {1} listed"
+msgstr "{1}-dən {0} siyahıda"
 
 msgid "1h Fail Rate"
 msgstr "1 saat uğursuzluq dərəcəsi"
@@ -3814,17 +3935,33 @@ msgstr "Hamısı"
 msgid "SAM bridge is not running."
 msgstr "SAM körpüsü işləmir."
 
+msgid "Sessions"
+msgstr "Sessiyalar"
+
 msgid "Active sessions in SessionsDB"
 msgstr "SessionsDB-dəki aktiv sessiyalar"
+
+msgid "Workers"
+msgstr "İşçi ipliklər"
 
 msgid "Active / pool worker threads"
 msgstr "Aktiv / hovuz işçi threadləri"
 
-msgid "Pending commands in pool"
-msgstr "Hovuzdakı gözləyən əmrlər"
+msgid "Queue"
+msgstr "Növbə"
+
+#, java-format
+msgid "Pending commands: {0} of {1}"
+msgstr "Gözləyən əmrlər: {0} / {1}"
+
+msgid "Handlers"
+msgstr "İşləyicilər"
 
 msgid "Connected pool handlers"
 msgstr "Qoşulmuş hovuz idarəçiləri"
+
+msgid "Stolen"
+msgstr "Oğurlanmış"
 
 msgid "Sockets stolen for data streaming"
 msgstr "Data axını üçün götürülmüş soketlər"
@@ -4143,9 +4280,6 @@ msgstr "Bütün cari həmyaşıd əlaqələrini göstərin"
 msgid "Router health overview"
 msgstr "Ruter sağlamlığının icmalı"
 
-msgid "Profiles"
-msgstr "Profillər"
-
 msgid "Show recent peer performance profiles"
 msgstr "Son həmyaşıd performans profillərini göstərin"
 
@@ -4454,6 +4588,27 @@ msgid "1 event"
 msgid_plural "{0} events"
 msgstr[0] "1 hadisə"
 msgstr[1] "{0} hadisələr"
+
+msgid "Open streaming connections"
+msgstr "Açıq yayım bağlantıları"
+
+msgid "Round-trip time (live samples, 1 min)"
+msgstr "Get-gəl vaxtı (canlı nümunələr, 1 dəq)"
+
+msgid "Retrans"
+msgstr "Təkrar"
+
+msgid "Share of sends needing retransmit (1 min)"
+msgstr "Təkrar göndərmə tələb edən göndərişlərin payı (1 dəq)"
+
+msgid "Created + received (1 min)"
+msgstr "Yaradılan + qəbul edilən (1 dəq)"
+
+msgid "Throughput"
+msgstr "Keçiricilik"
+
+msgid "Mean rate of streams closed in the last minute"
+msgstr "Son dəqiqədə bağlanan axınların orta sürəti"
 
 msgid "sent"
 msgstr "göndərildi"
@@ -4842,6 +4997,9 @@ msgstr "Boğulma Rədd Etmə Üstü"
 msgid "Maximum Participating Tunnels"
 msgstr "Maksimum İştirakçı Tunellər"
 
+msgid "Timer Threads"
+msgstr "Taymer iplikləri"
+
 msgid "Build Handler Maximum Queue"
 msgstr "Qurulma İşləyicisi Maksimum Növbəsi"
 
@@ -5196,6 +5354,9 @@ msgstr "Yavaş başlanğıc zamanı maksimum tıxac pəncərəsi."
 msgid "Per-connection inbound buffer cap (bytes)."
 msgstr "Hər qoşulma üçün gələn bufer tavanı (bayt)."
 
+msgid "Timer worker threads; higher reduces event delay."
+msgstr "Taymer işçi iplikləri; yüksək dəyər hadisə gecikməsini azaldır."
+
 msgid "Dynamic cap on concurrent streams per destination."
 msgstr "Hər təyinat üçün paralel axınlara dinamik tavan."
 
@@ -5441,9 +5602,13 @@ msgstr "Təkrar ötürmələr arasındakı minimum vaxt (ms)."
 
 msgid "Window growth per RTT after slow start; higher recovers faster."
 msgstr ""
+"Yavaş başlatmadan sonra hər RTT-də pəncərə artımı; yüksək dəyər daha tez "
+"bərpa olunur."
 
 msgid "Window growth per ACK during slow start; higher ramps faster."
 msgstr ""
+"Yavaş başlatma zamanı hər ACK-da pəncərə artımı; yüksək dəyər daha tez "
+"yüksəlir."
 
 msgid "Minimum send rate before pacing kicks in (KB/s)."
 msgstr "Pacing başlamazdan əvvəl minimum göndərmə sürəti (KB/s)."
@@ -5482,7 +5647,7 @@ msgid "Default cap on server handler threads for each server tunnel."
 msgstr "Hər bir server tuneli üçün server işləyici mövzularina standart tavan."
 
 msgid "Dedicated pool for Server→Client transfers, unblocks handlers."
-msgstr ""
+msgstr "Server→Klient köçürmələri üçün xüsusi hovuz, işləyiciləri açır."
 
 msgid "Stall timeout for Server→Client data transfers (ms)."
 msgstr "Server→Client məlumat ötürмələri üçün donma vaxt aşımı (ms)."
@@ -5534,6 +5699,8 @@ msgstr "Sorğular rədd edilmədən əvvəlki orta yüklü müddət (ms)."
 
 msgid "Widens the peer recency window when fast peers run short."
 msgstr ""
+"Sürətli həmkarlar çatışmadıqda həmkar təzəliyi pəncərəsini "
+"genişləndirir."
 
 msgid "Consecutive failures before pool backoff."
 msgstr "Hovuz geri çəkilməsindən əvvəlki ardıcıl uğursuzluqlar."
@@ -5573,6 +5740,8 @@ msgstr "Tunel server işləyici mövzuları üçün TCP soket qoşulma vaxtı (m
 
 msgid "IV dedup filter size; too small drops valid tunnel data."
 msgstr ""
+"IV təkrarlıq filtrinin ölçüsü; çox kiçik olsa, etibarlı tunel "
+"məlumatlarını silir."
 
 msgid "Max average message delay before rejecting transit (ms)."
 msgstr "Tranzitdən imtina etməzdən əvvəl maksimum orta mesaj gecikməsi (ms)."
@@ -7017,6 +7186,15 @@ msgstr "web proqramlarını konfiqurasiya edin"
 msgid "The Java web applications listed below are started by the webConsole client and run in the same JVM as the router. They are usually web applications accessible through the router console. They may be complete applications (e.g. i2psnark), front-ends to another client or application which must be separately enabled (e.g. susidns, i2ptunnel), or have no web interface at all (e.g. addressbook)."
 msgstr "Aşağıda sadalanan Java veb tətbiqetmələri veb-kamonlu müştəri tərəfindən başlanır və router kimi eyni JVM-də işlək. Onlar ümumiyyətlə yönləndirmə konsolu vasitəsilə əldə edilə bilən veb tətbiqetmələrdir. Onlar tam tətbiqetmələr (məsələn, ayrıca aktiv olmalıdır (məsələn, e.g. susidns, i2ptunnel) və ya heç bir veb interfeysi yoxdur (məsələn, ünvan kitabçası) olmalıdır. g susidns, i2ptunnel), or have no web interface at all (e. g addressbook). g susidns, i2ptunnel), or have no web interface at all (e. g addressbook). g susidns, i2ptunnel) və ya ümumiyyətlə veb interfeysi yoxdur (məsələn g ünvan kitabçası)"
 
+msgid "Router Session Key Manager"
+msgstr "Marşrutlaşdırıcı sessiya açar meneceri"
+
+msgid "Client Session Key Managers"
+msgstr "Müştər sessiya açar menecerləri"
+
+msgid "Router DHT"
+msgstr "Marşrutlaşdırıcının DHT-si"
+
 msgid "Open in new tab"
 msgstr "Yeni tabda açın"
 
@@ -7591,14 +7769,18 @@ msgstr "Minimum tunnel test müddəti millisaniyələrlə. Tunnel testləri vaxt
 msgid "Maximum tunnel test period in milliseconds. Tunnel tests never wait longer than this for a reply, even on high-latency paths. [Default is 50000 (50 seconds)]"
 msgstr "Maksimum tunnel test müddəti millisaniyələrlə. Tunnel testləri yüksək gecikməli şəbəkələrdə belə cavab üçün bundan artıq gözləmir. [Standart 60000]"
 
-msgid "Number of tunnel build timeouts before a peer is marked as a ghost (blacklisted for tunnel participation). Higher values tolerate more transient failures. [Default is 3]"
-msgstr "Həmyaşıdın xəyal olaraq işarələnməsindən əvvəl tunnel qurma vaxt aşımlarının sayı. Daha yüksək dəyərlər daha çox uğursuzluğa dözür. [Standart 3]"
+msgid "Number of tunnel build timeouts before a peer is marked as a ghost (excluded from tunnel participation). Higher values tolerate more transient failures. [Default is 1]"
+msgstr ""
+"Həmkar ghost kimi işarələnməzdən əvvəl (tunel iştirakından "
+"kənarlaşdırılır) tunel qurma vaxt keçmələrinin sayı. Yüksək dəyərlər "
+"müvəqqəti xətaları daha çox döyür. [İlkin dəyər 1-dir]"
 
-msgid "Cooldown period in milliseconds before a ghost-marked peer can be considered for tunnel participation again. Shorter values allow faster peer reuse. [Default is 180000 (3 minutes)]"
-msgstr "Xəyal kimi işarələnmiş həmyaşıdın tunnel iştirakı üçün yenidən nəzərdən keçirilməsindən əvvəl soyutma dövrü millisaniyələrlə. Daha qısa dəyərlər daha sürətli yenidən qoşulmağa imkan verir. [Standart 600000]"
-
-msgid "Cooldown period in milliseconds for ghost-marked peers during attack mode. Longer cooldowns limit exposure to potentially malicious peers during high-stress periods. [Default is 300000 (5 minutes)]"
-msgstr "Hücum rejimi zamanı xəyal kimi işarələnmiş həmyaşıdlar üçün soyutma dövrü millisaniyələrlə. Daha uzun soyutmalar potensial təcavüzkarlara məruz qalmanı məhdudlaşdırır. [Standart 3600000]"
+msgid "Cooldown period in milliseconds before a ghost-marked peer can be promoted into the tunnel peer tiers again. Shorter values return recovered peers to service faster. [Default is 90000 (90 seconds)]"
+msgstr ""
+"Ghost kimi işarələnmiş həmkarın tunel həmkar səviyyələrinə yenidən "
+"yüksəldilə bilməsinə qədər soyuma müddəti (millisaniyə). Qısa dəyərlər "
+"bərpa olunmuş həmkarları xidmətə daha tez qaytarır. [İlkin dəyər "
+"90000-dir (90 saniyə)]"
 
 msgid "Minimum number of incoming tunnel build requests accepted per peer per clean window. Prevents starving peers during low-traffic periods. [Default is 10]"
 msgstr "Təmiz pəncərə başına hər həmyaşıddan qəbul edilən minimum daxil olan tunnel qurma sorğu sayı. Aşağı tələb dövrlərində həmyaşıdların ac qalmasının qarşısını alır. [Standart 1]"
@@ -10028,3 +10210,35 @@ msgstr "Növbəti"
 
 msgid "Finished"
 msgstr "Bitdi"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

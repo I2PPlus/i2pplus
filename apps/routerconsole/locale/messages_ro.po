@@ -128,23 +128,51 @@ msgstr "Peers fără o adresă IP publicată"
 msgid "Average tunnel build success (%)"
 msgstr "Succesul mediu la construirea tunelului %"
 
+msgid "Tier promotions held back for a peer with no usable address"
+msgstr ""
+"Promovări de nivel reținute pentru un coleg fără adres utilizabil"
+
+msgid "RouterInfo refreshes issued for peers held out of the tiers"
+msgstr ""
+"Reîmprospătări RouterInfo emise pentru colegi ținuți în afara "
+"nivelurilor"
+
+msgid "Tier scans that left the fast or high-capacity tier short of target"
+msgstr ""
+"Scanări de nivel care au lăsat nivelul rapid sau de capacitate mare sub "
+"țintă"
+
+msgid "RouterInfos requested for stored profiles that had none"
+msgstr ""
+"RouterInfo cerute pentru profiluri stocate care nu aveau niciunul"
+
+msgid "Build timeouts recorded against a peer as a ghost mark"
+msgstr ""
+"Expirări de construire înregistrate pentru un coleg ca marcaj de fantomă"
+
+msgid "Ghost marks cleared by a successful build reply"
+msgstr "Marcaje de fantomă șterse de un răspuns de construire reușit"
+
+msgid "Peers currently excluded as ghosts"
+msgstr "Colegi excluși în prezent ca fantome"
+
+msgid "Ghost peers in the fast or high-capacity tiers"
+msgstr "Colegi-fantomă în nivelurile rapide sau de capacitate mare"
+
+msgid "Duplicate CLOSE safety-net messages sent"
+msgstr "Mesaje duplicat ale plasei de siguranță CLOSE trimise"
+
 msgid "Memory used by the JVM"
 msgstr "Memorie utilizată de JVM"
 
 msgid "maximum"
 msgstr "maxim"
 
-msgid "No transports"
-msgstr "Nici un transport (ascunse sau în pornire?)"
-
 msgid "Unsupported signature type"
 msgstr "Tip semnătură nesuportat"
 
 msgid "No support for our signature type"
 msgstr "Nu există suport pentru tipul nostru de semnătură"
-
-msgid "Unreachable on any transport"
-msgstr "Inaccesibil pe orice transport"
 
 msgid "Cannot enumerate UPnP devices on Android."
 msgstr "Nu se pot enumera dispozitivele UPnP pe Android."
@@ -842,6 +870,9 @@ msgstr "Consola"
 
 msgid "To enable SSL access for the Router Console, see the commented <code>clients.config</code> file located in your I2P application directory for more information. You will need to edit the RouterConsoleRunner config file located in the directory: "
 msgstr "Pentru a activa accesul SSL pentru consola routerului, consultați fișierul Comentat <code>client.config</code> situat în directorul dvs. de aplicații I2P pentru mai multe informații. Va trebui să editați fișierul de configurare a routerconsolerunner localizat în director:"
+
+msgid "No client session key managers."
+msgstr "Nu există gestionari de chei de sesiune pentru clienți."
 
 msgid "Save disabled, edit the router.config file to make changes"
 msgstr "Salvarea dezactivată, editați fișierul router.config pentru a face modificări"
@@ -2058,20 +2089,34 @@ msgstr "îmbunătățită"
 msgid "vs baseline"
 msgstr "față de linia de bază"
 
+#, java-format
+msgid "Out: {0} / {1}"
+msgstr "Ieșire: {0} / {1}"
+
+#, java-format
+msgid "In: {0} / {1}"
+msgstr "Intrare: {0} / {1}"
+
 msgid "CPU"
 msgstr "CPU"
 
-msgid "CPU load average"
-msgstr "Încărcarea medie a CPU"
+msgid "JVM CPU load average"
+msgstr "Media încărcării CPU a JVM"
+
+#, java-format
+msgid "{0} cores"
+msgstr "{0} nuclee"
 
 msgid "Memory"
 msgstr "Memorie"
 
-msgid "Memory usage"
-msgstr "Utilizarea memoriei"
+#, java-format
+msgid "Used: {0} / {1} max"
+msgstr "Utilizat: {0} / {1} maxim"
 
-msgid "Router uptime"
-msgstr "Timpul de funcționare al routerului"
+#, java-format
+msgid "Since {0}"
+msgstr "Din {0}"
 
 msgid "Job Lag"
 msgstr "Întârzierea locului de muncă"
@@ -2097,6 +2142,10 @@ msgstr "Fire de execuție"
 msgid "Active JVM threads"
 msgstr "Fire de execuție JVM active"
 
+#, java-format
+msgid "Empty at {0}"
+msgstr "Gol la {0}"
+
 msgid "NTCP Estab"
 msgstr "Stabilire NTCP"
 
@@ -2118,20 +2167,24 @@ msgstr "Timpul de retransmisie SSU"
 msgid "Conns/s"
 msgstr "Conex/s"
 
-msgid "NTCP connections established per second"
-msgstr "Conexiuni NTCP stabilite pe secundă"
+#, java-format
+msgid "Full at {0}/s"
+msgstr "Plin la {0}/s"
+
+msgid "New NTCP connections (1 min)"
+msgstr "Conexiuni NTCP noi (1 min)"
 
 msgid "Msgs/s"
 msgstr "Mesaje/s"
 
-msgid "Messages delivered per second"
-msgstr "Mesaje livrate pe secundă"
+msgid "Messages delivered (1 min)"
+msgstr "Mesaje livrate (1 min)"
 
 msgid "RTT"
 msgstr "RTT"
 
-msgid "End-to-end message round trip time"
-msgstr "Timpul de du-te-ntorci al mesajelor end-to-end"
+msgid "End-to-end client message round trip"
+msgstr "Drum dus-întors al mesajelor clientului capăt-către-capăt"
 
 msgid "Timeout"
 msgstr "Timp expirat"
@@ -2145,20 +2198,28 @@ msgstr "Construcție tunel"
 msgid "Client tunnel build latency"
 msgstr "Latența construcției tunelului client"
 
+#, java-format
+msgid "In: {0} / Out: {1}"
+msgstr "Intrare: {0} / Ieșire: {1}"
+
 msgid "Active Peers"
 msgstr "Parteneri activi"
 
-msgid "Active peers (last 60s)"
-msgstr "Parteneri activi (ultimele 60s)"
+#, java-format
+msgid "Full at {0}"
+msgstr "Plin la {0}"
+
+msgid "Reached in the last 60s"
+msgstr "Contactați în ultimele 60 s"
 
 msgid "Known Peers"
 msgstr "Parteneri cunoscuți"
 
-msgid "Known routers in network database"
-msgstr "Rutere cunoscute în baza de date a rețelei"
+msgid "In the network database"
+msgstr "În baza de date a rețelei"
 
-msgid "Active I2CP clients"
-msgstr "Clienți I2CP activi"
+msgid "I2CP clients connected"
+msgstr "Clienți I2CP conectați"
 
 msgid "Transit"
 msgstr "Tranzit"
@@ -2172,8 +2233,8 @@ msgstr "Fluxuri"
 msgid "Build Success"
 msgstr "Construiește succesul"
 
-msgid "Tunnel build success rate"
-msgstr "Rata de succes a construcției tunelului"
+msgid "Tunnel build success rate (1 min)"
+msgstr "Rata de succes a construirii tunelurilor (1 min)"
 
 msgid "NetDB"
 msgstr "NetDB"
@@ -2184,26 +2245,31 @@ msgstr "Timpul de căutare NetDB"
 msgid "Banned"
 msgstr "Banat"
 
-msgid "Total banned peers"
-msgstr "Total parteneri blocați"
+msgid "Peers excluded from all interactions"
+msgstr "Semeni excluși din toate interacțiunile"
+
+#, java-format
+msgid "{0} of {1} known"
+msgstr "{0} din {1} cunoscuți"
 
 msgid "LeaseSets"
 msgstr "LeaseSets"
 
-msgid "Stored LeaseSets in floodfill"
-msgstr "LeaseSets stocate în nodul de inundație"
+msgid "Stored LeaseSets"
+msgstr "LeaseSets stocate"
 
 msgid "Cache Hit"
 msgstr "Acces în cache"
 
-msgid "NetDB lookup success rate"
-msgstr "Rata de succes a căutării NetDB"
+#, java-format
+msgid "Matched {0} of {1} lookups (1 min)"
+msgstr "S-au potrivit {0} din {1} căutări (1 min)"
 
 msgid "Flood Verify"
 msgstr "Verificare Floodfill"
 
-msgid "Floodfill verify time"
-msgstr "timpul de verificare a nodului de inundație"
+msgid "Floodfill verify time (1 min)"
+msgstr "Timp de verificare Floodfill (1 min)"
 
 msgid "NetDB ACK"
 msgstr "Confirmare NetDB"
@@ -2214,20 +2280,20 @@ msgstr "Timpul de confirmare al partenerului NetDB"
 msgid "Lookups/s"
 msgstr "Căutări/s"
 
-msgid "NetDB lookups handled per second"
-msgstr "Căutări NetDB gestionate pe secundă"
+msgid "Lookups handled (1 min)"
+msgstr "Căutări tratate (1 min)"
 
 msgid "Requests/s"
 msgstr "Cereri/s"
 
-msgid "Combined store + lookup operations per second"
-msgstr "Operațiuni combinate stocare + căutare pe secundă"
+msgid "Stores + lookups (1 min)"
+msgstr "Stocări + căutări (1 min)"
 
 msgid "Stores/s"
 msgstr "Stocări/s"
 
-msgid "NetDB store messages handled per second"
-msgstr "Mesaje de stocare NetDB gestionate pe secundă"
+msgid "Stores handled (1 min)"
+msgstr "Stocări tratate (1 min)"
 
 msgid "LS Timeout"
 msgstr "Expirare LS"
@@ -3211,6 +3277,9 @@ msgstr "Vezi profilul"
 msgid "Configure peer"
 msgstr "Configurați partener"
 
+msgid "Memory usage"
+msgstr "Utilizarea memoriei"
+
 msgid "Hidden"
 msgstr "Ascuns"
 
@@ -3354,8 +3423,8 @@ msgstr "Peers cu lățime de bandă mare pentru multe tuneluri"
 msgid "Reliable"
 msgstr "De încredere"
 
-msgid "High-capacity peers with good acceptance"
-msgstr "Colegii de mare capacitate, cu o bună acceptare"
+msgid "Peers with good acceptance and recent activity"
+msgstr "Colegi cu acceptare bună și activitate recentă"
 
 msgid "Peers that store and serve NetDb info"
 msgstr "Peers care stochează și servesc informații NetDb"
@@ -3366,17 +3435,21 @@ msgstr "Cunoscute"
 msgid "Total entries in network database"
 msgstr "Total intrări în baza de date a rețelei"
 
+msgid "Profiles"
+msgstr "Profiluri"
+
 msgid "Profiles with activity in the last hour"
 msgstr "Profiluri cu activitate în ultima oră"
+
+#, java-format
+msgid "{0} of {1} stored"
+msgstr "{0} din {1} stocate"
 
 msgid "Unreachable"
 msgstr "Indisponibil"
 
-msgid "Peers without a reachable address"
-msgstr "Semeni fără o adresă accesibilă"
-
-msgid "Peers excluded from all interactions"
-msgstr "Semeni excluși din toate interacțiunile"
+msgid "Peers without a published address"
+msgstr "Colegi fără adres publicat"
 
 msgid "/min"
 msgstr "/min"
@@ -3384,8 +3457,12 @@ msgstr "/min"
 msgid "Test Fail"
 msgstr "Test eșuat"
 
-msgid "Connectivity test failures per minute"
-msgstr "Eșecuri ale testului de conectivitate pe minut"
+msgid "Connectivity test failures in the last minute"
+msgstr "Eșecuri ale testului de conectivitate în ultimul minut"
+
+#, java-format
+msgid "Empty at {0}/min"
+msgstr "Gol la {0}/min"
 
 msgid "Peer Connections"
 msgstr "Conexiuni de la egal la egal"
@@ -3662,26 +3739,40 @@ msgstr[2] "{0} profiluri învechite ascunse"
 msgid "Share of total profiles shown"
 msgstr "Procentul din totalul profilurilor afișate"
 
-msgid "peers"
-msgstr "noduri"
-
-msgid "Share of tier profiles shown"
-msgstr "Procentul de profiluri de nivel afișate"
-
 msgid "Window"
 msgstr "Fereastră"
 
 msgid "Fast RTT"
 msgstr "RTT rapid"
 
-msgid "Max RTT for fast-tier membership (ms)"
-msgstr "RTT maxim pentru apartenența la nivelul rapid (ms)"
+msgid "Max RTT for fast-tier membership"
+msgstr "RTT maxim pentru apartenența la nivelul rapid"
 
-msgid "Average loss of fast-tier peers (%)"
-msgstr "Pierdere medie a peer-urilor de nivel rapid (%)"
+msgid "Rises with network latency"
+msgstr "Crește cu latența rețelei"
 
-msgid "Average loss of high-capacity peers (%)"
-msgstr "Pierdere medie a peer-urilor de mare capacitate (%)"
+msgid "Average loss of fast-tier peers"
+msgstr "Pierderea medie a colegilor din nivelul rapid"
+
+msgid "Average loss of high-capacity peers"
+msgstr "Pierderea medie a colegilor de capacitate mare"
+
+msgid "Average direct-link RTT of tier peers"
+msgstr "RTT mediu de legătură directă al colegilor de nivel"
+
+#, java-format
+msgid "{0} of {1} measured"
+msgstr "{0} din {1} măsurați"
+
+msgid "1h Contact"
+msgstr "Contact în 1h"
+
+msgid "Heard from in the last hour"
+msgstr "Cu semnale în ultima oră"
+
+#, java-format
+msgid "{0} of {1} tier peers"
+msgstr "{0} din {1} colegi de nivel"
 
 msgid "Heard from within the display cutoff"
 msgstr "Auzit în limita de afișare"
@@ -3692,11 +3783,19 @@ msgstr "Căutări"
 msgid "Lookup success rate"
 msgstr "Rata de succes a căutării"
 
+#, java-format
+msgid "{0} of {1} lookups"
+msgstr "{0} din {1} căutări"
+
 msgid "Stores"
 msgstr "Stocări"
 
 msgid "Store success rate"
 msgstr "Rata de succes a stocării"
+
+#, java-format
+msgid "{0} of {1} peers"
+msgstr "{0} din {1} colegi"
 
 msgid "Definitions"
 msgstr "Definiții"
@@ -3769,11 +3868,25 @@ msgstr "cîți utilizatori au spus despre noi în ultima vreme ?"
 msgid "Known floodfills"
 msgstr "Noduri de inundație cunoscute"
 
-msgid "No-Fail"
-msgstr "Fără eșec"
+msgid "Reachable, unbanlisted and heard from"
+msgstr "Accesibil, nebanat și cu semnale recente"
 
-msgid "No lookup failures (1h)"
-msgstr "Nicio căutare eșuată (1h)"
+msgid "Active bans of floodfill-capable peers"
+msgstr "Banuri active pentru colegi capabili de floodfill"
+
+#, java-format
+msgid "of {0} known"
+msgstr "din {0} cunoscuți"
+
+msgid "Fail"
+msgstr "Eșec"
+
+msgid "Lookup failures in the last hour"
+msgstr "Eșecuri de căutare în ultima oră"
+
+#, java-format
+msgid "across {0} listed peers"
+msgstr "pe {0} colegi listați"
 
 msgid "Response"
 msgstr "Răspuns"
@@ -3781,11 +3894,16 @@ msgstr "Răspuns"
 msgid "Lookup response time (1h)"
 msgstr "Timpul de răspuns la căutare (1h)"
 
-msgid "1h Contact"
-msgstr "Contact în 1h"
+#, java-format
+msgid "{0} peers measured"
+msgstr "{0} colegi măsurați"
 
 msgid "Contacted within 1h"
 msgstr "Contactat în ultimele 1h"
+
+#, java-format
+msgid "{0} of {1} listed"
+msgstr "{0} din {1} listați"
 
 msgid "1h Fail Rate"
 msgstr "1 oră rată nereușită"
@@ -3823,17 +3941,33 @@ msgstr "Toate"
 msgid "SAM bridge is not running."
 msgstr "Puntea SAM nu rulează."
 
+msgid "Sessions"
+msgstr "Sesiuni"
+
 msgid "Active sessions in SessionsDB"
 msgstr "Sesiuni active în SessionsDB"
+
+msgid "Workers"
+msgstr "Fire de lucru"
 
 msgid "Active / pool worker threads"
 msgstr "Fire de execuție active / lucrători din pool"
 
-msgid "Pending commands in pool"
-msgstr "Comenzi în așteptare în pool"
+msgid "Queue"
+msgstr "Coadă"
+
+#, java-format
+msgid "Pending commands: {0} of {1}"
+msgstr "Comenzi în așteptare: {0} din {1}"
+
+msgid "Handlers"
+msgstr "Procesoare"
 
 msgid "Connected pool handlers"
 msgstr "Gestionari de pool conectați"
+
+msgid "Stolen"
+msgstr "Furate"
 
 msgid "Sockets stolen for data streaming"
 msgstr "Socket-uri preluate pentru streaming de date"
@@ -4152,9 +4286,6 @@ msgstr "Arată toate conexiunile partenerului actual"
 msgid "Router health overview"
 msgstr "Prezentare generală a stării routerului"
 
-msgid "Profiles"
-msgstr "Profiluri"
-
 msgid "Show recent peer performance profiles"
 msgstr "Arată profilele de performanță ale partenerului recent"
 
@@ -4465,6 +4596,27 @@ msgid_plural "{0} events"
 msgstr[0] "1 eveniment"
 msgstr[1] "{0} evenimente"
 msgstr[2] "{0} evenimente"
+
+msgid "Open streaming connections"
+msgstr "Conexiuni de streaming deschise"
+
+msgid "Round-trip time (live samples, 1 min)"
+msgstr "Timp de drum dus-întors (probe în direct, 1 min)"
+
+msgid "Retrans"
+msgstr "Retr."
+
+msgid "Share of sends needing retransmit (1 min)"
+msgstr "Ponderea trimiterilor care necesită retransmitere (1 min)"
+
+msgid "Created + received (1 min)"
+msgstr "Create + primite (1 min)"
+
+msgid "Throughput"
+msgstr "Debit"
+
+msgid "Mean rate of streams closed in the last minute"
+msgstr "Rata medie a fluxurilor închise în ultimul minut"
 
 msgid "sent"
 msgstr "trimis"
@@ -4853,6 +5005,9 @@ msgstr "Exponentul de respingere prin accelerație"
 msgid "Maximum Participating Tunnels"
 msgstr "Numărul maxim de tuneluri participante"
 
+msgid "Timer Threads"
+msgstr "Fire de cronometru"
+
 msgid "Build Handler Maximum Queue"
 msgstr "Coada maximă a handler-ului de construcție"
 
@@ -5206,6 +5361,11 @@ msgstr "Fereastra maximă de congestie în timpul startului lent."
 
 msgid "Per-connection inbound buffer cap (bytes)."
 msgstr "Plafonul bufferului de intrare per conexiune (octeți)."
+
+msgid "Timer worker threads; higher reduces event delay."
+msgstr ""
+"Fire de lucru pentru cronometru; o valoare mai mare reduce întârzierea "
+"evenimentelor."
 
 msgid "Dynamic cap on concurrent streams per destination."
 msgstr "Plafonul dinamic al fluxurilor concurente per destinație."
@@ -7028,6 +7188,15 @@ msgstr "configurare webapps"
 msgid "The Java web applications listed below are started by the webConsole client and run in the same JVM as the router. They are usually web applications accessible through the router console. They may be complete applications (e.g. i2psnark), front-ends to another client or application which must be separately enabled (e.g. susidns, i2ptunnel), or have no web interface at all (e.g. addressbook)."
 msgstr "Aplicațiile web Java enumerate mai jos sunt pornite de clientul WebConsole și se execută în același JVM ca și ruterul. Acestea sunt, de obicei, aplicații web accesibile prin consola routerului. Acestea pot fi aplicații complete (de exemplu, i2psnark), front-end-uri către un alt client sau aplicație care trebuie să fie activată separat (de exemplu, susidns, i2ptunnel) sau să nu aibă interfață web la toate (de exemplu, agenda de adrese). g i2psnark), front-end-uri către un alt client sau aplicație care trebuie să fie activate separat (de ex g susidns, i2ptunnel) sau nu au deloc interfață web (de ex g agenda)"
 
+msgid "Router Session Key Manager"
+msgstr "Gestionar de chei de sesiune al routerului"
+
+msgid "Client Session Key Managers"
+msgstr "Gestionari de chei de sesiune pentru clienți"
+
+msgid "Router DHT"
+msgstr "DHT-ul routerului"
+
 msgid "Open in new tab"
 msgstr "Deschide în filă nouă"
 
@@ -7602,14 +7771,18 @@ msgstr "Perioada minimă de testare a tunelului în milisecunde. Testele de tune
 msgid "Maximum tunnel test period in milliseconds. Tunnel tests never wait longer than this for a reply, even on high-latency paths. [Default is 50000 (50 seconds)]"
 msgstr "Perioada maximă de testare a tunelului în milisecunde. Testele de tunel nu așteaptă niciodată mai mult decât atât pentru un răspuns, chiar și pe căi cu latență ridicată. [Implicit este 50000 (50 secunde)]"
 
-msgid "Number of tunnel build timeouts before a peer is marked as a ghost (blacklisted for tunnel participation). Higher values tolerate more transient failures. [Default is 3]"
-msgstr "Numărul de timeout-uri de construcție a tunelului înainte ca un peer să fie marcat ca fantomă (listat negru pentru participarea la tuneluri). Valorile mai mari tolerează mai multe eșecuri tranzitorii. [Implicit este 3]"
+msgid "Number of tunnel build timeouts before a peer is marked as a ghost (excluded from tunnel participation). Higher values tolerate more transient failures. [Default is 1]"
+msgstr ""
+"Număr de expirări de construire a tunelului înainte ca un coleg să fie "
+"marcat ca fantomă (exclus din participarea la tuneluri). Valorile mai "
+"mari tolerează mai multe defecțiuni tranzitorii. [Implicit este 1]"
 
-msgid "Cooldown period in milliseconds before a ghost-marked peer can be considered for tunnel participation again. Shorter values allow faster peer reuse. [Default is 180000 (3 minutes)]"
-msgstr "Perioada de răcire în milisecunde înainte ca un peer marcat ca fantomă să poată fi considerat din nou pentru participarea la tuneluri. Valorile mai scurte permit reutilizarea mai rapidă a peer-ului. [Implicit este 180000 (3 minute)]"
-
-msgid "Cooldown period in milliseconds for ghost-marked peers during attack mode. Longer cooldowns limit exposure to potentially malicious peers during high-stress periods. [Default is 300000 (5 minutes)]"
-msgstr "Perioada de răcire în milisecunde pentru peer-ii marcați ca fantomă în timpul modului de atac. Perioadele mai lungi de răcire limitează expunerea la peer-i potențial rău intenționați în perioadele de stres ridicat. [Implicit este 300000 (5 minute)]"
+msgid "Cooldown period in milliseconds before a ghost-marked peer can be promoted into the tunnel peer tiers again. Shorter values return recovered peers to service faster. [Default is 90000 (90 seconds)]"
+msgstr ""
+"Perioadă de răcire în milisecunde înainte ca un coleg marcat ca fantomă "
+"să poată fi promovat din nou în nivelurile de colegi de tunel. Valorile "
+"mai scurte readuc mai rapid colegii recuperați în serviciu. [Implicit "
+"este 90000 (90 secunde)]"
 
 msgid "Minimum number of incoming tunnel build requests accepted per peer per clean window. Prevents starving peers during low-traffic periods. [Default is 10]"
 msgstr "Numărul minim de cereri de construcție a tunelului primite acceptate per peer per fereastră curată. Previne înfometarea peer-ilor în perioadele de trafic redus. [Implicit este 10]"
@@ -10039,3 +10212,35 @@ msgstr "Următorul"
 
 msgid "Finished"
 msgstr "Finalizat"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -126,23 +126,46 @@ msgstr "همتایان بدون آدرس IP منتشر شده"
 msgid "Average tunnel build success (%)"
 msgstr "درصد موفقیت متوسط ​​ساخت تونل"
 
+msgid "Tier promotions held back for a peer with no usable address"
+msgstr "ارتقای سطح به تعویق افتاده برای همتایی با نشانی قابل استفاده"
+
+msgid "RouterInfo refreshes issued for peers held out of the tiers"
+msgstr ""
+"نوسازی‌های RouterInfo صادر شده برای همتایان نگه‌داشته‌شده بیرون از سطوح"
+
+msgid "Tier scans that left the fast or high-capacity tier short of target"
+msgstr "پویش‌های سطحی که سطح سریع یا باظرفیت بالا را زیر هدف باقی گذاشت"
+
+msgid "RouterInfos requested for stored profiles that had none"
+msgstr ""
+"درخواست‌های RouterInfo برای نمایه‌های ذخیره‌شده‌ای که هیچ‌کدام نداشتند"
+
+msgid "Build timeouts recorded against a peer as a ghost mark"
+msgstr "مهلت‌های ساخت ثبت‌شده برای یک همتا به‌عنوان علامت شبح"
+
+msgid "Ghost marks cleared by a successful build reply"
+msgstr "علامت‌های شبح پاک‌شده با پاسخ ساخت موفق"
+
+msgid "Peers currently excluded as ghosts"
+msgstr "همتان فعلی که به‌عنوان شبح کنار گذاشته شده‌اند"
+
+msgid "Ghost peers in the fast or high-capacity tiers"
+msgstr "همتان شبح در سطوح سریع یا باظرفیت بالا"
+
+msgid "Duplicate CLOSE safety-net messages sent"
+msgstr "پیام‌های ایمنی CLOSE تکراری ارسال شده"
+
 msgid "Memory used by the JVM"
 msgstr "حافظه استفاده‌شده توسط JVM"
 
 msgid "maximum"
 msgstr "حداکثر"
 
-msgid "No transports"
-msgstr "بدون حمل و نقل (مخفی یا راه اندازی؟)"
-
 msgid "Unsupported signature type"
 msgstr "نوع امضا پشتیبانی نشده"
 
 msgid "No support for our signature type"
 msgstr "پشتیبانی از نوع امضای ما وجود ندارد"
-
-msgid "Unreachable on any transport"
-msgstr "در هیچ حمل و نقلی غیر قابل دسترس است"
 
 msgid "Cannot enumerate UPnP devices on Android."
 msgstr "نمی‌توان دستگاه‌های UPnP را در اندروید فهرست کرد."
@@ -839,6 +862,9 @@ msgstr "کنسول"
 
 msgid "To enable SSL access for the Router Console, see the commented <code>clients.config</code> file located in your I2P application directory for more information. You will need to edit the RouterConsoleRunner config file located in the directory: "
 msgstr "برای فعال سازی دسترسی SSL برای کنسول روتر، برای دریافت اطلاعات بیشتر وارد فایل <code>clients.config</code> که در دایرکتوری برنامه I2P شما قرار دارد شوید. شما باید فایل پیکربندی RouterConsoleRunner را که در دایرکتوری واقع شده است ویرایش کنید: "
+
+msgid "No client session key managers."
+msgstr "هیچ مدیر کلید نشست کارخواه وجود ندارد."
 
 msgid "Save disabled, edit the router.config file to make changes"
 msgstr "ذخیره غیرفعال است، برای ایجاد تغییرات فایل router.config را ویرایش کنید"
@@ -2052,20 +2078,34 @@ msgstr "بهبود یافته است"
 msgid "vs baseline"
 msgstr "در مقابل خط پایه"
 
+#, java-format
+msgid "Out: {0} / {1}"
+msgstr "خروجی: {0} / {1}"
+
+#, java-format
+msgid "In: {0} / {1}"
+msgstr "ورودی: {0} / {1}"
+
 msgid "CPU"
 msgstr "پردازنده"
 
-msgid "CPU load average"
-msgstr "میانگین بار پردازنده"
+msgid "JVM CPU load average"
+msgstr "میانگین بار پردازنده JVM"
+
+#, java-format
+msgid "{0} cores"
+msgstr "{0} هسته"
 
 msgid "Memory"
 msgstr "حافظه"
 
-msgid "Memory usage"
-msgstr "میزان استفاده از حافظه"
+#, java-format
+msgid "Used: {0} / {1} max"
+msgstr "استفاده‌شده: {0} / {1} حداکثر"
 
-msgid "Router uptime"
-msgstr "زمان فعال بودن روتر"
+#, java-format
+msgid "Since {0}"
+msgstr "از {0}"
 
 msgid "Job Lag"
 msgstr "تاخیر شغلی"
@@ -2091,6 +2131,10 @@ msgstr "نخ‌ها"
 msgid "Active JVM threads"
 msgstr "نخ‌های فعال JVM"
 
+#, java-format
+msgid "Empty at {0}"
+msgstr "خالی در {0}"
+
 msgid "NTCP Estab"
 msgstr "برقراری NTCP"
 
@@ -2112,20 +2156,24 @@ msgstr "زمان انقضای ارسال مجدد SSU"
 msgid "Conns/s"
 msgstr "اتصال/ثانیه"
 
-msgid "NTCP connections established per second"
-msgstr "اتصال‌های NTCP برقرار شده در هر ثانیه"
+#, java-format
+msgid "Full at {0}/s"
+msgstr "پر در {0}/ث"
+
+msgid "New NTCP connections (1 min)"
+msgstr "اتصال‌های جدید NTCP (۱ دقیقه)"
 
 msgid "Msgs/s"
 msgstr "پیام/ثانیه"
 
-msgid "Messages delivered per second"
-msgstr "پیام‌های تحویل داده شده در هر ثانیه"
+msgid "Messages delivered (1 min)"
+msgstr "پیام‌های تحویل‌شده (۱ دقیقه)"
 
 msgid "RTT"
 msgstr "زمان رفت‌وبرگشت"
 
-msgid "End-to-end message round trip time"
-msgstr "زمان رفت‌وبرگشت پیام سرتاسر"
+msgid "End-to-end client message round trip"
+msgstr "رفت‌وبرگشت پیام کارخواه از سر به سر"
 
 msgid "Timeout"
 msgstr "زمان انقضا"
@@ -2139,20 +2187,28 @@ msgstr "ساخت تونل"
 msgid "Client tunnel build latency"
 msgstr "تأخیر ساخت تونل مشتری"
 
+#, java-format
+msgid "In: {0} / Out: {1}"
+msgstr "ورودی: {0} / خروجی: {1}"
+
 msgid "Active Peers"
 msgstr "همتاهای فعال"
 
-msgid "Active peers (last 60s)"
-msgstr "همتاهای فعال (۶۰ ثانیه اخیر)"
+#, java-format
+msgid "Full at {0}"
+msgstr "پر در {0}"
+
+msgid "Reached in the last 60s"
+msgstr "در ۶۰ ثانیه گذشته دسترسی یافت شد"
 
 msgid "Known Peers"
 msgstr "همتاهای شناخته‌شده"
 
-msgid "Known routers in network database"
-msgstr "روترهای شناخته‌شده در پایگاه داده شبکه"
+msgid "In the network database"
+msgstr "در پایگاه داده شبکه"
 
-msgid "Active I2CP clients"
-msgstr "مشتری‌های فعال I2CP"
+msgid "I2CP clients connected"
+msgstr "کارخواه‌های I2CP متصل"
 
 msgid "Transit"
 msgstr "ترانزیت"
@@ -2166,8 +2222,8 @@ msgstr "جریان‌ها"
 msgid "Build Success"
 msgstr "موفقیت را بسازید"
 
-msgid "Tunnel build success rate"
-msgstr "نرخ موفقیت ساخت تونل"
+msgid "Tunnel build success rate (1 min)"
+msgstr "نرخ موفقیت ساخت تونل (۱ دقیقه)"
 
 msgid "NetDB"
 msgstr "پایگاه شبکه"
@@ -2178,26 +2234,31 @@ msgstr "زمان جستجوی پایگاه شبکه"
 msgid "Banned"
 msgstr "مسدود شده"
 
-msgid "Total banned peers"
-msgstr "مجموع همتاهای مسدود‌شده"
+msgid "Peers excluded from all interactions"
+msgstr "همسالان از همه تعاملات حذف شدند"
+
+#, java-format
+msgid "{0} of {1} known"
+msgstr "{0} از {1} شناخته‌شده"
 
 msgid "LeaseSets"
 msgstr "مجموعه های اجاره نامه"
 
-msgid "Stored LeaseSets in floodfill"
-msgstr "LeaseSets ذخیره شده در گره سیل"
+msgid "Stored LeaseSets"
+msgstr "LeaseSet ذخیره‌شده"
 
 msgid "Cache Hit"
 msgstr "برخورد با حافظه نهان"
 
-msgid "NetDB lookup success rate"
-msgstr "نرخ موفقیت جستجوی پایگاه شبکه"
+#, java-format
+msgid "Matched {0} of {1} lookups (1 min)"
+msgstr "نتیجه‌دار {0} از {1} جست‌وجو (۱ دقیقه)"
 
 msgid "Flood Verify"
 msgstr "تأیید فلودفیل"
 
-msgid "Floodfill verify time"
-msgstr "زمان تایید گره سیل"
+msgid "Floodfill verify time (1 min)"
+msgstr "زمان راستی‌آزمایی Floodfill (۱ دقیقه)"
 
 msgid "NetDB ACK"
 msgstr "تأیید پایگاه شبکه"
@@ -2208,20 +2269,20 @@ msgstr "زمان تأیید همتا در پایگاه شبکه"
 msgid "Lookups/s"
 msgstr "جستجو/ثانیه"
 
-msgid "NetDB lookups handled per second"
-msgstr "جستجوهای پایگاه شبکه رسیدگی‌شده در هر ثانیه"
+msgid "Lookups handled (1 min)"
+msgstr "جست‌وجوهای پردازش‌شده (۱ دقیقه)"
 
 msgid "Requests/s"
 msgstr "درخواست/ثانیه"
 
-msgid "Combined store + lookup operations per second"
-msgstr "عملیات ترکیبی ذخیره و جستجو در هر ثانیه"
+msgid "Stores + lookups (1 min)"
+msgstr "ذخیره‌ها + جست‌وجوها (۱ دقیقه)"
 
 msgid "Stores/s"
 msgstr "ذخیره/ثانیه"
 
-msgid "NetDB store messages handled per second"
-msgstr "پیام‌های ذخیره پایگاه شبکه رسیدگی‌شده در هر ثانیه"
+msgid "Stores handled (1 min)"
+msgstr "ذخیره‌های پردازش‌شده (۱ دقیقه)"
 
 msgid "LS Timeout"
 msgstr "انقضای LS"
@@ -3205,6 +3266,9 @@ msgstr "مشاهده نمایه"
 msgid "Configure peer"
 msgstr "پیکربندی همتا"
 
+msgid "Memory usage"
+msgstr "میزان استفاده از حافظه"
+
 msgid "Hidden"
 msgstr "پنهان"
 
@@ -3348,8 +3412,8 @@ msgstr "همتاهای پهنای باند بالا برای بسیاری از �
 msgid "Reliable"
 msgstr "قابل اعتماد"
 
-msgid "High-capacity peers with good acceptance"
-msgstr "همسالان با ظرفیت بالا با پذیرش خوب"
+msgid "Peers with good acceptance and recent activity"
+msgstr "همتان با پذیرش خوب و فعالیت اخیر"
 
 msgid "Peers that store and serve NetDb info"
 msgstr "همتاهایی که اطلاعات NetDb را ذخیره و ارائه می کنند"
@@ -3360,17 +3424,21 @@ msgstr "معروف"
 msgid "Total entries in network database"
 msgstr "کل ورودی ها در پایگاه داده شبکه"
 
+msgid "Profiles"
+msgstr "پروفایل ها"
+
 msgid "Profiles with activity in the last hour"
 msgstr "پروفایل‌های دارای فعالیت در ساعت گذشته"
+
+#, java-format
+msgid "{0} of {1} stored"
+msgstr "{0} از {1} ذخیره‌شده"
 
 msgid "Unreachable"
 msgstr "غیر قابل دسترس"
 
-msgid "Peers without a reachable address"
-msgstr "همتایان بدون آدرس قابل دسترسی"
-
-msgid "Peers excluded from all interactions"
-msgstr "همسالان از همه تعاملات حذف شدند"
+msgid "Peers without a published address"
+msgstr "همتان بدون نشانی منتشرشده"
 
 msgid "/min"
 msgstr "/ دقیقه"
@@ -3378,8 +3446,12 @@ msgstr "/ دقیقه"
 msgid "Test Fail"
 msgstr "تست شکست"
 
-msgid "Connectivity test failures per minute"
-msgstr "خرابی تست اتصال در دقیقه"
+msgid "Connectivity test failures in the last minute"
+msgstr "شکست‌های آزمون اتصال‌پذیری در دقیقه گذشته"
+
+#, java-format
+msgid "Empty at {0}/min"
+msgstr "خالی در {0}/د"
 
 msgid "Peer Connections"
 msgstr "اتصالات همتا"
@@ -3653,26 +3725,40 @@ msgstr[1] "{0} نمایه قدیمی پنهان شد"
 msgid "Share of total profiles shown"
 msgstr "سهم نمایه‌های کل نمایش داده شده"
 
-msgid "peers"
-msgstr "همتایان"
-
-msgid "Share of tier profiles shown"
-msgstr "سهم نمایه‌های لایه نمایش داده شده"
-
 msgid "Window"
 msgstr "پنجره"
 
 msgid "Fast RTT"
 msgstr "RTT سریع"
 
-msgid "Max RTT for fast-tier membership (ms)"
-msgstr "حداکثر RTT برای عضویت در لایه سریع (میلی‌ثانیه)"
+msgid "Max RTT for fast-tier membership"
+msgstr "بیشینه RTT برای عضویت در سطح سریع"
 
-msgid "Average loss of fast-tier peers (%)"
-msgstr "میانگین گم‌شدگی همتاهای لایه سریع (٪)"
+msgid "Rises with network latency"
+msgstr "با تأخیر شبکه بالا می‌رود"
 
-msgid "Average loss of high-capacity peers (%)"
-msgstr "میانگین گم‌شدگی همتاهای با ظرفیت بالا (٪)"
+msgid "Average loss of fast-tier peers"
+msgstr "میانگین از دست دادن همتایان سطح سریع"
+
+msgid "Average loss of high-capacity peers"
+msgstr "میانگین از دست دادن همتایان باظرفیت بالا"
+
+msgid "Average direct-link RTT of tier peers"
+msgstr "میانگین RTT پیوند مستقیم همتایان سطح"
+
+#, java-format
+msgid "{0} of {1} measured"
+msgstr "{0} از {1} اندازه‌گیری‌شده"
+
+msgid "1h Contact"
+msgstr "تماس 1 ساعت"
+
+msgid "Heard from in the last hour"
+msgstr "در ساعت گذشته خبری از آن‌ها بوده"
+
+#, java-format
+msgid "{0} of {1} tier peers"
+msgstr "{0} از {1} همتای سطح"
 
 msgid "Heard from within the display cutoff"
 msgstr "شنیده شده از درون محدوده نمایش"
@@ -3683,11 +3769,19 @@ msgstr "جستجوها"
 msgid "Lookup success rate"
 msgstr "نرخ موفقیت جستجو"
 
+#, java-format
+msgid "{0} of {1} lookups"
+msgstr "{0} از {1} جست‌وجو"
+
 msgid "Stores"
 msgstr "ذخیره‌ها"
 
 msgid "Store success rate"
 msgstr "نرخ موفقیت ذخیره"
+
+#, java-format
+msgid "{0} of {1} peers"
+msgstr "{0} از {1} همتا"
 
 msgid "Definitions"
 msgstr "تعاریف"
@@ -3760,11 +3854,25 @@ msgstr "چند همتای جدید در اخرین مدت به ما معرفی �
 msgid "Known floodfills"
 msgstr "گره های سیل شناخته شده"
 
-msgid "No-Fail"
-msgstr "بدون شکست"
+msgid "Reachable, unbanlisted and heard from"
+msgstr "قابل دسترسی، بدون بن، و دارای خبر اخیر"
 
-msgid "No lookup failures (1h)"
-msgstr "بدون شکست جستجو (1 ساعت)"
+msgid "Active bans of floodfill-capable peers"
+msgstr "بن‌های فعال روی همتایان توانمند Floodfill"
+
+#, java-format
+msgid "of {0} known"
+msgstr "از {0} شناخته‌شده"
+
+msgid "Fail"
+msgstr "شکست"
+
+msgid "Lookup failures in the last hour"
+msgstr "شکست‌های جست‌وجو در ساعت گذشته"
+
+#, java-format
+msgid "across {0} listed peers"
+msgstr "در میان {0} همتای فهرست‌شده"
 
 msgid "Response"
 msgstr "پاسخ"
@@ -3772,11 +3880,16 @@ msgstr "پاسخ"
 msgid "Lookup response time (1h)"
 msgstr "زمان پاسخ جستجو (1 ساعت)"
 
-msgid "1h Contact"
-msgstr "تماس 1 ساعت"
+#, java-format
+msgid "{0} peers measured"
+msgstr "{0} همتا اندازه‌گیری شد"
 
 msgid "Contacted within 1h"
 msgstr "تماس گرفته شده در 1 ساعت گذشته"
+
+#, java-format
+msgid "{0} of {1} listed"
+msgstr "{0} از {1} فهرست‌شده"
 
 msgid "1h Fail Rate"
 msgstr "1 ساعت میزان شکست"
@@ -3814,17 +3927,33 @@ msgstr "همه"
 msgid "SAM bridge is not running."
 msgstr "پل SAM در حال اجرا نیست."
 
+msgid "Sessions"
+msgstr "نشست‌ها"
+
 msgid "Active sessions in SessionsDB"
 msgstr "نشست‌های فعال در SessionsDB"
+
+msgid "Workers"
+msgstr "کارگرها"
 
 msgid "Active / pool worker threads"
 msgstr "نخ‌های فعال / کارگر استخر"
 
-msgid "Pending commands in pool"
-msgstr "فرمان‌های در انتظار در استخر"
+msgid "Queue"
+msgstr "صف"
+
+#, java-format
+msgid "Pending commands: {0} of {1}"
+msgstr "فرمان‌های در انتظار: {0} از {1}"
+
+msgid "Handlers"
+msgstr "گرداننده‌ها"
 
 msgid "Connected pool handlers"
 msgstr "مدیریت‌کننده‌های متصل استخر"
+
+msgid "Stolen"
+msgstr "دزدیده‌شده"
 
 msgid "Sockets stolen for data streaming"
 msgstr "سوکت‌های گرفته‌شده برای جریان داده"
@@ -4143,9 +4272,6 @@ msgstr "تمام اتصالات همتای فعلی را نشان دهید"
 msgid "Router health overview"
 msgstr "نمای کلی سلامت روتر"
 
-msgid "Profiles"
-msgstr "پروفایل ها"
-
 msgid "Show recent peer performance profiles"
 msgstr "پروفایل عملکرد همتایان اخیر را نشان دهید"
 
@@ -4454,6 +4580,27 @@ msgid "1 event"
 msgid_plural "{0} events"
 msgstr[0] "{0} رویدادها"
 msgstr[1] "1 رویداد"
+
+msgid "Open streaming connections"
+msgstr "اتصال‌های جریانی باز"
+
+msgid "Round-trip time (live samples, 1 min)"
+msgstr "زمان رفت‌وبرگشت (نمونه زنده، ۱ دقیقه)"
+
+msgid "Retrans"
+msgstr "بازفرست"
+
+msgid "Share of sends needing retransmit (1 min)"
+msgstr "سهم ارسال‌های نیازمند بازفرستانی (۱ دقیقه)"
+
+msgid "Created + received (1 min)"
+msgstr "ایجاد + دریافت (۱ دقیقه)"
+
+msgid "Throughput"
+msgstr "توان عبوری"
+
+msgid "Mean rate of streams closed in the last minute"
+msgstr "میانگین نرخ جریان‌های بسته‌شده در دقیقه گذشته"
 
 msgid "sent"
 msgstr "ارسال‌شده"
@@ -4842,6 +4989,9 @@ msgstr "توان رد دریچه"
 msgid "Maximum Participating Tunnels"
 msgstr "حداکثر تونل‌های مشارکت‌کننده"
 
+msgid "Timer Threads"
+msgstr "رشته‌های زمان‌سنج"
+
 msgid "Build Handler Maximum Queue"
 msgstr "حداکثر صف پردازشگر ساخت"
 
@@ -5195,6 +5345,9 @@ msgstr "حداکثر پنجره ازدحام در طول شروع آهسته."
 
 msgid "Per-connection inbound buffer cap (bytes)."
 msgstr "سقف بافر ورودی به ازای هر اتصال (بایت)."
+
+msgid "Timer worker threads; higher reduces event delay."
+msgstr "رشته‌های کاری زمان‌سنج؛ مقدار بالاتر تأخیر رویداد را کم می‌کند."
 
 msgid "Dynamic cap on concurrent streams per destination."
 msgstr "سقف پویا بر جریان‌های هم‌زمان به ازای هر مقصد."
@@ -7017,6 +7170,15 @@ msgstr "پیکربندی برنامه های وب"
 msgid "The Java web applications listed below are started by the webConsole client and run in the same JVM as the router. They are usually web applications accessible through the router console. They may be complete applications (e.g. i2psnark), front-ends to another client or application which must be separately enabled (e.g. susidns, i2ptunnel), or have no web interface at all (e.g. addressbook)."
 msgstr "برنامه های وب جاوا موجود در زیر توسط مشتری webConsole شروع و در  JVM همان مسیریاب اجرا می شوند. آن ها معمولا برنامه های وب قابل دسترس است از طریق کنسول مسیریاب هستند. آن ها می توانند برنامه های کامل ( مثلاً i2psnark) ، رابط های کاربری برای برنامه یا مشتری دیگری که باید به طور جداگانه فعال باشند ( مثلاً susidns ، i2ptunnel) یا اینکه هیچ رابط کاربری وبی نداشته باشند ( مثلاً addressbook) باشند."
 
+msgid "Router Session Key Manager"
+msgstr "مدیر کلید نشست مسیریاب"
+
+msgid "Client Session Key Managers"
+msgstr "مدیران کلید نشست کارخواه"
+
+msgid "Router DHT"
+msgstr "DHT مسیریاب"
+
 msgid "Open in new tab"
 msgstr "در زبانه جدید باز کن"
 
@@ -7591,14 +7753,18 @@ msgstr "حداقل دوره آزمایش تونل برحسب میلی‌ثانی
 msgid "Maximum tunnel test period in milliseconds. Tunnel tests never wait longer than this for a reply, even on high-latency paths. [Default is 50000 (50 seconds)]"
 msgstr "حداکثر دوره آزمایش تونل برحسب میلی‌ثانیه. آزمایش‌های تونل هرگز بیش از این مدت صبر نمی‌کنند. [پیش‌فرض 50000 (50 ثانیه)]"
 
-msgid "Number of tunnel build timeouts before a peer is marked as a ghost (blacklisted for tunnel participation). Higher values tolerate more transient failures. [Default is 3]"
-msgstr "تعداد زمان‌های انتظار ساخت تونل قبل از علامت‌گذاری یک همتا به عنوان شبح. مقادیر بالاتر شکست‌های موقت بیشتری را تحمل می‌کنند. [پیش‌فرض 3]"
+msgid "Number of tunnel build timeouts before a peer is marked as a ghost (excluded from tunnel participation). Higher values tolerate more transient failures. [Default is 1]"
+msgstr ""
+"تعداد مهلت‌های ساخت تونل پیش از آن‌که یک همتا به‌عنوان شبح علامت بخورد "
+"(از مشارکت تونلی کنار گذاشته شود). مقادیر بالاتر خطاهای گذرا را بیشتر "
+"تحمل می‌کنند. [پیش‌فرض ۱ است]"
 
-msgid "Cooldown period in milliseconds before a ghost-marked peer can be considered for tunnel participation again. Shorter values allow faster peer reuse. [Default is 180000 (3 minutes)]"
-msgstr "دوره تنفس برحسب میلی‌ثانیه قبل از اینکه یک همتا علامت‌گذاری شده به عنوان شبح دوباره در نظر گرفته شود. مقادیر کوتاه‌تر استفاده مجدد سریعتر را مجاز می‌کند. [پیش‌فرض 180000 (3 دقیقه)]"
-
-msgid "Cooldown period in milliseconds for ghost-marked peers during attack mode. Longer cooldowns limit exposure to potentially malicious peers during high-stress periods. [Default is 300000 (5 minutes)]"
-msgstr "دوره تنفس برحسب میلی‌ثانیه برای همتایان علامت‌گذاری شده به عنوان شبح در حالت حمله. دوره‌های طولانی‌تر قرار گرفتن در معرض را محدود می‌کنند. [پیش‌فرض 300000 (5 دقیقه)]"
+msgid "Cooldown period in milliseconds before a ghost-marked peer can be promoted into the tunnel peer tiers again. Shorter values return recovered peers to service faster. [Default is 90000 (90 seconds)]"
+msgstr ""
+"دوره سرد شدن به میلی‌ثانیه پیش از آن‌که همتای علامت‌شبح‌دار بتواند "
+"دوباره به سطوح همتای تونل ارتقا یابد. مقادیر کوتاه‌تر همتایان "
+"بازیابی‌شده را سریع‌تر به سرویس بازمی‌گردانند. [پیش‌فرض ۹۰۰۰۰ (۹۰ ثانیه) "
+"است]"
 
 msgid "Minimum number of incoming tunnel build requests accepted per peer per clean window. Prevents starving peers during low-traffic periods. [Default is 10]"
 msgstr "حداقل تعداد درخواست های ساخت تونل ورودی به ازای هر همتا در هر پنجره تمیز پذیرفته می شود. از گرسنگی همسالان در دوره های کم تردد جلوگیری می کند. [پیش‌فرض 10 است]"
@@ -10028,3 +10194,35 @@ msgstr "بعدی"
 
 msgid "Finished"
 msgstr "به پایان رسیده"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -126,23 +126,48 @@ msgstr "Peers utan en publicerad IP-adress"
 msgid "Average tunnel build success (%)"
 msgstr "Genomsnittlig tunnelbyggd framgång %"
 
+msgid "Tier promotions held back for a peer with no usable address"
+msgstr ""
+"Tier-befordringar hållna tillbaka för en peer utan användbar adress"
+
+msgid "RouterInfo refreshes issued for peers held out of the tiers"
+msgstr ""
+"RouterInfo-uppdateringar utfärdade för peers hållna utanför tierna"
+
+msgid "Tier scans that left the fast or high-capacity tier short of target"
+msgstr ""
+"Tier-skanningar som lämnade den snabba eller högkapacitetstieren under "
+"målet"
+
+msgid "RouterInfos requested for stored profiles that had none"
+msgstr "RouterInfos begärda för lagrade profiler som inte hade några"
+
+msgid "Build timeouts recorded against a peer as a ghost mark"
+msgstr "Byggtidsgränser registrerade mot en peer som spökmarkering"
+
+msgid "Ghost marks cleared by a successful build reply"
+msgstr "Spökmarkeringar rensade efter ett lyckat byggsvar"
+
+msgid "Peers currently excluded as ghosts"
+msgstr "Peers som för närvarande utesluts som spök"
+
+msgid "Ghost peers in the fast or high-capacity tiers"
+msgstr "Spökpeers i de snabba eller högkapacitetstiererna"
+
+msgid "Duplicate CLOSE safety-net messages sent"
+msgstr "Dubbla CLOSE-skyddsnätsmeddelanden skickade"
+
 msgid "Memory used by the JVM"
 msgstr "Minne som används av JVM"
 
 msgid "maximum"
 msgstr "maximum"
 
-msgid "No transports"
-msgstr "Inga transporter (gömd eller håller på att startas?)"
-
 msgid "Unsupported signature type"
 msgstr "Icke stödd signeringstyp"
 
 msgid "No support for our signature type"
 msgstr "Inget stöd för vår signeringstyp"
-
-msgid "Unreachable on any transport"
-msgstr "Onåbar på varje transport"
 
 msgid "Cannot enumerate UPnP devices on Android."
 msgstr "Kan inte räkna upp UPnP-enheter på Android."
@@ -839,6 +864,9 @@ msgstr "Konsol"
 
 msgid "To enable SSL access for the Router Console, see the commented <code>clients.config</code> file located in your I2P application directory for more information. You will need to edit the RouterConsoleRunner config file located in the directory: "
 msgstr "För att aktivera SSL -åtkomst för routerkonsolen, se den kommenterade <code>clients.config</code> -filen som finns i din i2p -applikationskatalog för mer information. Du måste redigera routerconsolerunner -konfigurationsfilen i katalogen"
+
+msgid "No client session key managers."
+msgstr "Inga sessionnyckelhanterare för klienter."
 
 msgid "Save disabled, edit the router.config file to make changes"
 msgstr "Spara inaktiverat, redigera filen router.config för att göra ändringa"
@@ -2052,20 +2080,34 @@ msgstr "förbättrats"
 msgid "vs baseline"
 msgstr "vs baslinje"
 
+#, java-format
+msgid "Out: {0} / {1}"
+msgstr "Ut: {0} / {1}"
+
+#, java-format
+msgid "In: {0} / {1}"
+msgstr "In: {0} / {1}"
+
 msgid "CPU"
 msgstr "CPU"
 
-msgid "CPU load average"
-msgstr "CPU-genomsnittlig belastning"
+msgid "JVM CPU load average"
+msgstr "Genomsnittlig CPU-belastning för JVM"
+
+#, java-format
+msgid "{0} cores"
+msgstr "{0} kärnor"
 
 msgid "Memory"
 msgstr "Minne"
 
-msgid "Memory usage"
-msgstr "Minnesanvändning"
+#, java-format
+msgid "Used: {0} / {1} max"
+msgstr "Använt: {0} / {1} max"
 
-msgid "Router uptime"
-msgstr "Router-drifttid"
+#, java-format
+msgid "Since {0}"
+msgstr "Sedan {0}"
 
 msgid "Job Lag"
 msgstr "Jobbdröjsmål"
@@ -2091,6 +2133,10 @@ msgstr "Trådar"
 msgid "Active JVM threads"
 msgstr "Aktiva JVM-trådar"
 
+#, java-format
+msgid "Empty at {0}"
+msgstr "Tom vid {0}"
+
 msgid "NTCP Estab"
 msgstr "NTCP-anslutning"
 
@@ -2112,20 +2158,24 @@ msgstr "SSU-överföringstimeout"
 msgid "Conns/s"
 msgstr "Anslutningar/s"
 
-msgid "NTCP connections established per second"
-msgstr "NTCP-anslutningar etablerade per sekund"
+#, java-format
+msgid "Full at {0}/s"
+msgstr "Full vid {0}/s"
+
+msgid "New NTCP connections (1 min)"
+msgstr "Nya NTCP-anslutningar (1 min)"
 
 msgid "Msgs/s"
 msgstr "Medd./s"
 
-msgid "Messages delivered per second"
-msgstr "Meddelanden levererade per sekund"
+msgid "Messages delivered (1 min)"
+msgstr "Levererade meddelanden (1 min)"
 
 msgid "RTT"
 msgstr "RTT"
 
-msgid "End-to-end message round trip time"
-msgstr "Ände-till-ändemeddelande rundresö tid"
+msgid "End-to-end client message round trip"
+msgstr "Klientmeddelandens tur-och-returtid ände till ände"
 
 msgid "Timeout"
 msgstr "Timeout"
@@ -2139,20 +2189,28 @@ msgstr "Tunnelbyggnad"
 msgid "Client tunnel build latency"
 msgstr "Klient-tunnelbyggnadslatens"
 
+#, java-format
+msgid "In: {0} / Out: {1}"
+msgstr "In: {0} / Ut: {1}"
+
 msgid "Active Peers"
 msgstr "Aktiva peers"
 
-msgid "Active peers (last 60s)"
-msgstr "Aktiva peers (senaste 60s)"
+#, java-format
+msgid "Full at {0}"
+msgstr "Full vid {0}"
+
+msgid "Reached in the last 60s"
+msgstr "Nådda under de senaste 60 sekunderna"
 
 msgid "Known Peers"
 msgstr "Kända peers"
 
-msgid "Known routers in network database"
-msgstr "Kända routrar i nätverksdatabasen"
+msgid "In the network database"
+msgstr "I nätverksdatabasen"
 
-msgid "Active I2CP clients"
-msgstr "Aktiva I2CP-klienter"
+msgid "I2CP clients connected"
+msgstr "Anslutna I2CP-klienter"
 
 msgid "Transit"
 msgstr "Transitera"
@@ -2166,8 +2224,8 @@ msgstr "Strömmar"
 msgid "Build Success"
 msgstr "Bygg framgång"
 
-msgid "Tunnel build success rate"
-msgstr "Tunnelbyggnad framgångsfrekvens"
+msgid "Tunnel build success rate (1 min)"
+msgstr "Lyckandefrekvens för tunnelbygge (1 min)"
 
 msgid "NetDB"
 msgstr "NetDB"
@@ -2178,26 +2236,31 @@ msgstr "NetDB-uppslagstid"
 msgid "Banned"
 msgstr "Förbjudna"
 
-msgid "Total banned peers"
-msgstr "Totalt blockerade peers"
+msgid "Peers excluded from all interactions"
+msgstr "Kamrater uteslutna från alla interaktioner"
+
+#, java-format
+msgid "{0} of {1} known"
+msgstr "{0} av {1} kända"
 
 msgid "LeaseSets"
 msgstr "LeaseSet"
 
-msgid "Stored LeaseSets in floodfill"
-msgstr "Lagrade LeaseSets i flood nod"
+msgid "Stored LeaseSets"
+msgstr "Lagrade LeaseSets"
 
 msgid "Cache Hit"
 msgstr "Cacheträff"
 
-msgid "NetDB lookup success rate"
-msgstr "NetDB-uppslag framgångsfrekvens"
+#, java-format
+msgid "Matched {0} of {1} lookups (1 min)"
+msgstr "Matchade {0} av {1} uppslag (1 min)"
 
 msgid "Flood Verify"
 msgstr "Floodfill-verifiering"
 
-msgid "Floodfill verify time"
-msgstr "verifiera tid för översvämningsnod"
+msgid "Floodfill verify time (1 min)"
+msgstr "Floodfill-bekräftelsetid (1 min)"
 
 msgid "NetDB ACK"
 msgstr "NetDB-bekräftelse"
@@ -2208,20 +2271,20 @@ msgstr "NetDB-peer-bekräftelsetid"
 msgid "Lookups/s"
 msgstr "Slag/s"
 
-msgid "NetDB lookups handled per second"
-msgstr "NetDB-uppslag hanterade per sekund"
+msgid "Lookups handled (1 min)"
+msgstr "Hanterade uppslag (1 min)"
 
 msgid "Requests/s"
 msgstr "Förfrågningar/s"
 
-msgid "Combined store + lookup operations per second"
-msgstr "Kombinerade lagrings- och uppslagsoperationer per sekund"
+msgid "Stores + lookups (1 min)"
+msgstr "Lagringar + uppslag (1 min)"
 
 msgid "Stores/s"
 msgstr "Lagringar/s"
 
-msgid "NetDB store messages handled per second"
-msgstr "NetDB-lagringsmeddelanden hanterade per sekund"
+msgid "Stores handled (1 min)"
+msgstr "Hanterade lagringar (1 min)"
 
 msgid "LS Timeout"
 msgstr "LS-timeout"
@@ -3205,6 +3268,9 @@ msgstr "Visa profil"
 msgid "Configure peer"
 msgstr "Konfigurera peer"
 
+msgid "Memory usage"
+msgstr "Minnesanvändning"
+
 msgid "Hidden"
 msgstr "Dold"
 
@@ -3348,8 +3414,8 @@ msgstr "Peers med hög bandbredd för många tunnlar"
 msgid "Reliable"
 msgstr "Pålitlig"
 
-msgid "High-capacity peers with good acceptance"
-msgstr "Högkapacitetskollegor med god acceptans"
+msgid "Peers with good acceptance and recent activity"
+msgstr "Peers med god acceptans och nylig aktivitet"
 
 msgid "Peers that store and serve NetDb info"
 msgstr "Peers som lagrar och serverar NetDb-information"
@@ -3360,17 +3426,21 @@ msgstr "Kända"
 msgid "Total entries in network database"
 msgstr "Totalt antal poster i nätverksdatabasen"
 
+msgid "Profiles"
+msgstr "Profiler"
+
 msgid "Profiles with activity in the last hour"
 msgstr "Profiler med aktivitet under den senaste timmen"
+
+#, java-format
+msgid "{0} of {1} stored"
+msgstr "{0} av {1} lagrade"
 
 msgid "Unreachable"
 msgstr "Onåbar"
 
-msgid "Peers without a reachable address"
-msgstr "Peers utan nåbar adress"
-
-msgid "Peers excluded from all interactions"
-msgstr "Kamrater uteslutna från alla interaktioner"
+msgid "Peers without a published address"
+msgstr "Peers utan publicerad adress"
 
 msgid "/min"
 msgstr "/min"
@@ -3378,8 +3448,12 @@ msgstr "/min"
 msgid "Test Fail"
 msgstr "Testet misslyckades"
 
-msgid "Connectivity test failures per minute"
-msgstr "Anslutningstestfel per minut"
+msgid "Connectivity test failures in the last minute"
+msgstr "Anslutningstestfel under den senaste minuten"
+
+#, java-format
+msgid "Empty at {0}/min"
+msgstr "Tom vid {0}/min"
 
 msgid "Peer Connections"
 msgstr "Peer-anslutningar"
@@ -3653,26 +3727,40 @@ msgstr[1] "{0} föråldrade profiler dolda"
 msgid "Share of total profiles shown"
 msgstr "Andel av totalt antal profiler som visas"
 
-msgid "peers"
-msgstr "peers"
-
-msgid "Share of tier profiles shown"
-msgstr "Andel av nivåprofiler som visas"
-
 msgid "Window"
 msgstr "Fönster"
 
 msgid "Fast RTT"
 msgstr "Snabb RTT"
 
-msgid "Max RTT for fast-tier membership (ms)"
-msgstr "Max RTT för medlemskap på snabb nivå (ms)"
+msgid "Max RTT for fast-tier membership"
+msgstr "Max RTT för medlemskap i den snabba tieren"
 
-msgid "Average loss of fast-tier peers (%)"
-msgstr "Genomsnittlig förlust för noder på snabb nivå (%)"
+msgid "Rises with network latency"
+msgstr "Stiger med nätverksfördröjningen"
 
-msgid "Average loss of high-capacity peers (%)"
-msgstr "Genomsnittlig förlust för noder med hög kapacitet (%)"
+msgid "Average loss of fast-tier peers"
+msgstr "Genomsnittligt bortfall av peers i den snabba tieren"
+
+msgid "Average loss of high-capacity peers"
+msgstr "Genomsnittligt bortfall av högkapacitetspeers"
+
+msgid "Average direct-link RTT of tier peers"
+msgstr "Genomsnittlig direktlänk-RTT för tier-peers"
+
+#, java-format
+msgid "{0} of {1} measured"
+msgstr "{0} av {1} mätta"
+
+msgid "1h Contact"
+msgstr "1h kontakt"
+
+msgid "Heard from in the last hour"
+msgstr "Kontaktade under den senaste timmen"
+
+#, java-format
+msgid "{0} of {1} tier peers"
+msgstr "{0} av {1} tier-peers"
 
 msgid "Heard from within the display cutoff"
 msgstr "Hördes från inom visningsgränsen"
@@ -3683,11 +3771,19 @@ msgstr "Uppslag"
 msgid "Lookup success rate"
 msgstr "Framgångsfrekvens för uppslag"
 
+#, java-format
+msgid "{0} of {1} lookups"
+msgstr "{0} av {1} uppslag"
+
 msgid "Stores"
 msgstr "Lagringar"
 
 msgid "Store success rate"
 msgstr "Framgångsfrekvens för lagringar"
+
+#, java-format
+msgid "{0} of {1} peers"
+msgstr "{0} av {1} peers"
 
 msgid "Definitions"
 msgstr "Definitioner"
@@ -3760,11 +3856,25 @@ msgstr "hur många nya noder har de berättat för oss om nyligen?"
 msgid "Known floodfills"
 msgstr "Kända floodfills"
 
-msgid "No-Fail"
-msgstr "Felfri"
+msgid "Reachable, unbanlisted and heard from"
+msgstr "Nåbar, inte bannlyst och nyligen kontaktad"
 
-msgid "No lookup failures (1h)"
-msgstr "Inga uppslagsfel (1h)"
+msgid "Active bans of floodfill-capable peers"
+msgstr "Aktiva bannlysningar av peers som klarar floodfill"
+
+#, java-format
+msgid "of {0} known"
+msgstr "av {0} kända"
+
+msgid "Fail"
+msgstr "Fel"
+
+msgid "Lookup failures in the last hour"
+msgstr "Uppslagsfel under den senaste timmen"
+
+#, java-format
+msgid "across {0} listed peers"
+msgstr "över {0} listade peers"
 
 msgid "Response"
 msgstr "Svar"
@@ -3772,11 +3882,16 @@ msgstr "Svar"
 msgid "Lookup response time (1h)"
 msgstr "Svarstid för uppslag (1h)"
 
-msgid "1h Contact"
-msgstr "1h kontakt"
+#, java-format
+msgid "{0} peers measured"
+msgstr "{0} peers mätta"
 
 msgid "Contacted within 1h"
 msgstr "Kontaktad inom 1h"
+
+#, java-format
+msgid "{0} of {1} listed"
+msgstr "{0} av {1} listade"
 
 msgid "1h Fail Rate"
 msgstr "1h felfrekvens"
@@ -3814,17 +3929,33 @@ msgstr "Alla"
 msgid "SAM bridge is not running."
 msgstr "SAM-brygga körs inte."
 
+msgid "Sessions"
+msgstr "Sessioner"
+
 msgid "Active sessions in SessionsDB"
 msgstr "Aktiva sessioner i SessionsDB"
+
+msgid "Workers"
+msgstr "Arbetstrådar"
 
 msgid "Active / pool worker threads"
 msgstr "Aktiva pool-arbetstrådar"
 
-msgid "Pending commands in pool"
-msgstr "Väntande kommandon i pool"
+msgid "Queue"
+msgstr "Kö"
+
+#, java-format
+msgid "Pending commands: {0} of {1}"
+msgstr "Väntande kommandon: {0} av {1}"
+
+msgid "Handlers"
+msgstr "Hanterare"
 
 msgid "Connected pool handlers"
 msgstr "Anslutna poolhanterare"
+
+msgid "Stolen"
+msgstr "Stulna"
 
 msgid "Sockets stolen for data streaming"
 msgstr "Uttag för dataströmning"
@@ -4143,9 +4274,6 @@ msgstr "Visa alla aktuella nodanslutningar"
 msgid "Router health overview"
 msgstr "Router-statusöversikt"
 
-msgid "Profiles"
-msgstr "Profiler"
-
 msgid "Show recent peer performance profiles"
 msgstr "Visa senaste nod-prestandaprofiler"
 
@@ -4454,6 +4582,28 @@ msgid "1 event"
 msgid_plural "{0} events"
 msgstr[0] "1 händelse"
 msgstr[1] "{0} händelser"
+
+msgid "Open streaming connections"
+msgstr "Öppna strömmande anslutningar"
+
+msgid "Round-trip time (live samples, 1 min)"
+msgstr "Tur-och-returtid (liveprover, 1 min)"
+
+msgid "Retrans"
+msgstr "Retrans."
+
+msgid "Share of sends needing retransmit (1 min)"
+msgstr "Andel sändningar som kräver omsändning (1 min)"
+
+msgid "Created + received (1 min)"
+msgstr "Skapade + mottagna (1 min)"
+
+msgid "Throughput"
+msgstr "Genomströmning"
+
+msgid "Mean rate of streams closed in the last minute"
+msgstr ""
+"Genomsnittlig takt på streamar som stängts under den senaste minuten"
 
 msgid "sent"
 msgstr "skickat"
@@ -4842,6 +4992,9 @@ msgstr "Strypningsavvisningsexponent"
 msgid "Maximum Participating Tunnels"
 msgstr "Högsta antal deltagande tunnlar"
 
+msgid "Timer Threads"
+msgstr "Timer-trådar"
+
 msgid "Build Handler Maximum Queue"
 msgstr "Byggnadshanterarens högsta kö"
 
@@ -5195,6 +5348,9 @@ msgstr "Max överbelastningsfönster under långsam start."
 
 msgid "Per-connection inbound buffer cap (bytes)."
 msgstr "Gräns för inkommande buffert per anslutning (byte)."
+
+msgid "Timer worker threads; higher reduces event delay."
+msgstr "Timer-arbetstrådar; högre värde minskar händelsefördröjningen."
 
 msgid "Dynamic cap on concurrent streams per destination."
 msgstr "Dynamisk gräns för samtidiga strömmar per destination."
@@ -7017,6 +7173,15 @@ msgstr "konfigurera webbappar"
 msgid "The Java web applications listed below are started by the webConsole client and run in the same JVM as the router. They are usually web applications accessible through the router console. They may be complete applications (e.g. i2psnark), front-ends to another client or application which must be separately enabled (e.g. susidns, i2ptunnel), or have no web interface at all (e.g. addressbook)."
 msgstr "Java -webbapplikationer som listas nedan startas av WebConsole -klienten och körs i samma JVM som routern. De är vanligtvis webbapplikationer tillgängliga via routernkonsolen. De kan vara kompletta applikationer (t.ex. i2psnark), fronten till en annan klient eller applikation som måste vara separat aktiverad (t.ex. Susidns, i2ptunnel) eller har inget webbgränssnitt alls (t.ex. adressbok)"
 
+msgid "Router Session Key Manager"
+msgstr "Nyckelhanterare för routersessioner"
+
+msgid "Client Session Key Managers"
+msgstr "Nyckelhanterare för klientsessioner"
+
+msgid "Router DHT"
+msgstr "Router-DHT"
+
 msgid "Open in new tab"
 msgstr "Öppna ny flik"
 
@@ -7591,14 +7756,17 @@ msgstr "Minsta tunneltestperiod i millisekunder. Tunneltester väntar alltid min
 msgid "Maximum tunnel test period in milliseconds. Tunnel tests never wait longer than this for a reply, even on high-latency paths. [Default is 50000 (50 seconds)]"
 msgstr "Maximal tunneltestperiod i millisekunder. Tunneltester väntar aldrig längre än så här på ett svar, även på höglatensvägar. [Standard är 50000 (50 sekunder)"
 
-msgid "Number of tunnel build timeouts before a peer is marked as a ghost (blacklisted for tunnel participation). Higher values tolerate more transient failures. [Default is 3]"
-msgstr "Antal tunnelbyggtidsgränser innan en nod markeras som spöke (svartlistad för tunnelmedverkan). Högre värden tolererar fler övergående fel. [Standard är 3"
+msgid "Number of tunnel build timeouts before a peer is marked as a ghost (excluded from tunnel participation). Higher values tolerate more transient failures. [Default is 1]"
+msgstr ""
+"Antal byggtidsgränser för tunnlar innan en peer markeras som spök "
+"(utesluts från tunneldeltagande). Högre värden tolererar fler "
+"tillfälliga fel. [Standard är 1]"
 
-msgid "Cooldown period in milliseconds before a ghost-marked peer can be considered for tunnel participation again. Shorter values allow faster peer reuse. [Default is 180000 (3 minutes)]"
-msgstr "Avkylningsperiod i millisekunder innan en spökmärkt nod kan övervägas för tunnelmedverkan igen. Kortare värden möjliggör snabbare nodåteranvändning. [Standard är 180000 (3 minuter)"
-
-msgid "Cooldown period in milliseconds for ghost-marked peers during attack mode. Longer cooldowns limit exposure to potentially malicious peers during high-stress periods. [Default is 300000 (5 minutes)]"
-msgstr "Avkylningsperiod i millisekunder för spökmärkta noder under attackläge. Längre avkylning begränsar exponering för potentiellt skadliga noder under högstressperioder. [Standard är 300000 (5 minuter)"
+msgid "Cooldown period in milliseconds before a ghost-marked peer can be promoted into the tunnel peer tiers again. Shorter values return recovered peers to service faster. [Default is 90000 (90 seconds)]"
+msgstr ""
+"Nedkylningstid i millisekunder innan en spökmarkerad peer åter kan "
+"befordras till tunnelpeer-tiererna. Kortare värden returnerar "
+"återhämtade peers snabbare i drift. [Standard är 90000 (90 sekunder)]"
 
 msgid "Minimum number of incoming tunnel build requests accepted per peer per clean window. Prevents starving peers during low-traffic periods. [Default is 10]"
 msgstr "Minsta antal inkommande tunnelbyggförfrågningar som accepteras per nod per rent fönster. Förhindrar att noder svälter under lågtrafikperioder. [Standard är 10"
@@ -10028,3 +10196,35 @@ msgstr "Nästa"
 
 msgid "Finished"
 msgstr "Avslutad"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

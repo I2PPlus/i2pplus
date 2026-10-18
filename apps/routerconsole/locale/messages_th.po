@@ -135,23 +135,44 @@ msgstr "peerที่ไม่มีที่อยู่IPที่เผยแ
 msgid "Average tunnel build success (%)"
 msgstr "เปอร์เซ็นต์ความสำเร็จเฉลี่ยในการสร้างอุโมงคม"
 
+msgid "Tier promotions held back for a peer with no usable address"
+msgstr "การเลื่อนระดับที่หน่วงไว้สำหรับ peer ที่ไม่มีที่อยู่ที่ใช้ได้"
+
+msgid "RouterInfo refreshes issued for peers held out of the tiers"
+msgstr "การรีเฟรช RouterInfo ที่ออกให้ peer ที่ถูกกันไว้นอกระดับ"
+
+msgid "Tier scans that left the fast or high-capacity tier short of target"
+msgstr "การสแกนระดับที่ทำให้ระดับเร็วหรือระดับความจุสูงไม่ถึงเป้าหมาย"
+
+msgid "RouterInfos requested for stored profiles that had none"
+msgstr "การขอ RouterInfo สำหรับโปรไฟล์ที่เก็บไว้ซึ่งไม่มี RouterInfo"
+
+msgid "Build timeouts recorded against a peer as a ghost mark"
+msgstr "เวลาที่เกินในการสร้างที่บันทึกไว้กับ peer เป็นเครื่องหมายผี"
+
+msgid "Ghost marks cleared by a successful build reply"
+msgstr "เครื่องหมายผีที่ล้างออกด้วยการตอบกลับการสร้างที่สำเร็จ"
+
+msgid "Peers currently excluded as ghosts"
+msgstr "peer ที่ถูกตัดออกในฐานะผีในปัจจุบัน"
+
+msgid "Ghost peers in the fast or high-capacity tiers"
+msgstr "peer ผีในระดับเร็วหรือความจุสูง"
+
+msgid "Duplicate CLOSE safety-net messages sent"
+msgstr "ข้อความตาข่ายนิรภัย CLOSE ซ้ำที่ถูกส่ง"
+
 msgid "Memory used by the JVM"
 msgstr "หน่วยความจำที่ใช้โดย JVM"
 
 msgid "maximum"
 msgstr "สูงสุด"
 
-msgid "No transports"
-msgstr "ไม่มีtransport"
-
 msgid "Unsupported signature type"
 msgstr "ประเภทลายเซ็นไม่ได้รับการสนับสนุน"
 
 msgid "No support for our signature type"
 msgstr "ไม่รองรับประเภทลายเซ็นของเรา"
-
-msgid "Unreachable on any transport"
-msgstr "เข้าถึงไม่ได้บนtransportใด"
 
 msgid "Cannot enumerate UPnP devices on Android."
 msgstr "ไม่สามารกแจกหมายอุปกรณ์UPnPบนAndroidได้."
@@ -848,6 +869,9 @@ msgstr "คอนโซล"
 
 msgid "To enable SSL access for the Router Console, see the commented <code>clients.config</code> file located in your I2P application directory for more information. You will need to edit the RouterConsoleRunner config file located in the directory: "
 msgstr "หากต้องการเปิดใช้งานการเข้าถึงSSLสำหรับคอนโซลเราเตอร์ให้ดูไฟล์<code>clients.config</code>ที่มีคอมเมนต์ซึ่งอยู่ในไดเรกทอรีแอปพลิเคชันI2Pของคุณเพื่อข้อมูลเพิ่มเติมคุณจะต้องแก้ไขไฟล์การกำหนดค่าRouterConsoleRunnerที่อยู่ในไดเรกทอรี: "
+
+msgid "No client session key managers."
+msgstr "ไม่มีตัวจัดการคีย์เซสชันของไคลเอนต์"
 
 msgid "Save disabled, edit the router.config file to make changes"
 msgstr "ปิดใช้งานการบันทึกให้แก้ไขไฟล์router.configเพื่อทำการเปลี่ยนแปลง"
@@ -2061,20 +2085,34 @@ msgstr "ดีขึ้น"
 msgid "vs baseline"
 msgstr "เทียบกับค่าฐาน"
 
+#, java-format
+msgid "Out: {0} / {1}"
+msgstr "ออก: {0} / {1}"
+
+#, java-format
+msgid "In: {0} / {1}"
+msgstr "เข้า: {0} / {1}"
+
 msgid "CPU"
 msgstr "CPU"
 
-msgid "CPU load average"
-msgstr "ค่าเฉลี่ยโหลดCPU"
+msgid "JVM CPU load average"
+msgstr "ค่าเฉลี่ยโหลด CPU ของ JVM"
+
+#, java-format
+msgid "{0} cores"
+msgstr "{0} คอร์"
 
 msgid "Memory"
 msgstr "หน่วยความจำ"
 
-msgid "Memory usage"
-msgstr "การใช้หน่วยความจำ"
+#, java-format
+msgid "Used: {0} / {1} max"
+msgstr "ใช้ไป: {0} / สูงสุด {1}"
 
-msgid "Router uptime"
-msgstr "เวลาทำงานของเราเตอร์"
+#, java-format
+msgid "Since {0}"
+msgstr "ตั้งแต่ {0}"
 
 msgid "Job Lag"
 msgstr "ความล่าช้าของงาน"
@@ -2100,6 +2138,10 @@ msgstr "เธรด"
 msgid "Active JVM threads"
 msgstr "เธรดJVMที่ใช้งานอยู่"
 
+#, java-format
+msgid "Empty at {0}"
+msgstr "ว่างที่ {0}"
+
 msgid "NTCP Estab"
 msgstr "NTCP Estab"
 
@@ -2121,20 +2163,24 @@ msgstr "หมดเวลาการส่งซ้ำของSSU"
 msgid "Conns/s"
 msgstr "การเชื่อมต่อ/s"
 
-msgid "NTCP connections established per second"
-msgstr "จำนวนการเชื่อมต่อNTCPที่สร้างขึ้นต่อวินาที"
+#, java-format
+msgid "Full at {0}/s"
+msgstr "เต็มที่ {0}/วินาที"
+
+msgid "New NTCP connections (1 min)"
+msgstr "การเชื่อมต่อ NTCP ใหม่ (1 นาที)"
 
 msgid "Msgs/s"
 msgstr "ข้อความ/s"
 
-msgid "Messages delivered per second"
-msgstr "จำนวนข้อความที่ส่งมอบต่อวินาที"
+msgid "Messages delivered (1 min)"
+msgstr "ข้อความที่ส่งถึง (1 นาที)"
 
 msgid "RTT"
 msgstr "RTT"
 
-msgid "End-to-end message round trip time"
-msgstr "เวลาไป-กลับของข้อความแบบปลายทางถึงปลายทาง"
+msgid "End-to-end client message round trip"
+msgstr "เวลาไป-กลับของข้อความไคลเอนต์แบบ end-to-end"
 
 msgid "Timeout"
 msgstr "หมดเวลา"
@@ -2148,20 +2194,28 @@ msgstr "การสร้างอุโมงคม"
 msgid "Client tunnel build latency"
 msgstr "ความล่าช้าในการสร้างอุโมงคมไคลเอนต์"
 
+#, java-format
+msgid "In: {0} / Out: {1}"
+msgstr "เข้า: {0} / ออก: {1}"
+
 msgid "Active Peers"
 msgstr "peerที่ใช้งานอยู่"
 
-msgid "Active peers (last 60s)"
-msgstr "peerที่ใช้งานอยู่(60sล่าสุด)"
+#, java-format
+msgid "Full at {0}"
+msgstr "เต็มที่ {0}"
+
+msgid "Reached in the last 60s"
+msgstr "ติดต่อได้ใน 60 วินาทีที่ผ่านมา"
 
 msgid "Known Peers"
 msgstr "peerที่รู้จัก"
 
-msgid "Known routers in network database"
-msgstr "เราเตอร์ที่รู้จักในฐานข้อมูลเครือข่าย"
+msgid "In the network database"
+msgstr "ในฐานข้อมูลของเครือข่าย"
 
-msgid "Active I2CP clients"
-msgstr "ไคลเอนต์I2CPที่ใช้งานอยู่"
+msgid "I2CP clients connected"
+msgstr "ไคลเอนต์ I2CP ที่เชื่อมต่ออยู่"
 
 msgid "Transit"
 msgstr "transit"
@@ -2175,8 +2229,8 @@ msgstr "สตรีม"
 msgid "Build Success"
 msgstr "ความสำเร็จในการสร้าง"
 
-msgid "Tunnel build success rate"
-msgstr "อัตราความสำเร็จในการสร้างอุโมงคม"
+msgid "Tunnel build success rate (1 min)"
+msgstr "อัตราความสำเร็จในการสร้างอุโมงค์ (1 นาที)"
 
 msgid "NetDB"
 msgstr "NetDB"
@@ -2187,26 +2241,31 @@ msgstr "เวลาค้นหาNetDB"
 msgid "Banned"
 msgstr "ถูกแบน"
 
-msgid "Total banned peers"
-msgstr "peerที่ถูกแบนทั้งหมด"
+msgid "Peers excluded from all interactions"
+msgstr "peerที่ถูกตัดออกจากการโต้ตอบทั้งหมด"
+
+#, java-format
+msgid "{0} of {1} known"
+msgstr "{0} จาก {1} ที่รู้จัก"
 
 msgid "LeaseSets"
 msgstr "LeaseSets"
 
-msgid "Stored LeaseSets in floodfill"
-msgstr "LeaseSetที่เก็บไว้ในfloodfill"
+msgid "Stored LeaseSets"
+msgstr "LeaseSet ที่เก็บไว้"
 
 msgid "Cache Hit"
 msgstr "แคชถูกใช้งาน"
 
-msgid "NetDB lookup success rate"
-msgstr "อัตราความสำเร็จในการค้นหาNetDB"
+#, java-format
+msgid "Matched {0} of {1} lookups (1 min)"
+msgstr "ตรงกัน {0} จากการค้นหา {1} ครั้ง (1 นาที)"
 
 msgid "Flood Verify"
 msgstr "การตรวจสอบfloodfill"
 
-msgid "Floodfill verify time"
-msgstr "เวลาตรวจสอบfloodfill"
+msgid "Floodfill verify time (1 min)"
+msgstr "เวลาตรวจสอบ Floodfill (1 นาที)"
 
 msgid "NetDB ACK"
 msgstr "NetDB ACK"
@@ -2217,20 +2276,20 @@ msgstr "เวลาที่peerตอบรับNetDB"
 msgid "Lookups/s"
 msgstr "การค้นหา/s"
 
-msgid "NetDB lookups handled per second"
-msgstr "จำนวนการค้นหาNetDBที่จัดการต่อวินาที"
+msgid "Lookups handled (1 min)"
+msgstr "การค้นหาที่จัดการ (1 นาที)"
 
 msgid "Requests/s"
 msgstr "คำขอ/s"
 
-msgid "Combined store + lookup operations per second"
-msgstr "จำนวนการดำเนินการเก็บและค้นหารวมต่อวินาที"
+msgid "Stores + lookups (1 min)"
+msgstr "การเก็บ + การค้นหา (1 นาที)"
 
 msgid "Stores/s"
 msgstr "การเก็บ/s"
 
-msgid "NetDB store messages handled per second"
-msgstr "จำนวนข้อความเก็บNetDBที่จัดการต่อวินาที"
+msgid "Stores handled (1 min)"
+msgstr "การเก็บที่จัดการ (1 นาที)"
 
 msgid "LS Timeout"
 msgstr "หมดเวลาLeaseSet"
@@ -3214,6 +3273,9 @@ msgstr "ดูโปรไฟล์"
 msgid "Configure peer"
 msgstr "ตั้งค่าpeer"
 
+msgid "Memory usage"
+msgstr "การใช้หน่วยความจำ"
+
 msgid "Hidden"
 msgstr "ซ่อนอยู่"
 
@@ -3357,8 +3419,8 @@ msgstr "peerแบนด์วิดท์สูงสำหรับอุโ�
 msgid "Reliable"
 msgstr "เสถียร"
 
-msgid "High-capacity peers with good acceptance"
-msgstr "peerความจุสูงที่ยอมรับได้ดี"
+msgid "Peers with good acceptance and recent activity"
+msgstr "peer ที่ยอมรับดีและมีกิจกรรมล่าสุด"
 
 msgid "Peers that store and serve NetDb info"
 msgstr "peerที่เก็บและให้บริการข้อมูลNetDb"
@@ -3369,17 +3431,21 @@ msgstr "เป็นที่รู้จัก"
 msgid "Total entries in network database"
 msgstr "รายการทั้งหมดในฐานข้อมูลเครือข่าย"
 
+msgid "Profiles"
+msgstr "โปรไฟล์"
+
 msgid "Profiles with activity in the last hour"
 msgstr "โปรไฟล์ที่มีกิจกรรมในชั่วโมงที่ผ่านมา"
+
+#, java-format
+msgid "{0} of {1} stored"
+msgstr "{0} จาก {1} ที่เก็บไว้"
 
 msgid "Unreachable"
 msgstr "เข้าถึงไม่ได้"
 
-msgid "Peers without a reachable address"
-msgstr "peerที่ไม่มีที่อยู่ที่เข้าถึงได้"
-
-msgid "Peers excluded from all interactions"
-msgstr "peerที่ถูกตัดออกจากการโต้ตอบทั้งหมด"
+msgid "Peers without a published address"
+msgstr "peer ที่ไม่มีที่อยู่ที่เผยแพร่"
 
 msgid "/min"
 msgstr "/นาที"
@@ -3387,8 +3453,12 @@ msgstr "/นาที"
 msgid "Test Fail"
 msgstr "ทดสอบล้มเหลว"
 
-msgid "Connectivity test failures per minute"
-msgstr "จำนวนความล้มเหลวของการทดสอบการเชื่อมต่อต่อนาที"
+msgid "Connectivity test failures in the last minute"
+msgstr "การทดสอบการเชื่อมต่อล้มเหลวในนาทีที่ผ่านมา"
+
+#, java-format
+msgid "Empty at {0}/min"
+msgstr "ว่างที่ {0}/นาที"
 
 msgid "Peer Connections"
 msgstr "การเชื่อมต่อpeer"
@@ -3662,26 +3732,40 @@ msgstr[1] "{0}โปรไฟล์ที่ล้าสมัยถูกซ่
 msgid "Share of total profiles shown"
 msgstr "สัดส่วนของโปรไฟล์ทั้งหมดที่แสดง"
 
-msgid "peers"
-msgstr "peer"
-
-msgid "Share of tier profiles shown"
-msgstr "สัดส่วนของโปรไฟล์ในแต่ละชั้นที่แสดง"
-
 msgid "Window"
 msgstr "หน้าต่าง"
 
 msgid "Fast RTT"
 msgstr "RTTต่ำ"
 
-msgid "Max RTT for fast-tier membership (ms)"
-msgstr "RTTสูงสุดสำหรับการเป็นสมาชิกชั้นที่เร็ว(ms)"
+msgid "Max RTT for fast-tier membership"
+msgstr "RTT สูงสุดสำหรับการเข้าระดับเร็ว"
 
-msgid "Average loss of fast-tier peers (%)"
-msgstr "การสูญเสียเฉลี่ยของpeerชั้นที่เร็ว(%)"
+msgid "Rises with network latency"
+msgstr "เพิ่มขึ้นตามความหน่วงของเครือข่าย"
 
-msgid "Average loss of high-capacity peers (%)"
-msgstr "การสูญเสียเฉลี่ยของpeerความจุสูง(%)"
+msgid "Average loss of fast-tier peers"
+msgstr "การสูญเสียเฉลี่ยของ peer ในระดับเร็ว"
+
+msgid "Average loss of high-capacity peers"
+msgstr "การสูญเสียเฉลี่ยของ peer ความจุสูง"
+
+msgid "Average direct-link RTT of tier peers"
+msgstr "RTT ลิงก์ตรงเฉลี่ยของ peer ในระดับ"
+
+#, java-format
+msgid "{0} of {1} measured"
+msgstr "{0} จาก {1} ที่วัดได้"
+
+msgid "1h Contact"
+msgstr "ติดต่อ1ชม."
+
+msgid "Heard from in the last hour"
+msgstr "มีการติดต่อในชั่วโมงที่ผ่านมา"
+
+#, java-format
+msgid "{0} of {1} tier peers"
+msgstr "{0} จาก {1} peer ในระดับ"
 
 msgid "Heard from within the display cutoff"
 msgstr "ได้ยินจากภายในช่วงเวลาที่แสดง"
@@ -3692,11 +3776,19 @@ msgstr "การค้นหา"
 msgid "Lookup success rate"
 msgstr "อัตราความสำเร็จของการค้นหา"
 
+#, java-format
+msgid "{0} of {1} lookups"
+msgstr "{0} จากการค้นหา {1} ครั้ง"
+
 msgid "Stores"
 msgstr "การเก็บ"
 
 msgid "Store success rate"
 msgstr "อัตราความสำเร็จของการเก็บ"
+
+#, java-format
+msgid "{0} of {1} peers"
+msgstr "{0} จาก {1} peer"
 
 msgid "Definitions"
 msgstr "คำนิยาม"
@@ -3769,11 +3861,25 @@ msgstr "เมื่อสักครู่พวกเขาแจ้งpeer�
 msgid "Known floodfills"
 msgstr "floodfillที่เป็นที่รู้จัก"
 
-msgid "No-Fail"
-msgstr "ไม่ล้มเหลว"
+msgid "Reachable, unbanlisted and heard from"
+msgstr "เข้าถึงได้ ไม่อยู่ในบัญชีห้าม และมีการติดต่อ"
 
-msgid "No lookup failures (1h)"
-msgstr "ไม่มีการค้นหาที่ล้มเหลว(1ชม.)"
+msgid "Active bans of floodfill-capable peers"
+msgstr "การแบนที่ยังใช้อยู่กับ peer ที่ทำ floodfill ได้"
+
+#, java-format
+msgid "of {0} known"
+msgstr "จาก {0} ที่รู้จัก"
+
+msgid "Fail"
+msgstr "ล้มเหลว"
+
+msgid "Lookup failures in the last hour"
+msgstr "การค้นหาผิดพลาดในชั่วโมงที่ผ่านมา"
+
+#, java-format
+msgid "across {0} listed peers"
+msgstr "ครอบคลุม peer ที่ระบุ {0} รายการ"
 
 msgid "Response"
 msgstr "การตอบสนอง"
@@ -3781,11 +3887,16 @@ msgstr "การตอบสนอง"
 msgid "Lookup response time (1h)"
 msgstr "เวลาตอบสนองของการค้นหา(1ชม.)"
 
-msgid "1h Contact"
-msgstr "ติดต่อ1ชม."
+#, java-format
+msgid "{0} peers measured"
+msgstr "วัด peer แล้ว {0} รายการ"
 
 msgid "Contacted within 1h"
 msgstr "ติดต่อภายใน1ชม."
+
+#, java-format
+msgid "{0} of {1} listed"
+msgstr "{0} จาก {1} ที่ระบุไว้"
 
 msgid "1h Fail Rate"
 msgstr "อัตราล้มเหลว1ชม."
@@ -3823,17 +3934,33 @@ msgstr "ทั้งหมด"
 msgid "SAM bridge is not running."
 msgstr "สะพานเชื่อมSAMไม่ได้ทำงาน."
 
+msgid "Sessions"
+msgstr "เซสชัน"
+
 msgid "Active sessions in SessionsDB"
 msgstr "เซสชันที่ใช้งานอยู่ในSessionsDB"
+
+msgid "Workers"
+msgstr "เธรดทำงาน"
 
 msgid "Active / pool worker threads"
 msgstr "เธรดที่ใช้งานอยู่/เธรดผู้ทำงานในกลุ่ม"
 
-msgid "Pending commands in pool"
-msgstr "คำสั่งที่รออยู่ในกลุ่ม"
+msgid "Queue"
+msgstr "คิว"
+
+#, java-format
+msgid "Pending commands: {0} of {1}"
+msgstr "คำสั่งที่ค้าง: {0} จาก {1}"
+
+msgid "Handlers"
+msgstr "ตัวจัดการ"
 
 msgid "Connected pool handlers"
 msgstr "ตัวจัดการกลุ่มที่เชื่อมต่ออยู่"
+
+msgid "Stolen"
+msgstr "ถูกขโมย"
 
 msgid "Sockets stolen for data streaming"
 msgstr "ซ็อกเก็ตที่ถูกยึดเพื่อสตรีมมิ่งข้อมูล"
@@ -4152,9 +4279,6 @@ msgstr "แสดงการเชื่อมต่อpeerปัจจุบ�
 msgid "Router health overview"
 msgstr "ภาพรวมสุขภาพของเราเตอร์"
 
-msgid "Profiles"
-msgstr "โปรไฟล์"
-
 msgid "Show recent peer performance profiles"
 msgstr "แสดงโปรไฟล์ประสิทธิภาพpeerล่าสุด"
 
@@ -4463,6 +4587,27 @@ msgid "1 event"
 msgid_plural "{0} events"
 msgstr[0] "1เหตุการณ์"
 msgstr[1] "{0}เหตุการณ์"
+
+msgid "Open streaming connections"
+msgstr "การเชื่อมต่อสตรีมมิงที่เปิดอยู่"
+
+msgid "Round-trip time (live samples, 1 min)"
+msgstr "เวลาไป-กลับ (ตัวอย่างสด, 1 นาที)"
+
+msgid "Retrans"
+msgstr "ส่งซ้ำ"
+
+msgid "Share of sends needing retransmit (1 min)"
+msgstr "สัดส่วนการส่งที่ต้องส่งซ้ำ (1 นาที)"
+
+msgid "Created + received (1 min)"
+msgstr "สร้าง + รับ (1 นาที)"
+
+msgid "Throughput"
+msgstr "ปริมาณส่งผ่าน"
+
+msgid "Mean rate of streams closed in the last minute"
+msgstr "อัตราเฉลี่ยของสตรีมที่ปิดในนาทีที่ผ่านมา"
 
 msgid "sent"
 msgstr "ส่งแล้ว"
@@ -4851,6 +4996,9 @@ msgstr "เลขชี้กำลังการปฏิเสธเมื่
 msgid "Maximum Participating Tunnels"
 msgstr "จำนวนอุโมงคมที่เข้าร่วมสูงสุด"
 
+msgid "Timer Threads"
+msgstr "เธรดนับเวลา"
+
 msgid "Build Handler Maximum Queue"
 msgstr "คิวสูงสุดของเธรดจัดการการสร้าง"
 
@@ -5204,6 +5352,9 @@ msgstr "หน้าต่างการแออัดสูงสุดใน
 
 msgid "Per-connection inbound buffer cap (bytes)."
 msgstr "ขีดจำกัดบัฟเฟอร์ขาเข้าต่อหนึ่งการเชื่อมต่อ(ไบต์)"
+
+msgid "Timer worker threads; higher reduces event delay."
+msgstr "เธรดทำงานของตัวนับเวลา; ค่าสูงขึ้นช่วยลดความล่าช้าของเหตุการณ์"
 
 msgid "Dynamic cap on concurrent streams per destination."
 msgstr "ขีดจำกัดแบบไดนามิกของสตรีมพร้อมกันต่อหนึ่งปลายทาง"
@@ -7026,6 +7177,15 @@ msgstr "ตั้งค่าเว็บแอป"
 msgid "The Java web applications listed below are started by the webConsole client and run in the same JVM as the router. They are usually web applications accessible through the router console. They may be complete applications (e.g. i2psnark), front-ends to another client or application which must be separately enabled (e.g. susidns, i2ptunnel), or have no web interface at all (e.g. addressbook)."
 msgstr "เว็บแอปJavaที่แสดงด้านล่างจะถูกเริ่มโดยไคลเอนต์webConsoleและทำงานในJVMเดียวกับเราเตอร์โดยปกติเป็นเว็บแอปที่เข้าถึงผ่านคอนโซลเราเตอร์ได้อาจเป็นแอปพลิเคชันที่สมบูรณ์(เช่นi2psnark)ส่วนหน้าของไคลเอนต์หรือแอปพลิเคชันอื่นที่ต้องเปิดใช้งานแยกต่างหาก(เช่นsusidns, i2ptunnel)หรือไม่มีส่วนติดต่อผู้ใช้บนเว็บเลย(เช่นaddressbook)"
 
+msgid "Router Session Key Manager"
+msgstr "ตัวจัดการคีย์เซสชันของเราเตอร์"
+
+msgid "Client Session Key Managers"
+msgstr "ตัวจัดการคีย์เซสชันของไคลเอนต์"
+
+msgid "Router DHT"
+msgstr "DHT ของเราเตอร์"
+
 msgid "Open in new tab"
 msgstr "เปิดในแท็บใหม่"
 
@@ -7600,14 +7760,18 @@ msgstr "ระยะเวลาทดสอบอุโมงคมขั้น
 msgid "Maximum tunnel test period in milliseconds. Tunnel tests never wait longer than this for a reply, even on high-latency paths. [Default is 50000 (50 seconds)]"
 msgstr "ระยะเวลาทดสอบอุโมงคมสูงสุดเป็นมิลลิวินาทีการทดสอบอุโมงคมจะไม่รอการตอบรับนานกว่านี้แม้บนเส้นทางที่มีความล่าช้าสูง[ค่าเริ่มต้นคือ50000(50วินาที)]"
 
-msgid "Number of tunnel build timeouts before a peer is marked as a ghost (blacklisted for tunnel participation). Higher values tolerate more transient failures. [Default is 3]"
-msgstr "จำนวนการหมดเวลาการสร้างอุโมงคมก่อนที่peerจะถูกทำเครื่องหมายว่าเป็นghost(ขึ้นบัญชีดำสำหรับการเข้าร่วมอุโมงคม)ค่าที่สูงขึ้นจะยอมรับความล้มเหลวชั่วคราวได้มากขึ้น[ค่าเริ่มต้นคือ3]"
+msgid "Number of tunnel build timeouts before a peer is marked as a ghost (excluded from tunnel participation). Higher values tolerate more transient failures. [Default is 1]"
+msgstr ""
+"จำนวนครั้งที่เกินเวลาในการสร้างอุโมงค์ก่อนที่ peer จะถูกทำเครื่องหมายผี "
+"(ถูกตัดออกจากการมีส่วนร่วมในอุโมงค์) "
+"ค่าที่สูงกว่ายอมให้ข้อขัดข้องชั่วครู่ได้มากขึ้น [ค่าเริ่มต้นคือ 1]"
 
-msgid "Cooldown period in milliseconds before a ghost-marked peer can be considered for tunnel participation again. Shorter values allow faster peer reuse. [Default is 180000 (3 minutes)]"
-msgstr "เวลาพักเป็นมิลลิวินาทีก่อนที่peerที่ถูกทำเครื่องหมายว่าเป็นghostจะได้รับการพิจารณาให้เข้าร่วมอุโมงคมอีกครั้งค่าที่สั้นลงจะใช้peerซ้ำได้เร็วขึ้น[ค่าเริ่มต้นคือ180000(3นาที)]"
-
-msgid "Cooldown period in milliseconds for ghost-marked peers during attack mode. Longer cooldowns limit exposure to potentially malicious peers during high-stress periods. [Default is 300000 (5 minutes)]"
-msgstr "เวลาพักเป็นมิลลิวินาทีสำหรับpeerที่ถูกทำเครื่องหมายว่าเป็นghostในโหมดโจมตีเวลาพักที่ยาวขึ้นจะจำกัดการเปิดรับต่อpeerที่อาจเป็นปฏิรัฐในช่วงเวลาที่มีความเครียดสูง[ค่าเริ่มต้นคือ300000(5นาที)]"
+msgid "Cooldown period in milliseconds before a ghost-marked peer can be promoted into the tunnel peer tiers again. Shorter values return recovered peers to service faster. [Default is 90000 (90 seconds)]"
+msgstr ""
+"ช่วงเวลารอให้เย็นลงเป็นมิลลิวินาทีก่อนที่ peer "
+"ที่ถูกทำเครื่องหมายผีจะเลื่อนกลับเข้าสู่ระดับ peer ของอุโมงค์ได้ "
+"ค่าที่สั้นกว่านำ peer ที่ฟื้นตัวกลับมารับใช้เร็วขึ้น [ค่าเริ่มต้นคือ "
+"90000 (90 วินาที)]"
 
 msgid "Minimum number of incoming tunnel build requests accepted per peer per clean window. Prevents starving peers during low-traffic periods. [Default is 10]"
 msgstr "จำนวนคำขอสร้างอุโมงคมขาเข้าขั้นต่ำที่ยอมรับต่อหนึ่งpeerต่อหนึ่งช่วงที่สะอาดป้องกันไม่ให้peerอยู่อย่างมากในช่วงที่ทราฟฟิกน้อย[ค่าเริ่มต้นคือ10]"
@@ -10037,3 +10201,35 @@ msgstr "ถัดไป"
 
 msgid "Finished"
 msgstr "เสร็จสิ้น"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -128,23 +128,45 @@ msgstr "Peers bez zveřejněné IP adresy"
 msgid "Average tunnel build success (%)"
 msgstr "Průměrná úspěšnost výstavby tunelu v %"
 
-msgid "Memory used by the JVM"
+msgid "Tier promotions held back for a peer with no usable address"
+msgstr "Povýšení do tieru zadržené pro peer bez použitelné adresy"
+
+msgid "RouterInfo refreshes issued for peers held out of the tiers"
+msgstr "Obnovy RouterInfo vydané pro peerové držené mimo tier"
+
+msgid "Tier scans that left the fast or high-capacity tier short of target"
 msgstr ""
+"Skeny tieru, po kterých rychlý nebo vysoce kapacitní tier nedosáhl cíle"
+
+msgid "RouterInfos requested for stored profiles that had none"
+msgstr "RouterInfo vyžádané pro uložené profily, které žádné neměly"
+
+msgid "Build timeouts recorded against a peer as a ghost mark"
+msgstr "Časové limity sestavení zaznamenané peerovi jako značka ghost"
+
+msgid "Ghost marks cleared by a successful build reply"
+msgstr "Značky ghost vymazané po úspěšné odpovědi sestavení"
+
+msgid "Peers currently excluded as ghosts"
+msgstr "Peerové aktuálně vyloučení jako ghost"
+
+msgid "Ghost peers in the fast or high-capacity tiers"
+msgstr "Ghost peerové v rychlém nebo vysoce kapacitním tieru"
+
+msgid "Duplicate CLOSE safety-net messages sent"
+msgstr "Odeslána duplicitní ochranná zpráva CLOSE"
+
+msgid "Memory used by the JVM"
+msgstr "Paměť použitá JVM"
 
 msgid "maximum"
-msgstr ""
-
-msgid "No transports"
-msgstr "Žádné transporty (skryté nebo začínající?)"
+msgstr "maximum"
 
 msgid "Unsupported signature type"
 msgstr "Nepodporovaný typ podpisu"
 
 msgid "No support for our signature type"
 msgstr "Žádná podpora pro náš typ podpisu"
-
-msgid "Unreachable on any transport"
-msgstr "Nedostupné na každém transportu"
 
 msgid "Cannot enumerate UPnP devices on Android."
 msgstr "Nelze vyjmenit zařízení UPnP na Androidu."
@@ -842,6 +864,9 @@ msgstr "Konzole"
 
 msgid "To enable SSL access for the Router Console, see the commented <code>clients.config</code> file located in your I2P application directory for more information. You will need to edit the RouterConsoleRunner config file located in the directory: "
 msgstr "Chcete-li povolit SSL přístup pro Router Console, podívejte se do komentovaného souboru <code>clients.config</code> umístěného v adresáři vaší aplikace I2P, kde najdete další informace. You will need to edit the RouterConsoleRunner config file located in the directory:. You will need to edit the RouterConsoleRunner config file located in the directory:. Budete muset upravit konfigurační soubor RouterConsoleRunner umístěný v adresáři:"
+
+msgid "No client session key managers."
+msgstr "Žádní správci klíčů klientských relací."
 
 msgid "Save disabled, edit the router.config file to make changes"
 msgstr "Ukládání zakázáno, upravte soubor router.config pro provedení změn."
@@ -1902,10 +1927,10 @@ msgid "Bandwidth Usage"
 msgstr "Využití šířky pásma"
 
 msgid "Graph combining is not enabled"
-msgstr ""
+msgstr "Kombinace grafů není povolena"
 
 msgid "Not enough stats enabled to combine"
-msgstr ""
+msgstr "Není povoleno dost statistik ke kombinaci"
 
 #, java-format
 msgid "ending {0} ago"
@@ -2023,22 +2048,22 @@ msgid "Add a glow effect to graph lines"
 msgstr "Přidat efekt záře k čárám grafů"
 
 msgid "Smooth lines"
-msgstr ""
+msgstr "Hladké čáry"
 
 msgid "Use bezier curves to plot graphs"
-msgstr ""
+msgstr "Použít Bézierovy křivky pro vykreslení grafů"
 
 msgid "Filled paths"
-msgstr ""
+msgstr "Vyplněné plochy"
 
 msgid "Use filled areas for graphs"
-msgstr ""
+msgstr "Použít vyplněné oblasti pro grafy"
 
 msgid "Combine graphs"
-msgstr ""
+msgstr "Kombinovat grafy"
 
 msgid "Merge related graphs into a plot"
-msgstr ""
+msgstr "Sloučit související grafy do jednoho zobrazení"
 
 msgid "Select Stats"
 msgstr "Vyberte Statistiky"
@@ -2058,20 +2083,34 @@ msgstr "zlepšila"
 msgid "vs baseline"
 msgstr "vs. základní linie"
 
+#, java-format
+msgid "Out: {0} / {1}"
+msgstr "Odchozí: {0} / {1}"
+
+#, java-format
+msgid "In: {0} / {1}"
+msgstr "Příchozí: {0} / {1}"
+
 msgid "CPU"
 msgstr "CPU"
 
-msgid "CPU load average"
-msgstr "Průměrná zátěž CPU"
+msgid "JVM CPU load average"
+msgstr "Průměrná zátěž CPU JVM"
+
+#, java-format
+msgid "{0} cores"
+msgstr "{0} jader"
 
 msgid "Memory"
 msgstr "Paměť"
 
-msgid "Memory usage"
-msgstr "Využití paměti"
+#, java-format
+msgid "Used: {0} / {1} max"
+msgstr "Využito: {0} / {1} max"
 
-msgid "Router uptime"
-msgstr "Doba provozu směrovače"
+#, java-format
+msgid "Since {0}"
+msgstr "Od {0}"
 
 msgid "Job Lag"
 msgstr "Zpoždění úloh"
@@ -2097,6 +2136,10 @@ msgstr "Vlákna"
 msgid "Active JVM threads"
 msgstr "Aktivní vlákna JVM"
 
+#, java-format
+msgid "Empty at {0}"
+msgstr "Prázdné při {0}"
+
 msgid "NTCP Estab"
 msgstr "NTCP Navázání"
 
@@ -2118,20 +2161,24 @@ msgstr "Časový limit opakovaného přenosu SSU"
 msgid "Conns/s"
 msgstr "Připoj/s"
 
-msgid "NTCP connections established per second"
-msgstr "Navázaná spojení NTCP za sekundu"
+#, java-format
+msgid "Full at {0}/s"
+msgstr "Plné při {0}/s"
+
+msgid "New NTCP connections (1 min)"
+msgstr "Nová spojení NTCP (1 min)"
 
 msgid "Msgs/s"
 msgstr "Zpr/s"
 
-msgid "Messages delivered per second"
-msgstr "Doručené zprávy za sekundu"
+msgid "Messages delivered (1 min)"
+msgstr "Doručené zprávy (1 min)"
 
 msgid "RTT"
 msgstr "RTT"
 
-msgid "End-to-end message round trip time"
-msgstr "Doba oběhu zprávy od odesílatele k příjemci"
+msgid "End-to-end client message round trip"
+msgstr "Okružní doba zpráv klienta end-to-end"
 
 msgid "Timeout"
 msgstr "Časový limit"
@@ -2145,20 +2192,28 @@ msgstr "Výstavba tunelů"
 msgid "Client tunnel build latency"
 msgstr "Zpoždění výstavby klientských tunelů"
 
+#, java-format
+msgid "In: {0} / Out: {1}"
+msgstr "Příchozí: {0} / Odchozí: {1}"
+
 msgid "Active Peers"
 msgstr "Aktivní peeri"
 
-msgid "Active peers (last 60s)"
-msgstr "Aktivní peeri (posledních 60 s)"
+#, java-format
+msgid "Full at {0}"
+msgstr "Plné při {0}"
+
+msgid "Reached in the last 60s"
+msgstr "Osloveni za posledních 60 s"
 
 msgid "Known Peers"
 msgstr "Známí peeri"
 
-msgid "Known routers in network database"
-msgstr "Známé směrovače v síťové databázi"
+msgid "In the network database"
+msgstr "V databázi sítě"
 
-msgid "Active I2CP clients"
-msgstr "Aktivní klienti I2CP"
+msgid "I2CP clients connected"
+msgstr "Připojení klienti I2CP"
 
 msgid "Transit"
 msgstr "Tranzit"
@@ -2172,8 +2227,8 @@ msgstr "Streamy"
 msgid "Build Success"
 msgstr "Budujte úspěch"
 
-msgid "Tunnel build success rate"
-msgstr "Míra úspěšnosti výstavby tunelů"
+msgid "Tunnel build success rate (1 min)"
+msgstr "Úspěšnost sestavování tunelů (1 min)"
 
 msgid "NetDB"
 msgstr "NetDB"
@@ -2184,26 +2239,31 @@ msgstr "Doba vyhledávání v NetDB"
 msgid "Banned"
 msgstr "Zakázáno"
 
-msgid "Total banned peers"
-msgstr "Celkový počet zablokovaných peerů"
+msgid "Peers excluded from all interactions"
+msgstr "Peers vyloučeni ze všech interakcí"
+
+#, java-format
+msgid "{0} of {1} known"
+msgstr "{0} z {1} známých"
 
 msgid "LeaseSets"
 msgstr "Pronájem sady"
 
-msgid "Stored LeaseSets in floodfill"
-msgstr "Uložené LeaseSets v záplavovém uzlu"
+msgid "Stored LeaseSets"
+msgstr "Uložené LeaseSets"
 
 msgid "Cache Hit"
 msgstr "Zásah do mezipaměti"
 
-msgid "NetDB lookup success rate"
-msgstr "Míra úspěšnosti vyhledávání v NetDB"
+#, java-format
+msgid "Matched {0} of {1} lookups (1 min)"
+msgstr "Shoda u {0} z {1} vyhledávání (1 min)"
 
 msgid "Flood Verify"
 msgstr "Ověření Floodfill"
 
-msgid "Floodfill verify time"
-msgstr "čas ověření záplavového uzlu"
+msgid "Floodfill verify time (1 min)"
+msgstr "Doba ověřování Floodfill (1 min)"
 
 msgid "NetDB ACK"
 msgstr "Potvrzení NetDB"
@@ -2214,20 +2274,20 @@ msgstr "Doba potvrzení peeru NetDB"
 msgid "Lookups/s"
 msgstr "Hled/s"
 
-msgid "NetDB lookups handled per second"
-msgstr "Obsloužená vyhledávání NetDB za sekundu"
+msgid "Lookups handled (1 min)"
+msgstr "Zpracovaná vyhledávání (1 min)"
 
 msgid "Requests/s"
 msgstr "Pož/s"
 
-msgid "Combined store + lookup operations per second"
-msgstr "Kombinované operace uložení + vyhledávání za sekundu"
+msgid "Stores + lookups (1 min)"
+msgstr "Uložení + vyhledávání (1 min)"
 
 msgid "Stores/s"
 msgstr "Ulož/s"
 
-msgid "NetDB store messages handled per second"
-msgstr "Obsloužené zprávy uložení NetDB za sekundu"
+msgid "Stores handled (1 min)"
+msgstr "Zpracovaná uložení (1 min)"
 
 msgid "LS Timeout"
 msgstr "Časový limit LeaseSet"
@@ -3211,6 +3271,9 @@ msgstr "Zobrazit profil"
 msgid "Configure peer"
 msgstr "Nakonfigurujte peer"
 
+msgid "Memory usage"
+msgstr "Využití paměti"
+
 msgid "Hidden"
 msgstr "Skryté"
 
@@ -3354,8 +3417,8 @@ msgstr "Peers s vysokou šířkou pásma pro mnoho tunelů"
 msgid "Reliable"
 msgstr "Spolehlivý"
 
-msgid "High-capacity peers with good acceptance"
-msgstr "Vysokokapacitní kolegové s dobrým přijetím"
+msgid "Peers with good acceptance and recent activity"
+msgstr "Peerové s dobrým přijímáním a nedávnou aktivitou"
 
 msgid "Peers that store and serve NetDb info"
 msgstr "Protějšky, které ukládají a poskytují informace NetDb"
@@ -3366,17 +3429,21 @@ msgstr "Známý"
 msgid "Total entries in network database"
 msgstr "Celkový počet záznamů v síťové databázi"
 
+msgid "Profiles"
+msgstr "Profily"
+
 msgid "Profiles with activity in the last hour"
 msgstr "Profily s aktivitou za poslední 1 hodinu"
+
+#, java-format
+msgid "{0} of {1} stored"
+msgstr "{0} z {1} uloženo"
 
 msgid "Unreachable"
 msgstr "Nedosažitelné"
 
-msgid "Peers without a reachable address"
-msgstr "Peers bez dostupné adresy"
-
-msgid "Peers excluded from all interactions"
-msgstr "Peers vyloučeni ze všech interakcí"
+msgid "Peers without a published address"
+msgstr "Peerové bez zveřejněné adresy"
 
 msgid "/min"
 msgstr "/min"
@@ -3384,8 +3451,12 @@ msgstr "/min"
 msgid "Test Fail"
 msgstr "Test se nezdařil"
 
-msgid "Connectivity test failures per minute"
-msgstr "Selhání testu připojení za minutu"
+msgid "Connectivity test failures in the last minute"
+msgstr "Selhání testu konektivity v poslední minutě"
+
+#, java-format
+msgid "Empty at {0}/min"
+msgstr "Prázdné při {0}/min"
 
 msgid "Peer Connections"
 msgstr "Peer připojení"
@@ -3580,6 +3651,7 @@ msgstr "Nízká latence"
 
 msgid "Round trip time to this peer on the direct link, as measured by the transport"
 msgstr ""
+"Okružní doba k tomuto peerovi po přímém spojení, měřená transportem"
 
 msgid "Packets retransmitted / packets sent, as reported by the UDP transport"
 msgstr "Pakety přenesené opakovaně / odeslané pakety, jak hlásí transport UDP"
@@ -3662,26 +3734,40 @@ msgstr[2] "Skryto {0} zastaralých profilů"
 msgid "Share of total profiles shown"
 msgstr "Podíl zobrazených celkových profilů"
 
-msgid "peers"
-msgstr "vrstevníci"
-
-msgid "Share of tier profiles shown"
-msgstr "Podíl zobrazených profilů úrovní"
-
 msgid "Window"
 msgstr "Okno"
 
 msgid "Fast RTT"
 msgstr "Rychlá RTT"
 
-msgid "Max RTT for fast-tier membership (ms)"
-msgstr "Maximální RTT pro členství v rychlé úrovni (ms)"
+msgid "Max RTT for fast-tier membership"
+msgstr "Max. RTT pro členství v rychlém tieru"
 
-msgid "Average loss of fast-tier peers (%)"
-msgstr "Průměrná ztráta u peerů v rychlé úrovni (%)"
+msgid "Rises with network latency"
+msgstr "Roste s latencí sítě"
 
-msgid "Average loss of high-capacity peers (%)"
-msgstr "Průměrná ztráta u peerů s vysokou kapacitou (%)"
+msgid "Average loss of fast-tier peers"
+msgstr "Průměrná ztráta peerů rychlého tieru"
+
+msgid "Average loss of high-capacity peers"
+msgstr "Průměrná ztráta vysoce kapacitních peerů"
+
+msgid "Average direct-link RTT of tier peers"
+msgstr "Průměrné RTT přímého spojení peerů tieru"
+
+#, java-format
+msgid "{0} of {1} measured"
+msgstr "{0} z {1} změřeno"
+
+msgid "1h Contact"
+msgstr "1h Kontakt"
+
+msgid "Heard from in the last hour"
+msgstr "Ozvali se za poslední hodinu"
+
+#, java-format
+msgid "{0} of {1} tier peers"
+msgstr "{0} z {1} peerů tieru"
 
 msgid "Heard from within the display cutoff"
 msgstr "Slyšeno v rámci limitu zobrazení"
@@ -3692,11 +3778,19 @@ msgstr "Vyhledávání"
 msgid "Lookup success rate"
 msgstr "Míra úspěšnosti vyhledávání"
 
+#, java-format
+msgid "{0} of {1} lookups"
+msgstr "{0} z {1} vyhledávání"
+
 msgid "Stores"
 msgstr "Úložiště"
 
 msgid "Store success rate"
 msgstr "Míra úspěšnosti ukládání"
+
+#, java-format
+msgid "{0} of {1} peers"
+msgstr "{0} z {1} peerů"
 
 msgid "Definitions"
 msgstr "Definice"
@@ -3769,11 +3863,25 @@ msgstr "o kolika nových spolužácích nám v poslední době řekli?"
 msgid "Known floodfills"
 msgstr "Známé floodfilly"
 
-msgid "No-Fail"
-msgstr "Bez selhání"
+msgid "Reachable, unbanlisted and heard from"
+msgstr "Dostupní, nebanovaní a ozývající se"
 
-msgid "No lookup failures (1h)"
-msgstr "Žádné selhání vyhledávání (1h)"
+msgid "Active bans of floodfill-capable peers"
+msgstr "Aktivní bany peerů způsobilých jako floodfill"
+
+#, java-format
+msgid "of {0} known"
+msgstr "z {0} známých"
+
+msgid "Fail"
+msgstr "Selhání"
+
+msgid "Lookup failures in the last hour"
+msgstr "Selhání vyhledávání za poslední hodinu"
+
+#, java-format
+msgid "across {0} listed peers"
+msgstr "mezi {0} uvedenými peer"
 
 msgid "Response"
 msgstr "Odezva"
@@ -3781,11 +3889,16 @@ msgstr "Odezva"
 msgid "Lookup response time (1h)"
 msgstr "Doba odezvy vyhledávání (1h)"
 
-msgid "1h Contact"
-msgstr "1h Kontakt"
+#, java-format
+msgid "{0} peers measured"
+msgstr "{0} peerů změřeno"
 
 msgid "Contacted within 1h"
 msgstr "Kontaktován během 1h"
+
+#, java-format
+msgid "{0} of {1} listed"
+msgstr "{0} z {1} uvedeno"
 
 msgid "1h Fail Rate"
 msgstr "1H Míra selhání"
@@ -3823,17 +3936,33 @@ msgstr "Vše"
 msgid "SAM bridge is not running."
 msgstr "SAM bridge není spuštěn."
 
+msgid "Sessions"
+msgstr "Relace"
+
 msgid "Active sessions in SessionsDB"
 msgstr "Aktivní relace v SessionsDB"
+
+msgid "Workers"
+msgstr "Pracovní vlákna"
 
 msgid "Active / pool worker threads"
 msgstr "Aktivní vlákna / vlákna fondu"
 
-msgid "Pending commands in pool"
-msgstr "Nevyřízené příkazy ve fondu"
+msgid "Queue"
+msgstr "Fronta"
+
+#, java-format
+msgid "Pending commands: {0} of {1}"
+msgstr "Čekající příkazy: {0} z {1}"
+
+msgid "Handlers"
+msgstr "Obsluhy"
 
 msgid "Connected pool handlers"
 msgstr "Připojené zpracovatele fondu"
+
+msgid "Stolen"
+msgstr "Ukradené"
 
 msgid "Sockets stolen for data streaming"
 msgstr "Sokety přesměrovány pro datový streaming"
@@ -4152,9 +4281,6 @@ msgstr "Zobrazit všechna aktuální peer připojení"
 msgid "Router health overview"
 msgstr "Přehled stavu směrovače"
 
-msgid "Profiles"
-msgstr "Profily"
-
 msgid "Show recent peer performance profiles"
 msgstr "Ukázat nedávné profily výkonu rovnocenných partnerů"
 
@@ -4465,6 +4591,27 @@ msgid_plural "{0} events"
 msgstr[0] "{0} událost"
 msgstr[1] "{0} události"
 msgstr[2] "{0} událostí"
+
+msgid "Open streaming connections"
+msgstr "Otevřená streamingová spojení"
+
+msgid "Round-trip time (live samples, 1 min)"
+msgstr "Doba okružní cesty (živé vzorky, 1 min)"
+
+msgid "Retrans"
+msgstr "Retrans."
+
+msgid "Share of sends needing retransmit (1 min)"
+msgstr "Podíl odeslání vyžadujících opakování (1 min)"
+
+msgid "Created + received (1 min)"
+msgstr "Vytvořeno + přijato (1 min)"
+
+msgid "Throughput"
+msgstr "Propustnost"
+
+msgid "Mean rate of streams closed in the last minute"
+msgstr "Průměrná rychlost uzavírání streamů v poslední minutě"
 
 msgid "sent"
 msgstr "odesláno"
@@ -4853,6 +5000,9 @@ msgstr "Exponent odmítnutí omezení"
 msgid "Maximum Participating Tunnels"
 msgstr "Maximální počet účastnických tunelů"
 
+msgid "Timer Threads"
+msgstr "Vlákna časovače"
+
 msgid "Build Handler Maximum Queue"
 msgstr "Maximální fronta obsluhy sestavování"
 
@@ -5207,6 +5357,10 @@ msgstr "Maximální okno přetížení během pomalého startu."
 msgid "Per-connection inbound buffer cap (bytes)."
 msgstr "Strop příchozího bufferu na jedno připojení (bajty)."
 
+msgid "Timer worker threads; higher reduces event delay."
+msgstr ""
+"Pracovní vlákna časovače; vyšší hodnota snižuje zpoždění událostí."
+
 msgid "Dynamic cap on concurrent streams per destination."
 msgstr "Dynamický strop souběžných streamů na jeden cíl."
 
@@ -5452,9 +5606,11 @@ msgstr "Minimální čas mezi opakovanými přenosy (ms)."
 
 msgid "Window growth per RTT after slow start; higher recovers faster."
 msgstr ""
+"Růst okna na RTT po pomalém startu; vyšší hodnota se zotaví rychleji."
 
 msgid "Window growth per ACK during slow start; higher ramps faster."
 msgstr ""
+"Růst okna na ACK během pomalého startu; vyšší hodnota nabíhá rychleji."
 
 msgid "Minimum send rate before pacing kicks in (KB/s)."
 msgstr "Minimální rychlost odesílání před zahájením stimulace (kB/s)."
@@ -5493,7 +5649,7 @@ msgid "Default cap on server handler threads for each server tunnel."
 msgstr "Výchozí strop obslužných vláken serveru pro každý serverový tunel."
 
 msgid "Dedicated pool for Server→Client transfers, unblocks handlers."
-msgstr ""
+msgstr "Vyhrazený pool pro přenosy server→klient, odblokuje obsluhy."
 
 msgid "Stall timeout for Server→Client data transfers (ms)."
 msgstr "Časový limit zastavení pro přenosy dat Server→Klient (ms)."
@@ -5544,7 +5700,7 @@ msgid "Duration of moderate load before declining requests (ms)."
 msgstr "Doba trvání střední zátěže před odmítáním požadavků (ms)."
 
 msgid "Widens the peer recency window when fast peers run short."
-msgstr ""
+msgstr "Rozšiřuje okno čerstvosti peerů, když rychlí peer docházejí."
 
 msgid "Consecutive failures before pool backoff."
 msgstr "Po sobě jdoucí selhání před ústupem poolu."
@@ -5584,6 +5740,8 @@ msgstr "Časový limit připojení TCP socketu pro obslužná vlákna serveru tu
 
 msgid "IV dedup filter size; too small drops valid tunnel data."
 msgstr ""
+"Velikost filtru deduplikace IV; příliš malý zahazuje platná tunnelová "
+"data."
 
 msgid "Max average message delay before rejecting transit (ms)."
 msgstr "Maximální průměrné zpoždění zprávy před odmítnutím přenosu (ms)."
@@ -7028,6 +7186,15 @@ msgstr "config webových aplikací"
 msgid "The Java web applications listed below are started by the webConsole client and run in the same JVM as the router. They are usually web applications accessible through the router console. They may be complete applications (e.g. i2psnark), front-ends to another client or application which must be separately enabled (e.g. susidns, i2ptunnel), or have no web interface at all (e.g. addressbook)."
 msgstr "Níže jsou uvedeny Java webové aplikace, které jsou spuštěny klientem webConsole a běží ve stejném JVM jako směrovač. Obvykle se jedná o webové aplikace, které jsou přístupné prostřednictvím konzole směrovače. Mohou to být kompletní aplikace (např. i2psnark), rozhraní pro jiného klienta nebo aplikaci, která je nutné samostatně povolit (např. susidns, i2ptunnel), nebo nemají žádné webové rozhraní (např. addressbook). susidns, i2ptunnel), or have no web interface at all (e. g addressbook). susidns, i2ptunnel), or have no web interface at all (e. g addressbook). susidns, i2ptunnel) nebo nemají vůbec žádné webové rozhraní (např G adresář)"
 
+msgid "Router Session Key Manager"
+msgstr "Správce klíčů relací routeru"
+
+msgid "Client Session Key Managers"
+msgstr "Správci klíčů klientských relací"
+
+msgid "Router DHT"
+msgstr "DHT routeru"
+
 msgid "Open in new tab"
 msgstr "Otevřít na nové kartě"
 
@@ -7602,14 +7769,17 @@ msgstr "Minimální doba testu tunelu v milisekundách. Testy tunelů vždy ček
 msgid "Maximum tunnel test period in milliseconds. Tunnel tests never wait longer than this for a reply, even on high-latency paths. [Default is 50000 (50 seconds)]"
 msgstr "Maximální doba testu tunelu v milisekundách. Testy tunelů nikdy nečekají na odpověď déle než toto, ani na sítích s vysokou latencí. [Výchozí je 60000]"
 
-msgid "Number of tunnel build timeouts before a peer is marked as a ghost (blacklisted for tunnel participation). Higher values tolerate more transient failures. [Default is 3]"
-msgstr "Počet časových limitů stavby tunelu, než je peer označen jako duch (blacklistován pro účast v tunelu). Vyšší hodnoty tolerují více selhání. [Výchozí je 3]"
+msgid "Number of tunnel build timeouts before a peer is marked as a ghost (excluded from tunnel participation). Higher values tolerate more transient failures. [Default is 1]"
+msgstr ""
+"Počet časových limitů sestavení tunelu, po kterých je peer označen jako "
+"ghost (vyloučen z účasti v tunelech). Vyšší hodnoty snášejí více "
+"dočasných výpadků. [Výchozí je 1]"
 
-msgid "Cooldown period in milliseconds before a ghost-marked peer can be considered for tunnel participation again. Shorter values allow faster peer reuse. [Default is 180000 (3 minutes)]"
-msgstr "Doba ochlazení v milisekundách, než může být peer označený jako duch znovu zvažován pro účast v tunelu. Kratší hodnoty umožňují rychlejší opětovné připojení. [Výchozí je 600000]"
-
-msgid "Cooldown period in milliseconds for ghost-marked peers during attack mode. Longer cooldowns limit exposure to potentially malicious peers during high-stress periods. [Default is 300000 (5 minutes)]"
-msgstr "Doba ochlazení v milisekundách pro peer-y označené jako duch během útokového režimu. Delší ochlazení omezuje vystavení potenciálním útočníkům. [Výchozí je 3600000]"
+msgid "Cooldown period in milliseconds before a ghost-marked peer can be promoted into the tunnel peer tiers again. Shorter values return recovered peers to service faster. [Default is 90000 (90 seconds)]"
+msgstr ""
+"Doba ochlazení v milisekundách, než může být peer označený jako ghost "
+"opět povýšen do tierů peerů tunelu. Nižší hodnoty rychleji vracejí "
+"uzdravené peer do služby. [Výchozí je 90000 (90 sekund)]"
 
 msgid "Minimum number of incoming tunnel build requests accepted per peer per clean window. Prevents starving peers during low-traffic periods. [Default is 10]"
 msgstr "Minimální počet přijatých příchozích požadavků na stavbu tunelu na peer na čisté okno. Zabraňuje hladovění peerů během období nízké poptávky. [Výchozí je 1]"
@@ -10045,3 +10215,35 @@ msgstr "Další"
 
 msgid "Finished"
 msgstr "Hotové"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

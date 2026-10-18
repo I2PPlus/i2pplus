@@ -124,23 +124,44 @@ msgstr "게시된 IP 주소가 없는 피어"
 msgid "Average tunnel build success (%)"
 msgstr "평균 터널 빌드 성공 %"
 
+msgid "Tier promotions held back for a peer with no usable address"
+msgstr "사용 가능한 주소가 없는 피어에 대해 보류된 티어 승격"
+
+msgid "RouterInfo refreshes issued for peers held out of the tiers"
+msgstr "티어에서 제외된 피어를 위해 발급한 RouterInfo 갱신"
+
+msgid "Tier scans that left the fast or high-capacity tier short of target"
+msgstr "빠른 티어 또는 대용량 티어가 목표에 미달한 티어 스캔"
+
+msgid "RouterInfos requested for stored profiles that had none"
+msgstr "RouterInfo가 없는 저장된 프로필에 대해 요청한 RouterInfo"
+
+msgid "Build timeouts recorded against a peer as a ghost mark"
+msgstr "고스트 마크로 피어에 기록된 빌드 시간 초과"
+
+msgid "Ghost marks cleared by a successful build reply"
+msgstr "성공적인 빌드 응답으로 해제된 고스트 마크"
+
+msgid "Peers currently excluded as ghosts"
+msgstr "현재 고스트로 제외된 피어"
+
+msgid "Ghost peers in the fast or high-capacity tiers"
+msgstr "빠른 티어 또는 대용량 티어의 고스트 피어"
+
+msgid "Duplicate CLOSE safety-net messages sent"
+msgstr "중복 전송된 CLOSE 안전망 메시지"
+
 msgid "Memory used by the JVM"
 msgstr "JVM이 사용하는 메모리"
 
 msgid "maximum"
 msgstr "최대"
 
-msgid "No transports"
-msgstr "트랜스포트 없음 (숨겨졌거나 시작중일 수 있습니다)"
-
 msgid "Unsupported signature type"
 msgstr "지원되지않는 서명 타입"
 
 msgid "No support for our signature type"
 msgstr "서명 타입 지원하지 않음"
-
-msgid "Unreachable on any transport"
-msgstr "어떤 트랜스포트에도 도달하지 못함"
 
 msgid "Cannot enumerate UPnP devices on Android."
 msgstr "Android에서 UPnP 장치를 열거할 수 없습니다."
@@ -836,6 +857,9 @@ msgstr "콘솔"
 
 msgid "To enable SSL access for the Router Console, see the commented <code>clients.config</code> file located in your I2P application directory for more information. You will need to edit the RouterConsoleRunner config file located in the directory: "
 msgstr "SSL 액세스를 사용하려면 I2P 응용 프로그램 디렉토리에 위치한 주석 처리된 <code>clients.config</code> 파일을 참조하십시오. 자세한 내용은 <code>RouterConsoleRunner</code> 구성 파일이 있는 디렉토리에서 편집해야합니다. "
+
+msgid "No client session key managers."
+msgstr "클라이언트 세션 키 관리자가 없습니다."
 
 msgid "Save disabled, edit the router.config file to make changes"
 msgstr "저장 비활성화됨, 변경 사항을 적용하려면 router.config 파일을 편집하세요"
@@ -2046,20 +2070,34 @@ msgstr "개선됨"
 msgid "vs baseline"
 msgstr "기준선 대비"
 
+#, java-format
+msgid "Out: {0} / {1}"
+msgstr "전송: {0} / {1}"
+
+#, java-format
+msgid "In: {0} / {1}"
+msgstr "수신: {0} / {1}"
+
 msgid "CPU"
 msgstr "CPU"
 
-msgid "CPU load average"
-msgstr "CPU 부하 평균"
+msgid "JVM CPU load average"
+msgstr "JVM CPU 평균 부하"
+
+#, java-format
+msgid "{0} cores"
+msgstr "코어 {0}개"
 
 msgid "Memory"
 msgstr "메모리"
 
-msgid "Memory usage"
-msgstr "메모리 사용량"
+#, java-format
+msgid "Used: {0} / {1} max"
+msgstr "사용: {0} / 최대 {1}"
 
-msgid "Router uptime"
-msgstr "라우터 가동시간"
+#, java-format
+msgid "Since {0}"
+msgstr "{0} 이후"
 
 msgid "Job Lag"
 msgstr "작업 지연"
@@ -2085,6 +2123,10 @@ msgstr "스레드"
 msgid "Active JVM threads"
 msgstr "활성 JVM 스레드"
 
+#, java-format
+msgid "Empty at {0}"
+msgstr "{0}에서 빔"
+
 msgid "NTCP Estab"
 msgstr "NTCP 연결"
 
@@ -2106,20 +2148,24 @@ msgstr "SSU 재전송 타임아웃"
 msgid "Conns/s"
 msgstr "연결/초"
 
-msgid "NTCP connections established per second"
-msgstr "초당 NTCP 연결 수"
+#, java-format
+msgid "Full at {0}/s"
+msgstr "{0}/초에서 가득 참"
+
+msgid "New NTCP connections (1 min)"
+msgstr "새 NTCP 연결 (1분)"
 
 msgid "Msgs/s"
 msgstr "메시지/초"
 
-msgid "Messages delivered per second"
-msgstr "초당 메시지 전달 수"
+msgid "Messages delivered (1 min)"
+msgstr "전달된 메시지 (1분)"
 
 msgid "RTT"
 msgstr "RTT"
 
-msgid "End-to-end message round trip time"
-msgstr "최종 간 메시지 왕복 시간"
+msgid "End-to-end client message round trip"
+msgstr "클라이언트 메시지 엔드투엔드 왕복 시간"
 
 msgid "Timeout"
 msgstr "타임아웃"
@@ -2133,20 +2179,28 @@ msgstr "터널 빌드"
 msgid "Client tunnel build latency"
 msgstr "클라이언트 터널 빌드 지연"
 
+#, java-format
+msgid "In: {0} / Out: {1}"
+msgstr "수신: {0} / 전송: {1}"
+
 msgid "Active Peers"
 msgstr "활성 peer"
 
-msgid "Active peers (last 60s)"
-msgstr "활성 peer (최근 60초)"
+#, java-format
+msgid "Full at {0}"
+msgstr "{0}에서 가득 참"
+
+msgid "Reached in the last 60s"
+msgstr "최근 60초 내 도달"
 
 msgid "Known Peers"
 msgstr "알려진 peer"
 
-msgid "Known routers in network database"
-msgstr "네트워크 데이터베이스의 알려진 라우터"
+msgid "In the network database"
+msgstr "네트워크 데이터베이스에"
 
-msgid "Active I2CP clients"
-msgstr "활성 I2CP 클라이언트"
+msgid "I2CP clients connected"
+msgstr "연결된 I2CP 클라이언트"
 
 msgid "Transit"
 msgstr "환승"
@@ -2160,8 +2214,8 @@ msgstr "스트림"
 msgid "Build Success"
 msgstr "성공을 구축하십시오"
 
-msgid "Tunnel build success rate"
-msgstr "터널 빌드 성공률"
+msgid "Tunnel build success rate (1 min)"
+msgstr "터널 빌드 성공률 (1분)"
 
 msgid "NetDB"
 msgstr "NetDB"
@@ -2172,26 +2226,31 @@ msgstr "NetDB 조회 시간"
 msgid "Banned"
 msgstr "차단됨"
 
-msgid "Total banned peers"
-msgstr "차단된 peer 총 수"
+msgid "Peers excluded from all interactions"
+msgstr "모든 상호작용에서 제외된 피어"
+
+#, java-format
+msgid "{0} of {1} known"
+msgstr "알고 있는 {1}개 중 {0}개"
 
 msgid "LeaseSets"
 msgstr "리즈셋"
 
-msgid "Stored LeaseSets in floodfill"
-msgstr "Floodfill에 저장된 LeaseSet"
+msgid "Stored LeaseSets"
+msgstr "저장된 LeaseSet"
 
 msgid "Cache Hit"
 msgstr "캐시 히트"
 
-msgid "NetDB lookup success rate"
-msgstr "NetDB 조회 성공률"
+#, java-format
+msgid "Matched {0} of {1} lookups (1 min)"
+msgstr "조회 {1}건 중 {0}건 일치 (1분)"
 
 msgid "Flood Verify"
 msgstr "Flood 검증"
 
-msgid "Floodfill verify time"
-msgstr "플러드 노드 검증 시간"
+msgid "Floodfill verify time (1 min)"
+msgstr "Floodfill 검증 시간 (1분)"
 
 msgid "NetDB ACK"
 msgstr "NetDB 확인"
@@ -2202,20 +2261,20 @@ msgstr "NetDB peer 확인 시간"
 msgid "Lookups/s"
 msgstr "조회/초"
 
-msgid "NetDB lookups handled per second"
-msgstr "초당 NetDB 조회 처리 수"
+msgid "Lookups handled (1 min)"
+msgstr "처리한 조회 (1분)"
 
 msgid "Requests/s"
 msgstr "요청/초"
 
-msgid "Combined store + lookup operations per second"
-msgstr "초당 저장 + 조회 작업 합계"
+msgid "Stores + lookups (1 min)"
+msgstr "저장 + 조회 (1분)"
 
 msgid "Stores/s"
 msgstr "저장/초"
 
-msgid "NetDB store messages handled per second"
-msgstr "초당 NetDB 저장 메시지 처리 수"
+msgid "Stores handled (1 min)"
+msgstr "처리한 저장 (1분)"
 
 msgid "LS Timeout"
 msgstr "LeaseSet 타임아웃"
@@ -3199,6 +3258,9 @@ msgstr "프로필 보기"
 msgid "Configure peer"
 msgstr "피어 구성"
 
+msgid "Memory usage"
+msgstr "메모리 사용량"
+
 msgid "Hidden"
 msgstr "숨겨짐"
 
@@ -3342,8 +3404,8 @@ msgstr "많은 터널을 위한 고대역폭 피어"
 msgid "Reliable"
 msgstr "믿을 수 있는"
 
-msgid "High-capacity peers with good acceptance"
-msgstr "수용성이 좋은 고용량 피어"
+msgid "Peers with good acceptance and recent activity"
+msgstr "수용률이 좋고 최근 활동이 있는 피어"
 
 msgid "Peers that store and serve NetDb info"
 msgstr "NetDb 정보를 저장하고 제공하는 피어"
@@ -3354,17 +3416,21 @@ msgstr "알려진"
 msgid "Total entries in network database"
 msgstr "네트워크 데이터베이스의 총 항목"
 
+msgid "Profiles"
+msgstr "프로필"
+
 msgid "Profiles with activity in the last hour"
 msgstr "지난 1시간 이내에 활동이 있는 프로필"
+
+#, java-format
+msgid "{0} of {1} stored"
+msgstr "{1}개 중 {0}개 저장됨"
 
 msgid "Unreachable"
 msgstr "접근불가능"
 
-msgid "Peers without a reachable address"
-msgstr "연결 가능한 주소가 없는 피어"
-
-msgid "Peers excluded from all interactions"
-msgstr "모든 상호작용에서 제외된 피어"
+msgid "Peers without a published address"
+msgstr "게시된 주소가 없는 피어"
 
 msgid "/min"
 msgstr "/분"
@@ -3372,8 +3438,12 @@ msgstr "/분"
 msgid "Test Fail"
 msgstr "테스트 실패"
 
-msgid "Connectivity test failures per minute"
-msgstr "분당 연결 테스트 실패"
+msgid "Connectivity test failures in the last minute"
+msgstr "최근 1분간 연결성 테스트 실패"
+
+#, java-format
+msgid "Empty at {0}/min"
+msgstr "{0}/분에서 빔"
 
 msgid "Peer Connections"
 msgstr "피어 연결"
@@ -3644,26 +3714,40 @@ msgstr[0] "오래된 프로필 {0}개 숨겨짐"
 msgid "Share of total profiles shown"
 msgstr "표시된 전체 프로필 비율"
 
-msgid "peers"
-msgstr "동료"
-
-msgid "Share of tier profiles shown"
-msgstr "표시된 계층 프로필 비율"
-
 msgid "Window"
 msgstr "윈도우"
 
 msgid "Fast RTT"
 msgstr "빠른 RTT"
 
-msgid "Max RTT for fast-tier membership (ms)"
-msgstr "빠른 계층 포함 기준 최대 RTT(ms)"
+msgid "Max RTT for fast-tier membership"
+msgstr "빠른 티어 참여 최대 RTT"
 
-msgid "Average loss of fast-tier peers (%)"
-msgstr "빠른 계층 피어의 평균 손실(%)"
+msgid "Rises with network latency"
+msgstr "네트워크 지연에 따라 상승"
 
-msgid "Average loss of high-capacity peers (%)"
-msgstr "고용량 피어의 평균 손실(%)"
+msgid "Average loss of fast-tier peers"
+msgstr "빠른 티어 피어 평균 손실"
+
+msgid "Average loss of high-capacity peers"
+msgstr "대용량 피어 평균 손실"
+
+msgid "Average direct-link RTT of tier peers"
+msgstr "티어 피어의 직접 링크 RTT 평균"
+
+#, java-format
+msgid "{0} of {1} measured"
+msgstr "{1}개 중 {0}개 측정됨"
+
+msgid "1h Contact"
+msgstr "1시간 연락"
+
+msgid "Heard from in the last hour"
+msgstr "최근 1시간 내 통신 있음"
+
+#, java-format
+msgid "{0} of {1} tier peers"
+msgstr "티어 피어 {1}개 중 {0}개"
 
 msgid "Heard from within the display cutoff"
 msgstr "표시 기한 내에 수신됨"
@@ -3674,11 +3758,19 @@ msgstr "조회"
 msgid "Lookup success rate"
 msgstr "조회 성공률"
 
+#, java-format
+msgid "{0} of {1} lookups"
+msgstr "조회 {1}건 중 {0}건"
+
 msgid "Stores"
 msgstr "저장"
 
 msgid "Store success rate"
 msgstr "저장 성공률"
+
+#, java-format
+msgid "{0} of {1} peers"
+msgstr "피어 {1}개 중 {0}개"
 
 msgid "Definitions"
 msgstr "정의"
@@ -3751,11 +3843,25 @@ msgstr "얼마나 많은 피어와 최근 통신했습니까?"
 msgid "Known floodfills"
 msgstr "알려진 플러드 노드"
 
-msgid "No-Fail"
-msgstr "실패 없음"
+msgid "Reachable, unbanlisted and heard from"
+msgstr "도달 가능, 금지 목록 없음, 최근 통신 있음"
 
-msgid "No lookup failures (1h)"
-msgstr "조회 실패 없음(1시간)"
+msgid "Active bans of floodfill-capable peers"
+msgstr "Floodfill 가능 피어에 대한 활성 금지"
+
+#, java-format
+msgid "of {0} known"
+msgstr "알고 있는 {0}개 중"
+
+msgid "Fail"
+msgstr "실패"
+
+msgid "Lookup failures in the last hour"
+msgstr "최근 1시간 내 조회 실패"
+
+#, java-format
+msgid "across {0} listed peers"
+msgstr "목록에 있는 피어 {0}개 대상"
 
 msgid "Response"
 msgstr "응답"
@@ -3763,11 +3869,16 @@ msgstr "응답"
 msgid "Lookup response time (1h)"
 msgstr "조회 응답 시간(1시간)"
 
-msgid "1h Contact"
-msgstr "1시간 연락"
+#, java-format
+msgid "{0} peers measured"
+msgstr "{0}개 피어 측정"
 
 msgid "Contacted within 1h"
 msgstr "1시간 이내에 연락됨"
+
+#, java-format
+msgid "{0} of {1} listed"
+msgstr "{1}개 중 {0}개 등록됨"
 
 msgid "1h Fail Rate"
 msgstr "1h 실패율"
@@ -3805,17 +3916,33 @@ msgstr "모두"
 msgid "SAM bridge is not running."
 msgstr "SAM bridge가 실행되고 있지 않습니다."
 
+msgid "Sessions"
+msgstr "세션"
+
 msgid "Active sessions in SessionsDB"
 msgstr "SessionsDB의 활성 세션"
+
+msgid "Workers"
+msgstr "워커 스레드"
 
 msgid "Active / pool worker threads"
 msgstr "활성 / 풀 워커 스레드"
 
-msgid "Pending commands in pool"
-msgstr "풀에서 대기 중인 명령"
+msgid "Queue"
+msgstr "대기열"
+
+#, java-format
+msgid "Pending commands: {0} of {1}"
+msgstr "대기 중인 명령: {0} / {1}"
+
+msgid "Handlers"
+msgstr "핸들러"
 
 msgid "Connected pool handlers"
 msgstr "연결된 풀 핸들러"
+
+msgid "Stolen"
+msgstr "탈취"
 
 msgid "Sockets stolen for data streaming"
 msgstr "데이터 스트리밍에 사용된 소켓"
@@ -4134,9 +4261,6 @@ msgstr "모든 현재 피어 연결 보기"
 msgid "Router health overview"
 msgstr "라우터 상태 개요"
 
-msgid "Profiles"
-msgstr "프로필"
-
 msgid "Show recent peer performance profiles"
 msgstr "최근 피어 작동상태 프로필 보기"
 
@@ -4443,6 +4567,27 @@ msgstr "전기간 평균 값"
 msgid "1 event"
 msgid_plural "{0} events"
 msgstr[0] "{0}개 이벤트"
+
+msgid "Open streaming connections"
+msgstr "열린 스트리밍 연결"
+
+msgid "Round-trip time (live samples, 1 min)"
+msgstr "왕복 시간 (실시간 표본, 1분)"
+
+msgid "Retrans"
+msgstr "재전송"
+
+msgid "Share of sends needing retransmit (1 min)"
+msgstr "재전송이 필요한 전송 비율 (1분)"
+
+msgid "Created + received (1 min)"
+msgstr "생성 + 수신 (1분)"
+
+msgid "Throughput"
+msgstr "처리량"
+
+msgid "Mean rate of streams closed in the last minute"
+msgstr "최근 1분간 닫힌 스트림 평균 속도"
 
 msgid "sent"
 msgstr "전송됨"
@@ -4831,6 +4976,9 @@ msgstr "스로틀 거부 지수"
 msgid "Maximum Participating Tunnels"
 msgstr "최대 참여 터널 수"
 
+msgid "Timer Threads"
+msgstr "타이머 스레드"
+
 msgid "Build Handler Maximum Queue"
 msgstr "빌드 처리기 최대 큐"
 
@@ -5184,6 +5332,9 @@ msgstr "슬로우 스타트 중 최대 혼잡 창 크기입니다."
 
 msgid "Per-connection inbound buffer cap (bytes)."
 msgstr "연결당 인바운드 버퍼 상한(바이트)."
+
+msgid "Timer worker threads; higher reduces event delay."
+msgstr "타이머 워커 스레드 수; 높을수록 이벤트 지연이 줄어듭니다."
 
 msgid "Dynamic cap on concurrent streams per destination."
 msgstr "목적지별 동시 스트림의 동적 상한."
@@ -7006,6 +7157,15 @@ msgstr "웹앱 설정"
 msgid "The Java web applications listed below are started by the webConsole client and run in the same JVM as the router. They are usually web applications accessible through the router console. They may be complete applications (e.g. i2psnark), front-ends to another client or application which must be separately enabled (e.g. susidns, i2ptunnel), or have no web interface at all (e.g. addressbook)."
 msgstr "아래에 나열된 Java 웹 애플리케이션들은 webConsole 클라이언트에 의해 시작되며 라우터와 동일한 JVM에서 실행됩니다. 일반적으로 라우터 콘솔을 통해 접근할 수 있는 웹 애플리케이션입니다. 완전한 애플리케이션 (예: i2psnark), 다른 클라이언트나 애플리케이션의 프런트엔드로 작동하여 별도로 활성화해야 하는 경우 (예: susidns, i2ptunnel) 또는 웹 인터페이스가 전혀 없는 경우 (예: addressbook) 일 수 있습니다."
 
+msgid "Router Session Key Manager"
+msgstr "라우터 세션 키 관리자"
+
+msgid "Client Session Key Managers"
+msgstr "클라이언트 세션 키 관리자"
+
+msgid "Router DHT"
+msgstr "라우터 DHT"
+
 msgid "Open in new tab"
 msgstr "새 탭에 열기"
 
@@ -7580,14 +7740,15 @@ msgstr "최소 터널 테스트 기간(밀리초). 터널 테스트는 항상 �
 msgid "Maximum tunnel test period in milliseconds. Tunnel tests never wait longer than this for a reply, even on high-latency paths. [Default is 50000 (50 seconds)]"
 msgstr "최대 터널 테스트 기간(밀리초). 터널 테스트는 고지연 경로에서도 응답을 이보다 더 오래 기다리지 않습니다. [기본값 50000(50초)]"
 
-msgid "Number of tunnel build timeouts before a peer is marked as a ghost (blacklisted for tunnel participation). Higher values tolerate more transient failures. [Default is 3]"
-msgstr "피어가 유령(터널 참여에서 차단 목록)으로 표시되기 전 터널 구축 시간 제한 수. 값이 높을수록 더 많은 일시적 실패를 허용합니다. [기본값 3]"
+msgid "Number of tunnel build timeouts before a peer is marked as a ghost (excluded from tunnel participation). Higher values tolerate more transient failures. [Default is 1]"
+msgstr ""
+"피어가 고스트로 표시되어 터널 참여에서 제외되기까지의 터널 빌드 시간 초과 횟수. 값이 클수록 일시적 장애를 더 허용합니다. "
+"[기본값은 1]"
 
-msgid "Cooldown period in milliseconds before a ghost-marked peer can be considered for tunnel participation again. Shorter values allow faster peer reuse. [Default is 180000 (3 minutes)]"
-msgstr "유령 표시된 피어가 다시 터널 참여에 고려될 수 있기 전 쿨다운 기간(밀리초). 짧은 값은 더 빠른 피어 재사용을 허용합니다. [기본값 180000(3분)]"
-
-msgid "Cooldown period in milliseconds for ghost-marked peers during attack mode. Longer cooldowns limit exposure to potentially malicious peers during high-stress periods. [Default is 300000 (5 minutes)]"
-msgstr "공격 모드 중 유령 표시된 피어의 쿨다운 기간(밀리초). 더 긴 쿨다운은 고스트레스 기간 중 잠재적 악성 피어에 대한 노출을 제한합니다. [기본값 300000(5분)]"
+msgid "Cooldown period in milliseconds before a ghost-marked peer can be promoted into the tunnel peer tiers again. Shorter values return recovered peers to service faster. [Default is 90000 (90 seconds)]"
+msgstr ""
+"고스트로 표시된 피어가 터널 피어 티어로 다시 승격될 수 있을 때까지의 쿨다운 기간(밀리초). 값이 짧을수록 복구된 피어를 더 "
+"빨리 서비스로 복귀시킵니다. [기본값은 90000(90초)]"
 
 msgid "Minimum number of incoming tunnel build requests accepted per peer per clean window. Prevents starving peers during low-traffic periods. [Default is 10]"
 msgstr "정리 창당 피어당 수락되는 최소 인바운드 터널 구축 요청 수. 낮은 트래픽 기간 중 피어 부족을 방지합니다. [기본값 10]"
@@ -10017,3 +10178,35 @@ msgstr "다음"
 
 msgid "Finished"
 msgstr "완료됨"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

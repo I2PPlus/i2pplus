@@ -122,23 +122,44 @@ msgstr "未發布IP位址的對等點"
 msgid "Average tunnel build success (%)"
 msgstr "隧道建立成功率平均值%"
 
+msgid "Tier promotions held back for a peer with no usable address"
+msgstr "因對等點沒有可用位址而暫緩的層級晉升"
+
+msgid "RouterInfo refreshes issued for peers held out of the tiers"
+msgstr "為被排除在層級之外的對等點發出的 RouterInfo 重新整理"
+
+msgid "Tier scans that left the fast or high-capacity tier short of target"
+msgstr "使快速或高容量層級未達目標的層級掃描"
+
+msgid "RouterInfos requested for stored profiles that had none"
+msgstr "為沒有 RouterInfo 的已儲存設定檔發出的請求"
+
+msgid "Build timeouts recorded against a peer as a ghost mark"
+msgstr "記錄在對等點上的建置逾時，作為幽靈標記"
+
+msgid "Ghost marks cleared by a successful build reply"
+msgstr "因成功的建置回覆而清除的幽靈標記"
+
+msgid "Peers currently excluded as ghosts"
+msgstr "目前作為幽靈排除的對等點"
+
+msgid "Ghost peers in the fast or high-capacity tiers"
+msgstr "快速或高容量層級中的幽靈對等點"
+
+msgid "Duplicate CLOSE safety-net messages sent"
+msgstr "發出的重複 CLOSE 安全網訊息"
+
 msgid "Memory used by the JVM"
 msgstr "JVM 已用記憶體"
 
 msgid "maximum"
 msgstr "最大值"
 
-msgid "No transports"
-msgstr "無傳輸層"
-
 msgid "Unsupported signature type"
 msgstr "不支援的簽章類型"
 
 msgid "No support for our signature type"
 msgstr "不支援我們的簽章類型"
-
-msgid "Unreachable on any transport"
-msgstr "透過任何傳輸層皆不可達"
 
 msgid "Cannot enumerate UPnP devices on Android."
 msgstr "無法在Android上列舉UPnP裝置。"
@@ -834,6 +855,9 @@ msgstr "主控台"
 
 msgid "To enable SSL access for the Router Console, see the commented <code>clients.config</code> file located in your I2P application directory for more information. You will need to edit the RouterConsoleRunner config file located in the directory: "
 msgstr "如要為路由器主控台啟用SSL存取，請參閱I2P應用程式目錄中附有註解的<code>clients.config</code>檔案以取得更多資訊。您將需要編輯位於下列目錄的RouterConsoleRunner組態檔案："
+
+msgid "No client session key managers."
+msgstr "沒有用戶端工作階段金鑰管理器。"
 
 msgid "Save disabled, edit the router.config file to make changes"
 msgstr "儲存已停用，請編輯router.config檔案以進行變更"
@@ -2044,20 +2068,34 @@ msgstr "改善"
 msgid "vs baseline"
 msgstr "與基準比較"
 
+#, java-format
+msgid "Out: {0} / {1}"
+msgstr "輸出: {0} / {1}"
+
+#, java-format
+msgid "In: {0} / {1}"
+msgstr "輸入: {0} / {1}"
+
 msgid "CPU"
 msgstr "CPU"
 
-msgid "CPU load average"
-msgstr "CPU負載平均值"
+msgid "JVM CPU load average"
+msgstr "JVM CPU 平均負載"
+
+#, java-format
+msgid "{0} cores"
+msgstr "{0} 個核心"
 
 msgid "Memory"
 msgstr "記憶體"
 
-msgid "Memory usage"
-msgstr "記憶體用量"
+#, java-format
+msgid "Used: {0} / {1} max"
+msgstr "已用: {0} / {1} 最大"
 
-msgid "Router uptime"
-msgstr "路由器運作時間"
+#, java-format
+msgid "Since {0}"
+msgstr "自 {0}"
 
 msgid "Job Lag"
 msgstr "工作延遲"
@@ -2083,6 +2121,10 @@ msgstr "執行緒"
 msgid "Active JVM threads"
 msgstr "作用中的JVM執行緒"
 
+#, java-format
+msgid "Empty at {0}"
+msgstr "在 {0} 處為空"
+
 msgid "NTCP Estab"
 msgstr "NTCP Estab"
 
@@ -2104,20 +2146,24 @@ msgstr "SSU重傳逾時"
 msgid "Conns/s"
 msgstr "Conns/s"
 
-msgid "NTCP connections established per second"
-msgstr "每秒建立的NTCP連線數"
+#, java-format
+msgid "Full at {0}/s"
+msgstr "在 {0}/s 處已滿"
+
+msgid "New NTCP connections (1 min)"
+msgstr "新建 NTCP 連線（1 分鐘）"
 
 msgid "Msgs/s"
 msgstr "Msgs/s"
 
-msgid "Messages delivered per second"
-msgstr "每秒傳送的訊息數"
+msgid "Messages delivered (1 min)"
+msgstr "已送達訊息（1 分鐘）"
 
 msgid "RTT"
 msgstr "RTT"
 
-msgid "End-to-end message round trip time"
-msgstr "端對端訊息往返時間"
+msgid "End-to-end client message round trip"
+msgstr "用戶端訊息端到端往返時間"
 
 msgid "Timeout"
 msgstr "逾時"
@@ -2131,20 +2177,28 @@ msgstr "隧道建立"
 msgid "Client tunnel build latency"
 msgstr "客戶端隧道建立延遲"
 
+#, java-format
+msgid "In: {0} / Out: {1}"
+msgstr "輸入: {0} / 輸出: {1}"
+
 msgid "Active Peers"
 msgstr "作用中的對等點"
 
-msgid "Active peers (last 60s)"
-msgstr "作用中的對等點（最近60秒）"
+#, java-format
+msgid "Full at {0}"
+msgstr "在 {0} 處已滿"
+
+msgid "Reached in the last 60s"
+msgstr "最近 60 秒內聯繫過"
 
 msgid "Known Peers"
 msgstr "已知對等點"
 
-msgid "Known routers in network database"
-msgstr "網路資料庫中的已知路由器"
+msgid "In the network database"
+msgstr "在網路資料庫中"
 
-msgid "Active I2CP clients"
-msgstr "作用中的I2CP客戶端"
+msgid "I2CP clients connected"
+msgstr "已連線的 I2CP 用戶端"
 
 msgid "Transit"
 msgstr "中繼"
@@ -2158,8 +2212,8 @@ msgstr "串流"
 msgid "Build Success"
 msgstr "建立成功"
 
-msgid "Tunnel build success rate"
-msgstr "隧道建立成功率"
+msgid "Tunnel build success rate (1 min)"
+msgstr "隧道建置成功率（1 分鐘）"
 
 msgid "NetDB"
 msgstr "NetDB"
@@ -2170,26 +2224,31 @@ msgstr "NetDB查詢時間"
 msgid "Banned"
 msgstr "已封鎖"
 
-msgid "Total banned peers"
-msgstr "已封鎖對等點總數"
+msgid "Peers excluded from all interactions"
+msgstr "排除於所有互動之外的對等點"
+
+#, java-format
+msgid "{0} of {1} known"
+msgstr "{1} 個中已知 {0} 個"
 
 msgid "LeaseSets"
 msgstr "LeaseSets"
 
-msgid "Stored LeaseSets in floodfill"
-msgstr "泛洪節點中儲存的LeaseSet"
+msgid "Stored LeaseSets"
+msgstr "已儲存的 LeaseSet"
 
 msgid "Cache Hit"
 msgstr "快取命中"
 
-msgid "NetDB lookup success rate"
-msgstr "NetDB查詢成功率"
+#, java-format
+msgid "Matched {0} of {1} lookups (1 min)"
+msgstr "{1} 次查詢中符合 {0} 次（1 分鐘）"
 
 msgid "Flood Verify"
 msgstr "泛洪驗證"
 
-msgid "Floodfill verify time"
-msgstr "泛洪節點驗證時間"
+msgid "Floodfill verify time (1 min)"
+msgstr "Floodfill 驗證時間（1 分鐘）"
 
 msgid "NetDB ACK"
 msgstr "NetDB ACK"
@@ -2200,20 +2259,20 @@ msgstr "NetDB對等點確認時間"
 msgid "Lookups/s"
 msgstr "Lookups/s"
 
-msgid "NetDB lookups handled per second"
-msgstr "每秒處理的NetDB查詢數"
+msgid "Lookups handled (1 min)"
+msgstr "已處理的查詢（1 分鐘）"
 
 msgid "Requests/s"
 msgstr "Requests/s"
 
-msgid "Combined store + lookup operations per second"
-msgstr "合併的儲存加查詢每秒作業數"
+msgid "Stores + lookups (1 min)"
+msgstr "儲存 + 查詢（1 分鐘）"
 
 msgid "Stores/s"
 msgstr "Stores/s"
 
-msgid "NetDB store messages handled per second"
-msgstr "每秒處理的NetDB儲存訊息數"
+msgid "Stores handled (1 min)"
+msgstr "已處理的儲存（1 分鐘）"
 
 msgid "LS Timeout"
 msgstr "LS逾時"
@@ -3197,6 +3256,9 @@ msgstr "檢視設定檔"
 msgid "Configure peer"
 msgstr "設定對等點"
 
+msgid "Memory usage"
+msgstr "記憶體用量"
+
 msgid "Hidden"
 msgstr "隱藏"
 
@@ -3340,8 +3402,8 @@ msgstr "可支援大量隧道的高頻寬對等點"
 msgid "Reliable"
 msgstr "可靠"
 
-msgid "High-capacity peers with good acceptance"
-msgstr "接受度高的高容量對等點"
+msgid "Peers with good acceptance and recent activity"
+msgstr "接受良好且近期活躍的對等點"
 
 msgid "Peers that store and serve NetDb info"
 msgstr "儲存並提供NetDb資訊的對等點"
@@ -3352,17 +3414,21 @@ msgstr "已知"
 msgid "Total entries in network database"
 msgstr "網路資料庫中的項目總數"
 
+msgid "Profiles"
+msgstr "設定檔"
+
 msgid "Profiles with activity in the last hour"
 msgstr "最近一小時內有活動的設定檔"
+
+#, java-format
+msgid "{0} of {1} stored"
+msgstr "{1} 個中已儲存 {0} 個"
 
 msgid "Unreachable"
 msgstr "不可達"
 
-msgid "Peers without a reachable address"
-msgstr "沒有可達位址的對等點"
-
-msgid "Peers excluded from all interactions"
-msgstr "排除於所有互動之外的對等點"
+msgid "Peers without a published address"
+msgstr "沒有已發布位址的對等點"
 
 msgid "/min"
 msgstr "/min"
@@ -3370,8 +3436,12 @@ msgstr "/min"
 msgid "Test Fail"
 msgstr "測試失敗"
 
-msgid "Connectivity test failures per minute"
-msgstr "每分鐘的連線測試失敗次數"
+msgid "Connectivity test failures in the last minute"
+msgstr "最近一分鐘內的連線能力測試失敗"
+
+#, java-format
+msgid "Empty at {0}/min"
+msgstr "在 {0}/min 處為空"
 
 msgid "Peer Connections"
 msgstr "對等點連線"
@@ -3642,26 +3712,40 @@ msgstr[0] "已隱藏{0}個過期設定檔"
 msgid "Share of total profiles shown"
 msgstr "顯示設定檔佔總數比例"
 
-msgid "peers"
-msgstr "對等點"
-
-msgid "Share of tier profiles shown"
-msgstr "顯示的層級設定檔占比"
-
 msgid "Window"
 msgstr "視窗"
 
 msgid "Fast RTT"
 msgstr "快速RTT"
 
-msgid "Max RTT for fast-tier membership (ms)"
-msgstr "快速層級資格的最大RTT（毫秒）"
+msgid "Max RTT for fast-tier membership"
+msgstr "加入快速層級的最大 RTT"
 
-msgid "Average loss of fast-tier peers (%)"
-msgstr "快速層級對等點的平均遺失率（%）"
+msgid "Rises with network latency"
+msgstr "隨網路延遲上升"
 
-msgid "Average loss of high-capacity peers (%)"
-msgstr "高容量對等點的平均遺失率（%）"
+msgid "Average loss of fast-tier peers"
+msgstr "快速層級對等點的平均流失"
+
+msgid "Average loss of high-capacity peers"
+msgstr "高容量對等點的平均流失"
+
+msgid "Average direct-link RTT of tier peers"
+msgstr "層級對等點直連 RTT 的平均值"
+
+#, java-format
+msgid "{0} of {1} measured"
+msgstr "{1} 個中已量測 {0} 個"
+
+msgid "1h Contact"
+msgstr "1小時聯絡"
+
+msgid "Heard from in the last hour"
+msgstr "最近一小時內有聯繫"
+
+#, java-format
+msgid "{0} of {1} tier peers"
+msgstr "{1} 個層級對等點中的 {0} 個"
 
 msgid "Heard from within the display cutoff"
 msgstr "在顯示期限內曾收到訊息"
@@ -3672,11 +3756,19 @@ msgstr "查詢"
 msgid "Lookup success rate"
 msgstr "查詢成功率"
 
+#, java-format
+msgid "{0} of {1} lookups"
+msgstr "{1} 次查詢中的 {0} 次"
+
 msgid "Stores"
 msgstr "儲存"
 
 msgid "Store success rate"
 msgstr "儲存成功率"
+
+#, java-format
+msgid "{0} of {1} peers"
+msgstr "{1} 個對等點中的 {0} 個"
 
 msgid "Definitions"
 msgstr "定義"
@@ -3749,11 +3841,25 @@ msgstr "最近對方告訴我們多少個新對等點？"
 msgid "Known floodfills"
 msgstr "已知泛洪節點"
 
-msgid "No-Fail"
-msgstr "無失敗"
+msgid "Reachable, unbanlisted and heard from"
+msgstr "可達、未被列入封鎖清單且近期有聯繫"
 
-msgid "No lookup failures (1h)"
-msgstr "無查詢失敗（1小時）"
+msgid "Active bans of floodfill-capable peers"
+msgstr "對具備 Floodfill 能力的對等點的現行封鎖"
+
+#, java-format
+msgid "of {0} known"
+msgstr "/ 已知 {0} 個"
+
+msgid "Fail"
+msgstr "失敗"
+
+msgid "Lookup failures in the last hour"
+msgstr "最近一小時內的查詢失敗"
+
+#, java-format
+msgid "across {0} listed peers"
+msgstr "涵蓋 {0} 個已列出的對等點"
 
 msgid "Response"
 msgstr "回應"
@@ -3761,11 +3867,16 @@ msgstr "回應"
 msgid "Lookup response time (1h)"
 msgstr "查詢回應時間（1小時）"
 
-msgid "1h Contact"
-msgstr "1小時聯絡"
+#, java-format
+msgid "{0} peers measured"
+msgstr "已量測 {0} 個對等點"
 
 msgid "Contacted within 1h"
 msgstr "1小時內曾聯絡"
+
+#, java-format
+msgid "{0} of {1} listed"
+msgstr "{1} 個中已列出 {0} 個"
 
 msgid "1h Fail Rate"
 msgstr "1小時失敗率"
@@ -3803,17 +3914,33 @@ msgstr "全部"
 msgid "SAM bridge is not running."
 msgstr "SAM bridge未執行。"
 
+msgid "Sessions"
+msgstr "工作階段"
+
 msgid "Active sessions in SessionsDB"
 msgstr "SessionsDB中的使用中工作階段"
+
+msgid "Workers"
+msgstr "工作執行緒"
 
 msgid "Active / pool worker threads"
 msgstr "使用中/池工作執行緒"
 
-msgid "Pending commands in pool"
-msgstr "池中待處理的命令"
+msgid "Queue"
+msgstr "佇列"
+
+#, java-format
+msgid "Pending commands: {0} of {1}"
+msgstr "待處理命令: {0} / {1}"
+
+msgid "Handlers"
+msgstr "處理執行緒"
 
 msgid "Connected pool handlers"
 msgstr "已連線的池處理器"
+
+msgid "Stolen"
+msgstr "被竊取"
 
 msgid "Sockets stolen for data streaming"
 msgstr "供資料串流使用的通訊端"
@@ -4132,9 +4259,6 @@ msgstr "顯示所有目前的對等點連線"
 msgid "Router health overview"
 msgstr "路由器健康狀態概覽"
 
-msgid "Profiles"
-msgstr "設定檔"
-
 msgid "Show recent peer performance profiles"
 msgstr "顯示近期的對等點效能設定檔"
 
@@ -4441,6 +4565,27 @@ msgstr "累計平均值"
 msgid "1 event"
 msgid_plural "{0} events"
 msgstr[0] "{0}個事件"
+
+msgid "Open streaming connections"
+msgstr "開啟的串流連線"
+
+msgid "Round-trip time (live samples, 1 min)"
+msgstr "往返時間（即時取樣，1 分鐘）"
+
+msgid "Retrans"
+msgstr "重傳"
+
+msgid "Share of sends needing retransmit (1 min)"
+msgstr "需要重傳的傳送佔比（1 分鐘）"
+
+msgid "Created + received (1 min)"
+msgstr "已建立 + 已接收（1 分鐘）"
+
+msgid "Throughput"
+msgstr "輸送量"
+
+msgid "Mean rate of streams closed in the last minute"
+msgstr "最近一分鐘關閉串流的平均速率"
 
 msgid "sent"
 msgstr "已傳送"
@@ -4829,6 +4974,9 @@ msgstr "節流拒絕指數"
 msgid "Maximum Participating Tunnels"
 msgstr "最大參與隧道數"
 
+msgid "Timer Threads"
+msgstr "計時器執行緒"
+
 msgid "Build Handler Maximum Queue"
 msgstr "建立處理器最大佇列"
 
@@ -5182,6 +5330,9 @@ msgstr "慢啟動期間的最大壅塞視窗。"
 
 msgid "Per-connection inbound buffer cap (bytes)."
 msgstr "每條連線的對內緩衝區上限（位元組）。"
+
+msgid "Timer worker threads; higher reduces event delay."
+msgstr "計時器工作執行緒數；數值越高，事件延遲越低。"
 
 msgid "Dynamic cap on concurrent streams per destination."
 msgstr "每個目的地的並行串流動態上限。"
@@ -7004,6 +7155,15 @@ msgstr "WebApp設定"
 msgid "The Java web applications listed below are started by the webConsole client and run in the same JVM as the router. They are usually web applications accessible through the router console. They may be complete applications (e.g. i2psnark), front-ends to another client or application which must be separately enabled (e.g. susidns, i2ptunnel), or have no web interface at all (e.g. addressbook)."
 msgstr "下列Java WebApp由webConsole客戶端啟動，並與路由器在同一個JVM中執行。它們通常是可透過路由器主控台存取的WebApp。它們可能是完整的應用程式（例如i2psnark）、另一個客戶端或應用程式的前端（必須另行啟用，例如susidns、i2ptunnel），或完全沒有Web介面（例如addressbook）。"
 
+msgid "Router Session Key Manager"
+msgstr "路由器工作階段金鑰管理器"
+
+msgid "Client Session Key Managers"
+msgstr "用戶端工作階段金鑰管理器"
+
+msgid "Router DHT"
+msgstr "路由器 DHT"
+
 msgid "Open in new tab"
 msgstr "在新分頁中開啟"
 
@@ -7578,14 +7738,12 @@ msgstr "隧道測試的最短期間（以毫秒為單位）。隧道測試在逾
 msgid "Maximum tunnel test period in milliseconds. Tunnel tests never wait longer than this for a reply, even on high-latency paths. [Default is 50000 (50 seconds)]"
 msgstr "隧道測試的最長期間（以毫秒為單位）。即使在高延遲路徑上，隧道測試等待回覆的時間也不會超過此值。[Default為50000（50秒）]"
 
-msgid "Number of tunnel build timeouts before a peer is marked as a ghost (blacklisted for tunnel participation). Higher values tolerate more transient failures. [Default is 3]"
-msgstr "在對等點被標記為幽靈（列入封鎖清單而無法參與隧道）之前，可發生的隧道建立逾時次數。較高的值可容忍更多暫時性故障。[Default為3]"
+msgid "Number of tunnel build timeouts before a peer is marked as a ghost (excluded from tunnel participation). Higher values tolerate more transient failures. [Default is 1]"
+msgstr "對等點被標記為幽靈（被排除出隧道參與）之前累計的隧道建置逾時次數。較高的值可容忍更多瞬時故障。[預設值為 1]"
 
-msgid "Cooldown period in milliseconds before a ghost-marked peer can be considered for tunnel participation again. Shorter values allow faster peer reuse. [Default is 180000 (3 minutes)]"
-msgstr "被標記為幽靈的對等點要再次被考慮參與隧道之前的冷卻時間（以毫秒為單位）。較短的值可讓對等點更快被重用。[Default為180000（3分鐘）]"
-
-msgid "Cooldown period in milliseconds for ghost-marked peers during attack mode. Longer cooldowns limit exposure to potentially malicious peers during high-stress periods. [Default is 300000 (5 minutes)]"
-msgstr "攻擊模式期間，被標記為幽靈的對等點的冷卻時間（以毫秒為單位）。較長的冷卻時間可減少在高壓力期間接觸潛在惡意對等點的機會。[Default為300000（5分鐘）]"
+msgid "Cooldown period in milliseconds before a ghost-marked peer can be promoted into the tunnel peer tiers again. Shorter values return recovered peers to service faster. [Default is 90000 (90 seconds)]"
+msgstr ""
+"被標記為幽靈的對等點重新晉升到隧道對等層級之前的冷卻時間（毫秒）。較短的值能讓恢復的對等點更快回到服務。[預設值為 90000（90 秒）]"
 
 msgid "Minimum number of incoming tunnel build requests accepted per peer per clean window. Prevents starving peers during low-traffic periods. [Default is 10]"
 msgstr "每個無違規時段內，針對每個對等點接受的傳入隧道建立要求數量下限。可避免在低流量期間讓對等點挨餓。[Default為10]"
@@ -10015,3 +10173,35 @@ msgstr "下一步"
 
 msgid "Finished"
 msgstr "完成"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

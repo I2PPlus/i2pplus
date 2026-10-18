@@ -126,23 +126,52 @@ msgstr "Ομότιμοι χωρίς δημοσιευμένη διεύθυνση 
 msgid "Average tunnel build success (%)"
 msgstr "Μέση % επιτυχίας κατασκευής σήραγγας"
 
+msgid "Tier promotions held back for a peer with no usable address"
+msgstr ""
+"Προαγωγές επιπέδου που κρατήθηκαν για συνομήλικο χωρίς χρήσιμη διεύθυνση"
+
+msgid "RouterInfo refreshes issued for peers held out of the tiers"
+msgstr ""
+"Ανανεώσεις RouterInfo που εκδόθηκαν για συνομήλικους κρατούμενους εκτός "
+"επιπέδων"
+
+msgid "Tier scans that left the fast or high-capacity tier short of target"
+msgstr ""
+"Σαρώσεις επιπέδου που άφησαν το γρήγορο ή υψηλής χωρητικότητας επίπεδο "
+"κάτω από τον στόχο"
+
+msgid "RouterInfos requested for stored profiles that had none"
+msgstr "Αιτήματα RouterInfo για αποθηκευμένα προφίλ που δεν είχαν"
+
+msgid "Build timeouts recorded against a peer as a ghost mark"
+msgstr ""
+"Λήξεις δόμησης που καταγράφηκαν κατά συνομήλικου ως στίγμα φαντάσματος"
+
+msgid "Ghost marks cleared by a successful build reply"
+msgstr ""
+"Στίγματα φαντάσματος που διαγράφηκαν από επιτυχημένη απάντηση δόμησης"
+
+msgid "Peers currently excluded as ghosts"
+msgstr "Συνομήλικοι που αποκλείονται προς το παρόν ως φαντάσματα"
+
+msgid "Ghost peers in the fast or high-capacity tiers"
+msgstr ""
+"Συνομήλικοι-φαντάσματα στα επίπεδα γρήγορο ή υψηλής χωρητικότητας"
+
+msgid "Duplicate CLOSE safety-net messages sent"
+msgstr "Διπλότυπα μηνύματα δικτύου ασφαλείας CLOSE εστάλησαν"
+
 msgid "Memory used by the JVM"
 msgstr "Μνήμη που χρησιμοποιείται από τη JVM"
 
 msgid "maximum"
 msgstr "μέγιστο"
 
-msgid "No transports"
-msgstr "Κανένας μεταφορέας (κρυφοί ή κατά την εκκίνηση;)"
-
 msgid "Unsupported signature type"
 msgstr "Μη υποστηριζόμενος τύπος υπογραφής"
 
 msgid "No support for our signature type"
 msgstr "Δεν υποστηρίζεται ο τύπος υπογραφών μας"
-
-msgid "Unreachable on any transport"
-msgstr "Μη προσβάσιμο από κανένα μεταφορέα"
 
 msgid "Cannot enumerate UPnP devices on Android."
 msgstr "Αδυναμία απαρίθμησης συσκευών UPnP σε Android."
@@ -839,6 +868,9 @@ msgstr "Κονσόλα"
 
 msgid "To enable SSL access for the Router Console, see the commented <code>clients.config</code> file located in your I2P application directory for more information. You will need to edit the RouterConsoleRunner config file located in the directory: "
 msgstr "Για να ενεργοποιήσετε την πρόσβαση SSL για την Κονσόλα του δρομολογητή, ανατρέξτε στο σχολιασμένο αρχείο <code>clients.config</code> που βρίσκεται στον κατάλογο της εφαρμογής I2P για περισσότερες πληροφορίες. Θα χρειαστεί να επεξεργαστείτε το αρχείο διαμόρφωσης RouterConsoleRunner που βρίσκεται στον κατάλογο:"
+
+msgid "No client session key managers."
+msgstr "Δεν υπάρχουν διαχειριστές κλειδιών συνεδρίας πελάτη."
 
 msgid "Save disabled, edit the router.config file to make changes"
 msgstr "Η αποθήκευση είναι απενεργοποιημένη, επεξεργαστείτε το αρχείο router.config για να κάνετε αλλαγές"
@@ -2052,20 +2084,34 @@ msgstr "βελτιωμένη"
 msgid "vs baseline"
 msgstr "έναντι γραμμής βάσης"
 
+#, java-format
+msgid "Out: {0} / {1}"
+msgstr "Έξοδος: {0} / {1}"
+
+#, java-format
+msgid "In: {0} / {1}"
+msgstr "Είσοδος: {0} / {1}"
+
 msgid "CPU"
 msgstr "CPU"
 
-msgid "CPU load average"
-msgstr "Μέσος όρος φόρτου CPU"
+msgid "JVM CPU load average"
+msgstr "Μέσος όρος φόρτου CPU της JVM"
+
+#, java-format
+msgid "{0} cores"
+msgstr "{0} πυρήνες"
 
 msgid "Memory"
 msgstr "Μνήμη"
 
-msgid "Memory usage"
-msgstr "Χρήση μνήμης"
+#, java-format
+msgid "Used: {0} / {1} max"
+msgstr "Σε χρήση: {0} / {1} μέγιστο"
 
-msgid "Router uptime"
-msgstr "Χρόνος λειτουργίας δρομολογητή"
+#, java-format
+msgid "Since {0}"
+msgstr "Από {0}"
 
 msgid "Job Lag"
 msgstr "Καθυστέρηση εργασίας"
@@ -2091,6 +2137,10 @@ msgstr "Νήματα"
 msgid "Active JVM threads"
 msgstr "Ενεργά νήματα JVM"
 
+#, java-format
+msgid "Empty at {0}"
+msgstr "Άδειο με {0}"
+
 msgid "NTCP Estab"
 msgstr "Εγκατάσταση NTCP"
 
@@ -2112,20 +2162,24 @@ msgstr "Χρονικό όριο επαναμετάδοσης SSU"
 msgid "Conns/s"
 msgstr "Συνδ./s"
 
-msgid "NTCP connections established per second"
-msgstr "Συνδέσεις NTCP που εγκαθίστανται ανά δευτερόλεπτο"
+#, java-format
+msgid "Full at {0}/s"
+msgstr "Γεμάτο με {0}/δ"
+
+msgid "New NTCP connections (1 min)"
+msgstr "Νέες συνδέσεις NTCP (1 λεπτό)"
 
 msgid "Msgs/s"
 msgstr "Μην./s"
 
-msgid "Messages delivered per second"
-msgstr "Μηνύματα που παραδίδονται ανά δευτερόλεπτο"
+msgid "Messages delivered (1 min)"
+msgstr "Παραδοθέντα μηνύματα (1 λεπτό)"
 
 msgid "RTT"
 msgstr "RTT"
 
-msgid "End-to-end message round trip time"
-msgstr "Χρόνος μετάβασης μηνύματος άκρη-σε-άκρη"
+msgid "End-to-end client message round trip"
+msgstr "Διαδρομή μετάβασης-επιστροφής μηνυμάτων πελάτη άκρου-σε-άκρο"
 
 msgid "Timeout"
 msgstr "Χρονικό όριο"
@@ -2139,20 +2193,28 @@ msgstr "Κατασκευή σήραγγας"
 msgid "Client tunnel build latency"
 msgstr "Καθυστέρηση κατασκευής σήραγγας πελάτη"
 
+#, java-format
+msgid "In: {0} / Out: {1}"
+msgstr "Είσοδος: {0} / Έξοδος: {1}"
+
 msgid "Active Peers"
 msgstr "Ενεργοί κόμβοι"
 
-msgid "Active peers (last 60s)"
-msgstr "Ενεργοί κόμβοι (τελευταία 60s)"
+#, java-format
+msgid "Full at {0}"
+msgstr "Γεμάτο με {0}"
+
+msgid "Reached in the last 60s"
+msgstr "Προσβάσιμοι στα τελευταία 60 δευτερόλεπτα"
 
 msgid "Known Peers"
 msgstr "Γνωστοί κόμβοι"
 
-msgid "Known routers in network database"
-msgstr "Γνωστοί δρομολογητές στη βάση δεδομένων δικτύου"
+msgid "In the network database"
+msgstr "Στη βάση δεδομένων του δικτύου"
 
-msgid "Active I2CP clients"
-msgstr "Ενεργοί πελάτες I2CP"
+msgid "I2CP clients connected"
+msgstr "Συνδεδεμένοι πελάτες I2CP"
 
 msgid "Transit"
 msgstr "Διέλευση"
@@ -2166,8 +2228,8 @@ msgstr "Ροές"
 msgid "Build Success"
 msgstr "Κατασκευή Επιτυχίας"
 
-msgid "Tunnel build success rate"
-msgstr "Ποσοστό επιτυχίας κατασκευής σήραγγας"
+msgid "Tunnel build success rate (1 min)"
+msgstr "Ποσοστό επιτυχίας δόμησης σηράγγων (1 λεπτό)"
 
 msgid "NetDB"
 msgstr "NetDB"
@@ -2178,26 +2240,31 @@ msgstr "Χρόνος αναζήτησης NetDB"
 msgid "Banned"
 msgstr "Αποκλεισμένος"
 
-msgid "Total banned peers"
-msgstr "Σύνολο αποκλεισμένων κόμβων"
+msgid "Peers excluded from all interactions"
+msgstr "Συνομήλικοι που αποκλείονται από όλες τις αλληλεπιδράσεις"
+
+#, java-format
+msgid "{0} of {1} known"
+msgstr "{0} από {1} γνωστοί"
 
 msgid "LeaseSets"
 msgstr "Μισθωτήρια"
 
-msgid "Stored LeaseSets in floodfill"
-msgstr "Αποθηκευμένα LeaseSets σε flood node"
+msgid "Stored LeaseSets"
+msgstr "Αποθηκευμένα LeaseSets"
 
 msgid "Cache Hit"
 msgstr "Cache επιτυχία"
 
-msgid "NetDB lookup success rate"
-msgstr "Ποσοστό επιτυχίας αναζήτησης NetDB"
+#, java-format
+msgid "Matched {0} of {1} lookups (1 min)"
+msgstr "Με αποτέλεσμα {0} από {1} αναζητήσεις (1 λεπτό)"
 
 msgid "Flood Verify"
 msgstr "Επαλήθευση Floodfill"
 
-msgid "Floodfill verify time"
-msgstr "χρόνος επαλήθευσης κόμβου πλημμύρας"
+msgid "Floodfill verify time (1 min)"
+msgstr "Χρόνος επαλήθευσης Floodfill (1 λεπτό)"
 
 msgid "NetDB ACK"
 msgstr "NetDB ACK"
@@ -2208,20 +2275,20 @@ msgstr "Χρόνος επιβεβαίωσης κόμβου NetDB"
 msgid "Lookups/s"
 msgstr "Αναζητ./s"
 
-msgid "NetDB lookups handled per second"
-msgstr "Αναζητήσεις NetDB που χειρίζονται ανά δευτερόλεπτο"
+msgid "Lookups handled (1 min)"
+msgstr "Αναζητήσεις που εξυπηρετήθηκαν (1 λεπτό)"
 
 msgid "Requests/s"
 msgstr "Αιτ./s"
 
-msgid "Combined store + lookup operations per second"
-msgstr "Συνδυασμένες λειτουργίες αποθήκευσης + αναζήτησης ανά δευτερόλεπτο"
+msgid "Stores + lookups (1 min)"
+msgstr "Αποθηκεύσεις + αναζητήσεις (1 λεπτό)"
 
 msgid "Stores/s"
 msgstr "Αποθ./s"
 
-msgid "NetDB store messages handled per second"
-msgstr "Μηνύματα αποθήκευσης NetDB που χειρίζονται ανά δευτερόλεπτο"
+msgid "Stores handled (1 min)"
+msgstr "Αποθηκεύσεις που εξυπηρετήθηκαν (1 λεπτό)"
 
 msgid "LS Timeout"
 msgstr "LS Χρονικό όριο"
@@ -3205,6 +3272,9 @@ msgstr "Προβολή προφίλ"
 msgid "Configure peer"
 msgstr "Διαμόρφωση του ομότιμου"
 
+msgid "Memory usage"
+msgstr "Χρήση μνήμης"
+
 msgid "Hidden"
 msgstr "Κρυφό"
 
@@ -3348,8 +3418,8 @@ msgstr "Ομότιμοι υψηλού εύρους ζώνης για πολλέ�
 msgid "Reliable"
 msgstr "Αξιόπιστος"
 
-msgid "High-capacity peers with good acceptance"
-msgstr "Ομότιμοι υψηλής χωρητικότητας με καλή αποδοχή"
+msgid "Peers with good acceptance and recent activity"
+msgstr "Συνομήλικοι με καλή αποδοχή και πρόσφατη δραστηριότητα"
 
 msgid "Peers that store and serve NetDb info"
 msgstr "Ομότιμοι που αποθηκεύουν και προβάλλουν πληροφορίες NetDb"
@@ -3360,17 +3430,21 @@ msgstr "Γνωστό"
 msgid "Total entries in network database"
 msgstr "Συνολικές καταχωρήσεις στη βάση δεδομένων δικτύου"
 
+msgid "Profiles"
+msgstr "Προφίλ"
+
 msgid "Profiles with activity in the last hour"
 msgstr "Προφίλ με δραστηριότητα στην τελευταία ώρα"
+
+#, java-format
+msgid "{0} of {1} stored"
+msgstr "{0} από {1} αποθηκευμένοι"
 
 msgid "Unreachable"
 msgstr "Απροσπέλαστος"
 
-msgid "Peers without a reachable address"
-msgstr "Ομότιμοι χωρίς προσβάσιμη διεύθυνση"
-
-msgid "Peers excluded from all interactions"
-msgstr "Συνομήλικοι που αποκλείονται από όλες τις αλληλεπιδράσεις"
+msgid "Peers without a published address"
+msgstr "Συνομήλικοι χωρίς δημοσιευμένη διεύθυνση"
 
 msgid "/min"
 msgstr "/min"
@@ -3378,8 +3452,12 @@ msgstr "/min"
 msgid "Test Fail"
 msgstr "Αποτυχία δοκιμής"
 
-msgid "Connectivity test failures per minute"
-msgstr "Αποτυχίες δοκιμών συνδεσιμότητας ανά λεπτό"
+msgid "Connectivity test failures in the last minute"
+msgstr "Αποτυχίες δοκιμής συνδεσιμότητας το τελευταίο λεπτό"
+
+#, java-format
+msgid "Empty at {0}/min"
+msgstr "Άδειο με {0}/λ"
 
 msgid "Peer Connections"
 msgstr "Συνδέσεις ομοτίμων"
@@ -3653,26 +3731,40 @@ msgstr[1] "Αποκρύφθηκαν {0} παλαιά προφίλ"
 msgid "Share of total profiles shown"
 msgstr "Ποσοστό συνολικών προφίλ που εμφανίζονται"
 
-msgid "peers"
-msgstr "συνομήλικοι"
-
-msgid "Share of tier profiles shown"
-msgstr "Ποσοστό προφίλ βαθμίδας που εμφανίζονται"
-
 msgid "Window"
 msgstr "Παράθυρο"
 
 msgid "Fast RTT"
 msgstr "Γρήγορο RTT"
 
-msgid "Max RTT for fast-tier membership (ms)"
-msgstr "Μέγιστο RTT για ένταξη στην ταχεία βαθμίδα (ms)"
+msgid "Max RTT for fast-tier membership"
+msgstr "Μέγιστο RTT για ιδιότητα μέλους στο γρήγορο επίπεδο"
 
-msgid "Average loss of fast-tier peers (%)"
-msgstr "Μέση απώλεια των ομοτίμων ταχείας βαθμίδας (%)"
+msgid "Rises with network latency"
+msgstr "Αυξάνεται με την καθυστέρηση του δικτύου"
 
-msgid "Average loss of high-capacity peers (%)"
-msgstr "Μέση απώλεια των ομοτίμων υψηλής χωρητικότητας (%)"
+msgid "Average loss of fast-tier peers"
+msgstr "Μέση απώλεια συνομήλικων του γρήγορου επιπέδου"
+
+msgid "Average loss of high-capacity peers"
+msgstr "Μέση απώλεια συνομήλικων υψηλής χωρητικότητας"
+
+msgid "Average direct-link RTT of tier peers"
+msgstr "Μέσο RTT απευθείας σύνδεσης των συνομήλικων επιπέδου"
+
+#, java-format
+msgid "{0} of {1} measured"
+msgstr "{0} από {1} μετρημένοι"
+
+msgid "1h Contact"
+msgstr "Επικοινωνία 1h"
+
+msgid "Heard from in the last hour"
+msgstr "Με επικοινωνία την τελευταία ώρα"
+
+#, java-format
+msgid "{0} of {1} tier peers"
+msgstr "{0} από {1} συνομήλικοι επιπέδου"
 
 msgid "Heard from within the display cutoff"
 msgstr "Ακούστηκε εντός του ορίου εμφάνισης"
@@ -3683,11 +3775,19 @@ msgstr "Αναζητήσεις"
 msgid "Lookup success rate"
 msgstr "Ποσοστό επιτυχίας αναζητήσεων"
 
+#, java-format
+msgid "{0} of {1} lookups"
+msgstr "{0} από {1} αναζητήσεις"
+
 msgid "Stores"
 msgstr "Αποθηκεύσεις"
 
 msgid "Store success rate"
 msgstr "Ποσοστό επιτυχίας αποθηκεύσεων"
+
+#, java-format
+msgid "{0} of {1} peers"
+msgstr "{0} από {1} συνομήλικοι"
 
 msgid "Definitions"
 msgstr "Ορισμοί"
@@ -3760,11 +3860,25 @@ msgstr "για πόσους νέους συνομηλίκους μας είπα�
 msgid "Known floodfills"
 msgstr "Γνωστοί κόμβοι πλημμύρας"
 
-msgid "No-Fail"
-msgstr "Χωρίς Αποτυχίες"
+msgid "Reachable, unbanlisted and heard from"
+msgstr "Προσβάσιμος, μη αποκλεισμένος και με πρόσφατη επικοινωνία"
 
-msgid "No lookup failures (1h)"
-msgstr "Καμία αποτυχία αναζήτησης (1h)"
+msgid "Active bans of floodfill-capable peers"
+msgstr "Ενεργοί αποκλεισμοί συνομήλικων ικανών για floodfill"
+
+#, java-format
+msgid "of {0} known"
+msgstr "από {0} γνωστούς"
+
+msgid "Fail"
+msgstr "Αποτυχία"
+
+msgid "Lookup failures in the last hour"
+msgstr "Αποτυχίες αναζήτησης την τελευταία ώρα"
+
+#, java-format
+msgid "across {0} listed peers"
+msgstr "σε {0} καταχωρημένους συνομήλικους"
 
 msgid "Response"
 msgstr "Απόκριση"
@@ -3772,11 +3886,16 @@ msgstr "Απόκριση"
 msgid "Lookup response time (1h)"
 msgstr "Χρόνος απόκρισης αναζητήσεων (1h)"
 
-msgid "1h Contact"
-msgstr "Επικοινωνία 1h"
+#, java-format
+msgid "{0} peers measured"
+msgstr "{0} συνομήλικοι μετρήθηκαν"
 
 msgid "Contacted within 1h"
 msgstr "Επικοινωνήθηκε εντός 1h"
+
+#, java-format
+msgid "{0} of {1} listed"
+msgstr "{0} από {1} καταχωρημένοι"
 
 msgid "1h Fail Rate"
 msgstr "Ρυθμός αποτυχίας 1 ώρας"
@@ -3814,17 +3933,33 @@ msgstr "Όλοι"
 msgid "SAM bridge is not running."
 msgstr "Η γέφυρα SAM δεν εκτελείται."
 
+msgid "Sessions"
+msgstr "Συνεδρίες"
+
 msgid "Active sessions in SessionsDB"
 msgstr "Ενεργές συνεδρίες στο SessionsDB"
+
+msgid "Workers"
+msgstr "Νήματα εργασίας"
 
 msgid "Active / pool worker threads"
 msgstr "Ενεργά / νήματα εργατών ομάδας"
 
-msgid "Pending commands in pool"
-msgstr "Εκκρεμείς εντολές στην ομάδα"
+msgid "Queue"
+msgstr "Ουρά"
+
+#, java-format
+msgid "Pending commands: {0} of {1}"
+msgstr "Εν αναμονή εντολές: {0} από {1}"
+
+msgid "Handlers"
+msgstr "Διεργαστές"
 
 msgid "Connected pool handlers"
 msgstr "Συνδεδεμένοι χειριστές ομάδας"
+
+msgid "Stolen"
+msgstr "Κλεμμένα"
 
 msgid "Sockets stolen for data streaming"
 msgstr "Υποκλαπέντα υποδοχές για ροή δεδομένων"
@@ -4143,9 +4278,6 @@ msgstr "Εμφάνιση όλων των τρεχουσών ομότιμων σ�
 msgid "Router health overview"
 msgstr "Επισκόπηση κατάστασης δρομολογητή"
 
-msgid "Profiles"
-msgstr "Προφίλ"
-
 msgid "Show recent peer performance profiles"
 msgstr "Εμφάνιση πρόσφατων προφίλ απόδοσης ομότιμων"
 
@@ -4454,6 +4586,27 @@ msgid "1 event"
 msgid_plural "{0} events"
 msgstr[0] "1 γεγονός"
 msgstr[1] "{0} γεγονότα"
+
+msgid "Open streaming connections"
+msgstr "Ανοιχτές συνδέσεις ροής"
+
+msgid "Round-trip time (live samples, 1 min)"
+msgstr "Χρόνος μετάβασης-επιστροφής (ζωντανά δείγματα, 1 λεπτό)"
+
+msgid "Retrans"
+msgstr "Επαν."
+
+msgid "Share of sends needing retransmit (1 min)"
+msgstr "Μερίδιο αποστολών που χρειάζονται επανμετάδοση (1 λεπτό)"
+
+msgid "Created + received (1 min)"
+msgstr "Δημιουργήθηκαν + ελήφθησαν (1 λεπτό)"
+
+msgid "Throughput"
+msgstr "Απόδοση"
+
+msgid "Mean rate of streams closed in the last minute"
+msgstr "Μέσος ρυθμός ροών που έκλεισαν το τελευταίο λεπτό"
 
 msgid "sent"
 msgstr "στάλθηκε"
@@ -4842,6 +4995,9 @@ msgstr "Εκθέτης Απόρριψης Πνιγμού"
 msgid "Maximum Participating Tunnels"
 msgstr "Μέγιστες Συμμετέχουσες Σήραγγες"
 
+msgid "Timer Threads"
+msgstr "Νήματα χρονομέτρητη"
+
 msgid "Build Handler Maximum Queue"
 msgstr "Μέγιστη Ουρά Χειριστή Κατασκευής"
 
@@ -5195,6 +5351,11 @@ msgstr "Μέγιστο παράθυρο συμφόρησης κατά το slow 
 
 msgid "Per-connection inbound buffer cap (bytes)."
 msgstr "Όριο του εισερχόμενου buffer ανά σύνδεση (bytes)."
+
+msgid "Timer worker threads; higher reduces event delay."
+msgstr ""
+"Νήματα εργασίας χρονομέτρητη· υψηλότερη τιμή μειώνει την καθυστέρηση "
+"συμβάντων."
 
 msgid "Dynamic cap on concurrent streams per destination."
 msgstr "Δυναμικό όριο ταυτόχρονων ροών ανά προορισμό."
@@ -7017,6 +7178,15 @@ msgstr "διαμόρφωση webapps"
 msgid "The Java web applications listed below are started by the webConsole client and run in the same JVM as the router. They are usually web applications accessible through the router console. They may be complete applications (e.g. i2psnark), front-ends to another client or application which must be separately enabled (e.g. susidns, i2ptunnel), or have no web interface at all (e.g. addressbook)."
 msgstr "Οι παρακάτω εφαρμογές Ιστού Java ξεκινάνε από τον πελάτη webConsole και εκτελούνται στον ίδιο JVM με τον δρομολογητή. Συνήθως είναι εφαρμογές Ιστού προσβάσιμες μέσω της κονσόλας του δρομολογητή. Μπορεί να είναι πλήρεις εφαρμογές (π.χ. i2psnark), επιφάνειες χρήστη για άλλο πελάτη ή εφαρμογή που πρέπει να ενεργοποιηθεί ξεχωριστά (π.χ. susidns, i2ptunnel) ή να μην έχουν καθόλου διεπαφή ιστού (π.χ. addressbook)."
 
+msgid "Router Session Key Manager"
+msgstr "Διαχειριστής κλειδιών συνεδρίας δρομολογητή"
+
+msgid "Client Session Key Managers"
+msgstr "Διαχειριστές κλειδιών συνεδρίας πελάτη"
+
+msgid "Router DHT"
+msgstr "DHT δρομολογητή"
+
 msgid "Open in new tab"
 msgstr "Άνοιξε σε νέα καρτέλα"
 
@@ -7591,14 +7761,19 @@ msgstr "Ελάχιστη περίοδος δοκιμής σήραγγας σε �
 msgid "Maximum tunnel test period in milliseconds. Tunnel tests never wait longer than this for a reply, even on high-latency paths. [Default is 50000 (50 seconds)]"
 msgstr "Μέγιστη περίοδος δοκιμής σήραγγας σε χιλιοστά του δευτερολέπτου. Οι δοκιμές σήραγγας δεν περιμένουν ποτέ περισσότερο από αυτό το χρόνο για απάντηση. [Προεπιλογή 50000 (50 δευτερόλεπτα)]"
 
-msgid "Number of tunnel build timeouts before a peer is marked as a ghost (blacklisted for tunnel participation). Higher values tolerate more transient failures. [Default is 3]"
-msgstr "Αριθμός χρονικών ορίων κατασκευής σήραγγας πριν ένας συνομήλικος επισημανθεί ως φάντασμα (μαύρη λίστα για συμμετοχή σε σήραγγες). Υψηλότερες τιμές ανέχονται περισσότερες παροδικές αποτυχίες. [Προεπιλογή 3]"
+msgid "Number of tunnel build timeouts before a peer is marked as a ghost (excluded from tunnel participation). Higher values tolerate more transient failures. [Default is 1]"
+msgstr ""
+"Αριθμός λήξεων δόμησης σήραγγας πριν ένας συνομήλικος σημειωθεί ως "
+"φάντασμα (αποκλείεται από συμμετοχή σε σήραγγες). Υψηλότερες τιμές "
+"ανέχονται περισσότερες παροδικές βλάβες. [Η προεπιλογή είναι 1]"
 
-msgid "Cooldown period in milliseconds before a ghost-marked peer can be considered for tunnel participation again. Shorter values allow faster peer reuse. [Default is 180000 (3 minutes)]"
-msgstr "Περίοδος ψύξης σε χιλιοστά του δευτερολέπτου πριν ένας συνομήλικος που επισημάνθηκε ως φάντασμα μπορεί να εξεταστεί ξανά για συμμετοχή σε σήραγγες. Μικρότερες τιμές επιτρέπουν ταχύτερη επαναχρησιμοποίηση συνομηλίκων. [Προεπιλογή 180000 (3 λεπτά)]"
-
-msgid "Cooldown period in milliseconds for ghost-marked peers during attack mode. Longer cooldowns limit exposure to potentially malicious peers during high-stress periods. [Default is 300000 (5 minutes)]"
-msgstr "Περίοδος ψύξης σε χιλιοστά του δευτερολέπτου για συνομηλίκους που επισημάνθηκαν ως φάντασμα κατά τη λειτουργία επίθεσης. Μεγαλύτερες περίοδοι ψύξης περιορίζουν την έκθεση σε δυνητικά κακόβουλους συνομηλίκους. [Προεπιλογή 300000 (5 λεπτά)]"
+msgid "Cooldown period in milliseconds before a ghost-marked peer can be promoted into the tunnel peer tiers again. Shorter values return recovered peers to service faster. [Default is 90000 (90 seconds)]"
+msgstr ""
+"Περίοδος ψύξης σε χιλιοστά του δευτερολέπτου πριν ένας συνομήλικος "
+"σημειωμένος ως φάντασμα μπορεί να προαχθεί και πάλι στα επίπεδα "
+"συνομήλικων σηράγγας. Μικρότερες τιμές επαναφέρουν γρηγορότερα τους "
+"ανακτημένους συνομήλικους σε υπηρεσία. [Η προεπιλογή είναι 90000 (90 "
+"δευτερόλεπτα)]"
 
 msgid "Minimum number of incoming tunnel build requests accepted per peer per clean window. Prevents starving peers during low-traffic periods. [Default is 10]"
 msgstr "Ελάχιστος αριθμός εισερχόμενων αιτημάτων κατασκευής σήραγγας που γίνονται αποδεκτά ανά συνομήλικο ανά καθαρό παράθυρο. Αποτρέπει την ασιτία συνομηλίκων κατά περιόδους χαμηλής κίνησης. [Προεπιλογή 10]"
@@ -10028,3 +10203,35 @@ msgstr "Επόμενο"
 
 msgid "Finished"
 msgstr "Τελειωμέν"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

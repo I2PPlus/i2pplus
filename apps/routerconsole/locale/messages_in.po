@@ -124,23 +124,51 @@ msgstr "Rekan tanpa alamat IP yang dipublikasikan"
 msgid "Average tunnel build success (%)"
 msgstr "Rata-rata keberhasilan pembangunan terowongan %"
 
-msgid "Memory used by the JVM"
+msgid "Tier promotions held back for a peer with no usable address"
 msgstr ""
+"Kenaikan tingkat ditahan untuk rekan tanpa alamat yang dapat dipakai"
+
+msgid "RouterInfo refreshes issued for peers held out of the tiers"
+msgstr ""
+"Penyegaran RouterInfo yang dikeluarkan untuk rekan yang ditahan di luar "
+"tingkat"
+
+msgid "Tier scans that left the fast or high-capacity tier short of target"
+msgstr ""
+"Pemindaian tingkat yang membuat tingkat cepat atau berkapasitas tinggi "
+"kurang dari target"
+
+msgid "RouterInfos requested for stored profiles that had none"
+msgstr ""
+"RouterInfo yang diminta untuk profil tersimpan yang tidak memilikinya"
+
+msgid "Build timeouts recorded against a peer as a ghost mark"
+msgstr ""
+"Waktu tunggu pembuatan yang dicatat terhadap rekan sebagai tanda hantu"
+
+msgid "Ghost marks cleared by a successful build reply"
+msgstr "Tanda hantu yang dihapus oleh balasan pembuatan yang berhasil"
+
+msgid "Peers currently excluded as ghosts"
+msgstr "Rekan yang saat ini dikeluarkan sebagai hantu"
+
+msgid "Ghost peers in the fast or high-capacity tiers"
+msgstr "Rekan hantu di tingkat cepat atau berkapasitas tinggi"
+
+msgid "Duplicate CLOSE safety-net messages sent"
+msgstr "Pesan jaringan pengaman CLOSE duplikat dikirim"
+
+msgid "Memory used by the JVM"
+msgstr "Memori yang dipakai JVM"
 
 msgid "maximum"
-msgstr ""
-
-msgid "No transports"
-msgstr "Tidak ada transport (tersembunyi atau sedang dinyalakan?)"
+msgstr "maksimum"
 
 msgid "Unsupported signature type"
 msgstr "Jenis signatur tidak didukung"
 
 msgid "No support for our signature type"
 msgstr "Tidak ada dukungan untuk jenis signature kami"
-
-msgid "Unreachable on any transport"
-msgstr "Tidak terjangkau transport apa pun"
 
 msgid "Cannot enumerate UPnP devices on Android."
 msgstr "Tidak dapat menghitung perangkat UPnP di Android."
@@ -836,6 +864,9 @@ msgstr "Konsol"
 
 msgid "To enable SSL access for the Router Console, see the commented <code>clients.config</code> file located in your I2P application directory for more information. You will need to edit the RouterConsoleRunner config file located in the directory: "
 msgstr "Untuk mengaktifkan akses SSL untuk Router Console, lihat file <code>clients.config</code> yang dikomentari yang terletak di direktori aplikasi I2P Anda untuk informasi lebih lanjut. Anda perlu mengedit file konfigurasi RouterConsoleRunner yang terletak di direktori"
+
+msgid "No client session key managers."
+msgstr "Tidak ada pengelola kunci sesi klien."
 
 msgid "Save disabled, edit the router.config file to make changes"
 msgstr "Simpan dinonaktifkan, edit file router.config untuk membuat perubahan"
@@ -1890,10 +1921,10 @@ msgid "Bandwidth Usage"
 msgstr "Penggunaan bandwidth"
 
 msgid "Graph combining is not enabled"
-msgstr ""
+msgstr "Penggabungan grafik tidak diaktifkan"
 
 msgid "Not enough stats enabled to combine"
-msgstr ""
+msgstr "Tidak cukup statistik diaktifkan untuk menggabungkan"
 
 #, java-format
 msgid "ending {0} ago"
@@ -2011,22 +2042,22 @@ msgid "Add a glow effect to graph lines"
 msgstr "Tambahkan efek cahaya pada garis grafik"
 
 msgid "Smooth lines"
-msgstr ""
+msgstr "Garis halus"
 
 msgid "Use bezier curves to plot graphs"
-msgstr ""
+msgstr "Gunakan kurva Bézier untuk menggambar grafik"
 
 msgid "Filled paths"
-msgstr ""
+msgstr "Jalur terisi"
 
 msgid "Use filled areas for graphs"
-msgstr ""
+msgstr "Gunakan area terisi untuk grafik"
 
 msgid "Combine graphs"
-msgstr ""
+msgstr "Gabungkan grafik"
 
 msgid "Merge related graphs into a plot"
-msgstr ""
+msgstr "Gabungkan grafik terkait ke satu plot"
 
 msgid "Select Stats"
 msgstr "Pilih Statistik"
@@ -2046,20 +2077,34 @@ msgstr "ditingkatkan"
 msgid "vs baseline"
 msgstr "vs dasar"
 
+#, java-format
+msgid "Out: {0} / {1}"
+msgstr "Keluar: {0} / {1}"
+
+#, java-format
+msgid "In: {0} / {1}"
+msgstr "Masuk: {0} / {1}"
+
 msgid "CPU"
 msgstr "CPU"
 
-msgid "CPU load average"
-msgstr "Rata-rata beban CPU"
+msgid "JVM CPU load average"
+msgstr "Rata-rata beban CPU JVM"
+
+#, java-format
+msgid "{0} cores"
+msgstr "{0} core"
 
 msgid "Memory"
 msgstr "Memori"
 
-msgid "Memory usage"
-msgstr "Penggunaan memori"
+#, java-format
+msgid "Used: {0} / {1} max"
+msgstr "Terpakai: {0} / {1} maks."
 
-msgid "Router uptime"
-msgstr "Waktu aktif router"
+#, java-format
+msgid "Since {0}"
+msgstr "Sejak {0}"
 
 msgid "Job Lag"
 msgstr "Keterlambatan Pekerjaan"
@@ -2085,6 +2130,10 @@ msgstr "Thread"
 msgid "Active JVM threads"
 msgstr "Thread JVM aktif"
 
+#, java-format
+msgid "Empty at {0}"
+msgstr "Kosong pada {0}"
+
 msgid "NTCP Estab"
 msgstr "Pembentukan NTCP"
 
@@ -2106,20 +2155,24 @@ msgstr "Waktu habis retransmisi SSU"
 msgid "Conns/s"
 msgstr "Koneksi/s"
 
-msgid "NTCP connections established per second"
-msgstr "Koneksi NTCP dibentuk per detik"
+#, java-format
+msgid "Full at {0}/s"
+msgstr "Penuh pada {0}/dtk"
+
+msgid "New NTCP connections (1 min)"
+msgstr "Koneksi NTCP baru (1 menit)"
 
 msgid "Msgs/s"
 msgstr "Pesan/s"
 
-msgid "Messages delivered per second"
-msgstr "Pesan terkirim per detik"
+msgid "Messages delivered (1 min)"
+msgstr "Pesan terkirim (1 menit)"
 
 msgid "RTT"
 msgstr "RTT"
 
-msgid "End-to-end message round trip time"
-msgstr "Waktu pulang-pergi pesan ujung-ke-ujung"
+msgid "End-to-end client message round trip"
+msgstr "Pulang-pergi pesan klien ujung ke ujung"
 
 msgid "Timeout"
 msgstr "Waktu Habis"
@@ -2133,20 +2186,28 @@ msgstr "Pembangunan Tunnel"
 msgid "Client tunnel build latency"
 msgstr "Latensi pembangunan tunnel klien"
 
+#, java-format
+msgid "In: {0} / Out: {1}"
+msgstr "Masuk: {0} / Keluar: {1}"
+
 msgid "Active Peers"
 msgstr "Peer Aktif"
 
-msgid "Active peers (last 60s)"
-msgstr "Peer aktif (60 detik terakhir)"
+#, java-format
+msgid "Full at {0}"
+msgstr "Penuh pada {0}"
+
+msgid "Reached in the last 60s"
+msgstr "Dihubungi dalam 60 detik terakhir"
 
 msgid "Known Peers"
 msgstr "Peer Dikenal"
 
-msgid "Known routers in network database"
-msgstr "Router dikenal dalam basis data jaringan"
+msgid "In the network database"
+msgstr "Dalam basis data jaringan"
 
-msgid "Active I2CP clients"
-msgstr "Klien I2CP aktif"
+msgid "I2CP clients connected"
+msgstr "Klien I2CP terhubung"
 
 msgid "Transit"
 msgstr "Transit"
@@ -2160,8 +2221,8 @@ msgstr "Stream"
 msgid "Build Success"
 msgstr "Bangun Kesuksesan"
 
-msgid "Tunnel build success rate"
-msgstr "Tingkat keberhasilan pembangunan tunnel"
+msgid "Tunnel build success rate (1 min)"
+msgstr "Tingkat keberhasilan pembuatan terowongan (1 menit)"
 
 msgid "NetDB"
 msgstr "NetDB"
@@ -2172,26 +2233,31 @@ msgstr "Waktu pencarian NetDB"
 msgid "Banned"
 msgstr "Diblokir"
 
-msgid "Total banned peers"
-msgstr "Total peer yang diblokir"
+msgid "Peers excluded from all interactions"
+msgstr "Rekan-rekan dikecualikan dari semua interaksi"
+
+#, java-format
+msgid "{0} of {1} known"
+msgstr "{0} dari {1} diketahui"
 
 msgid "LeaseSets"
 msgstr "Set Sewa"
 
-msgid "Stored LeaseSets in floodfill"
-msgstr "LeaseSet Tersimpan di simpul banjir"
+msgid "Stored LeaseSets"
+msgstr "LeaseSet tersimpan"
 
 msgid "Cache Hit"
 msgstr "Cache Terkena"
 
-msgid "NetDB lookup success rate"
-msgstr "Tingkat keberhasilan pencarian NetDB"
+#, java-format
+msgid "Matched {0} of {1} lookups (1 min)"
+msgstr "Cocok {0} dari {1} pencarian (1 menit)"
 
 msgid "Flood Verify"
 msgstr "Verifikasi Flood"
 
-msgid "Floodfill verify time"
-msgstr "simpul banjir memverifikasi waktu"
+msgid "Floodfill verify time (1 min)"
+msgstr "Waktu verifikasi Floodfill (1 menit)"
 
 msgid "NetDB ACK"
 msgstr "NetDB ACK"
@@ -2202,20 +2268,20 @@ msgstr "Waktu pengakuan peer NetDB"
 msgid "Lookups/s"
 msgstr "Pencarian/s"
 
-msgid "NetDB lookups handled per second"
-msgstr "Pencarian NetDB ditangani per detik"
+msgid "Lookups handled (1 min)"
+msgstr "Pencarian ditangani (1 menit)"
 
 msgid "Requests/s"
 msgstr "Permintaan/s"
 
-msgid "Combined store + lookup operations per second"
-msgstr "Operasi penyimpanan + pencarian gabungan per detik"
+msgid "Stores + lookups (1 min)"
+msgstr "Simpan + pencarian (1 menit)"
 
 msgid "Stores/s"
 msgstr "Simpan/s"
 
-msgid "NetDB store messages handled per second"
-msgstr "Pesan penyimpanan NetDB ditangani per detik"
+msgid "Stores handled (1 min)"
+msgstr "Penyimpanan ditangani (1 menit)"
 
 msgid "LS Timeout"
 msgstr "Waktu Habis LS"
@@ -3199,6 +3265,9 @@ msgstr "Lihat profil"
 msgid "Configure peer"
 msgstr "Konfigurasi peer"
 
+msgid "Memory usage"
+msgstr "Penggunaan memori"
+
 msgid "Hidden"
 msgstr "Tersembunyi"
 
@@ -3342,8 +3411,8 @@ msgstr "Rekan bandwidth tinggi untuk banyak terowongan"
 msgid "Reliable"
 msgstr "Dapat diandalkan"
 
-msgid "High-capacity peers with good acceptance"
-msgstr "Rekan berkapasitas tinggi dengan penerimaan yang baik"
+msgid "Peers with good acceptance and recent activity"
+msgstr "Rekan dengan penerimaan baik dan aktivitas baru-baru ini"
 
 msgid "Peers that store and serve NetDb info"
 msgstr "Rekan yang menyimpan dan menyajikan info NetDb"
@@ -3354,17 +3423,21 @@ msgstr "Diketahui"
 msgid "Total entries in network database"
 msgstr "Total entri dalam database jaringan"
 
+msgid "Profiles"
+msgstr "Profil"
+
 msgid "Profiles with activity in the last hour"
 msgstr "Profil dengan aktivitas dalam 1 jam terakhir"
+
+#, java-format
+msgid "{0} of {1} stored"
+msgstr "{0} dari {1} tersimpan"
 
 msgid "Unreachable"
 msgstr "Tidak dapat dijangkau"
 
-msgid "Peers without a reachable address"
-msgstr "Rekan tanpa alamat yang dapat dijangkau"
-
-msgid "Peers excluded from all interactions"
-msgstr "Rekan-rekan dikecualikan dari semua interaksi"
+msgid "Peers without a published address"
+msgstr "Rekan tanpa alamat yang dipublikasikan"
 
 msgid "/min"
 msgstr "/mnt"
@@ -3372,8 +3445,12 @@ msgstr "/mnt"
 msgid "Test Fail"
 msgstr "Tes Gagal"
 
-msgid "Connectivity test failures per minute"
-msgstr "Kegagalan uji konektivitas per menit"
+msgid "Connectivity test failures in the last minute"
+msgstr "Kegagalan uji konektivitas pada menit terakhir"
+
+#, java-format
+msgid "Empty at {0}/min"
+msgstr "Kosong pada {0}/menit"
 
 msgid "Peer Connections"
 msgstr "Koneksi Rekan"
@@ -3564,6 +3641,8 @@ msgstr "Latensi Rendah"
 
 msgid "Round trip time to this peer on the direct link, as measured by the transport"
 msgstr ""
+"Waktu pulang-pergi ke rekan ini melalui tautan langsung, sebagaimana "
+"diukur oleh transport"
 
 msgid "Packets retransmitted / packets sent, as reported by the UDP transport"
 msgstr "Paket yang dikirim ulang / paket yang dikirim, sebagaimana dilaporkan oleh transportasi UDP"
@@ -3644,26 +3723,40 @@ msgstr[0] "{0} profil basi disembunyikan"
 msgid "Share of total profiles shown"
 msgstr "Porsi profil total yang ditampilkan"
 
-msgid "peers"
-msgstr "teman sebaya"
-
-msgid "Share of tier profiles shown"
-msgstr "Porsi profil tingkat yang ditampilkan"
-
 msgid "Window"
 msgstr "Jendela"
 
 msgid "Fast RTT"
 msgstr "RTT Cepat"
 
-msgid "Max RTT for fast-tier membership (ms)"
-msgstr "RTT maksimum untuk keanggotaan tingkat cepat (ms)"
+msgid "Max RTT for fast-tier membership"
+msgstr "RTT maksimum untuk keanggotaan tingkat cepat"
 
-msgid "Average loss of fast-tier peers (%)"
-msgstr "Rata-rata kehilangan peer tingkat cepat (%)"
+msgid "Rises with network latency"
+msgstr "Naik seiring latensi jaringan"
 
-msgid "Average loss of high-capacity peers (%)"
-msgstr "Rata-rata kehilangan peer berkapasitas tinggi (%)"
+msgid "Average loss of fast-tier peers"
+msgstr "Kehilangan rata-rata rekan tingkat cepat"
+
+msgid "Average loss of high-capacity peers"
+msgstr "Kehilangan rata-rata rekan berkapasitas tinggi"
+
+msgid "Average direct-link RTT of tier peers"
+msgstr "RTT tautan langsung rata-rata dari rekan tingkat"
+
+#, java-format
+msgid "{0} of {1} measured"
+msgstr "{0} dari {1} terukur"
+
+msgid "1h Contact"
+msgstr "Kontak dalam 1 jam"
+
+msgid "Heard from in the last hour"
+msgstr "Terdengar dalam satu jam terakhir"
+
+#, java-format
+msgid "{0} of {1} tier peers"
+msgstr "{0} dari {1} rekan tingkat"
 
 msgid "Heard from within the display cutoff"
 msgstr "Terdengar dalam batas tampilan"
@@ -3674,11 +3767,19 @@ msgstr "Pencarian"
 msgid "Lookup success rate"
 msgstr "Tingkat keberhasilan pencarian"
 
+#, java-format
+msgid "{0} of {1} lookups"
+msgstr "{0} dari {1} pencarian"
+
 msgid "Stores"
 msgstr "Penyimpanan"
 
 msgid "Store success rate"
 msgstr "Tingkat keberhasilan penyimpanan"
+
+#, java-format
+msgid "{0} of {1} peers"
+msgstr "{0} dari {1} rekan"
 
 msgid "Definitions"
 msgstr "Definisi"
@@ -3751,11 +3852,25 @@ msgstr "berapa banyak peer baru yang mereka informasikan kepada kita akhir-akhir
 msgid "Known floodfills"
 msgstr "Node banjir yang diketahui"
 
-msgid "No-Fail"
-msgstr "Tanpa Gagal"
+msgid "Reachable, unbanlisted and heard from"
+msgstr "Dapat dijangkau, tidak diblokir, dan terdengar baru-baru ini"
 
-msgid "No lookup failures (1h)"
-msgstr "Tidak ada kegagalan pencarian (1 jam)"
+msgid "Active bans of floodfill-capable peers"
+msgstr "Blokir aktif terhadap rekan yang mampu floodfill"
+
+#, java-format
+msgid "of {0} known"
+msgstr "dari {0} diketahui"
+
+msgid "Fail"
+msgstr "Gagal"
+
+msgid "Lookup failures in the last hour"
+msgstr "Kegagalan pencarian dalam satu jam terakhir"
+
+#, java-format
+msgid "across {0} listed peers"
+msgstr "di antara {0} rekan terdaftar"
 
 msgid "Response"
 msgstr "Respons"
@@ -3763,11 +3878,16 @@ msgstr "Respons"
 msgid "Lookup response time (1h)"
 msgstr "Waktu respons pencarian (1 jam)"
 
-msgid "1h Contact"
-msgstr "Kontak dalam 1 jam"
+#, java-format
+msgid "{0} peers measured"
+msgstr "{0} rekan terukur"
 
 msgid "Contacted within 1h"
 msgstr "Dihubungi dalam 1 jam"
+
+#, java-format
+msgid "{0} of {1} listed"
+msgstr "{0} dari {1} terdaftar"
 
 msgid "1h Fail Rate"
 msgstr "Tingkat Kegagalan dalam 1 jam"
@@ -3805,17 +3925,33 @@ msgstr "Semuanya"
 msgid "SAM bridge is not running."
 msgstr "Jembatan SAM tidak berjalan."
 
+msgid "Sessions"
+msgstr "Sesi"
+
 msgid "Active sessions in SessionsDB"
 msgstr "Sesi aktif dalam SessionsDB"
+
+msgid "Workers"
+msgstr "Pekerja"
 
 msgid "Active / pool worker threads"
 msgstr "Thread pekerja aktif / pool"
 
-msgid "Pending commands in pool"
-msgstr "Perintah tertunda dalam pool"
+msgid "Queue"
+msgstr "Antrean"
+
+#, java-format
+msgid "Pending commands: {0} of {1}"
+msgstr "Perintah tertunda: {0} dari {1}"
+
+msgid "Handlers"
+msgstr "Pengendali"
 
 msgid "Connected pool handlers"
 msgstr "Penangan pool terhubung"
+
+msgid "Stolen"
+msgstr "Dicuri"
 
 msgid "Sockets stolen for data streaming"
 msgstr "Soket diambil alih untuk streaming data"
@@ -4134,9 +4270,6 @@ msgstr "Tampilkan semua koneksi peer saat ini"
 msgid "Router health overview"
 msgstr "Ikhtisar kesehatan router"
 
-msgid "Profiles"
-msgstr "Profil"
-
 msgid "Show recent peer performance profiles"
 msgstr "Tampilkan profil kinerja peer terbaru"
 
@@ -4443,6 +4576,27 @@ msgstr "Nilai rata-rata seumur hidup"
 msgid "1 event"
 msgid_plural "{0} events"
 msgstr[0] "{0} event"
+
+msgid "Open streaming connections"
+msgstr "Koneksi streaming terbuka"
+
+msgid "Round-trip time (live samples, 1 min)"
+msgstr "Waktu pulang-pergi (sampel langsung, 1 menit)"
+
+msgid "Retrans"
+msgstr "Ulang"
+
+msgid "Share of sends needing retransmit (1 min)"
+msgstr "Bagian kiriman yang perlu dikirim ulang (1 menit)"
+
+msgid "Created + received (1 min)"
+msgstr "Dibuat + diterima (1 menit)"
+
+msgid "Throughput"
+msgstr "Throughput"
+
+msgid "Mean rate of streams closed in the last minute"
+msgstr "Laju rata-rata stream yang ditutup pada menit terakhir"
 
 msgid "sent"
 msgstr "dikirim"
@@ -4831,6 +4985,9 @@ msgstr "Eksponen Tolak Throttle"
 msgid "Maximum Participating Tunnels"
 msgstr "Jumlah Terowongan Partisipasi Maksimum"
 
+msgid "Timer Threads"
+msgstr "Thread Timer"
+
 msgid "Build Handler Maximum Queue"
 msgstr "Antrean Maksimum Penangan Pembentukan"
 
@@ -5185,6 +5342,10 @@ msgstr "Jendela kemacetan maksimum selama slow start."
 msgid "Per-connection inbound buffer cap (bytes)."
 msgstr "Batas buffer masuk per koneksi (byte)."
 
+msgid "Timer worker threads; higher reduces event delay."
+msgstr ""
+"Thread pekerja timer; nilai lebih tinggi mengurangi penundaan kejadian."
+
 msgid "Dynamic cap on concurrent streams per destination."
 msgstr "Batas dinamis stream konkuren per tujuan."
 
@@ -5430,9 +5591,13 @@ msgstr "Waktu minimum antar pengiriman ulang (ms)."
 
 msgid "Window growth per RTT after slow start; higher recovers faster."
 msgstr ""
+"Pertumbuhan jendela per RTT setelah slow start; nilai lebih tinggi pulih "
+"lebih cepat."
 
 msgid "Window growth per ACK during slow start; higher ramps faster."
 msgstr ""
+"Pertumbuhan jendela per ACK selama slow start; nilai lebih tinggi naik "
+"lebih cepat."
 
 msgid "Minimum send rate before pacing kicks in (KB/s)."
 msgstr "Kecepatan pengiriman minimum sebelum tempo dimulai (KB/dtk)."
@@ -5472,6 +5637,7 @@ msgstr "Batas default utas penangan server untuk setiap terowongan server."
 
 msgid "Dedicated pool for Server→Client transfers, unblocks handlers."
 msgstr ""
+"Pool khusus untuk transfer server→klien, membuka blokir pengendali."
 
 msgid "Stall timeout for Server→Client data transfers (ms)."
 msgstr "Waktu habis stall untuk transfer data Server→Klien (ms)."
@@ -5522,7 +5688,7 @@ msgid "Duration of moderate load before declining requests (ms)."
 msgstr "Durasi beban sedang sebelum menolak permintaan (ms)."
 
 msgid "Widens the peer recency window when fast peers run short."
-msgstr ""
+msgstr "Memperlebar jendela kebaruan rekan saat rekan cepat menipis."
 
 msgid "Consecutive failures before pool backoff."
 msgstr "Kegagalan berturut-turut sebelum backoff pool."
@@ -5562,6 +5728,8 @@ msgstr "Waktu habis koneksi soket TCP untuk utas penangan server terowongan (ms)
 
 msgid "IV dedup filter size; too small drops valid tunnel data."
 msgstr ""
+"Ukuran filter deduplikasi IV; terlalu kecil membuang data terowongan "
+"yang sah."
 
 msgid "Max average message delay before rejecting transit (ms)."
 msgstr "Penundaan pesan rata-rata maksimum sebelum menolak transit (ms)."
@@ -7006,6 +7174,15 @@ msgstr "konfigurasi webapps"
 msgid "The Java web applications listed below are started by the webConsole client and run in the same JVM as the router. They are usually web applications accessible through the router console. They may be complete applications (e.g. i2psnark), front-ends to another client or application which must be separately enabled (e.g. susidns, i2ptunnel), or have no web interface at all (e.g. addressbook)."
 msgstr "Aplikasi web Java yang tercantum di bawah ini dimulai oleh webConsole client dan dijalankan di JVM yang sama dengan Router I2P. Mereka biasanya adalah aplikasi web yang dapat diakses melalui router console. Mereka mungkin merupakan aplikasi lengkap (mis. I2Psnark), front-end milik klien atau aplikasi lain yang harus diaktifkan secara terpisah (misalnya susidns, i2ptunnel), atau tidak memiliki antarmuka web sama sekali (misalnya buku alamat)"
 
+msgid "Router Session Key Manager"
+msgstr "Pengelola kunci sesi router"
+
+msgid "Client Session Key Managers"
+msgstr "Pengelola kunci sesi klien"
+
+msgid "Router DHT"
+msgstr "DHT router"
+
 msgid "Open in new tab"
 msgstr "Buka di tab baru"
 
@@ -7580,14 +7757,18 @@ msgstr "Periode tes terowongan minimum dalam milidetik. Tes terowongan selalu me
 msgid "Maximum tunnel test period in milliseconds. Tunnel tests never wait longer than this for a reply, even on high-latency paths. [Default is 50000 (50 seconds)]"
 msgstr "Periode tes terowongan maksimum dalam milidetik. Tes terowongan tidak pernah menunggu balasan lebih lama dari ini, bahkan pada jalur latensi tinggi. [Default 50000 (50 detik)"
 
-msgid "Number of tunnel build timeouts before a peer is marked as a ghost (blacklisted for tunnel participation). Higher values tolerate more transient failures. [Default is 3]"
-msgstr "Jumlah waktu habis pembangunan terowongan sebelum peer ditandai sebagai hantu (daftar hitam untuk partisipasi terowongan). Nilai lebih tinggi mentolerir lebih banyak kegagalan sementara. [Default 3"
+msgid "Number of tunnel build timeouts before a peer is marked as a ghost (excluded from tunnel participation). Higher values tolerate more transient failures. [Default is 1]"
+msgstr ""
+"Jumlah waktu tunggu pembuatan terowongan sebelum seorang rekan ditandai "
+"sebagai hantu (dikeluarkan dari keikutsertaan terowongan). Nilai lebih "
+"tinggi mentoleransi lebih banyak kegagalan sementara. [Bawaan adalah 1]"
 
-msgid "Cooldown period in milliseconds before a ghost-marked peer can be considered for tunnel participation again. Shorter values allow faster peer reuse. [Default is 180000 (3 minutes)]"
-msgstr "Periode pendinginan dalam milidetik sebelum peer bertanda hantu dapat dipertimbangkan untuk partisipasi terowongan lagi. Nilai lebih pendek memungkinkan penggunaan kembali peer lebih cepat. [Default 180000 (3 menit)"
-
-msgid "Cooldown period in milliseconds for ghost-marked peers during attack mode. Longer cooldowns limit exposure to potentially malicious peers during high-stress periods. [Default is 300000 (5 minutes)]"
-msgstr "Periode pendinginan dalam milidetik untuk peer bertanda hantu selama mode serangan. Pendinginan lebih lama membatasi paparan ke peer berpotensi berbahaya selama periode stres tinggi. [Default 300000 (5 menit)"
+msgid "Cooldown period in milliseconds before a ghost-marked peer can be promoted into the tunnel peer tiers again. Shorter values return recovered peers to service faster. [Default is 90000 (90 seconds)]"
+msgstr ""
+"Periode pendinginan dalam milidetik sebelum rekan bertanda hantu dapat "
+"dipromosikan kembali ke tingkat rekan terowongan. Nilai lebih pendek "
+"mengembalikan rekan pulih ke layanan lebih cepat. [Bawaan adalah 90000 "
+"(90 detik)]"
 
 msgid "Minimum number of incoming tunnel build requests accepted per peer per clean window. Prevents starving peers during low-traffic periods. [Default is 10]"
 msgstr "Jumlah minimum permintaan pembangunan terowongan masuk yang diterima per peer per jendela bersih. Mencegah peer kelaparan selama periode lalu lintas rendah. [Default 10"
@@ -10017,3 +10198,35 @@ msgstr "Selanjutnya"
 
 msgid "Finished"
 msgstr "Selesai"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

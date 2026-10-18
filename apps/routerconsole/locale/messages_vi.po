@@ -124,23 +124,47 @@ msgstr "Các máy ngang hàng không có địa chỉ IP được công bố"
 msgid "Average tunnel build success (%)"
 msgstr "Tỷ lệ xây dựng đường hầm trung bình thành công"
 
+msgid "Tier promotions held back for a peer with no usable address"
+msgstr "Lên bậc bị giữ lại cho đồng nghiệp không có địa chỉ khả dụng"
+
+msgid "RouterInfo refreshes issued for peers held out of the tiers"
+msgstr "Cập nhật RouterInfo phát cho các đồng nghiệp bị giữ ngoài bậc"
+
+msgid "Tier scans that left the fast or high-capacity tier short of target"
+msgstr ""
+"Lượt quét bậc khiến bậc nhanh hoặc dung lượng cao không đạt mục tiêu"
+
+msgid "RouterInfos requested for stored profiles that had none"
+msgstr "RouterInfo được yêu cầu cho hồ sơ đã lưu mà chưa có"
+
+msgid "Build timeouts recorded against a peer as a ghost mark"
+msgstr ""
+"Thời gian xây dựng vượt mức ghi nhận cho một đồng nghiệp dưới dạng dấu "
+"ghost"
+
+msgid "Ghost marks cleared by a successful build reply"
+msgstr "Dấu ghost được xóa nhờ phản hồi xây dựng thành công"
+
+msgid "Peers currently excluded as ghosts"
+msgstr "Đồng nghiệp hiện bị loại vì bị đánh dấu ghost"
+
+msgid "Ghost peers in the fast or high-capacity tiers"
+msgstr "Đồng nghiệp ghost trong bậc nhanh hoặc dung lượng cao"
+
+msgid "Duplicate CLOSE safety-net messages sent"
+msgstr "Tin nhắn lưới an toàn CLOSE trùng lặp đã gửi"
+
 msgid "Memory used by the JVM"
 msgstr "Bộ nhớ JVM đang sử dụng"
 
 msgid "maximum"
 msgstr "tối đa"
 
-msgid "No transports"
-msgstr "Không có truyền tải (bị ẩn hoặc đang khởi động?)"
-
 msgid "Unsupported signature type"
 msgstr "Loại chữ ký không được hỗ trợ"
 
 msgid "No support for our signature type"
 msgstr "Không hỗ trợ loại chữ ký của chúng tôi"
-
-msgid "Unreachable on any transport"
-msgstr "Không thể kết bằng bất kỳ phương thức truyền tải nào"
 
 msgid "Cannot enumerate UPnP devices on Android."
 msgstr "Không thể liệt kê các thiết bị UPnP trên Android."
@@ -836,6 +860,9 @@ msgstr "Bảng điều khiển"
 
 msgid "To enable SSL access for the Router Console, see the commented <code>clients.config</code> file located in your I2P application directory for more information. You will need to edit the RouterConsoleRunner config file located in the directory: "
 msgstr "Để cho phép truy cập SSL cho bảng điều khiển bộ định tuyến, hãy xem tệp được nhận xét <code>client.config</code> nằm trong thư mục ứng dụng I2P của bạn để biết thêm thông tin. Bạn sẽ cần chỉnh sửa tệp cấu hình RouterConsolerunner nằm trong thư mục: "
+
+msgid "No client session key managers."
+msgstr "Không có trình quản lý khóa phiên của client."
 
 msgid "Save disabled, edit the router.config file to make changes"
 msgstr "Lưu bị vô hiệu hóa, chỉnh sửa tệp router.config để thực hiện thay đổi"
@@ -2046,20 +2073,34 @@ msgstr "được cải thiện"
 msgid "vs baseline"
 msgstr "so với đường cơ sở"
 
+#, java-format
+msgid "Out: {0} / {1}"
+msgstr "Ra: {0} / {1}"
+
+#, java-format
+msgid "In: {0} / {1}"
+msgstr "Vào: {0} / {1}"
+
 msgid "CPU"
 msgstr "CPU"
 
-msgid "CPU load average"
-msgstr "Tải CPU trung bình"
+msgid "JVM CPU load average"
+msgstr "Tải CPU trung bình của JVM"
+
+#, java-format
+msgid "{0} cores"
+msgstr "{0} nhân"
 
 msgid "Memory"
 msgstr "Bộ nhớ"
 
-msgid "Memory usage"
-msgstr "Sử dụng bộ nhớ"
+#, java-format
+msgid "Used: {0} / {1} max"
+msgstr "Đã dùng: {0} / {1} tối đa"
 
-msgid "Router uptime"
-msgstr "Thời gian router hoạt động"
+#, java-format
+msgid "Since {0}"
+msgstr "Từ {0}"
 
 msgid "Job Lag"
 msgstr "Lớp công việc"
@@ -2085,6 +2126,10 @@ msgstr "Luồng"
 msgid "Active JVM threads"
 msgstr "Luồng JVM đang hoạt động"
 
+#, java-format
+msgid "Empty at {0}"
+msgstr "Rỗng ở {0}"
+
 msgid "NTCP Estab"
 msgstr "NTCP Estab"
 
@@ -2106,20 +2151,24 @@ msgstr "Thời gian chờ truyền lại SSU"
 msgid "Conns/s"
 msgstr "Kết nối/s"
 
-msgid "NTCP connections established per second"
-msgstr "Kết nối NTCP thiết lập mỗi giây"
+#, java-format
+msgid "Full at {0}/s"
+msgstr "Đầy ở {0}/s"
+
+msgid "New NTCP connections (1 min)"
+msgstr "Kết nối NTCP mới (1 phút)"
 
 msgid "Msgs/s"
 msgstr "Tin nhắn/s"
 
-msgid "Messages delivered per second"
-msgstr "Tin nhắn gửi đến mỗi giây"
+msgid "Messages delivered (1 min)"
+msgstr "Tin nhắn đã gửi tới (1 phút)"
 
 msgid "RTT"
 msgstr "RTT"
 
-msgid "End-to-end message round trip time"
-msgstr "Thời gian khứ hồi tin nhắn đầu cuối"
+msgid "End-to-end client message round trip"
+msgstr "Thời gian vòng đầu-cuối của tin nhắn client"
 
 msgid "Timeout"
 msgstr "Hết giờ"
@@ -2133,20 +2182,28 @@ msgstr "Xây dựng Tunnel"
 msgid "Client tunnel build latency"
 msgstr "Độ trễ xây dựng tunnel client"
 
+#, java-format
+msgid "In: {0} / Out: {1}"
+msgstr "Vào: {0} / Ra: {1}"
+
 msgid "Active Peers"
 msgstr "Peer Hoạt động"
 
-msgid "Active peers (last 60s)"
-msgstr "Peer hoạt động (60s qua)"
+#, java-format
+msgid "Full at {0}"
+msgstr "Đầy ở {0}"
+
+msgid "Reached in the last 60s"
+msgstr "Đã liên hệ trong 60 giây qua"
 
 msgid "Known Peers"
 msgstr "Peer Đã biết"
 
-msgid "Known routers in network database"
-msgstr "Router đã biết trong cơ sở dữ liệu mạng"
+msgid "In the network database"
+msgstr "Trong cơ sở dữ liệu mạng"
 
-msgid "Active I2CP clients"
-msgstr "Client I2CP đang hoạt động"
+msgid "I2CP clients connected"
+msgstr "Client I2CP đã kết nối"
 
 msgid "Transit"
 msgstr "Quá cảnh"
@@ -2160,8 +2217,8 @@ msgstr "Luồng"
 msgid "Build Success"
 msgstr "Xây dựng thành công"
 
-msgid "Tunnel build success rate"
-msgstr "Tỷ lệ thành công xây dựng tunnel"
+msgid "Tunnel build success rate (1 min)"
+msgstr "Tỉ lệ xây dựng đường hầm thành công (1 phút)"
 
 msgid "NetDB"
 msgstr "NetDB"
@@ -2172,26 +2229,31 @@ msgstr "Thời gian tra cứu NetDB"
 msgid "Banned"
 msgstr "Bị Cấm"
 
-msgid "Total banned peers"
-msgstr "Tổng peer bị cấm"
+msgid "Peers excluded from all interactions"
+msgstr "Các đồng nghiệp bị loại trừ khỏi tất cả các tương tác"
+
+#, java-format
+msgid "{0} of {1} known"
+msgstr "{0} trong {1} đã biết"
 
 msgid "LeaseSets"
 msgstr "Bộ hợp đồng thuê"
 
-msgid "Stored LeaseSets in floodfill"
-msgstr "Bộ hợp đồng thuê được lưu trữ trong nút lũ"
+msgid "Stored LeaseSets"
+msgstr "LeaseSet đã lưu"
 
 msgid "Cache Hit"
 msgstr "Cache trúng"
 
-msgid "NetDB lookup success rate"
-msgstr "Tỷ lệ thành công tra cứu NetDB"
+#, java-format
+msgid "Matched {0} of {1} lookups (1 min)"
+msgstr "Khớp {0} trong {1} tra cứu (1 phút)"
 
 msgid "Flood Verify"
 msgstr "Xác minh Flood"
 
-msgid "Floodfill verify time"
-msgstr "thời gian xác minh nút lũ"
+msgid "Floodfill verify time (1 min)"
+msgstr "Thời gian xác thực Floodfill (1 phút)"
 
 msgid "NetDB ACK"
 msgstr "NetDB ACK"
@@ -2202,20 +2264,20 @@ msgstr "Thời gian xác nhận peer NetDB"
 msgid "Lookups/s"
 msgstr "Truy vấn/s"
 
-msgid "NetDB lookups handled per second"
-msgstr "Truy vấn NetDB xử lý mỗi giây"
+msgid "Lookups handled (1 min)"
+msgstr "Tra cứu đã xử lý (1 phút)"
 
 msgid "Requests/s"
 msgstr "Yêu cầu/s"
 
-msgid "Combined store + lookup operations per second"
-msgstr "Thao tác lưu + truy vấn kết hợp mỗi giây"
+msgid "Stores + lookups (1 min)"
+msgstr "Lưu + tra cứu (1 phút)"
 
 msgid "Stores/s"
 msgstr "Lưu/s"
 
-msgid "NetDB store messages handled per second"
-msgstr "Thông báo lưu NetDB xử lý mỗi giây"
+msgid "Stores handled (1 min)"
+msgstr "Lưu đã xử lý (1 phút)"
 
 msgid "LS Timeout"
 msgstr "LS Hết giờ"
@@ -3199,6 +3261,9 @@ msgstr "Xem hồ sơ"
 msgid "Configure peer"
 msgstr "Cấu hình ngang hàng"
 
+msgid "Memory usage"
+msgstr "Sử dụng bộ nhớ"
+
 msgid "Hidden"
 msgstr "Dấu"
 
@@ -3342,8 +3407,8 @@ msgstr "Các băng thông ngang hàng cao cho nhiều đường hầm"
 msgid "Reliable"
 msgstr "Đáng tin cậy"
 
-msgid "High-capacity peers with good acceptance"
-msgstr "Các đồng nghiệp có năng lực cao với khả năng chấp nhận tốt"
+msgid "Peers with good acceptance and recent activity"
+msgstr "Đồng nghiệp chấp nhận tốt và hoạt động gần đây"
 
 msgid "Peers that store and serve NetDb info"
 msgstr "Các máy ngang hàng lưu trữ và cung cấp thông tin NetDb"
@@ -3354,17 +3419,21 @@ msgstr "Được biết"
 msgid "Total entries in network database"
 msgstr "Tổng số mục trong cơ sở dữ liệu mạng"
 
+msgid "Profiles"
+msgstr "Hồ sơ"
+
 msgid "Profiles with activity in the last hour"
 msgstr "Hồ sơ có hoạt động trong giờ qua"
+
+#, java-format
+msgid "{0} of {1} stored"
+msgstr "{0} trong {1} đã lưu"
 
 msgid "Unreachable"
 msgstr "Không thể truy cập"
 
-msgid "Peers without a reachable address"
-msgstr "Các đồng nghiệp không có địa chỉ có thể truy cập"
-
-msgid "Peers excluded from all interactions"
-msgstr "Các đồng nghiệp bị loại trừ khỏi tất cả các tương tác"
+msgid "Peers without a published address"
+msgstr "Đồng nghiệp không có địa chỉ đã công bố"
 
 msgid "/min"
 msgstr "/ phút"
@@ -3372,8 +3441,12 @@ msgstr "/ phút"
 msgid "Test Fail"
 msgstr "Kiểm tra thất bại"
 
-msgid "Connectivity test failures per minute"
-msgstr "Lỗi kiểm tra kết nối mỗi phút"
+msgid "Connectivity test failures in the last minute"
+msgstr "Lỗi kiểm tra kết nối trong phút qua"
+
+#, java-format
+msgid "Empty at {0}/min"
+msgstr "Rỗng ở {0}/phút"
 
 msgid "Peer Connections"
 msgstr "Kết nối ngang hàng"
@@ -3644,26 +3717,40 @@ msgstr[0] "{0} hồ sơ cũ đã ẩn"
 msgid "Share of total profiles shown"
 msgstr "Tỷ lệ tổng số hồ sơ được hiển thị"
 
-msgid "peers"
-msgstr "đồng nghiệp"
-
-msgid "Share of tier profiles shown"
-msgstr "Tỷ lệ hồ sơ theo bậc được hiển thị"
-
 msgid "Window"
 msgstr "Cửa sổ"
 
 msgid "Fast RTT"
 msgstr "RTT nhanh"
 
-msgid "Max RTT for fast-tier membership (ms)"
-msgstr "RTT tối đa để thuộc bậc nhanh (ms)"
+msgid "Max RTT for fast-tier membership"
+msgstr "RTT tối đa để vào bậc nhanh"
 
-msgid "Average loss of fast-tier peers (%)"
-msgstr "Mất gói trung bình của peer bậc nhanh (%)"
+msgid "Rises with network latency"
+msgstr "Tăng theo độ trễ mạng"
 
-msgid "Average loss of high-capacity peers (%)"
-msgstr "Mất gói trung bình của peer dung lực cao (%)"
+msgid "Average loss of fast-tier peers"
+msgstr "Trung bình số đồng nghiệp bậc nhanh bị mất"
+
+msgid "Average loss of high-capacity peers"
+msgstr "Trung bình số đồng nghiệp dung lượng cao bị mất"
+
+msgid "Average direct-link RTT of tier peers"
+msgstr "RTT liên kết trực tiếp trung bình của đồng nghiệp thuộc bậc"
+
+#, java-format
+msgid "{0} of {1} measured"
+msgstr "{0} trong {1} đã đo"
+
+msgid "1h Contact"
+msgstr "Liên hệ 1h"
+
+msgid "Heard from in the last hour"
+msgstr "Có liên hệ trong giờ qua"
+
+#, java-format
+msgid "{0} of {1} tier peers"
+msgstr "{0} trong {1} đồng nghiệp thuộc bậc"
 
 msgid "Heard from within the display cutoff"
 msgstr "Được nghe trong phạm vi thời gian hiển thị"
@@ -3674,11 +3761,19 @@ msgstr "Tra cứu"
 msgid "Lookup success rate"
 msgstr "Tỷ lệ thành công tra cứu"
 
+#, java-format
+msgid "{0} of {1} lookups"
+msgstr "{0} trong {1} tra cứu"
+
 msgid "Stores"
 msgstr "Lưu trữ"
 
 msgid "Store success rate"
 msgstr "Tỷ lệ thành công lưu trữ"
+
+#, java-format
+msgid "{0} of {1} peers"
+msgstr "{0} trong {1} đồng nghiệp"
 
 msgid "Definitions"
 msgstr "Định nghĩa"
@@ -3751,11 +3846,25 @@ msgstr "gần đây họ đã nói với chúng ta về bao nhiêu đồng nghi�
 msgid "Known floodfills"
 msgstr "Các nút lũ đã biết"
 
-msgid "No-Fail"
-msgstr "Không lỗi"
+msgid "Reachable, unbanlisted and heard from"
+msgstr "Đến được, không bị ban và có liên hệ"
 
-msgid "No lookup failures (1h)"
-msgstr "Không có lỗi tra cứu (1h)"
+msgid "Active bans of floodfill-capable peers"
+msgstr "Ban đang áp dụng với đồng nghiệp có khả năng floodfill"
+
+#, java-format
+msgid "of {0} known"
+msgstr "trong {0} đã biết"
+
+msgid "Fail"
+msgstr "Lỗi"
+
+msgid "Lookup failures in the last hour"
+msgstr "Lỗi tra cứu trong giờ qua"
+
+#, java-format
+msgid "across {0} listed peers"
+msgstr "trên {0} đồng nghiệp được liệt kê"
 
 msgid "Response"
 msgstr "Phản hồi"
@@ -3763,11 +3872,16 @@ msgstr "Phản hồi"
 msgid "Lookup response time (1h)"
 msgstr "Thời gian phản hồi tra cứu (1h)"
 
-msgid "1h Contact"
-msgstr "Liên hệ 1h"
+#, java-format
+msgid "{0} peers measured"
+msgstr "đã đo {0} đồng nghiệp"
 
 msgid "Contacted within 1h"
 msgstr "Đã liên hệ trong 1h"
+
+#, java-format
+msgid "{0} of {1} listed"
+msgstr "{0} trong {1} được liệt kê"
 
 msgid "1h Fail Rate"
 msgstr "Tỷ lệ thất bại 1h"
@@ -3805,17 +3919,33 @@ msgstr "Tất cả"
 msgid "SAM bridge is not running."
 msgstr "Cầu SAM không đang chạy."
 
+msgid "Sessions"
+msgstr "Phiên"
+
 msgid "Active sessions in SessionsDB"
 msgstr "Phiên hoạt động trong SessionsDB"
+
+msgid "Workers"
+msgstr "Luồng xử lý"
 
 msgid "Active / pool worker threads"
 msgstr "Luồng worker hoạt động / pool"
 
-msgid "Pending commands in pool"
-msgstr "Lệnh chờ trong pool"
+msgid "Queue"
+msgstr "Hàng đợi"
+
+#, java-format
+msgid "Pending commands: {0} of {1}"
+msgstr "Lệnh chờ: {0} trong {1}"
+
+msgid "Handlers"
+msgstr "Bộ xử lý"
 
 msgid "Connected pool handlers"
 msgstr "Bộ xử lý pool đã kết nối"
+
+msgid "Stolen"
+msgstr "Bị đánh cắp"
 
 msgid "Sockets stolen for data streaming"
 msgstr "Socket bị chiếm cho truyền phát dữ liệu"
@@ -4134,9 +4264,6 @@ msgstr "Hiển thị tất cả các kết nối ngang hàng hiện tại"
 msgid "Router health overview"
 msgstr "Tổng quan sức khỏe router"
 
-msgid "Profiles"
-msgstr "Hồ sơ"
-
 msgid "Show recent peer performance profiles"
 msgstr "Hiển thị hồ sơ hiệu suất ngang hàng gần đây"
 
@@ -4443,6 +4570,27 @@ msgstr "Giá trị trung bình trọn đời"
 msgid "1 event"
 msgid_plural "{0} events"
 msgstr[0] "{0} sự kiện"
+
+msgid "Open streaming connections"
+msgstr "Kết nối streaming đang mở"
+
+msgid "Round-trip time (live samples, 1 min)"
+msgstr "Thời gian vòng (mẫu trực tiếp, 1 phút)"
+
+msgid "Retrans"
+msgstr "Gửi lại"
+
+msgid "Share of sends needing retransmit (1 min)"
+msgstr "Tỉ lệ gửi phải truyền lại (1 phút)"
+
+msgid "Created + received (1 min)"
+msgstr "Tạo mới + nhận (1 phút)"
+
+msgid "Throughput"
+msgstr "Thông lượng"
+
+msgid "Mean rate of streams closed in the last minute"
+msgstr "Tốc độ trung bình các stream đóng trong phút qua"
 
 msgid "sent"
 msgstr "đã gửi"
@@ -4831,6 +4979,9 @@ msgstr "Số mũ từ chối điều tiết"
 msgid "Maximum Participating Tunnels"
 msgstr "Số đường hầm tham gia tối đa"
 
+msgid "Timer Threads"
+msgstr "Luồng định thời"
+
 msgid "Build Handler Maximum Queue"
 msgstr "Hàng đợi tối đa của trình xử lý xây dựng"
 
@@ -5184,6 +5335,9 @@ msgstr "Cửa sổ tắc nghẽn tối đa trong khởi động chậm."
 
 msgid "Per-connection inbound buffer cap (bytes)."
 msgstr "Giới hạn bộ đệm đầu vào cho mỗi kết nối (byte)."
+
+msgid "Timer worker threads; higher reduces event delay."
+msgstr "Luồng xử lý của định thời; giá trị cao hơn giảm trễ sự kiện."
 
 msgid "Dynamic cap on concurrent streams per destination."
 msgstr "Giới hạn động số luồng đồng thời cho mỗi đích."
@@ -7006,6 +7160,15 @@ msgstr "cấu hình ứng dụng web"
 msgid "The Java web applications listed below are started by the webConsole client and run in the same JVM as the router. They are usually web applications accessible through the router console. They may be complete applications (e.g. i2psnark), front-ends to another client or application which must be separately enabled (e.g. susidns, i2ptunnel), or have no web interface at all (e.g. addressbook)."
 msgstr "Các ứng dụng web Java được liệt kê bên dưới được khởi chạy bởi khách hàng webConsole và chạy trong cùng một JVM như bộ định tuyến. Thông thường chúng là các ứng dụng web có thể truy cập qua bảng điều khiển bộ định tuyến. Chúng có thể là các ứng dụng hoàn chỉnh (v.d. i2psnark), mặt trước cho khách hàng hoặc ứng dụng khác phải được bật riêng biệt (v.d. susidns, i2ptunnel), hoặc không có giao diện web (v.d. danh bạ)."
 
+msgid "Router Session Key Manager"
+msgstr "Trình quản lý khóa phiên của router"
+
+msgid "Client Session Key Managers"
+msgstr "Trình quản lý khóa phiên của client"
+
+msgid "Router DHT"
+msgstr "DHT của router"
+
 msgid "Open in new tab"
 msgstr "Mở trong tab mới"
 
@@ -7580,14 +7743,18 @@ msgstr "Thời gian kiểm tra đường hầm tối thiểu tính bằng mili g
 msgid "Maximum tunnel test period in milliseconds. Tunnel tests never wait longer than this for a reply, even on high-latency paths. [Default is 50000 (50 seconds)]"
 msgstr "Thời gian kiểm tra đường hầm tối đa tính bằng mili giây. Các bài kiểm tra đường hầm không bao giờ chờ phản hồi lâu hơn thời gian này, ngay cả trên các đường có độ trễ cao. [Mặc định 50000 (50 giây)]"
 
-msgid "Number of tunnel build timeouts before a peer is marked as a ghost (blacklisted for tunnel participation). Higher values tolerate more transient failures. [Default is 3]"
-msgstr "Số lần hết thời gian xây dựng đường hầm trước khi peer bị đánh dấu là ma (danh sách đen cho việc tham gia đường hầm). Giá trị cao hơn chịu được nhiều lỗi tạm thời hơn. [Mặc định 3]"
+msgid "Number of tunnel build timeouts before a peer is marked as a ghost (excluded from tunnel participation). Higher values tolerate more transient failures. [Default is 1]"
+msgstr ""
+"Số lần vượt thời gian xây dựng đường hầm trước khi một đồng nghiệp bị "
+"đánh dấu ghost (bị loại khỏi tham gia đường hầm). Giá trị cao hơn dung "
+"thứ nhiều hơn cho lỗi tạm thời. [Mặc định là 1]"
 
-msgid "Cooldown period in milliseconds before a ghost-marked peer can be considered for tunnel participation again. Shorter values allow faster peer reuse. [Default is 180000 (3 minutes)]"
-msgstr "Thời gian chờ tính bằng mili giây trước khi peer bị đánh dấu ma có thể được xem xét lại cho việc tham gia đường hầm. Giá trị ngắn hơn cho phép sử dụng lại peer nhanh hơn. [Mặc định 180000 (3 phút)]"
-
-msgid "Cooldown period in milliseconds for ghost-marked peers during attack mode. Longer cooldowns limit exposure to potentially malicious peers during high-stress periods. [Default is 300000 (5 minutes)]"
-msgstr "Thời gian chờ tính bằng mili giây cho các peer bị đánh dấu ma trong chế độ tấn công. Thời gian chờ dài hơn giới hạn tiếp xúc với các peer có khả năng độc hại trong thời gian căng thẳng cao. [Mặc định 300000 (5 phút)]"
+msgid "Cooldown period in milliseconds before a ghost-marked peer can be promoted into the tunnel peer tiers again. Shorter values return recovered peers to service faster. [Default is 90000 (90 seconds)]"
+msgstr ""
+"Thời gian nguội tính bằng mili giây trước khi đồng nghiệp bị đánh dấu ma "
+"có thể được lên các bậc đồng nghiệp đường hầm trở lại. Giá trị ngắn hơn "
+"đưa đồng nghiệp đã hồi phục trở lại phục vụ nhanh hơn. [Mặc định là "
+"90000 (90 giây)]"
 
 msgid "Minimum number of incoming tunnel build requests accepted per peer per clean window. Prevents starving peers during low-traffic periods. [Default is 10]"
 msgstr "Số lượng yêu cầu xây dựng đường hầm đến tối thiểu được chấp nhận trên mỗi peer trên mỗi cửa sổ sạch. Ngăn chặn peer bị đói trong thời gian lưu lượng thấp. [Mặc định 10]"
@@ -10017,3 +10184,35 @@ msgstr "Kế tiếp"
 
 msgid "Finished"
 msgstr "Đã kết thúc"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

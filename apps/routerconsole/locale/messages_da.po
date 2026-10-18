@@ -127,23 +127,47 @@ msgstr "Peers uden en offentliggjort IP-adresse"
 msgid "Average tunnel build success (%)"
 msgstr "Gennemsnitlig tunnelbygningssucces %"
 
+msgid "Tier promotions held back for a peer with no usable address"
+msgstr ""
+"Tier-forfremmelser tilbageholdt for en peer uden brugbar adresse"
+
+msgid "RouterInfo refreshes issued for peers held out of the tiers"
+msgstr "RouterInfo-opdateringer udsendt for peers holdt uden for tiers"
+
+msgid "Tier scans that left the fast or high-capacity tier short of target"
+msgstr ""
+"Tier-scanninger, der efterlod den hurtige eller højkapacitive tier under "
+"målet"
+
+msgid "RouterInfos requested for stored profiles that had none"
+msgstr "RouterInfos bedt om for gemte profiler, der ikke havde nogen"
+
+msgid "Build timeouts recorded against a peer as a ghost mark"
+msgstr "Build-timeouts noteret som ghost-mærke for en peer"
+
+msgid "Ghost marks cleared by a successful build reply"
+msgstr "Ghost-mærker ryddet ved et vellykket build-svar"
+
+msgid "Peers currently excluded as ghosts"
+msgstr "Peers der aktuelt er udelukkede som ghosts"
+
+msgid "Ghost peers in the fast or high-capacity tiers"
+msgstr "Ghost-peers i de hurtige eller højkapacitive tiers"
+
+msgid "Duplicate CLOSE safety-net messages sent"
+msgstr "Duplicerede CLOSE-sikkerhedsnetbeskeder sendt"
+
 msgid "Memory used by the JVM"
 msgstr "Hukommelse brugt af JVM"
 
 msgid "maximum"
 msgstr "maksimum"
 
-msgid "No transports"
-msgstr "Ingen transporter (skjult eller under opstart?)"
-
 msgid "Unsupported signature type"
 msgstr "Ikke-understøttet signatur typer"
 
 msgid "No support for our signature type"
 msgstr "Ingen støtte for vores signature type"
-
-msgid "Unreachable on any transport"
-msgstr "Utilgængelig for alle transporter"
 
 msgid "Cannot enumerate UPnP devices on Android."
 msgstr "Kan ikke opregne UPnP-enheder på Android."
@@ -847,6 +871,9 @@ msgstr "Konsol"
 
 msgid "To enable SSL access for the Router Console, see the commented <code>clients.config</code> file located in your I2P application directory for more information. You will need to edit the RouterConsoleRunner config file located in the directory: "
 msgstr "For at aktivere SSL -adgang til routerkonsollen, skal du se den kommenterede <code>clients.config</code> fil placeret i dit I2P -applikationsmappe for mere information. Du bliver nødt til at redigere routerconsolerunner -konfigurationsfilen, der er placeret i biblioteket:"
+
+msgid "No client session key managers."
+msgstr "Ingen klient-sessionnøglehåndterere."
 
 msgid "Save disabled, edit the router.config file to make changes"
 msgstr "Gem deaktiveret, rediger router.config-filen for at foretage ændringer"
@@ -2066,23 +2093,35 @@ msgstr "forbedret"
 msgid "vs baseline"
 msgstr "vs baseline"
 
+#, java-format
+msgid "Out: {0} / {1}"
+msgstr "Ud: {0} / {1}"
+
+#, java-format
+msgid "In: {0} / {1}"
+msgstr "Ind: {0} / {1}"
+
 # /java/src/net/i2p/router/web/helpers/HealthHelper.java:239
 msgid "CPU"
 msgstr "CPU"
 
-# /java/src/net/i2p/router/web/helpers/HealthHelper.java:240
-msgid "CPU load average"
-msgstr "CPU-belastningsgennemsnit"
+msgid "JVM CPU load average"
+msgstr "Gennemsnitlig JVM CPU-belastning"
+
+#, java-format
+msgid "{0} cores"
+msgstr "{0} kerner"
 
 msgid "Memory"
 msgstr "Hukommelse"
 
-msgid "Memory usage"
-msgstr "Hukommelsesbrug"
+#, java-format
+msgid "Used: {0} / {1} max"
+msgstr "Brugt: {0} / {1} maks."
 
-# /java/src/net/i2p/router/web/helpers/HealthHelper.java:244
-msgid "Router uptime"
-msgstr "Ruterens oppetid"
+#, java-format
+msgid "Since {0}"
+msgstr "Siden {0}"
 
 msgid "Job Lag"
 msgstr "Job forsinkelse"
@@ -2114,6 +2153,10 @@ msgstr "Tråde"
 msgid "Active JVM threads"
 msgstr "Aktive JVM-tråde"
 
+#, java-format
+msgid "Empty at {0}"
+msgstr "Tom ved {0}"
+
 # /java/src/net/i2p/router/web/helpers/HealthHelper.java:308
 msgid "NTCP Estab"
 msgstr "NTCP Etab."
@@ -2142,25 +2185,26 @@ msgstr "SSU genoverførselstidsudløb"
 msgid "Conns/s"
 msgstr "Forb/s"
 
-# /java/src/net/i2p/router/web/helpers/HealthHelper.java:315
-msgid "NTCP connections established per second"
-msgstr "NTCP-forbindelser etableret pr. sekund"
+#, java-format
+msgid "Full at {0}/s"
+msgstr "Fuld ved {0}/s"
+
+msgid "New NTCP connections (1 min)"
+msgstr "Nye NTCP-forbindelser (1 min)"
 
 # /java/src/net/i2p/router/web/helpers/HealthHelper.java:316
 msgid "Msgs/s"
 msgstr "Besk/s"
 
-# /java/src/net/i2p/router/web/helpers/HealthHelper.java:317
-msgid "Messages delivered per second"
-msgstr "Beskeder levereret pr. sekund"
+msgid "Messages delivered (1 min)"
+msgstr "Leverede beskeder (1 min)"
 
 # /java/src/net/i2p/router/web/helpers/HealthHelper.java:318
 msgid "RTT"
 msgstr "RTT"
 
-# /java/src/net/i2p/router/web/helpers/HealthHelper.java:319
-msgid "End-to-end message round trip time"
-msgstr "Besked roundtrip-tid fra ende til ende"
+msgid "End-to-end client message round trip"
+msgstr "Tur-retur for klientbeskeder hele vejen"
 
 # /java/src/net/i2p/router/web/helpers/HealthHelper.java:320
 msgid "Timeout"
@@ -2178,25 +2222,30 @@ msgstr "Tunnelbygning"
 msgid "Client tunnel build latency"
 msgstr "Klient tunnelbygningsforsinkelse"
 
+#, java-format
+msgid "In: {0} / Out: {1}"
+msgstr "Ind: {0} / Ud: {1}"
+
 # /java/src/net/i2p/router/web/helpers/HealthHelper.java:379
 msgid "Active Peers"
 msgstr "Aktive peers"
 
-# /java/src/net/i2p/router/web/helpers/HealthHelper.java:380
-msgid "Active peers (last 60s)"
-msgstr "Aktive peers (sidste 60s)"
+#, java-format
+msgid "Full at {0}"
+msgstr "Fuld ved {0}"
+
+msgid "Reached in the last 60s"
+msgstr "Kontaktet i de sidste 60 s"
 
 # /java/src/net/i2p/router/web/helpers/HealthHelper.java:381
 msgid "Known Peers"
 msgstr "Kendte peers"
 
-# /java/src/net/i2p/router/web/helpers/HealthHelper.java:382
-msgid "Known routers in network database"
-msgstr "Kendte routere i netværksdatabasen"
+msgid "In the network database"
+msgstr "I netværksdatabasen"
 
-# /java/src/net/i2p/router/web/helpers/HealthHelper.java:384
-msgid "Active I2CP clients"
-msgstr "Aktive I2CP-klienter"
+msgid "I2CP clients connected"
+msgstr "Forbundne I2CP-klienter"
 
 msgid "Transit"
 msgstr "Transit"
@@ -2211,9 +2260,8 @@ msgstr "Strømme"
 msgid "Build Success"
 msgstr "Opbyg succes"
 
-# /java/src/net/i2p/router/web/helpers/HealthHelper.java:390
-msgid "Tunnel build success rate"
-msgstr "Tunnelbygningssuccesrate"
+msgid "Tunnel build success rate (1 min)"
+msgstr "Succesrate for tunnelbyggeri (1 min)"
 
 # /java/src/net/i2p/router/web/helpers/HealthHelper.java:391
 msgid "NetDB"
@@ -2226,32 +2274,33 @@ msgstr "NetDB-opslagstid"
 msgid "Banned"
 msgstr "Udelukket"
 
-# /java/src/net/i2p/router/web/helpers/HealthHelper.java:394
-msgid "Total banned peers"
-msgstr "Samlet antal blokerede peers"
+msgid "Peers excluded from all interactions"
+msgstr "Peers udelukket fra alle interaktioner"
+
+#, java-format
+msgid "{0} of {1} known"
+msgstr "{0} af {1} kendte"
 
 msgid "LeaseSets"
 msgstr "Leasingkontraktsæt"
 
-# /java/src/net/i2p/router/web/helpers/HealthHelper.java:455
-msgid "Stored LeaseSets in floodfill"
-msgstr "Lagrede LeaseSets i flood node"
+msgid "Stored LeaseSets"
+msgstr "Gemte LeaseSets"
 
 # /java/src/net/i2p/router/web/helpers/HealthHelper.java:456
 msgid "Cache Hit"
 msgstr "Cache-træf"
 
-# /java/src/net/i2p/router/web/helpers/HealthHelper.java:457
-msgid "NetDB lookup success rate"
-msgstr "NetDB-opslagssuccesrate"
+#, java-format
+msgid "Matched {0} of {1} lookups (1 min)"
+msgstr "{0} af {1} opslag med match (1 min)"
 
 # /java/src/net/i2p/router/web/helpers/HealthHelper.java:458
 msgid "Flood Verify"
 msgstr "Floodverifikation"
 
-# /java/src/net/i2p/router/web/helpers/HealthHelper.java:459
-msgid "Floodfill verify time"
-msgstr "oversvømmelsesknudebekræftelsestid"
+msgid "Floodfill verify time (1 min)"
+msgstr "Floodfill-bekræftelsestid (1 min)"
 
 # /java/src/net/i2p/router/web/helpers/HealthHelper.java:460
 msgid "NetDB ACK"
@@ -2265,25 +2314,22 @@ msgstr "NetDB peer-bekræftelsestid"
 msgid "Lookups/s"
 msgstr "Opslag/s"
 
-# /java/src/net/i2p/router/web/helpers/HealthHelper.java:463
-msgid "NetDB lookups handled per second"
-msgstr "NetDB-opslag behandlet pr. sekund"
+msgid "Lookups handled (1 min)"
+msgstr "Behandlede opslag (1 min)"
 
 # /java/src/net/i2p/router/web/helpers/HealthHelper.java:464
 msgid "Requests/s"
 msgstr "Anmodn/s"
 
-# /java/src/net/i2p/router/web/helpers/HealthHelper.java:465
-msgid "Combined store + lookup operations per second"
-msgstr "Kombinerede lagrings- og opslagsoperationer pr. sekund"
+msgid "Stores + lookups (1 min)"
+msgstr "Lagringer + opslag (1 min)"
 
 # /java/src/net/i2p/router/web/helpers/HealthHelper.java:466
 msgid "Stores/s"
 msgstr "Lagring/s"
 
-# /java/src/net/i2p/router/web/helpers/HealthHelper.java:467
-msgid "NetDB store messages handled per second"
-msgstr "NetDB-lagringsbeskeder behandlet pr. sekund"
+msgid "Stores handled (1 min)"
+msgstr "Behandlede lagringer (1 min)"
 
 # /java/src/net/i2p/router/web/helpers/HealthHelper.java:468
 msgid "LS Timeout"
@@ -3271,6 +3317,9 @@ msgstr "Se profil"
 msgid "Configure peer"
 msgstr "Konfigurer peer"
 
+msgid "Memory usage"
+msgstr "Hukommelsesbrug"
+
 msgid "Hidden"
 msgstr "Gemt"
 
@@ -3414,8 +3463,8 @@ msgstr "Peers med høj båndbredde til mange tunneler"
 msgid "Reliable"
 msgstr "Pålidelig"
 
-msgid "High-capacity peers with good acceptance"
-msgstr "Peers med høj kapacitet med god accept"
+msgid "Peers with good acceptance and recent activity"
+msgstr "Peers med god accept og nylig aktivitet"
 
 msgid "Peers that store and serve NetDb info"
 msgstr "Peers, der gemmer og serverer NetDb-info"
@@ -3426,17 +3475,21 @@ msgstr "Kendte"
 msgid "Total entries in network database"
 msgstr "Samlet antal poster i netværksdatabasen"
 
+msgid "Profiles"
+msgstr "Profiler"
+
 msgid "Profiles with activity in the last hour"
 msgstr "Profiler med aktivitet i den sidste time"
+
+#, java-format
+msgid "{0} of {1} stored"
+msgstr "{0} af {1} gemt"
 
 msgid "Unreachable"
 msgstr "Utilgængelig"
 
-msgid "Peers without a reachable address"
-msgstr "Peers uden en tilgængelig adresse"
-
-msgid "Peers excluded from all interactions"
-msgstr "Peers udelukket fra alle interaktioner"
+msgid "Peers without a published address"
+msgstr "Peers uden en publiceret adresse"
 
 msgid "/min"
 msgstr "/min"
@@ -3444,8 +3497,12 @@ msgstr "/min"
 msgid "Test Fail"
 msgstr "Test mislykkedes"
 
-msgid "Connectivity test failures per minute"
-msgstr "Forbindelsestestfejl pr. minut"
+msgid "Connectivity test failures in the last minute"
+msgstr "Fejl i tilgængelighedstest i det sidste minut"
+
+#, java-format
+msgid "Empty at {0}/min"
+msgstr "Tom ved {0}/min"
 
 msgid "Peer Connections"
 msgstr "Peer-forbindelser"
@@ -3719,26 +3776,40 @@ msgstr[1] "{0} forældede profiler skjult"
 msgid "Share of total profiles shown"
 msgstr "Andel af viste profiler i alt"
 
-msgid "peers"
-msgstr "jævnaldrende"
-
-msgid "Share of tier profiles shown"
-msgstr "Andel af viste lagprofiler"
-
 msgid "Window"
 msgstr "Vindue"
 
 msgid "Fast RTT"
 msgstr "Hurtig RTT"
 
-msgid "Max RTT for fast-tier membership (ms)"
-msgstr "Maks. RTT for medlemskab i det hurtige lag (ms)"
+msgid "Max RTT for fast-tier membership"
+msgstr "Maks. RTT for medlemskab af den hurtige tier"
 
-msgid "Average loss of fast-tier peers (%)"
-msgstr "Gennemsnitligt tab for peers i det hurtige lag (%)"
+msgid "Rises with network latency"
+msgstr "Stiger med netværksforsinkelsen"
 
-msgid "Average loss of high-capacity peers (%)"
-msgstr "Gennemsnitligt tab for peers med høj kapacitet (%)"
+msgid "Average loss of fast-tier peers"
+msgstr "Gennemsnitligt tab af peers i den hurtige tier"
+
+msgid "Average loss of high-capacity peers"
+msgstr "Gennemsnitligt tab af højkapacitive peers"
+
+msgid "Average direct-link RTT of tier peers"
+msgstr "Gennemsnitlig direkte link-RTT for tier-peers"
+
+#, java-format
+msgid "{0} of {1} measured"
+msgstr "{0} af {1} målt"
+
+msgid "1h Contact"
+msgstr "1t kontakt"
+
+msgid "Heard from in the last hour"
+msgstr "Hørt fra i den sidste time"
+
+#, java-format
+msgid "{0} of {1} tier peers"
+msgstr "{0} af {1} tier-peers"
 
 msgid "Heard from within the display cutoff"
 msgstr "Hørt fra inden for visningsafskæringen"
@@ -3749,11 +3820,19 @@ msgstr "Opslag"
 msgid "Lookup success rate"
 msgstr "Succesrate for opslag"
 
+#, java-format
+msgid "{0} of {1} lookups"
+msgstr "{0} af {1} opslag"
+
 msgid "Stores"
 msgstr "Lagringer"
 
 msgid "Store success rate"
 msgstr "Succesrate for lagring"
+
+#, java-format
+msgid "{0} of {1} peers"
+msgstr "{0} af {1} peers"
 
 msgid "Definitions"
 msgstr "Definationer "
@@ -3826,11 +3905,25 @@ msgstr "hvor mange nye peers har de fortalt os om på det seneste?"
 msgid "Known floodfills"
 msgstr "Kendte Floodfills"
 
-msgid "No-Fail"
-msgstr "Ingen fejl"
+msgid "Reachable, unbanlisted and heard from"
+msgstr "Tilgængelig, ikke bandlyst og hørt fra"
 
-msgid "No lookup failures (1h)"
-msgstr "Ingen opslagsfejl (1t)"
+msgid "Active bans of floodfill-capable peers"
+msgstr "Aktive bandlysninger af peers der kan være floodfill"
+
+#, java-format
+msgid "of {0} known"
+msgstr "af {0} kendte"
+
+msgid "Fail"
+msgstr "Fejl"
+
+msgid "Lookup failures in the last hour"
+msgstr "Opslagsfejl i den sidste time"
+
+#, java-format
+msgid "across {0} listed peers"
+msgstr "på tværs af {0} listede peers"
 
 msgid "Response"
 msgstr "Svar"
@@ -3838,11 +3931,16 @@ msgstr "Svar"
 msgid "Lookup response time (1h)"
 msgstr "Svarstid for opslag (1t)"
 
-msgid "1h Contact"
-msgstr "1t kontakt"
+#, java-format
+msgid "{0} peers measured"
+msgstr "{0} peers målt"
 
 msgid "Contacted within 1h"
 msgstr "Kontaktet inden for 1t"
+
+#, java-format
+msgid "{0} of {1} listed"
+msgstr "{0} af {1} listede"
 
 msgid "1h Fail Rate"
 msgstr "1h fejlfrekvens"
@@ -3881,21 +3979,36 @@ msgstr "Alle"
 msgid "SAM bridge is not running."
 msgstr "SAM-broen kører ikke."
 
+msgid "Sessions"
+msgstr "Sessioner"
+
 # /java/src/net/i2p/router/web/helpers/SAMDebugHelper.java:70
 msgid "Active sessions in SessionsDB"
 msgstr "Aktive sessioner i SessionsDB"
+
+msgid "Workers"
+msgstr "Workers"
 
 # /java/src/net/i2p/router/web/helpers/SAMDebugHelper.java:72
 msgid "Active / pool worker threads"
 msgstr "Aktive / pool-arbejdstråde"
 
-# /java/src/net/i2p/router/web/helpers/SAMDebugHelper.java:74
-msgid "Pending commands in pool"
-msgstr "Ventende kommandoer i pool"
+msgid "Queue"
+msgstr "Kø"
+
+#, java-format
+msgid "Pending commands: {0} of {1}"
+msgstr "Ventende kommandoer: {0} af {1}"
+
+msgid "Handlers"
+msgstr "Håndterere"
 
 # /java/src/net/i2p/router/web/helpers/SAMDebugHelper.java:76
 msgid "Connected pool handlers"
 msgstr "Tilsluttede pool-håndteringer"
+
+msgid "Stolen"
+msgstr "Stjålet"
 
 # /java/src/net/i2p/router/web/helpers/SAMDebugHelper.java:78
 msgid "Sockets stolen for data streaming"
@@ -4216,9 +4329,6 @@ msgstr "Vis alle de nuværende klient forbindelser"
 msgid "Router health overview"
 msgstr "Ruterens tilstandsoversigt"
 
-msgid "Profiles"
-msgstr "Profiler"
-
 msgid "Show recent peer performance profiles"
 msgstr "Vis seneste klient ydelsesprofiler"
 
@@ -4527,6 +4637,27 @@ msgid "1 event"
 msgid_plural "{0} events"
 msgstr[0] "1 hændelse"
 msgstr[1] "{0} hændelser"
+
+msgid "Open streaming connections"
+msgstr "Åbne streaming-forbindelser"
+
+msgid "Round-trip time (live samples, 1 min)"
+msgstr "Tur-retur-tid (live prøver, 1 min)"
+
+msgid "Retrans"
+msgstr "Retrans."
+
+msgid "Share of sends needing retransmit (1 min)"
+msgstr "Andel afsendelser der kræver genudsendelse (1 min)"
+
+msgid "Created + received (1 min)"
+msgstr "Oprettet + modtaget (1 min)"
+
+msgid "Throughput"
+msgstr "Gennemløb"
+
+msgid "Mean rate of streams closed in the last minute"
+msgstr "Gennemsnitlig rate for lukkede streams i det sidste minut"
 
 # /java/src/net/i2p/router/web/helpers/StreamHelper.java:302
 msgid "sent"
@@ -4918,6 +5049,9 @@ msgstr "Knuser-afvisningseksponent"
 msgid "Maximum Participating Tunnels"
 msgstr "Maksimum deltagende tunneller"
 
+msgid "Timer Threads"
+msgstr "Timer-tråde"
+
 msgid "Build Handler Maximum Queue"
 msgstr "Byggehåndtering maksimum kø"
 
@@ -5271,6 +5405,11 @@ msgstr "Maksimalt tiltagningsvindue under langsom start."
 
 msgid "Per-connection inbound buffer cap (bytes)."
 msgstr "Loft for indgående buffer pr. forbindelse (bytes)."
+
+msgid "Timer worker threads; higher reduces event delay."
+msgstr ""
+"Timer-arbeidstråder; en højere værdi reducerer forsinkelsen på "
+"hændelser."
 
 msgid "Dynamic cap on concurrent streams per destination."
 msgstr "Dynamisk loft for samtidige streams pr. destination."
@@ -7105,6 +7244,15 @@ msgstr "konfigurere webapps"
 msgid "The Java web applications listed below are started by the webConsole client and run in the same JVM as the router. They are usually web applications accessible through the router console. They may be complete applications (e.g. i2psnark), front-ends to another client or application which must be separately enabled (e.g. susidns, i2ptunnel), or have no web interface at all (e.g. addressbook)."
 msgstr "De Java-webapplikationer, der er angivet nedenfor, startes af webConsole-klienten og kører i samme JVM som routeren. De er normalt webapplikationer, der er tilgængelige gennem routerkonsollen. De kan være komplette applikationer (f.eks. i2psnark), frontender til en anden klient eller applikation, der skal aktiveres separat (f.eks. susidns, i2ptunnel), eller de kan ikke have en webgrænseflade overhovedet (f.eks. addressbook)."
 
+msgid "Router Session Key Manager"
+msgstr "Router-sessionnøglehåndterer"
+
+msgid "Client Session Key Managers"
+msgstr "Klient-sessionnøglehåndterere"
+
+msgid "Router DHT"
+msgstr "Router-DHT"
+
 msgid "Open in new tab"
 msgstr "Åbne i nyt faneblad"
 
@@ -7683,14 +7831,17 @@ msgstr "Minimum tunneltestperiode i millisekunder. Tunneltests venter altid mind
 msgid "Maximum tunnel test period in milliseconds. Tunnel tests never wait longer than this for a reply, even on high-latency paths. [Default is 50000 (50 seconds)]"
 msgstr "Maksimum tunneltestperiode i millisekunder. Tunneltests venter aldrig længere end dette på et svar, selv på høj-latency-netværk. [Standard er 60000]"
 
-msgid "Number of tunnel build timeouts before a peer is marked as a ghost (blacklisted for tunnel participation). Higher values tolerate more transient failures. [Default is 3]"
-msgstr "Antal tunnelbygningstimeouts før en peer markeres som et spøgelse (sortlistet for tunnel-deltagelse). Højere værdier tolererer flere fejl. [Standard er 3]"
+msgid "Number of tunnel build timeouts before a peer is marked as a ghost (excluded from tunnel participation). Higher values tolerate more transient failures. [Default is 1]"
+msgstr ""
+"Antal tunnelbuild-timeouts før en peer markeres som ghost (udelukkes fra "
+"deltagelse i tunneler). Højere værdier tolererer flere forbigående fejl. "
+"[Standard er 1]"
 
-msgid "Cooldown period in milliseconds before a ghost-marked peer can be considered for tunnel participation again. Shorter values allow faster peer reuse. [Default is 180000 (3 minutes)]"
-msgstr "Nedkølingsperiode i millisekunder før en spøgelses-markeret peer kan overvejes til tunnel-deltagelse igen. Kortere værdier tillader hurtigere genindtræden. [Standard er 600000]"
-
-msgid "Cooldown period in milliseconds for ghost-marked peers during attack mode. Longer cooldowns limit exposure to potentially malicious peers during high-stress periods. [Default is 300000 (5 minutes)]"
-msgstr "Nedkølingsperiode i millisekunder for spøgelses-markerede peers under angrebstilstand. Længere nedkøling begrænser eksponering for potentielle angribere. [Standard er 3600000]"
+msgid "Cooldown period in milliseconds before a ghost-marked peer can be promoted into the tunnel peer tiers again. Shorter values return recovered peers to service faster. [Default is 90000 (90 seconds)]"
+msgstr ""
+"Nedkølingsperiode i millisekunder før en ghost-markeret peer igen kan "
+"forfremmes til tunnelpeer-tiers. Kortere værdier bringer genoprettede "
+"peers hurtigere tilbage i drift. [Standard er 90000 (90 sekunder)]"
 
 msgid "Minimum number of incoming tunnel build requests accepted per peer per clean window. Prevents starving peers during low-traffic periods. [Default is 10]"
 msgstr "Minimum antal indgående tunnelbygningsanmodninger accepteret per peer per rent vindue. Forhindrer peers i at sulte under lav-efterspørgselsperioder. [Standard er 1]"
@@ -10121,3 +10272,52 @@ msgstr "Næste"
 
 msgid "Finished"
 msgstr "Færdig"
+
+
+
+# /java/src/net/i2p/router/web/helpers/HealthHelper.java:240
+
+# /java/src/net/i2p/router/web/helpers/HealthHelper.java:244
+
+# /java/src/net/i2p/router/web/helpers/HealthHelper.java:315
+
+# /java/src/net/i2p/router/web/helpers/HealthHelper.java:317
+
+# /java/src/net/i2p/router/web/helpers/HealthHelper.java:319
+
+# /java/src/net/i2p/router/web/helpers/HealthHelper.java:380
+
+# /java/src/net/i2p/router/web/helpers/HealthHelper.java:382
+
+# /java/src/net/i2p/router/web/helpers/HealthHelper.java:384
+
+# /java/src/net/i2p/router/web/helpers/HealthHelper.java:390
+
+# /java/src/net/i2p/router/web/helpers/HealthHelper.java:394
+
+# /java/src/net/i2p/router/web/helpers/HealthHelper.java:455
+
+# /java/src/net/i2p/router/web/helpers/HealthHelper.java:457
+
+# /java/src/net/i2p/router/web/helpers/HealthHelper.java:459
+
+# /java/src/net/i2p/router/web/helpers/HealthHelper.java:463
+
+# /java/src/net/i2p/router/web/helpers/HealthHelper.java:465
+
+# /java/src/net/i2p/router/web/helpers/HealthHelper.java:467
+
+
+
+
+
+
+
+
+
+
+
+# /java/src/net/i2p/router/web/helpers/SAMDebugHelper.java:74
+
+
+

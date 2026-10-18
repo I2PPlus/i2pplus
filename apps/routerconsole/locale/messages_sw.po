@@ -135,23 +135,50 @@ msgstr "Peer bila anwani ya IP iliyochapishwa"
 msgid "Average tunnel build success (%)"
 msgstr "Asilimia ya wastani ya kujenga tuneli kwa mafanikio"
 
+msgid "Tier promotions held back for a peer with no usable address"
+msgstr "Kupandwa ngazi kimeshikiliwa kwa peer bila anwani inayotumika"
+
+msgid "RouterInfo refreshes issued for peers held out of the tiers"
+msgstr ""
+"Masasisho ya RouterInfo yaliyotolewa kwa peer walioshikiliwa nje ya "
+"ngazi"
+
+msgid "Tier scans that left the fast or high-capacity tier short of target"
+msgstr ""
+"Ukaguzi wa ngazi ulioacha ngazi ya haraka au yenye uwezo mkubwa chini ya "
+"lengo"
+
+msgid "RouterInfos requested for stored profiles that had none"
+msgstr ""
+"RouterInfo ziliombwa kwa wasifu uliohifadhiwa ambao haukuwa na yoyote"
+
+msgid "Build timeouts recorded against a peer as a ghost mark"
+msgstr ""
+"Muda wa kujenga ukikwama uliorekodiwa dhidi ya peer kama alama ya mzimu"
+
+msgid "Ghost marks cleared by a successful build reply"
+msgstr "Alama za mzimu zilizofutwa na jibu la kujenga lililofanikiwa"
+
+msgid "Peers currently excluded as ghosts"
+msgstr "Peer wanaaoondolewa kwa sasa kama mizimu"
+
+msgid "Ghost peers in the fast or high-capacity tiers"
+msgstr "Peer za mizimu katika ngazi za haraka au zenye uwezo mkubwa"
+
+msgid "Duplicate CLOSE safety-net messages sent"
+msgstr "Ujumbe mara mbili wa wavu-salama CLOSE umetumwa"
+
 msgid "Memory used by the JVM"
 msgstr "Kumbukumbu inayotumika na JVM"
 
 msgid "maximum"
 msgstr "kiwango cha juu"
 
-msgid "No transports"
-msgstr "Hakuna transport"
-
 msgid "Unsupported signature type"
 msgstr "Aina ya saini haijulikani"
 
 msgid "No support for our signature type"
 msgstr "Hakuna msaada kwa aina yetu ya saini"
-
-msgid "Unreachable on any transport"
-msgstr "Haipatikani kwa transport yoyote"
 
 msgid "Cannot enumerate UPnP devices on Android."
 msgstr "Haiwezi kuhesabiwa vifaa vya UPnP kwenye Android."
@@ -848,6 +875,9 @@ msgstr "Konsola"
 
 msgid "To enable SSL access for the Router Console, see the commented <code>clients.config</code> file located in your I2P application directory for more information. You will need to edit the RouterConsoleRunner config file located in the directory: "
 msgstr "Kuwasha ufikiaji wa SSL kwa Konsola ya Routeri, angalia faili ya <code>clients.config</code> iliyoelezwa iliyo kwenye katalogi yako ya programu ya I2P kwa taarifa zaidi. Utahitaji kuhariri faili ya mipangilio ya RouterConsoleRunner iliyo kwenye katalogi: "
+
+msgid "No client session key managers."
+msgstr "Hakuna wasimamizi wa funguo za kipindi cha kila mteja."
 
 msgid "Save disabled, edit the router.config file to make changes"
 msgstr "Kuhifadhi kumezimwa, hariri faili ya router.config ili kufanya mabadiliko"
@@ -2061,20 +2091,34 @@ msgstr "imeboreshwa"
 msgid "vs baseline"
 msgstr "dhidi ya msingi"
 
+#, java-format
+msgid "Out: {0} / {1}"
+msgstr "Nje: {0} / {1}"
+
+#, java-format
+msgid "In: {0} / {1}"
+msgstr "Ndani: {0} / {1}"
+
 msgid "CPU"
 msgstr "CPU"
 
-msgid "CPU load average"
-msgstr "Wastani wa mzigo wa CPU"
+msgid "JVM CPU load average"
+msgstr "Wastani mzigo wa CPU wa JVM"
+
+#, java-format
+msgid "{0} cores"
+msgstr "koko {0}"
 
 msgid "Memory"
 msgstr "Kumbukumbu"
 
-msgid "Memory usage"
-msgstr "Tumizi ya kumbukumbu"
+#, java-format
+msgid "Used: {0} / {1} max"
+msgstr "Zimetumika: {0} / {1} kiwango cha juu"
 
-msgid "Router uptime"
-msgstr "Muda wa kuendeshwa wa routeri"
+#, java-format
+msgid "Since {0}"
+msgstr "Tangu {0}"
 
 msgid "Job Lag"
 msgstr "Ucheleweshaji wa Kazi"
@@ -2100,6 +2144,10 @@ msgstr "Nyuzi"
 msgid "Active JVM threads"
 msgstr "Nyuzi za JVM zinavyofanya kazi"
 
+#, java-format
+msgid "Empty at {0}"
+msgstr "Tupu kwa {0}"
+
 msgid "NTCP Estab"
 msgstr "NTCP Estab"
 
@@ -2121,20 +2169,25 @@ msgstr "Muda wa kusubiri wa uwasilishaji upya wa SSU"
 msgid "Conns/s"
 msgstr "Muunganisho/s"
 
-msgid "NTCP connections established per second"
-msgstr "Muunganisho wa NTCP ulioanzishwa kwa sekunde"
+#, java-format
+msgid "Full at {0}/s"
+msgstr "Imejaa kwa {0}/s"
+
+msgid "New NTCP connections (1 min)"
+msgstr "Miunganisho mipya ya NTCP (dakika 1)"
 
 msgid "Msgs/s"
 msgstr "Ujumbe/s"
 
-msgid "Messages delivered per second"
-msgstr "Ujumbe ulioletwa kwa sekunde"
+msgid "Messages delivered (1 min)"
+msgstr "Ujumbe uliowasilishwa (dakika 1)"
 
 msgid "RTT"
 msgstr "RTT"
 
-msgid "End-to-end message round trip time"
-msgstr "Muda wa safari ya kurudi ya ujumbe mwisho mwisho"
+msgid "End-to-end client message round trip"
+msgstr ""
+"Safari ya kwenda-na-kurudi ya ujumbe wa mteja mwisho-hadi-mwisho"
 
 msgid "Timeout"
 msgstr "Muda wa kusubiri"
@@ -2148,20 +2201,28 @@ msgstr "Ujenzi wa Tuneli"
 msgid "Client tunnel build latency"
 msgstr "Latensi ya kujenga tuneli ya mteja"
 
+#, java-format
+msgid "In: {0} / Out: {1}"
+msgstr "Ndani: {0} / Nje: {1}"
+
 msgid "Active Peers"
 msgstr "Peer Zinavyofanya kazi"
 
-msgid "Active peers (last 60s)"
-msgstr "Peer zinavyofanya kazi (sekunde 60 zilizopita)"
+#, java-format
+msgid "Full at {0}"
+msgstr "Imejaa kwa {0}"
+
+msgid "Reached in the last 60s"
+msgstr "Ziliifikika sekunde 60 zilizopita"
 
 msgid "Known Peers"
 msgstr "Peer Zinazojulikana"
 
-msgid "Known routers in network database"
-msgstr "Routeri zinazojulikana kwenye kanzidata ya mtandao"
+msgid "In the network database"
+msgstr "Katika hifadhidata ya mtandao"
 
-msgid "Active I2CP clients"
-msgstr "Wateja wa I2CP Wanaofanya kazi"
+msgid "I2CP clients connected"
+msgstr "Wateja wa I2CP waliounganishwa"
 
 msgid "Transit"
 msgstr "Transit"
@@ -2175,8 +2236,8 @@ msgstr "Mijito"
 msgid "Build Success"
 msgstr "Ujenzi Umefanikiwa"
 
-msgid "Tunnel build success rate"
-msgstr "Kiwango cha kufanikia cha kujenga tuneli"
+msgid "Tunnel build success rate (1 min)"
+msgstr "Kiwango cha mafanikio ya kujenga tuneli (dakika 1)"
 
 msgid "NetDB"
 msgstr "NetDB"
@@ -2187,26 +2248,31 @@ msgstr "Muda wa utafutaji kwenye NetDB"
 msgid "Banned"
 msgstr "Waliobanwa"
 
-msgid "Total banned peers"
-msgstr "Jumla ya peer waliobanwa"
+msgid "Peers excluded from all interactions"
+msgstr "Peer zilizoondolewa kwenye mwingiliano wote"
+
+#, java-format
+msgid "{0} of {1} known"
+msgstr "{0} kati ya {1} zinazojulikana"
 
 msgid "LeaseSets"
 msgstr "LeaseSets"
 
-msgid "Stored LeaseSets in floodfill"
-msgstr "LeaseSets zilizohifadhiwa kwenye floodfill"
+msgid "Stored LeaseSets"
+msgstr "LeaseSet zilizohifadhiwa"
 
 msgid "Cache Hit"
 msgstr "Kugusa cache"
 
-msgid "NetDB lookup success rate"
-msgstr "Kiwango cha kufanikia cha utafutaji kwenye NetDB"
+#, java-format
+msgid "Matched {0} of {1} lookups (1 min)"
+msgstr "Zilinganishwa {0} kati ya utafutaji {1} (dakika 1)"
 
 msgid "Flood Verify"
 msgstr "Uthibitisho wa Flood"
 
-msgid "Floodfill verify time"
-msgstr "Muda wa uthibitisho wa floodfill"
+msgid "Floodfill verify time (1 min)"
+msgstr "Muda wa uthibitisho wa Floodfill (dakika 1)"
 
 msgid "NetDB ACK"
 msgstr "NetDB ACK"
@@ -2217,20 +2283,20 @@ msgstr "Muda wa kuakili na peer ya NetDB"
 msgid "Lookups/s"
 msgstr "Utafutaji/s"
 
-msgid "NetDB lookups handled per second"
-msgstr "Utafutaji wa NetDB ulioishughulikia kwa sekunde"
+msgid "Lookups handled (1 min)"
+msgstr "Utafutaji ulioshughulikiwa (dakika 1)"
 
 msgid "Requests/s"
 msgstr "Maombi/s"
 
-msgid "Combined store + lookup operations per second"
-msgstr "Shughuli za kuhifadhi na kutafuta pamoja kwa sekunde"
+msgid "Stores + lookups (1 min)"
+msgstr "Uhifadhi + utafutaji (dakika 1)"
 
 msgid "Stores/s"
 msgstr "Hifadhi/s"
 
-msgid "NetDB store messages handled per second"
-msgstr "Ujumbe wa kuhifadhi wa NetDB ulioishughulikia kwa sekunde"
+msgid "Stores handled (1 min)"
+msgstr "Uhifadhi ulioshughulikiwa (dakika 1)"
 
 msgid "LS Timeout"
 msgstr "Muda wa Kusubiri wa LS"
@@ -3214,6 +3280,9 @@ msgstr "Tazama wasifu"
 msgid "Configure peer"
 msgstr "Sanidi peer"
 
+msgid "Memory usage"
+msgstr "Tumizi ya kumbukumbu"
+
 msgid "Hidden"
 msgstr "Imefichwa"
 
@@ -3357,8 +3426,8 @@ msgstr "Peer za kasi kubwa kwa tuneli nyingi"
 msgid "Reliable"
 msgstr "Ya Kuaminika"
 
-msgid "High-capacity peers with good acceptance"
-msgstr "Peer za uwezo mkubwa zenye ukubali mzuri"
+msgid "Peers with good acceptance and recent activity"
+msgstr "Peer zenye ukubali mzuri na shughuli za hivi karibuni"
 
 msgid "Peers that store and serve NetDb info"
 msgstr "Peer zinazohifadhi na kutoa taarifa za NetDb"
@@ -3369,17 +3438,21 @@ msgstr "Zinazozikwa"
 msgid "Total entries in network database"
 msgstr "Idadi ya jumla ya maingizo kwenye kanzidata ya mtandao"
 
+msgid "Profiles"
+msgstr "Wasifu"
+
 msgid "Profiles with activity in the last hour"
 msgstr "Wasifu wenye shindikaa kwa saa ya mwisho"
+
+#, java-format
+msgid "{0} of {1} stored"
+msgstr "{0} kati ya {1} zimehifadhiwa"
 
 msgid "Unreachable"
 msgstr "Haipatikani"
 
-msgid "Peers without a reachable address"
-msgstr "Peer zisizo na anwani inayopatikana"
-
-msgid "Peers excluded from all interactions"
-msgstr "Peer zilizoondolewa kwenye mwingiliano wote"
+msgid "Peers without a published address"
+msgstr "Peer bila anwani iliyochapishwa"
 
 msgid "/min"
 msgstr "/min"
@@ -3387,8 +3460,12 @@ msgstr "/min"
 msgid "Test Fail"
 msgstr "Kushindwa kwa Jaribio"
 
-msgid "Connectivity test failures per minute"
-msgstr "Kushindwa kwa jaribio la muunganisho kwa dakika"
+msgid "Connectivity test failures in the last minute"
+msgstr "Kushindwa kwa jaribio la muunganisho dakika iliyopita"
+
+#, java-format
+msgid "Empty at {0}/min"
+msgstr "Tupu kwa {0}/dak"
 
 msgid "Peer Connections"
 msgstr "Muunganisho wa peer"
@@ -3662,26 +3739,40 @@ msgstr[1] "wasifu {0} wa zamani zimefichwa"
 msgid "Share of total profiles shown"
 msgstr "Sehemu ya wasifu zote zilizoonyeshwa"
 
-msgid "peers"
-msgstr "peer"
-
-msgid "Share of tier profiles shown"
-msgstr "Sehemu ya wasifu wa tabaka zilizoonyeshwa"
-
 msgid "Window"
 msgstr "Kipindi"
 
 msgid "Fast RTT"
 msgstr "RTT ya Haraka"
 
-msgid "Max RTT for fast-tier membership (ms)"
-msgstr "RTT ya juu zaidi ya ushiriki katika tabaka la haraka (ms)"
+msgid "Max RTT for fast-tier membership"
+msgstr "RTT ya juu zaidi kwa uanachama wa ngazi ya haraka"
 
-msgid "Average loss of fast-tier peers (%)"
-msgstr "Wastani ya kupotea kwa peer za tabaka la haraka (%)"
+msgid "Rises with network latency"
+msgstr "Hupanda kwa ucheleweshaji wa mtandao"
 
-msgid "Average loss of high-capacity peers (%)"
-msgstr "Wastani ya kupotea kwa peer za uwezo mkubwa (%)"
+msgid "Average loss of fast-tier peers"
+msgstr "Kupotea wastani kwa peer za ngazi ya haraka"
+
+msgid "Average loss of high-capacity peers"
+msgstr "Kupotea wastani kwa peer zenye uwezo mkubwa"
+
+msgid "Average direct-link RTT of tier peers"
+msgstr "RTT wastani ya kiungo cha moja kwa moja cha peer za ngazi"
+
+#, java-format
+msgid "{0} of {1} measured"
+msgstr "{0} kati ya {1} zimepimwa"
+
+msgid "1h Contact"
+msgstr "1h Mawasiliano"
+
+msgid "Heard from in the last hour"
+msgstr "Zimesikika saa iliyopita"
+
+#, java-format
+msgid "{0} of {1} tier peers"
+msgstr "{0} kati ya peer {1} za ngazi"
 
 msgid "Heard from within the display cutoff"
 msgstr "Imesikika kutoka ndani ya kizingiti cha kuonyesha"
@@ -3692,11 +3783,19 @@ msgstr "Utatufaji"
 msgid "Lookup success rate"
 msgstr "Kiwango cha kufanikia cha utatufaji"
 
+#, java-format
+msgid "{0} of {1} lookups"
+msgstr "{0} kati ya utafutaji {1}"
+
 msgid "Stores"
 msgstr "Kuhifadhi"
 
 msgid "Store success rate"
 msgstr "Kiwango cha kufanikia cha kuhifadhi"
+
+#, java-format
+msgid "{0} of {1} peers"
+msgstr "{0} kati ya peer {1}"
 
 msgid "Definitions"
 msgstr "Maelezo"
@@ -3769,11 +3868,25 @@ msgstr "peer mpya ngapi wametushtiria hivi karibuni?"
 msgid "Known floodfills"
 msgstr "Floodfill zinazojulikana"
 
-msgid "No-Fail"
-msgstr "Bila Kushindwa"
+msgid "Reachable, unbanlisted and heard from"
+msgstr "Inafikika, haijabanwa, na imesikika hivi karibuni"
 
-msgid "No lookup failures (1h)"
-msgstr "Hakuna kushindwa kwa utatufaji (1h)"
+msgid "Active bans of floodfill-capable peers"
+msgstr "Vikatazi hai vya peer wenye uwezo wa floodfill"
+
+#, java-format
+msgid "of {0} known"
+msgstr "kati ya {0} zinazojulikana"
+
+msgid "Fail"
+msgstr "Kushindwa"
+
+msgid "Lookup failures in the last hour"
+msgstr "Kushindwa kwa utafutaji saa iliyopita"
+
+#, java-format
+msgid "across {0} listed peers"
+msgstr "katika peer {0} zilizoorodheshwa"
 
 msgid "Response"
 msgstr "Jibu"
@@ -3781,11 +3894,16 @@ msgstr "Jibu"
 msgid "Lookup response time (1h)"
 msgstr "Muda wa jibu la utatufaji (1h)"
 
-msgid "1h Contact"
-msgstr "1h Mawasiliano"
+#, java-format
+msgid "{0} peers measured"
+msgstr "peer {0} zimepimwa"
 
 msgid "Contacted within 1h"
 msgstr "Ilwasilianawa ndani ya 1h"
+
+#, java-format
+msgid "{0} of {1} listed"
+msgstr "{0} kati ya {1} zimeorodheshwa"
 
 msgid "1h Fail Rate"
 msgstr "Kiwango cha Kushindwa 1h"
@@ -3823,17 +3941,33 @@ msgstr "Zote"
 msgid "SAM bridge is not running."
 msgstr "SAM bridge hafanyi kazi."
 
+msgid "Sessions"
+msgstr "Vipindi"
+
 msgid "Active sessions in SessionsDB"
 msgstr "Seseni zinavyofanya kazi katika SessionsDB"
+
+msgid "Workers"
+msgstr "Nyuzi-kazi"
 
 msgid "Active / pool worker threads"
 msgstr "Nyuzi za wafanyakazi zinavyofanya kazi / za kundi"
 
-msgid "Pending commands in pool"
-msgstr "Maagizo yanasubiri katika kundi"
+msgid "Queue"
+msgstr "Foleni"
+
+#, java-format
+msgid "Pending commands: {0} of {1}"
+msgstr "Amri zinazosubiri: {0} kati ya {1}"
+
+msgid "Handlers"
+msgstr "Vishikiliaji"
 
 msgid "Connected pool handlers"
 msgstr "Washughulikaji wa kundi waliounganishwa"
+
+msgid "Stolen"
+msgstr "Ziliibiwa"
 
 msgid "Sockets stolen for data streaming"
 msgstr "Sockets zilizochukuliwa kwa mtiririko wa data"
@@ -4152,9 +4286,6 @@ msgstr "Onyesha muunganisho wa peer wote wa sasa"
 msgid "Router health overview"
 msgstr "Muhtasari wa afya ya routeri"
 
-msgid "Profiles"
-msgstr "Wasifu"
-
 msgid "Show recent peer performance profiles"
 msgstr "Onyesha wasifu wa utendaji wa peer za hivi karibuni"
 
@@ -4463,6 +4594,27 @@ msgid "1 event"
 msgid_plural "{0} events"
 msgstr[0] "tukio 1"
 msgstr[1] "matukio {0}"
+
+msgid "Open streaming connections"
+msgstr "Miunganisho ya mtiririko wazi"
+
+msgid "Round-trip time (live samples, 1 min)"
+msgstr "Muda wa kwenda-na-kurudi (sampuli hai, dakika 1)"
+
+msgid "Retrans"
+msgstr "Tuma-tena"
+
+msgid "Share of sends needing retransmit (1 min)"
+msgstr "Sehemu ya mituma inayohitaji kutuma-tena (dakika 1)"
+
+msgid "Created + received (1 min)"
+msgstr "Zilizoundwa + zilizopokelewa (dakika 1)"
+
+msgid "Throughput"
+msgstr "Upitishaji"
+
+msgid "Mean rate of streams closed in the last minute"
+msgstr "Kasi wastani ya mitiririko iliyofungwa dakika iliyopita"
 
 msgid "sent"
 msgstr "Zilizotumwa"
@@ -4851,6 +5003,9 @@ msgstr "Exponent ya Kukataa kwa Udhibiti"
 msgid "Maximum Participating Tunnels"
 msgstr "Idadi Kubwa Zaidi ya Tuneli Zinazoshiriki"
 
+msgid "Timer Threads"
+msgstr "Nyuzi za kipima-muda"
+
 msgid "Build Handler Maximum Queue"
 msgstr "Foleni ya Juu Zaidi ya Kishughulikia cha Ujenzi"
 
@@ -5204,6 +5359,11 @@ msgstr "Dirisha mkubwa zaidi la msongamano wakati wa kuanza kwa polepole."
 
 msgid "Per-connection inbound buffer cap (bytes)."
 msgstr "Kikomo cha buffer ya kuingia kwa kila muunganisho (baiti)."
+
+msgid "Timer worker threads; higher reduces event delay."
+msgstr ""
+"Nyuzi-kazi za kipima-muda; thamani kubwa hupunguza ucheleweshaji wa "
+"matukio."
 
 msgid "Dynamic cap on concurrent streams per destination."
 msgstr "Kikomo cha kurekebisha kwa mtiririko unaoendelea kwa kila lengo."
@@ -7026,6 +7186,15 @@ msgstr "sanidi programu za tovuti"
 msgid "The Java web applications listed below are started by the webConsole client and run in the same JVM as the router. They are usually web applications accessible through the router console. They may be complete applications (e.g. i2psnark), front-ends to another client or application which must be separately enabled (e.g. susidns, i2ptunnel), or have no web interface at all (e.g. addressbook)."
 msgstr "Programu za tovuti za Java zilizoorodheshwa hapa chini huanzishwa na mteja wa webConsole na zinafanya kazi ndani ya JVM moja na routeri. Kwa kawaida huo ni programu za tovuti zinazopatikana kupitia konsola ya routeri. Zinaweza kuwa programu kamili (k.v. i2psnark), front-end kwa mteja au programu nyingine ambayo lazima iwashwe kwa kawaida (k.v. susidns, i2ptunnel), au hazina kiolesura cha tovuti hata (k.v. addressbook)."
 
+msgid "Router Session Key Manager"
+msgstr "Msimamizi wa funguo za kipindi cha router"
+
+msgid "Client Session Key Managers"
+msgstr "Wasimamizi wa funguo za kipindi cha kila mteja"
+
+msgid "Router DHT"
+msgstr "DHT ya router"
+
 msgid "Open in new tab"
 msgstr "Fungua katika tabo mpya"
 
@@ -7600,14 +7769,18 @@ msgstr "Kipindi cha chini cha jaribio la tuneli kwa ms. Majaribio ya tuneli daim
 msgid "Maximum tunnel test period in milliseconds. Tunnel tests never wait longer than this for a reply, even on high-latency paths. [Default is 50000 (50 seconds)]"
 msgstr "Kipindi cha kubwa cha jaribio la tuneli kwa ms. Majaribio ya tuneli hayasubiri kwa muda mrefu kuliko huu kupata jibu, hata kwenye njia za latensi kubwa. [Default ni 50000 (sekunde 50)]"
 
-msgid "Number of tunnel build timeouts before a peer is marked as a ghost (blacklisted for tunnel participation). Higher values tolerate more transient failures. [Default is 3]"
-msgstr "Idadi ya muda wa kusubiri wa kujenga tuneli kabla ya peer kuwekewa alama ya mzimu (kuwekwa kwenye orodha nyeusi kwa ushiriki wa tuneli). Thamani kubwa zinakubali mishindwa ya muda mwingi zaidi. [Default ni 3]"
+msgid "Number of tunnel build timeouts before a peer is marked as a ghost (excluded from tunnel participation). Higher values tolerate more transient failures. [Default is 1]"
+msgstr ""
+"Idadi ya kukwama kwa muda wa kujenga tuneli kabla ya peer kuwekwa alama "
+"ya mzimu (kuondolewa kushiriki tuneli). Thamani kubwa zinavumilia makosa "
+"ya muda mfupi zaidi. [Chaguo-msingi ni 1]"
 
-msgid "Cooldown period in milliseconds before a ghost-marked peer can be considered for tunnel participation again. Shorter values allow faster peer reuse. [Default is 180000 (3 minutes)]"
-msgstr "Mara ya kusubiri kwa ms kabla ya peer iliyowekewa alama ya mzimu kuweza kuzgunosha tena kwa ushiriki wa tuneli. Thamani fupi zinaruhusu matumizi mapya ya peer kwa haraka zaidi. [Default ni 180000 (3 dakika)]"
-
-msgid "Cooldown period in milliseconds for ghost-marked peers during attack mode. Longer cooldowns limit exposure to potentially malicious peers during high-stress periods. [Default is 300000 (5 minutes)]"
-msgstr "Mara ya kusubiri kwa ms kwa peer zilizowekewa alama ya mzimu wakati wa hali ya mashambulizi. Mara ndefu za kusubiri zinapunguza hatari kwa peer zinazoweza kuwa hasidi katika vipindi vya shinikizo kubwa. [Default ni 300000 (5 dakika)]"
+msgid "Cooldown period in milliseconds before a ghost-marked peer can be promoted into the tunnel peer tiers again. Shorter values return recovered peers to service faster. [Default is 90000 (90 seconds)]"
+msgstr ""
+"Muda wa kupoza kwa milisekunde kabla ya peer aliyewekwa alama ya mzimu "
+"kupandwa tena kwenye ngazi za peer za tuneli. Thamani fupi zinarudisha "
+"peer waliopona kwenye huduma haraka zaidi. [Chaguo-msingi ni 90000 "
+"(sekunde 90)]"
 
 msgid "Minimum number of incoming tunnel build requests accepted per peer per clean window. Prevents starving peers during low-traffic periods. [Default is 10]"
 msgstr "Idadi ya chini ya maombi ya kujenga tuneli yanayoingia yakikaribishwa kwa kila peer kwa kila dirisha safi. Inazuia peer kuzongwa wakati wa vipindi vya trafiki ndogo. [Default ni 10]"
@@ -10037,3 +10210,35 @@ msgstr "Ifuatayo"
 
 msgid "Finished"
 msgstr "Imeisha"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

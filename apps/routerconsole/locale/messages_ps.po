@@ -135,23 +135,47 @@ msgstr "پرته له خپور شوې IP پتې peerونه"
 msgid "Average tunnel build success (%)"
 msgstr "د ټونل د جوړولو د بریا اوسط فیصده"
 
+msgid "Tier promotions held back for a peer with no usable address"
+msgstr "د کار وړ پته نه لرونکي peer لپاره کچه لوړونه ودرول شول"
+
+msgid "RouterInfo refreshes issued for peers held out of the tiers"
+msgstr ""
+"د کچو څخه بهر ساتل شویو peerانو لپاره صادر شوي RouterInfo نوي کول"
+
+msgid "Tier scans that left the fast or high-capacity tier short of target"
+msgstr "د کچو سکانونه چې چټکه یا لوړ ظرفیته کچه یې له موخې ټیټه پریښوده"
+
+msgid "RouterInfos requested for stored profiles that had none"
+msgstr ""
+"د ساتل شویو پروفایلونو لپاره غوښتل شوي RouterInfo چې هیڅ یې نه درلود"
+
+msgid "Build timeouts recorded against a peer as a ghost mark"
+msgstr ""
+"د جوړونې وخت تېرېدنه چې د peer پر وړاندې د پرېت نښې په توګه ثبت شوې"
+
+msgid "Ghost marks cleared by a successful build reply"
+msgstr "پرېت نښې چې د بریالۍ جوړونې ځواب سره پاکې شوې"
+
+msgid "Peers currently excluded as ghosts"
+msgstr "هغه peerان چې اوس مهال د پرېتونو په توګه وباسل شوي"
+
+msgid "Ghost peers in the fast or high-capacity tiers"
+msgstr "پرېت peerان په چټکو یا لوړ ظرفیته کچو کې"
+
+msgid "Duplicate CLOSE safety-net messages sent"
+msgstr "لېږل شوي تکراري CLOSE خوندیتوب جال پیغامونه"
+
 msgid "Memory used by the JVM"
 msgstr "د JVM لخوا کارول شوی میموری"
 
 msgid "maximum"
 msgstr "تر ټولو لوړ"
 
-msgid "No transports"
-msgstr "ټرانسپورتونه نشته"
-
 msgid "Unsupported signature type"
 msgstr "د نښې نه ملاتړ کیږی ډول"
 
 msgid "No support for our signature type"
 msgstr "زموږ د نښې د ډول ملاتړ نشته"
-
-msgid "Unreachable on any transport"
-msgstr "په هیڅ ټرانسپورت کې ناشته"
 
 msgid "Cannot enumerate UPnP devices on Android."
 msgstr "په Android کې نه شو کېدلی چې د UPnP وسایل وپېژنو۔"
@@ -848,6 +872,9 @@ msgstr "کنسول"
 
 msgid "To enable SSL access for the Router Console, see the commented <code>clients.config</code> file located in your I2P application directory for more information. You will need to edit the RouterConsoleRunner config file located in the directory: "
 msgstr "د راوټر د کنسول لپاره د SSL لاسرسی فعالولو لپاره، د نورو معلوماتو لپاره خپل د I2P د پرلیکیشن دېریکټرۍ کې د تشریحاتو سره <code>clients.config</code> فایل وګورئ. ستا RouterConsoleRunner د ترتیباتو فایل باید سم کړئ چې په دې دېریکټرۍ کې دی: "
+
+msgid "No client session key managers."
+msgstr "د پیرودونکي د ایسیشن کیلي مدیران نشته."
 
 msgid "Save disabled, edit the router.config file to make changes"
 msgstr "خوندی کول غیر فعال، د بدلونونو لپاره router.config فایل سم کړئ"
@@ -1905,10 +1932,10 @@ msgid "Bandwidth Usage"
 msgstr "د باندویډټ کارول"
 
 msgid "Graph combining is not enabled"
-msgstr ""
+msgstr "د ګرافونو یوځای کول فعال نه دي"
 
 msgid "Not enough stats enabled to combine"
-msgstr ""
+msgstr "د یوځای کولو لپاره کافي احصایې فعالې نه دي"
 
 #, java-format
 msgid "ending {0} ago"
@@ -2026,22 +2053,22 @@ msgid "Add a glow effect to graph lines"
 msgstr "د ګراف په کرښو غو ځلېږلو اغېزه زیاته کړئ"
 
 msgid "Smooth lines"
-msgstr ""
+msgstr "هوار کرښې"
 
 msgid "Use bezier curves to plot graphs"
-msgstr ""
+msgstr "د ګرافونو د رسمولو لپاره د Bézier منحني وکاروئ"
 
 msgid "Filled paths"
-msgstr ""
+msgstr "ډک لارې"
 
 msgid "Use filled areas for graphs"
-msgstr ""
+msgstr "د ګرافونو لپاره ډکې ساحې وکاروئ"
 
 msgid "Combine graphs"
-msgstr ""
+msgstr "ګرافونه یوځای کړئ"
 
 msgid "Merge related graphs into a plot"
-msgstr ""
+msgstr "اړونده ګرافونه په یوه نقشه کې سره یوځای کړئ"
 
 msgid "Select Stats"
 msgstr "شمېرې غوره کړئ"
@@ -2061,20 +2088,34 @@ msgstr "ښه شوی"
 msgid "vs baseline"
 msgstr "په اړه بنسټ"
 
+#, java-format
+msgid "Out: {0} / {1}"
+msgstr "وښې: {0} / {1}"
+
+#, java-format
+msgid "In: {0} / {1}"
+msgstr "رننوت: {0} / {1}"
+
 msgid "CPU"
 msgstr "CPU"
 
-msgid "CPU load average"
-msgstr "د CPU بار اوسط"
+msgid "JVM CPU load average"
+msgstr "د JVM د CPU بار اوسط"
+
+#, java-format
+msgid "{0} cores"
+msgstr "{0} هستې"
 
 msgid "Memory"
 msgstr "میموری"
 
-msgid "Memory usage"
-msgstr "د میموری کارول"
+#, java-format
+msgid "Used: {0} / {1} max"
+msgstr "کارول شوي: {0} / {1} اعظمي"
 
-msgid "Router uptime"
-msgstr "د راوټر وخت د کار"
+#, java-format
+msgid "Since {0}"
+msgstr "له {0} راهیسې"
 
 msgid "Job Lag"
 msgstr "د وظیفو وېره"
@@ -2100,6 +2141,10 @@ msgstr "تارونه"
 msgid "Active JVM threads"
 msgstr "فعاله JVM تارونه"
 
+#, java-format
+msgid "Empty at {0}"
+msgstr "په {0} کې خالي"
+
 msgid "NTCP Estab"
 msgstr "د NTCP بنسټ"
 
@@ -2121,20 +2166,24 @@ msgstr "د SSU د بیا لېږلو وخت پې"
 msgid "Conns/s"
 msgstr "اتصالات/ثانیه"
 
-msgid "NTCP connections established per second"
-msgstr "په ثانیه کې د NTCP بنسټ شوی اتصالات"
+#, java-format
+msgid "Full at {0}/s"
+msgstr "په {0}/ث کې ډک"
+
+msgid "New NTCP connections (1 min)"
+msgstr "نوي NTCP اړیکې (۱ دقیقه)"
 
 msgid "Msgs/s"
 msgstr "پیغامونه/ثانیه"
 
-msgid "Messages delivered per second"
-msgstr "په ثانیه کې ترسېدلی پیغامونه"
+msgid "Messages delivered (1 min)"
+msgstr "رسېدلي پیغامونه (۱ دقیقه)"
 
 msgid "RTT"
 msgstr "RTT"
 
-msgid "End-to-end message round trip time"
-msgstr "د پیغام د پای تر پای ګرځ وخت"
+msgid "End-to-end client message round trip"
+msgstr "د پیرودونکي د پیغامونو سرونه-تر-سرونه تګ راتګ"
 
 msgid "Timeout"
 msgstr "وخت پې"
@@ -2148,20 +2197,28 @@ msgstr "د ټونل جوړول"
 msgid "Client tunnel build latency"
 msgstr "د کلآینټ د ټونل د جوړولو لیټنسی"
 
+#, java-format
+msgid "In: {0} / Out: {1}"
+msgstr "رننوت: {0} / وښې: {1}"
+
 msgid "Active Peers"
 msgstr "فعال peerونه"
 
-msgid "Active peers (last 60s)"
-msgstr "فعال peerونه (تېر 60s)"
+#, java-format
+msgid "Full at {0}"
+msgstr "په {0} کې ډک"
+
+msgid "Reached in the last 60s"
+msgstr "په تېرو ۶۰ ثانیو کې ترې رسېدلی"
 
 msgid "Known Peers"
 msgstr "پوهې شوی peerونه"
 
-msgid "Known routers in network database"
-msgstr "په نټورک ډیټابیس کې پوهې شوی راوټرونه"
+msgid "In the network database"
+msgstr "د شبکې په ډیټابیس کې"
 
-msgid "Active I2CP clients"
-msgstr "فعال I2CP کلآینټونه"
+msgid "I2CP clients connected"
+msgstr "نښلول شوي I2CP پیرودونکي"
 
 msgid "Transit"
 msgstr "ترانزیت"
@@ -2175,8 +2232,8 @@ msgstr "سټریمونه"
 msgid "Build Success"
 msgstr "د جوړولو بریا"
 
-msgid "Tunnel build success rate"
-msgstr "د ټونل د جوړولو د بریا کچه"
+msgid "Tunnel build success rate (1 min)"
+msgstr "د ټونل د جوړولو د بریا کچه (۱ دقیقه)"
 
 msgid "NetDB"
 msgstr "NetDB"
@@ -2187,26 +2244,31 @@ msgstr "د NetDB د لټون وخت"
 msgid "Banned"
 msgstr "بند شوی"
 
-msgid "Total banned peers"
-msgstr "ټول بندی peerونه"
+msgid "Peers excluded from all interactions"
+msgstr "له ټولو تعاملونو څخه وتل شوی peerونه"
+
+#, java-format
+msgid "{0} of {1} known"
+msgstr "{0} له {1} څخه معلوم"
 
 msgid "LeaseSets"
 msgstr "LeaseSets"
 
-msgid "Stored LeaseSets in floodfill"
-msgstr "په floodfill کې ذخیره شوی LeaseSets"
+msgid "Stored LeaseSets"
+msgstr "ساتل شوي LeaseSet"
 
 msgid "Cache Hit"
 msgstr "د کیش پوره موندنه"
 
-msgid "NetDB lookup success rate"
-msgstr "د NetDB د لټون د بریا کچه"
+#, java-format
+msgid "Matched {0} of {1} lookups (1 min)"
+msgstr "له {1} لټونونو څخه {0} سمون وخو (۱ دقیقه)"
 
 msgid "Flood Verify"
 msgstr "د سیلاب تصدیق"
 
-msgid "Floodfill verify time"
-msgstr "د floodfill د تصدیق وخت"
+msgid "Floodfill verify time (1 min)"
+msgstr "د Floodfill تصدیق وخت (۱ دقیقه)"
 
 msgid "NetDB ACK"
 msgstr "د NetDB ACK"
@@ -2217,20 +2279,20 @@ msgstr "د NetDB د peer مننه کولو وخت"
 msgid "Lookups/s"
 msgstr "لټونونه/ثانیه"
 
-msgid "NetDB lookups handled per second"
-msgstr "په ثانیه کې د NetDB لټونونه پرازول شوی"
+msgid "Lookups handled (1 min)"
+msgstr "پروسس شوي لټونونه (۱ دقیقه)"
 
 msgid "Requests/s"
 msgstr "غوښتنې/ثانیه"
 
-msgid "Combined store + lookup operations per second"
-msgstr "په ثانیه کې د ذخیرې او لټون یوځای عملیات"
+msgid "Stores + lookups (1 min)"
+msgstr "ساتنې + لټونونه (۱ دقیقه)"
 
 msgid "Stores/s"
 msgstr "ذخیرې/ثانیه"
 
-msgid "NetDB store messages handled per second"
-msgstr "په ثانیه کې د NetDB د ذخیرې پیغامونه پرازول شوی"
+msgid "Stores handled (1 min)"
+msgstr "پروسس شوې ساتنې (۱ دقیقه)"
 
 msgid "LS Timeout"
 msgstr "د LS وخت پې"
@@ -3214,6 +3276,9 @@ msgstr "پروفایل وښیئ"
 msgid "Configure peer"
 msgstr "peer ترتیب کړئ"
 
+msgid "Memory usage"
+msgstr "د میموری کارول"
+
 msgid "Hidden"
 msgstr "پټ"
 
@@ -3357,8 +3422,8 @@ msgstr "د ډېرو ټونلونو لپاره لوړ باندویډټ peerونه
 msgid "Reliable"
 msgstr "بشپړ"
 
-msgid "High-capacity peers with good acceptance"
-msgstr "د ښه منلو سره ډیره ظرفیت peerونه"
+msgid "Peers with good acceptance and recent activity"
+msgstr "هغه peerان چې ښه منل او وروستۍ چلند لري"
 
 msgid "Peers that store and serve NetDb info"
 msgstr "هغه peerونه چې د NetDb معلومات ذخیره او خدمت کوی"
@@ -3369,17 +3434,21 @@ msgstr "پوهې شوی"
 msgid "Total entries in network database"
 msgstr "په نټورک ډیټابیس کې ټول مدخلات"
 
+msgid "Profiles"
+msgstr "پروفایلونه"
+
 msgid "Profiles with activity in the last hour"
 msgstr "په تېرې 1h کې فعال پروفایلونه"
+
+#, java-format
+msgid "{0} of {1} stored"
+msgstr "{0} له {1} څخه ساتل شوي"
 
 msgid "Unreachable"
 msgstr "ناشته"
 
-msgid "Peers without a reachable address"
-msgstr "peerونه پرته له ترسېدونکې پتې څخه"
-
-msgid "Peers excluded from all interactions"
-msgstr "له ټولو تعاملونو څخه وتل شوی peerونه"
+msgid "Peers without a published address"
+msgstr "هغه peerان چې خپور شوی پته نلري"
 
 msgid "/min"
 msgstr "/min"
@@ -3387,8 +3456,12 @@ msgstr "/min"
 msgid "Test Fail"
 msgstr "د ازمونې ناکامۍ"
 
-msgid "Connectivity test failures per minute"
-msgstr "د پیوښتیا د ازمونې ناکامیو شمېر په دقیقه"
+msgid "Connectivity test failures in the last minute"
+msgstr "د تېرې دقیقې د نښلول کیدو ازموینې ناکامۍ"
+
+#, java-format
+msgid "Empty at {0}/min"
+msgstr "په {0}/دقیقه کې خالي"
 
 msgid "Peer Connections"
 msgstr "د peer اتصالونه"
@@ -3581,6 +3654,8 @@ msgstr "ټیټ لیټنسی"
 
 msgid "Round trip time to this peer on the direct link, as measured by the transport"
 msgstr ""
+"د دې peer پورې د مستقیمې اړیکې له لارې د تګ راتګ وخت، لکه څنګه چې لیږد "
+"اندازه کوي"
 
 msgid "Packets retransmitted / packets sent, as reported by the UDP transport"
 msgstr "بیا لېږل شوی پکټونه / لېږل شوی پکټونه، لکه څنګه چې UDP ټرانسپورټ راګوروی"
@@ -3662,26 +3737,40 @@ msgstr[1] "{0} زاړه پروفایلونه پټ شوی"
 msgid "Share of total profiles shown"
 msgstr "د ټولو پروفایلونو د ښودلې ونډه"
 
-msgid "peers"
-msgstr "peerونه"
-
-msgid "Share of tier profiles shown"
-msgstr "د پړاوونو د پروفایلونو د ښودلې ونډه"
-
 msgid "Window"
 msgstr "کښه"
 
 msgid "Fast RTT"
 msgstr "چټک RTT"
 
-msgid "Max RTT for fast-tier membership (ms)"
-msgstr "د چټکو پړاوونو د غړتیا لپاره تر ټولو لوړ RTT (ms)"
+msgid "Max RTT for fast-tier membership"
+msgstr "د چټکې کچې غړیتوب لپاره اعظمي RTT"
 
-msgid "Average loss of fast-tier peers (%)"
-msgstr "د چټکو peerونو اوسط ضایعېدل (%)"
+msgid "Rises with network latency"
+msgstr "د شبکې ځنډ سره پورته کېږي"
 
-msgid "Average loss of high-capacity peers (%)"
-msgstr "د ډیرې ظرفیت peerونو اوسط ضایعېدل (%)"
+msgid "Average loss of fast-tier peers"
+msgstr "د چټکې کچې د peerانو اوسط ضایع"
+
+msgid "Average loss of high-capacity peers"
+msgstr "د لوړ ظرفیته peerانو اوسط ضایع"
+
+msgid "Average direct-link RTT of tier peers"
+msgstr "د کچې د peerانو اوسط مستقیم اړیکې RTT"
+
+#, java-format
+msgid "{0} of {1} measured"
+msgstr "{0} له {1} څخه اندازه شوي"
+
+msgid "1h Contact"
+msgstr "د 1h اړیکه"
+
+msgid "Heard from in the last hour"
+msgstr "په تېرې ساعت کې ترې خبر شوی"
+
+#, java-format
+msgid "{0} of {1} tier peers"
+msgstr "د کچې له {1} peerانو څخه {0}"
 
 msgid "Heard from within the display cutoff"
 msgstr "له ښودنې له کتنې څخه اورېدل شوی"
@@ -3692,11 +3781,19 @@ msgstr "لټونې"
 msgid "Lookup success rate"
 msgstr "د لټونونو د بریا کچه"
 
+#, java-format
+msgid "{0} of {1} lookups"
+msgstr "له {1} لټونونو څخه {0}"
+
 msgid "Stores"
 msgstr "ذخیرې"
 
 msgid "Store success rate"
 msgstr "د ذخیرې د بریا کچه"
+
+#, java-format
+msgid "{0} of {1} peers"
+msgstr "له {1} peerانو څخه {0}"
 
 msgid "Definitions"
 msgstr "تعریفونه"
@@ -3769,11 +3866,25 @@ msgstr "په وروستو کې موږ ته څو نوې peerونه یې پوه ک
 msgid "Known floodfills"
 msgstr "پوهې شوی floodfillونه"
 
-msgid "No-Fail"
-msgstr "بې ناکامۍ"
+msgid "Reachable, unbanlisted and heard from"
+msgstr "لاسرسي وړ، بن شوی نه دی، او ترې خبر شوی"
 
-msgid "No lookup failures (1h)"
-msgstr "هیڅ د لټون ناکامی نشته (1h)"
+msgid "Active bans of floodfill-capable peers"
+msgstr "د floodfill وړ peerانو فعال بندیزونه"
+
+#, java-format
+msgid "of {0} known"
+msgstr "له {0} معلومو څخه"
+
+msgid "Fail"
+msgstr "ناکام"
+
+msgid "Lookup failures in the last hour"
+msgstr "د تېر ساعت لټون ناکامۍ"
+
+#, java-format
+msgid "across {0} listed peers"
+msgstr "په {0} نومول شویو peerانو باندې"
 
 msgid "Response"
 msgstr "ځواب"
@@ -3781,11 +3892,16 @@ msgstr "ځواب"
 msgid "Lookup response time (1h)"
 msgstr "د لټون د ځواب وخت (1h)"
 
-msgid "1h Contact"
-msgstr "د 1h اړیکه"
+#, java-format
+msgid "{0} peers measured"
+msgstr "{0} peerان اندازه شول"
 
 msgid "Contacted within 1h"
 msgstr "په 1h کې اړیکه ونیوې"
+
+#, java-format
+msgid "{0} of {1} listed"
+msgstr "{0} له {1} څخه نومول شوي"
 
 msgid "1h Fail Rate"
 msgstr "د 1h ناکامی کچه"
@@ -3823,17 +3939,33 @@ msgstr "ټول"
 msgid "SAM bridge is not running."
 msgstr "د SAM پل نه دی چلېږی۔"
 
+msgid "Sessions"
+msgstr "ایسیشنونه"
+
 msgid "Active sessions in SessionsDB"
 msgstr "په SessionsDB کې فعال ایسیشنونه"
+
+msgid "Workers"
+msgstr "کارکوونکي تارونه"
 
 msgid "Active / pool worker threads"
 msgstr "فعاله / د ټولګې کارکوونکی تارونه"
 
-msgid "Pending commands in pool"
-msgstr "په ټولګه کې پاتې فرمانونه"
+msgid "Queue"
+msgstr "صف"
+
+#, java-format
+msgid "Pending commands: {0} of {1}"
+msgstr "ځنډېلې لارښوونې: {0} / {1}"
+
+msgid "Handlers"
+msgstr "پروسس کوونکي"
 
 msgid "Connected pool handlers"
 msgstr "د ټولګې وصل شوی پرازونکی"
+
+msgid "Stolen"
+msgstr "غلا شوي"
 
 msgid "Sockets stolen for data streaming"
 msgstr "د ډیټا د سټریمینګ لپاره ایستل شوی ساکټونه"
@@ -4152,9 +4284,6 @@ msgstr "ټولې اوسنۍ peer اړیکې وښیئ"
 msgid "Router health overview"
 msgstr "د راوټر د روغتیا لنځ"
 
-msgid "Profiles"
-msgstr "پروفایلونه"
-
 msgid "Show recent peer performance profiles"
 msgstr "وروستې د peer د کار پروفایلونه وښیئ"
 
@@ -4463,6 +4592,27 @@ msgid "1 event"
 msgid_plural "{0} events"
 msgstr[0] "1 پېښه"
 msgstr[1] "{0} پېښې"
+
+msgid "Open streaming connections"
+msgstr "خلاصې سټریمینګ اړیکې"
+
+msgid "Round-trip time (live samples, 1 min)"
+msgstr "د تګ راتګ وخت (ژوندي نمونې، ۱ دقیقه)"
+
+msgid "Retrans"
+msgstr "بیا لېږل"
+
+msgid "Share of sends needing retransmit (1 min)"
+msgstr "هغه لېږلو برخه چې بیا لېږل غواړي (۱ دقیقه)"
+
+msgid "Created + received (1 min)"
+msgstr "جوړ + ترلاسه (۱ دقیقه)"
+
+msgid "Throughput"
+msgstr "تېرېدو ظرفیت"
+
+msgid "Mean rate of streams closed in the last minute"
+msgstr "د تېرې دقیقې په پای کې تړل شویو سټریمونو اوسط کچه"
 
 msgid "sent"
 msgstr "لېږل شوی"
@@ -4851,6 +5001,9 @@ msgstr "د ورو کولو د ردولو لهجه"
 msgid "Maximum Participating Tunnels"
 msgstr "تر ټولو لوړ د ګډون ټونلونه"
 
+msgid "Timer Threads"
+msgstr "د وخت اندازه کوونکي تارونه"
+
 msgid "Build Handler Maximum Queue"
 msgstr "د جوړولو د پرازونکی تر ټولو لوړ صف"
 
@@ -5205,6 +5358,9 @@ msgstr "د ورو پیل پر مهال تر ټولو لوړ کژ۔"
 msgid "Per-connection inbound buffer cap (bytes)."
 msgstr "پر هر اتصال د راتلونکی بفر حد (bytes)۔"
 
+msgid "Timer worker threads; higher reduces event delay."
+msgstr "د تایمر کارکوونکي تارونه؛ لوړ ارزښت د پېښو ځنډ کموي."
+
 msgid "Dynamic cap on concurrent streams per destination."
 msgstr "د هر تاریب د جوړو سټریمونو ځینیز حد۔"
 
@@ -5450,9 +5606,11 @@ msgstr "د بیا لېږلو ترمنځ تر ټولو ټیټ وخت (ms)۔"
 
 msgid "Window growth per RTT after slow start; higher recovers faster."
 msgstr ""
+"د ورو پیل وروسته د هر RTT پر کچه کړکۍ زیاتوالی؛ لوړ ارزښت ژر بېرته راځي."
 
 msgid "Window growth per ACK during slow start; higher ramps faster."
 msgstr ""
+"د ورو پیل پر مهال د هر ACK پر کچه کړکۍ زیاتوالی؛ لوړ ارزښت ژر پورته ځي."
 
 msgid "Minimum send rate before pacing kicks in (KB/s)."
 msgstr "د وېرې له فعالېدو مخکې تر ټولو ټیټ لېږلو سرعت (KB/s)۔"
@@ -5492,6 +5650,7 @@ msgstr "پر هر سرور ټونل د سرور د پرازونکو تارونو
 
 msgid "Dedicated pool for Server→Client transfers, unblocks handlers."
 msgstr ""
+"د پالودونکي→پیرودونکي لیږدونو لپاره ځانګړی حوض، پروسس کوونکي خلاصوي."
 
 msgid "Stall timeout for Server→Client data transfers (ms)."
 msgstr "د Server→Client د ډیټا د لېږلو د ودرېدو وخت پې (ms)۔"
@@ -5542,7 +5701,7 @@ msgid "Duration of moderate load before declining requests (ms)."
 msgstr "د منځنی بار مدت چې مخکې له غوښتنو څخه ردولو (ms)۔"
 
 msgid "Widens the peer recency window when fast peers run short."
-msgstr ""
+msgstr "کله چې چټک peerانو کمي وي د peerانو تازه والي کړکۍ پراخوي."
 
 msgid "Consecutive failures before pool backoff."
 msgstr "پرېټسې ناکامی وږی تر ټولګې ورو کېدو مخکې۔"
@@ -5581,7 +5740,7 @@ msgid "TCP socket connect timeout for tunnel server handler threads (ms)."
 msgstr "د ټونل د سرور د پرازونکو تارونو لپاره د TCP ساکټ د وصل وخت پې (ms)۔"
 
 msgid "IV dedup filter size; too small drops valid tunnel data."
-msgstr ""
+msgstr "د IV تکرار فیلټر اندازه؛ ډېر کوچنی سم ټونل ډاټا غورځوي."
 
 msgid "Max average message delay before rejecting transit (ms)."
 msgstr "د ترانزیت د ردولو مخکې تر ټولو لوړ اوسطی د پیغام ځنډ (ms)۔"
@@ -7026,6 +7185,15 @@ msgstr "config webapps"
 msgid "The Java web applications listed below are started by the webConsole client and run in the same JVM as the router. They are usually web applications accessible through the router console. They may be complete applications (e.g. i2psnark), front-ends to another client or application which must be separately enabled (e.g. susidns, i2ptunnel), or have no web interface at all (e.g. addressbook)."
 msgstr "دلته لیست شوې Java ویب اپلیکیشنونه د webConsole کلآینټ لخوا پیلېږی او د راوټر سره یو خپل JVM کې چلېږی۔ معمولاً هغه ویب اپلیکیشنونه دی چې له راوټر کنسول څخه یې لاسرسی شته۔ هغه کولی شی بشپړ اپلیکیشنونه وی (د بیلګې په توګه i2psnark)، د بل کلآینټ یا اپلیکیشن مخکې څخه چې باید جلا فعال شی (د بیلګې په توګه susidns، i2ptunnel)، یا داسې وی چې اصلاً ویب پرتله نه لری (د بیلګې په توګه addressbook)."
 
+msgid "Router Session Key Manager"
+msgstr "د راوټر د ایسیشن کیلي مدیر"
+
+msgid "Client Session Key Managers"
+msgstr "د پیرودونکي د ایسیشن کیلي مدیران"
+
+msgid "Router DHT"
+msgstr "د راوټر DHT"
+
 msgid "Open in new tab"
 msgstr "په نوې ټاب کې خلاص کړئ"
 
@@ -7600,14 +7768,17 @@ msgstr "د ټونل د ازمونو تر ټولو لږ دوره په ملی ثا
 msgid "Maximum tunnel test period in milliseconds. Tunnel tests never wait longer than this for a reply, even on high-latency paths. [Default is 50000 (50 seconds)]"
 msgstr "د ټونل د ازمونو تر ټولو لوړ دوره په ملی ثانیو کې۔ ټونل د ازمونې هیڅکله د ځواب د انتظار لپاره تر دې څخه ډېر نه پاتې کېږی، حتی په لوړو لیټنسی لارو کې۔ [ابدی 50000 (50 ثانیې) ده]"
 
-msgid "Number of tunnel build timeouts before a peer is marked as a ghost (blacklisted for tunnel participation). Higher values tolerate more transient failures. [Default is 3]"
-msgstr "د یو peer د جن په نښه کېدو مخکې د ټونل د جوړولو د وخت پې شمېر (د ټونل د ګډون لپاره په بلاک لیست کې)۔ لوړې ارزښتونه نور لنډمهالې ناکامیې زغمی۔ [ابدی 3 ده]"
+msgid "Number of tunnel build timeouts before a peer is marked as a ghost (excluded from tunnel participation). Higher values tolerate more transient failures. [Default is 1]"
+msgstr ""
+"هغه شمېر چې د ټونل جوړونې وخت تېرېدنه مخکې له دې چې peer د پرېت په توګه "
+"نښه شي (د ټونل ګډون څخه وباسل شي). لوړ ارزښتونه ډېر لنډمهاله ناکامۍ "
+"زغمي. [تاسیس شوی ۱ دی]"
 
-msgid "Cooldown period in milliseconds before a ghost-marked peer can be considered for tunnel participation again. Shorter values allow faster peer reuse. [Default is 180000 (3 minutes)]"
-msgstr "د ستردو مدت په ملی ثانیو کې، پیش له دې چې په جن نښه شوی peer بیا د ټونل د ګډون لپاره په حساب شی۔ لنډې ارزښتونه د peer ژر بیا کارولې اجازه ورکوی۔ [ابدی 180000 (3 دقیقې) ده]"
-
-msgid "Cooldown period in milliseconds for ghost-marked peers during attack mode. Longer cooldowns limit exposure to potentially malicious peers during high-stress periods. [Default is 300000 (5 minutes)]"
-msgstr "د برید په حالت کې د جن په نښه شویو peerونو لپاره د ستردو مدت په ملی ثانیو کې۔ اوږدې ستردو د لوړو فشار وختونو پر مهال د ممکن بدکاره peerونو له ښکارېدو څخه ساتنه کموی۔ [ابدی 300000 (5 دقیقې) ده]"
+msgid "Cooldown period in milliseconds before a ghost-marked peer can be promoted into the tunnel peer tiers again. Shorter values return recovered peers to service faster. [Default is 90000 (90 seconds)]"
+msgstr ""
+"د یخېدو موده ملي ثانیو کې مخکې له دې چې پرېت نښه شوی peer بیا د ټونل د "
+"peerانو کچو ته لوړ شي. لنډ ارزښتونه بېرته راغلي peerان ژر خدمت ته راولي. "
+"[تاسیس شوی ۹۰۰۰۰ (۹۰ ثانیې) دی]"
 
 msgid "Minimum number of incoming tunnel build requests accepted per peer per clean window. Prevents starving peers during low-traffic periods. [Default is 10]"
 msgstr "په هر peer او هره پاکې کښکۼ کې د راتلونکیو ټونل د جوړولو له منلو مخکې تر ټولو لږ شمېر۔ دا له ټیټ ترافیک وختونو پر مهال د بېغوره peerونو څخه ساتنه کوی۔ [ابدی 10 ده]"
@@ -10037,3 +10208,35 @@ msgstr "راتلونکی"
 
 msgid "Finished"
 msgstr "بشپړ"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

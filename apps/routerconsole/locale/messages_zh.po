@@ -124,23 +124,44 @@ msgstr "没有已发布 IP 地址的对等方"
 msgid "Average tunnel build success (%)"
 msgstr "平均隧道建立成功百分比"
 
+msgid "Tier promotions held back for a peer with no usable address"
+msgstr "因对等节点没有可用地址而暂缓的层级晋升"
+
+msgid "RouterInfo refreshes issued for peers held out of the tiers"
+msgstr "为被排除在层级之外的对等节点发出的 RouterInfo 刷新"
+
+msgid "Tier scans that left the fast or high-capacity tier short of target"
+msgstr "使快速或高容量层级未达到目标的层级扫描"
+
+msgid "RouterInfos requested for stored profiles that had none"
+msgstr "为没有 RouterInfo 的已存储配置文件发出的请求"
+
+msgid "Build timeouts recorded against a peer as a ghost mark"
+msgstr "记录在对等节点上的构建超时，作为幽灵标记"
+
+msgid "Ghost marks cleared by a successful build reply"
+msgstr "因成功的构建回复而清除的幽灵标记"
+
+msgid "Peers currently excluded as ghosts"
+msgstr "当前作为幽灵排除的对等节点"
+
+msgid "Ghost peers in the fast or high-capacity tiers"
+msgstr "快速或高容量层级中的幽灵对等节点"
+
+msgid "Duplicate CLOSE safety-net messages sent"
+msgstr "发送的重复 CLOSE 安全网消息"
+
 msgid "Memory used by the JVM"
 msgstr "JVM 已用内存"
 
 msgid "maximum"
 msgstr "最大值"
 
-msgid "No transports"
-msgstr "无数据传输（隐身模式或者正在启动？）"
-
 msgid "Unsupported signature type"
 msgstr "不支持的签名类型"
 
 msgid "No support for our signature type"
 msgstr "不支持我们的签名类型"
-
-msgid "Unreachable on any transport"
-msgstr "各传输方式均不可达"
 
 msgid "Cannot enumerate UPnP devices on Android."
 msgstr "无法在 Android 上枚举 UPnP 设备。"
@@ -836,6 +857,9 @@ msgstr "控制台"
 
 msgid "To enable SSL access for the Router Console, see the commented <code>clients.config</code> file located in your I2P application directory for more information. You will need to edit the RouterConsoleRunner config file located in the directory: "
 msgstr "要启用Router Console的SSL访问，请参阅位于您的I2P应用程序目录中的<code>client.config</code>文件以了解更多信息。您需要编辑位于该目录中的RouterConsoleRunner配置文件。 "
+
+msgid "No client session key managers."
+msgstr "没有客户端会话密钥管理器。"
 
 msgid "Save disabled, edit the router.config file to make changes"
 msgstr "保存已禁用，请编辑router.config文件进行更改"
@@ -2046,20 +2070,34 @@ msgstr "改进的"
 msgid "vs baseline"
 msgstr "与基线"
 
+#, java-format
+msgid "Out: {0} / {1}"
+msgstr "出: {0} / {1}"
+
+#, java-format
+msgid "In: {0} / {1}"
+msgstr "入: {0} / {1}"
+
 msgid "CPU"
 msgstr "CPU"
 
-msgid "CPU load average"
-msgstr "CPU 负载平均"
+msgid "JVM CPU load average"
+msgstr "JVM CPU 平均负载"
+
+#, java-format
+msgid "{0} cores"
+msgstr "{0} 核"
 
 msgid "Memory"
 msgstr "内存"
 
-msgid "Memory usage"
-msgstr "内存占用"
+#, java-format
+msgid "Used: {0} / {1} max"
+msgstr "已用: {0} / {1} 最大"
 
-msgid "Router uptime"
-msgstr "路由器运行时间"
+#, java-format
+msgid "Since {0}"
+msgstr "自 {0}"
 
 msgid "Job Lag"
 msgstr "作业延迟"
@@ -2085,6 +2123,10 @@ msgstr "线程"
 msgid "Active JVM threads"
 msgstr "活跃 JVM 线程"
 
+#, java-format
+msgid "Empty at {0}"
+msgstr "在 {0} 处为空"
+
 msgid "NTCP Estab"
 msgstr "NTCP 建立"
 
@@ -2106,20 +2148,24 @@ msgstr "SSU 重传超时"
 msgid "Conns/s"
 msgstr "连接/秒"
 
-msgid "NTCP connections established per second"
-msgstr "每秒建立的 NTCP 连接数"
+#, java-format
+msgid "Full at {0}/s"
+msgstr "在 {0}/s 处已满"
+
+msgid "New NTCP connections (1 min)"
+msgstr "新建 NTCP 连接（1 分钟）"
 
 msgid "Msgs/s"
 msgstr "消息/秒"
 
-msgid "Messages delivered per second"
-msgstr "每秒投递的消息数"
+msgid "Messages delivered (1 min)"
+msgstr "已送达消息（1 分钟）"
 
 msgid "RTT"
 msgstr "RTT"
 
-msgid "End-to-end message round trip time"
-msgstr "端到端消息往返时间"
+msgid "End-to-end client message round trip"
+msgstr "客户端消息端到端往返时间"
 
 msgid "Timeout"
 msgstr "超时"
@@ -2133,20 +2179,28 @@ msgstr "隧道建立"
 msgid "Client tunnel build latency"
 msgstr "客户端隧道建立延迟"
 
+#, java-format
+msgid "In: {0} / Out: {1}"
+msgstr "入: {0} / 出: {1}"
+
 msgid "Active Peers"
 msgstr "活跃 peer"
 
-msgid "Active peers (last 60s)"
-msgstr "活跃 peer（最近 60 秒）"
+#, java-format
+msgid "Full at {0}"
+msgstr "在 {0} 处已满"
+
+msgid "Reached in the last 60s"
+msgstr "最近 60 秒内联系过"
 
 msgid "Known Peers"
 msgstr "已知 peer"
 
-msgid "Known routers in network database"
-msgstr "网络数据库中已知的路由器"
+msgid "In the network database"
+msgstr "在网络数据库中"
 
-msgid "Active I2CP clients"
-msgstr "活跃 I2CP 客户端"
+msgid "I2CP clients connected"
+msgstr "已连接的 I2CP 客户端"
 
 msgid "Transit"
 msgstr "中转"
@@ -2160,8 +2214,8 @@ msgstr "流"
 msgid "Build Success"
 msgstr "建立成功"
 
-msgid "Tunnel build success rate"
-msgstr "隧道建立成功率"
+msgid "Tunnel build success rate (1 min)"
+msgstr "隧道建立成功率（1 分钟）"
 
 msgid "NetDB"
 msgstr "NetDB"
@@ -2172,26 +2226,31 @@ msgstr "NetDB 查询时间"
 msgid "Banned"
 msgstr "已封禁"
 
-msgid "Total banned peers"
-msgstr "被封禁的 peer 总数"
+msgid "Peers excluded from all interactions"
+msgstr "同伴被排除在所有互动之外"
+
+#, java-format
+msgid "{0} of {1} known"
+msgstr "{1} 个中已知 {0} 个"
 
 msgid "LeaseSets"
 msgstr "租约集"
 
-msgid "Stored LeaseSets in floodfill"
-msgstr "洪水节点中存储的LeaseSets"
+msgid "Stored LeaseSets"
+msgstr "已存储的 LeaseSet"
 
 msgid "Cache Hit"
 msgstr "缓存命中"
 
-msgid "NetDB lookup success rate"
-msgstr "NetDB 查询成功率"
+#, java-format
+msgid "Matched {0} of {1} lookups (1 min)"
+msgstr "{1} 次查找中匹配 {0} 次（1 分钟）"
 
 msgid "Flood Verify"
 msgstr "Flood 验证"
 
-msgid "Floodfill verify time"
-msgstr "洪水节点验证时间"
+msgid "Floodfill verify time (1 min)"
+msgstr "Floodfill 验证时间（1 分钟）"
 
 msgid "NetDB ACK"
 msgstr "NetDB 确认"
@@ -2202,20 +2261,20 @@ msgstr "NetDB peer 确认时间"
 msgid "Lookups/s"
 msgstr "查询/秒"
 
-msgid "NetDB lookups handled per second"
-msgstr "每秒处理的 NetDB 查询数"
+msgid "Lookups handled (1 min)"
+msgstr "已处理的查找（1 分钟）"
 
 msgid "Requests/s"
 msgstr "请求/秒"
 
-msgid "Combined store + lookup operations per second"
-msgstr "每秒合并的存储 + 查询操作数"
+msgid "Stores + lookups (1 min)"
+msgstr "存储 + 查找（1 分钟）"
 
 msgid "Stores/s"
 msgstr "存储/秒"
 
-msgid "NetDB store messages handled per second"
-msgstr "每秒处理的 NetDB 存储消息数"
+msgid "Stores handled (1 min)"
+msgstr "已处理的存储（1 分钟）"
 
 msgid "LS Timeout"
 msgstr "LeaseSet 超时"
@@ -3199,6 +3258,9 @@ msgstr "对等节点摘要"
 msgid "Configure peer"
 msgstr "配置对等节点"
 
+msgid "Memory usage"
+msgstr "内存占用"
+
 msgid "Hidden"
 msgstr "隐身"
 
@@ -3342,8 +3404,8 @@ msgstr "许多隧道的高带宽对等点"
 msgid "Reliable"
 msgstr "可靠的"
 
-msgid "High-capacity peers with good acceptance"
-msgstr "高能力同行，接受度高"
+msgid "Peers with good acceptance and recent activity"
+msgstr "接受良好且近期活跃的对等节点"
 
 msgid "Peers that store and serve NetDb info"
 msgstr "存储和提供 NetDb 信息的对等点"
@@ -3354,17 +3416,21 @@ msgstr "已知"
 msgid "Total entries in network database"
 msgstr "网络数据库中的总条目"
 
+msgid "Profiles"
+msgstr "摘要"
+
 msgid "Profiles with activity in the last hour"
 msgstr "最近一小时内有活动的配置文件"
+
+#, java-format
+msgid "{0} of {1} stored"
+msgstr "{1} 个中已存储 {0} 个"
 
 msgid "Unreachable"
 msgstr "不可达"
 
-msgid "Peers without a reachable address"
-msgstr "没有可到达地址的对等点"
-
-msgid "Peers excluded from all interactions"
-msgstr "同伴被排除在所有互动之外"
+msgid "Peers without a published address"
+msgstr "没有已发布地址的对等节点"
 
 msgid "/min"
 msgstr "/分钟"
@@ -3372,8 +3438,12 @@ msgstr "/分钟"
 msgid "Test Fail"
 msgstr "测试失败"
 
-msgid "Connectivity test failures per minute"
-msgstr "每分钟连接测试失败次数"
+msgid "Connectivity test failures in the last minute"
+msgstr "最近一分钟内的连通性测试失败"
+
+#, java-format
+msgid "Empty at {0}/min"
+msgstr "在 {0}/min 处为空"
 
 msgid "Peer Connections"
 msgstr "对等节点连接"
@@ -3644,26 +3714,40 @@ msgstr[0] "已隐藏 {0} 个过期配置文件"
 msgid "Share of total profiles shown"
 msgstr "显示的配置文件总数比例"
 
-msgid "peers"
-msgstr "对等节点"
-
-msgid "Share of tier profiles shown"
-msgstr "显示的层级配置文件比例"
-
 msgid "Window"
 msgstr "窗口"
 
 msgid "Fast RTT"
 msgstr "快速 RTT"
 
-msgid "Max RTT for fast-tier membership (ms)"
-msgstr "快速层成员资格的最大 RTT（毫秒）"
+msgid "Max RTT for fast-tier membership"
+msgstr "加入快速层级的最大 RTT"
 
-msgid "Average loss of fast-tier peers (%)"
-msgstr "快速层节点的平均丢失率（%）"
+msgid "Rises with network latency"
+msgstr "随网络延迟上升"
 
-msgid "Average loss of high-capacity peers (%)"
-msgstr "高容量节点的平均丢失率（%）"
+msgid "Average loss of fast-tier peers"
+msgstr "快速层级对等节点的平均流失"
+
+msgid "Average loss of high-capacity peers"
+msgstr "高容量对等节点的平均流失"
+
+msgid "Average direct-link RTT of tier peers"
+msgstr "层级对等节点直连 RTT 的平均值"
+
+#, java-format
+msgid "{0} of {1} measured"
+msgstr "{1} 个中已测量 {0} 个"
+
+msgid "1h Contact"
+msgstr "1 小时联系"
+
+msgid "Heard from in the last hour"
+msgstr "最近一小时内有联系"
+
+#, java-format
+msgid "{0} of {1} tier peers"
+msgstr "{1} 个层级对等节点中的 {0} 个"
 
 msgid "Heard from within the display cutoff"
 msgstr "在显示截止范围内曾收到消息"
@@ -3674,11 +3758,19 @@ msgstr "查询"
 msgid "Lookup success rate"
 msgstr "查询成功率"
 
+#, java-format
+msgid "{0} of {1} lookups"
+msgstr "{1} 次查找中的 {0} 次"
+
 msgid "Stores"
 msgstr "存储"
 
 msgid "Store success rate"
 msgstr "存储成功率"
+
+#, java-format
+msgid "{0} of {1} peers"
+msgstr "{1} 个对等节点中的 {0} 个"
 
 msgid "Definitions"
 msgstr "定义"
@@ -3751,11 +3843,25 @@ msgstr "最近获知了多少新节点？"
 msgid "Known floodfills"
 msgstr "已知洪水节点"
 
-msgid "No-Fail"
-msgstr "无失败"
+msgid "Reachable, unbanlisted and heard from"
+msgstr "可达、未被列入禁止名单且近期有联系"
 
-msgid "No lookup failures (1h)"
-msgstr "1 小时内无查询失败"
+msgid "Active bans of floodfill-capable peers"
+msgstr "对具备 Floodfill 能力的对等节点的现行禁令"
+
+#, java-format
+msgid "of {0} known"
+msgstr "/ 已知 {0} 个"
+
+msgid "Fail"
+msgstr "失败"
+
+msgid "Lookup failures in the last hour"
+msgstr "最近一小时内的查找失败"
+
+#, java-format
+msgid "across {0} listed peers"
+msgstr "涵盖 {0} 个已列出的对等节点"
 
 msgid "Response"
 msgstr "响应"
@@ -3763,11 +3869,16 @@ msgstr "响应"
 msgid "Lookup response time (1h)"
 msgstr "查询响应时间（1 小时）"
 
-msgid "1h Contact"
-msgstr "1 小时联系"
+#, java-format
+msgid "{0} peers measured"
+msgstr "已测量 {0} 个对等节点"
 
 msgid "Contacted within 1h"
 msgstr "1 小时内联系过"
+
+#, java-format
+msgid "{0} of {1} listed"
+msgstr "{1} 个中已列出 {0} 个"
 
 msgid "1h Fail Rate"
 msgstr "1 小时失败率"
@@ -3805,17 +3916,33 @@ msgstr "全部"
 msgid "SAM bridge is not running."
 msgstr "SAM bridge 未运行。"
 
+msgid "Sessions"
+msgstr "会话"
+
 msgid "Active sessions in SessionsDB"
 msgstr "SessionsDB 中的活跃会话"
+
+msgid "Workers"
+msgstr "工作线程"
 
 msgid "Active / pool worker threads"
 msgstr "活跃 / 池工作线程"
 
-msgid "Pending commands in pool"
-msgstr "池中待处理的命令"
+msgid "Queue"
+msgstr "队列"
+
+#, java-format
+msgid "Pending commands: {0} of {1}"
+msgstr "待处理命令: {0} / {1}"
+
+msgid "Handlers"
+msgstr "处理线程"
 
 msgid "Connected pool handlers"
 msgstr "已连接的池处理器"
+
+msgid "Stolen"
+msgstr "被窃取"
 
 msgid "Sockets stolen for data streaming"
 msgstr "用于数据流的套接字"
@@ -4134,9 +4261,6 @@ msgstr "显示所有当前对等节点连接"
 msgid "Router health overview"
 msgstr "路由器健康状态概览"
 
-msgid "Profiles"
-msgstr "摘要"
-
 msgid "Show recent peer performance profiles"
 msgstr "显示当前对等节点的性能记录"
 
@@ -4443,6 +4567,27 @@ msgstr "全程均值"
 msgid "1 event"
 msgid_plural "{0} events"
 msgstr[0] "{0} 个事件"
+
+msgid "Open streaming connections"
+msgstr "打开的流式连接"
+
+msgid "Round-trip time (live samples, 1 min)"
+msgstr "往返时间（实时采样，1 分钟）"
+
+msgid "Retrans"
+msgstr "重传"
+
+msgid "Share of sends needing retransmit (1 min)"
+msgstr "需要重传的发送占比（1 分钟）"
+
+msgid "Created + received (1 min)"
+msgstr "已创建 + 已接收（1 分钟）"
+
+msgid "Throughput"
+msgstr "吞吐量"
+
+msgid "Mean rate of streams closed in the last minute"
+msgstr "最近一分钟关闭流的平均速率"
 
 msgid "sent"
 msgstr "已发送"
@@ -4831,6 +4976,9 @@ msgstr "节流拒绝指数"
 msgid "Maximum Participating Tunnels"
 msgstr "最大参与隧道数"
 
+msgid "Timer Threads"
+msgstr "定时器线程"
+
 msgid "Build Handler Maximum Queue"
 msgstr "构建处理程序最大队列"
 
@@ -5184,6 +5332,9 @@ msgstr "慢启动期间的最大拥塞窗口。"
 
 msgid "Per-connection inbound buffer cap (bytes)."
 msgstr "每个连接的入站缓冲区上限（字节）。"
+
+msgid "Timer worker threads; higher reduces event delay."
+msgstr "定时器工作线程数；数值越高，事件延迟越低。"
 
 msgid "Dynamic cap on concurrent streams per destination."
 msgstr "每个目标的并发流动态上限。"
@@ -7006,6 +7157,15 @@ msgstr "配置 Web 应用"
 msgid "The Java web applications listed below are started by the webConsole client and run in the same JVM as the router. They are usually web applications accessible through the router console. They may be complete applications (e.g. i2psnark), front-ends to another client or application which must be separately enabled (e.g. susidns, i2ptunnel), or have no web interface at all (e.g. addressbook)."
 msgstr "下面列出的 Java 网络应用由 webConsole 客户端启动，并在与路由器相同的 JVM 中运行。它们通常是通过路由器控制台访问的 Web 应用程序。它们可以是完整的应用程序（例如 i2psnark），对另一必须单独启用客户端或应用程序的前端（例如 susidns、i2ptunnel），或完全没有网络界面（例如地址簿）。"
 
+msgid "Router Session Key Manager"
+msgstr "路由器会话密钥管理器"
+
+msgid "Client Session Key Managers"
+msgstr "客户端会话密钥管理器"
+
+msgid "Router DHT"
+msgstr "路由器 DHT"
+
 msgid "Open in new tab"
 msgstr "在新标签中打开"
 
@@ -7580,14 +7740,12 @@ msgstr "最小隧道测试周期（毫秒）。隧道测试在超时前至少等
 msgid "Maximum tunnel test period in milliseconds. Tunnel tests never wait longer than this for a reply, even on high-latency paths. [Default is 50000 (50 seconds)]"
 msgstr "最大隧道测试周期（毫秒）。隧道测试在高延迟路径上也绝不会等待超过此时间的回复。[默认为50000（50秒）]"
 
-msgid "Number of tunnel build timeouts before a peer is marked as a ghost (blacklisted for tunnel participation). Higher values tolerate more transient failures. [Default is 3]"
-msgstr "在对等点被标记为幽灵（被列入隧道参与黑名单）之前的隧道构建超时次数。较高的值容忍更多临时故障。[默认为3]"
+msgid "Number of tunnel build timeouts before a peer is marked as a ghost (excluded from tunnel participation). Higher values tolerate more transient failures. [Default is 1]"
+msgstr "对等节点被标记为幽灵（被排除出隧道参与）之前累计的隧道构建超时次数。较高的值可容忍更多瞬时故障。[默认值为 1]"
 
-msgid "Cooldown period in milliseconds before a ghost-marked peer can be considered for tunnel participation again. Shorter values allow faster peer reuse. [Default is 180000 (3 minutes)]"
-msgstr "幽灵标记的对等点可以再次被考虑参与隧道之前的冷却期（毫秒）。较短的值允许更快地重用对等点。[默认为180000（3分钟）]"
-
-msgid "Cooldown period in milliseconds for ghost-marked peers during attack mode. Longer cooldowns limit exposure to potentially malicious peers during high-stress periods. [Default is 300000 (5 minutes)]"
-msgstr "攻击模式下幽灵标记的对等点的冷却期（毫秒）。较长的冷却限制了高压力期间与潜在恶意对等点的接触。[默认为300000（5分钟）]"
+msgid "Cooldown period in milliseconds before a ghost-marked peer can be promoted into the tunnel peer tiers again. Shorter values return recovered peers to service faster. [Default is 90000 (90 seconds)]"
+msgstr ""
+"被标记为幽灵的对等节点重新晋升到隧道对等层级之前的冷却时间（毫秒）。较短的值能让恢复的对等节点更快回到服务。[默认值为 90000（90 秒）]"
 
 msgid "Minimum number of incoming tunnel build requests accepted per peer per clean window. Prevents starving peers during low-traffic periods. [Default is 10]"
 msgstr "每个清洗窗口每个对等点接受的最小入站隧道构建请求数。防止低流量期间对等点饥饿。[默认为10]"
@@ -10017,3 +10175,35 @@ msgstr "下一步"
 
 msgid "Finished"
 msgstr "完成"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

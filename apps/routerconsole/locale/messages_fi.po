@@ -126,23 +126,53 @@ msgstr "Vertaisversiot, joilla ei ole julkaistua IP-osoitetta"
 msgid "Average tunnel build success (%)"
 msgstr "Keskimääräinen tunnelin rakentamisen onnistuminen %"
 
+msgid "Tier promotions held back for a peer with no usable address"
+msgstr ""
+"Tasonnostot pidätetty vertaiselta, jolla ei ole käyttökelpoista "
+"osoitetta"
+
+msgid "RouterInfo refreshes issued for peers held out of the tiers"
+msgstr ""
+"RouterInfo-päivitykset, joita pyydettiin tasoilta pidätetyille "
+"vertaisille"
+
+msgid "Tier scans that left the fast or high-capacity tier short of target"
+msgstr ""
+"Tasoskannaukset, joissa nopea tai suurikapasiteettinen taso jäi alle "
+"tavoitteen"
+
+msgid "RouterInfos requested for stored profiles that had none"
+msgstr ""
+"Tallennetuille profiileille pyydetyt RouterInfo-tiedostot, joilta "
+"puuttui sellainen"
+
+msgid "Build timeouts recorded against a peer as a ghost mark"
+msgstr ""
+"Vertaista vastaan kirjatut rakennusaikakatkaisut kummitusmerkintöinä"
+
+msgid "Ghost marks cleared by a successful build reply"
+msgstr "Onnistuneen rakennusvastauksen poistamat kummitusmerkinnät"
+
+msgid "Peers currently excluded as ghosts"
+msgstr "Nykyisin kummituksina suljetut vertaiset"
+
+msgid "Ghost peers in the fast or high-capacity tiers"
+msgstr "Kummitusvertaiset nopeilla tai suurikapasiteettisilla tasoilla"
+
+msgid "Duplicate CLOSE safety-net messages sent"
+msgstr "Lähetetyt CLOSE-turvaverkkoviestien kaksoiskappaleet"
+
 msgid "Memory used by the JVM"
 msgstr "JVM:n käyttämä muisti"
 
 msgid "maximum"
 msgstr "enimmäis"
 
-msgid "No transports"
-msgstr "Ei kuljetuksia (piilotettu vai käynnistymässä?)"
-
 msgid "Unsupported signature type"
 msgstr "Allekirjoitustyyppiä ei tueta"
 
 msgid "No support for our signature type"
 msgstr "Ei tukea allekirjoitustyypille"
-
-msgid "Unreachable on any transport"
-msgstr "Ei tavoitettavissa millään kuljetuksella"
 
 msgid "Cannot enumerate UPnP devices on Android."
 msgstr "UPnP-laitteita ei ole mahdollista Androidilla."
@@ -839,6 +869,9 @@ msgstr "Konsoli"
 
 msgid "To enable SSL access for the Router Console, see the commented <code>clients.config</code> file located in your I2P application directory for more information. You will need to edit the RouterConsoleRunner config file located in the directory: "
 msgstr "Jos haluat ottaa SSL-käytön reititinkonsoliin käyttöön, katso lisätietoa kommentoidusta <code>clients.config</code>-tiedostosta, joka sijaitsee I2P-sovellushakemistossasi. Sinun on muokattava RouterConsoleRunner-asetustiedostoa, joka sijaitsee hakemistossa"
+
+msgid "No client session key managers."
+msgstr "Ei asiakasistuntojen avaintenhallintoja."
 
 msgid "Save disabled, edit the router.config file to make changes"
 msgstr "Tallennus poissa, muokkaa router.config-tiedostoa tehdä muutoksia."
@@ -2052,20 +2085,34 @@ msgstr "parantunut"
 msgid "vs baseline"
 msgstr "vs perusviiva"
 
+#, java-format
+msgid "Out: {0} / {1}"
+msgstr "Ulos: {0} / {1}"
+
+#, java-format
+msgid "In: {0} / {1}"
+msgstr "Sisään: {0} / {1}"
+
 msgid "CPU"
 msgstr "CPU"
 
-msgid "CPU load average"
-msgstr "CPU kuormituksen keskiarvo"
+msgid "JVM CPU load average"
+msgstr "JVM:n CPU-kuormituksen keskiarvo"
+
+#, java-format
+msgid "{0} cores"
+msgstr "{0} ydintä"
 
 msgid "Memory"
 msgstr "Muisti"
 
-msgid "Memory usage"
-msgstr "Muistin käyttö"
+#, java-format
+msgid "Used: {0} / {1} max"
+msgstr "Käytetty: {0} / {1} maks."
 
-msgid "Router uptime"
-msgstr "Reititimen käyttöaika"
+#, java-format
+msgid "Since {0}"
+msgstr "{0} lähtien"
 
 msgid "Job Lag"
 msgstr "Tehtävän viive"
@@ -2091,6 +2138,10 @@ msgstr "Säikeet"
 msgid "Active JVM threads"
 msgstr "Aktiiviset JVM-säikeet"
 
+#, java-format
+msgid "Empty at {0}"
+msgstr "Tyhjä kohdassa {0}"
+
 msgid "NTCP Estab"
 msgstr "NTCP muodostus"
 
@@ -2112,20 +2163,24 @@ msgstr "SSU uudelleenlähetyksen aikakatkaisu"
 msgid "Conns/s"
 msgstr "Yhteyttä/s"
 
-msgid "NTCP connections established per second"
-msgstr "Muodostetut NTCP-yhteydet sekunnissa"
+#, java-format
+msgid "Full at {0}/s"
+msgstr "Täysi kohdassa {0}/s"
+
+msgid "New NTCP connections (1 min)"
+msgstr "Uudet NTCP-yhteydet (1 min)"
 
 msgid "Msgs/s"
 msgstr "Viestejä/s"
 
-msgid "Messages delivered per second"
-msgstr "Toimitetut viestit sekunnissa"
+msgid "Messages delivered (1 min)"
+msgstr "Toimitetut viestit (1 min)"
 
 msgid "RTT"
 msgstr "RTT"
 
-msgid "End-to-end message round trip time"
-msgstr "Päätepisteiden välisen viestin kierroaika"
+msgid "End-to-end client message round trip"
+msgstr "Asiakasviestien meno-paluu päästä päähän"
 
 msgid "Timeout"
 msgstr "Aikakatkaisu"
@@ -2139,20 +2194,28 @@ msgstr "Tunnelin rakentaminen"
 msgid "Client tunnel build latency"
 msgstr "Asiakastunnelin rakennusviive"
 
+#, java-format
+msgid "In: {0} / Out: {1}"
+msgstr "Sisään: {0} / Ulos: {1}"
+
 msgid "Active Peers"
 msgstr "Aktiiviset vertaiset"
 
-msgid "Active peers (last 60s)"
-msgstr "Aktiiviset vertaiset (viimeinen 60 s)"
+#, java-format
+msgid "Full at {0}"
+msgstr "Täysi kohdassa {0}"
+
+msgid "Reached in the last 60s"
+msgstr "Tavoitettu viimeisen 60 s aikana"
 
 msgid "Known Peers"
 msgstr "Tunnetut vertaiset"
 
-msgid "Known routers in network database"
-msgstr "Tunnetut reitittimet verkkotietokannassa"
+msgid "In the network database"
+msgstr "Verkon tietokannassa"
 
-msgid "Active I2CP clients"
-msgstr "Aktiiviset I2CP-asiakkaat"
+msgid "I2CP clients connected"
+msgstr "Yhdistetyt I2CP-asiakkaat"
 
 msgid "Transit"
 msgstr "Julkinen liikenne"
@@ -2166,8 +2229,8 @@ msgstr "Streamit"
 msgid "Build Success"
 msgstr "Rakenna menestystä"
 
-msgid "Tunnel build success rate"
-msgstr "Tunnelin rakennuksen onnistumisprosentti"
+msgid "Tunnel build success rate (1 min)"
+msgstr "Tunnelin rakennuksen onnistumisprosentti (1 min)"
 
 msgid "NetDB"
 msgstr "NetDB"
@@ -2178,26 +2241,31 @@ msgstr "NetDB hakuaika"
 msgid "Banned"
 msgstr "Estetty"
 
-msgid "Total banned peers"
-msgstr "Kiellossa olevat vertaiset yhteensä"
+msgid "Peers excluded from all interactions"
+msgstr "Vertaishenkilöt on suljettu pois kaikista vuorovaikutuksista"
+
+#, java-format
+msgid "{0} of {1} known"
+msgstr "{0} / {1} tunnettu"
 
 msgid "LeaseSets"
 msgstr "Vuokrasopimukset"
 
-msgid "Stored LeaseSets in floodfill"
-msgstr "Tallennetut vuokrasetit Floodfilliin"
+msgid "Stored LeaseSets"
+msgstr "Tallennetut LeaseSetit"
 
 msgid "Cache Hit"
 msgstr "Välimuistiotus"
 
-msgid "NetDB lookup success rate"
-msgstr "NetDB haun onnistumisprosentti"
+#, java-format
+msgid "Matched {0} of {1} lookups (1 min)"
+msgstr "Osumia {0} / {1} hausta (1 min)"
 
 msgid "Flood Verify"
 msgstr "Tulvan vahvistus"
 
-msgid "Floodfill verify time"
-msgstr "tulvasolmun vahvistusaika"
+msgid "Floodfill verify time (1 min)"
+msgstr "Floodfill-tarkistusaika (1 min)"
 
 msgid "NetDB ACK"
 msgstr "NetDB vahvistus"
@@ -2208,20 +2276,20 @@ msgstr "NetDB vertaisvahvistusaika"
 msgid "Lookups/s"
 msgstr "Hakuja/s"
 
-msgid "NetDB lookups handled per second"
-msgstr "Käsitellyt NetDB-haun sekunnissa"
+msgid "Lookups handled (1 min)"
+msgstr "Käsitellyt haut (1 min)"
 
 msgid "Requests/s"
 msgstr "Pyyntöjä/s"
 
-msgid "Combined store + lookup operations per second"
-msgstr "Yhdistetyt tallennus + hakutoiminnot sekunnissa"
+msgid "Stores + lookups (1 min)"
+msgstr "Tallennukset + haut (1 min)"
 
 msgid "Stores/s"
 msgstr "Tallennuksia/s"
 
-msgid "NetDB store messages handled per second"
-msgstr "Käsitellyt NetDB-tallennusviestit sekunnissa"
+msgid "Stores handled (1 min)"
+msgstr "Käsitellyt tallennukset (1 min)"
 
 msgid "LS Timeout"
 msgstr "LS-aikakatkaisu"
@@ -3205,6 +3273,9 @@ msgstr "Näytä profiili"
 msgid "Configure peer"
 msgstr "Määritä vertaisverkko"
 
+msgid "Memory usage"
+msgstr "Muistin käyttö"
+
 msgid "Hidden"
 msgstr "Piilotettu"
 
@@ -3348,8 +3419,8 @@ msgstr "Suuren kaistanleveyden vertaisversiot monille tunneleille"
 msgid "Reliable"
 msgstr "Luotettava"
 
-msgid "High-capacity peers with good acceptance"
-msgstr "Korkean kapasiteetin vertaiset, joilla on hyvä hyväksyntä"
+msgid "Peers with good acceptance and recent activity"
+msgstr "Hyväksyvät ja äskettäin aktiiviset vertaiset"
 
 msgid "Peers that store and serve NetDb info"
 msgstr "Vertailijat, jotka tallentavat ja palvelevat NetDb-tietoja"
@@ -3360,17 +3431,21 @@ msgstr "Tuttu"
 msgid "Total entries in network database"
 msgstr "Tietojen kokonaismäärä verkkotietokannassa"
 
+msgid "Profiles"
+msgstr "Profiilit"
+
 msgid "Profiles with activity in the last hour"
 msgstr "Profiilit, joilla on ollut toimintaa viimeisen tunnin aikana"
+
+#, java-format
+msgid "{0} of {1} stored"
+msgstr "{0} / {1} tallennettu"
 
 msgid "Unreachable"
 msgstr "Ei saavutettavissa"
 
-msgid "Peers without a reachable address"
-msgstr "Vertaiset, joilla ei ole tavoitettavissa olevaa osoitetta"
-
-msgid "Peers excluded from all interactions"
-msgstr "Vertaishenkilöt on suljettu pois kaikista vuorovaikutuksista"
+msgid "Peers without a published address"
+msgstr "Julkaistua osoitetta vailla olevat vertaiset"
 
 msgid "/min"
 msgstr "/min"
@@ -3378,8 +3453,12 @@ msgstr "/min"
 msgid "Test Fail"
 msgstr "Testi epäonnistui"
 
-msgid "Connectivity test failures per minute"
-msgstr "Yhteystestin epäonnistumiset minuutissa"
+msgid "Connectivity test failures in the last minute"
+msgstr "Yhteyskäytännön testin virheet viimeisen minuutin aikana"
+
+#, java-format
+msgid "Empty at {0}/min"
+msgstr "Tyhjä kohdassa {0}/min"
 
 msgid "Peer Connections"
 msgstr "Vertaisyhteydet"
@@ -3653,26 +3732,40 @@ msgstr[1] "{0} vanhentunutta profiilia piilotettu"
 msgid "Share of total profiles shown"
 msgstr "Näytettävien profiilien osuus kaikista"
 
-msgid "peers"
-msgstr "vertaisia"
-
-msgid "Share of tier profiles shown"
-msgstr "Näytettävien tasoprofiilien osuus"
-
 msgid "Window"
 msgstr "Ikkuna"
 
 msgid "Fast RTT"
 msgstr "Nopea RTT"
 
-msgid "Max RTT for fast-tier membership (ms)"
-msgstr "Pikatason jäsenyyden enimmäis-RTT (ms)"
+msgid "Max RTT for fast-tier membership"
+msgstr "Suurin RTT nopean tason jäsenyyteen"
 
-msgid "Average loss of fast-tier peers (%)"
-msgstr "Pikatason vertaisten keskimääräinen hävikki (%)"
+msgid "Rises with network latency"
+msgstr "Nousee verkon viiveen mukana"
 
-msgid "Average loss of high-capacity peers (%)"
-msgstr "Suuren kapasiteetin vertaisten keskimääräinen hävikki (%)"
+msgid "Average loss of fast-tier peers"
+msgstr "Nopean tason vertaisten keskimääräinen menetys"
+
+msgid "Average loss of high-capacity peers"
+msgstr "Suurikapasiteettisten vertaisten keskimääräinen menetys"
+
+msgid "Average direct-link RTT of tier peers"
+msgstr "Tason vertaisten keskimääräinen suoran yhteyden RTT"
+
+#, java-format
+msgid "{0} of {1} measured"
+msgstr "{0} / {1} mitattu"
+
+msgid "1h Contact"
+msgstr "1h yhteys"
+
+msgid "Heard from in the last hour"
+msgstr "Kuultu viime tunnin aikana"
+
+#, java-format
+msgid "{0} of {1} tier peers"
+msgstr "{0} / {1} tason vertaista"
 
 msgid "Heard from within the display cutoff"
 msgstr "Kuullut näyttökatkaisun sisällä"
@@ -3683,11 +3776,19 @@ msgstr "Haut"
 msgid "Lookup success rate"
 msgstr "Hakujen onnistumisprosentti"
 
+#, java-format
+msgid "{0} of {1} lookups"
+msgstr "{0} / {1} hakua"
+
 msgid "Stores"
 msgstr "Tallennukset"
 
 msgid "Store success rate"
 msgstr "Tallennusten onnistumisprosentti"
+
+#, java-format
+msgid "{0} of {1} peers"
+msgstr "{0} / {1} vertaista"
 
 msgid "Definitions"
 msgstr "Määritelmät"
@@ -3760,11 +3861,25 @@ msgstr "kuinka monesta uudesta kollegasta he ovat kertoneet meille viime aikoina
 msgid "Known floodfills"
 msgstr "Tunnetut tulvasolmut"
 
-msgid "No-Fail"
-msgstr "Ei epäonnistumisia"
+msgid "Reachable, unbanlisted and heard from"
+msgstr "Saavutettavissa, ei porttokiellossa, ja äskettäin kuultu"
 
-msgid "No lookup failures (1h)"
-msgstr "Ei hakuvirheitä (1h)"
+msgid "Active bans of floodfill-capable peers"
+msgstr "Floodfill-kelpoisten vertaisten aktiiviset porttikiellot"
+
+#, java-format
+msgid "of {0} known"
+msgstr "/ {0} tunnettu"
+
+msgid "Fail"
+msgstr "Virhe"
+
+msgid "Lookup failures in the last hour"
+msgstr "Hakuvirheet viimeisen tunnin aikana"
+
+#, java-format
+msgid "across {0} listed peers"
+msgstr "{0} listatun vertaisen yli"
 
 msgid "Response"
 msgstr "Vastaus"
@@ -3772,11 +3887,16 @@ msgstr "Vastaus"
 msgid "Lookup response time (1h)"
 msgstr "Hakuvastausaika (1h)"
 
-msgid "1h Contact"
-msgstr "1h yhteys"
+#, java-format
+msgid "{0} peers measured"
+msgstr "{0} vertaista mitattu"
 
 msgid "Contacted within 1h"
 msgstr "Yhteydet 1 tunnin sisällä"
+
+#, java-format
+msgid "{0} of {1} listed"
+msgstr "{0} / {1} listattu"
 
 msgid "1h Fail Rate"
 msgstr "1h epäonnistumisprosentti"
@@ -3814,17 +3934,33 @@ msgstr "Kaikki"
 msgid "SAM bridge is not running."
 msgstr "SAM-siltaa ei käynnissä."
 
+msgid "Sessions"
+msgstr "Istunnot"
+
 msgid "Active sessions in SessionsDB"
 msgstr "Aktiiviset istunnot SessionsDB:ssä"
+
+msgid "Workers"
+msgstr "Työsäikeet"
 
 msgid "Active / pool worker threads"
 msgstr "Aktiiviset / poolin työsäikeet"
 
-msgid "Pending commands in pool"
-msgstr "Odottavat komennot poolissa"
+msgid "Queue"
+msgstr "Jono"
+
+#, java-format
+msgid "Pending commands: {0} of {1}"
+msgstr "Odottavat komennot: {0} / {1}"
+
+msgid "Handlers"
+msgstr "Käsittelijät"
 
 msgid "Connected pool handlers"
 msgstr "Yhdistetyt pool-käsittelijät"
+
+msgid "Stolen"
+msgstr "Varastetut"
 
 msgid "Sockets stolen for data streaming"
 msgstr "Tietojen suoratoistoon varastetut socketit"
@@ -4143,9 +4279,6 @@ msgstr "Näytä kaikki nykyiset vertaisyhteydet"
 msgid "Router health overview"
 msgstr "Reititimen tilan yleiskatsaus"
 
-msgid "Profiles"
-msgstr "Profiilit"
-
 msgid "Show recent peer performance profiles"
 msgstr "Näytä viimeisimmät vertaistoimintaprofiilit"
 
@@ -4454,6 +4587,28 @@ msgid "1 event"
 msgid_plural "{0} events"
 msgstr[0] "1 tapahtuma"
 msgstr[1] "{0} tapahtumaa"
+
+msgid "Open streaming connections"
+msgstr "Avoimet striimausyhteydet"
+
+msgid "Round-trip time (live samples, 1 min)"
+msgstr "Meno-paluuaika (reaaliaikaiset näytteet, 1 min)"
+
+msgid "Retrans"
+msgstr "Uud."
+
+msgid "Share of sends needing retransmit (1 min)"
+msgstr "Uudelleenlähetystä vaativien lähetysten osuus (1 min)"
+
+msgid "Created + received (1 min)"
+msgstr "Luotu + vastaanotettu (1 min)"
+
+msgid "Throughput"
+msgstr "Läpimeno"
+
+msgid "Mean rate of streams closed in the last minute"
+msgstr ""
+"Viime minuutin aikana suljettujen striimien keskimääräinen tahti"
 
 msgid "sent"
 msgstr "lähetetty"
@@ -4842,6 +4997,9 @@ msgstr "Rajoituksen hylkäyseksponentti"
 msgid "Maximum Participating Tunnels"
 msgstr "Osallistuvien tunnelien enimmäismäärä"
 
+msgid "Timer Threads"
+msgstr "Ajastinsäikeet"
+
 msgid "Build Handler Maximum Queue"
 msgstr "Rakennuskäsittelijän enimmäisjono"
 
@@ -5195,6 +5353,9 @@ msgstr "Ruuhkaikkunan enimmäisarvo hitaan aloituksen aikana."
 
 msgid "Per-connection inbound buffer cap (bytes)."
 msgstr "Saapuvan puskurin raja yhteyttä kohti (tavua)."
+
+msgid "Timer worker threads; higher reduces event delay."
+msgstr "Ajastimen työsäikeet; suurempi arvo vähentää tapahtumaviivettä."
 
 msgid "Dynamic cap on concurrent streams per destination."
 msgstr "Dynaaminen raja määränpään rinnakkaisille suoratoistoille."
@@ -7017,6 +7178,15 @@ msgstr "määritä WebApps"
 msgid "The Java web applications listed below are started by the webConsole client and run in the same JVM as the router. They are usually web applications accessible through the router console. They may be complete applications (e.g. i2psnark), front-ends to another client or application which must be separately enabled (e.g. susidns, i2ptunnel), or have no web interface at all (e.g. addressbook)."
 msgstr "WebConsole-asiakasohjelma käynnistää alla luetellut Java-verkkosovellukset, ja ne toimivat samassa JVM:ssä kuin reititin. They are usually web applications accessible through the router console They may be complete applications (e g i2psnark), front-ends to another client or application which must be separately enabled (e g susidns, i2ptunnel), or have no web interface at all (e g addressbook) Ne ovat yleensä verkkosovelluksia, joihin pääsee reititinkonsolin kautta Ne voivat olla täydellisiä sovelluksia (esim g i2psnark), käyttöliittymät toiselle asiakkaalle tai sovellukselle, joka on otettava käyttöön erikseen (esim g susidns, i2ptunnel) tai niillä ei ole verkkokäyttöliittymää ollenkaan (esim g addressbook) Ne ovat yleensä verkkosovelluksia, joihin pääsee reititinkonsolin kautta Ne voivat olla täydellisiä sovelluksia (esim g i2psnark), käyttöliittymät toiselle asiakkaalle tai sovellukselle, joka on otettava käyttöön erikseen (esim g susidns, i2ptunnel) tai niillä ei ole verkkokäyttöliittymää ollenkaan (esim g addressbook) Ne ovat yleensä verkkosovelluksia, joihin pääsee reititinkonsolin kautta Ne voivat olla täydellisiä sovelluksia (esim g i2psnark), käyttöliittymät toiselle asiakkaalle tai sovellukselle, joka on otettava käyttöön erikseen (esim g susidns, i2ptunnel) tai niillä ei ole verkkokäyttöliittymää ollenkaan (esim g addressbook). Ne ovat yleensä verkkosovelluksia, joihin pääsee reititinkonsolin kautta Ne voivat olla täydellisiä sovelluksia (esim g i2psnark), käyttöliittymät toiselle asiakkaalle tai sovellukselle, joka on otettava käyttöön erikseen (esim g susidns, i2ptunnel) tai niillä ei ole lainkaan verkkokäyttöliittymää (esim g osoitekirja"
 
+msgid "Router Session Key Manager"
+msgstr "Reitittimen istuntojen avaintenhallinta"
+
+msgid "Client Session Key Managers"
+msgstr "Asiakasistuntojen avaintenhallinnat"
+
+msgid "Router DHT"
+msgstr "Reitittimen DHT"
+
 msgid "Open in new tab"
 msgstr "Avaa uudessa välilehdessä"
 
@@ -7591,14 +7761,18 @@ msgstr "Vähimmäis tunnelitestausaika. [Oletus 45000 (45s)] [Default is 45000 (
 msgid "Maximum tunnel test period in milliseconds. Tunnel tests never wait longer than this for a reply, even on high-latency paths. [Default is 50000 (50 seconds)]"
 msgstr "Enimmäis tunnelitestausaika. [Oletus 50000 (50s)] [Default is 50000 (50 seconds)] [Oletus on 50 000 (50 sekuntia)] [Oletus on 50 000 (50 sekuntia)] [Oletus on 50 000 (50 sekuntia)]. [Oletus on 50 000 (50 sekuntia)"
 
-msgid "Number of tunnel build timeouts before a peer is marked as a ghost (blacklisted for tunnel participation). Higher values tolerate more transient failures. [Default is 3]"
-msgstr "Rakennusaikakatkaisujen määrä ennen vertaisen merkitsemistä haamuksi. [Oletus 3] [Default is 3] [Oletusarvo on 3] [Oletusarvo on 3] [Oletusarvo on 3]. [Oletus on 3"
+msgid "Number of tunnel build timeouts before a peer is marked as a ghost (excluded from tunnel participation). Higher values tolerate more transient failures. [Default is 1]"
+msgstr ""
+"Rakennusaikakatkaisujen lukumäärä, ennen kuin vertainen merkitään "
+"kummitukseksi (suljetaan tunneliyhteistyöstä). Suuremmat arvot sietävät "
+"enemmän hetkellisiä virheitä. [Oletus on 1]"
 
-msgid "Cooldown period in milliseconds before a ghost-marked peer can be considered for tunnel participation again. Shorter values allow faster peer reuse. [Default is 180000 (3 minutes)]"
-msgstr "Jäähdytysaika haamumerkitylle vertaiselle. [Oletus 180000 (3 min)] [Default is 180000 (3 minutes)] [Oletus on 180000 (3 minuuttia)] [Oletus on 180000 (3 minuuttia)] [Oletus on 180000 (3 minuuttia)]. [Oletus on 180000 (3 minuuttia)"
-
-msgid "Cooldown period in milliseconds for ghost-marked peers during attack mode. Longer cooldowns limit exposure to potentially malicious peers during high-stress periods. [Default is 300000 (5 minutes)]"
-msgstr "Jäähdytysaika haamuille hyökkäystilassa. [Oletus 300000 (5 min)] [Default is 300000 (5 minutes)] [Oletusarvo on 300 000 (5 minuuttia)] [Oletusarvo on 300 000 (5 minuuttia)] [Oletusarvo on 300 000 (5 minuuttia)]. [Oletus on 300000 (5 minuuttia)"
+msgid "Cooldown period in milliseconds before a ghost-marked peer can be promoted into the tunnel peer tiers again. Shorter values return recovered peers to service faster. [Default is 90000 (90 seconds)]"
+msgstr ""
+"Jäähdytysaika millisekunteina, ennen kuin kummitukseksi merkitty "
+"vertainen voidaan nostaa takaisin tunnelin vertaistasoille. Lyhyemmät "
+"arvot palauttavat parantuneet vertaiset palveluun nopeammin. [Oletus on "
+"90000 (90 sekuntia)]"
 
 msgid "Minimum number of incoming tunnel build requests accepted per peer per clean window. Prevents starving peers during low-traffic periods. [Default is 10]"
 msgstr "Vähimmäismäärä saapuvia rakennuspyyntöjä per vertainen per ikkuna. [Oletus 10] [Default is 10] [Oletusarvo on 10] [Oletusarvo on 10] [Oletusarvo on 10]. [Oletus on 10"
@@ -10028,3 +10202,35 @@ msgstr "Seuraava"
 
 msgid "Finished"
 msgstr "Valmistunut"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

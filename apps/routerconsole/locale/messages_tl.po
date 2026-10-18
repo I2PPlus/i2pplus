@@ -135,23 +135,50 @@ msgstr "Mga peer na walang nai-publish na IP address"
 msgid "Average tunnel build success (%)"
 msgstr "Karaniwang % ng tagumpay ng paggawa ng tunnel"
 
-msgid "Memory used by the JVM"
+msgid "Tier promotions held back for a peer with no usable address"
 msgstr ""
+"Itinigil ang pagtaas ng tier para sa peer na walang magamiting address"
+
+msgid "RouterInfo refreshes issued for peers held out of the tiers"
+msgstr ""
+"Mga RouterInfo refresh na inisyu para sa mga peer na inilalagay sa labas "
+"ng mga tier"
+
+msgid "Tier scans that left the fast or high-capacity tier short of target"
+msgstr ""
+"Mga tier scan na naiwan ang mabilis o mataas na kapasidad na tier sa "
+"ibaba ng target"
+
+msgid "RouterInfos requested for stored profiles that had none"
+msgstr ""
+"Mga RouterInfo na hiniling para sa mga naka-save na profile na wala nito"
+
+msgid "Build timeouts recorded against a peer as a ghost mark"
+msgstr "Mga build timeout na naitala laban sa peer bilang ghost mark"
+
+msgid "Ghost marks cleared by a successful build reply"
+msgstr "Mga ghost mark na na-clear ng matagumpay na build reply"
+
+msgid "Peers currently excluded as ghosts"
+msgstr "Mga peer na kasalukuyang tinatanggal bilang multo"
+
+msgid "Ghost peers in the fast or high-capacity tiers"
+msgstr "Mga ghost peer sa mabilis o mataas na kapasidad na mga tier"
+
+msgid "Duplicate CLOSE safety-net messages sent"
+msgstr "Mga dubleng CLOSE safety-net message na naipadala"
+
+msgid "Memory used by the JVM"
+msgstr "Memory ang ginagamit ng JVM"
 
 msgid "maximum"
-msgstr ""
-
-msgid "No transports"
-msgstr "Walang transport"
+msgstr "pinakamataas"
 
 msgid "Unsupported signature type"
 msgstr "Hindi suportadong uri ng signature"
 
 msgid "No support for our signature type"
 msgstr "Walang suporta para sa aming uri ng signature"
-
-msgid "Unreachable on any transport"
-msgstr "Hindi maabot sa kahit anong transport"
 
 msgid "Cannot enumerate UPnP devices on Android."
 msgstr "Hindi ma-enumerate ang mga UPnP device sa Android."
@@ -848,6 +875,9 @@ msgstr "Console"
 
 msgid "To enable SSL access for the Router Console, see the commented <code>clients.config</code> file located in your I2P application directory for more information. You will need to edit the RouterConsoleRunner config file located in the directory: "
 msgstr "Upang paganain ang SSL access para sa Router Console, tingnan ang nakomentong <code>clients.config</code> file na matatagpuan sa iyong application directory ng I2P para sa karagdagang impormasyon. Kailangan mong i-edit ang RouterConsoleRunner config file na matatagpuan sa directory: "
+
+msgid "No client session key managers."
+msgstr "Walang client session key manager."
 
 msgid "Save disabled, edit the router.config file to make changes"
 msgstr "Naka-disable ang pag-save, i-edit ang router.config file para gumawa ng mga pagbabago"
@@ -1905,10 +1935,10 @@ msgid "Bandwidth Usage"
 msgstr "Paggamit ng Bandwidth"
 
 msgid "Graph combining is not enabled"
-msgstr ""
+msgstr "Hindi naka-enable ang pagbubuklod ng graph"
 
 msgid "Not enough stats enabled to combine"
-msgstr ""
+msgstr "Kulang sa naka-enable na stat para magbuklod"
 
 #, java-format
 msgid "ending {0} ago"
@@ -2026,22 +2056,22 @@ msgid "Add a glow effect to graph lines"
 msgstr "Magdagdag ng epekto ng glow sa mga linya ng graph"
 
 msgid "Smooth lines"
-msgstr ""
+msgstr "Makinis na linya"
 
 msgid "Use bezier curves to plot graphs"
-msgstr ""
+msgstr "Gumamit ng bezier curve sa pag-plot ng graph"
 
 msgid "Filled paths"
-msgstr ""
+msgstr "Punong path"
 
 msgid "Use filled areas for graphs"
-msgstr ""
+msgstr "Gumamit ng punong area para sa graph"
 
 msgid "Combine graphs"
-msgstr ""
+msgstr "Ibuklod ang graph"
 
 msgid "Merge related graphs into a plot"
-msgstr ""
+msgstr "Pagsamahin ang magkakaugnay na graph sa isang plot"
 
 msgid "Select Stats"
 msgstr "Pumili ng Stats"
@@ -2061,20 +2091,34 @@ msgstr "nag-improve"
 msgid "vs baseline"
 msgstr "vs baseline"
 
+#, java-format
+msgid "Out: {0} / {1}"
+msgstr "Labas: {0} / {1}"
+
+#, java-format
+msgid "In: {0} / {1}"
+msgstr "Pasok: {0} / {1}"
+
 msgid "CPU"
 msgstr "CPU"
 
-msgid "CPU load average"
-msgstr "Karaniwang load ng CPU"
+msgid "JVM CPU load average"
+msgstr "Average ng CPU load ng JVM"
+
+#, java-format
+msgid "{0} cores"
+msgstr "{0} core"
 
 msgid "Memory"
 msgstr "Memory"
 
-msgid "Memory usage"
-msgstr "Paggamit ng memory"
+#, java-format
+msgid "Used: {0} / {1} max"
+msgstr "Nagamit: {0} / {1} pinakamataas"
 
-msgid "Router uptime"
-msgstr "Uptime ng router"
+#, java-format
+msgid "Since {0}"
+msgstr "Mula {0}"
 
 msgid "Job Lag"
 msgstr "Pagkaantala ng Job"
@@ -2100,6 +2144,10 @@ msgstr "Mga Thread"
 msgid "Active JVM threads"
 msgstr "Mga aktibong thread ng JVM"
 
+#, java-format
+msgid "Empty at {0}"
+msgstr "Walang laman sa {0}"
+
 msgid "NTCP Estab"
 msgstr "NTCP Estab"
 
@@ -2121,20 +2169,24 @@ msgstr "Timeout ng retransmission ng SSU"
 msgid "Conns/s"
 msgstr "Conns/s"
 
-msgid "NTCP connections established per second"
-msgstr "Mga koneksyong NTCP na itinatag kada segundo"
+#, java-format
+msgid "Full at {0}/s"
+msgstr "Puno sa {0}/s"
+
+msgid "New NTCP connections (1 min)"
+msgstr "Bagong NTCP connection (1 min)"
 
 msgid "Msgs/s"
 msgstr "Msgs/s"
 
-msgid "Messages delivered per second"
-msgstr "Mga mensaheng ihahatid kada segundo"
+msgid "Messages delivered (1 min)"
+msgstr "Mga naipadalang mensahe (1 min)"
 
 msgid "RTT"
 msgstr "RTT"
 
-msgid "End-to-end message round trip time"
-msgstr "Oras ng round trip ng mensahe mula hanggang huli"
+msgid "End-to-end client message round trip"
+msgstr "End-to-end round trip ng mensahe ng client"
 
 msgid "Timeout"
 msgstr "Timeout"
@@ -2148,20 +2200,28 @@ msgstr "Paggawa ng Tunnel"
 msgid "Client tunnel build latency"
 msgstr "Latensiya sa paggawa ng client tunnel"
 
+#, java-format
+msgid "In: {0} / Out: {1}"
+msgstr "Pasok: {0} / Labas: {1}"
+
 msgid "Active Peers"
 msgstr "Mga Aktibong Peer"
 
-msgid "Active peers (last 60s)"
-msgstr "Mga aktibong peer (huling 60s)"
+#, java-format
+msgid "Full at {0}"
+msgstr "Puno sa {0}"
+
+msgid "Reached in the last 60s"
+msgstr "Naabot sa nakalipas na 60s"
 
 msgid "Known Peers"
 msgstr "Mga Kilalang Peer"
 
-msgid "Known routers in network database"
-msgstr "Mga kilalang router sa network database"
+msgid "In the network database"
+msgstr "Sa network database"
 
-msgid "Active I2CP clients"
-msgstr "Mga aktibong client ng I2CP"
+msgid "I2CP clients connected"
+msgstr "Konektadong I2CP client"
 
 msgid "Transit"
 msgstr "Transit"
@@ -2175,8 +2235,8 @@ msgstr "Mga Stream"
 msgid "Build Success"
 msgstr "Tagumpay ng Paggawa"
 
-msgid "Tunnel build success rate"
-msgstr "Relasyon ng tagumpay ng paggawa ng tunnel"
+msgid "Tunnel build success rate (1 min)"
+msgstr "Tagumpay na rate ng tunnel build (1 min)"
 
 msgid "NetDB"
 msgstr "NetDB"
@@ -2187,26 +2247,31 @@ msgstr "Oras ng paghahanap sa NetDB"
 msgid "Banned"
 msgstr "Binned"
 
-msgid "Total banned peers"
-msgstr "Kabuuang bilang ng binned peer"
+msgid "Peers excluded from all interactions"
+msgstr "Mga peer na hindi kasali sa lahat ng interaksyon"
+
+#, java-format
+msgid "{0} of {1} known"
+msgstr "{0} sa {1} na kilala"
 
 msgid "LeaseSets"
 msgstr "Mga LeaseSet"
 
-msgid "Stored LeaseSets in floodfill"
-msgstr "Mga LeaseSet na naka-store sa floodfill"
+msgid "Stored LeaseSets"
+msgstr "Naka-save na LeaseSet"
 
 msgid "Cache Hit"
 msgstr "Cache Hit"
 
-msgid "NetDB lookup success rate"
-msgstr "Relasyon ng tagumpay ng paghahanap sa NetDB"
+#, java-format
+msgid "Matched {0} of {1} lookups (1 min)"
+msgstr "Tugma ang {0} sa {1} lookup (1 min)"
 
 msgid "Flood Verify"
 msgstr "Flood Verify"
 
-msgid "Floodfill verify time"
-msgstr "Oras ng beripikasyon ng floodfill"
+msgid "Floodfill verify time (1 min)"
+msgstr "Oras ng pagsusuri ng Floodfill (1 min)"
 
 msgid "NetDB ACK"
 msgstr "NetDB ACK"
@@ -2217,20 +2282,20 @@ msgstr "Oras ng pag-acknowledge ng peer sa NetDB"
 msgid "Lookups/s"
 msgstr "Lookups/s"
 
-msgid "NetDB lookups handled per second"
-msgstr "Mga paghahanap sa NetDB na hinahawakan kada segundo"
+msgid "Lookups handled (1 min)"
+msgstr "Mga lookup na hinawakan (1 min)"
 
 msgid "Requests/s"
 msgstr "Requests/s"
 
-msgid "Combined store + lookup operations per second"
-msgstr "Mga pinagsamang store at lookup kada segundo"
+msgid "Stores + lookups (1 min)"
+msgstr "Store + lookup (1 min)"
 
 msgid "Stores/s"
 msgstr "Stores/s"
 
-msgid "NetDB store messages handled per second"
-msgstr "Mga store message ng NetDB na hinahawakan kada segundo"
+msgid "Stores handled (1 min)"
+msgstr "Mga store na hinawakan (1 min)"
 
 msgid "LS Timeout"
 msgstr "LS Timeout"
@@ -3214,6 +3279,9 @@ msgstr "Tingnan ang profile"
 msgid "Configure peer"
 msgstr "I-configure ang peer"
 
+msgid "Memory usage"
+msgstr "Paggamit ng memory"
+
 msgid "Hidden"
 msgstr "Nakatago"
 
@@ -3357,8 +3425,8 @@ msgstr "Mga peer na mataas ang bandwidth para sa maraming tunnel"
 msgid "Reliable"
 msgstr "Maaasahan"
 
-msgid "High-capacity peers with good acceptance"
-msgstr "Mga peer na high capacity na may maganda na acceptance"
+msgid "Peers with good acceptance and recent activity"
+msgstr "Mga peer na mabuti ang pagtanggap at kamakailang aktibo"
 
 msgid "Peers that store and serve NetDb info"
 msgstr "Mga peer na nag-iimbak at naghahain ng impormasyon ng NetDB"
@@ -3369,17 +3437,21 @@ msgstr "Kilala"
 msgid "Total entries in network database"
 msgstr "Kabuuang bilang ng mga entry sa NetDB"
 
+msgid "Profiles"
+msgstr "Mga Profile"
+
 msgid "Profiles with activity in the last hour"
 msgstr "Mga profile na may aktibidad sa huling 1h"
+
+#, java-format
+msgid "{0} of {1} stored"
+msgstr "{0} sa {1} na naka-save"
 
 msgid "Unreachable"
 msgstr "Hindi maabot"
 
-msgid "Peers without a reachable address"
-msgstr "Mga peer na walang maabot na address"
-
-msgid "Peers excluded from all interactions"
-msgstr "Mga peer na hindi kasali sa lahat ng interaksyon"
+msgid "Peers without a published address"
+msgstr "Mga peer na walang na-publish na address"
 
 msgid "/min"
 msgstr "/min"
@@ -3387,8 +3459,12 @@ msgstr "/min"
 msgid "Test Fail"
 msgstr "Pagkakapalso ng Test"
 
-msgid "Connectivity test failures per minute"
-msgstr "Pagkakapalso ng koneksyon kada minuto"
+msgid "Connectivity test failures in the last minute"
+msgstr "Mga kabiguan sa connectivity test sa nakalipas na minuto"
+
+#, java-format
+msgid "Empty at {0}/min"
+msgstr "Walang laman sa {0}/min"
 
 msgid "Peer Connections"
 msgstr "Mga Koneksyon sa Peer"
@@ -3581,6 +3657,8 @@ msgstr "Mababang Latensiya"
 
 msgid "Round trip time to this peer on the direct link, as measured by the transport"
 msgstr ""
+"Round trip time sa peer na ito sa direktang link, ayon sa sukat ng "
+"transport"
 
 msgid "Packets retransmitted / packets sent, as reported by the UDP transport"
 msgstr "Mga ipinag-ulit na packet / ipinadalang packet, ayon sa tinukoy ng UDP transport"
@@ -3662,26 +3740,40 @@ msgstr[1] "{0} lumang profile ang nakatago"
 msgid "Share of total profiles shown"
 msgstr "Bahagi ng kabuuang profile na ipinapakita"
 
-msgid "peers"
-msgstr "peer"
-
-msgid "Share of tier profiles shown"
-msgstr "Bahagi ng tier profile na ipinapakita"
-
 msgid "Window"
 msgstr "Window"
 
 msgid "Fast RTT"
 msgstr "Fast RTT"
 
-msgid "Max RTT for fast-tier membership (ms)"
-msgstr "Max na RTT para sa pagiging kandidato sa fast tier (ms)"
+msgid "Max RTT for fast-tier membership"
+msgstr "Pinakamataas na RTT para sa pagmiyembro sa mabilis na tier"
 
-msgid "Average loss of fast-tier peers (%)"
-msgstr "Karaniwang pagkalugi ng fast tier peer (%)"
+msgid "Rises with network latency"
+msgstr "Tumataas kasama ng network latency"
 
-msgid "Average loss of high-capacity peers (%)"
-msgstr "Karaniwang pagkalugi ng high capacity peer (%)"
+msgid "Average loss of fast-tier peers"
+msgstr "Average na pagkawala ng mga peer sa mabilis na tier"
+
+msgid "Average loss of high-capacity peers"
+msgstr "Average na pagkawala ng mga peer na may mataas na kapasidad"
+
+msgid "Average direct-link RTT of tier peers"
+msgstr "Average na direct-link RTT ng mga peer sa tier"
+
+#, java-format
+msgid "{0} of {1} measured"
+msgstr "{0} sa {1} na sinusukat"
+
+msgid "1h Contact"
+msgstr "1h Kontak"
+
+msgid "Heard from in the last hour"
+msgstr "Narinig sa nakalipas na oras"
+
+#, java-format
+msgid "{0} of {1} tier peers"
+msgstr "{0} sa {1} peer sa tier"
 
 msgid "Heard from within the display cutoff"
 msgstr "Narinig sa loob ng panahon ng ipinapakita"
@@ -3692,11 +3784,19 @@ msgstr "Mga paghahanap"
 msgid "Lookup success rate"
 msgstr "Rateg ng tagumpay ng paghahanap"
 
+#, java-format
+msgid "{0} of {1} lookups"
+msgstr "{0} sa {1} lookup"
+
 msgid "Stores"
 msgstr "Mga store"
 
 msgid "Store success rate"
 msgstr "Rateg ng tagumpay ng store"
+
+#, java-format
+msgid "{0} of {1} peers"
+msgstr "{0} sa {1} peer"
 
 msgid "Definitions"
 msgstr "Mga Kahulugan"
@@ -3769,11 +3869,25 @@ msgstr "ilan sa bagong peer ang sinabi nila sa amin kamakailan?"
 msgid "Known floodfills"
 msgstr "Mga kilalang floodfill"
 
-msgid "No-Fail"
-msgstr "Walang Pagkakapalso"
+msgid "Reachable, unbanlisted and heard from"
+msgstr "Naabot, hindi naka-banlist, at kamakailan narinig"
 
-msgid "No lookup failures (1h)"
-msgstr "Walang pagkakapalso sa paghahanap (1h)"
+msgid "Active bans of floodfill-capable peers"
+msgstr "Aktibong ban sa mga peer na kayang maging floodfill"
+
+#, java-format
+msgid "of {0} known"
+msgstr "sa {0} na kilala"
+
+msgid "Fail"
+msgstr "Kabiguan"
+
+msgid "Lookup failures in the last hour"
+msgstr "Mga kabiguan sa lookup sa nakalipas na oras"
+
+#, java-format
+msgid "across {0} listed peers"
+msgstr "sa kabuuan ng {0} nakalistang peer"
 
 msgid "Response"
 msgstr "Tugon"
@@ -3781,11 +3895,16 @@ msgstr "Tugon"
 msgid "Lookup response time (1h)"
 msgstr "Oras ng tugon sa paghahanap (1h)"
 
-msgid "1h Contact"
-msgstr "1h Kontak"
+#, java-format
+msgid "{0} peers measured"
+msgstr "{0} peer na sinusukat"
 
 msgid "Contacted within 1h"
 msgstr "Nakal-contact sa loob ng 1h"
+
+#, java-format
+msgid "{0} of {1} listed"
+msgstr "{0} sa {1} na nakalista"
 
 msgid "1h Fail Rate"
 msgstr "1h Rateg ng Pagkakapalso"
@@ -3823,17 +3942,33 @@ msgstr "Lahat"
 msgid "SAM bridge is not running."
 msgstr "Hindi tumatakbo ang SAM bridge."
 
+msgid "Sessions"
+msgstr "Session"
+
 msgid "Active sessions in SessionsDB"
 msgstr "Mga aktibong session sa SessionsDB"
+
+msgid "Workers"
+msgstr "Worker"
 
 msgid "Active / pool worker threads"
 msgstr "Mga aktibong thread / thread ng pool"
 
-msgid "Pending commands in pool"
-msgstr "Mga nakapending na command sa pool"
+msgid "Queue"
+msgstr "Queue"
+
+#, java-format
+msgid "Pending commands: {0} of {1}"
+msgstr "Nakabinbing utos: {0} sa {1}"
+
+msgid "Handlers"
+msgstr "Handler"
 
 msgid "Connected pool handlers"
 msgstr "Mga konektadong handler ng pool"
+
+msgid "Stolen"
+msgstr "Nakaw"
 
 msgid "Sockets stolen for data streaming"
 msgstr "Mga socket na kinuha para sa data streaming"
@@ -4152,9 +4287,6 @@ msgstr "Ipakita ang lahat ng kasalukuyang koneksyon sa peer"
 msgid "Router health overview"
 msgstr "Pangkalahatang-ideya ng kalusugan ng router"
 
-msgid "Profiles"
-msgstr "Mga Profile"
-
 msgid "Show recent peer performance profiles"
 msgstr "Ipakita ang kamakailang profile ng performance ng peer"
 
@@ -4463,6 +4595,27 @@ msgid "1 event"
 msgid_plural "{0} events"
 msgstr[0] "isang kaganapan"
 msgstr[1] "{0} kaganapan"
+
+msgid "Open streaming connections"
+msgstr "Bukas na streaming connection"
+
+msgid "Round-trip time (live samples, 1 min)"
+msgstr "Round-trip time (live sample, 1 min)"
+
+msgid "Retrans"
+msgstr "Retrans"
+
+msgid "Share of sends needing retransmit (1 min)"
+msgstr "Bahagi ng pagpadala na nangangailangan ng retransmit (1 min)"
+
+msgid "Created + received (1 min)"
+msgstr "Nilikha + natanggap (1 min)"
+
+msgid "Throughput"
+msgstr "Throughput"
+
+msgid "Mean rate of streams closed in the last minute"
+msgstr "Average na rate ng mga stream na isinara sa nakalipas na minuto"
 
 msgid "sent"
 msgstr "ipinadala"
@@ -4851,6 +5004,9 @@ msgstr "Exponent ng Throttle Reject"
 msgid "Maximum Participating Tunnels"
 msgstr "Max na Tunnel na Kinakalahok"
 
+msgid "Timer Threads"
+msgstr "Timer Thread"
+
 msgid "Build Handler Maximum Queue"
 msgstr "Max na Build Handler Queue"
 
@@ -5205,6 +5361,11 @@ msgstr "Max na window ng congestion habang dahan-dahang nagsisimula."
 msgid "Per-connection inbound buffer cap (bytes)."
 msgstr "Limitasyon ng inbound buffer kada koneksyon (bytes)."
 
+msgid "Timer worker threads; higher reduces event delay."
+msgstr ""
+"Mga worker thread ng timer; mas mataas na halaga, mas mababa ang delay "
+"ng pangyayari."
+
 msgid "Dynamic cap on concurrent streams per destination."
 msgstr "Dinamikong limitasyon ng kasabay na stream kada destination."
 
@@ -5450,9 +5611,13 @@ msgstr "Min na oras sa pagitan ng mga retransmission (ms)."
 
 msgid "Window growth per RTT after slow start; higher recovers faster."
 msgstr ""
+"Paglago ng window bawat RTT pagkatapos ng slow start; mas mataas, mas "
+"mabilis makabangon."
 
 msgid "Window growth per ACK during slow start; higher ramps faster."
 msgstr ""
+"Paglago ng window bawat ACK habang nasa slow start; mas mataas, mas "
+"mabilis umakyat."
 
 msgid "Minimum send rate before pacing kicks in (KB/s)."
 msgstr "Min na bilis ng pagpapadala bago mailapat ang pacing (KB/s)."
@@ -5492,6 +5657,7 @@ msgstr "Default na limitasyon ng server handler thread para sa bawat server tunn
 
 msgid "Dedicated pool for Server→Client transfers, unblocks handlers."
 msgstr ""
+"Nakalaang pool para sa Server→Client transfer, binubuksan ang handler."
 
 msgid "Stall timeout for Server→Client data transfers (ms)."
 msgstr "Timeout ng pagkakahinto para sa Server→Client na paglipat ng data (ms)."
@@ -5543,6 +5709,8 @@ msgstr "Tagal ng moderate load bago magtanggihan ng mga request (ms)."
 
 msgid "Widens the peer recency window when fast peers run short."
 msgstr ""
+"Pinapalawak ang window ng kamakailan ng peer kapag nauubos ang mabilis "
+"na peer."
 
 msgid "Consecutive failures before pool backoff."
 msgstr "Magkasunod na failure bago mag-backoff ang pool."
@@ -5582,6 +5750,8 @@ msgstr "Timeout ng koneksyon ng TCP socket para sa tunnel server handler thread 
 
 msgid "IV dedup filter size; too small drops valid tunnel data."
 msgstr ""
+"Laki ng IV dedup filter; kung masyadong maliit, itinatapon ang wastong "
+"tunnel data."
 
 msgid "Max average message delay before rejecting transit (ms)."
 msgstr "Max na katamtamang pagkaelay ng mensahe bago magtanggihan ng transit (ms)."
@@ -7026,6 +7196,15 @@ msgstr "config webapps"
 msgid "The Java web applications listed below are started by the webConsole client and run in the same JVM as the router. They are usually web applications accessible through the router console. They may be complete applications (e.g. i2psnark), front-ends to another client or application which must be separately enabled (e.g. susidns, i2ptunnel), or have no web interface at all (e.g. addressbook)."
 msgstr "Sinisimulan ng webConsole client ang mga Java na web application na nakalista sa ibaba at tumatakbo sa parehong JVM ng router. Karaniwan, mga web application na maaaring ma-access sa pamamagitan ng router console ang mga ito. Maaaring mga kumpletong application (hal. i2psnark), front-end ng ibang client o application na dapat i-enable nang hiwalay (hal. susidns, i2ptunnel), o tuluyang walang web interface (hal. addressbook) ang mga ito."
 
+msgid "Router Session Key Manager"
+msgstr "Router Session Key Manager"
+
+msgid "Client Session Key Managers"
+msgstr "Mga Client Session Key Manager"
+
+msgid "Router DHT"
+msgstr "Router DHT"
+
 msgid "Open in new tab"
 msgstr "Buksan sa bagong tab"
 
@@ -7600,14 +7779,18 @@ msgstr "Min na panahon ng tunnel test sa millisecond. Laging naghihintay ang tun
 msgid "Maximum tunnel test period in milliseconds. Tunnel tests never wait longer than this for a reply, even on high-latency paths. [Default is 50000 (50 seconds)]"
 msgstr "Max na panahon ng tunnel test sa millisecond. Hindi kailanman naghihintay ang tunnel test ng mas mahabang panahon para sa isang reply, kahit sa mga landas na may mataas na latensiya. [Default ay 50000 (50 segundo)]"
 
-msgid "Number of tunnel build timeouts before a peer is marked as a ghost (blacklisted for tunnel participation). Higher values tolerate more transient failures. [Default is 3]"
-msgstr "Bilang ng timeout ng paggawa ng tunnel bago markahan ang isang peer bilang ghost (nasa Blacklist para sa pakikilahok sa tunnel). Mas mataas ang halaga, mas maraming pansin na transitory na pagkabigo ang tinatanggap. [Default ay 3]"
+msgid "Number of tunnel build timeouts before a peer is marked as a ghost (excluded from tunnel participation). Higher values tolerate more transient failures. [Default is 1]"
+msgstr ""
+"Bilang ng tunnel build timeout bago markahan ang peer bilang multo "
+"(tinatanggal sa pakikilahok sa tunnel). Mas mataas na halaga, mas "
+"matitiis ang pansamantalang kabiguan. [Ang default ay 1]"
 
-msgid "Cooldown period in milliseconds before a ghost-marked peer can be considered for tunnel participation again. Shorter values allow faster peer reuse. [Default is 180000 (3 minutes)]"
-msgstr "Panahon ng paghintay sa millisecond bago muling maisasaalang-alang ang peer na naka-mark bilang ghost para sa pakikilahok sa tunnel. Mas maikling halaga, mas mabilis ang muling paggamit ng peer. [Default ay 180000 (3 minuto)]"
-
-msgid "Cooldown period in milliseconds for ghost-marked peers during attack mode. Longer cooldowns limit exposure to potentially malicious peers during high-stress periods. [Default is 300000 (5 minutes)]"
-msgstr "Panahon ng paghintay sa millisecond para sa mga peer na naka-mark bilang ghost sa panahon ng attack mode. Mas mahabag na panahon ng paghintay, nababawasan ang pagkakasalapit sa mga peer na maaaring malikhaan sa panahon ng matinding presyon. [Default ay 300000 (5 minuto)]"
+msgid "Cooldown period in milliseconds before a ghost-marked peer can be promoted into the tunnel peer tiers again. Shorter values return recovered peers to service faster. [Default is 90000 (90 seconds)]"
+msgstr ""
+"Cooldown period sa milisegundo bago ma-promote muli sa mga tier ng "
+"tunnel peer ang peer na may ghost mark. Mas maikling halaga, mas mabilis "
+"ibalik sa serbisyo ang naibangon na peer. [Ang default ay 90000 (90 "
+"segundo)]"
 
 msgid "Minimum number of incoming tunnel build requests accepted per peer per clean window. Prevents starving peers during low-traffic periods. [Default is 10]"
 msgstr "Min na bilang ng tinatanggap na inbound na kahilingang paggawa ng tunnel kada peer kada malinis na window. Pinipigilan nito na magutusan ang mga peer sa panahon ng mababang traffic. [Default ay 10]"
@@ -10037,3 +10220,35 @@ msgstr "Susunod"
 
 msgid "Finished"
 msgstr "Tapos na"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -124,23 +124,50 @@ msgstr "IP ཁ་བྱང་སྤེལ་མེད་པའི་མཐུད
 msgid "Average tunnel build success (%)"
 msgstr "གདོང་ལམ་བཟོ་སྐྲུན་ལེགས་གྲུབ་ཀྱི་ཆ་སྙོམས། %"
 
+msgid "Tier promotions held back for a peer with no usable address"
+msgstr ""
+"སྤྱོད་རུང་ཁ་ཙམ་མེད་པའི་མཐུད་སྣེ་ཞིག་གི་ཆེད་དུ་བཀག་འགོག་བྱས་པའི་རིམ་པའི་འཕར་སྤྲོད།"
+
+msgid "RouterInfo refreshes issued for peers held out of the tiers"
+msgstr ""
+"རིམ་པའི་ཕྱིར་བཞག་པའི་མཐུད་སྣེ་ཚོར་བཏང་བའི་RouterInfo གསར་བསྐོང་།"
+
+msgid "Tier scans that left the fast or high-capacity tier short of target"
+msgstr ""
+"མགྱོགས་པོའི་རིམ་པ་ཡང་ན་ཆེས་ཆེན་གྱི་རིམ་པ་དམིགས་ཚད་ལས་ཉུང་དུ་བཏང་བའི་རིམ་པའི་འཚོལ་བཤེར།"
+
+msgid "RouterInfos requested for stored profiles that had none"
+msgstr ""
+"RouterInfo མེད་པའི་ཉར་ཚགས་བྱས་པའི་སྒྲིག་གཞི་ཚོར་ཞུས་པའི་RouterInfo "
+"གོ་སྐོར།"
+
+msgid "Build timeouts recorded against a peer as a ghost mark"
+msgstr ""
+"མཐུད་སྣེ་ཞིག་གི་སྟེང་གདོན་པའི་རྟགས་སུ་ཐོ་འགོད་བྱས་པའི་བཟོ་སྐྲུན་དུས་ཡུན་འདས་པ།"
+
+msgid "Ghost marks cleared by a successful build reply"
+msgstr "བཟོ་སྐྲུན་གྱི་ལན་ལེགས་གྲུབ་ཀྱིས་སུབ་པའི་གདོན་པའི་རྟགས།"
+
+msgid "Peers currently excluded as ghosts"
+msgstr "ཉེ་ལམ་དུ་གདོན་པར་བརྩིས་ནས་ཕྱིར་འཐེན་བྱས་པའི་མཐུད་སྣེ།"
+
+msgid "Ghost peers in the fast or high-capacity tiers"
+msgstr "མགྱོགས་པོའི་རིམ་པ་དང་ཆེས་ཆེན་རིམ་པའི་ནང་གི་གདོན་པའི་མཐུད་སྣེ།"
+
+msgid "Duplicate CLOSE safety-net messages sent"
+msgstr "ཕྱར་རིས་བཏང་བའི་CLOSE ཉེན་སྲུང་དྲ་མིག་གི་གནས་ཚུལ།"
+
 msgid "Memory used by the JVM"
 msgstr "JVM ཀྱིས་བེད་སྤྱོད་མཁན་གྱིས་མེད་བུའི་དྲོན་གནས།"
 
 msgid "maximum"
 msgstr "མང་ཤོས་"
 
-msgid "No transports"
-msgstr "འགྲེམ་སྤེལ་མེད། (སྦས་གསང་ཡང་ན་འགོ་བརྩམས་བཞིན་པ།)"
-
 msgid "Unsupported signature type"
 msgstr "རྒྱབ་སྐྱོར་མེད་པའི་མིང་རྟགས་རིགས།"
 
 msgid "No support for our signature type"
 msgstr "ང་ཚོའི་མིང་རྟགས་རིགས་ལ་རྒྱབ་སྐྱོར་མེད།"
-
-msgid "Unreachable on any transport"
-msgstr "འགྲེམ་སྤེལ་གང་གི་ཐོག་ནས་འབྲེལ་ཐུབ་མེད།"
 
 msgid "Cannot enumerate UPnP devices on Android."
 msgstr "Android ཐོག་ UPnP སྒྲིག་ཆས་རྩིས་བརྒྱ་བྱེད་མི་ཐུབ།"
@@ -836,6 +863,9 @@ msgstr "རོགས་དྲན།"
 
 msgid "To enable SSL access for the Router Console, see the commented <code>clients.config</code> file located in your I2P application directory for more information. You will need to edit the RouterConsoleRunner config file located in the directory: "
 msgstr "རོ་ཌེར་རོགས་དྲན་གི་SSL རིམ་རྒྱུན་དུ་བཙོན་པའི་ཐོན་པར་མི་འཚམས།. config file located in your I2P application directory for more information You will need to edit the RouterConsoleRunner config file located in the directory:. config file located in your I2P application directory for more information You will need to edit the RouterConsoleRunner config file located in the directory:. config file located in your I2P application directory for more information You will need to edit the RouterConsoleRunner config file located in the directory:. config file located in your I2P application directory for more information You will need to edit the RouterConsoleRunner config file located in the directory:"
+
+msgid "No client session key managers."
+msgstr "མཉེན་ཆས་ཚོད་འཛིན་གྱི་ལྡེ་མིག་དོ་དམ་མེད།"
 
 msgid "Save disabled, edit the router.config file to make changes"
 msgstr "གསོག་འཇོག་སྒོ་རྒྱག་ཡོད། བཅོས་བསྒྱུར་བྱེད་པར་router.config ཡིག་ཆར་རྩོམ་སྒྲིག་བྱོས།"
@@ -2046,20 +2076,34 @@ msgstr "ལེགས་སུ་གསར་དུ་ཡོད།"
 msgid "vs baseline"
 msgstr "སྨི་དྲོག་བརྗོད་དང་བསྡུར་ན།"
 
+#, java-format
+msgid "Out: {0} / {1}"
+msgstr "ཕྱིར་འགྲོ: {0} / {1}"
+
+#, java-format
+msgid "In: {0} / {1}"
+msgstr "ནང་འགྲོ: {0} / {1}"
+
 msgid "CPU"
 msgstr "CPU"
 
-msgid "CPU load average"
-msgstr "CPUགི་མང་བའི་དུས་ཆ་སྙོམས།"
+msgid "JVM CPU load average"
+msgstr "JVM གི་CPU ལས་ཀྱི་ཆ་སྙོམས།"
+
+#, java-format
+msgid "{0} cores"
+msgstr "སྙིང་ {0}"
 
 msgid "Memory"
 msgstr "དྲོན་གནས།"
 
-msgid "Memory usage"
-msgstr "དྲོན་གནས་བེད་སྤྱོད།"
+#, java-format
+msgid "Used: {0} / {1} max"
+msgstr "བེད་སྤྱོད: {0} / {1} མང་མཐའ།"
 
-msgid "Router uptime"
-msgstr "རྟོག་མཁན་གྱི་ལས་བྱེད་དུས།"
+#, java-format
+msgid "Since {0}"
+msgstr "{0} ནས།"
 
 msgid "Job Lag"
 msgstr "ལས་ཀ་དོན་དུས་རིང་ལུག"
@@ -2085,6 +2129,10 @@ msgstr "ཐེངས་གཏན་འབེབས་བྱེད།"
 msgid "Active JVM threads"
 msgstr "འཕྲུལ་ལས་སུ་ཡོད་པའི་JVMསྐུད་པ།"
 
+#, java-format
+msgid "Empty at {0}"
+msgstr "{0} ལ་སྟོང་པ།"
+
 msgid "NTCP Estab"
 msgstr "NTCPབཙུགས་པ།"
 
@@ -2106,20 +2154,24 @@ msgstr "SSUསླར་འཕྲིན་གྱི་དུས་ཚད་འད
 msgid "Conns/s"
 msgstr "མཐུད་པ་/ཆ།"
 
-msgid "NTCP connections established per second"
-msgstr "སྐར་མ་རེར་བཙུགས་པའི་NTCPམཐུད་པ།"
+#, java-format
+msgid "Full at {0}/s"
+msgstr "{0}/སྐར་ཆ་ལ་ཁེངས་པ།"
+
+msgid "New NTCP connections (1 min)"
+msgstr "NTCP གསར་པའི་སྦྲེལ་མཐུད (སྐར་མ ༡)"
 
 msgid "Msgs/s"
 msgstr "འཕྲིན་/ཆ།"
 
-msgid "Messages delivered per second"
-msgstr "སྐར་མ་རེར་སྐྱེལ་བའི་འཕྲིན།"
+msgid "Messages delivered (1 min)"
+msgstr "སྐུར་འབྱོར་བྱུང་བའི་གནས་ཚུལ (སྐར་མ ༡)"
 
 msgid "RTT"
 msgstr "RTT"
 
-msgid "End-to-end message round trip time"
-msgstr "བསྒོ་འཕྲུལ་ནས་བསྒོ་འཕྲུལ་དུ་འཕྲིན་གྱི་ལོག་འཕྲུལ་དུས།"
+msgid "End-to-end client message round trip"
+msgstr "མཉེན་ཆས་གནས་ཚུལ་གྱི་མཐའ་མཚམས་བར་གྱི་འགྲོ་ལོག"
 
 msgid "Timeout"
 msgstr "དུས་ཚད་འདས་པ།"
@@ -2133,20 +2185,28 @@ msgstr "ཡན་ལག་བཙུགས་པ།"
 msgid "Client tunnel build latency"
 msgstr "བློ་བརྟན་ཡན་ལག་བཙུགས་པའི་ཕྱིར་དོགས།"
 
+#, java-format
+msgid "In: {0} / Out: {1}"
+msgstr "ནང་འགྲོ: {0} / ཕྱིར་འགྲོ: {1}"
+
 msgid "Active Peers"
 msgstr "འཕྲུལ་ལས་སུ་ཡོད་པའི་Peer"
 
-msgid "Active peers (last 60s)"
-msgstr "འཕྲུལ་ལས་སུ་ཡོད་པའི་Peer(ཉེ་བའི་སྐར་མ་60)"
+#, java-format
+msgid "Full at {0}"
+msgstr "{0} ལ་ཁེངས་པ།"
+
+msgid "Reached in the last 60s"
+msgstr "སྐར་ཆ་ ༦༠ ནང་འབྲེལ་མཐུད་བྱུང་།"
 
 msgid "Known Peers"
 msgstr "ཤེས་པའི་Peer"
 
-msgid "Known routers in network database"
-msgstr "དྲ་རྒྱའི་གནས་བསྡུའི་ནང་ཤེས་པའི་རྟོག་མཁན།"
+msgid "In the network database"
+msgstr "དྲ་བའི་གཞི་གྲངས་མཛོད་ནང་།"
 
-msgid "Active I2CP clients"
-msgstr "འཕྲུལ་ལས་སུ་ཡོད་པའི་I2CPབློ་བརྟན།"
+msgid "I2CP clients connected"
+msgstr "I2CP མཉེན་ཆས་སྦྲེལ་ཟིན།"
 
 msgid "Transit"
 msgstr "བརྒྱུད་འགྲུལ།"
@@ -2160,8 +2220,8 @@ msgstr "རྒྱུན།"
 msgid "Build Success"
 msgstr "བཟོ་སྐྲུན་གྲུབ་འབྲས།"
 
-msgid "Tunnel build success rate"
-msgstr "ཡན་ལག་བཙུགས་པའི་ལེགས་གྲུབ་ཚད།"
+msgid "Tunnel build success rate (1 min)"
+msgstr "གདོང་ལམ་བཟོ་སྐྲུན་གྱི་ལེགས་གྲུབ་ཚད (སྐར་མ ༡)"
 
 msgid "NetDB"
 msgstr "NetDB"
@@ -2172,26 +2232,31 @@ msgstr "NetDBའཚོལ་བའི་དུས།"
 msgid "Banned"
 msgstr "བཀག་པ།"
 
-msgid "Total banned peers"
-msgstr "མཎྜལ་དུ་བཅུག་པའི་Peerཚང་མ།"
+msgid "Peers excluded from all interactions"
+msgstr "འདོད་ལྡན་གྱི་འདུ་སྦྱོར་ནས་བསྐོར་བའི་མཐུད་སྣེ།"
+
+#, java-format
+msgid "{0} of {1} known"
+msgstr "ཤེས་ཡོད་ {1} ནས་ {0}"
 
 msgid "LeaseSets"
 msgstr "LeaseSets"
 
-msgid "Stored LeaseSets in floodfill"
-msgstr "ཆུ་འཁྱིལ་ནང་བཞག་པའི་LeaseSets"
+msgid "Stored LeaseSets"
+msgstr "ཉར་ཚགས་བྱས་པའི་LeaseSet"
 
 msgid "Cache Hit"
 msgstr "Cacheཐིག"
 
-msgid "NetDB lookup success rate"
-msgstr "NetDBའཚོལ་བའི་ལེགས་གྲུབ་ཚད།"
+#, java-format
+msgid "Matched {0} of {1} lookups (1 min)"
+msgstr "འཚོལ་བཤེར་ {1} ནས་ {0} མཚུངས་པ (སྐར་མ ༡)"
 
 msgid "Flood Verify"
 msgstr "ཆུ་འཁྱིལ་བདེན་དཔྱད།"
 
-msgid "Floodfill verify time"
-msgstr "ཆུ་འཁྱིལ་བདེན་དཔྱད་ཀྱི་དུས།"
+msgid "Floodfill verify time (1 min)"
+msgstr "Floodfill ཞིབ་བཤེར་དུས་ཡུན (སྐར་མ ༡)"
 
 msgid "NetDB ACK"
 msgstr "NetDBཁས་ལེན།"
@@ -2202,20 +2267,20 @@ msgstr "NetDB Peerཁས་ལེན་པའི་དུས།"
 msgid "Lookups/s"
 msgstr "འཚོལ་བ་/ཆ།"
 
-msgid "NetDB lookups handled per second"
-msgstr "སྐར་མ་རེར་སྒྲུབ་པའི་NetDBའཚོལ་བ།"
+msgid "Lookups handled (1 min)"
+msgstr "ལས་སྣོན་བྱས་པའི་འཚོལ་བཤེར (སྐར་མ ༡)"
 
 msgid "Requests/s"
 msgstr "རེ་བ་/ཆ།"
 
-msgid "Combined store + lookup operations per second"
-msgstr "སྐར་མ་རེར་སྡོམ་པའི་བཞག་སྒྲིག་དང་འཚོལ་བའི་ལས་སྒྲུབ།"
+msgid "Stores + lookups (1 min)"
+msgstr "ཉར་ཚགས + འཚོལ་བཤེར (སྐར་མ ༡)"
 
 msgid "Stores/s"
 msgstr "བཞག་པ་/ཆ།"
 
-msgid "NetDB store messages handled per second"
-msgstr "སྐར་མ་རེར་སྒྲུབ་པའི་NetDBབཞག་པའི་འཕྲིན།"
+msgid "Stores handled (1 min)"
+msgstr "ལས་སྣོན་བྱས་པའི་ཉར་ཚགས (སྐར་མ ༡)"
 
 msgid "LS Timeout"
 msgstr "LSདུས་ཚད་འདས་པ།"
@@ -3199,6 +3264,9 @@ msgstr "གསལ་ཐོ་ལྟ་བ།"
 msgid "Configure peer"
 msgstr "ལག་གདང་རྒྱུན་སྒྲིག་བྱེད།"
 
+msgid "Memory usage"
+msgstr "དྲོན་གནས་བེད་སྤྱོད།"
+
 msgid "Hidden"
 msgstr "སྦས་པ།"
 
@@ -3342,8 +3410,8 @@ msgstr "འགྲུལ་ལམ་མང་པོར་ཞུགས་པའི
 msgid "Reliable"
 msgstr "ཡིན་ཚེས་བདེ་བའི"
 
-msgid "High-capacity peers with good acceptance"
-msgstr "ཡོད་ལས་ཤུགས་ལྡན་མཐུད་སྣེ་དང་སྲོད་པ་ཆེ་བའི་མཐུད་སྣེ།"
+msgid "Peers with good acceptance and recent activity"
+msgstr "ལེགས་པོར་ལེན་པ་དང་ཉེ་ཆར་འགུལ་སྐྱོད་ཡོད་པའི་མཐུད་སྣེ།"
 
 msgid "Peers that store and serve NetDb info"
 msgstr "དྲ་རྒྱའི་གནས་བསྡུའི་གནས་བསྡུ་དང་སྟོན་པའི་མཐུད་སྣེ།"
@@ -3354,17 +3422,21 @@ msgstr "ཤེས་པ།"
 msgid "Total entries in network database"
 msgstr "དྲ་ལམ་གནད་སྡུད་གཞིའི་ནང་གི་མཐུན་ཐོག་བསྡོམས།"
 
+msgid "Profiles"
+msgstr "གསལ་ཐོ།"
+
 msgid "Profiles with activity in the last hour"
 msgstr "སྐར་མ་གཅིག་གི་ནང་ཤུགས་ལྡན་གསལ་ཐོ།"
+
+#, java-format
+msgid "{0} of {1} stored"
+msgstr "{1} ནས་ {0} ཉར་ཚགས་བྱས།"
 
 msgid "Unreachable"
 msgstr "འབྲེལ་ཐུབ་མེད་པ།"
 
-msgid "Peers without a reachable address"
-msgstr "འཛུལ་ཐབས་མེད་པའི་མཐུད་སྣེ།"
-
-msgid "Peers excluded from all interactions"
-msgstr "འདོད་ལྡན་གྱི་འདུ་སྦྱོར་ནས་བསྐོར་བའི་མཐུད་སྣེ།"
+msgid "Peers without a published address"
+msgstr "སྤྱི་བསྒྲགས་ཁ་ཙམ་མེད་པའི་མཐུད་སྣེ།"
 
 msgid "/min"
 msgstr "/སྐར"
@@ -3372,8 +3444,12 @@ msgstr "/སྐར"
 msgid "Test Fail"
 msgstr "ཉམས་ཚད་མེད།"
 
-msgid "Connectivity test failures per minute"
-msgstr "སྐར་མ་རེར་གསང་འཛིན་ཉམས་ཚད་ལྟའི་ཉམས་མེད།"
+msgid "Connectivity test failures in the last minute"
+msgstr "སྐར་མ་གཅིག་གི་ནང་གི་མཐུད་ཐུབ་ཚོད་ལྟའི་འཕྲད་གདོང་།"
+
+#, java-format
+msgid "Empty at {0}/min"
+msgstr "{0}/སྐར་མ་ལ་སྟོང་པ།"
 
 msgid "Peer Connections"
 msgstr "ལག་གདང་འབྲེལ་བ།"
@@ -3644,26 +3720,40 @@ msgstr[0] "རྣམ་གྲངས་ལྕུའུ {0} བསྣུངས།"
 msgid "Share of total profiles shown"
 msgstr "སྟོན་བའི་རྣམ་གྲངས་ཀུན་གྲངས་ཀྱི་ཚད་རྩ (%)།"
 
-msgid "peers"
-msgstr "ལག་གདང་རྣམས།"
-
-msgid "Share of tier profiles shown"
-msgstr "སྟོན་བའི་རིམ་རྣམ་གྲངས་ཀྱི་ཚད་རྩ (%)།"
-
 msgid "Window"
 msgstr "དུས་འདུམ།"
 
 msgid "Fast RTT"
 msgstr "མྱུར་བའི་ RTT།"
 
-msgid "Max RTT for fast-tier membership (ms)"
-msgstr "མྱུར་རིམ་དུ་འཇུག་པའི་ RTT མཐའ་ཚད (ms)"
+msgid "Max RTT for fast-tier membership"
+msgstr "མགྱོགས་རིམ་གྱི་ཚོགས་མིའི་ཆེས་མང་RTT"
 
-msgid "Average loss of fast-tier peers (%)"
-msgstr "མྱུར་རིམ་གྱི་མཐུད་པའི་བརྡུངས་ཆ་སྙོམས། (%)"
+msgid "Rises with network latency"
+msgstr "དྲ་བའི་དུས་ཚོད་ཐག་དང་མཉམ་འཕར།"
 
-msgid "Average loss of high-capacity peers (%)"
-msgstr "ནུས་པོ་ཆེ་བའི་མཐུད་པའི་བརྡུངས་ཆ་སྙོམས། (%)"
+msgid "Average loss of fast-tier peers"
+msgstr "མགྱོགས་རིམ་གྱི་མཐུད་སྣེ་ཚོར་གྱི་ཆ་སྙོམས་བློ་གཏོང་།"
+
+msgid "Average loss of high-capacity peers"
+msgstr "ཆེས་ཆེན་མཐུད་སྣེ་ཚོར་གྱི་ཆ་སྙོམས་བློ་གཏོང་།"
+
+msgid "Average direct-link RTT of tier peers"
+msgstr "རིམ་པའི་མཐུད་སྣེ་ཚོའི་ཆ་སྙོམས་ཐད་ཀྱི་མཐུད་ལམ་RTT"
+
+#, java-format
+msgid "{0} of {1} measured"
+msgstr "{1} ནས་ {0} ཚད་ལེན་བྱས།"
+
+msgid "1h Contact"
+msgstr "1h གཏོང་བའི་དུས་ཚད།"
+
+msgid "Heard from in the last hour"
+msgstr "ཆུ་ཚོད་གཅིག་གི་ནང་གསལ་བརྡ་བྱུང་།"
+
+#, java-format
+msgid "{0} of {1} tier peers"
+msgstr "རིམ་པའི་མཐུད་སྣེ་ {1} ནས་ {0}"
 
 msgid "Heard from within the display cutoff"
 msgstr "སྟོན་གྲོགས་ཀྱི་ཡུན་ནང་ཐོས་འདུག"
@@ -3674,11 +3764,19 @@ msgstr "འཚོལ་བ།"
 msgid "Lookup success rate"
 msgstr "འཚོལ་བའི་ལེགས་གྲུབ་ཚད།"
 
+#, java-format
+msgid "{0} of {1} lookups"
+msgstr "འཚོལ་བཤེར་ {1} ནས་ {0}"
+
 msgid "Stores"
 msgstr "གནས་འཇོག།"
 
 msgid "Store success rate"
 msgstr "གནས་འཇོག་གི་ལེགས་གྲུབ་ཚད།"
+
+#, java-format
+msgid "{0} of {1} peers"
+msgstr "མཐུད་སྣེ་ {1} ནས་ {0}"
 
 msgid "Definitions"
 msgstr "ངེས་ཚིག་ཁག"
@@ -3751,11 +3849,25 @@ msgstr "ཉེ་ཆར་ཁོང་ཚོས་ང་ཚོར་བཤད་
 msgid "Known floodfills"
 msgstr "floodfill ཤེས་ཡོད།"
 
-msgid "No-Fail"
-msgstr "མི་ཕུག་མིན།"
+msgid "Reachable, unbanlisted and heard from"
+msgstr "འགྲོ་ཐུབ། བཀག་ཐོར་མེད། ཉེ་ཆར་གསལ་བརྡ་ཡོད།"
 
-msgid "No lookup failures (1h)"
-msgstr "འཚོལ་བའི་ཕུག་མིང་མེད (1h)"
+msgid "Active bans of floodfill-capable peers"
+msgstr "Floodfill ཐུབ་པའི་མཐུད་སྣེ་ལ་ཉེ་ལམ་གྱི་བཀག་འགོག"
+
+#, java-format
+msgid "of {0} known"
+msgstr "ཤེས་ཡོད་ {0} ནས།"
+
+msgid "Fail"
+msgstr "འཕྲད་གདོང་།"
+
+msgid "Lookup failures in the last hour"
+msgstr "ཆུ་ཚོད་གཅིག་གི་ནང་གི་འཚོལ་བཤེར་འཕྲད་གདོང་།"
+
+#, java-format
+msgid "across {0} listed peers"
+msgstr "ཐོ་བཀོད་མཐུད་སྣེ་ {0} ཁྱབ།"
 
 msgid "Response"
 msgstr "ལན་འདུགས།"
@@ -3763,11 +3875,16 @@ msgstr "ལན་འདུགས།"
 msgid "Lookup response time (1h)"
 msgstr "འཚོལ་བའི་ལན་འདུགས་ཀྱི་དུས་ཚད (1h)"
 
-msgid "1h Contact"
-msgstr "1h གཏོང་བའི་དུས་ཚད།"
+#, java-format
+msgid "{0} peers measured"
+msgstr "མཐུད་སྣེ་ {0} ཚད་ལེན་བྱས།"
 
 msgid "Contacted within 1h"
 msgstr "1h ནང་གཏོང་བའི་གནས་པ།"
+
+#, java-format
+msgid "{0} of {1} listed"
+msgstr "{1} ནས་ {0} ཐོ་བཀོད།"
 
 msgid "1h Fail Rate"
 msgstr "ཆུ་ཚོད་གཅིག་གི་ཕམ་ཚད།"
@@ -3805,17 +3922,33 @@ msgstr "ཚང་མ།"
 msgid "SAM bridge is not running."
 msgstr "SAMཟམ་པ་འཕྲུལ་ལས་མེད།"
 
+msgid "Sessions"
+msgstr "ཚོད་འཛིན།"
+
 msgid "Active sessions in SessionsDB"
 msgstr "SessionsDBནང་འཕྲུལ་ལས་སུ་ཡོད་པའི་སྐབས།"
+
+msgid "Workers"
+msgstr "ལས་སྒྲུབ་སྲོལ་ཁག"
 
 msgid "Active / pool worker threads"
 msgstr "འཕྲུལ་ལས་སུ་ཡོད་པའི་ / མཛོད་ཀྱི་ལས་མིའི་སྐུད་པ།"
 
-msgid "Pending commands in pool"
-msgstr "མཛོད་ནང་སྒུག་པའི་བཀོད་པ།"
+msgid "Queue"
+msgstr "སྒུག་ཐིག"
+
+#, java-format
+msgid "Pending commands: {0} of {1}"
+msgstr "སྒུག་བྱའི་བཀའ་: {0} / {1}"
+
+msgid "Handlers"
+msgstr "ལས་ཁུར་མཁན།"
 
 msgid "Connected pool handlers"
 msgstr "མཛོད་དང་མཐུད་པའི་འཆང་བ།"
+
+msgid "Stolen"
+msgstr "འཕྲོགས་པ།"
 
 msgid "Sockets stolen for data streaming"
 msgstr "གཞི་གྲངས་རྒྱུན་འཕྲུལ་ལ་ཕྱུང་བའི་Sockets"
@@ -4134,9 +4267,6 @@ msgstr "ད་ལྟའི་ལག་གདང་འབྲེལ་བ་ཆ་
 msgid "Router health overview"
 msgstr "རྟོག་མཁན་གྱི་གཟུགས་གཞིའི་སྤྱི་བསྡོམས།"
 
-msgid "Profiles"
-msgstr "གསལ་ཐོ།"
-
 msgid "Show recent peer performance profiles"
 msgstr "ཉེ་ཆར་གྱི་ལག་གདང་གི་ནུས་གནས་གསལ་ཐོ་སྟོན་པ།"
 
@@ -4443,6 +4573,27 @@ msgstr "ཚེ་ཚད་གྱི་ཆ་སྙོམ་གནས་ཐང་
 msgid "1 event"
 msgid_plural "{0} events"
 msgstr[0] "བྱུང་བ {0}"
+
+msgid "Open streaming connections"
+msgstr "ཁ་ཕྱེ་བའི་རྒྱུན་སྦྲེལ།"
+
+msgid "Round-trip time (live samples, 1 min)"
+msgstr "འགྲོ་ལོག་དུས་ཡུན (དངོས་དཔེ་མཚོན, སྐར་མ ༡)"
+
+msgid "Retrans"
+msgstr "སླར་སྐུར།"
+
+msgid "Share of sends needing retransmit (1 min)"
+msgstr "སླར་སྐུར་དགོས་པའི་སྐུར་བའི་ཆ་ཚད (སྐར་མ ༡)"
+
+msgid "Created + received (1 min)"
+msgstr "བཟོས + ལེན་པ (སྐར་མ ༡)"
+
+msgid "Throughput"
+msgstr "འགྲུལ་འོང་།"
+
+msgid "Mean rate of streams closed in the last minute"
+msgstr "སྐར་མ་གཅིག་གི་ནང་བརྒྱབ་པའི་རྒྱུན་གྱི་ཆ་སྙོམས་ཚད།"
 
 msgid "sent"
 msgstr "བཏང་བ།"
@@ -4831,6 +4982,9 @@ msgstr "འཆང་རྐྱེན་གྱིས་རྩིས་བཤོལ
 msgid "Maximum Participating Tunnels"
 msgstr "མཉམ་ཞུགས་ཁ་བསྐྲུན་མཐོ་ཤོས།"
 
+msgid "Timer Threads"
+msgstr "དུས་འཁོར་སྲོལ་ཁག"
+
 msgid "Build Handler Maximum Queue"
 msgstr "བཟོ་སྐྲུན་ལས་སྒྲུབ་ཀྱི་རིམ་པ་མཐོ་ཤོས།"
 
@@ -5184,6 +5338,11 @@ msgstr "འཇམ་པོའི་འགོ་བཙུགས་དུས་ཀ
 
 msgid "Per-connection inbound buffer cap (bytes)."
 msgstr "འབྲེལ་བ་རེ་རེའི་ནང་འབྲེལ་མཛུབ་སྟོང་མཐའ་ཚད། (བྷེ་ཐང)་"
+
+msgid "Timer worker threads; higher reduces event delay."
+msgstr ""
+"དུས་འཁོར་གྱི་ལས་སྒྲུབ་སྲོལ་ཁག། "
+"ཚད་མཐོན་པོས་དོན་རྐྱེན་ཕྱིར་འགྱངས་ཆུང་དུ་གཏོང་།"
 
 msgid "Dynamic cap on concurrent streams per destination."
 msgstr "འདོད་ཡུལ་རེ་རེའི་མཉམ་འགྲོགས་རྩོམ་འགྲུལ་གྱི་རྣམ་རྒྱུགས་ཀྱི་མཐའ་ཚད།"
@@ -7006,6 +7165,15 @@ msgstr "བཀོད་སྒྲིག་ཝེབ་གློག"
 msgid "The Java web applications listed below are started by the webConsole client and run in the same JVM as the router. They are usually web applications accessible through the router console. They may be complete applications (e.g. i2psnark), front-ends to another client or application which must be separately enabled (e.g. susidns, i2ptunnel), or have no web interface at all (e.g. addressbook)."
 msgstr "གཤམ་གསལ་བཀོད་པའི་ Java ཝེབ་གློག་དེ་དག་ webConsole ཞབས་འདེགས་ཀྱིས་འགོ་ཚུགས་པ་དང་རོ་ཌེར་དང་གཅིག་པའི་ JVM ནང་གཡོ་བ། དེ་དག་སྤྱིར་བཏུག་རོ་ཌེར་རོགས་སྒྱུར་བཞིན་པ་བརྒྱུད་ནས་འཛུལ་ཐུབ་པའི་ཝེབ་གློག་ཡིན། དེ་དག་ཆ་ཚང་གི་གློག་(དཔེར། i2psnark) ཡང་ན་གཞན་ཞབས་འདེགས་ཀྱི་སྟེག་སྐུད་ཡང་ན་གློག་ལ་སོ་སྒྲིག་བྱེད་དགོས་པའི་(དཔེར། susidns, i2ptunnel) ཡང་ན་ཝེབ་ངོས་མཐའི་མེད་པའི་(དཔེར། addressbook) ཡིན་པ་ཡོད།. དེ་དག་སྤྱིར་བཏང་རོ་ཌེར་console བརྒྱུད་ནས་བེད་སྤྱོད་བྱེད་ཐུབ་པའི་web applications ཡིན། They may be complete applications (e. g i2psnark), front-ends to another client or application which must be separately enabled (e. g susidns, i2ptunnel), or have no web interface at all (e. g addressbook). དེ་དག་སྤྱིར་བཏང་རོ་ཌེར་console བརྒྱུད་ནས་བེད་སྤྱོད་བྱེད་ཐུབ་པའི་web applications ཡིན། They may be complete applications (e. g i2psnark), front-ends to another client or application which must be separately enabled (e. g susidns, i2ptunnel), or have no web interface at all (e. g addressbook). They are usually web applications accessible through the router console They may be complete applications (e g i2psnark), front-ends to another client or application which must be separately enabled (e g susidns, i2ptunnel), or have no web interface at all (e g addressbook). They are usually web applications accessible through the router console They may be complete applications (e g i2psnark), front-ends to another client or application which must be separately enabled (e g susidns, i2ptunnel), or have no web interface at all (e g addressbook)"
 
+msgid "Router Session Key Manager"
+msgstr "སྤོ་འཁོར་ཚོད་འཛིན་ལྡེ་མིག་དོ་དམ།"
+
+msgid "Client Session Key Managers"
+msgstr "མཉེན་ཆས་ཚོད་འཛིན་ལྡེ་མིག་དོ་དམ།"
+
+msgid "Router DHT"
+msgstr "སྤོ་འཁོར་གྱི་DHT"
+
 msgid "Open in new tab"
 msgstr "མཆོག་གསར་ནང་ནས་ཁྱབ།"
 
@@ -7580,14 +7748,17 @@ msgstr "མཐའ་མའི་འབྲེལ་ལམ་ཚོད་ལྟའ
 msgid "Maximum tunnel test period in milliseconds. Tunnel tests never wait longer than this for a reply, even on high-latency paths. [Default is 50000 (50 seconds)]"
 msgstr "ཆེ་ཤོས་འབྲེལ་ལམ་ཚོད་ལྟའི་དུས་ཚོད། བརྒྱུད་དུས་མཐོ་བའི་དྲ་བ་ཡིན་ནའང་འབྲེལ་ལམ་ཚོད་ལྟའི་ལན་ལེན་པར་དུས་ཚོད་འདི་ལས་སྒུག་མི་དགོས།. Tunnel tests never wait longer than this for a reply, even on high-latency paths [Default is 50000 (50 seconds)]. Tunnel tests never wait longer than this for a reply, even on high-latency paths [Default is 50000 (50 seconds)]. Tunnel tests never wait longer than this for a reply, even on high-latency paths [Default is 50000 (50 seconds)]. Tunnel tests never wait longer than this for a reply, even on high-latency paths [Default is 50000 (50 seconds)]"
 
-msgid "Number of tunnel build timeouts before a peer is marked as a ghost (blacklisted for tunnel participation). Higher values tolerate more transient failures. [Default is 3]"
-msgstr "གྲོགས་པོ་ཞིག་འབྲེལ་ལམ་མཉམ་ཞུགས་ཀྱི་ཆེད་དུ་ནག་ཐོར་བཀོད་པའི་སྔོན་དུ་དུས་འདས་ཀྱི་གྲངས། གྲངས་མཐོ་ཤོས་ཀྱིས་ཕམ་པ་མང་བར་བཟོད་པར་བྱེད།. Higher values tolerate more transient failures [Default is 3]. Higher values tolerate more transient failures [Default is 3]. Higher values tolerate more transient failures [Default is 3]. Higher values tolerate more transient failures [Default is 3]"
+msgid "Number of tunnel build timeouts before a peer is marked as a ghost (excluded from tunnel participation). Higher values tolerate more transient failures. [Default is 1]"
+msgstr ""
+"མཐུད་སྣེ་ཞིག་གདོན་པར་རྟགས་མ་བཀོད་གོང་གི་གདོང་ལམ་བཟོ་སྐྲུན་དུས་ཡུན་འདས་པའི་གྲངས། "
+"(གདོང་ལམ་མཉམ་ཞུགས་ལས་ཕྱིར་འཐེན།) "
+"ཚད་མཐོན་པོས་སྐབས་རེའི་འཕྲད་གདོང་མང་བ་བཟོད། [གོ་མཆིད་ནི་ ༡]"
 
-msgid "Cooldown period in milliseconds before a ghost-marked peer can be considered for tunnel participation again. Shorter values allow faster peer reuse. [Default is 180000 (3 minutes)]"
-msgstr "འབྲེལ་ལམ་མཉམ་ཞུགས་ཀྱི་ཆེད་དུ་ནག་ཐོར་བཀོད་པའི་གྲོགས་པོ་སླར་བསམ་བློ་གཏོང་བའི་སྔོན་དུ་ངར་ཞིའི་སྐར་ཆའི་དུས་ཚོད། དུས་ཚོད་ཐུང་ཤོས་ཀྱིས་མྱུར་དུ་སླར་འཛུལ་ཆོག་པར་བྱེད།. Shorter values allow faster peer reuse [Default is 180000 (3 minutes)]. Shorter values allow faster peer reuse [Default is 180000 (3 minutes)]. Shorter values allow faster peer reuse [Default is 180000 (3 minutes)]. Shorter values allow faster peer reuse [Default is 180000 (3 minutes)]"
-
-msgid "Cooldown period in milliseconds for ghost-marked peers during attack mode. Longer cooldowns limit exposure to potentially malicious peers during high-stress periods. [Default is 300000 (5 minutes)]"
-msgstr "འཕེན་སྟངས་ཀྱི་དུས་སྐབས་ནང་དུ་ནག་ཐོར་བཀོད་པའི་གྲོགས་པོའི་ངར་ཞིའི་སྐར་ཆའི་དུས་ཚོད། ངར་ཞི་ཡུན་རིང་ཤོས་ཀྱིས་འཕེན་པར་མངོན་པའི་ཉེན་ཁར་ཚད་འཛིན་བྱེད།. Longer cooldowns limit exposure to potentially malicious peers during high-stress periods [Default is 300000 (5 minutes)]. Longer cooldowns limit exposure to potentially malicious peers during high-stress periods [Default is 300000 (5 minutes)]. Longer cooldowns limit exposure to potentially malicious peers during high-stress periods [Default is 300000 (5 minutes)]. Longer cooldowns limit exposure to potentially malicious peers during high-stress periods [Default is 300000 (5 minutes)]"
+msgid "Cooldown period in milliseconds before a ghost-marked peer can be promoted into the tunnel peer tiers again. Shorter values return recovered peers to service faster. [Default is 90000 (90 seconds)]"
+msgstr ""
+"གདོན་པར་རྟགས་བཀོད་པའི་མཐུད་སྣེ་ཞིག་གདོང་ལམ་མཐུད་སྣེའི་རིམ་པར་སླར་འཕར་ཐུབ་ཀྱི་བར་གྱི་གྲང་བཞག་དུས་ཡུན "
+"(མི་ལི་སྐར་ཆ)། ཚད་ཐུང་བས་གསོན་པའི་མཐུད་སྣེ་མགྱོགས་པོར་ཞབས་ཞུར་ལོག་འབྱོར། "
+"[གོ་མཆིད་ནི་ ༩༠༠༠༠ (སྐར་ཆ ༩༠)]"
 
 msgid "Minimum number of incoming tunnel build requests accepted per peer per clean window. Prevents starving peers during low-traffic periods. [Default is 10]"
 msgstr "གཙང་མའི་སྒོ་ཁྱིམ་རེ་རེའི་ནང་དུ་གྲོགས་པོ་རེ་རེ་ནས་ལེན་པའི་ནང་འཛུལ་འབྲེལ་ལམ་འཛུགས་སྐྲུན་རེ་སྐུལ་གྱི་མཐའ་མ། རེ་སྐུལ་དམའ་སྐབས་གྲོགས་པོ་བཀྲེས་པར་སྔོག་པ།. Prevents starving peers during low-traffic periods [Default is 10]. Prevents starving peers during low-traffic periods [Default is 10]. Prevents starving peers during low-traffic periods [Default is 10]. Prevents starving peers during low-traffic periods [Default is 10]"
@@ -10017,3 +10188,35 @@ msgstr "རྗེས་མ།"
 
 msgid "Finished"
 msgstr "མཇུག་རྫོགས།"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -126,23 +126,46 @@ msgstr "प्रकाशित आईपी पता नहीं वाल�
 msgid "Average tunnel build success (%)"
 msgstr "औसत टंनल निर्माण सफलता प्रतिशत"
 
-msgid "Memory used by the JVM"
+msgid "Tier promotions held back for a peer with no usable address"
+msgstr "उपयोगी पता न होने वाले पीयर के लिए टियर पदोन्नति रोक दी गई"
+
+msgid "RouterInfo refreshes issued for peers held out of the tiers"
+msgstr "टियर से बाहर रखे गए पीयर के लिए जारी की गई RouterInfo रीफ्रेश"
+
+msgid "Tier scans that left the fast or high-capacity tier short of target"
 msgstr ""
+"टियर स्कैन जिनमें तेज़ या उच्च-क्षमता टियर लक्ष्य तक नहीं पहुँचा"
+
+msgid "RouterInfos requested for stored profiles that had none"
+msgstr ""
+"संग्रहीत प्रोफ़ाइल के लिए अनुरोधित RouterInfo जिनके पास कोई नहीं थी"
+
+msgid "Build timeouts recorded against a peer as a ghost mark"
+msgstr "भूत-चिह्न के रूप में पीयर के विरुद्ध दर्ज किए गए बिल्ड टाइमआउट"
+
+msgid "Ghost marks cleared by a successful build reply"
+msgstr "सफल बिल्ड उत्तर से हटाए गए भूत-चिह्न"
+
+msgid "Peers currently excluded as ghosts"
+msgstr "वर्तमान में भूत मानकर बाहर किए गए पीयर"
+
+msgid "Ghost peers in the fast or high-capacity tiers"
+msgstr "तेज़ या उच्च-क्षमता टियर में भूत पीयर"
+
+msgid "Duplicate CLOSE safety-net messages sent"
+msgstr "भेजे गए डुप्लिकेट CLOSE सुरक्षा-जाल संदेश"
+
+msgid "Memory used by the JVM"
+msgstr "JVM द्वारा प्रयुक्त मेमोरी"
 
 msgid "maximum"
-msgstr ""
-
-msgid "No transports"
-msgstr "कोई पारिवहन नहीं (छिपा हुआ या शुरू हो रहा?)"
+msgstr "अधिकतम"
 
 msgid "Unsupported signature type"
 msgstr "समर्थन नहीं किया जाने वाला हस्ताक्षर प्रकार"
 
 msgid "No support for our signature type"
 msgstr "हमारे हस्ताक्षर प्रकार के लिए कोई समर्थन नहीं"
-
-msgid "Unreachable on any transport"
-msgstr "किसी भी पारिवहन पर पहुँचमुक्त"
 
 msgid "Cannot enumerate UPnP devices on Android."
 msgstr "Android पर UPnP डिवाइस को सूचीबद्ध नहीं कर सकते।"
@@ -839,6 +862,9 @@ msgstr "कंसोल"
 
 msgid "To enable SSL access for the Router Console, see the commented <code>clients.config</code> file located in your I2P application directory for more information. You will need to edit the RouterConsoleRunner config file located in the directory: "
 msgstr "राउटर कंसोल के लिए SSL पहुँच सक्षम करने के लिए, अपने I2P अनुप्रयोग डि렉्टरी में स्थित टिप्पणी वाले <code>clients.config</code> फ़ाइल को देखें अधिक जानकारी के लिए। आपको राउटरConsoleRunner कंfig फ़ाइल को संपादित करने की आवश्यकता होगी, जो निम्नलिखित डिरेक्टरी में स्थित है:  आपको निर्देशिका में स्थित RouterConsoleRunner कॉन्फ़िग फ़ाइल को संपादित करना होगा:"
+
+msgid "No client session key managers."
+msgstr "कोई क्लाइंट सत्र कुंजी प्रबंधक नहीं।"
 
 msgid "Save disabled, edit the router.config file to make changes"
 msgstr "सेव अक्षम, परिवर्तन करने के लिए router.config फ़ाइल संपादित करें"
@@ -1896,10 +1922,10 @@ msgid "Bandwidth Usage"
 msgstr "बैंडविड्थ का उपयोग"
 
 msgid "Graph combining is not enabled"
-msgstr ""
+msgstr "ग्राफ़ संयोजन सक्षम नहीं है"
 
 msgid "Not enough stats enabled to combine"
-msgstr ""
+msgstr "संयोजन हेतु पर्याप्त आँकड़े सक्षम नहीं"
 
 #, java-format
 msgid "ending {0} ago"
@@ -2017,22 +2043,22 @@ msgid "Add a glow effect to graph lines"
 msgstr "ग्राफ़ रेखाओं में चमक प्रभाव जोड़ें"
 
 msgid "Smooth lines"
-msgstr ""
+msgstr "चिकनी रेखाएँ"
 
 msgid "Use bezier curves to plot graphs"
-msgstr ""
+msgstr "ग्राफ़ बनाने के लिए बेज़ियर वक्र प्रयोग करें"
 
 msgid "Filled paths"
-msgstr ""
+msgstr "भरे पथ"
 
 msgid "Use filled areas for graphs"
-msgstr ""
+msgstr "ग्राफ़ के लिए भरे क्षेत्र प्रयोग करें"
 
 msgid "Combine graphs"
-msgstr ""
+msgstr "ग्राफ़ जोड़ें"
 
 msgid "Merge related graphs into a plot"
-msgstr ""
+msgstr "संबंधित ग्राफ़ को एक प्लॉट में मिलाएँ"
 
 msgid "Select Stats"
 msgstr "स्टैट्स चुनें"
@@ -2052,20 +2078,34 @@ msgstr "उन्नत"
 msgid "vs baseline"
 msgstr "बनाम बेसलाइन"
 
+#, java-format
+msgid "Out: {0} / {1}"
+msgstr "आउट: {0} / {1}"
+
+#, java-format
+msgid "In: {0} / {1}"
+msgstr "इन: {0} / {1}"
+
 msgid "CPU"
 msgstr "CPU"
 
-msgid "CPU load average"
-msgstr "CPU लोड औसत"
+msgid "JVM CPU load average"
+msgstr "JVM CPU औसत भार"
+
+#, java-format
+msgid "{0} cores"
+msgstr "{0} कोर"
 
 msgid "Memory"
 msgstr "मेमोरी"
 
-msgid "Memory usage"
-msgstr "मेमोरी उपयोग"
+#, java-format
+msgid "Used: {0} / {1} max"
+msgstr "प्रयुक्त: {0} / {1} अधिकतम"
 
-msgid "Router uptime"
-msgstr "राउटर अपटाइम"
+#, java-format
+msgid "Since {0}"
+msgstr "{0} से"
 
 msgid "Job Lag"
 msgstr "जॉब लैग"
@@ -2091,6 +2131,10 @@ msgstr "थ्रेड्स"
 msgid "Active JVM threads"
 msgstr "सक्रिय JVM थ्रेड्स"
 
+#, java-format
+msgid "Empty at {0}"
+msgstr "{0} पर खाली"
+
 msgid "NTCP Estab"
 msgstr "NTCP स्थापन"
 
@@ -2112,20 +2156,24 @@ msgstr "SSU पुनःप्रसारण समय समाप्ति"
 msgid "Conns/s"
 msgstr "कनेक्शन/से"
 
-msgid "NTCP connections established per second"
-msgstr "प्रति सेकंड स्थापित NTCP कनेक्शन"
+#, java-format
+msgid "Full at {0}/s"
+msgstr "{0}/सेकंड पर भरा"
+
+msgid "New NTCP connections (1 min)"
+msgstr "नए NTCP कनेक्शन (1 मिनट)"
 
 msgid "Msgs/s"
 msgstr "संदेश/से"
 
-msgid "Messages delivered per second"
-msgstr "प्रति सेकंड वितरित संदेश"
+msgid "Messages delivered (1 min)"
+msgstr "वितरित संदेश (1 मिनट)"
 
 msgid "RTT"
 msgstr "RTT"
 
-msgid "End-to-end message round trip time"
-msgstr "एंड-टू-एंड संदेश राउंड ट्रिप समय"
+msgid "End-to-end client message round trip"
+msgstr "क्लाइंट संदेश का एंड-टू-एंड राउंड ट्रिप"
 
 msgid "Timeout"
 msgstr "समय समाप्ति"
@@ -2139,20 +2187,28 @@ msgstr "टनल निर्माण"
 msgid "Client tunnel build latency"
 msgstr "क्लाइंट टनल निर्माण विलंब"
 
+#, java-format
+msgid "In: {0} / Out: {1}"
+msgstr "इन: {0} / आउट: {1}"
+
 msgid "Active Peers"
 msgstr "सक्रिय पीयर"
 
-msgid "Active peers (last 60s)"
-msgstr "सक्रिय पीयर (पिछले 60s)"
+#, java-format
+msgid "Full at {0}"
+msgstr "{0} पर भरा"
+
+msgid "Reached in the last 60s"
+msgstr "पिछले 60 सेकंड में संपर्क किया"
 
 msgid "Known Peers"
 msgstr "ज्ञात पीयर"
 
-msgid "Known routers in network database"
-msgstr "नेटवर्क डेटाबेस में ज्ञात राउटर"
+msgid "In the network database"
+msgstr "नेटवर्क डेटाबेस में"
 
-msgid "Active I2CP clients"
-msgstr "सक्रिय I2CP क्लाइंट"
+msgid "I2CP clients connected"
+msgstr "कनेक्ट किए गए I2CP क्लाइंट"
 
 msgid "Transit"
 msgstr "पारगम्यता"
@@ -2166,8 +2222,8 @@ msgstr "स्ट्रीम"
 msgid "Build Success"
 msgstr "बनाने की सफलता"
 
-msgid "Tunnel build success rate"
-msgstr "टनल निर्माण सफलता दर"
+msgid "Tunnel build success rate (1 min)"
+msgstr "टनेल निर्माण सफलता दर (1 मिनट)"
 
 msgid "NetDB"
 msgstr "NetDB"
@@ -2178,26 +2234,31 @@ msgstr "NetDB खोज समय"
 msgid "Banned"
 msgstr "बैन किया"
 
-msgid "Total banned peers"
-msgstr "कुल प्रतिबंधित पीयर"
+msgid "Peers excluded from all interactions"
+msgstr "साथियों को सभी इंटरैक्शन से बाहर रखा गया"
+
+#, java-format
+msgid "{0} of {1} known"
+msgstr "{1} में से {0} ज्ञात"
 
 msgid "LeaseSets"
 msgstr "लीज़ सेट"
 
-msgid "Stored LeaseSets in floodfill"
-msgstr "फ़्लूफ़फ़िलमार्कर में संग्रहीत लीज़सेट"
+msgid "Stored LeaseSets"
+msgstr "संग्रहीत LeaseSet"
 
 msgid "Cache Hit"
 msgstr "कैश हिट"
 
-msgid "NetDB lookup success rate"
-msgstr "NetDB खोज सफलता दर"
+#, java-format
+msgid "Matched {0} of {1} lookups (1 min)"
+msgstr "{1} लुकअप में से {0} मिले (1 मिनट)"
 
 msgid "Flood Verify"
 msgstr "फ्लड सत्यापन"
 
-msgid "Floodfill verify time"
-msgstr "फ़्लूफ़िलमार्कर समय सत्यापित करता है"
+msgid "Floodfill verify time (1 min)"
+msgstr "Floodfill सत्यापन समय (1 मिनट)"
 
 msgid "NetDB ACK"
 msgstr "NetDB ACK"
@@ -2208,20 +2269,20 @@ msgstr "NetDB पीयर स्वीकृति समय"
 msgid "Lookups/s"
 msgstr "खोज/से"
 
-msgid "NetDB lookups handled per second"
-msgstr "प्रति सेकंड संभाली गई NetDB खोजें"
+msgid "Lookups handled (1 min)"
+msgstr "संसाधित लुकअप (1 मिनट)"
 
 msgid "Requests/s"
 msgstr "अनुरोध/से"
 
-msgid "Combined store + lookup operations per second"
-msgstr "प्रति सेकंड संयुक्त स्टोर + खोज संचालन"
+msgid "Stores + lookups (1 min)"
+msgstr "संग्रह + लुकअप (1 मिनट)"
 
 msgid "Stores/s"
 msgstr "स्टोर/से"
 
-msgid "NetDB store messages handled per second"
-msgstr "प्रति सेकंड संभाले गए NetDB स्टोर संदेश"
+msgid "Stores handled (1 min)"
+msgstr "संसाधित संग्रह (1 मिनट)"
 
 msgid "LS Timeout"
 msgstr "LS समय समाप्ति"
@@ -3205,6 +3266,9 @@ msgstr "प्रोफ़ाइल देखें"
 msgid "Configure peer"
 msgstr "समकक्ष विन्यास करें"
 
+msgid "Memory usage"
+msgstr "मेमोरी उपयोग"
+
 msgid "Hidden"
 msgstr "छिपा"
 
@@ -3348,8 +3412,8 @@ msgstr "कई सुरंगों के लिए उच्च-बैंड�
 msgid "Reliable"
 msgstr "भरोसेमंद"
 
-msgid "High-capacity peers with good acceptance"
-msgstr "अच्छी स्वीकार्यता वाले उच्च क्षमता वाले सहकर्मी"
+msgid "Peers with good acceptance and recent activity"
+msgstr "अच्छी स्वीकृति और हाल की गतिविधि वाले पीयर"
 
 msgid "Peers that store and serve NetDb info"
 msgstr "सहकर्मी जो नेटडीबी जानकारी संग्रहीत और परोसते हैं"
@@ -3360,17 +3424,21 @@ msgstr "परिचित"
 msgid "Total entries in network database"
 msgstr "नेटवर्क डेटाबेस में कुल प्रविष्टियाँ"
 
+msgid "Profiles"
+msgstr "प्रोफ़ाइल"
+
 msgid "Profiles with activity in the last hour"
 msgstr "पिछले 1 घंटे में गतिविधि वाली प्रोफ़ाइल"
+
+#, java-format
+msgid "{0} of {1} stored"
+msgstr "{1} में से {0} संग्रहीत"
 
 msgid "Unreachable"
 msgstr "पहुँच不到"
 
-msgid "Peers without a reachable address"
-msgstr "पहुंच योग्य पते के बिना सहकर्मी"
-
-msgid "Peers excluded from all interactions"
-msgstr "साथियों को सभी इंटरैक्शन से बाहर रखा गया"
+msgid "Peers without a published address"
+msgstr "प्रकाशित पते न रखने वाले पीयर"
 
 msgid "/min"
 msgstr "/मिनट"
@@ -3378,8 +3446,12 @@ msgstr "/मिनट"
 msgid "Test Fail"
 msgstr "परीक्षण विफल"
 
-msgid "Connectivity test failures per minute"
-msgstr "प्रति मिनट कनेक्टिविटी परीक्षण विफलताएँ"
+msgid "Connectivity test failures in the last minute"
+msgstr "पिछले मिनट में कनेक्टिविटी परीक्षण विफलताएँ"
+
+#, java-format
+msgid "Empty at {0}/min"
+msgstr "{0}/मिनट पर खाली"
 
 msgid "Peer Connections"
 msgstr "समकक्ष कनेक्शन"
@@ -3572,6 +3644,7 @@ msgstr "कम लैटेंसी"
 
 msgid "Round trip time to this peer on the direct link, as measured by the transport"
 msgstr ""
+"डायरेक्ट लिंक पर इस पीयर तक का राउंड ट्रिप समय, परिवहन द्वारा मापा गया"
 
 msgid "Packets retransmitted / packets sent, as reported by the UDP transport"
 msgstr "UDP परिवहन द्वारा रिपोर्ट किए गए अनुसार पुनःप्रसारित पैकेट / भेजे गए पैकेट"
@@ -3653,26 +3726,40 @@ msgstr[1] "{0} पुराने प्रोफ़ाइल छिपाए �
 msgid "Share of total profiles shown"
 msgstr "प्रदर्शित कुल प्रोफ़ाइलों का अंश"
 
-msgid "peers"
-msgstr "समकक्ष"
-
-msgid "Share of tier profiles shown"
-msgstr "प्रदर्शित स्तरीय प्रोफ़ाइलों का अंश"
-
 msgid "Window"
 msgstr "विंडो"
 
 msgid "Fast RTT"
 msgstr "तेज़ RTT"
 
-msgid "Max RTT for fast-tier membership (ms)"
-msgstr "तेज़ स्तरीय सदस्यता हेतु अधिकतम RTT (ms)"
+msgid "Max RTT for fast-tier membership"
+msgstr "तेज़ टियर की सदस्यता के लिए अधिकतम RTT"
 
-msgid "Average loss of fast-tier peers (%)"
-msgstr "तीव्र स्तरीय पीयरों की औसत हानि (%)"
+msgid "Rises with network latency"
+msgstr "नेटवर्क विलंब के साथ बढ़ता है"
 
-msgid "Average loss of high-capacity peers (%)"
-msgstr "उच्च क्षमता वाले पीयरों की औसत हानि (%)"
+msgid "Average loss of fast-tier peers"
+msgstr "तेज़ टियर पीयर की औसत हानि"
+
+msgid "Average loss of high-capacity peers"
+msgstr "उच्च-क्षमता पीयर की औसत हानि"
+
+msgid "Average direct-link RTT of tier peers"
+msgstr "टियर पीयर का औसत डायरेक्ट-लिंक RTT"
+
+#, java-format
+msgid "{0} of {1} measured"
+msgstr "{1} में से {0} मापे"
+
+msgid "1h Contact"
+msgstr "1 घंटे में संपर्क"
+
+msgid "Heard from in the last hour"
+msgstr "पिछले घंटे में संपर्क हुआ"
+
+#, java-format
+msgid "{0} of {1} tier peers"
+msgstr "टियर पीयर {1} में से {0}"
 
 msgid "Heard from within the display cutoff"
 msgstr "प्रदर्शन कट-ऑफ के भीतर से सुना गया"
@@ -3683,11 +3770,19 @@ msgstr "खोजें"
 msgid "Lookup success rate"
 msgstr "खोज सफलता दर"
 
+#, java-format
+msgid "{0} of {1} lookups"
+msgstr "{1} लुकअप में से {0}"
+
 msgid "Stores"
 msgstr "स्टोर"
 
 msgid "Store success rate"
 msgstr "स्टोर सफलता दर"
+
+#, java-format
+msgid "{0} of {1} peers"
+msgstr "{1} पीयर में से {0}"
 
 msgid "Definitions"
 msgstr "परिभाषाएँ"
@@ -3760,11 +3855,25 @@ msgstr "हाल ही में वे हमें कितने नए �
 msgid "Known floodfills"
 msgstr "ज्ञात फ्लडफ़िल"
 
-msgid "No-Fail"
-msgstr "विफलता-रहित"
+msgid "Reachable, unbanlisted and heard from"
+msgstr "पहुँचने योग्य, बिना बैन-सूची और हाल में संपर्क में"
 
-msgid "No lookup failures (1h)"
-msgstr "कोई खोज विफलता नहीं (1 घंटा)"
+msgid "Active bans of floodfill-capable peers"
+msgstr "floodfill-सक्षम पीयर पर सक्रिय बैन"
+
+#, java-format
+msgid "of {0} known"
+msgstr "{0} ज्ञात में से"
+
+msgid "Fail"
+msgstr "विफल"
+
+msgid "Lookup failures in the last hour"
+msgstr "पिछले घंटे में लुकअप विफलताएँ"
+
+#, java-format
+msgid "across {0} listed peers"
+msgstr "{0} सूचीबद्ध पीयर के पार"
 
 msgid "Response"
 msgstr "प्रतिक्रिया"
@@ -3772,11 +3881,16 @@ msgstr "प्रतिक्रिया"
 msgid "Lookup response time (1h)"
 msgstr "खोज प्रतिक्रिया समय (1 घंटा)"
 
-msgid "1h Contact"
-msgstr "1 घंटे में संपर्क"
+#, java-format
+msgid "{0} peers measured"
+msgstr "{0} पीयर मापे"
 
 msgid "Contacted within 1h"
 msgstr "1 घंटे के भीतर संपर्क किया गया"
+
+#, java-format
+msgid "{0} of {1} listed"
+msgstr "{1} में से {0} सूचीबद्ध"
 
 msgid "1h Fail Rate"
 msgstr "1h विफलता दर"
@@ -3814,17 +3928,33 @@ msgstr "सभी"
 msgid "SAM bridge is not running."
 msgstr "SAM ब्रिज चल नहीं रहा है।"
 
+msgid "Sessions"
+msgstr "सत्र"
+
 msgid "Active sessions in SessionsDB"
 msgstr "SessionsDB में सक्रिय सत्र"
+
+msgid "Workers"
+msgstr "वर्कर"
 
 msgid "Active / pool worker threads"
 msgstr "सक्रिय / पूल वर्कर थ्रेड्स"
 
-msgid "Pending commands in pool"
-msgstr "पूल में लंबित कमांड"
+msgid "Queue"
+msgstr "कतार"
+
+#, java-format
+msgid "Pending commands: {0} of {1}"
+msgstr "लंबित आदेश: {0} / {1}"
+
+msgid "Handlers"
+msgstr "हैंडलर"
 
 msgid "Connected pool handlers"
 msgstr "जुड़े हुए पूल हैंडलर"
+
+msgid "Stolen"
+msgstr "चोरी"
 
 msgid "Sockets stolen for data streaming"
 msgstr "डेटा स्ट्रीमिंग के लिए चुराए गए सॉकेट"
@@ -4143,9 +4273,6 @@ msgstr "सभी वर्तमान पीयर कनेक्शन द�
 msgid "Router health overview"
 msgstr "राउटर स्वास्थ्य अवलोकन"
 
-msgid "Profiles"
-msgstr "प्रोफ़ाइल"
-
 msgid "Show recent peer performance profiles"
 msgstr "हाल के पीयर प्रदर्शन प्रोफ़ाइल दिखाएं"
 
@@ -4454,6 +4581,27 @@ msgid "1 event"
 msgid_plural "{0} events"
 msgstr[0] "{0} घटना"
 msgstr[1] "{0} घटनाएँ"
+
+msgid "Open streaming connections"
+msgstr "खुले स्ट्रीमिंग कनेक्शन"
+
+msgid "Round-trip time (live samples, 1 min)"
+msgstr "राउंड-ट्रिप समय (लाइव नमूने, 1 मिनट)"
+
+msgid "Retrans"
+msgstr "पुनःप्रेरण"
+
+msgid "Share of sends needing retransmit (1 min)"
+msgstr "पुनःप्रेरण माँगने वाले प्रेषण का हिस्सा (1 मिनट)"
+
+msgid "Created + received (1 min)"
+msgstr "बनाए + प्राप्त (1 मिनट)"
+
+msgid "Throughput"
+msgstr "थ्रूपुट"
+
+msgid "Mean rate of streams closed in the last minute"
+msgstr "पिछले मिनट में बंद हुए स्ट्रीमों की औसत दर"
 
 msgid "sent"
 msgstr "भेजा गया"
@@ -4842,6 +4990,9 @@ msgstr "थ्रॉटल अस्वीकृति घातांक"
 msgid "Maximum Participating Tunnels"
 msgstr "अधिकतम भाग लेने वाली टनल"
 
+msgid "Timer Threads"
+msgstr "टाइमर थ्रेड"
+
 msgid "Build Handler Maximum Queue"
 msgstr "निर्माण हैंडलर अधिकतम कतार"
 
@@ -5196,6 +5347,9 @@ msgstr "स्लो स्टार्ट के दौरान अधिक�
 msgid "Per-connection inbound buffer cap (bytes)."
 msgstr "प्रति-कनेक्शन इनबाउंड बफ़र सीमा (बाइट)।"
 
+msgid "Timer worker threads; higher reduces event delay."
+msgstr "टाइमर वर्कर थ्रेड; उच्च मान घटना विलंब कम करता है।"
+
 msgid "Dynamic cap on concurrent streams per destination."
 msgstr "प्रति गंतव्य समवर्ती स्ट्रीमों की गतिशील सीमा।"
 
@@ -5441,9 +5595,13 @@ msgstr "पुनःप्रसारणों के बीच न्यून
 
 msgid "Window growth per RTT after slow start; higher recovers faster."
 msgstr ""
+"स्लो स्टार्ट के बाद प्रति RTT विंडो वृद्धि; उच्च मान से विंडो तेज़ी से "
+"उबरती है।"
 
 msgid "Window growth per ACK during slow start; higher ramps faster."
 msgstr ""
+"स्लो स्टार्ट के दौरान प्रति ACK विंडो वृद्धि; उच्च मान तेज़ी से बढ़ाता "
+"है।"
 
 msgid "Minimum send rate before pacing kicks in (KB/s)."
 msgstr "पेसिंग किक शुरू होने से पहले न्यूनतम भेजने की दर (KB/s)।"
@@ -5483,6 +5641,7 @@ msgstr "प्रत्येक सर्वर टंनल के लिए �
 
 msgid "Dedicated pool for Server→Client transfers, unblocks handlers."
 msgstr ""
+"सर्वर→क्लाइंट स्थानांतरण हेतु समर्पित पूल, हैंडलर को खुला करता है।"
 
 msgid "Stall timeout for Server→Client data transfers (ms)."
 msgstr "सर्वर→क्लाइंट डेटा स्थानांतरण हेतु स्टॉल समय समाप्ति (ms)।"
@@ -5533,7 +5692,7 @@ msgid "Duration of moderate load before declining requests (ms)."
 msgstr "अनुरोधों को अस्वीकार करने से पहले मध्यम लोड की अवधि (ms)।"
 
 msgid "Widens the peer recency window when fast peers run short."
-msgstr ""
+msgstr "जब तेज़ पीयर कम पड़ें तो पीयर नवीनता विंडो चौड़ी करता है।"
 
 msgid "Consecutive failures before pool backoff."
 msgstr "पूल बैकऑफ़ से पहले क्रमागत विफलताएँ।"
@@ -5573,6 +5732,8 @@ msgstr "टनल सर्वर हैंडलर थ्रेड के ल�
 
 msgid "IV dedup filter size; too small drops valid tunnel data."
 msgstr ""
+"IV डुप्लिकेट-निवारण फ़िल्टर का आकार; बहुत छोटा मान्य टनेल डेटा गिरा देता "
+"है।"
 
 msgid "Max average message delay before rejecting transit (ms)."
 msgstr "ट्रांज़िट (एमएस) को अस्वीकार करने से पहले अधिकतम औसत संदेश विलंब।"
@@ -7017,6 +7178,15 @@ msgstr "वेबएप्लिकेशन की सेटिंग करे
 msgid "The Java web applications listed below are started by the webConsole client and run in the same JVM as the router. They are usually web applications accessible through the router console. They may be complete applications (e.g. i2psnark), front-ends to another client or application which must be separately enabled (e.g. susidns, i2ptunnel), or have no web interface at all (e.g. addressbook)."
 msgstr "निम्नलिखित जावा वेब अनुप्रयोग वेबकंसोल क्लाइंट द्वारा शुरू किए जाते हैं और राउटर के समान JVM में चलते हैं। वे आमतौर पर राउटर कंसोल के माध्यम से पहुँचने वाले वेब अनुप्रयोग होते हैं। वे पूर्ण अनुप्रयोग हो सकते हैं (जैसे i2psnark), अन्य क्लाइंट या अनुप्रयोग के लिए फ्रंट-एंड जो अलग-अलग सक्रिय करने की आवश्यकता होती है (जैसे susidns, i2ptunnel), या किसी भी वेब इंटरफेस के बिना हो सकते हैं (जैसे addressbook) ये आमतौर पर राउटर कंसोल के माध्यम से सुलभ वेब एप्लिकेशन हैं ये पूर्ण एप्लिकेशन हो सकते हैं (जैसे जैसे i2psnark), किसी अन्य क्लाइंट या एप्लिकेशन के फ्रंट-एंड जिसे अलग से सक्षम किया जाना चाहिए (जैसे जैसे susidns, i2ptunnel), या बिल्कुल कोई वेब इंटरफ़ेस नहीं है (जैसे जैसे एड्रेसबुक)"
 
+msgid "Router Session Key Manager"
+msgstr "राउटर सत्र कुंजी प्रबंधक"
+
+msgid "Client Session Key Managers"
+msgstr "क्लाइंट सत्र कुंजी प्रबंधक"
+
+msgid "Router DHT"
+msgstr "राउटर DHT"
+
 msgid "Open in new tab"
 msgstr "नई टैब में खोलें"
 
@@ -7591,14 +7761,17 @@ msgstr "मिलीसेकंड में न्यूनतम सुरं
 msgid "Maximum tunnel test period in milliseconds. Tunnel tests never wait longer than this for a reply, even on high-latency paths. [Default is 50000 (50 seconds)]"
 msgstr "मिलीसेकंड में अधिकतम सुरंग परीक्षण अवधि। सुरंग परीक्षण उच्च-विलंबता पथों पर भी उत्तर के लिए इससे अधिक प्रतीक्षा नहीं करता है। [डिफ़ॉल्ट 50000 (50 सेकंड)]"
 
-msgid "Number of tunnel build timeouts before a peer is marked as a ghost (blacklisted for tunnel participation). Higher values tolerate more transient failures. [Default is 3]"
-msgstr "पीयर को भूत (सुरंग भागीदारी के लिए ब्लैकलिस्ट) के रूप में चिह्नित करने से पहले सुरंग निर्माण टाइमआउट की संख्या। उच्च मान अधिक क्षणिक विफलताओं को सहन करते हैं। [डिफ़ॉल्ट 3]"
+msgid "Number of tunnel build timeouts before a peer is marked as a ghost (excluded from tunnel participation). Higher values tolerate more transient failures. [Default is 1]"
+msgstr ""
+"टनेल बिल्ड टाइमआउट की संख्या जिसके बाद पीयर को भूत चिह्नित कर दिया जाता "
+"है (टनेल भागीदारी से बाहर)। उच्च मान क्षणिक विफलताओं को अधिक सहन करते "
+"हैं। [पूर्वनिर्धारित 1 है]"
 
-msgid "Cooldown period in milliseconds before a ghost-marked peer can be considered for tunnel participation again. Shorter values allow faster peer reuse. [Default is 180000 (3 minutes)]"
-msgstr "भूत-चिह्नित पीयर को फिर से सुरंग भागीदारी के लिए माने जाने से पहले मिलीसेकंड में कूलडाउन अवधि। छोटे मान तेज़ पीयर पुन: उपयोग की अनुमति देते हैं। [डिफ़ॉल्ट 180000 (3 मिनट)]"
-
-msgid "Cooldown period in milliseconds for ghost-marked peers during attack mode. Longer cooldowns limit exposure to potentially malicious peers during high-stress periods. [Default is 300000 (5 minutes)]"
-msgstr "हमले मोड के दौरान भूत-चिह्नित पीयर के लिए मिलीसेकंड में कूलडाउन अवधि। लंबा कूलडाउन उच्च-तनाव अवधियों के दौरान संभावित दुर्भावनापूर्ण पीयर के संपर्क को सीमित करता है। [डिफ़ॉल्ट 300000 (5 मिनट)]"
+msgid "Cooldown period in milliseconds before a ghost-marked peer can be promoted into the tunnel peer tiers again. Shorter values return recovered peers to service faster. [Default is 90000 (90 seconds)]"
+msgstr ""
+"मिलीसेकंड में शीतकाल अवधि, इससे पहले कि भूत-चिह्नित पीयर फिर से टनेल "
+"पीयर टियर में पदोन्नत हो सके। छोटे मान पुनर्प्राप्त पीयर को सेवा में "
+"लौटाना तेज़ करते हैं। [पूर्वनिर्धारित 90000 (90 सेकंड) है]"
 
 msgid "Minimum number of incoming tunnel build requests accepted per peer per clean window. Prevents starving peers during low-traffic periods. [Default is 10]"
 msgstr "प्रति साफ विंडो प्रति पीयर स्वीकृत न्यूनतम इनबाउंड सुरंग निर्माण अनुरोध। कम ट्रैफ़िक अवधियों के दौरान पीयर को भूखा रहने से रोकता है। [डिफ़ॉल्ट 10]"
@@ -10028,3 +10201,35 @@ msgstr "अगला"
 
 msgid "Finished"
 msgstr "समाप्त"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

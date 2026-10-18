@@ -130,23 +130,47 @@ msgstr "Parterji brez objavljenega IP naslova"
 msgid "Average tunnel build success (%)"
 msgstr "Povprečen uspeh izgradnje tunela (%)"
 
+msgid "Tier promotions held back for a peer with no usable address"
+msgstr ""
+"Napredovanja v sloj zadržana za parterja brez uporabnega naslova"
+
+msgid "RouterInfo refreshes issued for peers held out of the tiers"
+msgstr "Osvežitve RouterInfo za parterje, držane zunaj slojev"
+
+msgid "Tier scans that left the fast or high-capacity tier short of target"
+msgstr ""
+"Pregledi slojev, po katerih hitri ali visokozmogljivi sloj ni dosegel "
+"cilja"
+
+msgid "RouterInfos requested for stored profiles that had none"
+msgstr "RouterInfo zahtevani za shranjene profile, ki jih niso imeli"
+
+msgid "Build timeouts recorded against a peer as a ghost mark"
+msgstr "Zamudi izgradnje zabeležene proti parterju kot oznaka duha"
+
+msgid "Ghost marks cleared by a successful build reply"
+msgstr "Oznake duha počiščene po uspešnem odgovoru izgradnje"
+
+msgid "Peers currently excluded as ghosts"
+msgstr "Parterji, trenutno izključeni kot duhovi"
+
+msgid "Ghost peers in the fast or high-capacity tiers"
+msgstr "Parterji-duhovi v hitrih ali visokozmogljivih slojih"
+
+msgid "Duplicate CLOSE safety-net messages sent"
+msgstr "Poslana podvojena varnostna sporočila CLOSE"
+
 msgid "Memory used by the JVM"
 msgstr "Pomnilnik, ki ga uporablja JVM"
 
 msgid "maximum"
 msgstr "največ"
 
-msgid "No transports"
-msgstr "Brez prevoznikov (skriti ali se zagonja?)"
-
 msgid "Unsupported signature type"
 msgstr "Nepodprta vrsta podpisa"
 
 msgid "No support for our signature type"
 msgstr "Nobena podpora za našo vrsto podpisa"
-
-msgid "Unreachable on any transport"
-msgstr "Ne dosegljivo z nobenim prevoznikom"
 
 msgid "Cannot enumerate UPnP devices on Android."
 msgstr "Ni mogoče oštevilčiti UPnP naprave na Androidu."
@@ -845,6 +869,9 @@ msgstr "Konzola"
 
 msgid "To enable SSL access for the Router Console, see the commented <code>clients.config</code> file located in your I2P application directory for more information. You will need to edit the RouterConsoleRunner config file located in the directory: "
 msgstr "Da omogočite dostop SSL za konzolo usmerjevalnika, glejte komentiran datoteko <code>clients.config</code>, ki se nahaja v imeniku aplikacije I2P za dodatne informacije. Boste morali urejati datoteko konfiguracije RouterConsoleRunner, ki se nahaja v imeniku"
+
+msgid "No client session key managers."
+msgstr "Ni upraviteljev ključev odjemalskih sej."
 
 msgid "Save disabled, edit the router.config file to make changes"
 msgstr "Shranjevanje onemogočeno, urejanje datoteko router.config za spremembe"
@@ -2064,20 +2091,34 @@ msgstr "izboljšan"
 msgid "vs baseline"
 msgstr "v primerjavi z izhodiščem"
 
+#, java-format
+msgid "Out: {0} / {1}"
+msgstr "Izhod: {0} / {1}"
+
+#, java-format
+msgid "In: {0} / {1}"
+msgstr "Vhod: {0} / {1}"
+
 msgid "CPU"
 msgstr "CPU"
 
-msgid "CPU load average"
-msgstr "Povprečna obremenitev CPU"
+msgid "JVM CPU load average"
+msgstr "Povprečna obremenitev CPU JVM"
+
+#, java-format
+msgid "{0} cores"
+msgstr "{0} jeder"
 
 msgid "Memory"
 msgstr "Pomnilnik"
 
-msgid "Memory usage"
-msgstr "Uporaba pomnilnika"
+#, java-format
+msgid "Used: {0} / {1} max"
+msgstr "Uporabljeno: {0} / {1} najv."
 
-msgid "Router uptime"
-msgstr "Čas delovanja usmerjevalnika"
+#, java-format
+msgid "Since {0}"
+msgstr "Od {0}"
 
 msgid "Job Lag"
 msgstr "Zamik naloga"
@@ -2103,6 +2144,10 @@ msgstr "Niti"
 msgid "Active JVM threads"
 msgstr "Aktivne niti JVM"
 
+#, java-format
+msgid "Empty at {0}"
+msgstr "Prazen pri {0}"
+
 msgid "NTCP Estab"
 msgstr "Vzpostavitev NTCP"
 
@@ -2124,20 +2169,24 @@ msgstr "Časovna omejitev ponovnega prenosa SSU"
 msgid "Conns/s"
 msgstr "Povezave/s"
 
-msgid "NTCP connections established per second"
-msgstr "Vzpostavljenih povezav NTCP na sekundo"
+#, java-format
+msgid "Full at {0}/s"
+msgstr "Poln pri {0}/s"
+
+msgid "New NTCP connections (1 min)"
+msgstr "Nove povezave NTCP (1 min)"
 
 msgid "Msgs/s"
 msgstr "Sporočila/s"
 
-msgid "Messages delivered per second"
-msgstr "Dostavljenih sporočil na sekundo"
+msgid "Messages delivered (1 min)"
+msgstr "Dostavljena sporočila (1 min)"
 
 msgid "RTT"
 msgstr "RTT"
 
-msgid "End-to-end message round trip time"
-msgstr "Čas obhoda sporočila od konca do konca"
+msgid "End-to-end client message round trip"
+msgstr "Celotna povratna doba sporočil odjemalca"
 
 msgid "Timeout"
 msgstr "Časovna omejitev"
@@ -2151,20 +2200,28 @@ msgstr "Gradnja tunela"
 msgid "Client tunnel build latency"
 msgstr "Zakasnitev gradnje odjemalskega tunela"
 
+#, java-format
+msgid "In: {0} / Out: {1}"
+msgstr "Vhod: {0} / Izhod: {1}"
+
 msgid "Active Peers"
 msgstr "Aktivni soležniki"
 
-msgid "Active peers (last 60s)"
-msgstr "Aktivni soležniki (zadnjih 60s)"
+#, java-format
+msgid "Full at {0}"
+msgstr "Poln pri {0}"
+
+msgid "Reached in the last 60s"
+msgstr "Doseženi v zadnjih 60 s"
 
 msgid "Known Peers"
 msgstr "Znani soležniki"
 
-msgid "Known routers in network database"
-msgstr "Znani usmerjevalniki v omrežni podatkovni bazi"
+msgid "In the network database"
+msgstr "V podatkovni zbirki omrežja"
 
-msgid "Active I2CP clients"
-msgstr "Aktivni odjemalci I2CP"
+msgid "I2CP clients connected"
+msgstr "Povezani odjemalci I2CP"
 
 msgid "Transit"
 msgstr "Prehod"
@@ -2178,8 +2235,8 @@ msgstr "Tokovi"
 msgid "Build Success"
 msgstr "Uspeh izgradnje"
 
-msgid "Tunnel build success rate"
-msgstr "Stopnja uspešnosti gradnje tunelov"
+msgid "Tunnel build success rate (1 min)"
+msgstr "Uspešnost gradnje predorov (1 min)"
 
 msgid "NetDB"
 msgstr "NetDB"
@@ -2190,26 +2247,31 @@ msgstr "Čas iskanja NetDB"
 msgid "Banned"
 msgstr "Prepovedano"
 
-msgid "Total banned peers"
-msgstr "Skupaj prepovedani soležniki"
+msgid "Peers excluded from all interactions"
+msgstr "Vrstniki so izključeni iz vseh interakcij"
+
+#, java-format
+msgid "{0} of {1} known"
+msgstr "{0} od {1} znanih"
 
 msgid "LeaseSets"
 msgstr "Nizi zakupov"
 
-msgid "Stored LeaseSets in floodfill"
-msgstr "Shranjeni LeaseSets v vozlišču poplav"
+msgid "Stored LeaseSets"
+msgstr "Shranjeni LeaseSeti"
 
 msgid "Cache Hit"
 msgstr "Zadetek predpomnilnika"
 
-msgid "NetDB lookup success rate"
-msgstr "Stopnja uspešnosti iskanja NetDB"
+#, java-format
+msgid "Matched {0} of {1} lookups (1 min)"
+msgstr "Zadetek pri {0} od {1} iskanj (1 min)"
 
 msgid "Flood Verify"
 msgstr "Preverjanje floodfill"
 
-msgid "Floodfill verify time"
-msgstr "čas preverjanja poplavnega vozlišča"
+msgid "Floodfill verify time (1 min)"
+msgstr "Čas preverjanja Floodfill (1 min)"
 
 msgid "NetDB ACK"
 msgstr "NetDB potrditev"
@@ -2220,20 +2282,20 @@ msgstr "Čas potrditve soležnika NetDB"
 msgid "Lookups/s"
 msgstr "Iskanja/s"
 
-msgid "NetDB lookups handled per second"
-msgstr "Obdelanih iskanj NetDB na sekundo"
+msgid "Lookups handled (1 min)"
+msgstr "Obravnavana iskanja (1 min)"
 
 msgid "Requests/s"
 msgstr "Zahteve/s"
 
-msgid "Combined store + lookup operations per second"
-msgstr "Skupno število operacij shranjevanja + iskanja na sekundo"
+msgid "Stores + lookups (1 min)"
+msgstr "Shranjevanja + iskanja (1 min)"
 
 msgid "Stores/s"
 msgstr "Shranjevanja/s"
 
-msgid "NetDB store messages handled per second"
-msgstr "Obdelanih sporočil shranjevanja NetDB na sekundo"
+msgid "Stores handled (1 min)"
+msgstr "Obravnavana shranjevanja (1 min)"
 
 msgid "LS Timeout"
 msgstr "Časovna omejitev LS"
@@ -3217,6 +3279,9 @@ msgstr "Oglej profil"
 msgid "Configure peer"
 msgstr "Nastavi parterja"
 
+msgid "Memory usage"
+msgstr "Uporaba pomnilnika"
+
 msgid "Hidden"
 msgstr "Skrito"
 
@@ -3360,8 +3425,8 @@ msgstr "Visoko pasovni vrstniki za številne tunele"
 msgid "Reliable"
 msgstr "Zanesljiv"
 
-msgid "High-capacity peers with good acceptance"
-msgstr "Visoko zmogljivi vrstniki z dobrim sprejemanjem"
+msgid "Peers with good acceptance and recent activity"
+msgstr "Parterji z dobro sprejemanjem in nedavno aktivnostjo"
 
 msgid "Peers that store and serve NetDb info"
 msgstr "Vrstniki, ki shranjujejo in strežejo informacije NetDb"
@@ -3372,17 +3437,21 @@ msgstr "Znani"
 msgid "Total entries in network database"
 msgstr "Skupaj vnosov v omrežno bazo podatkov"
 
+msgid "Profiles"
+msgstr "Profile"
+
 msgid "Profiles with activity in the last hour"
 msgstr "Profili z dejavnostjo v zadnji uri"
+
+#, java-format
+msgid "{0} of {1} stored"
+msgstr "{0} od {1} shranjenih"
 
 msgid "Unreachable"
 msgstr "Ne dosegljivo"
 
-msgid "Peers without a reachable address"
-msgstr "Vrstniki brez dosegljivega naslova"
-
-msgid "Peers excluded from all interactions"
-msgstr "Vrstniki so izključeni iz vseh interakcij"
+msgid "Peers without a published address"
+msgstr "Parterji brez objavljenega naslova"
 
 msgid "/min"
 msgstr "/min"
@@ -3390,8 +3459,12 @@ msgstr "/min"
 msgid "Test Fail"
 msgstr "Test Fail"
 
-msgid "Connectivity test failures per minute"
-msgstr "Napake pri preizkusu povezljivosti na minuto"
+msgid "Connectivity test failures in the last minute"
+msgstr "Napake preizkusa povezljivosti v zadnji minuti"
+
+#, java-format
+msgid "Empty at {0}/min"
+msgstr "Prazen pri {0}/min"
 
 msgid "Peer Connections"
 msgstr "Povezave partnerja"
@@ -3671,26 +3744,40 @@ msgstr[3] "Skritih je {0} zastarelih profilov"
 msgid "Share of total profiles shown"
 msgstr "Delež prikazanih vseh profilov"
 
-msgid "peers"
-msgstr "parterji"
-
-msgid "Share of tier profiles shown"
-msgstr "Delež prikazanih profilov ravni"
-
 msgid "Window"
 msgstr "Okno"
 
 msgid "Fast RTT"
 msgstr "Hitri RTT"
 
-msgid "Max RTT for fast-tier membership (ms)"
-msgstr "Največji RTT za članstvo v hitri ravni (ms)"
+msgid "Max RTT for fast-tier membership"
+msgstr "Najv. RTT za članstvo v hitrem sloju"
 
-msgid "Average loss of fast-tier peers (%)"
-msgstr "Povprečna izguba hitrih parterjev v ravni (%)"
+msgid "Rises with network latency"
+msgstr "Narašča z zakasnitvijo omrežja"
 
-msgid "Average loss of high-capacity peers (%)"
-msgstr "Povprečna izguba parterjev z visoko kapaciteto (%)"
+msgid "Average loss of fast-tier peers"
+msgstr "Povprečna izguba parterjev hitrega sloja"
+
+msgid "Average loss of high-capacity peers"
+msgstr "Povprečna izguba visokozmogljivih parterjev"
+
+msgid "Average direct-link RTT of tier peers"
+msgstr "Povprečni RTT neposredne povezave parterjev sloja"
+
+#, java-format
+msgid "{0} of {1} measured"
+msgstr "{0} od {1} merjenih"
+
+msgid "1h Contact"
+msgstr "Kontakt 1h"
+
+msgid "Heard from in the last hour"
+msgstr "Se oglasil v zadnji uri"
+
+#, java-format
+msgid "{0} of {1} tier peers"
+msgstr "{0} od {1} parterjev sloja"
 
 msgid "Heard from within the display cutoff"
 msgstr "Slišan znotraj meje prikaza"
@@ -3701,11 +3788,19 @@ msgstr "Iskanja"
 msgid "Lookup success rate"
 msgstr "Stopnja uspešnosti iskanja"
 
+#, java-format
+msgid "{0} of {1} lookups"
+msgstr "{0} od {1} iskanj"
+
 msgid "Stores"
 msgstr "Shranjevanja"
 
 msgid "Store success rate"
 msgstr "Stopnja uspešnosti shranjevanja"
+
+#, java-format
+msgid "{0} of {1} peers"
+msgstr "{0} od {1} parterjev"
 
 msgid "Definitions"
 msgstr "Definicije"
@@ -3778,11 +3873,25 @@ msgstr "koliko novih parterjev so nam naročili v zadnjem času?"
 msgid "Known floodfills"
 msgstr "Znana poplavna vozlišča"
 
-msgid "No-Fail"
-msgstr "Brez neuspeha"
+msgid "Reachable, unbanlisted and heard from"
+msgstr "Dosegljiv, neizobčen in se oglaša"
 
-msgid "No lookup failures (1h)"
-msgstr "Brez neuspehov iskanja (1h)"
+msgid "Active bans of floodfill-capable peers"
+msgstr "Aktivne prepovedi parterjev, sposobnih floodfill"
+
+#, java-format
+msgid "of {0} known"
+msgstr "od {0} znanih"
+
+msgid "Fail"
+msgstr "Napaka"
+
+msgid "Lookup failures in the last hour"
+msgstr "Napake iskanja v zadnji uri"
+
+#, java-format
+msgid "across {0} listed peers"
+msgstr "med {0} naštetimi parterji"
 
 msgid "Response"
 msgstr "Odziv"
@@ -3790,11 +3899,16 @@ msgstr "Odziv"
 msgid "Lookup response time (1h)"
 msgstr "Čas odziva iskanja (1h)"
 
-msgid "1h Contact"
-msgstr "Kontakt 1h"
+#, java-format
+msgid "{0} peers measured"
+msgstr "{0} parterjev merjenih"
 
 msgid "Contacted within 1h"
 msgstr "Kontaktiran v zadnji uri"
+
+#, java-format
+msgid "{0} of {1} listed"
+msgstr "{0} od {1} naštetih"
 
 msgid "1h Fail Rate"
 msgstr "1h Neuspešnost"
@@ -3832,17 +3946,33 @@ msgstr "Vse"
 msgid "SAM bridge is not running."
 msgstr "Most SAM ne deluje."
 
+msgid "Sessions"
+msgstr "Seje"
+
 msgid "Active sessions in SessionsDB"
 msgstr "Aktivne seje v SessionsDB"
+
+msgid "Workers"
+msgstr "Delovne niti"
 
 msgid "Active / pool worker threads"
 msgstr "Aktivne / delovne niti bazena"
 
-msgid "Pending commands in pool"
-msgstr "Čakajoči ukazi v bazenu"
+msgid "Queue"
+msgstr "Čakalna vrsta"
+
+#, java-format
+msgid "Pending commands: {0} of {1}"
+msgstr "Čakajoči ukazi: {0} od {1}"
+
+msgid "Handlers"
+msgstr "Obdelovalci"
 
 msgid "Connected pool handlers"
 msgstr "Povezani obravnavalniki bazena"
+
+msgid "Stolen"
+msgstr "Ukradeni"
 
 msgid "Sockets stolen for data streaming"
 msgstr "Vtičnice prevzete za pretakanje podatkov"
@@ -4161,9 +4291,6 @@ msgstr "Prikaži vse trenutne povezave z partnerji"
 msgid "Router health overview"
 msgstr "Pregled zdravja usmerjevalnika"
 
-msgid "Profiles"
-msgstr "Profile"
-
 msgid "Show recent peer performance profiles"
 msgstr "Prikaži nedavne profile zmogljivosti partnerjev"
 
@@ -4476,6 +4603,27 @@ msgstr[0] "{0} dogodek"
 msgstr[1] "{0} dogodki"
 msgstr[2] "{0} dogodki"
 msgstr[3] "{0} dogodki"
+
+msgid "Open streaming connections"
+msgstr "Odprte pretočne povezave"
+
+msgid "Round-trip time (live samples, 1 min)"
+msgstr "Povratna doba (živi vzorci, 1 min)"
+
+msgid "Retrans"
+msgstr "Ponov."
+
+msgid "Share of sends needing retransmit (1 min)"
+msgstr "Delež pošiljanj, ki zahtevajo ponovitev (1 min)"
+
+msgid "Created + received (1 min)"
+msgstr "Ustvarjeni + prejeti (1 min)"
+
+msgid "Throughput"
+msgstr "Pretočnost"
+
+msgid "Mean rate of streams closed in the last minute"
+msgstr "Povprečno število zaprtih tokov v zadnji minuti"
 
 msgid "sent"
 msgstr "poslano"
@@ -4864,6 +5012,9 @@ msgstr "Eksponent zavrnitve pri dušenju"
 msgid "Maximum Participating Tunnels"
 msgstr "Največje število sodelujočih predorov"
 
+msgid "Timer Threads"
+msgstr "Niti časovnika"
+
 msgid "Build Handler Maximum Queue"
 msgstr "Največja vrsta obdelovalca gradnje"
 
@@ -5217,6 +5368,10 @@ msgstr "Največje okno zasedenosti med počasnim zagonom."
 
 msgid "Per-connection inbound buffer cap (bytes)."
 msgstr "Omejitev dohodnega medpomnilnika na povezavo (bajti)."
+
+msgid "Timer worker threads; higher reduces event delay."
+msgstr ""
+"Delovne niti časovnika; višja vrednost zmanjša zakasnitev dogodkov."
 
 msgid "Dynamic cap on concurrent streams per destination."
 msgstr "Dinamična omejitev sočasnih pretokov na cilj."
@@ -7039,6 +7194,15 @@ msgstr "konfig webapps"
 msgid "The Java web applications listed below are started by the webConsole client and run in the same JVM as the router. They are usually web applications accessible through the router console. They may be complete applications (e.g. i2psnark), front-ends to another client or application which must be separately enabled (e.g. susidns, i2ptunnel), or have no web interface at all (e.g. addressbook)."
 msgstr "Spodaj navedene Java spletna aplikacije so zažene s strani klienta webConsole in tečejo v istem JVM kot usmerjevalnik. Običajno so to spletna aplikacija dostopna prek konzole usmerjevalnika. Lahko so polne aplikacije (npr. i2psnark), frontalni deli za drugo klienta ali aplikacijo, ki mora biti ločeno omogočena (npr. susidns, i2ptunnel), ali pa nimajo vsebinskega spletnega vmesnika (npr. addressbook)"
 
+msgid "Router Session Key Manager"
+msgstr "Upravitelj ključev sej usmerjevalnika"
+
+msgid "Client Session Key Managers"
+msgstr "Upravitelji ključev odjemalskih sej"
+
+msgid "Router DHT"
+msgstr "DHT usmerjevalnika"
+
 msgid "Open in new tab"
 msgstr "Odpri v novem zavihku"
 
@@ -7613,14 +7777,17 @@ msgstr "Najmanjše obdobje testiranja predora v milisekundah. Testi predorov ved
 msgid "Maximum tunnel test period in milliseconds. Tunnel tests never wait longer than this for a reply, even on high-latency paths. [Default is 50000 (50 seconds)]"
 msgstr "Največje obdobje testiranja predora v milisekundah. Testi predorov nikoli ne čakajo na odgovor dlje od tega, tudi na poteh z visoko zakasnitvijo. [Privzeto 50000 (50 sekund)"
 
-msgid "Number of tunnel build timeouts before a peer is marked as a ghost (blacklisted for tunnel participation). Higher values tolerate more transient failures. [Default is 3]"
-msgstr "Število časovnih omejitev gradnje predorov, preden je enakovredni označen kot duh (črni seznam za sodelovanje v predorih). Višje vrednosti tolerirajo več začasnih napak. [Privzeto 3"
+msgid "Number of tunnel build timeouts before a peer is marked as a ghost (excluded from tunnel participation). Higher values tolerate more transient failures. [Default is 1]"
+msgstr ""
+"Število zamud izgradnje predora, preden je parter označen kot duh "
+"(izključen iz sodelovanja v predorih). Višje vrednosti prenesejo več "
+"prehodnih napak. [Privzeta je 1]"
 
-msgid "Cooldown period in milliseconds before a ghost-marked peer can be considered for tunnel participation again. Shorter values allow faster peer reuse. [Default is 180000 (3 minutes)]"
-msgstr "Obdobje ohlajanja v milisekundah, preden je enakovredni, označen kot duh, lahko ponovno upoštevan za sodelovanje v predorih. Krajše vrednosti omogočajo hitrejšo ponovno uporabo enakovrednih. [Privzeto 180000 (3 minute)"
-
-msgid "Cooldown period in milliseconds for ghost-marked peers during attack mode. Longer cooldowns limit exposure to potentially malicious peers during high-stress periods. [Default is 300000 (5 minutes)]"
-msgstr "Obdobje ohlajanja v milisekundah za enakovredne, označene kot duhovi, med načinom napada. Daljša ohlajanja omejujejo izpostavljenost potencialno zlonamernim enakovrednim med obdobji visokega stresa. [Privzeto 300000 (5 minut)"
+msgid "Cooldown period in milliseconds before a ghost-marked peer can be promoted into the tunnel peer tiers again. Shorter values return recovered peers to service faster. [Default is 90000 (90 seconds)]"
+msgstr ""
+"Obdobje ohlajanja v milisekundah, preden je parter, označen kot duh, "
+"spet napredovan v sloje parterjev predora. Krajše vrednosti hitreje "
+"vrnejo okrepane parterje v storitev. [Privzeta je 90000 (90 sekund)]"
 
 msgid "Minimum number of incoming tunnel build requests accepted per peer per clean window. Prevents starving peers during low-traffic periods. [Default is 10]"
 msgstr "Najmanjše število dohodnih zahtevkov za gradnjo predorov, sprejetih na enakovrednega na čisto okno. Preprečuje stradanje enakovrednih med obdobji nizkega prometa. [Privzeto 10"
@@ -10050,3 +10217,35 @@ msgstr "Naslednje"
 
 msgid "Finished"
 msgstr "Končano"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

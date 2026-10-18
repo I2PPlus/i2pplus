@@ -126,23 +126,52 @@ msgstr "Peers sense adreça IP publicada"
 msgid "Average tunnel build success (%)"
 msgstr "Percentatge mitjà d’èxit de construcció de túnels"
 
+msgid "Tier promotions held back for a peer with no usable address"
+msgstr ""
+"Promocions de nivell retingudes per a un peer sense adreça utilitzable"
+
+msgid "RouterInfo refreshes issued for peers held out of the tiers"
+msgstr ""
+"Actualitzacions de RouterInfo emeses per a peers mantinguts fora dels "
+"nivells"
+
+msgid "Tier scans that left the fast or high-capacity tier short of target"
+msgstr ""
+"Anàlisis de nivell que van deixar el nivell ràpid o d'alta capacitat per "
+"sota de l'objectiu"
+
+msgid "RouterInfos requested for stored profiles that had none"
+msgstr ""
+"RouterInfo demanades per a perfils emmagatzemats que no en tenien"
+
+msgid "Build timeouts recorded against a peer as a ghost mark"
+msgstr ""
+"Temps d'espera de construcció registrats a un peer com a marca fantasma"
+
+msgid "Ghost marks cleared by a successful build reply"
+msgstr ""
+"Marques fantasma esborrades per una resposta de construcció reeixida"
+
+msgid "Peers currently excluded as ghosts"
+msgstr "Peers exclosos actualment com a fantasmes"
+
+msgid "Ghost peers in the fast or high-capacity tiers"
+msgstr "Peers fantasma als nivells ràpid o d'alta capacitat"
+
+msgid "Duplicate CLOSE safety-net messages sent"
+msgstr "Missatges duplicats de xarxa de seguretat CLOSE enviats"
+
 msgid "Memory used by the JVM"
 msgstr "Memòria utilitzada per la JVM"
 
 msgid "maximum"
 msgstr "màxim"
 
-msgid "No transports"
-msgstr "Cap transport"
-
 msgid "Unsupported signature type"
 msgstr "Tipus de signatura no compatible"
 
 msgid "No support for our signature type"
 msgstr "No hi ha compatibilitat amb el nostre tipus de signatura"
-
-msgid "Unreachable on any transport"
-msgstr "Inaccessible per qualsevol transport"
 
 msgid "Cannot enumerate UPnP devices on Android."
 msgstr "No es poden enumerar els dispositius UPnP a Android."
@@ -839,6 +868,9 @@ msgstr "Consola"
 
 msgid "To enable SSL access for the Router Console, see the commented <code>clients.config</code> file located in your I2P application directory for more information. You will need to edit the RouterConsoleRunner config file located in the directory: "
 msgstr "Per activar l’accés SSL a la consola del router, consulteu el fitxer <code>clients.config</code> comentat situat al directori de l’aplicació I2P per obtenir més informació. Haureu d’editar el fitxer de configuració RouterConsoleRunner situat al directori: "
+
+msgid "No client session key managers."
+msgstr "No hi ha gestors de claus de sessió de client."
 
 msgid "Save disabled, edit the router.config file to make changes"
 msgstr "El desat està desactivat, editeu el fitxer router.config per fer canvis"
@@ -2052,20 +2084,34 @@ msgstr "millorat"
 msgid "vs baseline"
 msgstr "respecte a la referència"
 
+#, java-format
+msgid "Out: {0} / {1}"
+msgstr "Sortida: {0} / {1}"
+
+#, java-format
+msgid "In: {0} / {1}"
+msgstr "Entrada: {0} / {1}"
+
 msgid "CPU"
 msgstr "CPU"
 
-msgid "CPU load average"
-msgstr "Mitjana de càrrega de la CPU"
+msgid "JVM CPU load average"
+msgstr "Mitjana de càrrega de CPU de la JVM"
+
+#, java-format
+msgid "{0} cores"
+msgstr "{0} nuclis"
 
 msgid "Memory"
 msgstr "Memòria"
 
-msgid "Memory usage"
-msgstr "Ús de la memòria"
+#, java-format
+msgid "Used: {0} / {1} max"
+msgstr "En ús: {0} / {1} màx."
 
-msgid "Router uptime"
-msgstr "Temps d’activitat del router"
+#, java-format
+msgid "Since {0}"
+msgstr "Des de {0}"
 
 msgid "Job Lag"
 msgstr "Retard de les tasques"
@@ -2091,6 +2137,10 @@ msgstr "Filals"
 msgid "Active JVM threads"
 msgstr "Filals JVM actius"
 
+#, java-format
+msgid "Empty at {0}"
+msgstr "Buit a {0}"
+
 msgid "NTCP Estab"
 msgstr "NTCP Estab"
 
@@ -2112,20 +2162,24 @@ msgstr "Temps d’espera de retransmissió SSU"
 msgid "Conns/s"
 msgstr "Conns/s"
 
-msgid "NTCP connections established per second"
-msgstr "Connexions NTCP establertes per segon"
+#, java-format
+msgid "Full at {0}/s"
+msgstr "Ple a {0}/s"
+
+msgid "New NTCP connections (1 min)"
+msgstr "Connexions NTCP noves (1 min)"
 
 msgid "Msgs/s"
 msgstr "Missatges/s"
 
-msgid "Messages delivered per second"
-msgstr "Missatges lliurats per segon"
+msgid "Messages delivered (1 min)"
+msgstr "Missatges lliurats (1 min)"
 
 msgid "RTT"
 msgstr "RTT"
 
-msgid "End-to-end message round trip time"
-msgstr "Temps de viatge d’anada i tornada de missatges extrem a extrem"
+msgid "End-to-end client message round trip"
+msgstr "Anada i tornada de missatges de client d'extrem a extrem"
 
 msgid "Timeout"
 msgstr "Temps d’espera"
@@ -2139,20 +2193,28 @@ msgstr "Construcció de túnels"
 msgid "Client tunnel build latency"
 msgstr "Latència de construcció de túnels de client"
 
+#, java-format
+msgid "In: {0} / Out: {1}"
+msgstr "Entrada: {0} / Sortida: {1}"
+
 msgid "Active Peers"
 msgstr "Peers actius"
 
-msgid "Active peers (last 60s)"
-msgstr "Peers actius (últims 60 s)"
+#, java-format
+msgid "Full at {0}"
+msgstr "Ple a {0}"
+
+msgid "Reached in the last 60s"
+msgstr "Contactats en els últims 60 s"
 
 msgid "Known Peers"
 msgstr "Peers coneguts"
 
-msgid "Known routers in network database"
-msgstr "Routers coneguts a la base de dades de la xarxa"
+msgid "In the network database"
+msgstr "A la base de dades de la xarxa"
 
-msgid "Active I2CP clients"
-msgstr "Clients I2CP actius"
+msgid "I2CP clients connected"
+msgstr "Clients I2CP connectats"
 
 msgid "Transit"
 msgstr "Trànsit"
@@ -2166,8 +2228,8 @@ msgstr "Fluxos"
 msgid "Build Success"
 msgstr "Construcció correcta"
 
-msgid "Tunnel build success rate"
-msgstr "Taxa d’èxit en la construcció de túnels"
+msgid "Tunnel build success rate (1 min)"
+msgstr "Taxa d'èxit de construcció de túnels (1 min)"
 
 msgid "NetDB"
 msgstr "NetDB"
@@ -2178,26 +2240,31 @@ msgstr "Temps de cerca a la NetDB"
 msgid "Banned"
 msgstr "Prohibits"
 
-msgid "Total banned peers"
-msgstr "Número total de peers prohibits"
+msgid "Peers excluded from all interactions"
+msgstr "Peers exclosos de totes les interaccions"
+
+#, java-format
+msgid "{0} of {1} known"
+msgstr "{0} de {1} coneguts"
 
 msgid "LeaseSets"
 msgstr "LeaseSets"
 
-msgid "Stored LeaseSets in floodfill"
-msgstr "LeaseSets emmagatzemats als floodfill"
+msgid "Stored LeaseSets"
+msgstr "LeaseSets emmagatzemats"
 
 msgid "Cache Hit"
 msgstr "Encert de memòria cau"
 
-msgid "NetDB lookup success rate"
-msgstr "Taxa d’èxit de les cerques a la NetDB"
+#, java-format
+msgid "Matched {0} of {1} lookups (1 min)"
+msgstr "Coincidències a {0} de {1} cerques (1 min)"
 
 msgid "Flood Verify"
 msgstr "Verificació de inundació"
 
-msgid "Floodfill verify time"
-msgstr "Temps de verificació dels floodfill"
+msgid "Floodfill verify time (1 min)"
+msgstr "Temps de verificació Floodfill (1 min)"
 
 msgid "NetDB ACK"
 msgstr "ACK de la NetDB"
@@ -2208,20 +2275,20 @@ msgstr "Temps d’acusació de rebut dels peers a la NetDB"
 msgid "Lookups/s"
 msgstr "Cerques/s"
 
-msgid "NetDB lookups handled per second"
-msgstr "Cerques a la NetDB processades per segon"
+msgid "Lookups handled (1 min)"
+msgstr "Cerques ateses (1 min)"
 
 msgid "Requests/s"
 msgstr "Peticions/s"
 
-msgid "Combined store + lookup operations per second"
-msgstr "Operacions combinades d’emmagatzematge + cerca per segon"
+msgid "Stores + lookups (1 min)"
+msgstr "Emmagatzematges + cerques (1 min)"
 
 msgid "Stores/s"
 msgstr "Emmagatzematges/s"
 
-msgid "NetDB store messages handled per second"
-msgstr "Missatges d’emmagatzematge de la NetDB processats per segon"
+msgid "Stores handled (1 min)"
+msgstr "Emmagatzematges ateses (1 min)"
 
 msgid "LS Timeout"
 msgstr "Temps d’espera de LS"
@@ -3205,6 +3272,9 @@ msgstr "Mostra el perfil"
 msgid "Configure peer"
 msgstr "Configura el peer"
 
+msgid "Memory usage"
+msgstr "Ús de la memòria"
+
 msgid "Hidden"
 msgstr "Amagat"
 
@@ -3348,8 +3418,8 @@ msgstr "Peers amb ample de banda alt per a molts túnels"
 msgid "Reliable"
 msgstr "Fiables"
 
-msgid "High-capacity peers with good acceptance"
-msgstr "Peers d’alta capacitat amb bona acceptació"
+msgid "Peers with good acceptance and recent activity"
+msgstr "Peers amb bona acceptació i activitat recent"
 
 msgid "Peers that store and serve NetDb info"
 msgstr "Peers que emmagatzemagen i serveixen informació de la NetDb"
@@ -3360,17 +3430,21 @@ msgstr "Coneguts"
 msgid "Total entries in network database"
 msgstr "Entrades totals a la base de dades de la xarxa"
 
+msgid "Profiles"
+msgstr "Perfils"
+
 msgid "Profiles with activity in the last hour"
 msgstr "Perfils amb activitat en l'última hora"
+
+#, java-format
+msgid "{0} of {1} stored"
+msgstr "{0} de {1} emmagatzemats"
 
 msgid "Unreachable"
 msgstr "Inabastibles"
 
-msgid "Peers without a reachable address"
-msgstr "Peers sense adreça abastible"
-
-msgid "Peers excluded from all interactions"
-msgstr "Peers exclosos de totes les interaccions"
+msgid "Peers without a published address"
+msgstr "Peers sense adreça publicada"
 
 msgid "/min"
 msgstr "/min"
@@ -3378,8 +3452,12 @@ msgstr "/min"
 msgid "Test Fail"
 msgstr "Proves fallides"
 
-msgid "Connectivity test failures per minute"
-msgstr "Fallades de les proves de connectivitat per minut"
+msgid "Connectivity test failures in the last minute"
+msgstr "Fallades de la prova de connectivitat en l'últim minut"
+
+#, java-format
+msgid "Empty at {0}/min"
+msgstr "Buit a {0}/min"
 
 msgid "Peer Connections"
 msgstr "Connexions amb peers"
@@ -3653,26 +3731,40 @@ msgstr[1] "{0} perfils obsolets ocults"
 msgid "Share of total profiles shown"
 msgstr "Proporció de perfils totals mostrats"
 
-msgid "peers"
-msgstr "peers"
-
-msgid "Share of tier profiles shown"
-msgstr "Proporció de perfils del nivell mostrats"
-
 msgid "Window"
 msgstr "Finestra"
 
 msgid "Fast RTT"
 msgstr "RTT ràpid"
 
-msgid "Max RTT for fast-tier membership (ms)"
-msgstr "RTT màxim per pertànyer al nivell ràpid (ms)"
+msgid "Max RTT for fast-tier membership"
+msgstr "RTT màxim per pertànyer al nivell ràpid"
 
-msgid "Average loss of fast-tier peers (%)"
-msgstr "Pèrdua mitjana dels peers del nivell ràpid (%)"
+msgid "Rises with network latency"
+msgstr "Augmenta amb la latència de la xarxa"
 
-msgid "Average loss of high-capacity peers (%)"
-msgstr "Pèrdua mitjana dels peers d’alta capacitat (%)"
+msgid "Average loss of fast-tier peers"
+msgstr "Pèrdua mitjana de peers del nivell ràpid"
+
+msgid "Average loss of high-capacity peers"
+msgstr "Pèrdua mitjana de peers d'alta capacitat"
+
+msgid "Average direct-link RTT of tier peers"
+msgstr "RTT mitjà d'enllaç directe dels peers de nivell"
+
+#, java-format
+msgid "{0} of {1} measured"
+msgstr "{0} de {1} mesurats"
+
+msgid "1h Contact"
+msgstr "Contacte 1h"
+
+msgid "Heard from in the last hour"
+msgstr "Amb activitat en l'última hora"
+
+#, java-format
+msgid "{0} of {1} tier peers"
+msgstr "{0} de {1} peers de nivell"
 
 msgid "Heard from within the display cutoff"
 msgstr "Contactats dins el límit de visualització"
@@ -3683,11 +3775,19 @@ msgstr "Cerques"
 msgid "Lookup success rate"
 msgstr "Taxa d’èxit de les cerques"
 
+#, java-format
+msgid "{0} of {1} lookups"
+msgstr "{0} de {1} cerques"
+
 msgid "Stores"
 msgstr "Emmagatzematges"
 
 msgid "Store success rate"
 msgstr "Taxa d’èxit de l’emmagatzematge"
+
+#, java-format
+msgid "{0} of {1} peers"
+msgstr "{0} de {1} peers"
 
 msgid "Definitions"
 msgstr "Definicions"
@@ -3760,11 +3860,25 @@ msgstr "quants peers nous ens han informat de darrerament?"
 msgid "Known floodfills"
 msgstr "Floodfills coneguts"
 
-msgid "No-Fail"
-msgstr "Sense fallides"
+msgid "Reachable, unbanlisted and heard from"
+msgstr "Abastable, sense ban i amb activitat recent"
 
-msgid "No lookup failures (1h)"
-msgstr "Cap cerca fallida (1h)"
+msgid "Active bans of floodfill-capable peers"
+msgstr "Bans actius de peers capaços de fer de floodfill"
+
+#, java-format
+msgid "of {0} known"
+msgstr "de {0} coneguts"
+
+msgid "Fail"
+msgstr "Fallada"
+
+msgid "Lookup failures in the last hour"
+msgstr "Fallades de cerca en l'última hora"
+
+#, java-format
+msgid "across {0} listed peers"
+msgstr "entre {0} peers llistats"
 
 msgid "Response"
 msgstr "Resposta"
@@ -3772,11 +3886,16 @@ msgstr "Resposta"
 msgid "Lookup response time (1h)"
 msgstr "Temps de resposta de la cerca (1h)"
 
-msgid "1h Contact"
-msgstr "Contacte 1h"
+#, java-format
+msgid "{0} peers measured"
+msgstr "{0} peers mesurats"
 
 msgid "Contacted within 1h"
 msgstr "Contactat dins l’última hora"
+
+#, java-format
+msgid "{0} of {1} listed"
+msgstr "{0} de {1} llistats"
 
 msgid "1h Fail Rate"
 msgstr "Taxa d’error 1h"
@@ -3814,17 +3933,33 @@ msgstr "Tots"
 msgid "SAM bridge is not running."
 msgstr "El pont SAM no s’està executant."
 
+msgid "Sessions"
+msgstr "Sessions"
+
 msgid "Active sessions in SessionsDB"
 msgstr "Sessions actives a SessionsDB"
+
+msgid "Workers"
+msgstr "Fils de treball"
 
 msgid "Active / pool worker threads"
 msgstr "Filals de treball actius / del pool"
 
-msgid "Pending commands in pool"
-msgstr "Ordres pendents al pool"
+msgid "Queue"
+msgstr "Cua"
+
+#, java-format
+msgid "Pending commands: {0} of {1}"
+msgstr "Comandes pendents: {0} de {1}"
+
+msgid "Handlers"
+msgstr "Gestors"
 
 msgid "Connected pool handlers"
 msgstr "Gestors connectats del pool"
+
+msgid "Stolen"
+msgstr "Robats"
 
 msgid "Sockets stolen for data streaming"
 msgstr "Sockets presos per a la transmissió de dades"
@@ -4143,9 +4278,6 @@ msgstr "Mostra totes les connexions actuals amb peers"
 msgid "Router health overview"
 msgstr "Resum de la salut del router"
 
-msgid "Profiles"
-msgstr "Perfils"
-
 msgid "Show recent peer performance profiles"
 msgstr "Mostra els perfils de rendiment recents dels peers"
 
@@ -4454,6 +4586,27 @@ msgid "1 event"
 msgid_plural "{0} events"
 msgstr[0] "1 esdeveniment"
 msgstr[1] "{0} esdeveniments"
+
+msgid "Open streaming connections"
+msgstr "Connexions de streaming obertes"
+
+msgid "Round-trip time (live samples, 1 min)"
+msgstr "Temps d'anada i tornada (mostres en directe, 1 min)"
+
+msgid "Retrans"
+msgstr "Reetr."
+
+msgid "Share of sends needing retransmit (1 min)"
+msgstr "Proporció d'enviaments que requereixen retransmissió (1 min)"
+
+msgid "Created + received (1 min)"
+msgstr "Creats + rebuts (1 min)"
+
+msgid "Throughput"
+msgstr "Rendiment"
+
+msgid "Mean rate of streams closed in the last minute"
+msgstr "Taxa mitjana de fluxos tancats en l'últim minut"
 
 msgid "sent"
 msgstr "enviat"
@@ -4842,6 +4995,9 @@ msgstr "Exponent de rebut de limitació"
 msgid "Maximum Participating Tunnels"
 msgstr "Túnels participants màxims"
 
+msgid "Timer Threads"
+msgstr "Fils del temporitzador"
+
 msgid "Build Handler Maximum Queue"
 msgstr "Cua màxima del gestor de construcció"
 
@@ -5195,6 +5351,11 @@ msgstr "Finestra de congestió màxima durant l’arrencada lenta."
 
 msgid "Per-connection inbound buffer cap (bytes)."
 msgstr "Límit del buffer d’entrada per connexió (bytes)."
+
+msgid "Timer worker threads; higher reduces event delay."
+msgstr ""
+"Fils de treball del temporitzador; un valor més alt redueix el retard "
+"d'esdeveniments."
 
 msgid "Dynamic cap on concurrent streams per destination."
 msgstr "Límit dinàmic de fluxos concurrents per destinació."
@@ -7017,6 +7178,15 @@ msgstr "config aplicacions web"
 msgid "The Java web applications listed below are started by the webConsole client and run in the same JVM as the router. They are usually web applications accessible through the router console. They may be complete applications (e.g. i2psnark), front-ends to another client or application which must be separately enabled (e.g. susidns, i2ptunnel), or have no web interface at all (e.g. addressbook)."
 msgstr "Les aplicacions web Java que es mostren a continuació les inicia el client webConsole i s’executen a la mateixa JVM que el router. Normalment són aplicacions web accessibles des de la consola del router. Poden ser aplicacions completes (p. ex. i2psnark), interfícies d’un altre client o aplicació que s’hagi d’habilitar per separat (p. ex. susidns, i2ptunnel), o bé no tenir cap interfície web (p. ex. addressbook)."
 
+msgid "Router Session Key Manager"
+msgstr "Gestor de claus de sessió de l'encaminador"
+
+msgid "Client Session Key Managers"
+msgstr "Gestors de claus de sessió de client"
+
+msgid "Router DHT"
+msgstr "DHT de l'encaminador"
+
 msgid "Open in new tab"
 msgstr "Obre en una pestanya nova"
 
@@ -7591,14 +7761,19 @@ msgstr "Període mínim de prova de túnel en mil·lisegons. Les proves de túne
 msgid "Maximum tunnel test period in milliseconds. Tunnel tests never wait longer than this for a reply, even on high-latency paths. [Default is 50000 (50 seconds)]"
 msgstr "Període màxim de prova de túnel en mil·lisegons. Les proves de túnel mai esperen més temps que aquest per una resposta, ni tan sols en rutes amb molta latència. [Per defecte: 50000 (50 segons)]"
 
-msgid "Number of tunnel build timeouts before a peer is marked as a ghost (blacklisted for tunnel participation). Higher values tolerate more transient failures. [Default is 3]"
-msgstr "Nombre de temps d’espera en la construcció de túnells abans de marcar un peer com a fantasma (amb el túnel bloquejat a la llista negra). Els valors més alts toleren més fallades transitàries. [Per defecte: 3]"
+msgid "Number of tunnel build timeouts before a peer is marked as a ghost (excluded from tunnel participation). Higher values tolerate more transient failures. [Default is 1]"
+msgstr ""
+"Nombre de temps d'espera de construcció de túnels abans que un peer "
+"sigui marcat com a fantasma (exclòs de la participació en túnels). "
+"Valors més alts toleren més fallades transitòries. [El valor per defecte "
+"és 1]"
 
-msgid "Cooldown period in milliseconds before a ghost-marked peer can be considered for tunnel participation again. Shorter values allow faster peer reuse. [Default is 180000 (3 minutes)]"
-msgstr "Període de refredament en mil·lisegons abans que un peer marcat com a fantasma es pugui tornar a considerar per participar en túnells. Els valors més curts permeten reutilitzar els peers més ràpidament. [Per defecte: 180000 (3 minuts)]"
-
-msgid "Cooldown period in milliseconds for ghost-marked peers during attack mode. Longer cooldowns limit exposure to potentially malicious peers during high-stress periods. [Default is 300000 (5 minutes)]"
-msgstr "Període de refredament en mil·lisegons per als peers marcats com a fantasma durant el mode d’atac. Els refredaments més llargs limiten l’exposició a peers potencialment maliciosos durant períodes d’estrès elevat. [Per defecte: 300000 (5 minuts)]"
+msgid "Cooldown period in milliseconds before a ghost-marked peer can be promoted into the tunnel peer tiers again. Shorter values return recovered peers to service faster. [Default is 90000 (90 seconds)]"
+msgstr ""
+"Període de refredament en mil·lisegons abans que un peer marcat com a "
+"fantasma pugui tornar a pujar als nivells de peers de túnel. Els valors "
+"més curts tornen els peers restablerts al servei més ràpidament. [El "
+"valor per defecte és 90000 (90 segons)]"
 
 msgid "Minimum number of incoming tunnel build requests accepted per peer per clean window. Prevents starving peers during low-traffic periods. [Default is 10]"
 msgstr "Nombre mínim de peticions de construcció de túnel entrants acceptades per peer i finestra neta. Evita que els peers es quedin sense servei durant períodes de poc tràfic. [Per defecte: 10]"
@@ -10028,3 +10203,35 @@ msgstr "Següent"
 
 msgid "Finished"
 msgstr "Finalitzat"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

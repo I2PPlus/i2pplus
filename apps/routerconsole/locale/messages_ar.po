@@ -134,23 +134,45 @@ msgstr "الأقران بدون عنوان IP منشور"
 msgid "Average tunnel build success (%)"
 msgstr "متوسط نجاح بناء النفق %"
 
+msgid "Tier promotions held back for a peer with no usable address"
+msgstr "ترقيات في المستويات أُوقفت لقران لا يملك عنوانًا صالحًا"
+
+msgid "RouterInfo refreshes issued for peers held out of the tiers"
+msgstr "عمليات تحديث RouterInfo صدرت لأقران مُبقاة خارج المستويات"
+
+msgid "Tier scans that left the fast or high-capacity tier short of target"
+msgstr ""
+"عمليات مسح المستويات التي جعلت المستوى السريع أو عالي السعة دون الهدف"
+
+msgid "RouterInfos requested for stored profiles that had none"
+msgstr "طلبات RouterInfo أُطلقت لملفات مخزنة لم تكن لديها واحدة"
+
+msgid "Build timeouts recorded against a peer as a ghost mark"
+msgstr "حالات انتهاء مهلة البناء المسجلة ضد قران كعلامة شبح"
+
+msgid "Ghost marks cleared by a successful build reply"
+msgstr "علامات شبح مُسحت برد بناء ناجح"
+
+msgid "Peers currently excluded as ghosts"
+msgstr "أقران مستبعدون حاليًا كأشباح"
+
+msgid "Ghost peers in the fast or high-capacity tiers"
+msgstr "أقران أشباح في المستويين السريع أو عالي السعة"
+
+msgid "Duplicate CLOSE safety-net messages sent"
+msgstr "رسائل أمان CLOSE مكررة أُرسلت"
+
 msgid "Memory used by the JVM"
 msgstr "الذاكرة المستخدمة من قبل JVM"
 
 msgid "maximum"
 msgstr "أقصى"
 
-msgid "No transports"
-msgstr "ﻻ وسائل النقل (مخفية أو جاري البدء؟)"
-
 msgid "Unsupported signature type"
 msgstr "نوع التوقيع غير مدعوم"
 
 msgid "No support for our signature type"
 msgstr "لا يوجد دعم لنوع التوقيع لدينا"
-
-msgid "Unreachable on any transport"
-msgstr "صعب الوصول بأية وسيلة"
 
 msgid "Cannot enumerate UPnP devices on Android."
 msgstr "لا يمكن تعداد أجهزة UPnP على نظام Android."
@@ -851,6 +873,9 @@ msgstr "وحدة التحكم"
 
 msgid "To enable SSL access for the Router Console, see the commented <code>clients.config</code> file located in your I2P application directory for more information. You will need to edit the RouterConsoleRunner config file located in the directory: "
 msgstr "لتمكين وصول SSL لوحدة التحكم في جهاز التوجيه ، راجع ملف <code>clients.config</code> المذكور في دليل تطبيق I2P لمزيد من المعلومات. ستحتاج إلى تحرير ملف تكوين RouterConsolerunner الموجود في الدليل: "
+
+msgid "No client session key managers."
+msgstr "لا توجد مدير مفاتيح جلسات للعملاء."
 
 msgid "Save disabled, edit the router.config file to make changes"
 msgstr "تم تعطيل الحفظ، قم بتحرير ملف router.config لإجراء التغييرات"
@@ -2076,20 +2101,34 @@ msgstr "تحسين"
 msgid "vs baseline"
 msgstr "مقابل خط الأساس"
 
+#, java-format
+msgid "Out: {0} / {1}"
+msgstr "صادر: {0} / {1}"
+
+#, java-format
+msgid "In: {0} / {1}"
+msgstr "وارد: {0} / {1}"
+
 msgid "CPU"
 msgstr "CPU"
 
-msgid "CPU load average"
-msgstr "متوسط حمل وحدة المعالجة المركزية"
+msgid "JVM CPU load average"
+msgstr "متوسط حمل معالج JVM"
+
+#, java-format
+msgid "{0} cores"
+msgstr "{0} نوى"
 
 msgid "Memory"
 msgstr "الذاكرة"
 
-msgid "Memory usage"
-msgstr "استخدام الذاكرة"
+#, java-format
+msgid "Used: {0} / {1} max"
+msgstr "مستخدم: {0} / {1} كحد أقصى"
 
-msgid "Router uptime"
-msgstr "مدة تشغيل جهاز التوجيه"
+#, java-format
+msgid "Since {0}"
+msgstr "منذ {0}"
 
 msgid "Job Lag"
 msgstr "فريق العمل"
@@ -2115,6 +2154,10 @@ msgstr "الخيوط"
 msgid "Active JVM threads"
 msgstr "خيوط JVM النشطة"
 
+#, java-format
+msgid "Empty at {0}"
+msgstr "فارغ عند {0}"
+
 msgid "NTCP Estab"
 msgstr "إنشاء NTCP"
 
@@ -2136,20 +2179,24 @@ msgstr "مهلة إعادة الإرسال SSU"
 msgid "Conns/s"
 msgstr "اتصالات/ثانية"
 
-msgid "NTCP connections established per second"
-msgstr "عدد اتصالات NTCP المنشأة لكل ثانية"
+#, java-format
+msgid "Full at {0}/s"
+msgstr "ممتلئ عند {0}/ث"
+
+msgid "New NTCP connections (1 min)"
+msgstr "اتصالات NTCP جديدة (دقيقة واحدة)"
 
 msgid "Msgs/s"
 msgstr "رسائل/ثانية"
 
-msgid "Messages delivered per second"
-msgstr "عدد الرسائل الم delivering لكل ثانية"
+msgid "Messages delivered (1 min)"
+msgstr "رسائل سُلّمت (دقيقة واحدة)"
 
 msgid "RTT"
 msgstr "RTT"
 
-msgid "End-to-end message round trip time"
-msgstr "وقت الذهاب والعودة للرسالة من طرف إلى طرف"
+msgid "End-to-end client message round trip"
+msgstr "رحلة الذهاب والعودة لرسائل العميل من طرف إلى طرف"
 
 msgid "Timeout"
 msgstr "مهلة الانتظار"
@@ -2163,20 +2210,28 @@ msgstr "بناء النفق"
 msgid "Client tunnel build latency"
 msgstr "زمن استجابة بناء نفق العميل"
 
+#, java-format
+msgid "In: {0} / Out: {1}"
+msgstr "وارد: {0} / صادر: {1}"
+
 msgid "Active Peers"
 msgstr "الأقران النشطون"
 
-msgid "Active peers (last 60s)"
-msgstr "الأقران النشطون (آخر 60 ثانية)"
+#, java-format
+msgid "Full at {0}"
+msgstr "ممتلئ عند {0}"
+
+msgid "Reached in the last 60s"
+msgstr "وُصل إليها في آخر 60 ثانية"
 
 msgid "Known Peers"
 msgstr "الأقران المعروفون"
 
-msgid "Known routers in network database"
-msgstr "أجهزة التوجيه المعروفة في قاعدة بيانات الشبكة"
+msgid "In the network database"
+msgstr "في قاعدة بيانات الشبكة"
 
-msgid "Active I2CP clients"
-msgstr "عملاء I2CP النشطون"
+msgid "I2CP clients connected"
+msgstr "عملاء I2CP متصلون"
 
 msgid "Transit"
 msgstr "العبور"
@@ -2190,8 +2245,8 @@ msgstr "التدفقات"
 msgid "Build Success"
 msgstr "بناء النجاح"
 
-msgid "Tunnel build success rate"
-msgstr "معدل نجاح بناء النفق"
+msgid "Tunnel build success rate (1 min)"
+msgstr "معدل نجاح بناء الأنفاق (دقيقة واحدة)"
 
 msgid "NetDB"
 msgstr "NetDB"
@@ -2202,26 +2257,31 @@ msgstr "وقت البحث في NetDB"
 msgid "Banned"
 msgstr "ممنوع"
 
-msgid "Total banned peers"
-msgstr "إجمالي الأقران المحظورين"
+msgid "Peers excluded from all interactions"
+msgstr "تم استبعاد الأقران من جميع التفاعلات"
+
+#, java-format
+msgid "{0} of {1} known"
+msgstr "{0} من {1} معروفة"
 
 msgid "LeaseSets"
 msgstr "مجموعات الإيجار"
 
-msgid "Stored LeaseSets in floodfill"
-msgstr "LeaseSets المخزنة في عقدة الفيضان"
+msgid "Stored LeaseSets"
+msgstr "LeaseSets مخزنة"
 
 msgid "Cache Hit"
 msgstr "مطابقة التخزين المؤقت"
 
-msgid "NetDB lookup success rate"
-msgstr "معدل نجاح البحث في NetDB"
+#, java-format
+msgid "Matched {0} of {1} lookups (1 min)"
+msgstr "طابقت {0} من {1} عمليات بحث (دقيقة واحدة)"
 
 msgid "Flood Verify"
 msgstr "تحقق من الفيضان"
 
-msgid "Floodfill verify time"
-msgstr "عقدة الفيضان التحقق من الوقت"
+msgid "Floodfill verify time (1 min)"
+msgstr "زمن تحقق Floodfill (دقيقة واحدة)"
 
 msgid "NetDB ACK"
 msgstr "تأكيد NetDB"
@@ -2232,20 +2292,20 @@ msgstr "وقت تأكيد peer NetDB"
 msgid "Lookups/s"
 msgstr "بحث/ثانية"
 
-msgid "NetDB lookups handled per second"
-msgstr "عمليات البحث في NetDB المعالجة لكل ثانية"
+msgid "Lookups handled (1 min)"
+msgstr "عمليات بحث عولجت (دقيقة واحدة)"
 
 msgid "Requests/s"
 msgstr "طلبات/ثانية"
 
-msgid "Combined store + lookup operations per second"
-msgstr "عمليات التخزين + البحث المجمعة لكل ثانية"
+msgid "Stores + lookups (1 min)"
+msgstr "تخزين + بحث (دقيقة واحدة)"
 
 msgid "Stores/s"
 msgstr "تخزين/ثانية"
 
-msgid "NetDB store messages handled per second"
-msgstr "رسائل التخزين في NetDB المعالجة لكل ثانية"
+msgid "Stores handled (1 min)"
+msgstr "عمليات تخزين عولجت (دقيقة واحدة)"
 
 msgid "LS Timeout"
 msgstr "مهلة LeaseSet"
@@ -3229,6 +3289,9 @@ msgstr "عرض الملف الشخصي"
 msgid "Configure peer"
 msgstr "تكوين النظير"
 
+msgid "Memory usage"
+msgstr "استخدام الذاكرة"
+
 msgid "Hidden"
 msgstr "مختفي"
 
@@ -3372,8 +3435,8 @@ msgstr "أقرانهم ذات النطاق الترددي العالي للعد�
 msgid "Reliable"
 msgstr "موثوق"
 
-msgid "High-capacity peers with good acceptance"
-msgstr "أقرانهم ذوي القدرات العالية والقبول الجيد"
+msgid "Peers with good acceptance and recent activity"
+msgstr "أقران بقبول جيد ونشاط حديث"
 
 msgid "Peers that store and serve NetDb info"
 msgstr "الأقران الذين يقومون بتخزين معلومات NetDb وتقديمها"
@@ -3384,17 +3447,21 @@ msgstr "معروف"
 msgid "Total entries in network database"
 msgstr "إجمالي الإدخالات في قاعدة بيانات الشبكة"
 
+msgid "Profiles"
+msgstr "الملفات الشخصية"
+
 msgid "Profiles with activity in the last hour"
 msgstr "ملفات تعريف مع نشاط في الساعة الأخيرة"
+
+#, java-format
+msgid "{0} of {1} stored"
+msgstr "{0} من {1} مخزنة"
 
 msgid "Unreachable"
 msgstr "لا يمكن الوصول له"
 
-msgid "Peers without a reachable address"
-msgstr "أقرانهم دون عنوان يمكن الوصول إليه"
-
-msgid "Peers excluded from all interactions"
-msgstr "تم استبعاد الأقران من جميع التفاعلات"
+msgid "Peers without a published address"
+msgstr "أقران بلا عنوان منشور"
 
 msgid "/min"
 msgstr "/دقيقة"
@@ -3402,8 +3469,12 @@ msgstr "/دقيقة"
 msgid "Test Fail"
 msgstr "فشل الاختبار"
 
-msgid "Connectivity test failures per minute"
-msgstr "فشل اختبار الاتصال في الدقيقة"
+msgid "Connectivity test failures in the last minute"
+msgstr "إخفاقات اختبار الاتصال في الدقيقة الأخيرة"
+
+#, java-format
+msgid "Empty at {0}/min"
+msgstr "فارغ عند {0}/د"
 
 msgid "Peer Connections"
 msgstr "اتصالات الأقران"
@@ -3689,26 +3760,40 @@ msgstr[5] "{0} ملف شخصي قديم مخفي"
 msgid "Share of total profiles shown"
 msgstr "نسبة إجمالي الملفات الشخصية المعروضة"
 
-msgid "peers"
-msgstr "الأقران"
-
-msgid "Share of tier profiles shown"
-msgstr "نسبة ملفات تعريف الطبقات المعروضة"
-
 msgid "Window"
 msgstr "نافذة"
 
 msgid "Fast RTT"
 msgstr "RTT سريع"
 
-msgid "Max RTT for fast-tier membership (ms)"
-msgstr "الحد الأقصى لـ RTT لعضوية الطبقة السريعة (مللي ثانية)"
+msgid "Max RTT for fast-tier membership"
+msgstr "أقصى RTT للعضوية في المستوى السريع"
 
-msgid "Average loss of fast-tier peers (%)"
-msgstr "متوسط فقدان أقران الطبقة السريعة (%)"
+msgid "Rises with network latency"
+msgstr "يرتفع مع كمون الشبكة"
 
-msgid "Average loss of high-capacity peers (%)"
-msgstr "متوسط فقدان الأقران ذوي السعة العالية (%)"
+msgid "Average loss of fast-tier peers"
+msgstr "متوسط فقد أقران المستوى السريع"
+
+msgid "Average loss of high-capacity peers"
+msgstr "متوسط فقد الأقران عاليي السعة"
+
+msgid "Average direct-link RTT of tier peers"
+msgstr "متوسط RTT للرابط المباشر لأقران المستوى"
+
+#, java-format
+msgid "{0} of {1} measured"
+msgstr "{0} من {1} مقيسة"
+
+msgid "1h Contact"
+msgstr "اتصال 1 ساعة"
+
+msgid "Heard from in the last hour"
+msgstr "وُصل بها في الساعة الأخيرة"
+
+#, java-format
+msgid "{0} of {1} tier peers"
+msgstr "{0} من {1} أقران المستوى"
 
 msgid "Heard from within the display cutoff"
 msgstr "سُمع ضمن حد العرض"
@@ -3719,11 +3804,19 @@ msgstr "عمليات البحث"
 msgid "Lookup success rate"
 msgstr "معدل نجاح البحث"
 
+#, java-format
+msgid "{0} of {1} lookups"
+msgstr "{0} من {1} عمليات بحث"
+
 msgid "Stores"
 msgstr "عمليات التخزين"
 
 msgid "Store success rate"
 msgstr "معدل نجاح التخزين"
+
+#, java-format
+msgid "{0} of {1} peers"
+msgstr "{0} من {1} أقران"
 
 msgid "Definitions"
 msgstr "التعاريف"
@@ -3796,11 +3889,25 @@ msgstr "كم من النظائر موجودة مؤخرا؟"
 msgid "Known floodfills"
 msgstr "علامات الفيضان المعروفة"
 
-msgid "No-Fail"
-msgstr "بلا فشل"
+msgid "Reachable, unbanlisted and heard from"
+msgstr "قابل للوصول، غير محظور، ووُصل به مؤخرًا"
 
-msgid "No lookup failures (1h)"
-msgstr "لا فشل في عمليات البحث (1 ساعة)"
+msgid "Active bans of floodfill-capable peers"
+msgstr "حظر نشط لأقران قادرين على أداء Floodfill"
+
+#, java-format
+msgid "of {0} known"
+msgstr "من {0} معروفة"
+
+msgid "Fail"
+msgstr "فشل"
+
+msgid "Lookup failures in the last hour"
+msgstr "إخفاقات بحث في الساعة الأخيرة"
+
+#, java-format
+msgid "across {0} listed peers"
+msgstr "عبر {0} قران مدرجين"
 
 msgid "Response"
 msgstr "الاستجابة"
@@ -3808,11 +3915,16 @@ msgstr "الاستجابة"
 msgid "Lookup response time (1h)"
 msgstr "زمن استجابة البحث (1 ساعة)"
 
-msgid "1h Contact"
-msgstr "اتصال 1 ساعة"
+#, java-format
+msgid "{0} peers measured"
+msgstr "{0} قران مقيسة"
 
 msgid "Contacted within 1h"
 msgstr "تم الاتصال خلال 1 ساعة"
+
+#, java-format
+msgid "{0} of {1} listed"
+msgstr "{0} من {1} مدرجة"
 
 msgid "1h Fail Rate"
 msgstr "معدل الفشل 1 ساعة"
@@ -3850,17 +3962,33 @@ msgstr "الكل"
 msgid "SAM bridge is not running."
 msgstr "جسر SAM غير قيد التشغيل."
 
+msgid "Sessions"
+msgstr "جلسات"
+
 msgid "Active sessions in SessionsDB"
 msgstr "الجلسات النشطة في SessionsDB"
+
+msgid "Workers"
+msgstr "خيوط عاملة"
 
 msgid "Active / pool worker threads"
 msgstr "الخيوط النشطة / خيوط عمل المجمع"
 
-msgid "Pending commands in pool"
-msgstr "الأوامر المعلقة في المجمع"
+msgid "Queue"
+msgstr "طابور"
+
+#, java-format
+msgid "Pending commands: {0} of {1}"
+msgstr "أوامر معلقة: {0} من {1}"
+
+msgid "Handlers"
+msgstr "معالجات"
 
 msgid "Connected pool handlers"
 msgstr "معالجات المجمع المتصلة"
+
+msgid "Stolen"
+msgstr "مسروقة"
 
 msgid "Sockets stolen for data streaming"
 msgstr "المقابس المستخدمة لتدفق البيانات"
@@ -4179,9 +4307,6 @@ msgstr "أظهر اتصالات المشاركين"
 msgid "Router health overview"
 msgstr "نظرة عامة على حالة جهاز التوجيه"
 
-msgid "Profiles"
-msgstr "الملفات الشخصية"
-
 msgid "Show recent peer performance profiles"
 msgstr "عرض ملفات تعريف الأداء الحديثة للأقران"
 
@@ -4498,6 +4623,27 @@ msgstr[2] "{0} حدثاً"
 msgstr[3] "{0} حدثاً"
 msgstr[4] "{0} حدثاً"
 msgstr[5] "{0} حدثاً"
+
+msgid "Open streaming connections"
+msgstr "اتصالات جارية مفتوحة"
+
+msgid "Round-trip time (live samples, 1 min)"
+msgstr "زمن الذهاب والعودة (عينات حية، دقيقة واحدة)"
+
+msgid "Retrans"
+msgstr "إعادة إرسال"
+
+msgid "Share of sends needing retransmit (1 min)"
+msgstr "نسبة الإرسالات التي تحتاج إعادة إرسال (دقيقة واحدة)"
+
+msgid "Created + received (1 min)"
+msgstr "أُنشئت + استُقبلت (دقيقة واحدة)"
+
+msgid "Throughput"
+msgstr "الإنتاجية"
+
+msgid "Mean rate of streams closed in the last minute"
+msgstr "متوسط معدل التدفقات المغلقة في الدقيقة الأخيرة"
 
 msgid "sent"
 msgstr "مُرسل"
@@ -4886,6 +5032,9 @@ msgstr "خنق رفض الأس"
 msgid "Maximum Participating Tunnels"
 msgstr "الحد الأقصى للأنفاق المشاركة"
 
+msgid "Timer Threads"
+msgstr "خيوط المؤقّت"
+
 msgid "Build Handler Maximum Queue"
 msgstr "بناء الحد الأقصى لقائمة الانتظار للمعالج"
 
@@ -5239,6 +5388,9 @@ msgstr "أقصى نافذة للازدحام أثناء البداية البط�
 
 msgid "Per-connection inbound buffer cap (bytes)."
 msgstr "حد مخزن الوارد لكل اتصال (بايت)."
+
+msgid "Timer worker threads; higher reduces event delay."
+msgstr "خيوط عمل المؤقّت؛ القيمة الأعلى تقلل تأخير الأحداث."
 
 msgid "Dynamic cap on concurrent streams per destination."
 msgstr "حد ديناميكي للبث المتزامن لكل وجهة."
@@ -7061,6 +7213,15 @@ msgstr "تكوين تطبيقات الويب"
 msgid "The Java web applications listed below are started by the webConsole client and run in the same JVM as the router. They are usually web applications accessible through the router console. They may be complete applications (e.g. i2psnark), front-ends to another client or application which must be separately enabled (e.g. susidns, i2ptunnel), or have no web interface at all (e.g. addressbook)."
 msgstr "قد تكون تطبيقات كاملة (على سبيل المثال السيول) ، أو الواجهة الأمامية لعميل أو تطبيق آخر يجب تمكينه بشكل منفصل (على سبيل المثال DNS ، I2PTunnel) ، أو ليس لديهم واجهة ويب على الإطلاق (على سبيل المثال دفتر العناصر). وهي عادةً تطبيقات ويب يمكن الوصول إليها من خلال وحدة تحكم الراوتر They may be complete applications (e. g i2psnark), front-ends to another client or application which must be separately enabled (e. g susidns, i2ptunnel), or have no web interface at all (e. g addressbook). وهي عادةً تطبيقات ويب يمكن الوصول إليها من خلال وحدة تحكم الراوتر They may be complete applications (e. g i2psnark), front-ends to another client or application which must be separately enabled (e. g susidns, i2ptunnel), or have no web interface at all (e. g addressbook). وهي عادة ما تكون تطبيقات ويب يمكن الوصول إليها من خلال وحدة تحكم جهاز التوجيه قد تكون تطبيقات كاملة (e ز i2psnark)، الواجهات الأمامية لعميل أو تطبيق آخر يجب تمكينه بشكل منفصل (على سبيل المثال ز susidns، i2ptunnel)، أو ليس لديك واجهة ويب على الإطلاق (على سبيل المثال ز دفتر العناوين)"
 
+msgid "Router Session Key Manager"
+msgstr "مدير مفاتيح جلسات الموجه"
+
+msgid "Client Session Key Managers"
+msgstr "مديرو مفاتيح جلسات العملاء"
+
+msgid "Router DHT"
+msgstr "DHT الموجه"
+
 msgid "Open in new tab"
 msgstr "فتح في صفحة جديدة"
 
@@ -7635,14 +7796,17 @@ msgstr "الحد الأدنى لفترة اختبار النفق بالميلي 
 msgid "Maximum tunnel test period in milliseconds. Tunnel tests never wait longer than this for a reply, even on high-latency paths. [Default is 50000 (50 seconds)]"
 msgstr "الحد الأقصى لفترة اختبار النفق بالميلي ثانية. لا تنتظر اختبارات النفق أبدًا أكثر من هذا للحصول على رد، حتى على الشبكات عالية الكمون. [الافتراضي 60000]"
 
-msgid "Number of tunnel build timeouts before a peer is marked as a ghost (blacklisted for tunnel participation). Higher values tolerate more transient failures. [Default is 3]"
-msgstr "عدد مهلات بناء النفق قبل وضع علامة على الأقران كشبح (في القائمة السوداء للمشاركة في النفق). القيم الأعلى تتسامح مع المزيد من الإخفاقات. [الافتراضي 3]"
+msgid "Number of tunnel build timeouts before a peer is marked as a ghost (excluded from tunnel participation). Higher values tolerate more transient failures. [Default is 1]"
+msgstr ""
+"عدد حالات انتهاء مهلة بناء النفق قبل وسم قران كقران شبح (مستبعد من "
+"المشاركة في الأنفاق). القيم الأعلى تتحمل المزيد من الأعطال العابرة. "
+"[الافتراضي 1]"
 
-msgid "Cooldown period in milliseconds before a ghost-marked peer can be considered for tunnel participation again. Shorter values allow faster peer reuse. [Default is 180000 (3 minutes)]"
-msgstr "فترة التهدئة بالميلي ثانية قبل أن يتم النظر في إعادة أقران موسوم بالشبح للمشاركة في النفق. القيم الأقصر تسمح بإعادة الانضمام بشكل أسرع. [الافتراضي 600000]"
-
-msgid "Cooldown period in milliseconds for ghost-marked peers during attack mode. Longer cooldowns limit exposure to potentially malicious peers during high-stress periods. [Default is 300000 (5 minutes)]"
-msgstr "فترة التهدئة بالميلي ثانية للأقران الموسومين بالشبح أثناء وضع الهجوم. فترات التهدئة الأطول تحد من التعرض للهجمات المحتملة. [الافتراضي 3600000]"
+msgid "Cooldown period in milliseconds before a ghost-marked peer can be promoted into the tunnel peer tiers again. Shorter values return recovered peers to service faster. [Default is 90000 (90 seconds)]"
+msgstr ""
+"فترة تبريد بالميلي ثانية قبل أن يمكن ترقية قران مُعلَّم كشبح مجددًا إلى "
+"مستويات أقران الأنفاق. القيم الأقصر تعيد الأقران المتعافين إلى الخدمة "
+"أسرع. [الافتراضي 90000 (90 ثانية)]"
 
 msgid "Minimum number of incoming tunnel build requests accepted per peer per clean window. Prevents starving peers during low-traffic periods. [Default is 10]"
 msgstr "الحد الأدنى لعدد طلبات بناء النفق الواردة المقبولة لكل أقران لكل نافذة نظيفة. يمنع تجويع الأقران خلال فترات الطلب المنخفض. [الافتراضي 1]"
@@ -10072,3 +10236,35 @@ msgstr "التالي"
 
 msgid "Finished"
 msgstr "منتهي"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

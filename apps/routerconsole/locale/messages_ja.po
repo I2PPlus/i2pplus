@@ -124,23 +124,44 @@ msgstr "IPアドレスが公開されていないピア"
 msgid "Average tunnel build success (%)"
 msgstr "平均トンネル構築成功率"
 
+msgid "Tier promotions held back for a peer with no usable address"
+msgstr "使用可能なアドレスを持たないピアに対して保留されたティア昇格"
+
+msgid "RouterInfo refreshes issued for peers held out of the tiers"
+msgstr "ティアから除外されているピアに対して発行された RouterInfo 更新"
+
+msgid "Tier scans that left the fast or high-capacity tier short of target"
+msgstr "高速ティアまたは大容量ティアが目標数を下回ったティアスキャン"
+
+msgid "RouterInfos requested for stored profiles that had none"
+msgstr "RouterInfo を持たない保存済みプロファイルに対して要求された RouterInfo 取得"
+
+msgid "Build timeouts recorded against a peer as a ghost mark"
+msgstr "ゴーストマークとしてピアに対して記録されたビルドタイムアウト"
+
+msgid "Ghost marks cleared by a successful build reply"
+msgstr "ビルドの正常な応答により解除されたゴーストマーク"
+
+msgid "Peers currently excluded as ghosts"
+msgstr "現在ゴーストとして除外されているピア"
+
+msgid "Ghost peers in the fast or high-capacity tiers"
+msgstr "高速または大容量ティア内のゴーストピア"
+
+msgid "Duplicate CLOSE safety-net messages sent"
+msgstr "送信された重複した CLOSE 安全網メッセージ"
+
 msgid "Memory used by the JVM"
 msgstr "JVMが使用するメモリ"
 
 msgid "maximum"
 msgstr "最大"
 
-msgid "No transports"
-msgstr "トランスポートなし (隠されているかスタートアップ中？)"
-
 msgid "Unsupported signature type"
 msgstr "サポートされていない署名形式です"
 
 msgid "No support for our signature type"
 msgstr "署名タイプに非対応"
-
-msgid "Unreachable on any transport"
-msgstr "すべてのトランスポートに到達不可"
 
 msgid "Cannot enumerate UPnP devices on Android."
 msgstr "AndroidでUPnPデバイスを列挙できません。"
@@ -836,6 +857,9 @@ msgstr "コンソール"
 
 msgid "To enable SSL access for the Router Console, see the commented <code>clients.config</code> file located in your I2P application directory for more information. You will need to edit the RouterConsoleRunner config file located in the directory: "
 msgstr "RouterコンソールのSSLアクセスを有効にするには、詳細についてはi2pアプリケーションディレクトリにある<code>clients.config</code>ファイルを参照してください。 ディレクトリにあるRouterConsolerunner構成ファイルを編集する必要があります。"
+
+msgid "No client session key managers."
+msgstr "クライアントセッション鍵マネージャーがありません。"
 
 msgid "Save disabled, edit the router.config file to make changes"
 msgstr "保存が無効です。変更を加えるにはrouter.configファイルを編集してください。"
@@ -2046,20 +2070,34 @@ msgstr "改善された"
 msgid "vs baseline"
 msgstr "対ベースライン"
 
+#, java-format
+msgid "Out: {0} / {1}"
+msgstr "送信: {0} / {1}"
+
+#, java-format
+msgid "In: {0} / {1}"
+msgstr "受信: {0} / {1}"
+
 msgid "CPU"
 msgstr "CPU"
 
-msgid "CPU load average"
-msgstr "CPU 負荷平均"
+msgid "JVM CPU load average"
+msgstr "JVM CPU 負荷平均"
+
+#, java-format
+msgid "{0} cores"
+msgstr "{0} コア"
 
 msgid "Memory"
 msgstr "記憶"
 
-msgid "Memory usage"
-msgstr "メモリ使用量"
+#, java-format
+msgid "Used: {0} / {1} max"
+msgstr "使用済み: {0} / {1} 最大"
 
-msgid "Router uptime"
-msgstr "ルーター稼働時間"
+#, java-format
+msgid "Since {0}"
+msgstr "{0} から"
 
 msgid "Job Lag"
 msgstr "ジョブの遅延"
@@ -2085,6 +2123,10 @@ msgstr "スレッド"
 msgid "Active JVM threads"
 msgstr "アクティブ JVM スレッド"
 
+#, java-format
+msgid "Empty at {0}"
+msgstr "{0} で空"
+
 msgid "NTCP Estab"
 msgstr "NTCP 確立"
 
@@ -2106,20 +2148,24 @@ msgstr "SSU 再送タイムアウト"
 msgid "Conns/s"
 msgstr "接続/秒"
 
-msgid "NTCP connections established per second"
-msgstr "1 秒あたりの NTCP 接続確立数"
+#, java-format
+msgid "Full at {0}/s"
+msgstr "{0}/秒 で満杯"
+
+msgid "New NTCP connections (1 min)"
+msgstr "新規 NTCP 接続（1 分）"
 
 msgid "Msgs/s"
 msgstr "メッセージ/秒"
 
-msgid "Messages delivered per second"
-msgstr "1 秒あたりのメッセージ配信数"
+msgid "Messages delivered (1 min)"
+msgstr "配信されたメッセージ（1 分）"
 
 msgid "RTT"
 msgstr "RTT"
 
-msgid "End-to-end message round trip time"
-msgstr "エンドツーエンドメッセージラウンドトリップ時間"
+msgid "End-to-end client message round trip"
+msgstr "クライアントメッセージのエンドツーエンド往復時間"
 
 msgid "Timeout"
 msgstr "タイムアウト"
@@ -2133,20 +2179,28 @@ msgstr "トンネル構築"
 msgid "Client tunnel build latency"
 msgstr "クライアントトンネル構築レイテンシ"
 
+#, java-format
+msgid "In: {0} / Out: {1}"
+msgstr "受信: {0} / 送信: {1}"
+
 msgid "Active Peers"
 msgstr "アクティブピア"
 
-msgid "Active peers (last 60s)"
-msgstr "アクティブピア（過去60秒）"
+#, java-format
+msgid "Full at {0}"
+msgstr "{0} で満杯"
+
+msgid "Reached in the last 60s"
+msgstr "直近 60 秒で到達"
 
 msgid "Known Peers"
 msgstr "既知ピア"
 
-msgid "Known routers in network database"
-msgstr "ネットワークデータベース内の既知ルーター"
+msgid "In the network database"
+msgstr "ネットワークデータベース内"
 
-msgid "Active I2CP clients"
-msgstr "アクティブ I2CP クライアント"
+msgid "I2CP clients connected"
+msgstr "接続済みの I2CP クライアント"
 
 msgid "Transit"
 msgstr "トランジット"
@@ -2160,8 +2214,8 @@ msgstr "ストリーム"
 msgid "Build Success"
 msgstr "ビルド成功"
 
-msgid "Tunnel build success rate"
-msgstr "トンネル構築成功率"
+msgid "Tunnel build success rate (1 min)"
+msgstr "トンネル構築成功率（1 分）"
 
 msgid "NetDB"
 msgstr "NetDB"
@@ -2172,26 +2226,31 @@ msgstr "NetDB 検索時間"
 msgid "Banned"
 msgstr "禁止されました"
 
-msgid "Total banned peers"
-msgstr "禁止されたピアの合計"
+msgid "Peers excluded from all interactions"
+msgstr "すべてのインタラクションから除外されたピア"
+
+#, java-format
+msgid "{0} of {1} known"
+msgstr "既知 {1} 件中 {0} 件"
 
 msgid "LeaseSets"
 msgstr "リースセット"
 
-msgid "Stored LeaseSets in floodfill"
-msgstr "フラッド ノードに保存されたリースセット"
+msgid "Stored LeaseSets"
+msgstr "保存済み LeaseSet"
 
 msgid "Cache Hit"
 msgstr "キャッシュヒット"
 
-msgid "NetDB lookup success rate"
-msgstr "NetDB 検索成功率"
+#, java-format
+msgid "Matched {0} of {1} lookups (1 min)"
+msgstr "検索 {1} 件中 {0} 件一致（1 分）"
 
 msgid "Flood Verify"
 msgstr "フラッド検証"
 
-msgid "Floodfill verify time"
-msgstr "フラッドノード検証時間"
+msgid "Floodfill verify time (1 min)"
+msgstr "Floodfill 検証時間（1 分）"
 
 msgid "NetDB ACK"
 msgstr "NetDB 確認応答"
@@ -2202,20 +2261,20 @@ msgstr "NetDB ピア確認時間"
 msgid "Lookups/s"
 msgstr "検索/秒"
 
-msgid "NetDB lookups handled per second"
-msgstr "1 秒あたりの NetDB 処理検索数"
+msgid "Lookups handled (1 min)"
+msgstr "処理した検索（1 分）"
 
 msgid "Requests/s"
 msgstr "リクエスト/秒"
 
-msgid "Combined store + lookup operations per second"
-msgstr "1 秒あたりのストア + 検索操作の合計"
+msgid "Stores + lookups (1 min)"
+msgstr "保存 + 検索（1 分）"
 
 msgid "Stores/s"
 msgstr "ストア/秒"
 
-msgid "NetDB store messages handled per second"
-msgstr "1 秒あたりの NetDB ストアメッセージ処理数"
+msgid "Stores handled (1 min)"
+msgstr "処理した保存（1 分）"
 
 msgid "LS Timeout"
 msgstr "LeaseSet タイムアウト"
@@ -3199,6 +3258,9 @@ msgstr "プロフィールを見る"
 msgid "Configure peer"
 msgstr "ピアの設定"
 
+msgid "Memory usage"
+msgstr "メモリ使用量"
+
 msgid "Hidden"
 msgstr "非表示"
 
@@ -3342,8 +3404,8 @@ msgstr "多くのトンネルの高帯域幅ピア"
 msgid "Reliable"
 msgstr "信頼性のある"
 
-msgid "High-capacity peers with good acceptance"
-msgstr "良好な受け入れ能力を備えた大容量ピア"
+msgid "Peers with good acceptance and recent activity"
+msgstr "受け入れが良好で直近の活動があるピア"
 
 msgid "Peers that store and serve NetDb info"
 msgstr "NetDb 情報を保存および提供するピア"
@@ -3354,17 +3416,21 @@ msgstr "既知"
 msgid "Total entries in network database"
 msgstr "ネットワーク データベースのエントリの合計"
 
+msgid "Profiles"
+msgstr "プロファイル"
+
 msgid "Profiles with activity in the last hour"
 msgstr "過去1時間以内にアクティビティのあるプロファイル"
+
+#, java-format
+msgid "{0} of {1} stored"
+msgstr "{1} 件中 {0} 件保存済み"
 
 msgid "Unreachable"
 msgstr "到達不可"
 
-msgid "Peers without a reachable address"
-msgstr "到達可能なアドレスを持たないピア"
-
-msgid "Peers excluded from all interactions"
-msgstr "すべてのインタラクションから除外されたピア"
+msgid "Peers without a published address"
+msgstr "公開済みアドレスを持たないピア"
 
 msgid "/min"
 msgstr "/分"
@@ -3372,8 +3438,12 @@ msgstr "/分"
 msgid "Test Fail"
 msgstr "テスト失敗"
 
-msgid "Connectivity test failures per minute"
-msgstr "1 分あたりの接続テストの失敗数"
+msgid "Connectivity test failures in the last minute"
+msgstr "直近 1 分間の接続性テスト失敗"
+
+#, java-format
+msgid "Empty at {0}/min"
+msgstr "{0}/分で空"
 
 msgid "Peer Connections"
 msgstr "ピア接続"
@@ -3644,26 +3714,40 @@ msgstr[0] "{0}件の古いプロファイルを非表示にしました"
 msgid "Share of total profiles shown"
 msgstr "全プロファイルの表示割合"
 
-msgid "peers"
-msgstr "仲間"
-
-msgid "Share of tier profiles shown"
-msgstr "ティアプロファイルの表示割合"
-
 msgid "Window"
 msgstr "ウィンドウ"
 
 msgid "Fast RTT"
 msgstr "高速 RTT"
 
-msgid "Max RTT for fast-tier membership (ms)"
-msgstr "高速ティア所属の最大 RTT (ms)"
+msgid "Max RTT for fast-tier membership"
+msgstr "高速ティア参加の最大 RTT"
 
-msgid "Average loss of fast-tier peers (%)"
-msgstr "高速ティアピアの平均損失率 (%)"
+msgid "Rises with network latency"
+msgstr "ネットワーク遅延に伴い上昇"
 
-msgid "Average loss of high-capacity peers (%)"
-msgstr "高容量ピアの平均損失率 (%)"
+msgid "Average loss of fast-tier peers"
+msgstr "高速ティアピアの平均喪失数"
+
+msgid "Average loss of high-capacity peers"
+msgstr "大容量ピアの平均喪失数"
+
+msgid "Average direct-link RTT of tier peers"
+msgstr "ティアピアの直接リンク RTT 平均"
+
+#, java-format
+msgid "{0} of {1} measured"
+msgstr "{1} 件中 {0} 件測定済み"
+
+msgid "1h Contact"
+msgstr "1時間コンタクト"
+
+msgid "Heard from in the last hour"
+msgstr "直近 1 時間で通信あり"
+
+#, java-format
+msgid "{0} of {1} tier peers"
+msgstr "ティアピア {1} 件中 {0} 件"
 
 msgid "Heard from within the display cutoff"
 msgstr "表示カットオフ以内に接触あり"
@@ -3674,11 +3758,19 @@ msgstr "ルックアップ"
 msgid "Lookup success rate"
 msgstr "ルックアップ成功率"
 
+#, java-format
+msgid "{0} of {1} lookups"
+msgstr "検索 {1} 件中 {0} 件"
+
 msgid "Stores"
 msgstr "ストア"
 
 msgid "Store success rate"
 msgstr "ストア成功率"
+
+#, java-format
+msgid "{0} of {1} peers"
+msgstr "ピア {1} 件中 {0} 件"
 
 msgid "Definitions"
 msgstr "定義"
@@ -3751,11 +3843,25 @@ msgstr "最近、何人の新しい仲間について教えてくれましたか
 msgid "Known floodfills"
 msgstr "既知のフラッド ノード数"
 
-msgid "No-Fail"
-msgstr "失敗なし"
+msgid "Reachable, unbanlisted and heard from"
+msgstr "到達可能、禁止リスト未登録、直近の通信あり"
 
-msgid "No lookup failures (1h)"
-msgstr "ルックアップ失敗なし (1時間)"
+msgid "Active bans of floodfill-capable peers"
+msgstr "floodfill 対応ピアに対する有効な禁止"
+
+#, java-format
+msgid "of {0} known"
+msgstr "既知 {0} 件中"
+
+msgid "Fail"
+msgstr "失敗"
+
+msgid "Lookup failures in the last hour"
+msgstr "直近 1 時間の検索失敗"
+
+#, java-format
+msgid "across {0} listed peers"
+msgstr "{0} 件の登録ピアを対象に"
 
 msgid "Response"
 msgstr "応答"
@@ -3763,11 +3869,16 @@ msgstr "応答"
 msgid "Lookup response time (1h)"
 msgstr "ルックアップ応答時間 (1時間)"
 
-msgid "1h Contact"
-msgstr "1時間コンタクト"
+#, java-format
+msgid "{0} peers measured"
+msgstr "{0} 件のピアを測定"
 
 msgid "Contacted within 1h"
 msgstr "1時間以内に接触あり"
+
+#, java-format
+msgid "{0} of {1} listed"
+msgstr "{1} 件中 {0} 件登録"
 
 msgid "1h Fail Rate"
 msgstr "1時間失敗率"
@@ -3805,17 +3916,33 @@ msgstr "すべて"
 msgid "SAM bridge is not running."
 msgstr "SAM bridge が実行されていません。"
 
+msgid "Sessions"
+msgstr "セッション"
+
 msgid "Active sessions in SessionsDB"
 msgstr "SessionsDB のアクティブセッション"
+
+msgid "Workers"
+msgstr "ワーカースレッド"
 
 msgid "Active / pool worker threads"
 msgstr "アクティブ / プールワーカースレッド"
 
-msgid "Pending commands in pool"
-msgstr "プール内の保留中のコマンド"
+msgid "Queue"
+msgstr "キュー"
+
+#, java-format
+msgid "Pending commands: {0} of {1}"
+msgstr "保留中のコマンド: {0} / {1}"
+
+msgid "Handlers"
+msgstr "ハンドラー"
 
 msgid "Connected pool handlers"
 msgstr "接続されたプールハンドラ"
+
+msgid "Stolen"
+msgstr "窃取"
 
 msgid "Sockets stolen for data streaming"
 msgstr "データストリーミングに使用されたソケット"
@@ -4134,9 +4261,6 @@ msgstr "現在のピア接続をすべて表示"
 msgid "Router health overview"
 msgstr "ルーターの状態概要"
 
-msgid "Profiles"
-msgstr "プロファイル"
-
 msgid "Show recent peer performance profiles"
 msgstr "最近のピアパフォーマンスプロファイルを表示"
 
@@ -4443,6 +4567,27 @@ msgstr "生涯平均値"
 msgid "1 event"
 msgid_plural "{0} events"
 msgstr[0] "{0}件のイベント"
+
+msgid "Open streaming connections"
+msgstr "オープンなストリーミング接続"
+
+msgid "Round-trip time (live samples, 1 min)"
+msgstr "往復時間（ライブサンプル、1 分）"
+
+msgid "Retrans"
+msgstr "再送"
+
+msgid "Share of sends needing retransmit (1 min)"
+msgstr "再送を要した送信の割合（1 分）"
+
+msgid "Created + received (1 min)"
+msgstr "作成 + 受信（1 分）"
+
+msgid "Throughput"
+msgstr "スループット"
+
+msgid "Mean rate of streams closed in the last minute"
+msgstr "直近 1 分間に閉じられたストリームの平均レート"
 
 msgid "sent"
 msgstr "送信済み"
@@ -4831,6 +4976,9 @@ msgstr "スロットル拒否指数"
 msgid "Maximum Participating Tunnels"
 msgstr "最大参加トンネル数"
 
+msgid "Timer Threads"
+msgstr "タイマースレッド"
+
 msgid "Build Handler Maximum Queue"
 msgstr "ビルドハンドラ最大キュー"
 
@@ -5184,6 +5332,9 @@ msgstr "スロースタート中の最大輻輳ウィンドウ。"
 
 msgid "Per-connection inbound buffer cap (bytes)."
 msgstr "接続あたりのインバウンドバッファ上限 (バイト)。"
+
+msgid "Timer worker threads; higher reduces event delay."
+msgstr "タイマーのワーカースレッド数。大きくするとイベント遅延が減ります。"
 
 msgid "Dynamic cap on concurrent streams per destination."
 msgstr "宛先ごとの同時ストリーム数の動的な上限。"
@@ -7006,6 +7157,15 @@ msgstr "Webアプリの設定"
 msgid "The Java web applications listed below are started by the webConsole client and run in the same JVM as the router. They are usually web applications accessible through the router console. They may be complete applications (e.g. i2psnark), front-ends to another client or application which must be separately enabled (e.g. susidns, i2ptunnel), or have no web interface at all (e.g. addressbook)."
 msgstr "以下にリストされているJava Webアプリケーションは、WebConsoleクライアントによって開始され、ルーターと同じJVMで実行されます。 通常、ルーターコンソールからアクセスできるWebアプリケーションです。 それらは、完全なアプリケーション（I2PSNARKなど）、別のクライアントまたは別のクライアントへのフロントエンド（susidns、i2ptunnelなど）、またはWebインターフェイスがまったくない（例：アドレスブック）である場合があります。 これらは通常、ルーターコンソールからアクセスできるWebアプリケーションです。完全なアプリケーション（例：i2psnark）、別途有効にする必要がある別のクライアントまたはアプリケーションへのフロントエンド（例：susidns、i2ptunnel）、またはWebインターフェースがまったくないもの（例：アドレスブック）もあります。"
 
+msgid "Router Session Key Manager"
+msgstr "ルーターセッション鍵マネージャー"
+
+msgid "Client Session Key Managers"
+msgstr "クライアントセッション鍵マネージャー"
+
+msgid "Router DHT"
+msgstr "ルーター DHT"
+
 msgid "Open in new tab"
 msgstr "新しいタブで開く"
 
@@ -7580,14 +7740,15 @@ msgstr "ミリ秒単位の最小トンネル テスト期間。トンネル テ�
 msgid "Maximum tunnel test period in milliseconds. Tunnel tests never wait longer than this for a reply, even on high-latency paths. [Default is 50000 (50 seconds)]"
 msgstr "トンネル テストの最大期間 (ミリ秒)。トンネル テストは、待ち時間が長いパスであっても、応答をこれより長く待つことはありません。 [デフォルトは50000(50秒)]"
 
-msgid "Number of tunnel build timeouts before a peer is marked as a ghost (blacklisted for tunnel participation). Higher values tolerate more transient failures. [Default is 3]"
-msgstr "ピアがゴーストとしてマークされる (トンネル参加のブラックリストに登録される) までのトンネル構築タイムアウトの数。値が大きいほど、より多くの一時的な障害が許容されます。 [デフォルトは3]"
+msgid "Number of tunnel build timeouts before a peer is marked as a ghost (excluded from tunnel participation). Higher values tolerate more transient failures. [Default is 1]"
+msgstr ""
+"ピアがゴーストとしてマークされる（トンネル参加から除外される）までのトンネルビルドタイムアウトの数。大きな値ほど一時的な障害を許容します。[既定値は "
+"1]"
 
-msgid "Cooldown period in milliseconds before a ghost-marked peer can be considered for tunnel participation again. Shorter values allow faster peer reuse. [Default is 180000 (3 minutes)]"
-msgstr "ゴーストマークが付けられたピアが再びトンネルへの参加を検討されるまでのクールダウン期間 (ミリ秒単位)。値を短くすると、ピアの再利用が速くなります。 [デフォルトは180000(3分)]"
-
-msgid "Cooldown period in milliseconds for ghost-marked peers during attack mode. Longer cooldowns limit exposure to potentially malicious peers during high-stress periods. [Default is 300000 (5 minutes)]"
-msgstr "攻撃モード中のゴーストマーク付きピアのクールダウン期間 (ミリ秒単位)。クールダウンを長くすると、高ストレス期間中に潜在的に悪意のあるピアにさらされることが制限されます。 [デフォルトは300000(5分)]"
+msgid "Cooldown period in milliseconds before a ghost-marked peer can be promoted into the tunnel peer tiers again. Shorter values return recovered peers to service faster. [Default is 90000 (90 seconds)]"
+msgstr ""
+"ゴーストマークされたピアがトンネルピアのティアに再昇格できるまでのクールダウン期間（ミリ秒）。小さい値ほど回復したピアを早く運用に戻します。[既定値は "
+"90000（90 秒）]"
 
 msgid "Minimum number of incoming tunnel build requests accepted per peer per clean window. Prevents starving peers during low-traffic periods. [Default is 10]"
 msgstr "クリーン ウィンドウごとのピアごとに受け入れられる受信トンネル構築リクエストの最小数。トラフィックが少ない時間帯にピアが不足するのを防ぎます。 [デフォルトは10]"
@@ -10017,3 +10178,35 @@ msgstr "次へ"
 
 msgid "Finished"
 msgstr "完了"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
