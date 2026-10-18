@@ -11,6 +11,7 @@ html:not([lang=en]) #graphs label input,html:not([lang=en]) #graphs label select
 html:not([lang=en]) #graphs .nowrap{min-width:600px;font-size:90%}
 html:not([lang=en]) #graphs .nowrap b{min-width:200px}
 html:not([lang=en]) #graphs .optionlist{columns:600px auto}
+summary{cursor:pointer}
 .bar .percentBarOuter,.bar .percentBarInner,.bar .percentBarText{display:inline-block}
 .bar .percentBarOuter,.bar .percentBarText{width:96px;height:14px}
 .bar .percentBarOuter{position:relative}
@@ -62,6 +63,15 @@ html:not([lang=en]) #graphs .optionlist{columns:600px auto}
 #compactLookup #netdblookup td:last-child{padding-right:6px;width:10%;min-width:120px}
 #compactLookup #netdblookup tr{background:var(--th)}
 #config_summarybar input[type=text]{width:64px;min-width:0}
+#debug th{font-size:85%}
+#debug .bar{padding:4px 12px;width:1%;white-space:nowrap;text-align:center}
+#debug .rid{margin:2px;float:left}
+#debug #apps th:last-child,#debug #apps td:last-child{text-align:left}
+#debug #listening th:last-child,#debug #listening td:last-child{width:1%;text-align:center}
+#debug #dhtbuckets th:last-child{text-align:center}
+#debug #client_skms{border:var(--border);border-collapse:separate}
+#debug #client_skms th,#debug #client_skms td{text-align:center}
+#debug #client_skms th[colspan="12"]{font-size:110%}
 #lsWrapper{columns:2 500px;margin-bottom:10px}
 #netdbSearchCompact{width:100%}
 #netdbwrap .leasesets_container{columns: 2 500px}

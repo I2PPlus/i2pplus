@@ -1916,7 +1916,7 @@ a[href^="configpeer?peer"]:hover::after{background:var(--edit_hover) no-repeat c
 #streamsWrap .ring .ring-bg{filter:none!important}
 
 /* debug */
-.debug_container,#debug td{line-height:1.4}
+.debug_container,#debug td:not(.rif):not(.rih):not(.rbw){line-height:1.4}
 .debug_container{padding:10px 15px;margin-top:-16px;border:var(--border_inner);box-shadow:var(--highlight);background:linear-gradient(180deg,#fafaff,rgba(250,250,255,.3)),repeating-linear-gradient(135deg,rgba(255,255,255,.5) 2px,rgba(221,221,255,.3) 3px,#fff 4px) #efefff;filter:var(--filter_shadow)}
 .debug_container:empty{display:none}
 .debug_targetinfo{word-break:break-all}
@@ -1946,28 +1946,31 @@ a[href^="configpeer?peer"]:hover::after{background:var(--edit_hover) no-repeat c
 .expiry li,.sentTags li{margin-right:0}
 #debug{background:#fafaff}
 #debug li:first-child{margin-top:0}
-#debug td:first-child,#debug th:first-child{padding-left:10px;color:var(--ink_light)}
-#debug td:last-child{vertical-align:top;text-align:right}
 #debug ul li{margin-left:40px;padding:0;list-style:none}
 #debug h2{padding:8px 10px;border-radius:0}
 #debug h3{border-radius:0}
 #debug table{filter:var(--filter_shadow)}
 #debug h2+table{margin-top:-16px}
 #debug hr{display:none}
-#bucketSet{margin-bottom:5px}
+#bucketSet{margin:-16px auto -2px}
 #debug h3{border-width:1px}
 #debug h3.debug_outboundsessions,#debug h3.debug_inboundsessions{padding:6px 10px 6px 28px;background-blend-mode:luminosity,normal,normal}
 #debug h3.debug_outboundsessions{background:url(/themes/console/images/outbound.svg) no-repeat 6px center/18px,linear-gradient(180deg,#fcfcff 50%,rgba(255,255,255,.6) 50%,rgba(240,240,255,.4)),linear-gradient(90deg,#fcfcff 5%,rgba(231,231,255,.8) 25%)}
 #debug h3.debug_inboundsessions{background:url(/themes/console/images/inbound.svg) no-repeat 6px center/18px,linear-gradient(180deg,#fcfcff 50%,rgba(255,255,255,.6) 50%,rgba(240,240,255,.4)),linear-gradient(90deg,#fcfcff 5%,rgba(231,231,255,.8) 25%)}
 #debug h3+table{margin-top:-16px}
-#debug td{padding-top:5px;padding-bottom:5px}
+#debug td:not(.rif):not(.rih):not(.rbw){padding-top:5px;padding-bottom:5px}
 #debug h2,#debug h3{position:relative;z-index:100}
 #debug h2{background:var(--bug) no-repeat right 6px center,var(--h2);background-size:20px,100%,100%;background-blend-mode:luminosity,normal,normal}
 #debug h3{padding-left:10px}
+#debug td:first-child:not(.rif),#debug th:first-child{padding-left:10px;color:var(--ink_light)}
+#debug td:last-child:not(.rbw){vertical-align:top;text-align:right}
 #debug .skm_key td:first-child,.debug_pubkey,.debug_sesskey{font-family:var(--monospaced);font-weight:700;color:var(--ink_code)}
 #debug .skm_key td:first-child b{font-family:var(--bodyfont)}
 #debug .tx_header th::before{background:url(images/favicon.svg) no-repeat center center/20px}
 #debug .tx_flag{box-shadow:0 0 0 1px #bbc8}
+#debug #client_skms{border:var(--border_inner)}
+#debug #client_skms th{border-left:0;border-right:0}
+#debug #client_skms th[colspan="12"]{border:0}
 #debug #tx_summary button{top:7px!important}
 #debug #tx_summary hr{display:block}
 #debug #tx_summary hr:last-of-type{margin:0 0 -8px!important}

@@ -2511,14 +2511,14 @@ a[href^="/netdb"]:hover span{color:var(--hover)}
 #debug li{display:inline-block;padding:2px 0;min-width:400px}
 #debug li:last-child{padding-bottom:2px}
 #debug{line-height:1.4;padding-bottom:11px}
-#debug table{margin-top:-13px}
+#debug table:not(.rid){margin-top:-13px}
 #debug table#updateworkers{margin-top:-1px}
 #debug #sockets{margin-bottom:0}
-#debug th,#debug td{text-align:left;padding:5px 10px}
+#debug th,#debug td:not(.rif):not(.rih):not(.rbw){text-align:left;padding:5px 10px}
 #debug th{padding:7px 10px}
 #debug th:first-child{text-align:left}
-#debug th:last-child,#debug td:last-child{text-align:right}
-#debug td:last-child{vertical-align:top}
+#debug th:last-child,#debug td:not(.rbw):last-child{text-align:right}
+#debug td:not(.rbw):last-child{vertical-align:top}
 #debug .skm_key td:first-child,.debug_pubkey,.debug_sesskey{font-family:var(--monospaced);font-weight:700;color:#bb0}
 #debug .skm_key td:first-child b{color:var(--ink)}
 #debug ul,#debug li{margin:0;text-align:left}
@@ -2533,6 +2533,11 @@ a[href^="/netdb"]:hover span{color:var(--hover)}
 #samessions,#samstats{width:calc(100% - 8px)}
 #samdebug{margin-bottom:-1px;box-shadow:var(--border_table)}
 #samdebug th{font-size:90%}
+#debug #skm h2+h3{margin-top:0}
+#skm p.infohelp:last-of-type{margin-bottom:0}
+#skm h3+p.infohelp{margin:-13px auto -2px}
+#debug #client_skms tr{border:var(--border_inner)!important}
+#debug #client_skms {border-collapse:separate}
 
 /* jardump */
 .revision,.sha256,.unsignedmod{display:inline-block;user-select:all}
