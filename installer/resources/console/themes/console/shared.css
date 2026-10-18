@@ -70,8 +70,8 @@ summary{cursor:pointer}
 #debug #listening th:last-child,#debug #listening td:last-child{width:1%;text-align:center}
 #debug #dhtbuckets th:last-child{text-align:center}
 #debug #client_skms{border:var(--border);border-collapse:separate}
-#debug #client_skms th,#debug #client_skms td{text-align:center}
-#debug #client_skms th[colspan="12"]{font-size:110%}
+#debug #client_skms th,#debug #client_skms td,#debug #updatemgr th:nth-child(4),#debug #updatemgr th:nth-child(6),#debug #updatemgr td:nth-child(4),#debug #updatemgr td:nth-child(6),#debug #updatemgr th:last-child,#debug #updatemgr td:last-child{text-align:center}
+#debug #client_skms th[colspan="12"],#debug #updatemgr th[colspan="7"]{font-size:110%}
 #lsWrapper{columns:2 500px;margin-bottom:10px}
 #netdbSearchCompact{width:100%}
 #netdbwrap .leasesets_container{columns: 2 500px}

@@ -2493,7 +2493,7 @@ a[href^="/netdb"]:hover span{color:var(--hover)}
 .debug_targetinfo{line-height:1.4;white-space:normal;word-break:break-all}
 .debug_targetinfo b{margin-right:3px}
 .debug_version{color:#aa0;font-weight:700}
-.skm_dest,#skm_dest{letter-spacing:0;text-transform:none;font-size:80%}
+.skm_dest,#skm_dest{letter-spacing:0;text-transform:none}
 .skm_key td,.debug_outboundtarget td{background:linear-gradient(180deg,#002000,#000)}
 #bucketSet{margin:-13px 0 12px 0}
 #bucketSet code{user-select:all}
