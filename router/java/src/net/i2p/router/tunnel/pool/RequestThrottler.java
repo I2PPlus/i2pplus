@@ -4,6 +4,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicIntegerArray;
+import java.util.concurrent.atomic.AtomicLong;
 import net.i2p.data.Hash;
 import net.i2p.data.router.RouterInfo;
 import net.i2p.router.BanLogger;
@@ -704,30 +705,29 @@ public class RequestThrottler {
      * Sliding window counter for burst detection.
      * Tracks per-peer request counts using 1-second buckets in a 10-second window.
      */
-    private static class BurstWindowCounter {
+    static class BurstWindowCounter {
         private final long windowSizeMs;
         private final int bucketCount;
         private final long bucketSizeMs;
         private final Map<Hash, AtomicIntegerArray> peerBuckets;
-        private volatile long lastCleanupTime;
+        private final AtomicLong lastCleanupTime;
 
         BurstWindowCounter(long windowSizeMs, int bucketCount) {
             this.windowSizeMs = windowSizeMs;
             this.bucketCount = bucketCount;
             this.bucketSizeMs = windowSizeMs / bucketCount;
             this.peerBuckets = new ConcurrentHashMap<>();
-            this.lastCleanupTime = System.currentTimeMillis();
+            this.lastCleanupTime = new AtomicLong(System.currentTimeMillis());
         }
 
-        synchronized int increment(Hash h) {
+        int increment(Hash h) {
             long now = System.currentTimeMillis();
             int bucketIndex = (int) ((now / bucketSizeMs) % bucketCount);
             AtomicIntegerArray peerArray = peerBuckets.computeIfAbsent(h, k -> new AtomicIntegerArray(bucketCount));
             peerArray.incrementAndGet(bucketIndex);
             int total = getWindowSum(peerArray, bucketIndex);
-            if (now - lastCleanupTime > 60 * 1000) {
+            if (now - lastCleanupTime.get() > 60 * 1000)
                 cleanup(now);
-            }
             return total;
         }
 
@@ -762,8 +762,12 @@ public class RequestThrottler {
             return sum;
         }
 
-        private void cleanup(long now) {
-            lastCleanupTime = now;
+        void cleanup(long now) {
+            // Claim the sweep with a CAS so concurrent increments do not all run
+            // it. peerBuckets is a ConcurrentHashMap, so removeIf iterates
+            // weakly-consistently and needs no monitor.
+            if (!lastCleanupTime.compareAndSet(lastCleanupTime.get(), now))
+                return;
             int currentBucket = (int) ((now / bucketSizeMs) % bucketCount);
             int prevBucket = (currentBucket - 1 + bucketCount) % bucketCount;
             peerBuckets.entrySet().removeIf(entry -> {
