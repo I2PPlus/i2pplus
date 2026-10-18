@@ -1,16 +1,17 @@
 package net.i2p.router.web;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.regex.Pattern;
 import java.util.LinkedList;
 import java.util.Locale;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 import javax.servlet.http.HttpSession;
 
 import net.i2p.I2PAppContext;
 import net.i2p.servlet.util.ServletUtil;
+import net.i2p.util.LHMCache;
 import net.i2p.util.Log;
 import net.i2p.util.RandomSource;
 import net.i2p.util.SystemVersion;
@@ -27,7 +28,17 @@ public class CSSHelper extends HelperBase {
     private static final Pattern LANG_PATTERN = Pattern.compile("[a-zA-Z_]");
     private static final Pattern SPACE_SPLIT = Pattern.compile("\\s+");
 
-    private static final Map<String, Boolean> _UACache = new ConcurrentHashMap<>();
+    /** Max User-Agent strings retained by {@link #_UACache} before LRU eviction. */
+    static final int MAX_UA_CACHE = 64;
+    /**
+     * Bounded LRU memo of the "is this a small browser?" decision, keyed on the
+     * request User-Agent. The key is a client-supplied string, so an unbounded
+     * map would grow with every unique UA ever seen; {@link LHMCache} caps it.
+     * Wrapped in {@link Collections#synchronizedMap} because {@link LHMCache} is
+     * unsynchronized and the console serves concurrent requests.
+     */
+    private static final Map<String, Boolean> _UACache =
+            Collections.synchronizedMap(new LHMCache<String, Boolean>(MAX_UA_CACHE));
     /**
      * Property key selecting the universal (theme-independent) colour scheme.
      */
@@ -505,11 +516,34 @@ public class CSSHelper extends HelperBase {
         boolean forceMobileConsole = _context.getBooleanProperty(PROP_FORCE_MOBILE_CONSOLE);
         if (forceMobileConsole) {return false;}
         if (ua == null) {return true;}
+        return cachedAllowIFrame(ua);
+    }
+
+    /**
+     * Memoise the small-browser decision for a User-Agent in the bounded
+     * {@link #_UACache}. Package-visible and static so the eviction behaviour is
+     * testable without a router context.
+     *
+     * @param ua the request User-Agent header, non-null
+     * @return whether an IFrame is allowed for this UA
+     * @since 0.9.71+
+     */
+    static boolean cachedAllowIFrame(String ua) {
         Boolean brv = _UACache.get(ua);
         if (brv != null) {return brv.booleanValue();}
         boolean rv = shouldAllowIFrame(ua);
         _UACache.put(ua, Boolean.valueOf(rv));
         return rv;
+    }
+
+    /**
+     * Number of User-Agent strings currently memoised in {@link #_UACache}.
+     *
+     * @return the cache size, for tests and diagnostics
+     * @since 0.9.71+
+     */
+    static int uaCacheSize() {
+        return _UACache.size();
     }
 
     private static boolean shouldAllowIFrame(String ua) {
