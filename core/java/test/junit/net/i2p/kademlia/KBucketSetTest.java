@@ -152,6 +152,47 @@ public class KBucketSetTest extends TestCase {
         assertTrue(keys.size() > 0);
     }
 
+    /**
+     * The capped variant returns at most max keys, the first one always
+     * targeting the closest bucket, and max &lt;= 0 yields nothing.
+     *
+     * @since 0.9.71+
+     */
+    public void testExploreKeysCapped() {
+        List<Hash> keys = set.getExploreKeys(-1000, 3);
+        assertTrue(keys.size() == 3);
+        KBucket<Hash> closest = set.getBuckets().get(0);
+        int range = set.getRange(keys.get(0));
+        assertTrue(range >= closest.getRangeBegin() && range <= closest.getRangeEnd());
+        // remaining keys must each land in some existing bucket
+        for (Hash k : keys) {
+            int r = set.getRange(k);
+            boolean found = false;
+            for (KBucket<Hash> b : set.getBuckets()) {
+                if (r >= b.getRangeBegin() && r <= b.getRangeEnd()) {found = true; break;}
+            }
+            assertTrue("key range " + r + " fits no bucket", found);
+        }
+        assertTrue(set.getExploreKeys(-1000, 0).isEmpty());
+    }
+
+    /**
+     * getBucketEntries returns the key's bucket mates, and empty for us.
+     *
+     * @since 0.9.71+
+     */
+    public void testBucketEntries() {
+        byte[] val = new byte[Hash.HASH_LENGTH];
+        context.random().nextBytes(val);
+        Hash h = new Hash(val);
+        set.add(h);
+        java.util.Set<Hash> entries = set.getBucketEntries(h);
+        assertTrue(entries.contains(h));
+        assertTrue(entries.size() > 0);
+        // our own hash has no bucket
+        assertTrue(set.getBucketEntries(usHash).isEmpty());
+    }
+
     /** @since 0.9.10 */
     public void testClosest() {
         byte[] val = new byte[Hash.HASH_LENGTH];

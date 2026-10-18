@@ -717,6 +717,67 @@ public class KBucketSet<T extends SimpleDataStructure> {
     }
 
     /**
+     * For every bucket that hasn't been updated in this long,
+     * or isn't close to full, generate a random key that would be a member
+     * of that bucket, up to max keys. The closest bucket's key is always
+     * first; the remaining buckets are visited in random order so a capped
+     * pass does not always starve the far end of the keyspace.
+     *
+     * @param age the maximum age in milliseconds
+     * @param max the maximum number of keys to generate
+     * @return non-null, closest bucket first
+     * @since 0.9.71+
+     */
+    public List<T> getExploreKeys(long age, int max) {
+        if (max <= 0) {return Collections.emptyList();}
+        List<T> rv = new ArrayList<>(Math.min(max, 32));
+        long old = _context.clock().now() - age;
+        getReadLock();
+        try {
+            int len = _buckets.size();
+            int[] order = new int[len];
+            for (int i = 0; i < len; i++) {order[i] = i;}
+            // Fisher-Yates over all but the closest bucket, which stays first
+            for (int i = len - 1; i > 1; i--) {
+                int j = 1 + _context.random().nextInt(i);
+                int tmp = order[i];
+                order[i] = order[j];
+                order[j] = tmp;
+            }
+            for (int i = 0; i < len && rv.size() < max; i++) {
+                KBucket<T> b = _buckets.get(order[i]);
+                int curSize = b.getKeyCount();
+                // Always explore the closest bucket
+                if ((b.getRangeBegin() == 0) || (b.getLastChanged() < old || curSize < BUCKET_SIZE * 3 / 4)) {
+                    rv.add(generateRandomKey(b));
+                }
+            }
+        } finally {
+            releaseReadLock();
+        }
+        return rv;
+    }
+
+    /**
+     * A copy of the entries of the bucket the given key belongs to.
+     *
+     * @param key the key whose bucket entries are wanted
+     * @return non-null, empty if the key is us or fits no bucket
+     * @since 0.9.71+
+     */
+    public Set<T> getBucketEntries(T key) {
+        KBucket<T> bucket;
+        getReadLock();
+        try {
+            bucket = getBucket(key);
+        } finally {
+            releaseReadLock();
+        }
+        if (bucket == null) {return Collections.emptySet();}
+        return new HashSet<>(bucket.getEntries());
+    }
+
+    /**
      * Generate a random key to go within this bucket
      * Package private for testing only. Others shouldn't need this.
      *

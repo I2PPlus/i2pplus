@@ -181,4 +181,74 @@ public class KBucketImplTest {
         bucket.setLastChanged();
         assertTrue(bucket.getLastChanged() >= first);
     }
+
+    /**
+     * A rejected newcomer is held in the replacement cache and the newest
+     * one is promoted when a slot frees up.
+     *
+     * @since 0.9.71+
+     */
+    @Test
+    public void testRejectedNewcomerPromotedOnVacancy() {
+        I2PAppContext ctx = I2PAppContext.getGlobalContext();
+        KBucketImpl<Hash> bucket = new KBucketImpl<>(ctx, 0, 0, K, new RejectTrimmer<Hash>());
+        for (int i = 0; i < K; i++) {
+            assertTrue(bucket.add(h(i)));
+        }
+        assertFalse(bucket.add(h(10)));
+        assertFalse(bucket.add(h(11)));
+        assertEquals(2, bucket.getReplacementCount());
+        assertTrue(bucket.remove(h(1)));
+        assertEquals(K, bucket.getKeyCount());
+        // newest rejection gets promoted
+        assertTrue(bucket.getEntries().contains(h(11)));
+        assertEquals(1, bucket.getReplacementCount());
+    }
+
+    /**
+     * The replacement cache is bounded; the oldest candidates are dropped
+     * first.
+     *
+     * @since 0.9.71+
+     */
+    @Test
+    public void testReplacementCacheBounded() {
+        I2PAppContext ctx = I2PAppContext.getGlobalContext();
+        KBucketImpl<Hash> bucket = new KBucketImpl<>(ctx, 0, 0, K, new RejectTrimmer<Hash>());
+        for (int i = 0; i < K; i++) {
+            assertTrue(bucket.add(h(i)));
+        }
+        // K = 4 so the replacement cap is min(16, K) = 4
+        for (int i = 0; i < 6; i++) {
+            assertFalse(bucket.add(h(20 + i)));
+        }
+        assertEquals(4, bucket.getReplacementCount());
+        assertTrue(bucket.remove(h(2)));
+        // newest (h(25)) promotes; oldest (h(20), h(21)) were dropped
+        assertTrue(bucket.getEntries().contains(h(25)));
+        assertFalse(bucket.getEntries().contains(h(20)));
+    }
+
+    /** @since 0.9.71+ */
+    @Test
+    public void testClearDropsReplacements() {
+        I2PAppContext ctx = I2PAppContext.getGlobalContext();
+        KBucketImpl<Hash> bucket = new KBucketImpl<>(ctx, 0, 0, K, new RejectTrimmer<Hash>());
+        for (int i = 0; i < K; i++) {
+            assertTrue(bucket.add(h(i)));
+        }
+        assertFalse(bucket.add(h(10)));
+        assertEquals(1, bucket.getReplacementCount());
+        bucket.clear();
+        assertEquals(0, bucket.getReplacementCount());
+    }
+
+    /** @since 0.9.71+ */
+    @Test
+    public void testNoReplacementsWhenNotFull() {
+        I2PAppContext ctx = I2PAppContext.getGlobalContext();
+        KBucketImpl<Hash> bucket = new KBucketImpl<>(ctx, 0, 0, K, new RejectTrimmer<Hash>());
+        assertTrue(bucket.add(h(1)));
+        assertEquals(0, bucket.getReplacementCount());
+    }
 }

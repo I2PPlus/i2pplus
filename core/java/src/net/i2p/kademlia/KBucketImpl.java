@@ -13,6 +13,8 @@ import net.i2p.data.SimpleDataStructure;
 import net.i2p.util.ConcurrentHashSet;
 
 import java.util.Collections;
+import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 /**
@@ -40,6 +42,11 @@ import java.util.Set;
  * to add the new entry. If the trimmer returns true without
  * removing entries, this KBucket will exceed the max size.
  * <p>
+ * A newcomer rejected by a full bucket is not thrown away but held in a
+ * small Kademlia replacement cache and promoted into the bucket when a
+ * slot frees up, so live candidates survive transient bucket pressure
+ * instead of needing to be re-discovered.
+ * <p>
  * Refactored from net.i2p.router.networkdb.kademlia
  *
  * @param <T> type of SimpleDataStructure objects stored in this bucket
@@ -59,6 +66,16 @@ class KBucketImpl<T extends SimpleDataStructure> implements KBucket<T> {
 
     private final int _max;
     private final KBucketTrimmer<T> _trimmer;
+
+    /**
+     * Kademlia replacement cache — newcomers rejected by a full bucket,
+     * insertion-ordered, oldest dropped when over capacity. Guarded by its
+     * own monitor; never exposed outside this class except for the test hook.
+     */
+    private final LinkedHashSet<T> _replacements;
+
+    /** Replacement cache capacity, bounded so 2048 buckets stay cheap. */
+    private final int _replacementMax;
 
     /** When did we last shake things up. */
     private long _lastChanged;
@@ -83,6 +100,8 @@ class KBucketImpl<T extends SimpleDataStructure> implements KBucket<T> {
         _end = end;
         _max = max;
         _trimmer = trimmer;
+        _replacementMax = Math.min(16, max);
+        _replacements = new LinkedHashSet<>(4);
     }
 
     @Override
@@ -120,11 +139,16 @@ class KBucketImpl<T extends SimpleDataStructure> implements KBucket<T> {
     @Override
     public void clear() {
         _entries.clear();
+        synchronized (_replacements) {
+            _replacements.clear();
+        }
     }
 
     /**
      * Updates last-changed if rv is true OR if the peer is already present.
      * Calls the trimmer if begin == end and we are full.
+     * If the trimmer rejects the newcomer it is kept in the replacement
+     * cache for promotion when a slot frees up.
      * If begin != end then add it and caller must do bucket splitting.
      *
      * @return true if added
@@ -135,13 +159,21 @@ class KBucketImpl<T extends SimpleDataStructure> implements KBucket<T> {
             // do this even if already contains, to call setLastChanged()
             boolean rv = _entries.add(peer);
             setLastChanged();
+            if (rv) {
+                // no longer a candidate, it is in
+                synchronized (_replacements) {
+                    _replacements.remove(peer);
+                }
+            }
             return rv;
         }
+        offerReplacement(peer);
         return false;
     }
 
     /**
-     * Remove the peer from this bucket.
+     * Remove the peer from this bucket. If a slot frees up, the newest
+     * replacement candidate (if any) is promoted into the bucket.
      *
      * @return if removed. Does NOT set lastChanged.
      */
@@ -149,7 +181,52 @@ class KBucketImpl<T extends SimpleDataStructure> implements KBucket<T> {
     public boolean remove(T peer) {
         boolean rv = _entries.remove(peer);
         //    setLastChanged();
+        if (rv && _entries.size() < _max) {
+            T promoted = pollReplacement();
+            if (promoted != null) {
+                _entries.add(promoted);
+            }
+        }
         return rv;
+    }
+
+    /**
+     * Hold a rejected newcomer as a future slot-filler, dropping the oldest
+     * candidate when over capacity.
+     */
+    private void offerReplacement(T peer) {
+        synchronized (_replacements) {
+            if (_entries.contains(peer)) {return;}
+            _replacements.add(peer);
+            if (_replacements.size() > _replacementMax) {
+                Iterator<T> iter = _replacements.iterator();
+                iter.next();
+                iter.remove();
+            }
+        }
+    }
+
+    /**
+     * Take the newest replacement candidate, or null if the cache is empty.
+     */
+    private T pollReplacement() {
+        synchronized (_replacements) {
+            if (_replacements.isEmpty()) {return null;}
+            T newest = null;
+            // insertion order — the last one is the most recent arrival
+            for (T t : _replacements) {newest = t;}
+            _replacements.remove(newest);
+            return newest;
+        }
+    }
+
+    /**
+     * Number of held replacement candidates. Package private for testing.
+     */
+    int getReplacementCount() {
+        synchronized (_replacements) {
+            return _replacements.size();
+        }
     }
 
     /**
