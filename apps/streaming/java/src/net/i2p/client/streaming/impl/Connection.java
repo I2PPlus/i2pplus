@@ -204,7 +204,7 @@ class Connection {
 
     // Pacing fields for smooth transmission
     /** Pacing rate in bytes per second. */
-    private volatile long _pacingRate; // bytes per second; last computed rate (recomputed live in calculatePacingDelay)
+    private volatile long _pacingRate; // bytes per second; refreshed on window/RTT change, read by calculatePacingDelay
     /** Last packet send time. */
     private volatile long _lastPacketSendTime;
     /** Pacing lock. */
@@ -1295,9 +1295,10 @@ class Connection {
     }
 
     /**
-     * Refresh the cached pacing rate when the congestion window changes.
-     * Note that {@link #calculatePacingDelay(int)} also recomputes the rate
-     * live, so this is now only an eager cache update for observability.
+     * Refresh the cached pacing rate when the congestion window or RTT changes.
+     * {@link #calculatePacingDelay(int)} reads this cache rather than recomputing
+     * the rate per packet, so it must be called whenever an input to
+     * {@link #calculatePacingRate()} changes.
      */
     private void updatePacingRate() {
         synchronized (_pacingLock) {
@@ -1308,12 +1309,15 @@ class Connection {
     /**
      * Calculate delay needed for pacing based on packet size and current rate.
      * Pacing delay = (packetSize / rate) - timeSinceLastPacket.
+     * <p>
+     * Uses the cached {@link #_pacingRate} (refreshed on every window / RTT change)
+     * instead of recomputing cwnd·mss/rtt per packet.
      * @param packetSize size in bytes of the packet about to go out
      * @return delay in ms, 0 if no pacing needed
      */
     private long calculatePacingDelay(int packetSize) {
-        long rate = calculatePacingRate();
-        if (rate == Long.MAX_VALUE) {
+        long rate = _pacingRate;
+        if (rate == Long.MAX_VALUE || rate <= 0) {
             return 0;
         }
         return calculatePacingDelay(packetSize, rate);

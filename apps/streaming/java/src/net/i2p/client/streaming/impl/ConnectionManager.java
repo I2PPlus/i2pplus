@@ -2498,9 +2498,11 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
         ConcurrentLinkedDeque<PooledConnection> pool = _streamPools.computeIfAbsent(destHash,
             k -> new ConcurrentLinkedDeque<>());
 
-        // Enforce per-destination limit
+        // Enforce per-destination limit. Exactly one connection is added per call,
+        // so evicting at most one oldest entry preserves the bound. ConcurrentLinkedDeque
+        // .size() is O(n), so a while-loop over it was O(n^2); a single check keeps it O(1).
         int maxPerDest = getPoolMaxPerDestination();
-        while (pool.size() >= maxPerDest) {
+        if (pool.size() >= maxPerDest) {
             PooledConnection oldest = pool.pollFirst();
             if (oldest != null) {
                 oldest.connection.disconnect(false, false);

@@ -514,6 +514,9 @@ class ConnectionHandler {
                             if (!oldcon.shouldResendSynAck(_context.clock().now())) {
                                 continue; // SYN-ACK throttle active
                             }
+                            // Hash only when we reach the flood gate — a throttled
+                            // duplicate SYN (the common flood case) never pays the
+                            // SHA-256 over the freshly-parsed wire Destination.
                             if (_manager.checkInboundSynFlood(from.calculateHash(), _context.clock().now())) {
                                 continue; // flood gate
                             }
