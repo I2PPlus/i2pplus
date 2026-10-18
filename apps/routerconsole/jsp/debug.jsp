@@ -27,14 +27,14 @@
     currentD = (currentD == null) ? "8" : currentD;
     for (String[] tab : tabs) {
         String tabUrl = tab[1];
-        String tabD = "0";
+        String tabD = null;
         int idx = tabUrl.indexOf("d=");
         if (idx != -1) {
             tabD = tabUrl.substring(idx + 2);
             int amp = tabD.indexOf('&');
             if (amp != -1) tabD = tabD.substring(0, amp);
         }
-        boolean isActive = tabD.equals(currentD);
+        boolean isActive = tabD != null && tabD.equals(currentD);
 %>
 <% if (isActive) { %>
     <span class="tab2"><%=intl._t(tab[0])%></span>
