@@ -176,7 +176,7 @@ html:not(.advmode) #tuning input[type=number]{min-width:0!important;text-align:c
 .ring .ring-pct.green{fill:#2ecc71}
 .ring .ring-pct.red{fill:#e74c3c}
 .ring .ring-pct.yellow{fill:#f39c12}
-.appdot{display:inline-block;width:9px;height:9px;border-radius:50%;background:#999;margin-right:5px;vertical-align:middle}
+.appdot{width:9px;height:9px;display:inline-block;vertical-align:middle;border-radius:50%;background:#999}
 .appdot.green{background:#2ecc71}
 .appdot.yellow{background:#f39c12}
 .appdot.red{background:#e74c3c}
