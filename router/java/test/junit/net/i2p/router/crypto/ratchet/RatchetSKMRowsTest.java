@@ -22,8 +22,8 @@ import net.i2p.data.PublicKey;
  * Tests the pure row builders and labels of
  * {@link RatchetSKM#buildInboundRows},
  * {@link RatchetSKM#buildOutboundRows} and
- * {@link RatchetSKM#buildOutboundSetRows}: peer labels are the full base64
- * key, set labels use the NSR/ES special cases, expired outbound sets are
+ * {@link RatchetSKM#buildOutboundSetRows}: peer labels are the base64 key
+ * hash, set labels use the NSR/ES special cases, expired outbound sets are
  * skipped, and rows sort by peer then set.
  *
  * @since 0.9.71
@@ -47,10 +47,10 @@ public class RatchetSKMRowsTest {
     }
 
     @Test
-    public void keyLabelFullBase64OrNull() {
+    public void keyLabelIsKeyHashOrNull() {
         assertEquals("null", RatchetSKM.keyLabel(null));
         String label = RatchetSKM.keyLabel(key((byte) 1));
-        assertEquals(label, key((byte) 1).toBase64());
+        assertEquals(label, key((byte) 1).calculateHash().toBase64());
         assertFalse(label.endsWith("..."));
         assertFalse(label.startsWith("["));
     }
@@ -75,9 +75,9 @@ public class RatchetSKMRowsTest {
         sets.put(key((byte) 1), a);
         List<String[]> rows = RatchetSKM.buildInboundRows(sets, 0);
         assertEquals(3, rows.size());
-        assertEquals(key((byte) 1).toBase64(), rows.get(0)[0]);
+        assertEquals(key((byte) 1).calculateHash().toBase64(), rows.get(0)[0]);
         assertEquals("ES/8", rows.get(0)[1]);
-        assertEquals(key((byte) 2).toBase64(), rows.get(1)[0]);
+        assertEquals(key((byte) 2).calculateHash().toBase64(), rows.get(1)[0]);
         assertEquals("5/2", rows.get(1)[1]);
         assertEquals("NSR/1", rows.get(2)[1]);
         assertEquals("4", rows.get(2)[3]);
@@ -97,7 +97,7 @@ public class RatchetSKMRowsTest {
         when(sess.getTagSets()).thenReturn(ts);
         List<String[]> rows = RatchetSKM.buildOutboundRows(java.util.Collections.singletonList(sess), 0);
         assertEquals(1, rows.size());
-        assertEquals(key((byte) 3).toBase64(), rows.get(0)[0]);
+        assertEquals(key((byte) 3).calculateHash().toBase64(), rows.get(0)[0]);
         assertTrue(rows.get(0)[1].endsWith(" ago"));
         assertEquals("1", rows.get(0)[4]);
     }

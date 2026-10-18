@@ -55,4 +55,11 @@ public class ClientSKMDebugHelperTest {
         String html = ClientSKMDebugHelper.buildSection("t", Collections.singletonList(row("In<b>", "p&b")), null);
         assertTrue(html, html.contains("<td>In&lt;b&gt;</td><td>p&amp;b</td>"));
     }
+
+    @Test
+    public void peerColumnUsesRendererNotEscaping() {
+        String html = ClientSKMDebugHelper.buildSection("t", Collections.singletonList(row("Inbound", "peerA")), null,
+                                                        "<tr><th>K</th><th>P</th></tr>\n", 1, p -> "<b>" + p + "</b>");
+        assertTrue(html, html.contains("<td>Inbound</td><td><b>peerA</b></td>"));
+    }
 }

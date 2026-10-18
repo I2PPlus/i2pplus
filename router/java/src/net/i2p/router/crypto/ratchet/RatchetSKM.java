@@ -20,8 +20,10 @@ import net.i2p.crypto.HKDF;
 import net.i2p.crypto.KeyPair;
 import net.i2p.crypto.SessionKeyManager;
 import net.i2p.crypto.TagSetHandle;
+import net.i2p.data.Base64;
 import net.i2p.data.DataHelper;
 import net.i2p.data.Destination;
+import net.i2p.data.Hash;
 import net.i2p.data.PrivateKey;
 import net.i2p.data.PublicKey;
 import net.i2p.data.SessionKey;
@@ -30,6 +32,7 @@ import net.i2p.router.RouterContext;
 import net.i2p.router.util.DecayingHashSet;
 import net.i2p.util.Log;
 import net.i2p.util.SimpleTimer2;
+import net.i2p.util.Translate;
 
 /**
  *
@@ -917,42 +920,50 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
         boolean isPQ = _type != EncType.ECIES_X25519;
         long now = _context.clock().now();
 
-        buf.append("<h3>").append(isPQ ? "PQ " : "").append("Ratchet Inbound sessions</h3>\n");
+        buf.append("<h3>").append(isPQ ? "PQ " : "").append(_t("Ratchet Inbound sessions")).append("</h3>\n");
         Map<PublicKey, Set<RatchetTagSet>> inboundSets = getRatchetTagSetsByPublicKey();
         List<String[]> inbound = buildInboundRows(inboundSets, now);
         if (inbound.isEmpty()) {
-            buf.append("<p class=infohelp>No inbound sessions.</p>\n");
+            buf.append("<p class=infohelp>").append(_t("No inbound sessions.")).append("</p>\n");
         } else {
             buf.append("<table>\n<thead>\n" +
-                      "<tr><th>Peer</th><th>Set</th><th>Expires in</th><th>Tags</th><th>Remaining</th></tr>\n</thead>\n");
+                      "<tr><th>").append(_t("Peer")).append("</th><th>").append(_t("Set")).
+                      append("</th><th>").append(_t("Expires in")).append("</th><th>").append(_t("Tags")).
+                      append("</th><th>").append(_t("Remaining")).append("</th></tr>\n</thead>\n");
             for (String[] row : inbound) {
-                buf.append("<tr><td>").append(row[0]).append("</td><td>").append(row[1])
+                buf.append("<tr><td>").append(peerCell(row[0])).append("</td><td>").append(row[1])
                    .append("</td><td>").append(row[2]).append("</td><td>").append(row[3])
                    .append("</td><td>").append(row[4]).append("</td></tr>\n");
             }
             buf.append("</table>\n");
         }
 
-        buf.append("<h3>").append(isPQ ? "PQ " : "").append("Ratchet Outbound sessions</h3>\n");
+        buf.append("<h3>").append(isPQ ? "PQ " : "").append(_t("Ratchet Outbound sessions")).append("</h3>\n");
         Set<OutboundSession> outbound = getOutboundSessions();
         List<String[]> obSessions = buildOutboundRows(outbound, now);
         if (obSessions.isEmpty()) {
-            buf.append("<p class=infohelp>No outbound sessions.</p>\n");
+            buf.append("<p class=infohelp>").append(_t("No outbound sessions.")).append("</p>\n");
         } else {
             List<String[]> obSets = buildOutboundSetRows(outbound, now);
             buf.append("<table>\n<thead>\n" +
-                      "<tr><th>Peer</th><th>Established</th><th>Last Used</th><th>Last Rcvd</th><th>Sets</th></tr>\n</thead>\n");
+                      "<tr><th>").append(_t("Peer")).append("</th><th>").append(_t("Established")).
+                      append("</th><th>").append(_t("Last Used")).append("</th><th>").append(_t("Last Rcvd")).
+                      append("</th><th>").append(_t("Sets")).append("</th></tr>\n</thead>\n");
             for (String[] row : obSessions) {
-                buf.append("<tr><td>").append(row[0]).append("</td><td>").append(row[1])
+                buf.append("<tr><td>").append(peerCell(row[0])).append("</td><td>").append(row[1])
                    .append("</td><td>").append(row[2]).append("</td><td>").append(row[3])
                    .append("</td><td>").append(row[4]).append("</td></tr>\n");
             }
             buf.append("</table>\n");
 
             buf.append("<table>\n<thead>\n" +
-                      "<tr><th>Peer</th><th>Set</th><th>Acked</th><th>Created</th><th>Last Used</th><th>Expires in</th><th>Remaining</th><th>NK sent</th></tr>\n</thead>\n");
+                      "<tr><th>").append(_t("Peer")).append("</th><th>").append(_t("Set")).
+                      append("</th><th>").append(_t("Acked")).append("</th><th>").append(_t("Created")).
+                      append("</th><th>").append(_t("Last Used")).append("</th><th>").append(_t("Expires in")).
+                      append("</th><th>").append(_t("Remaining")).append("</th><th>").append(_t("NK sent")).
+                      append("</th></tr>\n</thead>\n");
             for (String[] row : obSets) {
-                buf.append("<tr><td>").append(row[0]).append("</td><td>").append(row[1])
+                buf.append("<tr><td>").append(peerCell(row[0])).append("</td><td>").append(row[1])
                    .append("</td><td>").append(row[2]).append("</td><td>").append(row[3])
                    .append("</td><td>").append(row[4]).append("</td><td>").append(row[5])
                    .append("</td><td>").append(row[6]).append("</td><td>").append(row[7]).append("</td></tr>\n");
@@ -968,6 +979,27 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
             buf.append("<p class=infohelp>").append(summaryText(created, replaced, completed, misses)).append("</p>\n");
         }
         out.append(buf);
+    }
+
+    /**
+     * Render a peer cell as a router-info reference (flag, netdb link,
+     * bandwidth) when the label is a base64 hash; the label itself is the
+     * fallback for the "null" key.
+     *
+     * @param hashLabel the peer cell from a debug row
+     * @return the cell html
+     */
+    private String peerCell(String hashLabel) {
+        byte[] data = Base64.decode(hashLabel);
+        if (data == null || data.length != Hash.HASH_LENGTH) {return hashLabel;}
+        return _context.commSystem().renderPeerHTML(new Hash(data), true);
+    }
+
+    /**
+     * Console translation for the debug page strings.
+     */
+    private String _t(String s) {
+        return Translate.getString(s, _context, "net.i2p.router.web.messages");
     }
 
     /**
@@ -1004,9 +1036,10 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
         return summaryText(created, replaced, completed, misses);
     }
 
-    private static String summaryText(long created, long replaced, long completed, long misses) {
-        return "Sessions created: " + created + "; replaced: " + replaced +
-               "; inbound sessions completed: " + completed + "; inbound tag misses: " + misses;
+    private String summaryText(long created, long replaced, long completed, long misses) {
+        return Translate.getString("Sessions created: {0}; replaced: {1}; inbound sessions completed: {2}; inbound tag misses: {3}",
+                                   _context, "net.i2p.router.web.messages",
+                                   created, replaced, completed, misses);
     }
 
     /**
@@ -1038,14 +1071,16 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
     }
 
     /**
-     * Label a peer by its full base64 public key.
+     * Label a peer by the base64 hash of its public key, so the debug
+     * console can turn the cell into a router-info reference (flag, link,
+     * bandwidth) via {@code commSystem().renderPeerHTML()}.
      *
      * @param key the peer's public key, may be null
-     * @return the base64 key, or "null", never null
+     * @return the base64 key hash, or "null", never null
      * @since 0.9.71
      */
     static String keyLabel(PublicKey key) {
-        return key == null ? "null" : key.toBase64();
+        return key == null ? "null" : key.calculateHash().toBase64();
     }
 
     /**
@@ -1087,7 +1122,7 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
             for (RatchetTagSet ts : e.getValue()) {
                 synchronized (ts) {
                     rows.add(new String[] {peer, setIdLabel(ts.getID(), ts.getDebugID()),
-                                           DataHelper.formatDuration2(ts.getExpiration() - now),
+                                           DataHelper.formatDuration(ts.getExpiration() - now),
                                            Integer.toString(ts.size()), Integer.toString(ts.remaining())});
                 }
             }
@@ -1110,9 +1145,9 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
         List<String[]> rows = new ArrayList<>(sessions.size());
         for (OutboundSession sess : sessions) {
             rows.add(new String[] {keyLabel(sess.getTarget()),
-                                   DataHelper.formatDuration2(now - sess.getEstablishedDate()) + " ago",
-                                   DataHelper.formatDuration2(now - sess.getLastUsedDate()) + " ago",
-                                   DataHelper.formatDuration2(now - sess.getLastReceivedDate()) + " ago",
+                                   DataHelper.formatDuration(now - sess.getEstablishedDate()) + " ago",
+                                   DataHelper.formatDuration(now - sess.getLastUsedDate()) + " ago",
+                                   DataHelper.formatDuration(now - sess.getLastReceivedDate()) + " ago",
                                    Integer.toString(sess.getTagSets().size())});
         }
         rows.sort(Comparator.comparing(r -> r[0]));
@@ -1142,7 +1177,7 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
                                            ts.getAcked() ? "yes" : "no",
                                            DataHelper.formatTime(ts.getCreated()),
                                            DataHelper.formatTime(ts.getDate()),
-                                           DataHelper.formatDuration2(expires),
+                                           DataHelper.formatDuration(expires),
                                            Integer.toString(ts.remaining()),
                                            ts.getNextKey() != null ? "yes" : "no"});
                 }

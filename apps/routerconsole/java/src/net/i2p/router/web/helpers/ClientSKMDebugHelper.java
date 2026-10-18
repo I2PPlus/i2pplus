@@ -6,8 +6,10 @@ import java.io.Writer;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Function;
 
 import net.i2p.crypto.SessionKeyManager;
+import net.i2p.data.Base64;
 import net.i2p.data.DataHelper;
 import net.i2p.data.Destination;
 import net.i2p.data.Hash;
@@ -16,6 +18,7 @@ import net.i2p.router.TunnelPoolSettings;
 import net.i2p.router.crypto.ratchet.MuxedPQSKM;
 import net.i2p.router.crypto.ratchet.MuxedSKM;
 import net.i2p.router.crypto.ratchet.RatchetSKM;
+import net.i2p.util.Translate;
 
 /**
  * Renders every client ratchet session key manager as one table, with a
@@ -40,6 +43,24 @@ public class ClientSKMDebugHelper {
         "<th>Last Used</th><th>Last Rcvd</th><th>Expires in</th><th>Tags</th><th>Remaining</th><th>NK sent</th></tr>\n";
 
     /**
+     * The column header row, translated.
+     *
+     * @param ctx the router context for the translation bundle
+     * @return the header row html
+     */
+    private static String columns(RouterContext ctx) {
+        String[] labels = {"Kind", "Peer", "Set", "Acked", "Created", "Established",
+                           "Last Used", "Last Rcvd", "Expires in", "Tags", "Remaining", "NK sent"};
+        StringBuilder buf = new StringBuilder(256);
+        buf.append("<tr>");
+        for (String label : labels) {
+            buf.append("<th>").append(Translate.getString(label, ctx, "net.i2p.router.web.messages")).append("</th>");
+        }
+        buf.append("</tr>\n");
+        return buf.toString();
+    }
+
+    /**
      * Write the consolidated table, one section per distinct client ratchet
      * SKM (unwrapping the muxed variants), plus the legacy status section
      * for each client whose SKM has no ratchet part (plain ElGamal).
@@ -60,23 +81,23 @@ public class ClientSKMDebugHelper {
             if (skm == null || !rendered.add(skm)) {continue;}
             String title = clientTitle(ctx, dest, h);
             if (skm instanceof RatchetSKM) {
-                appendRatchet(sections, title, (RatchetSKM) skm);
+                appendRatchet(ctx, sections, title, (RatchetSKM) skm);
             } else if (skm instanceof MuxedSKM) {
                 MuxedSKM m = (MuxedSKM) skm;
-                appendRatchet(sections, title + " (" + m.getECSKM().getType().name() + ")", m.getECSKM());
+                appendRatchet(ctx, sections, title + " (" + m.getECSKM().getType().name() + ")", m.getECSKM());
                 legacySection(legacy, title + " (ElGamal)", m.getElgSKM());
                 legacySections++;
             } else if (skm instanceof MuxedPQSKM) {
                 MuxedPQSKM m = (MuxedPQSKM) skm;
-                appendRatchet(sections, title + " (" + m.getECSKM().getType().name() + ")", m.getECSKM());
-                appendRatchet(sections, title + " (" + m.getPQSKM().getType().name() + ")", m.getPQSKM());
+                appendRatchet(ctx, sections, title + " (" + m.getECSKM().getType().name() + ")", m.getECSKM());
+                appendRatchet(ctx, sections, title + " (" + m.getPQSKM().getType().name() + ")", m.getPQSKM());
             } else {
                 legacySection(legacy, title, skm);
                 legacySections++;
             }
         }
         if (sections.length() == 0 && legacySections == 0) {
-            out.write("<p>No client session key managers.</p>\n");
+            out.write("<p>" + Translate.getString("No client session key managers.", ctx, "net.i2p.router.web.messages") + "</p>\n");
             return;
         }
         if (sections.length() > 0) {
@@ -85,8 +106,25 @@ public class ClientSKMDebugHelper {
         out.write(legacy.toString());
     }
 
-    private static void appendRatchet(StringBuilder sections, String title, RatchetSKM rskm) {
-        sections.append(buildSection(title, rskm.getDebugRows(), rskm.getDebugSummary()));
+    private static void appendRatchet(RouterContext ctx, StringBuilder sections, String title, RatchetSKM rskm) {
+        sections.append(buildSection(title, rskm.getDebugRows(), rskm.getDebugSummary(),
+                                     columns(ctx), 1, peerRenderer(ctx)));
+    }
+
+    /**
+     * Turns a base64 key-hash cell into the standard router-info reference
+     * (flag, netdb link, bandwidth); falls back to the label itself when it
+     * is not a hash (e.g. the "null" key).
+     *
+     * @param ctx the router context
+     * @return a function mapping the cell text to html
+     */
+    private static Function<String, String> peerRenderer(RouterContext ctx) {
+        return label -> {
+            byte[] data = Base64.decode(label);
+            if (data == null || data.length != Hash.HASH_LENGTH) {return label;}
+            return ctx.commSystem().renderPeerHTML(new Hash(data), true);
+        };
     }
 
     /**
@@ -112,8 +150,8 @@ public class ClientSKMDebugHelper {
     }
 
     /**
-     * Build one thead/tbody/tfoot section. The title is pre-escaped html.
-     * Package-visible for testing.
+     * Build one thead/tbody/tfoot section with the default english columns
+     * and no peer rendering. Package-visible for testing.
      *
      * @param title the client title html
      * @param rows unified rows from RatchetSKM.getDebugRows()
@@ -121,13 +159,38 @@ public class ClientSKMDebugHelper {
      * @return the section html, never null
      */
     static String buildSection(String title, List<String[]> rows, String summary) {
+        return buildSection(title, rows, summary, COLUMNS, -1, null);
+    }
+
+    /**
+     * Build one thead/tbody/tfoot section. The title is pre-escaped html.
+     * The cell at peerCol is passed through peerRenderer (trusted html,
+     * e.g. a router-info reference) instead of being escaped.
+     * Package-visible for testing.
+     *
+     * @param title the client title html
+     * @param rows unified rows from RatchetSKM.getDebugRows()
+     * @param summary the counters line, or null for no tfoot
+     * @param columns the translated header row html
+     * @param peerCol index of the peer column, or -1 for none
+     * @param peerRenderer renders the peer cell html, or null to escape it
+     * @return the section html, never null
+     */
+    static String buildSection(String title, List<String[]> rows, String summary,
+                               String columns, int peerCol, Function<String, String> peerRenderer) {
         StringBuilder buf = new StringBuilder(rows.size() * 96 + 256);
         buf.append("<thead>\n<tr><th colspan=12>").append(title).append(" (").append(rows.size()).
-            append(")</th></tr>\n").append(COLUMNS).append("</thead>\n<tbody>\n");
+            append(")</th></tr>\n").append(columns).append("</thead>\n<tbody>\n");
         for (String[] r : rows) {
             buf.append("<tr>");
-            for (String c : r) {
-                buf.append("<td>").append(DataHelper.escapeHTML(c)).append("</td>");
+            for (int i = 0; i < r.length; i++) {
+                buf.append("<td>");
+                if (i == peerCol && peerRenderer != null) {
+                    buf.append(peerRenderer.apply(r[i]));
+                } else {
+                    buf.append(DataHelper.escapeHTML(r[i]));
+                }
+                buf.append("</td>");
             }
             buf.append("</tr>\n");
         }
