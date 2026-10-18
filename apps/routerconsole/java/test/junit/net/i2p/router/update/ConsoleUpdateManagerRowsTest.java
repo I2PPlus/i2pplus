@@ -1,6 +1,7 @@
 package net.i2p.router.update;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
@@ -149,8 +150,14 @@ public class ConsoleUpdateManagerRowsTest {
     public void numericVersionDatesFormatted() {
         assertEquals("0.9.70", ConsoleUpdateManager.fmtVersion("0.9.70"));
         String formatted = ConsoleUpdateManager.fmtVersion("1774700886000");
-        // JDK 25 CLDR puts a narrow no-break space (U+202F) before AM/PM
-        assertTrue(formatted, formatted.matches("\\w+ \\d+, \\d{4}, \\d{1,2}:\\d{2}[\\s\\u202F][AP]M"));
+        // fmtVersion delegates to DataHelper.formatTime, whose formatter is bound
+        // to the JVM default locale at class-load, so the exact rendering varies
+        // by locale (US "Nov 27, 2025, 10:28 PM" vs a 24-hour locale's
+        // "27 nov. 2025, 22:28"). Assert the locale-independent contract instead:
+        // the 13-digit numeric version is reformatted (not echoed) and names a
+        // four-digit year.
+        assertFalse("1774700886000 should be reformatted, not echoed", formatted.equals("1774700886000"));
+        assertTrue(formatted, formatted.matches(".*\\b\\d{4}\\b.*"));
     }
 
     @Test
