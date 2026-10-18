@@ -87,6 +87,33 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     private String _dbDir;
     /** Hash objects that we should search on (to fill up a bucket, not to get data) */
     private final Set<Hash> _exploreKeys;
+    /** Max peers held awaiting direct-contact verification. @since 0.9.71+ */
+    static final int UNVERIFIED_MAX = 1024;
+    /**
+     * Drop a pending peer from the verification queue after this long; it is
+     * still in the netdb, it just stops being a bucket candidate until it
+     * proves itself. @since 0.9.71+
+     */
+    static final long UNVERIFIED_MAX_AGE = 2 * 60 * 60 * 1000L;
+    /**
+     * Max bucket entries sharing one IP group — eclipse/Sybil resistance,
+     * mirrors kubo's table.go limits. @since 0.9.71+
+     */
+    static final int IP_GROUP_BUCKET_LIMIT = 2;
+    /**
+     * Max entries across all buckets sharing one IP group. @since 0.9.71+
+     */
+    static final int IP_GROUP_GLOBAL_LIMIT = 3;
+    /**
+     * Peers stored in the netdb but not yet in the routing buckets, awaiting
+     * direct-contact evidence before insertion (verify-before-add). Filled by
+     * {@link #addContact}, drained by {@link #promoteUnverifiedPeers()} and
+     * the probe cycle. Capped at {@link #UNVERIFIED_MAX}, entries older than
+     * {@link #UNVERIFIED_MAX_AGE} are dropped. Hash -> time queued.
+     *
+     * @since 0.9.71+
+     */
+    private final Map<Hash, Long> _unverifiedPeers = new ConcurrentHashMap<>(64);
     /** Initialized flag */
     private boolean _initialized;
     /** Clock independent time of when we started up */
@@ -490,6 +517,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         if (_kb != null && !isClientDb()) {_kb.clear();}
         if (_ds != null) {_ds.stop();}
         if (_exploreKeys != null) {_exploreKeys.clear();}
+        _unverifiedPeers.clear();
         if (_negativeCache != null) {_negativeCache.stop();}
         if (!isClientDb()) {
             BlindCache bc = blindCache();
@@ -1474,6 +1502,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
 
         _ds.remove(key);
         _kb.remove(key);
+        _unverifiedPeers.remove(key);
 
         if (onFailedLookupJob != null) {_context.jobQueue().addJob(onFailedLookupJob);}
     }
@@ -1485,6 +1514,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         }
         _ds.remove(key);
         _kb.remove(key);
+        _unverifiedPeers.remove(key);
 
         if (onFailedLookupJob != null) {
             _context.jobQueue().addJob(onFailedLookupJob);
@@ -1500,6 +1530,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         // Remove from data store and KBucket
         _ds.remove(key);
         _kb.remove(key);
+        _unverifiedPeers.remove(key);
 
         // Trigger the failed job callback if present
         if (onFailedLookupJob != null) {_context.jobQueue().addJob(onFailedLookupJob);}
@@ -2937,8 +2968,232 @@ return false;
         }
         _context.peerManager().setCapabilities(key, routerInfo.getCapabilities());
         _ds.put(key, routerInfo, persist);
-        if (rv == null) {_kb.add(key);}
+        if (rv == null) {addContact(key, routerInfo);}
         return rv;
+    }
+
+    /**
+     * Insert a newly-stored peer into the routing buckets, gated on two
+     * local-only checks (no wire-format change):
+     * <ol>
+     * <li>verify-before-add — a peer merely named in someone else's
+     * DatabaseSearchReply has never answered us, so it waits in
+     * {@link #_unverifiedPeers} until direct-contact evidence arrives
+     * (a reply, a successful send, or an established session). This is the
+     * main dead-peer contamination vector for the routing table.</li>
+     * <li>IP diversity — cap how many entries of one IP group (a /16 for
+     * IPv4, a /48 for IPv6) one bucket and the whole table will hold, so a
+     * single entity cannot eclipse our routing table.</li>
+     * </ol>
+     *
+     * @param key the peer hash
+     * @param routerInfo the peer's RouterInfo (for its addresses)
+     * @since 0.9.71+
+     */
+    private void addContact(Hash key, RouterInfo routerInfo) {
+        if (key.equals(_context.routerHash())) {return;}
+        if (!hasDirectContact(key)) {
+            queueUnverified(key);
+            return;
+        }
+        if (!ipDiversityAllows(key, routerInfo)) {
+            if (_log.shouldDebug()) {
+                _log.debug("Not adding Router [" + key.toBase64().substring(0, 6) +
+                           "] to bucket -> IP group limit reached");
+            }
+            return;
+        }
+        _kb.add(key);
+    }
+
+    /**
+     * Policy entry point for peers learned from search replies, where no
+     * RouterInfo is in hand yet: direct-contact gate only; the diversity
+     * check runs when the RI lands via store(). Rejected peers are queued
+     * and probed/promoted by the ProbeStalePeerJob cycle.
+     *
+     * @param key the peer hash
+     * @return true if the peer was inserted into its bucket now
+     * @since 0.9.71+
+     */
+    boolean addContact(Hash key) {
+        if (_kb == null || key.equals(_context.routerHash())) {return false;}
+        if (!hasDirectContact(key)) {
+            queueUnverified(key);
+            return false;
+        }
+        return _kb.add(key);
+    }
+
+    /**
+     * Queue a peer for later bucket promotion once it proves itself,
+     * sweeping expired entries when the queue is full.
+     */
+    private void queueUnverified(Hash key) {
+        long now = _context.clock().now();
+        if (_unverifiedPeers.size() >= UNVERIFIED_MAX) {
+            _unverifiedPeers.entrySet().removeIf(e -> e.getValue().longValue() < now - UNVERIFIED_MAX_AGE);
+            if (_unverifiedPeers.size() >= UNVERIFIED_MAX) {return;}
+        }
+        _unverifiedPeers.put(key, Long.valueOf(now));
+    }
+
+    /**
+     * Have we ever heard from this peer directly, as opposed to merely being
+     * told about it? An established session or a profile with a received
+     * message or successful send counts.
+     *
+     * @param peer the peer hash, non-null
+     * @return true if the peer has answered us at some point
+     * @since 0.9.71+
+     */
+    boolean hasDirectContact(Hash peer) {
+        if (_context.commSystem().isEstablished(peer)) {return true;}
+        return hasDirectContact(_context.profileOrganizer().getProfileNonblocking(peer));
+    }
+
+    /**
+     * Direct-contact test on profile evidence only: heard-from or
+     * successful-send, never heard-about (that only means someone mentioned
+     * them). Null-safe.
+     *
+     * @param prof the peer's profile or null
+     * @return true if the profile shows direct contact
+     * @since 0.9.71+
+     */
+    static boolean hasDirectContact(PeerProfile prof) {
+        return prof != null && (prof.getLastHeardFrom() > 0 || prof.getLastSendSuccessful() > 0);
+    }
+
+    /**
+     * Move pending peers that have earned direct-contact evidence into the
+     * routing buckets, and drop those that waited too long. Called by
+     * {@link ProbeStalePeerJob} each cycle, which also probes the pending
+     * peers so live ones earn evidence quickly.
+     *
+     * @return number promoted into buckets
+     * @since 0.9.71+
+     */
+    int promoteUnverifiedPeers() {
+        if (_kb == null || isClientDb() || _unverifiedPeers.isEmpty()) {return 0;}
+        long now = _context.clock().now();
+        int promoted = 0;
+        // CHM entrySet is weakly consistent — safe to iterate and remove
+        for (Map.Entry<Hash, Long> e : _unverifiedPeers.entrySet()) {
+            Hash peer = e.getKey();
+            if (e.getValue().longValue() < now - UNVERIFIED_MAX_AGE) {
+                _unverifiedPeers.remove(peer);
+                continue;
+            }
+            if (!hasDirectContact(peer)) {continue;}
+            DatabaseEntry de = lookupLocallyWithoutValidation(peer);
+            _unverifiedPeers.remove(peer);
+            if (de instanceof RouterInfo && ipDiversityAllows(peer, (RouterInfo) de)) {
+                if (_kb.add(peer)) {promoted++;}
+            }
+        }
+        if (promoted > 0 && _log.shouldInfo()) {
+            _log.info("Promoted " + promoted + " verified peer(s) into routing buckets");
+        }
+        return promoted;
+    }
+
+    /**
+     * The pending-verification queue size, for tests and the debug console.
+     *
+     * @return zero or more
+     * @since 0.9.71+
+     */
+    int getUnverifiedPeerCount() {return _unverifiedPeers.size();}
+
+    /**
+     * Snapshot of the pending-verification queue, for the probe cycle to
+     * target. The queue itself stays internal.
+     *
+     * @return non-null copy of the pending peer hashes
+     * @since 0.9.71+
+     */
+    Set<Hash> getUnverifiedPeersSnapshot() {
+        return new HashSet<>(_unverifiedPeers.keySet());
+    }
+
+    /**
+     * Would adding this peer to its bucket exceed the per-bucket or global
+     * IP-group caps? Peers with no literal-IP address are unconstrained.
+     *
+     * @param key the peer hash
+     * @param routerInfo the peer's RouterInfo
+     * @return true if the diversity policy allows the add
+     * @since 0.9.71+
+     */
+    boolean ipDiversityAllows(Hash key, RouterInfo routerInfo) {
+        Set<Long> groups = ipGroups(routerInfo);
+        if (groups.isEmpty()) {return true;}
+        // per-bucket cap
+        int bucketCount = 0;
+        for (Hash h : _kb.getBucketEntries(key)) {
+            if (sharesIPGroup(groups, h)) {
+                if (++bucketCount >= IP_GROUP_BUCKET_LIMIT) {return false;}
+            }
+        }
+        // global cap, cheap first pass over the bucket set
+        int globalCount = 0;
+        for (Hash h : _kb.getAll()) {
+            if (sharesIPGroup(groups, h)) {
+                if (++globalCount >= IP_GROUP_GLOBAL_LIMIT) {return false;}
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Does this bucket entry share an IP group with any of the given groups?
+     */
+    private boolean sharesIPGroup(Set<Long> groups, Hash peer) {
+        DatabaseEntry de = lookupLocallyWithoutValidation(peer);
+        if (!(de instanceof RouterInfo)) {return false;}
+        for (Long g : ipGroups((RouterInfo) de)) {
+            if (groups.contains(g)) {return true;}
+        }
+        return false;
+    }
+
+    /**
+     * The distinct IP groups of a router's literal-IP addresses.
+     * Package private for testing.
+     *
+     * @param ri the RouterInfo
+     * @return non-null set of group keys, empty if no literal IPs
+     */
+    static Set<Long> ipGroups(RouterInfo ri) {
+        Set<Long> rv = new HashSet<>(4);
+        for (RouterAddress ra : ri.getAddresses()) {
+            Long g = ipGroup(ra.getIP());
+            if (g != null) {rv.add(g);}
+        }
+        return rv;
+    }
+
+    /**
+     * IP group key: /16 for IPv4, /48 for IPv6, packed into a long with a
+     * family marker bit so the two families never collide. Hostnames
+     * (getIP() null) have no group.
+     *
+     * @param ip 4- or 16-byte address, or null
+     * @return the group key, or null if not a literal IP
+     */
+    static Long ipGroup(byte[] ip) {
+        if (ip == null) {return null;}
+        if (ip.length == 4) {
+            // v4 marker bit at 17, then the top two octets
+            return Long.valueOf(0x1_0000L | ((ip[0] & 0xffL) << 8) | (ip[1] & 0xffL));
+        }
+        if (ip.length == 16) {
+            long v = 0;
+            for (int i = 0; i < 6; i++) {v = (v << 8) | (ip[i] & 0xffL);}
+            return Long.valueOf(v);
+        }
+        return null;
     }
 
     /**
@@ -3022,6 +3277,7 @@ return false;
         DatabaseEntry o = _ds.get(dbEntry);
         if (o == null) {
             if (_kb != null) {_kb.remove(dbEntry);} // if we don't know the key, let's make sure it isn't a now-dead peer
+            _unverifiedPeers.remove(dbEntry);
             _context.peerManager().removeCapabilities(dbEntry);
             return;
         }
@@ -3072,6 +3328,7 @@ return false;
             _context.peerManager().removeCapabilities(peer);
             _negativeCache.cache(peer);
             _kb.remove(peer);
+            _unverifiedPeers.remove(peer);
             _ds.remove(peer);
             if (_log.shouldInfo()) {
                 _log.info("Dropping RouterInfo [" + peer.toBase64().substring(0,6) + "] -> Lookup failure");

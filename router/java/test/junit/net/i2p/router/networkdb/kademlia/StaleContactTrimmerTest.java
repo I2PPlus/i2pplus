@@ -16,6 +16,7 @@ import static org.mockito.Mockito.when;
 
 import net.i2p.data.Hash;
 import net.i2p.kademlia.KBucket;
+import net.i2p.router.CommSystemFacade;
 import net.i2p.router.RouterContext;
 import net.i2p.router.peermanager.PeerProfile;
 import net.i2p.router.peermanager.ProfileOrganizer;
@@ -56,6 +57,7 @@ public class StaleContactTrimmerTest {
         when(ctx.clock()).thenReturn(clock);
         when(clock.now()).thenReturn(NOW);
         when(ctx.profileOrganizer()).thenReturn(organizer);
+        when(ctx.commSystem()).thenReturn(mock(CommSystemFacade.class));
         return ctx;
     }
 
@@ -105,6 +107,37 @@ public class StaleContactTrimmerTest {
         KBucket<Hash> bucket = bucketOf(atBoundary);
         StaleContactTrimmer trimmer = new StaleContactTrimmer(context(organizer));
         assertFalse(trimmer.trim(bucket, randomHash()));
+    }
+
+    @Test
+    public void establishedPeerNeverEvicted() {
+        ProfileOrganizer organizer = mock(ProfileOrganizer.class);
+        Hash staleButConnected = randomHash(), staleUnconnected = randomHash();
+        profile(organizer, staleButConnected, NOW - 10 * 24 * HOUR);
+        profile(organizer, staleUnconnected, NOW - 5 * 24 * HOUR);
+        RouterContext ctx = context(organizer);
+        when(ctx.commSystem().isEstablished(staleButConnected)).thenReturn(true);
+        KBucket<Hash> bucket = bucketOf(staleButConnected, staleUnconnected);
+        StaleContactTrimmer trimmer = new StaleContactTrimmer(ctx);
+        assertTrue(trimmer.trim(bucket, randomHash()));
+        // the connected peer is skipped even though it is the oldest
+        verify(bucket).remove(staleUnconnected);
+        verify(bucket, never()).remove(staleButConnected);
+    }
+
+    @Test
+    public void allConnectedRejectsNewcomer() {
+        ProfileOrganizer organizer = mock(ProfileOrganizer.class);
+        Hash a = randomHash(), b = randomHash();
+        profile(organizer, a, NOW - 10 * 24 * HOUR);
+        profile(organizer, b, NOW - 10 * 24 * HOUR);
+        RouterContext ctx = context(organizer);
+        when(ctx.commSystem().isEstablished(a)).thenReturn(true);
+        when(ctx.commSystem().isEstablished(b)).thenReturn(true);
+        KBucket<Hash> bucket = bucketOf(a, b);
+        StaleContactTrimmer trimmer = new StaleContactTrimmer(ctx);
+        assertFalse(trimmer.trim(bucket, randomHash()));
+        verify(bucket, never()).remove(any(Hash.class));
     }
 
     private void profile(ProfileOrganizer organizer, Hash peer, long lastSeen) {

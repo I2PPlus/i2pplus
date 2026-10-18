@@ -4,10 +4,12 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
+import java.util.Random;
 import java.util.Set;
 import net.i2p.data.Hash;
 import net.i2p.data.i2np.I2NPMessage;
 import net.i2p.data.router.RouterInfo;
+import net.i2p.kademlia.KBucketSet;
 import net.i2p.router.CommSystemFacade.Status;
 import net.i2p.router.Job;
 import net.i2p.router.JobImpl;
@@ -317,7 +319,9 @@ class StartExplorersJob extends JobImpl {
     }
 
     /**
-     * Selects a set of keys from the exploration pool, supplementing with random keys if needed.
+     * Selects a set of keys from the exploration pool, supplementing with
+     * bucket-targeted keys (classic Kademlia bucket refresh) and then random
+     * keys if needed.
      *
      * @param num number of keys to select
      * @return a set of keys to explore of size 'num'
@@ -331,6 +335,20 @@ class StartExplorersJob extends JobImpl {
             if (keys.size() >= num) break;
         }
 
+        // Bucket-targeted keys: generate random keys inside the XOR range of
+        // buckets that are stale or not close to full, so sparse regions are
+        // refilled directly instead of waiting for random keys to land there
+        // by chance. Visited in random order, closest bucket first.
+        if (keys.size() < num) {
+            KBucketSet<Hash> ks = _facade.getKBuckets();
+            if (ks != null) {
+                for (Hash key : ks.getExploreKeys(BUCKET_REFRESH_AGE, num - keys.size())) {
+                    keys.add(key);
+                    if (keys.size() >= num) break;
+                }
+            }
+        }
+
         while (keys.size() < num) {
             byte[] hashBytes = new byte[Hash.HASH_LENGTH];
             getContext().random().nextBytes(hashBytes);
@@ -342,4 +360,10 @@ class StartExplorersJob extends JobImpl {
         }
         return keys;
     }
+
+    /**
+     * A bucket untouched for this long gets a targeted explore key even if
+     * reasonably full. Two full explore-job rerun periods.
+     */
+    private static final long BUCKET_REFRESH_AGE = 2 * 15 * 60 * 1000L;
 }

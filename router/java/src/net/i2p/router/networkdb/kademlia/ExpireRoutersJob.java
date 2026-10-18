@@ -24,9 +24,11 @@ import net.i2p.util.SystemVersion;
  * Go through the routing table pick routers that are
  * out of date, but don't expire routers we're actively connected to.
  * <p>
- * We could in the future use profile data, netdb total size, a Kademlia XOR distance,
- * or other criteria to minimize netdb size, but for now we just use _facade's
- * validate(), which is a sliding expiration based on netdb size.
+ * The normal path uses _facade's validate(), a sliding expiration based on
+ * netdb size. When the netdb is over the size limit, eviction is
+ * profile-weighted (see {@link #dropProbability}) — peers with no recent
+ * contact evidence go first, recently-attested peers are kept — instead of
+ * a flat random drop.
  *
  */
 class ExpireRoutersJob extends JobImpl {
@@ -36,6 +38,10 @@ class ExpireRoutersJob extends JobImpl {
     /** Rerun fairly often, so the fails don't queue up too many netdb searches at once */
     private static final long RERUN_DELAY_MS = 15*60*1000L;
     private static final int LIMIT_ROUTERS = SystemVersion.isSlow() ? 4000 : 8000;
+    /** Attested more recently than this: never dropped by the size-pressure path */
+    static final long PROTECTED_ATTESTED = 12*60*60*1000L;
+    /** Attested more recently than this: dropped at half the base probability */
+    static final long STALE_ATTESTED = 36*60*60*1000L;
 
     /**
      * Expire outdated routers from the network database.
@@ -133,7 +139,9 @@ class ExpireRoutersJob extends JobImpl {
                                 continue;
                         }
                     }
-                    if (getContext().random().nextInt(128) < pdrop) {
+                    // Profile-weighted drop: evict known-dead first, keep useful
+                    int weighted = dropProbability(pdrop, StaleContactTrimmer.lastSeen(getContext(), key), now);
+                    if (weighted > 0 && getContext().random().nextInt(128) < weighted) {
                         _facade.dropAfterLookupFailed(key);
                         removed++;
                     }
@@ -152,5 +160,33 @@ class ExpireRoutersJob extends JobImpl {
             }
         }
         return removed;
+    }
+
+    /**
+     * Profile-weighted drop probability (chance in 128) for the size-pressure
+     * eviction path. Peers with no contact evidence are dropped harder than
+     * the flat probability; peers attested within {@link #PROTECTED_ATTESTED}
+     * are skipped entirely, so netdb size pressure evicts known-dead entries
+     * before useful ones. Pure function — directly unit-testable.
+     *
+     * @param base the flat probability, 10-80 in practice
+     * @param lastSeen newest contact evidence for the peer, 0 if never attested
+     * @param now current context time
+     * @return adjusted chance in 128, 0 to protect the peer this cycle
+     * @since 0.9.71+
+     */
+    static int dropProbability(int base, long lastSeen, long now) {
+        if (lastSeen <= 0) {
+            // never heard of directly — first out
+            return Math.min(128, base * 2);
+        }
+        long age = now - lastSeen;
+        if (age < PROTECTED_ATTESTED) {
+            return 0;
+        }
+        if (age < STALE_ATTESTED) {
+            return base / 2;
+        }
+        return Math.min(128, base * 3 / 2);
     }
 }

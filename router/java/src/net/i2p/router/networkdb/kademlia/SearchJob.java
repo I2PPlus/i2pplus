@@ -953,7 +953,10 @@ public class SearchJob extends JobImpl {
      * @return true if peer was new
      */
     boolean add(Hash peer) {
-        boolean rv = _facade.getKBuckets().add(peer);
+        // Verify-before-add: a peer merely listed in a DSRM has never
+        // answered us, so route through the facade policy — direct-contact
+        // gate now, bucket promotion via the probe cycle once it answers.
+        boolean rv = _facade.addContact(peer);
         if (rv) {
             if (_log.shouldDebug())
                 _log.debug("Queueing up search for next time: [" + peer.toBase64().substring(0,6) + "]");

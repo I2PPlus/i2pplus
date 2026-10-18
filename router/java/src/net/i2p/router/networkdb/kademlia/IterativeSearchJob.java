@@ -1,6 +1,7 @@
 package net.i2p.router.networkdb.kademlia;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -109,6 +110,8 @@ public class IterativeSearchJob extends FloodSearchJob {
     private final Set<Hash> _skippedPeers;
     /** Floodfill peers we've sent queries to in this search — for active-query tracking */
     private final Set<Hash> _queriedFloodfills;
+    /** Set once the candidate set has been widened for beta confirmation. Guarded by this. @since 0.9.71+ */
+    private boolean _widened;
 
     private static final int MAX_NON_FF = 5;
     /** Max number of peers to query */
@@ -118,6 +121,15 @@ public class IterativeSearchJob extends FloodSearchJob {
     /** Extra peers to get from peer selector, as we may discard some before querying */
     private static final int EXTRA_PEERS = 2;
     private static final int IP_CLOSE_BYTES = 3;
+    /**
+     * Kademlia's beta: before a search may die with candidates exhausted,
+     * at least this many of the closest known peers must have been actually
+     * queried. When candidates run out first, the candidate set is widened
+     * once (see {@link #widenCandidatesLocked}).
+     *
+     * @since 0.9.71+
+     */
+    private static final int BETA_CONFIRM = 3;
 
     /** Config key for the total search time cap */
     public static final String PROP_MAX_SEARCH_TIME = "netdb.maxSearchTime";
@@ -650,7 +662,13 @@ public class IterativeSearchJob extends FloodSearchJob {
                      */
                     peer = _alwaysQueryHash;
                 } else {
-                    if (_toTry.isEmpty()) {return;}
+                    if (_toTry.isEmpty()) {
+                        // Beta confirmation: don't let the search die after
+                        // one or two misses when closer-known peers remain
+                        // unqueried.
+                        widenCandidatesLocked();
+                        if (_toTry.isEmpty()) {return;}
+                    }
                     for (Iterator<Hash> iter = _toTry.iterator(); iter.hasNext(); ) {
                         Hash h = iter.next();
                         iter.remove();
@@ -677,6 +695,50 @@ public class IterativeSearchJob extends FloodSearchJob {
             }
             sendQuery(peer, done + pend);
         }
+    }
+
+    /**
+     * When fewer than {@link #BETA_CONFIRM} peers have been queried and the
+     * candidate list is exhausted, widen the candidate set once with the
+     * closest known non-floodfill peers, so a failure is confirmed against
+     * beta closest peers rather than declared after one or two misses.
+     * One-shot: a search widens at most once. Caller must hold this lock.
+     *
+     * @since 0.9.71+
+     */
+    private void widenCandidatesLocked() {
+        if (_widened || _dead) {return;}
+        if (_failedPeers.size() + _unheardFrom.size() >= BETA_CONFIRM) {return;}
+        _widened = true;
+        // Cap so a huge netdb does not balloon the sorted set; the closest
+        // 2x the search limit is far more than beta.
+        addClosest(_toTry, _facade.getAllRouters(), _rkey, getContext().routerHash(), _key,
+                   2 * _totalSearchLimit);
+        if (_log.shouldInfo()) {
+            _log.info("IterativeSearch for " + (_isLease ? "LeaseSet" : "Router") +
+                      " [" + _key.toBase64().substring(0, 6) +
+                      "] widening candidates for beta confirmation");
+        }
+    }
+
+    /**
+     * Add the closest cap peers of allRouters, by XOR distance from rkey,
+     * excluding us and key. Package private for testing.
+     *
+     * @param candidates the search's candidate set to add to
+     * @param allRouters known router hashes
+     * @param rkey the routing key the search is chasing
+     * @param us our router hash
+     * @param key the lookup target
+     * @param cap max peers to add
+     */
+    static void addClosest(Collection<Hash> candidates, Collection<Hash> allRouters, Hash rkey,
+                           Hash us, Hash key, int cap) {
+        List<Hash> all = new ArrayList<>(allRouters);
+        all.remove(us);
+        all.remove(key);
+        all.sort(new XORComparator<>(rkey));
+        candidates.addAll(all.subList(0, Math.min(cap, all.size())));
     }
 
     /**

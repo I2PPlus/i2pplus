@@ -27,6 +27,11 @@ import net.i2p.util.Log;
  * During startup, probes ALL peers aggressively to quickly identify which
  * cached routers are still online.  After startup, falls back to probing
  * only stale peers (old RouterInfo, no recent proof of life).
+ * <p>
+ * Also serves the routing-table verify-before-add queue: peers named only
+ * in someone else's search reply wait in the facade's pending set until a
+ * probe here earns direct-contact evidence, and each cycle promotes the
+ * pending peers that have since proved themselves into the k-buckets.
  *
  * @since 0.9.70
  */
@@ -75,6 +80,9 @@ class ProbeStalePeerJob extends JobImpl {
 
         List<Hash> candidates = new ArrayList<>();
         _scores.clear();
+        // Move pending peers that earned direct-contact evidence since the
+        // last cycle into the routing buckets (verify-before-add drain).
+        _facade.promoteUnverifiedPeers();
         long maxAge = ctx.getProperty(
             "profileOrganizer.maxRouterInfoAgeHours", 2) * 3600_000L;
         boolean isStartupBurst = (_runCount < STARTUP_BURST_CYCLES) ||
@@ -83,6 +91,20 @@ class ProbeStalePeerJob extends JobImpl {
 
         int maxCandidates = isStartupBurst ? STARTUP_MAX_PROBES_PER_CYCLE * 2 : MAX_PROBES_PER_CYCLE * 2;
         final Map<Hash, Integer> scores = _scores;
+
+        // Pending unverified peers first — they need a probe to earn bucket
+        // entry regardless of RouterInfo age, unlike the stale-RI sweep below.
+        for (Hash peer : _facade.getUnverifiedPeersSnapshot()) {
+            if (candidates.size() >= maxCandidates) break;
+            Long last = _lastProbed.get(peer);
+            if (last != null && now - last < PROBE_COOLDOWN) continue;
+            if (ctx.commSystem().isEstablished(peer)) continue;
+            RouterInfo ri = _facade.lookupRIUnvalidated(peer);
+            if (ri == null || ri.isHidden()) continue;
+            scores.put(peer, Integer.valueOf(score(ri)));
+            candidates.add(peer);
+        }
+
         for (Hash peer : ctx.profileOrganizer().selectAllPeers()) {
             if (candidates.size() >= maxCandidates) break;
 
