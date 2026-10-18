@@ -43,7 +43,6 @@ import net.i2p.data.router.RouterAddress;
 import net.i2p.data.router.RouterIdentity;
 import net.i2p.data.router.RouterInfo;
 import net.i2p.kademlia.KBucketSet;
-import net.i2p.kademlia.RejectTrimmer;
 import net.i2p.router.BanLogger;
 import net.i2p.router.Banlist;
 
@@ -283,17 +282,27 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
 
     /** Maximum number of peers to place in the queue to explore */
     static final int MAX_EXPLORE_QUEUE = 64;
-    /** Property: maximum explore queue size. */
-    static final String PROP_EXPLORE_QUEUE = "router.exploreQueue";
 
-    /** Kad K  Was 500 in old implementation but that was with B ~= -8! */
-    private static final int BUCKET_SIZE = 24;
-    /** Property: Kademlia bucket size (B parameter). */
+    /**
+     * Kad K — routers kept per distance class. With 256 single-bit leaf
+     * buckets this caps routing knowledge at 256 x 64 = 16,384 routers.
+     * Was 500 in the old implementation, but that was with B ~= -8.
+     */
+    private static final int BUCKET_SIZE_DEFAULT = 64;
+    /** Property: Kademlia bucket size (K), read once at startup. */
     static final String PROP_BUCKET_SIZE = "router.exploreBucketSize";
-    /** Kademlia bucket size (B parameter). */
+    /** Kademlia top-level split factor (B). */
     private static final int KAD_B = 4;
-    /** P r o p  k a d  b */
-    static final String PROP_KAD_B = "router.exploreKadB";
+
+    /**
+     * Bucket size (K) from the property, clamped to what KBucketSet accepts.
+     *
+     * @param context the router context to read the property from
+     * @return the bucket size, at least 5
+     */
+    static int bucketSize(RouterContext context) {
+        return (int) Math.max(5, context.getProperty(PROP_BUCKET_SIZE, (long) BUCKET_SIZE_DEFAULT));
+    }
 
     /** Rate limits for netdb operations. */
     private static final long[] RATES = {RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR };
@@ -540,7 +549,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         else {
             synchronized (kbInitLock) {
                 _kb = new KBucketSet<>(_context, ri.getIdentity().getHash(),
-                                           BUCKET_SIZE, KAD_B, new RejectTrimmer<>());
+                                           bucketSize(_context), KAD_B, new StaleContactTrimmer(_context));
             }
         }
 

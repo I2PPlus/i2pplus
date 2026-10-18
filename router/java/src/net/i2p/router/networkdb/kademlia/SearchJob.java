@@ -255,7 +255,7 @@ public class SearchJob extends JobImpl {
     }
 
     /** Hard limit on total peers to query before giving up. */
-    private static int MAX_PEERS_QUERIED = 20;
+    private static final int MAX_PEERS_QUERIED = 64;
 
     /**
      * Send the next search, or stop if its completed

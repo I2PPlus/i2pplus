@@ -112,9 +112,9 @@ public class IterativeSearchJob extends FloodSearchJob {
 
     private static final int MAX_NON_FF = 5;
     /** Max number of peers to query */
-    private static final int TOTAL_SEARCH_LIMIT = 24;
+    private static final int TOTAL_SEARCH_LIMIT = 32;
     /** Max number of peers to query if we are ff */
-    private static final int TOTAL_SEARCH_LIMIT_WHEN_FF = 16;
+    private static final int TOTAL_SEARCH_LIMIT_WHEN_FF = 24;
     /** Extra peers to get from peer selector, as we may discard some before querying */
     private static final int EXTRA_PEERS = 2;
     private static final int IP_CLOSE_BYTES = 3;
