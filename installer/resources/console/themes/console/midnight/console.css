@@ -2158,6 +2158,7 @@ p#upnpstatus{margin-top:10px;padding-left:50px}
 .debug_container+h3,.debug_outboundsessions{margin-top:-1px}
 .debug_container{line-height:1.6}
 .debug_container{margin-top:-13px;padding:10px 15px 0;border:var(--border_inner);background:#000008}
+.debug_graphs{margin:12px auto 0;width:calc(100% - 2px);border:var(--border_inner);background:#000}
 .debug_inboundsessions{background:var(--in) no-repeat 6px center,var(--title);background-size:16px,4px 100%}
 .debug_outboundsessions,.debug_inboundsessions{padding:8px 10px 6px 28px}
 .debug_outboundsessions{margin-top:-2px;background:var(--out) no-repeat 6px center,var(--title);background-size:16px,4px 100%}
@@ -2166,7 +2167,8 @@ p#upnpstatus{margin-top:10px;padding-left:50px}
 .debug_targetinfo{line-height:1.4}
 .debug_version{color:#060}
 .skm_key td:first-child b{font-family:var(--bodyfont);color:var(--ink)}
-#bucketSet{margin:0;line-height:1.6}
+.streamsContainer{margin-bottom:13px}
+#bucketSet{margin:-14px auto -2px;line-height:1.6}
 #bucketSet code,.bucket,.b32{font-family:var(--monospaced)}
 #debug{padding-bottom:11px}
 #debug h2,#debug h3{border-radius:0}
@@ -2185,15 +2187,19 @@ p#upnpstatus{margin-top:10px;padding-left:50px}
 #debugStats{margin-top:2px;line-height:1.5}
 #debug th{padding:7px 10px}
 #debug th:last-child,#debug td:last-child{text-align:right}
-#debug td:last-child{vertical-align:top}
+#debug td:not(.rbw):last-child{vertical-align:top}
 #debug td span{max-width:300px;display:inline-block;vertical-align:text-bottom;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 #debug ul,.debug_targetinfo{margin:0;text-align:left;columns:400px 2;column-rule:var(--border_badge);column-gap:30px}
 #debug .tx_header th::before{background:url(images/favicon.svg) no-repeat center center/20px}
+#debug #skm h2+h3{margin-top:14px}
+#debug #skm p:last-of-type{margin-bottom:3px}
 #debug #tx_summary .percentBarInner{margin:0 0 3px!important;height:100%!important}
 #debug #tx_summary button{top:6px!important}
+#debug .ring-grid{margin:-13px auto;width:calc(100% - 10px);border:var(--border_inner);border-radius:0}
 #portmapper td:first-child,#sockets td:first-child{font-weight:700}
 #portmapper td{padding:5px 10px}
 #portmapper th,#portmapper td{text-align:left}
+#streamstats{margin:-2px auto 12px;width:calc(100% - 10px);border:var(--border_inner);border-radius:0}
 
 /* certs */
 #certs{padding-top:3px}
@@ -3026,6 +3032,7 @@ div[id^="config_"] .tab:first-child{margin-left:-1px}
 .rid{width:unset}
 .rid td{line-height:1;font-family:var(--monospaced);letter-spacing:.1em}
 .rid .rif{padding:1px 0!important}
+#debug .rid .rif{padding:1px 3px!important}
 #profiles .rid .rif{padding:1px 2px!important}
 #peers .rid .rif{padding:2px!important}
 #profiles #banlist .rid .rif,#banlist .rid .rif{padding:1px!important}
