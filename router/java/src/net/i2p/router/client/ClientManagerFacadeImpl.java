@@ -8,6 +8,7 @@ package net.i2p.router.client;
  */
 
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import net.i2p.client.I2PClient;
@@ -136,6 +137,9 @@ public class ClientManagerFacadeImpl extends ClientManagerFacade implements Inte
         boolean lively = true;
         long now = _context.clock().now();
         long renewalWindow = 90L * 1000; // 90s before expiration
+        // Destination hashes with a live runner this pass, used below to prune
+        // the log-throttle map so it cannot outgrow the set of real clients.
+        Set<Hash> active = new HashSet<>();
 
         for (Destination dest : _manager.getRunnerDestinations()) {
             ClientConnectionRunner runner = _manager.getRunner(dest);
@@ -152,6 +156,7 @@ public class ClientManagerFacadeImpl extends ClientManagerFacade implements Inte
             if (latestLeaseDate < now) {
                 // All leases have expired
                 Hash destHash = dest.calculateHash();
+                active.add(destHash);
                 long lastLog = _lastExpiredLogTime.getOrDefault(destHash, 0L);
                 boolean shouldLog = (now - lastLog) > LOG_THROTTLE;
 
@@ -185,7 +190,29 @@ public class ClientManagerFacadeImpl extends ClientManagerFacade implements Inte
                 }
             }
         }
+        // The throttle only matters for clients that still have a runner; drop
+        // entries for destinations that have gone away so the map stays bounded
+        // by the live client set instead of every client ever seen.
+        pruneStaleExpiredLogEntries(_lastExpiredLogTime, active);
         return lively;
+    }
+
+    /**
+     * Remove lease-expiration log-throttle entries whose destination no longer
+     * has a live runner. The throttle is only consulted for currently-connected
+     * clients (see {@link #verifyClientLiveliness}), so an entry for a
+     * disconnected destination can never be read again — retaining it would let
+     * the map grow with every I2CP client the router has ever served.
+     *
+     * @param map    the throttle map to prune in place
+     * @param active the destination hashes that currently have a live runner
+     * @return the number of stale entries removed
+     * @since 0.9.71+
+     */
+    static int pruneStaleExpiredLogEntries(ConcurrentHashMap<Hash, Long> map, Set<Hash> active) {
+        int before = map.size();
+        map.keySet().retainAll(active);
+        return before - map.size();
     }
 
     /**
