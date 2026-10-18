@@ -1041,7 +1041,7 @@ public class SAMBridge implements Runnable, ClientApp {
     public void renderSessionTableHTML(Writer out) throws IOException {
         Map<String, SessionRecord> sessions = SAMv3Handler.sSessionsHash.getAllEntries();
         if (sessions.isEmpty()) {
-            out.write("<p><i>No SAM sessions</i></p>\n");
+            out.write("<p id=noSAMsessions class=infohelp><i>No SAM sessions</i></p>\n");
             return;
         }
         List<String[]> rows = new ArrayList<String[]>(sessions.size());
