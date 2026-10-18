@@ -23,10 +23,12 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Function;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import net.i2p.crypto.SigAlgo;
 import net.i2p.crypto.SigType;
+import net.i2p.data.Base64;
 import net.i2p.data.BlindData;
 import net.i2p.data.Certificate;
 import net.i2p.data.DataFormatException;
@@ -60,6 +62,7 @@ import net.i2p.router.tunnel.pool.TunnelPool;
 import net.i2p.stat.RateConstants;
 import net.i2p.util.ConcurrentHashSet;
 import net.i2p.util.Log;
+import net.i2p.util.Translate;
 import net.i2p.util.VersionComparator;
 
 /**
@@ -3369,43 +3372,72 @@ return false;
         StringBuilder buf = new StringBuilder(rows.size() * 64 + 256);
         String root = kb.getRoot().toString();
         String shown = root.length() > 12 ? root.substring(0, 8) + "…" : root;
-        buf.append("<p id=bucketSet class=infohelp><b>Bucket Set rooted on:</b> <code title=\"").append(root).
+        buf.append("<p id=bucketSet class=infohelp><b>").append(_t("Bucket Set rooted on:")).append("</b> <code title=\"").append(root).
             append("\">").append(shown).
-            append("</code> (our router hash) <br><b>Totals:</b> ").append(kb.size()).append(" keys in ").append(rows.size()).
-            append(" buckets &nbsp;<b>Max bucket size:</b> ").append(kb.getBucketCapacity()).
-            append(" entries &nbsp;<b>B value:</b> ").append(kb.getBucketBValue()).append("</p>\n");
-        buf.append(buildBucketTable(rows, kb.getBucketCapacity()));
+            append("</code> (").append(_t("our router hash")).append(") <br><b>").append(_t("Totals:")).append("</b> ").append(kb.size()).
+            append(" ").append(_t("keys in")).append(" ").append(rows.size()).
+            append(" ").append(_t("buckets")).append(" &nbsp;<b>").append(_t("Max bucket size:")).append("</b> ").append(kb.getBucketCapacity()).
+            append(" ").append(_t("entries")).append(" &nbsp;<b>").append(_t("B value:")).append("</b> ").append(kb.getBucketBValue()).append("</p>\n");
+        buf.append(buildBucketTable(rows, kb.getBucketCapacity(), peerRenderer(), this::_t));
         buf.append('\n');
         out.write(buf.toString());
+    }
+
+    /**
+     * Turns a base64 hash into the standard router-info reference (flag,
+     * netdb link, bandwidth) for the bucket entry lists.
+     *
+     * @return a function mapping a base64 hash to html
+     */
+    private Function<String, String> peerRenderer() {
+        return k -> {
+            byte[] data = Base64.decode(k);
+            if (data == null || data.length != Hash.HASH_LENGTH) {return k;}
+            return _context.commSystem().renderPeerHTML(new Hash(data), true);
+        };
+    }
+
+    /**
+     * Console translation for the debug page strings.
+     */
+    private String _t(String s) {
+        return Translate.getString(s, _context, "net.i2p.router.web.messages");
     }
 
     /**
      * Build the bucket table from the rows of
      * {@link KBucketSet#getDebugBucketRows()}: bucket index, XOR-distance bit
      * range, entry count as a details/summary disclosure whose expanded
-     * content is the entry hashes linked to their netdb entries, and fill as
+     * content is the entry hashes rendered by the given function, and fill as
      * a percentage of capacity.
      * Package-visible for testing.
      *
      * @param rows the bucket rows
      * @param capacity the per-bucket capacity, greater than zero
+     * @param entryRenderer renders each entry hash as html
+     * @param tr translates a label, identity in tests
      * @return the table html, never null
      */
-    static String buildBucketTable(List<String[]> rows, int capacity) {
+    static String buildBucketTable(List<String[]> rows, int capacity,
+                                   Function<String, String> entryRenderer, Function<String, String> tr) {
         StringBuilder buf = new StringBuilder(rows.size() * 128 + 128);
-        buf.append("<table id=dhtbuckets><thead><tr><th>Bucket</th><th>Key range</th><th>Entries</th><th>Fill</th></tr></thead>\n<tbody>\n");
+        buf.append("<table id=dhtbuckets><thead><tr><th>").append(tr.apply("Bucket")).
+            append("</th><th>").append(tr.apply("Key range")).
+            append("</th><th>").append(tr.apply("Entries")).append("</th><th>").append(tr.apply("Fill")).
+            append("</th></tr></thead>\n<tbody>\n");
         int last = rows.size() - 1;
         for (int i = 0; i <= last; i++) {
             String[] r = rows.get(i);
             int count = Integer.parseInt(r[4]);
             int pct = Math.round(100.0f * count / capacity);
-            String end = i == 0 && last > 0 ? " (closest)" : i == last && last > 0 ? " (furthest)" : "";
+            String end = i == 0 && last > 0 ? " (" + tr.apply("closest") + ")" :
+                         i == last && last > 0 ? " (" + tr.apply("furthest") + ")" : "";
             buf.append("<tr><td>").append(r[0]).
-                append("</td><td title=\"XOR distance from us, bits ").append(r[2]).append('-').append(r[3]).append(end).
+                append("</td><td title=\"").append(tr.apply("XOR distance from us, bits")).append(' ').append(r[2]).append('-').append(r[3]).append(end).
                 append("\">").append(r[2]).append('-').append(r[3]).
                 append("</td><td>");
             if (count > 0) {
-                buf.append("<details><summary>").append(r[4]).append("</summary>").append(entryLinks(r[5])).append("</details>");
+                buf.append("<details><summary>").append(r[4]).append("</summary>").append(entryLinks(r[5], entryRenderer)).append("</details>");
             } else {
                 buf.append('0');
             }
@@ -3418,22 +3450,21 @@ return false;
     }
 
     /**
-     * Comma-separated entry hashes as netdb lookup links, sorted for stable
-     * display, truncated to six characters with the full hash in the title.
+     * Entry hashes rendered through the given function, sorted for stable
+     * display.
      *
      * @param keys comma-separated base64 hashes, may be empty
-     * @return the chips html, or an em-dash if there are no keys
+     * @param entryRenderer renders each hash as html
+     * @return the entries html, or an em-dash if there are no keys
      */
-    static String entryLinks(String keys) {
+    static String entryLinks(String keys, Function<String, String> entryRenderer) {
         if (keys == null || keys.isEmpty()) return "—";
         List<String> list = new ArrayList<String>(Arrays.asList(keys.split(",")));
         Collections.sort(list);
         StringBuilder buf = new StringBuilder(keys.length() + list.size() * 48);
         for (String k : list) {
             if (buf.length() > 0) buf.append(' ');
-            String shown = k.length() > 6 ? k.substring(0, 6) : k;
-            buf.append("<span class=routerHash><a href=\"netdb?r=").append(k).
-                append("\" title=\"").append(k).append("\">").append(shown).append("</a></span>");
+            buf.append(entryRenderer.apply(k));
         }
         return buf.toString();
     }
