@@ -108,22 +108,24 @@ public class ClientSKMDebugHelper {
 
     private static void appendRatchet(RouterContext ctx, StringBuilder sections, String title, RatchetSKM rskm) {
         sections.append(buildSection(title, rskm.getDebugRows(), rskm.getDebugSummary(),
-                                     columns(ctx), 1, peerRenderer(ctx)));
+                                     columns(ctx), 1, peerRenderer()));
     }
 
     /**
-     * Turns a base64 key-hash cell into the standard router-info reference
-     * (flag, netdb link, bandwidth); falls back to the label itself when it
-     * is not a hash (e.g. the "null" key).
+     * Turns a base64 key-hash cell into a destination reference: the peer of
+     * a client session is a destination, never a router, so no router-info
+     * markup (flag, bandwidth) applies and there is nothing to look up.
+     * Shows the short hash with the full hash as title; falls back to the
+     * label itself when it is not a hash (e.g. the "null" key).
      *
-     * @param ctx the router context
      * @return a function mapping the cell text to html
      */
-    private static Function<String, String> peerRenderer(RouterContext ctx) {
+    private static Function<String, String> peerRenderer() {
         return label -> {
             byte[] data = Base64.decode(label);
             if (data == null || data.length != Hash.HASH_LENGTH) {return label;}
-            return ctx.commSystem().renderPeerHTML(new Hash(data), true);
+            String shown = label.length() > 8 ? label.substring(0, 8) : label;
+            return "<span class=skm_dest title=\"" + label + "\">" + shown + "</span>";
         };
     }
 
