@@ -181,7 +181,7 @@ html:not(.advmode) #tuning input[type=number]{min-width:0!important;text-align:c
 #debug .appdot.yellow{background:#f39c12}
 #debug .appdot.red{background:#e74c3c}
 #debug .appdot.blue{background:#3498db}
-#debug #apps .appdot{margin-right:6px}
+#debug #apps .appdot,#debug #samsessions .appdot{margin-right:6px}
 a.ring-cell-link{text-decoration:none;color:inherit}
 .debug_graphs{display:flex;flex-wrap:wrap;gap:12px;margin:12px 0}
 .graph-cell{flex:1 1 calc(50% - 6px);min-width:250px;max-width:800px;text-align:center}
@@ -226,6 +226,9 @@ a.ring-cell-link{text-decoration:none;color:inherit}
 #hsNetwork+h2:not(.expanded){margin-bottom:-2px}
 #activeStreams .totalBandwidth{margin-top:3px;float:right;text-transform:none;letter-spacing:0;word-spacing:0;font-size:80%}
 #activeStreams th.sectionhead{padding:8px;font-size:120%;font-weight:700;text-align:left;letter-spacing:0.08em;text-transform:uppercase;color:var(--text);border-bottom:1px solid var(--border)}
+#samsessions td:nth-child(3){word-break:break-all;vertical-align:middle!important;font-family:var(--monospaced)}
+#samsessions td:not(:nth-child(3)){white-space:nowrap;text-align:center!important}
+#samsessions th:last-child,#samsessions td:last-child{vertical-align:middle!important;text-align:left!important}
 #sidebar .percentBarInner{transition:width .5s ease}
 #streamstats,#samstats{margin:8px auto;padding:16px 4px;width:100%;;display:grid;grid-template-columns:repeat(5,1fr);gap:4px;text-align:center}
 #streamstats .truncB32{width:48px;float:none;font-weight:600}
