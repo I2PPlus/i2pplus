@@ -260,6 +260,12 @@ public class RouterAppManager extends ClientAppManagerImpl {
         return new int[] {_clients.size(), running, _registered.size()};
     }
 
+    /**
+     * Table of registered and running router apps with state dots.
+     *
+     * @param out writer to write HTML output to
+     * @throws IOException if writing to output fails
+     */
     public void renderStatusHTML(Writer out) throws IOException {
         StringBuilder buf = new StringBuilder(1024);
         List<String[]> rows = buildRows(_clients, _registered);

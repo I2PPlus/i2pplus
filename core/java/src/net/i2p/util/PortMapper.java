@@ -484,6 +484,12 @@ public class PortMapper {
      */
     public static String displayHost(String ip) {return convertWildcard(ip, DEFAULT_HOST);}
 
+    /**
+     * Table of registered services with host and port, plus eepsites.
+     *
+     * @param out writer to write HTML output to
+     * @throws IOException if writing to output fails
+     */
     public void renderStatusHTML(Writer out) throws IOException {
         List<String> services = new ArrayList<>(_dir.keySet());
         out.write("<h2 id=debug_portmapper>Port Mapper</h2>\n" + "<table id=portmapper>\n<thead>\n<tr><th>Service</th><th>Host</th><th>Port</th></tr>\n</thead>\n");

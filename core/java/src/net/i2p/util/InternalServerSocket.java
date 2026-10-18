@@ -205,6 +205,12 @@ public class InternalServerSocket extends ServerSocket {
         return rv;
     }
 
+    /**
+     * Table of the ports currently claimed by internal server sockets.
+     *
+     * @param out writer to write HTML output to
+     * @throws IOException if writing to output fails
+     */
     public static void renderStatusHTML(Writer out) throws IOException {
         out.write("<h2 id=debug_sockets>Internal Server Sockets</h2>\n<table id=sockets>\n");
         List<Integer> ports = new ArrayList<>(_sockets.keySet());

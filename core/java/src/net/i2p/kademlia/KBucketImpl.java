@@ -222,6 +222,8 @@ class KBucketImpl<T extends SimpleDataStructure> implements KBucket<T> {
 
     /**
      * Number of held replacement candidates. Package private for testing.
+     *
+     * @return the count of candidates currently in the replacement cache
      */
     int getReplacementCount() {
         synchronized (_replacements) {

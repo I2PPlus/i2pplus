@@ -1257,6 +1257,9 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
          * @param d may be null
          * @param key may be null
          * @param callback may be null. Always null for IB.
+         * @param target the far-end public key this session talks to
+         * @param state the completed handshake state, source of the chaining
+         *              key and the role that decides the tagset direction
          */
         public OutboundSession(PublicKey target, Destination d, SessionKey key, HandshakeState state, ReplyCallback callback) {
             _target = target;
@@ -1304,6 +1307,8 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
          *
          * @param state the handshake state to advance, whose role decides the direction
          * @param callback only for inbound (NSR sent by Bob), may be null
+         * @param split the NSR split keys - new root chaining key ck plus the
+         *              per-direction session keys k_ab and k_ba
          */
         void updateSession(HandshakeState state, ReplyCallback callback, SplitKeys split) {
             SessionKey rk = split.ck;
@@ -1370,6 +1375,10 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
         }
 
         /**
+         * Process a Next Session Key message, validating the ID sequence
+         * before advancing the ratchet to the new tag set key.
+         *
+         * @param key the received next-session-key message
          * @since 0.9.46
          */
         public void nextKeyReceived(NextSessionKey key) {
@@ -1665,8 +1674,11 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
             }
             return rv;
         }
-        /** Return the target */
-
+        /**
+         * The far-end public key this session talks to.
+         *
+         * @return the target key, set at construction
+         */
         public PublicKey getTarget() {
             return _target;
         }
@@ -1678,13 +1690,19 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
         public HandshakeState getHandshakeState() {
             return _state;
         }
-        /** Return the currentKey */
-
+        /**
+         * The session key stored at construction; never updated afterwards.
+         *
+         * @return the key, or null if the session was created without one
+         */
         public SessionKey getCurrentKey() {
             return _currentKey;
         }
-        /** Return the establishedDate */
-
+        /**
+         * When this session was established.
+         *
+         * @return creation time in ms
+         */
         public long getEstablishedDate() {
             return _established;
         }
@@ -1709,6 +1727,10 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
 
         /**
          * Expire old tags, returning the number of tag sets removed
+         *
+         * @param now current time in ms, tag sets expiring at or before it
+         *            are removed
+         * @return the number of tag sets removed
          */
         public int expireTags(long now) {
             int removed = 0;
@@ -1727,8 +1749,12 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
             }
             return removed;
         }
-        /** Consume the next available tag and advance */
-
+        /**
+         * Consume the next available tag and advance
+         *
+         * @return the next tag with its key, rotation keys and pending acks,
+         *         or null if the session or tag set has expired or drained
+         */
         public RatchetEntry consumeNext() {
             long now = _context.clock().now();
             if (_lastReceived + SESSION_TAG_DURATION_MS < now) {
@@ -1782,6 +1808,8 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
          * Side effect - binds this session to the supplied destination.
          *
          * @param d the far-end Destination for this PublicKey if known, or null
+         * @param timer the ack timer to hold, cancelled when this session
+         *              sends; ignored if a timer is already registered
          * @return true if registered
          * @since 0.9.47
          */
@@ -1847,6 +1875,12 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
         }
 
         /**
+         * Register the callback to run when the ACK for one ratchet tag
+         * arrives; a live callback for the same tag is not replaced.
+         *
+         * @param id tag set ID the ACK is for
+         * @param n tag index within the tag set
+         * @param callback callback to run on ACK
          * @since 0.9.46
          */
         public void registerCallback(int id, int n, ReplyCallback callback) {
@@ -1861,6 +1895,10 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
         }
 
         /**
+         * Run and remove the callback registered for the ACKed tag, if any.
+         *
+         * @param id tag set ID the ACK is for
+         * @param n tag index within the tag set
          * @since 0.9.46
          */
         public void receivedACK(int id, int n) {
@@ -1877,6 +1915,10 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
         }
 
         /**
+         * Queue the ACK for one ratchet tag to be sent back.
+         *
+         * @param id tag set ID being ACKed
+         * @param n tag index within the tag set
          * @since 0.9.46
          */
         public void ackRequested(int id, int n) {
@@ -1904,6 +1946,10 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
         }
 
         /**
+         * Drop reply callbacks whose expiration has passed.
+         *
+         * @param now current time in ms
+         * @return the number of callbacks removed
          * @since 0.9.46
          */
         public int expireCallbacks(long now) {

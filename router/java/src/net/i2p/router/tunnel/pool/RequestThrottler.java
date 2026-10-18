@@ -712,6 +712,12 @@ public class RequestThrottler {
         private final Map<Hash, AtomicIntegerArray> peerBuckets;
         private final AtomicLong lastCleanupTime;
 
+        /**
+         * Divide the window into equal time buckets.
+         *
+         * @param windowSizeMs total window length in ms
+         * @param bucketCount equal time buckets covering the window
+         */
         BurstWindowCounter(long windowSizeMs, int bucketCount) {
             this.windowSizeMs = windowSizeMs;
             this.bucketCount = bucketCount;
@@ -720,6 +726,13 @@ public class RequestThrottler {
             this.lastCleanupTime = new AtomicLong(System.currentTimeMillis());
         }
 
+        /**
+         * Record one request from the peer and return the fresh window total.
+         * Sweeps aged-out peers when the last sweep is over a minute old.
+         *
+         * @param h the requesting peer's hash
+         * @return requests within the window, including this one
+         */
         int increment(Hash h) {
             long now = System.currentTimeMillis();
             int bucketIndex = (int) ((now / bucketSizeMs) % bucketCount);
@@ -731,6 +744,12 @@ public class RequestThrottler {
             return total;
         }
 
+        /**
+         * Window total for the peer without recording a request.
+         *
+         * @param h the peer's hash
+         * @return requests within the window, 0 if never seen
+         */
         int getCount(Hash h) {
             AtomicIntegerArray peerArray = peerBuckets.get(h);
             if (peerArray == null) return 0;
@@ -739,6 +758,12 @@ public class RequestThrottler {
             return getWindowSum(peerArray, bucketIndex);
         }
 
+        /**
+         * Count in the current bucket only, not the whole window.
+         *
+         * @param h the peer's hash
+         * @return this bucket's count, 0 if never seen
+         */
         int getCurrentBucketCount(Hash h) {
             AtomicIntegerArray peerArray = peerBuckets.get(h);
             if (peerArray == null) return 0;
@@ -747,6 +772,14 @@ public class RequestThrottler {
             return peerArray.get(bucketIndex);
         }
 
+        /**
+         * Whether the peer's window total exceeds a burst limit derived
+         * from its normal limit (clamped between the min and max).
+         *
+         * @param h the peer's hash
+         * @param normalLimit the peer's normal request limit
+         * @return true if the window total is above the derived burst limit
+         */
         boolean isBursting(Hash h, int normalLimit) {
             int count = getCount(h);
             int burstLimit = Math.max(BURST_THRESHOLD_MIN,
@@ -762,6 +795,12 @@ public class RequestThrottler {
             return sum;
         }
 
+        /**
+         * Drop peers whose current and previous buckets are both zero.
+         * CAS-claimed so concurrent callers mostly skip the sweep.
+         *
+         * @param now current time in ms
+         */
         void cleanup(long now) {
             // Claim the sweep with a CAS so concurrent increments do not all run
             // it. peerBuckets is a ConcurrentHashMap, so removeIf iterates
