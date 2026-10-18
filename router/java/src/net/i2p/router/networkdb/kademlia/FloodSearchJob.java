@@ -49,9 +49,9 @@ abstract class FloodSearchJob extends JobImpl {
 
     /**
      * Prepares a flood search for one key: records the target, the callbacks and the lease-set
-     * flag, then derives the deadline from the requested timeout. The halving by
-     * FLOOD_SEARCH_TIME_FACTOR is undone by the guard that follows it, so the full
-     * timeout currently applies to the flood phase.
+     * flag, then derives the deadline from the requested timeout, applied in full.
+     * (IterativeSearchJob extends this class, so any shortening here would halve
+     * every iterative search's deadline as well.)
      * @param ctx router context supplying the clock and log manager
      * @param facade floodfill database the key is looked up in
      * @param key the hash being searched for
@@ -69,10 +69,8 @@ abstract class FloodSearchJob extends JobImpl {
         if (onFind != null) {_onFind.add(onFind);}
         _onFailed = new CopyOnWriteArrayList<>();
         if (onFailed != null) {_onFailed.add(onFailed);}
-        int timeout = timeoutMs / FLOOD_SEARCH_TIME_FACTOR;
-        if (timeout < timeoutMs) {timeout = timeoutMs;}
-        _timeoutMs = timeout;
-        _expiration = timeout + ctx.clock().now();
+        _timeoutMs = timeoutMs;
+        _expiration = timeoutMs + ctx.clock().now();
         _isLease = isLease;
         _created = System.currentTimeMillis();
     }
@@ -118,7 +116,6 @@ abstract class FloodSearchJob extends JobImpl {
     public long getExpiration() { return _expiration; }
     /** Max simultaneous flood lookups before fallback. */
     protected static final int CONCURRENT_SEARCHES = SystemVersion.isSlow() ? 3 : 5;
-    private static final int FLOOD_SEARCH_TIME_FACTOR = 2;
     /**
      * Deprecated, unused, see FOSJ override
      */
