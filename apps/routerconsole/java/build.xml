@@ -953,6 +953,10 @@
         <pathelement location="${junit.home}/junit4.jar"/>
         <pathelement location="${hamcrest.home}/hamcrest-core.jar"/>
         <pathelement location="../../../apps/jetty/jettylib/javax.servlet.jar"/>
+        <!-- CSSHelper.allowIFrame() calls ServletUtil.isSmallBrowser(); the main
+             compile classpath carries jetty-i2p.jar (where ServletUtil lives) so
+             the test runtime classpath must too. -->
+        <pathelement location="${jetty.pkg.dir}/jetty-i2p.jar"/>
       </classpath>
       <formatter type="xml"/>
       <batchtest todir="${junit.reports.dir}/routerconsole/junit">
