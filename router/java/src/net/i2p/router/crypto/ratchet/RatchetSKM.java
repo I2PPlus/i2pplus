@@ -1190,13 +1190,6 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
         private final LinkedBlockingQueue<Integer> _acksToSend;
         private SimpleTimer2.TimedEvent _ackTimer;
         private Destination _destination;
-        /**
-         * Intended to be true after the first tagset is acked, reverting to
-         * false on repeated failures so tag delivery is not stuck forever on
-         * unacked tags. Currently never written, so getAckReceived() is always
-         * false.
-         */
-        private volatile boolean _acked;
 
         // next key
         private int _myOBKeyID = -1;
@@ -1816,11 +1809,6 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
                     return _tagSet.getExpiration();
             }
             return -1;
-        }
-        /** Return the ackReceived */
-
-        public boolean getAckReceived() {
-            return _acked;
         }
 
         /**

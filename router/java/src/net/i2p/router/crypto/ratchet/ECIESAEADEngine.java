@@ -326,7 +326,7 @@ public final class ECIESAEADEngine {
                 if (_log.shouldWarn()) {
                     _log.warn("NewSessionReply decryption failure -> Tag found but no state" +
                               "\n* Too small: " + data.length + " bytes for NewSessionReply" +
-                              " (minimum " + (KEYLEN + KEYLEN + MACLEN + MACLEN) + " bytes)");
+                              " (minimum " + min + " bytes)");
                 }
             }
             if (decrypted == null) {
@@ -468,7 +468,7 @@ public final class ECIESAEADEngine {
     /**
      * The minimum New Session message size for the given encryption type.
      *
-     * @return the min n s size
+     * @return the minimum new-session message size in bytes for this type
      * @since 0.9.67
      */
     private static int getMinNSSize(EncType type) {
@@ -489,7 +489,7 @@ public final class ECIESAEADEngine {
     /**
      * The minimum New Session Reply message size for the given encryption type.
      *
-     * @return the min n s r size
+     * @return the minimum new-session-reply message size in bytes for this type
      * @since 0.9.67
      */
     private static int getMinNSRSize(EncType type) {
