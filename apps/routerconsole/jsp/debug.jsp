@@ -8,7 +8,7 @@
 </head>
 <body>
 <%@include file="sidebar.jsi"%>
-<h1 class="conf adv debug">Debug</h1>
+<h1 class="conf adv debug"><%=intl._t("Debug")%></h1>
 <div class="main" id="debug">
 <div class="confignav">
 <%  String[][] tabs = {
@@ -37,9 +37,9 @@
         boolean isActive = tabD.equals(currentD);
 %>
 <% if (isActive) { %>
-    <span class="tab2"><%=tab[0]%></span>
+    <span class="tab2"><%=intl._t(tab[0])%></span>
 <% } else { %>
-    <span class="tab"><a href="<%=tabUrl%>"><%=tab[0]%></a></span>
+    <span class="tab"><a href="<%=tabUrl%>"><%=intl._t(tab[0])%></a></span>
 <% } %>
 <% } %>
 </div>
@@ -65,14 +65,14 @@
         }
         out.print("</div>\n");
     } else if ("3".equals(dd)) {
-        out.print("<div class=debug_section id=skm>\n<h2>Router Session Key Manager</h2>\n");
+        out.print("<div class=debug_section id=skm>\n<h2>" + intl._t("Router Session Key Manager") + "</h2>\n");
         _ctx.sessionKeyManager().renderStatusHTML(out);
         out.print("</div>");
     } else if ("4".equals(dd)) {
-        out.print("<h2>Client Session Key Managers</h2>");
+        out.print("<h2>" + intl._t("Client Session Key Managers") + "</h2>");
         net.i2p.router.web.helpers.ClientSKMDebugHelper.render(_ctx, out);
     } else if ("5".equals(dd)) {
-        out.print("<h2 id=dht>Router DHT</h2>\n");
+        out.print("<h2 id=dht>" + intl._t("Router DHT") + "</h2>\n");
         _ctx.netDb().renderStatusHTML(out);
     } else if ("6".equals(dd)) {
         java.io.InputStream is = this.getClass().getResourceAsStream("/net/i2p/router/web/resources/translationstatus.html");
