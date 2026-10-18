@@ -1159,17 +1159,6 @@ public class TransportManager implements TransportEventListener {
         int unreachableTransports = 0;
         RouterInfo targetRI = msg.getTarget();
         Hash peer = targetRI.getIdentity().calculateHash();
-        // Extract IP for ban logging
-        String _peerIP = "";
-        for (RouterAddress ra : targetRI.getAddresses()) {
-            if (ra != null && ra.getHost() != null && ra.getPort() > 0) {
-                String host = ra.getHost();
-                _peerIP = host.contains(":") && !host.startsWith("[")
-                    ? "[" + host + "]:" + ra.getPort()
-                    : host + ":" + ra.getPort();
-                break;
-            }
-        }
         List<String> failedTransports = msg.getFailedTransports();
         TransportBid rv = null;
         for (Transport t : _transports.values()) {
@@ -1206,6 +1195,9 @@ public class TransportManager implements TransportEventListener {
             }
         }
         if (unreachableTransports >= _transports.size()) {
+            // Extract IP for ban logging — only needed on this rare ban path,
+            // not for every routed message.
+            String _peerIP = peerIPFromRI(targetRI);
             if (msg.getTarget().getIdentity().getSigningPublicKey().getType() == null) {
                 // we don't support his crypto
                 _context.statManager().addRateData("transport.banlistOnUnsupportedSigType", 1);
@@ -1271,6 +1263,26 @@ public class TransportManager implements TransportEventListener {
             _context.statManager().addRateData("transport.noBidsYetNotAllUnreachable", unreachableTransports, msg.getLifetime());
         }
         return rv;
+    }
+
+    /**
+     * Build the {@code host:port} string for a peer's first usable transport
+     * address, for ban/ghost logging. Returns "" if the RouterInfo has no usable
+     * address. Only called on the rare unreachable/ban path, not per message.
+     *
+     * @param ri the target RouterInfo
+     * @return the peer IP:port, or "" if none
+     */
+    static String peerIPFromRI(RouterInfo ri) {
+        for (RouterAddress ra : ri.getAddresses()) {
+            if (ra != null && ra.getHost() != null && ra.getPort() > 0) {
+                String host = ra.getHost();
+                return host.contains(":") && !host.startsWith("[")
+                    ? "[" + host + "]:" + ra.getPort()
+                    : host + ":" + ra.getPort();
+            }
+        }
+        return "";
     }
 
     /**
