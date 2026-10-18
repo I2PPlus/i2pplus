@@ -4475,13 +4475,17 @@ private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, P
         if (netDb == null) return true;
         if (_context.router() == null) return true;
         if (!passesBasicGates(peer)) return false;
-        if (hasExcessiveLifetimeFailures(peer)) return false;
+        // Fetch the profile once. It is needed both for the lifetime-failure gate
+        // and (for stale RouterInfo) the proof-of-life check below; fetching it
+        // per-check took two read locks per candidate.
+        PeerProfile prof = _context.profileOrganizer().getProfile(peer);
+        if (isExcessiveLifetimeFailure(prof)) return false;
         // Unvalidated: every check a validating lookup would add on top of presence is
         // done below — banlist and XG/LU in passesBasicGates, and hidden flag,
         // age with proof-of-life fallback, transport establishment, usable
         // address and tier in hasValidRouterInfo.
         RouterInfo info = lookupRouterInfoUnvalidated(peer);
-        if (info != null) return hasValidRouterInfo(peer, info, buildSuccess);
+        if (info != null) return hasValidRouterInfo(peer, info, buildSuccess, prof);
         return false;
     }
 
@@ -4569,33 +4573,16 @@ private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, P
     }
 
     /**
-     * Returns true when the peer has excessive cumulative tunnel failures.
-     * Uses a dual gate: hard exclusion at {@link #MAX_LIFETIME_TUNNEL_FAILURES}
-     * failures or when the lifetime failure ratio exceeds
-     * {@link #MAX_LIFETIME_FAILURE_RATIO}.  Between
-     * {@link #SOFT_FAILURE_PENALTY_THRESHOLD} and the hard cap, peers are not
-     * excluded but receive a selection priority penalty (handled by the caller
-     * via {@link #getExcessiveFailurePenalty(Hash, PeerProfile)}).
+     * Whether the given profile carries excessive cumulative tunnel failures.
+     * Dual gate: hard exclusion at {@link #MAX_LIFETIME_TUNNEL_FAILURES} failures
+     * or when the lifetime failure ratio exceeds {@link #MAX_LIFETIME_FAILURE_RATIO}.
+     * A null profile or null history is not a failure.
      * <p>
      * The blame system (tunnelFailed()) only increments statistics — it never
-     * bans.  Without this check, peers with 200+ failures keep getting selected
+     * bans. Without this check, peers with 200+ failures keep getting selected
      * because the ghost peer system clears on any success and the first-hop
-     * cooldown is only 5 minutes.
-     *
-     * @param peer the peer hash
-     * @return true when the peer should be excluded from selection
-     */
-    private boolean hasExcessiveLifetimeFailures(Hash peer) {
-        return isExcessiveLifetimeFailure(getProfileNonblocking(peer));
-    }
-
-    /**
-     * Whether the given profile carries excessive cumulative tunnel failures.
-     * Same dual gate as {@link #hasExcessiveLifetimeFailures(Hash)}, for callers
-     * that already hold the profile and so avoid a re-probe per candidate.  A
-     * null profile or null history is not a failure.
-     * <p>
-     * Pure decision — no context access, safe for unit tests.
+     * cooldown is only 5 minutes. Pure decision — no context access, safe for
+     * unit tests.
      *
      * @param prof the profile, may be null
      * @return true when the peer should be excluded from selection
@@ -4643,7 +4630,7 @@ private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, P
      * Checks the RouterInfo for hidden flag, stale proof of life, usable
      * transport address, bandwidth tier, and tunnel exclusion.
      */
-    private boolean hasValidRouterInfo(Hash peer, RouterInfo info, double buildSuccess) {
+    private boolean hasValidRouterInfo(Hash peer, RouterInfo info, double buildSuccess, PeerProfile prof) {
         if (info.isHidden()) return false;
         long now = _context.clock().now();
         long maxAge = getMaxRouterInfoAgeMs();
@@ -4653,7 +4640,7 @@ private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, P
         // as tunnel targets, even during startup. The startup grace only
         // relaxes the transport-established requirement below.
         if (info.getPublished() < now - maxAge &&
-            !hasRecentProofOfLife(_context.profileOrganizer().getProfile(peer), now)) {
+            !hasRecentProofOfLife(prof, now)) {
             return false;
         }
         // During normal operation, require established transport connection.
