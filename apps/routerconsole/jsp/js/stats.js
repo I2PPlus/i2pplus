@@ -81,6 +81,29 @@
     for (let i = 0; i < tabs.length; i++) {tabs[i].classList.remove("tab2");}
   }
 
+  /**
+   * Depress the tab of the group whose radio is checked. When arriving with a
+   * stat filter (e.g. from the debug page's mini-graphs), the server only
+   * pre-checks the "Router" group, so a filtered page whose matches live in
+   * another group renders with nothing visible until a tab is clicked; check
+   * the first rendered group's radio so its stats show, then depress its tab.
+   */
+  function initActiveTab() {
+    const radios = document.querySelectorAll(".toggle_input");
+    if (!radios.length) return;
+    let checked = null;
+    for (let i = 0; i < radios.length; i++) {
+      if (radios[i].checked) { checked = radios[i]; break; }
+    }
+    if (!checked && new URLSearchParams(window.location.search).get("stat")) {
+      checked = radios[0];
+      checked.checked = true;
+    }
+    if (!checked) return;
+    const label = document.querySelector('label[for="' + checked.id + '"]');
+    if (label) label.classList.add("tab2");
+  }
+
   nav.addEventListener("click", function(element) {
     if (element.target.classList.contains("togglestat")) {
       if (infohelp) {infohelp.remove();}
@@ -94,6 +117,7 @@
   document.addEventListener("DOMContentLoaded", () => {
     initRefresh();
     initTabs();
+    initActiveTab();
     progressx.hide();
   });
 })();
