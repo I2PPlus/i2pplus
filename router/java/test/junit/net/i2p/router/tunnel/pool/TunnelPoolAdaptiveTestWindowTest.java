@@ -90,6 +90,9 @@ public class TunnelPoolAdaptiveTestWindowTest {
     public void testPreEmergencyBurstIsNamed() {
         assertTrue(TunnelPool.PRE_EMERGENCY_BURST > 0);
         assertTrue(TunnelPool.PRE_EMERGENCY_FRACTION > 0.0);
-        assertTrue(TunnelPool.PRE_EMERGENCY_FRACTION < 0.5);
+        // At most half: the fraction deliberately equals the isMateriallyShort
+        // line at 0.5 (pinned by TunnelPoolPreEmergencyTest), and beyond half
+        // the burst would fire against pools that are barely thin.
+        assertTrue(TunnelPool.PRE_EMERGENCY_FRACTION <= 0.5);
     }
 }

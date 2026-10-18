@@ -223,9 +223,17 @@ public class TunnelPool {
     static final int SOFT_REMOVAL_THRESHOLD = 7;
     /**
      * Pre-emergency threshold: fraction of target below which builds start immediately.
+     * <p>Half, not a quarter: at 0.25 a 4-tunnel pool only burst at zero healthy, so
+     *  the burst's exemption from the global build budget engaged only after the pool
+     *  had already collapsed, and recovery started from a hole while its non-exempt
+     *  replacements queued behind other pools' builds. Half engages the burst and its
+     *  exemption one healthy tunnel before the drain reaches zero. The threshold is
+     *  exactly the {@link #isMateriallyShort(int, int)} line, which made the separate
+     *  thin-pool fast-path below the pre-emergency branch unreachable; it was removed
+     *  and its warning folded into the branch.
      * @since 0.9.71+
      */
-    static final double PRE_EMERGENCY_FRACTION = 0.25;
+    static final double PRE_EMERGENCY_FRACTION = 0.5;
 
     /**
      * Builds started in one pre-emergency burst. Named so it stays consistent
@@ -3811,8 +3819,8 @@ public class TunnelPool {
      */
     /**
      * Whether a published LeaseSet is too small to count as a working set.
-     * <p>Half the target is the same line the pool's own "thin pool" fast-path uses
-     *  ({@code healthy < target / 2}), so the two signals now agree on which tier
+     * <p>Half the target is the same line as the pool's pre-emergency threshold
+     *  ({@link #PRE_EMERGENCY_FRACTION}), so the two signals agree on which tier
      *  matters instead of one covering everything and the other covering half of it.
      *
      * @param leases number of leases actually assembled
@@ -6748,10 +6756,19 @@ public class TunnelPool {
      *  from silently draining to zero, avoiding tunnel collapse cascades.
      */
     void ensureSufficientTunnels() {
-          // Pre-emergency: if pool is below 25% of target, start builds immediately
+          // Pre-emergency: if pool is below 50% of target, start builds immediately
           int target = getEffectiveTarget();
           int healthy = getHealthyTunnelCount();
           if (target > 0 && healthy >= 0 && healthy < target * PRE_EMERGENCY_FRACTION) {
+              // Warn on the thin state itself (deduplicated by count) before the
+              // gates: a burst that the throttle or the in-progress cap withholds
+              // is still a thin pool, and the old fast-path warned in exactly that
+              // case.
+              int lastWarned = _lastThinPoolWarned;
+              if (ThinPoolLogState.shouldLog(lastWarned, healthy) && _log.shouldWarn()) {
+                  _lastThinPoolWarned = healthy;
+                  _log.warn(ThinPoolLogState.formatThinPool(toString(), healthy, target));
+              }
               // Pace the burst with the same collapsed-pool floor the deferred path
               // uses below. This branch used to run on every event that reached it,
               // so a batch of builds expiring together dispatched one burst per
@@ -6808,20 +6825,12 @@ public class TunnelPool {
               return;
           }
 
-        // Fast-path: if healthy tunnels are below 50% of target, start builds immediately
-        // without waiting for the throttle. A thin pool is an emergency. Shared with the
-        // LeaseSet shortfall report so the two signals cannot drift apart; the old
-        // "healthy < target / 2" used integer division, so a target of 1 gave 0 and the
-        // emergency fast-path could never fire for it.
-        if (isMateriallyShort(healthy, target)) {
-            int lastWarned = _lastThinPoolWarned;
-            if (ThinPoolLogState.shouldLog(lastWarned, healthy) && _log.shouldWarn()) {
-                _lastThinPoolWarned = healthy;
-                _log.warn(ThinPoolLogState.formatThinPool(toString(), healthy, target));
-            }
-            ensureSufficientTunnelsNow(_context.clock().now());
-            return;
-        }
+        // The old sub-50% fast-path sat below this branch, but with the threshold
+        // at PRE_EMERGENCY_FRACTION = 0.5 its condition (isMateriallyShort) is
+        // identical, so the pre-emergency branch above already owns that band and
+        // returns in every case. The thin-pool warning it carried moved into the
+        // branch. Below half, the burst path decides; above it, the throttled
+        // ensure below runs.
         long nowEnsure = _context.clock().now();
         // Per-pool throttle: long gate when healthy, short floor when
         // collapsed (usable <= 1), soft-degraded-dominated (healthy <= 1),
