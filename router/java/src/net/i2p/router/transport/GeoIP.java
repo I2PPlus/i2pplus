@@ -569,10 +569,11 @@ public class GeoIP {
         if (asnFile == null) {return null;}
         com.maxmind.db.Reader rv = new com.maxmind.db.Reader(asnFile);
         if (_log.shouldDebug()) {_log.debug("Opened ASN Database, Metadata: " + rv.getMetadata());}
-        // db-ip embeds its product version (e.g. "2.13.0-27") in the metadata description
-        Map<String, String> desc = rv.getMetadata().getDescription();
-        String ver = desc != null ? desc.get("en") : null;
-        if (ver == null || ver.isEmpty()) {ver = Long.toString(asnFile.lastModified());}
+        // The update page formats a numeric version as a date. The db-ip ASN
+        // metadata description is a product name ("DB-IP.com - IP to ASN"),
+        // not a version, so report the database build date like the other DBs.
+        Date buildDate = rv.getMetadata().getBuildDate();
+        long ver = buildDate != null ? buildDate.getTime() : asnFile.lastModified();
         notifyVersion(_context, "ASN", ver);
         return rv;
     }
