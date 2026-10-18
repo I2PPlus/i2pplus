@@ -815,9 +815,10 @@ public class PeerProfile {
     void setSpeedBonusLastUpdate(long ts) {_speedBonusLastUpdate = ts;}
 
     /**
-     * Extra factor added to the capacity ranking - this can be updated in the profile
-     * written to disk to affect how the algorithm ranks capacity.  Negative values are
-     * penalties. Expires after 4 hours if not refreshed.
+     * Extra factor added to the capacity ranking - set manually on the
+     * configpeers page to nudge how the algorithm ranks a peer. Negative
+     * values are penalties. Expires 4 hours after the last manual update
+     * and is not persisted across a restart.
      *
      * @return the capacity bonus
      */
@@ -828,25 +829,12 @@ public class PeerProfile {
         return hoursSinceUpdate >= 4 ? 0 : _capacityBonus;
     }
     /**
-     * The capacity bonus.
+     * Set the capacity bonus, restarting its 4-hour expiry clock.
+     * Live only - never written back to the profile file.
      *
      * @param bonus the capacity bonus
      */
     public void setCapacityBonus(int bonus) {_capacityBonus = bonus; _capacityBonusLastUpdate = _context.clock().now();}
-
-    /**
-     * The timestamp of the last capacity bonus update.
-     *
-     * @return the timestamp of the last capacity bonus update
-     */
-    long getCapacityBonusLastUpdate() {return _capacityBonusLastUpdate;}
-
-    /**
-     * The timestamp of the last capacity bonus update.
-     *
-     * @param ts milliseconds since the epoch of the last capacity bonus update
-     */
-    void setCapacityBonusLastUpdate(long ts) {_capacityBonusLastUpdate = ts;}
 
     /**
      * The raw capacity bonus value.

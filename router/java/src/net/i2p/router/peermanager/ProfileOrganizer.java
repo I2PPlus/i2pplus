@@ -5531,7 +5531,7 @@ private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, P
             if (inFast || inHighCap) {
                 if (_log.shouldInfo()) {
                     _log.info("Demoting peer [" + peer.toBase64().substring(0, 6) +
-                              "] from fast/high-cap tiers due to high latency (capacityBonus: -30)");
+                              "] from fast/high-cap tiers due to high latency");
                 }
                 if (inFast) removeFastPeer(peer);
                 if (inHighCap) _highCapacityPeers.remove(peer);

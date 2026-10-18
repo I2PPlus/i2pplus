@@ -255,10 +255,7 @@ _context.statManager().createRequiredRateStat(STAT_STORED_PROFILES,
             add(buf, addComments, "speedBonus", profile.getSpeedBonus(), "Manual Speed Score adjustment: " +  profile.getSpeedBonus());
             add(buf, addComments, "speedBonusLastUpdate", profile.getSpeedBonusLastUpdate(), "Last update time for speed bonus:");
         }
-        if (profile.getCapacityBonus() != 0) {
-            add(buf, addComments, "capacityBonus", profile.getCapacityBonus(), "Manual Capacity Score adjustment: " +  profile.getCapacityBonus());
-            add(buf, addComments, "capacityBonusLastUpdate", profile.getCapacityBonusLastUpdate(), "Last update time for capacity bonus:");
-        }
+        // capacityBonus is deliberately NOT persisted - see purgeCapacityBonus()
         if (profile.getIntegrationBonus() != 0) {add(buf, addComments, "integrationBonus", profile.getIntegrationBonus(), "Manual Integration Score adjustment:");}
         if (profile.isLowLatency()) {
             add(buf, addComments, "lowLatency", 1, "Low latency flag (measured direct link RTT is low):");
@@ -555,8 +552,7 @@ List<PeerProfile> profiles = new ArrayList<>(Math.min(LIMIT_PROFILES, freshFiles
                 if (!success) {file.delete();} // new file exists and on Windows?
             }
 
-            profile.setCapacityBonus((int) getLong(props, "capacityBonus"));
-            profile.setCapacityBonusLastUpdate(getLong(props, "capacityBonusLastUpdate"));
+            purgeCapacityBonus(props);
             profile.setIntegrationBonus((int) getLong(props, "integrationBonus"));
             profile.setSpeedBonus((int) getLong(props, "speedBonus"));
             profile.setSpeedBonusLastUpdate(getLong(props, "speedBonusLastUpdate"));
@@ -664,6 +660,21 @@ List<PeerProfile> profiles = new ArrayList<>(Math.min(LIMIT_PROFILES, freshFiles
             if (_log.shouldDebug())
                 _log.debug("Fixed FirstHeardAbout time for [" + p.getPeer().toBase64().substring(0,6) + "] to " + (new Date(min)));
         }
+    }
+
+    /**
+     * Drop the capacity-bonus keys from a loaded profile's properties.
+     * A capacity bonus is a live, manual nudge set on the configpeers page;
+     * it must not survive a restart, and old profile files could carry one
+     * with no expiry timestamp, which the 4-hour decay would then treat as
+     * valid forever. Removing the keys here also clears them from disk on
+     * the next save.
+     *
+     * @param props the parsed profile properties, modified in place
+     */
+    static void purgeCapacityBonus(Properties props) {
+        props.remove("capacityBonus");
+        props.remove("capacityBonusLastUpdate");
     }
 
     /**

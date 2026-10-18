@@ -818,14 +818,7 @@ public class PeerTestJob extends JobImpl {
                         // Low latency is set from the measured direct-link RTT,
                         // in ProfileOrganizer.noteFirstHopRtt.
                     }
-                    if (prof != null && prof.getCapacityBonus() == -30 && cap != null && reachable) {
-                        try {
-                            prof.setCapacityBonus(0);
-                            if (_log.shouldInfo())
-                                _log.info("Resetting capacity bonus to 0 for [" + _peer.toBase64().substring(0,6) + "]");
-                        } catch (NumberFormatException nfe) { /* ignored */ }
-                        return;
-                    } else if (prof != null && cap != null && (!reachable || bw.equals("L") || (bw.equals("M")))) {
+                    if (prof != null && cap != null && (!reachable || bw.equals("L") || (bw.equals("M")))) {
                         try {
                             getContext().profileOrganizer().demoteIfHighLatency(h);
                             if (_log.shouldInfo())
