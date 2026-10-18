@@ -913,10 +913,11 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
      * @param isInbound true if this is for an inbound tunnel
      * @param isExploratory true if this is for exploratory tunnels
      * @param buildSuccess the build success ratio, fetched once per selection
+     * @param activityWindow the connectivity-signal window in ms, computed once per selection
      * @return the exclusion reason, or null if peer should not be excluded
      * @since 0.9.58
      */
-    private String getExclusionReason(Hash peerHash, boolean isInbound, boolean isExploratory, double buildSuccess) {
+    private String getExclusionReason(Hash peerHash, boolean isInbound, boolean isExploratory, double buildSuccess, long activityWindow) {
         final long BANDWIDTH_REJECTION_CUTOFF_MS = 20_000L;
 
         // A banlisted peer must never be pre-selected for tunnel builds.
@@ -982,7 +983,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
         // requiredSignalQuality).
         if (shouldPreQual(isExploratory, isInStartupGracePeriod(ctx), buildSuccess)) {
             boolean established = ctx.commSystem().isEstablished(peerHash);
-            if (!hasConnectivitySignal(profile, ctx.clock().now(), getActivityWindow(ctx),
+            if (!hasConnectivitySignal(profile, ctx.clock().now(), activityWindow,
                                        established, requiredSignalQuality(buildSuccess))) {
                 return "no-signal";
             }
@@ -1915,6 +1916,13 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
         private final boolean _isExpl;
         /** Build success ratio, fetched once per Excluder construction. */
         private final double _buildSuccess;
+        /**
+         * Activity window in ms, computed once per Excluder construction.
+         * {@link #getActivityWindow} calls {@code countActivePeers()}, which scans
+         * every non-failing profile under a read lock; recomputing it per candidate
+         * made selection O(candidates × peers). It is constant for one selection.
+         */
+        private final long _activityWindow;
 
         /**
          * Automatically adds selectPeersInTooManyTunnels(), unless i2np.allowLocal.
@@ -1940,6 +1948,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
             _isIn = isInbound;
             _isExpl = isExploratory;
             _buildSuccess = buildSuccess;
+            _activityWindow = getActivityWindow(ctx);
             for (Hash h : s) {recordExclusion(h, "too-many-tunnels");}
         }
 
@@ -1972,6 +1981,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
             _isIn = isInbound;
             _isExpl = isExploratory;
             _buildSuccess = buildSuccess;
+            _activityWindow = getActivityWindow(ctx);
         }
 
         /**
@@ -1998,7 +2008,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
                 return false;
             }
             Hash h = (Hash) o;
-            String reason = getExclusionReason(h, _isIn, _isExpl, _buildSuccess);
+            String reason = getExclusionReason(h, _isIn, _isExpl, _buildSuccess, _activityWindow);
             if (reason != null) {
                 s.add(h);
                 recordExclusion(h, reason);
