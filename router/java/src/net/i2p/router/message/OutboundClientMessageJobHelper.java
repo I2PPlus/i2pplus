@@ -31,7 +31,7 @@ import net.i2p.router.networkdb.kademlia.MessageWrapper;
 import net.i2p.util.Log;
 
 /**
- * Static methods to create a Garlic Message with one or more cloves, as follows:
+ * Static methods to create a Garlic Message with one or more cloves.
  * <pre>
  *
  * GarlicMessage

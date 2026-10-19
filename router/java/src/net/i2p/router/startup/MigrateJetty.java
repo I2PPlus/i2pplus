@@ -14,7 +14,7 @@ import net.i2p.util.Log;
 import net.i2p.util.VersionComparator;
 
 /**
- * Second migration, as of 2.9.0:
+ * Second migration, as of 2.9.0.
  * <p>
  * Migrate all the jetty*.xml files to change
  * Ref id= to Ref refid= because dup ids is a fatal error.
