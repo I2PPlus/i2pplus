@@ -581,6 +581,8 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     private static final String SUBDIR_PREFIX = "s";
     private static final String B64 = Base64.ALPHABET_I2P;
     private static final Pattern COMMENT_CLEANUP = Pattern.compile("[\n\r<>#;]");
+    /** Trailing .torrent suffix stripped from display names. */
+    private static final Pattern TORRENT_SUFFIX = Pattern.compile("\\.torrent$");
     private static final int DEFAULT_MAX_MESSAGES = 50;
 
     /**
@@ -4067,7 +4069,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                     if (n != null && !n.isEmpty() && !n.equals(magnetName) && !n.startsWith("Lookup [")) {
                         // n may be /path/to/file.torrent - extract basename without .torrent
                         if (n.endsWith(".torrent")) {
-                            try { result = new File(n).getName().replaceFirst("\\.torrent$", ""); }
+                            try { result = TORRENT_SUFFIX.matcher(new File(n).getName()).replaceFirst(""); }
                             catch (Exception ignore) { result = n; }
                         } else {
                             result = n;
@@ -4267,7 +4269,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                     String n = cur.getName();
                     if (n != null && !n.isEmpty() && !n.equals(magnetName) && !n.startsWith("Lookup [")) {
                         if (n.endsWith(".torrent")) {
-                            try { n = new File(n).getName().replaceFirst("\\.torrent$", ""); }
+                            try { n = TORRENT_SUFFIX.matcher(new File(n).getName()).replaceFirst(""); }
                             catch (Exception ignore) { /* basename extraction failed; the raw path is used as the name */ }
                         }
                         result = new TorrentInfo(n, 0);
