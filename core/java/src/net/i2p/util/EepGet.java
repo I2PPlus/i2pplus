@@ -1142,7 +1142,7 @@ public class EepGet {
         _fetchDeadlineMs = _fetchTotalTimeout > 0 ? fetchStartMs + _fetchTotalTimeout : 0;
 
         if (_log.shouldDebug())
-            _log.debug("Fetching (proxied? " + _shouldProxy + ") url=" + _actualURL);
+            _log.debug("[Eepget] Fetching (" + (_shouldProxy ? "proxied" : "direct") + ")\n* Request: " + redactedUrl(_actualURL));
         boolean usedStallImmediateRetry = false;
         while (_keepFetching) {
             final long now = System.currentTimeMillis();
@@ -1173,7 +1173,7 @@ public class EepGet {
                         if (attempt != _currentAttempt || fetchGeneration != _fetchGeneration)
                             return;
                         if (_log.shouldDebug())
-                            _log.debug("Timeout reached on " + _url + ": " + stimeout);
+                            _log.debug("[Eepget] Timeout reached -> " + stimeout + "\n* Request: " + redactedUrl(_url));
                         _aborted = true;
                         thread.interrupt();
                     }
@@ -1208,12 +1208,8 @@ public class EepGet {
                                 attemptStartBodyBytes, _bytesTransferred);
                 for (int i = 0; i < _listeners.size(); i++)
                     _listeners.get(i).attemptFailed(_url, _bytesTransferred, _bytesRemaining, _currentAttempt, _numRetries, ioe);
-                int truncate = _url.indexOf("&");
                 if (_log.shouldWarn())
-                    if (_url.contains("&") && _url.contains("info_hash"))
-                        _log.warn("Transfer failed [" + _url.substring(0, truncate).replace("http://", "") + "...] (" + ioe.getMessage() + ")");
-                    else
-                        _log.warn("Transfer failed [" + _url + "] (" + ioe.getMessage() + ")");
+                    _log.warn("[Eepget] Transfer failed [" + redactedUrl(_url) + "] -> " + ioe.getMessage());
                 if (ioe instanceof MalformedURLException ||
                     ioe instanceof UnknownHostException ||
                     ioe instanceof ConnectException) // proxy or nonproxied host Connection Refused
@@ -1262,8 +1258,8 @@ public class EepGet {
                 usedStallImmediateRetry = true;
                 delay = 0;
                 if (_log.shouldDebug())
-                    _log.debug("Stalled after " + _alreadyTransferred + " bytes on " + _url
-                               + ", immediate retry " + _currentAttempt + "/" + _numRetries);
+                    _log.debug("[Eepget] Stalled after " + _alreadyTransferred + " bytes -> Retrying (" +
+                               _currentAttempt + "/" + _numRetries + " attempts)\n* Request: " + redactedUrl(_url));
             }
             if (_fetchDeadlineMs > 0 && System.currentTimeMillis() + delay >= _fetchDeadlineMs)
                 break;
@@ -1277,17 +1273,24 @@ public class EepGet {
 
         for (int i = 0; i < _listeners.size(); i++)
             _listeners.get(i).transferFailed(_url, _bytesTransferred, _bytesRemaining, _currentAttempt);
-        int truncate = _url.indexOf("&");
         if (_log.shouldWarn())
-            if (_url.contains("&") && _url.contains("info_hash")) {
-                if (_url.startsWith("https"))
-                    _log.warn("Eepget error: All attempts failed\n* Request: " + _url.substring(0, truncate) + "...");
-                else
-                    _log.warn("Eepget error: All attempts failed\n* Request: " + _url.substring(7, truncate) + "...");
-            } else {
-                _log.warn("Eepget error: All attempts failed for [" + _url + "]");
-            }
+            _log.warn("[Eepget] All retrieval attempts failed\n* Request: " + redactedUrl(_url));
         return false;
+    }
+
+    /**
+     * The request URL for log output. Magnet-style URLs carrying an info_hash
+     * are cut at the first query parameter and the http:// prefix is dropped,
+     * so the hash never reaches the logs; other URLs pass through unchanged.
+     *
+     * @param url the request URL, not null
+     * @return the URL, redacted when it carries an info_hash
+     * @since 0.9.71+
+     */
+    static String redactedUrl(String url) {
+        if (url.contains("&") && url.contains("info_hash"))
+            return url.substring(0, url.indexOf("&")).replace("http://", "") + "...";
+        return url;
     }
 
     /**
@@ -1367,7 +1370,7 @@ public class EepGet {
     protected void doFetch(SocketTimeout timeout) throws IOException {
         readHeaders();
         if (_aborted)
-            throw new IOException("Eepget error: Timed out reading the HTTP headers");
+            throw new IOException("Timed out reading the HTTP headers\n* Request: " + redactedUrl(_url));
 
         // _proxy is null when extended by I2PSocketEepGet
         if (_proxy != null) {
@@ -1400,7 +1403,7 @@ public class EepGet {
         }
 
         if (_log.shouldDebug())
-            _log.debug("Headers read completely");
+            _log.debug("[Eepget] Headers read completely\n* Request: " + redactedUrl(_url));
 
         boolean strictSize = (_bytesRemaining >= 0);
 
@@ -1420,7 +1423,7 @@ public class EepGet {
         boolean gunzipping = _isGzippedResponse && _out != null;
         if (gunzipping) {
             if (_log.shouldInfo())
-                _log.info("Gzipped response, starting decompressor");
+                _log.info("[Eepget] Gzipped response, starting decompressor\n* Request: " + redactedUrl(_url));
             if (_outputStream == null)
                 markGzipPartial(new File(_outputFile));
             PipedInputStream pi = new PipedInputStream(64*1024);
@@ -1538,7 +1541,8 @@ public class EepGet {
             throw new IOException(MSG_DATA_TIMEOUT);
 
         if (_log.shouldDebug())
-            _log.debug("Done transferring " + _bytesTransferred + " (ok? " + !_transferFailed + ")");
+            _log.debug("[Eepget] Done transferring " + _bytesTransferred + (_transferFailed ? " (failed)" : " (ok)") +
+                       "\n* Request: " + redactedUrl(_url));
 
         if (_transferFailed) {
             // 404, etc - transferFailed is called after all attempts fail, by fetch() above
@@ -1585,7 +1589,7 @@ public class EepGet {
         boolean redirect = false;
 
         if (_log.shouldDebug())
-            _log.debug(_actualURL + " -> Status: " + _status);
+            _log.debug("[Eepget] Status: " + _status + "\n* Request: " + redactedUrl(_actualURL));
         boolean rcOk = false;
         // https://en.wikipedia.org/wiki/List_of_HTTP_status_codes
         switch (_responseCode) {
@@ -2108,7 +2112,7 @@ public class EepGet {
         String[] toks = DataHelper.split(line, " ", 3);
         if (toks.length < 2) {
             if (_log.shouldWarn())
-                _log.warn("Error: status " + line);
+                _log.warn("[Eepget] Error: status " + line + "\n* Request: " + redactedUrl(_url));
             return -1;
         }
         String rc = toks[1];
@@ -2120,7 +2124,7 @@ public class EepGet {
             return Integer.parseInt(rc);
         } catch (NumberFormatException nfe) {
             if (_log.shouldWarn())
-                _log.warn("Error: Status is INVALID: " + line, nfe);
+                _log.warn("[Eepget] Error: Status is INVALID: " + line + "\n* Request: " + redactedUrl(_url), nfe);
             return -1;
         }
     }
@@ -2138,7 +2142,7 @@ public class EepGet {
             try {
                 _bytesRemaining = Long.parseLong(val);
             } catch (NumberFormatException nfe) {
-                _log.error("Bad Content-Length header: [" + val + "]", nfe);
+                _log.error("[Eepget] Bad Content-Length header: [" + val + "]\n* Request: " + redactedUrl(_url), nfe);
             }
         } else if (key.equals("content-range")) {
             _contentRange = val;
@@ -2348,7 +2352,7 @@ public class EepGet {
                 throw new IOException("Proxy requires authentication");
             if (as.authSent)
                 throw new IOException("Proxy authentication failed");  // ignore stale
-            if (_log.shouldInfo()) _log.info("Adding auth");
+            if (_log.shouldInfo()) _log.info("[Eepget] Adding auth\n* Request: " + redactedUrl(_url));
             // actually happens in getRequest()
         } else {
             _redirects.incrementAndGet();
@@ -2358,7 +2362,7 @@ public class EepGet {
                 if (redirectURL.contains("b32.i2p")) {redirectURL = redirectURL.substring(0,32) + "...";}
                 throw new IOException("Too many redirects to " + redirectURL);
             }
-            if (_log.shouldInfo()) _log.info("Redirecting to " + _redirectLocation);
+            if (_log.shouldInfo()) _log.info("[Eepget] Redirecting to " + _redirectLocation + "\n* Request: " + redactedUrl(_url));
             if (as != null)
                 as.authSent = false;
         }
@@ -2575,7 +2579,7 @@ public class EepGet {
         String path = url.getRawPath();
         String query = url.getRawQuery();
         if (_log.shouldDebug())
-            _log.debug("Requesting " + _actualURL);
+            _log.debug("[Eepget] Request: " + redactedUrl(_actualURL));
         // RFC 2616 sec 5.1.2 - full URL if proxied, absolute path only if not proxied
         String urlToSend;
         if (_shouldProxy) {
@@ -3383,10 +3387,11 @@ public class EepGet {
             } catch (IOException ioe) {
                 _decompressException = ioe;
                 if (_log.shouldWarn())
-                    _log.warn("Error decompressing: " + written + ", " + in.getTotalRead() + "/" + in.getTotalExpanded(), ioe);
+                    _log.warn("[Eepget] Error decompressing: " + written + ", " + in.getTotalRead() + "/" + in.getTotalExpanded() +
+                               "\n* Request: " + redactedUrl(_url), ioe);
             } catch (OutOfMemoryError oom) {
                 _decompressException = new IOException("OOM in HTTP Decompressor");
-                _log.error("OOM in HTTP Decompressor", oom);
+                _log.error("[Eepget] OOM in HTTP Decompressor\n* Request: " + redactedUrl(_url), oom);
             } finally {
                 if (_out != null) try {
                         _out.close();

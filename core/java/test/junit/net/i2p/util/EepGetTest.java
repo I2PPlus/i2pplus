@@ -1463,6 +1463,23 @@ public class EepGetTest extends TestCase {
      * Whitebox access to the Protected retry count of a PartialEepGet, so the
      * update version-check retry wiring can be asserted without a live server.
      */
+    /**
+     * Log redaction of magnet-style URLs: info_hash never reaches the logs,
+     * the http:// prefix is dropped from redacted forms, and schemeless URLs
+     * keep every character (the old substring(7) chopped them).
+     */
+    public void testRedactedUrl() {
+        assertEquals("proxy.example/?action=download...",
+                     EepGet.redactedUrl("http://proxy.example/?action=download&info_hash=%7B%AB&name=x"));
+        assertEquals("https://proxy.example/?action=download...",
+                     EepGet.redactedUrl("https://proxy.example/?action=download&info_hash=%7B%AB"));
+        // no info_hash, no ampersand, or no ampersand-before-hash: unchanged
+        assertEquals("http://plain.example/path", EepGet.redactedUrl("http://plain.example/path"));
+        assertEquals("http://plain.example/?a=1&b=2", EepGet.redactedUrl("http://plain.example/?a=1&b=2"));
+        // schemeless URL keeps its first characters
+        assertEquals("plain.example/?a=1...", EepGet.redactedUrl("plain.example/?a=1&info_hash=x"));
+    }
+
     private static class TestPartialEepGet extends PartialEepGet {
         TestPartialEepGet(I2PAppContext ctx, String proxyHost, int proxyPort, ByteArrayOutputStream out, String url, long size) {
             super(ctx, proxyHost, proxyPort, out, url, size);
