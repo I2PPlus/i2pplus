@@ -1104,6 +1104,14 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
         return s + '/' + debugID;
     }
 
+    /** Row order for the peer/set tables: peer (column 0), then set (column 1). */
+    private static final Comparator<String[]> ROW_PEER_SET =
+        Comparator.comparing((String[] r) -> r[0]).thenComparing(r -> r[1]);
+
+    /** Row order for the peer-keyed table: peer (column 0). */
+    private static final Comparator<String[]> ROW_PEER =
+        Comparator.comparing((String[] r) -> r[0]);
+
     /**
      * One row per inbound tag set of {peer, set, expires in, tags,
      * remaining}, sorted by peer then set. The caller must have already
@@ -1127,7 +1135,7 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
                 }
             }
         }
-        rows.sort(Comparator.comparing((String[] r) -> r[0]).thenComparing(r -> r[1]));
+        rows.sort(ROW_PEER_SET);
         return rows;
     }
 
@@ -1150,7 +1158,7 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
                                    DataHelper.formatDuration(now - sess.getLastReceivedDate()) + " ago",
                                    Integer.toString(sess.getTagSets().size())});
         }
-        rows.sort(Comparator.comparing(r -> r[0]));
+        rows.sort(ROW_PEER);
         return rows;
     }
 
@@ -1183,7 +1191,7 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
                 }
             }
         }
-        rows.sort(Comparator.comparing((String[] r) -> r[0]).thenComparing(r -> r[1]));
+        rows.sort(ROW_PEER_SET);
         return rows;
     }
 
