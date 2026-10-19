@@ -383,9 +383,8 @@ public final class ECIESAEADEngine {
                 _context.statManager().updateFrequency("crypto.eciesAEAD.decryptFailed");
                 // we'll get this a lot on muxed SKM
                 if (_log.shouldInfo()) {
-                    _log.info("ECIES decryption failure for NewSession -> Type: " + type +
-                             " Data size: " + data.length + " (minimum " + minns + ")" +
-                             " Is router: " + isRouter);
+                    _log.info("ECIES decryption failure for " + (isRouter ? "NewSession" : "NewSession/LeaseSet") +
+                             " -> Type: " + type + " Data size: " + data.length + " (minimum " + minns + ")");
                 }
             }
         } else {
