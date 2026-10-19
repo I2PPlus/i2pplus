@@ -881,6 +881,7 @@ public class BuildRequestRecord {
      * Never log this at INFO or above.
      * Starts with a newline and an asterisk for multi-line log entries.
      *
+     * @return the key material dump, never null
      * @since 0.9.71+
      */
     public String toKeyString() {
