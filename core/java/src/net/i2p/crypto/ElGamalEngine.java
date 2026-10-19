@@ -2,7 +2,6 @@ package net.i2p.crypto;
 
 // License: BSD. See docs/LICENSES.md
 import net.i2p.I2PAppContext;
-import net.i2p.data.Base64;
 import net.i2p.data.DataHelper;
 import net.i2p.data.Hash;
 import net.i2p.data.PrivateKey;
@@ -216,7 +215,7 @@ public final class ElGamalEngine {
         if (ok) {
             return rv;
         }
-        if (_log.shouldDebug()) _log.debug("Doesn't match hash data: " + Base64.encode(rv), new Exception("Doesn't match"));
+        if (_log.shouldDebug()) _log.debug("Doesn't match hash data: " + rv.length + " bytes");
         return null;
     }
 }

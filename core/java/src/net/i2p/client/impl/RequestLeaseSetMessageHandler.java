@@ -565,7 +565,7 @@ class RequestLeaseSetMessageHandler extends HandlerImpl {
                 leaseSet.encrypt(key);
                 _context.keyRing().put(h, key);
             } catch (DataFormatException dfe) {
-                _log.error("BAD LeaseSet key: " + sk);
+                _log.error("BAD LeaseSet key: [" + keyPrefix(sk) + "]");
                 _context.keyRing().remove(h);
             }
         } else {
@@ -607,7 +607,7 @@ class RequestLeaseSetMessageHandler extends HandlerImpl {
                             PrivateKey pk = new PrivateKey(EncType.ECIES_X25519, b);
                             clientKeys.add(pk.toPublic());
                         } catch (IllegalArgumentException iae) {
-                            _log.error("BAD private key: " + p, iae);
+                            _log.error("BAD private key: [" + keyPrefix(p) + "]", iae);
                         }
                     }
                     int i = 0;
@@ -639,7 +639,7 @@ class RequestLeaseSetMessageHandler extends HandlerImpl {
                             PrivateKey pk = new PrivateKey(EncType.ECIES_X25519, b);
                             clientKeys.add(pk);
                         } catch (IllegalArgumentException iae) {
-                            _log.error("BAD private key: " + p, iae);
+                            _log.error("BAD private key: [" + keyPrefix(p) + "]", iae);
                         }
                     }
                     int i = 0;
@@ -816,6 +816,14 @@ class RequestLeaseSetMessageHandler extends HandlerImpl {
     }
 
     /**
+     * First 6 chars of a base64 key string, for logging without leaking
+     * key material.
+     */
+    private static String keyPrefix(String b64) {
+        return b64.length() <= 6 ? b64 : b64.substring(0, 6);
+    }
+
+    /**
      * Non-null [type:]b64[,[type:]b64]...
      * @param spkl non-null [type:]b64[,[type:]b64]...
      * @param privKeys the list the parsed keys are appended to; entries that
@@ -837,7 +845,7 @@ class RequestLeaseSetMessageHandler extends HandlerImpl {
                                 privKey.fromBase64(spk.substring(colon + 1));
                                 privKeys.add(privKey);
                             } catch (DataFormatException dfe) {
-                                _log.error("BAD private key: " + spk, dfe);
+                                _log.error("BAD private key: [" + keyPrefix(spk.substring(colon + 1)) + "]", dfe);
                             }
                         } else if (_log.shouldDebug()) {
                             _log.debug("Ignoring private key with unconfigured crypto type: " + type);
@@ -846,7 +854,7 @@ class RequestLeaseSetMessageHandler extends HandlerImpl {
                         _log.error("Unsupported crypto type: " + type);
                     }
                 } else {
-                    _log.error("Unsupported crypto type: " + spk);
+                    _log.error("Unsupported crypto type: " + spk.substring(0, colon));
                 }
             } else if (colon < 0) {
                 EncType type = EncType.ELGAMAL_2048;
@@ -856,7 +864,7 @@ class RequestLeaseSetMessageHandler extends HandlerImpl {
                         privKey.fromBase64(spk);
                         privKeys.add(privKey);
                     } catch (DataFormatException dfe) {
-                        _log.error("BAD private key: " + spk, dfe);
+                        _log.error("BAD private key: [" + keyPrefix(spk) + "]", dfe);
                     }
                 } else if (_log.shouldDebug()) {
                     _log.debug("Ignoring private key with unconfigured crypto type: " + type);

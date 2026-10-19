@@ -196,9 +196,8 @@ public class PrivateKey extends SimpleDataStructure implements Destroyable {
     }
 
     /**
-     * The type and either the base64 data (keys of 32 bytes or less) or just
-     * the size, so the secret is not printed. Prints "null" for the data of
-     * a destroyed key.
+     * The type and the size, never the data, so the secret is not printed.
+     * Prints "null" for the data of a destroyed key.
      *
      * @return a string representation
      * @since 0.9.38
@@ -210,9 +209,7 @@ public class PrivateKey extends SimpleDataStructure implements Destroyable {
         if (_data == null) {
             buf.append("null");
         } else {
-            int length = length();
-            if (length <= 32) buf.append(toBase64());
-            else buf.append("Size: ").append(length);
+            buf.append("Size: ").append(length());
         }
         buf.append(']');
         return buf.toString();

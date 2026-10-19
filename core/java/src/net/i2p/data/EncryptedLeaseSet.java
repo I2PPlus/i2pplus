@@ -166,8 +166,7 @@ public class EncryptedLeaseSet extends LeaseSet2 {
      */
     public void setSecret(String secret) {
         if (_signingKey != null && !DataHelper.eq(secret, _secret) && _log.shouldWarn()) {
-            _log.warn("SetSecret() after setSigningKey() -> Secret was: " + _secret +
-                      " * now: " + secret);
+            _log.warn("SetSecret() after setSigningKey() -> Secret changed");
         }
         _secret = secret;
     }
@@ -1012,10 +1011,10 @@ public class EncryptedLeaseSet extends LeaseSet2 {
             buf.append("\n* Published: ").append(!isUnpublished()).append("\n* Length: ").append(_encryptedData.length).append("\n* Signature: ").append(_signature).append("\n* Published: ").append(Instant.ofEpochMilli(_published)).append("\n* Expires: ").append(Instant.ofEpochMilli(_expires)).append("\n* Auth Type: ").append(_authType).append("\n* Client Keys: ").append(_numKeys);
             if (_decryptedLS2 != null) {
                 if (_secret != null) {
-                    buf.append("\n* Secret: ").append(_secret);
+                    buf.append("\n* Secret: set");
                 }
                 if (_clientPrivateKey != null) {
-                    buf.append("\n* Client Private Key: ").append(_clientPrivateKey.toBase64());
+                    buf.append("\n* Client Private Key: ").append(_clientPrivateKey);
                 }
                 buf.append("\n* Decrypted LS:\n").append(_decryptedLS2);
             } else if (_destination != null) {

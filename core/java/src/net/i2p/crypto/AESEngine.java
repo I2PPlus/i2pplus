@@ -137,7 +137,7 @@ public class AESEngine {
         boolean eq = DataHelper.eq(decr, 0, h, 0, Hash.HASH_LENGTH);
         SimpleByteCache.release(h);
         if (!eq) {
-            _log.error("Hash does not match [key=" + sessionKey + " / iv =" + DataHelper.toString(iv, iv.length) + "]", new Exception("Hash error"));
+            _log.error("Hash does not match [iv = " + DataHelper.toString(iv, iv.length) + "]", new Exception("Hash error"));
             return null;
         }
         int cur = Hash.HASH_LENGTH;

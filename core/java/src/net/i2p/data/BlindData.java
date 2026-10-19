@@ -403,7 +403,7 @@ public class BlindData {
         buf.append("\n\tAlpha valid for : ").append(Instant.ofEpochMilli(_routingKeyGenMod));
         buf.append("\n\tBlindedPublicKey: ").append(_blindSPK);
         buf.append("\n\tBlinded Hash    : ").append(_blindHash);
-        if (_secret != null) buf.append("\n\tSecret          : \"").append(_secret).append('"');
+        if (_secret != null) buf.append("\n\tSecret          : set");
         else buf.append("\n\tSecret Required : ").append(_secretRequired);
         buf.append("\n\tAuth Type       : ");
         if (_authType > 0) buf.append(_authType);
