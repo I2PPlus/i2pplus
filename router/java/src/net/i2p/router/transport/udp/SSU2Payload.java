@@ -467,6 +467,10 @@ class SSU2Payload {
         SigType st = pub.getType();
         if (st == null) {throw dfe;}
         bais.reset();
+        // A payload shorter than the signature (e.g. an identity-only RI) would
+        // make the signed-prefix array negative-sized - an unchecked exception
+        // that would escape the checked-exception drop path as a job error.
+        if (bais.available() <= st.getSigLen()) {throw dfe;}
         byte[] data = new byte[bais.available() - st.getSigLen()];
         bais.read(data);
         Signature sig = new Signature(st);

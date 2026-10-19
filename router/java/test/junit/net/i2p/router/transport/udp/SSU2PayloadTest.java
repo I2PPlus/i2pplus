@@ -2,15 +2,22 @@ package net.i2p.router.transport.udp;
 
 import static org.junit.Assert.*;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import net.i2p.I2PAppContext;
+import net.i2p.crypto.KeyGenerator;
+import net.i2p.data.Certificate;
 import net.i2p.data.DataFormatException;
 import net.i2p.data.Hash;
+import net.i2p.data.PublicKey;
+import net.i2p.data.SigningPublicKey;
 import net.i2p.data.i2np.I2NPMessage;
 import net.i2p.data.i2np.I2NPMessageException;
+import net.i2p.data.router.RouterIdentity;
 import net.i2p.data.router.RouterInfo;
 
 import org.junit.Test;
@@ -724,6 +731,35 @@ public class SSU2PayloadTest {
             fail("expected IOException");
         } catch (IOException ioe) {
             assertTrue(ioe.getMessage(), ioe.getMessage().contains("Illegal first block"));
+        }
+    }
+
+    /**
+     * An identity-only payload (no RI fields, no signature) must come back as
+     * the original DataFormatException, never as an unchecked exception from
+     * the recovery path's signed-prefix allocation. With today's sig types the
+     * identity is always longer than its sigLen so the size guard is not hit,
+     * but the contract - checked failure, same dfe instance - is pinned here
+     * and the guard covers any future sig type where sigLen exceeds a minimal
+     * identity (e.g. Ed448: 94-byte identity vs 114-byte sig).
+     */
+    @Test
+    public void testRecoverRouterInfoIdentityOnlyThrowsOriginalDfe() throws Exception {
+        RouterIdentity ident = new RouterIdentity();
+        ident.setCertificate(new Certificate(Certificate.CERTIFICATE_TYPE_NULL, null));
+        Object[] obj = KeyGenerator.getInstance().generatePKIKeypair();
+        ident.setPublicKey((PublicKey) obj[0]);
+        obj = KeyGenerator.getInstance().generateSigningKeypair();
+        ident.setSigningPublicKey((SigningPublicKey) obj[0]);
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        ident.writeBytes(baos);
+        ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
+        DataFormatException dfe = new DataFormatException("original parse failure");
+        try {
+            SSU2Payload.recoverRouterInfo(CTX, bais, dfe);
+            fail("expected the original DataFormatException");
+        } catch (DataFormatException e) {
+            assertSame(dfe, e);
         }
     }
 }
