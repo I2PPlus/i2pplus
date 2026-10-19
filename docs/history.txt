@@ -1,3 +1,35 @@
+2026-10-19 2.14+ (API 0.9.71) released
+
+2026-10-19 dr|z3d
+  * NetDb:
+    - Verify routing entries before adding them to buckets, cap entries per IP
+      and expire them by peer profile instead of a flat age
+    - Hold peers rejected during bucket splits in a replacement cache, and aim
+      exploratory searches at keys inside empty bucket ranges
+  * Tunnels:
+    - Start pre-emergency builds at half of target instead of a quarter, and
+      bound the pre-connect cooldown map by sweeping stale entries
+  * Transport: Reject RouterInfo recovery payloads shorter than the signature
+  * Streaming: Raise the default accept worker count to four and scale up
+    under SYN queue pressure, and reject poison packets arriving from the
+    wire - a remote could otherwise kill accept workers and stall the queue
+  * Console:
+    - Depress the active stats group tab on page load, bound the User-Agent
+      IFrame cache to 64 entries, and refresh translations
+  * Logging:
+    - Stop printing key material, hexdumps and credentials; log identifiers
+      or short prefixes instead
+    - Rewrite log entries to a one-line standard and move verbose detail
+      to debug
+    - Drop marker exception stack traces from about forty log sites
+  * Javadoc:
+    - Rewrite package.html summaries, drop vacuous and duplicated first
+      sentences, fill in missing descriptions, split over-long sentences,
+      enrich @return tags, and move TODO markers out of published docs
+    - Wrap bare code and config-key references with {@link} or {@code};
+      remove authorship attributions from rendered javadoc; license and
+      provenance headers are unchanged
+
 2026-10-18 dr|z3d
   * Console:
     - Overhaul the debug pages with overview rings, aligned tables and state
@@ -6,7 +38,7 @@
     - Render ratchet and DHT debug peers as router-info references, and
       client session-key peers as plain destination hashes
     - Fix the Streams tab showing as active on the port-mapper debug page
-  * NetDB: Trim stale routing entries and widen buckets and search limits
+  * NetDb: Trim stale routing entries and widen buckets and search limits
   * Peermanager: Keep the capacity bonus live-only, purging stale values
     from the profiles file on load
   * Transport: Report the ASN database build date, not its description,
@@ -1294,7 +1326,7 @@
 2026-08-10 dr|z3d
   * Tunnel: Collapse guard uses getTunnelFailed() (failures > 3); dead last pool
     member is removed, not kept as a zombie
-  * NetDB:
+  * NetDb:
     - Missing LeaseSet rebuild request: 30s instead of 5s, INFO, skipped
       while building/testing; no request loop into tunnel builds
     - Revert 10-minute re-mint floor (starved direct floodfill; local
@@ -1354,7 +1386,7 @@
     - BEP 6 pieces while choked; BEP 21 upload-only peers detected
     - Optional per-torrent destination (own DHT, shared tracker and
       blacklist, staggered starts)
-  * NetDB: Sweep also purges expired local LeaseSets
+  * NetDb: Sweep also purges expired local LeaseSets
   * Router:
     - Build-silent peers kept longer when scarce profiles (<2000)
     - Reconnects take over a dead connection's destination
@@ -1541,7 +1573,7 @@
   * I2PTunnel: Restore HTTP keepalive by running GET/HEAD inline, reduce
     default connect timeout to 30s
   * Transport: Priority send pool, non-blocking send, faster selector
-  * NetDB: Defer LeaseSet publish until tunnels are built, shorten republish
+  * NetDb: Defer LeaseSet publish until tunnels are built, shorten republish
     intervals, fix retry backoff
   * Tunnel: Reduce pool churn (target+1), widen peer activity windows, soft
     fallback for no-signal peers
@@ -1555,7 +1587,7 @@
     before EOF
   * Transport: Fix deadlock between NTCP2 locked_close() and
     OutboundNTCP2State.receive()
-  * NetDB: Client-initiated searches bypass floodfill dedup to prevent deferral
+  * NetDb: Client-initiated searches bypass floodfill dedup to prevent deferral
   * Tunnel: Prevent build churn by relaxing peer diversity and preserving
     UNTESTED/TESTING tunnels
   * Console: Fix sidebar double-refresh and broken-content flash on connection
@@ -1577,7 +1609,7 @@
     target+3), dynamic untested-tunnel cap via Tuner, Tuner-driven retest
     backoff replaces per-pool test budgets, align cancellation cap with
     effective pool target
-  * NetDB: Proactive LeaseSet refresh at 90s threshold, remove tunnel-count
+  * NetDb: Proactive LeaseSet refresh at 90s threshold, remove tunnel-count
     gates
   * Streaming: Fixes — SU3 download corruption, EOF hang, cache leak, TLP race,
     socket API cleanup
@@ -1587,7 +1619,7 @@
 2026-07-22 2.13+ (API 0.9.70) released
 
 2026-07-22 dr|z3d
-  * NetDB:
+  * NetDb:
     - Per-floodfill active-query tracking (MAX_CONCURRENT_PER_FLOODFILL=5)
       and overload check at search time; ContactDrivenRefreshJob — proactively
       refresh RouterInfo for peers we recently heard from; hook contactHeardFrom()
@@ -1637,7 +1669,7 @@
   * Tunnel: Fix BuildExecutor comparator crash; lower LeaseSet
     republish/rebuild throttle 5m→2m
   * Transport: Queue GeoIP lookups for all peers
-  * NetDB: Bound LookupBanHammer burstTimestamps to stop ReplyTunnel leak
+  * NetDb: Bound LookupBanHammer burstTimestamps to stop ReplyTunnel leak
   * SAM: Fix NPE on unregistered nickname
 
 2026-07-18 dr|z3d
@@ -1659,7 +1691,7 @@
   * Tunnel: Fix TestJob NPE/race when a tunnel is replaced mid-test;
     widen peer-selection activity window under degraded build success to
     break the pruning loop; register idle-transit-tunnel drop stat
-  * NetDB: Adaptive LeaseSet lookup timeout
+  * NetDb: Adaptive LeaseSet lookup timeout
   * i18n: Translate missing strings across all languages, fix format
     mismatches
   * I2PTunnel: Simplify HTTP server keepalive dispatch
@@ -2410,7 +2442,7 @@
 2025-04-24 zzz
  * Blockfile: Catch unchecked exceptions thrown from value deserializers
  * CLI: Add -6 flag to force IPv6 reseed test
- * NetDB: Add new reseed
+ * NetDb: Add new reseed
 
 2025-04-23 zzz
  * I2PSnark standalone: Change Ref id to refid in Jetty config file
@@ -2497,10 +2529,10 @@
 
 2025-02-03 zzz
  * Data: Fix compressible padding detection and expansion
- * NetDB: Fix reversed conditional in ExpireLeasesJob.java
+ * NetDb: Fix reversed conditional in ExpireLeasesJob.java
 
 2025-01-27 zzz
- * NetDB: RI publishing improvements
+ * NetDb: RI publishing improvements
 
 2025-01-26 zzz
  * Transport: Increase min peer test version
@@ -2538,13 +2570,13 @@
  * Console: Add GeoIP build information to /info page
 
 2024-12-26 zzz
- * NetDB:
+ * NetDb:
    - Reduce max ff response time
    - Base lookup timeout on peer's average response time
  * Profiles: Remove unused 10m and 24h rates for DB response time
 
 2024-12-18 zzz
- * NetDB: Aggressive expire for leasesets when over limits
+ * NetDb: Aggressive expire for leasesets when over limits
 
 2024-12-12 dr|z3d
  * Console / Webapps: Migrate display font from Droid Sans to Open Sans
@@ -3031,7 +3063,7 @@
  * I2PSnark: Activate snex's create torrent filtering
 
 2024-03-26 zzz
- * NetDB: Store message handling changes
+ * NetDb: Store message handling changes
  * Transports: Incoming connection checks
  * Tunnels:
    - Refactor message distribution
