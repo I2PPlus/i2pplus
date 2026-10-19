@@ -221,6 +221,12 @@ public final class GraphThemeColors {
         Pattern.compile("to\\s+(?:top|bottom|left|right)|\\d+(?:\\.\\d+)?deg",
                          Pattern.CASE_INSENSITIVE);
 
+    /** Dash-list separator: commas and/or whitespace. */
+    private static final Pattern DASH_SPLIT = Pattern.compile("[,\\s]+");
+
+    /** Space-separated stop separator; a stop may itself contain commas, so never split on those. */
+    private static final Pattern WS_SPLIT = Pattern.compile("\\s+");
+
     /** theme directory plus theme name to its parsed declarations. */
     private static final Map<String, Entry> CACHE = new ConcurrentHashMap<>();
 
@@ -890,7 +896,7 @@ public final class GraphThemeColors {
      * @return the values, or null when the text is not a usable dash list
      */
     private static float[] parseDashList(String value) {
-        String[] parts = value.trim().split("[,\\s]+");
+        String[] parts = DASH_SPLIT.split(value.trim());
         if (parts.length == 0 || parts.length > MAX_DASH_VALUES) {return null;}
         float[] out = new float[parts.length];
         for (int i = 0; i < parts.length; i++) {
@@ -952,7 +958,7 @@ public final class GraphThemeColors {
         // without wrapping it. Space-separated rather than comma-separated because a colour
         // may itself be a comma-separated function - rgba(0,0,0,.5) - and splitting on commas
         // would cut one in half.
-        String[] terms = text.split("\\s+");
+        String[] terms = WS_SPLIT.split(text);
         if (terms.length < 2) {return null;}
         return parseStops(terms, false);
     }
@@ -1002,7 +1008,7 @@ public final class GraphThemeColors {
             if (t.isEmpty() || (gradient && GRADIENT_DIRECTION.matcher(t).matches())) {
                 continue;
             }
-            Color c = SvgColor.parse(t.split("\\s+")[0]);
+            Color c = SvgColor.parse(WS_SPLIT.split(t)[0]);
             // One unusable stop makes the whole declaration unusable: a wash with a hole in it
             // would render as something the stylesheet never asked for.
             if (c == null) {return null;}

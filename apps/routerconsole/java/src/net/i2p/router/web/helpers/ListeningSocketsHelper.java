@@ -33,6 +33,10 @@ public class ListeningSocketsHelper {
     private static final String IN_JVM = "in-JVM";
     private static final String UNLABELLED = "internal";
 
+    /** Row order for the table: port (column 2) ascending, then service label (column 0). */
+    private static final Comparator<String[]> ROW_ORDER =
+        Comparator.comparingInt((String[] r) -> Integer.parseInt(r[2])).thenComparing(r -> r[0]);
+
     /**
      * Build the table rows, sorted by port ascending, then service. Services
      * whose port is also a claimed internal socket are flagged; internal
@@ -62,7 +66,7 @@ public class ListeningSocketsHelper {
             String label = e.getValue() != null ? e.getValue() : UNLABELLED;
             rows.add(new String[] {label, IN_JVM, Integer.toString(e.getKey()), "<span class=yes>yes</span>"});
         }
-        rows.sort(Comparator.comparingInt((String[] r) -> Integer.parseInt(r[2])).thenComparing(r -> r[0]));
+        rows.sort(ROW_ORDER);
         return rows;
     }
 
