@@ -999,9 +999,9 @@ public class I2PSnarkServlet extends BasicServlet {
                .append("var(--snarkGraph) no-repeat,var(--th);background-size:72px auto,100%,")
                .append("calc(100% - 80px) calc(100% - 4px),100%;background-position:right bottom,")
                .append("center center,left bottom,center center;background-blend-mode:multiply,overlay,luminosity,normal}</style>\n");
-}
+        }
         if (!isStandalone() && override.exists()) {
-            buf.append(cssLink("override.css", _themePath) + "\n"); // optional override.css for version-persistent user edits
+            buf.append(cssLink("override.css", _themePath)).append("\n"); // optional override.css for version-persistent user edits
         }
 
         // Larger fonts for CJK languages
@@ -1074,31 +1074,31 @@ public class I2PSnarkServlet extends BasicServlet {
         resp.setHeader("Content-Security-Policy", "default-src 'none'; child-src 'self'");
     }
 
-/**
- * Cheap change-detection stamp for the screen log, emitted with every xhr1
- * refresh payload so the client can skip the xhrscreenlog.html round trip
- * while the log is unchanged. Combines the last message id (which advances on
- * every add) with the list size (which moves on clears and cap-driven trims),
- * so both growth and shrinkage are detected without rendering anything.
- *
- * @return "lastMessageId:messageCount", or "0:0" when the log is empty
- * @since 0.9.71+
- */
+    /**
+     * Cheap change-detection stamp for the screen log, emitted with every xhr1
+     * refresh payload so the client can skip the xhrscreenlog.html round trip
+     * while the log is unchanged. Combines the last message id (which advances on
+     * every add) with the list size (which moves on clears and cap-driven trims),
+     * so both growth and shrinkage are detected without rendering anything.
+     *
+     * @return "lastMessageId:messageCount", or "0:0" when the log is empty
+     * @since 0.9.71+
+     */
     private String screenLogStamp() {
         List<UIMessages.Message> msgs = _manager.getMessages();
         if (msgs.isEmpty()) {return "0:0";}
         return msgs.get(msgs.size() - 1).id + ":" + msgs.size();
     }
 
-/**
- * Emits the bandwidth graph element for xhr1 payloads. The client passes its
- * last seen sample version as the "gv" parameter; the full sample CSV travels
- * only when the client is behind, so steady-state ticks cost a few bytes.
- *
- * @param req the refresh request, may carry a "gv" parameter
- * @param out the PrintWriter to write the element to
- * @since 0.9.71+
- */
+    /**
+     * Emits the bandwidth graph element for xhr1 payloads. The client passes its
+     * last seen sample version as the "gv" parameter; the full sample CSV travels
+     * only when the client is behind, so steady-state ticks cost a few bytes.
+     *
+     * @param req the refresh request, may carry a "gv" parameter
+     * @param out the PrintWriter to write the element to
+     * @since 0.9.71+
+     */
     private void emitGraphData(HttpServletRequest req, PrintWriter out) {
         long version = BandwidthGraph.getVersion();
         long clientVersion = -1;
@@ -1438,25 +1438,25 @@ public class I2PSnarkServlet extends BasicServlet {
         /** More than one torrent is listed, so the columns are sortable */
         final boolean showSort;
 
-/**
- * Builds the context from the header's caller inputs, deriving
- * pathPrefix from contextPath.
- *
- * @param req the request the header links are built for
- * @param contextPath the servlet context path, without a trailing slash
- * @param currentSort the active sort key, may be null
- * @param filterParam the active status filter key, may be null
- * @param filterQuery the applied filters as a query string
- * @param showSort more than one torrent is listed
- */
-        SortHeaderContext(HttpServletRequest req, String contextPath, String currentSort,
-                          String filterParam, String filterQuery, boolean showSort) {
-            this.req = req;
-            this.pathPrefix = contextPath + '/';
-            this.currentSort = currentSort;
-            this.filterParam = filterParam;
-            this.filterQuery = filterQuery;
-            this.showSort = showSort;
+    /**
+     * Builds the context from the header's caller inputs, deriving
+     * pathPrefix from contextPath.
+     *
+     * @param req the request the header links are built for
+     * @param contextPath the servlet context path, without a trailing slash
+     * @param currentSort the active sort key, may be null
+     * @param filterParam the active status filter key, may be null
+     * @param filterQuery the applied filters as a query string
+     * @param showSort more than one torrent is listed
+     */
+    SortHeaderContext(HttpServletRequest req, String contextPath, String currentSort,
+                      String filterParam, String filterQuery, boolean showSort) {
+        this.req = req;
+        this.pathPrefix = contextPath + '/';
+        this.currentSort = currentSort;
+        this.filterParam = filterParam;
+        this.filterQuery = filterQuery;
+        this.showSort = showSort;
         }
     }
 
@@ -2049,9 +2049,11 @@ public class I2PSnarkServlet extends BasicServlet {
             out.write("</th><th class=tAction>");
 
             if (fc.dht != null && !"2".equals(fc.peerParam)) {
-                out.write("<a id=debugMode href=\"?p=2\" title=\"" + toggleDebug + "\" data-debug-label=\"" + debugModeText + "\" data-normal-label=\"" + normalModeText + "\">" + debugModeText + "</a>");
+                out.write("<a id=debugMode href=\"?p=2\" title=\"" + toggleDebug + "\" data-debug-label=\"" +
+                          debugModeText + "\" data-normal-label=\"" + normalModeText + "\">" + debugModeText + "</a>");
             } else if (fc.dht != null) {
-                out.write("<a id=debugMode href=\"?p\" title=\"" + toggleDebug + "\" data-debug-label=\"" + debugModeText + "\" data-normal-label=\"" + normalModeText + "\">" + normalModeText + "</a>");
+                out.write("<a id=debugMode href=\"?p\" title=\"" + toggleDebug + "\" data-debug-label=\"" +
+                          debugModeText + "\" data-normal-label=\"" + normalModeText + "\">" + normalModeText + "</a>");
             }
 
             out.write("</th>");
@@ -2172,7 +2174,8 @@ public class I2PSnarkServlet extends BasicServlet {
         StringBuilder buf = new StringBuilder(1280);
         buf.append("<form id=torrentlist action=_post method=POST target=processForm>\n<div id=filterBar>")
            .append(buildFilterLink(buttonUrl, "search", searchActive, _t("Search"),
-               searchActive ? (searchResults > maxPageSize ? maxPageSize + " / " + searchResults : String.valueOf(searchResults)) : null))
+                   searchActive ? (searchResults > maxPageSize ? maxPageSize + " / " +
+                   searchResults : String.valueOf(searchResults)) : null))
            .append(buildFilterLink(buttonUrl, "all", !searchActive, _t("Show All"), allBadgeText))
            .append(buildSimpleFilterLink(buttonUrl, "active", _t("Active"), badge))
            .append(buildSimpleFilterLink(buttonUrl, "inactive", _t("Inactive"), badge))
@@ -6901,19 +6904,19 @@ public class I2PSnarkServlet extends BasicServlet {
         return toIcon(item.toString());
     }
 
-/**
- * Icon name registered for a lower-cased path's file extension.
- *
- * <p>A single map lookup replaces a scan of every registered suffix. The two
- * forms agree because no key in {@code IconMaps.SUFFIX_ICON_MAP} is a suffix
- * of another, so at most one key can match and it must start at the path's
- * last dot - exactly the substring taken here. A dotless path matches nothing
- * either way, and a dot-leading name such as ".exe" yields itself.
- *
- * @param lowerPath the file path, already lower-cased
- * @return the registered icon name, or null when the extension has none
- * @since 0.9.71+
- */
+    /**
+     * Icon name registered for a lower-cased path's file extension.
+     *
+     * <p>A single map lookup replaces a scan of every registered suffix. The two
+     * forms agree because no key in {@code IconMaps.SUFFIX_ICON_MAP} is a suffix
+     * of another, so at most one key can match and it must start at the path's
+     * last dot - exactly the substring taken here. A dotless path matches nothing
+     * either way, and a dot-leading name such as ".exe" yields itself.
+     *
+     * @param lowerPath the file path, already lower-cased
+     * @return the registered icon name, or null when the extension has none
+     * @since 0.9.71+
+     */
     static String suffixIcon(String lowerPath) {
         int dot = lowerPath.lastIndexOf('.');
         if (dot < 0) {return null;}
@@ -6963,12 +6966,12 @@ public class I2PSnarkServlet extends BasicServlet {
         return "generic";
     }
 
-/**
- * Holds immutable mappings from MIME types and file suffixes to icon names.
- *
- * <p>{@link #SUFFIX_ICON_MAP} is only safe to look up by suffix because no
- * key is a suffix of another - see {@link #suffixIcon}.
- */
+    /**
+     * Holds immutable mappings from MIME types and file suffixes to icon names.
+     *
+     * <p>{@link #SUFFIX_ICON_MAP} is only safe to look up by suffix because no
+     * key is a suffix of another - see {@link #suffixIcon}.
+     */
     private static class IconMaps {
         static final Map<String, String> MIME_ICON_MAP;
         static final Map<String, String> SUFFIX_ICON_MAP;
@@ -7808,5 +7811,6 @@ public class I2PSnarkServlet extends BasicServlet {
     boolean isStandalone() {
         return !_context.isRouterContext();
     }
+
 }
 
