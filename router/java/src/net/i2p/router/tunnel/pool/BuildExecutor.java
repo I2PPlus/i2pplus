@@ -1467,7 +1467,6 @@ public class BuildExecutor implements Runnable {
     private static final long BUDGET_EXHAUSTED_LOG_INTERVAL_MS = 60 * 1000L;
     private static final AtomicLong _lastBuildExpiryLog = new AtomicLong();
     private static final AtomicLong _lastBudgetExhaustedLog = new AtomicLong();
-    private static final AtomicLong _buildExpirySuppressed = new AtomicLong();
 
     /**
      * Hop was never assigned a peer.
@@ -1567,8 +1566,8 @@ public class BuildExecutor implements Runnable {
      * Rate-limit the per-expiry report.
      * <p>Expired builds arrive at roughly twenty a minute on a degraded router, which is far
      * too often to read individually but not often enough to summarise losslessly. One
-     * representative report a minute is enough to identify which pattern dominates. The
-     * suppressed count keeps the remainder accounted for.
+     * representative report a minute is enough to identify which pattern dominates;
+     * the {@code tunnel.buildTimeout} stat counts every expiry.
      *
      * @param now current time in milliseconds
      * @return true when this expiry should be reported
@@ -1577,7 +1576,6 @@ public class BuildExecutor implements Runnable {
     private boolean shouldLogBuildExpiry(long now) {
         long last = _lastBuildExpiryLog.get();
         if (now - last < BUILD_EXPIRY_LOG_INTERVAL_MS) {
-            _buildExpirySuppressed.incrementAndGet();
             return false;
         }
         _lastBuildExpiryLog.set(now);
@@ -1678,53 +1676,25 @@ public class BuildExecutor implements Runnable {
     }
     /**
      * <p>Build timeouts are the largest unexplained loss on this router,
-     * roughly twice the rejection rate. The existing DEBUG dump could not be
-     * read: the class logs at INFO in practice, and a six-line dump per
-     * expiry at twenty expiries a minute would be unreadable anyway. This
-     * is the same content compressed to one line, with the gateway index
-     * marked so "the gateway or the far end" is answerable directly.
+     * roughly twice the rejection rate. This WARN reporter is throttled and
+     * carries only the identifying facts: tunnel, length, gateway position,
+     * request ID. Full per-hop attribution is available at DEBUG via
+     * {@link #logExpiredPeers}.
      *
      * @param cfg the expired build's config
      * @since 0.9.71+
      */
     private void logExpiredBuildWarn(TunnelCreatorConfig cfg) {
-        CommSystemFacade commSystem = _context.commSystem();
-        long now = _context.clock().now();
         int length = cfg.getLength();
-        Hash us = _context.routerHash();
         int gatewayHop = gatewayHopIndex(cfg, length);
         String destination = cfg.getDestinationNickname();
-        StringBuilder buf = new StringBuilder(192);
+        StringBuilder buf = new StringBuilder(96);
         buf.append("Build expired unanswered: ");
         buf.append(cfg.isInbound() ? "inbound" : "outbound");
         buf.append(' ').append(destination != null ? destination : "exploratory");
         buf.append(", ").append(length).append(length == 1 ? " hop" : " hops");
         buf.append(", gateway: Hop").append(gatewayHop < 0 ? "?" : String.valueOf(gatewayHop));
         appendRequestMsgId(buf, cfg);
-        for (int hop = 0; hop < length; hop++) {
-            Hash peer = cfg.getPeer(hop);
-            boolean assigned = (peer != null);
-            boolean isUs = assigned && us != null && us.equals(peer);
-            String classification = classifyExpiredHop(assigned, isUs, hop == gatewayHop,
-                assigned && !isUs && commSystem.wasUnreachable(peer),
-                assigned && !isUs && commSystem.isEstablished(peer),
-                assigned && !isUs && commSystem.isConnecting(peer));
-            buf.append(" | Hop").append(hop).append(": ");
-            if (assigned && !isUs) {
-                PeerProfile profile = _context.profileOrganizer().getProfileNonblocking(peer);
-                long lastHeardFrom = (profile != null) ? profile.getLastHeardFrom() : 0;
-                buf.append('[').append(peer.toBase64(), 0, 6).append(']');
-                buf.append(' ').append(classification);
-                buf.append(" heard ");
-                buf.append(lastHeardFrom > 0 ? describeAge(now - lastHeardFrom) + " ago" : "never");
-            } else {
-                buf.append(classification);
-            }
-        }
-        long suppressed = _buildExpirySuppressed.getAndSet(0);
-        if (suppressed > 0) {
-            buf.append(" (suppressed ").append(suppressed).append(')');
-        }
         _log.warn(buf.toString());
     }
 
@@ -2087,7 +2057,7 @@ public class BuildExecutor implements Runnable {
                 if (_log.shouldInfo()) {
                     Long used = expiredTimeouts.get(cfg.getReplyMessageId());
                     long secs = used != null ? used / 1000 : _adaptiveTimeout / 1000;
-                    _log.info("Timeout (" + secs + "s) waiting for tunnel build reply -> " + cfg);
+                    _log.info("Timeout (" + secs + "s) waiting for tunnel build reply -> " + cfg.toShortString());
                 }
 
                 penalizeTimeout(cfg);
@@ -2999,14 +2969,14 @@ public class BuildExecutor implements Runnable {
         if (_log.shouldInfo()) {
             if ((result == Result.OTHER_FAILURE || result == Result.NO_TUNNELS ||
                  result == Result.NO_NETDB) && detail != null) {
-                _log.info("Build failed -> " + detail + " for " + cfg);
+                _log.info("Build failed -> " + detail + " for " + cfg.toShortString());
             } else {
-                _log.info("Build complete (" + result + ") for " + cfg);
+                _log.info("Build complete (" + result + ") for " + cfg.toShortString());
             }
         }
         if (result != Result.SUCCESS) {
             if (_log.shouldInfo()) {
-                _log.info("Build failed for " + cfg + " -> Reason: " + result);
+                _log.info("Build failed for " + cfg.toShortString() + " -> Reason: " + result);
             }
             if (result == Result.TIMEOUT) {
                 _context.statManager().addRateData("tunnel.buildTimeout", 1);
@@ -3105,7 +3075,7 @@ public class BuildExecutor implements Runnable {
         if (buildTime > 250) {
             synchronized (_currentlyBuilding) {_currentlyBuilding.notifyAll();}
         } else if (cfg.getLength() > 1 && _log.shouldInfo() && buildTime < 50) {
-            _log.info("Build completed fast (" + buildTime + "ms) -> " + cfg);
+            _log.info("Build completed fast (" + buildTime + "ms) -> " + cfg.toShortString());
         }
         long expireBefore = now + 10*60*1000L - BuildRequestor.getRequestTimeout(_context);
         if (cfg.getExpiration() <= expireBefore && _log.shouldDebug()) {

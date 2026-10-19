@@ -2329,7 +2329,7 @@ public class TunnelPool {
         _settings = settings;
         if (_settings != null) {
             if (_log.shouldInfo()) {
-                _log.info(toString() + " -> Settings updated \n" + settings);
+                _log.info(toString() + " -> Settings updated" + settings);
             }
             _manager.tunnelFailed(); // in case we need more
         }
@@ -2510,7 +2510,7 @@ public class TunnelPool {
             while (_inProgress.size() > maxAllowed && !_inProgress.isEmpty()) {
                 PooledTunnelCreatorConfig cfg = _inProgress.remove(_inProgress.size() - 1);
                 if (_log.shouldWarn()) {
-                    _log.warn("Cancelling excess tunnel build: " + cfg);
+                    _log.info("Cancelling excess tunnel build: " + cfg.toShortString());
                 }
                 cancelled.add(cfg);
             }
@@ -3892,7 +3892,7 @@ public class TunnelPool {
         Iterator<Lease> iter = leases.iterator();
         int count = Math.min(leases.size(), wanted);
         for (int i = 0; i < count; i++) {ls.addLease(iter.next());}
-        if (_log.shouldInfo()) {_log.info(toString() + " -> New LeaseSet built" + ls);}
+        if (_log.shouldInfo()) {_log.info(toString() + " -> New LeaseSet built with " + ls.size() + " leases");}
         _cachedLeaseSet = ls;
         _lastLeaseSetBuildTime = now;
         _lastPublishedEarliestLeaseEnd = leases.isEmpty() ? 0 : leases.first().getEndTime();
@@ -5154,7 +5154,7 @@ public class TunnelPool {
         int toPrune = toRemove.size() - reserve;
         if (toPrune <= 0) {
             if (_log.shouldInfo()) {
-                _log.info("Keeping " + toRemove.size() + " non-GOOD tunnels as LS fallback " +
+                _log.info("Keeping " + toRemove.size() + " non-GOOD tunnels as LeaseSet fallback " +
                           "(good: " + goodCount + ", reserve: " + reserve + ")");
             }
             return;
@@ -7469,7 +7469,7 @@ public class TunnelPool {
      */
     void buildComplete(PooledTunnelCreatorConfig cfg, BuildExecutor.Result result) {
         if (cfg.getTunnelPool() != this) {
-            _log.error("Tunnel created for wrong pool: " + cfg + "-> Should have been for: " + this, new Exception());
+            _log.error("Tunnel created for wrong pool: " + cfg.toShortString() + " -> Should have been for: " + toString());
             return;
         }
 

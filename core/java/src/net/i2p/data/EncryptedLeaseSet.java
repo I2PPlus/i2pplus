@@ -1016,7 +1016,7 @@ public class EncryptedLeaseSet extends LeaseSet2 {
                 if (_clientPrivateKey != null) {
                     buf.append("\n* Client Private Key: ").append(_clientPrivateKey);
                 }
-                buf.append("\n* Decrypted LS:\n").append(_decryptedLS2);
+                buf.append("\n* Decrypted LeaseSet:\n").append(_decryptedLS2);
             } else if (_destination != null) {
                 buf.append("\n* Destination: ").append(_destination).append("\n* Leases: ").append(getLeaseCount());
                 for (int i = 0; i < getLeaseCount(); i++) {

@@ -256,7 +256,7 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                         if (dbe.getType() != DatabaseEntry.KEY_TYPE_ROUTERINFO) {
                             // hash collision
                             // prevent ClassCastException here
-                            throw new IllegalArgumentException("Attempt to replace LS with " + ri);
+                            throw new IllegalArgumentException("Attempt to replace LeaseSet with " + ri);
                         }
                         prevNetDb = (RouterInfo) dbe;
                     }
@@ -526,13 +526,13 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                 if (invalidMessage.contains("published over")) {
                     dontBlamePeer = true;
                     if (_log.shouldWarn()) {
-                        _log.warn("Received STALE RouterInfo from [" + _fromHash.toBase64().substring(0,6) + "] \n* " + invalidMessage);
+                        _log.warn("Received STALE RouterInfo from [" + _fromHash.toBase64().substring(0,6) + "] * " + invalidMessage);
                     }
                 // Should we record in the profile?
                 } else if (_log.shouldDebug()) {
-                    _log.warn("Received INVALID data packet from [" + _fromHash.toBase64().substring(0,6) + "] \n* " + invalidMessage + _from);
+                    _log.warn("Received INVALID data packet from [" + _fromHash.toBase64().substring(0,6) + "] * " + invalidMessage + _from);
                 } else if (_log.shouldWarn()) {
-                    _log.warn("Received INVALID data packet from [" + _fromHash.toBase64().substring(0,6) + "] \n* " + invalidMessage);
+                    _log.warn("Received INVALID data packet from [" + _fromHash.toBase64().substring(0,6) + "] * " + invalidMessage);
                 }
             }
         } else if (invalidMessage != null && !dontBlamePeer) {
@@ -591,8 +591,8 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
             RouterInfo me = getContext().router().getRouterInfo();
             msg2.setEntry(me);
             if (_fromHash != null && _from != null && _log.shouldWarn()) {
-                _log.warn("Received a DbStoreMessage with Reply token, but we're not a Floodfill\n* From: " + _from +
-                          "\n* From Hash: " + _fromHash + "\n* Message: " + _message, new Exception());
+                _log.warn("Received a DatabaseStoreMessage with a reply token but we are not a floodfill" +
+                          " * from " + _from + " [" + _fromHash.toBase64().substring(0,6) + ']');
             }
         }
         Hash toPeer = _message.getReplyGateway();
@@ -617,7 +617,7 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
         }
         if (toUs) {
             if (_facade.isClientDb()) {
-                _log.error("[" + _facade + "] ERROR! SendMessageDirectJob (toUs) attempted in Client NetDb!\n* Message: " + msg);
+                _log.error("[" + _facade + "] SendMessageDirectJob (toUs) attempted in client NetDb [MsgID " + msg.getUniqueId() + ']');
                 return;
             }
             Job send = new SendMessageDirectJob(getContext(), msg, toPeer, REPLY_TIMEOUT, MESSAGE_PRIORITY, _msgIDBloomXor);

@@ -106,11 +106,12 @@ class JobQueueRunner extends I2PThread {
         long lastActive;
         resolveStats();
         while (_keepRunning && _context.jobQueue().isAlive()) {
+            Job job = null;
             try {
-                Job job = _context.jobQueue().getNext();
+                job = _context.jobQueue().getNext();
                 if (job == null) {
                     if (_context.router().isAlive() && _log.shouldError()) {
-                        _log.error("Failed to pull next job from queue -> Dead?");
+                        _log.error("Failed to pull next job from queue while router alive -> Retrying");
                     }
                     continue;
                 }
@@ -122,14 +123,14 @@ class JobQueueRunner extends I2PThread {
                 if (job instanceof JobImpl) {
                     long when = ((JobImpl)job).getMadeReadyOn();
                     if (when <= 0) {
-                        _log.error("Job was not made ready?! " + job, new Exception("Not made ready?!"));
+                        _log.error("Job was never made ready: " + job);
                     } else {enqueuedTime = now - when;}
                 }
 
                 _currentJob = job;
                 _lastJob = null;
                 if (_log.shouldDebug()) {
-                    _log.debug("[Job " + job.getJobId() + "] " + job.getName() + " -> [Runner " + _id + "] running");
+                    _log.debug(job.getName() + " -> [Runner " + _id + "] running");
                 }
                 long origStartAfter = job.getTiming().getStartAfter();
                 long doStart = now;
@@ -157,7 +158,7 @@ class JobQueueRunner extends I2PThread {
                         _log.warn("Completed " + _currentJob + " in " + duration
                                   + "ms -> Lag: " + (doStart-origStartAfter) + "ms");
                     } else if (_log.shouldInfo()) {
-                        _log.warn("Completed " + _currentJob + " in " + duration + "ms");
+                        _log.info("Completed " + _currentJob + " in " + duration + "ms");
                     }
                 }
 
@@ -171,9 +172,11 @@ class JobQueueRunner extends I2PThread {
                 _lastJob = _currentJob;
                 _currentJob = null;
                 _lastEnd = lastActive;
-            } catch (Exception t) {_log.log(Log.CRIT, "Error running?", t);}
+            } catch (Exception t) {
+                _log.log(Log.CRIT, "Job failed" + (job != null ? ": " + job.getName() : "") + " * Runner " + _id, t);
+            }
         }
-        if (_context.router().isAlive()) {_log.log(Log.WARN, "Queue runner " + _id + " removed (idle)");}
+        if (_context.router().isAlive()) {_log.debug("Queue runner " + _id + " removed (idle)");}
         _context.jobQueue().removeRunner(_id);
     }
 

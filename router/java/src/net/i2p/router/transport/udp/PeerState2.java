@@ -392,7 +392,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
                 long ahead = _packetNumber.get() - _ackedMessages.getHighestSet();
                 if (ahead > BITFIELD_SIZE) {
                     if (_log.shouldWarn())
-                        _log.warn("[SSU] Fail after " + ahead + " unACKed packets" + this);
+                        _log.warn("[SSU] Fail after " + ahead + " unACKed packets " + toShortString());
                     _transport.sendDestroy(this, REASON_FRAME_TIMEOUT);
                     _transport.dropPeer(this, true, "Too many unACKed packets");
                 }
@@ -421,7 +421,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
         boolean rv = checkRetransmitSessionConfirmed2(now, force);
         if (!rv) {
             // pulled out from synch block below to avoid deadlock
-            if (_log.shouldWarn()) {_log.warn("[SSU] Retransimit failure -> No SessionConfirmed ACK received " + this);}
+            if (_log.shouldWarn()) {_log.warn("[SSU] Retransmission failure -> No SessionConfirmed ACK received " + toShortString());}
             UDPPacket pkt = null;
             try {
                 pkt = _transport.getBuilder2().buildSessionDestroyPacket(SSU2Util.REASON_FRAME_TIMEOUT, this);
@@ -682,9 +682,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
             if (_receivedMessages.set(n)) {
                 synchronized(this) {_packetsReceivedDuplicate++;}
                 if (shouldLogDebug()) {
-                    _log.warn("[SSU] Duplicate packet [#" + n + "] from: " + from + " received " + this);
-                } else if (_log.shouldWarn()) {
-                    _log.warn("[SSU] Duplicate packet [#" + n + "] from: " + from);
+                    _log.debug("[SSU] Duplicate packet [#" + n + "] from: " + from + " received " + this);
                 }
                 return;
             }
@@ -807,7 +805,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
                 // time or retransmission budget exceeded
                 _migrationState = MigrationState.MIGRATION_STATE_NONE;
                 pathVerified();
-                if (shouldLog) {_log.warn("[SSU] Connection migration failed..." + this);}
+                if (shouldLog) {_log.warn("[SSU] Connection migration failed... " + toShortString());}
                 break;
             case RETRANSMIT:
                 if (shouldLogDebug()) {
@@ -1005,7 +1003,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
         long old = getTheyRelayToUsAs();
         if (old != 0) {
             if (_log.shouldWarn()) {
-                _log.warn("[SSU] Received NEW tag [" + tag + "] but had previous tag [" + old + "] " + this);
+                _log.warn("[SSU] Received NEW tag [" + tag + "] but had previous tag [" + old + "] " + toShortString());
             }
             return;
         }
@@ -1156,8 +1154,8 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
             receiveMessage(state);
         } else if (messageExpired) {
             messagePartiallyReceived();
-            if (_log.shouldWarn()) {
-                _log.warn("[SSU] Message expired while only being partially read: " + state);
+            if (_log.shouldInfo()) {
+                _log.info("[SSU] Message expired while only partially received [MsgID " + state.getMessageId() + ']');
             }
             _context.messageHistory().droppedInboundMessage(state.getMessageId(), state.getFrom(),
                 "expired while partially read");
@@ -1278,7 +1276,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
                                     setLastReceiveTime(now);
                                 } catch (IOException ioe) {
                                     if (_log.shouldWarn()) {
-                                        _log.warn("[SSU] Failed to send NewToken after successful migration to " + from + ' ' + this + " -> " + ioe.getMessage());
+                                        _log.warn("[SSU] Failed to send NewToken after successful migration to " + from + ' ' + toShortString() + " -> " + ioe.getMessage());
                                     }
                                 }
                             } else {
@@ -1289,7 +1287,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
                                 _log.warn("[SSU] Path response data mismatch. Expected: " + HexDump.dump(_pathChallengeData)
                                         + " Received: " + HexDump.dump(data) + this);
                             } else if (_log.shouldWarn()) {
-                                _log.warn("[SSU] Path response data mismatch" + this);
+                                _log.warn("[SSU] Path response data mismatch " + toShortString());
                             }
                             _migrationState = MigrationState.MIGRATION_STATE_NONE; // Reset on failure
                             pathVerified();
@@ -1388,12 +1386,13 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
             if (shouldLogDebug()) {
                 _log.warn("[SSU] Received invalid message... " + state + "\n* PeerState: " + this + ime);
             } else if (_log.shouldWarn()) {
-                _log.warn("[SSU] Received invalid message... " + state + "\n* PeerState: " + this + "\n* Error: " + ime.getMessage());
+                _log.warn("[SSU] Received invalid message [MsgID " + state.getMessageId() + "] " + toShortString() +
+                          " * error: " + ime.getMessage());
             }
         } catch (RuntimeException e) {
             // e.g. AIOOBE
             if (shouldLogDebug()) {_log.warn("[SSU] Error handling a message: " + state, e);}
-            else if (_log.shouldWarn()) {_log.warn("[SSU] Error handling a message: " + state + "\n* Error: " + e.getMessage());}
+            else if (_log.shouldWarn()) {_log.warn("[SSU] Error handling a message [MsgID " + state.getMessageId() + "] " + toShortString() + " * error: " + e.getMessage());}
         } finally {state.releaseResources();}
     }
 

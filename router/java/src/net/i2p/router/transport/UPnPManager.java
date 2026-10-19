@@ -308,7 +308,7 @@ class UPnPManager {
      */
     public void update(Set<TransportManager.Port> ports) {
         if (_log.shouldDebug())
-            _log.debug("UPnP Update with " + ports.size() + " ports", new Exception("I did it"));
+            _log.debug("UPnP Update with " + ports.size() + " ports");
 
         if (!_isRunning)
                 return;

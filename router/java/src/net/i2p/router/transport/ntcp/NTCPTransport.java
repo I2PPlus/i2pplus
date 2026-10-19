@@ -596,7 +596,7 @@ public class NTCPTransport extends TransportImpl {
             } else {
                 // Other IllegalStateExceptions are still warnings
                 String msg = e.getMessage();
-                if (_log.shouldWarn()) _log.warn("[NTCP] Failed opening a channel \n* Illegal State Exception" + (msg != null ? ":" + msg : ""));
+                if (_log.shouldWarn()) _log.warn("[NTCP] Failed opening a channel -> IllegalStateException" + (msg != null ? ": " + msg : ""));
             }
         }
     }
@@ -648,8 +648,8 @@ public class NTCPTransport extends TransportImpl {
                 _banLogger.logBanForever(peer, ipPort, "Invalid NetworkId (" + nid + ")");
                 _context.banlist().banlistRouterForever(peer, "Invalid NetworkId (" + nid + ")");
             }
-            if (_log.shouldWarn())
-                _log.warn("[NTCP] Not in our network: " + toAddress, new Exception());
+            if (_log.shouldInfo())
+                _log.info("[NTCP] Not in our network: " + toAddress);
             markUnreachable(peer);
             return null;
         }
@@ -2279,7 +2279,7 @@ public int getEstimatedRTT(Hash peer) {
         if (wantsAutoHost(enabled, ssuOK)) {
             if (!ssuOK) {
                 if (_log.shouldWarn())
-                    _log.warn("Null address with always config", new Exception());
+                    _log.warn("Auto address requested with always config but no SSU address is available");
                 return false;
             }
             // ip non-null

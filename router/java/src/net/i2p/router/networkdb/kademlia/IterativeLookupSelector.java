@@ -62,17 +62,18 @@ class IterativeLookupSelector implements MessageSelector {
             if (_search.getKey().equals(dsm.getKey())) {
                 _matchFound = true;
                 if (_log.shouldDebug())
-                    _log.debug("[Job " + _search.getJobId() + "] DbStoreMsg match \n* Message: " + this);
+                    _log.debug("DbStoreMsg match for [" + _search.getKey().toBase64().substring(0, 6) + "] * " + this);
                 return true;
             }
         } else if (type == DatabaseSearchReplyMessage.MESSAGE_TYPE) {
             DatabaseSearchReplyMessage dsrm = (DatabaseSearchReplyMessage)message;
             if (_search.getKey().equals(dsrm.getSearchKey())) {
                 // Got a netDb reply pointing us at other floodfills...
-                if (_log.shouldDebug()) {
+                if (_log.shouldInfo()) {
                     Hash from = dsrm.getFromHash();
-                    _log.info("[Job " + _search.getJobId() + "] Processing DbSearchReplyMsg via IterativeLookup from [" +
-                              from.toBase64().substring(0,6) + "] \n* Reply: " + this);
+                    _log.info("Processing search reply from [" + from.toBase64().substring(0,6) + "] via IterativeLookup for [" +
+                              _search.getKey().toBase64().substring(0,6) + "]");
+                    if (_log.shouldDebug()) _log.debug("Search reply: " + this);
                 }
 
                 // was inline, now in IterativeLookupJob due to deadlocks

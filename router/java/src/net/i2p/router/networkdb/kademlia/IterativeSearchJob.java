@@ -509,7 +509,7 @@ public class IterativeSearchJob extends FloodSearchJob {
         _maxConcurrent = (ctx.router().getUptime() > 30*60*1000 || known > 1000) ? ctx.getProperty("netdb.maxConcurrent", _maxConcurrentDefault) :
                           ctx.getProperty("netdb.maxConcurrent", _maxConcurrentDefault + 1);
         if (fromLocalDest != null && !isLease && _log.shouldWarn()) {
-            _log.warn("IterativeSearch for RouterInfo [" + key.toBase64().substring(0,6) + "] down client tunnel " + fromLocalDest, new Exception());
+            _log.warn("Iterative search for RouterInfo [" + key.toBase64().substring(0,6) + "] down client tunnel " + fromLocalDest);
         }
         // FloodSearchJob does not extend SearchJob, so increment here
         ctx.statManager().addRateData("netDb.searchCount", 1);
@@ -807,10 +807,9 @@ public class IterativeSearchJob extends FloodSearchJob {
                 }
                 if (replyTunnel == null) {
                     if (_log.shouldWarn())
-                        _log.warn(getJobId() + ": ISJ from " + _facade + " for " +
-                                 (_isLease ? "LS " : "RI ") +
-                                  _key + " to " + peer +
-                                  " failed, no IB tunnel (client or exploratory) to receive reply");
+                        _log.warn("Client search for " + (_isLease ? "LeaseSet " : "RouterInfo ") +
+                                  "[" + _key.toBase64().substring(0, 6) + "] via [" + peer.toBase64().substring(0, 6) +
+                                  "] failed -> No inbound tunnel to receive reply");
                     failed();
                     return;
                 }
@@ -818,13 +817,13 @@ public class IterativeSearchJob extends FloodSearchJob {
                 // We don't have a way to request/get a ECIES-tagged reply,
                 // sending reply down expl. tunnel gets the LS stored in the
                 // main netdb where the client can't find it
-                if (_log.shouldWarn())
-                    _log.warn(getJobId() + ": ISJ from client for " +
-                              (_isLease ? "LS " : "RI ") +
-                              _key + " to " + peer +
-                              " have LSK? " + (lsk != null) +
-                              " have his RI? " + (ri != null) +
-                              " skipped, no ratchet/elg support");
+                if (_log.shouldInfo()) {
+                    String why = lsk == null ? "No client keys" :
+                                 ri == null ? "No peer RouterInfo" : "No ratchet or ElGamal reply support";
+                    _log.info("Client search for " + (_isLease ? "LeaseSet " : "RouterInfo ") +
+                              "[" + _key.toBase64().substring(0, 6) + "] via [" + peer.toBase64().substring(0, 6) +
+                              "] skipped -> " + why);
+                }
                 failed(peer, false);
                 return;
             }
@@ -962,7 +961,7 @@ public class IterativeSearchJob extends FloodSearchJob {
                         dlm.setReplySession(sess.key, sess.rtag);
                     }
                 } else { // client went away, but send it anyway
-                    if (_log.shouldWarn()) {_log.warn("Failed encrypt to " + ri);}
+                    if (_log.shouldDebug()) {_log.debug("Failed to encrypt for [" + ri.getHash().toBase64().substring(0,6) + "] -> Sending anyway");}
                 }
 
                 outMsg = MessageWrapper.wrap(ctx, dlm, ri);
@@ -982,7 +981,7 @@ public class IterativeSearchJob extends FloodSearchJob {
         if (outMsg == null) {outMsg = dlm;}
         if (isDirect) {
             if (_facade.isClientDb() && _log.shouldWarn()) {
-                _log.warn("Warning! Sending direct search message in a client NetDb context! (DbId: " + _facade + ")" + outMsg );
+                _log.warn("Sending direct search message in a client NetDb context (DbId: " + _facade + ')');
             }
             OutNetMessage m = new OutNetMessage(ctx, outMsg, outMsg.getMessageExpiration(),
                                                 OutNetMessage.PRIORITY_MY_NETDB_LOOKUP, ri);

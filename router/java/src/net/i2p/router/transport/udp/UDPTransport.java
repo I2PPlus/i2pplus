@@ -1587,7 +1587,7 @@ public class UDPTransport extends TransportImpl {
                         // For IPv6, we only accept changes if this is one of our local addresses
                         if (!isLocalAddress(ourIP)) {
                             if (_log.shouldInfo())
-                                _log.info("New IPv6 address received but not one of our local addresses: " + Addresses.toString(ourIP), new Exception());
+                                _log.info("New IPv6 address received but not one of our local addresses: " + Addresses.toString(ourIP));
                             return false;
                         }
                         if (STATUS_IPV6_FW_2.contains(_reachabilityStatus)) {
@@ -1610,7 +1610,7 @@ public class UDPTransport extends TransportImpl {
                                 replaceCurrentExternalAddress(local, true);
                                 if (_log.shouldWarn())
                                     _log.warn("New IPv6 address, assuming still firewalled [" +
-                                              newIP + "]:" + ourPort, new Exception());
+                                              newIP + "]:" + ourPort);
                             } else {
                                 if (_log.shouldInfo())
                                     _log.info("Same IPv6 address, assuming still firewalled [" +
@@ -2010,7 +2010,7 @@ public class UDPTransport extends TransportImpl {
             }
         }
         if (_log.shouldInfo() && oldPort != newPort)
-            _log.info("Changed port from " + oldPort + " to " + newPort + " for " + peer);
+            _log.info("Changed port from " + oldPort + " to " + newPort + " for " + peer.toShortString());
     }
 
     /**
@@ -2031,7 +2031,7 @@ public class UDPTransport extends TransportImpl {
             }
         }
         if (_log.shouldInfo() && !oldAddress.equals(newAddress))
-            _log.info("Changed address from " + oldAddress + " to " + newAddress + " for " + peer);
+            _log.info("Changed address from " + oldAddress + " to " + newAddress + " for " + peer.toShortString());
     }
 
     /**
@@ -2067,7 +2067,7 @@ public class UDPTransport extends TransportImpl {
             if ( (oldPeer != null) && (oldPeer != peer) ) {
                 // this happens a lot
                 if (_log.shouldInfo())
-                    _log.info("Router already connected (PBID): Old = " + oldPeer + " New = " + peer);
+                    _log.info("Router already connected (PBID): Old = " + oldPeer.toShortString() + " New = " + peer.toShortString());
                 // transfer over the old state/inbound message fragments/etc
                 peer.loadFrom(oldPeer);
                 oldEstablishedOn = oldPeer.getKeyEstablishedTime();
@@ -2117,7 +2117,7 @@ public class UDPTransport extends TransportImpl {
         if (oldPeer2 != null && oldPeer2 != peer && oldPeer2 != oldPeer) {
             // this shouldn't happen, should have been removed above
             if (_log.shouldWarn())
-                _log.warn("Router already connected (PBRH): old=" + oldPeer2 + " new=" + peer);
+                _log.warn("Router already connected (PBRH): old=" + oldPeer2.toShortString() + " new=" + peer.toShortString());
             // transfer over the old state/inbound message fragments/etc
             // Send destroy before loadFrom(), because loadFrom() sets dead = true
             sendDestroy(oldPeer2, SSU2Util.REASON_REPLACED);
@@ -2129,9 +2129,9 @@ public class UDPTransport extends TransportImpl {
 
         if (_log.shouldWarn() && !_mismatchLogged && _peersByIdent.size() != _peersByRemoteHost.size()) {
             _mismatchLogged = true;
-            _log.warn("Size Mismatch after add: " + peer
-                       + " byIDsz = " + _peersByIdent.size()
-                       + " byHostsz = " + _peersByRemoteHost.size());
+            _log.warn("Size Mismatch after add: " + peer.toShortString()
+                       + " * byIDsz = " + _peersByIdent.size()
+                       + " * byHostsz = " + _peersByRemoteHost.size());
         }
 
         markReachable(peer.getRemotePeer(), peer.isInbound());
@@ -2162,7 +2162,7 @@ public class UDPTransport extends TransportImpl {
                             if (count == 0 || sinceSelected > 2*60*1000) {
                                 // Rate limit to prevent rapid churn after transition to firewalled or at startup
                                 if (_log.shouldWarn())
-                                    _log.warn("Rebuilding address -> New introducer (Total: " + count + ") " + peer);
+                                    _log.warn("Rebuilding address -> New introducer (Total: " + count + ") " + peer.toShortString());
                                 rebuildExternalAddress(ipv6);
                             }
                         }
@@ -2209,8 +2209,8 @@ public class UDPTransport extends TransportImpl {
                         if (peer != null)
                             sendDestroy(peer, SSU2Util.REASON_NETID);
                         dropPeer(peerHash, false, "Not in our network");
-                        if (_log.shouldWarn())
-                            _log.warn("Not in our network: " + entry, new Exception());
+                        if (_log.shouldInfo())
+                            _log.info("Not in our network: [" + peerHash.toBase64().substring(0,6) + ']');
                         return;
                     } // else will be invalidated and handled by netdb
                 }
@@ -2370,7 +2370,7 @@ public class UDPTransport extends TransportImpl {
                 _log.debug("Sending direct packet to " + packet);
             _pusher.send(packet);
         } else {
-            _log.error("No pusher", new Exception());
+            _log.error("No pusher -> Dropping packet");
         }
     }
 
@@ -2872,7 +2872,7 @@ public class UDPTransport extends TransportImpl {
             _fragments.add(state, peer);
         } catch (IllegalArgumentException iae) {
             if (_log.shouldWarn())
-                _log.warn("Shouldn't happen", new Exception("I did it"));
+                _log.warn("Failed to queue injected message " + peer.toShortString() + " * " + iae.getMessage());
         }
     }
 
@@ -2902,7 +2902,7 @@ public class UDPTransport extends TransportImpl {
             _fragments.add(states, peer);
         } catch (IllegalArgumentException iae) {
             if (_log.shouldWarn())
-                _log.warn("Shouldn't happen", new Exception("I did it"));
+                _log.warn("Failed to queue injected messages " + peer.toShortString() + " * " + iae.getMessage());
         }
     }
 
@@ -2927,7 +2927,7 @@ public class UDPTransport extends TransportImpl {
             _fragments.add(states, peer);
         } catch (IllegalArgumentException iae) {
             if (_log.shouldWarn())
-                _log.warn("Shouldn't happen", new Exception("I did it"));
+                _log.warn("Failed to queue injected messages " + peer.toShortString() + " * " + iae.getMessage());
         }
     }
 
@@ -3647,8 +3647,7 @@ public class UDPTransport extends TransportImpl {
             int consecutive = msg.getPeer().incrementConsecutiveFailedSends();
             if (_log.shouldInfo())
                 _log.info("Consecutive failure #" + consecutive
-                          + msg.toString()
-                          + " to " + msg.getPeer());
+                          + " [MsgID " + msg.getMessageId() + "] to " + msg.getPeer().toShortString());
             // Relaxed: only drop after more consecutive failures AND longer timeouts,
             // to handle NAT port churn without prematurely dropping peers
             long now = _context.clock().now();
@@ -3678,7 +3677,7 @@ public class UDPTransport extends TransportImpl {
     public void failed(OutNetMessage msg, String reason) {
         if (msg == null) return;
         if (_log.shouldInfo())
-            _log.info("Send failed: " + reason + msg);
+            _log.info("Send failed: " + reason + " [MsgID " + msg.getMessageId() + ' ' + msg.getMessageType() + ']');
 
         if (_context.messageHistory().getDoLog())
             _context.messageHistory().sendMessage(msg.getMessageType(), msg.getMessageId(), msg.getExpiration(),

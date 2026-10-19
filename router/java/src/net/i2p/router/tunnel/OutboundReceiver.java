@@ -63,8 +63,8 @@ class OutboundReceiver implements TunnelGateway.Receiver {
             return msg.getUniqueId();
         } else {
             // It should be rare to forget the router info for a peer in our own tunnel.
-            if (_log.shouldWarn())
-                _log.warn("Lookup of [" + _config.getPeer(1).toBase64().substring(0,6) + "] required for " + msg);
+            if (_log.shouldInfo())
+                _log.info("Lookup of [" + _config.getPeer(1).toBase64().substring(0,6) + "] required for " + msg);
             _context.netDb().lookupRouterInfo(_config.getPeer(1), new SendJob(_context, msg),
                                               new LookupFailedJob(_context), MAX_LOOKUP_TIME);
             return -1;
@@ -152,8 +152,8 @@ class OutboundReceiver implements TunnelGateway.Receiver {
          * Fail the tunnel since the first hop lookup timed out.
          */
         public void runJob() {
-            if (_log.shouldWarn())
-                _log.warn("Lookup of [" + _config.getPeer(1).toBase64().substring(0,6) + "] failed for " + _config);
+            if (_log.shouldInfo())
+                _log.info("Lookup of [" + _config.getPeer(1).toBase64().substring(0,6) + "] failed for " + _config.toShortString());
             _context.statManager().addRateData("tunnel.outboundLookupSuccess", 0);
             _config.tunnelFailedFirstHop();
         }
@@ -198,7 +198,7 @@ class OutboundReceiver implements TunnelGateway.Receiver {
             if (_log.shouldWarn()) {
                 _log.warn("Send to [" + _config.getPeer(1).toBase64().substring(0,6) + "] failed "
                           + streak + "/" + TunnelCreatorConfig.FIRST_HOP_FAILURE_THRESHOLD
-                          + " times for " + _config);
+                          + " times for " + _config.toShortString());
             }
             if (streak >= TunnelCreatorConfig.FIRST_HOP_FAILURE_THRESHOLD) {
                 _config.tunnelFailedFirstHop();

@@ -623,8 +623,8 @@ class FloodfillVerifyStoreJob extends JobImpl {
      * @param delayMs reply latency for stats
      */
     private void failStoreCheck(StoreCheckResult result, long delayMs) {
-        if (_log.shouldWarn()) {
-            _log.warn("Floodfill store check failed for [" + _key.toBase32().substring(0,8) +
+        if (_log.shouldInfo()) {
+            _log.info("Floodfill store check failed for [" + _key.toBase32().substring(0,8) +
                       "] -> Store peer [" + _target.toBase64().substring(0,6) + "] " +
                       (result == StoreCheckResult.MISSING ? "doesn't have the key"
                                                           : "returned a stale entry"));
@@ -667,15 +667,15 @@ class FloodfillVerifyStoreJob extends JobImpl {
         ProfileManager pm = getContext().profileManager();
         if (result == FloodCheckResult.MISSING) {
             getContext().statManager().addRateData("netDb.floodfillVerifyFailNoKey", delayMs);
-            if (_log.shouldWarn()) {
-                _log.warn("Floodfill Verify failed for [" + _key.toBase32().substring(0,8) + "] -> " +
-                          "Queried peer [" + _target.toBase64().substring(0,6) + "] didn't have the key");
+            if (_log.shouldInfo()) {
+                _log.info("Floodfill verify failed for [" + _key.toBase32().substring(0,8) + "] -> Queried peer [" +
+                          _target.toBase64().substring(0,6) + "] does not have the key");
             }
         } else {
             getContext().statManager().addRateData("netDb.floodfillVerifyFailStale", delayMs);
-            if (_log.shouldWarn()) {
-                _log.warn("Floodfill Verify failed for [" + _key.toBase32().substring(0,8) + "] -> Key was stale" +
-                          (_log.shouldDebug() ? "\n* peer still has an older copy" : ""));
+            if (_log.shouldInfo()) {
+                _log.info("Floodfill verify failed for [" + _key.toBase32().substring(0,8) +
+                          "] -> Peer still has an older copy");
             }
         }
         // blame the sent-to peer, but not if we never had one

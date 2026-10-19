@@ -910,7 +910,7 @@ public class Blocklist {
             if (us != null) {
                 byte[] usb = Addresses.getIP(us);
                 if (usb != null && DataHelper.eq(usb, ip)) {
-                    if (_log.shouldWarn()) {_log.warn("Not adding our own IP " + us, new Exception());}
+                    if (_log.shouldWarn()) {_log.warn("Not adding our own IP to the blocklist: " + us);}
                     return;
                 }
             }
@@ -922,7 +922,7 @@ public class Blocklist {
             if (us != null) { // don't ever block ourselves
                 byte[] usb = Addresses.getIP(us);
                 if (usb != null && DataHelper.eq(usb, ip)) {
-                    if (_log.shouldWarn()) {_log.warn("Not adding our own IP " + us, new Exception());}
+                    if (_log.shouldWarn()) {_log.warn("Not adding our own IP to the blocklist: " + us);}
                     return;
                 }
             }

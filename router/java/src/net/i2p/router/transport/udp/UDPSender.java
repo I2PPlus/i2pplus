@@ -196,12 +196,12 @@ public class UDPSender {
 
         // Check size against max MTU minus headers (assumed IPv4)
         if (psz > PeerState2.MAX_MTU - 28) {
-            _log.error("Dropping large UDP packet " + psz + " bytes from " + packet, new Exception());
+            _log.info("Dropping large UDP packet " + psz + " bytes from " + packet);
             return;
         }
 
-        if (psz > 0 && psz < SSU2Util.MIN_DATA_LEN && _log.shouldWarn())
-            _log.warn("Small UDP packet " + psz + " bytes from " + packet, new Exception());
+        if (psz > 0 && psz < SSU2Util.MIN_DATA_LEN && _log.shouldInfo())
+            _log.info("Small UDP packet " + psz + " bytes from " + packet);
 
         if (_dummy) {
             // Testing mode: immediately release the packet back to cache

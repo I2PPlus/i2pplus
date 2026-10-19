@@ -1007,16 +1007,16 @@ public class PeerState {
                 msg.timestamp("Expired in the active pool");
                 _transport.failed(state);
                 if (logInfo)
-                    _log.info("[" + _shortHash + "] Message expired " + state);
+                    _log.info("[" + _shortHash + "] Message expired [MsgID " + state.getMessageId() + ']');
             } else if (logInfo) {
-                _log.warn("[" + _shortHash + "] Unable to send direct message " + state);
+                _log.warn("[" + _shortHash + "] Unable to send direct message [MsgID " + state.getMessageId() + ']');
             }
         }
 
         if (failedSize > 0) {
             if (totalFail) {
                 if (logWarn)
-                    _log.warn("[SSU] First Outbound message failed (Timeout after 60s) -> " + this);
+                    _log.warn("[SSU] First outbound message failed (timeout after 60s) -> " + toShortString());
                 _transport.sendDestroy(this, SSU2Util.REASON_FRAME_TIMEOUT);
                 _transport.dropPeer(this, true, "OB First Message Fail");
                 _cachedOutboundCount = 0;
@@ -2192,7 +2192,7 @@ public class PeerState {
                 return;
             }
             if (state.getPeer() != this) {
-                if (_log.shouldWarn()) _log.warn("Not for me!", new Exception("I did it"));
+                if (_log.shouldWarn()) _log.warn("Outbound message state does not belong to this peer " + toShortString());
                 _transport.failed(state, false);
                 return;
             }
@@ -2202,8 +2202,8 @@ public class PeerState {
             state.setSeqNum(_nextSequenceNumber++);
 
             if (fail) {
-                if (_log.shouldWarn()) {
-                    _log.warn("Dropping message, Outbound queue full for " + toString());
+                if (_log.shouldInfo()) {
+                    _log.info("Outbound queue full " + toShortString() + " -> Dropping message");
                 }
                 _transport.failed(state, false);
             }
@@ -2589,6 +2589,17 @@ public class PeerState {
     /**
      * String representation.
      */
+    /**
+     * Compact one-line peer identifier for log output: short hash,
+     * direction, version and remote host id. No stats, no newlines.
+     *
+     * @since 0.9.71+
+     */
+    String toShortString() {
+        return '[' + _shortHash + "] " + (_isInbound ? "inbound" : "outbound") +
+               " v" + getVersion() + ' ' + _remoteHostId;
+    }
+
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder(256);

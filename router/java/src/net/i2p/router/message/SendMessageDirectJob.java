@@ -10,6 +10,7 @@ package net.i2p.router.message;
 import java.util.Date;
 import net.i2p.data.Hash;
 import net.i2p.data.i2np.I2NPMessage;
+import net.i2p.data.i2np.TunnelGatewayMessage;
 import net.i2p.data.router.RouterInfo;
 import net.i2p.router.Job;
 import net.i2p.router.JobImpl;
@@ -150,13 +151,28 @@ public class SendMessageDirectJob extends JobImpl {
     @Override
     public String getName() { return "Send Direct Message"; }
 
+    /**
+     * Simple class name of the message being sent, unwrapping a
+     * {@link TunnelGatewayMessage} to its inner message for a more
+     * informative log entry.
+     */
+    private String messageTypeName() {
+        I2NPMessage m = _message;
+        if (m instanceof TunnelGatewayMessage)
+            m = ((TunnelGatewayMessage) m).getMessage();
+        return m.getClass().getSimpleName();
+    }
+
     public void runJob() {
         long now = getContext().clock().now();
 
         if (_expiration < now) {
-            if (_log.shouldWarn())
-                _log.warn("Timed out sending direct message to [" + _targetHash.toBase64().substring(0,6) + "]" +
-                          "\n* Expires: " + new Date(_expiration) + _message);
+            if (_log.shouldWarn()) {
+                _log.warn("Timed out sending " + messageTypeName() + " message to [" +
+                          _targetHash.toBase64().substring(0,6) + "], expired " + new Date(_expiration));
+                if (_log.shouldDebug())
+                    _log.debug("Message details:" + _message);
+            }
             if (_onFail != null)
                 getContext().jobQueue().addJob(_onFail);
             return;
@@ -181,10 +197,13 @@ public class SendMessageDirectJob extends JobImpl {
                     _searchOn = getContext().clock().now();
                     _alreadySearched = true;
                 } else {
-                    if (_log.shouldWarn())
-                        _log.warn("Unable to find router [" + _targetHash.toBase64().substring(0,6)
-                                  + "] to send to after searching for " + (getContext().clock().now()-_searchOn)
-                                  + "ms" + _message);
+                    if (_log.shouldInfo()) {
+                        _log.info("Unable to find router [" + _targetHash.toBase64().substring(0,6) +
+                                  "] to send " + messageTypeName() + " message to after searching for " +
+                                  (getContext().clock().now()-_searchOn) + "ms");
+                        if (_log.shouldDebug())
+                            _log.debug("Message details:" + _message);
+                    }
                     if (_onFail != null)
                         getContext().jobQueue().addJob(_onFail);
                 }
@@ -195,7 +214,7 @@ public class SendMessageDirectJob extends JobImpl {
     private void send() {
         if (_sent) {
             if (_log.shouldWarn())
-                _log.warn("Message already sent, not resending...", new Exception("blah"));
+                _log.warn("Message already sent -> Not resending");
             return;
         }
         _sent = true;

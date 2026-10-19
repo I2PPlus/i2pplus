@@ -315,9 +315,9 @@ class TunnelParticipant {
 
         // Drop if expired more than 75s ago
         if (originalExpiration < now - 75_000) {
-            if (shouldLogWarn) {
+            if (_log.shouldInfo()) {
                 long age = now - originalExpiration;
-                _log.warn("Dropping stale" + msg + " -> Expired " + age + "ms ago (Cutoff: 75s)");
+                _log.info("Dropping stale " + msg + " -> Expired " + age + "ms ago (cutoff: 75s)");
             }
             return;
         }

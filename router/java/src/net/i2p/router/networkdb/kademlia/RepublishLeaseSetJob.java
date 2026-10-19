@@ -493,7 +493,7 @@ public class RepublishLeaseSetJob extends JobImpl {
             long elapsed = getContext().clock().now() - deferred;
             if (elapsed < FIRST_PUBLISH_TIMEOUT && leaseCount < targetLeases) {
                 if (_log.shouldInfo()) {
-                    _log.info("Deferring LS publish for [" + shortHash() +
+                    _log.info("Deferring LeaseSet publish for [" + shortHash() +
                               "] — " + leaseCount + "/" + targetLeases + " tunnels " +
                               "(elapsed " + (elapsed / 1000) + "s)");
                 }
@@ -1157,7 +1157,7 @@ public class RepublishLeaseSetJob extends JobImpl {
             String name = !tunnelName.isEmpty() ? " for '" + tunnelName + "'" : " for key";
 
             Job onFound = new JobImpl(getContext()) {
-                public String getName() {return "Verify LS Published";}
+                public String getName() {return "Verify LeaseSet Published";}
                 public void runJob() {
                     _lookupInProgress.set(false);
                     clearRetryInProgress();
@@ -1176,7 +1176,7 @@ public class RepublishLeaseSetJob extends JobImpl {
             };
 
             Job onFailed = new JobImpl(getContext()) {
-                public String getName() {return "Verify LS Failed";}
+                public String getName() {return "Verify LeaseSet Failed";}
                 public void runJob() {
                     _lookupInProgress.set(false);
                     clearRetryInProgress();

@@ -75,7 +75,7 @@ class OutboundTunnelEndpoint {
             // If we pass it on to the handler, it will fail
             // If we don't, the data buf won't get released from the cache... that's ok
             if (_log.shouldInfo())
-                _log.info("Invalid IV, dropping at Outbound Endpoint... " + _config);
+                _log.info("Invalid IV -> Dropping message at outbound endpoint " + _config.toShortString());
             return;
         }
         ok = _handler.receiveTunnelMessage(data, 0, data.length);
@@ -146,8 +146,8 @@ class OutboundTunnelEndpoint {
             }
 
             if (_log.shouldInfo()) {
-                _log.info("Full message received from Outbound tunnel " + _config +
-                          "\n* type " + msg.getType() + " [MsgID " + msg.getUniqueId() + "]" +
+                _log.info("Full message received from Outbound tunnel " + _config.toShortString() +
+                          " * type " + msg.getType() + " [MsgID " + msg.getUniqueId() + "]" +
                           " -> to be forwarded to [" + toRouter.toBase64().substring(0,6) + "]" +
                           (toTunnel != null ? ":" + toTunnel.getTunnelId() : ""));
             }

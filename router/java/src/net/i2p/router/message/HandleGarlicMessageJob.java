@@ -126,7 +126,7 @@ public class HandleGarlicMessageJob extends JobImpl implements GarlicMessageRece
                 } else {
                     Hash routerHash = instructions.getRouter();
                     if (routerHash == null) {
-                        _log.error("Router delivery instructions with null router hash: " + instructions);
+                        _log.error("Router delivery instructions with null router hash [mode " + instructions.getDeliveryMode() + ']');
                         return;
                     }
                     if (_log.shouldDebug()) {
@@ -148,7 +148,8 @@ public class HandleGarlicMessageJob extends JobImpl implements GarlicMessageRece
                 gwMessage.setMessageExpiration(data.getMessageExpiration());
                 Hash tunnelRouterHash = instructions.getRouter();
                 if (tunnelRouterHash == null) {
-                    _log.error("Tunnel delivery instructions with null router hash: " + instructions);
+                    _log.error("Tunnel delivery instructions with null router hash [mode " + instructions.getDeliveryMode() +
+                              "; tunnelId " + instructions.getTunnelId() + ']');
                     return;
                 }
                 if (_log.shouldDebug()) {
@@ -163,7 +164,7 @@ public class HandleGarlicMessageJob extends JobImpl implements GarlicMessageRece
                 return;
 
             default:
-                _log.error("Unknown instruction " + instructions.getDeliveryMode() + ": " + instructions);
+                _log.error("Unknown delivery mode " + instructions.getDeliveryMode() + " in garlic clove");
                 return;
         }
     }

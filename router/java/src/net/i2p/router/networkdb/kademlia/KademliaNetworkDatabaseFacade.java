@@ -2946,7 +2946,7 @@ return false;
      */
     RouterInfo store(Hash key, RouterInfo routerInfo, boolean persist) throws IllegalArgumentException {
         if (!_initialized || key == null || routerInfo == null) {return null;}
-        if (isClientDb()) {throw new IllegalArgumentException("RI store to client DB");}
+        if (isClientDb()) {throw new IllegalArgumentException("RouterInfo store to client DB");}
 
         RouterInfo rv;
         try {
@@ -3224,7 +3224,7 @@ return false;
             }
         }
         if (_log.shouldWarn()) {
-            _log.warn("RouterInfo verification failure (Unknown cause)\n" + entry);
+            _log.warn("RouterInfo verification failure (unknown cause) [" + h.toBase64().substring(0,6) + ']');
         }
     }
 

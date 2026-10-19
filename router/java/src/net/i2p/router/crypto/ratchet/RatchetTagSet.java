@@ -450,8 +450,7 @@ class RatchetTagSet implements TagSetHandle {
         if (idx < 0) {
             Log log = I2PAppContext.getGlobalContext().logManager().getLog(RatchetTagSet.class);
             if (log.shouldWarn())
-                log.warn("Tag not found " + tag.toBase64() +
-                         " in:\n" + toString(), new Exception());
+                log.warn("Tag not found " + tag.toBase64());
             return null;
         }
         _acked = true;
@@ -486,7 +485,7 @@ class RatchetTagSet implements TagSetHandle {
             Log log = I2PAppContext.getGlobalContext().logManager().getLog(RatchetTagSet.class);
             if (log.shouldWarn())
                 log.warn("No key found for tag " + tag.toBase64() + " at index " + idx +
-                         " tagnum = " + tagnum + " lastkey = " + _lastKey, new Exception());
+                         " * tagnum = " + tagnum + " * lastkey = " + _lastKey);
             return null;
         }
     }

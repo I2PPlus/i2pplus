@@ -248,16 +248,20 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
                     }
                 }
             } catch (IOException ioe) { /* ignored */ }
-            throw new GeneralSecurityException("IES2 Payload Error: " + this, rie);
+            throw new GeneralSecurityException("IES2 Payload Error", rie);
         } catch (DataFormatException dfe) {
             // no in-session response possible
             if (!shouldSuppressException(dfe)) {
                 _log.info("[SSU] InboundEstablishState Payload Error", dfe);
             }
-            throw new GeneralSecurityException("IES2 Payload Error: " + this, dfe);
+            throw new GeneralSecurityException("IES2 Payload Error", dfe);
         } catch (Exception e) {
-            if (!shouldSuppressException(e) && _log.shouldInfo()) {
-                _log.info("[SSU] InboundEstablishState Payload Error\n" + net.i2p.util.HexDump.dump(payload, 0, length), e);
+            if (!shouldSuppressException(e)) {
+                if (_log.shouldInfo())
+                    _log.info("[SSU] InboundEstablishState payload error -> " + e.getMessage());
+                if (_log.shouldDebug())
+                    _log.debug("[SSU] InboundEstablishState payload error\n* " +
+                               net.i2p.util.HexDump.dump(payload, 0, length), e);
             }
             throw new GeneralSecurityException("IES2 Payload Error", e);
         }
@@ -440,7 +444,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
                     if (DataHelper.eq(aliceIP, infoIP)) {continue;}
                 }
                 // We will ban and throw below after checking signature
-                mismatchMessage = "IP mismatch actual IP ".concat(Addresses.toString(aliceIP)).concat(" in RI: ");
+                mismatchMessage = "IP mismatch actual IP ".concat(Addresses.toString(aliceIP)).concat(" in RouterInfo: ");
             }
             return new AddressSelection(addr, mismatchMessage);
         }
@@ -785,7 +789,8 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
      */
     public void gotTermination(int reason, long count) {
         if (_log.shouldInfo()) {
-            _log.info("[SSU] Received TERMINATION block -> " + SSU2Util.terminationCodeToString(reason) + "; Count: " + count + "\n* " + this);
+            _log.info("[SSU] Received TERMINATION block -> " + SSU2Util.terminationCodeToString(reason) +
+                      (count > 0 ? "; Count: " + count : "") + " * " + toShortString());
         }
         // this sets the state to FAILED
         fail();
@@ -1101,9 +1106,10 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
                 // The reason matters: an already-FAILED state is an ordinary race with a
                 // peer that gave up on us first, while a key or payload rejection is a
                 // real protocol failure. They were indistinguishable in the log.
-                _log.warn("[SSU] Corrupt SessionConfirmed received from " + this
+                long suppressed = EstablishmentManager.getCorruptConfirmSuppressed();
+                _log.warn("[SSU] Corrupt SessionConfirmed received from " + toShortString()
                           + " -> " + EstablishmentManager.corruptConfirmReason(re)
-                          + " (suppressed " + EstablishmentManager.getCorruptConfirmSuppressed() + ")");
+                          + (suppressed > 0 ? " (suppressed " + suppressed + ")" : ""));
             }
             // Track probing attempts (skip if already blocklisted)
             if (!_context.blocklist().isBlocklisted(Addresses.toString(_aliceIP))) {
@@ -1389,8 +1395,8 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
             if (_queuedDataPackets == null) {
                 _queuedDataPackets = new ArrayList<>(4);
             } else if (_queuedDataPackets.size() >= 10) {
-                if (_log.shouldWarn())
-                    _log.warn("[SSU] Not queueing possible data packet from " + packet + " -> Too many packets already queued");
+                if (_log.shouldInfo())
+                    _log.info("[SSU] Not queueing possible data packet from " + packet + " -> Too many packets already queued");
                 return;
             }
             if (_log.shouldInfo())
@@ -1440,6 +1446,16 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
     }
 
     /**
+     * Compact one-line establish-state identifier for log output: alice
+     * address and current state. No lifetime or IDs, no newlines.
+     *
+     * @since 0.9.71+
+     */
+    String toShortString() {
+        return Addresses.toString(_aliceIP, _alicePort) + ' ' + _currentState;
+    }
+
+    /**
      * A string summary of this state.
      */
     @Override
@@ -1447,7 +1463,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
         StringBuilder buf = new StringBuilder(128);
         buf.append("InboundEstablishState ");
         buf.append(Addresses.toString(_aliceIP, _alicePort));
-        if (_log.shouldInfo()) {
+        if (_log.shouldDebug()) {
             buf.append("\n* Lifetime: ").append(DataHelper.formatDuration(getLifetime()));
             buf.append("; Receive ID: ").append(_rcvConnID);
             buf.append("; Send ID: ").append(_sendConnID);

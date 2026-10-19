@@ -171,7 +171,7 @@ class IntroducerLookupJob extends JobImpl {
         }
         if (_log.shouldDebug() && issued > 0) {
             _log.debug("IntroducerLookupJob: issued " + issued + " of " +
-                       pending.size() + " missing introducer RI lookups" +
+                       pending.size() + " missing introducer RouterInfo lookups" +
                        " (" + _inFlight.get() + " in flight, " +
                        _attempts.size() + " tracked)");
         }

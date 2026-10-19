@@ -41,7 +41,7 @@ public class AliasedTunnelPool extends TunnelPool {
     @Override
     synchronized void startup() {
         if (_log.shouldInfo())
-            _log.info(toString() + ": Startup() called, was already alive? " + _alive, new Exception());
+            _log.info(toString() + ": Startup() called while already alive: " + _alive);
         _alive = true;
         super.refreshLeaseSet();
     }

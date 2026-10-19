@@ -136,7 +136,7 @@ public class FloodfillDatabaseLookupMessageHandler implements HandlerJobBuilder 
 
                 if (!isDirect && _log.shouldInfo()) {message.append(" via [TunnelId ").append(dlm.getReplyTunnel()).append("]");}
                 message.append(" and banning for 10m -> Max 60 requests in 30s or 10/s exceeded");
-                _log.warn(message.toString());
+                _log.info(message.toString());
             }
 
             _context.statManager().addRateData("netDb.lookupsDropped", 1);

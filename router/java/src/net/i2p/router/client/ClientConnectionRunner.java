@@ -811,7 +811,7 @@ class ClientConnectionRunner {
                 // We got the LS after the timeout?
                 // ClientMessageEventListener told the router to publish.
                 if (_log.shouldWarn())
-                    _log.warn("LeaseRequest is null and we've received a new Lease? " + ls);
+                    _log.warn("Received a new LeaseSet but the lease request is no longer active");
                 return;
             } else {
                 state.setIsSuccessful(true);
@@ -873,7 +873,7 @@ class ClientConnectionRunner {
      */
     void disconnectClient(String reason, int logLevel) {
         DisconnectMessage msg = new DisconnectMessage();
-        if (_log.shouldWarn()) {_log.warn("Disconnecting the client -> " + reason);}
+        if (_log.shouldInfo()) {_log.info("Disconnecting the client -> " + reason);}
         if (reason.length() > 255) {reason = reason.substring(0, 255);}
         msg.setReason(reason);
         try {doSend(msg);}
@@ -1056,7 +1056,7 @@ class ClientConnectionRunner {
     void requestLeaseSet(Hash h, LeaseSet set, long expirationTime, Job onCreateJob, Job onFailedJob) {
         if (_dead) {
             if (_log.shouldWarn())
-                _log.warn("Requesting LeaseSet from a dead client: " + set);
+                _log.warn("Requesting a LeaseSet from a disconnected client");
             if (onFailedJob != null)
                 _context.jobQueue().addJob(onFailedJob);
             return;
@@ -1384,16 +1384,15 @@ class ClientConnectionRunner {
             if (!alreadyAccepted(_messageId)) {
                 if (_requeueCount++ > MAX_REQUEUE) {
                     // bug requeueing forever? failsafe
-                    _log.error("Abandoning update for [MsgID " + _messageId + "] to " +
-                                MessageStatusMessage.getStatusString(msg.getStatus()) + " for " + _sessId);
+                    _log.error("Abandoning " + MessageStatusMessage.getStatusString(msg.getStatus()) +
+                                " update for " + _messageId + " after " + _requeueCount + " attempts * " + _sessId);
                 } else {
                     long delay = REQUEUE_DELAY;
                     if (_requeueCount < 10) {delay = REQUEUE_DELAY / 5;}
                     else if (_requeueCount < 20) {delay = REQUEUE_DELAY / 2;}
                     if (_log.shouldWarn())
-                        _log.warn("Almost sent update for [MsgID " + _messageId + "] to " +
-                                  MessageStatusMessage.getStatusString(msg.getStatus()) + " for " + _sessId +
-                                  " before they knew the ID -> Delaying for " + delay + "ms...");
+                        _log.warn("Client has not accepted " + _messageId + " yet -> Delaying " +
+                                  MessageStatusMessage.getStatusString(msg.getStatus()) + " update " + delay + "ms * " + _sessId);
                     _lastTried = _context.clock().now();
                 }
                 return;

@@ -4576,7 +4576,7 @@ synchronized boolean checkRetransmitStall() {
             if (stuckLifetimeExceeded(_options.getStallGiveupMs(), now,
                                         first.getValue().getCreatedOn())) {
                 if (_log.shouldWarn()) {
-                    _log.warn(Connection.this + " oldest unacked packet stuck without progress, forcing disconnect");
+                    _log.warn(this + " oldest unacked packet stuck (" + (now - first.getValue().getCreatedOn()) + "ms) -> Forcing disconnect");
                 }
                 return true;
             }
@@ -4584,9 +4584,8 @@ synchronized boolean checkRetransmitStall() {
                                                                REMOTE_SILENT_FALLBACK_MS);
             if (remoteSilentTooLong(_lastReceivedOn, (int) inactivityWindow, now)) {
                 if (_log.shouldWarn()) {
-                    _log.warn(Connection.this + " remote silent for the inactivity window" +
-                              "\n* Idle: " + (now - _lastReceivedOn) + "ms * Timeout: " +
-                              inactivityWindow + "ms -> Forcing disconnect");
+                    _log.warn(this + " remote silent (" + (now - _lastReceivedOn) + "ms > " +
+                              inactivityWindow + "ms) -> Forcing disconnect");
                 }
                 return true;
             }

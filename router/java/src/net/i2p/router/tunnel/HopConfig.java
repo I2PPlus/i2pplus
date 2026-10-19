@@ -247,6 +247,16 @@ public class HopConfig {
         return rv;
     }
 
+    /**
+     * Compact one-line hop identifier for log output: the next peer to
+     * send to. No message counts or expiration, no newlines.
+     *
+     * @since 0.9.71+
+     */
+    public String toShortString() {
+        return _sendTo != null ? "to [" + _sendTo.toBase64().substring(0,6) + ']' : "local hop";
+    }
+
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder(256);

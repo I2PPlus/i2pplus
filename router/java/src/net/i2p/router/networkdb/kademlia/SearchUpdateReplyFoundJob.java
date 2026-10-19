@@ -159,7 +159,8 @@ class SearchUpdateReplyFoundJob extends JobImpl implements ReplyJob {
             _job.replyFound((DatabaseSearchReplyMessage)message, _peer);
         } else {
             if (_log.shouldError())
-                _log.error("[Job" + getJobId() + "] What?! Reply job matched a strange message: " + message);
+                _log.error("Reply job matched unexpected message type " + message.getClass().getSimpleName() +
+                          " [MsgID " + message.getUniqueId() + ']');
             return;
         }
 

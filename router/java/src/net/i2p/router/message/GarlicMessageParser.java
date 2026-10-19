@@ -165,7 +165,7 @@ public class GarlicMessageParser {
         if (decrData == null) {
             // This is the usual error path and it's logged at WARN level in GarlicMessageReceiver
             if (debug) {
-                _log.debug("Decryption of garlic message failed", new Exception("Decrypt fail"));
+                _log.debug("Decryption of garlic message failed");
             }
             return null;
         } else {

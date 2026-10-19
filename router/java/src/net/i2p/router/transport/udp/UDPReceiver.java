@@ -85,7 +85,7 @@ class UDPReceiver {
 
         RemoteHostId from = packet.getRemoteHost();
         if (from == null) {
-            if (_log.shouldWarn()) {_log.warn("Dropping UDP packet with null RemoteHostId");}
+            if (_log.shouldInfo()) {_log.info("Dropping UDP packet with null RemoteHostId");}
             packet.release();
             return 0;
         }
@@ -98,7 +98,7 @@ class UDPReceiver {
 
         // drop anything apparently from our IP (any port)
         if (_transport.isCurrentIPv4(from.getIP()) && !_transport.allowLocal()) {
-            if (_log.shouldWarn()) {_log.warn("Dropping (spoofed?) UDP packet from ourselves");}
+            if (_log.shouldInfo()) {_log.info("Dropping (spoofed?) UDP packet from ourselves");}
             packet.release();
             return 0;
         }
@@ -169,9 +169,9 @@ class UDPReceiver {
                         //_context.statManager().addRateData("udp.receivePacketSize", size);
                     } else {
                         // SSU1 had 0 byte hole punch, SSU2 does not
-                        if (_log.shouldWarn()) {
+                        if (_log.shouldInfo()) {
                             String ipAddress = dpacket.getAddress().toString().replace("/", "");
-                            _log.warn("Dropping short " + size + " byte UDP packet from " + ipAddress + ":" + dpacket.getPort());
+                            _log.info("Dropping short " + size + " byte UDP packet from " + ipAddress + ":" + dpacket.getPort());
                         }
                         packet.release();
                     }

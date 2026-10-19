@@ -994,8 +994,8 @@ public class TransientSessionKeyManager extends SessionKeyManager {
                         for (TagSet set : _tagSets) {
                             dropped += set.getTags().size();
                         }
-                        _log.warn("Rekeyed from " + _currentKey + " to " + key
-                                  + ": dropping " + dropped + " session tags", new Exception());
+                        _log.warn("Rekeyed from " + _currentKey + " to " + key +
+                                  " -> Dropping " + dropped + " session tags");
                     }
                     _acked = false;
                     _tagSets.clear();

@@ -90,11 +90,9 @@ class OutboundMessageDistributor {
         if (shouldDrop(target)) {
             _context.statManager().addRateData("tunnel.dropAtOBEP", 1);
             if (_log.shouldInfo()) {
-                 _log.warn("Dropping I2NPMessage to [" + target.toBase64().substring(0,6) + "] at Outbound Endpoint [TunnelID " +
-                           (tunnel != null ? tunnel.getTunnelId() : "null") + "] -> New connection throttle" + msg);
-            } else if (_log.shouldWarn()) {
-                 _log.warn("Dropping I2NPMessage (" + msg.getType() + ") to [" + target.toBase64().substring(0,6) + "] " +
-                           "at Outbound Endpoint [TunnelID " + (tunnel != null ? tunnel.getTunnelId() : "null") + "] -> New connection throttle");
+                 _log.info("Dropping I2NPMessage [type " + msg.getType() + "] to [" + target.toBase64().substring(0,6) +
+                           "] at Outbound Endpoint [TunnelID " +
+                           (tunnel != null ? tunnel.getTunnelId() : "null") + "] -> New connection throttle");
             }
             return;
         }
@@ -104,8 +102,8 @@ class OutboundMessageDistributor {
                 // only if not zero-hop
                 // credit our lookup message as part. traffic
                 if (_context.tunnelDispatcher().shouldDropParticipatingMessage(TunnelDispatcher.Location.OBEP, DatabaseLookupMessage.MESSAGE_TYPE, 1024, _partBWE)) {
-                    if (_log.shouldWarn()) {
-                        _log.warn("Dropping I2NPMessage (" + msg.getType() + ") to [" + target.toBase64().substring(0,6) + "] " +
+                    if (_log.shouldInfo()) {
+                        _log.info("Dropping I2NPMessage [type " + msg.getType() + "] to [" + target.toBase64().substring(0,6) + "] " +
                                   "at Outbound Endpoint -> Lookup bandwidth throttle");
                     }
                     return;

@@ -196,7 +196,7 @@ public class ExploreJob extends SearchJob {
                         msg.setReplySession(sess.key, sess.rtag);
                     }
                 } else {
-                    if (_log.shouldWarn()) {_log.warn("Failed encrypt to " + peer);}
+                    if (_log.shouldDebug()) {_log.debug("Failed to encrypt for [" + peer.getHash().toBase64().substring(0,6) + "] -> Sending anyway");}
                     // Client may have become unreachable, send anyway
                 }
             }

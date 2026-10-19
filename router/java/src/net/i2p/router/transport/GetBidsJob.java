@@ -71,7 +71,8 @@ class GetBidsJob {
         Hash us = context.routerHash();
         if (to.equals(us)) {
             if (log.shouldError())
-                log.error("Send a message to ourselves? nuh uh..." + msg, new Exception("I did it"));
+                log.error("Refusing to send a message to ourselves [MsgID " + msg.getMessageId() +
+                          ' ' + msg.getMessageType() + ']');
             context.statManager().addRateData("transport.bidFailSelf", msg.getLifetime());
             fail(context, msg);
             return;

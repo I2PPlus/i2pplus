@@ -328,10 +328,7 @@ protected void changeState(State state) {
             changeState(State.CORRUPT);
         }
         if (_log.shouldWarn()) {
-            String conStr = _con.toString();
-            int end = conStr.indexOf(" -> Not established ");
-            String brief = end > 0 ? conStr.substring(0, end) : conStr;
-            _log.warn((_con.isInbound() ? "Inbound" : "Outbound") + "EstablishState" + brief + " -> " + reason);
+            _log.warn("[NTCP] Handshake failure " + _con + " -> " + reason);
         }
         if (!bySkew)
             _context.statManager().addRateData("ntcp.receiveCorruptEstablishment", 1);
@@ -376,12 +373,7 @@ protected void changeState(State state) {
      */
     @Override
     public String toString() {
-        StringBuilder buf = new StringBuilder(64);
-        buf.append(_con.isInbound() ? "Inbound" : "Outbound").append("EstablishState");
-        buf.append(_con.toString());
-        buf.append(" (").append(_state).append(")");
-        if (_con.isEstablished()) buf.append(" -> Established");
-        return buf.toString();
+        return _con.toString() + " (" + _state + ')';
     }
 
     /**
@@ -487,6 +479,27 @@ protected void changeState(State state) {
      *  @param s the string to mark for translation
      *  @return s, unchanged; the marker works by naming the literal
      */
+    /**
+     * The bare cause from a netdb store rejection, stripped of the
+     * "Invalid NetDbStore attempt" wrapper, capability flags and router ID.
+     *
+     * @param iae the rejection from the netdb
+     * @return the cause, for log output
+     * @since 0.9.71+
+     */
+    static String storeFailCause(IllegalArgumentException iae) {
+        String reason = iae.getMessage();
+        if (reason == null)
+            return "Unknown";
+        String prefix = "Invalid NetDbStore attempt - ";
+        if (reason.startsWith(prefix))
+            reason = reason.substring(prefix.length());
+        int arrow = reason.indexOf(" -> ");
+        if (arrow > 0)
+            reason = reason.substring(arrow + 4);
+        return reason;
+    }
+
     protected static final String _x(String s) { // NOSONAR S1845 i18n marker convention
         return s;
     }

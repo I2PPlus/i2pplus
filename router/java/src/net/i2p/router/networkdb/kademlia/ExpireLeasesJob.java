@@ -199,7 +199,7 @@ class ExpireLeasesJob extends JobImpl {
                 Collections.sort(current, new LeaseSetComparator());
                 for (LeaseSet ls : current) {
                     toExpire.add(ls.getHash());
-                    if (_log.shouldInfo()) {_log.info("Aggressively expiring LeaseSets for " + _facade + "\n*" + ls);}
+                    if (_log.shouldInfo()) {_log.info("Aggressively expiring LeaseSet [" + ls.getHash().toBase64().substring(0,6) + "] for " + _facade);}
                     if (--sz <= limit) {break;}
                 }
             }

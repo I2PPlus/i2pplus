@@ -287,8 +287,8 @@ class OutboundEstablishState {
         // chance of a duplicate here in a race, that's ok
         if (!_queuedMessages.contains(msg))
             _queuedMessages.offer(msg);
-        else if (_log.shouldWarn())
-             _log.warn("Attempt to add duplicate msg to queue: " + msg);
+        else if (_log.shouldDebug())
+             _log.debug("Attempt to add duplicate msg to queue [MsgID " + msg.getMessageId() + ']');
     }
 
     /**

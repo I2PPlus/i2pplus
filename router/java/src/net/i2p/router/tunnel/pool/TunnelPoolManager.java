@@ -196,7 +196,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
         if (destination == null) return selectInboundTunnel();
         TunnelPool pool = _clientInboundPools.get(destination);
         if (pool != null) {return pool.selectTunnel();}
-        if (_log.shouldWarn()) {_log.warn("No pool available for Inbound tunnel for " + destination.toBase32());}
+        if (_log.shouldInfo()) {_log.info("No pool available for inbound tunnel for " + destination.toBase32());}
         return null;
     }
 
@@ -229,7 +229,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
         if (destination == null) {return selectInboundTunnel();}
         TunnelPool pool = _clientInboundPools.get(destination);
         if (pool != null) {return pool.selectTunnelForTest();}
-        if (_log.shouldWarn()) {_log.warn("No pool available for Inbound tunnel for " + destination.toBase32());}
+        if (_log.shouldInfo()) {_log.info("No pool available for inbound tunnel for " + destination.toBase32());}
         return null;
     }
 
@@ -246,7 +246,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
         if (destination == null) {return selectOutboundTunnel();}
         TunnelPool pool = _clientOutboundPools.get(destination);
         if (pool != null) {return pool.selectTunnelForTest();}
-        if (_log.shouldWarn()) {_log.warn("No pool available for Outbound tunnel for " + destination.toBase32());}
+        if (_log.shouldInfo()) {_log.info("No pool available for outbound tunnel for " + destination.toBase32());}
         return null;
     }
 
@@ -261,7 +261,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
         if (destination == null) return selectOutboundTunnel();
         TunnelPool pool = _clientOutboundPools.get(destination);
         if (pool != null) {return pool.selectTunnel();}
-        if (_log.shouldWarn()) {_log.warn("No pool available for Outbound tunnel for " + destination.toBase32());}
+        if (_log.shouldInfo()) {_log.info("No pool available for outbound tunnel for " + destination.toBase32());}
         return null;
     }
 
@@ -343,7 +343,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
         if (pool != null) {
             return pool.selectTunnel(closestTo);
         }
-        if (_log.shouldWarn()) {_log.warn("No pool available for Inbound tunnel for " + destination.toBase32());}
+        if (_log.shouldInfo()) {_log.info("No pool available for inbound tunnel for " + destination.toBase32());}
         return null;
     }
 
@@ -685,7 +685,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
             outbound.startup();
         }
         if (_log.shouldInfo()) {
-            _log.info("Added " + dest.toBase32() + " as alias for " + existingClient.toBase32() + settings);
+            _log.info("Added " + dest.toBase32() + " as alias for " + existingClient.toBase32());
         }
         return true;
     }

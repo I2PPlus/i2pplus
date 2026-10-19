@@ -131,13 +131,13 @@ class ContactDrivenRefreshJob extends JobImpl {
                 _facade.probeStalePeer(peer, ri);
                 if (_log.shouldInfo()) {
                     _log.info("Contact-driven refresh: [" + peer.toBase64().substring(0, 6)
-                              + "] stale RI pub=" + new java.util.Date(ri.getPublished()));
+                              + "] stale RouterInfo, published " + new java.util.Date(ri.getPublished()));
                 }
             } else {
                 // No RI at all — full Kademlia search
                 if (_log.shouldInfo()) {
                     _log.info("Contact-driven refresh: [" + peer.toBase64().substring(0, 6)
-                              + "] no RI, starting search");
+                              + "] no RouterInfo -> Starting search");
                 }
                 _facade.search(peer, null, null,
                                FloodfillNetworkDatabaseFacade.MAX_RI_AGE_BEFORE_REFRESH_MS, false);

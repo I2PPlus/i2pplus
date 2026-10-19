@@ -373,7 +373,7 @@ abstract class StoreJob extends JobImpl {
      */
     private void sendDirect(DatabaseStoreMessage msg, RouterInfo peer, long expiration) {
         if (_facade.isClientDb()) {
-            _log.error("Error! Direct DatabaseStoreMessage attempted in client context! Message: " + msg);
+            _log.error("Direct DatabaseStoreMessage attempted in client context [MsgID " + msg.getUniqueId() + ']');
             return;
         }
 

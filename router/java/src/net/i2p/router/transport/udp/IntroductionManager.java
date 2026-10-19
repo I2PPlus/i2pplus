@@ -229,7 +229,7 @@ class IntroductionManager {
             List<RouterAddress> ras = _transport.getTargetAddresses(ri);
             if (ras.isEmpty()) {
                 if (_log.shouldInfo())
-                    _log.info("Selected peer has no SSU address: " + ri);
+                    _log.info("Selected peer has no SSU address [" + ri.getHash().toBase64().substring(0,6) + ']');
                 continue;
             }
             if ( /* _context.profileOrganizer().isFailing(cur.getRemotePeer()) || */
@@ -505,7 +505,8 @@ class IntroductionManager {
                     // _nonceToAlice entries will be expired by cleanup()
                 } else {
                     if (_log.shouldWarn())
-                        _log.warn("Signature failed relay request\n" + aliceRI);
+                        _log.warn("Signature validation failed for relay request from Alice [" +
+                                  aliceRI.getHash().toBase64().substring(0,6) + ']');
                     rcode = SSU2Util.RELAY_REJECT_BOB_SIGFAIL;
                 }
             } else {
@@ -545,7 +546,7 @@ class IntroductionManager {
             byte[] info = aliceRI.toByteArray();
             byte[] gzipped = DataHelper.compress(info, 0, info.length, DataHelper.MAX_COMPRESSION);
             if (_log.shouldDebug()) {
-                _log.debug("Alice RI: " + info.length + " bytes uncompressed, " + gzipped.length +
+                _log.debug("Alice RouterInfo: " + info.length + " bytes uncompressed, " + gzipped.length +
                            " compressed, charlie MTU " + charlie.getMTU() + ", available " + avail);
             }
             boolean gzip = gzipped.length < info.length;
@@ -795,7 +796,8 @@ class IntroductionManager {
                     else {rcode = SSU2Util.RELAY_REJECT_CHARLIE_ADDRESS;}
                 } else {
                     if (_log.shouldWarn()) {
-                        _log.warn("Signature failed relay intro\n" + aliceRI);
+                        _log.warn("Signature validation failed for relay introduction from Alice [" +
+                                  aliceRI.getHash().toBase64().substring(0,6) + ']');
                     }
                     rcode = SSU2Util.RELAY_REJECT_CHARLIE_SIGFAIL;
                 }
@@ -881,12 +883,12 @@ class IntroductionManager {
         peer.setLastReceiveTime(now);
         long skew = time - now;
         if (skew > MAX_SKEW || skew < 0 - MAX_SKEW) {
-            if (_log.shouldWarn()) {_log.warn("Too skewed for relay resp from " + peer);}
+            if (_log.shouldWarn()) {_log.warn("Too skewed for relay response from " + peer.toShortString());}
             return;
         }
         int ver = data[8] & 0xff;
         if (ver != 2) {
-            if (_log.shouldWarn()) {_log.warn("Bad relay intro version " + ver + " from " + peer);}
+            if (_log.shouldWarn()) {_log.warn("Bad relay intro version " + ver + " from " + peer.toShortString());}
             return;
         }
         // Look up nonce to determine if we are Alice or Bob
@@ -905,11 +907,12 @@ class IntroductionManager {
                 if (SSU2Util.validateSig(_context, SSU2Util.RELAY_RESPONSE_PROLOGUE,
                                          _context.routerHash(), null, signedData, spk)) { /* ignored */ } else {
                     if (_log.shouldWarn())
-                        _log.warn("Signature failed RelayReponse as Bob from Charlie:\n" + charlie);
+                        _log.warn("Signature validation failed for relay response as Bob from Charlie [" +
+                                  charlie.getHash().toBase64().substring(0,6) + ']');
                 }
             } else {
                 if (_log.shouldWarn())
-                    _log.warn("Signer's RouterInfo not found " + peer);
+                    _log.warn("Signer's RouterInfo not found " + peer.toShortString());
             }
             byte[] idata = new byte[2 + data.length];
             idata[1] = (byte) status;

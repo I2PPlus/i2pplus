@@ -88,7 +88,7 @@ public class CreateLeaseSet2Message extends CreateLeaseSetMessage {
             else if (type == DatabaseEntry.KEY_TYPE_LS2) {_leaseSet = new LeaseSet2();}
             else if (type == DatabaseEntry.KEY_TYPE_ENCRYPTED_LS2) {_leaseSet = new EncryptedLeaseSet();}
             else if (type == DatabaseEntry.KEY_TYPE_META_LS2) {_leaseSet = new MetaLeaseSet();}
-            else if (type == -1) {throw new EOFException("EOF reading LS type");}
+            else if (type == -1) {throw new EOFException("EOF reading LeaseSet type");}
             else {throw new I2CPMessageException("Unsupported LeaseSet type: " + type);}
             _leaseSet.readBytes(in);
             if (type != DatabaseEntry.KEY_TYPE_META_LS2) {

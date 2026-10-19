@@ -375,6 +375,8 @@ public class EstablishmentManager {
 
     /**
      * The reason a SessionConfirmed was rejected, for the log line.
+     * The RuntimeException and GeneralSecurityException wrappers just
+     * re-throw the real handshake failure, so report the root cause.
      *
      * @param e the exception thrown out of the handshake
      * @return a short, single-line description including the exception type
@@ -382,6 +384,8 @@ public class EstablishmentManager {
      */
     static String corruptConfirmReason(Throwable e) {
         if (e == null) {return "unknown";}
+        while (e.getCause() != null)
+            e = e.getCause();
         String msg = e.getMessage();
         if (msg == null || msg.isEmpty()) {return e.getClass().getSimpleName();}
         // the handshake state carries long chains; keep it to one readable line
@@ -1021,7 +1025,7 @@ public class EstablishmentManager {
                 _banLogger.logBanForever(toHash, ipPort, "Not in our network: " + id);
                 _context.banlist().banlistRouterForever(toHash, "Not in our network: " + id);
             }
-            if (_log.shouldWarn()) {_log.warn("Not in our network: " + toRouterInfo, new Exception());}
+            if (_log.shouldInfo()) {_log.info("Not in our network: [" + toHash.toBase64().substring(0,6) + ']');}
             _transport.markUnreachable(toHash);
             _transport.failed(msg, "Peer is on the wrong network, cannot establish connection");
             return;
@@ -1098,8 +1102,8 @@ public class EstablishmentManager {
                     // offer() is atomic and returns false if the queue is full
                     if (queued.offer(msg)) {
                         queueCount = queued.size(); // O(1), safe
-                        if (_log.shouldWarn()) {
-                            _log.warn("[SSU] Queueing OutboundEstablish to " + to +
+                        if (_log.shouldInfo()) {
+                            _log.info("[SSU] Queueing OutboundEstablish to " + to +
                                       ", increase " + PROP_MAX_CONCURRENT_ESTABLISH);
                         }
                     } else {
@@ -1373,10 +1377,10 @@ public class EstablishmentManager {
                 ((int) (baseProb * 128 * currentRate / minThresh)) - (isFastRouter ? 256 : 512));
             int percent = probAccept > 128 ? 100 : (probAccept / 128) * 100;
             if (probAccept >= 128 || _context.random().nextInt(128) < probAccept) {
-                if (_log.shouldWarn()) {
-                    _log.warn("[SSU] Dropping incoming connection (" +
+                if (_log.shouldInfo()) {
+                    _log.info("[SSU] Dropping incoming connection (" +
                               (percent >= 1 ? Math.max(percent,100) : "1") + "% chance)" +
-                              "\n* Previous / current connections per minute: " + last + " / " +
+                              " * previous/current connections per minute: " + last + " / " +
                               (int) (currentRate * 60*1000));
                  }
                  return false;
@@ -1445,8 +1449,8 @@ public class EstablishmentManager {
                 // address cannot be trusted. Closing this properly needs
                 // per-source rate accounting that survives address rotation.
                 if (!shouldAllowInboundEstablishment()) {
-                    if (_log.shouldWarn())
-                        _log.warn("[SSU] Dropping InboundEstablish from " + Addresses.toString(fromIP));
+                    if (_log.shouldInfo())
+                        _log.info("[SSU] Dropping InboundEstablish from " + Addresses.toString(fromIP));
                     _context.statManager().addRateData("udp.establishDropped", 1);
                     sendTerminationPacket(from, packet, REASON_LIMITS);
                     return;
@@ -1601,9 +1605,10 @@ public class EstablishmentManager {
         catch (RuntimeException e) {
             if (state != null && !isPeerBanned(state)) {
                 if (_log.shouldWarn() && shouldLogCorruptConfirm(_context.clock().now())) {
-                    _log.warn("[SSU] Corrupt SessionConfirmed received from " + state
+                    long suppressed = getCorruptConfirmSuppressed();
+                    _log.warn("[SSU] Corrupt SessionConfirmed received from " + state.toShortString()
                               + " -> " + corruptConfirmReason(e)
-                              + " (suppressed " + getCorruptConfirmSuppressed() + ")");
+                              + (suppressed > 0 ? " (suppressed " + suppressed + ")" : ""));
                 }
                 // Track probing attempts
                 _context.banlist().badPacket(state.getRemoteHostId().toString(), null);
@@ -3086,7 +3091,7 @@ public class EstablishmentManager {
         RemoteHostId id = inboundState.getRemoteHostId();
         byte[] fromIP = id.getIP();
         if (_log.shouldInfo() && fromIP != null && !_context.blocklist().isBlocklisted(fromIP)) {
-            _log.warn("Expired: " + inboundState);
+            _log.info("Expired inbound establish from " + Addresses.toString(fromIP));
         }
         _inboundStates.remove(id);
         Long exp = Long.valueOf(_context.clock().now() + IB_BAN_TIME);
@@ -3558,14 +3563,14 @@ public class EstablishmentManager {
          * Got an RI block.
          */
         public void gotRI(RouterInfo ri, boolean isHandshake, boolean flood) {
-            warn("Unexpected RI block in HolePunch");
+            warn("Unexpected RouterInfo block in HolePunch");
         }
 
         /**
          * Got an RI fragment block.
          */
         public void gotRIFragment(byte[] data, boolean isHandshake, boolean flood, boolean isGzipped, int frag, int totalFrags) {
-            warn("Unexpected RI fragment block in HolePunch");
+            warn("Unexpected RouterInfo fragment block in HolePunch");
         }
 
         /**

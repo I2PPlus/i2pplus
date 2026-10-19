@@ -274,7 +274,7 @@ public abstract class BuildRequestor {
 
         TunnelInfo pairedTunnel = selectPairedTunnel(ctx, pool, cfg, exec, log);
         if (pairedTunnel == null) {
-            log.warn("Tunnel build failed -> No paired or exploratory tunnel available for " + cfg);
+            log.info("Tunnel build failed -> No paired or exploratory tunnel available for " + cfg.toShortString());
             // No blocking sleep here: the BuildExecutor thread serves ALL pools,
             // so sleeping on it stalls every pool's building.  Retries are
             // paced by the executor loop (build-pass spacing) plus the per-pool
@@ -287,7 +287,7 @@ public abstract class BuildRequestor {
 
         I2NPMessage msg = createTunnelBuildMessage(ctx, pool, cfg, pairedTunnel, exec);
         if (msg == null) {
-            log.warn("Tunnel build failed -> Hop RouterInfo unavailable for " + cfg);
+            log.info("Tunnel build failed -> Hop RouterInfo unavailable for " + cfg.toShortString());
             // Local netdb miss, not a peer failure: excluded from pool backoff
             exec.buildComplete(cfg, NO_NETDB, "Hop RouterInfo unavailable");
             return false;
@@ -336,7 +336,7 @@ public abstract class BuildRequestor {
                 : mgr.selectInboundExploratoryTunnel(farEnd);
 
             if (expl == null && log.shouldInfo()) {
-                log.info("No existing exploratory tunnels for " + cfg
+                log.info("No existing exploratory tunnels for " + cfg.toShortString()
                          + " -> Allowing zero-hop build");
             }
             return expl; // null => zero-hop fallback
@@ -357,7 +357,7 @@ public abstract class BuildRequestor {
                 return paired;
             }
             if (log.shouldInfo()) {
-                log.info("Client SKM unavailable for garlic reply, cannot build: " + cfg);
+                log.info("Client SessionKeyManager unavailable for garlic reply -> Cannot build: " + cfg.toShortString());
             }
             return null;
         }
@@ -370,7 +370,7 @@ public abstract class BuildRequestor {
             : mgr.selectInboundExploratoryTunnel(farEnd);
         if (expl != null) {
             if (log.shouldInfo()) {
-                log.info("Exploratory bootstrap reply tunnel for " + cfg + ": " + expl);
+                log.info("Exploratory bootstrap reply tunnel for " + cfg.toShortString() + ": " + expl);
             }
             return expl;
         }
@@ -395,7 +395,7 @@ public abstract class BuildRequestor {
             // ShortTBM to, so the request can never be routed. Fail the build
             // instead of dereferencing null.
             if (log.shouldWarn()) {
-                log.warn("No first hop to send an Inbound TunnelBuildMessage for " + cfg);
+                log.warn("No first hop to send an inbound TunnelBuildMessage for " + cfg.toShortString());
             }
             exec.buildComplete(cfg, OTHER_FAILURE, "No first hop for inbound build");
             return false;
@@ -421,7 +421,7 @@ public abstract class BuildRequestor {
                 // Sending the raw ShortTBM would expose the IBGW identity to
                 // the paired tunnel's endpoint; fail instead of leaking.
                 if (log.shouldWarn()) {
-                    log.warn("Cannot garlic-wrap Inbound TunnelBuildMessage to " + ibgw + " for " + cfg);
+                    log.warn("Cannot garlic-wrap inbound TunnelBuildMessage to " + ibgw + " for " + cfg.toShortString());
                 }
                 exec.buildComplete(cfg, peer != null ? OTHER_FAILURE : NO_NETDB, "Cannot wrap inbound TBM");
                 return false;
@@ -429,7 +429,7 @@ public abstract class BuildRequestor {
         }
 
         if (log.shouldInfo()) {
-            log.info("Sending build request [MsgID " + msg.getUniqueId() + "] for " + cfg +
+            log.info("Sending build request [MsgID " + msg.getUniqueId() + "] for " + cfg.toShortString() +
                      "\n* Via: " + pairedTunnel + " to [" + ibgw.toBase64().substring(0,6) +
                       "] -> Awaiting reply [MsgID " + cfg.getReplyMessageId() + "]");
         }
@@ -445,7 +445,7 @@ public abstract class BuildRequestor {
             // Length-1 outbound config: getBuildRequestPeer() has no hop to
             // return, so there is nothing to address the request to. Fail the
             // build rather than dereferencing null below.
-            log.warn("No next hop for outbound build: " + cfg);
+            log.info("No next hop for outbound build: " + cfg.toShortString());
             exec.buildComplete(cfg, OTHER_FAILURE, "No next hop for outbound build");
             return;
         }
@@ -461,7 +461,7 @@ public abstract class BuildRequestor {
             peer = ctx.netDb().lookupRouterInfoLocally(nextHop);
         }
         if (peer == null) {
-            log.warn("Next hop RouterInfo not found for outbound build: " + cfg);
+            log.info("Next hop RouterInfo not found for outbound build: " + cfg.toShortString());
             // Local netdb miss, not a peer failure: excluded from pool backoff
             exec.buildComplete(cfg, NO_NETDB, "Next hop not in netdb");
             return;
@@ -475,7 +475,7 @@ public abstract class BuildRequestor {
                 replySKM = ctx.sessionKeyManager();
             }
             if (replySKM == null) {
-                log.warn("No SessionKeyManager available for garlic reply to: " + cfg);
+                log.warn("No SessionKeyManager available for garlic reply to: " + cfg.toShortString());
                 exec.buildComplete(cfg, OTHER_FAILURE, "No session key manager");
                 return;
             }

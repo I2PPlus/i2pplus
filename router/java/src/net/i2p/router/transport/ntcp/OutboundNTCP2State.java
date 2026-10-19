@@ -284,14 +284,14 @@ class OutboundNTCP2State implements EstablishState {
         // set keys
         String s = _con.getRemoteAddress().getOption("s");
         if (s == null) {
-            fail("\n* No NTCP2 S");
+            fail("No NTCP2 S");
             return;
         }
         byte[] bk = Base64.decode(s);
         if (bk == null || bk.length != KEY_SIZE ||
             (bk[KEY_SIZE - 1] & 0x80) != 0 ||
             DataHelper.eqCT(bk, 0, ZEROKEY, 0, KEY_SIZE)) {
-            fail("\n* Bad NTCP2 S: " + s);
+            fail("Bad NTCP2 S: " + s);
             return;
         }
         _handshakeState.getRemotePublicKey().setPublicKey(bk, 0);
@@ -307,18 +307,10 @@ class OutboundNTCP2State implements EstablishState {
         } catch (GeneralSecurityException gse) {
             boolean gseNotNull = gse.getMessage() != null && !gse.getMessage().equals("null");
             // buffer length error
-            if (_log.shouldDebug())
-                _log.error("Bad message #1 out", gse);
-            else if (_log.shouldWarn())
-                _log.error("Bad message #1 out " + (gseNotNull ? "\n* General Security Exception: " + gse.getMessage() : ""));
-            fail("\n* Bad message #1 out", gse);
+            fail("Bad message #1 out" + (gseNotNull ? " * GeneralSecurityException: " + gse.getMessage() : ""), gse);
             return;
         } catch (RuntimeException re) {
-            if (_log.shouldDebug())
-                _log.error("Bad message #1 out", re);
-            else if (_log.shouldWarn())
-                _log.error("Bad message #1 out \n* Runtime Exception: " + re.getMessage());
-            fail("\n* Bad message #1 out", re);
+            fail("Bad message #1 out * RuntimeException: " + re.getMessage(), re);
             return;
         }
         if (_log.shouldDebug())
@@ -365,17 +357,17 @@ class OutboundNTCP2State implements EstablishState {
                 return;
             _context.aes().decrypt(_tmp, 0, _tmp, 0, _bobHash, _bobIV, KEY_SIZE);
             if (DataHelper.eqCT(_tmp, 0, ZEROKEY, 0, KEY_SIZE)) {
-                fail("\n* Bad message #2, Y = 0");
+                fail("Bad message #2, Y = 0");
                 return;
             }
             byte[] options2 = new byte[OPTIONS2_SIZE];
             try {
                 _handshakeState.readMessage(_tmp, 0, MSG2_SIZE, options2, 0);
             } catch (GeneralSecurityException gse) {
-                fail("\n* Bad message #2, Y = " + Base64.encode(_tmp, 0, KEY_SIZE), gse);
+                fail("Bad message #2, Y = " + Base64.encode(_tmp, 0, KEY_SIZE), gse);
                 return;
             } catch (RuntimeException re) {
-                fail("\n* Bad message #2, Y = " + Base64.encode(_tmp, 0, KEY_SIZE), re);
+                fail("Bad message #2, Y = " + Base64.encode(_tmp, 0, KEY_SIZE), re);
                 return;
             }
             if (_log.shouldDebug())
@@ -397,7 +389,7 @@ class OutboundNTCP2State implements EstablishState {
                 if (_context.clock().getUpdatedSuccessfully()) {
                     // usual case
                     _context.statManager().addRateData("ntcp.invalidOutboundSkew", diff);
-                    fail("\n* Clock Skew: " + _peerSkew, null, true);
+                    fail("Clock skew (" + _peerSkew + "s)", null, true);
                     // Only banlist if we know what time it is
                     byte[] ip = _con.getRemoteIP();
                     int port = _con.getRemotePort();
@@ -437,7 +429,7 @@ class OutboundNTCP2State implements EstablishState {
             changeState(State.OB_GOT_PADDING);
             if (src.hasRemaining()) {
                 // Outbound conn can never have extra data after msg 2
-                fail("\n* Extra data after message #2: " + src.remaining());
+                fail("Extra data after message #2: " + src.remaining());
                 return;
             }
             prepareOutbound3();
@@ -446,7 +438,7 @@ class OutboundNTCP2State implements EstablishState {
 
         // check for remaining data
         if ((_state == State.VERIFIED || _state == State.CORRUPT) && src.hasRemaining() && _log.shouldWarn())
-            _log.warn("Received unexpected " + src.remaining() + " on " + this, new Exception());
+            _log.warn("Received unexpected " + src.remaining() + " bytes on " + this);
     }
 
     /**
@@ -493,12 +485,12 @@ class OutboundNTCP2State implements EstablishState {
             // buffer length error
             if (!_log.shouldWarn())
                 _log.error("Bad message #3 out", gse);
-            fail("\n* Bad message #3 out", gse);
+            fail("Bad message #3 out", gse);
             return;
         } catch (RuntimeException re) {
             if (!_log.shouldWarn())
                 _log.error("Bad message #3 out", re);
-            fail("\n* Bad message #3 out", re);
+            fail("Bad message #3 out", re);
             return;
         }
         // send it all at once
@@ -601,13 +593,10 @@ class OutboundNTCP2State implements EstablishState {
         changeState(State.CORRUPT);
         _failReason = reason;
         if (_log.shouldDebug()) {
-            _log.warn("[NTCP] Outbound Handshake failure " + _handshakeState.toString());
-            _log.warn(this + "\n* Failed to establish connection: " + reason, e);
+            _log.debug("[NTCP] Handshake failure " + _handshakeState);
+            _log.debug(this + "\n* " + reason, e);
         } else if (_log.shouldWarn()) {
-            _log.warn("OutboundEstablishState -> Outbound: " +
-                      _con.getRemoteAddress().getHost() + ':' + _con.getRemotePort() + ' ' +
-                      (_con.getRemotePeer() != null ? _con.getRemotePeer().calculateHash().toBase64().substring(0,6) : "Unknown") +
-                      " -> " + reason);
+            _log.warn("[NTCP] Handshake failure " + _con + " -> " + reason);
         }
         _handshakeState.destroy();
         if (!bySkew) {
@@ -637,12 +626,6 @@ class OutboundNTCP2State implements EstablishState {
      */
     @Override
     public String toString() {
-        StringBuilder buf = new StringBuilder(64);
-        buf.append("OutboundEstablishState ");
-        buf.append(_con.toString());
-        if (_state != State.CORRUPT)
-            buf.append(" (").append(_state).append(")");
-        if (_con.isEstablished()) buf.append(" established");
-        return buf.toString();
+        return _con.toString() + (_state != State.CORRUPT ? " (" + _state + ')' : "");
     }
 }

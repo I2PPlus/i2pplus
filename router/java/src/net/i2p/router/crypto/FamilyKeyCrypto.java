@@ -393,17 +393,17 @@ public class FamilyKeyCrypto {
                             }
                         } catch (NumberFormatException e) {
                             if (_log.shouldInfo())
-                                _log.info("Bad b64 Family key: " + ri, e);
+                                _log.info("Invalid base64 family key in RouterInfo [" + ri.getHash().toBase64().substring(0,6) + ']', e);
                              _negativeCache.put(h, Result.BAD_KEY);
                              return Result.BAD_KEY;
                         } catch (IllegalArgumentException e) {
                             if (_log.shouldInfo())
-                                _log.info("Bad b64 Family key: " + ri, e);
+                                _log.info("Invalid base64 family key in RouterInfo [" + ri.getHash().toBase64().substring(0,6) + ']', e);
                              _negativeCache.put(h, Result.BAD_KEY);
                              return Result.BAD_KEY;
                         } catch (ArrayIndexOutOfBoundsException e) {
                             if (_log.shouldInfo())
-                                _log.info("Bad b64 Family key: " + ri, e);
+                                _log.info("Invalid base64 family key in RouterInfo [" + ri.getHash().toBase64().substring(0,6) + ']', e);
                              _negativeCache.put(h, Result.BAD_KEY);
                              return Result.BAD_KEY;
                         }

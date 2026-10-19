@@ -807,7 +807,7 @@ class EventPumper implements Runnable {
     public static void releaseBuf(ByteBuffer buf) {
         if (buf == null) return;
         if (buf.capacity() < BUF_SIZE) {
-            I2PAppContext.getGlobalContext().logManager().getLog(EventPumper.class).error("Bad size " + buf.capacity(), new Exception());
+            I2PAppContext.getGlobalContext().logManager().getLog(EventPumper.class).error("Bad buffer size " + buf.capacity());
             return;
         }
         buf.clear();
@@ -947,8 +947,8 @@ class EventPumper implements Runnable {
                                                             _transport.haveCapacity(95),
                                                             _transport.getMaxConnections(), _transport.countPeers(),
                                                             _context.random());
-        if (verdict.isDrop() && _log.shouldWarn()) {
-            _log.warn("Dropping incoming TCP connection (" + (verdict.getPercent() >= 1 ? Math.min(verdict.getPercent(), 100) + "%" : "1%") + " chance)" +
+        if (verdict.isDrop() && _log.shouldInfo()) {
+            _log.info("Dropping incoming TCP connection (" + (verdict.getPercent() >= 1 ? Math.min(verdict.getPercent(), 100) + "%" : "1%") + " chance)" +
                       " -> Previous/current connections per minute: " + verdict.getLastConnections() + " / " + verdict.getCurrentConnectionsPerMinute());
         }
         return !verdict.isDrop();
@@ -1122,7 +1122,7 @@ class EventPumper implements Runnable {
                 con.outboundConnected();
                 _context.statManager().addRateData("ntcp.connectSuccessful", 1);
             } else {
-                con.closeOnTimeout("Connect failed (15s timeout exceeded) -> Marking unreachable", null);
+                con.closeOnTimeout("15s connect timeout exceeded -> Marking unreachable", null);
                 _transport.markUnreachable(con.getRemotePeer().calculateHash());
                 _context.statManager().addRateData("ntcp.connectFailedTimeout", 1);
             }
@@ -1146,10 +1146,8 @@ class EventPumper implements Runnable {
     private void handleConnectError(NTCPConnection con, IOException ioe) {
         if (_log.shouldDebug()) {
             _log.debug("[NTCP] Failed outbound connection to " + con.getRemotePeer(), ioe);
-        } else if (_log.shouldWarn()) {
-            _log.warn("[NTCP] Failed outbound connection to " + con.getRemotePeer());
         }
-        con.closeOnTimeout("\n* Connect failed: " + ioe.getMessage(), ioe);
+        con.closeOnTimeout(connectFailReason(ioe), ioe);
         RouterIdentity remote = con.getRemotePeer();
         if (remote != null) {
             if (!con.isInbound()) {
@@ -1167,6 +1165,20 @@ class EventPumper implements Runnable {
      * @param remote  the failed peer's identity; ignored when null
      * @since 0.9.71+
      */
+    /**
+     * The bare failure reason from a failed connect: the exception message
+     * without the JDK 13+ " (connect failed)" operation suffix, or the
+     * exception class name when there is no message.
+     */
+    private static String connectFailReason(Exception e) {
+        String msg = e.getMessage();
+        if (msg == null)
+            return e.getClass().getSimpleName();
+        if (msg.endsWith(" (connect failed)"))
+            msg = msg.substring(0, msg.length() - 17);
+        return msg;
+    }
+
     private void recordFailedOutbound(RouterIdentity remote) {
         if (remote == null) return;
         Hash peerHash = remote.calculateHash();
@@ -1315,7 +1327,7 @@ class EventPumper implements Runnable {
         } else if (_log.shouldDebug()) {
             _log.debug("EOF on " + con);
         }
-        con.closeOnTimeout("\n* EOF on " + (con.isInbound() ? "Inbound" : "Outbound") + " connection -> No data received", null);
+        con.closeOnTimeout("EOF -> No data received", null);
         releaseBuf(buf);
     }
 
@@ -1651,10 +1663,8 @@ class EventPumper implements Runnable {
             } catch (IOException | UnresolvedAddressException e) {
                 if (debug) {
                     _log.debug("[NTCP] Failed outbound connection to " + con.getRemotePeer(), e);
-                } else if (warn) {
-                    _log.warn("[NTCP] Failed outbound connection to " + con.getRemotePeer());
                 }
-                con.closeOnTimeout("\n* Connect failed: " + e.getMessage(), e);
+                con.closeOnTimeout(connectFailReason(e), e);
                 RouterIdentity remote = con.getRemotePeer();
                 if (remote != null) {
                     _transport.markUnreachable(remote.calculateHash());

@@ -856,7 +856,7 @@ class PeerTestManager {
         if (retryCount < 5 && lookupRIForTest(h) == null) {
             if (_log.shouldInfo()) {
                 _log.info("Delay after receiving message " + msg + " and " + retryCount +
-                          " retries, no RI for [" + h.toBase64().substring(0,6) + "]");
+                          " retries, no RouterInfo for [" + h.toBase64().substring(0,6) + "]");
             }
             if (retryCount == 0)
                 new DelayTest(from, fromPeer, msg, h, data);
@@ -2018,7 +2018,7 @@ class PeerTestManager {
             byte[] info = ri.toByteArray();
             byte[] gzipped = DataHelper.compress(info, 0, info.length, DataHelper.MAX_COMPRESSION);
             if (_log.shouldDebug())
-                _log.debug("RI: " + info.length + " bytes uncompressed, " + gzipped.length +
+                _log.debug("RouterInfo: " + info.length + " bytes uncompressed, " + gzipped.length +
                            " compressed, MTU " + to.getMTU() + ", available " + avail);
             boolean gzip = gzipped.length < info.length;
             if (gzip)
@@ -2071,6 +2071,27 @@ class PeerTestManager {
      *
      *  @since 0.9.54
      */
+    /**
+     * The bare cause from a netdb store rejection, stripped of the
+     * "Invalid NetDbStore attempt" wrapper, capability flags and router ID.
+     *
+     * @param iae the rejection from the netdb
+     * @return the cause, for log output
+     * @since 0.9.71+
+     */
+    private static String storeFailCause(IllegalArgumentException iae) {
+        String reason = iae.getMessage();
+        if (reason == null)
+            return "Unknown";
+        String prefix = "Invalid NetDbStore attempt - ";
+        if (reason.startsWith(prefix))
+            reason = reason.substring(prefix.length());
+        int arrow = reason.indexOf(" -> ");
+        if (arrow > 0)
+            reason = reason.substring(arrow + 4);
+        return reason;
+    }
+
     private class PTCallback implements SSU2Payload.PayloadCallback {
         private final RemoteHostId _from;
         public long _timeReceived;
@@ -2105,7 +2126,7 @@ class PeerTestManager {
                 // ignore flood request
             } catch (IllegalArgumentException iae) {
                 if (_log.shouldInfo())
-                    _log.info("RouterInfo store fail ("+ iae.getMessage() + "): " + ri);
+                    _log.info("RouterInfo store fail -> " + storeFailCause(iae));
             }
         }
 

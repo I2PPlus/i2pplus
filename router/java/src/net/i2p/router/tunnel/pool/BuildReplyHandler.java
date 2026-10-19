@@ -127,7 +127,7 @@ class BuildReplyHandler {
                         rv[i] = RESULT_OK;
                     } else {
                         if (log.shouldWarn())
-                            log.warn("IBEP record corrupt on " + cfg);
+                            log.warn("IBEP record corrupt on " + cfg.toShortString());
                         // Caller doesn't check value for this hop so fail the whole thing
                         return null;
                     }
@@ -138,7 +138,7 @@ class BuildReplyHandler {
                 Result res = decryptRecord(reply, cfg, i, hop);
                 if (res.code == -1) {
                     if (log.shouldWarn())
-                        log.warn(reply.getUniqueId() + ": Failed to decrypt record for: " + cfg + " [" + i + "/" + hop + "]");
+                        log.warn(reply.getUniqueId() + ": Failed to decrypt record for " + cfg.toShortString() + " [" + i + "/" + hop + "]");
                     return null;
                 } else {
                     if (log.shouldDebug())

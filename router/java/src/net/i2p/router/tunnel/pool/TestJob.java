@@ -4287,7 +4287,7 @@ static List<PendingTest> prioritizeBatch(List<PendingTest> scan, long now) {
             }
             if (_log.shouldWarn()) {
                 _log.warn("Tunnel Test failed (consecutive " + failures +
-                          ") —> Kept for LS cycle \n* " + _cfg);
+                          ") -> Kept for LeaseSet cycle\n* " + _cfg);
             }
         } else {
             // Client/exploratory: count failures with adaptive thresholds.

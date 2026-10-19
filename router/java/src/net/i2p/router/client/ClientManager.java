@@ -372,8 +372,8 @@ class ClientManager {
             } else {rv = SessionStatusMessage.STATUS_REFUSED;}
         }
         if (stale != null) {
-            if (_log.shouldWarn()) {
-                _log.warn("Replacing connection for destination [" + dest.calculateHash().toBase32().substring(0,8) + "]");
+            if (_log.shouldInfo()) {
+                _log.info("Replacing connection for destination [" + dest.calculateHash().toBase32().substring(0,8) + ']');
             }
             stale.disconnectClient("Replaced by a new connection for the same destination", Log.WARN);
         }
@@ -842,10 +842,10 @@ class ClientManager {
             if (runner != null) {
                 if (dest != null) {runner.receiveMessage(dest, null, _msg.getPayload());}
                 else {runner.receiveMessage(_msg.getDestinationHash(), null, _msg.getPayload());}
-            } else if (_log.shouldWarn()) {
+            } else if (_log.shouldInfo()) {
                 // no client connection... we should pool these somewhere...
-                _log.warn("Message received but no current connection to [" + (dest != null ? dest.toBase32().substring(0,8) : "null") + " / " +
-                          _msg.getDestinationHash().toBase32().substring(0,8) + "] -> DROPPED", new Exception());
+                _log.info("Message received but no current connection to [" + (dest != null ? dest.toBase32().substring(0,8) : "null") + " / " +
+                          _msg.getDestinationHash().toBase32().substring(0,8) + "] -> Dropped");
             }
         }
     }

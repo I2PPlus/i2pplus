@@ -269,10 +269,10 @@ class RequestLeaseSetJob extends JobImpl {
                 // lever this side has; grow it so a slow client gets a fair chance to
                 // drain rather than a fixed second repeatedly failing.
                 long nextWait = waitMs * attempt * 2;
-                if (_log.shouldWarn())
-                    _log.warn("I2CP queue full sending the LeaseSet request (attempt " +
+                if (_log.shouldInfo())
+                    _log.info("I2CP queue full sending the LeaseSet request (attempt " +
                               attempt + " of " + attempts + ") -> Retrying in " + nextWait +
-                              "ms [" + ime.getMessage() + "]");
+                              "ms [" + ime.getMessage() + ']');
                 try {
                     Thread.sleep(nextWait);
                 } catch (InterruptedException ie) {

@@ -1367,19 +1367,7 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
     public String toString() {
         // H0:1235 -> H1:2345 -> H2:2345
         if (_log == null) {_log = _context.logManager().getLog(TunnelCreatorConfig.class);}
-        StringBuilder buf = new StringBuilder(128);
-        if (_isInbound) {buf.append("Inbound");}
-        else {buf.append("Outbound");}
-        if (_destination == null) {buf.append(" Exploratory tunnel");}
-        else {
-            buf.append(" Client tunnel [");
-            if (_destinationNickname != null) {
-                buf.append(_destinationNickname).append(" / ");
-            }
-            buf.append(_destination.toBase32().substring(0, 8)).append("]");
-        }
-        int fails = _failures.get();
-        if (fails > 1) {buf.append(" (").append(fails).append(" consecutive failures)");}
+        StringBuilder buf = new StringBuilder(toShortString());
         if (_log.shouldInfo()) {
             buf.append("\n* Gateway: ");
             for (int i = 0; i < _peers.length; i++) {
@@ -1407,6 +1395,29 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
                    .append(_verifiedBytesTransferred.sum()).append(" bytes)");
             }
         }
+        return buf.toString();
+    }
+
+    /**
+     * Compact one-line tunnel identifier for log output: role, client or
+     * exploratory, nickname and short destination. No hop list, no newlines.
+     *
+     * @since 0.9.71+
+     */
+    public String toShortString() {
+        StringBuilder buf = new StringBuilder(64);
+        if (_isInbound) {buf.append("Inbound");}
+        else {buf.append("Outbound");}
+        if (_destination == null) {buf.append(" Exploratory tunnel");}
+        else {
+            buf.append(" Client tunnel [");
+            if (_destinationNickname != null) {
+                buf.append(_destinationNickname).append(" / ");
+            }
+            buf.append(_destination.toBase32().substring(0, 8)).append("]");
+        }
+        int fails = _failures.get();
+        if (fails > 1) {buf.append(" (").append(fails).append(" consecutive failures)");}
         return buf.toString();
     }
 

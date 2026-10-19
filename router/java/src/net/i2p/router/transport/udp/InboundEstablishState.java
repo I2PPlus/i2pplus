@@ -169,7 +169,7 @@ class InboundEstablishState {  // TODO do all these methods need to be synchroni
     public void addMessage(OutNetMessage msg) {
         // chance of a duplicate here in a race, that's ok
         if (!_queuedMessages.contains(msg)) {_queuedMessages.offer(msg);}
-        else if (_log.shouldWarn()) {_log.warn("Attempt to add duplicate messsage to queue: " + msg);}
+        else if (_log.shouldDebug()) {_log.debug("Attempt to add duplicate message to queue [MsgID " + msg.getMessageId() + ']');}
    }
 
     /**

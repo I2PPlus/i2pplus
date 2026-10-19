@@ -1535,7 +1535,7 @@ class PacketBuilder2 {
         len += MAC_LEN;
         pkt.setLength(len);
         if (len < MIN_DATA_LEN)
-            _log.error("Packet too short " + len, new Exception());
+            _log.error("Packet too short " + len);
         SSU2Header.encryptShortHeader(packet, hdrKey1, hdrKey2);
     }
 

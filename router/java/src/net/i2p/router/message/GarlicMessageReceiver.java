@@ -131,7 +131,7 @@ public class GarlicMessageReceiver {
 
             if (keys == null || skm == null) {
                 if (debug) {
-                    _log.warn("Not decrypting " + message + " for disconnected client " + nick);
+                    _log.debug("Not decrypting " + message + " for disconnected client " + nick);
                 }
                 return;
             }
@@ -142,7 +142,7 @@ public class GarlicMessageReceiver {
 
             if (decryptionKey == null && decryptionKey2 == null && decryptionKey3 == null) {
                 if (debug) {
-                    _log.warn("No key to decrypt for client destination " + nick);
+                    _log.debug("No key to decrypt for client destination " + nick);
                 }
                 return;
             }
@@ -232,11 +232,10 @@ public class GarlicMessageReceiver {
         if (!valid) {
             final String howLongAgo = DataHelper.formatDuration(_context.clock().now() - clove.getExpiration());
             if (_log.shouldDebug()) {
-                _log.debug("Clove [" + clove.getCloveId() + "] is NOT valid -> Expired " + howLongAgo + " ago",
-                        new Exception("Invalid clove expiration"));
-            } else if (_log.shouldWarn()) {
-                _log.warn("Clove [" + clove.getCloveId() + "] is NOT valid -> Expired " + howLongAgo + " ago: "
-                        + invalidReason + ": " + clove);
+                _log.debug("Clove [" + clove.getCloveId() + "] is not valid -> Expired " + howLongAgo + " ago");
+            } else if (_log.shouldInfo()) {
+                _log.info("Clove [" + clove.getCloveId() + "] is not valid -> Expired " + howLongAgo + " ago * " +
+                          invalidReason);
             }
             _context.messageHistory().messageProcessingError(clove.getCloveId(),
                     clove.getData().getClass().getSimpleName(),

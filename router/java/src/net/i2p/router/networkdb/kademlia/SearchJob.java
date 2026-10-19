@@ -552,7 +552,7 @@ public class SearchJob extends JobImpl {
         // Use the 4-arg one so we pick up the override in ExploreJob
         I2NPMessage msg = buildMessage(null, getContext().routerHash(), expiration, router);
         if (msg == null) {
-            if (_log.shouldWarn()) {_log.warn("Failed to create DatabaseLookupMessage to: " + router);}
+            if (_log.shouldWarn()) {_log.warn("Failed to create DatabaseLookupMessage to [" + router.getHash().toBase64().substring(0,6) + ']');}
             getContext().jobQueue().addJob(new FailedJob(getContext(), router));
             return;
         }
@@ -601,10 +601,9 @@ public class SearchJob extends JobImpl {
     void replyFound(DatabaseSearchReplyMessage message, Hash peer) {
         long duration = _state.replyFound(peer);
         // this processing can take a while, so split 'er up
-        if (_log.shouldLog(Log.DEBUG))
-            _log.debug("[Job "+ getJobId() + "] [DbId: " + _facade
-                       +"] Starting Search ReplyJob to peer " + peer
-                       + " with DSRM " + message);
+        if (_log.shouldDebug())
+            _log.debug("Starting Search ReplyJob to [" + peer.toBase64().substring(0, 6) + "] for ["
+                       + message.getSearchKey().toBase64().substring(0, 6) + "] * " + _facade);
         getContext().jobQueue().addJob(new SearchReplyJob(getContext(), this, message, peer, duration));
     }
 
@@ -791,7 +790,7 @@ public class SearchJob extends JobImpl {
 
         if (outTunnel != null) {
             if (_log.shouldInfo()) {
-                _log.info("Resending LeaseSet to [" + to.toBase64().substring(0,6) + "] via " + outTunnel + ": " + msg);
+                _log.info("Resending LeaseSet to [" + to.toBase64().substring(0,6) + "] via " + outTunnel);
             }
             // TODO pass a priority to the dispatcher
             getContext().tunnelDispatcher().dispatchOutbound(msg, outTunnel.getSendTunnelId(0), null, to);
@@ -808,8 +807,8 @@ public class SearchJob extends JobImpl {
     protected void fail() {
         if (isLocal()) {
             if (_log.shouldError()) {
-                _log.error("Why did we fail if the target is local? [" +
-                           _state.getTarget().toBase64().substring(0,6) + "]", new Exception("failure cause"));
+                _log.error("Search failed even though the target is local [" +
+                           _state.getTarget().toBase64().substring(0,6) + ']');
             }
             succeed();
             return;

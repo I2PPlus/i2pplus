@@ -212,8 +212,8 @@ class SSLClientListenerRunner extends ClientListenerRunner {
             socket.setSoTimeout(oldTimeout);
             return rv;
         } catch (IOException ioe) { /* ignored */ }
-        if (_log.shouldWarn())
-             _log.warn("Peer did not authenticate themselves as I2CP quickly enough, dropping");
+        if (_log.shouldInfo())
+             _log.info("Peer did not authenticate as I2CP quickly enough -> Dropping the connection");
         return false;
     }
 }

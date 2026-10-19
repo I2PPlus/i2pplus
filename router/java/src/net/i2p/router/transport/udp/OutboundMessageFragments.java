@@ -421,7 +421,7 @@ class OutboundMessageFragments {
                 _context.statManager().addRateData("udp.packetsRetransmitted", lifetime, transmitted);
                 _context.statManager().addRateData("udp.retransmitEvents", 1);
                 if (_log.shouldInfo()) {
-                    _log.info("Retransmitting..." + state + " to " + peer);
+                    _log.info("Retransmitting [MsgID " + state.getMessageId() + "] to " + peer.toShortString());
                 }
                 _context.statManager().addRateData("udp.sendVolleyTime", lifetime, queued);
             }
@@ -483,7 +483,7 @@ class OutboundMessageFragments {
                     _context.statManager().addRateData("udp.sendFragmentsPerPacket", sendNext.size());
                 } else {
                     if (_log.shouldWarn()) {
-                        _log.warn("Building UDP packet FAIL for " + DataHelper.toString(sendNext) + " to: " + peer);
+                        _log.warn("Failed to build UDP packet for " + DataHelper.toString(sendNext) + " to " + peer.toShortString());
                     }
                     // Don't retry in this volley — peer session is dead/invalid.
                     // Fragments remain in OutboundMessageState and will be

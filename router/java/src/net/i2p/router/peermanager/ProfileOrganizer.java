@@ -826,7 +826,7 @@ public class ProfileOrganizer {
         try {
             boolean rv = _reorganizeLock.writeLock().tryLock(3000, TimeUnit.MILLISECONDS);
             if (!rv && _log.shouldWarn()) {
-                _log.warn("No lock, size is: " + _reorganizeLock.getQueueLength(), new Exception("rats"));
+                _log.warn("Could not acquire the reorganize write lock, queue length: " + _reorganizeLock.getQueueLength());
             }
             return rv;
         } catch (InterruptedException ignored) {

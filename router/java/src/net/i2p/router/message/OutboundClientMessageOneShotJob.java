@@ -241,8 +241,8 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
                 if (_log.shouldInfo()) {
                     _log.info("Message Expiration: " + (overallExpiration - _start) + "ms");
                 }
-            } else if (_log.shouldWarn()) {
-                _log.warn("Message expired before we got to it"); // runJob() will call dieFatal()
+            } else if (_log.shouldInfo()) {
+                _log.info("Message expired before it could be processed"); // runJob() will call dieFatal()
             }
         } else {
             // undocumented until 0.9.14, unused
@@ -385,7 +385,7 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
                 getContext().statManager().addRateData("client.leaseSetSkipCooldown", 1);
                 if (_log.shouldInfo()) {
                     _log.info("Skipping send to " + _toString +
-                              " — LS fail cooldown active, " +
+                              " -> LeaseSet fail cooldown active, " +
                               DataHelper.formatDuration(cooldownEnd - now) + " remaining");
                 }
                 dieFatal(MessageStatusMessage.STATUS_SEND_FAILURE_NO_LEASESET);
@@ -421,7 +421,7 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
                 // searches the network instead of failing in ~2ms, then log loudly.
                 kndf.clearNegativeCache(toHash);
                 if (_log.shouldInfo()) {
-                    _log.info("LS for " + _toString + " missing but recently valid — re-probing with negative cache cleared");
+                    _log.info("LeaseSet for " + _toString + " missing but recently valid -> Re-probing with negative cache cleared");
                 }
             }
             _leaseSetLookupBegin = getContext().clock().now();
@@ -1209,17 +1209,17 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
         }
         if (_log.shouldWarn()) {
             String lsInfo = _leaseSet != null ?
-                ("LS: [" + _leaseSet.getHash().toBase32().substring(0, 8) + "]" +
+                ("LeaseSet: [" + _leaseSet.getHash().toBase32().substring(0, 8) + "]" +
                  " * leases: " + _leaseSet.getLeaseCount() +
                  " * current: " + _leaseSet.isCurrent(Router.CLOCK_FUDGE_FACTOR)) :
-                "LS: null";
+                null;
             if (!statusToString.isEmpty() && !statusToString.equals("Unknown status")) {
                 // LS-not-found is routine (cooldown, negative cache) — demote to info;
                 // LookupLeaseSetFailedJob or the cooldown skip already logged at info.
                 int level = (status == MessageStatusMessage.STATUS_SEND_FAILURE_NO_LEASESET)
                     ? Log.INFO : Log.WARN;
                 _log.log(level, "Send FAIL to " + _toString + " after " + sendTime + "ms -> " +
-                          statusToString + "\n* " + lsInfo);
+                          statusToString + (lsInfo != null ? "\n* " + lsInfo : ""));
             } else {
                 _log.warn("Sending of " + _clientMessageId + " to " + _toString +
                           " failed after " + sendTime + "ms (Status code: " + status + ")");

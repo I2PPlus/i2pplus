@@ -95,10 +95,10 @@ class ClientMessageEventListener implements I2CPMessageReader.I2CPMessageEventLi
     @Override
     public void messageReceived(I2CPMessageReader reader, I2CPMessage message) {
         if (_runner.isDead()) {
-            if (_log.shouldWarn()) {_log.warn("Received but runner dead: \n" + message);}
+            if (_log.shouldInfo()) {_log.info("Received I2CP message but runner is dead [session " + message.sessionId() + ']');}
             return;
         }
-        if (_log.shouldDebug()) {_log.debug("Message received: \n" + message);}
+        if (_log.shouldDebug()) {_log.debug("Message received:\n" + message);}
         int type = message.getType();
         if (!_authorized) {
             // Default true as of 0.9.16
@@ -246,7 +246,7 @@ class ClientMessageEventListener implements I2CPMessageReader.I2CPMessageEventLi
                 _log.log(Log.CRIT, msg);
                 _runner.disconnectClient(msg);
             } else {
-                _log.error("Signature verification failed on a create session message:\n" + in);
+                _log.error("Signature verification failed on a create session message\n* " + in);
                 _runner.disconnectClient("Invalid signature on CreateSessionMessage");
             }
             return;
@@ -541,8 +541,9 @@ class ClientMessageEventListener implements I2CPMessageReader.I2CPMessageEventLi
         if (request != ReceiveRequest.ALLOWED) {
             if (_log.shouldWarn()) {
                 if (request == ReceiveRequest.UNKNOWN_SESSION) {
-                    _log.warn("ReceiveBegin for unknown session " + message.sessionId() +
-                              " [MsgID " + message.getMessageId() + "] -> Ignoring...");
+                    if (_log.shouldDebug())
+                        _log.debug("ReceiveBegin for unknown session " + message.sessionId() +
+                                   " [MsgID " + message.getMessageId() + "] -> Ignoring");
                 } else {
                     _log.warn("Payload for [MsgID " + message.getMessageId() + "] is null! -> Ignoring...");
                 }
@@ -571,9 +572,9 @@ class ClientMessageEventListener implements I2CPMessageReader.I2CPMessageEventLi
         Payload payload = _runner.getPayload(new MessageId(message.getMessageId()));
         ReceiveRequest request = classifyReceiveEnd(_runner.getConfig(message.sessionId()), payload);
         if (request == ReceiveRequest.UNKNOWN_SESSION) {
-            if (_log.shouldWarn()) {
-                _log.warn("ReceiveEnd for unknown session " + message.sessionId() +
-                          " [MsgID " + message.getMessageId() + "] -> Ignoring...");
+            if (_log.shouldDebug()) {
+                _log.debug("ReceiveEnd for unknown session " + message.sessionId() +
+                           " [MsgID " + message.getMessageId() + "] -> Ignoring");
             }
             return;
         }
@@ -604,7 +605,7 @@ class ClientMessageEventListener implements I2CPMessageReader.I2CPMessageEventLi
     protected void handleCreateLeaseSet(CreateLeaseSetMessage message) {
         LeaseSet ls = message.getLeaseSet();
         if (ls == null) {
-            if (_log.shouldError()) {_log.error("Null LeaseSet granted: " + message);}
+            if (_log.shouldError()) {_log.error("Null LeaseSet in CreateLeaseSetMessage [session " + message.sessionId() + ']');}
             _runner.disconnectClient("Invalid CreateLeaseSetMessage - null LeaseSet");
             return;
         }
@@ -612,13 +613,13 @@ class ClientMessageEventListener implements I2CPMessageReader.I2CPMessageEventLi
         if (type != DatabaseEntry.KEY_TYPE_META_LS2 &&
             type != DatabaseEntry.KEY_TYPE_ENCRYPTED_LS2 &&
             message.getPrivateKey() == null) {
-            if (_log.shouldError()) {_log.error("Null private keys: " + message);}
+            if (_log.shouldError()) {_log.error("Missing private keys in CreateLeaseSetMessage [session " + message.sessionId() + ']');}
             _runner.disconnectClient("Invalid CreateLeaseSetMessage - null private keys");
             return;
         }
         if (type == DatabaseEntry.KEY_TYPE_LEASESET && message.getSigningPrivateKey() == null) {
             // revocation keys only in LS1
-            if (_log.shouldError()) {_log.error("Null private keys: " + message);}
+            if (_log.shouldError()) {_log.error("Missing private keys in CreateLeaseSetMessage [session " + message.sessionId() + ']');}
             _runner.disconnectClient("Invalid CreateLeaseSetMessage - null private keys");
             return;
         }
@@ -703,7 +704,7 @@ class ClientMessageEventListener implements I2CPMessageReader.I2CPMessageEventLi
                         PublicKey pk;
                         try {pk = pks.get(i).toPublic();}
                         catch (IllegalArgumentException iae) {
-                            String msg = "Bad private key in LS: " + i;
+                            String msg = "Bad private key in LeaseSet: " + i;
                             if (_log.shouldError()) {_log.error(msg);}
                             _runner.disconnectClient(msg);
                             return;
@@ -854,7 +855,9 @@ class ClientMessageEventListener implements I2CPMessageReader.I2CPMessageEventLi
             return;
         }
         if (_log.shouldInfo()) {
-            _log.info("Updating options - old: " + cfg + " new: " + message.getSessionConfig());
+            _log.info("Updating session options for [session " + message.getSessionId() + ']');
+            if (_log.shouldDebug())
+                _log.debug("Old options: " + cfg + " * new options: " + message.getSessionConfig());
         }
         if (!message.getSessionConfig().getDestination().equals(cfg.getDestination())) {
             _log.error("Destination mismatch");
@@ -915,13 +918,13 @@ class ClientMessageEventListener implements I2CPMessageReader.I2CPMessageEventLi
         BlindData bd = message.getBlindData();
         if (bd == null) {
             // hash or hostname lookup? don't support for now
-            if (_log.shouldWarn()) {_log.warn("Unsupported BlindingInfo type: " + message);}
+            if (_log.shouldWarn()) {_log.warn("Unsupported BlindingInfo request [session " + message.sessionId() + ']');}
             return;
         }
         SigningPublicKey spk = bd.getUnblindedPubKey();
         if (spk == null) {
             // hash or hostname lookup? don't support for now
-            if (_log.shouldWarn()) {_log.warn("Unsupported BlindingInfo type: " + message);}
+            if (_log.shouldWarn()) {_log.warn("Unsupported BlindingInfo request [session " + message.sessionId() + ']');}
             return;
         }
         BlindData obd = _context.netDb().getBlindData(spk);

@@ -66,16 +66,21 @@ public class OutNetMessagePool {
             return false;
         }
         if (msg.getTarget() == null) {
-            _log.error("No target in the OutNetMessage: " + msg, new Exception());
+            _log.error("No target in the OutNetMessage [MsgID " + msg.getMessageId() + ' ' +
+                       msg.getMessageType() + ']');
             return false;
         }
         if (msg.getPriority() < 0) {
-            _log.error("Message cannot have a priority of < 0, dropping..." + msg, new Exception());
+            _log.error("OutNetMessage priority (" + msg.getPriority() + ") < 0 -> Dropping [MsgID " +
+                       msg.getMessageId() + ' ' + msg.getMessageType() + ']');
             return false;
         }
         if (msg.getExpiration() <= _context.clock().now()) {
-            if (_log.shouldWarn())
-                _log.warn("Dropping expired Outbound message" + msg, new Exception());
+            if (_log.shouldInfo())
+                _log.info("Outbound message expired " +
+                          (_context.clock().now() - msg.getExpiration()) +
+                          "ms ago -> Dropping [MsgID " + msg.getMessageId() + ' ' +
+                          msg.getMessageType() + ']');
             return false;
         }
         return true;

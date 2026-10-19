@@ -398,7 +398,8 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
 
     public void gotTermination(int reason, long count) {
         if (_log.shouldWarn())
-            _log.warn("[SSU] Received TERMINATION block -> " + SSU2Util.terminationCodeToString(reason) + "; Count: " + count + "\n* " + this);
+            _log.warn("[SSU] Received TERMINATION block -> " + SSU2Util.terminationCodeToString(reason) +
+                      (count > 0 ? "; Count: " + count : "") + " * " + toShortString());
         // this sets the state to FAILED
         fail();
         _transport.getEstablisher().receiveSessionDestroy(_remoteHostId, this);
@@ -418,7 +419,7 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
             long skew = recvOn - sendOn;
             String skewString = DataHelper.formatDuration(Math.abs(skew));
             if (_log.shouldWarn())
-                _log.warn("Failed, clock skew " + skewString + " on " + this);
+                _log.warn("Failed, clock skew " + skewString + " on " + toShortString());
             if (sendOn == 0) {
                 // no datetime block
             } else if (sendOn < BuildTime.getEarliestTime() || sendOn > BuildTime.getLatestTime()) {
@@ -666,7 +667,7 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
             _currentState != OutboundState.OB_STATE_REQUEST_SENT) {
             // not fatal
             if (_log.shouldWarn())
-                _log.warn("Received out-of-order Retry with token " + token + " on: " + this);
+                _log.warn("Received out-of-order Retry with token " + token + " on " + toShortString());
             // retransmit session request, rate limit
             _nextSend = Math.max(_context.clock().now(), _lastSend + 750);
             return;
@@ -718,7 +719,7 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
         if (_currentState != OutboundState.OB_STATE_REQUEST_SENT &&
             _currentState != OutboundState.OB_STATE_REQUEST_SENT_NEW_TOKEN) {
             // ignore dups
-            if (_log.shouldWarn()) {_log.warn("[SSU] Invalid state for SessionCreated: " + this);}
+            if (_log.shouldWarn()) {_log.warn("[SSU] Invalid state for SessionCreated: " + toShortString());}
             return;
         }
         if (_log.shouldDebug()) {_log.debug("[SSU] Received a SessionCreated on " + this);}
@@ -989,6 +990,16 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
     public void introSent(Hash h) {
         setIntroState(h, IntroState.INTRO_STATE_RELAY_REQUEST_SENT);
         introSent();
+    }
+
+    /**
+     * Compact one-line establish-state identifier for log output: peer
+     * hash and current state. No lifetime or introducer details, no newlines.
+     *
+     * @since 0.9.71+
+     */
+    String toShortString() {
+        return "[" + _remotePeer.getHash().toBase64().substring(0, 6) + "] " + _currentState;
     }
 
     @Override

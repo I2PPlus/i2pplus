@@ -905,8 +905,9 @@ void noteEstablishmentRtt(int rttMs) {
      */
     public void send(OutNetMessage msg) {
         if (!_outbound.offer(msg)) {
-            if (_log.shouldWarn())
-                _log.warn("Dropping message: Outbound queue full on " + this + msg);
+            if (_log.shouldInfo())
+                _log.info("Outbound queue full on " + toShortString() +
+                          " -> Dropping message [MsgID " + msg.getMessageId() + ' ' + msg.getMessageType() + ']');
             _transport.getContext().statManager().addRateData("ntcp.sendBacklogTime", msg.getLifetime());
             _transport.afterSend(msg, false, false, msg.getLifetime());
             return;
@@ -1312,8 +1313,9 @@ void noteEstablishmentRtt(int rttMs) {
                 return;
             if (msg.getExpiration() >= now)
                 break;
-            if (_log.shouldWarn())
-                _log.warn("Message expired while waiting in send queue, dropping..." + msg + " on " + this);
+            if (_log.shouldInfo())
+                _log.info("Dropping expired message in send queue [MsgID " + msg.getMessageId() +
+                          ' ' + msg.getMessageType() + "] on " + toShortString());
             _transport.afterSend(msg, false, false, msg.getLifetime());
         }
         _currentOutbound.add(msg);
@@ -1346,8 +1348,9 @@ void noteEstablishmentRtt(int rttMs) {
                     blocks.add(block);
                     size += NTCP2Payload.BLOCK_HEADER_SIZE + msz;
                 } else {
-                    if (_log.shouldWarn())
-                        _log.warn("Message expired while waiting in send queue, dropping..." + msg + " on " + this);
+                    if (_log.shouldInfo())
+                        _log.info("Dropping expired message in send queue [MsgID " + msg.getMessageId() +
+                                  ' ' + msg.getMessageType() + "] on " + toShortString());
                     _transport.afterSend(msg, false, false, msg.getLifetime());
                 }
             }
@@ -1458,7 +1461,8 @@ void noteEstablishmentRtt(int rttMs) {
         int size = block.getTotalLength();
         if (size + NTCP2Payload.BLOCK_HEADER_SIZE > BUFFER_SIZE) {
             if (_log.shouldWarn())
-                _log.warn("RouterInfo [" + ri + "] is too big for buffer (Size: " +
+                _log.warn("RouterInfo [" + ri.getHash().toBase64().substring(0,6) +
+                          "] too big for buffer (Size: " +
                           (size + NTCP2Payload.BLOCK_HEADER_SIZE) + " / Max: " + BUFFER_SIZE + ")");
             return;
         }
@@ -1602,7 +1606,7 @@ void noteEstablishmentRtt(int rttMs) {
                .append(" blocks in ").append(framelen)
                .append(" byte NTCP2 frame...");
             for (int i = 0; i < blocks.size(); i++) {
-                buf.append("\n* Block ").append(i).append(": ").append(blocks.get(i).toString());
+                buf.append("Block ").append(i).append(": ").append(blocks.get(i).toString());
             }
             _log.debug(buf.toString());
         }
@@ -1848,7 +1852,7 @@ void noteEstablishmentRtt(int rttMs) {
      */
     private void write(ByteBuffer buf) {
         if (_writeBufs.size() >= MAX_WRITE_BUFS) {
-            _log.warn("Write queue full (" + _writeBufs.size() + "), dropping buffer on " + this);
+            _log.info("Write queue full (" + _writeBufs.size() + ") on " + toShortString() + " -> Dropping buffer");
             _transport.getContext().statManager().addRateData("ntcp.writeBufs.size", _writeBufs.size(), MAX_WRITE_BUFS);
             _transport.getContext().statManager().addRateData("ntcp.writeQueueFull", 1);
             return;
@@ -2444,13 +2448,13 @@ void noteEstablishmentRtt(int rttMs) {
                     _log.debug("Processed " + blocks + " blocks in frame");
             } catch (IOException ioe) {
                 if (_log.shouldWarn())
-                    _log.warn("Payload delivery failure \n* " + ioe.getMessage());
+                    _log.warn("Payload delivery failure -> " + ioe.getMessage());
             } catch (DataFormatException dfe) {
                 if (_log.shouldWarn())
-                    _log.warn("Payload delivery failure \n* " + dfe.getMessage());
+                    _log.warn("Payload delivery failure -> " + dfe.getMessage());
             } catch (I2NPMessageException ime) {
                 if (_log.shouldWarn())
-                    _log.warn("Error parsing I2NP message \n* " + ime.getMessage());
+                    _log.warn("Error parsing I2NP message -> " + ime.getMessage());
                 _context.statManager().addRateData("ntcp.corruptI2NPIME", 1);
             }
         }
@@ -2508,7 +2512,7 @@ void noteEstablishmentRtt(int rttMs) {
                 }
             } catch (IllegalArgumentException iae) {
                 if (_log.shouldInfo())
-                    _log.info("RouterInfo store fail: " + ri, iae);
+                    _log.info("RouterInfo store fail [" + ri.getHash().toBase64().substring(0,6) + "] -> " + EstablishBase.storeFailCause(iae));
             }
         }
 
@@ -2774,6 +2778,29 @@ void noteEstablishmentRtt(int rttMs) {
         _currentInterestOps = ops;
     }
 
+    /**
+     * Compact one-line connection identifier for log output: direction,
+     * remote address, connection id and peer hash. No stats, no newlines.
+     *
+     * @since 0.9.71+
+     */
+    private String toShortString() {
+        String addr;
+        if (_isInbound) {
+            SocketChannel ch = _chan;
+            if (ch != null) {
+                InetAddress ia = ch.socket().getInetAddress();
+                addr = (ia != null ? ia.getHostAddress() : "Unknown") + ':' + ch.socket().getPort();
+            } else {
+                addr = "null_channel";
+            }
+        } else {
+            addr = _remAddr.getHost() + ':' + _remAddr.getPort();
+        }
+        return (_isInbound ? "inbound " : "outbound ") + addr + " [conn " + _connID + ' ' +
+               (_remotePeer == null ? "Unknown" : _remotePeer.calculateHash().toBase64().substring(0,6)) + ']';
+    }
+
     @Override
     public String toString() {
         String fromIP;
@@ -2790,15 +2817,14 @@ void noteEstablishmentRtt(int rttMs) {
         } else {
             fromIP = null;
         }
-        return (_isInbound ? (" -> Inbound: " + fromIP + ":" + port + ' ')
-                           : (" -> Outbound: " + _remAddr.getHost() + ":" + _remAddr.getPort() + ' ')) + "[" +
-               (_remotePeer == null ? "Unknown" : _remotePeer.calculateHash().toBase64().substring(0,6)) + "]" +
-               (isEstablished() ? "" : " -> Not established ") +
-               (_log.shouldInfo() ? "\n* Connection [ID " + _connID + "]" +
+        return (_isInbound ? ("Inbound: " + fromIP + ':' + port + ' ')
+                           : ("Outbound: " + _remAddr.getHost() + ':' + _remAddr.getPort() + ' ')) +
+               (_remotePeer != null ? "[" + _remotePeer.calculateHash().toBase64().substring(0,6) + "]" : "") +
+               (_log.shouldDebug() ? "\n* Connection [ID " + _connID + "]" +
                "\n* Created: " + DataHelper.formatDuration(getTimeSinceCreated()) + " ago;" +
                " Last message sent: " + DataHelper.formatDuration(getTimeSinceSend()) + " ago;" +
                " Last message received: " + DataHelper.formatDuration(getTimeSinceReceive()) + " ago" +
                "\n* Messages sent: " + _messagesWritten + ";" +
-               " Messages received: " + _messagesRead + " " : "");
+               " Messages received: " + _messagesRead : "");
     }
 }

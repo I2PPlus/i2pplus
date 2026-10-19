@@ -819,7 +819,7 @@ public class BuildHandler implements Runnable {
                 else {success = _context.tunnelDispatcher().joinOutbound(cfg);}
                 if (!success) {
                     _exec.buildComplete(cfg, DUP_ID);
-                    if (_log.shouldWarn()) {_log.warn("Duplicate ID for our own tunnel " + cfg);}
+                    if (_log.shouldWarn()) {_log.warn("Duplicate ID for our own tunnel " + cfg.toShortString());}
                     return;
                 }
                 _exec.buildComplete(cfg, SUCCESS);
@@ -870,7 +870,7 @@ public class BuildHandler implements Runnable {
             }
         } else {
             if (_log.shouldWarn()) {
-                _log.warn("Tunnel reply [MsgID " + msg.getUniqueId() + "] could not be decrypted for tunnel " + cfg);
+                _log.warn("Tunnel reply [MsgID " + msg.getUniqueId() + "] could not be decrypted for tunnel " + cfg.toShortString());
             }
             _context.statManager().addRateData("tunnel.corruptBuildReply", 1);
             _exec.buildComplete(cfg, BAD_RESPONSE); // don't leak
@@ -979,7 +979,7 @@ public class BuildHandler implements Runnable {
                     _lastBanDropWarn = dropNow;
                     _banDropsSinceWarn = 0;
                     String cause = _context.banlist().getBanCause(nextPeer);
-                    _log.warn("Dropping Tunnel Request -> Next peer ["
+                    _log.info("Dropping tunnel request -> Next peer ["
                               + nextPeer.toBase64().substring(0,6) + "] is banned ("
                               + banSeverity(_context.banlist().getBanAge(nextPeer))
                               + (cause != null ? ", cause: " + cause : "")
@@ -1718,7 +1718,7 @@ public class BuildHandler implements Runnable {
             boolean shouldThrottle = _context.getBooleanPropertyDefaultTrue(PROP_SHOULD_THROTTLE);
             if (cfg != null) {
                 if (!cfg.isInbound()) { // shouldnt happen - should we put it back?
-                    _log.error("Received TunnelBuildMessage, but it's not Inbound? " + cfg);
+                    _log.error("Received TunnelBuildMessage for an outbound tunnel configuration: " + cfg.toShortString());
                 }
                 BuildEndMessageState state = new BuildEndMessageState(cfg, receivedMessage);
                 handleRequestAsInboundEndpoint(state);
@@ -1956,7 +1956,7 @@ public class BuildHandler implements Runnable {
                 getContext().tunnelDispatcher().remove(_cfg);
             } catch (RuntimeException ex) {
                 if (log.shouldWarn()) {
-                    log.warn("Error removing timed-out hop config: " + _cfg, ex);
+                    log.warn("Error removing timed-out hop config: " + _cfg.toShortString(), ex);
                 }
             }
             getContext().statManager().addRateData("tunnel.rejectTimeout2", 1);
