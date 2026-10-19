@@ -105,6 +105,10 @@
               thread pool property reads, lifecycle-managed accept() handlers).
              Keep the 10 genuine TWR fixes; suppress the noise. -->
         <exclude name="CloseResource"/>
+        <!-- Fork idiom: Tuner-managed static volatile policy fields -->
+        <exclude name="AssignmentToNonFinalStatic"/>
+        <!-- Test-infra classes named *Test without cases; cosmetic -->
+        <exclude name="TestClassWithoutTestCases"/>
     </rule>
 
     <!-- Multithreading: only genuine bug risks, not style -->
@@ -116,6 +120,8 @@
         <exclude name="UseConcurrentHashMap"/>
         <exclude name="DontCallThreadRun"/>
         <exclude name="AvoidThreadGroup"/>
+        <!-- I2P idiom: Thread subclasses used as tasks (RouterThread et al.) -->
+        <exclude name="OverridingThreadRun"/>
     </rule>
 
     <!-- jPinpoint: performance, threading, memory, sustainability -->
@@ -148,6 +154,16 @@
         <!-- Equals/hashCode rules: excluded by user request (high noise, low signal) -->
         <exclude name="ImplementEqualsHashCodeOnValueObjects"/>
         <exclude name="FieldOfHashCodeMissingInEquals"/>
+        <!-- BufferFileStreaming (ISIO05): blanket rule; I2P file I/O is small-file or
+             already blocked through byte[] buffers, and downstream buffering (e.g.
+             TranslateReader) makes the remaining findings false positives -->
+        <exclude name="BufferFileStreaming"/>
+        <!-- House-style clashes: I2P _field naming, Tuner-managed static volatile
+             policy fields, single-threaded date helpers -->
+        <exclude name="ImproperVariableName"/>
+        <exclude name="AvoidSimpleDateFormat"/>
+        <!-- Cosmetic switch-case duplication, zero signal -->
+        <exclude name="AvoidDuplicateAssignmentsInCases"/>
     </rule>
 
 </ruleset>
