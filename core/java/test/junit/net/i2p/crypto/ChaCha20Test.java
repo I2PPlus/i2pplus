@@ -2,6 +2,7 @@ package net.i2p.crypto;
 
 import static org.junit.Assert.*;
 
+import java.nio.charset.StandardCharsets;
 import org.junit.Test;
 
 /**
@@ -20,7 +21,7 @@ public class ChaCha20Test {
 
     private static final byte[] RFC_IV = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x4a, 0x00, 0x00, 0x00, 0x00};
 
-    private static final byte[] RFC_PLAINTEXT = ("Ladies and Gentlemen of the class of '99: " + "If I could offer you only one tip for the future, " + "sunscreen would be it.").getBytes();
+    private static final byte[] RFC_PLAINTEXT = ("Ladies and Gentlemen of the class of '99: " + "If I could offer you only one tip for the future, " + "sunscreen would be it.").getBytes(StandardCharsets.UTF_8);
 
     private static final byte[] RFC_CIPHERTEXT = {
         0x6e,

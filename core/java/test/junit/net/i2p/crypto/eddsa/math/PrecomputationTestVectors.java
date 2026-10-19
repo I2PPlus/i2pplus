@@ -19,6 +19,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 
 public class PrecomputationTestVectors {
     // Test files were generated using base.py and base2.py from ref10
@@ -36,7 +37,7 @@ public class PrecomputationTestVectors {
         try {
             InputStream is = PrecomputationTestVectors.class.getResourceAsStream(fileName);
             if (is == null) throw new IOException("Resource not found: " + fileName);
-            file = new BufferedReader(new InputStreamReader(is));
+            file = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8));
             String line;
             while ((line = file.readLine()) != null) {
                 if (line.equals(" },")) col += 1;
@@ -76,7 +77,7 @@ public class PrecomputationTestVectors {
         try {
             InputStream is = PrecomputationTestVectors.class.getResourceAsStream(fileName);
             if (is == null) throw new IOException("Resource not found: " + fileName);
-            file = new BufferedReader(new InputStreamReader(is));
+            file = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8));
             String line;
             while ((line = file.readLine()) != null) {
                 if (line.equals(" },")) {

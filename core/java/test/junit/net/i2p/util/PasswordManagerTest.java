@@ -2,6 +2,7 @@ package net.i2p.util;
 
 import static org.junit.Assert.*;
 
+import java.nio.charset.StandardCharsets;
 import org.junit.Test;
 
 public class PasswordManagerTest {
@@ -71,7 +72,7 @@ public class PasswordManagerTest {
 
     @Test
     public void testMd5Sum() {
-        byte[] data = "test".getBytes();
+        byte[] data = "test".getBytes(StandardCharsets.UTF_8);
         byte[] sum = PasswordManager.md5Sum(data);
         assertNotNull(sum);
         assertEquals(16, sum.length);
@@ -79,7 +80,7 @@ public class PasswordManagerTest {
 
     @Test
     public void testMd5SumDeterministic() {
-        byte[] data = "test".getBytes();
+        byte[] data = "test".getBytes(StandardCharsets.UTF_8);
         byte[] s1 = PasswordManager.md5Sum(data);
         byte[] s2 = PasswordManager.md5Sum(data);
         assertArrayEquals(s1, s2);

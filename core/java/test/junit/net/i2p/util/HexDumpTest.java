@@ -2,6 +2,7 @@ package net.i2p.util;
 
 import static org.junit.Assert.*;
 
+import java.nio.charset.StandardCharsets;
 import org.junit.Test;
 import java.io.ByteArrayOutputStream;
 
@@ -59,7 +60,7 @@ public class HexDumpTest {
 
     @Test
     public void testDumpIncludesAscii() {
-        byte[] data = "Hello".getBytes();
+        byte[] data = "Hello".getBytes(StandardCharsets.UTF_8);
         String result = HexDump.dump(data);
         assertTrue(result.contains("Hello"));
     }

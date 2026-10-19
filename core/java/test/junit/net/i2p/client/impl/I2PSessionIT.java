@@ -9,6 +9,8 @@ package net.i2p.client.impl;
  *
  */
 
+import java.nio.charset.StandardCharsets;
+
 import junit.framework.TestCase;
 
 import net.i2p.I2PAppContext;
@@ -83,7 +85,7 @@ public class I2PSessionIT extends TestCase implements I2PSessionListener {
 
     public void messageAvailable(I2PSession session, int msgId, long size) {
         try {
-            String x = new String(session.receiveMessage(msgId));
+            String x = new String(session.receiveMessage(msgId), StandardCharsets.UTF_8);
             if (_s.contains(x)) _s.remove(x);
         } catch (Exception e) {
             fail();

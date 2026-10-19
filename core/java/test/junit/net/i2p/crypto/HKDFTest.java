@@ -2,6 +2,7 @@ package net.i2p.crypto;
 
 import static org.junit.Assert.*;
 
+import java.nio.charset.StandardCharsets;
 import net.i2p.I2PAppContext;
 
 import org.junit.BeforeClass;
@@ -23,7 +24,7 @@ public class HKDFTest {
     public void testSingleOutputDeterministic() {
         byte[] key = new byte[32];
         Arrays.fill(key, (byte) 0x0b);
-        byte[] data = "test data".getBytes();
+        byte[] data = "test data".getBytes(StandardCharsets.UTF_8);
         byte[] out1 = new byte[32];
         byte[] out2 = new byte[32];
 
@@ -45,7 +46,7 @@ public class HKDFTest {
     public void testSingleOutputWithInfo() {
         byte[] key = new byte[32];
         Arrays.fill(key, (byte) 0x0c);
-        byte[] data = "input".getBytes();
+        byte[] data = "input".getBytes(StandardCharsets.UTF_8);
         byte[] out1 = new byte[32];
         byte[] out2 = new byte[32];
 
@@ -67,7 +68,7 @@ public class HKDFTest {
     public void testTwoOutputsNoInfo() {
         byte[] key = new byte[32];
         Arrays.fill(key, (byte) 0x0b);
-        byte[] data = "test data".getBytes();
+        byte[] data = "test data".getBytes(StandardCharsets.UTF_8);
         byte[] out1 = new byte[32];
         byte[] out2 = new byte[32];
 
@@ -81,7 +82,7 @@ public class HKDFTest {
     public void testTwoOutputsWithInfo() {
         byte[] key = new byte[32];
         Arrays.fill(key, (byte) 0x0c);
-        byte[] data = "input".getBytes();
+        byte[] data = "input".getBytes(StandardCharsets.UTF_8);
         byte[] out1a = new byte[32];
         byte[] out2a = new byte[32];
         byte[] out1b = new byte[32];
