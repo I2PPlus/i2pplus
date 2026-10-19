@@ -3288,7 +3288,10 @@ th{font-size:8pt}
 
 @media (min-width:1400px){
 .statsName{border:1px solid #131}
-.statlist{padding:10px;columns:auto 540px;column-gap:10px;text-align:center}
+.statlist,.filtered .statlist ul{padding:10px;columns:auto 540px;column-gap:10px;text-align:center}
+.filtered .statlist ul li{break-inside:avoid}
+.filtered .statlist li li:not(.noevents):first-child{margin-top:0}
+.filtered .statlist{columns:1}
 #changelog pre span{width:calc(100% - 28px)}
 #help .confignav,#debug .confignav{position:sticky;top:0}
 #profiles #banlist{margin:3px -5px 0;padding:10px 5px;border:0}
