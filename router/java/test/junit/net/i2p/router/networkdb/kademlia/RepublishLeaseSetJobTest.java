@@ -36,7 +36,7 @@ import net.i2p.util.LogManager;
 
 /**
  * Verifies the republish dispatch for local LeaseSets that are not published
- * to the network (i2cp.dontPublishLeaseSet, e.g. the HTTP proxy).
+ * to the network ({@code i2cp.dontPublishLeaseSet}, e.g. the HTTP proxy).
  * Such clients must have their local copy re-minted on the lease timescale,
  * never failed as if they had stopped.
  */
@@ -121,7 +121,7 @@ public class RepublishLeaseSetJobTest {
 
     /**
      * A client whose I2CP session is closed by close-on-idle but whose tunnel
-     * pools still exist must keep the local re-mint cycle alive — the
+     * pools still exist must keep the local re-mint cycle alive. The
      * isTrackedLocal() gate prevents treating a temporarily-closed session as
      * a stop, so the local copy is not failed and publishing is not stopped.
      */
@@ -300,7 +300,7 @@ public class RepublishLeaseSetJobTest {
 
     /**
      * Inside the emergency re-mint window a pool stuck below target must
-     * re-mint immediately on its single viable lease rather than defer — a
+     * re-mint immediately on its single viable lease rather than defer. A
      * thin-but-alive public LeaseSet beats letting the copy lapse while the
      * deferral waits for capacity.  The required-count gate and the deferral
      * counter are both bypassed.

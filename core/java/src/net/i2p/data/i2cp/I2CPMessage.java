@@ -18,7 +18,6 @@ import java.io.OutputStream;
  * <p>
  * As of 0.9.48, does NOT extend DataStructure.
  *
- * @author jrandom
  */
 public interface I2CPMessage {
     /**
@@ -40,11 +39,11 @@ public interface I2CPMessage {
     /**
      * Read the contents from the input stream into the current class's format.
      * The stream should be the message header and body as defined by the I2CP
-     * specification
+     * specification.
      *
      * @param in stream to read from
      * @throws I2CPMessageException if the stream doesn't contain a valid message
-     *                              that this class can read.
+     * that this class can read.
      *
      * @throws IOException if there is a problem reading from the stream
      */
@@ -64,7 +63,7 @@ public interface I2CPMessage {
 
     /**
      * Return the unique identifier for this type of message, as specified in the
-     * network specification document under #ClientAccessLayerMessages
+     * network specification document under #ClientAccessLayerMessages.
      *
      * @return unique identifier for this type of message
      */

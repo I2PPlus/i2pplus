@@ -30,7 +30,7 @@ public class JSONUtils {
     }
 
     /**
-     * Function that return value for given key from json object represented by jsontext
+     * Function that return value for given key from json object represented by jsontext.
      * @param jsonTxt {String} JSON object
      * @param key {int} key by which value should be obtained from JSON map
      * @return {int} obtained value from JSON map
@@ -48,7 +48,7 @@ public class JSONUtils {
     }
 
     /**
-     * Function that add new value to JSON map
+     * Function that add new value to JSON map.
      * @param jsonTxt {String} JSON object
      * @param key {String} key by which value should be assigned to JSON map
      * @param value {String} value for given key
@@ -65,7 +65,7 @@ public class JSONUtils {
 
     /**
      * Function that return json object represented by jsontext and included
-     * single message assigned to "msg" key
+     * single message assigned to "msg" key.
      * @param msg {byte[]} message which should be assigned to json object
      * @return {byte[]} json object represented by jsontext and encodes into a sequence of bytes
      */
@@ -78,7 +78,7 @@ public class JSONUtils {
 
     /**
      * Function that return json object represented by jsontext and included
-     * single message assigned to "msg" key
+     * single message assigned to "msg" key.
      * @param msg {byte[]} message which should be assigned to json object
      * @param tests the test IDs whose results should be included
      * @return {byte[]} json object represented by jsontext and encodes into a sequence of bytes

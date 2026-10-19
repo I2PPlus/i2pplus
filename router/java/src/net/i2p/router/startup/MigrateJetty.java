@@ -24,7 +24,7 @@ import net.i2p.util.VersionComparator;
  * <p>
  * First migration, as of 0.9.30:
  * <p>
- * Migrate the clients.config and jetty.xml files
+ * Migrate the {@code clients.config} and jetty.xml files
  * from Jetty 5/6 to Jetty 7/8.
  * Also migrate jetty.xml from Jetty 7/8 to Jetty 9.
  * <p>
@@ -40,8 +40,8 @@ import net.i2p.util.VersionComparator;
  *  Copies $I2P/eepsite-jetty7/etc/* to $D/etc
  *  Changes main class in clients.config
  * </pre>
- * Copies clients.config to clients.config.jetty6;
- * Saves new clients.config.
+ * Copies {@code clients.config} to {@code clients.config.jetty6};
+ * Saves new {@code clients.config}.
  * <p>
  * Does NOT preserve port number, thread counts, etc. in the migration to 7/8.
  * DOES preserve everything in the migration to 9.
@@ -180,9 +180,9 @@ abstract class MigrateJetty {
     }
 
     /**
-     * Backup a file with given suffix
+     * Backup a file with given suffix.
      * @return true if the copy succeeded, or if there was nothing to copy; false
-     *         if the copy failed
+     * if the copy failed
      */
     private static boolean backupFile(File from, String suffix) {
         if (!from.exists())

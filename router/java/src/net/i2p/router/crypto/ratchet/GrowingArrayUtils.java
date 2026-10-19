@@ -2,10 +2,9 @@
 package net.i2p.router.crypto.ratchet;
 
 /**
- * Helper methods for efficient primitive array growth and insertion operations, treating array length as capacity rather than element count for optimal performance
- * All methods in this class assume that the length of an array is equivalent to its capacity and
- * NOT to number of elements in the array. The current size of the array is always passed in as a
- * parameter.
+ * Helper methods for efficient primitive array growth and insertion.
+ * All methods assume that an array's length is its capacity, NOT its element
+ * count; the current size is always passed in as a parameter.
  *
  */
 final class GrowingArrayUtils {

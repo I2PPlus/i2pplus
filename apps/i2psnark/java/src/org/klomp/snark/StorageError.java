@@ -24,27 +24,27 @@ import java.util.Locale;
  */
 public enum StorageError {
 
-    /** fatal: ENOSPC, the device has no free blocks left */
+    /** fatal: ENOSPC, the device has no free blocks left. */
     NO_SPACE("No space left on device", true),
-    /** fatal: EACCES or EPERM, the torrent's paths are not writable */
+    /** fatal: EACCES or EPERM, the torrent's paths are not writable. */
     PERMISSION("Permission denied", true),
-    /** fatal: EROFS, the filesystem holding the torrent is mounted read-only */
+    /** fatal: EROFS, the filesystem holding the torrent is mounted read-only. */
     READ_ONLY("Read-only file system", true),
-    /** fatal: EDQUOT, the user's block quota on the filesystem is exhausted */
+    /** fatal: EDQUOT, the user's block quota on the filesystem is exhausted. */
     QUOTA("Disk quota exceeded", true),
-    /** fatal: EIO, the device reported an unrecoverable error */
+    /** fatal: EIO, the device reported an unrecoverable error. */
     IO_ERROR("Input/output error", true),
-    /** fatal: EISDIR, a path that must name a file is a directory */
+    /** fatal: EISDIR, a path that must name a file is a directory. */
     IS_DIRECTORY("Path is a directory", true),
-    /** fatal: ENAMETOOLONG, a path component exceeds the filesystem limit */
+    /** fatal: ENAMETOOLONG, a path component exceeds the filesystem limit. */
     NAME_TOO_LONG("File name too long", true),
-    /** transient: fd exhaustion, retry */
+    /** transient: fd exhaustion, retry. */
     TOO_MANY_OPEN("Too many open files", false),
-    /** transient: stale or read-only handle, retry */
+    /** transient: stale or read-only handle, retry. */
     STALE_HANDLE("Stale or invalid file handle", false),
-    /** transient: file vanished, retry */
+    /** transient: file vanished, retry. */
     MISSING("File or directory missing", false),
-    /** unclassified; the raw exception text is preserved by describe() */
+    /** Unclassified error; the raw exception text is preserved by describe(). */
     OTHER("I/O error", false);
 
     private final String label;

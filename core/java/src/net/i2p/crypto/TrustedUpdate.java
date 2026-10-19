@@ -29,7 +29,6 @@ import java.nio.charset.StandardCharsets;
  * Handles signing and verification of I2P update files.
  * Supports multiple signature types and content formats for secure software distribution.
  *
- * @author jrandom and smeghead
  * @since 0.8.1
  */
 @SuppressWarnings("PMD.CloseResource")
@@ -121,7 +120,7 @@ public class TrustedUpdate {
 
     /**
      * Duplicate keys or names rejected,
-     * except that duplicate empty names are allowed
+     * except that duplicate empty names are allowed.
      *
      * @param key 172 character base64 string
      * @param name non-null but "" ok
@@ -382,12 +381,12 @@ public class TrustedUpdate {
     }
 
     /**
-     * Reads the version string from an input stream
+     * Reads the version string from an input stream.
      *
      * @param inputStream containing at least 56 bytes
      *
      * @return The version string read, or an empty string if no version string
-     *         is present.
+     * is present.
      *
      * @since 0.7.12
      */
@@ -449,14 +448,14 @@ public class TrustedUpdate {
      * matching the version in the sud header. This prevents spoofing the version,
      * since the sud signature does NOT cover the version in the header.
      * (We do this for sud/su2 files but not plugin xpi2p files -
-     * don't use this method for plugin files)
+     * don't use this method for plugin files).
      *
      * @param currentVersion The current version to check against.
      * @param signedFile     A signed update file.
      * @param outputFile     The file to write the verified data to.
      *
      * @return <code>null</code> if the signature and version were valid and the
-     *         data was moved, and an error <code>String</code> otherwise.
+     * data was moved, and an error <code>String</code> otherwise.
      */
     public String migrateVerified(String currentVersion, File signedFile, File outputFile) {
         if (!signedFile.exists()) return "File not found: " + signedFile.getAbsolutePath();

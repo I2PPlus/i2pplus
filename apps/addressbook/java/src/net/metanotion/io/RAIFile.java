@@ -59,6 +59,8 @@ public class RAIFile implements RandomAccessInterface, DataInput, DataOutput {
     }
 
 /**
+ * File name for debugging.
+ *
  * @since 0.8.8
  */
     @Override
@@ -69,52 +71,134 @@ public class RAIFile implements RandomAccessInterface, DataInput, DataOutput {
     }
 
     /**
+     * Current read/write position.
+     *
      * @return the file pointer
      */
     public long getFilePointer() throws IOException { return delegate.getFilePointer(); }
-    /** @return the file length */
+    /**
+     * File length in bytes.
+     *
+     * @return the file length
+     */
     public long length() throws IOException { return delegate.length(); }
-    /** @see java.io.RandomAccessFile#read() */
+    /**
+     * {@inheritDoc}
+     *
+     * @see java.io.RandomAccessFile#read()
+     */
     public int read() throws IOException { return delegate.read(); }
-    /** @see java.io.RandomAccessFile#read(byte[]) */
+    /**
+     * {@inheritDoc}
+     *
+     * @see java.io.RandomAccessFile#read(byte[])
+     */
     public int read(byte[] b) throws IOException { return delegate.read(b); }
-    /** @see java.io.RandomAccessFile#read(byte[],int,int) */
+    /**
+     * {@inheritDoc}
+     *
+     * @see java.io.RandomAccessFile#read(byte[],int,int)
+     */
     public int read(byte[] b, int off, int len) throws IOException { return delegate.read(b, off, len); }
-    /** @see java.io.RandomAccessFile#seek(long) */
+    /**
+     * {@inheritDoc}
+     *
+     * @see java.io.RandomAccessFile#seek(long)
+     */
     public void seek(long pos) throws IOException { delegate.seek(pos); }
-    /** @see java.io.RandomAccessFile#setLength(long) */
+    /**
+     * {@inheritDoc}
+     *
+     * @see java.io.RandomAccessFile#setLength(long)
+     */
     public void setLength(long newLength) throws IOException { delegate.setLength(newLength); }
 
     // Closeable Methods
-    /** @see java.io.RandomAccessFile#close() */
+    /**
+     * {@inheritDoc}
+     *
+     * @see java.io.RandomAccessFile#close()
+     */
     public void close() throws IOException { delegate.close(); }
 
     // DataInput Methods
-    /** @see java.io.RandomAccessFile#readBoolean() */
+    /**
+     * {@inheritDoc}
+     *
+     * @see java.io.RandomAccessFile#readBoolean()
+     */
     public boolean readBoolean() throws IOException { return delegate.readBoolean(); }
-    /** @see java.io.RandomAccessFile#readByte() */
+    /**
+     * {@inheritDoc}
+     *
+     * @see java.io.RandomAccessFile#readByte()
+     */
     public byte readByte() throws IOException { return delegate.readByte(); }
-    /** @see java.io.RandomAccessFile#readChar() */
+    /**
+     * {@inheritDoc}
+     *
+     * @see java.io.RandomAccessFile#readChar()
+     */
     public char readChar() throws IOException { return delegate.readChar(); }
-    /** @see java.io.RandomAccessFile#readDouble() */
+    /**
+     * {@inheritDoc}
+     *
+     * @see java.io.RandomAccessFile#readDouble()
+     */
     public double readDouble() throws IOException { return delegate.readDouble(); }
-    /** @see java.io.RandomAccessFile#readFloat() */
+    /**
+     * {@inheritDoc}
+     *
+     * @see java.io.RandomAccessFile#readFloat()
+     */
     public float readFloat() throws IOException { return delegate.readFloat(); }
-    /** @see java.io.RandomAccessFile#readFully(byte[]) */
+    /**
+     * {@inheritDoc}
+     *
+     * @see java.io.RandomAccessFile#readFully(byte[])
+     */
     public void readFully(byte[] b) throws IOException { delegate.readFully(b); }
-    /** @see java.io.RandomAccessFile#readFully(byte[],int,int) */
+    /**
+     * {@inheritDoc}
+     *
+     * @see java.io.RandomAccessFile#readFully(byte[],int,int)
+     */
     public void readFully(byte[] b, int off, int len) throws IOException { delegate.readFully(b, off, len); }
-    /** @see java.io.RandomAccessFile#readInt() */
+    /**
+     * {@inheritDoc}
+     *
+     * @see java.io.RandomAccessFile#readInt()
+     */
     public int readInt() throws IOException { return delegate.readInt(); }
-    /** @see java.io.RandomAccessFile#readLine() */
+    /**
+     * {@inheritDoc}
+     *
+     * @see java.io.RandomAccessFile#readLine()
+     */
     public String readLine() throws IOException { return delegate.readLine(); }
-    /** @see java.io.RandomAccessFile#readLong() */
+    /**
+     * {@inheritDoc}
+     *
+     * @see java.io.RandomAccessFile#readLong()
+     */
     public long readLong() throws IOException { return delegate.readLong(); }
-    /** @see java.io.RandomAccessFile#readShort() */
+    /**
+     * {@inheritDoc}
+     *
+     * @see java.io.RandomAccessFile#readShort()
+     */
     public short readShort() throws IOException { return delegate.readShort(); }
-    /** @see java.io.RandomAccessFile#readUnsignedByte() */
+    /**
+     * {@inheritDoc}
+     *
+     * @see java.io.RandomAccessFile#readUnsignedByte()
+     */
     public int readUnsignedByte() throws IOException { return delegate.readUnsignedByte(); }
-    /** @see java.io.RandomAccessFile#readUnsignedShort() */
+    /**
+     * {@inheritDoc}
+     *
+     * @see java.io.RandomAccessFile#readUnsignedShort()
+     */
     public int readUnsignedShort() throws IOException { return delegate.readUnsignedShort(); }
 
     /**
@@ -148,35 +232,91 @@ public class RAIFile implements RandomAccessInterface, DataInput, DataOutput {
         return s;
     }
 
-    /** @see java.io.RandomAccessFile#skipBytes(int) */
+    /**
+     * {@inheritDoc}
+     *
+     * @see java.io.RandomAccessFile#skipBytes(int)
+     */
     public int skipBytes(int n) throws IOException { return delegate.skipBytes(n); }
 
     // DataOutput Methods
-    /** @see java.io.RandomAccessFile#write(int) */
+    /**
+     * {@inheritDoc}
+     *
+     * @see java.io.RandomAccessFile#write(int)
+     */
     public void write(int b) throws IOException { delegate.write(b); }
-    /** @see java.io.RandomAccessFile#write(byte[]) */
+    /**
+     * {@inheritDoc}
+     *
+     * @see java.io.RandomAccessFile#write(byte[])
+     */
     public void write(byte[] b) throws IOException { delegate.write(b); }
-    /** @see java.io.RandomAccessFile#write(byte[],int,int) */
+    /**
+     * {@inheritDoc}
+     *
+     * @see java.io.RandomAccessFile#write(byte[],int,int)
+     */
     public void write(byte[] b, int off, int len) throws IOException { delegate.write(b, off, len); }
-    /** @see java.io.RandomAccessFile#writeBoolean(boolean) */
+    /**
+     * {@inheritDoc}
+     *
+     * @see java.io.RandomAccessFile#writeBoolean(boolean)
+     */
     public void writeBoolean(boolean v) throws IOException { delegate.writeBoolean(v); }
-    /** @see java.io.RandomAccessFile#writeByte(int) */
+    /**
+     * {@inheritDoc}
+     *
+     * @see java.io.RandomAccessFile#writeByte(int)
+     */
     public void writeByte(int v) throws IOException { delegate.writeByte(v); }
-    /** @see java.io.RandomAccessFile#writeShort(int) */
+    /**
+     * {@inheritDoc}
+     *
+     * @see java.io.RandomAccessFile#writeShort(int)
+     */
     public void writeShort(int v) throws IOException { delegate.writeShort(v); }
-    /** @see java.io.RandomAccessFile#writeChar(int) */
+    /**
+     * {@inheritDoc}
+     *
+     * @see java.io.RandomAccessFile#writeChar(int)
+     */
     public void writeChar(int v) throws IOException { delegate.writeChar(v); }
-    /** @see java.io.RandomAccessFile#writeInt(int) */
+    /**
+     * {@inheritDoc}
+     *
+     * @see java.io.RandomAccessFile#writeInt(int)
+     */
     public void writeInt(int v) throws IOException { delegate.writeInt(v); }
-    /** @see java.io.RandomAccessFile#writeLong(long) */
+    /**
+     * {@inheritDoc}
+     *
+     * @see java.io.RandomAccessFile#writeLong(long)
+     */
     public void writeLong(long v) throws IOException { delegate.writeLong(v); }
-    /** @see java.io.RandomAccessFile#writeFloat(float) */
+    /**
+     * {@inheritDoc}
+     *
+     * @see java.io.RandomAccessFile#writeFloat(float)
+     */
     public void writeFloat(float v) throws IOException { delegate.writeFloat(v); }
-    /** @see java.io.RandomAccessFile#writeDouble(double) */
+    /**
+     * {@inheritDoc}
+     *
+     * @see java.io.RandomAccessFile#writeDouble(double)
+     */
     public void writeDouble(double v) throws IOException { delegate.writeDouble(v); }
-    /** @see java.io.RandomAccessFile#writeBytes(String) */
+    /**
+     * {@inheritDoc}
+     *
+     * @see java.io.RandomAccessFile#writeBytes(String)
+     */
     public void writeBytes(String s) throws IOException { delegate.writeBytes(s); }
-    /** @see java.io.RandomAccessFile#writeChars(String) */
+    /**
+     * {@inheritDoc}
+     *
+     * @see java.io.RandomAccessFile#writeChars(String)
+     */
     public void writeChars(String s) throws IOException { delegate.writeChars(s); }
 
     /**

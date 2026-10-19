@@ -25,9 +25,7 @@ ActionEvent
 		return( new Object());
 	}
 
-	/**
-	 * Default constructor.
-	 */
+	/** Creates an action event with no command. */
 	public ActionEvent() {
 	}
 }

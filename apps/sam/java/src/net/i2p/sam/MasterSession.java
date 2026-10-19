@@ -27,8 +27,8 @@ import net.i2p.util.Log;
  * the streaming acceptor thread ({@code StreamAcceptor}) accepts I2P
  * connections and dispatches them to the correct subsession by protocol
  * and port, via {@link SAMv3StreamSession#queueSocket(I2PSocket)}.
- * <p>The master session itself is not directly usable for data transfer —
- * all streaming, datagram, and raw operations are delegated to registered
+ * <p>The master session itself is not directly usable for data transfer.
+ * All streaming, datagram, and raw operations are delegated to registered
  * subsessions. Calling {@link #connectAsync}, {@link #accept}, or
  * {@link #startForwardingIncoming} on this instance throws unconditionally.
  * <p>Under heavy tracker traffic, the accept loop may see thousands of
@@ -46,7 +46,7 @@ class MasterSession extends SAMv3StreamSession implements SAMDatagramReceiver, S
     private final StreamAcceptor streamAcceptor;
     private static final String[] INVALID_OPTS = { "PORT", "HOST", "FROM_PORT", "TO_PORT",
                                                    "PROTOCOL", "LISTEN_PORT", "LISTEN_PROTOCOL" };
-    /** Log overflow warnings at most once per 5 seconds to avoid flooding */
+    /** Log overflow warnings at most once per 5 seconds to avoid flooding. */
     private static final long OVERFLOW_LOG_INTERVAL_MS = 5000;
     private volatile long _lastOverflowLog;
     private volatile int _overflowCount;
@@ -263,32 +263,44 @@ class MasterSession extends SAMv3StreamSession implements SAMDatagramReceiver, S
     }
 
     /**
-     * Does nothing.
+     * No-op, the master session does not receive raw data.
      */
     public void stopRawReceiving() { /* no-op */ }
 
 
     /////// stream session overrides
 
-    /** @throws DataFormatException always */
+    /**
+     * Throws, use a STREAM subsession instead.
+     *
+     * @throws DataFormatException always
+     */
     @Override
     public void connectAsync(SAMv3Handler handler, String dest, Properties props) throws DataFormatException {
         throw new DataFormatException("master session");
     }
 
-    /** @throws SAMException always */
+    /**
+     * Throws, use a STREAM subsession instead.
+     *
+     * @throws SAMException always
+     */
     @Override
     public void accept(SAMv3Handler handler, boolean verbose) throws SAMException {
         throw new SAMException("master session");
     }
 
-    /** @throws SAMException always */
+    /**
+     * Throws, use a STREAM subsession instead.
+     *
+     * @throws SAMException always
+     */
     @Override
     public void startForwardingIncoming(Properties props, boolean sendPorts) throws SAMException {
         throw new SAMException("master session");
     }
 
-    /** does nothing */
+    /** Does nothing. */
     @Override
     public void stopForwardingIncoming() { /* no-op */ }
 
@@ -420,7 +432,7 @@ class MasterSession extends SAMv3StreamSession implements SAMDatagramReceiver, S
      * is full (the PHP client is not keeping up), the socket is reset
      * and an overflow is logged (rate-limited to avoid flooding).
      * <p>Runs for the lifetime of the master session; stopped by
-     * {@link MasterSession#close()}.
+     * {@link MasterSession#close}.
      */
     private class StreamAcceptor implements Runnable {
 

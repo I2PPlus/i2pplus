@@ -61,7 +61,6 @@ public class RrdGraphDef implements RrdGraphConstants, DataHolder {
      * Implementations of this class can be used to generate image than can be layered on graph. The
      * can be used for background image, a background image draw on canvas or an overlay image.
      *
-     * @author Fabrice Bacchella
      */
     public interface ImageSource {
         /**
@@ -429,6 +428,8 @@ public class RrdGraphDef implements RrdGraphConstants, DataHolder {
     }
 
     /**
+     * Whether a database pool is in use.
+     *
      * @since 3.7
      */
     @Override
@@ -437,6 +438,8 @@ public class RrdGraphDef implements RrdGraphConstants, DataHolder {
     }
 
     /**
+     * The database pool, if in use.
+     *
      * @since 3.7
      */
     @Override
@@ -445,6 +448,8 @@ public class RrdGraphDef implements RrdGraphConstants, DataHolder {
     }
 
     /**
+     * Use the given database pool.
+     *
      * @since 3.7
      */
     @Override

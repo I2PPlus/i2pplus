@@ -19,7 +19,6 @@ public class ActionResponse extends ControlResponse {
     //	Constructor
     ////////////////////////////////////////////////
 
-    /** Default constructor */
     public ActionResponse() {
         setHeader(HTTP.EXT, "");
     }

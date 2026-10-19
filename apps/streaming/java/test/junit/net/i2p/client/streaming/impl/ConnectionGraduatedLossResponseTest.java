@@ -76,7 +76,7 @@ public class ConnectionGraduatedLossResponseTest {
         }
     }
 
-    /** ssthresh is never below the graduated window, so slow-start can regrow. */
+    /** Ssthresh is never below the graduated window, so slow-start can regrow. */
     @Test
     public void testSsthreshAtLeastGraduatedWindow() {
         for (int strikes = 1; strikes <= 4; strikes++) {
@@ -88,7 +88,7 @@ public class ConnectionGraduatedLossResponseTest {
         }
     }
 
-    /** ssthresh respects a healthy bandwidth estimate (Westwood-style factor). */
+    /** Ssthresh respects a healthy bandwidth estimate (Westwood-style factor). */
     @Test
     public void testSsthreshUsesBandwidthEstimate() {
         // healthy link bandwidth estimate implies ssthresh well above the graduated floor
@@ -96,7 +96,7 @@ public class ConnectionGraduatedLossResponseTest {
         assertEquals(512, Connection.graduatedLossSsthresh(3, 256, 512));
     }
 
-    /** ssthresh is monotone non-increasing in strikes, like the window. */
+    /** Ssthresh is monotone non-increasing in strikes, like the window. */
     @Test
     public void testSsthreshMonotoneInStrikes() {
         for (int wsize : new int[] {16, 256, 1024}) {

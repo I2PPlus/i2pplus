@@ -24,7 +24,7 @@ import net.i2p.data.SimpleDataStructure;
  */
 public class Hash384 extends SimpleDataStructure {
 
-    /** 48 bytes */
+    /** 48 bytes. */
     public static final int HASH_LENGTH = 48;
 
     /**

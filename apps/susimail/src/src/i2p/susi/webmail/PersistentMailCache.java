@@ -26,6 +26,7 @@ import net.i2p.util.SecureDirectory;
 import net.i2p.util.SecureFile;
 import net.i2p.util.SystemVersion;
 
+// TODO cached server caps and config.
 /**
  * Manages persistent on-disk email cache with custom compressed format.
  *
@@ -40,10 +41,8 @@ import net.i2p.util.SystemVersion;
  *
  * This class should only be accessed from MailCache.
  *
- * TODO cached server caps and config.
- *
  * @since 0.9.14
- */
+*/
 class PersistentMailCache {
 
     /**
@@ -161,7 +160,7 @@ class PersistentMailCache {
     }
 
     /**
-     * Load files from in, add mail to out
+     * Load files from in, add mail to out.
      * @since 0.9.34
      */
     private static class Loader implements Runnable {
@@ -459,7 +458,7 @@ class PersistentMailCache {
     }
 
     /**
-     * For debugging. Import .eml files from the import/ directory
+     * For debugging. Import .eml files from the import/ directory.
      * @since 0.9.34
      */
     private void importMail() {

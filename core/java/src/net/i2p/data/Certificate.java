@@ -60,31 +60,30 @@ import java.util.Arrays;
  * <li>{@link KeyCertificate} - Specialized certificate for key type specification</li>
  * </ul>
  *
- * @author jrandom
  */
 @SuppressWarnings("PMD.OverrideBothEqualsAndHashcode")
 public class Certificate extends DataStructureImpl {
-    /** Null certificate singleton */
+    /** Null certificate singleton. */
     public static final Certificate NULL_CERT = new NullCert();
 
-    /** Certificate type identifier */
+    /** Certificate type identifier. */
     protected int _type;
-    /** Certificate payload data */
+    /** Certificate payload data. */
     protected byte[] _payload;
 
-    /** Specifies a null certificate type with no payload */
+    /** Specifies a null certificate type with no payload. */
     public static final int CERTIFICATE_TYPE_NULL = 0;
 
     /** We should not be used for anything (don't use us in the netDb, in tunnels, or tell others about us). */
     public static final int CERTIFICATE_TYPE_HIDDEN = 2;
 
-    /** Signed with 40-byte Signature and (optional) 32-byte hash */
+    /** Signed with 40-byte Signature and (optional) 32-byte hash. */
     public static final int CERTIFICATE_TYPE_SIGNED = 3;
 
-    /** Length of signed certificate with hash (signature + hash) */
+    /** Length of signed certificate with hash (signature + hash). */
     public static final int CERTIFICATE_LENGTH_SIGNED_WITH_HASH = Signature.SIGNATURE_BYTES + Hash.HASH_LENGTH;
 
-    /** Contains multiple certs */
+    /** Contains multiple certs. */
     public static final int CERTIFICATE_TYPE_MULTIPLE = 4;
 
     /** Key certificate type.
@@ -94,7 +93,7 @@ public class Certificate extends DataStructureImpl {
     public static final int CERTIFICATE_TYPE_KEY = 5;
 
     /**
-     * If null, P256 key, or Ed25519 key cert, return immutable static instance, else create new
+     * If null, P256 key, or Ed25519 key cert, return immutable static instance, else create new.
      *
      * @param data the source data
      * @param off the offset into data
@@ -133,7 +132,7 @@ public class Certificate extends DataStructureImpl {
     }
 
     /**
-     * If null, P256 key, or Ed25519 key cert, return immutable static instance, else create new
+     * If null, P256 key, or Ed25519 key cert, return immutable static instance, else create new.
      *
      * @param in the input stream
      * @return the Certificate instance
@@ -319,7 +318,7 @@ public class Certificate extends DataStructureImpl {
     }
 
     /**
-     * Up-convert this to a KeyCertificate
+     * Up-convert this to a KeyCertificate.
      *
      * @return a new KeyCertificate wrapping this certificate's payload
      * @throws DataFormatException if cert type != CERTIFICATE_TYPE_KEY
@@ -403,13 +402,13 @@ public class Certificate extends DataStructureImpl {
             throw new RuntimeException("Data already set");
         }
 
-        /** Overridden for efficiency */
+        /** Overridden for efficiency. */
         @Override
         public void writeBytes(OutputStream out) throws IOException {
             out.write(NULL_DATA);
         }
 
-        /** Overridden for efficiency */
+        /** Overridden for efficiency. */
         @Override
         public int writeBytes(byte[] target, int offset) {
             System.arraycopy(NULL_DATA, 0, target, offset, NULL_LENGTH);
@@ -422,13 +421,13 @@ public class Certificate extends DataStructureImpl {
             throw new RuntimeException("Data already set");
         }
 
-        /** Overridden for efficiency */
+        /** Overridden for efficiency. */
         @Override
         public int size() {
             return NULL_LENGTH;
         }
 
-        /** Overridden for efficiency */
+        /** Overridden for efficiency. */
         @Override
         public int hashCode() {
             // must be the same as type + payload above

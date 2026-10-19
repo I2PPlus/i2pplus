@@ -100,7 +100,7 @@ public class TestStreamTransfer {
         private BufferedReader _reader;
         private OutputStream _out;
         private Socket _s;
-        /** ID (string) to base64 destination */
+        /** ID (string) to base64 destination. */
         private Map _streams;
 
         public AliceRunner(BufferedReader reader, OutputStream out, Socket s) {

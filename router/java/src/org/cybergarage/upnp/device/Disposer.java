@@ -29,7 +29,6 @@ import org.cybergarage.util.*;
  * unavailable and clean up expired subscriptions, ensuring efficient resource management and
  * accurate device tracking.
  *
- * @author Satoshi Konno
  * @since 1.0
  */
 public class Disposer extends ThreadCore {

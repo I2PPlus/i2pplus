@@ -11,7 +11,7 @@ import org.junit.Test;
  * <p>The id is a 20-character hash of the stat name and period, minted because JRobin
  * caps datasource names at 20 characters; it cannot be inverted, so a log line quoting
  * one on its own names nothing an operator can look up. The map is what makes the
- * stalled-listener report say "jobQueue.jobLag.60000" instead of "BOPP6eO8n6WPbvCXIZzQ".
+ * stalled-listener report say "{@code jobQueue.jobLag.60000}" instead of "BOPP6eO8n6WPbvCXIZzQ".
  *
  * <p>Only the static map is under test: {@code GraphListener} itself needs a router
  * context to open an RRD, and registration happens at that point.

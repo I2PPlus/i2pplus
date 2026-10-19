@@ -6,7 +6,6 @@ import java.io.IOException;
  * Class to represent internal RRD archive state for a single datasource. Objects of this class are
  * never manipulated directly, it's up to Rrd4j to manage internal archive states.
  *
- * @author Sasa Markovic
  */
 public class ArcState implements RrdUpdater<ArcState> {
     private final Archive parentArc;

@@ -28,7 +28,6 @@ import org.cybergarage.xml.*;
  * ServiceData, and ActionData, providing common XML node management functionality across the
  * framework.
  *
- * @author Satoshi Konno
  * @since 1.0
  */
 public class NodeData {

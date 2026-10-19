@@ -26,23 +26,23 @@ import net.i2p.util.SystemVersion;
  * a process and keeps track of it's state by maintaining a Process object.
  * <p>
  * Keeps track of the process, and reports start/stop status correctly
- * on configplugins. When running a ShellService from a clients.config file,
- * the user MUST pass -shellservice.name in the args field in clients.config
+ * on configplugins. When running a ShellService from a {@code clients.config} file,
+ * the user MUST pass -shellservice.name in the args field in {@code clients.config}
  * to override the plugin name. The name passed to -shellservice.name should
  * be unique to avoid causing issues.
  * (https://i2pgit.org/i2p-hackers/i2p.i2p/-/merge_requests/39#note_4234)
  * -shellservice.displayName is optional and configures the name of the plugin
  * which is shown on the console. In most cases, the -shellservice.name must be
- * the same as the plugin name in order for the $PLUGIN field in clients.config
+ * the same as the plugin name in order for the $PLUGIN field in {@code clients.config}
  * to match the expected value. If this is not the case, i.e.
  * (-shellservice.name != plugin.name), you must not use $PLUGIN in your
- * clients.config file.
+ * {@code clients.config} file.
  * <p>
  * The recommended way to use this tool is to manage a single forked
  * app/process,
  * with a single ShellService, in a single plugin.
  * <p>
- * When you are writing your clients.config file, please take note that $PLUGIN
+ * When you are writing your {@code clients.config} file, please take note that $PLUGIN
  * will be derived from the `shellservice.name` field in the config file args.
  * <p>
  * Works on Windows, OSX, and Linux.
@@ -263,9 +263,9 @@ public class ShellService implements ClientApp {
     }
 
     /**
-     * Shut down the process by calling Process.destroy()
+     * Shut down the process by calling {@code Process.destroy()}.
      *
-     * @param args generally null but could be stopArgs from clients.config
+     * @param args generally null but could be stopArgs from {@code clients.config}
      */
     @Override
     public synchronized void shutdown(String[] args) throws Throwable {

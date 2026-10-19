@@ -85,7 +85,7 @@ public class MessageWrapper {
         return new WrappedMessage(msg, skm, sentTo, sentKey, tsh);
     }
 
-    /** Wrapper so that we can keep track of the key and tags  for later notification to the SKM  */
+    /** Wrapper so that we can keep track of the key and tags  for later notification to the SKM.  */
     static class WrappedMessage {
         /** The wrapped GarlicMessage. */
         private GarlicMessage msg;
@@ -99,14 +99,14 @@ public class MessageWrapper {
         private TagSetHandle tsh;
 
         /**
-         * Wrapped message
+         * Wrapped message.
          *
          * @param msg the garlic message that was built, to be sent as-is
          * @param skm the session key manager that owns the session key, notified
-         *            on ack or failure
+         * on ack or failure
          * @param sentTo the recipient's public key, used when reporting tags
          * @param sentKey the session key the tags were delivered under, or null
-         *                if none were sent
+         * if none were sent
          * @param tsh handle for the delivered tags, or null if none were sent
          */
         WrappedMessage(GarlicMessage msg, SessionKeyManager skm, PublicKey sentTo, SessionKey sentKey, TagSetHandle tsh) {
@@ -177,7 +177,7 @@ public class MessageWrapper {
 
     /** A single key and tag, for receiving a single message.  */
     public static class OneTimeSession {
-        /** ElG or ratchet */
+        /** ElG or ratchet. */
         public final SessionKey key;
         /** Non-null for ElG. */
         public final SessionTag tag;

@@ -515,7 +515,7 @@ public abstract class NamingService {
     }
 
     /**
-     * Ask any registered updaters to update now
+     * Ask any registered updaters to update now.
      *
      * @param options NamingService- or updater-specific, may be null
      * @since 0.8.7
@@ -855,13 +855,13 @@ public abstract class NamingService {
     /**
      * Is this a blinded ("b33") hostname?
      * Does NOT validate the base32 part except for length.
-     * See Blinding.decode() for full validation.
+     * See {@link net.i2p.crypto.Blinding#decode} for full validation.
      * <p>
      * ref: https://www.rfc-editor.org/rfc/rfc9476.html
      *
      * @param hostname non-null
      * @return true if hostname (case insensitive) ends with .b32.i2p or .b32.i2p.alt
-     *         and is long enough.
+     * and is long enough.
      *
      * @since 0.9.66
      */
@@ -874,13 +874,14 @@ public abstract class NamingService {
 
     /**
      * WARNING - for use by I2PAppContext only - others must use
-     * I2PAppContext.namingService()
+     * {@link net.i2p.I2PAppContext#namingService}.
+     *
      * <p>
      * Create a naming service instance, choosing the implementation from the
-     * "i2p.naming.impl" system property (defaulting to the router or client
+     * "{@code i2p.naming.impl}" system property (defaulting to the router or client
      * implementation according to the context type). This is a factory, not a
      * cache: every call constructs and returns a new instance, and no
-     * deduplication happens here. I2PAppContext.namingService() owns the
+     * deduplication happens here. {@link net.i2p.I2PAppContext#namingService} owns the
      * single instance per context, so call this at most once per context.
      *
      * @param context the application context

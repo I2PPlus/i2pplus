@@ -49,6 +49,8 @@ public class LogBean extends BaseBean
     }
 
     /**
+     * The addressbook log file.
+     *
      * @since 0.9.35
      */
     private File logFile() {return new File(addressbookDir(), LOG_FILE);}

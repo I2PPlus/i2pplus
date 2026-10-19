@@ -14,13 +14,13 @@ import net.i2p.util.Log;
 
 /**
  * Defines the message sent between one tunnel's endpoint and another's gateway.
- * format: { tunnelId, sizeof(i2npMessage.toByteArray()), i2npMessage.toByteArray() }
+ * format: { tunnelId, sizeof(i2npMessage.toByteArray()), i2npMessage.toByteArray() }.
  */
 public class TunnelGatewayMessage extends FastI2NPMessageImpl {
     private TunnelId _tunnelId;
     private I2NPMessage _msg;
     private byte[] _msgData;
-    /** Message type ID for this I2NP message */
+    /** Message type ID for this I2NP message. */
 
     public final static int MESSAGE_TYPE = 19;
     /** If we can't deliver a tunnel message in 10s, forget it. */
@@ -54,15 +54,15 @@ public class TunnelGatewayMessage extends FastI2NPMessageImpl {
     /**
      * Warning, at the IBGW, where the message was read in,
      * this will be an UnknownI2NPMessage.
-     * If you need a real message class, use UnknownI2NPMessage.convert().
+     * If you need a real message class, use {@link net.i2p.data.i2np.UnknownI2NPMessage#convert}.
      * <p>
      * Warning, will be null after message has been written.
      * <p>
      * Note that if you change the expiration on the embedded message it will
      * mess up the checksum of this message, so don't do that.
      * @return the message carried onward through the tunnel, held as an
-     *         {@link UnknownI2NPMessage} when this instance was read at the
-     *         IBGW, or null once this message has been written out
+     * {@link UnknownI2NPMessage} when this instance was read at the
+     * IBGW, or null once this message has been written out
      */
     public I2NPMessage getMessage() {return _msg;}
 
@@ -76,7 +76,7 @@ public class TunnelGatewayMessage extends FastI2NPMessageImpl {
         if (msg == null) {throw new IllegalArgumentException("Don't set me to null!");}
         _msg = msg;
     }
-    /** Calculate the serialized length of this message */
+    /** Calculate the serialized length of this message. */
 
     protected int calculateWrittenLength() {
         int rv = 4 + 2;
@@ -169,7 +169,7 @@ public class TunnelGatewayMessage extends FastI2NPMessageImpl {
         umsg.readBytes(data, utype, curIndex);
         _msg = umsg;
     }
-    /** Return the type */
+    /** Return the type. */
 
     public int getType() {return MESSAGE_TYPE;}
 

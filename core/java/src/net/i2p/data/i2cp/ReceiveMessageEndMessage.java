@@ -18,7 +18,6 @@ import java.io.InputStream;
  * Defines the message a client sends to a router when asking the
  * router to start sending a message to it.
  *
- * @author jrandom
  */
 public class ReceiveMessageEndMessage extends I2CPMessageImpl {
     /**

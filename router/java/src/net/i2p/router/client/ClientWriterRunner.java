@@ -8,9 +8,9 @@ import net.i2p.internal.PoisonI2CPMessage;
 import net.i2p.router.RouterContext;
 
 /**
- * Async writer class so that if a client app hangs, it won't take down the
- * whole router with it (otherwise the JobQueue would block until the client
- * reads from their i2cp socket, causing all sorts of bad things to happen)
+ * Writes I2CP messages to a client asynchronously, so a hung client app
+ * cannot take down the whole router. Without this, the JobQueue would block
+ * until the client reads from their i2cp socket.
  * <p>
  * For external I2CP connections only.
  */
@@ -18,7 +18,11 @@ class ClientWriterRunner implements Runnable {
     private final BlockingQueue<I2CPMessage> _messagesToWrite;
     private final ClientConnectionRunner _runner;
     private final RouterContext _context;
-    /** @since 0.9.70+ mutable for adaptive tuning */
+    /**
+     * Max messages queued per client before blocking.
+     *
+     * @since 0.9.70+ mutable for adaptive tuning
+     */
     private static volatile int queueSize = 256;
 
     /**
@@ -52,7 +56,7 @@ class ClientWriterRunner implements Runnable {
     /**
      * Add this message to the writer's queue
      * <p>
-     * Nonblocking, throws exception if queue is full
+     * Nonblocking, throws exception if queue is full.
      * @param msg the message to add
      * @throws I2CPMessageException if the queue is full
      */
@@ -65,7 +69,7 @@ class ClientWriterRunner implements Runnable {
     }
 
     /**
-     * No more messages - don't even try to send what we have
+     * No more messages - don't even try to send what we have.
      *
      */
     public void stopWriting() {

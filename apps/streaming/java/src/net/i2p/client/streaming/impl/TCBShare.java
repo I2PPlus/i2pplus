@@ -48,7 +48,7 @@ class TCBShare {
 
     /**
      * Maximum window size for TCB sharing from config.
-     * Tunable via i2p.streaming.maxSlowStartWindow (default: 64).
+     * Tunable via {@code i2p.streaming.maxSlowStartWindow} (default: 64).
      *
      * @return the maximum window size
      */

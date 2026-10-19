@@ -19,9 +19,8 @@ import java.io.OutputStream;
 
 /**
  * Defines the structure for why abuse was reported either by the client to
- * the router or by the router to the client
+ * the router or by the router to the client.
  *
- * @author jrandom
  */
 public class AbuseReason extends DataStructureImpl {
     /** Text description of the abuse reason. */

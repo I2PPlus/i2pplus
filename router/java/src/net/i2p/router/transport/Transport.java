@@ -44,7 +44,7 @@ import net.i2p.router.OutNetMessage;
  * To implement a new transport plugin:
  * <ol>
  * <li>Implement this interface and required base classes</li>
- * <li>Add transport to TransportManager.startListening()</li>
+ * <li>Add transport to {@link net.i2p.router.transport.TransportManager#startListening}</li>
  * <li>Ensure proper configuration and discovery</li>
  * <li>Test with existing I2P network compatibility</li>
  * </ol>
@@ -521,7 +521,7 @@ public interface Transport {
 
     /**
      * The most recent error messages.
-     * @return recent error messages
+     * @return copy of the list of recent human-readable error strings
      */
     public List<String> getMostRecentErrorMessages();
 

@@ -21,7 +21,7 @@ public interface ScalarOps extends Serializable {
     public byte[] reduce(byte[] s);
 
     /**
-     * $r = (a * b + c) \bmod l$
+     * $r = (a * b + c) \bmod l$.
      *
      * @param a the first multiplicand, a scalar in little-endian form
      * @param b the second multiplicand, a scalar in little-endian form

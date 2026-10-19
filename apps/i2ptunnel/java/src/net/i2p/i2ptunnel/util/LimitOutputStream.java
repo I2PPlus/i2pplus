@@ -25,9 +25,9 @@ public abstract class LimitOutputStream extends FilterOutputStream {
     /** True once setDone() has run, so the callback cannot fire twice. */
     protected boolean _isDone;
 
-    /** Callback interface for notification when a limited output stream completes */
+    /** Callback interface for notification when a limited output stream completes. */
     public interface DoneCallback {
-        /** Called when the stream operation completes */
+        /** Called when the stream operation completes. */
         public void streamDone();
     }
 
@@ -54,7 +54,7 @@ public abstract class LimitOutputStream extends FilterOutputStream {
     /**
      * Subclasses MUST override the following method
      * such that it calls done() when finished
-     * and throws EOFException if called again
+     * and throws EOFException if called again.
      */
     @Override
     public void write(byte[] buf, int off, int len) throws IOException {
@@ -68,7 +68,7 @@ public abstract class LimitOutputStream extends FilterOutputStream {
     protected boolean isDone() { return _isDone; }
 
     /**
-     * flush(), call the callback, and set _isDone
+     * flush(), call the callback, and set _isDone.
      *
      * @throws IOException if the wrapped stream cannot be flushed
      */

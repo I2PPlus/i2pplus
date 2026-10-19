@@ -33,9 +33,8 @@ import java.util.Map;
 import java.util.Properties;
 
 /**
- * Defines the information a client must provide to create a session
+ * Defines the information a client must provide to create a session.
  *
- * @author jrandom
  */
 public class SessionConfig extends DataStructureImpl {
     /** The destination for this session. */
@@ -48,21 +47,21 @@ public class SessionConfig extends DataStructureImpl {
     private Properties _options;
 
     /**
-     * Seconds since epoch, NOT ms
+     * Seconds since epoch, NOT ms.
      *
      * @since 0.9.38
      */
     public static final String PROP_OFFLINE_EXPIRATION = "i2cp.leaseSetOfflineExpiration";
 
     /**
-     * Base 64, optionally preceded by sig type and ':', default DSA-SHA1
+     * Base 64, optionally preceded by sig type and ':', default DSA-SHA1.
      *
      * @since 0.9.38
      */
     public static final String PROP_TRANSIENT_KEY = "i2cp.leaseSetTransientPublicKey";
 
     /**
-     * Base 64, optionally preceded by sig type and ':', default DSA-SHA1
+     * Base 64, optionally preceded by sig type and ':', default DSA-SHA1.
      *
      * @since 0.9.38
      */
@@ -97,7 +96,7 @@ public class SessionConfig extends DataStructureImpl {
     }
 
     /**
-     * Retrieve the destination for which this session is supposed to connect
+     * Retrieve the destination for which this session is supposed to connect.
      *
      * @return Destination for this session
      */
@@ -107,7 +106,7 @@ public class SessionConfig extends DataStructureImpl {
 
     /**
      * Determine when this session was authorized by the destination (so we can
-     * prevent replay attacks)
+     * prevent replay attacks).
      *
      * @return the time the destination authorized this session, or null if never set
      */
@@ -125,7 +124,7 @@ public class SessionConfig extends DataStructureImpl {
     }
 
     /**
-     * Retrieve any configuration options for the session
+     * Retrieve any configuration options for the session.
      *
      * @return Properties of this session
      */
@@ -188,7 +187,7 @@ public class SessionConfig extends DataStructureImpl {
     }
 
     /**
-     * Get the offline expiration
+     * Get the offline expiration.
      *
      * @return Java time (ms) or 0 if not initialized or does not have offline keys
      * @since 0.9.38
@@ -244,7 +243,8 @@ public class SessionConfig extends DataStructureImpl {
     }
 
     /**
-     * Gets the offline signature from the options.
+     * The offline signature parsed from the "offlineSignature" session
+     * option.
      *
      * @return null on error or if not initialized or does not have offline keys
      * @since 0.9.38
@@ -267,10 +267,10 @@ public class SessionConfig extends DataStructureImpl {
     }
 
     /**
-     * Sign the structure using the supplied private key
+     * Sign the structure using the supplied private key.
      *
      * @param signingKey SigningPrivateKey to sign with.
-     *                   If offline data is set, must be with the transient key.
+     * If offline data is set, must be with the transient key.
      *
      * @throws DataFormatException if the data cannot be signed
      */

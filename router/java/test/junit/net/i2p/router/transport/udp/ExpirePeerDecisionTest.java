@@ -9,7 +9,7 @@ import org.junit.Test;
 
 /**
  * Pins peer-expiry / firewall-keepalive decision logic extracted from
- * UDPTransport.ExpirePeerEvent.timeReached(). All helpers are pure static
+ * {@code UDPTransport.ExpirePeerEvent.timeReached()}. All helpers are pure static
  * functions in UDPTransport; no router context is required.
  *
  * Constants below pin the package settings they were extracted from:

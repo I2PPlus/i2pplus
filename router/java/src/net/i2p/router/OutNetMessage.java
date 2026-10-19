@@ -26,7 +26,7 @@ public class OutNetMessage implements CDPQEntry {
     private final RouterInfo _target;
     private final I2NPMessage _message;
     private final int _messageTypeId;
-    /** Cached message ID, for use after we discard the message */
+    /** Cached message ID, for use after we discard the message. */
     private final long _messageId;
     private final int _messageSize;
     private final int _priority;
@@ -43,7 +43,7 @@ public class OutNetMessage implements CDPQEntry {
     private long _transportQueued;
     private long _seqNum;
     private final boolean _shouldTimestamp;
-    /** For debugging, maps each event name to a timestamp (e.g. "begin sending", "handleOutbound", etc) */
+    /** For debugging, maps each event name to a timestamp (e.g. "begin sending", "handleOutbound", etc). */
     private HashMap<String, Long> _timestamps;
     /**
      * Contains a list of timestamp event names in the order they were fired
@@ -58,41 +58,41 @@ public class OutNetMessage implements CDPQEntry {
      * @since 0.9.3
      */
     public static final int PRIORITY_LOWEST = 100;
-    /** Medium priority */
+    /** Medium priority. */
     public static final int PRIORITY_MEDIUM = 400;
-    /** Highest priority */
+    /** Highest priority. */
     public static final int PRIORITY_HIGHEST = 1000;
-    /** Build reply priority */
+    /** Build reply priority. */
     public static final int PRIORITY_BUILD_REPLY = 300;
-    /** Exploratory priority */
+    /** Exploratory priority. */
     public static final int PRIORITY_EXPLORATORY = 455;
-    /** Participating priority */
+    /** Participating priority. */
     public static final int PRIORITY_PARTICIPATING = 200;
-    /** My build request priority */
+    /** My build request priority. */
     public static final int PRIORITY_MY_BUILD_REQUEST = 500;
-    /** My data priority */
+    /** My data priority. */
     public static final int PRIORITY_MY_DATA = PRIORITY_HIGHEST;
-    /** My netdb lookup priority */
+    /** My netdb lookup priority. */
     public static final int PRIORITY_MY_NETDB_LOOKUP = PRIORITY_HIGHEST;
-    /** My netdb store low priority */
+    /** My netdb store low priority. */
     public static final int PRIORITY_MY_NETDB_STORE_LOW = 250;
-    /** My netdb store priority */
+    /** My netdb store priority. */
     public static final int PRIORITY_MY_NETDB_STORE = PRIORITY_HIGHEST;
-    /** Netdb explore priority */
+    /** Netdb explore priority. */
     public static final int PRIORITY_NETDB_EXPLORE = PRIORITY_LOWEST;
-    /** Netdb flood priority */
+    /** Netdb flood priority. */
     public static final int PRIORITY_NETDB_FLOOD = PRIORITY_HIGHEST;
-    /** Netdb harvest priority */
+    /** Netdb harvest priority. */
     public static final int PRIORITY_NETDB_HARVEST = PRIORITY_LOWEST;
-    /** Netdb reply priority */
+    /** Netdb reply priority. */
     public static final int PRIORITY_NETDB_REPLY = 300;
-    /** His build request priority */
+    /** His build request priority. */
     public static final int PRIORITY_HIS_BUILD_REQUEST = 300;
-    /** His netdb store priority */
+    /** His netdb store priority. */
     public static final int PRIORITY_HIS_NETDB_STORE = 200;
 
     /**
-     * Null msg and target, zero expiration (used in OutboundMessageRegistry only)
+     * Null msg and target, zero expiration (used in OutboundMessageRegistry only).
      *
      * @param context the router context
      * @since 0.9.9
@@ -100,13 +100,13 @@ public class OutNetMessage implements CDPQEntry {
     public OutNetMessage(RouterContext context) {this(context, null, 0, -1, null);}
 
     /**
-     * Standard constructor
+     * Standard constructor.
      *
      * @param context the router context
      * @param msg generally non-null
      * @param expiration the expiration time
      * @param priority the send priority; higher is sent sooner, 100
-     *                 (PRIORITY_LOWEST) through 1000 (PRIORITY_HIGHEST)
+     * (PRIORITY_LOWEST) through 1000 (PRIORITY_HIGHEST)
      * @param target generally non-null
      * @since 0.9.9
      */
@@ -134,10 +134,10 @@ public class OutNetMessage implements CDPQEntry {
 
     /**
      * Stamp the message's progress.
-     * Only useful if log level is INFO or DEBUG
+     * Only useful if log level is INFO or DEBUG.
      *
      * @param eventName the label this stamp is filed under; reusing a name overwrites its
-     *                  earlier time and appends a duplicate to the order list
+     * earlier time and appends a duplicate to the order list
      */
     public void timestamp(String eventName) {
         if (_shouldTimestamp) {
@@ -271,7 +271,7 @@ public class OutNetMessage implements CDPQEntry {
     public void setOnFailedSendJob(Job job) {_onFailedSend = job;}
 
     /**
-     * If the MessageSelector detects a reply, this job is enqueued
+     * If the MessageSelector detects a reply, this job is enqueued.
      *
      * @return the onReply job
      */
@@ -340,7 +340,7 @@ public class OutNetMessage implements CDPQEntry {
     /**
      * The transports that have failed to deliver this message.
      * <p>
-     * As of 0.9.55, changed from a Set to a List
+     * As of 0.9.55, changed from a Set to a List.
      *
      * @return the list of failed transports
      */
@@ -365,7 +365,7 @@ public class OutNetMessage implements CDPQEntry {
      */
     public long getCreated() {return _created;}
 
-    /** Reset creation time for dispatch age tracking on requeue */
+    /** Reset creation time for dispatch age tracking on requeue. */
     public void resetCreatedTime() {_created = _context.clock().now();}
 
     /**
@@ -412,7 +412,7 @@ public class OutNetMessage implements CDPQEntry {
     public long getTransportQueued() {return _transportQueued;}
 
     /**
-     * For CDQ
+     * For CDQ.
      *
      * @since 0.9.3
      */
@@ -478,7 +478,7 @@ public class OutNetMessage implements CDPQEntry {
 
     /**
      * Only useful if log level is INFO or DEBUG;
-     * locked_initTimestamps() must have been called previously
+     * locked_initTimestamps() must have been called previously.
      */
     private void renderTimestamps(StringBuilder buf) {
         synchronized (this) {

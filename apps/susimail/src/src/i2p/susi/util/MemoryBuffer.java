@@ -93,6 +93,8 @@ public class MemoryBuffer implements Buffer {
 	}
 
 	/**
+	 * Current write position in the array.
+	 *
 	 * @return 0 always
 	 */
 	public int getOffset() {

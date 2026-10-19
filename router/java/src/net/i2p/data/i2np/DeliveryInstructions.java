@@ -23,10 +23,9 @@ import net.i2p.data.TunnelId;
  * TrivialPreprocessor and reader FragmentHandler do not use this class,
  * the reading and writing is handled inline there.
  *
- * @author jrandom
  */
 public class DeliveryInstructions extends DataStructureImpl {
-    /** 0-3, set by delivery mode constants */
+    /** 0-3, set by delivery mode constants. */
     private int _deliveryMode;
     /**
      * Delivery mode keeping the message on this router.
@@ -44,40 +43,40 @@ public class DeliveryInstructions extends DataStructureImpl {
      * Delivery mode sending the message into a named tunnel.
      */
     public final static int DELIVERY_MODE_TUNNEL = 3;
-    /** Hash of the destination for DESTINATION mode */
+    /** Hash of the destination for DESTINATION mode. */
     private Hash _destinationHash;
-    /** Hash of the router for ROUTER or TUNNEL mode */
+    /** Hash of the router for ROUTER or TUNNEL mode. */
     private Hash _routerHash;
-    /** Tunnel ID for TUNNEL mode */
+    /** Tunnel ID for TUNNEL mode. */
     private TunnelId _tunnelId;
-    /** Whether a delivery delay was requested */
+    /** Whether a delivery delay was requested. */
     private boolean _delayRequested;
-    /** Delay duration in seconds (obsolete, not implemented) */
+    /** Delay duration in seconds (obsolete, not implemented). */
     private long _delaySeconds;
 
-    /** Flag bit pattern for local delivery mode */
+    /** Flag bit pattern for local delivery mode. */
     private final static int FLAG_MODE_LOCAL = 0;
-    /** Flag bit pattern for destination delivery mode */
+    /** Flag bit pattern for destination delivery mode. */
     private final static int FLAG_MODE_DESTINATION = 1;
-    /** Flag bit pattern for router delivery mode */
+    /** Flag bit pattern for router delivery mode. */
     private final static int FLAG_MODE_ROUTER = 2;
-    /** Flag bit pattern for tunnel delivery mode */
+    /** Flag bit pattern for tunnel delivery mode. */
     private final static int FLAG_MODE_TUNNEL = 3;
 
-    /** Bitmask isolating the mode field in the flag byte */
+    /** Bitmask isolating the mode field in the flag byte. */
     private final static int FLAG_MODE = 96;
-    /** Bitmask for the delay-requested flag */
+    /** Bitmask for the delay-requested flag. */
     private final static int FLAG_DELAY = 16;
 
     /**
-     * Immutable local instructions, no options
+     * Immutable local instructions, no options.
      *
      * @since 0.9.9
      */
     public static final DeliveryInstructions LOCAL = new LocalInstructions();
 
     /**
-     * Returns immutable local instructions, or new
+     * Returns immutable local instructions, or new.
      *
      * @param data the buffer holding the encoded delivery instructions
      * @param offset the index within data of the flags byte starting the instructions
@@ -193,7 +192,7 @@ public class DeliveryInstructions extends DataStructureImpl {
     public void setDelaySeconds(long seconds) { _delaySeconds = seconds; }
 
     /**
-     * Not supported, use readBytes(byte[], int)
+     * Not supported, use readBytes(byte[], int).
      * @throws UnsupportedOperationException always; the stream form is not implemented
      */
     public void readBytes(InputStream in) {
@@ -264,7 +263,7 @@ public class DeliveryInstructions extends DataStructureImpl {
         return (0 != (flags & FLAG_DELAY));
     }
 
-    /** Encodes the current delivery mode and delay into flag byte */
+    /** Encodes the current delivery mode and delay into flag byte. */
     private int getFlags() {
         int val = 0;
 
@@ -286,7 +285,7 @@ public class DeliveryInstructions extends DataStructureImpl {
         return val;
     }
 
-    /** Size of the serialized additional delivery info in bytes */
+    /** Size of the serialized additional delivery info in bytes. */
     private int getAdditionalInfoSize() {
         int additionalSize = 0;
 
@@ -314,7 +313,7 @@ public class DeliveryInstructions extends DataStructureImpl {
         return additionalSize;
     }
 
-    /** Serializes additional delivery info (hash, tunnel ID, delay) into buffer */
+    /** Serializes additional delivery info (hash, tunnel ID, delay) into buffer. */
     private int getAdditionalInfo(byte[] rv, int offset) {
         int origOffset = offset;
 
@@ -347,7 +346,7 @@ public class DeliveryInstructions extends DataStructureImpl {
     }
 
     /**
-     * Not supported, use writeBytes(byte[], int)
+     * Not supported, use writeBytes(byte[], int).
      * @throws UnsupportedOperationException always; the stream form is not implemented
      */
     public void writeBytes(OutputStream out) {

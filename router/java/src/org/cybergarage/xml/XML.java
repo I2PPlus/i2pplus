@@ -21,7 +21,6 @@ package org.cybergarage.xml;
  *   <li>&apos; - escaped as &amp;apos; (when quotes are enabled)
  * </ul>
  *
- * @author Satoshi Konno
  * @since 1.0
  */
 public class XML {

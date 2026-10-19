@@ -188,7 +188,7 @@ public class RrdNioBackendFactory extends RrdFileBackendFactory {
      * is needed, and not before.
      *
      * <p>In practice this thread pool will be used if clients rely on the factory returned by
-     * {@link org.rrd4j.core.RrdBackendFactory#getDefaultFactory()}, but not if clients provide
+     * {@link org.rrd4j.core.RrdBackendFactory#getDefaultFactory}, but not if clients provide
      * their own backend instance when creating {@code RrdDb} instances or syncing was not disabled.
      */
     /**

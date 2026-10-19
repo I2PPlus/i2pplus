@@ -22,7 +22,7 @@ import net.i2p.util.Log;
  * Probes peers to verify they are still alive, using DirectLookupJob to ask
  * for their RouterInfo.  If they respond, lastHeardFrom/lastHeardAbout are
  * updated, making them pass the proof-of-life check in
- * ProfileOrganizer.isSelectable().
+ * {@link net.i2p.router.peermanager.ProfileOrganizer#isSelectable}.
  * <p>
  * During startup, probes ALL peers aggressively to quickly identify which
  * cached routers are still online.  After startup, falls back to probing
@@ -50,7 +50,7 @@ class ProbeStalePeerJob extends JobImpl {
 
     private static final long CYCLE_INTERVAL = 60L * 1000;
     private static final int MAX_PROBES_PER_CYCLE = 50;
-    /** More aggressive during startup to establish transport connections faster */
+    /** More aggressive during startup to establish transport connections faster. */
     private static final int STARTUP_MAX_PROBES_PER_CYCLE = 100;
     private static final long PROBE_COOLDOWN = 10L * 60 * 1000;
     private static final long PROOF_OF_LIFE_WINDOW_MS = 60L * 60 * 1000;

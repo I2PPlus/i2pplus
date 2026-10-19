@@ -22,7 +22,7 @@ import org.openjdk.jmh.runner.options.OptionsBuilder;
 import java.util.concurrent.TimeUnit;
 
 /**
- * Test the JVM's implementation for speed
+ * Test the JVM's implementation for speed.
  *
  * Old results (2011-05):
  * <ul>

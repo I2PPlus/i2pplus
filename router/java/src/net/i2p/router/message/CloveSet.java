@@ -63,7 +63,7 @@ public class CloveSet {
 
     /**
      * Get the message ID.
-     * @return the message ID
+     * @return the 64-bit clove message ID
      */
     public long getMessageId() { return _msgId; }
 

@@ -25,7 +25,7 @@ import net.i2p.util.PortMapper;
 
 /**
  * This is the thread listening on 127.0.0.1:7655 or as specified by
- * sam.udp.host and sam.udp.port properties.
+ * {@code sam.udp.host} and {@code sam.udp.port} properties.
  * This is used for both repliable and raw datagrams.
  *
  * @since 0.9.24 moved from SAMv3Handler
@@ -293,12 +293,20 @@ class SAMv3DatagramServer implements Handler {
 			}
 		}
 
-		/** @since 0.9.22 */
+		/**
+		 * Log a warning to the router log.
+		 *
+		 * @since 0.9.22
+		 */
 		private static void warn(String s) {
 			warn(s, null);
 		}
 
-		/** @since 0.9.22 */
+		/**
+		 * Log a warning with its cause.
+		 *
+		 * @since 0.9.22
+		 */
 		private static void warn(String s, Throwable t) {
 			Log log = I2PAppContext.getGlobalContext().logManager().getLog(SAMv3DatagramServer.class);
 			if (log.shouldWarn())

@@ -18,8 +18,6 @@ import net.i2p.util.SystemVersion;
  * <p>All methods are static to provide convenient access throughout the framework. Debug output can
  * be enabled/disabled at runtime.
  *
- * @author Satoshi Konno
- * @author I2P modifications
  * @version 1.0
  * @since 1.0
  */

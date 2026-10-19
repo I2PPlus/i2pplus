@@ -35,7 +35,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
  * (160 for SHA1Hash or 256 for Hash),
  * times 2**(B-1) for Kademlia value B.
  * <p>
- * Refactored from net.i2p.router.networkdb.kademlia
+ * Refactored from net.i2p.router.networkdb.kademlia.
  *
  * @param <T> type of SimpleDataStructure objects stored in buckets
  * @since 0.9.2 in i2psnark, moved to core in 0.9.10
@@ -189,12 +189,13 @@ public class KBucketSet<T extends SimpleDataStructure> {
 
     /**
      * No lock required.
-     * FIXME will split the closest buckets too far if B &gt; 1 and K &lt; 2**B
-     * Won't ever really happen and if it does it still works.
+     *
      * @return true if the bucket is over BUCKET_SIZE and its range covers more
-     *         than one key
+     * than one key
      */
     private boolean shouldSplit(KBucket<T> b) {
+        // FIXME will split the closest buckets too far if B > 1 and K < 2**B
+        // Won't ever really happen and if it does it still works.
         return b.getRangeBegin() != b.getRangeEnd() && b.getKeyCount() > BUCKET_SIZE;
     }
 
@@ -418,7 +419,7 @@ public class KBucketSet<T extends SimpleDataStructure> {
         return removed;
     }
 
-    /** Clear all buckets. @since 0.8.8 */
+    /** Clear all buckets. @since 0.8.8. */
     public void clear() {
         getReadLock();
         try {
@@ -592,7 +593,7 @@ public class KBucketSet<T extends SimpleDataStructure> {
 
     /**
      * The bucket number (NOT the range number) that the xor of the key goes in
-     * Caller must hold read lock
+     * Caller must hold read lock.
      *
      * @return 0 to max-1 or -1 for us
      */
@@ -630,7 +631,7 @@ public class KBucketSet<T extends SimpleDataStructure> {
 
     /**
      * The bucket that the xor of the key goes in
-     * Caller must hold read lock
+     * Caller must hold read lock.
      *
      * @return null if key is us
      */
@@ -644,7 +645,7 @@ public class KBucketSet<T extends SimpleDataStructure> {
 
     /**
      * The bucket number that contains this range number
-     * Caller must hold read lock or write lock
+     * Caller must hold read lock or write lock.
      *
      * @return 0 to max-1 or -1 for us
      */
@@ -720,7 +721,7 @@ public class KBucketSet<T extends SimpleDataStructure> {
      * For every bucket that hasn't been updated in this long,
      * or isn't close to full, generate a random key that would be a member
      * of that bucket, up to max keys. The closest bucket's key is always
-     * first; the remaining buckets are visited in random order so a capped
+     * first. The remaining buckets are visited in random order so a capped
      * pass does not always starve the far end of the keyspace.
      *
      * @param age the maximum age in milliseconds
@@ -860,10 +861,10 @@ public class KBucketSet<T extends SimpleDataStructure> {
     }
 
     /**
-     * Make a new SimpleDataStrucure from the data
+     * Make a new SimpleDataStrucure from the data.
      *
      * @param data size &lt;= SDS length, else throws IAE
-     *             Can be 1 bigger if top byte is zero
+     * Can be 1 bigger if top byte is zero
      */
     @SuppressWarnings("unchecked")
     private T makeKey(byte[] data) {

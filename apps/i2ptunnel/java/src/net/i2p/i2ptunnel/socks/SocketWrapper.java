@@ -44,6 +44,8 @@ class SocketWrapper implements I2PSocket {
     }
 
     /**
+     * Local destination of the socket.
+     *
      * @return the Destination of this side of the socket.
      */
     public Destination getThisDestination() {
@@ -51,6 +53,8 @@ class SocketWrapper implements I2PSocket {
     }
 
     /**
+     * Peer destination of the socket.
+     *
      * @return the destination of the peer.
      */
     @Override
@@ -98,6 +102,8 @@ class SocketWrapper implements I2PSocket {
     public void setOptions(I2PSocketOptions options) { /* no-op */ }
 
     /**
+     * Socket read timeout in milliseconds.
+     *
      * @return the read timeout
      */
     public long getReadTimeout() {
@@ -127,6 +133,8 @@ class SocketWrapper implements I2PSocket {
     }
 
     /**
+     * Whether the socket is closed.
+     *
      * @return true if the wrapped outproxy socket is closed
      */
     public boolean isClosed() {

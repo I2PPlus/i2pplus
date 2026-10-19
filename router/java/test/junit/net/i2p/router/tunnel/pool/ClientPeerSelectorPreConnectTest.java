@@ -78,7 +78,7 @@ public class ClientPeerSelectorPreConnectTest {
 
     /**
      * The regression this change fixes. A generous timeout used to mean
-     * "pre-connect is unnecessary"; it only means the budget is larger than
+     * "pre-connect is unnecessary". It only means the budget is larger than
      * the handshake, not that a session already exists. With adaptive
      * timeouts at 17s and 22s this path skipped pre-connect for most builds.
      */

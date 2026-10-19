@@ -42,10 +42,6 @@ import java.io.Writer;
  * But we also had to modify NCSARequestLog to do so, to change private fields to protected.
  *
  * So that we will work with system Jetty 6 packages, we just copy the whole thing and modify log() as required.
- *
- * @author Greg Wilkins
- * @author Nigel Canonizado
- *
  */
 public class I2PRequestLog extends AbstractLifeCycle implements RequestLog
 {

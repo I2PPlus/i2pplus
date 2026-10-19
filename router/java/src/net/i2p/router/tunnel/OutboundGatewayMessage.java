@@ -27,7 +27,7 @@ class OutboundGatewayMessage extends PendingGatewayMessage implements CDPQEntry 
     }
 
     /**
-     * For CDPQ
+     * For CDPQ.
      */
     @Override
     public void setSeqNum(long num) {
@@ -35,7 +35,7 @@ class OutboundGatewayMessage extends PendingGatewayMessage implements CDPQEntry 
     }
 
     /**
-     * For CDPQ
+     * For CDPQ.
      * @return the seq num
      */
     public long getSeqNum() {
@@ -43,7 +43,7 @@ class OutboundGatewayMessage extends PendingGatewayMessage implements CDPQEntry 
     }
 
     /**
-     * For CDPQ
+     * For CDPQ.
      * @return the CDPQ priority assigned at construction
      */
     public int getPriority() {

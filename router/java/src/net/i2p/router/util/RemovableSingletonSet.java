@@ -7,7 +7,7 @@ import java.util.NoSuchElementException;
 /**
  * Singleton set with removable element support and iterator functionality.
  * <p>
- * Similar to Collections.singleton() but provides the ability to
+ * Similar to {@code Collections.singleton()} but provides the ability to
  * remove the single element and clear the set. Iterator supports
  * remove() operations while maintaining singleton behavior.
  * <p>

@@ -24,9 +24,9 @@ import net.i2p.router.tunnel.TunnelCreatorConfig;
  * pure threshold helpers {@link TunnelPool#exceedsRemovalThreshold(int)} /
  * {@link TunnelPool#exceedsRemovalThreshold(int, boolean)}.
  * Hard statuses share the cumulative counter with TestJob and remove only
- * after the count exceeds MAX_CONSECUTIVE_TEST_FAILURES (3); soft send
+ * after the count exceeds MAX_CONSECUTIVE_TEST_FAILURES (3). Soft send
  * timeouts (status 3) increment only the soft counter and remove only above
- * SOFT_REMOVAL_THRESHOLD — they must not trip getTunnelFailed() or
+ * SOFT_REMOVAL_THRESHOLD. They must not trip getTunnelFailed() or
  * selection gates at the hard bar.
  *
  * @since 0.9.71+

@@ -41,7 +41,7 @@ public class CompressedRequestorTest {
     private static final Log LOG = new Log(CompressedRequestorTest.class);
     private static final String REQUESTOR_CLASS = I2PTunnelHTTPServer.class.getName() + "$CompressedRequestor";
 
-    /** I2PSocket stub for the browser side: capture output, count reset()/close() */
+    /** I2PSocket stub for the browser side: capture output, count reset()/close(). */
     private static class BrowserSocket implements I2PSocket {
         private final ByteArrayInputStream _in;
         final ByteArrayOutputStream out = new ByteArrayOutputStream();
@@ -78,7 +78,7 @@ public class CompressedRequestorTest {
         _executor.shutdownNow();
     }
 
-    /** Construct the private CompressedRequestor via reflection */
+    /** Construct the private CompressedRequestor via reflection. */
     private static Runnable newRequestor(Socket webserver, BrowserSocket browser, String headers,
                                          boolean compress, boolean upgrade, boolean keepalive,
                                          AtomicInteger waiter, ThreadPoolExecutor executor) throws Exception {
@@ -117,7 +117,7 @@ public class CompressedRequestorTest {
         return Arrays.copyOfRange(response, bodyStart + 4, response.length);
     }
 
-    /** Run a requestor against a server thread that handles one accepted connection */
+    /** Run a requestor against a server thread that handles one accepted connection. */
     private void runScenario(BrowserSocket browser, String requestHeaders, boolean compress,
                              boolean upgrade, boolean keepalive, AtomicInteger waiter,
                              final ThrowingConsumer<Socket> serverHandler,
@@ -154,7 +154,7 @@ public class CompressedRequestorTest {
     /**
      * Wait for async requestor completion after run() returns.
      * Keepalive finishes before run() returns (waiter 2, no browser close).
-     * Non-keepalive may still be transferring; wait until finishTransfer
+     * Non-keepalive may still be transferring. Wait until finishTransfer
      * has closed the browser (waiter 1 + closeCount) or the keepalive path
      * has published waiter 2.
      *
@@ -174,7 +174,7 @@ public class CompressedRequestorTest {
         }
     }
 
-    /** like java.util.function.Consumer but throws */
+    /** Like java.util.function.Consumer but throws. */
     private interface ThrowingConsumer<T> {
         void accept(T t) throws Throwable;
     }

@@ -20,9 +20,8 @@ import net.i2p.util.SimpleByteCache;
 /**
  * Defines the base message implementation.
  * <p>
- * Note: No longer extends DataStructureImpl as of 0.9.48
+ * Note: No longer extends DataStructureImpl as of 0.9.48.
  *
- * @author jrandom
  */
 public abstract class I2NPMessageImpl implements I2NPMessage {
     /** Log for the message class, taken from the context's log manager. */
@@ -34,7 +33,7 @@ public abstract class I2NPMessageImpl implements I2NPMessage {
 
     /**
      * Warning, lazily initialized by readBytes(), writeBytes(), toByteArray(),
-     * getUniqueId(), and setUniqueId(); otherwise will be -1.
+     * getUniqueId(), and setUniqueId(). Otherwise will be -1.
      * Extending classes should take care when accessing this field;
      * to ensure initialization, use getUniqueId() instead.
      */
@@ -88,7 +87,7 @@ public abstract class I2NPMessageImpl implements I2NPMessage {
 
     /**
      * Read the header, then read the rest into buffer, then call
-     * readMessage in the implemented message type
+     * readMessage in the implemented message type.
      * <pre>
      *  Specifically:
      *  1 byte type (if caller didn't read already, as specified by the type param
@@ -171,7 +170,7 @@ public abstract class I2NPMessageImpl implements I2NPMessage {
     }
 
     /**
-     * Replay resistant message Id
+     * Replay resistant message Id.
      * @return the unique id
      */
     public long getUniqueId(long msgIDBloomXor) {
@@ -201,7 +200,7 @@ public abstract class I2NPMessageImpl implements I2NPMessage {
     public void setUniqueId(long id) { _uniqueId.set(id); }
 
     /**
-     * Date after which the message should be dropped (and the associated uniqueId forgotten)
+     * Date after which the message should be dropped (and the associated uniqueId forgotten).
      *
      * @return the message expiration
      */

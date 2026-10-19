@@ -8,15 +8,15 @@ import net.i2p.data.Base64;
 import net.i2p.data.DataHelper;
 
 /**
- * Encrypt/decrypt headers
+ * Encrypt/decrypt headers.
  *
  * @since 0.9.54
  */
 final class SSU2Header {
 
-    /** 8 bytes of zeros */
+    /** 8 bytes of zeros. */
     public static final byte[] HEADER_PROT_DATA = new byte[HEADER_PROT_DATA_LEN];
-    /** 12 bytes of zeros */
+    /** 12 bytes of zeros. */
     public static final byte[] CHACHA_IV_0 = new byte[CHACHA_IV_LEN];
 
     /**
@@ -25,7 +25,7 @@ final class SSU2Header {
      * <p>
      * Safe because a trial-decrypted Header never escapes the calling method:
      * acceptTrialDecrypt() copies the bytes into the packet, and no caller
-     * stores the Header. One scratch per header size, because Header.toString()
+     * stores the Header. One scratch per header size, because {@link net.i2p.router.transport.udp.Header#toString}
      * and getEphemeralKey() infer the header type from the array length, and
      * because PacketHandler may hold a handshake header while falling back to
      * a long-header decrypt of the same packet.
@@ -36,7 +36,7 @@ final class SSU2Header {
         final Header session = new Header(SESSION_HEADER_SIZE);
         final Header longHdr = new Header(LONG_HEADER_SIZE);
         final Header shortHdr = new Header(SHORT_HEADER_SIZE);
-        /** reused by decryptDestConnID(), decryptShortHeader(), encryptShortHeader() */
+        /** Reused by decryptDestConnID(), decryptShortHeader(), encryptShortHeader(). */
         final byte[] xor = new byte[HEADER_PROT_DATA_LEN];
     }
 
@@ -304,7 +304,7 @@ final class SSU2Header {
     ////////// Encryption ///////////
 
     /**
-     * First 64 bytes
+     * First 64 bytes.
      *
      * @param packet the outbound packet whose header bytes are encrypted in place
      * @param key1 the 32-byte ChaCha20 key protecting header bytes 0-7
@@ -319,7 +319,7 @@ final class SSU2Header {
     }
 
     /**
-     * First 32 bytes
+     * First 32 bytes.
      *
      * @param packet the outbound packet whose header bytes are encrypted in place
      * @param key1 the 32-byte ChaCha20 key protecting header bytes 0-7

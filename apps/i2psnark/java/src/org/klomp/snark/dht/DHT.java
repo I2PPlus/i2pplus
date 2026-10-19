@@ -9,7 +9,7 @@ import net.i2p.data.Destination;
 import net.i2p.data.Hash;
 
 /**
- * Stub for KRPC
+ * Stub for KRPC.
  *
  * @since 0.8.4
  */

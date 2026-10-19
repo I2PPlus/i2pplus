@@ -1,7 +1,7 @@
 package net.i2p.client.streaming;
 
 /**
- * Usage: StreamSinkTest [(old|new) [#hops [#kb]]]
+ * Usage: StreamSinkTest [(old|new) [#hops [#kb]]].
  */
 public class StreamSinkTestStandalone {
     /**

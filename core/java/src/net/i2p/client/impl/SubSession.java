@@ -79,7 +79,7 @@ class SubSession extends I2PSessionMuxedImpl {
     }
 
     /**
-     * Does nothing for now
+     * Does nothing for now.
      */
     @Override
     public void updateOptions(Properties options) { /* nop */ }
@@ -159,7 +159,7 @@ class SubSession extends I2PSessionMuxedImpl {
 
     /**
      * Deliver an I2CP message to the router
-     * May block for several seconds if the write queue to the router is full
+     * May block for several seconds if the write queue to the router is full.
      *
      * @throws I2PSessionException if the message is malformed or there is an error writing it out
      */
@@ -260,7 +260,7 @@ class SubSession extends I2PSessionMuxedImpl {
 
     /**
      * Called by the message handler
-     * on reception of HostReplyMessage
+     * on reception of HostReplyMessage.
      *
      * @param d non-null
      */
@@ -271,7 +271,7 @@ class SubSession extends I2PSessionMuxedImpl {
 
     /**
      * Called by the message handler
-     * on reception of HostReplyMessage
+     * on reception of HostReplyMessage.
      */
     @Override
     void destLookupFailed(long nonce, int code) {
@@ -345,7 +345,7 @@ class SubSession extends I2PSessionMuxedImpl {
 
     /**
      * This won't be called, as the reply does not contain a session ID, so
-     * it won't be routed back to us
+     * it won't be routed back to us.
      */
     @Override
     public int[] bandwidthLimits() throws I2PSessionException {

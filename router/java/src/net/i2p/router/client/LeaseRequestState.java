@@ -12,7 +12,7 @@ import net.i2p.router.Job;
 
 /**
  * Bundle up the data points necessary when asynchronously requesting a lease
- * from a client
+ * from a client.
  */
 class LeaseRequestState {
     /**
@@ -105,7 +105,7 @@ class LeaseRequestState {
      * Claim one attempt to re-request the LeaseSet after netdb publish()
      * rejected it as expired (client clock skew or slow signing). The first
      * {@link #MAX_TRANSIENT_PUBLISH_RETRIES} callers receive true so the
-     * request is promptly re-run with freshly floored lease times; later
+     * request is promptly re-run with freshly floored lease times. Later
      * callers receive false so a persistently skewed client cannot loop.
      *
      * @return true if a retry attempt is available

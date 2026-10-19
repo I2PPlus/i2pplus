@@ -24,9 +24,8 @@ import net.i2p.util.Log;
 import net.i2p.util.SecureDirectory;
 
 /**
- * SSL version of ClientListenerRunner
+ * SSL version of ClientListenerRunner.
  *
- * @author zzz
  * @since 0.8.3
  */
 class SSLClientListenerRunner extends ClientListenerRunner {
@@ -81,7 +80,7 @@ class SSLClientListenerRunner extends ClientListenerRunner {
      * Call out to keytool to create a new keystore with a keypair in it.
      * Trying to do this programatically is a nightmare, requiring either BouncyCastle
      * libs or using proprietary Sun libs, and it's a huge mess.
-     * If successful, stores the keystore password and key password in router.config.
+     * If successful, stores the keystore password and key password in {@code router.config}.
      *
      * @return true if the keystore was created and its passwords saved
      */

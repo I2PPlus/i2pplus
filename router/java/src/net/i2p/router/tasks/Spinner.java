@@ -18,7 +18,7 @@ package net.i2p.router.tasks;
  * <p>
  * As a non-daemon thread, the JVM will not terminate until this
  * thread completes its 5-minute sleep or is interrupted. This is
- * especially important for ensuring router.info files are written
+ * especially important for ensuring {@code router.info} files are written
  * correctly and network connections are closed gracefully.
  *
  * @since 0.8.12 moved from Router.java

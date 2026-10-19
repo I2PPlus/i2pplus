@@ -42,7 +42,7 @@ public class SMTPClient {
 
     /**
      * 7629902 ~= 7.27 MB
-     * Base64 encodes 57 chars to 76 + \r\n on a line
+     * Base64 encodes 57 chars to 76 + \r\n on a line.
      * @since 0.9.33
      */
     public static final long BINARY_MAX_SIZE = (long) ((DEFAULT_MAX_SIZE * 57.0d / 78) - 32*1024);
@@ -58,7 +58,7 @@ public class SMTPClient {
     private static final Encoding base64;
     static {base64 = EncodingFactory.getEncoding("base64");}
 
-    /** Default constructor */
+    /** Creates a client with no error. */
     public SMTPClient() {
         error = "";
         lastResponse = "";
@@ -66,14 +66,14 @@ public class SMTPClient {
     }
 
     /**
-     * Writes a command to the server and waits for its reply
+     * Writes a command to the server and waits for its reply.
      * @param cmd the command to write, or null to send nothing
      * @return result code or 0 for failure
      */
     private int sendCmd(String cmd) {return sendCmd(cmd, true);}
 
     /**
-     * Writes a command to the server, optionally without waiting for the reply
+     * Writes a command to the server, optionally without waiting for the reply.
      * @param cmd the command to write, or null to send nothing
      * @param shouldWait if false, don't wait for response, and return 100
      * @return result code or 0 for failure
@@ -85,7 +85,7 @@ public class SMTPClient {
 
     /**
      * Writes a command to the server, optionally without waiting for the reply
-     * and optionally masked in the debug log
+     * and optionally masked in the debug log.
      * @param cmd the command to write, or null to send nothing
      * @param shouldWait if false, don't wait for response, and return 100
      * @param mask true to mask the command in debug logs (credentials)
@@ -106,7 +106,7 @@ public class SMTPClient {
     }
 
     /**
-     * Does not flush, wait, or read
+     * Does not flush, wait, or read.
      *
      * @param cmd the command to write, never null
      * @since 0.9.13
@@ -116,7 +116,7 @@ public class SMTPClient {
     }
 
     /**
-     * Does not flush, wait, or read
+     * Does not flush, wait, or read.
      *
      * @param cmd the command to write, never null
      * @param mask true to mask the command in debug logs (credentials)
@@ -135,7 +135,7 @@ public class SMTPClient {
 
     /**
      * Sends the commands back to back if the server supports pipelining,
-     * otherwise one at a time
+     * otherwise one at a time.
      *
      * @param cmds the commands to send in order, never null or empty
      * @return number of successful commands
@@ -171,15 +171,19 @@ public class SMTPClient {
     }
 
     /**
+     * The numeric code of the last server reply.
+     *
      * @return result code or 0 for failure
      * @since 0.9.13
      */
     private int getResult() {return getFullResult().result;}
 
     /**
+     * Read the complete server reply.
+     *
      * @return result code and string, all lines combined with \r separators,
-     *         first 3 bytes are the ASCII return code or "000" for failure
-     *         Result and Result.recv non null
+     * first 3 bytes are the ASCII return code or "000" for failure
+     * Result and Result.recv non null
      * @since 0.9.13
      */
     private Result getFullResult() {
@@ -350,7 +354,7 @@ public class SMTPClient {
     }
 
     /**
-     * Caller must close out
+     * Caller must close out.
      *
      * @param out the writer that receives the message, left open for the caller
      * @param body headers and body, without the attachments
@@ -398,7 +402,7 @@ public class SMTPClient {
     }
 
     /**
-     * A command to send and a result code to expect
+     * A command to send and a result code to expect.
      * @since 0.9.13
      */
     private static class SendExpect {
@@ -440,7 +444,7 @@ public class SMTPClient {
     }
 
     /**
-     * A result string and code
+     * A result string and code.
      * @since 0.9.13
      */
     private static class Result {
@@ -453,13 +457,21 @@ public class SMTPClient {
          */
         public final String recv;
 
-        /** @param t non-null */
+        /**
+         * Creates a reply with its code and text.
+         *
+         * @param t non-null
+         */
         public Result(int r, String t) {
             result = r;
             recv = t;
         }
 
-        /** @since 0.9.33 */
+        /**
+         * Reply code and text for log messages.
+         *
+         * @since 0.9.33
+         */
         @Override
         public String toString() {
             StringBuilder buf = new StringBuilder();
@@ -469,10 +481,10 @@ public class SMTPClient {
         }
     }
 
-    /** translate */
+    /** Looks up a localized string in the message bundle. */
     private static String _t(String s) {return Messages.getString(s);}
 
-    /** translate */
+    /** Looks up a localized string in the message bundle. */
     private static String _t(String s, Object o) {return Messages.getString(s, o);}
 
 }

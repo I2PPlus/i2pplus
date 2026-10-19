@@ -10,10 +10,10 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 /**
- * Tests for the per-rate coalesce isolation in {@link RateStat#coalesceStats()}.
+ * Tests for the per-rate coalesce isolation in {@link RateStat#coalesceStats}.
  *
  * <p>The defect this guards against is the reason the isolation exists.
- * {@link StatManager#coalesceStats()} walks the whole stat table in one pass on the
+ * {@link StatManager#coalesceStats} walks the whole stat table in one pass on the
  * shared coalesce timer, so an exception escaping a single rate used to abandon
  * every stat later in that pass. Their listeners received nothing, their graphs
  * froze, and nothing was logged anywhere - the rate simply stopped recording, which
@@ -42,7 +42,7 @@ public class RateCoalesceIsolationTest {
         /**
          * Throws a checked or unchecked throwable without declaring it, so this
          * stand-in can model an {@link Error} as well as a {@link RuntimeException}
-         * without widening {@link Rate#coalesce()}'s signature.
+         * without widening {@link Rate#coalesce}'s signature.
          */
         @SuppressWarnings("unchecked")
         private static <T extends Throwable> void sneakyThrow(Throwable t) throws T {

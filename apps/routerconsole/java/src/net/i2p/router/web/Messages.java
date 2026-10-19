@@ -27,7 +27,7 @@ public class Messages extends Translate {
      * Look up a string in this package's bundle.
      *
      * @param key the translation key, holding the English text when untranslated
-     * @param ctx supplies the routerconsole.lang property, else current locale
+     * @param ctx supplies the {@code routerconsole.lang} property, else current locale
      * @return the translated string, or the key itself when no translation exists
      */
     public static String getString(String key, I2PAppContext ctx) {
@@ -35,17 +35,17 @@ public class Messages extends Translate {
     }
 
     /**
-     * translate a string with a parameter
+     * Translate a string with a parameter
      * This is a lot more expensive than getString(s, ctx), so use sparingly.
      *
      * @param s string to be translated containing {0}
-     *          The {0} will be replaced by the parameter.
-     *          Single quotes must be doubled, i.e. ' -&gt; '' in the string.
+     * The {0} will be replaced by the parameter.
+     * Single quotes must be doubled, i.e. ' -&gt; '' in the string.
      * @param o parameter, not translated.
-     *          To translate parameter also, use _t("foo {0} bar", _t("baz"))
-     *          Do not double the single quotes in the parameter.
-     *          Use autoboxing to call with ints, longs, floats, etc.
-     * @param ctx supplies the routerconsole.lang property, else current locale
+     * To translate parameter also, use _t("foo {0} bar", _t("baz"))
+     * Do not double the single quotes in the parameter.
+     * Use autoboxing to call with ints, longs, floats, etc.
+     * @param ctx supplies the {@code routerconsole.lang} property, else current locale
      * @return the translated string, with {0} replaced by the parameter
      */
     public static String getString(String s, Object o, I2PAppContext ctx) {
@@ -58,7 +58,7 @@ public class Messages extends Translate {
      * @param s string to be translated containing {0} and {1}
      * @param o first parameter, not translated
      * @param o2 second parameter, not translated
-     * @param ctx supplies the routerconsole.lang property, else current locale
+     * @param ctx supplies the {@code routerconsole.lang} property, else current locale
      * @return the translated string, with {0} and {1} replaced
      * @since 0.7.14
      */
@@ -73,7 +73,7 @@ public class Messages extends Translate {
      * @param n the count, used to choose between s and p
      * @param s singular string, may contain {0} for the count
      * @param p plural string, may contain {0} for the count
-     * @param ctx supplies the routerconsole.lang property, else current locale
+     * @param ctx supplies the {@code routerconsole.lang} property, else current locale
      * @return s or p, per the plural rules for n
      * @since 0.7.14
      */
@@ -84,13 +84,13 @@ public class Messages extends Translate {
     /**
      * Return the "display language", e.g. "English" for the language specified
      * by langCode, using the current language.
-     * Uses translation if available, then JVM Locale.getDisplayLanguage() if available, else default param.
+     * Uses translation if available, then JVM {@code Locale.getDisplayLanguage()} if available, else default param.
      *
      * @param langCode two-letter lower-case language code whose name is wanted,
-     *                 e.g. "en"
+     * e.g. "en"
      * @param dflt returned untranslated when the current language is "en", when
-     *             the bundle has no entry for it, or when the JVM has no display
-     *             name for langCode in the current language
+     * the bundle has no entry for it, or when the JVM has no display
+     * name for langCode in the current language
      * @param ctx supplies the language to display the name in
      * @return the display language
      * @since 0.9.5

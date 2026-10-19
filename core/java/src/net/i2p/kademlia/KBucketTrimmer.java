@@ -3,7 +3,7 @@ package net.i2p.kademlia;
 import net.i2p.data.SimpleDataStructure;
 
 /**
- * Called when a kbucket can no longer be split and is too big
+ * Called when a kbucket can no longer be split and is too big.
  *
  * @param <K> type of SimpleDataStructure objects in the bucket
  * @since 0.9.2 in i2psnark, moved to core in 0.9.10

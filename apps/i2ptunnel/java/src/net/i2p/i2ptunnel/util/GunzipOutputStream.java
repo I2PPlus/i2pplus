@@ -24,7 +24,7 @@ import net.i2p.util.Log;
  * <p>
  * Not a public API, subject to change, not for external use.
  * <p>
- * Modified from net.i2p.util.ResettableGZIPInputStream to use Java 6 InflaterOutputstream
+ * Modified from net.i2p.util.ResettableGZIPInputStream to use Java 6 InflaterOutputstream.
  * @since 0.9.21, public since 0.9.50 for LocalHTTPServer, moved to util in 0.9.62
  */
 public class GunzipOutputStream extends InflaterOutputStream {
@@ -45,7 +45,7 @@ public class GunzipOutputStream extends InflaterOutputStream {
     private final Log _log;
 
     /**
-     * Build a new Gunzip stream
+     * Build a new Gunzip stream.
      * @param uncompressedStream the sink the decompressed bytes are written to
      * @throws IOException if the underlying CRC32/Deflater stream cannot be created
      */
@@ -54,7 +54,7 @@ public class GunzipOutputStream extends InflaterOutputStream {
     }
 
     /**
-     * With a callback when done
+     * With a callback when done.
      *
      * @param uncompressedStream the sink the decompressed bytes are written to
      * @param cb may be null
@@ -124,7 +124,7 @@ public class GunzipOutputStream extends InflaterOutputStream {
     }
 
     /**
-     * Inflater statistic
+     * Inflater statistic.
      * @return the total read
      */
     public long getTotalRead() {
@@ -136,7 +136,7 @@ public class GunzipOutputStream extends InflaterOutputStream {
     }
 
     /**
-     * Inflater statistic
+     * Inflater statistic.
      * @return the total expanded
      */
     public long getTotalExpanded() {
@@ -149,9 +149,9 @@ public class GunzipOutputStream extends InflaterOutputStream {
     }
 
     /**
-     * Inflater statistic
+     * Inflater statistic.
      * @return the number of inflated bytes still buffered inside the inflater,
-     *         or 0 if the inflater is unavailable
+     * or 0 if the inflater is unavailable
      */
     public long getRemaining() {
         try {
@@ -163,9 +163,9 @@ public class GunzipOutputStream extends InflaterOutputStream {
     }
 
     /**
-     * Inflater statistic
+     * Inflater statistic.
      * @return true if the inflater has finished decompressing the compressed
-     *         input; also true if the inflater is unavailable
+     * input; also true if the inflater is unavailable
      */
     public boolean getFinished() {
         try {
@@ -193,6 +193,8 @@ public class GunzipOutputStream extends InflaterOutputStream {
     }
 
     /**
+     * Check the gzip CRC and size trailer.
+     *
      * @throws IOException on CRC or length check fail
      */
     private void verifyFooter() throws IOException {
@@ -359,7 +361,7 @@ public class GunzipOutputStream extends InflaterOutputStream {
     }
 
     /**
-     * Calculate CRC32 along the way
+     * Calculate CRC32 along the way.
      * @since 0.9.61
      */
     private static class CRC32OutputStream extends FilterOutputStream {

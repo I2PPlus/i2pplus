@@ -33,8 +33,6 @@ package org.xlattice.crypto.filters;
  * <li>Both use lookup tables (UNMASK/MASK) for efficient bit operations</li>
  * </ul>
  *
- * @author <A HREF="mailto:jddixon@users.sourceforge.net">Jim Dixon</A>
- *
  *         BloomSHA1.java and KeySelector.java are BSD licensed from xlattice
  *         app - http://xlattice.sourceforge.net/
  *
@@ -68,7 +66,6 @@ public class KeySelector {
      * <p>Implementations must be thread-safe as they may be used concurrently
      * by multiple threads accessing the same Bloom filter.</p>
      *
-     * @author Jim Dixon
      * @since 0.8.11
      */
     public interface BitSelector {
@@ -115,7 +112,6 @@ public class KeySelector {
      * <p>Implementations must be thread-safe as they may be used concurrently
      * by multiple threads accessing the same Bloom filter.</p>
      *
-     * @author Jim Dixon
      * @since 0.8.11
      */
     public interface WordSelector {
@@ -214,10 +210,9 @@ public class KeySelector {
      * <p>Thread Safety: This implementation is thread-safe as it operates
      * only on method parameters and local variables.</p>
      *
-     * @author Jim Dixon
      */
      public class GenericBitSelector implements BitSelector {
-         /** Default constructor. */
+         /** Selects bits from any key data. */
          public GenericBitSelector() {}
          /**
           * Extracts k bit offsets from key data using 5-bit stride algorithm.
@@ -285,10 +280,9 @@ public class KeySelector {
      * <p>Thread Safety: This implementation is thread-safe as it operates
      * only on method parameters and local variables.</p>
      *
-     * @author Jim Dixon
      */
      public class GenericWordSelector implements WordSelector {
-         /** Default constructor. */
+         /** Selects words from any key data. */
          public GenericWordSelector() {}
         /**
          * Extracts k word offsets from key data using variable stride algorithm.

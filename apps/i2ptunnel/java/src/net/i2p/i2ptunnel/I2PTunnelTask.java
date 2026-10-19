@@ -20,9 +20,9 @@ public abstract class I2PTunnelTask extends EventDispatcherImpl {
 
     private int id;
     private String name;
-    /** true while the tunnel is running and accepting connections */
+    /** True while the tunnel is running and accepting connections. */
     protected volatile boolean open;
-    /** the I2PTunnel this task runs inside */
+    /** The I2PTunnel this task runs inside. */
     public I2PTunnel tunnel;
 
     /**
@@ -105,7 +105,7 @@ public abstract class I2PTunnelTask extends EventDispatcherImpl {
 
     /**
      * Notify the task that I2PTunnel's options have been updated.
-     * Extending classes should override and call I2PTunnel.getClientOptions(),
+     * Extending classes should override and call {@link net.i2p.i2ptunnel.I2PTunnel#getClientOptions},
      * then update the I2PSocketManager.
      * Does nothing here.
      *
@@ -115,7 +115,7 @@ public abstract class I2PTunnelTask extends EventDispatcherImpl {
     public void optionsUpdated(I2PTunnel tunnel) {}
 
     /**
-     * For tasks that don't call I2PTunnel.addSession() directly
+     * For tasks that don't call {@link net.i2p.i2ptunnel.I2PTunnel#addSession} directly.
      *
      * @param session the newly connected session to register with the tunnel
      * @since 0.8.13

@@ -7,9 +7,9 @@ import net.i2p.util.Log;
 import org.eclipse.jetty.server.Server;
 
 /**
- *  Stop all plugins that are installed and running
+ * Stop all plugins that are installed and running.
  *
- *  @since 0.7.13
+ * @since 0.7.13
  */
 class PluginStopper extends PluginStarter {
 
@@ -35,9 +35,9 @@ class PluginStopper extends PluginStarter {
     }
 
     /**
-     *  Stop all running plugins
+     * Stop all running plugins
      * <p>
-     *  this shouldn't throw anything
+     * this shouldn't throw anything.
      */
     private void stopPlugins() {
         Log log = _context.logManager().getLog(PluginStopper.class);

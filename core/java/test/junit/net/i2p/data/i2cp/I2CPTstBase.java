@@ -20,7 +20,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 
 /**
- * Utility class for wrapping I2CP message tests
+ * Utility class for wrapping I2CP message tests.
  *
  * @since 0.9.48
  */

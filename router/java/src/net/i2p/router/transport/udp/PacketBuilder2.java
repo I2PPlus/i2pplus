@@ -47,7 +47,7 @@ class PacketBuilder2 {
      * @since 0.9.71+
      */
     private static final class BlockPool {
-        /** The list passed to writePayload(); cleared and refilled per call */
+        /** The list passed to writePayload(); cleared and refilled per call. */
         final List<Block> blocks = new ArrayList<>(8);
         final List<I2NPBlock> i2npBlocks = new ArrayList<>(4);
         final List<FirstFragBlock> firstFragBlocks = new ArrayList<>(4);
@@ -104,36 +104,36 @@ class PacketBuilder2 {
      * SSU2 packet type constant for debugging/stats.
      */
     static final int TYPE_FIRST = 62;
-    /** SSU2 packet type constant for debugging/stats */
+    /** SSU2 packet type constant for debugging/stats. */
     static final int TYPE_ACK = TYPE_FIRST;
-    /** SSU2 packet type constant for debugging/stats */
+    /** SSU2 packet type constant for debugging/stats. */
     static final int TYPE_PUNCH = 63;
-    /** SSU2 packet type constant for debugging/stats */
+    /** SSU2 packet type constant for debugging/stats. */
     static final int TYPE_RESP = 64;
-    /** SSU2 packet type constant for debugging/stats */
+    /** SSU2 packet type constant for debugging/stats. */
     static final int TYPE_INTRO = 65;
-    /** SSU2 packet type constant for debugging/stats */
+    /** SSU2 packet type constant for debugging/stats. */
     static final int TYPE_RREQ = 66;
-    /** SSU2 packet type constant for debugging/stats */
+    /** SSU2 packet type constant for debugging/stats. */
     static final int TYPE_TCB = 67;
-    /** SSU2 packet type constant for debugging/stats */
+    /** SSU2 packet type constant for debugging/stats. */
     static final int TYPE_TBC = 68;
-    /** SSU2 packet type constant for debugging/stats */
+    /** SSU2 packet type constant for debugging/stats. */
     static final int TYPE_TTA = 69;
-    /** SSU2 packet type constant for debugging/stats */
+    /** SSU2 packet type constant for debugging/stats. */
     static final int TYPE_TFA = 70;
-    /** SSU2 packet type constant for debugging/stats */
+    /** SSU2 packet type constant for debugging/stats. */
     static final int TYPE_CONF = 71;
-    /** SSU2 packet type constant for debugging/stats */
+    /** SSU2 packet type constant for debugging/stats. */
     static final int TYPE_SREQ = 72;
-    /** SSU2 packet type constant for debugging/stats */
+    /** SSU2 packet type constant for debugging/stats. */
     static final int TYPE_CREAT = 73;
-    /** SSU2 packet type constant for debugging/stats */
+    /** SSU2 packet type constant for debugging/stats. */
     static final int TYPE_DESTROY = 74;
 
-    /** IPv4 only */
+    /** IPv4 only. */
     public static final int IP_HEADER_SIZE = 20;
-    /** Same for IPv4 and IPv6 */
+    /** Same for IPv4 and IPv6. */
     public static final int UDP_HEADER_SIZE = 8;
 
     /** Minimum IPv4 data packet overhead with MAC in bytes (60). */
@@ -148,7 +148,7 @@ class PacketBuilder2 {
 
     /**
      * Higher than all other OutNetMessage priorities, but still droppable,
-     * and will be shown in the codel.UDP-Sender.drop.500 stat.
+     * and will be shown in the {@code codel.UDP-Sender.drop.500} stat.
      */
     static final int PRIORITY_HIGH = 550;
     private static final int PRIORITY_MEDIUM = OutNetMessage.PRIORITY_MEDIUM;
@@ -157,7 +157,7 @@ class PacketBuilder2 {
     private static final int DATETIME_SEND_FREQUENCY = 256;
 
     /**
-     * Class for passing multiple fragments to buildPacket()
+     * Class for passing multiple fragments to buildPacket().
      *
      * @since 0.9.16, moved from the removed SSU1 PacketBuilder
      */
@@ -839,7 +839,7 @@ class PacketBuilder2 {
     }
 
     /**
-     * Build all the fragmented SessionConfirmed packets
+     * Build all the fragmented SessionConfirmed packets.
      */
     private UDPPacket[] buildSessionConfirmedPackets(OutboundEstablishState2 state, SSU2Payload.RIBlock block) {
         UDPPacket packet0 = buildShortPacketHeader(state.getSendConnID(), 0, SESSION_CONFIRMED_FLAG_BYTE);
@@ -1186,6 +1186,8 @@ class PacketBuilder2 {
     }
 
     /**
+     * Build the header block of a long SSU2 packet.
+     *
      * @param pktNum 0 - 0xFFFFFFFF
      * @return a packet with the first 32 bytes filled in
      */
@@ -1200,6 +1202,8 @@ class PacketBuilder2 {
     }
 
     /**
+     * Build the header block of a short SSU2 packet.
+     *
      * @param pktNum 0 - 0xFFFFFFFF
      * @return a packet with the first 16 bytes filled in
      */
@@ -1348,7 +1352,7 @@ class PacketBuilder2 {
 
     /**
      * Also used for hole punch with a relay request block.
-     * Also used for retry with (usually) ptBlock = null
+     * Also used for retry with (usually) ptBlock = null.
      *
      * @param packet containing only 32 byte header
      * @param ptBlock Peer Test or Relay Request block. Null for retry.
@@ -1536,9 +1540,11 @@ class PacketBuilder2 {
     }
 
     /**
+     * Random padding block up to the maximum size.
+     *
      * @param len current length of the packet including IP/UDP header
-     *            (unless header subtracted from max)
-     *            If len == 0 ensure 8 byte block minimum
+     * (unless header subtracted from max)
+     * If len == 0 ensure 8 byte block minimum
      * @param max max length of the packet
      * @return null if no room
      */
@@ -1547,9 +1553,11 @@ class PacketBuilder2 {
     }
 
     /**
+     * Random padding block with an explicit cap.
+     *
      * @param len current length of the packet including IP/UDP header
-     *            (unless header subtracted from max)
-     *            If len == 0 ensure 8 byte block minimum
+     * (unless header subtracted from max)
+     * If len == 0 ensure 8 byte block minimum
      * @param max max length of the packet
      * @param maxPadding max length of the padding (not including block header)
      * @return null if no room

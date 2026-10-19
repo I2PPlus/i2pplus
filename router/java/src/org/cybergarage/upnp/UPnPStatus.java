@@ -18,7 +18,6 @@ import org.cybergarage.http.HTTPStatus;
  * strings and instance methods for storing and retrieving status information.
  *
  * @since 1.0
- * @author Satoshi Konno
  */
 public class UPnPStatus {
     ////////////////////////////////////////////////

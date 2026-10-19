@@ -18,7 +18,6 @@ import java.util.Map;
  * This class provides DNSSEC algorithm definitions and constants used
  * for DNSSEC operations including signature and digest algorithms.
  *
- * @author MiniDNS Project
  * @since 0.1
  */
 public final class DnssecConstants {

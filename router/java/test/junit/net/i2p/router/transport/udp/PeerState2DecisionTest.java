@@ -9,14 +9,14 @@ import org.junit.Test;
 
 /**
  * Pins connection-migration decision logic extracted from
- * PeerState2.receivePacket(). The decision methods are pure and require no
+ * {@link net.i2p.router.transport.udp.PeerState2#receivePacket}. The decision methods are pure and require no
  * router context, so the full migration-state classifier is exercised here.
  *
  * @since 0.9.71+
  */
 public class PeerState2DecisionTest {
 
-    /** mirrored from PeerState2 so tests are independent of field privacy */
+    /** Mirrored from PeerState2 so tests are independent of field privacy. */
     private static final int MAX_PATH_CHALLENGE_SENDS = 4;
     private static final long MAX_PATH_CHALLENGE_TIME = 30*1000L;
 

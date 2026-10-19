@@ -38,7 +38,7 @@ import net.i2p.data.TunnelId;
 import org.junit.Test;
 
 /**
- * Guards that keep LeaseSet2.writeHeader() from rejecting a client-built
+ * Guards that keep {@link net.i2p.data.LeaseSet2#writeHeader} from rejecting a client-built
  * set with "LeaseSet expired": positive TTL vs published and current time,
  * and no empty sign.
  */
@@ -242,14 +242,14 @@ public class RequestLeaseSetSignGuardTest {
 
     /**
      * A destination in the production wire layout, as built by
-     * I2PClientImpl.createDestination(): a 256-byte public key, a KeyCertificate
+     * {@link net.i2p.client.impl.I2PClientImpl#createDestination}: a 256-byte public key, a KeyCertificate
      * derived from the signing key, and the padding that completes the
      * 128-byte signing-key field. The public encryption key is unused here;
      * only the signing key material matters for the subcredential and the
      * ELS2 signatures.
      *
      * @param spk the destination's signing public key
-     * @return a destination that round-trips through Destination.create()
+     * @return a destination that round-trips through {@link net.i2p.data.Destination#create}
      */
     private static Destination wireValidDestination(SigningPublicKey spk) {
         Destination dest = new Destination();

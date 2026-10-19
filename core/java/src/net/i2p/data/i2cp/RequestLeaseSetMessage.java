@@ -25,7 +25,6 @@ import java.util.Date;
  * Defines the message a router sends to a client to request that
  * a leaseset be created and signed. The reply is a CreateLeaseSetMessage.
  *
- * @author jrandom
  */
 public class RequestLeaseSetMessage extends I2CPMessageImpl {
 

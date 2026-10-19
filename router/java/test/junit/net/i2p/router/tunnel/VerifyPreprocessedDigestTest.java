@@ -181,7 +181,7 @@ public class VerifyPreprocessedDigestTest {
     /**
      * Hash the same bytes two ways and require agreement: once as a single
      * payload||IV buffer through calculateHash(), and once as the pair of
-     * MessageDigest.update() calls verifyPreprocessed() makes.
+     * {@link java.security.MessageDigest#update} calls verifyPreprocessed() makes.
      *
      * @param offset where the message starts inside the buffer
      * @param paddingEnd one past the last padding byte

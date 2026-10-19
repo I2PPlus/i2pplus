@@ -66,7 +66,6 @@ import org.freenetproject.ForwardPortStatus;
  * <li>Logging and monitoring capabilities</li>
  * </ul>
  *
- * @author zzz
  * @since 0.7.4
  */
 class UPnPManager {
@@ -194,7 +193,7 @@ class UPnPManager {
     }
 
     /**
-     * Blocking, may take a while, up to 20 seconds
+     * Blocking, may take a while, up to 20 seconds.
      */
     public synchronized void stop() {
         if (_log.shouldDebug())
@@ -247,7 +246,7 @@ class UPnPManager {
     }
 
     /**
-     * Initiate a UPnP search
+     * Initiate a UPnP search.
      *
      * @since 0.9.18
      */
@@ -270,7 +269,7 @@ class UPnPManager {
     }
 
     /**
-     * Delayed Callback
+     * Delayed Callback.
      *
      * @since 0.9.41
      */

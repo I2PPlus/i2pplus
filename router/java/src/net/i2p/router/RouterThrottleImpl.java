@@ -66,10 +66,10 @@ public class RouterThrottleImpl implements RouterThrottle {
 
     private static final int DEFAULT_MAX_PROCESSINGTIME = SystemVersion.isSlow() ? 3000 : 2000;
 
-    /** Tunnel acceptance */
+    /** Tunnel acceptance. */
     public static final int TUNNEL_ACCEPT = 0;
 
-    /** = TrivialPreprocessor.PREPROCESSED_SIZE */
+    /** = TrivialPreprocessor.PREPROCESSED_SIZE. */
     private static final int PREPROCESSED_SIZE = 1024;
 
 
@@ -98,13 +98,12 @@ public class RouterThrottleImpl implements RouterThrottle {
         }
     }
 
+    // FIXME only called by SSU Receiver, not NTCP!
+    // FIXME should put warning on the console
+    // FIXME or should we do this at all? We have Codel queues all over now...
     /**
      * Should we accept any more data from the network for any sort of message,
      * taking into account our current load, or should we simply slow down?
-     * <p>
-     * FIXME only called by SSU Receiver, not NTCP!
-     * FIXME should put warning on the console
-     * FIXME or should we do this at all? We have Codel queues all over now...
      */
     public boolean acceptNetworkMessage() {
         long lag = _context.jobQueue().getMaxLag();
@@ -117,7 +116,7 @@ public class RouterThrottleImpl implements RouterThrottle {
     /**
      * If we should send a reject, return a nonzero reject code.
      * Anything that causes us to drop a request instead of rejecting it
-     * must go in BuildHandler.handleInboundRequest(), not here.
+     * must go in {@link net.i2p.router.tunnel.pool.BuildHandler#handleInboundRequest}, not here.
      *
      * @return 0 for accept or nonzero reject code
      */
@@ -349,7 +348,7 @@ public class RouterThrottleImpl implements RouterThrottle {
         return Math.min(floor, share / 2); // Cap at 50% of share
     }
 
-    /** Also limited to 90% - see below */
+    /** Also limited to 90% - see below. */
     private static final int MIN_AVAILABLE_BPS = 4*1024; // always leave at least 4KBps free when allowing
     private static final String LIMIT_STR = _x("Declining requests" + ": " + "Bandwidth limit");
 
@@ -447,7 +446,7 @@ public class RouterThrottleImpl implements RouterThrottle {
         return !reject;
     }
 
-    /** Don't ever probabilistically throttle tunnels if we have less than this many */
+    /** Don't ever probabilistically throttle tunnels if we have less than this many. */
     private int getMinThrottleTunnels() {
         String p = _context.getProperty(PROP_MIN_THROTTLE_TUNNELS);
         if (!(p != null && p.equals(_cachedMinThrottleTunnelsProp))) {
@@ -683,7 +682,11 @@ public class RouterThrottleImpl implements RouterThrottle {
         return Router.EXIT_GRACEFUL == code || Router.EXIT_HARD == code;
     }
 
-    /** @since 0.8.12 */
+    /**
+     * Throttle hard while the router attempts to shut down.
+     *
+     * @since 0.8.12
+     */
     public void setShutdownStatus() {
         if (isShuttingDown(_context)) {
             setTunnelStatus("[shutdown]" + _x("Declining requests") + ": " + _x("Shutting down") + "&hellip;");
@@ -692,7 +695,11 @@ public class RouterThrottleImpl implements RouterThrottle {
         }
     }
 
-    /** @since 0.8.12 */
+    /**
+     * Restore normal throttling after a shutdown attempt.
+     *
+     * @since 0.8.12
+     */
     public void cancelShutdownStatus() {
         // try hard to guess the state, before we actually get a request
         int maxTunnels = getMaxTunnels();

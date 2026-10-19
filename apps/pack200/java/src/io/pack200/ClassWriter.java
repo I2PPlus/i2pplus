@@ -44,7 +44,6 @@ import java.util.List;
 
 /**
  * Writer for a class file that is incorporated into a package.
- * @author John Rose
  */
 class ClassWriter {
     int verbose;

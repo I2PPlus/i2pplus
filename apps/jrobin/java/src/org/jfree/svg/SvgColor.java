@@ -52,7 +52,11 @@ public final class SvgColor {
         return null;
     }
 
-    /** @param digits the text after '#', 3, 4, 6 or 8 characters */
+    /**
+     * Convert hex digits to a color.
+     *
+     * @param digits the text after '#', 3, 4, 6 or 8 characters
+     */
     private static Color parseHex(String digits) {
         int len = digits.length();
         if (len != 3 && len != 4 && len != 6 && len != 8) {return null;}

@@ -132,7 +132,7 @@ public class I2PTunnelHTTPServerIOTest extends TestCase {
 
     /**
      * Test Sender stall detection: a Sender that never provides data should
-     * be interruptible via Thread.interrupt() and eventually stop.
+     * be interruptible via {@link java.lang.Thread#interrupt} and eventually stop.
      */
     public void testSenderInterruptible() throws Exception {
         // Use a stream that blocks forever on read()
@@ -257,7 +257,7 @@ public class I2PTunnelHTTPServerIOTest extends TestCase {
     }
 
     /**
-     * ioQueueCap must grow with the worker count while keeping a hard floor.
+     * IoQueueCap must grow with the worker count while keeping a hard floor.
      */
     public void testIOQueueCapFormula() {
         assertEquals(32, I2PTunnelHTTPServer.ioQueueCap(1));

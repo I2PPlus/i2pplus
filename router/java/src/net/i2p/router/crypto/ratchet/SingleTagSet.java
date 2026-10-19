@@ -3,7 +3,8 @@ package net.i2p.router.crypto.ratchet;
 import net.i2p.data.SessionKey;
 
 /**
- * Single-use tag set for handling inbound Existing Session messages in database replies with fixed nonce of 0, designed for DSM/DSRM response processing
+ * Single-use tag set for handling inbound Existing Session messages in database replies with fixed
+  * nonce of 0, designed for DSM/DSRM response processing.
  *
  * @since 0.9.46
  */
@@ -13,13 +14,13 @@ class SingleTagSet extends RatchetTagSet {
     private boolean _isUsed;
 
     /**
-     *  For outbound Existing Session
+     * For outbound Existing Session.
      *
-     *  @param lsnr the listener that hands the tag back to the owning tunnel
-     *  @param key the session key the tag's inbound messages will be decrypted with
-     *  @param tag the single pre-generated tag to be sent with the Existing Session message
-     *  @param date creation time of the tag, in milliseconds since the epoch
-     *  @param timeout milliseconds after date at which the tag expires
+     * @param lsnr the listener that hands the tag back to the owning tunnel
+     * @param key the session key the tag's inbound messages will be decrypted with
+     * @param tag the single pre-generated tag to be sent with the Existing Session message
+     * @param date creation time of the tag, in milliseconds since the epoch
+     * @param timeout milliseconds after date at which the tag expires
      */
     public SingleTagSet(SessionTagListener lsnr, SessionKey key, RatchetSessionTag tag, long date, long timeout) {
         super(lsnr, key, date, timeout);

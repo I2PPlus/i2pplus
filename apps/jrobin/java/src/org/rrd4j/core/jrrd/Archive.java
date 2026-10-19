@@ -15,7 +15,6 @@ import java.util.Locale;
 /**
  * Instances of this class model an archive section of an RRD file.
  *
- * @author <a href="mailto:ciaran@codeloop.com">Ciaran Treanor</a>
  * @version $Revision: 1.1 $
  */
 public class Archive {

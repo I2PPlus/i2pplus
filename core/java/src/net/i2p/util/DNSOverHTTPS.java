@@ -62,7 +62,7 @@ public class DNSOverHTTPS implements EepGet.StatusListener {
     private static final ObjectCounter<String> fails = new ObjectCounter<>();
 
     /**
-     * ESR version of Firefox, same as Tor Browser
+     * ESR version of Firefox, same as Tor Browser.
      */
     public static final String UA_CLEARNET = "Mozilla/5.0 (Windows NT 10.0; rv:128.0) Gecko/20100101 Firefox/128.0";
 
@@ -244,13 +244,13 @@ public class DNSOverHTTPS implements EepGet.StatusListener {
      * @since 0.9.35
      */
     public enum Type {
-        /** IPv4 only */
+        /** IPv4 only. */
         V4_ONLY,
-        /** IPv6 only */
+        /** IPv6 only. */
         V6_ONLY,
-        /** IPv4 preferred */
+        /** IPv4 preferred. */
         V4_PREFERRED,
-        /** IPv6 preferred */
+        /** IPv6 preferred. */
         V6_PREFERRED
     }
 
@@ -265,7 +265,7 @@ public class DNSOverHTTPS implements EepGet.StatusListener {
     }
 
     /**
-     * V4_ONLY unless we have only IPv6 address, then V6_ONLY
+     * V4_ONLY unless we have only IPv6 address, then V6_ONLY.
      *
      * @param host the hostname to resolve
      * @return null if not found
@@ -278,7 +278,7 @@ public class DNSOverHTTPS implements EepGet.StatusListener {
     }
 
     /**
-     * Lookup in cache, then query servers
+     * Lookup in cache, then query servers.
      *
      * @param host the hostname to resolve
      * @param type the query type
@@ -289,7 +289,7 @@ public class DNSOverHTTPS implements EepGet.StatusListener {
     }
 
     /**
-     * Lookup in cache, then query servers
+     * Lookup in cache, then query servers.
      *
      * @param url null to query several default servers, or specify single server
      * @return null if not found
@@ -338,7 +338,7 @@ public class DNSOverHTTPS implements EepGet.StatusListener {
     }
 
     /**
-     * Lookup in cache
+     * Lookup in cache.
      *
      * @return null if not found or expired
      */
@@ -354,7 +354,7 @@ public class DNSOverHTTPS implements EepGet.StatusListener {
     }
 
     /**
-     * Query servers
+     * Query servers.
      *
      * @param url null to query several default servers, or specify single server
      * @return null if not found
@@ -387,6 +387,8 @@ public class DNSOverHTTPS implements EepGet.StatusListener {
     }
 
     /**
+     * Query one host over DNS-over-HTTPS.
+     *
      * @return null if not found
      */
     private String query(String host, boolean isv6, List<String> toQuery, long timeout) {
@@ -439,6 +441,8 @@ public class DNSOverHTTPS implements EepGet.StatusListener {
     }
 
     /**
+     * Fetch one DNS answer over HTTPS.
+     *
      * @return null if not found
      */
     private String fetch(SSLEepGet eepget, String host, boolean isv6, Question q) {
@@ -596,6 +600,8 @@ public class DNSOverHTTPS implements EepGet.StatusListener {
     }
 
     /**
+     * Load the DoH server URLs.
+     *
      * @since 0.9.49
      */
     private static void loadURLs() {
@@ -822,7 +828,7 @@ public class DNSOverHTTPS implements EepGet.StatusListener {
     }
 
     /**
-     * Decode sdns:// stamps found in file
+     * Decode sdns:// stamps found in file.
      *
      * @return the URL, or null on error or if not a DoH (type 2) stamp
      * @since 0.9.62

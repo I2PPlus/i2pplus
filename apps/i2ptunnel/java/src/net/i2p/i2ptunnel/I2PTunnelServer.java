@@ -116,7 +116,7 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
     protected final Logging l;
     private I2PSSLSocketFactory _sslFactory;
     private static final long DEFAULT_READ_TIMEOUT = -1;
-    /** default timeout - override if desired */
+    /** Default timeout - override if desired. */
     protected volatile long readTimeout = DEFAULT_READ_TIMEOUT;
     /** Config key to enable SSL. */
     public static final String PROP_USE_SSL = "useSSL";
@@ -133,49 +133,50 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
 
     /**
      * Config key to cap concurrent inbound connections; 0 (default) = unlimited.
-     *  When the cap is reached, new connections are rejected promptly (HTTP: 503) instead of
-     *  being queued behind a saturated pool. This is the last-resort governor under duress;
-     *  normal operation should not reach it. Key: tunnel.N.option.i2ptunnel.server.maxConnections
+     * When the cap is reached, new connections are rejected promptly (HTTP: 503) instead of
+     * being queued behind a saturated pool. This is the last-resort governor under duress;
+     * normal operation should not reach it. Key: {@code tunnel.N.option.i2ptunnel.server.maxConnections}.
      * @since 0.9.71+
      */
     public static final String PROP_MAX_CONNECTIONS = "i2ptunnel.server.maxConnections";
 
     /**
      * Config key to override the socket read timeout in ms; 0 (default) = shut down silent
-     *  connections promptly (HTTP server falls back to SERVER_READ_TIMEOUT_GET).
-     *  Key: tunnel.N.option.i2ptunnel.server.readTimeout
+     * connections promptly (HTTP server falls back to SERVER_READ_TIMEOUT_GET).
+     * Key: {@code tunnel.N.option.i2ptunnel.server.readTimeout}.
      * @since 0.9.71+
      */
     public static final String PROP_READ_TIMEOUT = "i2ptunnel.server.readTimeout";
 
     /**
      * Default write timeout for the outbound I2P stream (ms). Without a bounded value,
-     *  a stalled peer (send window not advancing, e.g. under a SYN flood) holds a server
-     *  handler thread for the full streaming disconnect timeout (default 120s) inside
-     *  MessageOutputStream.flush()/close(). A bounded write timeout fails after no ACK
-     *  progress instead of blocking the handler; it does not cap throughput for a peer
-     *  that is progressing, so it is safe for legitimate slow transfers.
-     *  60s is long enough that a normal I2P RTO blip (~30s avgRTO) with no other
-     *  forward-ACK progress does not fail the write, while still bounding a dead peer
-     *  well under the 120s disconnect timeout. A tighter default (15s) was tried and
-     *  false-failed mid-body downloads whenever a single lost ACK spanned the window.
+     * a stalled peer (send window not advancing, e.g. under a SYN flood) holds a server
+     * handler thread for the full streaming disconnect timeout (default 120s) inside
+      * {@link net.i2p.client.streaming.impl.MessageOutputStream#flush} /close(). A bounded write timeout
+       * fails after no ACK
+     * progress instead of blocking the handler. It does not cap throughput for a peer
+     * that is progressing, so it is safe for legitimate slow transfers.
+     * 60s is long enough that a normal I2P RTO blip (~30s avgRTO) with no other
+     * forward-ACK progress does not fail the write, while still bounding a dead peer
+     * well under the 120s disconnect timeout. A tighter default (15s) was tried and
+     * false-failed mid-body downloads whenever a single lost ACK spanned the window.
      */
     private static final long DEFAULT_WRITE_TIMEOUT = 60 * 1000L;
 
     /**
      * Config key to override the outbound write timeout in ms (0 = use the streaming
-     *  default, which can be the full 120s disconnect timeout with no ACK progress).
-     *  Key: tunnel.N.option.i2ptunnel.server.writeTimeout
+     * default, which can be the full 120s disconnect timeout with no ACK progress).
+     * Key: {@code tunnel.N.option.i2ptunnel.server.writeTimeout}.
      * @since 0.9.71+
      */
     public static final String PROP_WRITE_TIMEOUT = "i2ptunnel.server.writeTimeout";
 
     /**
      * Config key to cap this tunnel's private server handler pool in threads.
-     *  Each server tunnel owns a per-port pool summed under the global
-     *  i2ptunnel.serverHandler.threads budget; unset or &lt; 2 follows the
-     *  Tuner-managed default (i2ptunnel.server.threads).
-     *  Key: tunnel.N.option.i2ptunnel.server.threads
+     * Each server tunnel owns a per-port pool summed under the global
+     * {@code i2ptunnel.serverHandler.threads} budget; unset or &lt; 2 follows the
+     * Tuner-managed default ({@code i2ptunnel.server.threads}).
+     * Key: {@code tunnel.N.option.i2ptunnel.server.threads}.
      * @since 0.9.71+
      */
     public static final String PROP_SERVER_THREADS = "i2ptunnel.server.threads";
@@ -189,7 +190,7 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
     protected volatile ThreadPoolExecutor _clientExecutor;
     /**
      * The controller group that owns this tunnel's runner pool, cached from
-     * {@link TunnelControllerGroup#getInstance()} once in {@link #run()}. Cached
+     * {@link TunnelControllerGroup#getInstance} once in {@link #run}. Cached
      * because the singleton accessor synchronizes on the class object, which a
      * per-request call would turn into contention across every tunnel thread.
      * @since 0.9.71+
@@ -746,17 +747,17 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
     }
 
     /**
-     *  Refuse an inbound connection with an accurate reason. Queue-depth
-     *  rejects are not connection-cap rejects; conflating them made every
-     *  saturated-queue drop look like a maxConnections trip (and logged
-     *  maxConnections=0 when the cap was unlimited).
-     *  <p>The queue-full metrics line is emitted by {@link #warnQueueFull}
-     *  with real pool active/max/queue values; this method only rate-limits
-     *  and closes so a flood cannot spam the log.
+     * Refuse an inbound connection with an accurate reason. Queue-depth
+     * rejects are not connection-cap rejects. Conflating them made every
+     * saturated-queue drop look like a maxConnections trip (and logged
+     * maxConnections=0 when the cap was unlimited).
+     * <p>The queue-full metrics line is emitted by {@link #warnQueueFull}
+     * with real pool active/max/queue values; this method only rate-limits
+     * and closes so a flood cannot spam the log.
      *
-     *  @param socket the accepted but undelivered I2PSocket to reject
-     *  @param queueFull true if the handler queue gate rejected, false for the connection cap
-     *  @since 0.9.71+
+     * @param socket the accepted but undelivered I2PSocket to reject
+     * @param queueFull true if the handler queue gate rejected, false for the connection cap
+     * @since 0.9.71+
      */
     protected void rejectConnection(I2PSocket socket, boolean queueFull) {
         closeSilently(socket);
@@ -814,9 +815,9 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
         return (long) avg;
     }
 
-    /** Minimum interval between gate-rejection warnings. @since 0.9.71+ */
+    /** Minimum interval between gate-rejection warnings. @since 0.9.71+. */
     private static final long REJECT_WARN_MS = 30 * 1000L;
-    /** Last gate-rejection warning timestamp for rate limiting. @since 0.9.71+ */
+    /** Last gate-rejection warning timestamp for rate limiting. @since 0.9.71+. */
     private final AtomicLong _lastRejectWarn = new AtomicLong();
 
     /**
@@ -968,7 +969,8 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
      * <p>
      * A stalled peer (send window not advancing, e.g. under a SYN flood) otherwise holds a
      * server handler thread for the full streaming disconnect timeout (default 120s) inside
-     * MessageOutputStream.flush()/close(). Bounding the write timeout fails on no ACK
+      * {@link net.i2p.client.streaming.impl.MessageOutputStream#flush} /close(). Bounding the write
+       * timeout fails on no ACK
      * progress rather than blocking the handler; it does not cap throughput for a peer that
      * is progressing, so it is safe for legitimate slow transfers.
      * <p>
@@ -1236,7 +1238,7 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
     }
 
     /**
-     * This is run in a thread from a limited-size thread pool via Handler.run(),
+     * This is run in a thread from a limited-size thread pool via {@code Handler.run()},
      * except for a standard server (this class, no extension, as determined in getUsePool()),
      * it is run directly in the acceptor thread (see run()).
      * <p>
@@ -1250,11 +1252,11 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
      * <p>
      * <b>Implementation Notes:</b>
      * <ul>
-     *   <li>Subclasses that override this must call super.blockingHandle() or implement
-     *       full connection handling themselves</li>
-     *   <li>For protocol-specific handling (HTTP, IRC), spawn a handler thread and return</li>
-     *   <li>For simple forwarding, this base implementation handles all cases</li>
-     *   <li>Performance: local connections are fast enough to handle synchronously</li>
+     * <li>Subclasses that override this must call super.blockingHandle() or implement
+     * full connection handling themselves</li>
+     * <li>For protocol-specific handling (HTTP, IRC), spawn a handler thread and return</li>
+     * <li>For simple forwarding, this base implementation handles all cases</li>
+     * <li>Performance: local connections are fast enough to handle synchronously</li>
      * </ul>
      * <p>
      * <b>Error Handling:</b> SocketException and IOException are caught and logged,

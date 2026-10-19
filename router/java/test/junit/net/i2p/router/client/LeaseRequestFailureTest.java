@@ -330,7 +330,7 @@ public class LeaseRequestFailureTest {
     }
 
     /**
-     * netdb publish() rejects the client's LeaseSet as expired: the pending
+     * Netdb publish() rejects the client's LeaseSet as expired: the pending
      * request is promptly re-queued (seed + one retry per call) until the
      * bound, without disconnecting the client or failing the request.
      */
@@ -498,7 +498,11 @@ public class LeaseRequestFailureTest {
             _out.poll();
         }
 
-        /** @return how many LeaseSet requests the router managed to hand over */
+        /**
+         * Count of lease set requests made.
+         *
+         * @return how many LeaseSet requests the router managed to hand over
+         */
         int leaseSetRequests() {return _leaseSetRequests.get();}
 
         @Override

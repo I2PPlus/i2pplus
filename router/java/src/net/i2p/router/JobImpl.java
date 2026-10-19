@@ -19,7 +19,7 @@ public abstract class JobImpl implements Job {
     private final JobTiming _timing;
     private static final AtomicLong _idSrc = new AtomicLong();
     // make this public so we can reference the job number for tunnel builds on /jobs
-    /** Unique job identifier */
+    /** Unique job identifier. */
     public final long _id;
     private volatile long _madeReadyOn;
 
@@ -68,7 +68,7 @@ public abstract class JobImpl implements Job {
     public long getMadeReadyOn() { return _madeReadyOn; }
 
     /**
-     * Deprecated to avoid JobQueue deadlocks
+     * Deprecated to avoid JobQueue deadlocks.
      *
      * @deprecated use madeReady(long)
      */
@@ -76,7 +76,7 @@ public abstract class JobImpl implements Job {
     public void madeReady() { _madeReadyOn = _context.clock().now(); }
 
     /**
-     * For JobQueue only, not for external use
+     * For JobQueue only, not for external use.
      *
      * @param now the current time in milliseconds
      * @since 0.9.55

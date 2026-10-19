@@ -102,7 +102,7 @@ public class SendMessageOptions extends DateAndFlags {
     /**
      * If we are low on tags, send this many.
      * Power of 2 recommended - rounds down.
-     * default 0, meaning unset, use the SKM config (default 40)
+     * default 0, meaning unset, use the SKM config (default 40).
      *
      * @param tags 0 or 2 to 128
      */
@@ -135,7 +135,7 @@ public class SendMessageOptions extends DateAndFlags {
     /**
      * Low tag threshold. If less than this many, send more.
      * Power of 2 recommended - rounds down.
-     * default 0, meaning unset, use the SKM config (default 30)
+     * default 0, meaning unset, use the SKM config (default 30).
      *
      * @param tags 0 to 90
      */
@@ -272,7 +272,7 @@ public class SendMessageOptions extends DateAndFlags {
         }
     }
 
-    /** Overrides i2cp.gzip session option and size threshold for this message only. */
+    /** Overrides {@code i2cp.gzip} session option and size threshold for this message only. */
     public enum GzipOption {
         /** Use the session's gzip setting. */
         DEFAULT,

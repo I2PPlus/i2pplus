@@ -11,7 +11,7 @@ import net.i2p.util.Log;
 import java.nio.charset.StandardCharsets;
 /**
  * Thread to do inbound filtering.
- * Moved from I2PTunnelIRCClient.java
+ * Moved from I2PTunnelIRCClient.java.
  *
  * @since 0.8.9
  */

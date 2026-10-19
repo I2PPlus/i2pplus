@@ -18,7 +18,7 @@ import net.i2p.data.i2cp.ReceiveMessageBeginMessage;
 /**
  * Handle I2CP MessageStatusMessages from the router.  This currently only takes
  * into account status of available, automatically prefetching them as soon as
- * possible
+ * possible.
  *
  */
 class MessageStatusMessageHandler extends HandlerImpl {

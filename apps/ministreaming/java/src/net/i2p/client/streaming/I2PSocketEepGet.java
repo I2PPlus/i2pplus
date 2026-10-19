@@ -43,7 +43,6 @@ import net.i2p.util.SocketTimeout;
  * Warning - does not support /eepproxy/blah, address helpers, http://B64KEY.i2p/blah,
  * or other odd things that may be found in the HTTP proxy.
  *
- * @author zzz
  */
 public class I2PSocketEepGet extends EepGet {
     private final I2PSocketManager _socketManager;
@@ -101,7 +100,7 @@ public class I2PSocketEepGet extends EepGet {
     }
 
     /**
-     * Overridden to disable inline gunzipping
+     * Overridden to disable inline gunzipping.
      * @since 0.8.10
      */
     @Override
@@ -241,7 +240,7 @@ public class I2PSocketEepGet extends EepGet {
      * Guess we have to override this since
      * super doesn't strip the http://host from the GET line
      * which hoses some servers (opentracker)
-     * HTTP proxy was kind enough to do this for us
+     * HTTP proxy was kind enough to do this for us.
      * @return the HTTP request line and headers, with the scheme and host stripped from the GET line
      */
     @Override

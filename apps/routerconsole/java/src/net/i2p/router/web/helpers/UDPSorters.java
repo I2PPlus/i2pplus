@@ -7,7 +7,7 @@ import net.i2p.I2PAppContext;
 import net.i2p.router.transport.udp.PeerState;
 
 /**
- * Comparators for various columns
+ * Comparators for various columns.
  *
  * @since 0.9.31 moved from udp; 0.9.18 moved from UDPTransport
  */
@@ -16,37 +16,37 @@ class UDPSorters {
     /** Instances are never needed; this is a holder for the flags and comparators. */
     UDPSorters() {}
 
-    /** Sort by peer hash */
+    /** Sort by peer hash. */
     static final int FLAG_ALPHA = 0;
-    /** Sort by inbound idle time */
+    /** Sort by inbound idle time. */
     static final int FLAG_IDLE_IN = 1;
-    /** Sort by outbound idle time */
+    /** Sort by outbound idle time. */
     static final int FLAG_IDLE_OUT = 2;
-    /** Sort by inbound rate */
+    /** Sort by inbound rate. */
     static final int FLAG_RATE_IN = 3;
-    /** Sort by outbound rate */
+    /** Sort by outbound rate. */
     static final int FLAG_RATE_OUT = 4;
-    /** Sort by clock skew */
+    /** Sort by clock skew. */
     static final int FLAG_SKEW = 5;
-    /** Sort by congestion window */
+    /** Sort by congestion window. */
     static final int FLAG_CWND= 6;
-    /** Sort by slow start threshold */
+    /** Sort by slow start threshold. */
     static final int FLAG_SSTHRESH = 7;
-    /** Sort by RTT */
+    /** Sort by RTT. */
     static final int FLAG_RTT = 8;
-    /** Sort by RTO */
+    /** Sort by RTO. */
     static final int FLAG_RTO = 10;
-    /** Sort by MTU */
+    /** Sort by MTU. */
     static final int FLAG_MTU = 11;
-    /** Sort by sent message count */
+    /** Sort by sent message count. */
     static final int FLAG_SEND = 12;
-    /** Sort by received message count */
+    /** Sort by received message count. */
     static final int FLAG_RECV = 13;
-    /** Sort by retransmitted packets */
+    /** Sort by retransmitted packets. */
     static final int FLAG_RESEND = 14;
-    /** Sort by duplicate packets */
+    /** Sort by duplicate packets. */
     static final int FLAG_DUP = 15;
-    /** Sort by uptime */
+    /** Sort by uptime. */
     static final int FLAG_UPTIME = 16;
 
     /**

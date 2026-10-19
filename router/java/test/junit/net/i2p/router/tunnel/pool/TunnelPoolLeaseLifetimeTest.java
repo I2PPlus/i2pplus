@@ -31,7 +31,7 @@ public class TunnelPoolLeaseLifetimeTest {
     /**
      * With the shipped defaults the lease cap binds, not the tunnel, and peers
      * are advertised exactly the standard 10m. The safety margin is subtracted
-     * before the cap, so a binding cap overwrites it — the advertised value
+     * before the cap, so a binding cap overwrites it. The advertised value
      * lands on 10m, not 9m59s.
      */
     @Test

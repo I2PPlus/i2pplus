@@ -46,9 +46,9 @@ import java.util.StringTokenizer;
  * @version $version$
  */
 public class InclusiveByteRange {
-    /** The first byte position */
+    /** The first byte position. */
     long first = 0;
-    /** The last byte position */
+    /** The last byte position. */
     long last = 0;
 
     /**

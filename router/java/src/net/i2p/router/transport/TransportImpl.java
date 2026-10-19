@@ -77,7 +77,7 @@ import net.i2p.util.SystemVersion;
 import net.i2p.util.Translate;
 
 /**
- * Defines a way to send a message to another peer and start listening for messages
+ * Defines a way to send a message to another peer and start listening for messages.
  *
  */
 public abstract class TransportImpl implements Transport {
@@ -119,11 +119,11 @@ public abstract class TransportImpl implements Transport {
     private final long WAS_UNREACHABLE_PERIOD;
     private volatile CleanupUnreachable _cleanupJob;
 
-/** Advertised reachability value for a working IPv4 address. @since 0.9.50 */
+/** Advertised reachability value for a working IPv4 address. @since 0.9.50. */
     public static final String CAP_IPV4 = "4";
-    /** Advertised reachability value for a working IPv6 address. @since 0.9.50 */
+    /** Advertised reachability value for a working IPv6 address. @since 0.9.50. */
     public static final String CAP_IPV6 = "6";
-    /** Advertised reachability value for both address families. @since 0.9.50 */
+    /** Advertised reachability value for both address families. @since 0.9.50. */
     public static final String CAP_IPV4_IPV6 = CAP_IPV4 + CAP_IPV6;
 
     /**
@@ -151,7 +151,7 @@ public abstract class TransportImpl implements Transport {
         _IPMap = new LHMCache<>(size);
     }
 
-            /** 50/100/150/250/450/550/700 for BW Tiers K/L/M/N/O/P/X */
+            /** 50/100/150/250/450/550/700 for BW Tiers K/L/M/N/O/P/X. */
     private static final int MAX_CONNECTION_FACTOR = 100;
     // see constructor
     private static volatile int SEND_POOL_CAPACITY = SystemVersion.isSlow() ? 64 : 128;
@@ -185,7 +185,7 @@ public abstract class TransportImpl implements Transport {
     }
 
     /**
-     * Initialize the new transport
+     * Initialize the new transport.
      *
      * @param context the router context supplying the log, statistics and comm system
      */
@@ -259,10 +259,10 @@ public abstract class TransportImpl implements Transport {
     public abstract int countActivePeers();
 
     /**
-     * Per-transport connection limit
+     * Per-transport connection limit.
      *
      * @return the maximum concurrent peer connections for this transport,
-     *         0 when the comm system is a test dummy
+     * 0 when the comm system is a test dummy
      */
     public int getMaxConnections() {
         if (_context.commSystem().isDummy()) {return 0;} // testing
@@ -382,7 +382,7 @@ public abstract class TransportImpl implements Transport {
     private static final int DEFAULT_CAPACITY_PCT = 90;
 
     /**
-     * Can we initiate or accept a connection to another peer, saving some margin
+     * Can we initiate or accept a connection to another peer, saving some margin.
      */
     public boolean haveCapacity() {
         return haveCapacity(DEFAULT_CAPACITY_PCT);
@@ -427,7 +427,7 @@ public abstract class TransportImpl implements Transport {
     }
 
     /**
-     * The transport is done sending this message
+     * The transport is done sending this message.
      *
      * @param msg message in question
      * @param sendSuccessful true if the peer received it
@@ -437,7 +437,7 @@ public abstract class TransportImpl implements Transport {
     }
 
     /**
-     * The transport is done sending this message
+     * The transport is done sending this message.
      *
      * @param msg message in question
      * @param sendSuccessful true if the peer received it
@@ -448,7 +448,7 @@ public abstract class TransportImpl implements Transport {
     }
 
     /**
-     * The transport is done sending this message
+     * The transport is done sending this message.
      *
      * @param msg message in question
      * @param sendSuccessful true if the peer received it
@@ -633,13 +633,13 @@ public abstract class TransportImpl implements Transport {
     protected abstract void outboundMessageReady();
 
     /**
-     *  Message received from the I2NPMessageReader - send it to the listener
+     * Message received from the I2NPMessageReader - send it to the listener.
      *
-     *  @param inMsg non-null
-     *  @param remoteIdent may be null
-     *  @param remoteIdentHash may be null, calculated from remoteIdent if null
-     *  @param msToReceive milliseconds the read took, for the debug log
-     *  @param bytesReceived how many bytes of the message arrived, for the debug log
+     * @param inMsg non-null
+     * @param remoteIdent may be null
+     * @param remoteIdentHash may be null, calculated from remoteIdent if null
+     * @param msToReceive milliseconds the read took, for the debug log
+     * @param bytesReceived how many bytes of the message arrived, for the debug log
      */
     public void messageReceived(I2NPMessage inMsg, RouterIdentity remoteIdent, Hash remoteIdentHash, long msToReceive, int bytesReceived) {
         int level = Log.DEBUG;
@@ -668,14 +668,14 @@ public abstract class TransportImpl implements Transport {
 
             /** Do we increase the advertised cost when approaching conn limits? */
     protected static final boolean ADJUST_COST = true;
-            /** Adjustment factor for congestion cost */
+            /** Adjustment factor for congestion cost. */
     protected static final int CONGESTION_COST_ADJUSTMENT = 1;
 
     /**
-     *  What addresses are we currently listening to?
-     *  Replaces getCurrentAddress()
-     *  @return a copy of all addresses, non-null
-     *  @since IPv6
+     * What addresses are we currently listening to?
+     * Replaces getCurrentAddress().
+     * @return a copy of all addresses, non-null
+     * @since IPv6
      */
     public List<RouterAddress> getCurrentAddresses() {
         synchronized(_currentAddresses) {
@@ -1012,10 +1012,10 @@ public abstract class TransportImpl implements Transport {
      */
     public int getRequestedPort() {return -1;}
 
-            /** Who to notify on message availability */
+            /** Who to notify on message availability. */
     public void setListener(TransportEventListener listener) {_listener = listener;}
     /**
-     * Make this stuff pretty
+     * Make this stuff pretty.
      *
      * @param out the writer to render to
      * @throws IOException if writing fails
@@ -1027,7 +1027,7 @@ public abstract class TransportImpl implements Transport {
     public void renderStatusHTML(Writer out, String urlBase, int sortFlags) throws IOException {renderStatusHTML(out);}
 
     /**
-     * Previously returned short, now enum as of 0.9.20
+     * Previously returned short, now enum as of 0.9.20.
      * @return the reachability status
      */
     public abstract Status getReachabilityStatus();
@@ -1045,7 +1045,7 @@ public abstract class TransportImpl implements Transport {
     /**
      * This returns true if the force-firewalled setting is configured, false otherwise.
      *
-     * @return whether i pv6 firewalled
+     * @return whether IPv6 firewalled
      * @since 0.9.27, public since 0.9.30
      */
     public boolean isIPv6Firewalled() {
@@ -1223,7 +1223,7 @@ public abstract class TransportImpl implements Transport {
     }
 
     /**
-     * Maintain the WasUnreachable list
+     * Maintain the WasUnreachable list.
      */
     private void markWasUnreachable(Hash peer, boolean yes) {
         if (yes) {
@@ -1238,7 +1238,7 @@ public abstract class TransportImpl implements Transport {
     /**
      * Are we allowed to connect to local addresses?
      *
-     * @return true if i2np.allowLocal is set, false otherwise
+     * @return true if {@code i2np.allowLocal} is set, false otherwise
      * @since 0.9.28 moved from UDPTransport
      */
     public boolean allowLocal() {return _context.getBooleanProperty("i2np.allowLocal");}
@@ -1351,7 +1351,7 @@ public abstract class TransportImpl implements Transport {
 
     /**
      * The IPv6 configuration for this transport.
-     * @return the i pv6 config
+     * @return the IPv6 config
      * @since IPv6, public since 0.9.30
      */
     public TransportUtil.IPv6Config getIPv6Config() {
@@ -1374,30 +1374,30 @@ public abstract class TransportImpl implements Transport {
     private static final String BUNDLE_NAME = "net.i2p.router.web.messages";
 
     /**
-     *  Looks the string up in the web messages bundle, returning s itself if
-     *  there is no translation
-     *  @param s the string to be translated
-     *  @return the translated string, or s itself when there is no translation
-     *  @since 0.9.8 moved from transports
+     * Looks the string up in the web messages bundle, returning s itself if
+     * there is no translation.
+     * @param s the string to be translated
+     * @return the translated string, or s itself when there is no translation
+     * @since 0.9.8 moved from transports
      */
     protected String _t(String s) {return Translate.getString(s, _context, BUNDLE_NAME);}
 
     /**
-     *  Translate and substitute one parameter
-     *  @param s the string to be translated, containing {0}
-     *  @param o the parameter, not translated itself
-     *  @return the translated string with {0} replaced by o
-     *  @since 0.9.8 moved from transports
+     * Translate and substitute one parameter.
+     * @param s the string to be translated, containing {0}
+     * @param o the parameter, not translated itself
+     * @return the translated string with {0} replaced by o
+     * @since 0.9.8 moved from transports
      */
     protected String _t(String s, Object o) {return Translate.getString(s, o, _context, BUNDLE_NAME);}
 
     /**
-     *  Translate, choosing between the singular and the plural form
-     *  @param s the singular string, may contain {0} for the count
-     *  @param p the plural string, may contain {0} for the count
-     *  @param n the count, used to choose between s and p
-     *  @return the translated string for that count
-     *  @since 0.9.8
+     * Translate, choosing between the singular and the plural form.
+     * @param s the singular string, may contain {0} for the count
+     * @param p the plural string, may contain {0} for the count
+     * @param n the count, used to choose between s and p
+     * @return the translated string for that count
+     * @since 0.9.8
      */
     protected String ngettext(String s, String p, int n) {return Translate.getString(n, s, p, _context, BUNDLE_NAME);}
 }

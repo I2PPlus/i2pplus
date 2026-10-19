@@ -95,7 +95,7 @@ public class I2PSnarkUtil implements DisconnectListener {
     private int _i2cpPort;
     private final Map<String, String> _opts;
     /**
-     * The shared session. Cleared by {@link #disconnect()} and {@link #sessionDisconnected()},
+     * The shared session. Cleared by {@link #disconnect} and {@link #sessionDisconnected},
      * both of which hold the instance monitor, while unsynchronized readers run on request and
      * peer threads: a reader that null-checks the field and then dereferences it again can
      * still see null on the second read. Read it once into a local and use the local.
@@ -106,9 +106,9 @@ public class I2PSnarkUtil implements DisconnectListener {
     private int _maxUploaders;
     private int _maxUpBW;
     private int _maxConnections;
-    /** Discard-ratio auto-ban toggle, set by SnarkManager from config */
+    /** Discard-ratio auto-ban toggle, set by SnarkManager from config. */
     private volatile boolean _banDiscardRatio;
-    /** Discard-ratio auto-ban period in ms, set by SnarkManager from config */
+    /** Discard-ratio auto-ban period in ms, set by SnarkManager from config. */
     private volatile long _banDiscardPeriod;
     private final File _tmpDir;
     private int _startupDelayMin;
@@ -134,32 +134,32 @@ public class I2PSnarkUtil implements DisconnectListener {
     private boolean _enableUDP = ENABLE_UDP_TRACKER;
     private UDPTrackerClient _udpTracker;
     private boolean _multiDest;
-    /** Maximum shared destinations in multi-dest mode, 0 for one per torrent */
+    /** Maximum shared destinations in multi-dest mode, 0 for one per torrent. */
     private int _maxDest = SnarkManager.DEFAULT_MULTI_DEST_MAX;
-    /** Whether a tracker metadata lookup is outstanding; holds the tunnel floor while true */
+    /** Whether a tracker metadata lookup is outstanding; holds the tunnel floor while true. */
     private volatile boolean _lookupPending;
-    /** Per-run random salt mixing pool assignments so the grouping is unlearnable */
+    /** Per-run random salt mixing pool assignments so the grouping is unlearnable. */
     private final int _destSalt;
     /**
      * Client identity spoofing setting. Empty (the default) means random
      * profiles per pool when multi-dest is on and no spoofing otherwise;
-     * "random" forces random selection in all modes; "i2psnark" forces the
+     * "random" forces random selection in all modes. "i2psnark" forces the
      * classic identity even in multi-dest mode; a profile name always
      * impersonates that client. Cached profiles are not recomputed when this
      * changes mid-run, so running torrents keep a consistent identity.
      */
     private volatile String _clientIdSetting = "";
-    /** Restricted candidate set for random selection, empty for all */
+    /** Restricted candidate set for random selection, empty for all. */
     private volatile List<ClientID.Profile> _clientIdCandidates = Collections.emptyList();
-    /** The profile for the shared destination, when multi-dest is off */
+    /** The profile for the shared destination, when multi-dest is off. */
     private ClientID.Profile _sharedClientId;
-    /** Profiles by pool index, so all torrents in a pool share one identity */
+    /** Profiles by pool index, so all torrents in a pool share one identity. */
     private final ConcurrentHashMap<Integer, ClientID.Profile> _poolClientIds =
             new ConcurrentHashMap<Integer, ClientID.Profile>();
-    /** Profiles by info hash for dedicated destinations in multi-dest mode */
+    /** Profiles by info hash for dedicated destinations in multi-dest mode. */
     private final ConcurrentHashMap<String, ClientID.Profile> _dedicatedClientIds =
             new ConcurrentHashMap<String, ClientID.Profile>();
-    /** Sequential pool number for the tunnel nickname, one per pool destination created */
+    /** Sequential pool number for the tunnel nickname, one per pool destination created. */
     private int _nextPoolNum;
     private final Map<String, TorrentDest> _torrentDests = new ConcurrentHashMap<>();
     private long _startedTime;
@@ -169,27 +169,27 @@ public class I2PSnarkUtil implements DisconnectListener {
     private String _apiKey;
     private static final int EEPGET_CONNECT_TIMEOUT = 75 * 1000;
     private static final int EEPGET_CONNECT_TIMEOUT_SHORT = 30 * 1000;
-    /** Default for the collapsible page panels: start them collapsed */
+    /** Default for the collapsible page panels: start them collapsed. */
     public static final boolean DEFAULT_COLLAPSE_PANELS = true;
-    /** Default for the torrents-page status filter: hide it */
+    /** Default for the torrents-page status filter: hide it. */
     public static final boolean DEFAULT_SHOW_STATUSFILTER = false;
-    /** Default for the image lightbox viewer: load it */
+    /** Default for the image lightbox viewer: load it. */
     public static final boolean DEFAULT_ENABLE_LIGHTBOX = true;
-    /** Default for the add-torrent and create-torrent forms: show them only on page one */
+    /** Default for the add-torrent and create-torrent forms: show them only on page one. */
     public static final boolean DEFAULT_ENABLE_ADDCREATE = false;
-    /** Default for open trackers: announce to them as backups */
+    /** Default for open trackers: announce to them as backups. */
     public static final boolean DEFAULT_USE_OPENTRACKERS = true;
-    /** Default for inbound tunnels: a fixed hop count */
+    /** Default for inbound tunnels: a fixed hop count. */
     public static final boolean DEFAULT_VARY_INBOUND_HOPS = false;
-    /** Default for outbound tunnels: a fixed hop count */
+    /** Default for outbound tunnels: a fixed hop count. */
     public static final boolean DEFAULT_VARY_OUTBOUND_HOPS = false;
-    /** Ceiling on the peers one torrent will hold at once */
+    /** Ceiling on the peers one torrent will hold at once. */
     public static final int MAX_CONNECTIONS = 300; // per torrent
     /**
      * Bandwidth throttle property.
      */
     public static final String PROP_MAX_BW = "i2cp.outboundBytesPerSecond";
-    /** Default for the DHT: participate in it */
+    /** Default for the DHT: participate in it. */
     public static final boolean DEFAULT_USE_DHT = true;
     /**
      * User agent for eepget requests.
@@ -332,7 +332,7 @@ public class I2PSnarkUtil implements DisconnectListener {
     }
 
     /**
-     * This updates ALL the session options (not just the bw) and tells the router
+     * This updates ALL the session options (not just the bw) and tells the router.
      *
      * @param limit maximum upload bandwidth per torrent in KB/s
      */
@@ -772,7 +772,7 @@ public class I2PSnarkUtil implements DisconnectListener {
     }
 
     /**
-     * Connect to the router, if we aren't already
+     * Connect to the router, if we aren't already.
      *
      * @return true if connected
      */
@@ -1162,26 +1162,26 @@ public class I2PSnarkUtil implements DisconnectListener {
 
     private static final int MAX_NAME_LENGTH = 64;
 
-    /** Parenthesized and bracketed segments, e.g. "(2026)", "[WEBRip]" */
+    /** Parenthesized and bracketed segments, e.g. "(2026)", "[WEBRip]". */
     private static final Pattern PAREN_SEGMENTS = Pattern.compile("\\([^()]*\\)|\\[[^\\[\\]]*\\]");
-    /** Common quality tokens (resolution, codec, source) */
+    /** Common quality tokens (resolution, codec, source). */
     private static final Pattern QUALITY_TOKENS = Pattern.compile(
             "(?i)(?<=[.\\-_ ]|^)(?:1080p|2160p|720p|480p|4k|8k|x264|x265|h264|h265|hevc" +
             "|xvid|divx|web-dl|webdl|webrip|hdtv|pdtv|bluray|bdrip|brrip|dvdrip|remux" +
             "|proper|repack|internal|10bit|12bit|8bit|aac|ac3|eac3|dts|ddp5\\.1|dd5\\.1|5\\.1" +
             "|7\\.1|atmos|hdr10|hdr)(?=[.\\-_ ]|$)");
-    /** A trailing file extension */
+    /** A trailing file extension. */
     private static final Pattern TRAILING_EXTENSION = Pattern.compile(
             "(?i)\\.(?:mkv|mp4|avi|wmv|flv|webm|m4v|mov|mpg|mpeg|ts|m2ts|mp3|flac|m4a|ogg|opus|wav|wma|aac|ac3|dts|zip|rar|7z|tar|iso|torrent|srt|sub|nfo|txt|jpg|jpeg|png|gif|bmp|webp)$");
-    /** Any alphanumeric run (release-tag check) */
+    /** Any alphanumeric run (release-tag check). */
     private static final Pattern ALPHANUMERIC = Pattern.compile("[A-Za-z0-9]+");
-    /** All-caps acronym check */
+    /** All-caps acronym check. */
     private static final Pattern ALLCAPS = Pattern.compile("[A-Z0-9]+");
-    /** Runs of two or more dots */
+    /** Runs of two or more dots. */
     private static final Pattern MULTIPLE_DOTS = Pattern.compile("\\.{2,}");
-    /** Runs of whitespace */
+    /** Runs of whitespace. */
     private static final Pattern WHITESPACE = Pattern.compile("\\s+");
-    /** Leading or trailing dots and dashes */
+    /** Leading or trailing dots and dashes. */
     private static final Pattern LEADING_TRAILING = Pattern.compile("^[.\\-]+|[.\\-]+$");
 
     /**
@@ -1244,7 +1244,7 @@ public class I2PSnarkUtil implements DisconnectListener {
     /**
      * Tunnel nickname for a shared pool, "I2PSnark - Pool &lt;n&gt;", with the pool's member
      * names carried in the i2psnark.poolMembers session property for the pool tooltip.
-     * Single-torrent pools keep their torrent's nickname instead; this is applied by
+     * Single-torrent pools keep their torrent's nickname instead. This is applied by
      * TorrentDest only when a second torrent joins the pool.
      *
      * @param poolNum the sequential pool number, assigned when the pool destination was created
@@ -1359,7 +1359,7 @@ public class I2PSnarkUtil implements DisconnectListener {
         return new int[] {in, out};
     }
 
-    /** Router default for outbound.quantity when a session sets none */
+    /** Router default for outbound.quantity when a session sets none. */
     private static final int DEFAULT_OUTBOUND_QUANTITY = 2;
 
     /**
@@ -1555,7 +1555,7 @@ public class I2PSnarkUtil implements DisconnectListener {
     }
 
     /**
-     * For FetchAndAdd
+     * For FetchAndAdd.
      *
      * @return null if not connected
      * @since 0.9.1
@@ -1599,7 +1599,7 @@ public class I2PSnarkUtil implements DisconnectListener {
     }
 
     /**
-     * When did we connect to the network? For RPC
+     * When did we connect to the network? For RPC.
      *
      * @return 0 if not connected
      * @since 0.9.30
@@ -1641,7 +1641,7 @@ public class I2PSnarkUtil implements DisconnectListener {
         return connect(peer, _manager, getMyDestination());
     }
 
-    /** Connect to the given destination via the given socket manager */
+    /** Connect to the given destination via the given socket manager. */
     private I2PSocket connect(PeerID peer, I2PSocketManager mgr, Destination myDest)
             throws IOException {
         if (mgr == null) {
@@ -1854,7 +1854,7 @@ public class I2PSnarkUtil implements DisconnectListener {
     }
 
     /**
-     * Fetch to memory
+     * Fetch to memory.
      *
      * @param url the URL to fetch
      * @param rewrite if true, convert http://KEY.i2p/foo/announce to http://i2p/KEY/foo/announce
@@ -1907,13 +1907,13 @@ public class I2PSnarkUtil implements DisconnectListener {
      * @param initialSize initial capacity of the output buffer, in bytes
      * @param maxSize fails if greater
      * @param ih the torrent's info hash
-     *           <p>When the torrent has no destination of its own - which is every torrent while
-     *           {@link #getMultiDest()} is off, the default - the fetch goes over the shared
-     *           session instead. Returning null here is what silently disabled every HTTP tracker
-     *           announce: all of the default open trackers are http, and each one failed
-     *           immediately with "No response from", leaving a magnet with no working peer source
-     *           at all. Fetching over the shared session is exactly what the single-destination
-     *           configuration already means.
+     * <p>When the torrent has no destination of its own - which is every torrent while
+     * {@link #getMultiDest} is off, the default - the fetch goes over the shared
+     * session instead. Returning null here is what silently disabled every HTTP tracker
+     * announce: all of the default open trackers are http, and each one failed
+     * immediately with "No response from", leaving a magnet with no working peer source
+     * at all. Fetching over the shared session is exactly what the single-destination
+     * configuration already means.
      *
      * @return null on error
      * @since 0.9.71+
@@ -1976,7 +1976,7 @@ public class I2PSnarkUtil implements DisconnectListener {
     /**
      * Full Base64 of the Destination.
      *
-     * @return the our i p string
+     * @return the our IP string
      */
     public String getOurIPString() {
         Destination dest = getMyDestination();
@@ -2036,10 +2036,10 @@ public class I2PSnarkUtil implements DisconnectListener {
     private static final int BASE32_HASH_LENGTH = 52; // 1 + Hash.HASH_LENGTH * 8 / 5
 
     /**
-     * Base64 Hash or Hash.i2p or name.i2p using naming service
+     * Base64 Hash or Hash.i2p or name.i2p using naming service.
      *
      * @param ip destination string: base64, a .b32.i2p address, or a name.i2p hostname
-     *           resolved through the naming service
+     * resolved through the naming service
      * @return the Destination, or null if it cannot be parsed or the name does not resolve
      */
     Destination getDestination(String ip) {
@@ -2105,11 +2105,11 @@ public class I2PSnarkUtil implements DisconnectListener {
 
     /**
      * Given http://KEY.i2p/foo/announce turn it into http://i2p/KEY/foo/announce Given
-     * http://tracker.blah.i2p/foo/announce leave it alone
+     * http://tracker.blah.i2p/foo/announce leave it alone.
      *
      * @param origAnnounce the tracker's announce URL, expected to begin with "http://"
      * @return the URL with the key moved into the path, or the input unchanged when the
-     *         host is too short to be a full destination key
+     * host is too short to be a full destination key
      */
     String rewriteAnnounce(String origAnnounce) {
         int destStart = "http://".length();
@@ -2193,7 +2193,7 @@ public class I2PSnarkUtil implements DisconnectListener {
     }
 
     /**
-     * List of open tracker announce URLs to use as backups
+     * List of open tracker announce URLs to use as backups.
      *
      * @return non-null, possibly unmodifiable, empty if disabled
      */
@@ -2222,7 +2222,7 @@ public class I2PSnarkUtil implements DisconnectListener {
     }
 
     /**
-     * List of open tracker announce URLs to use as backups even if disabled
+     * List of open tracker announce URLs to use as backups even if disabled.
      *
      * @return non-null
      * @since 0.9.4
@@ -2270,7 +2270,7 @@ public class I2PSnarkUtil implements DisconnectListener {
     /**
      * Whether the DHT is used.
      *
-     * @return whether use d h t
+     * @return whether use DHT
      */
     public boolean shouldUseDHT() {
         return _shouldUseDHT;
@@ -2536,8 +2536,8 @@ public class I2PSnarkUtil implements DisconnectListener {
      * A translated string for the given key.
      *
      * @param key the message bundle key to look up
-     * @return the translated string, in the routerconsole.lang property if set,
-     *         else the current locale
+     * @return the translated string, in the {@code routerconsole.lang} property if set,
+     * else the current locale
      */
     public String getString(String key) {
         return Translate.getString(key, _context, BUNDLE_NAME);
@@ -2595,7 +2595,7 @@ public class I2PSnarkUtil implements DisconnectListener {
      * Blank lines, lines starting with '#' or ';', and lines with no '=' are ignored; for
      * the rest, everything after the first '=' is the value.
      *
-     * <p>Same as DataHelper.loadProps() but allows '#' in values, so we can have filenames
+     * <p>Same as {@link net.i2p.data.DataHelper#loadProps} but allows '#' in values, so we can have filenames
      * with '#' in them in property files. '#' must be in column 1 for a comment.
      *
      * @param props the properties to fill

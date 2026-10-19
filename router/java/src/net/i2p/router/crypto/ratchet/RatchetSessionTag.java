@@ -5,12 +5,12 @@ import net.i2p.data.DataHelper;
 
 /**
  * 8-byte session tag for ratchet protocol messages with efficient long-based storage representation for memory optimization
- * Does not extend SessionTag or DataStructure to save space
+ * Does not extend SessionTag or DataStructure to save space.
  *
  * @since 0.9.44
  */
 public class RatchetSessionTag {
-    /** Length of the tag in bytes */
+    /** Length of the tag in bytes. */
     public static final int LENGTH = 8;
 
     private final long _data;
@@ -65,7 +65,7 @@ public class RatchetSessionTag {
     }
 
     /**
-     * 12 chars
+     * 12 chars.
      * @return the tag encoded with the I2P base64 alphabet, 12 characters ending in '='
      */
     public String toBase64() {

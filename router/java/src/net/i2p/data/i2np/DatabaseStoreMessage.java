@@ -22,15 +22,13 @@ import net.i2p.data.MetaLeaseSet;
 import net.i2p.data.TunnelId;
 import net.i2p.data.router.RouterInfo;
 
+// TODO: Don't decompress and recompress RouterInfos at the OBEP and IBGW.
 /**
  * Defines the message a router sends to another router to test the network
  * database reachability, as well as the reply message sent back.
  * <p>
- * TODO: Don't decompress and recompress RouterInfos at the OBEP and IBGW.
  * Could this even change the message length or corrupt things?
- *
- * @author jrandom
- */
+*/
 public class DatabaseStoreMessage extends FastI2NPMessageImpl {
     /**
      * I2NP message type ID for a database store request.
@@ -72,7 +70,7 @@ public class DatabaseStoreMessage extends FastI2NPMessageImpl {
     public DatabaseEntry getEntry() {return _dbEntry;}
 
     /**
-     * This also sets the key
+     * This also sets the key.
      *
      * @param entry the entry to store
      * @throws IllegalStateException if data previously set, to protect saved checksum
@@ -216,7 +214,7 @@ public class DatabaseStoreMessage extends FastI2NPMessageImpl {
     }
 
     /**
-     * Calculate the message body's length (not including the header and footer)
+     * Calculate the message body's length (not including the header and footer).
      *
      * @return the length of the message body
      * @throws IllegalStateException if the entry is not set

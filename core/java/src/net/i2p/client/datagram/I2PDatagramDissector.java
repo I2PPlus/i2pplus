@@ -24,7 +24,6 @@ import java.io.IOException;
  * Class for dissecting I2P repliable datagrams, checking the authenticity of
  * the sender.  Note that objects of this class are NOT THREAD SAFE!
  *
- * @author human
  */
 public final class I2PDatagramDissector {
 
@@ -192,7 +191,7 @@ public final class I2PDatagramDissector {
 
     /**
      * Verify the signature of this datagram (previously loaded with the
-     * loadI2PDatagram() method)
+     * loadI2PDatagram() method).
      *
      * @throws I2PInvalidDatagramException if the signature is invalid
      */

@@ -48,7 +48,7 @@ public class ConstantPoolLiteralTagTest extends TestCase {
     }
 
     /**
-     * ConstantPool's entry factory reads {@link Utils#getTLGlobals()}, which is
+     * ConstantPool's entry factory reads {@link Utils#getTLGlobals}, which is
      * only populated while a pack or unpack is in flight. Stand up the same
      * context the engine would.
      */

@@ -60,7 +60,7 @@ public class TunnelController implements Logging {
     private volatile TunnelState _state;
     private volatile SimpleTimer2.TimedEvent _pkfc;
     private volatile long _startupDelayEndTime;
-    /** Suppress log messages during tunnel restart */
+    /** Suppress log messages during tunnel restart. */
     private boolean _suppressLog;
 
     /**
@@ -140,10 +140,10 @@ public class TunnelController implements Logging {
      */
     public static final String PROP_STARTUP_DELAY_MAX = "startupDelayMax";
 
-    /** Default minimum startup delay in seconds */
+    /** Default minimum startup delay in seconds. */
     public static final int DEFAULT_STARTUP_DELAY_MIN = 0;
 
-    /** Default maximum startup delay in seconds */
+    /** Default maximum startup delay in seconds. */
     public static final int DEFAULT_STARTUP_DELAY_MAX = 0;
 
     /**
@@ -158,10 +158,10 @@ public class TunnelController implements Logging {
      */
     public static final String PROP_SHUTDOWN_DELAY_MAX = "shutdownDelayMax";
 
-    /** Default minimum shutdown delay in seconds */
+    /** Default minimum shutdown delay in seconds. */
     public static final int DEFAULT_SHUTDOWN_DELAY_MIN = 0;
 
-    /** Default maximum shutdown delay in seconds */
+    /** Default maximum shutdown delay in seconds. */
     public static final int DEFAULT_SHUTDOWN_DELAY_MAX = 0;
 
     /*
@@ -258,9 +258,9 @@ public class TunnelController implements Logging {
     public static final String TYPE_STD_CLIENT = "client";
     /** Server forwarding incoming streams to a localhost host and port. */
     public static final String TYPE_STD_SERVER = "server";
-    /** Client in the UI and I2P side but a server on the localhost side */
+    /** Client in the UI and I2P side but a server on the localhost side. */
     public static final String TYPE_STREAMR_CLIENT = "streamrclient";
-    /** Server in the UI and I2P side but a client on the localhost side */
+    /** Server in the UI and I2P side but a client on the localhost side. */
     public static final String TYPE_STREAMR_SERVER = "streamrserver";
 
     /**
@@ -332,9 +332,9 @@ public class TunnelController implements Logging {
     /**
      * The I2PTunnel
      * <p>
-     * for advanced plugin usage
+     * for advanced plugin usage.
      * @return the I2PTunnel client built around this controller, which holds the I2CP
-     *         session and runs the tunnel on {@link #startTunnel()}
+     * session and runs the tunnel on {@link #startTunnel}
      */
     public I2PTunnel getTunnel() {
         return _tunnel;
@@ -512,7 +512,7 @@ public class TunnelController implements Logging {
     }
 
     /**
-     * Start up the tunnel (if it isn't already running)
+     * Start up the tunnel (if it isn't already running).
      */
     public void startTunnel() {
         synchronized (this) {
@@ -684,7 +684,7 @@ public class TunnelController implements Logging {
     }
 
     /**
-     * Streamr server is a UDP client, use the targetPort field for listenPort
+     * Streamr server is a UDP client, use the targetPort field for listenPort.
      */
     private void startStreamrServer() {
         String listenOn = getListenOnInterface();
@@ -697,7 +697,7 @@ public class TunnelController implements Logging {
     }
 
     /**
-     * Note the fact that we are using some sessions, so that they don't get closed by some other tunnels
+     * Note the fact that we are using some sessions, so that they don't get closed by some other tunnels.
      */
     private void acquire() {
         List<I2PSession> sessions = _tunnel.getSessions();
@@ -1170,7 +1170,8 @@ public class TunnelController implements Logging {
 
     /**
      * Apply the default signature type for tunnels that support it,
-     * mirroring EditBean.getSigType() and GeneralHelper.getSigType().
+      * mirroring {@link net.i2p.i2ptunnel.web.EditBean#getSigType} and
+       * {@link net.i2p.i2ptunnel.ui.GeneralHelper#getSigType} .
      *
      * @param type the tunnel type
      */
@@ -1313,7 +1314,7 @@ public class TunnelController implements Logging {
     public String getI2CPPort() { return _config.getProperty(PROP_I2CP_PORT); }
 
     /**
-     * Absolute path to filter definition file
+     * Absolute path to filter definition file.
      *
      * @return the configured filter definition path, or null if no filter is set
      */
@@ -1347,7 +1348,7 @@ public class TunnelController implements Logging {
     }
 
     /**
-     * These are the ones with a prefix of "option."
+     * These are the ones with a prefix of "option.".
      *
      * @return one big string of "key=val key=val ..."
      * @deprecated why would you want this? Use getClientOptionProps() instead
@@ -1468,7 +1469,7 @@ public class TunnelController implements Logging {
     }
 
     /**
-     * Returns null if not running.
+     * Get my destination as a Base64 string.
      * @return Base64 or null
      */
     public String getMyDestination() {
@@ -1479,7 +1480,7 @@ public class TunnelController implements Logging {
     }
 
     /**
-     * Returns null if not running.
+     * Get my destination's base32 address.
      * @return "{52 chars}.b32.i2p" or null
      */
     public String getMyDestHashBase32() {
@@ -1490,7 +1491,7 @@ public class TunnelController implements Logging {
     }
 
     /**
-     * Returns null if not running.
+     * Get the destination from the first session that has one.
      * @return Destination or null
      */
     public Destination getDestination() {
@@ -1505,7 +1506,7 @@ public class TunnelController implements Logging {
     }
 
     /**
-     * Returns false if not running.
+     * Check whether the primary session uses offline keys.
      * @return true if the primary session has offline keys
      */
     public boolean getIsOfflineKeys() {
@@ -1516,7 +1517,7 @@ public class TunnelController implements Logging {
     }
 
     /**
-     * Returns false if not running.
+     * Check whether any session or subsession uses offline keys.
      * @return true if ANY session or subsession has offline keys
      */
     private boolean getIsOfflineKeysAnySession() {
@@ -1547,7 +1548,7 @@ public class TunnelController implements Logging {
     public boolean getIsStarting() { return _state == TunnelState.START_ON_LOAD || _state == TunnelState.STARTING || _state == TunnelState.DELAYED_START_PENDING; }
 
     /**
-     * Gets the current tunnel state.
+     * The current state of this tunnel.
      *
      * @return the current TunnelState
      */
@@ -1576,7 +1577,7 @@ public class TunnelController implements Logging {
 
         /**
          * Changes the tunnel state and notifies any waiting threads.
-         * @param state the new value for {@link #getState()}
+         * @param state the new value for {@link #getState}
          */
         public synchronized void changeState(TunnelState state) {
         _state = state;
@@ -1604,7 +1605,7 @@ public class TunnelController implements Logging {
     public void restoreLog() { _suppressLog = false; }
 
     /**
-     * Pull off any messages that the I2PTunnel has produced
+     * Pull off any messages that the I2PTunnel has produced.
      *
      * @return list of messages pulled off (each is a String, earliest first)
      */
@@ -1648,7 +1649,7 @@ public class TunnelController implements Logging {
             }
         }
 
-        /** Check for offline key expiration and stop tunnel if expired */
+        /** Check for offline key expiration and stop tunnel if expired. */
         public void timeReached() {
             if (!getIsRunning() && !getIsStarting())
                 return;

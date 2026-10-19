@@ -12,7 +12,6 @@ import org.rrd4j.ConsolFun;
  * state object for each datasource) and round robin archives (one round robin for each datasource).
  * API (read-only) is provided to access each of these parts.
  *
- * @author Sasa Markovic
  */
 public class Archive implements RrdUpdater<Archive> {
     private final RrdDb parentDb;

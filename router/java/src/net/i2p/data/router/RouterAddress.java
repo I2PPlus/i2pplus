@@ -36,7 +36,6 @@ import net.i2p.util.OrderedProperties;
  * check. Implementing expiration, or any other use of the field, requires
  * several releases to propagate because it is backwards-incompatible.
  *
- * @author jrandom
  * @since 0.9.16 moved from net.i2p.data
  */
 public class RouterAddress extends DataStructureImpl {
@@ -54,9 +53,9 @@ public class RouterAddress extends DataStructureImpl {
     /** Cached port number. */
     private int _port;
 
-    /** Property key for host */
+    /** Property key for host. */
     public static final String PROP_HOST = "host";
-    /** Property key for port */
+    /** Property key for port. */
     public static final String PROP_PORT = "port";
     private static final byte[] NOT_LOOKED_UP = new byte[0];
     /**
@@ -89,7 +88,7 @@ public class RouterAddress extends DataStructureImpl {
      * contacting this router.  The value 0 means free and 255 means really expensive.
      * No value above 255 is allowed.
      * <p>
-     * Unused before 0.7.12
+     * Unused before 0.7.12.
      * @return 0-255
      */
     public int getCost() {
@@ -104,7 +103,7 @@ public class RouterAddress extends DataStructureImpl {
      * There is no check here.
      * Rarely used, use 3-arg constructor.
      * <p>
-     * NTCP is set to 10 and SSU to 5 by default, unused before 0.7.12
+     * NTCP is set to 10 and SSU to 5 by default, unused before 0.7.12.
      *
      * @param cost 0-255, where 0 is free and 255 is most expensive
      */
@@ -124,7 +123,7 @@ public class RouterAddress extends DataStructureImpl {
     }
 
     /**
-     * Retrieve the transport specific options necessary for communication
+     * Retrieve the transport specific options necessary for communication.
      *
      * @return an unmodifiable view, non-null, sorted
      * @since 0.8.13
@@ -145,7 +144,7 @@ public class RouterAddress extends DataStructureImpl {
     }
 
     /**
-     * Caching version of InetAddress.getByName(getOption("host")).getAddress(), which is slow.
+     * Caching version of {@code InetAddress.getByName(}getOption("host")).getAddress(), which is slow.
      * Caches numeric host names, and negative caches also.
      * <p>
      * As of 0.9.32, this works for literal IP addresses only, and does NOT resolve host names.
@@ -180,7 +179,7 @@ public class RouterAddress extends DataStructureImpl {
     }
 
     /**
-     * Caching version of Integer.parseInt(getOption("port"))
+     * Caching version of {@link java.lang.Integer#parseInt}getOption("port"))
      * Caches valid ports 1-65535 only.
      *
      * @return 1-65535 or 0 if invalid
@@ -262,7 +261,7 @@ public class RouterAddress extends DataStructureImpl {
     }
 
     /**
-     * Everything, including Transport, host, port, options, and cost
+     * Everything, including Transport, host, port, options, and cost.
      * @param addr may be null
      * @return true only if every field of both addresses matches
      */
@@ -287,7 +286,7 @@ public class RouterAddress extends DataStructureImpl {
 
     /**
      * This is used on peers.jsp so sort options so it looks better.
-     * We don't just use OrderedProperties for _options because DataHelper.writeProperties()
+     * We don't just use OrderedProperties for _options because {@link net.i2p.data.DataHelper#writeProperties}
      * sorts also.
      */
     @Override

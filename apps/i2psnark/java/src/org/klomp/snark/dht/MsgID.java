@@ -8,7 +8,7 @@ import net.i2p.I2PAppContext;
 import net.i2p.data.ByteArray;
 
 /**
- * Used for both incoming and outgoing message IDs
+ * Used for both incoming and outgoing message IDs.
  *
  * @since 0.9.2
  */
@@ -16,7 +16,7 @@ class MsgID extends ByteArray {
 
     private static final long serialVersionUID = 1L;
 
-    /** BEP 5: 2 bytes, incremented */
+    /** BEP 5: 2 bytes, incremented. */
     private static final int MY_TOK_LEN = 8;
 
     private static final int MAX_TOK_LEN = 16;

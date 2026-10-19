@@ -11,7 +11,7 @@ import net.i2p.I2PAppContext;
  */
 public class ShortTunnelBuildReplyMessage extends TunnelBuildReplyMessage {
     /**
-     *  Impossible value, more than 1 byte
+     * Impossible value, more than 1 byte.
      */
     public static final int MESSAGE_TYPE = 999;
     /**

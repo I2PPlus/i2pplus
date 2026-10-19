@@ -35,7 +35,9 @@ public class ConfigKeyringHelper extends HelperBase {
     }
 
     /**
-     *  @since 0.9.33 moved from PersistentKeyRing
+     * Render the keyring page.
+     *
+     * @since 0.9.33 moved from PersistentKeyRing
      */
     private void renderStatusHTML(StringWriter out) {
         StringBuilder buf = new StringBuilder(1024);

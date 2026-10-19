@@ -11,7 +11,7 @@ import org.junit.Test;
  * RTO recovery cadence) at the ceiling, so raw samples are clamped before they
  * enter the smoother in {@link ConnectionOptions#updateRTT(int)} via
  * {@link ConnectionOptions#clampRttSample(int, int)}. The once-per-RTT guard in
- * {@link ConnectionOptions#doubleRTO()} is floored by
+ * {@link ConnectionOptions#doubleRTO} is floored by
  * {@link ConnectionOptions#MIN_RTO_DOUBLE_GAP_MS} so a degenerate smoothed RTT
  * cannot turn the guard into a no-op.
  *
@@ -49,7 +49,7 @@ public class ConnectionOptionsRttSampleClampTest {
         assertEquals(500, ConnectionOptions.clampRttSample(500, -1));
     }
 
-    /** updateRTT clamps before the smoother, so a huge single sample only
+    /** UpdateRTT clamps before the smoother, so a huge single sample only
         reaches the ceiling in the smoothed RTT; the min-RTT tracker sees the
         raw sample so a slow path (> maxRtt) gets no fabricated floor. */
     @Test
@@ -84,7 +84,7 @@ public class ConnectionOptionsRttSampleClampTest {
     /**
      * Backoff must never shrink the timer. loadFromCache seeds an RTO in the
      * computeRTO ceiling band (12s &lt; RTO &lt;= 30s) which only computeRTO() can
-     * reach; a bare {@code min(doubled, getMaxRTO())} clamp there would drag the
+     * reach. A bare {@code min(doubled, getMaxRTO())} clamp there would drag the
      * timer DOWN to 12s exactly when recovery wants it growing.
      */
     @Test

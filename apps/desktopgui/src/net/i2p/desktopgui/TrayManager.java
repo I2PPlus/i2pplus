@@ -202,7 +202,7 @@ abstract class TrayManager {
     }
 
     /**
-     * Remove the tray icon from the system tray
+     * Remove the tray icon from the system tray.
      *
      * @since 0.9.26
      */
@@ -236,7 +236,7 @@ abstract class TrayManager {
     protected abstract JPopupMenu getSwingMainMenu();
 
     /**
-     * Update the menu
+     * Update the menu.
      * @since 0.9.26
      */
     protected abstract void updateMenu();
@@ -303,9 +303,9 @@ abstract class TrayManager {
     }
 
     /**
-     *  Initializes _notificationItem 1 and 2
+     * Initializes _notificationItem 1 and 2.
      *
-     *  @since 0.9.58 pulled out of InternalTrayManager
+     * @since 0.9.58 pulled out of InternalTrayManager
      */
     protected void initializeNotificationItems() {
         final MenuItem notificationItem2 = new MenuItem(_t("Enable notifications"));
@@ -340,9 +340,9 @@ abstract class TrayManager {
     }
 
     /**
-     *  Initializes _jnotificationItem 1 and 2
+     * Initializes _jnotificationItem 1 and 2.
      *
-     *  @since 0.9.58 pulled out of InternalTrayManager
+     * @since 0.9.58 pulled out of InternalTrayManager
      */
     protected void initializeJNotificationItems() {
         final JMenuItem notificationItem2 = new JMenuItem(_t("Enable notifications"));

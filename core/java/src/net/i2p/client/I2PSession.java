@@ -277,7 +277,7 @@ public interface I2PSession {
     /**
      * Receive a message that the router has notified the client about, returning
      * the payload.
-     * This may only be called once for a given msgId (until the counter wraps)
+     * This may only be called once for a given msgId (until the counter wraps).
      *
      * @param msgId message to fetch
      * @return unencrypted body of the message, or null if not found
@@ -402,7 +402,7 @@ public interface I2PSession {
      public boolean isOffline();
 
     /**
-     * Get the offline expiration
+     * Get the offline expiration.
      *
      * @return Java time (ms) or 0 if not initialized or does not have offline keys
      * @since 0.9.38
@@ -517,7 +517,7 @@ public interface I2PSession {
     /**
      * Ask the router to lookup a Destination by host name.
      * Blocking. See above for details.
-     * Same as lookupDest() but with a failure code in the return value
+     * Same as lookupDest() but with a failure code in the return value.
      *
      * @param name the hostname to look up
      * @param maxWait milliseconds to wait for the router's reply before giving up
@@ -622,7 +622,7 @@ public interface I2PSession {
      public void addMuxedSessionListener(I2PSessionMuxedListener l, int proto, int port);
 
      /**
-      * removes the specified listener (only)
+      * Removes the specified listener (only).
       *
       * @param proto 1-254, or PROTO_ANY (0) to match any protocol
       * @param port 1-65535, or PORT_ANY (0) to match any port
@@ -721,22 +721,22 @@ public interface I2PSession {
      */
     public void setCurrentTunnelPair(TunnelPair pair);
 
-    /** Any port */
+    /** Any port. */
     public static final int PORT_ANY = 0;
-    /** Unspecified port */
+    /** Unspecified port. */
     public static final int PORT_UNSPECIFIED = 0;
-    /** Any protocol */
+    /** Any protocol. */
     public static final int PROTO_ANY = 0;
-    /** Unspecified protocol */
+    /** Unspecified protocol. */
     public static final int PROTO_UNSPECIFIED = 0;
-    /** Streaming protocol */
+    /** Streaming protocol. */
     public static final int PROTO_STREAMING = 6;
 
-    /** A repliable and signed datagram */
+    /** A repliable and signed datagram. */
     public static final int PROTO_DATAGRAM = 17;
 
     /**
-     * A raw (unsigned, unrepliable) datagram
+     * A raw (unsigned, unrepliable) datagram.
      *
      * @since 0.9.2
      */
@@ -744,7 +744,7 @@ public interface I2PSession {
 
     /**
      * A repliable and signed datagram.
-     * See Proposal 163 and datagrams/Datagram2
+     * See Proposal 163 and datagrams/Datagram2.
      *
      * @since 0.9.66
      */
@@ -752,7 +752,7 @@ public interface I2PSession {
 
     /**
      * A repliable but unsigned datagram.
-     * See Proposal 163 and datagrams/Datagram3
+     * See Proposal 163 and datagrams/Datagram3.
      *
      * @since 0.9.66
      */

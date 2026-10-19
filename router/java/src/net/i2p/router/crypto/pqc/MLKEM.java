@@ -20,7 +20,7 @@ import org.bouncycastle.pqc.crypto.mlkem.MLKEMPrivateKeyParameters;
 import org.bouncycastle.pqc.crypto.mlkem.MLKEMPublicKeyParameters;
 
 /**
- * Wrapper around bouncycastle
+ * Wrapper around bouncycastle.
  *
  * @since 0.9.69
  */
@@ -28,11 +28,11 @@ public final class MLKEM {
 
     private MLKEM() {}
 
-    /** MLKEM-512 key factory */
+    /** MLKEM-512 key factory. */
     public static final KeyFactory MLKEM512KeyFactory = new MLKEMFactory(EncType.MLKEM512_X25519_INT);
-    /** MLKEM-768 key factory */
+    /** MLKEM-768 key factory. */
     public static final KeyFactory MLKEM768KeyFactory = new MLKEMFactory(EncType.MLKEM768_X25519_INT);
-    /** MLKEM-1024 key factory */
+    /** MLKEM-1024 key factory. */
     public static final KeyFactory MLKEM1024KeyFactory = new MLKEMFactory(EncType.MLKEM1024_X25519_INT);
 
     private static class MLKEMFactory implements KeyFactory {

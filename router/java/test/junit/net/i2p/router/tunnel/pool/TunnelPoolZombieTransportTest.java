@@ -230,7 +230,7 @@ public class TunnelPoolZombieTransportTest {
     /**
      * The bias both sides share cancels in the ratio. The transport style is read
      * from the peer's first published address, which is arbitrary for a peer
-     * advertising several transports; applying the same arbitrary rule to numerator
+     * advertising several transports. Applying the same arbitrary rule to numerator
      * and denominator is what keeps that from compounding.
      */
     @Test

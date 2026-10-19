@@ -16,8 +16,8 @@ import net.i2p.util.Log;
 import net.i2p.util.SystemVersion;
 
 /**
- * Simplified main class for App Context only, requiring only i2p.jar.
- * Provides basic system tray functionality without router.jar dependency.
+ * Simplified main class for App Context only, requiring only {@code i2p.jar}.
+ * Provides basic system tray functionality without {@code router.jar} dependency.
  * Uses ExternalTrayManager for limited I2P management capabilities.
  *
  * @since 0.9.54

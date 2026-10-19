@@ -246,7 +246,7 @@ public class SU3File {
     }
 
     /**
-     * Use this X.509 cert file for verification instead of $I2P/certificates/content_type/foo_at_mail.i2p
+     * Use this X.509 cert file for verification instead of $I2P/certificates/content_type/foo_at_mail.i2p.
      *
      * @since 0.9.15
      */
@@ -832,7 +832,7 @@ public class SU3File {
     }
 
     /**
-     * Zip, xml, and xml.gz only
+     * Zip, xml, and xml.gz only.
      *
      * @return true on success
      * @since 0.9.9
@@ -1116,7 +1116,7 @@ public class SU3File {
     }
 
     /**
-     * Writes Java-encoded keys (X.509 for public and PKCS#8 for private)
+     * Writes Java-encoded keys (X.509 for public and PKCS#8 for private).
      *
      * @param crlFile may be null; non-null to save
      * @return true on success
@@ -1180,7 +1180,7 @@ public class SU3File {
     }
 
     /**
-     * For the -k CLI option
+     * For the -k CLI option.
      *
      * @return non-null, throws IOE on all errors
      * @since 0.9.15

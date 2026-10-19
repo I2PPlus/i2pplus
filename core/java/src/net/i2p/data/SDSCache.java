@@ -38,8 +38,6 @@ import java.util.concurrent.atomic.AtomicReferenceArray;
  *  }
  * </pre>
  *
- * @author zzz
- *
  * @param <V> type of SimpleDataStructure objects cached
  * @since 0.8.3
  */
@@ -83,6 +81,8 @@ public class SDSCache<V extends SimpleDataStructure> {
     }
 
     /**
+     * Saves the cache when the router shuts down.
+     *
      * @since 0.8.8
      */
     private static class Shutdown implements Runnable {
@@ -232,10 +232,12 @@ public class SDSCache<V extends SimpleDataStructure> {
         }
 
         /**
+         * The cached entry, if still referenced.
+         *
          * @param key the 4-byte index
          * @return the reference for the key, or null. A slot whose key is
-         *         published but whose reference is not yet reads as empty, so a
-         *         reader racing a put may see a miss; the put holds the lock.
+         * published but whose reference is not yet reads as empty, so a
+         * reader racing a put may see a miss; the put holds the lock.
          */
         @SuppressWarnings("unchecked")
         WeakReference<V> get(int key) {

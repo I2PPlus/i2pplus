@@ -15,7 +15,7 @@ import net.i2p.router.web.Messages;
 import net.i2p.router.web.NewsHelper;
 
 /**
- * simple helper to control restarts/shutdowns in the left hand nav
+ * Simple helper to control restarts/shutdowns in the left hand nav.
  */
 public class ConfigRestartBean {
     /** Creates a bean; the container calls it with no arguments before rendering the nav. */
@@ -42,7 +42,7 @@ public class ConfigRestartBean {
     }
 
     /**
-     * this also initiates the restart/shutdown based on action
+     * This also initiates the restart/shutdown based on action.
      *
      * @param urlBase the base URL
      * @param action the action to perform
@@ -186,7 +186,7 @@ public class ConfigRestartBean {
     }
 
     /**
-     * this is for sidebar.jsp
+     * This is for sidebar.jsp.
      *
      * @return the time remaining until restart
      */
@@ -204,7 +204,7 @@ public class ConfigRestartBean {
         return Messages.getString(s, o, ctx);
     }
 
-    /** translate (ngettext) @since 0.9.10 */
+    /** translate (ngettext) @since 0.9.10. */
     private static String ngettext(String s, String p, int n, RouterContext ctx) {
         return Messages.getString(n, s, p, ctx);
     }

@@ -18,7 +18,7 @@ import net.i2p.util.SystemVersion;
  * NTCPConnections, including decryption of the data read, connection
  * handshaking, parsing bytes into I2NP messages, etc.
  * Provides efficient buffer management and connection lifecycle coordination.
- * Supports dynamic thread count adjustment via {@link #adjustThreads()}.
+ * Supports dynamic thread count adjustment via {@link #adjustThreads}.
  *
  * @since 0.9.16 (dynamic resizing since 0.9.70+)
  */
@@ -73,7 +73,7 @@ public class Reader {
         return size > 0 ? (double) _activeCount.get() / size : Double.NaN;
     }
     /**
-     * Reader thread count, bounded by MIN_THREADS-MAX_THREADS
+     * Reader thread count, bounded by MIN_THREADS-MAX_THREADS.
      * @param count the requested target, clamped into the range 2 to 16
      */
     public static void setThreadCount(int count) { _threadCount = Math.max(MIN_THREADS, Math.min(MAX_THREADS, count)); }

@@ -7,7 +7,7 @@ import java.util.Comparator;
  * Compares versions.
  * Characters other than [0-9.-_] are ignored.
  * I2P only uses '.' but Sun Java uses '_' and plugins may use any of '.-_'
- * Moved from TrustedUpdate.java
+ * Moved from TrustedUpdate.java.
  *
  * @since 0.7.10
  */
@@ -25,12 +25,12 @@ public class VersionComparator implements Comparator<String>, Serializable {
     }
 
     /**
-     *  To avoid churning comparators
+     * To avoid churning comparators.
      *
      * @param l the left-hand version string, the one being ordered
      * @param r the right-hand version string, the one being ordered against
      * @return negative if l sorts older than r, positive if newer, 0 if equivalent
-     *  @since 0.9.7
+     * @since 0.9.7
      */
     public static int comp(String l, String r) {
         if (l.equals(r)) return 0;

@@ -28,8 +28,8 @@ import net.i2p.util.LogManager;
 /**
  * Tests for the checkTunnel-failure path in ClientPeerSelector.finalizeSelection:
  * the selection must fail as an empty list (never null), and only the peer
- * adjacent to us (IBGW for inbound, OBEP for outbound) may be cooled down —
- * the peers of the failing edge are blamed via profileManager().tunnelTimedOut(),
+ * adjacent to us (IBGW for inbound, OBEP for outbound) may be cooled down.
+ * The peers of the failing edge are blamed via profileManager().tunnelTimedOut(),
  * but innocent middle hops must not pay a blanket cooldown.
  */
 public class ClientPeerSelectorCooldownTest {

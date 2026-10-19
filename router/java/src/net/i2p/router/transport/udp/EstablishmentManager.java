@@ -81,7 +81,7 @@ public class EstablishmentManager {
     private final Map<RemoteHostId, Token> _inboundTokens;
     private final ObjectCounter<RemoteHostId> _terminationCounter;
     /**
-     * Cached "udp.inboundTokenLifetime" RateStat handle. Registered in the
+     * Cached "{@code udp.inboundTokenLifetime}" RateStat handle. Registered in the
      * constructor and never replaced, so it is resolved once rather than on
      * every getInboundToken() call: that path is reachable from an
      * unauthenticated inbound Token Request, so the stat lookup (a name-based
@@ -93,7 +93,7 @@ public class EstablishmentManager {
      */
     private volatile RateStat _inboundTokenLifetimeStat;
 
-    /** Map of RemoteHostId to InboundEstablishState */
+    /** Map of RemoteHostId to InboundEstablishState. */
     private final ConcurrentHashMap<RemoteHostId, InboundEstablishState> _inboundStates;
 
     /**
@@ -148,32 +148,32 @@ public class EstablishmentManager {
     private final Object _activityLock;
     private int _activity;
 
-    /** Max outbound in progress - max inbound is half of this */
+    /** Max outbound in progress - max inbound is half of this. */
     private final int DEFAULT_MAX_CONCURRENT_ESTABLISH;
     private static volatile int _defaultLowMaxConcurrentEstablish = SystemVersion.isSlow() ? 128 : 512;
     private static volatile int _defaultHighMaxConcurrentEstablish = SystemVersion.isSlow() ? 256 : 2048;
     /**
-     * The default low max concurrent establish
+     * The default low max concurrent establish.
      * @return the default cap on concurrent outbound sessions before scaling
      */
     public static int getDefaultLowMaxConcurrentEstablish() { return _defaultLowMaxConcurrentEstablish; }
     /**
-     * The default low max concurrent establish, bounded 32-4096
+     * The default low max concurrent establish, bounded 32-4096.
      * @param val the desired max concurrent outbound sessions, clamped to 32-4096
      */
     public static void setDefaultLowMaxConcurrentEstablish(int val) { _defaultLowMaxConcurrentEstablish = Math.max(32, Math.min(4096, val)); }
     /**
-     * The default high max concurrent establish
+     * The default high max concurrent establish.
      * @return the default ceiling on concurrent outbound sessions
      */
     public static int getDefaultHighMaxConcurrentEstablish() { return _defaultHighMaxConcurrentEstablish; }
     /**
-     * The default high max concurrent establish, bounded 64-8192
+     * The default high max concurrent establish, bounded 64-8192.
      * @param val the desired max concurrent outbound sessions, clamped to 64-8192
      */
     public static void setDefaultHighMaxConcurrentEstablish(int val) { _defaultHighMaxConcurrentEstablish = Math.max(64, Math.min(8192, val)); }
     private static final String PROP_MAX_CONCURRENT_ESTABLISH = "i2np.udp.maxConcurrentEstablish";
-    /** Tuned max concurrent establish, -1 = use config. Set by Tuner. @since 0.9.71+ */
+    /** Tuned max concurrent establish, -1 = use config. Set by Tuner. @since 0.9.71+. */
     private static volatile int _tunedMaxConcurrentEstablish = -1;
     /**
      * Set the max concurrent establish (called by Tuner).
@@ -193,7 +193,7 @@ public class EstablishmentManager {
         return ctx.getProperty(PROP_MAX_CONCURRENT_ESTABLISH, _defaultLowMaxConcurrentEstablish);
     }
 
-    /** Max pending outbound connections (waiting because we are at MAX_CONCURRENT_ESTABLISH) */
+    /** Max pending outbound connections (waiting because we are at MAX_CONCURRENT_ESTABLISH). */
     private static volatile int MAX_QUEUED_OUTBOUND = 128;
 
     /**
@@ -212,7 +212,7 @@ public class EstablishmentManager {
         MAX_QUEUED_OUTBOUND = Math.max(32, Math.min(512, max));
     }
 
-    /** Max queued msgs per peer while peer connection is queued */
+    /** Max queued msgs per peer while peer connection is queued. */
     private static final int MAX_QUEUED_PER_PEER = 32;
 
     /**
@@ -229,7 +229,7 @@ public class EstablishmentManager {
      * Kill any outbound that takes more than this.
      * Two round trips (Req-Created-Confirmed-Data) for direct;
      * 3 1/2 round trips (RReq-RResp+Intro-HolePunch-Req-Created-Confirmed-Data) for indirect.
-     * Tuned to ~3-5x average establish time; the Tuner further adjusts this at runtime.
+     * Tuned to ~3-5x average establish time. The Tuner further adjusts this at runtime.
      */
     static final AtomicLong MAX_OB_ESTABLISH_TIME = new AtomicLong(5*1000L);
 
@@ -294,7 +294,7 @@ public class EstablishmentManager {
     static long getIbRetrySentMaxTime() { return IB_RETRY_SENT_MAX_TIME; }
 
     /**
-     * Minimum gap between inbound establishment give-up reports.  @since 0.9.71+
+     * Minimum gap between inbound establishment give-up reports.  @since 0.9.71+.
      */
     static final long INBOUND_GIVEUP_LOG_INTERVAL_MS = 60 * 1000L;
     private static final AtomicLong _lastInboundGiveupLog = new AtomicLong();
@@ -403,7 +403,7 @@ public class EstablishmentManager {
      */
     static final long SLOW_ESTABLISH_MS = 1000L;
 
-    /** Max wait before receiving a response to a single message during outbound establishment */
+    /** Max wait before receiving a response to a single message during outbound establishment. */
     public static final long OB_MESSAGE_TIMEOUT = 2500L;
 
     /** For the DSM and or netdb store. */
@@ -420,7 +420,7 @@ public class EstablishmentManager {
     public static final long IB_TOKEN_EXPIRATION = 60*60L*1000L;
     private static final long MAX_SKEW = 2*60L*1000L;
     private static final String TOKEN_FILE = "ssu2tokens.txt";
-    /** Max immediate terminations to send to a peer every FAILSAFE_INTERVAL */
+    /** Max immediate terminations to send to a peer every FAILSAFE_INTERVAL. */
     private static final int MAX_TERMINATIONS = 2;
 
     /**
@@ -502,7 +502,7 @@ public class EstablishmentManager {
     }
 
     /**
-     * Grab the active establishing state
+     * Grab the active establishing state.
      * @param from the peer's IP and port, keying the inbound state map
      * @return null if none
      */
@@ -511,7 +511,7 @@ public class EstablishmentManager {
     }
 
     /**
-     * Grab the active establishing state
+     * Grab the active establishing state.
      * @param from the peer's IP and port, tried against the claimed and hash-keyed maps
      * @return null if none
      */
@@ -527,7 +527,7 @@ public class EstablishmentManager {
     }
 
     /**
-     * How many concurrent outbound sessions to deal with
+     * How many concurrent outbound sessions to deal with.
      * @return the max concurrent establish
      */
     private int getMaxConcurrentEstablish() {
@@ -889,7 +889,7 @@ public class EstablishmentManager {
     /**
      * Is this a rejection from the introducer (Bob) rather than from Charlie
      * or a success? SSU2 relay response codes 1-63 reject at the introducer
-     * layer; 0 is success and >=64 reject at the destination (Charlie).
+     * layer. 0 is success and >=64 reject at the destination (Charlie).
      * Both the live-introduction map handling and the signer selection in
      * {@link #receiveRelayResponse} branch on this.
      *
@@ -1307,7 +1307,7 @@ public class EstablishmentManager {
         }
     }
     /**
-     * How many concurrent inbound sessions to deal with
+     * How many concurrent inbound sessions to deal with.
      * @return the max inbound establishers
      */
     private int getMaxInboundEstablishers() {
@@ -1530,7 +1530,7 @@ public class EstablishmentManager {
      * so we have basic probing resistance.
      * The Retry packet encryption is low-cost, chacha only.
      * <p>
-     * Rate limited to MAX_TERMINATIONS per peer every FAILSAFE_INTERVAL
+     * Rate limited to MAX_TERMINATIONS per peer every FAILSAFE_INTERVAL.
      *
      * @param fromPacket header already decrypted, must be session or token request
      * @param terminationCode SSU2 reason code placed in the Retry packet
@@ -1696,7 +1696,7 @@ public class EstablishmentManager {
     /**
      * Got a SessionDestroy on an established conn
      * <p>
-     * SSU 2
+     * SSU 2.
      *
      * @param from the sender, logged only - the authenticated state decides what to drop
      * @param state the established session to tear down
@@ -1711,7 +1711,7 @@ public class EstablishmentManager {
     /**
      * Got a SessionDestroy during outbound establish
      * <p>
-     * SSU 2
+     * SSU 2.
      *
      * @param from the sender, which keys the outbound state to abandon
      * @param state the outbound attempt being torn down
@@ -1740,7 +1740,7 @@ public class EstablishmentManager {
      * As this packet was essentially unauthenticated (i.e. intro key, not session key)
      * we just log it as it could be spoofed.
      * <p>
-     * SSU 2
+     * SSU 2.
      *
      * @param from the unauthenticated sender, logged only as it may be spoofed
      * @since 0.8.1
@@ -2002,7 +2002,7 @@ public class EstablishmentManager {
     }
 
     /**
-     * A database store message with our router info
+     * A database store message with our router info.
      * @return non-null
      * @since 0.9.24 split from sendOurInfo(), public since 0.9.55 for UDPTransport
      */
@@ -2130,11 +2130,11 @@ public class EstablishmentManager {
      * This may be called multiple times, it sets the nonce the first time only
      * Caller should probably synch on state.
      * <p>
-     * SSU 2
+     * SSU 2.
      *
      * @param state the outbound state to walk through the introducers of; must be
-     *              an {@link OutboundEstablishState2} with at least one valid v2
-     *              introducer
+     * an {@link OutboundEstablishState2} with at least one valid v2
+     * introducer
      */
     private void handlePendingIntro(OutboundEstablishState state) {
         long nonce = state.getIntroNonce();
@@ -2739,7 +2739,7 @@ public class EstablishmentManager {
     /**
      * Are IP and port valid? This is only for checking the relay response.
      * Allow IPv6 as of 0.9.50.
-     * Refuse anybody in the same /16
+     * Refuse anybody in the same /16.
      * @param ip the address from the relay response, IPv4 or IPv6, may be null
      * @param port the claimed port, must be a valid 1-65535
      * @return true if the address is routable, blocklist-free and not in our own /16
@@ -3036,7 +3036,7 @@ public class EstablishmentManager {
     }
 
     /**
-     * Caller should probably synch on outboundState
+     * Caller should probably synch on outboundState.
      */
     private void processExpired(OutboundEstablishState outboundState) {
         long nonce = outboundState.getIntroNonce();
@@ -3079,7 +3079,7 @@ public class EstablishmentManager {
 
 
     /**
-     * Caller should probably synch on inboundState
+     * Caller should probably synch on inboundState.
      * @since 0.9.2
      */
     private void processExpired(InboundEstablishState inboundState) {
@@ -3100,7 +3100,7 @@ public class EstablishmentManager {
     //// SSU 2 ////
 
     /**
-     * Remember a token that can be used later to connect to the peer
+     * Remember a token that can be used later to connect to the peer.
      *
      * @param peer the peer's address and port, which keys the stored token
      * @param token nonzero token value to store
@@ -3145,7 +3145,7 @@ public class EstablishmentManager {
     }
 
     /**
-     * Remove our tokens for this length
+     * Remove our tokens for this length.
      *
      * @param isIPv6 true if the new address is 16 bytes, false if 4
      * @since 0.9.54
@@ -3175,7 +3175,7 @@ public class EstablishmentManager {
     }
 
     /**
-     * Remove all tokens
+     * Remove all tokens.
      *
      * @since 0.9.54
      */
@@ -3185,13 +3185,13 @@ public class EstablishmentManager {
     }
 
     /**
-     * Token that can be used later for the peer to connect to us
+     * Token that can be used later for the peer to connect to us.
      *
      * @return the inbound token
      * @since 0.9.54
      */
     /**
-     * Resolves the "udp.inboundTokenLifetime" RateStat, caching the handle.
+     * Resolves the "{@code udp.inboundTokenLifetime}" RateStat, caching the handle.
      * <p>
      * The stat is created in this class's constructor and never replaced, so
      * after the first successful lookup this is a single volatile read. A
@@ -3209,7 +3209,7 @@ public class EstablishmentManager {
     }
 
     /**
-     * Token that can be used later for the peer to connect to us
+     * Token that can be used later for the peer to connect to us.
      *
      * @param peer the peer's address and port, at most one live token per peer
      * @return the inbound token
@@ -3309,24 +3309,24 @@ public class EstablishmentManager {
             added = (int) (now >> 10);
         }
         /**
-         * The token value
+         * The token value.
          *
          * @return the opaque value we match an incoming request against
          */
         public long getToken() {return token;}
         /**
-         * The expiration time
+         * The expiration time.
          *
          * @return the absolute time after which the token is no longer accepted
          */
         public long getExpiration() {return (expires & 0xFFFFFFFFL) << 10;}
         /**
-         * When this token was added
+         * When this token was added.
          *
          * @return the absolute time the token was issued
          */
         public long getWhenAdded() {return (added & 0xFFFFFFFFL) << 10;}
-        /** String representation */
+        /** String representation. */
         public String toString() {
             return "Token [" + token + "]\n* Added: " + DataHelper.formatTime(getWhenAdded()) +
                    "\n* Expires: " + DataHelper.formatTime(getExpiration());
@@ -3411,6 +3411,8 @@ public class EstablishmentManager {
     }
 
     /**
+     * Write unused intro tokens to disk.
+     *
      * @since 0.9.55
      */
     private void saveTokens() {
@@ -3464,7 +3466,7 @@ public class EstablishmentManager {
     }
 
     /**
-     * Soonest expiration first
+     * Soonest expiration first.
      * @since 0.9.57
      */
     private static class TokenComparator implements Comparator<Map.Entry<RemoteHostId, Token>>, Serializable {
@@ -3511,7 +3513,7 @@ public class EstablishmentManager {
     }
 
     /**
-     * Process SSU2 hole punch payload
+     * Process SSU2 hole punch payload.
      *
      * @since 0.9.55
      */
@@ -3754,7 +3756,7 @@ public class EstablishmentManager {
             }
         }
 
-        /** Perform failsafe cleanup of stale establishment states */
+        /** Perform failsafe cleanup of stale establishment states. */
         private void doFailsafe(long now) {
             for (Iterator<OutboundEstablishState> iter = _liveIntroductions.values().iterator(); iter.hasNext(); ) {
                 OutboundEstablishState state = iter.next();

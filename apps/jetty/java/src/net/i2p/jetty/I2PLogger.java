@@ -93,7 +93,11 @@ public class I2PLogger implements Logger
         }
     }
 
-    /** @param msg the message @param th the throwable */
+    /**
+     * Log a debug message with a throwable.
+     *
+     * @param msg the message @param th the throwable
+     */
     public void debug(String msg,Throwable th)
     {
         _log.debug(msg,th);
@@ -226,7 +230,9 @@ public class I2PLogger implements Logger
     }
 
     /**
-     *  @since Jetty 7
+     * No-op, required by the Jetty logger interface.
+     *
+     * @since Jetty 7
      */
     public void ignore(Throwable ignored)
     {
@@ -234,7 +240,9 @@ public class I2PLogger implements Logger
     }
 
     /**
-     *  @since Jetty 7
+     * Log a throwable at debug level.
+     *
+     * @since Jetty 7
      */
     public void debug(Throwable thrown)
     {
@@ -242,7 +250,9 @@ public class I2PLogger implements Logger
     }
 
     /**
-     *  @since Jetty 7
+     * Log a formatted debug message.
+     *
+     * @since Jetty 7
      */
     public void debug(String msg, Object... args)
     {
@@ -252,7 +262,9 @@ public class I2PLogger implements Logger
     }
 
     /**
-     *  @since Jetty 7
+     * Log a throwable at info level.
+     *
+     * @since Jetty 7
      */
     public void info(Throwable thrown)
     {
@@ -260,7 +272,9 @@ public class I2PLogger implements Logger
     }
 
     /**
-     *  @since Jetty 7
+     * Log a formatted info message.
+     *
+     * @since Jetty 7
      */
     public void info(String msg, Object... args)
     {
@@ -270,7 +284,9 @@ public class I2PLogger implements Logger
     }
 
     /**
-     *  @since Jetty 7
+     * Log an info message with a throwable.
+     *
+     * @since Jetty 7
      */
     public void info(String msg, Throwable th)
     {
@@ -278,7 +294,9 @@ public class I2PLogger implements Logger
     }
 
     /**
-     *  @since Jetty 7
+     * Log a throwable at warn level.
+     *
+     * @since Jetty 7
      */
     public void warn(Throwable thrown)
     {
@@ -286,7 +304,9 @@ public class I2PLogger implements Logger
     }
 
     /**
-     *  @since Jetty 7
+     * Log a formatted warn message.
+     *
+     * @since Jetty 7
      */
     public void warn(String msg, Object... args)
     {
@@ -305,7 +325,9 @@ public class I2PLogger implements Logger
     }
 
     /**
-     *  @since Jetty 9
+     * Log a debug message with one argument.
+     *
+     * @since Jetty 9
      */
     public void debug(String msg, long arg) {
         debug(msg, Long.valueOf(arg), null);

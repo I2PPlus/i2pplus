@@ -14,9 +14,8 @@ import net.i2p.data.DataStructure;
 import net.i2p.data.StructureTest;
 
 /**
- * Test harness for loading / storing Hash objects
+ * Tests AbuseReason data structure serialization.
  *
- * @author jrandom
  */
 public class AbuseReasonTest extends StructureTest {
     @Override

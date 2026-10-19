@@ -37,7 +37,6 @@ import java.util.Properties;
  * Cannot handle multiple simultaneous queries atm.
  * Could be expanded to ask the router other things.
  *
- * @author zzz
  */
 @SuppressWarnings("PMD.CloseResource")
 public class I2PSimpleSession extends I2PSessionImpl2 {
@@ -153,7 +152,7 @@ public class I2PSimpleSession extends I2PSessionImpl2 {
     }
 
     /**
-     * Ignore, does nothing
+     * Ignore, does nothing.
      *
      * @since 0.8.4
      */
@@ -161,7 +160,7 @@ public class I2PSimpleSession extends I2PSessionImpl2 {
     public void updateOptions(Properties options) { /* nop */ }
 
     /**
-     * Only map message handlers that we will use
+     * Only map message handlers that we will use.
      */
     private static class SimpleMessageHandlerMap extends I2PClientMessageHandlerMap {
         public SimpleMessageHandlerMap(I2PAppContext context) {

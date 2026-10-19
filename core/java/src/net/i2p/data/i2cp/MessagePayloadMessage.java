@@ -17,9 +17,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 /**
- * Defines the payload message a router sends to the client
+ * Defines the payload message a router sends to the client.
  *
- * @author jrandom
  */
 public class MessagePayloadMessage extends I2CPMessageImpl {
     /**
@@ -32,7 +31,7 @@ public class MessagePayloadMessage extends I2CPMessageImpl {
 
     /**
      * For reading.
-     * Deprecated for writing, use 3-arg constructor
+     * Deprecated for writing, use 3-arg constructor.
      */
     public MessagePayloadMessage() {
         _sessionId = -1;
@@ -40,7 +39,7 @@ public class MessagePayloadMessage extends I2CPMessageImpl {
     }
 
     /**
-     * For writing
+     * For writing.
      *
      * @param sessID the session the message belongs to, stored truncated to 32 bits
      * @param msgID the message ID used to correlate the payload with its reply
@@ -75,6 +74,8 @@ public class MessagePayloadMessage extends I2CPMessageImpl {
     }
 
     /**
+     * Deprecated, set the session id in the constructor.
+     *
      * @param id 0-65535
      * @deprecated use 3-arg constructor
      */
@@ -93,6 +94,8 @@ public class MessagePayloadMessage extends I2CPMessageImpl {
     }
 
     /**
+     * Deprecated, set the message id in the constructor.
+     *
      * @param id the message ID
      * @deprecated use 3-arg constructor
      */
@@ -111,6 +114,8 @@ public class MessagePayloadMessage extends I2CPMessageImpl {
     }
 
     /**
+     * Deprecated, set the payload in the constructor.
+     *
      * @param payload the payload to deliver to the session
      * @deprecated use 3-arg constructor
      */
@@ -133,6 +138,8 @@ public class MessagePayloadMessage extends I2CPMessageImpl {
     }
 
     /**
+     * Write the message body to the output stream.
+     *
      * @throws UnsupportedOperationException always, as this message is read-only
               once constructed
      */

@@ -16,7 +16,7 @@ package net.i2p;
 public class CoreVersion {
 
     /**
-     * Private constructor to prevent instantiation
+     * Private constructor to prevent instantiation.
      */
     private CoreVersion() {}
 

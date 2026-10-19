@@ -21,7 +21,6 @@ import java.net.URL;
  *
  * <p>Also provides utility methods for URL manipulation and validation.
  *
- * @author Satoshi Konno
  * @version 1.0
  * @since 1.0
  */

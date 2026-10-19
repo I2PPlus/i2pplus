@@ -183,7 +183,7 @@ public class SkipList<K extends Comparable<? super K>, V> implements Flushable, 
     // This is expensive proportional to the number of spans.
     /** Rebalance the skip list levels. */
     public void balance() {
-        // TODO Skip List Balancing Algorithm
+    // TODO Skip List Balancing Algorithm
     }
 
 }

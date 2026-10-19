@@ -36,7 +36,7 @@ class UpdateRunner implements UpdateTask, CompleteListener {
     private static final long CHECK_INTERVAL = 3 * (long) 60 * 1000;
 
     /**
-     * Update runner
+     * Update runner.
      *
      * @param ctx the application context, whose log manager supplies the log
      * @param umgr the update manager, told when the download completes or fails
@@ -301,7 +301,7 @@ class UpdateRunner implements UpdateTask, CompleteListener {
         _smgr.torrentComplete(snark);
     }
 
-    /** This is called by stopTorrent() among others */
+    /** This is called by stopTorrent() among others. */
     @Override
     public void updateStatus(Snark snark) {
         if (snark.isStopped() && !_isComplete) fatal("stopped by user");
@@ -361,7 +361,7 @@ class UpdateRunner implements UpdateTask, CompleteListener {
     /**
      * The saved torrent time.
      *
-     * @return the saved torrent time
+     * @return the last saved torrent time, ms since epoch
      */
     @Override
     public long getSavedTorrentTime(Snark snark) {
@@ -371,7 +371,7 @@ class UpdateRunner implements UpdateTask, CompleteListener {
     /**
      * The saved torrent bit field.
      *
-     * @return the saved torrent bit field
+     * @return the saved completion state, or null if none
      */
     @Override
     public BitField getSavedTorrentBitField(Snark snark) {
@@ -409,13 +409,13 @@ class UpdateRunner implements UpdateTask, CompleteListener {
         _smgr.locked_saveComments(snark, comments);
     }
 
-    /** Whether to auto-start */
+    /** Whether to auto-start. */
     @Override
     public boolean shouldAutoStart() {
         return _smgr.shouldAutoStart();
     }
 
-    /** The bandwidth listener */
+    /** The bandwidth listener. */
     @Override
     public BandwidthListener getBandwidthListener() {
         return _smgr.getBandwidthListener();

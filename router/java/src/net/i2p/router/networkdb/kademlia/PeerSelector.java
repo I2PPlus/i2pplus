@@ -22,13 +22,13 @@ import java.util.Set;
  * This class only provides common constructor and logging functionality.</p>
  */
 abstract class PeerSelector {
-    /** _log. / */
+    /** _log. /. */
     protected final Log _log;
-    /** _context. / */
+    /** _context. /. */
     protected final RouterContext _context;
 
     /**
-     * PeerSelector. /
+     * PeerSelector. /.
      *
      * @param ctx the router context whose log and profile organizer this selector uses
      */

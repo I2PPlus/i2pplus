@@ -48,7 +48,7 @@ public class CommentSet extends AbstractSet<Comment> {
     private long latestCommentTime;
     private boolean modified;
 
-    /** Maximum number of comments allowed */
+    /** Maximum number of comments allowed. */
     public static final int MAX_SIZE = 256;
 
     // Comment.java enforces max text length of 512, but
@@ -187,7 +187,7 @@ public class CommentSet extends AbstractSet<Comment> {
     }
 
     /**
-     * Hides a comment by its unique ID (as returned by Comment.getID()).
+     * Hides a comment by its unique ID (as returned by {@link org.klomp.snark.comments.Comment#getID}).
      *
      * @param id the comment ID to hide
      * @return true if present and not previously hidden

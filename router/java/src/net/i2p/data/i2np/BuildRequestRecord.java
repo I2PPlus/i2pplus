@@ -126,19 +126,19 @@ import net.i2p.util.Log;
  *
  */
 public class BuildRequestRecord {
-    /** The raw record data */
+    /** The raw record data. */
     private final byte[] _data;
-    /** True if ECIES format, false if ElGamal */
+    /** True if ECIES format, false if ElGamal. */
     private final boolean _isEC;
-    /** ChaCha reply key for ECIES */
+    /** ChaCha reply key for ECIES. */
     private SessionKey _chachaReplyKey;
-    /** ChaCha reply AD for ECIES */
+    /** ChaCha reply AD for ECIES. */
     private byte[] _chachaReplyAD;
-    /** Derived layer key for short records */
+    /** Derived layer key for short records. */
     private SessionKey _derivedLayerKey;
-    /** Derived IV key for short records */
+    /** Derived IV key for short records. */
     private SessionKey _derivedIVKey;
-    /** Derived garlic keys for short OBEP records */
+    /** Derived garlic keys for short OBEP records. */
     private OneTimeSession _derivedGarlicKeys;
 
     /**
@@ -154,7 +154,7 @@ public class BuildRequestRecord {
      */
     private static final int FLAG_OUTBOUND_ENDPOINT = (1 << 6);
 
-    /** IV size in bytes */
+    /** IV size in bytes. */
     public static final int IV_SIZE = 16;
     /** We show 16 bytes of the peer hash outside the elGamal block. */
     public static final int PEER_SIZE = 16;
@@ -168,90 +168,90 @@ public class BuildRequestRecord {
      */
     public byte[] getData() { return _data; }
 
-    /** Offset for receive tunnel in ElGamal format */
+    /** Offset for receive tunnel in ElGamal format. */
     private static final int OFF_RECV_TUNNEL = 0;
-    /** Offset for local identity hash in ElGamal format */
+    /** Offset for local identity hash in ElGamal format. */
     private static final int OFF_OUR_IDENT = OFF_RECV_TUNNEL + 4;
-    /** Offset for send tunnel in ElGamal format */
+    /** Offset for send tunnel in ElGamal format. */
     private static final int OFF_SEND_TUNNEL = OFF_OUR_IDENT + Hash.HASH_LENGTH;
-    /** Offset for send identity hash in ElGamal format */
+    /** Offset for send identity hash in ElGamal format. */
     private static final int OFF_SEND_IDENT = OFF_SEND_TUNNEL + 4;
-    /** Offset for layer key in ElGamal format */
+    /** Offset for layer key in ElGamal format. */
     private static final int OFF_LAYER_KEY = OFF_SEND_IDENT + Hash.HASH_LENGTH;
-    /** Offset for IV key in ElGamal format */
+    /** Offset for IV key in ElGamal format. */
     private static final int OFF_IV_KEY = OFF_LAYER_KEY + SessionKey.KEYSIZE_BYTES;
-    /** Offset for reply key in ElGamal format */
+    /** Offset for reply key in ElGamal format. */
     public static final int OFF_REPLY_KEY = OFF_IV_KEY + SessionKey.KEYSIZE_BYTES;
-    /** Offset for reply IV in ElGamal format */
+    /** Offset for reply IV in ElGamal format. */
     private static final int OFF_REPLY_IV = OFF_REPLY_KEY + SessionKey.KEYSIZE_BYTES;
-    /** Offset for flags in ElGamal format */
+    /** Offset for flags in ElGamal format. */
     private static final int OFF_FLAG = OFF_REPLY_IV + IV_SIZE;
-    /** Offset for request time in ElGamal format */
+    /** Offset for request time in ElGamal format. */
     private static final int OFF_REQ_TIME = OFF_FLAG + 1;
-    /** Offset for send message ID in ElGamal format */
+    /** Offset for send message ID in ElGamal format. */
     private static final int OFF_SEND_MSG_ID = OFF_REQ_TIME + 4;
-    /** Padding size for ElGamal format */
+    /** Padding size for ElGamal format. */
     private static final int PADDING_SIZE = 29;
-    /** Record length for ElGamal format (222 bytes) */
+    /** Record length for ElGamal format (222 bytes). */
     private static final int LENGTH = OFF_SEND_MSG_ID + 4 + PADDING_SIZE;
 
-    /** Offset for send tunnel in ECIES long format */
+    /** Offset for send tunnel in ECIES long format. */
     private static final int OFF_SEND_TUNNEL_EC = OFF_OUR_IDENT;
-    /** Offset for send identity hash in ECIES long format */
+    /** Offset for send identity hash in ECIES long format. */
     private static final int OFF_SEND_IDENT_EC = OFF_SEND_TUNNEL_EC + 4;
-    /** Offset for layer key in ECIES long format */
+    /** Offset for layer key in ECIES long format. */
     private static final int OFF_LAYER_KEY_EC = OFF_SEND_IDENT_EC + Hash.HASH_LENGTH;
-    /** Offset for IV key in ECIES long format */
+    /** Offset for IV key in ECIES long format. */
     private static final int OFF_IV_KEY_EC = OFF_LAYER_KEY_EC + SessionKey.KEYSIZE_BYTES;
-    /** Offset for reply key in ECIES long format */
+    /** Offset for reply key in ECIES long format. */
     public static final int OFF_REPLY_KEY_EC = OFF_IV_KEY_EC + SessionKey.KEYSIZE_BYTES;
-    /** Offset for reply IV in ECIES long format */
+    /** Offset for reply IV in ECIES long format. */
     private static final int OFF_REPLY_IV_EC = OFF_REPLY_KEY_EC + SessionKey.KEYSIZE_BYTES;
-    /** Offset for flags in ECIES long format */
+    /** Offset for flags in ECIES long format. */
     private static final int OFF_FLAG_EC = OFF_REPLY_IV_EC + IV_SIZE;
-    /** Offset for request time in ECIES long format */
+    /** Offset for request time in ECIES long format. */
     private static final int OFF_REQ_TIME_EC = OFF_FLAG_EC + 4;
-    /** Offset for expiration in ECIES long format */
+    /** Offset for expiration in ECIES long format. */
     private static final int OFF_EXPIRATION = OFF_REQ_TIME_EC + 4;
-    /** Offset for send message ID in ECIES long format */
+    /** Offset for send message ID in ECIES long format. */
     private static final int OFF_SEND_MSG_ID_EC = OFF_EXPIRATION + 4;
-    /** Offset for options in ECIES long format */
+    /** Offset for options in ECIES long format. */
     private static final int OFF_OPTIONS = OFF_SEND_MSG_ID_EC + 4;
-    /** Record length for ECIES long format (464 bytes) */
+    /** Record length for ECIES long format (464 bytes). */
     private static final int LENGTH_EC = 464;
-    /** Maximum options length for ECIES long format */
+    /** Maximum options length for ECIES long format. */
     private static final int MAX_OPTIONS_LENGTH = LENGTH_EC - OFF_OPTIONS;
 
-    /** Offset for flags in ECIES short format */
+    /** Offset for flags in ECIES short format. */
     private static final int OFF_FLAG_EC_SHORT = OFF_SEND_IDENT_EC + Hash.HASH_LENGTH;
-    /** Offset for layer encryption type in ECIES short format */
+    /** Offset for layer encryption type in ECIES short format. */
     private static final int OFF_LAYER_ENC_TYPE = OFF_FLAG_EC_SHORT + 3;
-    /** Offset for request time in ECIES short format */
+    /** Offset for request time in ECIES short format. */
     private static final int OFF_REQ_TIME_EC_SHORT = OFF_LAYER_ENC_TYPE + 1;
-    /** Offset for expiration in ECIES short format */
+    /** Offset for expiration in ECIES short format. */
     private static final int OFF_EXPIRATION_SHORT = OFF_REQ_TIME_EC_SHORT + 4;
-    /** Offset for send message ID in ECIES short format */
+    /** Offset for send message ID in ECIES short format. */
     private static final int OFF_SEND_MSG_ID_EC_SHORT = OFF_EXPIRATION_SHORT + 4;
-    /** Offset for options in ECIES short format */
+    /** Offset for options in ECIES short format. */
     private static final int OFF_OPTIONS_SHORT = OFF_SEND_MSG_ID_EC_SHORT + 4;
-    /** Record length for ECIES short format (154 bytes) */
+    /** Record length for ECIES short format (154 bytes). */
     private static final int LENGTH_EC_SHORT = ShortTunnelBuildMessage.SHORT_RECORD_SIZE - (16 + 32 + 16);
-    /** Maximum options length for ECIES short format */
+    /** Maximum options length for ECIES short format. */
     private static final int MAX_OPTIONS_LENGTH_SHORT = LENGTH_EC_SHORT - OFF_OPTIONS_SHORT;
-    /** Empty byte array for short record HKDF */
+    /** Empty byte array for short record HKDF. */
     private static final byte[] ZEROLEN = new byte[0];
-    /** HKDF info string for reply key derivation */
+    /** HKDF info string for reply key derivation. */
     private static final String INFO_1 = "SMTunnelReplyKey";
-    /** HKDF info string for layer key derivation */
+    /** HKDF info string for layer key derivation. */
     private static final String INFO_2 = "SMTunnelLayerKey";
-    /** HKDF info string for IV key derivation */
+    /** HKDF info string for IV key derivation. */
     private static final String INFO_3 = "TunnelLayerIVKey";
-    /** HKDF info string for garlic key and tag derivation */
+    /** HKDF info string for garlic key and tag derivation. */
     private static final String INFO_4 = "RGarlicKeyAndTag";
 
-    /** Test mode flag */
+    /** Test mode flag. */
     private static final boolean TEST = false;
-    /** Test key factory */
+    /** Test key factory. */
     private static KeyFactory TESTKF;
 
     /**
@@ -286,7 +286,7 @@ public class BuildRequestRecord {
 
     /**
      * Reads the tunnel layer encryption key.
-     * Tunnel layer encryption key that the current hop should use
+     * Tunnel layer encryption key that the current hop should use.
      * @return the session key for layer encryption
      */
     public SessionKey readLayerKey() {
@@ -300,7 +300,7 @@ public class BuildRequestRecord {
 
     /**
      * Reads the tunnel IV encryption key.
-     * Tunnel IV encryption key that the current hop should use
+     * Tunnel IV encryption key that the current hop should use.
      * @return the session key for IV encryption
      */
     public SessionKey readIVKey() {

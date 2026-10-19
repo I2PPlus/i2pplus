@@ -1,13 +1,14 @@
 package edu.internet2.ndt;
+
+// TODO for a later release: It may be worthwhile exploring whether MessageTypes could be
+// merged here instead of being located in NDTConstants. Message/Type could also be made into
+// an enumeration and checks for the current MessageType being assigned could be incorporated.
+
 /**
  * Class to define Message. Messages are composed of a "type" and a body.
  * Some examples of message types are: COMM_FAILURE, SRV_QUEUE, MSG_LOGIN, TEST_PREPARE.
  * Messages are defined to have a "length" field too. Currently, 2 bytes of the message
- * body" byte array are often used to store length (For example, second/third array positions)
- *
- * <p>TODO for a later release: It may be worthwhile exploring whether MessageTypes could be
- * merged here instead of being located in NDTConstants. Message/Type could also be made into
- * an enumeration and checks for the current MessageType being assigned could be incorporated.</p>
+ * body" byte array are often used to store length (For example, second/third array positions).
  *
  * @see MessageType for more Message Types.
  */
@@ -16,34 +17,34 @@ public class Message {
     /** Creates a new Message with default type and body. */
     public Message() {}
 
-    /**  y type */
+    /** Message type byte. */
     byte _yType;
-    /**  ya body */
+    /**  Ya body. */
     byte[] _yaBody;
 
     /**
-     * Get Message Type
+     * Get Message Type.
      *
      * @return byte indicating Message Type
      */
     public byte getType() {return _yType;}
 
     /**
-     * Set Message Type
+     * Set Message Type.
      *
      * @param bParamType byte indicating Message Type
      */
     public void setType(byte bParamType) {this._yType = bParamType;}
 
     /**
-     * Get Message body as array
+     * Get Message body as array.
      *
      * @return byte array message body
      */
     public byte[] getBody() {return _yaBody;}
 
     /**
-     * Set Message body, given a byte array input
+     * Set Message body, given a byte array input.
      *
      * @param baParamBody message body byte array
      */
@@ -68,7 +69,7 @@ public class Message {
     }
 
     /**
-     * Utility method to initialize Message body
+     * Utility method to initialize Message body.
      *
      * @param iParamSize byte array size
      */

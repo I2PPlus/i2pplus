@@ -27,7 +27,6 @@ import java.util.Vector;
  * <p>This class is used by UPnP control points to maintain collections of discovered devices,
  * enabling organized device management and enumeration for application use.
  *
- * @author Satoshi Konno
  * @since 1.0
  */
 public class DeviceList extends Vector<Device> {

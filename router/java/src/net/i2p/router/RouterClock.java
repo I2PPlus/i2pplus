@@ -28,7 +28,7 @@ public class RouterClock extends Clock {
      * We should be able to slew really fast,
      * this is probably a lot faster than what NTP does
      * 1/50 is 12s in a 10m tunnel lifetime, that should be fine.
-     * All of this is @since 0.7.12
+     * All of this is @since 0.7.12.
      */
     private static final long MAX_SLEW = 25;
     /**
@@ -37,11 +37,11 @@ public class RouterClock extends Clock {
     public static final int DEFAULT_STRATUM = 8;
     private static final int WORST_STRATUM = 16;
 
-    /** The max NTP Timestamper delay is 30m right now, make this longer than that */
+    /** The max NTP Timestamper delay is 30m right now, make this longer than that. */
     private static final long MIN_DELAY_FOR_WORSE_STRATUM = 45L*60*1000;
     private volatile long _desiredOffset;
     private volatile long _lastSlewed;
-    /** Use system time for this */
+    /** Use system time for this. */
     private long _lastChanged;
     private int _lastStratum;
     private long _lastProposedOffset;
@@ -63,10 +63,10 @@ public class RouterClock extends Clock {
     private volatile long _lastShiftNanos;
 
     /**
-     * Does not start. Caller MUST call start()
+     * Does not start. Caller MUST call start().
      *
      * @param context the router context used to create the timestamper and to
-     *                resolve clock settings
+     * resolve clock settings
      */
     public RouterClock(RouterContext context) {
         super(context);
@@ -99,7 +99,7 @@ public class RouterClock extends Clock {
      * Specify how far away from the "correct" time the computer is - a positive
      * value means that the system time is slow, while a negative value means the system time is fast.
      *
-     * @param offsetMs the delta from System.currentTimeMillis() (NOT the delta from now())
+     * @param offsetMs the delta from {@link java.lang.System#currentTimeMillis} (NOT the delta from now())
      */
     @Override
     public void setOffset(long offsetMs, boolean force) {
@@ -109,7 +109,7 @@ public class RouterClock extends Clock {
     /**
      * The offset with the given stratum.
      *
-     * @param offsetMs the delta from System.currentTimeMillis() (NOT the delta from now())
+     * @param offsetMs the delta from {@link java.lang.System#currentTimeMillis} (NOT the delta from now())
      * @param stratum the stratum of the time source
      * @since 0.7.12
      */
@@ -120,7 +120,7 @@ public class RouterClock extends Clock {
     /**
      * The offset, optionally forcing the change.
      *
-     * @param offsetMs the delta from System.currentTimeMillis() (NOT the delta from now())
+     * @param offsetMs the delta from {@link java.lang.System#currentTimeMillis} (NOT the delta from now())
      * @param force whether to bypass sanity checks
      * @param stratum the stratum of the time source
      * @since 0.7.12

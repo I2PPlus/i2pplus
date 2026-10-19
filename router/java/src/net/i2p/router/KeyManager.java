@@ -42,18 +42,18 @@ public class KeyManager {
     private SigningPrivateKey _signingPrivateKey;
     private SigningPublicKey _signingPublicKey;
     private final Map<Hash, LeaseSetKeys> _leaseSetKeys; // Destination --> LeaseSetKeys
-    /** Property key for keydir */
+    /** Property key for keydir. */
 
     public static final String PROP_KEYDIR = "router.keyBackupDir";
-    /** Default keydir */
+    /** Default keydir. */
     public static final String DEFAULT_KEYDIR = "keyBackup";
-    /** Path to the private enc key file */
+    /** Path to the private enc key file. */
     public static final String KEYFILE_PRIVATE_ENC = "privateEncryption.key";
-    /** Path to the public enc key file */
+    /** Path to the public enc key file. */
     public static final String KEYFILE_PUBLIC_ENC = "publicEncryption.key";
-    /** Path to the private signing key file */
+    /** Path to the private signing key file. */
     public static final String KEYFILE_PRIVATE_SIGNING = "privateSigning.key";
-    /** Path to the public signing key file */
+    /** Path to the public signing key file. */
     public static final String KEYFILE_PUBLIC_SIGNING = "publicSigning.key";
     /**
      * Create a key manager.
@@ -86,35 +86,35 @@ public class KeyManager {
     }
 
     /**
-     * Router key
+     * Router key.
      *
      * @return will be null on error or before startup() or setKeys() is called
      */
     public synchronized PrivateKey getPrivateKey() { return _privateKey; }
 
     /**
-     * Router key
+     * Router key.
      *
      * @return will be null on error or before startup() or setKeys() is called
      */
     public synchronized PublicKey getPublicKey() { return _publicKey; }
 
     /**
-     * Router key
+     * Router key.
      *
      * @return will be null on error or before startup() or setKeys() is called
      */
     public synchronized SigningPrivateKey getSigningPrivateKey() { return _signingPrivateKey; }
 
     /**
-     * Router key
+     * Router key.
      *
      * @return will be null on error or before startup() or setKeys() is called
      */
     public synchronized SigningPublicKey getSigningPublicKey() { return _signingPublicKey; }
 
     /**
-     * Client with a single key
+     * Client with a single key.
      *
      * @param dest the destination these keys belong to
      * @param leaseRevocationPrivateKey unused, may be null
@@ -128,7 +128,7 @@ public class KeyManager {
     }
 
     /**
-     * Client with multiple keys
+     * Client with multiple keys.
      *
      * @param dest the destination these keys belong to
      * @param leaseRevocationPrivateKey unused, may be null
@@ -188,14 +188,14 @@ public class KeyManager {
      * As of 0.9.4 this is run on-demand only, there's no need to
      * periodically sync.
      * Actually, there's little need for this at all.
-     * If router.keys is corrupt, we should just make a new router identity,
+     * If {@code router.keys} is corrupt, we should just make a new router identity,
      * there's no real reason to try so hard to recover our old keys.
      */
     private class SynchronizeKeysJob extends JobImpl {
         public SynchronizeKeysJob() {
             super(KeyManager.this._context);
         }
-        /** Execute the job */
+        /** Execute the job. */
 
         public void runJob() {
             String keyDir = getContext().getProperty(PROP_KEYDIR, DEFAULT_KEYDIR);
@@ -318,7 +318,7 @@ public class KeyManager {
             else
                 return null;
         }
-        /** Return the name */
+        /** Return the name. */
 
         public String getName() { return "Synchronize Keys to Disk"; }
     }

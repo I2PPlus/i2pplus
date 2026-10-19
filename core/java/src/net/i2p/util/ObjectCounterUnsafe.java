@@ -50,7 +50,7 @@ public class ObjectCounterUnsafe<K> {
     }
 
     /**
-     * Add a value
+     * Add a value.
      *
      * @param h the object whose count is raised
      * @param val the number to add, which may be negative
@@ -106,7 +106,7 @@ public class ObjectCounterUnsafe<K> {
     }
 
     /**
-     * Reset the count for this key to zero
+     * Reset the count for this key to zero.
      * @param h the object to drop from the map
      */
     public void clear(K h) {
@@ -114,7 +114,7 @@ public class ObjectCounterUnsafe<K> {
     }
 
     /**
-     * Modifiable integer
+     * Modifiable integer.
      */
     private static class Int {
         int c;
@@ -125,7 +125,7 @@ public class ObjectCounterUnsafe<K> {
     }
 
     /**
-     * reverse sort
+     * Reverse sort.
      */
     private class ObjComparator implements Comparator<K> {
         @Override

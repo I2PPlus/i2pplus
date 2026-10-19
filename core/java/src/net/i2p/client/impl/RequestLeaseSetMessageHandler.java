@@ -56,7 +56,6 @@ import java.util.concurrent.ConcurrentHashMap;
  * Handle I2CP RequestLeaseSetMessage from the router by granting all leases,
  * using the specified expiration time for each lease.
  *
- * @author jrandom
  */
 class RequestLeaseSetMessageHandler extends HandlerImpl {
     private final Map<Destination, LeaseInfo> _existingLeaseSets;
@@ -114,12 +113,12 @@ class RequestLeaseSetMessageHandler extends HandlerImpl {
     }
 
     /**
-     * For extension
+     * For extension.
      *
      * @param context the client context the handler runs in, passed to the
-     *                superclass for logging and session lookup
+     * superclass for logging and session lookup
      * @param messageType the I2CP message type to register for, so subclasses
-     *                    can claim a different request message
+     * can claim a different request message
      * @since 0.9.7
      */
     protected RequestLeaseSetMessageHandler(I2PAppContext context, int messageType) {
@@ -132,10 +131,10 @@ class RequestLeaseSetMessageHandler extends HandlerImpl {
      * Do we send a LeaseSet or a LeaseSet2?
      * As of 0.9.69, always use LS2 unless the router doesn't support it
      * <p>
-     * Side effect: sets _ls2Type
+     * Side effect: sets _ls2Type.
      *
      * @param session the session whose LeaseSet2 preference is consulted, and
-     *                which is torn down when that preference cannot be parsed
+     * which is torn down when that preference cannot be parsed
      * @return true if LS2 should be used
      * @since 0.9.38
      */
@@ -876,7 +875,7 @@ class RequestLeaseSetMessageHandler extends HandlerImpl {
     }
 
     /**
-     * Multiple encryption keys supported, as of 0.9.39, for LS2
+     * Multiple encryption keys supported, as of 0.9.39, for LS2.
      */
     private static class LeaseInfo {
         private final List<PublicKey> _pubKeys;
@@ -885,7 +884,7 @@ class RequestLeaseSetMessageHandler extends HandlerImpl {
         private final SigningPrivateKey _signingPrivKey;
 
         /**
-         * New keys
+         * New keys.
          *
          * @param types must be available
          */
@@ -917,7 +916,7 @@ class RequestLeaseSetMessageHandler extends HandlerImpl {
         }
 
         /**
-         * Existing keys, LS1 only
+         * Existing keys, LS1 only.
          *
          * @param privKeys all EncTypes must be available
          * @param signingPrivKey the signing private key
@@ -937,7 +936,7 @@ class RequestLeaseSetMessageHandler extends HandlerImpl {
         }
 
         /**
-         * Existing crypto keys, new signing key, LS1 only
+         * Existing crypto keys, new signing key, LS1 only.
          *
          * @param privKeys all EncTypes must be available
          * @param dest the destination for key generation
@@ -960,7 +959,7 @@ class RequestLeaseSetMessageHandler extends HandlerImpl {
         }
 
         /**
-         * Existing keys, LS2 only
+         * Existing keys, LS2 only.
          *
          * @param privKeys all EncTypes must be available
          * @since 0.9.47
@@ -994,12 +993,20 @@ class RequestLeaseSetMessageHandler extends HandlerImpl {
             return _privKeys.get(0);
         }
 
-        /** @since 0.9.39 */
+        /**
+         * The blinded public keys.
+         *
+         * @since 0.9.39
+         */
         public List<PublicKey> getPublicKeys() {
             return _pubKeys;
         }
 
-        /** @since 0.9.39 */
+        /**
+         * The blinded private keys.
+         *
+         * @since 0.9.39
+         */
         public List<PrivateKey> getPrivateKeys() {
             return _privKeys;
         }
@@ -1021,7 +1028,7 @@ class RequestLeaseSetMessageHandler extends HandlerImpl {
         }
 
         /**
-         * Reverse order by enc type
+         * Reverse order by enc type.
          *
          * @since 0.9.39
          */

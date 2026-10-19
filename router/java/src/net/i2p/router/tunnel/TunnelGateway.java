@@ -12,7 +12,7 @@ import net.i2p.util.SimpleTimer2;
 
 /**
  * Serve as the gatekeeper for a tunnel, accepting messages, coalescing and/or
- * fragmenting them before wrapping them up for tunnel delivery. The flow here
+ * fragmenting them before wrapping them up for tunnel delivery. The flow here.
  * is: <ol>
  * <li>add an I2NPMessage (and a target tunnel/router, if necessary)</li>
  * <li>that message is queued up into a TunnelGateway.Pending and offered to the
@@ -91,7 +91,7 @@ abstract class TunnelGateway {
      * coalesced with other pending messages) or after a brief pause (_flushFrequency).
      * If it is queued up past its expiration, it is silently dropped.
      * <p>
-     * UNUSED - see overrides
+     * UNUSED - see overrides.
      *
      * @param msg message to be sent through the tunnel
      * @param toRouter router to send to after the endpoint (or null for endpoint processing)

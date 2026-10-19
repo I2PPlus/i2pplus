@@ -32,13 +32,13 @@ class Token extends ByteArray {
 
     private static final long serialVersionUID = 1L;
 
-    /** Default token length for outgoing tokens (8 bytes) */
+    /** Default token length for outgoing tokens (8 bytes). */
     private static final int MY_TOK_LEN = 8;
 
-    /** Maximum allowed token length for incoming tokens (64 bytes) */
+    /** Maximum allowed token length for incoming tokens (64 bytes). */
     private static final int MAX_TOK_LEN = 64;
 
-    /** Timestamp when this token was created or last seen */
+    /** Timestamp when this token was created or last seen. */
     private final long lastSeen;
 
     /**

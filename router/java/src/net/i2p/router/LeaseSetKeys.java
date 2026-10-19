@@ -27,13 +27,13 @@ public class LeaseSetKeys {
     private final PrivateKey _decryptionKeyPQ;
 
     /**
-     * Unmodifiable, ElGamal only
+     * Unmodifiable, ElGamal only.
      *
      * @since 0.9.44
      */
     public static final Set<EncType> SET_ELG = Collections.unmodifiableSet(EnumSet.of(EncType.ELGAMAL_2048));
     /**
-     * Unmodifiable, ECIES-X25519 only
+     * Unmodifiable, ECIES-X25519 only.
      */
     public static final Set<EncType> SET_EC = Collections.unmodifiableSet(EnumSet.of(EncType.ECIES_X25519));
     /**
@@ -42,39 +42,39 @@ public class LeaseSetKeys {
     public static final Set<EncType> SET_BOTH = Collections.unmodifiableSet(EnumSet.of(EncType.ELGAMAL_2048, EncType.ECIES_X25519));
     private static final Set<EncType> SET_NONE = Collections.emptySet();
     /**
-     * Unmodifiable, PQ only
+     * Unmodifiable, PQ only.
      */
     public static final Set<EncType> SET_PQ1 = Collections.unmodifiableSet(EnumSet.of(EncType.MLKEM512_X25519));
     /**
-     * Unmodifiable, PQ only
+     * Unmodifiable, PQ only.
      */
     public static final Set<EncType> SET_PQ2 = Collections.unmodifiableSet(EnumSet.of(EncType.MLKEM768_X25519));
     /**
-     * Unmodifiable, PQ only
+     * Unmodifiable, PQ only.
      */
     public static final Set<EncType> SET_PQ3 = Collections.unmodifiableSet(EnumSet.of(EncType.MLKEM1024_X25519));
     /**
-     * Unmodifiable, ECIES-X25519 and PQ only
+     * Unmodifiable, ECIES-X25519 and PQ only.
      */
     public static final Set<EncType> SET_EC_PQ1 = Collections.unmodifiableSet(EnumSet.of(EncType.ECIES_X25519, EncType.MLKEM512_X25519));
     /**
-     * Unmodifiable, ECIES-X25519 and PQ only
+     * Unmodifiable, ECIES-X25519 and PQ only.
      */
     public static final Set<EncType> SET_EC_PQ2 = Collections.unmodifiableSet(EnumSet.of(EncType.ECIES_X25519, EncType.MLKEM768_X25519));
     /**
-     * Unmodifiable, ECIES-X25519 and PQ only
+     * Unmodifiable, ECIES-X25519 and PQ only.
      */
     public static final Set<EncType> SET_EC_PQ3 = Collections.unmodifiableSet(EnumSet.of(EncType.ECIES_X25519, EncType.MLKEM1024_X25519));
     /**
-     * Unmodifiable, ECIES-X25519 and PQ only
+     * Unmodifiable, ECIES-X25519 and PQ only.
      */
     public static final Set<EncType> SET_EC_PQ_ALL = Collections.unmodifiableSet(EnumSet.of(EncType.ECIES_X25519, EncType.MLKEM512_X25519, EncType.MLKEM768_X25519, EncType.MLKEM1024_X25519));
 
     /**
-     * Client with a single key
+     * Client with a single key.
      *
      * @param dest not read; the LeaseSetKeys constructor shares its
-     *             signature with the server-side variant
+     * signature with the server-side variant
      * @param revocationKey unused, may be null
      * @param decryptionKey non-null
      */
@@ -149,7 +149,7 @@ public class LeaseSetKeys {
     /**
      * Key with which a LeaseSet can be revoked (by republishing it with no Leases)
      * <p>
-     * Deprecated, unused
+     * Deprecated, unused.
      * @return the revocation key
      */
     public SigningPrivateKey getRevocationKey() { return _revocationKey; }

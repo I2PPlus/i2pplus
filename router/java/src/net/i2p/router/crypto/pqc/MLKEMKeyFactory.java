@@ -50,7 +50,7 @@ public class MLKEMKeyFactory extends I2PThread implements KeyFactory {
     private static final int HARD_MAX = 32768;
 
     /**
-     * Alice side only
+     * Alice side only.
      *
      * @param ctx the application context whose log, stat and system info are used
      * @param type must be one of the internal types MLKEM*_INT
@@ -92,7 +92,7 @@ public class MLKEMKeyFactory extends I2PThread implements KeyFactory {
     }
 
     /**
-     * Returns the last created instance.
+     * The most recently constructed factory.
      *
      * @return the most recently constructed factory, or null if none has been created yet
      * @since 0.9.70+
@@ -100,7 +100,7 @@ public class MLKEMKeyFactory extends I2PThread implements KeyFactory {
     public static MLKEMKeyFactory getInstance() { return lastInstance; }
 
     /**
-     * Returns the current minimum precalc queue size.
+     * Lower bound on the precalculated key queue size.
      *
      * @return the min size
      * @since 0.9.70+
@@ -116,7 +116,7 @@ public class MLKEMKeyFactory extends I2PThread implements KeyFactory {
     public void setMinSize(int min) { _minSize = Math.max(1, min); }
 
     /**
-     * Returns the current maximum precalc queue size.
+     * Upper bound on the precalculated key queue size.
      *
      * @return the max size
      * @since 0.9.70+
@@ -163,9 +163,9 @@ public class MLKEMKeyFactory extends I2PThread implements KeyFactory {
     }
 
     /**
-     *  Note that this stops the singleton precalc thread.
-     *  You don't want to do this if there are multiple routers in the JVM.
-     *  Fix this if you care. See Router.shutdown().
+     * Note that this stops the singleton precalc thread.
+     * You don't want to do this if there are multiple routers in the JVM.
+     * Fix this if you care. See {@link net.i2p.router.Router#shutdown}.
      */
     public void shutdown() {
         _isRunning = false;

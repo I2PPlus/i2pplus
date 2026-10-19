@@ -116,7 +116,7 @@ class Packet {
     /**
      * The receiveStreamId will be set to this when the packet doesn't know
      * what ID will be assigned by the remote peer (aka this is the initial
-     * synchronize packet)
+     * synchronize packet).
      */
     public static final long STREAM_ID_UNKNOWN = 0L;
 
@@ -182,7 +182,7 @@ class Packet {
     public static final int FLAG_ECHO = (1 << 9);
 
     /**
-     * If set, this packet doesn't really want to ack anything
+     * If set, this packet doesn't really want to ack anything.
      */
     public static final int FLAG_NO_ACK = (1 << 10);
 
@@ -271,7 +271,7 @@ class Packet {
     }
 
     /**
-     * 0-indexed sequence number for this Packet in the sendStream
+     * 0-indexed sequence number for this Packet in the sendStream.
      * @return 0-indexed sequence number for current Packet in current sendStream
      */
     public long getSequenceNum() {return _sequenceNum;}
@@ -307,7 +307,7 @@ class Packet {
      * List of packet sequence numbers below the getAckThrough() value
      * have not been received.  this may be null.
      * <p>
-     * Warning: This is different than getNACKs() in PacketLocal
+     * Warning: This is different than getNACKs() in PacketLocal.
      *
      * @return List of packet sequence numbers not ACKed, or null if there are none.
      */
@@ -329,7 +329,7 @@ class Packet {
      * Not to be used without sanitizing for huge values.
      * Setters from options did not divide by 1000, and the options default
      * is 1000, so the value sent in the 1-byte field was always
-     * 1000 &amp; 0xff = 0xe8 = 232
+     * 1000 &amp; 0xff = 0xe8 = 232.
      *
      * @return Delay before resending a packet in seconds.
      */
@@ -338,7 +338,7 @@ class Packet {
     /**
      * Unused.
      * Broken before release 0.7.8
-     * See above
+     * See above.
      *
      * @param numSeconds the resend delay in seconds, ignored by this release
      */
@@ -374,7 +374,7 @@ class Packet {
         return (_payload == null ? 0 : _payload.getValid());
     }
 
-    /** No-op stub. */
+    /** No-op, payload buffers are garbage-collected, not pooled. */
     public void releasePayload() { /* no-op */ }
 
     /**
@@ -426,10 +426,10 @@ class Packet {
     public Signature getOptionalSignature() {return _optionSignature;}
 
     /**
-     * This also sets flag FLAG_SIGNATURE_INCLUDED
+     * This also sets flag FLAG_SIGNATURE_INCLUDED.
      *
      * @param sig the signature to attach to the packet, or null to clear it and
-     *            drop the flag
+     * drop the flag
      */
     public void setOptionalSignature(Signature sig) {
         setFlag(FLAG_SIGNATURE_INCLUDED, sig != null);
@@ -453,16 +453,16 @@ class Packet {
     /**
      * How many milliseconds the sender of this packet wants the recipient
      * to wait before sending any more data (only valid if the flag for it is
-     * set)
+     * set).
      * @return How long the sender wants the recipient to wait before sending any more data in ms.
      */
     public int getOptionalDelay() {return _optionDelay;}
 
     /**
-     * Caller must also call setFlag(FLAG_DELAY_REQUESTED)
+     * Caller must also call setFlag(FLAG_DELAY_REQUESTED).
      *
      * @param delayMs how long the sender should be asked to wait in ms, clamped
-     *                to 0..MAX_DELAY_REQUEST
+     * to 0..MAX_DELAY_REQUEST
      */
     public void setOptionalDelay(int delayMs) {
         if (delayMs > MAX_DELAY_REQUEST) {_optionDelay = MAX_DELAY_REQUEST;}
@@ -478,10 +478,10 @@ class Packet {
     public int getOptionalMaxSize() {return _optionMaxSize;}
 
     /**
-     * This also sets flag FLAG_MAX_PACKET_SIZE_INCLUDED
+     * This also sets flag FLAG_MAX_PACKET_SIZE_INCLUDED.
      *
      * @param numBytes the largest payload the sender should be told it may
-     *                 receive, or 0 to unset the flag
+     * receive, or 0 to unset the flag
      */
     public void setOptionalMaxSize(int numBytes) {
         setFlag(FLAG_MAX_PACKET_SIZE_INCLUDED, numBytes > 0);
@@ -686,6 +686,8 @@ class Packet {
     }
 
     /**
+     * Whether the router can sign with this key type.
+     *
      * @param spk non-null
      * @return true if we have a crypto provider for the key's signature type
      */
@@ -1005,6 +1007,8 @@ class Packet {
     }
 
     /**
+     * Log once that a signature key type is unavailable.
+     *
      * @param ctx the context supplying the logger
      * @param spk the key with the unusable type, non-null
      */

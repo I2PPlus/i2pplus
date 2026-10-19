@@ -49,7 +49,6 @@ import org.json.simple.JsonObject;
  *     null        &lt;---&gt;  null
  * </pre>
  *
- * @author Vladimir Dzhuvinov
  */
 public abstract class JSONRPC2Message {
     /**

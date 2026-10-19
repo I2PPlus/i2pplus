@@ -25,7 +25,7 @@ import net.i2p.util.SimpleByteCache;
  * Decrypt the layers of a tunnel build reply message, determining whether the individual
  * hops agreed to participate in the tunnel, or if not, why not.
  *
- * @since 0.9.51 moved to tunnel.pool package
+ * @since 0.9.51 moved to {@code tunnel.pool} package
  */
 class BuildReplyHandler {
 

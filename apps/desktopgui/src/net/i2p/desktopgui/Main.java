@@ -261,13 +261,21 @@ public class Main implements RouterApp, NotificationService {
 
     /////// ClientApp methods
 
-    /** @since 0.9.26 */
+    /**
+     * Start the router.
+     *
+     * @since 0.9.26
+     */
     @Override
     public synchronized void startup() {
         beginStartup();
     }
 
-    /** @since 0.9.26 */
+    /**
+     * Stop the router.
+     *
+     * @since 0.9.26
+     */
     @Override
     public synchronized void shutdown(String[] args) {
         if (_state == STOPPED)
@@ -278,29 +286,49 @@ public class Main implements RouterApp, NotificationService {
         changeState(STOPPED);
     }
 
-    /** @since 0.9.26 */
+    /**
+     * Current router state.
+     *
+     * @since 0.9.26
+     */
     public synchronized ClientAppState getState() {
         return _state;
     }
 
-    /** @since 0.9.26 */
+    /**
+     * Name of the managed app.
+     *
+     * @since 0.9.26
+     */
     public String getName() {
         return "desktopgui";
     }
 
-    /** @since 0.9.26 */
+    /**
+     * Display name of the managed app.
+     *
+     * @since 0.9.26
+     */
     public String getDisplayName() {
         return "Desktop GUI";
     }
 
     /////// end ClientApp methods
 
-    /** @since 0.9.26 */
+    /**
+     * Update the tray on a router state change.
+     *
+     * @since 0.9.26
+     */
     private void changeState(ClientAppState state) {
         changeState(state, null, null);
     }
 
-    /** @since 0.9.26 */
+    /**
+     * Update the tray with a state change message.
+     *
+     * @since 0.9.26
+     */
     private synchronized void changeState(ClientAppState state, String msg, Exception e) {
         _state = state;
         if (_mgr != null)

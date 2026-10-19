@@ -371,7 +371,7 @@ public class PcapWriter implements Closeable, Flushable {
 
         /**
          * Returns the raw option data buffer (40 bytes long).
-         * The caller must use {@link #size()} to get the actual used length.
+         * The caller must use {@link #size} to get the actual used length.
          *
          * @return the option data buffer
          */

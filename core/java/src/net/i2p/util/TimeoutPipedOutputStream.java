@@ -7,7 +7,7 @@ import java.io.PipedOutputStream;
  * Helper for TimeoutPipedInputStream.
  * There isn't any timeout implemented here.
  * <p>
- * To support InternalSocket.setSoTimeout().
+ * To support {@link net.i2p.util.InternalSocket#setSoTimeout}.
  * Package private, not a part of the public API, not for general use.
  *
  * @see TimeoutPipedInputStream

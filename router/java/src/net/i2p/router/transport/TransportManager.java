@@ -121,7 +121,7 @@ public class TransportManager implements TransportEventListener {
      * @since 0.9.71+
      */
     private volatile EstablishedSnapshot _establishedCache;
-            /** How long a getEstablished() snapshot is reused, in ms. @since 0.9.71+ */
+            /** How long a getEstablished() snapshot is reused, in ms. @since 0.9.71+. */
     private static final long ESTABLISHED_CACHE_TTL = 1000;
 
     /**
@@ -135,6 +135,8 @@ public class TransportManager implements TransportEventListener {
         private final long expiresAt;
 
         /**
+         * Creates a snapshot of established peers valid until the given time.
+         *
          * @param peers the unmodifiable peer hash list
          * @param expiresAt wall-clock ms after which this snapshot is stale
          */
@@ -150,9 +152,9 @@ public class TransportManager implements TransportEventListener {
     public static final String PROP_ENABLE_NTCP = "i2np.ntcp.enable";
             /** Property enabling UPnP port forwarding; defaults to true. */
     public static final String PROP_ENABLE_UPNP = "i2np.upnp.enable";
-            /** Enable UPnP for IPv6 */
+            /** Enable UPnP for IPv6. */
     public static final String PROP_ENABLE_UPNP_IPV6 = "i2np.upnp.ipv6.enable";
-            /** Default UPnP IPv6 enable */
+            /** Default UPnP IPv6 enable. */
     public static final boolean DEFAULT_ENABLE_UPNP_IPV6 = true;
     private static final String PROP_JAVA_PROXY1 = "socksProxyHost";
     private static final String PROP_JAVA_PROXY2 = "java.net.useSystemProxies";
@@ -171,9 +173,9 @@ public class TransportManager implements TransportEventListener {
      *  to Fast peers and proactively establishes new ones.
      */
     private static final long MAINTAINER_INTERVAL = 60*1000L;
-            /** Maximum per-cycle establishments to avoid flooding the network */
+            /** Maximum per-cycle establishments to avoid flooding the network. */
     private static final int MAINTAINER_MAX_PER_CYCLE = 10;
-            /** Minimum outbound Fast connections to maintain (below this, we establish more) */
+            /** Minimum outbound Fast connections to maintain (below this, we establish more). */
     private static final int MAINTAINER_MIN_OUTBOUND = 150;
 
     private OutboundMaintainerEvent _outboundMaintainer;
@@ -517,11 +519,11 @@ public class TransportManager implements TransportEventListener {
 
     /**
      * Initialize from interfaces, and callback from UPnP or SSU.
-     * See CSFI.notifyReplaceAddress().
+     * See {@code CSFI.notifyReplaceAddress()}.
      * Tell all transports... but don't loop.
      *
      * @param source where the address came from, so the transport that reported
-     *               it is not told about its own address
+     * it is not told about its own address
      * @param ip the new external address, 4 bytes for IPv4 or 16 for IPv6
      * @param port the external port, or 0 when the source did not report one
      */
@@ -535,11 +537,11 @@ public class TransportManager implements TransportEventListener {
 
     /**
      * Remove all ipv4 or ipv6 addresses.
-     *  See CSFI.notifyRemoveAddress().
-     *  Tell all transports... but don't loop.
+     * See {@code CSFI.notifyRemoveAddress()}.
+     * Tell all transports... but don't loop.
      *
      * @param source where the removal came from, so the transport that reported
-     *               it is not told to drop its own address
+     * it is not told to drop its own address
      * @param ipv6 true to remove the IPv6 addresses, false for the IPv4 ones
      * @since 0.9.20
      */
@@ -700,14 +702,14 @@ public class TransportManager implements TransportEventListener {
     }
 
     /**
-     *  How many peers we have sent to in the last minute, summed across transports.
+     * How many peers we have sent to in the last minute, summed across transports.
      * <p>Each transport owns the window, so this is a strict sum and not a union: a
      * peer reachable over both NTCP and UDP counts on each. The transports maintain
-     * this by summing two such counts, matching how {@link #countActivePeers()} is
+     * this by summing two such counts, matching how {@link #countActivePeers} is
      * built, so the two are directly comparable.
      *
      * @return the number of peers sent to in the last minute, summed across every
-     *         transport, and so a peer reachable over two of them counted twice
+     * transport, and so a peer reachable over two of them counted twice
      * @since 0.9.71+
      */
     int countActiveSendPeers() {
@@ -785,7 +787,7 @@ public class TransportManager implements TransportEventListener {
     }
 
     /**
-     * Previously returned short, now enum as of 0.9.20
+     * Previously returned short, now enum as of 0.9.20.
      * @return the best status of any transport
      */
     Status getReachabilityStatus() {
@@ -969,10 +971,10 @@ public class TransportManager implements TransportEventListener {
     }
 
     /**
-     * This forces a rebuild
+     * This forces a rebuild.
      *
      * @return the addresses every transport currently publishes, after asking
-     *         each to refresh
+     * each to refresh
      */
     List<RouterAddress> getAddresses() {
         List<RouterAddress> rv = new ArrayList<>(4);
@@ -991,17 +993,17 @@ public class TransportManager implements TransportEventListener {
      */
     @SuppressWarnings("PMD.AvoidFieldNameMatchingTypeName")
     static class Port {
-                        /** Transport style */
+                        /** Transport style. */
         public final String style;
-                        /** Port number */
+                        /** Port number. */
         public final int port;
-                        /** True if IPv6 */
+                        /** True if IPv6. */
         public final boolean isIPv6;
-                        /** IP address string */
+                        /** IP address string. */
         public final String ip;
 
         /**
-         * IPv4 only
+         * IPv4 only.
          *
          * @param style the transport style the port is for, e.g. SSU or NTCP
          * @param port the configured port number
@@ -1014,7 +1016,7 @@ public class TransportManager implements TransportEventListener {
         }
 
         /**
-         * IPv6 only
+         * IPv6 only.
          *
          * @param style the transport style the port is for, e.g. SSU or NTCP
          * @param host the IPv6 address literal the port is bound to
@@ -1058,9 +1060,9 @@ public class TransportManager implements TransportEventListener {
 
     /**
      * Include the published port, or the requested port, for each transport
-     * which we will pass along to UPnP
+     * which we will pass along to UPnP.
      * @return one {@link Port} per transport style and address family that is
-     *         listening, un-firewalled and not disabled; empty when we are hidden
+     * listening, un-firewalled and not disabled; empty when we are hidden
      */
     private Set<Port> getPorts() {
         Set<Port> rv = new HashSet<>(4);
@@ -1345,7 +1347,7 @@ public class TransportManager implements TransportEventListener {
     }
 
     /**
-     * Delayed update of UPnP ports
+     * Delayed update of UPnP ports.
      *
      * @since 0.9.39
      */

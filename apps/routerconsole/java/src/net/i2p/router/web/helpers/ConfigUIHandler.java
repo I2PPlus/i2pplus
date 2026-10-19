@@ -25,7 +25,7 @@ import net.i2p.router.web.RouterConsoleRunner;
  * for the router console interface.
  */
 public class ConfigUIHandler extends FormHandler {
-    /** ConfigUIHandler default constructor */
+    /** ConfigUIHandler default constructor. */
     public ConfigUIHandler() {
         super();
     }
@@ -88,7 +88,7 @@ public class ConfigUIHandler extends FormHandler {
      */
     public void setTheme(String val) {_config = val;}
 
-    /** Note - lang change is handled in CSSHelper but we still need to save it here */
+    /** Note - lang change is handled in CSSHelper but we still need to save it here. */
     private void saveChanges() {
         if (_config == null || _config.length() <= 0) {return;}
         if (!CONFIG_PATTERN.matcher(_config).replaceAll("").isEmpty()) {

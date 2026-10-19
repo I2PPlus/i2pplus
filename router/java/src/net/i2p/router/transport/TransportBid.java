@@ -11,7 +11,7 @@ package net.i2p.router.transport;
 /**
  * Represents a transport's bid for message delivery cost.
  * Provide a bid for how much it would "cost" to transfer a message of a
- * particular peer
+ * particular peer.
  *
  */
 public class TransportBid {
@@ -40,7 +40,7 @@ public class TransportBid {
     public void setLatencyMs(int milliseconds) {_latencyMs = milliseconds;}
 
     /**
-     * Specifies the transport that offered this bid
+     * Specifies the transport that offered this bid.
      * @return the transport making the bid, or null if not yet recorded
      */
     public Transport getTransport() {return _transport;}

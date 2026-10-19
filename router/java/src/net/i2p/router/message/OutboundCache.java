@@ -164,7 +164,7 @@ public class OutboundCache {
         private final Hash dh;
 
         /**
-         * Hash pair
+         * Hash pair.
          * @param s source Hash, the first half of the composite cache key
          * @param d destination Hash, the second half of the composite cache key
          */

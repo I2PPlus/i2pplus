@@ -139,13 +139,13 @@ class LookupDestJob extends JobImpl {
         _name = name;
         _blindData = bd;
     }
-    /** Return the name */
+    /** Return the name. */
 
     public String getName() { return _name != null ?
                                      "Lookup Hostname for Client" :
                                      "Lookup LeaseSet for Client";
     }
-    /** Execute the job */
+    /** Execute the job. */
 
     public void runJob() {
         if (_blindData != null) {
@@ -202,10 +202,10 @@ class LookupDestJob extends JobImpl {
 
     private class DoneJob extends JobImpl {
         public DoneJob(RouterContext enclosingContext) {super(enclosingContext);}
-        /** Return the name */
+        /** Return the name. */
 
         public String getName() {return "Lookup LeaseSet &amp; Reply to Client";}
-        /** Execute the job */
+        /** Execute the job. */
 
         public void runJob() {
             NetworkDatabaseFacade db = _runner.getFloodfillNetworkDatabaseFacade();
@@ -240,14 +240,14 @@ class LookupDestJob extends JobImpl {
     }
 
     /**
-     * Return the request ID or failed hash so the client can correlate replies with requests
+     * Return the request ID or failed hash so the client can correlate replies with requests.
      *
      * @since 0.8.3
      */
     private void returnFail() {returnFail(HostReplyMessage.RESULT_FAILURE);}
 
     /**
-     * Return the request ID or failed hash so the client can correlate replies with requests
+     * Return the request ID or failed hash so the client can correlate replies with requests.
      *
      * @param code failure code, greater than zero, only used for HostReplyMessage
      * @since 0.9.43

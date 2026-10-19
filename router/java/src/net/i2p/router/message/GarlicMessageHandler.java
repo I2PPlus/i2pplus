@@ -57,7 +57,7 @@ public class GarlicMessageHandler implements HandlerJobBuilder {
         _msgIDBloomXorRouter = msgIDBloomXorRouter;
         _msgIDBloomXorTunnel = msgIDBloomXorTunnel;
     }
-    /** Create and return a job to handle this message */
+    /** Create and return a job to handle this message. */
 
     public Job createJob(I2NPMessage receivedMessage, RouterIdentity from, Hash fromHash) {
         return new HandleGarlicMessageJob(_context, (GarlicMessage)receivedMessage, from, fromHash, _msgIDBloomXorLocal, _msgIDBloomXorRouter, _msgIDBloomXorTunnel);

@@ -64,9 +64,9 @@ public class FragmentHandlerCapTest {
     }
 
     /**
-     * StatManager.addRateData() silently discards data for a stat that was
+     * {@link net.i2p.stat.StatManager#addRateData} silently discards data for a stat that was
      * never registered, and createRateStat() is itself a no-op unless
-     * stat.full is set. Every stat FragmentHandler emits must therefore be
+     * {@code stat.full} is set. Every stat FragmentHandler emits must therefore be
      * declared as required, or the cap's drop counter is invisible in the
      * default configuration and the attack it defends against has no signal.
      *

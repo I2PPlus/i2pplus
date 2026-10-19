@@ -20,7 +20,7 @@ public class Frequency {
     private long _count;
 
     /**
-     * Creates a new Frequency with the specified period
+     * Creates a new Frequency with the specified period.
      *
      * @param period ms
      */
@@ -31,7 +31,7 @@ public class Frequency {
     }
 
     /**
-     * How long is this frequency averaged over? (ms)
+     * How long is this frequency averaged over? (ms).
      *
      * @return the period in ms
      */
@@ -50,7 +50,7 @@ public class Frequency {
     }
 
     /**
-     * What is the lowest average interval (aka most frequent) we have seen? (ms)
+     * What is the lowest average interval (aka most frequent) we have seen? (ms).
      *
      * @return milliseconds; returns period + 1 if no events in previous period
      */
@@ -81,7 +81,8 @@ public class Frequency {
     }
 
     /**
-     * Over the lifetime of this stat, without any decay or weighting, what was the average interval between events? (ms)
+     * Over the lifetime of this stat, without any decay or weighting, what was the average interval
+      * between events? (ms).
      *
      * @return milliseconds; returns Double.MAX_VALUE if no events ever
      */
@@ -112,7 +113,7 @@ public class Frequency {
     }
 
     /**
-     * Take note that a new event occurred, recalculating all the averages and frequencies
+     * Take note that a new event occurred, recalculating all the averages and frequencies.
      *
      */
     public void eventOccurred() {
@@ -120,7 +121,7 @@ public class Frequency {
     }
 
     /**
-     * Recalculate the averages
+     * Recalculate the averages.
      *
      */
     public void recalculate() {
@@ -133,7 +134,7 @@ public class Frequency {
      * call - currentTimeMillis is served from the vDSO and takes no Java lock - so
      * holding this monitor across it makes every concurrent event queue behind a
      * syscall rather than behind arithmetic. Hoisting it out cuts the contended
-     * cost of {@link FrequencyStat#eventOccurred()} on a three-period stat from
+     * cost of {@link FrequencyStat#eventOccurred} on a three-period stat from
      * 166ns to 145ns per event; uncontended it changes nothing, because the clock
      * read costs the same either way when there is no queue.
      * <p>It is also safe to move. {@code now} is only ever differenced against
@@ -175,7 +176,7 @@ public class Frequency {
     }
 
     /**
-     * Appends the data of this frequency to the specified StringBuilder
+     * Appends the data of this frequency to the specified StringBuilder.
      *
      * @param dest to append data to
      * @since 0.9.23

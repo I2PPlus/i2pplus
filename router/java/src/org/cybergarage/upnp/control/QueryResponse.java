@@ -19,7 +19,6 @@ public class QueryResponse extends ControlResponse {
     //	Constructor
     ////////////////////////////////////////////////
 
-    /** Default constructor */
     public QueryResponse() {}
 
     /**

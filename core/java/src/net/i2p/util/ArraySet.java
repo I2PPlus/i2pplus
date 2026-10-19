@@ -22,22 +22,22 @@ import java.util.Set;
  * @since 0.9.25, moved to net.i2p.util in 0.9.55
  */
 public class ArraySet<E> extends AbstractSet<E> implements Set<E> {
-    /** The maximum capacity for this set */
+    /** The maximum capacity for this set. */
     public static final int MAX_CAPACITY = 32;
 
-    /** The underlying array of entries */
+    /** The underlying array of entries. */
     protected final Object[] _entries;
 
-    /** Whether to throw on overflow */
+    /** Whether to throw on overflow. */
     private final boolean _throwOnFull;
 
-    /** The current size of the set */
+    /** The current size of the set. */
     private int _size;
 
-    /** The overflow index for overwrite mode */
+    /** The overflow index for overwrite mode. */
     private int _overflowIndex;
 
-    /** The modification count for fail-fast iterators */
+    /** The modification count for fail-fast iterators. */
     private transient int modCount;
 
     /**
@@ -291,7 +291,7 @@ public class ArraySet<E> extends AbstractSet<E> implements Set<E> {
      * Only thrown when the ArraySet was configured to throw on overflow.
      */
     public static class SetFullException extends IllegalStateException {
-        /** The serial version UID */
+        /** The serial version UID. */
         private static final long serialVersionUID = 9087390587254111L;
 
         /**

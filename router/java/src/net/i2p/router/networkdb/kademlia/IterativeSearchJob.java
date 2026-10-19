@@ -58,7 +58,7 @@ import net.i2p.util.SystemVersion;
  * Advantages over flood-only approaches:
  * - More robust in large networks with incomplete floodfill knowledge
  * - Better success rates through sequential searching
- * - Reduced network traffic through single-peer queries
+ * - Reduced network traffic through single-peer queries.
  *
  * @since 0.8.9
  */
@@ -80,7 +80,7 @@ public class IterativeSearchJob extends FloodSearchJob {
     private final Hash _fromLocalDest;
     /** Hash to always query first, set from a router property for testing. */
     private static Hash _alwaysQueryHash;
-    /** Max number of peers to query */
+    /** Max number of peers to query. */
     private final int _totalSearchLimit;
     /**
      * Masked-IP keys, ports and family options of the peers already queried by
@@ -108,17 +108,17 @@ public class IterativeSearchJob extends FloodSearchJob {
     /** Number of entries used in {@link #_fingerprintPorts}. */
     private int _fingerprintPortCount;
     private final Set<Hash> _skippedPeers;
-    /** Floodfill peers we've sent queries to in this search — for active-query tracking */
+    /** Floodfill peers we've sent queries to in this search — for active-query tracking. */
     private final Set<Hash> _queriedFloodfills;
-    /** Set once the candidate set has been widened for beta confirmation. Guarded by this. @since 0.9.71+ */
+    /** Set once the candidate set has been widened for beta confirmation. Guarded by this. @since 0.9.71+. */
     private boolean _widened;
 
     private static final int MAX_NON_FF = 5;
-    /** Max number of peers to query */
+    /** Max number of peers to query. */
     private static final int TOTAL_SEARCH_LIMIT = 32;
-    /** Max number of peers to query if we are ff */
+    /** Max number of peers to query if we are ff. */
     private static final int TOTAL_SEARCH_LIMIT_WHEN_FF = 24;
-    /** Extra peers to get from peer selector, as we may discard some before querying */
+    /** Extra peers to get from peer selector, as we may discard some before querying. */
     private static final int EXTRA_PEERS = 2;
     private static final int IP_CLOSE_BYTES = 3;
     /**
@@ -131,11 +131,11 @@ public class IterativeSearchJob extends FloodSearchJob {
      */
     private static final int BETA_CONFIRM = 3;
 
-    /** Config key for the total search time cap */
+    /** Config key for the total search time cap. */
     public static final String PROP_MAX_SEARCH_TIME = "netdb.maxSearchTime";
-    /** Default total search time cap (15s) */
+    /** Default total search time cap (15s). */
     private static final long MAX_SEARCH_TIME_DEFAULT = 15*1000;
-    /** Total search time cap - dynamically loadable */
+    /** Total search time cap - dynamically loadable. */
     private static volatile long _maxSearchTime = MAX_SEARCH_TIME_DEFAULT;
 
     /**
@@ -162,6 +162,8 @@ public class IterativeSearchJob extends FloodSearchJob {
      */
     private static final int MAX_RI_ADDRESSES = 16;
     /**
+     * Fingerprint entries we can store in a reply.
+     *
      * @since 0.9.71+
      */
     private static final int MAX_FINGERPRINT_ENTRIES = 1 + MAX_RI_ADDRESSES;
@@ -275,12 +277,12 @@ public class IterativeSearchJob extends FloodSearchJob {
         _maxSearchTime = Math.max(10*1000, Math.min(30*1000, val));
     }
 
-    /** Cache size for recently completed peer replies to avoid false positive bans */
+    /** Cache size for recently completed peer replies to avoid false positive bans. */
     private static final int COMPLETED_CACHE_SIZE = 8192;
     private static final String PROP_LATE_REPLY_GRACE = "netDb.lateReplyGracePeriod";
-    /** Default grace period for late replies (5 min) */
+    /** Default grace period for late replies (5 min). */
     private static final long LATE_REPLY_GRACE_PERIOD_DEFAULT = 5L*60*1000;
-    /** Grace period for late replies - dynamically loadable */
+    /** Grace period for late replies - dynamically loadable. */
     private static volatile long _lateReplyGracePeriod = LATE_REPLY_GRACE_PERIOD_DEFAULT;
 
 /**
@@ -297,7 +299,7 @@ public class IterativeSearchJob extends FloodSearchJob {
     private static long getGracePeriod() {
         return _lateReplyGracePeriod;
     }
-    /** Static cache of recently completed searches: peer hash -> expiration timestamp */
+    /** Static cache of recently completed searches: peer hash -> expiration timestamp. */
     private static final ConcurrentHashMap<Hash, Long> _recentlyCompleted = new ConcurrentHashMap<>(COMPLETED_CACHE_SIZE);
     /**
      * The time before we give up and start a new search - much shorter than the message's expire time
@@ -307,12 +309,12 @@ public class IterativeSearchJob extends FloodSearchJob {
     private final long _singleSearchTime;
 
     /**
-     * The default single search time
+     * The default single search time.
      */
     private static final long SINGLE_SEARCH_TIME = 6L*1000;
     private static final long MIN_SINGLE_SEARCH_TIME = 1000;
 
-    /** The actual expire time for a search message */
+    /** The actual expire time for a search message. */
     private static final long SINGLE_SEARCH_MSG_TIME = 15L*1000;
 
     /**
@@ -322,7 +324,7 @@ public class IterativeSearchJob extends FloodSearchJob {
      */
     private int _maxConcurrent;
     /**
-     * The default _maxConcurrent
+     * The default _maxConcurrent.
      * @return 4 on a slow system, otherwise 16
      */
     private static volatile int _maxConcurrentDefault = SystemVersion.isSlow() ? 4 : 16;
@@ -345,8 +347,8 @@ public class IterativeSearchJob extends FloodSearchJob {
 
     /**
      * Adaptive deadline cap (ms) for LeaseSet lookups only.
-     * RouterInfo lookups continue to use {@link #getMaxSearchTime()}.
-     * Tuned live by the Tuner toward ~4x the observed netDb.successTime,
+     * RouterInfo lookups continue to use {@link #getMaxSearchTime}.
+     * Tuned live by the Tuner toward ~4x the observed {@code netDb.successTime},
      * floored so healthy-but-slow searches aren't abandoned. Defaults to
      * the max search time so behavior is unchanged until the Tuner adjusts it.
      * @since 0.9.70+
@@ -359,7 +361,7 @@ public class IterativeSearchJob extends FloodSearchJob {
      * lookup completes or times out; a long hold during a spike tanks transit
      * throughput. Defaults to a shorter cap than the max search time so a missing
      * or unreachable RouterInfo fails fast and the source can reroute. Tuned
-     * live by the Tuner toward ~4x the observed netDb.successTime.
+     * live by the Tuner toward ~4x the observed {@code netDb.successTime}.
      * @since 0.9.70+
      */
     private static volatile int _maxRouterInfoLookupTime = 5*1000;
@@ -405,7 +407,7 @@ public class IterativeSearchJob extends FloodSearchJob {
     public static final boolean DEFAULT_ENCRYPT_RI = NativeBigInteger.isNative();
 
     /**
-     * Lookup using exploratory tunnels
+     * Lookup using exploratory tunnels.
      * @param ctx the router context
      * @param facade the network database the key is looked up in
      * @param key the hash to search for, a RouterInfo or LeaseSet hash
@@ -623,7 +625,7 @@ public class IterativeSearchJob extends FloodSearchJob {
     }
 
     /**
-     * Send lookups to one or more peers, up to the configured concurrent and total limits
+     * Send lookups to one or more peers, up to the configured concurrent and total limits.
      */
     private void retry() {
         long now = getContext().clock().now();
@@ -742,7 +744,7 @@ public class IterativeSearchJob extends FloodSearchJob {
     }
 
     /**
-     * Send a DLM to the peer
+     * Send a DLM to the peer.
      *
      * @param peer who to send to
      * @param previouslyTried how many did we send to before this one?
@@ -1102,7 +1104,7 @@ public class IterativeSearchJob extends FloodSearchJob {
     }
 
     /**
-     * Hash of the dest this query is from
+     * Hash of the dest this query is from.
      * @return null for router
      * @since 0.9.13
      */
@@ -1185,14 +1187,14 @@ public class IterativeSearchJob extends FloodSearchJob {
     }
 
     /**
-     * Dropped by the job queue
+     * Dropped by the job queue.
      * @since 0.9.31
      */
     @Override
     public void dropped() {failed();}
 
     /**
-     * Total failure
+     * Total failure.
      */
     @Override
     void failed() {

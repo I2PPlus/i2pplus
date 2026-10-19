@@ -24,31 +24,30 @@ import java.util.Properties;
  * An I2PClient contains no state, it is just a facility for creating private key files
  * and generating sessions from existing private key files.
  *
- * @author jrandom
  */
 public interface I2PClient {
-    /** Standard host property, defaulting to localhost if not specified */
+    /** Standard host property, defaulting to localhost if not specified. */
     public static final String PROP_TCP_HOST = "i2cp.tcp.host";
 
-    /** Standard port number property */
+    /** Standard port number property. */
     public static final String PROP_TCP_PORT = "i2cp.tcp.port";
 
-    /** Reliability property */
+    /** Reliability property. */
     public static final String PROP_RELIABILITY = "i2cp.messageReliability";
 
-    /** Reliability value: best effort */
+    /** Reliability value: best effort. */
     public static final String PROP_RELIABILITY_BEST_EFFORT = "BestEffort";
 
-    /** Reliability value: guaranteed */
+    /** Reliability value: guaranteed. */
     public static final String PROP_RELIABILITY_GUARANTEED = "Guaranteed";
 
-    /** Reliability value: none. @since 0.8.1 */
+    /** Reliability value: none. @since 0.8.1. */
     public static final String PROP_RELIABILITY_NONE = "none";
 
-    /** Destination signature type property. @since 0.9.12 */
+    /** Destination signature type property. @since 0.9.12. */
     public static final String PROP_SIGTYPE = "i2cp.destination.sigType";
 
-    /** Default signature type. @since 0.9.12 */
+    /** Default signature type. @since 0.9.12. */
     public static final SigType DEFAULT_SIGTYPE = SigType.EdDSA_SHA512_Ed25519;
 
     /**
@@ -69,33 +68,33 @@ public interface I2PClient {
      */
     public static final String PROP_FAST_RECEIVE = "i2cp.fastReceive";
 
-    /** Enable SSL for I2CP connection. @since 0.9.44, was protected in I2PSessionImpl */
+    /** Enable SSL for I2CP connection. @since 0.9.44, was protected in I2PSessionImpl. */
     public static final String PROP_ENABLE_SSL = "i2cp.SSL";
 
-    /** Username for I2CP authentication. @since 0.9.44, was protected in I2PSessionImpl */
+    /** Username for I2CP authentication. @since 0.9.44, was protected in I2PSessionImpl. */
     public static final String PROP_USER = "i2cp.username";
 
-    /** Password for I2CP authentication. @since 0.9.44, was protected in I2PSessionImpl */
+    /** Password for I2CP authentication. @since 0.9.44, was protected in I2PSessionImpl. */
     public static final String PROP_PW = "i2cp.password";
 
-    /** Enable gzip compression for I2CP messages. @since 0.9.46 */
+    /** Enable gzip compression for I2CP messages. @since 0.9.46. */
     public static final String PROP_GZIP = "i2cp.gzip";
 
     /**
      * How many minutes to wait for the first lease set (tunnels) during session
      * connect before failing. Integer; 0 or unparsable values fall back to the
-     * default of 60. @since 0.9.71+
+     * default of 60. @since 0.9.71+.
      */
     public static final String PROP_TUNNEL_BUILD_TIMEOUT = "i2cp.tunnelBuildTimeoutMinutes";
 
     /**
-     * 7654
+     * 7654.
      *
      * @since 0.9.38
      */
     public static final int DEFAULT_LISTEN_PORT = 7654;
 
-    /** Protocol flag that must be sent when opening the i2cp connection to the router */
+    /** Protocol flag that must be sent when opening the i2cp connection to the router. */
     public static final int PROTOCOL_BYTE = 0x2A;
 
     /**

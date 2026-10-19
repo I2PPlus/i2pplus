@@ -20,7 +20,7 @@ import net.i2p.util.Log;
  * Given an established connection, walk through the process of establishing the
  * leaseset.  This requests the TunnelManagerFacade to build tunnels for the
  * client and then once thats done (asynchronously) it requests a lease set from
- * the client
+ * the client.
  *
  */
 class CreateSessionJob extends JobImpl {
@@ -38,10 +38,10 @@ class CreateSessionJob extends JobImpl {
         _config = config;
         if (_log.shouldDebug()) {_log.debug("CreateSessionJob for config: " + config);}
     }
-    /** Return the name */
+    /** Return the name. */
 
     public String getName() {return "Request Tunnels for New Client";}
-    /** Execute the job */
+    /** Execute the job. */
 
     public void runJob() {
         Hash dest = _config.getDestination().calculateHash();

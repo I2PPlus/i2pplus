@@ -22,7 +22,7 @@ import net.i2p.router.RouterVersion;
  */
 public class NewsCommandLine extends RouterCommandLine {
 
-    /** Additional command classes for news and blocklist management */
+    /** Additional command classes for news and blocklist management. */
     protected static final List<String> NCLASSES = Arrays.asList(new String[] {
         "com.vuze.plugins.mlab.MLabRunner",
         "net.i2p.router.news.BlocklistEntries",
@@ -30,7 +30,7 @@ public class NewsCommandLine extends RouterCommandLine {
         "net.i2p.router.update.NewsHandler"
     });
 
-    /** Protected constructor to prevent instantiation */
+    /** Protected constructor to prevent instantiation. */
     protected NewsCommandLine() {}
 
     /**

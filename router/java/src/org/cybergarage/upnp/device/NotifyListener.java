@@ -27,7 +27,6 @@ import org.cybergarage.upnp.ssdp.*;
  * asynchronous notifications when devices advertise their presence or announce their departure from
  * the network.
  *
- * @author Satoshi Konno
  * @since 1.0
  */
 public interface NotifyListener {

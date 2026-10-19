@@ -72,20 +72,20 @@ public class NewsXMLParser {
      * XHTML element or blacklisted attribute in the feed content.
      */
     public enum XHTMLMode {
-        /** abort the parsing on any non-whitelisted element or blacklisted attribute */
+        /** Abort the parsing on any non-whitelisted element or blacklisted attribute. */
         ABORT,
-        /** remove only the non-whitelisted element, or element containing a blacklisted attribute  */
+        /** Remove only the non-whitelisted element, or element containing a blacklisted attribute.  */
         REMOVE_ELEMENT,
-        /** remove only the non-whitelisted element, remove only the blacklisted attribute  */
+        /** Remove only the non-whitelisted element, remove only the blacklisted attribute.  */
         REMOVE_ATTRIBUTE,
-        /** skip the feed entry containing the non-whitelisted element or blacklisted attribute */
+        /** Skip the feed entry containing the non-whitelisted element or blacklisted attribute. */
         SKIP_ENTRY,
-        /** disable all whitelist and blacklist checks */
+        /** Disable all whitelist and blacklist checks. */
         ALLOW_ALL
     }
 
     /**
-     * Creates a new NewsXMLParser with the given context
+     * Creates a new NewsXMLParser with the given context.
      * @param ctx the application context supplying the log manager and property lookups
      */
     public NewsXMLParser(I2PAppContext ctx) {
@@ -503,7 +503,7 @@ public class NewsXMLParser {
     }
 
     /**
-     * Helper to get all Nodes matching the name
+     * Helper to get all Nodes matching the name.
      *
      * @param node the parent node to search
      * @param name the element name a child node must carry to be returned
@@ -521,6 +521,8 @@ public class NewsXMLParser {
     }
 
     /**
+     * Validate an XML node, throwing if it is invalid.
+     *
      * @return true if node was removed from parent (only for REMOVE_ELEMENT mode)
      * @throws I2PParserException if any node not in whitelist (depends on mode)
      */
@@ -579,7 +581,7 @@ public class NewsXMLParser {
     }
 
     /**
-     * Extend IOE since cybergarage ParserException extends Exception
+     * Extend IOE since cybergarage ParserException extends Exception.
      */
     private static class I2PParserException extends IOException {
         public I2PParserException(String s) {
@@ -592,7 +594,7 @@ public class NewsXMLParser {
     }
 
     /**
-     * Command-line entry point for testing
+     * Command-line entry point for testing.
      * @param args the feed file to parse, optionally followed by an XHTMLMode name
      */
     public static void main(String[] args) {

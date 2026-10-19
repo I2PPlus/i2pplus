@@ -42,7 +42,7 @@ public class PayloadGarlicConfig extends GarlicConfig {
 
     /**
      * Specify the I2NP message to be sent - if this is set, no other cloves can be included
-     * in this block
+     * in this block.
      *
      * @return the I2NP message payload
      */

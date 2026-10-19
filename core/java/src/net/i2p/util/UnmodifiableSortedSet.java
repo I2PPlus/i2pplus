@@ -72,7 +72,7 @@ public class UnmodifiableSortedSet<E> extends ArraySet<E> implements SortedSet<E
     }
 
     /**
-     * Warning: O(n**2)
+     * Warning: O(n**2).
      *
      * @param c collection to copy and sort
      */
@@ -81,7 +81,7 @@ public class UnmodifiableSortedSet<E> extends ArraySet<E> implements SortedSet<E
     }
 
     /**
-     * Warning: O(n**2)
+     * Warning: O(n**2).
      *
      * @param c collection to copy and sort
      * @param comparator comparator for ordering
@@ -125,6 +125,8 @@ public class UnmodifiableSortedSet<E> extends ArraySet<E> implements SortedSet<E
     }
 
     /**
+     * Throws, the set is unmodifiable.
+     *
      * @throws UnsupportedOperationException always, as view creation is not supported
      */
     @Override
@@ -133,6 +135,8 @@ public class UnmodifiableSortedSet<E> extends ArraySet<E> implements SortedSet<E
     }
 
     /**
+     * Throws, the set is unmodifiable.
+     *
      * @throws UnsupportedOperationException always, as view creation is not supported
      */
     @Override
@@ -141,6 +145,8 @@ public class UnmodifiableSortedSet<E> extends ArraySet<E> implements SortedSet<E
     }
 
     /**
+     * Throws, the set is unmodifiable.
+     *
      * @throws UnsupportedOperationException always, as view creation is not supported
      */
     @Override
@@ -149,8 +155,10 @@ public class UnmodifiableSortedSet<E> extends ArraySet<E> implements SortedSet<E
     }
 
     /**
+     * Throws, the set is unmodifiable.
+     *
      * @throws UnsupportedOperationException if the set has finished initializing;
-     *                                       before that the call is allowed so the Collection constructor can populate it
+     * before that the call is allowed so the Collection constructor can populate it
      */
     @Override
     public boolean add(E o) {
@@ -160,8 +168,10 @@ public class UnmodifiableSortedSet<E> extends ArraySet<E> implements SortedSet<E
     }
 
     /**
+     * Throws, the set is unmodifiable.
+     *
      * @throws UnsupportedOperationException if the set has finished initializing;
-     *                                       before that the call is allowed so the Collection constructor can populate it
+     * before that the call is allowed so the Collection constructor can populate it
      */
     @Override
     public void addUnique(E o) {
@@ -171,6 +181,8 @@ public class UnmodifiableSortedSet<E> extends ArraySet<E> implements SortedSet<E
     }
 
     /**
+     * Throws, the set is unmodifiable.
+     *
      * @throws UnsupportedOperationException always, as the set cannot be emptied
      */
     @Override
@@ -179,6 +191,8 @@ public class UnmodifiableSortedSet<E> extends ArraySet<E> implements SortedSet<E
     }
 
     /**
+     * Throws, the set is unmodifiable.
+     *
      * @throws UnsupportedOperationException always, as no element can be removed
      */
     @Override
@@ -187,7 +201,7 @@ public class UnmodifiableSortedSet<E> extends ArraySet<E> implements SortedSet<E
     }
 
     /**
-     * Overridden to do binary search
+     * Overridden to do binary search.
      */
     @Override
     @SuppressWarnings("unchecked")

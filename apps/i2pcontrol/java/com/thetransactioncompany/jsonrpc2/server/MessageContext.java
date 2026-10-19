@@ -20,7 +20,6 @@ import javax.servlet.http.HttpServletRequest;
  *     <li>The client principal(s) (user), if authenticated.
  * </ul>
  *
- * @author Vladimir Dzhuvinov
  */
 public class MessageContext {
 

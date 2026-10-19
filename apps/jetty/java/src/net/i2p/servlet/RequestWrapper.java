@@ -28,7 +28,6 @@ import net.i2p.util.Log;
  * String, and an IllegalStateException from the container (which signals an
  * oversized request) is logged and rethrown.
  *
- * @author user
  * @since 0.9.19 moved from susimail so it may be used by routerconsole too
  */
 public class RequestWrapper {
@@ -225,7 +224,11 @@ public class RequestWrapper {
         return result;
     }
 
-    /** @since 0.9.33 */
+    /**
+     * Log a request error.
+     *
+     * @since 0.9.33
+     */
     private static void log(Exception e) {
         Log log = I2PAppContext.getGlobalContext().logManager().getLog(RequestWrapper.class);
         log.error("Multipart form error", e);

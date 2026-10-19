@@ -19,7 +19,6 @@ public class QueryRequest extends ControlRequest {
     //	Constructor
     ////////////////////////////////////////////////
 
-    /** Default constructor */
     public QueryRequest() {}
 
     /**

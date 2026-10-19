@@ -114,7 +114,7 @@ public class OOMListener implements I2PThread.OOMEventListener {
     }
 
     /**
-     * Best guess if running from a Debian package
+     * Best guess if running from a Debian package.
      * @return whether debian package
      * @since 0.9.35
      */

@@ -21,7 +21,7 @@ import net.i2p.util.Log;
  * <p>
  * All counters use AtomicLong and timestamps use volatile for
  * thread-safe access from NetDB message handlers and transport threads.
- * <p><b>Combined responsiveness rate.</b> {@link #getFailedLookupRate()} is a
+ * <p><b>Combined responsiveness rate.</b> {@link #getFailedLookupRate} is a
  * single rate covering <em>both</em> lookups and stores: every resolved lookup
  * and every verified store adds 0, every failed lookup and every failed store
  * verification adds 1. The persisted key stays "dbHistory.failedLookupRate" for
@@ -122,8 +122,8 @@ public class DBHistory {
      * lookup and a verified store both add 0, a failed lookup and a failed store
      * verification both add 1. Read it as "fraction of NetDb requests this peer
      * failed to answer". Lookup and store outcomes are also tracked separately
-     * by {@link #getLastLookupSuccessful()}, {@link #getLastLookupFailed()},
-     * {@link #getLastStoreSuccessful()} and {@link #getLastStoreFailed()}.
+     * by {@link #getLastLookupSuccessful}, {@link #getLastLookupFailed},
+     * {@link #getLastStoreSuccessful} and {@link #getLastStoreFailed}.
      *
      * @return the combined lookup and store failure rate
      */
@@ -160,7 +160,7 @@ public class DBHistory {
     /**
      * Note that we successfully stored to a floodfill peer and verified the result by asking another floodfill peer
      * <p>Also feeds the combined failure rate with a success (0), and the
-     * network-wide "peer.failedLookupRate" statistic with a success (0).
+     * network-wide "{@code peer.failedLookupRate}" statistic with a success (0).
      *
      * @since 0.7.8
      */
@@ -173,7 +173,7 @@ public class DBHistory {
     /**
      * Note that floodfill verify failed
      * <p>Also feeds the combined failure rate with a failure (1). The
-     * network-wide "peer.failedLookupRate" statistic is deliberately not fed
+     * network-wide "{@code peer.failedLookupRate}" statistic is deliberately not fed
      * here, so a store failure is counted against this peer but only dilutes
      * rather than inflates the network-wide average.
      *
@@ -185,20 +185,20 @@ public class DBHistory {
     }
 
     /**
-     * Receive a lookup reply from the peer, where they gave us the specified info
+     * Receive a lookup reply from the peer, where they gave us the specified info.
      *
      * @param newPeers number of peers we have never seen before
      * @param oldPeers number of peers we have seen before
      * @param invalid number of peers that are invalid / out of date / otherwise b0rked
      * @param duplicate number of peers we asked them not to give us (though they're allowed to send us
-     *                  themselves if they don't know anyone else)
+     * themselves if they don't know anyone else)
      */
     public void lookupReply(int newPeers, int oldPeers, int invalid, int duplicate) {
         if (invalid > 0) {_invalidReplyRate.addData(invalid);}
     }
 
     /**
-     * Note that the peer sent us a data point without us asking for it
+     * Note that the peer sent us a data point without us asking for it.
      *
      * @param wasNew whether we already knew about this data point or not
      */
@@ -265,7 +265,7 @@ public class DBHistory {
 
     /**
      * Coalesce the rate statistics and decay the lookup and store counters.
-     * <p>Mirrors {@link TunnelHistory#coalesceStats()}: the RateStats are folded
+     * <p>Mirrors {@link TunnelHistory#coalesceStats}: the RateStats are folded
      * unconditionally, and the lifetime counters only once
      * {@link #decayLifetimeCounters(long)} finds its interval has elapsed.
      */

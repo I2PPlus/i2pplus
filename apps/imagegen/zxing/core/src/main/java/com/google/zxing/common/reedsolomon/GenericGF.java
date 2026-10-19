@@ -24,8 +24,6 @@ package com.google.zxing.common.reedsolomon;
  * for convenience and speed (but at the cost of memory).
  * </p>
  *
- * @author Sean Owen
- * @author David Olivier
  */
 public final class GenericGF {
 

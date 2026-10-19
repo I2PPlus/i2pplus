@@ -12,26 +12,25 @@ import org.rrd4j.data.Variable;
 
 /**
  * Class used to represent data fetched from the RRD. Object of this class is created when the
- * method {@link org.rrd4j.core.FetchRequest#fetchData() fetchData()} is called on a {@link
+ * method {@link org.rrd4j.core.FetchRequest#fetchData fetchData()} is called on a {@link
  * org.rrd4j.core.FetchRequest FetchRequest} object.
  *
  * <p>Data returned from the RRD is, simply, just one big table filled with timestamps and
- * corresponding datasource values. Use {@link #getRowCount() getRowCount()} method to count the
+ * corresponding datasource values. Use {@link #getRowCount getRowCount()} method to count the
  * number of returned timestamps (table rows).
  *
  * <p>The first table column is filled with timestamps. Time intervals between consecutive
- * timestamps are guaranteed to be equal. Use {@link #getTimestamps() getTimestamps()} method to get
+ * timestamps are guaranteed to be equal. Use {@link #getTimestamps getTimestamps()} method to get
  * an array of timestamps returned.
  *
  * <p>Remaining columns are filled with datasource values for the whole timestamp range, on a
- * column-per-datasource basis. Use {@link #getColumnCount() getColumnCount()} to find the number of
+ * column-per-datasource basis. Use {@link #getColumnCount getColumnCount()} to find the number of
  * datasources and {@link #getValues(int) getValues(i)} method to obtain all values for the i-th
  * datasource. Returned datasource values correspond to the values returned with {@link
  * #getTimestamps() getTimestamps()} method.
  *
  * <p>This data structure holds the fetched information.
  *
- * @author Sasa Markovic
  */
 @SuppressWarnings("deprecation")
 public class FetchData {
@@ -125,9 +124,9 @@ public class FetchData {
 
     /**
      * Returns all archived values for a single datasource. Returned values correspond to timestamps
-     * returned with {@link #getTimestamps() getTimestamps()} method.
+     * returned with {@link #getTimestamps getTimestamps()} method.
      *
-     * @param dsIndex Datasource index, from 0 to {@link #getColumnCount()} - 1
+     * @param dsIndex Datasource index, from 0 to {@link #getColumnCount} - 1
      * @return Array of single datasource values.
      */
     public double[] getValues(int dsIndex) {
@@ -136,7 +135,7 @@ public class FetchData {
 
     /**
      * Returns all archived values for all datasources. Returned values correspond to timestamps
-     * returned with {@link #getTimestamps() getTimestamps()} method.
+     * returned with {@link #getTimestamps getTimestamps()} method.
      *
      * @return Two-dimensional aray of all datasource values.
      */
@@ -146,7 +145,7 @@ public class FetchData {
 
     /**
      * Returns all archived values for a single datasource. Returned values correspond to timestamps
-     * returned with {@link #getTimestamps() getTimestamps()} method.
+     * returned with {@link #getTimestamps getTimestamps()} method.
      *
      * @param dsName Datasource name, as it appears in the RRD
      * @return Array of single datasource values.

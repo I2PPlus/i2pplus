@@ -12,7 +12,6 @@ package net.i2p.client.datagram;
 /**
  * Exception thrown when I2P repliable datagram signature verification fails.
  *
- * @author human
  */
 public class I2PInvalidDatagramException extends Exception {
 

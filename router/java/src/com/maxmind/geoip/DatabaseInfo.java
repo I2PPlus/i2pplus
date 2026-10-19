@@ -22,7 +22,6 @@ import java.util.Date;
  * </ul>
  *
  * @see com.maxmind.geoip.LookupService#getDatabaseInfo()
- * @author Matt Tucker
  */
 public class DatabaseInfo {
 

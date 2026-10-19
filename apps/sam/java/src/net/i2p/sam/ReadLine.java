@@ -14,7 +14,7 @@ import java.net.SocketTimeoutException;
  */
 class ReadLine {
 
-    /** Creates a new ReadLine instance (utility class) */
+    /** Creates a new ReadLine instance (utility class). */
     private ReadLine() {}
 
     private static final int MAX_LINE_LENGTH = 8*1024;
@@ -23,7 +23,7 @@ class ReadLine {
      * Read a line terminated by newline, with a total read timeout.
      * <p>
      * Warning - strips \n but not \r
-     * Warning - 8KB line length limit as of 0.7.13, @throws IOException if exceeded
+     * Warning - 8KB line length limit as of 0.7.13, @throws IOException if exceeded.
      *
      * @param socket the socket to read from, whose SO_TIMEOUT this sets to the remaining time
      * @param buf the buffer the line is appended to, without its newline

@@ -7,7 +7,6 @@ import org.rrd4j.graph.DownSampler;
  * <a href="http://skemman.is/en/item/view/1946/15343">Sveinn Steinarsson's thesis</a>, section
  * 4.2..
  *
- * @author Benjamin Green
  */
 public abstract class DownSampleImpl implements DownSampler {
 

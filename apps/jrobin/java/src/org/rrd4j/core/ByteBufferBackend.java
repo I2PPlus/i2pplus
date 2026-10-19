@@ -9,7 +9,6 @@ import java.util.Arrays;
  * A backend that store and provides access to data using a {@link java.nio.ByteBuffer}, using java
  * internal methods for long, integer and others types.
  *
- * @author Fabrice Bacchella
  * @since 3.4
  */
 public abstract class ByteBufferBackend extends RrdBackend {

@@ -507,7 +507,7 @@ class FloodfillVerifyStoreJob extends JobImpl {
     }
 
     /**
-     * Pick a responsive floodfill close to the key, but not the one we sent to
+     * Pick a responsive floodfill close to the key, but not the one we sent to.
      */
     private Hash pickTarget() {
         Hash rkey = getContext().routingKeyGenerator().getRoutingKey(_key);
@@ -795,7 +795,7 @@ class FloodfillVerifyStoreJob extends JobImpl {
     }
 
     /**
-     * the netDb store failed to verify, so resend it to a random floodfill peer
+     * The netDb store failed to verify, so resend it to a random floodfill peer
      * Fixme - since we now store closest-to-the-key, this is likely to store to the
      * very same ff as last time, until the stats get bad enough to switch.
      * Therefore, pass the failed ff through as a don't-store-to.

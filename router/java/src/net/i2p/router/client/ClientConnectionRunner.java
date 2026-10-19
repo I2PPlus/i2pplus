@@ -64,7 +64,6 @@ import net.i2p.util.SimpleTimer2;
  * As of release 0.9.21, multiple sessions are supported on a single
  * I2CP connection. These sessions share tunnels and some configuration.
  *
- * @author jrandom
  */
 class ClientConnectionRunner {
     /** Logger for the runner. */
@@ -83,33 +82,33 @@ class ClientConnectionRunner {
     private String _clientVersion;
     /**
      * Mapping of MessageId to Payload, storing messages for retrieval.
-     * Unused for i2cp.fastReceive = "true" (_dontSendMSMOnRecive = true)
+     * Unused for {@code i2cp.fastReceive} = "true" (_dontSendMSMOnRecive = true).
      */
     private final Map<MessageId, Payload> _messages;
     private int _consecutiveLeaseRequestFails;
     private long _lastLeaseFailTime;
     /**
      * Set of messageIds created but not yet ACCEPTED.
-     * Unused for i2cp.messageReliability = "none" (_dontSendMSM = true)
+     * Unused for {@code i2cp.messageReliability} = "none" (_dontSendMSM = true).
      */
     private final Set<MessageId> _acceptedPending;
     /** Reads and processes incoming I2CP messages from the client. */
     protected I2CPMessageReader _reader;
-    /** Used for all sessions, which must all have the same crypto keys */
+    /** Used for all sessions, which must all have the same crypto keys. */
     private SessionKeyManager _sessionKeyManager;
-    /** Used for leaseSets sent to and received from this client */
+    /** Used for leaseSets sent to and received from this client. */
     private FloodfillNetworkDatabaseFacade _floodfillNetworkDatabaseFacade;
     /**
      * This contains the last 10 MessageIds that have had their (non-ack) status
-     * delivered to the client (so that we can be sure only to update when necessary)
+     * delivered to the client (so that we can be sure only to update when necessary).
      */
     private final List<MessageId> _alreadyProcessed;
     private ClientWriterRunner _writer;
     /** True once the connection has been shut down. */
     private volatile boolean _dead;
-    /** For outbound traffic. true if i2cp.messageReliability = "none"; @since 0.8.1 */
+    /** For outbound traffic. True if {@code i2cp.messageReliability} = "none". @since 0.8.1. */
     private boolean _dontSendMSM;
-    /** For inbound traffic. true if i2cp.fastReceive = "true"; @since 0.9.4 */
+    /** For inbound traffic. True if {@code i2cp.fastReceive} = "true". @since 0.9.4. */
     private boolean _dontSendMSMOnReceive;
     private final AtomicInteger _messageId; // messageId counter
     private Hash _encryptedLSHash;
@@ -139,12 +138,16 @@ class ClientConnectionRunner {
      */
     private static final int MAX_BUFFERED_MESSAGES = 1024;
 
-    /** @since 0.9.2 */
+    /**
+     * Config keys for tag counts and send options.
+     *
+     * @since 0.9.2
+     */
     private static final String PROP_TAGS = "crypto.tagsToSend";
     private static final String PROP_THRESH = "crypto.lowTagThreshold";
 
     /**
-     * For multisession
+     * For multisession.
      *
      * @since 0.9.21
      */
@@ -167,7 +170,7 @@ class ClientConnectionRunner {
     }
 
     /**
-     * Create a new runner against the given socket
+     * Create a new runner against the given socket.
      *
      * @param context the router context
      * @param manager the client manager
@@ -191,7 +194,7 @@ class ClientConnectionRunner {
     /**
      * Actually run the connection - listen for I2CP messages and respond.  This
      * is the main driver for this class, though it gets all its meat from the
-     * {@link net.i2p.data.i2cp.I2CPMessageReader I2CPMessageReader}
+     * {@link net.i2p.data.i2cp.I2CPMessageReader I2CPMessageReader}.
      *
      * @throws IOException if the socket I/O fails
      */
@@ -207,11 +210,11 @@ class ClientConnectionRunner {
             t.start();
             _out = new BufferedOutputStream(_socket.getOutputStream());
             _reader.startReading();
-            // TODO need a cleaner for unclaimed items in _messages, but we have no timestamps...
+    // TODO need a cleaner for unclaimed items in _messages, but we have no timestamps...
     }
 
     /**
-     * Allow override for testing
+     * Allow override for testing.
      *
      * @return the message event listener
      * @since 0.9.8
@@ -315,7 +318,7 @@ class ClientConnectionRunner {
 
     /**
      * Primary client's config,
-     * will be null if session not set up
+     * will be null if session not set up.
      *
      * @return the primary config, or null if not set up
      * @since 0.9.21
@@ -386,7 +389,7 @@ class ClientConnectionRunner {
     }
 
     /**
-     * Return the hash for the given ID
+     * Return the hash for the given ID.
      *
      * @param id the session id
      * @return hash or null if unknown
@@ -401,7 +404,7 @@ class ClientConnectionRunner {
     }
 
     /**
-     * Return the dest for the given ID
+     * Return the dest for the given ID.
      *
      * @param id the session id
      * @return dest or null if unknown
@@ -602,7 +605,7 @@ class ClientConnectionRunner {
     boolean isDead() { return _dead; }
 
     /**
-     * Only call if _dontSendMSMOnReceive is false, otherwise will always be null
+     * Only call if _dontSendMSMOnReceive is false, otherwise will always be null.
      *
      * @param id the message id
      * @return the payload, or null
@@ -612,7 +615,7 @@ class ClientConnectionRunner {
     }
 
     /**
-     * Only call if _dontSendMSMOnReceive is false
+     * Only call if _dontSendMSMOnReceive is false.
      *
      * @param id the message id
      * @param payload the payload to store
@@ -639,7 +642,7 @@ class ClientConnectionRunner {
     }
 
     /**
-     * Only call if _dontSendMSMOnReceive is false
+     * Only call if _dontSendMSMOnReceive is false.
      *
      * @param id the message id to remove
      */
@@ -767,7 +770,7 @@ class ClientConnectionRunner {
      * Send a notification to the client that their message (id specified) was
      * delivered (or failed delivery)
      * Note that this sends the Guaranteed status codes, even though we only support best effort.
-     * Doesn't do anything if i2cp.messageReliability = "none"
+     * Doesn't do anything if {@code i2cp.messageReliability} = "none"
      * <p>
      * Do not use for status = STATUS_SEND_ACCEPTED; use ackSendMessage() for that.
      *
@@ -787,7 +790,7 @@ class ClientConnectionRunner {
 
     /**
      * Called after a new leaseSet is granted by the client and the NetworkDb has been
-     * updated.  This takes care of all the LeaseRequestState stuff (including firing any jobs)
+     * updated.  This takes care of all the LeaseRequestState stuff (including firing any jobs).
      *
      * @param ls if encrypted, the encrypted LS, not the decrypted one
      */
@@ -854,7 +857,7 @@ class ClientConnectionRunner {
     /**
      * Send a DisconnectMessage and log with level Log.ERROR.
      * This is always bad.
-     * See ClientMessageEventListener.handleCreateSession()
+     * See {@link net.i2p.router.client.ClientMessageEventListener#handleCreateSession}
      * for why we don't send a SessionStatusMessage when we do this.
      *
      * @param reason will be truncated to 255 bytes
@@ -891,7 +894,7 @@ class ClientConnectionRunner {
     /**
      * Distribute the message.  If the dest is local, it blocks until its passed
      * to the target ClientConnectionRunner (which then fires it into a MessageReceivedJob).
-     * If the dest is remote, it blocks until it is added into the ClientMessagePool
+     * If the dest is remote, it blocks until it is added into the ClientMessagePool.
      *
      * @param message the message to distribute
      * @return the message id assigned
@@ -925,7 +928,7 @@ class ClientConnectionRunner {
     /**
      * Send a notification to the client that their message (id specified) was accepted
      * for delivery (but not necessarily delivered)
-     * Doesn't do anything if i2cp.messageReliability = "none"
+     * Doesn't do anything if {@code i2cp.messageReliability} = "none"
      * or if the nonce is 0.
      *
      * @param sid the session id
@@ -991,7 +994,7 @@ class ClientConnectionRunner {
     }
 
     /**
-     * Send async abuse message to the client
+     * Send async abuse message to the client.
      *
      * @param dest the offending destination
      * @param reason the human-readable description of the abuse
@@ -1198,7 +1201,7 @@ class ClientConnectionRunner {
         private final Job _onFailed;
 
         /**
-         * Caller must schedule()
+         * Caller must schedule().
          *
          * @param ls dest must be set
          */
@@ -1273,7 +1276,7 @@ class ClientConnectionRunner {
     }
 
     /**
-     * Actually send the I2CPMessage to the peer through the socket
+     * Actually send the I2CPMessage to the peer through the socket.
      *
      * @param msg the message to send
      * @throws I2CPMessageException if the message could not be sent

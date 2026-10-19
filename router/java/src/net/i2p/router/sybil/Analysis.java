@@ -68,26 +68,26 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
      * The name we register with the ClientAppManager.
      */
     public static final String APP_NAME = "Sybil Scan";
-    /** Property to set the scan frequency */
+    /** Property to set the scan frequency. */
     public static final String PROP_FREQUENCY = "router.sybilFrequency";
-    /** Property to set the threshold */
+    /** Property to set the threshold. */
     public static final String PROP_THRESHOLD = "router.sybilThreshold";
-    /** Property to enable blocking */
+    /** Property to enable blocking. */
     public static final String PROP_BLOCK = "router.sybilEnableBlocking";
-    /** Property to analyze all peers */
+    /** Property to analyze all peers. */
     public static final String PROP_NONFF = "router.sybilAnalyzeAll";
-    /** Property to set the block period */
+    /** Property to set the block period. */
     public static final String PROP_BLOCKTIME = "router.sybilBlockPeriod";
-    /** Property to set the delete old period */
+    /** Property to set the delete old period. */
     public static final String PROP_REMOVETIME = "router.sybilDeleteOld";
     private static final long MIN_FREQUENCY = 60*60*1000L;
     private static final long MIN_UPTIME = 75*60*1000L;
-    /** Default scan frequency */
+    /** Default scan frequency. */
     public static final long DEFAULT_FREQUENCY = 4*60*60*1000L;
 
-    /** Maximum pairs to analyze */
+    /** Maximum pairs to analyze. */
     public static final int PAIRMAX = 20;
-    /** Maximum entries to process */
+    /** Maximum entries to process. */
     public static final int MAX = 10;
     // multiplied by size - 1, will also get POINTS24 added
     private static final double POINTS32 = 5.0;
@@ -118,23 +118,23 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
     // so we don't always turn a temporary block into a permanent one.
     private static final double POINTS_BANLIST = 5.0;
 
-    /** Minimum close value for family detection */
+    /** Minimum close value for family detection. */
     public static final double MIN_CLOSE = 242.0;
     private static final double PAIR_DISTANCE_FACTOR = 2.0;
     private static final double OUR_KEY_FACTOR = 4.0;
     private static final double VERSION_FACTOR = 2.0;
 
-    /** Default is blocking enabled */
+    /** Default is blocking enabled. */
     public static final boolean DEFAULT_BLOCK = true;
-    /** Default block threshold */
+    /** Default block threshold. */
     public static final double DEFAULT_BLOCK_THRESHOLD = 35.0;
-    /** Default block time */
+    /** Default block time. */
     public static final long DEFAULT_BLOCK_TIME = 24*60*60*1000L;
-    /** Default remove time */
+    /** Default remove time. */
     public static final long DEFAULT_REMOVE_TIME = 24*60*60*1000L;
-    /** Short remove time */
+    /** Short remove time. */
     public static final long SHORT_REMOVE_TIME = 12*60*60*1000L;
-    /** Minimum points to block */
+    /** Minimum points to block. */
     public static final float MIN_BLOCK_POINTS = 12.01f;
     private static final byte[] IPV6_LOCALHOST = new byte[16];
     static { IPV6_LOCALHOST[15] = 1; }
@@ -181,7 +181,7 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
     public PersistSybil getPersister() { return _persister; }
 
     /**
-     * Load the persisted blocklist and tell the router
+     * Load the persisted blocklist and tell the router.
      *
      * @since 0.9.50
      */
@@ -517,7 +517,7 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
     }
 
     /**
-     * Blocklist and Banlist if configured
+     * Blocklist and Banlist if configured.
      * @since 0.9.41
      */
     private void doBlocking(Map<Hash, Points> points) {
@@ -642,7 +642,7 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
     /**
      * IPv6 only.
      *
-     * @return the i pv6
+     * @return the IPv6
      * @since 0.9.57
      */
     private static byte[] getIPv6(RouterInfo ri) {

@@ -281,7 +281,11 @@ public class QueuedI2CPMessageReaderTest {
     private static class StubQueue extends I2CPMessageQueue {
         private final LinkedBlockingQueue<I2CPMessage> _out = new LinkedBlockingQueue<>();
 
-        /** @param count messages to add @param firstSeq sequence number of the first */
+        /**
+         * Queue the given number of messages.
+         *
+         * @param count messages to add @param firstSeq sequence number of the first
+         */
         void fill(int count, int firstSeq) {
             for (int i = 0; i < count; i++) {_out.offer(new SeqMessage(firstSeq + i));}
         }
@@ -341,7 +345,11 @@ public class QueuedI2CPMessageReaderTest {
             received.incrementAndGet();
         }
 
-        /** @return true once count messages have arrived, false on timeout */
+        /**
+         * Wait for the reader to process the messages.
+         *
+         * @return true once count messages have arrived, false on timeout
+         */
         boolean await(int count, long timeoutMs) {
             long deadline = System.currentTimeMillis() + timeoutMs;
             while (received.get() < count) {

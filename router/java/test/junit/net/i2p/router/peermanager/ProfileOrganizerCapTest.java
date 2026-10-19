@@ -12,7 +12,7 @@ import org.junit.Test;
 
 /**
  * Unit tests for the profile-cap predicates extracted from
- * ProfileOrganizer.enforceProfileCap().
+ * {@link net.i2p.router.peermanager.ProfileOrganizer#enforceProfileCap}.
  *
  * @since 0.9.71+
  */

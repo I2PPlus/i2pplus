@@ -25,9 +25,9 @@ public class WizardHandler extends FormHandler {
     private WizardHelper _helper;
 
     /**
-     *  Bind the helper (scope session) to this handler (scope request)
+     * Bind the helper (scope session) to this handler (scope request).
      * @param helper session-scoped WizardHelper holding the wizard state this
-     *               request handler drives
+     * request handler drives
      */
     public void setWizardHelper(WizardHelper helper) {_helper = helper;}
 
@@ -71,8 +71,8 @@ public class WizardHandler extends FormHandler {
     }
 
     /**
-     *  Modified from ConfigNetHandler
-     *  @return true if any bandwidth, share or burst setting was written
+     * Modified from ConfigNetHandler.
+     * @return true if any bandwidth, share or burst setting was written
      */
     private boolean updateRates(Map<String, String> changes) {
         boolean updated = false;
@@ -122,14 +122,14 @@ public class WizardHandler extends FormHandler {
         return updated;
     }
 
-    /** start the test */
+    /** Start the test. */
     private void startNDT() {
         if (_helper == null) {addFormError(_t("Bad state for test"));}
         else if (_helper.startNDT()) {addFormNotice(_t("Bandwidth test started"));}
         else {addFormError(_t("Bandwidth test is already running"));}
     }
 
-    /** cancel the test */
+    /** Cancel the test. */
     private void cancelNDT() {
         if (_helper == null) {addFormError(_t("Bad state for test"));}
         else if (_helper.cancelNDT()) {addFormError(_t("Bandwidth test cancelled"));}

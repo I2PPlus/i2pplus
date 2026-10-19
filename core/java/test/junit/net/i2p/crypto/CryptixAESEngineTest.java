@@ -113,7 +113,7 @@ public class CryptixAESEngineTest extends TestCase {
 
     /**
      * Round trip through the JVM (system-AES) path, which only engages for
-     * payloads of at least 640 bytes on AES-NI/unlimited-policy JVMs; on
+     * payloads of at least 640 bytes on AES-NI/unlimited-policy JVMs. On
      * other JVMs this exercises the Cryptix fallback path, which is fine — the
      * test's job is a large-payload round trip.
      */

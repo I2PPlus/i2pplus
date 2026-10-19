@@ -15,15 +15,15 @@ public class ResultsTextPane extends JTextPane {
     public ResultsTextPane() {}
 
     /**
-     * Compiler auto-generate value not directly related to class functionality
+     * Compiler auto-generate value not directly related to class functionality.
      */
     private static final long serialVersionUID = -2224271202004876654L;
 
     /**
-     * Method to append String into the current document
+     * Method to append String into the current document.
      *
      * @param paramTextStr
-     *                        String to be inserted into the document
+     * String to be inserted into the document
      */
     public void append(String paramTextStr) {
         try {

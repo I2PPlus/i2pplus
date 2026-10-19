@@ -22,7 +22,7 @@ import org.junit.Test;
 
 /**
  * Quick unit test for base functionality of inbound tunnel
- * operation
+ * operation.
  *
  */
 public class InboundTest extends TestCase {

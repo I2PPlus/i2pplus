@@ -6,7 +6,7 @@ import org.junit.Test;
 
 /**
  * Tests for the pure capability ban pattern matcher in
- * Banlist.matchCapabilityPattern().
+ * {@link net.i2p.router.Banlist#matchCapabilityPattern}.
  *
  * Pattern syntax: comma/space separated list of patterns; each pattern is a
  * set of required capability characters, optionally followed by '!' and a set

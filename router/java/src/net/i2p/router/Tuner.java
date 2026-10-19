@@ -97,18 +97,21 @@ public class Tuner extends SimpleTimer2.TimedEvent {
     private final Log _log;
     private final List<TunableParam> _params;
     private final AutotuneConfig _autotune;
-    /** Transport worker thread params updated every 5s instead of the 15s cycle */
+    /** Transport worker thread params updated every 5s instead of the 15s cycle. */
     private final Set<TunableParam> _fastParams = new HashSet<TunableParam>();
     private long _lastFastCycle;
     private long _lastSlowCycle;
-    /** Health from the most recent slow cycle, shared with fast-cycle params */
+    /** Health from the most recent slow cycle, shared with fast-cycle params. */
     private SystemHealth _lastHealth;
 
     /** Period for short-term bandwidth stats. */
     static final long STAT_PERIOD = RateConstants.ONE_MINUTE;
     /** Period for long-term bandwidth stats. */
     static final long STAT_PERIOD_LONG = RateConstants.TEN_MINUTES;
-    /** Max history samples for sparklines (120 samples @ 15s = 30min; transport thread params sample every 5s = 10min) */
+    /**
+     * Max history samples for sparklines (120 samples @ 15s = 30min; transport thread params sample
+      * every 5s = 10min).
+     */
     static final int MAX_HISTORY = 120;
 
     /** Stat prefix for per-stage CPU usage (pct of one core, 100 = full core). */
@@ -122,7 +125,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
     /** Per-thread CPU time source; getThreadCpuTime() returns -1 on unsupported JVMs. */
     private static final ThreadMXBean _threadMXBean = ManagementFactory.getThreadMXBean();
-    /** Per-stage CPU state, updated each cycle by {@link #sampleStageCpu()}. */
+    /** Per-stage CPU state, updated each cycle by {@link #sampleStageCpu}. */
     private final Map<String, StageCpu> _stageCpu = new HashMap<String, StageCpu>();
     /** Per-thread stage and previous CPU time, keyed by thread id. */
     private final ThreadCpuTable _threadCpu = new ThreadCpuTable();
@@ -230,7 +233,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      * renamed: every {@code setName} call in the router sits inside a thread
      * factory, before the thread starts.  An id whose CPU counter ran backwards
      * is a reused id and is reset to {@link ThreadCpuTable#UNRESOLVED} by
-     * {@link #sampleStageCpu()}, so its name is read again rather than trusted.
+     * {@link #sampleStageCpu}, so its name is read again rather than trusted.
      */
     private void resolveThreadNames(long[] ids, int count) {
         int unseen = 0;
@@ -269,7 +272,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
     }
 
     /**
-     * Thread-id keyed sample state for {@link #sampleStageCpu()}: per live
+     * Thread-id keyed sample state for {@link #sampleStageCpu}: per live
      * thread, which {@link #CPU_STAGES} entry its name matched and the CPU
      * nanoseconds recorded at the previous sample.
      * <p>Open addressed with linear probing.  Entries are never deleted one by
@@ -373,10 +376,10 @@ public class Tuner extends SimpleTimer2.TimedEvent {
          * Start a sample cycle: carry stage and CPU baseline forward for the
          * given live thread ids and make them the table's contents.
          * <p>An id the previous generation did not hold enters
-         *  {@link #UNRESOLVED} with {@link #NO_CPU}; an id no longer reported
-         *  drops out.  A reused id whose predecessor was still live one cycle
-         *  ago does carry a stale entry forward — {@link #sampleStageCpu()} spots
-         *  it as a backwards CPU counter and resets the stage.
+         * {@link #UNRESOLVED} with {@link #NO_CPU}; an id no longer reported
+         * drops out.  A reused id whose predecessor was still live one cycle
+         * ago does carry a stale entry forward — {@link #sampleStageCpu} spots
+         * it as a backwards CPU counter and resets the stage.
          *
          * @param ids   live thread ids from the MXBean
          * @param count number of valid entries in {@code ids}
@@ -533,23 +536,23 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         return t instanceof NTCPTransport ? (NTCPTransport) t : null;
     }
 
-    /** I2CP internal queue size — static so ClientManager can read it without circular dep */
+    /** I2CP internal queue size — static so ClientManager can read it without circular dep. */
     private static volatile int internalQueueSize = SystemVersion.isSlow() ? 256 : 512;
 
     /**
      * Untested tunnel cap multiplier, tuned in-memory only.
-     *  No subsystem consumer reads i2p.tunnel.untestedMultiplier, so the value
-     *  lives in this static (not router.config) purely to track the last
-     *  autotuned setting across applyValue/getRuntimeValue calls.
-     *  -1 = no tuned value yet; use the config-or-default path.
+     * No subsystem consumer reads {@code i2p.tunnel.untestedMultiplier}, so the value
+     * lives in this static (not {@code router.config}) purely to track the last
+     * autotuned setting across applyValue/getRuntimeValue calls.
+     * -1 = no tuned value yet; use the config-or-default path.
      * @since 0.9.71+
      */
     private static volatile int untestedMultiplier = -1;
 
-    /** Max time (ms) a message may sit in the outbound dispatch queue before being dropped */
+    /** Max time (ms) a message may sit in the outbound dispatch queue before being dropped. */
     private static volatile int maxDispatchAgeMs = 3000;
 
-    /** Priority for I/O handler threads — boosted under load, reduced when idle */
+    /** Priority for I/O handler threads — boosted under load, reduced when idle. */
     private static volatile int handlerThreadPriority = Thread.NORM_PRIORITY;
 
     /**
@@ -622,17 +625,17 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
     /**
      * The test client budget.
-     * @return the test client budget
+     * @return tunnels tested concurrently per client pool (default 256)
      */
     public static int getTestClientBudget() { return testClientBudget; }
     /**
      * The test retest backoff.
-     * @return the test retest backoff
+     * @return retest delay multiplier as a percent, 100 = no backoff, up to 800
      */
     public static int getTestRetestBackoff() { return testRetestBackoff; }
     /**
      * The build failure buffer.
-     * @return the build failure buffer
+     * @return extra tunnels built beyond target per pool, 0-10
      */
     public static int getBuildFailureBuffer() { return buildFailureBuffer; }
 
@@ -647,7 +650,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         internalQueueSize = Math.max(def / 2, Math.min(def * 4, size));
     }
 
-    /** Subsystem labels for grouping in the UI */
+    /** Subsystem labels for grouping in the UI. */
     public static final String SUB_TRANSPORT = "Transport";
     /** Tunnel subsystem identifier. */
     public static final String SUB_TUNNEL = "Tunnel";
@@ -691,7 +694,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      * (and the gate that floors it) must never be allowed past a thread count the max
      * heap can plausibly host. ~1 thread per 2MB of max heap, floored at 256 so even a
      * constrained router keeps a sane baseline, clamped to the 16384 hard cap. Mirrors
-     * the memory scaling pattern of {@link #memoryDerivedInitMsgMax()}.
+     * the memory scaling pattern of {@link #memoryDerivedInitMsgMax}.
      *
      * @return the memory-feasible thread ceiling for the client proxy pool
      * @since 0.9.71+
@@ -699,11 +702,11 @@ public class Tuner extends SimpleTimer2.TimedEvent {
     private static int memoryDerivedClientThreadMax() {
         return Math.max(256, Math.min(16384, (int) (SystemVersion.getMaxMemory() / (2 * 1024 * 1024))));
     }
-    /** ML-KEM precalc min/max — each pair ~3.5KB, scale with cores and memory */
+    /** ML-KEM precalc min/max — each pair ~3.5KB, scale with cores and memory. */
     private static final int MLKEM_FACTOR = Math.max(MEM_FACTOR, CORE_FACTOR);
     private static final int MLKEM_PRECALC_MIN = Math.max(512, 8 * MLKEM_FACTOR);
     private static final int MLKEM_PRECALC_MAX = Math.max(16384, 64 * MLKEM_FACTOR);
-    /** X25519/EDH precalc — each pair ~64 bytes, scale with cores and memory */
+    /** X25519/EDH precalc — each pair ~64 bytes, scale with cores and memory. */
     private static final int XDH_FACTOR = Math.max(MEM_FACTOR, CORE_FACTOR);
     private static final int XDH_PRECALC_MIN = Math.max(256, 128 * XDH_FACTOR);
     private static final int XDH_PRECALC_MAX = Math.max(32768, 2048 * XDH_FACTOR);
@@ -743,20 +746,20 @@ public class Tuner extends SimpleTimer2.TimedEvent {
     }
 
     /**
-     * Manages the autotune.config file — separate from router.config.
+     * Manages the autotune.config file — separate from {@code router.config}.
      * <p>Stores tuner metadata (value, default, min, max, step) for each
      * param, and is the only file the tuner persists to. Each param's
      * {@code applyValue()} sets the runtime value in the live subsystem
      * (streaming, transport, ...) and deliberately does not write
-     * router.config, so an auto-tuned value never outlives the tuning
+     * {@code router.config}, so an auto-tuned value never outlives the tuning
      * decision that produced it and never competes with an operator's
-     * router.config entry. The one deliberate router.config write is the
+     * {@code router.config} entry. The one deliberate {@code router.config} write is the
      * one-time legacy cleanup in {@code purgeOldTunerProps()}, which
      * deletes pre-autotune.config {@code tuner.*} keys and sets the
      * migration marker.
      * <p>Writes are throttled: values are marked dirty and flushed to
-     * disk at most once per 5 minutes ({@link #save()}). Use
-     * {@link #forceSave()} for unconditional writes (e.g. shutdown).
+     * disk at most once per 5 minutes ({@link #save}). Use
+     * {@link #forceSave} for unconditional writes (e.g. shutdown).
      *
      * @since 0.9.70+
      */
@@ -1115,9 +1118,9 @@ public class Tuner extends SimpleTimer2.TimedEvent {
     }
 
     /**
-     * Remove old tuner.* properties from router.config that were written there
+     * Remove old tuner.* properties from {@code router.config} that were written there
      * before autotune.config was introduced. Only purges keys we know about
-     * (tuner.PARAM.value/default/min/max/step), leaves user-configured props alone.
+     * ({@code tuner.PARAM.value}/default/min/max/step), leaves user-configured props alone.
      */
     private void purgeOldTunerProps(RouterContext ctx) {
         String markerKey = "tuner._migrated_to_autotune";
@@ -1250,7 +1253,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
     private final Map<String, Long> _lastParamFailureLog = new HashMap<>();
     /** Minimum gap between repeated failure logs for the same param, ms. */
     private static final long PARAM_FAILURE_LOG_INTERVAL_MS = 5L * 60 * 1000;
-    /** Counts params that threw during a tuning cycle. @see #noteParamUpdateFailure */
+    /** Counts params that threw during a tuning cycle. @see #noteParamUpdateFailure. */
     static final String PARAM_UPDATE_FAILED_STAT = "tuner.paramUpdateFailed";
 
     /** Refresh XDH, EDH and MLKEM precomputation pool sizes. */
@@ -1289,7 +1292,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
     /**
      * Compute derived tuning values from subsystem scores and job queue stats.
      * Updates static volatile fields read by TestJob and TunnelPool.
-     * Called once per tune cycle from {@link #timeReached()}.
+     * Called once per tune cycle from {@link #timeReached}.
      */
     private void computeTuningValues() {
         // Build failure buffer: how many extra tunnels to build per pool
@@ -1394,7 +1397,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         return rate.getLastEventCount();
     }
 
-    /** Flush on shutdown — unconditional write if dirty */
+    /** Flush on shutdown — unconditional write if dirty. */
     public void shutdown() {
         _autotune.forceSave();
         cancel();
@@ -1528,7 +1531,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             p.setOverride(value);
     }
 
-    /** Restore all params to factory defaults (code-level, not persisted) */
+    /** Restore all params to factory defaults (code-level, not persisted). */
     public void restoreDefaults() {
         for (TunableParam param : _params) {
             if (param instanceof BaseParam) {
@@ -1559,32 +1562,32 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         String getName();
         /**
          * The param description.
-         * @return the param description
+         * @return one-line human-readable explanation of the param
          */
         String getDescription();
         /**
          * The subsystem name.
-         * @return the subsystem name
+         * @return name of the subsystem this param belongs to
          */
         String getSubsystem();
         /**
          * The current value.
-         * @return the current value
+         * @return the value in effect now
          */
         int getCurrentValue();
         /**
          * The minimum value.
-         * @return the minimum value
+         * @return the lowest value the tuner will apply
          */
         int getMin();
         /**
          * The maximum value.
-         * @return the maximum value
+         * @return the highest value the tuner will apply
          */
         int getMax();
         /**
          * The step size.
-         * @return the step size
+         * @return the increment used when adjusting this param
          */
         int getStep();
         /**
@@ -1592,7 +1595,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
          * @return true if auto-tuning is enabled
          */
         boolean isAutoTuning();
-        /** Update the runtime value */
+        /** Update the runtime value. */
         void update();
         /**
          * An override value.
@@ -1704,7 +1707,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
     /**
      * Property prefix for tuner ranges.
-     * Format: tuner.{paramName}.min, tuner.{paramName}.max, tuner.{paramName}.step
+     * Format: tuner.{paramName}.min, tuner.{paramName}.max, tuner.{paramName}.step.
      */
     static final String PROP_PREFIX = "tuner.";
 
@@ -1731,9 +1734,9 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      * @since 0.9.70+
      */
     abstract static class BaseParam implements TunableParam {
-        /** Shared instance — set once in Tuner constructor, used by all BaseParams */
+        /** Shared instance — set once in Tuner constructor, used by all BaseParams. */
         static volatile AutotuneConfig sharedAutotune;
-        /** Internal config property key (e.g. "i2p.tunnel.socketConnectTimeout"). */
+        /** Internal config property key (e.g. "{@code i2p.tunnel.socketConnectTimeout}"). */
         protected final String _name;
         /** Human-readable label for display in the Tuner UI. */
         protected final String _description;
@@ -1742,7 +1745,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         /** Config key prefix for property lookups. */
         protected final String _propPrefix;
         /**
-         * autotune.config keys for this param's range and persisted state.
+         * Autotune.config keys for this param's range and persisted state.
          * Built once because the name is final while the range refresh runs
          * every cycle.
          *
@@ -1831,9 +1834,9 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 /**
  * A tunable parameter with the given name, description and subsystem.
  *
- * @param name internal property key (e.g. "i2p.tunnel.socketConnectTimeout")
+ * @param name internal property key (e.g. "{@code i2p.tunnel.socketConnectTimeout}")
  * @param description human-readable label shown in Tuner UI (e.g. "Socket connect timeout (ms)")
- *                    — keep short, include unit in parens; same convention for all new params
+ * — keep short, include unit in parens; same convention for all new params
  * @param subsystem subsystem identifier (e.g. "i2ptunnel", "streaming")
  * @param defaultMin minimum allowed value
  * @param defaultMax maximum allowed value
@@ -1874,7 +1877,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
          * as the authoritative source of truth for auto-revert decisions,
          * so that stale persisted values from previous Tuner versions
          * cannot corrupt the tuning baseline. If {@code defaultValue} is
-         * zero or negative, falls back to {@link #getRuntimeValue()}.
+         * zero or negative, falls back to {@link #getRuntimeValue}.
          *
          * @param name internal property key
          * @param description human-readable label shown in Tuner UI
@@ -2153,19 +2156,19 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         /**
          * Re-read the default value from autotune.config for live updates.
          * <p>Called once per tuning cycle. When a user saves a new default
-         *  via the console form, this method picks it up and uses it as the
-         *  auto-revert target. If the persisted default differs from the
-         *  factory default (code-level default), it is treated as stale and
-         *  ignored — the factory default is the authoritative source of truth.
+         * via the console form, this method picks it up and uses it as the
+         * auto-revert target. If the persisted default differs from the
+         * factory default (code-level default), it is treated as stale and
+         * ignored. The factory default is the authoritative source of truth.
          * <p>A stale default is a persistent config state, not a recurring
-         *  event: it stays in autotune.config until edited, so re-announcing it
-         *  every cycle produced thousands of identical WARN lines for a
-         *  condition the code already handles correctly. It is therefore
-         *  reported once per param at DEBUG, and WARN stays free for things
-         *  that actually need attention.
+         * event: it stays in autotune.config until edited, so re-announcing it
+         * every cycle produced thousands of identical WARN lines for a
+         * condition the code already handles correctly. It is therefore
+         * reported once per param at DEBUG, and WARN stays free for things
+         * that actually need attention.
          *
          * @param ctx router context, unused here; kept for symmetry with
-         *            refreshRanges
+         * refreshRanges
          * @since 0.9.70+
          */
         public void refreshDefault(RouterContext ctx) {
@@ -2192,7 +2195,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         /**
          * Persist a tuned value to autotune.config.
          * <p>Writes are throttled: the value is marked dirty and flushed
-         * to disk at most once per 5 minutes by {@link AutotuneConfig#save()}.
+         * to disk at most once per 5 minutes by {@link AutotuneConfig#save}.
          * This avoids excessive I/O from params that change every cycle.
          *
          * @param ctx   the router context
@@ -2309,7 +2312,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
          * increasing load when the CPU is already saturated.
          *
          * @param ctx      the router context
-         * @param statName the stat to query (e.g. "jobQueue.jobLag")
+         * @param statName the stat to query (e.g. "{@code jobQueue.jobLag}")
          * @return the 60s rolling average, or NaN if not available
          * @since 0.9.70+
          */
@@ -2343,7 +2346,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
         /**
          * Fetch an additional stat value using the 10-minute average.
-         * <p>The 10-minute period is a medium-term signal — slower to react than
+         * <p>The 10-minute period is a medium-term signal. Slower to react than
          * the 60s period but less prone to gaps from brief idle windows. Use this
          * as the first fallback when the 60s stat has no recent events, since most
          * streaming stats are registered with both ONE_MINUTE and TEN_MINUTES rates.
@@ -2546,7 +2549,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
          * This method sums the event counts across all priorities.
          *
          * @param ctx      the router context
-         * @param prefix   the stat prefix (e.g. "codel.UDP-Sender.drop")
+         * @param prefix   the stat prefix (e.g. "{@code codel.UDP-Sender.drop}")
          * @return the total drop event count, or NaN if no priorities have events
          * @since 0.9.70+
          */
@@ -3176,7 +3179,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return PeerState.getAckFrequency();
         }
 
-        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null) return Double.NaN;
@@ -3185,7 +3187,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return rate.getAverageValue();
         }
 
-        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // observed = udp.sendConfirmTime (actual network RTT, ms)
@@ -3307,7 +3308,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return (int) UDPTransport.getDataMessageTimeout();
         }
 
-        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null)
@@ -3318,7 +3318,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return rate.getAverageValue();
         }
 
-        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // observed = udp.sendConfirmTime (ms, actual SSU send+confirm RTT)
@@ -3441,7 +3440,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return (int) UDPTransport.getMaxObEstablishTime();
         }
 
-        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null)
@@ -3452,7 +3450,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return rate.getAverageValue();
         }
 
-        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             double sendExpired = getAdditionalStat(_context, "udp.sendExpired");
@@ -3501,7 +3498,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return (int) UDPTransport.getMaxIbEstablishTime();
         }
 
-        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null)
@@ -3512,7 +3508,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return rate.getAverageValue();
         }
 
-        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             double sendExpired = getAdditionalStat(_context, "udp.sendExpired");
@@ -3566,7 +3561,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return NTCPTransport.getEstablishTimeout();
         }
 
-        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null)
@@ -3577,7 +3571,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return rate.getAverageValue();
         }
 
-        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             double ibTime = getAdditionalStat(_context, "ntcp.inboundEstablishTime");
@@ -3624,7 +3617,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
     /**
      * Tunes rDNS executor core pool size based on queue depth.
-     * Only active when {@link net.i2p.router.CommSystemFacade#enableReverseLookups()} is true.
+     * Only active when {@link net.i2p.router.CommSystemFacade#enableReverseLookups} is true.
      * Primary signal: {@code rdns.executor.queueSize}.
      *
      * @since 0.9.70+
@@ -3645,7 +3638,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return CommSystemFacadeImpl.getRdnsCorePoolSize();
         }
 
-        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             if (!_context.commSystem().enableReverseLookups())
                 return Double.NaN;
@@ -3658,7 +3650,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return rate.getAverageValue();
         }
 
-        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // Skip tuning when rDNS is disabled
@@ -3712,7 +3703,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             maxDispatchAgeMs = value;
         }
 
-        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _ctx.statManager().getRate(_statName);
             if (rs == null) return Double.NaN;
@@ -3721,7 +3711,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return rate.getAverageValue();
         }
 
-        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // observed = transport.expiredOnQueueLifetime (ms, avg lifetime of expired messages)
@@ -3811,7 +3800,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return _context.getProperty("i2p.router.handlerThreadPriority", Thread.NORM_PRIORITY);
         }
 
-        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _ctx.statManager().getRate(_statName);
             if (rs == null) return Double.NaN;
@@ -3820,7 +3808,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return rate.getAverageValue();
         }
 
-        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // observed = transport.sendProcessingTime (ms, dispatch latency)
@@ -3887,7 +3874,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return (int) TunnelDispatcher.getRequeueTime();
         }
 
-        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null)
@@ -3898,7 +3884,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return rate.getAverageValue();
         }
 
-        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // observed = participating InBps (transit inbound bandwidth)
@@ -3939,8 +3924,8 @@ public class Tuner extends SimpleTimer2.TimedEvent {
     /**
      * Tunes TunnelGatewayPumper queue capacity based on gateway queue depth.
      * Larger queue = more buffering before drops under burst load.
-     * Primary signal: tunnel.pumperQueueDepth (pumper queue usage).
-     * Cross-refs: tunnel.pumperQueueFull (drop events), tunnel.ibgw/obgw.queueSize.
+     * Primary signal: {@code tunnel.pumperQueueDepth} (pumper queue usage).
+     * Cross-refs: {@code tunnel.pumperQueueFull} (drop events), {@code tunnel.ibgw}/obgw.queueSize.
      *
      * @since 0.9.70+
      */
@@ -3962,12 +3947,10 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return TunnelDispatcher.getPumperQueueCapacity();
         }
 
-        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             return getAdditionalEventCount(_context, _statName);
         }
 
-        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // observed = tunnel.pumperQueueFull event count (drop events per period)
@@ -4009,8 +3992,8 @@ public class Tuner extends SimpleTimer2.TimedEvent {
     /**
      * Tunes TunnelGatewayPumper thread count based on pumper backlog.
      * More threads = more parallel gateway pumping = lower latency.
-     * Primary signal: tunnel.pumperQueueDepth (pumper queue usage).
-     * Cross-refs: tunnel.ibgw/obgw.queueSize, jobQueue.jobLag (CPU).
+     * Primary signal: {@code tunnel.pumperQueueDepth} (pumper queue usage).
+     * Cross-refs: {@code tunnel.ibgw}/obgw.queueSize, {@code jobQueue.jobLag} (CPU).
      *
      * @since 0.9.70+
      */
@@ -4032,7 +4015,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return TunnelDispatcher.getPumperMaxThreads();
         }
 
-        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null) return Double.NaN;
@@ -4041,7 +4023,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return rate.getAverageValue();
         }
 
-        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // observed = tunnel.pumperQueueDepth (avg items in pumper queue)
@@ -4104,7 +4085,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return (int) FIFOBandwidthRefiller.getReplenishFrequency();
         }
 
-        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null)
@@ -4115,7 +4095,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return rate.getAverageValue();
         }
 
-        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // observed = participating OutBps (transit outbound bandwidth)
@@ -4141,7 +4120,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
     }
 
     /**
-     * Tunes the EventPumper max idle loop rate (ntcp.pumper.maxIdleLps) against
+     * Tunes the EventPumper max idle loop rate ({@code ntcp.pumper.maxIdleLps}) against
      * the observed NTCP loop rate. This is the real CPU governor for idle
      * busy-spin: the pumper enforces a minimum idle iteration time, so lowering
      * the rate curbs busy-spin even when selector wakeups defeat the select()
@@ -4165,7 +4144,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return NTCPTransport.getMaxIdleLps();
         }
 
-        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null)
@@ -4176,7 +4154,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return rate.getAverageValue();
         }
 
-        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             if (current <= 0)
@@ -4220,7 +4197,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return (int) NTCPTransport.getSelectorLoopDelay();
         }
 
-        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null)
@@ -4231,7 +4207,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return rate.getAverageValue();
         }
 
-        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // observed = ntcp.pumperLoopsPerSecond (NTCP event loop rate)
@@ -4306,7 +4281,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return TunnelDispatcher.getMaxObMsgsPerPump();
         }
 
-        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null)
@@ -4317,7 +4291,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return rate.getAverageValue();
         }
 
-        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // observed = tunnel.obgw.queueSize (queue depth, messages waiting)
@@ -4377,7 +4350,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return TunnelDispatcher.getMaxIbMsgsPerPump();
         }
 
-        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null)
@@ -4388,7 +4360,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return rate.getAverageValue();
         }
 
-        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // observed = tunnel.ibgw.queueSize (queue depth, messages waiting)
@@ -4454,12 +4425,10 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return v >= 0 ? v : 128;
         }
 
-        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             return getObservedRTT(_context, _statName);
         }
 
-        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // observed = stream.con.initialRTT.in (inbound RTT, ms)
@@ -4571,12 +4540,10 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return v >= 0 ? v : 6000;
         }
 
-        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             return getObservedRTT(_context, _statName);
         }
 
-        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // observed = stream.con.initialRTT.out (outbound RTT in ms)
@@ -4666,8 +4633,8 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      * needs). Refuses to shrink while the path is lossy so retransmission traffic keeps
      * its dispatch capacity (reliability). Live dispatchers are resized immediately via
      * {@code I2PSocketManagerFull.resizeReceiveWorkers}.
-     * Primary signal: stream.receiveBacklogged. Cross-refs: stream.receiveQueueDepth,
-     * stream.rtxRatio, jobQueue.jobLag.
+     * Primary signal: {@code stream.receiveBacklogged}. Cross-refs: {@code stream.receiveQueueDepth},
+     * {@code stream.rtxRatio}, {@code jobQueue.jobLag}.
      */
     private class StreamingReceiveWorkersParam extends BaseParam {
 
@@ -4710,7 +4677,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return 0.0;
         }
 
-        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             double queueDepth = getAdditionalStat(_context, "stream.receiveQueueDepth");
@@ -4861,7 +4827,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return v >= 0 ? v : 500;
         }
 
-        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null)
@@ -4872,7 +4837,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return rate.getAverageValue();
         }
 
-        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // observed = stream.sendsBeforeAck (avg sends before standalone ACK)
@@ -4931,7 +4895,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return v >= 0 ? v : 100;
         }
 
-        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null)
@@ -4942,7 +4905,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return rate.getAverageValue();
         }
 
-        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // observed = stream.con.sendMessageSize (avg outgoing message size)
@@ -5002,12 +4964,10 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return v > 0 ? v : 1024;
         }
 
-        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             return getObservedRTT(_context, _statName);
         }
 
-        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             double failLifetime = getAdditionalStat(_context, "transport.sendMessageFailureLifetime");
@@ -5164,8 +5124,8 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      * Clean-path climb for a window-sized parameter: {@code max(step, current / 4)}.
      * <p>Near the bottom of the range this degenerates to the plain linear
      * {@code step} so a parameter parked at {@code min} cannot take a
-     * disproportionate jump, but once it has room the growth is geometric —
-     * a healthy window reaches its cap in a handful of cycles instead of
+     * disproportionate jump, but once it has room the growth is geometric.
+     * A healthy window reaches its cap in a handful of cycles instead of
      * one step per cycle for as many cycles as the range spans.
      *
      * @param current current runtime value
@@ -5611,7 +5571,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return v > 0 ? v : 1024;
         }
 
-        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             return getObservedRTT(_context, _statName);
         }
@@ -5625,7 +5584,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         /** Consecutive windows in the climb direction. */
         private int _riseClimb;
 
-        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             // Act at most once per closed 60s window. The tuner ticks every 5s while
             // the event counts only change when a window closes, so without this the
@@ -5784,7 +5742,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return ClientManagerFacadeImpl.getWriterQueueSize();
         }
 
-        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null) return Double.NaN;
@@ -5793,7 +5750,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return rate.getAverageValue();
         }
 
-        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // observed = udp.sendConfirmTime (ms, actual network RTT)
@@ -5862,7 +5818,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return _context.getProperty("router.codelTarget", 5);
         }
 
-        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null)
@@ -5873,7 +5828,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return rate.getAverageValue();
         }
 
-        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // observed = codel.UDP-Sender.delay (avg queue sojourn time, ms)
@@ -5933,7 +5887,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return _context.getProperty("router.codelInterval", 50);
         }
 
-        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null) return Double.NaN;
@@ -5942,7 +5895,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return rate.getAverageValue();
         }
 
-        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // observed = codel.UDP-Sender.delay (avg queue sojourn time, ms)
@@ -5981,7 +5933,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      * Tunes Westwood+ EWMA decay factor based on bandwidth stability.
      * Lower factor = faster adaptation to bandwidth changes.
      * Higher factor = smoother estimates, less jitter.
-     * Uses transport.sendProcessingTime as the observed stat (proxy for RTT stability).
+     * Uses {@code transport.sendProcessingTime} as the observed stat (proxy for RTT stability).
      */
     private class WestwoodDecayFactorParam extends BaseParam {
 
@@ -6001,7 +5953,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return SimpleBandwidthEstimator.getDecayFactor();
         }
 
-        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null)
@@ -6012,7 +5963,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return rate.getAverageValue();
         }
 
-        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // observed = transport.sendProcessingTime (ms, proxy for RTT variability)
@@ -6080,7 +6030,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return SyntheticREDQueue.getCurrentMinThreshold();
         }
 
-        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null) return Double.NaN;
@@ -6089,7 +6038,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return rate.getAverageValue();
         }
 
-        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // observed = participating bandwidth queue (bytes) — growing = more transit load
@@ -6158,7 +6106,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return SyntheticREDQueue.getCurrentMaxThreshold();
         }
 
-        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null) return Double.NaN;
@@ -6167,7 +6114,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return rate.getAverageValue();
         }
 
-        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             int minThreshold = getRuntimeValue(); // fallback
@@ -6225,12 +6171,10 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return Math.round(prob * 1_000_000);
         }
 
-        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             return getAdditionalEventCount(_context, _statName);
         }
 
-        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // observed = tunnel.participatingMessageDropped event count
@@ -6294,12 +6238,10 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return f != null ? f.getMinSize() : _min;
         }
 
-        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             return getAdditionalEventCount(_context, _statName);
         }
 
-        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             // Clamp to bounds first — config may have stale value beyond current range
             int current = Math.min(Math.max(getRuntimeValue(), _min), _max);
@@ -6359,12 +6301,10 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return f != null ? f.getMinSize() : _min;
         }
 
-        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             return getAdditionalEventCount(_context, _statName);
         }
 
-        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = Math.min(Math.max(getRuntimeValue(), _min), _max);
             // observed = crypto.EDHUsed event count (key consumption per period)
@@ -6418,12 +6358,10 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return f != null ? f.getMinSize() : _min;
         }
 
-        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             return getAdditionalEventCount(_context, _statName);
         }
 
-        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = Math.min(Math.max(getRuntimeValue(), _min), _max);
             // observed = crypto.MLKEMEmpty event count (queue empty events per period)
@@ -6491,7 +6429,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return NTCPTransport.getSendFinisherQueueCapacity();
         }
 
-        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null) return Double.NaN;
@@ -6500,7 +6437,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return rate.getAverageValue();
         }
 
-        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // observed = ntcp.sendTime (ms, message lifetime in finisher pipeline)
@@ -6546,7 +6482,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      * <p>Increases when push time is high and CPU/system have headroom.
      * Decreases when push time is low and no heavy transit. Supports
      * dynamic thread addition/removal via
-     * {@link net.i2p.router.transport.udp.PacketHandler#adjustThreads()}.
+     * {@link net.i2p.router.transport.udp.PacketHandler#adjustThreads}.
      *
      * @since 0.9.70+
      */
@@ -6570,7 +6506,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return UDPTransport.getPacketHandlerMaxThreads();
         }
 
-        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null) return Double.NaN;
@@ -6579,7 +6514,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return rate.getAverageValue();
         }
 
-        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // observed = udp.pushTime (avg time to push packet to handler, ms)
@@ -6649,8 +6583,8 @@ public class Tuner extends SimpleTimer2.TimedEvent {
     /**
      * Tunes UDP MessageReceiver thread count based on upstream pressure.
      * Higher thread count = more parallel message assembly = fewer expired messages.
-     * Primary signal: codel.UDP-Receiver.delay (upstream queue sojourn time).
-     * Cross-refs: udp.inboundExpired (messages dropped), codel.UDP-MessageReceiver.delay (sojourn).
+     * Primary signal: {@code codel.UDP-Receiver.delay} (upstream queue sojourn time).
+     * Cross-refs: {@code udp.inboundExpired} (messages dropped), {@code codel.UDP-MessageReceiver.delay} (sojourn).
      *
      * @since 0.9.70+
      */
@@ -6674,7 +6608,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return UDPTransport.getMessageReceiverThreads();
         }
 
-        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null) return Double.NaN;
@@ -6683,7 +6616,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return rate.getAverageValue();
         }
 
-        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // Reclaim parked threads when the pool is massively under-utilized
@@ -6783,7 +6715,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return (int) PeerState.getSentMessagesCleanTime();
         }
 
-        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null) return Double.NaN;
@@ -6792,7 +6723,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return rate.getAverageValue();
         }
 
-        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // observed = udp.sentMessagesDepth (avg pending-ACK entries across peers)
@@ -6854,7 +6784,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return (int) PeerState.getOutboundMsgExpiration();
         }
 
-        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null) return Double.NaN;
@@ -6863,7 +6792,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return rate.getAverageValue();
         }
 
-        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // observed = udp.peerCount (total SSU connections)
@@ -6921,7 +6849,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return v > 0 ? v : _min;
         }
 
-        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null) return Double.NaN;
@@ -6930,7 +6857,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return rate.getAverageValue();
         }
 
-        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // observed = peer.activeProfileCount (active profiles in RAM)
@@ -6995,7 +6921,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return (int)(TunnelDispatcher.getTransitThrottleFactor(_context, 0.95f) * 100);
         }
 
-        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             // Primary: tunnel.participating InBps (transit bandwidth)
             // Fallback: transport.sendProcessingTime (latency proxy)
@@ -7012,7 +6937,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return Double.NaN;
         }
 
-        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             int maxBps = _context.bandwidthLimiter().getOutboundKBytesPerSecond() * 1024;
@@ -7067,7 +6991,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
     /**
      * Threshold for the message-processing-latency transit throttle
-     * (router.defaultProcessingTimeThrottle, read by RouterThrottleImpl). When
+     * ({@code router.defaultProcessingTimeThrottle}, read by RouterThrottleImpl). When
      * the 1-minute sendProcessingTime average stays above this for the sustain
      * window, tunnel requests are rejected as transient overload.
      * <p>
@@ -7094,7 +7018,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return RouterThrottleImpl.getMaxProcessingTimeTuned(_context);
         }
 
-        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             // Stable baseline: 10-minute average of sendProcessingTime. Avoids
             // ratcheting the threshold up to match a transient spike.
@@ -7120,7 +7043,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         private static final String THROTTLE_TARGET_STAT =
             "router.defaultProcessingTimeThrottleTarget";
 
-        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // Target ~4x the stable baseline, so the throttle only fires on
@@ -7161,7 +7083,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return RouterThrottleImpl.getThrottleRejectExponent(_context);
         }
 
-        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null) return Double.NaN;
@@ -7171,7 +7092,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return rate.getAverageValue() / 100.0;
         }
 
-        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // observed = build success ratio (0.0-1.0)
@@ -7228,7 +7148,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return TunnelDispatcher.getPerTunnelBweDivisor(_context);
         }
 
-        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null) return Double.NaN;
@@ -7237,7 +7156,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return rate.getAverageValue();
         }
 
-        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             int numTunnels = _context.tunnelManager().getParticipatingCount();
@@ -7299,7 +7217,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return (int)(RouterThrottleImpl.getTunnelGrowthFactorTuned(_context) * 10);
         }
 
-        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null) return Double.NaN;
@@ -7308,7 +7225,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return rate.getAverageValue();
         }
 
-        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             int maxBps = _context.bandwidthLimiter().getOutboundKBytesPerSecond() * 1024;
@@ -7356,7 +7272,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return RouterThrottleImpl.getDefaultMaxTunnels();
         }
 
-        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             // Primary: tunnel.participating InBps
             // Fallback: transport.sendProcessingTime
@@ -7373,7 +7288,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return Double.NaN;
         }
 
-        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             int maxBps = _context.bandwidthLimiter().getOutboundKBytesPerSecond() * 1024;
@@ -7436,7 +7350,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return BuildHandler.getMaxQueue();
         }
 
-        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null) return Double.NaN;
@@ -7445,7 +7358,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return rate.getAverageValue();
         }
 
-        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // observed = jobQueue.jobLag (ms)
@@ -7505,7 +7417,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return (int) BuildExecutor.getGoodDeficitThrottle(_context);
         }
 
-        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null) return Double.NaN;
@@ -7515,7 +7426,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return rate.getAverageValue() / 100.0;
         }
 
-        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // observed = tunnel.buildSuccessRate (normalized 0.0-1.0)
@@ -7580,12 +7490,10 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return v > 0 ? v : 10000;
         }
 
-        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             return getObservedRTT(_context, _statName);
         }
 
-        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // observed = udp.sendConfirmTime (ms, actual network RTT)
@@ -7638,7 +7546,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return v > 0 ? v : 125;
         }
 
-        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null) return Double.NaN;
@@ -7647,7 +7554,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return rate.getAverageValue();
         }
 
-        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // observed = stream.con.sendDuplicateSize (retained for sparkline history only)
@@ -7701,12 +7607,10 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return v > 0 ? v : 15000;
         }
 
-        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             return getObservedRTT(_context, _statName);
         }
 
-        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // observed = udp.sendConfirmTime (ms, actual network RTT)
@@ -7760,12 +7664,10 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return v > 0 ? v : 32;
         }
 
-        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             return getObservedRTT(_context, _statName);
         }
 
-        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // observed = udp.sendConfirmTime (ms, actual network RTT)
@@ -7825,12 +7727,10 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return v > 0 ? v : 300;
         }
 
-        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             return getObservedRTT(_context, _statName);
         }
 
-        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // observed = udp.sendConfirmTime (ms, actual network RTT)
@@ -7869,7 +7769,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      * i.e. fewer ACKs per window increment). Range [1,4] limits code factors
      * 1-4 so growth is never slower than 1/4th per ACK, which avoids the
      * pathologically slow settings the old [1,16] range allowed.
-     * Primary signal: stream.con.sendDuplicateSize (retransmit pressure).
+     * Primary signal: {@code stream.con.sendDuplicateSize} (retransmit pressure).
      */
     private class CongestionAvoidanceGrowthParam extends BaseParam {
 
@@ -7892,12 +7792,10 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return Math.max(_min, Math.min(_max, _min + _max - codeVal));
         }
 
-        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             return getObservedRTT(_context, _statName);
         }
 
-        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // observed = stream.con.sendDuplicateSize (retained for sparkline history only)
@@ -8070,12 +7968,10 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return Math.max(_min, Math.min(_max, _min + _max - codeVal));
         }
 
-        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             return getObservedRTT(_context, _statName);
         }
 
-        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // observed = stream.con.initialRTT.out (RTT, ms)
@@ -8218,7 +8114,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return v >= 0 ? v : 16;
         }
 
-        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null)
@@ -8230,7 +8125,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return rate.getAverageValue() / 1024.0;
         }
 
-        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // observed = bw.sendBps (average send bandwidth in KB/s)
@@ -8281,12 +8175,10 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return v > 0 ? v : 10000;
         }
 
-        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             return getObservedRTT(_context, _statName);
         }
 
-        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // observed = stream.con.initialRTT.out (ms), falling back to udp.sendConfirmTime
@@ -8339,12 +8231,10 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return v > 0 ? v : 1000;
         }
 
-        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             return getObservedRTT(_context, _statName);
         }
 
-        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // observed = stream.con.initialRTT.out (RTT, ms)
@@ -8395,12 +8285,10 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return v > 0 ? v : 80;
         }
 
-        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             return getObservedRTT(_context, _statName);
         }
 
-        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // observed = stream.con.initialRTT.out (RTT, ms)
@@ -8436,9 +8324,9 @@ public class Tuner extends SimpleTimer2.TimedEvent {
     /**
      * Inactivity timeout for streaming connections.
      * Higher values keep slow transfers alive; lower values free resources faster.
-     * Primary signal: udp.sendConfirmTime (transport RTT).
-     * Cross-refs: stream.con.lifetimeRTT (completed stream RTT),
-     *             stream.con.sendDuplicateSize (retransmit pressure).
+     * Primary signal: {@code udp.sendConfirmTime} (transport RTT).
+     * Cross-refs: {@code stream.con.lifetimeRTT} (completed stream RTT),
+     * {@code stream.con.sendDuplicateSize} (retransmit pressure).
      */
     private class InactivityTimeoutParam extends BaseParam {
 
@@ -8458,12 +8346,10 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return v > 0 ? v : 300000;
         }
 
-        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             return getObservedRTT(_context, _statName);
         }
 
-        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // observed = udp.sendConfirmTime (ms, actual network RTT)
@@ -8515,12 +8401,10 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return v > 0 ? v : 5;
         }
 
-        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             return getAdditionalEventCount(_context, _statName);
         }
 
-        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // observed = stream.connectFailed event count in last 60s
@@ -8601,7 +8485,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return v > 0 ? v : getMax();
         }
 
-        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             return getAdditionalStat(_context, _statName);
         }
@@ -8720,7 +8603,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return IterativeSearchJob.getSearchLimit(_context, 16);
         }
 
-        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null) return Double.NaN;
@@ -8729,7 +8611,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return rate.getAverageValue();
         }
 
-        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // observed = transport.sendProcessingTime (ms, network latency proxy)
@@ -8782,7 +8663,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return (int) IterativeSearchJob.getMaxSearchTime();
         }
 
-        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null) return Double.NaN;
@@ -8791,7 +8671,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return rate.getAverageValue();
         }
 
-        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // observed = transport.sendProcessingTime (ms, network latency proxy)
@@ -8832,7 +8711,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return IterativeSearchJob.getMaxConcurrentDefault();
         }
 
-        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null) return Double.NaN;
@@ -8841,7 +8719,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return rate.getAverageValue();
         }
 
-        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // observed = transport.sendProcessingTime (ms, network latency proxy)
@@ -8897,7 +8774,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return IterativeSearchJob.getSingleSearchTime(_context, 6000);
         }
 
-        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null) return Double.NaN;
@@ -8906,7 +8782,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return rate.getAverageValue();
         }
 
-        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // observed = transport.sendProcessingTime (ms, per-peer network latency proxy)
@@ -8993,7 +8868,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return IterativeSearchJob.getMaxLeaseSetLookupTime();
         }
 
-        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null) return Double.NaN;
@@ -9002,7 +8876,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return rate.getAverageValue();
         }
 
-        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // observed = client.leaseSetFoundRemoteTime (ms): time for successful
@@ -9059,12 +8932,12 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
     /**
      * RouterInfo lookup deadline cap (ms), used for transit next-hop lookups.
-     * Adaptive: targets ~6x the observed netDb.successTime (average time for a
+     * Adaptive: targets ~6x the observed {@code netDb.successTime} (average time for a
      * successful NetDb lookup, RouterInfo AND LeaseSet) so transit messages don't
      * stall behind a doomed search for a missing/unreachable peer. A shorter cap
      * lets the source reroute instead of holding the message for the full window.
      * Grows toward the ceiling when failing RI lookups run up against the deadline
-     * (netDb.lookupsFailedRouterInfo elevated and netDb.failedTime near the cap),
+     * ({@code netDb.lookupsFailedRouterInfo} elevated and {@code netDb.failedTime} near the cap),
      * and won't shrink while lookups are failing or the system is congested.
      * Range widened to 8s: BuildHandler drops transit builds when the next-hop
      * lookup exceeds the cap (no reject is sent, so the originator burns its full
@@ -9098,7 +8971,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return IterativeSearchJob.getMaxRouterInfoLookupTime();
         }
 
-        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null) return Double.NaN;
@@ -9110,7 +8982,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return rate.getAverageValue();
         }
 
-        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // observed = netDb.successTime (ms): avg successful NetDb lookup (RI + LS).
@@ -9201,7 +9072,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return (int) SearchJob.getResendTimeout();
         }
 
-        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null) return Double.NaN;
@@ -9210,7 +9080,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return rate.getAverageValue();
         }
 
-        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // observed = transport.sendProcessingTime (ms, network latency proxy)
@@ -9272,7 +9141,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return SearchJob.getLeaseResendCount();
         }
 
-        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null) return Double.NaN;
@@ -9281,7 +9149,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return rate.getAverageValue();
         }
 
-        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // observed = netDb.republishQuantity: how many peers got a republish
@@ -9343,7 +9210,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return rate.getAverageValue();
         }
 
-        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // Low known-router count needs more explorer attempts; a busy system
@@ -9386,7 +9252,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return EstablishmentManager.getMaxConcurrentEstablishTuned(_context);
         }
 
-        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null) return Double.NaN;
@@ -9395,7 +9260,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return rate.getAverageValue();
         }
 
-        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // observed = udp.outboundEstablishTime (avg ms per outbound handshake)
@@ -9471,7 +9335,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return ProfileOrganizer.getDefaultMaxProfilesValue();
         }
 
-        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null) return Double.NaN;
@@ -9483,18 +9346,18 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         /**
          * Compute the target value from memory headroom.
          * <p>This parameter bounds a memory store, so memory is the only input it
-         *  needs. It previously took {@code peer.fastPeerCount} and an hourly
-         *  profile-count trend instead, which made it a memory cap governed by peer
-         *  quality: raising it required more than 30% of the current cap to be fast
-         *  peers, so a router holding 1594 profiles and 375 fast peers could never
-         *  raise its own cap. {@link ProfileOrganizer#enforceProfileCap()} then
-         *  pinned the store one profile above the cap and evicted continuously to
-         *  stay there, shedding roughly 80 profiles a minute against a network
-         *  database of more than 5000 peers. The cap could not respond to the churn
-         *  because the churn was the reason the gate never opened.
+         * needs. It previously took {@code peer.fastPeerCount} and an hourly
+         * profile-count trend instead, which made it a memory cap governed by peer
+         * quality: raising it required more than 30% of the current cap to be fast
+         * peers, so a router holding 1594 profiles and 375 fast peers could never
+         * raise its own cap. {@link ProfileOrganizer#enforceProfileCap} then
+         * pinned the store one profile above the cap and evicted continuously to
+         * stay there, shedding roughly 80 profiles a minute against a network
+         * database of more than 5000 peers. The cap could not respond to the churn
+         * because the churn was the reason the gate never opened.
          * <p>Peer count is retained only as a tiebreak on how much headroom to
-         *   grant, so a growing profile store is not penalised while memory is free
-         *  and a shrinking one is not expanded while memory is tight.
+         * grant, so a growing profile store is not penalised while memory is free
+         * and a shrinking one is not expanded while memory is tight.
          *
          * @param observed current value of the bound stat, {@code peer.activeProfileCount}
          * @return the target profile count
@@ -9543,7 +9406,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return ProfileOrganizer.getDefaultMinFastPeers();
         }
 
-        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null) return Double.NaN;
@@ -9552,7 +9414,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return rate.getAverageValue();
         }
 
-        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             int maxFast = ProfileOrganizer.getDefaultMaxFastPeers();
@@ -9627,12 +9488,10 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return Math.round(ProfileOrganizer.getLossyThreshold(_context) * 100.0f);
         }
 
-        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             return _context.profileOrganizer().getMedianLossRatio() * 100.0;
         }
 
-        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             // No fresh loss data anywhere: keep the current value, don't chase noise
             if (observed <= 0.0) return getRuntimeValue();
@@ -9662,7 +9521,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return ProfileOrganizer.getDefaultMaxFastPeers();
         }
 
-        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null) return Double.NaN;
@@ -9671,7 +9529,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return rate.getAverageValue();
         }
 
-        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             int minFast = ProfileOrganizer.getDefaultMinFastPeers();
@@ -9722,7 +9579,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return ProfileOrganizer.getMinHighCapacityPeers();
         }
 
-        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null) return Double.NaN;
@@ -9731,7 +9587,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return rate.getAverageValue();
         }
 
-        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             int maxHighCap = ProfileOrganizer.getDefaultMaxHighCapPeers();
@@ -9788,7 +9643,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return ProfileOrganizer.getDefaultMaxHighCapPeers();
         }
 
-        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null) return Double.NaN;
@@ -9797,7 +9651,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return rate.getAverageValue();
         }
 
-        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             int minHighCap = ProfileOrganizer.getMinHighCapacityPeers();
@@ -9874,12 +9727,10 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return BuildRequestor.getRequestTimeout(_context);
         }
 
-        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             return getAdditionalStat(ctx, _statName);
         }
 
-        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // observed = tunnel.buildTimeoutRate (0-100, 1-minute average timeout percentage)
@@ -9957,7 +9808,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
     /**
      * Build first-hop delivery timeout.
-     * Primary signal: tunnel.buildFailFirstHop (direct first-hop failures).
+     * Primary signal: {@code tunnel.buildFailFirstHop} (direct first-hop failures).
      */
     private class BuildFirstHopTimeoutParam extends BaseParam {
 
@@ -9976,12 +9827,10 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return BuildRequestor.getFirstHopTimeout(_context);
         }
 
-        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             return getAdditionalEventCount(_context, _statName);
         }
 
-        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // observed = tunnel.buildFailFirstHop event count (first-hop delivery failures per period)
@@ -10072,7 +9921,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return BuildExecutor.getMaxConcurrentBuilds();
         }
 
-        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null) return Double.NaN;
@@ -10082,7 +9930,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return rate.getAverageValue() / 100.0;
         }
 
-        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // observed = tunnel.buildSuccessRate (normalized 0.0-1.0)
@@ -10294,12 +10141,12 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
         /**
          * Compute the target multiplier from peer supply, ignoring the observed
-         *  build success rate. Ample fast peers pin the window at its floor no
-         *  matter how degraded builds look; scarcity, or the startup grace
-         *  period, is the only thing that widens it.
+         * build success rate. Ample fast peers pin the window at its floor no
+         * matter how degraded builds look. Scarcity, or the startup grace
+         * period, is the only thing that widens it.
          *
          * @param observed build success rate; carried for the base-class contract
-         *                 and deliberately not consulted
+         * and deliberately not consulted
          * @return the multiplier to apply
          * @since 0.9.71+
          */
@@ -10337,12 +10184,10 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return BuildHandler.getMaxLookupLimit(_context);
         }
 
-        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             return getAdditionalEventCount(_context, _statName);
         }
 
-        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             double pendingQueue = getAdditionalStat(_context, "tunnel.pendingLookupQueue");
@@ -10405,7 +10250,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return BuildHandler.getPercentLookupLimit(_context);
         }
 
-        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             double observed = getAdditionalStat(_context, "tunnel.nextHopLookupSuccessTime");
             if (!Double.isNaN(observed))
@@ -10419,7 +10263,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return Double.NaN;
         }
 
-        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             double pendingQueue = getAdditionalStat(_context, "tunnel.pendingLookupQueue");
@@ -10483,7 +10326,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      * <p>Increases when send is slow/backlogged and CPU has headroom.
      * Decreases when send is fast, no backlog, and CPU is idle.
      * Supports dynamic thread addition/removal via
-     * {@link Reader#adjustThreads()}.
+     * {@link Reader#adjustThreads}.
      *
      * @since 0.9.70+
      */
@@ -10505,7 +10348,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
         protected int getRuntimeValue() { return Reader.getThreadCount(); }
 
-        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null) return Double.NaN;
@@ -10514,7 +10356,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return rate.getAverageValue();
         }
 
-        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // Reclaim parked threads when the pool is massively under-utilized
@@ -10591,7 +10432,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      * <p>Increases when send is slow/backlogged and CPU has headroom.
      * Decreases when send is fast, no backlog, and CPU is idle.
      * Supports dynamic thread addition/removal via
-     * {@link Writer#adjustThreads()}.
+     * {@link Writer#adjustThreads}.
      *
      * @since 0.9.70+
      */
@@ -10613,7 +10454,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
         protected int getRuntimeValue() { return Writer.getThreadCount(); }
 
-        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null) return Double.NaN;
@@ -10622,7 +10462,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return rate.getAverageValue();
         }
 
-        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // Reclaim parked threads when the pool is massively under-utilized
@@ -10721,7 +10560,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return (int) NTCPTransport.getFailsafeIterationFreq();
         }
 
-        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null) return Double.NaN;
@@ -10730,7 +10568,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return rate.getAverageValue();
         }
 
-        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // observed = ntcp.failsafeIterationTime (ms, time to iterate all connections)
@@ -10766,8 +10603,8 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      * Tunes NTCP send finisher thread count based on send pool utilization
      * and send finisher queue depth. More threads when the pool is saturated
      * or the finisher queue is backing up.
-     * Primary signal: ntcp.sendPool.utilization.
-     * Cross-refs: ntcp.sendFinisher.queueSize, ntcp.writeBufs.size.
+     * Primary signal: {@code ntcp.sendPool.utilization}.
+     * Cross-refs: {@code ntcp.sendFinisher.queueSize}, {@code ntcp.writeBufs.size}.
      *
      * @since 0.9.70+
      */
@@ -10792,7 +10629,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return NTCPTransport.getSendFinisherMaxThreads();
         }
 
-        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null) return Double.NaN;
@@ -10801,7 +10637,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return rate.getAverageValue();
         }
 
-        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // Reclaim parked threads when the pool is massively under-utilized
@@ -10849,9 +10684,9 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
     /**
      * Tunes max concurrent outbound messages per peer.
-     * Higher values allow more parallelism; lower values reduce congestion.
-     * Primary signal: udp.rejectConcurrentActive (rejection rate).
-     * Cross-refs: udp.sendConfirmTime (RTT), tunnel.participating InBps (bandwidth).
+     * Higher values allow more parallelism. Lower values reduce congestion.
+     * Primary signal: {@code udp.rejectConcurrentActive} (rejection rate).
+     * Cross-refs: {@code udp.sendConfirmTime} (RTT), {@code tunnel.participating} InBps (bandwidth).
      *
      * @since 0.9.70+
      */
@@ -10877,7 +10712,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return PeerState.getMaxConcurrentMessages();
         }
 
-        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null) return Double.NaN;
@@ -10886,7 +10720,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return rate.getAverageValue();
         }
 
-        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // observed = udp.allowConcurrentActive (avg concurrent messages per peer)
@@ -10965,7 +10798,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
     /**
      * Initial concurrent messages per peer — starting point for new connections.
      * Lower = conservative start, higher = aggressive start.
-     * Primary signal: udp.sendConfirmTime (RTT).
+     * Primary signal: {@code udp.sendConfirmTime} (RTT).
      *
      * @since 0.9.70+
      */
@@ -10992,7 +10825,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return PeerState.getInitConcurrentMsgs();
         }
 
-        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null) { return Double.NaN; }
@@ -11013,7 +10845,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return Math.max(_min, Math.min(_max, byFree));
         }
 
-        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
@@ -11061,7 +10892,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return PeerState.getMinConcurrentMsgs();
         }
 
-        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null) { return Double.NaN; }
@@ -11070,7 +10900,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return rate.getAverageValue();
         }
 
-        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             double memPressure = getMemoryPressure();
@@ -11085,8 +10914,8 @@ public class Tuner extends SimpleTimer2.TimedEvent {
     /**
      * Initial RTO for new UDP peers — starting point before RTT estimation kicks in.
      * Lower = faster retransmit on lossy links, higher = avoids spurious retransmits on high-latency links.
-     * Primary signal: udp.sendConfirmTime (measured RTT).
-     * Cross-refs: peer.testOK (peer test time), peer.testTimeout (timeout frequency).
+     * Primary signal: {@code udp.sendConfirmTime} (measured RTT).
+     * Cross-refs: {@code peer.testOK} (peer test time), {@code peer.testTimeout} (timeout frequency).
      *
      * @since 0.9.70+
      */
@@ -11107,7 +10936,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return PeerState.getInitRTO();
         }
 
-        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null) { return Double.NaN; }
@@ -11116,7 +10944,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return rate.getAverageValue();
         }
 
-        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // observed = avg RTT in ms
@@ -11145,9 +10972,9 @@ public class Tuner extends SimpleTimer2.TimedEvent {
     /**
      * Minimum RTO — floor for retransmission timeout.
      * Lower = more aggressive retransmit, higher = avoids retransmit storms.
-     * Primary signal: udp.sendConfirmTime (RTT) and udp.retransmitEvents (retransmit count).
-     * Cross-refs: udp.avgSendWindow (CWIN), udp.congestionOccurred (congestion events),
-     *             udp.congestedRTO (RTO inflation during congestion).
+     * Primary signal: {@code udp.sendConfirmTime} (RTT) and {@code udp.retransmitEvents} (retransmit count).
+     * Cross-refs: {@code udp.avgSendWindow} (CWIN), {@code udp.congestionOccurred} (congestion events),
+     * {@code udp.congestedRTO} (RTO inflation during congestion).
      *
      * @since 0.9.70+
      */
@@ -11168,7 +10995,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return PeerState.getMinRTO();
         }
 
-        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null) { return Double.NaN; }
@@ -11177,7 +11003,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return rate.getAverageValue();
         }
 
-        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             double retransmits = getAdditionalStat(_context, "udp.retransmitEvents");
@@ -11217,9 +11042,9 @@ public class Tuner extends SimpleTimer2.TimedEvent {
     /**
      * Maximum RTO — ceiling for retransmission timeout.
      * Lower = fail peers faster, higher = tolerates longer outages.
-     * Primary signal: udp.sendConfirmTime (RTT) and udp.sendExpired (timeout failures).
-     * Cross-refs: udp.avgSendWindow (CWIN), udp.congestionOccurred (congestion events),
-     *             udp.congestedRTO (RTO inflation during congestion).
+     * Primary signal: {@code udp.sendConfirmTime} (RTT) and {@code udp.sendExpired} (timeout failures).
+     * Cross-refs: {@code udp.avgSendWindow} (CWIN), {@code udp.congestionOccurred} (congestion events),
+     * {@code udp.congestedRTO} (RTO inflation during congestion).
      *
      * @since 0.9.70+
      */
@@ -11240,7 +11065,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return PeerState.getMaxRTO();
         }
 
-        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null) { return Double.NaN; }
@@ -11249,7 +11073,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return rate.getAverageValue();
         }
 
-        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             double failures = getAdditionalStat(_context, "udp.sendExpired");
@@ -11296,9 +11119,9 @@ public class Tuner extends SimpleTimer2.TimedEvent {
     /**
      * Max send window (CWIN) — bytes in flight per peer.
      * Higher = more aggressive sending, lower = less buffering.
-     * Primary signal: udp.avgSendWindow (current usage across peers).
-     * Cross-refs: udp.retransmitEvents (retransmits), udp.congestionOccurred (congestion events),
-     *             jobQueue.jobLag (CPU pressure).
+     * Primary signal: {@code udp.avgSendWindow} (current usage across peers).
+     * Cross-refs: {@code udp.retransmitEvents} (retransmits), {@code udp.congestionOccurred} (congestion events),
+     * {@code jobQueue.jobLag} (CPU pressure).
      *
      * @since 0.9.70+
      */
@@ -11326,7 +11149,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return PeerState.getMaxSendWindow();
         }
 
-        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null) { return Double.NaN; }
@@ -11335,7 +11157,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return rate.getAverageValue();
         }
 
-        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
             double retransmits = getAdditionalStat(_context, "udp.retransmitEvents");
@@ -11372,15 +11193,15 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      * @param max        hard upper clamp in bytes
      * @param step       per-cycle adjustment in bytes
      * @param idleFloor  anti-ratchet floor for idle shrink (max of default and min)
-     * @param observed   udp.avgSendWindow usage (NaN = no data)
-     * @param jobLag     jobQueue.jobLag (NaN = unknown)
+     * @param observed   {@code udp.avgSendWindow} usage (NaN = no data)
+     * @param jobLag     {@code jobQueue.jobLag} (NaN = unknown)
      * @param memPressure heap pressure ratio 0.0-1.0
-     * @param retransmits     udp.retransmitEvents recent count
-     * @param congCWIN        udp.congestionOccurred recent count
-     * @param sendWindow      udp.avgSendWindow for collapse detection
-     * @param rtxRatio        stream.rtxRatio hourly ratio
-     * @param failsafeCloses  ntcp.failsafeCloses recent count
-     * @param mtuDecrease     udp.mtuDecrease recent count
+     * @param retransmits     {@code udp.retransmitEvents} recent count
+     * @param congCWIN        {@code udp.congestionOccurred} recent count
+     * @param sendWindow      {@code udp.avgSendWindow} for collapse detection
+     * @param rtxRatio        {@code stream.rtxRatio} hourly ratio
+     * @param failsafeCloses  {@code ntcp.failsafeCloses} recent count
+     * @param mtuDecrease     {@code udp.mtuDecrease} recent count
      * @return the new CWIN target, already clamped to [min, max]
      * @since 0.9.71+
      */
@@ -11524,8 +11345,8 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      * peers; the trade-off is more in-flight bytes immediately after loss, which
      * can increase drops. Kept conservative (default 1) and only widened when the
      * window is collapsing under congestion while sends are NOT expiring.
-     * Primary signal: udp.avgSendWindow (CWIN across peers).
-     * Cross-refs: udp.congestionOccurred, udp.retransmitEvents, udp.sendExpired.
+     * Primary signal: {@code udp.avgSendWindow} (CWIN across peers).
+     * Cross-refs: {@code udp.congestionOccurred}, {@code udp.retransmitEvents}, {@code udp.sendExpired}.
      *
      * @since 0.9.70+
      */
@@ -11546,7 +11367,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return PeerState.getPostRTOWindowMTUs();
         }
 
-        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null) { return Double.NaN; }
@@ -11555,7 +11375,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return rate.getAverageValue();
         }
 
-        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             double congCWIN = getAdditionalStat(_context, "udp.congestionOccurred");
@@ -11644,7 +11463,6 @@ SendPoolCapacityParam() {
             return TransportImpl.getSendPoolCapacity();
         }
 
-        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null) return Double.NaN;
@@ -11730,8 +11548,8 @@ protected int computeTarget(double observed) {
     /**
      * Tunes I2CP internal client queue size.
      * Sweet spot: large enough to prevent client drops, small enough to avoid buffering latency.
-     * Primary signal: udp.sendConfirmTime (actual network RTT).
-     * Cross-refs: client.writerQueueFull (overflow events), jobLag (CPU), transport.sendProcessingTime.
+     * Primary signal: {@code udp.sendConfirmTime} (actual network RTT).
+     * Cross-refs: client.writerQueueFull (overflow events), jobLag (CPU), {@code transport.sendProcessingTime}.
      *
      * @since 0.9.70+
      */
@@ -11756,7 +11574,6 @@ protected int computeTarget(double observed) {
             return Tuner.getInternalQueueSize();
         }
 
-        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null) return Double.NaN;
@@ -11765,7 +11582,6 @@ protected int computeTarget(double observed) {
             return rate.getAverageValue();
         }
 
-        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // observed = udp.sendConfirmTime (ms, actual network RTT)
@@ -11803,8 +11619,8 @@ protected int computeTarget(double observed) {
     /**
      * Tunes max queued outbound SSU connections.
      * Sweet spot: large enough to prevent connection drops, small enough to avoid stale connections.
-     * Primary signal: udp.queuedOutbound.size (queue depth at check).
-     * Cross-refs: i2np.udp.maxConcurrentEstablish, udp.sendConfirmTime.
+     * Primary signal: {@code udp.queuedOutbound.size} (queue depth at check).
+     * Cross-refs: {@code i2np.udp.maxConcurrentEstablish}, {@code udp.sendConfirmTime}.
      *
      * @since 0.9.70+
      */
@@ -11825,7 +11641,6 @@ protected int computeTarget(double observed) {
             return EstablishmentManager.getMaxQueuedOutbound();
         }
 
-        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null) return Double.NaN;
@@ -11834,7 +11649,6 @@ protected int computeTarget(double observed) {
             return rate.getAverageValue();
         }
 
-        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // observed = udp.sendConfirmTime (ms, actual network RTT)
@@ -11867,9 +11681,9 @@ protected int computeTarget(double observed) {
     /**
      * Tunes max write buffers per NTCP connection.
      * Sweet spot: large enough to prevent write stalls, small enough to avoid memory waste.
-     * Queue-thread coupling: must scale with ntcp.writer.threads.
-     * Primary signal: ntcp.writeBufs.size (avg write buffer count).
-     * Cross-refs: ntcp.writer.threads, transport.sendProcessingTime.
+     * Queue-thread coupling: must scale with {@code ntcp.writer.threads}.
+     * Primary signal: {@code ntcp.writeBufs.size} (avg write buffer count).
+     * Cross-refs: {@code ntcp.writer.threads}, {@code transport.sendProcessingTime}.
      *
      * @since 0.9.70+
      */
@@ -11890,7 +11704,6 @@ protected int computeTarget(double observed) {
             return NTCPConnection.getMaxWriteBufs();
         }
 
-        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null) return Double.NaN;
@@ -11899,7 +11712,6 @@ protected int computeTarget(double observed) {
             return rate.getAverageValue();
         }
 
-        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // observed = ntcp.writeBufs.size (avg write buffer count per connection)
@@ -11940,8 +11752,8 @@ protected int computeTarget(double observed) {
      * Tunes max concurrent test jobs based on transport latency.
      * When latency is high, fewer tests = less transport pressure.
      * When latency is low, more tests = faster pool recovery.
-     * Primary signal: transport.sendProcessingTime (message latency).
-     * Cross-refs: udp.sendConfirmTime (RTT), jobQueue.testJobCount.
+     * Primary signal: {@code transport.sendProcessingTime} (message latency).
+     * Cross-refs: {@code udp.sendConfirmTime} (RTT), {@code jobQueue.testJobCount}.
      *
      * @since 0.9.70+
      */
@@ -11962,7 +11774,6 @@ protected int computeTarget(double observed) {
             return TestJob.maxQueuedTests;
         }
 
-        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null) return Double.NaN;
@@ -11971,7 +11782,6 @@ protected int computeTarget(double observed) {
             return rate.getAverageValue();
         }
 
-        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // observed = transport.sendProcessingTime (ms, message lifetime)
@@ -12003,8 +11813,8 @@ protected int computeTarget(double observed) {
      * Tunes minimum delay between tests per tunnel.
      * Longer delay = fewer tests = less transport pressure.
      * Shorter delay = faster detection of tunnel failures.
-     * Primary signal: transport.sendProcessingTime.
-     * Cross-refs: tunnel.testFailedTime, tunnel.testSuccessTime.
+     * Primary signal: {@code transport.sendProcessingTime}.
+     * Cross-refs: {@code tunnel.testFailedTime}, {@code tunnel.testSuccessTime}.
      *
      * @since 0.9.70+
      */
@@ -12025,7 +11835,6 @@ protected int computeTarget(double observed) {
             return TestJob.getMinTestDelay(_context);
         }
 
-        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null) return Double.NaN;
@@ -12034,7 +11843,6 @@ protected int computeTarget(double observed) {
             return rate.getAverageValue();
         }
 
-        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // observed = transport.sendProcessingTime (ms)
@@ -12062,8 +11870,8 @@ protected int computeTarget(double observed) {
     /**
      * Tunes maximum delay between tests per tunnel.
      * Works with min delay — max caps the backoff for healthy tunnels.
-     * Primary signal: transport.sendProcessingTime.
-     * Cross-refs: tunnel.testSuccessTime.
+     * Primary signal: {@code transport.sendProcessingTime}.
+     * Cross-refs: {@code tunnel.testSuccessTime}.
      *
      * @since 0.9.70+
      */
@@ -12084,7 +11892,6 @@ protected int computeTarget(double observed) {
             return TestJob.getMaxTestDelay(_context);
         }
 
-        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null) return Double.NaN;
@@ -12093,7 +11900,6 @@ protected int computeTarget(double observed) {
             return rate.getAverageValue();
         }
 
-        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // observed = transport.sendProcessingTime (ms)
@@ -12114,15 +11920,15 @@ protected int computeTarget(double observed) {
     }
 
     /**
-     * Tunes the maximum tunnel test failure window (i2p.tunnel.testJob.maxTestPeriod).
+     * Tunes the maximum tunnel test failure window ({@code i2p.tunnel.testJob.maxTestPeriod}).
      * The window is how long a tunnel test may take before the tunnel is declared
-     * failed. Target is 2x the measured successful-test RTT (tunnel.testSuccessTime):
+     * failed. Target is 2x the measured successful-test RTT ({@code tunnel.testSuccessTime}):
      * a test answered in ~2.3s is almost certainly dead if it needs more than ~4.6s.
      * Shrinking the window lets pools fail and rebuild fast instead of waiting tens
      * of seconds on tunnels that will never answer — the dominant cause of the
      * network-wide build timeout rate. Grows when failing tests run far past the
      * window, which is the signature of a genuinely degraded network.
-     * Cross-refs: tunnel.testFailedTime (failing tests), tunnel.testPeriod (the
+     * Cross-refs: {@code tunnel.testFailedTime} (failing tests), {@code tunnel.testPeriod} (the
      * window actually applied by TestJob).
      */
     private class TestJobMaxPeriodParam extends BaseParam {
@@ -12142,7 +11948,6 @@ protected int computeTarget(double observed) {
             return TestJob.getMaxTestPeriod(_context);
         }
 
-        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null) return Double.NaN;
@@ -12151,7 +11956,6 @@ protected int computeTarget(double observed) {
             return rate.getAverageValue();
         }
 
-        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // observed = tunnel.testSuccessTime (ms): measured RTT of successful tests.
@@ -12182,11 +11986,11 @@ protected int computeTarget(double observed) {
 
     /**
      * Tunes the minimum tunnel test failure window floor
-     * (i2p.tunnel.testJob.minTestPeriod). Anchored at 1x the measured
+     * ({@code i2p.tunnel.testJob.minTestPeriod}). Anchored at 1x the measured
      * successful-test RTT so the 2x window in TestJobMaxPeriodParam can't
      * collapse below the typical success time on very fast networks, which
      * would invite flapping. Never pushed above the configured max window.
-     * Cross-refs: tunnel.testSuccessTime (primary), tunnel.testPeriod.
+     * Cross-refs: {@code tunnel.testSuccessTime} (primary), {@code tunnel.testPeriod}.
      */
     private class TestJobMinPeriodParam extends BaseParam {
 
@@ -12205,7 +12009,6 @@ protected int computeTarget(double observed) {
             return TestJob.getMinTestPeriod(_context);
         }
 
-        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null) return Double.NaN;
@@ -12214,7 +12017,6 @@ protected int computeTarget(double observed) {
             return rate.getAverageValue();
         }
 
-        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // observed = tunnel.testSuccessTime (ms)
@@ -12237,7 +12039,7 @@ protected int computeTarget(double observed) {
     /**
      * Tunes the I2PTunnel server handler thread pool size.
      * Primary signal: serverHandler.queueDepth (tasks waiting for a handler thread).
-     * Cross-refs: jobQueue.jobLag (CPU pressure), serverHandler.blockingHandleTime.
+     * Cross-refs: {@code jobQueue.jobLag} (CPU pressure), serverHandler.blockingHandleTime.
      *
      * @since 0.9.70+
      */
@@ -12271,7 +12073,6 @@ protected int computeTarget(double observed) {
             return I2PTunnelReflector.invokeGetInt("getLiveServerHandlerQueueDepth");
         }
 
-        /** Compute the target value based on live signals and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
@@ -12289,33 +12090,33 @@ protected int computeTarget(double observed) {
      * without a live {@link RouterContext}.
      * <p>Signals:
      * <ul>
-     *   <li>{@code queueDepth} — handler tasks waiting for a free pool thread.</li>
-     *   <li>{@code active} — number of handler threads currently busy
-     *       ({@code i2ptunnel.serverHandler.active}). When this pins the pool
-     *       ceiling while the queue backs up, handlers are starving connections.
-     *       {@code blockingHandleTime} stays low in that case because it only
-     *       measures the fast local socket connect to the app, not the slow
-     *       inbound I2P write to the peer, so saturation is the reliable signal.</li>
-     *   <li>{@code blockingTime} — local handler connect time (not the I2P write).</li>
-     *   <li>{@code jobLag} — {@code jobQueue.jobLag} as a CPU-pressure veto: never
-     *       grow a pool on a swap/busy box.</li>
-     *   <li>{@code synExpire} — router-wide SYN accept-queue expire rate percent
-     *       ({@code stream.con.synExpireRate}). A high rate is direct latency
-     *       evidence: SYNs are expiring in the accept queue because the inbound I2P
-     *       write is slow, NOT because the handler pool is under-provisioned. Handlers
-     *       stall on the same slow transport, so adding threads cannot drain faster;
-     *       aggressive growth here would just pile up more blocked sockets. A high
-     *       expire rate therefore moderates growth rather than vetoing it.</li>
+     * <li>{@code queueDepth} — handler tasks waiting for a free pool thread.</li>
+     * <li>{@code active} — number of handler threads currently busy
+     * ({@code i2ptunnel.serverHandler.active}). When this pins the pool
+     * ceiling while the queue backs up, handlers are starving connections.
+     * {@code blockingHandleTime} stays low in that case because it only
+     * measures the fast local socket connect to the app, not the slow
+     * inbound I2P write to the peer, so saturation is the reliable signal.</li>
+     * <li>{@code blockingTime} — local handler connect time (not the I2P write).</li>
+     * <li>{@code jobLag} — {@code jobQueue.jobLag} as a CPU-pressure veto: never
+     * grow a pool on a swap/busy box.</li>
+     * <li>{@code synExpire} — router-wide SYN accept-queue expire rate percent
+     * ({@code stream.con.synExpireRate}). A high rate is direct latency
+     * evidence: SYNs are expiring in the accept queue because the inbound I2P
+     * write is slow, NOT because the handler pool is under-provisioned. Handlers
+     * stall on the same slow transport, so adding threads cannot drain faster;
+     * aggressive growth here would just pile up more blocked sockets. A high
+     * expire rate therefore moderates growth rather than vetoing it.</li>
      * </ul>
      *
      * @param current      current pool size
      * @param min          the floor the shrink branch stops at
      * @param max          the ceiling every growth branch clamps to
-     * @param queueDepth   60s avg of i2ptunnel.serverHandler.queueDepth, or NaN
-     * @param active       60s avg of i2ptunnel.serverHandler.active, or NaN
-     * @param blockingTime 60s avg of i2ptunnel.serverHandler.blockingHandleTime, or NaN
-     * @param jobLag       60s avg of jobQueue.jobLag, or NaN
-     * @param synExpire    60s avg of stream.con.synExpireRate (percent), or NaN
+     * @param queueDepth   60s avg of {@code i2ptunnel.serverHandler.queueDepth}, or NaN
+     * @param active       60s avg of {@code i2ptunnel.serverHandler.active}, or NaN
+     * @param blockingTime 60s avg of {@code i2ptunnel.serverHandler.blockingHandleTime}, or NaN
+     * @param jobLag       60s avg of {@code jobQueue.jobLag}, or NaN
+     * @param synExpire    60s avg of {@code stream.con.synExpireRate} (percent), or NaN
      * @return the new pool size
      * @since 0.9.71+
      */
@@ -12392,40 +12193,40 @@ protected int computeTarget(double observed) {
 
     /**
      * Pure decision logic for the Tuner-managed inbound receive-worker default
-     *  ({@code i2p.streaming.receiveWorkerThreads}). Extracted (package-visible,
-     *  static) so unit tests can exercise the policy without a live
-     *  {@link RouterContext}.
+     * ({@code i2p.streaming.receiveWorkerThreads}). Extracted (package-visible,
+     * static) so unit tests can exercise the policy without a live
+     * {@link RouterContext}.
      * <p>Signals:
-     *  <ul>
-     *    <li>{@code backlogged} — 60s avg of {@code stream.receiveBacklogged}
-     *        (producer-blind events on a full receive shard queue), NaN when none.
-     *    <li>{@code queueDepth} — 60s avg of {@code stream.receiveQueueDepth}.
-     *    <li>{@code rtxRatio} — resends per 1000 sends (loss signal), NaN when
-     *        unknown. Threshold 50 = 5% resends, matching InitialWindowSizeParam.
-     *    <li>{@code jobLag} — 60s avg of {@code jobQueue.jobLag} (CPU pressure),
-     *        NaN when unknown.
-     *  </ul>
+     * <ul>
+     * <li>{@code backlogged} — 60s avg of {@code stream.receiveBacklogged}
+     * (producer-blind events on a full receive shard queue), NaN when none.
+     * <li>{@code queueDepth} — 60s avg of {@code stream.receiveQueueDepth}.
+     * <li>{@code rtxRatio} — resends per 1000 sends (loss signal), NaN when
+     * unknown. Threshold 50 = 5% resends, matching InitialWindowSizeParam.
+     * <li>{@code jobLag} — 60s avg of {@code jobQueue.jobLag} (CPU pressure),
+     * NaN when unknown.
+     * </ul>
      * <p>Policy (throughput / latency / reliability):
-     *  <ul>
-     *    <li>Grow by one shard when producers were blind on a full queue this
-     *        period and the CPU is not pegged — the dispatcher is the bottleneck,
-     *        so parallelize the inflow (throughput).
-     *    <li>Never shrink while the path is lossy ({@code rtxRatio > 50}): the
-     *        retransmission burst still needs its dispatch capacity, and shrinking
-     *        under loss risks re-backlogging a just-relieved queue (reliability).
-     *    <li>Slowly reclaim a shard when the queue holds near-empty ({@code queueDepth
-     *        <= 0.25}) with no growth veto active — a leaner pool keeps the same
-     *        latency (latency). The probe requires real (non-NaN) observations, so a
-     *        genuinely idle manager is left alone rather than churned.
-     *  </ul>
+     * <ul>
+     * <li>Grow by one shard when producers were blind on a full queue this
+     * period and the CPU is not pegged — the dispatcher is the bottleneck,
+     * so parallelize the inflow (throughput).
+     * <li>Never shrink while the path is lossy ({@code rtxRatio > 50}): the
+     * retransmission burst still needs its dispatch capacity, and shrinking
+     * under loss risks re-backlogging a just-relieved queue (reliability).
+     * <li>Slowly reclaim a shard when the queue holds near-empty ({@code queueDepth
+     * <= 0.25}) with no growth veto active — a leaner pool keeps the same
+     * latency (latency). The probe requires real (non-NaN) observations, so a
+     * genuinely idle manager is left alone rather than churned.
+     * </ul>
      *
      * @param current     current live worker count
      * @param min         lower bound (2)
      * @param max         upper bound (8)
-     * @param backlogged  60s avg of stream.receiveBacklogged, or NaN
-     * @param queueDepth  60s avg of stream.receiveQueueDepth, or NaN
+     * @param backlogged  60s avg of {@code stream.receiveBacklogged}, or NaN
+     * @param queueDepth  60s avg of {@code stream.receiveQueueDepth}, or NaN
      * @param rtxRatio    resends per 1000 sends, or NaN
-     * @param jobLag      60s avg of jobQueue.jobLag (CPU pressure), or NaN
+     * @param jobLag      60s avg of {@code jobQueue.jobLag} (CPU pressure), or NaN
      * @return the new worker count, clamped to [min, max]
      * @since 0.9.71+
      */
@@ -12454,34 +12255,34 @@ protected int computeTarget(double observed) {
 
     /**
      * Pure decision logic for the Tuner-managed default client concurrent-connection
-     *  cap (i2ptunnel.maxConnections default). Extracted (package-visible, static) so
-     *  unit tests can exercise the policy without a live {@link RouterContext}.
+     * cap ({@code i2ptunnel.maxConnections} default). Extracted (package-visible, static) so
+     * unit tests can exercise the policy without a live {@link RouterContext}.
      * <p>Signals:
-     *  <ul>
-     *    <li>{@code shedRate} — events/minute of {@code i2ptunnel.clientConnectionShed}.
-     *        A non-zero rate means the accept loop is closing excess inbound
-     *        connections (zero bytes) because the cap is too low; this is the primary
-     *        "raise" signal and the direct observable of the empty-response symptom.</li>
-     *    <li>{@code activeThreads} — {@code i2ptunnel.clientRunner.activeThreads} (60s avg
-     *        of true executor load). When it pins near {@code maxRunner} the executor is
-     *        saturated, so raising the connection cap would only pile onto a busy pool.</li>
-     *    <li>{@code current}/{@code min}/{@code max} — the current default (per-tunnel
-     *        overrides are untouched), floor, and ceiling.</li>
-     *  </ul>
+     * <ul>
+     * <li>{@code shedRate} — events/minute of {@code i2ptunnel.clientConnectionShed}.
+     * A non-zero rate means the accept loop is closing excess inbound
+     * connections (zero bytes) because the cap is too low; this is the primary
+     * "raise" signal and the direct observable of the empty-response symptom.</li>
+     * <li>{@code activeThreads} — {@code i2ptunnel.clientRunner.activeThreads} (60s avg
+     * of true executor load). When it pins near {@code maxRunner} the executor is
+     * saturated, so raising the connection cap would only pile onto a busy pool.</li>
+     * <li>{@code current}/{@code min}/{@code max} — the current default (per-tunnel
+     * overrides are untouched), floor, and ceiling.</li>
+     * </ul>
      * <p>Policy: any shed (admission-gate overflow or executor-full rejection) is the
-     *  unambiguous overload signal — grow the gate decisively and fast so excess
-     *  connections are admitted and served instead of dropped as empty responses. The
-     *  worker pool is floored at this gate in {@code TunnelControllerGroup.setClientRunnerMax},
-     *  so a decisive gate rise also pulls the executor ceiling up (no more 256-vs-27 wedge).
-     *  Near-saturated executor grows moderately; healthy load grows gently; idle decays
-     *  slowly so a quiet spell does not throw away burst headroom. Rise is deliberately
-     *  much faster than decay to fully absorb bursts.
+     * unambiguous overload signal — grow the gate decisively and fast so excess
+     * connections are admitted and served instead of dropped as empty responses. The
+     * worker pool is floored at this gate in {@code TunnelControllerGroup.setClientRunnerMax},
+     * so a decisive gate rise also pulls the executor ceiling up (no more 256-vs-27 wedge).
+     * Near-saturated executor grows moderately; healthy load grows gently; idle decays
+     * slowly so a quiet spell does not throw away burst headroom. Rise is deliberately
+     * much faster than decay to fully absorb bursts.
      *
      * @param current     current default cap
      * @param min         floor for the default cap
      * @param max         ceiling for the default cap
-     * @param shedRate    60s avg of i2ptunnel.clientConnectionShed, or NaN
-     * @param activeThreads 60s avg of i2ptunnel.clientRunner.activeThreads, or NaN
+     * @param shedRate    60s avg of {@code i2ptunnel.clientConnectionShed}, or NaN
+     * @param activeThreads 60s avg of {@code i2ptunnel.clientRunner.activeThreads}, or NaN
      * @param maxRunner   the client executor max pool size (saturation reference point)
      * @return the new default cap
      * @since 0.9.71+
@@ -12528,7 +12329,7 @@ protected int computeTarget(double observed) {
     /**
      * Tunes the Tuner-managed default per-tunnel cap on server handler threads.
      * Primary signal: serverHandler.queueDepth (tasks waiting for a handler thread).
-     * Cross-refs: jobQueue.jobLag (CPU pressure), serverHandler.blockingHandleTime.
+     * Cross-refs: {@code jobQueue.jobLag} (CPU pressure), serverHandler.blockingHandleTime.
      * <p>Each server tunnel owns a private handler pool sized at most this cap
      * (unless the tunnel sets an explicit {@code i2ptunnel.server.threads}
      * override); the pools are summed under the global budget tuned by
@@ -12556,7 +12357,6 @@ protected int computeTarget(double observed) {
             return I2PTunnelReflector.invokeGetInt("getServerThreadsPerTunnel");
         }
 
-        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null) return Double.NaN;
@@ -12565,7 +12365,6 @@ protected int computeTarget(double observed) {
             return rate.getAverageValue();
         }
 
-        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
@@ -12613,7 +12412,6 @@ protected int computeTarget(double observed) {
             return I2PTunnelReflector.invokeGetInt("getLiveServerHandlerQueueDepth");
         }
 
-        /** Compute the target value based on live signals and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
@@ -12795,9 +12593,9 @@ protected int computeTarget(double observed) {
 
         /**
          * Adjust timeout based on stall rate:
-         *  - High stall rate (>2 per cycle): the timeout is too tight, loosen it
-         *  - Zero stalls: timeout may be too conservative, tighten slightly
-         *  - Low stall rate (1 per cycle): no change
+         * - High stall rate (>2 per cycle): the timeout is too tight, loosen it
+         * - Zero stalls: timeout may be too conservative, tighten slightly
+         * - Low stall rate (1 per cycle): no change.
          */
         protected int computeTarget(double observed) {
             return nextStallTimeoutMs(getRuntimeValue(), observed, _min, _max);
@@ -12822,9 +12620,9 @@ protected int computeTarget(double observed) {
      * (each queued task holds an {@code I2PSocket}).
      * <p>Signals:
      * <ul>
-     *   <li>{@code queueDepth} — handler tasks waiting for a free pool thread.</li>
-     *   <li>{@code jobLag} — {@code jobQueue.jobLag} as a CPU-pressure veto: never
-     *       grow the buffer on a swap/busy box.</li>
+     * <li>{@code queueDepth} — handler tasks waiting for a free pool thread.</li>
+     * <li>{@code jobLag} — {@code jobQueue.jobLag} as a CPU-pressure veto: never
+     * grow the buffer on a swap/busy box.</li>
      * </ul>
      * <p>Idle handling converges the buffer to {@link #SERVER_BACKLOG_IDLE_FLOOR}
      * rather than to {@code min}: a too-large buffer shrinks, a too-small one grows,
@@ -12833,10 +12631,10 @@ protected int computeTarget(double observed) {
      *
      * @param current    current queue capacity
      * @param min        the setter's lower clamp, unused here; the idle floor
-     *                   sets the low end instead
+     * sets the low end instead
      * @param max        the ceiling every growth branch clamps to
-     * @param queueDepth 60s avg of i2ptunnel.serverHandler.queueDepth, or NaN
-     * @param jobLag     60s avg of jobQueue.jobLag, or NaN
+     * @param queueDepth 60s avg of {@code i2ptunnel.serverHandler.queueDepth}, or NaN
+     * @param jobLag     60s avg of {@code jobQueue.jobLag}, or NaN
      * @return the new queue capacity
      * @since 0.9.71+
      */
@@ -12893,7 +12691,6 @@ protected int computeTarget(double observed) {
             return I2PTunnelReflector.invokeGetInt("getClientRunnerMax");
         }
 
-        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null) return Double.NaN;
@@ -12902,7 +12699,6 @@ protected int computeTarget(double observed) {
             return rate.getAverageValue();
         }
 
-        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             // Cross-ref the shed stat (admission-gate overflow OR executor-full rejection):
             // a non-zero rate is the direct empty-response observable. Raise the worker
@@ -12931,8 +12727,8 @@ protected int computeTarget(double observed) {
 
     /**
      * Tunes the Tuner-managed default client concurrent-connection cap
-     * (i2ptunnel.maxConnections default). Primary signal:
-     * i2ptunnel.clientConnectionShed — a non-zero rate means excess inbounds are
+     * ({@code i2ptunnel.maxConnections} default). Primary signal:
+     * {@code i2ptunnel.clientConnectionShed}. A non-zero rate means excess inbounds are
      * closed empty (an HTTP proxy browser reads that as an empty response), so the
      * gate rises fast to serve the burst and the worker pool follows (floored here).
      */
@@ -12960,7 +12756,6 @@ protected int computeTarget(double observed) {
             return I2PTunnelReflector.invokeGetInt("getClientDefaultMaxConnections");
         }
 
-        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null) return Double.NaN;
@@ -12969,7 +12764,6 @@ protected int computeTarget(double observed) {
             return rate.getAverageValue();
         }
 
-        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             double activeThreads = getAdditionalStat(_context, "i2ptunnel.clientRunner.activeThreads");
             int current = getRuntimeValue();
@@ -13006,7 +12800,6 @@ protected int computeTarget(double observed) {
             return I2PTunnelReflector.invokeGetInt("getSocketConnectTimeout");
         }
 
-        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null) return Double.NaN;
@@ -13015,7 +12808,6 @@ protected int computeTarget(double observed) {
             return rate.getAverageValue();
         }
 
-        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // observed = i2ptunnel.serverHandler.socketConnectTime (60s rolling avg, ms)
@@ -13088,7 +12880,6 @@ protected int computeTarget(double observed) {
             return stored;
         }
 
-        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null) return Double.NaN;
@@ -13097,7 +12888,6 @@ protected int computeTarget(double observed) {
             return rate.getAverageValue();
         }
 
-        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
@@ -13174,7 +12964,7 @@ protected int computeTarget(double observed) {
         private final long _uptime;
 
         /**
-         * System health
+         * System health.
          *
          * @param ctx router context supplying uptime and the stats the score reads
          */
@@ -13439,7 +13229,7 @@ protected int computeTarget(double observed) {
          * Transport send failure rate: failed sends vs total sends.
          * Uses event counts (each send = 1 event, each failure = 1 event).
          * Requires 500+ sends to skip noisy startup window.
-         * <1% = 1.0, >10% = 0.0
+         * <1% = 1.0, >10% = 0.0.
          */
         private double scoreSendFailure() {
             double failures = getEventCount("transport.sendMessageFailureLifetime");
@@ -13878,7 +13668,6 @@ protected int computeTarget(double observed) {
         }
         protected void applyValue(int value) { ParticipatingThrottler.setParticipatingMinLimit(value); }
         protected int getRuntimeValue() { return ParticipatingThrottler.getParticipatingMinLimit(); }
-        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null) return Double.NaN;
@@ -13886,7 +13675,6 @@ protected int computeTarget(double observed) {
             if (rate == null || rate.getLastEventCount() == 0) return Double.NaN;
             return rate.getAverageValue();
         }
-        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
@@ -13923,7 +13711,6 @@ protected int computeTarget(double observed) {
         }
         protected void applyValue(int value) { ParticipatingThrottler.setParticipatingMaxLimit(value); }
         protected int getRuntimeValue() { return ParticipatingThrottler.getParticipatingMaxLimit(); }
-        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null) return Double.NaN;
@@ -13931,7 +13718,6 @@ protected int computeTarget(double observed) {
             if (rate == null || rate.getLastEventCount() == 0) return Double.NaN;
             return rate.getAverageValue();
         }
-        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
@@ -13965,7 +13751,6 @@ protected int computeTarget(double observed) {
         }
         protected void applyValue(int value) { ParticipatingThrottler.setParticipatingPctLimit(value); }
         protected int getRuntimeValue() { return ParticipatingThrottler.getParticipatingPctLimit(); }
-        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null) return Double.NaN;
@@ -13973,7 +13758,6 @@ protected int computeTarget(double observed) {
             if (rate == null || rate.getLastEventCount() == 0) return Double.NaN;
             return rate.getAverageValue();
         }
-        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
@@ -14008,11 +13792,9 @@ protected int computeTarget(double observed) {
         }
         protected void applyValue(int value) { ParticipatingThrottler.setRejectThreshold(value); }
         protected int getRuntimeValue() { return ParticipatingThrottler.getRejectThreshold(); }
-        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             return getAdditionalStatHourly(_context, "jobQueue.loadRecoveryTime");
         }
-        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             if (Double.isNaN(observed)) return current;
@@ -14037,11 +13819,9 @@ protected int computeTarget(double observed) {
         }
         protected void applyValue(int value) { ParticipatingThrottler.setRejectSteepness(value); }
         protected int getRuntimeValue() { return ParticipatingThrottler.getRejectSteepness(); }
-        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             return getAdditionalStatHourly(_context, "jobQueue.loadRecoveryTime");
         }
-        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             if (Double.isNaN(observed)) return current;
@@ -14066,11 +13846,9 @@ protected int computeTarget(double observed) {
         }
         protected void applyValue(int value) { ParticipatingThrottler.setLoadWeight(value); }
         protected int getRuntimeValue() { return ParticipatingThrottler.getLoadWeight(); }
-        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             return getAdditionalStatHourly(_context, "jobQueue.loadRecoveryTime");
         }
-        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             if (Double.isNaN(observed)) return current;
@@ -14094,7 +13872,6 @@ protected int computeTarget(double observed) {
         }
         protected void applyValue(int value) { RequestThrottler.setRequestMinLimit(value); }
         protected int getRuntimeValue() { return RequestThrottler.getRequestMinLimit(); }
-        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null) return Double.NaN;
@@ -14102,7 +13879,6 @@ protected int computeTarget(double observed) {
             if (rate == null || rate.getLastEventCount() == 0) return Double.NaN;
             return rate.getAverageValue();
         }
-        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
@@ -14129,7 +13905,6 @@ protected int computeTarget(double observed) {
         }
         protected void applyValue(int value) { RequestThrottler.setRequestMaxLimit(value); }
         protected int getRuntimeValue() { return RequestThrottler.getRequestMaxLimit(); }
-        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null) return Double.NaN;
@@ -14137,7 +13912,6 @@ protected int computeTarget(double observed) {
             if (rate == null || rate.getLastEventCount() == 0) return Double.NaN;
             return rate.getAverageValue();
         }
-        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
@@ -14167,7 +13941,6 @@ protected int computeTarget(double observed) {
         }
         protected void applyValue(int value) { RequestThrottler.setRequestPctLimit(value); }
         protected int getRuntimeValue() { return RequestThrottler.getRequestPctLimit(); }
-        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null) return Double.NaN;
@@ -14175,7 +13948,6 @@ protected int computeTarget(double observed) {
             if (rate == null || rate.getLastEventCount() == 0) return Double.NaN;
             return rate.getAverageValue();
         }
-        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
@@ -14204,7 +13976,6 @@ protected int computeTarget(double observed) {
         }
         protected void applyValue(int value) { RequestThrottler.setRequestBurst1sThreshold(value); }
         protected int getRuntimeValue() { return RequestThrottler.getRequestBurst1sThreshold(); }
-        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null) return Double.NaN;
@@ -14212,7 +13983,6 @@ protected int computeTarget(double observed) {
             if (rate == null || rate.getLastEventCount() == 0) return Double.NaN;
             return rate.getAverageValue();
         }
-        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
@@ -14240,11 +14010,9 @@ protected int computeTarget(double observed) {
         }
         protected void applyValue(int value) { RequestThrottler.setRequestRejectThreshold(value); }
         protected int getRuntimeValue() { return RequestThrottler.getRequestRejectThreshold(); }
-        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             return getAdditionalStatHourly(_context, "jobQueue.loadRecoveryTime");
         }
-        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             if (Double.isNaN(observed)) return current;
@@ -14269,11 +14037,9 @@ protected int computeTarget(double observed) {
         }
         protected void applyValue(int value) { RequestThrottler.setRequestRejectSteepness(value); }
         protected int getRuntimeValue() { return RequestThrottler.getRequestRejectSteepness(); }
-        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             return getAdditionalStatHourly(_context, "jobQueue.loadRecoveryTime");
         }
-        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             if (Double.isNaN(observed)) return current;
@@ -14298,11 +14064,9 @@ protected int computeTarget(double observed) {
         }
         protected void applyValue(int value) { RequestThrottler.setRequestLoadWeight(value); }
         protected int getRuntimeValue() { return RequestThrottler.getRequestLoadWeight(); }
-        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             return getAdditionalStatHourly(_context, "jobQueue.loadRecoveryTime");
         }
-        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             if (Double.isNaN(observed)) return current;
@@ -14334,7 +14098,6 @@ protected int computeTarget(double observed) {
         }
         protected void applyValue(int value) { RequestThrottler.setHighLoadLagMs(value); }
         protected int getRuntimeValue() { return RequestThrottler.getHighLoadLagMs(); }
-        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null) return Double.NaN;
@@ -14343,8 +14106,8 @@ protected int computeTarget(double observed) {
             return rate.getAverageValue();
         }
         /**
-         * Compute the target value based on observed stat and configured limits.
-         * <p>Hysteresis: observed &gt; 200ms → tighten (decrease threshold);
+         * Target for the high-load lag threshold, tightened or loosened by lag hysteresis.
+         * <p> observed &gt; 200ms → tighten (decrease threshold);
          * observed &lt; 50ms → loosen (increase threshold).  The 150ms
          * dead-band (50–200) prevents oscillation near the boundary.
          *
@@ -14376,7 +14139,6 @@ protected int computeTarget(double observed) {
         }
         protected void applyValue(int value) { RequestThrottler.setHighLoadCpuPct(value); }
         protected int getRuntimeValue() { return RequestThrottler.getHighLoadCpuPct(); }
-        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null) return Double.NaN;
@@ -14384,7 +14146,6 @@ protected int computeTarget(double observed) {
             if (rate == null || rate.getLastEventCount() == 0) return Double.NaN;
             return rate.getAverageValue();
         }
-        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             // Hold steady — CPU threshold is system-dependent, not load-reactive
             return getRuntimeValue();
@@ -14395,7 +14156,7 @@ protected int computeTarget(double observed) {
      * Tunes the moderate-load job lag threshold in RequestThrottler.
      * Controls when low-share peers start being disconnected.
      * <p>Independently tunes based on observed jobLag (not derived from
-     * {@link RequestThrottler#getHighLoadLagMs()}) to avoid lockstep
+     * {@link RequestThrottler#getHighLoadLagMs}) to avoid lockstep
      * oscillation with {@link RequestHighLoadLagParam}.  Uses a secondary
      * signal ({@code jobQueue.readyJobs}) to break coupling when both params
      * share the same primary lag signal.
@@ -14405,7 +14166,7 @@ protected int computeTarget(double observed) {
      * cross-reference prevents correlated oscillation with the high-load
      * param (which uses a 50–200ms dead-band on the same primary signal).
      * <p>Ceiling invariant: always stays at least {@code _step} below
-     * {@link RequestThrottler#getHighLoadLagMs()} to maintain the
+     * {@link RequestThrottler#getHighLoadLagMs} to maintain the
      * ordering moderate &lt; high.
      *
      * @since 0.9.70+
@@ -14417,7 +14178,6 @@ protected int computeTarget(double observed) {
         }
         protected void applyValue(int value) { RequestThrottler.setModerateLoadLagMs(value); }
         protected int getRuntimeValue() { return RequestThrottler.getModerateLoadLagMs(); }
-        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null) return Double.NaN;
@@ -14426,10 +14186,10 @@ protected int computeTarget(double observed) {
             return rate.getAverageValue();
         }
         /**
-         * Compute the target value based on observed stat and configured limits.
+         * Target for the moderate-load lag threshold, decoupled from the high-load param.
          * <p>Uses independent thresholds on the primary signal (jobLag) and
          * a secondary signal (readyJobs) to decouple from the high-load param.
-         * Tighten when lag &gt; 100ms or queue depth &gt; 20; loosen only when
+         * Tighten when lag &gt; 100ms or queue depth &gt; 20. Loosen only when
          * both are low (lag &lt; 30ms and readyJobs &lt; 5).
          *
          * @param observed the 60s avg jobLag in ms
@@ -14468,7 +14228,6 @@ protected int computeTarget(double observed) {
         }
         protected void applyValue(int value) { RequestThrottler.setModerateLoadCpuPct(value); }
         protected int getRuntimeValue() { return RequestThrottler.getModerateLoadCpuPct(); }
-        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null) return Double.NaN;
@@ -14476,7 +14235,6 @@ protected int computeTarget(double observed) {
             if (rate == null || rate.getLastEventCount() == 0) return Double.NaN;
             return rate.getAverageValue();
         }
-        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             return getRuntimeValue();
         }
@@ -14494,7 +14252,6 @@ protected int computeTarget(double observed) {
         }
         protected void applyValue(int value) { RequestThrottler.setSustainedModerateLoadMs(value); }
         protected int getRuntimeValue() { return (int) RequestThrottler.getSustainedModerateLoadMs(); }
-        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null) return Double.NaN;
@@ -14502,7 +14259,6 @@ protected int computeTarget(double observed) {
             if (rate == null || rate.getLastEventCount() == 0) return Double.NaN;
             return rate.getAverageValue();
         }
-        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             return getRuntimeValue();
         }
@@ -14520,7 +14276,6 @@ protected int computeTarget(double observed) {
         }
         protected void applyValue(int value) { BuildExecutor.setPoolFailureThreshold(value); }
         protected int getRuntimeValue() { return BuildExecutor.getPoolFailureThreshold(); }
-        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null) return Double.NaN;
@@ -14528,7 +14283,6 @@ protected int computeTarget(double observed) {
             if (rate == null || rate.getLastEventCount() == 0) return Double.NaN;
             return rate.getAverageValue();
         }
-        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
@@ -14552,7 +14306,6 @@ protected int computeTarget(double observed) {
         }
         protected void applyValue(int value) { BuildExecutor.setPoolBackoffMs(value); }
         protected int getRuntimeValue() { return (int) BuildExecutor.getPoolBackoffMs(); }
-        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null) return Double.NaN;
@@ -14560,7 +14313,6 @@ protected int computeTarget(double observed) {
             if (rate == null || rate.getLastEventCount() == 0) return Double.NaN;
             return rate.getAverageValue();
         }
-        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
@@ -14597,7 +14349,6 @@ protected int computeTarget(double observed) {
         protected int getRuntimeValue() {
             return BuildExecutor.getTunnelTargetBuffer(_context);
         }
-        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null) return Double.NaN;
@@ -14605,7 +14356,6 @@ protected int computeTarget(double observed) {
             if (rate == null || rate.getLastEventCount() == 0) return Double.NaN;
             return rate.getAverageValue();
         }
-        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
@@ -14670,7 +14420,6 @@ protected int computeTarget(double observed) {
                 return untestedMultiplier;
             return _context.getProperty("i2p.tunnel.untestedMultiplier", 2);
         }
-        /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null) return Double.NaN;
@@ -14678,7 +14427,6 @@ protected int computeTarget(double observed) {
             if (rate == null || rate.getLastEventCount() == 0) return Double.NaN;
             return rate.getAverageValue();
         }
-        /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             double memPressure = getMemoryPressure();
@@ -14833,7 +14581,7 @@ protected int computeTarget(double observed) {
      * Tunes the stale-build pruning threshold percentage.  Builds whose
      * queue-wait has consumed this fraction of the adaptive timeout budget
      * are pruned before dispatch.  Higher values let older builds through
-     * (more tolerant); lower values prune sooner (more aggressive).
+     * (more tolerant). Lower values prune sooner (more aggressive).
      */
     private class StaleBuildThresholdParam extends BaseParam {
         StaleBuildThresholdParam() {

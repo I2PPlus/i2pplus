@@ -21,7 +21,6 @@ import java.util.Arrays;
 /**
  * <p>A simple, fast array of bits, represented compactly by an array of ints internally.</p>
  *
- * @author Sean Owen
  */
 public final class BitArray implements Cloneable {
 
@@ -318,7 +317,7 @@ public final class BitArray implements Cloneable {
    *
    * @param bitOffset first bit to start writing
    * @param array array to write into. Bytes are written most-significant byte first. This is the opposite
-   *              of the internal representation, which is exposed by {@link #getBitArray()}
+   * of the internal representation, which is exposed by {@link #getBitArray}
    * @param offset position in array to start writing
    * @param numBytes how many bytes to write
    */
@@ -382,10 +381,8 @@ public final class BitArray implements Cloneable {
   }
 
   /**
-   * @param o the object to compare
-   * @return true if this BitArray equals the given object
-   */
-  /**
+   * Whether the other array has the same bits.
+   *
    * @param o the object to compare
    * @return true if this BitArray equals the given object
    */
@@ -399,9 +396,8 @@ public final class BitArray implements Cloneable {
   }
 
   /**
-   * @return the hash code value for this BitArray
-   */
-  /**
+   * Hash of the bit words.
+   *
    * @return the hash code value for this BitArray
    */
   @Override
@@ -410,9 +406,8 @@ public final class BitArray implements Cloneable {
   }
 
   /**
-   * @return a string representation of this BitArray
-   */
-  /**
+   * Bits as text for debugging.
+   *
    * @return a string representation of this BitArray
    */
   @Override
@@ -428,9 +423,8 @@ public final class BitArray implements Cloneable {
   }
 
   /**
-   * @return a copy of this BitArray
-   */
-  /**
+   * A copy of this array.
+   *
    * @return a copy of this BitArray
    */
   @Override

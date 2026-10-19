@@ -21,14 +21,14 @@ import net.i2p.router.tunnel.pool.TunnelPool;
 public interface TunnelManagerFacade extends Service {
 
     /**
-     * Pick a random inbound exploratory tunnel
+     * Pick a random inbound exploratory tunnel.
      *
      * @return null if none
      */
     TunnelInfo selectInboundTunnel();
 
     /**
-     * Pick a random inbound tunnel from the given destination's pool
+     * Pick a random inbound tunnel from the given destination's pool.
      *
      * @param destination if null, returns inbound exploratory tunnel
      * @return null if none
@@ -36,14 +36,14 @@ public interface TunnelManagerFacade extends Service {
     TunnelInfo selectInboundTunnel(Hash destination);
 
     /**
-     * Pick a random outbound exploratory tunnel
+     * Pick a random outbound exploratory tunnel.
      *
      * @return null if none
      */
     TunnelInfo selectOutboundTunnel();
 
     /**
-     * Pick a random outbound tunnel from the given destination's pool
+     * Pick a random outbound tunnel from the given destination's pool.
      *
      * @param destination if null, returns outbound exploratory tunnel
      * @return null if none
@@ -192,7 +192,7 @@ public interface TunnelManagerFacade extends Service {
     public long getLastParticipatingExpiration();
 
     /**
-     * Count how many inbound tunnel requests we have received but not yet processed
+     * Count how many inbound tunnel requests we have received but not yet processed.
      *
      * @return number of inbound build requests waiting in the queue
      */
@@ -299,32 +299,32 @@ public interface TunnelManagerFacade extends Service {
      */
     public void setOutboundSettings(Hash client, TunnelPoolSettings settings);
     /**
-     * For TunnelRenderer in router console
+     * For TunnelRenderer in router console.
      *
      * @param out list that the client inbound, client outbound and both
-     *            exploratory pools are appended to
+     * exploratory pools are appended to
      */
     public void listPools(List<TunnelPool> out);
     /**
-     * For TunnelRenderer in router console
+     * For TunnelRenderer in router console.
      *
      * @return snapshot of the inbound pools, keyed by destination hash
      */
     public Map<Hash, TunnelPool> getInboundClientPools();
     /**
-     * For TunnelRenderer in router console
+     * For TunnelRenderer in router console.
      *
      * @return snapshot of the outbound pools, keyed by destination hash
      */
     public Map<Hash, TunnelPool> getOutboundClientPools();
     /**
-     * For TunnelRenderer in router console
+     * For TunnelRenderer in router console.
      *
      * @return the shared inbound exploratory pool, never null
      */
     public TunnelPool getInboundExploratoryPool();
     /**
-     * For TunnelRenderer in router console
+     * For TunnelRenderer in router console.
      *
      * @return the shared outbound exploratory pool, never null
      */
@@ -352,7 +352,7 @@ public interface TunnelManagerFacade extends Service {
      * Run both of a client's pools' ensure logic on demand instead of
      * waiting for the next build-timer interval.  Called from the data
      * phase when a send failed for pool-empty reasons (message expired
-     * while queued, no tunnels available) — a liveness signal that the
+     * while queued, no tunnels available). A liveness signal that the
      * pools need rebuilding now.  Each pool's internal ensure throttle
      * still applies, so a failure storm cannot become a build storm.
      * <p>The pool maps are keyed by the <b>local</b> client (source)

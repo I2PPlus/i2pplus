@@ -24,13 +24,13 @@ import static org.junit.Assert.*;
 
 /**
  * Tests for the HTTP proxy server request handling helpers
- * extracted from I2PTunnelHTTPServer.blockingHandle().
+ * extracted from {@link net.i2p.i2ptunnel.I2PTunnelHTTPServer#blockingHandle}.
  */
 public class I2PTunnelHTTPServerTest {
     private static final I2PAppContext CTX = I2PAppContext.getGlobalContext();
     private static final Log LOG = new Log(I2PTunnelHTTPServerTest.class);
 
-    /** I2PSocket stub: configurable input, capture output, counts close() */
+    /** I2PSocket stub: configurable input, capture output, counts close(). */
     private static class FakeSocket implements I2PSocket {
         private InputStream _in;
         private final ByteArrayOutputStream _out = new ByteArrayOutputStream();

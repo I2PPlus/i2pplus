@@ -16,7 +16,6 @@ package net.i2p.data;
  * This class is written such that apps may extend it to
  * create their own policies.
  *
- * @author zzz
  */
 public class VerifiedDestination extends Destination {
 
@@ -26,7 +25,7 @@ public class VerifiedDestination extends Destination {
     }
 
     /**
-     * Alternative constructor which takes a base64 string representation
+     * Alternative constructor which takes a base64 string representation.
      *
      * @param s a Base64 representation of the destination, as (eg) is used in hosts.txt
      * @throws DataFormatException if the string does not decode to a full-length destination
@@ -37,7 +36,7 @@ public class VerifiedDestination extends Destination {
     }
 
     /**
-     * Create from an existing Dest
+     * Create from an existing Dest.
      *
      * @param d must be non-null
      * @throws DataFormatException if the source destination's base64 form cannot be parsed
@@ -65,7 +64,7 @@ public class VerifiedDestination extends Destination {
         return verifyUnknownCert();
     }
 
-    /** Defaults for Signed Certs */
+    /** Defaults for Signed Certs. */
     public static final int CERTIFICATE_LENGTH_SIGNED = Signature.SIGNATURE_BYTES;
 
     /** Length of a signed certificate including the signer hash. */
@@ -91,7 +90,7 @@ public class VerifiedDestination extends Destination {
      * The application will need to apply additional steps to select
      * an appropriate signing Destination and verify the signature.
      * <p>
-     * See PrivateKeyFile.verifySignature() for sample verification code.
+     * See {@link net.i2p.data.PrivateKeyFile#verifySignature} for sample verification code.
      *
      * @return true if the signed certificate payload length is valid
      */
@@ -102,7 +101,7 @@ public class VerifiedDestination extends Destination {
     }
 
     /**
-     * Reject all unknown certs
+     * Reject all unknown certs.
      *
      * @return false always
      */

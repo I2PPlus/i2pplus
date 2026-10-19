@@ -42,10 +42,10 @@ class SAMUtils {
 
      private final static Log _log = new Log(SAMUtils.class);
 
-    /** The key for the command portion of a parsed SAM message */
+    /** The key for the command portion of a parsed SAM message. */
     public static final String COMMAND = "\"\"COMMAND\"\"";
 
-    /** The key for the opcode portion of a parsed SAM message */
+    /** The key for the opcode portion of a parsed SAM message. */
     public static final String OPCODE = "\"\"OPCODE\"\"";
 
     /**
@@ -134,7 +134,7 @@ class SAMUtils {
     }
 
     /**
-     * Resolve the destination from a key or a hostname
+     * Resolve the destination from a key or a hostname.
      * @param s Hostname or key to be resolved
      * @return the Destination for the specified hostname, non-null
      * @throws DataFormatException on bad Base64 or name not found

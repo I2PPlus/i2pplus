@@ -227,7 +227,7 @@ public final class GraphThemeColors {
     /** Space-separated stop separator; a stop may itself contain commas, so never split on those. */
     private static final Pattern WS_SPLIT = Pattern.compile("\\s+");
 
-    /** theme directory plus theme name to its parsed declarations. */
+    /** Theme directory plus theme name to its parsed declarations. */
     private static final Map<String, Entry> CACHE = new ConcurrentHashMap<>();
 
     /** Marker for "the stylesheet is not there", which is a cacheable state of its own. */

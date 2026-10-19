@@ -1048,7 +1048,11 @@ class SAMv1Handler extends SAMHandler implements SAMRawReceiver, SAMDatagramRece
         }
     }
 
-    /** @param msg may be null */
+    /**
+     * Report the result of an outgoing stream connection.
+     *
+     * @param msg may be null
+     */
     public void notifyStreamOutgoingConnection ( int id, String result, String msg ) throws IOException
     {
         if ( streamSession == null )
@@ -1072,8 +1076,8 @@ class SAMv1Handler extends SAMHandler implements SAMRawReceiver, SAMDatagramRece
      * Create a string to be appended to a status.
      *
      * @param msg may be null
-     * @return non-null, "" if msg is null, MESSAGE=msg or MESSAGE="msg a b c"
-     *         with leading space if msg is non-null
+     * @return non-null, "" if msg is null, MESSAGE=msg or MESSAGE="msg a BC"
+     * with leading space if msg is non-null
      * @since 0.9.20
      */
     protected static String createMessageString(String msg) {
@@ -1095,7 +1099,7 @@ class SAMv1Handler extends SAMHandler implements SAMRawReceiver, SAMDatagramRece
 
     /**
      * Write a string and message, escaping the message.
-     * Writes s + createMessageString(msg) + \n
+     * Writes s + createMessageString(msg) + \n.
      *
      * @param s The string, non-null
      * @param msg the message to escape and append as a MESSAGE= field, or null for no message

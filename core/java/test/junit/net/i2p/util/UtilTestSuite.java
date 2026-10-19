@@ -4,9 +4,8 @@ import junit.framework.Test;
 import junit.framework.TestSuite;
 
 /**
- * Test suite for all available tests in the net.i2p.util package
+ * Test suite for all available tests in the net.i2p.util package.
  *
- * @author comwiz
  */
 public class UtilTestSuite {
 

@@ -229,7 +229,11 @@ public class KBucketImplTest {
         assertFalse(bucket.getEntries().contains(h(20)));
     }
 
-    /** @since 0.9.71+ */
+    /**
+     * Clearing a bucket drops its replacements.
+     *
+     * @since 0.9.71+
+     */
     @Test
     public void testClearDropsReplacements() {
         I2PAppContext ctx = I2PAppContext.getGlobalContext();
@@ -243,7 +247,11 @@ public class KBucketImplTest {
         assertEquals(0, bucket.getReplacementCount());
     }
 
-    /** @since 0.9.71+ */
+    /**
+     * A not-full bucket keeps no replacements.
+     *
+     * @since 0.9.71+
+     */
     @Test
     public void testNoReplacementsWhenNotFull() {
         I2PAppContext ctx = I2PAppContext.getGlobalContext();

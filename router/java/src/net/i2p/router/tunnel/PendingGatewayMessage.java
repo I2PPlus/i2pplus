@@ -8,9 +8,9 @@ import net.i2p.data.i2np.I2NPMessage;
 import net.i2p.router.util.CDQEntry;
 
 /**
- *  Stores all the state for an unsent or partially-sent message
+ * Stores all the state for an unsent or partially-sent message.
  *
- *  @since 0.9.3 refactored from TunnelGateway.Pending
+ * @since 0.9.3 refactored from TunnelGateway.Pending
  */
 class PendingGatewayMessage implements CDQEntry {
     /** The destination router. */
@@ -29,7 +29,7 @@ class PendingGatewayMessage implements CDQEntry {
     protected int _fragmentNumber;
     /** When this message was created. */
     protected final long _created;
-    /** IDs of TunnelDataMessages this message was fragmented into */
+    /** IDs of TunnelDataMessages this message was fragmented into. */
     private List<Long> _messageIds;
     /** Time enqueued in CDQ. */
     private long _enqueueTime;
@@ -111,9 +111,9 @@ class PendingGatewayMessage implements CDQEntry {
     public void incrementFragmentNumber() { _fragmentNumber++; }
 
     /**
-     *  Add an ID to the list of the TunnelDataMssages this message was fragmented into.
-     *  Unused except in notePreprocessing() calls for debugging
-     *  @param id the message ID to add
+     * Add an ID to the list of the TunnelDataMssages this message was fragmented into.
+     * Unused except in notePreprocessing() calls for debugging.
+     * @param id the message ID to add
      */
     public void addMessageId(long id) {
         synchronized (this) {
@@ -124,9 +124,9 @@ class PendingGatewayMessage implements CDQEntry {
     }
 
     /**
-     *  The IDs of the TunnelDataMssages this message was fragmented into.
-     *  Unused except in notePreprocessing() calls for debugging
-     *  @return non-null list of message IDs
+     * The IDs of the TunnelDataMssages this message was fragmented into.
+     * Unused except in notePreprocessing() calls for debugging.
+     * @return non-null list of message IDs
      */
     public List<Long> getMessageIds() {
         synchronized (this) {
@@ -138,15 +138,15 @@ class PendingGatewayMessage implements CDQEntry {
     }
 
     /**
-     *  For CDQ
-     *  @since 0.9.3
+     * For CDQ.
+     * @since 0.9.3
      */
     public void setEnqueueTime(long now) {
         _enqueueTime = now;
     }
 
     /**
-     * For CDQ
+     * For CDQ.
      * @return the enqueue time
      * @since 0.9.3
      */
@@ -155,8 +155,8 @@ class PendingGatewayMessage implements CDQEntry {
     }
 
     /**
-     *  For CDQ
-     *  @since 0.9.3
+     * For CDQ.
+     * @since 0.9.3
      */
     public void drop() {
         // No-op - intentionally empty

@@ -65,7 +65,6 @@ package net.i2p.data;
  * <li><strong>Algorithm Selection:</strong> Use appropriate symmetric cipher for key size</li>
  * </ul>
  *
- * @author jrandom
  */
 public class SessionKey extends SimpleDataStructure {
     private Object _preparedKey;
@@ -73,7 +72,7 @@ public class SessionKey extends SimpleDataStructure {
     /** Key size in bytes (32). */
     public static final int KEYSIZE_BYTES = 32;
 
-    /** A key with all zeroes in the data */
+    /** A key with all zeroes in the data. */
     public static final SessionKey INVALID_KEY = new SessionKey(new byte[KEYSIZE_BYTES]);
 
     /**

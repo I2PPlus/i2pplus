@@ -37,7 +37,6 @@ import java.util.GregorianCalendar;
  *
  * <p>See {@link TimeParser} for complete syntax reference and parsing details.
  *
- * @author Sasa Markovic
  */
 public class TimeSpec {
     /** Time specification represents an absolute date/time. */

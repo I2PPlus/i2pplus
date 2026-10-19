@@ -12,7 +12,7 @@ import net.i2p.stat.RateStat;
 import net.i2p.util.Log;
 
 /**
- * Tunnel related history information
+ * Tunnel related history information.
  */
 public class TunnelHistory {
     private final RouterContext _context;
@@ -32,18 +32,18 @@ public class TunnelHistory {
     private final RateStat _rejectRate;
     private final RateStat _failRate;
     private volatile long _lastCoalesce = System.currentTimeMillis();
-    /** Rate periods for history tracking */
+    /** Rate periods for history tracking. */
     static final long[] RATES = new long[] {RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR };
 
-    /** Probabalistic tunnel rejection due to a flood of requests - infrequent */
+    /** Probabalistic tunnel rejection due to a flood of requests - infrequent. */
     public static final int TUNNEL_REJECT_PROBABALISTIC_REJECT = 10;
-    /** Tunnel rejection due to temporary cpu/job/tunnel overload - rare */
+    /** Tunnel rejection due to temporary cpu/job/tunnel overload - rare. */
     public static final int TUNNEL_REJECT_TRANSIENT_OVERLOAD = 20;
-    /** Tunnel rejection due to excess bandwidth usage - used for most rejections even if not really for bandwidth */
+    /** Tunnel rejection due to excess bandwidth usage - used for most rejections even if not really for bandwidth. */
     public static final int TUNNEL_REJECT_BANDWIDTH = 30;
-    /** Tunnel rejection due to system failure - not currently used */
+    /** Tunnel rejection due to system failure - not currently used. */
     public static final int TUNNEL_REJECT_CRIT = 50;
-    /** Streaming NACK - peer accepted tunnel but can't deliver data */
+    /** Streaming NACK - peer accepted tunnel but can't deliver data. */
     public static final int TUNNEL_REJECT_STREAMING_NACK = 100;
 
     /**
@@ -60,86 +60,86 @@ public class TunnelHistory {
     }
 
     /**
-     * Total tunnels the peer has agreed to participate in
+     * Total tunnels the peer has agreed to participate in.
      *
      * @return the count since the last decay, applied every 8 hours by
-     *         {@link #decayLifetimeCounters(long)}
+     * {@link #decayLifetimeCounters(long)}
      */
     public long getLifetimeAgreedTo() {return _lifetimeAgreedTo.get();}
     /**
-     * Total tunnels the peer has refused to participate in (does not include timeouts)
+     * Total tunnels the peer has refused to participate in (does not include timeouts).
      *
      * @return the count since the last decay, applied every 8 hours by
-     *         {@link #decayLifetimeCounters(long)}
+     * {@link #decayLifetimeCounters(long)}
      */
     public long getLifetimeRejected() {return _lifetimeRejected.get();}
     /**
-     * Total tunnel builds to this peer that timed out without a response
+     * Total tunnel builds to this peer that timed out without a response.
      *
      * @return the count since the last decay, applied every 8 hours by
-     *         {@link #decayLifetimeCounters(long)}
+     * {@link #decayLifetimeCounters(long)}
      */
     public long getLifetimeTimedOut() {return _lifetimeTimedOut.get();}
     /**
-     * Total tunnels the peer has agreed to participate in that were later marked as failed prematurely
+     * Total tunnels the peer has agreed to participate in that were later marked as failed prematurely.
      *
      * @return the count since the last decay, applied every 8 hours by
-     *         {@link #decayLifetimeCounters(long)}
+     * {@link #decayLifetimeCounters(long)}
      */
     public long getLifetimeFailed() {return _lifetimeFailed.get();}
     /**
-     * When the peer last agreed to participate in a tunnel
+     * When the peer last agreed to participate in a tunnel.
      *
      * @return milliseconds since the epoch, or 0 if the peer has never agreed
      */
     public long getLastAgreedTo() {return _lastAgreedTo;}
     /**
-     * When the peer last refused to participate in a tunnel with level of critical
+     * When the peer last refused to participate in a tunnel with level of critical.
      *
      * @return milliseconds since the epoch, or 0 if the peer has never
-     *         rejected at this severity
+     * rejected at this severity
      */
     public long getLastRejectedCritical() {return _lastRejectedCritical;}
     /**
-     * When the peer last refused to participate in a tunnel complaining of bandwidth overload
+     * When the peer last refused to participate in a tunnel complaining of bandwidth overload.
      *
      * @return milliseconds since the epoch, or 0 if the peer has never
-     *         rejected at this severity
+     * rejected at this severity
      */
     public long getLastRejectedBandwidth() {return _lastRejectedBandwidth;}
     /**
-     * When the peer last refused to participate in a tunnel complaining of transient overload
+     * When the peer last refused to participate in a tunnel complaining of transient overload.
      *
      * @return milliseconds since the epoch, or 0 if the peer has never
-     *         rejected at this severity
+     * rejected at this severity
      */
     public long getLastRejectedTransient() {return _lastRejectedTransient;}
     /**
-     * When the peer last refused to participate in a tunnel probabalistically
+     * When the peer last refused to participate in a tunnel probabalistically.
      *
      * @return milliseconds since the epoch, or 0 if the peer has never
-     *         rejected at this severity
+     * rejected at this severity
      */
     public long getLastRejectedProbabalistic() {return _lastRejectedProbabalistic;}
     /**
-     * When the peer last timed out without responding to a tunnel request
+     * When the peer last timed out without responding to a tunnel request.
      *
      * @return milliseconds since the epoch, or 0 if the peer has never timed out
      */
     public long getLastTimedOut() {return _lastTimedOut;}
     /**
-     * When the last tunnel the peer participated in failed
+     * When the last tunnel the peer participated in failed.
      *
      * @return milliseconds since the epoch, or 0 if no participating tunnel
-     *         has failed
+     * has failed
      */
     public long getLastFailed() {return _lastFailed;}
 
     /**
-     * When the peer last passed a tunnel test
+     * When the peer last passed a tunnel test.
      *
      * @return milliseconds since the epoch, or 0 if the peer has never passed
-     *         a tunnel test
+     * a tunnel test
      */
     public long getLastTestedSuccessfully() {return _lastTestedSuccessfully;}
 
@@ -154,8 +154,8 @@ public class TunnelHistory {
     /**
      * Calculate the ratio of accepted to total tunnel requests.
      * Only explicit rejections are counted; timeouts are tracked
-     * separately via {@link #getLifetimeTimedOut()} and the
-     * time-windowed {@link #getRejectionRate()} RateStat.
+     * separately via {@link #getLifetimeTimedOut} and the
+     * time-windowed {@link #getRejectionRate} RateStat.
      *
      * @return ratio (0.0 to 1.0), or 1.0 if no data available
      */
@@ -209,8 +209,8 @@ public class TunnelHistory {
      * Count a tunnel build timeout (peer did not respond in time).
      * Timeouts are tracked separately from rejections because a peer that
      * is slow to respond is different from a peer that actively refuses.
-     * Timeouts do NOT count toward {@link #getLifetimeRejected()} and
-     * therefore do not affect {@link #getAcceptanceRatio()}.
+     * Timeouts do NOT count toward {@link #getLifetimeRejected} and
+     * therefore do not affect {@link #getAcceptanceRatio}.
      */
     public void incrementTimedOut() {
         _lifetimeTimedOut.incrementAndGet();
@@ -219,7 +219,7 @@ public class TunnelHistory {
     }
 
     /**
-     * Define this rate as the probability it really failed
+     * Define this rate as the probability it really failed.
      *
      * @param pct = probability * 100
      */
@@ -260,7 +260,7 @@ public class TunnelHistory {
     /**
      * Apply the lifetime-counter decay if its interval has elapsed.
      * <p>Deliberately does not coalesce the {@link RateStat}s. Those are folded by
-     * {@link #coalesceStats()} on the caller's own cadence, and folding them again
+     * {@link #coalesceStats} on the caller's own cadence, and folding them again
      * here would advance their windows twice as often as the statistic's consumers
      * expect. A caller that only wants the decay — the tier reorganise walking every
      * candidate — can call this cheaply: one volatile read and one comparison, with
@@ -325,7 +325,7 @@ public class TunnelHistory {
     }
 
     /**
-     * Write the data from the profile to the stream
+     * Write the data from the profile to the stream.
      *
      * @param out the stream to write the properties-formatted history to
      * @param addComments add comment lines to the output

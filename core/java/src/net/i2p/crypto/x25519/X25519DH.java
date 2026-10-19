@@ -36,7 +36,7 @@ public class X25519DH {
     }
 
     /**
-     * Test vectors from RFC 7748
+     * Test vectors from RFC 7748.
      *
      * @since 0.9.62
      */

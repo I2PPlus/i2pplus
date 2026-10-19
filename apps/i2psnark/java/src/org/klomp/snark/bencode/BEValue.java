@@ -107,9 +107,9 @@ public class BEValue {
     /**
      * Returns this BEValue as int. This operation only succeeds when the BEValue is actually a
      * Number, otherwise it will throw a InvalidBEncodingException. The returned int is the result
-     * of <code>Number.intValue()</code>.
+     * of {@code Number.intValue()}.
      *
-     * @return the value narrowed by {@link Number#intValue()}
+     * @return the value narrowed by {@link Number#intValue}
      * @throws InvalidBEncodingException if the value is not a Number
      */
     public int getInt() throws InvalidBEncodingException {
@@ -119,9 +119,9 @@ public class BEValue {
     /**
      * Returns this BEValue as long. This operation only succeeds when the BEValue is actually a
      * Number, otherwise it will throw a InvalidBEncodingException. The returned long is the result
-     * of <code>Number.longValue()</code>.
+     * of {@code Number.longValue()}.
      *
-     * @return the value narrowed by {@link Number#longValue()}
+     * @return the value narrowed by {@link Number#longValue}
      * @throws InvalidBEncodingException if the value is not a Number
      */
     public long getLong() throws InvalidBEncodingException {

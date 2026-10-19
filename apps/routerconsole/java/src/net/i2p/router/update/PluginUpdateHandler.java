@@ -22,7 +22,6 @@ import net.i2p.util.SystemVersion;
  * <p>
  * Moved from web/ and turned into an Updater.
  *
- * @author zzz
  * @since 0.7.12
  */
 class PluginUpdateHandler implements Checker, Updater {
@@ -31,7 +30,7 @@ class PluginUpdateHandler implements Checker, Updater {
     private final Log _log;
 
     /**
-     * Create a plugin update handler
+     * Create a plugin update handler.
      *
      * @param ctx the router context
      * @param mgr the console update manager
@@ -42,7 +41,7 @@ class PluginUpdateHandler implements Checker, Updater {
         _mgr = mgr;
     }
 
-    /** check a single plugin */
+    /** Check a single plugin. */
     @Override
     public UpdateTask check(UpdateType type, UpdateMethod method,
                             String appName, String currentVersion, long maxTime) {
@@ -73,7 +72,7 @@ class PluginUpdateHandler implements Checker, Updater {
         return new PluginUpdateChecker(_context, _mgr, updateSources, appName, oldVersion);
     }
 
-    /** download a single plugin */
+    /** Download a single plugin. */
     @Override
     public UpdateTask update(UpdateType type, UpdateMethod method, List<URI> updateSources,
                                String appName, String newVersion, long maxTime) {

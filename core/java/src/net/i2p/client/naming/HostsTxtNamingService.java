@@ -42,11 +42,11 @@ public class HostsTxtNamingService extends MetaNamingService {
 
     /**
      * If this system property is specified, the tunnel will read the
-     * given file for hostname=destKey values when resolving names
+     * given file for hostname=destKey values when resolving names.
      */
     public static final String PROP_HOSTS_FILE = "i2p.hostsfilelist";
 
-    /** Default hosts.txt filenames */
+    /** Default hosts.txt filenames. */
     public static final String DEFAULT_HOSTS_FILE = "privatehosts.txt,userhosts.txt,hosts.txt";
 
     private List<String> getFilenames() {
@@ -81,7 +81,7 @@ public class HostsTxtNamingService extends MetaNamingService {
 
     /**
      * All services aggregated, unless options contains
-     * the property "file", in which case only for that file
+     * the property "file", in which case only for that file.
      * @return the hostnames from the selected file, or from every service if no file is named
      */
     @Override

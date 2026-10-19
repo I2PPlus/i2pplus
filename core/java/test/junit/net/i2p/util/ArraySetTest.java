@@ -135,8 +135,8 @@ public class ArraySetTest {
     }
 
     /**
-     * AbstractSet.removeAll uses Iterator.remove() when this.size() &lt;= other.size().
-     * ASIterator.remove() used to box the index to Integer and call remove(Object),
+     * AbstractSet.removeAll uses {@link java.util.Iterator#remove} when this.size() &lt;= other.size().
+     * {@code ASIterator.remove()} used to box the index to Integer and call remove(Object),
      * which never removed the entry — leaving cursor != _size so hasNext() spun
      * forever (BldExecutor hang via ClientPeerSelector.selectSingleHop).
      */

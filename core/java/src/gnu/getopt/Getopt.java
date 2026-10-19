@@ -341,10 +341,6 @@ import java.util.ResourceBundle;
  *
  * @version 1.0.7
  *
- * @author Roland McGrath (roland@gnu.ai.mit.edu)
- * @author Ulrich Drepper (drepper@cygnus.com)
- * @author Aaron M. Renn (arenn@urbanophile.com)
- *
  * @see LongOpt
  */
 public class Getopt extends Object

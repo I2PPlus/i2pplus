@@ -46,7 +46,6 @@ import java.util.Set;
 
 /**
  * Writer for a package file.
- * @author John Rose
  */
 class PackageWriter extends BandStructure {
     Package pkg;

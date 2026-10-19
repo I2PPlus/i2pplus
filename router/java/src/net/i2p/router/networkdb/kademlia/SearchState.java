@@ -218,7 +218,7 @@ class SearchState {
     /**
      * Checks if this search state has been aborted.
      *
-     * @return true once {@link #abort()} has been called
+     * @return true once {@link #abort} has been called
      * @since 0.9.16
      */
     public boolean isAborted() {return _aborted;}

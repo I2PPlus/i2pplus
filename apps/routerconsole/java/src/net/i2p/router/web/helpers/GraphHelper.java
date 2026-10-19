@@ -82,7 +82,7 @@ public class GraphHelper extends FormHandler {
     private static final String STAT_PARAM = "/viewstat.jsp?stat=";
     private static final String GRAPH_HREF = "/graph?stat=";
 
-    /** set the defaults after we have a context */
+    /** Set the defaults after we have a context. */
     @Override
     public void setContextId(String contextId) {
         super.setContextId(contextId);
@@ -106,7 +106,7 @@ public class GraphHelper extends FormHandler {
     }
 
     /**
-     * This must be output in the jsp since &lt;meta&gt; must be in the &lt;head&gt;
+     * This must be output in the jsp since &lt;meta&gt; must be in the &lt;head&gt;.
      * @return the refresh meta
      * @since 0.8.7
      */
@@ -355,7 +355,7 @@ public class GraphHelper extends FormHandler {
     }
 
     /**
-     * For single stat page
+     * For single stat page.
      * @param stat the rate name to plot, or a group id when combining is on
      */
     public void setStat(String stat) {_stat = stat;}
@@ -553,7 +553,7 @@ public class GraphHelper extends FormHandler {
 
     /**
      * For single stat page;
-     * stat = "bw.combined" treated specially
+     * stat = "bw.combined" treated specially.
      *
      * @return the single stat
      */
@@ -687,7 +687,11 @@ public class GraphHelper extends FormHandler {
 
     private boolean _hideLegend;
 
-    /** @since 0.9 */
+    /**
+     * Link to the graph page for a stat.
+     *
+     * @since 0.9
+     */
     private static String link(String stat, boolean showEvents, int periodCount, int end, int width, int height,
                                boolean hideLegend, boolean hideRestarts) {
         return
@@ -843,7 +847,7 @@ public class GraphHelper extends FormHandler {
     }
 
     /**
-     * We have to do this here because processForm() isn't called unless the nonces are good
+     * We have to do this here because processForm() isn't called unless the nonces are good.
      * @return the all messages
      * @since 0.8.7
      */
@@ -864,7 +868,7 @@ public class GraphHelper extends FormHandler {
     }
 
     /**
-     * This was a HelperBase but now it's a FormHandler
+     * This was a HelperBase but now it's a FormHandler.
      * @since 0.8.2
      */
     @Override
@@ -875,7 +879,7 @@ public class GraphHelper extends FormHandler {
     }
 
     /**
-     * Silently save settings if changed, no indication of success or failure
+     * Silently save settings if changed, no indication of success or failure.
      * @since 0.7.10
      */
     private void saveSettings() {

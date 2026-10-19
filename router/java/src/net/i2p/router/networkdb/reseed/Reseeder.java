@@ -42,7 +42,7 @@ import net.i2p.util.VersionComparator;
 
 /**
  * Reseed handler that fetches router infos from configured seed URLs.
- * Uses the built-in URL list unless "i2p.reseedURL" is overridden.
+ * Uses the built-in URL list unless "{@code i2p.reseedURL}" is overridden.
  * Writes results to ./netDb/. Logs to console, router log, and wrapper log.
  * <p>
  * Moved from ReseedHandler in routerconsole; see ReseedChecker for additional validation.
@@ -270,7 +270,7 @@ public class Reseeder {
         private final URI _url;
 
         /**
-         * Start a reseed from the default URL list
+         * Start a reseed from the default URL list.
          */
         public ReseedRunner() {this(null);}
 
@@ -323,7 +323,7 @@ public class Reseeder {
             return host != null && !host.isEmpty() && port > 0;
         }
 
-        /** Run the reseed sequence */
+        /** Run the reseed sequence. */
         public void run() {
             try {run2();}
             finally {
@@ -393,7 +393,7 @@ public class Reseeder {
             }
         }
 
-        /** Record and log download bandwidth samples. @since 0.9.18 */
+        /** Record and log download bandwidth samples. @since 0.9.18. */
         private void processBandwidths() {
             if (_bandwidths.isEmpty()) {return;}
             long tot = 0;
@@ -402,7 +402,7 @@ public class Reseeder {
             if (_log.shouldInfo()) {
                 _log.info("Bandwidth average: " + avg + " KB/s from " + _bandwidths.size() + " samples");
             }
-            // TODO _context.bandwidthLimiter().....
+        // TODO _context.bandwidthLimiter().....
         }
 
         /**
@@ -430,7 +430,7 @@ public class Reseeder {
             }
         }
 
-        /** Progress not tracked here. @see #attemptFailed */
+        /** Progress not tracked here. @see #attemptFailed. */
         @Override
         public void bytesTransferred(long alreadyTransferred, int currentWrite, long bytesTransferred, long bytesRemaining, String url) {}
         /** Completion handled in caller. */

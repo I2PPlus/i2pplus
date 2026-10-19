@@ -24,7 +24,6 @@ package org.cybergarage.upnp.device;
  * <p>This class is used by SSDP components to validate and process NT headers in notification
  * messages, enabling proper classification of device advertisements and event notifications.
  *
- * @author Satoshi Konno
  * @since 1.0
  */
 public class NT {

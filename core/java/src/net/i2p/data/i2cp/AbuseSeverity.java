@@ -20,9 +20,8 @@ import java.io.OutputStream;
 /**
  * Provides a severity level (larger numbers are more severe) in association with
  * a client reporting abusive behavior to the router or the router reporting it
- * to the client
+ * to the client.
  *
- * @author jrandom
  */
 public class AbuseSeverity extends DataStructureImpl {
     /** Numeric severity level. */

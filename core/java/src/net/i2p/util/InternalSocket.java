@@ -21,7 +21,7 @@ public class InternalSocket extends Socket {
     private final int _port;
 
     /**
-     * Server side
+     * Server side.
      *
      * @param is the piped stream carrying data from the client to this end
      * @param os the piped stream carrying data from this end to the client
@@ -33,11 +33,11 @@ public class InternalSocket extends Socket {
     }
 
     /**
-     *  Client side
+     * Client side.
      *
-     *  @param port &gt; 0
-     *  @throws IOException if the port is not positive, or no internal server
-     *                      is listening on it
+     * @param port &gt; 0
+     * @throws IOException if the port is not positive, or no internal server
+     * is listening on it
      */
     public InternalSocket(int port) throws IOException {
         if (port <= 0) throw new IOException("Bad port number");
@@ -46,15 +46,15 @@ public class InternalSocket extends Socket {
     }
 
     /**
-     *  Convenience method to return either a Socket or an InternalSocket
+     * Convenience method to return either a Socket or an InternalSocket.
      *
-     *  @param host the host requested, which is only honoured for the loopback
-     *              names inside a running router
-     *  @param port &gt; 0
-     *  @return an {@link InternalSocket} when running under a router and the host is a
-     *          loopback name, otherwise a TCP {@link Socket} to the host and port
-     *  @throws IOException if neither an internal socket nor a TCP socket to the
-     *                      given host and port can be opened
+     * @param host the host requested, which is only honoured for the loopback
+     * names inside a running router
+     * @param port &gt; 0
+     * @return an {@link InternalSocket} when running under a router and the host is a
+     * loopback name, otherwise a TCP {@link Socket} to the host and port
+     * @throws IOException if neither an internal socket nor a TCP socket to the
+     * given host and port can be opened
      */
     public static Socket getSocket(String host, int port) throws IOException {
         if (I2PAppContext.getGlobalContext().isRouterContext() && (host.equals("127.0.0.1") || host.equals("localhost"))) {
@@ -85,20 +85,20 @@ public class InternalSocket extends Socket {
     }
 
     /**
-     * Input stream
+     * Input stream.
      *
      * @param is the replacement stream, installed by the internal server after
-     *           a client has connected
+     * a client has connected
      */
     void setInputStream(InputStream is) {
         _is = is;
     }
 
     /**
-     * Output stream
+     * Output stream.
      *
      * @param os the replacement stream, installed by the internal server after
-     *           a client has connected
+     * a client has connected
      */
     void setOutputStream(OutputStream os) {
         _os = os;
@@ -166,7 +166,7 @@ public class InternalSocket extends Socket {
 
 
     /**
-     * Supported as of 0.9.33, prior to that threw UnsupportedOperationException
+     * Supported as of 0.9.33, prior to that threw UnsupportedOperationException.
      *
      * @return 1 if connected, -1 if not
      */
@@ -177,7 +177,7 @@ public class InternalSocket extends Socket {
 
 
     /**
-     * Supported as of 0.9.33, prior to that threw UnsupportedOperationException
+     * Supported as of 0.9.33, prior to that threw UnsupportedOperationException.
      *
      * @return if connected: actual port for clients, 1 for servers; -1 if not
      */
@@ -188,7 +188,7 @@ public class InternalSocket extends Socket {
 
 
     /**
-     * Supported as of 0.9.33, prior to that threw UnsupportedOperationException
+     * Supported as of 0.9.33, prior to that threw UnsupportedOperationException.
      *
      * @return -1 always
      */
@@ -199,7 +199,7 @@ public class InternalSocket extends Socket {
 
 
     /**
-     * Supported as of 0.9.33, prior to that threw UnsupportedOperationException
+     * Supported as of 0.9.33, prior to that threw UnsupportedOperationException.
      * @return true unless both streams are shut down; a plain socket is never "connected"
      */
     @Override
@@ -208,7 +208,7 @@ public class InternalSocket extends Socket {
     }
 
     /**
-     * Supported as of 0.9.33, prior to that threw UnsupportedOperationException
+     * Supported as of 0.9.33, prior to that threw UnsupportedOperationException.
      * @return whether input shutdown
      */
     @Override
@@ -217,7 +217,7 @@ public class InternalSocket extends Socket {
     }
 
     /**
-     * Supported as of 0.9.33, prior to that threw UnsupportedOperationException
+     * Supported as of 0.9.33, prior to that threw UnsupportedOperationException.
      * @return whether output shutdown
      */
     @Override
@@ -227,14 +227,14 @@ public class InternalSocket extends Socket {
 
 
     /**
-     * Does nothing as of 0.9.33, prior to that threw UnsupportedOperationException
+     * Does nothing as of 0.9.33, prior to that threw UnsupportedOperationException.
      */
     @Override
     public void setSoLinger(boolean on, int linger) { /* nop */ }
 
 
     /**
-     * Supported as of 0.9.33, prior to that threw UnsupportedOperationException
+     * Supported as of 0.9.33, prior to that threw UnsupportedOperationException.
      */
     @Override
     public synchronized void shutdownInput() throws IOException {
@@ -246,7 +246,7 @@ public class InternalSocket extends Socket {
 
     /**
      * Flushes (as the Socket javadocs advise) and closes.
-     * Supported as of 0.9.33, prior to that threw UnsupportedOperationException
+     * Supported as of 0.9.33, prior to that threw UnsupportedOperationException.
      */
     @Override
     public void shutdownOutput() throws IOException {

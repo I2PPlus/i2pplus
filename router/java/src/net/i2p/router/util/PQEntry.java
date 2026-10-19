@@ -17,7 +17,7 @@ package net.i2p.router.util;
 public interface PQEntry {
 
     /**
-     * Higher is higher priority
+     * Higher is higher priority.
      *
      * @return the priority value
      */
@@ -31,7 +31,7 @@ public interface PQEntry {
     public void setSeqNum(long num);
 
     /**
-     * Needed to ensure FIFO ordering within a single priority
+     * Needed to ensure FIFO ordering within a single priority.
      *
      * @return the sequence number
      */

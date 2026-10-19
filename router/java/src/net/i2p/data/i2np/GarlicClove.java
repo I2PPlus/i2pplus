@@ -22,22 +22,21 @@ import net.i2p.util.Log;
  * <p>
  * Note that certificates are always the null certificate at this time, others are unimplemented.
  *
- * @author jrandom
  */
 public class GarlicClove extends DataStructureImpl {
 
     private static final long serialVersionUID = 1L;
-    /** Application context for logging and configuration */
+    /** Application context for logging and configuration. */
     private transient final I2PAppContext _context;
-    /** How and where to deliver this clove */
+    /** How and where to deliver this clove. */
     private DeliveryInstructions _instructions;
-    /** The message payload wrapped in this clove */
+    /** The message payload wrapped in this clove. */
     private I2NPMessage _msg;
-    /** Unique identifier for this clove */
+    /** Unique identifier for this clove. */
     private long _cloveId;
-    /** Time after which this clove expires */
+    /** Time after which this clove expires. */
     private long _expiration;
-    /** Certificate authorizing delivery (always null certificate currently) */
+    /** Certificate authorizing delivery (always null certificate currently). */
     private Certificate _certificate;
 
     /**

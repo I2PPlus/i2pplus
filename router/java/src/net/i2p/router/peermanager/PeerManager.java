@@ -32,7 +32,8 @@ import net.i2p.util.SimpleTimer2;
  * <p>
  * Responsibilities:
  * - Maintains `_peersByCapability` index (character → Set of Hash) for quick capability lookups
- * - Runs Reorg on SimpleTimer2 which calls ProfileOrganizer.reorganize() at adaptive intervals
+  * - Runs Reorg on SimpleTimer2 which calls
+   * {@link net.i2p.router.peermanager.ProfileOrganizer#reorganize} at adaptive intervals
  * (30s early uptime → 90s medium → 250s steady state)
  * - Periodically stores profiles to disk via ProfilePersistenceHelper (every 15 min)
  * - Loads stored profiles from disk on startup in a background thread
@@ -41,7 +42,7 @@ import net.i2p.util.SimpleTimer2;
  * Profile persistence:
  * - Only Tier 1 (Active) and Tier 2 (Passive) profiles are written to disk
  * - Gossip-only (Tier 3) profiles are kept in memory but never persisted
- * - Profiles older than EXPIRE_AGE (7 days) are deleted after store
+ * - Profiles older than EXPIRE_AGE (7 days) are deleted after store.
  */
 class PeerManager {
     private final Log _log;
@@ -64,7 +65,7 @@ class PeerManager {
      * Rate contained in the profile, as the Rates must be coalesced.
      */
     static final long REORGANIZE_TIME_LONG = 250*1000L;
-    /** After first two hours of uptime ~= 246 */
+    /** After first two hours of uptime ~= 246. */
     static final int REORGANIZES_PER_DAY = 256;
     private static final long STORE_TIME = 15*60*1000L; // how frequently we write profiles to disk
     // for profiles stored to disk
@@ -138,7 +139,7 @@ class PeerManager {
      * Reorganize the profiles. Also periodically store them,
      * and delete very old ones.
      * <p>
-     * This takes too long to run on the SimpleTimer2 queue
+     * This takes too long to run on the SimpleTimer2 queue.
      *
      * @since 0.9.10
      */
@@ -195,7 +196,7 @@ class PeerManager {
     }
 
     /**
-     * Write active profiles to disk
+     * Write active profiles to disk.
      */
     void storeProfiles() {
         // Don't overwrite disk profiles when testing
@@ -239,6 +240,8 @@ class PeerManager {
     Set<Hash> selectPeers() {return _organizer.selectAllPeers();}
 
     /**
+     * Save a peer's profile to disk if it is still usable.
+     *
      * @param cutoff only store if most recent activity is newer than this (absolute time)
      * @return true if the profile was written to disk, false if it was skipped
      */
@@ -291,15 +294,15 @@ class PeerManager {
     /**
      * Load the profiles in a separate thread, so we don't spend
      * forever in the constructor (slowing down the Router constructor
-     * via RouterContext.initAll()).
-     * This also instantiates Reorg, so only call this once
+     * via {@link net.i2p.router.RouterContext#initAll}).
+     * This also instantiates Reorg, so only call this once.
      *
      * @since 0.8.8
      */
     private void loadProfilesInBackground() {(new I2PThread(new ProfileLoader(), "PeerProfLoad")).start();}
 
     /**
-     * Load the profiles and instantiate Reorg, waiting for 60s uptime to allow the routerinfos to load first
+     * Load the profiles and instantiate Reorg, waiting for 60s uptime to allow the routerinfos to load first.
      *
      * @since 0.8.8
      */
@@ -323,7 +326,7 @@ class PeerManager {
     }
 
     /**
-     * This may take a long time - 30 seconds or more
+     * This may take a long time - 30 seconds or more.
      */
     void loadProfiles() {
         // Peers whose profile survived but whose RouterInfo the netdb cannot supply.

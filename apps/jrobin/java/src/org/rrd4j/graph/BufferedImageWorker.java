@@ -19,10 +19,10 @@ import javax.imageio.stream.ImageOutputStream;
 class BufferedImageWorker extends ImageWorker {
 
     /**
-     *  Builder class for creating BufferedImageWorker instances with configurable parameters.
-     *  Supports fluent API for setting image properties, writer, and output format.
+     * Builder class for creating BufferedImageWorker instances with configurable parameters.
+     * Supports fluent API for setting image properties, writer, and output format.
      *
-     *  <p>Use {@link BufferedImageWorker#getBuilder()} to create a new builder instance.</p>
+     * <p>Use {@link BufferedImageWorker#getBuilder} to create a new builder instance.</p>
      */
     static class Builder {
         private int width = 1;
@@ -31,7 +31,7 @@ class BufferedImageWorker extends ImageWorker {
         private ImageWriter writer;
         private ImageWriteParam imageWriteParam;
 
-        /** Use {@link BufferedImageWorker#getBuilder()} to obtain an instance. */
+        /** Use {@link BufferedImageWorker#getBuilder} to obtain an instance. */
         Builder() {}
 
         /**

@@ -13,7 +13,7 @@ import net.i2p.util.Log;
  */
 public class EncodingFactory {
 
-	/** Utility class, not instantiable */
+	/** Utility class, not instantiable. */
 	private EncodingFactory() {}
 
 	private static final String DEFAULT_ENCODINGS = "i2p.susi.webmail.encoding.HeaderLine;i2p.susi.webmail.encoding.QuotedPrintable;i2p.susi.webmail.encoding.Base64;i2p.susi.webmail.encoding.SevenBit;i2p.susi.webmail.encoding.EightBit;i2p.susi.webmail.encoding.HTML";

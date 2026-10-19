@@ -19,7 +19,7 @@ import net.i2p.data.DataHelper;
 /**
  * Extends EepGet for POST.
  * Adapted from old jrandom EepPost, removed 2012 as unused.
- * Ref: RFC 7578
+ * Ref: RFC 7578.
  *
  * @since 0.9.67
  */
@@ -131,7 +131,7 @@ public class EepPost extends EepGet {
     }
 
     /**
-     * In-memory, not for large POSTs
+     * In-memory, not for large POSTs.
      *
      * @param contentType the value for the Content-Type header
      * @param data the post body, must not be empty
@@ -148,7 +148,7 @@ public class EepPost extends EepGet {
     }
 
     /**
-     * In-memory, not for large POSTs
+     * In-memory, not for large POSTs.
      *
      * @param contentType the value for the Content-Type header
      * @param data the post body, must not be empty
@@ -165,7 +165,7 @@ public class EepPost extends EepGet {
     }
 
     /**
-     * For large POSTs
+     * For large POSTs.
      *
      * @param contentType the value for the Content-Type header
      * @param data the post body, must be a regular file and not empty
@@ -211,7 +211,7 @@ public class EepPost extends EepGet {
     }
 
     /**
-     * Adapted from old jrandom EepPost
+     * Adapted from old jrandom EepPost.
      */
     private static void sendFields(StringBuilder out, Map<String, Object> fields) {
         boolean first = true;
@@ -227,7 +227,7 @@ public class EepPost extends EepGet {
 
     /**
      * Multipart
-     * Adapted from old jrandom EepPost
+     * Adapted from old jrandom EepPost.
      *
      * @param separator non-null
      */
@@ -245,7 +245,7 @@ public class EepPost extends EepGet {
     }
 
     /**
-     * Adapted from old jrandom EepPost
+     * Adapted from old jrandom EepPost.
      */
     private static void sendField(StringBuilder out, String field, String val) {
         // Only the space-to-plus substitution of
@@ -256,7 +256,7 @@ public class EepPost extends EepGet {
 
     /**
      * Multipart
-     * Adapted from old jrandom EepPost
+     * Adapted from old jrandom EepPost.
      *
      * @param separator non-null
      */
@@ -269,7 +269,7 @@ public class EepPost extends EepGet {
 
     /**
      * Multipart
-     * Adapted from old jrandom EepPost
+     * Adapted from old jrandom EepPost.
      *
      * @param separator non-null
      */
@@ -285,7 +285,7 @@ public class EepPost extends EepGet {
     }
 
     /**
-     * Adapted from old jrandom EepPost
+     * Adapted from old jrandom EepPost.
      * @return a fresh random multipart boundary, base32 encoded
      */
     private String getSeparator() {
@@ -304,7 +304,7 @@ public class EepPost extends EepGet {
      * are in seconds: -t is the inactivity timeout, -v the header timeout, and
      * -w the total timeout, which is unlimited by default.
      *
-     * @param args the options and URL as described by {@link #usage()}
+     * @param args the options and URL as described by {@link #usage}
      */
     public static void main(String[] args) {
         String proxyHost = "127.0.0.1";

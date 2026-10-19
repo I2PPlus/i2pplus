@@ -26,7 +26,7 @@ public class IVFilterSizerTest {
     // ==================== sizing helpers ====================
 
     /**
-     * mForEntries must reproduce the shipped table. At n=614400 the table
+     * MForEntries must reproduce the shipped table. At n=614400 the table
      * records 1.48E-3 for m=23, so mForEntries(614400, 1.48E-3) has to land
      * on 24 (the exponent that achieves it) and mForEntries must never
      * under-size, which is what would cost good tunnel data.
@@ -66,7 +66,7 @@ public class IVFilterSizerTest {
         assertEquals(0, DecayingBloomFilter.mForEntries(1000, Double.NaN));
     }
 
-    /** mForBudget must respect the key-width ceiling and the empty case. */
+    /** MForBudget must respect the key-width ceiling and the empty case. */
     @Test
     public void testBudgetSizing() {
         assertEquals(0, DecayingBloomFilter.mForBudget(0));

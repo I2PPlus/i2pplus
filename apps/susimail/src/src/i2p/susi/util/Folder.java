@@ -26,18 +26,18 @@ import net.i2p.data.DataHelper;
  */
 public class Folder<O extends Object> {
 
-	/** Property key for page size configuration */
+	/** Property key for page size configuration. */
 	public static final String PAGESIZE = "pager.pagesize";
-	/** Default page size for folder display */
+	/** Default page size for folder display. */
 	public static final int DEFAULT_PAGESIZE = 30;
 
 	/**
 	 * Enumeration defining sort direction for folder elements.
 	 */
 	public enum SortOrder {
-		/** lowest to highest */
+		/** Lowest to highest. */
 		DOWN,
-		/** reverse sort, highest  to lowest */
+		/** Reverse sort, highest  to lowest. */
 		UP;
 	}
 
@@ -50,7 +50,7 @@ public class Folder<O extends Object> {
 	private Comparator<O> currentSorter;
 	private String currentSortID;
 
-	/** Default constructor */
+	/** Creates an empty folder. */
 	public Folder()
 	{
 		pages = 1;

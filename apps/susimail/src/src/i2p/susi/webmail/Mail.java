@@ -35,73 +35,73 @@ import net.i2p.util.SystemVersion;
  */
 class Mail {
 
-    /** Default unknown date string */
+    /** Default unknown date string. */
     private static final String unknown = "unknown";
-    /** Regex for email address without angle brackets */
+    /** Regex for email address without angle brackets. */
     private static final String P1 = "^[^@< \t]+@[A-Za-z0-9-]+\\.[A-Za-z0-9\\.-]+$";
-    /** Regex for email address with angle brackets */
+    /** Regex for email address with angle brackets. */
     private static final String P2 = "^<[^@< \t]+@[A-Za-z0-9-]+\\.[A-Za-z0-9\\.-]+>$";
-    /** Compiled pattern for bare email addresses */
+    /** Compiled pattern for bare email addresses. */
     private static final Pattern PATTERN1 = Pattern.compile(P1);
-    /** Compiled pattern for bracketed email addresses */
+    /** Compiled pattern for bracketed email addresses. */
     private static final Pattern PATTERN2 = Pattern.compile(P2);
     /**
-     *  Also used by MailPart
-     *  See MailPart for why we don't do \r\n\r\n
+     * Also used by MailPart
+     * See MailPart for why we don't do \r\n\r\n.
      */
     static final byte[] HEADER_MATCH = DataHelper.getASCII("\r\n\r");
 
-    /** Message size in bytes */
+    /** Message size in bytes. */
     private long size;
-    /** As received, trimmed only, not HTML escaped */
+    /** As received, trimmed only, not HTML escaped. */
     public String sender;       // as received, trimmed only, not HTML escaped
     /** Address only, enclosed by {@code <>}. */
     public String reply;        // address only, enclosed by <>
     /** As received, trimmed only, not HTML escaped. Default "". */
     public String subject;      // as received, trimmed only, not HTML escaped, non-null, default ""
-    /** Raw date string from the Date header */
+    /** Raw date string from the Date header. */
     public String dateString;
-    /** Formatted date string in UTC */
+    /** Formatted date string in UTC. */
     public String formattedDate;       // US Locale, UTC
-    /** Formatted date string in local time zone */
+    /** Formatted date string in local time zone. */
     public String localFormattedDate;  // Current Locale, local time zone
     /** Sender name or address truncated with &hellip; */
     public String shortSender;         // Either name or address but not both, HTML escaped, double-quotes removed, truncated with hellip
     /** Subject truncated with &hellip;. Default "". */
     public String shortSubject;        // HTML escaped, truncated with hellip, non-null, default ""
-    /** Quoted date in local time zone, longer format */
+    /** Quoted date in local time zone, longer format. */
     public String quotedDate;          // Current Locale, local time zone, longer format
-    /** Long date-only format for mail list tooltips */
+    /** Long date-only format for mail list tooltips. */
     public String dateOnly;            // Long date only format for mail list date tooltips e.g. Tuesday 30th December, 1999
-    /** Unique ID assigned by the POP3 server */
+    /** Unique ID assigned by the POP3 server. */
     public final String uidl;
-    /** The parsed message date */
+    /** The parsed message date. */
     public Date date;
-    /** Raw header buffer */
+    /** Raw header buffer. */
     private Buffer header;
-    /** Raw body buffer */
+    /** Raw body buffer. */
     private Buffer body;
-    /** Parsed mail part tree */
+    /** Parsed mail part tree. */
     private MailPart part;
     /** May be null. Non-empty if non-null. Not HTML escaped. */
     String[] to; // addresses only, enclosed by <>
-    /** addresses only, enclosed by {@code <>} */
+    /** Addresses only, enclosed by {@code <>}. */
     String[] cc;
-    /** Whether this message is unread */
+    /** Whether this message is unread. */
     private boolean isNew;
-    /** Whether this message is flagged as spam */
+    /** Whether this message is flagged as spam. */
     private boolean isSpam;
-    /** Whether headers have been parsed */
+    /** Whether headers have been parsed. */
     private boolean headersParsed;
-    /** Content-Type header value */
+    /** Content-Type header value. */
     public String contentType;
-    /** Message-ID as received, not HTML escaped */
+    /** Message-ID as received, not HTML escaped. */
     public String messageID; // as received, trimmed only, probably enclosed with <>, not HTML escaped
-    /** Error message from parsing, or empty */
+    /** Error message from parsing, or empty. */
     public String error;
-    /** Whether this message is flagged for deletion */
+    /** Whether this message is flagged for deletion. */
     public boolean markForDeletion;
-    /** Logger */
+    /** Logger. */
     private final Log _log;
 
     /**
@@ -140,7 +140,11 @@ class Mail {
         }
     }
 
-    /** @since 0.9.34 */
+    /**
+     * Parse and store the message headers.
+     *
+     * @since 0.9.34
+     */
     private synchronized String[] setHeader(Buffer rb, InputStream in, boolean closeIn) {
         if (rb == null) {return null;}
         header = rb;
@@ -306,7 +310,6 @@ class Mail {
     /**
      * Check an address for the shape a mail server will accept.
      *
-     *
      * @param address E-mail address to be validated
      * @return Is the e-mail address valid?
     */
@@ -424,19 +427,19 @@ class Mail {
         if (buf.length() > 0) {out.println(buf);}
     }
 
-    /** Formatter for short UTC date display */
+    /** Formatter for short UTC date display. */
     private static final ThreadLocal<DateFormat> dateFormatter = ThreadLocal.withInitial(
         () -> new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.US));
-    /** Formatter for long date-only tooltips */
+    /** Formatter for long date-only tooltips. */
     private static final ThreadLocal<DateFormat> dateOnlyFormatter = ThreadLocal.withInitial(
         () -> new SimpleDateFormat("EEEE dd MMMM, yyyy", Locale.US));
-    /** Formatter for short local time zone display */
+    /** Formatter for short local time zone display. */
     private static final ThreadLocal<DateFormat> localDateFormatter = ThreadLocal.withInitial(() -> {
         DateFormat df = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT);
         df.setTimeZone(SystemVersion.getSystemTimeZone());
         return df;
     });
-    /** Formatter for medium local time zone display */
+    /** Formatter for medium local time zone display. */
     private static final ThreadLocal<DateFormat> longLocalDateFormatter = ThreadLocal.withInitial(() -> {
         DateFormat df = DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT);
         df.setTimeZone(SystemVersion.getSystemTimeZone());
@@ -458,6 +461,8 @@ class Mail {
     }
 
     /**
+     * Parse the header lines of a message.
+     *
      * @return all headers, to pass to MailPart, or null on error
      */
     private String[] parseHeaders(InputStream in) {

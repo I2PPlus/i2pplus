@@ -20,9 +20,9 @@ import net.i2p.util.SystemVersion;
  * <p>
  * <strong>Scaling Algorithm:</strong>
  * <ul>
- *   <li>Scale UP when: readyJobs > activeRunners * scaleUpJobsRatio OR maxLag > scaleUpLagThreshold</li>
- *   <li>Scale DOWN when: readyJobs &lt; activeRunners AND avgLag &lt; scaleDownLagThreshold (sustained)</li>
- *   <li>Bounds: min runners = max(4, cores), max runners = min(2 * router.maxJobRunners, RAM-based limit)</li>
+ * <li>Scale UP when: readyJobs > activeRunners * scaleUpJobsRatio OR maxLag > scaleUpLagThreshold</li>
+ * <li>Scale DOWN when: readyJobs &lt; activeRunners AND avgLag &lt; scaleDownLagThreshold (sustained)</li>
+ * <li>Bounds: min runners = max(4, cores), max runners = min(2 * {@code router.maxJobRunners}, RAM-based limit)</li>
  * </ul>
  * <p>
  * <strong>Resource Saturation Gates:</strong>
@@ -30,19 +30,19 @@ import net.i2p.util.SystemVersion;
  * saturation rather than thread count. Emergency signals (critical lag,
  * wedged jobs, dropped jobs) override the suppression.
  * <ul>
- *   <li>CPU saturation: router.cpuLoad > 85%</li>
- *   <li>GC storm: router.gcPauseTime > 50 ms/min</li>
- *   <li>Network congestion: tunnel.buildSuccessRate &lt; 50%</li>
- *   <li>Bandwidth saturation: bwLimiter.outboundDelayedTime > 500ms</li>
+ * <li>CPU saturation: {@code router.cpuLoad} > 85%</li>
+ * <li>GC storm: {@code router.gcPauseTime} > 50 ms/min</li>
+ * <li>Network congestion: {@code tunnel.buildSuccessRate} &lt; 50%</li>
+ * <li>Bandwidth saturation: bwLimiter.outboundDelayedTime > 500ms</li>
  * </ul>
  * <p>
  * <strong>Feedback Mechanism:</strong>
  * <ul>
- *   <li>Captures pre-scale metrics before adding runners</li>
- *   <li>Compares post-scale metrics after 2 check intervals</li>
- *   <li>If lag, maxLag, message delay, or ready jobs INCREASED after scaling, rolls back</li>
- *   <li>After 5 failed scale attempts, circuit breaker opens — stops scaling up</li>
- *   <li>Tracks memory usage to prevent OOM conditions</li>
+ * <li>Captures pre-scale metrics before adding runners</li>
+ * <li>Compares post-scale metrics after 2 check intervals</li>
+ * <li>If lag, maxLag, message delay, or ready jobs INCREASED after scaling, rolls back</li>
+ * <li>After 5 failed scale attempts, circuit breaker opens — stops scaling up</li>
+ * <li>Tracks memory usage to prevent OOM conditions</li>
  * </ul>
  *
  * @since 0.9.68+
@@ -1078,8 +1078,8 @@ class JobQueueScaler implements Runnable {
 
     /**
      * Check if the scaler is currently running.
-     * @return true between {@link #startup()} and {@link #shutdown()}, and false when dynamic
-     *         scaling is disabled, so startup() may leave it false
+     * @return true between {@link #startup} and {@link #shutdown}, and false when dynamic
+     * scaling is disabled, so startup() may leave it false
      */
     public boolean isAlive() {
         return _isAlive;

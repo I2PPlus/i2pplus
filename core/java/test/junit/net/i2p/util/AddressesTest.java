@@ -8,6 +8,8 @@ import java.net.Inet6Address;
 import java.net.UnknownHostException;
 
 /**
+ * Tests for the Addresses utility.
+ *
  * @since 0.9.49
  */
 public class AddressesTest {
@@ -60,7 +62,7 @@ public class AddressesTest {
     }
 
     /**
-     * Should always return false when the address isn't in the cache
+     * Should always return false when the address isn't in the cache.
      */
     @Test
     public void isDynamic() throws UnknownHostException {
@@ -70,7 +72,7 @@ public class AddressesTest {
     }
 
     /**
-     * Should always return false when the address isn't in the cache
+     * Should always return false when the address isn't in the cache.
      */
     @Test
     public void isDeprecated() throws UnknownHostException {

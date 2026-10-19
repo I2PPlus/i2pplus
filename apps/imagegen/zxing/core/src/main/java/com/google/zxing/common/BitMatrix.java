@@ -30,8 +30,6 @@ import java.util.Arrays;
  * <p>The ordering of bits is row-major. Within each int, the least significant bits are used first,
  * meaning they represent lower x values. This is compatible with BitArray's implementation.</p>
  *
- * @author Sean Owen
- * @author dswitkin@google.com (Daniel Switkin)
  */
 public final class BitMatrix implements Cloneable {
 
@@ -482,6 +480,8 @@ public final class BitMatrix implements Cloneable {
   }
 
   /**
+   * Matrix as text with custom set, unset and separator strings.
+   *
    * @param setString representation of a set bit
    * @param unsetString representation of an unset bit
    * @param lineSeparator newline character in string representation

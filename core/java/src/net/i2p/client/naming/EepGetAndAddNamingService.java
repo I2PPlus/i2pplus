@@ -27,19 +27,18 @@ import java.util.Locale;
  * <p>
  * Sample config to put in configadvanced.jsp (restart required):
  * <p>
- * i2p.naming.impl=net.i2p.client.naming.MetaNamingService
- * i2p.nameservicelist=net.i2p.client.naming.HostsTxtNamingService,net.i2p.client.naming.EepGetAndAddNamingService
- * i2p.naming.eepget.list=http://stats.i2p/cgi-bin/hostquery.cgi?a=,http://i2host.i2p/cgi-bin/i2hostquery?
+ * {@code i2p.naming.impl}=net.i2p.client.naming.MetaNamingService
+  * {@code i2p.nameservicelist}
+ * =net.i2p.client.naming.HostsTxtNamingService,net.i2p.client.naming.EepGetAndAddNamingService
+ * {@code i2p.naming.eepget.list}=http://stats.i2p/cgi-bin/hostquery.cgi?a=,http://i2host.i2p/cgi-bin/i2hostquery?
  *
- * @author zzz
- *
- * @deprecated use HostsTxtNamingService.put()
+ * @deprecated use {@link net.i2p.client.naming.HostsTxtNamingService#put}
  * @since 0.7.9
  */
 @Deprecated
 public class EepGetAndAddNamingService extends EepGetNamingService {
 
-    /** Default hosts.txt filename */
+    /** Default hosts.txt filename. */
     private static final String DEFAULT_HOSTS_FILE = "hosts.txt";
 
     /**

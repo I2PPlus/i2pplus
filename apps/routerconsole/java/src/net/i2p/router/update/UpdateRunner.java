@@ -28,46 +28,46 @@ import net.i2p.util.VersionComparator;
  * @since 0.9.4 moved from UpdateHandler
  */
 class UpdateRunner extends I2PAppThread implements UpdateTask, EepGet.StatusListener {
-    /** router context */
+    /** Router context. */
     protected final RouterContext _context;
     /** Class logger. */
     protected final Log _log;
-    /** update manager */
+    /** Update manager. */
     protected final ConsoleUpdateManager _mgr;
-    /** update type */
+    /** Update type. */
     protected final UpdateType _type;
-    /** update method */
+    /** Update method. */
     protected final UpdateMethod _method;
-    /** list of update URIs */
+    /** List of update URIs. */
     protected final List<URI> _urls;
-    /** temporary file for the update download */
+    /** Temporary file for the update download. */
     protected final String _updateFile;
-    /** whether the runner is currently running */
+    /** Whether the runner is currently running. */
     protected volatile boolean _isRunning;
-    /** whether the update completed */
+    /** Whether the update completed. */
     protected boolean done;
-    /** the current EepGet instance */
+    /** The current EepGet instance. */
     protected EepGet _get;
-    /** tells the listeners what mode we are in - set to true in extending classes for checks */
+    /** Tells the listeners what mode we are in - set to true in extending classes for checks. */
     protected boolean _isPartial;
-    /** set by the listeners on completion */
+    /** Set by the listeners on completion. */
     protected String _newVersion;
-    /** 56 byte header, only used for suds */
+    /** 56 byte header, only used for suds. */
     protected final ByteArrayOutputStream _baos;
-    /** current URI being fetched */
+    /** Current URI being fetched. */
     protected URI _currentURI;
-    /** current router version for comparison */
+    /** Current router version for comparison. */
     private final String _currentVersion;
 
-    /** connect timeout in ms */
+    /** Connect timeout in ms. */
     protected static final long CONNECT_TIMEOUT = (long) 55*1000;
-    /** inactivity timeout with proxy in ms */
+    /** Inactivity timeout with proxy in ms. */
     protected static final long INACTIVITY_TIMEOUT = 5 * (long) 60 * 1000;
-    /** inactivity timeout without proxy in ms */
+    /** Inactivity timeout without proxy in ms. */
     protected static final long NOPROXY_INACTIVITY_TIMEOUT = (long) 60*1000;
 
     /**
-     * Uses router version for partial checks
+     * Uses router version for partial checks.
      *
      * @param ctx the router context supplying the logger and temp directory
      * @param mgr the update manager notified of progress and results
@@ -79,7 +79,7 @@ class UpdateRunner extends I2PAppThread implements UpdateTask, EepGet.StatusList
     }
 
     /**
-     * Uses router version for partial checks
+     * Uses router version for partial checks.
      *
      * @param ctx the router context supplying the logger and temp directory
      * @param mgr the update manager notified of progress and results
@@ -312,7 +312,7 @@ class UpdateRunner extends I2PAppThread implements UpdateTask, EepGet.StatusList
         _mgr.notifyAttemptFailed(this, url, null); // ignored
     }
 
-    /** subclasses should override */
+    /** Subclasses should override. */
     public void bytesTransferred(long alreadyTransferred, int currentWrite, long bytesTransferred, long bytesRemaining, String url) {
         if (_isPartial) {return;}
         long d = currentWrite + bytesTransferred;
@@ -324,7 +324,7 @@ class UpdateRunner extends I2PAppThread implements UpdateTask, EepGet.StatusList
         _mgr.notifyProgress(this, status, d, d + bytesRemaining);
     }
 
-    /** subclasses should override */
+    /** Subclasses should override. */
     public void transferComplete(long alreadyTransferred, long bytesTransferred, long bytesRemaining, String url, String outputFile, boolean notModified) {
         if (_isPartial) {
             // Compare version with what we have now
@@ -348,7 +348,7 @@ class UpdateRunner extends I2PAppThread implements UpdateTask, EepGet.StatusList
         else {tmp.delete();} // corrupt
     }
 
-    /** subclasses should override */
+    /** Subclasses should override. */
     public void transferFailed(String url, long bytesTransferred, long bytesRemaining, int currentAttempt) {
         if (_log.shouldWarn()) {
             _log.warn("Update from " + url + " did not download completely (" + bytesRemaining +
@@ -385,7 +385,7 @@ class UpdateRunner extends I2PAppThread implements UpdateTask, EepGet.StatusList
     protected static String linkify(String url) {return ConsoleUpdateManager.linkify(url);}
 
     /**
-     * translate a string
+     * Translate a string.
      *
      * @param s the message key to look up
      * @return the translated text, or the key itself if there is no translation
@@ -393,7 +393,7 @@ class UpdateRunner extends I2PAppThread implements UpdateTask, EepGet.StatusList
     protected String _t(String s) {return _mgr._t(s);}
 
     /**
-     * translate a string with a parameter
+     * Translate a string with a parameter.
      *
      * @param s the message key to look up
      * @param o substituted for {0} in the message
@@ -402,6 +402,8 @@ class UpdateRunner extends I2PAppThread implements UpdateTask, EepGet.StatusList
     protected String _t(String s, Object o) {return _mgr._t(s, o);}
 
     /**
+     * Handler summary for log messages.
+     *
      * @return the class name, type, ID, method and URI
      */
     @Override

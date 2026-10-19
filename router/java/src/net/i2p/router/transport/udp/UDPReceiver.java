@@ -27,11 +27,11 @@ class UDPReceiver {
     private final UDPTransport _transport;
     private final PacketHandler _handler;
     private final SocketListener _endpoint;
-    /** Reused inbound bandwidth request, only touched on the runner thread */
+    /** Reused inbound bandwidth request, only touched on the runner thread. */
     private FIFOBandwidthLimiter.Request _bandwidthRequest;
 
     private static final boolean IS_ANDROID = SystemVersion.isAndroid();
-    /** How long to sleep between throttle checks while inbound is throttled */
+    /** How long to sleep between throttle checks while inbound is throttled. */
     private static final int THROTTLE_WAIT_MS = 10;
 
     /**
@@ -71,7 +71,7 @@ class UDPReceiver {
     }
 
 
-    /** Receive a UDP packet */
+    /** Receive a UDP packet. */
     private int receive(UDPPacket packet) {return doReceive(packet);}
 
     /**

@@ -48,9 +48,9 @@ import org.rrd4j.core.RrdNioBackendFactory;
 public class GraphGenerator implements Runnable, ClientApp {
     private final RouterContext _context;
     private final Log _log;
-    /** list of GraphListener instances, preserved for iteration by UI helpers */
+    /** List of GraphListener instances, preserved for iteration by UI helpers. */
     private final List<GraphListener> _listeners;
-    /** index of listener by rate for O(1) lookup during rendering */
+    /** Index of listener by rate for O(1) lookup during rendering. */
     private final Map<Rate, GraphListener> _listenerByRate = new ConcurrentHashMap<>();
     private static final int MAX_CONCURRENT_RENDER = SystemVersion.isARM() ? Math.max(2, SystemVersion.getCores() / 2) :
                                                   SystemVersion.getMaxMemory() < 256*1024*1024 ? Math.max(8, SystemVersion.getCores() / 2) :
@@ -61,7 +61,7 @@ public class GraphGenerator implements Runnable, ClientApp {
     /** Health watchdog scheduler, separate from {@link #_scheduler} so a stuck
      * sync task cannot stop the thing that is meant to notice it is stuck. */
     private volatile ScheduledExecutorService _healthScheduler;
-    /** Guards the watchdog against being scheduled twice; see {@link #startHealthWatchdog()}. */
+    /** Guards the watchdog against being scheduled twice; see {@link #startHealthWatchdog}. */
     private boolean _healthStarted;
     /**
      * Whether this instance configured the shared RRD backend factory.
@@ -111,7 +111,7 @@ public class GraphGenerator implements Runnable, ClientApp {
     private static final int COALESCE_STALL_TICKS = (int) (COALESCE_STALL_MS / HEALTH_INTERVAL_MS);
     /** Upper bound on how many retained samples one backfill is asked for. */
     static final int MAX_BACKFILL_STEPS = 8;
-    /** Repeat period for a report whose numbers have not changed. @since 0.9.71+ */
+    /** Repeat period for a report whose numbers have not changed. @since 0.9.71+. */
     private static final long REPORT_REPEAT_MS = 120_000L;
     /** Wall-clock time when graph generation started; lets the never-yet-written staleness
      * test distinguish an empty startup window from a genuinely stalled writer. */
@@ -183,7 +183,7 @@ public class GraphGenerator implements Runnable, ClientApp {
     }
 
     /**
-     * Body of {@link #run()}, separated so any failure before the app registers itself is logged.
+     * Body of {@link #run}, separated so any failure before the app registers itself is logged.
      */
     private void runGenerator() {
         // JRobin 1.5.9 crashes these JVMs
@@ -523,7 +523,7 @@ public class GraphGenerator implements Runnable, ClientApp {
     /** Most listener names a single tally will list before summarising the rest as a count. */
     static final int MAX_NAMED = 5;
 
-    /** Origin wording for an age measured from the last successful write. @since 0.9.71+ */
+    /** Origin wording for an age measured from the last successful write. @since 0.9.71+. */
     private static final String staleAgeSinceLastWrite = "since last write";
     /**
      * Origin wording for an age with no earlier write to measure back from.
@@ -538,8 +538,8 @@ public class GraphGenerator implements Runnable, ClientApp {
      * Decide whether a listener is stalled, and why, assuming the coalesce sweep has
      * run recently enough to have fed these rates.
      *
-     * @param detached {@link GraphListener#isDetached()} - the RRD is closed
-     * @param registered {@link GraphListener#isRegistered()} - the Rate still points at the listener
+     * @param detached {@link GraphListener#isDetached} - the RRD is closed
+     * @param registered {@link GraphListener#isRegistered} - the Rate still points at the listener
      * @param lastUpdateSuccess wall-clock ms of the last successful write, or 0 if none
      * @param now current wall-clock ms
      * @param startedMs wall-clock ms when graphing began
@@ -559,14 +559,14 @@ public class GraphGenerator implements Runnable, ClientApp {
      * <p>Pure decision logic, split out of the sync task so the thresholds can be pinned
      * by unit tests without a router or an RRD file.
      *
-     * @param detached {@link GraphListener#isDetached()} - the RRD is closed
-     * @param registered {@link GraphListener#isRegistered()} - the Rate still points at the listener
+     * @param detached {@link GraphListener#isDetached} - the RRD is closed
+     * @param registered {@link GraphListener#isRegistered} - the Rate still points at the listener
      * @param lastUpdateSuccess wall-clock ms of the last successful write, or 0 if none
      * @param now current wall-clock ms
      * @param startedMs wall-clock ms when graphing began
      * @param ratePeriod the rate's period in ms
      * @param coalesceStalled true when the coalesce sweep has not run recently enough to
-     *                        have fed these rates; see {@link net.i2p.stat.StatManager#getCoalesceSweepAgeMs(long)}
+     * have fed these rates; see {@link net.i2p.stat.StatManager#getCoalesceSweepAgeMs(long)}
      * @return {@link StaleCause#OK} when there is nothing to report, otherwise the cause
      * @since 0.9.71+
      */
@@ -1198,7 +1198,7 @@ public class GraphGenerator implements Runnable, ClientApp {
      * <p>Iterates {@link #_listeners} rather than the rate map so that "mapped" is a
      * real question: a listener that is alive but has lost its map entry is exactly the
      * REBUILD case the ladder exists for, and iterating the map would never see it.
-     * The map's own dead entries are handled by {@link #reviveDetachedListeners()}.
+     * The map's own dead entries are handled by {@link #reviveDetachedListeners}.
      * <p>The ledger reports at WARN, not ERROR, because it describes drift the ladder
      * has usually already repaired, and a single INFO marks its clearing.
      */
@@ -1288,7 +1288,7 @@ public class GraphGenerator implements Runnable, ClientApp {
      * tick in six, so comparing against the previous tick alone would report "the rates
      * stopped" five times out of six.
      * <p>Not synchronized, and deliberately so: only the single watchdog thread ever
-     * calls it, whereas {@link #stop()} holds this instance's monitor across a bounded
+     * calls it, whereas {@link #stop} holds this instance's monitor across a bounded
      * scheduler shutdown wait. Synchronizing here would let a shutdown stall the
      * watchdog for the length of that wait.
      *
@@ -1376,7 +1376,7 @@ public class GraphGenerator implements Runnable, ClientApp {
     }
 
     /**
-     * Disable graph generation until restart
+     * Disable graph generation until restart.
      * @param ctx the context whose registered generator is stopped
      * @since 0.9.6
      */
@@ -1386,7 +1386,7 @@ public class GraphGenerator implements Runnable, ClientApp {
     }
 
     /**
-     * Disable graph generation until restart
+     * Disable graph generation until restart.
      * @since 0.9.38
      */
     synchronized void setDisabled() {
@@ -1399,7 +1399,7 @@ public class GraphGenerator implements Runnable, ClientApp {
     /////// ClientApp methods
 
     /**
-     * Does nothing, we aren't tracked
+     * Does nothing, we aren't tracked.
      * @since 0.9.38
      */
     @Override
@@ -1407,36 +1407,48 @@ public class GraphGenerator implements Runnable, ClientApp {
         // TODO
     }
     /**
-     * Does nothing, we aren't tracked
+     * Does nothing, we aren't tracked.
      * @since 0.9.38
      */
     @Override
     public void shutdown(String[] args) {
         // TODO
     }
-    /** @since 0.9.38 */
+    /**
+     * Always RUNNING.
+     *
+     * @since 0.9.38
+     */
     @Override
     public ClientAppState getState() {return ClientAppState.RUNNING;}
 
-    /** @since 0.9.38 */
+    /**
+     * The app's internal name.
+     *
+     * @since 0.9.38
+     */
     @Override
     public String getName() {return NAME;}
 
-    /** @since 0.9.38 */
+    /**
+     * The app's display name.
+     *
+     * @since 0.9.38
+     */
     @Override
     public String getDisplayName() {return "I2P+ Graph Generator";}
 
     /////// End ClientApp methods
 
     /**
-     * List of GraphListener instances
+     * List of GraphListener instances.
      * @return the registered listeners, empty if none
      * @since 0.9.33
      */
     public List<GraphListener> getListeners() { return _listeners; }
 
     /**
-     * The stats graphed when stat.summaries is unset, as statName.period pairs.
+     * The stats graphed when {@code stat.summaries} is unset, as statName.period pairs.
      *
      * @since 0.9.33
      */
@@ -1918,12 +1930,12 @@ GraphListener lsnr = _listenerByRate.get(rate);
     }
 
     /**
-     * Resolve a stat.summaries string to the Rates it names.
+     * Resolve a {@code stat.summaries} string to the Rates it names.
      * <p>A token that is not statName.period, names an unknown stat or carries a
      * non-numeric period is skipped rather than failing the sync tick.
      *
      * @param specs a comma-separated list of statName.period tokens; malformed
-     *              tokens are skipped rather than failing the sync tick
+     * tokens are skipped rather than failing the sync tick
      * @return list of Rate objects
      * @since 0.9.33
      */
@@ -2083,7 +2095,7 @@ GraphListener lsnr = _listenerByRate.get(rate);
     }
 
     /**
-     * Delete the old rrd dir if we are no longer persistent
+     * Delete the old rrd dir if we are no longer persistent.
      * @since 0.8.7
      */
     private void deleteOldRRDs() {
@@ -2108,7 +2120,7 @@ GraphListener lsnr = _listenerByRate.get(rate);
     }
 
     /**
-     * Make sure any persistent RRDs are closed
+     * Make sure any persistent RRDs are closed.
      * @since 0.8.7
      */
     private class Shutdown implements Runnable {

@@ -33,7 +33,6 @@ import java.util.Arrays;
 /**
  * A parsed bytecode instruction.
  * Provides accessors to various relevant bits.
- * @author John Rose
  */
 class Instruction  {
     protected byte[] bytes;  // bytecodes

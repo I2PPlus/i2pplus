@@ -153,6 +153,6 @@ public abstract class BasePRNGStandalone implements IRandomStandalone, Serializa
      */
     public abstract void setup(Map<String, byte[]> attributes);
 
-    /** Fill the internal buffer with random bytes */
+    /** Fill the internal buffer with random bytes. */
     public abstract void fillBlock(); //throws LimitReachedException;
 }

@@ -24,7 +24,6 @@ import org.cybergarage.xml.Parser;
  * <p>The class primarily serves as a factory for creating SOAP message structures and provides
  * constants for standard SOAP elements and namespaces used throughout the UPnP framework.
  *
- * @author Satoshi Konno
  * @since 1.0
  */
 public class SOAP {

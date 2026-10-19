@@ -22,7 +22,6 @@ import org.cybergarage.xml.Parser;
  * constants used throughout the UPnP implementation.
  *
  * @since 1.0
- * @author Satoshi Konno
  */
 public class UPnP {
     /**

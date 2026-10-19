@@ -6,10 +6,10 @@ import net.i2p.data.DataHelper;
 import net.i2p.data.Hash;
 
 /**
- *  Sorts in true binary order, not Base64 string order.
- *  A-Z a-z 0-9 -~
+ * Sorts in true binary order, not Base64 string order.
+ * A-Z a-z 0-9 -~.
  *
- *  @since 0.9.64 moved from BanlistRenderer
+ * @since 0.9.64 moved from BanlistRenderer
  */
 class HashComparator implements Comparator<Hash>, Serializable {
     /**
@@ -24,7 +24,7 @@ class HashComparator implements Comparator<Hash>, Serializable {
     public static final HashComparator _instance = new HashComparator();
 
     /**
-     * Thread safe, no state
+     * Thread safe, no state.
      * @return the shared comparator, which holds no state
      */
     public static HashComparator getInstance() { return _instance; }

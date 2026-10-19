@@ -19,9 +19,9 @@ public class AdaptiveTimeoutTest {
     private static final long BASE = 20 * 1000L;
     private static final long CEILING = 45 * 1000L;
 
-    /** lengths 0..5: lengths above 3 add 5s per extra hop */
+    /** Lengths 0..5: lengths above 3 add 5s per extra hop. */
     private static final int[] LENGTHS = {0, 1, 2, 3, 4, 5};
-    /** tiers bracketing the >80 (+2s) and >90 (+3s) boundaries */
+    /** Tiers bracketing the >80 (+2s) and >90 (+3s) boundaries. */
     private static final int[] CPU_LOADS = {0, 80, 81, 90, 91};
     private static final boolean[] DIRECTIONS = {true, false};
 

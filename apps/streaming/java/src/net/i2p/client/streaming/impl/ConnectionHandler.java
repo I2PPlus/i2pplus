@@ -23,9 +23,8 @@ import net.i2p.util.SystemVersion;
  * Receive new connection attempts
  * <p>
  * Use a bounded queue to limit the damage from SYN floods,
- * router overload, or a slow client
+ * router overload, or a slow client.
  *
- * @author zzz modded to use concurrent and bound queue size
  */
 class ConnectionHandler {
     private final I2PAppContext _context;
@@ -38,7 +37,7 @@ class ConnectionHandler {
     private final AtomicInteger _activeWorkerCount;
     private final SimpleTimer2 _timer;
     private volatile boolean _active;
-    /** Explicit per-manager override, or -1 to use the live configured {@link #getAcceptTimeout()}.
+    /** Explicit per-manager override, or -1 to use the live configured {@link #getAcceptTimeout}.
      * @since 0.9.71+ */
     private volatile int _acceptTimeout = -1;
     private boolean _restartPending;
@@ -48,7 +47,7 @@ class ConnectionHandler {
      * expected to pull it. If accept() is delayed (busy or slow hosted server),
      * the queued SYN is reset after this window, so it must be long enough to
      * absorb brief stalls without refusing inbound connections. Tunable via
-     * i2p.streaming.acceptTimeout (default: 60000 / 60 seconds). On a congested
+     * {@code i2p.streaming.acceptTimeout} (default: 60000 / 60 seconds). On a congested
      * fabric RTT is commonly 3-10s, so 30s was too short once a SYN actually
      * queued; 60s gives the RTT-aware floor (see {@link #getAdaptiveSynTimeout})
      * headroom to extend on slow-but-alive tunnels without refusing them.
@@ -128,7 +127,7 @@ class ConnectionHandler {
      * a real stall, not mere latency: {@code buildSuccess} below
      * {@link #SYN_STRESS_THRESHOLD} <b>and</b> the recent SYN expire rate
      * ({@code recentExpireRatePct}) at or above the Tuner threshold
-     * ({@link I2PSocketManagerFull#getSynExprExpireThresh()}, default 60).  A
+     * ({@link I2PSocketManagerFull#getSynExprExpireThresh}, default 60).  A
      * server that is draining its SYN queue — even on a slow tunnel — is treated
      * as healthy and keeps the full configured window.
      * <p><b>RTT-aware floor (#2).</b> When the clamp does fire, the window is not
@@ -144,10 +143,10 @@ class ConnectionHandler {
      * a non-positive configured timeout is returned unchanged.  A fractional 0.0
      * build success is genuine failure, not "no data".
      *
-     * @param configuredTimeoutMs the configured accept timeout (i2p.streaming.acceptTimeout)
+     * @param configuredTimeoutMs the configured accept timeout ({@code i2p.streaming.acceptTimeout})
      * @param buildSuccess tunnel build success as a fraction [0.0, 1.0]; NaN when unavailable
      * @param recentExpireRatePct percent of recent SYN-queue entries that expired un-accepted,
-     *                            or a negative value when the rate is not known yet
+     * or a negative value when the rate is not known yet
      * @param rttMs a recent round-trip time sample in milliseconds, or &lt;=0 when unavailable
      * @return the timeout (ms) to arm the SYN reap with
      */
@@ -207,7 +206,7 @@ class ConnectionHandler {
      * {@link #SYN_STRESS_SAMPLE_INTERVAL} to avoid per-packet StatManager
      * lookups (each {@code SystemVersion} probe is six RateStat reads).
      * <p>Outside a router context (stand-alone streaming) there are no tunnel
-     * statistics at all — report NaN so the configured timeout is kept.
+     * statistics at all. Report NaN so the configured timeout is kept.
      * {@code SystemVersion} reports 0% both for "no tunnel events yet" and for
      * real failure, so 0 is treated as unknown (NaN) rather than stress.
      *
@@ -276,7 +275,7 @@ class ConnectionHandler {
     /**
      * Publish the SYN accept-queue expire rate as a router-wide RateStat so the
      * Tuner can distinguish latency-bound accept stalls (high expire rate: more
-     * handler threads will not help — the transport is the bottleneck) from a
+     * handler threads will not help. The transport is the bottleneck) from a
      * genuinely parallelizable load. Only meaningful in a router context, and
      * only when a real rate is available.
      *
@@ -292,7 +291,7 @@ class ConnectionHandler {
      * -- only while the tunnel system shows positive stall evidence -- to an
      * RTT-aware floor never below {@link #SYN_STRESS_MIN_TIMEOUT} and never
      * above the configured timeout.
-     * The configured value is re-read on every call, so a router.config change
+     * The configured value is re-read on every call, so a {@code router.config} change
      * or Tuner override applies without a restart.
      *
      * @return timeout in ms to arm the SYN reap with
@@ -308,7 +307,7 @@ class ConnectionHandler {
      * and the live configured value.  A non-negative override (set via
      * {@link #setAcceptTimeout(int)}, e.g. by
      * {@link I2PSocketManagerFull#setAcceptTimeout(long)}) wins; otherwise the
-     * configured value — re-read on each call so a router.config change or
+     * configured value — re-read on each call so a {@code router.config} change or
      * Tuner override applies without a restart — is used.  A negative override
      * clears any earlier explicit value and falls back to the configuration.
      * <p>Pure decision helper, extracted so the override-vs-config precedence
@@ -343,7 +342,7 @@ class ConnectionHandler {
      * <p>Called from the accept loop immediately before a fresh SYN is handed to
      * {@code receiveConnection()}.  The enqueue timestamp (stamped in
      * {@code receiveNewSyn}) is removed and the residence time becomes the
-     * sampled {@link #getRttMs()} input to the adaptive SYN timeout.  The sample
+     * sampled {@link #getRttMs} input to the adaptive SYN timeout.  The sample
      * is lightly smoothed toward the previous value so a single slow acceptance
      * does not swing the floor all the way to configured on its own.
      * <p>Retransmitted and poison SYNs never reach this point, so only genuinely
@@ -363,7 +362,7 @@ class ConnectionHandler {
     }
 
     /**
-     * Creates a new instance of ConnectionHandler
+     * Creates a new instance of ConnectionHandler.
      *
      * @param context the application context supplying the clock and logging
      * @param mgr the connection manager owning this handler and its queues
@@ -551,10 +550,9 @@ class ConnectionHandler {
      * Receive new connection attempts
      * <p>
      * Use a bounded queue to limit the damage from SYN floods,
-     * router overload, or a slow client
+     * router overload, or a slow client.
      *
      * @param packet the incoming connection attempt, null to do nothing
-     * @author zzz modded to use concurrent and bound queue size
      * @since 0.9.71+ modified to use worker threads
      */
     public void receiveNewSyn(Packet packet) {
@@ -826,7 +824,7 @@ class ConnectionHandler {
      * Accept-queue bookkeeping for one enqueued SYN.
      * <p>Holds the enqueue clock-time and the accept-timeout snapshot taken at
      * that moment. The timeout is snapshotted because the adaptive
-     * {@link #getEffectiveAcceptTimeout()} moves as tunnel health changes; the
+     * {@link #getEffectiveAcceptTimeout} moves as tunnel health changes; the
      * expiry must match what the client was quoted, not what health looks like
      * later. A worker that polls the SYN stores a fresh record, so expiry keeps
      * tracking the most recent quote.
@@ -859,7 +857,7 @@ class ConnectionHandler {
      * {@link #receiveNewSyn(Packet)}, one at dequeue in the accept worker) with
      * a single self-rescheduling event that scans the enqueue table every
      * {@link #SYN_SWEEP_INTERVAL}. Under a SYN flood the old model posted O(n)
-     * timer events per second; this is O(1) posts per second regardless of
+     * timer events per second. This is O(1) posts per second regardless of
      * load. The time-between-sweeps bound means a SYN may persist at most
      * one interval past its timeout — negligible against 10s+ accept timeouts.
      * <p>The two-argument removal on the concurrent map is atomic against the
@@ -899,7 +897,7 @@ class ConnectionHandler {
     /**
      * Simple end-of-queue marker.
      * The standard class limits the delay to POISON_MAX_DELAY_REQUEST so
-     * an evil user can't use this to shut us down
+     * an evil user can't use this to shut us down.
      */
     private static class PoisonPacket extends Packet {
         public static final int POISON_MAX_DELAY_REQUEST = Packet.MAX_DELAY_REQUEST + 1;

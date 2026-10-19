@@ -35,23 +35,23 @@ public class UIMessages {
     }
 
     /**
-     *  Will remove an old message if over the max size.
-     *  Use if it does not include a link.
-     *  Escapes '&lt;' and '&gt;' before queueing
+     * Will remove an old message if over the max size.
+     * Use if it does not include a link.
+     * Escapes '&lt;' and '&gt;' before queueing.
      *
-     *  @param message text to queue, HTML-escaped before storage
-     *  @return the message id
+     * @param message text to queue, HTML-escaped before storage
+     * @return the message id
      */
     public int addMessage(String message) {
         return addMessageNoEscape(message.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;"));
     }
 
     /**
-     *  Use if it includes a link.
-     *  Does not escape '&lt;' and '&gt;' before queueing
+     * Use if it includes a link.
+     * Does not escape '&lt;' and '&gt;' before queueing.
      *
-     *  @param message text to queue verbatim, so it may carry markup such as a link
-     *  @return the message id
+     * @param message text to queue verbatim, so it may carry markup such as a link
+     * @return the message id
      */
     public synchronized int addMessageNoEscape(String message) {
         _messages.offer(new Message(_count++, message));

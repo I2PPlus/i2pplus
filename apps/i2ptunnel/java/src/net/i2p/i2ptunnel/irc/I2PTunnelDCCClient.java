@@ -136,7 +136,7 @@ public class I2PTunnelDCCClient extends I2PTunnelClientBase {
 
     /**
      * Stop listening for new sockets.
-     * We can't call super.close() as it kills all sockets in the sockMgr
+     * We can't call super.close() as it kills all sockets in the sockMgr.
      */
     public void stop() {
         open = false;
@@ -146,7 +146,7 @@ public class I2PTunnelDCCClient extends I2PTunnelClientBase {
     }
 
     /**
-     * Just so we can do the callbacks
+     * Just so we can do the callbacks.
      *
      * @since 0.8.9
      */

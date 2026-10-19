@@ -13,7 +13,7 @@ import net.i2p.client.streaming.I2PSocketOptions;
  * ({@link I2PSocketOptions#PROP_MAX_CONNECT_TIMEOUT}).
  * This is what lets per-tunnel client options (e.g. the IRC client tunnel)
  * raise the absolute cap on the SYN-ACK wait window above the router-wide
- * i2p.streaming.maxConnectTimeout default.
+ * {@code i2p.streaming.maxConnectTimeout} default.
  */
 public class ConnectionOptionsMaxConnectTimeoutTest {
 

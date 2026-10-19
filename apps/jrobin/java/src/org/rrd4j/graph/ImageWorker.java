@@ -16,8 +16,6 @@ import java.nio.file.Paths;
  * Abstract base class for image workers in RRD graphs. Provides drawing operations for creating
  * graph images with various output formats. Tracks last paint/stroke/font to avoid redundant
  * state changes that produce duplicate inline styles in SVG output.
- *
- * Default constructor.
  */
 public abstract class ImageWorker {
 
@@ -292,7 +290,7 @@ public abstract class ImageWorker {
      *
      * @param x the sample x coordinates, one per sample
      * @param start first sample index of the run, inclusive, as returned by
-     *              {@link PathIterator#getNextPath()}
+     * {@link PathIterator#getNextPath}
      * @return the column the run's first vertex must be drawn at
      * @since 0.9.71
      */

@@ -207,7 +207,7 @@ class StoreState {
     }
 
     /**
-     * Increments attempted count
+     * Increments attempted count.
      *
      * @param peer the peer now pending a store reply, and counted as attempted
      */

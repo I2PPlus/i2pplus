@@ -204,7 +204,7 @@ import net.i2p.util.Log;
 
     /**
      * Our inbound mask.
-     * For most cases, we use what we published, i.e. getConnectMask()
+     * For most cases, we use what we published, i.e. getConnectMask().
      *
      * @param us our router info
      * @return bitmask for accepting connections

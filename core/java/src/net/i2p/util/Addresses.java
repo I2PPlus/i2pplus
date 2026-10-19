@@ -39,7 +39,6 @@ import java.nio.charset.StandardCharsets;
  * <b>Performance Warning:</b> Many methods in this class are very slow on Windows
  * (approximately 200ms + 50ms per interface). Consider caching results when possible.
  *
- * @author zzz
  * @since 0.8.3 moved to core from router/transport
  */
 public abstract class Addresses {
@@ -59,7 +58,7 @@ public abstract class Addresses {
     private static final int FLAG_TEMPORARY = 0x01;
     private static long ifCacheTime;
     private static final Map<Inet6Address, Inet6Addr> _ifCache = INET6_CACHE_ENABLED ? new HashMap<>(8) : null;
-    /** 12 char hex lower case */
+    /** 12 char hex lower case. */
     private static final Set<String> _macCache = new HashSet<>();
 
     // Convert IPv6 to canonical RFC 5952
@@ -156,7 +155,7 @@ public abstract class Addresses {
  * all returned addresses should be routable, but they are not necessarily
  * appropriate for external use. For example, Teredo and 6to4 addresses
  * are included with IPv6 results. Additional validation is recommended.
- * See e.g. TransportUtil.isPubliclyRoutable().
+ * See e.g. {@link net.i2p.router.transport.TransportUtil#isPubliclyRoutable}.
  *
  * @param includeLocal whether to include local addresses and deprecated IPv6 addresses
  * @param includeIPv6 whether to include IPv6 addresses
@@ -172,7 +171,7 @@ public abstract class Addresses {
  * all returned addresses should be routable, but they are not necessarily
  * appropriate for external use. For example, Teredo and 6to4 addresses
  * are included with IPv6 results. Additional validation is recommended.
- * See e.g. TransportUtil.isPubliclyRoutable().
+ * See e.g. {@link net.i2p.router.transport.TransportUtil#isPubliclyRoutable}.
  *
  * @param includeSiteLocal whether to include private addresses like 192.168.x.x and deprecated IPv6 addresses
  * @param includeLoopbackAndWildcard whether to include loopback addresses (127.x.x.x) and wildcard (0.0.0.0)
@@ -191,7 +190,7 @@ public abstract class Addresses {
  * all returned addresses should be routable, but they are not necessarily
  * appropriate for external use. For example, Teredo and 6to4 addresses
  * are included with IPv6 results. Additional validation is recommended.
- * See e.g. TransportUtil.isPubliclyRoutable().
+ * See e.g. {@link net.i2p.router.transport.TransportUtil#isPubliclyRoutable}.
  *
  * @param includeSiteLocal whether to include private addresses like 192.168.x.x and deprecated IPv6 addresses
  * @param includeLoopbackAndWildcard whether to include loopback addresses (127.x.x.x) and wildcard (0.0.0.0)
@@ -346,7 +345,7 @@ public abstract class Addresses {
     }
 
     /**
-     * Strip the trailing "%nn" from Inet6Address.getHostAddress()
+     * Strip the trailing "%nn" from {@link java.net.Inet6Address#getHostAddress}.
      */
     private static String stripScope(String ip) {
         int pct = ip.indexOf('%');
@@ -479,7 +478,7 @@ public abstract class Addresses {
     }
 
     /**
-     * Does the RFC 5952 substitution and drops a redundant leading zero group
+     * Does the RFC 5952 substitution and drops a redundant leading zero group.
      *
      * @param host non-null
      * @since 0.9.57
@@ -513,7 +512,7 @@ public abstract class Addresses {
     }
 
     /**
-     * Textual IP to bytes, because InetAddress.getByName() is slow.
+     * Textual IP to bytes, because {@link java.net.InetAddress#getByName} is slow.
      *
      * @since 0.9.3
      */
@@ -538,15 +537,15 @@ public abstract class Addresses {
     }
 
 /**
- * Caching version of InetAddress.getByName(host).getAddress(), which is slow.
+ * Caching version of {@link java.net.InetAddress#getByName(String) getByName(host)}.getAddress(), which is slow.
  * Caches numeric addresses only. Will resolve but not cache DNS addresses.
  * <p>
  * DEPRECATED for IPs in RouterAddresses, blocklists, etc.; use getIPOnly() instead.
  * <p>
- * Behavior differences from InetAddress.getByName():
+ * Behavior differences from {@link java.net.InetAddress#getByName}:
  * <ul>
  * <li>Does not allow numeric IPs of the form d.d.d, d.d, or d (considered mistakes)
- * <li>Returns null for null or empty host (vs. 127.0.0.1 in InetAddress)
+ * <li>Returns null for null or empty host (vs. 127.0.0.1 in InetAddress).
  * </ul>
  *
  * @param host DNS or IPv4 or IPv6 address; if null or empty returns null
@@ -587,16 +586,16 @@ public abstract class Addresses {
     }
 
 /**
- * Caching version of InetAddress.getByName(host).getAddress(), which is slow.
+ * Caching version of {@link java.net.InetAddress#getByName(String) getByName(host)}.getAddress(), which is slow.
  * Resolves literal IP addresses only without DNS lookups. Returns null for hostnames.
  * <p>
  * PREFERRED for IPs in RouterAddresses, blocklists, etc. over getIP()
  * because it avoids getByName() in most cases.
  * <p>
- * Behavior differences from InetAddress.getByName():
+ * Behavior differences from {@link java.net.InetAddress#getByName}:
  * <ul>
  * <li>Does not allow numeric IPs of the form d.d.d, d.d, or d (considered mistakes)
- * <li>Returns null for null or empty host (vs. 127.0.0.1 in InetAddress)
+ * <li>Returns null for null or empty host (vs. 127.0.0.1 in InetAddress).
  * </ul>
  *
  * @param host literal IPv4 or IPv6 address; if null returns null
@@ -634,9 +633,9 @@ public abstract class Addresses {
  * For hostnames, returns the preferred type (IPv4/v6) if available, else the other type.
  * Will resolve but not cache DNS hostnames.
  * <p>
- * Behavior differences from InetAddress.getByName():
+ * Behavior differences from {@link java.net.InetAddress#getByName}:
  * <ul>
- * <li>Returns null for null or empty host (vs. 127.0.0.1 in InetAddress)
+ * <li>Returns null for null or empty host (vs. 127.0.0.1 in InetAddress).
  * </ul>
  *
  * @param host DNS or IPv4 or IPv6 address; if null returns null
@@ -688,9 +687,9 @@ public abstract class Addresses {
  * Note: Order and number of results are platform-specific and depend on JVM options
  * (java.net.preferIPv4Stack, java.net.preferIPv6Addresses) and caching layers.
  * <p>
- * Behavior differences from InetAddress.getByName():
+ * Behavior differences from {@link java.net.InetAddress#getByName}:
  * <ul>
- * <li>Returns null for null or empty host (vs. 127.0.0.1 in InetAddress)
+ * <li>Returns null for null or empty host (vs. 127.0.0.1 in InetAddress).
  * </ul>
  *
  * @param host DNS or IPv4 or IPv6 address; if null returns null
@@ -765,8 +764,8 @@ public abstract class Addresses {
     }
 
 /**
- * Fast IPv4 address parsing that avoids slow InetAddress.getByName() on Windows.
- * Also avoids split(), Integer.parseInt(), and object churn.
+ * Fast IPv4 address parsing that avoids slow {@link java.net.InetAddress#getByName} on Windows.
+ * Also avoids split(), {@link java.lang.Integer#parseInt}, and object churn.
  *
  * @param host IPv4 address in w.x.y.z format only
  * @return 4-byte array or null if invalid
@@ -798,8 +797,8 @@ public abstract class Addresses {
     }
 
 /**
- * Fast IPv6 address parsing that avoids slow InetAddress.getByName() on Windows.
- * Also avoids split(), Integer.parseInt(), and object churn.
+ * Fast IPv6 address parsing that avoids slow {@link java.net.InetAddress#getByName} on Windows.
+ * Also avoids split(), {@link java.lang.Integer#parseInt}, and object churn.
  *
  * @param host full IPv6 address in 0:1:2:3:4:5:6:7 format only (no :: compression)
  * @return 16-byte array or null if invalid
@@ -843,6 +842,8 @@ public abstract class Addresses {
     /* ////// IPv6 Cache Utils /////// */
 
     /**
+     * Cached IPv6 address with its scope.
+     *
      * @since 0.9.28
      */
     private static class Inet6Addr {
@@ -1024,7 +1025,7 @@ public abstract class Addresses {
     }
 
     /**
-     * Print out the local addresses
+     * Print out the local addresses.
      *
      * @param args command line arguments
      */
@@ -1109,7 +1110,11 @@ public abstract class Addresses {
         System.out.println("scan time:    " + DataHelper.formatDuration(time));
     }
 
-    /** @since 0.9.34 */
+    /**
+     * Print the addresses to stdout.
+     *
+     * @since 0.9.34
+     */
     private static void print(Set<String> a) {
         if (a.isEmpty()) {
             System.out.println("none");
@@ -1120,7 +1125,11 @@ public abstract class Addresses {
         }
     }
 
-    /** @since 0.9.57 */
+    /**
+     * Print the addresses in canonical form to stdout.
+     *
+     * @since 0.9.57
+     */
     private static void printCanonical(Set<String> a) {
         if (a.isEmpty()) {
             System.out.println("none");
@@ -1154,7 +1163,7 @@ public abstract class Addresses {
     }
 
     /**
-     * RFC 4941
+     * RFC 4941.
      *
      * @return the privacy status
      * @since 0.9.34
@@ -1174,7 +1183,7 @@ public abstract class Addresses {
 
 
     /**
-     * Return first line in a file as a long
+     * Return first line in a file as a long.
      *
      * @return -1 on failure
      * @since 0.9.34

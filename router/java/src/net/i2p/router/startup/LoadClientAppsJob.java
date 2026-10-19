@@ -16,7 +16,7 @@ import net.i2p.util.Log;
 import net.i2p.util.SimpleTimer2;
 
 /**
- * Run any client applications specified in clients.config.  If any clientApp
+ * Run any client applications specified in {@code clients.config}.  If any clientApp
  * contains the config property ".onBoot=true" it'll be launched immediately, otherwise
  * it'll get queued up for starting 2 minutes later.
  */
@@ -35,7 +35,7 @@ public class LoadClientAppsJob extends JobImpl {
     }
 
     /**
-     * Load and start the client applications configured in clients.config.
+     * Load and start the client applications configured in {@code clients.config}.
      */
     public void runJob() {
         synchronized (LoadClientAppsJob.class) {
@@ -78,7 +78,7 @@ public class LoadClientAppsJob extends JobImpl {
     }
 
     /**
-     * Public for router console only, not for use by others, subject to change
+     * Public for router console only, not for use by others, subject to change.
      */
     public static class DelayedRunClient extends SimpleTimer2.TimedEvent {
         /**

@@ -122,7 +122,7 @@ public class UDPTransport extends TransportImpl {
     private volatile boolean _needsRebuild;
     private final Object _rebuildLock = new Object();
 
-    /** Introduction key */
+    /** Introduction key. */
     private SessionKey _introKey;
 
     /**
@@ -133,7 +133,7 @@ public class UDPTransport extends TransportImpl {
 
     private volatile long _expireTimeout;
 
-    /** Last report from a peer of our IP */
+    /** Last report from a peer of our IP. */
     private Hash _lastFromv4;
     private Hash _lastFromv6;
     private byte[] _lastFromIPv4;
@@ -147,7 +147,7 @@ public class UDPTransport extends TransportImpl {
     private RouterAddress _currentOurV4Address;
     private RouterAddress _currentOurV6Address;
 
-    /** Adaptive tuner */
+    /** Adaptive tuner. */
     private final Tuner _tuner;
 
     /**
@@ -162,9 +162,9 @@ public class UDPTransport extends TransportImpl {
     public static final String STYLE2 = Transport.STYLE_SSU2;
     /** SSU2 protocol version. */
     static final int SSU2_INT_VERSION = 2;
-    /** "2" */
+    /** "2". */
     static final String SSU2_VERSION = Integer.toString(SSU2_INT_VERSION);
-    /** "2," */
+    /** "2,". */
     static final String SSU2_VERSION_ALT = SSU2_VERSION + ',';
     private final PacketBuilder2 _packetBuilder2;
     private final X25519KeyFactory _xdhFactory;
@@ -173,9 +173,9 @@ public class UDPTransport extends TransportImpl {
     private final byte[] _ssu2StaticIntroKey;
     private final String _ssu2B64StaticPubKey;
     private final String _ssu2B64StaticIntroKey;
-    /** b64 static private key. Value sourced from {@link Transport#PROP_SSU2_SP}. */
+    /** Config key for the base-64 SSU2 static private key. Value sourced from {@link Transport#PROP_SSU2_SP}. */
     public static final String PROP_SSU2_SP = Transport.PROP_SSU2_SP;
-    /** b64 static IV. Value sourced from {@link Transport#PROP_SSU2_IKEY}. */
+    /** Config key for the base-64 SSU2 static IV. Value sourced from {@link Transport#PROP_SSU2_IKEY}. */
     public static final String PROP_SSU2_IKEY = Transport.PROP_SSU2_IKEY;
     private static final long MIN_DOWNTIME_TO_REKEY_HIDDEN = 24*60*60*1000L;
 
@@ -219,9 +219,9 @@ public class UDPTransport extends TransportImpl {
     public static final String PROP_FORCE_INTRODUCERS = Transport.PROP_FORCE_INTRODUCERS;
     /** Do we allow direct SSU connections, sans introducers?  */
     public static final String PROP_ALLOW_DIRECT = "i2np.udp.allowDirect";
-    /** This is rarely if ever used, default is to bind to wildcard address */
+    /** This is rarely if ever used, default is to bind to wildcard address. */
     public static final String PROP_BIND_INTERFACE = "i2np.udp.bindInterface";
-    /** Override the "large" (max) MTU, default is PeerState.LARGE_MTU */
+    /** Override the "large" (max) MTU, default is PeerState.LARGE_MTU. */
     private static final String PROP_DEFAULT_MTU = "i2np.udp.mtu";
     /**
      * Config key for the SSU introducer key published in hidden-mode RouterInfos.
@@ -238,7 +238,7 @@ public class UDPTransport extends TransportImpl {
     /** How many relays offered to us will we use at a time? */
     public static final int PUBLIC_RELAY_COUNT = 3;
 
-    /** Consecutive send failures before considering a peer for drop (requires inactivity too) */
+    /** Consecutive send failures before considering a peer for drop (requires inactivity too). */
     private static final int MAX_CONSECUTIVE_FAILED = 3;
 
     /**
@@ -293,7 +293,7 @@ public class UDPTransport extends TransportImpl {
     /** Minimum active peers to maintain IP detection, etc. */
     private static final int MIN_PEERS = 80;
     private static final int MIN_PEERS_IF_HAVE_V6 = 100;
-    /** Minimum peers volunteering to be introducers if we need that */
+    /** Minimum peers volunteering to be introducers if we need that. */
     private static final int MIN_INTRODUCER_POOL = 30;
     /** Default introducer expiration in ms. */
     static final long INTRODUCER_EXPIRATION_MARGIN = 20*60*1000L;
@@ -567,7 +567,7 @@ public class UDPTransport extends TransportImpl {
     /**
      * Pick a port if not previously configured, so that TransportManager may
      * call getRequestedPort() before we've started to get a best-guess of what our
-     * port is going to be, and pass that to NTCP
+     * port is going to be, and pass that to NTCP.
      */
     private void setupPort() {
         int port = getRequestedPort();
@@ -993,13 +993,13 @@ public class UDPTransport extends TransportImpl {
             if (_endpoints.isEmpty()) {
                 _log.log(Log.CRIT, "No more UDP sockets open");
                 setReachabilityStatus(Status.HOSED);
-                // TODO restart?
+            // TODO restart?
             }
             rebuildExternalAddress(endpoint.isIPv6());
         }
     }
 
-    /** Check if inbound fragment handler is alive */
+    /** Check if inbound fragment handler is alive. */
     private boolean isAlive() {
         return _inboundFragments.isAlive();
     }
@@ -1013,7 +1013,7 @@ public class UDPTransport extends TransportImpl {
     SessionKey getIntroKey() { return _introKey; }
 
     /**
-     * The static Intro key
+     * The static Intro key.
      *
      * @return null if not configured for SSU2
      * @since 0.9.54
@@ -1023,7 +1023,7 @@ public class UDPTransport extends TransportImpl {
     }
 
     /**
-     * The static pub key
+     * The static pub key.
      *
      * @return null if not configured for SSU2
      * @since 0.9.54
@@ -1033,7 +1033,7 @@ public class UDPTransport extends TransportImpl {
     }
 
     /**
-     * The static priv key
+     * The static priv key.
      *
      * @return null if not configured for SSU2
      * @since 0.9.54
@@ -1113,7 +1113,7 @@ public class UDPTransport extends TransportImpl {
     }
 
     /**
-     * Published or requested port
+     * Published or requested port.
      *
      * @param ipv6 {@code true} for the IPv6 socket
      * @return the published port, else the requested port
@@ -1143,7 +1143,7 @@ public class UDPTransport extends TransportImpl {
     }
 
     /**
-     * For PeerTestManager
+     * For PeerTestManager.
      * @return {@code true} if we have a published IPv6 address
      * @since 0.9.30
      */
@@ -1312,7 +1312,7 @@ public class UDPTransport extends TransportImpl {
 
     /**
      * From config, UPnP, local i/f, ...
-     * Not for info received from peers - see externalAddressReceived(Hash, ip, port)
+     * Not for info received from peers - see externalAddressReceived(Hash, ip, port).
      *
      * @param source as defined in Transport.SOURCE_xxx
      * @param ip publicly routable IPv4 or IPv6, null ok
@@ -1441,7 +1441,7 @@ public class UDPTransport extends TransportImpl {
      * Todo:
      * - Much better tracking of troublemakers
      * - Disable if we have good local address or UPnP
-     * - This gets harder if and when we publish multiple addresses, or IPv6
+     * - This gets harder if and when we publish multiple addresses, or IPv6.
      *
      * @param from Hash of inbound destination
      * @param hisIP the IP of the peer telling us
@@ -1782,7 +1782,7 @@ public class UDPTransport extends TransportImpl {
      *
      * @param oldIP the previously configured IP, null if never set
      * @param hasWrapper true if running under the service wrapper
-     * @param laptopMode true if the i2np.laptopMode property is set
+     * @param laptopMode true if the {@code i2np.laptopMode} property is set
      * @param lastChanged ms of the previous IP change, 0 if unknown
      * @param now current time ms
      * @param uptime router uptime ms
@@ -1851,7 +1851,7 @@ public class UDPTransport extends TransportImpl {
      * We must have an accurate external port when firewalled, or else
      * our signature of the SessionCreated packet will be invalid.
      * <p>
-     * As of 0.9.58, returns false if status is UNKNOWN
+     * As of 0.9.58, returns false if status is UNKNOWN.
      * @return the is port fixed
      */
     private boolean getIsPortFixed(boolean isIPv6) {
@@ -1936,7 +1936,7 @@ public class UDPTransport extends TransportImpl {
 
     /**
      * Was the state for this SSU2 receive connection ID recently closed?
-     * Lock-free single ConcurrentHashMap read; hits the per-packet receive path
+     * Lock-free single ConcurrentHashMap read. Hits the per-packet receive path
      * on a connection-ID miss (attacker-triggerable), so the shared add/drop
      * lock must not be taken here.
      * @param rcvConnID the receive connection ID of the closed session
@@ -1948,7 +1948,7 @@ public class UDPTransport extends TransportImpl {
     }
 
     /**
-     * Start listening for packets on a destroyed connection
+     * Start listening for packets on a destroyed connection.
      * @param peer the destroyed session to keep reachable
      * @since 0.9.57
      */
@@ -1965,7 +1965,7 @@ public class UDPTransport extends TransportImpl {
     }
 
     /**
-     * Stop listening for packets on a destroyed connection
+     * Stop listening for packets on a destroyed connection.
      * @param peer the destroyed session to stop tracking
      * @since 0.9.57
      */
@@ -1992,7 +1992,7 @@ public class UDPTransport extends TransportImpl {
     }
 
     /**
-     * Remove and add to peersByRemoteHost map
+     * Remove and add to peersByRemoteHost map.
      * @param peer the peer whose port changed
      * @param newPort the peer's new port
      * @since 0.9.3
@@ -2014,7 +2014,7 @@ public class UDPTransport extends TransportImpl {
     }
 
     /**
-     * Remove and add to peersByRemoteHost map
+     * Remove and add to peersByRemoteHost map.
      * @param peer the peer whose address changed
      * @param newAddress the peer's new IP and port
      * @since 0.9.56
@@ -2035,7 +2035,7 @@ public class UDPTransport extends TransportImpl {
     }
 
     /**
-     * For IntroductionManager
+     * For IntroductionManager.
      * @return may be null if not started
      * @since 0.9.2
      */
@@ -2234,7 +2234,7 @@ public class UDPTransport extends TransportImpl {
     }
 
     /**
-     * Is in drop list
+     * Is in drop list.
      *
      * @param peer the peer to look for
      * @return {@code true} if a delayed drop is still pending for the peer
@@ -2625,7 +2625,7 @@ public class UDPTransport extends TransportImpl {
      *
      * @param addr validated target SSU address
      * @param cost the target's address cost
-     * @param weAreFirewalled status computed by {@link #isFirewalled()}
+     * @param weAreFirewalled status computed by {@link #isFirewalled}
      * @return the bid to send, higher values being preferred by the peer
      */
     private TransportBid selectBid(RouterAddress addr, int cost, boolean weAreFirewalled) {
@@ -2954,7 +2954,7 @@ public class UDPTransport extends TransportImpl {
 
     /**
      * Rebuild to get updated cost and introducers. IPv4 only, unless configured as IPv6 only.
-     * Do not tell the router (he is the one calling this)
+     * Do not tell the router (he is the one calling this).
      * @return the current router addresses
      * @since 0.7.12
      */
@@ -3094,16 +3094,6 @@ public class UDPTransport extends TransportImpl {
         return null;
     }
 
-    /**
-     * Update our IPv4 or IPv6 address and optionally tell the router to rebuild and republish the router info.
-     * FIXME no way to remove an IPv6 address
-     *
-     * @param host new validated IPv4 or IPv6 or DNS hostname or null
-     *             or ":" to force IPv6 introducer rebuild
-     * @param port new validated port or 0/-1
-     * @param allowRebuildRouterInfo whether to tell the router
-     * @return the new address if changed, else null
-     */
     private RouterAddress rebuildExternalAddress(String host, int port, boolean allowRebuildRouterInfo) {
         /** Lock for rebuilding external address. */
         synchronized (_rebuildLock) {
@@ -3111,6 +3101,7 @@ public class UDPTransport extends TransportImpl {
         }
     }
 
+    // FIXME no way to remove an IPv6 address
     /**
      * Rebuild the external address from the given validated host; caller must hold the rebuild lock.
      *
@@ -3382,7 +3373,7 @@ public class UDPTransport extends TransportImpl {
      * <p>
      * Side effect: Sets our MTU
      * <p>
-     * Caller must sync on _rebuildLock
+     * Caller must sync on _rebuildLock.
      *
      * @since 0.9.18
      */
@@ -3398,7 +3389,7 @@ public class UDPTransport extends TransportImpl {
     }
 
     /**
-     * Avoid deadlocks part 999
+     * Avoid deadlocks part 999.
      * @since 0.9.49
      */
     private void rebuildRouterInfo() {
@@ -3406,6 +3397,8 @@ public class UDPTransport extends TransportImpl {
     }
 
     /**
+     * Creates the periodic SSU2 rebuild timer event.
+     *
      * @since 0.9.49
      */
     private class RebuildEvent extends SimpleTimer2.TimedEvent {
@@ -3611,7 +3604,7 @@ public class UDPTransport extends TransportImpl {
     }
 
     /**
-     * Packet handler status
+     * Packet handler status.
      *
      * @return the handler's status string, or empty if not yet started
      */
@@ -3624,7 +3617,7 @@ public class UDPTransport extends TransportImpl {
     }
 
     /**
-     * The packet handler
+     * The packet handler.
      *
      * @return the handler, or null if not yet started
      */
@@ -3890,7 +3883,7 @@ public class UDPTransport extends TransportImpl {
     }
 
     /**
-     * The introduction manager
+     * The introduction manager.
      *
      * @return the manager, or null if not started
      * @since 0.9.54
@@ -3900,7 +3893,7 @@ public class UDPTransport extends TransportImpl {
     }
 
     /**
-     * The peer test manager
+     * The peer test manager.
      *
      * @return the manager, or null if not started
      * @since 0.9.54
@@ -3910,7 +3903,7 @@ public class UDPTransport extends TransportImpl {
     }
 
     /**
-     * The inbound fragment reassembler
+     * The inbound fragment reassembler.
      *
      * @return the reassembler, or null if not started
      * @since 0.9.54
@@ -3920,7 +3913,7 @@ public class UDPTransport extends TransportImpl {
     }
 
     /**
-     * Does nothing
+     * Does nothing.
      * @deprecated as of 0.9.31
      */
     @Override
@@ -4285,7 +4278,7 @@ if (_alive)
     }
 
     /**
-     * IPv4 only
+     * IPv4 only.
      */
     private void setReachabilityStatus(Status status) {
         setReachabilityStatus(status, false);
@@ -4308,7 +4301,7 @@ if (_alive)
     /**
      * 1) Merge IPv4 or IPv6 newStatus into the current IPv4+IPv6 status
      * 2a) If current status changed, call rebuildExternalAddress()
-     * 2b) Otherwise, If we need to retest, call PeerTestEvent.forceRunSoon()
+     * 2b) Otherwise, If we need to retest, call {@link net.i2p.router.transport.udp.PeerTestEvent#forceRunSoon}.
      *
      * @param isIPv6 Is the change an IPv6 change?
      */
@@ -4536,11 +4529,11 @@ if (_alive)
      * @since 0.9.71+
      */
     enum IPv6Rebuild {
-        /** publish i/s/v with the existing address (must include the IPv6 flag) */
+        /** Publish i/s/v with the existing address (must include the IPv6 flag). */
         REBUILD_PUBLISH,
-        /** rebuild explicitly with the currently stored IPv6 address */
+        /** Rebuild explicitly with the currently stored IPv6 address. */
         REBUILD_ADDRESS,
-        /** no IPv6 rebuild needed */
+        /** No IPv6 rebuild needed. */
         NONE
     }
 
@@ -4728,7 +4721,7 @@ if (_alive)
 
     /**
      * The max packet handler threads.
-     * @return max packet handler threads
+     * @return the current ceiling on SSU2 packet handler threads
      */
     public static int getPacketHandlerMaxThreads() { return PacketHandler.getMaxHandlers(); }
 
@@ -4788,7 +4781,7 @@ if (_alive)
 
     /**
      * Total outbound messages queued across all UDP peers.
-     * Unsynchronized — uses ConcurrentHashMap.values() which is weakly consistent.
+     * Unsynchronized — uses {@link java.util.concurrent.ConcurrentHashMap#values} which is weakly consistent.
      * For Tuner cross-references on outbound pressure.
      *
      * @return total outbound queue depth

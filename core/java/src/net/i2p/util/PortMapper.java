@@ -26,18 +26,18 @@ public class PortMapper {
     private final ConcurrentHashMap<String, InetSocketAddress> _dir;
     private final Set<String> _eepsites;
 
-    /** Property to prefer HTTPS */
+    /** Property to prefer HTTPS. */
     public static final String PROP_PREFER_HTTPS = "routerconsole.preferHTTPS";
 
-    /** Console service */
+    /** Console service. */
     public static final String SVC_CONSOLE = "console";
-    /** HTTPS console service */
+    /** HTTPS console service. */
     public static final String SVC_HTTPS_CONSOLE = "https_console";
-    /** HTTP proxy service */
+    /** HTTP proxy service. */
     public static final String SVC_HTTP_PROXY = "HTTP";
-    /** HTTPS proxy service */
+    /** HTTPS proxy service. */
     public static final String SVC_HTTPS_PROXY = "HTTPS";
-    /** Eepsite service */
+    /** Eepsite service. */
     public static final String SVC_EEPSITE = "eepsite";
 
     /**
@@ -47,17 +47,17 @@ public class PortMapper {
      */
     public static final String SVC_HTTPS_EEPSITE = "https_eepsite";
 
-    /** IRC service */
+    /** IRC service. */
     public static final String SVC_IRC = "irc";
-    /** SOCKS service */
+    /** SOCKS service. */
     public static final String SVC_SOCKS = "socks";
-    /** Tahoe-LAFS service */
+    /** Tahoe-LAFS service. */
     public static final String SVC_TAHOE = "tahoe-lafs";
-    /** SMTP service */
+    /** SMTP service. */
     public static final String SVC_SMTP = "SMTP";
-    /** POP3 service */
+    /** POP3 service. */
     public static final String SVC_POP = "POP3";
-    /** SAM service */
+    /** SAM service. */
     public static final String SVC_SAM = "SAM";
 
     /**
@@ -74,7 +74,7 @@ public class PortMapper {
      */
     public static final String SVC_SAM_SSL = "SAM-SSL";
 
-    /** BOB service */
+    /** BOB service. */
     public static final String SVC_BOB = "BOB";
 
     /** Not necessary, already in config? */
@@ -102,15 +102,15 @@ public class PortMapper {
     public static final String SVC_HTTPS_I2PCONTROL = "https_i2pcontrol";
 
     /**
-     * To indicate presence, alternative to WebAppStarter.isWebappRunning().
-     * For actual base URL, use getConsoleURL()
+     * To indicate presence, alternative to {@code WebAppStarter.isWebappRunning()}.
+     * For actual base URL, use getConsoleURL().
      *
      * @since 0.9.34
      */
     public static final String SVC_I2PSNARK = "i2psnark";
 
     /**
-     * To indicate presence, alternative to WebAppStarter.isWebappRunning().
+     * To indicate presence, alternative to {@code WebAppStarter.isWebappRunning()}.
      * For actual base URL, use getConsoleURL()
      * <p>
      * Note: This is only the webapp. Also requires TCG running to be useful.
@@ -121,32 +121,32 @@ public class PortMapper {
     public static final String SVC_I2PTUNNEL = "i2ptunnel";
 
     /**
-     * To indicate presence, alternative to WebAppStarter.isWebappRunning().
-     * For actual base URL, use getConsoleURL()
+     * To indicate presence, alternative to {@code WebAppStarter.isWebappRunning()}.
+     * For actual base URL, use getConsoleURL().
      *
      * @since 0.9.34
      */
     public static final String SVC_IMAGEGEN = "imagegen";
 
     /**
-     * To indicate presence, alternative to WebAppStarter.isWebappRunning().
-     * For actual base URL, use getConsoleURL()
+     * To indicate presence, alternative to {@code WebAppStarter.isWebappRunning()}.
+     * For actual base URL, use getConsoleURL().
      *
      * @since 0.9.34
      */
     public static final String SVC_SUSIDNS = "susidns";
 
     /**
-     * To indicate presence, alternative to WebAppStarter.isWebappRunning().
-     * For actual base URL, use getConsoleURL()
+     * To indicate presence, alternative to {@code WebAppStarter.isWebappRunning()}.
+     * For actual base URL, use getConsoleURL().
      *
      * @since 0.9.34
      */
     public static final String SVC_SUSIMAIL = "susimail";
 
     /**
-     * To indicate presence, alternative to WebAppStarter.isWebappRunning().
-     * For actual base URL, use getConsoleURL()
+     * To indicate presence, alternative to {@code WebAppStarter.isWebappRunning()}.
+     * For actual base URL, use getConsoleURL().
      *
      * @since 0.9.39
      */
@@ -174,7 +174,7 @@ public class PortMapper {
     public static final String DEFAULT_HOST = "127.0.0.1";
 
     /**
-     * Create a port mapper
+     * Create a port mapper.
      *
      * @param context unused for now
      */
@@ -184,7 +184,7 @@ public class PortMapper {
     }
 
     /**
-     * Add the service
+     * Add the service.
      *
      * @param service the service name
      * @param port &gt; 0
@@ -197,7 +197,7 @@ public class PortMapper {
     /**
      * Add the service.
      * If service is SVC_EEPSITE or SVC_HTTPS_EEPSITE,
-     * the URL will be included in getEepsites()
+     * the URL will be included in getEepsites().
      *
      * @param service the service name
      * @param host the hostname to map the service to
@@ -224,7 +224,7 @@ public class PortMapper {
     }
 
     /**
-     * Remove the service
+     * Remove the service.
      *
      * @param service the service name
      */
@@ -236,7 +236,7 @@ public class PortMapper {
      * Remove the service,
      * only if it is registered with the supplied port.
      * If service is SVC_EEPSITE or SVC_HTTPS_EEPSITE,
-     * the URL will be removed from getEepsites()
+     * the URL will be removed from getEepsites().
      *
      * @param service the service name
      * @param port the port number
@@ -254,7 +254,7 @@ public class PortMapper {
     }
 
     /**
-     * The registered port for a service
+     * The registered port for a service.
      *
      * @param service the service name
      * @return -1 if not registered
@@ -265,7 +265,7 @@ public class PortMapper {
     }
 
     /**
-     * The registered port for a service
+     * The registered port for a service.
      *
      * @param service the service name
      * @param def value to return when the service is unregistered
@@ -360,7 +360,7 @@ public class PortMapper {
      * If PROP_PREFER_HTTPS is set to false,
      * return http URL unless console is https only. Default http://127.0.0.1:7657/
      *
-     * @return the console u r l
+     * @return the console URL
      * @since 0.9.33 consolidated from i2ptunnel and desktopgui
      */
     public String getConsoleURL() {
@@ -374,9 +374,9 @@ public class PortMapper {
      * return http URL unless console is https only. Default http://127.0.0.1:7657/
      *
      * @param preferHTTPS if true, start from the https console URL, which still
-     * @return the console u r l
+     * @return the console URL
      * @since 0.9.34
-     *        downgrades to http when the console is not https-enabled
+     * downgrades to http when the console is not https-enabled
      */
     public String getConsoleURL(boolean preferHTTPS) {
         return preferHTTPS ? getHTTPSConsoleURL() : getHTTPConsoleURL();
@@ -437,6 +437,8 @@ public class PortMapper {
     }
 
     /**
+     * Control URL for the mapped service.
+     *
      * @since 0.9.50 from SummaryBarRenderer
      */
     private static String toURL(String svc, String host, int port) {
@@ -451,7 +453,7 @@ public class PortMapper {
     }
 
     /**
-     * For debugging only
+     * For debugging only.
      *
      * @param out the writer to render the debug table to
      * @throws IOException if the writer rejects any of the table's write calls

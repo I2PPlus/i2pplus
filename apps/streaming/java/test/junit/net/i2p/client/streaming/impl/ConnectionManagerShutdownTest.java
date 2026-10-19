@@ -17,7 +17,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 /**
- * Tests that {@link ConnectionManager#shutdown()} takes permanent ownership of
+ * Tests that {@link ConnectionManager#shutdown} takes permanent ownership of
  * its BanExpiry sweeper.
  *
  * <p>The sweeper re-arms itself from inside timeReached(), and

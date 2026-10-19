@@ -68,8 +68,8 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
     private static final long MAX_SKEW = 2*60*1000L;
 
     /**
-     *  Per-introducer introduction states
-     *  @since 0.9.55
+     * Per-introducer introduction states.
+     * @since 0.9.55
      */
     public enum IntroState {
         // pending states
@@ -236,12 +236,12 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
     }
 
     /**
-     *  After introduction
+     * After introduction.
      *
-     *  @param ip the IP address bytes
-     *  @param port the port number
-     *  @param token the token received
-     *  @since 0.9.55
+     * @param ip the IP address bytes
+     * @param port the port number
+     * @param token the token received
+     * @since 0.9.55
      */
     public synchronized void introduced(byte[] ip, int port, long token) {
         if (_currentState != OutboundState.OB_STATE_PENDING_INTRO)
@@ -257,14 +257,14 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
     }
 
     /**
-     *  This will be called 0 times if we don't have a token and never get a retry;
-     *  once if we have a token;
-     *  and twice if the token we had was bad and we got a retry.
-     *  We must regenerate the handshake state if we get a new token, because
-     *  we only save the full encrypted packet for retransmission, and
-     *  the encryption changes if the token does.
+     * This will be called 0 times if we don't have a token and never get a retry;
+     * once if we have a token;
+     * and twice if the token we had was bad and we got a retry.
+     * We must regenerate the handshake state if we get a new token, because
+     * we only save the full encrypted packet for retransmission, and
+     * the encryption changes if the token does.
      * <p>
-     *  caller must synch
+     * caller must synch.
      */
     private void createNewState(RouterAddress addr) {
         String ss = addr.getOption("s");
@@ -465,8 +465,8 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
     // SSU 1 overrides
 
     /**
-     *  Overridden to destroy the handshake state
-     *  @since 0.9.56
+     * Overridden to destroy the handshake state.
+     * @since 0.9.56
      */
     @Override
     public synchronized void fail() {
@@ -524,9 +524,9 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
      */
     public long getToken() { return _token; }
     /**
-     *  Get the next token for this connection
+     * Get the next token for this connection.
      *
-     *  @return may be null
+     * @return may be null
      */
     public EstablishmentManager.Token getNextToken() {
         if (_bobIP != null && _bobIP.length == 4 && _transport.isSymNatted())
@@ -592,12 +592,12 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
     }
 
     /**
-     * Receive a retry packet
+     * Receive a retry packet.
      *
      * @param packet the UDP packet received
      * @throws GeneralSecurityException if the packet does not match the pending
-     *                                  Retry request - wrong address, connection IDs, or an unexpected
-     *                                  retry token - or carries a bad or zero DateTime block
+     * Retry request - wrong address, connection IDs, or an unexpected
+     * retry token - or carries a bad or zero DateTime block
      */
     public synchronized void receiveRetry(UDPPacket packet) throws GeneralSecurityException {
         try {
@@ -612,7 +612,9 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
     }
 
     /**
-     *  @since 0.9.56
+     * Process a Retry packet, with the lock held.
+     *
+     * @since 0.9.56
      */
     private void locked_receiveRetry(UDPPacket packet) throws GeneralSecurityException {
         DatagramPacket pkt = packet.getPacket();
@@ -683,12 +685,12 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
     }
 
     /**
-     * Receive a SessionCreated packet
+     * Receive a SessionCreated packet.
      *
      * @param packet the UDP packet received
      * @throws GeneralSecurityException if the packet does not match the pending
-     *                                  request - wrong address or connection IDs - or is missing its
-     *                                  DateTime or address block, or exceeds the two minute skew limit
+     * request - wrong address or connection IDs - or is missing its
+     * DateTime or address block, or exceeds the two minute skew limit
      */
     public synchronized void receiveSessionCreated(UDPPacket packet) throws GeneralSecurityException {
         try {
@@ -708,7 +710,9 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
     }
 
     /**
-     *  @since 0.9.56
+     * Process SessionCreated, with the lock held.
+     *
+     * @since 0.9.56
      */
     private void locked_receiveSessionCreated(UDPPacket packet) throws GeneralSecurityException {
         if (_currentState != OutboundState.OB_STATE_REQUEST_SENT &&
@@ -790,7 +794,7 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
 
     /**
      * Note that we just sent a token request packet
-     * and save it for retransmission
+     * and save it for retransmission.
      *
      * @param packet the datagram packet sent
      */
@@ -804,7 +808,7 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
 
     /**
      * Note that we just sent the SessionRequest packet
-     * and save it for retransmission
+     * and save it for retransmission.
      *
      * @param pkt the datagram packet sent
      */
@@ -833,7 +837,7 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
 
     /**
      * Note that we just sent the SessionConfirmed packets
-     * and save them for retransmission
+     * and save them for retransmission.
      *
      * @param packets the UDP packets sent
      * @return the new PeerState2, may also be retrieved from getPeerState()
@@ -977,7 +981,7 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
     }
 
     /**
-     * A relay request was sent to the SSU2 introducer specified
+     * A relay request was sent to the SSU2 introducer specified.
      *
      * @param h the introducer hash
      * @since 0.9.55

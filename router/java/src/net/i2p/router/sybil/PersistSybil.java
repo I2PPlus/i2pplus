@@ -177,7 +177,7 @@ public class PersistSybil {
 
     /**
      * Remove all files older than configured threshold
-     * Inline for now, thread later if necessary
+     * Inline for now, thread later if necessary.
      *
      * @since 0.9.41
      */
@@ -223,7 +223,7 @@ public class PersistSybil {
 
 
     /**
-     * Delete the file for a particular date
+     * Delete the file for a particular date.
      *
      * @param date the timestamp for the file
      * @return true if the file was deleted
@@ -235,7 +235,7 @@ public class PersistSybil {
     }
 
     /**
-     * Get the blocklist path
+     * Get the blocklist path.
      *
      * @return the blocklist file
      * @since 0.9.57
@@ -246,7 +246,7 @@ public class PersistSybil {
     }
 
     /**
-     * Delete the blocklist
+     * Delete the blocklist.
      *
      * @since 0.9.63+
      */
@@ -265,7 +265,7 @@ public class PersistSybil {
     }
 
     /**
-     * Read the blocklist
+     * Read the blocklist.
      *
      * @return map of ip or hash to expiration (ms), or null on failure
      * @since 0.9.50
@@ -279,7 +279,7 @@ public class PersistSybil {
     }
 
     /**
-     * Read the blocklist
+     * Read the blocklist.
      *
      * @return map of ip or hash to expiration (ms), or null on failure
      * @since 0.9.50
@@ -317,7 +317,7 @@ public class PersistSybil {
     /**
      * Write the blocklist.
      * The format is different than other blocklists because we include an expiration.
-     * Format: One per line: ip or hash,expiration time (ms)
+     * Format: One per line: ip or hash,expiration time (ms).
      *
      * @param blocks non-empty, will be merged with existing entries
      * @param blockUntil the expiration time in ms

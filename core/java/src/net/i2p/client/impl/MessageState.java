@@ -58,17 +58,17 @@ class MessageState {
     }
 
     /**
-     *  Track a sent message's delivery state for asynchronous notification
+     * Track a sent message's delivery state for asynchronous notification.
      *
-     *  @param ctx the context supplying the clock and log used to time the
-     *             wait and to report warnings
-     *  @param nonce the transaction nonce this message was sent under
-     *  @param session the session the message was sent through, also used
-     *                 as the log prefix
-     *  @param expires absolute time (not interval)
-     *  @param listener notified on each state change while the message has
-     *                  not yet expired
-     *  @since 0.9.14
+     * @param ctx the context supplying the clock and log used to time the
+     * wait and to report warnings
+     * @param nonce the transaction nonce this message was sent under
+     * @param session the session the message was sent through, also used
+     * as the log prefix
+     * @param expires absolute time (not interval)
+     * @param listener notified on each state change while the message has
+     * not yet expired
+     * @since 0.9.14
      */
     public MessageState(I2PAppContext ctx, long nonce, I2PSession session, long expires, SendMessageStatusListener listener) {
         _context = ctx;
@@ -162,10 +162,10 @@ class MessageState {
     }
 
     /**
-     *  Record a status update, advancing the state only when it moves forward
+     * Record a status update, advancing the state only when it moves forward.
      *
-     *  @param status the MessageStatusMessage status code just received
-     *  @since 0.9.14
+     * @param status the MessageStatusMessage status code just received
+     * @since 0.9.14
      */
     private void locked_update(int status) {
         switch (status) {

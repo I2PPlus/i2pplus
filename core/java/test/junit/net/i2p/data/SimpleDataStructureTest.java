@@ -14,9 +14,8 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 
 /**
- * Test harness for the simple data structure
+ * Test harness for the simple data structure.
  *
- * @author welterde
  */
 public class SimpleDataStructureTest {
 

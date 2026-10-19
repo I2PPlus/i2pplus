@@ -15,10 +15,10 @@ import java.util.Set;
  * (number, string, etc.) and whether the parameter is mandatory or optional:
  *
  * <ul>
- *     <li>{@code getXXX(param_name)} for mandatory parameters, where
- *         {@code XXX} is the expected parameter type.
- *     <li>{@code getOptXXX(param_name, default_value)} for optional
- *         parameters, specifying a default value.
+ * <li>{@code getXXX(param_name)} for mandatory parameters, where
+ * {@code XXX} is the expected parameter type.
+ * <li>{@code getOptXXX(param_name, default_value)} for optional
+ * parameters, specifying a default value.
  * </ul>
  *
  * <p>There are also generic getter methods that let you do the type conversion
@@ -65,9 +65,7 @@ import java.util.Set;
  * }
  *
  * </pre>
- *
- * @author Vladimir Dzhuvinov
- */
+*/
 public class NamedParamsRetriever
 	extends ParamsRetriever {
 
@@ -272,6 +270,8 @@ public class NamedParamsRetriever
 
 
 	/**
+	 * Whether a parameter exists with the name.
+	 *
 	 * @see #hasParam
 	 */
 	@Deprecated
@@ -296,6 +296,8 @@ public class NamedParamsRetriever
 
 
 	/**
+	 * Whether parameters exist with all the names.
+	 *
 	 * @see #hasParams(String[])
 	 */
 	@Deprecated
@@ -351,6 +353,8 @@ public class NamedParamsRetriever
 
 
 	/**
+	 * Whether the mandatory parameters exist and the optional ones match their types.
+	 *
 	 * @see #hasParams(String[], String[])
 	 */
 	@Deprecated
@@ -397,6 +401,8 @@ public class NamedParamsRetriever
 
 
 	/**
+	 * Throw if any mandatory parameter is missing.
+	 *
 	 * @see #ensureParams(String[])
 	 */
 	@Deprecated
@@ -434,6 +440,8 @@ public class NamedParamsRetriever
 
 
 	/**
+	 * Throw if a mandatory parameter is missing or an optional one has the wrong type.
+	 *
 	 * @see #ensureParams(String[], String[])
 	 */
 	@Deprecated
@@ -466,6 +474,8 @@ public class NamedParamsRetriever
 
 
 	/**
+	 * Throw if no parameter exists with the name.
+	 *
 	 * @see #ensureParam(String)
 	 */
 	@Deprecated
@@ -503,6 +513,8 @@ public class NamedParamsRetriever
 
 
 	/**
+	 * Throw if the named parameter is missing or of the wrong type.
+	 *
 	 * @param <T> the type the named parameter must map to
 	 * @see #ensureParam(String, Class)
 	 */
@@ -561,6 +573,8 @@ public class NamedParamsRetriever
 
 
 	/**
+	 * Throw if the named parameter fails the given criteria.
+	 *
 	 * @see #ensureParam(String, Class, boolean)
 	 */
 	@Deprecated

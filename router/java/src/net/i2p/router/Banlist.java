@@ -98,13 +98,13 @@ public class Banlist {
     // Country ban duration - uses existing router.blockCountries property (session-based)
 
     /**
-     * hash of 387 zeros
+     * Hash of 387 zeros.
      *
      * @since 0.9.66
      */
     public static final Hash HASH_ZERORI = new Hash(Base64.decode("MRn86w6tHQgE25D7DIejOBCJ-dImSjdsQaOaBuUypkE="));
 
-    /** Entry representing a banned peer with expiration and reason information */
+    /** Entry representing a banned peer with expiration and reason information. */
     public static class Entry {
         /** When it should expire, per the i2p clock. */
         public long expireOn;
@@ -129,9 +129,7 @@ public class Banlist {
         /** Transports to ban, null means all transports. */
         public Set<String> transports;
 
-        /**
-         * Default constructor.
-         */
+        /** Constructs an empty entry. */
         public Entry() {
             // intentionally empty - default constructor
         }
@@ -155,7 +153,7 @@ public class Banlist {
     public static final long BANLIST_DURATION_FOREVER = 181L*24*60*60*1000L; // will get rounded down to 180d on console
 
     /**
-     * Buggy i2pd fork
+     * Buggy i2pd fork.
      *
      * @since 0.9.52
      */
@@ -178,9 +176,9 @@ public class Banlist {
      */
     private static final int BAN_COUNT_BASELINE = 3000;
     private static final double MIN_BAN_SCALE = 0.25;
-    /** Eligible ban durations for reduction: > 4 hours */
+    /** Eligible ban durations for reduction: > 4 hours. */
     private static final long BAN_REDUCTION_MIN = 4 * 60 * 60 * 1000L;
-    /** Eligible ban durations for reduction: < 1 week */
+    /** Eligible ban durations for reduction: < 1 week. */
     private static final long BAN_REDUCTION_MAX = 7 * 24 * 60 * 60 * 1000L;
     /** Above this count, ALL bans over 1h are halved regardless of existing scaling. */
     private static final int BAN_COUNT_HIGH = 8000;
@@ -336,7 +334,7 @@ public class Banlist {
 
     /**
      * Check if XG router bans are enabled.
-     * XG = unlimited bandwidth (X), no transit tunnels (G) - often botnet indicators
+     * XG = unlimited bandwidth (X), no transit tunnels (G) - often botnet indicators.
      *
      * @return true if XG router bans are enabled
      * @since 0.9.70+
@@ -345,7 +343,7 @@ public class Banlist {
 
     /**
      * Check if LU router bans are enabled.
-     * LU = low bandwidth tier (L) + unreachable/firewalled (U)
+     * LU = low bandwidth tier (L) + unreachable/firewalled (U).
      *
      * @return true if LU router bans are enabled
      * @since 0.9.70+
@@ -366,7 +364,7 @@ public class Banlist {
 
     /**
      * Get custom capability ban pattern.
-     * Format: string of capability letters (e.g., "DG", "UX")
+     * Format: string of capability letters (e.g., "DG", "UX").
      *
      * @return the custom capability ban pattern, or empty string if none
      * @since 0.9.70+
@@ -434,6 +432,8 @@ public class Banlist {
 
     private class Cleanup extends JobImpl {
         /**
+         * Creates the periodic banlist cleanup job.
+         *
          * @param ctx the router context
          */
         public Cleanup(RouterContext ctx) {
@@ -476,7 +476,7 @@ public class Banlist {
      * When the ban count exceeds BAN_COUNT_BASELINE, proportionally reduce
      * remaining durations of eligible entries (between BAN_REDUCTION_MIN
      * and BAN_REDUCTION_MAX) to keep the list manageable under memory pressure.
-     * Scaling: remaining *= max(MIN_BAN_SCALE, (double) BAN_COUNT_BASELINE / count)
+     * Scaling: remaining *= max(MIN_BAN_SCALE, (double) BAN_COUNT_BASELINE / count).
      */
     private void reduceDurations(long now) {
         int count = _entries.size();
@@ -1050,6 +1050,8 @@ public class Banlist {
      */
     public void unbanlistRouter(Hash peer) {unbanlistRouter(peer, true);}
     /**
+     * Remove a peer from the banlist, optionally updating message history.
+     *
      * @param peer the router hash to remove from banlist
      * @param realUnbanlist if true, update message history
      */
@@ -1192,13 +1194,13 @@ public class Banlist {
     /**
      * Reason recorded when the peer was banlisted.
      * <p>Diagnostic only. A rejected tunnel build says a peer was banned but not
-     * why, so a burst of rejections cannot be attributed to a cause; without it
+     * why, so a burst of rejections cannot be attributed to a cause. Without it
      * the only way to find out which subsystem is banning peers is to add
      * temporary logging to each caller.
      *
      * @param peer the router hash to check
      * @return the recorded cause code or reason, or null when the peer is not
-     *         currently banlisted or no cause was recorded
+     * currently banlisted or no cause was recorded
      * @since 0.9.71+
      */
     public String getBanCause(Hash peer) {

@@ -67,8 +67,8 @@ import org.jfree.svg.util.RadialGradientPaintKey;
 
 /**
  * A {@code Graphics2D} implementation that creates SVG output. After rendering the graphics via the
- * {@code SVGGraphics2D}, you can retrieve an SVG element (see {@link #getSVGElement()}) or an SVG
- * document (see {@link #getSVGDocument()}) containing your content. <b>Usage</b><br>
+ * {@code SVGGraphics2D}, you can retrieve an SVG element (see {@link #getSVGElement}) or an SVG
+ * document (see {@link #getSVGDocument}) containing your content. <b>Usage</b><br>
  *
  * <p>Using the {@code SVGGraphics2D} class is straightforward. First, create an instance specifying
  * the height and width of the SVG element that will be created. Then, use standard Java2D API calls
@@ -92,20 +92,20 @@ import org.jfree.svg.util.RadialGradientPaintKey;
  * Some additional notes:
  *
  * <ul>
- *   <li>Images are supported, but for methods with an {@code ImageObserver} parameter note that the
- *       observer is ignored completely. In any case, using images that are not fully loaded already
- *       would not be a good idea in the context of generating SVG data/files;
- *   <li>the {@link #getFontMetrics(java.awt.Font)} and {@link #getFontRenderContext()} methods
- *       return values that come from an internal {@code BufferedImage}, this is a short-cut and we
- *       don't know if there are any negative consequences (if you know of any, please let us know
- *       and we'll add the info here or find a way to fix it);
- *   <li>there are settings to control the number of decimal places used to write the coordinates
- *       for geometrical elements (default 2dp) and transform matrices (default 6dp). These defaults
- *       may change in a future release.
- *   <li>when an HTML page contains multiple SVG elements, the items within the DEFS element for
- *       each SVG element must have IDs that are unique across <em>all</em> SVG elements in the
- *       page. We auto-populate the {@code defsKeyPrefix} attribute to help ensure that unique IDs
- *       are generated.
+ * <li>Images are supported, but for methods with an {@code ImageObserver} parameter note that the
+ * observer is ignored completely. In any case, using images that are not fully loaded already
+ * would not be a good idea in the context of generating SVG data/files;
+ * <li>the {@link #getFontMetrics(java.awt.Font)} and {@link #getFontRenderContext} methods
+ * return values that come from an internal {@code BufferedImage}, this is a short-cut and we
+ * don't know if there are any negative consequences (if you know of any, please let us know
+ * and we'll add the info here or find a way to fix it);
+ * <li>there are settings to control the number of decimal places used to write the coordinates
+ * for geometrical elements (default 2dp) and transform matrices (default 6dp). These defaults
+ * may change in a future release.
+ * <li>when an HTML page contains multiple SVG elements, the items within the DEFS element for
+ * each SVG element must have IDs that are unique across <em>all</em> SVG elements in the
+ * page. We auto-populate the {@code defsKeyPrefix} attribute to help ensure that unique IDs
+ * are generated.
  * </ul>
  *
  * <p>For some demos showing how to use this class, look at the JFree-Demos project at GitHub:
@@ -358,7 +358,7 @@ public final class SVGGraphics2D extends Graphics2D {
 
     /**
      * Creates a new instance with the specified width and height that will populate the supplied
-     * StringBuilder instance. This constructor is used by the {@link #create()} method, but won't
+     * StringBuilder instance. This constructor is used by the {@link #create} method, but won't
      * normally be called directly by user code.
      *
      * @param width the width of the SVG element.
@@ -372,7 +372,7 @@ public final class SVGGraphics2D extends Graphics2D {
 
     /**
      * Creates a new instance with the specified width and height that will populate the supplied
-     * StringBuilder instance. This constructor is used by the {@link #create()} method, but won't
+     * StringBuilder instance. This constructor is used by the {@link #create} method, but won't
      * normally be called directly by user code.
      *
      * @param width the width of the SVG element.
@@ -427,7 +427,7 @@ public final class SVGGraphics2D extends Graphics2D {
 
     /**
      * Returns the width for the SVG element, specified in the constructor. This value will be
-     * written to the SVG element returned by the {@link #getSVGElement()} method.
+     * written to the SVG element returned by the {@link #getSVGElement} method.
      *
      * @return The width for the SVG element.
      */
@@ -437,7 +437,7 @@ public final class SVGGraphics2D extends Graphics2D {
 
     /**
      * Returns the height for the SVG element, specified in the constructor. This value will be
-     * written to the SVG element returned by the {@link #getSVGElement()} method.
+     * written to the SVG element returned by the {@link #getSVGElement} method.
      *
      * @return The height for the SVG element.
      */
@@ -569,7 +569,7 @@ public final class SVGGraphics2D extends Graphics2D {
      * output. The default value is 6.
      *
      * <p>Note that there is a separate attribute to control the number of decimal places for
-     * geometrical elements in the output (see {@link #getGeometryDP()}).
+     * geometrical elements in the output (see {@link #getGeometryDP}).
      *
      * @return The number of decimal places.
      * @see #setTransformDP(int)
@@ -599,7 +599,7 @@ public final class SVGGraphics2D extends Graphics2D {
      * default value is 2.
      *
      * <p>Note that there is a separate attribute to control the number of decimal places for
-     * transform matrices in the output (see {@link #getTransformDP()}).
+     * transform matrices in the output (see {@link #getTransformDP}).
      *
      * @return The number of decimal places.
      */
@@ -711,7 +711,7 @@ public final class SVGGraphics2D extends Graphics2D {
     /**
      * Creates a new graphics object that is a copy of this graphics object (except that it has not
      * accumulated the drawing operations). Not sure yet when or why this would be useful when
-     * creating SVG output. Note that the {@code fontMapper} object ({@link #getFontMapper()}) is
+     * creating SVG output. Note that the {@code fontMapper} object ({@link #getFontMapper}) is
      * shared between the existing instance and the new one.
      *
      * @return A new graphics object.
@@ -806,7 +806,7 @@ public final class SVGGraphics2D extends Graphics2D {
 
     /**
      * Returns the foreground color. This method exists for backwards compatibility in AWT, you
-     * should use the {@link #getPaint()} method.
+     * should use the {@link #getPaint} method.
      *
      * @return The foreground color (never {@code null}).
      * @see #getPaint()
@@ -3327,7 +3327,7 @@ public final class SVGGraphics2D extends Graphics2D {
     }
 
     /**
-     * Returns an SVG document (this contains the content returned by the {@link #getSVGElement()}
+     * Returns an SVG document (this contains the content returned by the {@link #getSVGElement}
      * method, prepended with the required document header).
      *
      * @return An SVG document.

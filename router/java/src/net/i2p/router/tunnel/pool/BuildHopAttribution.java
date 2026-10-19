@@ -26,10 +26,10 @@ public class BuildHopAttribution {
     /**
      * Build the stat name for one hop position and classification.
      * <p>Shape: {@code tunnel.buildExpired.Hop1.establishedSilent}. Lower-cased
-     *  and stripped of non-alphanumerics so a classification containing a space or
-     *  comma still yields one legal stat name — those come from
-     *  {@link BuildExecutor#HOP_ESTABLISHED_SILENT} and friends, and a stat name
-     *  containing a space would not register.
+     * and stripped of non-alphanumerics so a classification containing a space or
+     * comma still yields one legal stat name. Those come from
+     * {@link BuildExecutor#HOP_ESTABLISHED_SILENT} and friends, and a stat name
+     * containing a space would not register.
      *
      * @param hopIndex zero-based position in the build path; 0 is us
      * @param classification token from {@link BuildExecutor#classifyExpiredHop}

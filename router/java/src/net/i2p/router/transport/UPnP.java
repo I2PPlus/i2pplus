@@ -57,19 +57,15 @@ import org.freenetproject.ForwardPortCallback;
 import org.freenetproject.ForwardPortStatus;
 
 /**
- * This (and all in org/freenet, org/cybergarage, org/xmlpull)
- * grabbed from freenet SVN, mid-February 2009 by zzz.
- * This file modded somewhat to remove freenet-specific stuff,
- * but most of the glue to I2P is in UPnPManager (which was written
- * from scratch and is not the Limewire one referred to below).
+ * UPnP port mapping client for NAT traversal. Public only for command line
+ * usage. Not a public API, not for external use.
  * <p>
- * ==================
+ * From Freenet SVN (February 2009) along with the org/freenet, org/cybergarage
+ * and org/xmlpull trees, modified to remove Freenet-specific code. The glue
+ * to I2P is in UPnPManager, written from scratch.
  * <p>
- * This plugin implements UP&amp;P support on a Freenet node.
- * Some code has been borrowed from Limewire, see com.limegroup.gnutella.UPnPManager.
- * Public only for command line usage. Not a public API, not for external use.
+ * Some code was borrowed from Limewire, see com.limegroup.gnutella.UPnPManager.
  *
- * @author Florent Daigni&egrave;re &lt;nextgens@freenetproject.org&gt;
  * @see "http://www.upnp.org/"
  * @see "http://en.wikipedia.org/wiki/Universal_Plug_and_Play"
  * @since 0.7.4
@@ -94,7 +90,7 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
     private static final String WANCON_DEVICE = "urn:schemas-upnp-org:device:WANConnectionDevice:1";
     private static final String WAN_IP_CONNECTION = "urn:schemas-upnp-org:service:WANIPConnection:1";
     private static final String WAN_PPP_CONNECTION = "urn:schemas-upnp-org:service:WANPPPConnection:1";
-    /** IGD 2 flavors, since 0.9.34 */
+    /** IGD 2 flavors, since 0.9.34. */
     private static final String ROUTER_DEVICE_2 = "urn:schemas-upnp-org:device:InternetGatewayDevice:2";
     private static final String WAN_DEVICE_2 = "urn:schemas-upnp-org:device:WANDevice:2";
     private static final String WANCON_DEVICE_2 = "urn:schemas-upnp-org:device:WANConnectionDevice:2";
@@ -118,11 +114,11 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
     // FIXME: detect it for real and deal with it! @see #2524
     private volatile boolean thinksWeAreDoubleNatted = false;
 
-    /** List of ports we want to forward */
+    /** List of ports we want to forward. */
     private final Set<ForwardPort> portsToForward;
-    /** List of ports we have actually forwarded */
+    /** List of ports we have actually forwarded. */
     private final Set<ForwardPort> portsForwarded;
-    /** Callback to call when a forward fails or succeeds */
+    /** Callback to call when a forward fails or succeeds. */
     private ForwardPortCallback forwardCallback;
 
     private static final String PROP_ADVANCED = "routerconsole.advanced";
@@ -164,7 +160,7 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
     }
 
     /**
-     * WARNING - Blocking up to 2 seconds
+     * WARNING - Blocking up to 2 seconds.
      */
     public synchronized void terminate() {
         removeDeviceChangeListener(this);
@@ -618,7 +614,7 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
 
     /**
      * EventListener callback -
-     * unused for now - supported in miniupnpd as of 1.1
+     * unused for now - supported in miniupnpd as of 1.1.
      */
     public void eventNotifyReceived(String uuid, long seq, String varName, String value) {
         if (uuid == null || varName == null || value == null)
@@ -699,7 +695,7 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
     }
 
     /**
-     * Go through the other devices, try re-adding them
+     * Go through the other devices, try re-adding them.
      * @since 0.9.46
      */
     private void retryOtherDevices() {
@@ -718,7 +714,7 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
     }
 
     /**
-     * The addresses we want to bind to
+     * The addresses we want to bind to.
      *
      * @return the local addresses
      * @since 0.9.46, public since 0.9.55 for HTTPServerList
@@ -1056,6 +1052,8 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
         private static final long UINT_MAX = (1L << 32) - 1;
 
     /**
+     * Fetch a UPnP service status variable as a number.
+     *
      * @since 0.9.34
      */
     private String toLong(String action, String arg, Service serv) {
@@ -1073,6 +1071,8 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
     }
 
     /**
+     * Fetch a UPnP service status variable as a date.
+     *
      * @since 0.9.34
      */
     private String toTime(String action, String arg, Service serv) {
@@ -1087,6 +1087,8 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
     }
 
     /**
+     * Fetch a UPnP service status variable as a boolean.
+     *
      * @since 0.9.34
      */
     private String toBoolean(String action, String arg, Service serv) {
@@ -1313,7 +1315,7 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
     }
 
     /**
-     * Compare based on friendly name of the device
+     * Compare based on friendly name of the device.
      * @since 0.9.46
      */
     private static class UDNComparator implements Comparator<Map.Entry<String, Device>>, Serializable {
@@ -1526,7 +1528,7 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
     }
 
     /**
-     * 65536 isn't a lot, so check for dups
+     * 65536 isn't a lot, so check for dups.
      *
      * @return 0 - 65535
      * @since 0.9.50
@@ -1748,10 +1750,10 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
 
     /**
      * Registers a callback when the given ports change.
-     * non-blocking
+     * non-blocking.
      * @param ports non-null
      * @param cb the callback replaced; replacing a different one is logged as an
-     *           error, and may be null to unregister
+     * error, and may be null to unregister
      */
     public void onChangePublicPorts(Set<ForwardPort> ports, ForwardPortCallback cb) {
         Set<ForwardPort> portsToDumpNow = null;
@@ -2060,7 +2062,7 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
         }
 
         /**
-         * Ignores UID
+         * Ignores UID.
          */
         @Override
         public boolean equals(Object o) {
@@ -2080,7 +2082,7 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
     }
 
     /**
-     * Dumps out device info in semi-HTML format
+     * Dumps out device info in semi-HTML format.
      *
      * @param args ignored; this diagnostic entry point takes no options
      * @throws Exception if the control point cannot be started or the search fails

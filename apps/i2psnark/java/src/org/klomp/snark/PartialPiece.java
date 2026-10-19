@@ -34,9 +34,9 @@ class PartialPiece implements Comparable<PartialPiece> {
     private final byte[] bs; // in-memory storage if piece is small
     private final int pclen; // piece length in bytes
     private final File tempDir;
-    /** BEP 47: to recognize padding-only chunks and skip requesting them; may be null */
+    /** BEP 47: to recognize padding-only chunks and skip requesting them; may be null. */
     private final MetaInfo _meta;
-    /** BEP 47: per-piece padding sub-block mask, lazily computed; null until first use */
+    /** BEP 47: per-piece padding sub-block mask, lazily computed; null until first use. */
     private volatile BitField _paddingMask;
 
     private File tempfile;

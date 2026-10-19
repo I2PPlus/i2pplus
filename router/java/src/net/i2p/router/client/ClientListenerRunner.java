@@ -27,27 +27,26 @@ import net.i2p.util.PortMapper;
  * Note that this is extended by SSLClientListenerRunner for SSL,
  * and by DomainClientListenerRunner in Android for domain sockets.
  *
- * @author jrandom
  */
 class ClientListenerRunner implements Runnable {
-    /** Logger for this class */
+    /** Logger for this class. */
     protected final Log _log;
-    /** Router context */
+    /** Router context. */
     protected final RouterContext _context;
-    /** Client manager */
+    /** Client manager. */
     protected final ClientManager _manager;
-    /** Server socket for accepting connections */
+    /** Server socket for accepting connections. */
     protected ServerSocket _socket;
-    /** Port to listen on */
+    /** Port to listen on. */
     protected final int _port;
-    /** Whether to bind on all interfaces */
+    /** Whether to bind on all interfaces. */
     protected final boolean _bindAllInterfaces;
-    /** Whether the runner is running */
+    /** Whether the runner is running. */
     protected volatile boolean _running;
-    /** Whether the socket is currently listening */
+    /** Whether the socket is currently listening. */
     protected volatile boolean _listening;
 
-    /** Property to control binding to all interfaces */
+    /** Property to control binding to all interfaces. */
     public static final String BIND_ALL_INTERFACES = "i2cp.tcp.bindAllInterfaces";
 
     /**
@@ -209,7 +208,7 @@ class ClientListenerRunner implements Runnable {
     }
 
     /**
-     * Handle the connection by passing it off to a {@link ClientConnectionRunner ClientConnectionRunner}
+     * Handle the connection by passing it off to a {@link ClientConnectionRunner ClientConnectionRunner}.
      *
      * @param socket the accepted socket connection
      */

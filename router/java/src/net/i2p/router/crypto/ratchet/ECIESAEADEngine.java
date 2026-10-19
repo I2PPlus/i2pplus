@@ -128,7 +128,7 @@ public final class ECIESAEADEngine {
     }
 
     /**
-     * May be called multiple times
+     * May be called multiple times.
      */
     public synchronized void startup() {
         if (!_isRunning) {
@@ -138,7 +138,7 @@ public final class ECIESAEADEngine {
     }
 
     /**
-     * Cannot be restarted
+     * Cannot be restarted.
      */
     public synchronized void shutdown() {
         _isRunning = false;
@@ -152,7 +152,7 @@ public final class ECIESAEADEngine {
     //// start decrypt ////
 
     /**
-     * Try to decrypt the message with one or both of the given private keys
+     * Try to decrypt the message with one or both of the given private keys.
      *
      * @param data the encrypted CloveSet to decrypt
      * @param elgKey must be ElG, non-null
@@ -160,14 +160,14 @@ public final class ECIESAEADEngine {
      * @param keyManager holds the session key material and ratchet preference
      * @return decrypted data or null on failure
      * @throws DataFormatException if the underlying garlic parse fails and cannot be
-     *                             recovered by trying the remaining crypto schemes
+     * recovered by trying the remaining crypto schemes
      */
     public CloveSet decrypt(byte[] data, PrivateKey elgKey, PrivateKey ecKey, MuxedSKM keyManager) throws DataFormatException {
         return _muxedEngine.decrypt(data, elgKey, ecKey, keyManager);
     }
 
     /**
-     * Try to decrypt the message with one or both of the given private keys
+     * Try to decrypt the message with one or both of the given private keys.
      *
      * @param data the encrypted CloveSet to decrypt
      * @param ecKey must be EC, non-null
@@ -188,7 +188,7 @@ public final class ECIESAEADEngine {
      * ECIES+AEAD algorithm in the data structure spec.
      * <p>
      * Warning - use the correct SessionKeyManager. Clients should instantiate their own.
-     * Clients using I2PAppContext.sessionKeyManager() may be correlated with the router,
+     * Clients using {@link net.i2p.I2PAppContext#sessionKeyManager} may be correlated with the router,
      * unless you are careful to use different keys.
      *
      * @param data the encrypted CloveSet to decrypt
@@ -196,7 +196,7 @@ public final class ECIESAEADEngine {
      * @param keyManager holds the session tags and key material used to decrypt
      * @return decrypted data or null on failure
      * @throws DataFormatException if the underlying garlic parse fails and cannot be
-     *                             recovered by trying the remaining crypto schemes
+     * recovered by trying the remaining crypto schemes
      */
     public CloveSet decrypt(byte[] data, PrivateKey targetPrivateKey,
                             RatchetSKM keyManager) throws DataFormatException {
@@ -696,7 +696,7 @@ public final class ECIESAEADEngine {
     }
 
     /**
-     * Scenario 1A: New Session Message Anonymous
+     * Scenario 1A: New Session Message Anonymous.
      * <pre>
      * - 32 byte ephemeral key (NOT Elligator2)
      * - payload (7 bytes minimum for DateTime block)
@@ -966,7 +966,7 @@ public final class ECIESAEADEngine {
     }
 
     /**
-     * Scenario 3: Existing Session Message
+     * Scenario 3: Existing Session Message.
      * <pre>
      * - 8 byte SessionTag
      * - payload
@@ -1381,7 +1381,7 @@ public final class ECIESAEADEngine {
     }
 
     /**
-     * Scenario 3: Existing Session Message
+     * Scenario 3: Existing Session Message.
      * <pre>
      * - 8 byte SessionTag
      * - payload
@@ -1507,7 +1507,7 @@ public final class ECIESAEADEngine {
         public boolean ackRequested;
 
         /**
-         * NS/NSR
+         * NS/NSR.
          */
         public PLCallback() {
             this(null, null);
@@ -1525,7 +1525,7 @@ public final class ECIESAEADEngine {
             skm = keyManager;
             remote = remoteKey;
         }
-        /** Process a datetime field from the payload */
+        /** Process a datetime field from the payload. */
 
         public void gotDateTime(long time) throws DataFormatException {
             if (_log.shouldDebug())
@@ -1555,14 +1555,14 @@ public final class ECIESAEADEngine {
             if (_log.shouldDebug())
                 _log.debug("Received OPTIONS block (" + options.length + " bytes)");
         }
-        /** Process a garlic clove field from the payload */
+        /** Process a garlic clove field from the payload. */
 
         public void gotGarlic(GarlicClove clove) {
             if (_log.shouldDebug())
                 _log.debug("Received GARLIC block: " + clove);
             cloveSet.add(clove);
         }
-        /** Process a next key field from the payload */
+        /** Process a next key field from the payload. */
 
         public void gotNextKey(NextSessionKey next) {
             if (_log.shouldDebug())
@@ -1573,7 +1573,7 @@ public final class ECIESAEADEngine {
                 nextKeys = new ArrayList<>(2);
             nextKeys.add(next);
         }
-        /** Process an ack field from the payload */
+        /** Process an ack field from the payload. */
 
         public void gotAck(int id, int n) {
             if (_log.shouldDebug())
@@ -1583,7 +1583,7 @@ public final class ECIESAEADEngine {
             else if (_log.shouldWarn())
                 _log.warn("ACK received during NewSession or NewSessionReply -> Ignored");
         }
-        /** Process an ack request field from the payload */
+        /** Process an ack request field from the payload. */
 
         public void gotAckRequest() {
             if (_log.shouldDebug())
@@ -1619,13 +1619,13 @@ public final class ECIESAEADEngine {
             if (_log.shouldDebug())
                 _log.debug("Received PN block, pn: " + pn);
         }
-        /** Process an unknown field from the payload */
+        /** Process an unknown field from the payload. */
 
         public void gotUnknown(int type, int len) {
             if (_log.shouldDebug())
                 _log.debug("Received UNKNOWN block, type: " + type + " len: " + len);
         }
-        /** Process a padding field from the payload */
+        /** Process a padding field from the payload. */
 
         public void gotPadding(int paddingLength, int frameLength) {
             if (_log.shouldDebug())
@@ -1866,7 +1866,7 @@ public final class ECIESAEADEngine {
         }
 
         /**
-         * Take a pooled GarlicBlock for this clove, or allocate one
+         * Take a pooled GarlicBlock for this clove, or allocate one.
          *
          * @param clove the clove to wrap, borrowed for the payload's lifetime
          * @return a GarlicBlock holding clove, ready to be serialized
@@ -1880,7 +1880,7 @@ public final class ECIESAEADEngine {
         }
 
         /**
-         * Take a pooled PaddingBlock of this size, or allocate one
+         * Take a pooled PaddingBlock of this size, or allocate one.
          *
          * @param size the padding length in bytes, 0 or more
          * @return a PaddingBlock writing that many zero bytes
@@ -1894,10 +1894,10 @@ public final class ECIESAEADEngine {
         }
 
         /**
-         * Take a pooled DateTimeBlock for this expiry, or allocate one
+         * Take a pooled DateTimeBlock for this expiry, or allocate one.
          *
          * @param time the expiry in milliseconds since the epoch (written to the
-         *             wire as 4-byte seconds)
+         * wire as 4-byte seconds)
          * @return a DateTimeBlock carrying time
          */
         DateTimeBlock acquireDateTime(long time) {
@@ -1909,7 +1909,7 @@ public final class ECIESAEADEngine {
         }
 
         /**
-         * Take a pooled NextKeyBlock for this key, or allocate one
+         * Take a pooled NextKeyBlock for this key, or allocate one.
          *
          * @param nextKey the next ratchet key to hand to the recipient
          * @return a NextKeyBlock carrying nextKey
@@ -1923,7 +1923,7 @@ public final class ECIESAEADEngine {
         }
 
         /**
-         * Take a pooled AckBlock for these acknowledgements, or allocate one
+         * Take a pooled AckBlock for these acknowledgements, or allocate one.
          *
          * @param acks the packed acks, each id &lt;&lt; 16 | n, for the messages being acknowledged
          * @return an AckBlock listing acks, in the order given
@@ -1937,7 +1937,7 @@ public final class ECIESAEADEngine {
         }
 
         /**
-         * Take a pooled AckRequestBlock, or allocate one
+         * Take a pooled AckRequestBlock, or allocate one.
          *
          * @return an empty AckRequestBlock, asking the recipient to acknowledge
          */

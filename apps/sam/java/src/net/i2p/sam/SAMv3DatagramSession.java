@@ -32,7 +32,7 @@ class SAMv3DatagramSession extends SAMDatagramSession implements Session, SAMDat
     }
 
     /**
-     * build a DatagramSession according to informations registered
+     * Build a DatagramSession according to informations registered
      * with the given nickname
      * <p>
      * Caller MUST call start().
@@ -42,7 +42,7 @@ class SAMv3DatagramSession extends SAMDatagramSession implements Session, SAMDat
      * @throws IOException declared on this constructor, but not raised by the body
      * @throws DataFormatException likewise declared, but not raised by the body
      * @throws I2PSessionException if the session registered under nick cannot
-     *                             be rebuilt from the record's destination
+     * be rebuilt from the record's destination
      * @throws SAMException if the nickname is no longer registered
      */
     public SAMv3DatagramSession(String nick, SAMv3DatagramServer dgServer)

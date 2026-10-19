@@ -24,7 +24,6 @@ import java.util.concurrent.atomic.AtomicLong;
  * thrown, or the connection being closed.  Applications should use this rather
  * than read from the stream themselves.
  *
- * @author jrandom
  */
 @SuppressWarnings("PMD.CloseResource")
 public class I2CPMessageReader {
@@ -91,7 +90,7 @@ public class I2CPMessageReader {
     }
 
     /**
-     * Instruct the reader to begin reading messages off the stream
+     * Instruct the reader to begin reading messages off the stream.
      *
      */
     public void startReading() {
@@ -106,13 +105,13 @@ public class I2CPMessageReader {
     }
 
     /**
-     * Defines the different events the reader produces while reading the stream
+     * Defines the different events the reader produces while reading the stream.
      *
      */
     public static interface I2CPMessageEventListener {
         /**
          * Notify the listener that a message has been received from the given
-         * reader
+         * reader.
          *
          * @param reader I2CPMessageReader to notify
          * @param message the I2CPMessage
@@ -130,7 +129,7 @@ public class I2CPMessageReader {
 
         /**
          * Notify the listener that the stream this reader was reading was
-         * closed. For most errors, readError() will be called first, as of 0.9.41
+         * closed. For most errors, readError() will be called first, as of 0.9.41.
          *
          * @param reader I2CPMessageReader to notify
          */
@@ -202,7 +201,7 @@ public class I2CPMessageReader {
         }
 
         /**
-         * Called by run()
+         * Called by run().
          *
          * @since 0.9.21
          */

@@ -111,7 +111,7 @@ public class KRPCFilterTest {
 
     /**
      * A valid NodeInfo for the given hash seed and port. The NID must match the
-     * hash/port derivation enforced by NodeInfo.verify(): first 4 NID bytes
+     * hash/port derivation enforced by {@link org.klomp.snark.dht.NodeInfo#verify}: first 4 NID bytes
      * equal the hash, bytes 4-5 are the hash bytes xored with the port.
      */
     private static NodeInfo validNode(byte hashStart, int port) {
@@ -125,7 +125,7 @@ public class KRPCFilterTest {
     }
 
     /**
-     * removeSelf drops entries equal to ourselves and keeps near-misses: the
+     * RemoveSelf drops entries equal to ourselves and keeps near-misses: the
      * same hash with a different NID and port, and unrelated nodes. The input
      * list is not modified.
      */
@@ -148,7 +148,7 @@ public class KRPCFilterTest {
     }
 
     /**
-     * heardAbout and heardFrom return our own node info for a self echo without
+     * HeardAbout and heardFrom return our own node info for a self echo without
      * storing it, and findClosest never returns an entry equal to ourselves.
      */
     @Test

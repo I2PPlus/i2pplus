@@ -3,7 +3,7 @@ package net.i2p.client.impl;
 import net.i2p.client.LookupResult;
 import net.i2p.data.Destination;
 
-/** Return value of I2PSession.lookupDest2(). */
+/** Return value of {@link net.i2p.client.I2PSession#lookupDest2}. */
 public class LkupResult implements LookupResult {
 
     private final int _code;
@@ -11,7 +11,7 @@ public class LkupResult implements LookupResult {
     private final int _nonce;
 
     /**
-     * Lkup result
+     * Lkup result.
      *
      * @param code the LookupResult result code: zero on success, nonzero on failure
      * @param dest the destination the lookup resolved to, null when it failed

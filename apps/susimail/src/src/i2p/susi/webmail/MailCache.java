@@ -36,13 +36,13 @@ class MailCache {
      * Enumeration of email fetching strategies.
      */
     public enum FetchMode {
-        /** Header only */
+        /** Header only. */
         HEADER,
-        /** All messages */
+        /** All messages. */
         ALL,
-        /** Cache only */
+        /** Cache only. */
         CACHE_ONLY,
-        /** Header and cache only */
+        /** Header and cache only. */
         HEADER_CACHE_ONLY
     }
 
@@ -53,7 +53,7 @@ class MailCache {
     private final Folder<String> folder;
     private final String folderName;
     /**
-     * Serializes draft/sent full-mail writes. @since 0.9.71+
+     * Serializes draft/sent full-mail writes. @since 0.9.71+.
      */
     private final Object _writeLock = new Object();
     private NewMailListener _loadInProgress;
@@ -157,7 +157,7 @@ class MailCache {
     public Object getWriteLock() {return _writeLock;}
 
     /**
-     * For writing a new full mail
+     * For writing a new full mail.
      * @param uidl the UIDL identifying the mail that was written
      * @param buffer as received from getFullBuffer
      * @param success whether the write finished without error; on false the mail is not added
@@ -190,11 +190,11 @@ class MailCache {
     }
 
     /**
-     * Move a mail to another MailCache, neither may be DIR_DRAFTS
+     * Move a mail to another MailCache, neither may be DIR_DRAFTS.
      * @param uidl the UIDL of the mail to move
      * @param toMC the cache receiving the mail
      * @return true if the mail was moved, false if either cache holds drafts or the
-     *         mail has no body or its file is missing
+     * mail has no body or its file is missing
      * @since 0.9.35
      */
     public boolean moveTo(String uidl, MailCache toMC) {
@@ -228,7 +228,7 @@ class MailCache {
     }
 
     /**
-     * Moved a mail from another MailCache
+     * Moved a mail from another MailCache.
      * @since 0.9.35
      */
     private void movedTo(Mail mail) {
@@ -282,11 +282,17 @@ class MailCache {
         return true;
     }
 
-    /** @since 0.9.34 */
+    /**
+     * Loads new mail in a background thread.
+     *
+     * @since 0.9.34
+     */
     private class LoadMailRunner implements Runnable {
         private final NewMailListener _nml;
 
         /**
+         * Creates the loader with its completion listener.
+         *
          * @param nml listener to notify after load
          */
         public LoadMailRunner(NewMailListener nml) {
@@ -636,7 +642,7 @@ class MailCache {
     }
 
     /**
-     * Outgoing to POP3
+     * Outgoing to POP3.
      */
     private static class POP3Request implements FetchRequest {
         /**
@@ -651,6 +657,8 @@ class MailCache {
         public final Buffer buf;
 
         /**
+         * Creates a request for the message's headers or full body.
+         *
          * @param m the mail to fetch
          * @param hOnly if true, fetch headers only
          * @param buffer the buffer the fetched message is written into
@@ -661,43 +669,67 @@ class MailCache {
             buf = buffer;
         }
 
-        /** @return the UIDL */
+        /**
+         * The message's unique ID listing id.
+         *
+         * @return the UIDL
+         */
         public String getUIDL() {
             return mail.uidl;
         }
 
-        /** @since 0.9.34 */
+        /**
+         * Set whether only the headers have been fetched.
+         *
+         * @since 0.9.34
+         */
         public synchronized void setHeaderOnly(boolean headerOnly) {
             this.headerOnly = headerOnly;
         }
 
-        /** @return true if headers-only */
+        /**
+         * Whether only the headers have been fetched.
+         *
+         * @return true if headers-only
+         */
     public synchronized boolean getHeaderOnly() {
             return headerOnly;
         }
 
-        /** @since 0.9.34 */
+        /**
+         * Buffer holding the fetched data.
+         *
+         * @since 0.9.34
+         */
         public Buffer getBuffer() {
             return buf;
         }
 
-        /** @since 0.9.34 */
+        /**
+         * Record whether the fetch succeeded.
+         *
+         * @since 0.9.34
+         */
         public synchronized void setSuccess(boolean success) {
             this.success = success;
         }
 
-        /** @since 0.9.34 */
+        /**
+         * Whether the fetch succeeded.
+         *
+         * @since 0.9.34
+         */
         public synchronized boolean getSuccess() {
             return success;
         }
     }
 
-    /** translate */
+    /** Looks up a localized string in the message bundle. */
     private static String _t(String s) {
         return Messages.getString(s);
     }
 
-    /** translate */
+    /** Looks up the localized plural form for n items. */
     private static String ngettext(String s, String p, int n) {
         return Messages.getString(n, s, p);
     }

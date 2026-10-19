@@ -223,9 +223,9 @@ public class ParticipatingThrottler {
     }
 
     /**
-     * Participating throttler
+     * Participating throttler.
      * @param ctx the router context supplying properties, rate stats and the ban
-     *            logger that records throttled peers
+     * logger that records throttled peers
      */
     ParticipatingThrottler(RouterContext ctx) {
         this.context = ctx;
@@ -477,7 +477,7 @@ public class ParticipatingThrottler {
      * Percentage share of participating tunnels granted to one peer, before
      * any relaxation. Unreachable and low-share peers are held to a fifth of
      * the nominal share (a tenth on slow platforms) and capped at the min
-     * limit; everyone else gets the full share and may reach three times the
+     * limit. Everyone else gets the full share and may reach three times the
      * min limit, bounded below by half the max limit. The divisors are applied
      * in floating point so a low {@code pctLimit} cannot truncate the share
      * to zero.
@@ -782,7 +782,7 @@ public class ParticipatingThrottler {
      * Uncached 0.0–1.0 load score from job queue lag, CPU load, system load,
      * and bandwidth queue pressure. Job lag contributes 40% of the score and
      * saturates at 1000ms, CPU load 25%, system load 20%, and bandwidth queue
-     * pressure 15%, saturating at 100KB/s; each input is clamped to its own
+     * pressure 15%, saturating at 100KB/s. Each input is clamped to its own
      * range so a lagging counter cannot push the total past 1.0.
      *
      * @param context the context to read the load inputs from

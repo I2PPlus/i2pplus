@@ -20,7 +20,7 @@ import net.i2p.util.EepGet;
  * Task to periodically look for updates to the news.xml, and to keep
  * track of whether that has an announcement for a new version.
  * <p>
- * Overrides UpdateRunner for convenience, this is not an Updater
+ * Overrides UpdateRunner for convenience, this is not an Updater.
  *
  * @since 0.9.4 moved from NewsFetcher, public since 0.9.57 for CLI only
  */
@@ -56,10 +56,10 @@ public class NewsHandler extends UpdateHandler implements Checker {
     }
 
     /**
-     *  CLI fetch
+     * CLI fetch.
      *
-     *  @param args command line arguments: -p proxy port, -l language, -u override news URL
-     *  @since 0.9.57
+     * @param args command line arguments: -p proxy port, -l language, -u override news URL
+     * @since 0.9.57
      */
     public static void main(String[] args) {
         I2PAppContext ctx = I2PAppContext.getGlobalContext();
@@ -120,9 +120,9 @@ public class NewsHandler extends UpdateHandler implements Checker {
     }
 
     /**
-     *  CLI fetch
+     * CLI fetch.
      *
-     *  @since 0.9.57
+     * @since 0.9.57
      */
     private static void test(I2PAppContext ctx, String phost, int pport, String url, File file) {
         file.delete();

@@ -151,7 +151,7 @@ public class StallRegistryTest {
         assertEquals(500, StallRegistry.stallAge(_a, 1500, COOLDOWN));
     }
 
-    /** stallAge is clamped to the cooldown and never negative. */
+    /** StallAge is clamped to the cooldown and never negative. */
     @Test
     public void testStallAgeIsClamped() {
         assertEquals(COOLDOWN, StallRegistry.stallAge(_a, 0, COOLDOWN));

@@ -77,7 +77,7 @@ public class TestJobDirectionStatTest {
     }
 
     /**
-     * StatManager.addRateData() drops names it has never seen, so the emitted
+     * {@link net.i2p.stat.StatManager#addRateData} drops names it has never seen, so the emitted
      * names must be exactly the declared ones.
      */
     @Test
@@ -133,7 +133,7 @@ public class TestJobDirectionStatTest {
      * a unit event. Writing the round-trip time instead would make Average a
      * sum of milliseconds — the console then reports thousands where the event
      * count is in the hundreds, and the pass/fail rate becomes unreadable.
-     * Latency is already carried by tunnel.testSuccessTime / testFailedTime.
+     * Latency is already carried by {@code tunnel.testSuccessTime} / testFailedTime.
      */
     @Test
     public void emissionRecordsUnitCountNotDuration() {

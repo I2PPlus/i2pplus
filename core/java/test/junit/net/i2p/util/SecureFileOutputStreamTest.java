@@ -34,7 +34,7 @@ public class SecureFileOutputStreamTest {
     }
 
     /**
-     * setGroupPerms must yield exactly 660: owner and group rw, owner/group
+     * SetGroupPerms must yield exactly 660: owner and group rw, owner/group
      * execute and all other/world bits cleared. This is the permission log
      * rotation relies on for group inspection without opening up to the world.
      */

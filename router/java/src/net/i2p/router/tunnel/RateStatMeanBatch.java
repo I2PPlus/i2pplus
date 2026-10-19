@@ -103,7 +103,7 @@ class RateStatMeanBatch {
     /**
      * Divide, guarding the empty batch.
      * <p>Integer division, so a mean is truncated toward zero: the error is
-     * always in [0, 1) of a unit — under one unit, never a unit in the
+     * always in [0, 1) of a unit. Under one unit, never a unit in the
      * over-reporting direction — on a quantity that was never more precise
      * than its integer samples. Rounding would let a stat claiming to never
      * over-report a queue depth or a write delay do exactly that.

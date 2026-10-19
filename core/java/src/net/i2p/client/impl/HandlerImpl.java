@@ -13,15 +13,14 @@ import net.i2p.I2PAppContext;
 import net.i2p.util.Log;
 
 /**
- * Base class for handling I2CP messages
+ * Base class for handling I2CP messages.
  *
- * @author jrandom
  */
 abstract class HandlerImpl implements I2CPMessageHandler {
-    /** The logger */
+    /** The logger. */
     protected final Log _log;
     private final int _type;
-    /** The application context */
+    /** The application context. */
     protected final I2PAppContext _context;
 
     /**

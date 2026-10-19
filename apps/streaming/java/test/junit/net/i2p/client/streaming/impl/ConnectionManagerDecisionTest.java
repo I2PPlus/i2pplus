@@ -63,7 +63,7 @@ public class ConnectionManagerDecisionTest {
     }
 
     /**
-     * Verify that ResendPacketEvent.timeReached() is public.
+     * Verify that {@code ResendPacketEvent.timeReached()} is public.
      */
     @Test
     public void testResendPacketEventTimeReachedIsPublic() throws Exception {

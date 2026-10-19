@@ -240,7 +240,7 @@ class OutboundClientMessageJobHelper {
     }
 
     /**
-     * Make a basic DSM
+     * Make a basic DSM.
      * @since 0.9.12
      */
     private static DeliveryStatusMessage buildDSM(RouterContext ctx, long replyToken) {
@@ -271,7 +271,7 @@ class OutboundClientMessageJobHelper {
     }
 
     /**
-     * Build a clove that stores the leaseSet locally
+     * Build a clove that stores the leaseSet locally.
      */
     private static PayloadGarlicConfig buildLeaseSetClove(RouterContext ctx, long expiration, LeaseSet replyLeaseSet) {
         DatabaseStoreMessage msg = new DatabaseStoreMessage(ctx);

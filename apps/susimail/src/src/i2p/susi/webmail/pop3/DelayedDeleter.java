@@ -74,7 +74,7 @@ class DelayedDeleter {
     }
 
     private class Checker extends SimpleTimer2.TimedEvent {
-        /** Schedule first deferred-delete check */
+        /** Schedule first deferred-delete check. */
         public Checker() {
             super(I2PAppContext.getGlobalContext().simpleTimer2(), CHECK_TIME + 5*1000);
         }
@@ -98,7 +98,7 @@ class DelayedDeleter {
     }
 
     private class Deleter extends I2PAppThread {
-        /** Thread that performs the deletion */
+        /** Thread that performs the deletion. */
         public Deleter() {super("Susimail-Delete");}
             @Override
             public void run() {

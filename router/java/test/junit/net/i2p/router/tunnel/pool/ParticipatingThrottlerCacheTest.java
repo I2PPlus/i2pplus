@@ -13,10 +13,10 @@ import org.junit.Test;
 import net.i2p.router.RouterContext;
 
 /**
- * Tests for the two TTL caches that sit in front of the per-request throttling
- * work - the load score consulted by every throttled participating request,
- * and the two invariant inputs behind the participation limit - plus the limit
- * arithmetic those caches wrap.
+ * Tests for the two TTL caches in front of the per-request throttling work,
+ * plus the limit arithmetic they wrap. The caches hold the load score
+ * consulted by every throttled participating request and the two invariant
+ * inputs behind the participation limit.
  *
  * <p>Caching must not move any policy value, so the limit arithmetic is pinned
  * here against hand-computed numbers. It was extracted into

@@ -28,13 +28,13 @@ public class LocaleWebAppHandler extends HandlerWrapper
     private final WebAppContext _wac;
 
     /**
-     *  Create handler for localized JSP resolution and Jetty integration.
+     * Create handler for localized JSP resolution and Jetty integration.
      *
-     *  @param ctx app context supplying the routerconsole.lang property
-     *  @param path context path the console is served under
-     *  @param warPath filesystem location of the console WAR
-     *  @param tmpdir directory Jetty unpacks the WAR into
-     *  @param servletHandler handler holding the console servlets
+     * @param ctx app context supplying the {@code routerconsole.lang} property
+     * @param path context path the console is served under
+     * @param warPath filesystem location of the console WAR
+     * @param tmpdir directory Jetty unpacks the WAR into
+     * @param servletHandler handler holding the console servlets
      */
     public LocaleWebAppHandler(I2PAppContext ctx, String path, String warPath,
                                 File tmpdir, ServletHandler servletHandler) {
@@ -50,10 +50,10 @@ public class LocaleWebAppHandler extends HandlerWrapper
     }
 
     /**
-     *  Handle foo.jsp by converting to foo_xx.jsp
-     *  for language xx, where xx is the language for the default locale,
-     *  or as specified in the routerconsole.lang property.
-     *  Unless language == "en".
+     * Handle foo.jsp by converting to foo_xx.jsp
+     * for language xx, where xx is the language for the default locale,
+     * or as specified in the {@code routerconsole.lang} property.
+     * Unless language == "en".
      */
     @Override
     public void handle(String pathInContext,
@@ -122,7 +122,7 @@ public class LocaleWebAppHandler extends HandlerWrapper
     }
 
     /**
-     *  Mysteriously removed from Jetty 7
+     * Mysteriously removed from Jetty 7.
      */
     private void setInitParams(Map<?,?> params) {
         setInitParams(_wac, params);

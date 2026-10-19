@@ -115,9 +115,11 @@ public class XSSRequestWrapper extends HttpServletRequestWrapper {
     }
 
     /**
+     * Header with XSS patterns stripped.
+     *
      * @return the value of the named header once it has been checked against the
-     *         whitelist, or null if the header is absent or its value did not
-     *         match and was dropped
+     * whitelist, or null if the header is absent or its value did not
+     * match and was dropped
      */
     @Override
     public String getHeader(String name) {

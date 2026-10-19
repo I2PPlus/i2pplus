@@ -32,9 +32,9 @@ import org.minidns.util.SafeCharSequence;
  * <p>
  * This class holds three representations of a DNS name: ACE, raw ACE and IDN. ACE (ASCII Compatible Encoding), which
  * can be accessed via {@link #ace}, represents mostly the data that got send over the wire. But since DNS names are
- * case insensitive, the ACE value is normalized to lower case. You can use {@link #getRawAce()} to get the raw ACE data
+ * case insensitive, the ACE value is normalized to lower case. You can use {@link #getRawAce} to get the raw ACE data
  * that was received, which possibly includes upper case characters. The IDN (Internationalized Domain Name), that is
- * the DNS name as it should be shown to the user, can be retrieved using {@link #asIdn()}.
+ * the DNS name as it should be shown to the user, can be retrieved using {@link #asIdn}.
  * </p>
  * More information about Internationalized Domain Names can be found at:
  * <ul>
@@ -44,7 +44,6 @@ import org.minidns.util.SafeCharSequence;
  *
  * @see <a href="https://tools.ietf.org/html/rfc3696">RFC 3696</a>
  * @see DnsLabel
- * @author Florian Schmaus
  *
  */
 public final class DnsName extends SafeCharSequence implements Serializable, Comparable<DnsName> {
@@ -52,6 +51,8 @@ public final class DnsName extends SafeCharSequence implements Serializable, Com
     private static final long serialVersionUID = 1L;
 
     /**
+     * Regex matching label separator dots.
+     *
      * @see <a href="https://www.ietf.org/rfc/rfc3490.txt">RFC 3490 § 3.1 1.</a>
      */
     private static final String LABEL_SEP_REGEX = "[.\u3002\uFF0E\uFF61]";
@@ -284,7 +285,7 @@ public final class DnsName extends SafeCharSequence implements Serializable, Com
      * Return the ACE (ASCII Compatible Encoding) version of this DNS name. Note
      * that this method may return a String containing null bytes. Those Strings are
      * notoriously difficult to handle from a security perspective. Therefore it is
-     * recommended to use {@link #toString()} instead, which will return a sanitized
+     * recommended to use {@link #toString} instead, which will return a sanitized
      * String.
      *
      * @return the ACE version of this DNS name.
@@ -299,7 +300,7 @@ public final class DnsName extends SafeCharSequence implements Serializable, Com
      * received over the wire. Most notably, this version may include uppercase
      * letters.
      *
-     * <b>Please refer to {@link #getAce()} for a discussion of the security
+     * <b>Please refer to {@link #getAce} for a discussion of the security
      * implications when working with the ACE representation of a DNS name.</b>
      *
      * @return the raw ACE version of this DNS name.
@@ -717,7 +718,7 @@ public final class DnsName extends SafeCharSequence implements Serializable, Com
     /**
      * Discards labels to the left, keeping only the rightmost few.
      *
-     * @param labelCount how many of the rightmost labels to keep, from 0 for the root up to {@link #getLabelCount()}
+     * @param labelCount how many of the rightmost labels to keep, from 0 for the root up to {@link #getLabelCount}
      * @return a name built from that many labels, this name itself when it is already that short, and the root at 0
      * @throws IllegalArgumentException if labelCount exceeds this name's label count
      */

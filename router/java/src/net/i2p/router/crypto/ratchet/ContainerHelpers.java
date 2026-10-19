@@ -2,14 +2,14 @@
 package net.i2p.router.crypto.ratchet;
 
 /**
- * Binary search utilities for array operations without argument validation overhead
+ * Binary search utilities for array operations without argument validation overhead.
  */
 class ContainerHelpers {
 
     private ContainerHelpers() {}
 
     /**
-     * This is Arrays.binarySearch(), but doesn't do any argument validation.
+     * This is {@code Arrays.binarySearch()}, but doesn't do any argument validation.
      *
      * @param array the sorted array; only the first size entries are examined
      * @param size how many leading elements of array are sorted and searchable

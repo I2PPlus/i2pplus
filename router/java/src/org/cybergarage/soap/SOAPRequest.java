@@ -34,7 +34,6 @@ import org.cybergarage.xml.ParserException;
  * <p>This class is used by UPnP control points to send action invocation requests to UPnP devices,
  * enabling remote procedure calls through SOAP messaging over HTTP.
  *
- * @author Satoshi Konno
  */
 public class SOAPRequest extends HTTPRequest {
     private static final String SOAPACTION = HTTP.SOAP_ACTION;

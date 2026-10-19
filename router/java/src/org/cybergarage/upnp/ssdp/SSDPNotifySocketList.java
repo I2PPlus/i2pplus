@@ -17,8 +17,6 @@ import org.cybergarage.util.Debug;
  * This class manages multiple {@link SSDPNotifySocket} instances to handle SSDP notifications
  * across different network interfaces and addresses.
  *
- * @author Satoshi "skonno" Konno
- * @author Stefano "Kismet" Lenzi
  * @version 1.8
  */
 public class SSDPNotifySocketList extends Vector<SSDPNotifySocket> {

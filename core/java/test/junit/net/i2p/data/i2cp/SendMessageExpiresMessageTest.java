@@ -18,9 +18,8 @@ import net.i2p.data.Payload;
 import net.i2p.data.PayloadTest;
 
 /**
- * Test harness for loading / storing SendMessageExpiresMessage objects
+ * Test harness for loading / storing SendMessageExpiresMessage objects.
  *
- * @author str4d
  */
 public class SendMessageExpiresMessageTest extends I2CPTstBase {
 

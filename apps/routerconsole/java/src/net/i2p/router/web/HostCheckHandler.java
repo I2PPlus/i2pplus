@@ -170,7 +170,7 @@ public class HostCheckHandler extends GzipHandler
     }
 
     /**
-     * Strip [] and port from a host header
+     * Strip [] and port from a host header.
      *
      * @param host the HTTP Host header non-null
      * @return the host with IPv6 brackets and any port removed
@@ -269,7 +269,7 @@ public class HostCheckHandler extends GzipHandler
     }
 
     /**
-     * Extract host from "host:port" or "[ipv6]:port"
+     * Extract host from "host:port" or "[ipv6]:port".
      */
     private static String extractHost(String hostPort) {
         if (hostPort.startsWith("[")) {
@@ -286,7 +286,7 @@ public class HostCheckHandler extends GzipHandler
     }
 
     /**
-     * Extract port from "host:port" or "[ipv6]:port", default to defaultPort if not found
+     * Extract port from "host:port" or "[ipv6]:port", default to defaultPort if not found.
      */
     private static int extractPort(String hostPort, int defaultPort) {
         if (hostPort.startsWith("[")) {
@@ -307,7 +307,7 @@ public class HostCheckHandler extends GzipHandler
     }
 
     /**
-     * Normalize IPv6 address to canonical form
+     * Normalize IPv6 address to canonical form.
      */
     private static String normalizeIP(String host) {
         if (host == null) return null;
@@ -320,7 +320,7 @@ public class HostCheckHandler extends GzipHandler
     }
 
     /**
-     * Check if host is localhost/loopback
+     * Check if host is localhost/loopback.
      * @return true if the host resolves to a loopback address
      */
     private static boolean isLocalhost(String host) {
@@ -338,7 +338,7 @@ public class HostCheckHandler extends GzipHandler
     }
 
     /**
-     * Redirect to HTTPS
+     * Redirect to HTTPS.
      *
      * @since 0.9.34
      */

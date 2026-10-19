@@ -31,7 +31,7 @@ class UnsignedUpdateRunner extends UpdateRunner {
         if (!uris.isEmpty()) {_currentURI = uris.get(0);}
     }
 
-    /** Get the file */
+    /** Get the file. */
     @Override
         protected void update() {
         // always proxy for now
@@ -59,7 +59,7 @@ class UnsignedUpdateRunner extends UpdateRunner {
         if (!this.done) {_mgr.notifyTaskFailed(this, "", null);}
     }
 
-    /** eepget listener callback Overrides */
+    /** Eepget listener callback Overrides. */
     @Override
     public void transferComplete(long alreadyTransferred, long bytesTransferred, long bytesRemaining, String url, String outputFile, boolean notModified) {
         String lastmod = _get.getLastModified();

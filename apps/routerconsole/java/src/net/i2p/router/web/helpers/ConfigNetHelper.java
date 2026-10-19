@@ -28,13 +28,13 @@ public class ConfigNetHelper extends HelperBase {
         super();
     }
 
-    /** copied from various private components */
+    /** Copied from various private components. */
     final static String PROP_I2NP_NTCP_HOSTNAME = "i2np.ntcp.hostname";
-    /** NTCP port property */
+    /** NTCP port property. */
     final static String PROP_I2NP_NTCP_PORT = "i2np.ntcp.port";
-    /** NTCP auto port property */
+    /** NTCP auto port property. */
     final static String PROP_I2NP_NTCP_AUTO_PORT = "i2np.ntcp.autoport";
-    /** NTCP auto IP property */
+    /** NTCP auto IP property. */
     final static String PROP_I2NP_NTCP_AUTO_IP = "i2np.ntcp.autoip";
 
     /**
@@ -213,7 +213,7 @@ public class ConfigNetHelper extends HelperBase {
     }
 
     /**
-     * default false, inverse of default true property
+     * Default false, inverse of default true property.
      * @return the checked attribute if UDP is disabled
      * @since 0.8.13
      */
@@ -224,7 +224,7 @@ public class ConfigNetHelper extends HelperBase {
     }
 
     /**
-     * default true
+     * Default true.
      * @return the checked attribute if UDP is enabled
      * @since 0.9.35
      */
@@ -236,7 +236,7 @@ public class ConfigNetHelper extends HelperBase {
 
     /**
      * Combined SSU/NTCP
-     * Use SSU setting, then NTCP setting, then default
+     * Use SSU setting, then NTCP setting, then default.
      * @param mode the IPv6 configuration mode
      * @return the checked attribute for the matching mode
      */
@@ -354,7 +354,11 @@ public class ConfigNetHelper extends HelperBase {
         return rounded;
     }
 
-    /** @param kbytes binary K */
+    /**
+     * Convert KB/s to a bit-rate string.
+     *
+     * @param kbytes binary K
+     */
     private String kbytesToBits(float kbytes) {
         return ("<span class=\"net_bwrate\">"
                  + DataHelper.formatSize2Decimal((long) (kbytes * (8 * 1024))) + _t("bps")
@@ -455,7 +459,7 @@ public class ConfigNetHelper extends HelperBase {
         buf.append("</select>\n");
         return buf.toString();
     }
-    /** Default share bandwidth in KBps */
+    /** Default share bandwidth in KBps. */
     public static final int DEFAULT_SHARE_KBPS = 48;
 
     /**

@@ -383,7 +383,7 @@ public class PacketDispatcherTest {
         }
     }
 
-    /** resizeAll reaches every live dispatcher; shut-down ones are left alone. */
+    /** ResizeAll reaches every live dispatcher; shut-down ones are left alone. */
     @Test
     public void testResizeAllAppliesToLiveDispatchers() throws Exception {
         PacketDispatcher a = new PacketDispatcher(2, 4, (con, p) -> {});

@@ -26,7 +26,7 @@ import net.i2p.util.SystemVersion;
 public enum SigType {
     /**
      * DSA_SHA1 is the default.
-     * Pubkey 128 bytes; privkey 20 bytes; hash 20 bytes; sig 40 bytes
+     * Pubkey 128 bytes; privkey 20 bytes; hash 20 bytes; sig 40 bytes.
      *
      * @since 0.9.8
      */
@@ -42,7 +42,7 @@ public enum SigType {
             CryptoConstants.DSA_SHA1_SPEC,
             "1.2.840.10040.4.3",
             "0"),
-    /**  Pubkey 64 bytes; privkey 32 bytes; hash 32 bytes; sig 64 bytes */
+    /**  Pubkey 64 bytes; privkey 32 bytes; hash 32 bytes; sig 64 bytes. */
     ECDSA_SHA256_P256(
             1,
             64,
@@ -55,7 +55,7 @@ public enum SigType {
             ECConstants.P256_SPEC,
             "1.2.840.10045.4.3.2",
             "0.9.12"),
-    /**  Pubkey 96 bytes; privkey 48 bytes; hash 48 bytes; sig 96 bytes */
+    /**  Pubkey 96 bytes; privkey 48 bytes; hash 48 bytes; sig 96 bytes. */
     ECDSA_SHA384_P384(
             2,
             96,
@@ -68,7 +68,7 @@ public enum SigType {
             ECConstants.P384_SPEC,
             "1.2.840.10045.4.3.3",
             "0.9.12"),
-    /**  Pubkey 132 bytes; privkey 66 bytes; hash 64 bytes; sig 132 bytes */
+    /**  Pubkey 132 bytes; privkey 66 bytes; hash 64 bytes; sig 132 bytes. */
     ECDSA_SHA512_P521(
             3,
             132,
@@ -82,7 +82,7 @@ public enum SigType {
             "1.2.840.10045.4.3.4",
             "0.9.12"),
 
-    /**  Pubkey 256 bytes; privkey 512 bytes; hash 32 bytes; sig 256 bytes */
+    /**  Pubkey 256 bytes; privkey 512 bytes; hash 32 bytes; sig 256 bytes. */
     RSA_SHA256_2048(
             4,
             256,
@@ -95,7 +95,7 @@ public enum SigType {
             RSAConstants.F4_2048_SPEC,
             "1.2.840.113549.1.1.11",
             "0.9.12"),
-    /**  Pubkey 384 bytes; privkey 768 bytes; hash 48 bytes; sig 384 bytes */
+    /**  Pubkey 384 bytes; privkey 768 bytes; hash 48 bytes; sig 384 bytes. */
     RSA_SHA384_3072(
             5,
             384,
@@ -108,7 +108,7 @@ public enum SigType {
             RSAConstants.F4_3072_SPEC,
             "1.2.840.113549.1.1.12",
             "0.9.12"),
-    /**  Pubkey 512 bytes; privkey 1024 bytes; hash 64 bytes; sig 512 bytes */
+    /**  Pubkey 512 bytes; privkey 1024 bytes; hash 64 bytes; sig 512 bytes. */
     RSA_SHA512_4096(
             6,
             512,
@@ -144,7 +144,7 @@ public enum SigType {
 
     /**
      * Prehash version (double hashing, for offline use such as su3, not for use on the network)
-     * Pubkey 32 bytes; privkey 32 bytes; hash 64 bytes; sig 64 bytes
+     * Pubkey 32 bytes; privkey 32 bytes; hash 64 bytes; sig 64 bytes.
      *
      * @since 0.9.25
      */
@@ -165,7 +165,7 @@ public enum SigType {
 
     /**
      * Blinded version of EdDSA, use for encrypted LS2
-     * Pubkey 32 bytes; privkey 32 bytes; hash 64 bytes; sig 64 bytes
+     * Pubkey 32 bytes; privkey 32 bytes; hash 64 bytes; sig 64 bytes.
      *
      * @since 0.9.39
      */
@@ -237,7 +237,7 @@ public enum SigType {
      * Pristine digest for {@link #digestName}, created once and cloned per call.
      * Never handed out and never fed data, so any clone of it is a fully
      * independent digest in its initial state. Lazily created by
-     * {@link #getDigestPrototype()} so that an unavailable algorithm still
+     * {@link #getDigestPrototype} so that an unavailable algorithm still
      * leaves the enum constant constructible.
      */
     private volatile MessageDigest digestProto;
@@ -325,10 +325,10 @@ public enum SigType {
     }
 
     /**
-     * The elliptic curve ECParameterSpec for ECDSA; DSAParameterSpec for DSA
+     * The elliptic curve ECParameterSpec for ECDSA; DSAParameterSpec for DSA.
      *
      * @return the domain parameters this signature type was created with, an
-     *         ECParameterSpec for ECDSA or a DSAParameterSpec for DSA
+     * ECParameterSpec for ECDSA or a DSAParameterSpec for DSA
      * @throws InvalidParameterSpecException if the algorithm is not available on this JVM.
      */
     public AlgorithmParameterSpec getParams() throws InvalidParameterSpecException {
@@ -430,7 +430,7 @@ public enum SigType {
     /**
      * The OID for the signature.
      *
-     * @return the o i d
+     * @return the OID
      * @since 0.9.25
      */
     public String getOID() {
@@ -530,7 +530,7 @@ public enum SigType {
     }
 
     /**
-     * Convenience for user apps
+     * Convenience for user apps.
      *
      * @param stype number or name
      * @return null if not found

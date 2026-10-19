@@ -64,7 +64,6 @@ import org.cybergarage.xml.ParserException;
  * <p>This class is used by UPnP control applications to discover, control, and monitor UPnP devices
  * on the network, providing a complete framework for building UPnP control point functionality.
  *
- * @author Satoshi Konno
  */
 public class ControlPoint implements HTTPRequestListener {
     private static final int DEFAULT_EVENTSUB_PORT = 8058;

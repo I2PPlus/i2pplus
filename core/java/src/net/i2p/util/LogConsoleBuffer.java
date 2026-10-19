@@ -60,7 +60,7 @@ public class LogConsoleBuffer {
     /**
      * Retrieve the currently buffered messages, earlier values were generated...
      * earlier.  All values are strings with no formatting (as they are written
-     * in the logs)
+     * in the logs).
      *
      * @return the buffered lines, oldest first; empty if nothing is buffered
      */
@@ -71,7 +71,7 @@ public class LogConsoleBuffer {
     /**
      * Retrieve the currently buffered critical messages, earlier values were generated...
      * earlier.  All values are strings with no formatting (as they are written
-     * in the logs)
+     * in the logs).
      *
      * @return the buffered critical lines, oldest first; empty if none are buffered
      */
@@ -82,7 +82,7 @@ public class LogConsoleBuffer {
     /**
      * Retrieve the currently buffered messages, earlier values were generated...
      * earlier.  All values are strings with no formatting (as they are written
-     * in the logs)
+     * in the logs).
      *
      * @return the buffer itself, oldest first, for incremental reads by the UI
      * @since 0.9.46
@@ -94,7 +94,7 @@ public class LogConsoleBuffer {
     /**
      * Retrieve the currently buffered critical messages, earlier values were generated...
      * earlier.  All values are strings with no formatting (as they are written
-     * in the logs)
+     * in the logs).
      *
      * @return the critical buffer itself, oldest first, for incremental reads
      * @since 0.9.46

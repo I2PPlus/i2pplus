@@ -48,6 +48,8 @@ public class NavHelper implements NavService, ClientApp {
     }
 
     /**
+     * Remove an app from the nav bar.
+     *
      * @param name standard name for the app
      */
     @Override
@@ -56,7 +58,7 @@ public class NavHelper implements NavService, ClientApp {
     }
 
     /**
-     * Retrieve binary icon for a plugin
+     * Retrieve binary icon for a plugin.
      * @param name plugin name
      * @return null if not found
      * @since 0.9.25
@@ -69,7 +71,7 @@ public class NavHelper implements NavService, ClientApp {
     }
 
     /**
-     * Store binary icon for a plugin
+     * Store binary icon for a plugin.
      * @param name plugin name
      * @param arr the icon bytes served for that plugin
      * @since 0.9.25
@@ -80,7 +82,7 @@ public class NavHelper implements NavService, ClientApp {
 
 
     /**
-     * Translated string is loaded by PluginStarter
+     * Translated string is loaded by PluginStarter.
      * @return map of translated name to HTML string, or null if none
      */
     public Map<String, String> getClientAppLinks() {
@@ -110,7 +112,7 @@ public class NavHelper implements NavService, ClientApp {
     }
 
     /**
-     * Get 16x16 icon img and append to buf
+     * Get 16x16 icon img and append to buf.
      * @param name standard app name
      * @since 0.9.45
      */
@@ -181,31 +183,51 @@ public class NavHelper implements NavService, ClientApp {
 
     /////// ClientApp methods
 
-    /** @since 0.9.56 */
+    /**
+     * No-op, nothing to start.
+     *
+     * @since 0.9.56
+     */
     @Override
     public void startup() {
         // TODO
     }
-    /** @since 0.9.56 */
+    /**
+     * Clear the registered app lists.
+     *
+     * @since 0.9.56
+     */
     @Override
     public void shutdown(String[] args) {
         _apps.clear();
         _binary.clear();
     }
 
-    /** @since 0.9.56 */
+    /**
+     * Always RUNNING.
+     *
+     * @since 0.9.56
+     */
     @Override
     public ClientAppState getState() {
         return ClientAppState.RUNNING;
     }
 
-    /** @since 0.9.56 */
+    /**
+     * The app's internal name.
+     *
+     * @since 0.9.56
+     */
     @Override
     public String getName() {
         return "NavHelper";
     }
 
-    /** @since 0.9.56 */
+    /**
+     * The app's display name.
+     *
+     * @since 0.9.56
+     */
     @Override
     public String getDisplayName() {
         return "Nav Helper";

@@ -51,11 +51,10 @@ import net.i2p.util.EventDispatcherImpl;
 import net.i2p.util.Log;
 import net.i2p.util.OrderedProperties;
 
+// TODO: Poor error propagation as most events aren't listened to elsewhere.
 /**
  * Manages I2PTunnelTasks and I2PSessions.
- * <p>
- * Typically one of each. TODO: Poor error propagation as most events
- * aren't listened to elsewhere.
+ * Typically one of each.
  */
 public class I2PTunnel extends EventDispatcherImpl implements Logging {
     private final Log _log;
@@ -68,21 +67,21 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
     /** Packet processing delay in milliseconds. */
     public static final int PACKET_DELAY = 80;
 
-    /** Whether to use own destination */
+    /** Whether to use own destination. */
     public volatile boolean ownDest = false;
 
-    /** the I2CP port, non-null */
+    /** The I2CP port, non-null. */
     public String port = System.getProperty(I2PClient.PROP_TCP_PORT, Integer.toString(I2PClient.DEFAULT_LISTEN_PORT));
-    /** the I2CP host, non-null */
+    /** The I2CP host, non-null. */
     public String host = System.getProperty(I2PClient.PROP_TCP_HOST, "127.0.0.1");
-    /** the listen-on host. Sadly the listen-on port does not have a field. */
+    /** The listen-on host. Sadly the listen-on port does not have a field. */
     public String listenHost = host;
 
-    /** Default read timeout for tunnel connections (-1 = no timeout) */
+    /** Default read timeout for tunnel connections (-1 = no timeout). */
     public long readTimeout = -1;
 
     /**
-     * Absolute path to filter definition file
+     * Absolute path to filter definition file.
      * @since 0.9.40
      */
     public String filterDefinition;
@@ -105,11 +104,15 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
         new LongOpt("wait", LongOpt.NO_ARGUMENT, null, 'w')
     };
 
-    /** @since 0.9.17 */
+    /**
+     * How the tunnel session is being closed.
+     *
+     * @since 0.9.17
+     */
     private enum CloseMode { NORMAL, FORCED, DESTROY }
 
     /**
-     * Command-line entry point
+     * Command-line entry point.
      *
      * @param args the command-line arguments parsed by the I2PTunnel constructor
      */
@@ -124,19 +127,19 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
     }
 
     /**
-     * Standard constructor for embedded, uses args "-nocli -die" to return immediately
+     * Standard constructor for embedded, uses args "-nocli -die" to return immediately.
      */
     public I2PTunnel() {
         this(nocli_args);
     }
 
     /**
-     * New standard constructor in router, with back ref to tc
+     * New standard constructor in router, with back ref to tc.
      *
      * @param tc may be null
      * @throws IllegalArgumentException if the arguments are unparseable, name
-     *                                  more than one command, or the trailing
-     *                                  command file does not exist
+     * more than one command, or the trailing
+     * command file does not exist
      * @since 0.9.48
      */
     public I2PTunnel(TunnelController tc) {
@@ -144,31 +147,33 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
     }
 
     /**
-     * See usage() for options
+     * See usage() for options.
      *
      * @param args the CLI arguments, parsed per usage()
      * @throws IllegalArgumentException if the arguments are unparseable, name
-     *                                  more than one command, or the trailing
-     *                                  command file does not exist
+     * more than one command, or the trailing
+     * command file does not exist
      */
     public I2PTunnel(String[] args) {
         this(args, null);
     }
 
     /**
-     * See usage() for options
+     * See usage() for options.
      *
      * @param args the CLI arguments, parsed per usage()
      * @param lsnr may be null
      * @throws IllegalArgumentException if the arguments are unparseable, name
-     *                                  more than one command, or the trailing
-     *                                  command file does not exist
+     * more than one command, or the trailing
+     * command file does not exist
      */
     public I2PTunnel(String[] args, ConnectionEventListener lsnr) {
         this(args, lsnr, null);
     }
 
     /**
+     * Creates the tunnel with its listener and controller.
+     *
      * @param lsnr may be null
      * @param tc may be null
      * @throws IllegalArgumentException
@@ -329,7 +334,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
         } catch (IOException ex) {System.err.println("Error: " + ex);}
     }
 
-    /** With newlines except for last line */
+    /** With newlines except for last line. */
     private static String usage() {
         // Hand-maintained mirror of the Getopt spec in the constructor;
         // option letters here must match longopts and the short option string.
@@ -372,7 +377,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
     }
 
     /**
-     * Add a session to the tunnel
+     * Add a session to the tunnel.
      *
      * @param session null ok
      */
@@ -383,7 +388,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
     }
 
     /**
-     * Remove a session from the tunnel
+     * Remove a session from the tunnel.
      *
      * @param session null ok
      */
@@ -419,7 +424,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
         }
     }
 
-    /** java 1.3 vs 1.4 :)
+    /** Java 1.3 vs 1.4 :).
      */
     private static String[] split(String src, String delim) {
         StringTokenizer tok = new StringTokenizer(src, delim);
@@ -574,7 +579,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
     /**
      * Display help information through the given logger.
      * <p>
-     * Does not fire any events to the logger
+     * Does not fire any events to the logger.
      *
      * @param l logger to receive events and output
      */
@@ -714,7 +719,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
 
     /**
      * Same args as runServer
-     * (we should stop duplicating all this code...)
+     * (we should stop duplicating all this code...).
      *
      * @param args host, port and privkeyfile, exactly as runServer takes them
      * @param l logger to receive events and output
@@ -851,7 +856,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
      * Also sets the event "openClientResult" = "error" or "ok" (before setting the value to "ok" it also
      * adds "Ready! Port #" to the logger as well).  In addition, it will also set "clientLocalPort" =
      * Integer port number if the client is listening
-     * sharedClient parameter is a String "true" or "false"
+     * sharedClient parameter is a String "true" or "false".
      *
      * @param args {portNumber, destinationBase64 or "file:filename"[, sharedClient [, privKeyFile]]}
      * @param l logger to receive events and output
@@ -900,7 +905,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
      * <p>
      * Event "httpclientTaskId" = Integer(taskId) after the tunnel has been started (or -1 on error).
      * Also sets "httpclientStatus" = "ok" or "error" after the client tunnel has started.
-     * parameter sharedClient is a String, either "true" or "false"
+     * parameter sharedClient is a String, either "true" or "false".
      *
      * @param args {portNumber[, sharedClient][, proxy to be used for the WWW]}
      * @param l logger to receive events and output
@@ -1026,7 +1031,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
      * <p>
      * Event "ircclientTaskId" = Integer(taskId) after the tunnel has been started (or -1 on error).
      * Also sets "ircclientStatus" = "ok" or "error" after the client tunnel has started.
-     * parameter sharedClient is a String, either "true" or "false"
+     * parameter sharedClient is a String, either "true" or "false".
      *
      * @param args {portNumber,destinationBase64 or "file:filename" [, sharedClient [, privKeyFile]]}
      * @param l logger to receive events and output
@@ -1176,7 +1181,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
     }
 
     /**
-     * Streamr client
+     * Streamr client.
      *
      * @param args {targethost, targetport, destinationString}
      * @param l logger to receive events and output
@@ -1222,10 +1227,10 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
     }
 
     /**
-     * Streamr server
+     * Streamr server.
      *
      * @param args exactly two: the port and the private key file, which is
-     *             resolved against the config dir when not absolute
+     * resolved against the config dir when not absolute
      * @param l logger to receive events and output
      * @throws IllegalArgumentException on config problem
      */
@@ -1267,7 +1272,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
      * Specify the i2cp host and port
      * Deprecated - only used by CLI
      * <p>
-     * Event "configResult" = "ok" or "error" after the configuration has been specified
+     * Event "configResult" = "ok" or "error" after the configuration has been specified.
      *
      * @param args an optional leading -s for SSL, then the I2CP host and port
      * @param l logger to receive events and output
@@ -1301,7 +1306,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
     }
 
     /**
-     * Specify the i2cp username and password
+     * Specify the i2cp username and password.
      *
      * @param args exactly two: the I2CP username and password
      * @param l logger to receive events and output
@@ -1322,7 +1327,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
      * Specify whether to use its own destination for each outgoing tunnel
      * Deprecated - only used by CLI
      * <p>
-     * Event "owndestResult" = "ok" or "error" after the configuration has been specified
+     * Event "owndestResult" = "ok" or "error" after the configuration has been specified.
      *
      * @param args {yes or no}
      * @param l logger to receive events and output
@@ -1342,7 +1347,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
     /**
      * Specify the hostname / IP address of the interface that the tunnels should bind to
      * <p>
-     * Event "listen_onResult" = "ok" or "error" after the interface has been specified
+     * Event "listen_onResult" = "ok" or "error" after the interface has been specified.
      *
      * @param args exactly one: the interface hostname or IP to bind to
      * @param l logger to receive events and output
@@ -1361,7 +1366,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
     /**
      * Specify the read timeout going to be used for newly-created I2PSockets
      * <p>
-     * Event "read_timeoutResult" = "ok" or "error" after the interface has been specified
+     * Event "read_timeoutResult" = "ok" or "error" after the interface has been specified.
      *
      * @param args exactly one: the read timeout in ms; negative waits forever
      * @param l logger to receive events and output
@@ -1387,7 +1392,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
      * Does NOT support non-default sig types.
      * Deprecated - only used by CLI
      * <p>
-     * Event "genkeysResult" = "ok" or "error" after the generation is complete
+     * Event "genkeysResult" = "ok" or "error" after the generation is complete.
      *
      * @param args {privateKeyFilename, publicKeyFilename} or {privateKeyFilename}
      * @param l logger to receive events and output
@@ -1432,7 +1437,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
      * Deprecated - only used by CLI
      * <p>
      * Event "privateKey" = base64 of the privateKey stream and
-     * sets the event "publicDestination" = base64 of the destination
+     * sets the event "publicDestination" = base64 of the destination.
      *
      * @param l logger to receive events and output
      */
@@ -1449,7 +1454,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
      * Deprecated - only used by CLI
      * <p>
      * Event "quitResult" = "error" if there are tasks running (but if there
-     * aren't, well, there's no point in setting the quitResult to "ok", now is there?)
+     * aren't, well, there's no point in setting the quitResult to "ok", now is there?).
      *
      * @param l logger to receive events and output
      */
@@ -1466,7 +1471,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
      * Deprecated - only used by CLI
      * <p>
      * Event "listDone" = "done" after dumping the tasks to
-     * the logger
+     * the logger.
      *
      * @param l logger to receive events and output
      */
@@ -1482,7 +1487,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
      * Close the given task (or all tasks), optionally forcing them to die a hard
      * death
      * <p>
-     * Event "closeResult" = "ok" after the closing is complete
+     * Event "closeResult" = "ok" after the closing is complete.
      *
      * @param args {jobNumber}, {"forced", jobNumber}, {"forced", "all"}, {"destroy", jobNumber}, {"destroy", "all"}
      * @param l logger to receive events and output
@@ -1535,7 +1540,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
      * Run all of the commands in the given file (one command per line)
      * Deprecated - only used by CLI
      * <p>
-     * Event "runResult" = "ok" or "error" after the closing is complete
+     * Event "runResult" = "ok" or "error" after the closing is complete.
      *
      * @param args exactly one: the path to a file of commands, one per line
      * @param l logger to receive events and output
@@ -1567,7 +1572,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
      * Perform a lookup of the name specified
      * Deprecated - only used by CLI
      * <p>
-     * Event "lookupResult" = base64 of the destination, or an error message
+     * Event "lookupResult" = base64 of the destination, or an error message.
      *
      * @param args {name}
      * @param l logger to receive events and output
@@ -1601,7 +1606,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
      * Start up a ping task with the specified args (currently supporting -ns, -h, -l)
      * Deprecated - only used by CLI
      * <p>
-     * Event "pingTaskId" = Integer of the taskId, or -1
+     * Event "pingTaskId" = Integer of the taskId, or -1.
      *
      * @param allargs arguments to pass to the I2Ping task
      * @param l logger to receive events and output
@@ -1630,7 +1635,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
     }
 
     /**
-     * Send a BlindingInfo message, just for testing
+     * Send a BlindingInfo message, just for testing.
      * @since 0.9.43
      */
     private void runBlinding(String[] argv) {
@@ -1738,7 +1743,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
         }
     }
 
-    /** Helper method to actually close the given task number (optionally forcing closure) */
+    /** Helper method to actually close the given task number (optionally forcing closure). */
     private boolean closetask(int num, CloseMode mode, Logging l) {
         boolean closed = false;
 
@@ -1756,7 +1761,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
         return closed;
     }
 
-    /** Helper method to actually close the given task number (optionally forcing closure) */
+    /** Helper method to actually close the given task number (optionally forcing closure). */
     private boolean closetask(I2PTunnelTask t, CloseMode mode) {
         if (_log.shouldInfo()) {_log.info("Closing task " + t.getId() + " mode: " + mode);}
         boolean success;
@@ -1797,7 +1802,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
     /**
      * Create a new destination, storing the destination and its private keys where instructed.
      * Does NOT support non-default sig types.
-     * Deprecated - only used by CLI
+     * Deprecated - only used by CLI.
      *
      * @param writeTo location to store the destination and private keys
      * @param pubDest location to store the destination
@@ -1818,7 +1823,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
 
     /**
      * Read in the given destination, display it, and write it to the given location
-     * Deprecated - only used by CLI
+     * Deprecated - only used by CLI.
      *
      * @param readFrom stream to read the destination from
      * @param pubDest stream to write the destination to
@@ -1837,7 +1842,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
 
     /**
      * Write out the destination to the stream
-     * Deprecated - only used by CLI
+     * Deprecated - only used by CLI.
      *
      * @param d Destination to write
      * @param o stream to write the destination to, or null for noop
@@ -1856,8 +1861,9 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
      * or the Base64 encoding of that structure.
      * <p>
      * Since file:&lt;filename&gt; isn't really used, this method is deprecated,
-     * just call context.namingService.lookup() directly.
-     * @deprecated Don't use i2ptunnel for lookup! Use I2PAppContext.getGlobalContext().namingService().lookup(name) from i2p.jar
+     * just call {@code context.namingService.lookup()} directly.
+      * @deprecated Don't use i2ptunnel for lookup! Use {@link net.i2p.I2PAppContext#getGlobalContext}
+       * {@code namingService().lookup(} name) from {@code i2p.jar}
      */
     @Deprecated
     public static Destination destFromName(String name) throws DataFormatException {
@@ -1865,6 +1871,8 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
     }
 
     /**
+     * Resolve a destination from a name or Base64 string.
+     *
      * @param i2cpHost may be null
      * @param i2cpPort may be null
      * @param user may be null
@@ -2001,7 +2009,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
     }
 
     /**
-     * Callback routine to find out
+     * Callback routine to find out.
      */
     public interface ConnectionEventListener {
         /**

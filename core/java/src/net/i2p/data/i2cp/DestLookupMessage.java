@@ -11,7 +11,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 /**
- * Request the router look up the dest for a hash
+ * Request the router look up the dest for a hash.
  */
 public class DestLookupMessage extends I2CPMessageImpl {
     /**

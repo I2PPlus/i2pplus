@@ -12,7 +12,7 @@ import net.i2p.router.peermanager.PeerProfile;
  * Evicts the least-recently-attested peer from a full routing bucket so the
  * netdb routing table rotates toward live peers instead of filling with
  * dead-but-unexpired routers. Liveness is the newest of the peer profile's
- * heard-about / heard-from / successful-send times; a peer with no profile
+ * heard-about / heard-from / successful-send times. A peer with no profile
  * counts as never seen. The oldest entry is only evicted when it is older
  * than the grace window, otherwise the newcomer is rejected. Peers with an
  * established session are never eviction candidates — same protection

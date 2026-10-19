@@ -39,28 +39,27 @@ import net.i2p.util.SimpleTimer2;
  * <p>
  * Unused directly, see I2PSessionMuxedImpl extension.
  *
- * @author jrandom
  */
 class I2PSessionImpl2 extends I2PSessionImpl {
 
-    /** One MessageState object per message in the process of being sent */
+    /** One MessageState object per message in the process of being sent. */
     protected final Map<Long, MessageState> _sendingStates;
     /**
      * Source of the per-message replay nonces sent to the router.
      */
     protected final AtomicLong _sendMessageNonce;
-    /** Max # seconds to wait for confirmation of the message send */
+    /** Max # seconds to wait for confirmation of the message send. */
     private final static long SEND_TIMEOUT = (long) 60 * 1000; // 60 seconds to send
     /** Should we gzip each payload prior to sending it? */
     private final static boolean SHOULD_COMPRESS = true;
     private final static boolean SHOULD_DECOMPRESS = true;
-    /** Don't expect any MSMs from the router for outbound traffic @since 0.8.1 */
+    /** Don't expect any MSMs from the router for outbound traffic @since 0.8.1. */
     protected boolean _noEffort;
     private static final long REMOVE_EXPIRED_TIME = (long) 63*1000;
     private static Method _tunnelManagerMethod;
 
     /**
-     * For extension by SimpleSession (no dest)
+     * For extension by SimpleSession (no dest).
      *
      * @param context the app context whose router client the session sends through
      * @param options router connection options, or null to use the System properties
@@ -77,7 +76,7 @@ class I2PSessionImpl2 extends I2PSessionImpl {
      * For extension by I2PSessionMuxedImpl
      * <p>
      * Create a new session, reading the Destination, PrivateKey, and SigningPrivateKey
-     * from the destKeyStream, and using the specified options to connect to the router
+     * from the destKeyStream, and using the specified options to connect to the router.
      *
      * @param ctx the app context whose router client the session sends through
      * @param destKeyStream stream containing the private key data, format is specified in {@link net.i2p.data.PrivateKeyFile PrivateKeyFile}
@@ -96,7 +95,7 @@ class I2PSessionImpl2 extends I2PSessionImpl {
      * For extension by SubSession via I2PSessionMuxedImpl
      * <p>
      * Create a new session, reading the Destination, PrivateKey, and SigningPrivateKey
-     * from the destKeyStream, and using the specified options to connect to the router
+     * from the destKeyStream, and using the specified options to connect to the router.
      *
      * @param primary the muxed session whose context, handlers and producer are shared
      * @param destKeyStream stream containing the private key data, format is specified in {@link net.i2p.data.PrivateKeyFile PrivateKeyFile}
@@ -112,7 +111,7 @@ class I2PSessionImpl2 extends I2PSessionImpl {
     }
 
     /**
-     * Fire up a periodic task to check for unclaimed messages
+     * Fire up a periodic task to check for unclaimed messages.
      *
      * @since 0.9.14
      */
@@ -175,7 +174,7 @@ class I2PSessionImpl2 extends I2PSessionImpl {
      * See ConnectionOptions.java in the streaming lib for similar calculations.
      * <p>
      * Since we still have to pass it through gzip -0 the CPU savings is trivial but it's
-     * the best we can do for now. See below. i2cp.gzip defaults to SHOULD_COMPRESS = true.
+     * the best we can do for now. See below. {@code i2cp.gzip} defaults to SHOULD_COMPRESS = true.
      * <p>
      * Perhaps the http server (which does its own compression) and P2P apps
      * (with generally uncompressible data) should set to false.
@@ -352,7 +351,7 @@ class I2PSessionImpl2 extends I2PSessionImpl {
     }
 
     /**
-     * Unused? see MuxedImpl override
+     * Unused? See the MuxedImpl override.
      *
      * @param keyUsed unused - no end-to-end crypto
      * @param tagsSent unused - no end-to-end crypto
@@ -365,18 +364,16 @@ class I2PSessionImpl2 extends I2PSessionImpl {
         verifyOpen();
         updateActivity();
 
-        /**
-         * Sadly there is no way to send something completely uncompressed in a backward-compatible way,
-         * so we have to still send it in a gzip format, which adds 23 bytes (2.4% for a 960-byte msg)
-         * (10 byte header + 5 byte block header + 8 byte trailer)
-         * <p>
-         * In the future we can add a one-byte magic number != 0x1F to signal an uncompressed msg
-         * (Gzip streams start with 0x1F 0x8B 0x08) assuming we don't need the CRC-32 that comes with gzip?
-         * <p>
-         * Maybe implement this soon in receiveMessage() below so we are ready
-         * in case we ever make an incompatible network change.
-         * This would save 22 of the 23 bytes and a little CPU.
-         */
+        // Sadly there is no way to send something completely uncompressed in a
+        // backward-compatible way, so we still send it in gzip format, which
+        // adds 23 bytes (2.4% for a 960-byte msg): 10 byte header + 5 byte
+        // block header + 8 byte trailer.
+        // In the future we can add a one-byte magic number != 0x1F to signal an
+        // uncompressed msg (Gzip streams start with 0x1F 0x8B 0x08), assuming
+        // we don't need the CRC-32 that comes with gzip.
+        // Maybe implement this soon in receiveMessage() below so we are ready
+        // in case we ever make an incompatible network change. This would save
+        // 22 of the 23 bytes and a little CPU.
         boolean sc = shouldCompress(size);
         if (sc) {payload = DataHelper.compress(payload, offset, size);}
         else {payload = DataHelper.compress(payload, offset, size, DataHelper.NO_COMPRESSION);}
@@ -431,8 +428,7 @@ class I2PSessionImpl2 extends I2PSessionImpl {
     }
 
     /**
-     * TODO - Don't need to save MessageState since actuallyWait is false...
-     * But for now just use sendNoEffort() instead.
+     * Send a best-effort message with the given flags.
      *
      * @param dest the remote destination to send to
      * @param payload the message bytes to deliver
@@ -443,6 +439,8 @@ class I2PSessionImpl2 extends I2PSessionImpl {
      * @since 0.8.4
      */
     protected boolean sendBestEffort(Destination dest, byte[] payload, long expires, int flags) throws I2PSessionException {
+        // TODO - Don't need to save MessageState since actuallyWait is false...
+        // But for now just use sendNoEffort() instead.
 
         long nonce = _sendMessageNonce.incrementAndGet();
         MessageState state = new MessageState(_context, nonce, getPrefix());
@@ -451,7 +449,7 @@ class I2PSessionImpl2 extends I2PSessionImpl {
          * Since this is 'best effort', all we're waiting for is a status update saying
          * that the router received it - in theory, that should come back immediately,
          * but in practice can take up to a second (though usually much quicker).
-         * Setting this to false will short-circuit that delay
+         * Setting this to false will short-circuit that delay.
          */
         boolean actuallyWait = false; // true;
         if (actuallyWait) {_sendingStates.put(Long.valueOf(nonce), state);}
@@ -482,7 +480,7 @@ class I2PSessionImpl2 extends I2PSessionImpl {
     /**
      * Same as sendBestEffort(), except we do not expect any MessageStatusMessage responses -
      * not for accepted, or success, or failure.
-     * So we don't create a MessageState and save it on the _sendingStates HashSet
+     * So we don't create a MessageState and save it on the _sendingStates HashSet.
      *
      * @param dest the remote destination to send to
      * @param payload the message bytes
@@ -506,7 +504,7 @@ class I2PSessionImpl2 extends I2PSessionImpl {
      * so the lookup here fails.
      * <p>
      * This is now pretty much avoided since streaming now sets
-     * i2cp.messageReliability = none, which forces sendNoEffort() instead of sendBestEffort(),
+     * {@code i2cp.messageReliability} = none, which forces sendNoEffort() instead of sendBestEffort(),
      * so the router won't send us any MSM's for outbound traffic.
      *
      * @param msgId the message ID
@@ -580,7 +578,7 @@ class I2PSessionImpl2 extends I2PSessionImpl {
     }
 
     /**
-     * Cached reflection access to RouterContext.tunnelManager().
+     * Cached reflection access to {@link net.i2p.router.RouterContext#tunnelManager}.
      * Method is looked up once and reused to avoid repeated getMethod() overhead.
      * @return the tunnel manager
      */

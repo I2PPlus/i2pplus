@@ -19,11 +19,11 @@ public interface MessageSelector {
 
     /**
      * Returns true if the received message matches the selector.
-     * If this returns true, the job specified by OutNetMessage.getOnReplyJob()
+     * If this returns true, the job specified by {@link net.i2p.router.OutNetMessage#getOnReplyJob}
      * will be run for every OutNetMessage associated with this selector
      * (by InNetMessagePool), after calling setMessage() for that ReplyJob.
      * <p>
-     * WARNING this is called from within OutboundMessageSelector.getOriginalMessages()
+     * WARNING this is called from within {@code OutboundMessageSelector.getOriginalMessages()}
      * inside a lock and can lead to deadlocks if the selector does too much in isMatch().
      * Until the lock is removed, take care to keep it simple.
      *
@@ -45,7 +45,7 @@ public interface MessageSelector {
      * Returns the # of milliseconds since the epoch after which this selector should
      * stop searching for matches.
      * At some time after expiration, if continueMatching() has not returned false,
-     * the job specified by OutNetMessage.getOnFailedReplyJob()
+     * the job specified by {@link net.i2p.router.OutNetMessage#getOnFailedReplyJob}
      * will be run for every OutNetMessage associated with this selector
      * (by OutboundMessageRegistry).
      * @return the number of milliseconds since the epoch at which to stop searching

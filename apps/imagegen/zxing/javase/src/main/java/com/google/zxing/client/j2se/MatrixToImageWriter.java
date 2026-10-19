@@ -29,7 +29,6 @@ import javax.imageio.ImageIO;
  * file or stream. Provided here instead of core since it depends on
  * Java SE libraries.
  *
- * @author Sean Owen
  */
 public final class MatrixToImageWriter {
 
@@ -73,6 +72,8 @@ public final class MatrixToImageWriter {
   }
 
   /**
+   * Write the matrix as an image file.
+   *
    * @param matrix {@link BitMatrix} to write
    * @param format the ImageIO format name, e.g. PNG
    * @param file file {@link File} to write image to
@@ -98,6 +99,8 @@ public final class MatrixToImageWriter {
   }
 
   /**
+   * Write the matrix as an image file with the given hints.
+   *
    * @param matrix {@link BitMatrix} to write
    * @param format the ImageIO format name, e.g. PNG
    * @param file file {@link File} to write image to

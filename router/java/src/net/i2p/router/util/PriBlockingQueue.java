@@ -31,11 +31,11 @@ public class PriBlockingQueue<E extends PQEntry> extends PriorityBlockingQueue<E
 
     private static final long serialVersionUID = 1L;
 
-    /** The I2P application context */
+    /** The I2P application context. */
     protected final transient I2PAppContext _context;
-    /** The log instance */
+    /** The log instance. */
     protected final transient Log _log;
-    /** The queue name */
+    /** The queue name. */
     protected final String _name;
 
     /**
@@ -53,12 +53,12 @@ public class PriBlockingQueue<E extends PQEntry> extends PriorityBlockingQueue<E
      * Default backlog size threshold, depends on system speed.
      */
     protected static final int DEFAULT_BACKLOG_SIZE = SystemVersion.isSlow() ? 256 : 384;
-    /** Default maximum queue size */
+    /** Default maximum queue size. */
     protected static final int DEFAULT_MAX_SIZE = SystemVersion.isSlow() ? 512 : 1024;
 
-    /** Property key for maximum queue size */
+    /** Property key for maximum queue size. */
     public static final String PROP_MAX_SIZE = "router.codelMaxQueue";
-    /** Property key for backlog threshold */
+    /** Property key for backlog threshold. */
     public static final String PROP_BACKLOG_SIZE = "router.codelBacklog";
 
     /**

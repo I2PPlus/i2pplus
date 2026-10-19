@@ -11,7 +11,7 @@ import net.i2p.data.Hash;
 import net.i2p.data.TunnelId;
 
 /**
- * Defines the information associated with a tunnel
+ * Defines the information associated with a tunnel.
  */
 public interface TunnelInfo {
     /**
@@ -47,7 +47,7 @@ public interface TunnelInfo {
     public Hash getPeer(int hop);
 
     /**
-     * For convenience
+     * For convenience.
      *
      * @return getPeer(0)
      * @since 0.8.9
@@ -55,7 +55,7 @@ public interface TunnelInfo {
     public Hash getGateway();
 
     /**
-     * For convenience
+     * For convenience.
      *
      * @return getPeer(getLength() - 1)
      * @since 0.8.9
@@ -63,7 +63,7 @@ public interface TunnelInfo {
     public Hash getEndpoint();
 
     /**
-     * For convenience
+     * For convenience.
      *
      * @return isInbound() ? getGateway() : getEndpoint()
      * @since 0.8.9
@@ -121,7 +121,7 @@ public interface TunnelInfo {
 
     /**
      * Record that the tunnel carried real (non-test) traffic.  Updated only
-     * at the real traffic delivery sites — inbound data arrival
+     * at the real traffic delivery sites. Inbound data arrival
      * (InboundEndpointProcessor) and outbound message dispatch
      * (OutboundClientMessageOneShotJob) — never by TestJob, so test traffic
      * cannot pollute the proof that the tunnel works.
@@ -145,7 +145,7 @@ public interface TunnelInfo {
     public boolean wasReused();
 
     /**
-     * Note that we reused this tunnel
+     * Note that we reused this tunnel.
      *
      * @since 0.8.11
      */
@@ -186,8 +186,8 @@ public interface TunnelInfo {
     /**
      * Mark this tunnel FAILING without consulting the hard-failure counter.
      * Used when a tunnel is retained in the pool on a basis that does not
-     * increment {@link #getConsecutiveFailures()} — soft send timeouts, for
-     * example — so {@link #setTestFailed()} would still report GOOD. Without
+     * increment {@link #getConsecutiveFailures} — soft send timeouts, for
+     * example — so {@link #setTestFailed} would still report GOOD. Without
      * this the retained tunnel stays selectable and keeps being handed work.
      *
      * @since 0.9.71+
@@ -215,7 +215,7 @@ public interface TunnelInfo {
     /**
      * Increment the soft (best-effort timeout) failure count only.
      * Soft status-3 timeouts must not touch the hard/test counter that
-     * drives {@link #getTunnelFailed()} and selection gates.
+     * drives {@link #getTunnelFailed} and selection gates.
      *
      * @since 0.9.71+
      */
@@ -223,7 +223,7 @@ public interface TunnelInfo {
 
     /**
      * Soft best-effort timeout count (status 3). Independent of
-     * {@link #getConsecutiveFailures()}.
+     * {@link #getConsecutiveFailures}.
      *
      * @return the soft failure count
      * @since 0.9.71+

@@ -10,9 +10,8 @@ package net.i2p.data;
  */
 
 /**
- * Test harness for loading / storing DateAndFlags objects
+ * Test harness for loading / storing DateAndFlags objects.
  *
- * @author str4d
  */
 public class DateAndFlagsTest extends StructureTest {
 

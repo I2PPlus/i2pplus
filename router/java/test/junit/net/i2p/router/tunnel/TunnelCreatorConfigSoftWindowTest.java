@@ -22,7 +22,7 @@ import net.i2p.util.LogManager;
  * - verified traffic and traffic-proof test resets clear the streak
  * - a passing test does NOT clear it (the test path is not the data path)
  * - last-chance admissions snapshot their deadline at admission time and are
- *   revoked by settlement, pruning, or expiry
+ * revoked by settlement, pruning, or expiry.
  *
  * @since 0.9.71+
  */

@@ -1,7 +1,7 @@
 package net.i2p.app;
 
 /**
- * If a class started via clients.config implements this interface,
+ * If a class started via {@code clients.config} implements this interface,
  * it will be used to manage the client, instead of starting with main()
  * <p>
  * Clients implementing this interface MUST provide the following constructor:
@@ -23,7 +23,7 @@ public interface ClientApp {
 
     /**
      * Do not take a long time. Do not block. Start threads here if necessary.
-     * Client must call ClientAppManager.notify() at least once within this
+     * Client must call {@link net.i2p.app.ClientAppManager#notify} at least once within this
      * method to change the state from INITIALIZED to something else.
      * Will not be called multiple times on the same object.
      *
@@ -33,11 +33,11 @@ public interface ClientApp {
 
     /**
      * Do not take a long time. Do not block. Use a thread if necessary.
-     * If previously running, client must call ClientAppManager.notify() at least once within this
+     * If previously running, client must call {@link net.i2p.app.ClientAppManager#notify} at least once within this
      * method to change the state to STOPPING or STOPPED.
      * May be called multiple times on the same object, in any state.
      *
-     * @param args generally null but could be stopArgs from clients.config
+     * @param args generally null but could be stopArgs from {@code clients.config}
      * @throws Throwable on shutdown failure
      */
     public void shutdown(String[] args) throws Throwable;

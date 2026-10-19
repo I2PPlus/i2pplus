@@ -22,9 +22,9 @@ import net.i2p.router.tunnel.HopConfig;
 import net.i2p.router.tunnel.TunnelCreatorConfig;
 
 /**
- * Fill in the encrypted BuildRequestRecords in a TunnelBuildMessage
+ * Fill in the encrypted BuildRequestRecords in a TunnelBuildMessage.
  *
- * @since 0.9.51 moved to tunnel.pool package
+ * @since 0.9.51 moved to {@code tunnel.pool} package
  */
 abstract class BuildMessageGenerator {
 
@@ -32,7 +32,7 @@ abstract class BuildMessageGenerator {
 
     /**
      * Place the asymmetrically encrypted record in the specified record slot,
-     * containing the hop's configuration (as well as the reply info, if it is an outbound endpoint)
+     * containing the hop's configuration (as well as the reply info, if it is an outbound endpoint).
      *
      * @param recordNum the record number to place this record in
      * @param hop the hop number for this record
@@ -99,7 +99,7 @@ abstract class BuildMessageGenerator {
 
     /**
      * Create an unencrypted build request record for a tunnel hop.
-     * Returns null if hop >= cfg.length
+     * Returns null if hop >= cfg.length.
      *
      * @param ctx the I2P application context
      * @param cfg the tunnel creator configuration

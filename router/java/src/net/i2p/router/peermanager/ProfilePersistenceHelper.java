@@ -80,7 +80,7 @@ class ProfilePersistenceHelper {
     private final File _profileDir;
     private Hash _us;
 
-    /** Last known number of profile files on disk, from the most recent load or purge */
+    /** Last known number of profile files on disk, from the most recent load or purge. */
     private volatile int _storedProfileCount;
 
     private static final String STAT_STORED_PROFILES = "peer.storedProfileCount";
@@ -198,7 +198,7 @@ _context.statManager().createRequiredRateStat(STAT_STORED_PROFILES,
 
     /**
      * Write the data from the profile to the stream
-     * includes comments
+     * includes comments.
      *
      * @param profile the profile to serialize
      * @param out the stream to write the serialized profile to, not closed by this method
@@ -207,7 +207,7 @@ _context.statManager().createRequiredRateStat(STAT_STORED_PROFILES,
     public void writeProfile(PeerProfile profile, OutputStream out) throws IOException {writeProfile(profile, out, true);}
 
     /**
-     * Write the data from the profile to the stream
+     * Write the data from the profile to the stream.
      *
      * @param profile the profile to serialize
      * @param out the stream to write the serialized profile to, not closed by this method
@@ -283,7 +283,6 @@ _context.statManager().createRequiredRateStat(STAT_STORED_PROFILES,
         if (profile.getPeerTestTimeAverage() != 0) {
             add(buf, addComments, "peerTestTimeAverage", (long) profile.getPeerTestTimeAverage(), "Peer test response time average (ms):");
         }
-        // TODO: needs clarification - difference between tunnel peak and tunnel peak tunnel? And round down KBps display to 2 decimal places
         if (profile.getPeakThroughputKBps() >= 1) {
             add(buf, addComments, "tunnelPeakThroughput", (long) profile.getPeakThroughputKBps(), "Tunnel Peak throughput (KB/s): " +
                 profile.getPeakThroughputKBps());
@@ -323,7 +322,11 @@ _context.statManager().createRequiredRateStat(STAT_STORED_PROFILES,
         }
     }
 
-    /** @since 0.8.5 */
+    /**
+     * Write a date property, with a comment if requested.
+     *
+     * @since 0.8.5
+     */
     private static void addDate(StringBuilder buf, boolean addComments, String name, long val, String description) {
         if (addComments) {
             String when = val > 0 ? (new Date(val)).toString() : "Never";
@@ -331,7 +334,11 @@ _context.statManager().createRequiredRateStat(STAT_STORED_PROFILES,
         } else {add(buf, false, name, val, description);}
     }
 
-    /** @since 0.8.5 */
+    /**
+     * Write a profile property, with a comment if requested.
+     *
+     * @since 0.8.5
+     */
     private static void add(StringBuilder buf, boolean addComments, String name, long val, String description) {
         if (addComments) {buf.append("# ").append(description).append(NL);}
         else {buf.append(name).append('=').append(val).append(NL);}
@@ -450,7 +457,7 @@ List<PeerProfile> profiles = new ArrayList<>(Math.min(LIMIT_PROFILES, freshFiles
     }
 
     /**
-     * Migrate from one-level to two-level directory structure
+     * Migrate from one-level to two-level directory structure.
      *
      * @since 0.9.4
      */
@@ -465,7 +472,7 @@ List<PeerProfile> profiles = new ArrayList<>(Math.min(LIMIT_PROFILES, freshFiles
     }
 
     /**
-     * Delete profile files with timestamps older than 'age' ago
+     * Delete profile files with timestamps older than 'age' ago.
      *
      * @param age how far back in milliseconds a profile must predate to be deleted
      * @return the number of profile files removed
@@ -725,7 +732,7 @@ List<PeerProfile> profiles = new ArrayList<>(Math.min(LIMIT_PROFILES, freshFiles
 
     /**
      * Peers whose profile was loaded while the netdb held no RouterInfo, collected
-     * during {@link #readProfiles()}.
+     * during {@link #readProfiles}.
      * <p>These profiles are kept on disk but inert until the RouterInfo is fetched
      * again, so the caller needs the list to go and request it. Empty when no
      * collection has been supplied.
@@ -737,8 +744,8 @@ List<PeerProfile> profiles = new ArrayList<>(Math.min(LIMIT_PROFILES, freshFiles
     /**
      * Supply the set to collect peers-without-RouterInfo into.
      *
-     * @param missingRouterInfo the set to fill during {@link #readProfiles()},
-     *                          or null to collect nothing
+     * @param missingRouterInfo the set to fill during {@link #readProfiles},
+     * or null to collect nothing
      * @since 0.9.72
      */
     void setMissingRouterInfoSink(Set<Hash> missingRouterInfo) { _missingRouterInfo = missingRouterInfo; }

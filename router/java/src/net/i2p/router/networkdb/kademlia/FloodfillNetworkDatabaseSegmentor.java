@@ -34,7 +34,6 @@ import net.i2p.util.Log;
  * explicit DBID of the destination recipient, or using the DBID of the special
  * netDb when it's appropriate to route the netDb entry to one of the special tables.
  *
- * @author idk
  * @since 0.9.61
  */
 public class FloodfillNetworkDatabaseSegmentor extends SegmentedNetworkDatabaseFacade {
@@ -73,7 +72,7 @@ public class FloodfillNetworkDatabaseSegmentor extends SegmentedNetworkDatabaseF
 
 
     /**
-     * If we are floodfill, turn it off and tell everybody for the _mainDbid
+     * If we are floodfill, turn it off and tell everybody for the _mainDbid.
      *
      * @since 0.9.61
      */
@@ -85,7 +84,7 @@ public class FloodfillNetworkDatabaseSegmentor extends SegmentedNetworkDatabaseF
     }
 
     /**
-     * Start up the _mainDbid
+     * Start up the _mainDbid.
      *
      * @since 0.9.61
      */

@@ -8,9 +8,7 @@ import java.util.Comparator;
  * Comparator for sorting AddressBean by name alphabetically.
  */
 public class AddressByNameSorter implements Comparator<AddressBean>, Serializable {
-    /**
-     * Default constructor.
-     */
+    /** Creates a name-order comparator. */
     public AddressByNameSorter() {
         super();
     }

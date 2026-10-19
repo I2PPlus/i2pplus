@@ -20,7 +20,7 @@ import net.i2p.router.tunnel.TunnelCreatorConfig;
 /**
  * Tests that a tunnel provably carrying real traffic is not held down by
  * stale test bookkeeping: the pool clears FAILING and FAILED on either
- * direction once the real-traffic marker is fresh — inbound stamps only
+ * direction once the real-traffic marker is fresh. Inbound stamps only
  * after verified decrypt, outbound only after the remote reply — and
  * promotes traffic-proven UNTESTED tunnels so LeaseSet building can see
  * them.  A stale marker never revives a marked tunnel: proof has a window.

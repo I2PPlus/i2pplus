@@ -93,12 +93,12 @@ import net.i2p.util.SystemVersion;
     /**
      * Returns ENDPOINT FIRST, GATEWAY LAST!!!!
      * In: us .. closest .. middle .. IBGW
-     * Out: OBGW .. middle .. closest .. us
+     * Out: OBGW .. middle .. closest .. us.
      *
      * @return ordered list of Hash objects (one per peer) specifying what order
-     *         they should appear in a tunnel (ENDPOINT FIRST).  This includes
-     *         the local router in the list.  Never null; an empty list means
-     *         no peers could be selected.
+     * they should appear in a tunnel (ENDPOINT FIRST).  This includes
+     * the local router in the list.  Never null; an empty list means
+     * no peers could be selected.
      */
     @Override
     public List<Hash> selectPeers(TunnelPoolSettings settings) {
@@ -655,7 +655,7 @@ import net.i2p.util.SystemVersion;
         return (int)(100 * pct);
     }
 
-    /** Use current + last to get more recent and smoother data */
+    /** Use current + last to get more recent and smoother data. */
     private int getEvents(String stat, long period) {
         RateStat rs = ctx.statManager().getRate(stat);
         if (rs == null)

@@ -27,16 +27,16 @@ import java.io.InputStream;
  * the same hash may be built repeatedly.</li>
  * <li>{@link #create(InputStream)} reads exactly 32 bytes from the stream and
  * wraps them; it does not hash the stream. To hash arbitrary data, use
- * {@link #calculateHash()} or a SHA256Generator.</li>
+ * {@link #calculateHash} or a SHA256Generator.</li>
  * </ul>
  * <p>Rendering:</p>
  * <ul>
- * <li>{@link #toBase64()} caches its result in a volatile field.</li>
- * <li>{@link #toBase32()} caches its result the same way.</li>
+ * <li>{@link #toBase64} caches its result in a volatile field.</li>
+ * <li>{@link #toBase32} caches its result the same way.</li>
  * </ul>
  * <p>Comparison:</p>
  * <ul>
- * <li>{@link #hashCode()} is the precomputed value of the first 4 bytes, held
+ * <li>{@link #hashCode} is the precomputed value of the first 4 bytes, held
  * in a volatile field. It is not constant-time.</li>
  * <li>equals() is inherited from {@link SimpleDataStructure} and is
  * {@link java.util.Arrays#equals(byte[], byte[])} - not constant-time, and
@@ -52,12 +52,11 @@ import java.io.InputStream;
  * neither final nor volatile, so a
  * Hash built by a constructor and published through an unsynchronized
  * data structure may expose stale data.</li>
- * <li>{@link #getData()} hands out the backing array, so a caller that
+ * <li>{@link #getData} hands out the backing array, so a caller that
  * mutates it corrupts the cached hash code and the cached Base64 and
  * Base32 strings, as well as any byte cache that shares the array.</li>
  * </ul>
  *
- * @author jrandom
  */
 @SuppressWarnings({"PMD.OverrideBothEqualsAndHashcode", "checkstyle:EqualsHashCode"})
 public class Hash extends SimpleDataStructure {
@@ -96,7 +95,7 @@ public class Hash extends SimpleDataStructure {
     }
 
     /**
-     * Pull from cache or return new
+     * Pull from cache or return new.
      *
      * @param data the buffer holding the 32 bytes to wrap
      * @param off the index within that buffer of the first of the 32 bytes
@@ -109,7 +108,7 @@ public class Hash extends SimpleDataStructure {
     }
 
     /**
-     * Pull from cache or return new
+     * Pull from cache or return new.
      *
      * @param in the stream read for exactly the 32 bytes of the hash
      * @return the cached or new hash
@@ -120,7 +119,7 @@ public class Hash extends SimpleDataStructure {
         return _cache.get(in);
     }
 
-    /** Create an empty hash (data is null) */
+    /** Create an empty hash (data is null). */
     public Hash() {
         super();
     }

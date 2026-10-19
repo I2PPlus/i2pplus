@@ -39,7 +39,7 @@ public class SelfSignedGeneratorTest {
      * The signature types {@code generate()} can actually build a certificate
      * for.
      *
-     * <p>RedDSA is excluded on purpose: {@link SigType#isAvailable()} reports it
+     * <p>RedDSA is excluded on purpose: {@link SigType#isAvailable} reports it
      * as usable for key generation, but {@code SelfSignedGenerator} rejects it
      * with "Unsupported" because a RedDSA signature cannot be encoded into an
      * X.509 certificate. Filtering here keeps the loop aligned with the
@@ -191,7 +191,11 @@ public class SelfSignedGeneratorTest {
                      cert.getPublicKey(), rcert.getPublicKey());
     }
 
-    /** @return the first available signature type, or skip the test if none is */
+    /**
+     * The first signature type the router supports.
+     *
+     * @return the first available signature type, or skip the test if none is
+     */
     private static SigType firstAvailable() {
         for (SigType type : supportedTypes()) {
             return type;

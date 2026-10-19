@@ -45,7 +45,7 @@ public class PeerStateRtoTest {
 
     /**
      * The clamped value must never leave the window, whatever the raw estimate
-     * is — that is the invariant {@link PeerState#getRTO()} promises.
+     * is — that is the invariant {@link PeerState#getRTO} promises.
      */
     @Test
     public void testResultAlwaysInsideWindow() {

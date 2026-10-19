@@ -60,7 +60,7 @@ public class ConvertToHashTest {
     }
 
     /**
-     * The case where a destination cannot be resolved at all
+     * The case where a destination cannot be resolved at all.
      */
     @Test
     public void getHashResolveDestinationFail() {

@@ -24,11 +24,11 @@ import org.eclipse.jetty.webapp.WebAppContext;
 
 /**
  * Add, start or stop a webapp.
- * Add to the webapp classpath if specified in webapps.config.
+ * Add to the webapp classpath if specified in {@code webapps.config}.
  * <p>
  * Sadly, setting Class-Path in MANIFEST.MF doesn't work for jetty wars.
  * See WebAppConfiguration for more information.
- * but let's just do it in webapps.config.
+ * but let's just do it in {@code webapps.config}.
  * <p>
  * No, wac.addClassPath() does not work. For more info see:
  * <p>
@@ -38,13 +38,13 @@ import org.eclipse.jetty.webapp.WebAppContext;
  */
 public class WebAppStarter {
 
-    /** All methods are static; the ctor exists only for javadoc */
+    /** All methods are static; the ctor exists only for javadoc. */
     public WebAppStarter() {}
 
     private static final Map<String, Long> warModTimes = new ConcurrentHashMap<>();
-    /** Init parameters for webapps */
+    /** Init parameters for webapps. */
     static final Map<String, String> INIT_PARAMS = new HashMap<>(4);
-    /** Plugin name parameter */
+    /** Plugin name parameter. */
     static final String PARAM_PLUGIN_NAME = "net.i2p.router.web.WebAppStarter.PLUGIN_NAME";
 
     // There are 4 additional jars that are required to do the Servlet 3.0 annotation scanning.
@@ -98,7 +98,7 @@ public class WebAppStarter {
     /**
      * Adds and starts.
      * Prior to 0.9.28, was not guaranteed to throw on failure.
-     * Not for routerconsole.war, it's started in RouterConsoleRunner.
+     * Not for {@code routerconsole.war}, it's started in RouterConsoleRunner.
      * Not for plugins, use 5-arg method.
      * <p>
      * As of 0.9.34, the appName will be registered with the PortMapper.
@@ -117,7 +117,7 @@ public class WebAppStarter {
 
     /**
      * Adds and starts.
-     * Not for routerconsole.war, it's started in RouterConsoleRunner.
+     * Not for {@code routerconsole.war}, it's started in RouterConsoleRunner.
      * <p>
      * The appName will be registered with the PortMapper.
      *
@@ -148,7 +148,7 @@ public class WebAppStarter {
     }
 
     /**
-     * add but don't start
+     * Add but don't start
      * This is used only by RouterConsoleRunner, which adds all the webapps first
      * and then starts all at once.
      *
@@ -282,10 +282,10 @@ public class WebAppStarter {
 
     /**
      * Stop it and remove the context.
-     * Throws just about anything, caller would be wise to catch Throwable
+     * Throws just about anything, caller would be wise to catch Throwable.
      * @param ctx router context supplying the PortMapper
      * @param s the Jetty server holding the console contexts, so this also works
-     *          during shutdown after the console has been unregistered
+     * during shutdown after the console has been unregistered
      * @param appName context path, e.g. "i2psnark"
      * @since 0.9.41
      */
@@ -313,7 +313,7 @@ public class WebAppStarter {
      * the console is already unregistered.
      * <p>
      * As of 0.9.34, the appName will be registered with the PortMapper,
-     * and PortMapper.isRegistered() will be more efficient than this.
+     * and {@link net.i2p.util.PortMapper#isRegistered} will be more efficient than this.
      *
      * @param ctx router context used to locate the console server
      * @param appName context path, e.g. "i2psnark"
@@ -328,7 +328,7 @@ public class WebAppStarter {
     }
 
     /**
-     * Determine if a webapp is running
+     * Determine if a webapp is running.
      * @param s the Jetty server holding the console contexts
      * @param appName context path, e.g. "i2psnark"
      * @return true if the context exists and has been started
@@ -357,7 +357,7 @@ public class WebAppStarter {
     }
 
     /**
-     * Find a webapp by name
+     * Find a webapp by name.
      * @param s the Jetty server holding the console contexts
      * @param appName context path, e.g. "i2psnark"
      * @return the context, or null if the console server or the webapp is not found
@@ -371,6 +371,8 @@ public class WebAppStarter {
     }
 
     /**
+     * The handler for the named webapp, if deployed.
+     *
      * @return the web app
      * @since 0.9.41
      */
@@ -407,6 +409,8 @@ public class WebAppStarter {
     }
 
     /**
+     * The console's handler collection.
+     *
      * @return the console server
      * @since 0.9.41
      */

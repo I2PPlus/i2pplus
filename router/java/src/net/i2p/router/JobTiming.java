@@ -32,7 +32,7 @@ public class JobTiming implements Clock.ClockUpdateListener {
     }
 
     /**
-     * # of milliseconds after the epoch to start the job
+     * # of milliseconds after the epoch to start the job.
      *
      * @return the scheduled start time
      */
@@ -40,7 +40,7 @@ public class JobTiming implements Clock.ClockUpdateListener {
 
     /**
      * WARNING - this does not force a resort of the job queue any more...
-     * ALWAYS call JobImpl.requeue() instead if job is already queued.
+     * ALWAYS call {@link net.i2p.router.JobImpl#requeue} instead if job is already queued.
      *
      * @param startTime the new start time
      */
@@ -100,7 +100,7 @@ public class JobTiming implements Clock.ClockUpdateListener {
     public void end(long now) { _actualEnd = now; }
 
     /**
-     * Adjust all timing values by the specified delta
+     * Adjust all timing values by the specified delta.
      */
     public void offsetChanged(long delta) {
         if (_start != 0) _start += delta;

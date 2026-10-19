@@ -1,7 +1,7 @@
 package org.klomp.snark;
 
 /**
- * Bandwidth and bandwidth limits
+ * Bandwidth and bandwidth limits.
  *
  * <p>Maintain three bandwidth estimators: Sent, received, and requested.
  *

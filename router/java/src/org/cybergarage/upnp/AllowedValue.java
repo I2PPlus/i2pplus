@@ -27,7 +27,6 @@ import org.cybergarage.xml.Node;
  * <p>This class is used by UPnP services to manage allowed value constraints for state variables,
  * enabling proper validation and description generation for variables with restricted value sets.
  *
- * @author Satoshi Konno
  */
 public class AllowedValue {
     ////////////////////////////////////////////////

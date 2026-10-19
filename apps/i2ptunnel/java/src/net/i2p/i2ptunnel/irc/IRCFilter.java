@@ -9,7 +9,7 @@ import net.i2p.util.Log;
 
 /**
  * Static methods to filter individual lines.
- * Moved from I2PTunnelIRCClient.java
+ * Moved from I2PTunnelIRCClient.java.
  *
  * @since 0.8.9
  */
@@ -22,9 +22,9 @@ abstract class IRCFilter {
 
 
     private static final boolean ALLOW_ALL_DCC_IN = false;
-    /** does not override DCC handling */
+    /** Does not override DCC handling. */
     private static final boolean ALLOW_ALL_CTCP_IN = false;
-    /** does not override DCC handling */
+    /** Does not override DCC handling. */
     private static final boolean ALLOW_ALL_CTCP_OUT = false;
 
     private static final Set<String> _allowedInbound;
@@ -469,7 +469,7 @@ abstract class IRCFilter {
      *  DCC SEND file xxx.b32.i2p i2p-port length -> DCC SEND file IP port length
      *  DCC RESUME file i2p-port offset           -> DCC RESUME file port offset
      *  DCC ACCEPT file i2p-port offset           -> DCC ACCEPT file port offset
-     *  DCC xxx                                   -> null
+     *  DCC xxx                                   -> null.
      * </pre>
      *
      * @param pfx the message through the "DCC " part
@@ -561,7 +561,7 @@ abstract class IRCFilter {
      *  DCC SEND file IP port length -> DCC SEND file xxx.b32.i2p i2p-port length
      *  DCC RESUME file port offset  -> DCC RESUME file i2p-port offset
      *  DCC ACCEPT file port offset  -> DCC ACCEPT file i2p-port offset
-     *  DCC xxx                      -> null
+     *  DCC xxx                      -> null.
      * </pre>
      *
      * @param pfx the message through the "DCC " part

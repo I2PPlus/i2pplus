@@ -80,7 +80,6 @@ import org.cybergarage.xml.XML;
  *   <li>NMPR (Network Media Profile Requirements) compliance
  * </ul>
  *
- * @author Satoshi Konno
  * @since 2002
  */
 public class Device implements org.cybergarage.http.HTTPRequestListener, SearchListener {
@@ -2732,7 +2731,7 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
     /**
      * Attaches caller-defined data to this device's node.
      *
-     * @param data any object; only read back by {@link #getUserData()}
+     * @param data any object; only read back by {@link #getUserData}
      */
     public void setUserData(Object data) {
         userData = data;

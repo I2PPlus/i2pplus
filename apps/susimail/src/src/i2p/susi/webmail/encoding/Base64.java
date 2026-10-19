@@ -35,6 +35,8 @@ public class Base64 extends Encoding {
 	}
 
 	/**
+	 * Encode the bytes as base64.
+	 *
 	 * @return Base64-encoded String.
 	 * @throws EncodingException if encoding fails
 	 */
@@ -49,7 +51,7 @@ public class Base64 extends Encoding {
 	}
 
 	/**
-	 * More efficient than super
+	 * More efficient than super.
 	 *
 	 * @param in the input stream to encode
 	 * @see Base64#encode(String)
@@ -98,6 +100,8 @@ public class Base64 extends Encoding {
 	}
 
 	/**
+	 * The base64 character for a 6-bit value.
+	 *
 	 * @param b
 	 * @return Encoded single byte.
 	 */
@@ -164,6 +168,8 @@ public class Base64 extends Encoding {
 	}
 
 	/**
+	 * Decode base64 input into the buffer.
+	 *
 	 * @since 0.9.34
 	 */
 	public void decode(InputStream in, Buffer bout) throws IOException {

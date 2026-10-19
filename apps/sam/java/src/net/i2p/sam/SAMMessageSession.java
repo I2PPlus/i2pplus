@@ -115,6 +115,8 @@ abstract class SAMMessageSession implements SAMMessageSess {
     }
 
     /**
+     * Protocol family to listen for.
+     *
      * @return the listen protocol
      * @since 0.9.25
      */
@@ -123,6 +125,8 @@ abstract class SAMMessageSession implements SAMMessageSess {
     }
 
     /**
+     * Port to listen on.
+     *
      * @return the listen port
      * @since 0.9.25
      */
@@ -257,7 +261,7 @@ abstract class SAMMessageSession implements SAMMessageSess {
     protected abstract void messageReceived(byte[] msg, int proto, int fromPort, int toPort);
 
     /**
-     * Do whatever is needed to shutdown the SAM session
+     * Do whatever is needed to shutdown the SAM session.
      */
     protected abstract void shutDown();
 
@@ -272,7 +276,7 @@ abstract class SAMMessageSession implements SAMMessageSess {
     }
 
     /**
-     * SAM message-based session handler, running in its own thread
+     * SAM message-based session handler, running in its own thread.
      *
      */
     private class SAMMessageSessionHandler implements Runnable, I2PSessionMuxedListener {
@@ -282,7 +286,7 @@ abstract class SAMMessageSession implements SAMMessageSess {
         private volatile boolean stillRunning = true;
 
         /**
-         * Create a new SAM message-based session handler
+         * Create a new SAM message-based session handler.
          *
          * @param destStream Input stream containing the destination keys
          * @param props Properties to setup the I2P session
@@ -313,7 +317,7 @@ abstract class SAMMessageSession implements SAMMessageSess {
         }
 
         /**
-         * Create a new SAM message-based session handler on an existing I2PSession
+         * Create a new SAM message-based session handler on an existing I2PSession.
          *
          * @since 0.9.25
          */
@@ -333,7 +337,7 @@ abstract class SAMMessageSession implements SAMMessageSess {
         }
 
         /**
-         * Stop a SAM message-based session handling thread
+         * Stop a SAM message-based session handling thread.
          *
          */
         public final void stopRunning() {
@@ -404,7 +408,11 @@ abstract class SAMMessageSession implements SAMMessageSess {
                              I2PSession.PORT_UNSPECIFIED, I2PSession.PORT_UNSPECIFIED);
         }
 
-        /** @since 0.9.24 */
+        /**
+         * Forward a received message to the SAM client.
+         *
+         * @since 0.9.24
+         */
         public void messageAvailable(I2PSession session, int msgId, long size,
                                      int proto, int fromPort, int toPort) {
 

@@ -15,9 +15,8 @@ import net.i2p.data.i2cp.SetDateMessage;
 import net.i2p.util.Clock;
 
 /**
- * Handle I2CP time messages from the router
+ * Handle I2CP time messages from the router.
  *
- * @author jrandom
  */
 class SetDateMessageHandler extends HandlerImpl {
     /**

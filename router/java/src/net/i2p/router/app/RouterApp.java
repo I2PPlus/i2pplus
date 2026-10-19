@@ -3,7 +3,7 @@ package net.i2p.router.app;
 import net.i2p.app.ClientApp;
 
 /**
- * If a class started via clients.config implements this interface,
+ * If a class started via {@code clients.config} implements this interface,
  * it will be used to manage the client, instead of starting with main()
  * <p>
  * Clients implementing this interface MUST provide the following constructor:

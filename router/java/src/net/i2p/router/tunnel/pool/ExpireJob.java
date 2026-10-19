@@ -163,7 +163,7 @@ class ExpireJob extends JobImpl {
     }
 
     /**
-     * Constructor for batch job (no config)
+     * Constructor for batch job (no config).
      */
     private ExpireJob(RouterContext ctx) {
         super(ctx);

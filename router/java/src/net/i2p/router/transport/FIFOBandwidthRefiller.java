@@ -105,13 +105,13 @@ public class FIFOBandwidthRefiller implements Runnable {
     /** Default burst seconds. */
     public static final int DEFAULT_BURST_SECONDS = 60;
 
-    /** For now, until there is some tuning and safe throttling, we set the floor at this inbound (KBps) */
+    /** For now, until there is some tuning and safe throttling, we set the floor at this inbound (KBps). */
     public static final int MIN_INBOUND_BANDWIDTH = 32;
-    /** For now, until there is some tuning and safe throttling, we set the floor at this outbound (KBps) */
+    /** For now, until there is some tuning and safe throttling, we set the floor at this outbound (KBps). */
     public static final int MIN_OUTBOUND_BANDWIDTH = 32;
-    /** For now, until there is some tuning and safe throttling, we set the floor at this during burst (KBps) */
+    /** For now, until there is some tuning and safe throttling, we set the floor at this during burst (KBps). */
     public static final int MIN_INBOUND_BANDWIDTH_PEAK = 32;
-    /** For now, until there is some tuning and safe throttling, we set the floor at this during burst (KBps) */
+    /** For now, until there is some tuning and safe throttling, we set the floor at this during burst (KBps). */
     public static final int MIN_OUTBOUND_BANDWIDTH_PEAK = 32;
     /**
      * Max for reasonable Bloom filter false positive rate.
@@ -129,7 +129,7 @@ public class FIFOBandwidthRefiller implements Runnable {
 
     /**
      * How often we replenish the queues.
-     * The bandwidth limiter will get an update this often (ms)
+     * The bandwidth limiter will get an update this often (ms).
      */
     private static volatile long _replenishFrequency = SystemVersion.isSlow() || SystemVersion.getCPULoadAvg() > 80 ? 100 : 20;
 
@@ -161,7 +161,7 @@ public class FIFOBandwidthRefiller implements Runnable {
         _isRunning = true;
     }
 
-    /** Shut down the bandwidth refiller */
+    /** Shut down the bandwidth refiller. */
     synchronized void shutdown() {
         _isRunning = false;
     }
@@ -228,7 +228,7 @@ public class FIFOBandwidthRefiller implements Runnable {
     }
 
     /**
-     * In Bytes per second
+     * In Bytes per second.
      * @return the share bandwidth
      */
     private int getShareBandwidth() {
@@ -448,7 +448,7 @@ public class FIFOBandwidthRefiller implements Runnable {
     }
 
     /**
-     * Call a few times a minute to update the stats
+     * Call a few times a minute to update the stats.
      *
      * @since 0.8.12
      */

@@ -8,7 +8,6 @@ package net.i2p.client;
  * Define a means for the router to asynchronously notify the client that a
  * new message is available or the router is under attack.
  *
- * @author zzz extends I2PSessionListener
  */
 public interface I2PSessionMuxedListener extends I2PSessionListener {
 

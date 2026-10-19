@@ -29,7 +29,7 @@ public class ByteArray implements Serializable, Comparable<ByteArray> {
 
     /**
      * Sets valid = data.length, unless data is null
-     * Sets offset = 0
+     * Sets offset = 0.
      *
      * @param data the byte array, may be null
      */
@@ -39,8 +39,7 @@ public class ByteArray implements Serializable, Comparable<ByteArray> {
     }
 
     /**
-     * Sets offset = offset
-     * Sets valid = length
+     * Wrap the given range of a byte array.
      *
      * @param data the byte array, may be null but why would you do that
      * @param offset the starting offset
@@ -64,7 +63,7 @@ public class ByteArray implements Serializable, Comparable<ByteArray> {
 
     /**
      * Sets the underlying byte array.
-     * Warning, does not set valid
+     * Warning, does not set valid.
      *
      * @param data the new byte array
      */
@@ -95,7 +94,7 @@ public class ByteArray implements Serializable, Comparable<ByteArray> {
     /**
      * Returns the offset into the byte array.
      *
-     * @return the index of the first live byte within {@link #getData()}
+     * @return the index of the first live byte within {@link #getData}
      */
     public int getOffset() {
         return _offset;

@@ -10,9 +10,8 @@ import net.i2p.internal.I2CPMessageQueue;
  * when both are in the same JVM.
  * This interface contains methods to access two queues,
  * one for transmission and one for receiving.
- * The methods are identical to those in java.util.concurrent.BlockingQueue
+ * The methods are identical to those in java.util.concurrent.BlockingQueue.
  *
- * @author zzz
  * @since 0.8.3
  */
 class I2CPMessageQueueImpl extends I2CPMessageQueue {
@@ -30,7 +29,7 @@ class I2CPMessageQueueImpl extends I2CPMessageQueue {
     }
 
     /**
-     * Send a message, nonblocking
+     * Send a message, nonblocking.
      *
      * @return success (false if no space available)
      */
@@ -50,7 +49,7 @@ class I2CPMessageQueueImpl extends I2CPMessageQueue {
     }
 
     /**
-     * Receive a message, non-blocking
+     * Receive a message, non-blocking.
      *
      * @return message or null if none available
      */
@@ -58,6 +57,8 @@ class I2CPMessageQueueImpl extends I2CPMessageQueue {
     public I2CPMessage poll() {return _in.poll();}
 
     /**
+     * Messages waiting to be read by the client.
+     *
      * @return messages waiting to be received
      * @since 0.9.71+
      */
@@ -65,6 +66,8 @@ class I2CPMessageQueueImpl extends I2CPMessageQueue {
     public int pending() {return _in.size();}
 
     /**
+     * Slots free for messages from the client.
+     *
      * @return how many more messages will be accepted; {@link Integer#MAX_VALUE} when unbounded
      * @since 0.9.71+
      */
@@ -72,12 +75,12 @@ class I2CPMessageQueueImpl extends I2CPMessageQueue {
     public int remainingCapacity() {return _out.remainingCapacity();}
 
     /**
-     * Send a message, blocking until space is available
+     * Send a message, blocking until space is available.
      */
     public void put(I2CPMessage msg) throws InterruptedException {_out.put(msg);}
 
     /**
-     * Receive a message, blocking until one is available
+     * Receive a message, blocking until one is available.
      *
      * @return the next message removed from the inbound side of the queue
      */

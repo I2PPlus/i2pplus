@@ -12,7 +12,7 @@ import org.mockito.stubbing.Answer;
 
 /**
  * Unit tests for the NTCP write-buffer pool introduced in
- * {@link EventPumper#acquireWriteBuf()} / {@link EventPumper#releaseWriteBuf(byte[])}.
+ * {@link EventPumper#acquireWriteBuf} / {@link EventPumper#releaseWriteBuf(byte[])}.
  *
  * <p>Pins the pooling contract: acquired buffers are exactly the NTCP2 frame size,
  * releasing and re-acquiring yields the same instance, and only arrays of the exact

@@ -23,7 +23,7 @@ public class FilenameUtil {
 	 * Convert the UTF-8 to ASCII suitable for inclusion in a header
 	 * and for use as a cross-platform filename.
 	 * Replace chars likely to be illegal in filenames,
-	 * and non-ASCII chars, with _
+	 * and non-ASCII chars, with _.
 	 *
 	 * Ref: RFC 6266, RFC 5987, i2psnark Storage.ILLEGAL
 	 *
@@ -51,7 +51,7 @@ public class FilenameUtil {
 	/**
 	 * Encode the UTF-8 suitable for inclusion in a header
 	 * as a RFC 5987/6266 filename* value, and for use as a cross-platform filename.
-	 * Replace chars likely to be illegal in filenames with _
+	 * Replace chars likely to be illegal in filenames with _.
 	 *
 	 * Ref: RFC 6266, RFC 5987, i2psnark Storage.ILLEGAL
 	 *

@@ -29,7 +29,6 @@ import org.cybergarage.upnp.device.*;
  * <p>This class is used by UPnP control points to subscribe to event notifications from UPnP
  * services, allowing them to receive updates when service state variables change.
  *
- * @author Satoshi Konno
  * @since 1.0
  */
 public class SubscriptionRequest extends HTTPRequest {

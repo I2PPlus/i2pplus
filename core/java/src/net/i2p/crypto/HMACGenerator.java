@@ -33,7 +33,7 @@ public abstract class HMACGenerator {
     public HMACGenerator() {}
 
     /**
-     * Calculate the HMAC of the data with the given key
+     * Calculate the HMAC of the data with the given key.
      *
      * @param key the session key
      * @param data the data to HMAC

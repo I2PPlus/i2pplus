@@ -20,7 +20,7 @@ import java.util.zip.Checksum;
 
 /**
  * Utilities for Blinding EdDSA keys.
- * PRELIMINARY - Subject to change - see proposal 123
+ * PRELIMINARY - Subject to change - see proposal 123.
  *
  * @since 0.9.38
  */
@@ -234,7 +234,7 @@ public final class Blinding {
     /**
      * Decode a new-format b32 address.
      * See proposal 149.
-     * NOTE: Not for external use, use decode(String)
+     * NOTE: Not for external use, use decode(String).
      *
      * @param ctx the application context
      * @param b 35+ bytes

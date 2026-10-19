@@ -54,7 +54,7 @@ public class SAMStreamSink {
     private boolean _isV3;
     private boolean _isV32;
     private String _v3ID;
-    /** Connection id (Integer) to peer (Flooder) */
+    /** Connection id (Integer) to peer (Flooder). */
     private final Map<String, Sink> _remotePeers;
     private static I2PSSLSocketFactory sslSocketFactory;
 
@@ -662,6 +662,8 @@ public class SAMStreamSink {
     }
 
     /**
+     * Send the HELLO and log in.
+     *
      * @param isMaster is this the control socket
      * @return our b64 dest or null
      */
@@ -898,12 +900,16 @@ public class SAMStreamSink {
         }
 
         /**
+         * SAM connection id.
+         *
          * @return the connection id
          */
         public String getConnectionId() { return _connectionId; }
         /**
+         * Remote destination of the stream.
+         *
          * @return the remote destination string reported when this connection was
-         *         established, which is used only for logging
+         * established, which is used only for logging
          */
         public String getDestination() { return _remoteDestination; }
 

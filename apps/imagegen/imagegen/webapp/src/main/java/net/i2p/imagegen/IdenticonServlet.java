@@ -57,7 +57,6 @@ import net.i2p.util.Log;
  * </dl>
  * </blockquote>
  *
- * @author don
  * @since 0.9.25
  */
 public class IdenticonServlet extends HttpServlet {

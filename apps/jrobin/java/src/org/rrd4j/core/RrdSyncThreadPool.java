@@ -11,10 +11,10 @@ import java.util.concurrent.atomic.AtomicReference;
 /**
  * Thread pool used by {@link org.rrd4j.core.RrdNioBackend} instances to periodically sync the
  * mapped file to disk. Note that instances of RrdSyncThreadPool must be disposed of by calling
- * {@link #shutdown()}.
+ * {@link #shutdown}.
  *
  * <p>For ease of use in standalone applications, clients may choose to register a shutdown hook by
- * calling {@link #registerShutdownHook()}. However, in web applications it is best to explicitly
+ * calling {@link #registerShutdownHook}. However, in web applications it is best to explicitly
  * {@code shutdown()} the pool when the application is un-deployed, usually within a {@code
  * javax.servlet.ServletContextListener}.
  *
@@ -93,7 +93,7 @@ public class RrdSyncThreadPool {
     }
 
     /**
-     * Unregisters the shutdown hook installed by {@link #registerShutdownHook()}. Has no effect if
+     * Unregisters the shutdown hook installed by {@link #registerShutdownHook}. Has no effect if
      * the hook is not currently installed.
      *
      * @see #unregisterShutdownHook()

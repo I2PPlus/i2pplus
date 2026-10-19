@@ -14,11 +14,6 @@ import junit.framework.TestCase;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 
-/**
- *
- * @author Comwiz
- *
- */
 public class I2PClientTest extends TestCase {
     private I2PClient _client;
 

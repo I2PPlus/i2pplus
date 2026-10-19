@@ -10,8 +10,6 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  *  Implement on top of a ConcurrentHashMap with a dummy value.
  *
- *  @author zzz
- *
  *  @param <E> type of elements in this set
  */
 public class ConcurrentHashSet<E> extends AbstractSet<E> implements Set<E> {

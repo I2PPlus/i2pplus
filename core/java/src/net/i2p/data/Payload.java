@@ -65,7 +65,6 @@ import java.util.Arrays;
  * <li><strong>Backward Compatibility:</strong> Legacy methods still available</li>
  * </ul>
  *
- * @author jrandom
  */
 public class Payload extends DataStructureImpl {
     /** Encrypted payload data. */

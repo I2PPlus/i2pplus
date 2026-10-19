@@ -10,9 +10,8 @@ package net.i2p.data;
  */
 
 /**
- * Test harness for loading / storing Hash objects
+ * Tests Destination creation, serialization and hashing.
  *
- * @author jrandom
  */
 public class DestinationTest extends StructureTest {
     @Override

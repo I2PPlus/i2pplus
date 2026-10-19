@@ -54,7 +54,7 @@ class SchedulerConnecting extends SchedulerImpl {
      * Handle an event on a connecting connection. Checks for connect
      * timeout and sends available data when the send time arrives.
      * <p>The timeout gate uses the connection's effective connect window
-     * ({@link Connection#getEffectiveConnectWindow()}) rather than the raw un-scaled
+     * ({@link Connection#getEffectiveConnectWindow}) rather than the raw un-scaled
      * connectTimeout.  That window is the (connectDelay + connectTimeout) base scaled by
      * the Tuner's connect-timeout multiplier, the same budget {@code waitForConnect(int)}
      * and the SYN give-up check in {@code Connection#getMaxSynSends()} use, so this

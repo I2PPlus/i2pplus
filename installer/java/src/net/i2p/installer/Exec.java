@@ -6,7 +6,7 @@ import java.io.IOException;
 /**
  * <p>Launch a program in the background from the installer, then terminate
  * this JVM without waiting for it.</p>
- * Usage: <code>Exec dir command [args ...]</code><br>
+ * Usage: <code>Exec dir command [args ...]</code>.
  *
  * The program is started directly by {@link Runtime#exec}, not through a
  * command shell, so the first word is resolved with the platform's usual
@@ -20,9 +20,7 @@ import java.io.IOException;
  * @since 0.4.1.4, moved to {@link net.i2p.installer} in 0.9.5
  */
 public class Exec {
-    /**
-     * Default constructor.
-     */
+    /** No-op, all methods are static. */
     public Exec() {}
 
     /**

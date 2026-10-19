@@ -22,9 +22,8 @@ import net.i2p.router.RouterContext;
 import net.i2p.router.networkdb.kademlia.FloodfillNetworkDatabaseFacade;
 
 /**
- * Manage all interactions with clients
+ * Manage all interactions with clients.
  *
- * @author jrandom
  */
 public class DummyClientManagerFacade extends ClientManagerFacade {
     private RouterContext _context;

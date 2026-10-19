@@ -31,25 +31,25 @@ import net.i2p.util.Log;
  */
 class HTTPResponseOutputStream extends FilterOutputStream {
     private final Log _log;
-    /** pooled buffer holding the response header block while it is parsed, null once emitted */
+    /** Pooled buffer holding the response header block while it is parsed, null once emitted. */
     protected ByteArray _headerBuffer;
     private volatile boolean _headerWritten;
     private final byte[] _buf1;
-    /** set when the response carries Content-Encoding: x-i2p-gzip, so the body is gunzipped */
+    /** Set when the response carries Content-Encoding: x-i2p-gzip, so the body is gunzipped. */
     protected volatile boolean _gzip;
-    /** Content-Length of the body in bytes, -1 if unknown or chunked, 0 for a bodyless response */
+    /** Content-Length of the body in bytes, -1 if unknown or chunked, 0 for a bodyless response. */
     protected volatile long _dataExpected = -1;
-    /** true if the outproxy (I2P) side connection may be reused after this response */
+    /** True if the outproxy (I2P) side connection may be reused after this response. */
     protected volatile boolean _keepAliveIn;
-    /** true if the browser side socket may be reused after this response */
+    /** True if the browser side socket may be reused after this response. */
     protected volatile boolean _keepAliveOut;
-    /** response-scoped, set during header parsing */
+    /** True if the response body is chunked, set during header parsing. */
     private boolean _chunked;
-    /** response-scoped, set during header parsing */
+    /** True once the Connection header has been sent, set during header parsing. */
     private boolean _connectionSent;
-    /** lower-case, trimmed */
+    /** Response Content-Type header value, lower-case and trimmed. */
     protected String _contentType;
-    /** lower-case, trimmed */
+    /** Response Content-Encoding header value, lower-case and trimmed. */
     protected String _contentEncoding;
     private final DoneCallback _callback;
     /** Entity-body bytes delivered after the first header block (Range resume offset). */
@@ -72,7 +72,7 @@ class HTTPResponseOutputStream extends FilterOutputStream {
     private static final ByteCache _cache = ByteCache.getInstance(8, CACHE_SIZE);
     // OOM DOS prevention
     private static final int MAX_HEADER_SIZE = 64*1024;
-    /** we ignore any potential \r, since we trim it on write anyway */
+    /** We ignore any potential \r, since we trim it on write anyway. */
     private static final byte NL = '\n';
     private static final byte[] CONNECTION_CLOSE = DataHelper.getASCII("Connection: close\r\n");
     private static final byte[] CRLF = DataHelper.getASCII("\r\n");
@@ -179,7 +179,7 @@ class HTTPResponseOutputStream extends FilterOutputStream {
      * and no transparent gzip decode (which would desync the Range offset
      * from wire bytes).
      *
-     * @return true if {@link #prepareBodyResume()} is safe to attempt
+     * @return true if {@link #prepareBodyResume} is safe to attempt
      * @since 0.9.71+
      */
     public boolean canRangeResume() {
@@ -313,7 +313,7 @@ class HTTPResponseOutputStream extends FilterOutputStream {
         }
     }
 
-    /** are the headers finished? */
+    /** Are the headers finished? */
     private boolean headerReceived() {
         int valid = _headerBuffer.getValid();
         if (valid < 3)
@@ -329,7 +329,7 @@ class HTTPResponseOutputStream extends FilterOutputStream {
         return second == NL; //   \n\n
     }
 
-    /** ok, received, now munge & write it */
+    /** Parse the received header, adjust it as needed, and write it to the client. */
     private void writeHeader() throws IOException {
         _chunked = false;
         _connectionSent = false;

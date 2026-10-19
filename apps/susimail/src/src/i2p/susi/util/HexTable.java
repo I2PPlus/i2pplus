@@ -12,8 +12,8 @@ public class HexTable {
     public HexTable() {}
 
     /**
-     *  Three character strings, upper case, e.g. "=0A"
-     *  WARNING: This array is public for backward compatibility but should be treated as immutable
+     * Three character strings, upper case, e.g. "=0A"
+     * WARNING: This array is public for backward compatibility but should be treated as immutable.
      */
     public static final String[] table = new String[256];
 
@@ -26,7 +26,7 @@ public class HexTable {
     }
 
     /**
-     * Get hex string for the given byte value
+     * Get hex string for the given byte value.
      * @param b byte value (0-255)
      * @return hex string, e.g. "=0A"
      */
@@ -38,7 +38,7 @@ public class HexTable {
     }
 
     /**
-     * Direct access to table entry for backward compatibility
+     * Direct access to table entry for backward compatibility.
      * @param index a byte value between 0 and 255
      * @return hex string at that index
      */
@@ -50,7 +50,7 @@ public class HexTable {
     }
 
     /**
-     * Get a copy of the hex table for safe access
+     * Get a copy of the hex table for safe access.
      * @return a copy of the hex table array
      */
     public static String[] getTable() {

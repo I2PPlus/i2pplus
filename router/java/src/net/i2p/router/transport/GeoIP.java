@@ -68,9 +68,8 @@ import net.i2p.util.SystemVersion;
  * Everything here uses longs, since Java is signed-only, the file is
  * sorted by unsigned, and we don't store the table in memory
  * (unlike in Blocklist.java, where it's in-memory so we want to be
- * space-efficient)
+ * space-efficient).
  *
- * @author zzz
  */
 public class GeoIP {
     private final Log _log;
@@ -83,7 +82,7 @@ public class GeoIP {
     // In the following structures, an IPv4 IP is stored as a non-negative long, 0 to 2**32 - 1,
     // and the first 8 bytes of an IPv6 IP are stored as a signed long.
     private final Map<Long, String> _IPToCountry;
-    /** Cap for _IPToCountry to prevent unbounded growth */
+    /** Cap for _IPToCountry to prevent unbounded growth. */
     private static final int MAX_IP_CACHE_SIZE = 32768;
 
     private final Set<Long> _pendingSearch;
@@ -99,7 +98,7 @@ public class GeoIP {
 
     /** Property: whether GeoIP lookups are enabled. */
     static final String PROP_GEOIP_ENABLED = "routerconsole.geoip.enable";
-    /** Normalize ISP/org names from ASN database (strip suffixes, abbreviate, title-case) */
+    /** Normalize ISP/org names from ASN database (strip suffixes, abbreviate, title-case). */
     static final String PROP_NORMALIZE_ISP = "routerconsole.enableISPNameNormalization";
     /**
      * Property: the directory the GeoIP databases are read from.
@@ -109,7 +108,7 @@ public class GeoIP {
      * Default GeoIP directory, under the router's base directory.
      */
     public static final String GEOIP_DIR_DEFAULT = "geoip";
-    /** Default geoip file name */
+    /** Default geoip file name. */
     static final String GEOIP_FILE_DEFAULT = "geoip.txt";
     /**
      * GEOIP2_FILE_DEFAULT.
@@ -119,7 +118,7 @@ public class GeoIP {
      * Default MaxMind ASN database file name.
      */
     public static final String ASN_FILE_DEFAULT = "db-ip-asn.mmdb";
-    /** Default country names file name */
+    /** Default country names file name. */
     static final String COUNTRY_FILE_DEFAULT = "countries.txt";
     /**
      * Property: the last country an IP was seen in, set for the console.
@@ -197,7 +196,7 @@ public class GeoIP {
      * Blocking lookup of all pending IPs.
      * Results will be added to the table and available via get() after completion.
      * <p>
-     * Public for BundleRouterInfos
+     * Public for BundleRouterInfos.
      */
 
     public void blockingLookup() {
@@ -562,7 +561,7 @@ public class GeoIP {
     }
 
    /**
-    * Open the ASN database reader (lazy, cached)
+    * Open the ASN database reader (lazy, cached).
     */
     private com.maxmind.db.Reader openASN() throws IOException {
         File asnFile = getASN();
@@ -623,7 +622,7 @@ public class GeoIP {
 
     // --- ISP Name Normalization (ported from Python normalize-asn.py) ---
 
-    /** Known broken org names in the MaxMind ASN DB — straight replacements */
+    /** Known broken org names in the MaxMind ASN DB — straight replacements. */
     private static final Map<String, String> ASN_DB_OVERRIDES;
     static {
         ASN_DB_OVERRIDES = new HashMap<>();
@@ -749,12 +748,12 @@ public class GeoIP {
         "etisalat", "techtel"
     ));
 
-    /** Reverse a single word */
+    /** Reverse a single word. */
     private static String reverseWord(String word) {
         return new StringBuilder(word).reverse().toString();
     }
 
-    /** Suffixes to strip from org names — single combined alternation (44→1) */
+    /** Suffixes to strip from org names — single combined alternation (44→1). */
     private static final Pattern SUFFIX_ALL = Pattern.compile(
         "(?:,?\\s+Pty\\.?\\s+Ltd\\.?|,?\\s+PTY\\s+LTD\\.?|" +
         ",?\\s+Limited\\s+Liability\\s+Partnership\\.?|" +
@@ -785,7 +784,7 @@ public class GeoIP {
         Pattern.CASE_INSENSITIVE
     );
 
-    /** Words to keep uppercase */
+    /** Words to keep uppercase. */
     private static final Set<String> KEEP_UPPER = new HashSet<>(Arrays.asList(
         "IP", "IPv4", "IPv6", "ATM", "TV", "DNS", "IPTV", "AS",
         "USA", "UK", "EU", "APAC", "EMEA", "LAN", "WAN", "DSL",
@@ -797,7 +796,7 @@ public class GeoIP {
         "RCN", "MCI"
     ));
 
-    /** Brand names that should keep their exact casing */
+    /** Brand names that should keep their exact casing. */
     private static final Map<String, String> BRAND_NAMES = new HashMap<>();
     static {
         String[][] brands = {
@@ -812,9 +811,9 @@ public class GeoIP {
         for (String[] b : brands) {BRAND_NAMES.put(b[0], b[1]);}
     }
 
-    /** Vodafone subsidiaries: "Vodafone <Country>" names (longest first for matching) */
+    /** Vodafone subsidiaries: "Vodafone <Country>" names (longest first for matching). */
     private static final List<String> VODAFONE_COUNTRIES;
-    /** Vodafone regional brand aliases that are not country names */
+    /** Vodafone regional brand aliases that are not country names. */
     private static final Map<String, String> VODAFONE_ALIASES;
     static {
         List<String> countries = new ArrayList<>(Arrays.asList(
@@ -864,7 +863,7 @@ public class GeoIP {
         VODAFONE_ALIASES = Collections.unmodifiableMap(aliases);
     }
 
-    /** Trailing generic words to drop (redundant suffixes like "Communications", "Services") */
+    /** Trailing generic words to drop (redundant suffixes like "Communications", "Services"). */
     private static final Pattern TRAILING_VERBOSE = Pattern.compile(
         "\\s*(?:\\bCommunications?\\b|\\bTelecommunications?\\b|\\bNetworks?\\b|\\bSolutions?\\b|" +
         "\\bServices?\\b|\\bSystems?\\b|\\bTechnolog(?:y|ies)\\b|\\bComputer\\b|\\bPrivate\\b)\\s*$",
@@ -874,16 +873,16 @@ public class GeoIP {
     /**
      * China carrier network labels and region designators to drop (China169 backbone,
      * IP Network, Province, Municipality, Autonomous Region); leftover spaces are
-     * collapsed by the DOUBLE_SPACE step below
+     * collapsed by the DOUBLE_SPACE step below.
      */
     private static final Pattern CHINA_VERBOSE = Pattern.compile(
         "(?:China169|Backbone|IP Networks?|Province|Municipality|Autonomous Region)",
         Pattern.CASE_INSENSITIVE
     );
 
-    /** Abbreviation map for verbose words */
+    /** Abbreviation map for verbose words. */
     private static final Map<String, String> ABBREV_MAP;
-    /** Single combined abbreviation pattern */
+    /** Single combined abbreviation pattern. */
     private static final Pattern ABBREV_ALL;
     static {
         Map<String, String> map = new HashMap<>();
@@ -936,7 +935,7 @@ public class GeoIP {
         ABBREV_ALL = Pattern.compile(sb.toString(), Pattern.CASE_INSENSITIVE);
     }
 
-    /** Single-pass abbreviation replacement (was 29× replaceAll) */
+    /** Single-pass abbreviation replacement (was 29× replaceAll). */
     private static String applyAbbreviation(String name) {
         StringBuilder sb = new StringBuilder(name.length() + 16);
         Matcher m = ABBREV_ALL.matcher(name);
@@ -950,7 +949,7 @@ public class GeoIP {
         return sb.toString();
     }
 
-    /** Filler prepositions/articles to drop */
+    /** Filler prepositions/articles to drop. */
     private static final Pattern FILLER_DROP = Pattern.compile(
         "\\b(?:de|do|da|dos|das|em|para|por|com|e|y|o|a|os|as|dan|serta|untuk|dari|ke|pada|" +
         "im|am|von|der|den|del|della|delle|dello|alla|alle|il|le|la|i|gli|un|una|sul|negli|nel|" +
@@ -958,30 +957,30 @@ public class GeoIP {
         Pattern.CASE_INSENSITIVE
     );
 
-    /** Embedded ASN numbers (e.g. AS12345) */
+    /** Embedded ASN numbers (e.g. AS12345). */
     private static final Pattern ASN_EMBEDDED = Pattern.compile("\\bAS\\d+\\b\\s*", Pattern.CASE_INSENSITIVE);
     private static final Pattern ASN_TRAILING = Pattern.compile("\\s*\\bAS\\d+\\b$", Pattern.CASE_INSENSITIVE);
 
-    /** Paired single quotes around text (e.g. 'TIMEWEB') — keeps internal apostrophes like O'Brien */
+    /** Paired single quotes around text (e.g. 'TIMEWEB') — keeps internal apostrophes like O'Brien. */
     private static final Pattern PAIRED_SINGLE_QUOTES = Pattern.compile("'([^']{2,})'");
 
-    /** Parentheticals to strip (anywhere, not just trailing) */
+    /** Parentheticals to strip (anywhere, not just trailing). */
     private static final Pattern PAREN_ALL = Pattern.compile("\\s*\\([^)]{0,50}\\)\\s*");
 
-    /** Normalize mangled dash separators: "hosted- -vdsina" → "hosted - vdsina" */
+    /** Normalize mangled dash separators: "hosted- -vdsina" → "hosted - vdsina". */
     private static final Pattern DASH_SPACE_DASH = Pattern.compile("(\\w)-\\s+-(\\w)");
 
-    /** Leading/trailing junk */
+    /** Leading/trailing junk. */
     private static final Pattern LEADING_JUNK = Pattern.compile("^[-\u2013\u2014\\s\"']+");
     private static final Pattern TRAILING_JUNK = Pattern.compile("[-\u2013\u2014\\s\"']+$");
     private static final Pattern DOUBLE_COMMA = Pattern.compile(",\\s*,");
     private static final Pattern DOUBLE_SPACE = Pattern.compile("  +");
-    /** Whitespace split */
+    /** Whitespace split. */
     private static final Pattern SPACE_SPLIT = Pattern.compile("\\s+");
-    /** Leading/trailing punctuation trim */
+    /** Leading/trailing punctuation trim. */
     private static final Pattern LEADING_TRAILING_JUNK = Pattern.compile("^[ ,.]+|[ ,.]+$");
 
-    /** Verbose prefixes to strip — single combined alternation (3→1) */
+    /** Verbose prefixes to strip — single combined alternation (3→1). */
     private static final Pattern STRIP_PREFIX_ALL = Pattern.compile(
         "^(?:Internet Domain Name System|" +
         "Internet (?:Backbone|Network|Service|Provider|Telecom|Communications)|" +
@@ -989,7 +988,7 @@ public class GeoIP {
         Pattern.CASE_INSENSITIVE
     );
 
-    /** Filler words that can be trimmed from long names */
+    /** Filler words that can be trimmed from long names. */
     private static final Pattern FILLER_WORDS = Pattern.compile(
         "\\b(?:Center|Centre|Engineering|Development|Technical|Technology|Information|" +
         "Communications?|Telecommunications?|Network(?:s)?|Services?|Solutions?|Systems?|" +
@@ -997,10 +996,10 @@ public class GeoIP {
         Pattern.CASE_INSENSITIVE
     );
 
-    /** Precompiled pattern for short all-caps acronym detection */
+    /** Precompiled pattern for short all-caps acronym detection. */
     private static final Pattern ACRONYM_PATTERN = Pattern.compile("[A-Z]+");
 
-    /** Names that should be returned as-is — single combined pattern vs array */
+    /** Names that should be returned as-is — single combined pattern vs array. */
     private static final Pattern SKIP_ALL = Pattern.compile(
         "^(?:Reserved\\s+AS|Autonomous\\s+System\\s+number|N/?A)$",
         Pattern.CASE_INSENSITIVE
@@ -1409,7 +1408,7 @@ public class GeoIP {
         return name;
     }
 
-    /** First whitespace-delimited word of a string with trailing punctuation stripped, or the whole string */
+    /** First whitespace-delimited word of a string with trailing punctuation stripped, or the whole string. */
     private static String firstWord(String s) {
         int i = s.indexOf(' ');
         String w = i > 0 ? s.substring(0, i) : s;
@@ -1449,7 +1448,7 @@ public class GeoIP {
     }
 
      /**
-      * Open a GeoIP2 database
+      * Open a GeoIP2 database.
       * @since 0.9.38
       */
     private DatabaseReader openGeoIP2(File geoFile) throws IOException {
@@ -1463,8 +1462,8 @@ public class GeoIP {
     }
 
    /**
-    * Return the current GeoIP database version
-    * @return the geo i p build info
+    * Return the current GeoIP database version.
+    * @return the geo IP build info
     * @since 0.9.65+
     */
     private static final ThreadLocal<DateFormat> _GEOIP_DATE_FORMAT = ThreadLocal.withInitial(() -> new SimpleDateFormat("MMM d, yyyy", Locale.US));
@@ -1492,7 +1491,7 @@ public class GeoIP {
     }
 
     /**
-     * Return the current ASN database version
+     * Return the current ASN database version.
      * @return the HTML build info, or a not-found or error message
      * @since 0.9.65+
      */
@@ -1528,7 +1527,7 @@ public class GeoIP {
     * To create:
     * wget http://ip-to-country.webhosting.info/downloads/ip-to-country.csv.zip
     * unzip ip-to-country.csv.zip
-    * cut -d, -f3,5 < ip-to-country.csv|sed 's/"//g' | sort | uniq > countries.txt
+    * cut -d, -f3,5 < ip-to-country.csv|sed 's/"//g' | sort | uniq > countries.txt.
     */
     private void readCountryFile() {
         String geoDir = _context.getProperty(PROP_GEOIP_DIR, GEOIP_DIR_DEFAULT);
@@ -1581,11 +1580,11 @@ public class GeoIP {
     * To create:
     * wget http://ip-to-country.webhosting.info/downloads/ip-to-country.csv.zip
     * unzip ip-to-country.csv.zip
-    * cut -d, -f0-3 < ip-to-country.csv|sed 's/"//g' > geoip.txt
+    * cut -d, -f0-3 < ip-to-country.csv|sed 's/"//g' > geoip.txt.
     *
     * @param search a sorted array of IPs to search
     * @return an array of country codes, same order as the search param,
-    *         or a zero-length array on failure
+    * or a zero-length array on failure
     */
     private String[] readGeoIPFile(Long[] search) {
         String geoDir = _context.getProperty(PROP_GEOIP_DIR, GEOIP_DIR_DEFAULT);
@@ -1672,7 +1671,7 @@ public class GeoIP {
      * Put our country code in the config, where others (such as Timestamper) can get it,
      * and it will be there next time at startup.
      * <p>
-     * Does nothing in I2PAppContext
+     * Does nothing in I2PAppContext.
      * @param ts the timestamp of the geoip file that was read, greater than zero
      */
     private void updateOurCountry(long ts) {
@@ -1805,7 +1804,7 @@ public class GeoIP {
 
     /**
      * Add to the list needing lookup
-     * Public for BundleRouterInfos
+     * Public for BundleRouterInfos.
      *
      * @param ip IPv4 or IPv6
      */
@@ -1817,7 +1816,7 @@ public class GeoIP {
 
     /**
      * Add to the list needing lookup
-     * Public for BundleRouterInfos
+     * Public for BundleRouterInfos.
      *
      * @param ip IPv4 or IPv6
      */
@@ -1846,7 +1845,7 @@ public class GeoIP {
 
     /**
      * The country for an IP from the cache.
-     * Public for BundleRouterInfos
+     * Public for BundleRouterInfos.
      *
      * @param ip IPv4 or IPv6
      * @return lower-case code, generally two letters, or null.
@@ -1916,7 +1915,7 @@ public class GeoIP {
 
     /**
      * The untranslated country name for a country code.
-     * Public for BundleRouterInfos
+     * Public for BundleRouterInfos.
      *
      * @param code two-letter lower case code
      * @return untranslated name or null

@@ -145,7 +145,7 @@ public class BlockfileNamingService extends DummyNamingService {
      * one and imports entries from hosts.txt, userhosts.txt, and privatehosts.txt.
      * <p>
      * If not in router context, the database will be opened read-only
-     * unless the property i2p.naming.blockfile.writeInAppContext is true.
+     * unless the property {@code i2p.naming.blockfile.writeInAppContext} is true.
      * Not designed for multiple instantiations or simultaneous use by multiple JVMs.
      *
      * @param context the application context whose router directory holds hostsdb.blockfile
@@ -357,6 +357,8 @@ public class BlockfileNamingService extends DummyNamingService {
     }
 
     /**
+     * Whether the database is in an old format.
+     *
      * @return true if needs an upgrade
      * @throws IOE on bad version
      * @since 0.8.9
@@ -377,7 +379,7 @@ public class BlockfileNamingService extends DummyNamingService {
      * Version 1->2: Add reverse skiplist and populate
      * Version 2->3: Re-populate reverse skiplist as version 2 didn't keep it updated
      * after the upgrade. No change to format.
-     * Version 3->4: Change format to support multiple destinations per hostname
+     * Version 3->4: Change format to support multiple destinations per hostname.
      *
      * @return true if upgraded successfully
      * @since 0.8.9
@@ -466,7 +468,7 @@ public class BlockfileNamingService extends DummyNamingService {
      * Blockfile must be writable, of course.
      * Side effect: sets _version field
      * <p>
-     * Caller must synchronize
+     * Caller must synchronize.
      * @since 0.9.26 pulled out of upgrade()
      */
     private void setVersion(String version) throws IOException {
@@ -486,7 +488,7 @@ public class BlockfileNamingService extends DummyNamingService {
 
     /**
      * For either v1 or v4.
-     * Caller must synchronize
+     * Caller must synchronize.
      * @return entry or null, or throws ioe
      */
     private DestEntry getEntry(String listname, String key) throws IOException {
@@ -506,7 +508,7 @@ public class BlockfileNamingService extends DummyNamingService {
     }
 
     /**
-     * Caller must synchronize
+     * Caller must synchronize.
      * @param source may be null
      */
     private void addEntry(BlockFile bf, String listname, String key, Destination dest, String source) throws IOException {
@@ -533,7 +535,7 @@ public class BlockfileNamingService extends DummyNamingService {
 
     /**
      * Single dest version.
-     * Caller must synchronize
+     * Caller must synchronize.
      *
      * @param props may be null
      * @throws RuntimeException
@@ -548,7 +550,7 @@ public class BlockfileNamingService extends DummyNamingService {
     /**
      * Multiple dests version.
      * DB MUST be version 4.
-     * Caller must synchronize
+     * Caller must synchronize.
      *
      * @param propsList may be null, or entries may be null
      * @throws RuntimeException
@@ -573,7 +575,7 @@ public class BlockfileNamingService extends DummyNamingService {
     }
 
     /**
-     * Caller must synchronize
+     * Caller must synchronize.
      * @return removed object or null
      * @throws RuntimeException
      */
@@ -625,7 +627,7 @@ public class BlockfileNamingService extends DummyNamingService {
 
     /**
      * Caller must synchronize.
-     * Fails without exception on error (logs only)
+     * Fails without exception on error (logs only).
      * @since 0.8.9
      */
     private void addReverseEntry(String key, Destination dest) {
@@ -668,7 +670,7 @@ public class BlockfileNamingService extends DummyNamingService {
 
     /**
      * Caller must synchronize.
-     * Fails without exception on error (logs only)
+     * Fails without exception on error (logs only).
      * @since 0.8.9
      */
     private void removeReverseEntry(String key, Destination dest) {
@@ -692,6 +694,8 @@ public class BlockfileNamingService extends DummyNamingService {
     }
 
     /**
+     * Reverse lookup key for the destination.
+     *
      * @return the reverse key
      * @since 0.8.9
      */
@@ -700,6 +704,8 @@ public class BlockfileNamingService extends DummyNamingService {
     }
 
     /**
+     * Reverse lookup key for the hash.
+     *
      * @return the reverse key
      * @since 0.8.9
      */
@@ -877,9 +883,11 @@ public class BlockfileNamingService extends DummyNamingService {
     }
 
     /**
+     * Store a destination, replacing any previous entry for the name.
+     *
      * @param options If non-null and contains the key "list", add to that list
-     *                (default "hosts.txt")
-     *                Use the key "s" for the source
+     * (default "hosts.txt")
+     * Use the key "s" for the source
      */
     @Override
     public boolean put(String hostname, Destination d, Properties options) {
@@ -887,11 +895,13 @@ public class BlockfileNamingService extends DummyNamingService {
     }
 
     /**
+     * Store a destination only if the name is unused.
+     *
      * @param options If non-null and contains the key "list", add to that list
-     *                (default "hosts.txt")
-     *                Use the key "s" for the source.
-     *                Key "a" will be added with the current time, unless
-     *                "a" is present in options.
+     * (default "hosts.txt")
+     * Use the key "s" for the source.
+     * Key "a" will be added with the current time, unless
+     * "a" is present in options.
      */
     @Override
     public boolean putIfAbsent(String hostname, Destination d, Properties options) {
@@ -1034,8 +1044,10 @@ public class BlockfileNamingService extends DummyNamingService {
     }
 
     /**
+     * Remove the named entry.
+     *
      * @param options If non-null and contains the key "list", remove
-     *                from that list (default "hosts.txt", NOT all lists)
+     * from that list (default "hosts.txt", NOT all lists)
      */
     @Override
     public boolean remove(String hostname, Properties options) {
@@ -1083,16 +1095,18 @@ public class BlockfileNamingService extends DummyNamingService {
     }
 
     /**
+     * All entries as destination objects.
+     *
      * @param options If non-null and contains the key "list", get
-     *                from that list (default "hosts.txt", NOT all lists)
-     *                Key "skip": skip that many entries
-     *                Key "limit": max number to return
-     *                Key "search": return only those matching substring
-     *                Key "startsWith": return only those starting with
-     *                ("[0-9]" allowed)
-     *                Key "beginWith": start here in the iteration
-     *                Don't use both startsWith and beginWith.
-     *                Search, startsWith, and beginWith values must be lower case.
+     * from that list (default "hosts.txt", NOT all lists)
+     * Key "skip": skip that many entries
+     * Key "limit": max number to return
+     * Key "search": return only those matching substring
+     * Key "startsWith": return only those starting with
+     * ("[0-9]" allowed)
+     * Key "beginWith": start here in the iteration
+     * Don't use both startsWith and beginWith.
+     * Search, startsWith, and beginWith values must be lower case.
      * @return the matching hostnames mapped to their destinations
      */
     @Override
@@ -1181,16 +1195,18 @@ public class BlockfileNamingService extends DummyNamingService {
     }
 
     /**
+     * All entries as Base64 strings.
+     *
      * @param options If non-null and contains the key "list", get
-     *                from that list (default "hosts.txt", NOT all lists)
-     *                Key "skip": skip that many entries
-     *                Key "limit": max number to return
-     *                Key "search": return only those matching substring
-     *                Key "startsWith": return only those starting with
-     *                ("[0-9]" allowed)
-     *                Key "beginWith": start here in the iteration
-     *                Don't use both startsWith and beginWith.
-     *                Search, startsWith, and beginWith values must be lower case.
+     * from that list (default "hosts.txt", NOT all lists)
+     * Key "skip": skip that many entries
+     * Key "limit": max number to return
+     * Key "search": return only those matching substring
+     * Key "startsWith": return only those starting with
+     * ("[0-9]" allowed)
+     * Key "beginWith": start here in the iteration
+     * Don't use both startsWith and beginWith.
+     * Search, startsWith, and beginWith values must be lower case.
      * @return the base64 entries
      * @since 0.9.20
      */
@@ -1551,8 +1567,10 @@ public class BlockfileNamingService extends DummyNamingService {
     }
 
     /**
+     * Number of entries.
+     *
      * @param options If non-null and contains the key "list", return the
-     *                size of that list (default "hosts.txt", NOT all lists)
+     * size of that list (default "hosts.txt", NOT all lists)
      */
     @Override
     public int size(Properties options) {
@@ -1804,7 +1822,7 @@ public class BlockfileNamingService extends DummyNamingService {
         clearCache();
     }
 
-    /** for logging errors in the static serializers below */
+    /** For logging errors in the static serializers below. */
     private static void logError(String msg, Throwable t) {
         I2PAppContext.getGlobalContext().logManager().getLog(BlockfileNamingService.class).error(msg, t);
     }
@@ -1825,7 +1843,7 @@ public class BlockfileNamingService extends DummyNamingService {
      */
     private static class PropertiesSerializer implements Serializer<Properties> {
         /**
-         * A format error on the properties is non-fatal (returns an empty properties)
+         * A format error on the properties is non-fatal (returns an empty properties).
          * @return the serialized properties, or two zero bytes on a format error
          */
         public byte[] getBytes(Properties p) {
@@ -1838,7 +1856,7 @@ public class BlockfileNamingService extends DummyNamingService {
             }
         }
 
-        /** returns null on error */
+        /** Deserialize the properties stored in an entry value, null on malformed data. */
         public Properties construct(byte[] b) {
             Properties rv = new Properties();
             try {
@@ -1900,7 +1918,7 @@ public class BlockfileNamingService extends DummyNamingService {
 
         /**
          * A format error on the properties is non-fatal (only the properties are lost)
-         * A format error on the destination is fatal
+         * A format error on the destination is fatal.
          * @return the serialized entry, or just its empty properties on a format error
          */
         @Override
@@ -1923,7 +1941,7 @@ public class BlockfileNamingService extends DummyNamingService {
             return baos.toByteArray();
         }
 
-        /** returns null on error */
+        /** Deserialize an entry value into a destination and its properties, null on malformed data. */
         @Override
         public DestEntry construct(byte[] b) {
             DestEntry rv = new DestEntry();
@@ -1943,7 +1961,7 @@ public class BlockfileNamingService extends DummyNamingService {
     }
 
     /**
-     * For multiple destinations per hostname
+     * For multiple destinations per hostname.
      * @since 0.9.26
      */
     private static class DestEntrySerializerV4 implements Serializer<DestEntry> {
@@ -1984,7 +2002,7 @@ public class BlockfileNamingService extends DummyNamingService {
             return baos.toByteArray();
         }
 
-        /** returns null on error */
+        /** Deserialize an entry value into a destination and its properties, null on malformed data. */
         public DestEntry construct(byte[] b) {
             DestEntry rv = new DestEntry();
             ByteArrayInputStream bais = new ByteArrayInputStream(b);
@@ -2050,7 +2068,7 @@ public class BlockfileNamingService extends DummyNamingService {
      * Same as DataHelper.readProperties, UTF-8, unsorted,
      * except that values may up to 4K bytes.
      * <p>
-     * Throws DataFormatException on duplicate key
+     * Throws DataFormatException on duplicate key.
      *
      * @param in stream to read the mapping from
      * @return the properties read, UTF-8 and unsorted
@@ -2083,11 +2101,11 @@ public class BlockfileNamingService extends DummyNamingService {
     /**
      * Same as DataHelper.writeStringUTF8, except that
      * strings up to 4K bytes are allowed.
-     * Format is: one-byte length + data, or 0xff + two-byte length + data
+     * Format is: one-byte length + data, or 0xff + two-byte length + data.
      *
      * @param out stream to write string
      * @param string to write out: null strings are valid, but strings of excess length will
-     *               cause a DataFormatException to be thrown
+     * cause a DataFormatException to be thrown
      * @throws DataFormatException if the string is not valid
      * @throws IOException if there is an IO error writing the string
      */
@@ -2114,7 +2132,7 @@ public class BlockfileNamingService extends DummyNamingService {
     /**
      * Same as DataHelper.readString, except that
      * strings up to 4K bytes are allowed.
-     * Format is: one-byte length + data, or 0xff + two-byte length + data
+     * Format is: one-byte length + data, or 0xff + two-byte length + data.
      *
      * @param in stream to read from
      * @return UTF-8 string
@@ -2141,13 +2159,15 @@ public class BlockfileNamingService extends DummyNamingService {
     }
 
     /**
-     * Used to store entries that need deleting
+     * Used to store entries that need deleting.
      */
     private static class InvalidEntry {
         public final String key;
         public final String list;
 
         /**
+         * Records the bad key and line.
+         *
          * @param k the key (hostname)
          * @param l the list name
          */
@@ -2159,7 +2179,7 @@ public class BlockfileNamingService extends DummyNamingService {
 
     /**
      * BlockfileNamingService [force]
-     * force = force writable
+     * force = force writable.
      *
      * @param args when the first element is "force" the database is opened writable
      */

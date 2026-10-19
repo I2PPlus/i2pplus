@@ -23,7 +23,7 @@ class CapacityCalculator {
 
     private CapacityCalculator() {}
 
-    /** Property for bonus applied to peers in the same country */
+    /** Property for bonus applied to peers in the same country. */
     public static final String PROP_COUNTRY_BONUS = "profileOrganizer.sameCountryBonus";
 
     /** Used to adjust each period so that we keep trying to expand the peer's capacity. */

@@ -21,7 +21,6 @@ package com.google.zxing;
  * the content did not conform to the barcode's format rules. This could have
  * been due to a mis-detection.
  *
- * @author Sean Owen
  */
 public final class FormatException extends ReaderException {
 

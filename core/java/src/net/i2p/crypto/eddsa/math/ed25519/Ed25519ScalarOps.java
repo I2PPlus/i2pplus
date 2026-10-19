@@ -10,8 +10,6 @@ import net.i2p.crypto.eddsa.math.ScalarOps;
  * doing a combined multiply plus add plus reduce operation.
  * <p>
  * $q = 2^{252} + 27742317777372353535851937790883648493$.
- * <p>
- * Reviewed/commented by Bloody Rookie (nemproject@gmx.de)
  */
 public class Ed25519ScalarOps implements ScalarOps {
 

@@ -120,7 +120,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
     private static final int MAX_LAG_BEFORE_SKIP_SEARCH = SystemVersion.isSlow() ? 1000 : 500;
     /** Delay before publishing RouterInfo at startup. */
     private static final int PUBLISH_JOB_DELAY = 15*1000;
-    /** Rate-limit Client subDb exploratory drop WARN (10s). @since 0.9.71+ */
+    /** Rate-limit Client subDb exploratory drop WARN (10s). @since 0.9.71+. */
     private static volatile long _lastClientSubDbWarn;
     private static final long CLIENT_SUBDB_WARN_INTERVAL = 10*1000L;
     /**
@@ -135,7 +135,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
     public static final String PROP_FLOODFILL_AT_RESTART = "router.wasFloodfill";
 
     /**
-     * Main DB
+     * Main DB.
      * @param context the router context
      */
     public FloodfillNetworkDatabaseFacade(RouterContext context) {
@@ -143,7 +143,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
     }
 
     /**
-     * Sub DBs
+     * Sub DBs.
      *
      * @param context the router context
      * @param dbid null for main DB
@@ -402,7 +402,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
     }
 
     /**
-     * Don't actually publish unless the RI didn't change during the delay
+     * Don't actually publish unless the RI didn't change during the delay.
      * @since 0.9.65
      */
     private class DelayedPublish extends SimpleTimer2.TimedEvent {
@@ -788,7 +788,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
     }
 
     /**
-     * Note in the profile that the store succeeded
+     * Note in the profile that the store succeeded.
      * @since 0.9.19
      */
     private static class FloodSuccessJob extends JobImpl {
@@ -885,7 +885,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
      * <p>
      * Begin a kademlia style search for the key specified, which can take up to timeoutMs and
      * will fire the appropriate jobs on success or timeout (or if the kademlia search completes
-     * without any match)
+     * without any match).
      *
      * @return always null; the caller is notified through onFindJob or onFailedLookupJob
      */
@@ -1008,7 +1008,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
     }
 
     /**
-     * Must be called by the search job queued by search() on success or failure
+     * Must be called by the search job queued by search() on success or failure.
      * @param key the key whose pending search is being retired
      */
     void complete(Hash key) {
@@ -1186,7 +1186,8 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
              _context.banlist().isBanlisted(peer) || uninteresting) {
             /**
              * Don't try to overload ourselves (e.g. failing 3000 router refs at once, and then firing off 3000 netDb lookup tasks)
-             * Also don't queue a search if we have plenty of routerinfos (KBucketSetSize() includes leasesets but avoids locking)
+              * Also don't queue a search if we have plenty of routerinfos (KBucketSetSize() includes leasesets
+               * but avoids locking).
              */
             if (_log.shouldInfo()) {
                 boolean ffEnabled;

@@ -76,7 +76,7 @@ public final class CryptixAESKeyCache {
         /**
          * Allocates round-key arrays for a non-default AES variant, sizing both the
          * encryption and the decryption schedule to the supplied round count and
-         * block size instead of the AES standard values used by {@link #createNew()}.
+         * block size instead of the AES standard values used by {@link #createNew}.
          * @param rounds AES round count, 10 for a 128-bit key up to 14 for a 256-bit key
          * @param bc block size in 32-bit words, 4 for the 16-byte AES block
          * @since 0.9.31

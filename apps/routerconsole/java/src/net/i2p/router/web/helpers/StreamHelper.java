@@ -211,7 +211,7 @@ public class StreamHelper extends HelperBase {
      * bytes/sec rate. The stream lifetime byte stats record each closed
      * connection's total bytes weighted by its lifetime, so
      * avgValue/avgDuration is the mean throughput of the streams that closed
-     * in the window; streams that never close report nothing.
+     * in the window. Streams that never close report nothing.
      *
      * @param avgBytesPerConn average lifetime bytes per closed connection
      * @param avgLifetimeMs average closed-connection lifetime in ms
@@ -488,12 +488,12 @@ public class StreamHelper extends HelperBase {
             return (int) bytesPerSec + " B/s";
     }
 
-    /** Format bytes without space before unit: "0B", "1.23KiB" */
+    /** Format bytes without space before unit: "0B", "1.23KiB". */
     private static String formatSize(long bytes) {
         return DataHelper.formatSize2(bytes, false).replace(" ", "") + "B";
     }
 
-    /** HTML-escape a string */
+    /** HTML-escape a string. */
     private static String esc(String s) {
         if (s == null) return "";
         StringBuilder buf = new StringBuilder(s.length() + 16);

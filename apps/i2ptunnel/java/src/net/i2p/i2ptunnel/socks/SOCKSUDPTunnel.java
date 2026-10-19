@@ -112,7 +112,7 @@ public class SOCKSUDPTunnel extends I2PTunnelUDPClientBase {
         return super.close(forced);
     }
 
-    /** you should really add() after startRunning() */
+    /** You should really add() after startRunning(). */
     private void startall() { /* no-op */ }
 
     private void stopall() {

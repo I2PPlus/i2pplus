@@ -28,8 +28,6 @@ import org.cybergarage.util.ListenerList;
  * HTTPServer#open(String, int)} before starting. Optionally, {@link HTTPRequestListener} instances
  * can be registered to handle incoming requests.
  *
- * @author Satoshi "skonno" Konno
- * @author Stefano "Kismet" Lenzi
  * @version 1.8
  * @since 1.0
  */

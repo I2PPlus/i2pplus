@@ -179,7 +179,7 @@ class PeerAcceptor {
      * Read ahead to the infohash, throwing an exception if there isn't enough data. Also check the
      * first 20 bytes for the correct protocol here and throw IOE if bad, so we don't hang waiting
      * for 48 bytes if it's not a bittorrent client. The 20 bytes are checked again in
-     * Peer.handshake().
+     * {@code Peer.handshake()}.
      */
     private static byte[] readHash(InputStream in) throws IOException {
         for (int i = 0; i < PROTO_LEN; i++) {
@@ -196,7 +196,7 @@ class PeerAcceptor {
     }
 
     /**
-     * A unique exception so we can tell the ConnectionAcceptor about non-BT connections
+     * A unique exception so we can tell the ConnectionAcceptor about non-BT connections.
      *
      * @since 0.9.1
      */

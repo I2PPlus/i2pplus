@@ -15,14 +15,14 @@ public class Messages {
     private final I2PAppContext _context;
 
     /**
-     * Create a messages instance using the global context
+     * Create a messages instance using the global context.
      */
     public Messages() {
         _context = I2PAppContext.getGlobalContext();
     }
 
     /**
-     * lang in routerconsole.lang property, else current locale
+     * Lang in {@code routerconsole.lang} property, else current locale.
      *
      * @param key the translation key
      * @return the translated string
@@ -32,7 +32,7 @@ public class Messages {
     }
 
     /**
-     * Static translation method
+     * Static translation method.
      *
      * @param key the translation key
      * @param ctx the I2P app context
@@ -43,16 +43,16 @@ public class Messages {
     }
 
     /**
-     * translate a string with a parameter
+     * Translate a string with a parameter
      * This is a lot more expensive than getString(s, ctx), so use sparingly.
      *
      * @param s string to be translated containing {0}
-     *          The {0} will be replaced by the parameter.
-     *          Single quotes must be doubled, i.e. ' -&gt; '' in the string.
+     * The {0} will be replaced by the parameter.
+     * Single quotes must be doubled, i.e. ' -&gt; '' in the string.
      * @param o parameter, not translated.
-     *          To translate parameter also, use _t("foo {0} bar", _t("baz"))
-     *          Do not double the single quotes in the parameter.
-     *          Use autoboxing to call with ints, longs, floats, etc.
+     * To translate parameter also, use _t("foo {0} bar", _t("baz"))
+     * Do not double the single quotes in the parameter.
+     * Use autoboxing to call with ints, longs, floats, etc.
      * @return the translated string
      */
     public String _t(String s, Object o) {
@@ -60,7 +60,7 @@ public class Messages {
     }
 
     /**
-     * translate a string with two parameters
+     * Translate a string with two parameters.
      *
      * @param s string to be translated containing {0} and {1}
      * @param o1 substituted for {0}
@@ -73,7 +73,7 @@ public class Messages {
     }
 
     /**
-     * translate (ngettext)
+     * translate (ngettext).
      *
      * @param s the singular form
      * @param p the plural form
@@ -87,7 +87,7 @@ public class Messages {
     }
 
     /**
-     * translate (ngettext)
+     * translate (ngettext).
      *
      * @param s the singular form
      * @param p the plural form

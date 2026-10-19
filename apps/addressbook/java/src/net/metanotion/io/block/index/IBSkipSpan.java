@@ -27,7 +27,6 @@ import net.metanotion.util.skiplist.SkipSpan;
  *
  * <p>Recommended span size is 16.</p>
  *
- * @author zzz
  * @param <K> type of keys maintained by this skip span
  * @param <V> type of values stored in this skip span
  */

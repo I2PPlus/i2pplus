@@ -124,7 +124,7 @@ public class FrequencyStat {
         return _statName.hashCode();
     }
 
-    /** Compares this frequency stat to another object for equality. @since 0.8.2 */
+    /** Compares this frequency stat to another object for equality. @since 0.8.2. */
     @Override
     public boolean equals(Object obj) {
         if ((obj == null) || !(obj instanceof FrequencyStat)) return false;
@@ -134,7 +134,7 @@ public class FrequencyStat {
     private static final String NL = System.getProperty("line.separator");
 
     /**
-     * Serializes this FrequencyStat to the provided OutputStream
+     * Serializes this FrequencyStat to the provided OutputStream.
      *
      * @param out to write to
      * @param prefix to prepend to the stat

@@ -124,7 +124,7 @@ public class I2PSocketManagerFactory {
 
     /**
      * Create a socket manager using a brand new destination connected to the
-     * I2CP router on the specified host and port with the specified connection filter
+     * I2CP router on the specified host and port with the specified connection filter.
      *
      * Blocks for a long time while the router builds tunnels.
      * The nonblocking createDisconnectedManager() is preferred.
@@ -157,7 +157,7 @@ public class I2PSocketManagerFactory {
     /**
      * Create a socket manager using a brand new destination connected to the
      * I2CP router on the given machine reachable through the given port with
-     * the specified connection filter
+     * the specified connection filter.
      *
      * Blocks for a long time while the router builds tunnels.
      * The nonblocking createDisconnectedManager() is preferred.
@@ -203,13 +203,13 @@ public class I2PSocketManagerFactory {
 
     /**
      * Create a socket manager using the destination loaded from the given private key
-     * stream and connected to the default I2CP host and port with the specified connection filter
+     * stream and connected to the default I2CP host and port with the specified connection filter.
      *
      * Blocks for a long time while the router builds tunnels.
      * The nonblocking createDisconnectedManager() is preferred.
      *
      * @param myPrivateKeyStream private key stream, format is specified in {@link net.i2p.data.PrivateKeyFile PrivateKeyFile}
-     *                           or null for a transient destination. Caller must close.
+     * or null for a transient destination. Caller must close.
      * @param filter The filter to use for incoming connections
      * @return the newly created socket manager, or null if there were errors
      * @since 0.9.40
@@ -532,7 +532,11 @@ public class I2PSocketManagerFactory {
         return SigType.EdDSA_SHA512_Ed25519;
     }
 
-    /** @since 0.9.7 */
+    /**
+     * The logger for this class.
+     *
+     * @since 0.9.7
+     */
     private static Log getLog() {
         return I2PAppContext.getGlobalContext().logManager().getLog(I2PSocketManagerFactory.class);
     }

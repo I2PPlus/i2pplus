@@ -21,7 +21,7 @@ import net.i2p.util.Addresses;
  * Handler to deal with form submissions from the main config form and act
  * upon the values.
  * <p>
- * Used for both /config and /confignet
+ * Used for both /config and /confignet.
  */
 public class ConfigNetHandler extends FormHandler {
 
@@ -512,9 +512,9 @@ public class ConfigNetHandler extends FormHandler {
     }
 
     /**
-     * Do basic verification of address here to prevent problems later
+     * Do basic verification of address here to prevent problems later.
      * @return true if the address parses and is publicly routable; false adds a
-     *         form error describing which check failed
+     * form error describing which check failed
      * @since 0.8.9
      */
     private boolean verifyAddress(String addr) {
@@ -545,14 +545,16 @@ public class ConfigNetHandler extends FormHandler {
         _context.router().shutdownGracefully(Router.EXIT_GRACEFUL_RESTART);
     }
 
-    /** default burst percentage */
+    /** Default burst percentage. */
     static final int DEF_BURST_PCT = 10;
-    /** default burst time */
+    /** Default burst time. */
     static final int DEF_BURST_TIME = 20;
 
     /**
+     * Apply the new rate settings, returning whether they changed.
+     *
      * @return true if any rate or share property was staged in the pending
-     *         changes map, meaning a restart is needed to apply it
+     * changes map, meaning a restart is needed to apply it
      */
     private boolean updateRates() {
         boolean updated = false;

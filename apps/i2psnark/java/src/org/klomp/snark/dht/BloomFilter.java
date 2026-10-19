@@ -16,20 +16,20 @@ import net.i2p.crypto.SHA1;
  * hashes, so the resulting filters stay compatible between clients.
  *
  * <p>The number of inserted values can be estimated from the count of
- * zero bits, see {@link #estimateSize()}. The estimate is only reliable up
+ * zero bits, see {@link #estimateSize}. The estimate is only reliable up
  * to a few thousand inserted values; the filter saturates around 8000.
  *
  * @since 0.9.71+
  */
 class BloomFilter {
 
-    /** Number of hash functions, as specified in BEP 33 */
+    /** Number of hash functions, as specified in BEP 33. */
     private static final int K = 2;
 
-    /** Number of bits in the filter, as specified in BEP 33 */
+    /** Number of bits in the filter, as specified in BEP 33. */
     private static final int M = 256 * 8;
 
-    /** Size of the filter in bytes, as specified in BEP 33 */
+    /** Size of the filter in bytes, as specified in BEP 33. */
     static final int SIZE = M / 8;
 
     private final byte[] _bloom;

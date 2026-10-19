@@ -27,8 +27,6 @@ import org.cybergarage.upnp.Device;
  * notifications when devices become available or unavailable, enabling responsive application
  * behavior and dynamic device management.
  *
- * @author Satoshi Konno
- * @author Oliver Newell
  * @since 1.0
  */
 public interface DeviceChangeListener {

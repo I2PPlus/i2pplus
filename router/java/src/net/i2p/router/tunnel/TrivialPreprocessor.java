@@ -18,24 +18,24 @@ import net.i2p.util.SimpleByteCache;
  * <p>
  * See FragmentHandler Javadoc for tunnel message fragment format
  * <p>
- * Not instantiated directly except in unit tests; see BatchedPreprocessor
+ * Not instantiated directly except in unit tests; see BatchedPreprocessor.
  */
 class TrivialPreprocessor implements TunnelGateway.QueuePreprocessor {
-    /** The router context */
+    /** The router context. */
     protected final RouterContext _context;
-    /** The logger */
+    /** The logger. */
     protected final Log _log;
 
-    /** Size of preprocessed data blocks */
+    /** Size of preprocessed data blocks. */
     public static final int PREPROCESSED_SIZE = 1024;
-    /** Length of the IV */
+    /** Length of the IV. */
     protected static final int IV_SIZE = HopProcessor.IV_LENGTH;
 
     /**
      * Here in tunnels, we take from the cache but never add to it.
      * In other words, we take advantage of other places in the router also using 1024-byte ByteCaches
      * (since ByteCache only maintains once instance for each size)
-     * Used in BatchedPreprocessor; see add'l comments there
+     * Used in BatchedPreprocessor; see add'l comments there.
      */
     protected static final ByteCache _dataCache = ByteCache.getInstance(512, PREPROCESSED_SIZE);
 

@@ -155,7 +155,10 @@ public class HealthHelper extends HelperBase {
         }
     }
 
-    /** Get a rate stat's current value (current partial period average if available, else last full period). Returns 0 if unavailable */
+    /**
+     * Get a rate stat's current value (current partial period average if available, else last full
+      * period). Returns 0 if unavailable.
+     */
     private double getStatAvg(String name) {
         RateStat rs = _context.statManager().getRate(name);
         if (rs == null) return 0;
@@ -187,7 +190,10 @@ public class HealthHelper extends HelperBase {
         return 0;
     }
 
-    /** Get a rate stat's event count (narrowest 1-minute window only, for throughput calc), returning 0 if unavailable */
+    /**
+     * Get a rate stat's event count (narrowest 1-minute window only, for throughput calc), returning 0
+      * if unavailable.
+     */
     private long getStatCount(String name) {
         RateStat rs = _context.statManager().getRate(name);
         if (rs == null) return 0;
@@ -197,7 +203,7 @@ public class HealthHelper extends HelperBase {
 
     /**
      * Evaluate a stat against the router's own baseline (10m and 1h averages).
-     * A value near the router's normal range is green; progressively larger
+     * A value near the router's normal range is green. Progressively larger
      * deviations go yellow then red. When no baseline can be formed yet the
      * result is "gray" (collecting) with a null detail.
      * <p>
@@ -205,7 +211,7 @@ public class HealthHelper extends HelperBase {
      * is unconditionally green — the absolute value is so small it cannot
      * reasonably be called a regression even if the baseline is even smaller.
      *
-     * @param name stat name (e.g. "udp.avgRTO")
+     * @param name stat name (e.g. "{@code udp.avgRTO}")
      * @param greenThreshold absolute value below which the result is always green (0 to disable)
      * @return anomaly result with color class and a human-readable detail line
      * @since 0.9.70+
@@ -242,11 +248,11 @@ public class HealthHelper extends HelperBase {
         return new Anomaly(color, detail);
     }
 
-    /** Baseline-vs-current evaluation result for a single stat. @since 0.9.70+ */
+    /** Baseline-vs-current evaluation result for a single stat. @since 0.9.70+. */
     private static final class Anomaly {
-        /** "green", "yellow", "red", or "gray" */
+        /** "green", "yellow", "red", or "gray". */
         final String color;
-        /** tooltip detail line (e.g. "vs baseline 12% ↑"), or null when collecting */
+        /** Tooltip detail line (e.g. "vs baseline 12% ↑"), or null when collecting. */
         final String detail;
 
         Anomaly(String color, String detail) {
@@ -255,7 +261,7 @@ public class HealthHelper extends HelperBase {
         }
     }
 
-    /** Get last 5 history data points from RRD for a stat, trying wider windows if needed, or null if unavailable */
+    /** Get last 5 history data points from RRD for a stat, trying wider windows if needed, or null if unavailable. */
     private double[] getStatHistory(String name) {
         RateStat rs = _context.statManager().getRate(name);
         if (rs == null) return null;
@@ -287,7 +293,7 @@ public class HealthHelper extends HelperBase {
 
     /**
      * Section 1 – Performance &amp; Load (8 rings)
-     * Resource: Bandwidth, CPU, Memory | Latency: BW Delay, Job Lag, Msg Lag | Job: Job Queue, Threads
+     * Resource: Bandwidth, CPU, Memory | Latency: BW Delay, Job Lag, Msg Lag | Job: Job Queue, Threads.
      */
     private void renderPerfSection(Writer out) throws IOException {
         // Bandwidth utilization: the worst of the two directions, each against its own cap
@@ -386,7 +392,8 @@ public class HealthHelper extends HelperBase {
 
     /**
      * Section 2 – Transport &amp; Connectivity (8 rings)
-     * NTCP: NTCP Estab | SSU: SSU Estab, SSU RTO | Throughput: Conns/s, Msgs/s | Quality: RTT, Timeout%, Tunnel Build
+      * NTCP: NTCP Estab | SSU: SSU Estab, SSU RTO | Throughput: Conns/s, Msgs/s | Quality: RTT, Timeout%,
+       * Tunnel Build.
      */
     private void renderTransportSection(Writer out) throws IOException {
         // NTCP Establish Time
@@ -465,7 +472,8 @@ public class HealthHelper extends HelperBase {
 
     /**
      * Section 3 – Network &amp; Participation (8 rings)
-     * Peers: Active Peers, Known Peers | Role: Clients, Transit | Health: Build Success, NetDB, Uptime | Security: Banned
+      * Peers: Active Peers, Known Peers | Role: Clients, Transit | Health: Build Success, NetDB, Uptime |
+       * Security: Banned.
      */
     private void renderNetworkSection(Writer out) throws IOException {
         // Known Peers (in-memory)
@@ -543,7 +551,8 @@ public class HealthHelper extends HelperBase {
 
     /**
      * Section 4 – Floodfill / NetDB (8 rings, shown when floodfill enabled)
-     * Capacity: LeaseSets | Perf: Cache Hit, Flood Verify, NetDB ACK | Throughput: Lookups/s, Requests/s, Stores/s | Errors: LS Timeout
+      * Capacity: LeaseSets | Perf: Cache Hit, Flood Verify, NetDB ACK | Throughput: Lookups/s,
+       * Requests/s, Stores/s | Errors: LS Timeout.
      */
     private void renderFFSection(Writer out) throws IOException {
         // NetDB ACK Time (new)
@@ -626,7 +635,7 @@ public class HealthHelper extends HelperBase {
                   RingRenderer.MODE_HEALTH, null));
     }
 
-    /** Count active I2P streaming connections across all tunnel controllers. Returns [inCount, outCount] */
+    /** Count active I2P streaming connections across all tunnel controllers. Returns [inCount, outCount]. */
     private int[] countActiveStreams() {
         TunnelControllerGroup tcg = TunnelControllerGroup.getInstance();
         if (tcg == null) return new int[2];
@@ -655,7 +664,7 @@ public class HealthHelper extends HelperBase {
         return new int[]{inCount, outCount};
     }
 
-    /** Build a details array from a base description plus an optional anomaly detail line */
+    /** Build a details array from a base description plus an optional anomaly detail line. */
     private static String[] withDetail(String desc, String anomalyDetail) {
         if (anomalyDetail != null)
             return new String[]{desc, anomalyDetail};
@@ -700,12 +709,12 @@ public class HealthHelper extends HelperBase {
         return out;
     }
 
-    /** Format a byte count as whole megabytes */
+    /** Format a byte count as whole megabytes. */
     private static String formatMB(double bytes) {
         return (long) (bytes / (1024 * 1024)) + " MB";
     }
 
-    /** Compact duration: 230s, 24m, 3h, 2d, 1mo (plain text, no HTML) */
+    /** Compact duration: 230s, 24m, 3h, 2d, 1mo (plain text, no HTML). */
     private static String formatCompactDuration(long ms) {
         long sec = ms / 1000;
         if (sec < 60) return sec + "s";
@@ -718,7 +727,7 @@ public class HealthHelper extends HelperBase {
         return (day / 30) + "mo " + (day % 30) + "d";
     }
 
-    /** Format bytes as B/s, KB/s or MB/s */
+    /** Format bytes as B/s, KB/s or MB/s. */
     private static String formatBW(double bytes) {
         if (bytes >= 1000000)
             return String.format("%.0f MB/s", bytes / 1000000);

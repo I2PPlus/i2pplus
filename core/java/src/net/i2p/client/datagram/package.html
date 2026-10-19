@@ -5,7 +5,11 @@
 </head>
 <body>
 <p>
-    Provides a standard way for reading and writing messages transferred over I2P so that recipient has an authenticated mechanism to reply to it. This is necessary because the base I2P message sent through {@link net.i2p.client.I2PSession#sendMessage} has no "from" address, and simply providing a raw "from" address would be insecure as it could be spoofed. An application that needs to know for certain who sent a message to them should use {@link net.i2p.client.datagram.I2PDatagramDissector} to parse raw message received from {@link net.i2p.client.I2PSession}, and in turn, use {@link net.i2p.client.datagram.I2PDatagramMaker} to build a message that can be parsed.
+    Provides a standard way for reading and writing messages transferred over I2P so that the recipient has an authenticated mechanism to reply to the sender.
+</p>
+
+<p>
+    This is necessary because the base I2P message sent through {@link net.i2p.client.I2PSession#sendMessage} has no "from" address, and a raw "from" address would be insecure as it could be spoofed. An application that needs to know for certain who sent a message to them should use {@link net.i2p.client.datagram.I2PDatagramDissector} to parse raw message received from {@link net.i2p.client.I2PSession}, and in turn, use {@link net.i2p.client.datagram.I2PDatagramMaker} to build a message that can be parsed.
 </p>
 
 <p>

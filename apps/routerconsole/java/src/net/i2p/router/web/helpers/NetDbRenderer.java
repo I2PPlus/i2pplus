@@ -129,17 +129,17 @@ class NetDbRenderer {
     private final Set<Hash> _renderedLeaseSetKeys = new HashSet<>();
     private final ProfileOrganizer _organizer;
     private final int BATCH_SIZE = SystemVersion.isSlow() ? 8 : Math.max(SystemVersion.getCores() - 2, 16);
-    /** Bound on a single parallel render task so a stalled common pool cannot hang the netdb page */
+    /** Bound on a single parallel render task so a stalled common pool cannot hang the netdb page. */
     private static final long RENDER_TASK_TIMEOUT = 30 * 1000L;
-    /** Memo for the "{0} ago" renders of {@link #renderRouterInfo}, one per renderer */
+    /** Memo for the "{0} ago" renders of {@link #renderRouterInfo}, one per renderer. */
     private final AgoMemo _agoMemo = new AgoMemo();
-    /** Expensive translator behind {@link #agoMemo(String)}, bound once so the memo never sees a fresh lambda */
+    /** Expensive translator behind {@link #agoMemo(String)}, bound once so the memo never sees a fresh lambda. */
     private final Function<String, String> _agoFormat = duration -> _t("{0} ago", duration);
-    /** Memoized result of {@link #memoryUsedMB()}, -1 until first use */
+    /** Memoized result of {@link #memoryUsedMB}, -1 until first use. */
     private volatile long _memoryUsedMB = -1;
-    /** Whether {@link #_memoryUsedMB} holds a value for this render pass */
+    /** Whether {@link #_memoryUsedMB} holds a value for this render pass. */
     private volatile boolean _memoryUsedValid;
-    /** Memoized capability tooltip for this render pass, null until first use */
+    /** Memoized capability tooltip for this render pass, null until first use. */
     private volatile String _capTooltip;
     private long now;
 
@@ -160,7 +160,7 @@ class NetDbRenderer {
         private static final int MAX_ENTRIES = 1024;
         /** UI language the entries were produced under; a change invalidates them all. */
         private String _lang;
-        /** duration string to formatted text, for {@link #_lang} only */
+        /** Duration string to formatted text, for {@link #_lang} only. */
         private final Map<String, String> _byDuration = new ConcurrentHashMap<>();
 
         /**
@@ -1407,13 +1407,13 @@ class NetDbRenderer {
      * @since 0.9.72+
      */
     private static class RouterTallies {
-        /** router.version option value to count */
+        /** Router.version option value to count. */
         final ObjectCounterUnsafe<String> versions;
-        /** country code to count */
+        /** Country code to count. */
         final ObjectCounterUnsafe<String> countries;
-        /** transport class index to count, sized for TNAMES */
+        /** Transport class index to count, sized for TNAMES. */
         final int[] transportCount;
-        /** country code to [X-tier count, floodfill count] */
+        /** Country code to [X-tier count, floodfill count]. */
         final Map<String, int[]> countryTiers;
 
         RouterTallies() {
@@ -1430,18 +1430,18 @@ class NetDbRenderer {
  * resolves late stays uncounted.
  */
     private static final long TALLIES_CACHE_MS = 3 * 1000L;
-    /** Tally source list the cached tallies were computed from */
+    /** Tally source list the cached tallies were computed from. */
     private static volatile List<RouterInfo> _cachedTalliesSource;
-    /** Cached tallies, valid only for {@link #_cachedTalliesSource} */
+    /** Cached tallies, valid only for {@link #_cachedTalliesSource}. */
     private static volatile RouterTallies _cachedTallies;
-    /** Expiry for {@link #_cachedTallies} */
+    /** Expiry for {@link #_cachedTallies}. */
     private static volatile long _cachedTalliesUntil;
 
 /**
  * Overview tallies for the sorted router list, memoized for a few seconds.
  * <p>Counting costs a country lookup, an option read and a transport
  * classification per known router, and the sorted list is only replaced on
- * its own expiry — so the list's identity is the stamp the tallies belong
+ * its own expiry. So the list's identity is the stamp the tallies belong
  * to, and the TTL bounds a country that resolves later.
  *
  * @param routers the sorted list from {@link NetDbRouterCache}
@@ -1517,7 +1517,7 @@ class NetDbRenderer {
 
     /**
      * Reverse DNS cache with TTL (24 hours).
-     * Small cache since we rely on file-backed rdnsCache in CommSystemFacadeImpl
+     * Small cache since we rely on file-backed rdnsCache in CommSystemFacadeImpl.
      */
     private final LHMCache<String, CacheEntry> reverseLookupCache = new LHMCache<>(50);
     private static final long TTL_24_HOURS = 24 * 60 * (long) 60 * 1000; // 24 hours

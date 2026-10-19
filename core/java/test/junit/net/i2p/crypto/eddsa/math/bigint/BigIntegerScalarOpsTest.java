@@ -1,5 +1,5 @@
 /**
- * EdDSA-Java by str4d
+ * EdDSA-Java by str4d.
  *
  * To the extent possible under law, the person who associated CC0 with
  * EdDSA-Java has waived all copyright and related or neighboring rights
@@ -24,18 +24,11 @@ import org.junit.Test;
 
 import java.math.BigInteger;
 
-/**
- * @author str4d
- *
- */
 public class BigIntegerScalarOpsTest {
 
     static final EdDSANamedCurveSpec ed25519 = EdDSANamedCurveTable.getByName(EdDSANamedCurveTable.ED_25519);
     static final Field ed25519Field = ed25519.getCurve().getField();
 
-    /**
-     * Test method for {@link net.i2p.crypto.eddsa.math.bigint.BigIntegerScalarOps#reduce(byte[])}.
-     */
     @Test
     public void testReduce() {
         ScalarOps sc = new BigIntegerScalarOps(ed25519Field, new BigInteger("5"));
@@ -47,9 +40,6 @@ public class BigIntegerScalarOpsTest {
         assertThat(sc2.reduce(r), is(equalTo(Utils.hexToBytes("f38907308c893deaf244787db4af53682249107418afc2edc58f75ac58a07404"))));
     }
 
-    /**
-     * Test method for {@link net.i2p.crypto.eddsa.math.bigint.BigIntegerScalarOps#multiplyAndAdd(byte[], byte[], byte[])}.
-     */
     @Test
     public void testMultiplyAndAdd() {
         ScalarOps sc = new BigIntegerScalarOps(ed25519Field, new BigInteger("5"));

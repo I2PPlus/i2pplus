@@ -53,7 +53,7 @@ public class ExploreJob extends SearchJob {
     /**
      * Tuned exploratory breadth, or -1 when no tuned value has been applied.
      * Set via {@link #setExploreBredth(int)} by the Tuner; takes priority over
-     * the {@code router.exploreBredth} config read in {@link #calculateBredth()}.
+     * the {@code router.exploreBredth} config read in {@link #calculateBredth}.
      */
     private static volatile int _tunedExploreBredth = -1;
 
@@ -229,7 +229,7 @@ public class ExploreJob extends SearchJob {
      * Computes the concurrency level (bredth) for exploratory searches based on
      * configured property, network size, and system speed.
      * &lt;p&gt;
-     * If the "router.exploreBredth" property is defined and parseable, it is used.
+     * If the "{@code router.exploreBredth}" property is defined and parseable, it is used.
      * Otherwise, network size and system speed heuristics determine the bredth.
      *
      * @return computed maximum concurrency level for exploration
@@ -288,6 +288,8 @@ public class ExploreJob extends SearchJob {
     }
 
     /**
+     * Process a reply listing routers that hold the key.
+     *
      * @since 0.9.67
      */
     @Override
@@ -296,7 +298,7 @@ public class ExploreJob extends SearchJob {
         super.replyFound(message, peer); // This starts a SearchReplyJob
     }
     /**
-     * This is called from SearchReplyJob
+     * This is called from SearchReplyJob.
      * @return true if peer was new
      * @since 0.9.67
      */

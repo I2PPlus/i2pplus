@@ -30,7 +30,7 @@ public class ConfigTunnelsHandler extends FormHandler {
     }
 
     /**
-     * Set whether the form should trigger a save
+     * Set whether the form should trigger a save.
      *
      * @param moo the form value to check for save trigger
      */

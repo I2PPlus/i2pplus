@@ -19,7 +19,7 @@ import net.i2p.stat.Rate;
 import net.i2p.stat.RateStat;
 
 /**
- * Dump the stats to the web admin interface
+ * Dump the stats to the web admin interface.
  */
 public class StatsGenerator {
     private final RouterContext _context;
@@ -323,9 +323,9 @@ public class StatsGenerator {
     }
 
     /**
-     *  Translated sort
-     *  Inner class, can't be Serializable
-     *  @since 0.9.3
+     * Translated sort
+     * Inner class, can't be Serializable.
+     * @since 0.9.3
      */
     private class AlphaComparator implements Comparator<String> {
         /**
@@ -349,13 +349,13 @@ public class StatsGenerator {
         }
     }
 
-    /** translate a string */
+    /** Translate a string. */
     private String _t(String s) {return Messages.getString(s, _context);}
 
-    /** translate a string */
+    /** Translate a string. */
     private String _t(String s, Object o) {return Messages.getString(s, o, _context);}
 
-    /** translate a string */
+    /** Translate a string. */
     private String ngettext(String s, String p, int n) {return Messages.getString(n, s, p, _context);}
 
 }

@@ -43,7 +43,7 @@ class ClientPeerSelector extends TunnelPeerSelector {
      * <p>The quality loop can only iterate while it has a candidate to reject, so asking the
      * tiers for exactly one left it a single attempt per refill and the 16-attempt budget went
      * largely unspent. A small batch lets one tier scan serve several attempts. Only the
-     * accepted peer is kept — see the trim after the loop — so the rest never reach the tunnel.
+     * accepted peer is kept. See the trim after the loop — so the rest never reach the tunnel.
      *
      * @since 0.9.71+
      */
@@ -77,11 +77,11 @@ class ClientPeerSelector extends TunnelPeerSelector {
      * @since 0.9.71+
      */
     static final double CONNECTING_PREF_BUILD_SUCCESS = 0.60;
-    /** How often the accepted-first-hop tier line may be written, per tier. @since 0.9.71+ */
+    /** How often the accepted-first-hop tier line may be written, per tier. @since 0.9.71+. */
     private static final long TIER_LOG_INTERVAL_MS = 60L * 1000;
-    /** Last write time per accepted tier key, for rate limiting. @since 0.9.71+ */
+    /** Last write time per accepted tier key, for rate limiting. @since 0.9.71+. */
     private final Map<String, Long> _tierLogTime = new ConcurrentHashMap<>(8);
-    /** Accepts per tier since the last log line, so volume is visible. @since 0.9.71+ */
+    /** Accepts per tier since the last log line, so volume is visible. @since 0.9.71+. */
 private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
     /** Pre-connect cooldown: peers connected within this window don't need pre-connect again. */
     private static final long PRECONNECT_COOLDOWN_MS = 5 * 60 * 1000L;
@@ -149,12 +149,12 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
     /**
      * Returns ENDPOINT FIRST, GATEWAY LAST!!!!
      * In: us .. closest .. middle .. IBGW
-     * Out: OBGW .. middle .. closest .. us
+     * Out: OBGW .. middle .. closest .. us.
      *
      * @return ordered list of Hash objects (one per peer) specifying what order
-     *         they should appear in a tunnel (ENDPOINT FIRST).  This includes
-     *         the local router in the list.  Never null; an empty list means
-     *         no peers could be selected.
+     * they should appear in a tunnel (ENDPOINT FIRST).  This includes
+     * the local router in the list.  Never null; an empty list means
+     * no peers could be selected.
      */
     public List<Hash> selectPeers(TunnelPoolSettings settings) {
         return selectPeers(settings, null);
@@ -540,12 +540,12 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
      * filter: with at most one usable tunnel the pool is near-collapsed,
      * and excluding checkTunnel-cooled peers from every hop can leave no
      * selectable path at all.  The cooled peers stay filtered at first-hop
-     * selection (where the build actually contacts them); middle and last
+     * selection (where the build actually contacts them). Middle and last
      * hops may use them.  Single-hop tunnels (no multi-hop quality loop)
      * and unknown pools (negative count) never relax.
      *
      * @param usableTunnels usable tunnels in this pool, or -1 when the pool
-     *                      is unknown
+     * is unknown
      * @param length tunnel length being selected for
      * @return true when cooldowns should apply to the first hop only
      * @since 0.9.71+
@@ -608,7 +608,7 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
 
     /**
      * Select all hops of a multi-hop tunnel: last hop, middle hops, then first
-     * hop.  rv ends up [endpoint .. first hop]; the vetted first hop is recorded
+     * hop.  rv ends up [endpoint .. first hop]. The vetted first hop is recorded
      * on {@code ex} so a shortfall fill inserts middles before it instead of
      * shifting roles.  A missing first hop is logged and left for that fill —
      * discarding the whole selection would waste a usable endpoint and middles.
@@ -1383,7 +1383,7 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
     /**
      * First-hop quality tier for the current attempt: 0 = prefer
      * established peers, 1 = also accept connecting peers, 2 = accept any
-     * peer that passed the tier filters.  Escalates with attempts; during
+     * peer that passed the tier filters.  Escalates with attempts. During
      * the startup grace period the tier never changes.  Note the quirk:
      * attempts 4-5 downgrade a tier-2 selection to 1 (preserved verbatim).
      * <p>
@@ -1515,7 +1515,11 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
         return (buildSuccess < ATTACK_THRESHOLD || useHighCapPrimary) && rvSize > 0;
     }
 
-    /** Progressive fallbacks when the selected peers are short of the requested length. @return the final rv, or null to abort (returns empty list) */
+    /**
+     * Progressive fallbacks when the selected peers are short of the requested length.
+     *
+     * @return the final rv, or null to abort (returns empty list).
+     */
     private List<Hash> applyShortfallFallbacks(TunnelPoolSettings settings, List<Hash> rv, int length,
                                                SelectionParams params, SelectionExclusions ex) {
         // not enough peers to build the requested size
@@ -1931,7 +1935,7 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
     /**
      * Filter candidates through the reliability gate: a peer must have an
      * adequate acceptance ratio and at least one recent activity or
-     * connection signal to remain. The input order is preserved; ranking
+     * connection signal to remain. The input order is preserved. Ranking
      * is left to the caller's quality sort so each reliability signal
      * plays a single role.
      *
@@ -2427,7 +2431,7 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
          * Passing peers are cached in {@code _allowed} so subsequent
          * contains() calls for the same Hash skip the global cache lookup.
          *
-         * @param o the candidate peer hash, as passed by Set.contains()
+         * @param o the candidate peer hash, as passed by {@link java.util.Set#contains}
          * @return true if peer should be excluded
          */
         public boolean contains(Object o) {
@@ -2479,7 +2483,7 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
          * Passing peers are cached in {@code _allowed} so subsequent
          * contains() calls for the same Hash skip the global cache lookup.
          *
-         * @param o the candidate peer hash, as passed by Set.contains()
+         * @param o the candidate peer hash, as passed by {@link java.util.Set#contains}
          * @return true if peer should be excluded
          */
         public boolean contains(Object o) {

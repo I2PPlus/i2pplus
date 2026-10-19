@@ -5,13 +5,13 @@ package net.i2p.router.web;
  * @since 0.9.33 moved from HomeHelper
  */
 public class App {
-    /** Application name */
+    /** Application name. */
     public final String name;
-    /** Application description */
+    /** Application description. */
     public String desc;
-    /** Application URL */
+    /** Application URL. */
     public String url;
-    /** Application icon path */
+    /** Application icon path. */
     public String icon;
 
     /**

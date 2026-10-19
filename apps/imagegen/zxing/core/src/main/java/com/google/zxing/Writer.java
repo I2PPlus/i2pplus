@@ -22,7 +22,6 @@ import java.util.Map;
 /**
  * The base class for all objects which encode/generate a barcode image.
  *
- * @author dswitkin@google.com (Daniel Switkin)
  */
 public interface Writer {
 

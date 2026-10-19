@@ -8,9 +8,6 @@ import java.math.BigInteger;
 
 /**
  * A particular element of the field \Z/(2^255-19).
- *
- * @author str4d
- *
  */
 public class BigIntegerFieldElement extends FieldElement implements Serializable {
     private static final long serialVersionUID = 4890398908392808L;

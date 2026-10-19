@@ -18,7 +18,7 @@ import net.i2p.router.RouterContext;
 
 /**
  * Quick unit test for base functionality of outbound tunnel
- * operation
+ * operation.
  *
  */
 public class OutboundTest extends TestCase {

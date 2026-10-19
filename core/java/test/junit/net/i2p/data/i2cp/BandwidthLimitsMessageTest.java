@@ -12,9 +12,8 @@ package net.i2p.data.i2cp;
 import net.i2p.data.DataFormatException;
 
 /**
- * Test harness for loading / storing BandwidthLimitsMessage objects
+ * Test harness for loading / storing BandwidthLimitsMessage objects.
  *
- * @author str4d
  */
 public class BandwidthLimitsMessageTest extends I2CPTstBase {
     @Override

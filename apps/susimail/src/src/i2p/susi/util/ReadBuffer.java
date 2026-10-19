@@ -40,6 +40,8 @@ public class ReadBuffer implements Buffer {
     }
 
     /**
+     * Stream for reading the buffered data.
+     *
      * @return new ByteArrayInputStream over the content
      * @since 0.9.34
      */
@@ -49,9 +51,11 @@ public class ReadBuffer implements Buffer {
     }
 
     /**
+     * Stream for writing data to be buffered.
+     *
      * @return the output stream
      * @throws IllegalStateException always; this buffer is read-only and wraps a
-     *                               fixed byte array, so it has nowhere to write
+     * fixed byte array, so it has nowhere to write
      * @since 0.9.34
      */
     @Override
@@ -60,20 +64,20 @@ public class ReadBuffer implements Buffer {
     }
 
     /**
-     * Does nothing
+     * Does nothing.
      * @since 0.9.34
      */
     @Override
     public void readComplete(boolean success) { /* no-op */ }
 
     /**
-     * Does nothing
+     * Does nothing.
      * @since 0.9.34
      */
     public void writeComplete(boolean success) { /* no-op */ }
 
     /**
-     * Always valid
+     * Always valid.
      * @return the number of bytes in the window, as given to the constructor
      */
     public int getLength() {
@@ -81,9 +85,9 @@ public class ReadBuffer implements Buffer {
     }
 
     /**
-     * Always valid
+     * Always valid.
      * @return the index in the backing array where the window starts, as given
-     *         to the constructor
+     * to the constructor
      */
     public int getOffset() {
         return offset;

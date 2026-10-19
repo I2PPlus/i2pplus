@@ -5,18 +5,19 @@ import net.i2p.crypto.HKDF;
 import net.i2p.data.SessionKey;
 
 /**
- * Container for Noise protocol split keys that prevents duplicate HKDF calculations by sharing derived keys between engine and session key manager components
+ * Container for Noise protocol split keys that prevents duplicate HKDF calculations by sharing
+  * derived keys between engine and session key manager components.
  *
  * @since 0.9.46
  */
 class SplitKeys {
 
     private static final byte[] ZEROLEN = new byte[0];
-    /** The chain key */
+    /** The chain key. */
     public final SessionKey ck;
-    /** The session key for direction {A to B} */
+    /** The session key for direction {A to B}. */
     public final SessionKey k_ab;
-    /** The session key for direction {B to A} */
+    /** The session key for direction {B to A}. */
     public final SessionKey k_ba;
     /**
      * Derives ck, k_ab, k_ba from Noise handshake split stage.

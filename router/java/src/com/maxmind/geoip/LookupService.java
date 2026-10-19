@@ -52,7 +52,6 @@ import java.util.Locale;
  * LookupService lookupService = new LookupService(fileName);
  * </pre>
  *
- * @author Matt Tucker (matt@jivesoftware.com)
  */
 public class LookupService {
 

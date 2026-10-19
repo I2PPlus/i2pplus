@@ -32,8 +32,6 @@ import java.util.Map;
 
 /**
  * Encoder for QR codes.
- * @author satorux@google.com (Satoru Takabayashi) - creator
- * @author dswitkin@google.com (Daniel Switkin) - ported from C++
  */
 public final class Encoder {
 
@@ -318,8 +316,10 @@ public final class Encoder {
   }
 
   /**
+   * Whether the data fits in the version at this error-correction level.
+   *
    * @return true if the number of input bits will fit in a code with the specified version and
-   *         error correction level.
+   * error correction level.
    */
   private static boolean willFit(int numInputBits, Version version, ErrorCorrectionLevel ecLevel) {
       // In the following comments, we use numbers of Version 7-H.

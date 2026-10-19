@@ -26,7 +26,7 @@ import net.i2p.util.SimpleTimer2;
  * I2NPMessages when they arrive, and dropping fragments if they take too long
  * to arrive.
  * <p>
- * From tunnel-alt.html:
+ * From tunnel-alt.html.
 
 <p>When the gateway wants to deliver data through the tunnel, it first
 gathers zero or more <a href="i2np.html">I2NP</a> messages, selects how much padding will be used,
@@ -131,7 +131,7 @@ class FragmentHandler {
     private static final ByteCache _cache = ByteCache.getInstance(512, TrivialPreprocessor.PREPROCESSED_SIZE);
 
     /**
-     * For unit tests only, others use 3-arg constructor
+     * For unit tests only, others use 3-arg constructor.
      *
      * @param context the router context
      * @param receiver callback that receives each fully reassembled message
@@ -334,7 +334,7 @@ class FragmentHandler {
     static final byte MASK_TYPE = (byte)(3 << 5);
     /** Is this the first fragment of a fragmented message? */
     static final byte MASK_FRAGMENTED = (byte)(1 << 3);
-    /** Are there follow-up headers? UNIMPLEMENTED */
+    /** Are there follow-up headers? UNIMPLEMENTED. */
     static final byte MASK_EXTENDED = (byte)(1 << 2);
     /** For subsequent fragments, which bits contain the fragment number? */
     private static final int MASK_FRAGMENT_NUM = (byte)((1 << 7) - 2); // 0x7E;
@@ -362,7 +362,7 @@ class FragmentHandler {
     }
 
     /**
-     * Handle the initial fragment in a message (or a full message, if it fits)
+     * Handle the initial fragment in a message (or a full message, if it fits).
      *
      * @return offset after reading the full fragment or -1 on error
      * @throws RuntimeException
@@ -520,7 +520,7 @@ class FragmentHandler {
     }
 
     /**
-     * Handle a fragment beyond the initial fragment in a message
+     * Handle a fragment beyond the initial fragment in a message.
      *
      * @return offset after reading the full fragment or -1 on error
      * @throws RuntimeException
@@ -667,12 +667,12 @@ class FragmentHandler {
      * Receive messages out of the tunnel endpoint.  There should be a single
      * instance of this object per tunnel so that it can tell what tunnel various
      * messages come in on (e.g. to prevent DataMessages arriving from anywhere
-     * other than the client's inbound tunnels)
+     * other than the client's inbound tunnels).
      *
      */
     public interface DefragmentedReceiver {
         /**
-         * Receive a fully formed I2NPMessage out of the tunnel
+         * Receive a fully formed I2NPMessage out of the tunnel.
          *
          * @param msg the reassembled I2NP message
          * @param toRouter where we are told to send the message (null means locally)

@@ -49,8 +49,8 @@ abstract class EstablishBase implements EstablishState {
      */
     protected final byte[] _Y;
     /**
-     *  OUR clock minus HIS clock, in seconds.
-     *  Inbound: tsB - tsA - rtt/2, Outbound: tsA - tsB - rtt/2
+     * OUR clock minus HIS clock, in seconds.
+     * Inbound: tsB - tsA - rtt/2, Outbound: tsA - tsB - rtt/2.
      */
     protected long _peerSkew;
 
@@ -100,48 +100,48 @@ abstract class EstablishBase implements EstablishState {
         IB_INIT,
 
         /**
-         * Next state IB_NTCP2_GOT_X
+         * Next state IB_NTCP2_GOT_X.
          * @since 0.9.36
          */
         IB_NTCP2_INIT,
         /**
          * Got X part of msg 1
-         * Next state IB_NTCP2_GOT_MSG1 or IB_NTCP2_READ_RANDOM on fail
+         * Next state IB_NTCP2_GOT_MSG1 or IB_NTCP2_READ_RANDOM on fail.
          * @since 0.9.36
          */
         IB_NTCP2_GOT_X,
         /**
          * Got Noise part of msg 1
-         * Next state IB_NTCP2_GOT_PADDING or IB_NTCP2_READ_RANDOM on fail
+         * Next state IB_NTCP2_GOT_PADDING or IB_NTCP2_READ_RANDOM on fail.
          * @since 0.9.36
          */
         IB_NTCP2_GOT_MSG1,
         /**
          * Got msg 1 incl. padding
-         * Next state IB_NTCP2_SENT_Y
+         * Next state IB_NTCP2_SENT_Y.
          * @since 0.9.36
          */
         IB_NTCP2_GOT_PADDING,
         /**
          * Sent msg 2 and padding
-         * Next state IB_NTCP2_GOT_RI
+         * Next state IB_NTCP2_GOT_RI.
          * @since 0.9.36
          */
         IB_NTCP2_SENT_Y,
         /**
          * Got msg 3
-         * Next state VERIFIED
+         * Next state VERIFIED.
          * @since 0.9.36
          */
         IB_NTCP2_GOT_RI,
         /**
          * Got msg 1 and failed AEAD
-         * Next state CORRUPT
+         * Next state CORRUPT.
          * @since 0.9.36
          */
         IB_NTCP2_READ_RANDOM,
 
-        /** OB: got and verified 4; IB: got and verified 3 and sent 4 */
+        /** OB: got and verified 4; IB: got and verified 3 and sent 4. */
         VERIFIED,
         /** Handshake data failed verification. */
         CORRUPT
@@ -244,7 +244,7 @@ protected void changeState(State state) {
     /**
      * Parse the contents of the buffer as part of the handshake.
      * <p>
-     * All data must be copied out of the buffer as Reader.processRead()
+     * All data must be copied out of the buffer as {@link net.i2p.router.transport.ntcp.Reader#processRead}
      * will return it to the pool.
      * <p>
      * If there are additional data in the buffer after the handshake is complete,
@@ -262,7 +262,7 @@ protected void changeState(State state) {
     /**
      * Does nothing. Outbound (Alice) must override.
      * We are establishing an outbound connection, so prepare ourselves by
-     * queueing up the write of the first part of the handshake
+     * queueing up the write of the first part of the handshake.
      */
     public void prepareOutbound() { /* no-op */ }
 
@@ -272,11 +272,11 @@ protected void changeState(State state) {
     }
 
     /**
-     *  If synchronized on this, fails with
-     *  deadlocks from all over via CSFI.isEstablished().
-     *  Also CSFI.getFramedAveragePeerClockSkew().
+     * If synchronized on this, fails with
+     * deadlocks from all over via {@code CSFI.isEstablished()}.
+     * Also {@code CSFI.getFramedAveragePeerClockSkew()}.
      *
-     *  @return is the handshake complete and valid?
+     * @return is the handshake complete and valid?
      */
     public boolean isComplete() {
         return _isComplete.get();
@@ -385,7 +385,9 @@ protected void changeState(State state) {
     }
 
     /**
-     *  @since 0.9.8
+     * Establish state that passed signature verification.
+     *
+     * @since 0.9.8
      */
     private static class VerifiedEstablishState extends EstablishBase {
 
@@ -431,7 +433,9 @@ protected void changeState(State state) {
     }
 
     /**
-     *  @since 0.9.16
+     * Establish state that failed, to retry later.
+     *
+     * @since 0.9.16
      */
     private static class FailedEstablishState extends EstablishBase {
 

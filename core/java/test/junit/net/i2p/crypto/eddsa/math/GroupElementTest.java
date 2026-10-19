@@ -1,5 +1,5 @@
 /**
- * EdDSA-Java by str4d
+ * EdDSA-Java by str4d.
  *
  * To the extent possible under law, the person who associated CC0 with
  * EdDSA-Java has waived all copyright and related or neighboring rights
@@ -23,11 +23,6 @@ import org.junit.*;
 import java.math.BigInteger;
 import java.util.Arrays;
 
-/**
- * @author str4d
- * Additional tests by NEM project team.
- *
- */
 public class GroupElementTest {
     static final byte[] BYTES_ZEROZERO = Utils.hexToBytes("0000000000000000000000000000000000000000000000000000000000000000");
     static final byte[] BYTES_ONEONE = Utils.hexToBytes("0100000000000000000000000000000000000000000000000000000000000080");
@@ -47,9 +42,6 @@ public class GroupElementTest {
     static final FieldElement[] PKR = new FieldElement[] {curve.getField().fromByteArray(Utils.hexToBytes("5849722e338aced7b50c7f0e9328f9a10c847b08e40af5c5b0577b0fd8984f15")), curve.getField().fromByteArray(Utils.hexToBytes("3b6a27bcceb6a42d62a3a8d02a6f0d73653215771de243a63ac048a18b59da29"))};
     static final byte[] BYTES_PKR = Utils.hexToBytes("3b6a27bcceb6a42d62a3a8d02a6f0d73653215771de243a63ac048a18b59da29");
 
-    /**
-     * Test method for {@link GroupElement#p2(Curve, FieldElement, FieldElement, FieldElement)}.
-     */
     @Test
     public void testP2() {
         final GroupElement t = GroupElement.p2(curve, ZERO, ONE, ONE);
@@ -61,9 +53,6 @@ public class GroupElementTest {
         assertThat(t.T, is((FieldElement) null));
     }
 
-    /**
-     * Test method for {@link GroupElement#p3(Curve, FieldElement, FieldElement, FieldElement, FieldElement)}.
-     */
     @Test
     public void testP3() {
         final GroupElement t = GroupElement.p3(curve, ZERO, ONE, ONE, ZERO);
@@ -75,9 +64,6 @@ public class GroupElementTest {
         assertThat(t.T, is(ZERO));
     }
 
-    /**
-     * Test method for {@link GroupElement#p3(Curve, FieldElement, FieldElement, FieldElement, FieldElement, boolean)}.
-     */
     @Test
     public void testP3WithExplicitFlag() {
         final GroupElement t = GroupElement.p3(curve, ZERO, ONE, ONE, ZERO, false);
@@ -89,9 +75,6 @@ public class GroupElementTest {
         assertThat(t.T, is(ZERO));
     }
 
-    /**
-     * Test method for {@link GroupElement#p1p1(Curve, FieldElement, FieldElement, FieldElement, FieldElement)}.
-     */
     @Test
     public void testP1p1() {
         final GroupElement t = GroupElement.p1p1(curve, ZERO, ONE, ONE, ONE);
@@ -103,9 +86,6 @@ public class GroupElementTest {
         assertThat(t.T, is(ONE));
     }
 
-    /**
-     * Test method for {@link GroupElement#precomp(Curve, FieldElement, FieldElement, FieldElement)}.
-     */
     @Test
     public void testPrecomp() {
         final GroupElement t = GroupElement.precomp(curve, ONE, ONE, ZERO);
@@ -117,9 +97,6 @@ public class GroupElementTest {
         assertThat(t.T, is((FieldElement) null));
     }
 
-    /**
-     * Test method for {@link GroupElement#cached(Curve, FieldElement, FieldElement, FieldElement, FieldElement)}.
-     */
     @Test
     public void testCached() {
         final GroupElement t = GroupElement.cached(curve, ONE, ONE, ONE, ZERO);
@@ -131,9 +108,6 @@ public class GroupElementTest {
         assertThat(t.T, is(ZERO));
     }
 
-    /**
-     * Test method for {@link GroupElement#GroupElement(Curve, GroupElement.Representation, FieldElement, FieldElement, FieldElement, FieldElement)}.
-     */
     @Test
     public void testGroupElementCurveRepresentationFieldElementFieldElementFieldElementFieldElement() {
         final GroupElement t = new GroupElement(curve, GroupElement.Representation.P3, ZERO, ONE, ONE, ZERO);
@@ -145,9 +119,6 @@ public class GroupElementTest {
         assertThat(t.T, is(ZERO));
     }
 
-    /**
-     * Test method for {@link GroupElement#GroupElement(Curve, GroupElement.Representation, FieldElement, FieldElement, FieldElement, FieldElement, boolean)}.
-     */
     @Test
     public void testGroupElementCurveRepresentationFieldElementFieldElementFieldElementFieldElementWithExplicitFlag() {
         final GroupElement t = new GroupElement(curve, GroupElement.Representation.P3, ZERO, ONE, ONE, ZERO, false);
@@ -161,7 +132,7 @@ public class GroupElementTest {
 
     /**
      * Tests {@link GroupElement#GroupElement(Curve, byte[])} and
-     * {@link GroupElement#toByteArray()} against valid public keys.
+     * {@link GroupElement#toByteArray} against valid public keys.
      */
     @Test
     public void testToAndFromByteArray() {
@@ -172,9 +143,6 @@ public class GroupElementTest {
         }
     }
 
-    /**
-     * Test method for {@link GroupElement#GroupElement(Curve, byte[])}.
-     */
     @Test
     public void testGroupElementByteArray() {
         final GroupElement t = new GroupElement(curve, BYTES_PKR);
@@ -198,13 +166,9 @@ public class GroupElementTest {
         }
     }
 
-    /**
-     * Test method for {@link GroupElement#toByteArray()}.
-     * <p>
-     * TODO 20141001 BR: why test with points which are not on the curve?
-     */
     @Test
     public void testToByteArray() {
+        // TODO 20141001 BR: why test with points which are not on the curve?
         byte[] zerozero = GroupElement.p2(curve, ZERO, ZERO, ONE).toByteArray();
         assertThat(zerozero.length, is(equalTo(BYTES_ZEROZERO.length)));
         assertThat(zerozero, is(equalTo(BYTES_ZEROZERO)));
@@ -246,9 +210,6 @@ public class GroupElementTest {
 
     // region toX where X is the representation
 
-    /**
-     * Test method for {@link GroupElement#toP2()}.
-     */
     @Test
     public void testToP2() {
         GroupElement p3zero = curve.getZero(GroupElement.Representation.P3);
@@ -505,9 +466,6 @@ public class GroupElementTest {
 
     // endregion
 
-    /**
-     * Test method for precomputation.
-     */
     @Test
     public void testPrecompute() {
         GroupElement B = ed25519.getB();
@@ -546,9 +504,6 @@ public class GroupElementTest {
         }
     }
 
-    /**
-     * Test method for {@link GroupElement#dbl()}.
-     */
     @Test
     public void testDbl() {
         GroupElement B = ed25519.getB();
@@ -621,9 +576,6 @@ public class GroupElementTest {
     }
 
     // region hashCode / equals
-    /**
-     * Test method for {@link GroupElement#equals(java.lang.Object)}.
-     */
     @Test
     public void testEqualsObject() {
         assertThat(GroupElement.p2(curve, ZERO, ONE, ONE), is(equalTo(P2_ZERO)));
@@ -675,9 +627,6 @@ public class GroupElementTest {
     static final byte[] RADIX16_ONE = Utils.hexToBytes("01000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000");
     static final byte[] RADIX16_42 = Utils.hexToBytes("FA030000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000");
 
-    /**
-     * Test method for {@link GroupElement#toRadix16(byte[])}.
-     */
     @Test
     public void testToRadix16() {
         assertThat(GroupElement.toRadix16(BYTES_ZERO), is(RADIX16_ZERO));
@@ -700,9 +649,6 @@ public class GroupElementTest {
         }
     }
 
-    /**
-     * Test method for {@link GroupElement#cmov(GroupElement, int)}.
-     */
     @Test
     public void testCmov() {
         GroupElement a = curve.getZero(GroupElement.Representation.PRECOMP);
@@ -711,9 +657,6 @@ public class GroupElementTest {
         assertThat(a.cmov(b, 1), is(equalTo(b)));
     }
 
-    /**
-     * Test method for {@link GroupElement#select(int, int)}.
-     */
     @Test
     public void testSelect() {
         GroupElement B = ed25519.getB();
@@ -734,7 +677,6 @@ public class GroupElementTest {
 
     // region scalar multiplication
     /**
-     * Test method for {@link GroupElement#scalarMultiply(byte[])}.
      * Test values generated with Python Ed25519 implementation.
      */
     @Test
@@ -849,9 +791,6 @@ public class GroupElementTest {
 
     // endregion
 
-    /**
-     * Test method for {@link GroupElement#isOnCurve(Curve)}.
-     */
     @Test
     public void testIsOnCurve() {
         assertThat(P2_ZERO.isOnCurve(curve), is(true));

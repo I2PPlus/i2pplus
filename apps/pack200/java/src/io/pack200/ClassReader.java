@@ -47,7 +47,6 @@ import java.util.Map;
 
 /**
  * Reader for a class file that is being incorporated into a package.
- * @author John Rose
  */
 class ClassReader {
     int verbose;

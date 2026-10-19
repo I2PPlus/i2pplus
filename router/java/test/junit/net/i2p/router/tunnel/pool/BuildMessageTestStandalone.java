@@ -282,6 +282,8 @@ public class BuildMessageTestStandalone extends TestCase {
     }
 
     /**
+     * Run the standalone tunnel build message test.
+     *
      * @since 0.9.51
      */
     public static void main(String[] args) {

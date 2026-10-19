@@ -92,7 +92,7 @@ public class ProxyTargetBlockTest {
     /**
      * The SOCKS4a and SOCKS5 servers used to carry their own narrower copy of
      * this policy, refusing only "localhost", "127.0.0.1", "*.localhost",
-     * "192.168.*" and "[::1]" — which left 127.0.0.2, 10/8, 172.16/12,
+     * "192.168.*" and "[::1]". That left 127.0.0.2, 10/8, 172.16/12,
      * 169.254.169.254 and bare "::1" reachable through the outproxy plugin.
      * Both now delegate to {@link I2PTunnelHTTPClientBase#isBlockedLocalAddress},
      * so every target that is refused over HTTP is refused over SOCKS too.

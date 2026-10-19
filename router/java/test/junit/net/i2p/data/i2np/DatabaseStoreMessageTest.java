@@ -23,9 +23,8 @@ import net.i2p.util.Clock;
 import org.junit.Test;
 
 /**
- * Test harness for loading / storing I2NP DatabaseStore message objects
+ * Test harness for loading / storing I2NP DatabaseStore message objects.
  *
- * @author jrandom
  */
 public class DatabaseStoreMessageTest extends StructureTest {
 

@@ -3,7 +3,7 @@ package net.i2p.client.streaming.impl;
 import net.i2p.I2PException;
 
 /**
- * We attempted to have more open streams than we are willing to put up with
+ * We attempted to have more open streams than we are willing to put up with.
  *
  */
 public class TooManyStreamsException extends I2PException {

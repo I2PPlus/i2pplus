@@ -43,7 +43,7 @@ class WebPeer extends Peer implements EepGet.StatusListener {
     private static final long TOTAL_TIMEOUT = 10 * (long) 60 * 1000;
     private static final long INACTIVITY_TIMEOUT = 2 * (long) 60 * 1000;
     private static final long TARGET_FETCH_TIME = 2 * (long) 60 * 1000;
-    /** BEP 47: zeros for serving padding ranges, written in blocks */
+    /** BEP 47: zeros for serving padding ranges, written in blocks. */
     private static final byte[] ZERO_BUFFER = new byte[4096];
     // 128 KB
     private static final int ABSOLUTE_MIN_REQUESTS = 8;
@@ -444,7 +444,7 @@ class WebPeer extends Peer implements EepGet.StatusListener {
     /**
      * The max pipeline.
      *
-     * @return the max pipeline
+     * @return maximum concurrent piece requests to this peer
      */
     @Override
     public int getMaxPipeline() {
@@ -531,7 +531,7 @@ class WebPeer extends Peer implements EepGet.StatusListener {
     /**
      * The inactive time.
      *
-     * @return the inactive time
+     * @return ms since data was last received from this peer
      */
     @Override
     public long getInactiveTime() {
@@ -543,7 +543,7 @@ class WebPeer extends Peer implements EepGet.StatusListener {
     /**
      * The max inactive time.
      *
-     * @return the max inactive time
+     * @return inactivity limit in ms before the peer is dropped
      */
     @Override
     public long getMaxInactiveTime() {

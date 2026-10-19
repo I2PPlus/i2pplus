@@ -32,8 +32,8 @@ import net.i2p.util.OrderedProperties;
  * </ul>
  * <p>Key differences from LeaseSet:</p>
  * <ul>
- * <li>Uses {@link #getPublished()} for version comparison instead of lease dates</li>
- * <li>Supports multiple encryption keys via {@link #getEncryptionKeys()}</li>
+ * <li>Uses {@link #getPublished} for version comparison instead of lease dates</li>
+ * <li>Supports multiple encryption keys via {@link #getEncryptionKeys}</li>
  * <li>Includes offline signing capabilities via {@link #setOfflineSignature(long, SigningPublicKey, Signature)}</li>
  * <li>Has separate published and expires timestamps</li>
  * </ul>
@@ -57,7 +57,7 @@ public class LeaseSet2 extends LeaseSet {
     protected Properties _options;
     /** Only used if more than one key, otherwise null. */
     private List<PublicKey> _encryptionKeys;
-    /** If this leaseset was formerly blinded, the blinded hash, so we can find it again */
+    /** If this leaseset was formerly blinded, the blinded hash, so we can find it again. */
     private Hash _blindedHash;
     /** Flag bit for offline keys. */
     private static final int FLAG_OFFLINE_KEYS = 0x01;
@@ -317,10 +317,10 @@ public class LeaseSet2 extends LeaseSet {
     }
 
     /**
-     * Generate a Signature to pass to setOfflineSignature()
+     * Generate a Signature to pass to setOfflineSignature().
      *
      * @param expires when the offline signature stops being valid, in milliseconds
-     *                since the epoch; the signature covers whole seconds only
+     * since the epoch; the signature covers whole seconds only
      * @param transientSPK the key that will sign the leaseset
      * @param priv the private signing key for the destination
      * @return null on error
@@ -441,7 +441,7 @@ public class LeaseSet2 extends LeaseSet {
     }
 
     /**
-     * This does NOT validate the signature
+     * This does NOT validate the signature.
      *
      * @throws IllegalStateException if called more than once or Destination already set
      */
@@ -489,7 +489,7 @@ public class LeaseSet2 extends LeaseSet {
     }
 
     /**
-     * Including sig. This does NOT validate the signature
+     * Including sig. This does NOT validate the signature.
      */
     @Override
     public void writeBytes(OutputStream out) throws DataFormatException, IOException {
@@ -499,7 +499,7 @@ public class LeaseSet2 extends LeaseSet {
     }
 
     /**
-     * Without sig. This does NOT validate the signature
+     * Without sig. This does NOT validate the signature.
      *
      * @param out the stream to write the header and body to
      * @throws DataFormatException if the destination or encryption key is unset
@@ -514,7 +514,7 @@ public class LeaseSet2 extends LeaseSet {
     }
 
     /**
-     * Without sig. This does NOT validate the signature
+     * Without sig. This does NOT validate the signature.
      *
      * @param out the stream to write the properties, encryption keys and leases to
      * @throws DataFormatException if the leases or a key cannot be serialized
@@ -610,7 +610,7 @@ public class LeaseSet2 extends LeaseSet {
     }
 
     /**
-     * Number of bytes, NOT including signature
+     * Number of bytes, NOT including signature.
      */
     @Override
     public int size() {

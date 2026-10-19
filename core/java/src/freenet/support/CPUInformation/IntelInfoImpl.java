@@ -70,7 +70,7 @@ class IntelInfoImpl extends CPUIDCPUInfo implements IntelCPUInfo
     private static boolean isBroadwellCompatible;
     private static boolean isSkylakeCompatible;
 
-    /** Identified processor name from {@link #identifyCPU()}, or {@code null} if unrecognized. */
+    /** Identified processor name from {@link #identifyCPU}, or {@code null} if unrecognized. */
     private static final String smodel = identifyCPU();
 
     /** {@code true} if the CPU supports Pentium (P5) instructions. */

@@ -2,7 +2,7 @@
 package net.i2p.router.crypto.ratchet;
 
 /**
- * Utility methods for creating unpadded arrays with optimal growth sizing
+ * Utility methods for creating unpadded arrays with optimal growth sizing.
  */
 class ArrayUtils {
 

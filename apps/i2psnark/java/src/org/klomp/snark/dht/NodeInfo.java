@@ -48,7 +48,7 @@ class NodeInfo extends SimpleDataStructure {
     public static final int LENGTH = NID.HASH_LENGTH + Hash.HASH_LENGTH + 2;
 
     /**
-     * With a fake NID used for pings
+     * With a fake NID used for pings.
      *
      * @param dest the destination that will be resolved when the node is contacted
      * @param port the DHT query port, or 0 if unknown
@@ -302,10 +302,10 @@ class NodeInfo extends SimpleDataStructure {
 
     /**
      * To persistent storage string. Format: NID:Hash:Destination:port First 3 in base 64;
-     * Destination may be empty string
+     * Destination may be empty string.
      *
      * @return the colon-separated persistence form, with an empty destination
-     *         field when the full destination is not yet known
+     * field when the full destination is not yet known
      */
     public String toPersistentString() {
         StringBuilder buf = new StringBuilder(650);

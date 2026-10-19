@@ -8,9 +8,9 @@ import net.i2p.util.Log;
 import net.i2p.util.SimpleTimer2;
 
 /**
- *  Close the POP3 connection after a certain idle time
+ * Close the POP3 connection after a certain idle time.
  *
- *  @since 0.9.13
+ * @since 0.9.13
  */
 class IdleCloser {
     private final POP3MailBox mailbox;
@@ -57,7 +57,7 @@ class IdleCloser {
     }
 
     private class Checker extends SimpleTimer2.TimedEvent {
-        /** Schedule first idle-close check */
+        /** Schedule first idle-close check. */
         public Checker() {
             super(I2PAppContext.getGlobalContext().simpleTimer2(), getMaxIdle() + 5*1000);
         }
@@ -87,7 +87,7 @@ class IdleCloser {
     }
 
     private class Closer extends I2PAppThread {
-        /** Thread that closes the connection */
+        /** Thread that closes the connection. */
         public Closer() {super("Susimail-Closer");}
 
         @Override

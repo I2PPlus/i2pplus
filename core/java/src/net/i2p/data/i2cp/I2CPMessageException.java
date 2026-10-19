@@ -12,9 +12,8 @@ package net.i2p.data.i2cp;
 import net.i2p.I2PException;
 
 /**
- * Represent an error serializing or deserializing a message
+ * Represent an error serializing or deserializing a message.
  *
- * @author jrandom
  */
 public class I2CPMessageException extends I2PException {
 

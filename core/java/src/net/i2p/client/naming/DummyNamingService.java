@@ -22,13 +22,13 @@ import java.util.Properties;
  */
 public class DummyNamingService extends NamingService {
 
-    /** Length of a base32 hash string */
+    /** Length of a base32 hash string. */
     protected static final int BASE32_HASH_LENGTH = 52; // 1 + Hash.HASH_LENGTH * 8 / 5
-    /** Property to enable b32 lookup */
+    /** Property to enable b32 lookup. */
     public static final String PROP_B32 = "i2p.naming.hostsTxt.useB32";
-    /** Maximum cache size */
+    /** Maximum cache size. */
     protected static final int CACHE_MAX_SIZE = SystemVersion.isAndroid() ? 32 : 128;
-    /** Standard base64 destination length (no certificate) */
+    /** Standard base64 destination length (no certificate). */
     public static final int DEST_SIZE = 516; // Std. Base64 length (no certificate)
 
     /**
@@ -50,6 +50,8 @@ public class DummyNamingService extends NamingService {
     }
 
     /**
+     * Throws, this service knows no destinations.
+     *
      * @param hostname mixed case as it could be a key
      * @param lookupOptions input parameter, NamingService-specific, can be null
      * @param storedOptions output parameter, NamingService-specific, any stored properties will be added if non-null
@@ -96,7 +98,7 @@ public class DummyNamingService extends NamingService {
     }
 
     /**
-     * Provide basic static caching for all services
+     * Provide basic static caching for all services.
      *
      * @param s case-sensitive, could be a hostname or a full b64 string
      * @param d the destination to cache
@@ -132,7 +134,7 @@ public class DummyNamingService extends NamingService {
         }
     }
 
-    /** Clear all cached destinations. @since 0.8.1 */
+    /** Clear all cached destinations. @since 0.8.1. */
     protected static void clearCache() {
         synchronized (_cache) {
             _cache.clear();

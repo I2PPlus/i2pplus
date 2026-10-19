@@ -12,9 +12,8 @@ package net.i2p.data.i2cp;
 import net.i2p.data.DataFormatException;
 
 /**
- * Test harness for loading / storing MessageStatusMessage objects
+ * Test harness for loading / storing MessageStatusMessage objects.
  *
- * @author jrandom
  */
 public class MessageStatusMessageTest extends I2CPTstBase {
     @Override

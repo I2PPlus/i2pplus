@@ -28,7 +28,6 @@ import java.util.Vector;
  * organized state management and event notification for service monitoring and control
  * applications.
  *
- * @author Satoshi Konno
  * @since 1.0
  */
 public class ServiceStateTable extends Vector<StateVariable> {

@@ -28,7 +28,6 @@ import java.util.Vector;
  * enabling organized service management and enumeration for application use and XML description
  * generation.
  *
- * @author Satoshi Konno
  * @since 1.0
  */
 public class ServiceList extends Vector<Service> {

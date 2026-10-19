@@ -12,7 +12,6 @@ package freenet.support.CPUInformation;
 /**
  * An interface for classes that provide lowlevel information about Intel CPU's
  *
- * @author Iakin
  */
 public interface IntelCPUInfo extends CPUInfo {
 

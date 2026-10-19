@@ -17,9 +17,8 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 
 /**
- * Test harness for the date structure
+ * Test harness for the date structure.
  *
- * @author jrandom
  */
 public class UnsignedIntegerTest {
     @Test

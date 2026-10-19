@@ -18,9 +18,8 @@ import java.io.ByteArrayOutputStream;
 import java.util.Properties;
 
 /**
- * Test harness for the date structure
+ * Test harness for the date structure.
  *
- * @author jrandom
  */
 public class MappingTest {
     @Test

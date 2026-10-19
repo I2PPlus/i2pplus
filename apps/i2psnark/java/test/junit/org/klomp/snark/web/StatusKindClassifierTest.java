@@ -5,7 +5,7 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 
 /**
- * Tests for I2PSnarkServlet.classifyStatus(), the pure decision function
+ * Tests for {@link org.klomp.snark.web.I2PSnarkServlet#classifyStatus}, the pure decision function
  * extracted from buildStatusString().
  *
  * Branch order is load-bearing and mirrors the historical cascade: earlier

@@ -10,9 +10,8 @@ package net.i2p.data;
  */
 
 /**
- * Test harness for loading / storing TunnelId objects
+ * Test harness for loading / storing TunnelId objects.
  *
- * @author jrandom
  */
 public class TunnelIdTest extends StructureTest {
     @Override

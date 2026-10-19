@@ -7,7 +7,7 @@ import net.i2p.i2ptunnel.udp.*;
 import net.i2p.util.Log;
 
 /**
- * Sends to one of many Sinks based on toPort
+ * Sends to one of many Sinks based on toPort.
  *
  * @param <S> type of Sink objects managed by this MultiSink
  */
@@ -24,7 +24,7 @@ public class MultiSink<S extends Sink> implements Source, Sink {
         this.cache = cache;
     }
 
-    /** Don't use this - put sinks in the cache */
+    /** Don't use this - put sinks in the cache. */
     public void setSink(Sink sink) { /* no-op */ }
 
     @Override
@@ -33,7 +33,7 @@ public class MultiSink<S extends Sink> implements Source, Sink {
     /**
      * Send to a single sink looked up by toPort
      * <p>
-     * May throw RuntimeException from underlying sinks
+     * May throw RuntimeException from underlying sinks.
      *
      * @param from sending destination, passed along to the sink, may be null
      * @param fromPort source port, passed along to the sink

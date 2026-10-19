@@ -19,7 +19,7 @@ import org.junit.Test;
 
 /**
  * Unit tests for pure decision helpers extracted from
- * ClientPeerSelector.selectFirstHop().
+ * {@link net.i2p.router.tunnel.pool.ClientPeerSelector#selectFirstHop}.
  *
  * @since 0.9.71+
  */

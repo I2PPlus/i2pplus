@@ -23,7 +23,6 @@ import java.util.StringTokenizer;
  * specify only 'known' data source values. However, if you want to specify 'unknown' values too,
  * use <code>Double.NaN</code>.
  *
- * @author Sasa Markovic
  */
 public class Sample {
     private final RrdDb parentDb;

@@ -66,7 +66,7 @@ public class I2PSimpleClient implements I2PClient {
     }
 
     /**
-     * Create a new session (though do not connect it yet)
+     * Create a new session (though do not connect it yet).
      *
      * @param destKeyStream stream containing the private key data
      * @param options set of options to configure the router with
@@ -78,7 +78,7 @@ public class I2PSimpleClient implements I2PClient {
     }
 
     /**
-     * Create a new session (though do not connect it yet)
+     * Create a new session (though do not connect it yet).
      *
      * @param context the application context
      * @param options set of options to configure the router with

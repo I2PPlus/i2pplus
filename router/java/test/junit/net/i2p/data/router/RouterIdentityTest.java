@@ -26,9 +26,8 @@ import org.junit.Test;
 import java.io.ByteArrayOutputStream;
 
 /**
- * Test harness for loading / storing Hash objects
+ * Tests RouterIdentity loading, storing and hashing.
  *
- * @author jrandom
  */
 public class RouterIdentityTest extends StructureTest {
 

@@ -4,7 +4,6 @@ package net.i2p.crypto.eddsa;
  * Basic utilities for EdDSA.
  * Not for external use, not maintained as a public API.
  *
- * @author str4d
  * @since 0.9.15
  *
  */

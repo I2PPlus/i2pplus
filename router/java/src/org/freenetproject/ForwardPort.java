@@ -3,7 +3,6 @@ package org.freenetproject;
 /**
  * A public Internet Protocol port on the node which needs to be forwarded if the
  * node is NATed.
- * @author toad
  */
 public class ForwardPort {
 

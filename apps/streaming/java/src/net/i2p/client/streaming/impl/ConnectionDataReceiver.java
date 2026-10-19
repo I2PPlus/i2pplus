@@ -11,7 +11,7 @@ import net.i2p.util.Log;
 /**
  * Receive data from the MessageOutputStream, build a packet,
  * and send it through a connection.  The write calls on this
- * do NOT block, but they also do not necessary imply immediate
+ * do NOT block, but they also do not necessarily imply immediate
  * delivery, or even the generation of a new packet.  This class
  * is the only one that builds useful outbound Packet objects.
  * <p>
@@ -19,7 +19,7 @@ import net.i2p.util.Log;
  * <p>
  * There's one of these per MessageOutputStream.
  * It stores no state. It sends everything to the Connection unless
- * the Connection is closed,
+ * the Connection is closed.
  */
 class ConnectionDataReceiver implements MessageOutputStream.DataReceiver {
     /** Application context. */
@@ -171,7 +171,7 @@ class ConnectionDataReceiver implements MessageOutputStream.DataReceiver {
      * Send some data through the connection, attaching any appropriate flags
      * onto the packet.
      * <p>
-     * Called externally from Connection with args (null, 0, 0) to send an ack
+     * Called externally from Connection with args (null, 0, 0) to send an ack.
      *
      * @param buf data to be sent - may be null
      * @param off offset into the buffer to start writing from
@@ -183,13 +183,13 @@ class ConnectionDataReceiver implements MessageOutputStream.DataReceiver {
     }
 
     /**
-     * Called externally from Connection with args (null, 0, 0, true) to send an empty data packet
+     * Called externally from Connection with args (null, 0, 0, true) to send an empty data packet.
      *
      * @param buf data to be sent - may be null
      * @param off offset into the buffer to start writing from
      * @param size how many bytes of the buffer to write (may be 0)
      * @param forceIncrement even if the buffer is empty, increment the packetId
-     *                       so we get an ACK back
+     * so we get an ACK back
      * @return the packet sent
      */
     public PacketLocal send(byte[] buf, int off, int size, boolean forceIncrement) {
@@ -208,15 +208,15 @@ class ConnectionDataReceiver implements MessageOutputStream.DataReceiver {
 
     /**
      * Compose a packet.
-     * Most flags are set here; however, some are set in Connection.sendPacket()
-     * and Connection.ResendPacketEvent.retransmit().
+     * Most flags are set here; however, some are set in {@link net.i2p.client.streaming.impl.Connection#sendPacket}
+     * and {@link net.i2p.client.streaming.impl.Connection.ResendPacketEvent#retransmit()}.
      * Take care not to set the same options both here and in Connection.
      *
      * @param buf data to be sent - may be null
      * @param off offset into the buffer to start writing from
      * @param size how many bytes of the buffer to write (may be 0)
      * @param forceIncrement even if the buffer is empty, increment the packetId
-     *                       so we get an ACK back
+     * so we get an ACK back
      * @return the packet to be sent
      */
     private PacketLocal buildPacket(byte[] buf, int off, int size, boolean forceIncrement) {

@@ -90,15 +90,15 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
      * @since 0.9.71+
      */
     enum MigrationPendingDecision {
-        /** packet from the current (pre-migration) remote host, cancel the migration */
+        /** Packet from the current (pre-migration) remote host, cancel the migration. */
         CANCEL,
-        /** migration timed out and must be reset to NONE */
+        /** Migration timed out and must be reset to NONE. */
         EXPIRED,
-        /** from the pending host and the retransmit interval has elapsed */
+        /** From the pending host and the retransmit interval has elapsed. */
         RETRANSMIT,
-        /** from the pending host but within the retransmit interval, keep waiting */
+        /** From the pending host but within the retransmit interval, keep waiting. */
         STILL_WAITING,
-        /** a third address entirely, do not switch */
+        /** a third address entirely, do not switch. */
         THIRD_ADDRESS
     }
     private final Object _migrationLock = new Object();
@@ -166,7 +166,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
     private static final int MAX_SESS_CONF_RETX = 5;
     /** Configurable sent-messages sweep interval. Default 60s, shortened under load. */
     private static volatile long _sentMessagesCleanTime = 60*1000L;
-    /** Max _sentMessages entries examined per expireSentMessages() call. @since 0.9.71+ */
+    /** Max _sentMessages entries examined per expireSentMessages() call. @since 0.9.71+. */
     private static final int SENT_MESSAGES_EXPIRE_BATCH = 32;
     private boolean shouldLogDebug() { return _log.shouldDebug(); }
 
@@ -305,7 +305,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
     }
 
     /**
-     * Overridden to use our version of ACKTimer
+     * Overridden to use our version of ACKTimer.
      */
     @Override
     protected synchronized void messagePartiallyReceived(long now) {
@@ -470,7 +470,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
 
     /**
      * Next outbound packet number,
-     * starts at 1 for Alice (0 is Session Confirmed) and 0 for Bob
+     * starts at 1 for Alice (0 is Session Confirmed) and 0 for Bob.
      * @return the next packet number
      */
     public long getNextPacketNumber() throws IOException {
@@ -483,7 +483,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
     }
 
     /**
-     * For PeerStateDestroyed only, after we are dead
+     * For PeerStateDestroyed only, after we are dead.
      * @return the next packet number no throw
      * @since 0.9.57
      */
@@ -497,7 +497,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
      */
     public long getSendConnID() {return _sendConnID;}
     /**
-     * Caller must sync on returned object when encrypting
+     * Caller must sync on returned object when encrypting.
      * @return the send cipher
      */
     public CipherState getSendCipher() {return _sendCha;}
@@ -516,6 +516,8 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
      */
     public byte[] getSendHeaderEncryptKey2() {return _sendHeaderEncryptKey2;}
     /**
+     * Record why the peer was destroyed, for the Destroy message.
+     *
      * @since 0.9.57
      */
     public void setDestroyReason(int reason) {_destroyReason = reason;}
@@ -611,10 +613,10 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
     }
 
     /**
-     * From different than expected source IP/port
+     * From different than expected source IP/port.
      *
      * @param from source address the packet did not come from; a mismatch
-     *             causes the packet to be dropped
+     * causes the packet to be dropped
      * @param packet fully encrypted, header and body decryption will be done here
      * @since 0.9.55
      */
@@ -777,7 +779,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
      * Connection migration attempt while in MIGRATION_STATE_PENDING.
      * <p>
      * The packet source is classified by the pure {@link #decidePendingMigration}
-     * method; this method applies the side effects (cancel/timeout state reset,
+     * method. This method applies the side effects (cancel/timeout state reset,
      * path-challenge retransmission with exponential backoff).
      * <p>
      * Must be called with {@code _migrationLock} held.
@@ -883,7 +885,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
     }
 
     /**
-     * Caller must synch on _migrationState
+     * Caller must synch on _migrationState.
      * @since 0.9.56
      */
     private void sendPathChallenge(InetAddress toIP, int toPort) {
@@ -1346,7 +1348,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
     /////////////////////////////////////////////////////////
 
     /**
-     * Caller should sync; UDPTransport must remove and add to peersByRemoteHost map
+     * Caller should sync; UDPTransport must remove and add to peersByRemoteHost map.
      *
      * @param id the new remote host id, carrying both the address and the port
      * @since 0.9.56
@@ -1414,7 +1416,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
     }
 
     /**
-     * Callback from SSU2Bitfield.forEachAndNot().
+     * Callback from {@link net.i2p.router.transport.udp.SSU2Bitfield#forEachAndNot}.
      * A new ack was received.
      */
     public void bitSet(long pktNum) {
@@ -1491,11 +1493,11 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
     }
 
     /**
-     * Flag byte to be sent in header
+     * Flag byte to be sent in header.
      *
      * @return the header flag byte, {@code 0x01} when the send window has under
-     *         a third of its capacity left and an immediate ack is requested,
-     *         otherwise {@code 0}
+     * a third of its capacity left and an immediate ack is requested,
+     * otherwise {@code 0}
      * @since 0.9.56, public since 0.9.57 for SSU2Sender interface
      */
     public byte getFlags() {return shouldRequestImmediateAck() ? (byte) 0x01 : 0;}
@@ -1535,12 +1537,12 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
     private class ACKTimer extends SimpleTimer2.TimedEvent {
 
         /**
-         * Caller must schedule
+         * Caller must schedule.
          */
         public ACKTimer() {super(_context.simpleTimer2());}
 
         /**
-         * Ack soon, based on the current RTT
+         * Ack soon, based on the current RTT.
          *
          * @since 0.9.56
          */
@@ -1553,7 +1555,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
         }
 
         /**
-         * Ack almost immediately
+         * Ack almost immediately.
          *
          * @since 0.9.56
          */

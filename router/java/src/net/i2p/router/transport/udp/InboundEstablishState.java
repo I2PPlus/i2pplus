@@ -16,47 +16,47 @@ import net.i2p.util.SystemVersion;
  * the connection with us.  In other words, they are Alice and we are Bob.
  */
 class InboundEstablishState {  // TODO do all these methods need to be synchronized?
-    /** Router context */
+    /** Router context. */
     protected final RouterContext _context;
     /** Logger. */
     protected final Log _log;
-    /** SessionRequest message data from Alice */
+    /** SessionRequest message data from Alice. */
     private byte[] _receivedX;
-    /** Our IP address as seen by Alice */
+    /** Our IP address as seen by Alice. */
     protected byte[] _bobIP;
-    /** Our port number as seen by Alice */
+    /** Our port number as seen by Alice. */
     protected final int _bobPort;
-    /** Alice's IP address from the SessionCreated message */
+    /** Alice's IP address from the SessionCreated message. */
     protected final byte[] _aliceIP;
-    /** Alice's port number */
+    /** Alice's port number. */
     protected final int _alicePort;
-    /** Relay tag we sent to Alice */
+    /** Relay tag we sent to Alice. */
     protected long _sentRelayTag;
-    /** Signed-on time we sent to Alice */
+    /** Signed-on time we sent to Alice. */
     private long _sentSignedOnTime;
-    /** SessionConfirmed message fragments from Alice (fragmentation theoretical only) */
+    /** SessionConfirmed message fragments from Alice (fragmentation theoretical only). */
     private byte[][] _receivedIdentity;
-    /** Identity before signature verification */
+    /** Identity before signature verification. */
     protected RouterIdentity _receivedUnconfirmedIdentity;
-    /** Identity after successful signature verification */
+    /** Identity after successful signature verification. */
     protected RouterIdentity _receivedConfirmedIdentity;
-    /** Timestamp when establishment began */
+    /** Timestamp when establishment began. */
     protected final long _establishBegin;
-    /** Last packet send time */
+    /** Last packet send time. */
     protected long _lastSend;
-    /** Next scheduled send time */
+    /** Next scheduled send time. */
     protected long _nextSend;
-    /** Remote host identifier for uniqueness */
+    /** Remote host identifier for uniqueness. */
     protected final RemoteHostId _remoteHostId;
-    /** Current state in the inbound establishment protocol */
+    /** Current state in the inbound establishment protocol. */
     protected InboundState _currentState;
-    /** Messages queued while session was being established */
+    /** Messages queued while session was being established. */
     private final Queue<OutNetMessage> _queuedMessages;
-    /** Count of SessionCreated packets sent (for exponential backoff) */
+    /** Count of SessionCreated packets sent (for exponential backoff). */
     protected int _createdSentCount;
-    /** Whether Alice requested introduction (default true for SSU 1, false for SSU 2) */
+    /** Whether Alice requested introduction (default true for SSU 1, false for SSU 2). */
     protected boolean _introductionRequested;
-    /** Estimated round-trip time */
+    /** Estimated round-trip time. */
     protected int _rtt;
 
     /**
@@ -76,21 +76,21 @@ class InboundEstablishState {  // TODO do all these methods need to be synchroni
         IB_STATE_CONFIRMED_COMPLETELY,
         /** We are explicitly failing it. */
         IB_STATE_FAILED,
-        /** Successful completion, PeerState created and added to transport */
+        /** Successful completion, PeerState created and added to transport. */
         IB_STATE_COMPLETE,
 
         /**
-         * SSU2: We have received a token request
+         * SSU2: We have received a token request.
          * @since 0.9.54
          */
         IB_STATE_TOKEN_REQUEST_RECEIVED,
         /**
-         * SSU2: We have received a request but the token is bad
+         * SSU2: We have received a request but the token is bad.
          * @since 0.9.54
          */
         IB_STATE_REQUEST_BAD_TOKEN_RECEIVED,
         /**
-         * SSU2: We have sent a retry
+         * SSU2: We have sent a retry.
          * @since 0.9.54
          */
         IB_STATE_RETRY_SENT,
@@ -111,12 +111,12 @@ class InboundEstablishState {  // TODO do all these methods need to be synchroni
     protected static long getMaxDelay() { return EstablishmentManager.MAX_IB_ESTABLISH_TIME.get(); }
 
     /**
-     *  For SSU2
+     * For SSU2.
      *
-     *  @param ctx router context, used for the clock and the log
-     *  @param addr the remote address the session request arrived from, which becomes
-     *              the peer's address and remote host id
-     *  @since 0.9.54
+     * @param ctx router context, used for the clock and the log
+     * @param addr the remote address the session request arrived from, which becomes
+     * the peer's address and remote host id
+     * @since 0.9.54
      */
     protected InboundEstablishState(RouterContext ctx, InetSocketAddress addr) {
         _context = ctx;
@@ -161,10 +161,10 @@ class InboundEstablishState {  // TODO do all these methods need to be synchroni
     public synchronized void complete() {_currentState = InboundState.IB_STATE_COMPLETE;}
 
     /**
-     *  Queue a message to be sent after the session is established.
-     *  This will only happen if we decide to send something during establishment
-     *  @param msg the message to send once the session is established
-     *  @since 0.9.2
+     * Queue a message to be sent after the session is established.
+     * This will only happen if we decide to send something during establishment.
+     * @param msg the message to send once the session is established
+     * @since 0.9.2
      */
     public void addMessage(OutNetMessage msg) {
         // chance of a duplicate here in a race, that's ok
@@ -173,9 +173,9 @@ class InboundEstablishState {  // TODO do all these methods need to be synchroni
    }
 
     /**
-     *  Pull from the message queue
-     *  @return null if none
-     *  @since 0.9.2
+     * Pull from the message queue.
+     * @return null if none
+     * @since 0.9.2
      */
     public OutNetMessage getNextQueuedMessage() {return _queuedMessages.poll();}
 

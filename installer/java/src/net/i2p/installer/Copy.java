@@ -4,7 +4,7 @@ import net.i2p.util.FileUtil;
 
 /**
  * <p>This class is used by the installer to copy files.</p>
- * Usage: <code>Copy [FROM] [TO]</code><br>
+ * Usage: <code>Copy [FROM] [TO]</code>.
  *
  * See also: {@link net.i2p.util.FileUtil#copy FileUtil.copy()}.
  * @since 0.4.1.4, moved to {@link net.i2p.installer} in 0.9.5

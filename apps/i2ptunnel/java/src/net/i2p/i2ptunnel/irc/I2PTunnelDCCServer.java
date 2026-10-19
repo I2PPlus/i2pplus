@@ -37,15 +37,15 @@ import net.i2p.util.EventDispatcher;
  */
 public class I2PTunnelDCCServer extends I2PTunnelServer {
 
-    /** key is the server's local I2P port */
+    /** Key is the server's local I2P port. */
     private final ConcurrentHashMap<Integer, LocalAddress> _outgoing;
-    /** key is the server's local I2P port */
+    /** Key is the server's local I2P port. */
     private final ConcurrentHashMap<Integer, LocalAddress> _active;
-    /** key is the server's local I2P port */
+    /** Key is the server's local I2P port. */
     private final ConcurrentHashMap<Integer, LocalAddress> _resume;
     private final List<I2PSocket> _sockList;
 
-    /** just to keep super() happy */
+    /** Just to keep super() happy. */
     private static final InetAddress DUMMY;
     static {
         InetAddress dummy = null;
@@ -156,7 +156,7 @@ public class I2PTunnelDCCServer extends I2PTunnelServer {
     }
 
     /**
-     * An outgoing DCC request
+     * An outgoing DCC request.
      *
      * @param ip local irc client IP
      * @param port local irc client port
@@ -168,6 +168,8 @@ public class I2PTunnelDCCServer extends I2PTunnelServer {
     }
 
     /**
+     * Register an outgoing DCC session, returning its id.
+     *
      * @param port local dcc server I2P port or 0 to pick one at random
      */
     private int newOutgoing(byte[] ip, int port, int i2pPort) {
@@ -205,7 +207,7 @@ public class I2PTunnelDCCServer extends I2PTunnelServer {
     }
 
     /**
-     * An incoming RESUME request
+     * An incoming RESUME request.
      *
      * @param port local dcc server I2P port
      * @return local IRC client DCC port or -1 on error
@@ -228,7 +230,7 @@ public class I2PTunnelDCCServer extends I2PTunnelServer {
     }
 
     /**
-     * An outgoing ACCEPT response
+     * An outgoing ACCEPT response.
      *
      * @param port local irc client DCC port
      * @return local DCC server i2p port or -1 on error

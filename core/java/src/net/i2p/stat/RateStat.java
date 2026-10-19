@@ -25,8 +25,8 @@ public class RateStat {
     /** Actual rate objects for this statistic. */
     protected final Rate[] _rates;
     /**
-     * How many per-rate {@link Rate#coalesce()} calls have thrown. A rate that
-     * throws is skipped, never propagated: see {@link #coalesceStats()}.
+     * How many per-rate {@link Rate#coalesce} calls have thrown. A rate that
+     * throws is skipped, never propagated: see {@link #coalesceStats}.
      */
     private final AtomicLong _coalesceFailures = new AtomicLong();
     /**
@@ -66,7 +66,7 @@ public class RateStat {
      * Constructor taking pre-built rates, for tests that need a rate which throws.
      * <p>The public constructor cannot express this because it always builds working
      * rates, and a {@code Rate} cannot be made to fail without a fault injected into
-     * it. The isolation in {@link #coalesceStats()} is only worth anything if it can
+     * it. The isolation in {@link #coalesceStats} is only worth anything if it can
      * be shown to hold when a rate really does throw.
      *
      * @param name unique name of the statistic
@@ -99,7 +99,7 @@ public class RateStat {
     }
 
     /**
-     * Sum of the per-rate coalesce skip counts; see {@link Rate#getCoalesceSkips()}.
+     * Sum of the per-rate coalesce skip counts; see {@link Rate#getCoalesceSkips}.
      *
      * @return total coalesce skips across this stat's rates
      * @since 0.9.71+
@@ -111,7 +111,7 @@ public class RateStat {
     }
 
     /**
-     * Sum of the per-rate successful coalesce counts; see {@link Rate#getCoalesceCount()}.
+     * Sum of the per-rate successful coalesce counts; see {@link Rate#getCoalesceCount}.
      *
      * @return total coalesces across this stat's rates
      * @since 0.9.71+
@@ -124,7 +124,7 @@ public class RateStat {
 
     /**
      * Sum of the per-rate backlog collapse counts; see
-     * {@link Rate#getCoalesceBacklogCollapses()}.
+     * {@link Rate#getCoalesceBacklogCollapses}.
      *
      * @return total backlog collapses across this stat's rates
      * @since 0.9.71+
@@ -278,7 +278,7 @@ public void addData(long value) {
 
     /**
      * Returns rate with requested period if it exists,
-     * otherwise null
+     * otherwise null.
      *
      * @param period ms
      * @return the Rate whose period equals this one exactly, or null
@@ -350,7 +350,7 @@ public void addData(long value) {
     }
 
     /**
-     * Includes comment lines
+     * Includes comment lines.
      *
      * @param out the output stream
      * @param prefix the property prefix

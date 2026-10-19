@@ -98,6 +98,8 @@ class PluginUpdateRunner extends UpdateRunner {
     }
 
     /**
+     * The plugin's update URI.
+     *
      * @return the u r i
      */
     @Override
@@ -106,6 +108,8 @@ class PluginUpdateRunner extends UpdateRunner {
     }
 
     /**
+     * The plugin's update id.
+     *
      * @return the i d
      */
     @Override
@@ -176,7 +180,7 @@ class PluginUpdateRunner extends UpdateRunner {
     }
 
     /**
-     * Overridden to change the "Updating I2P" text in super
+     * Overridden to change the "Updating I2P" text in super.
      * @since 0.9.35
      */
     @Override
@@ -220,6 +224,8 @@ class PluginUpdateRunner extends UpdateRunner {
     }
 
     /**
+     * Whether the file has a SU3 magic header.
+     *
      * @return if SU3
      * @since 0.9.15
      */
@@ -240,6 +246,8 @@ class PluginUpdateRunner extends UpdateRunner {
     }
 
     /**
+     * Install a .sud plugin update.
+     *
      * @since 0.9.15
      */
     private void processSUD(File f, File appDir, String url) {
@@ -352,7 +360,7 @@ class PluginUpdateRunner extends UpdateRunner {
     }
 
     /**
-     * Process a SU3 plugin file
+     * Process a SU3 plugin file.
      * @since 0.9.15
      */
     private void processSU3(File f, File appDir, String url) {
@@ -397,6 +405,8 @@ class PluginUpdateRunner extends UpdateRunner {
     }
 
     /**
+     * Load the plugin's config for the update.
+     *
      * @return null on error
      * @since 0.9.15
      */
@@ -429,6 +439,8 @@ class PluginUpdateRunner extends UpdateRunner {
     }
 
     /**
+     * Move the downloaded update into place.
+     *
      * @param pubkey null OK for su3
      * @since 0.9.15
      */

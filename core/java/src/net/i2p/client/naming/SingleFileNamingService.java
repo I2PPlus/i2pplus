@@ -52,13 +52,13 @@ public class SingleFileNamingService extends NamingService {
     private final File _file;
     private final ReentrantReadWriteLock _fileLock;
 
-    /** Cached number of entries */
+    /** Cached number of entries. */
     private volatile int _size;
 
-    /** Last write time */
+    /** Last write time. */
     private long _lastWrite;
 
-    /** hostname -> base64 key cache, guarded by _fileLock; valid when _cacheStamp >= file mtime */
+    /** Hostname to base64 key cache, guarded by _fileLock; valid when _cacheStamp >= file mtime. */
     private final Map<String, String> _keyCache = new HashMap<>(64);
     private volatile long _cacheStamp;
 
@@ -88,7 +88,7 @@ public class SingleFileNamingService extends NamingService {
     }
 
     /**
-     * Will strip a "www." prefix and retry if lookup fails
+     * Will strip a "www." prefix and retry if lookup fails.
      *
      * @param hostname case-sensitive; caller should convert to lower case
      * @param lookupOptions unused, may be null
@@ -141,12 +141,12 @@ public class SingleFileNamingService extends NamingService {
     }
 
     /**
-     * Better than DataHelper.loadProps(), doesn't load the whole file into memory,
+     * Better than {@code DataHelper.loadProps()}, doesn't load the whole file into memory,
      * and stops when it finds a match.
      *
      * @param host case-sensitive; caller should convert to lower case
      * @return the base64 destination key mapped to that hostname in the hosts
-     *         file, or null if the file holds no such entry
+     * file, or null if the file holds no such entry
      */
     @SuppressWarnings("PMD.AvoidBranchingStatementAsLastInLoop")
     private String getKey(String host) throws IOException {
@@ -635,6 +635,8 @@ public class SingleFileNamingService extends NamingService {
     }
 
     /**
+     * Whether the file ends with a newline.
+     *
      * @return true if the file exists, is non-empty and ends with a newline
      */
     private static boolean endsWithNewline(File file) {

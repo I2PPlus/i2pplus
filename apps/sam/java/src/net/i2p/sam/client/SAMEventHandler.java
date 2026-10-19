@@ -7,7 +7,7 @@ import net.i2p.I2PAppContext;
 import net.i2p.util.Log;
 
 /**
- * Simple helper implementation of a the SAMClientEventListener
+ * Simple helper implementation of a the SAMClientEventListener.
  *
  */
 public class SAMEventHandler extends SAMClientEventListenerImpl {
@@ -46,7 +46,7 @@ public class SAMEventHandler extends SAMClientEventListenerImpl {
         }
     }
 
-    /** may be called twice, first for CREATE and second for ADD */
+    /** May be called twice, first for CREATE and second for ADD. */
     @Override
     public void sessionStatusReceived(String result, String destination, String msg) {
         synchronized (_sessionCreateLock) {
@@ -106,7 +106,7 @@ public class SAMEventHandler extends SAMClientEventListenerImpl {
 
     /**
      * Wait for the connection to be established, returning the server version if everything
-     * went ok
+     * went ok.
      * @return SAM server version if everything ok, or null on failure
      */
     public String waitForHelloReply() {
@@ -126,7 +126,7 @@ public class SAMEventHandler extends SAMClientEventListenerImpl {
     }
 
     /**
-     * Wait for the session to be created, returning true if everything went ok
+     * Wait for the session to be created, returning true if everything went ok.
      *
      * @return true if everything ok
      */
@@ -147,7 +147,7 @@ public class SAMEventHandler extends SAMClientEventListenerImpl {
     }
 
     /**
-     * Wait for the session to be added, returning true if everything went ok
+     * Wait for the session to be added, returning true if everything went ok.
      *
      * @return true if everything ok
      * @since 0.9.25
@@ -169,7 +169,7 @@ public class SAMEventHandler extends SAMClientEventListenerImpl {
     }
 
     /**
-     * Wait for the stream to be created, returning true if everything went ok
+     * Wait for the stream to be created, returning true if everything went ok.
      *
      * @return true if everything ok
      */

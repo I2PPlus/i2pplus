@@ -15,9 +15,8 @@ import net.i2p.data.i2cp.DisconnectMessage;
 import net.i2p.data.i2cp.I2CPMessage;
 
 /**
- * Handle I2CP disconnect messages from the router
+ * Handle I2CP disconnect messages from the router.
  *
- * @author jrandom
  */
 class DisconnectMessageHandler extends HandlerImpl {
     /**

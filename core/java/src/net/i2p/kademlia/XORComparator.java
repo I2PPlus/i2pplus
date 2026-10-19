@@ -6,13 +6,13 @@ import java.io.Serializable;
 import java.util.Comparator;
 
 /**
- * Help sort Hashes in relation to a base key using the XOR metric
+ * Help sort Hashes in relation to a base key using the XOR metric.
  *
  * @param <T> type of SimpleDataStructure objects being compared
  * @since 0.9.2 in i2psnark, moved to core in 0.9.10
  */
 public class XORComparator<T extends SimpleDataStructure> implements Comparator<T>, Serializable {
-    /** Key to compare distances with */
+    /** Key to compare distances with. */
     private final byte[] _base;
 
     /**

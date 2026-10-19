@@ -42,7 +42,7 @@ public class OsfwWorker implements Runnable {
     }
 
     /**
-     * Constructor accepting Tcpbw100 parameter
+     * Constructor accepting Tcpbw100 parameter.
      *
      * @param srvSocketParam Socket on which to accept connections
      * @param iParamTestTime Test time duration to wait for message from server

@@ -11,8 +11,8 @@ import net.i2p.router.RouterContext;
 
 /**
  * Precedence tests for the consolidated prune early-expiry property:
- * canonical router.pruneEarlyExpiryDelay first, legacy
- * router.tunnel.pruneEarlyExpiryDelay as fallback, else the 120s default.
+ * canonical {@code router.pruneEarlyExpiryDelay} first, legacy
+ * {@code router.tunnel.pruneEarlyExpiryDelay} as fallback, else the 120s default.
  * Both names are honored so pre-0.9.71 configs keep working.
  *
  * @since 0.9.71+

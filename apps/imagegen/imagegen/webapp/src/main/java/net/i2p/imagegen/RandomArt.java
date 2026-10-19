@@ -8,7 +8,7 @@ import net.i2p.data.DataHelper;
  * Draw an ASCII-Art representing the fingerprint so human brain can
  * profit from its built-in pattern recognition ability.
  * This technique is called "random art" and can be found in some
- * scientific publications like this original paper:
+ * scientific publications like this original paper.
  *
  * "Hash Visualization: a New Technique to improve Real-World Security",
  * Perrig A. and Song D., 1999, International Workshop on Cryptographic

@@ -12,7 +12,6 @@ import java.io.IOException;
  * <p>Robin object does not hold values in memory - such object could be quite large. Instead of it,
  * Robin reads them from the backend I/O only when necessary.
  *
- * @author Sasa Markovic
  */
 public interface Robin extends RrdUpdater<Robin> {
 

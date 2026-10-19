@@ -22,7 +22,7 @@ package org.minidns.dnslabel;
  * <blockquote>
  * They [i.e, DNS labels] must start with a letter, end with a letter or digit,
  * and have as interior characters only letters, digits, and hyphen.
- * </blockquote>.
+ * </blockquote>
  * However, this was relaxed in
  * <a href="https://datatracker.ietf.org/doc/html/rfc1123#page-13">RFC 1123 §
  * 2.1</a>
@@ -43,7 +43,7 @@ package org.minidns.dnslabel;
  * first or last character of a LDH label.
  *
  * @see <a href="https://tools.ietf.org/html/rfc5890#section-2.3.1">RFC 5890 §
- *      2.3.1. LDH Label</a>
+ * 2.3.1. LDH Label</a>
  *
  */
 public abstract class LdhLabel extends DnsLabel {

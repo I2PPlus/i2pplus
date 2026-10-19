@@ -246,17 +246,17 @@ class UDPPacket implements CDPQEntry {
     }
 
     /**
-     * Message type
+     * Message type.
      *
      * @return the SSU2 message type this packet carries, or -1 when none has
-     *         been set yet
+     * been set yet
      */
     int getMessageType() {
         return _messageType;
     }
 
     /**
-     * Message type
+     * Message type.
      *
      * @param type the SSU2 message type being carried, recorded for debug logging
      */
@@ -265,20 +265,20 @@ class UDPPacket implements CDPQEntry {
     }
 
     /**
-     * Fragment count
+     * Fragment count.
      *
      * @return the number of data fragments this packet carries, or -1 when it is
-     *         an ack rather than a data fragment
+     * an ack rather than a data fragment
      */
     int getFragmentCount() {
         return _fragmentCount;
     }
 
     /**
-     * Fragment count
+     * Fragment count.
      *
      * @param count the number of data fragments this packet carries, or -1 to
-     *              mark it as an ack with no fragment data
+     * mark it as an ack with no fragment data
      */
     void setFragmentCount(int count) {
         _fragmentCount = count;

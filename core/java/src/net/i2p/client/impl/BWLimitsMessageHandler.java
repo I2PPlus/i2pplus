@@ -10,7 +10,7 @@ import net.i2p.data.i2cp.BandwidthLimitsMessage;
 import net.i2p.data.i2cp.I2CPMessage;
 
 /**
- * Handle I2CP BW replies from the router
+ * Handle I2CP BW replies from the router.
  */
 class BWLimitsMessageHandler extends HandlerImpl {
     /**

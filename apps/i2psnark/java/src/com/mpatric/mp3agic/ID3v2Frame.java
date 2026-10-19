@@ -156,7 +156,7 @@ public class ID3v2Frame {
     }
 
     /**
-     * Returns the 4-character frame identifier.
+     * The frame's four-character ID, e.g. "TIT2".
      *
      * @return the frame ID
      */
@@ -183,7 +183,7 @@ public class ID3v2Frame {
     }
 
     /**
-     * Returns the frame data.
+     * The raw frame payload bytes.
      *
      * @return the frame data
      */
@@ -192,7 +192,7 @@ public class ID3v2Frame {
     }
 
     /**
-     * Sets the frame data.
+     * Replace the frame payload and update its length.
      *
      * @param data the new frame data
      */
@@ -203,7 +203,7 @@ public class ID3v2Frame {
     }
 
     /**
-     * Returns whether the frame has a data length indicator.
+     * True if the frame carries a data length indicator.
      *
      * @return true if data length indicator is present
      */
@@ -212,7 +212,7 @@ public class ID3v2Frame {
     }
 
     /**
-     * Returns whether the frame data is compressed.
+     * True if the frame data is compressed.
      *
      * @return true if frame is compressed
      */
@@ -221,7 +221,7 @@ public class ID3v2Frame {
     }
 
     /**
-     * Returns whether the frame data is encrypted.
+     * True if the frame data is encrypted.
      *
      * @return true if frame is encrypted
      */
@@ -230,7 +230,7 @@ public class ID3v2Frame {
     }
 
     /**
-     * Returns whether the frame is part of a group.
+     * True if the frame belongs to a frame group.
      *
      * @return true if frame is grouped
      */
@@ -239,7 +239,7 @@ public class ID3v2Frame {
     }
 
     /**
-     * Returns whether the preserve file flag is set.
+     * True if the frame should survive tag edits (preserve file).
      *
      * @return true if preserve file flag is set
      */
@@ -248,7 +248,7 @@ public class ID3v2Frame {
     }
 
     /**
-     * Returns whether the preserve tag flag is set.
+     * True if the frame should survive tag discards (preserve tag).
      *
      * @return true if preserve tag flag is set
      */
@@ -257,7 +257,7 @@ public class ID3v2Frame {
     }
 
     /**
-     * Returns whether the frame is read-only.
+     * True if the frame is marked read-only.
      *
      * @return true if frame is read-only
      */
@@ -266,7 +266,7 @@ public class ID3v2Frame {
     }
 
     /**
-     * Returns whether the frame uses unsynchronisation.
+     * True if unsynchronisation is applied to the frame.
      *
      * @return true if unsynchronisation is enabled
      */

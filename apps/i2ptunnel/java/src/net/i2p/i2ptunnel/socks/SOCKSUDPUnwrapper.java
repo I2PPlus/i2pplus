@@ -9,7 +9,7 @@ import net.i2p.util.Log;
 
 /**
  * Strip a SOCKS header off a datagram, convert it to a Destination and port
- * Ref: RFC 1928
+ * Ref: RFC 1928.
  */
 public class SOCKSUDPUnwrapper implements Source, Sink {
     private Sink sink;
@@ -46,15 +46,15 @@ public class SOCKSUDPUnwrapper implements Source, Sink {
 
     /**
      *
-     *  May throw RuntimeException from underlying sink
-     *  @param ignoredFrom unused; the SOCKS header in the data supplies the
-     *                     destination instead, as this unwrapper never sends
-     *                     from itself
-     *  @param fromPort will be passed along
-     *  @param toPort the UDP port to send to, taken from the SOCKS header
-     *                rather than from this argument
-     *  @throws RuntimeException if the downstream sink fails to send the unwrapped data
-     *  @since 0.9.53 added fromPort and toPort parameters
+     * May throw RuntimeException from underlying sink.
+     * @param ignoredFrom unused; the SOCKS header in the data supplies the
+     * destination instead, as this unwrapper never sends
+     * from itself
+     * @param fromPort will be passed along
+     * @param toPort the UDP port to send to, taken from the SOCKS header
+     * rather than from this argument
+     * @throws RuntimeException if the downstream sink fails to send the unwrapped data
+     * @since 0.9.53 added fromPort and toPort parameters
      */
     public void send(Destination ignoredFrom, int fromPort, int toPort, byte[] data) {
         SOCKSHeader h;

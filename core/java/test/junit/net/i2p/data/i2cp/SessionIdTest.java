@@ -15,9 +15,8 @@ import net.i2p.data.Hash;
 import net.i2p.data.StructureTest;
 
 /**
- * Test harness for loading / storing SessionId objects
+ * Test harness for loading / storing SessionId objects.
  *
- * @author jrandom
  */
 public class SessionIdTest extends StructureTest {
     @Override

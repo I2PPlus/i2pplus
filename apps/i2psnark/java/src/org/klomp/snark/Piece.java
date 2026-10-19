@@ -31,11 +31,15 @@ class Piece implements Comparable<Piece> {
     private final Set<PeerID> peers;
 
     /**
+     * Peers currently requested from for this piece.
+     *
      * @since 0.8.3
      */
     private volatile Set<PeerID> requests;
 
     /**
+     * Download priority for this piece.
+     *
      * @since 0.8.1
      */
     private int priority;
@@ -220,7 +224,7 @@ class Piece implements Comparable<Piece> {
     }
 
     /**
-     * Clear all knowledge of peers Caller must synchronize
+     * Clear all knowledge of peers Caller must synchronize.
      *
      * @since 0.9.3
      */

@@ -10,10 +10,10 @@ import net.i2p.util.Log;
 /**
  * Delivers coalesced rate samples to {@link RateSummaryListener}s off the coalesce thread.
  * <p>This exists because the natural place to notify a summary listener — inline in
- * {@link Rate#coalesce()} — puts two things on one thread that must not be there.
+ * {@link Rate#coalesce} — puts two things on one thread that must not be there.
  * {@code coalesce()} runs on the shared {@code SimpleTimer2} pool, which has a
  * fixed two threads for every periodic event in the router, and it is reached from
- * {@link StatManager#coalesceStats()} while that method holds the {@code StatManager}
+ * {@link StatManager#coalesceStats} while that method holds the {@code StatManager}
  * monitor. A listener that touches storage does I/O: the graph listeners write a
  * sample into an RRD database, which ultimately writes a {@code FileChannel} to a
  * shared scratch file. A slow or stalled disk therefore blocks a pool thread while
@@ -30,7 +30,7 @@ import net.i2p.util.Log;
  * writable. A same-step sample therefore <em>supersedes</em> the one behind it
  * (see {@link #submit}) instead of queueing behind it: that is not a loss, and
  * counting it as one would be a lie. Only when the hard capacity is reached is
- * something genuinely evicted, which is counted by {@link #getOverruns()}.
+ * something genuinely evicted, which is counted by {@link #getOverruns}.
  * <p>Samples for a single rate are delivered in order because delivery is
  * single-threaded and the queue is FIFO, which {@code Rate} relies on: an RRD
  * rejects a sample whose timestamp does not advance.
@@ -49,7 +49,7 @@ class RateSampleDelivery {
      */
     static final int DEFAULT_CAPACITY = 4096;
 
-    /** How long {@link #shutdown()} waits for the consumer before abandoning
+    /** How long {@link #shutdown} waits for the consumer before abandoning
      * whatever is still queued. */
     private static final long SHUTDOWN_JOIN_MS = 2000;
 
@@ -60,7 +60,7 @@ class RateSampleDelivery {
         final long eventCount;
         final double totalEventTime;
         final long period;
-        /** The sample's archive step stamp, carried from {@link Rate#coalesce()}. */
+        /** The sample's archive step stamp, carried from {@link Rate#coalesce}. */
         final long timestampMs;
         /** {@code timestampMs / period}: the archive step this sample is for. */
         final long step;
@@ -81,7 +81,7 @@ class RateSampleDelivery {
     /** Retained capacity, kept for the overrun report. */
     private final int _capacity;
     private final AtomicBoolean _running = new AtomicBoolean(true);
-    /** Overruns reported so far; see {@link #reportOverruns()} for the consumer-only reader. */
+    /** Overruns reported so far; see {@link #reportOverruns} for the consumer-only reader. */
     private final AtomicLong _overruns = new AtomicLong();
     private final AtomicLong _superseded = new AtomicLong();
     private final AtomicLong _delivered = new AtomicLong();
@@ -126,24 +126,24 @@ class RateSampleDelivery {
      * <p>If the tail entry is the same listener and belongs to the same archive
      * step, it is replaced rather than appended to. Storage holds one value per
      * step, so the older of the two can never be written and the newer is the
-     * only one worth delivering; the replacement is counted by
-     * {@link #getSuperseded()} so the decision is visible rather than silent.
+     * only one worth delivering. The replacement is counted by
+     * {@link #getSuperseded} so the decision is visible rather than silent.
      * Only a hard capacity overflow evicts anything, and that is counted by
-     * {@link #getOverruns()}.
+     * {@link #getOverruns}.
      *
      * @param listener the listener to notify; a null listener is refused rather
-     *                 than queued, because most rates have no listener and an
-     *                 entry that fails on the consumer thread costs a logged
-     *                 exception per rate per period
+     * than queued, because most rates have no listener and an
+     * entry that fails on the consumer thread costs a logged
+     * exception per rate per period
      * @param totalValue the period's total value
      * @param eventCount the period's event count
      * @param totalEventTime the period's accumulated event time
      * @param period the rate period in ms
      * @param timestampMs the sample's archive step stamp, as stamped by
-     *                    {@link Rate#coalesce()}
+     * {@link Rate#coalesce}
      * @return true if the sample was queued or superseded an existing entry,
-     *         false if the listener was null, if it was rejected after
-     *         {@link #shutdown()}, or if an eviction could not be completed
+     * false if the listener was null, if it was rejected after
+     * {@link #shutdown}, or if an eviction could not be completed
      * @since 0.9.71+
      */
     boolean submit(RateSummaryListener listener, double totalValue, long eventCount,
@@ -247,10 +247,10 @@ class RateSampleDelivery {
 
     /**
      * How long the oldest pending sample has been waiting, from the step stamp
-     * {@link Rate#coalesce()} gave it.
+     * {@link Rate#coalesce} gave it.
      * <p>This is the live signal that the consumer has stopped making progress,
      * and it keeps rising while a listener is wedged — which is exactly when
-     * {@link #getOverruns()} stops being able to report anything useful.
+     * {@link #getOverruns} stops being able to report anything useful.
      *
      * @return the age in ms of the head of the queue, or 0 when nothing is pending
      * @since 0.9.71+
@@ -267,10 +267,10 @@ class RateSampleDelivery {
     }
 
     /**
-     * True once {@link #shutdown()} has been called.
+     * True once {@link #shutdown} has been called.
      *
-     * @return true after {@link #shutdown()} has begun tearing the consumer down,
-     *         false while the delivery thread is still accepting samples
+     * @return true after {@link #shutdown} has begun tearing the consumer down,
+     * false while the delivery thread is still accepting samples
      */
     boolean isStopped() {
         return !_running.get();
@@ -336,7 +336,7 @@ class RateSampleDelivery {
      * the {@code Rate} and {@code StatManager} monitors on the shared coalesce
      * timer, where a log call that can block is not allowed. The cost is that a
      * wedged consumer delays its own report until it unblocks — acceptable, because
-     * {@link #getOldestPendingAgeMs()} and {@link #getOverruns()} expose the same
+     * {@link #getOldestPendingAgeMs} and {@link #getOverruns} expose the same
      * condition to the console's ledger continuously and without needing a log
      * line to have been written first. Not rate-limited: an overrun must never be
      * absorbed, so every advance of the counter produces a record.

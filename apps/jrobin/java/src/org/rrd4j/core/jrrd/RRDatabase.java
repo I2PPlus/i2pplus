@@ -19,7 +19,6 @@ import org.rrd4j.core.RrdException;
  * Instances of this class model <a href="http://people.ee.ethz.ch/~oetiker/webtools/rrdtool/">Round
  * Robin Database</a> (RRD) files.
  *
- * @author <a href="mailto:ciaran@codeloop.com">Ciaran Treanor</a>
  * @version $Revision: 1.1 $
  */
 public class RRDatabase implements Closeable {

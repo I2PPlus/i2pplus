@@ -6,7 +6,7 @@ import net.i2p.router.RouterContext;
 import net.i2p.util.SystemVersion;
 
 /**
- * Honor the 'batchFrequency' tunnel pool setting or the 'router.batchFrequency'
+ * Honor the 'batchFrequency' tunnel pool setting or the '{@code router.batchFrequency}'
  * router config setting, and track fragmentation.
  */
 class BatchedRouterPreprocessor extends BatchedPreprocessor {
@@ -21,7 +21,7 @@ class BatchedRouterPreprocessor extends BatchedPreprocessor {
      * Only applies to OBGWs.
      */
     public static final String PROP_BATCH_FREQUENCY = "batchFrequency";
-    /** This goes in router advanced config */
+    /** This goes in router advanced config. */
     public static final String PROP_ROUTER_BATCH_FREQUENCY = "router.batchFrequency";
     /** For client OBGWs only (our data). */
     public static final int OB_CLIENT_BATCH_FREQ = SystemVersion.isSlow() ? 37 : 25;
@@ -81,7 +81,7 @@ class BatchedRouterPreprocessor extends BatchedPreprocessor {
     }
 
     /**
-     * how long should we wait before flushing
+     * How long should we wait before flushing.
      * @return the send delay
      */
     @Override

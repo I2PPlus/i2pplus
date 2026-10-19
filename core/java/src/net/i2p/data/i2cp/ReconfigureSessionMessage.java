@@ -19,7 +19,6 @@ import java.io.InputStream;
  * Defines the message a client sends to a router when
  * updating the config on an existing session.
  *
- * @author zzz
  */
 public class ReconfigureSessionMessage extends I2CPMessageImpl {
     /**

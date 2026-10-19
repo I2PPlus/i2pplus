@@ -20,7 +20,6 @@ package com.google.zxing.qrcode.decoder;
  * <p>See ISO 18004:2006, 6.5.1. This enum encapsulates the four error correction levels
  * defined by the QR code standard.</p>
  *
- * @author Sean Owen
  */
 public enum ErrorCorrectionLevel {
 

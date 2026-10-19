@@ -25,17 +25,17 @@ import javax.security.auth.Destroyable;
  * {@link EncType#ELGAMAL_2048}, 32 for {@link EncType#ECIES_X25519}.
  * {@link #KEYSIZE_BYTES} is the default type's length only.</li>
  * <li>For ElGamal the array is the private exponent padded to the key size,
- * which is why {@link #hashCode()} uses the last 4 bytes - the leading
+ * which is why {@link #hashCode} uses the last 4 bytes - the leading
  * ones are all zero.</li>
- * <li>Call {@link #destroy()} when the key is no longer needed. That zeroes
+ * <li>Call {@link #destroy} when the key is no longer needed. That zeroes
  * the array and returns it to the byte cache, so after it the key
- * reports {@link #isDestroyed()} and {@link #length()} still returns the
+ * reports {@link #isDestroyed} and {@link #length} still returns the
  * type's length but the data is gone.</li>
  * </ul>
  * <p>Caching:</p>
  * <ul>
  * <li>The derived public key is cached in memory: the first
- * {@link #toPublic()} computes it, later calls return the same
+ * {@link #toPublic} computes it, later calls return the same
  * {@link PublicKey} instance. A key built with the
  * {@link #PrivateKey(EncType, byte[], PublicKey)} constructor starts
  * with the caller's instance. There is no key cache of any kind here,
@@ -45,14 +45,13 @@ import javax.security.auth.Destroyable;
  * <p>Thread safety:</p>
  * <ul>
  * <li>Not thread-safe. The data cannot be reassigned once set, but the
- * cached public key and the zeroing done by {@link #destroy()} are
- * unsynchronized writes to plain fields, and {@link #getData()} hands
+ * cached public key and the zeroing done by {@link #destroy} are
+ * unsynchronized writes to plain fields, and {@link #getData} hands
  * out the backing array. Share a fully populated key, or pass it
  * through a synchronized structure, and do not destroy() or write to
  * the array while another thread may be using it.</li>
  * </ul>
  *
- * @author jrandom
  */
 public class PrivateKey extends SimpleDataStructure implements Destroyable {
     private static final EncType DEF_TYPE = EncType.ELGAMAL_2048;
@@ -186,8 +185,8 @@ public class PrivateKey extends SimpleDataStructure implements Destroyable {
     /**
      * Whether this key has been destroyed.
      *
-     * @return true if {@link #destroy()} has run and the key data has been
-     *         zeroed, false while the key is still usable
+     * @return true if {@link #destroy} has run and the key data has been
+     * zeroed, false while the key is still usable
      * @since 0.9.40
      */
     @Override

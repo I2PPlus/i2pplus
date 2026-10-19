@@ -13,7 +13,6 @@ import java.util.Arrays;
  * <p>Robin object does not hold values in memory - such object could be quite large. Instead of it,
  * Robin reads them from the backend I/O only when necessary.
  *
- * @author Sasa Markovic
  */
 class RobinArray implements Robin {
     private final Archive parentArc;

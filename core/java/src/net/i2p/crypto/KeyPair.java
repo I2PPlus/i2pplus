@@ -12,7 +12,6 @@ import net.i2p.data.PublicKey;
  * <p>The public key is used for encryption and signature verification,
  * while the private key is used for decryption and signing operations.</p>
  *
- * @author I2P Project
  * @since 0.9.38
  */
 public class KeyPair {

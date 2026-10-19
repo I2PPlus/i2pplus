@@ -43,7 +43,7 @@ public class DummyNetworkDatabaseFacade extends NetworkDatabaseFacade {
      */
     @Override
     public void restart() { /* Intentionally empty - dummy implementation */ }
-    /** Shut down and release resources */
+    /** Shut down and release resources. */
     public void shutdown() { /* Intentionally empty - dummy implementation */ }
     /**
      * Start the network database and register the local router info.
@@ -95,26 +95,26 @@ public class DummyNetworkDatabaseFacade extends NetworkDatabaseFacade {
      */
     @Override
     public RouterInfo lookupRouterInfoLocally(Hash key) { return _routers.get(key); }
-    /** Publish a key to the network */
+    /** Publish a key to the network. */
 
     public void publish(LeaseSet localLeaseSet) { /* Intentionally empty - dummy implementation */ }
-    /** Publish a key to the network */
+    /** Publish a key to the network. */
     public void publish(RouterInfo localRouterInfo) { /* Intentionally empty - dummy implementation */ }
-    /** Store a key locally */
+    /** Store a key locally. */
 
     public LeaseSet store(Hash key, LeaseSet leaseSet) { return leaseSet; }
-    /** Store a key locally */
+    /** Store a key locally. */
     public RouterInfo store(Hash key, RouterInfo routerInfo) {
         return _routers.put(key, routerInfo);
     }
-    /** Remove a key from publication */
+    /** Remove a key from publication. */
 
     public void unpublish(LeaseSet localLeaseSet) { /* Intentionally empty - dummy implementation */ }
-//** Access the stored lease set */
+//** Access the stored lease set. */
     public void accessLeaseSet(Hash key) { /* Intentionally empty - dummy implementation */ }
-    /** Remove a lease set from tracking */
+    /** Remove a lease set from tracking. */
     public void removeLeaseSetFromTracking(Hash key) { /* Intentionally empty - dummy implementation */ }
-    /** Record a lookup failure */
+    /** Record a lookup failure. */
 
     public void fail(Hash dbEntry) {
         _routers.remove(dbEntry);

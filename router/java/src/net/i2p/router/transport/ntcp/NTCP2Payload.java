@@ -24,7 +24,7 @@ class NTCP2Payload {
      */
     NTCP2Payload() {}
 
-    /** Block header size in bytes */
+    /** Block header size in bytes. */
     public static final int BLOCK_HEADER_SIZE = 3;
 
     private static final int BLOCK_DATETIME = 0;

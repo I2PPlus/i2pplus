@@ -38,7 +38,7 @@ import net.i2p.util.SystemVersion;
  * pending.add(0, msg)
  * }
  * }
- * }
+ * }.
  */
 class BatchedPreprocessor extends TrivialPreprocessor {
     private long _pendingSince;
@@ -49,7 +49,7 @@ class BatchedPreprocessor extends TrivialPreprocessor {
      * Fragment number of each flushed message, accumulated over the flush and
      * reported as one mean sample.  Both stats here were sampled per
      * fragment, which is two stat lookups and two monitors per rate period
-     * for every fragment leaving the gateway; both are means, so one sample
+     * for every fragment leaving the gateway. Both are means, so one sample
      * per flush reports the same quantity.
      * @since 0.9.71+
      */
@@ -59,7 +59,7 @@ class BatchedPreprocessor extends TrivialPreprocessor {
 
     private static final boolean DEBUG = false;
 
-    /** Minimum delay even under full pressure (ms) -- avoids busy-wait retry storms */
+    /** Minimum delay even under full pressure (ms) -- avoids busy-wait retry storms. */
     static final long MIN_FLUSH_DELAY = 2L;
 
     /**
@@ -86,7 +86,7 @@ class BatchedPreprocessor extends TrivialPreprocessor {
     static long DEFAULT_DELAY = SystemVersion.isSlow() ? 100 : 20;
     /**
      * Wait up to this long before sending (flushing) a small tunnel message
-     * Warning - overridden in BatchedRouterPreprocessor
+     * Warning - overridden in BatchedRouterPreprocessor.
      *
      * @return the send delay in ms
      */
@@ -135,7 +135,7 @@ class BatchedPreprocessor extends TrivialPreprocessor {
      * Pressure is the max of buffer fullness (allocated/FULL_SIZE)
      * and queue pressure (pending.size/FORCE_BATCH_FLUSH), bounded [0,1].
      * <p>
-     * delay = MIN_FLUSH_DELAY + (getSendDelay() - MIN_FLUSH_DELAY) * (1 - pressure)
+     * delay = MIN_FLUSH_DELAY + (getSendDelay() - MIN_FLUSH_DELAY) * (1 - pressure).
      */
     private long computePendingDelay(long allocated, int pendingSize) {
         int fullnessPct = (int) (allocated * 100L / FULL_SIZE);

@@ -9,7 +9,7 @@ import org.junit.Test;
 
 /**
  * Unit tests for the reachability-status decisions extracted from
- * {@link NTCPTransport#getReachabilityStatus()}.
+ * {@link NTCPTransport#getReachabilityStatus}.
  *
  * <p>Covers the three-stage cascade that replaces the original 150+ line method:
  * the header decides the hopeless cases up front, the inbound-activity stage

@@ -388,7 +388,7 @@ public class NetDbHelper extends FormHandler {
     }
 
     /**
-     * Now we're a FormHandler
+     * Now we're a FormHandler.
      * @since 0.9.38
      */
     protected void processForm() {
@@ -635,12 +635,12 @@ public class NetDbHelper extends FormHandler {
     }
 
     /**
-     * Creates a simplified search form with
-     * - a select element listing all original fields as options and grouped signature/encryption/transport types
-     * - a single text input for the search value
-     * - a submit button
-     * Includes tooltips and option groups for signatures, encryption types and transport.
-     * @throws IOException
+     * Creates a simplified search form: a select element listing all original
+     * fields as options with grouped signature, encryption and transport
+     * types, a single text input for the search value, and a submit button.
+     * Includes tooltips and option groups for signatures, encryption types
+     * and transport.
+     * @throws IOException on write error
      */
     private void renderCompactLookupForm() throws IOException {
         StringBuilder buf = new StringBuilder(8192);

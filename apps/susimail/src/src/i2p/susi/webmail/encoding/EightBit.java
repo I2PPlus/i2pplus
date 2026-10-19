@@ -24,18 +24,19 @@ public class EightBit extends Encoding {
 	}
 
 	/**
-	 * TODO would be nice to implement this, as it is supported on the project server,
-	 * but content must be CRLF terminated with a max of 998 chars per line.
-	 * And you can't have leading dots either, we'd have to prevent or double-dot it.
-	 * That would be expensive to check, using either a double read or
-	 * pulling it all into memory.
-	 * So it's prohibitive for attachments. We could do it for the message body,
-	 * since it's in memory already, but that's not much of a win.
-	 * ref: https://stackoverflow.com/questions/29510178/how-to-handle-1000-character-lines-in-8bit-mime
+	 * Not supported, always throws.
 	 *
 	 * @throws EncodingException always; 8bit encoding is not supported
 	 */
 	public String encode(byte[] in) throws EncodingException {
+		// TODO would be nice to implement this, as it is supported on the project server,
+		// but content must be CRLF terminated with a max of 998 chars per line.
+		// And you can't have leading dots either, we'd have to prevent or double-dot it.
+		// That would be expensive to check, using either a double read or
+		// pulling it all into memory.
+		// So it's prohibitive for attachments. We could do it for the message body,
+		// since it's in memory already, but that's not much of a win.
+		// ref: https://stackoverflow.com/questions/29510178/how-to-handle-1000-character-lines-in-8bit-mime
 		throw new EncodingException("unsupported");
 	}
 
@@ -45,6 +46,8 @@ public class EightBit extends Encoding {
 	}
 
 	/**
+	 * Pass the bytes through unchanged.
+	 *
 	 * @return the same buffer, unchanged
 	 */
 	@Override
@@ -53,7 +56,7 @@ public class EightBit extends Encoding {
 	}
 
 	/**
-	 * Copy in to out, unchanged
+	 * Copy in to out, unchanged.
 	 * @since 0.9.34
 	 */
 	public void decode(InputStream in, Buffer out) throws IOException {

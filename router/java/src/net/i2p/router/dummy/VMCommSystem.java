@@ -34,9 +34,9 @@ import net.i2p.util.Log;
  * where contact with the actual network is disabled.
  * <p>
  * VMCommSystem can be enabled with the following setting in the
- * router.config file:
+ * {@code router.config} file:
  * <p>
- * i2p.vmCommSystem=true
+ * {@code i2p.vmCommSystem}=true
  * <p>
  * FOR DEBUGGING AND LOCAL TESTING ONLY.
  */
@@ -46,7 +46,7 @@ public class VMCommSystem extends CommSystemFacade {
     private final X25519KeyFactory _xdhThread;
 
     /**
-     * Mapping from Hash to VMCommSystem for all routers hooked together
+     * Mapping from Hash to VMCommSystem for all routers hooked together.
      */
     private static Map<Hash, VMCommSystem> _commSystemFacades = Collections.synchronizedMap(new HashMap<>(16));
     /**
@@ -67,26 +67,28 @@ public class VMCommSystem extends CommSystemFacade {
 
     /**
      * Factory for making X25519 key pairs.
-     * @return the x d h factory
+     * @return the XDHE factory
      * @since 0.9.49 so some tests don't NPE
      */
     @Override
     public X25519KeyFactory getXDHFactory() { return _xdhThread; }
-    /** Return the count of active peers */
+    /** Return the count of active peers. */
     public int countActivePeers() { return Math.max(_commSystemFacades.size() - 1, 0); }
     /**
-     * Return the count of active send peers
+     * Return the count of active send peers.
      * @return the number of peers in the map other than this router
      */
     public int countActiveSendPeers()  { return Math.max(_commSystemFacades.size() - 1, 0); }
-    /** Return whether established */
+    /** Return whether established. */
     public boolean isEstablished(Hash peer) { return _commSystemFacades.containsKey(peer); }
 
     /**
+     * Always false, the VM transport never disconnects.
+     *
      * @since 0.9.71+
      */
     public boolean wasFailsafeClosed(Hash peer, long withinMs) {return false;}
-    /** Return the established */
+    /** Return the established. */
 
     public List<Hash> getEstablished() {
         List<Hash> rv;
@@ -149,7 +151,7 @@ public class VMCommSystem extends CommSystemFacade {
             // bah, ueberspeed!
             getTiming().setStartAfter(us.clock().now());
         }
-        /** Execute the job */
+        /** Execute the job. */
         public void runJob() {
             I2NPMessageHandler handler = new I2NPMessageHandler(_ctx);
             try {
@@ -163,7 +165,7 @@ public class VMCommSystem extends CommSystemFacade {
                 _log.error("Error reading/formatting a VM message? Something is not right...", e);
             }
         }
-        /** Return the name */
+        /** Return the name. */
         public String getName() { return "Receive Message"; }
     }
 
@@ -177,17 +179,17 @@ public class VMCommSystem extends CommSystemFacade {
     public void receive(byte[] message, Hash fromPeer) {
         _context.jobQueue().addJob(new ReceiveJob(fromPeer, message, _context));
     }
-    /** Shut down and release resources */
+    /** Shut down and release resources. */
 
     public void shutdown() {
         _commSystemFacades.remove(_context.routerHash());
     }
-    /** Start up and initialize */
+    /** Start up and initialize. */
 
     public void startup() {
         _commSystemFacades.put(_context.routerHash(), this);
     }
-    /** Restart the service */
+    /** Restart the service. */
 
     public void restart() {
         _commSystemFacades.remove(_context.routerHash());

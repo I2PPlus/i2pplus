@@ -8,7 +8,7 @@ import net.i2p.router.message.CloveSet;
 import net.i2p.util.Log;
 
 /**
- * Multiplexed decryption engine supporting both ElGamal and ECIES+AEAD with adaptive ordering
+ * Multiplexed decryption engine supporting both ElGamal and ECIES+AEAD with adaptive ordering.
  *
  * @since 0.9.44
  */
@@ -27,7 +27,7 @@ final class MuxedEngine {
     }
 
     /**
-     * Decrypt the message with the given private keys
+     * Decrypt the message with the given private keys.
      *
      * @param data the encrypted CloveSet to decrypt
      * @param elgKey must be ElG, non-null
@@ -35,7 +35,7 @@ final class MuxedEngine {
      * @param keyManager holds the session key material and ratchet preference
      * @return decrypted data or null on failure
      * @throws DataFormatException if the underlying garlic parse fails and cannot be
-     *                             recovered by trying the remaining crypto schemes
+     * recovered by trying the remaining crypto schemes
      */
     public CloveSet decrypt(byte[] data, PrivateKey elgKey, PrivateKey ecKey, MuxedSKM keyManager) throws DataFormatException {
         if (elgKey.getType() != EncType.ELGAMAL_2048 ||

@@ -82,7 +82,7 @@ public class Clock implements Timestamper.UpdateListener {
     }
 
     /**
-     * This is a dummy, see RouterClock and RouterTimestamper for the real thing
+     * This is a dummy, see RouterClock and RouterTimestamper for the real thing.
      *
      * @return a newly built dummy timestamper, as the base Clock keeps none
      */
@@ -113,7 +113,7 @@ public class Clock implements Timestamper.UpdateListener {
      * Specify how far away from the "correct" time the computer is - a positive
      * value means that the system time is slow, while a negative value means the system time is fast.
      *
-     * @param offsetMs the delta from System.currentTimeMillis() (NOT the delta from now())
+     * @param offsetMs the delta from {@link java.lang.System#currentTimeMillis} (NOT the delta from now())
      */
     public void setOffset(long offsetMs) {
         setOffset(offsetMs, false);
@@ -123,9 +123,9 @@ public class Clock implements Timestamper.UpdateListener {
      * Specify how far away from the "correct" time the computer is - a positive
      * value means that the system time is slow, while a negative value means the system time is fast.
      * <p>
-     * Warning - overridden in RouterClock
+     * Warning - overridden in RouterClock.
      *
-     * @param offsetMs the delta from System.currentTimeMillis() (NOT the delta from now())
+     * @param offsetMs the delta from {@link java.lang.System#currentTimeMillis} (NOT the delta from now())
      * @param force if true, bypass all sanity checks
      */
     public synchronized void setOffset(long offsetMs, boolean force) {
@@ -173,7 +173,7 @@ public class Clock implements Timestamper.UpdateListener {
     /**
      * Current offset from system time.
      *
-     * @return the current delta from System.currentTimeMillis() in milliseconds
+     * @return the current delta from {@link java.lang.System#currentTimeMillis} in milliseconds
      */
     public synchronized long getOffset() {
         return _offset;
@@ -206,7 +206,7 @@ public class Clock implements Timestamper.UpdateListener {
     }
 
     /**
-     * Warning - overridden in RouterClock
+     * Warning - overridden in RouterClock.
      *
      * @param stratum the reference clock's stratum, discarded here and used only by {@code RouterClock}
      * @since 0.7.12
@@ -276,7 +276,7 @@ public class Clock implements Timestamper.UpdateListener {
          * Called when the clock offset changes.
          *
          * @param delta = (new offset - old offset),
-         *              where each offset = (now() - System.currentTimeMillis())
+         * where each offset = (now() - {@link java.lang.System#currentTimeMillis})
          */
         public void offsetChanged(long delta);
     }

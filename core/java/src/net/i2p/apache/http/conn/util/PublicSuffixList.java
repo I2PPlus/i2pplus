@@ -35,7 +35,7 @@ import net.i2p.apache.http.util.Args;
  * the part of a domain name which is not under the control of the individual registrant
  * <p>
  * An up-to-date list of suffixes can be obtained from
- * <a href="http://publicsuffix.org/">publicsuffix.org</a>
+ * <a href="http://publicsuffix.org/">publicsuffix.org</a>.
  *
  * @since 4.4
  */

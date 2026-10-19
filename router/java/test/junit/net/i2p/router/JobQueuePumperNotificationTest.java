@@ -69,6 +69,8 @@ public class JobQueuePumperNotificationTest {
         }
 
         /**
+         * When the job was picked up, in nanos.
+         *
          * @return nanosecond timestamp when this job was executed by a runner
          */
         long getPickedUpNanos() { return _pickedUpAt.get(); }

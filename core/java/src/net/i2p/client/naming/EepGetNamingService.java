@@ -30,9 +30,9 @@ import net.i2p.util.EepGet;
  * <p>
  * Sample config to put in configadvanced.jsp (restart required):
  * <p>
- * i2p.naming.impl=net.i2p.client.naming.MetaNamingService
- * i2p.nameservicelist=net.i2p.client.naming.HostsTxtNamingService,net.i2p.client.naming.EepGetNamingService
- * i2p.naming.eepget.list=http://namingservice.i2p/cgi-bin/lkup.cgi?host=,http://i2host.i2p/cgi-bin/i2hostquery?
+ * {@code i2p.naming.impl}=net.i2p.client.naming.MetaNamingService
+ * {@code i2p.nameservicelist}=net.i2p.client.naming.HostsTxtNamingService,net.i2p.client.naming.EepGetNamingService
+ * {@code i2p.naming.eepget.list}=http://namingservice.i2p/cgi-bin/lkup.cgi?host=,http://i2host.i2p/cgi-bin/i2hostquery?
  *
  */
 public class EepGetNamingService extends DummyNamingService {

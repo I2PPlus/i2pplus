@@ -60,7 +60,7 @@ public abstract class CommSystemFacade implements Service {
     public void renderStatusHTML(Writer out) throws IOException { renderStatusHTML(out, null, 0); }
 
     /**
-     * Create the list of RouterAddress structures based on the router's config
+     * Create the list of RouterAddress structures based on the router's config.
      *
      * @return the published addresses, empty when none are configured
      */
@@ -76,7 +76,7 @@ public abstract class CommSystemFacade implements Service {
 
     /**
      * How many peers we have sent a message to in the last minute.
-     * <p>Narrower than {@link #countActivePeers()} in both respects that matter: send
+     * <p>Narrower than {@link #countActivePeers} in both respects that matter: send
      * only, and a one-minute window rather than the transport's active window. The
      * pair answers different questions - how many peers we can reach against how many
      * we are actually driving traffic to right now.
@@ -371,7 +371,7 @@ public abstract class CommSystemFacade implements Service {
 
     /**
      * Whether reverse DNS lookups of router IPs are enabled.
-     * Single source of truth for the routerconsole.enableReverseLookups setting;
+     * Single source of truth for the {@code routerconsole.enableReverseLookups} setting;
      * used by the comm system, netDb, and the console UI.
      *
      * @return true if reverse lookups are enabled
@@ -416,14 +416,14 @@ public abstract class CommSystemFacade implements Service {
     public boolean isRunning() { return true; }
 
     /**
-     * Tell other transports our address changed
+     * Tell other transports our address changed.
      *
      * @param address the address that replaced the previous one
      */
     public void notifyReplaceAddress(RouterAddress address) {}
 
     /**
-     * Tell other transports our address changed
+     * Tell other transports our address changed.
      *
      * @param address the address that was removed
      * @since 0.9.20
@@ -431,7 +431,7 @@ public abstract class CommSystemFacade implements Service {
     public void notifyRemoveAddress(RouterAddress address) {}
 
     /**
-     * Tell other transports our address changed
+     * Tell other transports our address changed.
      *
      * @param ipv6 true to remove the IPv6 address, false for IPv4
      * @since 0.9.20
@@ -457,20 +457,20 @@ public abstract class CommSystemFacade implements Service {
     /**
      * Factory for making X25519 key pairs.
      *
-     * @return the x d h factory
+     * @return the XDHE factory
      * @since 0.9.46
      */
     public X25519KeyFactory getXDHFactory() { return null; }
 
     /**
-     * Router must call after netdb is initialized
+     * Router must call after netdb is initialized.
      *
      * @since 0.9.41
      */
     public void initGeoIP() {}
 
     /**
-     * Exempt this router hash from any incoming throttles or rejections
+     * Exempt this router hash from any incoming throttles or rejections.
      *
      * @param peer the router to exempt
      * @since 0.9.58
@@ -478,7 +478,7 @@ public abstract class CommSystemFacade implements Service {
     public void exemptIncoming(Hash peer) {}
 
     /**
-     * Is this IP exempt from any incoming throttles or rejections
+     * Is this IP exempt from any incoming throttles or rejections.
      *
      * @param ip the address to test
      * @return whether exempt incoming
@@ -487,7 +487,7 @@ public abstract class CommSystemFacade implements Service {
     public boolean isExemptIncoming(String ip) { return false; }
 
     /**
-     * Remove this IP from the exemptions
+     * Remove this IP from the exemptions.
      *
      * @param ip the address to remove from the exemptions
      * @since 0.9.58
@@ -529,7 +529,7 @@ public abstract class CommSystemFacade implements Service {
      * but UNKNOWN must be last.
      * <p>
      * We are able to receive unsolicited connections
-     * on all enabled transports
+     * on all enabled transports.
      */
     public static final short STATUS_OK = 0;
 
@@ -589,7 +589,7 @@ public abstract class CommSystemFacade implements Service {
 
     /**
      * We are behind a symmetric NAT which will make our 'from' address look
-     * differently when we talk to multiple people
+     * differently when we talk to multiple people.
      */
     public static final short STATUS_DIFFERENT = 7;
 
@@ -646,19 +646,19 @@ public abstract class CommSystemFacade implements Service {
     public static final short STATUS_IPV4_DISABLED_IPV6_FIREWALLED = 12;
 
     /**
-     * We have no network interface at all enabled transports
+     * We have no network interface at all enabled transports.
      *
      * @since 0.9.4
      */
     public static final short STATUS_DISCONNECTED = 14;
 
     /**
-     * Our detection system is broken (SSU bind port failed)
+     * Our detection system is broken (SSU bind port failed).
      */
     public static final short STATUS_HOSED = 15;
 
     /**
-     * Our reachability is unknown on all
+     * Our reachability is unknown on all.
      */
     public static final short STATUS_UNKNOWN = 16;
 
@@ -670,45 +670,47 @@ public abstract class CommSystemFacade implements Service {
      * @since 0.9.20
      */
     public enum Status {
-        /** IPv4 OK, IPv6 OK or disabled or no address */
+        /** IPv4 OK, IPv6 OK or disabled or no address. */
         OK(STATUS_OK, _x("OK")),
-        /** IPv4 OK, IPv6 connectivity testing */
+        /** IPv4 OK, IPv6 connectivity testing. */
         IPV4_OK_IPV6_UNKNOWN(STATUS_IPV4_OK_IPV6_UNKNOWN, _x("IPv4: OK; IPv6: Testing")),
-        /** IPv4 OK, IPv6 firewalled */
+        /** IPv4 OK, IPv6 firewalled. */
         IPV4_OK_IPV6_FIREWALLED(STATUS_IPV4_OK_IPV6_FIREWALLED, _x("IPv4: OK; IPv6: Firewalled")),
-        /** IPv4 connectivity testing, IPv6 OK */
+        /** IPv4 connectivity testing, IPv6 OK. */
         IPV4_UNKNOWN_IPV6_OK(STATUS_IPV4_UNKNOWN_IPV6_OK, _x("IPv4: Testing; IPv6: OK")),
-        /** IPv4 firewalled, IPv6 OK */
+        /** IPv4 firewalled, IPv6 OK. */
         IPV4_FIREWALLED_IPV6_OK(STATUS_IPV4_FIREWALLED_IPV6_OK, _x("IPv4: Firewalled; IPv6: OK")),
-        /** IPv4 disabled, IPv6 OK */
+        /** IPv4 disabled, IPv6 OK. */
         IPV4_DISABLED_IPV6_OK(STATUS_IPV4_DISABLED_IPV6_OK, _x("IPv4: Disabled; IPv6: OK")),
-        /** IPv4 symmetric NAT (not source NAT) */
+        /** IPv4 symmetric NAT (not source NAT). */
         IPV4_SNAT_IPV6_OK(STATUS_IPV4_SNAT_IPV6_OK, _x("IPv4: Symmetric NAT; IPv6: OK")),
-        /** IPv4 symmetric NAT, IPv6 firewalled or disabled or no address */
+        /** IPv4 symmetric NAT, IPv6 firewalled or disabled or no address. */
         DIFFERENT(STATUS_DIFFERENT, _x("Symmetric NAT")),
-        /** IPv4 symmetric NAT (not source NAT) */
+        /** IPv4 symmetric NAT (not source NAT). */
         IPV4_SNAT_IPV6_UNKNOWN(STATUS_IPV4_SNAT_IPV6_UNKNOWN, _x("IPv4: Symmetric NAT; IPv6: Testing")),
-        /** IPv4 firewalled, IPv6 connectivity testing */
+        /** IPv4 firewalled, IPv6 connectivity testing. */
         IPV4_FIREWALLED_IPV6_UNKNOWN(STATUS_IPV4_FIREWALLED_IPV6_UNKNOWN, _x("IPv4: Firewalled; IPv6: Testing")),
-        /** IPv4 firewalled, IPv6 firewalled or disabled or no address */
+        /** IPv4 firewalled, IPv6 firewalled or disabled or no address. */
         REJECT_UNSOLICITED(STATUS_REJECT_UNSOLICITED, _x("Firewalled")),
-        /** IPv4 connectivity testing, IPv6 firewalled */
+        /** IPv4 connectivity testing, IPv6 firewalled. */
         IPV4_UNKNOWN_IPV6_FIREWALLED(STATUS_IPV4_UNKNOWN_IPV6_FIREWALLED, _x("IPv4: Testing; IPv6: Firewalled")),
-        /** IPv4 disabled, IPv6 connectivity testing */
+        /** IPv4 disabled, IPv6 connectivity testing. */
         IPV4_DISABLED_IPV6_UNKNOWN(STATUS_IPV4_DISABLED_IPV6_UNKNOWN, _x("IPv4: Disabled; IPv6: Testing")),
-        /** IPv4 disabled, IPv6 firewalled */
+        /** IPv4 disabled, IPv6 firewalled. */
         IPV4_DISABLED_IPV6_FIREWALLED(STATUS_IPV4_DISABLED_IPV6_FIREWALLED, _x("IPv4: Disabled; IPv6: Firewalled")),
-        /** No network interface available on any transport */
+        /** No network interface available on any transport. */
         DISCONNECTED(STATUS_DISCONNECTED, _x("Disconnected")),
-        /** Transport detection failure, SSU bind port conflict */
+        /** Transport detection failure, SSU bind port conflict. */
         HOSED(STATUS_HOSED, _x("Port Conflict")),
-        /** Reachability has not been determined on any transport */
+        /** Reachability has not been determined on any transport. */
         UNKNOWN(STATUS_UNKNOWN, _x("Testing"));
 
         private final int code;
         private final String status;
 
         /**
+         * Creates a status with the given code and text.
+         *
          * @param code the integer status code
          * @param status the human-readable status string
          */
@@ -979,7 +981,7 @@ public abstract class CommSystemFacade implements Service {
         }
 
         /**
-         * Readable status, not translated
+         * Readable status, not translated.
          *
          * @return the status as a human readable string
          */

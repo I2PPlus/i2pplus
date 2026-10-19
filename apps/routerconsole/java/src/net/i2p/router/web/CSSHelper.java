@@ -17,11 +17,11 @@ import net.i2p.util.RandomSource;
 import net.i2p.util.SystemVersion;
 
 /**
- * Copied and modded from I2PTunnel IndexBean (GPL)
+ * Copied and modded from I2PTunnel IndexBean (GPL).
  */
 public class CSSHelper extends HelperBase {
 
-    /** The context is injected by setContextId(), not by the ctor */
+    /** The context is injected by setContextId(), not by the ctor. */
     public CSSHelper() {}
 
     private static final Log _log = I2PAppContext.getGlobalContext().logManager().getLog(CSSHelper.class);
@@ -48,7 +48,7 @@ public class CSSHelper extends HelperBase {
      */
     public static final String PROP_THEME_NAME = "routerconsole.theme";
     /**
-     * Prefix for the per-theme properties mapping a theme name to its directory
+     * Prefix for the per-theme properties mapping a theme name to its directory.
      * @since 0.9.33 moved from ConfigUIHelper
      */
     public static final String PROP_THEME_PFX = PROP_THEME_NAME + '.';
@@ -82,60 +82,60 @@ public class CSSHelper extends HelperBase {
      * Property key forcing the narrow mobile console on wide screens.
      */
     public static final String PROP_FORCE_MOBILE_CONSOLE = "routerconsole.forceMobileConsole";
-    /** Whether apps open inside a console IFrame instead of replacing the console
+    /** Whether apps open inside a console IFrame instead of replacing the console.
      * @since 0.9.32 */
     public static final String PROP_EMBED_APPS = "routerconsole.embedApps";
-    /** Whether the console uses the Sora display font instead of Open Sans
+    /** Whether the console uses the Sora display font instead of Open Sans.
      * @since 0.9.59+ */
     public static final String PROP_ENABLE_SORA_FONT = "routerconsole.displayFontSora";
     /**
      * Whether the Sora display font is used when no preference is configured.
      */
     public static final boolean DEFAULT_ENABLE_SORA_FONT = false;
-    /** Rotating nonce for CSRF protection, rotates every 5 minutes */
+    /** Rotating nonce for CSRF protection, rotates every 5 minutes. */
     private static String currentNonce;
     private static final String[] _recentNonces = new String[2];
     private static long lastRotation;
     private static final long NONCE_ROTATION_MS = 5 * (long) 60 * 1000; // 5 minutes
-    /** Whether the sidebar is unified with the main content column
+    /** Whether the sidebar is unified with the main content column.
      * @since 0.9.67+ */
     public static final String PROP_UNIFIED_SIDEBAR = "routerconsole.unifiedSidebar";
     /**
      * Whether the sidebar is merged into the main content column by default.
      */
     public static final boolean DEFAULT_UNIFIED_SIDEBAR = false;
-    /** Whether a sidebar shorter than the viewport sticks to the top while scrolling
+    /** Whether a sidebar shorter than the viewport sticks to the top while scrolling.
      * @since 0.9.68+ */
     public static final String PROP_STICKY_SIDEBAR = "routerconsole.stickySidebar";
     /**
      * Whether a short sidebar sticks to the top while the page scrolls.
      */
     public static final boolean DEFAULT_STICKY_SIDEBAR = true;
-    /** true = legacy RRD4J minigraph renderer; false = dual-baseline canvas
+    /** true = legacy RRD4J minigraph renderer; false = dual-baseline canvas.
      * @since 0.9.70+ */
     public static final String PROP_SIDEBAR_GRAPH_LEGACY = "routerconsole.sidebarGraphLegacy";
-    /** Default true for legacy RRD4J; set false for dual-baseline canvas
+    /** Default true for legacy RRD4J; set false for dual-baseline canvas.
      * @since 0.9.70+ */
     public static final boolean DEFAULT_SIDEBAR_GRAPH_LEGACY = true;
-    /** Sidebar graph time period in minutes (2–30, default 20)
+    /** Sidebar graph time period in minutes (2–30, default 20).
      * @since 0.9.70+ */
     public static final String PROP_SIDEBAR_GRAPH_MINUTES = "routerconsole.sidebarGraphMinutes";
-    /** true = split display (inbound top, outbound bottom); false = overlay
+    /** true = split display (inbound top, outbound bottom); false = overlay.
      * @since 0.9.70+ */
     public static final String PROP_SIDEBAR_GRAPH_SPLIT = "routerconsole.sidebarGraphSplit";
-    /** Sidebar graph render direction: "ltr" or "rtl"
+    /** Sidebar graph render direction: "ltr" or "rtl".
      * @since 0.9.70+ */
     public static final String PROP_SIDEBAR_GRAPH_DIRECTION = "routerconsole.sidebarGraphDirection";
-    /** true = continuous scrolling graph; false = full-buffer redraw (default)
+    /** true = continuous scrolling graph; false = full-buffer redraw (default).
      * @since 0.9.70+ */
     public static final String PROP_SIDEBAR_GRAPH_CONTINUOUS = "routerconsole.sidebarGraphContinuous";
 
-    /** Session-bound nonce for CSRF protection, replaces static nonces @since 0.9.69 */
+    /** Session-bound nonce for CSRF protection, replaces static nonces @since 0.9.69. */
     private static final String SESSION_CONSOLE_NONCE = "__router.console.nonce.queue__";
     private static final int NONCE_QUEUE_SIZE = 50;
 
     /**
-     * Session-bound nonce generation - replaces static consoleNonce, updateNonce, reseedNonce, systemNonce
+     * Session-bound nonce generation - replaces static consoleNonce, updateNonce, reseedNonce, systemNonce.
      * @param session returns an invalid nonce if null
      * @return a new nonce for each call
      * @since 0.9.69
@@ -177,7 +177,7 @@ public class CSSHelper extends HelperBase {
     }
 
     /**
-     * Session-bound nonce validation - replaces static nonce validation
+     * Session-bound nonce validation - replaces static nonce validation.
      * @param session returns false if null
      * @param nonce returns false if null
      * @return true if valid
@@ -188,7 +188,7 @@ public class CSSHelper extends HelperBase {
     }
 
     /**
-     * Session-bound nonce validation with preserve option
+     * Session-bound nonce validation with preserve option.
      * @param session returns false if null
      * @param nonce returns false if null
      * @param preserve if true, do not delete the nonce. Use for early checks in jsps.
@@ -278,7 +278,7 @@ public class CSSHelper extends HelperBase {
     }
 
     /**
-     * Theme directory prefix, forced to classic for pre-Trident/6 IE
+     * Theme directory prefix, forced to classic for pre-Trident/6 IE.
      * @param userAgent the request User-Agent header, null for a normal browser
      * @return the theme path to prepend to console CSS and image references
      */
@@ -298,21 +298,22 @@ public class CSSHelper extends HelperBase {
     }
 
     /**
-     * Returns whether app embedding is enabled or disabled
+     * Returns whether app embedding is enabled or disabled.
      * @return true to open apps in a console IFrame, false to replace the console
      * @since 0.9.32
      */
     public boolean embedApps() {return _context.getBooleanProperty(PROP_EMBED_APPS);}
 
     /**
-     * Returns whether we should use Sora display font
+     * Whether the Sora display font is enabled.
      * @return true to use Sora, false for Open Sans
      * @since 0.9.59+
      */
     public boolean useSoraDisplayFont() {return _context.getBooleanProperty(PROP_ENABLE_SORA_FONT);}
 
     /**
-     * Save config for alternative display font if enabled
+     * Save the configuration to enable the Sora display font, if the
+     * property is set.
      * @since 0.9.59+
      */
     public void setSoraDisplayFont() {
@@ -322,21 +323,21 @@ public class CSSHelper extends HelperBase {
     }
 
     /**
-     * Returns whether we should use a unified sidebar
+     * Whether the unified sidebar is enabled, defaulting to false.
      * @return true if explicitly enabled, false otherwise
      * @since 0.9.67+
      */
     public boolean useUnifiedSidebar() {return _context.getBooleanProperty(PROP_UNIFIED_SIDEBAR);}
 
     /**
-     * Returns whether we should use a unified sidebar
+     * Whether the unified sidebar is in use, defaulting to true.
      * @return true unless the user has explicitly turned the unified sidebar off
      * @since 0.9.67+
      */
     public boolean enableUnifiedSidebar() {return _context.getBooleanPropertyDefaultTrue(PROP_UNIFIED_SIDEBAR);}
 
     /**
-     * Returns whether we should use a sticky sidebar when the sidebar height is less than the height of the viewport
+     * Returns whether we should use a sticky sidebar when the sidebar height is less than the height of the viewport.
      * @return true if explicitly enabled, false otherwise
      * @since 0.9.68+
      */
@@ -388,14 +389,14 @@ public class CSSHelper extends HelperBase {
     }
 
     /**
-     * Returns whether we should use a sticky sidebar when the sidebar height is less than the height of the viewport
+     * Returns whether we should use a sticky sidebar when the sidebar height is less than the height of the viewport.
      * @return true unless the user has explicitly turned the sticky sidebar off
      * @since 0.9.68+
      */
     public boolean enableStickySidebar() {return _context.getBooleanPropertyDefaultTrue(PROP_STICKY_SIDEBAR);}
 
     /**
-     * change default language for the router AND save it
+     * Change default language for the router AND save it.
      * @param lang xx OR xx_XX OR xxx OR xxx_XX
      */
     public void setLang(String lang) {
@@ -417,13 +418,13 @@ public class CSSHelper extends HelperBase {
     }
 
     /**
-     * needed for conditional css loads for zh
+     * Needed for conditional css loads for zh.
      * @return two-letter only, lower-case
      */
     public String getLang() {return Messages.getLanguage(_context);}
 
     /**
-     * Show / hide news on home page
+     * Show / hide news on home page.
      * @param val if non-null, "1" to show, else hide
      * @since 0.8.12
      */
@@ -434,14 +435,14 @@ public class CSSHelper extends HelperBase {
 
     /**
      * Should we send X_Frame_Options=SAMEORIGIN
-     * Default true
+     * Default true.
      * @return whether send x frame
      * @since 0.9.1
      */
     public boolean shouldSendXFrame() {return !_context.getBooleanProperty(PROP_XFRAME);}
 
     /**
-     * change refresh and save it, "0" also disables the refresh entirely
+     * Change refresh and save it, "0" also disables the refresh entirely.
      * @param r the new refresh period in seconds
      */
     public void setRefresh(String r) {
@@ -453,7 +454,7 @@ public class CSSHelper extends HelperBase {
     }
 
     /**
-     * The summary page refresh period, floored at 5s under heavy CPU load
+     * The summary page refresh period, floored at 5s under heavy CPU load.
      * @return refresh time in seconds, as a string, or "3600" when refresh is disabled
      */
     public String getRefresh() {
@@ -466,7 +467,7 @@ public class CSSHelper extends HelperBase {
     }
 
     /**
-     * change disable refresh boolean and save it
+     * Change disable refresh boolean and save it.
      * @param r "0" to disable the refresh, anything else to re-enable it
      * @since 0.9.1
      */
@@ -484,9 +485,9 @@ public class CSSHelper extends HelperBase {
     public boolean getDisableRefresh() {return _context.getBooleanProperty(PROP_DISABLE_REFRESH);}
 
     /**
-     * translate the title and display consistently
+     * Translate the title and display consistently.
      * @param s the raw page title
-     * @return a complete title element, prefixed by routerconsole.pageTitlePrefix if set
+     * @return a complete title element, prefixed by {@code routerconsole.pageTitlePrefix} if set
      */
     public String title(String s) {
         StringBuilder buf = new StringBuilder(128);
@@ -563,7 +564,7 @@ public class CSSHelper extends HelperBase {
      */
     public static class StringFormatter {
 
-        /** All methods are static; the ctor exists only for javadoc */
+        /** All methods are static; the ctor exists only for javadoc. */
         public StringFormatter() {}
 
         /**

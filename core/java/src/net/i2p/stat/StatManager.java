@@ -110,7 +110,7 @@ public class StatManager {
 
     /**
      * Create a new statistic to monitor the frequency of some event.
-     * The stat is ONLY created if the stat.full property is true or we are not in the router context.
+     * The stat is ONLY created if the {@code stat.full} property is true or we are not in the router context.
      *
      * @param name unique name of the statistic
      * @param description simple description of the statistic
@@ -124,7 +124,7 @@ public class StatManager {
 
     /**
      * Create a new statistic to monitor the frequency of some event.
-     * The stat is always created, independent of the stat.full setting or context.
+     * The stat is always created, independent of the {@code stat.full} setting or context.
      *
      * @param name unique name of the statistic
      * @param description simple description of the statistic
@@ -180,7 +180,7 @@ public class StatManager {
 
     /**
      * Create a new statistic to monitor the average value and confidence of some action.
-     * The stat is ONLY created if the stat.full property is true or we are not in the router context.
+     * The stat is ONLY created if the {@code stat.full} property is true or we are not in the router context.
      *
      * @param name unique name of the statistic
      * @param description simple description of the statistic
@@ -194,7 +194,7 @@ public class StatManager {
 
     /**
      * Create a new statistic to monitor the average value and confidence of some action.
-     * The stat is always created, independent of the stat.full setting or context.
+     * The stat is always created, independent of the {@code stat.full} setting or context.
      *
      * @param name unique name of the statistic
      * @param description simple description of the statistic
@@ -249,7 +249,7 @@ public class StatManager {
     }
 
     /**
-     * Sum of {@link Rate#getCoalesceSkips()} across every rate in the table.
+     * Sum of {@link Rate#getCoalesceSkips} across every rate in the table.
      * <p>A rate normally skips one coalesce per period, so this grows steadily and
      * is not by itself a problem. It is reported so that a rate which stopped
      * coalescing entirely can be told apart from one that is merely visited early.
@@ -265,7 +265,7 @@ public class StatManager {
     }
 
     /**
-     * Sum of {@link Rate#getCoalesceBacklogCollapses()} across every rate in the
+     * Sum of {@link Rate#getCoalesceBacklogCollapses} across every rate in the
      * table.
      * <p>Unlike a skip, a collapse is permanent: the steps it abandoned can never
      * be written, so every count here is a gap in the graph data. Zero is the
@@ -285,7 +285,7 @@ public class StatManager {
 
     /**
      * Samples evicted because the delivery queue hit its hard capacity.
-     * <p>Unlike {@link RateSampleDelivery#getSuperseded()} this must never happen:
+     * <p>Unlike {@link RateSampleDelivery#getSuperseded} this must never happen:
      * same-step supersession means a slow consumer does not grow the queue, so
      * reaching the cap means the consumer is not draining at all. Surfaced here
      * because the delivery queue is package-private and the console watchdog,
@@ -302,7 +302,7 @@ public class StatManager {
      * Samples replaced in place by a newer value for the same archive step.
      * <p>High but non-zero is normal under load and is not loss - only one value
      * per step is storable and the newest is the correct one. A count that stops
-     * advancing while {@link #getSamplePending()} climbs means the consumer has
+     * advancing while {@link #getSamplePending} climbs means the consumer has
      * stopped draining.
      *
      * @return supersession count since startup
@@ -598,7 +598,7 @@ public class StatManager {
     }
 
     /**
-     * Serializes all Frequencies and Rates to the provided OutputStream
+     * Serializes all Frequencies and Rates to the provided OutputStream.
      *
      * @param out to write to
      * @param prefix to use when serializing

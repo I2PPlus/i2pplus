@@ -16,11 +16,11 @@ import net.i2p.router.tasks.ReadConfigJob;
 import net.i2p.util.Log;
 import net.i2p.util.SystemVersion;
 
-/** This actually boots almost everything */
+/** This actually boots almost everything. */
 class BootCommSystemJob extends JobImpl {
     private final Log _log;
 
-    /** Property to enable trusted links */
+    /** Property to enable trusted links. */
     public static final String PROP_USE_TRUSTED_LINKS = "router.trustedLinks";
 
     /**

@@ -22,9 +22,8 @@ import net.i2p.data.StructureTest;
 import java.util.Properties;
 
 /**
- * Test harness for loading / storing Hash objects
+ * Tests SessionConfig serialization and option handling.
  *
- * @author jrandom
  */
 public class SessionConfigTest extends StructureTest {
     @Override

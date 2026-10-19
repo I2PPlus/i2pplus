@@ -13,12 +13,12 @@ import java.nio.ByteBuffer;
 import net.i2p.data.Destination;
 
 /**
- * Interface for sending streaming data to a SAM client
+ * Interface for sending streaming data to a SAM client.
  */
 
 interface SAMStreamReceiver {
     /**
-     * Sends the result of a stream send operation
+     * Sends the result of a stream send operation.
      * @param id the stream connection ID the answer belongs to
      * @param result the result code sent to the client, such as OK or TIMEOUT
      * @param bufferState state of the buffer
@@ -27,14 +27,14 @@ interface SAMStreamReceiver {
     public void streamSendAnswer( int id, String result, String bufferState ) throws IOException;
 
     /**
-     * Notifies that the outwards buffer is free for writing
+     * Notifies that the outwards buffer is free for writing.
      * @param id the stream connection ID whose send buffer has drained
      * @throws IOException if writing to the client socket fails
      */
     public void notifyStreamSendBufferFree( int id ) throws IOException;
 
     /**
-     * Notify about a new incoming connection
+     * Notify about a new incoming connection.
      *
      * @param id New connection id
      * @param dest Destination sent to the client in base64 form
@@ -43,7 +43,7 @@ interface SAMStreamReceiver {
     public void notifyStreamIncomingConnection ( int id, Destination dest ) throws IOException;
 
     /**
-     * Notify about a new outgoing connection
+     * Notify about a new outgoing connection.
      *
      * @param id New connection id
      * @param result status code sent in the STREAM STATUS reply
@@ -61,15 +61,15 @@ interface SAMStreamReceiver {
      */
     public void receiveStreamBytes(int id, ByteBuffer data) throws IOException;
 
+    // FIXME: this interface should be cleaner
     /**
-     * Notify that a connection has been closed
-     * FIXME: this interface should be cleaner
+     * Notify that a connection has been closed.
      *
      * @param id Connection id that was closed
      * @param result Disconnection reason ("OK" or something else)
      * @param msg Error message, if any
      * @throws IOException if writing to the client socket fails
-     */
+    */
     public void notifyStreamDisconnection(int id, String result, String msg) throws IOException;
 
     /**

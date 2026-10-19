@@ -32,7 +32,7 @@ public class FortunaRandomSource extends RandomSource implements EntropyHarveste
     private boolean _haveNextGaussian;
 
     /**
-     * May block up to 10 seconds or forever
+     * May block up to 10 seconds or forever.
      * @param context the router context
      */
     public FortunaRandomSource(I2PAppContext context) {
@@ -68,7 +68,7 @@ public class FortunaRandomSource extends RandomSource implements EntropyHarveste
     }
 
     /**
-     * Note - methods may hang or NPE or throw IllegalStateExceptions after this
+     * Note - methods may hang or NPE or throw IllegalStateExceptions after this.
      *
      * @since 0.8.8
      */
@@ -118,6 +118,8 @@ public class FortunaRandomSource extends RandomSource implements EntropyHarveste
     }
 
     /**
+     * Next random int, signed.
+     *
      * @return all possible int values, positive and negative
      * @since 0.9.54
      */
@@ -129,7 +131,7 @@ public class FortunaRandomSource extends RandomSource implements EntropyHarveste
     }
 
     /**
-     * Implementation from Sun's java.util.Random javadocs
+     * Implementation from Sun's java.util.Random javadocs.
      */
     private int signedNextInt(int n) {
         if (n <= 0) throw new IllegalArgumentException("n must be positive");
@@ -225,7 +227,7 @@ public class FortunaRandomSource extends RandomSource implements EntropyHarveste
     }
 
     /**
-     * Implementation from sun's java.util.Random javadocs
+     * Implementation from sun's java.util.Random javadocs.
      */
     @Override
     public double nextDouble() {
@@ -237,7 +239,7 @@ public class FortunaRandomSource extends RandomSource implements EntropyHarveste
     }
 
     /**
-     * Implementation from sun's java.util.Random javadocs
+     * Implementation from sun's java.util.Random javadocs.
      */
     @Override
     public float nextFloat() {
@@ -249,7 +251,7 @@ public class FortunaRandomSource extends RandomSource implements EntropyHarveste
     }
 
     /**
-     * Implementation from sun's java.util.Random javadocs
+     * Implementation from sun's java.util.Random javadocs.
      */
     @Override
     public double nextGaussian() {

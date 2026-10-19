@@ -16,7 +16,7 @@ import java.io.OutputStream;
  * </ul>
  * <p><strong>Structure:</strong></p>
  * <ul>
- * <li><strong>LeaseSet Hash:</strong> 32-byte hash of the target LeaseSet (available via {@link #getGateway()})</li>
+ * <li><strong>LeaseSet Hash:</strong> 32-byte hash of the target LeaseSet (available via {@link #getGateway})</li>
  * <li><strong>Cost:</strong> 4-byte cost value for routing decisions</li>
  * <li><strong>Type:</strong> 4-byte type identifier for the referenced LeaseSet</li>
  * </ul>
@@ -40,7 +40,7 @@ import java.io.OutputStream;
  * <li><strong>Type:</strong> Application-specific categorization</li>
  * <li><strong>Hash:</strong> Uniquely identifies the target LeaseSet</li>
  * </ul>
- * <p><strong>Implementation Status:</strong> PRELIMINARY - Subject to change as proposal evolves</p>
+ * <p><strong>Implementation Status:</strong> PRELIMINARY - Subject to change as proposal evolves.</p>
  *
  * @since 0.9.38
  */

@@ -37,7 +37,7 @@ import java.util.Set;
  * Per-key last-seen-time, failures, etc. must be tracked elsewhere.
  * <p>
  * If this bucket is full (i.e. begin == end &amp;&amp; size &gt;= max)
- * then add() will call KBucketTrimmer.trim() do
+ * then add() will call {@link net.i2p.kademlia.KBucketTrimmer#trim} do
  * (possibly) remove older entries, and indicate whether
  * to add the new entry. If the trimmer returns true without
  * removing entries, this KBucket will exceed the max size.
@@ -47,7 +47,7 @@ import java.util.Set;
  * slot frees up, so live candidates survive transient bucket pressure
  * instead of needing to be re-discovered.
  * <p>
- * Refactored from net.i2p.router.networkdb.kademlia
+ * Refactored from net.i2p.router.networkdb.kademlia.
  *
  * @param <T> type of SimpleDataStructure objects stored in this bucket
  * @since 0.9.2 in i2psnark, moved to core in 0.9.10

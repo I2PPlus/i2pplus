@@ -25,7 +25,6 @@ package org.cybergarage.upnp.xml;
  * <p>This class is used by UPnP actions to manage argument definitions and their values during
  * action invocation, enabling proper parameter handling and response generation.
  *
- * @author Satoshi Konno
  * @since 1.0
  */
 public class ArgumentData extends NodeData {

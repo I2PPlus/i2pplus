@@ -34,21 +34,21 @@ public class HopConfig {
     private volatile int _oldMessagesProcessed;
     private volatile int _allocatedBW;
 
-    /** Creates a new HopConfig with default values */
+    /** Creates a new HopConfig with default values. */
     public HopConfig() {
         _creation = -1;
         _expiration = -1;
     }
 
     /**
-     * What tunnel ID are we receiving on? (0 if uninitialized)
+     * What tunnel ID are we receiving on? (0 if uninitialized).
      *
      * @return the receive tunnel ID or 0
      */
     public long getReceiveTunnelId() { return (_receiveTunnel != null) ? _receiveTunnel.getTunnelId() : 0; }
 
     /**
-     * What tunnel ID are we receiving on? (null if uninitialized)
+     * What tunnel ID are we receiving on? (null if uninitialized).
      *
      * @return the receive tunnel or null
      */
@@ -80,21 +80,21 @@ public class HopConfig {
     public Hash getReceiveFrom() { return _receiveFrom; }
 
     /**
-     * Do not set for gateway
+     * Do not set for gateway.
      *
      * @param from the previous peer hash
      */
     public void setReceiveFrom(Hash from) { _receiveFrom = from; }
 
     /**
-     * What is the next tunnel ID we are sending to? (0 if endpoint)
+     * What is the next tunnel ID we are sending to? (0 if endpoint).
      *
      * @return the send tunnel ID or 0
      */
     public long getSendTunnelId() { return (_sendTunnel != null) ? _sendTunnel.getTunnelId() : 0; }
 
     /**
-     * What is the next tunnel ID we are sending to? (null if endpoint)
+     * What is the next tunnel ID we are sending to? (null if endpoint).
      *
      * @return the send tunnel or null
      */
@@ -104,7 +104,7 @@ public class HopConfig {
 
     /**
      * The tunnel ID to send messages through.
-     * Do not set for endpoint
+     * Do not set for endpoint.
      *
      * @param id the tunnel ID
      * @since 0.9.48
@@ -113,7 +113,7 @@ public class HopConfig {
 
     /**
      * The send tunnel ID, from 1 to 0xffffffff.
-     * Do not set for endpoint
+     * Do not set for endpoint.
      *
      * @param id 1 to 0xffffffff
      * @throws IllegalArgumentException if less than or equal to zero or greater than max value
@@ -129,7 +129,7 @@ public class HopConfig {
     public Hash getSendTo() { return _sendTo; }
 
     /**
-     * Do not set for endpoint
+     * Do not set for endpoint.
      *
      * @param to the next peer hash
      */
@@ -208,7 +208,7 @@ public class HopConfig {
 
     /**
      * Take note of a message being pumped through this tunnel.
-     * "processed" is for incoming and "sent" is for outgoing (could be dropped in between)
+     * "processed" is for incoming and "sent" is for outgoing (could be dropped in between).
      */
     public void incrementProcessedMessages() { _messagesProcessed.incrementAndGet(); }
 
@@ -232,7 +232,7 @@ public class HopConfig {
     /**
      * This returns the number of processed messages since the last time this was called,
      * and resets the count. It should only be called by code that updates the router stats.
-     * See TunnelDispatcher.updateParticipatingStats().
+     * See {@link net.i2p.router.tunnel.TunnelDispatcher#updateParticipatingStats}.
      * <p>
      * The counter is sampled once so the returned delta and the stored baseline
      * refer to the same read; a concurrent increment lands in the next window.

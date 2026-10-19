@@ -28,7 +28,6 @@ import java.io.IOException;
  * Class for creating I2P repliable datagrams.  Note that objects of this class
  * are NOT THREAD SAFE!
  *
- * @author human
  */
 public final class I2PDatagramMaker {
 

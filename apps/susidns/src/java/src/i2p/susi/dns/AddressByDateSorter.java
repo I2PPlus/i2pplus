@@ -14,9 +14,7 @@ import java.util.Comparator;
  * @since 0.9.66
  */
 public class AddressByDateSorter implements Comparator<AddressBean>, Serializable {
-    /**
-     * Default constructor.
-     */
+    /** Creates a date-order comparator. */
     public AddressByDateSorter() {
         super();
     }

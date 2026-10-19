@@ -9,7 +9,7 @@ import net.i2p.router.message.CloveSet;
 import net.i2p.util.Log;
 
 /**
- * Post-quantum hybrid decryption engine supporting both ECIES and ML-KEM with adaptive ordering
+ * Post-quantum hybrid decryption engine supporting both ECIES and ML-KEM with adaptive ordering.
  *
  * @since 0.9.67
  */
@@ -61,7 +61,7 @@ final class MuxedPQEngine {
     }
 
     /**
-     * Decrypt the message with the given private keys
+     * Decrypt the message with the given private keys.
      *
      * @param data the data to decrypt
      * @param ecKey must be EC, non-null

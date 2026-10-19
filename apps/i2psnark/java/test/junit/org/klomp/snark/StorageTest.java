@@ -30,7 +30,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 /**
- * Tests for Storage.check(savedTime, savedBitField), the fast-resume path.
+ * Tests for {@link org.klomp.snark.Storage#check}savedTime, savedBitField), the fast-resume path.
  *
  * <p>Contract under test: on startup, the saved per-torrent bitfield and timestamp are trusted
  * only for files that are unchanged (mtime &lt;= savedTime and length matching). Files that were
@@ -488,7 +488,7 @@ public class StorageTest {
     // ----- desired per-file granularity, FAIL on the current all-or-nothing implementation -----
 
     /**
-     * b.dat modified after the save: only b.dat's pieces (2, 3) may be re-verified; a.dat's
+     * B.dat modified after the save: only b.dat's pieces (2, 3) may be re-verified; a.dat's
      * pieces (0, 1) must be trusted without re-hashing.
      */
     @Test
@@ -568,7 +568,7 @@ public class StorageTest {
     }
 
     /**
-     * b.dat has the wrong length even with an old mtime: only b.dat's pieces may be re-verified,
+     * B.dat has the wrong length even with an old mtime: only b.dat's pieces may be re-verified,
      * proving the length check is per-file and independent of the mtime check.
      */
     @Test
@@ -939,7 +939,7 @@ public class StorageTest {
         }
     }
 
-    /** classify maps OS errno text and typed NIO exceptions to classified errors. */
+    /** Classify maps OS errno text and typed NIO exceptions to classified errors. */
     @Test
     public void testClassifyStorageError() {
         // Unix errno text via plain java.io exceptions
@@ -964,7 +964,7 @@ public class StorageTest {
         assertClassify(StorageError.STALE_HANDLE, new IOException("The process cannot access the file because it is being used by another process"));
     }
 
-    /** typed NIO exceptions classify without any message parsing */
+    /** Typed NIO exceptions classify without any message parsing. */
     @Test
     public void testClassifyTypedExceptions() {
         assertClassify(StorageError.MISSING, new NoSuchFileException("/data/torrent/file1"));
@@ -979,7 +979,7 @@ public class StorageTest {
         assertClassify(StorageError.OTHER, new FileSystemException("/data/torrent/file1"));
     }
 
-    /** describe preserves the raw text only for unclassified errors */
+    /** Describe preserves the raw text only for unclassified errors. */
     @Test
     public void testDescribe() {
         assertEquals("No space left on device", StorageError.describe(new IOException("No space left on device")));
@@ -988,7 +988,7 @@ public class StorageTest {
         assertEquals("I/O error", StorageError.describe(new IOException((String) null)));
     }
 
-    /** the fatal set is the deduplicated single source of truth for stopping a torrent */
+    /** The fatal set is the deduplicated single source of truth for stopping a torrent. */
     @Test
     public void testFatalFlags() {
         StorageError[] fatal = {StorageError.NO_SPACE, StorageError.PERMISSION, StorageError.READ_ONLY,
@@ -1320,7 +1320,7 @@ public class StorageTest {
     }
 
     /**
-     * countNonPad excludes padding directories from a directory listing, so
+     * CountNonPad excludes padding directories from a directory listing, so
      * they do not count toward the max files per torrent limit.
      */
     @Test
@@ -1481,7 +1481,7 @@ public class StorageTest {
     /**
      * After a restart (simulated with a saved bitfield), a data-dir file is
      * trusted from the saved state without re-hashing, and a staging file with
-     * matching length and mtime is trusted too; unfinished pieces keep their
+     * matching length and mtime is trusted too. Unfinished pieces keep their
      * saved clear bits and complete in place, moving out on completion.
      */
     @Test

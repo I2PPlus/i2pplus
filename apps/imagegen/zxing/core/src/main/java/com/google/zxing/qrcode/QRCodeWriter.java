@@ -33,7 +33,6 @@ import java.util.Map;
  * <p>Encodes text content into a QR Code barcode using the ZXing library's encoder,
  * supporting various error correction levels and encoding hint types.</p>
  *
- * @author dswitkin@google.com (Daniel Switkin)
  */
 public final class QRCodeWriter implements Writer {
 

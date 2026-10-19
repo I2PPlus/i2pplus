@@ -2,7 +2,7 @@ package net.i2p.router.transport.udp;
 
 /**
  * Generic means of SACK/NACK transmission for partially or fully
- * received messages
+ * received messages.
  */
 interface ACKBitfield {
 
@@ -37,7 +37,7 @@ interface ACKBitfield {
 
     /**
      * Number of fragments acked in this bitfield.
-     * Faster than looping through received()
+     * Faster than looping through received().
      *
      * @return number of fragments acked
      * @since 0.9.16

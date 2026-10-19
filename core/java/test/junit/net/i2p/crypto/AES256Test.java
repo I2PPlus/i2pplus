@@ -16,9 +16,6 @@ import net.i2p.data.DataHelper;
 import net.i2p.data.SessionKey;
 import net.i2p.util.RandomSource;
 
-/**
- * @author Comwiz
- */
 public class AES256Test extends TestCase {
     private I2PAppContext _context;
     private byte[] iv;

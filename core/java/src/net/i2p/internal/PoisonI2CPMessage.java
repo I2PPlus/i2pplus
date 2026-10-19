@@ -9,7 +9,6 @@ import java.io.InputStream;
  * For marking end-of-queues in a standard manner.
  * Don't actually send it.
  *
- * @author zzz
  * @since 0.8.3
  */
 public class PoisonI2CPMessage extends I2CPMessageImpl {

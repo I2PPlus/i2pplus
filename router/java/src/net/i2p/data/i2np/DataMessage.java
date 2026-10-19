@@ -15,7 +15,6 @@ import net.i2p.data.DataHelper;
  * Defines a message containing arbitrary bytes of data.
  * This is what goes in a GarlicClove.
  *
- * @author jrandom
  */
 public class DataMessage extends FastI2NPMessageImpl {
     /** The message type identifier. */

@@ -15,7 +15,7 @@ interface EstablishState {
     /**
      * Parse the contents of the buffer as part of the handshake.
      * <p>
-     * All data must be copied out of the buffer as Reader.processRead()
+     * All data must be copied out of the buffer as {@link net.i2p.router.transport.ntcp.Reader#processRead}
      * will return it to the pool.
      * <p>
      * If there are additional data in the buffer after the handshake is complete,
@@ -29,7 +29,7 @@ interface EstablishState {
     /**
      * Does nothing. Outbound (Alice) must override.
      * We are establishing an outbound connection, so prepare ourselves by
-     * queueing up the write of the first part of the handshake
+     * queueing up the write of the first part of the handshake.
      *
      * @throws IllegalStateException on invalid state
      */
@@ -51,8 +51,8 @@ interface EstablishState {
 
     /**
      * If synchronized on this, fails with
-     * deadlocks from all over via CSFI.isEstablished().
-     * Also CSFI.getFramedAveragePeerClockSkew().
+     * deadlocks from all over via {@code CSFI.isEstablished()}.
+     * Also {@code CSFI.getFramedAveragePeerClockSkew()}.
      *
      * @return is the handshake complete and valid?
      */

@@ -25,7 +25,6 @@ public class ControlResponse extends SOAPResponse {
     //	Constructor
     ////////////////////////////////////////////////
 
-    /** Default constructor */
     public ControlResponse() {
         setServer(UPnP.getServerName());
     }

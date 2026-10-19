@@ -18,15 +18,15 @@ import net.i2p.util.LogManager;
  * Tests for the windowed first-hop send failure streak on
  * {@link TunnelCreatorConfig}:
  * - bursts inside {@link TunnelCreatorConfig#FIRST_HOP_FAILURE_SPACING_MS}
- *   collapse to one counted failure
+ * collapse to one counted failure
  * - spaced failures advance towards
- *   {@link TunnelCreatorConfig#FIRST_HOP_FAILURE_THRESHOLD}
+ * {@link TunnelCreatorConfig#FIRST_HOP_FAILURE_THRESHOLD}
  * - the streak decays out after
- *   {@link TunnelCreatorConfig#FIRST_HOP_FAILURE_WINDOW_MS}
+ * {@link TunnelCreatorConfig#FIRST_HOP_FAILURE_WINDOW_MS}
  * - the escalation latch fires exactly once until the streak is cleared
  * - inbound and zero-hop tunnels are not applicable
  * - real traffic clears and re-arms the streak, while a passing test leaves
- *   it to age out (a flaky first hop must still be detectable)
+ * it to age out (a flaky first hop must still be detectable).
  *
  * @since 0.9.71+
  */

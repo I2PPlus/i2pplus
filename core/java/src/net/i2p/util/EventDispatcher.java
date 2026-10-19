@@ -31,9 +31,8 @@ import java.util.Set;
  * public Object waitEventValue(String n) { return _event.waitEventValue(n); }
  * </code>
  * <p>
- * Deprecated - Used only by I2PTunnel
+ * Deprecated - Used only by I2PTunnel.
  *
- * @author human
  */
 public interface EventDispatcher {
 
@@ -49,7 +48,7 @@ public interface EventDispatcher {
      * Attach an EventDispatcher object to the events dispatching chain.  Note
      * that notification is not bidirectional (i.e. events notified to
      * <code>ev</code> won't reach the object calling this method).
-     * Good luck, and beware of notification loops! :-)
+     * Good luck, and beware of notification loops! :-).
      *
      * @param iev Event object to be attached
      */
@@ -63,7 +62,7 @@ public interface EventDispatcher {
     public void detachEventDispatcher(EventDispatcher iev);
 
     /**
-     * Deliver an event
+     * Deliver an event.
      *
      * @param event name of the event
      * @param args data being stored for that event
@@ -72,7 +71,7 @@ public interface EventDispatcher {
 
     /**
      * Retrieve the value currently associated with the specified
-     * event value
+     * event value.
      *
      * @param name name of the event to query for
      * @return the event value
@@ -80,26 +79,26 @@ public interface EventDispatcher {
     public Object getEventValue(String name);
 
     /**
-     * Retrieve the names of all the events that have been received
+     * Retrieve the names of all the events that have been received.
      *
      * @return A set of event names
      */
     public Set<String> getEvents();
 
     /**
-     * Ignore further event notifications
+     * Ignore further event notifications.
      *
      */
     public void ignoreEvents();
 
     /**
-     * Almost like the method above :-)
+     * Almost like the method above :-).
      *
      */
     public void unIgnoreEvents();
 
     /**
-     * Wait until the given event has received a value
+     * Wait until the given event has received a value.
      *
      * @param name name of the event to wait for
      * @return value specified for that event

@@ -41,8 +41,8 @@ public class TunerCeilingDirectionTest {
      * The dead-band. Strictly between the climb band (inclusive at half the lossy
      * threshold) and the shrink threshold the honest answer is "unchanged", which
      * is what lets the ceiling rest at an intermediate value. 0.10 is the climb
-     * boundary itself, not the dead-band — it is pinned by
-     * {@link #climbBandBoundaryIsInclusive()}.
+     * boundary itself, not the dead-band. It is pinned by
+     * {@link #climbBandBoundaryIsInclusive}.
      */
     @Test
     public void betweenBandsHolds() {
@@ -150,7 +150,7 @@ public class TunerCeilingDirectionTest {
      * The accumulation sequence the caller must produce: a sustained loss signal
      * moves the ceiling on the second window, and a sustained clean signal moves
      * it back.
-     * <p>This is the sequence that deadlocked before the fix — the confirm counts
+     * <p>This is the sequence that deadlocked before the fix. The confirm counts
      * were gated on the return value, which is HOLD until the counts are reached,
      * so they never incremented and the ceiling froze permanently. The counts
      * must be updated from the raw signal zone, then gated.

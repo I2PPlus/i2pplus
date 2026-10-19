@@ -17,7 +17,7 @@ import java.util.jar.Attributes;
 import java.util.jar.Manifest;
 
 /**
- * The build date as set in i2p.jar,
+ * The build date as set in {@code i2p.jar},
  * and reasonable min and max values for the current time,
  * to be used as sanity checks.
  * <p>
@@ -85,7 +85,7 @@ public class BuildTime {
     }
 
     /**
-     * The build date for i2p.jar.
+     * The build date for {@code i2p.jar}.
      *
      * @return the earliest possible time if actual build date is unknown
      */

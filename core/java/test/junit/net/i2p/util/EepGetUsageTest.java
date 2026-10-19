@@ -18,10 +18,10 @@ import org.junit.Test;
  */
 public class EepGetUsageTest {
 
-    /** Options accepted by EepGet.main(), from its Getopt spec. */
+    /** Options accepted by {@link net.i2p.util.EepGet#main}, from its Getopt spec. */
     private static final String EEPGET_OPTIONS = "p:cn:t:e:o:m:l:h:u:x:";
 
-    /** Options accepted by EepPost.main(), from its Getopt spec. */
+    /** Options accepted by {@link net.i2p.util.EepPost#main}, from its Getopt spec. */
     private static final String EEPPOST_OPTIONS = "p:cn:t:v:w:o:u:x:l:m:s:f:";
 
     /**

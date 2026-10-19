@@ -8,8 +8,8 @@ import static org.junit.Assert.*;
 
 /**
  * Tests for {@link Rate}'s retained-sample ring and ledger counters:
- * {@link Rate#getRecentSamples(int)}, {@link Rate#getCoalesceCount()} and
- * {@link Rate#getCoalesceBacklogCollapses()}.
+ * {@link Rate#getRecentSamples(int)}, {@link Rate#getCoalesceCount} and
+ * {@link Rate#getCoalesceBacklogCollapses}.
  *
  * <p>The ring exists so a healed listener can backfill steps it never stored, and
  * carries an explicit {@code timestampMs} because {@code RateSummaryListener.add}

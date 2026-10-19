@@ -66,6 +66,8 @@ public class SmoothedBandTest {
     }
 
     /**
+     * Cubic control points for the smoothed curve.
+     *
      * @param x sample x coordinates, one per sample
      * @param y sample y coordinates, one per sample, no NaN in this run
      * @param transitionWidth most width to give one sub-pixel transition

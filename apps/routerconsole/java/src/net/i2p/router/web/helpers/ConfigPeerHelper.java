@@ -123,7 +123,7 @@ public class ConfigPeerHelper extends HelperBase {
     public boolean isBanned(Hash h) {return _context.banlist().isBanlisted(h);}
 
     /**
-     * Convert a (non-negative) two's complement IP to exactly 16 bytes
+     * Convert a (non-negative) two's complement IP to exactly 16 bytes.
      */
     private static byte[] toIPBytes(BigInteger bi) {
         byte[] ba = bi.toByteArray();

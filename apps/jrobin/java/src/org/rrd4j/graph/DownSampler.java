@@ -5,7 +5,6 @@ import java.util.Arrays;
 /**
  * A class that implement a downsampler, used to reduce the number of point to display.
  *
- * @author Fabrice Bacchella
  */
 public interface DownSampler {
 

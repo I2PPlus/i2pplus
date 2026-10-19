@@ -72,7 +72,7 @@ class OutboundReceiver implements TunnelGateway.Receiver {
     }
 
     /**
-     * The next hop
+     * The next hop.
      * @return non-null
      * @since 0.9.3
      */
@@ -160,7 +160,7 @@ class OutboundReceiver implements TunnelGateway.Receiver {
     }
 
     /**
-     * Immediately fail the tunnel if the send fails
+     * Immediately fail the tunnel if the send fails.
      *
      * @since 0.9.53
      */

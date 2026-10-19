@@ -50,7 +50,7 @@ class FileLogWriter extends LogWriter {
     }
 
     /**
-     * File may not exist or have old logs in it if not opened yet
+     * File may not exist or have old logs in it if not opened yet.
      *
      * @return non-null
      */
@@ -121,6 +121,8 @@ class FileLogWriter extends LogWriter {
     }
 
     /**
+     * Flush the log file writer.
+     *
      * @since 0.9.19
      */
     @Override
@@ -133,6 +135,8 @@ class FileLogWriter extends LogWriter {
     }
 
     /**
+     * Close the log file writer.
+     *
      * @since 0.9.19 renamed from closeFile()
      */
     @Override
@@ -141,7 +145,7 @@ class FileLogWriter extends LogWriter {
     }
 
     /**
-     * Gzip the closed file
+     * Gzip the closed file.
      *
      * @param threadGzipper if true, spin off a thread
      * @since 0.9.55
@@ -167,7 +171,7 @@ class FileLogWriter extends LogWriter {
     /**
      * Rotate to the next file (or the first file if this is the first call)
      * <p>
-     * Caller must synch
+     * Caller must synch.
      */
     private void rotateFile() {
         File old = _currentFile;
@@ -249,7 +253,7 @@ class FileLogWriter extends LogWriter {
     /**
      * Retrieve the first file, updating the rotation number accordingly
      * <p>
-     * Caller must synch
+     * Caller must synch.
      * @return the first file
      */
     private File getFirstFile(File base, String pattern, int max) {
@@ -302,6 +306,8 @@ class FileLogWriter extends LogWriter {
     }
 
     /**
+     * Gzips a rotated log file in the background.
+     *
      * @since 0.9.55
      */
     private static class Gzipper extends I2PAppThread {

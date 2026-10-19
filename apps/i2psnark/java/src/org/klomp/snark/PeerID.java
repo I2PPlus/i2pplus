@@ -75,7 +75,7 @@ public class PeerID implements Comparable<PeerID> {
     }
 
     /**
-     * Creates a PeerID from a destHash
+     * Creates a PeerID from a destHash.
      *
      * @param destHashParam the destination hash, which must be exactly 32 bytes
      * @param util for eventual destination lookup
@@ -137,7 +137,7 @@ public class PeerID implements Comparable<PeerID> {
     /**
      * The dest hash.
      *
-     * @return the dest hash
+     * @return the 20-byte I2P destination hash, or null
      * @since 0.8.1
      */
     public byte[] getDestHash() {
@@ -148,14 +148,14 @@ public class PeerID implements Comparable<PeerID> {
         return DataHelper.hashCode(destHash);
     }
 
-    /** The hash code of a PeerID is the hashcode of the desthash */
+    /** The hash code of a PeerID is the hashcode of the desthash. */
     @Override
     public int hashCode() {
         return hash;
     }
 
     /**
-     * Returns true if and only if this peerID and the given peerID have the same destination hash
+     * Returns true if and only if this peerID and the given peerID have the same destination hash.
      *
      * @param pid the peer to compare destination hashes with
      * @return true if both peers hash to the same destination
@@ -164,7 +164,7 @@ public class PeerID implements Comparable<PeerID> {
         return DataHelper.eq(destHash, pid.getDestHash());
     }
 
-    /** Two PeerIDs are equal when they have the same dest hash */
+    /** Two PeerIDs are equal when they have the same dest hash. */
     @Override
     public boolean equals(Object o) {
         if (o instanceof PeerID) {

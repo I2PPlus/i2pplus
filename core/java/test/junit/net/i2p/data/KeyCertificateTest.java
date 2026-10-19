@@ -17,9 +17,6 @@ import net.i2p.crypto.SigType;
 
 import org.junit.Test;
 
-/**
- * @author str4d
- */
 public class KeyCertificateTest {
     private static final byte[] P256_PAYLOAD = new byte[] {
                 0, (byte) (SigType.ECDSA_SHA256_P256.getCode()),

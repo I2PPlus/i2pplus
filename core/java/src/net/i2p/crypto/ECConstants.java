@@ -15,7 +15,7 @@ import java.security.spec.EllipticCurve;
 import net.i2p.util.NativeBigInteger;
 
 /**
- * Constants for elliptic curves, from NIST FIPS 186-4 (2013) / ANSI X9.62
+ * Constants for elliptic curves, from NIST FIPS 186-4 (2013) / ANSI X9.62.
  *
  * @since 0.9.9
  */
@@ -66,7 +66,7 @@ final class ECConstants {
 
     /**
      * Return whether Bouncy Castle is available.
-     * @return whether b c available
+     * @return whether BC available
      */
     public static boolean isBCAvailable() { return BC_AVAILABLE; }
 
@@ -100,7 +100,7 @@ final class ECConstants {
 
         /**
          * P and N in decimal, no spaces;
-         * Seed, B, Gx, Gy in hex, spaces allowed
+         * Seed, B, Gx, Gy in hex, spaces allowed.
          */
         public ECParms(String pss, String nss, String sss, String bss, String gxss, String gyss) {
             ps = pss; ns = nss; ss = sss; bs = bss; gxs = gxss; gys = gyss;
@@ -302,7 +302,7 @@ final class ECConstants {
     );
 
     /**
-     * Generate a spec from a curve name
+     * Generate a spec from a curve name.
      *
      * @return null if fail
      */
@@ -372,8 +372,8 @@ final class ECConstants {
 
 
     /**
-     * There is no ECParameterSpec.equals().
-     * Needed to load family keys on Android via SigUtil.fromJavaKey().
+     * There is no {@link java.security.spec.ECParameterSpec#equals}.
+     * Needed to load family keys on Android via {@link net.i2p.crypto.SigUtil#fromJavaKey}.
      *
      * @param s1 the spec being compared; null is tolerated only if {@code s2} is also null
      * @param s2 the spec being compared; null is tolerated only if {@code s1} is also null

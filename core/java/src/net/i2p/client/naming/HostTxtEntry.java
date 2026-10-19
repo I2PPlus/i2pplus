@@ -33,45 +33,45 @@ public class HostTxtEntry {
     private boolean isValidated;
     private boolean isValid;
 
-    /** Separator between name and destination in the hosts.txt line */
+    /** Separator between name and destination in the hosts.txt line. */
     public static final char KV_SEPARATOR = '=';
-    /** Separator between the destination part and the properties part */
+    /** Separator between the destination part and the properties part. */
     public static final String PROPS_SEPARATOR = "#!";
-    /** Separator between individual properties */
+    /** Separator between individual properties. */
     public static final char PROP_SEPARATOR = '#';
-    /** Property key for the action type (e.g. adddest, remove) */
+    /** Property key for the action type (e.g. adddest, remove). */
     public static final String PROP_ACTION = "action";
-    /** Property key for the date timestamp (seconds since epoch) */
+    /** Property key for the date timestamp (seconds since epoch). */
     public static final String PROP_DATE = "date";
-    /** Property key for the destination Base64 string */
+    /** Property key for the destination Base64 string. */
     public static final String PROP_DEST = "dest";
-    /** Property key for the expiry time */
+    /** Property key for the expiry time. */
     public static final String PROP_EXPIRES = "expires";
-    /** Property key for the hostname */
+    /** Property key for the hostname. */
     public static final String PROP_NAME = "name";
-    /** Property key for the old destination (used in change operations) */
+    /** Property key for the old destination (used in change operations). */
     public static final String PROP_OLDDEST = "olddest";
-    /** Property key for the old hostname (used in rename operations) */
+    /** Property key for the old hostname (used in rename operations). */
     public static final String PROP_OLDNAME = "oldname";
-    /** Property key for the old signature for inner verification */
+    /** Property key for the old signature for inner verification. */
     public static final String PROP_OLDSIG = "oldsig";
-    /** Property key for the signature */
+    /** Property key for the signature. */
     public static final String PROP_SIG = "sig";
-    /** Action value: add a new destination */
+    /** Action value: add a new destination. */
     public static final String ACTION_ADDDEST = "adddest";
-    /** Action value: add a new hostname */
+    /** Action value: add a new hostname. */
     public static final String ACTION_ADDNAME = "addname";
-    /** Action value: add a subdomain entry */
+    /** Action value: add a subdomain entry. */
     public static final String ACTION_ADDSUBDOMAIN = "addsubdomain";
-    /** Action value: change an existing destination */
+    /** Action value: change an existing destination. */
     public static final String ACTION_CHANGEDEST = "changedest";
-    /** Action value: change an existing hostname */
+    /** Action value: change an existing hostname. */
     public static final String ACTION_CHANGENAME = "changename";
-    /** Action value: remove an entry */
+    /** Action value: remove an entry. */
     public static final String ACTION_REMOVE = "remove";
-    /** Action value: remove all entries */
+    /** Action value: remove all entries. */
     public static final String ACTION_REMOVEALL = "removeall";
-    /** Action value: update an existing entry */
+    /** Action value: update an existing entry. */
     public static final String ACTION_UPDATE = "update";
 
     /**
@@ -243,7 +243,7 @@ public class HostTxtEntry {
     }
 
     /**
-     * Write the props part (if any) only, without newline
+     * Write the props part (if any) only, without newline.
      */
     private void writeProps(Writer out, boolean omitSig, boolean omitOldSig) throws IOException {
         if (props == null) return;
@@ -266,7 +266,7 @@ public class HostTxtEntry {
     }
 
     /**
-     * Verify with the dest public key using the "sig" property
+     * Verify with the dest public key using the "sig" property.
      * @return whether valid sig is present
      */
     public boolean hasValidSig() {
@@ -308,7 +308,7 @@ public class HostTxtEntry {
     }
 
     /**
-     * Verify with the "olddest" property's public key using the "oldsig" property
+     * Verify with the "olddest" property's public key using the "oldsig" property.
      * @return whether valid inner sig is present
      */
     public boolean hasValidInnerSig() {
@@ -350,7 +350,7 @@ public class HostTxtEntry {
     }
 
     /**
-     * Verify with the "dest" property's public key using the "sig" property
+     * Verify with the "dest" property's public key using the "sig" property.
      * @return whether valid remove sig is present
      */
     public boolean hasValidRemoveSig() {
@@ -394,7 +394,7 @@ public class HostTxtEntry {
     }
 
     /**
-     * Compares Destination only, not properties
+     * Compares Destination only, not properties.
      */
     @Override
     public boolean equals(Object o) {

@@ -22,6 +22,8 @@ class CPUIDCPUInfo implements CPUInfo {
     public boolean hasSSE4A() {return (CPUID.getExtendedECXCPUFlags() & (1 << 6)) != 0;} //Extended ECX Bit 6
 
     /**
+     * Whether the CPU supports AVX.
+     *
      * @return true iff the CPU supports the AVX instruction set.
      * @since 0.9.26
      */
@@ -32,6 +34,8 @@ class CPUIDCPUInfo implements CPUInfo {
     }
 
     /**
+     * Whether the CPU supports AVX2.
+     *
      * @return true iff the CPU supports the AVX2 instruction set.
      * @since 0.9.26
      */
@@ -72,36 +76,48 @@ class CPUIDCPUInfo implements CPUInfo {
     public boolean hasTBM() {return (CPUID.getExtendedECXCPUFlags() & (1 << 21)) != 0;} //Extended ECX Bit 21
 
     /**
+     * Whether the CPU supports AES.
+     *
      * @return true iff the CPU supports the AES-NI instruction set.
      * @since 0.9.14
      */
     public boolean hasAES() {return (CPUID.getECXCPUFlags() & (1 << 25)) != 0;} //ECX Bit 25
 
     /**
+     * Whether the CPU supports 64-bit mode.
+     *
      * @return true iff the CPU supports the 64-bit support
      * @since 0.9.26
      */
     public boolean hasX64() {return (CPUID.getExtendedEDXCPUFlags() & (1 << 29)) != 0;} //Extended EDX Bit 29
 
     /**
+     * Whether the CPU supports BMI1.
+     *
      * @return true iff the CPU supports the BMI1 instruction set.
      * @since 0.9.26
      */
     public boolean hasBMI1() {return (CPUID.getExtendedEBXFeatureFlags() & (1 << 3)) != 0;} // Extended EBX Feature Bit 3
 
     /**
+     * Whether the CPU supports BMI2.
+     *
      * @return true iff the CPU supports the BMI2 instruction set.
      * @since 0.9.26
      */
     public boolean hasBMI2() {return (CPUID.getExtendedEBXFeatureFlags() & (1 << 8)) != 0;} // Extended EBX Feature Bit 8
 
     /**
+     * Whether the CPU supports FMA3.
+     *
      * @return true iff the CPU supports the FMA3 instruction set.
      * @since 0.9.26
      */
     public boolean hasFMA3() {return (CPUID.getECXCPUFlags() & (1 << 12)) != 0;} // ECX Bit 12
 
     /**
+     * Whether the CPU supports MOVBE.
+     *
      * @return true iff the CPU supports the MOVBE instruction set.
      * @since 0.9.26
      */

@@ -126,16 +126,16 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
      */
     final Deque<Peer> peers;
 
-    /** Peers we heard about via PEX */
+    /** Peers we heard about via PEX. */
     private final Set<PeerID> pexPeers;
 
-    /** Max distinct swarm peers remembered per torrent */
+    /** Max distinct swarm peers remembered per torrent. */
     private static final int MAX_SWARM_PEERS = 512;
 
-    /** How long a remembered swarm peer stays valid without resurfacing */
+    /** How long a remembered swarm peer stays valid without resurfacing. */
     private static final long SWARM_PEER_TTL = 2 * 60 * 60 * 1000L;
 
-    /** Distinct swarm peers, keyed by destination hash, value is the last-seen wall time */
+    /** Distinct swarm peers, keyed by destination hash, value is the last-seen wall time. */
     private final Map<Hash, Long> swarmSeen = new HashMap<>(64);
 
     /** Estimate of the peers, without requiring any synchronization. */
@@ -166,9 +166,8 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
      */
     private long wantedBytes;
 
-    /**
-     * Partial pieces; lock by synching on wantedPieces. TODO store Requests, not PartialPieces.
-     */
+        // Partial pieces; lock by synching on wantedPieces. TODO store Requests, not PartialPieces.
+
     private final List<PartialPiece> partialPieces;
 
     /**
@@ -266,7 +265,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
     }
 
     /**
-     * Run the PeerCheckerTask via the SimpleTimer2 executors
+     * Run the PeerCheckerTask via the SimpleTimer2 executors.
      *
      * @since 0.8.2
      */
@@ -291,7 +290,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
     }
 
     /**
-     * Rerequest after unthrottled
+     * Rerequest after unthrottled.
      *
      * @since 0.9.62
      */
@@ -684,7 +683,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
         }
     }
 
-    /** Returns the average rate in Bps over last RATE_DEPTH * CHECK_PERIOD seconds */
+    /** Returns the average rate in Bps over last RATE_DEPTH * CHECK_PERIOD seconds. */
     @Override
     public long getDownloadRate() {
         if (halted) {
@@ -693,7 +692,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
         return getRate(downloaded_old);
     }
 
-    /** Returns the average rate in Bps over last RATE_DEPTH * CHECK_PERIOD seconds */
+    /** Returns the average rate in Bps over last RATE_DEPTH * CHECK_PERIOD seconds. */
     @Override
     public long getUploadRate() {
         if (halted) {
@@ -747,7 +746,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
     }
 
     /**
-     * Current limit in Bps
+     * Current limit in Bps.
      *
      * @return the up b w limit
      * @since 0.9.62
@@ -779,7 +778,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
     }
 
     /**
-     * Current limit in Bps
+     * Current limit in Bps.
      *
      * @return the down b w limit
      * @since 0.9.62
@@ -855,7 +854,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
     }
 
     /**
-     * Formerly used to reduce max if huge pieces to keep from ooming when leeching but now we don't
+     * Formerly used to reduce max if huge pieces to keep from ooming when leeching but now we don't.
      *
      * @return usually I2PSnarkUtil.MAX_CONNECTIONS
      */
@@ -1070,7 +1069,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
     }
 
     /**
-     * Add peer (inbound or outbound)
+     * Add peer (inbound or outbound).
      *
      * @param peer the connection to take over; disconnected rather than tracked if halted or full
      * @return true if actual attempt to add peer occurs
@@ -1163,7 +1162,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
         return false;
     }
 
-    /** (Optimistically) unchoke. Must be called with peers synchronized */
+    /** (Optimistically) unchoke. Must be called with peers synchronized. */
     void unchokePeer() {
         if (storage == null || storage.getBitField().size() == 0 || overUpBWLimit()) {
             return;
@@ -1256,7 +1255,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
     private static final int END_GAME_THRESHOLD = 32;
 
     /**
-     * Max number of peers to get a piece from when in end game
+     * Max number of peers to get a piece from when in end game.
      *
      * @since 0.8.1
      */
@@ -1428,7 +1427,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
 
     /**
      * Maps file priorities to piece priorities. Call after updating file priorities
-     * Storage.setPriority()
+     * {@link org.klomp.snark.Storage#setPriority}.
      *
      * @since 0.8.1
      */
@@ -1549,11 +1548,11 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
     }
 
     /**
-     * Whether the storage error is a genuine filesystem problem (no space,
-     * permissions, read-only filesystem, hardware I/O error) that should stop
-     * the torrent with an explicit reason, as opposed to a transient or
-     * stale-handle condition (EBADF, fd exhaustion, vanished file) that the
-     * torrent can retry.
+     * Whether the storage error is a genuine filesystem problem that should
+     * stop the torrent with an explicit reason. Genuine means no space, bad
+     * permissions, read-only filesystem, or hardware I/O error; transient or
+     * stale-handle conditions (EBADF, fd exhaustion, vanished file) can be
+     * retried.
      *
      * @param ioe the storage error
      * @return true if the torrent should stop
@@ -2107,7 +2106,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
 
     /**
      * Remove saved state for this piece. Unless we are in the end game there shouldnt be anything
-     * in there. Do not call with wantedPieces lock held (deadlock)
+     * in there. Do not call with wantedPieces lock held (deadlock).
      */
     private void removePartialPiece(int piece) {
         synchronized (wantedPieces) {
@@ -2123,7 +2122,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
         }
     }
 
-    /** Clear the requested flag for a piece */
+    /** Clear the requested flag for a piece. */
     private void markUnrequested(Peer peer, int piece) {
         synchronized (wantedPieces) {
             Piece pc = wantedMap.get(Integer.valueOf(piece));
@@ -2224,7 +2223,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
     }
 
     /**
-     * PeerListener callback
+     * PeerListener callback.
      *
      * @since 0.8.4
      */
@@ -2390,7 +2389,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
     }
 
     /**
-     * PeerListener callback Tell the DHT to ping it, this will get back the node info
+     * PeerListener callback Tell the DHT to ping it, this will get back the node info.
      *
      * @param rport must be port + 1
      * @since 0.8.4
@@ -2433,7 +2432,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
     }
 
     /**
-     * Called when comments are requested via ut_comment
+     * Called when comments are requested via ut_comment.
      *
      * @since 0.9.31
      */
@@ -2460,7 +2459,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
     }
 
     /**
-     * Called when comments are received via ut_comment
+     * Called when comments are received via ut_comment.
      *
      * @param comments non-null
      * @since 0.9.31
@@ -2477,7 +2476,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
     }
 
     /**
-     * Called by TrackerClient
+     * Called by TrackerClient.
      *
      * @return the Set itself, modifiable, not a copy, caller should clear()
      * @since 0.8.4
@@ -2487,11 +2486,12 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
     }
 
     /**
-     * Return number of allowed uploaders for this torrent. * Check with Snark to see if we are over
+     * Return number of allowed uploaders for this torrent.
+     * Check with Snark to see if we are over
      * the total upload limit.
      *
      * @return the current uploader count plus one, capped at MAX_UPLOADERS, or one
-     *         less than the current count while Snark reports the total upload limit exceeded
+     * less than the current count while Snark reports the total upload limit exceeded
      */
     public int allowedUploaders() {
         int up = uploaders.get();
@@ -2565,7 +2565,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
     }
 
     /**
-     * Decrement the uploaders and (if set) the interestedUploaders counts
+     * Decrement the uploaders and (if set) the interestedUploaders counts.
      *
      * @param isInterested true to also decrement the interested uploader count
      * @since 0.9.28

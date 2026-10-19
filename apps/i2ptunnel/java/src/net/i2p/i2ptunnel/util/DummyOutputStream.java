@@ -3,12 +3,12 @@ package net.i2p.i2ptunnel.util;
 import java.io.OutputStream;
 
 /**
- * Write to nowhere
+ * Write to nowhere.
  *
  * @since 0.9.62 copied from susimail
  */
 public class DummyOutputStream extends OutputStream {
-    /** Constructor */
+    /** Creates a stream that discards all writes. */
     public DummyOutputStream() {}
 
     @Override

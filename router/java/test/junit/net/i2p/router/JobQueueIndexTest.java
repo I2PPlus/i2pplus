@@ -55,6 +55,8 @@ public class JobQueueIndexTest {
     }
 
     /**
+     * Read a private field of the job queue.
+     *
      * @param name the private field name on JobQueue
      * @return the field's value
      */
@@ -65,6 +67,8 @@ public class JobQueueIndexTest {
     }
 
     /**
+     * The queue's index set.
+     *
      * @return the live membership index
      */
     @SuppressWarnings("unchecked")
@@ -73,6 +77,8 @@ public class JobQueueIndexTest {
     }
 
     /**
+     * The named internal queue.
+     *
      * @param name the private queue field name
      * @return that queue's contents
      */
@@ -111,6 +117,8 @@ public class JobQueueIndexTest {
     }
 
     /**
+     * How many copies of the job are queued.
+     *
      * @return how many copies of job the three ready queues hold
      */
     private int copies(Job job) throws Exception {
@@ -124,6 +132,8 @@ public class JobQueueIndexTest {
     }
 
     /**
+     * Create a named test job.
+     *
      * @param name a job class name fragment
      * @return a fresh job whose name contains name
      */
@@ -205,7 +215,7 @@ public class JobQueueIndexTest {
     }
 
     /**
-     * Dispatch releases the index entry, not job completion. JobImpl.requeue()
+     * Dispatch releases the index entry, not job completion. {@link net.i2p.router.JobImpl#requeue}
      * is called from runJob() - i.e. while the job is still running - and if
      * the entry survived until updateStats() the requeue would be swallowed and
      * the job would never run again.
@@ -249,7 +259,7 @@ public class JobQueueIndexTest {
     /**
      * The index must survive a concurrent storm of adds and promotions without
      * drifting from the queues. Distinct instances per thread make this an
-     * exact count check; duplicates admitted inside the check-then-add window
+     * exact count check. Duplicates admitted inside the check-then-add window
      * are tolerated by design, so only membership is asserted.
      */
     @Test
@@ -354,6 +364,8 @@ public class JobQueueIndexTest {
         private final String _name;
 
         /**
+         * A job with a fixed name.
+         *
          * @param ctx the router context
          * @param name the job name reported by getName()
          */

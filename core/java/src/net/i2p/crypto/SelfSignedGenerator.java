@@ -39,13 +39,13 @@ import net.i2p.util.RandomSource;
 
 /**
  * Generate keys and a selfsigned certificate, suitable for
- * storing in a Keystore with KeyStoreUtil.storePrivateKey().
+ * storing in a Keystore with {@link net.i2p.crypto.KeyStoreUtil#storePrivateKey}.
  * All done programatically, no keytool, no BC libs, no sun classes.
  * Ref: RFC 2459, RFC 5280
  * <p>
  * This is coded to create a cert that is similar to what comes out of keytool.
  * <p>
- * NOTE: Recommended use is via KeyStoreUtil.createKeys() and related methods.
+ * NOTE: Recommended use is via {@link net.i2p.crypto.KeyStoreUtil#createKeys} and related methods.
  * This API may not be stable.
  *
  * @since 0.9.25
@@ -368,7 +368,7 @@ public final class SelfSignedGenerator {
     }
 
     /**
-     * Generate a CRL for the given cert, signed with the given private key
+     * Generate a CRL for the given cert, signed with the given private key.
      */
     private static X509CRL generateCRL(
             X509Certificate cert, int validDays, int crlNum, byte[] sigoid, SigningPrivateKey priv)
@@ -623,7 +623,7 @@ public final class SelfSignedGenerator {
     }
 
     /**
-     * Sequence of two UTCDates
+     * Sequence of two UTCDates.
      *
      * @return 32 bytes ASN.1 encoded object
      */
@@ -642,7 +642,7 @@ public final class SelfSignedGenerator {
     }
 
     /**
-     * A single UTCDate
+     * A single UTCDate.
      *
      * @return 15 bytes ASN.1 encoded object
      */
@@ -668,11 +668,11 @@ public final class SelfSignedGenerator {
      * 5) Authority Key Identifier
      * (not necessarily output in that order)
      * <p>
-     * Ref: RFC 5280
+     * Ref: RFC 5280.
      *
      * @param pubbytes the DER-encoded public key bit string the extension identifier is derived from
      * @param altNames the Subject Alternative Names. May be null. May contain hostnames and/or IP addresses.
-     *                 cname, localhost, 127.0.0.1, and ::1 will be automatically added.
+     * cname, localhost, 127.0.0.1, and ::1 will be automatically added.
      *
      * @return ASN.1 encoded object
      */
@@ -950,7 +950,7 @@ public final class SelfSignedGenerator {
     }
 
     /**
-     * 0x30 len 0x06 len encodedbytes... 0x05 0
+     * 0x30 len 0x06 len encodedbytes... 0x05 0.
      *
      * @return ASN.1 encoded object
      * @throws IllegalArgumentException
@@ -1000,7 +1000,7 @@ public final class SelfSignedGenerator {
     }
 
     /**
-     * Note: For CLI testing, use java -jar i2p.jar su3file keygen pubkey.crt keystore.ks commonName
+     * Note: For CLI testing, use java -jar {@code i2p.jar} su3file keygen pubkey.crt keystore.ks commonName.
      *
      * @param args the command line, starting with the subcommand
      * @throws Exception if the subcommand fails

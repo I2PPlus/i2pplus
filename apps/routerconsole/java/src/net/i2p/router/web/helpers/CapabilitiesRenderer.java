@@ -18,13 +18,13 @@ class CapabilitiesRenderer {
      */
     CapabilitiesRenderer() {}
 
-    /** Link HTML for the capability letters used by both views */
+    /** Link HTML for the capability letters used by both views. */
     static final Map<Character, String> CAP_REPLACEMENTS;
 
-    /** CAP_REPLACEMENTS plus the letters only the Sybil view links */
+    /** CAP_REPLACEMENTS plus the letters only the Sybil view links. */
     static final Map<Character, String> SYBIL_REPLACEMENTS;
 
-    /** Tier link letters, in the order they are suffixed */
+    /** Tier link letters, in the order they are suffixed. */
     static final char[] TIER_LINK_LETTERS = { 'K', 'L', 'M', 'N', 'O', 'P', 'X' };
 
     static {

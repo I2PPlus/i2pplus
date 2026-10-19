@@ -47,7 +47,7 @@ public class SyntheticREDQueue implements BandwidthEstimator {
     private static final int DEFAULT_LOW_THRESHOLD_DIV = 4;
     private static final int DEFAULT_HIGH_THRESHOLD_DIV = 2;
 
-    /** Active instances for dynamic tuning — weak refs prevent leak when tunnels expire */
+    /** Active instances for dynamic tuning — weak refs prevent leak when tunnels expire. */
     private static final CopyOnWriteArrayList<WeakReference<SyntheticREDQueue>> INSTANCES = new CopyOnWriteArrayList<>();
 
     /**
@@ -269,7 +269,7 @@ public class SyntheticREDQueue implements BandwidthEstimator {
     }
 
     /**
-     * Returns the current max drop probability.
+     * The ceiling on the random drop probability for this queue.
      *
      * @return the max drop probability
      * @since 0.9.70+
@@ -560,7 +560,7 @@ public class SyntheticREDQueue implements BandwidthEstimator {
      * Returns a cut-down status string with the bandwidth estimate and the configured limit,
      * omitting the average queue size. The queue size is an internal RED estimator depth, useful
      * when diagnosing the estimator at DEBUG but noise on an operator-facing summary row, so the
-     * I2PSnark netstatus debug section uses this form instead of {@link #toString()}.
+     * I2PSnark netstatus debug section uses this form instead of {@link #toString}.
      * <p>Values are separated by a bullet, matching the multi-value debug spans in {@code KRPC}.
      * Inline HTML is deliberate: this method exists only for that single debug row.
      *

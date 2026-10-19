@@ -37,7 +37,6 @@ import org.cybergarage.util.Debug;
  * multicast advertisements from UPnP devices, enabling the core device discovery functionality in
  * UPnP networks.
  *
- * @author Satoshi Konno
  */
 public class HTTPMUSocket {
     ////////////////////////////////////////////////
@@ -55,7 +54,6 @@ public class HTTPMUSocket {
     //	Constructor
     ////////////////////////////////////////////////
 
-    /** Default constructor. */
     public HTTPMUSocket() {}
 
     /**

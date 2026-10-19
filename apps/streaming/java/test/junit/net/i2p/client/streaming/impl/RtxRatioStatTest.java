@@ -14,8 +14,8 @@ import org.junit.Test;
  * Tests that the stream-close retransmission ratios are registered with the
  * periods the router's Tuner actually reads.
  *
- * <p>{@code Tuner.getAdditionalStat5Min()} samples stream.rtxRatio and
- * stream.rtxRatioBytes at {@link RateConstants#FIVE_MINUTES}; a RateStat built
+ * <p>{@code Tuner.getAdditionalStat5Min()} samples {@code stream.rtxRatio} and
+ * {@code stream.rtxRatioBytes} at {@link RateConstants#FIVE_MINUTES}; a RateStat built
  * without that period has no rate for it, the lookup returns null, and the
  * Tuner sees NaN forever — the stat exists, is populated at the minute and hour
  * periods, and still never influences congestion decisions. The control case

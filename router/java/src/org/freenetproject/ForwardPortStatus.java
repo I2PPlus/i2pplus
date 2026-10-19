@@ -5,7 +5,6 @@ package org.freenetproject;
  * This class encapsulates the result of UPnP port forwarding attempts,
  * including success/failure status, reason messages, and external port information.
  *
- * @author Freenet Project
  * @version 1.0
  */
 public class ForwardPortStatus {

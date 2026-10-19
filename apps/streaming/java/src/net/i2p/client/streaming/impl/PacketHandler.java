@@ -48,7 +48,7 @@ class PacketHandler {
     /**
      * Sharded dispatcher for known-connection packets, created lazily on the
      * first inbound packet and shut down with the manager.  Guarded by the
-     * volatile field + double-checked locking in {@link #getDispatcher()}.
+     * volatile field + double-checked locking in {@link #getDispatcher}.
      */
     private volatile PacketDispatcher _dispatcher;
 
@@ -150,7 +150,7 @@ class PacketHandler {
 
     /**
      * Shut down the receive workers, if any were created, releasing queued
-     * packets.  Called from ConnectionManager.shutdown(); idempotent.
+     * packets.  Called from {@link net.i2p.client.streaming.impl.ConnectionManager#shutdown}; idempotent.
      *
      * @since 0.9.71
      */

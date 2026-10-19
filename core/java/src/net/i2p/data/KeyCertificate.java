@@ -70,21 +70,21 @@ public class KeyCertificate extends Certificate {
     private static final byte[] EMPTY = new byte[0];
 
     /**
-     * ElG + Ed25519
+     * ElG + Ed25519.
      *
-     * @since 0.9.22 pkg private for Certificate.create()
+     * @since 0.9.22 pkg private for {@link net.i2p.data.Certificate#create}
      */
     static final byte[] Ed25519_PAYLOAD = new byte[] {0, (byte) SigType.EdDSA_SHA512_Ed25519.getCode(), 0, 0};
 
     /**
-     * ElG + P256
+     * ElG + P256.
      *
-     * @since 0.9.22 pkg private for Certificate.create()
+     * @since 0.9.22 pkg private for {@link net.i2p.data.Certificate#create}
      */
     static final byte[] ECDSA256_PAYLOAD = new byte[] {0, (byte) SigType.ECDSA_SHA256_P256.getCode(), 0, 0};
 
     /**
-     * X25519 + Ed25519
+     * X25519 + Ed25519.
      *
      * @since 0.9.54
      */
@@ -229,7 +229,7 @@ public class KeyCertificate extends Certificate {
     }
 
     /**
-     * Up-convert a cert to this class
+     * Up-convert a cert to this class.
      *
      * @param cert payload 4 bytes minimum if non-null
      * @throws DataFormatException if cert type != CERTIFICATE_TYPE_KEY
@@ -281,7 +281,7 @@ public class KeyCertificate extends Certificate {
     /**
      * Signing Key extra data, if any, is first in the array.
      * Crypto Key extra data, if any, is second in the array,
-     * at offset max(0, getSigType().getPubkeyLen() - 128)
+     * at offset max(0, getSigType().getPubkeyLen() - 128).
      *
      * @return empty array if unset or none
      */
@@ -368,13 +368,13 @@ public class KeyCertificate extends Certificate {
             throw new RuntimeException("Data already set");
         }
 
-        /** Overridden for efficiency */
+        /** Overridden for efficiency. */
         @Override
         public void writeBytes(OutputStream out) throws IOException {
             out.write(ECDSA256_DATA);
         }
 
-        /** Overridden for efficiency */
+        /** Overridden for efficiency. */
         @Override
         public int writeBytes(byte[] target, int offset) {
             System.arraycopy(ECDSA256_DATA, 0, target, offset, ECDSA256_LENGTH);
@@ -387,13 +387,13 @@ public class KeyCertificate extends Certificate {
             throw new RuntimeException("Data already set");
         }
 
-        /** Overridden for efficiency */
+        /** Overridden for efficiency. */
         @Override
         public int size() {
             return ECDSA256_LENGTH;
         }
 
-        /** Overridden for efficiency */
+        /** Overridden for efficiency. */
         @Override
         public int hashCode() {
             return _hashcode;
@@ -435,13 +435,13 @@ public class KeyCertificate extends Certificate {
             throw new RuntimeException("Data already set");
         }
 
-        /** Overridden for efficiency */
+        /** Overridden for efficiency. */
         @Override
         public void writeBytes(OutputStream out) throws IOException {
             out.write(ED_DATA);
         }
 
-        /** Overridden for efficiency */
+        /** Overridden for efficiency. */
         @Override
         public int writeBytes(byte[] target, int offset) {
             System.arraycopy(ED_DATA, 0, target, offset, ED_LENGTH);
@@ -454,13 +454,13 @@ public class KeyCertificate extends Certificate {
             throw new RuntimeException("Data already set");
         }
 
-        /** Overridden for efficiency */
+        /** Overridden for efficiency. */
         @Override
         public int size() {
             return ED_LENGTH;
         }
 
-        /** Overridden for efficiency */
+        /** Overridden for efficiency. */
         @Override
         public int hashCode() {
             return _hashcode;
@@ -502,13 +502,13 @@ public class KeyCertificate extends Certificate {
             throw new RuntimeException("Data already set");
         }
 
-        /** Overridden for efficiency */
+        /** Overridden for efficiency. */
         @Override
         public void writeBytes(OutputStream out) throws IOException {
             out.write(ED_DATA);
         }
 
-        /** Overridden for efficiency */
+        /** Overridden for efficiency. */
         @Override
         public int writeBytes(byte[] target, int offset) {
             System.arraycopy(ED_DATA, 0, target, offset, ED_LENGTH);
@@ -521,13 +521,13 @@ public class KeyCertificate extends Certificate {
             throw new RuntimeException("Data already set");
         }
 
-        /** Overridden for efficiency */
+        /** Overridden for efficiency. */
         @Override
         public int size() {
             return ED_LENGTH;
         }
 
-        /** Overridden for efficiency */
+        /** Overridden for efficiency. */
         @Override
         public int hashCode() {
             return _hashcode;

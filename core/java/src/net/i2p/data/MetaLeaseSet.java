@@ -28,7 +28,7 @@ import java.util.Map;
  * <li>Fallback and redundancy strategies</li>
  * <li>Service discovery and aggregation</li>
  * </ul>
- * <p><strong>Implementation Status:</strong> PRELIMINARY - Subject to change as the proposal evolves</p>
+ * <p><strong>Implementation Status:</strong> PRELIMINARY - Subject to change as the proposal evolves.</p>
  *
  * @since 0.9.38
  */
@@ -70,7 +70,7 @@ public class MetaLeaseSet extends LeaseSet2 {
     }
 
     /**
-     * This does NOT validate the signature
+     * This does NOT validate the signature.
      *
      * @throws IllegalStateException if called more than once or Destination already set
      */
@@ -98,7 +98,7 @@ public class MetaLeaseSet extends LeaseSet2 {
     }
 
     /**
-     * Without sig. This does NOT validate the signature
+     * Without sig. This does NOT validate the signature.
      */
     @Override
     protected void writeBytesWithoutSig(OutputStream out) throws DataFormatException, IOException {
@@ -121,7 +121,7 @@ public class MetaLeaseSet extends LeaseSet2 {
     }
 
     /**
-     * Number of bytes, NOT including signature
+     * Number of bytes, NOT including signature.
      */
     @Override
     public int size() {

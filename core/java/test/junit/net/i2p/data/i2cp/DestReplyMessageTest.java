@@ -12,9 +12,8 @@ package net.i2p.data.i2cp;
 import net.i2p.data.DataFormatException;
 
 /**
- * Test harness for loading / storing DestReplyMessage objects
+ * Test harness for loading / storing DestReplyMessage objects.
  *
- * @author str4d
  */
 public class DestReplyMessageTest extends I2CPTstBase {
     @Override

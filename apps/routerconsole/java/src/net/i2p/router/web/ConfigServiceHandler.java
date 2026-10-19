@@ -64,7 +64,7 @@ public class ConfigServiceHandler extends FormHandler {
     }
 
     /**
-     * Rekey and/or tell the wrapper we are stopping,
+     * Rekey and/or tell the wrapper we are stopping.
      */
     private static class UpdateWrapperOrRekeyTask implements Runnable {
         private final boolean _rekey;
@@ -106,7 +106,7 @@ public class ConfigServiceHandler extends FormHandler {
 
         /**
          * Make them all look the same since the hooks are stored in a set
-         * and we don't want dups
+         * and we don't want dups.
          * @return whether h code is present
          */
         @Override
@@ -114,7 +114,7 @@ public class ConfigServiceHandler extends FormHandler {
 
         /**
          * Make them all look the same since the hooks are stored in a set
-         * and we don't want dups
+         * and we don't want dups.
          */
         @Override
         public boolean equals(Object o) {
@@ -144,7 +144,7 @@ public class ConfigServiceHandler extends FormHandler {
 
         /**
          * Make them all look the same since the hooks are stored in a set
-         * and we don't want dups
+         * and we don't want dups.
          * @return whether h code is present
          */
         @Override
@@ -152,7 +152,7 @@ public class ConfigServiceHandler extends FormHandler {
 
         /**
          * Make them all look the same since the hooks are stored in a set
-         * and we don't want dups
+         * and we don't want dups.
          */
         @Override
         public boolean equals(Object o) {return (o != null) && (o instanceof FinalWrapperTask);}
@@ -160,7 +160,7 @@ public class ConfigServiceHandler extends FormHandler {
 
     /**
      * Register a handler for signals,
-     * so we can handle HUP from the wrapper (wrapper 3.2.0 or higher)
+     * so we can handle HUP from the wrapper (wrapper 3.2.0 or higher).
      *
      * @param ctx the router context
      * @since 0.8.13
@@ -176,7 +176,7 @@ public class ConfigServiceHandler extends FormHandler {
     }
 
     /**
-     * Unregister the handler for signals
+     * Unregister the handler for signals.
      *
      * @since 0.8.13
      */
@@ -223,7 +223,7 @@ public class ConfigServiceHandler extends FormHandler {
     /**
      * Get the console URL.
      *
-     * @return the console URL
+     * @return the full http://host:port URL of the console
      * @since 0.9.33
      */
     public String getConsoleURL() {return _context.portMapper().getConsoleURL();}
@@ -400,7 +400,7 @@ public class ConfigServiceHandler extends FormHandler {
     }
 
     /**
-     * Enable/disable and start/stop systray
+     * Enable/disable and start/stop systray.
      *
      * @since 0.9.26
      */

@@ -12,9 +12,8 @@ import net.i2p.I2PAppContext;
 import net.i2p.client.impl.I2PClientImpl;
 
 /**
- * Provide a means of hooking into an appropriate I2PClient implementation
+ * Provide a means of hooking into an appropriate I2PClient implementation.
  *
- * @author jrandom
  */
 public class I2PClientFactory {
     /**
@@ -24,7 +23,7 @@ public class I2PClientFactory {
     public I2PClientFactory() {}
 
     /**
-     * Create a new instance of the appropriate I2PClient with a specific context
+     * Create a new instance of the appropriate I2PClient with a specific context.
      *
      * @param context the I2PAppContext to use
      * @return a new {@link I2PClientImpl} bound to that context
@@ -37,7 +36,7 @@ public class I2PClientFactory {
     }
 
     /**
-     * Create a new instance of the appropriate I2PClient
+     * Create a new instance of the appropriate I2PClient.
      *
      * @return a new {@link I2PClientImpl} bound to the global context
      */

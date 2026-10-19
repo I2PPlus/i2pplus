@@ -1,5 +1,5 @@
 /**
- * EdDSA-Java by str4d
+ * EdDSA-Java by str4d.
  *
  * To the extent possible under law, the person who associated CC0 with
  * EdDSA-Java has waived all copyright and related or neighboring rights
@@ -21,10 +21,6 @@ import net.i2p.crypto.eddsa.Utils;
 import org.junit.Assert;
 import org.junit.Test;
 
-/**
- * @author str4d
- *
- */
 public class EdDSAPrivateKeySpecTest {
     static final byte[] ZERO_SEED = Utils.hexToBytes("0000000000000000000000000000000000000000000000000000000000000000");
     static final byte[] ZERO_H = Utils.hexToBytes("5046adc1dba838867b2bbbfdd0c3423e58b57970b5267a90f57960924a87f1960a6a85eaa642dac835424b5d7c8d637c00408c7a73da672b7f498521420b6dd3");
@@ -32,9 +28,6 @@ public class EdDSAPrivateKeySpecTest {
 
     static final EdDSANamedCurveSpec ed25519 = EdDSANamedCurveTable.getByName(EdDSANamedCurveTable.ED_25519);
 
-    /**
-     * Test method for {@link net.i2p.crypto.eddsa.spec.EdDSAPrivateKeySpec#EdDSAPrivateKeySpec(byte[], net.i2p.crypto.eddsa.spec.EdDSAParameterSpec)}.
-     */
     @Test
     public void testEdDSAPrivateKeySpecFromSeed() {
         EdDSAPrivateKeySpec key = new EdDSAPrivateKeySpec(ZERO_SEED, ed25519);
@@ -53,9 +46,6 @@ public class EdDSAPrivateKeySpecTest {
         }
     }
 
-    /**
-     * Test method for {@link net.i2p.crypto.eddsa.spec.EdDSAPrivateKeySpec#EdDSAPrivateKeySpec(net.i2p.crypto.eddsa.spec.EdDSAParameterSpec, byte[])}.
-     */
     @Test
     public void testEdDSAPrivateKeySpecFromH() {
         EdDSAPrivateKeySpec key = new EdDSAPrivateKeySpec(ed25519, ZERO_H);

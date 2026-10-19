@@ -40,7 +40,7 @@ import org.eclipse.jetty.server.handler.ContextHandlerCollection;
 
 /**
  * Handles configuration changes for I2P client applications and web apps.
- * Saves changes to clients.config and webapps.config files, manages client
+ * Saves changes to {@code clients.config} and {@code webapps.config} files, manages client
  * installation, updates, and startup configuration.
  */
 public class ConfigClientsHandler extends FormHandler {
@@ -408,7 +408,7 @@ public class ConfigClientsHandler extends FormHandler {
     /**
      * Big hack for the moment, not using properties for directory and port
      * Go through all the Jetty servers, find the one serving port 7657,
-     * requested and add the .war to that one
+     * requested and add the .war to that one.
      */
     private void startWebApp(String app) {
         ContextHandlerCollection s = WebAppStarter.getConsoleServer(_context);
@@ -538,6 +538,8 @@ public class ConfigClientsHandler extends FormHandler {
     }
 
     /**
+     * Install a plugin from a URL.
+     *
      * @param app null for a new install
      * @param url http: or file:
      */
@@ -662,7 +664,7 @@ public class ConfigClientsHandler extends FormHandler {
     }
 
     /**
-     * Handle interface form
+     * Handle interface form.
      * @since 0.8.3
      */
     private void saveInterfaceChanges() {

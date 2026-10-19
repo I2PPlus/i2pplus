@@ -33,11 +33,11 @@ public class DCCClientManager extends EventReceiver {
     private final I2PTunnel _tunnel;
     private final Log _log;
 
-    /** key is the DCC client's local port */
+    /** Key is the DCC client's local port. */
     private final ConcurrentHashMap<Integer, I2PTunnelDCCClient> _incoming;
-    /** key is the DCC client's local port */
+    /** Key is the DCC client's local port. */
     private final ConcurrentHashMap<Integer, I2PTunnelDCCClient> _active;
-    /** key is the DCC client's local port */
+    /** Key is the DCC client's local port. */
     private final ConcurrentHashMap<Integer, I2PTunnelDCCClient> _complete;
 
     // list of client tunnels?
@@ -102,6 +102,8 @@ public class DCCClientManager extends EventReceiver {
     }
 
     /**
+     * Register an incoming DCC session, returning its id.
+     *
      * @param localPort bind to port or 0; if nonzero it will be the rv
      */
     private int newIncoming(String b32, int port, int localPort) {

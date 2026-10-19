@@ -39,13 +39,13 @@ import net.i2p.util.Log;
  */
 public class BlocklistManager {
 
-    /** Default filename for the URL blocklist */
+    /** Default filename for the URL blocklist. */
     public static final String HTTP_BLOCKLIST = "http_blocklist.txt";
 
-    /** Default filename for the client blocklist */
+    /** Default filename for the client blocklist. */
     public static final String HTTP_BLOCKLIST_CLIENTS = "http_blocklist_clients.txt";
 
-    /** Default maximum number of entries in the client blocklist */
+    /** Default maximum number of entries in the client blocklist. */
     public static final int DEFAULT_CLIENT_LIMIT = 512;
 
     private final Log _log;
@@ -266,7 +266,7 @@ public class BlocklistManager {
     }
 
     /**
-     * Gets the current size of the client blocklist.
+     * The number of entries in the client blocklist.
      *
      * @return the number of entries in the client blocklist, or -1 if not initialized
      */

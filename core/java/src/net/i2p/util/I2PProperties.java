@@ -8,9 +8,6 @@ import java.util.concurrent.CopyOnWriteArrayList;
  * This class contains a number of properties ((key,value)-pairs).
  * Additionally, it adds the possibility for callbacks,
  * to allow immediate response to changing properties.
- *
- * @author Mathiasdm
- *
  */
 public class I2PProperties extends Properties {
 

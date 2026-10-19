@@ -33,7 +33,7 @@ public class UpdateHandler {
     private HttpSession _session;
 
     /**
-     * For form validation
+     * For form validation.
      *
      * @param session the console HTTP session the nonce is validated against
      * @since 0.9.69
@@ -69,10 +69,10 @@ public class UpdateHandler {
     }
 
     /**
-     * Configure this bean to query a particular router context
+     * Configure this bean to query a particular router context.
      *
      * @param contextId beginning few characters of the routerHash, or null to pick
-     *                  the first one we come across.
+     * the first one we come across.
      */
     public void setContextId(String contextId) {
         try {
@@ -82,7 +82,7 @@ public class UpdateHandler {
     }
 
     /**
-     * These two can be set in either order, so call checkUpdateAction() twice
+     * These two can be set in either order, so call checkUpdateAction() twice.
      *
      * @param val the update action name submitted by the form
      */
@@ -102,7 +102,7 @@ public class UpdateHandler {
     }
 
     /**
-     * Alias for setUpdateNonce for session-based nonce support
+     * Alias for setUpdateNonce for session-based nonce support.
      *
      * @param nonce the nonce submitted by the form, checked against the session
      * @since 0.9.69
@@ -113,8 +113,8 @@ public class UpdateHandler {
     }
 
     /**
-     * these two can be set in either order, so call checkUpdateAction() twice
-     * storeSession() MUST be called first
+     * These two can be set in either order, so call checkUpdateAction() twice
+     * storeSession() MUST be called first.
      */
     private void checkUpdateAction() {
         if (_action == null || _nonce == null) {return;}

@@ -24,7 +24,7 @@ public class ConnectionHandlerWorkerTest {
         assertEquals(1, ConnectionOptions.getAcceptWorkerThreads());
     }
 
-    /** setAcceptWorkerThreads clamps to [0, 16]. */
+    /** SetAcceptWorkerThreads clamps to [0, 16]. */
     @Test
     public void testAcceptWorkerCountClamping() {
         ConnectionOptions.setAcceptWorkerThreads(-1);
@@ -43,7 +43,7 @@ public class ConnectionHandlerWorkerTest {
         assertEquals(16, ConnectionOptions.getAcceptWorkerThreads());
     }
 
-    /** getMaxQueueSize defaults to 4096 for non-slow systems. */
+    /** GetMaxQueueSize defaults to 4096 for non-slow systems. */
     @Test
     public void testDefaultMaxQueueSize() {
         // The default is 4096 for non-slow systems (SystemVersion.isSlow() check)
@@ -51,7 +51,7 @@ public class ConnectionHandlerWorkerTest {
         assertTrue("maxQueueSize must be positive", true);
     }
 
-    /** getAdaptiveSynTimeout preserves configured timeout when no stress evidence. */
+    /** GetAdaptiveSynTimeout preserves configured timeout when no stress evidence. */
     @Test
     public void testNoStressNoClamp() {
         int configured = 60000;
@@ -59,7 +59,7 @@ public class ConnectionHandlerWorkerTest {
         assertEquals(configured, ConnectionHandler.getAdaptiveSynTimeout(configured, 0.5, 0, 0));
     }
 
-    /** getAdaptiveSynTimeout clamps when stress evidence and expire rate threshold met. */
+    /** GetAdaptiveSynTimeout clamps when stress evidence and expire rate threshold met. */
     @Test
     public void testStressWithExpireRateClamps() {
         int configured = 60000;
@@ -69,7 +69,7 @@ public class ConnectionHandlerWorkerTest {
         assertTrue(result >= ConnectionHandler.SYN_STRESS_MIN_TIMEOUT);
     }
 
-    /** getAdaptiveSynTimeout returns configured when expire threshold is 100 (clamp disabled). */
+    /** GetAdaptiveSynTimeout returns configured when expire threshold is 100 (clamp disabled). */
     @Test
     public void testExpireThreshold100DisablesClamp() {
         int configured = 60000;

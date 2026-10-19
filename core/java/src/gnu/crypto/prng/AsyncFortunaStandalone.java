@@ -12,7 +12,7 @@ import net.i2p.util.SystemVersion;
 /**
  * Fortuna instance that tries to avoid blocking if at all possible by using separate
  * filled buffer segments rather than one buffer (and blocking when that buffer's data
- * has been eaten)
+ * has been eaten).
  *
  * Note that this class is not fully Thread safe!
  * The following methods must be synchronized externally, they are not
@@ -23,25 +23,25 @@ import net.i2p.util.SystemVersion;
 public class AsyncFortunaStandalone extends FortunaStandalone implements Runnable {
     private static final int DEFAULT_BUFFERS = 2;
     private static final int DEFAULT_BUFSIZE = SystemVersion.isAndroid() ? 64*1024 : 256*1024;
-    /** how many buffers are cycled through, never less than 2 */
+    /** How many buffers are cycled through, never less than 2. */
     private final int _bufferCount;
-    /** the size in bytes of each buffer, never less than 16384 */
+    /** The size in bytes of each buffer, never less than 16384. */
     private final int _bufferSize;
-    /** the lock */
+    /** The lock. */
     private final Object asyncBuffers = new Object();
-    /** the app context */
+    /** The app context. */
     private final I2PAppContext _context;
-    /** the logger for this class */
+    /** The logger for this class. */
     private final Log _log;
-    /** true until shutdown() is called, which stops the refill thread */
+    /** True until shutdown() is called, which stops the refill thread. */
     private volatile boolean _isRunning;
-    /** the thread that refills empty buffers in the background */
+    /** The thread that refills empty buffers in the background. */
     private Thread _refillThread;
-    /** buffers holding freshly generated output, waiting to be consumed */
+    /** Buffers holding freshly generated output, waiting to be consumed. */
     private final LinkedBlockingQueue<AsyncBuffer> _fullBuffers;
-    /** consumed buffers waiting to be refilled */
+    /** Consumed buffers waiting to be refilled. */
     private final LinkedBlockingQueue<AsyncBuffer> _emptyBuffers;
-    /** the buffer the PRNG is currently handing out bytes from */
+    /** The buffer the PRNG is currently handing out bytes from. */
     private AsyncBuffer _currentBuffer;
 
     /**
@@ -58,13 +58,13 @@ public class AsyncFortunaStandalone extends FortunaStandalone implements Runnabl
         _log = context.logManager().getLog(AsyncFortunaStandalone.class);
     }
 
-    /** Return a copy of this object */
+    /** Return a copy of this object. */
     @Override
     public Object clone() {
         return super.clone();
     }
 
-    /** Start the PRNG */
+    /** Start the PRNG. */
     public void startup() {
         for (int i = 0; i < _bufferCount; i++) {_emptyBuffers.offer(new AsyncBuffer(_bufferSize));}
         _isRunning = true;
@@ -74,7 +74,7 @@ public class AsyncFortunaStandalone extends FortunaStandalone implements Runnabl
         _refillThread.start();
     }
 
-    /** Stop the PRNG */
+    /** Stop the PRNG. */
     public void shutdown() {
         _isRunning = false;
         _emptyBuffers.clear();
@@ -85,7 +85,7 @@ public class AsyncFortunaStandalone extends FortunaStandalone implements Runnabl
         buffer = null;
     }
 
-    /** the seed is only propogated once the prng is started with startup() */
+    /** The seed is only propogated once the prng is started with startup(). */
     @Override
     public void seed(byte[] val) {
         Map<String, byte[]> props = Collections.singletonMap(SEED, val);
@@ -104,7 +104,7 @@ public class AsyncFortunaStandalone extends FortunaStandalone implements Runnabl
 
     /**
      * Make the next available filled buffer current, scheduling any unfilled
-     * buffers for refill, and blocking until at least one buffer is ready
+     * buffers for refill, and blocking until at least one buffer is ready.
      */
     protected void rotateBuffer() {
         synchronized (asyncBuffers) {

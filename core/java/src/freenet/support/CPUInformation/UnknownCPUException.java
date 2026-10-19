@@ -5,14 +5,13 @@ package freenet.support.CPUInformation;
 
 /**
  * Exception for unknown CPU types.
- * @author Iakin
  */
 /**
  * UnknownCPUException Extends RuntimeException.
  */
 public class UnknownCPUException extends RuntimeException {
     /**
-     *
+     * Serial Version UID.
      */
     private static final long serialVersionUID = 5166144274582583742L;
 

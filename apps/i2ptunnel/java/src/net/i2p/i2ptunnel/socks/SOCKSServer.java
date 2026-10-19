@@ -56,14 +56,14 @@ abstract class SOCKSServer {
     protected int addressType;
 
     /**
-     * The application context, used for the log manager and property lookups
+     * The application context, used for the log manager and property lookups.
      */
     protected final I2PAppContext _context;
-    /** the connected socket back to the local SOCKS client */
+    /** The connected socket back to the local SOCKS client. */
     protected final Socket clientSock;
-    /** the tunnel configuration, holding the IP to domain mappings */
+    /** The tunnel configuration, holding the IP to domain mappings. */
     protected final Properties props;
-    /** the logger for this class */
+    /** The logger for this class. */
     protected final Log _log;
 
     /**
@@ -104,7 +104,7 @@ abstract class SOCKSServer {
     protected abstract void setupServer() throws SOCKSException;
 
     /**
-     * Get a socket that can be used to send/receive 8-bit clean data
+     * Get a socket for sending/receiving 8-bit clean data
      * to/from the client.
      *
      * @return a Socket connected with the client
@@ -113,14 +113,14 @@ abstract class SOCKSServer {
     public abstract Socket getClientSocket() throws SOCKSException;
 
     /**
-     * Confirm to the client that the connection has succeeded
+     * Confirm to the client that the connection has succeeded.
      *
      * @throws SOCKSException if the success reply cannot be written back to the client
      */
     protected abstract void confirmConnection() throws SOCKSException;
 
     /**
-     * Get an I2PSocket that can be used to send/receive 8-bit clean data
+     * Get an I2PSocket for sending/receiving 8-bit clean data
      * to/from the destination of the SOCKS connection.
      *
      * @param t the streaming tunnel to build the destination socket over

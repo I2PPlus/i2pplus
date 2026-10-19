@@ -48,7 +48,6 @@ import org.json.simple.JsonObject;
  *     null        &lt;---&gt;  null
  * </pre>
  *
- * @author Vladimir Dzhuvinov
  */
 public class JSONRPC2Error extends Exception {
 
@@ -216,6 +215,8 @@ public class JSONRPC2Error extends Exception {
 
 
 	/**
+	 * Encode the error as a JSON object.
+	 *
 	 * @see #toJSONObject
 	 */
 	@Deprecated

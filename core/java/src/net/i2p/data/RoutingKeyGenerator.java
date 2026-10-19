@@ -19,15 +19,15 @@ import net.i2p.I2PAppContext;
  * transformation, and whether it is a function of changing network-wide
  * "mod data", is up to the implementation - this interface says nothing
  * about reversibility, caching, or cost.</li>
- * <li>{@link #getLastChanged()} reports when that mod data last changed, so
+ * <li>{@link #getLastChanged} reports when that mod data last changed, so
  * a caller holding a previously derived key can tell whether it is
  * stale and needs to be regenerated.</li>
- * <li>{@link #getInstance()} returns the generator of the global context,
+ * <li>{@link #getInstance} returns the generator of the global context,
  * which is null unless that context is a router context.</li>
  * </ul>
  * <p>Availability:</p>
  * <ul>
- * <li>Not available in a plain I2PAppContext - I2PAppContext.routingKeyGenerator()
+ * <li>Not available in a plain I2PAppContext - {@link net.i2p.I2PAppContext#routingKeyGenerator}
  * returns null there, because only a router holds a network database.</li>
  * <li>The implementation is {@code net.i2p.data.router.RouterKeyGenerator},
  * which appends the current GMT date to the hash and hashes the result,

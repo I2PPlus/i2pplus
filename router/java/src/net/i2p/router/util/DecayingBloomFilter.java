@@ -38,9 +38,9 @@ import org.xlattice.crypto.filters.BloomSHA1;
  * @since 0.8.8
  */
 public class DecayingBloomFilter {
-    /** The I2P app context */
+    /** The I2P app context. */
     protected final I2PAppContext _context;
-    /** The logger */
+    /** The logger. */
     protected final Log _log;
     /** Filter size exponent: each buffer holds 2^m bits. */
     private final int _m;
@@ -50,19 +50,19 @@ public class DecayingBloomFilter {
      * and decay() already computes it, so tracking it is free.
      */
     private volatile int _lastWindowCount;
-    /** Current bloom filter */
+    /** Current bloom filter. */
     private BloomSHA1 _current;
-    /** Previous bloom filter */
+    /** Previous bloom filter. */
     private BloomSHA1 _previous;
-    /** Duration of each filter in ms */
+    /** Duration of each filter in ms. */
     protected final int _durationMs;
-    /** Size of entries in bytes */
+    /** Size of entries in bytes. */
     protected final int _entryBytes;
-    /** Extender arrays for small entries */
+    /** Extender arrays for small entries. */
     private final byte[][] _extenders;
-    /** Mask for converting longs to entries */
+    /** Mask for converting longs to entries. */
     private final long _longToEntryMask;
-    /** Thread-local buffer for extended entries */
+    /** Thread-local buffer for extended entries. */
     private final ThreadLocal<byte[]> _extendedBuf;
     /**
      * Thread-local buffer for the long-to-entry conversion, sized _entryBytes.
@@ -71,11 +71,11 @@ public class DecayingBloomFilter {
      * @since 0.9.71+
      */
     private final ThreadLocal<byte[]> _longToEntryBuf;
-    /** Counter for current duplicates */
+    /** Counter for current duplicates. */
     protected final AtomicLong _currentDuplicates = new AtomicLong();
-    /** Whether decay is still running */
+    /** Whether decay is still running. */
     protected volatile boolean _keepDecaying;
-    /** The decay timer event */
+    /** The decay timer event. */
     protected final SimpleTimer2.TimedEvent _decayEvent;
     /** Name for logging. */
     protected final String _name;
@@ -288,6 +288,8 @@ public class DecayingBloomFilter {
     }
 
     /**
+     * Saves filter state when the router shuts down.
+     *
      * @since 0.8.8
      */
     private class Shutdown implements Runnable {
@@ -396,7 +398,7 @@ public class DecayingBloomFilter {
     }
 
     /**
-     * Add a byte array entry to the filter
+     * Add a byte array entry to the filter.
      *
      * @param entry the entry to add
      * @return true if the entry added is a duplicate
@@ -406,7 +408,7 @@ public class DecayingBloomFilter {
     }
 
     /**
-     * Add a byte array entry at the specified offset and length
+     * Add a byte array entry at the specified offset and length.
      *
      * @param entry the entry data
      * @param off index in entry of the first byte to filter
@@ -436,10 +438,10 @@ public class DecayingBloomFilter {
      *
      * @param entry the value to encode
      * @return the thread's scratch array of exactly _entryBytes bytes. The
-     *         caller must consume it before the next call on the same thread.
+     * caller must consume it before the next call on the same thread.
      * @throws IllegalArgumentException if entryBytes is over 8, since
-     *                                  DataHelper.toLong() cannot write more than 8 bytes; use the
-     *                                  byte array form of add() for wider entries
+     * {@link net.i2p.data.DataHelper#toLong} cannot write more than 8 bytes; use the
+     * byte array form of add() for wider entries
      * @since 0.9.71+
      */
     private byte[] encodeLong(long entry) {
@@ -558,7 +560,7 @@ public class DecayingBloomFilter {
         }
     }
 
-    /** Clear all filters and reset counts */
+    /** Clear all filters and reset counts. */
     public void clear() {
         // prepare both replacements before taking the write lock, for the same
         // reason decay() does
@@ -573,7 +575,7 @@ public class DecayingBloomFilter {
         } finally { releaseWriteLock(); }
     }
 
-    /** Stop the decay process */
+    /** Stop the decay process. */
     public void stopDecaying() {
         _keepDecaying = false;
         _decayEvent.cancel();
@@ -587,7 +589,7 @@ public class DecayingBloomFilter {
      * read lock, so it stalls all inserts for its duration: measured at about
      * 2.6ms at m=29. Allocating the replacement does the same zeroing without
      * the lock and is in fact slightly cheaper at that size, so the lock is
-     * held only for the pointer swap. See {@link BloomSHA1#prepareReset()} for
+     * held only for the pointer swap. See {@link BloomSHA1#prepareReset} for
      * the allocation/GC tradeoff this accepts.
      */
     protected void decay() {
@@ -681,7 +683,7 @@ public class DecayingBloomFilter {
     }
 
     /**
-     * Acquire the read lock
+     * Acquire the read lock.
      * @since 0.8.11 moved from DecayingHashSet
      */
     protected void getReadLock() {
@@ -689,7 +691,7 @@ public class DecayingBloomFilter {
     }
 
     /**
-     * Release the read lock
+     * Release the read lock.
      * @since 0.8.11 moved from DecayingHashSet
      */
     protected void releaseReadLock() {
@@ -697,7 +699,7 @@ public class DecayingBloomFilter {
     }
 
     /**
-     * Acquire the write lock
+     * Acquire the write lock.
      *
      * @return true if the lock was acquired
      * @since 0.8.11 moved from DecayingHashSet
@@ -715,7 +717,7 @@ public class DecayingBloomFilter {
     }
 
     /**
-     * Release the write lock
+     * Release the write lock.
      * @since 0.8.11 moved from DecayingHashSet
      */
     protected void releaseWriteLock() {

@@ -48,7 +48,6 @@ import net.i2p.util.Log;
 /**
  * Produce the various messages the session needs to send to the router.
  *
- * @author jrandom
  */
 class I2CPMessageProducer {
     private final Log _log;
@@ -60,7 +59,7 @@ class I2CPMessageProducer {
     private final java.util.concurrent.locks.Condition _throttleCondition;
     private static final String PROP_MAX_BW = "i2cp.outboundBytesPerSecond";
 
-    /** See ConnectionOptions in streaming  - MTU + streaming overhead + gzip overhead */
+    /** See ConnectionOptions in streaming  - MTU + streaming overhead + gzip overhead. */
     private static final int TYP_SIZE = 1730 + 28 + 23;
 
     private static final int MIN_RATE = 2 * TYP_SIZE;
@@ -214,7 +213,7 @@ class I2CPMessageProducer {
     }
 
     /**
-     * Package up and send the payload to the router for delivery
+     * Package up and send the payload to the router for delivery.
      *
      * @param session the session to send the message on
      * @param dest the destination to deliver the message to
@@ -242,7 +241,7 @@ class I2CPMessageProducer {
     }
 
     /**
-     * Package up and send the payload to the router for delivery
+     * Package up and send the payload to the router for delivery.
      *
      * @param session the session to send the message on
      * @param dest the destination to deliver the message to
@@ -280,7 +279,7 @@ class I2CPMessageProducer {
     }
 
     /**
-     * Package up and send the payload to the router for delivery
+     * Package up and send the payload to the router for delivery.
      *
      * @param session the session to send the message on
      * @param dest the destination to deliver the message to
@@ -422,7 +421,7 @@ class I2CPMessageProducer {
     }
 
     /**
-     * Send an abuse message to the router
+     * Send an abuse message to the router.
      *
      * @param session the session on whose behalf the abuse is reported
      * @param msgId the message ID the abuse refers to
@@ -484,7 +483,7 @@ class I2CPMessageProducer {
     }
 
     /**
-     * Update number of tunnels
+     * Update number of tunnels.
      *
      * @param session the session to reconfigure
      * @param tunnels 0 for original configured number

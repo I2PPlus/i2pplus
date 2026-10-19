@@ -169,7 +169,7 @@ public class I2PSOCKSTunnel extends I2PTunnelClientBase {
     public HashMap<String, List<String>> getProxyMap() {return proxies;}
 
     /**
-     * Get the default proxy list
+     * Get the default proxy list.
      *
      * @return the default proxy list
      */

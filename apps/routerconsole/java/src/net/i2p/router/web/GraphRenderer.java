@@ -118,7 +118,7 @@ class GraphRenderer {
      */
     private static final float CROWDED_LINE_WIDTH = 1f;
 
-    /** Whether to render every series as a filled path under a thin line. @since 0.9.71+ */
+    /** Whether to render every series as a filled path under a thin line. @since 0.9.71+. */
     private static final String PROP_FILL = "routerconsole.graphFill";
 
     /**
@@ -519,6 +519,8 @@ class GraphRenderer {
     }
 
     /**
+     * Assemble the render settings for one graph.
+     *
      * @param allLines draw the primary as a line rather than a filled area
      */
     private GraphRenderConfig buildRenderConfig(int width, int height, boolean hideLegend,
@@ -1031,7 +1033,7 @@ class GraphRenderer {
      * whichever one is behind.
      * <p>The max/min/avg/now summary block is emitted for the first extra
      * series only when there is exactly one, matching the long-standing
-     * combined-bandwidth graph; with more, four legend lines per series would
+     * combined-bandwidth graph. With more, four legend lines per series would
      * bury the plot.
      */
     private void configureExtraDataSources(RrdGraphDef def, GraphRenderConfig cfg) throws IOException {
@@ -1194,7 +1196,7 @@ class GraphRenderer {
      * Which plot slot an extra series occupies.
      * <p>The primary always takes slot 0, so extras start at 1 and, since a frame carries at
      * most two plots, every extra past the first clamps onto slot 1.
-     * <p>Every per-plot lookup for an extra series goes through here — its stroke colour, its
+     * <p>Every per-plot lookup for an extra series goes through here. Its stroke colour, its
      * fill and its value shading. They used to compute the ordinal separately and one of them
      * disagreed, which gave a series one plot's colour and another plot's gradient.
      *
@@ -1680,7 +1682,7 @@ class GraphRenderer {
          * group is drawn the same way.
          */
         final boolean allLines;
-        /** Render every series as a translucent filled path under a thin line. @since 0.9.71+ */
+        /** Render every series as a translucent filled path under a thin line. @since 0.9.71+. */
         final boolean fillSeries;
         /** True to label the axis and the dates in UTC. */
         final boolean useUtc;
@@ -1688,7 +1690,7 @@ class GraphRenderer {
         final boolean smooth;
         /** True to keep the historical zero-floored y-axis ({@link #PROP_ZERO_BASE}). */
         final boolean forceZero;
-        /** Emit the plot geometry and series as JSON instead of drawing. @since 0.9.71+ */
+        /** Emit the plot geometry and series as JSON instead of drawing. @since 0.9.71+. */
         final boolean meta;
         /** Active UI language code, which selects the fonts and the translated title. */
         final String lang;
@@ -1710,7 +1712,7 @@ class GraphRenderer {
         Font legend;
         /** Font for the title. */
         Font title;
-        /** rrd4j format string the legend's min/max/avg/now figures are printed with. */
+        /** RRD4j format string the legend's min/max/avg/now figures are printed with. */
         String numberFormat;
         /** Theme colour of the restart rules. */
         Color restartColor;
@@ -1785,7 +1787,7 @@ class GraphRenderer {
 
         /** Mutable counterpart of {@link GraphRenderConfig}; every setter returns itself. */
         static final class Builder {
-            /** Obtained from {@link GraphRenderConfig#builder()}, the only place one is made. */
+            /** Obtained from {@link GraphRenderConfig#builder}, the only place one is made. */
             Builder() {}
 
             /** Window start, in wall-clock ms. */
@@ -2054,7 +2056,7 @@ class GraphRenderer {
         }
     }
 
-    /** translate a string */
+    /** Translate a string. */
     private String _t(String s) {
         // the RRD font doesn't have zh chars, at least on my system
         // Works on 1.5.9 except on windows
@@ -2065,7 +2067,7 @@ class GraphRenderer {
     }
 
     /**
-     * translate a string with a parameter
+     * Translate a string with a parameter.
      */
     private String _t(String s, String o) {
         // the RRD font doesn't have zh chars, at least on my system

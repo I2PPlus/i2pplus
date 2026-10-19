@@ -74,7 +74,7 @@ public class TunnelDispatcher implements Service {
     private final RouterContext _context;
     private final Log _log;
 
-    /** Map of outbound gateways we created */
+    /** Map of outbound gateways we created. */
     private final ConcurrentHashMap<TunnelId, TunnelGateway> _outboundGateways = new ConcurrentHashMap<>();
 
 /**
@@ -89,24 +89,24 @@ public class TunnelDispatcher implements Service {
         return _outboundGateways.containsKey(tid);
     }
 
-    /** Map of outbound endpoints we joined */
+    /** Map of outbound endpoints we joined. */
     private final ConcurrentHashMap<TunnelId, OutboundTunnelEndpoint> _outboundEndpoints = new ConcurrentHashMap<>();
 
-    /** Map of tunnel participants (either IBEP or middle hop) */
+    /** Map of tunnel participants (either IBEP or middle hop). */
     private final ConcurrentHashMap<TunnelId, TunnelParticipant> _participants = new ConcurrentHashMap<>();
 
-    /** Map of inbound gateways (IBGW or zero-hop tunnels) */
+    /** Map of inbound gateways (IBGW or zero-hop tunnels). */
     private final ConcurrentHashMap<TunnelId, TunnelGateway> _inboundGateways = new ConcurrentHashMap<>();
 
-    /** Configurations for tunnels we are participating in but not creating */
+    /** Configurations for tunnels we are participating in but not creating. */
     private final ConcurrentHashMap<TunnelId, HopConfig> _participatingConfig = new ConcurrentHashMap<>();
 
-    /** Timestamp of the last expiration of a participating tunnel */
+    /** Timestamp of the last expiration of a participating tunnel. */
     private volatile long _lastParticipatingExpiration;
 
 /**
  * Cached transit throttle factors, refreshed by
- * {@link #updateThrottleFactors()} on the cleanup timer.
+ * {@link #updateThrottleFactors} on the cleanup timer.
  *
  * @since 0.9.70+
  */
@@ -115,7 +115,7 @@ public class TunnelDispatcher implements Service {
 
     /**
      * Tuned transit throttle factor, -1.0 = use router config.
-     * Set by the Tuner when autotuning router.transitThrottleFactor.
+     * Set by the Tuner when autotuning {@code router.transitThrottleFactor}.
      * @since 0.9.71+
      */
     private static volatile float _tunedTransitThrottleFactor = -1.0f;
@@ -171,7 +171,7 @@ public class TunnelDispatcher implements Service {
         return Math.min(maxTunnels, 100);
     }
 
-    /** Validator used for tunnel IVs */
+    /** Validator used for tunnel IVs. */
     private BloomFilterIVValidator _validator;
 
 /**
@@ -184,15 +184,23 @@ public class TunnelDispatcher implements Service {
  * Tuner reads {@code Rate.getLastEventCount()} directly. Batching would keep
  * the plotted value right and drop the count to one per flush.
  * <p>What they do not need is the string-keyed map lookup and log-level check
- * on every call. Resolved after {@link #initializeStats()} so the handles can
+ * on every call. Resolved after {@link #initializeStats} so the handles can
  * only ever alias an already-registered stat.
  *
  * @since 0.9.71+
  */
     private final RateStat _dispatchParticipantStat;
-    /** @see #_dispatchParticipantStat */
+    /**
+     * Stat for messages we process as a tunnel participant.
+     *
+     * @see #_dispatchParticipantStat
+     */
     private final RateStat _dispatchEndpointStat;
-    /** @see #_dispatchParticipantStat */
+    /**
+     * Stat for messages we process as a tunnel endpoint.
+     *
+     * @see #_dispatchParticipantStat
+     */
     private final RateStat _dispatchInboundStat;
 
     /**
@@ -204,32 +212,32 @@ public class TunnelDispatcher implements Service {
      */
     public BloomFilterIVValidator getIVValidator() { return _validator; }
 
-    /** Job to expire tunnels we are participating in */
+    /** Job to expire tunnels we are participating in. */
     private final LeaveTunnel _leaveJob;
 
-    /** Pumper used to drive tunnel message processing */
+    /** Pumper used to drive tunnel message processing. */
     private final TunnelGatewayPumper _pumper;
 
-    /** Recently expired tunnel IDs to suppress warnings */
+    /** Recently expired tunnel IDs to suppress warnings. */
     private final ConcurrentHashMap<TunnelId, Long> _recentlyExpired = new ConcurrentHashMap<>();
 
-    /** Time window (in ms) for suppressing warnings on recently expired tunnels */
+    /** Time window (in ms) for suppressing warnings on recently expired tunnels. */
     private static final long RECENT_EXPIRY_WINDOW_MS = 5_000;
 
-    /** Base interval for periodic cleanup of expired tunnels */
+    /** Base interval for periodic cleanup of expired tunnels. */
     private static final long CLEANUP_INTERVAL_MIN = 5 * 60 * 1000L;
 
-    /** Max interval for cleanup when few tunnels */
+    /** Max interval for cleanup when few tunnels. */
     private static final long CLEANUP_INTERVAL_MAX = 10 * 60 * 1000L;
 
-    /** Tunnel count thresholds for scaling cleanup interval */
+    /** Tunnel count thresholds for scaling cleanup interval. */
     private static final int CLEANUP_THRESHOLD_HIGH = 2000;
     private static final int CLEANUP_THRESHOLD_MED = 1000;
 
-    /** Fudge factor for tunnel expiration check - simplifies complex calculation */
+    /** Fudge factor for tunnel expiration check - simplifies complex calculation. */
     private static final long TUNNEL_EXPIRY_FUDGE = (3 * Router.CLOCK_FUDGE_FACTOR / 2) + 1000;
 
-    /** Configs currently being removed - prevents duplicate removal calls */
+    /** Configs currently being removed - prevents duplicate removal calls. */
     private final Set<HopConfig> _configsBeingRemoved = ConcurrentHashMap.newKeySet();
 
     /**
@@ -237,27 +245,27 @@ public class TunnelDispatcher implements Service {
      * Determines which throttle factor and bandwidth estimator to apply.
      */
     public enum Location {
-        /** Outbound endpoint */
+        /** Outbound endpoint. */
         OBEP,
-        /** Transit (middle) hop */
+        /** Transit (middle) hop. */
         PARTICIPANT,
-        /** Inbound gateway */
+        /** Inbound gateway. */
         IBGW
     }
 
     private static final long[] RATES = { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR };
 
-    /** Lock used when joining tunnels as participant, endpoint, or gateway */
+    /** Lock used when joining tunnels as participant, endpoint, or gateway. */
     private final Object _joinParticipantLock = new Object();
 
-    /** Total bandwidth allocated for participating tunnels */
+    /** Total bandwidth allocated for participating tunnels. */
     private final AtomicInteger _allocatedBW = new AtomicInteger();
 
-    /** High for now, just to prevent long-lived-message attacks */
+    /** High for now, just to prevent long-lived-message attacks. */
     private static final long MAX_FUTURE_EXPIRATION = 3 * 60 * 1000L + Router.CLOCK_FUDGE_FACTOR;
 
     /**
-     * Creates a new instance of TunnelDispatcher
+     * Creates a new instance of TunnelDispatcher.
      *
      * @param ctx the router context
      */
@@ -307,9 +315,9 @@ public class TunnelDispatcher implements Service {
      * This is a safety net in case LeaveTunnel job fails to remove them.
      */
     private class PeriodicCleanup extends SimpleTimer2.TimedEvent {
-        /** Schedule the first cleanup pass */
+        /** Schedule the first cleanup pass. */
         public PeriodicCleanup() { super(_context.simpleTimer2()); }
-        /** Run cleanup and reschedule */
+        /** Run cleanup and reschedule. */
         public void timeReached() {
             updateThrottleFactors();
             cleanupExpiredTunnels();
@@ -486,7 +494,7 @@ public class TunnelDispatcher implements Service {
     }
 
     /**
-     * Initializes all stats tracked by this class
+     * Initializes all stats tracked by this class.
      */
     private void initializeStats() {
         _context.statManager().createRequiredRateStat("tunnel.participatingTunnels", "Tunnels routed for others", "Tunnels [Participating]", RATES);
@@ -554,7 +562,7 @@ public class TunnelDispatcher implements Service {
     }
 
     /**
-     * Create a preprocessor for an inbound tunnel gateway
+     * Create a preprocessor for an inbound tunnel gateway.
      *
      * @param cfg the hop configuration for the inbound gateway
      */
@@ -563,7 +571,7 @@ public class TunnelDispatcher implements Service {
     }
 
     /**
-     * Create a preprocessor for an outbound tunnel gateway
+     * Create a preprocessor for an outbound tunnel gateway.
      *
      * @param cfg the tunnel creator configuration for the outbound gateway
      */
@@ -596,7 +604,7 @@ public class TunnelDispatcher implements Service {
     }
 
     /**
-     * We are the outbound gateway - we created this tunnel
+     * We are the outbound gateway - we created this tunnel.
      *
      * @param cfg config for the outbound tunnel we created
      * @return true if successful, false if tunnel ID is a duplicate
@@ -631,7 +639,7 @@ public class TunnelDispatcher implements Service {
     }
 
     /**
-     * We are the inbound endpoint - we created this tunnel
+     * We are the inbound endpoint - we created this tunnel.
      *
      * @param cfg config for the inbound tunnel we created
      * @return true if successful, false if tunnel ID is a duplicate
@@ -659,7 +667,7 @@ public class TunnelDispatcher implements Service {
     }
 
     /**
-     * We are a participant in this tunnel, but not as the endpoint or gateway
+     * We are a participant in this tunnel, but not as the endpoint or gateway.
      *
      * @param cfg config for the tunnel we're joining as participant
      * @return true if successful, false if tunnel ID is a duplicate
@@ -695,7 +703,7 @@ public class TunnelDispatcher implements Service {
     }
 
     /**
-     * We are the outbound endpoint in this tunnel, and did not create it
+     * We are the outbound endpoint in this tunnel, and did not create it.
      *
      * @param cfg config for the tunnel we're joining as outbound endpoint
      * @return true if successful, false if tunnel ID is a duplicate
@@ -728,7 +736,7 @@ public class TunnelDispatcher implements Service {
     }
 
     /**
-     * We are the inbound gateway in this tunnel, and did not create it
+     * We are the inbound gateway in this tunnel, and did not create it.
      *
      * @param cfg config for the tunnel we're joining as inbound gateway
      * @return true if successful, false if tunnel ID is a duplicate
@@ -822,11 +830,11 @@ public class TunnelDispatcher implements Service {
     }
 
     /**
-     * Remove a tunnel we created
+     * Remove a tunnel we created.
      *
      * @param cfg the tunnel being dropped, whose direction picks the outbound
-     *            gateway or inbound participant map it is removed from, and
-     *            whose message and failure counts are recorded in the stats
+     * gateway or inbound participant map it is removed from, and
+     * whose message and failure counts are recorded in the stats
      */
     public void remove(TunnelCreatorConfig cfg) {
         if (cfg.isInbound()) {
@@ -866,11 +874,11 @@ public class TunnelDispatcher implements Service {
     }
 
     /**
-     * Remove a tunnel we're participating in
+     * Remove a tunnel we're participating in.
      *
      * @param cfg the tunnel being dropped, identified by its receive tunnel;
-     *            releases its allocated bandwidth, null is ignored, and a
-     *            second removal of the same config is a no-op
+     * releases its allocated bandwidth, null is ignored, and a
+     * second removal of the same config is a no-op
      */
     public void remove(HopConfig cfg) {
         if (cfg == null) return;
@@ -947,11 +955,11 @@ public class TunnelDispatcher implements Service {
     }
 
     /**
-     * Dispatch a TunnelDataMessage to the appropriate participant or endpoint
+     * Dispatch a TunnelDataMessage to the appropriate participant or endpoint.
      *
      * @param msg transit message to deliver, routed by its tunnel ID
      * @param recvFrom hash of the peer that sent it, recorded in the dispatch
-     *                 log and passed on for profile accounting
+     * log and passed on for profile accounting
      */
     public void dispatch(TunnelDataMessage msg, Hash recvFrom) {
         byte[] data = msg.getData();
@@ -986,11 +994,11 @@ public class TunnelDispatcher implements Service {
     }
 
     /**
-     * Dispatch a TunnelGatewayMessage to the appropriate gateway
+     * Dispatch a TunnelGatewayMessage to the appropriate gateway.
      *
      * @param msg gateway message wrapping the I2NP message to forward; both its
-     *            own and the wrapped expiration must fall within
-     *            -CLOCK_FUDGE_FACTOR and +MAX_FUTURE_EXPIRATION of now
+     * own and the wrapped expiration must fall within
+     * -CLOCK_FUDGE_FACTOR and +MAX_FUTURE_EXPIRATION of now
      */
     public void dispatch(TunnelGatewayMessage msg) {
         TunnelId id = msg.getTunnelId();
@@ -1163,11 +1171,11 @@ public class TunnelDispatcher implements Service {
     }
 
     /**
-     * Update stats for participating tunnels
+     * Update stats for participating tunnels.
      *
      * @param ms length in ms of the coalescing interval the counters cover;
-     *           also the averaging period applied to the message rates, so the
-     *           per-tunnel average is scaled to a 10 minute figure
+     * also the averaging period applied to the message rates, so the
+     * per-tunnel average is scaled to a 10 minute figure
      */
     public void updateParticipatingStats(int ms) {
         int partCount = _context.tunnelManager().getParticipatingCount();
@@ -1302,13 +1310,13 @@ public class TunnelDispatcher implements Service {
     /**
      * The max bandwidth per transit tunnel.
      * Scales with allocation: higher share = higher per-tunnel cap.
-     * Uses outbound bandwidth only — on floodfill routers inbound is far
+     * Uses outbound bandwidth only. On floodfill routers inbound is far
      * smaller than outbound and would create an artificial bottleneck.
      *
      * @param loc role in the tunnel, currently unused; the cap depends only on
-     *            the outbound rate and our share percentage
+     * the outbound rate and our share percentage
      * @return cap in bytes per second, floored at 10KB (30KB or 50KB for the
-     *         larger allocation tiers) once the computed value exceeds 256KB
+     * larger allocation tiers) once the computed value exceeds 256KB
      */
     int getMaxPerTunnelBandwidth(Location loc) {
         int outKBps = _context.bandwidthLimiter().getOutboundKBytesPerSecond();
@@ -1326,14 +1334,14 @@ public class TunnelDispatcher implements Service {
         }
 
     /**
-     * Start up the TunnelDispatcher
+     * Start up the TunnelDispatcher.
      */
     public synchronized void startup() {
         _validator = new BloomFilterIVValidator(_context, getShareBandwidth(_context));
     }
 
     /**
-     * Shut down TunnelDispatcher
+     * Shut down TunnelDispatcher.
      */
     public synchronized void shutdown() {
         if (_validator != null) {
@@ -1355,7 +1363,7 @@ public class TunnelDispatcher implements Service {
     }
 
     /**
-     * Restart the TunnelDispatcher
+     * Restart the TunnelDispatcher.
      */
     public void restart() {
         shutdown();
@@ -1384,7 +1392,7 @@ public class TunnelDispatcher implements Service {
     }
 
     /**
-     * Job to expire tunnels we are participating in
+     * Job to expire tunnels we are participating in.
      */
     private class LeaveTunnel extends JobImpl {
         private final ConcurrentLinkedQueue<HopConfig> _configs = new ConcurrentLinkedQueue<>();

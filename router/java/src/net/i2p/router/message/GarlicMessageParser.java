@@ -38,7 +38,7 @@ public class GarlicMessageParser {
     private static final int MAX_CLOVES = 32;
 
     /**
-     * Create a garlic message parser
+     * Create a garlic message parser.
      *
      * @param context the router context
      */
@@ -47,15 +47,17 @@ public class GarlicMessageParser {
         _log = _context.logManager().getLog(GarlicMessageParser.class);
     }
 
+    // TODO need both for muxed
     /**
-     * Supports ELGAMAL_2048, ECIES_X25519, and PQ
+     * Supports ELGAMAL_2048, ECIES_X25519, and PQ.
      *
      * @param message the garlic message to decrypt
-     * @param encryptionKey either type TODO need both for muxed
+     * @param encryptionKey either type
      * @param skm use tags from this session key manager
      * @return null on error
      */
     CloveSet getGarlicCloves(GarlicMessage message, PrivateKey encryptionKey, SessionKeyManager skm) {
+        // TODO need both key types for muxed
         byte[] encData = message.getData();
         byte[] decrData;
         boolean debug = _log.shouldDebug();
@@ -214,7 +216,7 @@ public class GarlicMessageParser {
     }
 
     /**
-     * ElGamal only
+     * ElGamal only.
      *
      * @param data the raw data to read from
      * @param offset where in data to start

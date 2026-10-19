@@ -85,7 +85,7 @@ public final class EdDSABlinding {
 
     /**
      * Reduce a 64-byte value modulo l.
-     * Use to generate alpha
+     * Use to generate alpha.
      *
      * @param b 64 bytes little endian of random
      * @return 32 bytes little endian mod l

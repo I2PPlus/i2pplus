@@ -9,7 +9,7 @@ import net.i2p.util.EventDispatcher;
 
 /**
  * Streamr consumer that acts as an I2P client and UDP server,
- * receiving data from I2P destinations and forwarding it to a configured UDP host/port
+ * receiving data from I2P destinations and forwarding it to a configured UDP host/port.
  */
 public class StreamrConsumer extends I2PTunnelUDPClientBase {
 

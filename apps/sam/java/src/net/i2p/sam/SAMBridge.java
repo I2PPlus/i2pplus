@@ -63,13 +63,13 @@ public class SAMBridge implements Runnable, ClientApp {
     private final SAMSecureSessionInterface _secureSession;
 
     /**
-     * filename in which the name to private key mapping should
-     * be stored (and loaded from)
+     * Filename in which the name to private key mapping should
+     * be stored (and loaded from).
      */
     private final String persistFilename;
     /**
-     * app designated destination name to the base64 of the I2P formatted
-     * destination keys (Destination+PrivateKey+SigningPrivateKey)
+     * App designated destination name to the base64 of the I2P formatted
+     * destination keys (Destination+PrivateKey+SigningPrivateKey).
      */
     private final Map<String, String> nameToPrivKeys;
     private final Set<Handler> _handlers;
@@ -116,7 +116,7 @@ public class SAMBridge implements Runnable, ClientApp {
      * For ClientApp interface.
      * Recommended constructor for external use.
      * Does NOT open the listener socket or start threads; caller must call
-     * startup()
+     * startup().
      *
      * @param context the client context the bridge runs in, supplying the log
      * @param mgr  may be null
@@ -338,10 +338,10 @@ public class SAMBridge implements Runnable, ClientApp {
     }
 
     /**
-     * Handlers must call on startup
+     * Handlers must call on startup.
      *
      * @param handler the connection handler to add to the set stopped and
-     *                started with this bridge
+     * started with this bridge
      * @since 0.9.20
      */
     public void register(Handler handler) {
@@ -353,10 +353,10 @@ public class SAMBridge implements Runnable, ClientApp {
     }
 
     /**
-     * Handlers must call on stop
+     * Handlers must call on stop.
      *
      * @param handler the connection handler to drop from the set of handlers
-     *                started and stopped with this bridge
+     * started and stopped with this bridge
      * @since 0.9.20
      */
     public void unregister(Handler handler) {
@@ -465,7 +465,7 @@ public class SAMBridge implements Runnable, ClientApp {
 
     /**
      * Remove a v3 handler from the shared handler pool.
-     * Called by SAMv3Handler.stopHandling().
+     * Called by {@link net.i2p.sam.SAMv3Handler#stopHandling}.
      *
      * @param handler non-null
      * @since 0.9.62
@@ -502,8 +502,7 @@ public class SAMBridge implements Runnable, ClientApp {
      * Was a static singleton, now a singleton for this bridge.
      * Instantiate and start server if it doesn't exist.
      * We only listen on one host and port, as specified in the
-     * sam.udp.host and sam.udp.port properties.
-     * TODO we could have multiple servers on different hosts/ports in the future.
+     * {@code sam.udp.host} and {@code sam.udp.port} properties.
      *
      * @param props non-null instantiate and start server if it doesn't exist
      * @return non-null
@@ -511,6 +510,7 @@ public class SAMBridge implements Runnable, ClientApp {
      * @since 0.9.24
      */
     SAMv3DatagramServer getV3DatagramServer(Properties props) throws IOException {
+        // TODO we could have multiple servers on different hosts/ports in the future.
         String host = props.getProperty(PROP_DATAGRAM_HOST, DEFAULT_DATAGRAM_HOST);
         int port;
         String portStr = props.getProperty(PROP_DATAGRAM_PORT, DEFAULT_DATAGRAM_PORT);
@@ -534,7 +534,7 @@ public class SAMBridge implements Runnable, ClientApp {
     ////// begin ClientApp interface, use only if using correct construtor
 
     /**
-     * Start the bridge
+     * Start the bridge.
      * @since 0.9.6
      */
     public synchronized void startup() throws IOException {
@@ -602,7 +602,7 @@ public class SAMBridge implements Runnable, ClientApp {
     }
 
     /**
-     * Return the display name
+     * Return the display name.
      * @return the display name
      * @since 0.9.6
      */

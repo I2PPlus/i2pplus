@@ -56,7 +56,6 @@ import java.util.Arrays;
  * <li><strong>Current:</strong> Multiple algorithms with automatic type detection</li>
  * </ul>
  *
- * @author jrandom
  */
 public class Signature extends SimpleDataStructure {
     private static final SigType DEF_TYPE = SigType.DSA_SHA1;
@@ -127,6 +126,8 @@ public class Signature extends SimpleDataStructure {
     }
 
     /**
+     * Signature as Base64 for debugging.
+     *
      * @since 0.9.8
      */
     @Override

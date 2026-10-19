@@ -3,9 +3,9 @@ package net.i2p.util;
 import net.i2p.crypto.SipHashInline;
 
 /**
- *  Wrapper around SipHashInline with constant per-JVM keys
+ * Wrapper around SipHashInline with constant per-JVM keys.
  *
- *  @since 0.9.5
+ * @since 0.9.5
  */
 public abstract class SipHash {
     private static final long K0 = RandomSource.getInstance().nextLong();
@@ -40,11 +40,11 @@ public abstract class SipHash {
     }
 
     /**
-     *  Secure replacement for DataHelper.hashCode(byte[]);
-     *  caching recommended
+     * Secure replacement for {@code DataHelper.hashCode(}byte[]);
+     * caching recommended.
      *
-     *  @param data may be null
-     *  @return whether h code is present
+     * @param data may be null
+     * @return whether h code is present
      */
     public static int hashCode(byte[] data) {
         if (data == null) return 0;

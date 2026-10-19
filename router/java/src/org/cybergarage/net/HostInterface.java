@@ -35,7 +35,6 @@ import org.cybergarage.util.Debug;
  * <p>This class is essential for UPnP devices that need to bind to specific network interfaces or
  * discover available network addresses for device advertisement and communication.
  *
- * @author Satoshi Konno
  * @since 1.0
  */
 public class HostInterface {

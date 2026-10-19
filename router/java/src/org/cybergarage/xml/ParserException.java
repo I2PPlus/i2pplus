@@ -11,7 +11,6 @@ package org.cybergarage.xml;
  * <p>This exception is used throughout the XML parsing framework to indicate errors that occur
  * during XML document parsing, including I/O errors, malformed XML, and security violations.
  *
- * @author Satoshi Konno
  * @since 1.0
  */
 public class ParserException extends Exception {

@@ -18,7 +18,6 @@ import net.i2p.data.i2cp.SessionConfig;
  * Note that an outbound message may get routed as an inbound message
  * for local-local communication.
  *
- * @author jrandom
  */
 public class ClientMessage {
     private final Payload _payload;
@@ -33,7 +32,7 @@ public class ClientMessage {
     private final int _flags;
 
     /**
-     * For outbound (locally originated)
+     * For outbound (locally originated).
      *
      * @param toDest the destination to send to
      * @param payload the message payload
@@ -59,7 +58,7 @@ public class ClientMessage {
     }
 
     /**
-     * For inbound (from remote dest)
+     * For inbound (from remote dest).
      *
      * @param toDestHash the destination hash
      * @param payload the message payload
@@ -79,7 +78,7 @@ public class ClientMessage {
 
     /**
      * Retrieve the payload of the message.  All ClientMessage objects should have
-     * a payload
+     * a payload.
      *
      * @return the payload carried by this message, never null
      */
@@ -88,7 +87,7 @@ public class ClientMessage {
     /**
      * Retrieve the destination to which this message is directed.
      * Valid for outbound; null for inbound.
-     * If null, use getDestinationHash()
+     * If null, use getDestinationHash().
      *
      * @return the resolved destination, or null if only the hash is known
      */
@@ -104,7 +103,7 @@ public class ClientMessage {
     /**
      * Retrieve the destination to which this message is directed.
      * Valid for inbound; null for outbound.
-     * If null, use getDestination()
+     * If null, use getDestination().
      *
      * @return the destination hash
      */
@@ -127,7 +126,7 @@ public class ClientMessage {
 
     /**
      * Retrieve the session config of the client that sent the message.  This will only be available
-     * if the client was local
+     * if the client was local.
      *
      * @return the session config
      */

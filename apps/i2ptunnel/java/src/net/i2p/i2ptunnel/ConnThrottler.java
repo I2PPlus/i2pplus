@@ -200,7 +200,7 @@ class ConnThrottler {
             increment();
         }
 
-        /** Caller must synch */
+        /** Caller must synch. */
         public int countSince(long time) {
             for (Iterator<Long> iter = times.iterator(); iter.hasNext(); ) {
                 if (iter.next().longValue() < time)
@@ -211,19 +211,19 @@ class ConnThrottler {
             return times.size();
         }
 
-        /** Caller must synch */
+        /** Caller must synch. */
         public void increment() {
             times.add(Long.valueOf(Clock.getInstance().now()));
         }
 
-        /** Caller must synch */
+        /** Caller must synch. */
         public void ban(long untilTime) {
             until = untilTime;
             // don't need to save times if banned
             times.clear();
         }
 
-        /** Caller must synch */
+        /** Caller must synch. */
         public long getUntil() {
             if (until < Clock.getInstance().now())
                 until = 0;
@@ -232,7 +232,7 @@ class ConnThrottler {
     }
 
     private class Cleaner extends SimpleTimer2.TimedEvent {
-        /** must call schedule() later */
+        /** Must call schedule() later. */
         public Cleaner() {
             super(SimpleTimer2.getInstance());
         }

@@ -62,7 +62,6 @@ import net.i2p.util.SystemVersion;
  * cryptographic schemes (EdDSA, ECDSA) with configurable parameters
  * for security and performance optimization.</p>
  *
- * @author jrandom
  * @since 0.8.0
  */
 public final class KeyGenerator {
@@ -90,7 +89,7 @@ public final class KeyGenerator {
     }
 
     /**
-     * Generate a private 256 bit session key
+     * Generate a private 256 bit session key.
      *
      * @return session key
      */
@@ -103,14 +102,14 @@ public final class KeyGenerator {
         return key;
     }
 
-    /** New rounds (1M) - OWASP compliant */
+    /** New rounds (1M) - OWASP compliant. */
     private static final int PBE_ROUNDS = 1000000;
-    /** Legacy rounds (1K) - for migration */
+    /** Legacy rounds (1K) - for migration. */
     private static final int PBE_ROUNDS_LEGACY = 1000;
 
     /**
      * PBE the passphrase with the salt.
-     * Warning - SLOW
+     * Warning - SLOW.
      *
      * @param salt the random salt; only the first 16 bytes are mixed in
      * @param passphrase the password bytes stretched into the session key
@@ -123,7 +122,7 @@ public final class KeyGenerator {
 
     /**
      * PBE the passphrase with the salt using specified rounds.
-     * Warning - SLOW
+     * Warning - SLOW.
      *
      * @param salt 16 bytes
      * @param passphrase the password bytes, appended whole after the 16-byte salt prefix
@@ -157,8 +156,8 @@ public final class KeyGenerator {
     private static final int PUBKEY_EXPONENT_SIZE_FULL = 2048;
 
     /**
-     * Short exponent size, which should be safe for use with Oakley primes,
-     * per "On Diffie-Hellman Key Agreement with Short Exponents" - van Oorschot, Weiner
+     * Short exponent size, considered safe for use with Oakley primes.
+     * Per "On Diffie-Hellman Key Agreement with Short Exponents" - van Oorschot, Weiner
      * at EuroCrypt 96, and crypto++'s benchmarks at http://www.eskimo.com/~weidai/benchmarks.html
      * Also, "Koshiba &amp; Kurosawa: Short Exponent Diffie-Hellman Problems" (PKC 2004, LNCS 2947, pp. 173-186)
      * apparently supports this, according to
@@ -166,7 +165,11 @@ public final class KeyGenerator {
      */
     private static final int PUBKEY_EXPONENT_SIZE_SHORT = 226;
 
-    /** @since 0.9.8 */
+    /**
+     * Use long ElGamal exponents unless the CPU is slow.
+     *
+     * @since 0.9.8
+     */
     private static final boolean DEFAULT_USE_LONG_EXPONENT = !SystemVersion.isSlow();
 
     private static final String PROP_LONG_EXPONENT = "crypto.elGamal.useLongKey";
@@ -194,7 +197,7 @@ public final class KeyGenerator {
     /**
      * ElGamal only.
      * Generate a pair of keys, where index 0 is a PublicKey, and
-     * index 1 is a PrivateKey
+     * index 1 is a PrivateKey.
      *
      * @return pair of keys
      */
@@ -230,7 +233,7 @@ public final class KeyGenerator {
     }
 
     /**
-     * Supports EncTypes
+     * Supports EncTypes.
      *
      * @param type the encryption type
      * @return the key pair
@@ -270,7 +273,7 @@ public final class KeyGenerator {
 
     /**
      * Convert a PrivateKey to its corresponding PublicKey.
-     * As of 0.9.38, supports EncTypes
+     * As of 0.9.38, supports EncTypes.
      *
      * @param priv PrivateKey object
      * @return the corresponding PublicKey object
@@ -319,7 +322,7 @@ public final class KeyGenerator {
     /**
      * DSA-SHA1 only.
      * <p>
-     * Same as above but different return type
+     * Same as above but different return type.
      *
      * @return pair of keys
      * @since 0.8.7
@@ -346,7 +349,7 @@ public final class KeyGenerator {
     }
 
     /**
-     * Generic signature type, supports DSA, RSA, ECDSA, EdDSA
+     * Generic signature type, supports DSA, RSA, ECDSA, EdDSA.
      *
      * @param type the signature type
      * @return the key pair
@@ -460,7 +463,7 @@ public final class KeyGenerator {
     }
 
     /**
-     * Usage: KeyGenerator [sigtype...]
+     * Usage: KeyGenerator [sigtype...].
      * @param args command line arguments
      */
     public static void main(String[] args) {
@@ -472,7 +475,7 @@ public final class KeyGenerator {
     }
 
     /**
-     * Usage: KeyGenerator [sigtype...]
+     * Usage: KeyGenerator [sigtype...].
      */
     private static void main2(String[] args) {
         RandomSource.getInstance().nextBoolean();

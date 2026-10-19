@@ -32,7 +32,7 @@ public class SecurityHeaderBuilder {
      */
     public SecurityHeaderBuilder() {}
 
-    /** Cookie strings that should be filtered from Set-Cookie headers */
+    /** Cookie strings that should be filtered from Set-Cookie headers. */
     private static final String[] COOKIE_STRINGS = {"STYXKEY", "visited=yes"};
 
     /**
@@ -69,7 +69,7 @@ public class SecurityHeaderBuilder {
      * text/plain, application/json).
      * </p>
      * <p>
-     * Sets: Referrer-Policy: same-origin
+     * Sets: Referrer-Policy: same-origin.
      * </p>
      *
      * @param headers the HTTP response headers map
@@ -90,7 +90,7 @@ public class SecurityHeaderBuilder {
      * The Allow header is only added for MIME types in the custom whitelist.
      * </p>
      * <p>
-     * Sets: Allow: GET, POST, HEAD
+     * Sets: Allow: GET, POST, HEAD.
      * </p>
      *
      * @param headers the HTTP response headers map

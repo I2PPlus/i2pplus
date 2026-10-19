@@ -27,7 +27,7 @@ import net.i2p.util.RandomSource;
 
 /**
  * When a message arrives at the inbound tunnel endpoint, this distributor
- * honors the instructions (safely)
+ * honors the instructions (safely).
  */
 class InboundMessageDistributor implements GarlicMessageReceiver.CloveReceiver {
     private final RouterContext _context;
@@ -236,7 +236,7 @@ class InboundMessageDistributor implements GarlicMessageReceiver.CloveReceiver {
     }
 
     /**
-     * Handle a clove removed from the garlic message
+     * Handle a clove removed from the garlic message.
      *
      */
     @Override

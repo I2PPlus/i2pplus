@@ -19,7 +19,7 @@ import org.junit.Test;
  * the partner pool instead.
  *
  * Deferring is not immunity: the caller routes the defer through
- * TestJob.deferForMissingPartner(), which kicks the paired pool to rebuild
+ * {@link net.i2p.router.tunnel.pool.TestJob#deferForMissingPartner}, which kicks the paired pool to rebuild
  * and eventually fails the tunnel once its bounded budget is spent.  What
  * matters here is attribution — a degraded paired pool must not cascade its
  * failures into this one.

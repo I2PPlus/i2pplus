@@ -39,13 +39,13 @@ public class ListeningSocketsHelper {
 
     /**
      * Build the table rows, sorted by port ascending, then service. Services
-     * whose port is also a claimed internal socket are flagged; internal
+     * whose port is also a claimed internal socket are flagged. Internal
      * sockets not covered by any service get their own row, labelled from the
      * socket or falling back to "internal".
      * Pure, for unit tests.
      *
-     * @param services service name to bound address, from {@link PortMapper#getForwardedServices()}
-     * @param internalPorts internal port to optional label, from {@link InternalServerSocket#getPortLabels()}
+     * @param services service name to bound address, from {@link PortMapper#getForwardedServices}
+     * @param internalPorts internal port to optional label, from {@link InternalServerSocket#getPortLabels}
      * @return rows of {service, host, port, internal}, never null
      */
     static List<String[]> buildRows(Map<String, InetSocketAddress> services, Map<Integer, String> internalPorts) {

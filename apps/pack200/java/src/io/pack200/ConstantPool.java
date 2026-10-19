@@ -38,7 +38,6 @@ import java.util.Set;
 
 /**
  * Representation of constant pool entries and indexes.
- * @author John Rose
  */
 abstract
 class ConstantPool {
@@ -813,7 +812,11 @@ class ConstantPool {
         return parts;
     }
 
-    /** @since 1.7, JSR 292 */
+    /**
+     * Constant pool entry for a method handle.
+     *
+     * @since 1.7, JSR 292
+     */
     public static
     class MethodHandleEntry extends Entry {
         final int refKind;
@@ -863,7 +866,11 @@ class ConstantPool {
         }
     }
 
-    /** @since 1.7, JSR 292 */
+    /**
+     * Constant pool entry for a method type.
+     *
+     * @since 1.7, JSR 292
+     */
     public static
     class MethodTypeEntry extends Entry {
         final SignatureEntry typeRef;
@@ -898,7 +905,11 @@ class ConstantPool {
         }
     }
 
-    /** @since 1.7, JSR 292 */
+    /**
+     * Constant pool entry for an invokedynamic.
+     *
+     * @since 1.7, JSR 292
+     */
     public static
     class InvokeDynamicEntry extends Entry {
         final BootstrapMethodEntry bssRef;
@@ -951,7 +962,11 @@ class ConstantPool {
         }
     }
 
-    /** @since 1.7, JSR 292 */
+    /**
+     * Bootstrap method table entry.
+     *
+     * @since 1.7, JSR 292
+     */
     public static
     class BootstrapMethodEntry extends Entry {
         final MethodHandleEntry bsmRef;

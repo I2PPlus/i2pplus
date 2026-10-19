@@ -42,7 +42,7 @@ public class SnarkManagerTest {
     }
 
     /**
-     * countRealFiles excludes top-level BEP 47 padding files (.pad/_pad) from
+     * CountRealFiles excludes top-level BEP 47 padding files (.pad/_pad) from
      * the max files per torrent count, so a padded torrent is not rejected
      * because of its synthetic zero files. Padding nested below the root is a
      * regular file.
@@ -69,7 +69,7 @@ public class SnarkManagerTest {
     }
 
     /**
-     * parseShouldPadFiles reads the config property with a false default,
+     * ParseShouldPadFiles reads the config property with a false default,
      * so an absent or unparsable value disables padding.
      */
     @Test
@@ -87,7 +87,7 @@ public class SnarkManagerTest {
     }
 
     /**
-     * wasPreviouslyRunning decodes the persisted PROP_META_RUNNING flag.
+     * WasPreviouslyRunning decodes the persisted PROP_META_RUNNING flag.
      * null (missing entry) counts as previously running to match the
      * auto-start default; explicit "false" means the torrent was stopped.
      * The round-trip contract: locked_saveTorrentStatus writes "true"

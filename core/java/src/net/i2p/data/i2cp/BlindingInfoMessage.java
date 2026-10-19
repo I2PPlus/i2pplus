@@ -27,7 +27,7 @@ import java.io.InputStream;
  * @since 0.9.43; do not send to routers older than 0.9.43.
  */
 public class BlindingInfoMessage extends I2CPMessageImpl {
-    /** The message type */
+    /** The message type. */
     public static final int MESSAGE_TYPE = 42;
 
     private SessionId _sessionId;
@@ -46,19 +46,19 @@ public class BlindingInfoMessage extends I2CPMessageImpl {
     private static final int FLAG_AUTH = 0x0f;
     private static final int FLAG_SECRET = 0x10;
 
-    /** Endpoint type for hash */
+    /** Endpoint type for hash. */
     public static final int TYPE_HASH = 0;
 
-    /** Endpoint type for hostname */
+    /** Endpoint type for hostname. */
     public static final int TYPE_HOST = 1;
 
-    /** Endpoint type for destination */
+    /** Endpoint type for destination. */
     public static final int TYPE_DEST = 2;
 
-    /** Endpoint type for key */
+    /** Endpoint type for key. */
     public static final int TYPE_KEY = 3;
 
-    /** Creates an empty BlindingInfoMessage for reading */
+    /** Creates an empty BlindingInfoMessage for reading. */
     public BlindingInfoMessage() {}
 
     /**
@@ -87,7 +87,7 @@ public class BlindingInfoMessage extends I2CPMessageImpl {
     }
 
     /**
-     * HASH not supported by router and may not be useful
+     * HASH not supported by router and may not be useful.
      *
      * @param h destination {@link Hash}, must be non-null
      * @param id the session ID
@@ -108,7 +108,7 @@ public class BlindingInfoMessage extends I2CPMessageImpl {
     }
 
     /**
-     * HOST not supported by router and may not be useful
+     * HOST not supported by router and may not be useful.
      *
      * @param h endpoint hostname, must be non-null
      * @param id the session ID
@@ -219,7 +219,7 @@ public class BlindingInfoMessage extends I2CPMessageImpl {
     }
 
     /**
-     * Gets the endpoint type.
+     * The endpoint type selector.
      *
      * @return 0 (hash) or 1 (host) or 2 (dest) or 3 (key)
      */

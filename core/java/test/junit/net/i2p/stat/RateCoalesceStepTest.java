@@ -146,7 +146,7 @@ public class RateCoalesceStepTest {
     }
 
     /**
-     * {@link Rate#coalesce()} only reaches these helpers once the period is due
+     * {@link Rate#coalesce} only reaches these helpers once the period is due
      * minus slack, so an early visit never advances the grid and never collapses.
      */
     @Test

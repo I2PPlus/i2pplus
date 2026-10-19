@@ -19,7 +19,6 @@ import java.io.InputStream;
  * Defines the message a client sends to a router when destroying
  * existing session.
  *
- * @author jrandom
  */
 public class DestroySessionMessage extends I2CPMessageImpl {
     /**

@@ -13,7 +13,7 @@ import net.i2p.data.Destination;
  */
 public class I2PSink implements Sink {
 
-    /** true to send data unwrapped, false to wrap it in a repliable datagram. */
+    /** True to send data unwrapped, false to wrap it in a repliable datagram. */
     protected final boolean raw;
     /** Session the datagrams are sent out on. */
     protected final I2PSession sess;

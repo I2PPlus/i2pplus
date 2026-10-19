@@ -22,7 +22,6 @@ import com.google.zxing.common.BitMatrix;
 /**
  * See ISO 18004:2006 Annex D
  *
- * @author Sean Owen
  */
 public final class Version {
 

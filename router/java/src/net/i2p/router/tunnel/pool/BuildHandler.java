@@ -77,7 +77,7 @@ public class BuildHandler implements Runnable {
      * round trip.
      */
     private final ConcurrentHashMap<Hash, AtomicInteger> _lookupKeys = new ConcurrentHashMap<>(32);
-    /** FIFO of deferred lookups waiting for a concurrent-lookup slot */
+    /** FIFO of deferred lookups waiting for a concurrent-lookup slot. */
     private final ConcurrentLinkedDeque<PendingLookup> _pendingLookups = new ConcurrentLinkedDeque<>();
     private volatile boolean _isRunning;
     private final Object _startupLock = new Object();
@@ -86,7 +86,7 @@ public class BuildHandler implements Runnable {
     private static final String PROP_SHOULD_THROTTLE = "router.enableTransitThrottle";
     private enum ExplState {NONE, IB, OB, BOTH}
     private static final boolean IS_SLOW = SystemVersion.isSlow();
-    /** TODO these may be too high, review and adjust */
+    // TODO these may be too high, review and adjust
     private static volatile int _maxQueue = IS_SLOW ? 64 : 512;
     private static final String PROP_MAX_QUEUE = "router.buildHandlerMaxQueue";
     private static final int NEXT_HOP_LOOKUP_TIMEOUT = 5*1000;
@@ -107,10 +107,10 @@ public class BuildHandler implements Runnable {
      * work, so hardware size doesn't change how many can be in flight.
      * Network load is bounded downstream by per-key search coalescing,
      * IterativeSearchJob fan-out caps, and the recently-queried floodfill
-     * cooldowns. Overridable via i2p.tunnel.build.maxLookupLimit.
+     * cooldowns. Overridable via {@code i2p.tunnel.build.maxLookupLimit}.
      */
     private static final int MAX_LOOKUP_LIMIT = IS_SLOW ? 32 : 64;
-    /** i2p.tunnel.build.maxPendingLookups property; see {@link #getMaxPendingLookups}. */
+    /** {@code i2p.tunnel.build.maxPendingLookups} property; see {@link #getMaxPendingLookups}. */
     private static final String PROP_MAX_PENDING_LOOKUPS = "i2p.tunnel.build.maxPendingLookups";
     /**
      * Grace added to the lookup timeout for the independent slot-release
@@ -238,7 +238,7 @@ public class BuildHandler implements Runnable {
      * build request is still inside the originator's budget. Sized near the
      * useful maximum - a full queue drains inside the staleness window
      * (drain rate x window is roughly 200) - so bursts absorb instead of
-     * dying; entries past the originator's budget are discarded by the
+     * dying. Entries past the originator's budget are discarded by the
      * staleness check either way.
      *
      * @param ctx router context, for config lookup
@@ -316,7 +316,7 @@ public class BuildHandler implements Runnable {
      * dropping the key entry once its last waiting request completes so
      * released slots become visible to new arrivals.
      * <p>
-     * Pure decision on its map argument — safe for unit tests.
+     * Pure decision on its map argument. Safe for unit tests.
      *
      * @param inFlight distinct next-hop keys currently being resolved
      * @param key next hop being released by one request
@@ -379,7 +379,7 @@ public class BuildHandler implements Runnable {
     /**
      * Whether a timed-out next-hop lookup deserves one more attempt.
      * Retry only when a full extra lookup still fits inside the originator's
-     * build-request budget — past that, the originator has given up and
+     * build-request budget. Past that, the originator has given up and
      * completing the join is wasted work (same reasoning as
      * {@link #pendingLookupMaxAge}).
      *
@@ -439,7 +439,7 @@ public class BuildHandler implements Runnable {
 
     /**
      * Upper bound on participating tunnels before the router drops
-     * incoming build requests, tunable via router.maxParticipatingTunnels.
+     * incoming build requests, tunable via {@code router.maxParticipatingTunnels}.
      */
     private static int getMaxParticipatingTunnels(RouterContext ctx) {
         refreshBuildConfig(ctx);
@@ -555,7 +555,7 @@ public class BuildHandler implements Runnable {
     }
 
     /**
-     * Call the same time you start the threads
+     * Call the same time you start the threads.
      *
      * @since 0.9.18
      */
@@ -600,7 +600,7 @@ public class BuildHandler implements Runnable {
     }
 
     /**
-     * Thread to handle inbound requests
+     * Thread to handle inbound requests.
      * @since 0.8.11
      */
     @Override
@@ -657,7 +657,7 @@ public class BuildHandler implements Runnable {
     }
 
     /**
-     * Blocking call to handle a single inbound request
+     * Blocking call to handle a single inbound request.
      */
     private void handleInboundRequest() {
         BuildMessageState state = null;
@@ -706,7 +706,7 @@ public class BuildHandler implements Runnable {
     }
 
     /**
-     * Blocking call to handle a single inbound reply
+     * Blocking call to handle a single inbound reply.
      */
     private void handleReply(BuildReplyMessageState state) {
         // search through the tunnels for a reply
@@ -721,7 +721,7 @@ public class BuildHandler implements Runnable {
     }
 
     /**
-     * Blocking call to handle a single inbound reply
+     * Blocking call to handle a single inbound reply.
      */
     private void handleReply(TunnelBuildReplyMessage msg, PooledTunnelCreatorConfig cfg, long delay) {
         // From the config's own creation time, not from its expiry minus ten minutes. The expiry
@@ -1058,7 +1058,7 @@ public class BuildHandler implements Runnable {
     }
 
     /**
-     * This request is actually a reply, process it as such
+     * This request is actually a reply, process it as such.
      */
     private void handleRequestAsInboundEndpoint(BuildEndMessageState state) {
         int records = state.msg.getRecordCount();
@@ -1804,7 +1804,7 @@ public class BuildHandler implements Runnable {
         final Hash fromHash;
         final long recvTime;
         private long lookupStartTime = -1;
-        /** Guards against a deferred lookup completing after its timeout fired, or vice versa */
+        /** Guards against a deferred lookup completing after its timeout fired, or vice versa. */
         private final AtomicBoolean _handled = new AtomicBoolean(false);
 
         /**
@@ -1927,7 +1927,7 @@ public class BuildHandler implements Runnable {
     /**
      * Remove the participating tunnel if we can't contact the next hop
      * Not strictly necessary, as the entry doesn't use that much space,
-     * but it affects capacity calculations
+     * but it affects capacity calculations.
      */
     private static class TunnelBuildNextHopFailJob extends JobImpl {
         private final HopConfig _cfg;
@@ -1984,9 +1984,9 @@ public class BuildHandler implements Runnable {
      * @since 0.9.71+
      */
     static final int NEXT_HOP_REPLIED = 0;
-    /** Next hop did not answer within the hop-contact window. @since 0.9.71+ */
+    /** Next hop did not answer within the hop-contact window. @since 0.9.71+. */
     static final int NEXT_HOP_TIMEOUT = 1;
-    /** We declined the inbound build request. @since 0.9.71+ */
+    /** We declined the inbound build request. @since 0.9.71+. */
     static final int NEXT_HOP_DROPPED = 2;
     private static final int NEXT_HOP_OUTCOMES = 3;
 
@@ -2086,7 +2086,7 @@ public class BuildHandler implements Runnable {
 
     /**
      * Extract IP:port from RouterInfo for a peer hash.
-     * @return the i p port from hash
+     * @return the IP port from hash
      */
     private String getIPPortFromHash(Hash h) {
         try {

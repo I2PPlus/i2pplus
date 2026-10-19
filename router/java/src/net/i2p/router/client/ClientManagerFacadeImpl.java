@@ -31,24 +31,23 @@ import net.i2p.router.networkdb.kademlia.FloodfillNetworkDatabaseFacade;
 import net.i2p.util.Log;
 
 /**
- * Base impl of the client facade
+ * Base impl of the client facade.
  *
- * @author jrandom
  */
 public class ClientManagerFacadeImpl extends ClientManagerFacade implements InternalClientManager {
     private final Log _log;
     private ClientManager _manager;
     private final RouterContext _context;
-    /** Throttle lease expiration logging - only log once per client per interval */
+    /** Throttle lease expiration logging - only log once per client per interval. */
     private static final long LOG_THROTTLE = 10L * 60 * 1000; // 10 minutes
     private final ConcurrentHashMap<Hash, Long> _lastExpiredLogTime = new ConcurrentHashMap<>();
-    /** Note that this is different than the property the client side uses, i2cp.tcp.port */
+    /** Note that this is different than the property the client side uses, {@code i2cp.tcp.port}. */
     public static final String PROP_CLIENT_PORT = "i2cp.port";
-    /** Default port */
+    /** Default port. */
     public static final int DEFAULT_PORT = I2PClient.DEFAULT_LISTEN_PORT;
-    /** Note that this is different than the property the client side uses, i2cp.tcp.host */
+    /** Note that this is different than the property the client side uses, {@code i2cp.tcp.host}. */
     public static final String PROP_CLIENT_HOST = "i2cp.hostname";
-    /** Default host */
+    /** Default host. */
     public static final String DEFAULT_HOST = "127.0.0.1";
     /**
      * Creates the facade without starting anything; call startup() to listen for I2CP connections.
@@ -77,13 +76,15 @@ public class ClientManagerFacadeImpl extends ClientManagerFacade implements Inte
     public synchronized void shutdown() {shutdown("Router shutdown");}
 
     /**
+     * Disconnect all clients with the given error message.
+     *
      * @param msg message to send to the clients
      * @since 0.8.8
      */
     public synchronized void shutdown(String msg) {
         if (_manager != null) {_manager.shutdown(msg);}
     }
-    /** Restart the service */
+    /** Restart the service. */
 
     public synchronized void restart() {
         if (_manager != null) {_manager.restart();}
@@ -299,6 +300,8 @@ public class ClientManagerFacadeImpl extends ClientManagerFacade implements Inte
     }
 
     /**
+     * Report whether a client message was delivered or lost.
+     *
      * @param id the router's ID for this message
      * @param messageNonce the client's ID for this message, greater than zero
      * @param status see I2CP MessageStatusMessage for success/failure codes
@@ -314,7 +317,7 @@ public class ClientManagerFacadeImpl extends ClientManagerFacade implements Inte
     }
 
     /**
-     * Return the client's current config, or null if not connected
+     * Return the client's current config, or null if not connected.
      *
      * @return the client session config
      */
@@ -325,7 +328,7 @@ public class ClientManagerFacadeImpl extends ClientManagerFacade implements Inte
     }
 
     /**
-     * Return the client's current manager or null if not connected
+     * Return the client's current manager or null if not connected.
      *
      * @return the client session key manager
      */
@@ -337,7 +340,7 @@ public class ClientManagerFacadeImpl extends ClientManagerFacade implements Inte
     }
 
     /**
-     * Return the list of locally connected clients
+     * Return the list of locally connected clients.
      *
      * @return set of Destination objects
      */

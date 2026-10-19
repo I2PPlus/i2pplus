@@ -30,7 +30,7 @@ public class ElGamalPublicKeyImpl implements ElGamalPublicKey, DHPublicKey {
 
     /** The public value y = g^x mod p. */
     private BigInteger y;
-    /** El spec */
+    /** El spec. */
     private ElGamalParameterSpec elSpec;
 
     /**
@@ -236,7 +236,7 @@ public class ElGamalPublicKeyImpl implements ElGamalPublicKey, DHPublicKey {
     }
 
     /**
-     * Read object
+     * Read object.
      * @param in the stream to deserialize the y value and the ElGamal parameters from
      * @throws IOException if the stream cannot be read
      * @throws ClassNotFoundException if the serialized class is not available to this router
@@ -247,7 +247,7 @@ public class ElGamalPublicKeyImpl implements ElGamalPublicKey, DHPublicKey {
     }
 
     /**
-     * Write object
+     * Write object.
      * @param out the stream to serialize the y value and the ElGamal parameters to
      * @throws IOException if the stream cannot be written
      */

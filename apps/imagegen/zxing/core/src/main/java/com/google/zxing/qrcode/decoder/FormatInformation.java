@@ -20,7 +20,6 @@ package com.google.zxing.qrcode.decoder;
  * <p>Encapsulates a QR Code's format information, including the data mask used and
  * error correction level.</p>
  *
- * @author Sean Owen
  *         See DataMask
  * @see ErrorCorrectionLevel
  */

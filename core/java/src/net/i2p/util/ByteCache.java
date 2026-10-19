@@ -46,8 +46,8 @@ public final class ByteCache extends TryCache<ByteArray> {
     private static final Map<Integer, ByteCache> _caches = new ConcurrentHashMap<>(16);
 
     /**
-     * max size in bytes of each cache
-     * Set to max memory / 128, with a min of 256KB and a max of 8MB
+     * Max size in bytes of each cache
+     * Set to max memory / 128, with a min of 256KB and a max of 8MB.
      *
      * @since 0.7.14
      */
@@ -63,7 +63,7 @@ public final class ByteCache extends TryCache<ByteArray> {
     /** If the cache size hasn't been exceeded in 90 seconds, cut the cache in half. */
     private static final long EXPIRE_PERIOD = (long) 90 * 1000;
 
-    /** Global cleanup task - single timer for all caches */
+    /** Global cleanup task - single timer for all caches. */
     private static final List<ByteCache> _allCaches = new ArrayList<>();
 
     static {
@@ -146,7 +146,7 @@ public final class ByteCache extends TryCache<ByteArray> {
     }
 
     /**
-     * Clear everything (memory pressure)
+     * Clear everything (memory pressure).
      *
      * @since 0.7.14
      */
@@ -161,7 +161,11 @@ public final class ByteCache extends TryCache<ByteArray> {
 
     private final int _entrySize;
 
-    /** @since 0.9.36 */
+    /**
+     * Factory for cached byte arrays.
+     *
+     * @since 0.9.36
+     */
     private static class ByteArrayFactory implements TryCache.ObjectFactory<ByteArray> {
         private final int sz;
 
@@ -200,7 +204,7 @@ public final class ByteCache extends TryCache<ByteArray> {
     }
 
     /**
-     * Put this structure back onto the available cache for reuse
+     * Put this structure back onto the available cache for reuse.
      */
     @Override
     public final void release(ByteArray entry) {

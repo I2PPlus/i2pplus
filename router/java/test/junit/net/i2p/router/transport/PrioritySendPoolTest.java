@@ -45,6 +45,8 @@ public class PrioritySendPoolTest {
     }
 
     /**
+     * Build a message with the given priority.
+     *
      * @param priority the message priority
      * @return a payload-free message, identified by object identity
      */
@@ -194,7 +196,7 @@ public class PrioritySendPoolTest {
     /**
      * Drive the pool past the compaction threshold repeatedly and confirm the
      * order and the counts survive. Compaction discards the dead prefix of the
-     * backing array; a wrong shift here would duplicate or drop messages
+     * backing array. A wrong shift here would duplicate or drop messages
      * rather than merely reorder them.
      */
     @Test
@@ -238,7 +240,7 @@ public class PrioritySendPoolTest {
 
     /**
      * drainTo() must emit only the live region, in dequeue order, so that
-     * TransportImpl.resizeSendPool() re-offers the pending messages correctly.
+     * {@link net.i2p.router.transport.TransportImpl#resizeSendPool} re-offers the pending messages correctly.
      */
     @Test
     public void testDrainToEmitsLiveRegionInOrder() {
@@ -259,7 +261,7 @@ public class PrioritySendPoolTest {
 
     /**
      * A shrinking capacity only takes effect for later offers. Messages
-     * already queued stay put; each subsequent offer sheds one tail message
+     * already queued stay put. Each subsequent offer sheds one tail message
      * when the pool is over the new capacity, which is the documented
      * "evicted on the next offer()" behaviour.
      */

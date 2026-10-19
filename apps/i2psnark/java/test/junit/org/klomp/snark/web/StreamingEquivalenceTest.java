@@ -122,7 +122,7 @@ public class StreamingEquivalenceTest {
     /**
      * Builds an on-disk torrent directory with n files, creates its metainfo
      * via Storage's create-from-directory constructor, writes the .torrent,
-     * boots a stopped-mode Snark from it (running Storage.check()), and
+     * boots a stopped-mode Snark from it (running {@link org.klomp.snark.Storage#check}), and
      * registers it with the manager under the directory name.
      */
     private static void makeTorrent(File dataRoot, String name, int n) throws Exception {

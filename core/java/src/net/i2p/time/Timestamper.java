@@ -19,7 +19,7 @@ public class Timestamper implements Runnable {
 
     /**
      * Update the time immediately.
-     * Dummy
+     * Dummy.
      *
      * @since 0.8.8
      */

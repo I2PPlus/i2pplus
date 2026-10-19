@@ -12,9 +12,8 @@ package net.i2p.client;
 import net.i2p.I2PException;
 
 /**
- * Thrown when there is a problem doing something on the session
+ * Thrown when there is a problem doing something on the session.
  *
- * @author jrandom
  */
 public class I2PSessionException extends I2PException {
 

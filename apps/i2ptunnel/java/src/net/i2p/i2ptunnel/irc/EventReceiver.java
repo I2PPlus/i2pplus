@@ -27,14 +27,14 @@ public abstract class EventReceiver implements EventDispatcher {
 
     public EventReceiver() {}
 
-    /** default constructor */
-
     @Override
     public EventDispatcher getEventDispatcher() {
         return this;
     }
 
     /**
+     * Subscribe to IRC events.
+     *
      * @throws UnsupportedOperationException always; the receiver is its own dispatcher
      */
     @Override
@@ -43,6 +43,8 @@ public abstract class EventReceiver implements EventDispatcher {
     }
 
     /**
+     * Unsubscribe from IRC events.
+     *
      * @throws UnsupportedOperationException always; the receiver is its own dispatcher
      */
     @Override
@@ -54,6 +56,8 @@ public abstract class EventReceiver implements EventDispatcher {
     public abstract void notifyEvent(String eventName, Object args);
 
     /**
+     * Value of the last fired event.
+     *
      * @return never returns, as a receiver stores no event values
      * @throws UnsupportedOperationException always; a receiver stores no event values
      */
@@ -63,6 +67,8 @@ public abstract class EventReceiver implements EventDispatcher {
     }
 
     /**
+     * All registered event names.
+     *
      * @return never returns, as the receiver registers no event names
      * @throws UnsupportedOperationException always; the registry is never populated
      */
@@ -72,6 +78,8 @@ public abstract class EventReceiver implements EventDispatcher {
     }
 
     /**
+     * Stop waiting for events.
+     *
      * @throws UnsupportedOperationException always; there is nothing to ignore
      */
     @Override
@@ -83,6 +91,8 @@ public abstract class EventReceiver implements EventDispatcher {
     public void unIgnoreEvents() {}
 
     /**
+     * Block until the event fires and return its value.
+     *
      * @throws UnsupportedOperationException always; a receiver cannot block on an event
      */
     @Override

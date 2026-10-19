@@ -17,9 +17,8 @@ import java.io.ByteArrayOutputStream;
 import java.util.Date;
 
 /**
- * Test harness for loading / storing Lease objects
+ * Test harness for loading / storing Lease objects.
  *
- * @author jrandom
  */
 public class LeaseTest extends StructureTest {
 

@@ -8,7 +8,6 @@ import net.i2p.crypto.eddsa.Utils;
  * Represents a point on an EdDSA curve with support for multiple coordinate representations.
  * Provides operations for point addition, doubling, and scalar multiplication.
  *
- * @author str4d
  * @since 0.9.15
  */
 public class GroupElement implements Serializable {
@@ -18,9 +17,9 @@ public class GroupElement implements Serializable {
      * Available coordinate representations for a group element.
      */
     public enum Representation {
-        /** Projective representation (X:Y:Z) */
+        /** Projective representation (X:Y:Z). */
         P2,
-        /** Extended projective representation (X:Y:Z:T) */
+        /** Extended projective representation (X:Y:Z:T). */
         P3,
         /**
          * Extended representation with precomputed doubles.
@@ -28,11 +27,11 @@ public class GroupElement implements Serializable {
          * @since 0.9.36
          */
         P3PrecomputedDouble,
-        /** Completed representation for addition results */
+        /** Completed representation for addition results. */
         P1P1,
-        /** Precomputed representation for optimized operations */
+        /** Precomputed representation for optimized operations. */
         PRECOMP,
-        /** Cached representation for intermediate calculations */
+        /** Cached representation for intermediate calculations. */
         CACHED
     }
 
@@ -453,7 +452,6 @@ public class GroupElement implements Serializable {
 
     /**
      * Convert a GroupElement from one Representation to another.
-     * TODO-CR: Add additional conversion?
      * $r = p$
      * <p>
      * Supported conversions:
@@ -461,12 +459,13 @@ public class GroupElement implements Serializable {
      * <li>P3 $\rightarrow$ P2
      * <li>P3 $\rightarrow$ CACHED (1 multiply, 1 add, 1 subtract)
      * <li>P1P1 $\rightarrow$ P2 (3 multiply)
-     * <li>P1P1 $\rightarrow$ P3 (4 multiply)
+     * <li>P1P1 $\rightarrow$ P3 (4 multiply).
      *
      * @param repr The representation to convert to.
      * @return A new group element in the given representation.
      */
     private GroupElement toRep(final Representation repr) {
+        // TODO-CR: Add additional conversion?
         if (this.repr == repr)
             return this;
         switch (this.repr) {
@@ -564,7 +563,7 @@ public class GroupElement implements Serializable {
      * <p>
      * $r$ in $P \times P$ representation:
      * <p>
-     * $r = ((X' : Z'), (Y' : T'))$ where
+     * $r = ((X' : Z'), (Y' : T'))$ where.
      * </p><ul>
      * <li>$X' = (X + Y)^2 - (Y^2 + X^2)$
      * <li>$Y' = Y^2 + X^2$
@@ -587,7 +586,7 @@ public class GroupElement implements Serializable {
      * X3 = (B − C − D) · J = X' * (-T'); \\
      * Y3 = F · (E − D) = Z' * (-Y'); \\
      * Z3 = F · J = Z' * (-T').
-     * $$
+     * $$.
      *
      * @return The P1P1 representation
      */
@@ -615,6 +614,14 @@ public class GroupElement implements Serializable {
         }
     }
 
+    // TODO-CR: Formula for the $P^2$ representation is not in agreement with the formula given in [2] page 6
+    // TODO-CR: (the common factor $1/Z2^2$ does not matter):
+    // E = B - A, F = D - C, G = D + C, H = B + A
+    // X3 = E * F = (B - A) * (D - C);
+    // Y3 = G * H = (D + C) * (B + A);
+    // Z3 = F * G = (D - C) * (D + C);
+    // T3 = E * H = (B - A) * (B + A);
+
     /**
      * GroupElement addition using the twisted Edwards addition law with
      * extended coordinates (Hisil2008).
@@ -624,7 +631,7 @@ public class GroupElement implements Serializable {
      * <p>
      * $r$ in $P \times P$ representation:
      * <p>
-     * $r = ((X' : Z'), (Y' : T'))$ where
+     * $r = ((X' : Z'), (Y' : T'))$ where.
      * <p><ul>
      * <li>$X' = (Y1 + X1) * q.X - (Y1 - X1) * q.Y = ((Y1 + X1) * (Y2 + X2) - (Y1 - X1) * (Y2 - X2)) * 1/Z2$
      * <li>$Y' = (Y1 + X1) * q.X + (Y1 - X1) * q.Y = ((Y1 + X1) * (Y2 + X2) + (Y1 - X1) * (Y2 - X2)) * 1/Z2$
@@ -645,17 +652,8 @@ public class GroupElement implements Serializable {
      * <li>$X'' = X' * Z' = (B - A) * (D + C) * 1/Z2^2$
      * <li>$Y'' = Y' * T' = (B + A) * (D - C) * 1/Z2^2$
      * <li>$Z'' = Z' * T' = (D + C) * (D - C) * 1/Z2^2$
-     * <li>$T'' = X' * Y' = (B - A) * (B + A) * 1/Z2^2$
-     * </ul><p>
-     * TODO-CR BR: Formula for the $P^2$ representation is not in agreement with the formula given in [2] page 6<br>
-     * TODO-CR BR: (the common factor $1/Z2^2$ does not matter):<br>
-     * $$
-     * E = B - A, F = D - C, G = D + C, H = B + A \\
-     * X3 = E * F = (B - A) * (D - C); \\
-     * Y3 = G * H = (D + C) * (B + A); \\
-     * Z3 = F * G = (D - C) * (D + C); \\
-     * T3 = E * H = (B - A) * (B + A);
-     * $$
+     * <li>$T'' = X' * Y' = (B - A) * (B + A) * 1/Z2^2$.
+     * </ul>
      *
      * @param q the PRECOMP representation of the GroupElement to add.
      * @return the P1P1 representation of the result.
@@ -801,12 +799,11 @@ public class GroupElement implements Serializable {
 
     /**
      * Negates this group element by subtracting it from the neutral group element.
-     * <p>
-     * TODO-CR BR: why not simply negate the coordinates $X$ and $T$?
      *
      * @return The negative of this group element.
      */
     public GroupElement negate() {
+        // TODO-CR BR: why not simply negate the coordinates $X$ and $T$?
         if (this.repr != Representation.P3)
             throw new UnsupportedOperationException();
         return this.curve.getZero(Representation.P3).sub(toCached()).toP3PrecomputeDouble();
@@ -948,19 +945,21 @@ public class GroupElement implements Serializable {
         return t.cmov(tminus, bnegative);
     }
 
+    // TODO mult(): check that the precondition below applies here
     /**
      * $h = a * B$ where $a = a[0]+256*a[1]+\dots+256^{31} a[31]$ and
      * $B$ is this point. If its lookup table has not been precomputed, it
      * will be at the start of the method (and cached for later calls).
      * Constant time.
      * <p>
-     * Preconditions: (TODO: Check this applies here)
-     *     $a[31] \le 127$
+     * Preconditions:
+     * $a[31] \le 127$.
      *
      * @param a $= a[0]+256*a[1]+\dots+256^{31} a[31]$
      * @return $a * B$ as a group element
      */
     public GroupElement scalarMultiply(final byte[] a) {
+        // TODO: Check the preconditions apply here
         GroupElement t;
         int i;
 

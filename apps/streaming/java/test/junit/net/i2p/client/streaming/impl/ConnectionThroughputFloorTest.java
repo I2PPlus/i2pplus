@@ -147,7 +147,7 @@ public class ConnectionThroughputFloorTest {
      * The baseline must not collapse after a quiet window: if it did, the
      * next slow-but-healthy sample would trivially clear the floor and the
      * detector would be disarmed by the very event it is meant to catch. The
-     * guard is in the caller, which skips the update for a zero sample; this
+     * guard is in the caller, which skips the update for a zero sample. This
      * pins that a zero sample measures as 0 so the skip is testable.
      */
     @Test

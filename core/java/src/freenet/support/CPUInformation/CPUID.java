@@ -99,7 +99,6 @@ import net.i2p.util.SystemVersion;
  *
  * @see <a href="http://en.wikipedia.org/wiki/Cpuid">Wikipedia: CPUID</a>
  * @see <a href="https://www.amd.com/en/search/documentation/hub.html">AMD PPR / CPUID references</a>
- * @author Iakin
  */
 public class CPUID {
 
@@ -286,7 +285,7 @@ public class CPUID {
      *
      * <p><b>WARNING:</b> This is the raw Base Family, NOT the computed family.
      * For AMD CPUs with Base Family == 0xF (15), you must add
-     * {@link #getCPUExtendedFamily()} to get the actual family.
+     * {@link #getCPUExtendedFamily} to get the actual family.
      * For other AMD families (17h, 19h, 1Ah), the extended family is always
      * added to the base family to form the actual family.</p>
      *
@@ -302,7 +301,7 @@ public class CPUID {
      *
      * <p><b>WARNING:</b> This is the raw Base Model, NOT the computed model.
      * For CPUs with Base Family == 0x6 or 0xF, you must add
-     * {@link #getCPUExtendedModel()} &lt;&lt; 4 to get the actual model.
+     * {@link #getCPUExtendedModel} &lt;&lt; 4 to get the actual model.
      * For AMD CPUs, the extended model is always applied when computing
      * the actual model.</p>
      *
@@ -728,7 +727,11 @@ public class CPUID {
         return true;
     }
 
-    /**  @return non-null */
+    /**
+     * Resource name of the cpuid native library.
+     *
+     * @return non-null
+     */
     private static final String getResourceName() {
         return getLibraryPrefix() + getLibraryMiddlePart() + getLibrarySuffix();
     }

@@ -23,7 +23,7 @@ import net.i2p.data.router.RouterInfo;
 import org.junit.Test;
 
 /**
- * Tests the block-parsing logic split out of SSU2Payload.processPayload().
+ * Tests the block-parsing logic split out of {@link net.i2p.router.transport.udp.SSU2Payload#processPayload}.
  * Each per-type parse* helper, plus the frame order/overflow guards, is
  * exercised directly where the framing data is simple to construct.
  */
@@ -76,7 +76,7 @@ public class SSU2PayloadTest {
         public void gotPathResponse(RemoteHostId from, byte[] data) { events.add("pathresponse:" + hx(data)); }
     }
 
-    /** one block: [type][2-byte length][data] */
+    /** One block: [type][2-byte length][data]. */
     private static byte[] blk(int type, byte[] data) {
         byte[] b = new byte[3 + data.length];
         b[0] = (byte) type;
@@ -86,7 +86,7 @@ public class SSU2PayloadTest {
         return b;
     }
 
-    /** concatenate blocks into one payload frame */
+    /** Concatenate blocks into one payload frame. */
     private static byte[] frame(byte[]... blocks) {
         int n = 0;
         for (byte[] b : blocks)
@@ -100,7 +100,7 @@ public class SSU2PayloadTest {
         return f;
     }
 
-    /** big-endian unsigned value of nBytes bytes */
+    /** Big-endian encoding of the value in the given number of bytes. */
     private static byte[] be(int nBytes, long v) {
         byte[] b = new byte[nBytes];
         for (int i = nBytes - 1; i >= 0; i--) {

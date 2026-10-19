@@ -17,7 +17,7 @@ import net.i2p.util.Log;
 
 /**
  * Listen to a destination, receiving any sockets and writing anything they
- * send to a new file. See the {@link #main}
+ * send to a new file. See the {@link #main}.
  *
  */
 public class StreamSinkServer {
@@ -57,7 +57,7 @@ public class StreamSinkServer {
 
     /**
      * Actually fire up the server - this call blocks forever (or until the server
-     * socket closes)
+     * socket closes).
      *
      */
     public void runServer() {
@@ -169,11 +169,11 @@ public class StreamSinkServer {
     }
 
     /**
-     * Fire up the streaming server.  <code>Usage: StreamSinkServer [i2cpHost i2cpPort] sinkDir ourDestFile [numHandlers]</code><br>
+     * Fire up the streaming server.  <code>Usage: StreamSinkServer [i2cpHost i2cpPort] sinkDir ourDestFile [numHandlers].</code><br>
      * <ul>
-     *  <li><b>sinkDir</b>: Directory to store received files in</li>
-     *  <li><b>ourDestFile</b>: filename to write our binary destination to</li>
-     *  <li><b>numHandlers</b>: how many concurrent connections to handle</li>
+     * <li><b>sinkDir</b>: Directory to store received files in</li>
+     * <li><b>ourDestFile</b>: filename to write our binary destination to</li>
+     * <li><b>numHandlers</b>: how many concurrent connections to handle</li>
      * </ul>
      * @param args [i2cpHost i2cpPort] sinkDir ourDestFile [numHandlers]
      */

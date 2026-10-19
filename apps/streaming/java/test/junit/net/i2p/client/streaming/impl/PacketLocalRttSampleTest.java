@@ -6,7 +6,7 @@ import org.junit.Test;
 
 /**
  * Tests the send-based RTT sample seam in
- * {@link PacketLocal#rttSample(long, long)} (see {@link PacketLocal#getRttTime()}).
+ * {@link PacketLocal#rttSample(long, long)} (see {@link PacketLocal#getRttTime}).
  *
  * <p>RTT must be measured from the packet's <i>last transmission</i>, not from
  * creation: a packet may sit in the outbound queue (pacing, choke, slow tunnel)
@@ -54,7 +54,7 @@ public class PacketLocalRttSampleTest {
      * The sample is independent of creation time: a packet created at t=1000
      * but (due to queueing) first sent at t=8000 and ACKed at t=9000 yields a
      * 1000ms sample, not an 8000ms lifetime. This is the entire point of the
-     * send-based seam vs {@link PacketLocal#getAckTime()}.
+     * send-based seam vs {@link PacketLocal#getAckTime}.
      */
     @Test
     public void testSampleExcludesQueueingDelaySinceCreation() {

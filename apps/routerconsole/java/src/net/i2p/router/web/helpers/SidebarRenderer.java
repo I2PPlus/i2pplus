@@ -39,13 +39,13 @@ import net.i2p.util.SystemVersion;
  */
 class SidebarRenderer {
 
-    /** All section identifiers */
+    /** All section identifiers. */
     static final String[] ALL_SECTIONS =
         {"Advanced", "AdvancedRouterInfo", "Bandwidth", "BandwidthGraph", "Clock", "Congestion", "CPUBar",
          "Destinations", "FirewallAndReseedStatus", "HelpAndFAQ", "I2PInternals", "I2PServices", "MemoryBar",
          "NetworkReachability", "NewsHeadings", "Peers", "RestartStatus", "RouterInfo", "ShortRouterInfo",
          "Tunnels", "TunnelStatus", "UpdateStatus"};
-    /** Section name map */
+    /** Section name map. */
     static final Map<String, String> SECTION_NAMES;
 
     static {
@@ -279,7 +279,7 @@ class SidebarRenderer {
     }
 
     /**
-     * renderI2PServicesHTML.
+     * Render the "I2P Services" sidebar section.
      * @return the section markup
      */
     public String renderI2PServicesHTML() {
@@ -452,7 +452,7 @@ class SidebarRenderer {
     }
 
     /**
-     * renderI2PInternalsHTML.
+     * Render the "I2P Internals" sidebar section.
      * @return the section markup
      */
     public String renderI2PInternalsHTML() {
@@ -1190,11 +1190,11 @@ class SidebarRenderer {
     }
 
     /**
-     * Renders the sidebar bandwidth graph HTML. When routerconsole.sidebarGraphLegacy
+     * Renders the sidebar bandwidth graph HTML. When {@code routerconsole.sidebarGraphLegacy}
      * is false, emits data-rx/data-tx attributes for the dual-baseline canvas renderer
      * (inbound inverted top, outbound normal bottom). Otherwise, serves the RRD4J SVG.
      * @return the graph markup: data attributes for the canvas renderer,
-     *         or an RRD4J SVG in legacy mode
+     * or an RRD4J SVG in legacy mode
      * @since 0.9.32
      */
     public String renderBandwidthGraphHTML() {
@@ -1652,18 +1652,22 @@ class SidebarRenderer {
         return buf.toString();
     }
 
-    /** tag only */
+    /** Tag only. */
     private static final String _x(String s) {return s;}
 
-    /** translate a string */
+    /** Translate a string. */
     private String _t(String s) {return Messages.getString(s, _context);}
 
-    /** @since 0.9.23 */
+    /**
+     * Translate a message.
+     *
+     * @since 0.9.23
+     */
     private String _t(String s, Object o) {return Messages.getString(s, o, _context);}
 
     /**
      * Where the translation is to two words or more,
-     * prevent splitting across lines
+     * prevent splitting across lines.
      *
      * @since 0.9.18
      */

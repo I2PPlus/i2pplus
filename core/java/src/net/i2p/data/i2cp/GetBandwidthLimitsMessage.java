@@ -9,9 +9,8 @@ import java.io.IOException;
 import java.io.InputStream;
 
 /**
- * Request the router tells us the current bw limits
+ * Request the router tells us the current bw limits.
  *
- * @author zzz
  */
 public class GetBandwidthLimitsMessage extends I2CPMessageImpl {
     /**

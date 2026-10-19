@@ -12,13 +12,12 @@ package net.i2p.data.i2np;
 /**
  * Base interface for all I2NP messages
  * <p>
- * Note: No longer extends DataStructure as of 0.9.48
+ * Note: No longer extends DataStructure as of 0.9.48.
  *
- * @author jrandom
  */
 public interface I2NPMessage {
 
-    /** 4 bytes unsigned */
+    /** 4 bytes unsigned. */
     public static final long MAX_ID_VALUE = (1L << 32) - 1L;
 
     /**
@@ -31,13 +30,13 @@ public interface I2NPMessage {
 
     /**
      * Read the body into the data structures, after the initial type byte, using
-     * the current class's format as defined by the I2NP specification
+     * the current class's format as defined by the I2NP specification.
      *
      * @param data the full serialized message, header included
      * @param type I2NP message type. If less than zero, read the type from data
      * @param offset where to start
-     *               starting at type if type is &lt; 0 (16 byte header)
-     *               starting at ID if type is &gt;= 0 (15 byte header)
+     * starting at type if type is &lt; 0 (16 byte header)
+     * starting at ID if type is &gt;= 0 (15 byte header)
      * @return size of the message read (including headers)
      * @throws I2NPMessageException if there is no valid message
      */
@@ -45,15 +44,15 @@ public interface I2NPMessage {
 
     /**
      * Read the body into the data structures, after the initial type byte, using
-     * the current class's format as defined by the I2NP specification
+     * the current class's format as defined by the I2NP specification.
      *
      * @param data the data, may or may not include the type
      * @param type I2NP message type. If less than zero, read the type from data
      * @param offset where to start
-     *               starting at type if type is &lt; 0 (16 byte header)
-     *               starting at ID if type is &gt;= 0 (15 byte header)
+     * starting at type if type is &lt; 0 (16 byte header)
+     * starting at ID if type is &gt;= 0 (15 byte header)
      * @param maxLen read no more than this many bytes from data starting at offset, even if it is longer
-     *               This includes the type byte only if type &lt; 0
+     * This includes the type byte only if type &lt; 0
      * @return size of the message read (including headers)
      * @throws I2NPMessageException if there is no valid message
      * @since 0.8.12
@@ -63,7 +62,7 @@ public interface I2NPMessage {
     /**
      * Read the body into the data structures, after the initial type byte and
      * the uniqueId / expiration, using the current class's format as defined by
-     * the I2NP specification
+     * the I2NP specification.
      * <p>
      * Implementations must not read more than dataSize,
      * or throw I2NPMessageException or IndexOutOfBoundsException if they do.
@@ -73,7 +72,7 @@ public interface I2NPMessage {
      * @param dataSize how long into the data to read
      * @param type I2NP message type
      * @throws I2NPMessageException if the stream doesn't contain a valid message
-     *                              that this class can read.
+     * that this class can read.
      */
     public void readMessage(byte[] data, int offset, int dataSize, int type) throws I2NPMessageException;
     /**
@@ -94,7 +93,7 @@ public interface I2NPMessage {
 
     /**
      * Return the unique identifier for this type of I2NP message, as defined in
-     * the I2NP spec
+     * the I2NP spec.
      * @return the message type number, as defined in the I2NP spec
      */
     public int getType();
@@ -122,7 +121,7 @@ public interface I2NPMessage {
     public void setUniqueId(long id);
 
     /**
-     * Date after which the message should be dropped (and the associated uniqueId forgotten)
+     * Date after which the message should be dropped (and the associated uniqueId forgotten).
      *
      * @return the message expiration
      */
@@ -137,14 +136,14 @@ public interface I2NPMessage {
 
 
     /**
-     * How large the message is, including any checksums, i.e. full 16 byte header
+     * How large the message is, including any checksums, i.e. full 16 byte header.
      *
      * @return the size in bytes of the message with the full NTCP 1 header
      */
     public int getMessageSize();
 
     /**
-     * How large the raw message is with the short 5 byte header
+     * How large the raw message is with the short 5 byte header.
      *
      * @return the size in bytes of the message with the short SSU header
      */
@@ -165,7 +164,7 @@ public interface I2NPMessage {
      * Full 16 byte header for NTCP 1.
      *
      * @param buffer the destination array, which must have room for
-     *               {@link #getMessageSize()} bytes
+     * {@link #getMessageSize} bytes
      * @return the new offset (NOT the length)
      */
     public int toByteArray(byte[] buffer);
@@ -177,7 +176,7 @@ public interface I2NPMessage {
      * Full 16 byte header for NTCP 1.
      *
      * @param buffer the destination array, which must have room for
-     *               {@link #getMessageSize()} bytes from {@code off} on
+     * {@link #getMessageSize} bytes from {@code off} on
      * @param off the offset to start writing at
      * @return the new offset (NOT the length)
      * @since 0.9.36
@@ -191,7 +190,7 @@ public interface I2NPMessage {
      * Short 5 byte header for SSU.
      *
      * @param buffer the destination array, written from index 0, which must have
-     *               room for {@link #getRawMessageSize()} bytes
+     * room for {@link #getRawMessageSize} bytes
      * @return the length written
      */
     public int toRawByteArray(byte[] buffer);
@@ -203,7 +202,7 @@ public interface I2NPMessage {
      * Short 9 byte header for NTCP 2.
      *
      * @param buffer the destination array, which must have room for
-     *               {@link #getRawMessageSize()} bytes from {@code off} on
+     * {@link #getRawMessageSize} bytes from {@code off} on
      * @param off the offset to start writing at
      * @return the new offset (NOT the length)
      * @since 0.9.36

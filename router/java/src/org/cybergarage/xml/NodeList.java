@@ -13,7 +13,6 @@ import java.util.Vector;
  * <p>This class extends Vector to provide specialized methods for managing collections of Node
  * objects. It includes methods for finding nodes by name or by name suffix.
  *
- * @author Satoshi Konno
  * @since 1.0
  */
 public class NodeList extends Vector<Node> {

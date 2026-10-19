@@ -51,7 +51,7 @@ public class FragmentTest {
     }
 
     /**
-     * Send a message that fits inside a single fragment through
+     * Send a message that fits inside a single fragment through.
      *
      */
     @Test
@@ -74,7 +74,7 @@ public class FragmentTest {
     }
 
     /**
-     * Send a message with two fragments through with no delay
+     * Send a message with two fragments through with no delay.
      *
      */
     @Test
@@ -98,7 +98,7 @@ public class FragmentTest {
 
     /**
      * Send a fragmented message, except wait a while between each fragment, causing
-     * the defragmentation to fail (since the fragments will expire)
+     * the defragmentation to fail (since the fragments will expire).
      *
      */
     public void runDelayed() {

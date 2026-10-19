@@ -78,7 +78,6 @@ import org.json.simple.JsonObject;
  *     null        &lt;---&gt;  null
  * </pre>
  *
- * @author Vladimir Dzhuvinov
  */
 public class JSONRPC2Notification extends JSONRPC2Message {
 
@@ -324,7 +323,6 @@ public class JSONRPC2Notification extends JSONRPC2Message {
     /**
      * Gets the positional (JSON array) parameters.
      *
-     *
      * @return The positional (JSON array) parameters, {@code null} if none
      * @since 1.30
      *        or named.
@@ -337,7 +335,6 @@ public class JSONRPC2Notification extends JSONRPC2Message {
 
     /**
      * Gets the named parameters.
-     *
      *
      * @return The named (JSON object) parameters, {@code null} if none or
      * @since 1.30
@@ -380,7 +377,6 @@ public class JSONRPC2Notification extends JSONRPC2Message {
     /**
      * Sets the positional (JSON array) request parameters.
      *
-     *
      * @param positionalParams The positional (JSON array) request
      * @since 1.30
      *        parameters, {@code null} if none.
@@ -396,7 +392,6 @@ public class JSONRPC2Notification extends JSONRPC2Message {
 
     /**
      * Sets the named (JSON object) request parameters.
-     *
      *
      * @param namedParams The named (JSON object) request parameters,
      * @since 1.30

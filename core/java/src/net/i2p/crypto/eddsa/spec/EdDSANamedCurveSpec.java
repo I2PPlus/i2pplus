@@ -7,7 +7,6 @@ import net.i2p.crypto.eddsa.math.ScalarOps;
 /**
  * EdDSA Curve specification that can also be referred to by name.
  *
- * @author str4d
  */
 public class EdDSANamedCurveSpec extends EdDSAParameterSpec {
     /** The curve name. */

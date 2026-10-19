@@ -16,7 +16,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 /**
- * Handle messages from the server for the client or vice versa
+ * Handle messages from the server for the client or vice versa.
  */
 public class I2CPMessageHandler {
     /**

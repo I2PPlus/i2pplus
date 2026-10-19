@@ -26,7 +26,6 @@ package org.cybergarage.upnp.device;
  * <p>This class is used by SSDP components to validate and process ST headers in search requests
  * and responses, enabling targeted device discovery and proper search target classification.
  *
- * @author Satoshi Konno
  * @since 1.0
  */
 public class ST {

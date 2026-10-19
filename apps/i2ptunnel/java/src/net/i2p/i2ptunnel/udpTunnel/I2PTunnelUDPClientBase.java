@@ -42,16 +42,16 @@ import net.i2p.util.EventDispatcher;
  */
  public abstract class I2PTunnelUDPClientBase extends I2PTunnelTask implements Source, Sink {
 
-    /** The I2P app context */
+    /** The I2P app context. */
     protected I2PAppContext _context;
-    /** Logging instance */
+    /** Logging instance. */
     protected Logging l;
 
-    /** Default connect timeout */
+    /** Default connect timeout. */
     static final long DEFAULT_CONNECT_TIMEOUT = (long) 60 * 1000;
 
     private static final AtomicLong __clientId = new AtomicLong();
-    /** Unique client identifier */
+    /** Unique client identifier. */
     protected long _clientId;
 
     private final Object startLock = new Object();

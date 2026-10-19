@@ -34,7 +34,7 @@ import net.i2p.stat.StatManager;
  */
 public class FirstHopRttTest {
 
-    /** router.peerTestTimeout default; the threshold is twice this. */
+    /** Router.peerTestTimeout default; the threshold is twice this. */
     private static final int THRESHOLD = 750 * 2;
     private static final long NOW = 2_000_000_000L;
     private static final long HOUR = RateConstants.ONE_HOUR;
@@ -341,7 +341,7 @@ public class FirstHopRttTest {
     /**
      * The low-latency decision has one implementation, reached by both callers.
      *
-     * <p>{@link PeerProfile#recalculateLowLatency()} is a wrapper over
+     * <p>{@link PeerProfile#recalculateLowLatency} is a wrapper over
      * {@link PeerProfile#getLowLatencyForFirstHopRtt(long, long)}, so the flag
      * cannot be derived two different ways depending on which pass ran last.
      */

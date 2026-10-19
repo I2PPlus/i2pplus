@@ -34,17 +34,17 @@ import net.i2p.util.Log;
 import net.i2p.util.SimpleTimer2;
 
 /**
- *  Entry points are runTest() to start a new test as Alice,
- *  and receiveTest() for all received test packets.
+ * Entry points are runTest() to start a new test as Alice,
+ * and receiveTest() for all received test packets.
  * <p>
- *  IPv6 info: All Alice-Bob and Alice-Charlie communication is via IPv4.
- *  The Bob-Charlie communication may be via IPv6, however Charlie must
- *  be IPv4-capable.
- *  The IP address (of Alice) in the message must be IPv4 if present,
- *  as we only support testing of IPv4.
- *  Testing of IPv6 could be added in the future.
+ * IPv6 info: All Alice-Bob and Alice-Charlie communication is via IPv4.
+ * The Bob-Charlie communication may be via IPv6, however Charlie must
+ * be IPv4-capable.
+ * The IP address (of Alice) in the message must be IPv4 if present,
+ * as we only support testing of IPv4.
+ * Testing of IPv6 could be added in the future.
  * <p>
- *  From udp.html on the website:
+ * From {@code udp.html} on the website.
 
 <p>The automation of collaborative reachability testing for peers is
 enabled by a sequence of PeerTest messages.  With its proper
@@ -196,7 +196,7 @@ class PeerTestManager {
         protected ChaChaPolyCipherState initialValue() {return new ChaChaPolyCipherState();}
     };
 
-    /** How long a "no RouterInfo for this Peer Test" answer is reused. @since 0.9.71+ */
+    /** How long a "no RouterInfo for this Peer Test" answer is reused. @since 0.9.71+. */
     private static final long TEST_RI_MISS_TTL = 250;
     /**
      *  Last hash whose RouterInfo lookup missed, with the time it was recorded.
@@ -216,12 +216,12 @@ class PeerTestManager {
     private volatile RIMiss _testRIMiss;
 
     /**
-     *  Have seen peer tests (as Alice) get stuck (_currentTest != null)
-     *  so I've thrown some synchronizization on the methods;
-     *  don't know the root cause or whether this fixes it
+     * Have seen peer tests (as Alice) get stuck (_currentTest != null)
+     * so I've thrown some synchronizization on the methods;
+     * don't know the root cause or whether this fixes it.
      *
-     *  @param context the router context
-     *  @param transport the UDP transport
+     * @param context the router context
+     * @param transport the UDP transport
      */
     public PeerTestManager(RouterContext context, UDPTransport transport) {
         _context = context;
@@ -235,10 +235,10 @@ class PeerTestManager {
     }
 
     /**
-     *  The next few methods are for when we are Alice
+     * The next few methods are for when we are Alice.
      *
-     *  @param bob IPv4 only
-     *  @return true if we successfully started a test
+     * @param bob IPv4 only
+     * @return true if we successfully started a test
      */
     public synchronized boolean runTest(PeerState bob) {
         if (_currentTest != null) {
@@ -325,12 +325,12 @@ class PeerTestManager {
         }
 
         /**
-         *  Decide what to do under the instance lock, then send outside it.
+         * Decide what to do under the instance lock, then send outside it.
          * <p>
-         *  The decision reads and clears _currentTest, so it needs the lock; the
-         *  send builds a packet and can block, and holding the lock across that
-         *  would stall runTest() and every receiveTest() path.  The state
-         *  captured under the lock is passed to the send explicitly.
+         * The decision reads and clears _currentTest, so it needs the lock. The
+         * send builds a packet and can block, and holding the lock across that
+         * would stall runTest() and every receiveTest() path.  The state
+         * captured under the lock is passed to the send explicitly.
          */
         public void timeReached() {
             PeerTestState state;
@@ -403,14 +403,14 @@ class PeerTestManager {
         }
     }
 
-    /** No retransmit needed. @since 0.9.71+ */
+    /** No retransmit needed. @since 0.9.71+. */
     static final int ACTION_NONE = 0;
-    /** Retransmit msg 1 to Bob. @since 0.9.71+ */
+    /** Retransmit msg 1 to Bob. @since 0.9.71+. */
     static final int ACTION_SEND_BOB = 1;
-    /** Send msg 6 to Charlie. @since 0.9.71+ */
+    /** Send msg 6 to Charlie. @since 0.9.71+. */
     static final int ACTION_SEND_CHARLIE = 2;
 
-    /** How long after msg 4 we may send msg 6 without having seen msg 5. @since 0.9.71+ */
+    /** How long after msg 4 we may send msg 6 without having seen msg 5. @since 0.9.71+. */
     private static final long SYMNAT_GRACE = 5000;
 
     /**
@@ -579,9 +579,9 @@ class PeerTestManager {
      */
 
     /**
-     *  Reset all state and call testComplete(). We are Alice.
+     * Reset all state and call testComplete(). We are Alice.
      * <p>
-     *  call from a synchronized method
+     * call from a synchronized method.
      *
      * @since 0.9.57
      */
@@ -653,15 +653,15 @@ class PeerTestManager {
     private void testComplete() {testComplete(_currentTest);}
 
     /**
-     *  Complete the given test.
-     *  <p>The test is passed in rather than re-read from {@link #_currentTest},
-     *  so a caller that decided to complete a specific test cannot end up
-     *  completing its successor: {@link ContinueTimer#timeReached()} releases the
-     *  instance lock to send, and {@link #runTest()} can install a new test in
-     *  that window. Re-reading here would publish a reachability status against
-     *  the wrong test.
+     * Complete the given test.
+     * <p>The test is passed in rather than re-read from {@link #_currentTest},
+     * so a caller that decided to complete a specific test cannot end up
+     * completing its successor: {@link ContinueTimer#timeReached} releases the
+     * instance lock to send, and {@link #runTest} can install a new test in
+     * that window. Re-reading here would publish a reachability status against
+     * the wrong test.
      *
-     *  @param test the test being completed, or null to do nothing
+     * @param test the test being completed, or null to do nothing
      */
     private void testComplete(PeerTestState test) {
         if (test == null) return;
@@ -1988,7 +1988,7 @@ class PeerTestManager {
      * Send RI and Peer Test. SSU2 only. We are Bob.
      * <p>
      * Msg 2 Bob to Charlie with Alice's RI
-     * Msg 4 Bob to Alice with Charlie's RI
+     * Msg 4 Bob to Alice with Charlie's RI.
      *
      * @param ri may be null, but hopefully not
      * @param status -1 for msg 2, nonnegative for msg 4

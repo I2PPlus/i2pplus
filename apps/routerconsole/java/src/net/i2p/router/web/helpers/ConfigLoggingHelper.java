@@ -22,7 +22,11 @@ public class ConfigLoggingHelper extends HelperBase {
      */
     public ConfigLoggingHelper() {}
 
-    /** @since 0.9.57 */
+    /**
+     * Re-fetch the log manager for the new context.
+     *
+     * @since 0.9.57
+     */
     @Override
     public void setContextId(String contextId) {
         super.setContextId(contextId);
@@ -106,7 +110,7 @@ public class ConfigLoggingHelper extends HelperBase {
         return buf.toString();
     }
 
-    /** these are translated in the core bundle */
+    /** These are translated in the core bundle. */
     private static final String[] levels = { "CRIT", "ERROR", "WARN", "INFO", "DEBUG" };
 
     /**
@@ -207,8 +211,8 @@ public class ConfigLoggingHelper extends HelperBase {
     private static final String CORE_BUNDLE_NAME = "net.i2p.util.messages";
 
     /**
-     *  translate a string from the core bundle
-     *  @since 0.9.45
+     * Translate a string from the core bundle.
+     * @since 0.9.45
      */
     private String _c(String s) {
         return Translate.getString(s, _context, CORE_BUNDLE_NAME);

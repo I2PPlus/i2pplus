@@ -29,7 +29,6 @@ import java.util.concurrent.ThreadLocalRandom;
  * <p>This class is used by UPnP devices to automatically announce their presence on the network at
  * regular intervals, ensuring discovery by control points and maintaining network visibility.
  *
- * @author Satoshi Konno
  * @since 1.0
  */
 public class Advertiser extends ThreadCore {

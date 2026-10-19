@@ -18,7 +18,7 @@ import net.i2p.data.DataHelper;
 
 /**
  * Manage both plaintext and salted/hashed password storage in
- * router.config.
+ * {@code router.config}.
  *
  * @since 0.9.4
  */
@@ -104,7 +104,7 @@ public class ConsolePasswordManager extends RouterPasswordManager {
      * Decode a fixed-width hex string into exactly hex.length()/2 bytes.
      * <p>
      * DELIBERATE DEVIATION from the DataHelper canonical-source rule:
-     * DataHelper.fromHexString() decodes via BigInteger and returns the
+     * {@link net.i2p.data.DataHelper#fromHexString} decodes via BigInteger and returns the
      * minimum-length, sign-aware representation - a leading '0' nibble is
      * stripped and a first nibble of 8-f gains an extra 0x00 byte. Password
      * salts and hashes must round-trip at their exact stored width; using
@@ -158,7 +158,7 @@ public class ConsolePasswordManager extends RouterPasswordManager {
     /**
      * Get all users with PBKDF2 passwords.
      *
-     * @param realm e.g. routerconsole.auth.i2prouter
+     * @param realm e.g. {@code routerconsole.auth.i2prouter}
      * @return Map of usernames to PBKDF2 hashes
      */
     public Map<String, String> getPBKDF2(String realm) {
@@ -178,7 +178,7 @@ public class ConsolePasswordManager extends RouterPasswordManager {
 
     /**
      * Migrate from plaintext to MD5 hash
-     * Ref: RFC 2617
+     * Ref: RFC 2617.
      *
      * @return success or nothing to migrate
      */
@@ -209,12 +209,12 @@ public class ConsolePasswordManager extends RouterPasswordManager {
      * <p>
      * Upgrades to PBKDF2 on save (subrealm is unused for PBKDF2).
      *
-     * @param realm The full realm, e.g. routerconsole.auth.i2prouter, etc.
+     * @param realm The full realm, e.g. {@code routerconsole.auth.i2prouter}, etc.
      * @param subrealm unused (for backward compatibility)
      * @param user non-null, non-empty, already trimmed
      * @param pw the plain text password to hash
-     * @return true if the PBKDF2 entry reached router.config; false if the
-     *         JCE provider rejects PBKDF2 or the key spec
+     * @return true if the PBKDF2 entry reached {@code router.config}; false if the
+     * JCE provider rejects PBKDF2 or the key spec
      */
     public boolean saveMD5(String realm, String subrealm, String user, String pw) {
         // Upgrade to PBKDF2 on save
@@ -229,8 +229,8 @@ public class ConsolePasswordManager extends RouterPasswordManager {
      * @param subrealm unused for PBKDF2
      * @param user non-null, non-empty
      * @param pw the plain text password to hash
-     * @return true if the PBKDF2 entry reached router.config; false if the
-     *         JCE provider rejects PBKDF2 or the key spec
+     * @return true if the PBKDF2 entry reached {@code router.config}; false if the
+     * JCE provider rejects PBKDF2 or the key spec
      * @since 0.9.70+
      */
     private boolean savePBKDF2(String realm, String subrealm, String user, String pw) {

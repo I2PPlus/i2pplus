@@ -18,7 +18,7 @@ import net.i2p.data.router.RouterIdentity;
 public interface TransportEventListener {
 
     /**
-     * Message received
+     * Message received.
      *
      * @param message non-null
      * @param fromRouter may be null

@@ -10,7 +10,7 @@ import net.i2p.I2PAppContext;
  * @since 0.7.12
  */
 public class VariableTunnelBuildReplyMessage extends TunnelBuildReplyMessage {
-    /** Message type ID for this I2NP message */
+    /** Message type ID for this I2NP message. */
     public static final int MESSAGE_TYPE = 24;
 
     /**

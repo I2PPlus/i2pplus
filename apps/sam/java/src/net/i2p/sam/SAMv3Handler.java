@@ -40,9 +40,9 @@ class SAMv3Handler extends SAMv1Handler
     volatile boolean stolenSocket;
     /** Stream forwarding socket. */
     volatile boolean streamForwardingSocket;
-    /** true once the SESSION CREATE has fully initialized; guards against race in execStreamMessage */
+    /** True once the SESSION CREATE has fully initialized; guards against race in execStreamMessage. */
     private volatile boolean sessionReady;
-    /** package-visible for {@link SAMHandlerPool} */
+    /** Package-visible so {@link SAMHandlerPool} can read it. */
     final boolean sendPorts;
     /** Authentication error message. */
     private static final String AUTH_ERROR = "AUTH STATUS RESULT=I2P_ERROR";
@@ -113,7 +113,7 @@ class SAMv3Handler extends SAMv1Handler
     }
 
     /**
-     * For SAMv3StreamSession connect and accept
+     * For SAMv3StreamSession connect and accept.
      */
     public void stealSocket() {
         stolenSocket = true;
@@ -130,7 +130,7 @@ class SAMv3Handler extends SAMv1Handler
     }
 
     /**
-     * For SAMv3StreamSession
+     * For SAMv3StreamSession.
      * @return the bridge owning this handler
      * @since 0.9.20
      */
@@ -139,7 +139,7 @@ class SAMv3Handler extends SAMv1Handler
     }
 
     /**
-     * For SAMv3DatagramServer
+     * For SAMv3DatagramServer.
      * @return may be null
      * @since 0.9.24
      */
@@ -148,7 +148,7 @@ class SAMv3Handler extends SAMv1Handler
     }
 
     /**
-     * For subsessions created by MasterSession
+     * For subsessions created by MasterSession.
      * @param sess the raw session to route reply traffic to
      * @since 0.9.25
      */
@@ -157,7 +157,7 @@ class SAMv3Handler extends SAMv1Handler
     }
 
     /**
-     * For subsessions created by MasterSession
+     * For subsessions created by MasterSession.
      * @param sess the datagram session to route reply traffic to
      * @since 0.9.25
      */
@@ -166,9 +166,9 @@ class SAMv3Handler extends SAMv1Handler
     }
 
     /**
-     * For subsessions created by MasterSession
+     * For subsessions created by MasterSession.
      * @param sess the stream session to route reply traffic to; setting it also
-     *             marks the session ready
+     * marks the session ready
      * @since 0.9.25
      */
     void setSession(SAMv3StreamSession sess) {
@@ -554,6 +554,8 @@ class SAMv3Handler extends SAMv1Handler
     }
 
     /**
+     * Create a stream session for a login.
+     *
      * @throws NPE if login nickname is not registered
      */
     private static SAMv3StreamSession newSAMStreamSession(String login )
@@ -862,7 +864,11 @@ class SAMv3Handler extends SAMv1Handler
         return sameClient(owner);
     }
 
-    /** @since 0.9.24 */
+    /**
+     * Handle the AUTH message.
+     *
+     * @since 0.9.24
+     */
     private boolean execAuthMessage(String opcode, Properties props) {
         if (!mayManageAuth()) {
             if (_log.shouldWarn())

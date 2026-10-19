@@ -13,7 +13,7 @@ import net.i2p.data.SessionTag;
 import net.i2p.router.crypto.TransientSessionKeyManager;
 
 /**
- * Multiplexed session key manager combining ElGamal and ECIES key management
+ * Multiplexed session key manager combining ElGamal and ECIES key management.
  *
  * @since 0.9.44
  */
@@ -90,7 +90,7 @@ public class MuxedSKM extends SessionKeyManager {
     }
 
     /**
-     *  ElG only
+     * ElG only.
      * @return the current key
      */
     @Override
@@ -102,7 +102,7 @@ public class MuxedSKM extends SessionKeyManager {
     }
 
     /**
-     *  ElG only
+     * ElG only.
      * @return the current or new key
      */
     @Override
@@ -114,7 +114,7 @@ public class MuxedSKM extends SessionKeyManager {
     }
 
     /**
-     *  ElG only
+     * ElG only.
      */
     @Override
     public void createSession(PublicKey target, SessionKey key) {
@@ -126,7 +126,7 @@ public class MuxedSKM extends SessionKeyManager {
     }
 
     /**
-     *  ElG only
+     * ElG only.
      */
     @Override
     public SessionKey createSession(PublicKey target) {
@@ -137,7 +137,7 @@ public class MuxedSKM extends SessionKeyManager {
     }
 
     /**
-     *  ElG only
+     * ElG only.
      */
     @Override
     public SessionTag consumeNextAvailableTag(PublicKey target, SessionKey key) {
@@ -148,10 +148,10 @@ public class MuxedSKM extends SessionKeyManager {
     }
 
     /**
-     *  EC only
+     * EC only.
      *
-     *  @param target the destination to take an available session tag from
-     *  @return the oldest unconsumed tag, or null if the target is not an ECIES-X25519 key
+     * @param target the destination to take an available session tag from
+     * @return the oldest unconsumed tag, or null if the target is not an ECIES-X25519 key
      */
     public RatchetEntry consumeNextAvailableTag(PublicKey target) {
         EncType type = target.getType();
@@ -177,7 +177,7 @@ public class MuxedSKM extends SessionKeyManager {
     public int getLowThreshold() { return 0; }
 
     /**
-     *  ElG only
+     * ElG only.
      * @return whether send tags
      */
     @Override
@@ -189,7 +189,7 @@ public class MuxedSKM extends SessionKeyManager {
     }
 
     /**
-     *  ElG only
+     * ElG only.
      * @return whether send tags
      */
     @Override
@@ -223,7 +223,7 @@ public class MuxedSKM extends SessionKeyManager {
     }
 
     /**
-     *  ElG only
+     * ElG only.
      */
     @Override
     public TagSetHandle tagsDelivered(PublicKey target, SessionKey key, Set<SessionTag> sessionTags) {
@@ -234,7 +234,7 @@ public class MuxedSKM extends SessionKeyManager {
     }
 
     /**
-     *  ElG only
+     * ElG only.
      */
     @Override
     public void tagsReceived(SessionKey key, Set<SessionTag> sessionTags) {
@@ -242,7 +242,7 @@ public class MuxedSKM extends SessionKeyManager {
     }
 
     /**
-     *  ElG only
+     * ElG only.
      */
     @Override
     public void tagsReceived(SessionKey key, Set<SessionTag> sessionTags, long expire) {
@@ -251,7 +251,7 @@ public class MuxedSKM extends SessionKeyManager {
 
     /**
      * EC only
-     * One time session
+     * One time session.
      *
      * @param key the session the tag was received on
      * @param tag the one-time tag received
@@ -300,7 +300,7 @@ public class MuxedSKM extends SessionKeyManager {
     }
 
     /**
-     *  ElG only
+     * ElG only.
      */
     @Override
     public void failTags(PublicKey target, SessionKey key, TagSetHandle ts) {
@@ -310,7 +310,7 @@ public class MuxedSKM extends SessionKeyManager {
     }
 
     /**
-     *  ElG only
+     * ElG only.
      */
     @Override
     public void tagsAcked(PublicKey target, SessionKey key, TagSetHandle ts) {

@@ -9,8 +9,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 /**
- * Tests for the pumper loop-rate normalisation behind ntcp.pumperLoopsPerSecond and
- * ntcp.pumperIdleLoops.
+ * Tests for the pumper loop-rate normalisation behind {@code ntcp.pumperLoopsPerSecond} and
+ * {@code ntcp.pumperIdleLoops}.
  *
  * <p>Why this exists. Both stats are documented as a rate ("loops/s") and the graph page
  * invites plotting them together, but the idle series used to publish the raw window

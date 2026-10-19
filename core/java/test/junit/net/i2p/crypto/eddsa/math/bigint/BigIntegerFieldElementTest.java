@@ -1,5 +1,5 @@
 /**
- * EdDSA-Java by str4d
+ * EdDSA-Java by str4d.
  *
  * To the extent possible under law, the person who associated CC0 with
  * EdDSA-Java has waived all copyright and related or neighboring rights
@@ -25,10 +25,6 @@ import org.junit.Test;
 import java.math.BigInteger;
 import java.util.Random;
 
-/**
- * @author str4d
- *
- */
 public class BigIntegerFieldElementTest extends AbstractFieldElementTest {
     static final byte[] BYTES_ZERO = Utils.hexToBytes("0000000000000000000000000000000000000000000000000000000000000000");
     static final byte[] BYTES_ONE = Utils.hexToBytes("0100000000000000000000000000000000000000000000000000000000000000");
@@ -67,9 +63,6 @@ public class BigIntegerFieldElementTest extends AbstractFieldElementTest {
         return ed25519Field;
     }
 
-    /**
-     * Test method for {@link BigIntegerFieldElement#BigIntegerFieldElement(Field, BigInteger)}.
-     */
     @Test
     public void testFieldElementBigInteger() {
         assertThat(new BigIntegerFieldElement(ed25519Field, BigInteger.ZERO).bi, is(BigInteger.ZERO));
@@ -77,9 +70,6 @@ public class BigIntegerFieldElementTest extends AbstractFieldElementTest {
         assertThat(new BigIntegerFieldElement(ed25519Field, BigInteger.valueOf(2)).bi, is(BigInteger.valueOf(2)));
     }
 
-    /**
-     * Test method for {@link FieldElement#toByteArray()}.
-     */
     @Test
     public void testToByteArray() {
         byte[] zero = ZERO.toByteArray();
@@ -109,9 +99,6 @@ public class BigIntegerFieldElementTest extends AbstractFieldElementTest {
 
     // endregion
 
-    /**
-     * Test method for {@link FieldElement#equals(java.lang.Object)}.
-     */
     @Test
     public void testEqualsObject() {
         assertThat(new BigIntegerFieldElement(ed25519Field, BigInteger.ZERO), is(equalTo(ZERO)));

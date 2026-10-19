@@ -19,7 +19,6 @@ import net.i2p.data.Hash;
  * search (DatabaseFindNearest or DatabaseLookup) when it doesn't have the value,
  * specifying what routers it would search.
  *
- * @author jrandom
  */
 public class DatabaseSearchReplyMessage extends FastI2NPMessageImpl {
     /**
@@ -42,7 +41,7 @@ public class DatabaseSearchReplyMessage extends FastI2NPMessageImpl {
     }
 
     /**
-     * Defines the key being searched for
+     * Defines the key being searched for.
      * @return the search key
      */
     public Hash getSearchKey() { return _key; }

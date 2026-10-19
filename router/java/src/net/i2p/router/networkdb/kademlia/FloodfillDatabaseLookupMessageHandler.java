@@ -169,7 +169,7 @@ public class FloodfillDatabaseLookupMessageHandler implements HandlerJobBuilder 
     /**
      * Handle special cases:
      * - Fix loopback DLM bug (pre-0.9.67) where from was set to self
-     * - Reject direct floodfill-to-floodfill lookups of type EXPL or ANY
+     * - Reject direct floodfill-to-floodfill lookups of type EXPL or ANY.
      *
      * @return the corrected DLM, or null to drop the message
      */
@@ -290,7 +290,7 @@ public class FloodfillDatabaseLookupMessageHandler implements HandlerJobBuilder 
 
     /**
      * Extract IP:port from RouterInfo for a peer hash.
-     * @return the i p from hash
+     * @return the IP from hash
      */
     private String getIPFromHash(Hash h) {
         try {

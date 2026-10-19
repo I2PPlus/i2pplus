@@ -82,7 +82,7 @@ public class WebMail extends HttpServlet {
      */
     public WebMail() {}
 
-    /**  log */
+    /** Router log for this servlet. */
     private final Log _log = I2PAppContext.getGlobalContext().logManager().getLog(WebMail.class);
     private static final long serialVersionUID = 1L;
     private static final String DEFAULT_HOST = "127.0.0.1";
@@ -90,13 +90,21 @@ public class WebMail extends HttpServlet {
     private static final int DEFAULT_SMTPPORT = 7659;
     private enum State {AUTH, LOADING, LIST, SHOW, NEW, CONFIG }
 
-    /** @since 0.9.62 */
+    /**
+     * How HTML parts are displayed.
+     *
+     * @since 0.9.62
+     */
     private enum HtmlMode {NONE, LINK, ALLOW, PREFER }
 
     // TODO generate from servlet name to allow for renaming or multiple instances
     private static final String myself = "/susimail/";
 
-    /** @since 0.9.62+ */
+    /**
+     * Per-server Content-Security-Policy nonce.
+     *
+     * @since 0.9.62+
+     */
     private static final String cspNonce = Integer.toHexString(RandomSource.getInstance().nextInt());
 
     /*
@@ -198,9 +206,9 @@ public class WebMail extends HttpServlet {
                                       SORT_DATE, '-' + SORT_SIZE});
     /** Maildir subfolder for current mail. */
     static final String DIR_FOLDER = "cur"; // MailDir-like
-    /** Translated "Drafts" folder name */
+    /** Translated "Drafts" folder name. */
     public static final String DIR_DRAFTS = _x("Drafts"); // MailDir-like
-    /** Translated "Sent" folder name */
+    /** Translated "Sent" folder name. */
     public static final String DIR_SENT = _x("Sent"); // MailDir-like
     private static final String DIR_TRASH = _x("Trash"); // MailDir-like
     private static final String DIR_SPAM = _x("Bulk Mail"); // MailDir-like
@@ -254,7 +262,7 @@ public class WebMail extends HttpServlet {
     private static final String CONSOLE_BUNDLE_NAME = "net.i2p.router.web.messages";
     static {Config.setPrefix("susimail");}
 
-    /** Data structure to hold any persistent data (to store them in session dictionary) */
+    /** Data structure to hold any persistent data (to store them in session dictionary). */
     private static class SessionObject implements HttpSessionBindingListener, NewMailListener {
 
         int smtpPort;
@@ -269,9 +277,13 @@ public class WebMail extends HttpServlet {
         String error = "";
         String info = "";
         String draftUIDL; // Just convenience to pass from PSCB to P-R-G
-        /** Local password verification for session protection @since 0.9.70+ */
+        /** Local password verification for session protection @since 0.9.70+. */
         private String _sessionSalt;
-        /** @since 0.9.70+ */
+        /**
+         * Key for signing session identifiers.
+         *
+         * @since 0.9.70+
+         */
         private String _sessionKey;
         /**
          * Attachments staged for this session, cleared and deleted together.
@@ -338,7 +350,7 @@ public class WebMail extends HttpServlet {
         }
 
         /**
-         * PBKDF2 hash for password verification with high iteration count
+         * PBKDF2 hash for password verification with high iteration count.
          * @return whether h password is present
          * @since 0.9.70+
          */
@@ -358,7 +370,11 @@ public class WebMail extends HttpServlet {
             }
         }
 
-        /** @since 0.9.13 */
+        /**
+         * No-op, nothing to do when the session is bound.
+         *
+         * @since 0.9.13
+         */
         public void valueBound(HttpSessionBindingEvent event) { /* no-op */ }
 
         /**
@@ -389,7 +405,11 @@ public class WebMail extends HttpServlet {
             }
         }
 
-        /** @since 0.9.27 */
+        /**
+         * Record a form nonce for the session.
+         *
+         * @since 0.9.27
+         */
         public void addNonce(String nonce) {
             synchronized(nonces) {
                 nonces.add(0, nonce);
@@ -397,7 +417,11 @@ public class WebMail extends HttpServlet {
             }
         }
 
-        /** @since 0.9.27 */
+        /**
+         * Check and consume a form nonce.
+         *
+         * @since 0.9.27
+         */
         public boolean isValidNonce(String nonce) {
             synchronized(nonces) {return nonces.contains(nonce);}
         }
@@ -435,7 +459,7 @@ public class WebMail extends HttpServlet {
     }
 
     /**
-     * returns html string of a form button with name and label
+     * Returns html string of a form button with name and label.
      *
      * @param name
      * @param label
@@ -460,7 +484,7 @@ public class WebMail extends HttpServlet {
     }
 
     /**
-     * returns html string of a disabled form button with name and label
+     * Returns html string of a disabled form button with name and label.
      *
      * @param name
      * @param label
@@ -471,13 +495,13 @@ public class WebMail extends HttpServlet {
     }
 
     /**
-     * returns a html string of the label and two imaged links using the parameter name
-     * (used for sorting buttons in folder view)
+     * Returns a html string of the label and two imaged links using the parameter name
+     * (used for sorting buttons in folder view).
      *
      * @param name
      * @param label
      * @return the HTML markup for the header cell: the label followed by the
-     *         up and down image links
+     * up and down image links
      */
     private static String sortHeader(String name, String label, String imgPath,
                                      String currentName, SortOrder currentOrder, int page, String folder) {
@@ -504,7 +528,7 @@ public class WebMail extends HttpServlet {
     }
 
     /**
-     * check, if a given button "was pressed" in the received http request
+     * Check whether the named submit button "was pressed" in the request.
      *
      * @param request
      * @param key
@@ -515,7 +539,7 @@ public class WebMail extends HttpServlet {
         return value != null && (!value.isEmpty() || key.equals(CONFIGURE) || key.equals(NEW_UIDL));
     }
     /**
-     * recursively render all mail body parts
+     * Recursively render all mail body parts.
      *
      * 1. if type is multipart/alternative, look for preferred section and ignore others
      * 2. if type is multipart/*, recursively call all these parts
@@ -756,7 +780,7 @@ public class WebMail extends HttpServlet {
     }
 
     /**
-     * prepare line for presentation between html tags
+     * Prepare line for presentation between html tags.
      *
      * Escapes html tags
      *
@@ -772,6 +796,7 @@ public class WebMail extends HttpServlet {
     //// Start state change and button processing here ////
 
     /**
+     * Handle the login form, connecting to the mailbox.
      *
      * @param sessionObject
      * @param request
@@ -936,7 +961,7 @@ public class WebMail extends HttpServlet {
     }
 
     /**
-     * Callback from MailCache.loadFromDisk()
+     * Callback from {@link i2p.susi.webmail.MailCache#loadFromDisk}.
      * @since 0.9.34
      */
     private static class LoadWaiter implements NewMailListener {
@@ -944,6 +969,8 @@ public class WebMail extends HttpServlet {
         private final MailCache _mc;
 
         /**
+         * Waits for the mailbox to load for this session.
+         *
          * @param so the session waiting on the disk load, notified when it finishes
          * @param mc the cache supplying the UIDLs that just arrived on disk
          */
@@ -969,7 +996,7 @@ public class WebMail extends HttpServlet {
     }
 
     /**
-     * Callback from POP3MailBox.connectToServer()
+     * Callback from {@link i2p.susi.webmail.pop3.POP3MailBox#connectToServer}.
      * @since 0.9.34
      */
     private static class ConnectWaiter implements NewMailListener, Runnable {
@@ -977,16 +1004,22 @@ public class WebMail extends HttpServlet {
         private final POP3MailBox _mb;
 
         /**
+         * Waits for the mailbox to connect for this session.
+         *
          * @param so the session waiting on the mailbox connection attempt
          */
         public ConnectWaiter(SessionObject so) {_so = so; _mb = _so.mailbox;}
 
         @Override
-        /** run this way if already connected */
+        /** Run this way if already connected. */
         public void run() {foundNewMail(true);}
 
         @Override
-        /** @param connected are we? */
+        /**
+         * Wake the waiting page when mail arrives.
+         *
+         * @param connected are we?
+         */
         public void foundNewMail(boolean connected) {
             MailCache mc = null;
             boolean found = false;
@@ -1036,6 +1069,7 @@ public class WebMail extends HttpServlet {
     }
 
     /**
+     * End the session and show the login page.
      *
      * @param sessionObject
      * @param request
@@ -1071,7 +1105,7 @@ public class WebMail extends HttpServlet {
 
     /**
      * Process all buttons, which possibly change internal state.
-     * Also processes ?show=x for a GET
+     * Also processes ?show=x for a GET.
      *
      * @param sessionObject
      * @param request
@@ -1373,7 +1407,7 @@ public class WebMail extends HttpServlet {
     }
 
     /**
-     * Returns e.g. 3,5 for ?check3=1&check5=1 (or POST equivalent)
+     * Returns e.g. 3,5 for ?check3=1&check5=1 (or POST equivalent).
      * @param request
      * @return non-null List of Base64 UIDLs, or attachment numbers as Strings
      */
@@ -1390,10 +1424,12 @@ public class WebMail extends HttpServlet {
     }
 
     /**
+     * Handle the common folder and message buttons.
+     *
      * @param sessionObject
      * @param request
      * @return the state to render next: {@link State#AUTH} if the connection was lost,
-     *         otherwise the incoming state unchanged
+     * otherwise the incoming state unchanged
      */
     private static State processGenericButtons(SessionObject sessionObject, RequestWrapper request, State state) {
         if (buttonPressed(request, REFRESH)) {
@@ -1420,8 +1456,8 @@ public class WebMail extends HttpServlet {
     }
 
     /**
-     * process buttons of compose message dialog
-     * This must be called BEFORE processStateChangeButtons so we can add the attachment before SEND
+     * Process buttons of compose message dialog
+     * This must be called BEFORE processStateChangeButtons so we can add the attachment before SEND.
      *
      * @param sessionObject
      * @param request
@@ -1516,11 +1552,11 @@ public class WebMail extends HttpServlet {
     }
 
     /**
-     * process buttons of message view
+     * Process buttons of message view.
      * @param sessionObject
      * @param request
      * @return the next UIDL to see (if PREV/NEXT pushed), or null (if REALLYDELETE pushed), or showUIDL,
-     *         or "delete" (if DELETE pushed). If null, next state should be LIST.
+     * or "delete" (if DELETE pushed). If null, next state should be LIST.
      */
     private static String processMessageButtons(SessionObject sessionObject, String showUIDL, RequestWrapper request) {
         if (buttonPressed(request, PREV)) {
@@ -1576,7 +1612,7 @@ public class WebMail extends HttpServlet {
     }
 
     /**
-     * process download link in message view
+     * Process download link in message view.
      * @param sessionObject
      * @param request
      * @return If true, we sent an attachment or 404, do not send any other response
@@ -1667,7 +1703,7 @@ public class WebMail extends HttpServlet {
     }
 
     /**
-     * Process save-as link in message view
+     * Process save-as link in message view.
      *
      * @param sessionObject
      * @param request
@@ -1691,6 +1727,8 @@ public class WebMail extends HttpServlet {
     }
 
     /**
+     * Find the part with the given id, recursively.
+     *
      * @param id as retrieved from getID()
      * @return the part or null
      */
@@ -1707,6 +1745,8 @@ public class WebMail extends HttpServlet {
     }
 
     /**
+     * Find the part with the given content-id, recursively.
+     *
      * @param id a content-id, without the surrounding &lt;&gt; or trailing @ part
      * @return the part or null
      * @since 0.9.62
@@ -1731,7 +1771,7 @@ public class WebMail extends HttpServlet {
     }
 
     /**
-     * process buttons of folder view
+     * Process buttons of folder view.
      * @param sessionObject
      * @param page the current page
      * @param request
@@ -1879,6 +1919,8 @@ public class WebMail extends HttpServlet {
     //// End state change and button processing ////
 
     /**
+     * The session's state, creating it if needed.
+     *
      * @param httpSession
      * @return non-null
      */
@@ -1904,10 +1946,10 @@ public class WebMail extends HttpServlet {
 
     /**
      * Either mobile or text browser
-     * Copied from net.i2p.router.web.CSSHelper
+     * Copied from net.i2p.router.web.CSSHelper.
      * @param ua null ok
      * @return true if the user agent is a small-screen or text browser, false
-     *         for a null agent or a full browser
+     * for a null agent or a full browser
      * @since 0.9.7
      */
     private static boolean isMobile(String ua) {
@@ -1916,6 +1958,8 @@ public class WebMail extends HttpServlet {
     }
 
     /**
+     * The mail cache for the requested folder.
+     *
      * @return folder or null
      * @since 0.9.35
      */
@@ -1946,6 +1990,8 @@ public class WebMail extends HttpServlet {
     }
 
     /**
+     * The folder selected in the request.
+     *
      * @return folder or null
      * @since 0.9.35
      */
@@ -1956,7 +2002,7 @@ public class WebMail extends HttpServlet {
 
     /**
      * Blocking wait, bounded to 5 seconds so a stuck loader cannot hang the
-     * servlet thread indefinitely
+     * servlet thread indefinitely.
      * @since 0.9.35
      */
     private static void waitForLoad(SessionObject sessionObject, MailCache mc) {
@@ -1982,7 +2028,7 @@ public class WebMail extends HttpServlet {
     //// Start request handling here ////
 
     /**
-     * The entry point for all web page loads
+     * The entry point for all web page loads.
      *
      * @param httpRequest
      * @param response
@@ -2582,10 +2628,10 @@ public class WebMail extends HttpServlet {
     }
 
     /**
-     * Determine if a user-provided override.css file is active
+     * Determine if a user-provided override.css file is active.
      *
      * @return true if an override.css exists in the current theme's
-     *         susimail directory
+     * susimail directory
      * @since 0.9.65+
      */
     public boolean isOverrideCssActive() {
@@ -2599,7 +2645,7 @@ public class WebMail extends HttpServlet {
     }
 
     /**
-     * Redirect a POST to a GET (P-R-G), replacing the query string
+     * Redirect a POST to a GET (P-R-G), replacing the query string.
      * @param q starting with '?' or null
      * @since 0.9.33 adapted from I2PSnarkServlet
      */
@@ -2628,11 +2674,13 @@ public class WebMail extends HttpServlet {
     }
 
     /**
+     * Stream one attachment part to the browser.
+     *
      * @param sessionObject
      * @param response
      * @param isRaw if true, don't zip it
      * @return true if the part was written to the response, false if the part was
-     *         null or the write threw an IOException
+     * null or the write threw an IOException
      */
     private static boolean sendAttachment(SessionObject sessionObject, MailPart part, HttpServletResponse response, boolean isRaw) {
         boolean shown = false;
@@ -2729,12 +2777,12 @@ public class WebMail extends HttpServlet {
     }
 
     /**
-     * Send the mail to be saved by the browser
+     * Send the mail to be saved by the browser.
      *
      * @param sessionObject
      * @param response
      * @return true if the message was copied to the response, false if it has no
-     *         body or the copy threw an IOException
+     * body or the copy threw an IOException
      * @since 0.9.18
      */
     private static boolean sendMailSaveAs(SessionObject sessionObject, Mail mail,
@@ -3037,7 +3085,7 @@ public class WebMail extends HttpServlet {
     }
 
     /**
-     * Threaded sending
+     * Threaded sending.
      * @since 0.9.35
      */
     private static class EmailSender implements Runnable {
@@ -3225,6 +3273,8 @@ public class WebMail extends HttpServlet {
     }
 
     /**
+     * Join the array as a quoted CSV string.
+     *
      * @param arr may be null
      * @since 0.9.35
      */
@@ -3240,6 +3290,7 @@ public class WebMail extends HttpServlet {
     }
 
     /**
+     * Show the compose form.
      *
      * @param out
      * @param sessionObject
@@ -3373,7 +3424,7 @@ public class WebMail extends HttpServlet {
     }
 
     /**
-     * The sender string
+     * The sender string.
      *
      * @return non-null
      * @since 0.9.63 pulled out of showCompose()
@@ -3402,6 +3453,7 @@ public class WebMail extends HttpServlet {
     }
 
     /**
+     * Show the login form.
      *
      * @param out
      */
@@ -3449,6 +3501,8 @@ public class WebMail extends HttpServlet {
     }
 
     /**
+     * Show the loading page, refreshed by meta tag.
+     *
      * @since 0.9.34
      */
     private static void showLoading(PrintWriter out, SessionObject sessionObject, RequestWrapper request) {
@@ -3458,6 +3512,8 @@ public class WebMail extends HttpServlet {
     }
 
     /**
+     * Show the message list for a folder.
+     *
      * @param out
      * @param sessionObject
      * @param request
@@ -3841,6 +3897,8 @@ public class WebMail extends HttpServlet {
     }
 
     /**
+     * HTML select control listing the folders.
+     *
      * @param disableCurrent true for move to folder, false for select folder
      * @since 0.9.35
      */
@@ -3871,6 +3929,7 @@ public class WebMail extends HttpServlet {
     }
 
     /**
+     * Show one message with its parts.
      *
      * @param out
      * @param sessionObject
@@ -4013,12 +4072,13 @@ public class WebMail extends HttpServlet {
     }
 
     /**
-     * TODO this is addresses only, we don't save the full line in Mail
+     * Build a comma-separated recipient line from the addresses.
      *
      * @param to non-null
      * @since 0.9.33
      */
     private static String buildRecipientLine(String[] to) {
+        // TODO this is addresses only, we don't save the full line in Mail
         if (to != null) {
             StringBuilder buf = new StringBuilder(to.length * 16);
             for (int i = 0; i < to.length; i++) {
@@ -4033,7 +4093,7 @@ public class WebMail extends HttpServlet {
     }
 
     /**
-     * Simple configure page
+     * Simple configure page.
      *
      * @param folder may be null
      * @since 0.9.13
@@ -4065,33 +4125,33 @@ public class WebMail extends HttpServlet {
         out.print("</div>\n");
     }
 
-    /** tag for translation */
+    /** Tag for translation. */
     private static String _x(String s) {
         return s;
     }
 
-    /** translate */
+    /** Looks up a localized string in the message bundle. */
     private static String _t(String s) {
         return Messages.getString(s);
     }
 
-    /** translate */
+    /** Looks up a localized string in the message bundle. */
     private static String _t(String s, Object o) {
         return Messages.getString(s, o);
     }
 
-    /** translate */
+    /** Looks up a localized string in the message bundle. */
     private static String _t(String s, Object o, Object o2) {
         return Messages.getString(s, o, o2);
     }
 
-    /** translate */
+    /** Looks up the localized plural form for n items. */
     private static String ngettext(String s, String p, int n) {
         return Messages.getString(n, s, p);
     }
 
     /**
-     * Get all themes
+     * Get all themes.
      * @return String[] -- Array of all the themes found.
      */
     private static String[] getThemes(I2PAppContext ctx) {

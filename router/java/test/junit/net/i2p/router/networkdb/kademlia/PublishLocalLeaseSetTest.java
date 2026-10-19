@@ -41,9 +41,9 @@ import net.i2p.util.SimpleTimer2;
 
 /**
  * End-to-end verification of publish() for a local client whose LeaseSet is
- * not published to the network (i2cp.dontPublishLeaseSet, e.g. the HTTP
+ * not published to the network ({@code i2cp.dontPublishLeaseSet}, e.g. the HTTP
  * proxy).  The local copy must be stored and a republish job scheduled so it
- * is re-minted before its ~6-minute lease expires — previously publish()
+ * is re-minted before its ~6-minute lease expires. Previously publish()
  * returned before scheduling anything and the LeaseSet sat expired in the
  * local netdb for minutes.
  */

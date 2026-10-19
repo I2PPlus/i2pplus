@@ -27,16 +27,16 @@ public class NewsMetadata {
      */
     public NewsMetadata() {}
 
-    /** Standard Atom feed metadata */
+    /** Standard Atom feed metadata. */
     public String feedTitle;
-    /** Standard Atom feed metadata */
+    /** Standard Atom feed metadata. */
     public String feedSubtitle;
-    /** Standard Atom feed metadata */
+    /** Standard Atom feed metadata. */
     public String feedID;
-    /** Standard Atom feed metadata */
+    /** Standard Atom feed metadata. */
     public long feedUpdated;
 
-    /** I2P metadata */
+    /** I2P metadata. */
     public List<Release> releases;
 
     /**
@@ -59,15 +59,15 @@ public class NewsMetadata {
          */
         public Release() {}
 
-        /** The release date */
+        /** The release date. */
         public long date;
-        /** The minimum I2P version required */
+        /** The minimum I2P version required. */
         public String minVersion;
-        /** The minimum Java version required */
+        /** The minimum Java version required. */
         public String minJavaVersion;
-        /** The I2P version of this release */
+        /** The I2P version of this release. */
         public String i2pVersion;
-        /** The list of available updates */
+        /** The list of available updates. */
         public List<Update> updates;
 
         @Override
@@ -122,20 +122,20 @@ public class NewsMetadata {
          */
         public Update() {}
 
-        /** The update type (su3, su2, etc.) */
+        /** The update type (su3, su2, etc.). */
         public String type;
-        /** The torrent source URL */
+        /** The torrent source URL. */
         public String torrent;
         /**
-         * Stored as of 0.9.52, but there is no registered handler
+         * Stored as of 0.9.52, but there is no registered handler.
          */
         public List<String> clearnet;
         /**
-         * Stored as of 0.9.52, but there is no registered handler
+         * Stored as of 0.9.52, but there is no registered handler.
          */
         public List<String> ssl;
         /**
-         * In-net URLs
+         * In-net URLs.
          * @since 0.9.52
          */
         public List<String> i2pnet;

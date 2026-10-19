@@ -16,7 +16,7 @@ import net.i2p.util.PortMapper;
  * Handler for router update configuration.
  */
 public class ConfigUpdateHandler extends FormHandler {
-    /** ConfigUpdateHandler default constructor */
+    /** ConfigUpdateHandler default constructor. */
     public ConfigUpdateHandler() {
         super();
     }
@@ -35,28 +35,28 @@ public class ConfigUpdateHandler extends FormHandler {
     private boolean _updateDevSU3;
     private String _devSU3URL;
 
-    /** Property for news URL */
+    /** Property for news URL. */
     public static final String PROP_NEWS_URL = "router.newsURL";
     /**
-     *  current default, i2pnews.i2p, run by echelon
+     * Current default, i2pnews.i2p, run by echelon
      * <p>
-     *  NOTE: If you change, also change in Android:
-     *  app/src/main/java/net/i2p/android/apps/NewsFetcher.java
+     * NOTE: If you change, also change in Android:
+     * app/src/main/java/net/i2p/android/apps/NewsFetcher.java.
      */
     public static final String DEFAULT_NEWS_URL_SU3 = "http://tc73n4kivdroccekirco7rhgxdg5f3cjvbaapabupeyzrqwv5guq.b32.i2p/news.su3";
-    /** Property for news refresh frequency */
+    /** Property for news refresh frequency. */
     public static final String PROP_REFRESH_FREQUENCY = "router.newsRefreshFrequency";
-    /** Default refresh frequency (36 hours) */
+    /** Default refresh frequency (36 hours). */
     public static final long DEFAULT_REFRESH_FREQ = 36*60*60*1000L;
-    /** Default refresh frequency as String */
+    /** Default refresh frequency as String. */
     public static final String DEFAULT_REFRESH_FREQUENCY = Long.toString(DEFAULT_REFRESH_FREQ);
-    /** Property for update policy */
+    /** Property for update policy. */
     public static final String PROP_UPDATE_POLICY = "router.updatePolicy";
-    /** Default update policy */
+    /** Default update policy. */
     public static final String DEFAULT_UPDATE_POLICY = "notify";
-    /** Property for update through proxy */
+    /** Property for update through proxy. */
     public static final String PROP_SHOULD_PROXY = "router.updateThroughProxy";
-    /** Default for update through proxy */
+    /** Default for update through proxy. */
     public static final boolean DEFAULT_SHOULD_PROXY = true;
     /**
      *  Property for fetching news through proxy.
@@ -68,50 +68,50 @@ public class ConfigUpdateHandler extends FormHandler {
      *  @since 0.9.9
      */
     public static final boolean DEFAULT_SHOULD_PROXY_NEWS = true;
-    /** Property for update proxy host */
+    /** Property for update proxy host. */
     public static final String PROP_PROXY_HOST = "router.updateProxyHost";
-    /** Default proxy host */
+    /** Default proxy host. */
     public static final String DEFAULT_PROXY_HOST = "127.0.0.1";
-    /** Property for update proxy port */
+    /** Property for update proxy port. */
     public static final String PROP_PROXY_PORT = "router.updateProxyPort";
-    /** Default proxy port as int */
+    /** Default proxy port as int. */
     public static final int DEFAULT_PROXY_PORT_INT = 4444;
-    /** Default proxy port as String */
+    /** Default proxy port as String. */
     public static final String DEFAULT_PROXY_PORT = Integer.toString(DEFAULT_PROXY_PORT_INT);
-    /** default false */
+    /** Default false. */
     public static final boolean DEFAULT_UPDATE_UNSIGNED = true;
-    /** Property for unsigned update flag */
+    /** Property for unsigned update flag. */
     public static final String PROP_UPDATE_UNSIGNED = "router.updateUnsigned";
-    /** default false - use for distros */
+    /** Default false - use for distros. */
     public static final String PROP_UPDATE_DISABLED = "router.updateDisabled";
-    /** no default */
+    /** No default. */
     public static final String PROP_ZIP_URL = "router.updateUnsignedURL";
 
-    /** Property for update URL */
+    /** Property for update URL. */
     public static final String PROP_UPDATE_URL = "router.updateURL";
 
     /**
-     *  If true, offer development SU3 builds; default false
-     *  @since 0.9.20
+     * If true, offer development SU3 builds; default false.
+     * @since 0.9.20
      */
     public static final String PROP_UPDATE_DEV_SU3 = "router.updateDevSU3";
     /**
-     *  If true, the development SU3 URL; no default
-     *  @since 0.9.20
+     * If true, the development SU3 URL; no default.
+     * @since 0.9.20
      */
     public static final String PROP_DEV_SU3_URL = "router.updateDevSU3URL";
 
     /**
-     *  These are only for .sud and .su2.
-     *  Do NOT use this for .su3
+     * These are only for .sud and .su2.
+     * Do NOT use this for .su3.
      */
     public static final String DEFAULT_UPDATE_URL = "";
 
     private static final String SU3_CERT_DIR = "certificates/router";
 
     /**
-     *  Only enabled if we have trusted public key certificates installed
-     *  @since 0.9.9
+     * Only enabled if we have trusted public key certificates installed.
+     * @since 0.9.9
      */
     public static final boolean USE_SU3_UPDATE;
     static {
@@ -119,14 +119,14 @@ public class ConfigUpdateHandler extends FormHandler {
         USE_SU3_UPDATE = files != null && files.length > 0;
     }
 
-    /** Property for trusted update keys */
+    /** Property for trusted update keys. */
     public static final String PROP_TRUSTED_KEYS = "router.trustedUpdateKeys";
 
     /**
-     *  Convenience method for updaters
-     *  @param ctx the context for retrieving configuration
-     *  @return the configured value, else the registered HTTP proxy, else the default
-     *  @since 0.8.13
+     * Convenience method for updaters.
+     * @param ctx the context for retrieving configuration
+     * @return the configured value, else the registered HTTP proxy, else the default
+     * @since 0.8.13
      */
     public static int proxyPort(I2PAppContext ctx) {
         return ctx.getProperty(PROP_PROXY_PORT,

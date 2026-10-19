@@ -29,7 +29,6 @@ import java.util.Iterator;
  *   <li>User data attachment for application-specific information
  * </ul>
  *
- * @author Satoshi Konno
  * @since 1.0
  */
 public class Node {

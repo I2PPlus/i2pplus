@@ -16,11 +16,11 @@ public abstract class HelperBase {
 
     public HelperBase() {}
 
-    /** the router context */
+    /** The router context. */
     protected RouterContext _context;
-    /** the writer for output */
+    /** The writer for output. */
     protected Writer _out;
-    /** the log instance */
+    /** The log instance. */
     protected Log _log;
 
     /**
@@ -64,7 +64,7 @@ public abstract class HelperBase {
     /**
      * Store the writer for output.
      * Renamed from setWriter, we really don't want setFoo(non-String)
-     * to prevent jsp.error.beans.property.conversion 500 error for ?writer=foo
+     * to prevent {@code jsp.error.beans.property.conversion} 500 error for ?writer=foo.
      * @param out the writer to store
      * @since 0.8.2
      */

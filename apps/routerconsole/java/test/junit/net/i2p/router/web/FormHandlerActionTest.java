@@ -8,7 +8,7 @@ import java.util.Map;
 import org.junit.Test;
 
 /**
- * Tests for FormHandler.resolveEffectiveAction().
+ * Tests for {@link net.i2p.router.web.FormHandler#resolveEffectiveAction}.
  *
  * Forms carry a hidden action=blah fallback plus submit buttons named action.
  * When a button is clicked the parameter map holds both values and the

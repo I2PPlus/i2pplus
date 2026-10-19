@@ -1,32 +1,32 @@
 package edu.internet2.ndt;
 
-/** Class to define the NDTP control message types **/
+/** The NDT control message type constants. */
 public class MessageType {
-    /** default constructor */
+    /** Not instantiable in practice; only constants are used. */
     public MessageType() {}
 
-    /** Communication failure */
+    /** Communication failure. */
     public static final byte COMM_FAILURE = 0;
-    /** Server queue */
+    /** Server queue. */
     public static final byte SRV_QUEUE = 1;
-    /** Login message */
+    /** Login message. */
     public static final byte MSG_LOGIN = 2;
-    /** Test prepare */
+    /** Test prepare. */
     public static final byte TEST_PREPARE = 3;
-    /** Test start */
+    /** Test start. */
     public static final byte TEST_START = 4;
-    /** Test message */
+    /** Test message. */
     public static final byte TEST_MSG = 5;
-    /** Test finalize */
+    /** Test finalize. */
     public static final byte TEST_FINALIZE = 6;
-    /** Error message */
+    /** Error message. */
     public static final byte MSG_ERROR = 7;
-    /** Results message */
+    /** Results message. */
     public static final byte MSG_RESULTS = 8;
-    /** Logout message */
+    /** Logout message. */
     public static final byte MSG_LOGOUT = 9;
-    /** Waiting message */
+    /** Waiting message. */
     public static final byte MSG_WAITING = 10;
-    /** Extended login message */
+    /** Extended login message. */
     public static final byte MSG_EXTENDED_LOGIN = 11;
 }

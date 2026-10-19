@@ -82,7 +82,11 @@ public class AxisClassRenderTest {
         }
     }
 
-    /** @throws IOException if the RRD cannot be closed */
+    /**
+     * Delete the generated test files.
+     *
+     * @throws IOException if the RRD cannot be closed
+     */
     @After
     public void tearDown() throws IOException {
         if (db != null && !db.isClosed()) {
@@ -91,6 +95,8 @@ public class AxisClassRenderTest {
     }
 
     /**
+     * Render a graph to an SVG string.
+     *
      * @param w graph width in pixels
      * @param h graph height in pixels
      * @return the rendered SVG, set up the way the console sets it up
@@ -118,7 +124,11 @@ public class AxisClassRenderTest {
         return new String(svg, StandardCharsets.UTF_8);
     }
 
-    /** @param svg the document @param cssClass the group's class @return its body, or null */
+    /**
+     * Extract the SVG group with the given CSS class.
+     *
+     * @param svg the document @param cssClass the group's class @return its body, or null
+     */
     private static String group(String svg, String cssClass) {
         String open = "<g class=\"" + cssClass + "\">";
         int at = svg.indexOf(open);
@@ -129,7 +139,11 @@ public class AxisClassRenderTest {
         return end < 0 ? null : svg.substring(at + open.length(), end);
     }
 
-    /** @param svg the document @return the number of {@code <line>} elements it contains */
+    /**
+     * Count the rendered lines in the SVG.
+     *
+     * @param svg the document @return the number of {@code <line>} elements it contains
+     */
     private static int countLines(String svg) {
         int n = 0;
         for (int i = svg.indexOf("<line"); i >= 0; i = svg.indexOf("<line", i + 1)) {n++;}
@@ -190,7 +204,11 @@ public class AxisClassRenderTest {
                     + stretch, stretch.contains("<text"));
     }
 
-    /** @param svg @return the first 600 characters, for failure messages */
+    /**
+     * The first line of the SVG.
+     *
+     * @param svg @return the first 600 characters, for failure messages
+     */
     private static String head(String svg) {
         return svg.length() > 600 ? svg.substring(0, 600) : svg;
     }

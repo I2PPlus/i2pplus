@@ -29,7 +29,7 @@ import net.i2p.data.DataHelper;
  */
 class NodeInfoComparator implements Comparator<NodeInfo>, Serializable {
     private static final long serialVersionUID = 1L;
-    /** The target key (info hash or node ID) to measure distances against */
+    /** The target key (info hash or node ID) to measure distances against. */
     private final byte[] _base;
 
     /**

@@ -14,7 +14,7 @@ import org.klomp.snark.Storage;
 import org.klomp.snark.TorrentDest;
 
 /**
- * Comparators for various columns
+ * Comparators for various columns.
  *
  * @since 0.9.16 from TorrentNameComparator, moved from I2PSnarkservlet
  */
@@ -26,7 +26,7 @@ class Sorters {
      */
     Sorters() {}
 
-    /** See below */
+    /** See below. */
     private static final Pattern PATTERN_DE;
     private static final Pattern PATTERN_EN;
     private static final Pattern PATTERN_ES;
@@ -144,7 +144,7 @@ class Sorters {
 
     /**
      * Sort alphabetically in current locale, ignore case, ignore leading articles such as "the" if
-     * the pattern is set by setPattern()
+     * the pattern is set by setPattern().
      *
      * @since 0.7.14
      */
@@ -212,7 +212,7 @@ class Sorters {
         return c;
     }
 
-    /** Forward or reverse sort, but the fallback is always forward */
+    /** Forward or reverse sort, but the fallback is always forward. */
     private abstract static class Sort implements Comparator<Snark>, Serializable {
 
         private static final long serialVersionUID = 1L;
@@ -715,7 +715,7 @@ class Sorters {
     }
 
     /**
-     * Sort alphabetically in current locale, ignore case, directories first
+     * Sort alphabetically in current locale, ignore case, directories first.
      *
      * @since 0.9.6 moved from I2PSnarkServlet in 0.9.16
      */
@@ -723,7 +723,7 @@ class Sorters {
 
         private static final long serialVersionUID = 1L;
 
-        /** Cached, case-insensitive at secondary strength */
+        /** Cached, case-insensitive at secondary strength. */
         private static final Collator _c = Collator.getInstance();
 
         static {
@@ -747,7 +747,7 @@ class Sorters {
         }
     }
 
-    /** Forward or reverse sort, but the fallback is always forward */
+    /** Forward or reverse sort, but the fallback is always forward. */
     private abstract static class FAISort implements Comparator<FileAndIndex>, Serializable {
 
         private static final long serialVersionUID = 1L;

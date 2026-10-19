@@ -17,9 +17,8 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 
 /**
- * Utility class for wrapping data structure tests
+ * Utility class for wrapping data structure tests.
  *
- * @author jrandom
  */
 public abstract class StructureTest {
 

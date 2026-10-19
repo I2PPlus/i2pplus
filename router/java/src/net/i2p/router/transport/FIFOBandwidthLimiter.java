@@ -92,7 +92,7 @@ public class FIFOBandwidthLimiter {
 
     /**
      * Current time in milliseconds from the System clock.
-     * @return milliseconds since the epoch, from System.currentTimeMillis()
+     * @return milliseconds since the epoch, from {@link java.lang.System#currentTimeMillis}
      */
     public /* static */ long now() {
         // Don't use the clock().now(), since that may jump
@@ -195,14 +195,14 @@ public class FIFOBandwidthLimiter {
         _refiller.reinitialize();
     }
 
-    /** Shut down the bandwidth limiter */
+    /** Shut down the bandwidth limiter. */
     public synchronized void shutdown() {
         _refiller.shutdown();
         _refillerThread.interrupt();
         clear();
     }
 
-    /** Clear all pending requests and reset counters */
+    /** Clear all pending requests and reset counters. */
     private void clear() {
         _pendingInboundRequests.clear();
         _pendingOutboundRequests.clear();
@@ -263,7 +263,7 @@ public class FIFOBandwidthLimiter {
     }
 
     /**
-     * In Bytes per second
+     * In Bytes per second.
      * @return the max share bandwidth
      * @since 0.9.68
      */
@@ -352,7 +352,7 @@ public class FIFOBandwidthLimiter {
     /**
      * The transports don't use this any more, so make it private
      * and a SimpleRequest instead of a Request
-     * So there's no more casting
+     * So there's no more casting.
      */
     private void requestInbound(SimpleRequest req, int bytesIn, String purpose) {
         int pending;
@@ -533,7 +533,7 @@ public class FIFOBandwidthLimiter {
 
     /**
      * More bytes are available - add them to the queue and satisfy any requests
-     * we can
+     * we can.
      *
      * @param buf contains satisfied outbound requests, really just to avoid object thrash, not really used
      * @param bytesInbound allowance to add to the inbound queue, in bytes, for the elapsed period
@@ -704,7 +704,7 @@ public class FIFOBandwidthLimiter {
     }
 
     /**
-     * There are no limits, so just give every inbound request whatever they want
+     * There are no limits, so just give every inbound request whatever they want.
      *
      * @param satisfied out param, list of requests that were completely satisfied
      */
@@ -728,7 +728,7 @@ public class FIFOBandwidthLimiter {
     /**
      * We have limits, so iterate through the requests, allocating as much
      * bandwidth as we can to those who have used what we have given them and are waiting
-     * for more (giving priority to the first ones who requested it)
+     * for more (giving priority to the first ones who requested it).
      *
      * @param satisfied out param, list of requests that were completely satisfied
      */
@@ -817,7 +817,7 @@ public class FIFOBandwidthLimiter {
     }
 
     /**
-     * There are no limits, so just give every outbound request whatever they want
+     * There are no limits, so just give every outbound request whatever they want.
      *
      * @param satisfied out param, list of requests that were completely satisfied
      */
@@ -842,7 +842,7 @@ public class FIFOBandwidthLimiter {
     /**
      * We have limits, so iterate through the requests, allocating as much
      * bandwidth as we can to those who have used what we have given them and are waiting
-     * for more (giving priority to the first ones who requested it)
+     * for more (giving priority to the first ones who requested it).
      *
      * @param satisfied out param, list of requests that were completely satisfied
      */
@@ -904,7 +904,7 @@ public class FIFOBandwidthLimiter {
     /**
      * Lockless total satisfaction,
      * at some minor risk of exceeding the limits
-     * and driving the available counter below zero
+     * and driving the available counter below zero.
      *
      * @param requested number of bytes
      * @return true if the request was satisfied outright, false if it was queued
@@ -924,7 +924,7 @@ public class FIFOBandwidthLimiter {
     /**
      * Lockless total satisfaction,
      * at some minor risk of exceeding the limits
-     * and driving the available counter below zero
+     * and driving the available counter below zero.
      *
      * @param requested number of bytes
      * @return true if the request was satisfied outright, false if it was queued
@@ -941,7 +941,11 @@ public class FIFOBandwidthLimiter {
         return rv;
     }
 
-    /** @deprecated not worth translating */
+    /**
+     * No-op, the HTML status page was not worth translating.
+     *
+     * @deprecated not worth translating
+     */
     @Deprecated
     public void renderStatusHTML(Writer out) throws IOException {
         // no-op
@@ -1075,7 +1079,7 @@ public class FIFOBandwidthLimiter {
 
         /**
          * Increments allocationsSinceWait only if there is a listener.
-         * Does not notify; caller must call notifyAllocation()
+         * Does not notify; caller must call notifyAllocation().
          */
         synchronized void allocateBytes(int bytes) {
             _allocated += bytes;

@@ -121,6 +121,8 @@ class HostTxtIterator implements Iterator<Map.Entry<String, HostTxtEntry>>, Clos
         private final HostTxtEntry value;
 
         /**
+         * Creates an immutable map entry.
+         *
          * @param k the key
          * @param v the value
          */

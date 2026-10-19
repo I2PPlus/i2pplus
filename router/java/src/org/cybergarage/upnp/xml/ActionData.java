@@ -12,7 +12,7 @@ import org.cybergarage.upnp.control.*;
  * functionality.
  */
 public class ActionData extends NodeData {
-    /** Default constructor */
+    /** Creates an empty action data holder. */
     public ActionData() {}
 
     ////////////////////////////////////////////////

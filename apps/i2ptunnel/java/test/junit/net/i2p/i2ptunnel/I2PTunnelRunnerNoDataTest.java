@@ -50,22 +50,22 @@ public class I2PTunnelRunnerNoDataTest {
         assertFalse(I2PTunnelRunner.shouldFireNoDataFailure(0L, true));
     }
 
-    /** "GET / HTTP/1.1\r\nHost: x\r\n\r\n" */
+    /** "GET / HTTP/1.1\r\nHost: x\r\n\r\n". */
     private static byte[] get() {
         return "GET / HTTP/1.1\r\nHost: x\r\n\r\n".getBytes();
     }
 
-    /** "HEAD /path HTTP/1.1\r\n\r\n" */
+    /** "HEAD /path HTTP/1.1\r\n\r\n". */
     private static byte[] head() {
         return "HEAD /path HTTP/1.1\r\n\r\n".getBytes();
     }
 
-    /** "POST /submit HTTP/1.1\r\nContent-Length: 3\r\n\r\nabc" */
+    /** "POST /submit HTTP/1.1\r\nContent-Length: 3\r\n\r\nabc". */
     private static byte[] post() {
         return "POST /submit HTTP/1.1\r\nContent-Length: 3\r\n\r\nabc".getBytes();
     }
 
-    /** "PUT /r HTTP/1.1\r\nContent-Length: 0\r\n\r\n" */
+    /** "PUT /r HTTP/1.1\r\nContent-Length: 0\r\n\r\n". */
     private static byte[] put() {
         return "PUT /r HTTP/1.1\r\nContent-Length: 0\r\n\r\n".getBytes();
     }

@@ -65,7 +65,7 @@ import net.i2p.util.SystemVersion;
  * </ul>
  *
  * <p>Storage implements Closeable and should be properly closed after use.
- * The storage must be checked via {@link #check()} before reading or writing pieces.
+ * The storage must be checked via {@link #check} before reading or writing pieces.
  *
  * <p>Thread safety: This class uses synchronized methods and concurrent collections
  * for thread-safe access to file handles and metadata.
@@ -439,7 +439,7 @@ public class Storage implements Closeable {
      * sets all the bitfield bits.
      *
      * <p>Hashing walks the torrent from end to end, so a file handle is closed as soon as the
-     * piece that read it is done, rather than held until {@link #cleanRAFs()}: leaving every
+     * piece that read it is done, rather than held until {@link #cleanRAFs}: leaving every
      * handle open for the duration exhausts the process file descriptor limit on torrents
      * with many files, and there is no periodic sweep running yet because the Storage has not
      * been handed to a PeerCheckerTask.
@@ -470,7 +470,7 @@ public class Storage implements Closeable {
 
     /**
      * Close every open file handle, whatever its last-use time. Used by the creation-time
-     * hash pass, which runs before any periodic {@link #cleanRAFs()} exists.
+     * hash pass, which runs before any periodic {@link #cleanRAFs} exists.
      */
     private void closeAllRAFs() {
         for (TorrentFile tf : _torrentFiles) {
@@ -542,7 +542,7 @@ public class Storage implements Closeable {
      * The excluded files.
      *
      * @param base the torrent data dir the excluded paths are reported relative to
-     * @return the excluded files
+     * @return comma-separated names of excluded files and directories
      * @since 0.9.62+
      */
     public List<String> getExcludedFiles(File base) {
@@ -743,7 +743,7 @@ public class Storage implements Closeable {
     }
 
     /**
-     * Clear the storage changed variable
+     * Clear the storage changed variable.
      *
      * @since 0.9.30
      */
@@ -816,7 +816,7 @@ public class Storage implements Closeable {
     }
 
     /**
-     * Index to pass to remaining(), getPriority(), setPriority()
+     * Index to pass to remaining(), getPriority(), setPriority().
      *
      * @param file non-canonical path (non-directory)
      * @return internal index of file; -1 if unknown file
@@ -835,7 +835,7 @@ public class Storage implements Closeable {
     }
 
     /**
-     * For efficiency, calculate remaining bytes for all files at once
+     * For efficiency, calculate remaining bytes for all files at once.
      *
      * @return number of bytes remaining for each file, use indexOf() to get index for a file
      * @since 0.9.23
@@ -846,7 +846,7 @@ public class Storage implements Closeable {
 
     /**
      * The torrent-relative paths of every file in the torrent, index-aligned with the arrays
-     * returned by {@link #remaining2()}.
+     * returned by {@link #remaining2}.
      *
      * <p>BEP 47 padding files are included, as the synthetic name (a number, optionally
      * "-n", under the .pad directory) the metainfo gives them, so that element i of this
@@ -930,7 +930,7 @@ public class Storage implements Closeable {
     }
 
     /**
-     * Must call Snark.updatePiecePriorities() (which calls getPiecePriorities()) after calling
+     * Must call {@link org.klomp.snark.Snark#updatePiecePriorities} (which calls getPiecePriorities()) after calling
      * this.
      *
      * @param fileIndex as obtained from indexOf
@@ -969,7 +969,7 @@ public class Storage implements Closeable {
     }
 
     /**
-     * The file priorities array. Only call this when stopped, but after check()
+     * The file priorities array. Only call this when stopped, but after check().
      *
      * @param p may be null
      * @since 0.8.1
@@ -1344,10 +1344,10 @@ public class Storage implements Closeable {
 
     /**
      * Doesn't really reopen the file descriptors for a restart. Just does an existence check but no
-     * length check or data reverification
+     * length check or data reverification.
      *
      * @throws IOException if the storage was never checked, or a vanished data
-     *                     file cannot be recreated
+     * file cannot be recreated
      */
     public void reopen() throws IOException {
         if (_torrentFiles.isEmpty()) {
@@ -1492,6 +1492,7 @@ public class Storage implements Closeable {
          return filterName(name);
      }
 
+        // <p>TODO: If multiple files in the same torrent map to the same filter name, the whole torrent
     /**
      * Removes 'suspicious' characters from the given file name.
      * http://msdn.microsoft.com/en-us/library/aa365247%28VS.85%29.aspx Then replace chars not
@@ -1499,12 +1500,11 @@ public class Storage implements Closeable {
      *
      * <p>This is called frequently and it can be pretty slow so cache the result.
      *
-     * <p>TODO: If multiple files in the same torrent map to the same filter name, the whole torrent
      * will blow up. Check at torrent creation?
      *
      * @param name the file name as listed in the torrent's metainfo
      * @return the name with suspicious characters replaced by underscores
-     */
+    */
     public static String filterName(String name) {
         String rv = _filterNameCache.get(name);
         if (rv != null) {
@@ -1794,16 +1794,15 @@ public class Storage implements Closeable {
         return changed;
     }
 
+        // <p>TODO thread the checking so we can return and display something on the UI
     /**
      * This is called at the beginning, and at presumed completion, so we have to be careful about
      * locking.
      *
-     * <p>TODO thread the checking so we can return and display something on the UI
-     *
      * @param recheck if true, this is a check after we downloaded the last piece, and we don't
-     *                modify the global bitfield unless the check fails.
+     * modify the global bitfield unless the check fails.
      * @return true if changed (only valid if recheck == true)
-     */
+    */
     private boolean checkCreateFiles(boolean recheck) throws IOException {
         return checkCreateFiles(recheck, null);
     }
@@ -2268,14 +2267,14 @@ public class Storage implements Closeable {
         }
     }
 
+        // does the recheck here. TODO thread the recheck?
     /**
-     * Put the piece in the Storage if it is correct. Warning - takes a LONG time if complete as it
-     * does the recheck here. TODO thread the recheck?
+     * Put the piece in the Storage if it is correct. Warning - takes a LONG time if complete as it.
      *
      * @param pp the received piece data, which is hashed against the metainfo to verify it
      * @return true if the piece was correct (sha metainfo hash matches), otherwise false.
      * @throws IOException when some storage related error occurs.
-     */
+    */
     public boolean putPiece(PartialPiece pp) throws IOException {
         int piece = pp.getPiece();
         boolean shouldPreallocate = _util.getPreallocateFiles();
@@ -2583,7 +2582,8 @@ public class Storage implements Closeable {
     }
 
     /**
-     * This is a dup of MetaInfo.getPieceLength() but we need it before the MetaInfo is created in
+     * This is a dup of {@link org.klomp.snark.MetaInfo#getPieceLength} but we need it before the
+      * MetaInfo is created in
      * our second constructor.
      *
      * @return the piece length
@@ -2773,7 +2773,7 @@ public class Storage implements Closeable {
 
     private static final long RAF_CLOSE_DELAY = 4 * (long) 60 * 1000;
 
-    /** Close unused RAFs - call periodically */
+    /** Close unused RAFs - call periodically. */
     public void cleanRAFs() {
         long cutoff = System.currentTimeMillis() - RAF_CLOSE_DELAY;
         for (TorrentFile tf : _torrentFiles) {
@@ -2826,19 +2826,19 @@ public class Storage implements Closeable {
         /** Whether the file is empty and sparse; locking: this. */
         public boolean isSparse;
 
-        /** BEP 47 padding placeholder; hashes as zeros and is never read from or written to disk */
+        /** BEP 47 padding placeholder; hashes as zeros and is never read from or written to disk. */
         public final boolean isPadding;
 
         /** Priority by file; default 0. */
         public volatile int priority;
 
-        /** For new metainfo from files; use base == f for single-file torrent */
+        /** For new metainfo from files; use base == f for single-file torrent. */
         public TorrentFile(File base, File f) {
             this(base, f, f.length());
         }
 
         /**
-         * For existing metainfo with specified file length; use base == f for single-file torrent
+         * For existing metainfo with specified file length; use base == f for single-file torrent.
          */
         public TorrentFile(File base, File f, long len) {
             this(base, f, len, false);
@@ -2885,11 +2885,11 @@ public class Storage implements Closeable {
         }
 
         /*
-         * For each of the following, caller must synchronize on RAFlock[i]
-         * ... except at the beginning if you're careful
+         * For each of the following, caller must synchronize on RAFlock[i]... except at the
+         * beginning if you're careful
          */
 
-        /** This must be called before using the RAF to ensure it is open locking: this */
+        /** This must be called before using the RAF to ensure it is open locking: this. */
         public synchronized RandomAccessFile checkRAF() throws IOException {
             if (raf != null) {
                 RAFtime = System.currentTimeMillis();
@@ -2944,7 +2944,7 @@ public class Storage implements Closeable {
             RAFtime = System.currentTimeMillis();
         }
 
-        /** Close if last used time older than cutoff. locking: this */
+        /** Close if last used time older than cutoff. locking: this. */
         public synchronized void closeRAF(long cutoff) {
             if (RAFtime > 0 && RAFtime < cutoff) {
                 try {
@@ -2953,7 +2953,7 @@ public class Storage implements Closeable {
             }
         }
 
-        /** Can be called even if not open locking: this */
+        /** Can be called even if not open locking: this. */
         public synchronized void closeRAF() throws IOException {
             RAFtime = 0;
             if (raf == null) {

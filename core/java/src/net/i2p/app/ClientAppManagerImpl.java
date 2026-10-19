@@ -34,7 +34,7 @@ public class ClientAppManagerImpl implements ClientAppManager {
      */
     @Override
     public void notify(ClientApp app, ClientAppState state, String message, Exception e) {
-        // TODO
+    // TODO
     }
     /**
      *  Register with the manager under the given name,

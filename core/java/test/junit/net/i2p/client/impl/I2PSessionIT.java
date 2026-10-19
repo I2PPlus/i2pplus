@@ -26,11 +26,6 @@ import java.io.ByteArrayOutputStream;
 import java.util.HashSet;
 import java.util.Set;
 
-/**
- *
- * @author Comwiz
- *
- */
 public class I2PSessionIT extends TestCase implements I2PSessionListener {
     private Set<String> _s;
 

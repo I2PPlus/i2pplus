@@ -22,7 +22,7 @@ import net.i2p.data.DataHelper;
  */
 public class Mp3Tags {
 
-    /** Utility class, not instantiable */
+    /** Utility class, not instantiable. */
     private Mp3Tags() {}
 
     /**

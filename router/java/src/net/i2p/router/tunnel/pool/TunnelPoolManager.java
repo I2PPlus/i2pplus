@@ -38,9 +38,9 @@ import net.i2p.util.SimpleTimer2;
 public class TunnelPoolManager implements TunnelManagerFacade {
     private final RouterContext _context;
     private final Log _log;
-    /** Hash (destination) to TunnelPool */
+    /** Hash (destination) to TunnelPool. */
     private final Map<Hash, TunnelPool> _clientInboundPools;
-    /** Hash (destination) to TunnelPool */
+    /** Hash (destination) to TunnelPool. */
     private final Map<Hash, TunnelPool> _clientOutboundPools;
     private final TunnelPool _inboundExploratory;
     private final TunnelPool _outboundExploratory;
@@ -91,7 +91,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
 
     /**
      * Pending delayed cleanups for pool removal.
-     * Key: destination hash, Value: cleanup task
+     * Key: destination hash, Value: cleanup task.
      * @since 0.9.69+
      */
     private final Map<Hash, DelayedPoolCleanup> _pendingCleanups;
@@ -583,7 +583,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
         if (pool != null) {pool.setSettings(settings);}
     }
 
-    /** Restart all tunnel handlers and rebuild all tunnels */
+    /** Restart all tunnel handlers and rebuild all tunnels. */
     public synchronized void restart() {
         // Quiesce the batch-test subsystem first: the restart replaces the
         // pools and tunnels its buffer, permits, and running map describe,
@@ -719,7 +719,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
                     }
                 }
             }
-            // TODO if primary already vanished...
+        // TODO if primary already vanished...
         }
     }
 
@@ -944,7 +944,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
         else {return _context.getBooleanProperty(PROP_DISABLE_TUNNEL_TESTING);}
     }
 
-    /** Start the tunnel pool manager and build initial tunnels */
+    /** Start the tunnel pool manager and build initial tunnels. */
     public synchronized void startup() {
         _isShutdown = false;
         RemoveSlowTunnelsJob._runCount.set(0);
@@ -1019,7 +1019,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
          * budget on are the idle ones the sweep exists to find. A narrow window
          * would re-probe the peers working hardest, which is where the budget
          * is least useful.
-         * <p>Widening this constant reduces coverage — it widens the skip set,
+         * <p>Widening this constant reduces coverage. It widens the skip set,
          * not the probe set — so it is only safe because the test below keys on
          * our own send successes rather than on incidental inbound traffic.
          */
@@ -1187,7 +1187,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
     }
 
     /**
-     * Tuned by Tuner — min 2, max 8
+     * Tuned by Tuner — min 2, max 8.
      * @return number of build handler threads
      */
     public static int getBuildHandlerThreads() { return _numHandlerThreads; }
@@ -1201,7 +1201,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
 
     /**
      * Actual number of running BuildHandler threads.
-     * May differ from {@link #getBuildHandlerThreads()} if threads
+     * May differ from {@link #getBuildHandlerThreads} if threads
      * were interrupted or failed to start.
      * @return current build handler thread count
      * @since 0.9.70+
@@ -1307,7 +1307,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
 
         /**
          * Remove slow tunnels and reschedule.
-         * Per-pool cost is bounded by {@link TunnelPool#ensureSufficientTunnels()}
+         * Per-pool cost is bounded by {@link TunnelPool#ensureSufficientTunnels}
          * gates; this job itself runs on the configured interval (default 60s).
          * No global collapse bypass: recovery paths (ExpireJob, buildComplete,
          * emergency) already handle collapsed pools per-pool.
@@ -1443,7 +1443,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
      * Does not blame peers for the removal.
      * Removes all such tunnels per pool if pool has more tunnels than configured quantity,
      * but won't go below the configured quantity.
-     * Threshold is either the configured property (in ms), or Math.max(avg latency,
+     * Threshold is either the configured property (in ms), or {@link java.lang.Math#max}avg latency,
      * DEFAULT_MIN_SLOW_THRESHOLD), whichever is larger.
      * @return true if any tunnels were removed
      * @since 0.9.69+
@@ -1800,7 +1800,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
     BuildExecutor getExecutor() { return _executor; }
 
     /**
-     * Remove a tunnel from the expiration queue to prevent memory leak
+     * Remove a tunnel from the expiration queue to prevent memory leak.
      *
      * @param cfg the tunnel configuration to drop from the expiration queue
      */
@@ -1823,7 +1823,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
 
     /**
      * Size of the inbound build queue.
-     * @return size of the inbound build queue
+     * @return current number of queued inbound builds
      */
     public int getInboundBuildQueueSize() { return _handler.getInboundBuildQueueSize(); }
 
@@ -1879,7 +1879,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
      * tunnels out of the fast tier into high cap or beyond...)
      * <p>
      * Possible improvement - restrict based on count per IP, or IP block,
-     * to slightly increase costs of collusion
+     * to slightly increase costs of collusion.
      *
      * @return Set of peers that should not be allowed in another tunnel
      */
@@ -2073,7 +2073,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
     }
 
     /**
-     * For TunnelRenderer in router console
+     * For TunnelRenderer in router console.
      * @return the inbound exploratory pool, never null
      */
     public TunnelPool getInboundExploratoryPool() {
@@ -2081,7 +2081,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
     }
 
     /**
-     * For TunnelRenderer in router console
+     * For TunnelRenderer in router console.
      * @return the outbound exploratory pool, never null
      */
     public TunnelPool getOutboundExploratoryPool() {
@@ -2089,6 +2089,8 @@ public class TunnelPoolManager implements TunnelManagerFacade {
     }
 
     /**
+     * The client's inbound pool, creating it if needed.
+     *
      * @return pool or null
      * @since 0.9.34
      */
@@ -2097,6 +2099,8 @@ public class TunnelPoolManager implements TunnelManagerFacade {
     }
 
     /**
+     * The client's outbound pool, creating it if needed.
+     *
      * @return pool or null
      * @since 0.9.34
      */
@@ -2240,7 +2244,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
     }
 
     /**
-     * Fail all (outbound) tunnels with this peer as first hop (not counting us)
+     * Fail all (outbound) tunnels with this peer as first hop (not counting us).
      *
      * @since 0.8.13
      */
@@ -2261,7 +2265,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
     }
 
     /**
-     * Fail all (inbound) tunnels with this peer as last hop (not counting us)
+     * Fail all (inbound) tunnels with this peer as last hop (not counting us).
      *
      * @since 0.8.13
      */

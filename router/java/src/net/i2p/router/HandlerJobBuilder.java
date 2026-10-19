@@ -13,10 +13,10 @@ import net.i2p.data.i2np.I2NPMessage;
 import net.i2p.data.router.RouterIdentity;
 
 /**
- * Defines a class that builds jobs to handle a particular message - these
- * builders are registered with the InNetMessagePool for various I2NP message
- * types, allowing immediate queueing of a handler job rather than waiting for
- * a polling job to come pick it up.
+ * Builds jobs to handle a particular message type.
+ * Implementations are registered with the InNetMessagePool for various I2NP
+ * message types, allowing immediate queueing of a handler job rather than
+ * waiting for a polling job to come pick it up.
  *
  */
 public interface HandlerJobBuilder {

@@ -162,12 +162,12 @@ public final class ClientID {
                     "Deluge/2.2.0 libtorrent/2.0.13",
                     false,
                     "Deluge/2.2.0 libtorrent/2.0.13");
-    /** qBittorrent 5.2.3: mixed-case "-qB5230-" prefix, no OS/Java suffix. */
+    /** QBittorrent 5.2.3: mixed-case "-qB5230-" prefix, no OS/Java suffix. */
     public static final Profile QBITTORRENT =
             new Profile("qBittorrent", "-qB5230-", "qBittorrent/5.2.3", false, "qBittorrent/5.2.3");
     // Real libtorrent 2.x uses a lowercase -lt prefix we do not recognize, so
     // this profile pins the last fully-authentic 1.2.x identity instead.
-    /** libtorrent 1.2.19: the last fully-authentic 1.2.x identity. */
+    /** Libtorrent 1.2.19: the last fully-authentic 1.2.x identity. */
     public static final Profile LIBTORRENT =
             new Profile("libtorrent", "-LT1219-", "libtorrent/1.2.19", false, "libtorrent/1.2.19");
     // Tixati peer ID has no dashes; UA and handshake strings unverified.

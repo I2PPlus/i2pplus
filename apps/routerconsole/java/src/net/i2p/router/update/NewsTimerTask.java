@@ -107,7 +107,11 @@ class NewsTimerTask extends SimpleTimer2.TimedEvent {
                !NewsHelper.dontInstall(_context);
     }
 
-    /** @since 0.9.20 */
+    /**
+     * Whether dev SU3 fetching is enabled.
+     *
+     * @since 0.9.20
+     */
     private boolean shouldFetchDevSU3() {
         String url = _context.getProperty(ConfigUpdateHandler.PROP_DEV_SU3_URL);
         return url != null && !url.isEmpty() &&
@@ -116,7 +120,7 @@ class NewsTimerTask extends SimpleTimer2.TimedEvent {
     }
 
     /**
-     * Don't clog the scheduler when fetching the news
+     * Don't clog the scheduler when fetching the news.
      *
      * @since 0.9.9
      */

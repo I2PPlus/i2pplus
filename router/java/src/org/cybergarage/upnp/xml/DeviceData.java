@@ -36,11 +36,10 @@ import org.cybergarage.util.*;
  * <p>This class is used by UPnP devices to manage their description data and configuration,
  * enabling proper device advertisement and service discovery functionality.
  *
- * @author Satoshi Konno
  * @since 1.0
  */
 public class DeviceData extends NodeData {
-    /** Default constructor */
+    /** Creates an empty device data holder. */
     public DeviceData() {}
 
     ////////////////////////////////////////////////

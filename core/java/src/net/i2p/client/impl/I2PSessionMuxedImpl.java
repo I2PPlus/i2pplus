@@ -42,32 +42,31 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * protocol, same as before.
  * <p>
  * old datagram -&gt; new muxed: doesn't work because the old sends proto 0 but the udp side
- *                            of the mux registers with PROTO_DATAGRAM, so the datagrams
- *                            go to the streaming side, same as before.
+ * of the mux registers with PROTO_DATAGRAM, so the datagrams
+ * go to the streaming side, same as before.
  * old streaming -&gt; new muxed: works
  * <p>
  * Typical Usage:
  * Streaming + datagrams:
  * I2PSocketManager sockMgr = getSocketManager();
- *        I2PSession session = sockMgr.getSession();
- *        session.addMuxedSessionListener(myI2PSessionMuxedListener, I2PSession.PROTO_DATAGRAM, I2PSession.PORT_ANY);
- *         * or *
- *        session.addSessionListener(myI2PSessionListener, I2PSession.PROTO_DATAGRAM, I2PSession.PORT_ANY);
- *        session.sendMessage(dest, payload, I2PSession.PROTO_DATAGRAM, fromPort, toPort);
+ * I2PSession session = sockMgr.getSession();
+ * session.addMuxedSessionListener(myI2PSessionMuxedListener, I2PSession.PROTO_DATAGRAM, I2PSession.PORT_ANY);
+ * * or *
+ * session.addSessionListener(myI2PSessionListener, I2PSession.PROTO_DATAGRAM, I2PSession.PORT_ANY);
+ * session.sendMessage(dest, payload, I2PSession.PROTO_DATAGRAM, fromPort, toPort);
  * <p>
  * Datagrams only, with multiple ports:
- *        I2PClient client = I2PClientFactory.createClient();
- *        ...
- *        I2PSession session = client.createSession(...);
- *        session.addMuxedSessionListener(myI2PSessionMuxedListener, I2PSession.PROTO_DATAGRAM, I2PSession.PORT_ANY);
- *         * or *
- *        session.addSessionListener(myI2PSessionListener, I2PSession.PROTO_DATAGRAM, I2PSession.PORT_ANY);
- *        session.sendMessage(dest, payload, I2PSession.PROTO_DATAGRAM, fromPort, toPort);
+ * I2PClient client = {@link net.i2p.client.I2PClientFactory#createClient};
+ * ...
+ * I2PSession session = client.createSession(...);
+ * session.addMuxedSessionListener(myI2PSessionMuxedListener, I2PSession.PROTO_DATAGRAM, I2PSession.PORT_ANY);
+ * * or *
+ * session.addSessionListener(myI2PSessionListener, I2PSession.PROTO_DATAGRAM, I2PSession.PORT_ANY);
+ * session.sendMessage(dest, payload, I2PSession.PROTO_DATAGRAM, fromPort, toPort);
  * <p>
  * Multiple streaming ports:
- *        Needs some streaming lib hacking
+ * Needs some streaming lib hacking.
  *
- * @author zzz
  * @since 0.7.1
  */
 class I2PSessionMuxedImpl extends I2PSessionImpl2 {
@@ -491,27 +490,27 @@ class I2PSessionMuxedImpl extends I2PSessionImpl2 {
      *
      */
 
-    /** OS byte in gzip header */
+    /** OS byte in gzip header. */
     private static final int PROTO_BYTE = 9;
 
-    /** Upper two bytes of MTIME in gzip header */
+    /** Upper two bytes of MTIME in gzip header. */
     private static final int FROMPORT_BYTES = 4;
 
-    /** Lower two bytes of MTIME in gzip header */
+    /** Lower two bytes of MTIME in gzip header. */
     private static final int TOPORT_BYTES = 6;
 
-    /** Non-muxed sets the OS byte to 0xff */
+    /** Non-muxed sets the OS byte to 0xff. */
     private static int getProto(MessagePayloadMessage msg) {
         int rv = getByte(msg, PROTO_BYTE) & 0xff;
         return rv == 0xff ? PROTO_UNSPECIFIED : rv;
     }
 
-    /** Non-muxed sets the MTIME bytes to 0 */
+    /** Non-muxed sets the MTIME bytes to 0. */
     private static int getFromPort(MessagePayloadMessage msg) {
         return (((getByte(msg, FROMPORT_BYTES) & 0xff) << 8) | (getByte(msg, FROMPORT_BYTES + 1) & 0xff));
     }
 
-    /** Non-muxed sets the MTIME bytes to 0 */
+    /** Non-muxed sets the MTIME bytes to 0. */
     private static int getToPort(MessagePayloadMessage msg) {
         return (((getByte(msg, TOPORT_BYTES) & 0xff) << 8) | (getByte(msg, TOPORT_BYTES + 1) & 0xff));
     }

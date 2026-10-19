@@ -27,7 +27,6 @@ import java.util.*;
  * simultaneously, allowing subscribers to receive batched updates about service state variable
  * changes.
  *
- * @author Satoshi Konno
  * @since 1.0
  */
 public class PropertyList extends Vector<Property> {

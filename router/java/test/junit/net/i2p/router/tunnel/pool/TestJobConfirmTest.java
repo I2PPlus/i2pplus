@@ -69,7 +69,7 @@ public class TestJobConfirmTest {
 
     /**
      * The core of the gate.  Reusing the failed partner would make the
-     * confirming round prove nothing, so the same instance is rejected — even
+     * confirming round prove nothing, so the same instance is rejected. Even
      * though it is perfectly healthy, which is what makes this an identity
      * check rather than a status check.
      */

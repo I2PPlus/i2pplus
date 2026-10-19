@@ -4,7 +4,7 @@ import net.i2p.crypto.EncType;
 import net.i2p.data.PublicKey;
 
 /**
- * X25519 public key with identifier for next session key exchange in ratchet protocol
+ * X25519 public key with identifier for next session key exchange in ratchet protocol.
  *
  * @since 0.9.44
  */
@@ -91,6 +91,8 @@ class NextSessionKey extends PublicKey {
     }
 
     /**
+     * Equal if the ratchet and message number match.
+     *
      * @since 0.9.46
      */
     @Override

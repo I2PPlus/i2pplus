@@ -82,7 +82,6 @@ import java.util.Set;
  * - Revocation of an encrypted leaseset will explode.
  * - So having an included signature at all is pointless?
  *
- * @author jrandom
  */
 public class LeaseSet extends DatabaseEntry {
     /** Destination this LeaseSet is for. */
@@ -138,7 +137,7 @@ public class LeaseSet extends DatabaseEntry {
     }
 
     /**
-     * Same as getEarliestLeaseDate()
+     * Same as getEarliestLeaseDate().
      * @return milliseconds since the epoch of the earliest lease expiry
      */
     @Override
@@ -159,7 +158,7 @@ public class LeaseSet extends DatabaseEntry {
     }
 
     /**
-     * Warning - will be null for LS2 EncryptedLeaseSets if not decrypted
+     * Warning - will be null for LS2 EncryptedLeaseSets if not decrypted.
      *
      * @return Destination or null
      */
@@ -245,7 +244,7 @@ public class LeaseSet extends DatabaseEntry {
     /**
      * Record the local client that received this leaseset.
      * <p>
-     * As of 0.9.65, no longer sets receivedAsReply to true
+     * As of 0.9.65, no longer sets receivedAsReply to true.
      *
      * @param localClient may be null
      * @since 0.9.47
@@ -319,7 +318,7 @@ public class LeaseSet extends DatabaseEntry {
      * means it was published later)
      * <p>
      * Warning - do not use this for version comparison for LeaseSet2.
-     * Use LeaseSet2.getPublished() instead.
+     * Use {@link net.i2p.data.LeaseSet2#getPublished} instead.
      *
      * @return earliest end date of any lease in the set, or -1 if there are no leases
      */
@@ -373,7 +372,7 @@ public class LeaseSet extends DatabaseEntry {
 
     /**
      * Determine whether ANY lease is currently valid, at least within a given
-     * fudge factor
+     * fudge factor.
      *
      * @param fudge milliseconds fudge factor to allow between the current time
      * @return true if there are current leases, false otherwise
@@ -415,7 +414,7 @@ public class LeaseSet extends DatabaseEntry {
     }
 
     /**
-     * This does NOT validate the signature
+     * This does NOT validate the signature.
      *
      * @throws IllegalStateException if called more than once or Destination already set
      */
@@ -451,7 +450,7 @@ public class LeaseSet extends DatabaseEntry {
     }
 
     /**
-     * This does NOT validate the signature
+     * This does NOT validate the signature.
      */
     @Override
     public void writeBytes(OutputStream out) throws DataFormatException, IOException {
@@ -469,7 +468,7 @@ public class LeaseSet extends DatabaseEntry {
     }
 
     /**
-     * Number of bytes, NOT including signature
+     * Number of bytes, NOT including signature.
      *
      * @return the size in bytes
      */
@@ -551,13 +550,16 @@ public class LeaseSet extends DatabaseEntry {
     }
 
     /**
-     * - Put the {Gateway Hash, TunnelID} pairs for all the leases in a buffer
-     * - Pad with random data to a multiple of 16 bytes
-     * - Use the first part of the dest's public key as an IV
-     * - Encrypt
-     * - Pad with random data to a multiple of 36 bytes
-     * - Add an extra lease
-     * - Replace the Hash and TunnelID in each Lease
+     * Encrypts the lease set in seven steps.
+     * <ul>
+     * <li>Put the {Gateway Hash, TunnelID} pairs for all the leases in a buffer</li>
+     * <li>Pad with random data to a multiple of 16 bytes</li>
+     * <li>Use the first part of the dest's public key as an IV</li>
+     * <li>Encrypt</li>
+     * <li>Pad with random data to a multiple of 36 bytes</li>
+     * <li>Add an extra lease</li>
+     * <li>Replace the Hash and TunnelID in each Lease</li>
+     * </ul>
      */
     private void encryp(SessionKey key) throws DataFormatException, IOException {
         int size = _leases.size();
@@ -603,7 +605,7 @@ public class LeaseSet extends DatabaseEntry {
      * Decrypt the leases, except for the last one which is partially padding.
      * Store the new decrypted leases in a backing store,
      * and keep the original leases so that verify() still works and the
-     * encrypted leaseset can be sent on to others (via writeBytes())
+     * encrypted leaseset can be sent on to others (via writeBytes()).
      */
     private void decrypt(SessionKey key) throws DataFormatException, IOException {
         int size = _leases.size();

@@ -25,14 +25,13 @@ import net.i2p.util.EventDispatcher;
 import net.i2p.util.I2PAppThread;
 import net.i2p.util.PortMapper;
 
+// TODO: Consider extending I2PTunnelClient to reduce code duplication.
 /**
  * IRC client tunnel with DCC support and filtering.
- * <p>
- * TODO: Consider extending I2PTunnelClient to reduce code duplication.
- */
+*/
 public class I2PTunnelIRCClient extends I2PTunnelClientBase {
 
-    /** list of Destination objects that we point at */
+    /** List of Destination objects that we point at. */
     private final List<I2PSocketAddress> _addrs;
     // application should ping timeout before this
     private static final long DEFAULT_READ_TIMEOUT = 10 * (long) 60 * 1000;
@@ -114,7 +113,11 @@ public class I2PTunnelIRCClient extends I2PTunnelClientBase {
         notifyEvent("openIRCClientResult", "ok");
     }
 
-    /** @since 0.9.9 moved from constructor */
+    /**
+     * Parse the destination list from config.
+     *
+     * @since 0.9.9 moved from constructor
+     */
     private void buildAddresses(String destinations) {
         if (destinations == null)
             return;
@@ -263,7 +266,7 @@ public class I2PTunnelIRCClient extends I2PTunnelClientBase {
      */
     static final int IRC_CONNECT_MAX_ATTEMPTS = 4;
 
-    /** Backoff floor (ms) for I2P connect retries, doubling per attempt. @since 0.9.71+ */
+    /** Backoff floor (ms) for I2P connect retries, doubling per attempt. @since 0.9.71+. */
     static final long IRC_CONNECT_RETRY_BASE_DELAY = 1000;
 
     /**
@@ -271,7 +274,7 @@ public class I2PTunnelIRCClient extends I2PTunnelClientBase {
      * The first retry waits {@link #IRC_CONNECT_RETRY_BASE_DELAY} (1s), doubling
      * per attempt up to a hard cap of 8s. During a tunnel-pool stall the cap
      * lets the pool recover instead of hammering it, and the loop still fails
-     * fast once {@link #poolState()} reports a provably dead pool.
+     * fast once {@link #poolState} reports a provably dead pool.
      * Pure decision - no context access, safe for unit tests.
      *
      * @param attempt the 1-based connect failure count (how many failures so far)
@@ -298,7 +301,7 @@ public class I2PTunnelIRCClient extends I2PTunnelClientBase {
      *
      * @param failures the 1-based number of failed attempts so far
      * @param maxAttempts the total attempt budget, 1-based
-     * @param poolState the {@link #poolState()} value from the last failed attempt
+     * @param poolState the {@link #poolState} value from the last failed attempt
      * @param last the throwable from the last failed attempt
      * @return true if another attempt should be scheduled
      * @since 0.9.71+
@@ -338,7 +341,7 @@ public class I2PTunnelIRCClient extends I2PTunnelClientBase {
     /**
      * Instance gate for the clientConnectionRun retry loop: applies the static
      * budget, dead-pool and failure-classification rules with the current pool
-     * state ({@link #poolState()}).
+     * state ({@link #poolState}).
      *
      * @param failures the 1-based number of failed attempts so far
      * @param t the throwable from the last failed attempt
@@ -394,7 +397,7 @@ public class I2PTunnelIRCClient extends I2PTunnelClientBase {
     /**
      * Destination-list index for connect attempt {@code attempt} when rotating
      * round-robin: {@code base + attempt mod size}.  Attempt 0 uses the
-     * per-connection random start; each later attempt advances one slot, so
+     * per-connection random start. Each later attempt advances one slot, so
      * consecutive attempts always hit different targets (for size &gt; 1).
      * Pure decision - no context access, safe for unit tests.
      *
@@ -466,6 +469,8 @@ public class I2PTunnelIRCClient extends I2PTunnelClientBase {
     private final byte[] _localAddr;
 
     /**
+     * Creates DCC state with the local address.
+     *
      * @param local Our IP address, from the IRC client's perspective
      */
     public DCC(byte[] local) {
@@ -476,6 +481,8 @@ public class I2PTunnelIRCClient extends I2PTunnelClientBase {
     }
 
     /**
+     * Whether DCC handling is enabled.
+     *
      * @return true if the DCC option was set on this client
      */
     @Override
@@ -484,6 +491,8 @@ public class I2PTunnelIRCClient extends I2PTunnelClientBase {
     }
 
     /**
+     * Base32 hostname advertised in DCC offers.
+     *
      * @return the b32 hostname
      */
     public String getB32Hostname() {
@@ -491,6 +500,8 @@ public class I2PTunnelIRCClient extends I2PTunnelClientBase {
     }
 
     /**
+     * Local IP advertised in DCC offers.
+     *
      * @return the local address
      */
     public byte[] getLocalAddress() {

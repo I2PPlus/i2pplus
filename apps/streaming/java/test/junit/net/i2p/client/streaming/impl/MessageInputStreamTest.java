@@ -23,7 +23,7 @@ import java.util.Collections;
 import java.util.Properties;
 
 /**
- * Stress test the MessageInputStream
+ * Stress test the MessageInputStream.
  */
 public class MessageInputStreamTest {
 

@@ -20,9 +20,8 @@ import java.io.InputStream;
 import java.io.Serializable;
 
 /**
- * Base implementation of all data structures
+ * Base implementation of all data structures.
  *
- * @author jrandom
  */
 public abstract class DataStructureImpl implements DataStructure, Serializable {
     /**
@@ -84,7 +83,7 @@ public abstract class DataStructureImpl implements DataStructure, Serializable {
     }
 
     /**
-     * Repeated reads until buffer is full or IOException is thrown
+     * Repeated reads until buffer is full or IOException is thrown.
      *
      * @param in input stream to read from
      * @param target byte array to read into

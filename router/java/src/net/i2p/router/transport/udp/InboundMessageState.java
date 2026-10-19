@@ -194,7 +194,7 @@ class InboundMessageState implements CDQEntry {
 
     /**
      * The enqueue time.
-     * @return the enqueue time
+     * @return ms since epoch when the message was enqueued
      */
     public long getEnqueueTime() {
         synchronized(lock) {
@@ -217,7 +217,7 @@ class InboundMessageState implements CDQEntry {
 
     /**
      * The message ID.
-     * @return the message id
+     * @return the 64-bit SSU2 message id
      */
     public long getMessageId() { return _messageId; }
 

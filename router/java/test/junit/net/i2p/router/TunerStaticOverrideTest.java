@@ -21,7 +21,7 @@ import net.i2p.util.SystemVersion;
 
 /**
  * Contract tests for the "tuned value overrides config" statics added so the
- * Tuner no longer writes live-settable params back into router.config.
+ * Tuner no longer writes live-settable params back into {@code router.config}.
  *
  * <p>Each consumer exposes a {@code setX}/{@code getX(ctx, def)} pair that
  * returns the tuned value once set, and otherwise falls back to

@@ -32,7 +32,7 @@ class OutboundMessageState implements CDPQEntry {
     /** Sends for each fragment, or null if only one fragment. */
     private final byte[] _fragmentSends;
     private final long _startedOn;
-    /** Time of first fragment send (for network RTT measurement, excludes queue time) */
+    /** Time of first fragment send (for network RTT measurement, excludes queue time). */
     private volatile long _firstSendTime;
     private int _pushCount;
     private int _maxSends;
@@ -157,7 +157,7 @@ class OutboundMessageState implements CDPQEntry {
 
     /**
      * The message ID.
-     * @return the message id
+     * @return the unique ID of the I2NP message being tracked
      */
     public long getMessageId() { return _i2npMessage.getUniqueId(); }
 
@@ -435,7 +435,7 @@ class OutboundMessageState implements CDPQEntry {
 
     /**
      * The max number of sends for any fragment.
-     * As of 0.9.49, may be less than getPushCount() if we pushed only some fragments
+     * As of 0.9.49, may be less than getPushCount() if we pushed only some fragments.
      * @return the max sends
      */
     public synchronized int getMaxSends() { return _maxSends; }
@@ -539,7 +539,7 @@ class OutboundMessageState implements CDPQEntry {
 
     /**
      * The size in bytes of the fragment.
-     * Does NOT include any SSU overhead (SSU2 is 3 for all fragments, + 5 for followon fragments)
+     * Does NOT include any SSU overhead (SSU2 is 3 for all fragments, + 5 for followon fragments).
      *
      * @param fragmentNum the number of the fragment
      * @return the size of the fragment specified by the number
@@ -585,7 +585,7 @@ class OutboundMessageState implements CDPQEntry {
     }
 
     /**
-     * For CDQ
+     * For CDQ.
      * @since 0.9.3
      */
     @Override
@@ -594,7 +594,7 @@ class OutboundMessageState implements CDPQEntry {
     }
 
     /**
-     * For CDQ
+     * For CDQ.
      * @return the enqueue time
      * @since 0.9.3
      */
@@ -604,7 +604,7 @@ class OutboundMessageState implements CDPQEntry {
     }
 
     /**
-     * For CDQ
+     * For CDQ.
      * @since 0.9.3
      */
     @Override
@@ -613,7 +613,7 @@ class OutboundMessageState implements CDPQEntry {
     }
 
     /**
-     * For CDPQ
+     * For CDPQ.
      * @since 0.9.3
      */
     @Override
@@ -622,7 +622,7 @@ class OutboundMessageState implements CDPQEntry {
     }
 
     /**
-     * For CDPQ
+     * For CDPQ.
      * @return the seq num
      * @since 0.9.3
      */
@@ -631,7 +631,7 @@ class OutboundMessageState implements CDPQEntry {
     }
 
     /**
-     * For CDPQ
+     * For CDPQ.
      * @return OutNetMessage priority or 1000 for injected
      * @since 0.9.3
      */

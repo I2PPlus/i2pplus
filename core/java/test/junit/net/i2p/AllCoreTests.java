@@ -12,9 +12,6 @@ package net.i2p;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
-/**
- * @author str4d
- */
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
     net.i2p.client.I2PClientTestSuite.class,

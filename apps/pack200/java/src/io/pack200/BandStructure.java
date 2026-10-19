@@ -53,7 +53,6 @@ import java.util.Map;
 
 /**
  * Define the structure and ordering of "bands" in a packed file.
- * @author John Rose
  */
 abstract
 class BandStructure {

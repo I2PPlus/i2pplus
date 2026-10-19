@@ -21,7 +21,7 @@ import net.i2p.util.SystemVersion;
  * an actual pool of packet handler threads, each pulling off the inbound
  * receiver's queue and pushing them as necessary.
  * <p>
- * Supports dynamic thread count adjustment via {@link #adjustThreads()}.
+ * Supports dynamic thread count adjustment via {@link #adjustThreads}.
  * @since 0.9.14 (dynamic resizing since 0.9.70+)
  */
 class PacketHandler {
@@ -85,7 +85,7 @@ class PacketHandler {
 
     /**
      * The target max packet handler threads.
-     * Takes effect immediately via {@link #adjustThreads()}.
+     * Takes effect immediately via {@link #adjustThreads}.
      *
      * @param handlers the new max handlers
      * @since 0.9.70+
@@ -196,7 +196,7 @@ class PacketHandler {
     }
 
     /**
-     * Blocking for a while
+     * Blocking for a while.
      */
     private void stopQueue() {
         _inboundQueue.clear();
@@ -277,7 +277,7 @@ class PacketHandler {
          * <li>Established session
          * <li>Pending inbound establishment
          * <li>Pending outbound establishment
-         * <li>No established or pending session found
+         * <li>No established or pending session found.
          * </ol>
          */
         private void handlePacket(UDPPacket packet) {
@@ -325,7 +325,7 @@ class PacketHandler {
      * Session Confirmed that was lost, or in-order but before the Session Confirmed was processed,
      * will handed to the state to be queued for deferred handling.
      * <p>
-     * Min packet data size: 56 (token request) if state is null; 40 (data) if state is non-null
+     * Min packet data size: 56 (token request) if state is null; 40 (data) if state is non-null.
      *
      * @param state must be version 2, but will be null for session request unless retransmitted
      * @return true if the header was validated as a SSU2 packet, cannot fallback to SSU 1
@@ -500,7 +500,7 @@ class PacketHandler {
      * <p>
      * Possible messages here are Session Created or Retry
      * <p>
-     * Min packet data size: 56 (retry)
+     * Min packet data size: 56 (retry).
      *
      * @param state must be version 2, non-null
      * @return true if the header was validated as a SSU2 packet, cannot fallback to SSU 1

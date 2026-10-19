@@ -37,7 +37,6 @@ import java.util.Map;
  * Define the conversions between sequences of small integers and raw bytes.
  * This is a schema of encodings which incorporates varying lengths,
  * varying degrees of length variability, and varying amounts of signed-ness.
- * @author John Rose
  */
 class Coding implements Comparable<Coding>, CodingMethod, Histogram.BitMetric {
     /*

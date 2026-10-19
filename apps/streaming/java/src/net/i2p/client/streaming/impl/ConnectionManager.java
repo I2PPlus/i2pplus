@@ -45,11 +45,11 @@ class ConnectionManager {
     private final ConnectionPacketHandler _conPacketHandler;
     private final TCBShare _tcbShare;
     private final IncomingConnectionFilter _connectionFilter;
-    /** Inbound stream ID (Long) to Connection map */
+    /** Inbound stream ID (Long) to Connection map. */
     private final ConcurrentHashMap<Long, Connection> _connectionByInboundId;
-    /** Outbound stream ID (Long) to Connection map — reverse index for O(1) lookup */
+    /** Outbound stream ID (Long) to Connection map — reverse index for O(1) lookup. */
     private final ConcurrentHashMap<Long, Connection> _connectionByOutboundId;
-    /** Ping ID (Long) to PingRequest */
+    /** Ping ID (Long) to PingRequest. */
     private final ConcurrentHashMap<Long, PingRequest> _pendingPings;
     private volatile boolean _throttlersInitialized;
     private final ConnectionOptions _defaultOptions;
@@ -112,7 +112,7 @@ class ConnectionManager {
     /**
      * Max idle time before a pooled stream is closed and evicted.
      * Default 20s — balances reuse vs staleness.
-     * Tunable via i2p.streaming.poolMaxIdleMs.
+     * Tunable via {@code i2p.streaming.poolMaxIdleMs}.
      * @return the pool max idle ms
      */
     private long getPoolMaxIdleMs() {
@@ -122,7 +122,7 @@ class ConnectionManager {
     /**
      * Max pooled streams per destination.
      * Default 8 — limits memory per peer.
-     * Tunable via i2p.streaming.poolMaxPerDestination.
+     * Tunable via {@code i2p.streaming.poolMaxPerDestination}.
      * @return the pool max per destination
      */
     private int getPoolMaxPerDestination() {
@@ -134,7 +134,7 @@ class ConnectionManager {
      * Disabled by default — pooled connections retain stale remote state
      * that causes zero-data-flow after reuse. Enable only with proper
      * connection state reset.
-     * Tunable via i2p.streaming.streamPool.enabled (default: false).
+     * Tunable via {@code i2p.streaming.streamPool.enabled} (default: false).
      * @return whether pool enabled
      */
     private boolean isPoolEnabled() {
@@ -143,7 +143,7 @@ class ConnectionManager {
 
     /**
      * Cooldown between connection attempts to the same failed destination.
-     * Tunable via i2p.streaming.destinationCooldownMs (default: 5000).
+     * Tunable via {@code i2p.streaming.destinationCooldownMs} (default: 5000).
      * @return the dest cooldown ms
      */
     private long getDestCooldownMs() {
@@ -174,7 +174,7 @@ class ConnectionManager {
 
     /**
      * Sample periods for the stream-close retransmission ratios. The five
-     * minute period is mandatory, not cosmetic: Tuner.getAdditionalStat5Min()
+     * minute period is mandatory, not cosmetic: {@code Tuner.getAdditionalStat5Min()}
      * reads exactly FIVE_MINUTES from both stats to measure routing
      * congestion, and a RateStat without that period makes addRateData()
      * silently drop those samples, leaving the tuner with NaN forever.
@@ -219,11 +219,11 @@ class ConnectionManager {
 
     /**
      * Temporary bans keyed by destination hash -> bannedUntil epoch ms.
-     * Autoban hammering dests for 24h (or i2p.streaming.tempBanMinutes).
+     * Autoban hammering dests for 24h (or {@code i2p.streaming.tempBanMinutes}).
      * Enforced in shouldRejectConnection() before the port/budget counters so a
      * banned dest no longer consumes its per-dest budget or per-peer throttlers.
      * Expired entries
-     * are removed by BanExpiry. @since 0.9.71+
+     * are removed by BanExpiry. @since 0.9.71+.
      */
     private final ConcurrentHashMap<Hash, Long> _tempBanUntil = new ConcurrentHashMap<>();
 
@@ -252,7 +252,7 @@ class ConnectionManager {
      * check-and-reserve, so two SYNs racing the gate cannot both observe "room
      * left") and released through {@link #_streamReservations} so a teardown
      * cannot double-count. Shrunk toward the live table by {@link BanExpiry}
-     * only after the same excess is seen twice. @since 0.9.71+
+     * only after the same excess is seen twice. @since 0.9.71+.
      */
     private final ConcurrentHashMap<Hash, AtomicInteger> _streamsByDest = new ConcurrentHashMap<>();
 
@@ -265,7 +265,7 @@ class ConnectionManager {
      * token, not the connection's remote peer, is the source of truth on
      * teardown, so a connection torn down before its peer was ever learned
      * (or one whose dest hash is expensive to recompute) still returns its
-     * slot to the right budget. @since 0.9.71+
+     * slot to the right budget. @since 0.9.71+.
      */
     private final ConcurrentHashMap<Long, Hash> _streamReservations = new ConcurrentHashMap<>(32);
 
@@ -291,9 +291,9 @@ class ConnectionManager {
     private final ReentrantReadWriteLock _admissionLock = new ReentrantReadWriteLock();
 
     /**
-     * The sweeper owned by this manager. Held so {@link #shutdown()} can stop
+     * The sweeper owned by this manager. Held so {@link #shutdown} can stop
      * it: a fired-and-cancelled TimedEvent would otherwise re-arm itself from
-     * inside timeReached(), outliving the manager it reads. @since 0.9.71+
+     * inside timeReached(), outliving the manager it reads. @since 0.9.71+.
      */
     private volatile BanExpiry _banExpiry;
 
@@ -301,8 +301,8 @@ class ConnectionManager {
      * Per-destination burst state for the sub-second SYN gate: value is a two-element
      * array {burstStartMs, count}, updated at most once per validated SYN via
      * compare-and-swap (replace). A dest that quiesces naturally falls out of the
-     * next window; no per-dest entries accumulate beyond one array, so this is bounded
-     * and cheap on the hot path. Reset per-dest by the SYN-rate sweeper. @since 0.9.71+
+     * next window. No per-dest entries accumulate beyond one array, so this is bounded
+     * and cheap on the hot path. Reset per-dest by the SYN-rate sweeper. @since 0.9.71+.
      */
     private final ConcurrentHashMap<Hash, long[]> _recentSyns = new ConcurrentHashMap<>();
 
@@ -364,12 +364,12 @@ class ConnectionManager {
 
     /**
      * Autoban property: a dest is temporarily banned until this many minutes after
-     * it first trips a flood threshold. Default 5 minutes — short enough that
+     * it first trips a flood threshold. Default 5 minutes. Short enough that
      * a legitimate client's retry window (30s connect timeout) overlaps with
      * the ban expiry, so retries succeed on the next attempt.  The previous
      * 24-hour default was far too aggressive: a burst of page-load SYNs from
      * a browser (local or remote) could ban a peer for an entire day.
-     * Tunable via i2p.streaming.tempBanMinutes. 0 disables autoban. @since 0.9.71+
+     * Tunable via {@code i2p.streaming.tempBanMinutes}. 0 disables autoban. @since 0.9.71+.
      */
     public static final String PROP_TEMP_BAN_MINUTES = "i2p.streaming.tempBanMinutes";
     private static final long DEFAULT_TEMP_BAN_MINUTES = 5;
@@ -379,7 +379,7 @@ class ConnectionManager {
      * 0 disables (no new bans are recorded and the SYN flood gates do not
      * strike or drop); nonzero enables. Default on. The BanExpiry sweeper runs
      * regardless, so per-dest gate state stays bounded and the cached autoban
-     * config keeps refreshing while enforcement is off. @since 0.9.71+
+     * config keeps refreshing while enforcement is off. @since 0.9.71+.
      */
     public static final String PROP_AUTOBAN = "i2p.streaming.autoban";
     private static final int DEFAULT_AUTOBAN = -1;
@@ -387,7 +387,7 @@ class ConnectionManager {
     /**
      * Autoban property: refusals from a single dest within a one-minute window
      * (as counted by _refusalCounter) at which the dest is auto-banned.
-     * Tunable via i2p.streaming.tempBanRefusals. @since 0.9.71+
+     * Tunable via {@code i2p.streaming.tempBanRefusals}. @since 0.9.71+.
      */
     public static final String PROP_TEMP_BAN_REFUSALS = "i2p.streaming.tempBanRefusals";
     private static final long DEFAULT_TEMP_BAN_REFUSALS = 100;
@@ -428,7 +428,7 @@ class ConnectionManager {
      * high-legitimate-traffic router, or set {@link #PROP_AUTOBAN} 0 to turn
      * off autoban entirely (which also disables the refusal-based ban).
      * <p>Values below 2 are raised to 2: a single window must never ban alone.
-     * Tunable via i2p.streaming.tempBanStrikes.
+     * Tunable via {@code i2p.streaming.tempBanStrikes}.
      * @since 0.9.71+
      */
     public static final String PROP_TEMP_BAN_STRIKES = "i2p.streaming.tempBanStrikes";
@@ -1084,7 +1084,7 @@ class ConnectionManager {
      * reaches {@link #receiveConnection(Packet)} (and thus never passes the
      * {@link #checkSynBurst(Hash, long, boolean)} gate at the top of that method). An
      * attacker exploits that by planting a handful of half-open connections and
-     * then blasting retransmitted SYNs against them; without this gate every hit
+     * then blasting retransmitted SYNs against them. Without this gate every hit
      * makes {@code ConnectionHandler.resendSynAck} mint and enqueue a fresh
      * SYN-ACK, consuming CPU and egress, and the connection never establishes.
      * <p>This routes the retransmit through the <em>same</em> per-destination
@@ -1098,7 +1098,7 @@ class ConnectionManager {
      * @param h remote dest hash, non-null
      * @param now current clock time
      * @return true if this SYN should be dropped (dest already temp-banned, or
-     *         this SYN is a second distinct burst strike and just banned it)
+     * this SYN is a second distinct burst strike and just banned it)
      * @since 0.9.71+
      */
     boolean checkInboundSynFlood(Hash h, long now) {
@@ -1140,7 +1140,7 @@ class ConnectionManager {
     /**
      * The cap to <em>report</em> in refusal log messages: the Tuner's current
      * override when it has armed one, otherwise the user-configured ceiling.
-     * <p>This deliberately differs from {@link #getEffectiveMaxStreams()}, which
+     * <p>This deliberately differs from {@link #getEffectiveMaxStreams}, which
      * min's the override against the user ceiling and is the real enforcement
      * limit at the per-destination stream budget gate
      * ({@link #reserveStreamSlot(ConcurrentHashMap, Hash, int)}).
@@ -1160,7 +1160,7 @@ class ConnectionManager {
     }
 
     /**
-     * Maximum ping timeout. Tunable via i2p.streaming.maxPingTimeout (default: 300000).
+     * Maximum ping timeout. Tunable via {@code i2p.streaming.maxPingTimeout} (default: 300000).
      * @return the max ping timeout
      */
     private long getMaxPingTimeout() {
@@ -1171,14 +1171,18 @@ class ConnectionManager {
 
     /**
      * Once over throttle limits, respond this many times before just dropping.
-     * Tunable via i2p.streaming.dropOverLimit (default: 3).
+     * Tunable via {@code i2p.streaming.dropOverLimit} (default: 3).
      * @return the drop over limit
      */
     private int getDropOverLimit() {
         return _context.getProperty("i2p.streaming.dropOverLimit", 3);
     }
 
-    /** @since 0.9.54+ */
+    /**
+     * Config key enabling the PONG response delay.
+     *
+     * @since 0.9.54+
+     */
     private static final String PROP_ENABLE_PONG_DELAY = "i2p.streaming.enablePongDelay";
     private static final boolean DEFAULT_ENABLE_PONG_DELAY = false;
     private static final int MAX_PONG_DELAY = 50;
@@ -1203,7 +1207,7 @@ class ConnectionManager {
          "</body>\n" +
          "</html>";
     /**
-     * Manage all conns for this session
+     * Manage all conns for this session.
      *
      * @param context the I2P app context
      * @param session the primary session, packets may come in on subsessions also
@@ -1359,7 +1363,7 @@ class ConnectionManager {
     }
 
     /**
-     * Update the throttler options
+     * Update the throttler options.
      *
      * @since 0.9.3
      */
@@ -1680,12 +1684,12 @@ class ConnectionManager {
      * <p>Pure decision helper (extracted from {@code receiveConnection}):
      * the "reset" limit action, an empty action, and port 443 (the synth
      * HTTPS over I2P port, which must not be tricked into a text payload)
-     * all produce a plain RESET; "http" produces an HTTP Retry-After body;
+     * all produce a plain RESET. "http" produces an HTTP Retry-After body;
      * anything else is echoed verbatim after normalizing {@code \r}/\code{n}
      * escape sequences. HTTPS (443) always stacks the port check too, per RFC-compliant
      * servers that disregard limit responses on that port.
      *
-     * @param limitAction the configured i2p.streaming.limitAction value, may be null
+     * @param limitAction the configured {@code i2p.streaming.limitAction} value, may be null
      * @param retryAfter seconds for the Retry-After header, or 0 to omit it
      * @param sslPort true if the SYN arrived on local port 443
      * @return the response payload, or null for a RESET
@@ -1732,9 +1736,9 @@ class ConnectionManager {
      *
      * @param con null if unknown
      * @param ping Ping packet to process, must have From and Sig fields,
-     *             with signature already verified, only if answerPings() returned true
+     * with signature already verified, only if answerPings() returned true
      * @return true if we sent a pong
-     * @since 0.9.12 from PacketHandler.receivePing()
+     * @since 0.9.12 from {@code PacketHandler.receivePing()}
      */
     public boolean receivePing(Connection con, Packet ping) {
         Destination dest = ping.getOptionalFrom();
@@ -1865,7 +1869,7 @@ class ConnectionManager {
 
     /**
      * Default stream delay maximum when no connect timeout is set.
-     * Tunable via i2p.streaming.defaultStreamDelayMax (default: 10000).
+     * Tunable via {@code i2p.streaming.defaultStreamDelayMax} (default: 10000).
      * @return the default stream delay max
      */
     private long getDefaultStreamDelayMax() {
@@ -2290,7 +2294,7 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
     public PacketHandler getPacketHandler() { return _packetHandler; }
 
     /**
-     * This is the primary session only
+     * This is the primary session only.
      *
      * @return the primary session passed to the constructor, not a subsession
      */
@@ -2610,7 +2614,7 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
 
     /**
      * Publish a closing connection's lifetime counters. Called once per stream
-     * from Connection.disconnectComplete(), which is the single funnel every
+     * from {@link net.i2p.client.streaming.impl.Connection#disconnectComplete}, which is the single funnel every
      * teardown goes through — deliberately not gated on whether the dispatch
      * table still held the connection. A hard-killed or already-unlinked stream
      * would otherwise silently lose every lifetime stat, and with them the
@@ -2983,7 +2987,7 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
      * Live connection count per dest, preferring the reservation token (the
      * dest that was actually charged at admission) and falling back to the
      * connection's remote peer for anything bound outside the protocol.
-     * Built per sweep; a dest with no live connection is simply absent.
+     * Built per sweep. A dest with no live connection is simply absent.
      *
      * @return observed stream count per dest, never null
      * @since 0.9.71+
@@ -3036,10 +3040,10 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
 
         /**
          * Set by stop(); blocks both further sweeps and, critically, the
-         * self re-arm at the end of timeReached(). TimedEvent.schedule()
+         * self re-arm at the end of timeReached(). {@code TimedEvent.schedule()}
          * unconditionally clears _cancelAfterRun, so a bare cancel() racing
          * a sweep that had already started would be undone by that
-         * re-arming schedule() — the event would fire again on a shut-down
+         * re-arming schedule(). The event would fire again on a shut-down
          * manager. Reading the flag makes shutdown sticky either way.
          */
         private volatile boolean _stopped;
@@ -3052,7 +3056,7 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
         /**
          * Shut this sweeper down permanently: cancel the pending run and
          * prevent timeReached() from re-arming itself. Called from
-         * ConnectionManager.shutdown(), which owns this instance.
+         * {@link net.i2p.client.streaming.impl.ConnectionManager#shutdown}, which owns this instance.
          * @since 0.9.71+
          */
         void stop() {
@@ -3061,7 +3065,7 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
         }
 
         /**
-         * Whether {@link #stop()} has been called.
+         * Whether {@link #stop} has been called.
          * @return true once stopped
          * @since 0.9.71+
          */
@@ -3220,6 +3224,8 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
     }
 
     /**
+     * Connection summary for log messages.
+     *
      * @since 0.9.21
      */
     @Override

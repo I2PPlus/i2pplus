@@ -84,6 +84,8 @@ class TransientDataStore implements DataStore {
     public void rescan() { /* No-op - in-memory store has no external state to rescan */ }
 
     /**
+     * Entries currently stored.
+     *
      * @return total size (RI and LS)
      * @since 0.8.8
      */
@@ -91,6 +93,8 @@ class TransientDataStore implements DataStore {
     public int size() {return _data.size();}
 
     /**
+     * Keys of all stored entries.
+     *
      * @return Unmodifiable view, not a copy
      */
     @Override
@@ -99,6 +103,8 @@ class TransientDataStore implements DataStore {
     }
 
     /**
+     * All stored entries.
+     *
      * @return Unmodifiable view, not a copy
      * @since 0.8.3
      */
@@ -108,6 +114,8 @@ class TransientDataStore implements DataStore {
     }
 
     /**
+     * All stored entries as key-value pairs.
+     *
      * @return Unmodifiable view, not a copy
      * @since 0.8.3
      */
@@ -165,9 +173,11 @@ class TransientDataStore implements DataStore {
     }
 
     /**
+     * Store an entry, replacing any previous one for the key.
+     *
      * @param data must be validated before here
      * @return true only if the entry was stored; false for null data, a
-     *         banned RouterInfo, or an entry older than the one held
+     * banned RouterInfo, or an entry older than the one held
      */
     public boolean put(Hash key, DatabaseEntry data) {
         if (data == null) return false;

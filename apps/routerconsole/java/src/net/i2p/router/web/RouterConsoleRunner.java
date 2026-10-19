@@ -119,7 +119,7 @@ public class RouterConsoleRunner implements RouterApp {
     public static final String PROP_CONSOLE_PW = "routerconsole.auth." + JETTY_REALM;
     /** Property name for enabling console authentication. */
     public static final String PROP_PW_ENABLE = "routerconsole.auth.enable";
-    /** from Jetty Credential.java */
+    /** From Jetty Credential.java. */
     private static final String MD5_CREDENTIAL_TYPE = "MD5:";
 
     /** Name of the root console webapp. */
@@ -150,20 +150,22 @@ public class RouterConsoleRunner implements RouterApp {
     /** Property name for hosts allowed to access the console. */
     static final String PROP_ALLOWED_HOSTS = "routerconsole.allowedHosts";
     /**
-     * Accepts every .war file in the webapps directory except routerconsole.war,
+     * Accepts every .war file in the webapps directory except {@code routerconsole.war},
      * which is the root context rather than a plugin webapp.
      * @since 0.9.34
      */
     static final FileFilter WAR_FILTER = new WarFilenameFilter();
 
     /**
+     * Construct and start the console, parsing command-line arguments.
+     * Usage:
      * <pre>
      *  non-SSL:
      *  RouterConsoleRunner
      *  RouterConsoleRunner 7657
      *  RouterConsoleRunner 7657 127.0.0.1
      *  RouterConsoleRunner 7657 127.0.0.1,::1
-     *  RouterConsoleRunner 7657 127.0.0.1,::1 ./webapps/
+     *  RouterConsoleRunner 7657 127.0.0.1,::1 ./webapps/.
      *
      * SSL:
      *  RouterConsoleRunner -s 7657
@@ -181,11 +183,11 @@ public class RouterConsoleRunner implements RouterApp {
      * @param ctx the router context
      * @param mgr the client app manager to register with, or null for a standalone run
      * @param args second arg may be a comma-separated list of bind addresses,
-     *             for example ::1,127.0.0.1
-     *             On XP, the other order (127.0.0.1,::1) fails the IPV6 bind,
-     *             because 127.0.0.1 will bind ::1 also. But even though it's bound
-     *             to both, we can't connect to [::1]:7657 for some reason.
-     *             So the wise choice is ::1,127.0.0.1
+     * for example ::1,127.0.0.1
+     * On XP, the other order (127.0.0.1,::1) fails the IPV6 bind,
+     * because 127.0.0.1 will bind ::1 also. But even though it's bound
+     * to both, we can't connect to [::1]:7657 for some reason.
+     * So the wise choice is ::1,127.0.0.1
      */
     public RouterConsoleRunner(RouterContext ctx, ClientAppManager mgr, String[] args) {
         _context = ctx;
@@ -246,6 +248,8 @@ public class RouterConsoleRunner implements RouterApp {
     /////// ClientApp methods
 
     /**
+     * Start the console web server.
+     *
      * @since 0.9.4
      */
     @Override
@@ -258,6 +262,8 @@ public class RouterConsoleRunner implements RouterApp {
     }
 
     /**
+     * Stop the console web server.
+     *
      * @since 0.9.4
      */
     @Override
@@ -292,6 +298,8 @@ public class RouterConsoleRunner implements RouterApp {
     }
 
     /**
+     * Current console state.
+     *
      * @since 0.9.4
      */
     @Override
@@ -300,6 +308,8 @@ public class RouterConsoleRunner implements RouterApp {
     }
 
     /**
+     * The console's internal name.
+     *
      * @since 0.9.4
      */
     @Override
@@ -308,6 +318,8 @@ public class RouterConsoleRunner implements RouterApp {
     }
 
     /**
+     * The console's display name.
+     *
      * @since 0.9.4
      */
     @Override
@@ -357,7 +369,7 @@ public class RouterConsoleRunner implements RouterApp {
     }
 
     /**
-     * Package private for ConfigServiceHandler
+     * Package private for ConfigServiceHandler.
      * @param context the context to read the desktopgui.enabled property from
      * @return true if the desktop GUI tray icon is enabled, false if not or on a headless box
      * @since 0.9.48 pulled out of startTrayApp
@@ -389,7 +401,11 @@ public class RouterConsoleRunner implements RouterApp {
         }
     }
 
-    /** @since 0.9.17 */
+    /**
+     * Warn if the JVM is too old.
+     *
+     * @since 0.9.17
+     */
     private void checkJavaVersion() {
         boolean noJava8 = !SystemVersion.isJava8();
         boolean openARM = SystemVersion.isARM() && SystemVersion.isOpenJDK() && !SystemVersion.isJava9();
@@ -1115,7 +1131,7 @@ public class RouterConsoleRunner implements RouterApp {
     }
 
     /**
-     * For logging authentication failures
+     * For logging authentication failures.
      * @since 0.9.28
      */
     private static class CustomHashLoginService extends HashLoginService {
@@ -1136,7 +1152,11 @@ public class RouterConsoleRunner implements RouterApp {
         }
     }
 
-    /** @since 0.8.8 */
+    /**
+     * Stops the web server when the router shuts down.
+     *
+     * @since 0.8.8
+     */
     private class ServerShutdown implements Runnable {
         @Override
         public void run() {
@@ -1199,7 +1219,7 @@ public class RouterConsoleRunner implements RouterApp {
     }
 
     /**
-     * Stops all but the root webapp (routerconsole.war)
+     * Stops all but the root webapp ({@code routerconsole.war})
      * In Jetty 9, stopping the server doesn't stop the non-root webapps,
      * so we must do it here.
      * There should be a better way to do this, possibly by
@@ -1243,7 +1263,7 @@ public class RouterConsoleRunner implements RouterApp {
     }
 
     /**
-     * Put IPv4 first
+     * Put IPv4 first.
      * @since 0.9.24
      */
     private static class HostComparator implements Comparator<String>, Serializable {

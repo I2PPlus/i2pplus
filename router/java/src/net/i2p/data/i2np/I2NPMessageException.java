@@ -11,14 +11,13 @@ package net.i2p.data.i2np;
 import net.i2p.I2PException;
 
 /**
- * Represent an error serializing or deserializing an APIMessage
+ * Represent an error serializing or deserializing an APIMessage.
  *
- * @author jrandom
  */
 public class I2NPMessageException extends I2PException {
 
     /**
-     * Create an exception with a message and cause
+     * Create an exception with a message and cause.
      *
      * @param message the detail message
      * @param parent the cause of the failure, may be null
@@ -28,7 +27,7 @@ public class I2NPMessageException extends I2PException {
     }
 
     /**
-     * Create an exception with a message
+     * Create an exception with a message.
      *
      * @param message the detail message
      */

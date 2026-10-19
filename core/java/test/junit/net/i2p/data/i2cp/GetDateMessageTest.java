@@ -12,9 +12,8 @@ package net.i2p.data.i2cp;
 import net.i2p.data.DataFormatException;
 
 /**
- * Test harness for loading / storing GetDateMessage objects
+ * Test harness for loading / storing GetDateMessage objects.
  *
- * @author str4d
  */
 public class GetDateMessageTest extends I2CPTstBase {
     @Override

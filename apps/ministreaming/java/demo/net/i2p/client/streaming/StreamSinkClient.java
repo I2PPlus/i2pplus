@@ -123,12 +123,12 @@ public class StreamSinkClient {
     }
 
     /**
-     * Fire up the client.  <code>Usage: StreamSinkClient [i2cpHost i2cpPort] sendSizeKB writeDelayMs serverDestFile [concurrentSends]</code> <br>
+     * Fire up the client.  <code>Usage: StreamSinkClient [i2cpHost i2cpPort] sendSizeKB writeDelayMs serverDestFile [concurrentSends].</code> <br>
      * <ul>
-     *  <li><b>sendSizeKB</b>: how many KB to send, or -1 for unlimited</li>
-     *  <li><b>writeDelayMs</b>: how long to wait between each .write (0 for no delay)</li>
-     *  <li><b>serverDestFile</b>: file containing the StreamSinkServer's binary Destination</li>
-     *  <li><b>concurrentSends</b>: how many concurrent threads should send to the server at once</li>
+     * <li><b>sendSizeKB</b>: how many KB to send, or -1 for unlimited</li>
+     * <li><b>writeDelayMs</b>: how long to wait between each .write (0 for no delay)</li>
+     * <li><b>serverDestFile</b>: file containing the StreamSinkServer's binary Destination</li>
+     * <li><b>concurrentSends</b>: how many concurrent threads should send to the server at once</li>
      * </ul>
      * @param args [i2cpHost i2cpPort] sendSizeKB writeDelayMs serverDestFile [concurrentSends]
      */

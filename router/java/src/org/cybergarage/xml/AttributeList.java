@@ -13,7 +13,6 @@ import java.util.Vector;
  * <p>This class extends Vector to provide specialized methods for managing collections of Attribute
  * objects. It includes methods for finding attributes by name.
  *
- * @author Satoshi Konno
  * @since 1.0
  */
 public class AttributeList extends Vector<Attribute> {

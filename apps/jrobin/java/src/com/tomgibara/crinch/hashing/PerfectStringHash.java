@@ -1,17 +1,17 @@
 /*
-* Copyright 2010 Tom Gibara
+     Copyright 2010 Tom Gibara
 *
-* Licensed under the Apache License, Version 2.0 (the "License");
-* you may not use this file except in compliance with the License.
-* You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License");
+  * you may not use this file except in compliance with the License.
+   * You may obtain a copy of the License at
 *
-*     http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
 
-* Unless required by applicable law or agreed to in writing, software
-* distributed under the License is distributed on an "AS IS" BASIS,
-* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-* See the License for the specific language governing permissions and
-* limitations under the License.
+  * Unless required by applicable law or agreed to in writing, software
+   * distributed under the License is distributed on an "AS IS" BASIS,
+    * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     * See the License for the specific language governing permissions and
+      * limitations under the License.
 *
 */
 package com.tomgibara.crinch.hashing;
@@ -38,7 +38,6 @@ import java.util.Comparator;
  * <p><strong>NOTE:</strong> Good performance of this algorithm is predicated on string hash values
  * being cached by the <code>String</code> class. Experience indicates that is is a good assumption.
  *
- * @author Tom Gibara
  */
 public class PerfectStringHash implements Hash<String> {
 
@@ -237,9 +236,9 @@ public class PerfectStringHash implements Hash<String> {
         return BigInteger.valueOf(hash(value));
     }
 
-    // TODO decide whether to throw an IAE if -1 is returned from hash
     @Override
     public int hashAsInt(String value) {
+        // TODO decide whether to throw an IAE if -1 is returned from hash
         return hash(value);
     }
 

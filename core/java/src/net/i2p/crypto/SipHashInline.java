@@ -22,13 +22,17 @@ package net.i2p.crypto;
  * <p>
  * I2P mods: add off/len version
  * <p>
- * For constant keys see net.i2p.util.SipHash
+ * For constant keys see net.i2p.util.SipHash.
  *
  * @since 0.9.5, Moved to net.i2p.crypto and public since 0.9.27
  */
 public final class SipHashInline {
 
-    /** @since 0.9.27 */
+    /**
+     * Static class, no instances.
+     *
+     * @since 0.9.27
+     */
     private SipHashInline() {}
 
     /**

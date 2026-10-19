@@ -54,7 +54,7 @@ public class HostCheckHandler extends AbstractHandler {
     }
 
     /**
-     * Unused, we can't get here from RunStandalone
+     * Unused, we can't get here from RunStandalone.
      *
      * @param hosts contains hostnames or IPs. But we allow all IPs anyway.
      */
@@ -117,7 +117,7 @@ public class HostCheckHandler extends AbstractHandler {
     }
 
     /**
-     * Strip [] and port from a host header
+     * Strip [] and port from a host header.
      *
      * @param host the HTTP Host header non-null
      * @return the host with IPv6 brackets and any port removed

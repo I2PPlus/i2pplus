@@ -154,7 +154,7 @@ public class Elg2KeyFactory extends I2PThread implements KeyFactory {
     /**
      * Note that this stops the singleton precalc thread.
      * You don't want to do this if there are multiple routers in the JVM.
-     * Fix this if you care. See Router.shutdown().
+     * Fix this if you care. See {@link net.i2p.router.Router#shutdown}.
      */
     public void shutdown() {
         _isRunning = false;

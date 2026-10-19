@@ -6,7 +6,7 @@ import net.i2p.util.SystemVersion;
 
 /**
  * Define the configuration for streaming and verifying data on the socket.
- * Use I2PSocketManager.buildOptions() to get one of these.
+ * Use {@link net.i2p.client.streaming.I2PSocketManager#buildOptions} to get one of these.
  */
 class I2PSocketOptionsImpl implements I2PSocketOptions {
     private long _connectTimeout;
@@ -80,7 +80,7 @@ class I2PSocketOptionsImpl implements I2PSocketOptions {
      * Max buffer size, connect timeout, read timeout, and write timeout
      * from properties. Does not set local port or remote port.
      * <p>
-     * Only the properties present in opts are applied; anything absent from
+     * Only the properties present in opts are applied. Anything absent from
      * opts keeps the value this object already has, so a partial opts
      * overrides only what it names.
      *
@@ -176,7 +176,7 @@ class I2PSocketOptionsImpl implements I2PSocketOptions {
     /**
      * Define how long we will wait for the ACK from a SYN, in milliseconds.
      * <p>
-     * The value is stored un-scaled; see {@link #getConnectTimeout()}.
+     * The value is stored un-scaled; see {@link #getConnectTimeout}.
      * <p>
      * Default 30 seconds.
      *
@@ -251,7 +251,7 @@ class I2PSocketOptionsImpl implements I2PSocketOptions {
      * InterruptedIOException.  If this is less than or equal to zero, there
      * is no timeout.
      * <p>
-     * Default -1 (unlimited)
+     * Default -1 (unlimited).
      * @return the write timeout
      */
     @Override
@@ -265,7 +265,7 @@ class I2PSocketOptionsImpl implements I2PSocketOptions {
      * InterruptedIOException.  If this is less than or equal to zero, there
      * is no timeout.
      * <p>
-     * Default -1 (unlimited)
+     * Default -1 (unlimited).
      * @param ms wait time to block on the output stream while waiting for the data to flush.
      */
     @Override

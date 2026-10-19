@@ -292,7 +292,7 @@ public class BSkipLevels<K extends Comparable<? super K>, V> extends SkipLevels<
             bf.log.debug("Finished level search, found " + lvls.size() + " levels");
         if (!this.equals(lvls.last())) {
             bf.log.error("First level is out of order! " + print());
-            // TODO switch stack and other fields for the skiplist - hard to test
+        // TODO switch stack and other fields for the skiplist - hard to test
         }
         // traverse the levels, back-to-front
         boolean rv = false;

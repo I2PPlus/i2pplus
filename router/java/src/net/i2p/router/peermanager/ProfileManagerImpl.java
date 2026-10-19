@@ -102,7 +102,7 @@ public class ProfileManagerImpl implements ProfileManager {
     }
 
     /**
-     * Note that there was some sort of communication error talking with the peer
+     * Note that there was some sort of communication error talking with the peer.
      *
      * @deprecated unused
      */
@@ -117,7 +117,7 @@ public class ProfileManagerImpl implements ProfileManager {
     }
 
     /**
-     * Note that the router agreed to participate in a tunnel
+     * Note that the router agreed to participate in a tunnel.
      */
     @Override
     public void tunnelJoined(Hash peer, long responseTimeMs) {
@@ -270,11 +270,11 @@ public class ProfileManagerImpl implements ProfileManager {
     }
 
     /**
-     * Note that the peer replied to a db lookup with a redirect to other routers, where
-     * the list of redirected users included newPeers routers that the local router didn't
-     * know about, oldPeers routers that the local router already knew about, the given invalid
-     * routers that were invalid in some way, and the duplicate number of routers that we explicitly
-     * asked them not to send us, but they did anyway
+     * The peer replied to a db lookup with a redirect to other routers.
+     * The redirect list included newPeers routers we did not previously know
+     * about, oldPeers routers we already had profiles for, the given invalid
+     * routers that were unusable, and a count of duplicates we had explicitly
+     * asked them not to send but they did anyway
      * <p>
      * Non-blocking. Will not update the profile if we can't get the lock.
      */
@@ -326,10 +326,10 @@ public class ProfileManagerImpl implements ProfileManager {
      * <p>
      * As of 0.9.53 we update the DbResponseTime.
      * <p>
-     * This will force creation of DB stats
+     * This will force creation of DB stats.
      *
      * @param responseTimeMs the measured send duration in milliseconds, used
-     *                       as both the value and the event time
+     * as both the value and the event time
      */
     @Override
     public void dbStoreSent(Hash peer, long responseTimeMs) {
@@ -347,7 +347,7 @@ public class ProfileManagerImpl implements ProfileManager {
      * Note that we've verified a successful send of db data to the floodfill peer
      * by querying another floodfill.
      * <p>
-     * This will force creation of DB stats
+     * This will force creation of DB stats.
      */
     @Override
     public void dbStoreSuccessful(Hash peer) {
@@ -372,7 +372,7 @@ public class ProfileManagerImpl implements ProfileManager {
      * - UNKNOWN: 0 successful lookups (probing target)
      * - OK: 1-4 successful lookups with &gt;=50% success rate
      * - GOOD: &gt;=5 successful lookups with &gt;=80% success rate
-     * - BAD: &gt;=5 total lookups with &lt;50% success rate
+     * - BAD: &gt;=5 total lookups with &lt;50% success rate.
      *
      * @param data the peer profile, must have expanded DB profile
      * @since 0.9.71+
@@ -403,7 +403,7 @@ public class ProfileManagerImpl implements ProfileManager {
      * Note that we were unable to confirm a successful send of db data to
      * the peer, at least not within our timeout period
      * <p>
-     * This will force creation of DB stats
+     * This will force creation of DB stats.
      */
     @Override
     public void dbStoreFailed(Hash peer) {

@@ -34,7 +34,6 @@ import java.util.Collection;
 
 /**
  * Represents a chunk of bytecodes.
- * @author John Rose
  */
 class Code extends Attribute.Holder {
     Class.Method m;

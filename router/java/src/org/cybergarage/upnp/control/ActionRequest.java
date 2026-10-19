@@ -19,7 +19,6 @@ public class ActionRequest extends ControlRequest {
     //	Constructor
     ////////////////////////////////////////////////
 
-    /** Default constructor */
     public ActionRequest() {}
 
     /**

@@ -144,7 +144,7 @@ class PeerStateDestroyed implements SSU2Payload.PayloadCallback, SSU2Sender {
     }
 
     /**
-     * Call at transport shutdown or cache eviction
+     * Call at transport shutdown or cache eviction.
      */
     public void kill() {
         _ackTimer.cancel();
@@ -158,19 +158,19 @@ class PeerStateDestroyed implements SSU2Payload.PayloadCallback, SSU2Sender {
     /**
      * The remote host ID.
      *
-     * @return the remote host id
+     * @return the peer's IP and port as a RemoteHostId
      */
     public RemoteHostId getRemoteHostId() { return _remoteHostId; }
     /**
      * Whether the peer is IPv6.
      *
-     * @return whether i pv6
+     * @return whether IPv6
      */
     public boolean isIPv6() { return _remoteHostId.getIP().length == 16; }
     /**
      * The remote IP address.
      *
-     * @return the remote i p address
+     * @return the remote IP address
      */
     public InetAddress getRemoteIPAddress() {
         try {
@@ -182,19 +182,19 @@ class PeerStateDestroyed implements SSU2Payload.PayloadCallback, SSU2Sender {
     /**
      * The remote port.
      *
-     * @return the remote port
+     * @return the peer's UDP port
      */
     public int getRemotePort() { return _remoteHostId.getPort(); }
     /**
      * The MTU.
      *
-     * @return the m t u
+     * @return the maximum UDP payload size in bytes for this peer
      */
     public int getMTU() { return _mtu; }
     /**
      * The next packet number.
      *
-     * @return the next packet number
+     * @return the number for the next outbound packet, then increments
      */
     public long getNextPacketNumber() { return _packetNumber.getAndIncrement(); }
     /**
@@ -206,7 +206,7 @@ class PeerStateDestroyed implements SSU2Payload.PayloadCallback, SSU2Sender {
     /**
      * The send cipher.
      *
-     * @return the send cipher
+     * @return the Noise cipher state for outbound packets
      */
     public CipherState getSendCipher() { return _sendCha; }
     /**
@@ -523,7 +523,7 @@ class PeerStateDestroyed implements SSU2Payload.PayloadCallback, SSU2Sender {
         private long _delay = TERMINATION_RETX_TIME;
 
         /**
-         * Caller must schedule
+         * Caller must schedule.
          */
         public ACKTimer() {
             super(_context.simpleTimer2());
@@ -570,7 +570,7 @@ class PeerStateDestroyed implements SSU2Payload.PayloadCallback, SSU2Sender {
     private class KillTimer extends SimpleTimer2.TimedEvent {
 
         /**
-         * Caller must schedule
+         * Caller must schedule.
          */
         public KillTimer() {
             super(_context.simpleTimer2());

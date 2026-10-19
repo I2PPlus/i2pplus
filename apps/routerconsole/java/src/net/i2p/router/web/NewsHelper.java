@@ -11,10 +11,10 @@ import net.i2p.router.RouterContext;
 import net.i2p.router.update.ConsoleUpdateManager;
 
 /**
- *  If news file does not exist, use file from the initialNews directory
- *  in $I2P
+ * If news file does not exist, use file from the initialNews directory
+ * in $I2P.
  *
- *  @since 0.8.2
+ * @since 0.8.2
  */
 public class NewsHelper extends ContentHelper {
 
@@ -27,32 +27,36 @@ public class NewsHelper extends ContentHelper {
      * Router config property recording when news was last downloaded, in milliseconds.
      */
     public static final String PROP_LAST_UPDATE_TIME = "router.updateLastDownloaded";
-    /** @since 0.8.12 */
+    /**
+     * Config key for when the news bar was last hidden.
+     *
+     * @since 0.8.12
+     */
     private static final String PROP_LAST_HIDDEN = "routerconsole.newsLastHidden";
     /**
-     *  When news was last fetched, in milliseconds since the epoch
-     *  @since 0.9.4
+     * When news was last fetched, in milliseconds since the epoch.
+     * @since 0.9.4
      */
     public static final String PROP_LAST_CHECKED = "routerconsole.newsLastChecked";
     /**
-     *  Last-Modified stamp of the news actually downloaded, in milliseconds
-     *  since the epoch
-     *  @since 0.9.4
+     * Last-Modified stamp of the news actually downloaded, in milliseconds
+     * since the epoch.
+     * @since 0.9.4
      */
     public static final String PROP_LAST_UPDATED = "routerconsole.newsLastUpdated";
     /**
-     *  Last-Modified stamp of the fetch that first added an entry, in
-     *  milliseconds since the epoch
-     *  @since 0.9.55
+     * Last-Modified stamp of the fetch that first added an entry, in
+     * milliseconds since the epoch.
+     * @since 0.9.55
      */
     public static final String PROP_LAST_NEW_ENTRY = "routerconsole.newsLastNewEntry";
     /**
-     *  Console language the news was last downloaded in
-     *  @since 0.9.62
+     * Console language the news was last downloaded in.
+     * @since 0.9.62
      */
     public static final String PROP_LAST_LANG = "routerconsole.newsLastLanguage";
     /**
-     * Default true
+     * Default true.
      * @since 0.9.21
      */
     public static final String PROP_TRANSLATE = "routerconsole.newsTranslate";
@@ -99,7 +103,7 @@ public class NewsHelper extends ContentHelper {
         if (mgr == null) return false;
         return mgr.getUpdateAvailable(ROUTER_SIGNED) != null ||
                mgr.getUpdateAvailable(ROUTER_SIGNED_SU3) != null;
-*/
+    */
         return false;
     }
 
@@ -130,15 +134,15 @@ public class NewsHelper extends ContentHelper {
         if (rv != null)
             return rv;
         return mgr.getUpdateAvailable(ROUTER_SIGNED);
-*/
+    */
         return null;
     }
 
     /**
-     *  Release update only.
-     *  Translated message about new version available but constrained
-     *  @return null if none
-     *  @since 0.9.9
+     * Release update only.
+     * Translated message about new version available but constrained.
+     * @return null if none
+     * @since 0.9.9
      */
     public static String updateConstraint() {
         ConsoleUpdateManager mgr = ConsoleUpdateManager.getInstance();
@@ -147,9 +151,9 @@ public class NewsHelper extends ContentHelper {
     }
 
     /**
-     *  Translated message about new version available but constrained
-     *  @return null if none
-     *  @since 0.9.23
+     * Translated message about new version available but constrained.
+     * @return null if none
+     * @since 0.9.23
      */
     public static String unsignedUpdateConstraint() {
         ConsoleUpdateManager mgr = ConsoleUpdateManager.getInstance();
@@ -158,9 +162,9 @@ public class NewsHelper extends ContentHelper {
     }
 
     /**
-     *  Translated message about new version available but constrained
-     *  @return null if none
-     *  @since 0.9.23
+     * Translated message about new version available but constrained.
+     * @return null if none
+     * @since 0.9.23
      */
     public static String devSU3UpdateConstraint() {
         ConsoleUpdateManager mgr = ConsoleUpdateManager.getInstance();
@@ -185,7 +189,7 @@ public class NewsHelper extends ContentHelper {
 
     /**
      * Will be false if already downloaded or if dev update disabled.
-     * @param ctx the router context, consulted for router.updateUnsigned
+     * @param ctx the router context, consulted for {@code router.updateUnsigned}
      * @return whether unsigned update available
      * @since 0.9.4 moved from NewsFetcher
      */
@@ -197,9 +201,9 @@ public class NewsHelper extends ContentHelper {
     }
 
     /**
-     *  The version of the unsigned update on offer
-     *  @return null if none
-     *  @since 0.9.4 moved from NewsFetcher
+     * The version of the unsigned update on offer.
+     * @return null if none
+     * @since 0.9.4 moved from NewsFetcher
      */
     public static String unsignedUpdateVersion() {
         ConsoleUpdateManager mgr = ConsoleUpdateManager.getInstance();
@@ -208,9 +212,9 @@ public class NewsHelper extends ContentHelper {
     }
 
     /**
-     *  Already downloaded but not installed version
-     *  @return null if none
-     *  @since 0.9.4
+     * Already downloaded but not installed version.
+     * @return null if none
+     * @since 0.9.4
      */
     public static String unsignedVersionDownloaded() {
         ConsoleUpdateManager mgr = ConsoleUpdateManager.getInstance();
@@ -220,7 +224,7 @@ public class NewsHelper extends ContentHelper {
 
     /**
      * Will be false if already downloaded or if dev update disabled.
-     * @param ctx the router context, consulted for router.updateDevSU3
+     * @param ctx the router context, consulted for {@code router.updateDevSU3}
      * @return whether dev s u3 update available
      * @since 0.9.20
      */
@@ -232,9 +236,9 @@ public class NewsHelper extends ContentHelper {
     }
 
     /**
-     *  The version of the development SU3 update on offer
-     *  @return null if none
-     *  @since 0.9.20
+     * The version of the development SU3 update on offer.
+     * @return null if none
+     * @since 0.9.20
      */
     public static String devSU3UpdateVersion() {
         ConsoleUpdateManager mgr = ConsoleUpdateManager.getInstance();
@@ -243,9 +247,9 @@ public class NewsHelper extends ContentHelper {
     }
 
     /**
-     *  Already downloaded but not installed version
-     *  @return null if none
-     *  @since 0.9.20
+     * Already downloaded but not installed version.
+     * @return null if none
+     * @since 0.9.20
      */
     public static String devSU3VersionDownloaded() {
         ConsoleUpdateManager mgr = ConsoleUpdateManager.getInstance();
@@ -254,10 +258,10 @@ public class NewsHelper extends ContentHelper {
     }
 
     /**
-     *  Convert long date stamp to
-     *  date/time in the system locale, local time zone
-     *  @return null if ver = null
-     *  @since 0.9.4 moved from NewsFetcher
+     * Convert long date stamp to
+     * date/time in the system locale, local time zone.
+     * @return null if ver = null
+     * @since 0.9.4 moved from NewsFetcher
      */
     private static String formatUnsignedVersion(String ver) {
         if (ver != null) {
@@ -270,9 +274,9 @@ public class NewsHelper extends ContentHelper {
     }
 
     /**
-     *  The update manager's own status line
-     *  @return "" if none
-     *  @since 0.9.4 moved from UpdateHelper
+     * The update manager's own status line.
+     * @return "" if none
+     * @since 0.9.4 moved from UpdateHelper
      */
     public static String getUpdateStatus() {
         ConsoleUpdateManager mgr = ConsoleUpdateManager.getInstance();
@@ -281,7 +285,7 @@ public class NewsHelper extends ContentHelper {
     }
 
     /**
-     * If we haven't downloaded news yet, use the translated initial news file
+     * If we haven't downloaded news yet, use the translated initial news file.
      * @return up to three entries no older than 60 days
      */
     @Override
@@ -300,7 +304,7 @@ public class NewsHelper extends ContentHelper {
     }
 
     /**
-     * Whether the news file is newer than the stamp saved when it was hidden
+     * Whether the news file is newer than the stamp saved when it was hidden.
      * @param ctx the router context to read the hidden-news stamp from
      * @return whether show news
      * @since 0.9.4
@@ -314,19 +318,19 @@ public class NewsHelper extends ContentHelper {
     }
 
     /**
-     *  Save config with the timestamp of the current news to hide, or 0 to show
-     *  @param yes true to show the news, false to stamp it as hidden
-     *  @since 0.8.12
+     * Save config with the timestamp of the current news to hide, or 0 to show.
+     * @param yes true to show the news, false to stamp it as hidden
+     * @since 0.8.12
      */
     public void showNews(boolean yes) {
         showNews(_context, yes);
     }
 
     /**
-     *  Save config with the timestamp of the current news to hide, or 0 to show
-     *  @param ctx the router context whose config is updated
-     *  @param yes true to show the news, false to stamp it as hidden
-     *  @since 0.9.4
+     * Save config with the timestamp of the current news to hide, or 0 to show.
+     * @param ctx the router context whose config is updated
+     * @param yes true to show the news, false to stamp it as hidden
+     * @since 0.9.4
      */
     public static void showNews(RouterContext ctx, boolean yes) {
         long stamp = yes ? 0 : lastNewEntry(ctx);
@@ -408,18 +412,18 @@ public class NewsHelper extends ContentHelper {
     }
 
     /**
-     *  Whether installing an update is blocked outright
-     *  @param ctx the router context supplying the update and base dir settings
-     *  @return true if updates are disabled or the base dir is not writable
-     *  @since 0.9.4 moved from NewsFetcher
+     * Whether installing an update is blocked outright.
+     * @param ctx the router context supplying the update and base dir settings
+     * @return true if updates are disabled or the base dir is not writable
+     * @since 0.9.4 moved from NewsFetcher
      */
     public static boolean dontInstall(RouterContext ctx) {
         return isUpdateDisabled(ctx) || isBaseReadonly(ctx);
     }
 
     /**
-     * Whether updating has been switched off in the config
-     * @param ctx the router context consulted for router.updateDisabled
+     * Whether updating has been switched off in the config.
+     * @param ctx the router context consulted for {@code router.updateDisabled}
      * @return whether update disabled
      * @since 0.9.9
      */
@@ -428,7 +432,7 @@ public class NewsHelper extends ContentHelper {
     }
 
     /**
-     * Whether an update could not be written even if it were allowed
+     * Whether an update could not be written even if it were allowed.
      * @param ctx the router context supplying the base dir to test
      * @return whether base readonly
      * @since 0.9.9
@@ -440,20 +444,20 @@ public class NewsHelper extends ContentHelper {
     }
 
     /**
-     *  When news was last fetched, whether or not anything changed
-     *  @param ctx the router context to read the fetch stamp from
-     *  @return milliseconds since the epoch, or 0 if never fetched
-     *  @since 0.9.4
+     * When news was last fetched, whether or not anything changed.
+     * @param ctx the router context to read the fetch stamp from
+     * @return milliseconds since the epoch, or 0 if never fetched
+     * @since 0.9.4
      */
     public static long lastChecked(RouterContext ctx) {
         return ctx.getProperty(PROP_LAST_CHECKED, 0L);
     }
 
     /**
-     *  When the news was last downloaded
-     *  @param ctx the router context to read the stamp from and save it to
-     *  @return milliseconds since the epoch, or 0 if unknown
-     *  @since 0.9.4
+     * When the news was last downloaded.
+     * @param ctx the router context to read the stamp from and save it to
+     * @return milliseconds since the epoch, or 0 if unknown
+     * @since 0.9.4
      */
     public static long lastUpdated(RouterContext ctx) {
         long rv = ctx.getProperty(PROP_LAST_UPDATED, 0L);
@@ -466,8 +470,8 @@ public class NewsHelper extends ContentHelper {
     }
 
     /**
-     *  When we last got a new news entry
-     *  @since 0.9.55
+     * When we last got a new news entry.
+     * @since 0.9.55
      */
     private static long lastNewEntry(RouterContext ctx) {
         long rv = ctx.getProperty(PROP_LAST_NEW_ENTRY, 0L);

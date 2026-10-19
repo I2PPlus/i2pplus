@@ -13,7 +13,7 @@ import net.i2p.router.web.PluginStarter;
 
 /**
  * Render the configuration menu at the top of all the config pages.
- * refactored from confignav.jsp to reduce size and make translation easier
+ * refactored from confignav.jsp to reduce size and make translation easier.
  */
 public class HelpSectionHelper extends HelperBase {
 
@@ -22,7 +22,7 @@ public class HelpSectionHelper extends HelperBase {
      */
     public HelpSectionHelper() { super(); }
 
-    /** help-X.jsp */
+    /** help-X.jsp. */
     private static final String[] pages =
                                           {"", "configuration", "sidebar", "reseeding", "advancedsettings",
                                            "faq", "reachability", "reseed", "jsonrpc", "legal" };
@@ -35,7 +35,11 @@ public class HelpSectionHelper extends HelperBase {
                                            _x("FAQ"),
                                            _x("JSON-RPC API") };
 
-    /** @since 0.9.19 */
+    /**
+     * One help tab.
+     *
+     * @since 0.9.19
+     */
     private static class Tab {
         public final String page;
         public final String title;
@@ -44,7 +48,11 @@ public class HelpSectionHelper extends HelperBase {
         }
     }
 
-    /** @since 0.9.19 */
+    /**
+     * Sorts help tabs by localized title.
+     *
+     * @since 0.9.19
+     */
     private class TabComparator implements Comparator<Tab> {
          private static final long serialVersionUID = 1L;
          private final Collator coll;
@@ -61,7 +69,7 @@ public class HelpSectionHelper extends HelperBase {
     }
 
     /**
-     * Render the help navigation bar
+     * Render the help navigation bar.
      *
      * @param requestURI the current request URI
      * @throws IOException if rendering fails

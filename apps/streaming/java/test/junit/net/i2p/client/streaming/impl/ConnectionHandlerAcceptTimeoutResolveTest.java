@@ -9,7 +9,7 @@ import org.junit.Test;
  * {@link ConnectionHandler#resolveAcceptTimeout(int, int)}.
  *
  * <p>The accept timeout is now read from the live configuration on every SYN
- * (so a router.config change applies without a restart).  An explicit override
+ * (so a {@code router.config} change applies without a restart).  An explicit override
  * set via {@code setAcceptTimeout(int)} — e.g. per-manager
  * {@code I2PSocketManagerFull.setAcceptTimeout(long)} — takes precedence, and a
  * negative override clears it to fall back to the configured value.

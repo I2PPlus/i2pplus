@@ -19,7 +19,6 @@ import java.io.InputStream;
  * Defines the message a router sends to a client indicating the
  * status of the session.
  *
- * @author jrandom
  */
 public class SessionStatusMessage extends I2CPMessageImpl {
     /**

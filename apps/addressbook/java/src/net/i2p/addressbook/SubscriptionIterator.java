@@ -12,7 +12,6 @@ import net.i2p.util.PortMapper;
  * returns AddressBook objects, and not Subscription objects.
  * Yes, the EepGet fetch() is done in here in next().
  *
- * @author Ragnarok
  */
 class SubscriptionIterator implements Iterator<AddressBook> {
 

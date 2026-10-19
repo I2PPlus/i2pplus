@@ -12,7 +12,6 @@ import net.i2p.crypto.eddsa.math.ed25519.Ed25519ScalarOps;
  * Table of named EdDSA curves.
  * Provides lookup of curve specifications by name.
  *
- * @author str4d
  * @since 0.9.15
  *
  */
@@ -23,7 +22,7 @@ public class EdDSANamedCurveTable {
      */
     public EdDSANamedCurveTable() {}
 
-    /** RFC 8032 */
+    /** RFC 8032. */
     public static final String ED_25519 = "Ed25519";
     /** Old name for the Ed25519 curve. */
     public static final String CURVE_ED25519_SHA512 = "ed25519-sha-512";
@@ -67,7 +66,7 @@ public class EdDSANamedCurveTable {
     }
 
     /**
-     * Define an alias for a curve
+     * Define an alias for a curve.
      *
      * @param name the existing curve name to alias, matched case-insensitively
      * @param alias the additional name to file the curve under, matched case-insensitively

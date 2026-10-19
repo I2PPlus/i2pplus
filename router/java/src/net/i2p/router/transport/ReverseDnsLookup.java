@@ -130,13 +130,13 @@ public class ReverseDnsLookup {
      */
     private static final ConcurrentHashMap<String, CacheEntry> rdnsCache = new ConcurrentHashMap<>(MAX_RDNS_CACHE_SIZE);
 
-    /** Flag set after the first normalize sweep to avoid re-processing every 15 minutes */
+    /** Flag set after the first normalize sweep to avoid re-processing every 15 minutes. */
     private static volatile boolean _normalizeSweepDone;
 
     private static Timer _rdnsTimer;
 
     /**
-     * rDNS cache entry lifetime in hours, based on available memory.
+     * RDNS cache entry lifetime in hours, based on available memory.
      * <p>
      * Routers with less than 512 MB keep entries for 24 h; routers with at
      * least 1 GB keep them for 48 h; everything else for 36 h. This bounds
@@ -219,7 +219,7 @@ public class ReverseDnsLookup {
     /**
      * Whether an entry read from the persistence file is fresh enough to reuse.
      * <p>
-     * Applies only at startup when the file is loaded; entries older than the
+     * Applies only at startup when the file is loaded. Entries older than the
      * eviction threshold are skipped so a long-idle router does not resurrect
      * months-old hostnames.
      *
@@ -597,9 +597,9 @@ public class ReverseDnsLookup {
     /**
      * Serialize a cache entry for persistence.
      * <p>
-     * Format is "ip,hostname,timestamp" — one line per entry. The timestamp
+     * Format is "ip,hostname,timestamp". One line per entry. The timestamp
      * enables expiration and startup filtering, and distinguishes the current
-     * format from the two-part legacy format (see {@link #rdnsEntryFromString}).
+     * format from the two-part legacy format (see {@link #rdnsEntryFromString(String)}).
      *
      * @param entry the entry to serialize
      * @return the serialized entry line

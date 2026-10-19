@@ -16,8 +16,6 @@ import java.util.Arrays;
  * For compatibility with older releases, decoding supports both RFC 8410 and an
  * older draft specification.
  *
- * @author str4d
- *
  * @see <a href="https://tools.ietf.org/html/rfc8410">RFC 8410</a>
  * @see <a href="https://tools.ietf.org/html/draft-josefsson-pkix-eddsa-04">Older draft
  *      specification</a>
@@ -31,7 +29,7 @@ public class EdDSAPublicKey implements EdDSAKey, PublicKey {
     private GroupElement Aneg = null;
     /** The encoded public key (Abyte). */
     private final byte[] Abyte;
-    /** Ed dsa spec */
+    /** Ed dsa spec. */
     private final EdDSAParameterSpec edDsaSpec;
 
     // OID 1.3.101.xxx

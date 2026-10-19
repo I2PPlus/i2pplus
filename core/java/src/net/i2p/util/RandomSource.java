@@ -21,7 +21,6 @@ import java.security.SecureRandom;
 /**
  * Singleton for whatever PRNG i2p uses.
  *
- * @author jrandom
  */
 public class RandomSource extends SecureRandom implements EntropyHarvester {
 
@@ -34,7 +33,7 @@ public class RandomSource extends SecureRandom implements EntropyHarvester {
     /**
      * Deprecated - do not instantiate this directly, as you won't get the
      * good one (Fortuna). Use getInstance() or
-     * I2PAppContext.getGlobalContext().random() to get the FortunaRandomSource
+     * {@link net.i2p.I2PAppContext#getGlobalContext}{@code random()} to get the FortunaRandomSource
      * instance.
      *
      * @param context the application context this source is bound to
@@ -46,10 +45,10 @@ public class RandomSource extends SecureRandom implements EntropyHarvester {
 
     /**
      * Singleton for whatever PRNG i2p uses.
-     * Same as I2PAppContext.getGlobalContext().random();
+     * Same as {@link net.i2p.I2PAppContext#getGlobalContext}{@code random()};
      * use context.random() if you have a context already.
      *
-     * @return I2PAppContext.getGlobalContext().random()
+     * @return {@link net.i2p.I2PAppContext#getGlobalContext}{@code random()}
      */
     public static RandomSource getInstance() {
         return I2PAppContext.getGlobalContext().random();
@@ -62,7 +61,7 @@ public class RandomSource extends SecureRandom implements EntropyHarvester {
      * Ok, so we're going to have it return between 0 and n (including 0, excluding n), since
      * thats what it has been used for.
      * <p>
-     * This code unused, see FortunaRandomSource override
+     * This code unused, see FortunaRandomSource override.
      */
     @Override
     public int nextInt(int n) {
@@ -74,7 +73,7 @@ public class RandomSource extends SecureRandom implements EntropyHarvester {
     }
 
     /**
-     * This code unused, see FortunaRandomSource override
+     * This code unused, see FortunaRandomSource override.
      *
      * @return all possible int values, positive and negative
      * @since 0.9.54
@@ -88,7 +87,7 @@ public class RandomSource extends SecureRandom implements EntropyHarvester {
      * including 0, excluding n.
      * <p>
      * This code unused, see FortunaRandomSource override
-     * NOPMD - nextLong(long) doesn't override SecureRandom (added in Java 17)
+     * NOPMD - nextLong(long) doesn't override SecureRandom (added in Java 17).
      */
     public long nextLong(long n) {
         long v = super.nextLong();
@@ -100,7 +99,7 @@ public class RandomSource extends SecureRandom implements EntropyHarvester {
     /**
      * Not part of java.util.SecureRandom, but added since Fortuna supports it.
      * <p>
-     * This code unused, see FortunaRandomSource override
+     * This code unused, see FortunaRandomSource override.
      *
      * @param buf the array to fill with random bytes
      * @param offset where in the array to start writing
@@ -148,7 +147,7 @@ public class RandomSource extends SecureRandom implements EntropyHarvester {
     }
 
     /**
-     * May block up to 10 seconds
+     * May block up to 10 seconds.
      */
     public void loadSeed() {
         byte[] buf = new byte[1024];
@@ -181,7 +180,7 @@ public class RandomSource extends SecureRandom implements EntropyHarvester {
     }
 
     /**
-     * May block up to 10 seconds
+     * May block up to 10 seconds.
      *
      * @param buf the buffer to receive the merged seed; its size bounds the amount read
      * @return true if any entropy source contributed, false if the buffer is still all zeros
@@ -254,7 +253,7 @@ public class RandomSource extends SecureRandom implements EntropyHarvester {
     }
 
     /**
-     * XORs the seed into buf
+     * XORs the seed into buf.
      *
      * @param f the seed file to read; its first {@code buf.length} bytes are XORed in
      * @return true if the file was read, even if it held fewer than {@code buf.length} bytes

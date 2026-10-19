@@ -6,7 +6,7 @@ import org.junit.Test;
 
 /**
  * Tests the pending next-hop lookup stale-window calculation used by
- * BuildHandler.drainPendingLookups(): the window must fit inside the
+ * {@link net.i2p.router.tunnel.pool.BuildHandler#drainPendingLookups}: the window must fit inside the
  * originator's build request timeout, with a fallback when the arguments
  * are degenerate.
  *

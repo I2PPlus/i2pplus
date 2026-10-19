@@ -43,7 +43,7 @@ import java.util.logging.Logger;
  * 4 sections: question, answer, nameserver and addition resource record
  * section.
  * A message can either be parsed ({@link #DnsMessage(byte[])}) or serialized
- * ({@link DnsMessage#toArray()}).
+ * ({@link DnsMessage#toArray}).
  *
  * @see <a href="https://www.ietf.org/rfc/rfc1035.txt">RFC 1035</a>
  */
@@ -409,7 +409,7 @@ public class DnsMessage {
             }
         }
 
-        // TODO Add verification of dns message state here
+    // TODO Add verification of dns message state here
     }
 
     /**
@@ -741,7 +741,7 @@ public class DnsMessage {
     }
 
     /**
-     * Cached string representation of this message, built on first call to {@link #toString()}.
+     * Cached string representation of this message, built on first call to {@link #toString}.
      */
     private String toStringCache;
 
@@ -760,7 +760,7 @@ public class DnsMessage {
     }
 
     /**
-     * Cached terminal-formatted output string, built on first call to {@link #asTerminalOutput()}.
+     * Cached terminal-formatted output string, built on first call to {@link #asTerminalOutput}.
      */
     private String terminalOutputCache;
 
@@ -888,7 +888,7 @@ public class DnsMessage {
     }
 
     /**
-     * Cached normalized version of this message (id set to 0), built on first call to {@link #asNormalizedVersion()}.
+     * Cached normalized version of this message (id set to 0), built on first call to {@link #asNormalizedVersion}.
      */
     private DnsMessage normalizedVersionCache;
 
@@ -922,7 +922,7 @@ public class DnsMessage {
     }
 
     /**
-     * Cached hash code, computed from the serialized byte representation on first call to {@link #hashCode()}.
+     * Cached hash code, computed from the serialized byte representation on first call to {@link #hashCode}.
      */
     private transient Integer hashCodeCache;
 
@@ -1084,7 +1084,6 @@ public class DnsMessage {
      * Provides a fluent API for building DNS messages with various
      * sections and flags configured step by step.
      *
-     * @author MiniDNS Project
      */
     public static final class Builder {
 

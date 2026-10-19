@@ -14,7 +14,7 @@ import net.i2p.util.Log;
 
 /**
  * Simple streaming lib test app that connects to a given destination and sends
- * the contents of a file, then disconnects.  See the {@link #main}
+ * the contents of a file, then disconnects.  See the {@link #main}.
  *
  */
 public class StreamSinkSend {
@@ -103,11 +103,11 @@ public class StreamSinkSend {
     }
 
     /**
-     * Fire up the client.  <code>Usage: StreamSinkClient sendFile writeDelayMs serverDestFile</code> <br>
+     * Fire up the client.  <code>Usage: StreamSinkClient sendFile writeDelayMs serverDestFile.</code> <br>
      * <ul>
-     *  <li><b>sendFile</b>: filename to send</li>
-     *  <li><b>writeDelayMs</b>: how long to wait between each .write (0 for no delay)</li>
-     *  <li><b>serverDestFile</b>: file containing the StreamSinkServer's binary Destination</li>
+     * <li><b>sendFile</b>: filename to send</li>
+     * <li><b>writeDelayMs</b>: how long to wait between each .write (0 for no delay)</li>
+     * <li><b>serverDestFile</b>: file containing the StreamSinkServer's binary Destination</li>
      * </ul>
      * @param args sendFile writeDelayMs serverDestFile
      */

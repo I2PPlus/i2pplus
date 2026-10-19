@@ -76,7 +76,7 @@ public class DecayingBloomFilterTest {
      * Negative and extreme long values are remembered.
      *
      * Long.MIN_VALUE used to throw: the encoder computed 0 - entry, which
-     * overflows back to Long.MIN_VALUE, and DataHelper.toLong() rejects
+     * overflows back to Long.MIN_VALUE, and {@code DataHelper.toLong()} rejects
      * negatives. It is now folded onto Long.MAX_VALUE.
      */
     @Test
@@ -91,7 +91,7 @@ public class DecayingBloomFilterTest {
     /**
      * A long and its negation must stay distinct. The sign is carried in the
      * top bit of the first byte, which is spare only because toLong() is big
-     * endian and so the magnitude's high bit is always clear; the magnitudes
+     * endian and so the magnitude's high bit is always clear. The magnitudes
      * below bracket the bit-55 boundary where that would stop holding.
      */
     @Test

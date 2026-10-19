@@ -13,10 +13,11 @@ import net.i2p.stat.RateStat;
 import net.i2p.util.Log;
 import net.i2p.util.SystemVersion;
 
+// TODO most of the methods should be synchronized.
 /**
  * Copied from http://www.i2p2.i2p/how_peerselection.html
  * <p>
- * See also main() below for additional commentary by zzz.
+ * See also main() below for additional commentary.
  * <p>
  * Currently, there is no 'ejection' strategy to get rid of the profiles for peers that
  * are no longer active (or when the network consists of thousands of peers, to get rid
@@ -26,9 +27,7 @@ import net.i2p.util.SystemVersion;
  * Once it becomes necessary, we can simply compact the poorly performing profiles
  * (keeping only the most basic data) and maintain hundreds of thousands of profiles
  * in memory. Beyond that size, we can simply eject the peers (e.g. keeping the best 100,000).
- * <p>
- * TODO most of the methods should be synchronized.
- */
+*/
 
 public class PeerProfile {
     private final Log _log;
@@ -100,7 +99,7 @@ public class PeerProfile {
     /**
      * Fastest 1 minute throughput, in bytes per minute, ordered with fastest
      * first.  This is not synchronized, as we don't *need* perfection, and we only
-     * reorder/insert values on coalesce
+     * reorder/insert values on coalesce.
      */
     private final float[] _peakThroughput = new float[THROUGHPUT_COUNT];
     private final AtomicLong _peakThroughputCurrentTotal = new AtomicLong();
@@ -138,7 +137,7 @@ public class PeerProfile {
     }
 
     /**
-     * Caller should call setLastHeardAbout() and setFirstHeardAbout()
+     * Caller should call setLastHeardAbout() and setFirstHeardAbout().
      *
      * @param context the router context
      * @param peer non-null
@@ -146,7 +145,7 @@ public class PeerProfile {
     public PeerProfile(RouterContext context, Hash peer) {this(context, peer, false);}
 
     /**
-     * Caller should call setLastHeardAbout() and setFirstHeardAbout()
+     * Caller should call setLastHeardAbout() and setFirstHeardAbout().
      *
      * @param peer non-null
      * @param expand whether to eagerly expand (default false; auto-expanded on first use)
@@ -164,7 +163,7 @@ public class PeerProfile {
     }
 
     /**
-     * What peer is being profiled
+     * What peer is being profiled.
      *
      * @return the peer, non-null
      */
@@ -241,7 +240,7 @@ public class PeerProfile {
      * congestion episode (a 25-40% retransmit ratio) falls back under the
      * 0.20 lossy threshold in roughly 20-40 minutes instead of the hour-plus
      * an hourly-quantized decay imposed, while a peer that keeps reporting
-     * loss stays gated — each report re-inflates the score through the max()
+     * loss stays gated. Each report re-inflates the score through the max()
      * fold in {@link #setLossRatio}.
      *
      * @since 0.9.71+
@@ -252,7 +251,7 @@ public class PeerProfile {
      * Decayed loss score, the maximum of all loss ratios reported within the
      * last few hours, with continuous time-based decay: 50% every
      * {@link #LOSS_DECAY_HALF_LIFE_MS} since the last report, capped at 16
-     * half-lives (4 hours, effectively zero). Unlike {@link #getLossRatio()}
+     * half-lives (4 hours, effectively zero). Unlike {@link #getLossRatio}
      * this retains loss memory when the transport stops reporting, so a
      * demoted peer does not look clean again merely because its last sample
      * went stale.
@@ -307,7 +306,7 @@ public class PeerProfile {
 
     /**
      * Is this peer active at the moment (sending/receiving messages within the last
-     * 10 minutes)
+     * 10 minutes).
      *
      * @return true if active
      */
@@ -316,7 +315,7 @@ public class PeerProfile {
     }
 
     /**
-     * Is this peer active at the moment (sending/receiving messages within the last 10 minutes)
+     * Is this peer active at the moment (sending/receiving messages within the last 10 minutes).
      *
      * @param now the current clock reading in milliseconds
      * @return true if active
@@ -369,7 +368,7 @@ public class PeerProfile {
     }
 
     /**
-     * For now, just a one-byte comparison
+     * For now, just a one-byte comparison.
      *
      * @return -127 to +128, lower is closer
      * @since 0.8.11
@@ -443,15 +442,15 @@ public class PeerProfile {
      */
     public void setLastSendSuccessful(long when) {_lastSentToSuccessfully = when;}
 
-    /** Measured direct-link RTT in ms, or 0 when never measured. @since 0.9.71+ */
+    /** Measured direct-link RTT in ms, or 0 when never measured. @since 0.9.71+. */
     private volatile int _firstHopRtt;
-    /** When {@link #_firstHopRtt} was last refreshed, in ms since the epoch. @since 0.9.71+ */
+    /** When {@link #_firstHopRtt} was last refreshed, in ms since the epoch. @since 0.9.71+. */
     private volatile long _firstHopRttTime;
 
     /**
      * How long a recorded first-hop RTT stays usable.
      * <p>Four hours rather than the {@link RateConstants#ONE_HOUR} Active tier
-     * period that {@link #getLastSendSuccessful()} uses. Link latency is a
+     * period that {@link #getLastSendSuccessful} uses. Link latency is a
      * slow-changing property of a path, and it is now refreshed continuously by
      * {@code ProfileOrganizer.sampleFirstHopRtts()} on every reorganize, so this
      * window no longer decides how current a measurement is -- it only decides
@@ -578,7 +577,7 @@ public class PeerProfile {
 
     /**
      * Whether this peer counts as low latency, judged on its direct link.
-     * <p>The single low-latency decision: {@link #recalculateLowLatency()} is a thin
+     * <p>The single low-latency decision: {@link #recalculateLowLatency} is a thin
      * wrapper over this, so the flag is derived one way everywhere. Two
      * implementations of the same comparison is how the flag ends up disagreeing
      * with itself depending on which pass happened to run last.
@@ -839,7 +838,7 @@ public class PeerProfile {
     /**
      * The raw capacity bonus value.
      *
-     * @return the raw capacity bonus value
+     * @return the bonus before time-decay is applied
      */
     int getCapacityBonusRaw() {return _capacityBonus;}
 
@@ -979,12 +978,12 @@ public class PeerProfile {
 
     /**
      * Recalculate the low-latency flag from the measured direct-link RTT.
-     * <p>The only low-latency decision in the codebase: both callers — the
+     * <p>The only low-latency decision in the codebase: both callers. The
      * reorganize sampling pass and the recorder that runs when a measurement
      * arrives — come through here, so the flag cannot be derived two different
      * ways from the same field.
      * <p>Judged on the direct link to this peer, not on how long a test through a
-     * multi-hop tunnel took. {@link #getPeerTestTimeAverage()} is the round trip
+     * multi-hop tunnel took. {@link #getPeerTestTimeAverage} is the round trip
      * across every hop of that tunnel, so using it here measured the latency of
      * hops the peer was merely a member of.
      * <p>An unmeasured peer keeps whatever was persisted: absent evidence is not
@@ -999,7 +998,7 @@ void recalculateLowLatency() {
     /**
      * Recompute the low-latency flag, optionally against a calibrated
      * per-transport floor instead of the absolute one.
-     * <p>This remains the single low-latency decision; the calibrated floor only
+     * <p>This remains the single low-latency decision. The calibrated floor only
      * supplies an alternative bar and never a separate verdict. It is
      * deliberately one-directional: the floor is derived from measured link
      * latencies across all peers, and nothing about this peer's tier membership
@@ -1010,7 +1009,7 @@ void recalculateLowLatency() {
      * cold router the behaviour here is identical to it being absent.
      *
      * @param calibratedFloorMs the transport's calibrated floor in ms, or
-     *                          -1/null when unknown
+     * -1/null when unknown
      * @since 0.9.71+
      */
     void recalculateLowLatency(Long calibratedFloorMs) {
@@ -1019,7 +1018,7 @@ void recalculateLowLatency() {
 
     /**
      * Recompute the low-latency flag against the calibrated bounds.
-     * <p>This remains the single low-latency decision; the calibrated values only
+     * <p>This remains the single low-latency decision. The calibrated values only
      * supply alternative bars and never a separate verdict. It is deliberately
      * one-directional: the floors are derived from measured link latencies across
      * all peers, and nothing about this peer's tier membership feeds back into
@@ -1170,13 +1169,13 @@ void recalculateLowLatency() {
     }
 
     /**
-     * This is the speed value
+     * This is the speed value.
      *
      * @return the average of the eight fastest one-minute data transfers (four
-     *         on slow JVMs), on a per-tunnel basis,
-     *         through this peer. Ever. Peaks are never decayed; only a higher
-     *         measurement can raise them, and a lower one is ignored. Freshness
-     *         is judged by the selection gates, not by eroding these values.
+     * on slow JVMs), on a per-tunnel basis,
+     * through this peer. Ever. Peaks are never decayed; only a higher
+     * measurement can raise them, and a lower one is ignored. Freshness
+     * is judged by the selection gates, not by eroding these values.
      */
     public float getPeakTunnel1mThroughputKBps() {
         float rv = 0;
@@ -1232,7 +1231,7 @@ void recalculateLowLatency() {
      * When the given peer is performing well enough that we want to keep detailed
      * stats on them again, call this to set up the info we dropped during shrinkProfile.
      * This will not however overwrite any existing data, so it can be safely called
-     * repeatedly
+     * repeatedly.
      */
     public synchronized void expandProfile() {
         // Don't expand profiles that have never accepted or rejected one of our
@@ -1248,7 +1247,7 @@ void recalculateLowLatency() {
     }
 
     /**
-     * For floodfills
+     * For floodfills.
      */
     public synchronized void expandDBProfile() {
         String group = (null == _peer ? "profileUnknown" : _peer.toBase64().substring(0,6));
@@ -1296,7 +1295,7 @@ void recalculateLowLatency() {
 
     /**
      * Coalesce throughput peaks: insert new measurement into the sorted
-     * peak arrays.  Existing peaks are never modified — they represent
+     * peak arrays.  Existing peaks are never modified. They represent
      * demonstrated capability, not recency.  Freshness is handled by
      * selection gates (isLowLatency, getIsActive, hasValidRouterInfo)
      * rather than by eroding the data.
@@ -1336,7 +1335,7 @@ void recalculateLowLatency() {
     }
 
     /**
-     * Coalesce all stats and update values
+     * Coalesce all stats and update values.
      */
     public synchronized void coalesceStats() {
         coalesceOnly();
@@ -1397,14 +1396,14 @@ void recalculateLowLatency() {
 
     /**
      * RateStat memory per expanded profile:
-     * PeerProfile:     3 RateStats (was 5; 2 dead removed), 1-3 Rates each -   6 rates total
+     * PeerProfile:     3 RateStats (was 5. 2 dead removed), 1-3 Rates each -   6 rates total
      * DBHistory:       2 RateStats, 1-2 rates each -                           3 rates total
      * TunnelHistory:   2 RateStats, 2 rates each -                             4 rates total
      * ---                                    ---------
      * 7                                      13 rates total
      * <p>
      * shrinkProfile() / shrinkDBProfile() drop the PeerProfile
-     * and DBProfile RateStats; TunnelHistory RateStats are final
+     * and DBProfile RateStats. TunnelHistory RateStats are final
      * and retained. Re-created lazily on the next expand.
      */
 

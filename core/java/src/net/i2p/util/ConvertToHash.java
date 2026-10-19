@@ -10,17 +10,16 @@ import net.i2p.data.Hash;
 import java.util.Locale;
 
 /**
- *  Convert any kind of destination String to a hash
- *  Supported:
- *  Base64 dest
- *  Base64 dest.i2p
- *  Base64 Hash
- *  Base64 Hash.i2p
- *  Base32 Hash
- *  Base32 desthash.b32.i2p
- *  example.i2p
+ * Convert any kind of destination String to a hash
+ * Supported:
+ * Base64 dest
+ * Base64 dest.i2p
+ * Base64 Hash
+ * Base64 Hash.i2p
+ * Base32 Hash
+ * Base32 desthash.b32.i2p
+ * example.i2p.
  *
- *  @author zzz
  */
 public class ConvertToHash {
 
@@ -31,10 +30,10 @@ public class ConvertToHash {
     public ConvertToHash() {}
 
     /**
-     *  Convert any kind of destination String to a hash
+     * Convert any kind of destination String to a hash.
      *
      * @param peer the destination string in any supported form - base64 hash, base64 or base32 hash with an .i2p suffix, base64 destination with or without .i2p, or a hostname resolved via the naming service; any http:// or https:// prefix and a trailing slash are stripped first
-     *  @return null on failure
+     * @return null on failure
      */
     public static Hash getHash(String peer) {
         if (peer == null) return null;

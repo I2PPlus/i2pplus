@@ -44,7 +44,7 @@ import java.time.Instant;
  * <li>Key rotation intervals should balance security and usability</li>
  * <li>Proper validation of blinded signatures is essential</li>
  * </ul>
- * <p><strong>Implementation Status:</strong> PRELIMINARY - Subject to change as proposal evolves</p>
+ * <p><strong>Implementation Status:</strong> PRELIMINARY - Subject to change as proposal evolves.</p>
  *
  * @since 0.9.40
  */
@@ -89,7 +89,7 @@ public class BlindData {
     public static final int AUTH_PSK = 3;
 
     /**
-     * Enabled, unspecified type
+     * Enabled, unspecified type.
      *
      * @since 0.9.41
      */

@@ -19,9 +19,8 @@ import java.util.List;
 
 /**
  * Test KBucketSet.
- * Newer tests ported from KBSTest in i2p.zzz.kademlia branch
+ * Newer tests ported from KBSTest in {@code i2p.zzz.kademlia} branch.
  *
- * @author comwiz
  * @since 0.9.10 moved from net.i2p.router.networkdb.kademlia
  */
 public class KBucketSetTest extends TestCase {
@@ -63,7 +62,11 @@ public class KBucketSetTest extends TestCase {
         assertFalse(set.add(usHash));
     }
 
-    /** @since 0.9.10 */
+    /**
+     * Concurrent adds and removes from multiple threads.
+     *
+     * @since 0.9.10
+     */
     public void testConcurrent() {
         int count = 2500;
         int n = 4;
@@ -82,7 +85,11 @@ public class KBucketSetTest extends TestCase {
         }
     }
 
-    /** @since 0.9.10 */
+    /**
+     * Tester thread for the concurrent test.
+     *
+     * @since 0.9.10
+     */
     private class RTester extends Thread {
         private final int _count;
 
@@ -95,7 +102,11 @@ public class KBucketSetTest extends TestCase {
         }
     }
 
-    /** @since 0.9.10 */
+    /**
+     * Audit the bucket set after mutations.
+     *
+     * @since 0.9.10
+     */
     public void testAudit() {
         int errors = 0;
         for (KBucket<Hash> b : set.getBuckets()) {
@@ -110,7 +121,11 @@ public class KBucketSetTest extends TestCase {
         assertTrue(errors == 0);
     }
 
-    /** @since 0.9.10 */
+    /**
+     * Entries stay in XOR-distance order.
+     *
+     * @since 0.9.10
+     */
     public void testOrder() {
         int bits = Hash.HASH_LENGTH * 8;
         int errors = 0;
@@ -130,7 +145,11 @@ public class KBucketSetTest extends TestCase {
         assertTrue(errors == 0);
     }
 
-    /** @since 0.9.10 */
+    /**
+     * Random entries land in the expected buckets.
+     *
+     * @since 0.9.10
+     */
     public void testGenRandom() {
         int errors = 0;
         for (KBucket<Hash> b : set.getBuckets()) {
@@ -146,7 +165,11 @@ public class KBucketSetTest extends TestCase {
         assertTrue(errors == 0);
     }
 
-    /** @since 0.9.10 */
+    /**
+     * Explore returns close and far entries.
+     *
+     * @since 0.9.10
+     */
     public void testExplore() {
         List<Hash> keys = set.getExploreKeys(-1000);
         assertTrue(keys.size() > 0);
@@ -177,7 +200,7 @@ public class KBucketSetTest extends TestCase {
     }
 
     /**
-     * getBucketEntries returns the key's bucket mates, and empty for us.
+     * GetBucketEntries returns the key's bucket mates, and empty for us.
      *
      * @since 0.9.71+
      */
@@ -193,7 +216,11 @@ public class KBucketSetTest extends TestCase {
         assertTrue(set.getBucketEntries(usHash).isEmpty());
     }
 
-    /** @since 0.9.10 */
+    /**
+     * Closest returns the nearest entries.
+     *
+     * @since 0.9.10
+     */
     public void testClosest() {
         byte[] val = new byte[Hash.HASH_LENGTH];
         for (int i = 0; i < 23; i++) {

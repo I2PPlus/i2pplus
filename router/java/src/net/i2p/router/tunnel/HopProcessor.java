@@ -100,6 +100,8 @@ class HopProcessor {
     }
 
     /**
+     * Processor summary for log messages.
+     *
      * @since 0.8.12
      */
     @Override

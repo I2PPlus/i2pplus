@@ -150,7 +150,7 @@ public class InternalServerSocket extends ServerSocket {
     // most below here unsupported
 
     /**
-     * Returns null as of 0.9.33, prior to that threw IllegalArgumentException
+     * Returns null as of 0.9.33, prior to that threw IllegalArgumentException.
      * @return null, as this socket does not wrap a channel
      */
     @Override
@@ -159,7 +159,7 @@ public class InternalServerSocket extends ServerSocket {
     }
 
     /**
-     * Returns true as of 0.9.33, prior to that threw IllegalArgumentException
+     * Returns true as of 0.9.33, prior to that threw IllegalArgumentException.
      * @return always true, as the socket is listening from construction
      */
     @Override
@@ -168,8 +168,8 @@ public class InternalServerSocket extends ServerSocket {
     }
 
     /**
-     * Supported as of 0.9.33, prior to that threw IllegalArgumentException
-     * @return true once {@link #close()} has run, false while still listening
+     * Supported as of 0.9.33, prior to that threw IllegalArgumentException.
+     * @return true once {@link #close} has run, false while still listening
      */
     @Override
     public boolean isClosed() {
@@ -177,7 +177,7 @@ public class InternalServerSocket extends ServerSocket {
     }
 
     /**
-     * For debugging only
+     * For debugging only.
      *
      * @param out the writer to render the table of open ports into
      * @throws IOException if the writer rejects the HTML fragment

@@ -5,11 +5,11 @@ import java.net.SocketTimeoutException;
 import net.i2p.I2PException;
 
 /**
- * Streaming server socket returned by {@link I2PSocketManager#getServerSocket()}.
+ * Streaming server socket returned by {@link I2PSocketManager#getServerSocket}.
  * Defines how to listen for streaming peer connections.
  * <p>
  * Note that this is not a standard Java {@link java.net.ServerSocket},
- * if you need one of those, use {@link I2PSocketManager#getStandardServerSocket()} instead.
+ * if you need one of those, use {@link I2PSocketManager#getStandardServerSocket} instead.
  */
 public interface I2PServerSocket {
     /**
@@ -62,7 +62,7 @@ public interface I2PServerSocket {
     public long getSoTimeout();
 
     /**
-     * Access the manager which is coordinating the server socket
+     * Access the manager which is coordinating the server socket.
      * @return I2PSocketManager
      */
     public I2PSocketManager getManager();

@@ -22,7 +22,7 @@ public class BuildExecutorAdaptiveRampTest {
     private static final long MODERATE_RECOVERY_MS = 2 * 1000L;
     private static final long LOW_SUCCESS_RECOVERY_MS = 5 * 1000L;
 
-    /** base concurrency on a 24-core host, the shape the review worked from. */
+    /** Base concurrency on a 24-core host, the shape the review worked from. */
     private static final int BASE = 96;
     private static final double THROTTLE_FLOOR_RATIO = 0.60;
 
@@ -30,7 +30,7 @@ public class BuildExecutorAdaptiveRampTest {
 
     /**
      * The timeout rate is no longer an input to the deadline. It used to add 7s, on the
-     * theory that timeouts were premature; that was true while the establishment deadline
+     * theory that timeouts were premature. That was true while the establishment deadline
      * was abandoning 117 handshakes a minute, and false once it was fixed. The signal now
      * drives the concurrency throttle instead, which reduces occupancy rather than
      * extending it.

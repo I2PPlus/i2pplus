@@ -49,7 +49,7 @@ import net.i2p.util.Log;
  * I2PSocketManager, it should not attempt to call I2PSession's setSessionListener
  * or receive any messages with its .receiveMessage
  * <p>
- * This is what I2PSocketManagerFactory.createManager() returns.
+ * This is what {@link net.i2p.client.streaming.I2PSocketManagerFactory#createManager} returns.
  * Direct instantiation by others is deprecated.
  */
 public class I2PSocketManagerFull implements I2PSocketManager {
@@ -68,7 +68,7 @@ public class I2PSocketManagerFull implements I2PSocketManager {
     private final AtomicBoolean _isDestroyed = new AtomicBoolean();
 
     /**
-     * Does not support EC
+     * Does not support EC.
      * @since 0.9.21
      */
     private static final Set<Hash> _ecUnsupported = new HashSet<>(16);
@@ -105,7 +105,7 @@ public class I2PSocketManagerFull implements I2PSocketManager {
     };
 
     /**
-     * Does not support Ed
+     * Does not support Ed.
      * @since 0.9.23
      */
     private static final Set<Hash> _edUnsupported = new HashSet<>(16);
@@ -179,7 +179,7 @@ public class I2PSocketManagerFull implements I2PSocketManager {
     }
 
     /**
-     * This is what I2PSocketManagerFactory.createManager() returns.
+     * This is what {@link net.i2p.client.streaming.I2PSocketManagerFactory#createManager} returns.
      * Direct instantiation by others is deprecated.
      *
      * @param context non-null
@@ -351,7 +351,7 @@ public class I2PSocketManagerFull implements I2PSocketManager {
     }
 
     /**
-     * Remove the subsession
+     * Remove the subsession.
      *
      * @since 0.9.21
      */
@@ -617,7 +617,11 @@ public class I2PSocketManagerFull implements I2PSocketManager {
         verifySession(_connectionManager.getSession());
     }
 
-    /** @since 0.9.21 */
+    /**
+     * Throw unless the session is alive and ready.
+     *
+     * @since 0.9.21
+     */
     private void verifySession(I2PSession session) throws I2PException {
         if (_isDestroyed.get())
             throw new I2PSessionException("Session was closed");
@@ -628,7 +632,7 @@ public class I2PSocketManagerFull implements I2PSocketManager {
 
     /**
      * Create a new connected socket. Blocks until the socket is created,
-     * unless the connectDelay option (i2p.streaming.connectDelay) is
+     * unless the connectDelay option ({@code i2p.streaming.connectDelay}) is
      * set and greater than zero. If so this will return immediately,
      * and the client may quickly write initial data to the socket and
      * this data will be bundled in the SYN packet.
@@ -737,7 +741,7 @@ public class I2PSocketManagerFull implements I2PSocketManager {
 
     /**
      * Create a new connected socket. Blocks until the socket is created,
-     * unless the connectDelay option (i2p.streaming.connectDelay) is
+     * unless the connectDelay option ({@code i2p.streaming.connectDelay}) is
      * set and greater than zero in the default options. If so this will return immediately,
      * and the client may quickly write initial data to the socket and
      * this data will be bundled in the SYN packet.
@@ -858,14 +862,14 @@ public class I2PSocketManagerFull implements I2PSocketManager {
     }
 
     /**
-     * For logging / diagnostics only
+     * For logging / diagnostics only.
      * @return the name this manager was constructed with, suffixed with a sequence number
-     *         that distinguishes concurrent managers
+     * that distinguishes concurrent managers
      */
     public String getName() { return _name; }
 
     /**
-     * For logging / diagnostics only
+     * For logging / diagnostics only.
      */
     public void setName(String name) { _name = name; }
 
@@ -888,9 +892,9 @@ public class I2PSocketManagerFull implements I2PSocketManager {
 
     private static final Object _pcapInitLock = new Object();
     private static boolean pcapInitialized;
-    /** The PCAP writer */
+    /** The PCAP writer. */
     static PcapWriter pcapWriter;
-    /** The PCAP property */
+    /** The PCAP property. */
     static final String PROP_PCAP = "i2p.streaming.pcap";
     private static final String PCAP_FILE = "streaming.pcap";
 
@@ -1049,7 +1053,7 @@ public class I2PSocketManagerFull implements I2PSocketManager {
 
     /**
      * The operator-tunable ceiling for the Tuner's stream-cap override.
-     * Reads from {@code i2p.streaming.maxMaxConcurrentStreams} in router.config.
+     * Reads from {@code i2p.streaming.maxMaxConcurrentStreams} in {@code router.config}.
      * @return the current ceiling
      * @since 0.9.71+
      */

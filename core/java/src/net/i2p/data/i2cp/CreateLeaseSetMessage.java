@@ -25,9 +25,8 @@ import java.io.InputStream;
 
 /**
  * Defines the message a client sends to a router when authorizing
- * the LeaseSet
+ * the LeaseSet.
  *
- * @author jrandom
  */
 public class CreateLeaseSetMessage extends I2CPMessageImpl {
     /**

@@ -20,7 +20,11 @@ public class RouterManager {
      */
     public RouterManager() {}
 
-    /** @return non-null */
+    /**
+     * The running router's context, if any.
+     *
+     * @return non-null
+     */
     private static I2PAppContext getAppContext() {
         return I2PAppContext.getGlobalContext();
     }

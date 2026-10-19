@@ -80,7 +80,6 @@ import java.util.Map;
  * <li><strong>IV Generation:</strong> LeaseSet encryption IV should not use public key bytes</li>
  * </ul>
  *
- * @author jrandom
  */
 public class Destination extends KeysAndCert {
 
@@ -99,7 +98,7 @@ public class Destination extends KeysAndCert {
     private static final Map<SigningPublicKey, Destination> _cache = new LHMCache<>(CACHE_SIZE);
 
     /**
-     * Pull from cache or return new
+     * Pull from cache or return new.
      *
      * @param in the input stream
      * @return the destination read from the stream, shared with any instance already cached under the same signing key
@@ -151,6 +150,8 @@ public class Destination extends KeysAndCert {
     }
 
     /**
+     * Creates a destination from its components.
+     *
      * @since 0.9.9
      */
     private Destination(PublicKey pk, SigningPublicKey sk, Certificate c, byte[] padding) {
@@ -169,7 +170,7 @@ public class Destination extends KeysAndCert {
      * Minimal variant of writeBytes(OutputStream) that writes a typed
      * (XDH/PQ) destination too; the KEYSIZE_BYTES hardcode broke 32-byte
      * key destinations with ArrayIndexOutOfBoundsException.
-     * Broken for sig types P521 and RSA before 0.9.15
+     * Broken for sig types P521 and RSA before 0.9.15.
      *
      * @param target the buffer receiving the serialised destination
      * @param offset the offset to start writing
@@ -214,7 +215,7 @@ public class Destination extends KeysAndCert {
 
     /**
      * Cache it.
-     * Useful in I2PTunnelHTTPServer where it is added to the headers
+     * Useful in I2PTunnelHTTPServer where it is added to the headers.
      *
      * @since 0.9.9
      */

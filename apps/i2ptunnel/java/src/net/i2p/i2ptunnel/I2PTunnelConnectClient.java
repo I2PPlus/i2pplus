@@ -33,7 +33,7 @@ import java.nio.charset.StandardCharsets;
  * accesses, passed through for outproxy accesses.
  * <p>
  * Reference: RFC draft-luotonen-ssl-tunneling-03.txt (1997)
- * "Tunneling SSL Through a WWW Proxy"
+ * "Tunneling SSL Through a WWW Proxy".
  */
 public class I2PTunnelConnectClient extends I2PTunnelHTTPClientBase implements Runnable {
 
@@ -150,8 +150,10 @@ public class I2PTunnelConnectClient extends I2PTunnelHTTPClientBase implements R
     }
 
     /**
+     * Authentication realm for the HTTP proxy.
+     *
      * @return {@link #AUTH_REALM}, the realm this client sends in its Digest
-     *         authentication challenge to the proxy
+     * authentication challenge to the proxy
      * @since 0.9.4
      */
     protected String getRealm() {

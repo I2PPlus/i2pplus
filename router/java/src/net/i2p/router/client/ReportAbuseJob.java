@@ -19,23 +19,23 @@ import net.i2p.router.RouterContext;
 import net.i2p.util.Log;
 
 /**
- * Async job to send an abuse message to the client
+ * Async job to send an abuse message to the client.
  *
  */
 class ReportAbuseJob extends JobImpl {
     /** Log for this job. */
     private final Log _log;
-    /** Client connection to send the abuse report to */
+    /** Client connection to send the abuse report to. */
     private final ClientConnectionRunner _runner;
-    /** Destination being reported for abuse */
+    /** Destination being reported for abuse. */
     private final Destination _dest;
-    /** Description of the abuse reason */
+    /** Description of the abuse reason. */
     private final String _reason;
-    /** Severity level of the abuse report */
+    /** Severity level of the abuse report. */
     private final int _severity;
 
     /**
-     * Create abuse report
+     * Create abuse report.
      *
      * @param context the router context, whose log manager supplies this job's logger
      * @param runner the client connection the report will be sent to
@@ -52,10 +52,10 @@ class ReportAbuseJob extends JobImpl {
         _reason = reason;
         _severity = severity;
     }
-/** Return the name */
+/** Return the name. */
 
     public String getName() { return "Report Abuse to Client"; }
-/** Execute the job */
+/** Execute the job. */
 
     public void runJob() {
         if (_runner.isDead()) return;

@@ -86,14 +86,26 @@ class SAMHandlerPool {
         }
     }
 
-    /** @since 0.9.63 */
+    /**
+     * SAM ping command prefix.
+     *
+     * @since 0.9.63
+     */
     private static final String PING_PREFIX = "PING ";
-    /** @since 0.9.63 */
+    /**
+     * SAM pong reply prefix.
+     *
+     * @since 0.9.63
+     */
     private static final String PONG_PREFIX = "PONG ";
-    /** @since 0.9.63 */
+    /**
+     * SAM line terminator.
+     *
+     * @since 0.9.63
+     */
     private static final String CRLF = "\n";
 
-    /** Create the pool */
+    /** Create the pool. */
     SAMHandlerPool() {
         _log = I2PAppContext.getGlobalContext().logManager().getLog(SAMHandlerPool.class);
         try {
@@ -205,7 +217,7 @@ class SAMHandlerPool {
     }
 
     /**
-     * Number of handlers currently registered (connected)
+     * Number of handlers currently registered (connected).
      * @return the number of connected SAM handler contexts currently registered
      * @since 0.9.70+
      */

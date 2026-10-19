@@ -145,7 +145,7 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                  * Otherwise, mark it as something we received unsolicited, so we'll answer queries
                  * for it.  This flag must NOT get set on entries that we
                  * receive in response to our own lookups.
-                 * See ../HDLMJ for more info
+                 * See ../HDLMJ for more info.
                  */
                 if (!_facade.isClientDb()) {
                     if (!ls.getReceivedAsReply()) {ls.setReceivedAsPublished();}
@@ -236,7 +236,7 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                 if (isUs) {
                     /**
                      * This is initiated by PeerTestJob from another peer
-                     * throw rather than return, so that we send the ack below (prevent easy attack)
+                     * throw rather than return, so that we send the ack below (prevent easy attack).
                      */
                     dontBlamePeer = true;
                     throw new IllegalArgumentException("Router [" + key.toBase64().substring(0, 6) + "] attempted to store our RouterInfo");

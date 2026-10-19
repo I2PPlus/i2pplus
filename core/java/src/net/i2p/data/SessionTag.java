@@ -19,7 +19,7 @@ import java.util.Arrays;
  * <p>
  * Not recommended for external use, subject to change.
  * <p>
- * As of 0.9.44, does NOT extend SimpleDataStructure, to save space
+ * As of 0.9.44, does NOT extend SimpleDataStructure, to save space.
  */
 public class SessionTag {
     /** Tag length in bytes (32). */

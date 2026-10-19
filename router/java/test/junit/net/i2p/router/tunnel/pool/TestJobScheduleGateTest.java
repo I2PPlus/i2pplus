@@ -10,7 +10,7 @@ import org.junit.Test;
 
 /**
  * Unit tests for the pure scheduling gates extracted from
- * TestJob.shouldSchedule().
+ * {@link net.i2p.router.tunnel.pool.TestJob#shouldSchedule}.
  *
  * @since 0.9.71+
  */

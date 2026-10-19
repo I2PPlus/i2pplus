@@ -7,7 +7,7 @@ import java.util.Properties;
 import org.junit.Test;
 
 /**
- * LeaseSet2.setOptions() must replace the previous options, and null must
+ * {@link net.i2p.data.LeaseSet2#setOptions} must replace the previous options, and null must
  * clear them instead of throwing NullPointerException after the clear.
  *
  * @since 0.9.71+

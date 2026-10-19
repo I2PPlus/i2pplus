@@ -22,7 +22,6 @@ import java.io.OutputStream;
  * <p>
  * As of 0.9.48, does NOT extend DataStructureImpl.
  *
- * @author jrandom
  */
 public abstract class I2CPMessageImpl implements I2CPMessage {
 
@@ -56,7 +55,7 @@ public abstract class I2CPMessageImpl implements I2CPMessage {
     }
 
     /**
-     * Read the body into the data structures
+     * Read the body into the data structures.
      *
      * @param length number of bytes in the message payload
      * @throws IOException if there's an error reading from the stream
@@ -75,7 +74,7 @@ public abstract class I2CPMessageImpl implements I2CPMessage {
 
     /**
      * Read in the payload part of the message (after the initial 4 byte size and 1
-     * byte type)
+     * byte type).
      *
      * @param buf positioned just past the 4 byte size and 1 byte type header
      * @param size how many payload bytes remain to be read
@@ -86,7 +85,7 @@ public abstract class I2CPMessageImpl implements I2CPMessage {
 
     /**
      * Write out the payload part of the message (not including the 4 byte size and
-     * 1 byte type)
+     * 1 byte type).
      *
      * @return byte array
      * @throws I2CPMessageException if the message cannot be written

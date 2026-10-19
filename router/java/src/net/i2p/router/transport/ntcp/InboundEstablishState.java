@@ -67,46 +67,46 @@ import net.i2p.util.VersionComparator;
  */
 class InboundEstablishState extends EstablishBase implements NTCP2Payload.PayloadCallback {
 
-    /** Current encrypted block we are reading (IB only) or an IV buf used at the end for OB */
+    /** Current encrypted block we are reading (IB only) or an IV buf used at the end for OB. */
     private byte[] _curEncrypted;
-    /** Alice's RouterIdentity, set after gotRI() validation succeeds */
+    /** Alice's RouterIdentity, set after gotRI() validation succeeds. */
     private RouterIdentity _aliceIdent; // NOSONAR S1450: set and read in gotRI()
-    /** Flag to ensure releaseBufs() is called only once */
+    /** Flag to ensure releaseBufs() is called only once. */
     private volatile boolean _released;
 
     //// NTCP2 things
-    /** Noise protocol handshake state for XK pattern */
+    /** Noise protocol handshake state for XK pattern. */
     private HandshakeState _handshakeState;
-    /** Length of padding specified in message 1 options, used for probing resistance */
+    /** Length of padding specified in message 1 options, used for probing resistance. */
     private int _padlen1;
-    /** Length of message 3 part 2 (RI + signature) */
+    /** Length of message 3 part 2 (RI + signature). */
     private int _msg3p2len;
-    /** Reason code for handshake failure; negative means success, non-negative is failure reason */
+    /** Reason code for handshake failure; negative means success, non-negative is failure reason. */
     private int _msg3p2FailReason = -1;
-    /** Temporary buffer for receiving message 3 */
+    /** Temporary buffer for receiving message 3. */
     private ByteArray _msg3tmp;
-    /** Cached payload buffer for message 3 processing to reduce pool overhead */
+    /** Cached payload buffer for message 3 processing to reduce pool overhead. */
     private ByteArray _payloadTmp;
-    /** Alice's negotiated options from message 3 */
+    /** Alice's negotiated options from message 3. */
     private NTCP2Options _hisPadding;
     private int _version = 2;
 
-    /** Buffer size for reading data phase packets (16 KB), same as I2PTunnelRunner */
+    /** Buffer size for reading data phase packets (16 KB), same as I2PTunnelRunner. */
     private static final int BUFFER_SIZE = 16*1024;
-    /** Maximum number of read buffers to cache (32 on slow devices, 64 otherwise) */
+    /** Maximum number of read buffers to cache (32 on slow devices, 64 otherwise). */
     private static final int MAX_DATA_READ_BUFS = SystemVersion.isSlow() ? 32 : 64;
-    /** Cache for read buffers */
+    /** Cache for read buffers. */
     private static final ByteCache _dataReadBufs = ByteCache.getInstance(MAX_DATA_READ_BUFS, BUFFER_SIZE);
 
-    /** Maximum padding for probing resistance strategy (128 bytes) */
+    /** Maximum padding for probing resistance strategy (128 bytes). */
     private static final int PADDING1_FAIL_MAX = 128;
-    /** Maximum padding length in message 2 (64 bytes) */
+    /** Maximum padding length in message 2 (64 bytes). */
     private static final int PADDING2_MAX = 64;
-    /** Minimum RouterInfo size: DSA signature (40) + overhead (8+1+1+2+387) */
+    /** Minimum RouterInfo size: DSA signature (40) + overhead (8+1+1+2+387). */
     private static final int RI_MIN = 387 + 8 + 1 + 1 + 2 + 40;
-    /** Minimum message 3 part 2 size: header (1+2+1) + RI_MIN + MAC (16) */
+    /** Minimum message 3 part 2 size: header (1+2+1) + RI_MIN + MAC (16). */
     private static final int MSG3P2_MIN = 1 + 2 + 1 + RI_MIN + MAC_SIZE;
-    /** Maximum message 3 part 2 size (6000 bytes, less than full buffer) */
+    /** Maximum message 3 part 2 size (6000 bytes, less than full buffer). */
     private static final int MSG3P2_MAX = 6000;
 
     /** The set of states that are part of NTCP 2 protocol processing. */
@@ -117,7 +117,7 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
     private final BanLogger _banLogger;
 
     /**
-     * Creates a new InboundEstablishState for the given context, transport, and connection
+     * Creates a new InboundEstablishState for the given context, transport, and connection.
      *
      * @param ctx the router context
      * @param transport the NTCP transport
@@ -136,7 +136,7 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
      * Entry point for receiving data on an inbound NTCP connection.
      * Parses the contents of the buffer as part of the handshake.
      * <p>Delegates to receiveInbound() for actual processing.
-     * All data is copied out of the buffer as Reader.processRead()
+     * All data is copied out of the buffer as {@link net.i2p.router.transport.ntcp.Reader#processRead}
      * will return it to the pool.
      * <p>If there are additional data in the buffer after the handshake is complete,
      * this EstablishState is responsible for passing it to NTCPConnection.
@@ -168,7 +168,7 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
      * </ul>
      * <p>For NTCP 2, this method receives messages 1 and 3 from Alice,
      * and sends messages 2 and 4 in response.
-     * <p>All data must be copied out of the buffer as Reader.processRead()
+     * <p>All data must be copied out of the buffer as {@link net.i2p.router.transport.ntcp.Reader#processRead}
      * will return it to the pool.
      *
      * @param src the ByteBuffer containing received data; data is copied out
@@ -387,7 +387,7 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
      * we are Bob, so receive these bytes as part of an inbound connection
      * This method receives messages 1 and 3, and sends message 2.
      * <p>
-     * All data must be copied out of the buffer as Reader.processRead()
+     * All data must be copied out of the buffer as {@link net.i2p.router.transport.ntcp.Reader#processRead}
      * will return it to the pool.
      *
      * @since 0.9.36
@@ -635,7 +635,7 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
             // pass buffer for processing of "extra" data
             setDataPhase(src);
         }
-        // TODO check for remaining data and log/throw
+    // TODO check for remaining data and log/throw
     }
 
     /**

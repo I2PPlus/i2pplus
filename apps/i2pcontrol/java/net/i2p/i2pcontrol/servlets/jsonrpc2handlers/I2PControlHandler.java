@@ -47,7 +47,11 @@ public class I2PControlHandler implements RequestHandler {
     }
 
 
-    /** @return method names handled by this handler */
+    /**
+     * Method names this handler services.
+     *
+     * @return method names handled by this handler
+     */
     @Override
     public String[] handledRequests() {
         return new String[] {"I2PControl"};

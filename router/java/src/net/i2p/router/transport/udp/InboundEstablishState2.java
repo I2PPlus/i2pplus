@@ -380,9 +380,9 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
      * @since 0.9.71+
      */
     static final class AddressSelection {
-        /** the selected address, or null when no address qualified */
+        /** The selected address, or null when no address qualified. */
         final RouterAddress ra;
-        /** set when the advertised IP differs from the sender's; null otherwise */
+        /** Set when the advertised IP differs from the sender's; null otherwise. */
         final String mismatchMessage;
 
         /**
@@ -568,7 +568,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
      * - Network ID match
      * - IP match
      * - SSU2 version
-     * - Old/slow router status
+     * - Old/slow router status.
      */
     private void validateRouterInfo(RouterInfo ri, RouterAddress ra, String mismatchMessage) throws RIException {
         Hash h = _receivedUnconfirmedIdentity.calculateHash();
@@ -813,7 +813,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
     // SSU 1 overrides
 
     /**
-     * Overridden to destroy the handshake state
+     * Overridden to destroy the handshake state.
      * @since 0.9.56
      */
     @Override
@@ -835,12 +835,12 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
 
     /**
      * The send conn ID.
-     * @return the send conn id
+     * @return the 64-bit connection ID used on our outbound packets
      */
     public long getSendConnID() {return _sendConnID;}
     /**
      * The rcv conn ID.
-     * @return the rcv conn id
+     * @return the 64-bit connection ID used by the peer on its packets
      */
     public long getRcvConnID() {return _rcvConnID;}
     /**
@@ -964,6 +964,8 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
     }
 
     /**
+     * Process a session or token request after a retry, with the lock held.
+     *
      * @since 0.9.56
      */
     private void locked_receiveSessionOrTokenRequestAfterRetry(UDPPacket packet) throws GeneralSecurityException {
@@ -1113,6 +1115,8 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
     }
 
     /**
+     * Process SessionConfirmed and create the peer state, with the lock held.
+     *
      * @since 0.9.56
      */
     private PeerState2 locked_receiveSessionConfirmed(UDPPacket packet) throws GeneralSecurityException {
@@ -1456,7 +1460,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
     }
 
     /**
-     * For throwing out of gotRI()
+     * For throwing out of gotRI().
      * @since 0.9.57
      */
     static class RIException extends DataFormatException {

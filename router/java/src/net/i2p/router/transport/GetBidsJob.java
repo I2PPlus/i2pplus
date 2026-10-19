@@ -20,7 +20,7 @@ import net.i2p.util.Log;
  * Retrieves transport bids for outbound message delivery.
  * Retrieve a set of bids for a particular outbound message, and if any are found
  * that meet the message's requirements, register the message as in process and
- * pass it on to the transport for processing
+ * pass it on to the transport for processing.
  */
 class GetBidsJob {
 
@@ -32,7 +32,7 @@ class GetBidsJob {
     GetBidsJob() {}
 
     /**
-     * Transport bids for a message and send it if a suitable bid is found
+     * Transport bids for a message and send it if a suitable bid is found.
      * @param context the router context, used for stats, banlist and clock lookups
      * @param tmgr the transport manager asked to collect the bids from every available transport
      * @param msg the outbound message to bid on, dispatched on the lowest acceptable bid
@@ -112,7 +112,7 @@ class GetBidsJob {
     }
 
     /**
-     * Fail a message and trigger failure callbacks
+     * Fail a message and trigger failure callbacks.
      * @param context the router context, whose job queue receives the failure callbacks
      * @param msg the outbound message being dropped; it is unregistered from the message registry
      */

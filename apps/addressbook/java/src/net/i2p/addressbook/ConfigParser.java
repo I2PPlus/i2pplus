@@ -19,14 +19,11 @@ import net.i2p.util.SecureFileOutputStream;
 import net.i2p.util.SystemVersion;
 
 import java.nio.charset.StandardCharsets;
+// TODO: switch to the DataHelper loadProps/storeProps methods?
 /**
  * Utility class providing methods to parse and write files in config file
  * format, and subscription file format.
- * <p>
- * TODO: switch to the DataHelper loadProps/storeProps methods?
- *
- * @author Ragnarok
- */
+*/
 class ConfigParser {
 
     private ConfigParser() {

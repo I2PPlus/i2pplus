@@ -12,14 +12,13 @@ import java.security.spec.AlgorithmParameterSpec;
 /**
  * Parameter specification for an EdDSA algorithm.
  *
- * @author str4d
  * @since 0.9.15
  */
 public class EdDSAParameterSpec implements AlgorithmParameterSpec, Serializable {
     private static final long serialVersionUID = 8274987108472012L;
     /** The curve parameters. */
     private final Curve curve;
-    /** Hash algo */
+    /** Hash algo. */
     private final String hashAlgo;
     /** The scalar operations. */
     private final ScalarOps sc;

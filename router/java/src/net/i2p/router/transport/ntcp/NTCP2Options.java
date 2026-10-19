@@ -112,7 +112,7 @@ class NTCP2Options {
     }
 
     /**
-     * padding bytes per side, two dummy-rate bytes and two delay bytes
+     * Padding bytes per side, two dummy-rate bytes and two delay bytes.
      *
      * @param options the 12 byte options block from the peer's OBWH, as two
      * @return null on error

@@ -25,7 +25,6 @@ package org.cybergarage.upnp.device;
  * <p>This class is used by UPnP device parsing components to provide consistent error messages when
  * encountering issues with device description documents, improving debugging and error handling.
  *
- * @author Satoshi Konno
  * @since 1.0
  */
 public class Description {

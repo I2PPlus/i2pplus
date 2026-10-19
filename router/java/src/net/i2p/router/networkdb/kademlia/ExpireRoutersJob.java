@@ -35,12 +35,12 @@ class ExpireRoutersJob extends JobImpl {
     private final Log _log;
     private final KademliaNetworkDatabaseFacade _facade;
 
-    /** Rerun fairly often, so the fails don't queue up too many netdb searches at once */
+    /** Rerun fairly often, so the fails don't queue up too many netdb searches at once. */
     private static final long RERUN_DELAY_MS = 15*60*1000L;
     private static final int LIMIT_ROUTERS = SystemVersion.isSlow() ? 4000 : 8000;
-    /** Attested more recently than this: never dropped by the size-pressure path */
+    /** Attested more recently than this: never dropped by the size-pressure path. */
     static final long PROTECTED_ATTESTED = 12*60*60*1000L;
-    /** Attested more recently than this: dropped at half the base probability */
+    /** Attested more recently than this: dropped at half the base probability. */
     static final long STALE_ATTESTED = 36*60*60*1000L;
 
     /**
@@ -81,10 +81,10 @@ class ExpireRoutersJob extends JobImpl {
     /**
      * Run through all of the known peers and pick ones that have really old
      * routerInfo publish dates, excluding ones that we are connected to,
-     * so that they can be failed
+     * so that they can be failed.
      *
      * @return how many routers were failed and removed, 0 if the netdb is
-     *         small, we are disconnected, or the system is lagging
+     * small, we are disconnected, or the system is lagging
      */
     private int expireKeys() {
         // go through the database directly for efficiency

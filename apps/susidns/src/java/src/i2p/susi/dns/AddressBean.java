@@ -21,7 +21,7 @@ public class AddressBean {
     private final String name;
     private final byte[] dest;
     private Properties props;
-    /** available as of Java 6 */
+    /** Available as of Java 6. */
     static final boolean haveIDN;
 
     static {
@@ -73,20 +73,20 @@ public class AddressBean {
     public String getDestination() {return Base64.encode(dest);}
 
     /**
-     * The ASCII (Punycode) name
+     * The ASCII (Punycode) name.
      * @return the name exactly as supplied, not Punycode-decoded
      */
     public String getName() {return name;}
 
     /**
-     * The Unicode name, translated from Punycode
+     * The Unicode name, translated from Punycode.
      * @return the original string on error
      * @since 0.8.7
      */
     public String getDisplayName() {return toUnicode(name);}
 
     /**
-     * The Unicode name, translated from Punycode
+     * The Unicode name, translated from Punycode.
      * @param host the hostname to convert
      * @return the original string on error
      * @since 0.8.7
@@ -111,7 +111,7 @@ public class AddressBean {
     private static final char DOT4 = 0xFF61;
 
     /**
-     * Ref: java.net.IDN and RFC 3490
+     * Ref: java.net.IDN and RFC 3490.
      * @param host will be converted to lower case
      * @return name converted to lower case and punycoded if necessary
      * @throws IllegalArgumentException on various errors or if IDN is needed but not available
@@ -281,7 +281,7 @@ public class AddressBean {
     public String getNotes() {return DataHelper.escapeHTML(getProp("notes"));}
 
     /**
-     * Do this the easy way
+     * Do this the easy way.
      * @return the certificate type as a string
      * @since 0.8.7
      */
@@ -303,7 +303,7 @@ public class AddressBean {
     }
 
     /**
-     * Do this the easy way
+     * Do this the easy way.
      * @return the signature type as a string
      * @since 0.9.12
      */
@@ -318,7 +318,7 @@ public class AddressBean {
     }
 
     /**
-     * Do this the easy way
+     * Do this the easy way.
      * @return the encryption type as a string
      * @since 0.9.66
      */
@@ -345,6 +345,8 @@ public class AddressBean {
     }
 
     /**
+     * Parse a date property from the bean map.
+     *
      * @param key the property key
      * @return the formatted date
      * @since 0.8.7

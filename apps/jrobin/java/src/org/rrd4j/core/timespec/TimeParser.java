@@ -33,7 +33,6 @@ import java.time.Instant;
  * long timestamp = spec.getTimestamp();
  * </pre>
  *
- * @author Sasa Markovic (based on work by Tobi Oetiker)
  */
 public class TimeParser {
     private static final int PREVIOUS_OP = -1;

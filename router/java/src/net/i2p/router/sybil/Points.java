@@ -6,7 +6,7 @@ import java.util.List;
 import net.i2p.data.DataHelper;
 
 /**
- * A total score and a List of reason Strings
+ * A total score and a List of reason Strings.
  *
  * @since 0.9.38 moved from SybilRenderer
  */

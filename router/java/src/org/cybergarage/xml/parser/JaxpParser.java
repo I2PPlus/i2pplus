@@ -37,8 +37,6 @@ import org.xml.sax.InputSource;
  *   <li>DOM to Node tree conversion
  * </ul>
  *
- * @author Satoshi Konno
- * @author Markus Thurner
  * @since 1.0
  */
 public class JaxpParser extends Parser {

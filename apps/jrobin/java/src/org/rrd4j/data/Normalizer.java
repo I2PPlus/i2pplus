@@ -72,7 +72,11 @@ class Normalizer {
         return values;
     }
 
-    /** @return a copy of rawValues */
+    /**
+     * Copy of the values, NaN for missing.
+     *
+     * @return a copy of rawValues
+     */
     private static double[] getCopyOf(double[] rawValues) {
         int n = rawValues.length;
         double[] values = new double[n];

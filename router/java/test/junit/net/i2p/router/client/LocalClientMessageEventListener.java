@@ -29,7 +29,7 @@ import net.i2p.router.RouterContext;
 import java.util.Locale;
 
 /**
- * For testing
+ * For testing.
  *
  * @since 0.9.8
  */
@@ -40,7 +40,7 @@ class LocalClientMessageEventListener extends ClientMessageEventListener {
     }
 
     /**
-     * Immediately send a fake leaseset
+     * Immediately send a fake leaseset.
      */
     @Override
     protected void startCreateSessionJob(SessionConfig config) {
@@ -56,7 +56,7 @@ class LocalClientMessageEventListener extends ClientMessageEventListener {
     }
 
     /**
-     * Don't tell the netdb or key manager
+     * Don't tell the netdb or key manager.
      */
     @Override
     protected void handleCreateLeaseSet(CreateLeaseSetMessage message) {
@@ -64,7 +64,7 @@ class LocalClientMessageEventListener extends ClientMessageEventListener {
     }
 
     /**
-     * Look only in current local dests
+     * Look only in current local dests.
      */
     @Override
     protected void handleDestLookup(DestLookupMessage message) {
@@ -81,7 +81,7 @@ class LocalClientMessageEventListener extends ClientMessageEventListener {
     }
 
     /**
-     * Look only in current local dests
+     * Look only in current local dests.
      */
     @Override
     protected void handleHostLookup(HostLookupMessage message) {
@@ -112,7 +112,7 @@ class LocalClientMessageEventListener extends ClientMessageEventListener {
     }
 
     /**
-     * Send dummy limits
+     * Send dummy limits.
      */
     @Override
     protected void handleGetBWLimits(GetBandwidthLimitsMessage message) {

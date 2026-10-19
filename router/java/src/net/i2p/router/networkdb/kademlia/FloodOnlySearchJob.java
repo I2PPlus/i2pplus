@@ -22,7 +22,7 @@ abstract class FloodOnlySearchJob extends FloodSearchJob {
     private boolean _shouldProcessDSRM;
     private final HashSet<Hash> _unheardFrom;
 
-    /** This is a marker to register with the MessageRegistry, it is never sent */
+    /** This is a marker to register with the MessageRegistry, it is never sent. */
     private OutNetMessage _out;
     /** Reply message selector. */
     protected final MessageSelector _replySelector;
@@ -54,7 +54,7 @@ abstract class FloodOnlySearchJob extends FloodSearchJob {
     }
 
     /**
-     * For DirectLookupJob extension, RI only, different match job
+     * For DirectLookupJob extension, RI only, different match job.
      *
      * @param ctx the router context
      * @param facade the floodfill network database facade
@@ -90,7 +90,7 @@ abstract class FloodOnlySearchJob extends FloodSearchJob {
     public String getName() { return "Start NetDb Search for Floodfill"; }
 
     /**
-     * Note that we heard from the peer
+     * Note that we heard from the peer.
      *
      * @param peer the peer hash
      * @return number remaining after decrementing

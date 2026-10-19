@@ -73,7 +73,6 @@ import java.io.OutputStream;
  *   <li>All I2P protocol message classes</li>
  * </ul>
  *
- * @author jrandom
  */
 public interface DataStructure /* extends Serializable */ {
 
@@ -100,7 +99,7 @@ public interface DataStructure /* extends Serializable */ {
     public void writeBytes(OutputStream out) throws DataFormatException, IOException;
 
     /**
-     * Render the structure into modified base 64 notation
+     * Render the structure into modified base 64 notation.
      *
      * @return null on error
      */
@@ -136,7 +135,7 @@ public interface DataStructure /* extends Serializable */ {
     public void fromByteArray(byte[] data) throws DataFormatException;
 
     /**
-     * Calculate the SHA256 value of this object (useful for a few scenarios)
+     * Calculate the SHA256 value of this object (useful for a few scenarios).
      *
      * @return SHA256 hash, or null if there were problems (data format or io errors)
      */

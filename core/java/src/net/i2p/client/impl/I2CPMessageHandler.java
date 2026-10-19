@@ -12,9 +12,8 @@ package net.i2p.client.impl;
 import net.i2p.data.i2cp.I2CPMessage;
 
 /**
- * Define a way to handle a particular type of message
+ * Define a way to handle a particular type of message.
  *
- * @author jrandom
  */
 interface I2CPMessageHandler {
     /**

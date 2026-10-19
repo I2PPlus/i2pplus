@@ -58,7 +58,6 @@ import java.util.jar.JarFile;
 
 /**
  * Define the main data structure transmitted by pack/unpack.
- * @author John Rose
  */
 class Package {
     int verbose;

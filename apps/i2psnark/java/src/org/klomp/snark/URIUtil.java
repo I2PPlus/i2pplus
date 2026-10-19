@@ -233,7 +233,7 @@ public class URIUtil {
         return buf;
     }
 
-    /** Modded from Jetty TypeUtil */
+    /** Modded from Jetty TypeUtil. */
     private static void toHex(byte b, StringBuilder buf) {
         buf.append('%');
         int d = 0xf & ((0xF0 & b) >> 4);
@@ -242,7 +242,7 @@ public class URIUtil {
         buf.append((char) ((d > 9 ? ('A' - 10) : '0') + d));
     }
 
-    /** UTF-8 */
+    /** UTF-8. */
     private static void toHex(char c, StringBuilder buf) {
         if (c > 0x7f) {
             byte[] b = DataHelper.getUTF8(Character.toString(c));

@@ -94,7 +94,7 @@ public interface CompleteListener {
      * The saved comments.
      *
      * @param snark the Snark instance to read the comment set from
-     * @return the saved comments
+     * @return the comment text as saved, or null
      * @since 0.9.31
      */
     public CommentSet getSavedComments(Snark snark);

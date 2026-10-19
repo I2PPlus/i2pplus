@@ -16,7 +16,7 @@ import net.i2p.util.OrderedProperties;
  * Warning: Not suitable for multiple applications or prefixes.
  */
 public class Config {
-    /** Default constructor */
+    /** Creates an empty config. */
     public Config() {}
 
 	private static Properties properties;
@@ -99,7 +99,7 @@ public class Config {
 	}
 
 	/**
-	 * Returns the properties, sorted, WITHOUT the prefix
+	 * Returns the properties, sorted, WITHOUT the prefix.
 	 *
 	 * @return the sorted properties, with the config prefix stripped
 	 * @since 0.9.13

@@ -103,7 +103,7 @@ public class RouterKeyGenerator extends RoutingKeyGenerator {
     }
 
     /**
-     * How long until midnight (ms)
+     * How long until midnight (ms).
      *
      * @return could be slightly negative
      * @since 0.9.10 moved from UpdateRoutingKeyModifierJob
@@ -139,7 +139,7 @@ public class RouterKeyGenerator extends RoutingKeyGenerator {
 
     /**
      * Update the current modifier data with some bytes derived from the current
-     * date (yyyyMMdd in GMT)
+     * date (yyyyMMdd in GMT).
      *
      * @return true if changed
      */
@@ -181,7 +181,7 @@ public class RouterKeyGenerator extends RoutingKeyGenerator {
     }
 
     /**
-     * Routing key using tomorrow's modData, not today's
+     * Routing key using tomorrow's modData, not today's.
      *
      * @param origKey the key to be modified into a routing key
      * @return the next routing key
@@ -192,7 +192,7 @@ public class RouterKeyGenerator extends RoutingKeyGenerator {
     }
 
     /**
-     * Routing key for the specified date, not today's
+     * Routing key for the specified date, not today's.
      *
      * @param origKey the key to be modified into a routing key
      * @param time epoch milliseconds naming the day to derive the key for
@@ -212,7 +212,7 @@ public class RouterKeyGenerator extends RoutingKeyGenerator {
 
     /**
      * Generate a modified (yet consistent) hash from the origKey by generating the
-     * SHA256 of the targetKey with the specified modData appended to it
+     * SHA256 of the targetKey with the specified modData appended to it.
      *
      * @return the modified hash, computed over {@code origKey} followed by the modifier
      * @throws IllegalArgumentException if origKey is null

@@ -16,43 +16,42 @@ import java.util.Arrays;
  * protected {@link #_data} field.
  * <p>What the base class actually provides:</p>
  * <ul>
- *   <li><strong>Length:</strong> {@link #length()} is abstract, and subclasses
- *       fix it per type - 32 bytes for {@link Hash} or {@link SessionKey}, 256
- *       for an ElGamal {@link PublicKey}, and 20, 32, 64 or 256 for a
- *       {@link SigningPublicKey} depending on the algorithm. It is a fixed
- *       length per subclass, not per instance.</li>
- *   <li><strong>Single assignment:</strong> {@link #setData(byte[])},
- *       {@link #readBytes(InputStream)} and {@link #fromBase64(String)} all
- *       refuse to overwrite non-null data with a {@link RuntimeException}, and
- *       reject a wrong length. {@link #fromByteArray(byte[])} and
- *       {@link #fromBase64(String)} additionally reject null.</li>
- *   <li><strong>No copy:</strong> {@link #getData()} and
- *       {@link #toByteArray()} return the backing array itself, not a copy.</li>
- *   <li><strong>Encoding:</strong> {@link #toBase64()} and, where a subclass
- *       adds it, its own base32 rendering.</li>
- *   <li><strong>Comparison:</strong> {@link #equals(Object)} compares the raw
- *       arrays without checking the class or length, so two different
- *       SimpleDataStructure subclasses of equal length holding equal bytes
- *       compare equal (e.g. a 32-byte {@link SessionKey} and a 32-byte
- *       {@link Hash}). {@link #hashCode()} uses the first 4 bytes only, which
- *       requires the data to be random - subclasses with structured data
- *       override it.</li>
+ * <li><strong>Length:</strong> {@link #length} is abstract, and subclasses
+ * fix it per type - 32 bytes for {@link Hash} or {@link SessionKey}, 256
+ * for an ElGamal {@link PublicKey}, and 20, 32, 64 or 256 for a
+ * {@link SigningPublicKey} depending on the algorithm. It is a fixed
+ * length per subclass, not per instance.</li>
+ * <li><strong>Single assignment:</strong> {@link #setData(byte[])},
+ * {@link #readBytes(InputStream)} and {@link #fromBase64(String)} all
+ * refuse to overwrite non-null data with a {@link RuntimeException}, and
+ * reject a wrong length. {@link #fromByteArray(byte[])} and
+ * {@link #fromBase64(String)} additionally reject null.</li>
+ * <li><strong>No copy:</strong> {@link #getData} and
+ * {@link #toByteArray} return the backing array itself, not a copy.</li>
+ * <li><strong>Encoding:</strong> {@link #toBase64} and, where a subclass
+ * adds it, its own base32 rendering.</li>
+ * <li><strong>Comparison:</strong> {@link #equals(Object)} compares the raw
+ * arrays without checking the class or length, so two different
+ * SimpleDataStructure subclasses of equal length holding equal bytes
+ * compare equal (e.g. a 32-byte {@link SessionKey} and a 32-byte
+ * {@link Hash}). {@link #hashCode} uses the first 4 bytes only, which
+ * requires the data to be random - subclasses with structured data
+ * override it.</li>
  * </ul>
  * <p>Not provided here:</p>
  * <ul>
- *   <li><strong>No cache:</strong> there is no LRU or any other cache in this
- *       class. Subclasses that want one supply their own static
- *       {@link SDSCache} and expose create() factory methods that go through
- *       it - see {@link Hash}.</li>
- *   <li><strong>Not thread-safe:</strong> nothing here is synchronized and
- *       {@link #_data} is not volatile, so an instance must be published
- *       safely (final field, or a happens-before edge) before other threads
- *       read it. Safe sharing applies only to a fully populated instance that
- *       nobody mutates - and callers that mutate the array returned by
- *       getData() break that.</li>
+ * <li><strong>No cache:</strong> there is no LRU or any other cache in this
+ * class. Subclasses that want one supply their own static
+ * {@link SDSCache} and expose create() factory methods that go through
+ * it - see {@link Hash}.</li>
+ * <li><strong>Not thread-safe:</strong> nothing here is synchronized and
+ * {@link #_data} is not volatile, so an instance must be published
+ * safely (final field, or a happens-before edge) before other threads
+ * read it. Safe sharing applies only to a fully populated instance that
+ * nobody mutates - and callers that mutate the array returned by
+ * getData() break that.</li>
  * </ul>
  *
- * @author zzz
  * @since 0.8.2
  */
 public abstract class SimpleDataStructure implements DataStructure {
@@ -87,8 +86,8 @@ public abstract class SimpleDataStructure implements DataStructure {
      * structure, and breaks the hashCode contract of any subclass that caches
      * a hash of the data.
      *
-     * @return the backing array, always exactly {@link #length()} long or null
-     *         before the data has been set
+     * @return the backing array, always exactly {@link #length} long or null
+     * before the data has been set
      */
     public byte[] getData() {
         return _data;

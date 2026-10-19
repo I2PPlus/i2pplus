@@ -28,7 +28,6 @@ import org.cybergarage.upnp.*;
  * <p>This class is used by UPnP devices to respond to subscription requests from control points,
  * providing subscription confirmation, timeout information, and error status when necessary.
  *
- * @author Satoshi Konno
  * @since 1.0
  */
 public class SubscriptionResponse extends HTTPResponse {

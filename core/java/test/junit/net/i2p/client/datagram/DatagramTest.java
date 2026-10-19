@@ -22,11 +22,6 @@ import net.i2p.data.Hash;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 
-/**
- *
- * @author Comwiz
- *
- */
 public class DatagramTest extends TestCase {
     private I2PClient _client;
 

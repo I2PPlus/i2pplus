@@ -13,7 +13,7 @@ import net.i2p.util.I2PAppThread;
 import net.i2p.util.Log;
 
 /**
- * Read from a socket, producing events for any SAM message read
+ * Read from a socket, producing events for any SAM message read.
  *
  */
 public class SAMReader {
@@ -62,7 +62,7 @@ public class SAMReader {
     }
 
     /**
-     * Async event notification interface for SAM clients
+     * Async event notification interface for SAM clients.
      *
      */
     public interface SAMClientEventListener {
@@ -139,14 +139,14 @@ public class SAMReader {
         public static final String NAMING_REPLY_KEY_NOT_FOUND = "KEY_NOT_FOUND";
 
         /**
-         * version).
+         * Called when the HELLO reply arrives.
          *
          * @param ok whether the SAM bridge accepted our HELLO greeting
          * @param version the bridge version string it reported, null if none was sent
          */
         public void helloReplyReceived(boolean ok, String version);
         /**
-         * message).
+         * Called when a SESSION STATUS reply arrives.
          *
          * @param result the session status, one of the SESSION_STATUS_* constants
          * @param destination the base64 destination the status refers to
@@ -154,7 +154,7 @@ public class SAMReader {
          */
         public void sessionStatusReceived(String result, String destination, String message);
         /**
-         * message).
+         * Called when a STREAM STATUS reply arrives.
          *
          * @param result the stream status, one of the STREAM_STATUS_* constants
          * @param id the stream ID from the reply, null under SAM v3
@@ -162,14 +162,14 @@ public class SAMReader {
          */
         public void streamStatusReceived(String result, String id, String message);
         /**
-         * id).
+         * Called when a STREAM CONNECTED reply arrives.
          *
          * @param remoteDestination the base64 destination the stream is connected to
          * @param id the stream ID assigned by the SAM bridge
          */
         public void streamConnectedReceived(String remoteDestination, String id);
         /**
-         * message).
+         * Called when a STREAM CLOSED reply arrives.
          *
          * @param result the close status, one of the STREAM_CLOSED_* constants
          * @param id the stream ID of the stream that was closed
@@ -177,7 +177,7 @@ public class SAMReader {
          */
         public void streamClosedReceived(String result, String id, String message);
         /**
-         * length).
+         * Called when data arrives on a stream.
          *
          * @param id the stream ID the data arrived on
          * @param data the buffer holding the payload
@@ -186,7 +186,7 @@ public class SAMReader {
          */
         public void streamDataReceived(String id, byte[] data, int offset, int length);
         /**
-         * message).
+         * Called when a NAMING reply arrives.
          *
          * @param name the requested host name or service string
          * @param result the reply status, one of the NAMING_REPLY_* constants
@@ -195,14 +195,14 @@ public class SAMReader {
          */
         public void namingReplyReceived(String name, String result, String value, String message);
         /**
-         * privateKey).
+         * Called when a DEST reply arrives.
          *
          * @param publicKey the base64 destination the bridge generated for us
          * @param privateKey the base64 private key matching that destination
          */
         public void destReplyReceived(String publicKey, String privateKey);
         /**
-         * toPort).
+         * Called when a datagram arrives.
          *
          * @param dest the base64 destination that sent the datagram
          * @param data the buffer holding the datagram body
@@ -213,7 +213,7 @@ public class SAMReader {
          */
         public void datagramReceived(String dest, byte[] data, int offset, int length, int fromPort, int toPort);
         /**
-         * protocol).
+         * Called when a raw datagram arrives.
          *
          * @param data the buffer holding the raw datagram body
          * @param offset the index within data where the body starts
@@ -224,20 +224,20 @@ public class SAMReader {
          */
         public void rawReceived(byte[] data, int offset, int length, int fromPort, int toPort, int protocol);
         /**
-         * data).
+         * Called when a PING reply arrives.
          *
          * @param data the payload echoed back, limited to the first token of the line
          */
         public void pingReceived(String data);
         /**
-         * data).
+         * Called when a PONG reply arrives.
          *
          * @param data the payload echoed back, limited to the first token of the line
          */
         public void pongReceived(String data);
 
         /**
-         * params).
+         * Called for a SAM message the reader does not parse.
          *
          * @param major the first token of the SAM message, naming the command family
          * @param minor the second token, naming the specific command within that family

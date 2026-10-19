@@ -12,7 +12,6 @@ import java.util.ResourceBundle;
  * format of long options.
  *
  * @version 1.0.5
- * @author Aaron M. Renn (arenn@urbanophile.com)
  *
  * @see Getopt
  */

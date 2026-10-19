@@ -85,7 +85,7 @@ class Zones {
      * Example:
      * US,NA
      * <p>
-     * Modified from GeoIP.readCountryFile()
+     * Modified from {@link net.i2p.router.transport.GeoIP#readCountryFile}
      * ref: http://dev.maxmind.com/geoip/legacy/codes/country_continent/
      */
     private void readContinentFile() {

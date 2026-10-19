@@ -11,8 +11,6 @@ import java.util.Arrays;
  * An element $t$, entries $t[0] \dots t[9]$, represents the integer
  * $t[0]+2^{26} t[1]+2^{51} t[2]+2^{77} t[3]+2^{102} t[4]+\dots+2^{230} t[9]$.
  * Bounds on each $t[i]$ vary depending on context.
- * <p>
- * Reviewed/commented by Bloody Rookie (nemproject@gmx.de)
  */
 public class Ed25519FieldElement extends FieldElement {
     /**
@@ -34,7 +32,7 @@ public class Ed25519FieldElement extends FieldElement {
 
     /**
      * Copy the source field element's data into this element's array.
-     * Package-private accumulator support — allows reuse of a single
+     * Package-private accumulator support. Allows reuse of a single
      * field element instance across multiple operations instead of
      * allocating a new int[10] + wrapper for each op.
      *
@@ -99,8 +97,6 @@ public class Ed25519FieldElement extends FieldElement {
     /**
      * $h = f + g$
      * <p>
-     * TODO-CR BR: $h$ is allocated via new, probably not a good idea. Do we need the copying into temp variables if we do that?
-     * <p>
      * Preconditions:
      * </p><ul>
      * <li>$|f|$ bounded by $1.1*2^{25},1.1*2^{24},1.1*2^{25},1.1*2^{24},$ etc.
@@ -116,6 +112,7 @@ public class Ed25519FieldElement extends FieldElement {
      */
     @Override
     public FieldElement add(FieldElement val) {
+        // TODO-CR BR: $h$ is allocated via new, probably not a good idea. Do we need the copying into temp variables if we do that?
         int[] g = ((Ed25519FieldElement) val).t;
         int[] h = new int[10];
         for (int i = 0; i < 10; i++) {
@@ -128,8 +125,6 @@ public class Ed25519FieldElement extends FieldElement {
      * $h = f - g$
      * <p>
      * Can overlap $h$ with $f$ or $g$.
-     * <p>
-     * TODO-CR BR: See above.
      * <p>
      * Preconditions:
      * </p><ul>
@@ -147,6 +142,7 @@ public class Ed25519FieldElement extends FieldElement {
 
     @Override
     public FieldElement subtract(FieldElement val) {
+        // TODO-CR BR: See above.
         int[] g = ((Ed25519FieldElement) val).t;
         int[] h = new int[10];
         for (int i = 0; i < 10; i++) {
@@ -157,8 +153,6 @@ public class Ed25519FieldElement extends FieldElement {
 
     /**
      * $h = -f$
-     * <p>
-     * TODO-CR BR: see above.
      * <p>
      * Preconditions:
      * </p><ul>
@@ -173,6 +167,7 @@ public class Ed25519FieldElement extends FieldElement {
      */
     @Override
     public FieldElement negate() {
+        // TODO-CR BR: see above.
         int[] h = new int[10];
         for (int i = 0; i < 10; i++) {
             h[i] = -t[i];
@@ -826,7 +821,7 @@ public class Ed25519FieldElement extends FieldElement {
      * Invert this field element.
      * <p>
      * The inverse is found via Fermat's little theorem:<br>
-     * $a^p \cong a \mod p$ and therefore $a^{(p-2)} \cong a^{-1} \mod p$
+     * $a^p \cong a \mod p$ and therefore $a^{(p-2)} \cong a^{-1} \mod p$.
      *
      * @return The inverse of this field element.
      */
@@ -950,13 +945,12 @@ public class Ed25519FieldElement extends FieldElement {
     /**
      * This field element to the power of $(2^{252} - 3)$.
      * This is a helper function for calculating the square root.
-     * <p>
-     * TODO-CR BR: I think it makes sense to have a sqrt function.
      *
      * @return This field element to the power of $(2^{252} - 3)$.
      */
     @Override
     public FieldElement pow22523() {
+        // TODO-CR BR: I think it makes sense to have a sqrt function.
         FieldElement t0;
         FieldElement t1;
         FieldElement t2;

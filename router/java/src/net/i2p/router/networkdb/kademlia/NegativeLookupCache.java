@@ -267,7 +267,11 @@ class NegativeLookupCache {
         cleaner.cancel();
     }
 
-    /** @return true if either counter is at or over its cache threshold. */
+    /**
+     * Whether the cache is full enough to stop storing.
+     *
+     * @return true if either counter is at or over its cache threshold.
+     */
     private boolean isTripped(Hash h) {
         return counter.count(h) >= _maxFails
             || timeoutCounter.count(h) >= _maxTimeoutFails;

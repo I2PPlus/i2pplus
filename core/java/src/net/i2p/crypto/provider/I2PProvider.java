@@ -18,7 +18,7 @@ public final class I2PProvider extends Provider {
     /**
      * I2P provider instance.  This should only be required
      * when using runtime registration of the provider via
-     * <code>Security.addProvider()</code>.
+     * <code>{@link java.security.Security#addProvider}</code>.
      */
     public I2PProvider() {
         // following constructor deprecated in Java 9,

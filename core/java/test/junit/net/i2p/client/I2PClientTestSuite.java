@@ -14,9 +14,6 @@ import junit.framework.TestSuite;
 
 import net.i2p.client.datagram.DatagramTest;
 
-/**
- * @author Comwiz
- */
 public class I2PClientTestSuite {
 
     public static Test suite() {

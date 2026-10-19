@@ -13,7 +13,6 @@ import java.nio.charset.StandardCharsets;
 /**
  * This servlet generates random art (visual identifier) images.
  *
- * @author modified from identicon
  * @since 0.9.25
  */
 public class RandomArtServlet extends HttpServlet {

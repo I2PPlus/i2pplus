@@ -18,7 +18,7 @@ import net.i2p.router.TunnelPoolSettings;
 import net.i2p.router.tunnel.TunnelCreatorConfig;
 
 /**
- * Tests the pool maintenance floor ({@link TunnelPool#getEffectiveTarget()})
+ * Tests the pool maintenance floor ({@link TunnelPool#getEffectiveTarget})
  * and the LeaseSet quality comparator ({@link TunnelPool#QUALITY_COMPARATOR})
  * that back the build → publish → prune tunnel maintenance loop.
  *

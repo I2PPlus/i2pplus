@@ -13,7 +13,6 @@ package com.thetransactioncompany.jsonrpc2;
  *         object, e.g. {@code {"param1":"val1", "param2":"val2", ...}}.
  * </ul>
  *
- * @author Vladimir Dzhuvinov
  */
 public enum JSONRPC2ParamsType {
 

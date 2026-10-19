@@ -16,7 +16,7 @@ package net.i2p.router.util;
 public interface CDQEntry {
 
     /**
-     * To be set by the queue
+     * To be set by the queue.
      *
      * @param time the enqueue timestamp
      */
@@ -30,7 +30,7 @@ public interface CDQEntry {
     public long getEnqueueTime();
 
     /**
-     * Implement any reclaimation of resources here
+     * Implement any reclaimation of resources here.
      */
     public void drop();
 }

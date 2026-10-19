@@ -22,7 +22,6 @@ import java.util.NoSuchElementException;
  * with proper fail-fast behavior on concurrent modifications.
  *
  * @param <E>  type of elements in this list
- * @author zab
  * @since 0.9.4 moved from net.i2p.util in 0.9.24
  */
 @SuppressWarnings("java:S2975")
@@ -30,7 +29,7 @@ public class CachedIteratorArrayList<E> extends ArrayList<E> {
 
     private static final long serialVersionUID = 4863212596318574111L;
 
-    /** Thread local */
+    /** Thread local. */
     private volatile ThreadLocal<CachedIterator<E>> iterator = ThreadLocal.withInitial(() -> new CachedIterator<>());
 
     /** Creates a new empty CachedIteratorArrayList. */
@@ -111,7 +110,7 @@ public class CachedIteratorArrayList<E> extends ArrayList<E> {
          */
         int expectedModCount;
 
-        /** Reference to the owning list, set on each call to iterator() */
+        /** Reference to the owning list, set on each call to iterator(). */
         private transient WeakReference<CachedIteratorArrayList<E>> listRef;
 
         /** Reset iterator state for the given list. */
@@ -140,9 +139,10 @@ public class CachedIteratorArrayList<E> extends ArrayList<E> {
         }
 
         /**
-         * Returns the next element in the iteration.
+         * The next element in the iteration.
          *
          * @return the next element
+         * @throws NoSuchElementException if the iteration is finished
          */
         public E next() {
             CachedIteratorArrayList<E> l = list();

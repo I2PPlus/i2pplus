@@ -24,7 +24,6 @@ package org.cybergarage.upnp.device;
  * <p>This class is used by SSDP components to classify and process notification messages, enabling
  * proper handling of device presence announcements and departure notifications.
  *
- * @author Satoshi Konno
  * @since 1.0
  */
 public class NTS {

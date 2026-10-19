@@ -33,7 +33,7 @@ public class MetaNamingService extends DummyNamingService {
     protected final List<NamingService> _services;
 
     /**
-     * Adds the services from the i2p.nameservicelist property, in order, as chained services.
+     * Adds the services from the {@code i2p.nameservicelist} property, in order, as chained services.
      *
      * @param context the application context
      */
@@ -132,7 +132,7 @@ public class MetaNamingService extends DummyNamingService {
     }
 
     /**
-     * Stores in the last service
+     * Stores in the last service.
      */
     @Override
     public boolean put(String hostname, Destination d, Properties options) {
@@ -144,7 +144,7 @@ public class MetaNamingService extends DummyNamingService {
     }
 
     /**
-     * Stores in the last service
+     * Stores in the last service.
      */
     @Override
     public boolean putIfAbsent(String hostname, Destination d, Properties options) {
@@ -155,7 +155,7 @@ public class MetaNamingService extends DummyNamingService {
     }
 
     /**
-     * Removes from all services
+     * Removes from all services.
      */
     @Override
     public boolean remove(String hostname, Properties options) {
@@ -168,7 +168,7 @@ public class MetaNamingService extends DummyNamingService {
     }
 
     /**
-     * All services aggregated
+     * All services aggregated.
      * @return the hostname to destination mapping merged from every delegate service
      */
     @Override
@@ -181,7 +181,7 @@ public class MetaNamingService extends DummyNamingService {
     }
 
     /**
-     * All services aggregated
+     * All services aggregated.
      *
      * @return the base64 entries
      * @since 0.9.20
@@ -196,7 +196,7 @@ public class MetaNamingService extends DummyNamingService {
     }
 
     /**
-     * All services aggregated
+     * All services aggregated.
      * @return the hostnames known to every delegate service, merged into one set
      */
     @Override
@@ -210,7 +210,7 @@ public class MetaNamingService extends DummyNamingService {
 
     /**
      * All services aggregated.
-     * Duplicates not removed (for efficiency)
+     * Duplicates not removed (for efficiency).
      *
      * @since 0.9.20
      */
@@ -222,7 +222,7 @@ public class MetaNamingService extends DummyNamingService {
     }
 
     /**
-     * All services aggregated
+     * All services aggregated.
      */
     @Override
     public int size(Properties options) {

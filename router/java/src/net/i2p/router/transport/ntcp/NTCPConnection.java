@@ -117,7 +117,7 @@ public class NTCPConnection implements Closeable {
         MAX_WRITE_BUFS = Math.max(128, Math.min(2048, max));
     }
     private final Queue<ByteBuffer> _writeBufs;
-    /** Requests that were not granted immediately */
+    /** Requests that were not granted immediately. */
     private final Set<FIFOBandwidthLimiter.Request> _bwInRequests;
     private final Set<FIFOBandwidthLimiter.Request> _bwOutRequests;
     private long _establishedOn;
@@ -133,7 +133,7 @@ public class NTCPConnection implements Closeable {
      */
     private final PriBlockingQueue<OutNetMessage> _outbound;
     /**
-     *  Current prepared OutNetMessages, or empty - synchronize on _writeLock
+     * Current prepared OutNetMessages, or empty - synchronize on _writeLock.
      */
     private final List<OutNetMessage> _currentOutbound;
     /** Current partially read I2NP message. */
@@ -174,8 +174,8 @@ public class NTCPConnection implements Closeable {
     private volatile long _establishmentRttTime;
     private long _lastRateUpdated;
     /**
-     * Last time "ntcp.writeBufs.size" was recorded, to throttle the per-frame
-     *  RateStat call on the write path (sample at most once per second).
+     * Last time "{@code ntcp.writeBufs.size}" was recorded, to throttle the per-frame
+     * RateStat call on the write path (sample at most once per second).
      * Best-effort throttle only; no _writeLock needed.
      */
     private long _lastWriteBufsStat;
@@ -243,49 +243,49 @@ public class NTCPConnection implements Closeable {
     // don't make combined messages too big, to minimize latency
     // Tunnel data msgs are 1024 + 4 + 9 + 3 = 1040, allow 5
     private static final int NTCP2_PREFERRED_PAYLOAD_MAX = 5 * 1040;
-    /** Unspecified reason */
+    /** Unspecified reason. */
     static final int REASON_UNSPEC = 0;
-    /** Termination reason */
+    /** Termination reason. */
     static final int REASON_TERMINATION = 1;
-    /** Timeout reason */
+    /** Timeout reason. */
     static final int REASON_TIMEOUT = 2;
-    /** AEAD failure reason */
+    /** AEAD failure reason. */
     static final int REASON_AEAD = 4;
-    /** Options mismatch reason */
+    /** Options mismatch reason. */
     static final int REASON_OPTIONS = 5;
-    /** Signature type mismatch reason */
+    /** Signature type mismatch reason. */
     static final int REASON_SIGTYPE = 6;
-    /** Clock skew reason */
+    /** Clock skew reason. */
     static final int REASON_SKEW = 7;
-    /** Padding violation reason */
+    /** Padding violation reason. */
     static final int REASON_PADDING = 8;
-    /** Framing error reason */
+    /** Framing error reason. */
     static final int REASON_FRAMING = 9;
-    /** Payload error reason */
+    /** Payload error reason. */
     static final int REASON_PAYLOAD = 10;
-    /** Message 1 error reason */
+    /** Message 1 error reason. */
     static final int REASON_MSG1 = 11;
-    /** Message 2 error reason */
+    /** Message 2 error reason. */
     static final int REASON_MSG2 = 12;
-    /** Message 3 error reason */
+    /** Message 3 error reason. */
     static final int REASON_MSG3 = 13;
-    /** Frame timeout reason */
+    /** Frame timeout reason. */
     static final int REASON_FRAME_TIMEOUT = 14;
-    /** Signature failure reason */
+    /** Signature failure reason. */
     static final int REASON_SIGFAIL = 15;
-    /** S mismatch reason */
+    /** S mismatch reason. */
     static final int REASON_S_MISMATCH = 16;
-    /** Banned reason */
+    /** Banned reason. */
     static final int REASON_BANNED = 17;
-    /** Default minimum padding integer */
+    /** Default minimum padding integer. */
     static final int PADDING_MIN_DEFAULT_INT = 0;
-    /** Default maximum padding integer */
+    /** Default maximum padding integer. */
     static final int PADDING_MAX_DEFAULT_INT = 1;
     private static final float PADDING_MIN_DEFAULT = PADDING_MIN_DEFAULT_INT / 16.0f;
     private static final float PADDING_MAX_DEFAULT = PADDING_MAX_DEFAULT_INT / 16.0f;
-    /** Default dummy value */
+    /** Default dummy value. */
     static final int DUMMY_DEFAULT = 0;
-    /** Default delay value */
+    /** Default delay value. */
     static final int DELAY_DEFAULT = 0;
     private static final NTCP2Options OUR_PADDING = new NTCP2Options(PADDING_MIN_DEFAULT, PADDING_MAX_DEFAULT,
                                                                      PADDING_MIN_DEFAULT, PADDING_MAX_DEFAULT,
@@ -301,13 +301,13 @@ public class NTCPConnection implements Closeable {
     private byte[] _sendSipIV;
 
     /**
-     *  Create an inbound connected (though not established) NTCP connection.
-     *  Caller MUST call transport.establishing(this) after construction.
-     *  Caller MUST key.attach(this) after construction.
-     *  @param ctx the router context
-     *  @param transport the NTCP transport
-     *  @param chan the socket channel
-     *  @param key the selection key
+     * Create an inbound connected (though not established) NTCP connection.
+     * Caller MUST call {@code transport.establishing}(this) after construction.
+     * Caller MUST key.attach(this) after construction.
+     * @param ctx the router context
+     * @param transport the NTCP transport
+     * @param chan the socket channel
+     * @param key the selection key
      */
     public NTCPConnection(RouterContext ctx, NTCPTransport transport, SocketChannel chan, SelectionKey key) {
         this(ctx, transport, null, true);
@@ -319,7 +319,7 @@ public class NTCPConnection implements Closeable {
 
     /**
      * Create an outbound unconnected NTCP connection.
-     * Caller MUST call transport.establishing(this) after construction.
+     * Caller MUST call {@code transport.establishing}(this) after construction.
      *
      * @param ctx the router context
      * @param transport the NTCP transport
@@ -378,16 +378,16 @@ public class NTCPConnection implements Closeable {
     }
 
     /**
-     *  Valid for inbound; valid for outbound shortly after creation
+     * Valid for inbound; valid for outbound shortly after creation.
      *
-     *  @return the socket channel
+     * @return the socket channel
      */
     public SocketChannel getChannel() { return _chan; }
 
     /**
-     *  Valid for inbound; valid for outbound shortly after creation
+     * Valid for inbound; valid for outbound shortly after creation.
      *
-     *  @return the selection key
+     * @return the selection key
      */
     public SelectionKey getKey() { return _conKey; }
 
@@ -455,31 +455,31 @@ public class NTCPConnection implements Closeable {
     }
 
     /**
-     *  Only valid during establishment;
-     *  replaced with EstablishState.VERIFIED or FAILED afterwards
+     * Only valid during establishment;
+     * replaced with EstablishState.VERIFIED or FAILED afterwards.
      *
-     *  @return the establish state
+     * @return the establish state
      */
     EstablishState getEstablishState() { return _establishState; }
 
     /**
-     *  Only valid for outbound; null for inbound
+     * Only valid for outbound; null for inbound.
      *
-     *  @return the remote address
+     * @return the remote address
      */
     public RouterAddress getRemoteAddress() { return _remAddr; }
 
     /**
-     *  Valid for outbound; valid for inbound after handshake
+     * Valid for outbound; valid for inbound after handshake.
      *
-     *  @return the remote peer identity
+     * @return the remote peer identity
      */
     public RouterIdentity getRemotePeer() { return _remotePeer; }
 
     /**
-     *  Valid for outbound; valid for inbound after handshake
+     * Valid for outbound; valid for inbound after handshake.
      *
-     *  @param ident the remote peer identity
+     * @param ident the remote peer identity
      */
     public void setRemotePeer(RouterIdentity ident) { _remotePeer = ident; }
 
@@ -544,7 +544,7 @@ public class NTCPConnection implements Closeable {
             return queued;
     }
 
-    /** Check if there are pending outbound messages */
+    /** Check if there are pending outbound messages. */
     private boolean hasCurrentOutbound() {
         synchronized(_writeLock) {
             return ! _currentOutbound.isEmpty();
@@ -552,9 +552,9 @@ public class NTCPConnection implements Closeable {
     }
 
     /**
-     *  Drain any pending outbound messages to a new queue
-     *  @return how many pending messages were moved into the given queue
-     *  @since 0.9.46
+     * Drain any pending outbound messages to a new queue.
+     * @return how many pending messages were moved into the given queue
+     * @since 0.9.46
      */
     private int drainOutboundTo(Queue<OutNetMessage> to) {
         int rv = 0;
@@ -643,11 +643,11 @@ void noteEstablishmentRtt(int rttMs) {
    }
 
    /**
-    * When {@link #getEstimatedRTT()} was measured, on the router clock.
+    * When {@link #getEstimatedRTT} was measured, on the router clock.
     *
     * @return the handshake completion time in ms, or
-    *         {@code Transport.RTT_TIME_UNKNOWN} before establishment has
-    *         supplied a reading
+    * {@code Transport.RTT_TIME_UNKNOWN} before establishment has
+    * supplied a reading
     * @since 0.9.71+
     */
    public long getEstimatedRTTTime() {
@@ -732,7 +732,7 @@ void noteEstablishmentRtt(int rttMs) {
     }
 
     /**
-     * Track time of zero-reads to avoid closing healthy connections
+     * Track time of zero-reads to avoid closing healthy connections.
      * @return current count after incrementing
      */
     public int gotZeroRead() {
@@ -978,7 +978,7 @@ void noteEstablishmentRtt(int rttMs) {
      * Prepare the next I2NP message for transmission.  This should be run from
      * the Writer thread pool. NTCP 1 or 2.
      * <p>
-     * This is the entry point as called from Writer.Runner.run()
+     * This is the entry point as called from {@code Writer.Runner.run()}.
      *
      * @param prep an instance of PrepBuffer to use as scratch space
      *
@@ -1004,7 +1004,7 @@ void noteEstablishmentRtt(int rttMs) {
      * Contains unencrypted data that will be encrypted before transmission.
      */
     static class PrepBuffer {
-        /** Unencrypted data buffer */
+        /** Unencrypted data buffer. */
         final byte[] unencrypted;
 
         /**
@@ -1014,7 +1014,7 @@ void noteEstablishmentRtt(int rttMs) {
             unencrypted = new byte[BUFFER_SIZE];
         }
 
-        /** Initialize (no-op) */
+        /** Initialize (no-op). */
         public void init() {
         }
     }
@@ -1028,7 +1028,7 @@ void noteEstablishmentRtt(int rttMs) {
      *  @since 0.9.71+
      */
     static class BlockPool {
-        /** per-frame block list */
+        /** Blocks allocated for the frame being built. */
         final List<Block> blocks = new ArrayList<>(4);
         private final List<NTCP2Payload.I2NPBlock> i2npBlocks = new ArrayList<>(4);
         private final List<NTCP2Payload.PaddingBlock> paddingBlocks = new ArrayList<>(4);
@@ -1268,16 +1268,16 @@ void noteEstablishmentRtt(int rttMs) {
     }
 
     /**
-     *  Whether the buffered (split-frame) read path needs a fresh destination
-     *  buffer for the announced frame.
-     *  <p>Only at a frame boundary with no existing buffer large enough does the
-     *  read state allocate; otherwise the partially filled buffer is reused.
+     * Whether the buffered (split-frame) read path needs a fresh destination
+     * buffer for the announced frame.
+     * <p>Only at a frame boundary with no existing buffer large enough does the
+     * read state allocate. Otherwise the partially filled buffer is reused.
      *
-     *  @param dataBuf the current scratch buffer, or null
-     *  @param received bytes of the current frame read so far outside the shortcut
-     *  @param framelen the announced frame length
-     *  @return true if a new buffer must be allocated
-     *  @since 0.9.71+
+     * @param dataBuf the current scratch buffer, or null
+     * @param received bytes of the current frame read so far outside the shortcut
+     * @param framelen the announced frame length
+     * @return true if a new buffer must be allocated
+     * @since 0.9.71+
      */
     static boolean needsFrameBuffer(ByteArray dataBuf, int received, int framelen) {
         return received == 0 && (dataBuf == null || dataBuf.getData().length < framelen);
@@ -1388,13 +1388,13 @@ void noteEstablishmentRtt(int rttMs) {
     }
 
     /**
-     *  NTCP2 only
+     * NTCP2 only.
      *
-     *  @param dataSize the total size of the data we are sending
-     *  @param availForPad the available size for padding, not including padding block header,
-     *                     must be greater than zero
-     *  @return min 0 max availForPad
-     *  @since 0.9.36
+     * @param dataSize the total size of the data we are sending
+     * @param availForPad the available size for padding, not including padding block header,
+     * must be greater than zero
+     * @return min 0 max availForPad
+     * @since 0.9.36
      */
     private int getPaddingSize(int dataSize, int availForPad) {
         // since we're calculating with percentages, get at least a
@@ -1430,10 +1430,10 @@ void noteEstablishmentRtt(int rttMs) {
     }
 
     /**
-     *  NTCP2 only
+     * NTCP2 only.
      *
-     *  @param shouldFlood whether to flood the router info
-     *  @since 0.9.36, pkg private since 0.9.55 for EventPumper
+     * @param shouldFlood whether to flood the router info
+     * @since 0.9.36, pkg private since 0.9.55 for EventPumper
      */
     void sendOurRouterInfo(boolean shouldFlood) {
         RouterInfo ri = _context.router().getRouterInfo();
@@ -1443,9 +1443,9 @@ void noteEstablishmentRtt(int rttMs) {
     }
 
     /**
-     *  NTCP2 only
+     * NTCP2 only.
      *
-     *  @since 0.9.36
+     * @since 0.9.36
      */
     private void sendRouterInfo(RouterInfo ri, boolean shouldFlood) {
         // no synch needed, sendNTCP2() is synched
@@ -1542,19 +1542,19 @@ void noteEstablishmentRtt(int rttMs) {
     }
 
     /**
-     *  This constructs the payload from the blocks, using the
-     *  tmp byte array, then encrypts the payload and
-     *  passes it to the pumper for writing.
-     *  <p>The frame bytes go into a fixed-size pooled buffer (see
-     *  {@link EventPumper#acquireWriteBuf()}) instead of a per-frame allocation:
-     *  frames are variable-length, so the old {@code new byte[2 + framelen]} rarely
-     *  matched the pool's size class and was reallocated on every send. Only the
-     *  used {@code 2 + framelen} prefix is handed to the writer; the pumper returns
-     *  the buffer to the pool after the frame has fully drained.
+     * This constructs the payload from the blocks, using the
+     * tmp byte array, then encrypts the payload and
+     * passes it to the pumper for writing.
+     * <p>The frame bytes go into a fixed-size pooled buffer (see
+     * {@link EventPumper#acquireWriteBuf}) instead of a per-frame allocation:
+     * frames are variable-length, so the old {@code new byte[2 + framelen]} rarely
+     * matched the pool's size class and was reallocated on every send. Only the
+     * used {@code 2 + framelen} prefix is handed to the writer; the pumper returns
+     * the buffer to the pool after the frame has fully drained.
      *
-     *  @param tmp to be used for output of NTCP2Payload.writePayload(),
-     *             must have room for block output. May be released immediately on return.
-     *  @since 0.9.36
+     * @param tmp to be used for output of {@link net.i2p.router.transport.ntcp.NTCP2Payload#writePayload},
+     * must have room for block output. May be released immediately on return.
+     * @since 0.9.36
      */
     private void sendNTCP2(byte[] tmp, List<Block> blocks) {
         int payloadlen = NTCP2Payload.writePayload(tmp, 0, blocks);
@@ -1709,26 +1709,26 @@ void noteEstablishmentRtt(int rttMs) {
     }
 
     /**
-     *  Call when there is data ready to write.
-     *  If we have bandwidth, calls write() which calls EventPumnper.wantsWrite(con).
-     *  If no bandwidth, calls queuedWrite().
+     * Call when there is data ready to write.
+     * If we have bandwidth, calls write() which calls {@code EventPumnper.wantsWrite(}con).
+     * If no bandwidth, calls queuedWrite().
      *
-     *  @param data the data to write
-     *  @since moved from EventPumper in 0.9.52
+     * @param data the data to write
+     * @since moved from EventPumper in 0.9.52
      */
     void wantsWrite(byte[] data) {
         wantsWrite(data, 0, data.length);
     }
 
     /**
-     *  Call when there is data ready to write.
-     *  If we have bandwidth, calls write() which calls EventPumnper.wantsWrite(con).
-     *  If no bandwidth, calls queuedWrite().
+     * Call when there is data ready to write.
+     * If we have bandwidth, calls write() which calls {@code EventPumnper.wantsWrite(}con).
+     * If no bandwidth, calls queuedWrite().
      *
-     *  @param data the data to write
-     *  @param off the offset in the data
-     *  @param len the length of the data
-     *  @since 0.9.35 off/len version, moved from EventPumper in 0.9.52
+     * @param data the data to write
+     * @param off the offset in the data
+     * @param len the length of the data
+     * @since 0.9.35 off/len version, moved from EventPumper in 0.9.52
      */
     void wantsWrite(byte[] data, int off, int len) {
         ByteBuffer buf = ByteBuffer.wrap(data, off, len);
@@ -1774,7 +1774,7 @@ void noteEstablishmentRtt(int rttMs) {
      * The contents of the buffer have been read and can be processed asap.
      * This should not block, and the NTCP connection now owns the buffer
      * to do with as it pleases BUT it should eventually copy out the data
-     * and call EventPumper.releaseBuf().
+     * and call {@link net.i2p.router.transport.ntcp.EventPumper#releaseBuf}.
      *
      * @param buf the buffer received
      */
@@ -1836,15 +1836,15 @@ void noteEstablishmentRtt(int rttMs) {
      * <p>
      * Only enqueues the buffer and registers write interest. The socket write
      * itself is performed exclusively by the pumper thread in
-     * EventPumper.processWrite(): this single-writer contract guarantees that
-     * at most one thread calls SocketChannel.write() on this connection at a
+     * {@link net.i2p.router.transport.ntcp.EventPumper#processWrite}: this single-writer contract guarantees that
+     * at most one thread calls {@link java.nio.channels.SocketChannel#write} on this connection at a
      * time, so frame bytes can never interleave. It also removes the need to
      * hold _writeLock across the socket drain.
      *
      * @since 0.9.71+ single-writer contract (previously attempted a direct,
-     *        lock-serialized drain from the calling thread); the
-     *        "ntcp.writeBufs.size" stat is now sampled at most
-     *        once per second instead of every frame
+     * lock-serialized drain from the calling thread); the
+     * "{@code ntcp.writeBufs.size}" stat is now sampled at most
+     * once per second instead of every frame
      */
     private void write(ByteBuffer buf) {
         if (_writeBufs.size() >= MAX_WRITE_BUFS) {
@@ -1918,16 +1918,16 @@ void noteEstablishmentRtt(int rttMs) {
     }
 
     /**
-     *  Remove the buffer, which must be the current head of _writeBufs.
-     *  Called only from the pumper's drain loop (EventPumper.processWrite()).
-     *  Removal is O(1) via poll(): the single-writer drain guarantees the
-     *  buffer is at the head (producers only add, the pumper is the only
-     *  consumer), replacing the previous O(n) equals()-scan.
-     *  The completion bookkeeping self-synchronizes on _writeLock; the
-     *  _writeBufs queue operations are lock-free.
+     * Remove the buffer, which must be the current head of _writeBufs.
+     * Called only from the pumper's drain loop ({@link net.i2p.router.transport.ntcp.EventPumper#processWrite}).
+     * Removal is O(1) via poll(): the single-writer drain guarantees the
+     * buffer is at the head (producers only add, the pumper is the only
+     * consumer), replacing the previous O(n) equals()-scan.
+     * The completion bookkeeping self-synchronizes on _writeLock; the
+     * _writeBufs queue operations are lock-free.
      *
-     *  @param buf the buffer to remove
-     *  @since 0.9.71+ O(1) head removal (was _writeBufs.remove(buf))
+     * @param buf the buffer to remove
+     * @since 0.9.71+ O(1) head removal (was _writeBufs.remove(buf))
      */
     void removeWriteBuf(ByteBuffer buf) {
         // never clear OutNetMessages during establish phase
@@ -1982,9 +1982,9 @@ void noteEstablishmentRtt(int rttMs) {
     // following fields covered by _statLock
     private long _bytesReceived;
     private long _bytesSent;
-    /** _bytesReceived when we last updated the rate */
+    /** _bytesReceived when we last updated the rate. */
     private long _lastBytesReceived;
-    /** _bytesSent when we last updated the rate */
+    /** _bytesSent when we last updated the rate. */
     private long _lastBytesSent;
     private float _sendBps;
     private float _recvBps;
@@ -2003,7 +2003,7 @@ void noteEstablishmentRtt(int rttMs) {
     public float getRecvRate() { synchronized(_statLock) { return _recvBps; } }
 
     /**
-     *  Stats only for console
+     * Stats only for console.
      */
     private void updateStats() {
         synchronized(_statLock) {
@@ -2028,19 +2028,19 @@ void noteEstablishmentRtt(int rttMs) {
     }
 
     /**
-     *  Connection must be established!
+     * Connection must be established!
      * <p>
-     *  The contents of the buffer include some fraction of one or more
-     *  encrypted and encoded I2NP messages.  individual i2np messages are
-     *  encoded as "sizeof(data)+data+pad+crc", and those are encrypted
-     *  with the session key and the last 16 bytes of the previous encrypted
-     *  i2np message.
+     * The contents of the buffer include some fraction of one or more
+     * encrypted and encoded I2NP messages.  Individual I2NP messages are
+     * encoded as "sizeof(data)+data+pad+crc", and those are encrypted
+     * with the session key and the last 16 bytes of the previous encrypted
+     * I2NP message.
      * <p>
-     *  The NTCP connection now owns the buffer
-     *  BUT it must copy out the data
-     *  as reader will call EventPumper.releaseBuf().
+     * The NTCP connection now owns the buffer
+     * BUT it must copy out the data
+     * as reader will call {@link net.i2p.router.transport.ntcp.EventPumper#releaseBuf}.
      * <p>
-     *  This is the entry point as called from Reader.processRead()
+     * This is the entry point as called from {@link net.i2p.router.transport.ntcp.Reader#processRead}.
      *
      * @param buf the buffer containing encrypted data
      */
@@ -2054,11 +2054,11 @@ void noteEstablishmentRtt(int rttMs) {
     }
 
     /**
-     *  Handle a received timestamp, NTCP 1 or 2.
-     *  Caller must synch
+     * Handle a received timestamp, NTCP 1 or 2.
+     * Caller must synch.
      *
-     *  @param ts his timestamp in seconds, NOT ms
-     *  @since 0.9.36 pulled out of readMeta() above
+     * @param ts his timestamp in seconds, NOT ms
+     * @since 0.9.36 pulled out of readMeta() above
      */
     private void receiveTimestamp(long ts) {
         long ourTs = (_context.clock().now() + 500) / 1000;
@@ -2129,14 +2129,14 @@ void noteEstablishmentRtt(int rttMs) {
     /**
      * We are Alice. NTCP2 only.
      * <p>
-     * Caller MUST call recvEncryptedI2NP() after, for any remaining bytes in receive buffer
+     * Caller MUST call recvEncryptedI2NP() after, for any remaining bytes in receive buffer.
      *
      * @param sender use to send to Bob
      * @param receiver use to receive from Bob
      * @param sip_ab 24 bytes to init SipHash to Bob
      * @param sip_ba 24 bytes to init SipHash from Bob
      * @param clockSkew OUR clock minus BOB's clock in seconds (may be negative, obviously, but |val| should
-     *                  be under 1 minute)
+     * be under 1 minute)
      * @since 0.9.36
      */
     synchronized void finishOutboundEstablishment(CipherState sender, CipherState receiver,
@@ -2156,14 +2156,14 @@ void noteEstablishmentRtt(int rttMs) {
     /**
      * We are Bob. NTCP2 only.
      * <p>
-     * Caller MUST call recvEncryptedI2NP() after, for any remaining bytes in receive buffer
+     * Caller MUST call recvEncryptedI2NP() after, for any remaining bytes in receive buffer.
      *
      * @param sender use to send to Alice
      * @param receiver use to receive from Alice
      * @param sip_ba 24 bytes to init SipHash to Alice
      * @param sip_ab 24 bytes to init SipHash from Alice
      * @param clockSkew OUR clock minus ALICE's clock in seconds (may be negative, obviously, but |val| should
-     *                  be under 1 minute)
+     * be under 1 minute)
      * @param hisPadding may be null
      * @since 0.9.36
      */
@@ -2692,7 +2692,7 @@ void noteEstablishmentRtt(int rttMs) {
 
     /**
      * Little endian.
-     * Same as DataHelper.fromlongLE(src, offset, 8) but allows negative result
+     * Same as {@link net.i2p.data.DataHelper#fromlongLE}src, offset, 8) but allows negative result.
      *
      * @throws ArrayIndexOutOfBoundsException
      * @since 0.9.36
@@ -2708,7 +2708,7 @@ void noteEstablishmentRtt(int rttMs) {
 
     /**
      * Little endian.
-     * Same as DataHelper.fromlongLE(target, offset, 8, value) but allows negative value
+     * Same as {@link net.i2p.data.DataHelper#fromlongLE}target, offset, 8, value) but allows negative value.
      *
      */
     private static void toLong8LE(byte[] target, int offset, long value) {
@@ -2739,7 +2739,7 @@ void noteEstablishmentRtt(int rttMs) {
         return _writeInterestPending.compareAndSet(expected, update);
     }
 
-    /** Update last active time to now */
+    /** Update last active time to now. */
     public void updateLastActiveTime() {
         _lastActiveTime = System.currentTimeMillis();
     }
@@ -2756,7 +2756,7 @@ void noteEstablishmentRtt(int rttMs) {
     private volatile int _currentInterestOps = 0;
 
     /**
-     * Check if the given interest op is not already set
+     * Check if the given interest op is not already set.
      *
      * @param ops the interest ops to check
      * @return true if the op is not already set
@@ -2766,7 +2766,7 @@ void noteEstablishmentRtt(int rttMs) {
     }
 
     /**
-     * Update the cached interest ops
+     * Update the cached interest ops.
      *
      * @param ops the new interest ops
      */

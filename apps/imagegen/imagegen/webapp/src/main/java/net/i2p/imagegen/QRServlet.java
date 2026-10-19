@@ -30,7 +30,6 @@ import java.nio.charset.StandardCharsets;
 /**
  * This servlet generates QR code images.
  *
- * @author modiied from identicon
  * @since 0.9.25
  */
 public class QRServlet extends HttpServlet {
@@ -61,13 +60,13 @@ public class QRServlet extends HttpServlet {
     /** How long a rendered identicon stays in the cache. */
     private long identiconExpiresInMillis = DEFAULT_IDENTICON_EXPIRES_IN_MILLIS;
 
-    /** Check if client accepts SVG */
+    /** Check if client accepts SVG. */
     private static boolean acceptsSvg(HttpServletRequest req) {
         String accept = req.getHeader("Accept");
         return accept != null && accept.contains("image/svg+xml");
     }
 
-    /** Convert QR BitMatrix to SVG markup */
+    /** Convert QR BitMatrix to SVG markup. */
     private static String bitMatrixToSvg(BitMatrix matrix, String text, String textName) {
         int qrWidth = matrix.getWidth();
         int qrHeight = matrix.getHeight();
@@ -107,7 +106,7 @@ public class QRServlet extends HttpServlet {
         }
     }
 
-    /** Append SVG path data for QR modules */
+    /** Append SVG path data for QR modules. */
     private static int appendQrPath(StringBuilder sb, BitMatrix matrix, int width, int height, int yOffset) {
         boolean first = true;
         int maxY = 0;
@@ -135,7 +134,7 @@ public class QRServlet extends HttpServlet {
         return maxY;
     }
 
-    /** Escape XML special characters */
+    /** Escape XML special characters. */
     private static String escapeXml(String s) {
         StringBuilder sb = new StringBuilder(s.length());
         for (int i = 0; i < s.length(); i++) {

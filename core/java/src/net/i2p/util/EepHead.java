@@ -29,7 +29,6 @@ import net.i2p.I2PAppContext;
  * Writing from scratch rather than extending EepGet would maybe have been less bloated memory-wise.
  * This way gets us redirect handling, among other benefits.
  *
- * @author zzz
  * @since 0.7.7
  */
 public class EepHead extends EepGet {
@@ -56,7 +55,7 @@ public class EepHead extends EepGet {
 
     /**
      * CLI entry point: fetch and display HTTP response headers for a URL.
-     * Usage: EepHead [-p 127.0.0.1:4444] [-n #retries] url
+     * Usage: EepHead [-p 127.0.0.1:4444] [-n #retries] url.
      *
      * @param args the command line arguments, with options set by -p host:port,
         -n retries, -t seconds, -u user and -x password, followed by
@@ -406,7 +405,7 @@ public class EepHead extends EepGet {
     }
 
     /**
-     * We don't decrement the variable (unlike in EepGet), so this is valid
+     * We don't decrement the variable (unlike in EepGet), so this is valid.
      *
      * @return the Content-Length reported by the server, in bytes
      */

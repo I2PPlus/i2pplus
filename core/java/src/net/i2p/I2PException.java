@@ -16,7 +16,6 @@ package net.i2p;
  * those were added to Exception in Java 1.4, so this class provides nothing
  * extra at the moment.
  *
- * @author jrandom
  */
 public class I2PException extends Exception {
 

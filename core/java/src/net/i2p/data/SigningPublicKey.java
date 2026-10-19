@@ -79,7 +79,6 @@ import java.util.Arrays;
  * <li><strong>Safe Sharing:</strong> Instances can be safely shared between threads</li>
  * </ul>
  *
- * @author jrandom
  */
 public class SigningPublicKey extends SimpleDataStructure {
     private static final SigType DEF_TYPE = SigType.DSA_SHA1;
@@ -103,7 +102,7 @@ public class SigningPublicKey extends SimpleDataStructure {
 
     /**
      * Pull from cache or return new.
-     * Deprecated - used only by deprecated Destination.readBytes(data, off)
+     * Deprecated - used only by deprecated {@code Destination.readBytes(}data, off).
      *
      * @param data the buffer holding the encoded key
      * @param off the index in data at which the key starts
@@ -115,7 +114,7 @@ public class SigningPublicKey extends SimpleDataStructure {
     }
 
     /**
-     * Pull from cache or return new
+     * Pull from cache or return new.
      *
      * @param in the stream to read the encoded key from
      * @return the cached or new key
@@ -256,11 +255,11 @@ public class SigningPublicKey extends SimpleDataStructure {
 
     /**
      * Get the portion of this (type 0) SPK that is really padding based on the Key Cert type given,
-     * if any
+     * if any.
      *
      * @param kcert the key certificate
      * @return the leading padding, or a shared empty array if there is no
-     *         padding or the type is unknown
+     * padding or the type is unknown
      * @throws IllegalStateException if this is already typed to a different type
      * @since 0.9.12
      */
@@ -304,7 +303,7 @@ public class SigningPublicKey extends SimpleDataStructure {
     }
 
     /**
-     * Only for SigType EdDSA_SHA512_Ed25519
+     * Only for SigType EdDSA_SHA512_Ed25519.
      *
      * @param alpha the secret data
      * @return the blinded public key
@@ -316,6 +315,8 @@ public class SigningPublicKey extends SimpleDataStructure {
     }
 
     /**
+     * Key summary for log messages.
+     *
      * @since 0.9.8
      */
     @Override
@@ -359,6 +360,8 @@ public class SigningPublicKey extends SimpleDataStructure {
     }
 
     /**
+     * Equal if the keys are equal.
+     *
      * @since 0.9.17
      */
     @Override

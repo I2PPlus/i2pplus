@@ -17,7 +17,7 @@ import java.io.ByteArrayOutputStream;
 import org.junit.Test;
 
 /**
- * LeaseSet2.writeHeader() rejects expires &lt; published with
+ * {@link net.i2p.data.LeaseSet2#writeHeader} rejects expires &lt; published with
  * "LeaseSet expired". Client-side empty or short lease ends hit this path.
  */
 public class LeaseSet2ExpiryTest {

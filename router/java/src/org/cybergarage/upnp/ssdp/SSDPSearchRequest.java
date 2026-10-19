@@ -30,7 +30,6 @@ import org.cybergarage.upnp.device.*;
  * to find devices matching specific search targets such as device types, service types, or unique
  * device identifiers.
  *
- * @author Satoshi Konno
  * @since 1.0
  */
 public class SSDPSearchRequest extends SSDPRequest {

@@ -10,7 +10,6 @@ import java.util.Arrays;
 /**
  * EdDSA private key specification.
  *
- * @author str4d
  * @since 0.9.15
  */
 public class EdDSAPrivateKeySpec implements KeySpec {

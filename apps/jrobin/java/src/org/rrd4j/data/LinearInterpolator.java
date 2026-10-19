@@ -46,7 +46,6 @@ public class LinearInterpolator extends Plottable {
     /**
      * A enumeration of interpolation methods
      *
-     * @author Fabrice Bacchella
      */
     public enum Method {
         /** Use the previous value for interpolation */

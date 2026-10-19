@@ -42,7 +42,7 @@ public class I2PSocketException extends SocketException {
     }
 
     /**
-     * Use message provided
+     * Use message provided.
      *
      * @param message the detail message
      */
@@ -52,18 +52,18 @@ public class I2PSocketException extends SocketException {
     }
 
     /**
-     * For programmatic action based on specific failure code
+     * For programmatic action based on specific failure code.
      *
      * @return the failure code, either a {@code MessageStatusMessage} status
-     *         supplied to the integer constructor or {@code -1} when the
-     *         exception was constructed from a message alone
+     * supplied to the integer constructor or {@code -1} when the
+     * exception was constructed from a message alone
      */
     public int getStatus() {
         return _status;
     }
 
     /**
-     * For programmatic action based on specific failure code
+     * For programmatic action based on specific failure code.
      *
      * @return canned message based on status in int constructor or message from String constructor
      */
@@ -161,7 +161,7 @@ public class I2PSocketException extends SocketException {
     }
 
     /**
-     * Tag for translation
+     * Tag for translation.
      */
     private static String _x(String s) {
         return s;

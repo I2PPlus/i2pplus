@@ -118,7 +118,11 @@ public class ConfigAdvancedHandler extends FormHandler {
         }
     }
 
-    /** @since 0.9.20 */
+    /**
+     * Save floodfill settings.
+     *
+     * @since 0.9.20
+     */
     private void saveFF() {
         boolean saved = _context.router().saveConfig(ConfigAdvancedHelper.PROP_FLOODFILL_PARTICIPANT, _ff);
         if (_ff.equals("false") || _ff.equals("true")) {

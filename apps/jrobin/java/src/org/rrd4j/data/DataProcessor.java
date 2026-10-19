@@ -83,7 +83,7 @@ public class DataProcessor implements DataHolder {
     /**
      * Creates new DataProcessor object for the given time span. Ending timestamp may be set to
      * zero. In that case, the class will try to find the optimal ending timestamp based on the last
-     * update time of RRD files processed with the {@link #processData()} method.
+     * update time of RRD files processed with the {@link #processData} method.
      *
      * @param t1 Starting timestamp in seconds without milliseconds
      * @param t2 Ending timestamp in seconds without milliseconds
@@ -100,11 +100,11 @@ public class DataProcessor implements DataHolder {
     /**
      * Creates new DataProcessor object for the given time span. Ending date may be set to null. In
      * that case, the class will try to find optimal ending date based on the last update time of
-     * RRD files processed with the {@link #processData()} method.
+     * RRD files processed with the {@link #processData} method.
      *
      * @param d1 start of the range, in seconds since the epoch
      * @param d2 end of the range, in seconds since the epoch; null leaves the end
-     *           to be chosen from the last update time of the processed files
+     * to be chosen from the last update time of the processed files
      */
     public DataProcessor(Date d1, Date d2) {
         this(Util.getTimestamp(d1), d2 != null ? Util.getTimestamp(d2) : 0);
@@ -113,7 +113,7 @@ public class DataProcessor implements DataHolder {
     /**
      * Creates new DataProcessor object for the given time span. Ending date may be set to null. In
      * that case, the class will try to find optimal ending date based on the last update time of
-     * RRD files processed with the {@link #processData()} method.
+     * RRD files processed with the {@link #processData} method.
      *
      * <p>It use the time zone for starting calendar date.
      *
@@ -169,7 +169,7 @@ public class DataProcessor implements DataHolder {
 
     /**
      * Defines the {@link org.rrd4j.core.RrdDbPool RrdDbPool} to use. If not defined, but {{@link
-     * #setPoolUsed(boolean)} set to true, the default {@link RrdDbPool#getInstance()} will be used.
+     * #setPoolUsed(boolean)} set to true, the default {@link RrdDbPool#getInstance} will be used.
      *
      * @param pool an optional pool to use.
      */
@@ -182,12 +182,12 @@ public class DataProcessor implements DataHolder {
      * Sets the number of pixels (target graph width). This number is used only to calculate pixel
      * coordinates for Rrd4j graphs (methods {@link #getValuesPerPixel(String)} and {@link
      * #getTimestampsPerPixel()}), but has influence neither on datasource values calculated with
-     * the {@link #processData()} method nor on aggregated values returned from {@link
+     * the {@link #processData} method nor on aggregated values returned from {@link
      * #getAggregates(String)} and similar methods. In other words, aggregated values will not
      * change once you decide to change the dimension of your graph.
      *
      * @param pixelCount The number of pixels. If you process RRD data in order to display it on the
-     *                   graph, this should be the width of your graph.
+     * graph, this should be the width of your graph.
      */
     public void setPixelCount(int pixelCount) {
         this.pixelCount = pixelCount;
@@ -216,7 +216,7 @@ public class DataProcessor implements DataHolder {
 
     /**
      * Returns the time step used for data processing. Initially, this method returns zero. Once
-     * {@link #processData()} is finished, the method will return the time stamp interval.
+     * {@link #processData} is finished, the method will return the time stamp interval.
      *
      * @return Step used for data processing.
      */
@@ -271,11 +271,11 @@ public class DataProcessor implements DataHolder {
     /**
      * Returns ending timestamp. Basically, this value is equal to the ending timestamp specified in
      * the constructor. However, if the ending timestamps was zero, it will be replaced with the
-     * real timestamp when the {@link #processData()} method returns. The real value will be
+     * real timestamp when the {@link #processData} method returns. The real value will be
      * calculated from the last update times of processed RRD files.
      *
      * @return Ending timestamp in seconds
-     * @deprecated Uses {@link #getEndTime()} instead.
+     * @deprecated Uses {@link #getEndTime} instead.
      */
     @Deprecated
     public long getEndingTimestamp() {
@@ -283,7 +283,7 @@ public class DataProcessor implements DataHolder {
     }
 
     /**
-     * Returns consolidated timestamps created with the {@link #processData()} method.
+     * Returns consolidated timestamps created with the {@link #processData} method.
      *
      * @return array of timestamps in seconds
      */
@@ -297,13 +297,13 @@ public class DataProcessor implements DataHolder {
 
     /**
      * Returns calculated values for a single datasource. Corresponding timestamps can be obtained
-     * from the {@link #getTimestamps()} method.
+     * from the {@link #getTimestamps} method.
      *
      * @param sourceName Datasource name
      * @return an array of datasource values
      * @throws java.lang.IllegalArgumentException Thrown if invalid datasource name is specified, or
-     *                                            if datasource values are not yet calculated (method {@link #processData()} was not
-     *                                            called)
+     * if datasource values are not yet calculated (method {@link #processData} was not
+     * called)
      */
     public double[] getValues(String sourceName) {
         Source source = getSource(sourceName);
@@ -322,25 +322,25 @@ public class DataProcessor implements DataHolder {
      * @param consolFun Consolidation function to be applied to fetched datasource values. Valid
      * @return a aggregate value as a double calculated from the source.
      * @throws java.lang.IllegalArgumentException Thrown if invalid datasource name is specified, or
-     *                                            if datasource values are not yet calculated (method {@link #processData()} was not
-     *                                            called)
-     *                                            called)
-     *                                            called)
-     *                                            called)
-     *                                            constants are conveniently defined in the {@link org.rrd4j.ConsolFun} class)
-     *                                            consolidation functions are MIN, MAX, LAST, FIRST, AVERAGE and TOTAL (these string
-     *                                            called)
-     *                                            called)
-     *                                            called)
-     *                                            called)
-     *                                            called)
-     *                                            called)
-     *                                            called)
-     *                                            called)
-     *                                            called)
-     *                                            called)
-     *                                            called)
-     *                                            called)
+     * if datasource values are not yet calculated (method {@link #processData} was not
+     * called)
+     * called)
+     * called)
+     * called)
+     * constants are conveniently defined in the {@link org.rrd4j.ConsolFun} class)
+     * consolidation functions are MIN, MAX, LAST, FIRST, AVERAGE and TOTAL (these string
+     * called)
+     * called)
+     * called)
+     * called)
+     * called)
+     * called)
+     * called)
+     * called)
+     * called)
+     * called)
+     * called)
+     * called)
      * @deprecated Use {@link Variable} based method instead.
      */
     @Deprecated
@@ -358,8 +358,8 @@ public class DataProcessor implements DataHolder {
      * @param sourceName Datasource name
      * @return Object containing all aggregated values
      * @throws java.lang.IllegalArgumentException Thrown if invalid datasource name is specified, or
-     *                                            if datasource values are not yet calculated (method {@link #processData()} was not
-     *                                            called)
+     * if datasource values are not yet calculated (method {@link #processData} was not
+     * called)
      * @deprecated Use {@link Variable} based method instead.
      */
     @Deprecated
@@ -477,12 +477,12 @@ public class DataProcessor implements DataHolder {
      * object.
      *
      * @return All datasource values for all datasources. The first index is the index of the
-     *         datasource, the second index is the index of the datasource value. The number of
-     *         datasource values is equal to the number of timestamps returned with {@link
-     *         #getTimestamps()} method.
+     * datasource, the second index is the index of the datasource value. The number of
+     * datasource values is equal to the number of timestamps returned with {@link
+     * #getTimestamps()} method.
      * @throws java.lang.IllegalArgumentException Thrown if invalid datasource name is specified, or
-     *                                            if datasource values are not yet calculated (method {@link #processData()} was not
-     *                                            called)
+     * if datasource values are not yet calculated (method {@link #processData} was not
+     * called)
      */
     public double[][] getValues() {
         String[] names = getSourceNames();
@@ -922,7 +922,7 @@ public class DataProcessor implements DataHolder {
      * @param pixelCount graph width in pixels, retained for later calls
      * @return Per-pixel datasource values
      * @throws java.lang.IllegalArgumentException Thrown if datasource values are not yet calculated
-     *                                            (method {@link #processData()} was not called)
+     * (method {@link #processData} was not called)
      */
     public double[] getValuesPerPixel(String sourceName, int pixelCount) {
         setPixelCount(pixelCount);
@@ -933,12 +933,12 @@ public class DataProcessor implements DataHolder {
      * Method used to calculate datasource values which should be presented on the graph based on
      * the graph width set with a {@link #setPixelCount(int)} method call. Each value returned
      * represents a single pixel on the graph. Corresponding timestamp can be found in the array
-     * returned from {@link #getTimestampsPerPixel()} method.
+     * returned from {@link #getTimestampsPerPixel} method.
      *
      * @param sourceName Datasource name
      * @return Per-pixel datasource values
      * @throws java.lang.IllegalArgumentException Thrown if datasource values are not yet calculated
-     *                                            (method {@link #processData()} was not called)
+     * (method {@link #processData} was not called)
      */
     public double[] getValuesPerPixel(String sourceName) {
         double[] values = getValues(sourceName);
@@ -1257,6 +1257,8 @@ public class DataProcessor implements DataHolder {
     }
 
     /**
+     * Start of the data time range.
+     *
      * @since 3.7
      */
     @Override
@@ -1265,6 +1267,8 @@ public class DataProcessor implements DataHolder {
     }
 
     /**
+     * Set the time range to process.
+     *
      * @since 3.7
      */
     @Override

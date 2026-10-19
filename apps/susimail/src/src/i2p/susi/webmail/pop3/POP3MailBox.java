@@ -48,9 +48,9 @@ public class POP3MailBox implements NewMailListener {
     private boolean supportsTOP;
     private boolean supportsUIDL;
 
-    /** ID to size */
+    /** ID to size. */
     private final HashMap<Integer, Integer> sizes;
-    /** UIDL to ID */
+    /** UIDL to ID. */
     private final HashMap<String, Integer> uidlToID;
 
     private Socket socket;
@@ -109,11 +109,11 @@ public class POP3MailBox implements NewMailListener {
     }
 
     /**
-     * retrieves header from pop3 server (with TOP command and RETR as fallback)
+     * Retrieves header from pop3 server (with TOP command and RETR as fallback)
      * Caller must sync.
      *
      * @param id the 1-based message number from 1 to the mailbox size;
-     *           out of range sets lastError
+     * out of range sets lastError
      * @return Byte buffer containing header data or null
      */
     private Buffer getHeader(int id) {
@@ -201,11 +201,11 @@ public class POP3MailBox implements NewMailListener {
     }
 
     /**
-     * retrieve message body from pop3 server (via RETR command)
+     * Retrieve message body from pop3 server (via RETR command)
      * Caller must sync.
      *
      * @param id the 1-based message number from 1 to the mailbox size;
-     *           out of range sets lastError
+     * out of range sets lastError
      * @return the buffer containing body data or null
      */
     private Buffer getBody(int id, Buffer buffer) {
@@ -314,7 +314,7 @@ public class POP3MailBox implements NewMailListener {
     }
 
     /**
-     * Is the connection is still alive
+     * Is the connection is still alive.
      *
      * @return true or false
      */
@@ -480,11 +480,17 @@ public class POP3MailBox implements NewMailListener {
         return true;
     }
 
-    /** @since 0.9.34 */
+    /**
+     * Connects to the POP3 server in a background thread.
+     *
+     * @since 0.9.34
+     */
     private class ConnectRunner implements Runnable {
         private final NewMailListener _nml;
 
         /**
+         * Creates the runner with its completion listener.
+         *
          * @param nml listener to notify on connect
          */
         public ConnectRunner(NewMailListener nml) {_nml = nml;}
@@ -497,11 +503,17 @@ public class POP3MailBox implements NewMailListener {
         }
     }
 
-    /** @since 0.9.34 */
+    /**
+     * Rechecks for new mail in a background thread.
+     *
+     * @since 0.9.34
+     */
     private class RecheckRunner implements Runnable {
         private final NewMailListener _nml;
 
         /**
+         * Creates the runner with its completion listener.
+         *
          * @param nml listener to notify on recheck
          */
         public RecheckRunner(NewMailListener nml) {_nml = nml;}
@@ -576,7 +588,7 @@ public class POP3MailBox implements NewMailListener {
 
     /**
      * Closes any existing connection first.
-     * Then, connect to pop3 server, login with USER and PASS and try STAT then
+     * Then, connect to pop3 server, login with USER and PASS and try STAT then.
      *
      * Caller must sync.
      */
@@ -1085,7 +1097,7 @@ public class POP3MailBox implements NewMailListener {
     /**
      * Relay from the checker to the webmail session object,
      * which relays to MailCache, which will fetch the mail from us
-     * in a big circle
+     * in a big circle.
      *
      * @param nml the session-side listener that new-mail notifications are relayed to
      * @since 0.9.13
@@ -1095,7 +1107,7 @@ public class POP3MailBox implements NewMailListener {
     /**
      * Relay from the checker to the webmail session object,
      * which relays to MailCache, which will fetch the mail from us
-     * in a big circle
+     * in a big circle.
      *
      * @since 0.9.13
      */
@@ -1118,7 +1130,7 @@ public class POP3MailBox implements NewMailListener {
     }
 
     /**
-     * For helper threads to lock
+     * For helper threads to lock.
      * @return the monitor serializing all command and connection activity
      * @since 0.9.13
      */
@@ -1171,7 +1183,7 @@ public class POP3MailBox implements NewMailListener {
     }
 
     /**
-     * returns number of message with given UIDL
+     * Returns number of message with given UIDL
      * Caller must sync.
      *
      * @param uidl the server-side unique message id to map to a message number
@@ -1195,33 +1207,37 @@ public class POP3MailBox implements NewMailListener {
         synchronized(synchronizer) {return new ArrayList<>(uidlToID.keySet());}
     }
 
-    /** for SendRecv */
+    /** For SendRecv. */
     private enum Mode {
-        /** no extra lines (sendCmd1a) */
+        /** No extra lines (sendCmd1a). */
         A1,
-        /** return extra lines in ReadBuffer (sendCmdNa) */
+        /** Return extra lines in ReadBuffer (sendCmdNa). */
         RB,
-        /** return extra lines in List of Strings (sendCmdNl) */
+        /** Return extra lines in List of Strings (sendCmdNl). */
         LS
     }
 
     /**
-     * A command to send and a mode to receive and return the results
+     * A command to send and a mode to receive and return the results.
      * @since 0.9.13
      */
     private static class SendRecv {
         public final String send;
         public final Mode mode;
         public String response;
-        /** true for success */
+        /** True for success. */
         public boolean result;
-        /** non-null for RB mode only */
+        /** Buffer holding the returned lines, non-null in LS mode only. */
         public final Buffer rb;
         public List<String> ls;
         // to remember things
         public Object savedObject;
 
-        /** @param s may be null */
+        /**
+         * A command to send and the response mode expected.
+         *
+         * @param s may be null
+         */
         public SendRecv(String s, Mode m) {
             send = s;
             mode = m;
@@ -1229,7 +1245,7 @@ public class POP3MailBox implements NewMailListener {
         }
 
         /**
-         * RB mode only
+         * RB mode only.
          * @param s may be null
          * @since 0.9.34
          */
@@ -1273,7 +1289,7 @@ public class POP3MailBox implements NewMailListener {
         public void setHeaderOnly(boolean headerOnly);
     }
 
-    /** translate */
+    /** Looks up a localized string in the message bundle. */
     private static String _t(String s) {return Messages.getString(s);}
 
 }

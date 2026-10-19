@@ -118,7 +118,7 @@ public final class SimpleByteCache {
     }
 
     /**
-     * Clear everything (memory pressure)
+     * Clear everything (memory pressure).
      */
     public static void clearAll() {
         for (SimpleByteCache bc : _caches.values()) {
@@ -129,7 +129,11 @@ public final class SimpleByteCache {
     private final TryCache<byte[]> _available;
     private final int _entrySize;
 
-    /** @since 0.9.36 */
+    /**
+     * Factory for cached byte arrays.
+     *
+     * @since 0.9.36
+     */
     private static class ByteArrayFactory implements TryCache.ObjectFactory<byte[]> {
         private final int sz;
 
@@ -187,7 +191,7 @@ public final class SimpleByteCache {
     }
 
     /**
-     * Put this array back onto the available cache for reuse
+     * Put this array back onto the available cache for reuse.
      * @param entry the array to recycle; ignored if null, or if no cache exists for its length
      */
     public static void release(byte[] entry) {
@@ -199,7 +203,7 @@ public final class SimpleByteCache {
     }
 
     /**
-     * Put this array back onto the available cache for reuse
+     * Put this array back onto the available cache for reuse.
      */
     private void releaseIt(byte[] entry) {
         if (entry.length != _entrySize) {
@@ -211,7 +215,7 @@ public final class SimpleByteCache {
     }
 
     /**
-     * Clear everything (memory pressure)
+     * Clear everything (memory pressure).
      */
     private void clear() {
         _available.clear();
@@ -261,6 +265,8 @@ public final class SimpleByteCache {
         }
 
         /**
+         * The cached array for the key, creating it if needed.
+         *
          * @param key the array size
          * @return the cache for the key, or null
          */
@@ -321,7 +327,7 @@ public final class SimpleByteCache {
         }
 
         /**
-         * Snapshot of the caches, for the cleanup task and {@link #clearAll()}.
+         * Snapshot of the caches, for the cleanup task and {@link #clearAll}.
          *
          * @return never null
          */

@@ -32,14 +32,14 @@ import net.i2p.util.PortMapper;
 public class I2PTunnelClient extends I2PTunnelClientBase {
 
     /**
-     * list of Destination objects that we point at
+     * List of Destination objects that we point at.
      * @deprecated why protected? Is anybody using out-of-tree? Protected from the beginning (2004)
      */
     @Deprecated
     protected List<Destination> dests;
 
     /**
-     * replacement for dests
+     * Replacement for dests.
      */
     private final List<I2PSocketAddress> _addrs;
     // We don't know what protocol, so we assume the application has its own timeout mechanism
@@ -91,7 +91,11 @@ public class I2PTunnelClient extends I2PTunnelClientBase {
         notifyEvent("openClientResult", "ok");
     }
 
-    /** @since 0.9.9 moved from constructor */
+    /**
+     * Parse the destination list from config.
+     *
+     * @since 0.9.9 moved from constructor
+     */
     private void buildAddresses(String destinations) {
         if (destinations == null)
             return;
@@ -258,7 +262,7 @@ public class I2PTunnelClient extends I2PTunnelClientBase {
     }
 
     /**
-     * Overridden to unregister with port mapper
+     * Overridden to unregister with port mapper.
      *
      * @since 0.9.27
      */

@@ -19,7 +19,6 @@ import net.i2p.data.KeysAndCert;
  * As of 0.9.9 this data structure is immutable after the two keys and the certificate
  * are set; attempts to change them will throw an IllegalStateException.
  *
- * @author jrandom
  * @since 0.9.16 moved from net.i2p.data
  */
 public class RouterIdentity extends KeysAndCert {
@@ -39,7 +38,7 @@ public class RouterIdentity extends KeysAndCert {
      * Hidden mode may also be specified with a capability in the RouterInfo.
      * <p>
      * Not recommended for direct use.
-     * Use of RouterInfo.isHidden() (which calls this) is preferred.
+     * Use of {@link net.i2p.data.router.RouterInfo#isHidden} (which calls this) is preferred.
      * @return true if the certificate type limits this router's reachability
      */
     public boolean isHidden() {

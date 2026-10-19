@@ -9,10 +9,10 @@ package net.i2p.crypto;
  */
 public interface EntropyHarvester {
     /**
-     * Feed the entropy pools with data[offset:offset+len]
+     * Feed the entropy pools with data[offset:offset+len].
      *
      * @param source origin of the entropy, allowing the harvester to
-     *               determine how much to value the data
+     * determine how much to value the data
      *
      * @param data array holding the entropy bytes to harvest
      *
@@ -22,15 +22,15 @@ public interface EntropyHarvester {
     void feedEntropy(String source, byte[] data, int offset, int len);
 
     /**
-     * Feed the entropy pools with the bits in the data
+     * Feed the entropy pools with the bits in the data.
      *
      * @param source origin of the entropy, allowing the harvester to
-     *               determine how much to value the data
+     * determine how much to value the data
      *
      * @param data value whose bits are to be harvested
      *
      * @param bitoffset bit index into the data array to start
-     *                  (using java standard big-endian)
+     * (using java standard big-endian)
      *
      * @param bits how many bits to use
      */

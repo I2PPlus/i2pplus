@@ -9,7 +9,6 @@ import org.rrd4j.data.Variable;
 /**
  * Interface for holding data sources.
  *
- * @author Fabrice Bacchella
  * @since 3.7
  */
 public interface DataHolder {
@@ -44,7 +43,7 @@ public interface DataHolder {
 
     /**
      * Defines the {@link org.rrd4j.core.RrdDbPool RrdDbPool} to use. If not defined, but {{@link
-     * #setPoolUsed(boolean)} set to true, the default {@link RrdDbPool#getInstance()} will be used.
+     * #setPoolUsed(boolean)} set to true, the default {@link RrdDbPool#getInstance} will be used.
      *
      * @param pool an optional pool to use.
      */

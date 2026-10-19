@@ -290,7 +290,7 @@ public class FetchAndAdd extends Snark implements EepGet.StatusListener, Runnabl
 
     /**
      * The torrent file size, or -1. No padding information is available while fetching, so this
-     * equals {@link #getTotalLength()}.
+     * equals {@link #getTotalLength}.
      *
      * @return torrent file size or -1
      */

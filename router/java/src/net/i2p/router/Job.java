@@ -16,7 +16,7 @@ package net.i2p.router;
  */
 public interface Job {
     /**
-     * Descriptive name of the task
+     * Descriptive name of the task.
      *
      * @return the descriptive name of the task
      */
@@ -28,7 +28,7 @@ public interface Job {
      */
     public long getJobId();
     /**
-     * Timing criteria for the task
+     * Timing criteria for the task.
      *
      * @return the job timing object
      */

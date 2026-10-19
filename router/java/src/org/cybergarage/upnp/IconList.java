@@ -28,7 +28,6 @@ import java.util.Vector;
  * management for device presentation and user interface applications that display device
  * information.
  *
- * @author Satoshi Konno
  * @since 1.0
  */
 public class IconList extends Vector<Icon> {

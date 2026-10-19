@@ -69,7 +69,6 @@ import net.i2p.util.SecureFileOutputStream;
  * This class is extended by net.i2p.data.router.RouterPrivateKeyFile.
  * RouterIdentity encryption keys ARE used and must be valid.
  *
- * @author welterde, zzz
  */
 @SuppressWarnings("PMD.CloseResource")
 public class PrivateKeyFile {
@@ -91,15 +90,15 @@ public class PrivateKeyFile {
     private static final int PADDING_ENTROPY = 32;
 
     /**
-     *  Create a new PrivateKeyFile, or modify an existing one, with various
-     *  types of Certificates.
+     * Create a new PrivateKeyFile, or modify an existing one, with various
+     * types of Certificates.
      * <p>
-     *  Changing a Certificate does not change the public or private keys.
-     *  But it does change the Destination Hash, which effectively makes it
-     *  a new Destination. In other words, don't change the Certificate on
-     *  a Destination you've already registered in a hosts.txt key add form.
+     * Changing a Certificate does not change the public or private keys.
+     * But it does change the Destination Hash, which effectively makes it
+     * a new Destination. In other words, don't change the Certificate on
+     * a Destination you've already registered in a hosts.txt key add form.
      * <p>
-     *  Copied and expanded from that in Destination.java
+     * Copied and expanded from that in Destination.java.
      *
      * @param args command line arguments
      */
@@ -563,12 +562,12 @@ public class PrivateKeyFile {
     }
 
     /**
-     *  Read a PrivateKeyFile from an input stream.
-     *  Can't be used for writing
+     * Read a PrivateKeyFile from an input stream.
+     * Can't be used for writing.
      *
-     *  @param in the input stream
-     *  @throws I2PSessionException if session creation fails
-     *  @since 0.9.26
+     * @param in the input stream
+     * @throws I2PSessionException if session creation fails
+     * @since 0.9.26
      */
     public PrivateKeyFile(InputStream in) throws I2PSessionException {
         this("/dev/null");
@@ -618,11 +617,11 @@ public class PrivateKeyFile {
     }
 
     /**
-     *  Create with the specified signature and encryption types if nonexistent.
-     *  Private for now, only for router.keys.dat testing.
+     * Create with the specified signature and encryption types if nonexistent.
+     * Private for now, only for {@code router.keys.dat} testing.
      * <p>
-     *  Also reads in the file to get the privKey and signingPrivKey,
-     *  which aren't available from I2PClient.
+     * Also reads in the file to get the privKey and signingPrivKey,
+     * which aren't available from I2PClient.
      *
      * @since 0.9.42
      */
@@ -833,9 +832,9 @@ public class PrivateKeyFile {
     }
 
     /**
-     *  Private key may be random data or all zeros for Destinations as of 0.9.57
+     * Private key may be random data or all zeros for Destinations as of 0.9.57.
      *
-     *  @return null on error or if not initialized
+     * @return null on error or if not initialized
      */
     public PrivateKey getPrivKey() {
         try {
@@ -881,13 +880,13 @@ public class PrivateKeyFile {
     }
 
     /**
-     *  Side effect - zeroes out the current signing private key
+     * Side effect - zeroes out the current signing private key.
      *
-     *  @param expires expiration time in Java ms
-     *  @param transientPub the transient signing public key
-     *  @param sig the offline signature
-     *  @param transientPriv the transient signing private key
-     *  @since 0.9.38
+     * @param expires expiration time in Java ms
+     * @param transientPub the transient signing public key
+     * @param sig the offline signature
+     * @param transientPriv the transient signing private key
+     * @since 0.9.38
      */
     public void setOfflineData(
             long expires, SigningPublicKey transientPub, Signature sig, SigningPrivateKey transientPriv) {
@@ -982,11 +981,11 @@ public class PrivateKeyFile {
     }
 
     /**
-     *  Write the keys to the file.
-     *  Copied from I2PClientImpl.createDestination()
+     * Write the keys to the file.
+     * Copied from {@link net.i2p.client.impl.I2PClientImpl#createDestination}.
      *
      * @throws IOException if file operations fail
-     *  @throws DataFormatException if data encoding fails
+     * @throws DataFormatException if data encoding fails
      */
     public void write() throws IOException, DataFormatException {
         try (OutputStream out = new SecureFileOutputStream(this.file)) {
@@ -1004,10 +1003,10 @@ public class PrivateKeyFile {
     }
 
     /**
-     *  Verify that the PublicKey matches the PrivateKey, and
-     *  the SigningPublicKey matches the SigningPrivateKey.
+     * Verify that the PublicKey matches the PrivateKey, and
+     * the SigningPublicKey matches the SigningPrivateKey.
      * <p>
-     *  NOTE this will fail for Destinations containing random padding for the enc. key
+     * NOTE this will fail for Destinations containing random padding for the enc. key.
      *
      * @return true if both key pairs match, false otherwise
      * @since 0.9.16

@@ -30,11 +30,11 @@ import net.i2p.util.SystemVersion;
 public class CoDelPriorityBlockingQueue<E extends CDPQEntry> extends PriBlockingQueue<E> {
 
     // following 4 are state variables defined by sample code, locked by this
-    /** Time when we'll declare we're above target (0 if below) */
+    /** Time when we'll declare we're above target (0 if below). */
     private long _first_above_time;
-    /** Time to drop next packet */
+    /** Time to drop next packet. */
     private long _drop_next;
-    /** Packets dropped since going into drop state */
+    /** Packets dropped since going into drop state. */
     private int _count;
     /** True if in drop state. */
     private boolean _dropping;
@@ -57,10 +57,10 @@ public class CoDelPriorityBlockingQueue<E extends CDPQEntry> extends PriBlocking
      * Below a target of 5 ms, utilization suffers for some conditions and traffic loads;
      * above 5 ms there is very little or no improvement in utilization.
      * <p>
-     * I2P: Lowered to 5ms for reduced latency in high-performance scenarios
+     * I2P: Lowered to 5ms for reduced latency in high-performance scenarios.
      */
     private static final int DEFAULT_CODEL_TARGET = 5;
-    /** Property key for CoDel target delay */
+    /** Property key for CoDel target delay. */
     public static final String PROP_CODEL_TARGET = "router.codelTarget";
     /** CoDel target delay in ms. */
     private volatile long _target;
@@ -69,17 +69,17 @@ public class CoDelPriorityBlockingQueue<E extends CDPQEntry> extends PriBlocking
      * Quote:
      * A setting of 100 ms works well across a range of RTTs from 10 ms to 1 second
      * <p>
-     * I2P: Lowered to 50ms for faster reaction to congestion
+     * I2P: Lowered to 50ms for faster reaction to congestion.
      */
     private static final int DEFAULT_CODEL_INTERVAL = 50;
-    /** Property key for CoDel interval */
+    /** Property key for CoDel interval. */
     public static final String PROP_CODEL_INTERVAL = "router.codelInterval";
     /** CoDel interval in ms. */
     private volatile long _interval;
     /** RateStat name for dropped messages. */
     private final String STAT_DROP;
 
-    /** Active instances for dynamic tuning — weak refs prevent leak when tunnels expire */
+    /** Active instances for dynamic tuning — weak refs prevent leak when tunnels expire. */
     private static final CopyOnWriteArrayList<WeakReference<CoDelPriorityBlockingQueue>> INSTANCES = new CopyOnWriteArrayList<>();
 
     /** Remove this instance from the tuning list. */
@@ -115,7 +115,7 @@ public class CoDelPriorityBlockingQueue<E extends CDPQEntry> extends PriBlocking
             if (q != null) q._interval = interval;
         }
     }
-    /** Stat name for delay tracking */
+    /** Stat name for delay tracking. */
     private final String STAT_DELAY;
     /** Minimum priority. */
     public static final int MIN_PRIORITY = 100;
@@ -205,7 +205,8 @@ public class CoDelPriorityBlockingQueue<E extends CDPQEntry> extends PriBlocking
     }
 
     /**
-     * Returns the current CoDel target delay in ms.
+     * The CoDel target queuing delay, the delay considered acceptable before
+     * the queue is judged congested.
      *
      * @return the target delay in ms
      */
@@ -219,7 +220,8 @@ public class CoDelPriorityBlockingQueue<E extends CDPQEntry> extends PriBlocking
     public void setTarget(long target) { _target = target; }
 
     /**
-     * Returns the current CoDel interval in ms.
+     * The CoDel measuring interval, the sliding window over which the minimum
+     * queuing delay is observed.
      *
      * @return the interval in ms
      */
@@ -331,7 +333,7 @@ public class CoDelPriorityBlockingQueue<E extends CDPQEntry> extends PriBlocking
     }
 
     /**
-     * Caller must synch on this
+     * Caller must synch on this.
      *
      * @param entry may be null
      */
@@ -450,7 +452,7 @@ public class CoDelPriorityBlockingQueue<E extends CDPQEntry> extends PriBlocking
     }
 
     /**
-     * Caller must synch on this
+     * Caller must synch on this.
      */
     private void control_law(long t) {
         _drop_next = t + (long) (_interval / Math.sqrt(_count));

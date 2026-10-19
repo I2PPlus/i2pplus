@@ -72,7 +72,7 @@ public class TestJob extends JobImpl {
     /**
      * Consecutive test rounds deferred because the partner tunnel was suspect.
      * Bounded so a tunnel that genuinely fails tests is eventually marked even
-     * when its partner is also degraded — otherwise cascading deferrals delay
+     * when its partner is also degraded. Otherwise cascading deferrals delay
      * failure detection indefinitely.
      * @since 0.9.71+
      */
@@ -80,7 +80,7 @@ public class TestJob extends JobImpl {
     /**
      * True once this failure has already been re-tested against a different
      * partner without charging the tunnel. Set on the first ambiguous failure
-     * so the following round is a confirmation; cleared on any success and
+     * so the following round is a confirmation. Cleared on any success and
      * once the failure is finally charged, so each charge needs a fresh
      * confirmation.
      * @since 0.9.71+
@@ -115,7 +115,7 @@ public class TestJob extends JobImpl {
     private int _deferredCount = 0;
     /**
      * Lifetime budget of paired-pool kicks issued by the deferral escape in
-     * {@link #runJob()}.  A partner shortage is not evidence against this
+     * {@link #runJob}.  A partner shortage is not evidence against this
      * tunnel, so it is never failed for one — but the kick must still be
      * bounded, or a paired pool that cannot recover turns into an unbounded
      * rebuild loop against a tunnel that has no say in the matter.
@@ -168,57 +168,57 @@ public class TestJob extends JobImpl {
      */
     static final int TEST_ROUND_BYTES = 1024;
     /**
-     *  Grace period before a tunnel's first test failure can count against it.
-     *  <p>A tunnel that is condemned before it has had a realistic chance to
-     *  settle and carry traffic can never prove itself, and a pool in that
-     *  state cannot reach steady state.  Measured on a live router: outbound
-     *  pools were condemning a tunnel every ~1.8 min against a 10-12 min
-     *  configured lifetime, because the fastest retest interval and a
-     *  four-strike threshold condemn a failing tunnel in ~90s.  Nothing
-     *  distinguished "this tunnel is dead" from "this tunnel is ninety seconds
-     *  old".
-     *  <p>Must exceed the fastest path to condemnation — four strikes at the
-     *  30s minimum retest interval is 120s — or a young tunnel can still
-     *  reach the threshold inside its own grace and the loop is not broken.
-     *  Three minutes leaves margin over that 120s while staying well inside a
-     *  10-12 minute lifetime, so a genuinely dead tunnel is delayed by at most
-     *  this much: the grace defers the first charge, it does not excuse the
-     *  tunnel.
+     * Grace period before a tunnel's first test failure can count against it.
+     * <p>A tunnel that is condemned before it has had a realistic chance to
+     * settle and carry traffic can never prove itself, and a pool in that
+     * state cannot reach steady state.  Measured on a live router: outbound
+     * pools were condemning a tunnel every ~1.8 min against a 10-12 min
+     * configured lifetime, because the fastest retest interval and a
+     * four-strike threshold condemn a failing tunnel in ~90s.  Nothing
+     * distinguished "this tunnel is dead" from "this tunnel is ninety seconds
+     * old".
+     * <p>Must exceed the fastest path to condemnation. Four strikes at the
+     * 30s minimum retest interval is 120s — or a young tunnel can still
+     * reach the threshold inside its own grace and the loop is not broken.
+     * Three minutes leaves margin over that 120s while staying well inside a
+     * 10-12 minute lifetime, so a genuinely dead tunnel is delayed by at most
+     * this much: the grace defers the first charge, it does not excuse the
+     * tunnel.
      *
-     *  @since 0.9.71+
+     * @since 0.9.71+
      */
     static final long YOUNG_TUNNEL_GRACE_MS = 3 * 60 * 1000L;
 
     /**
-     *  Probe the far endpoint of a tunnel whose test round just failed, and
-     *  record whether it was still reachable.
-     *  <p>A round times out, the tunnel is charged, and the pool loses it.  The
-     *  charge assumes the far endpoint was gone, but nothing records whether
-     *  that was true.  Two very different faults produce the same verdict: the
-     *  endpoint having died (the tunnel is genuinely broken, so the charge is
-     *  correct), and the endpoint being alive with the reply simply never
-     *  arriving (the tunnel is being condemned for something it does not own).
-     *  The first is a data-path fault; the second is a fault in the test's own
-     *  pass criterion, and the remedy is opposite.  One counter cannot tell
-     *  them apart, so this splits the population.
-     *  <p>Observational only: it never gates selection, never alters the
-     *  charge, and never changes timing, so it cannot itself change behaviour.
-     *  It runs only on rounds that have already failed and are already being
-     *  charged.
-     *  <p>Two signals are read rather than one, because
-     *  {@link CommSystemFacade#isEstablished} and
-     *  {@link CommSystemFacade#wasUnreachable} both default to {@code false}
-     *  in the interface and only their implementations answer.  A lookup that
-     *  misses therefore reports "reachable" silently; recording both makes that
-     *  failure mode visible in the data instead of hiding it.
-     *  <p>Caveats, so the result is not over-read: "established" means reachable
-     *  <em>now</em>, not that the peer was reachable when the message was sent
-     *  and chose not to answer; and it does not separate a send failure from a
-     *  lost reply, since both look the same from here.  Only failed rounds are
-     *  probed, so the counters describe the failure population only.
+     * Probe the far endpoint of a tunnel whose test round just failed, and
+     * record whether it was still reachable.
+     * <p>A round times out, the tunnel is charged, and the pool loses it.  The
+     * charge assumes the far endpoint was gone, but nothing records whether
+     * that was true.  Two very different faults produce the same verdict: the
+     * endpoint having died (the tunnel is genuinely broken, so the charge is
+     * correct), and the endpoint being alive with the reply simply never
+     * arriving (the tunnel is being condemned for something it does not own).
+     * The first is a data-path fault. The second is a fault in the test's own
+     * pass criterion, and the remedy is opposite.  One counter cannot tell
+     * them apart, so this splits the population.
+     * <p>Observational only: it never gates selection, never alters the
+     * charge, and never changes timing, so it cannot itself change behaviour.
+     * It runs only on rounds that have already failed and are already being
+     * charged.
+     * <p>Two signals are read rather than one, because
+     * {@link CommSystemFacade#isEstablished} and
+     * {@link CommSystemFacade#wasUnreachable} both default to {@code false}
+     * in the interface and only their implementations answer.  A lookup that
+     * misses therefore reports "reachable" silently; recording both makes that
+     * failure mode visible in the data instead of hiding it.
+     * <p>Caveats, so the result is not over-read: "established" means reachable
+     * <em>now</em>, not that the peer was reachable when the message was sent
+     * and chose not to answer; and it does not separate a send failure from a
+     * lost reply, since both look the same from here.  Only failed rounds are
+     * probed, so the counters describe the failure population only.
      *
      * @param cfg the tunnel whose round failed
-     *  @since 0.9.71+
+     * @since 0.9.71+
      */
     private void probeFarEndpoint(TunnelInfo cfg) {
         if (cfg == null) {return;}
@@ -340,19 +340,19 @@ public class TestJob extends JobImpl {
     }
 
     /**
-     *  Failure rate of a reply partner: failures divided by rounds it carried.
-     *  A rate is the only figure comparable between partners — a raw "blamed
-     *  before" flag reads a stable pool as bad and a churning pool as good,
-     *  because it tracks how often a partner is re-picked rather than how
-     *  often it fails.  That confound was visible in the field: outbound tests
-     *  drew partners from the stable inbound pool and showed a 74% repeat
-     *  share, while inbound tests drew from the churning outbound pool and
-     *  showed 15%.  Neither number said anything about partner health.
+     * Failure rate of a reply partner: failures divided by rounds it carried.
+     * A rate is the only figure comparable between partners. A raw "blamed
+     * before" flag reads a stable pool as bad and a churning pool as good,
+     * because it tracks how often a partner is re-picked rather than how
+     * often it fails.  That confound was visible in the field: outbound tests
+     * drew partners from the stable inbound pool and showed a 74% repeat
+     * share, while inbound tests drew from the churning outbound pool and
+     * showed 15%.  Neither number said anything about partner health.
      *
      * @param tally partner to failure/use counts, may be null
      * @param replyPartner the tunnel the reply came back through, may be null
      * @return failures per round carried, 0 when nothing is recorded
-     *  @since 0.9.71+
+     * @since 0.9.71+
      */
     static double replyPartnerFailureRate(Map<Hash, long[]> tally, TunnelInfo replyPartner) {
         if (tally == null || tally.isEmpty() || replyPartner == null) {return 0d;}
@@ -583,7 +583,7 @@ public class TestJob extends JobImpl {
      * Maximum number of tunnel tests that can run concurrently.
      * Prevents overwhelming the router with too many simultaneous tunnel tests.
      * This value can be adjusted based on system capacity.
-     * Tunable via i2p.tunnel.testJob.maxConcurrent (default: 64 fast / 32 slow)
+     * Tunable via {@code i2p.tunnel.testJob.maxConcurrent} (default: 64 fast / 32 slow).
      * @return the max concurrent tests
      */
     private static int getMaxConcurrentTests(RouterContext ctx) {
@@ -593,7 +593,7 @@ public class TestJob extends JobImpl {
 
     /**
      * The minimum test period from config or default (3s).
-     * Tunable via i2p.tunnel.testJob.minTestPeriod (default: 3000).
+     * Tunable via {@code i2p.tunnel.testJob.minTestPeriod} (default: 3000).
      * @return the min test period
      */
     private int getMinTestPeriod() {
@@ -602,7 +602,7 @@ public class TestJob extends JobImpl {
 
     /**
      * The maximum test period from config or default (15s).
-     * Tunable via i2p.tunnel.testJob.maxTestPeriod (default: 15000).
+     * Tunable via {@code i2p.tunnel.testJob.maxTestPeriod} (default: 15000).
      * @return the max test period
      */
     private int getMaxTestPeriod() {
@@ -719,7 +719,7 @@ public class TestJob extends JobImpl {
     /**
      * Maximum number of TestJob instances that should be queued before deferring new ones.
      * Prevents job queue saturation from too many waiting tunnel tests.
-     * Tunable via i2p.tunnel.testJob.maxQueued (default: 96 fast / 64 slow).
+     * Tunable via {@code i2p.tunnel.testJob.maxQueued} (default: 96 fast / 64 slow).
      * Dynamically overridden by the Tuner at runtime; when it still holds the
      * built-in default, the configured property value is applied on first use.
      */
@@ -728,7 +728,7 @@ public class TestJob extends JobImpl {
     /**
      * The queue ceiling actually in force. Starts at
      * {@link #DEFAULT_QUEUED_LIMIT} and is replaced either by the Tuner or by
-     * the i2p.tunnel.testJob.maxQueued property, so read it rather than
+     * the {@code i2p.tunnel.testJob.maxQueued} property, so read it rather than
      * assuming either.
      */
     public static volatile int maxQueuedTests = DEFAULT_QUEUED_LIMIT;
@@ -763,7 +763,7 @@ public class TestJob extends JobImpl {
      * starving critical router jobs, but never below half the base
      * limit — see {@link #scaleHardLimit(int, long)}.
      * <p>
-     * Tunable via i2p.tunnel.testJob.hardLimit (default: 512 fast / 384 slow)
+     * Tunable via {@code i2p.tunnel.testJob.hardLimit} (default: 512 fast / 384 slow).
      * @param ctx the router context
      * @return the pressure-scaled hard limit
      */
@@ -949,7 +949,7 @@ public class TestJob extends JobImpl {
      * Name of a per-direction test outcome stat.
      * <p>
      * A successful test emits no log line at all, so counters are the only way
-     * to see test health by direction — without them "no outbound tests passed"
+     * to see test health by direction. Without them "no outbound tests passed"
      * and "passing tests are not logged" are indistinguishable in a log review.
      * Registration and emission both route through this method, so a stat can
      * never be written without being declared: {@code addRateData()} silently
@@ -1069,15 +1069,15 @@ public class TestJob extends JobImpl {
 
 
     /**
-     *  Arm a confirming round: mark the failure as unconfirmed, remember the
-     *  partner that must not be reused, and schedule the round ASAP.  The
-     *  tunnel is not charged for this failure; only a confirming round that
-     *  also fails charges it.
+     * Arm a confirming round: mark the failure as unconfirmed, remember the
+     * partner that must not be reused, and schedule the round ASAP.  The
+     * tunnel is not charged for this failure. Only a confirming round that
+     * also fails charges it.
      *
      * @param partner the partner whose failure triggered this, may be null
      * @return true if the confirming round was scheduled, false if it could
-     *         not be and the caller should charge the tunnel as before
-     *  @since 0.9.71+
+     * not be and the caller should charge the tunnel as before
+     * @since 0.9.71+
      */
     private boolean beginConfirmationRound(TunnelInfo partner) {
         _confirmPending = true;
@@ -1107,15 +1107,15 @@ public class TestJob extends JobImpl {
     }
 
     /**
-     *  Whether a candidate partner is usable for this round, i.e. present and
-     *  not the one a confirming round is meant to avoid.  A confirming round
-     *  that reused the failed partner would prove nothing, so it must prefer a
-     *  different one; if none exists the round still proceeds with it, which
-     *  simply leaves the tunnel to be charged as it was before.
+     * Whether a candidate partner is usable for this round, i.e. present and
+     * not the one a confirming round is meant to avoid.  A confirming round
+     * that reused the failed partner would prove nothing, so it must prefer a
+     * different one. If none exists the round still proceeds with it, which
+     * simply leaves the tunnel to be charged as it was before.
      *
      * @param t candidate partner, may be null
      * @return true when the candidate may be used
-     *  @since 0.9.71+
+     * @since 0.9.71+
      */
     private boolean usablePartner(TunnelInfo t) {
         return usablePartner(t, _excludedPartner);
@@ -1142,13 +1142,13 @@ public class TestJob extends JobImpl {
      * the per-peer throughput profile only.
      * <p>{@code realTraffic} is false and must stay false.  A test round is
      * the tunnel under test carrying its own probe, so crediting it as real
-     * traffic would stamp {@link TunnelCreatorConfig#getLastTransferred()} —
+     * traffic would stamp {@link TunnelCreatorConfig#getLastTransferred} —
      * and for an outbound test the outgoing tunnel <em>is</em> the tunnel
      * under test.  A tunnel that had never carried a single production byte
      * would then look recently proven and could grant itself the data-verified
      * test trust, which is decided on exactly that clock.  The exemption
      * budget is unaffected, since only
-     * {@link TunnelCreatorConfig#recordRealTraffic()} refills it.
+     * {@link TunnelCreatorConfig#recordRealTraffic} refills it.
      * <p>Static and taking the tunnel as an argument, so the call site itself
      * is testable: asserting on {@code TunnelCreatorConfig} directly would
      * pass even if this passed the wrong flag.
@@ -1251,7 +1251,7 @@ public class TestJob extends JobImpl {
 
     /**
      * The job queue is going away.  Its shutdown clears queued jobs without
-     * running {@link #dropped()} or their timeout callbacks, so anything the
+     * running {@link #dropped} or their timeout callbacks, so anything the
      * queue held would otherwise leak its slots, keep its pending selector,
      * and leave the pump flag set forever.  Reset the context's batch state
      * so those leaks cannot outlive the queue; there is no matching
@@ -1311,7 +1311,7 @@ public class TestJob extends JobImpl {
         return "client-" + destination.toBase64() + "-" + direction;
     }
 
-            /** Flag to indicate if this job is valid and should be queued */
+            /** Flag to indicate if this job is valid and should be queued. */
     private boolean _valid = true;
 
     /**
@@ -1335,7 +1335,7 @@ public class TestJob extends JobImpl {
     /**
      * The last pending message registered for this instance's round, kept so a
      * reset or drop can unregister it even when the round was registered but
-     * never armed (permit refusal).  Re-registering overwrites it; the
+     * never armed (permit refusal).  Re-registering overwrites it. The
      * registry's unregister is idempotent, so a stale reference is harmless.
      */
     private volatile OutNetMessage _pendingMessage;
@@ -1720,16 +1720,16 @@ public class TestJob extends JobImpl {
     }
 
     /**
-     *  Whether a pool is critically low on tunnels: no active tunnels at all,
-     *  or at most 2 active against a larger target.  Critical pools get test
-     *  priority so replacement tunnels are validated before the pool drains.
-     *  NOTE: BuildExecutor.calculatePairedBuilds() carries an identical
-     *  inline predicate — dedupe candidate if either side changes again.
+     * Whether a pool is critically low on tunnels: no active tunnels at all,
+     * or at most 2 active against a larger target.  Critical pools get test
+     * priority so replacement tunnels are validated before the pool drains.
+     * NOTE: {@link net.i2p.router.tunnel.pool.BuildExecutor#calculatePairedBuilds} carries an identical
+     * inline predicate. Dedupe candidate if either side changes again.
      *
-     *  @param activeCount current active tunnel count
-     *  @param target configured total quantity
-     *  @return true if the pool is critical
-     *  @since 0.9.71+
+     * @param activeCount current active tunnel count
+     * @param target configured total quantity
+     * @return true if the pool is critical
+     * @since 0.9.71+
      */
     static boolean isPoolCritical(int activeCount, int target) {
         return activeCount == 0 || (activeCount < target && activeCount <= 2);
@@ -1806,7 +1806,7 @@ public class TestJob extends JobImpl {
      * Maximum first-test candidates held in the batch buffer.  When full the
      * oldest is evicted, which simply returns that tunnel to the unbuffered
      * state: recovery depends on the pool sweep re-offering it, so the buffer
-     * is best-effort, not lossless — an eviction delays a test rather than
+     * is best-effort, not lossless. An eviction delays a test rather than
      * discarding it, but only for as long as the sweep runs again.
      * @since 0.9.71+
      */
@@ -1821,10 +1821,10 @@ public class TestJob extends JobImpl {
     static final int PUMP_BATCH_SIZE = 4;
 
     /**
-     * Candidates popped from the buffer per drain, larger than the dispatch
-     * batch so a candidate that is denied only for its own pool can be
-     * rotated to the tail while the scan continues to the candidates behind
-     * it, instead of blocking the whole run at the head.
+     * Candidates popped from the buffer per drain.
+     * Larger than the dispatch batch so a candidate denied only for its own
+     * pool can rotate to the tail while the scan continues to the candidates
+     * behind it, instead of blocking the whole run at the head.
      * @since 0.9.71+
      */
     static final int DRAIN_SCAN_LIMIT = PUMP_BATCH_SIZE * 2;
@@ -1836,22 +1836,22 @@ public class TestJob extends JobImpl {
      */
     static final int MAX_STRANDED_OFFERS_PER_SWEEP = 32;
 
-            /** Pump requeue delay while the job queue is quiet. @since 0.9.71+ */
+            /** Pump requeue delay while the job queue is quiet. @since 0.9.71+. */
     static final long PUMP_DELAY_HEALTHY_MS = 250;
 
-            /** Pump requeue delay while the job queue is busy. @since 0.9.71+ */
+            /** Pump requeue delay while the job queue is busy. @since 0.9.71+. */
     static final long PUMP_DELAY_BUSY_MS = 1000;
 
-            /** Pump requeue delay when the job queue is badly lagging. @since 0.9.71+ */
+            /** Pump requeue delay when the job queue is badly lagging. @since 0.9.71+. */
     static final long PUMP_DELAY_LAGGED_MS = 3000;
 
-            /** Job-queue lag above which the pump uses the busy delay (ms). @since 0.9.71+ */
+            /** Job-queue lag above which the pump uses the busy delay (ms). @since 0.9.71+. */
     static final long PUMP_BUSY_LAG_MS = MAX_LAG_FOR_SCHEDULE;
 
-            /** Job-queue lag above which the pump uses the lagged delay (ms). @since 0.9.71+ */
+            /** Job-queue lag above which the pump uses the lagged delay (ms). @since 0.9.71+. */
     static final long PUMP_LAGGED_LAG_MS = 3000;
 
-            /** Minimum spacing between batch-denial INFO lines (ms). @since 0.9.71+ */
+            /** Minimum spacing between batch-denial INFO lines (ms). @since 0.9.71+. */
     static final long DENIAL_LOG_INTERVAL_MS = 3 * 60 * 1000L;
 
     /**
@@ -1977,7 +1977,7 @@ public class TestJob extends JobImpl {
     /**
      * Drain up to {@code max} removable elements from the front of
      * {@code buf}.  An element is removed when {@code eligible} returns true
-     * (dispatch it, or discard it as stale); the first element that is not
+     * (dispatch it, or discard it as stale). The first element that is not
      * eligible stays at the head and ends the claim, so a temporarily denied
      * candidate pauses the batch behind it instead of being skipped and
      * retried out of order, while permanently-stale entries never wedge the
@@ -2242,7 +2242,7 @@ public class TestJob extends JobImpl {
      * Decrement a gauge without letting it fall below zero.  {@link
      * #beginBatchReset(RouterContext)} normalizes the gauges while instances
      * are still alive, so an instance releasing after the reset must not drag
-     * its counter negative — a negative instance count would admit more than
+     * its counter negative. A negative instance count would admit more than
      * {@link #getHardLimit(RouterContext)} jobs.
      *
      * @param gauge the counter to decrement, never null
@@ -2451,7 +2451,7 @@ public class TestJob extends JobImpl {
      * Put one candidate back at the buffer tail, used to rotate a candidate
      * that is denied only for its own pool behind the rest of the scan so the
      * drain is not blocked at the head by it.  Refused when the buffer is
-     * full — the candidate simply returns to the unbuffered state and the
+     * full. The candidate simply returns to the unbuffered state and the
      * sweeps re-offer it, rather than evicting an older candidate to make
      * room for one that was just taken out.
      *
@@ -2617,7 +2617,7 @@ static List<PendingTest> prioritizeBatch(List<PendingTest> scan, long now) {
      * Drain one batch from the first-test buffer and dispatch admitted
      * candidates directly (no per-tunnel queue entry).
      * <p>
-     * The pop runs under the buffer lock with zero evaluation — gate checks
+     * The pop runs under the buffer lock with zero evaluation. Gate checks
      * call pool.getActiveTunnelCount(), which takes the pool's tunnel lock,
      * and taking pool locks under the buffer lock both stalls every offer
      * behind an O(tunnels) scan and invites lock-order inversion.  More than
@@ -2706,7 +2706,7 @@ static List<PendingTest> prioritizeBatch(List<PendingTest> scan, long now) {
      * switches for the permits it reserved.  Reply, timeout, and dispatch
      * failure all hold the token they were built for, so a delayed callback
      * from an earlier round can never complete, release, or clear state that
-     * now belongs to a later one — the old flags on the instance had no way to
+     * now belongs to a later one. The old flags on the instance had no way to
      * tell which round they referred to.
      *
      * @since 0.9.71+
@@ -2741,7 +2741,7 @@ static List<PendingTest> prioritizeBatch(List<PendingTest> scan, long now) {
     /**
      * First path to claim a round wins: the round must still be the active one
      * and must not have been claimed before.  Pure so the reply-vs-timeout race
-     * is testable without a live job — the reply job and the timeout job can
+     * is testable without a live job. The reply job and the timeout job can
      * both reach it, and exactly one may proceed to completion.
      *
      * @param active the round the instance currently considers live, or null
@@ -3076,7 +3076,7 @@ static List<PendingTest> prioritizeBatch(List<PendingTest> scan, long now) {
      * removes the instance's running-test registration, so a duplicate
      * cleanup (defer path racing a terminal path) cannot double-release.
      * Note: This does NOT affect the total counter, which
-     * {@link #decrementIfCounted()} owns.
+     * {@link #decrementIfCounted} owns.
      */
     private void cleanupTunnelTracking() {
         InstanceClaims claims = _claims;
@@ -3929,28 +3929,28 @@ static List<PendingTest> prioritizeBatch(List<PendingTest> scan, long now) {
     }
 
     /**
-     *  Whether a failed round should be deferred instead of charged to the
-     *  tunnel under test, because the partner tunnel — the one the round was
-     *  actually routed through — is itself suspect.
-     *  <p>A test of an inbound tunnel is sent out through an outbound partner
-     *  and answered back down the tunnel under test; a test of an outbound
-     *  tunnel is the mirror image.  The round therefore fails for two
-     *  independent reasons and the failure is charged to only one of them.
-     *  When the partner is a stub, already marked failing, or borrowed from
-     *  the exploratory pool because the paired pool had nothing, the round is
-     *  evidence about the partner pool — counting it here cascades one
-     *  degraded pool's failures into the other.  The tunnel under test is not
-     *  left immune: the defer runs through
-     *  {@link #deferForMissingPartner(TunnelPool, String)}, which kicks the
-     *  paired pool to rebuild and eventually fails the tunnel if it never
-     *  recovers, and data-phase send failures still report independently of
-     *  any test.
-     *  <p>A null partner defers: with no reply leg at all there was no reply
-     *  for any reason, so the round is no evidence about the tunnel.
+     * Whether a failed round should be deferred instead of charged to the
+     * tunnel under test, because the partner tunnel — the one the round was
+     * actually routed through — is itself suspect.
+     * <p>A test of an inbound tunnel is sent out through an outbound partner
+     * and answered back down the tunnel under test. A test of an outbound
+     * tunnel is the mirror image.  The round therefore fails for two
+     * independent reasons and the failure is charged to only one of them.
+     * When the partner is a stub, already marked failing, or borrowed from
+     * the exploratory pool because the paired pool had nothing, the round is
+     * evidence about the partner pool — counting it here cascades one
+     * degraded pool's failures into the other.  The tunnel under test is not
+     * left immune: the defer runs through
+     * {@link #deferForMissingPartner(TunnelPool, String)}, which kicks the
+     * paired pool to rebuild and eventually fails the tunnel if it never
+     * recovers, and data-phase send failures still report independently of
+     * any test.
+     * <p>A null partner defers: with no reply leg at all there was no reply
+     * for any reason, so the round is no evidence about the tunnel.
      *
      * @param partner the tunnel the round was routed through, may be null
      * @param partnerFallback true when the partner came from the exploratory
-     *                        pool because the paired pool could not supply one
+     * pool because the paired pool could not supply one
      * @return true to defer the round rather than count the failure
      * @since 0.9.71+
      */
@@ -4327,7 +4327,7 @@ static List<PendingTest> prioritizeBatch(List<PendingTest> scan, long now) {
      * the tunnel is declared failed.
      * <p>
      * When a recent successful-test measurement exists, the window is 2x that
-     * average — a test answered in ~2.3s is almost certainly dead if it needs
+     * average. A test answered in ~2.3s is almost certainly dead if it needs
      * more than ~4.6s.  Before any measurements exist, fall back to mainline's
      * formula (3x transport send processing + 2.5s per hop), which assumes a
      * slow network so early tests don't false-fail.
@@ -4337,9 +4337,9 @@ static List<PendingTest> prioritizeBatch(List<PendingTest> scan, long now) {
      * The pending-message expiration (and thus the reply selector) is tied to
      * the period itself, so a short window never strands a selector.
      *
-     * @param successTimeAvgMs average tunnel.testSuccessTime over the last minute,
-     *                         NaN if never measured
-     * @param sendProcessingMs average transport.sendProcessingTime, NaN if unknown
+     * @param successTimeAvgMs average {@code tunnel.testSuccessTime} over the last minute,
+     * NaN if never measured
+     * @param sendProcessingMs average {@code transport.sendProcessingTime}, NaN if unknown
      * @param outLen outbound tunnel length, &lt;= 0 if no outbound tunnel
      * @param replyLen reply tunnel length, &lt;= 0 if no reply tunnel
      * @param minPeriod the configured minTestPeriod, the lower clamp in ms
@@ -4391,16 +4391,16 @@ static List<PendingTest> prioritizeBatch(List<PendingTest> scan, long now) {
     }
 
     /**
-     *  Adaptive latency threshold for demoting a peer as "high latency" after a
-     *  tunnel test. Uses the network's current baseline RTT (udp.sendConfirmTime,
-     *  the time to send a message and receive its ACK) so that a network-wide
-     *  latency spike does not demote every peer and starve the fast-peer pool.
-     *  Floored at a fixed minimum so a genuinely slow peer is still demoted on a
-     *  fast network.
+     * Adaptive latency threshold for demoting a peer as "high latency" after a
+     * tunnel test. Uses the network's current baseline RTT ({@code udp.sendConfirmTime},
+     * the time to send a message and receive its ACK) so that a network-wide
+     * latency spike does not demote every peer and starve the fast-peer pool.
+     * Floored at a fixed minimum so a genuinely slow peer is still demoted on a
+     * fast network.
      *
-     *  @param ctx the router context whose configuration supplies the limit
-     *  @return demotion threshold in ms
-     *  @since 0.9.70+
+     * @param ctx the router context whose configuration supplies the limit
+     * @return demotion threshold in ms
+     * @since 0.9.70+
      */
     private static long getLatencyDemotionThreshold(RouterContext ctx) {
         // Floor: a peer slower than this is demoted even on a fast network.
@@ -4717,7 +4717,7 @@ static List<PendingTest> prioritizeBatch(List<PendingTest> scan, long now) {
     /**
      * Called when the job is dropped due to router overload, when the batch
      * pump's catch sees a dispatch throw, or when a reset cancels it.
-     * Equivalent to {@link #cancelForReset()}.
+     * Equivalent to {@link #cancelForReset}.
      */
     @Override
     public void dropped() {

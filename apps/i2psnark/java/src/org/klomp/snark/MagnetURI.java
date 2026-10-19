@@ -28,12 +28,12 @@ public class MagnetURI {
     /** Maggot protocol prefix. */
     public static final String MAGGOT = "maggot://";
 
+        // https://blog.libtorrent.org/2020/09/bittorrent-v2/ TODO, dup param parsing, as a dual v1/v2
     /**
-     * https://blog.libtorrent.org/2020/09/bittorrent-v2/ TODO, dup param parsing, as a dual v1/v2
-     * link will contain two xt params
+     * Link will contain two xt params.
      *
      * @since 0.9.48
-     */
+    */
     public static final String MAGNET_FULL_V2 = MAGNET + "?xt=urn:btmh:";
 
     /**

@@ -43,7 +43,6 @@ import java.nio.CharBuffer;
  *       find out how to do this.
  * </ul>
  *
- * @author Sasa Markovic
  */
 public abstract class RrdBackend {
 

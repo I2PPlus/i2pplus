@@ -32,9 +32,8 @@ import net.i2p.router.NetworkDatabaseFacade;
  * by determining when clients and the local floodfill disagree on the content of a
  * leaseSet.
  * <p>
- * See implementation: FloodfillNetworkDatabaseSegmentor
+ * See implementation: FloodfillNetworkDatabaseSegmentor.
  *
- * @author idk
  * @since 0.9.61
  */
 public abstract class SegmentedNetworkDatabaseFacade {
@@ -64,14 +63,14 @@ public abstract class SegmentedNetworkDatabaseFacade {
     public abstract NetworkDatabaseFacade clientNetDB(Hash dbid);
 
     /**
-     * Shut down the network databases
+     * Shut down the network databases.
      *
      * @since 0.9.61
      */
     public abstract void shutdown();
 
     /**
-     * Start up the network databases
+     * Start up the network databases.
      *
      * @since 0.9.61
      */

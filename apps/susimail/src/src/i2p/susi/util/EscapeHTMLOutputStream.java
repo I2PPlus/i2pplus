@@ -7,7 +7,7 @@ import net.i2p.data.DataHelper;
 
 /**
  * OutputStream that escapes HTML characters during streaming.
- * Streaming version of DataHelper.escapeHTML(), also escapes '--' for
+ * Streaming version of {@link net.i2p.data.DataHelper#escapeHTML}, also escapes '--' for
  * comment safety since '--' is disallowed inside HTML comments.
  *
  * @since 0.9.34
@@ -22,7 +22,7 @@ public class EscapeHTMLOutputStream extends FilterOutputStream {
     private static final byte[] MDASH = DataHelper.getASCII("&#45;");
     private static final byte[] BR = DataHelper.getASCII("<br>\n");
 
-    /** Track state: 0=normal, 1=saw '<', 2=saw '<-', 3=prev was '-' */
+    /** Track state: 0=normal, 1=saw '<', 2=saw '<-', 3=prev was '-'. */
     private int _commentState;
 
     /**

@@ -5,7 +5,7 @@ import net.i2p.router.RouterContext;
 import java.net.Socket;
 
 /**
- * For testing
+ * For testing.
  *
  * @since 0.9.8
  */

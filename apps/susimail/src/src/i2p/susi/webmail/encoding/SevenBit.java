@@ -24,6 +24,8 @@ public class SevenBit extends Encoding {
 	}
 
 	/**
+	 * Verify the bytes are 7-bit clean and return them as text.
+	 *
 	 * @throws EncodingException always; 7bit decodes but has no encoder
 	 */
 	public String encode(byte[] in) throws EncodingException {
@@ -31,6 +33,8 @@ public class SevenBit extends Encoding {
 	}
 
 	/**
+	 * Pass the bytes through after checking they are 7-bit.
+	 *
 	 * @throws DecodingException on illegal characters
 	 */
 	@Override
@@ -52,7 +56,7 @@ public class SevenBit extends Encoding {
 	}
 
 	/**
-	 * We don't do any 8-bit checks like we do for decode(byte[])
+	 * We don't do any 8-bit checks like we do for decode(byte[]).
 	 * @return the buffer unchanged, without the 8-bit check decode(byte[]) makes
 	 */
 	@Override
@@ -62,7 +66,7 @@ public class SevenBit extends Encoding {
 
 	/**
 	 * Copy in to out, unchanged
-	 * We don't do any 8-bit checks like we do for decode(byte[])
+	 * We don't do any 8-bit checks like we do for decode(byte[]).
 	 * @since 0.9.34
 	 */
 	public void decode(InputStream in, Buffer out) throws IOException {

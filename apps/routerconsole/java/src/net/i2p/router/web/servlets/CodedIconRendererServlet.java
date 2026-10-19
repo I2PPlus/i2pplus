@@ -13,7 +13,7 @@ import net.i2p.router.web.NavHelper;
 import net.i2p.util.FileUtil;
 
 /**
- * Serve plugin icons, at /Plugins/pluginicon?plugin=foo
+ * Serve plugin icons, at /Plugins/pluginicon?plugin=foo.
  *
  * @since 0.9.25
  */

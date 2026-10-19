@@ -178,7 +178,7 @@ class TimeAxis extends Axis {
     /**
      * Draw minor grids, skipping any position a major gridline already claimed.
      *
-     * @param majorX x coordinates owned by the major grid, drawn by {@link #drawMajorGrids()}
+     * @param majorX x coordinates owned by the major grid, drawn by {@link #drawMajorGrids}
      */
     private void drawMinorGrids(Set<Integer> majorX) {
         if (!gdef.noMinorGrid) {

@@ -11,7 +11,6 @@ import org.rrd4j.DsType;
  * <p>Normally, you don't need to manipulate Datasource objects directly, it's up to Rrd4j framework
  * to do it for you.
  *
- * @author Sasa Markovic
  */
 public class Datasource implements RrdUpdater<Datasource> {
     private static final double MAX_32_BIT = Math.pow(2, 32);

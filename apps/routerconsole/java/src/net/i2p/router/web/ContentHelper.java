@@ -26,10 +26,10 @@ public class ContentHelper extends HelperBase {
     private String _lang;
 
     /**
-     * Caution, use absolute paths only, do not assume files are in CWD
+     * Caution, use absolute paths only, do not assume files are in CWD.
      *
      * @param page the absolute path of the content file to include, resolved by
-     *             filename() to a localized variant such as file_lang.ext when one exists
+     * filename() to a localized variant such as file_lang.ext when one exists
      */
     public void setPage(String page) { _page = page; }
     /**

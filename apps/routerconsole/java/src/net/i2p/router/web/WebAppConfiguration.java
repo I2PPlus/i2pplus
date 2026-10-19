@@ -17,18 +17,18 @@ import org.eclipse.jetty.webapp.WebAppClassLoader;
 import org.eclipse.jetty.webapp.WebAppContext;
 
 /**
- * Adds to the webapp classpath as specified in webapps.config.
+ * Adds to the webapp classpath as specified in {@code webapps.config}.
  * This allows us to reference classes that are not in the classpath
  * specified in wrapper.config, since old installations have
  * individual jars and not lib/*.jar specified in wrapper.config.
  * <p>
- * A sample line in webapps.config is:
- * webapps.appname.classpath=foo.jar,$I2P/lib/bar.jar
+ * A sample line in {@code webapps.config} is:
+ * {@code webapps.appname.classpath}=foo.jar,$I2P/lib/bar.jar
  * Unless $I2P is specified the path will be relative to $I2P/lib for
  * webapps in the installation and appDir/plugins/appname/lib for plugins.
  * <p>
- * webapps.config is used because setting Class-Path in MANIFEST.MF does not
- * work for jetty wars, and because WebAppContext.addClassPath() is not
+ * {@code webapps.config} is used because setting Class-Path in MANIFEST.MF does not
+ * work for jetty wars, and because {@code WebAppContext.addClassPath()} is not
  * usable here. Jars that are already on the system class path are skipped
  * to avoid duplicate statics; /susimail is the exception.
  *
@@ -46,7 +46,7 @@ public class WebAppConfiguration implements Configuration {
 
     /**
      * This was the interface in Jetty 5, in Jetty 6 was configureClassLoader(),
-     * now it's configure()
+     * now it's configure().
      */
     private void configureClassPath(WebAppContext wac) throws Exception {
         String ctxPath = wac.getContextPath();
@@ -167,7 +167,11 @@ public class WebAppConfiguration implements Configuration {
     public void deconfigure(WebAppContext context) {
         // no state to release
     }
-    /** @since Jetty 7 */
+    /**
+     * Apply I2P security settings to the webapp.
+     *
+     * @since Jetty 7
+     */
     public void configure(WebAppContext context) throws Exception {
         configureClassPath(context);
         // One InstanceManager for the whole context, not one per handler.
@@ -176,7 +180,11 @@ public class WebAppConfiguration implements Configuration {
         context.getServletContext().setAttribute("org.apache.tomcat.InstanceManager", new SimpleInstanceManager());
     }
 
-    /** @since Jetty 7 */
+    /**
+     * Apply the same settings to a cloned webapp.
+     *
+     * @since Jetty 7
+     */
     @Override
     public void cloneConfigure(WebAppContext template, WebAppContext context) {
         // no state, nothing to be done

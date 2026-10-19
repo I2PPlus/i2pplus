@@ -262,7 +262,7 @@ public class GeoIPv6 {
     }
 
     /**
-     * Used to temporarily hold, sort, and merge entries before compressing
+     * Used to temporarily hold, sort, and merge entries before compressing.
      */
     private static class V6Entry implements Comparable<V6Entry> {
         public final long from;
@@ -315,7 +315,7 @@ public class GeoIPv6 {
         return rv;
     }
 
-    /** Like DataHelper.writeLong(rawStream, 8, value) but allows negative values. */
+    /** Like {@link net.i2p.data.DataHelper#writeLong}rawStream, 8, value) but allows negative values. */
     private static void writeLong(OutputStream rawStream, long value) throws IOException {
         for (int i = 56; i >= 0; i -= 8) {
             byte cur = (byte) (value >> i);
@@ -323,7 +323,7 @@ public class GeoIPv6 {
         }
     }
 
-    /** Like DataHelper.readLong(src, offset, 8) but allows negative values. */
+    /** Like {@link net.i2p.data.DataHelper#readLong}src, offset, 8) but allows negative values. */
     private static long readLong(byte[] src, int offset) {
         long rv = 0;
         int limit = offset + 8;
@@ -339,7 +339,7 @@ public class GeoIPv6 {
      * <p>
      * GeoIPv6 infile1.csv[.gz] [infile2.csv[.gz]...] outfile.dat.gz
      * <p>
-     * Used to create the file for distribution, do not comment out
+     * Used to create the file for distribution, do not comment out.
      * @param args command line arguments
      */
     public static void main(String[] args) {

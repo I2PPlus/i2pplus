@@ -98,7 +98,6 @@ class FloodfillMonitorJob extends JobImpl {
         int delay = (REQUEUE_DELAY / 2) + getContext().random().nextInt(REQUEUE_DELAY);
         // there's a lot of eligible non-floodfills, keep them from all jumping in at once
         // TODO: somehow assess the size of the network to make this adaptive?
-
         if (!ff) {delay *= 4;}
         else {delay *= 10;} // slow down check if we're already a floodfill
         requeue(delay);

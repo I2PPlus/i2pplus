@@ -10,7 +10,6 @@ import java.lang.annotation.Target;
 /**
  * Description of a {@link RrdBackendFactory}
  *
- * @author Fabrice Bacchella
  */
 @Documented
 @Retention(RUNTIME)

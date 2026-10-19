@@ -12,7 +12,7 @@ import net.i2p.util.Log;
  *
  * @since 0.7.9
  */
-/** Listens for in-JVM connections on internal socket */
+/** Listens for in-JVM connections on internal socket. */
 class InternalSocketRunner extends I2PAppThread {
     private final I2PTunnelClientBase client;
     private final int port;
@@ -21,7 +21,7 @@ class InternalSocketRunner extends I2PAppThread {
     private volatile boolean open;
 
     /**
-     * Does not start the runner, caller must call start()
+     * Does not start the runner, caller must call start().
      *
      * @param client the tunnel client that handles each socket accepted internally
      */
@@ -30,7 +30,7 @@ class InternalSocketRunner extends I2PAppThread {
     }
 
     /**
-     * Does not start the runner, caller must call start()
+     * Does not start the runner, caller must call start().
      *
      * @param client the tunnel client that handles each socket accepted internally
      * @param label service name shown for this port on the debug page
@@ -64,7 +64,7 @@ class InternalSocketRunner extends I2PAppThread {
         }
     }
 
-    /** Stop the server socket and mark as closed */
+    /** Stop the server socket and mark as closed. */
     void stopRunning() {
         if (this.open) {
             this.open = false;

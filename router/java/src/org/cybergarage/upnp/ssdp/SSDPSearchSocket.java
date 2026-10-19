@@ -33,7 +33,6 @@ import org.cybergarage.util.*;
  * requests to the SSDP multicast address and receiving responses from available devices on the
  * network.
  *
- * @author Satoshi Konno
  * @since 1.0
  */
 public class SSDPSearchSocket extends HTTPMUSocket implements Runnable {

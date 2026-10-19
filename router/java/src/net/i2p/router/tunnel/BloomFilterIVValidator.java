@@ -320,7 +320,11 @@ public class BloomFilterIVValidator implements IVValidator {
             _filter.stopDecaying();
     }
 
-    /** @since 0.9.20 */
+    /**
+     * Log a one-time WARN when the IV filter may be too small.
+     *
+     * @since 0.9.20
+     */
     private void warn(long maxMemory, int KBps, long recMaxMem, int threshKBps) {
         if (SystemVersion.isAndroid())
             return;

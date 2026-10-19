@@ -26,8 +26,6 @@ import java.util.Arrays;
  * This class is designed to be thread-safe, but this has not been
  * exhaustively tested.
  *
- * @author <A HREF="mailto:jddixon@users.sourceforge.net">Jim Dixon</A>
- *
  *         BloomSHA1.java and KeySelector.java are BSD licensed from the xlattice
  *         app - http://xlattice.sourceforge.net/
  *
@@ -147,13 +145,13 @@ public class BloomSHA1 {
     }
 
     /**
-     *  Install a prepared reset. O(1), because the caller has already paid for
-     *  the zeroed array. The caller must hold exclusive access to this filter,
-     *  which for the decaying filters means holding their write lock.
+     * Install a prepared reset. O(1), because the caller has already paid for
+     * the zeroed array. The caller must hold exclusive access to this filter,
+     * which for the decaying filters means holding their write lock.
      *
-     *  @param reset a token from {@link #prepareReset()} for this filter
-     *  @throws IllegalArgumentException if the token is not for this filter
-     *  @since 0.9.71+
+     * @param reset a token from {@link #prepareReset} for this filter
+     * @throws IllegalArgumentException if the token is not for this filter
+     * @since 0.9.71+
      */
     public void applyReset(Reset reset) {
         if (reset == null || reset.bits.length != filterWords)
@@ -165,7 +163,7 @@ public class BloomSHA1 {
     /**
      * Clears the filter, synchronized.
      *
-     * <p>On a latency path prefer {@link #prepareReset()} plus
+     * <p>On a latency path prefer {@link #prepareReset} plus
      * {@link #applyReset(Reset)}, which moves the memset off the lock.
      */
     public void clear() {

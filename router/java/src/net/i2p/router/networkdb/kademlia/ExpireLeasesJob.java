@@ -40,11 +40,11 @@ class ExpireLeasesJob extends JobImpl {
     private static final long RERUN_DELAY_MS = 30*1000L;
     private static final int LIMIT_LEASES_FF = 1250;
     private static final int LIMIT_LEASES_CLIENT = SystemVersion.isSlow() ? 300 : 750;
-    /** Refresh leasesets with less than this much time remaining before expiry */
+    /** Refresh leasesets with less than this much time remaining before expiry. */
     private static final long REFRESH_THRESHOLD_MS = 2 * 60 * 1000L;
     /**
      * After this long past expiry, a leaseset is considered stale and purged
-     * immediately by {@link #purgeStaleLeasesets()} in a client database.
+     * immediately by {@link #purgeStaleLeasesets} in a client database.
      */
     private static final long STALE_EXPIRED_MS = 5 * 60 * 1000L;
 
@@ -142,7 +142,7 @@ class ExpireLeasesJob extends JobImpl {
 
     /**
      * Run through the entire data store, finding all expired leaseSets (ones that
-     * don't have any leases that haven't yet passed, even with the CLOCK_FUDGE_FACTOR)
+     * don't have any leases that haven't yet passed, even with the CLOCK_FUDGE_FACTOR).
      */
     private List<Hash> selectKeysToExpire() {
         RouterContext ctx = getContext();
@@ -208,7 +208,7 @@ class ExpireLeasesJob extends JobImpl {
     }
 
     /**
-     * Oldest first
+     * Oldest first.
      * @since 0.9.65
      */
     private static class LeaseSetComparator implements Comparator<LeaseSet>, Serializable {

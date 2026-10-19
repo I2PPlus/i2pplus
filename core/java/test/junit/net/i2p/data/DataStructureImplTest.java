@@ -18,9 +18,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-/**
- * @author Comwiz
- */
 public class DataStructureImplTest {
     DataStructure _struct;
 

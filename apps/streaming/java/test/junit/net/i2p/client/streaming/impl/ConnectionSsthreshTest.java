@@ -21,7 +21,7 @@ public class ConnectionSsthreshTest {
 
     // ---- the reported production configuration ----
 
-    /** maxWindowSize=768 (the SystemVersion.isSlow() default), initialWindowSize=128. */
+    /** maxWindowSize=768 (the {@link net.i2p.util.SystemVersion#isSlow} default), initialWindowSize=128. */
     @Test
     public void testSlowStartCapAboveCeilingIsClamped() {
         // maxSlowStartWindow=2048, maxWindowSize=768, initialWindowSize=128
@@ -41,7 +41,7 @@ public class ConnectionSsthreshTest {
 
     // ---- the ceiling base is max(globalMax, initialWindowSize) ----
 
-    /** initialWindowSize above the Tuner global raises the base, not lowers it. */
+    /** InitialWindowSize above the Tuner global raises the base, not lowers it. */
     @Test
     public void testInitialWindowSizeLargerThanGlobalRaisesBase() {
         assertEquals(1024, Connection.initialSsthresh(2048, 768, 1024));

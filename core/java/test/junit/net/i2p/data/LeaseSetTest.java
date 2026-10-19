@@ -14,9 +14,8 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 
 /**
- * Test harness for loading / storing Lease objects
+ * Test harness for loading / storing Lease objects.
  *
- * @author jrandom
  */
 public class LeaseSetTest extends StructureTest {
 

@@ -11,7 +11,7 @@ public class Messages {
     private static final String BUNDLE_NAME = "i2p.susi.webmail.messages";
     private final I2PAppContext _context;
 
-    /** Default constructor, uses global context */
+    /** Default constructor, uses global context. */
     public Messages() {_context = I2PAppContext.getGlobalContext();}
 
     /**

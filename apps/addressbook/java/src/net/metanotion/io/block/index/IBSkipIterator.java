@@ -32,6 +32,8 @@ public class IBSkipIterator<K extends Comparable<? super K>, V> extends SkipIter
     }
 
     /**
+     * Next value in the iteration.
+     *
      * @return the next value, and advances the index
      * @throws NoSuchElementException if the iterator is past the last value
      * @throws RuntimeException wrapping any IOException from loading the span
@@ -89,6 +91,8 @@ public class IBSkipIterator<K extends Comparable<? super K>, V> extends SkipIter
     }
 
     /**
+     * Previous value in the iteration.
+     *
      * @return the previous value, and decrements the index
      * @throws NoSuchElementException if the iterator is before the first value
      * @throws RuntimeException wrapping any IOException from loading the span

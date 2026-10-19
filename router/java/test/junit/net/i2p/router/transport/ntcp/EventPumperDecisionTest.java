@@ -9,7 +9,7 @@ import net.i2p.router.transport.ntcp.NTCPConnection;
 
 /**
  * Unit tests for the two failsafe-scan decisions extracted from
- * {@link EventPumper#doFailsafeCheck()}:
+ * {@link EventPumper#doFailsafeCheck}:
  * {@link EventPumper#getIdleExpire(NTCPConnection, boolean, long)} and
  * {@link EventPumper#closeIdleOrSendRouterInfo(NTCPConnection, long, long, long)}.
  * Pins the exact timeout branching (disposable handshakes get the short

@@ -3,12 +3,11 @@ package net.i2p.stat;
 /**
  * Storage space for computations of various averages.
  *
- * @author zab
  * @since 0.9.4
  */
 public class RateAverages {
 
-    /** Create a new RateAverages */
+    /** Create a new RateAverages. */
     public RateAverages() {}
 
     /** Thread-local temp instance. */

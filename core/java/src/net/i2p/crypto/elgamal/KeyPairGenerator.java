@@ -22,7 +22,7 @@ import java.security.spec.AlgorithmParameterSpec;
 
 /**
  * Modified from eddsa
- * Only supported strength is 2048
+ * Only supported strength is 2048.
  *
  * @since 0.9.25
  */

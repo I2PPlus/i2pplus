@@ -66,7 +66,7 @@ class IdleChecker extends SimpleTimer2.TimedEvent {
     static final int NO_CHANGE = -1;
 
     /**
-     * Caller must schedule
+     * Caller must schedule.
      *
      * @param mgr the SnarkManager providing the util and owning this timer
      * @param pcs the peer set whose connectivity state decides whether tunnels may be released
@@ -404,7 +404,7 @@ class IdleChecker extends SimpleTimer2.TimedEvent {
 
     /**
      * The outbound tunnel count currently applied to the shared session. Inbound and outbound are
-     * always pushed together, so this matches {@link #getActiveInboundCount()}.
+     * always pushed together, so this matches {@link #getActiveInboundCount}.
      *
      * @return the active outbound count, never below {@link #MIN_TUNNEL_QTY}
      * @since 0.9.66+

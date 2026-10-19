@@ -16,7 +16,6 @@ import java.nio.charset.StandardCharsets;
 /**
  * A simple log with automatic time stamping.
  *
- * @author Ragnarok
  */
 class Log {
 

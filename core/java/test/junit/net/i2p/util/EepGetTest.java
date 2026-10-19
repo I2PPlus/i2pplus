@@ -683,7 +683,7 @@ public class EepGetTest extends TestCase {
     }
 
     /**
-     * Whether the thread's current stack shows it inside Thread.sleep().
+     * Whether the thread's current stack shows it inside {@link java.lang.Thread#sleep}.
      *
      * @param t thread to inspect
      * @return true if sleeping

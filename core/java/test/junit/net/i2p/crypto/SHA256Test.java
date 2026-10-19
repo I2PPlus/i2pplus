@@ -15,9 +15,6 @@ import net.i2p.I2PAppContext;
 import net.i2p.data.DataHelper;
 import net.i2p.data.Hash;
 
-/**
- * @author Comwiz
- */
 public class SHA256Test extends TestCase {
     private I2PAppContext _context;
 

@@ -191,7 +191,7 @@ class OutboundNTCP2State implements EstablishState {
     /**
      * Parse the contents of the buffer as part of the handshake.
      * <p>
-     * All data must be copied out of the buffer as Reader.processRead()
+     * All data must be copied out of the buffer as {@link net.i2p.router.transport.ntcp.Reader#processRead}
      * will return it to the pool.
      */
     @Override
@@ -230,7 +230,7 @@ class OutboundNTCP2State implements EstablishState {
     public int getVersion() { return _version; }
 
     /**
-     * Check if the connection is in initial state and ready for prepareOutbound()
+     * Check if the connection is in initial state and ready for prepareOutbound().
      *
      * @return whether initial state
      * @since 0.9.59
@@ -241,7 +241,7 @@ class OutboundNTCP2State implements EstablishState {
 
     /**
      * Check if the connection is in a state where prepareOutbound() has already been called
-     * to avoid duplicate calls that cause IllegalStateException
+     * to avoid duplicate calls that cause IllegalStateException.
      * @return whether prepare outbound called
      */
     public boolean isPrepareOutboundCalled() {
@@ -350,10 +350,10 @@ class OutboundNTCP2State implements EstablishState {
      * <p>
      * IV (CBC from msg 1) must be in _bobIV
      * <p>
-     * All data must be copied out of the buffer as Reader.processRead()
+     * All data must be copied out of the buffer as {@link net.i2p.router.transport.ntcp.Reader#processRead}
      * will return it to the pool.
      * <p>
-     * Caller must synch
+     * Caller must synch.
      */
     private void receiveOutbound(ByteBuffer src) {
         // Read in message #2 except for the padding
@@ -453,7 +453,7 @@ class OutboundNTCP2State implements EstablishState {
      * We are Alice.
      * Write the 3rd message.
      * <p>
-     * Caller must synch
+     * Caller must synch.
      */
     private void prepareOutbound3() {
         // create msg 3 part 2 payload
@@ -542,7 +542,7 @@ class OutboundNTCP2State implements EstablishState {
     }
 
     /**
-     * KDF for SipHash
+     * KDF for SipHash.
      *
      * @param ctx the router context, supplying the HKDF implementation
      * @param state the handshake state whose chaining key and handshake hash are the KDF inputs
@@ -578,13 +578,13 @@ class OutboundNTCP2State implements EstablishState {
     /**
      * Fail the handshake with the given reason.
      * @param reason stored as the fail reason and reported by
-     *               {@link #getFailReason()}
+     * {@link #getFailReason}
      */
     protected void fail(String reason) {fail(reason, null);}
     /**
      * Fail the handshake with the given reason and exception.
      * @param reason stored as the fail reason and reported by
-     *               {@link #getFailReason()}
+     * {@link #getFailReason}
      * @param e the exception cause, may be null
      */
     protected void fail(String reason, Exception e) {fail(reason, e, false);}
@@ -592,7 +592,7 @@ class OutboundNTCP2State implements EstablishState {
     /**
      * Fail the handshake, optionally skew-related.
      * @param reason stored as the fail reason and reported by
-     *               {@link #getFailReason()}
+     * {@link #getFailReason}
      * @param e the exception cause, may be null
      * @param bySkew true to suppress the skew stat, as when we caused the skew ourselves
      */
@@ -626,7 +626,7 @@ class OutboundNTCP2State implements EstablishState {
     /**
      * Only call once.
      * <p>
-     * Caller must synch
+     * Caller must synch.
      */
     private void releaseBufs(boolean isVerified) {
         Arrays.fill(_tmp, (byte) 0);

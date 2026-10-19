@@ -21,7 +21,7 @@ import net.i2p.util.SimpleTimer2;
 import org.klomp.snark.dht.DatagramSender;
 
 /**
- * One of these for all trackers and info hashes. Ref: BEP 15, proposal 160
+ * One of these for all trackers and info hashes. Ref: BEP 15, proposal 160.
  *
  * <p>The main difference from BEP 15 is that the announce response contains a 32-byte hash instead
  * of a 4-byte IP and a 2-byte port.
@@ -387,7 +387,7 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
     ///// Sending.....
 
     /**
-     * Send one time with a new tid
+     * Send one time with a new tid.
      *
      * @param toWait > 0
      * @return null on failure or if toWait <= 0
@@ -406,7 +406,7 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
     }
 
     /**
-     * Send one time with given tid
+     * Send one time with given tid.
      *
      * @return the payload or null on failure
      */
@@ -421,7 +421,7 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
     }
 
     /**
-     * Send one time with a new tid
+     * Send one time with a new tid.
      *
      * @param toWait if <= 0 does not register
      * @return null on failure or if toWait <= 0
@@ -457,7 +457,7 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
     }
 
     /**
-     * Send one time with given tid
+     * Send one time with given tid.
      *
      * @return the payload or null on failure
      */
@@ -489,7 +489,7 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
     }
 
     /**
-     * Send one time with a new tid
+     * Send one time with a new tid.
      *
      * @param toWait if &lt;= 0 does not register
      * @return null on failure or if toWait &lt;= 0
@@ -514,7 +514,7 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
     }
 
     /**
-     * Send one time with given tid
+     * Send one time with given tid.
      *
      * @return the payload or null on failure
      */
@@ -575,7 +575,7 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
     }
 
     /**
-     * Resend the stored payload
+     * Resend the stored payload.
      *
      * @return true if the datagram was handed to the session for sending
      */
@@ -837,7 +837,7 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
     // I2PSessionMuxedListener interface ----------------
 
     /**
-     * Instruct the client that the given session has received a message
+     * Instruct the client that the given session has received a message.
      *
      * <p>Will be called only if you register via addMuxedSessionListener(). Will be called only for
      * the proto(s) and toPort(s) you register for.
@@ -976,7 +976,7 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
         /**
          * The seed count.
          *
-         * @return the seed count
+         * @return number of seeds from the tracker reply
          */
         public int getSeedCount() {
             return complete;
@@ -985,7 +985,7 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
         /**
          * The leech count.
          *
-         * @return the leech count
+         * @return number of leeches from the tracker reply
          */
         public int getLeechCount() {
             return incomplete;
@@ -994,7 +994,7 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
         /**
          * The failure reason.
          *
-         * @return the failure reason
+         * @return error message from the tracker, or null on success
          */
         public String getFailureReason() {
             return error;
@@ -1216,7 +1216,7 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
         FAIL
     }
 
-    /** Callback for replies */
+    /** Callback for replies. */
     private class ReplyWaiter extends SimpleTimer2.TimedEvent {
         private final int tid;
         private final Tracker sentTo;
@@ -1258,7 +1258,7 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
         /**
          * The expected action.
          *
-         * @return the expected action
+         * @return the BEP 15 action type the reply must carry
          */
         public int getExpectedAction() {
             return action;

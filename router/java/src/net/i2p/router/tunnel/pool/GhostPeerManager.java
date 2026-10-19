@@ -46,7 +46,7 @@ import net.i2p.util.Log;
  * it is meant to protect.  Deactivation keeps {@code offenses} and
  * {@code markedAt}, so the strike history survives and a peer that times out
  * again still counts toward {@code timeoutThreshold}.
- * <p>The active exclusion count is cached so {@link #getGhostCount()} is a
+ * <p>The active exclusion count is cached so {@link #getGhostCount} is a
  * volatile read on the hot path instead of a full map scan; its sweep deadline
  * is bucketed to {@link #COUNT_GRANULARITY_MS} so scattered expiry times cost
  * at most one rescan per bucket rather than one per mark.
@@ -152,7 +152,7 @@ static final long OFFENSE_DECAY_MS = 30 * 60 * 1000L;
      * Sweep deadlines are rounded up to this many milliseconds.  Marks expire
      * at whatever offset the timeout landed on; without bucketing, a hundred
      * staggered expiries would force a full map rescan per distinct millisecond
-     * as {@link #getGhostCount()} is polled.  Bucketing costs at most this much
+     * as {@link #getGhostCount} is polled.  Bucketing costs at most this much
      * staleness in the *count* only — {@link #isGhost(Hash)} always reads the
      * map directly, so selection is never affected.
      * @since 0.9.71+
@@ -180,7 +180,7 @@ static final long OFFENSE_DECAY_MS = 30 * 60 * 1000L;
      * Eviction order by expiry ascending: expired marks sort first (oldest
      * expiry first, so they go in the order they lapsed), followed by active
      * marks nearest to lapsing.  Keying on the expiry rather than the mark time
-     * keeps whichever exclusions have the most protection left — a 4× escalated
+     * keeps whichever exclusions have the most protection left. A 4× escalated
      * mark still ten minutes from lapsing outlives a base mark about to lapse,
      * which {@code markedAt} ordering would get backwards.
      */
@@ -202,7 +202,7 @@ static final long OFFENSE_DECAY_MS = 30 * 60 * 1000L;
      * Record that a peer timed out during tunnel build.
      * <p>The peer is excluded only once its strike count reaches the
      * configured threshold ({@code i2p.tunnel.ghostPeer.timeoutThreshold},
-     * at least 1); earlier strikes are recorded without excluding it, so the
+     * at least 1). Earlier strikes are recorded without excluding it, so the
      * configured sensitivity actually gates selection.  The exclusion expiry
      * is snapshotted at mark time so a later state change doesn't extend or
      * shorten an active exclusion; a fresh timeout is new evidence and re-marks
@@ -354,7 +354,7 @@ static final long OFFENSE_DECAY_MS = 30 * 60 * 1000L;
 
     /**
      * Enforce {@link #MAX_ACTIVE_GHOSTS}: a burst of timeouts that excludes
-     * enough of the reachable set makes tier selection return nothing — the
+     * enough of the reachable set makes tier selection return nothing. The
      * exclusion intended to protect the build instead starves it (seen as
      * "All selected peers were ghosts").  Deactivate the excess, dropping the
      * exclusions nearest to lapsing so the set keeps the marks with the most
@@ -421,7 +421,7 @@ static final long OFFENSE_DECAY_MS = 30 * 60 * 1000L;
 
     /**
      * Record successful tunnel participation by a peer.
-     * Clears ghost status immediately, including its offense history — a peer
+     * Clears ghost status immediately, including its offense history. A peer
      * that just routed a tunnel is proven live.
      * <p>Called for every peer on every successful build, so the overwhelming
      * majority of calls find no mark present. Only a call that actually removed
@@ -447,7 +447,7 @@ static final long OFFENSE_DECAY_MS = 30 * 60 * 1000L;
      * Check if a peer should be excluded from tunnel selection.
      * Expired marks are left in place (not evicted) so their strike count
      * survives toward {@code i2p.tunnel.ghostPeer.timeoutThreshold}; they
-     * report {@code false} here and count as inactive in {@link #getGhostCount()}.
+     * report {@code false} here and count as inactive in {@link #getGhostCount}.
      *
      * @param peer the router hash to test
      * @return true if the peer is a ghost and should be skipped
@@ -509,7 +509,7 @@ static final long OFFENSE_DECAY_MS = 30 * 60 * 1000L;
     /**
      * Count of active ghost exclusions whose peer sits in the fast or
      * high-capacity tier, a peer in both tiers counted once.
-     * <p>Needed to pair with {@link ProfileOrganizer#getFastOrHighCapCount()}: an
+     * <p>Needed to pair with {@link ProfileOrganizer#getFastOrHighCapCount}: an
      * all-tier ghost count divided by a tier size overstates, because most marks
      * land on peers that were never in the preferred tier and would not have
      * competed for those slots.

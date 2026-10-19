@@ -12,7 +12,6 @@ import net.i2p.data.DataHelper;
  */
 class DefinitionParser {
 
-    /** Default constructor */
     private DefinitionParser() {}
 
     private static enum Rule { DEFAULT, EXPLICIT, FILE, RECORDER }

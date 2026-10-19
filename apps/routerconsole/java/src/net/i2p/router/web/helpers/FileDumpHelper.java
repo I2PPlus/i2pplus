@@ -23,9 +23,9 @@ import net.i2p.util.FileSuffixFilter;
 import net.i2p.util.FileUtil;
 
 /**
- *  Dump info on jars and wars
+ * Dump info on jars and wars.
  *
- *  @since 0.8.13
+ * @since 0.8.13
  */
 public class FileDumpHelper extends HelperBase {
     /**

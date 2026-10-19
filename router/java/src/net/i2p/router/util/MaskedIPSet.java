@@ -132,7 +132,7 @@ public class MaskedIPSet extends HashSet<String> {
 
     /**
      * Generate an arbitrary unique value for this ip/mask (mask = 1-4)
-     * If IPv6, double the mask value
+     * If IPv6, double the mask value.
      *
      * @param mask is 1-4 (number of bytes to match)
      */

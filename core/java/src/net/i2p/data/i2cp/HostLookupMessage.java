@@ -122,7 +122,7 @@ public class HostLookupMessage extends I2CPMessageImpl {
     }
 
     /**
-     * Gets the lookup type.
+     * The lookup type selector.
      *
      * @return 0 (hash) or 1 (host)
      */

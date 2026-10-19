@@ -18,7 +18,7 @@ import net.i2p.util.SystemVersion;
  * Coordinate the outbound fragments and select the next one to be built.
  * This pool contains messages we are actively trying to send, essentially
  * doing a round robin across each message to send one fragment, as implemented
- * in {@link #getNextVolley()}.  This also honors per-peer throttling, taking
+ * in {@link #getNextVolley}.  This also honors per-peer throttling, taking
  * note of each peer's allocations.  If a message has each of its fragments
  * sent more than a certain number of times, it is failed out.  In addition,
  * this instance also receives notification of message ACKs from the
@@ -47,7 +47,7 @@ class OutboundMessageFragments {
     /**
      * Ceiling on any wait taken here, so one peer reporting a long delay cannot
      * stall the pool.
-     * <p>Doubled on a host {@link SystemVersion#isSlow()}, where the extra
+     * <p>Doubled on a host {@link SystemVersion#isSlow}, where the extra
      * millisecond buys nothing but headroom. Package-visible so tests assert
      * against the value in force rather than a literal: hardcoding it made
      * {@code OutboundMessageFragmentsDecisionTest} pass only on a host with
@@ -60,9 +60,9 @@ class OutboundMessageFragments {
      * see {@link #foldSendDelay}.
      */
     static final int MIN_WAIT_MS = 10;
-    /** Counter for periodic aggregate stat emission */
+    /** Counter for periodic aggregate stat emission. */
     private int _statEmitCounter;
-    /** How many add() calls between "udp.memory.activePeers" samples. @since 0.9.71+ */
+    /** How many add() calls between "{@code udp.memory.activePeers}" samples. @since 0.9.71+. */
     private static final int MEMORY_STAT_INTERVAL = 16;
     /** Counter gating the memory stat. Single sender thread, no synchronization needed. */
     private int _memoryStatCounter;
@@ -70,10 +70,10 @@ class OutboundMessageFragments {
     /**
      * Reusable consumed-fragment marker for {@link #preparePackets}. Reused
      * across volleys (cleared per call) instead of allocating a fresh BitSet
-     * every volley; {@link BitSet#set} grows it as needed, so growth is
+     * every volley. {@link BitSet#set} grows it as needed, so growth is
      * amortized to the largest volley ever seen.
      * <p>
-     * Only reachable from {@link #getNextVolley()} on the single
+     * Only reachable from {@link #getNextVolley} on the single
      * PacketPusher thread, so no synchronization is needed.
      */
     private BitSet _consumed = new BitSet();
@@ -145,7 +145,7 @@ class OutboundMessageFragments {
     }
 
     /**
-     * Add a new message to the active pool
+     * Add a new message to the active pool.
      *
      * @param msg the message to queue; it is ignored when its target has no RouterInfo
      */
@@ -244,7 +244,7 @@ class OutboundMessageFragments {
     }
 
 /**
- * Should the "udp.memory.activePeers" gauge be sampled on this add()?
+ * Should the "{@code udp.memory.activePeers}" gauge be sampled on this add()?
  * True once every {@link #MEMORY_STAT_INTERVAL} messages.
  *
  * @return true if the gauge should be updated now

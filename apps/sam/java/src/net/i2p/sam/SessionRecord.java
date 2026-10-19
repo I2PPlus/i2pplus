@@ -43,7 +43,7 @@ class SessionRecord {
 
 	/**
 	 * Update the last-accessed timestamp.
-	 * Called by SessionsDB.get().
+	 * Called by {@link net.i2p.sam.SessionsDB#get}.
 	 */
 	void touch() {
 		_lastAccessed = System.currentTimeMillis();

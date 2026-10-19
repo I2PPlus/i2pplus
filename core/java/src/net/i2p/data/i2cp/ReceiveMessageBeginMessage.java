@@ -18,7 +18,6 @@ import net.i2p.data.DataHelper;
  * Defines the message a client sends to a router when asking the
  * router to start sending a message to it.
  *
- * @author jrandom
  */
 public class ReceiveMessageBeginMessage extends I2CPMessageImpl {
     /**
@@ -30,7 +29,7 @@ public class ReceiveMessageBeginMessage extends I2CPMessageImpl {
     /** The message ID. */
     private long _messageId;
 
-    /** Default constructor */
+    /** Creates a message with an invalid session id. */
     public ReceiveMessageBeginMessage() {
         _sessionId = -1;
         _messageId = -1;
@@ -55,7 +54,7 @@ public class ReceiveMessageBeginMessage extends I2CPMessageImpl {
     }
 
     /**
-     * Sets the session ID.
+     * Set the session the message is addressed to.
      *
      * @param id 0-65535
      */
@@ -102,7 +101,7 @@ public class ReceiveMessageBeginMessage extends I2CPMessageImpl {
 
 
     /**
-     * Override to reduce mem churn
+     * Override to reduce mem churn.
      *
      * @throws IOException on write error
      */

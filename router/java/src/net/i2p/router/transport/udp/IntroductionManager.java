@@ -53,13 +53,13 @@ class IntroductionManager {
     private static final Object DUMMY = new Object();
 
     /**
-     * Limit since we ping to keep the conn open
+     * Limit since we ping to keep the conn open.
      * @since 0.8.11
      */
     private static final int MAX_INBOUND = 100;
 
     /**
-     * This is enforced in EstablishmentManager
+     * This is enforced in EstablishmentManager.
      * @since 0.8.11
      */
     public static final int MAX_OUTBOUND = 200;
@@ -334,8 +334,8 @@ class IntroductionManager {
     }
 
     /**
-     *  So we can sort them
-     *  @since 0.9.18
+     * So we can sort them.
+     * @since 0.9.18
      */
     private static class Introducer implements Comparable<Introducer> {
         public final String stag;
@@ -343,7 +343,7 @@ class IntroductionManager {
         public final String shash;
 
         /**
-         * SSU 2
+         * SSU 2.
          * @since 0.9.55
          */
         public Introducer(Hash h, long tag, String exp) {
@@ -377,8 +377,8 @@ class IntroductionManager {
     }
 
     /**
-     *  Was part of pickInbound(), moved out so we can call it more often
-     *  @since 0.8.11
+     * Was part of pickInbound(), moved out so we can call it more often.
+     * @since 0.8.11
      */
     public void pingIntroducers() {
         // Try to keep the connection up for two hours after we made anybody an introducer
@@ -421,10 +421,10 @@ class IntroductionManager {
     }
 
     /**
-     *  Combined IPv4 and IPv6
+     * Combined IPv4 and IPv6.
      *
-     *  @return number of peers we have volunteered to introduce
-     *  @since 0.9.3
+     * @return number of peers we have volunteered to introduce
+     * @since 0.9.3
      */
     int introducedCount() {
             return _outbound.size();
@@ -952,7 +952,7 @@ class IntroductionManager {
      *
          */
     void receiveHolePunch(RemoteHostId charlie, byte[] data) {
-        // TODO: implement when needed
+    // TODO: implement when needed
     }
 
     /**

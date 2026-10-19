@@ -38,7 +38,6 @@ import net.i2p.util.ConcurrentHashSet;
  * Uses read/write locks with SimpleTimer2 for thread safety
  * and efficient buffer switching without synchronization overhead.
  *
- * @author zzz
  */
 public class DecayingHashSet extends DecayingBloomFilter {
     private ConcurrentHashSet<ArrayWrapper> _current;
@@ -269,7 +268,7 @@ public class DecayingHashSet extends DecayingBloomFilter {
      * Force a decay cycle if the entry count exceeds the soft cap.
      * <p>
      * A decay must never run more often than the decay interval: the swap in
-     * {@link #decay()} drops the older buffer, and doing that before that
+     * {@link #decay} drops the older buffer, and doing that before that
      * buffer has aged out would forget entries that are still live, turning
      * this duplicate/replay filter into a source of false negatives. So when
      * the cap is exceeded we decay only if at least one interval has passed

@@ -45,9 +45,9 @@ class UDPAddress {
 
     /** Property key for capabilities. */
     public static final String PROP_CAPACITY = "caps";
-    /** 'B' */
+    /** 'B'. */
     public static final char CAPACITY_TESTING = 'B';
-    /** 'C' */
+    /** 'C'. */
     public static final char CAPACITY_INTRODUCER = 'C';
 
     /** Introducer host. */
@@ -58,9 +58,9 @@ class UDPAddress {
     public static final String PROP_INTRO_KEY_PREFIX = "ikey";
     /** Introducer tag. */
     public static final String PROP_INTRO_TAG_PREFIX = "itag";
-    /** Introduction expiration prefix */
+    /** Introduction expiration prefix. */
     public static final String PROP_INTRO_EXP_PREFIX = "iexp";
-    /** Introduction hash prefix for SSU2 */
+    /** Introduction hash prefix for SSU2. */
     public static final String PROP_INTRO_HASH_PREFIX = "ih";
 
     /** Maximum number of introducers per address. */
@@ -451,7 +451,7 @@ class UDPAddress {
     /**
      * The MTU to use for this address.
      *
-     * @return 0 if unset or invalid; rectified via MTU.rectify()
+     * @return 0 if unset or invalid; rectified via {@link net.i2p.router.transport.udp.MTU#rectify}
      * @since 0.9.2
      */
     int getMTU() {
@@ -487,7 +487,7 @@ class UDPAddress {
     ////////////////
 
     /**
-     * Textual IP to InetAddress, because InetAddress.getByName() is slow.
+     * Textual IP to InetAddress, because {@link java.net.InetAddress#getByName} is slow.
      * Copied from Addresses.java, but caching InetAddress rather than byte[].
      */
     private static final Map<String, InetAddress> _inetAddressCache;
@@ -503,11 +503,11 @@ class UDPAddress {
     }
 
     /**
-     * Caching version of InetAddress.getByName(host), which is slow.
+     * Caching version of {@link java.net.InetAddress#getByName(String) getByName(host)}, which is slow.
      * Caches numeric IPs only.
      * As of 0.9.32, will NOT resolve hostnames.
      * <p>
-     * Unlike InetAddress.getByName(), we do NOT allow numeric IPs
+     * Unlike {@link java.net.InetAddress#getByName}, we do NOT allow numeric IPs
      * of the form d.d.d, d.d, or d, as these are almost certainly mistakes.
      *
      * @param host literal IPv4 or IPv6; if null or hostname, returns null

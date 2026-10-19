@@ -17,7 +17,7 @@ import net.i2p.router.RouterContext;
 import net.i2p.util.Log;
 
 /**
- * Base implementation that has simple algorithms and periodically saves state
+ * Base implementation that has simple algorithms and periodically saves state.
  */
 public class PeerManagerFacadeImpl implements PeerManagerFacade {
     private final Log _log;
@@ -73,6 +73,8 @@ public class PeerManagerFacadeImpl implements PeerManagerFacade {
     }
 
     /**
+     * Record a peer's capability flags.
+     *
      * @param caps non-null
      */
     public void setCapabilities(Hash peer, String caps) {
@@ -99,6 +101,8 @@ public class PeerManagerFacadeImpl implements PeerManagerFacade {
     }
 
     /**
+     * Peers advertising the given capability.
+     *
      * @param capability the address capability letter, matched without regard to case
      * @return non-null unmodifiable set
      */
@@ -108,6 +112,8 @@ public class PeerManagerFacadeImpl implements PeerManagerFacade {
     }
 
     /**
+     * How many peers advertise the given capability.
+     *
      * @param capability the address capability letter, matched without regard to case
      * @return the number of profiles advertising that capability
      * @since 0.9.45
@@ -117,7 +123,11 @@ public class PeerManagerFacadeImpl implements PeerManagerFacade {
         return _manager.countPeersByCapability(capability);
     }
 
-    /** @deprecated moved to routerconsole */
+    /**
+     * No-op, the HTML status page was not worth translating.
+     *
+     * @deprecated moved to routerconsole
+     */
     @Deprecated
     public void renderStatusHTML(Writer out) throws IOException {
         // Deprecated - moved to routerconsole

@@ -7,7 +7,7 @@ import org.junit.Test;
 /**
  * Boundary tests for the getSystemLoad() sample cache.
  *
- * getSystemLoad() calls OperatingSystemMXBean.getSystemLoadAverage(), a native
+ * getSystemLoad() calls {@code OperatingSystemMXBean.getSystemLoadAverage()}, a native
  * /proc read that sits on the per-build-request path of both tunnel throttlers.
  * The staleness predicate is factored out so the refresh interval can be
  * verified without touching the MXBean or the static query state.
@@ -88,7 +88,7 @@ public class SystemVersionSystemLoadCacheTest {
     /**
      * getCPULoadAvg() previously performed two string-keyed statManager()
      * lookups per call; it now resolves the handle once. Either way an
-     * unregistered "router.cpuLoad" stat must yield 0 rather than throwing.
+     * unregistered "{@code router.cpuLoad}" stat must yield 0 rather than throwing.
      */
     @Test
     public void testGetCpuLoadAvgNonNegative() {

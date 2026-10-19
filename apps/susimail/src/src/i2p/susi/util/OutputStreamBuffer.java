@@ -34,6 +34,8 @@ public class OutputStreamBuffer implements Buffer {
 	}
 
 	/**
+	 * Stream that collects writes into the buffer.
+	 *
 	 * @return the same OutputStream that was passed to the constructor
 	 */
 	@Override
@@ -42,7 +44,7 @@ public class OutputStreamBuffer implements Buffer {
 	}
 
 	/**
-	 * Does nothing
+	 * Does nothing.
 	 */
 	@Override
 	public void readComplete(boolean success) { /* no-op */ }
@@ -57,6 +59,8 @@ public class OutputStreamBuffer implements Buffer {
 	}
 
 	/**
+	 * Bytes written so far.
+	 *
 	 * @return 0 always
 	 */
 	public int getLength() {
@@ -64,6 +68,8 @@ public class OutputStreamBuffer implements Buffer {
 	}
 
 	/**
+	 * Current write position in the array.
+	 *
 	 * @return 0 always
 	 */
 	public int getOffset() {

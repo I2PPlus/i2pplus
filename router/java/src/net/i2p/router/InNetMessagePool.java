@@ -57,7 +57,7 @@ public class InNetMessagePool implements Service {
     private final AtomicBoolean _alive = new AtomicBoolean(false);
     private final boolean _dispatchThreaded;
 
-    /** Config flags for dispatch mode */
+    /** Config flags for dispatch mode. */
     private static final String PROP_DISPATCH_THREADED = "router.dispatchThreaded";
     private static final boolean DEFAULT_DISPATCH_THREADED = false;
 
@@ -66,7 +66,7 @@ public class InNetMessagePool implements Service {
 
     private final boolean DISPATCH_DIRECT;
 
-    /** Maximum valid I2NP message type */
+    /** Maximum valid I2NP message type. */
     private static final int MAX_I2NP_MESSAGE_TYPE = 31;
     private static final int MAX_DELIVERY_SKEW = 5000; // 5s latitude
     private static final long[] RATES = RateConstants.BASIC_RATES;

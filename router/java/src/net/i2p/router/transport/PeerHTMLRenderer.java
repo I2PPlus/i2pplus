@@ -31,7 +31,7 @@ public class PeerHTMLRenderer {
     private static final String BUNDLE_NAME = "net.i2p.router.web.messages";
     private static final String COUNTRY_BUNDLE_NAME = "net.i2p.router.countries.messages";
 
-    /** Removes the leading D/E/G bandwidth marker from a visible capacity string */
+    /** Removes the leading D/E/G bandwidth marker from a visible capacity string. */
     private final RouterContext _context;
     private final CountryLookup _countryLookup;
     private final ReverseDnsLookup _rdns;
@@ -250,7 +250,7 @@ public class PeerHTMLRenderer {
     /**
      * Reverse-DNS label: resolves {@code ip} to its canonical host name when
      * reverse lookups are enabled and the resolver offers a distinct, known
-     * name; otherwise returns the raw IP. Non-blocking-the lookup is served
+     * name. Otherwise returns the raw IP. Non-blocking-the lookup is served
      * from the rDNS cache and a background lookup is queued on a miss.
      * <p>
      * Deduplicates the resolver branch formerly duplicated across

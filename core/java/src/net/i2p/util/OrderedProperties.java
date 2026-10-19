@@ -24,7 +24,6 @@ import java.util.Set;
  * The keySet() and entrySet() methods return ordered sets.
  * Others - such as the enumerations values(), keys(), propertyNames() - do not.
  *
- * @author zzz Rewritten
  */
 public class OrderedProperties extends Properties {
 

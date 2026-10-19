@@ -113,7 +113,7 @@ public final class HMAC256Generator extends HMACGenerator {
     /**
      * Package private for HKDF.
      *
-     * @return cached or Mac.getInstance("HmacSHA256")
+     * @return cached or a {@link javax.crypto.Mac#getInstance(String) Mac} for "HmacSHA256"
      * @since 0.9.48
      */
     Mac acquire() {
@@ -131,7 +131,7 @@ public final class HMAC256Generator extends HMACGenerator {
     /**
      * Release a Mac back to the pool.
      * Mac will be reset, discarding any accumulated message state.
-     * Per the JCA contract, {@link Mac#reset()} "resets this Mac object to
+     * Per the JCA contract, {@link Mac#reset} "resets this Mac object to
      * the state it was in when previously initialized via a call to
      * init(Key)", so it clears the message state without re-running the
      * ipad/opad key schedule that {@link Mac#init(java.security.Key)} does.
@@ -162,7 +162,7 @@ public final class HMAC256Generator extends HMACGenerator {
      * bytes of the key, so getEncoded() returns exactly those 32 bytes (zero padded
      * if the caller supplied a shorter key); the full key data may be longer than
      * 32 bytes. The copy is mandatory rather than an optimization: the JDK's
-     * HmacCore.engineInit() zeroes the array returned by getEncoded() once it has
+     * {@code HmacCore.engineInit()} zeroes the array returned by getEncoded() once it has
      * consumed it, so handing out the internal array would destroy the caller's
      * key. This also means the result must never be cached - a second init() with
      * the same key object would read back an all-zero key.</p>

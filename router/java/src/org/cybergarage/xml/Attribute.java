@@ -11,7 +11,6 @@ package org.cybergarage.xml;
  * <p>This class provides a simple container for XML attribute name-value pairs. Attributes can be
  * created independently or copied from existing attributes.
  *
- * @author Satoshi Konno
  * @since 1.0
  */
 public class Attribute {

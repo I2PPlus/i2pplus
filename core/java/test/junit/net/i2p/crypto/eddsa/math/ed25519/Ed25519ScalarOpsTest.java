@@ -1,5 +1,5 @@
 /**
- * EdDSA-Java by str4d
+ * EdDSA-Java by str4d.
  *
  * To the extent possible under law, the person who associated CC0 with
  * EdDSA-Java has waived all copyright and related or neighboring rights
@@ -23,18 +23,10 @@ import org.junit.*;
 
 import java.math.BigInteger;
 
-/**
- * @author str4d
- * Additional tests by the NEM project team.
- *
- */
 public class Ed25519ScalarOpsTest {
 
     private static final Ed25519ScalarOps scalarOps = new Ed25519ScalarOps();
 
-    /**
-     * Test method for {@link net.i2p.crypto.eddsa.math.bigint.BigIntegerScalarOps#reduce(byte[])}.
-     */
     @Test
     public void testReduce() {
         // Example from test case 1
@@ -59,9 +51,6 @@ public class Ed25519ScalarOpsTest {
         }
     }
 
-    /**
-     * Test method for {@link net.i2p.crypto.eddsa.math.bigint.BigIntegerScalarOps#multiplyAndAdd(byte[], byte[], byte[])}.
-     */
     @Test
     public void testMultiplyAndAdd() {
         // Example from test case 1

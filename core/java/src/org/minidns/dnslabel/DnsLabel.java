@@ -28,7 +28,6 @@ import org.minidns.util.SafeCharSequence;
  * </p>
  *
  * @see <a href="https://tools.ietf.org/html/rfc5890#section-2.2">RFC 5890 § 2.2. DNS-Related Terminology</a>
- * @author Florian Schmaus
  *
  */
 public abstract class DnsLabel extends SafeCharSequence implements Comparable<DnsLabel> {
@@ -115,7 +114,7 @@ private static final boolean VALIDATE = true;
     /**
      * Get the raw label. Note that this may return a String containing null bytes.
      * Those Strings are notoriously difficult to handle from a security
-     * perspective. Therefore it is recommended to use {@link #toString()} instead,
+     * perspective. Therefore it is recommended to use {@link #toString} instead,
      * which will return a sanitized String.
      *
      * @return the raw label.
@@ -339,7 +338,7 @@ private static final boolean VALIDATE = true;
     public static class LabelToLongException extends IllegalArgumentException {
 
         /**
-         *
+         * Serial Version UID.
          */
         private static final long serialVersionUID = 1L;
 

@@ -21,7 +21,6 @@ package com.google.zxing;
  * This includes, but is not limited to, failing checksums / error correction algorithms, being
  * unable to locate finder timing patterns, and so on.
  *
- * @author Sean Owen
  */
 public abstract class ReaderException extends Exception {
 
@@ -31,7 +30,7 @@ public abstract class ReaderException extends Exception {
   /** empty stack trace array for disabled stack traces */
   protected static final StackTraceElement[] NO_TRACE = new StackTraceElement[0];
 
-  /** Default constructor */
+  /** For subclasses only. */
   ReaderException() {
     // do nothing
   }

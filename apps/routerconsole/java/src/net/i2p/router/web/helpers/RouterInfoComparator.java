@@ -6,10 +6,10 @@ import net.i2p.data.Hash;
 import net.i2p.data.router.RouterInfo;
 
 /**
- *  Sorts in true binary order, not Base64 string order.
- *  A-Z a-z 0-9 -~
+ * Sorts in true binary order, not Base64 string order.
+ * A-Z a-z 0-9 -~.
  *
- *  @since 0.9.64
+ * @since 0.9.64
  */
 class RouterInfoComparator implements Comparator<RouterInfo>, Serializable {
      private static final long serialVersionUID = 1;
@@ -25,7 +25,7 @@ class RouterInfoComparator implements Comparator<RouterInfo>, Serializable {
      RouterInfoComparator() {}
 
      /**
-      * Thread safe, no state
+      * Thread safe, no state.
       * @return the shared stateless comparator instance
       */
      public static RouterInfoComparator getInstance() { return _instance; }

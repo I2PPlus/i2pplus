@@ -16,7 +16,7 @@ import java.util.Set;
  * Group, without inherent ordering, a set of keys a certain distance away from
  * a local key, using XOR as the distance metric
  * <p>
- * Refactored from net.i2p.router.networkdb.kademlia
+ * Refactored from net.i2p.router.networkdb.kademlia.
  *
  * @param <T> type of SimpleDataStructure objects stored in the bucket
  * @since 0.9.2 in i2psnark, moved to core in 0.9.10
@@ -50,16 +50,16 @@ public interface KBucket<T extends SimpleDataStructure> {
     public int getKeyCount();
 
     /**
-     * Add the peer to the bucket
+     * Add the peer to the bucket.
      *
      * @param key the key to store; a full bucket may still accept it if the
-     *            trimmer makes room
+     * trimmer makes room
      * @return true if added
      */
     public boolean add(T key);
 
     /**
-     * Remove the key from the bucket
+     * Remove the key from the bucket.
      *
      * @param key the key to evict from this bucket
      * @return true if the key existed in the bucket before removing it, else false
@@ -72,7 +72,7 @@ public interface KBucket<T extends SimpleDataStructure> {
     public void setLastChanged();
 
     /**
-     * The last-changed timestamp
+     * The last-changed timestamp.
      * @return the last changed
      */
     public long getLastChanged();

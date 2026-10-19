@@ -7,7 +7,7 @@ import net.i2p.crypto.SigType;
 import org.junit.Test;
 
 /**
- * Pins bid-decision logic extracted from UDPTransport.bid(). All helpers are
+ * Pins bid-decision logic extracted from {@link net.i2p.router.transport.udp.UDPTransport#bid}. All helpers are
  * pure static functions in UDPTransport; no router context is required.
  *
  * @since 0.9.71+

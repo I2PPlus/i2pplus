@@ -15,13 +15,13 @@ import net.i2p.router.RouterContext;
  * - Congestion caps (D=0.75x, E=0.50x) multiply down the effective speed
  * - Actual peak 1-min tunnel throughput adds to bandwidth tier estimate when available
  * - When no throughput data exists, the bandwidth-tier estimate stands alone
- *   (freshness is handled by selection gates, not by eroding the score)
+ * (freshness is handled by selection gates, not by eroding the score).
  */
 class SpeedCalculator {
 
     private SpeedCalculator() {}
 
-    /** Base scores for profiled bandwidth tiers */
+    /** Base scores for profiled bandwidth tiers. */
     private static final double BASE_X = 10000;
     private static final double BASE_P = 5000;
     private static final double BASE_O = 2500;
@@ -31,10 +31,10 @@ class SpeedCalculator {
     private static final double BASE_K = 125;
     private static final double BASE_UNKNOWN = 100;
 
-    /** RTT threshold where speed is fully penalized (16s) */
+    /** RTT threshold where speed is fully penalized (16s). */
     private static final double MAX_RTT = 16000;
 
-    /** Congestion capability multipliers */
+    /** Congestion capability multipliers. */
     private static final double CONGESTION_D = 0.75;
     private static final double CONGESTION_E = 0.50;
 

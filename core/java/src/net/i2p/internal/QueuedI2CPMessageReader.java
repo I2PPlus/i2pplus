@@ -17,18 +17,17 @@ import net.i2p.util.Log;
  * Fetches messages off an In-JVM queue, zero-copy.
  * Uses a shared dispatcher pool instead of one thread per instance.
  *
- * @author zzz
  * @since 0.8.3
  */
 public class QueuedI2CPMessageReader extends I2CPMessageReader {
     private final I2CPMessageQueue in;
     private volatile boolean registered;
     /**
-     *  Set while a worker is serving this reader.
-     *  <p>I2CP messages for one session are order-dependent, so exactly one worker may
-     *  touch a reader at a time. Correctness would otherwise rest on the ready queue never
-     *  holding two entries for the same reader; claiming it before serving turns that into
-     *  something the code enforces rather than something registration order has to uphold.
+     * Set while a worker is serving this reader.
+     * <p>I2CP messages for one session are order-dependent, so exactly one worker may
+     * touch a reader at a time. Correctness would otherwise rest on the ready queue never
+     * holding two entries for the same reader. Claiming it before serving turns that into
+     * something the code enforces rather than something registration order has to uphold.
      */
     private final AtomicBoolean _claimed = new AtomicBoolean();
 
@@ -197,10 +196,10 @@ public class QueuedI2CPMessageReader extends I2CPMessageReader {
          */
         static final long IDLE_POLL_MS = 5;
         /**
-         *  Ceiling on concurrent workers, started on demand rather than up front.
-         *  <p>Only reached while several clients are backed up at once; at that point one
-         *  worker per client would be unbounded, and 8 concurrent workers is already far
-         *  more than the queue drain rate needs.
+         * Ceiling on concurrent workers, started on demand rather than up front.
+         * <p>Only reached while several clients are backed up at once. At that point one
+         * worker per client would be unbounded, and 8 concurrent workers is already far
+         * more than the queue drain rate needs.
          */
         static final int MAX_WORKERS = 8;
         /** A pass slower than this means a client's message handler is blocking the pool. */

@@ -11,7 +11,7 @@ import net.i2p.util.FileUtil;
  */
 
 public class Delete {
-    /** utility class */
+    /** Utility class. */
     private Delete() {}
 
     /**

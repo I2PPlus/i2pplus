@@ -10,7 +10,7 @@ import net.i2p.util.Log;
 import net.i2p.util.SimpleTimer2;
 
     /**
-     * Initiate a test (we are Alice)
+     * Initiate a test (we are Alice).
      *
      * @since 0.9.30 moved out of UDPTransport
      */
@@ -111,7 +111,7 @@ import net.i2p.util.SimpleTimer2;
     }
 
     /**
-     * Just to consolidate the logging
+     * Just to consolidate the logging.
      * @since 0.9.57
      */
     @Override
@@ -144,7 +144,7 @@ import net.i2p.util.SimpleTimer2;
     }
 
     /**
-     * Run within the next 45 seconds at the latest
+     * Run within the next 45 seconds at the latest.
      * @param isIPv6 true to test IPv6 reachability, false to test IPv4
      * @since 0.9.13
      */
@@ -153,10 +153,10 @@ import net.i2p.util.SimpleTimer2;
     }
 
     /**
-     * Run within the specified time at the latest
+     * Run within the specified time at the latest.
      * @param isIPv6 true to test IPv6 reachability, false to test IPv4
      * @param delay milliseconds to wait before the test runs, at most
-     *              MIN_TEST_FREQUENCY
+     * MIN_TEST_FREQUENCY
      * @since 0.9.39
      */
     public synchronized void forceRunSoon(boolean isIPv6, long delay) {
@@ -169,7 +169,7 @@ import net.i2p.util.SimpleTimer2;
     }
 
     /**
-     * Run within the next 5 seconds at the latest
+     * Run within the next 5 seconds at the latest.
      * @param isIPv6 true to test IPv6 reachability, false to test IPv4
      * @since 0.9.13
      */
@@ -179,9 +179,9 @@ import net.i2p.util.SimpleTimer2;
 
     /**
      * Caller MUST also call schedule(), reschedule(),
-     * forceRunSoon(), or forceRunImmediately()
+     * forceRunSoon(), or forceRunImmediately().
      * @param isAlive true keeps the event scheduled for later tests, false
-     *                cancels it
+     * cancels it
      */
     public synchronized void setIsAlive(boolean isAlive) {
         _alive = isAlive;
@@ -190,7 +190,7 @@ import net.i2p.util.SimpleTimer2;
     }
 
     /**
-     * Set the last-tested timer to now
+     * Set the last-tested timer to now.
      * @param isIPv6 true stamps the IPv6 timer, false stamps the IPv4 timer
      * @since 0.9.13
      */

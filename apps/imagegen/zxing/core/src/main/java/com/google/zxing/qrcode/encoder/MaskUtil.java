@@ -18,9 +18,6 @@ package com.google.zxing.qrcode.encoder;
 
 /**
  * Utility class for QR code mask operations.
- * @author Satoru Takabayashi
- * @author Daniel Switkin
- * @author Sean Owen
  */
 final class MaskUtil {
 

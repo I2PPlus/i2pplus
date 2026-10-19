@@ -19,7 +19,11 @@ package org.klomp.snark.web;
  */
 public final class RedirectQuery {
 
-    /** @since 0.9.71+ */
+    /**
+     * Static class, no instances.
+     *
+     * @since 0.9.71+
+     */
     private RedirectQuery() {}
 
     /**

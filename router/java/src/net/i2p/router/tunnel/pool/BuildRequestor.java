@@ -58,7 +58,7 @@ public abstract class BuildRequestor {
     private static final String MIN_NEWTBM_VERSION = "0.9.51";
     private static final boolean SEND_VARIABLE = true;
     private static final int SHORT_RECORDS = 4;
-    /** 5 records (~2600 bytes) fit well within 3 tunnel messages */
+    /** 5 records (~2600 bytes) fit well within 3 tunnel messages. */
     private static final int MEDIUM_RECORDS = 5;
     /** Property to enable/disable pre-connect fallback on build failure. */
     static final String PROP_PRECONNECT_ENABLED = "i2p.tunnel.preConnect.enabled";
@@ -193,13 +193,13 @@ public abstract class BuildRequestor {
      */
     private static final int BUILD_MSG_TIMEOUT = 60*1000;
 
-    /** Proposal 168 minimum bandwidth property key */
+    /** Proposal 168 minimum bandwidth property key. */
     static final String PROP_MIN_BW = "m";
-    /** Proposal 168 required bandwidth property key */
+    /** Proposal 168 required bandwidth property key. */
     static final String PROP_REQ_BW = "r";
-    /** Proposal 168 maximum bandwidth property key */
+    /** Proposal 168 maximum bandwidth property key. */
     static final String PROP_MAX_BW = "l";
-    /** Proposal 168 available bandwidth property key */
+    /** Proposal 168 available bandwidth property key. */
     static final String PROP_AVAIL_BW = "b";
 
     /**

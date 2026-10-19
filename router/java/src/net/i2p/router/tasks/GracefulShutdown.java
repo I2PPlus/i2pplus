@@ -23,10 +23,10 @@ public class GracefulShutdown implements Runnable {
         return _wakeLock;
     }
 
-    /** Delay before finalizing a restart/shutdown after a signaling condition is met (ms) */
+    /** Delay before finalizing a restart/shutdown after a signaling condition is met (ms). */
     private static final int RESTART_DELAY_MS = 20_000;
 
-    /** Interval between status checks while a restart/shutdown is in progress (ms) */
+    /** Interval between status checks while a restart/shutdown is in progress (ms). */
     private static final int CHECK_STATUS_INTERVAL_MS = 5_000;
 
     /**

@@ -24,7 +24,7 @@ import net.i2p.util.Translate;
  * Renders every client ratchet session key manager as one table, with a
  * thead/tbody/tfoot section per client as on the update manager page, so
  * the columns align across all clients. Inbound tag sets, outbound
- * sessions and outbound tag sets share the column grid; cells that do not
+ * sessions and outbound tag sets share the column grid. Cells that do not
  * apply to a row's kind show an em-dash. The tfoot carries the client's
  * session counters. Clients whose SKM has no ratchet part (plain ElGamal)
  * keep their own tag-status rendering below the table.
@@ -115,7 +115,7 @@ public class ClientSKMDebugHelper {
      * Turns a base64 key-hash cell into a destination reference: the peer of
      * a client session is a destination, never a router, so no router-info
      * markup (flag, bandwidth) applies and there is nothing to look up.
-     * Shows the short hash with the full hash as title; falls back to the
+     * Shows the short hash with the full hash as title. Falls back to the
      * label itself when it is not a hash (e.g. the "null" key).
      *
      * @return a function mapping the cell text to html
@@ -156,7 +156,7 @@ public class ClientSKMDebugHelper {
      * and no peer rendering. Package-visible for testing.
      *
      * @param title the client title html
-     * @param rows unified rows from RatchetSKM.getDebugRows()
+     * @param rows unified rows from {@link net.i2p.router.crypto.ratchet.RatchetSKM#getDebugRows}
      * @param summary the counters line, or null for no tfoot
      * @return the section html, never null
      */
@@ -171,7 +171,7 @@ public class ClientSKMDebugHelper {
      * Package-visible for testing.
      *
      * @param title the client title html
-     * @param rows unified rows from RatchetSKM.getDebugRows()
+     * @param rows unified rows from {@link net.i2p.router.crypto.ratchet.RatchetSKM#getDebugRows}
      * @param summary the counters line, or null for no tfoot
      * @param columns the translated header row html
      * @param peerCol index of the peer column, or -1 for none

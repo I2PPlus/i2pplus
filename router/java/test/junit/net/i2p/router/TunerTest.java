@@ -32,7 +32,7 @@ public class TunerTest {
         Assume.assumeTrue("No RouterContext available", _ctx != null);
     }
 
-    /** Inline clamp to match SystemHealth.clamp (private static) */
+    /** Inline clamp to match SystemHealth.clamp (private static). */
     private static double clamp01(double v) {
         return Math.max(0.0, Math.min(1.0, v));
     }
@@ -993,7 +993,7 @@ public class TunerTest {
      * Saturated under a high SYN-expire rate: the accept queue is losing SYNs to
      * timeout (transport-latency bound). Additional handler threads would all stall
      * on the same slow I2P write, so growth is restrained to a modest +2 instead of
-     * the proportional step — avoid overshoot on a bottleneck more threads can't widen.
+     * the proportional step. Avoid overshoot on a bottleneck more threads can't widen.
      */
     @Test
     public void testServerHandlerSaturatedGrowsSlowlyWhenLatencyBound() {
@@ -1600,7 +1600,7 @@ public class TunerTest {
 
     /** The heap-headroom ladder: four steps below 40%, two below 50%, hold at
      * 50% and above, shrink above 60%. The hold-at-50% rung is what makes the
-     * large increments safe — a big jump can never be the event that pushes
+     * large increments safe. A big jump can never be the event that pushes
      * the heap into pressure. */
     @Test
     public void testMaxWindowMemoryHeadroomLadder() {
@@ -1717,7 +1717,7 @@ public class TunerTest {
 
     /**
      * getAdditionalStat5Min() is what the congestion tuner reads for
-     * stream.rtxRatio and stream.rtxRatioBytes. It returns NaN unless the stat
+     * {@code stream.rtxRatio} and {@code stream.rtxRatioBytes}. It returns NaN unless the stat
      * was registered with a five-minute period, so a writer that only offers
      * minute/ten-minute/hour periods (what ConnectionManager did before
      * 0.9.71+) feeds the tuner NaN forever no matter how much data it records.

@@ -125,7 +125,7 @@ public class DecodingOutputStream extends OutputStream {
         decodeAndWrite(false);
     }
 
-    /** Only flushes. Does NOT close the writer */
+    /** Only flushes. Does NOT close the writer. */
     @Override
     public void close() throws IOException {
         decodeAndWrite(true);

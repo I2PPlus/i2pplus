@@ -11,7 +11,7 @@ import net.i2p.data.i2cp.HostReplyMessage;
 import net.i2p.data.i2cp.I2CPMessage;
 
 /**
- * Handle I2CP dest replies from the router
+ * Handle I2CP dest replies from the router.
  *
  * @since 0.9.11
  */

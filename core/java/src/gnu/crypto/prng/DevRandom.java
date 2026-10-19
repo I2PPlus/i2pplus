@@ -8,13 +8,13 @@ import java.util.Map;
 import net.i2p.data.DataHelper;
 
 /**
- * Simple /dev/random reader
+ * Simple /dev/random reader.
  *
  * @since 0.9.58
  */
 class DevRandom implements IRandomStandalone {
 
-    /** Default constructor */
+    /** Creates a reader for /dev/random. */
     DevRandom() {}
 
     private static final String F = "/dev/random";

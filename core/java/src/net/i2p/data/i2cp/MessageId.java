@@ -21,7 +21,6 @@ import java.io.OutputStream;
  * <p>
  * As of 0.9.48, does NOT extend DataStructureImpl.
  *
- * @author jrandom
  */
 public class MessageId {
     private long _messageId;

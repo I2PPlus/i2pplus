@@ -35,7 +35,6 @@ import java.io.OutputStream;
 /**
  * Adaptive coding.
  * See the section "Adaptive Encodings" in the Pack200 spec.
- * @author John Rose
  */
 class AdaptiveCoding implements CodingMethod {
     CodingMethod headCoding;

@@ -35,7 +35,6 @@ import org.xml.sax.SAXParseException;
 /**
  * Class defines various utility functions used in Rrd4j.
  *
- * @author Sasa Markovic
  */
 public class Util {
 
@@ -98,7 +97,7 @@ public class Util {
     }
 
     /**
-     * Just an alias for {@link #getTime()} method.
+     * Just an alias for {@link #getTime} method.
      *
      * @return Current timestamp (without milliseconds)
      */

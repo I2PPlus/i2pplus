@@ -16,7 +16,7 @@ import java.io.File;
  * <p>
  * Ref: https://lwn.net/Articles/975565/
  * Ref: https://systemd.io/TEMPORARY_DIRECTORIES/
- * Ref: man systemd-tmpfiles; man tmpfiles.d
+ * Ref: man systemd-tmpfiles; man tmpfiles.d.
  *
  * @since 0.9.64
  */
@@ -28,7 +28,7 @@ public class TempDirScanner extends SimpleTimer2.TimedEvent {
     private static final long DELAY = 23 * 60 * 60 * 1000L;
 
     /**
-     * Schedules itself
+     * Schedules itself.
      *
      * @param context the app context whose temp dir is kept alive and whose timer scans it
      */

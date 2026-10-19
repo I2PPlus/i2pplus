@@ -37,7 +37,7 @@ import net.i2p.router.transport.CommSystemFacadeImpl;
 import net.i2p.router.web.Messages;
 
 /**
- * Helper class to refactor HTML rendering from out of the ProfileOrganizer
+ * Helper class to refactor HTML rendering from out of the ProfileOrganizer.
  */
 class ProfileOrganizerRenderer {
     private static final Pattern WHOIS_PAREN = Pattern.compile("\\([^)]+\\)");
@@ -53,7 +53,7 @@ class ProfileOrganizerRenderer {
     private final boolean _fragmentKeys;
 
     /**
-     * Creates a new ProfileOrganizerRenderer
+     * Creates a new ProfileOrganizerRenderer.
      *
      * @param organizer the organizer holding the peer profiles and throttling data to render
      * @param context the router context supplying console translations
@@ -63,7 +63,7 @@ class ProfileOrganizerRenderer {
     }
 
     /**
-     * Creates a new ProfileOrganizerRenderer
+     * Creates a new ProfileOrganizerRenderer.
      * @param organizer the organizer holding the peer profiles and throttling data to render
      * @param context the router context supplying console translations
      * @param fragmentKeys when true, rows carry a data-key attribute for the contentonly fragment mode
@@ -131,7 +131,7 @@ class ProfileOrganizerRenderer {
     private static class ProfileSelection {
         final Set<PeerProfile> order;
         final int older;
-        /** Hide window for stale profiles, 0 for none */
+        /** Hide window for stale profiles, 0 for none. */
         final long hideWindow;
         /** Snapshot of fast-tier hashes, taken once under organizer read lock. */
         final Set<Hash> fastSet;
@@ -152,7 +152,7 @@ class ProfileOrganizerRenderer {
 
     /**
      * Load, filter, and sort the profiles for the given mode. Modes 1 and 2
-     * drop peers that do not match the tier; mode 3 keeps all peers in binary
+     * drop peers that do not match the tier. Mode 3 keeps all peers in binary
      * hash order. Modes 0-2 hide inactive peers not heard from within a cutoff
      * that scales with the candidate count (4h above 500, 2h above 1000, 1h
      * above 2000, 30m above 3000, 15m above 4000, 10m above 5000) to keep the
@@ -886,32 +886,32 @@ class ProfileOrganizerRenderer {
      * @since 0.9.71+
      */
     private static class FloodfillStats {
-        /** floodfill-capable peers known to the peer manager (matches sidebar) */
+        /** Floodfill-capable peers known to the peer manager (matches sidebar). */
         int known;
-        /** peers passing the table's emit filter */
+        /** Peers passing the table's emit filter. */
         int listed;
-        /** listed && lastHeardFrom within the last hour */
+        /** Listed peers heard from within the last hour. */
         int recentlyHeard;
-        /** active bans of floodfill-capable peers (banFF classification) */
+        /** Active bans of floodfill-capable peers (banFF classification). */
         int banned;
-        /** sum of row.hourFailPct over listed peers */
+        /** Sum of row.hourFailPct over listed peers. */
         long failPctSum;
-        /** listed peers contributing to failPctSum */
+        /** Listed peers contributing to failPctSum. */
         int failCount;
-        /** sum of 1h response times (ms) over listed peers with non-negative avg */
+        /** Sum of 1h response times (ms) over listed peers with non-negative avg. */
         long respMsSum;
-        /** listed peers contributing to respMsSum */
+        /** Listed peers contributing to respMsSum. */
         int respCount;
-        /** aggregated lifetime lookups good and bad */
+        /** Aggregated lifetime lookups good and bad. */
         long lookupsGood, lookupsBad;
-        /** listed peers whose most recent store was good vs bad */
+        /** Listed peers whose most recent store was good vs bad. */
         int storeGood, storeBad;
     }
 
     /**
      * Render the floodfill health rings above the floodfill table: peer count,
      * reachability, banned floodfills, mean 1h failure, mean response time,
-     * recent activity, lookup reliability and store health — all aggregated
+     * recent activity, lookup reliability and store health. All aggregated
      * over the observed floodfill peers.
      *
      * @param out the writer to render to
@@ -1206,7 +1206,7 @@ class ProfileOrganizerRenderer {
     /**
      * Sorts profiles by tier (fast > high-cap > standard) using pre-computed
      * tier sets, then by binary hash order within each tier.  No locks are
-     * acquired during comparison — the tier snapshot is taken once in
+     * acquired during comparison. The tier snapshot is taken once in
      * loadProfiles() and passed to this comparator.
      * @since 0.9.70+
      */
@@ -1240,7 +1240,7 @@ class ProfileOrganizerRenderer {
 
     /**
      * Used for floodfill-only page
-     * As of 0.9.29, sorts in true binary order, not base64 string
+     * As of 0.9.29, sorts in true binary order, not base64 string.
      * @since 0.9.8
      */
     private static class ProfComparator implements Comparator<PeerProfile>, Serializable {
@@ -1314,7 +1314,11 @@ class ProfileOrganizerRenderer {
         return Math.round(ra.getAverage());
     }
 
-    /** @since 0.9.21 */
+    /**
+     * Format a time span for display.
+     *
+     * @since 0.9.21
+     */
     private String formatInterval(long now, long then) {
         if (then <= 0) {return _t(NA);}
         // avoid 0 or negative
@@ -1322,13 +1326,13 @@ class ProfileOrganizerRenderer {
         return DataHelper.formatDuration2(now - then);
     }
 
-    /** translate a string */
+    /** Translate a string. */
     private String _t(String s) {return Messages.getString(s, _context);}
 
     private String _t(String s, Object o) {return Messages.getString(s, o, _context);}
 
     /**
-     * Translate with plural support
+     * Translate with plural support.
      *
      * @param s singular string, may contain {0} for the count
      * @param p plural string, may contain {0} for the count

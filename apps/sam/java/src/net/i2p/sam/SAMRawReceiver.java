@@ -11,7 +11,7 @@ package net.i2p.sam;
 import java.io.IOException;
 
 /**
- * Interface for sending raw data to a SAM client
+ * Interface for sending raw data to a SAM client.
  */
 interface SAMRawReceiver {
 

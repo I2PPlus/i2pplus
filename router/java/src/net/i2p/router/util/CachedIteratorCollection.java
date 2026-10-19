@@ -60,17 +60,17 @@ public class CachedIteratorCollection<E> extends AbstractCollection<E> {
 
     // Set to true in clear() to signal all iterator instances the collection is gone.
     // ThreadLocalMap entries for other threads will be cleaned lazily via WeakRef key.
-    /** True after clear() to signal iterator instances the collection is gone */
+    /** True after clear() to signal iterator instances the collection is gone. */
     volatile boolean _cleared;
 
-    /** Size of the collection */
+    /** Size of the collection. */
     int size;
 
     /**
      * Node object that contains:
      * (1) Data object
      * (2) Link to previous Node object
-     * (3) Link to next Node object
+     * (3) Link to next Node object.
      */
     private static class Node<E> {
         E item;
@@ -84,21 +84,19 @@ public class CachedIteratorCollection<E> extends AbstractCollection<E> {
         }
     }
 
-    /** First node in the linked list */
+    /** First node in the linked list. */
     Node<E> first;
 
-    /** Last node in the linked list */
+    /** Last node in the linked list. */
     Node<E> last;
 
-    /**
-     * Default constructor
-     */
+    /** Constructs an empty collection. */
     public CachedIteratorCollection() {
         // Intentionally empty - default constructor
     }
 
     /**
-     * Adds a data object (element) as a Node and sets previous/next pointers accordingly
+     * Adds a data object (element) as a Node and sets previous/next pointers accordingly.
      */
     @Override
     public synchronized boolean add(E element) {
@@ -114,7 +112,7 @@ public class CachedIteratorCollection<E> extends AbstractCollection<E> {
     }
 
     /**
-     * Clears the collection, all pointers reset to 'null'
+     * Clears the collection, all pointers reset to 'null'.
      */
     @Override
     public synchronized void clear() {
@@ -130,7 +128,7 @@ public class CachedIteratorCollection<E> extends AbstractCollection<E> {
 
     /**
      * Remove the first element matching by identity (==).
-     * Used by PeerState.acked() to avoid iterating with early-exit break.
+     * Used by {@code PeerState.acked()} to avoid iterating with early-exit break.
      *
      * @return true if removed
      * @since 0.9.70+
@@ -211,7 +209,7 @@ public class CachedIteratorCollection<E> extends AbstractCollection<E> {
      * <p>
      * Static to avoid holding an implicit {@code this$0} reference to the enclosing
      * collection, which would prevent GC of the collection (and its owning PeerState)
-     * when held in another thread's ThreadLocal after {@link CachedIteratorCollection#clear()} is called.
+     * when held in another thread's ThreadLocal after {@link CachedIteratorCollection#clear} is called.
      *
      * @param <E> the type of elements in this iterator
      */
@@ -234,7 +232,7 @@ public class CachedIteratorCollection<E> extends AbstractCollection<E> {
         }
 
         /**
-         * Reset iteration
+         * Reset iteration.
          */
         private void reset() {
             CachedIteratorCollection<E> c = collRef.get();
@@ -253,7 +251,7 @@ public class CachedIteratorCollection<E> extends AbstractCollection<E> {
 
         /**
          * If nextCalled is true (i.e. next() has been called at least once),
-         * remove() will remove the last returned Node
+         * remove() will remove the last returned Node.
          */
         @Override
         public void remove() {
@@ -300,7 +298,7 @@ public class CachedIteratorCollection<E> extends AbstractCollection<E> {
 
         /**
          * Returns true as long as current Iteration Index Node (itrIndexNode)
-         * is non-null
+         * is non-null.
          *
          * @return whether next is present
          */
@@ -313,7 +311,10 @@ public class CachedIteratorCollection<E> extends AbstractCollection<E> {
         }
 
         /**
-         * Returns the next node in the iteration
+         * The next element in the iteration.
+         *
+         * @throws NoSuchElementException if the collection was cleared or the
+         * iteration is finished
          */
         @Override
         public E next() {
@@ -332,7 +333,7 @@ public class CachedIteratorCollection<E> extends AbstractCollection<E> {
     }
 
     /**
-     * Return size of current collection
+     * Return size of current collection.
      */
     @Override
     public synchronized int size() {

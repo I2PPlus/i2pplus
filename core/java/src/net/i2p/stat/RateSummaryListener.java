@@ -2,7 +2,7 @@ package net.i2p.stat;
 import java.util.Arrays;
 
 /**
- * Receive the state of the rate when its coalesced
+ * Receive the state of the rate when its coalesced.
  */
 public interface RateSummaryListener {
     /**

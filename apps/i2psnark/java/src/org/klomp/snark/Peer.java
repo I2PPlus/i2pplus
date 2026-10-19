@@ -217,7 +217,7 @@ public class Peer implements Comparable<Peer>, BandwidthListener {
     }
 
     /**
-     * Returns the id of the peer.
+     * This peer's ID, assigned when it was created.
      *
      * @return the peer ID this peer was created with
      */
@@ -433,7 +433,7 @@ public class Peer implements Comparable<Peer>, BandwidthListener {
         }
     }
 
-    /** Bound on the socket read timeout while reading the handshake, to avoid hanging a thread on a stalled peer */
+    /** Bound on the socket read timeout while reading the handshake, to avoid hanging a thread on a stalled peer. */
     private static final long HANDSHAKE_READ_TIMEOUT = (long) 45 * 1000;
 
     /**
@@ -620,7 +620,8 @@ public class Peer implements Comparable<Peer>, BandwidthListener {
     }
 
     /**
-     * Disconnects this peer if it was connected. PeerListener.disconnected() will be called when
+     * Disconnects this peer if it was connected. {@link org.klomp.snark.PeerListener#disconnected} will
+      * be called when
      * the connection is completely terminated. If deregister is true, partial pieces will be
      * returned.
      *
@@ -903,7 +904,7 @@ public class Peer implements Comparable<Peer>, BandwidthListener {
     }
 
     /**
-     * Current limit in Bps
+     * Current limit in Bps.
      *
      * @return the up b w limit
      * @since 0.9.62
@@ -930,7 +931,7 @@ public class Peer implements Comparable<Peer>, BandwidthListener {
     }
 
     /**
-     * Current limit in Bps
+     * Current limit in Bps.
      *
      * @return the down b w limit
      * @since 0.9.62
@@ -994,7 +995,7 @@ public class Peer implements Comparable<Peer>, BandwidthListener {
     /**
      * The max inactive time.
      *
-     * @return max inactive time
+     * @return inactivity limit in ms before the peer is disconnected
      */
     public long getMaxInactiveTime() {
         return isCompleted() && !isInteresting()
@@ -1002,7 +1003,7 @@ public class Peer implements Comparable<Peer>, BandwidthListener {
                 : PeerCoordinator.MAX_INACTIVE;
     }
 
-    /** Send keepalive */
+    /** Send keepalive. */
     public void keepAlive() {
         PeerState s = state;
         if (s != null) {
@@ -1012,7 +1013,7 @@ public class Peer implements Comparable<Peer>, BandwidthListener {
 
     /**
      * Retransmit outstanding requests if necessary
-     * Does nothing if supportsFast()
+     * Does nothing if supportsFast().
      */
     public void retransmitRequests() {
         if (supportsFast())
@@ -1024,7 +1025,7 @@ public class Peer implements Comparable<Peer>, BandwidthListener {
     }
 
     /**
-     * Return how much the peer has
+     * Return how much the peer has.
      *
      * @return number of completed pieces (not bytes)
      */

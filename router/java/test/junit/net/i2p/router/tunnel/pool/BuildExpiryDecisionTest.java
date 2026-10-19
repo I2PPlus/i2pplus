@@ -126,7 +126,7 @@ public class BuildExpiryDecisionTest {
     }
 
     /**
-     * A negative budget from an operator setting router.tunnelConcurrentBuilds
+     * A negative budget from an operator setting {@code router.tunnelConcurrentBuilds}
      * below zero is floored rather than passed through, because a caller using
      * the result as a build count would otherwise dispatch nothing at all.
      */

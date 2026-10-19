@@ -37,7 +37,6 @@ import org.rrd4j.DsType;
  * definition parameters, see RRDTool's <a href="../../../../man/rrdcreate.html"
  * target="man">rrdcreate man page</a>.
  *
- * @author Sasa Markovic
  */
 public class RrdDef {
     /** Default RRD step to be used if not specified in constructor (300 seconds). */

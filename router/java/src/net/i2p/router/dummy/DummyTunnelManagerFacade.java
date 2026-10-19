@@ -26,7 +26,7 @@ import net.i2p.router.tunnel.pool.TunnelPool;
  */
 public class DummyTunnelManagerFacade implements TunnelManagerFacade {
 
-    /** Creates a new DummyTunnelManagerFacade */
+    /** Creates a new DummyTunnelManagerFacade. */
     public DummyTunnelManagerFacade() {}
 
     /**

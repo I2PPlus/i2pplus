@@ -12,7 +12,6 @@ import org.cybergarage.util.Debug;
  * This class defines SSDP protocol constants including multicast addresses, ports, and utility
  * methods for parsing SSDP cache control headers.
  *
- * @author Satoshi "skonno" Konno
  * @version 1.8
  */
 public class SSDP {

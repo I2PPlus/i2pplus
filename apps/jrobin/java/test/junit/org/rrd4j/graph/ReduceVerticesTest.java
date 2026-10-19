@@ -19,6 +19,8 @@ import org.junit.Test;
 public class ReduceVerticesTest {
 
     /**
+     * X values 0 through n-1 for the given Y values.
+     *
      * @param x source x coordinates
      * @param y source y coordinates
      * @return evenly spaced x coordinates, one per sample
@@ -32,6 +34,8 @@ public class ReduceVerticesTest {
     }
 
     /**
+     * Assert the reduced vertex arrays match.
+     *
      * @param xv collected x coordinates, trimmed to count
      * @param yv collected y coordinates, trimmed to count
      * @param count number of vertices written

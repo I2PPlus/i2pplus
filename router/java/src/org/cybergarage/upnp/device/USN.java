@@ -27,7 +27,6 @@ import java.nio.charset.StandardCharsets;
  * advertisement messages, enabling proper device identification and service differentiation in UPnP
  * networks.
  *
- * @author Satoshi Konno
  * @since 1.0
  */
 public class USN {

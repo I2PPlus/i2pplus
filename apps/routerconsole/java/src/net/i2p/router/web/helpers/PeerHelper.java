@@ -64,7 +64,7 @@ public class PeerHelper extends HelperBase {
      * Default constructor for the console peer summary helper.
      */
     public PeerHelper() {
-        // TODO
+    // TODO
     }
     /**
      * Parses the decimal sort order, falling back to 0 when absent or invalid.
@@ -194,7 +194,7 @@ public class PeerHelper extends HelperBase {
     /**
      * Get the 1-minute event count of a RateStat, preferring the current partial
      * window. For count-type stats whose event value carries no information
-     * (e.g. peer.testTimeout always records 1), this is the meaningful signal -
+     * (e.g. {@code peer.testTimeout} always records 1), this is the meaningful signal -
      * the average would read a constant 1.0.
      * @return events in the last minute, 0 if unavailable
      * @since 0.9.71

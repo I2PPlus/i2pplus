@@ -11,7 +11,7 @@ package net.i2p.router;
 import net.i2p.CoreVersion;
 
 /**
- * Expose a version string
+ * Expose a version string.
  *
  */
 public class RouterVersion {
@@ -25,12 +25,12 @@ public class RouterVersion {
     public static final String ID = "Git";
     /** The router version number. */
     public static final String VERSION = CoreVersion.VERSION;
-    /** For example: "beta", "alpha", "rc" */
+    /** For example: "beta", "alpha", "rc". */
     public static final String STATUS = "";
     /** The router build number. */
     public static final long BUILD = 28;
 
-    /** For example "-test" */
+    /** For example "-test". */
     public static final String EXTRA = "+";
     /** The full version string, combining version, build, and extra. */
     public static final String FULL_VERSION = VERSION + "-" + BUILD + EXTRA;

@@ -264,7 +264,7 @@ class SSU2Bitfield {
      */
     public interface Callback {
         /**
-         * Called when a bit is set
+         * Called when a bit is set.
          *
          * @param bit the absolute message number that was newly set
          */
@@ -310,7 +310,7 @@ class SSU2Bitfield {
     }
 
     /**
-     * Pretty print an ACK block
+     * Pretty print an ACK block.
      *
      * @param thru the highest acked message number
      * @param acnt number of contiguous acks below thru, 0-255

@@ -8,7 +8,7 @@ import org.junit.Test;
 
 /**
  * Tests for the TestJob hard-limit rules: the job-queue-lag floor on the
- * limit ({@link TestJob#scaleHardLimit(int, long)}) — lag scales the limit
+ * limit ({@link TestJob#scaleHardLimit(int, long)}). Lag scales the limit
  * down so TestJobs don't starve critical router jobs, but never below half
  * the base, since quartering starved the tunnel test queue while UNTESTED
  * tunnels piled up unscheduled — and the boundary the reservation itself

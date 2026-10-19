@@ -32,26 +32,26 @@ import net.i2p.util.SystemVersion;
 public class ConfigClientsHelper extends HelperBase {
     private String _edit;
 
-    /** from ClientListenerRunner */
+    /** From ClientListenerRunner. */
     public static final String BIND_ALL_INTERFACES = "i2cp.tcp.bindAllInterfaces";
-    /** from ClientManager */
+    /** From ClientManager. */
     public static final String PROP_DISABLE_EXTERNAL = "i2cp.disableInterface";
-    /** from ClientManager */
+    /** From ClientManager. */
     public static final String PROP_ENABLE_SSL = "i2cp.SSL";
-    /** from ClientMessageEventListener */
+    /** From ClientMessageEventListener. */
     public static final String PROP_AUTH = "i2cp.auth";
-    /** from ClientManager */
+    /** From ClientManager. */
     public static final String PROP_DISABLE_LOOPBACK = "i2cp.disableLoopback";
-    /** Enable/disable client configuration changes in the web UI */
+    /** Enable/disable client configuration changes in the web UI. */
     public static final String PROP_ENABLE_CLIENT_CHANGE = "routerconsole.enableClientChange";
-    /** Enable/disable plugin installation in the web UI */
+    /** Enable/disable plugin installation in the web UI. */
     public static final String PROP_ENABLE_PLUGIN_INSTALL = "routerconsole.enablePluginInstall";
 
     /**
-     * simple regex from
+     * Simple regex from
      * https://stackoverflow.com/questions/8204680/java-regex-email
      * not the massive RFC 822 compliant one
-     * modified so .i2p will work
+     * modified so .i2p will work.
      */
     private static final Pattern VALID_EMAIL_ADDRESS_REGEX =
         Pattern.compile("[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z2]{2,6}", Pattern.CASE_INSENSITIVE);

@@ -7,7 +7,6 @@ import org.rrd4j.graph.DownSampler;
  *
  * <p>Modified by Fabrice Bacchella for NaN support.
  *
- * @author Benjamin Green
  */
 public class LargestTriangleThreeBuckets extends DownSampleImpl {
 

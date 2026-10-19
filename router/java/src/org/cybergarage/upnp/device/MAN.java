@@ -24,7 +24,6 @@ package org.cybergarage.upnp.device;
  * <p>This class is used by SSDP components to validate and process MAN headers in M-SEARCH
  * requests, ensuring proper discovery protocol compliance.
  *
- * @author Satoshi Konno
  * @since 1.0
  */
 public class MAN {

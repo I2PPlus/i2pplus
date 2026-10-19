@@ -19,12 +19,12 @@ class Sorters {
     Sorters() {}
 
     /**
-     * Base for the various sorters
+     * Base for the various sorters.
      *
      * @since 0.9.13
      */
     private abstract static class SorterBase implements Comparator<String>, Serializable {
-        /** Mail cache to fetch mail objects from */
+        /** Mail cache to fetch mail objects from. */
         private final MailCache mailCache;
 
         /**
@@ -47,7 +47,7 @@ class Sorters {
         }
 
         /**
-         * Compare two mail objects
+         * Compare two mail objects.
          *
          * @param a the mail on the left of the comparison
          * @param b the mail on the right of the comparison
@@ -55,7 +55,7 @@ class Sorters {
          */
         protected abstract int compare(Mail a, Mail b);
 
-        /** Date-based fallback comparator */
+        /** Date-based fallback comparator. */
         private int fallbackCompare(Mail a, Mail b) {return DateSorter.scompare(a, b);}
     }
 
@@ -64,7 +64,7 @@ class Sorters {
      */
     public static class SenderSorter extends SorterBase {
 
-        /** Locale-aware string collator */
+        /** Locale-aware string collator. */
         private final Comparator<Object> collator = Collator.getInstance();
 
         /**
@@ -90,7 +90,7 @@ class Sorters {
      */
     public static class ToSorter extends SorterBase {
 
-        /** Locale-aware string collator */
+        /** Locale-aware string collator. */
         private final Comparator<Object> collator = Collator.getInstance();
 
         /**
@@ -124,7 +124,7 @@ class Sorters {
     public static class SubjectSorter extends SorterBase {
         private static final String xre = Messages.getString("Re:").toLowerCase(Locale.US);
         private static final String xfwd = Messages.getString("Fwd:").toLowerCase(Locale.US);
-        /** Locale-aware string collator */
+        /** Locale-aware string collator. */
         private final Comparator<Object> collator = Collator.getInstance();
 
         /**
@@ -178,11 +178,11 @@ class Sorters {
         protected int compare(Mail a, Mail b) {return scompare(a, b);}
 
         /**
-         * Use as fallback in other sorters
+         * Use as fallback in other sorters.
          * @param a non-null
          * @param b non-null
          * @return negative, zero or positive as the first mail sorts before, at the same
-         *         date as, or after the second; a mail with no date sorts last
+         * date as, or after the second; a mail with no date sorts last
          */
         public static int scompare(Mail a, Mail b) {
             return a.date != null ? ( b.date != null ? a.date.compareTo( b.date ) : -1 ) : ( b.date != null ? 1 : 0 );

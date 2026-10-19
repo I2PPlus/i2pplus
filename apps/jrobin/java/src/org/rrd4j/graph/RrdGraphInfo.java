@@ -6,7 +6,7 @@ import java.util.function.Supplier;
 
 /**
  * Class to represent successfully created Rrd4j graph. Objects of this class are created by method
- * {@link org.rrd4j.graph.RrdGraph#getRrdGraphInfo()}.
+ * {@link org.rrd4j.graph.RrdGraph#getRrdGraphInfo}.
  */
 public class RrdGraphInfo {
     /** Path of the backing RRD file, or '-' when the graph was never written to disk. */

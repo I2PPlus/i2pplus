@@ -22,7 +22,7 @@ import net.i2p.util.Log;
  * or interrupted. It serves as a failsafe mechanism to handle
  * unexpected JVM termination scenarios such as:
  * <ul>
- * <li>System.exit() calls outside normal shutdown flow</li>
+ * <li>{@link java.lang.System#exit} calls outside normal shutdown flow</li>
  * <li>JVM crashes or fatal errors</li>
  * <li>Process termination signals (SIGTERM, etc.)</li>
  * <li>Power loss or system shutdown</li>

@@ -6,7 +6,7 @@ import java.io.Writer;
 
 /**
  * Writer that escapes HTML characters during streaming.
- * Streaming version of DataHelper.escapeHTML(), also escapes '--' for
+ * Streaming version of {@code DataHelper.escapeHTML()}, also escapes '--' for
  * comment safety since '--' is disallowed inside HTML comments.
  *
  * @since 0.9.34
@@ -21,7 +21,7 @@ public class EscapeHTMLWriter extends FilterWriter {
     private static final String MDASH = "&#45;";
     private static final String BR = "<br>\n";
 
-    /** Track state: 0=normal, 1=saw '<', 2=saw '<-', 3=prev was '-' */
+    /** Track state: 0=normal, 1=saw '<', 2=saw '<-', 3=prev was '-'. */
     private int _commentState;
 
     /**

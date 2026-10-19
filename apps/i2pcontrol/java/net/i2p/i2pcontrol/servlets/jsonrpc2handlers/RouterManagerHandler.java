@@ -56,7 +56,11 @@ public class RouterManagerHandler implements RequestHandler {
         _context = ctx;
     }
 
-    /** @return method names handled by this handler */
+    /**
+     * Method names this handler services.
+     *
+     * @return method names handled by this handler
+     */
     @Override
     public String[] handledRequests() {
         return new String[] { "RouterManager" };

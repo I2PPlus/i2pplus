@@ -18,6 +18,6 @@ public class X25519Spec implements AlgorithmParameterSpec {
      */
     public X25519Spec() {}
 
-    /** Singleton instance */
+    /** Singleton instance. */
     public static final X25519Spec X25519_SPEC = new X25519Spec();
 }

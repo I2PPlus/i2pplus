@@ -50,21 +50,21 @@ public class I2PTunnelIRCServer extends I2PTunnelServer implements Runnable {
     private final String webircSpoofIP;
 
     /** IRC server config keys. */
-    /** config key for the registration method, {@code user} (default) or {@code webirc} */
+    /** Config key for the registration method, {@code user} (default) or {@code webirc}. */
     public static final String PROP_METHOD="ircserver.method";
-    /** default for {@link #PROP_METHOD}, selecting the USER-based hostname mangling */
+    /** Default for {@link #PROP_METHOD}, selecting the USER-based hostname mangling. */
     public static final String PROP_METHOD_DEFAULT="user";
-    /** config key for the cloak passphrase, where unset means random persistent cloaking */
+    /** Config key for the cloak passphrase, where unset means random persistent cloaking. */
     public static final String PROP_CLOAK="ircserver.cloakKey";
-    /** config key for the password sent in the WEBIRC handshake, with no quotes or spaces */
+    /** Config key for the password sent in the WEBIRC handshake, with no quotes or spaces. */
     public static final String PROP_WEBIRC_PASSWORD="ircserver.webircPassword";
-    /** config key for the IP address spoofed in the WEBIRC handshake */
+    /** Config key for the IP address spoofed in the WEBIRC handshake. */
     public static final String PROP_WEBIRC_SPOOF_IP="ircserver.webircSpoofIP";
-    /** default for {@link #PROP_WEBIRC_SPOOF_IP}, the loopback address */
+    /** Default for {@link #PROP_WEBIRC_SPOOF_IP}, the loopback address. */
     public static final String PROP_WEBIRC_SPOOF_IP_DEFAULT="127.0.0.1";
-    /** config key for the fake hostname template, where {@code %f} is the full B32 destination */
+    /** Config key for the fake hostname template, where {@code %f} is the full B32 destination. */
     public static final String PROP_HOSTNAME="ircserver.fakeHostname";
-    /** default for {@link #PROP_HOSTNAME}, the full B32 destination as a hostname */
+    /** Default for {@link #PROP_HOSTNAME}, the full B32 destination as a hostname. */
     public static final String PROP_HOSTNAME_DEFAULT="%f.b32.i2p";
     private static final long HEADER_TIMEOUT = (long) 30*1000;
     private static final long TOTAL_HEADER_TIMEOUT = 2 * HEADER_TIMEOUT;
@@ -332,7 +332,7 @@ public class I2PTunnelIRCServer extends I2PTunnelServer implements Runnable {
      * <p>
      * Warning - strips \n but not \r
      * Warning - 8KB line length limit as of 0.7.13, @throws IOException if exceeded
-     * Warning - not UTF-8
+     * Warning - not UTF-8.
      *
      * @param timeout throws SocketTimeoutException immediately if zero or negative
      * @throws SocketTimeoutException if timeout is reached before newline

@@ -14,7 +14,7 @@ import java.util.Locale;
  * Change Log:
  * </p>
  * <ul>
- * <li>v1.3.6 - Fixed OutputStream.flush() so that 'position' is reset.</li>
+ * <li>v1.3.6 - Fixed {@link java.io.OutputStream#flush} so that 'position' is reset.</li>
  * <li>v1.3.5 - Added flag to turn on and off line breaks. Fixed bug in input stream
  * where last buffer being read, if not completely full, was not returned.</li>
  * <li>v1.3.4 - Fixed when "improperly padded stream" error was thrown at the wrong time.</li>
@@ -29,10 +29,8 @@ import java.util.Locale;
  * </p>
  * <p>
  * Modified by jrandom for i2p, using safeEncode / safeDecode to create filesystem and URL safe
- * base64 values (replacing / with ~, and + with -)
+ * base64 values (replacing / with ~, and + with -).
  *
- * @author Robert Harder
- * @author rob@iharder.net
  * @version 1.3.4
  */
 public class Base64 {
@@ -50,7 +48,7 @@ public class Base64 {
     }
 
     /**
-     * Output will be a multiple of 4 chars, including 0-2 trailing '='
+     * Output will be a multiple of 4 chars, including 0-2 trailing '='.
      *
      * @param source the byte array to encode, if null will return ""
      * @return the Base64 encoded string
@@ -60,7 +58,7 @@ public class Base64 {
     }
 
     /**
-     * Output will be a multiple of 4 chars, including 0-2 trailing '='
+     * Output will be a multiple of 4 chars, including 0-2 trailing '='.
      *
      * @param source the byte array to encode, if null will return ""
      * @param off the offset in the source array
@@ -72,7 +70,7 @@ public class Base64 {
     }
 
     /**
-     * Output will be a multiple of 4 chars, including 0-2 trailing '='
+     * Output will be a multiple of 4 chars, including 0-2 trailing '='.
      *
      * @param source the byte array to encode, if null will return ""
      * @param useStandardAlphabet Warning, must be false for I2P compatibility
@@ -83,7 +81,7 @@ public class Base64 {
     }
 
     /**
-     * Output will be a multiple of 4 chars, including 0-2 trailing '='
+     * Output will be a multiple of 4 chars, including 0-2 trailing '='.
      *
      * @param source the byte array to encode, if null will return ""
      * @param off the offset in the source array
@@ -386,7 +384,7 @@ public class Base64 {
 
     /**
      * Same as encodeBytes, except uses a filesystem / URL friendly set of characters,
-     * replacing / with ~, and + with -
+     * replacing / with ~, and + with -.
      *
      * @return the Base64 encoded string
      */
@@ -405,7 +403,7 @@ public class Base64 {
 
     /**
      * Same as decode, except from a filesystem / URL friendly set of characters,
-     * replacing / with ~, and + with -
+     * replacing / with ~, and + with -.
      *
      * @return the decoded data, null on error
      */

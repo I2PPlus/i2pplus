@@ -144,6 +144,8 @@ public final class ElGamalSigEngine extends Signature {
     }
 
     /**
+     * Deprecated and unsupported.
+     *
      * @deprecated replaced with <a href="#engineSetParameter(java.security.spec.AlgorithmParameterSpec)">this</a>
      */
     @Override

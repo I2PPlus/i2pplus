@@ -36,24 +36,24 @@ import java.util.concurrent.atomic.AtomicLong;
  * This also fires off a LogWriter thread that pulls pending records off and
  * writes them where appropriate.
  * <p>
- * As of 0.9.41, this class may be overridden via I2PAppContext.setLogManager()
+ * As of 0.9.41, this class may be overridden via {@link net.i2p.I2PAppContext#setLogManager}.
  */
 public class LogManager implements Flushable {
     /**
-     * Property name for the logger config file location
+     * Property name for the logger config file location.
      */
     public static final String CONFIG_LOCATION_PROP = "loggerConfigLocation";
     /**
-     * Property name to override the log filename
+     * Property name to override the log filename.
      */
     public static final String FILENAME_OVERRIDE_PROP = "loggerFilenameOverride";
     /**
-     * Default logger config file name
+     * Default logger config file name.
      */
     public static final String CONFIG_LOCATION_DEFAULT = "logger.config";
 
     /**
-     * These define the characters in the format line of the config file
+     * These define the characters in the format line of the config file.
      */
     public static final char DATE = 'd';
     /**
@@ -74,39 +74,39 @@ public class LogManager implements Flushable {
     public static final char MESSAGE = 'm';
 
     /**
-     * Property name for the log record format string
+     * Property name for the log record format string.
      */
     public static final String PROP_FORMAT = "logger.format";
     /**
-     * Property name for the date format pattern
+     * Property name for the date format pattern.
      */
     public static final String PROP_DATEFORMAT = "logger.dateFormat";
     /**
-     * Property name for the log file name pattern
+     * Property name for the log file name pattern.
      */
     public static final String PROP_FILENAME = "logger.logFileName";
     /**
-     * Property name for the log file size limit
+     * Property name for the log file size limit.
      */
     public static final String PROP_FILESIZE = "logger.logFileSize";
     /**
-     * Property name for the log rotation limit
+     * Property name for the log rotation limit.
      */
     public static final String PROP_ROTATIONLIMIT = "logger.logRotationLimit";
     /**
-     * Property name to enable or disable on-screen display
+     * Property name to enable or disable on-screen display.
      */
     public static final String PROP_DISPLAYONSCREEN = "logger.displayOnScreen";
     /**
-     * Property name for the console buffer size
+     * Property name for the console buffer size.
      */
     public static final String PROP_CONSOLEBUFFERSIZE = "logger.consoleBufferSize";
     /**
-     * Property name for the minimum log level displayed on screen
+     * Property name for the minimum log level displayed on screen.
      */
     public static final String PROP_DISPLAYONSCREENLEVEL = "logger.minimumOnScreenLevel";
     /**
-     * Property name for the default log level
+     * Property name for the default log level.
      */
     public static final String PROP_DEFAULTLEVEL = "logger.defaultLevel";
 
@@ -120,36 +120,60 @@ public class LogManager implements Flushable {
      */
     public static final String PROP_GROUP_READABLE = "logger.groupReadable";
 
-    /** @since 0.9.2 */
+    /**
+     * Config key for the log buffer size.
+     *
+     * @since 0.9.2
+     */
     private static final String PROP_LOG_BUFFER_SIZE = "logger.logBufferSize";
 
-    /** @since 0.9.2 */
+    /**
+     * Config key to drop messages on buffer overflow.
+     *
+     * @since 0.9.2
+     */
     private static final String PROP_DROP = "logger.dropOnOverflow";
 
-    /** @since 0.9.3 */
+    /**
+     * Config key for dropping duplicate messages.
+     *
+     * @since 0.9.3
+     */
     private static final String PROP_DUP = "logger.dropDuplicates";
 
-    /** @since 0.9.18 */
+    /**
+     * Config key for the log flush interval.
+     *
+     * @since 0.9.18
+     */
     private static final String PROP_FLUSH = "logger.flushInterval";
 
-    /** @since 0.9.56 */
+    /**
+     * Config key for log gzipping.
+     *
+     * @since 0.9.56
+     */
     private static final String PROP_GZIP = "logger.gzip";
 
-    /** @since 0.9.56 */
+    /**
+     * Config key for the minimum log size to gzip.
+     *
+     * @since 0.9.56
+     */
     private static final String PROP_MIN_GZIP_SIZE = "logger.minGzipSize";
 
     /**
-     * Prefix for per-logger level override properties
+     * Prefix for per-logger level override properties.
      */
     public static final String PROP_RECORD_PREFIX = "logger.record.";
 
     /**
-     * Default log record format string
+     * Default log record format string.
      */
     public static final String DEFAULT_FORMAT = DATE + " " + PRIORITY + "[" + THREAD + "] " + CLASS + ": " + MESSAGE;
 
     /**
-     * Default date format pattern; blank means default short date and medium time for the locale
+     * Default date format pattern; blank means default short date and medium time for the locale.
      */
     // TODO: Sync time format for router and wrapper logs and dates in router log messages (currently 3 different formats)
     /**
@@ -158,31 +182,31 @@ public class LogManager implements Flushable {
     public static final String DEFAULT_DATEFORMAT = "yyyy/MM/dd HH:mm:ss.SSS";
 
     /**
-     * Default log file name pattern
+     * Default log file name pattern.
      */
     public static final String DEFAULT_FILENAME = "logs/log-@.txt";
     /**
-     * Default log file size limit as a string
+     * Default log file size limit as a string.
      */
     public static final String DEFAULT_FILESIZE = "5m";
     /**
-     * Default setting for on-screen log display
+     * Default setting for on-screen log display.
      */
     public static final boolean DEFAULT_DISPLAYONSCREEN = true;
     /**
-     * Default number of entries in the console buffer
+     * Default number of entries in the console buffer.
      */
     public static final int DEFAULT_CONSOLEBUFFERSIZE = 25;
     /**
-     * Default log rotation limit
+     * Default log rotation limit.
      */
     public static final String DEFAULT_ROTATIONLIMIT = "3";
     /**
-     * Default log level string
+     * Default log level string.
      */
     public static final String DEFAULT_DEFAULTLEVEL = Log.STR_ERROR;
     /**
-     * Default on-screen log level string
+     * Default on-screen log level string.
      */
     public static final String DEFAULT_ONSCREENLEVEL = Log.STR_ERROR;
     private static final int MIN_FILESIZE_LIMIT = 16 * 1024;
@@ -201,13 +225,13 @@ public class LogManager implements Flushable {
     /** Max LogRecords to buffer in memory before we start blocking. */
     private static final int MAX_BUFFER = 1024;
 
-    /** Ordered list of LogRecord elements that have not been written out yet */
+    /** Ordered list of LogRecord elements that have not been written out yet. */
     private final LinkedBlockingQueue<LogRecord> _records;
 
-    /** List of explicit overrides of log levels (LogLimit objects) */
+    /** List of explicit overrides of log levels (LogLimit objects). */
     private final Set<LogLimit> _limits;
 
-    /** String (scope) or Log.LogScope to Log object */
+    /** String (scope) or Log.LogScope to Log object. */
     private final ConcurrentHashMap<Object, Log> _logs;
 
     /**
@@ -225,13 +249,13 @@ public class LogManager implements Flushable {
      */
     private volatile int _defaultLimit;
 
-    /** Log record format string */
+    /** Log record format string. */
     private volatile char[] _format;
 
-    /** Date format instance */
+    /** Date format instance. */
     private SimpleDateFormat _dateFormat;
 
-    /** Date format string (for the SimpleDateFormat instance) */
+    /** Date format string (for the SimpleDateFormat instance). */
     private String _dateFormatPattern;
 
     /** Log filename pattern. */
@@ -460,7 +484,7 @@ public class LogManager implements Flushable {
     }
 
     /**
-     * File may not exist or have old logs in it if not opened yet
+     * File may not exist or have old logs in it if not opened yet.
      *
      * @return non-null
      */
@@ -692,7 +716,7 @@ public class LogManager implements Flushable {
     }
 
     /**
-     * Update the existing limit overrides
+     * Update the existing limit overrides.
      *
      * @param limits mapping of prefix to log level string (not the log #)
      */
@@ -729,7 +753,7 @@ public class LogManager implements Flushable {
     }
 
     /**
-     * Update the log file size limit
+     * Update the log file size limit.
      * @param numBytes the requested limit in bytes, raised to the 16 KiB minimum; zero or negative is ignored
      */
     public void setFileSize(int numBytes) {
@@ -773,10 +797,10 @@ public class LogManager implements Flushable {
 
     /**
      * Determine how many bytes are in the given formatted string (5m, 60g, 100k, etc)
-     * Size may be k, m, or g; a trailing b is ignored. Upper-case is allowed.
+     * Size may be k, m, or g. A trailing b is ignored. Upper-case is allowed.
      * Spaces between the number and letter is are allowed.
      * The number may be in floating point.
-     * 16K min, 2 GB max (returns int)
+     * 16K min, 2 GB max (returns int).
      * @param size the formatted size to parse, such as "5m", "60g" or "100k"
      * @return the file size
      */
@@ -980,7 +1004,7 @@ public class LogManager implements Flushable {
 
     /**
      * Zero-copy.
-     * For the LogWriter
+     * For the LogWriter.
      *
      * @return the live bounded record queue the LogWriter drains, handed over without copying
      * @since 0.8.2
@@ -1083,7 +1107,7 @@ public class LogManager implements Flushable {
     }
 
     /**
-     * Convenience method for LogRecordFormatter
+     * Convenience method for LogRecordFormatter.
      *
      * @return the router context this LogManager was created in
      * @since 0.7.14

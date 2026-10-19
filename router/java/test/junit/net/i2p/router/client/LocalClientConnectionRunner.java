@@ -15,14 +15,14 @@ import net.i2p.router.RouterContext;
 import java.net.Socket;
 
 /**
- *  For testing
+ * For testing.
  *
- *  @since 0.9.8
+ * @since 0.9.8
  */
 class LocalClientConnectionRunner extends ClientConnectionRunner {
 
     /**
-     * Create a new runner with the given queues
+     * Create a new runner with the given queues.
      *
      */
     public LocalClientConnectionRunner(RouterContext context, ClientManager manager, Socket socket) {
@@ -30,7 +30,7 @@ class LocalClientConnectionRunner extends ClientConnectionRunner {
     }
 
     /**
-     *  Custom listener
+     * Custom listener.
      */
     @Override
     protected I2CPMessageReader.I2CPMessageEventListener createListener() {
@@ -38,8 +38,8 @@ class LocalClientConnectionRunner extends ClientConnectionRunner {
     }
 
     /**
-     *  Just send the message directly,
-     *  don't instantiate a RequestLeaseSetJob
+     * Just send the message directly,
+     * don't instantiate a RequestLeaseSetJob.
      */
     @Override
     void requestLeaseSet(Hash h, LeaseSet set, long expirationTime, Job onCreateJob, Job onFailedJob) {
@@ -57,7 +57,7 @@ class LocalClientConnectionRunner extends ClientConnectionRunner {
     }
 
     /**
-     *  No job queue, so super NPEs
+     * No job queue, so super NPEs.
      */
     @Override
     void updateMessageDeliveryStatus(Destination dest, MessageId id, long messageNonce, int status) {
@@ -77,7 +77,7 @@ class LocalClientConnectionRunner extends ClientConnectionRunner {
     }
 
     /**
-     *  So LocalClientMessageEventListener can lookup other local dests
+     * So LocalClientMessageEventListener can lookup other local dests.
      */
     public Destination localLookup(Hash h) {
         for (Destination d : _manager.getRunnerDestinations()) {

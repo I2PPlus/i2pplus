@@ -74,7 +74,6 @@ import java.util.Date;
  * <li>{@link TunnelId} - Tunnel identifier on gateway router</li>
  * </ul>
  *
- * @author jrandom
  */
 public class Lease extends DataStructureImpl {
     /** Gateway router hash. */
@@ -88,7 +87,7 @@ public class Lease extends DataStructureImpl {
     public Lease() { /* required for deserialization */ }
 
     /**
-     * Retrieve the router at which the destination can be contacted
+     * Retrieve the router at which the destination can be contacted.
      *
      * @return identity of the router acting as a gateway
      */
@@ -97,7 +96,7 @@ public class Lease extends DataStructureImpl {
     }
 
     /**
-     * Configure the router at which the destination can be contacted
+     * Configure the router at which the destination can be contacted.
      *
      * @param ident router acting as the gateway
      */
@@ -106,7 +105,7 @@ public class Lease extends DataStructureImpl {
     }
 
     /**
-     * Tunnel on the gateway to communicate with
+     * Tunnel on the gateway to communicate with.
      *
      * @return the tunnel on the gateway, or null if none is set
      */
@@ -115,7 +114,7 @@ public class Lease extends DataStructureImpl {
     }
 
     /**
-     * Configure the tunnel on the gateway to communicate with
+     * Configure the tunnel on the gateway to communicate with.
      *
      * @param id the tunnel on the gateway to communicate with; null clears it
      */

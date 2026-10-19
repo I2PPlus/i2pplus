@@ -79,7 +79,7 @@ public final class ElGamalAESEngine {
      * ElGamal+AES algorithm in the data structure spec.
      * <p>
      * Warning - use the correct SessionKeyManager. Clients should instantiate their own.
-     * Clients using I2PAppContext.sessionKeyManager() may be correlated with the router,
+     * Clients using {@link net.i2p.I2PAppContext#sessionKeyManager} may be correlated with the router,
      * unless you are careful to use different keys.
      *
      * @param data the encrypted data to decrypt, at least 80 bytes
@@ -471,20 +471,20 @@ public final class ElGamalAESEngine {
      * no less than the paddedSize parameter, but may be more.  This method uses the
      * ElGamal+AES algorithm in the data structure spec.
      * <p>
-     * Unused externally, only called by below (i.e. newKey is always null)
+     * Unused externally, only called by below (i.e. newKey is always null).
      *
      * @param data the plaintext to encrypt
      * @param target public key to which the data should be encrypted, must be ELGAMAL_2048.
-     *               May be null if key and currentTag are non-null.
+     * May be null if key and currentTag are non-null.
      *
      * @param key session key to use during encryption
      * @param tagsForDelivery session tags to be associated with the key (or newKey if specified), or null;
-     *                        200 max enforced at receiver
+     * 200 max enforced at receiver
      *
      * @param currentTag sessionTag to use, or null if it should use ElG (i.e. new session)
      * @param newKey key to be delivered to the target, with which the tagsForDelivery should be associated, or null
      * @param paddedSize minimum size in bytes of the body after padding it (if less than the
-     *                   body's real size, no bytes are appended but the body is not truncated)
+     * body's real size, no bytes are appended but the body is not truncated)
      *
      * @return the encrypted data, at least paddedSize bytes and up to 514 bytes larger
      * @throws IllegalArgumentException on bad target EncType
@@ -553,10 +553,10 @@ public final class ElGamalAESEngine {
     /**
      * Encrypt the data to the target using the given key and deliver the specified tags
      * No new session key
-     * No current tag (encrypt as new session)
+     * No current tag (encrypt as new session).
      *
      * @param tagsForDelivery session tags to be associated with the key or null;
-     *                        200 max enforced at receiver
+     * 200 max enforced at receiver
      *
      * @throws IllegalArgumentException on bad target EncType
      * @deprecated unused
@@ -569,7 +569,7 @@ public final class ElGamalAESEngine {
     /**
      * Encrypt the data to the target using the given key delivering no tags
      * No new session key
-     * No current tag (encrypt as new session)
+     * No current tag (encrypt as new session).
      *
      * @throws IllegalArgumentException on bad target EncType
      * @deprecated unused
@@ -673,8 +673,9 @@ public final class ElGamalAESEngine {
      * Here we are careful to use the SHA256Generator method that does not
      * generate a Hash object or cache the result.
      *
-     * @param preIV the 32 byte pre-IV. Caller should call SimpleByteCache.release(data) after use.
-     * @return a 16 byte array. Caller should call SimpleByteCache.release(rv) after use.
+      * @param preIV the 32 byte pre-IV. Caller should call {@link net.i2p.util.SimpleByteCache#release}
+       * data) after use.
+     * @return a 16 byte array. Caller should call {@link net.i2p.util.SimpleByteCache#release}rv) after use.
      * @since 0.8.9
      */
     private byte[] halfHash(byte[] preIV) {
@@ -700,13 +701,13 @@ public final class ElGamalAESEngine {
      * - random bytes, padding the total size to greater than paddedSize with a mod 16 = 0
      * </pre>
      * <p>
-     * Note: package private for ElGamalTest.testAES()
+     * Note: package private for {@code ElGamalTest.testAES()}
      *
      * @param data the plaintext to encrypt into the AES area
      * @param key the AES session key to encrypt with
      * @param iv the 16 byte AES initialization vector
      * @param tagsForDelivery session tags to be associated with the key or null;
-     *                        200 max enforced at receiver
+     * 200 max enforced at receiver
      * @param newKey key to deliver to the target, or null for no new key block
      * @param paddedSize minimum size in bytes of the AES area after padding
      * @return the encrypted AES area, or null on encryption failure

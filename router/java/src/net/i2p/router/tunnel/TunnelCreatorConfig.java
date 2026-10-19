@@ -21,7 +21,7 @@ import net.i2p.util.Log;
  * Coordinate the info that the tunnel creator keeps track of, including what
  * peers are in the tunnel and what their configuration is
  * <p>
- * See PooledTunnelCreatorConfig for the non-abstract class
+ * See PooledTunnelCreatorConfig for the non-abstract class.
  */
 public abstract class TunnelCreatorConfig implements TunnelInfo {
     /**
@@ -55,7 +55,7 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
     /**
      * Wall-clock time this config was created, i.e. when its build started.
      * Lets the test cycle give a freshly built tunnel a grace period before
-     * its results count against it — a tunnel cannot fairly be judged on a
+     * its results count against it. A tunnel cannot fairly be judged on a
      * round trip it had no realistic chance to complete.  Deliberately not
      * on {@link TunnelInfo}: the test cycle is the only reader, and adding a
      * method to a public interface for one caller would break out-of-tree
@@ -77,7 +77,7 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
     private volatile long _lastSoftFailure;
     /**
      * Raw count of spaced first-hop send failures.  Decay and spacing are
-     * applied at read time, see {@link #recordFirstHopSendFailure()}.
+     * applied at read time, see {@link #recordFirstHopSendFailure}.
      * @since 0.9.71+
      */
     private final AtomicInteger _firstHopSendFailures = new AtomicInteger();
@@ -94,7 +94,7 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
      * {@link #FIRST_HOP_FAILURE_THRESHOLD} the caller is told exactly once.
      * The send-failure job is shared by every message on the tunnel and is
      * only deduped while queued, so without this a single burst would call
-     * {@link #tunnelFailedFirstHop()} for each failed message.
+     * {@link #tunnelFailedFirstHop} for each failed message.
      * @since 0.9.71+
      */
     private volatile boolean _firstHopFailed;
@@ -105,7 +105,7 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
     /**
      * Whether a transport session to our local hop existed when this tunnel entered
      * the pool. Recorded once at build time by the pool, then read-only.
-     * <p>See {@link net.i2p.router.TunnelInfo#hadLocalHopSession()} for why the pool
+     * <p>See {@link net.i2p.router.TunnelInfo#hadLocalHopSession} for why the pool
      * needs the build-time fact rather than the current session state.
      * @since 0.9.71+
      */
@@ -140,7 +140,7 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
     private Log _log;
 
     /**
-     * IV length for {@link #getAESReplyIV}
+     * IV length for {@link #getAESReplyIV}.
      * @since 0.9.48 moved from HopConfig
      */
     public static final int REPLY_IV_LENGTH = 16;
@@ -152,7 +152,7 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
     public static final int MAX_CONSECUTIVE_TEST_FAILURES = 3;
     /**
      * Window in which soft best-effort send timeouts accumulate into a
-     * consecutive streak (status-3 timeouts only — hard dispatch failures
+     * consecutive streak (status-3 timeouts only. Hard dispatch failures
      * use {@link #MAX_CONSECUTIVE_TEST_FAILURES}).  A soft failure older
      * than this is decayed out of the count, bounding both the degraded bar
      * ({@code TunnelPool.SOFT_DEGRADED_FOR_ENSURE}) and the soft removal bar
@@ -184,7 +184,7 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
     /**
      * Ceiling for {@link #incrementTestFailures}.  Comfortably above the
      * largest removal threshold any caller can compute (degraded mode with a
-     * thin pool), so saturation never changes a decision — it only stops the
+     * thin pool), so saturation never changes a decision. It only stops the
      * reported count from drifting.
      * @since 0.9.71+
      */
@@ -232,7 +232,7 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
     private String _destinationNickname;
 
     /**
-     * For exploratory only (null destination)
+     * For exploratory only (null destination).
      *
      * @param ctx the router context
      * @param length 1 minimum (0 hop is length 1)
@@ -243,7 +243,7 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
     }
 
     /**
-     * Optional display nickname for this tunnel (e.g. pool name like I2PSnark)
+     * Optional display nickname for this tunnel (e.g. pool name like I2PSnark).
      *
      * @param name the nickname to show in logs
      * @since 0.9.70+
@@ -333,21 +333,21 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
     public void setPeer(int hop, Hash peer) {_peers[hop] = peer;}
 
     /**
-     * For convenience
+     * For convenience.
      * @return getPeer(0)
      * @since 0.8.9
      */
     public Hash getGateway() {return _peers[0];}
 
     /**
-     * For convenience
+     * For convenience.
      * @return getPeer(getLength() - 1)
      * @since 0.8.9
      */
     public Hash getEndpoint() {return _peers[_peers.length - 1];}
 
     /**
-     * For convenience
+     * For convenience.
      * @return isInbound() ? getGateway() : getEndpoint()
      * @since 0.8.9
      */
@@ -440,7 +440,7 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
     /**
      * Record that {@code bytes} moved through this tunnel, counting as real
      * traffic: it also stamps the last-real-traffic clock that
-     * {@link #getLastTransferred()} reports and the data-verified test trust
+     * {@link #getLastTransferred} reports and the data-verified test trust
      * in TestJob keys off.  Only the real delivery paths — inbound data
      * arrival and outbound message dispatch — may call this.
      *
@@ -545,7 +545,7 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
     public long getVerifiedBytesTransferred() {return _verifiedBytesTransferred.sum();}
 
     /**
-     * When we last sent or received data on this tunnel
+     * When we last sent or received data on this tunnel.
      * @return the last transferred
      */
     public long getLastTransferred() { return _lastTransferredTime; }
@@ -561,7 +561,7 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
 
     /**
      * When the tunnel last carried real (non-test) traffic, or 0 if never.
-     * Updated only at the real traffic delivery sites — inbound data arrival
+     * Updated only at the real traffic delivery sites. Inbound data arrival
      * (InboundEndpointProcessor) and outbound message dispatch
      * (OutboundClientMessageOneShotJob) — never by TestJob, so test traffic
      * cannot pollute the proof that the tunnel works.
@@ -585,7 +585,7 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
      * outbound caller only fires after the remote peer ACKed.
      * <p>
      * Status itself is not touched here — see
-     * TunnelPool.clearFailingOnTraffic(), which owns promotion back to GOOD.
+     * {@link net.i2p.router.tunnel.pool.TunnelPool#clearFailingOnTraffic}, which owns promotion back to GOOD.
      *
      * @since 0.9.71+
      */
@@ -604,7 +604,7 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
     public long getLastRealTraffic() {return _lastRealTraffic;}
 
     /**
-     * The tunnel failed a test, so (maybe) stop using it
+     * The tunnel failed a test, so (maybe) stop using it.
      *
      * @return false if we stopped using it, true if still ok
      */
@@ -634,7 +634,7 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
     /**
      * Increment the soft best-effort timeout counter only.
      * Soft status-3 must not trip getTunnelFailed() or selection gates
-     * that key on the hard/test counter — congestion is not tunnel death.
+     * that key on the hard/test counter. Congestion is not tunnel death.
      * The streak is time-windowed: a failure that arrives after
      * {@link #SOFT_FAILURE_WINDOW_MS} without one starts the count over at
      * 1 instead of extending an aging streak forever.
@@ -671,8 +671,8 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
     /**
      * Reset the soft streak: verified traffic proves the tunnel carries
      * data, so congestion timeouts recorded before it no longer count.
-     * Called from {@link #recordRealTraffic()} and
-     * {@link #clearTestFailures()}, never from {@link #testSuccessful(int)} —
+     * Called from {@link #recordRealTraffic} and
+     * {@link #clearTestFailures}, never from {@link #testSuccessful(int)} —
      * a passing test exercises the test path, not the data path.
      * @since 0.9.71+
      */
@@ -759,18 +759,18 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
      * <p>
      * Called from the outbound send-failure job, which fires for every
      * non-requeueable send failure (expired on queue, CoDel drop, no-bid
-     * reply, dropped message) — most of which are local congestion, not a
+     * reply, dropped message). Most of which are local congestion, not a
      * dead peer.  Counting raw would retire the tunnel on one bad second,
      * so the streak is decayed by {@link #FIRST_HOP_FAILURE_WINDOW_MS} and
      * spaced by {@link #FIRST_HOP_FAILURE_SPACING_MS}.
      *
      * @return -1 if not applicable (inbound or zero-hop tunnel), 0 if this
-     *         failure changed nothing (inside the spacing interval, or the
-     *         threshold was already reached and escalated), otherwise the
-     *         current streak; a return value of
-     *         {@link #FIRST_HOP_FAILURE_THRESHOLD} or more means the caller
-     *         must fail the tunnel, and it is only handed that signal once
-     *         until {@link #clearFirstHopFailures()} re-arms it
+     * failure changed nothing (inside the spacing interval, or the
+     * threshold was already reached and escalated), otherwise the
+     * current streak; a return value of
+     * {@link #FIRST_HOP_FAILURE_THRESHOLD} or more means the caller
+     * must fail the tunnel, and it is only handed that signal once
+     * until {@link #clearFirstHopFailures} re-arms it
      * @since 0.9.71+
      */
     public int recordFirstHopSendFailure() {
@@ -778,11 +778,11 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
     }
 
     /**
-     * Timestamped form of {@link #recordFirstHopSendFailure()}, so spacing,
+     * Timestamped form of {@link #recordFirstHopSendFailure}, so spacing,
      * decay and latching are testable without real waits.
      *
      * @param now wall-clock time (ms) of this failure
-     * @return see {@link #recordFirstHopSendFailure()}
+     * @return see {@link #recordFirstHopSendFailure}
      * @since 0.9.71+
      */
     int recordFirstHopSendFailure(long now) {
@@ -814,7 +814,7 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
     }
 
     /**
-     * Timestamped form of {@link #getFirstHopSendFailures()}.
+     * Timestamped form of {@link #getFirstHopSendFailures}.
      *
      * @param now wall-clock time (ms) to evaluate the decay against
      * @return the streak count, 0 if none
@@ -828,7 +828,7 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
     /**
      * Reset the first-hop send failure streak and re-arm the escalation
      * latch.  Only a data-carrying send proves the path to the first hop
-     * works, so the sole caller is {@link #recordRealTraffic()}.
+     * works, so the sole caller is {@link #recordRealTraffic}.
      * <p>
      * A passing test deliberately does not clear the streak: the round trip
      * proves the peer is not dead, but not that it is not flaky, and a first
@@ -838,7 +838,7 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
      * instead, which ages out a genuinely dead peer's old failures without
      * making accumulation impossible for a merely flaky one.
      * <p>
-     * This differs from {@link #clearSoftFailures()}, which likewise is never
+     * This differs from {@link #clearSoftFailures}, which likewise is never
      * called from {@link #testSuccessful(int)} for the same reason.
      *
      * @since 0.9.71+
@@ -854,7 +854,7 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
     }
 
     /**
-     * The tunnel failed completely, so definitely stop using it
+     * The tunnel failed completely, so definitely stop using it.
      *
      * @since 0.9.53
      */
@@ -921,7 +921,7 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
 
     /**
      * Reset the consecutive failure counter and mark the tunnel as GOOD.
-     * Called only on traffic proof — never by {@link #testSuccessful(int)},
+     * Called only on traffic proof. Never by {@link #testSuccessful(int)},
      * which reaches GOOD by being tested rather than by carrying data — so
      * it also restores the recent-traffic test exemption budget alongside
      * the soft streak: a tunnel promoted back from FAILING/FAILED must
@@ -980,20 +980,20 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
     public boolean wasReused() {return _reused;}
 
     /**
-     * Note that we reused this tunnel
+     * Note that we reused this tunnel.
      * @since 0.8.11
      */
     public void setReused() {_reused = true;}
 
     /**
-     * Outbound message priority - for outbound tunnels only
+     * Outbound message priority - for outbound tunnels only.
      * @return -25 to +25, default 0
      * @since 0.9.4
      */
     public int getPriority() {return _priority;}
 
     /**
-     * Outbound message priority - for outbound tunnels only
+     * Outbound message priority - for outbound tunnels only.
      * @param priority -25 to +25, default 0
      * @since 0.9.4
      */
@@ -1036,14 +1036,14 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
     public byte[] getAESReplyIV(int hop) {return _AESReplyIVs[hop];}
 
     /**
-     * Checksum for blank record
+     * Checksum for blank record.
      * @return the blank hash
      * @since 0.9.48
      */
     public Hash getBlankHash() {return _blankHash;}
 
     /**
-     * Checksum for blank record
+     * Checksum for blank record.
      *
      * @param h the hash to use for a blank record
      * @since 0.9.48
@@ -1162,7 +1162,7 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
 
     /**
      * Mark the tunnel FAILING regardless of the hard-failure counter.
-     * {@link #setTestFailed()} derives the status from {@code _failures}, so
+     * {@link #setTestFailed} derives the status from {@code _failures}, so
      * it reports GOOD for a tunnel retained on soft send timeouts alone —
      * which would leave the tunnel selectable and hold its slot in the pool's
      * good-tunnel accounting while it keeps timing out.
@@ -1216,7 +1216,7 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
      * Admit this tunnel for a last-chance test despite its remaining life
      * being inside the early-expiry window.  The deadline is snapshotted
      * from the expiration at admission time so later pool state changes
-     * cannot extend it; natural expiry still bounds it.
+     * cannot extend it. Natural expiry still bounds it.
      *
      * @param now current wall-clock time (ms)
      * @param reason why the tunnel was admitted; {@code null} clears
@@ -1234,9 +1234,9 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
 
     /**
      * Is a last-chance test admission still valid at {@code now}?  Only
-     * expiration shortens the window — the snapshot deadline prevents a
+     * expiration shortens the window. The snapshot deadline prevents a
      * re-read of a later expiration from extending it, and
-     * {@link #clearLastChanceAdmission()} revokes it once the test settles.
+     * {@link #clearLastChanceAdmission} revokes it once the test settles.
      *
      * @param now current wall-clock time (ms)
      * @return true if an unexpired admission is in effect

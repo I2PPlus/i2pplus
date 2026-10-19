@@ -17,8 +17,8 @@ public class ContextHelper {
     public ContextHelper() {}
 
     /**
-     * to take the first context in the list
-     * first context in the list
+     * To take the first context in the list
+     * first context in the list.
      *
      * @param contextId base64 prefix of the target router hash, or null or blank
      * @return the context whose router hash starts with contextId, otherwise the

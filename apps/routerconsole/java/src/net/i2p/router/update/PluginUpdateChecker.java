@@ -30,7 +30,7 @@ class PluginUpdateChecker extends UpdateRunner {
     /**
      * Prepare a plugin update check. The first of the update URIs is the one
      * actually fetched; the rest are kept only for display, and
-     * {@link #update()} fetches just the leading {@code TrustedUpdate.HEADER_BYTES}
+     * {@link #update} fetches just the leading {@code TrustedUpdate.HEADER_BYTES}
      * to compare versions rather than the whole plugin.
      *
      * @param ctx the router context

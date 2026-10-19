@@ -55,7 +55,7 @@ public class XMLParser extends JaxpParser {
     }
 
     /**
-     * Modified from UPnP JaxpParser
+     * Modified from UPnP JaxpParser.
      *
      * @param parentNode null if at top
      * @param rank parse level, only for debug
@@ -138,7 +138,7 @@ public class XMLParser extends JaxpParser {
     }
 
     /**
-     * A replacement for Node.toString(), which does not recognize #text.
+     * A replacement for {@link org.cybergarage.xml.Node#toString}, which does not recognize #text.
      *
      * @param buf the buffer receiving the XML text of the node and its children
      * @param node the root of the subtree to render
@@ -149,7 +149,7 @@ public class XMLParser extends JaxpParser {
 
 
     /**
-     * A replacement for Node.output(), which does not recognize #text.
+     * A replacement for {@link org.cybergarage.xml.Node#output}, which does not recognize #text.
      * Also, we use the empty entity, so <br /> does not turn into <br></br>.
      */
     private static void output(StringBuilder buf, Node node, int indentLevel) {

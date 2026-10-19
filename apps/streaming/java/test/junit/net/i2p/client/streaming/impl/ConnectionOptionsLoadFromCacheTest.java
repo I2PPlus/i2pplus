@@ -7,7 +7,7 @@ import org.junit.Test;
 /**
  * Pins the per-destination RTT contract that links the TCB share cache
  * ({@link TCBShare}) to the first-SYN evidence gate
- * ({@link Connection#getSynRetransmitInterval()} / {@link Connection#computeSynRetransmitInterval(int, int)}).
+ * ({@link Connection#getSynRetransmitInterval} / {@link Connection#computeSynRetransmitInterval(int, int)}).
  *
  * <p>When a repeat connection to a recently-contacted destination is opened,
  * {@link Connection#setRemotePeer(net.i2p.data.Destination)} applies the dampened

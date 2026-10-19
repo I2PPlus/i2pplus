@@ -41,7 +41,6 @@ import java.util.Objects;
  * since it does not natively support indexed access.
  * <p>
  *
- * @author John Rose
  */
 final class Fixups extends AbstractCollection<Fixups.Fixup> {
     byte[] bytes;    // the subject of the relocations

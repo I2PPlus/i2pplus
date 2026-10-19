@@ -22,12 +22,11 @@ import net.i2p.data.i2cp.SessionStatusMessage;
 import net.i2p.data.i2cp.SetDateMessage;
 
 /**
- * Contains a map of message handlers that a session will want to use
+ * Contains a map of message handlers that a session will want to use.
  *
- * @author jrandom
  */
 class I2PClientMessageHandlerMap {
-    /** Map of message type id--&gt; I2CPMessageHandler */
+    /** Map of message type id--&gt; I2CPMessageHandler. */
     protected final I2CPMessageHandler[] _handlers;
 
     /**

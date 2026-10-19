@@ -29,7 +29,7 @@ import java.util.concurrent.ConcurrentMap;
 
 /**
  * Creates and updates the in-memory or on-disk RRD database,
- * and provides methods to generate graphs of the data
+ * and provides methods to generate graphs of the data.
  */
 public class GraphListener implements RateSummaryListener {
     /**
@@ -38,7 +38,7 @@ public class GraphListener implements RateSummaryListener {
      * @since 0.9.33
      */
     public static final String PROP_PERSISTENT = "routerconsole.graphPersistent";
-    /** note that .jrb files are NOT compatible with .rrd files */
+    /** Note that .jrb files are NOT compatible with .rrd files. */
     static final String RRD_DIR = "rrd";
     /** Prefix for RRD file names. */
     static final String RRD_PREFIX = "rrd-";
@@ -100,7 +100,7 @@ public class GraphListener implements RateSummaryListener {
     private volatile long _backfillCount;
     /**
      * Coalesce count of the Rate when this listener attached.
-     * <p>{@link Rate#getCoalesceCount()} counts from the Rate's construction, and a
+     * <p>{@link Rate#getCoalesceCount} counts from the Rate's construction, and a
      * stat registered at router startup has been coalescing long before the console
      * attaches to it. Comparing that absolute count against this listener's own write
      * count would report the entire pre-attach history as drift, on every listener,
@@ -224,7 +224,7 @@ public class GraphListener implements RateSummaryListener {
      * so every lost step is charged exactly once. A later heal that drops the drift
      * back to zero and a further outage both still get reported.
      *
-     * @param coalesceDelta coalesce delta from {@link #getCoalesceDelta()}
+     * @param coalesceDelta coalesce delta from {@link #getCoalesceDelta}
      * @return steps newly charged, 0 when they were already charged
      * @since 0.9.71+
      */
@@ -366,7 +366,7 @@ public class GraphListener implements RateSummaryListener {
      * itself and the operator has to know which graph is affected. Reported every
      * {@link #MAX_CONSECUTIVE_ERRORS} failures rather than on every one, so a rate with
      * a persistently failing RRD cannot turn the log into the stall it used to avoid.
-     * <p>Deliberately does not call {@link #stopListening()}. Retiring on a transient
+     * <p>Deliberately does not call {@link #stopListening}. Retiring on a transient
      * I/O error left a hole in the graph that nothing refilled for up to a full sync
      * interval, and the detach was indistinguishable from a real fault in the logs.
      * Recording now stops on its own - the ledger drift grows - and the heal ladder
@@ -406,7 +406,7 @@ public class GraphListener implements RateSummaryListener {
      * step is empty forever once nothing writes it, so writing them late beats losing
      * them.
      * <p>{@code RrdDb.store} rejects any timestamp not strictly newer than the last
-     * one stored, so a sample that lands on or before {@link #getLastStoredTimeMs()} is
+     * one stored, so a sample that lands on or before {@link #getLastStoredTimeMs} is
      * skipped rather than attempted: the write path has already covered the recent
      * steps and the ring can overlap them.
      *
@@ -471,7 +471,7 @@ public class GraphListener implements RateSummaryListener {
     /**
      * Truncate a wall-clock stamp to the whole second an RRD actually stores.
      * <p>Pure because the whole skip rule is this truncation applied against
-     * {@link #getLastStoredTimeMs()}: comparing raw milliseconds would let a sample
+     * {@link #getLastStoredTimeMs}: comparing raw milliseconds would let a sample
      * 999ms into a step the listener already stored look newer than it is, and the
      * write would then be rejected by the archive as non-monotonic.
      *
@@ -490,7 +490,7 @@ public class GraphListener implements RateSummaryListener {
      * every ten seconds and from calling a permanent gap a transient one.
      * <p>Pure, so the boundary is unit tested without a Rate, an RRD or a clock.
      *
-     * @param lastStoredTimeMs newest stored step from {@link #getLastStoredTimeMs()}
+     * @param lastStoredTimeMs newest stored step from {@link #getLastStoredTimeMs}
      * @param retained the Rate's retained samples, oldest first; may be null
      * @return true if at least one retained sample is newer than the last stored step
      * @since 0.9.71+
@@ -509,7 +509,7 @@ public class GraphListener implements RateSummaryListener {
 
     /**
      * Whether the open RRD handle can still take a write.
-     * <p>Distinct from {@link #isDetached()}: a detached listener has no handle at
+     * <p>Distinct from {@link #isDetached}: a detached listener has no handle at
      * all, whereas this can be false for a listener that still holds a handle which
      * something else has already closed. That is the cheapest fault to heal, since
      * the listener, its registration and its RRD file all survive and only the handle
@@ -536,13 +536,13 @@ public class GraphListener implements RateSummaryListener {
 
     /**
      * Whether this listener is still the one its Rate notifies on coalesce.
-     * <p>Distinct from {@link #isDetached()}: a Rate holds exactly one summary
+     * <p>Distinct from {@link #isDetached}: a Rate holds exactly one summary
      * listener, so registering a replacement silently orphans this instance while its
      * RRD stays open. That instance is attached - so it renders fine and the console
      * shows a plausible graph - but it can never be called again, and nothing about
      * that state is visible without asking the Rate.
      *
-     * @return true if {@link Rate#getSummaryListener()} is this instance
+     * @return true if {@link Rate#getSummaryListener} is this instance
      * @since 0.9.71+
      */
     boolean isRegistered() { return ownsRegistration(_rate.getSummaryListener(), this); }
@@ -553,7 +553,7 @@ public class GraphListener implements RateSummaryListener {
      * for the same Rate are {@code equals} but only one of them is ever called, so
      * only reference equality answers "is this instance the live one".
      *
-     * @param registered current registration, as returned by {@link Rate#getSummaryListener()}
+     * @param registered current registration, as returned by {@link Rate#getSummaryListener}
      * @param self the listener asking
      * @return true only if {@code self} is the registered instance
      * @since 0.9.71+
@@ -662,7 +662,7 @@ public class GraphListener implements RateSummaryListener {
 
     /**
      * Build the RRD handle, sample and renderer for this listener.
-     * <p>Split out of {@link #startListening()} so {@link #reopen()} can obtain a new
+     * <p>Split out of {@link #startListening} so {@link #reopen} can obtain a new
      * handle without touching the Rate. Does no I/O on any rate's monitor: it is
      * called from the sync task and from the health watchdog, never from a
      * Rate-synchronized callback.
@@ -815,7 +815,7 @@ public class GraphListener implements RateSummaryListener {
 
     /**
      * Release the RRD handle, leaving the Rate registration alone.
-     * <p>Shared by {@link #stopListening()} and {@link #reopen()}: the only difference
+     * <p>Shared by {@link #stopListening} and {@link #reopen}: the only difference
      * between tearing a listener down and healing it is whether the Rate keeps
      * pointing at this instance, and that has to be the caller's decision.
      * <p>The handle is cleared before it is closed, so a delivery thread that is
@@ -1130,7 +1130,11 @@ public class GraphListener implements RateSummaryListener {
      */
     RrdBackendFactory getBackendFactory() {return getBackendFactory(_isPersistent);}
 
-    /** @since 0.9.46 */
+    /**
+     * The RRD backend for persistent or in-memory data.
+     *
+     * @since 0.9.46
+     */
     @SuppressWarnings("deprecation")
     private static RrdBackendFactory getBackendFactory(boolean isPersistent) {
         // NIO-backed on-disk file for persistent RRDs, in-memory backend otherwise
@@ -1149,7 +1153,7 @@ public class GraphListener implements RateSummaryListener {
     /**
      * Fetch the last {@code count} data points from the RRD database for use by the
      * dual-baseline minigraph renderer (data-rx/data-tx attributes on the canvas).
-     * Points are right-aligned; the returned array is NaN-padded on the left when
+     * Points are right-aligned. The returned array is NaN-padded on the left when
      * fewer points are available.
      *
      * @param count number of most recent data points to retrieve

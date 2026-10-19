@@ -22,7 +22,6 @@ import java.util.Arrays;
  * Passes a command to the OS shell for execution and manages the input and
  * output.
  *
- * @author hypercubus
  * @since 0.9.3
  */
 @SuppressWarnings("PMD.CloseResource")
@@ -34,7 +33,11 @@ public class ShellCommand {
      */
     public ShellCommand() {}
 
-    /** @since 0.9.3 */
+    /**
+     * Holds the result of a shell command.
+     *
+     * @since 0.9.3
+     */
     private static class Result {
         public volatile boolean commandSuccessful;
     }
@@ -42,13 +45,14 @@ public class ShellCommand {
     /**
      * Executes a shell command in its own thread.
      *
-     * @author hypercubus
      */
     private class CommandThread extends I2PAppThread {
         private final Object shellCommand;
         private final Result result;
 
         /**
+         * Runs the shell command in a thread.
+         *
          * @param shellCommand either a String or a String[] (since 0.8.3)
          * @param result holder for the exit status, written when the thread runs
          */
@@ -67,12 +71,11 @@ public class ShellCommand {
     /**
      * Consumes stream data. Instances of this class, when given the
      * <code>STDOUT</code> and <code>STDERR</code> input streams of a
-     * <code>Runtime.exec()</code> process for example, will prevent blocking
-     * during a <code>Process.waitFor()</code> loop and thereby allow the
+     * {@code Runtime.exec()} process for example, will prevent blocking
+     * during a {@code Process.waitFor()} loop and thereby allow the
      * process to exit properly. This class makes no attempt to preserve the
      * consumed data.
      *
-     * @author hypercubus
      */
     private static class StreamConsumer extends I2PAppThread {
         private final BufferedReader bufferedReader;
@@ -101,12 +104,12 @@ public class ShellCommand {
      * produced by the executed command will not be displayed.
      *
      * @param  commandArray The command for the shell to execute,
-     *                      as a String[].
-     *                      See Runtime.exec(String[]) for more info.
+     * as a String[].
+     * See {@code Runtime.exec(}String[]) for more info.
      *
      * @return              <code>true</code> if the spawned shell process
-     *                      returns an exit status of 0 (indicating success),
-     *                      else <code>false</code>.
+     * returns an exit status of 0 (indicating success),
+     * else <code>false</code>.
      *
      * @since 0.9.38
      */
@@ -124,18 +127,18 @@ public class ShellCommand {
      * Use a String array for best results, especially on Windows.
      *
      * @param  shellCommand The command for the shell to execute, as a String.
-     *                      You can't quote arguments successfully.
-     *                      See Runtime.exec(String) for more info.
+     * You can't quote arguments successfully.
+     * See {@code Runtime.exec(}String) for more info.
      *
      * @param  seconds      The method will return <code>true</code> if this
-     *                      number of seconds elapses without the process
-     *                      returning an exit status. A value of <code>0</code>
-     *                      here disables waiting.
+     * number of seconds elapses without the process
+     * returning an exit status. A value of <code>0</code>
+     * here disables waiting.
      *
      * @return              <code>true</code> if the spawned shell process
-     *                      returns an exit status of 0 (indicating success),
-     *                      OR if the time expires,
-     *                      else <code>false</code>.
+     * returns an exit status of 0 (indicating success),
+     * OR if the time expires,
+     * else <code>false</code>.
      */
     public boolean executeSilentAndWaitTimed(String shellCommand, int seconds) {
         return executeSAWT(shellCommand, seconds);
@@ -148,18 +151,18 @@ public class ShellCommand {
      * executed command will not be displayed.
      *
      * @param  commandArray The command for the shell to execute,
-     *                      as a String[].
-     *                      See Runtime.exec(String[]) for more info.
+     * as a String[].
+     * See {@code Runtime.exec(}String[]) for more info.
      *
      * @param  seconds      The method will return <code>true</code> if this
-     *                      number of seconds elapses without the process
-     *                      returning an exit status. A value of <code>0</code>
-     *                      here disables waiting.
+     * number of seconds elapses without the process
+     * returning an exit status. A value of <code>0</code>
+     * here disables waiting.
      *
      * @return              <code>true</code> if the spawned shell process
-     *                      returns an exit status of 0 (indicating success),
-     *                      OR if the time expires,
-     *                      else <code>false</code>.
+     * returns an exit status of 0 (indicating success),
+     * OR if the time expires,
+     * else <code>false</code>.
      *
      * @since 0.8.3
      */
@@ -167,7 +170,11 @@ public class ShellCommand {
         return executeSAWT(commandArray, seconds);
     }
 
-    /** @since 0.8.3 */
+    /**
+     * Execute the command, timing it for the debug log.
+     *
+     * @since 0.8.3
+     */
     private boolean executeSAWT(Object shellCommand, int seconds) {
         String name = null;
         long begin = 0;

@@ -520,7 +520,8 @@ public class MetaInfo {
     }
 
     /**
-     * Returns a list of lists of urls.
+     * The tracker announce URLs grouped into tiers, each tier a set of
+     * equivalent trackers, per BEP 12.
      *
      * @return tiered announce URLs per BEP 12, or null if none were specified
      * @since 0.9.5
@@ -549,7 +550,7 @@ public class MetaInfo {
     }
 
     /**
-     * Returns the piece hashes.
+     * The 20-byte SHA1 hash of each piece, concatenated.
      *
      * @return not a copy, do not modify
      * @since public since 0.9.53, was package private
@@ -562,7 +563,7 @@ public class MetaInfo {
      * Returns the requested name for the file or toplevel directory. If it is a toplevel directory
      * name getFiles() will return a non-null List of file name hierarchy name.
      * @return the name the torrent requests for the file, or for the toplevel
-     *         directory when {@link #getFiles()} returns a file hierarchy
+     * directory when {@link #getFiles} returns a file hierarchy
      */
     public String getName() {
         return name;
@@ -649,8 +650,8 @@ public class MetaInfo {
      * boundary maps to the following file. Single-file torrents always return 0.
      *
      * @param pos torrent byte offset
-     * @return the index into {@link #getFiles()} and {@link #getLengths()}, which
-     *         is the file count if the position is past the end
+     * @return the index into {@link #getFiles} and {@link #getLengths}, which
+     * is the file count if the position is past the end
      */
     int fileIndex(long pos) {
         long[] ends = fileEnds();
@@ -745,10 +746,10 @@ public class MetaInfo {
      * Return the length of a piece. All pieces are of equal length except for the last one (<code>
      * getPieces()-1</code>).
      *
-     * @param piece zero-based piece index, from 0 to {@link #getPieces()} - 1
+     * @param piece zero-based piece index, from 0 to {@link #getPieces} - 1
      * @return the piece length
      * @throws IndexOutOfBoundsException when piece is equal to or greater then the number of pieces
-     *                                   in the torrent.
+     * in the torrent.
      */
     public int getPieceLength(int piece) {
         int pieces = getPieces();
@@ -839,7 +840,7 @@ public class MetaInfo {
 
     /**
      * Returns the total length of the non-padding files in this torrent, or
-     * {@link #getTotalLength()} if there are no padding files. The projected downloaded size.
+     * {@link #getTotalLength} if there are no padding files. The projected downloaded size.
      *
      * @return the length of all non-padding files
      */
@@ -1050,7 +1051,7 @@ public class MetaInfo {
 
     /**
      * Command-line utility to inspect and optionally modify torrent file metadata.
-     * Usage: MetaInfo [-a announceURL] [-c created-by] [-m comment] [-w webseed-url]* file.torrent [file2.torrent...]
+     * Usage: MetaInfo [-a announceURL] [-c created-by] [-m comment] [-w webseed-url]* file.torrent [file2.torrent...].
      *
      * @param args the options in {@code Usage} above, followed by the torrent files
      * @since 0.8.5

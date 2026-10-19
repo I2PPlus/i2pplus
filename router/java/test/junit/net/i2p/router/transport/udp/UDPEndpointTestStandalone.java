@@ -14,7 +14,7 @@ import java.util.Set;
  *
  * Note: this is a standalone test, not a JUnit test.
  * At some point someone may want to convert it to a JUnit test.
- * --zab
+ * --zab.
  */
 public class UDPEndpointTestStandalone {
     private final RouterContext _context;

@@ -31,7 +31,6 @@ import javax.crypto.spec.SecretKeySpec;
  * AES encryption engine using Cryptix's Rijndael implementation with CBC mode.
  * Supports 128-bit block size with 16-byte IV. No padding is provided.
  *
- * @author jrandom,crypto
  */
 public final class CryptixAESEngine extends AESEngine {
     private final LinkedBlockingQueue<Cipher> _ciphers;
@@ -56,13 +55,13 @@ public final class CryptixAESEngine extends AESEngine {
      * path.
      * <p>
      * Why memoize at all: building the spec clones the key material, but
-     * {@link SecretKeySpec#getEncoded()} returns the spec's *internal* array,
+     * {@link SecretKeySpec#getEncoded} returns the spec's *internal* array,
      * so a reused instance passes the same byte[] reference to
      * {@link Cipher#init} and skips JCE makeSessionKey re-expansion of the
      * 256-bit key on every JVM-path encrypt/decrypt.
      * <p>
      * This cache is deliberately NOT the same as
-     * {@link SessionKey#getPreparedKey()}, which is owned by the legacy Cryptix
+     * {@link SessionKey#getPreparedKey}, which is owned by the legacy Cryptix
      * path and lives per SessionKey - keep the two fast paths decoupled.
      * {@link SessionKey} equality is value-based, so distinct-but-identical
      * keys share one spec (their bytes are equal, so sharing is correct).
@@ -91,7 +90,7 @@ public final class CryptixAESEngine extends AESEngine {
     /**
      * Check for AES-NI support in processor and JVM.
      *
-     * @return whether a e s n i is present
+     * @return whether AESNI is present
      * @since 0.9.14
      */
     private static boolean hasAESNI() {
@@ -350,7 +349,7 @@ public final class CryptixAESEngine extends AESEngine {
      * and the extra key schedule is pure overhead. It protected nothing either:
      * the live key bytes are already resident for the life of the
      * {@link SessionKey} in the {@link #_keySpecReads} memo and in
-     * {@link SessionKey#getPreparedKey()} on the legacy Cryptix path.
+     * {@link SessionKey#getPreparedKey} on the legacy Cryptix path.
      *
      * @param cipher the Cipher to return to the cache
      * @since 0.9.49

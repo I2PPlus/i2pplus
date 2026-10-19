@@ -27,7 +27,7 @@ import net.i2p.util.SystemVersion;
  * There is only one of these.
  * Instantiated by BuildHandler.
  *
- * @since 0.9.51 moved to tunnel.pool package
+ * @since 0.9.51 moved to {@code tunnel.pool} package
  */
 class BuildMessageProcessor {
     private final RouterContext ctx;
@@ -49,7 +49,7 @@ class BuildMessageProcessor {
      * For N typical part tunnels and rejecting 50%, that's 12N requests per hour.
      * This is the equivalent of (12N/600) KBps through the IVValidator filter.
      * <p>
-     * Target false positive rate is 1E-5 or lower
+     * Target false positive rate is 1E-5 or lower.
      *
      * @since 0.9.24
      */

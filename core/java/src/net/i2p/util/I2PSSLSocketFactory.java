@@ -85,14 +85,12 @@ import net.i2p.crypto.KeyStoreUtil;
 import net.i2p.data.DataHelper;
 
 import java.nio.charset.StandardCharsets;
+// TODO extend SSLSocketFactory
 /**
  * Loads trusted ASCII certs from ~/.i2p/certificates/ and $I2P/certificates/.
- * <p>
- * TODO extend SSLSocketFactory
  *
- * @author zzz
  * @since 0.9.9 moved from ../client, original since 0.8.3
- */
+*/
 public class I2PSSLSocketFactory {
 
     private static final String PROP_DISABLE = "i2p.disableSSLHostnameVerification";
@@ -295,7 +293,7 @@ public class I2PSSLSocketFactory {
     /**
      * Validate the hostname.
      * Warning - be sure to remove [] from IPv6 addresses in host parameter if you
-     * got it from URI.getHost().
+     * got it from {@code URI.getHost()}.
      * <p>
      * ref: https://developer.android.com/training/articles/security-ssl.html
      * ref: http://op-co.de/blog/posts/java_sslsocket_mitm/
@@ -348,7 +346,7 @@ public class I2PSSLSocketFactory {
     }
 
     /**
-     * From Apache PublicSuffixMatcherLoader.getDefault()
+     * From Apache {@code PublicSuffixMatcherLoader.getDefault()}
      * <p>
      * https://publicsuffix.org/list/effective_tld_names.dat
      * What does this get us?
@@ -408,7 +406,7 @@ public class I2PSSLSocketFactory {
 
     /**
      * Merge two PublicSuffixLists
-     * Have to do this because they are unmodifiable
+     * Have to do this because they are unmodifiable.
      *
      * @since 0.9.20
      */
@@ -431,7 +429,7 @@ public class I2PSSLSocketFactory {
      * It would almost be easier just to add all possible 26*26 two-letter codes.
      *
      * @param tlds list that collects each lowercased TLD read from the country file
-     * @since 0.9.20 adapted from GeoIP.loadCountryFile()
+     * @since 0.9.20 adapted from {@link net.i2p.router.transport.GeoIP#loadCountryFile}
      */
     private static void addCountries(I2PAppContext ctx, List<String> tlds) {
         Log log = ctx.logManager().getLog(I2PSSLSocketFactory.class);
@@ -531,7 +529,7 @@ public class I2PSSLSocketFactory {
      * based on configured inclusion and exclusion lists
      * as well as enabled and supported protocols and cipher suites.
      * <p>
-     * Adapted from Jetty SslContextFactory.java
+     * Adapted from Jetty SslContextFactory.java.
      *
      * @param socket the socket whose enabled protocols and cipher suites are narrowed
      * @since 0.9.16
@@ -547,7 +545,7 @@ public class I2PSSLSocketFactory {
      * based on configured inclusion and exclusion lists
      * as well as enabled and supported protocols and cipher suites.
      * <p>
-     * Adapted from Jetty SslContextFactory.java
+     * Adapted from Jetty SslContextFactory.java.
      *
      * @param socket the server socket whose enabled protocols and cipher suites are narrowed
      * @since 0.9.16
@@ -569,7 +567,7 @@ public class I2PSSLSocketFactory {
      * based on configured inclusion and exclusion lists
      * as well as enabled and supported protocols.
      * <p>
-     * Adapted from Jetty SslContextFactory.java
+     * Adapted from Jetty SslContextFactory.java.
      *
      * @param enabledProtocols Array of enabled protocols
      * @param supportedProtocols Array of supported protocols
@@ -585,7 +583,7 @@ public class I2PSSLSocketFactory {
      * based on configured inclusion and exclusion lists
      * as well as enabled and supported cipher suite lists.
      * <p>
-     * Adapted from Jetty SslContextFactory.java
+     * Adapted from Jetty SslContextFactory.java.
      *
      * @param enabledCipherSuites Array of enabled cipher suites
      * @param supportedCipherSuites Array of supported cipher suites
@@ -597,7 +595,7 @@ public class I2PSSLSocketFactory {
     }
 
     /**
-     * Adapted from Jetty SslContextFactory.java
+     * Adapted from Jetty SslContextFactory.java.
      *
      * @param toEnable Add all these to what is enabled, if supported
      * @param toExclude Remove all these from what is enabled

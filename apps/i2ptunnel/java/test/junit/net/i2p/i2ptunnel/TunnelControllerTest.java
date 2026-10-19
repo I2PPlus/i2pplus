@@ -10,7 +10,7 @@ import net.i2p.crypto.SigType;
 
 /**
  * Tests the per-type default configuration applied by
- * TunnelController.setConfig() and its helpers.
+ * {@link net.i2p.i2ptunnel.TunnelController#setConfig} and its helpers.
  *
  * @since 0.9.70+
  */

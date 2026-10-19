@@ -5,7 +5,6 @@ import org.rrd4j.DsType;
 /**
  * Class DataSourceType
  *
- * @author <a href="mailto:ciaran@codeloop.com">Ciaran Treanor</a>
  * @version $Revision: 1.1 $
  */
 public enum DataSourceType {

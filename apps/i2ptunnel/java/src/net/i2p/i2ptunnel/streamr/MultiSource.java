@@ -8,7 +8,7 @@ import net.i2p.i2ptunnel.udp.*;
 import net.i2p.util.Log;
 
 /**
- * Multi-source data distributor that forwards data to multiple sink destinations
+ * Multi-source data distributor that forwards data to multiple sink destinations.
  */
 public class MultiSource implements Source, Sink {
     private Sink sink;
@@ -49,9 +49,9 @@ public class MultiSource implements Source, Sink {
     }
 
     /**
-     *  May throw RuntimeException from underlying sinks
-     *  @throws RuntimeException if one of the registered sinks fails to send the data
-     *  @since 0.9.53 added fromPort and toPort parameters
+     * May throw RuntimeException from underlying sinks.
+     * @throws RuntimeException if one of the registered sinks fails to send the data
+     * @since 0.9.53 added fromPort and toPort parameters
      */
     public void send(Destination ignoredFrom, int ignoredFromPort, int ignoredToPort, byte[] data) {
         if (sinks.isEmpty()) {
@@ -68,7 +68,7 @@ public class MultiSource implements Source, Sink {
     }
 
     /**
-     * range that receive each copy of the data
+     * Range that receive each copy of the data.
      *
      * @param ms the subscriber to deliver to, naming the destination and the port
      * @since 0.9.53 changed to MSink parameter
@@ -78,7 +78,7 @@ public class MultiSource implements Source, Sink {
     }
 
     /**
-     * object identity
+     * Object identity.
      *
      * @param ms the subscriber to drop; matched against the registered sinks by
      * @since 0.9.53 changed to MSink parameter
@@ -111,6 +111,8 @@ public class MultiSource implements Source, Sink {
         }
 
         /**
+         * Hash by source address and port.
+         *
          * @return whether h code is present
          */
         @Override

@@ -29,7 +29,7 @@ import static org.junit.Assert.*;
 
 /**
  * Unit tests for the package-private helper methods extracted from
- * I2PTunnelHTTPServer.blockingHandle() for inproxy/referer/UA/post-throttle rejection.
+ * {@link net.i2p.i2ptunnel.I2PTunnelHTTPServer#blockingHandle} for inproxy/referer/UA/post-throttle rejection.
  */
 public class I2PTunnelHTTPServerHelperTest {
     private static final I2PAppContext CTX = I2PAppContext.getGlobalContext();
@@ -37,7 +37,7 @@ public class I2PTunnelHTTPServerHelperTest {
 
     private I2PTunnelHTTPServer _server;
 
-    /** I2PSocket stub: configurable input, capture output, counts close() */
+    /** I2PSocket stub: configurable input, capture output, counts close(). */
     private static class FakeSocket implements I2PSocket {
         private InputStream _in;
         private final ByteArrayOutputStream _out = new ByteArrayOutputStream();

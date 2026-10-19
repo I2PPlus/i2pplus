@@ -28,7 +28,6 @@ import java.net.*;
  * targeted delivery of event notifications and management of subscription lifecycles including
  * automatic cleanup of expired subscriptions.
  *
- * @author Satoshi Konno
  * @since 1.0
  */
 public class Subscriber {

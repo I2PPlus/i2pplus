@@ -126,7 +126,11 @@ public class I2PSnarkEscapingAndValidationTest {
 
     // ----- bencoded byte-array length handling -----
 
-    /** @since 0.9.71+ */
+    /**
+     * Decode a bencoded string via reflection.
+     *
+     * @since 0.9.71+
+     */
     private static String decodeBencoded(String bencoded) throws Throwable {
         BDecoder decoder =
                 new BDecoder(

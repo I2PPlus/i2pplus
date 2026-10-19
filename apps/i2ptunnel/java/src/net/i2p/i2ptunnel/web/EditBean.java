@@ -24,11 +24,11 @@ import net.i2p.util.Addresses;
  * Web interface bean for editing and configuring I2P tunnel settings.
  * <p>Warning - This class is not part of the i2ptunnel API,
  * it has been moved from the jar to the war.
- * Usage by classes outside of i2ptunnel.war is deprecated.</p>
+ * Usage by classes outside of {@code i2ptunnel.war} is deprecated.</p>
  */
 public class EditBean extends IndexBean {
     /**
-     * Default constructor.
+     * Constructs the edit-page bean.
      * @since 0.8.3
      */
     public EditBean() { super(); }
@@ -237,7 +237,7 @@ public class EditBean extends IndexBean {
     }
 
     /**
-     * Returns the outbound tunnel depth.
+     * Configured hop count for the tunnel's outbound (client-side) tunnels.
      *
      * @param tunnel index of the tunnel in the configured list, or -1 for a new tunnel
      * @param defaultLength the default depth if not configured
@@ -249,7 +249,7 @@ public class EditBean extends IndexBean {
     }
 
     /**
-     * Returns the outbound tunnel quantity.
+     * Configured number of primary outbound tunnels.
      *
      * @param tunnel index of the tunnel in the configured list, or -1 for a new tunnel
      * @param defaultQuantity the default quantity if not configured
@@ -261,7 +261,7 @@ public class EditBean extends IndexBean {
     }
 
     /**
-     * Returns the outbound backup tunnel quantity.
+     * Configured number of backup outbound tunnels.
      *
      * @param tunnel index of the tunnel in the configured list, or -1 for a new tunnel
      * @param defaultBackupQuantity the default backup quantity if not configured
@@ -273,7 +273,7 @@ public class EditBean extends IndexBean {
     }
 
     /**
-     * Returns the outbound tunnel variance.
+     * Configured length variance allowed for outbound tunnels.
      *
      * @param tunnel index of the tunnel in the configured list, or -1 for a new tunnel
      * @param defaultVariance the default variance if not configured
@@ -355,7 +355,7 @@ public class EditBean extends IndexBean {
     }
 
     /**
-     * Returns the encryption mode for the tunnel.
+     * Configured encryption mode for the tunnel, as a numeric string.
      *
      * @param tunnel index of the tunnel in the configured list, or -1 for a new tunnel
      * @return the encryption mode as a string
@@ -366,7 +366,7 @@ public class EditBean extends IndexBean {
     }
 
     /**
-     * Returns the blinded password for the tunnel.
+     * Configured blinded password used to authenticate to the tunnel peer.
      *
      * @param tunnel index of the tunnel in the configured list, or -1 for a new tunnel
      * @return the blinded password, or empty string if none
@@ -378,7 +378,7 @@ public class EditBean extends IndexBean {
 
     /**
      * List of b64 name : b64key
-     * Pubkeys for DH, privkeys for PSK
+     * Pubkeys for DH, privkeys for PSK.
      * @param tunnel index of the tunnel in the configured list
      * @param isDH true for DH, false for PSK
      * @return non-null
@@ -389,7 +389,7 @@ public class EditBean extends IndexBean {
     }
 
     /**
-     * Returns the signature type for the tunnel.
+     * Configured signature type for the tunnel's destination.
      *
      * @param tunnel index of the tunnel in the configured list, or -1 for a new tunnel
      * @param newTunnelType used if tunnel &lt; 0
@@ -547,7 +547,7 @@ public class EditBean extends IndexBean {
     }
 
     /**
-     * Returns the filter definition for the tunnel.
+     * Configured peer filter definition for the tunnel.
      *
      * @param tunnel index of the tunnel in the configured list, or -1 for a new tunnel
      * @return the filter definition, or empty string if none
@@ -705,7 +705,7 @@ public class EditBean extends IndexBean {
     /**
      * The outproxy username.
      * @param tunnel index of the tunnel in the configured list
-     * @return the outproxy username
+     * @return the username, or empty string if none
      * @since 0.8.3
      */
     public String getOutproxyUsername(int tunnel) {
@@ -715,7 +715,7 @@ public class EditBean extends IndexBean {
     /**
      * The outproxy password.
      * @param tunnel index of the tunnel in the configured list
-     * @return the outproxy password
+     * @return the password, or empty string if none
      * @since 0.8.3
      */
     public String getOutproxyPassword(int tunnel) {
@@ -745,7 +745,7 @@ public class EditBean extends IndexBean {
     /**
      * The outproxy type.
      * @param tunnel index of the tunnel in the configured list
-     * @return the outproxy type
+     * @return the proxy type as configured for the tunnel
      * @since 0.9.57
      */
     public String getOutproxyType(int tunnel) {
@@ -823,7 +823,7 @@ public class EditBean extends IndexBean {
     }
 
     /**
-     * POST limits
+     * POST limits.
      * @param tunnel index of the tunnel in the configured list
      * @return the post max
      * @since 0.9.9

@@ -55,13 +55,13 @@ import net.i2p.util.Log;
  */
 public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runnable {
 
-    /** The logger */
+    /** The logger. */
     protected final Log _log;
-    /** The application context */
+    /** The application context. */
     protected final I2PAppContext _context;
-    /** The logging instance */
+    /** The logging instance. */
     protected final Logging l;
-    /** Default connect timeout */
+    /** Default connect timeout. */
     static final long DEFAULT_CONNECT_TIMEOUT = (long) 30*1000;
     /**
      * Legacy cap on consecutive connect timeouts before abandoning tunnel
@@ -110,50 +110,50 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
      * @since 0.9.71+
      */
     static final long POOL_BUILD_DEADLINE_GRACE_MS = 45 * 1000;
-    /** Client ID counter */
+    /** Client ID counter. */
     private static final AtomicLong __clientId = new AtomicLong();
-    /** This client's ID */
+    /** This client's ID. */
     protected long _clientId;
-    /** Guards sockMgr and mySockets */
+    /** Guards sockMgr and mySockets. */
     protected final Object sockLock = new Object();
-    /** The socket manager */
+    /** The socket manager. */
     protected I2PSocketManager sockMgr; // should be final and use a factory. LINT
-    /** List of active sockets */
+    /** List of active sockets. */
     protected final List<I2PSocket> mySockets = new ArrayList<>();
-    /** Whether we own our destination */
+    /** Whether we own our destination. */
     protected boolean _ownDest;
-    /** The destination */
+    /** The destination. */
     protected Destination dest;
-    /** Local port */
+    /** Local port. */
     private volatile int localPort;
-    /** Handler name */
+    /** Handler name. */
     private final String _handlerName;
 
     /**
      * Protected for I2Ping since 0.9.11. Not for use outside package.
      */
     protected boolean listenerReady;
-    /** Server socket */
+    /** Server socket. */
     protected ServerSocket ss;
-    /** Start lock */
+    /** Start lock. */
     private final Object startLock = new Object();
-    /** Whether start is running */
+    /** Whether start is running. */
     private boolean startRunning;
-    /** Whether we are building tunnels */
+    /** Whether we are building tunnels. */
     private volatile boolean _buildingTunnels;
-    /** Tunnel builder thread */
+    /** Tunnel builder thread. */
     private volatile Thread _tunnelBuilder;
-    /** Private key file path */
+    /** Private key file path. */
     private String privKeyFile;
-    /** true if we are chained from a server. */
+    /** True if we are chained from a server. */
     private boolean chained;
-    /** Thread pool executor */
+    /** Thread pool executor. */
     protected volatile ThreadPoolExecutor _executor;
-    /** true if we created _executor ourselves (TCG was null) and must shut it down on close */
+    /** True if we created _executor ourselves (TCG was null) and must shut it down on close. */
     private volatile boolean _ownExecutor;
-    /** Property name: max concurrently active client connections handled by one client tunnel */
+    /** Property name: max concurrently active client connections handled by one client tunnel. */
     public static final String PROP_MAX_CONNECTIONS = "i2ptunnel.maxConnections";
-    /** Default socket open timeout in ms, after which close() will proceed even with active sockets */
+    /** Default socket open timeout in ms, after which close() will proceed even with active sockets. */
     public static final long DEFAULT_SOCKET_OPEN_TIMEOUT = 30000;
     /**
      * Default cap on concurrently handled client connections.
@@ -170,35 +170,35 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
     /**
      * True when this tunnel's config explicitly set
      * {@value #PROP_MAX_CONNECTIONS}. When false the tunnel inherits the
-     * Tuner-managed default cap (see {@link #getEffectiveMaxConnections()}),
+     * Tuner-managed default cap (see {@link #getEffectiveMaxConnections}),
      * so the Tuner can raise/lower the floor without a tunnel restart. An
      * explicit override always wins over the Tuner default.
      */
     private volatile boolean _maxConnectionsCustomized;
     /** Live reservation counter shared by the connections of this tunnel. */
     private final AtomicInteger _activeConnections = new AtomicInteger();
-    /** Socket open timeout in ms; close() will proceed after this even with active sockets */
+    /** Socket open timeout in ms; close() will proceed after this even with active sockets. */
     private final long _socketOpenTimeout = DEFAULT_SOCKET_OPEN_TIMEOUT;
-    /** Time the tunnel was opened, for timeout checks in close() */
+    /** Time the tunnel was opened, for timeout checks in close(). */
     private long _openStarted;
-    /** this is ONLY for shared clients */
+    /** This is ONLY for shared clients. */
     private static I2PSocketManager socketManager;
 
     /**
-     * Only destroy and replace a static shared client socket manager if it's been connected before
+     * Only destroy and replace a static shared client socket manager if it's been connected before.
      * @since 0.9.20
      */
     private enum SocketManagerState { INIT, CONNECTED }
-    /** Socket manager state */
+    /** Socket manager state. */
     private static SocketManagerState socketManagerState = SocketManagerState.INIT;
-    /** Property for SSL enable */
+    /** Property for SSL enable. */
     public static final String PROP_USE_SSL = I2PTunnelServer.PROP_USE_SSL;
 
     /**
      * This constructor is used to add a client to an existing socket manager.
      * <p>
      * As of 0.9.21 this does NOT open the local socket. You MUST call
-     * {@link #startRunning()} for that. The local socket will be opened
+     * {@link #startRunning} for that. The local socket will be opened
      * immediately (ignoring the <code>i2cp.delayOpen</code> option).
      *
      * @param localPort if 0, use any port, get actual port selected with getLocalPort()
@@ -238,7 +238,7 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
      * <p>
      * (0.9.20 claimed to be fast, but due to a bug it DID connect the manager
      * to the router. It did NOT open the local socket however, so it was still
-     * necessary to call startRunning() for that.)
+     * necessary to call startRunning() for that.).
      *
      * @param localPort if 0, use any port, get actual port selected with getLocalPort()
      * @param ownDest whether to use an owned destination
@@ -247,7 +247,7 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
      * @param handlerName the handler name
      * @param tunnel the I2PTunnel instance
      * @throws IllegalArgumentException if the I2CP configuration is b0rked so
-     *                                  badly that we can't create a socketManager
+     * badly that we can't create a socketManager
      */
     public I2PTunnelClientBase(int localPort, boolean ownDest, Logging l,
                                EventDispatcher notifyThis, String handlerName,
@@ -263,7 +263,7 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
      * <p>
      * (0.9.20 claimed to be fast, but due to a bug it DID connect the manager
      * to the router. It did NOT open the local socket however, so it was still
-     * necessary to call startRunning() for that.)
+     * necessary to call startRunning() for that.).
      *
      * @param localPort if 0, use any port, get actual port selected with getLocalPort()
      * @param ownDest whether to use an owned destination
@@ -273,7 +273,7 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
      * @param tunnel the I2PTunnel instance
      * @param pkf Path to the private key file, or null to generate a transient key
      * @throws IllegalArgumentException if the I2CP configuration is b0rked so
-     *                                  badly that we can't create a socketManager
+     * badly that we can't create a socketManager
      */
     public I2PTunnelClientBase(int localPort, boolean ownDest, Logging l,
                                EventDispatcher notifyThis, String handlerName,
@@ -317,9 +317,9 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
      * Sets the this.sockMgr field if it is null, or if we want a new one.
      * This may take a LONG time if building a new manager.
      * <p>
-     * We need a socket manager before getDefaultOptions() and most other things
+     * We need a socket manager before getDefaultOptions() and most other things.
      * @throws IllegalStateException if the I2CP configuration is b0rked so
-     *                               badly that we cant create a socketManager
+     * badly that we cant create a socketManager
      */
     protected void verifySocketManager() {
         synchronized(sockLock) {
@@ -633,7 +633,7 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
      * Actually open the local socket and start working on incoming connections.
      * *Must* be called by derived classes after initialization.
      * <p>
-     * This will be fast if i2cp.delayOpen is true, but could take
+     * This will be fast if {@code i2cp.delayOpen} is true, but could take
      * a LONG TIME if it is false, as it connects to the router and builds tunnels.
      * <p>
      * Extending classes must check the value of boolean open after calling
@@ -964,7 +964,7 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
      * Whether another tunnel-failover attempt is worthwhile after a connect failure.
      * <p>
      * Stops immediately when the outbound pool is provably dead (no valid tunnels,
-     * none building) — further legs cannot succeed and each leg may burn the full
+     * none building). Further legs cannot succeed and each leg may burn the full
      * connect timeout.  When a timeout occurred, walks <b>all</b> configured legs
      * (up to {@code tunnelCount}) so a pool with several dead tunnels does not
      * give up after {@link #MAX_TIMEOUT_FAILOVER} legs while healthy legs remain
@@ -973,7 +973,7 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
      * @param tunnelCount configured max failover legs (max inbound/outbound quantity)
      * @param attemptsMade legs already attempted (1-based)
      * @param timeoutFailures consecutive timeout-style failures so far
-     * @param poolDown true if {@link #poolIsDefinitivelyDown()} was true after the failure
+     * @param poolDown true if {@link #poolIsDefinitivelyDown} was true after the failure
      * @return true to try the next tunnel leg
      * @since 0.9.71+
      */
@@ -994,8 +994,8 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
      * @param tunnelCount configured max failover legs (max inbound/outbound quantity)
      * @param attemptsMade legs already attempted (1-based)
      * @param timeoutFailures consecutive timeout-style failures so far
-     * @param poolDown true if {@link #poolIsDefinitivelyDown()} was true after the failure
-     * @param poolBuilding true when {@link #poolState()} reports builds in flight
+     * @param poolDown true if {@link #poolIsDefinitivelyDown} was true after the failure
+     * @param poolBuilding true when {@link #poolState} reports builds in flight
      * @return true to try the next tunnel leg
      * @since 0.9.71+
      */
@@ -1020,8 +1020,8 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
      * @param connectAttempts total connect attempts so far (1-based after failure)
      * @param timeoutConnectAttempts timeout-style attempts so far
      * @param timedOut true when the failure classified as a connect timeout
-     * @param poolDown true if {@link #poolIsDefinitivelyDown()} was true
-     * @param poolBuilding true when {@link #poolState()} reports builds in flight
+     * @param poolDown true if {@link #poolIsDefinitivelyDown} was true
+     * @param poolBuilding true when {@link #poolState} reports builds in flight
      * @param browserClosed true if the browser already hung up (abort now)
      * @return true to sleep and retry the outer connect loop
      * @since 0.9.71+
@@ -1044,7 +1044,7 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
      * given the single pool-state snapshot taken for that failure.
      * <p>
      * Both derived flags ({@code poolDown}, {@code poolBuilding}) come from
-     * one {@link #poolState()} reading so a failure never mixes two pool
+     * one {@link #poolState} reading so a failure never mixes two pool
      * observations — the reflective pool query is relatively expensive and
      * one failure must not repeat it.  Stops immediately when the shared
      * request deadline has passed, regardless of remaining attempt budget.
@@ -1052,7 +1052,7 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
      * @param connectAttempts total connect attempts so far (1-based after failure)
      * @param timeoutConnectAttempts timeout-style attempts so far
      * @param timedOut true when the failure classified as a connect timeout
-     * @param poolState the single {@link #poolState()} reading for this failure
+     * @param poolState the single {@link #poolState} reading for this failure
      * @param deadlineExpired true when the shared request deadline has passed
      * @return true to sleep and retry the outer connect loop
      * @since 0.9.71+
@@ -1095,13 +1095,13 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
      * Clamp a requested timeout to the time left before a shared deadline.
      * Used for naming lookups, retry sleeps, and per-leg connect timeouts so
      * no single step can spend budget the rest of the request still needs.
-     * Pure decision — no clock access, safe for unit tests.
+     * Pure decision. No clock access, safe for unit tests.
      *
      * @param requestedMs the timeout the step would use with no deadline
      * @param deadlineMs absolute deadline in ms since the epoch, or {@link #NO_DEADLINE}
      * @param nowMs current time in ms since the epoch
      * @return the requested timeout reduced to the remaining budget; 0 when
-     *         the deadline has passed (callers must skip the step)
+     * the deadline has passed (callers must skip the step)
      * @since 0.9.71+
      */
     static long clampToDeadlineMs(long requestedMs, long deadlineMs, long nowMs) {
@@ -1111,7 +1111,7 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
 
     /**
      * Compute the connect timeout to apply to one failover leg under a
-     * shared deadline. Pure decision — no clock access, safe for unit tests.
+     * shared deadline. Pure decision. No clock access, safe for unit tests.
      * <p>Three behaviors the raw clamp lacked: a caller that requested no
      * timeout at all ({@code requestedMs <= 0}, which streaming can report
      * when its effective connect window is not yet established) gets
@@ -1139,7 +1139,7 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
 
     /**
      * One-shot deadline extension for a request whose outbound tunnel pool is
-     * still building when the shared deadline runs out. Pure decision — no
+     * still building when the shared deadline runs out. Pure decision. No
      * clock access, safe for unit tests.
      * <p>Pool state 0 means the pool exists with no valid tunnel yet but
      * builds are in progress: no connect leg can succeed until one lands,
@@ -1154,10 +1154,10 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
      *
      * @param deadlineMs current deadline in ms since the epoch
      * @param nowMs current time in ms since the epoch
-     * @param poolState latest {@link #poolState()} reading (0 = still building)
+     * @param poolState latest {@link #poolState} reading (0 = still building)
      * @param alreadyExtended true if this request already consumed its grace
      * @return the extended deadline, or {@code deadlineMs} unchanged when no
-     *         extension applies
+     * extension applies
      * @since 0.9.71+
      */
     static long extendDeadlineForBuildingPool(long deadlineMs, long nowMs, int poolState,
@@ -1168,7 +1168,7 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
     }
 
     /**
-     * for timeout wording
+     * For timeout wording.
      *
      * @param e the throwable whose cause chain, up to eight links deep, is scanned
      * @return true if the cause chain looks like a connect/read timeout
@@ -1191,7 +1191,7 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
     }
 
     /**
-     * and none are being built, so further connect retries cannot succeed
+     * And none are being built, so further connect retries cannot succeed.
      *
      * @return true if the client outbound tunnel pool provably has no tunnels
      * @since 0.9.71+
@@ -1435,13 +1435,13 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
     }
 
     /**
-     * Pure decision helper for {@link #getEffectiveMaxConnections()}: pick the
+     * Pure decision helper for {@link #getEffectiveMaxConnections}: pick the
      * per-tunnel override when one was explicitly configured, otherwise the
      * Tuner-managed default cap. Package-visible and context-free so unit tests
      * can exercise it without a live tunnel.
      *
      * @param customized whether this tunnel declared an explicit
-     *                   {@value #PROP_MAX_CONNECTIONS} override
+     * {@value #PROP_MAX_CONNECTIONS} override
      * @param ownCap      the tunnel's resolved cap ({@link #resolveMaxConnections} result)
      * @param globalDefault the Tuner-managed default cap
      * @return the effective cap: &gt;= 1 when gated, 0 meaning unlimited
@@ -1472,7 +1472,7 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
     }
 
     /**
-     * Manage the connection just opened on the specified socket
+     * Manage the connection just opened on the specified socket.
      *
      * @param s Socket to take care of
      */
@@ -1539,7 +1539,7 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
      * Best-effort shed response on the browser-facing socket, then close it.
      * <p>
      * The default is a silent close (non-HTTP tunnels). HTTP subclasses override
-     * this to emit a real status line — a cookie-capped meta-refresh page or a
+     * this to emit a real status line. A cookie-capped meta-refresh page or a
      * 503 — so browsers never see an empty response for a shed connection.
      *
      * @param s the accepted socket being shed; never null
@@ -1551,7 +1551,7 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
     }
 
     /**
-     * Blocking runner, used during the connection establishment
+     * Blocking runner, used during the connection establishment.
      */
     private class BlockingRunner implements Runnable {
         private final Socket _s;

@@ -134,7 +134,7 @@ public class PeerState {
 
     private int _messagesReceived;
     private final AtomicInteger _messagesSent = new AtomicInteger();
-    /** Last time we logged a send rejection (for rate-limited logging) */
+    /** Last time we logged a send rejection (for rate-limited logging). */
     private long _lastRejectionLogTime;
     private static final long REJECTION_LOG_INTERVAL = 1000;  // 1 second
     private int _packetsTransmitted;
@@ -184,15 +184,15 @@ public class PeerState {
     /** Have we migrated away from this peer to another newer one? */
     protected volatile boolean _dead;
 
-    /** The minimum number of outstanding messages (NOT fragments/packets) — configurable */
+    /** The minimum number of outstanding messages (NOT fragments/packets) — configurable. */
     private static volatile int MIN_CONCURRENT_MSGS = SystemVersion.isSlow() ? 8 : 32;
-    /** Maximum lifetime before a message is considered stuck and expired (60 seconds) */
+    /** Maximum lifetime before a message is considered stuck and expired (60 seconds). */
     private static final long MAX_MESSAGE_LIFETIME = 60 * 1000L;
-    /** After this time, we start adding backoff delay (5 seconds) */
+    /** After this time, we start adding backoff delay (5 seconds). */
     private static final long BACKOFF_START_LIFETIME = 5 * 1000L;
-    /** Initial concurrent messages per peer — configurable */
+    /** Initial concurrent messages per peer — configurable. */
     private static volatile int INIT_CONCURRENT_MSGS = SystemVersion.isSlow() ? 16 : 64;
-    /** Hard cap on concurrent messages per peer — adjustable via Tuner */
+    /** Hard cap on concurrent messages per peer — adjustable via Tuner. */
     private static volatile int MAX_CONCURRENT_MSGS = SystemVersion.isSlow() ? 64 : 256;
 
     /**
@@ -250,7 +250,7 @@ public class PeerState {
     public static void setOutboundMsgExpiration(long ms) { OutboundMessageState.setMessageExpiration(ms); }
 
     /**
-     * Load configurable UDP transport parameters from router.config.
+     * Load configurable UDP transport parameters from {@code router.config}.
      * Called once during UDPTransport initialization.
      *
      * @param ctx router context for property access
@@ -327,16 +327,16 @@ public class PeerState {
      * Target RTT in ms — below this, increase concurrency; above this, decrease.
      * I2P network RTT through 2-4 hops is typically 500-2000ms.
      * High enough to avoid false congestion signals from normal network latency.
-     * Configurable via i2p.transport.udp.targetRTT
+     * Configurable via {@code i2p.transport.udp.targetRTT}.
      */
     private static volatile int TARGET_RTT = 2000;
     /**
      * RTT multiplier above which we multiplicative-decrease concurrency.
      * Only decrease when RTT > TARGET_RTT * RTT_DECREASE_FACTOR — truly congested.
-     * Configurable via i2p.transport.udp.rttDecreaseFactor
+     * Configurable via {@code i2p.transport.udp.rttDecreaseFactor}.
      */
     private static volatile int RTT_DECREASE_FACTOR = 4;
-    /** When RTT > TARGET_RTT but there are queued messages, increase modestly */
+    /** When RTT > TARGET_RTT but there are queued messages, increase modestly. */
     private static final int QUEUE_BACKPRESSURE_INCREASE = 4;
     /**
      * How many concurrent outbound messages do we allow OutboundMessageFragments to send.
@@ -352,7 +352,7 @@ public class PeerState {
     /** Last time it was made an introducer. */
     private long _lastIntroducerTime;
 
-    /** Max send window bytes — configurable via i2p.transport.udp.maxSendWindow */
+    /** Max send window bytes — configurable via {@code i2p.transport.udp.maxSendWindow}. */
     private static volatile int MAX_SEND_WINDOW_BYTES = SystemVersion.isSlow() ? 32*1024 : 128*1024;
 
     /**
@@ -387,7 +387,7 @@ public class PeerState {
      * <p>
      * The IPv4 IP and UDP headers are 28 bytes, so the SSU payload area is
      * 620 - 28 = 592, which is 37 whole 16-byte blocks.
-     * PacketBuilder2.buildPacket() requires that alignment for its padding.
+     * {@link net.i2p.router.transport.udp.PacketBuilder2#buildPacket} requires that alignment for its padding.
      * <p>
      * ACKs also have to fit, especially 1 + (4 * MAX_RESEND_ACKS_SMALL), so the
      * max acks are reduced when the small MTU is in use. That is a best effort:
@@ -417,7 +417,7 @@ public class PeerState {
      * covering the fragment block header and four nine-byte ACK allowances).
      * <p>Second, the IPv4 IP and UDP headers are 28 bytes, so the SSU payload
      * area must be a whole number of 16-byte blocks for
-     * PacketBuilder2.buildPacket() to pad correctly. 1480 would leave 1452
+     * {@link net.i2p.router.transport.udp.PacketBuilder2#buildPacket} to pad correctly. 1480 would leave 1452
      * bytes, which is not a multiple of 16; the next aligned size is
      * 1484 - 28 = 1456 = 91 * 16. 1484 is therefore the smallest value that
      * meets both constraints.
@@ -427,23 +427,23 @@ public class PeerState {
     public static final int LARGE_MTU = 1484;
 
     /**
-     * Max of IPv4 and IPv6 max MTUs
+     * Max of IPv4 and IPv6 max MTUs.
      * @since 0.9.28
      */
     public static final int MAX_MTU = Math.max(LARGE_MTU, MAX_IPV6_MTU);
 
-    /** Amount to adjust up or down in adjustMTU() - should be multiple of 16, at least for SSU 1 */
+    /** Amount to adjust up or down in adjustMTU() - should be multiple of 16, at least for SSU 1. */
     private static final int MTU_STEP = 64;
 
     /**
      * Minimum retransmission timeout in milliseconds, configurable via
-     * "i2p.transport.udp.minRTO" and clamped to [100, 2000].
+     * "{@code i2p.transport.udp.minRTO}" and clamped to [100, 2000].
      */
     private static volatile int MIN_RTO = 1000;
-    /** Initial RTO before first RTT sample — configurable via i2p.transport.udp.initRTO */
+    /** Initial RTO before first RTT sample — configurable via {@code i2p.transport.udp.initRTO}. */
     private static volatile int INIT_RTO = 1000;
     private static final int INIT_RTT = 0;
-    /** Maximum retransmission timeout — configurable via i2p.transport.udp.maxRTO */
+    /** Maximum retransmission timeout — configurable via {@code i2p.transport.udp.maxRTO}. */
     private static volatile int MAX_RTO = 60*1000;
     /**
      * Number of MTUs to restart the send window at after an RTO-timeout collapse.
@@ -464,13 +464,13 @@ public class PeerState {
     /**
      * How long send-window growth stays frozen after a path-unverified
      * migration signal (ms). Refreshed while the path remains unverified;
-     * cleared by {@link #pathVerified()} when migration ends.
+     * cleared by {@link #pathVerified} when migration ends.
      * @since 0.9.71+
      */
     static final long PATH_UNVERIFIED_FREEZE_MS = 5000;
     /**
      * Outbound message queue depth per peer, -1 = use router config.
-     * Set by the Tuner when autotuning router.peerOutboundQueueSize.
+     * Set by the Tuner when autotuning {@code router.peerOutboundQueueSize}.
      * @since 0.9.71+
      */
     private static volatile int OUTBOUND_QUEUE_SIZE = -1;
@@ -492,12 +492,12 @@ public class PeerState {
         if (i > 0) return i;
         return ctx.getProperty("router.peerOutboundQueueSize", def);
     }
-    /** How frequently do we want to send ACKs to a peer? (dynamically tuned) */
+    /** How frequently do we want to send ACKs to a peer? (dynamically tuned). */
     private static final AtomicInteger ACK_FREQUENCY = new AtomicInteger(300);
     /**
      * Current ACK frequency.
      *
-     * @return current ACK frequency
+     * @return seconds between ACKs to a peer, dynamically tuned
      * @since 0.9.70+
      */
     public static int getAckFrequency() { return ACK_FREQUENCY.get(); }
@@ -641,17 +641,17 @@ public class PeerState {
      */
     public static int getClockSkewFudge() { return (getAckFrequency() * 2) / 3; }
 
-    /** If this many acks arrive out of order, fast rtx */
+    /** If this many acks arrive out of order, fast rtx. */
     private static final int FAST_RTX_ACKS = 3;
 
-    /** Lock for outbound operations */
+    /** Lock for outbound operations. */
     private final Object _outboundLock = new Object() {
         private static final long serialVersionUID = 1L;
     };
-    /** Lock for inbound operations */
+    /** Lock for inbound operations. */
     protected final Object _inboundLock = new Object();
 
-    /** Reusable lists for finishAndAllocate() — avoids per-volley allocation churn */
+    /** Reusable lists for finishAndAllocate() — avoids per-volley allocation churn. */
     private final List<OutboundMessageState> _succeededBuffer = new ArrayList<>(4);
     private final List<OutboundMessageState> _failedBuffer = new ArrayList<>(4);
 
@@ -771,7 +771,7 @@ public class PeerState {
     /**
      * Whether a failed outbound message counts as a total-first-message
      * failure. Only the first outbound message (sequence number 0) of an
-     * outbound connection can destroy the peer; failures of messages sent to
+     * outbound connection can destroy the peer. Failures of messages sent to
      * an inbound peer are never total. Pure so the destroy decision is
      * unit-testable.
      *
@@ -976,7 +976,7 @@ public class PeerState {
     /**
      * Process failed outbound messages and their side effects, completely
      * outside _outboundLock. Window bytes for unacked fragments are refunded
-     * under _sendWindowBytesRemainingLock (capped at the full window); a total
+     * under _sendWindowBytesRemainingLock (capped at the full window). A total
      * failure of the first outbound message destroys the peer with
      * REASON_FRAME_TIMEOUT and drops it.
      * <p>
@@ -1046,7 +1046,7 @@ public class PeerState {
     boolean hasOutbound() { return _cachedOutboundCount > 0; }
 
     /**
-     * For SSU2
+     * For SSU2.
      *
      * @param ctx the router context, supplying the log manager and tunables
      * @param transport the UDP transport that owns this peer state and can drop the peer
@@ -1108,7 +1108,7 @@ public class PeerState {
 
     /**
      * Change the remote port.
-     * Caller should sync; UDPTransport must remove and add to peersByRemoteHost map
+     * Caller should sync; UDPTransport must remove and add to peersByRemoteHost map.
      *
      * @param newPort the new port number
      * @since 0.9.3
@@ -1149,7 +1149,7 @@ public class PeerState {
     /**
      * Last send time.
      * When did we last send them a packet?
-     * Updated for data, relay, and peer test, but not acks, pings, or termination
+     * Updated for data, relay, and peer test, but not acks, pings, or termination.
      *
      * @return the last send time
      */
@@ -1165,7 +1165,7 @@ public class PeerState {
     /**
      * Last receive time.
      * When did we last receive a packet from them?
-     * Updated for data, relay, and peer test, but not acks, pings, or termination
+     * Updated for data, relay, and peer test, but not acks, pings, or termination.
      *
      * @return the last receive time
      */
@@ -1261,7 +1261,7 @@ public class PeerState {
      * Estimate how large the other side's MTU is.
      * This could be wrong.
      * It is used only for the HTML status.
-     * @return the receive m t u
+     * @return the receive MTU
      */
     public int getReceiveMTU() {return _mtuReceive;}
 
@@ -1290,7 +1290,7 @@ public class PeerState {
     /**
      * Last send time.
      * When did we last send them a packet?
-     * Updated for data, relay, and peer test, but not acks, pings, or termination
+     * Updated for data, relay, and peer test, but not acks, pings, or termination.
      *
      * @param when the time to set
      */
@@ -1299,7 +1299,7 @@ public class PeerState {
     /**
      * Last receive time.
      * When did we last receive a packet from them?
-     * Updated for data, relay, and peer test, but not acks, pings, or termination
+     * Updated for data, relay, and peer test, but not acks, pings, or termination.
      *
      * @param when the time to set
      */
@@ -1325,7 +1325,7 @@ public class PeerState {
     }
 
     /**
-     * The Westwood+ bandwidth estimate
+     * The Westwood+ bandwidth estimate.
      *
      * @param now the current time
      * @return the smoothed send transfer rate
@@ -1334,7 +1334,7 @@ public class PeerState {
 
     /**
      * Receive Bps estimate.
-     * An approximation, for display only
+     * An approximation, for display only.
      *
      * @param now the current time
      * @return the smoothed receive transfer rate
@@ -1379,7 +1379,7 @@ public class PeerState {
      * cannot.  If it is not decremented, the window size remaining is
      * not adjusted at all.
      * <p>
-     * Caller should synch
+     * Caller should synch.
      */
     private boolean allocateSendingBytes(OutboundMessageState state, long now) {
         int messagePushCount = state.getPushCount();
@@ -1408,7 +1408,7 @@ public class PeerState {
 
     /**
      * If we are serving as an introducer to them, this is the the tag that they can publish that,
-     * when presented to us, will cause us to send a relay introduction to the current peer
+     * when presented to us, will cause us to send a relay introduction to the current peer.
      * @param tag 1 to Integer.MAX_VALUE, or 0 if relaying disabled
      */
     void setWeRelayToThemAs(long tag) {_weRelayToThemAs = tag;}
@@ -1421,7 +1421,7 @@ public class PeerState {
 
     /**
      * Slow start threshold.
-     * Stat in SST column, otherwise unused - candidate for removal
+     * Stat in SST column, otherwise unused - candidate for removal.
      *
      * @return the slow start threshold
      */
@@ -1429,7 +1429,7 @@ public class PeerState {
 
     /**
      * Concurrent sends count.
-     * 2nd stat in CWND column, otherwise unused - candidate for removal
+     * 2nd stat in CWND column, otherwise unused - candidate for removal.
      *
      * @return the concurrent sends count
      */
@@ -1440,7 +1440,7 @@ public class PeerState {
     /**
      * Concurrent send window.
      * 3rd stat in CWND column, otherwise unused,
-     * candidate for removal
+     * candidate for removal.
      *
      * @return the concurrent send window
      */
@@ -1450,7 +1450,7 @@ public class PeerState {
 
     /**
      * Consecutive send rejections count.
-     * 4th stat in CWND column, otherwise unused - candidate for removal
+     * 4th stat in CWND column, otherwise unused - candidate for removal.
      *
      * @return the consecutive send rejections count
      */
@@ -1538,7 +1538,7 @@ public class PeerState {
     /**
      * Expire partially received inbound messages, returning how many are still pending.
      * This should probably be fired periodically, in case a peer goes silent and we don't
-     * try to send them any messages (and don't receive any messages from them either)
+     * try to send them any messages (and don't receive any messages from them either).
      *
      * @return the number of partially received inbound messages still pending
      */
@@ -1562,7 +1562,7 @@ public class PeerState {
 
     /**
      * Either they told us to back off, or we had to resend to get the data through.
-     * Caller should synch on this
+     * Caller should synch on this.
      */
     private void congestionOccurred() {
         long now = _context.clock().now();
@@ -1754,7 +1754,7 @@ public class PeerState {
 
     /**
      * We sent a message which was ACKed containing the given # of bytes.
-     * Caller should synch on this
+     * Caller should synch on this.
      */
     private void locked_messageACKed(int bytesACKed, int maxPktSz, long lifetime, int numSends, boolean anyPending, boolean anyQueued) {
         _consecutiveFailedSends = 0;
@@ -1823,12 +1823,12 @@ public class PeerState {
         }
     }
 
-    /** This is the value specified in RFC 2988 */
+    /** This is the value specified in RFC 2988. */
     private static final float RTT_DAMPENING = 0.125f;
 
     /**
      * Adjust the tcp-esque timeouts.
-     * Caller should synch on this
+     * Caller should synch on this.
      *
      * @param lifetime network RTT — time from first send to ACK (excludes queue time)
      */
@@ -1903,7 +1903,7 @@ public class PeerState {
      * Adjust upward if a large packet was successfully sent without retransmission.
      * Adjust downward if a packet was retransmitted.
      * <p>
-     * Caller should synch on this
+     * Caller should synch on this.
      *
      * @param maxPktSz the largest packet that was sent
      * @param success was it sent successfully?
@@ -2024,7 +2024,7 @@ public class PeerState {
     /**
      * Clamp a raw RTO estimate into the active [minRto, maxRto] window.
      * <p>
-     * Extracted from {@link #getRTO()} so telemetry can report the value a
+     * Extracted from {@link #getRTO} so telemetry can report the value a
      * packet actually waits under — raw estimates can sit outside the window
      * (set at INIT_RTO, then re-clamped only on the next RTT sample) and
      * would otherwise make the effective-vs-raw comparison untestable.
@@ -2134,9 +2134,9 @@ public class PeerState {
     /**
      * Hold send-window growth while the path is unverified (SSU2 connection
      * migration, {@code limitSending}). Freezes growth only for a short window;
-     * does not collapse CWIN or adjust RTO — migration is a path change, not
+     * does not collapse CWIN or adjust RTO. Migration is a path change, not
      * congestion, and a full collapse thrashes multi-homed peers.
-     * Growth resumes via {@link #pathVerified()} or when the freeze expires.
+     * Growth resumes via {@link #pathVerified} or when the freeze expires.
      * @since 0.9.71+
      */
     void pathUnverified() {
@@ -2155,7 +2155,7 @@ public class PeerState {
     }
 
     /**
-     * Same as setLastReceivedTime(now)
+     * Same as setLastReceivedTime(now).
      */
     void dataReceived() {_lastReceiveTime = _context.clock().now();}
 
@@ -2167,7 +2167,7 @@ public class PeerState {
     public long getLastACKSend() {return _lastACKSend;}
 
     /**
-     * All acks have been sent - SSU 1 only, see override
+     * All acks have been sent - SSU 1 only, see override.
      *
      * @since 0.9.52
      */
@@ -2302,7 +2302,7 @@ public class PeerState {
     }
 
     /**
-     * Packet overhead plus room for acks
+     * Packet overhead plus room for acks.
      * @return 87 (IPv4), 107 (IPv6)
      * @since 0.9.49
      */
@@ -2313,7 +2313,7 @@ public class PeerState {
     }
 
     /**
-     * Locks this
+     * Locks this.
      */
     private boolean locked_shouldSend(OutboundMessageState state, long now) {
         if (allocateSendingBytes(state, now)) {
@@ -2447,7 +2447,7 @@ public class PeerState {
 
     /**
      * Enter or leave fast retransmit mode, and adjust SST and window variables accordingly.
-     * See RFC 5681 sec. 2.4
+     * See RFC 5681 sec. 2.4.
      *
      * @param highest the highest sequence number that was acked
      * @return true if we have something to fast-retransmit
@@ -2516,7 +2516,7 @@ public class PeerState {
 
     /**
      * Leave fast retransmit mode if we were in it, and adjust SST and window variables accordingly.
-     * See RFC 5681 sec. 2.4
+     * See RFC 5681 sec. 2.4.
      *
      * @since 0.9.49
      */
@@ -2534,7 +2534,7 @@ public class PeerState {
     }
 
     /**
-     * SSU 2 only
+     * SSU 2 only.
      *
      * @return whether request immediate ack
      * @since 0.9.56
@@ -2579,7 +2579,7 @@ public class PeerState {
     }
 
     /**
-     * Convenience for OutboundMessageState so it can fail itself
+     * Convenience for OutboundMessageState so it can fail itself.
      *
      * @return the UDPTransport this peer state belongs to
      * @since 0.9.3

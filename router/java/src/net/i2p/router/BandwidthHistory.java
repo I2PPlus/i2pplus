@@ -24,21 +24,21 @@ import net.i2p.util.SimpleTimer2;
  * flushes to /tmp/i2p-bandwidth.dat every 60 seconds so data survives
  * page refreshes and router restarts.
  * <p>
- * Started automatically by Router.startup().
- * Accessed by SidebarRenderer.getDataAttributes() to populate the
+ * Started automatically during router startup.
+ * Accessed by {@link net.i2p.router.web.helpers.SidebarRenderer#getDataAttributes} to populate the
  * canvas minigraph with real data instead of interpolated RRD points.
  *
  * @since 0.9.70+
  */
 public class BandwidthHistory extends SimpleTimer2.TimedEvent {
 
-    /** Buffer: 1200 entries = 20 min at 1s */
+    /** Buffer: 1200 entries = 20 min at 1s. */
     public static final int CAPACITY = 1200;
-    /** Sample once per second */
+    /** Sample once per second. */
     public static final long SAMPLE_INTERVAL = 1000;
-    /** Flush to disk every 60s */
+    /** Flush to disk every 60s. */
     private static final long FLUSH_INTERVAL = 60 * 1000;
-    /** Discard file data older than 30 min */
+    /** Discard file data older than 30 min. */
     private static final long MAX_FILE_AGE = 30L * 60 * 1000;
     private static final Pattern COMMA_SPLIT = Pattern.compile(",");
     private static final String FILE_NAME = "i2p-bandwidth.dat";

@@ -8,9 +8,9 @@ import java.util.Locale;
 import java.util.TimeZone;
 
 /**
- *  Moved from NewsFetcher
+ * Moved from NewsFetcher.
  *
- *  @since 0.8.5; moved from net.i2p.router.util in 0.9.34
+ * @since 0.8.5; moved from net.i2p.router.util in 0.9.34
  */
 public abstract class RFC822Date {
     /**
@@ -63,7 +63,7 @@ public abstract class RFC822Date {
     }
 
     /**
-     * Format is "d MMM yyyy HH:mm:ss z"
+     * Format is "d MMM yyyy HH:mm:ss z".
      *
      * @param t the time to format, in milliseconds since the epoch
      * @return the date rendered as an RFC 822 string in the local time zone

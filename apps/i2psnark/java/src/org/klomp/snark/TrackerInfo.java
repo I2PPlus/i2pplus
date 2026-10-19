@@ -29,7 +29,7 @@ class TrackerInfo {
     private final int interval;
     /**
      * The peers from the response, unmodifiable and never null: a failure response has no
-     * peers, and is reported by {@link #getFailureReason()} instead.
+     * peers, and is reported by {@link #getFailureReason} instead.
      */
     private final Set<Peer> peers;
     private int complete;
@@ -127,7 +127,7 @@ class TrackerInfo {
     }
 
     /**
-     * To convert returned UDPTracker data to the standard structure
+     * To convert returned UDPTracker data to the standard structure.
      *
      * @param hashes may be null
      * @param interval seconds to wait before re-announcing, from the tracker's response
@@ -160,7 +160,7 @@ class TrackerInfo {
         failure_reason = error;
     }
 
-    /** List of Dictionaries or List of Strings */
+    /** List of Dictionaries or List of Strings. */
     private static Set<Peer> getPeers(
             List<BEValue> l, byte[] my_id, byte[] infohash, MetaInfo metainfo, I2PSnarkUtil util)
             throws IOException {
@@ -186,10 +186,10 @@ class TrackerInfo {
     private static final int HASH_LENGTH = 32;
 
     /**
-     * One big string of concatenated 32-byte hashes
+     * One big string of concatenated 32-byte hashes.
      *
      * @return a peer for each whole 32-byte hash in the array, skipping any that fail to
-     *         parse as a peer ID; a trailing partial hash is ignored
+     * parse as a peer ID; a trailing partial hash is ignored
      * @since 0.8.1
      */
     private static Set<Peer> getPeers(
@@ -215,7 +215,7 @@ class TrackerInfo {
     }
 
     /**
-     * From Hash to Peer
+     * From Hash to Peer.
      *
      * @return a peer for each hash, empty if {@code hashes} is null
      * @since 0.9.14
@@ -276,7 +276,7 @@ class TrackerInfo {
     /**
      * The seed count.
      *
-     * @return the seed count
+     * @return number of complete peers (seeds) from the last reply
      * @since 0.9.9
      */
     public int getSeedCount() {
@@ -286,7 +286,7 @@ class TrackerInfo {
     /**
      * The leech count.
      *
-     * @return the leech count
+     * @return number of incomplete peers (leeches) from the last reply
      * @since 0.9.71+
      */
     public int getLeechCount() {

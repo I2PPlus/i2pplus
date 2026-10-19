@@ -18,7 +18,7 @@ public interface IncomingConnectionFilter {
     public boolean allowDestination(Destination d);
 
     /**
-     * Utility implementation that allows all incoming connections
+     * Utility implementation that allows all incoming connections.
      */
     public static final IncomingConnectionFilter ALLOW =
         new IncomingConnectionFilter() {
@@ -28,7 +28,7 @@ public interface IncomingConnectionFilter {
         };
 
     /**
-     * Utility implementation that denies all incoming connections
+     * Utility implementation that denies all incoming connections.
      */
     public static final IncomingConnectionFilter DENY =
         new IncomingConnectionFilter() {

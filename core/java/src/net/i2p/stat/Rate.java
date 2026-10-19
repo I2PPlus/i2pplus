@@ -18,12 +18,12 @@ import java.util.List;
  * If value is always a constant, you should be using Frequency instead.
  * <p><b>Step arithmetic.</b> A rate's RRD database is created with an archive step
  * of {@code period/1000}, so the archive step index a sample belongs to is exactly
- * {@link #archiveStep archiveStep}(timestampMs, period). {@link #coalesce()}
+ * {@link #archiveStep archiveStep}(timestampMs, period). {@link #coalesce}
  * stamps each sample with the step it is actually <em>due</em> for rather than
  * with the current wall clock, so consecutive coalesces land in consecutive steps
  * even when the coalesce timer drifts relative to the period; see
  * {@link #coalesceDueMs}. A backlog too large to replay is collapsed into the
- * current step and counted by {@link #getCoalesceBacklogCollapses()}, because a
+ * current step and counted by {@link #getCoalesceBacklogCollapses}, because a
  * rate keeps only the current partial period and cannot reconstruct the steps it
  * missed.
  * <p><b>What a listener receives.</b> {@link RateSummaryListener#add} cannot carry
@@ -138,10 +138,10 @@ public class Rate {
     private volatile long _creationDate;
     private volatile int _period;
     /**
-     * How many times {@link #coalesce()} declined to coalesce because the period
+     * How many times {@link #coalesce} declined to coalesce because the period
      * had not elapsed. A rapidly climbing value on a rate that should be
      * coalescing means the period or the last-coalesce timestamp is wrong; see
-     * {@link #getCoalesceSkips()}.
+     * {@link #getCoalesceSkips}.
      */
     private volatile long _coalesceSkips;
     /**
@@ -174,12 +174,12 @@ public class Rate {
     /**
      * Off-timer delivery for the summary listener, owned by {@link StatManager}
      * and injected into every rate it creates. Null in tests and in standalone use,
-     * in which case the listener is called inline from {@link #coalesce()}.
+     * in which case the listener is called inline from {@link #coalesce}.
      */
     private volatile RateSampleDelivery _delivery;
 
     /**
-     * Number of {@link #coalesce()} calls that declined to coalesce because the
+     * Number of {@link #coalesce} calls that declined to coalesce because the
      * rate period had not yet elapsed.
      * <p>One skip per cycle is normal — the coalesce timer does not divide evenly
      * into the rate period, so most periods are visited once before they are due
@@ -194,7 +194,7 @@ public class Rate {
     }
 
     /**
-     * Number of {@link #coalesce()} calls that actually coalesced.
+     * Number of {@link #coalesce} calls that actually coalesced.
      * <p>Paired with a storage listener's own written-step count, this is the
      * ledger invariant: the two must agree over the window since that listener
      * attached, and any positive drift is a step that was never recorded.
@@ -207,7 +207,7 @@ public class Rate {
     }
 
     /**
-     * How many steps {@link #coalesce()} gave up on because the timer had been
+     * How many steps {@link #coalesce} gave up on because the timer had been
      * starved for more than one whole period.
      * <p>Each one is a whole period of aggregate data that will never reach
      * storage: a rate holds only the current partial period, so the steps it
@@ -287,7 +287,7 @@ public class Rate {
      * <p>Replaying the missed steps is not an option: a rate retains only the
      * current partial period, so the aggregates for steps already gone were never
      * held anywhere. Writing the backlog into the current step is the only
-     * honest choice, and {@link #getCoalesceBacklogCollapses()} makes the gap
+     * honest choice, and {@link #getCoalesceBacklogCollapses} makes the gap
      * visible instead of leaving it as a hole in the graph.
      *
      * @param now wall-clock ms of this coalesce visit
@@ -419,7 +419,7 @@ public class Rate {
     /**
      * The instant this rate's period grid has reached, which is the step the next
      * coalesce is due for. Advances by exactly one period per coalesce so the
-     * archive steps stay aligned; see {@link #getLastCoalesceNow()} for the wall
+     * archive steps stay aligned; see {@link #getLastCoalesceNow} for the wall
      * clock of the visit itself.
      *
      * @return the current grid instant in ms
@@ -439,7 +439,7 @@ public class Rate {
 
     /**
      * Wall clock of the last successful coalesce, as distinct from the period grid
-     * instant that {@link #getLastCoalesceDate()} now reports.
+     * instant that {@link #getLastCoalesceDate} now reports.
      *
      * @return the wall clock ms of the last successful coalesce
      * @since 0.9.71+
@@ -527,7 +527,7 @@ public class Rate {
     }
 
     /**
-     * Accrue the data in current period as if the event took the specified amount of time
+     * Accrue the data in current period as if the event took the specified amount of time.
      * If value is always a constant, you should be using Frequency instead.
      * If eventDuration is nonzero, then the various get*Saturation*() and get*EventTime()
      * methods will also return nonzero.
@@ -568,7 +568,7 @@ public class Rate {
         _lifetimeTotalEventTime += eventDuration;
     }
 
-    /** 2s is plenty of slack to deal with slow coalescing (across many stats) */
+    /** 2s is plenty of slack to deal with slow coalescing (across many stats). */
     private static final int SLACK = 2000;
 
     /**
@@ -585,7 +585,7 @@ public class Rate {
      * ({@link #coalesceDueMs}) and the grid is advanced to that same instant, so
      * the steps stay exactly one period apart however much the timer drifts. A
      * backlog deeper than one period cannot be replayed and is collapsed into the
-     * current step instead, counted by {@link #getCoalesceBacklogCollapses()}.
+     * current step instead, counted by {@link #getCoalesceBacklogCollapses}.
      * <p>Being on the grid makes a rate coalesce once per period even when the
      * timer visits more often than the period elapses, which is the point: an RRD
      * holds one value per step, so the samples that used to land two steps apart
@@ -878,7 +878,7 @@ public class Rate {
     /**
      * What was the total value, compared to the total value in
      * the extreme period (i.e. the period with the highest total value),
-     * Warning- returns ratio, not percentage (i.e. it is not multiplied by 100 here)
+     * Warning- returns ratio, not percentage (i.e. it is not multiplied by 100 here).
      *
      * @return ratio of last total to extreme total, or 0 if no data
      */
@@ -890,7 +890,7 @@ public class Rate {
 
     /**
      * How large was the last period's value as compared to the lifetime average value?
-     * Warning- returns ratio, not percentage (i.e. it is not multiplied by 100 here)
+     * Warning- returns ratio, not percentage (i.e. it is not multiplied by 100 here).
      *
      * @return ratio of last period value to lifetime average period value, or 0 if no data
      */
@@ -945,7 +945,7 @@ public class Rate {
 
     /**
      * Stores the rate data to a string builder.
-     * Includes comment lines
+     * Includes comment lines.
      *
      * @param prefix prefix to the property entries (should NOT end with a period)
      * @param buf the builder the properties are appended to

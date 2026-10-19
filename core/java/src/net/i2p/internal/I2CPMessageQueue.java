@@ -16,7 +16,6 @@ import java.io.Closeable;
  * Reading may be done in a thread using the QueuedI2CPMessageReader class.
  * Non-blocking writing may be done directly with offer().
  *
- * @author zzz
  * @since 0.8.3
  */
 public abstract class I2CPMessageQueue implements Closeable {

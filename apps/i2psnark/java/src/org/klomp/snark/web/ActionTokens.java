@@ -25,10 +25,10 @@ import java.util.Map;
  */
 public final class ActionTokens {
 
-    /** b64 names of 32-byte hashes are 44 chars incl. one '=' pad; tokens stop before it */
+    /** Base64 of a 32-byte hash is 44 chars including one '=' pad; tokens stop before it. */
     private static final int MAX_TOKEN_LEN = 43;
 
-    /** Floor for readability/stability: tokens shorter than this are too collision-prone */
+    /** Floor for readability/stability: tokens shorter than this are too collision-prone. */
     private static final int MIN_TOKEN_LEN = 4;
 
     private ActionTokens() {}

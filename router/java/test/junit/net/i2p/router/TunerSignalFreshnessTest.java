@@ -56,7 +56,7 @@ public class TunerSignalFreshnessTest {
     /**
      * The case an event-count equality gate fails. Two consecutive windows closing
      * with identical event counts are still two windows, and the second one is new
-     * evidence. Keyed on the close time this holds; keyed on the counts it would
+     * evidence. Keyed on the close time this holds. Keyed on the counts it would
      * not.
      */
     @Test

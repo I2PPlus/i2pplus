@@ -110,7 +110,7 @@ public class Blocklist {
      * Tor exit nodes blocklist filename.
      */
     public static final String BLOCKLIST_FILE_TOR_EXITS = "blocklist_tor.txt";
-    /** Feed blocklist file path */
+    /** Feed blocklist file path. */
     private static final String BLOCKLIST_FEED_FILE = "docs/feed/blocklist/blocklist.txt";
     /** Country-based blocklist filename.
      * @since 0.9.48
@@ -120,7 +120,7 @@ public class Blocklist {
     /**
      * Limits of transient (in-memory) blocklists.
      * Note that it's impossible to prevent clogging up
-     * the tables by a determined attacker, esp. on IPv6
+     * the tables by a determined attacker, esp. on IPv6.
      * @return whether the limits below are halved on a slow system
      */
     private static final int MAX_IPV4_SINGLES = SystemVersion.isSlow() ? 2048 : 8192;
@@ -132,27 +132,27 @@ public class Blocklist {
     private static final Object DUMMY = Integer.valueOf(0);
 
     /**
-     * For Update Manager
+     * For Update Manager.
      *
      * @since 0.9.48
      */
     public static final String ID_FEED = "feed";
-    /** System blocklist ID */
+    /** System blocklist ID. */
     private static final String ID_SYSTEM = "system";
-    /** User-configured blocklist ID */
+    /** User-configured blocklist ID. */
     private static final String ID_LOCAL = "local";
-    /** Country-based blocklist ID */
+    /** Country-based blocklist ID. */
     private static final String ID_COUNTRY = "country";
-    /** User-specified blocklist ID */
+    /** User-specified blocklist ID. */
     private static final String ID_USER = "user";
-    /** Sybil attack blocklist ID */
+    /** Sybil attack blocklist ID. */
     public static final String ID_SYBIL = "sybil";
-    /** Tor exit nodes blocklist ID */
+    /** Tor exit nodes blocklist ID. */
     public static final String ID_TOR = "tor";
 
     /**
      * Constructor.
-     * Router MUST call startup()
+     * Router MUST call startup().
      *
      * @param context the router context
      */
@@ -279,7 +279,7 @@ public class Blocklist {
      * ~/.i2p/blocklist.txt
      * ~/.i2p/docs/feed/blocklist/blocklist.txt
      * ~/.i2p/blocklist-countries.txt
-     * File if specified with router.blocklist.file
+     * File if specified with {@code router.blocklist.file}.
      */
     public synchronized void startup() {
         if (_started) {return;}
@@ -346,6 +346,8 @@ public class Blocklist {
     }
 
     /**
+     * A blocklist file and its parsed contents.
+     *
      * @since 0.9.48
      */
     private static class BLFile {
@@ -356,7 +358,7 @@ public class Blocklist {
     }
 
     /**
-     * Delay telling update manager until it's there
+     * Delay telling update manager until it's there.
      *
      * @since 0.9.48
      */
@@ -410,6 +412,8 @@ public class Blocklist {
         private final List<BLFile> _files;
 
         /**
+         * Creates the job that reads blocklist files at startup.
+         *
          * @param files not necessarily existing, but avoid dups
          */
         public ReadinJob (List<BLFile> files) {
@@ -656,6 +660,8 @@ public class Blocklist {
     }
 
     /**
+     * Merge a new blocklist into the existing one, returning the new entry count.
+     *
      * @param count valid entries in blocklist before merge
      * @return count valid entries in blocklist after merge
      * @since 0.9.18 split out from readBlocklistFile()
@@ -704,6 +710,8 @@ public class Blocklist {
         final Hash peer;
 
         /**
+         * Creates an entry from its fields.
+         *
          * @param c the free-text note carried over into the ban reason, may be null
          * @param h the router hash (may be null)
          * @param i1 the starting IP
@@ -718,7 +726,7 @@ public class Blocklist {
     }
 
     /**
-     * Parse one line, returning a temp data structure with the result
+     * Parse one line, returning a temp data structure with the result.
      */
     private Entry parse(String buf, boolean shouldLog) { // NOSONAR S3012: called from readBlocklistFile() and banlistRouter()
         byte[] ip1;
@@ -961,6 +969,8 @@ public class Blocklist {
     }
 
     /**
+     * Remove an IP from the in-memory blocklist.
+     *
      * @since 0.9.28
      */
     private void remove(int ip) {
@@ -1119,7 +1129,7 @@ public class Blocklist {
     /**
      * First check the single-IP list. Then do a binary search through the in-memory range list which
      * is a sorted array of longs. The array is sorted in signed order, but we don't care.
-     * Each long is ((from << 32) | to)
+     * Each long is ((from << 32) | to).
      * @return true if the IP is on a single-IP, country, permanent or Tor list
      */
     private synchronized boolean isBlocklisted(int ip) {
@@ -1144,7 +1154,7 @@ public class Blocklist {
     /**
      * Do a binary search through the in-memory range list which is a sorted array of longs.
      * The array is sorted in signed order, but we don't care.
-     * Each long is ((from << 32) | to)
+     * Each long is ((from << 32) | to).
      *
      * @return whether permanently blocklisted
      * @since 0.9.48 split out from above
@@ -1440,7 +1450,7 @@ public class Blocklist {
     /**
      * Single IPs blocked until restart. Unsorted.
      * <p>
-     * Public for console only, not a public API
+     * Public for console only, not a public API.
      *
      * @return a copy, unsorted
      * @since 0.9.48
@@ -1456,7 +1466,7 @@ public class Blocklist {
     /**
      * IP ranges blocked until restart. Sorted, but as signed longs, so 128-255 are first
      * <p>
-     * Public for console only, not a public API
+     * Public for console only, not a public API.
      *
      * @param max maximum entries to return
      * @return a copy, sorted

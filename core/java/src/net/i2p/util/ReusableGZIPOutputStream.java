@@ -32,7 +32,7 @@ public class ReusableGZIPOutputStream extends ResettableGZIPOutputStream {
     }
 
     /**
-     * Pull a cached instance
+     * Pull a cached instance.
      * @return a stream from the pool, or a newly allocated one when the pool is empty or caching is disabled
      */
     public static ReusableGZIPOutputStream acquire() {
@@ -46,7 +46,7 @@ public class ReusableGZIPOutputStream extends ResettableGZIPOutputStream {
 
     /**
      * Release an instance back into the cache (this will discard any
-     * state)
+     * state).
      * @param out the stream to return to the pool; it is destroyed instead if the pool is disabled or full
      */
     public static void release(ReusableGZIPOutputStream out) {

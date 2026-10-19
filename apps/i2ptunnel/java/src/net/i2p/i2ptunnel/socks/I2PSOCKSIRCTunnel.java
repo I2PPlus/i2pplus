@@ -50,7 +50,7 @@ public class I2PSOCKSIRCTunnel extends I2PSOCKSTunnel {
 
     /**
      * Same as in I2PSOCKSTunnel, but run the filters from I2PTunnelIRCClient
-     * instead of I2PTunnelRunner
+     * instead of I2PTunnelRunner.
      */
     @Override
     protected void clientConnectionRun(Socket s) {

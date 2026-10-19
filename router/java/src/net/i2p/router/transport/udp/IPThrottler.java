@@ -29,10 +29,10 @@ class IPThrottler {
     }
 
     /**
-     *  Increments before checking
+     * Increments before checking.
      *
-     *  @param ip the IP address bytes
-     *  @return true if the IP should be throttled
+     * @param ip the IP address bytes
+     * @return true if the IP should be throttled
      */
     public boolean shouldThrottle(byte[] ip) {
         // for IPv4 we simply use the IP;
@@ -52,7 +52,7 @@ class IPThrottler {
         return Integer.valueOf(rv);
     }
 
-    /** Hash an IP address for throttling */
+    /** Hash an IP address for throttling. */
     private static Integer hashCode(byte[] ip) {
         int rv = 0;
         for (int i = 0; i < 8; i++) {

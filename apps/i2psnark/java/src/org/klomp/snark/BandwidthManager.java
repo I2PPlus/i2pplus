@@ -6,7 +6,7 @@ import net.i2p.util.Log;
 import net.i2p.util.SyntheticREDQueue;
 
 /**
- * Bandwidth and bandwidth limits
+ * Bandwidth and bandwidth limits.
  *
  * <p>Maintain three bandwidth estimators: Sent, received, and requested.
  *
@@ -32,8 +32,8 @@ import net.i2p.util.SyntheticREDQueue;
  * <p>Only the following data are counted by the BandwidthListeners:
  *
  * <ul>
- *   <li>Pieces (both Peer and WebPeer)
- *   <li>ut_metadata
+ * <li>Pieces (both Peer and WebPeer)
+ * <li>ut_metadata
  * </ul>
  *
  * No overhead at any layer is accounted for.
@@ -70,7 +70,7 @@ public class BandwidthManager implements BandwidthListener {
     }
 
     /**
-     * Current limit in Bps
+     * Current limit in Bps.
      *
      * @param upLimit the new upload limit in Bps, truncated to Integer.MAX_VALUE
      */
@@ -80,7 +80,7 @@ public class BandwidthManager implements BandwidthListener {
     }
 
     /**
-     * Current limit in Bps
+     * Current limit in Bps.
      *
      * @param downLimit the new download limit in Bps, truncated to Integer.MAX_VALUE
      */
@@ -93,7 +93,7 @@ public class BandwidthManager implements BandwidthListener {
     }
 
     /**
-     * The average rate in Bps
+     * The average rate in Bps.
      *
      * @return the estimated rate at which peers request data from us, in Bps
      */
@@ -103,25 +103,25 @@ public class BandwidthManager implements BandwidthListener {
 
     // begin BandwidthListener interface
 
-    /** The average rate in Bps */
+    /** The average rate in Bps. */
     @Override
     public long getUploadRate() {
         return (long) (1000f * _up.getBandwidthEstimate());
     }
 
-    /** The average rate in Bps */
+    /** The average rate in Bps. */
     @Override
     public long getDownloadRate() {
         return (long) (1000f * _down.getBandwidthEstimate());
     }
 
-    /** We unconditionally sent this many bytes */
+    /** We unconditionally sent this many bytes. */
     @Override
     public void uploaded(int size) {
         _up.addSample(size);
     }
 
-    /** We received this many bytes */
+    /** We received this many bytes. */
     @Override
     public void downloaded(int size) {
         _down.addSample(size);
@@ -168,13 +168,13 @@ public class BandwidthManager implements BandwidthListener {
         return rv;
     }
 
-    /** Current limit in BPS */
+    /** Current limit in BPS. */
     @Override
     public long getUpBWLimit() {
         return _up.getMaxBandwidth();
     }
 
-    /** Current limit in BPS */
+    /** Current limit in BPS. */
     @Override
     public long getDownBWLimit() {
         return _down.getMaxBandwidth();
@@ -192,7 +192,7 @@ public class BandwidthManager implements BandwidthListener {
         return getDownloadRate() > getDownBWLimit();
     }
 
-    /** In HTML for debug page */
+    /** In HTML for debug page. */
     @Override
     public String toString() {
         String separator = " <span class=bullet>&nbsp;&bullet;&nbsp;</span> ";

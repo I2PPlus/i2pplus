@@ -25,7 +25,7 @@ import net.i2p.util.LogManager;
  * - repeat timeouts never lengthen that cooldown
  * - the cooldown is snapshotted at mark time (state changes don't extend it)
  * - success and clearGhost release the peer
- * - the router itself is never tracked
+ * - the router itself is never tracked.
  */
 public class GhostPeerManagerTest {
 

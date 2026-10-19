@@ -7,7 +7,7 @@ package org.klomp.snark;
 import java.io.Serializable;
 
 /**
- * A structure for torrent creation filters
+ * A structure for torrent creation filters.
  *
  * @since 0.9.62+
  */

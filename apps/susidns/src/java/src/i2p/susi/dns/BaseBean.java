@@ -21,17 +21,17 @@ import net.i2p.util.OrderedProperties;
  * @since 0.9.1
  */
 public class BaseBean {
-    /** The I2P application context */
+    /** The I2P application context. */
     protected final I2PAppContext _context;
-    /** The configuration properties */
+    /** The configuration properties. */
     protected final Properties properties;
-    /** The current action */
+    /** The current action. */
     protected String action;
-    /** The last serial number for CSRF */
+    /** The last serial number for CSRF. */
     protected String lastSerial;
-    /** The serial number */
+    /** The serial number. */
     protected String serial;
-    /** The HTTP method */
+    /** The HTTP method. */
     protected String method;
     private long configLastLoaded;
     private static final String PRIVATE_BOOK = "private_addressbook";
@@ -40,7 +40,7 @@ public class BaseBean {
     private static final String PROP_THEME_NAME = "theme";
     private static final String DEFAULT_THEME = "dark";
     private static final String BASE_THEME_PATH = "/themes/susidns/";
-    /** Property for password enable */
+    /** Property for password enable. */
     public static final String PROP_PW_ENABLE = "routerconsole.auth.enable";
     private static final String RC_PROP_ENABLE_SORA_FONT = "routerconsole.displayFontSora";
     private static final String ADDRESSBOOK_DIR = "addressbook";
@@ -62,8 +62,8 @@ public class BaseBean {
     protected File addressbookDir() {return new File(_context.getRouterDir(), ADDRESSBOOK_DIR);}
 
     /**
-     * Returns the config file.
-     * @return the config file
+     * The addressbook configuration file.
+     * @return the file, which may not exist
      * @since 0.9.13 moved from ConfigBean.configFileName
      */
     protected File configFile() {return new File(addressbookDir(), CONFIG_FILE);}
@@ -104,7 +104,7 @@ public class BaseBean {
     }
 
     /**
-     * Returns the theme path
+     * Returns the theme path.
      * @return the theme path
      * @since 0.9.1
      */
@@ -130,8 +130,8 @@ public class BaseBean {
     }
 
     /**
-     * Returns the theme name
-     * @return the theme name
+     * The configured console theme name.
+     * @return the theme name, never null, falling back to the default theme
      * @since 0.9.64+
      */
     public String getThemeName() {
@@ -148,7 +148,7 @@ public class BaseBean {
     }
 
     /**
-     * Get all themes
+     * Get all themes.
      * @return String[] -- Array of all the themes found.
      * @since 0.9.2
      */
@@ -176,7 +176,7 @@ public class BaseBean {
     public boolean useSoraFont() {return _context.getBooleanProperty(RC_PROP_ENABLE_SORA_FONT);}
 
     /**
-     * Determine if a user-provided override.css file is active
+     * Determine if a user-provided override.css file is active.
      * @return true if override.css is active
      * @since 0.9.65+
      */

@@ -26,7 +26,7 @@ public class Comment implements Comparable<Comment> {
     private static final AtomicInteger _id = new AtomicInteger();
     private final int id = _id.incrementAndGet();
 
-    /** Maximum length of a commenter name */
+    /** Maximum length of a commenter name. */
     public static final int MAX_NAME_LEN = 32;
     // same as IRC, more or less
     private static final int MAX_TEXT_LEN = 512;
@@ -37,7 +37,7 @@ public class Comment implements Comparable<Comment> {
     private static final long TIME_OFFSET = 1104537600000L;
 
     /**
-     * My comment, now
+     * My comment, now.
      *
      * @param text may be null, will be truncated to max length, newlines replaced with spaces
      * @param name may be null, will be truncated to max length, newlines and commas removed
@@ -146,7 +146,7 @@ public class Comment implements Comparable<Comment> {
     }
 
     /**
-     * Returns a unique ID for this comment, usable with CommentSet.remove(int).
+     * Returns a unique ID for this comment, usable with {@link org.klomp.snark.comments.CommentSet#remove}int).
      * Not persisted across restarts.
      *
      * @return the unique ID

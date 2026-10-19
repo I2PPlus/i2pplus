@@ -212,7 +212,7 @@ public class FloodfillPeerSelector extends PeerSelector {
      * lookup fail rate no more than 1.5 * average
      * Group 2: No store or lookup failure in a little while or
      * success newer than failure
-     * Group 3: All others
+     * Group 3: All others.
      *
      * @param key the ROUTING key (NOT the original key)
      * @param maxNumRouters max to return
@@ -722,7 +722,7 @@ public class FloodfillPeerSelector extends PeerSelector {
         private final Map<Hash, RouterInfo> _infoCache = new HashMap<>(64);
 
         /**
-         * Warning - may return our router hash - add to toIgnore if necessary
+         * Warning - may return our router hash - add to toIgnore if necessary.
          * @param key the ROUTING key (NOT the original key)
          * @param toIgnore can be null
          */
@@ -764,7 +764,7 @@ public class FloodfillPeerSelector extends PeerSelector {
          * The list is in 3 groups - unsorted (shuffled) within each group.
          * Group 1: NetDb published less than 3h ago, no bad send in last 30m.
          * Group 2: All others
-         * Group 3: Non-floodfills, sorted by closest-to-the-key
+         * Group 3: Non-floodfills, sorted by closest-to-the-key.
          *
          * @param howMany the maximum number of entries to return
          * @return the list of matching peer hashes
@@ -837,7 +837,7 @@ public class FloodfillPeerSelector extends PeerSelector {
      * Floodfill peers only. Used only by HandleDatabaseLookupMessageJob to populate the DSRM.
      * UNLESS peersToIgnore contains Hash.FAKE_HASH (all zeros), in which case this is an exploratory
      * lookup, and the response should not include floodfills.
-     * List MAY INCLUDE our own router - add to peersToIgnore if you don't want
+     * List MAY INCLUDE our own router - add to peersToIgnore if you don't want.
      *
      * @param key the original key (NOT the routing key)
      * @param peersToIgnore can be null
@@ -860,7 +860,7 @@ public class FloodfillPeerSelector extends PeerSelector {
 
     /**
      * Extract IP:port from RouterInfo.
-     * @return the i p from router info
+     * @return the IP from router info
      */
     private String getIPFromRouterInfo(RouterInfo ri) {
         if (ri == null) return null;

@@ -8,7 +8,7 @@ import net.i2p.data.DataHelper;
 
 /**
  * ChaCha20, wrapper around Noise ChaChaCore.
- * RFC 7539
+ * RFC 7539.
  *
  * @since 0.9.39
  */
@@ -43,7 +43,7 @@ public final class ChaCha20 {
     private ChaCha20() {}
 
     /**
-     * Encrypt from plaintext to ciphertext
+     * Encrypt from plaintext to ciphertext.
      *
      * @param key first 32 bytes used as the key
      * @param iv first 12 bytes used as the iv
@@ -58,7 +58,7 @@ public final class ChaCha20 {
     }
 
     /**
-     * Encrypt from plaintext to ciphertext
+     * Encrypt from plaintext to ciphertext.
      *
      * @param key first 32 bytes used as the key
      * @param iv first 12 bytes starting at ivOffset used as the iv
@@ -97,7 +97,7 @@ public final class ChaCha20 {
     }
 
     /**
-     * Encrypt from ciphertext to plaintext
+     * Encrypt from ciphertext to plaintext.
      *
      * @param key first 32 bytes used as the key
      * @param iv first 12 bytes used as the iv
@@ -113,7 +113,7 @@ public final class ChaCha20 {
     }
 
     /**
-     * Encrypt from ciphertext to plaintext
+     * Encrypt from ciphertext to plaintext.
      *
      * @param key first 32 bytes used as the key
      * @param iv first 12 bytes starting at ivOffset used as the iv

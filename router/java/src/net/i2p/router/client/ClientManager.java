@@ -49,9 +49,8 @@ import net.i2p.util.SimpleTimer2;
 import net.i2p.util.SystemVersion;
 
 /**
- * Coordinate connections and various tasks
+ * Coordinate connections and various tasks.
  *
- * @author jrandom
  */
 class ClientManager {
     private final Log _log;
@@ -96,7 +95,7 @@ class ClientManager {
      */
     private static final String PROP_DISABLE_LOOPBACK = "i2cp.disableLoopback";
     private static final long REQUEST_LEASESET_TIMEOUT = 60L*1000;
-    private static final int MAX_SESSION_ID = 65534; /** 2 bytes, save 65535 for unknown */
+    private static final int MAX_SESSION_ID = 65534; /** 2 bytes; 65535 is reserved for unknown. */
     private static final String PROP_MAX_SESSIONS = "i2cp.maxSessions";
     private static final int DEFAULT_MAX_SESSIONS = SystemVersion.isSlow() ? 4096 : 16384;
     /** Sentinel session ID for unknown/unidentified sessions. */
@@ -104,7 +103,7 @@ class ClientManager {
 
     /**
      * Does not start the listeners.
-     * Caller must call start()
+     * Caller must call start().
      *
      * @param context the router context
      * @param port the I2CP port
@@ -684,7 +683,7 @@ class ClientManager {
     ClientConnectionRunner getRunner(Destination dest) {return _runners.get(dest);}
 
     /**
-     * Return the client's current config, or null if not connected
+     * Return the client's current config, or null if not connected.
      *
      * @param dest the destination whose session config is wanted
      * @return the SessionConfig, or null
@@ -697,8 +696,8 @@ class ClientManager {
 
     /**
      * Return the client's SessionKeyManager
-     * Use this instead of the RouterContext.sessionKeyManager()
-     * to prevent correlation attacks across destinations
+     * Use this instead of the {@link net.i2p.router.RouterContext#sessionKeyManager}
+     * to prevent correlation attacks across destinations.
      *
      * @param dest the destination hash
      * @return the SessionKeyManager, or null
@@ -852,7 +851,7 @@ class ClientManager {
     }
 
     /**
-     * Tell external clients the time periodically
+     * Tell external clients the time periodically.
      *
      * @since 0.9.20
      */

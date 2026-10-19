@@ -18,13 +18,11 @@ import java.util.concurrent.atomic.AtomicInteger;
  * <li>Statistical data collection</li>
  * </ul>
  *
- * @author zzz, welterde
- *
  * @param <K> type of objects being counted
  */
 public class ObjectCounter<K> implements Serializable {
     /**
-     * Serializable so it can be passed in an Android Bundle
+     * Serializable so it can be passed in an Android Bundle.
      */
     private static final long serialVersionUID = 3160378641721937421L;
 
@@ -92,7 +90,7 @@ public class ObjectCounter<K> implements Serializable {
     }
 
     /**
-     * Reset the count for this key to zero
+     * Reset the count for this key to zero.
      *
      * @param h the object to drop, leaving later reads of it at 0
      * @since 0.9.36

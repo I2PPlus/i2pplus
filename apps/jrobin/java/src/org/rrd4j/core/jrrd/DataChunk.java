@@ -7,7 +7,6 @@ import org.rrd4j.data.LinearInterpolator;
 /**
  * Models a chunk of result data from an RRDatabase.
  *
- * @author <a href="mailto:ciaran@codeloop.com">Ciaran Treanor</a>
  * @version $Revision: 1.1 $
  */
 public class DataChunk {

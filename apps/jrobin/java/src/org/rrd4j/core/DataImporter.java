@@ -8,7 +8,6 @@ import org.rrd4j.DsType;
 /**
  * An abstract class to import data from external source.
  *
- * @author Fabrice Bacchella
  * @since 3.5
  */
 public abstract class DataImporter implements Closeable {

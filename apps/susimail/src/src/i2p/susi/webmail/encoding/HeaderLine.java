@@ -15,11 +15,13 @@ import net.i2p.util.HexDump;
 
 import java.nio.charset.StandardCharsets;
 /**
- * Ref:
- * http://en.wikipedia.org/wiki/MIME#Encoded-Word
- * http://tools.ietf.org/html/rfc2047
- * https://jeffreystedfast.blogspot.com/2013/09/time-for-rant-on-mime-parsers.html
- * https://jeffreystedfast.blogspot.com/2013/08/why-decoding-rfc2047-encoded-headers-is.html
+ * References for the RFC 2047 encoded-word rules this class implements.
+ * <ul>
+ * <li>http://en.wikipedia.org/wiki/MIME#Encoded-Word</li>
+ * <li>http://tools.ietf.org/html/rfc2047</li>
+ * <li>https://jeffreystedfast.blogspot.com/2013/09/time-for-rant-on-mime-parsers.html</li>
+ * <li>https://jeffreystedfast.blogspot.com/2013/08/why-decoding-rfc2047-encoded-headers-is.html</li>
+ * </ul>
  */
 public class HeaderLine extends Encoding {
 	/**
@@ -34,6 +36,8 @@ public class HeaderLine extends Encoding {
 	public static final String NAME = "HEADERLINE";
 
 	/**
+	 * The header's name.
+	 *
 	 * @return the constant {@link #NAME}, "HEADERLINE"
 	 */
 	@Override
@@ -43,7 +47,7 @@ public class HeaderLine extends Encoding {
 
 	/**
 	 * This will split multibyte chars across lines,
-	 * see 4th ref above
+	 * see 4th ref above.
 	 *
 	 * @throws UnsupportedOperationException always, since this byte[] overload is not implemented; use encode(String)
 	 */
@@ -51,23 +55,39 @@ public class HeaderLine extends Encoding {
 		throw new UnsupportedOperationException("use encode(String)");
 	}
 
-	/** @since 0.9.33 */
+	/**
+	 * Whether the char is header whitespace.
+	 *
+	 * @since 0.9.33
+	 */
 	private static boolean isWhiteSpace(char c) {
 		return c == ' ' || c == '\t';
 	}
 
-	/** @since 0.9.33 */
+	/**
+	 * Whether the char is a control or non-ASCII character.
+	 *
+	 * @since 0.9.33
+	 */
 	private static boolean isControlOrMultiByte(char c) {
 		return (c < 32 && !isWhiteSpace(c)) || c >= 127;
 	}
 
-	/** @since 0.9.33 */
+	/**
+	 * Whether the char is an RFC 2047 special.
+	 *
+	 * @since 0.9.33
+	 */
 	private static boolean isPSpecial(char c) {
 		return c == '!' || c == '*' || c == '+' || c == '-' ||
 		       c == '/' || c == '=' || c == '_';
 	}
 
-	/** @since 0.9.33 */
+	/**
+	 * Whether the char is safe unencoded in an encoded-word.
+	 *
+	 * @since 0.9.33
+	 */
 	private static boolean isPSafe(char c) {
 		return (c >= '0' && c <= '9') ||
 		       (c >= 'a' && c <= 'z') ||
@@ -92,13 +112,12 @@ public class HeaderLine extends Encoding {
 	 * This will not split multibyte chars, including supplementary chars,
 	 * across lines.
 	 *
-	 * TODO this will not work for quoting structured text
-	 * such as recipient names on the "To" and "Cc" lines.
-	 *
 	 * @param str must start with "field-name: ", must have non-whitespace after that
 	 */
 	@Override
 	public String encode(String str) throws EncodingException {
+		// TODO this will not work for quoting structured text
+		// such as recipient names on the "To" and "Cc" lines.
 		str = str.trim();
 		int l = str.indexOf(": ");
 		if (l <= 0 || l >= 64)
@@ -177,7 +196,7 @@ public class HeaderLine extends Encoding {
 
 	/**
 	 * Decode all the header lines, up through \r\n\r\n,
-	 * and puts them in the ReadBuffer, including the \r\n\r\n
+	 * and puts them in the ReadBuffer, including the \r\n\r\n.
 	 */
 	public void decode(InputStream in, Buffer bout) throws IOException {
 		OutputStream out = bout.getOutputStream();

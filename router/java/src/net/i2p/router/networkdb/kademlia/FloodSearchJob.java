@@ -51,7 +51,7 @@ abstract class FloodSearchJob extends JobImpl {
      * Prepares a flood search for one key: records the target, the callbacks and the lease-set
      * flag, then derives the deadline from the requested timeout, applied in full.
      * (IterativeSearchJob extends this class, so any shortening here would halve
-     * every iterative search's deadline as well.)
+     * every iterative search's deadline as well.).
      * @param ctx router context supplying the clock and log manager
      * @param facade floodfill database the key is looked up in
      * @param key the hash being searched for
@@ -76,14 +76,14 @@ abstract class FloodSearchJob extends JobImpl {
     }
 
     /**
-     * System time, NOT context time
+     * System time, NOT context time.
      *
      * @return wall-clock creation time in milliseconds, used for statistics only
      */
     public long getCreated() { return _created; }
 
     /**
-     * Add jobs to an existing search
+     * Add jobs to an existing search.
      * @param onFind may be null
      * @param onFailed may be null
      * @param timeoutMs search timeout in ms
@@ -117,14 +117,14 @@ abstract class FloodSearchJob extends JobImpl {
     /** Max simultaneous flood lookups before fallback. */
     protected static final int CONCURRENT_SEARCHES = SystemVersion.isSlow() ? 3 : 5;
     /**
-     * Deprecated, unused, see FOSJ override
+     * Deprecated, unused, see FOSJ override.
      */
     public void runJob() {
         throw new UnsupportedOperationException("use override");
     }
 
     /**
-     * Deprecated, unused, see FOSJ override
+     * Deprecated, unused, see FOSJ override.
      * @return the fixed descriptive name {@code "NetDb Search (phase 1)"} of this job
      */
     public String getName() { return "NetDb Search (phase 1)"; }
@@ -160,14 +160,14 @@ abstract class FloodSearchJob extends JobImpl {
     protected int getLookupsRemaining() { return _lookupsRemaining.get(); }
 
     /**
-     * Deprecated, unused, see FOSJ override
+     * Deprecated, unused, see FOSJ override.
      */
     void failed() {
         throw new UnsupportedOperationException("use override");
     }
 
     /**
-     * Deprecated, unused, see FOSJ override
+     * Deprecated, unused, see FOSJ override.
      */
     void success() {
         synchronized(this) {

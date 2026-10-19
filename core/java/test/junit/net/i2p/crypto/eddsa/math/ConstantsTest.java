@@ -1,5 +1,5 @@
 /**
- * EdDSA-Java by str4d
+ * EdDSA-Java by str4d.
  *
  * To the extent possible under law, the person who associated CC0 with
  * EdDSA-Java has waived all copyright and related or neighboring rights
@@ -27,7 +27,6 @@ import java.security.NoSuchAlgorithmException;
 
 /**
  * Based on the tests in checkparams.py from the Python Ed25519 implementation.
- * @author str4d
  *
  */
 public class ConstantsTest {

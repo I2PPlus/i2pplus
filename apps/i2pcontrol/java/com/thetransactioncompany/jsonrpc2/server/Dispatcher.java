@@ -34,7 +34,6 @@ import java.util.Hashtable;
  * <p>Note: The dispatch(...) methods were deprecated in version 1.7. Use
  * process(...) instead.
  *
- * @author Vladimir Dzhuvinov
  */
 public class Dispatcher implements RequestHandler, NotificationHandler {
 
@@ -131,6 +130,8 @@ public class Dispatcher implements RequestHandler, NotificationHandler {
     }
 
     /**
+     * Deprecated, use the variant that takes an origin.
+     *
      * @deprecated
      */
     @Deprecated
@@ -170,6 +171,8 @@ public class Dispatcher implements RequestHandler, NotificationHandler {
     }
 
     /**
+     * Deprecated, use the variant that takes an origin.
+     *
      * @deprecated
      */
     @Deprecated

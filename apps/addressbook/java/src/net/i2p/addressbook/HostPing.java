@@ -20,7 +20,7 @@ import net.i2p.data.Destination;
 
 /**
  * Simple command-line ping tool
- * Provides I2PIng-compatible functionality with direct I2PSocketManager usage
+ * Provides I2PIng-compatible functionality with direct I2PSocketManager usage.
  */
 public class HostPing {
 
@@ -66,7 +66,7 @@ public class HostPing {
     }
 
     /**
-     * Multiple ping mode like I2PIng's default behavior
+     * Multiple ping mode like I2PIng's default behavior.
      */
     private int pingMultiple(String destination) {
         List<Long> responseTimes = new ArrayList<>();
@@ -102,7 +102,7 @@ public class HostPing {
     }
 
     /**
-     * Consecutive mode - requires 5 consecutive successes
+     * Consecutive mode - requires 5 consecutive successes.
      */
     private int pingConsecutive(String destination) {
         int consecutiveSuccesses = 0;
@@ -143,7 +143,7 @@ public class HostPing {
     }
 
     /**
-     * Single ping attempt using I2PSocketManager
+     * Single ping attempt using I2PSocketManager.
      */
     private long pingSingle(String hostname) {
         I2PSocketManager socketManager = null;
@@ -216,7 +216,7 @@ public class HostPing {
     }
 
     /**
-     * Print summary in I2PIng format
+     * Print summary in I2PIng format.
      */
     private void printSummary(String destination, int successCount, int totalCount, List<Long> responseTimes) {
         if (successCount > 0 && !responseTimes.isEmpty()) {
@@ -272,7 +272,7 @@ public class HostPing {
     }
 
     /**
-     * Read destinations from file
+     * Read destinations from file.
      */
     private List<String> readDestinationsFromFile(String filename) {
         List<String> destinations = new ArrayList<>();
@@ -327,7 +327,7 @@ public class HostPing {
     }
 
     /**
-     * Validate destination format (B64, B32, or .i2p)
+     * Validate destination format (B64, B32, or .i2p).
      * @return whether valid destination
      */
     private boolean isValidDestination(String dest) {
@@ -358,7 +358,7 @@ public class HostPing {
     }
 
     /**
-     * Command line interface
+     * Command line interface.
      * @param args the command line: -n count, -t timeoutMs, -ls leaseSetType, -c, -d, -h or -l hostsFile,
               --help, plus any bare .b32.i2p destinations to ping
      */
@@ -445,7 +445,7 @@ public class HostPing {
     }
 
     /**
-     * Print help message
+     * Print help message.
      */
     private static void printHelp() {
         System.out.println("HostPing - I2P destination ping tool using HostChecker");

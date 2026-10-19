@@ -22,7 +22,6 @@ import java.util.Arrays;
  * JAVAPORT: The original code was a 2D array of ints, but since it only ever gets assigned
  * -1, 0, and 1, I'm going to use less memory and go with bytes.
  *
- * @author dswitkin@google.com (Daniel Switkin)
  */
 public final class ByteMatrix {
 
@@ -122,6 +121,8 @@ public final class ByteMatrix {
   }
 
   /**
+   * Matrix as text for debugging.
+   *
    * @return a string representation of this ByteMatrix
    */
   @Override

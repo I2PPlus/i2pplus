@@ -13,7 +13,7 @@ import net.i2p.data.Destination;
  * @since 0.9.1
  */
 public class I2PSocketAddress extends SocketAddress {
-    /** Serial version unique identifier */
+    /** Serial version unique identifier. */
     private static final long serialVersionUID = 1L;
     /** Port number, 0 if not specified. */
     private final int _port;

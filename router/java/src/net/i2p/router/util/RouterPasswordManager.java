@@ -72,9 +72,9 @@ public class RouterPasswordManager extends PasswordManager {
     }
 
     /**
-     *  Migrate from plaintext to salt/hash
+     * Migrate from plaintext to salt/hash.
      *
-     *  @return success or nothing to migrate
+     * @return success or nothing to migrate
      */
     protected boolean migrate() {
         synchronized(RouterPasswordManager.class) {
@@ -98,25 +98,25 @@ public class RouterPasswordManager extends PasswordManager {
     }
 
     /**
-     *  Same as saveHash()
+     * Same as saveHash().
      *
-     *  @param realm e.g. i2cp, routerconsole, etc.
-     *  @param user null or "" for no user, already trimmed
-     *  @param pw plain text, already trimmed
-     *  @return true if the hashed entry was written to router.config
+     * @param realm e.g. i2cp, routerconsole, etc.
+     * @param user null or "" for no user, already trimmed
+     * @param pw plain text, already trimmed
+     * @return true if the hashed entry was written to {@code router.config}
      */
     public boolean save(String realm, String user, String pw) {
         return saveHash(realm, user, pw);
     }
 
     /**
-     *  This will fail if pw contains a '#'
-     *  or if user contains '#' or '=' or starts with '!'
+     * This will fail if pw contains a '#'
+     * or if user contains '#' or '=' or starts with '!'.
      *
-     *  @param realm e.g. i2cp, routerconsole, etc.
-     *  @param user null or "" for no user, already trimmed
-     *  @param pw plain text, already trimmed
-     *  @return true if the plain entry was written to router.config
+     * @param realm e.g. i2cp, routerconsole, etc.
+     * @param user null or "" for no user, already trimmed
+     * @param pw plain text, already trimmed
+     * @return true if the plain entry was written to {@code router.config}
      */
     public boolean savePlain(String realm, String user, String pw) {
         String pfx = realm;
@@ -132,13 +132,13 @@ public class RouterPasswordManager extends PasswordManager {
     }
 
     /**
-     *  This will fail if
-     *  if user contains '#' or '=' or starts with '!'
+     * This will fail if
+     * if user contains '#' or '=' or starts with '!'.
      *
-     *  @param realm e.g. i2cp, routerconsole, etc.
-     *  @param user null or "" for no user, already trimmed
-     *  @param pw plain text, already trimmed
-     *  @return true if the base64 entry was written to router.config
+     * @param realm e.g. i2cp, routerconsole, etc.
+     * @param user null or "" for no user, already trimmed
+     * @param pw plain text, already trimmed
+     * @return true if the base64 entry was written to {@code router.config}
      */
     public boolean saveB64(String realm, String user, String pw) {
         String pfx = realm;
@@ -155,13 +155,13 @@ public class RouterPasswordManager extends PasswordManager {
     }
 
     /**
-     *  This will fail if
-     *  user contains '#' or '=' or starts with '!'
+     * This will fail if
+     * user contains '#' or '=' or starts with '!'.
      *
-     *  @param realm e.g. i2cp, routerconsole, etc.
-     *  @param user null or "" for no user, already trimmed
-     *  @param pw plain text, already trimmed
-     *  @return true if the hashed entry was written to router.config
+     * @param realm e.g. i2cp, routerconsole, etc.
+     * @param user null or "" for no user, already trimmed
+     * @param pw plain text, already trimmed
+     * @return true if the hashed entry was written to {@code router.config}
      */
     public boolean saveHash(String realm, String user, String pw) {
         String pfx = realm;

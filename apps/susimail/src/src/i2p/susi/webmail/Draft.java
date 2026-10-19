@@ -40,7 +40,7 @@ class Draft extends Mail {
 	}
 
 	/**
-	 * Overridden to process attachment and Bcc headers
+	 * Overridden to process attachment and Bcc headers.
 	 */
 	@Override
 	public synchronized void setBody(Buffer rb) {
@@ -89,7 +89,7 @@ class Draft extends Mail {
 	}
 
 	/**
-	 * Includes size of attachments
+	 * Includes size of attachments.
 	 *
 	 * @return body plus attachment size in bytes
 	 * @since 0.9.62

@@ -5,7 +5,7 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 
 /**
- * Tests for I2PSnarkServlet.escapeJSString().
+ * Tests for {@link org.klomp.snark.web.I2PSnarkServlet#escapeJSString}.
  *
  * The escaper feeds torrent names into HTML attributes (data-name, client)
  * that page scripts read back into JavaScript string literals. Torrent names

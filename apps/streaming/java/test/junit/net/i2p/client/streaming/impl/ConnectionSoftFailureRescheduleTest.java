@@ -9,7 +9,7 @@ import org.junit.Test;
  * exemption.
  *
  * <p>{@link Connection#shouldRateLimitSoftRetransmit(long, long, long)} gates
- * {@link Connection#scheduleSoftFailureRetransmit()} so back-to-back router
+ * {@link Connection#scheduleSoftFailureRetransmit} so back-to-back router
  * soft failures (NO_LEASESET while the LeaseSet fetch is in flight) defer to
  * the retransmit timer instead of firing a new immediate pass at the I2CP
  * round-trip rate.  Without the gate, a ~10ms soft-fail burst exhausted the

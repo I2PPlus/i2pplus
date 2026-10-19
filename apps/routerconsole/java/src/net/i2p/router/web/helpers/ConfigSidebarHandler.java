@@ -17,7 +17,7 @@ import net.i2p.I2PAppContext;
  * @since 0.9.1
  */
 public class ConfigSidebarHandler extends FormHandler {
-    /** ConfigSidebarHandler default constructor */
+    /** ConfigSidebarHandler default constructor. */
     public ConfigSidebarHandler() {
         super();
     }

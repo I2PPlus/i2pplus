@@ -27,28 +27,28 @@ class ContactDrivenRefreshJob extends JobImpl {
     private final Log _log;
     private final FloodfillNetworkDatabaseFacade _facade;
 
-    /** Peers we've heard from recently that may need a RI refresh */
+    /** Peers we've heard from recently that may need a RI refresh. */
     private final ConcurrentLinkedQueue<Hash> _pending;
 
-    /** Cooldown tracker: peer hash -&gt; last refresh time (ms) */
+    /** Cooldown tracker: peer hash -&gt; last refresh time (ms). */
     private final Map<Hash, Long> _lastRefresh;
 
-    /** Max peers to process per cycle */
+    /** Max peers to process per cycle. */
     private static final int MAX_BATCH = 10;
 
-    /** Run interval when idle */
+    /** Run interval when idle. */
     private static final long CYCLE_MS = 10 * 1000L;
 
-    /** Don't re-refresh the same peer more often than this */
+    /** Don't re-refresh the same peer more often than this. */
     private static final long COOLDOWN_MS = 15L * 60 * 1000;
 
-    /** Max cooldown map entries to prevent unbounded growth */
+    /** Max cooldown map entries to prevent unbounded growth. */
     private static final int MAX_COOLDOWN_ENTRIES = 4096;
-    /** Max pending queue size — reject offers past this to prevent OOM under heavy store load */
+    /** Max pending queue size — reject offers past this to prevent OOM under heavy store load. */
     private static final int MAX_PENDING = 8192;
 
     /**
-     * Creates a new ContactDrivenRefreshJob
+     * Creates a new ContactDrivenRefreshJob.
      *
      * @param ctx the router context
      * @param facade the floodfill network database facade

@@ -6,24 +6,24 @@ package net.i2p.update;
  * @since 0.9.4
  */
 public enum UpdateMethod {
-    /** Dummy: internal use only */
+    /** Dummy: internal use only. */
     METHOD_DUMMY,
-    /** HTTP via .i2p or outproxy */
+    /** HTTP via .i2p or outproxy. */
     HTTP,
-    /** Direct HTTP via clearnet */
+    /** Direct HTTP via clearnet. */
     HTTP_CLEARNET,
-    /** Direct HTTPS via clearnet */
+    /** Direct HTTPS via clearnet. */
     HTTPS_CLEARNET,
-    /** BitTorrent protocol */
+    /** BitTorrent protocol. */
     TORRENT,
-    /** Gnutella protocol */
+    /** Gnutella protocol. */
     GNUTELLA,
-    /** IMule protocol */
+    /** IMule protocol. */
     IMULE,
-    /** Tahoe-LAFS protocol */
+    /** Tahoe-LAFS protocol. */
     TAHOE_LAFS,
-    /** Debian package manager */
+    /** Debian package manager. */
     DEBIAN,
-    /** Local file */
+    /** Local file. */
     FILE
 }

@@ -66,22 +66,22 @@ class ConnectionAcceptor implements Runnable {
     private final SimpleTimer2.TimedEvent _cleaner;
     /** Accept loops per destination, shared by the torrents pooled on it. */
     private final Map<TorrentDest, TorrentAcceptLoop> _torrentAcceptors = new ConcurrentHashMap<>();
-    /** Stops the accept loop */
+    /** Stops the accept loop. */
     private volatile boolean stop;
     /** Protocol errors within a window before the client is rejected. */
     private static final int MAX_BAD = 3;
     private static final long BAD_CLEAN_INTERVAL = 15 * (long) 60 * 1000;
-    /** Maximum concurrent incoming connections in handshake */
+    /** Maximum concurrent incoming connections in handshake. */
     private static final int MAX_HANDLERS = 64;
     private final AtomicInteger activeHandlers = new AtomicInteger();
 
     /**
-     * Multitorrent. Caller MUST call startAccepting()
+     * Multitorrent. Caller MUST call startAccepting().
      *
      * @param util the I2PSnark utility instance supplying the config and
-     *             storage this acceptor works through
+     * storage this acceptor works through
      * @param set the peer coordinator set covering every torrent, handed to the
-     *            multitorrent PeerAcceptor this constructor creates
+     * multitorrent PeerAcceptor this constructor creates
      */
     public ConnectionAcceptor(I2PSnarkUtil util, PeerCoordinatorSet set) {
         _util = util;
@@ -210,7 +210,7 @@ class ConnectionAcceptor implements Runnable {
     }
 
     /**
-     * Caller must synch
+     * Caller must synch.
      *
      * @since 0.9.9
      */
@@ -252,7 +252,7 @@ class ConnectionAcceptor implements Runnable {
 
     /**
      * Effectively unused, would only be called if we changed I2CP host/port, which is hidden in the
-     * gui if in router context
+     * gui if in router context.
      */
     public synchronized void restart() {
         Thread t = thread;
@@ -469,6 +469,8 @@ class ConnectionAcceptor implements Runnable {
         }
 
         /**
+         * Queue a peer's accept request.
+         *
          * @param coordinator the torrent to add to this loop's routing set
          */
         public void add(PeerCoordinator coordinator) {
@@ -661,6 +663,8 @@ class ConnectionAcceptor implements Runnable {
     }
 
     /**
+     * Periodically cleans up stale acceptors.
+     *
      * @since 0.9.1
      */
     private class Cleaner extends SimpleTimer2.TimedEvent {

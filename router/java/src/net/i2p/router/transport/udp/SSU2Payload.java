@@ -33,48 +33,48 @@ class SSU2Payload {
      */
     private SSU2Payload() {}
 
-    /** SSU2 block type: ACK */
+    /** SSU2 block type: ACK. */
     static final int BLOCK_ACK = 12;
-    /** SSU2 block type: ADDRESS */
+    /** SSU2 block type: ADDRESS. */
     static final int BLOCK_ADDRESS = 13;
-    /** SSU2 block type: DATETIME (must be the first block of a handshake) */
+    /** SSU2 block type: DATETIME (must be the first block of a handshake). */
     static final int BLOCK_DATETIME = 0;
-    /** SSU2 block type: FIRSTFRAG */
+    /** SSU2 block type: FIRSTFRAG. */
     static final int BLOCK_FIRSTFRAG = 4;
-    /** SSU2 block type: FOLLOWONFRAG */
+    /** SSU2 block type: FOLLOWONFRAG. */
     static final int BLOCK_FOLLOWONFRAG = 5;
-    /** SSU2 block type: I2NP */
+    /** SSU2 block type: I2NP. */
     static final int BLOCK_I2NP = 3;
-    /** SSU2 block type: NEWTOKEN */
+    /** SSU2 block type: NEWTOKEN. */
     static final int BLOCK_NEWTOKEN = 17;
-    /** SSU2 block type: OPTIONS */
+    /** SSU2 block type: OPTIONS. */
     static final int BLOCK_OPTIONS = 1;
-    /** SSU2 block type: PADDING (must end the block list) */
+    /** SSU2 block type: PADDING (must end the block list). */
     static final int BLOCK_PADDING = 254;
-    /** SSU2 block type: PATHCHALLENGE */
+    /** SSU2 block type: PATHCHALLENGE. */
     static final int BLOCK_PATHCHALLENGE = 18;
-    /** SSU2 block type: PATHRESP */
+    /** SSU2 block type: PATHRESP. */
     static final int BLOCK_PATHRESP = 19;
-    /** SSU2 block type: PEERTEST */
+    /** SSU2 block type: PEERTEST. */
     static final int BLOCK_PEERTEST = 10;
-    /** SSU2 block type: RELAYINTRO */
+    /** SSU2 block type: RELAYINTRO. */
     static final int BLOCK_RELAYINTRO = 9;
-    /** SSU2 block type: RELAYREQ */
+    /** SSU2 block type: RELAYREQ. */
     static final int BLOCK_RELAYREQ = 7;
-    /** SSU2 block type: RELAYRESP */
+    /** SSU2 block type: RELAYRESP. */
     static final int BLOCK_RELAYRESP = 8;
-    /** SSU2 block type: RELAYTAG */
+    /** SSU2 block type: RELAYTAG. */
     static final int BLOCK_RELAYTAG = 16;
-    /** SSU2 block type: RELAYTAGREQ */
+    /** SSU2 block type: RELAYTAGREQ. */
     static final int BLOCK_RELAYTAGREQ = 15;
-    /** SSU2 block type: ROUTERINFO */
+    /** SSU2 block type: ROUTERINFO. */
     static final int BLOCK_ROUTERINFO = 2;
     /**
      * Bytes of type-and-length prefix that precede the data of every block.
      */
     public static final int BLOCK_HEADER_SIZE = 3;
     /**
-     * SSU2 block type: TERMINATION
+     * SSU2 block type: TERMINATION.
      */
     public static final int BLOCK_TERMINATION = 6;
 
@@ -327,7 +327,7 @@ class SSU2Payload {
      * Guard that a block's declared length fits inside the frame.
      * Offsets in the error message are byte positions relative to the frame.
      * The frame contents are deliberately not included, they may be
-     * decrypted data; callers that want a dump log it at DEBUG.
+     * decrypted data. Callers that want a dump log it at DEBUG.
      *
      * @param off start of the payload in the array
      * @param length frame size in bytes
@@ -1027,7 +1027,7 @@ class SSU2Payload {
     }
 
     /**
-     * Same format as I2NPBlock
+     * Same format as I2NPBlock.
      */
     public static class FirstFragBlock extends Block {
         private OutboundMessageState m;

@@ -137,7 +137,7 @@ class DHTTracker {
         new Cleaner();
     }
 
-    /** Stop the tracker */
+    /** Stop the tracker. */
     void stop() {
         _torrents.clear();
         _isRunning = false;

@@ -111,7 +111,7 @@ public class BuildHandlerNextHopSummaryTest {
     /**
      * The dropped bucket must be reachable from production, not only from a
      * test.  A bucket nothing writes to always reads zero, which looks like a
-     * healthy router and hides the rejections entirely — so assert the source
+     * healthy router and hides the rejections entirely. So assert the source
      * actually records the two drop paths we care about.
      */
     @Test

@@ -56,23 +56,23 @@ import net.i2p.crypto.SHA256Generator;
 public class FortunaStandalone extends BasePRNGStandalone implements Serializable {
     private static final long serialVersionUID = 0xFACADE;
     private static final int SEED_FILE_SIZE = 64;
-    /** number of entropy pools */
+    /** Number of entropy pools. */
     static final int NUM_POOLS = 32;
-    /** minimum bytes in pool 0 before reseed */
+    /** Minimum bytes in pool 0 before reseed. */
     static final int MIN_POOL_SIZE = 64;
-    /** the underlying PRNG generator */
+    /** The underlying PRNG generator. */
     protected final IRandomStandalone generator;
-    /** null if using DevRandom */
+    /** Null if using DevRandom. */
     protected final MessageDigest[] pools;
-    /** timestamp of last reseed */
+    /** Timestamp of last reseed. */
     protected long lastReseed;
-    /** current pool index for entropy distribution */
+    /** Current pool index for entropy distribution. */
     private int pool;
-    /** bytes added to pool 0 */
+    /** Bytes added to pool 0. */
     protected int pool0Count;
-    /** number of reseeds performed */
+    /** Number of reseeds performed. */
     protected int reseedCount;
-    /** property name for the seed attribute */
+    /** Property name for the seed attribute. */
     public static final String SEED = "gnu.crypto.prng.fortuna.seed";
 
     /** With DevRandom disabled. */
@@ -112,7 +112,7 @@ public class FortunaStandalone extends BasePRNGStandalone implements Serializabl
         generator.init(attributes);
     }
 
-    /** Unused, see AsyncFortunaStandalone */
+    /** Unused, see AsyncFortunaStandalone. */
     public void fillBlock() {
         throw new UnsupportedOperationException("use override");
     }
@@ -149,7 +149,7 @@ public class FortunaStandalone extends BasePRNGStandalone implements Serializabl
 
     // Reading and writing this object is equivalent to storing and retrieving the seed.
     /**
-     * Write object
+     * Write object.
      * @param out the stream the SEED_FILE_SIZE bytes of generator state are written to
      * @throws IOException if the stream rejects the seed bytes or the write fails
      */
@@ -160,7 +160,7 @@ public class FortunaStandalone extends BasePRNGStandalone implements Serializabl
     }
 
     /**
-     * Read object
+     * Read object.
      * @param in the stream holding the previously written SEED_FILE_SIZE bytes of generator state
      * @throws IOException if the stream ends early or the read fails
      */
@@ -181,7 +181,7 @@ public class FortunaStandalone extends BasePRNGStandalone implements Serializabl
         private final MessageDigest hash;
         private final byte[] counter;
         private final byte[] key;
-        /** current encryption key built from the keying material */
+        /** Current encryption key built from the keying material. */
         private Object cryptixKey;
         private CryptixAESKeyCache.KeyCacheEntry cryptixKeyBuf;
         private boolean seeded;

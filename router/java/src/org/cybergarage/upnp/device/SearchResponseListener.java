@@ -27,7 +27,6 @@ import org.cybergarage.upnp.ssdp.*;
  * asynchronous responses when devices reply to discovery searches, enabling comprehensive device
  * discovery and network mapping.
  *
- * @author Satoshi Konno
  * @since 1.0
  */
 public interface SearchResponseListener {

@@ -42,10 +42,10 @@ import net.i2p.util.Translate;
  */
 public class RatchetSKM extends SessionKeyManager implements SessionTagListener {
     private final Log _log;
-    /** Map allowing us to go from the targeted PublicKey to the OutboundSession used */
+    /** Map allowing us to go from the targeted PublicKey to the OutboundSession used. */
     private final ConcurrentHashMap<PublicKey, OutboundSession> _outboundSessions;
     private final HashMap<PublicKey, List<OutboundSession>> _pendingOutboundSessions;
-    /** Map allowing us to go from a SessionTag to the containing RatchetTagSet */
+    /** Map allowing us to go from a SessionTag to the containing RatchetTagSet. */
     private final ConcurrentHashMap<RatchetSessionTag, RatchetTagSet> _inboundTagSets;
     /**
      * Lifetime counters for the debug page, incremented only at
@@ -56,7 +56,7 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
     private final LongAdder _sessionsReplaced = new LongAdder();
     private final LongAdder _inboundCompleted = new LongAdder();
     private final LongAdder _tagMisses = new LongAdder();
-    /** The router context */
+    /** The router context. */
     protected final RouterContext _context;
     private volatile boolean _alive;
     private CleanupEvent _cleanupEvent;
@@ -67,14 +67,14 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
 
     /**
      * Let outbound session tags sit around for this long before expiring them.
-     * Inbound tag expiration is set by SESSION_LIFETIME_MAX_MS
+     * Inbound tag expiration is set by SESSION_LIFETIME_MAX_MS.
      */
     static final long SESSION_TAG_DURATION_MS = 8 * 60 * 1000L;
 
     /**
-     * Keep unused inbound session tags around for this long (a few minutes longer than
-     * session tags are used on the outbound side so that no reasonable network lag
-     * can cause failed decrypts)
+     * How long unused inbound session tags are kept.
+     * A few minutes longer than the outbound tag lifetime, so no reasonable
+     * network lag can cause failed decrypts.
      * <p>
      * This is also the session idle timeout used by TransientSessionKeyManager.
      */
@@ -135,7 +135,7 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
     }
 
     /**
-     * Cannot be restarted
+     * Cannot be restarted.
      */
     @Override
     public void shutdown() {
@@ -155,7 +155,7 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
             // wait until first expiration time to start
             super(_context.simpleTimer2(), SESSION_PENDING_DURATION_MS);
         }
-        /** Perform recurring maintenance */
+        /** Perform recurring maintenance. */
 
         public void timeReached() {
             if (!_alive)
@@ -166,7 +166,7 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
     }
 
     /**
-     * The local destination for this SKM
+     * The local destination for this SKM.
      *
      * @return our destination or null for the router SKM
      * @since 0.9.46
@@ -196,7 +196,7 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
         }
     }
 
-    /** OutboundSession - used only by HTML */
+    /** OutboundSession - used only by HTML. */
     private Set<OutboundSession> getOutboundSessions() {
         return new HashSet<>(_outboundSessions.values());
     }
@@ -234,7 +234,7 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
     }
 
     /**
-     * Check if a public key is a duplicate
+     * Check if a public key is a duplicate.
      *
      * @param pk the public key to check
      * @return true if a dup
@@ -400,7 +400,7 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
     }
 
     /**
-     * Process a received next key
+     * Process a received next key.
      *
      * @param target the target public key
      * @param key the next session key
@@ -517,7 +517,7 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
 
     /**
      * Determine (approximately) how many available session tags for the current target
-     * have been confirmed and are available
+     * have been confirmed and are available.
      *
      * @return the available tags
      */
@@ -534,7 +534,7 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
 
     /**
      * Determine how long the available tags will be available for before expiring, in
-     * milliseconds
+     * milliseconds.
      * @return the available time left
      */
     @Override
@@ -603,7 +603,7 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
     }
 
     /**
-     * One time session
+     * One time session.
      *
      * @param key the session key
      * @param tag the ratchet session tag
@@ -705,7 +705,7 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
 
     /**
      * For inbound, we are Bob, NS received, replace if very old
-     * For outbound, we are Alice, NSR received, never replace
+     * For outbound, we are Alice, NSR received, never replace.
      *
      * @param isInbound Bob if true
      * @return true if added
@@ -736,7 +736,7 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
     }
 
     /**
-     * Aggressively expire inbound tag sets and outbound sessions
+     * Aggressively expire inbound tag sets and outbound sessions.
      *
      * @return number of tag sets expired (bogus as it overcounts inbound)
      */
@@ -817,7 +817,7 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
     /// ACKS ///
 
     /**
-     * Register a callback for an ACK
+     * Register a callback for an ACK.
      *
      * @param target the target public key
      * @param id the callback ID
@@ -836,7 +836,7 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
     }
 
     /**
-     * Process a received ACK
+     * Process a received ACK.
      *
      * @param target the target public key
      * @param id the ACK ID
@@ -852,7 +852,7 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
     }
 
     /**
-     * Process an ACK request
+     * Process an ACK request.
      *
      * @param target the target public key
      * @param id the ACK ID
@@ -1196,7 +1196,7 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
     }
 
     /**
-     * For debugging
+     * For debugging.
      */
     private static String toString(PublicKey target) {
         if (target == null)
@@ -1205,7 +1205,7 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
     }
 
     /**
-     * The state for a crypto session to a single public key
+     * The state for a crypto session to a single public key.
      */
     class OutboundSession {
         private final PublicKey _target;
@@ -1598,7 +1598,7 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
         }
 
         /**
-         * Reverse key to send, or null
+         * Reverse key to send, or null.
          *
          * @return the reverse send key
          * @since 0.9.46
@@ -1716,7 +1716,7 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
         }
 
         /**
-         * NOT updated for inbound except for NSR and first ES tag used
+         * NOT updated for inbound except for NSR and first ES tag used.
          * @return the last used date
          */
         public long getLastUsedDate() {
@@ -1724,7 +1724,7 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
         }
 
         /**
-         * ONLY updated for inbound NS/NSR/ES tag used
+         * ONLY updated for inbound NS/NSR/ES tag used.
          *
          * @return the last received date
          * @since 0.9.46
@@ -1734,10 +1734,10 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
         }
 
         /**
-         * Expire old tags, returning the number of tag sets removed
+         * Expire old tags, returning the number of tag sets removed.
          *
          * @param now current time in ms, tag sets expiring at or before it
-         *            are removed
+         * are removed
          * @return the number of tag sets removed
          */
         public int expireTags(long now) {
@@ -1758,10 +1758,10 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
             return removed;
         }
         /**
-         * Consume the next available tag and advance
+         * Consume the next available tag and advance.
          *
          * @return the next tag with its key, rotation keys and pending acks,
-         *         or null if the session or tag set has expired or drained
+         * or null if the session or tag set has expired or drained
          */
         public RatchetEntry consumeNext() {
             long now = _context.clock().now();
@@ -1870,7 +1870,7 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
 
         /**
          * Furthest away tag set expiration date, after which all of the
-         * tags will have expired
+         * tags will have expired.
          *
          * @return the last expiration date
          */

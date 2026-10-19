@@ -27,7 +27,6 @@ import java.io.*;
  * interpreting device description documents, helping developers identify and resolve description
  * format issues.
  *
- * @author Satoshi Konno
  * @since 1.0
  */
 public class InvalidDescriptionException extends Exception {

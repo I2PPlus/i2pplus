@@ -611,7 +611,7 @@ public final class GraphGroups {
     /**
      * Find the group a stat belongs to.
      *
-     * @param statName a stat name such as "router.fastPeers"
+     * @param statName a stat name such as "{@code router.fastPeers}"
      * @return the owning group id, or null when the stat is not in any group
      */
     public static String groupOf(String statName) {

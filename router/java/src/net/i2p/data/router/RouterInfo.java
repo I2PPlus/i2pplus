@@ -50,7 +50,6 @@ import net.i2p.util.OrderedProperties;
  * To ensure integrity of the RouterInfo, methods that change an element of the
  * RouterInfo will throw an IllegalStateException after the RouterInfo is signed.
  *
- * @author jrandom
  * @since 0.9.16 moved from net.i2p.data
  */
 public class RouterInfo extends DatabaseEntry {
@@ -84,16 +83,16 @@ public class RouterInfo extends DatabaseEntry {
     private volatile boolean _shouldCache;
     /**
      * Maybe we should check if we are floodfill?
-     * If we do bring this back, don't do on ARM or Android
+     * If we do bring this back, don't do on ARM or Android.
      * @return the max memory
      */
     private static final boolean CACHE_ALL = false; // SystemVersion.getMaxMemory() > 128*1024*1024L;
-    /** Property key for network id */
+    /** Property key for network id. */
 
     public static final String PROP_NETWORK_ID = "netId";
-    /** Property key for capabilities */
+    /** Property key for capabilities. */
     public static final String PROP_CAPABILITIES = "caps";
-    /** Capability flag for hidden */
+    /** Capability flag for hidden. */
     public static final char CAPABILITY_HIDDEN = 'H';
     private static final int MAX_ADDRESSES = 16;
     private static final int MAX_INTRODUCERS = 5;
@@ -109,7 +108,7 @@ public class RouterInfo extends DatabaseEntry {
 
     /**
      * Public string of chars which serve as bandwidth capacity markers
-     * NOTE: individual chars defined in Router.java
+     * NOTE: individual chars defined in Router.java.
      */
     public static final String BW_CAPABILITY_CHARS = "" +
         // reverse, so e.g. "POfR" works correctly
@@ -123,7 +122,7 @@ public class RouterInfo extends DatabaseEntry {
 
     /**
      * Public string of chars which serve as bandwidth congestion markers
-     * NOTE: individual chars defined in Router.java
+     * NOTE: individual chars defined in Router.java.
      *
      * @since 0.9.63+
      */
@@ -150,24 +149,24 @@ public class RouterInfo extends DatabaseEntry {
         setIdentity(old.getIdentity());
         setPeers(old.getPeers());
     }
-    /** Return the date */
+    /** Return the date. */
 
     public long getDate() {
         return _published;
     }
-    /** Return the keysAndCert */
+    /** Return the keysAndCert. */
 
     public KeysAndCert getKeysAndCert() {
         return _identity;
     }
-    /** Return the type */
+    /** Return the type. */
 
     public int getType() {
         return KEY_TYPE_ROUTERINFO;
     }
 
     /**
-     * Retrieve the identity of the router represented
+     * Retrieve the identity of the router represented.
      *
      * @return the RouterIdentity holding the public key and certificate
      */
@@ -176,7 +175,7 @@ public class RouterInfo extends DatabaseEntry {
     }
 
     /**
-     * Configure the identity of the router represented
+     * Configure the identity of the router represented.
      *
      * @param ident the RouterIdentity whose public key and certificate describe this router
      * @throws IllegalStateException if RouterInfo is already signed
@@ -204,7 +203,7 @@ public class RouterInfo extends DatabaseEntry {
     }
 
     /**
-     * Date on which it was published, in milliseconds since Midnight GMT on Jan 01, 1970
+     * Date on which it was published, in milliseconds since Midnight GMT on Jan 01, 1970.
      *
      * @param published the publication time in milliseconds since the epoch
      * @throws IllegalStateException if RouterInfo is already signed
@@ -217,7 +216,7 @@ public class RouterInfo extends DatabaseEntry {
 
     /**
      * Return the number of router addresses.
-     * More efficient than getAddresses().size()
+     * More efficient than getAddresses().size().
      *
      * @return the address count
      * @since 0.9.27
@@ -314,7 +313,7 @@ public class RouterInfo extends DatabaseEntry {
     public String getOption(String opt) {return _options.getProperty(opt);}
 
     /**
-     * For convenience, the same as getOption("router.version"),
+     * For convenience, the same as getOption("{@code router.version}"),
      * but returns "0" if unset.
      *
      * @return non-null, "0" if unknown.
@@ -399,7 +398,7 @@ public class RouterInfo extends DatabaseEntry {
     }
 
     /**
-     * Determine whether this router info is authorized with a valid signature
+     * Determine whether this router info is authorized with a valid signature.
      *
      * @return true if the signature verifies, false otherwise
      */
@@ -409,7 +408,7 @@ public class RouterInfo extends DatabaseEntry {
     }
 
     /**
-     * Return true if the signature is valid, as {@link #isValid()} does.
+     * Return true if the signature is valid, as {@link #isValid} does.
      */
     @Override
     public boolean verifySignature() {
@@ -454,7 +453,7 @@ public class RouterInfo extends DatabaseEntry {
 
     /**
      * Return a string representation of this node's bandwidth tier,
-     * or "Unknown"
+     * or "Unknown".
      * @return the bandwidth tier
      */
     public String getBandwidthTier() {
@@ -473,7 +472,7 @@ public class RouterInfo extends DatabaseEntry {
 
     /**
      * Return a string representation of this node's congestion cap,
-     * or "Unknown"
+     * or "Unknown".
      *
      * @return the congestion cap
      * @since 0.9.63+
@@ -524,7 +523,7 @@ public class RouterInfo extends DatabaseEntry {
     }
 
     /**
-     * For multiple addresses per-transport (IPv4 or IPv6)
+     * For multiple addresses per-transport (IPv4 or IPv6).
      * @param transportStyle the transport style to match, e.g. NTCP2 or SSU2
      * @return a mutable list of the advertised addresses in that style, never null
      * @since 0.7.11
@@ -540,7 +539,7 @@ public class RouterInfo extends DatabaseEntry {
 
     /**
      * For multiple addresses per-transport (IPv4 or IPv6)
-     * Return addresses matching either of two styles
+     * Return addresses matching either of two styles.
      *
      * @param transportStyle1 the first transport style to match, e.g. NTCP2
      * @param transportStyle2 the second transport style to match, e.g. SSU2
@@ -558,7 +557,7 @@ public class RouterInfo extends DatabaseEntry {
     }
 
     /**
-     * Actually validate the signature
+     * Actually validate the signature.
      */
     private void doValidate() {
         _isValid = super.verifySignature();
@@ -574,7 +573,7 @@ public class RouterInfo extends DatabaseEntry {
     }
 
     /**
-     * This does NOT validate the signature
+     * This does NOT validate the signature.
      *
      * @throws IllegalStateException if RouterInfo was already read in
      */
@@ -670,7 +669,7 @@ public class RouterInfo extends DatabaseEntry {
     }
 
     /**
-     * This does NOT validate the signature
+     * This does NOT validate the signature.
      */
     public void writeBytes(OutputStream out) throws DataFormatException, IOException {
         if (_signature == null) throw new DataFormatException("Signature is null");

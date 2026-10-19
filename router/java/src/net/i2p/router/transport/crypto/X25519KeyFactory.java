@@ -19,7 +19,7 @@ import net.i2p.util.SystemVersion;
  * the pairs are generated in the NTCP Pumper thread,
  * and it can fall behind.
  * <p>Pool sizes scale dynamically based on memory headroom, CPU pressure,
- * and connection demand. The Tuner calls {@link #refreshPoolSize()} every
+ * and connection demand. The Tuner calls {@link #refreshPoolSize} every
  * 15 seconds to adapt to changing conditions.</p>
  *
  * @since 0.9.36 from DHSessionKeyFactory.PrecalcRunner
@@ -37,17 +37,17 @@ public class X25519KeyFactory extends I2PThread implements KeyFactory {
     private final LinkedBlockingQueue<KeyPair> _keys;
     private volatile boolean _isRunning;
     private long _checkDelay = 10 * 1000L;
-    /** Empties observed since last refresh — drives pool growth */
+    /** Empties observed since last refresh — drives pool growth. */
     private final AtomicInteger _emptyCount = new AtomicInteger();
-    /** Key consumption count since last refresh — drives fill ceiling */
+    /** Key consumption count since last refresh — drives fill ceiling. */
     private final AtomicInteger _usedCount = new AtomicInteger();
     private static final String PROP_DH_PRECALC_DELAY = "crypto.xdh.precalc.delay";
     private static final int DEFAULT_DH_PRECALC_DELAY = 25;
-    /** Absolute floor — never go below this even under memory pressure */
+    /** Absolute floor — never go below this even under memory pressure. */
     private static final int HARD_MIN = 128;
-    /** Absolute ceiling — never exceed this regardless of headroom */
+    /** Absolute ceiling — never exceed this regardless of headroom. */
     private static final int HARD_MAX = 65536;
-    /** Each keypair is ~64 bytes; this is the memory budget per key in bytes */
+    /** Each keypair is ~64 bytes; this is the memory budget per key in bytes. */
     private static final int KEY_SIZE_BYTES = 64;
 
     /**
@@ -196,21 +196,21 @@ public class X25519KeyFactory extends I2PThread implements KeyFactory {
 
     /**
      * Record an empty-queue event for demand tracking.
-     * Called by {@link #getKeys()} when the pool is depleted.
+     * Called by {@link #getKeys} when the pool is depleted.
      *
      * @since 0.9.70+
      */
     public void recordEmpty() { _emptyCount.incrementAndGet(); }
 
     /**
-     * Returns the last created instance.
+     * The most recently constructed factory.
      * @return the most recently constructed factory, or null if none has been created yet
      * @since 0.9.70+
      */
     public static X25519KeyFactory getInstance() { return lastInstance; }
 
     /**
-     * Returns the current minimum precalc queue size.
+     * Lower bound on the precalculated key queue size.
      * @return the min size
      * @since 0.9.70+
      */
@@ -225,7 +225,7 @@ public class X25519KeyFactory extends I2PThread implements KeyFactory {
     public void setMinSize(int min) { _minSize = Math.max(HARD_MIN, min); }
 
     /**
-     * Returns the current maximum precalc queue size.
+     * Upper bound on the precalculated key queue size.
      * @return the max size
      * @since 0.9.70+
      */
@@ -250,7 +250,7 @@ public class X25519KeyFactory extends I2PThread implements KeyFactory {
     /**
      * Note that this stops the singleton precalc thread.
      * You don't want to do this if there are multiple routers in the JVM.
-     * Fix this if you care. See Router.shutdown().
+     * Fix this if you care. See {@link net.i2p.router.Router#shutdown}.
      */
     public void shutdown() {
         _isRunning = false;

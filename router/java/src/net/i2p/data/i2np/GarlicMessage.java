@@ -11,9 +11,8 @@ import net.i2p.I2PAppContext;
 import net.i2p.data.DataHelper;
 
 /**
- * Defines the wrapped garlic message
+ * Defines the wrapped garlic message.
  *
- * @author jrandom
  */
 public class GarlicMessage extends FastI2NPMessageImpl {
     /**

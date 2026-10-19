@@ -29,7 +29,6 @@ import org.cybergarage.http.*;
  * providing information about device capabilities and availability. It handles both standard UPnP
  * responses and vendor-specific extensions.
  *
- * @author Satoshi Konno
  * @since 1.0
  */
 public class SSDPResponse extends HTTPResponse {

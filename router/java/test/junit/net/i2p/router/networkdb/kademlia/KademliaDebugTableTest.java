@@ -21,7 +21,7 @@ import static org.junit.Assert.assertTrue;
  */
 public class KademliaDebugTableTest {
 
-    /** Stand-in for commSystem().renderPeerHTML, keeping the assertions readable */
+    /** Stand-in for commSystem().renderPeerHTML, keeping the assertions readable. */
     private static final Function<String, String> CHIP =
         k -> "<span class=routerHash><a href=\"netdb?r=" + k + "\" title=\"" + k + "\">" +
              (k.length() > 6 ? k.substring(0, 6) : k) + "</a></span>";

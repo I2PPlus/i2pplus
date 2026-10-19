@@ -50,7 +50,7 @@ import net.i2p.util.TempDirScanner;
  * access to one of the singletons but doesn't have its own context from which
  * to root itself, it binds to the I2PAppContext's getGlobalContext(), which is
  * the first context that was created within the JVM, or a new one if no context
- * existed already.  This functionality is often used within the I2P core for
+ * existed already.  This functionality is often used within the I2P core for.
  * logging - e.g. <pre>
  *     private static final Log _log = new Log(someClass.class);
  * </pre>
@@ -61,15 +61,15 @@ import net.i2p.util.TempDirScanner;
  * relevant.
  */
 public class I2PAppContext {
-    /** The context that components without explicit root are bound */
+    /** The context that components without explicit root are bound. */
     protected static volatile I2PAppContext _globalAppContext;
 
-    /** Override properties for this context */
+    /** Override properties for this context. */
     protected final I2PProperties _overrideProps;
     private volatile Properties _mergedProps;
 
     private StatManager _statManager;
-    /** The session key manager */
+    /** The session key manager. */
     protected SessionKeyManager _sessionKeyManager;
     private NamingService _namingService;
     private ElGamalEngine _elGamalEngine;
@@ -77,12 +77,12 @@ public class I2PAppContext {
     private LogManager _logManager;
     private HMAC256Generator _hmac256;
     private SHA256Generator _sha;
-    /** The context clock, overridden in RouterContext */
+    /** The context clock, overridden in RouterContext. */
     protected Clock _clock;
     private DSAEngine _dsa;
     private RandomSource _random;
     private KeyGenerator _keyGenerator;
-    /** The key ring, overridden in RouterContext */
+    /** The key ring, overridden in RouterContext. */
     protected KeyRing _keyRing;
     private SimpleTimer2 _simpleTimer2;
     private final PortMapper _portMapper;
@@ -97,15 +97,15 @@ public class I2PAppContext {
     private volatile boolean _logManagerInitialized;
     private volatile boolean _hmac256Initialized;
     private volatile boolean _shaInitialized;
-    /** Whether the clock is initialized, used in RouterContext */
+    /** Whether the clock is initialized, used in RouterContext. */
     protected volatile boolean _clockInitialized;
     private volatile boolean _dsaInitialized;
     private volatile boolean _randomInitialized;
     private volatile boolean _keyGeneratorInitialized;
-    /** Whether the key ring is initialized, used in RouterContext */
+    /** Whether the key ring is initialized, used in RouterContext. */
     protected volatile boolean _keyRingInitialized;
     private volatile boolean _simpleTimer2Initialized;
-    /** Shutdown tasks to run on context shutdown */
+    /** Shutdown tasks to run on context shutdown. */
     protected final Set<Runnable> _shutdownTasks;
     private final File _baseDir;
     private final File _configDir;
@@ -394,7 +394,7 @@ public class I2PAppContext {
     public File getRouterDir() { return _routerDir; }
 
     /**
-     * Where router.ping goes.
+     * Where {@code router.ping} goes.
      * Applications should not use this.
      * The same as the router dir by default as of 0.8.12
      * Was the same as the system temp dir prior to that.
@@ -409,7 +409,7 @@ public class I2PAppContext {
      * Where the router keeps its log directory.
      * Applications should not use this.
      * The same as the config dir for now.
-     * (i.e. ~/.i2p, NOT ~/.i2p/logs)
+     * (i.e. ~/.i2p, NOT ~/.i2p/logs).
      *
      * @return dir constant for the life of the context
      * @since 0.7.6
@@ -477,7 +477,7 @@ public class I2PAppContext {
      */
     public File getLibDir() { return _libDir; }
 
-    /** Don't rely on deleteOnExit() */
+    /** Don't rely on deleteOnExit(). */
     public void deleteTempDir() {
         synchronized (_lock1) {
             if (_tmpDir != null) {
@@ -552,7 +552,7 @@ public class I2PAppContext {
     }
 
     /**
-     * Return an int with an int default
+     * Return an int with an int default.
      *
      * @param propName the property name
      * @param defaultVal the default value
@@ -577,7 +577,7 @@ public class I2PAppContext {
     }
 
     /**
-     * Return a long with a long default
+     * Return a long with a long default.
      *
      * @param propName the property name
      * @param defaultVal the default value
@@ -603,7 +603,7 @@ public class I2PAppContext {
     }
 
     /**
-     * Return a float with a float default
+     * Return a float with a float default.
      *
      * @param propName the property name
      * @param defaultVal the default value
@@ -629,7 +629,7 @@ public class I2PAppContext {
     }
 
     /**
-     * Return a boolean with a boolean default
+     * Return a boolean with a boolean default.
      *
      * @param propName the property name
      * @param defaultVal the default value
@@ -644,7 +644,7 @@ public class I2PAppContext {
     }
 
     /**
-     * Default false
+     * Default false.
      *
      * @param propName the property name
      * @return the boolean property
@@ -709,7 +709,7 @@ public class I2PAppContext {
      * only populated in the constructor, so there is nothing to notify. A
      * subclass that allows properties to change at runtime overrides this to
      * register the callback with its I2PProperties - see
-     * RouterContext.addPropertyCallback(). Callers that depend on
+     * {@link net.i2p.router.RouterContext#addPropertyCallback}. Callers that depend on
      * property-change notifications must therefore only do so in such a
      * context.
      *
@@ -748,7 +748,7 @@ public class I2PAppContext {
      * as its own key manager. Not that clients are doing end-to-end crypto anyway.
      * <p>
      * For client crypto within the router,
-     * use RouterContext.clientManager.getClientSessionKeyManager(dest)
+     * use {@link net.i2p.router.RouterContext#clientManager}{@code getClientSessionKeyManager(}dest)
      * <p>
      * As of 0.9.15, this returns a dummy SessionKeyManager in I2PAppContext.
      * The dummy SKM does NOT handle session tags.
@@ -802,7 +802,7 @@ public class I2PAppContext {
      * just does the algorithm), it does transparently use the context for logging
      * its performance and activity.  In addition, the engine can be swapped with
      * the context's properties (though only someone really crazy should mess with
-     * it ;)
+     * it ;).
      *
      * @return the ElGamal engine
      */
@@ -878,7 +878,7 @@ public class I2PAppContext {
     }
 
     /**
-     * Un-deprecated in 0.9.38
+     * Un-deprecated in 0.9.38.
      *
      * @return the HMAC256 generator
      */
@@ -888,7 +888,11 @@ public class I2PAppContext {
         return _hmac256;
     }
 
-    /** @deprecated used only by syndie */
+    /**
+     * Deprecated, used only by syndie.
+     *
+     * @deprecated used only by syndie
+     */
     @Deprecated
     private void initializeHMAC256() {
         synchronized (_lock10) {
@@ -900,7 +904,7 @@ public class I2PAppContext {
     }
 
     /**
-     * Our SHA256 instance (see the hmac discussion for why its context specific)
+     * Our SHA256 instance (see the hmac discussion for why its context specific).
      *
      * @return the SHA256 generator
      */
@@ -919,7 +923,7 @@ public class I2PAppContext {
     }
 
     /**
-     * Our DSA engine (see HMAC and SHA above)
+     * Our DSA engine (see HMAC and SHA above).
      *
      * @return the DSA engine
      */
@@ -996,7 +1000,7 @@ public class I2PAppContext {
     }
 
     /**
-     * Basic hash map
+     * Basic hash map.
      *
      * @return the key ring
      */
@@ -1046,7 +1050,7 @@ public class I2PAppContext {
      * You must be in a RouterContext for the tasks to be executed
      * at shutdown.
      * This method moved from Router in 0.7.1 so that clients
-     * may use it without depending on router.jar.
+     * may use it without depending on {@code router.jar}.
      *
      * @param task the Runnable to invoke during shutdown
      * @since 0.7.1
@@ -1076,7 +1080,7 @@ public class I2PAppContext {
     }
 
     /**
-     * Use this instead of context instanceof RouterContext
+     * Use this instead of context instanceof RouterContext.
      *
      * @return false always in I2PAppContext
      * @since 0.7.9
@@ -1106,7 +1110,7 @@ public class I2PAppContext {
     }
 
     /**
-     * Basic mapping from service names to ports
+     * Basic mapping from service names to ports.
      *
      * @return the port mapper
      * @since 0.8.12
@@ -1116,7 +1120,7 @@ public class I2PAppContext {
     }
 
     /**
-     * Use instead of SimpleTimer2.getInstance()
+     * Use instead of {@link net.i2p.util.SimpleTimer2#getInstance}.
      *
      * @return the SimpleTimer2 instance
      */

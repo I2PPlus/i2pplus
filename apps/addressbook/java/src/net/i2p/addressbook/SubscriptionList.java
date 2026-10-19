@@ -11,9 +11,6 @@ import java.util.Map;
 
 /**
  * A list of Subscriptions loaded from a file.
- *
- * @author Ragnarok
- *
  */
 class SubscriptionList implements Iterable<AddressBook> {
 

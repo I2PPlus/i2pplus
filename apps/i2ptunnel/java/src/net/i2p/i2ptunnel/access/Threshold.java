@@ -8,9 +8,9 @@ package net.i2p.i2ptunnel.access;
  */
 class Threshold {
 
-    /** A Threshold that is never breached */
+    /** A Threshold that is never breached. */
     static final Threshold ALLOW = new Threshold(Integer.MAX_VALUE, 1);
-    /** A Threshold that is always breached */
+    /** A Threshold that is always breached. */
     static final Threshold DENY = new Threshold(0, 1);
 
     private final int connections;

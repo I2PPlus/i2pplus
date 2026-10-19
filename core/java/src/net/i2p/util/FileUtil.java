@@ -89,13 +89,13 @@ public class FileUtil {
      * <p>
      * Since 0.7.12, any files inside the zip that have a .jar.pack or .war.pack suffix
      * are transparently unpacked to a .jar or .war file using unpack200.
-     * Logs at WARN level to wrapper.log
+     * Logs at WARN level to wrapper.log.
      *
      * @param zipfile the zip archive to extract
      * @param targetDir the directory the entries are written under, with any
-     *                  missing parent directories created as needed
+     * missing parent directories created as needed
      * @return true if every entry was extracted, false if any entry was refused
-     *         or could not be read or written
+     * or could not be read or written
      */
     public static boolean extractZip(File zipfile, File targetDir) {
         return extractZip(zipfile, targetDir, Log.WARN);
@@ -204,10 +204,10 @@ public class FileUtil {
      * Todo: verify zip header? Although this would break the undocumented
      * practice of renaming the i2pupdate.sud file to i2pupdate.zip and
      * letting the unzip method skip over the leading 56 bytes of
-     * "junk" (sig and version)
+     * "junk" (sig and version).
      *
      * @param zipfile the zip archive to check, whose entries are decompressed
-     *                and discarded rather than written out
+     * and discarded rather than written out
      * @return true if ok
      */
     public static boolean verifyZip(File zipfile) {
@@ -251,7 +251,7 @@ public class FileUtil {
     }
 
     /**
-     * Public since 0.8.3
+     * Public since 0.8.3.
      *
      * @return whether pack200 supported
      * @since 0.8.1
@@ -298,10 +298,10 @@ public class FileUtil {
      * Unpack a .pack stream with the io.pack200 fork, discovered at runtime so the
      * jar is not required at compile time.
      * <p>
-     * Caller must close streams
+     * Caller must close streams.
      *
      * @throws IOException on unpack error or if the library is unavailable.
-     *                     Will not throw ClassNotFoundException.
+     * Will not throw ClassNotFoundException.
      * @throws java.lang.reflect.InvocationTargetException on duplicate zip entries in the packed jar
      * @since 0.8.1
      */
@@ -323,12 +323,12 @@ public class FileUtil {
      * Warning - this inefficiently allocates a StringBuilder of size maxNumLines*80,
      * so don't make it too big.
      * Warning - converts \r\n to \n
-     * Warning - inefficient if startAtBeginning is false, see console LogsHelper for better version
+     * Warning - inefficient if startAtBeginning is false, see console LogsHelper for better version.
      *
      * @param filename the path of the newline-delimited text file to read
      * @param maxNumLines max number of lines (or -1 for unlimited)
      * @param startAtBeginning if true, read the first maxNumLines, otherwise read
-     *                         the last maxNumLines
+     * the last maxNumLines
      *
      * @return string or null; does not throw IOException.
      */
@@ -481,10 +481,10 @@ public class FileUtil {
     }
 
     /**
-     * Usage: FileUtil (delete path | copy source dest | rename from to | unzip path.zip)
+     * Usage: FileUtil (delete path | copy source dest | rename from to | unzip path.zip).
      *
      * @param args the subcommand and its operands: delete path | copy source
-     *             dest | rename from to | unzip path.zip
+     * dest | rename from to | unzip path.zip
      */
     public static void main(String[] args) {
         if ((args == null) || (args.length < 2)) {

@@ -42,7 +42,6 @@ import net.i2p.util.SystemVersion;
  * Portable uses both, with the key usage being that I2P is extracted from (whatever) to a base directory,
  * but still has it's config separate in the working directory.
  *
- * @author (who to blame) Meeh
  * @version 0.2
  * @since 0.9.35
  */
@@ -60,9 +59,9 @@ public class PortableWorkingDir {
      * Only call this once on router invocation.
      * Caller should store the return value for future reference.
      *
-     * @param envProps launcher's environment, read for i2p.dir.config and
-     *                 i2p.dir.base; may be null, in which case System properties
-     *                 are consulted instead
+     * @param envProps launcher's environment, read for {@code i2p.dir.config} and
+     * {@code i2p.dir.base}; may be null, in which case System properties
+     * are consulted instead
      * @return the working directory path
      */
     public static String getWorkingDir(Properties envProps) {

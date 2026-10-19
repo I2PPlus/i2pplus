@@ -18,7 +18,6 @@ import net.i2p.data.i2cp.SessionStatusMessage;
  * Handle I2CP SessionStatusMessagese from the router, updating the session as
  * necessary.
  *
- * @author jrandom
  */
 class SessionStatusMessageHandler extends HandlerImpl {
     /**

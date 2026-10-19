@@ -54,7 +54,7 @@ class SOCKS5Server extends SOCKSServer {
     private boolean setupCompleted;
     private final boolean authRequired;
     /**
-     * torsocks support
+     * Torsocks support
      * Cache of fake IPv4 255.x.x.x (as returned from RESOLVE) to hostname
      * torsocks 2.3.0 does NOT support IPv6, even though Tor does now
      * The fake IP is a partial SipHash of the hostname, so collisions aren't predictable.
@@ -62,20 +62,21 @@ class SOCKS5Server extends SOCKSServer {
      */
     private static final Map<String, String> _torCache = new LHMCache<>(256);
 
-    /** Sticky proxy cache: host -> selected proxy, for consistent routing */
+    /** Sticky proxy cache: host -> selected proxy, for consistent routing. */
     private final ConcurrentHashMap<String, String> _proxyCache = new ConcurrentHashMap<>();
 
     /**
      * Create a SOCKS5 server that communicates with the client using
      * the specified socket.  This method should not be invoked
      * directly: new SOCKS5Server objects should be created by using
-     * SOCKSServerFactory.createSOCSKServer().  It is assumed that the
+     * {@link net.i2p.i2ptunnel.socks.SOCKSServerFactory#createSOCKSServer(net.i2p.I2PAppContext, java.net.Socket, java.util.Properties)}.
+     * It is assumed that the
      * SOCKS VER field has been stripped from the input stream of the
      * client socket.
      *
      * @param ctx the context to run the tunnel in
      * @param clientSock the accepted socket, positioned just past the version
-     *                   and command bytes already consumed
+     * and command bytes already consumed
      * @param props non-null
      */
     public SOCKS5Server(I2PAppContext ctx, Socket clientSock, Properties props) {
@@ -147,7 +148,7 @@ class SOCKS5Server extends SOCKSServer {
     }
 
     /**
-     * Wait for the username/password message and verify or throw SOCKSException on failure
+     * Wait for the username/password message and verify or throw SOCKSException on failure.
      * @since 0.8.2
      */
     private void verifyPassword(DataInputStream in, DataOutputStream out, InetAddress client) throws IOException {
@@ -379,7 +380,7 @@ class SOCKS5Server extends SOCKSServer {
     }
 
     /**
-     * Send the specified reply during SOCKS5 initialization
+     * Send the specified reply during SOCKS5 initialization.
      */
     private void sendInitReply(int replyCode, DataOutputStream out) throws IOException {
         byte[] reply = new byte[2];
@@ -391,7 +392,7 @@ class SOCKS5Server extends SOCKSServer {
     }
 
     /**
-     * Send the specified reply during SOCKS5 authorization
+     * Send the specified reply during SOCKS5 authorization.
      * @since 0.8.2
      */
     private void sendAuthReply(int replyCode, DataOutputStream out) throws IOException {
@@ -466,7 +467,7 @@ class SOCKS5Server extends SOCKSServer {
     }
 
     /**
-     * Get an I2PSocket that can be used to send/receive 8-bit clean data
+     * Get an I2PSocket for sending/receiving 8-bit clean data
      * to/from the destination of the SOCKS connection.
      *
      * @return an I2PSocket connected with the destination
@@ -589,7 +590,7 @@ class SOCKS5Server extends SOCKSServer {
         }
     }
 
-    /** Select a proxy, preferring a cached one for the same host */
+    /** Select a proxy, preferring a cached one for the same host. */
     private String selectProxy(List<String> proxies, String host) {
         if (proxies.size() == 1) return proxies.get(0);
         String cached = _proxyCache.get(host);

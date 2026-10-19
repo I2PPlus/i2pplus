@@ -23,10 +23,9 @@ import net.i2p.router.networkdb.kademlia.FloodfillNetworkDatabaseFacade;
 /**
  * Manages client connections and LeaseSet operations for I2P applications. Handles client registration, lease authorization, and session management for local services.
  *
- * @author jrandom
  */
 public abstract class ClientManagerFacade implements Service {
-/** Property key for client only */
+/** Property key for client only. */
     public static final String PROP_CLIENT_ONLY = "i2cp.dontPublishLeaseSet";
 
     /**
@@ -125,7 +124,7 @@ public abstract class ClientManagerFacade implements Service {
 
 
     /**
-     * Return the list of locally connected clients
+     * Return the list of locally connected clients.
      *
      * @return set of Destination objects
      */

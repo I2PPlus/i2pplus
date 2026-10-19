@@ -24,7 +24,6 @@ public class ControlRequest extends SOAPRequest {
     //	Constructor
     ////////////////////////////////////////////////
 
-    /** Default constructor */
     public ControlRequest() {}
 
     /**

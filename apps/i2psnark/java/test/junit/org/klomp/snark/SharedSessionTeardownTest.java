@@ -9,7 +9,7 @@ import static org.junit.Assert.assertTrue;
 /**
  * Tests for the single-destination session teardown guard.
  *
- * <p>The defect: {@link Snark#teardownSession()} called {@link I2PSnarkUtil#disconnect()}
+ * <p>The defect: {@link Snark#teardownSession} called {@link I2PSnarkUtil#disconnect}
  * whenever any torrent stopped in single-dest mode, because every torrent shares one I2CP
  * session. Trackers such as zzzot submit throwaway lookup magnets and delete them minutes later;
  * each deletion destroyed the shared session, so every running torrent was forced onto a fresh

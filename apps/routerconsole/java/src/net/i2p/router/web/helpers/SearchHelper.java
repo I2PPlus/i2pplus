@@ -23,14 +23,14 @@ public class SearchHelper extends HelperBase {
     private Map<String, String> _engines = new TreeMap<>();
 
     private static final char S = ',';
-    /** Search engines config property */
+    /** Search engines config property. */
     static final String PROP_ENGINES = "routerconsole.searchEngines";
     private static final String PROP_DEFAULT = "routerconsole.searchEngine";
     private static final String DEFAULT = "shinobi.i2p";
 
-    /** Default search engine list */
+    /** Default search engine list. */
     static final String ENGINES_DEFAULT =
-    // TODO: add a checkbox or dropdown to UI to choose default engine
+        // TODO: add a checkbox or dropdown to UI to choose default engine
         "ahmia.i2p"                + S +     "http://ahmia.i2p/search/?q=%s" + S +
         "i2pforum.i2p"             + S +     "http://i2pforum.i2p/search.php?keywords=%s" + S +
         "hackaday.i2p"             + S +     "http://hackaday.i2p/blog/?s=%s" + S +

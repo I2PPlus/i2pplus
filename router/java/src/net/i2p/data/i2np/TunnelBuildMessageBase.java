@@ -37,7 +37,7 @@ public abstract class TunnelBuildMessageBase extends I2NPMessageImpl {
     public TunnelBuildMessageBase(I2PAppContext context) {this(context, MAX_RECORD_COUNT);}
 
     /**
-     * leaves the count to be set by readMessage()
+     * Leaves the count to be set by readMessage().
      *
      * @param context the application context the message is read and written under
      * @param records the number of records to preallocate, up to MAX_RECORD_COUNT; zero

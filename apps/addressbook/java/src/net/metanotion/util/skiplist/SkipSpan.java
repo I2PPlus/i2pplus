@@ -202,7 +202,9 @@ public class SkipSpan<K extends Comparable<? super K>, V> implements Flushable {
     }
 
     /**
-     *  @return the new span if it caused a split, else null if it went in this span
+     * Insert a span at the given position.
+     *
+     * @return the new span if it caused a split, else null if it went in this span
      */
     private SkipSpan<K, V> insert(int loc, K key, V val, SkipList<K, V> sl) {
         sl.addItem();

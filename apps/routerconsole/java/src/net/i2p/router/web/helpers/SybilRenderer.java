@@ -76,7 +76,7 @@ public class SybilRenderer {
     }
 
     /**
-     * Entry point
+     * Entry point.
      *
      * @param out the writer receiving the rendered HTML
      * @param nonce the CSP nonce the emitted markup references
@@ -110,7 +110,7 @@ public class SybilRenderer {
     }
 
     /**
-     * Reverse points, then forward by text
+     * Reverse points, then forward by text.
      * @since 0.9.38
      */
     private static class ReasonComparator implements Comparator<String>, Serializable {
@@ -139,7 +139,7 @@ public class SybilRenderer {
     }
 
     /**
-     * The whole thing
+     * The whole thing.
      *
      * @param mode what tab to show
      * @param date only for mode = 12
@@ -983,9 +983,9 @@ public class SybilRenderer {
     }
 
     /**
-     * Render routers closer than MIN_CLOSE up to MAX routers
+     * Render routers closer than MIN_CLOSE up to MAX routers.
      * @param us the reference hash distances are measured from, or null to omit
-     *           the distance row
+     * the distance row
      * @param ris sorted, closest first
      */
     @SuppressWarnings("PMD.UnsynchronizedStaticFormatter")
@@ -1052,7 +1052,7 @@ public class SybilRenderer {
     }
 
     /**
-     * Countries now in a separate bundle
+     * Countries now in a separate bundle.
      * @param code two-letter country code
      * @return the translated country
      * @since 0.9.9
@@ -1064,11 +1064,11 @@ public class SybilRenderer {
 
     /**
      * Be careful to use stripHTML for any displayed routerInfo data
-     * to prevent vulnerabilities
+     * to prevent vulnerabilities.
      *
      * @param us ROUTING KEY or null
      * @param full unused; vestigial, every caller passes false and the body
-     *             never reads it
+     * never reads it
      * @return distance to us if non-null, else 0
      */
     @SuppressWarnings("PMD.UnsynchronizedStaticFormatter")
@@ -1270,7 +1270,7 @@ public class SybilRenderer {
     }
 
     /**
-     * Called from NetDbRenderer
+     * Called from NetDbRenderer.
      *
      * @param out the writer receiving the rendered HTML
      * @param ctx the router context supplying the key generator and clock
@@ -1341,7 +1341,11 @@ public class SybilRenderer {
         }
     }
 
-    /** @since 0.9.28 */
+    /**
+     * Write a network distance in human units.
+     *
+     * @since 0.9.28
+     */
     private static void writeDistance(Writer out, BigInteger dist) throws IOException {
         double distance = biLog2(dist);
         if (distance < MIN_CLOSE) {out.write("<span style=font-weight:600;color:red>");}
@@ -1349,12 +1353,12 @@ public class SybilRenderer {
         if (distance < MIN_CLOSE) {out.write("</span>");}
     }
 
-    /** Translate a string */
+    /** Translate a string. */
     private String _t(String s) {
         return Messages.getString(s, _context);
     }
 
-    /** Tag only */
+    /** Tag only. */
     private static final String _x(String s) {
         return s;
     }

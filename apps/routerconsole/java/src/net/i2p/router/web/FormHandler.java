@@ -27,30 +27,30 @@ import net.i2p.util.Log;
  * This Handler will only process a single POST. The jsp bean must be declared scope=request.
  */
 public abstract class FormHandler {
-    /** Router context */
+    /** Router context. */
     protected RouterContext _context;
     /** Class logger. */
     protected Log _log;
-    /** Not for multipart/form-data, will be null */
+    /** Not for multipart/form-data, will be null. */
     @SuppressWarnings("rawtypes")
     protected Map _settings;
-    /** Only for multipart/form-data. Warning, parameters are NOT XSS filtered */
+    /** Only for multipart/form-data. Warning, parameters are NOT XSS filtered. */
     protected RequestWrapper _requestWrapper;
     private String _nonce;
-    /** Form action */
+    /** Form action. */
     protected String _action;
-    /** Request method */
+    /** Request method. */
     protected String _method;
     private final List<Message> _errors;
     private final List<Message> _notices;
     private boolean _processed;
     private boolean _valid;
-    /** Output writer */
+    /** Output writer. */
     protected Writer _out;
-    /** HTTP session for nonce validation */
+    /** HTTP session for nonce validation. */
     protected HttpSession _session;
 
-    /** Rate limiter for form submissions - prevents brute-force attacks */
+    /** Rate limiter for form submissions - prevents brute-force attacks. */
     private static final int RATE_LIMIT_WINDOW_MS = 60000; // 1 minute
     private static final int RATE_LIMIT_MAX_POSTS = 30; // max POSTs per minute per IP
     private static final ConcurrentHashMap<String, RateLimitEntry> RATE_LIMIT_MAP = new ConcurrentHashMap<>();
@@ -81,7 +81,7 @@ public abstract class FormHandler {
         return true;
     }
 
-    /** Clean up old entries periodically */
+    /** Clean up old entries periodically. */
     static {
         Thread cleanupThread = new Thread(FormHandler::cleanupRateLimits, "FormHdlrCln");
         cleanupThread.setDaemon(true);
@@ -117,17 +117,17 @@ public abstract class FormHandler {
     }
 
     /**
-     * For nonce validation
+     * For nonce validation.
      * @param session the HTTP session
      * @since 0.9.69
      */
     public void storeSession(HttpSession session) { _session = session; }
 
     /**
-     * Configure this bean to query a particular router context
+     * Configure this bean to query a particular router context.
      *
      * @param contextId beginning few characters of the routerHash, or null to pick
-     *                  the first one we come across.
+     * the first one we come across.
      */
     public void setContextId(String contextId) {
         try {
@@ -157,7 +157,7 @@ public abstract class FormHandler {
     public void setSettings(Map settings) {_settings = new HashMap<>(settings);}
 
     /**
-     * Only set by formhandler.jsi for multipart/form-data
+     * Only set by formhandler.jsi for multipart/form-data.
      *
      * @param rw the request wrapper
      * @since 0.9.19
@@ -165,7 +165,7 @@ public abstract class FormHandler {
     public void setRequestWrapper(RequestWrapper rw) {_requestWrapper = rw;}
 
     /**
-     * Same as HelperBase
+     * Same as HelperBase.
      * @return true if advanced mode
      * @since 0.9.14.1
      */
@@ -220,7 +220,7 @@ public abstract class FormHandler {
         return action;
     }
 
-    /** Check for common XSS patterns @since 0.9.70+ */
+    /** Check for common XSS patterns @since 0.9.70+. */
     private boolean containsXSS(String val) {
         if (val == null || val.isEmpty()) return false;
         String lower = val.toLowerCase();
@@ -232,7 +232,7 @@ public abstract class FormHandler {
     }
 
     /**
-     * Call this to prevent changes using GET
+     * Call this to prevent changes using GET.
      *
      * @param val the request method
      * @since 0.8.2
@@ -258,7 +258,7 @@ public abstract class FormHandler {
     /**
      * Add an error message to display
      * Use if it does not include a link.
-     * Escapes '&lt;' and '&gt;' before queueing
+     * Escapes '&lt;' and '&gt;' before queueing.
      *
      * @param errorMsg the error message
      */
@@ -269,7 +269,7 @@ public abstract class FormHandler {
     /**
      * Add an error message to display
      * Use if it does not include a link.
-     * Escapes '&lt;' and '&gt;' before queueing
+     * Escapes '&lt;' and '&gt;' before queueing.
      *
      * @param errorMsg the error message
      * @param canClose If true, the message can be closed by the user.
@@ -282,7 +282,7 @@ public abstract class FormHandler {
     /**
      * Add a non-error message to display
      * Use if it does not include a link.
-     * Escapes '&lt;' and '&gt;' before queueing
+     * Escapes '&lt;' and '&gt;' before queueing.
      *
      * @param msg the notice message
      */
@@ -293,7 +293,7 @@ public abstract class FormHandler {
     /**
      * Add a non-error message to display
      * Use if it does not include a link.
-     * Escapes '&lt;' and '&gt;' before queueing
+     * Escapes '&lt;' and '&gt;' before queueing.
      *
      * @param msg the notice message
      * @param canClose If true, the message can be closed by the user.
@@ -306,7 +306,7 @@ public abstract class FormHandler {
     /**
      * Add a non-error message to display
      * Use if it includes a link or other formatting.
-     * Does not escape '&lt;' and '&gt;' before queueing
+     * Does not escape '&lt;' and '&gt;' before queueing.
      *
      * @param msg the notice message
      * @since 0.9.14.1
@@ -318,7 +318,7 @@ public abstract class FormHandler {
     /**
      * Add a non-error message to display
      * Use if it includes a link or other formatting.
-     * Does not escape '&lt;' and '&gt;' before queueing
+     * Does not escape '&lt;' and '&gt;' before queueing.
      *
      * @param msg the notice message
      * @param canClose If true, the message can be closed by the user.
@@ -332,7 +332,7 @@ public abstract class FormHandler {
     /**
      * Add an error message to display
      * Use if it includes a link or other formatting.
-     * Does not escape '&lt;' and '&gt;' before queueing
+     * Does not escape '&lt;' and '&gt;' before queueing.
      *
      * @param msg the error message
      * @since 0.9.19
@@ -344,7 +344,7 @@ public abstract class FormHandler {
     /**
      * Add an error message to display
      * Use if it includes a link or other formatting.
-     * Does not escape '&lt;' and '&gt;' before queueing
+     * Does not escape '&lt;' and '&gt;' before queueing.
      *
      * @param msg the error message
      * @param canClose If true, the message can be closed by the user.
@@ -356,10 +356,10 @@ public abstract class FormHandler {
     }
 
     /**
-     * Display everything, wrap it in a div for consistent presentation
+     * Display everything, wrap it in a div for consistent presentation.
      *
      * @return the queued errors and notices wrapped in a div, or an empty
-     *         string if there are none
+     * string if there are none
      */
     public String getAllMessages() {
         validate();
@@ -383,10 +383,10 @@ public abstract class FormHandler {
 
     /**
      * Display any error messages (processing the form if it hasn't
-     * been yet)
+     * been yet).
      *
      * @return an unordered list of the queued error messages, or an empty
-     *         string if there are none
+     * string if there are none
      */
     public String getErrors() {
         validate();
@@ -396,10 +396,10 @@ public abstract class FormHandler {
 
     /**
      * Display any non-error messages (processing the form if it hasn't
-     * been yet)
+     * been yet).
      *
      * @return an unordered list of the queued notice messages, or an empty
-     *         string if there are none
+     * string if there are none
      */
     public String getNotices() {
         validate();
@@ -501,16 +501,16 @@ public abstract class FormHandler {
     public String _t(String s) {return Messages.getString(s, _context);}
 
     /**
-     * translate a string with a parameter
+     * Translate a string with a parameter
      * This is a lot more expensive than _t(s), so use sparingly.
      *
      * @param s string to be translated containing {0}
-     *          The {0} will be replaced by the parameter.
-     *          Single quotes must be doubled, i.e. ' -&gt; '' in the string.
+     * The {0} will be replaced by the parameter.
+     * Single quotes must be doubled, i.e. ' -&gt; '' in the string.
      * @param o parameter, not translated.
-     *          To translate parameter also, use _t("foo {0} bar", _t("baz"))
-     *          Do not double the single quotes in the parameter.
-     *          Use autoboxing to call with ints, longs, floats, etc.
+     * To translate parameter also, use _t("foo {0} bar", _t("baz"))
+     * Do not double the single quotes in the parameter.
+     * Use autoboxing to call with ints, longs, floats, etc.
      * @return the translated string
      */
     public String _t(String s, Object o) {return Messages.getString(s, o, _context);}
@@ -536,7 +536,7 @@ public abstract class FormHandler {
     public static String _x(String s) {return s;}
 
     /**
-     * Message class to encapsulate the message text and the canClose flag
+     * Message class to encapsulate the message text and the canClose flag.
      */
     public static class Message {
         private String text;

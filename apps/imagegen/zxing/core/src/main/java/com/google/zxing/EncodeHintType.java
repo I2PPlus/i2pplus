@@ -19,7 +19,6 @@ package com.google.zxing;
 /**
  * These are a set of hints that you may pass to Writers to specify their behavior.
  *
- * @author dswitkin@google.com (Daniel Switkin)
  */
 public enum EncodeHintType {
 

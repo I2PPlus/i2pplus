@@ -82,7 +82,7 @@ public class LookupDest {
     }
 
     /**
-     * Any hostname, but this is for long-format b32
+     * Any hostname, but this is for long-format b32.
      *
      * @param ctx the context to read the I2CP client options from
      * @param hostname a "b33" hostname, 64+ chars ending with ".b32.i2p"
@@ -132,11 +132,11 @@ public class LookupDest {
 
     /**
      * Supports hostnames and extended b32.
-     * TODO: does not support I2CP options.
      *
      * @param args command line arguments
      */
     public static void main(String[] args) {
+        // TODO: does not support I2CP options.
         if (args.length != 1) {
             System.err.println("Usage: LookupDest hostname|b32");
             System.exit(1);

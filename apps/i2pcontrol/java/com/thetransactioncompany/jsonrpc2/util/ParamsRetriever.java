@@ -4,7 +4,6 @@ package com.thetransactioncompany.jsonrpc2.util;
 /**
  * The base abstract class for the JSON-RPC 2.0 parameter retrievers.
  *
- * @author Vladimir Dzhuvinov
  */
 public abstract class ParamsRetriever {
     /**

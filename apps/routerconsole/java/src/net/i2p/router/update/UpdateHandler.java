@@ -21,9 +21,9 @@ import net.i2p.update.*;
  * This does not do any checking, that is handled by the NewsFetcher.
  */
 class UpdateHandler implements Updater {
-    /** The router context for configuration access */
+    /** The router context for configuration access. */
     protected final RouterContext _context;
-    /** The update manager for coordinating updates */
+    /** The update manager for coordinating updates. */
     protected final ConsoleUpdateManager _mgr;
 
     /**

@@ -61,9 +61,9 @@ class SAMStreamSession implements SAMMessageSess {
     /** The socket manager used for outgoing connections. */
     protected final I2PSocketManager socketMgr;
 
-    /** stream id → socket reader; Integer key, auto-negative ids for inbound. */
+    /** Stream id → socket reader; Integer key, auto-negative ids for inbound. */
     private final HashMap<Integer,SAMStreamSessionSocketReader> handlersMap = new HashMap<>();
-    /** stream id → sender for outbound data. */
+    /** Stream id → sender for outbound data. */
     private final HashMap<Integer,StreamSender> sendersMap = new HashMap<>();
 
     /** Counter for auto-generated negative stream ids. */
@@ -79,7 +79,7 @@ class SAMStreamSession implements SAMMessageSess {
     protected final boolean _isOwnSession;
 
     /**
-     * should we flush every time we get a STREAM SEND, or leave that up to
+     * Should we flush every time we get a STREAM SEND, or leave that up to
      * the streaming lib to decide?
      */
     protected final boolean forceFlush;
@@ -95,12 +95,12 @@ class SAMStreamSession implements SAMMessageSess {
      * Caller MUST call start().
      *
      * @param dest Base64-encoded destination and private keys,
-     *             and optional offline signature section (same format as PrivateKeyFile)
+     * and optional offline signature section (same format as PrivateKeyFile)
      * @param dir Session direction ("RECEIVE", "CREATE" or "BOTH") or "__v3__" if extended by SAMv3StreamSession
      * @param props Properties to setup the I2P session
      * @param recv Object that will receive incoming data
-     * @throws SAMException if dir names no known direction, if i2cp.tcp.port is
-     *                      not a number, or if the I2P session cannot be created
+     * @throws SAMException if dir names no known direction, if {@code i2cp.tcp.port} is
+     * not a number, or if the I2P session cannot be created
      */
     public SAMStreamSession(String dest, String dir, Properties props,
                             SAMStreamReceiver recv) throws SAMException {
@@ -113,12 +113,12 @@ class SAMStreamSession implements SAMMessageSess {
      * Caller MUST call start().
      *
      * @param destStream Input stream containing the binary destination and private keys,
-     *                   and optional offline signature section (same format as PrivateKeyFile)
+     * and optional offline signature section (same format as PrivateKeyFile)
      * @param dir Session direction ("RECEIVE", "CREATE" or "BOTH") or "__v3__" if extended by SAMv3StreamSession
      * @param props Properties to setup the I2P session
      * @param recv Object that will receive incoming data
-     * @throws SAMException if dir names no known direction, if i2cp.tcp.port is
-     *                      not a number, or if the I2P session cannot be created
+     * @throws SAMException if dir names no known direction, if {@code i2cp.tcp.port} is
+     * not a number, or if the I2P session cannot be created
      */
     protected SAMStreamSession(InputStream destStream, String dir,
                                Properties props,  SAMStreamReceiver recv) throws SAMException {
@@ -287,7 +287,7 @@ class SAMStreamSession implements SAMMessageSess {
     }
 
     /**
-     * Connect the SAM STREAM session to the specified Destination
+     * Connect the SAM STREAM session to the specified Destination.
      *
      * @param id Unique id for the connection
      * @param dest Base64-encoded Destination to connect to
@@ -296,13 +296,13 @@ class SAMStreamSession implements SAMMessageSess {
      * @return true if successful
      * @throws DataFormatException if the destination is not valid
      * @throws SAMInvalidDirectionException if trying to connect through a
-     *                                      receive-only session
+     * receive-only session
      * @throws ConnectException if the destination refuses connections
      * @throws NoRouteToHostException if the destination can't be reached
      * @throws InterruptedIOException if the connection timeouts
      * @throws I2PException if there's another I2P-related error
      * @throws IOException if the connection fails for a reason not covered by
-     *                     the more specific subclasses listed above
+     * the more specific subclasses listed above
      */
     public boolean connect ( int id, String dest, Properties props ) throws I2PException, SAMInvalidDirectionException, IOException {
         if (!canCreate) {
@@ -475,7 +475,7 @@ class SAMStreamSession implements SAMMessageSess {
         return id;
     }
 
-    /** Create a unique id, either positive or negative */
+    /** Create a unique id, either positive or negative. */
     private int createUniqueId() {
         return lastNegativeId.decrementAndGet();
     }
@@ -567,7 +567,7 @@ class SAMStreamSession implements SAMMessageSess {
         private final I2PServerSocket serverSocket;
 
         /**
-         * Create a new SAM STREAM session server
+         * Create a new SAM STREAM session server.
          *
          */
         public SAMStreamSessionServer() {
@@ -578,7 +578,7 @@ class SAMStreamSession implements SAMMessageSess {
         }
 
         /**
-         * Stop a SAM STREAM session server
+         * Stop a SAM STREAM session server.
          *
          */
         public void stopRunning() {
@@ -691,7 +691,7 @@ class SAMStreamSession implements SAMMessageSess {
         protected final int id;
 
         /**
-         * Create a new SAM STREAM session socket reader
+         * Create a new SAM STREAM session socket reader.
          *
          * @param s Socket to be handled
          * @param id Unique id assigned to the handler
@@ -732,7 +732,7 @@ class SAMStreamSession implements SAMMessageSess {
      */
     public class SAMv1StreamSessionSocketReader extends SAMStreamSessionSocketReader {
         /**
-         * Create a new SAM STREAM session socket reader
+         * Create a new SAM STREAM session socket reader.
          *
          * @param s Socket to be handled
          * @param id Unique id assigned to the handler
@@ -847,7 +847,7 @@ class SAMStreamSession implements SAMMessageSess {
 	}
 
         /**
-         * Send bytes through the SAM STREAM session socket sender
+         * Send bytes through the SAM STREAM session socket sender.
          *
          * @param in Data input stream
          * @param size Count of bytes to send
@@ -857,7 +857,7 @@ class SAMStreamSession implements SAMMessageSess {
 
 
         /**
-         * Stop a SAM STREAM session socket sender thread immediately
+         * Stop a SAM STREAM session socket sender thread immediately.
          *
          */
         public abstract void stopRunning();
@@ -914,7 +914,7 @@ class SAMStreamSession implements SAMMessageSess {
         }
 
         /**
-         * Send bytes through the SAM STREAM session socket sender
+         * Send bytes through the SAM STREAM session socket sender.
          *
          * @throws IOException if the client didnt provide enough data
          */
@@ -936,7 +936,7 @@ class SAMStreamSession implements SAMMessageSess {
         }
 
         /**
-         * Stop a SAM STREAM session socket sender thread immediately
+         * Stop a SAM STREAM session socket sender thread immediately.
          *
          */
         @Override

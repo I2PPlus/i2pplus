@@ -37,7 +37,7 @@ public class TestSwarm {
     private SAMReader _reader;
     private boolean _dead;
     private SAMEventHandler _eventHandler;
-    /** Connection id (Integer) to peer (Flooder) */
+    /** Connection id (Integer) to peer (Flooder). */
     private Map _remotePeers;
 
     public static void main(String[] args) {

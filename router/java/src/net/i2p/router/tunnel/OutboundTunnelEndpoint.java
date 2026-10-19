@@ -189,7 +189,11 @@ class OutboundTunnelEndpoint {
         }
     }
 
-    /** @since 0.9.8 */
+    /**
+     * Tunnel summary for log messages.
+     *
+     * @since 0.9.8
+     */
     @Override
     public String toString() {
         return "OutboundEndpoint [TunnelId " + _config.getReceiveTunnelId() + "]";

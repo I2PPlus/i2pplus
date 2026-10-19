@@ -4,7 +4,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
 /**
- * Class that defines utility methods used by the NDT code
+ * Class that defines utility methods used by the NDT code.
  */
 public class NDTUtils {
     /**
@@ -49,7 +49,7 @@ public class NDTUtils {
     public static boolean isNotEmpty(String str) {return !isEmpty(str);}
 
     /**
-     * Utility method to encode the given string using UTF-8 encoding
+     * Utility method to encode the given string using UTF-8 encoding.
      *
      * @param str String to encode
      * @return encoded string with replacing '+' to '%20'

@@ -108,24 +108,24 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
     private final Destination _from;
     private final Destination _to;
     private final String _toString;
-    private LeaseSet _leaseSet; /** Target destination's leaseSet, if known */
-    private Lease _lease; /** Actual lease the message is being routed through */
-    private PublicKey _encryptionKey; /** Actual target encryption key from the LS being used */
+    private LeaseSet _leaseSet; /** Target destination's leaseSet, if known. */
+    private Lease _lease; /** Actual lease the message is being routed through. */
+    private PublicKey _encryptionKey; /** Actual target encryption key from the LS being used. */
     private final long _start;
-    private enum Result {NONE, FAIL, SUCCESS} /** Note we can succeed after failure, but not vice versa */
+    private enum Result {NONE, FAIL, SUCCESS} /** Note we can succeed after failure, but not vice versa. */
     private Result _finished = Result.NONE;
     private long _leaseSetLookupBegin;
     private TunnelInfo _outTunnel;
     private TunnelInfo _inTunnel;
     private boolean _wantACK;
 
-    /** Key used to cache things with, based on source + dest */
+    /** Key used to cache things with, based on source + dest. */
     private final OutboundCache.HashPair _hashPair;
 
     /**
      * Final timeout (in milliseconds) that the outbound message will fail in.
-     * This can be overridden in the router.config or the client's session config
-     * (the client's session config takes precedence)
+     * This can be overridden in the {@code router.config} or the client's session config
+     * (the client's session config takes precedence).
      */
     public static final String OVERALL_TIMEOUT_MS_PARAM = "clientMessageTimeout";
     private static final long OVERALL_TIMEOUT_MS_DEFAULT = 60*1000L;
@@ -183,7 +183,7 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
     /**
      * How many pool picks to sample when gathering rotation candidates for a
      * fresh connection.  With the default client pool of two tunnels a single
-     * extra pick almost always yields the alternative; a small bound keeps the
+     * extra pick almost always yields the alternative. A small bound keeps the
      * hot path cheap.
      */
     private static final int MAX_ROTATION_CANDIDATES = 6;
@@ -663,7 +663,7 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
     }
 
     /**
-     * We couldn't even find the leaseSet, so die
+     * We couldn't even find the leaseSet, so die.
      */
     private class LookupLeaseSetFailedJob extends JobImpl {
         public LookupLeaseSetFailedJob(RouterContext enclosingContext) {super(enclosingContext);}
@@ -701,7 +701,7 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
      * the (already created) payload clove as well as a new delivery status message.  This garlic
      * message is sent out one of our tunnels, destined for the lease (tunnel+router) specified, and the delivery
      * status message is targeting one of our free inbound tunnels as well.  We use a new
-     * reply selector to keep an eye out for that delivery status message's token
+     * reply selector to keep an eye out for that delivery status message's token.
      */
     private void send() {
         synchronized(this) {
@@ -864,10 +864,10 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
         if (!wantACK) {getContext().statManager().addRateData("client.dispatchNoACK", 1);}
     }
 
+    // TODO replace with a method
     /**
      * Note: This is run inline by send(), not on the job queue.
-     * TODO replace with a method
-     */
+    */
     private class DispatchJob extends JobImpl {
         private final GarlicMessage _msg;
         private final ReplySelector _selector;
@@ -1142,7 +1142,7 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
     }
 
     /**
-     * Pick an arbitrary inbound tunnel for any deliveryStatusMessage to come back in
+     * Pick an arbitrary inbound tunnel for any deliveryStatusMessage to come back in.
      */
     private TunnelInfo selectInboundTunnel() {
         // Use tunnel EP closest to his hash, as a simple cache to minimize connections
@@ -1294,7 +1294,7 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
      * or starved when the send needed them: 14 (expired while queued —
      * nothing carried it before the deadline) and 16 (no tunnels
      * available).  These do not blame the outbound tunnel (see
-     * {@link #isTunnelRelatedFailure}); they trigger a pool-level ensure
+     * {@link #isTunnelRelatedFailure}). They trigger a pool-level ensure
      * nudge instead (see dieFatal).
      *
      * @param status the I2CP MessageStatusMessage failure code
@@ -1320,7 +1320,7 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
      * Whether the current (source, destination) pair is inside a stall
      * cooldown, and rotation is enabled.
      * <p>Always a hint. When true the caller prefers another tunnel but must
-     * still return one — a destination whose every tunnel is inside a
+     * still return one. A destination whose every tunnel is inside a
      * cooldown has to keep using one of them, or the send fails outright and
      * a slow path becomes a dead one.
      *
@@ -1375,7 +1375,7 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
      * one is our own fault — a saturated handler pool, an aborted body, a slow
      * upstream — and says nothing about the tunnel that delivered the request.
      * Charging those failures to the tunnel makes the pool condemn its own
-     * healthy egress; the resulting starvation guarantees the next request
+     * healthy egress. The resulting starvation guarantees the next request
      * fails too, so the service can never recover.
      *
      * @param status        the I2CP MessageStatusMessage failure code
@@ -1442,7 +1442,7 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
 
     /**
      * Keep an eye out for any of the delivery status message tokens that have been
-     * sent down the various tunnels to deliver this message
+     * sent down the various tunnels to deliver this message.
      */
     private static class ReplySelector implements MessageSelector {
         private final long _pendingToken;
@@ -1603,7 +1603,7 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
 
     /**
      * Fired after the basic timeout for sending through the given tunnel has been reached.
-     * We'll accept successes later, but won't expect them
+     * We'll accept successes later, but won't expect them.
      */
     private class SendTimeoutJob extends JobImpl {
         private final SessionKey _key;

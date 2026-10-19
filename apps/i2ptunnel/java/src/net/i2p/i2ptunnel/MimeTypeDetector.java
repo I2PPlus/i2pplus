@@ -27,10 +27,10 @@ public class MimeTypeDetector {
      */
     public MimeTypeDetector() {}
 
-    /** MIME types that require security headers (Referrer-Policy, Allow) */
+    /** MIME types that require security headers (Referrer-Policy, Allow). */
     private static final Set<String> CUSTOM_WHITELIST_SET = new HashSet<>();
 
-    /** MIME types that should use immutable cache control */
+    /** MIME types that should use immutable cache control. */
     private static final Set<String> IMMUTABLE_CACHE_WHITELIST_SET = new HashSet<>();
 
     static {

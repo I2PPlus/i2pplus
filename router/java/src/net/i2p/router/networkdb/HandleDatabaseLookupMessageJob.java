@@ -36,7 +36,7 @@ import net.i2p.util.Log;
 /**
  * Handle a lookup for a key received from a remote peer.  Needs to be implemented
  * to send back replies, etc
- * Unused directly - see kademlia/ for extension
+ * Unused directly - see kademlia/ for extension.
  */
 public class HandleDatabaseLookupMessageJob extends JobImpl {
     private final Log _log;
@@ -121,7 +121,7 @@ public class HandleDatabaseLookupMessageJob extends JobImpl {
              * Answer any request for a LeaseSet if it has been published to us.
              * getReceivedAsPublished:
              * - false for received over a client tunnel(if associated with a client, goes to client subDB)
-             * - true for received in a DatabaseStoreMessage unsolicited(goes to main Db)
+             * - true for received in a DatabaseStoreMessage unsolicited(goes to main Db).
              */
             if (ls != null && ls.getReceivedAsPublished()) {
                 /**

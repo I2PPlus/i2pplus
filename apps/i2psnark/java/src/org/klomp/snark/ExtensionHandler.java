@@ -17,7 +17,7 @@ import org.klomp.snark.comments.Comment;
 import org.klomp.snark.comments.CommentSet;
 
 /**
- * REF: BEP 10 Extension Protocol
+ * REF: BEP 10 Extension Protocol.
  *
  * @since 0.8.2
  */
@@ -85,7 +85,7 @@ abstract class ExtensionHandler {
      */
     public static final String TYPE_LT_DONTHAVE = "lt_donthave";
 
-    /** Pieces * SHA1 Hash length, + 25% extra for file names, bencoding overhead, etc */
+    /** Pieces * SHA1 Hash length, + 25% extra for file names, bencoding overhead, etc. */
     private static final int MAX_METADATA_SIZE = Storage.MAX_PIECES * 20 * 5 / 4;
 
     private static final int PARALLEL_REQUESTS = 8;

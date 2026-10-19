@@ -38,7 +38,7 @@ import java.util.Set;
  * <p><strong>Key Features:</strong></p>
  * <ul>
  * <li><strong>Authentication Types:</strong> Supports DH, PSK, and no authentication</li>
- * <li><strong>Blinded Keys:</strong> Uses {@link #getSigningKey()} for the blinded key (revocation key in super)</li>
+ * <li><strong>Blinded Keys:</strong> Uses {@link #getSigningKey} for the blinded key (revocation key in super)</li>
  * <li><strong>Encryption:</strong> Content encrypted with ChaCha20-Poly1305 AEAD</li>
  * <li><strong>Access Control:</strong> Fine-grained control over who can decrypt the LeaseSet</li>
  * </ul>
@@ -54,7 +54,7 @@ import java.util.Set;
  * <li>{@link BlindData#AUTH_DH} - Diffie-Hellman key exchange authentication</li>
  * <li>{@link BlindData#AUTH_PSK} - Pre-shared key authentication</li>
  * </ul>
- * <p><strong>Implementation Status:</strong> PRELIMINARY - Subject to change as the proposal evolves</p>
+ * <p><strong>Implementation Status:</strong> PRELIMINARY - Subject to change as the proposal evolves.</p>
  *
  * @since 0.9.38
  */
@@ -306,7 +306,7 @@ public class EncryptedLeaseSet extends LeaseSet2 {
     }
 
     /**
-     * This does NOT validate the signature
+     * This does NOT validate the signature.
      *
      * @throws IllegalStateException if called more than once or Destination already set
      */
@@ -329,7 +329,7 @@ public class EncryptedLeaseSet extends LeaseSet2 {
     /**
      * Before encrypt() is called, the inner leaseset.
      * After encrypt() is called, the encrypted data.
-     * Without sig. This does NOT validate the signature
+     * Without sig. This does NOT validate the signature.
      */
     @Override
     protected void writeBytesWithoutSig(OutputStream out) throws DataFormatException, IOException {
@@ -348,7 +348,7 @@ public class EncryptedLeaseSet extends LeaseSet2 {
     }
 
     /**
-     * Overridden because we have a blinded key, not a dest
+     * Overridden because we have a blinded key, not a dest.
      */
     @Override
     public boolean verifyOfflineSignature() {
@@ -356,7 +356,7 @@ public class EncryptedLeaseSet extends LeaseSet2 {
     }
 
     /**
-     * Overridden because we have a blinded key, not a dest
+     * Overridden because we have a blinded key, not a dest.
      */
     @Override
     protected void readHeader(InputStream in) throws DataFormatException, IOException {
@@ -372,7 +372,7 @@ public class EncryptedLeaseSet extends LeaseSet2 {
     }
 
     /**
-     * Overridden because we have a blinded key, not a dest
+     * Overridden because we have a blinded key, not a dest.
      */
     @Override
     protected void writeHeader(OutputStream out) throws DataFormatException, IOException {
@@ -386,7 +386,7 @@ public class EncryptedLeaseSet extends LeaseSet2 {
     }
 
     /**
-     * Overridden because we have a blinded key, not a dest
+     * Overridden because we have a blinded key, not a dest.
      */
     @Override
     protected void readOfflineBytes(InputStream in) throws DataFormatException, IOException {
@@ -402,7 +402,7 @@ public class EncryptedLeaseSet extends LeaseSet2 {
     }
 
     /**
-     * Overridden because we have a blinded key, not a dest
+     * Overridden because we have a blinded key, not a dest.
      */
     @Override
     protected void writeOfflineBytes(OutputStream out) throws DataFormatException, IOException {
@@ -414,7 +414,7 @@ public class EncryptedLeaseSet extends LeaseSet2 {
     }
 
     /**
-     * Number of bytes, NOT including signature
+     * Number of bytes, NOT including signature.
      */
     @Override
     public int size() {
@@ -461,12 +461,12 @@ public class EncryptedLeaseSet extends LeaseSet2 {
 
     /**
      * Throws IllegalStateException if not initialized.
-     * Ref: proposal 123
+     * Ref: proposal 123.
      *
      * @param authType 0, 1, or 3, see BlindData
      * @param clientKeys The client's X25519 public or private keys, null if unused
      * @throws IllegalStateException if already encrypted, not signed, or the inner
-     *                               layer cannot be written
+     * layer cannot be written
      */
     public void encrypt(int authType, List<? extends SimpleDataStructure> clientKeys) {
         if (_encryptedData != null) throw new IllegalStateException("already encrypted");
@@ -782,7 +782,7 @@ public class EncryptedLeaseSet extends LeaseSet2 {
     }
 
     /**
-     * The HKDF input (no per-client auth)
+     * The HKDF input (no per-client auth).
      *
      * @param ctx the context supplying the router and client keys used to derive the subcredential
      * @return 36 bytes
@@ -797,7 +797,7 @@ public class EncryptedLeaseSet extends LeaseSet2 {
     }
 
     /**
-     * The HKDF input (with per-client auth)
+     * The HKDF input (with per-client auth).
      *
      * @param authcookie 32 bytes
      * @return 68 bytes
@@ -813,7 +813,7 @@ public class EncryptedLeaseSet extends LeaseSet2 {
     }
 
     /**
-     * The subcredential
+     * The subcredential.
      *
      * @return 32 bytes
      * @throws IllegalStateException if we don't have it
@@ -835,7 +835,7 @@ public class EncryptedLeaseSet extends LeaseSet2 {
     }
 
     /**
-     * Hash with a personalization string
+     * Hash with a personalization string.
      *
      * @return 32 bytes
      * @since 0.9.39

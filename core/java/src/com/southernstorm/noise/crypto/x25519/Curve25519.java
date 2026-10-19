@@ -35,7 +35,7 @@ public final class Curve25519 {
      * per thread is therefore sufficient.
      * <p>
      * Security: the instance handed out here is always fully zeroed, both on
-     * creation and on release ({@link #destroy()} runs in a {@code finally} on
+     * creation and on release ({@link #destroy} runs in a {@code finally} on
      * every path out of {@code eval()}), and {@code eval()} clears it again
      * before use - so a pooled instance never carries private key material
      * forward, exactly as a freshly allocated one did not.

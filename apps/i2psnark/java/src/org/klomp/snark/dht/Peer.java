@@ -21,11 +21,11 @@ import net.i2p.data.Hash;
  */
 class Peer extends Hash {
 
-    /** Timestamp when this peer was last active in the torrent */
+    /** Timestamp when this peer was last active in the torrent. */
     private volatile long lastSeen;
 
     // todo we could pack this into the upper bit of lastSeen
-    /** Flag indicating whether this peer has the complete torrent */
+    /** Flag indicating whether this peer has the complete torrent. */
     private volatile boolean isSeed;
 
     /**

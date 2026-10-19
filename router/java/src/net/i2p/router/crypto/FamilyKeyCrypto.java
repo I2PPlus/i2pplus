@@ -33,7 +33,7 @@ import net.i2p.util.SimpleTimer2;
 
 /**
  * Utilities for creating, storing, retrieving the signing keys for
- * the netdb family feature
+ * the netdb family feature.
  *
  * @since 0.9.24
  */
@@ -50,22 +50,22 @@ public class FamilyKeyCrypto {
     private final SigningPrivateKey _privkey;
     private final SigningPublicKey _pubkey;
     private final AtomicInteger _failCount = new AtomicInteger();
-    /** Property key for keystore password */
+    /** Property key for keystore password. */
 
     public static final String PROP_KEYSTORE_PASSWORD = "netdb.family.keystorePassword";
-    /** Property key for family name */
+    /** Property key for family name. */
     public static final String PROP_FAMILY_NAME = "netdb.family.name";
-    /** Property key for key password */
+    /** Property key for key password. */
     public static final String PROP_KEY_PASSWORD = "netdb.family.keyPassword";
-    /** Certificate file suffix */
+    /** Certificate file suffix. */
     public static final String CERT_SUFFIX = ".crt";
-    /** CRL file suffix */
+    /** CRL file suffix. */
     public static final String CRL_SUFFIX = ".crl";
-    /** Keystore file prefix */
+    /** Keystore file prefix. */
     public static final String KEYSTORE_PREFIX = "family-";
-    /** Keystore file suffix */
+    /** Keystore file suffix. */
     public static final String KEYSTORE_SUFFIX = ".ks";
-    /** Common name suffix */
+    /** Common name suffix. */
     public static final String CN_SUFFIX = ".family.i2p.net";
     private static final int DEFAULT_KEY_VALID_DAYS = 3652;  // 10 years
     // Note that we can't use RSA here, as the b64 sig would exceed the 255 char limit for a Mapping
@@ -75,17 +75,17 @@ public class FamilyKeyCrypto {
     private static final String KS_DIR = "keystore";
     private static final String CERT_DIR = "certificates/family";
     private static final String CRL_DIR = "crls";
-    /** Option key for family name */
+    /** Option key for family name. */
     public static final String OPT_NAME = "family";
-    /** Option key for family signature */
+    /** Option key for family signature. */
     public static final String OPT_SIG = "family.sig";
-    /** Option key for family certificate */
+    /** Option key for family certificate. */
     public static final String OPT_KEY = "family.key";
 
     /**
      * For signing and verification.
      * <p>
-     * If the context property netdb.family.name is set, this can be used for signing,
+     * If the context property {@code netdb.family.name} is set, this can be used for signing,
      * else only for verification.
      *
      * @param context the router context supplying the family name property and certificate directory
@@ -140,7 +140,7 @@ public class FamilyKeyCrypto {
     }
 
     /**
-     * Clears the caches
+     * Clears the caches.
      */
     public void shutdown() {
         _verified.clear();
@@ -161,7 +161,7 @@ public class FamilyKeyCrypto {
 
     /**
      * Caller must add family to RI also.
-     * throws on all errors
+     * throws on all errors.
      *
      * @param family non-null, must match that we were initialized with or will throw GSE
      * @param h non-null
@@ -233,27 +233,27 @@ public class FamilyKeyCrypto {
      * @since 0.9.54
      */
     public enum Result {
-        /** Router has no family option */
+        /** Router has no family option. */
         NO_FAMILY,
-        /** Router has a family name but no key and no stored certificate */
+        /** Router has a family name but no key and no stored certificate. */
         NO_KEY,
-        /** Router has a family name but no signature */
+        /** Router has a family name but no signature. */
         NO_SIG,
-        /** Family name changed since last verification */
+        /** Family name changed since last verification. */
         NAME_CHANGED,
-        /** Signature changed since last verification, will re-verify */
+        /** Signature changed since last verification, will re-verify. */
         SIG_CHANGED,
-        /** Signature could not be decoded */
+        /** Signature could not be decoded. */
         INVALID_SIG,
-        /** Signature type is not available on this router */
+        /** Signature type is not available on this router. */
         UNSUPPORTED_SIG,
-        /** Key in the router info could not be decoded */
+        /** Key in the router info could not be decoded. */
         BAD_KEY,
-        /** Signature verification failed */
+        /** Signature verification failed. */
         BAD_SIG,
-        /** Verified with a key in the router info */
+        /** Verified with a key in the router info. */
         RI_KEY,
-        /** Verified with a stored certificate */
+        /** Verified with a stored certificate. */
         STORED_KEY,
     }
 
@@ -263,11 +263,11 @@ public class FamilyKeyCrypto {
      * @since 0.9.54
      */
     private static class Verified {
-        /** The family name */
+        /** The family name. */
         public final String name;
-        /** The family signature */
+        /** The family signature. */
         public final String sig;
-        /** The verification result */
+        /** The verification result. */
         public final Result result;
         /**
          * Stores the family name, signature, and verification result.
@@ -333,7 +333,7 @@ public class FamilyKeyCrypto {
     }
 
     /**
-     * Verify the family in a RouterInfo, name already retrieved
+     * Verify the family in a RouterInfo, name already retrieved.
      *
      * @since 0.9.28
      */
@@ -460,6 +460,8 @@ public class FamilyKeyCrypto {
     }
 
     /**
+     * Verify the family keystore can be opened and its aliases used.
+     *
      * @return success if it exists and we have a password, or it was created successfully.
      * @throws GeneralSecurityException on keystore error
      */
@@ -495,7 +497,7 @@ public class FamilyKeyCrypto {
      * Call out to keytool to create a new keystore with a keypair in it.
      * Trying to do this programatically is a nightmare, requiring either BouncyCastle
      * libs or using proprietary Sun libs, and it's a huge mess.
-     * If successful, stores the keystore password and key password in router.config.
+     * If successful, stores the keystore password and key password in {@code router.config}.
      *
      * @throws GeneralSecurityException on all errors
      */

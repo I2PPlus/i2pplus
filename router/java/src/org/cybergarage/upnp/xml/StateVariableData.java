@@ -27,7 +27,6 @@ import org.cybergarage.upnp.control.*;
  * <p>This class is used by UPnP services to manage state variable definitions and their current
  * values, enabling proper service description generation and query response handling.
  *
- * @author Satoshi Konno
  * @since 1.0
  */
 public class StateVariableData extends NodeData {

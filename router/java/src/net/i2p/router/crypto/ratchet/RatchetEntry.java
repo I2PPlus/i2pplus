@@ -3,23 +3,24 @@ package net.i2p.router.crypto.ratchet;
 import java.util.List;
 
 /**
- *  Container for outbound ratchet encryption data including tag, key, nonce, and optional next session keys for message preparation
- *  The object returned from SKM.consumeNextAvailableTag() to the engine encrypt.
+ * Container for outbound ratchet encryption data including tag, key, nonce, and optional next
+  * session keys for message preparation
+ * The object returned from {@code SKM.consumeNextAvailableTag()} to the engine encrypt.
  *
- *  @since 0.9.44
+ * @since 0.9.44
  */
 class RatchetEntry {
-    /** The session tag */
+    /** The session tag. */
     public final RatchetSessionTag tag;
-    /** The session key */
+    /** The session key. */
     public final SessionKeyAndNonce key;
-    /** The key identifier */
+    /** The key identifier. */
     public final int keyID;
-    /** The previous chain length */
+    /** The previous chain length. */
     public final int pn;
-    /** The next {forward} chain key */
+    /** The next {forward} chain key. */
     public final NextSessionKey nextForwardKey;
-    /** The next {reverse} chain key */
+    /** The next {reverse} chain key. */
     public final NextSessionKey nextReverseKey;
     /** ACKs queued for delivery with this entry, or null. */
     public final List<Integer> acksToSend;

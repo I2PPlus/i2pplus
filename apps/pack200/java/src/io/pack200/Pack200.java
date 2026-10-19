@@ -100,8 +100,6 @@ import java.util.jar.JarOutputStream;
  * Unless otherwise noted, passing a {@code null} argument to a constructor or
  * method in this class will cause a {@link NullPointerException} to be thrown.
  *
- * @author John Rose
- * @author Kumar Srinivasan
  * @since 1.5
  */
 public abstract class Pack200 {

@@ -59,15 +59,15 @@ import net.i2p.util.Log;
  */
 public final class DefaultHostnameVerifier implements HostnameVerifier {
 
-    /** DNS name type constant */
+    /** DNS name type constant. */
     final static int DNS_NAME_TYPE        = 2;
-    /** IP address type constant */
+    /** IP address type constant. */
     final static int IP_ADDRESS_TYPE      = 7;
 
-    /** Logger instance */
+    /** Logger instance. */
     private final Log log = I2PAppContext.getGlobalContext().logManager().getLog(getClass());
 
-    /** Public suffix matcher */
+    /** Public suffix matcher. */
     private final PublicSuffixMatcher publicSuffixMatcher;
 
     /**

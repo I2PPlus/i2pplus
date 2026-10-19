@@ -35,7 +35,7 @@ import net.i2p.util.Log;
 
 /**
  * Run once or twice at startup by StartupJob,
- * and then runs BootCommSystemJob
+ * and then runs BootCommSystemJob.
  */
 class LoadRouterInfoJob extends JobImpl {
     private final Log _log;
@@ -86,9 +86,9 @@ class LoadRouterInfoJob extends JobImpl {
     }
 
     /**
-     * Loads router.info and either router.keys.dat or router.keys.
+     * Loads {@code router.info} and either {@code router.keys.dat} or {@code router.keys}.
      * <p>
-     * See CreateRouterInfoJob for file formats
+     * See CreateRouterInfoJob for file formats.
      */
     private void loadRouterInfo() {
         RouterInfo info = null;
@@ -273,7 +273,7 @@ class LoadRouterInfoJob extends JobImpl {
         return uselong != haslong;
     }
 
-    /** Key data container for router information. @since 0.9.16 */
+    /** Key data container for router information. @since 0.9.16. */
     public static class KeyData {
         /**
          * Router identity of this router.
@@ -304,7 +304,7 @@ class LoadRouterInfoJob extends JobImpl {
     /**
      * Read key data from the specified files.
      *
-     * @param rkf1 in router.keys format, tried second
+     * @param rkf1 in {@code router.keys} format, tried second
      * @param rkf2 in eepPriv.dat format, tried first
      * @return non-null, throws IOE if neither exists
      * @throws DataFormatException if the stored key pairs do not validate against each other

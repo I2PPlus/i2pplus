@@ -20,12 +20,12 @@ import net.i2p.util.SystemVersion;
 /**
  * Provides the working directory for i2p.
  * <p>
- * For the location, first try the system property i2p.dir.config
+ * For the location, first try the system property {@code i2p.dir.config}
  * Next try $HOME/.i2p on linux or %LOCALAPPDATA%\I2P on Windows.
  * <p>
  * If the dir exists, return it.
  * Otherwise, attempt to create it, and copy files from the base directory.
- * To successfully copy, the base install dir must be the system property i2p.dir.base
+ * To successfully copy, the base install dir must be the system property {@code i2p.dir.base}
  * or else must be in $CWD.
  * <p>
  * If I2P was run from the install directory in the past,
@@ -57,7 +57,7 @@ public class WorkingDir {
     /** We do a couple of things differently if this is the username. */
     private static final String PROP_WRAPPER_LOG = "wrapper.logfile";
     private static final String DEFAULT_WRAPPER_LOG = "wrapper.log";
-    /** Feb 16 2006 */
+    /** Feb 16 2006. */
     private static final long EEPSITE_TIMESTAMP = 1140048000000L;
 
     /**
@@ -336,7 +336,7 @@ public class WorkingDir {
      * Files and directories from the base install to copy over.
      * None of these should be included in i2pupdate.zip
      * <p>
-     * The user should not delete these in the old location, leave them as templates for new users
+     * The user should not delete these in the old location, leave them as templates for new users.
      */
     private static final String MIGRATE_BASE =
         // base install - dirs
@@ -366,7 +366,7 @@ public class WorkingDir {
     }
 
     /**
-     *  Copy over the clients.config file with modifications
+     * Copy over the {@code clients.config} file with modifications.
      */
     private static boolean migrateClientsConfig(File olddir, File todir) {
         File oldFile = new File(olddir, "clients.config");
@@ -462,7 +462,7 @@ public class WorkingDir {
     }
 
     /**
-     * Recursive copy a file or dir to a dir
+     * Recursive copy a file or dir to a dir.
      *
      * @param src file or directory, need not exist
      * @param targetDir the directory to copy to, will be created if it doesn't exist
@@ -529,7 +529,7 @@ public class WorkingDir {
     }
 
     /**
-     * Recursive touch all files in a dir to a given time
+     * Recursive touch all files in a dir to a given time.
      *
      * @param target the directory or file to touch, must exist
      * @param time the modification time in milliseconds since the epoch

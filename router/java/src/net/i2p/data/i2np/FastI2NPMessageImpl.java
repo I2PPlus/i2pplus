@@ -95,7 +95,7 @@ public abstract class FastI2NPMessageImpl extends I2NPMessageImpl {
     }
 
     /**
-     * If available, use the previously-computed or previously-read checksum for speed
+     * If available, use the previously-computed or previously-read checksum for speed.
      */
     @Override
     public int toByteArray(byte[] buffer) {
@@ -105,7 +105,7 @@ public abstract class FastI2NPMessageImpl extends I2NPMessageImpl {
     }
 
     /**
-     * Use a previously-computed checksum for speed
+     * Use a previously-computed checksum for speed.
      *
      * @param buffer the destination array, must be at least {@link #HEADER_LENGTH} bytes long
      * @return the number of bytes written into buffer

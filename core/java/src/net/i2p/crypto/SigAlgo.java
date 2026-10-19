@@ -1,7 +1,7 @@
 package net.i2p.crypto;
 
 /**
- * Base signature algorithm type
+ * Base signature algorithm type.
  *
  * @since 0.9.9
  */

@@ -113,7 +113,7 @@ public class NativeBigInteger extends BigInteger {
      * Well, we really want to use Log so if you are one of those "other systems"
      * then comment out the I2PAppContext usage below.
      * <p>
-     * Set to false if not in router context, so scripts using TrustedUpdate
+     * Set to false if not in router context, so scripts using TrustedUpdate.
      */
     private static boolean _doLog = System.getProperty("jbigi.dontLog") == null
             && I2PAppContext.getCurrentContext() != null
@@ -124,7 +124,7 @@ public class NativeBigInteger extends BigInteger {
      * originally installed as release 0.6.1.10 or later (released 2006-01-16),
      * for linux, freebsd, osx, and windows, EXCEPT:
      * - athlon64 not available for freebsd
-     * - osx also does not have all of them
+     * - osx also does not have all of them.
      */
     private static final String JBIGI_OPTIMIZATION_ATHLON64 = "athlon64";
 
@@ -158,20 +158,36 @@ public class NativeBigInteger extends BigInteger {
     private static final String JBIGI_OPTIMIZATION_BOBCAT = "bobcat";
     private static final String JBIGI_OPTIMIZATION_JAGUAR = "jaguar";
 
-    /** @since 0.9.41 */
+    /**
+     * Jbigi optimization name for Skylake CPUs.
+     *
+     * @since 0.9.41
+     */
     private static final String JBIGI_OPTIMIZATION_SKYLAKE = "skylake";
 
-    /** @since 0.9.48 */
+    /**
+     * Jbigi optimization name for Zen CPUs.
+     *
+     * @since 0.9.48
+     */
     private static final String JBIGI_OPTIMIZATION_ZEN = "zen";
 
-    /** @since 0.9.48 */
+    /**
+     * Jbigi optimization name for Zen 2 CPUs.
+     *
+     * @since 0.9.48
+     */
     private static final String JBIGI_OPTIMIZATION_ZEN2 = "zen2";
 
-    /** @since 0.9.69+ */
+    /**
+     * Jbigi optimization name for Zen 3 CPUs.
+     *
+     * @since 0.9.69+
+     */
     private static final String JBIGI_OPTIMIZATION_ZEN3 = "zen3";
 
     /**
-     * ARM, 64-bit only
+     * ARM, 64-bit only.
      *
      * @since 0.9.26
      */
@@ -275,7 +291,7 @@ public class NativeBigInteger extends BigInteger {
     }
 
     /**
-     * Operating systems
+     * Operating systems.
      * @return true when running on Windows
      */
     private static final boolean _isWin = SystemVersion.isWindows();
@@ -422,35 +438,35 @@ public class NativeBigInteger extends BigInteger {
     private static native byte[] nativeModInverse(byte[] base, byte[] d);
 
     /**
-     * The jbigi version, only available since jbigi version 3
+     * The jbigi version, only available since jbigi version 3.
      *
      * @since 0.9.26
      */
     private static native int nativeJbigiVersion();
 
     /**
-     * The libmp major version, only available since jbigi version 3
+     * The libmp major version, only available since jbigi version 3.
      *
      * @since 0.9.26
      */
     private static native int nativeGMPMajorVersion();
 
     /**
-     * The libmp minor version, only available since jbigi version 3
+     * The libmp minor version, only available since jbigi version 3.
      *
      * @since 0.9.26
      */
     private static native int nativeGMPMinorVersion();
 
     /**
-     * The libmp patch version, only available since jbigi version 3
+     * The libmp patch version, only available since jbigi version 3.
      *
      * @since 0.9.26
      */
     private static native int nativeGMPPatchVersion();
 
     /**
-     * The jbigi version, fetched from the native library
+     * The jbigi version, fetched from the native library.
      *
      * @return 0 if no jbigi available, 2 if version not supported
      * @since 0.9.26
@@ -489,7 +505,7 @@ public class NativeBigInteger extends BigInteger {
     }
 
     /**
-     * The jbigi version, fetched from the native library
+     * The jbigi version, fetched from the native library.
      *
      * @return 0 if no jbigi available, 2 if version info not supported
      * @since 0.9.26
@@ -499,7 +515,7 @@ public class NativeBigInteger extends BigInteger {
     }
 
     /**
-     * The libgmp version string
+     * The libgmp version string.
      *
      * @return "unknown" if no jbigi available or if version not supported
      * @since 0.9.26
@@ -508,7 +524,7 @@ public class NativeBigInteger extends BigInteger {
         return _libGMPVersion;
     }
 
-    /** Cached ba */
+    /** Cached ba. */
     private volatile byte[] cachedBa;
 
     /**
@@ -753,7 +769,11 @@ public class NativeBigInteger extends BigInteger {
         }
     }
 
-    /** @since 0.8.7 */
+    /**
+     * Log a native math debug message.
+     *
+     * @since 0.8.7
+     */
     private static void debug(String s) {
         I2PAppContext.getGlobalContext()
                 .logManager()
@@ -774,7 +794,11 @@ public class NativeBigInteger extends BigInteger {
         warn(s, null);
     }
 
-    /** @since 0.8.7 */
+    /**
+     * Log a native math warning.
+     *
+     * @since 0.8.7
+     */
     private static void warn(String s, Throwable t) {
         if (_doLog) {
             System.err.println("WARNING: " + s);
@@ -788,12 +812,20 @@ public class NativeBigInteger extends BigInteger {
         else _loadStatus = s;
     }
 
-    /** @since 0.9.26 */
+    /**
+     * Log a native math error.
+     *
+     * @since 0.9.26
+     */
     private static void error(String s) {
         error(s, null);
     }
 
-    /** @since 0.9.26 */
+    /**
+     * Log a native math error with its cause.
+     *
+     * @since 0.9.26
+     */
     private static void error(String s, Throwable t) {
         if (_doLog) {
             System.err.println("ERROR: " + s);

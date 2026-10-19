@@ -23,7 +23,7 @@ import net.i2p.util.SimpleTimer2;
  * send them immediately with no blocking, since the
  * mode=bestEffort doesn't block in the SDK.
  * <p>
- * MessageOutputStream -&gt; ConnectionDataReceiver -&gt; Connection -&gt; PacketQueue -&gt; I2PSession
+ * MessageOutputStream -&gt; ConnectionDataReceiver -&gt; Connection -&gt; PacketQueue -&gt; I2PSession.
  */
 class PacketQueue implements SendMessageStatusListener, Closeable {
     private final I2PAppContext _context;
@@ -81,7 +81,7 @@ class PacketQueue implements SendMessageStatusListener, Closeable {
     /**
      * Add a new packet to be sent out ASAP.
      * This updates the acks.
-     * keys and tags disabled since dropped in I2PSession
+     * keys and tags disabled since dropped in I2PSession.
      *
      * @param packet the packet to send ahead of the queue, updating the acks
      * @return true if sent
@@ -299,7 +299,7 @@ class PacketQueue implements SendMessageStatusListener, Closeable {
      * SendMessageStatusListener interface
      * <p>
      * Tell the client of an update in the send status for a message
-     * previously sent with I2PSession.sendMessage().
+     * previously sent with {@link net.i2p.client.I2PSession#sendMessage}.
      * Multiple calls for a single message ID are possible.
      *
      * @param session the session reporting the new status, not otherwise consulted
@@ -433,7 +433,7 @@ class PacketQueue implements SendMessageStatusListener, Closeable {
     }
 
     /**
-     * Check for expired message states, without wastefully setting a timer for each
+     * Check for expired message states, without wastefully setting a timer for each.
      * @since 0.9.14
      */
     private class RemoveExpired extends SimpleTimer2.TimedEvent {
@@ -447,7 +447,7 @@ class PacketQueue implements SendMessageStatusListener, Closeable {
         }
 
         /**
-         * Remove expired message status entries and reschedule
+         * Remove expired message status entries and reschedule.
          */
         public void timeReached() {
             if (_dead)

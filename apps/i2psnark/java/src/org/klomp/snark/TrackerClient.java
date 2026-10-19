@@ -80,19 +80,19 @@ public class TrackerClient implements Runnable {
     private static final String NOT_REGISTERED_3 = "torrent unauthorised"; // vuze
     private static final String ERROR_GOT_HTML = "received html (invalid response)"; // fake return
 
-    /** BEP 48 scrape path segment */
+    /** BEP 48 scrape path segment. */
     private static final String SCRAPE = "scrape";
 
     private static final int SLEEP = 5; // 5 minutes.
     private static final int UNANNOUNCE_THREADS = 32;
     private static final int UNANNOUNCE_QUEUE = 16384;
     private static final long UNANNOUNCE_KEEPALIVE = 60 * 1000;
-    /** One wave of unannounces, latency-bound, through an established tunnel */
+    /** One wave of unannounces, latency-bound, through an established tunnel. */
     private static final long UNANNOUNCE_WAVE = 3 * 1000;
-    /** Dispatch window is scaled to the batch, clamped between these */
+    /** Dispatch window is scaled to the batch, clamped between these. */
     private static final long UNANNOUNCE_MIN_WAIT = UNANNOUNCE_WAVE;
     private static final long UNANNOUNCE_MAX_WAIT = 10 * 1000;
-    /** When the queue is this many waves deep, only the primary tracker per torrent gets a slot */
+    /** When the queue is this many waves deep, only the primary tracker per torrent gets a slot. */
     private static final int UNANNOUNCE_PRIMARY_THRESHOLD = UNANNOUNCE_THREADS * 2;
 
     /**
@@ -129,7 +129,7 @@ public class TrackerClient implements Runnable {
     static {
         _unannouncers.allowCoreThreadTimeOut(true);
     }
-    /** Released when this client's last unannounce dispatch finishes; awaited by halt() callers */
+    /** Released when this client's last unannounce dispatch finishes; awaited by halt() callers. */
     private volatile CountDownLatch _unannounceLatch;
 
     /**
@@ -218,7 +218,7 @@ public class TrackerClient implements Runnable {
     private static final int LONG_SLEEP = 2 * 60 * 1000;
     /**
      * Max random spread added to the LONG_SLEEP failure floor so torrents
-     *  that failed together don't re-announce in lockstep @since 0.9.71+
+     * that failed together don't re-announce in lockstep @since 0.9.71+.
      */
     private static final int LONG_SLEEP_JITTER = 30 * 1000;
 
@@ -261,16 +261,16 @@ public class TrackerClient implements Runnable {
      */
     private static final long SCRAPE_INTERVAL = 10 * (long) 60 * 1000;
 
-    /** After a scrape with a non-zero swarm size, defer the next scrape this long */
+    /** After a scrape with a non-zero swarm size, defer the next scrape this long. */
     private static final long SCRAPE_GOOD_DEFER = 20 * (long) 60 * 1000;
 
     /**
      * Random jitter added to each scheduled scrape so scrapes from many
-     * torrents to a shared tracker spread out instead of firing in lockstep
+     * torrents to a shared tracker spread out instead of firing in lockstep.
      */
     private static final int SCRAPE_JITTER = 5 * 60 * 1000;
 
-    /** No guidance in BEP 5; standard practice is K (=8) */
+    /** No guidance in BEP 5; standard practice is K (=8). */
     private static final int DHT_ANNOUNCE_PEERS = 8;
 
     /**
@@ -541,7 +541,7 @@ public class TrackerClient implements Runnable {
     }
 
     /**
-     * Call after editing torrent
+     * Call after editing torrent.
      *
      * @since 0.9.57
      */
@@ -1419,7 +1419,7 @@ public class TrackerClient implements Runnable {
     }
 
     /**
-     * Creates a thread for each tracker in parallel if tunnel is still open
+     * Creates a thread for each tracker in parallel if tunnel is still open.
      *
      * @since 0.9.1
      */
@@ -1458,7 +1458,7 @@ public class TrackerClient implements Runnable {
     }
 
     /**
-     * Send "stopped" to a single tracker
+     * Send "stopped" to a single tracker.
      *
      * @since 0.9.1
      */
@@ -1685,7 +1685,7 @@ public class TrackerClient implements Runnable {
     }
 
     /**
-     * HTTP - blocking
+     * HTTP - blocking.
      *
      * <p>Note: IOException message text gets displayed in the UI
      */
@@ -1786,7 +1786,7 @@ public class TrackerClient implements Runnable {
     }
 
     /**
-     * UDP - blocking
+     * UDP - blocking.
      *
      * @return null if _fastUnannounce &amp;&amp; event == STOPPED
      * @since 0.9.54
@@ -2006,7 +2006,7 @@ public class TrackerClient implements Runnable {
     }
 
     /**
-     * UDP before HTTP
+     * UDP before HTTP.
      *
      * @since 0.9.67
      */
@@ -2068,7 +2068,7 @@ public class TrackerClient implements Runnable {
          }
 
         /**
-         * Call before restarting
+         * Call before restarting.
          *
          * @since 0.9.1
          */

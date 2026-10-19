@@ -49,9 +49,9 @@ public interface UpdateTask {
     public URI getURI();
 
     /**
-     *  Valid for plugins
+     * Valid for plugins.
      *
-     *  @return the identifier of the plugin being updated, empty if this is not a plugin update
+     * @return the identifier of the plugin being updated, empty if this is not a plugin update
      */
     public String getID();
 }

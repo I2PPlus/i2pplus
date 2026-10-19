@@ -120,7 +120,7 @@ public class ClientPeerSelectorShortSelectionTest {
 
     /**
      * The decision depends only on the structural floor, never on how far below
-     * {@code min} the selection happens to be — otherwise a deeper shortfall
+     * {@code min} the selection happens to be. Otherwise a deeper shortfall
      * would still be discarded and the starvation would persist for pools that
      * are worse off than 3/8.
      */

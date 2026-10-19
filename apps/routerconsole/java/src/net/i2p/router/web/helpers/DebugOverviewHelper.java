@@ -18,14 +18,14 @@ public class DebugOverviewHelper extends HelperBase {
      */
     public DebugOverviewHelper() {}
 
-    /** Priority-ordered single-stat graph wishes, after bw.combined */
+    /** Priority-ordered single-stat graph wishes, after bw.combined. */
     static final String[] GRAPH_STATS = {"tunnel.buildSuccessRate", "tunnel.participatingTunnels",
                                          "router.activePeers", "jobQueue.jobLag",
                                          "router.cpuLoad", "router.memoryUsed",
                                          "tunnel.buildInboundSuccessRate", "tunnel.buildOutboundSuccessRate",
                                          "tunnel.testSuccessTime"};
 
-    /** Number of mini-graphs shown, backfilled from other enabled stats */
+    /** Number of mini-graphs shown, backfilled from other enabled stats. */
     static final int GRAPH_COUNT = 4;
 
     /**
@@ -194,7 +194,7 @@ public class DebugOverviewHelper extends HelperBase {
      * Pick up to GRAPH_COUNT stats to graph: bw.combined first when both
      * bw rates are enabled, then the priority wish list, then a
      * deterministic backfill from any other enabled stats so the row fills
-     * out. A single stat not in the router's stat.summaries list would
+     * out. A single stat not in the router's {@code stat.summaries} list would
      * make viewstat.jsp 400, so only enabled stats are ever shown.
      *
      * @param enabled names of stats with a graph listener
@@ -229,7 +229,7 @@ public class DebugOverviewHelper extends HelperBase {
      * Build the mini-graph row for the given stats, at the standard graph
      * size with grid but no legend or title - the tiny sidebar template
      * is not used here. bw.combined needs no period parameter (viewstat.jsp
-     * resolves it specially) and links to the plain graphs page; a single
+     * resolves it specially) and links to the plain graphs page. A single
      * stat only draws when a period is given, so 60 one-minute buckets =
      * 60 min.
      *

@@ -7,7 +7,7 @@ import net.i2p.data.SessionKey;
 /**
  * Session key with nonce and optional handshake state for ratchet message encryption and decryption operations, supporting nonces up to 65535
  * <p>
- * This is what is returned from RatchetTagSet.consume().
+ * This is what is returned from {@link net.i2p.router.crypto.ratchet.RatchetTagSet#consume}.
  * RatchetSKM puts it in a RatchetEntry and returns it to ECIESAEADEngine.
  *
  * @since 0.9.44
@@ -19,7 +19,7 @@ class SessionKeyAndNonce extends SessionKey {
     private final PublicKey _remoteKey;
 
     /**
-     * For outbound Existing Session
+     * For outbound Existing Session.
      *
      * @param data the AEAD session key, handed to the superclass
      * @param nonce message nonce, 0 to 65535
@@ -29,7 +29,7 @@ class SessionKeyAndNonce extends SessionKey {
     }
 
     /**
-     * For inbound Existing Session
+     * For inbound Existing Session.
      *
      * @param data the AEAD session key, handed to the superclass
      * @param id index of the session within the inbound tag set
@@ -46,7 +46,7 @@ class SessionKeyAndNonce extends SessionKey {
     }
 
     /**
-     * For New Session Replies
+     * For New Session Replies.
      *
      * @param state the noise handshake state carried over into the new session
      */
@@ -59,16 +59,16 @@ class SessionKeyAndNonce extends SessionKey {
     }
 
     /**
-     * For ES, else 0
+     * For ES, else 0.
      * @return the message nonce in the range 0 to 65535 that this session key
-     *         is paired with, or 0 when no established session key is held yet
+     * is paired with, or 0 when no established session key is held yet
      */
     public int getNonce() {
         return _nonce;
     }
 
     /**
-     * For inbound ES, else 0
+     * For inbound ES, else 0.
      *
      * @return the session ID
      * @since 0.9.46

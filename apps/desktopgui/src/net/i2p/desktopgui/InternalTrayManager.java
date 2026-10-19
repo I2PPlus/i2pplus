@@ -23,7 +23,7 @@ import net.i2p.util.Translate;
  * Tray manager for internal use with full router context access.
  * Provides comprehensive I2P management through system tray including
  * restart, shutdown, browser launch, and configuration options.
- * Requires router.jar for complete functionality.
+ * Requires {@code router.jar} for complete functionality.
  */
 class InternalTrayManager extends TrayManager {
 
@@ -54,7 +54,9 @@ class InternalTrayManager extends TrayManager {
     }
 
     /**
-     *  @since 0.9.53
+     * Create the system tray icon and menu.
+     *
+     * @since 0.9.53
      */
     @Override
     public void startManager() throws AWTException {
@@ -386,7 +388,7 @@ class InternalTrayManager extends TrayManager {
     }
 
     /**
-     * Update the menu
+     * Update the menu.
      * @since 0.9.26
      */
     protected synchronized void updateMenu() {

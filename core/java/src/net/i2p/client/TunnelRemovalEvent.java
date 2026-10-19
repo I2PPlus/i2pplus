@@ -17,15 +17,15 @@ public class TunnelRemovalEvent {
 
     /** Why a tunnel was removed from a client's pool. */
     public enum RemovalReason {
-        /** Tunnel was explicitly removed or failed */
+        /** Tunnel was explicitly removed or failed. */
         EXPLICIT_REMOVAL,
-        /** Tunnel was pruned to maintain pool size */
+        /** Tunnel was pruned to maintain pool size. */
         POOL_PRUNING,
-        /** Tunnel lease expired */
+        /** Tunnel lease expired. */
         LEASE_EXPIRED,
-        /** Pool is being shut down */
+        /** Pool is being shut down. */
         POOL_SHUTDOWN,
-        /** Tunnel failed and was removed */
+        /** Tunnel failed and was removed. */
         FAILURE
     }
 

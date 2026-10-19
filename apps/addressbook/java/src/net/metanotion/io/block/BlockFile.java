@@ -398,12 +398,12 @@ public class BlockFile implements Closeable {
 
     /**
      * Add the page to the free list. The file is never shrunk.
-     * TODO: Reclaim free pages at end of file, or even do a full compaction.
      * Does not throw exceptions; logs on failure.
      *
      * @param page the page number to free
      */
     public void freePage(int page) {
+        // TODO: Reclaim free pages at end of file, or even do a full compaction.
         if (page <= METAINDEX_PAGE) {
             log.error("Bad page free attempt: " + page);
             return;

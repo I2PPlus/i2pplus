@@ -3,9 +3,8 @@ package net.i2p.internal;
 import net.i2p.client.I2PSessionException;
 
 /**
- * A manager for the in-JVM I2CP message interface
+ * A manager for the in-JVM I2CP message interface.
  *
- * @author zzz
  * @since 0.8.3
  */
 public interface InternalClientManager {

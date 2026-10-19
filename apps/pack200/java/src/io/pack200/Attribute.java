@@ -44,7 +44,6 @@ import java.util.Map;
  * Takes care to remember where constant pool indexes occur.
  * Implements the "little language" of Pack200 for describing
  * attribute layouts.
- * @author John Rose
  */
 class Attribute implements Comparable<Attribute> {
     // Attribute instance fields.

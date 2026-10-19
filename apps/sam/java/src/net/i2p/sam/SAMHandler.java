@@ -53,7 +53,7 @@ abstract class SAMHandler implements Runnable, Handler {
      */
     public final int verMinor;
 
-    /** I2CP options configuring the I2CP connection (port, host, numHops, etc) */
+    /** I2CP options configuring the I2CP connection (port, host, numHops, etc). */
     protected final Properties i2cpProps;
 
     /**
@@ -185,7 +185,7 @@ abstract class SAMHandler implements Runnable, Handler {
     }
 
     /**
-     * SAMHandler constructor (to be called by subclasses)
+     * SAMHandler constructor (to be called by subclasses).
      *
      * @param s Socket attached to a SAM client
      * @param verMajor SAM major version to manage
@@ -220,7 +220,7 @@ abstract class SAMHandler implements Runnable, Handler {
     protected abstract void handle();
 
     /**
-     * Get the channel of the socket connected to the SAM client
+     * Get the channel of the socket connected to the SAM client.
      *
      * @return the client socket, or null before it is accepted
      */
@@ -257,7 +257,7 @@ abstract class SAMHandler implements Runnable, Handler {
 
     /**
      * If you're crazy enough to write to the raw socket, grab the write lock
-     * with getWriteLock(), synchronize against it, and write to the getOut()
+     * with getWriteLock(), synchronize against it, and write to the getOut().
      *
      * @return socket Write lock object
      */

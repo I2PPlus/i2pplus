@@ -42,7 +42,6 @@ import net.i2p.socks.SOCKS5Client;
  * <p>
  * Since 0.9.33, HTTP proxies (CONNECT) supported. Proxy auth not supported.
  *
- * @author zzz
  * @since 0.7.10
  */
 @SuppressWarnings("PMD.CloseResource")
@@ -92,7 +91,7 @@ public class SSLEepGet extends EepGet {
     }
 
     /**
-     * A new SSLEepGet with a new SSLState
+     * A new SSLEepGet with a new SSLState.
      *
      * @param ctx the router context supplying config, logging, and the cert directories
      * @param outputStream stream to write the response body to; takes precedence over outputFile
@@ -137,7 +136,7 @@ public class SSLEepGet extends EepGet {
     }
 
     /**
-     * A new SSLEepGet with a new SSLState
+     * A new SSLEepGet with a new SSLState.
      *
      * @param ctx the router context supplying config, logging, and the cert directories
      * @param outputFile path of the file to write the response body to; takes precedence over outputStream
@@ -283,11 +282,11 @@ public class SSLEepGet extends EepGet {
     }
 
     /**
-     * Output file and output stream: one null, one non-null
+     * Output file and output stream: one null, one non-null.
      *
      * @param state an SSLState retrieved from a previous SSLEepGet with getSSLState(), or null.
-     *              This makes repeated fetches from the same host MUCH faster,
-     *              and prevents repeated key store loads even for different hosts.
+     * This makes repeated fetches from the same host MUCH faster,
+     * and prevents repeated key store loads even for different hosts.
      *
      * @since 0.9.9
      */
@@ -458,7 +457,7 @@ public class SSLEepGet extends EepGet {
      * Pass this back to the next SSLEepGet constructor for faster fetches.
      * This may be called either after the constructor or after the fetch.
      *
-     * @return the s s l state
+     * @return the SSL state
      * @since 0.8.2
      */
     public SSLState getSSLState() {
@@ -856,7 +855,7 @@ public class SSLEepGet extends EepGet {
      * Connect to a HTTP proxy.
      * Proxy address must be in _proxyHost and _proxyPort.
      * Side effects: Sets _proxy, _proxyIn, _proxyOut,
-     * and other globals via readHeaders()
+     * and other globals via readHeaders().
      *
      * @param host what the proxy should connect to
      * @param port what the proxy should connect to
@@ -879,7 +878,7 @@ public class SSLEepGet extends EepGet {
      * Connect to a HTTP proxy.
      * Proxy address must be in _proxyHost and _proxyPort.
      * Side effects: Sets _proxy, _proxyIn, _proxyOut,
-     * and other globals via readHeaders()
+     * and other globals via readHeaders().
      *
      * @param port what the proxy should connect to, probably 4444
      * @since 0.9.33
@@ -894,7 +893,7 @@ public class SSLEepGet extends EepGet {
      * Connect to a HTTP proxy.
      * Proxy address must be in _proxyHost and _proxyPort.
      * Side effects: Sets _proxyIn, _proxyOut,
-     * and other globals via readHeaders()
+     * and other globals via readHeaders().
      *
      * @param host what the proxy should connect to
      * @param port what the proxy should connect to
@@ -944,7 +943,7 @@ public class SSLEepGet extends EepGet {
      * Connect to a SOCKS proxy.
      * Proxy address must be in _proxyHost and _proxyPort.
      * Side effects: Sets _proxy, _proxyIn, _proxyOut,
-     * and other globals via readHeaders()
+     * and other globals via readHeaders().
      *
      * @param host what the proxy should connect to
      * @param port what the proxy should connect to

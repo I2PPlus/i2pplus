@@ -20,7 +20,7 @@ import java.util.zip.InflaterInputStream;
 public class ResettableGZIPInputStream extends InflaterInputStream {
     private static final int FOOTER_SIZE = 8; // CRC32 + ISIZE
 
-    /** See below for why this is necessary */
+    /** See below for why this is necessary. */
     private final ExtraByteInputStream _extraByteInputStream;
 
     /** Keep a typesafe copy of this. */
@@ -124,7 +124,7 @@ public class ResettableGZIPInputStream extends InflaterInputStream {
     }
 
     /**
-     * Moved from i2ptunnel HTTPResponseOutputStream.InternalGZIPInputStream
+     * Moved from i2ptunnel HTTPResponseOutputStream.InternalGZIPInputStream.
      *
      * @return the total read
      * @since 0.8.9
@@ -138,7 +138,7 @@ public class ResettableGZIPInputStream extends InflaterInputStream {
     }
 
     /**
-     * Moved from i2ptunnel HTTPResponseOutputStream.InternalGZIPInputStream
+     * Moved from i2ptunnel HTTPResponseOutputStream.InternalGZIPInputStream.
      *
      * @return the total expanded
      * @since 0.8.9
@@ -153,10 +153,10 @@ public class ResettableGZIPInputStream extends InflaterInputStream {
     }
 
     /**
-     * Moved from i2ptunnel HTTPResponseOutputStream.InternalGZIPInputStream
+     * Moved from i2ptunnel HTTPResponseOutputStream.InternalGZIPInputStream.
      *
      * @return uncompressed bytes still buffered, or 0 if the inflater has been
-     *         closed
+     * closed
      * @since 0.8.9
      */
     public long getRemaining() {
@@ -169,10 +169,10 @@ public class ResettableGZIPInputStream extends InflaterInputStream {
     }
 
     /**
-     * Moved from i2ptunnel HTTPResponseOutputStream.InternalGZIPInputStream
+     * Moved from i2ptunnel HTTPResponseOutputStream.InternalGZIPInputStream.
      *
      * @return true once the whole stream has been inflated, false if the
-     *         inflater has been closed
+     * inflater has been closed
      * @since 0.8.9
      */
     public boolean getFinished() {
@@ -212,7 +212,7 @@ public class ResettableGZIPInputStream extends InflaterInputStream {
     }
 
     /**
-     * Moved from i2ptunnel HTTPResponseOutputStream.InternalGZIPInputStream
+     * Moved from i2ptunnel HTTPResponseOutputStream.InternalGZIPInputStream.
      *
      * @since 0.8.9
      */

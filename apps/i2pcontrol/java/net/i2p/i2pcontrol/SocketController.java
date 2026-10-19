@@ -108,19 +108,31 @@ public class SocketController implements RouterApp {
         changeState(STOPPED);
     }
 
-    /** @return current state */
+    /**
+     * Current state of the managed client app.
+     *
+     * @return current state
+     */
     @Override
     public synchronized ClientAppState getState() {
         return _state;
     }
 
-    /** @return "I2PControl-Socket" */
+    /**
+     * Unique name of the client app.
+     *
+     * @return "I2PControl-Socket"
+     */
     @Override
     public String getName() {
         return "I2PControl-Socket";
     }
 
-    /** @return "I2PControl-Socket" */
+    /**
+     * Display name of the client app.
+     *
+     * @return "I2PControl-Socket"
+     */
     @Override
     public String getDisplayName() {
         return "I2PControl-Socket";

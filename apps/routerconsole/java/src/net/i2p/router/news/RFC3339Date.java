@@ -74,7 +74,7 @@ public abstract class RFC3339Date {
     };
 
     /**
-     * Parse the date
+     * Parse the date.
      *
      * @param s non-null
      * @return -1 on failure
@@ -104,7 +104,7 @@ public abstract class RFC3339Date {
     }
 
     /**
-     * Format is "yyyy-MM-ddTHH:mm:ssZ"
+     * Format is "yyyy-MM-ddTHH:mm:ssZ".
      * @param t milliseconds since the epoch to render, always formatted in GMT
      * @return the instant rendered as yyyy-MM-ddTHH:mm:ssZ with a literal Z
      */

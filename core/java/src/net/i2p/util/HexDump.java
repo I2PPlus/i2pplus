@@ -20,7 +20,6 @@ import java.io.OutputStream;
  * an output that resembles `hexdump -C` (Windows users: do you
  * remember `debug` in the DOS age?).
  *
- * @author human
  */
 public class HexDump {
     /** Utility class. */
@@ -139,7 +138,4 @@ public class HexDump {
         }
     }
 
-    /**
-     * @since 0.9.21
-     */
 }

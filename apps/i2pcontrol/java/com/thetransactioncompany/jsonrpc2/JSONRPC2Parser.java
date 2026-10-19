@@ -48,7 +48,6 @@ import org.json.simple.Jsoner;
  *     null        &lt;---&gt;  null
  * </pre>
  *
- * @author Vladimir Dzhuvinov
  */
 public class JSONRPC2Parser {
 

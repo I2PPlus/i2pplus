@@ -10,7 +10,7 @@ import java.nio.charset.StandardCharsets;
 import org.junit.Test;
 
 /**
- * Tests the recorder-file read cache used by {@link AccessFilter#record()}:
+ * Tests the recorder-file read cache used by {@link AccessFilter#record}:
  * the {@code (lastModified, length)} signature detection and the b32-set parse.
  * Files are exercised on the real filesystem with temp files, matching the
  * production path exactly (no router context required).

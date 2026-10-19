@@ -15,7 +15,7 @@ import net.i2p.router.transport.udp.SSU2Payload.Block;
 import org.junit.Test;
 
 /**
- * Pins packet-building decision logic extracted from PacketBuilder2.buildPacket().
+ * Pins packet-building decision logic extracted from {@link net.i2p.router.transport.udp.PacketBuilder2#buildPacket}.
  * All helpers are pure static functions; only the non-empty otherBlocks-size sum
  * needs mocked Block lengths. No router context is required.
  *

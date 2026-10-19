@@ -24,15 +24,15 @@ import net.i2p.util.SecureFileOutputStream;
  * It is still called once from LoadRouterInfoJob (but not run as a Job).
  * <p>
  * The following comments appear to be incorrect...
- * it rebuilds if the router.info file does not exist.
- * There is no check for a router.info.rebuild file.
+ * it rebuilds if the {@code router.info} file does not exist.
+ * There is no check for a {@code router.info.rebuild} file.
  * <p>
- * If the file router.info.rebuild exists, rebuild the router info and republish.
+ * If the file {@code router.info.rebuild} exists, rebuild the router info and republish.
  * This is useful for dhcp or other situations where the router addresses change -
- * simply create the router.info.rebuild file after modifying router.config and within
+ * simply create the {@code router.info.rebuild} file after modifying {@code router.config} and within
  * 45 seconds (the current check frequency), the router info will be rebuilt with new
  * addresses and stats, as well as a new version, then republished.  Afterwards, the
- * router.info.rebuild file is deleted
+ * {@code router.info.rebuild} file is deleted.
  */
 class RebuildRouterInfoJob extends JobImpl {
     private final Log _log;
@@ -65,7 +65,7 @@ class RebuildRouterInfoJob extends JobImpl {
     }
 
     /**
-     * Rebuild with default settings
+     * Rebuild with default settings.
      */
     void rebuildRouterInfo() {
         rebuildRouterInfo(true);

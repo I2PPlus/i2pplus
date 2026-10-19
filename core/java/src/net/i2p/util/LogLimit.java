@@ -10,7 +10,7 @@ package net.i2p.util;
  */
 
 /**
- * Defines the log limit for a particular set of logs
+ * Defines the log limit for a particular set of logs.
  *
  */
 class LogLimit {

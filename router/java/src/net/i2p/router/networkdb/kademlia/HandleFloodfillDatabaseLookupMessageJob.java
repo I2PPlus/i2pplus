@@ -33,7 +33,7 @@ import net.i2p.router.networkdb.HandleDatabaseLookupMessageJob;
  */
 public class HandleFloodfillDatabaseLookupMessageJob extends HandleDatabaseLookupMessageJob {
     /**
-     * Creates a new job to handle a floodfill database lookup message
+     * Creates a new job to handle a floodfill database lookup message.
      *
      * @param ctx the router context
      * @param receivedMessage the lookup message received

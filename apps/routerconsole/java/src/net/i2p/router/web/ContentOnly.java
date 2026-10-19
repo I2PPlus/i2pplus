@@ -23,9 +23,9 @@ public class ContentOnly {
 
     private ContentOnly() {}
 
-    /** Splits the contentonly parameter on commas and whitespace */
+    /** Splits the contentonly parameter on commas and whitespace. */
     private static final Pattern SPLIT = Pattern.compile("[,\\s]+");
-    /** Element ids are [A-Za-z0-9_-] runs */
+    /** Element ids are [A-Za-z0-9_-] runs. */
     private static final Pattern ELEMENT_ID = Pattern.compile("[A-Za-z0-9_-]+");
 
     /**

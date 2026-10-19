@@ -46,7 +46,7 @@ import net.i2p.util.VersionComparator;
  * <ul>
  * <li>Evaluate necessity of peer testing in current network conditions</li>
  * <li>Consider alternative test methods beyond RI self-messaging</li>
- * <li>Integration with PeerManager.selectPeers() optimization</li>
+ * <li>Integration with {@link net.i2p.router.peermanager.PeerManager#selectPeers} optimization</li>
  * </ul>
  */
 public class PeerTestJob extends JobImpl {
@@ -548,17 +548,17 @@ public class PeerTestJob extends JobImpl {
          * @since 0.9.71+
          */
         int tierRank;
-        /** The peer's RouterInfo from the network database (null if not found locally) */
+        /** The peer's RouterInfo from the network database (null if not found locally). */
         final RouterInfo routerInfo;
-        /** The peer's performance profile (null if no profile exists) */
+        /** The peer's performance profile (null if no profile exists). */
         final PeerProfile profile;
-        /** Shortened hash identifier for logging (first 6 chars of base64) */
+        /** Shortened hash identifier for logging (first 6 chars of base64). */
         final String shortHash;
-        /** Whether the peer has the reachable capability flag */
+        /** Whether the peer has the reachable capability flag. */
         final boolean isReachable;
-        /** The peer's bandwidth tier (O, P, X, K, L, M, N) or empty string */
+        /** The peer's bandwidth tier (O, P, X, K, L, M, N) or empty string. */
         final String bandwidthTier;
-        /** Raw capabilities string from RouterInfo (may be null) */
+        /** Raw capabilities string from RouterInfo (may be null). */
         final String capabilities;
 
         /**
@@ -610,7 +610,7 @@ public class PeerTestJob extends JobImpl {
     }
 
     /**
-     * Simple selector looking for a dbStore of the peer specified
+     * Simple selector looking for a dbStore of the peer specified.
      */
     private class ReplySelector implements MessageSelector {
         private final long _expiration;
@@ -761,7 +761,7 @@ public class PeerTestJob extends JobImpl {
     }
 
     /**
-     * Called when the peer's response is found
+     * Called when the peer's response is found.
      */
     private class PeerReplyFoundJob extends JobImpl implements ReplyJob {
         private final RouterInfo _peer;
@@ -857,7 +857,7 @@ public class PeerTestJob extends JobImpl {
 
     }
     /**
-     * Called when the peer's response times out
+     * Called when the peer's response times out.
      */
     private class PeerReplyTimeoutJob extends JobImpl {
         private final RouterInfo _peer;

@@ -18,7 +18,6 @@ import org.cybergarage.xml.Node;
  * control point applications or user interfaces.
  *
  * @since 1.0
- * @author Satoshi Konno
  */
 public class Icon {
     ////////////////////////////////////////////////

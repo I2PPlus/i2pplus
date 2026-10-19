@@ -22,7 +22,7 @@ public class FixupsTest extends TestCase {
      * Mirrors the private {@code Fixups.U1_FORMAT}/{@code U2_FORMAT}. They are
      * private to the class under test, so the values are restated here and
      * checked against the package-visible {@link Fixups#fmtLen} in
-     * {@link #testFmtLenMatchesFormatConstants()} so they cannot silently drift.
+     * {@link #testFmtLenMatchesFormatConstants} so they cannot silently drift.
      */
     private static final int U1_FORMAT = 1;
     private static final int U2_FORMAT = 0;
@@ -37,7 +37,7 @@ public class FixupsTest extends TestCase {
     private final List<ConstantPool.Entry> entries = new ArrayList<ConstantPool.Entry>();
 
     /**
-     * ConstantPool's entry factory reaches into {@link Utils#getTLGlobals()},
+     * ConstantPool's entry factory reaches into {@link Utils#getTLGlobals},
      * which is only populated while a pack or unpack is in flight. Stand up the
      * same context the engine would, so the factory works outside a real pack.
      */

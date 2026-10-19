@@ -12,7 +12,6 @@ package freenet.support.CPUInformation;
 /**
  * An interface for classes that provide lowlevel information about AMD CPU's
  *
- * @author Iakin
  */
 public interface AMDCPUInfo extends CPUInfo {
     /**

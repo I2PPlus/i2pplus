@@ -19,7 +19,7 @@ import java.util.Map;
 public interface UpdateManager {
 
     /**
-     * The name we register with the ClientAppManager
+     * The name we register with the ClientAppManager.
      *
      * @since 0.9.12
      */
@@ -131,7 +131,7 @@ public interface UpdateManager {
     public void notifyVersionConstraint(UpdateTask task, URI newsSource, UpdateType type, String id, String newVersion, String message);
 
     /**
-     * Called by the Checker after check() was called and all notifyVersionAvailable() callbacks are finished
+     * Called by the Checker after check() was called and all notifyVersionAvailable() callbacks are finished.
      *
      * @param task the running check or download this report concerns
      * @param newer notifyVersionAvailable was called
@@ -254,7 +254,7 @@ public interface UpdateManager {
     /**
      * Non-blocking. Does not check.
      * Fails if check or update already in progress.
-     * If returns true, then call isUpdateInProgress() in a loop
+     * If returns true, then call isUpdateInProgress() in a loop.
      *
      * @param type the UpdateType of this request
      * @return true if task started
@@ -265,7 +265,7 @@ public interface UpdateManager {
     /**
      * Non-blocking. Does not check.
      * Fails if check or update already in progress.
-     * If returns true, then call isUpdateInProgress() in a loop
+     * If returns true, then call isUpdateInProgress() in a loop.
      *
      * @param type the UpdateType of this request
      * @param id id of this request
@@ -277,7 +277,7 @@ public interface UpdateManager {
     /**
      * Non-blocking. Does not check.
      * Fails if check or update already in progress.
-     * If returns true, then call isUpdateInProgress() in a loop
+     * If returns true, then call isUpdateInProgress() in a loop.
      *
      * @param type the UpdateType of this request
      * @param maxTime not honored by all Updaters
@@ -289,7 +289,7 @@ public interface UpdateManager {
     /**
      * Non-blocking. Does not check.
      * Fails if check or update already in progress.
-     * If returns true, then call isUpdateInProgress() in a loop
+     * If returns true, then call isUpdateInProgress() in a loop.
      *
      * @param type the UpdateType of this request
      * @param id id of this request
@@ -318,7 +318,7 @@ public interface UpdateManager {
     public void notifyInstalled(UpdateType type, String id, String version);
 
     /**
-     * For debugging
+     * For debugging.
      *
      * @param out writer to output to
      * @throws IOException if writing fails

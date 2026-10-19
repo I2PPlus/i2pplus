@@ -13,7 +13,6 @@ import java.security.MessageDigest;
  * reasonably long random string prior to invoking this method.
  * </p>
  *
- * @author don
  */
 public class IdenticonUtil {
 	/**
@@ -53,7 +52,7 @@ public class IdenticonUtil {
 	}
 
 	/**
-	 * Returns current inetSalt value.
+	 * The salt string mixed into the hashed IP address.
 	 *
 	 * @return the inet salt
 	 */
@@ -62,7 +61,7 @@ public class IdenticonUtil {
 	}
 
 	/**
-	 * Sets current inetSalt value.
+	 * Set the salt string mixed into the hashed IP address.
 	 *
 	 * @param inetSalt string mixed into the hashed IP; set it before getIdenticonCode()
 	 */
@@ -109,8 +108,8 @@ public class IdenticonUtil {
 	 * Returns identicon code specified as an input parameter or derived from an
 	 * IP address.
 	 * <p>
-	 * This method is a convenience method intended to be used by servlets like
-	 * below:
+	 * This method is a convenience method intended to be used by servlets as
+	 * in the following example:
 	 * </p>
 	 *
 	 * <pre>
@@ -119,12 +118,12 @@ public class IdenticonUtil {
 	 * </pre>
 	 *
 	 * @param codeParam
-	 *            code parameter, if <code>null</code> remoteAddr parameter
-	 *            will be used to determine the value.
+	 * code parameter, if <code>null</code> remoteAddr parameter
+	 * will be used to determine the value.
 	 * @param remoteAddr
-	 *            HTTP requester's IP address. Optional if code was specified.
+	 * HTTP requester's IP address. Optional if code was specified.
 	 * @return the identicon code, or 0 if the input could not be parsed or
-	 *         resolved
+	 * resolved
 	 */
 	public static int getIdenticonCode(String codeParam, String remoteAddr) {
 		int code = 0;

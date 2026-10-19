@@ -278,23 +278,23 @@ public class JobStats {
      * Totals over the most recent runs of one job type.
      */
     public static class RecentStats {
-/** Number of runs */
+/** Number of runs. */
         public final long runs;
-/** Total time across all runs */
+/** Total time across all runs. */
         public final long totalTime;
-/** Maximum time of all runs */
+/** Maximum time of all runs. */
         public final long maxTime;
-/** Minimum time of all runs */
+/** Minimum time of all runs. */
         public final long minTime;
-/** Total pending time across all runs */
+/** Total pending time across all runs. */
         public final long totalPendingTime;
-/** Maximum pending time */
+/** Maximum pending time. */
         public final long maxPendingTime;
-/** Minimum pending time */
+/** Minimum pending time. */
         public final long minPendingTime;
 
         /**
-         * Recent stats
+         * Recent stats.
          *
          * @param runs the number of runs in the window
          * @param totalTime the summed run time across those runs, in milliseconds

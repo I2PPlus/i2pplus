@@ -188,9 +188,9 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
         return _cachedObClientSlow;
     }
 
-    /** Threshold for detecting tunnel build attacks */
+    /** Threshold for detecting tunnel build attacks. */
     protected static final double ATTACK_THRESHOLD = ProfileOrganizer.ATTACK_THRESHOLD;
-    /** Duration in ms to suppress startup warnings */
+    /** Duration in ms to suppress startup warnings. */
     protected static final long STARTUP_WARNING_SUPPRESS_MS = 5 * 60 * 1000L;
 
     /** Multiplier applied to the base activity window by {@link #getActivityWindow}. */
@@ -206,7 +206,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
      */
     private static volatile int _windowMultiplier = DEFAULT_WINDOW_MULTIPLIER;
 
-    /** Peers selected within this window are excluded from further selection to ensure diversity */
+    /** Peers selected within this window are excluded from further selection to ensure diversity. */
     protected static final long PEER_SELECTION_COOLDOWN_MS = 60_000;
 
     /**
@@ -228,10 +228,10 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
      */
     protected static final Map<Hash, Long> _provenResponders = new ConcurrentHashMap<>();
 
-    /** Recency window for proven-responder proof */
+    /** Recency window for proven-responder proof. */
     protected static final long PROVEN_RESPONDER_WINDOW_MS = 60 * 60 * 1000L;
 
-    /** Shared cooldown map across all peer selectors */
+    /** Shared cooldown map across all peer selectors. */
     protected static final Map<Hash, Long> _peerCooldowns = new ConcurrentHashMap<>();
 
     /**
@@ -259,13 +259,13 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
         return sb.toString();
     }
 
-    /** Peers that failed as first hop (first hop unreachable) excluded for this long */
+    /** Peers that failed as first hop (first hop unreachable) excluded for this long. */
     protected static final long FIRST_HOP_FAIL_COOLDOWN_MS = 5 * 60 * 1000L;
 
-    /** Tracks when a peer last failed as first hop */
+    /** Tracks when a peer last failed as first hop. */
     protected static final Map<Hash, Long> _firstHopFails = new ConcurrentHashMap<>();
 
-    /** How often to send keepalive pings to established Fast/HighCap peers */
+    /** How often to send keepalive pings to established Fast/HighCap peers. */
     private static final long KEEPALIVE_INTERVAL_MS = 15_000; // More frequent keepalives
 
     /** Peers requested from the fast tier in a keepalive cycle. */
@@ -292,7 +292,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
     /** Most peers acted on in one cycle, bounding a cycle's cost. */
     private static final int KEEPALIVE_ACTION_BUDGET = 200;
 
-    /** Tracks last keepalive send time per peer */
+    /** Tracks last keepalive send time per peer. */
     private static final ConcurrentHashMap<Hash, Long> _lastKeepAlive = new ConcurrentHashMap<>(512);
 
     /**
@@ -320,7 +320,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
      * Check if a peer recently failed as first hop and should be excluded.
      * During ghost cascades (high ghost count), the cooldown is shortened
      * from 5 min to 60s to rehabilitate peers faster when the network
-     * is stressed — many peers are ghosted through no fault of their own.
+     * is stressed. Many peers are ghosted through no fault of their own.
      *
      * @param ctx the router context
      * @param peer the candidate to test; its first-hop reachability is probed
@@ -597,7 +597,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
 
     /**
      * Add cooldown entries still inside their window (value &gt; cutoff) to the
-     * exclusion set without mutating the map; returns the count added.
+     * exclusion set without mutating the map. Returns the count added.
      * Shared by both selectors; the maps themselves stay separate
      * ({@link #_peerCooldowns} for client pools, the exploratory map for
      * exploratory selections).
@@ -772,11 +772,11 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
 
     /**
      * For debugging, also possibly for restricted routes?
-     * Needs analysis and testing
+     * Needs analysis and testing.
      *
      * @param settings the tunnel pool settings
      * @return true on roughly one call in four when the pool names explicit peers,
-     *         false otherwise (always false for an exploratory pool)
+     * false otherwise (always false for an exploratory pool)
      */
     protected boolean shouldSelectExplicit(TunnelPoolSettings settings) {
         if (settings.isExploratory()) return false;
@@ -791,7 +791,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
 
     /**
      * For debugging, also possibly for restricted routes.
-     * Needs analysis and testing
+     * Needs analysis and testing.
      *
      * @param settings the tunnel pool settings
      * @param length the desired length of the tunnel
@@ -877,7 +877,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
 
     /**
      * Create the exclusion set for this pool, for passing to ProfileOrganizer.
-     * The set is seeded with TunnelManager.selectPeersInTooManyTunnels() and
+     * The set is seeded with {@code TunnelManager.selectPeersInTooManyTunnels()} and
      * is then populated via the contains() calls.
      *
      * @param isInbound true for inbound tunnels
@@ -892,7 +892,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
      * Current tunnel build success ratio, 1.0 when no data is available.
      * <p>
      * Expensive: each call performs 6 RateStat lookups and 6 rate fetches
-     * ({@link ProfileOrganizer#getTunnelBuildSuccess()}).  Fetch once per
+     * ({@link ProfileOrganizer#getTunnelBuildSuccess}).  Fetch once per
      * selection or scan and pass the value down; never call per candidate
      * peer.  A value of 1.0 (no data) keeps the attack-threshold gates
      * closed at boot instead of treating missing stats as an attack.
@@ -1107,11 +1107,11 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
                ? QUALITY_RELAXED : QUALITY_STRICT;
     }
 
-    /** Minimum evidence bar when builds are healthy. @since 0.9.71+ */
+    /** Minimum evidence bar when builds are healthy. @since 0.9.71+. */
     static final int QUALITY_RELAXED = 0;
     /**
      * Minimum evidence bar under stress: a live session or a recent successful
-     * tunnel test. @since 0.9.71+
+     * tunnel test. @since 0.9.71+.
      */
     static final int QUALITY_STRICT = 1;
 
@@ -1485,7 +1485,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
         return val != null ? val : DEFAULT_EXCLUDE_CAPS;
     }
 
-    /** SSU2 fixes (2.1.0), Congestion fixes (2.2.0) */
+    /** SSU2 fixes (2.1.0), Congestion fixes (2.2.0). */
     private static final String MIN_VERSION = "0.9.62";
 
     /**
@@ -1696,7 +1696,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
      * longer than newPeers) and every peer must be equal in order, starting
      * from the gateway side for inbound (index 0) or after self for outbound
      * (index 1).
-     * Pure decision — no context access, safe for unit tests.
+     * Pure decision. No context access, safe for unit tests.
      *
      * @param existing the existing tunnel to compare against
      * @param newPeers the newly selected peers (excluding self)
@@ -1768,7 +1768,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
      * <p>
      * Now:
      * SipHash using h to generate the SipHash keys
-     * then siphash(l) - siphash(r)
+     * then siphash(l) - siphash(r).
      */
     private static class HashComparator implements Comparator<Hash>, Serializable {
         private final long k0;
@@ -1925,7 +1925,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
         private final long _activityWindow;
 
         /**
-         * Automatically adds selectPeersInTooManyTunnels(), unless i2np.allowLocal.
+         * Automatically adds selectPeersInTooManyTunnels(), unless {@code i2np.allowLocal}.
          * Fetches the build success ratio once, so the per-peer exclusion
          * checks in {@link #contains(Object)} never re-read router statistics.
          * @param isInbound true for an inbound pool
@@ -1936,7 +1936,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
         }
 
         /**
-         * Automatically adds selectPeersInTooManyTunnels(), unless i2np.allowLocal.
+         * Automatically adds selectPeersInTooManyTunnels(), unless {@code i2np.allowLocal}.
          * Uses a build success ratio already fetched by the caller.
          * @param isInbound true for an inbound pool
          * @param isExploratory true for an exploratory pool
@@ -1987,7 +1987,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
         /**
          * When true, the no-signal check in {@link #getExclusionReason} is
          * skipped, allowing untested peers to be considered for tunnel builds.
-         * Set by {@link #relaxNoSignalExclusions()} when peer scarcity demands it.
+         * Set by {@link #relaxNoSignalExclusions} when peer scarcity demands it.
          */
         private volatile boolean _allowNoSignal;
 
@@ -2170,7 +2170,8 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
     /**
      * Check if a peer's RouterInfo has at least one reachable SSU or NTCP address.
      * Peers without valid transport addresses always fail as first hops and trigger
-     * bans in EstablishmentManager.establish() — they should be excluded from selection.
+      * bans in {@link net.i2p.router.transport.udp.EstablishmentManager#establish} — they should be
+       * excluded from selection.
      *
      * @param ctx the router context
      * @param peer hash of the peer to check
@@ -2548,7 +2549,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
      * means the peer is not reachable, so it leaves the fast tiers at once
      * rather than after the three-strike send-failure path.
      * <p>Demotion is immediate because unlike a send failure on a live tunnel,
-     * this has no ambiguity to accumulate against — there was no reply at all.
+     * this has no ambiguity to accumulate against. There was no reply at all.
      * Waiting for strikes leaves exactly the peers this sweep exists to find
      * sitting in the tier where selection will pick them again.
      *
@@ -2590,7 +2591,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
      * would starve the pool of newcomers during recovery — the activity
      * window below only applies once we have profile data to judge.
      * Profiled peers are always checked against the activity window
-     * regardless of uptime; the startup grace period previously allowed
+     * regardless of uptime. The startup grace period previously allowed
      * stale profiled peers to be selected, which caused tunnel builds
      * to fail on peers with no recent contact.
      *
@@ -2598,7 +2599,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
      * @param peer hash of the peer to check
      * @param buildSuccess the build success ratio, fetched once by the caller
      * @return true if the peer has a profile and has not been heard from or
-     *         about within the activity window
+     * about within the activity window
      */
     static boolean isStalePeer(RouterContext ctx, Hash peer, double buildSuccess) {
         PeerProfile profile = ctx.profileOrganizer().getProfileNonblocking(peer);
@@ -2673,7 +2674,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
      */
     public static final int SCARCE_FAST_PEERS = 200;
 
-    /** Upper bound on the activity window, applied after the multiplier. @since 0.9.71+ */
+    /** Upper bound on the activity window, applied after the multiplier. @since 0.9.71+. */
     public static final long MAX_WINDOW_MS = 12 * 60 * 60 * 1000L;
 
     /**
@@ -2743,7 +2744,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
     }
 
     /**
-     * Ceiling for {@link #getWindowMultiplier()}. Exposed so the pool's
+     * Ceiling for {@link #getWindowMultiplier}. Exposed so the pool's
      * starvation bypass can widen the window without duplicating the bound.
      *
      * @return the maximum multiplier
@@ -2753,7 +2754,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
         return MAX_WINDOW_MULTIPLIER;
     }
 
-    /** Stat name for the live window multiplier. @see #publishWindowMultiplier */
+    /** Stat name for the live window multiplier. @see #publishWindowMultiplier. */
     public static final String WINDOW_MULTIPLIER_STAT = "tunnel.peerSelection.windowMultiplier";
     /**
      * Rate periods for {@link #WINDOW_MULTIPLIER_STAT}. Must not be null:

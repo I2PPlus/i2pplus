@@ -25,13 +25,13 @@ import net.i2p.util.Log;
 public class ConfigStatsHelper extends HelperBase {
     private Log _log;
     private final Set<String> _graphs;
-    /** list of names of stats which are remaining, ordered by nested groups */
+    /** List of names of stats which are remaining, ordered by nested groups. */
     private final List<String> _stats;
     private String _currentStatName;
     private String _currentGraphName;
     private String _currentStatDescription;
     private String _currentGroup;
-    /** true if the current stat is the first in the group */
+    /** True if the current stat is the first in the group. */
     private boolean _currentIsFirstInGroup;
     private boolean _currentIsGraphed;
     private boolean _currentCanBeGraphed;
@@ -45,10 +45,10 @@ public class ConfigStatsHelper extends HelperBase {
     }
 
     /**
-     * Configure this bean to query a particular router context
+     * Configure this bean to query a particular router context.
      *
      * @param contextId beginning few characters of the routerHash, or null to pick
-     *                  the first one we come across.
+     * the first one we come across.
      */
     @Override
     public void setContextId(String contextId) {
@@ -72,7 +72,7 @@ public class ConfigStatsHelper extends HelperBase {
     }
 
     /**
-     * move the cursor to the next known stat, returning true if a valid
+     * Move the cursor to the next known stat, returning true if a valid
      * stat is available.
      *
      * @return true if a valid stat is available, otherwise false
@@ -148,7 +148,7 @@ public class ConfigStatsHelper extends HelperBase {
     /**
      * Get the current stat name.
      *
-     * @return the current stat name
+     * @return the stat name as entered, or null
      */
     public String getCurrentStatName() { return _currentStatName; }
     /**
@@ -210,7 +210,7 @@ public class ConfigStatsHelper extends HelperBase {
     /**
      * Get the current graph name.
      *
-     * @return the current graph name
+     * @return the graph name as entered, or null
      */
     public String getCurrentGraphName() { return _currentGraphName; }
     /**
@@ -240,7 +240,7 @@ public class ConfigStatsHelper extends HelperBase {
 
     /**
      * Translated sort
-     * Inner class, can't be Serializable
+     * Inner class, can't be Serializable.
      * @since 0.9.4
      */
     private class AlphaComparator implements Comparator<String> {

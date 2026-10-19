@@ -17,7 +17,7 @@ import net.i2p.util.Log;
 /**
  * Called after a match to a db search is found
  * <p>
- * Used only by SearchJob which is only used by ExploreJob
+ * Used only by SearchJob which is only used by ExploreJob.
  */
 class SearchUpdateReplyFoundJob extends JobImpl implements ReplyJob {
     private final Log _log;
@@ -32,10 +32,10 @@ class SearchUpdateReplyFoundJob extends JobImpl implements ReplyJob {
     private final long _sentOn;
 
     /**
-     * Create job with no tunnel info
+     * Create job with no tunnel info.
      *
      * @param context the router context supplying the log and the network
-     *                database facade
+     * database facade
      * @param peer the peer that returned the matching database reply
      * @param state the search this job continues
      * @param facade the network database facade to store the found entry in
@@ -48,18 +48,18 @@ class SearchUpdateReplyFoundJob extends JobImpl implements ReplyJob {
     }
 
     /**
-     * Create job with tunnel info for reply routing
+     * Create job with tunnel info for reply routing.
      *
      * @param context the router context supplying the log and the network
-     *                database facade
+     * database facade
      * @param peer the peer that returned the matching database reply
      * @param state the search this job continues
      * @param facade the network database facade to store the found entry in
      * @param job the search job to tell when the reply has been handled
      * @param outTunnel the tunnel the original search request went out on, used
-     *                  to reply over the same path
+     * to reply over the same path
      * @param replyTunnel the tunnel to send the reply back over, or null to let
-     *                    the job build one from the peer's RouterInfo
+     * the job build one from the peer's RouterInfo
      */
     public SearchUpdateReplyFoundJob(RouterContext context, RouterInfo peer,
                                      SearchState state, KademliaNetworkDatabaseFacade facade,

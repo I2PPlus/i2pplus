@@ -15,7 +15,7 @@ import net.i2p.util.Log;
  * Receive raw information from the I2PSession and turn it into
  * Packets, if we can.
  * <p>
- * I2PSession -&gt; MessageHandler -&gt; PacketHandler -&gt; ConnectionPacketHandler -&gt; MessageInputStream
+ * I2PSession -&gt; MessageHandler -&gt; PacketHandler -&gt; ConnectionPacketHandler -&gt; MessageInputStream.
  */
 class MessageHandler implements I2PSessionMuxedListener {
     private final ConnectionManager _manager;
@@ -25,7 +25,7 @@ class MessageHandler implements I2PSessionMuxedListener {
     private final AtomicBoolean _restartPending = new AtomicBoolean();
 
     /**
-     * Creates a new MessageHandler
+     * Creates a new MessageHandler.
      *
      * @param ctx the I2P app context
      * @param mgr the connection manager
@@ -139,7 +139,7 @@ class MessageHandler implements I2PSessionMuxedListener {
     }
 
     /**
-     * Notify the client that some error occurred
+     * Notify the client that some error occurred.
      *
      * @param session of the client
      * @param message to send to the client about the error
@@ -151,7 +151,7 @@ class MessageHandler implements I2PSessionMuxedListener {
     }
 
     /**
-     * Add a disconnect listener
+     * Add a disconnect listener.
      *
      * @param lsnr the listener to add
      */
@@ -160,7 +160,7 @@ class MessageHandler implements I2PSessionMuxedListener {
     }
 
     /**
-     * Remove a disconnect listener
+     * Remove a disconnect listener.
      *
      * @param lsnr the listener to remove
      */

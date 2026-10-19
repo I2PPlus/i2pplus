@@ -12,16 +12,15 @@ package net.i2p.data;
 import net.i2p.I2PException;
 
 /**
- * Thrown when the data was not available to read or write a DataStructure
+ * Thrown when the data was not available to read or write a DataStructure.
  *
- * @author jrandom
  */
 public class DataFormatException extends I2PException {
 
     /**
      * Detail message.
      * @param msg the detail message
-     * @param t the cause, retrievable with {@link #getCause()}
+     * @param t the cause, retrievable with {@link #getCause}
      */
     public DataFormatException(String msg, Throwable t) {
         super(msg, t);

@@ -33,7 +33,6 @@ import org.cybergarage.util.Debug;
  * requests across different network interfaces, enabling comprehensive device discovery in
  * multi-homed environments.
  *
- * @author Satoshi Konno
  * @since 1.0
  */
 public class SSDPSearchSocketList extends Vector<SSDPSearchSocket> {
@@ -50,7 +49,7 @@ public class SSDPSearchSocketList extends Vector<SSDPSearchSocket> {
     /** SSDP port the search requests are sent to. */
     private int port = SSDP.PORT;
 
-    /** Default constructor. */
+    /** Creates an empty list. */
     public SSDPSearchSocketList() {}
 
     /**

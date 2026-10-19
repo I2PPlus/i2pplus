@@ -62,7 +62,6 @@ import java.util.Arrays;
  * <li>Provides unified interface for identity management across I2P</li>
  * </ul>
  *
- * @author zzz
  * @since 0.8.2
  */
 public class KeysAndCert extends DataStructureImpl {
@@ -90,7 +89,7 @@ public class KeysAndCert extends DataStructureImpl {
     private byte[] _padding;
 
     /**
-     * If compressed, the padding size / 32, else 0
+     * If compressed, the padding size / 32, else 0.
      *
      * @since 0.9.62
      */
@@ -157,11 +156,11 @@ public class KeysAndCert extends DataStructureImpl {
      * Up-convert the certificate to a KeyCertificate, caching the result.
      * The cache avoids a new KeyCertificate allocation on every identity-type
      * query for identities holding a plain CERTIFICATE_TYPE_KEY Certificate
-     * (KeyCertificate.toKeyCertificate() already returns itself).
+     * ({@link net.i2p.data.KeyCertificate#toKeyCertificate} already returns itself).
      *
      * @param cert the non-null certificate
      * @return the key certificate, or null if the certificate is not of type
-     *         CERTIFICATE_TYPE_KEY or its payload is too short
+     * CERTIFICATE_TYPE_KEY or its payload is too short
      */
     private KeyCertificate getKeyCertificate(Certificate cert) {
         if (cert.getCertificateType() != Certificate.CERTIFICATE_TYPE_KEY) return null;
@@ -239,7 +238,8 @@ public class KeysAndCert extends DataStructureImpl {
     /**
      * Padding bytes to set.
      *
-     * @param padding the padding to store, whose length must be 32 or a multiple of 32 for {@link #isCompressible()} to become true
+      * @param padding the padding to store, whose length must be 32 or a multiple of 32 for
+       * {@link #isCompressible} to become true
      * @throws IllegalStateException if was already set
      * @since 0.9.12
      */
@@ -332,7 +332,7 @@ public class KeysAndCert extends DataStructureImpl {
     }
 
     /**
-     * For Destination.writeBytes()
+     * For {@code Destination.writeBytes()}.
      *
      * @param target the buffer receiving the padding
      * @param off the offset in target at which to start writing

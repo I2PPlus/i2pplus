@@ -19,7 +19,7 @@ import net.i2p.util.SystemVersion;
  * <p>
  * Provides random iteration over a list with the ability to stop
  * iteration early when a condition is met. This can provide
- * significant performance improvements over Collections.shuffle() when
+ * significant performance improvements over {@code Collections.shuffle()} when
  * the iteration process may terminate before processing all elements.
  * <p>
  * Uses BitSet for tracking served items and I2P RandomSource
@@ -34,7 +34,7 @@ import net.i2p.util.SystemVersion;
  * </ul>
  * <p>
  * <strong>Note:</strong> Not recommended for small lists or when iterating
- * through a large portion of a collection. Use Collections.shuffle()
+ * through a large portion of a collection. Use {@code Collections.shuffle()}
  * for those cases instead.
  *
  * @param <E>  type of elements returned by this iterator
@@ -51,7 +51,7 @@ public class RandomIterator<E> implements Iterator<E> {
      */
     private final BitSet served;
 
-    /** The amount of items served so far */
+    /** The amount of items served so far. */
     private int servedCount;
     private final List<E> list;
     private final int LIST_SIZE;
@@ -68,7 +68,7 @@ public class RandomIterator<E> implements Iterator<E> {
      */
     private final Random rand = RandomSource.getInstance();
 
-    /** Used to narrow the range to take random indexes from */
+    /** Used to narrow the range to take random indexes from. */
     private int lower;
     private int upper;
 
@@ -174,7 +174,7 @@ public class RandomIterator<E> implements Iterator<E> {
     }
 
     /**
-     * Test case from android ticket above
+     * Test case from android ticket above.
      *
      * @since 0.9.2
      */

@@ -12,9 +12,6 @@ package net.i2p.stat;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
-/**
- * @author Comwiz
- */
 public class StatTestSuite {
 
     public static Test suite() {

@@ -29,28 +29,28 @@ import net.i2p.util.SecureFileOutputStream;
  * <p>
  * <strong>RouterInfo Contents:</strong>
  * <ul>
- *   <li>Router identity (public keys, certificates)</li>
- *   <li>Network addresses and transport endpoints</li>
- *   <li>Router capabilities and supported versions</li>
- *   <li>Performance statistics and bandwidth limits</li>
- *   <li>Current router status and options</li>
+ * <li>Router identity (public keys, certificates)</li>
+ * <li>Network addresses and transport endpoints</li>
+ * <li>Router capabilities and supported versions</li>
+ * <li>Performance statistics and bandwidth limits</li>
+ * <li>Current router status and options</li>
  * </ul>
  * <p>
  * <strong>Persistence Process:</strong>
  * <ul>
- *   <li>Retrieves current RouterInfo from router</li>
- *   <li>Writes to router.info file in router directory</li>
- *   <li>Uses synchronized access to prevent corruption</li>
- *   <li>Employs atomic file writing for safety</li>
- *   <li>Handles errors gracefully with detailed logging</li>
+ * <li>Retrieves current RouterInfo from router</li>
+ * <li>Writes to {@code router.info} file in router directory</li>
+ * <li>Uses synchronized access to prevent corruption</li>
+ * <li>Employs atomic file writing for safety</li>
+ * <li>Handles errors gracefully with detailed logging</li>
  * </ul>
  * <p>
  * <strong>File Safety:</strong>
  * <ul>
- *   <li>Uses SecureFileOutputStream for atomic writes</li>
- *   <li>Synchronized on routerInfoFileLock for thread safety</li>
- *   <li>Prevents partial writes and corruption</li>
- *   <li>Ensures consistent state across restarts</li>
+ * <li>Uses SecureFileOutputStream for atomic writes</li>
+ * <li>Synchronized on routerInfoFileLock for thread safety</li>
+ * <li>Prevents partial writes and corruption</li>
+ * <li>Ensures consistent state across restarts</li>
  * </ul>
  * <p>
  * This job is triggered automatically whenever RouterInfo is updated
@@ -81,7 +81,7 @@ public class PersistRouterInfoJob extends JobImpl {
     /**
      * Save the current router information to disk.
      * <p>
-     * This job writes the router's RouterInfo to the router.info file
+     * This job writes the router's RouterInfo to the {@code router.info} file
      * in the router directory. It uses a synchronized block to ensure
      * thread-safe access to the router info file.
      * <p>

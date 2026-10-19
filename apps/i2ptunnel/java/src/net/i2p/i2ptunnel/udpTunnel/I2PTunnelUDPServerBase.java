@@ -56,7 +56,7 @@ public class I2PTunnelUDPServerBase extends I2PTunnelTask implements Source, Sin
     protected Logging l;
 
     private static final long DEFAULT_READ_TIMEOUT = -1;
-    /** default timeout to 3 minutes - override if desired */
+    /** Default timeout to 3 minutes - override if desired. */
     protected long readTimeout = DEFAULT_READ_TIMEOUT;
 
     private I2PSession _session;

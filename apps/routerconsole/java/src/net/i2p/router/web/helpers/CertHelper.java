@@ -10,9 +10,9 @@ import net.i2p.util.FileUtil;
 import net.i2p.util.Log;
 
 /**
- *  Dump out our local SSL certs, if any
+ * Dump out our local SSL certs, if any.
  *
- *  @since 0.9.23
+ * @since 0.9.23
  */
 public class CertHelper extends HelperBase {
 
@@ -110,7 +110,9 @@ public class CertHelper extends HelperBase {
     }
 
     /**
-     *  @param file may be null
+     * Send a certificate file to the browser.
+     *
+     * @param file may be null
      */
     private void output(String name, File file) throws IOException {
         if (file != null && file.exists()) {

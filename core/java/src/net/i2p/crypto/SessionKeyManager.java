@@ -26,7 +26,7 @@ public class SessionKeyManager {
 
     /**
      * A dummy SessionKeyManager for testing or for passing to
-     * ElGamalAESEngine.decrypt()
+     * {@link net.i2p.router.crypto.ElGamalAESEngine#decrypt}.
      *
      * @since 0.9.14
      */
@@ -34,10 +34,10 @@ public class SessionKeyManager {
 
     /**
      * A dummy SessionKeyManager for testing or for passing to
-     * ElGamalAESEngine.decrypt()
+     * {@link net.i2p.router.crypto.ElGamalAESEngine#decrypt}.
      *
      * @param context application context, accepted but ignored by this base
-     *                implementation, which manages no sessions
+     * implementation, which manages no sessions
      */
     public SessionKeyManager(I2PAppContext context) { // nop
     }
@@ -46,7 +46,7 @@ public class SessionKeyManager {
      * Retrieve the session key currently associated with encryption to the target,
      * or null if a new session key should be generated.
      * <p>
-     * Warning - don't generate a new session if this returns null, it's racy, use getCurrentOrNewKey()
+     * Warning - don't generate a new session if this returns null, it's racy, use getCurrentOrNewKey().
      * @param target the destination whose current session key is wanted
      * @return the current key
      */
@@ -97,7 +97,7 @@ public class SessionKeyManager {
      * Retrieve the next available session tag for identifying the use of the given
      * key when communicating with the target.  If this returns null, no tags are
      * available so ElG should be used with the given key (a new sessionKey should
-     * NOT be used)
+     * NOT be used).
      *
      * @param target the destination the tag was sent to
      * @param key the session key whose use the tag identifies
@@ -148,7 +148,7 @@ public class SessionKeyManager {
 
     /**
      * Determine (approximately) how many available session tags for the current target
-     * have been confirmed and are available
+     * have been confirmed and are available.
      *
      * @param target the destination the tags were sent to
      * @param key the session key those tags were issued under
@@ -160,7 +160,7 @@ public class SessionKeyManager {
 
     /**
      * Determine how long the available tags will be available for before expiring, in
-     * milliseconds
+     * milliseconds.
      * @param target the destination the tags were sent to
      * @param key the session key those tags were issued under
      * @return the available time left
@@ -172,7 +172,7 @@ public class SessionKeyManager {
     /**
      * Take note of the fact that the given sessionTags associated with the key for
      * encryption to the target have definitely been received at the target (aka call this
-     * method after receiving an ack to a message delivering them)
+     * method after receiving an ack to a message delivering them).
      *
      * @param target the destination that acknowledged the tags
      * @param key the session key the acknowledged tags were issued under
@@ -186,7 +186,7 @@ public class SessionKeyManager {
     /**
      * Mark all of the tags delivered to the target up to this point as invalid, since the peer
      * has failed to respond when they should have.  This call essentially lets the system recover
-     * from corrupted tag sets and crashes
+     * from corrupted tag sets and crashes.
      *
      * @param target the destination whose delivered tags are being invalidated
      */
@@ -219,7 +219,7 @@ public class SessionKeyManager {
      * Determine if we have received a session key associated with the given session tag,
      * and if so, discard it (but keep track for frequent dups) and return the decryption
      * key it was received with (via tagsReceived(...)).  returns null if no session key
-     * matches
+     * matches.
      *
      * @param tag the session tag whose delivered key is consumed
      * @return the session key, or null
@@ -230,7 +230,7 @@ public class SessionKeyManager {
 
     /**
      * Called when the system is closing down, instructing the session key manager to take
-     * whatever precautions are necessary (saving state, etc)
+     * whatever precautions are necessary (saving state, etc).
      */
     public void shutdown() { // nop
     }

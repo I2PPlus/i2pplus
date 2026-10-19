@@ -12,7 +12,7 @@ import net.i2p.I2PAppContext;
 import net.i2p.util.Log;
 
 /**
- * Handle messages from router to router.  This class is NOT threadsafe
+ * Handle messages from router to router.  This class is NOT threadsafe.
  */
 public class I2NPMessageHandler {
     private final Log _log;
@@ -52,7 +52,7 @@ public class I2NPMessageHandler {
     }
 
     /**
-     * Result is retrieved with lastRead()
+     * Result is retrieved with lastRead().
      *
      * @param data the buffer holding the serialized message
      * @param offset the index in data at which the message starts
@@ -67,12 +67,12 @@ public class I2NPMessageHandler {
      * Limit the max to read from the data buffer, so that
      * we can use a large buffer but prevent the reader from reading off the end.
      * <p>
-     * Result is retrieved with lastRead()
+     * Result is retrieved with lastRead().
      *
      * @param data the buffer holding the serialized message
      * @param offset the index in data at which the message starts
      * @param maxLen read no more than this many bytes from data starting at offset, even if it is longer
-     *               must be at least 16
+     * must be at least 16
      * @return the number of bytes read from data
      * @throws net.i2p.data.i2np.I2NPMessageException on an unknown type or body
      * @since 0.8.12

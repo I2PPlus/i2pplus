@@ -17,7 +17,7 @@ package net.i2p.router.peermanager;
  * @since moved from router to peermanager in 0.9.40
  */
 class PeerSelectionCriteria {
-    /** The peers will be used for a test message */
+    /** The peers will be used for a test message. */
     public static final int PURPOSE_TEST = 1;
 
     /**
@@ -31,7 +31,7 @@ class PeerSelectionCriteria {
     private int _purpose;
 
     /**
-     * Minimum number of peers required
+     * Minimum number of peers required.
      *
      * @return the minimum number of peers
      */
@@ -43,7 +43,7 @@ class PeerSelectionCriteria {
      */
     public void setMinimumRequired(int min) { _minReq = min; }
     /**
-     * Maximum number of peers required
+     * Maximum number of peers required.
      *
      * @return the maximum number of peers
      */
@@ -55,10 +55,10 @@ class PeerSelectionCriteria {
      */
     public void setMaximumRequired(int max) { _maxReq = max; }
     /**
-     * Purpose for which the peers will be used
+     * Purpose for which the peers will be used.
      *
      * @return a {@link #PURPOSE_TEST} constant naming why the selected peers
-     *         will be used, or 0 if no purpose has been set
+     * will be used, or 0 if no purpose has been set
      */
     public int getPurpose() { return _purpose; }
     /**

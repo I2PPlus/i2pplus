@@ -1,7 +1,7 @@
 package net.i2p.router.crypto.ratchet;
 
 /**
- * Callback interface for ratchet acknowledgment notifications with expiration support
+ * Callback interface for ratchet acknowledgment notifications with expiration support.
  *
  * @since 0.9.46
  */

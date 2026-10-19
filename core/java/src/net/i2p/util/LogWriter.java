@@ -30,14 +30,14 @@ abstract class LogWriter implements Runnable {
     private static final long MAX_FLUSH_INTERVAL = 5 * (long) 60 * 1000;
     // true for newest first on /logs page; false for oldest first
     private static final boolean BUFFER_DISPLAYED_REVERSE = true;
-    /** Timestamp of last config reread */
+    /** Timestamp of last config reread. */
     private volatile long _lastReadConfig;
     /**
      * The log manager owning this writer and its context.
      */
     protected final LogManager _manager;
 
-    /** Whether the writer should continue writing */
+    /** Whether the writer should continue writing. */
     protected volatile boolean _write;
     private LogRecord _last;
     private long _firstTimestamp;
@@ -45,7 +45,7 @@ abstract class LogWriter implements Runnable {
     private volatile long _flushInterval = FLUSH_INTERVAL;
 
     /**
-     * Creates a new LogWriter
+     * Creates a new LogWriter.
      *
      * @param manager the log manager
      */
@@ -55,7 +55,7 @@ abstract class LogWriter implements Runnable {
     }
 
     /**
-     * File may not exist or have old logs in it if not opened yet
+     * File may not exist or have old logs in it if not opened yet.
      *
      * @return non-null
      */
@@ -77,13 +77,13 @@ abstract class LogWriter implements Runnable {
      */
     protected abstract void writeRecord(int priority, String line);
 
-    /** Flush the writer output */
+    /** Flush the writer output. */
     protected abstract void flushWriter();
 
-    /** Close the writer */
+    /** Close the writer. */
     protected abstract void closeWriter();
 
-    /** Stop the log writer thread */
+    /** Stop the log writer thread. */
     public void stopWriting() {
         _write = false;
     }
@@ -131,14 +131,14 @@ abstract class LogWriter implements Runnable {
     }
 
     /**
-     * Flush pending log records
+     * Flush pending log records.
      */
     public void flushRecords() {
         flushRecords(true);
     }
 
     /**
-     * Flush pending log records, optionally waiting for new ones
+     * Flush pending log records, optionally waiting for new ones.
      *
      * @param shouldWait whether to wait for new records
      */
@@ -184,7 +184,7 @@ abstract class LogWriter implements Runnable {
     }
 
     /**
-     * Write a msg with the date stamp of the last duplicate
+     * Write a msg with the date stamp of the last duplicate.
      *
      * @since 0.9.21
      */
@@ -198,7 +198,7 @@ abstract class LogWriter implements Runnable {
     }
 
     /**
-     * Return a msg with the date stamp of the last duplicate
+     * Return a msg with the date stamp of the last duplicate.
      *
      * @since 0.9.3
      */

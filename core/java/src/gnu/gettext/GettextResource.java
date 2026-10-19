@@ -40,7 +40,6 @@ import java.util.*;
  * To compile GNU gettext message catalogs into Java ResourceBundle classes,
  * the <CODE>msgfmt</CODE> program can be used.
  *
- * @author Bruno Haible
  */
 /**
  * GettextResource Extends ResourceBundle.

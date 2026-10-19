@@ -237,7 +237,7 @@ public class SSUDemo {
     // Foo and netDb store handling below
 
     /**
-     * Deal with an Foo message received
+     * Deal with an Foo message received.
      */
     private class FooJobBuilder implements HandlerJobBuilder {
         @SuppressWarnings("deprecation")

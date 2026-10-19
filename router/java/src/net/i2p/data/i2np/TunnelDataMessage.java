@@ -16,7 +16,7 @@ import net.i2p.util.ByteCache;
 /**
  * Defines the message sent between routers as part of the tunnel delivery
  * <p>
- * The tunnel ID is changed in-place by TunnelParticipant.send(), so
+ * The tunnel ID is changed in-place by {@link net.i2p.router.tunnel.TunnelParticipant#send}, so
  * we can't reuse the checksum on output, but we still subclass
  * FastI2NPMessageImpl so we don't verify the checksum on input...
  * because this is a high-usage class.
@@ -26,22 +26,24 @@ public class TunnelDataMessage extends FastI2NPMessageImpl {
     private TunnelId _tunnelIdObj;
     private byte[] _data;
     private ByteArray _dataBuf;
-    /** Message type ID for this I2NP message */
+    /** Message type ID for this I2NP message. */
 
     public final static int MESSAGE_TYPE = 18;
-    /** Size of the data payload in bytes */
+    /** Size of the data payload in bytes. */
     public static final int DATA_SIZE = 1024;
     /** If we can't deliver a tunnel message in 10s, forget it. */
     private static final int EXPIRATION_PERIOD = 10*1000;
 
     private static final ByteCache _cache;
     /**
-     * When true, it means this tunnelDataMessage is being used as part of a tunnel processing
-     * pipeline, where the byte array is acquired during the TunnelDataMessage's creation
-     * (per readMessage), held onto through several transitions (updating and moving that array
-     * between different TunnelDataMessage instances or the fragment handler's cache, etc), until
-     * it is finally released back into the cache when written to the next peer (or explicitly by
-     * the fragment handler's completion). Setting this to false just increases memory churn.
+     * When true, this tunnelDataMessage is used as part of a tunnel processing
+     * pipeline. The byte array is acquired during the TunnelDataMessage's
+     * creation (per readMessage), held onto through several transitions
+     * (updating and moving that array between different TunnelDataMessage
+     * instances or the fragment handler's cache, etc.), until it is finally
+     * released back into the cache when written to the next peer (or
+     * explicitly by the fragment handler's completion). Setting this to false
+     * just increases memory churn.
      * <p>
      * This is tricky to get right and avoid data corruption.
      */
@@ -73,7 +75,7 @@ public class TunnelDataMessage extends FastI2NPMessageImpl {
     public long getTunnelId() {return _tunnelId;}
 
     /**
-     * (correctly) Invalidates stored checksum
+     * (correctly) Invalidates stored checksum.
      *
      * @param id the tunnel to address; assigning it invalidates the cached checksum
      */
@@ -93,7 +95,7 @@ public class TunnelDataMessage extends FastI2NPMessageImpl {
     }
 
     /**
-     * (correctly) Invalidates stored checksum
+     * (correctly) Invalidates stored checksum.
      *
      * @param id the tunnel to address; assigning it invalidates the cached checksum
      */
@@ -128,7 +130,7 @@ public class TunnelDataMessage extends FastI2NPMessageImpl {
         if ((data == null) || (data.length <= 0)) {throw new IllegalArgumentException("Empty tunnel payload?");}
         _data = data;
     }
-    /** Read and parse the message from raw data into fields */
+    /** Read and parse the message from raw data into fields. */
 
     public void readMessage(byte[] data, int offset, int dataSize, int type) throws I2NPMessageException {
         if (type != MESSAGE_TYPE) throw new I2NPMessageException("Message type is incorrect for this message");
@@ -178,7 +180,7 @@ public class TunnelDataMessage extends FastI2NPMessageImpl {
         // dataBufs released - but received TDMs do (via FragmentHandler)
         return curIndex;
     }
-    /** Return the type */
+    /** Return the type. */
 
     public int getType() {return MESSAGE_TYPE;}
 

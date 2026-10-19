@@ -688,8 +688,8 @@ public class TuningHelper extends HelperBase {
 
     /**
      * Resolve a subsystem's metric identifiers to tooltip lines carrying each
-     * stat's live value, e.g. "jobQueue.jobLag: 12ms". Metrics with no mapping
-     * or no stat are skipped; returns null when nothing resolves, so the ring
+     * stat's live value, e.g. "{@code jobQueue.jobLag}: 12ms". Metrics with no mapping
+     * or no stat are skipped. Returns null when nothing resolves, so the ring
      * simply gets no tooltip instead of an identifier list.
      *
      * @param metrics the metric identifiers from the subsystem score, may be null

@@ -37,7 +37,6 @@ import java.util.Properties;
  * An I2PClient contains no state, it is just a facility for creating private key files
  * and generating sesssions from existing private key files.
  *
- * @author jrandom
  */
 public class I2PClientImpl implements I2PClient {
 
@@ -174,10 +173,10 @@ public class I2PClientImpl implements I2PClient {
     }
 
     /**
-     * Create a new session (though do not connect it yet)
+     * Create a new session (though do not connect it yet).
      *
      * @param destKeyStream location from which to read the Destination, PrivateKey, and SigningPrivateKey from,
-     *                      format is specified in {@link net.i2p.data.PrivateKeyFile PrivateKeyFile}
+     * format is specified in {@link net.i2p.data.PrivateKeyFile PrivateKeyFile}
      *
      * @param options set of options to configure the router with, if null will use System properties
      */
@@ -187,11 +186,11 @@ public class I2PClientImpl implements I2PClient {
     }
 
     /**
-     * Create a new session (though do not connect it yet)
+     * Create a new session (though do not connect it yet).
      *
      * @param context the I2PAppContext to use
      * @param destKeyStream location from which to read the Destination, PrivateKey, and SigningPrivateKey from,
-     *                      format is specified in {@link net.i2p.data.PrivateKeyFile PrivateKeyFile}
+     * format is specified in {@link net.i2p.data.PrivateKeyFile PrivateKeyFile}
      *
      * @param options set of options to configure the router with, if null will use System properties
      * @return the newly created session, not yet logged in

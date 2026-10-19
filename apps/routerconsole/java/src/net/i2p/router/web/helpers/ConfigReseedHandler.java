@@ -140,7 +140,11 @@ public class ConfigReseedHandler extends FormHandler {
             addFormError(_t("Error saving the configuration (applied but not saved) - please see the error logs"), true);
     }
 
-    /** @since 0.8.9 */
+    /**
+     * Save a string reseed setting.
+     *
+     * @since 0.8.9
+     */
     private void saveString(String config, String param) {
         String val = getJettyString(param);
         if (val != null && !val.isEmpty())
@@ -149,7 +153,11 @@ public class ConfigReseedHandler extends FormHandler {
             removes.add(config);
     }
 
-    /** @since 0.8.9 */
+    /**
+     * Save a boolean reseed setting.
+     *
+     * @since 0.8.9
+     */
     private void saveBoolean(String config, String param) {
         boolean val = getJettyString(param) != null;
         changes.put(config, Boolean.toString(val));

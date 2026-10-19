@@ -32,22 +32,22 @@ import java.nio.charset.StandardCharsets;
  * Provides functionality for loading, filtering, and managing address entries.
  */
 public class AddressbookBean extends BaseBean {
-    /** Logger instance */
+    /** Logger instance. */
     private static final Log _log = new Log(AddressbookBean.class);
 
-    /** The address book name */
+    /** The address book name. */
     protected String book;
-    /** The filter string */
+    /** The filter string. */
     protected String filter;
-    /** The search string */
+    /** The search string. */
     protected String search;
-    /** The hostname */
+    /** The hostname. */
     protected String hostname;
-    /** The destination */
+    /** The destination. */
     protected String destination;
-    /** The category filter string */
+    /** The category filter string. */
     protected String category;
-    /** Valid category names */
+    /** Valid category names. */
     private static final String[] VALID_CATEGORIES = {
         "cryptocoin",
         "drugs",
@@ -76,17 +76,17 @@ public class AddressbookBean extends BaseBean {
         "wiki",
         "wip"
     };
-    /** Beginning index for pagination */
+    /** Beginning index for pagination. */
     protected int beginIndex;
-    /** Ending index for pagination */
+    /** Ending index for pagination. */
     protected int endIndex;
 
     private Properties addressbook;
     /** Parsed #! properties per hostname, built once per load. */
     private Map<String, Properties> _propsByHost;
-    /** List of entries marked for deletion */
+    /** List of entries marked for deletion. */
     protected final LinkedList<String> deletionMarks;
-    /** Comparator for sorting addresses */
+    /** Comparator for sorting addresses. */
     protected static final Comparator<AddressBean> sorter;
 
     private static final int DISPLAY_SIZE = 100;
@@ -143,9 +143,7 @@ public class AddressbookBean extends BaseBean {
         return addressbook != null && !addressbook.isEmpty();
     }
 
-    /**
-     * Default constructor.
-     */
+    /** Creates an empty addressbook bean. */
     public AddressbookBean() {
         super();
         deletionMarks = new LinkedList<>();
@@ -231,7 +229,7 @@ public class AddressbookBean extends BaseBean {
         return getFileName();
     }
 
-    /** Array of address entries */
+    /** Array of address entries. */
     protected AddressBean[] entries;
 
     /**
@@ -257,7 +255,7 @@ public class AddressbookBean extends BaseBean {
     }
 
     /**
-     * Sets the book name.
+     * Set the address book to display, normalizing unknown names to "router".
      * @param book the book name to set
      */
     public void setBook(String book) {
@@ -641,7 +639,7 @@ public class AddressbookBean extends BaseBean {
     }
 
     /**
-     * Returns the filter string.
+     * The search filter narrowing the displayed entries.
      * @return the filter string
      */
     public String getFilter() {
@@ -669,7 +667,7 @@ public class AddressbookBean extends BaseBean {
     }
 
     /**
-     * Sets the filter string.
+     * Set the search filter; "none" clears it, and a category name selects that category.
      * @param filter filter string to set
      */
     public void setFilter(String filter) {
@@ -692,7 +690,7 @@ public class AddressbookBean extends BaseBean {
     }
 
     /**
-     * Returns the destination string.
+     * The destination for the add or edit form, as entered.
      * @return the destination string
      */
     public String getDestination() {
@@ -700,7 +698,7 @@ public class AddressbookBean extends BaseBean {
     }
 
     /**
-     * Sets the destination string.
+     * Set the destination for the add or edit form.
      * @param destination the destination string to store, stripped of any HTML
      */
     public void setDestination(String destination) {
@@ -708,7 +706,7 @@ public class AddressbookBean extends BaseBean {
     } // XSS
 
     /**
-     * Returns the category filter string.
+     * The category filter, set when the search filter names a category.
      * @return the category filter string
      */
     public String getCategoryFilter() {
@@ -716,7 +714,7 @@ public class AddressbookBean extends BaseBean {
     }
 
     /**
-     * Returns the hostname string.
+     * The hostname for the add or edit form, as entered.
      * @return the hostname string
      */
     public String getHostname() {
@@ -740,7 +738,7 @@ public class AddressbookBean extends BaseBean {
     } // XSS
 
     /**
-     * Sets the hostname string.
+     * Set the hostname for the add or edit form.
      * @param hostname the hostname string to store, stripped of any HTML
      */
     public void setHostname(String hostname) {
@@ -748,7 +746,7 @@ public class AddressbookBean extends BaseBean {
     } // XSS
 
     /**
-     * Returns the beginning index as integer.
+     * The first displayed entry index, clamped to the result set.
      * @return the beginning index
      */
     protected int getBeginInt() {
@@ -756,7 +754,7 @@ public class AddressbookBean extends BaseBean {
     }
 
     /**
-     * Returns the beginning index as string.
+     * The clamped first displayed entry index, as a string for the JSP.
      * @return the beginning index as string
      */
     public String getBegin() {
@@ -774,7 +772,7 @@ public class AddressbookBean extends BaseBean {
     }
 
     /**
-     * Sets the beginning index.
+     * Set the page start index from a form string, ignoring garbage.
      * @param s the beginning index as string
      */
     public void setBegin(String s) {
@@ -784,7 +782,7 @@ public class AddressbookBean extends BaseBean {
     }
 
     /**
-     * Returns the ending index as integer.
+     * The last displayed entry index, clamped to the result set.
      * @return the ending index
      */
     protected int getEndInt() {
@@ -792,7 +790,7 @@ public class AddressbookBean extends BaseBean {
     }
 
     /**
-     * Returns the ending index as string.
+     * The clamped last displayed entry index, as a string for the JSP.
      * @return the ending index as string
      */
     public String getEnd() {
@@ -800,7 +798,7 @@ public class AddressbookBean extends BaseBean {
     }
 
     /**
-     * Gets the beginning index into results.
+     * The index of the first entry in the result set, as a string.
      * @return beginning index into results
      * @since 0.8.7
      */
@@ -812,7 +810,7 @@ public class AddressbookBean extends BaseBean {
     }
 
     /**
-     * Gets ending index into results.
+     * The index of the last entry in the result set, as a string.
      * @return ending index into results
      * @since 0.8.7
      */
@@ -826,7 +824,7 @@ public class AddressbookBean extends BaseBean {
     }
 
     /**
-     * Sets the ending index.
+     * Set the page end index from a form string, ignoring garbage.
      * @param s the ending index as string
      */
     public void setEnd(String s) {
@@ -845,7 +843,7 @@ public class AddressbookBean extends BaseBean {
     }
 
     /**
-     * Gets the size of the lookup result.
+     * The number of entries in the current result set.
      * @return the size of the lookup result
      * @since 0.8.7
      */
@@ -864,7 +862,7 @@ public class AddressbookBean extends BaseBean {
     }
 
     /**
-     * Gets the total size of the address book.
+     * The total number of entries in the book.
      * @return the total size of the address book
      * @since 0.8.7
      */

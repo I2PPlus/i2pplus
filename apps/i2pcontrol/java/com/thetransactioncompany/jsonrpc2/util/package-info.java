@@ -33,7 +33,6 @@
  *         object).
  * </ul>
  *
- *
  * <p><b>Package dependencies:</b> The classes in this package depend on the
  * sister {@link com.thetransactioncompany.jsonrpc2} package.
  *

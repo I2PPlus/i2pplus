@@ -70,7 +70,11 @@ public interface RandomAccessInterface extends Closeable {
     public boolean canWrite();
 
     // Closeable Methods
-    /** @see java.io.RandomAccessFile#close() */
+    /**
+     * Closes the file.
+     *
+     * @see java.io.RandomAccessFile#close()
+     */
     public void close() throws IOException;
 
     // DataInput Methods

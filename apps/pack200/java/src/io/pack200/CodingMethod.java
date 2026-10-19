@@ -31,7 +31,6 @@ import java.io.OutputStream;
 
 /**
  * Interface for encoding and decoding int arrays using bytewise codes.
- * @author John Rose
  */
 interface CodingMethod {
     // Read and write an array of ints from/to a stream.

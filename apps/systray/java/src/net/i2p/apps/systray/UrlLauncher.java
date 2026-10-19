@@ -55,7 +55,7 @@ public class UrlLauncher implements ClientApp {
     private static final boolean IS_SERVICE = SystemVersion.isService();
 
     /**
-     * Browsers to try IN-ORDER
+     * Browsers to try IN-ORDER.
      */
     private static final String[] BROWSERS = {
             // This debian script tries everything in $BROWSER, then gnome-www-browser and x-www-browser
@@ -84,7 +84,7 @@ public class UrlLauncher implements ClientApp {
     };
 
     /**
-     * ClientApp constructor used from clients.config
+     * ClientApp constructor used from {@code clients.config}.
      *
      * @param context the router context supplying the console URL used when args is empty
      * @param mgr null OK
@@ -104,7 +104,7 @@ public class UrlLauncher implements ClientApp {
     }
 
     /**
-     * Constructor from SysTray
+     * Constructor from SysTray.
      *
      * @since 0.9.18
      */
@@ -175,14 +175,14 @@ public class UrlLauncher implements ClientApp {
      * Obtains the default browser for the Windows platform, which by now should
      * be Edgium in the worst-case scenario but in case it isn't, we can use this
      * function to figure it out. It can find:
-     *
-     * 1. The current user's HTTPS default browser if they configured it to be
-     * non-default
-     * 2. The current user's HTTP default browser if they configured it to be
-     * non-default
-     * 3. Edgium if it's available
-     * 4. iexplore if it's not
-     *
+     * <ol>
+     * <li>The current user's HTTPS default browser if they configured it to be
+     * non-default</li>
+     * <li>The current user's HTTP default browser if they configured it to be
+     * non-default</li>
+     * <li>Edgium if it's available</li>
+     * <li>iexplore if it's not</li>
+     * </ol>
      * and it will return the first one we find in exactly that order.
      *
      * Adapted from:
@@ -218,8 +218,8 @@ public class UrlLauncher implements ClientApp {
     }
 
     /**
-     * obtains a value matching a key contained in the windows registry at a path
-     * represented by hkeyquery
+     * Obtains a value matching a key contained in the windows registry at a path
+     * represented by hkeyquery.
      *
      * @param hkeyquery registry entry to ask for.
      * @param key key to retrieve value from
@@ -252,12 +252,11 @@ public class UrlLauncher implements ClientApp {
     }
 
     /**
-     * If following a query back to the Default value doesn't work then what
-     * we have is a "ProgID" which will be registered in \HKEY_CLASSES_ROOT\%ProgId%,
-     * and will have an entry \shell\open\command, where \shell\open\command yields the
-     * value that contains the command it needs. This function takes a registry query
-     * in the same format as getDefaultOutOfRegistry but instead of looking for the
-     * default entry
+     * If following a query back to the Default value doesn't work, what we
+     * have is a "ProgID", registered under \HKEY_CLASSES_ROOT\%ProgId% with a
+     * \shell\open\command entry whose value contains the command it needs.
+     * Takes a registry query in the same format as getDefaultOutOfRegistry
+     * but follows the ProgID instead of the default entry.
      *
      * @param hkeyquery
      * @return the command required to run the application referenced in hkeyquery, or null
@@ -285,7 +284,7 @@ public class UrlLauncher implements ClientApp {
     }
 
     /**
-     * obtains a default browsing command out of the Windows registry.
+     * Obtains a default browsing command out of the Windows registry.
      *
      * @param hkeyquery registry entry to ask for.
      * @return either a registry "Default" value or null if one does not exist/is empty
@@ -513,7 +512,7 @@ public class UrlLauncher implements ClientApp {
     }
 
     /**
-     * ClientApp interface
+     * ClientApp interface.
      * @return the tracked application state
      * @since 0.9.18
      */
@@ -523,7 +522,7 @@ public class UrlLauncher implements ClientApp {
     }
 
     /**
-     * ClientApp interface
+     * ClientApp interface.
      * @return the name this application registers with the router, always {@code UrlLauncher}
      * @since 0.9.18
      */
@@ -533,7 +532,7 @@ public class UrlLauncher implements ClientApp {
     }
 
     /**
-     * ClientApp interface
+     * ClientApp interface.
      * @return the display name
      * @since 0.9.18
      */
@@ -543,6 +542,8 @@ public class UrlLauncher implements ClientApp {
     }
 
     /**
+     * React to a client app state change.
+     *
      * @since 0.9.18
      */
     private void changeState(ClientAppState state) {
@@ -550,6 +551,8 @@ public class UrlLauncher implements ClientApp {
     }
 
     /**
+     * React to a state change with an error.
+     *
      * @since 0.9.18
      */
     private synchronized void changeState(ClientAppState state, Exception e) {
@@ -559,7 +562,7 @@ public class UrlLauncher implements ClientApp {
     }
 
     /**
-     * ClientApp interface
+     * ClientApp interface.
      * @since 0.9.18
      */
     @Override
@@ -569,7 +572,7 @@ public class UrlLauncher implements ClientApp {
     }
 
     /**
-     * Obsolete, now uses ClientApp interface
+     * Obsolete, now uses ClientApp interface.
      * @param args URL(s) to open
      */
     public static void main(String[] args) {

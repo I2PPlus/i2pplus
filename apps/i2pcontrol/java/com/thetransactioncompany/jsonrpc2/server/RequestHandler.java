@@ -7,7 +7,6 @@ import com.thetransactioncompany.jsonrpc2.JSONRPC2Response;
 /**
  * Interface for handling JSON-RPC 2.0 requests.
  *
- * @author Vladimir Dzhuvinov
  */
 public interface RequestHandler {
 

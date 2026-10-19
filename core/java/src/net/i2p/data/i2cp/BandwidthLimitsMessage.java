@@ -13,12 +13,11 @@ import java.io.IOException;
 import java.io.InputStream;
 
 /**
- * Tell the other side the limits
+ * Tell the other side the limits.
  *
- * @author zzz
  */
 public class BandwidthLimitsMessage extends I2CPMessageImpl {
-    /** Message type identifier for bandwidth limit messages */
+    /** Message type identifier for bandwidth limit messages. */
     public static final int MESSAGE_TYPE = 23;
     private static final int LIMITS = 16;
     private int[] data;
@@ -32,7 +31,7 @@ public class BandwidthLimitsMessage extends I2CPMessageImpl {
     /**
      * BandwidthLimitsMessage with the client inbound and outbound limits.
      * <p>
-     * Slot definitions. Slots 7-15 are left undefined and wasted — this
+     * Slot definitions. Slots 7-15 are left undefined and wasted. This
      * message is only local and rarely sent, so we don't care about the waste.
      * <p>
      * 0) Client inbound limit (KBps)
@@ -42,7 +41,7 @@ public class BandwidthLimitsMessage extends I2CPMessageImpl {
      * 4) Router outbound limit (KBps)
      * 5) Router outbound burst limit (KBps)
      * 6) Router burst time (seconds)
-     * 7-15) undefined
+     * 7-15) undefined.
      *
      * @param in Client inbound limit (KBps)
      * @param out Client outbound limit (KBps)

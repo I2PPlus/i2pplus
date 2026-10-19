@@ -19,7 +19,6 @@ import java.io.InputStream;
  * Defines the message a client sends to a router when establishing a new
  * session.
  *
- * @author jrandom
  */
 public class CreateSessionMessage extends I2CPMessageImpl {
     /**

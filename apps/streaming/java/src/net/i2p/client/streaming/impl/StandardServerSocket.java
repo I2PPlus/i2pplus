@@ -23,14 +23,13 @@ import net.i2p.client.streaming.I2PSocketAddress;
  * You may not create an unbound StandardServerSocket.
  * Create this through the SocketManager.
  *
- * @author zzz
  * @since 0.8.4
  */
 class StandardServerSocket extends ServerSocket {
     private final I2PServerSocketFull _socket;
 
     /**
-     * Doesn't really throw IOE but super() does
+     * Doesn't really throw IOE but super() does.
      *
      * @param socket the I2P server socket that accept() and close() delegate to
      * @throws IOException always, from the no-argument ServerSocket constructor this must call
@@ -158,19 +157,19 @@ class StandardServerSocket extends ServerSocket {
     }
 
     /**
-     * Does nothing.
+     * Ignored, streaming sockets manage their own tuning.
      */
     @Override
     public void setPerformancePreferences(int connectionTime, int latency, int bandwidth) { /* no-op */ }
 
     /**
-     * Does nothing.
+     * Ignored, streaming sockets manage their own tuning.
      */
     @Override
     public void setReceiveBufferSize(int size) { /* no-op */ }
 
     /**
-     * Does nothing.
+     * Ignored, streaming sockets manage their own tuning.
      */
     @Override
     public void setReuseAddress(boolean on) { /* no-op */ }

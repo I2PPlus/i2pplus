@@ -39,12 +39,13 @@ public class OutboundMessageRegistry {
     /** Map of active MessageSelector to either an OutNetMessage or a List of OutNetMessages causing it (for quick removal). */
     private final Map<MessageSelector, Object> _selectorToMessage;
     /**
-     * set of active OutNetMessage (for quick removal and selector fetching)
-     * !! Really? seems only for dup detection in registerPending().
+     * Set of active OutNetMessage (for quick removal and selector fetching).
+     * Apparently only used for dup detection in registerPending().
      * Changed to concurrent, but it could perhaps be removed completely,
      * It would seem difficult to add a dup since every OutNetMessage is different,
      * and it's generally instantiated just before ctx.outNetMessagePool().add().
-     * But in TransportImpl.afterSend() it does requeue a previous ONM if allowRequeue=true.
+      * But in {@link net.i2p.router.transport.TransportImpl#afterSend} it does requeue a previous ONM if
+     * allowRequeue=true.
      */
     private final Set<OutNetMessage> _activeMessages;
     private final CleanupTask _cleanupTask;
@@ -65,7 +66,7 @@ public class OutboundMessageRegistry {
     }
 
     /**
-     * Does something @since 0.8.8
+     * Does something @since 0.8.8.
      */
     public void shutdown() {
         synchronized (_selectors) {
@@ -165,7 +166,7 @@ public class OutboundMessageRegistry {
 
     /**
      * Registers a new, empty OutNetMessage, with the reply and timeout jobs specified.
-     * The onTimeout job is called at replySelector.getExpiration() (if no reply is received by then)
+     * The onTimeout job is called at replySelector.getExpiration() (if no reply is received by then).
      *
      * @param replySelector non-null; The same selector may be used for more than one message.
      * @param onReply non-null
@@ -194,6 +195,8 @@ public class OutboundMessageRegistry {
     public void registerPending(OutNetMessage msg) { registerPending(msg, false); }
 
     /**
+     * Add a message to the pending registry, optionally allowing a null payload.
+     *
      * @param allowEmpty is msg.getMessage() allowed to be null?
      */
     @SuppressWarnings("unchecked")
@@ -258,7 +261,7 @@ public class OutboundMessageRegistry {
     }
 
     private class CleanupTask extends SimpleTimer2.TimedEvent {
-        /** LOCKING: _selectors */
+        /** LOCKING: _selectors. */
         private long _nextExpire;
 
         /**

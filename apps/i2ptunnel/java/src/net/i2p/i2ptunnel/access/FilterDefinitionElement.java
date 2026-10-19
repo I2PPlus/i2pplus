@@ -29,11 +29,11 @@ abstract class FilterDefinitionElement {
 
     /**
      * Updates the provided map with the hash(es) of remote destinations
-     * mentioned in this element
+     * mentioned in this element.
      *
      * @param map the destination-to-tracker map the discovered hashes are added to
      * @throws IOException if the destinations this element names cannot be read,
-     *                     as when a file-backed element cannot be opened
+     * as when a file-backed element cannot be opened
      */
     abstract void update(Map<Hash, DestTracker> map) throws IOException;
 
@@ -47,12 +47,12 @@ abstract class FilterDefinitionElement {
     }
 
     /**
-     * Utility method to create a Hash object from a .b32 string
+     * Utility method to create a Hash object from a .b32 string.
      *
      * @param b32 the 60 character ".b32.i2p" address to decode
      * @return the destination hash the address names
      * @throws InvalidDefinitionException if the string is not a well formed .b32.i2p
-     *                                    address, or its base 32 payload does not decode
+     * address, or its base 32 payload does not decode
      */
     protected static Hash fromBase32(String b32) throws InvalidDefinitionException {
         if (b32.length() != 60)

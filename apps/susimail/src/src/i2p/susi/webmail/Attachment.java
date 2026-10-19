@@ -23,15 +23,15 @@ public class Attachment {
      */
     public final int id = _nextId.getAndIncrement();
     /**
-     * The file name of the attachment.
+     * Suggested file name for the attachment.
      */
     private final String fileName;
     /**
-     * The content type of the attachment.
+     * MIME content type of the attachment.
      */
     private final String contentType;
     /**
-     * The transfer encoding of the attachment.
+     * MIME transfer encoding of the attachment.
      */
     private final String transferEncoding;
     /**
@@ -40,7 +40,7 @@ public class Attachment {
     private final File data;
 
     /**
-     * Creates a new Attachment.
+     * Reference a file to be attached to an email.
      *
      * @param name the file name
      * @param type the content type
@@ -55,23 +55,23 @@ public class Attachment {
     }
 
     /**
-     * Returns the file name.
+     * The attachment's suggested file name.
      *
-     * @return the file name
+     * @return the file name, may be null
      */
     public String getFileName() {return fileName;}
 
     /**
-     * Returns the transfer encoding.
+     * The MIME transfer encoding of the attachment data.
      *
      * @return the transfer encoding, non-null
      */
     public String getTransferEncoding() {return transferEncoding;}
 
     /**
-     * Returns the content type.
+     * The MIME content type of the attachment.
      *
-     * @return the content type
+     * @return the content type, or null if the part had no Content-Type header
      */
     public String getContentType() {return contentType;}
 
@@ -92,7 +92,7 @@ public class Attachment {
     public String getPath() {return data.getAbsolutePath();}
 
     /**
-     * The unencoded size
+     * The unencoded size.
      *
      * @return the unencoded size
      * @since 0.9.33
@@ -100,7 +100,7 @@ public class Attachment {
     public long getSize() {return data.length();}
 
     /**
-     * Delete the data file
+     * Delete the data file.
      * @since 0.9.33
      */
     public void deleteData() {data.delete();}

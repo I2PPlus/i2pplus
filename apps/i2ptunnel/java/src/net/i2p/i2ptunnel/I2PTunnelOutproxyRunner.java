@@ -42,7 +42,7 @@ public class I2PTunnelOutproxyRunner extends I2PAppThread {
     private static final AtomicLong __runnerId = new AtomicLong();
     private final long _runnerId;
 
-    /** Max bytes streamed in a packet - smaller packets might be filled up to this size */
+    /** Max bytes streamed in a packet - smaller packets might be filled up to this size. */
     private static final int MAX_PACKET_SIZE = 4 * 1024;
     private static final int NETWORK_BUFFER_SIZE = MAX_PACKET_SIZE * 8;
 
@@ -55,7 +55,7 @@ public class I2PTunnelOutproxyRunner extends I2PAppThread {
     private final byte[] initialI2PData;
     private final byte[] initialSocketData;
 
-    /** When the runner started up */
+    /** When the runner started up. */
     private final long startedOn;
 
 /**
@@ -102,7 +102,7 @@ public class I2PTunnelOutproxyRunner extends I2PAppThread {
     }
 
     /**
-     * Get when this runner started transferring data
+     * Get when this runner started transferring data.
      * @return timestamp in ms
      */
     public long getStartedOn() {

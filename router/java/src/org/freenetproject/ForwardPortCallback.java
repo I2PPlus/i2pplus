@@ -4,7 +4,6 @@ import java.util.Map;
 
 /**
  * Callback called by port forwarding plugins to indicate success or failure.
- * @author toad
  */
 public interface ForwardPortCallback {
 

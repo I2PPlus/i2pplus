@@ -32,9 +32,8 @@ import java.util.Properties;
 import static org.junit.Assert.*;
 
 /**
- * Test harness for loading / storing Hash objects
+ * Tests RouterInfo loading, storing and caching.
  *
- * @author jrandom
  */
 public class RouterInfoTest extends StructureTest {
     private static final Log _log = new Log(RouterInfoTest.class);

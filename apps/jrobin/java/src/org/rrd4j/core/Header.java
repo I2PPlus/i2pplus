@@ -12,7 +12,6 @@ import java.io.IOException;
  *
  * <p>This header contains metadata about the RRD file.
  *
- * @author Sasa Markovic
  */
 public class Header implements RrdUpdater<Header> {
     /** Length of the RRD signature string. */

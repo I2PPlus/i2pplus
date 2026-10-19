@@ -13,9 +13,9 @@ import net.i2p.router.news.NewsManager;
 import net.i2p.util.SystemVersion;
 
 /**
- *  HTML-formatted full news entries
+ * HTML-formatted full news entries.
  *
- *  @since 0.9.23
+ * @since 0.9.23
  */
 public class NewsFeedHelper extends HelperBase {
     /**

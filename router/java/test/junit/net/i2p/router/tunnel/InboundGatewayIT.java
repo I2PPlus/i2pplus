@@ -13,7 +13,7 @@ import static junit.framework.TestCase.*;
 
 /**
  * Quick unit test for base functionality of inbound tunnel
- * operation
+ * operation.
  */
 public class InboundGatewayIT extends GatewayITBase {
 

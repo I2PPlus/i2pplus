@@ -19,14 +19,11 @@ import net.i2p.util.SecureFile;
  * together, and written out to local files.
  * <p>
  * Methods are NOT thread-safe.
- *
- * @author Ragnarok
- *
  */
 class AddressBook implements Iterable<Map.Entry<String, HostTxtEntry>> {
 
     private final String location;
-    /** either addresses or subFile will be non-null, but not both */
+    /** Either addresses or subFile will be non-null, but not both. */
     private final Map<String, HostTxtEntry> addresses;
     private final File subFile;
     private boolean modified;
@@ -36,17 +33,17 @@ class AddressBook implements Iterable<Map.Entry<String, HostTxtEntry>> {
     private static final int MAX_DEST_LENGTH = MIN_DEST_LENGTH + 100;  // longer than any known cert type for now
 
     /**
-     * 5-67 chars lower/upper case
+     * 5-67 chars lower/upper case.
      */
     private static final Pattern HOST_PATTERN = Pattern.compile("^[0-9a-zA-Z\\.-]{5,67}$");
 
     /**
      * 52 chars lower/upper case
-     * Always ends in 'a' or 'q'
+     * Always ends in 'a' or 'q'.
      */
     private static final Pattern B32_PATTERN = Pattern.compile("^[2-7a-zA-Z]{51}[aAqQ]$");
 
-    /** not a complete qualification, just a quick check */
+    /** Not a complete qualification, just a quick check. */
     private static final Pattern B64_PATTERN = Pattern.compile("^[0-9a-zA-Z~-]{" + MIN_DEST_LENGTH + ',' + MAX_DEST_LENGTH + "}={0,2}$");
 
     /**
@@ -60,7 +57,7 @@ class AddressBook implements Iterable<Map.Entry<String, HostTxtEntry>> {
         this.location = null;
     }
 
-    /** Maximum permitted size of a hosts subscription file - 5MB or around 8000 hosts */
+    /** Maximum permitted size of a hosts subscription file - 5MB or around 8000 hosts. */
     static final long MAX_SUB_SIZE = 5 * 1024 * 1024L;
 
     /**
@@ -200,7 +197,7 @@ class AddressBook implements Iterable<Map.Entry<String, HostTxtEntry>> {
 
     /**
      * Basic validation of the hostname.
-     * Already converted to lower case by HostTxtParser.parse()
+     * Already converted to lower case by {@link net.i2p.addressbook.HostTxtParser#parse}.
      * @param host the hostname to validate
      * @return true if the hostname is valid, false otherwise
      */
@@ -255,7 +252,7 @@ class AddressBook implements Iterable<Map.Entry<String, HostTxtEntry>> {
     }
 
     /**
-     * Do basic validation of the b64 dest, without bothering to instantiate it
+     * Do basic validation of the b64 dest, without bothering to instantiate it.
      * @param dest the destination to validate
      * @return true if the destination is valid, false otherwise
      */
@@ -293,7 +290,7 @@ class AddressBook implements Iterable<Map.Entry<String, HostTxtEntry>> {
      * or conflicts to log. Addresses in AddressBook other that are not in this AddressBook
      * are added to this AddressBook.
      * <p>
-     * In case of a conflict, addresses in this AddressBook take precedence
+     * In case of a conflict, addresses in this AddressBook take precedence.
      *
      * @param other An AddressBook to merge with.
      * @param overwrite True to overwrite

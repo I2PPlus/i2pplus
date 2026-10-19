@@ -12,7 +12,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * Good ol' fashioned struct with the send status
+ * Good ol' fashioned struct with the send status.
  *
  */
 class OutboundClientMessageStatus {

@@ -17,9 +17,8 @@ import net.i2p.data.TunnelIdTest;
 import java.util.Date;
 
 /**
- * Test harness for loading / storing RequestLeaseSetMessage objects
+ * Test harness for loading / storing RequestLeaseSetMessage objects.
  *
- * @author jrandom
  */
 public class RequestLeaseSetMessageTest extends I2CPTstBase {
     @Override

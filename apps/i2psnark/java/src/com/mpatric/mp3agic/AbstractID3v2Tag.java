@@ -270,7 +270,7 @@ public abstract class AbstractID3v2Tag implements ID3v2 {
     /** Padding length. */
     protected static final int PADDING_LENGTH = 256;
 
-    /** iTunes comment description. */
+    /** ITunes comment description. */
     private static final String ITUNES_COMMENT_DESCRIPTION = "iTunNORM";
 
     /** Unsynchronization flag. */
@@ -309,7 +309,6 @@ public abstract class AbstractID3v2Tag implements ID3v2 {
     /** Map of frame sets keyed by frame ID. */
     private final Map<String, ID3v2FrameSet> frameSets;
 
-    /** Default constructor. */
     public AbstractID3v2Tag() {
         frameSets = new TreeMap<>();
     }

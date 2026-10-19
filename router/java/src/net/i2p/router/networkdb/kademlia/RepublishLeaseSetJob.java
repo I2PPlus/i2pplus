@@ -181,7 +181,7 @@ public class RepublishLeaseSetJob extends JobImpl {
     private static final ConcurrentHashMap<Hash, AtomicInteger> _globalFailCount = new ConcurrentHashMap<>();
     /** Consecutive re-mint deferral count per destination, to bound fresh-build waiting. */
     private static final ConcurrentHashMap<Hash, AtomicInteger> _remintDefers = new ConcurrentHashMap<>();
-    /** When this destination last ran a re-mint that could not improve anything. @since 0.9.71+ */
+    /** When this destination last ran a re-mint that could not improve anything. @since 0.9.71+. */
     private static final ConcurrentHashMap<Hash, Long> _lastIneffectiveRemint = new ConcurrentHashMap<>();
     /** Max verifications per destination before falling back to direct retry. */
     private static final int MAX_FLOODFILL_VERIFICATIONS = 3;
@@ -282,7 +282,7 @@ public class RepublishLeaseSetJob extends JobImpl {
     }
 
     // Client has indicated it should no longer publish this LeaseSet
-    /** Handle should not publish */
+    /** Handle should not publish. */
     private void handleShouldNotPublish() {
         LeaseSet ls = _facade.lookupLeaseSetLocally(_dest);
         if (ls != null && _log.shouldDebug()) {
@@ -296,7 +296,7 @@ public class RepublishLeaseSetJob extends JobImpl {
     }
 
     // Handle a local LeaseSet that needs publication
-    /** Handle local lease set */
+    /** Handle local lease set. */
     private void handleLocalLeaseSet() {
         LeaseSet ls = _facade.lookupLeaseSetLocally(_dest);
         if (ls != null) {
@@ -316,7 +316,7 @@ public class RepublishLeaseSetJob extends JobImpl {
     }
 
     // LeaseSet has expired — request a fresh one and check back soon
-    /** Handle expired lease set */
+    /** Handle expired lease set. */
     private void handleExpiredLeaseSet(LeaseSet ls, String name) {
         if (_log.shouldWarn()) {
             _log.warn("LeaseSet EXPIRED -> Triggering immediate rebuild" + name +
@@ -340,7 +340,7 @@ public class RepublishLeaseSetJob extends JobImpl {
     }
 
     // No LeaseSet exists locally — ask the client to create one
-    /** Handle missing lease set */
+    /** Handle missing lease set. */
     private void handleMissingLeaseSet() {
         long now = getContext().clock().now();
         Long lastLog = _lastMissingLogTime.get(_dest);
@@ -368,7 +368,7 @@ public class RepublishLeaseSetJob extends JobImpl {
     }
 
     // Client is no longer local — clean up and stop publishing
-    /** Handle not local */
+    /** Handle not local. */
     private void handleNotLocal() {
         if (_log.shouldInfo()) {
             _log.info("Client [" + shortHash() +
@@ -394,7 +394,7 @@ public class RepublishLeaseSetJob extends JobImpl {
 
     // True if the destination is still a configured local tunnel even when
     // its I2CP session is closed (close-on-idle), i.e. a pool still exists.
-    /** Determine if client is still a configured local tunnel */
+    /** Determine if client is still a configured local tunnel. */
     private boolean isTrackedLocal() {
         return getContext().clientManager().isLocal(_dest) ||
                getContext().tunnelManager().getInboundSettings(_dest) != null ||
@@ -404,7 +404,7 @@ public class RepublishLeaseSetJob extends JobImpl {
     // Publish a valid LeaseSet.  Startup gate defers first publication until
     // target tunnel count met (or FIRST_PUBLISH_TIMEOUT elapses).  After first
     // successful publish, subsequent renewals proceed immediately.
-    /** Handle valid lease set */
+    /** Handle valid lease set. */
     private void handleValidLeaseSet(LeaseSet ls, String name, long now, long timeUntilExpiry) {
         Long lastPubLog = _lastPublishLogTime.get(_dest);
         boolean expiring = timeUntilExpiry <= EXPIRY_WINDOW;
@@ -715,6 +715,8 @@ public class RepublishLeaseSetJob extends JobImpl {
     }
 
     /**
+     * Re-publish the lease set before it expires from the network DB.
+     *
      * @param storedLeaseSet the LeaseSet currently published, for no-op detection
      */
     private void refloatLeaseSet(LeaseSet storedLeaseSet, String name, long now, long timeUntilExpiry) {
@@ -947,7 +949,7 @@ public class RepublishLeaseSetJob extends JobImpl {
 
     // Schedule the next republish cycle.  Unregisters current job first
     // so hasActiveRepublishJob() doesn't block the successor.
-    /** Schedule republish */
+    /** Schedule republish. */
     private void scheduleRepublish(long delayMs) {
         _facade.removePublishingJob(_dest, this);
         if (_facade.hasActiveRepublishJob(_dest)) {
@@ -965,7 +967,7 @@ public class RepublishLeaseSetJob extends JobImpl {
     // Schedule a retry after a failed publish.
     // Exponential backoff with aggressive first-retry delay;
     // every 4th attempt is promoted to high-priority.
-    /** Requeue republish */
+    /** Requeue republish. */
     void requeueRepublish() {
         if (_retryInProgress.putIfAbsent(_dest, Boolean.TRUE) != null) {
             if (_log.shouldDebug()) {
@@ -1008,7 +1010,7 @@ public class RepublishLeaseSetJob extends JobImpl {
         }
     }
 
-    /** Clear retry in progress */
+    /** Clear retry in progress. */
     private void clearRetryInProgress() {
         _retryInProgress.remove(_dest);
     }
@@ -1017,7 +1019,7 @@ public class RepublishLeaseSetJob extends JobImpl {
         return _dest.toBase32().substring(0, 8);
     }
 
-    /** Cleanup stale entries */
+    /** Cleanup stale entries. */
     private static void cleanupStaleEntries() {
         long now = System.currentTimeMillis();
         if (now - _lastCleanupTime <= CACHE_CLEANUP_THRESHOLD)
@@ -1037,7 +1039,7 @@ public class RepublishLeaseSetJob extends JobImpl {
         _publishedOnce.retainAll(_lastPublishLogTime.keySet());
     }
 
-    /** Cleanup map */
+    /** Cleanup map. */
     private static void cleanupMap(ConcurrentHashMap<Hash, Long> map, long now) {
         Iterator<Map.Entry<Hash, Long>> iter = map.entrySet().iterator();
         while (iter.hasNext()) {
@@ -1049,7 +1051,7 @@ public class RepublishLeaseSetJob extends JobImpl {
     }
 
     // Reset global fail counters idle beyond the threshold
-    /** Cleanup global fail count */
+    /** Cleanup global fail count. */
     private static void cleanupGlobalFailCount(long now) {
         // Global fail count has no timestamp per entry; just clear entries
         // for destinations no longer being tracked in the publish log.
@@ -1149,7 +1151,7 @@ public class RepublishLeaseSetJob extends JobImpl {
             }
         }
 
-        /** Verify and retry */
+        /** Verify and retry. */
         private void verifyAndRetry(final LeaseSet ls) {
             String tunnelName = getTunnelName(ls.getDestination());
             String name = !tunnelName.isEmpty() ? " for '" + tunnelName + "'" : " for key";

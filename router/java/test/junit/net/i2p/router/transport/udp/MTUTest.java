@@ -5,7 +5,7 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 
 /**
- * Tests for MTU.rectify().
+ * Tests for {@link net.i2p.router.transport.udp.MTU#rectify}.
  */
 public class MTUTest {
 

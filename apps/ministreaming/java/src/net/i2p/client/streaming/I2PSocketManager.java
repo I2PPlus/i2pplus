@@ -25,7 +25,7 @@ import net.i2p.data.Destination;
  * There should be one I2PSocketManager for each I2PSession, and if an application
  * is sending and receiving data through the streaming library using an
  * I2PSocketManager, it should not attempt to call I2PSession's setSessionListener
- * or receive any messages with its .receiveMessage
+ * or receive any messages with its .receiveMessage.
  */
 public interface I2PSocketManager {
 
@@ -124,7 +124,7 @@ public interface I2PSocketManager {
     public I2PSocketOptions buildOptions(Properties opts);
 
     /**
-     * Create a new connected socket (block until the socket is created)
+     * Create a new connected socket (block until the socket is created).
      *
      * @param peer Destination to connect to
      * @param options I2P socket options to be used for connecting
@@ -140,7 +140,7 @@ public interface I2PSocketManager {
                              NoRouteToHostException, InterruptedIOException;
 
     /**
-     * Create a new connected socket (block until the socket is created)
+     * Create a new connected socket (block until the socket is created).
      *
      * @param peer Destination to connect to
      *
@@ -223,15 +223,15 @@ public interface I2PSocketManager {
     public byte[] ping(Destination peer, int localPort, int remotePort, long timeoutMs, byte[] payload);
 
     /**
-     * For logging / diagnostics only
+     * For logging / diagnostics only.
      *
      * @return the label reported for this manager in logs and console output,
-     *         as set by setName()
+     * as set by setName()
      */
     public String getName();
 
     /**
-     * For logging / diagnostics only
+     * For logging / diagnostics only.
      *
      * @param name the label reported in logs and console output
      */
@@ -246,7 +246,7 @@ public interface I2PSocketManager {
      * @param name the display name the factory would otherwise have read from a config file
      * @throws UnsupportedOperationException always; this interface has no body
      * @deprecated nothing calls this; build the manager with
-     *             I2PSocketManagerFactory.createManager().
+     * {@link net.i2p.client.streaming.I2PSocketManagerFactory#createManager}.
      */
     @Deprecated
     public void init(I2PAppContext context, I2PSession session, Properties opts, String name);
@@ -264,7 +264,7 @@ public interface I2PSocketManager {
      */
     public void removeDisconnectListener(DisconnectListener lsnr);
 
-    /** Listener for notification when an I2P session is disconnected */
+    /** Listener for notification when an I2P session is disconnected. */
     public static interface DisconnectListener {
         /**
          * Called when the I2P session is disconnected.

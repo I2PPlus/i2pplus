@@ -86,7 +86,7 @@ class RatchetTagSet implements TagSetHandle {
     private static final int INITIAL_KEY_CAPACITY = 0;
     /**
      * Tags registered in the SKM's _inboundTagSets map.
-     * Used for O(tags_in_set) removal in RatchetSKM.consumeTag() instead of
+     * Used for O(tags_in_set) removal in {@link net.i2p.router.crypto.ratchet.RatchetSKM#consumeTag} instead of
      * O(total_tags) scan of the entire _inboundTagSets map.
      * Only populated for inbound tagsets (where _lsnr != null).
      *
@@ -95,7 +95,7 @@ class RatchetTagSet implements TagSetHandle {
     private final Set<RatchetSessionTag> _registeredTags = ConcurrentHashMap.newKeySet();
 
     /**
-     * Outbound NSR Tagset
+     * Outbound NSR Tagset.
      *
      * @param hkdf the HKDF used to derive the next root, tag and symmetric keys
      * @param state the handshake state
@@ -109,7 +109,7 @@ class RatchetTagSet implements TagSetHandle {
     }
 
     /**
-     * Outbound ES Tagset
+     * Outbound ES Tagset.
      *
      * @param hkdf the HKDF used to derive the next root, tag and symmetric keys
      * @param rootKey the root key
@@ -124,7 +124,7 @@ class RatchetTagSet implements TagSetHandle {
     }
 
     /**
-     * Inbound NSR Tagset
+     * Inbound NSR Tagset.
      *
      * @param hkdf the HKDF used to derive the next root, tag and symmetric keys
      * @param lsnr the session tag listener
@@ -141,7 +141,7 @@ class RatchetTagSet implements TagSetHandle {
     }
 
     /**
-     * Inbound ES Tagset
+     * Inbound ES Tagset.
      *
      * @param hkdf the HKDF used to derive the next root, tag and symmetric keys
      * @param lsnr the session tag listener
@@ -220,7 +220,7 @@ class RatchetTagSet implements TagSetHandle {
     }
 
     /**
-     * For SingleTagSet
+     * For SingleTagSet.
      *
      * @param lsnr the session tag listener
      * @param rootKey the root key
@@ -311,7 +311,7 @@ class RatchetTagSet implements TagSetHandle {
     }
 
     /**
-     * For inbound and outbound: set last used time
+     * For inbound and outbound: set last used time.
      *
      * @param when the last used time
      */
@@ -320,7 +320,7 @@ class RatchetTagSet implements TagSetHandle {
     }
 
     /**
-     * For inbound and outbound: creation time, for debugging only
+     * For inbound and outbound: creation time, for debugging only.
      *
      * @return the creation time
      */
@@ -344,9 +344,9 @@ class RatchetTagSet implements TagSetHandle {
      * Expiration is getDate() + getTimeout() if acked.
      * Before acked, uses _created + _timeout (full lifetime).
      * <p>
-     * Previously this used Math.min(_timeout, SESSION_PENDING_DURATION_MS)
+     * Previously this used {@link java.lang.Math#min}_timeout, SESSION_PENDING_DURATION_MS)
      * which capped unacked ES tagsets at 3 minutes instead of their designed
-     * 10-minute SESSION_LIFETIME_MAX_MS. With i2cp.disableLoopback=true,
+     * 10-minute SESSION_LIFETIME_MAX_MS. With {@code i2cp.disableLoopback}=true,
      * the NSR round-trip through the full tunnel path could exceed 3 minutes,
      * causing tags to expire before the first ES message arrived.
      * <p>
@@ -555,7 +555,7 @@ class RatchetTagSet implements TagSetHandle {
 
     /**
      * Return the set of tags registered in the SKM's _inboundTagSets map.
-     * Used for O(tags_in_set) removal in RatchetSKM.consumeTag().
+     * Used for O(tags_in_set) removal in {@link net.i2p.router.crypto.ratchet.RatchetSKM#consumeTag}.
      *
      * @return every tag this set has registered with the session key manager
      * @since 0.9.70
@@ -610,7 +610,7 @@ class RatchetTagSet implements TagSetHandle {
 
     /**
      * The TagSet ID, starting at 0.
-     * After that = 1 + my key id + his key id
+     * After that = 1 + my key id + his key id.
      *
      * @return the tagset ID
      */
@@ -619,7 +619,7 @@ class RatchetTagSet implements TagSetHandle {
     }
 
     /**
-     * A unique ID for debugging only
+     * A unique ID for debugging only.
      *
      * @return the debug ID
      */

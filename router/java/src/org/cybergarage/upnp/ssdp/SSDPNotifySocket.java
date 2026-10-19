@@ -15,8 +15,6 @@ import org.cybergarage.util.Debug;
 /**
  * This class identifies a SSDP socket only for <b>notifying packet</b>.
  *
- * @author Satoshi "skonno" Konno
- * @author Stefano "Kismet" Lenzi
  * @version 1.8
  */
 public class SSDPNotifySocket extends HTTPMUSocket implements Runnable {

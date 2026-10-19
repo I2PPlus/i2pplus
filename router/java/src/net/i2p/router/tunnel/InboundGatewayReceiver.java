@@ -81,7 +81,7 @@ class InboundGatewayReceiver implements TunnelGateway.Receiver {
     }
 
     /**
-     * The next hop
+     * The next hop.
      * @return non-null
      * @since 0.9.3
      */

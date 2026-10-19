@@ -29,7 +29,7 @@ class PacketLocal extends Packet implements MessageOutputStream.WriteStatus {
     private final AtomicInteger _numSoftResends = new AtomicInteger();
     private volatile long _lastSend;
     private long _acceptedOn;
-    /** LOCKING: this */
+    /** LOCKING: this. */
     private long _ackOn;
     private long _cancelledOn;
     private final AtomicInteger _nackCount = new AtomicInteger();
@@ -123,7 +123,7 @@ class PacketLocal extends Packet implements MessageOutputStream.WriteStatus {
     public long getLifetime() { return _context.clock().now() - _createdOn; }
 
     /**
-     * Increment the number of times this packet has been sent
+     * Increment the number of times this packet has been sent.
      */
     public void incrementSends() {
         _numSends.incrementAndGet();
@@ -131,7 +131,7 @@ class PacketLocal extends Packet implements MessageOutputStream.WriteStatus {
     }
 
     /**
-     * Record that this packet was ACKed
+     * Record that this packet was ACKed.
      */
     public void ackReceived() {
         final long now = _context.clock().now();
@@ -170,7 +170,7 @@ class PacketLocal extends Packet implements MessageOutputStream.WriteStatus {
     private static final ByteCache _payloadCache = ByteCache.getInstance(128, Packet.MAX_PAYLOAD_SIZE);
 
     /**
-     * Record that this packet was cancelled
+     * Record that this packet was cancelled.
      */
     public void cancelled() {
         synchronized (this) {
@@ -196,17 +196,17 @@ class PacketLocal extends Packet implements MessageOutputStream.WriteStatus {
     /**
      * RTT sample for an ACKed packet: time between its last transmission and
      * its ACK.
-     * <p>Unlike {@link #getAckTime()} (which measures lifetime since creation
+     * <p>Unlike {@link #getAckTime} (which measures lifetime since creation
      * and is used for the {@code stream.sendsBeforeAck} stat), this excludes
      * queueing delay: a packet may sit in the outbound queue (pacing, choke,
      * slow tunnel) long after creation, and folding that delay into the RTT
      * sample inflates SRTT and pins RTO at its ceiling exactly when recovery
      * is needed. Per RFC 6298 section 3, only packets sent once are valid RTT
-     * samples; callers gate on {@link #getNumSends()} &lt;= 1 before trusting
+     * samples; callers gate on {@link #getNumSends} &lt;= 1 before trusting
      * the value.
      *
      * @return the RTT sample in ms, or -1 if the packet was never sent or
-     *         never ACKed
+     * never ACKed
      * @since 0.9.71+
      */
     public synchronized int getRttTime() {
@@ -242,7 +242,7 @@ class PacketLocal extends Packet implements MessageOutputStream.WriteStatus {
      * Record a resend that was triggered by a router soft failure.  Soft
      * failures (NO_TUNNELS / EXPIRED / LOCAL) mean the packet was never put
      * on the tunnel fabric, so the attempt should not consume the hard
-     * retransmit budget (see Connection.hardResendBudgetExceeded()).
+     * retransmit budget (see {@link net.i2p.client.streaming.impl.Connection#hardResendBudgetExceeded}).
      *
      * @since 0.9.71+
      */
@@ -307,7 +307,7 @@ class PacketLocal extends Packet implements MessageOutputStream.WriteStatus {
     }
 
     /**
-     * Warning: This is different than getNacks() in super
+     * Warning: This is different than getNacks() in super.
      *
      * @return Number of times this packet has been nacked
      */
@@ -439,7 +439,7 @@ class PacketLocal extends Packet implements MessageOutputStream.WriteStatus {
     ////// begin WriteStatus methods
 
     /**
-     * Blocks until outbound window is not full. See Connection.packetSendChoke().
+     * Blocks until outbound window is not full. See {@link net.i2p.client.streaming.impl.Connection#packetSendChoke}.
      *
      * @param maxWaitMs MessageOutputStream is the only caller, generally with -1
      * @throws IOException if the connection is closed
@@ -593,11 +593,11 @@ class PacketLocal extends Packet implements MessageOutputStream.WriteStatus {
     /**
      * Whether this packet's payload has been released and it can no longer be
      * (re)transmitted.
-     * <p>Both {@link #ackReceived()} and {@link #cancelled()} call
+     * <p>Both {@link #ackReceived} and {@link #cancelled} call
      * {@code releasePayload()}, which returns this packet's buffer to the shared
      * outbound payload cache and clears {@code _payload}. Once either has run the
      * packet must never be enqueued again — a (re)send would read a {@code null}
-     * payload and crash the I2CP write. {@link #isCancelled()} alone is
+     * payload and crash the I2CP write. {@link #isCancelled} alone is
      * insufficient: an ACKed-but-not-cancelled packet also has a released
      * payload.
      * <p>This is the discriminator the retransmit timer uses to skip packets that
@@ -607,7 +607,7 @@ class PacketLocal extends Packet implements MessageOutputStream.WriteStatus {
      * guard on {@code getAckTime()}.
      *
      * @return {@code true} if the packet was ACKed or cancelled, so its payload
-     *         was released; {@code false} if it may still be transmitted
+     * was released; {@code false} if it may still be transmitted
      * @since 0.9.71+
      */
     public synchronized boolean writeReleased() { return _ackOn > 0 || _cancelledOn > 0; }

@@ -512,7 +512,7 @@ class BasicServlet extends HttpServlet {
         /**
          * The content type.
          *
-         * @return the content type
+         * @return the MIME type for the response header
          */
         public String getContentType() {
             return getMimeType(_file.toString());
@@ -530,7 +530,7 @@ class BasicServlet extends HttpServlet {
         /**
          * The cache time.
          *
-         * @return the cache time
+         * @return max-age in seconds for the Cache-Control header
          */
         public int getCacheTime() {
             return FILE_CACHE_CONTROL_SECS;
@@ -539,7 +539,7 @@ class BasicServlet extends HttpServlet {
         /**
          * The content length.
          *
-         * @return the content length
+         * @return the byte length for the Content-Length header
          */
         public long getContentLength() {
             return _file.length();
@@ -548,7 +548,7 @@ class BasicServlet extends HttpServlet {
         /**
          * The input stream.
          *
-         * @return the input stream
+         * @return a stream over the response body
          */
         public InputStream getInputStream() throws IOException {
             if (getContentLength() > 4 * 1024 * 1024) {
@@ -566,7 +566,7 @@ class BasicServlet extends HttpServlet {
         }
     }
 
-    /** File content with byte limit */
+    /** File content with byte limit. */
     private class LimitFileContent extends FileContent {
         private final long _limit;
 
@@ -584,7 +584,7 @@ class BasicServlet extends HttpServlet {
         /**
          * The content length.
          *
-         * @return the content length
+         * @return the byte length for the Content-Length header
          */
         @Override
         public long getContentLength() {
@@ -602,7 +602,7 @@ class BasicServlet extends HttpServlet {
         /**
          * The content type.
          *
-         * @return the content type
+         * @return the MIME type for the response header
          */
         public String getContentType() {
             return getMimeType(_path);
@@ -626,7 +626,7 @@ class BasicServlet extends HttpServlet {
         /**
          * The cache time.
          *
-         * @return the cache time
+         * @return max-age in seconds for the Cache-Control header
          */
         public int getCacheTime() {
             return WAR_CACHE_CONTROL_SECS;
@@ -635,7 +635,7 @@ class BasicServlet extends HttpServlet {
         /**
          * The content length.
          *
-         * @return the content length
+         * @return the byte length for the Content-Length header
          */
         public long getContentLength() {
             return -1;
@@ -644,7 +644,7 @@ class BasicServlet extends HttpServlet {
         /**
          * The input stream.
          *
-         * @return the input stream
+         * @return a stream over the response body
          */
         public InputStream getInputStream() throws IOException {
             InputStream rv = getServletContext().getResourceAsStream(_path);
@@ -697,7 +697,7 @@ class BasicServlet extends HttpServlet {
     }
 
     /**
-     * Simple version of URIUtil.addPaths().
+     * Simple version of {@code URIUtil.addPaths()}.
      *
      * @param base the base path
      * @param path the path to add (may be null)
@@ -721,7 +721,7 @@ class BasicServlet extends HttpServlet {
     }
 
     /**
-     * Simple version of URIUtil.decodePath().
+     * Simple version of {@code URIUtil.decodePath()}.
      * @param path the path to decode
      * @return the decoded path
      * @throws MalformedURLException if the path contains invalid escape sequences
@@ -740,7 +740,7 @@ class BasicServlet extends HttpServlet {
     }
 
     /**
-     * Simple version of URIUtil.encodePath().
+     * Simple version of {@link org.klomp.snark.URIUtil#encodePath}.
      * @param path the path to encode
      * @return the encoded path
      */
@@ -748,7 +748,7 @@ class BasicServlet extends HttpServlet {
         return URIUtil.encodePath(path);
     }
 
-    /** Write from in to out */
+    /** Write from in to out. */
     private void copy(InputStream in, OutputStream out) throws IOException {
         copy(in, 0, out, -1);
     }

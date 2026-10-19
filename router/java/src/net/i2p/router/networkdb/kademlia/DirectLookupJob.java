@@ -14,7 +14,7 @@ import net.i2p.router.RouterContext;
  * Mainly for older routers. As of 0.9.55, transports will
  * periodically send their RI.
  * Some old routers may not respond or may send DSRM,
- * e.g. if hidden (and i2pd?)
+ * e.g. if hidden (and i2pd?).
  *
  * @since 0.9.56
  */
@@ -25,7 +25,7 @@ class DirectLookupJob extends FloodOnlySearchJob {
     private static final int TIMEOUT = 8*1000;
 
     /**
-     * request is sent to; if null the job fails without sending anything
+     * Request is sent to; if null the job fails without sending anything.
      *
      * @param ctx the router context
      * @param facade the floodfill network database facade to report completion to

@@ -23,7 +23,7 @@ public class ConnectionUnchokeWindowTest {
 
     /** The ceiling in the reported production configuration. */
     private static final int CEILING = 768;
-    /** ssthresh under the old code when maxSlowStartWindow is 2048. */
+    /** Ssthresh under the old code when maxSlowStartWindow is 2048. */
     private static final int SSTHRESH = 2048;
 
     // ---- the core fix: restore what was demonstrated, nothing more ----

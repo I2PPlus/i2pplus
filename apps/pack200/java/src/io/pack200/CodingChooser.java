@@ -43,7 +43,6 @@ import java.util.zip.DeflaterOutputStream;
 /**
  * Heuristic chooser of basic encodings.
  * Runs "zip" to measure the apparent information content after coding.
- * @author John Rose
  */
 class CodingChooser {
     int verbose;

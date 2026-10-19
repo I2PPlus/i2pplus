@@ -14,7 +14,6 @@ import net.i2p.data.DataHelper;
  * Defines the message sent back in reply to a message when requested, containing
  * the private ack id.
  *
- * @author jrandom
  */
 public class DeliveryStatusMessage extends FastI2NPMessageImpl {
     /**
@@ -24,11 +23,11 @@ public class DeliveryStatusMessage extends FastI2NPMessageImpl {
     private long _id;
     private long _arrival;
 
-    /** 4 bytes unsigned */
+    /** 4 bytes unsigned. */
     private static final long MAX_MSG_ID = (1L << 32) - 1;
 
     /**
-     * Create a delivery status message
+     * Create a delivery status message.
      * @param context the app context supplying the log, the clock that stamps the
                              expiry, and the random source that mints message ids
      */
@@ -61,7 +60,7 @@ public class DeliveryStatusMessage extends FastI2NPMessageImpl {
 
     /**
      * Misnamed, as it is generally (always?) set by the creator to the current time,
-     * in some future usage it could be set on arrival
+     * in some future usage it could be set on arrival.
      *
      * @return the arrival time
      */
@@ -69,7 +68,7 @@ public class DeliveryStatusMessage extends FastI2NPMessageImpl {
 
     /**
      * Misnamed, as it is generally (always?) set by the creator to the current time,
-     * in some future usage it could be set on arrival
+     * in some future usage it could be set on arrival.
      *
      * @param arrival the arrival time
      */

@@ -48,7 +48,6 @@ public class RrdDb implements RrdUpdater<RrdDb>, Closeable {
     /**
      * Builder for {@link RrdDb} instances.
      *
-     * @author Fabrice Bacchella
      * @since 3.5
      */
     public static class Builder {
@@ -1029,15 +1028,15 @@ public class RrdDb implements RrdUpdater<RrdDb>, Closeable {
 
     /**
      * Prepares fetch request to be executed on this RRD. Use returned <code>FetchRequest</code>
-     * object and its {@link org.rrd4j.core.FetchRequest#fetchData() fetchData()} method to actually
+     * object and its {@link org.rrd4j.core.FetchRequest#fetchData fetchData()} method to actually
      * fetch data from the RRD file.
      *
      * @param consolFun Consolidation function to be used in fetch request.
      * @param fetchStart Starting timestamp for fetch request.
      * @param fetchEnd Ending timestamp for fetch request.
      * @param resolution Fetch resolution (see RRDTool's <a
-     *                   href="http://oss.oetiker.ch/rrdtool/doc/rrdfetch.en.html" target="man">rrdfetch man
-     *                   page</a> for an explanation of this parameter.
+     * href="http://oss.oetiker.ch/rrdtool/doc/rrdfetch.en.html" target="man">rrdfetch man
+     * page</a> for an explanation of this parameter.
      * @return Request object that should be used to actually fetch data from RRD
      */
     public FetchRequest createFetchRequest(
@@ -1047,7 +1046,7 @@ public class RrdDb implements RrdUpdater<RrdDb>, Closeable {
 
     /**
      * Prepares fetch request to be executed on this RRD. Use returned <code>FetchRequest</code>
-     * object and its {@link org.rrd4j.core.FetchRequest#fetchData() fetchData()} method to actually
+     * object and its {@link org.rrd4j.core.FetchRequest#fetchData fetchData()} method to actually
      * fetch data from this RRD. Data will be fetched with the smallest possible resolution (see
      * RRDTool's <a href="http://oss.oetiker.ch/rrdtool/doc/rrdfetch.en.html" target="man">rrdfetch
      * man page</a> for the explanation of the resolution parameter).
@@ -1352,7 +1351,7 @@ public class RrdDb implements RrdUpdater<RrdDb>, Closeable {
     }
 
     /**
-     * This method is just an alias for {@link #getXml() getXml} method.
+     * This method is just an alias for {@link #getXml getXml} method.
      *
      * @return Internal RRD state in XML format.
      * @throws java.io.IOException Thrown in case of I/O related error
@@ -1661,7 +1660,7 @@ public class RrdDb implements RrdUpdater<RrdDb>, Closeable {
 
     /**
      * Returns the last time when some of the archives in this RRD was updated. This time is not the
-     * same as the {@link #getLastUpdateTime()} since RRD file can be updated without updating any
+     * same as the {@link #getLastUpdateTime} since RRD file can be updated without updating any
      * of the archives.
      *
      * @return last time when some of the archives in this RRD was updated

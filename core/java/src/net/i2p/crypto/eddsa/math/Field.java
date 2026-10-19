@@ -5,7 +5,6 @@ import java.io.Serializable;
 /**
  * An EdDSA finite field. Includes several pre-computed values.
  *
- * @author str4d
  */
 public class Field implements Serializable {
     private static final long serialVersionUID = 8746587465875676L;
@@ -46,7 +45,7 @@ public class Field implements Serializable {
     private final FieldElement qm2;
 
     /**
-     * (q-5) / 8
+     * (q-5) / 8.
      */
     private final FieldElement qm5d8;
 

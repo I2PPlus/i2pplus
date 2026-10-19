@@ -32,7 +32,6 @@ import org.cybergarage.util.Debug;
  * <p>This class is used by SSDP components to send discovery messages (M-SEARCH) and receive device
  * advertisements (NOTIFY messages) over UDP multicast and unicast communication.
  *
- * @author Satoshi Konno
  * @since 1.0
  */
 public class HTTPUSocket {

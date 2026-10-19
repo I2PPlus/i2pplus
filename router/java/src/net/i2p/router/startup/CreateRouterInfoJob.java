@@ -47,15 +47,15 @@ public class CreateRouterInfoJob extends JobImpl {
     private final Log _log;
     private final Job _next;
 
-    /** Router info filename */
+    /** Router info filename. */
     public static final String INFO_FILENAME = "router.info";
-    /** Old router keys filename */
+    /** Old router keys filename. */
     public static final String KEYS_FILENAME = "router.keys";
-    /** Router keys filename */
+    /** Router keys filename. */
     public static final String KEYS2_FILENAME = "router.keys.dat";
-    /** Property for router signature type */
+    /** Property for router signature type. */
     static final String PROP_ROUTER_SIGTYPE = "router.sigType";
-    /** Property for router encryption type
+    /** Property for router encryption type.
      * @since 0.9.48 */
     static final String PROP_ROUTER_ENCTYPE = "router.encType";
     private static final SigType DEFAULT_SIGTYPE = SigType.EdDSA_SHA512_Ed25519;
@@ -88,14 +88,14 @@ public class CreateRouterInfoJob extends JobImpl {
     }
 
     /**
-     * Writes 6 files: router.info (standard RI format),
-     * router.keys.dat, and 4 individual key files under keyBackup/
+     * Writes 6 files: {@code router.info} (standard RI format),
+     * {@code router.keys.dat}, and 4 individual key files under keyBackup/
      * <p>
-     * router.keys.dat file format: This is the
+     * {@code router.keys.dat} file format: This is the
      * same "eepPriv.dat" format used by the client code,
      * as documented in PrivateKeyFile.
      * <p>
-     * Old router.keys file format: Note that this is NOT the
+     * Old {@code router.keys} file format: Note that this is NOT the
      * same "eepPriv.dat" format used by the client code.
      *  <pre>
      *  - Private key (256 bytes)
@@ -255,7 +255,8 @@ public class CreateRouterInfoJob extends JobImpl {
      * Only called at startup via LoadRouterInfoJob and RebuildRouterInfoJob.
      * Not called by periodic RepublishLocalRouterInfoJob.
      * We don't want to change the cert on the fly as it changes the router hash.
-     * RouterInfo.isHidden() checks the capability, but RouterIdentity.isHidden() checks the cert.
+      * {@link net.i2p.data.router.RouterInfo#isHidden} checks the capability, but
+       * {@link net.i2p.data.router.RouterIdentity#isHidden} checks the cert.
      * There's no reason to ever add a hidden cert?
      *
      * @return the certificate for a new RouterInfo - probably a null cert.

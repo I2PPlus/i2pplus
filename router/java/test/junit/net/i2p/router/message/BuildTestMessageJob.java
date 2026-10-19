@@ -120,7 +120,7 @@ public class BuildTestMessageJob extends JobImpl {
     }
 
     /**
-     * Build a clove that sends a DeliveryStatusMessage to us
+     * Build a clove that sends a DeliveryStatusMessage to us.
      */
     private PayloadGarlicConfig buildAckClove() {
 
@@ -140,7 +140,7 @@ public class BuildTestMessageJob extends JobImpl {
     }
 
     /**
-     * Search inbound messages for delivery status messages with our key
+     * Search inbound messages for delivery status messages with our key.
      */
     private static final class TestMessageSelector implements MessageSelector {
         private long _testMessageKey;
@@ -169,7 +169,7 @@ public class BuildTestMessageJob extends JobImpl {
     }
 
     /**
-     * On reply, fire off the specified job
+     * On reply, fire off the specified job.
      *
      */
     private static final class JobReplyJob extends JobImpl implements ReplyJob {

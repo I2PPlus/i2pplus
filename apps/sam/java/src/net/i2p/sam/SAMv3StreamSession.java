@@ -57,15 +57,15 @@ class SAMv3StreamSession extends SAMStreamSession implements Session {
 
     private static final int BUFFER_SIZE = 4096;
     private static final int MAX_ACCEPT_QUEUE = 16384;
-    /** Seconds to wait for a queued socket before returning null */
+    /** Seconds to wait for a queued socket before returning null. */
     private static final int ACCEPT_POLL_TIMEOUT_SECS = 60;
 
     private final Object socketServerLock = new Object();
-    /** this is ONLY set for FORWARD, not for ACCEPT */
+    /** This is ONLY set for FORWARD, not for ACCEPT. */
     private I2PServerSocket socketServer;
-    /** this is the count of active ACCEPT sockets */
+    /** This is the count of active ACCEPT sockets. */
     private final AtomicInteger _acceptors = new AtomicInteger();
-    /** for subsession only, null otherwise */
+    /** For subsession only, null otherwise. */
     private final LinkedBlockingQueue<I2PSocket> _acceptQueue;
 
     private static I2PSSLSocketFactory sslSocketFactory;
@@ -152,11 +152,11 @@ class SAMv3StreamSession extends SAMStreamSession implements Session {
      * Take a socket from the accept queue, with a timeout to avoid
      * indefinite blocking on stale connections. Under heavy tracker
      * traffic, sockets may accumulate faster than the client can
-     * consume them; a timeout ensures the acceptor thread can check
+     * consume them. A timeout ensures the acceptor thread can check
      * for shutdown and avoid leaking threads on idle sessions.
      *
      * @return the next queued socket, or null if the queue is empty
-     *         after the timeout (caller must handle null)
+     * after the timeout (caller must handle null)
      * @throws ConnectException if the thread is interrupted
      * @since 0.9.25
      */
@@ -331,7 +331,11 @@ class SAMv3StreamSession extends SAMStreamSession implements Session {
         }
     }
 
-    /** @return first 4 chars of the session nickname for thread names */
+    /**
+     * Nickname truncated to four characters.
+     *
+     * @return first 4 chars of the session nickname for thread names
+     */
     private static String truncNick(String n) { return n.length() > 4 ? n.substring(0, 4) : n; }
 
     /**
@@ -621,7 +625,7 @@ class SAMv3StreamSession extends SAMStreamSession implements Session {
      * data transfer continues on the NIO thread pool. The handler's
      * {@link Handler#handle(Selector)} method copies available data
      * on each NIO select tick.
-     * <p>When either side reaches end-of-stream, {@link Handler#close()}
+     * <p>When either side reaches end-of-stream, {@link Handler#close}
      * is called to tear down both channels and remove this handler
      * from the sessions database. Idle timeout is checked periodically
      * in {@code handle()} and forces a close if no data flows for
@@ -756,11 +760,11 @@ class SAMv3StreamSession extends SAMStreamSession implements Session {
     }
 
     /**
-     * Close the stream session
-     * TODO Why do we override?
+     * Close the stream session.
      */
     @Override
     public void close() {
+        // TODO Why do we override?
         if (_isOwnSession) socketMgr.destroySocketManager();
     }
 }

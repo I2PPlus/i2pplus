@@ -377,7 +377,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     /**
      * {@inheritDoc}
      * <p>The javadoc on this method said "in the last minute" already, while
-     * {@link #countActivePeers()} above it says five. Only the latter is inaccurate:
+     * {@link #countActivePeers} above it says five. Only the latter is inaccurate:
      * every transport's active window is sixty seconds. The send-only count is the
      * one this declares, per transport.
      */
@@ -403,11 +403,11 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     /**
      * The framed average clock skew of connected peers in milliseconds, or the clock offset if we cannot answer.
      * A positive number means our clock is ahead of theirs.
-     * Todo: change List to milliseconds
+     * Todo: change List to milliseconds.
      *
      * @param percentToInclude 1-100
      * @return The framed average clock skew of connected peers in milliseconds, or the clock offset if we cannot answer.
-     *         Average is calculated over the middle "percentToInclude" peers.
+     * Average is calculated over the middle "percentToInclude" peers.
      */
     @Override
     public long getFramedAveragePeerClockSkew(int percentToInclude) {
@@ -482,6 +482,8 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     }
 
     /**
+     * Whether the peer's most recent connection was closed by the failsafe.
+     *
      * @since 0.9.71+
      */
     public boolean wasFailsafeClosed(Hash peer, long withinMs) {
@@ -662,7 +664,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
 
     /**
      * UDP changed addresses, tell NTCP and restart
-     * All the work moved to NTCPTransport.externalAddressReceived()
+     * All the work moved to {@link net.i2p.router.transport.ntcp.NTCPTransport#externalAddressReceived}.
      * @param udpAddr may be null; or udpAddr's host/IP may be null
      */
     @Override
@@ -687,7 +689,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     }
 
     /**
-     * Tell other transports our address changed
+     * Tell other transports our address changed.
      *
      * @param address may be null; or address's host/IP may be null
      * @since 0.9.20
@@ -699,7 +701,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     }
 
     /**
-     * Tell other transports our address changed
+     * Tell other transports our address changed.
      *
      * @since 0.9.20
      */
@@ -709,7 +711,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     }
 
     /**
-     * Exempt this router hash from any incoming throttles or rejections
+     * Exempt this router hash from any incoming throttles or rejections.
      *
      * @since 0.9.58
      */
@@ -737,7 +739,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     }
 
     /**
-     * Is this IP exempt from any incoming throttles or rejections
+     * Is this IP exempt from any incoming throttles or rejections.
      *
      * @param ip canonical string
      * @return whether exempt incoming
@@ -751,7 +753,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     }
 
     /**
-     * Remove this IP from the exemptions
+     * Remove this IP from the exemptions.
      *
      * @param ip canonical string
      * @since 0.9.58
@@ -795,7 +797,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
 
     /**
      * Factory for making X25519 key pairs.
-     * @return the x d h factory
+     * @return the XDHE factory
      * @since 0.9.46
      */
     @Override
@@ -812,7 +814,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
      */
 
     /**
-     * Router must call after netdb is initialized
+     * Router must call after netdb is initialized.
      * @since 0.9.41
      */
     @Override
@@ -838,7 +840,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     public String getOurCountry() {return _countryLookup.getOurCountry();}
 
     /**
-     * Are we in a strict country
+     * Are we in a strict country.
      * @return whether in strict country
      * @since 0.8.13
      */
@@ -846,7 +848,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     public boolean isInStrictCountry() {return _countryLookup.isInStrictCountry();}
 
     /**
-     * Are they in a strict country
+     * Are they in a strict country.
      * @param peer hash of the peer to look up
      * @return whether in strict country
      * @since 0.9.16
@@ -855,7 +857,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     public boolean isInStrictCountry(Hash peer) {return _countryLookup.isInStrictCountry(peer);}
 
     /**
-     * Are they in a strict country
+     * Are they in a strict country.
      * @param ri RouterInfo of the peer, used for IP extraction
      * @return whether in strict country
      * @since 0.9.16
@@ -908,9 +910,9 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     public void queueLookup(byte[] ip) {_countryLookup.queueLookup(ip);}
 
     /**
-     * Domain name from a reverse DNS hostname
+     * Domain name from a reverse DNS hostname.
      * @param hostname the reverse DNS hostname, whose leading labels are
-     *                 stripped down to the registrable domain
+     * stripped down to the registrable domain
      * @return domain name only from reverse dns hostname lookups
      * @since 0.9.58+
      */
@@ -982,7 +984,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     private static final int TIME_START_DELAY = 5*60*1000;
     private static final int TIME_REPEAT_DELAY = 8*60*1000;
 
-    /** Start the backup timestamper */
+    /** Start the backup timestamper. */
     private void startTimestamper() {
         new Timestamper().schedule(TIME_START_DELAY);
     }
@@ -1015,11 +1017,11 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
         }
     }
 
-    /** Start the network monitor */
+    /** Start the network monitor. */
     private void startNetMonitor() {new NetMonitor();}
 
     /**
-     * Simple check to see if we have a network connection
+     * Simple check to see if we have a network connection.
      * @since 0.9.4
      */
     private class NetMonitor extends SimpleTimer2.TimedEvent {

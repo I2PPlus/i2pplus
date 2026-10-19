@@ -10,7 +10,7 @@ import net.i2p.util.Log;
 import net.i2p.util.SimpleTimer2;
 
 /**
- * Server-mode subscriber that manages multiple data sources and handles incoming connections
+ * Server-mode subscriber that manages multiple data sources and handles incoming connections.
  */
 public class Subscriber implements Sink {
 

@@ -3,7 +3,6 @@ package org.rrd4j.core.jrrd;
 /**
  * Instances of this class model the primary data point status from an RRD file.
  *
- * @author <a href="mailto:ciaran@codeloop.com">Ciaran Treanor</a>
  * @version $Revision: 1.1 $
  */
 public class PDPStatusBlock {

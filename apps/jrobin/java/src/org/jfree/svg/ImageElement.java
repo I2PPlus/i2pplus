@@ -7,7 +7,7 @@ import org.jfree.svg.util.Args;
  * A {@code (String, Image)} pair that links together a reference ID and the source image. This is
  * used internally by {@link SVGGraphics2D} to track images as they are rendered. This is important
  * when images are not embedded in the SVG output, in which case you may need to generate
- * corresponding image files for the images (see also {@link SVGGraphics2D#getSVGImages()}).
+ * corresponding image files for the images (see also {@link SVGGraphics2D#getSVGImages}).
  */
 public final class ImageElement {
 

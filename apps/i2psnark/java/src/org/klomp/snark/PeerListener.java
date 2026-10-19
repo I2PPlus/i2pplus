@@ -68,7 +68,7 @@ interface PeerListener {
     boolean gotBitField(Peer peer, BitField bitfield);
 
     /**
-     * Called when a piece is received from the peer. The piece must be requested by Peer.request()
+     * Called when a piece is received from the peer. The piece must be requested by {@code Peer.request()}
      * first. If this method returns false that means the Peer provided a corrupted piece and the
      * connection will be closed.
      *
@@ -104,7 +104,7 @@ interface PeerListener {
 
     /**
      * Called when the peer has disconnected and the peer task may have a partially downloaded piece
-     * that the PeerCoordinator can save
+     * that the PeerCoordinator can save.
      *
      * @param peer the peer that just disconnected
      * @param pcs the still-outstanding piece requests whose partial data can be salvaged
@@ -114,7 +114,7 @@ interface PeerListener {
 
     /**
      * Called when a peer has connected and there may be a partially downloaded piece that the
-     * coordinatorator can give the peer task
+     * coordinatorator can give the peer task.
      *
      * @param peer the peer that just connected
      * @param havePieces the have-pieces bitmask for the peer
@@ -169,7 +169,7 @@ interface PeerListener {
     void gotPort(Peer peer, int port, int rport);
 
     /**
-     * Called when peers are received via PEX
+     * Called when peers are received via PEX.
      *
      * @param peer the Peer that got the message.
      * @param pIDList the peer IDs (dest hashes)
@@ -187,7 +187,7 @@ interface PeerListener {
     public I2PSnarkUtil getUtil();
 
     /**
-     * Called when comments are requested via ut_comment
+     * Called when comments are requested via ut_comment.
      *
      * @param peer the Peer that got the message.
      * @param num the number of comments asked for
@@ -196,7 +196,7 @@ interface PeerListener {
     public void gotCommentReq(Peer peer, int num);
 
     /**
-     * Called when comments are received via ut_comment
+     * Called when comments are received via ut_comment.
      *
      * @param peer the Peer that got the message.
      * @param comments the comments carried by the message

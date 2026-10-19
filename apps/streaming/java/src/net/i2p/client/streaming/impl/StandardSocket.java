@@ -25,7 +25,6 @@ import net.i2p.data.Destination;
  * You may not create an unbound StandardSocket.
  * Create this through the SocketManager.
  *
- * @author zzz
  * @since 0.8.4
  */
 public class StandardSocket extends Socket {
@@ -368,31 +367,31 @@ public class StandardSocket extends Socket {
     }
 
     /**
-     * Does nothing.
+     * Ignored, streaming sockets manage their own tuning.
      */
     @Override
     public void setPerformancePreferences(int connectionTime, int latency, int bandwidth) { /* no-op */ }
 
     /**
-     * Does nothing.
+     * Ignored, streaming sockets manage their own tuning.
      */
     @Override
     public void setReceiveBufferSize(int size) { /* no-op */ }
 
     /**
-     * Does nothing.
+     * Ignored, streaming sockets manage their own tuning.
      */
     @Override
     public void setReuseAddress(boolean on) { /* no-op */ }
 
     /**
-     * Does nothing.
+     * Ignored, streaming sockets manage their own tuning.
      */
     @Override
     public void setSendBufferSize(int size) { /* no-op */ }
 
     /**
-     * Does nothing.
+     * Ignored, streaming sockets manage their own tuning.
      */
     @Override
     public void setSoLinger(boolean on, int linger) { /* no-op */ }
@@ -414,13 +413,13 @@ public class StandardSocket extends Socket {
     }
 
     /**
-     * Does nothing.
+     * Ignored, streaming sockets manage their own tuning.
      */
     @Override
     public void setTcpNoDelay(boolean on) { /* no-op */ }
 
     /**
-     * Does nothing.
+     * Ignored, streaming sockets manage their own tuning.
      */
     @Override
     public void setTrafficClass(int tc) { /* no-op */ }

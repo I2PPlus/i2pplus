@@ -33,7 +33,7 @@ public class SimpleTimer2WatchdogDecisionTest {
 
     /**
      * Replay a sample sequence through the same bookkeeping
-     * SimpleTimer2.SaturationWatchdog.checkSaturation() performs, and count the
+     * {@code SimpleTimer2.SaturationWatchdog.checkSaturation()} performs, and count the
      * samples that report. The pure function alone cannot express the throttle,
      * since "was this episode reported" is state; this is the state machine.
      *
@@ -63,7 +63,7 @@ public class SimpleTimer2WatchdogDecisionTest {
 
     /**
      * Replay a sequence of completed-task counts through the bookkeeping
-     * SimpleTimer2.SaturationWatchdog.checkStall() performs, and count the
+     * {@code SimpleTimer2.SaturationWatchdog.checkStall()} performs, and count the
      * samples that report.
      *
      * @param completed per-sample completed-task count

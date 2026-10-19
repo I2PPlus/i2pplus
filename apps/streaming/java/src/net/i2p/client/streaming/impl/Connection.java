@@ -66,13 +66,13 @@ class Connection {
     /** Whether the final disconnect sequence has been initiated. */
     private final AtomicBoolean _finalDisconnect = new AtomicBoolean();
     /**
-     *  Slot-release claim: CAS'd exactly once when this connection's budget
-     *  slot is given back (reservation token consumed, or peer fallback when
-     *  no token was bound), and re-armed only when a new generation binds a
-     *  fresh token (assignReceiveStreamId). Lets every teardown path race to
-     *  release without any of them draining a slot twice — the failure mode
-     *  that lets a hard-disconnect sweep decrement a later stream's count.
-     *  @since 0.9.71+
+     * Slot-release claim: CAS'd exactly once when this connection's budget
+     * slot is given back (reservation token consumed, or peer fallback when
+     * no token was bound), and re-armed only when a new generation binds a
+     * fresh token (assignReceiveStreamId). Lets every teardown path race to
+     * release without any of them draining a slot twice. The failure mode
+     * that lets a hard-disconnect sweep decrement a later stream's count.
+     * @since 0.9.71+
      */
     private final AtomicBoolean _slotReleaseClaimed = new AtomicBoolean();
     /** Whether the connection has been hard-disconnected (unrecoverable). */
@@ -83,25 +83,25 @@ class Connection {
     private final MessageOutputStream _outputStream;
     /** Selects the appropriate scheduler for packet pacing. */
     private final SchedulerChooser _chooser;
-    /** Locking: _nextSendLock */
+    /** Locking: _nextSendLock. */
     private long _nextSendTime;
-    /** Atomic long. */
+    /** Packets acked by the peer. */
     private final AtomicLong _ackedPackets = new AtomicLong();
-    /** Created on. */
+    /** When the connection was created. */
     private final long _createdOn;
-    /** Atomic long. */
+    /** Timestamp CLOSE was sent, or 0. */
     private final AtomicLong _closeSentOn = new AtomicLong();
-    /** Atomic long. */
+    /** Timestamp CLOSE was received, or 0. */
     private final AtomicLong _closeReceivedOn = new AtomicLong();
     /** Unacknowledged packets counter. */
     private final AtomicInteger _unackedPacketsReceived = new AtomicInteger();
     /** Congestion window end. */
     private long _congestionWindowEnd;
-    /** Atomic long. */
+    /** Highest throughput byte acked so far, -1 when none. */
     private final AtomicLong _highestAckedThrough = new AtomicLong(-1);
-    /** Duplicate ACK tracking for fast retransmit (accessed inside _outboundPacketsLock) */
+    /** Duplicate ACK tracking for fast retransmit (accessed inside _outboundPacketsLock). */
     private int _dupAckCount;
-    /** Last dup ack. */
+    /** Timestamp of the last duplicate ACK. */
     private long _lastDupAck;
     /** Slow start threshold. */
     private volatile int _ssthresh;
@@ -117,7 +117,7 @@ class Connection {
      */
     private TreeMap<Long, PacketLocal> _outboundPackets;
     /** Monitor for {@link #_outboundPackets} and the sender window. Exposed via
-     *  {@link #getWindowLock()} so ConnectionPacketHandler serializes with us. */
+     * {@link #getWindowLock} so ConnectionPacketHandler serializes with us. */
     private final Object _outboundPacketsLock = new Object();
     /** Outbound queue. */
     private final PacketQueue _outboundQueue;
@@ -131,7 +131,7 @@ class Connection {
     private I2PSocketFull _socket;
     /** Error cause if the connection could not be established. */
     private volatile String _connectionError;
-    /** Atomic long. */
+    /** Timestamp a disconnect was scheduled at, or 0. */
     private final AtomicLong _disconnectScheduledOn = new AtomicLong();
     /**
      * Last received on. Written on the receive/notification thread
@@ -226,33 +226,33 @@ class Connection {
     private final AtomicInteger _unchokesToSend = new AtomicInteger();
     /** Ack since congestion. */
     private final AtomicBoolean _ackSinceCongestion;
-    /** Notify this on connection (or connection failure) */
+    /** Notify this on connection (or connection failure). */
     private final Object _connectLock;
-    /** Locking for _nextSendTime */
+    /** Locking for _nextSendTime. */
     private final Object _nextSendLock;
     /** How many messages have been resent and not yet ACKed. */
     private final AtomicInteger _activeResends = new AtomicInteger();
     /**
-     *  Set when a soft failure triggers an immediate retransmit pass, so the
-     *  resend loop can tag those resends as soft (not consuming the hard
-     *  retransmit budget).  Written on the router callback thread in
-     *  {@link #scheduleSoftFailureRetransmit()}, read and cleared on the timer
-     *  thread in {@link RetransmitEvent#timeReached()}.  Cleared on cancel so a
-     *  cancelled soft pass cannot leak into a later RTO-driven pass.
+     * Set when a soft failure triggers an immediate retransmit pass, so the
+     * resend loop can tag those resends as soft (not consuming the hard
+     * retransmit budget).  Written on the router callback thread in
+     * {@link #scheduleSoftFailureRetransmit}, read and cleared on the timer
+     * thread in {@link RetransmitEvent#timeReached}.  Cleared on cancel so a
+     * cancelled soft pass cannot leak into a later RTO-driven pass.
      */
     private volatile boolean _softFailureResendPending;
     /**
-     *  Set when a soft failure triggers an immediate retransmit pass,
-     *  so the next send through {@link PacketQueue#enqueue(PacketLocal)}
-     *  uses {@link net.i2p.client.SendMessageOptions#setFreshConnection(boolean)} to rotate
-     *  to a different outbound tunnel instead of retrying the same
-     *  (possibly sick) tunnel that caused the stall.  Only the first
-     *  packet in a soft-failure pass carries the marker; subsequent
-     *  packets reuse the already rotated tunnel, so the handover settles
-     *  before any data flows and an in-flight download is never disturbed.
-     *  Written on the router callback thread in
-     *  {@link #scheduleSoftFailureRetransmit()}, cleared on first use
-     *  in {@link PacketQueue#enqueue(PacketLocal)} and on cancel.
+     * Set when a soft failure triggers an immediate retransmit pass,
+     * so the next send through {@link PacketQueue#enqueue(PacketLocal)}
+     * uses {@link net.i2p.client.SendMessageOptions#setFreshConnection(boolean)} to rotate
+     * to a different outbound tunnel instead of retrying the same
+     * (possibly sick) tunnel that caused the stall.  Only the first
+     * packet in a soft-failure pass carries the marker; subsequent
+     * packets reuse the already rotated tunnel, so the handover settles
+     * before any data flows and an in-flight download is never disturbed.
+     * Written on the router callback thread in
+     * {@link #scheduleSoftFailureRetransmit}, cleared on first use
+     * in {@link PacketQueue#enqueue(PacketLocal)} and on cancel.
      */
     private volatile boolean _nextSendFreshConnection;
      /**
@@ -272,12 +272,12 @@ class Connection {
      */
     private volatile boolean _ackProgress;
     /**
-     *  Wall-clock time (ms) of the last permitted immediate retransmit scheduled
-     *  from {@link #scheduleSoftFailureRetransmit()}.  Gates back-to-back soft
-     *  failures (e.g. NO_LEASESET while the LeaseSet fetch is in flight) so they
-     *  defer to the retransmit timer instead of firing a new immediate pass at
-     *  the I2CP round-trip rate, which exhausted the SYN give-up budget within
-     *  ~200ms.  Written on the router callback thread, read on itself.
+     * Wall-clock time (ms) of the last permitted immediate retransmit scheduled
+     * from {@link #scheduleSoftFailureRetransmit}.  Gates back-to-back soft
+     * failures (e.g. NO_LEASESET while the LeaseSet fetch is in flight) so they
+     * defer to the retransmit timer instead of firing a new immediate pass at
+     * the I2CP round-trip rate, which exhausted the SYN give-up budget within
+     * ~200ms.  Written on the router callback thread, read on itself.
      */
     private volatile long _lastSoftFailRetransmit;
     /** Connection event. */
@@ -328,12 +328,12 @@ class Connection {
      */
     private static final int WINDOW_CEILING_HEADROOM_PCT = 125;
     /**
-     *  Last {@link #getWindowCeiling()} sample, ceiling and timestamp as ONE
-     *  value: two separate volatiles let a reader pair one writer's ceiling
-     *  with the other writer's newer (or its own later) timestamp, serving a
-     *  stale ceiling for another BDP_CACHE_MS or inverting the age check.
-     *  Volatile: written from the app-writer choke loop and the ACK path.
-     *  @since 0.9.71+
+     * Last {@link #getWindowCeiling} sample, ceiling and timestamp as ONE
+     * value: two separate volatiles let a reader pair one writer's ceiling
+     * with the other writer's newer (or its own later) timestamp, serving a
+     * stale ceiling for another BDP_CACHE_MS or inverting the age check.
+     * Volatile: written from the app-writer choke loop and the ACK path.
+     * @since 0.9.71+
      */
     private volatile WindowCeilingSample _windowCeilingSample;
 
@@ -350,7 +350,7 @@ class Connection {
      * the period.
      */
     private int _chokeSizeBeginCnt;
-    /** Counts completed releases, driving the stream.chokeSizeEnd sample. */
+    /** Counts completed releases, driving the {@code stream.chokeSizeEnd} sample. */
     private int _chokeSizeEndCnt;
 
     // ---------------------------------------------------------------------
@@ -364,7 +364,7 @@ class Connection {
     // acting on the verdict is the router layer's decision.
     // ---------------------------------------------------------------------
 
-    /** Verdict of one floor evaluation. @since 0.9.71+ */
+    /** Verdict of one floor evaluation. @since 0.9.71+. */
     enum StallState {
         /** Healthy, or not enough history to judge. */
         NONE,
@@ -386,7 +386,7 @@ class Connection {
      */
     private static final int FLOOR_REBASE_WINDOWS = 10;
 
-    /** Rolling goodput sample window. @since 0.9.71+ */
+    /** Rolling goodput sample window. @since 0.9.71+. */
     private static final long FLOOR_SAMPLE_MS = 10000;
 
     /**
@@ -419,22 +419,22 @@ class Connection {
      */
     private static final long STALL_GRACE_MS = 30000;
 
-    /** Weight of a new goodput sample in the baseline EWMA, scaled by 100. @since 0.9.71+ */
+    /** Weight of a new goodput sample in the baseline EWMA, scaled by 100. @since 0.9.71+. */
     private static final int FLOOR_EWMA_PERCENT = 30;
 
-    /** EWMA of achieved goodput in bytes/sec, 0 until the floor arms. @since 0.9.71+ */
+    /** EWMA of achieved goodput in bytes/sec, 0 until the floor arms. @since 0.9.71+. */
     private double _floorBaselineBps;
 
-    /** Completed goodput samples backing {@link #_floorBaselineBps}. @since 0.9.71+ */
+    /** Completed goodput samples backing {@link #_floorBaselineBps}. @since 0.9.71+. */
     private int _floorSamples;
 
-    /** Bytes counted toward the sample open at {@link #_floorSampleStart}. @since 0.9.71+ */
+    /** Bytes counted toward the sample open at {@link #_floorSampleStart}. @since 0.9.71+. */
     private long _floorSampleBytes;
 
-    /** Clock value at which the current goodput sample opened. @since 0.9.71+ */
+    /** Clock value at which the current goodput sample opened. @since 0.9.71+. */
     private long _floorSampleStart;
 
-    /** Clock value of the most recent observed progress, for stall detection. @since 0.9.71+ */
+    /** Clock value of the most recent observed progress, for stall detection. @since 0.9.71+. */
     private long _lastProgressAt;
 
     /**
@@ -454,23 +454,23 @@ class Connection {
      */
     private final FloorCheckEvent _floorCheckEvent;
 
-    /** Last reported verdict, so the caller can log a rising edge only. @since 0.9.71+ */
+    /** Last reported verdict, so the caller can log a rising edge only. @since 0.9.71+. */
     private StallState _lastStallState = StallState.NONE;
 
 
-    /** Atomic long. */
+    /** Lifetime bytes sent, for stats. */
     private final AtomicLong _lifetimeBytesSent = new AtomicLong();
-    /** Atomic long. */
+    /** Lifetime bytes received, for stats. */
     private final AtomicLong _lifetimeBytesReceived = new AtomicLong();
-    /** Atomic long. */
+    /** Lifetime duplicate messages sent, for stats. */
     private final AtomicLong _lifetimeDupMessageSent = new AtomicLong();
-    /** Atomic long. */
+    /** Lifetime duplicate messages received, for stats. */
     private final AtomicLong _lifetimeDupMessageReceived = new AtomicLong();
-    /** Atomic long. */
+    /** Lifetime duplicate bytes sent, for stats. */
     private final AtomicLong _lifetimeDupBytesSent = new AtomicLong();
 
     /**
-     * Default resend delay (i2p.streaming.maxResendDelay) in ms.
+     * Default resend delay ({@code i2p.streaming.maxResendDelay}) in ms.
      * @return the router-wide resend delay default in ms
      * @since 0.9.70+
      */
@@ -478,7 +478,7 @@ class Connection {
         return I2PAppContext.getGlobalContext().getProperty("i2p.streaming.maxResendDelay", 20*1000);
     }
     /**
-     * Default resend delay (i2p.streaming.minResendDelay) in ms.
+     * Default resend delay ({@code i2p.streaming.minResendDelay}) in ms.
      * @return the router-wide resend delay floor in ms
      * @since 0.9.70+
      */
@@ -486,7 +486,7 @@ class Connection {
         return I2PAppContext.getGlobalContext().getProperty("i2p.streaming.minResendDelay", 100);
     }
     /**
-     * Idle time after which an established connection is dropped (i2p.streaming.disconnectTimeout) in ms.
+     * Idle time after which an established connection is dropped ({@code i2p.streaming.disconnectTimeout}) in ms.
      * @return the disconnect timeout in ms
      * @since 0.9.70+
      */
@@ -494,11 +494,11 @@ class Connection {
         return I2PAppContext.getGlobalContext().getProperty("i2p.streaming.disconnectTimeout", 2*60*1000);
     }
     /**
-     *  Default <em>base</em> connect timeout in milliseconds (30 seconds), the
-     *  value used for an outbound connect that has none configured.  It is not
-     *  the effective connect window: that is this value (plus the connect delay
-     *  on the delayed-SYN path) scaled by {@link #getConnectTimeoutMultiplier()}
-     *  and capped at {@link #getMaxConnectTimeout()}.
+     * Default <em>base</em> connect timeout in milliseconds (30 seconds), the
+     * value used for an outbound connect that has none configured.  It is not
+     * the effective connect window: that is this value (plus the connect delay
+     * on the delayed-SYN path) scaled by {@link #getConnectTimeoutMultiplier}
+     * and capped at {@link #getMaxConnectTimeout}.
      */
     public static final int DEFAULT_CONNECT_TIMEOUT = 30*1000;
     /**
@@ -514,11 +514,11 @@ class Connection {
         return I2PAppContext.getGlobalContext().getProperty(I2PSocketOptions.PROP_MAX_CONNECT_TIMEOUT, 75*1000);
     }
     /**
-     *  Absolute cap on this connection's connect window, in milliseconds.
-     *  Uses the per-connection override (ConnectionOptions#getMaxConnectTimeout())
-     *  when set, otherwise the router-wide i2p.streaming.maxConnectTimeout.
-     *  @return the cap in ms, never negative
-     *  @since 0.9.71+
+     * Absolute cap on this connection's connect window, in milliseconds.
+     * Uses the per-connection override (ConnectionOptions#getMaxConnectTimeout())
+     * when set, otherwise the router-wide {@code i2p.streaming.maxConnectTimeout}.
+     * @return the cap in ms, never negative
+     * @since 0.9.71+
      */
     long getMaxConnectTimeout() {
         long override = _options.getMaxConnectTimeout();
@@ -552,23 +552,23 @@ class Connection {
     }
 
     /**
-     *  Compute the effective connect timeout (ms) an outbound connect will wait, as used
-     *  by both {@link #waitForConnect(int)} and the SYN give-up budget in
-     *  {@link #getMaxSynSends()}.
-     *  <p>Scales the desired base window ({@code connectDelay + connectTimeout}, or just
-     *  {@code connectTimeout}) by the Tuner connect-timeout multiplier, then applies the
-     *  {@link #CONNECT_TIMEOUT_FLOOR_MS} floor and the absolute {@code maxConnectTimeoutMs}
-     *  cap.  Both consumers must agree on this value: a SYN retransmit budget
-     *  <em>shorter</em> than this window was the cause of the spurious "Connection failed"
-     *  for live-but-slow peers, where the retransmit timer discarded the connection
-     *  error-free before waitForConnect reached its own timeout.
+     * Compute the effective connect timeout (ms) an outbound connect will wait, as used
+     * by both {@link #waitForConnect(int)} and the SYN give-up budget in
+     * {@link #getMaxSynSends}.
+     * <p>Scales the desired base window ({@code connectDelay + connectTimeout}, or just
+     * {@code connectTimeout}) by the Tuner connect-timeout multiplier, then applies the
+     * {@link #CONNECT_TIMEOUT_FLOOR_MS} floor and the absolute {@code maxConnectTimeoutMs}
+     * cap.  Both consumers must agree on this value: a SYN retransmit budget
+     * <em>shorter</em> than this window was the cause of the spurious "Connection failed"
+     * for live-but-slow peers, where the retransmit timer discarded the connection
+     * error-free before waitForConnect reached its own timeout.
      *
-     *  @param desiredTimeoutMs   the base window (connectDelay + connectTimeout) in ms;
-     *                            &lt;=0 means no connect timeout is configured
-     *  @param multiplier         the Tuner connect-timeout multiplier percentage (30-200)
-     *  @param maxConnectTimeoutMs the absolute cap (i2p.streaming.maxConnectTimeout) in ms
-     *  @return the effective window in ms, or 0 when no connect timeout is configured
-     *  @since 0.9.71+
+     * @param desiredTimeoutMs   the base window (connectDelay + connectTimeout) in ms;
+     * &lt;=0 means no connect timeout is configured
+     * @param multiplier         the Tuner connect-timeout multiplier percentage (30-200)
+     * @param maxConnectTimeoutMs the absolute cap ({@code i2p.streaming.maxConnectTimeout}) in ms
+     * @return the effective window in ms, or 0 when no connect timeout is configured
+     * @since 0.9.71+
      */
     static long computeEffectiveConnectTimeout(long desiredTimeoutMs, int multiplier, long maxConnectTimeoutMs) {
         if (desiredTimeoutMs <= 0) {return 0;}
@@ -589,14 +589,14 @@ class Connection {
     }
 
     /**
-     *  Default window size cap used when no per-connection or global override is set.
-     *  This global is the guaranteed floor of the per-stream ceiling
-     *  ({@link #getWindowCeiling()}), which the Tuner adjusts based on observed
-     *  RTT, bandwidth, loss, and memory pressure — every stream ramps at least
-     *  to this value, while its own BDP may lift the ceiling toward
-     *  {@link #ABSOLUTE_MAX_WINDOW} so a fast stream is not held back by
-     *  signals gathered from other streams.
-     *  Raised from 1024 to 2048 to better utilize high-BDP paths.
+     * Default window size cap used when no per-connection or global override is set.
+     * This global is the guaranteed floor of the per-stream ceiling
+     * ({@link #getWindowCeiling}), which the Tuner adjusts based on observed
+     * RTT, bandwidth, loss, and memory pressure — every stream ramps at least
+     * to this value, while its own BDP may lift the ceiling toward
+     * {@link #ABSOLUTE_MAX_WINDOW} so a fast stream is not held back by
+     * signals gathered from other streams.
+     * Raised from 1024 to 2048 to better utilize high-BDP paths.
      */
     public static final int MAX_WINDOW_SIZE_DEFAULT = SystemVersion.isSlow() ? 1024 : 2048;
 
@@ -643,9 +643,9 @@ class Connection {
 
     /** Number of remaining unchoke assertions to send. */
     private static final int UNCHOKES_TO_SEND = 8;
-    /** Multiplier for the Westwood BDP estimate used to calculate the new slow start threshold */
+    /** Multiplier for the Westwood BDP estimate used to calculate the new slow start threshold. */
     private static final int SSTHR_BW_FACTOR = 2;
-    /** Minimum slow start threshold after fast retransmit */
+    /** Minimum slow start threshold after fast retransmit. */
     private static final int MIN_SSTHR_FAST_RETX = 16;
     /**
      * Minimum RTT (ms) used when deriving the bandwidth slow-start threshold anchor.
@@ -666,23 +666,23 @@ class Connection {
     static final int MAX_PLAUSIBLE_MIN_RTT_MS = 60_000;
 
     /**
-     *  Give up resending an unacked SYN after this many sends.
-     *  SYN retransmission uses a fixed RTO interval (no backoff — there is no
-     *  congestion to manage before the connection is established), so the total
-     *  SYN budget equals maxSynResends * interval.  The interval is the
-     *  evidence-gated RTT-aware value from {@link #computeSynRetransmitInterval(int, int)}
-     *  — the initial RTO (default 9s) before any RTT measurement, or an interval
-     *  derived from the measured path RTT once evidence exists.  With the default 9s
-     *  interval and 12 sends the fallback budget is 108s, safely past the 75s
-     *  connect-window cap on a no-evidence dead path.
-     *  <p>This is the <em>per-connection floor</em> for the connect path:
-     *  {@link #getMaxSynSends()} raises the effective give-up count as needed so the
-     *  retransmit budget never expires before the connect window
-     *  ({@link #computeEffectiveConnectTimeout(long, int, long)}) does.  Otherwise the
-     *  retransmit timer can tear the connection down error-free while
-     *  {@link #waitForConnect(int)} is still waiting, leaving the caller with a generic
-     *  "Connection failed" instead of an accurate message.
-     *  @since 0.9.70+ mutable for adaptive tuning
+     * Give up resending an unacked SYN after this many sends.
+     * SYN retransmission uses a fixed RTO interval (no backoff — there is no
+     * congestion to manage before the connection is established), so the total
+     * SYN budget equals maxSynResends * interval.  The interval is the
+     * evidence-gated RTT-aware value from {@link #computeSynRetransmitInterval(int, int)}
+     * — the initial RTO (default 9s) before any RTT measurement, or an interval
+     * derived from the measured path RTT once evidence exists.  With the default 9s
+     * interval and 12 sends the fallback budget is 108s, safely past the 75s
+     * connect-window cap on a no-evidence dead path.
+     * <p>This is the <em>per-connection floor</em> for the connect path:
+     * {@link #getMaxSynSends} raises the effective give-up count as needed so the
+     * retransmit budget never expires before the connect window
+     * ({@link #computeEffectiveConnectTimeout(long, int, long)}) does.  Otherwise the
+     * retransmit timer can tear the connection down error-free while
+     * {@link #waitForConnect(int)} is still waiting, leaving the caller with a generic
+     * "Connection failed" instead of an accurate message.
+     * @since 0.9.70+ mutable for adaptive tuning
      */
     private static volatile int maxSynResends = 12;
 
@@ -845,8 +845,8 @@ class Connection {
      * configured budget — so the proxy can emit the "Website Unreachable" page sooner.
      *
      * @param measuredRttMs a recent round-trip time for this peer in ms, or &lt;=0 when no
-     *                      RTT evidence is available (never measured, no cache entry)
-     * @param initialRtoMs  the configured initial RTO (i2p.streaming.initialRTO) in ms
+     * RTT evidence is available (never measured, no cache entry)
+     * @param initialRtoMs  the configured initial RTO ({@code i2p.streaming.initialRTO}) in ms
      * @return the fixed inter-SYN retransmit interval (ms) to use
      * @since 0.9.70+ evidence-gated and RTT-aware SYN pacing
      */
@@ -860,24 +860,24 @@ class Connection {
     }
 
     /**
-     *  Compute the effective number of SYN sends before this connection gives up, used by
-     *  {@link #getMaxSynSends()} on each give-up decision.
-     *  <p>The total SYN budget is {@code sends * synIntervalMs} (fixed interval, no backoff).
-     *  With RTT evidence the interval can collapse toward {@link #SYN_RTO_MIN} (750ms), so a
-     *  fixed {@code configuredMax} budget can end well before {@link #waitForConnect(int)}'s
-     *  window does — {@code 12 * 750ms = 9s} against a 10000ms floor — leaving waitForConnect
-     *  to mislabel the handshake as "Connection failed".  This returns at least enough sends
-     *  that {@code sends * synIntervalMs &gt;= connectWindowMs}, so the connect-timeout gate
-     *  (which reports an accurate error) fires first on genuinely-dead paths, while a
-     *  live-but-slow peer keeps receiving SYN retransmits for the full window.
+     * Compute the effective number of SYN sends before this connection gives up, used by
+     * {@link #getMaxSynSends} on each give-up decision.
+     * <p>The total SYN budget is {@code sends * synIntervalMs} (fixed interval, no backoff).
+     * With RTT evidence the interval can collapse toward {@link #SYN_RTO_MIN} (750ms), so a
+     * fixed {@code configuredMax} budget can end well before {@link #waitForConnect(int)}'s
+     * window does — {@code 12 * 750ms = 9s} against a 10000ms floor — leaving waitForConnect
+     * to mislabel the handshake as "Connection failed".  This returns at least enough sends
+     * that {@code sends * synIntervalMs &gt;= connectWindowMs}, so the connect-timeout gate
+     * (which reports an accurate error) fires first on genuinely-dead paths, while a
+     * live-but-slow peer keeps receiving SYN retransmits for the full window.
      *
-     *  @param configuredMax   the configured static give-up count ({@link #maxSynResends})
-     *  @param synIntervalMs   the fixed inter-SYN retransmit interval (ms) in use
-     *  @param connectWindowMs the effective connect window from
-     *                         {@link #computeEffectiveConnectTimeout(long, int, long)};
-     *                         0 means no connect timeout is configured
-     *  @return the number of sends before giving up, never less than {@code configuredMax}
-     *  @since 0.9.71+
+     * @param configuredMax   the configured static give-up count ({@link #maxSynResends})
+     * @param synIntervalMs   the fixed inter-SYN retransmit interval (ms) in use
+     * @param connectWindowMs the effective connect window from
+     * {@link #computeEffectiveConnectTimeout(long, int, long)};
+     * 0 means no connect timeout is configured
+     * @return the number of sends before giving up, never less than {@code configuredMax}
+     * @since 0.9.71+
      */
     static int computeSynResendBudget(int configuredMax, int synIntervalMs, long connectWindowMs) {
         if (configuredMax <= 0 || synIntervalMs <= 0 || connectWindowMs <= 0) {return configuredMax;}
@@ -891,7 +891,7 @@ class Connection {
      * response to retransmitted SYNs.
      * <p>This is the <em>floor</em>: the live spacing used by
      * {@link #shouldResendSynAck(long)} is the connection's own
-     * {@link #getSynRetransmitInterval()} — the same RTT-aware interval the client
+     * {@link #getSynRetransmitInterval} — the same RTT-aware interval the client
      * uses for its SYN retransmit timer — so every client retransmit can receive a
      * SYN-ACK response even as the Tuner adapts the initial RTO.  At 3s the server
      * skipped every other retransmit, starving lossy I2P paths where the initial
@@ -925,12 +925,12 @@ class Connection {
      * SYN-ACK minting without ever starving a live-but-slow peer.
      *
      * @param connectWindowMs the client's effective connect window
-     *                        ({@link #getEffectiveConnectWindow()}); &lt;=0 means no
-     *                        window is configured and no cap is applied
+     * ({@link #getEffectiveConnectWindow}); &lt;=0 means no
+     * window is configured and no cap is applied
      * @param spacingMs       the inter-SYN-AACK spacing in use; &lt;=0 means no spacing
-     *                        is derived and no cap is applied
+     * is derived and no cap is applied
      * @return the cap; never less than 1, or {@link #SYN_ACK_RESEND_MAX} when no
-     *         window is configured
+     * window is configured
      * @since 0.9.71+
      */
     static int computeSynAckResendCap(long connectWindowMs, long spacingMs) {
@@ -995,7 +995,7 @@ class Connection {
 
     /**
      * Record that a SYN-ACK was sent for this connection at {@code now} (initial
-     * re-send from {@code ConnectionHandler#resendSynAck} only — the initial
+     * re-send from {@code ConnectionHandler#resendSynAck} only. The initial
      * handshake SYN-ACK is a normal outbound packet and is not counted here).  This
      * snapshot advances the throttle window so subsequent retransmitted SYNs are
      * spaced {@link #SYN_ACK_RESEND_MIN_SPACING_MS} after the last answer.
@@ -1046,7 +1046,7 @@ class Connection {
     public static void setMaxRetransmissions(int val) { maxRetransmissions = Math.max(8, Math.min(128, val)); }
     /**
      * Configured give-up count for an unacknowledged SYN.
-     * @return the SYN give-up count before {@link #getMaxSynSends()} scaling
+     * @return the SYN give-up count before {@link #getMaxSynSends} scaling
      * @since 0.9.70+
      */
     public static int getMaxSynResendsStatic() { return maxSynResends; }
@@ -1105,8 +1105,8 @@ class Connection {
     /**
      * Maximum number of packets to retransmit in a single timer fire.
      * This caps the resend batch size only; the give-up threshold is
-     * {@link ConnectionOptions#getMaxResends()}, checked separately.
-     * Tunable via i2p.streaming.maxRetransmissions (default: 32).
+     * {@link ConnectionOptions#getMaxResends}, checked separately.
+     * Tunable via {@code i2p.streaming.maxRetransmissions} (default: 32).
      * @return the max rtx
      */
     private int getMaxRtx() {
@@ -1167,26 +1167,26 @@ class Connection {
     }
 
     /**
-     *  The total time (ms) from connection creation during which this connecting
-     *  connection may wait for its SYN to be acknowledged before the connect path
-     *  tears the handshake down.
-     *  <p>This is the single authoritative connect window shared by
-     *  {@link #waitForConnect(int)}, {@link #getMaxSynSends()}, and
-     *  {@link SchedulerConnecting}, so no path can tear an unacknowledged SYN down
-     *  before the others have given it the full Tuner-scaled budget.  It is the
-     *  (connectDelay + connectTimeout) base — connectDelay counted only on the
-     *  delayed-SYN path, exactly as {@link ConnectionManager#connect} invokes
-     *  waitForConnect — scaled by the Tuner's connect-timeout multiplier, floored at
-     *  {@link #CONNECT_TIMEOUT_FLOOR_MS}, and capped at the absolute max connect
-     *  timeout.
-     *  <p>Using the raw un-scaled connectTimeout here (as SchedulerConnecting once did)
-     *  lets the scheduler race ahead of waitForConnect on high-RTT paths where the
-     *  Tuner has raised the multiplier above 100%, killing the handshake with a generic
-     *  error instead of the accurate "SYN not acknowledged".
+     * The total time (ms) from connection creation during which this connecting
+     * connection may wait for its SYN to be acknowledged before the connect path
+     * tears the handshake down.
+     * <p>This is the single authoritative connect window shared by
+     * {@link #waitForConnect(int)}, {@link #getMaxSynSends}, and
+     * {@link SchedulerConnecting}, so no path can tear an unacknowledged SYN down
+     * before the others have given it the full Tuner-scaled budget.  It is the
+     * (connectDelay + connectTimeout) base — connectDelay counted only on the
+     * delayed-SYN path, exactly as {@link ConnectionManager#connect} invokes
+     * waitForConnect — scaled by the Tuner's connect-timeout multiplier, floored at
+     * {@link #CONNECT_TIMEOUT_FLOOR_MS}, and capped at the absolute max connect
+     * timeout.
+     * <p>Using the raw un-scaled connectTimeout here (as SchedulerConnecting once did)
+     * lets the scheduler race ahead of waitForConnect on high-RTT paths where the
+     * Tuner has raised the multiplier above 100%, killing the handshake with a generic
+     * error instead of the accurate "SYN not acknowledged".
      *
-     *  @return the effective connect window in milliseconds; 0 when no connect timeout
-     *          is configured (no budget, caller should not give up on timeout)
-     *  @since 0.9.71+
+     * @return the effective connect window in milliseconds; 0 when no connect timeout
+     * is configured (no budget, caller should not give up on timeout)
+     * @since 0.9.71+
      */
     long getEffectiveConnectWindow() {
         long base = computeConnectBase(_options.getConnectTimeout(), _options.getConnectDelay());
@@ -1274,8 +1274,8 @@ class Connection {
      * Calculate pacing rate based on current congestion window and RTT.
      * Rate = (cwnd * mss) / rtt to smooth transmission.
      * @return the pacing rate in bytes per second, never below
-     *         {@link ConnectionOptions#getMinPacingRate()}, or {@link Long#MAX_VALUE}
-     *         when the RTT, window or MSS is still unset (pacing disabled)
+     * {@link ConnectionOptions#getMinPacingRate}, or {@link Long#MAX_VALUE}
+     * when the RTT, window or MSS is still unset (pacing disabled)
      */
     private long calculatePacingRate() {
         int cwnd = _options.getWindowSize();
@@ -1298,7 +1298,7 @@ class Connection {
      * Refresh the cached pacing rate when the congestion window or RTT changes.
      * {@link #calculatePacingDelay(int)} reads this cache rather than recomputing
      * the rate per packet, so it must be called whenever an input to
-     * {@link #calculatePacingRate()} changes.
+     * {@link #calculatePacingRate} changes.
      */
     private void updatePacingRate() {
         synchronized (_pacingLock) {
@@ -1352,32 +1352,32 @@ class Connection {
     int getSSThresh() {return _ssthresh;}
 
     /**
-     *  The slow-start threshold a freshly constructed connection starts with,
-     *  clamped so it can never exceed the connection's window ceiling.
-     *  <p>{@code ConnectionPacketHandler.adjustWindow()} picks its growth path on
-     *  {@code window < ssthresh}: below is exponential slow start, at or above is
-     *  linear congestion avoidance. The ceiling from
-     *  {@link #computeWindowCeiling(int, float, int, int, int)} is
-     *  {@code min(absMax, max(globalMax, initialWindowSize))} before any BDP term,
-     *  so a connection can never grow past that base. Initialising {@code ssthresh}
-     *  to the Tuner-managed {@code maxSlowStartWindow} therefore risks
-     *  {@code ssthresh > ceiling} whenever the Tuner has raised the slow-start cap
-     *  above the window ceiling — and then {@code window < ssthresh} is permanently
-     *  true, the deficit-multiplier recovery path in congestion avoidance never
-     *  runs, and every window change is governed by the slow-start branch alone.
-     *  <p>Both inputs are Tuner-tunable over overlapping ranges
-     *  ({@code maxWindowSize} 512-8192, {@code maxSlowStartWindow} 128-8192), so
-     *  nothing else maintains the {@code ssthresh <= ceiling} invariant; this is
-     *  where it is enforced. Clamping to the pre-BDP base rather than
-     *  {@link #getWindowCeiling()} keeps the constructor free of the bandwidth
-     *  estimator, which is not yet constructed at this point.
+     * The slow-start threshold a freshly constructed connection starts with,
+     * clamped so it can never exceed the connection's window ceiling.
+     * <p>{@code ConnectionPacketHandler.adjustWindow()} picks its growth path on
+     * {@code window < ssthresh}: below is exponential slow start, at or above is
+     * linear congestion avoidance. The ceiling from
+     * {@link #computeWindowCeiling(int, float, int, int, int)} is
+     * {@code min(absMax, max(globalMax, initialWindowSize))} before any BDP term,
+     * so a connection can never grow past that base. Initialising {@code ssthresh}
+     * to the Tuner-managed {@code maxSlowStartWindow} therefore risks
+     * {@code ssthresh > ceiling} whenever the Tuner has raised the slow-start cap
+     * above the window ceiling — and then {@code window < ssthresh} is permanently
+     * true, the deficit-multiplier recovery path in congestion avoidance never
+     * runs, and every window change is governed by the slow-start branch alone.
+     * <p>Both inputs are Tuner-tunable over overlapping ranges
+     * ({@code maxWindowSize} 512-8192, {@code maxSlowStartWindow} 128-8192), so
+     * nothing else maintains the {@code ssthresh <= ceiling} invariant; this is
+     * where it is enforced. Clamping to the pre-BDP base rather than
+     * {@link #getWindowCeiling} keeps the constructor free of the bandwidth
+     * estimator, which is not yet constructed at this point.
      *
-     *  @param maxSlowStartWindow the Tuner-managed slow-start cap, in messages
+     * @param maxSlowStartWindow the Tuner-managed slow-start cap, in messages
      * @param globalMaxWindow the Tuner-managed window ceiling floor
-     *                        ({@code i2p.streaming.maxWindowSize}), in messages
+     * ({@code i2p.streaming.maxWindowSize}), in messages
      * @param initialWindowSize the configured starting window, in messages
      * @return the initial slow-start threshold in messages, in
-     *         {@code [1, maxSlowStartWindow]}
+     * {@code [1, maxSlowStartWindow]}
      * @since 0.9.71+
      */
     static int initialSsthresh(int maxSlowStartWindow, int globalMaxWindow, int initialWindowSize) {
@@ -1510,31 +1510,32 @@ class Connection {
     }
 
     /**
-     *  Per-stream window ceiling: the minimum of {@link #ABSOLUTE_MAX_WINDOW}
-     *  and the larger of the Tuner-managed global ceiling (or the per-connection
-     *  override) and this stream's own bandwidth-delay product scaled by
-     *  {@link #WINDOW_CEILING_HEADROOM_PCT}. The global value is the FLOOR of
-     *  the cap — every stream can always ramp to the Tuner's base capacity —
-     *  while a proven pipe lifts its own ceiling toward the absolute cap. Each
-     *  stream responds to its own RTT and delivered-bandwidth estimate, and the
-     *  Tuner still pulls the floor down under memory or loss pressure while
-     *  {@link #ABSOLUTE_MAX_WINDOW} bounds every stream unconditionally.
-     *  <p>Before any ACK sample exists the ceiling falls back to the global
-     *  floor, so an uncalibrated stream ramps exactly as before (bounded by
-     *  slow-start's ssthresh and the global ceiling).
-     *  <p>The result is cached for {@link #BDP_CACHE_MS} so a persistently full
-     *  window (the app keeps writing, the choke loop keeps blocking) does not
-     *  re-lock the synchronized estimator and re-read RTT on every write
-     *  attempt; the Westwood+ sample only moves on ACK cadence anyway. Both
-     *  writer threads may populate the cache; a ceiling from either is valid,
-     *  and ceiling + timestamp are stored as one value ({@code WindowCeilingSample}) so a reader can never pair one writer's ceiling
-     *  with the other writer's newer timestamp — which would pin the cache
-     *  hit to the older ceiling for extra BDP_CACHE_MS windows — nor invert
-     *  the age check by pairing a stale timestamp with a fresh ceiling.
+     * Per-stream window ceiling: the minimum of {@link #ABSOLUTE_MAX_WINDOW}
+     * and the larger of the Tuner-managed global ceiling (or the per-connection
+     * override) and this stream's own bandwidth-delay product scaled by
+     * {@link #WINDOW_CEILING_HEADROOM_PCT}. The global value is the FLOOR of
+     * the cap. Every stream can always ramp to the Tuner's base capacity —
+     * while a proven pipe lifts its own ceiling toward the absolute cap. Each
+     * stream responds to its own RTT and delivered-bandwidth estimate, and the
+     * Tuner still pulls the floor down under memory or loss pressure while
+     * {@link #ABSOLUTE_MAX_WINDOW} bounds every stream unconditionally.
+     * <p>Before any ACK sample exists the ceiling falls back to the global
+     * floor, so an uncalibrated stream ramps exactly as before (bounded by
+     * slow-start's ssthresh and the global ceiling).
+     * <p>The result is cached for {@link #BDP_CACHE_MS} so a persistently full
+     * window (the app keeps writing, the choke loop keeps blocking) does not
+     * re-lock the synchronized estimator and re-read RTT on every write
+     * attempt; the Westwood+ sample only moves on ACK cadence anyway. Both
+     * writer threads may populate the cache; a ceiling from either is valid,
+      * and ceiling + timestamp are stored as one value ({@code WindowCeilingSample}) so a reader can
+       * never pair one writer's ceiling
+     * with the other writer's newer timestamp — which would pin the cache
+     * hit to the older ceiling for extra BDP_CACHE_MS windows — nor invert
+     * the age check by pairing a stale timestamp with a fresh ceiling.
      *
-     *  @return max allowed in-flight packets for this stream, at least the
-     *          global/floor base and never above {@code ABSOLUTE_MAX_WINDOW}
-     *  @since 0.9.71+
+     * @return max allowed in-flight packets for this stream, at least the
+     * global/floor base and never above {@code ABSOLUTE_MAX_WINDOW}
+     * @since 0.9.71+
      */
     int getWindowCeiling() {
         long now = _context.clock().now();
@@ -1550,9 +1551,9 @@ class Connection {
     }
 
     /**
-     *  One {@link #getWindowCeiling()} cache entry: ceiling + sample time as a
-     *  single atomically-published value (see the field's Javadoc).
-     *  @since 0.9.71+
+     * One {@link #getWindowCeiling} cache entry: ceiling + sample time as a
+     * single atomically-published value (see the field's Javadoc).
+     * @since 0.9.71+
      */
     private static final class WindowCeilingSample {
         /** Computed ceiling in messages. */
@@ -1573,30 +1574,31 @@ class Connection {
     }
 
     /**
-     *  Pure decision helper for {@link #getWindowCeiling()}: the per-stream
-     *  window ceiling in messages —
-     *  {@code min(absMax, max(globalMax, floor, headroom * bwe * rtt))}, falling
-     *  back to {@code min(absMax, max(globalMax, floor))} when no bandwidth
-     *  sample exists yet.
-     *  <p>The Tuner global is the FLOOR of the cap, never its ceiling: a
-     *  measured-goodput BDP term that binds downward is self-defeating — the
-     *  window gets pinned at the floor, measured goodput cannot grow past the
-     *  pinned window, and the ceiling stays pinned there forever (the
-     *  observed 128-message absorbing state that capped a fast path at
-     *  ~85 KB/s). With the global as the floor, slow start and congestion
-     *  avoidance always ramp to at least the Tuner base, the BDP term may
-     *  lift the cap toward {@code absMaxMsgs} once the path proves capacity,
-     *  loss response stays with the graduated window cuts, and the Tuner's
-     *  memory/loss shrink still lowers the guaranteed base on every stream.
+     * Pure decision helper for {@link #getWindowCeiling}: the per-stream
+     * window ceiling in messages —
+     * {@code min(absMax, max(globalMax, floor, headroom * bwe * rtt))}, falling
+     * back to {@code min(absMax, max(globalMax, floor))} when no bandwidth
+     * sample exists yet.
+     * <p>The Tuner global is the FLOOR of the cap, never its ceiling: a
+     * measured-goodput BDP term that binds downward is self-defeating — the
+     * window gets pinned at the floor, measured goodput cannot grow past the
+     * pinned window, and the ceiling stays pinned there forever (the
+     * observed 128-message absorbing state that capped a fast path at
+     * ~85 KB/s). With the global as the floor, slow start and congestion
+     * avoidance always ramp to at least the Tuner base, the BDP term may
+     * lift the cap toward {@code absMaxMsgs} once the path proves capacity,
+     * loss response stays with the graduated window cuts, and the Tuner's
+     * memory/loss shrink still lowers the guaranteed base on every stream.
      *
-     *  @param globalMax Tuner-managed global or per-connection ceiling in messages; the guaranteed floor
-     *  @param bwePerMs Westwood+ estimate in packets/ms; NaN or {@code <= 0} means no sample yet
-     *  @param rttMs round-trip time in ms (caller applies the 500ms floor)
-     *  @param floorMsgs minimum ceiling regardless of the estimate (the initial window, so the cap is never below a connection's starting cwnd)
-     *  @param absMaxMsgs absolute ceiling regardless of inputs (ABSOLUTE_MAX_WINDOW)
-     *  @return ceiling in messages, in
-     *          {@code [min(absMax, max(1, globalMax, floorMsgs)), absMaxMsgs]}
-     *  @since 0.9.71+
+     * @param globalMax Tuner-managed global or per-connection ceiling in messages; the guaranteed floor
+     * @param bwePerMs Westwood+ estimate in packets/ms; NaN or {@code <= 0} means no sample yet
+     * @param rttMs round-trip time in ms (caller applies the 500ms floor)
+      * @param floorMsgs minimum ceiling regardless of the estimate (the initial window, so the cap is
+       * never below a connection's starting cwnd)
+     * @param absMaxMsgs absolute ceiling regardless of inputs (ABSOLUTE_MAX_WINDOW)
+     * @return ceiling in messages, in
+     * {@code [min(absMax, max(1, globalMax, floorMsgs)), absMaxMsgs]}
+     * @since 0.9.71+
      */
     static int computeWindowCeiling(int globalMax, float bwePerMs, int rttMs,
                                     int floorMsgs, int absMaxMsgs) {
@@ -1625,11 +1627,11 @@ class Connection {
     }
 
     /**
-     *  Whether the sender should block.
-     *  @param unacked number of unacked packets
-     *  @param wsz the current window size
-     *  @param windowCeiling per-stream window ceiling from {@link #getWindowCeiling()}, sampled outside the lock
-     *  @return true if the sender should block (window full or choked)
+     * Whether the sender should block.
+     * @param unacked number of unacked packets
+     * @param wsz the current window size
+     * @param windowCeiling per-stream window ceiling from {@link #getWindowCeiling}, sampled outside the lock
+     * @return true if the sender should block (window full or choked)
      */
     private boolean shouldWait(int unacked, int wsz, int windowCeiling) {
         return _isChoked || unacked >= wsz ||
@@ -1938,7 +1940,7 @@ class Connection {
     }
 
     /**
-     *  Emit {@code stream.con.stallDetected} and {@code stream.con.throttleDetected}
+     * Emit {@code stream.con.stallDetected} and {@code stream.con.throttleDetected}.
 
      * on the rising edge of a verdict.
      *
@@ -2130,13 +2132,13 @@ class Connection {
      * budget boundary from being killed.
      *
      * @param budgetMs the worst-case in-flight budget in ms, computed by the
-     *                 caller as the retransmit budget times the maximum single
-     *                 retransmit timeout; {@code <= 0} disables the check
+     * caller as the retransmit budget times the maximum single
+     * retransmit timeout; {@code <= 0} disables the check
      * @param now current time in ms since epoch
      * @param createdOn creation time of the oldest packet, in ms since epoch
-     *                  (PacketLocal.getCreatedOn()), or &lt;= 0 if unknown
+     * ({@link net.i2p.client.streaming.impl.PacketLocal#getCreatedOn}), or &lt;= 0 if unknown
      * @return true if the packet has been in flight beyond the budget and
-     *         recovery is presumed dead
+     * recovery is presumed dead
      * @since 0.9.71+
      */
     static boolean stuckLifetimeExceeded(long budgetMs, long now, long createdOn) {
@@ -2227,9 +2229,10 @@ class Connection {
      * budget. The subtraction is clamped at zero so an early-tagged paced
      * resend cannot undercount below the true hard count.
      *
-     * @param totalSends total send attempts incl. resends (PacketLocal.getNumSends())
+      * @param totalSends total send attempts incl. resends ({@link
+     * net.i2p.client.streaming.impl.PacketLocal#getNumSends})
      * @param softResends of those, resends tagged as soft-failure-triggered
-     *                    (PacketLocal.getNumSoftResends())
+     * ({@link net.i2p.client.streaming.impl.PacketLocal#getNumSoftResends})
      * @param maxResends configured per-packet retransmit budget (&gt; 0)
      * @return true if the non-soft send attempts exceed the budget
      * @since 0.9.71+
@@ -2268,19 +2271,20 @@ class Connection {
     }
 
     /**
-     *  Pure decision: has the retransmit loop exceeded the SYN give-up budget
-     *  after excluding soft-failure-triggered resends?
-     *  <p>Mirror of {@link #hardResendBudgetExceeded(int, int, int)} for the
-     *  SYN-phase give-up.  A SYN resent only because the router reported a soft
-     *  failure (e.g. NO_LEASESET while its LeaseSet fetch is in flight) never
-     *  reached the tunnel fabric, so it is not evidence of a dead path; counting
-     *  it against {@code maxSynSends} lets a burst of router-side soft failures
-     *  kill a connect in a few hundred ms with a spurious "SYN not acknowledged".
-     *  Only genuine on-wire retransmits should consume the give-up budget.
+     * Pure decision: has the retransmit loop exceeded the SYN give-up budget
+     * after excluding soft-failure-triggered resends?
+     * <p>Mirror of {@link #hardResendBudgetExceeded(int, int, int)} for the
+     * SYN-phase give-up.  A SYN resent only because the router reported a soft
+     * failure (e.g. NO_LEASESET while its LeaseSet fetch is in flight) never
+     * reached the tunnel fabric, so it is not evidence of a dead path; counting
+     * it against {@code maxSynSends} lets a burst of router-side soft failures
+     * kill a connect in a few hundred ms with a spurious "SYN not acknowledged".
+     * Only genuine on-wire retransmits should consume the give-up budget.
      *
-     * @param totalSends total SYN send attempts incl. resends (PacketLocal.getNumSends())
+      * @param totalSends total SYN send attempts incl. resends ({@link
+     * net.i2p.client.streaming.impl.PacketLocal#getNumSends})
      * @param softResends of those, resends tagged as soft-failure-triggered
-     *                    (PacketLocal.getNumSoftResends())
+     * ({@link net.i2p.client.streaming.impl.PacketLocal#getNumSoftResends})
      * @param maxSynSends per-connection SYN give-up budget (getMaxSynSends())
      * @return true if the non-soft SYN send attempts exceed the budget
      * @since 0.9.71+
@@ -2424,18 +2428,18 @@ class Connection {
     }
 
     /**
-     *  Pure decision: is this soft-failure report too close to the last
-     *  permitted immediate retransmit to fire another now?
-     *  <p>Derived from {@link #scheduleSoftFailureRetransmit()}; extracted for
-     *  testability.  A report at exactly {@code minSpacingMs} after the last is
-     *  allowed, mirroring the strict-inequality pacing of the retransmit timer.
+     * Pure decision: is this soft-failure report too close to the last
+     * permitted immediate retransmit to fire another now?
+     * <p>Derived from {@link #scheduleSoftFailureRetransmit}; extracted for
+     * testability.  A report at exactly {@code minSpacingMs} after the last is
+     * allowed, mirroring the strict-inequality pacing of the retransmit timer.
      *
-     *  @param now wall-clock time of this soft-failure report (ms)
-     *  @param lastSoftFailRetransmit wall-clock time of the last permitted
-     *                                immediate retransmit (ms), 0 if none yet this connection
-     *  @param minSpacingMs minimum gap between immediate retransmits (ms)
-     *  @return true if the retransmit should be deferred to the existing timer
-     *  @since 0.9.71+
+     * @param now wall-clock time of this soft-failure report (ms)
+     * @param lastSoftFailRetransmit wall-clock time of the last permitted
+     * immediate retransmit (ms), 0 if none yet this connection
+     * @param minSpacingMs minimum gap between immediate retransmits (ms)
+     * @return true if the retransmit should be deferred to the existing timer
+     * @since 0.9.71+
      */
     static boolean shouldRateLimitSoftRetransmit(long now, long lastSoftFailRetransmit, long minSpacingMs) {
         if (lastSoftFailRetransmit <= 0) {
@@ -2913,7 +2917,7 @@ class Connection {
      * In general, this is true until either:
      * - CLOSE received and CLOSE sent and our CLOSE is acked
      * - RESET received or sent
-     * - closed on the socket side
+     * - closed on the socket side.
      * @return the is connected
      */
     public boolean getIsConnected() {return _connected.get();}
@@ -3083,7 +3087,7 @@ class Connection {
     }
 
     /**
-     *  Cancel and remove all packets awaiting ack
+     * Cancel and remove all packets awaiting ack.
      */
     private void killOutstandingPackets() {
         synchronized (_outboundPacketsLock) {
@@ -3096,12 +3100,12 @@ class Connection {
     }
 
     /**
-     *  Schedule the end of the TIME-WAIT state,
-     *  but only if not previously scheduled.
-     *  Must call either this or disconnectComplete()
+     * Schedule the end of the TIME-WAIT state,
+     * but only if not previously scheduled.
+     * Must call either this or disconnectComplete().
      *
-     *  @return true if a new event was scheduled; false if already scheduled
-     *  @since 0.9.9
+     * @return true if a new event was scheduled; false if already scheduled
+     * @since 0.9.9
      */
     private boolean scheduleDisconnectEvent() {
         if (!_disconnectScheduledOn.compareAndSet(0, _context.clock().now())) {return false;}
@@ -3128,10 +3132,10 @@ class Connection {
     }
 
     /**
-     *  Called from SchedulerImpl
+     * Called from SchedulerImpl.
      *
-     *  @param msToWait wait in ms before the ConEvent releases its waiters
-     *  @since 0.9.23 moved here so we can use our timer
+     * @param msToWait wait in ms before the ConEvent releases its waiters
+     * @since 0.9.23 moved here so we can use our timer
      */
     public void scheduleConnectionEvent(long msToWait) {
         _timer.addEvent(_connectionEvent, msToWait);
@@ -3247,11 +3251,11 @@ class Connection {
     }
 
     /**
-     *  Re-arm the slot-release claim for a new generation, called by
-     *  ConnectionManager.assignReceiveStreamId() when a pooled connection
-     *  binds a fresh reservation token: the next teardown of this object must
-     *  be able to claim again.
-     *  @since 0.9.71+
+     * Re-arm the slot-release claim for a new generation, called by
+     * {@link net.i2p.client.streaming.impl.ConnectionManager#assignReceiveStreamId} when a pooled connection
+     * binds a fresh reservation token: the next teardown of this object must
+     * be able to claim again.
+     * @since 0.9.71+
      */
     void resetSlotRelease() {
         _slotReleaseClaimed.set(false);
@@ -3447,14 +3451,14 @@ class Connection {
     }
 
     /**
-     *  If the next send time is currently &gt;= 0 (i.e. not "never"),
-     *  this may make the next time sooner but will not make it later.
-     *  If the next send time is currently &lt; 0 (i.e. "never"),
-     *  this will set it to the time specified, but not later than
-     *  options.getSendAckDelay() from now (1000 ms)
+     * If the next send time is currently &gt;= 0 (i.e. not "never"),
+     * this may make the next time sooner but will not make it later.
+     * If the next send time is currently &lt; 0 (i.e. "never"),
+     * this will set it to the time specified, but not later than
+     * options.getSendAckDelay() from now (1000 ms).
      *
-     *  @param when the desired send time in ms since the epoch, or &lt; 0 for
-     *              "never"
+     * @param when the desired send time in ms since the epoch, or &lt; 0 for
+     * "never"
      */
     public void setNextSendTime(long when) {
         synchronized(_nextSendLock) {
@@ -3651,7 +3655,7 @@ if (!on) {
     }
 
     /**
-     * For ConnectionPacketHandler.adjustWindow()
+     * For {@link net.i2p.client.streaming.impl.ConnectionPacketHandler#adjustWindow}.
      *
      * @return the monitor guarding the outbound window map
      * @since 0.9.71
@@ -4120,7 +4124,7 @@ if (!on) {
         /** Whether the timer is active. */
         private boolean _scheduled;
 
-        /** Retransmit event */
+        /** Retransmit event. */
         RetransmitEvent() {super(_timer);}
 
         /**
@@ -4648,7 +4652,7 @@ synchronized boolean checkRetransmitStall() {
         /** Timestamp of the last ACK DUP mark. */
         private long _created;
 
-        /** Ack dup event */
+        /** Ack dup event. */
         AckDupEvent() {
             super(_timer);
         }
@@ -4689,7 +4693,7 @@ synchronized boolean checkRetransmitStall() {
      * Notify waiters to reschedule the connection event.
      */
     class ConEvent extends SimpleTimer2.TimedEvent {
-        /** Con event */
+        /** Con event. */
         ConEvent() {super();}
         /**
          * Notify event waiters when the timer fires.
@@ -4711,7 +4715,7 @@ synchronized boolean checkRetransmitStall() {
     /**
      * Number of retransmits sent directly per RTO fire before remaining
      * retransmits are paced, to avoid flooding the I2CP queue with a
-     * single-timer-fire burst. @since 0.9.71+
+     * single-timer-fire burst. @since 0.9.71+.
      */
     static final int IMMEDIATE_RETX_BURST = 4;
 
@@ -4719,7 +4723,7 @@ synchronized boolean checkRetransmitStall() {
      * Once a packet has been transmitted this many times, always send it
      * directly instead of pacing it: a repeatedly-resent packet is
      * recovery-critical and must not starve behind a stale pacing rate in the
-     * paced queue (hard drain deadline). @since 0.9.71+
+     * paced queue (hard drain deadline). @since 0.9.71+.
      */
     static final int MAX_PACED_RETX = 4;
 
@@ -4793,7 +4797,7 @@ synchronized boolean checkRetransmitStall() {
          * <p>
          * Don't synchronize this, deadlock with ackPackets-&gt;ackReceived-&gt;SimpleTimer2.cancel
          * <p>Historical note on the lock warning: SimpleTimer2 now invokes
-         * TimedEvent.timeReached()/run() outside any SimpleTimer2 monitor
+         * {@code TimedEvent.timeReached()}/run() outside any SimpleTimer2 monitor
          * (only checkAndPrepareRun/updateStateAfterRun are brief synchronized
          * scopes), so the called-from-across-the-wire locks taken in
          * ackPackets() and here cannot form a monitor cycle with this thread.

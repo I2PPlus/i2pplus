@@ -14,7 +14,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * <p>
  * As of release 0.8.7, uses java.security.MessageDigest by default.
  * As of release 0.9.25, uses only MessageDigest.
- * GNU-Crypto gnu.crypto.hash.Sha256Standalone
+ * GNU-Crypto {@code gnu.crypto.hash.Sha256Standalone}
  * is removed as of 0.9.28.
  * As of release 0.9.71, the digest pool is lock-free (ConcurrentLinkedQueue)
  * instead of a LinkedBlockingQueue.
@@ -46,7 +46,7 @@ public final class SHA256Generator {
 
     /**
      * Number of elements in {@link #_digests}, maintained explicitly because
-     * {@link ConcurrentLinkedQueue#size()} is O(n). May drift by a constant
+     * {@link ConcurrentLinkedQueue#size} is O(n). May drift by a constant
      * factor under races, which does not matter for a reuse bound.
      *
      * @since 0.9.71+
@@ -141,8 +141,8 @@ public final class SHA256Generator {
      * Release a digest back to the pool, reset so that no hashed data survives
      * in a pooled digest between uses.
      * <p>
-     * The digest must be SHA-256, i.e. one {@link #acquire()} returned. That
-     * invariant is not re-checked: {@link MessageDigest#getAlgorithm()} is a
+     * The digest must be SHA-256, i.e. one {@link #acquire} returned. That
+     * invariant is not re-checked: {@link MessageDigest#getAlgorithm} is a
      * provider-dependent string comparison on a hot path.
      *
      * @param digest must be SHA-256

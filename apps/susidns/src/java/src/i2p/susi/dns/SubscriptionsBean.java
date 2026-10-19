@@ -53,6 +53,8 @@ public class SubscriptionsBean extends BaseBean {
     }
 
     /**
+     * The subscriptions file.
+     *
      * @since 0.9.13
       */
     private File subsFile() {return new File(addressbookDir(), SUBS_FILE);}

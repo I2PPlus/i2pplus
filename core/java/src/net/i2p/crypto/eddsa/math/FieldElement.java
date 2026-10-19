@@ -4,14 +4,14 @@ import java.io.Serializable;
 
 /**
  * Represents an element in a finite field of order $2^{b}-3$.
- * Note: concrete subclasses must implement hashCode() and equals()
+ * Note: concrete subclasses must implement hashCode() and equals().
  *
  * @since 0.9.15
  */
 public abstract class FieldElement implements Serializable {
     private static final long serialVersionUID = 1239527465875676L;
 
-    /** The field this element belongs to */
+    /** The field this element belongs to. */
     protected final Field f;
 
     /**

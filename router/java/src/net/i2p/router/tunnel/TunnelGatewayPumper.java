@@ -32,7 +32,7 @@ import net.i2p.util.SimpleTimer2;
  * - Uses a LinkedBlockingQueue with bounded capacity for backpressure.
  * - Uses a concurrent Set to track backlogged gateways for requeueing.
  * - Non-blocking offer() with timeout prevents I2CP reader stalls.
- * - Gateway drops are tracked via tunnel.pumperQueueFull stat.
+ * - Gateway drops are tracked via {@code tunnel.pumperQueueFull} stat.
  */
 class TunnelGatewayPumper implements Runnable {
     private final RouterContext _context;
@@ -61,7 +61,7 @@ class TunnelGatewayPumper implements Runnable {
 
     private static final AtomicInteger _threadNum = new AtomicInteger();
 
-    /** Running instance for dynamic resize from Tuner */
+    /** Running instance for dynamic resize from Tuner. */
     private static volatile TunnelGatewayPumper _instance;
 
     private volatile int _pumpers;
@@ -442,7 +442,7 @@ class TunnelGatewayPumper implements Runnable {
         }
 
         /**
-         * No-op receiver for poison pill to avoid null pointer issues
+         * No-op receiver for poison pill to avoid null pointer issues.
          */
         private static class NoOpReceiver implements Receiver {
             @Override

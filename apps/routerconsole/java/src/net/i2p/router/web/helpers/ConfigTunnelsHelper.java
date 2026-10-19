@@ -19,9 +19,7 @@ import net.i2p.router.web.HelperBase;
  * @since 0.9.33
  */
 public class ConfigTunnelsHelper extends HelperBase {
-    /**
-     *  Default constructor.
-     */
+    /** Creates a helper for the tunnels config page. */
     public ConfigTunnelsHelper() { super(); }
     private static final String HOP = "hop";
     private static final String TUNNEL = "tunnel";
@@ -103,8 +101,8 @@ public class ConfigTunnelsHelper extends HelperBase {
     }
 
     /**
-     *  Sort tunnels by the name of the tunnel
-     *  @since 0.9.57
+     * Sort tunnels by the name of the tunnel.
+     * @since 0.9.57
      */
     private class TPComparator implements Comparator<TunnelPoolSettings> {
          private final Collator _comp = Collator.getInstance();
@@ -117,7 +115,7 @@ public class ConfigTunnelsHelper extends HelperBase {
     }
 
     /**
-     * Get display name for the tunnel
+     * Get display name for the tunnel.
      * @return the tunnel name
      * @since 0.9.57
      */
@@ -297,7 +295,7 @@ public class ConfigTunnelsHelper extends HelperBase {
         buf.append("</tbody>");
     }
 
-    /** to fool xgettext so the following isn't tagged */
+    /** To fool xgettext so the following isn't tagged. */
     private static final String DUMMY2 = "{0} ";
 
     private void renderOptions(StringBuilder buf, int min, int max, int now, String prefix, String name) {
@@ -310,5 +308,5 @@ public class ConfigTunnelsHelper extends HelperBase {
         }
     }
 
-    /** dummy for tagging */
+    /** Dummy for tagging. */
 }

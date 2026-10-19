@@ -12,8 +12,8 @@ import net.i2p.client.I2PSession;
 import org.junit.Test;
 
 /**
- * Tests the snapshot contract of {@link I2PTunnel#getTasks()} and
- * {@link I2PTunnel#getSessions()}: both are documented to return an
+ * Tests the snapshot contract of {@link I2PTunnel#getTasks} and
+ * {@link I2PTunnel#getSessions}: both are documented to return an
  * unmodifiable, non-null copy, so a caller can neither reach nor reorder
  * the tunnel's live collections through the returned list.
  *

@@ -27,7 +27,6 @@ import java.util.Vector;
  * <p>This class is used by UPnP services to manage collections of action arguments, enabling proper
  * XML description generation and action invocation parameter handling.
  *
- * @author Satoshi Konno
  */
 public class ArgumentList extends Vector<Argument> {
     ////////////////////////////////////////////////

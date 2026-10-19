@@ -13,7 +13,7 @@ import java.util.Properties;
 
 /**
  * Class for creating and loading I2P repliable datagrams version 3.
- * Ref: Proposal 163
+ * Ref: Proposal 163.
  * <pre>
  * +----+----+----+----+----+----+----+----+
  * |                                       |
@@ -49,7 +49,7 @@ public class Datagram3 {
     private static final byte VERSION = 3;
 
     /**
-     * As returned from load()
+     * As returned from load().
      */
     private Datagram3(Hash dest, byte[] data, Properties options) {
         _from = dest;
@@ -136,7 +136,7 @@ public class Datagram3 {
 
     /**
      * The payload carried by an I2P repliable datagram (previously loaded
-     * with the load() method)
+     * with the load() method).
      *
      * @return A byte array containing the datagram payload
      */
@@ -146,7 +146,7 @@ public class Datagram3 {
 
     /**
      * The sender of an I2P repliable datagram (previously loaded with the
-     * load() method)
+     * load() method).
      *
      * @return The Hash of the Destination of the I2P repliable datagram sender
      */
@@ -156,7 +156,7 @@ public class Datagram3 {
 
     /**
      * The options of an I2P repliable datagram (previously loaded with the
-     * load() method), if any
+     * load() method), if any.
      *
      * @return options or null
      */

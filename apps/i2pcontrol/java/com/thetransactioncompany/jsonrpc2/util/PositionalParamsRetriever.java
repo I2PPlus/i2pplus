@@ -13,10 +13,10 @@ import java.util.Map;
  * (number, string, etc.) and whether the parameter is mandatory or optional:
  *
  * <ul>
- *     <li>{@code getXXX(param_pos)} for mandatory parameters, where
- *         {@code XXX} is the expected parameter type.
- *     <li>{@code getOptXXX(param_pos, default_value)} for optional parameters,
- *         specifying a default value.
+ * <li>{@code getXXX(param_pos)} for mandatory parameters, where
+ * {@code XXX} is the expected parameter type.
+ * <li>{@code getOptXXX(param_pos, default_value)} for optional parameters,
+ * specifying a default value.
  * </ul>
  *
  * <p>There are also generic getter methods that let you do the type conversion
@@ -63,9 +63,7 @@ import java.util.Map;
  *         JSONRPC2Response response = new JSONRPC2Response(e, null);
  * }
  * </pre>
- *
- * @author Vladimir Dzhuvinov
- */
+*/
 public class PositionalParamsRetriever
 	extends ParamsRetriever {
 
@@ -256,6 +254,8 @@ public class PositionalParamsRetriever
 
 
 	/**
+	 * Whether a parameter exists at the position.
+	 *
 	 * @see #hasParam
 	 */
 	@Deprecated
@@ -287,6 +287,8 @@ public class PositionalParamsRetriever
 
 
 	/**
+	 * Throw if no parameter exists at the position.
+	 *
 	 * @see #ensureParam
 	 */
 	@Deprecated
@@ -324,6 +326,8 @@ public class PositionalParamsRetriever
 
 
 	/**
+	 * Throw if the parameter at the position is missing or of the wrong type.
+	 *
 	 * @see #ensureParam(int, Class)
 	 */
 	@Deprecated
@@ -380,6 +384,8 @@ public class PositionalParamsRetriever
 
 
 	/**
+	 * Throw if the parameter at the position fails the given criteria.
+	 *
 	 * @see #ensureParam(int, Class, boolean)
 	 */
 	@Deprecated

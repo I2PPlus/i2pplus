@@ -98,14 +98,14 @@ class Message {
      * The offset within the piece. Used for REQUEST, PIECE, CANCEL and REJECT messages.
      */
     final int begin;
-    /** The data length */
+    /** The data length. */
     final int length;
 
-    /** The data payload. Used for PIECE, BITFIELD and EXTENSION messages */
+    /** The data payload. Used for PIECE, BITFIELD and EXTENSION messages. */
     byte[] data;
-    /** The data offset */
+    /** The data offset. */
     final int off;
-    /** The payload length */
+    /** The payload length. */
     final int len;
 
     // Used to do deferred fetch of data
@@ -132,7 +132,7 @@ class Message {
     private static final ByteCache _cache = ByteCache.getInstance(16, BUFSIZE);
 
     /**
-     * For types KEEP_ALIVE, CHOKE, UNCHOKE, INTERESTED, UNINTERESTED, HAVE_ALL, HAVE_NONE
+     * For types KEEP_ALIVE, CHOKE, UNCHOKE, INTERESTED, UNINTERESTED, HAVE_ALL, HAVE_NONE.
      *
      * @param type the message type
      * @since 0.9.32
@@ -142,7 +142,7 @@ class Message {
     }
 
     /**
-     * For types HAVE, PORT, SUGGEST, ALLOWED_FAST
+     * For types HAVE, PORT, SUGGEST, ALLOWED_FAST.
      *
      * @param type the message type
      * @param piece the zero-based index of the piece the message refers to
@@ -153,7 +153,7 @@ class Message {
     }
 
     /**
-     * For types REQUEST, REJECT, CANCEL
+     * For types REQUEST, REJECT, CANCEL.
      *
      * @param type the message type
      * @param piece the zero-based index of the piece requested, rejected or cancelled
@@ -166,7 +166,7 @@ class Message {
     }
 
     /**
-     * For type BITFIELD
+     * For type BITFIELD.
      *
      * @param data the encoded bitfield, sent as the message payload
      * @since 0.9.32
@@ -176,7 +176,7 @@ class Message {
     }
 
     /**
-     * For type EXTENSION
+     * For type EXTENSION.
      *
      * @param id the extended message id carried in the extension header
      * @param data the extension payload
@@ -187,7 +187,7 @@ class Message {
     }
 
     /**
-     * For type PIECE with deferred data
+     * For type PIECE with deferred data.
      *
      * @param piece the zero-based index of the piece being sent
      * @param begin the offset within the piece where the data starts, in bytes
@@ -200,6 +200,8 @@ class Message {
     }
 
     /**
+     * Creates a peer protocol message from its fields.
+     *
      * @since 0.9.32
      */
     private Message(
@@ -303,7 +305,7 @@ class Message {
     /**
      * Ensure the deferred PIECE data is available before sending.
      *
-     * <p>Exactly one execution site runs the loader, decided by {@link #claimLoad()}: either this
+     * <p>Exactly one execution site runs the loader, decided by {@link #claimLoad}: either this
      * sender thread (inline fallback, the pre-prefetch behavior) or PeerConnectionOut's prefetch
      * task. If a prefetch is in flight, wait briefly for it rather than duplicating the disk read;
      * on timeout or discard the message is dropped and the peer will re-request. The loader always
@@ -324,7 +326,7 @@ class Message {
     }
 
     /**
-     * Invoke the deferred loader. Must be called only after winning {@link #claimLoad()};
+     * Invoke the deferred loader. Must be called only after winning {@link #claimLoad};
      * executes with no locks held so slow reads never block purge paths.
      *
      * @return the loaded buffer, or null on error (a REJECT has already been queued upstream)
@@ -367,7 +369,7 @@ class Message {
     }
 
     /**
-     * Deliver the result of a loader run started after {@link #claimLoad()} returned true.
+     * Deliver the result of a loader run started after {@link #claimLoad} returned true.
      * Stores the buffer unless the message was discarded meanwhile, in which case the buffer
      * is released immediately; failure is recorded so the sender drops the message.
      *
@@ -445,7 +447,7 @@ class Message {
     }
 
     /**
-     * Return a cache-acquired buffer to the pool, mirroring Storage.getPiece()'s acquire
+     * Return a cache-acquired buffer to the pool, mirroring {@link org.klomp.snark.Storage#getPiece}'s acquire
      * condition; non-cache-backed partial-read buffers are simply dropped for GC.
      *
      * @param ba the buffer to release

@@ -12,7 +12,7 @@ public class StreamSinkTestClient {
     public StreamSinkTestClient() {}
 
     /**
-     * Sends each named file through a stream and waits for the receiver to finish
+     * Sends each named file through a stream and waits for the receiver to finish.
      *
      * @param args the files to send; when empty a hard-coded library file is sent instead
      */

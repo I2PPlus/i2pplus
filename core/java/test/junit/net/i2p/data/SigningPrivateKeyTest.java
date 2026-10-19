@@ -18,9 +18,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.EOFException;
 
 /**
- * Test harness for loading / storing SigningPrivateKey objects
+ * Test harness for loading / storing SigningPrivateKey objects.
  *
- * @author jrandom
  */
 public class SigningPrivateKeyTest extends StructureTest {
 

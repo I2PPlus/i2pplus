@@ -73,7 +73,6 @@ import net.i2p.crypto.SigType;
  *   <li><strong>Careful Usage:</strong> Protection is not foolproof against all attacks</li>
  * </ul>
  *
- * @author zzz
  * @since 0.8.2
  */
 public abstract class DatabaseEntry extends DataStructureImpl {
@@ -257,7 +256,7 @@ public abstract class DatabaseEntry extends DataStructureImpl {
 
     /**
      * Routing key for the structure using the current modifier in the RoutingKeyGenerator.
-     * This only calculates a new one when necessary though (if the generator's key modifier changes)
+     * This only calculates a new one when necessary though (if the generator's key modifier changes).
      *
      * @return the routing key
      * @throws IllegalStateException if not in RouterContext
@@ -292,7 +291,7 @@ public abstract class DatabaseEntry extends DataStructureImpl {
     }
 
     /**
-     * Retrieve the proof that the identity stands behind the info here
+     * Retrieve the proof that the identity stands behind the info here.
      *
      * @return the signature, or null if not signed
      */
@@ -301,7 +300,7 @@ public abstract class DatabaseEntry extends DataStructureImpl {
     }
 
     /**
-     * Configure the proof that the entity stands behind the info here
+     * Configure the proof that the entity stands behind the info here.
      *
      * @param signature the signature to set
      * @throws IllegalStateException if already signed
@@ -312,7 +311,7 @@ public abstract class DatabaseEntry extends DataStructureImpl {
     }
 
     /**
-     * Sign the structure using the supplied signing key
+     * Sign the structure using the supplied signing key.
      *
      * @param key the signing private key
      * @throws IllegalStateException if already signed

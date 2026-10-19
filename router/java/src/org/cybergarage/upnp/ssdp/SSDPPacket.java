@@ -31,7 +31,6 @@ import org.cybergarage.upnp.device.*;
  * advertisement messages, providing convenient access to both network information and message
  * content.
  *
- * @author Satoshi Konno
  * @since 1.0
  */
 public class SSDPPacket {

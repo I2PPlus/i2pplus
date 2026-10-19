@@ -88,6 +88,8 @@ public class MonotoneSplineTest {
     }
 
     /**
+     * Convert the ints to doubles.
+     *
      * @param iv source coordinates
      * @return the values widened to double
      */

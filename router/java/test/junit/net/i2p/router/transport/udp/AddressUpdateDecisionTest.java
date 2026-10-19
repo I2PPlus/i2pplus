@@ -8,8 +8,8 @@ import net.i2p.util.Addresses;
 import org.junit.Test;
 
 /**
- * Pins address-update decision logic extracted from UDPTransport.changeAddress().
- * All helpers are pure static functions in UDPTransport; no router context is
+ * Pins address-update decision logic extracted from {@link net.i2p.router.transport.udp.UDPTransport#changeAddress}.
+ * All helpers are pure static functions in UDPTransport. No router context is
  * required. isLocalAddress() is intentionally not tested here: it depends on
  * real local network interfaces.
  *

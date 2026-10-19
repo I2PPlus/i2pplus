@@ -141,7 +141,7 @@ public class LogSettingsTest extends TestCase {
                     log.shouldLog(Log.WARN));
     }
 
-    /** With no matching entry the class falls back to logger.defaultLevel. */
+    /** With no matching entry the class falls back to {@code logger.defaultLevel}. */
     public void testNoEntryUsesDefaultLevel() throws IOException {
         reread();
         assertFalse("default is ERROR, so INFO must be suppressed", log.shouldLog(Log.INFO));

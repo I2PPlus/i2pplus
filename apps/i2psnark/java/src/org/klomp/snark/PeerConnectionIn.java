@@ -29,17 +29,17 @@ class PeerConnectionIn implements Runnable {
     // in the bitfield message is bigger but it's currently 5000/8 = 625 so don't bother)
     private static final int MAX_MSG_SIZE = Math.max(PeerState.PARTSIZE + 9, MagnetState.CHUNK_SIZE + 100); // 100 for the ext msg dictionary
 
-    /** Flood guard: maximum inbound messages per window, generous to tolerate bursts */
+    /** Flood guard: maximum inbound messages per window, generous to tolerate bursts. */
     private static final int MAX_MESSAGES_PER_WINDOW = 2000;
 
-    /** Flood guard: length of the counting window */
+    /** Flood guard: length of the counting window. */
     private static final long FLOOD_WINDOW_MS = 10 * 1000;
 
     private volatile Thread thread;
     private volatile boolean quit;
     private final boolean isStandalone = !I2PAppContext.getGlobalContext().isRouterContext();
 
-    /** Last rcvd */
+    /** Last rcvd. */
     long lastRcvd;
 
     /**

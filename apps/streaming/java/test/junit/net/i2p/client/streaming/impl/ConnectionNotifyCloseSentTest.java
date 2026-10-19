@@ -15,14 +15,14 @@ import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 
 /**
- * Tests the idempotency contract of {@link Connection#notifyCloseSent()}.
+ * Tests the idempotency contract of {@link Connection#notifyCloseSent}.
  *
  * <p>{@code notifyCloseSent()} records when the CLOSE was handed to the wire via a
  * CAS on an {@code AtomicLong} that starts at 0, so the first call fixes the
  * timestamp and every later call is a no-op. A duplicate notification can only
  * come from a path that bypasses the CLOSE-flag guard in
  * ConnectionDataReceiver (e.g. an ACK-only packet sent by {@code ackImmediately()}
- * after the close), and it must not move {@link Connection#getCloseSentOn()} —
+ * after the close), and it must not move {@link Connection#getCloseSentOn} —
  * the disconnect and resend accounting both treat a nonzero value as "we sent
  * CLOSE first".
  *

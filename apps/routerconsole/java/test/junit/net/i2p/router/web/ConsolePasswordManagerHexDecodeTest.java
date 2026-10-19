@@ -10,7 +10,7 @@ import org.junit.Test;
  * Tests for ConsolePasswordManager.HexDecode()/HexEncode().
  *
  * Regression guard for a past change that delegated hex decoding to
- * DataHelper.fromHexString(), which is a minimum-length, sign-aware
+ * {@code DataHelper.fromHexString()}, which is a minimum-length, sign-aware
  * BigInteger decode. A leading '0' nibble loses a byte (32 stored bytes
  * decode to 31) and a first nibble of 8-f gains an extra 0x00 byte (decodes
  * to 33). PBKDF2 salts and hashes must round-trip at their exact stored

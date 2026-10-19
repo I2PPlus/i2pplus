@@ -24,11 +24,11 @@ public class CRLEntry {
      */
     public CRLEntry() {}
 
-    /** The data payload */
+    /** The data payload. */
     public String data;
-    /** The identifier */
+    /** The identifier. */
     public String id;
-    /** The last updated timestamp */
+    /** The last updated timestamp. */
     public long updated;
 
     @Override

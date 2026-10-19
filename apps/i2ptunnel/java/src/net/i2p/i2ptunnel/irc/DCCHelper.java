@@ -1,7 +1,7 @@
 package net.i2p.i2ptunnel.irc;
 
 /**
- * Hooks to create and maintain DCC client and server tunnels
+ * Hooks to create and maintain DCC client and server tunnels.
  *
  * @since 0.8.9
  */
@@ -15,21 +15,21 @@ public interface DCCHelper {
     public boolean isEnabled();
 
     /**
-     * String to put in the outgoing DCC
+     * String to put in the outgoing DCC.
      *
      * @return the b32 hostname string
      */
     public String getB32Hostname();
 
     /**
-     * Our IP address (taken from the socket), must be IPv4
+     * Our IP address (taken from the socket), must be IPv4.
      *
      * @return the local IP address bytes
      */
     public byte[] getLocalAddress();
 
     /**
-     * An outgoing DCC request
+     * An outgoing DCC request.
      *
      * @param ip local irc client IP
      * @param port local irc client port
@@ -39,7 +39,7 @@ public interface DCCHelper {
     public int newOutgoing(byte[] ip, int port, String type);
 
     /**
-     * An incoming DCC request
+     * An incoming DCC request.
      *
      * @param b32 remote dcc server b32 address
      * @param port remote dcc server I2P port
@@ -49,7 +49,7 @@ public interface DCCHelper {
     public int newIncoming(String b32, int port, String type);
 
     /**
-     * An outgoing RESUME request
+     * An outgoing RESUME request.
      *
      * @param port local DCC client tunnel port
      * @return remote DCC server i2p port or -1 on error
@@ -57,7 +57,7 @@ public interface DCCHelper {
     public int resumeOutgoing(int port);
 
     /**
-     * An incoming RESUME request
+     * An incoming RESUME request.
      *
      * @param port local dcc server I2P port
      * @return local IRC client DCC port or -1 on error
@@ -65,7 +65,7 @@ public interface DCCHelper {
     public int resumeIncoming(int port);
 
     /**
-     * An outgoing ACCEPT response
+     * An outgoing ACCEPT response.
      *
      * @param port local irc client DCC port
      * @return local DCC server i2p port or -1 on error
@@ -73,7 +73,7 @@ public interface DCCHelper {
     public int acceptOutgoing(int port);
 
     /**
-     * An incoming ACCEPT response
+     * An incoming ACCEPT response.
      *
      * @param port remote dcc server I2P port
      * @return local DCC client tunnel port or -1 on error

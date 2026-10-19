@@ -47,9 +47,9 @@ public class TunnelPoolSettings {
      * @since 0.9.68+ last peer exclusions for diversity
      */
     private Set<Hash> _lastPeerExclusions;
-    /** Prefix used to configure the inbound exploratory pool */
+    /** Prefix used to configure the inbound exploratory pool. */
     public static final String      PREFIX_INBOUND_EXPLORATORY = "router.inboundPool.";
-    /** Prefix used to configure the outbound exploratory pool */
+    /** Prefix used to configure the outbound exploratory pool. */
     public static final String      PREFIX_OUTBOUND_EXPLORATORY = "router.outboundPool.";
     /**
      * Pool property naming the client a client pool serves.
@@ -75,7 +75,7 @@ public class TunnelPoolSettings {
      * Pool property for how much the hop count may vary around PROP_LENGTH.
      */
     public static final String      PROP_LENGTH_VARIANCE = "lengthVariance";
-    /** Config property allowing zero-hop tunnels; unreliable, zero hops are always possible */
+    /** Config property allowing zero-hop tunnels; unreliable, zero hops are always possible. */
     public static final String      PROP_ALLOW_ZERO_HOP = "allowZeroHop";
     /**
      * Pool property for whether the pool's tunnels are tested.
@@ -106,11 +106,11 @@ public class TunnelPoolSettings {
      */
     public static final int         DEFAULT_DURATION = 10*60*1000;
     private static final boolean    IS_SLOW = SystemVersion.isSlow();
-    /** Default inbound tunnel length for client pools */
+    /** Default inbound tunnel length for client pools. */
     private static final int        DEFAULT_IB_LENGTH = 3;
     private static final int        DEFAULT_OB_LENGTH = 3;
     private static final int        DEFAULT_LENGTH_VARIANCE = 0;
-    /** Default inbound tunnel length for exploratory pools */
+    /** Default inbound tunnel length for exploratory pools. */
     private static final int        DEFAULT_IB_EXPL_LENGTH = IS_SLOW ? 2 : 3;
     private static final int        DEFAULT_OB_EXPL_LENGTH = IS_SLOW ? 2 : 3;
     private static final int        DEFAULT_IB_EXPL_LENGTH_VARIANCE = IS_SLOW ? 0 : 1;
@@ -175,7 +175,7 @@ public class TunnelPoolSettings {
     }
 
     /**
-     * How many tunnels should be available at all times
+     * How many tunnels should be available at all times.
      *
      * @return the desired quantity
      */
@@ -188,7 +188,7 @@ public class TunnelPoolSettings {
     public void setQuantity(int quantity) { _quantity = quantity; }
 
     /**
-     * How many backup tunnels should be kept waiting in the wings
+     * How many backup tunnels should be kept waiting in the wings.
      *
      * @return the desired backup quantity
      */
@@ -211,14 +211,14 @@ public class TunnelPoolSettings {
     }
 
     /**
-     * How many remote hops should be in the tunnel NOT including us
+     * How many remote hops should be in the tunnel NOT including us.
      *
      * @return 0 to 7
      */
     public int getLength() { return _length; }
 
     /**
-     * How many remote hops should be in the tunnel NOT including us
+     * How many remote hops should be in the tunnel NOT including us.
      *
      * @param length 0 to 7 (not enforced here)
      */
@@ -230,8 +230,8 @@ public class TunnelPoolSettings {
      * As of 0.9.44, same goes for exploratory:
      * Prior to 0.9.35, generally true for client.
      * As of 0.9.35, generally false for client, but true if
-     * getLength() + Math.min(getLengthVariance(), 0) &lt;= 0,
-     * OR if getLengthOverride() == 0
+     * {@link java.lang.Math#min(long, long) getLength() + min(getLengthVariance(), 0)} &lt;= 0,
+     * OR if getLengthOverride() == 0.
      * @return the allow zero hop
      */
     public boolean getAllowZeroHop() {
@@ -279,7 +279,7 @@ public class TunnelPoolSettings {
     /**
      * A temporary length to be used due to network conditions.
      * If less than zero, the standard length should be used.
-     * Unused until 0.8.11
+     * Unused until 0.8.11.
      * @return the length override
      */
     public int getLengthOverride() { return _lengthOverride; }
@@ -287,7 +287,7 @@ public class TunnelPoolSettings {
     /**
      * A temporary length to be used due to network conditions.
      * If less than zero, the standard length will be used.
-     * Unused until 0.8.11
+     * Unused until 0.8.11.
      *
      * @param length the override in hops, or negative for the standard length
      */
@@ -316,10 +316,10 @@ public class TunnelPoolSettings {
 
     /**
      * Other destinations that use the same tunnel (or null if exploratory).
-     * Modifiable, concurrent, not a copy
+     * Modifiable, concurrent, not a copy.
      *
      * @return the live alias set, modifiable and concurrent, or null for an
-     *         exploratory pool
+     * exploratory pool
      * @since 0.9.21
      */
     public Set<Hash> getAliases() {
@@ -399,7 +399,7 @@ public class TunnelPoolSettings {
     public SessionKey getRandomKey() { return _randomKey; }
 
     /**
-     * What user supplied name was given to the client connected (can be null)
+     * What user supplied name was given to the client connected (can be null).
      *
      * @return the nickname, or null if none was supplied
      */
@@ -416,15 +416,15 @@ public class TunnelPoolSettings {
      * to be in the same tunnel
      * (1-4, 0 to disable)
      * <p>
-     * Support removed in the ClientPeerSelector in 0.8.6; restored in 0.9.53
+     * Support removed in the ClientPeerSelector in 0.8.6; restored in 0.9.53.
      *
      * @return 0-4 Number of bytes to match to determine if peers in the same IP range should
-     *         not be in the same tunnel. 0 = disable check; 1 = /8; 2 = /16; 3 = /24; 4 = exact IP match
+     * not be in the same tunnel. 0 = disable check; 1 = /8; 2 = /16; 3 = /24; 4 = exact IP match
      */
     public int getIPRestriction() { return _IPRestriction; }
 
     /**
-     * Outbound message priority - for outbound tunnels only
+     * Outbound message priority - for outbound tunnels only.
      *
      * @return -25 to +30, default 30 for outbound exploratory and 0 for others
      * @since 0.9.4

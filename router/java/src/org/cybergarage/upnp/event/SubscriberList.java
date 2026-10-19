@@ -27,7 +27,6 @@ import java.util.*;
  * subscribed to receive event notifications, enabling efficient broadcast of state variable changes
  * to interested parties.
  *
- * @author Satoshi Konno
  * @since 1.0
  */
 public class SubscriberList extends Vector<Subscriber> {

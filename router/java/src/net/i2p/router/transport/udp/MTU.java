@@ -208,7 +208,7 @@ public class MTU {
     }
 
     /**
-     * CLI test
+     * CLI test.
      * @param args hostnames or IP addresses of interfaces to report MTU for;
               with no arguments, every local interface is reported
      */
@@ -264,7 +264,7 @@ public class MTU {
         }
     }
 
-    /** Comparator for InetAddress by host address */
+    /** Comparator for InetAddress by host address. */
     private static class IAComparator implements Comparator<InetAddress>, Serializable {
         @Override
         public int compare(InetAddress l, InetAddress r) {

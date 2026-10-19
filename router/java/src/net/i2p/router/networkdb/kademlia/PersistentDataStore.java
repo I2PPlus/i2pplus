@@ -161,7 +161,7 @@ public class PersistentDataStore extends TransientDataStore {
     public DatabaseEntry get(Hash key) {return get(key, true);}
 
     /**
-     * Prepare for having only a partial set in memory and the rest on disk
+     * Prepare for having only a partial set in memory and the rest on disk.
      * @param persist if false, call super only, don't access disk
      */
     @Override
@@ -1153,7 +1153,7 @@ public class PersistentDataStore extends TransientDataStore {
     }
 
     /**
-     * Migrate from two-level to one-level directory structure
+     * Migrate from two-level to one-level directory structure.
      * @since 0.9.5
      */
     private static void unmigrate(File dbdir) {
@@ -1170,7 +1170,7 @@ public class PersistentDataStore extends TransientDataStore {
     }
 
     /**
-     * Migrate from one-level to two-level directory structure
+     * Migrate from one-level to two-level directory structure.
      * @since 0.9.5
      */
     private static void migrate(File dbdir, File[] files) {
@@ -1219,7 +1219,7 @@ public class PersistentDataStore extends TransientDataStore {
     }
 
     /**
-     * Package private for installer BundleRouterInfos
+     * Package private for installer BundleRouterInfos.
      *
      * @param filename the routerinfo filename, including the prefix and suffix added by getRouterInfoFile()
      * @return the hash encoded in the name, or null if the name is malformed or the key does not decode
@@ -1239,7 +1239,7 @@ public class PersistentDataStore extends TransientDataStore {
         } catch (RuntimeException e) {return null;}
     }
 
-    /** Remove file */
+    /** Remove file. */
     private void removeFile(Hash key, File dir) {
         String riName = getRouterInfoName(key);
         File f = new File(dir, riName);

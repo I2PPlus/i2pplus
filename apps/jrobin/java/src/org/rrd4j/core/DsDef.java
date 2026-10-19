@@ -17,7 +17,6 @@ import org.rrd4j.DsType;
  * <p>For the complete explanation of all source definition parameters, see RRDTool's <a
  * href="http://oss.oetiker.ch/rrdtool/doc/rrdcreate.en.html" target="man">rrdcreate man page</a>.
  *
- * @author Sasa Markovic
  */
 public class DsDef {
     /** Force zeros for NaNs suffix */

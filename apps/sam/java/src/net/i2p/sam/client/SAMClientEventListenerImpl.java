@@ -3,7 +3,7 @@ package net.i2p.sam.client;
 import java.util.Properties;
 
 /**
- * Basic noop client event listener
+ * Basic noop client event listener.
  */
 public class SAMClientEventListenerImpl implements SAMReader.SAMClientEventListener {
     /**

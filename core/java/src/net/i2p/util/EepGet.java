@@ -40,139 +40,139 @@ import net.i2p.data.DataHelper;
  * [-n #retries]
  * [-o outputFile]
  * [-m markSize lineLen]
- * url
+ * url.
  */
 @SuppressWarnings("PMD.CloseResource")
 public class EepGet {
-    /** I2P application context for configuration, logging, and random number generation */
+    /** I2P application context for configuration, logging, and random number generation. */
     protected final I2PAppContext _context;
-    /** Logger for this instance */
+    /** Logger for this instance. */
     protected final Log _log;
-    /** Fixed retry delay in ms, -1 selects the jittered default @since 0.9.71+ */
+    /** Fixed retry delay in ms, -1 selects the jittered default @since 0.9.71+. */
     protected final long _retryDelayMs;
-    /** Whether to route requests through an HTTP proxy */
+    /** Whether to route requests through an HTTP proxy. */
     protected final boolean _shouldProxy;
-    /** Proxy hostname or IP address */
+    /** Proxy hostname or IP address. */
     protected final String _proxyHost;
-    /** Proxy port number */
+    /** Proxy port number. */
     protected final int _proxyPort;
-    /** Maximum number of retry attempts per fetch */
+    /** Maximum number of retry attempts per fetch. */
     protected final int _numRetries;
     /**
      * Minimum acceptable response size in bytes, -1 signifies unlimited,
-     * applied both against whole responses and chunks
+     * applied both against whole responses and chunks.
      */
     private final long _minSize;
     /**
      * Maximum acceptable response size in bytes, -1 signifies unlimited,
-     * applied both against whole responses and chunks
+     * applied both against whole responses and chunks.
      */
     private final long _maxSize;
-    /** Path to the output file for saving the fetched content */
+    /** Path to the output file for saving the fetched content. */
     protected final String _outputFile;
-    /** Output stream destination, overrides outputFile when non-null */
+    /** Output stream destination, overrides outputFile when non-null. */
     protected final OutputStream _outputStream;
-    /** The URL we were asked to fetch */
+    /** The URL we were asked to fetch. */
     protected final String _url;
-    /** The URL we actually fetch from (may differ from _url in case of redirect) */
+    /** The URL we actually fetch from (may differ from _url in case of redirect). */
     protected String _actualURL;
-    /** POST data as a string body (for application/x-www-form-urlencoded) */
+    /** POST data as a string body (for application/x-www-form-urlencoded). */
     private String _postData;
-    /** POST data as raw binary bytes */
+    /** POST data as raw binary bytes. */
     private byte[] _postBinaryData;
-    /** POST data read from a file */
+    /** POST data read from a file. */
     private File _postDataFile;
-    /** Whether to allow caching of the fetched response */
+    /** Whether to allow caching of the fetched response. */
     private boolean _allowCaching;
-    /** Registered status listeners for progress callbacks */
+    /** Registered status listeners for progress callbacks. */
     protected final List<StatusListener> _listeners;
-    /** Additional HTTP headers to include in the request */
+    /** Additional HTTP headers to include in the request. */
     protected List<String> _extraHeaders;
 
-    /** Whether to continue fetching; set false to abort */
+    /** Whether to continue fetching; set false to abort. */
     protected volatile boolean _keepFetching;
     /**
      * The socket connection to the proxy or the target server (if not proxied).
-     * Warning - null when extended by I2PSocketEepGet
+     * Warning - null when extended by I2PSocketEepGet.
      */
     protected Socket _proxy;
-    /** Output stream to the proxy/server socket */
+    /** Output stream to the proxy/server socket. */
     protected OutputStream _proxyOut;
-    /** Input stream from the proxy/server socket */
+    /** Input stream from the proxy/server socket. */
     protected InputStream _proxyIn;
-    /** Output stream for writing fetched data (file or pipe) */
+    /** Output stream for writing fetched data (file or pipe). */
     protected OutputStream _out;
-    /** Total bytes transferred across all attempts, including resumed content */
+    /** Total bytes transferred across all attempts, including resumed content. */
     protected long _alreadyTransferred;
-    /** Body bytes transferred in the current fetch(), summed across attempts */
+    /** Body bytes transferred in the current fetch(), summed across attempts. */
     protected long _bytesTransferred;
-    /** Remaining bytes on the current attempt, -1 if unknown (chunked or no Content-Length) */
+    /** Remaining bytes on the current attempt, -1 if unknown (chunked or no Content-Length). */
     protected long _bytesRemaining;
-    /** Zero-based attempt counter for the current fetch; read by the watchdog command */
+    /** Zero-based attempt counter for the current fetch; read by the watchdog command. */
     protected volatile int _currentAttempt;
-    /** HTTP response status code, -1 if no response received */
+    /** HTTP response status code, -1 if no response received. */
     protected volatile int _responseCode = -1;
-    /** HTTP response status text (e.g. "OK", "Not Found") */
+    /** HTTP response status text (e.g. "OK", "Not Found"). */
     protected String _responseText;
-    /** Whether to write error response bodies to the output */
+    /** Whether to write error response bodies to the output. */
     protected volatile boolean _shouldWriteErrorToOutput;
-    /** ETag received from the server (for conditional requests) */
+    /** ETag received from the server (for conditional requests). */
     protected String _etag;
-    /** Last-Modified header received from the server */
+    /** Last-Modified header received from the server. */
     protected String _lastModified;
-    /** Original ETag passed in constructor, preserved across redirects */
+    /** Original ETag passed in constructor, preserved across redirects. */
     protected final String _etagOrig;
-    /** Original Last-Modified passed in constructor, preserved across redirects */
+    /** Original Last-Modified passed in constructor, preserved across redirects. */
     protected final String _lastModifiedOrig;
-    /** Whether the response is using chunked transfer encoding */
+    /** Whether the response is using chunked transfer encoding. */
     protected volatile boolean _encodingChunked;
-    /** Whether the server returned 304 Not Modified */
+    /** Whether the server returned 304 Not Modified. */
     protected volatile boolean _notModified;
-    /** Content-Type header value from the response */
+    /** Content-Type header value from the response. */
     protected String _contentType;
-    /** Server header value from the response */
+    /** Server header value from the response. */
     protected String _server;
-    /** Status header value from the response */
+    /** Status header value from the response. */
     protected String _status;
-    /** Transfer-Encoding header value from the response */
+    /** Transfer-Encoding header value from the response. */
     protected String _transferEncoding;
-    /** Content-Encoding header value from the response */
+    /** Content-Encoding header value from the response. */
     protected String _contentEncoding;
-    /** Content-Language header value from the response */
+    /** Content-Language header value from the response. */
     protected String _contentLanguage;
-    /** Cache-Control header value from the response */
+    /** Cache-Control header value from the response. */
     protected String _cacheControl;
-    /** Accept-Ranges header value from the response */
+    /** Accept-Ranges header value from the response. */
     protected String _acceptRanges;
-    /** Vary header value from the response */
+    /** Vary header value from the response. */
     protected String _vary;
-    /** Expires header value from the response */
+    /** Expires header value from the response. */
     protected String _expiryDate;
-    /** Set-Cookie header value from the response */
+    /** Set-Cookie header value from the response. */
     protected String _cookie;
-    /** Referrer-Policy header value from the response */
+    /** Referrer-Policy header value from the response. */
     protected String _referrerPolicy;
-    /** X-Frame-Options header value from the response */
+    /** X-Frame-Options header value from the response. */
     protected String _xframeOptions;
-    /** Content-Security-Policy header value from the response */
+    /** Content-Security-Policy header value from the response. */
     protected String _csp;
-    /** X-XSS-Protection header value from the response */
+    /** X-XSS-Protection header value from the response. */
     protected String _xssProtection;
-    /** X-Content-Type-Options header value from the response */
+    /** X-Content-Type-Options header value from the response. */
     protected String _xContentTypeOptions;
-    /** X-Powered-By header value from the response */
+    /** X-Powered-By header value from the response. */
     protected String _xPoweredBy;
-    /** Content-Range header value from the response, for validating 206/416 resumes */
+    /** Content-Range header value from the response, for validating 206/416 resumes. */
     protected String _contentRange;
-    /** Whether the current transfer attempt failed (non-2xx response code) */
+    /** Whether the current transfer attempt failed (non-2xx response code). */
     protected volatile boolean _transferFailed;
-    /** Whether the fetch was aborted due to timeout or user request */
+    /** Whether the fetch was aborted due to timeout or user request. */
     protected volatile boolean _aborted;
-    /** Timeout in ms for receiving the HTTP response headers */
+    /** Timeout in ms for receiving the HTTP response headers. */
     protected volatile int _fetchHeaderTimeout;
-    /** Total timeout in ms for the entire fetch operation */
+    /** Total timeout in ms for the entire fetch operation. */
     protected volatile int _fetchTotalTimeout;
-    /** Inactivity timeout in ms between data packets */
+    /** Inactivity timeout in ms between data packets. */
     protected volatile int _fetchInactivityTimeout;
     /**
      * Generation of the current fetch() call, incremented at each entry so a
@@ -181,37 +181,37 @@ public class EepGet {
      */
     private volatile int _fetchGeneration;
     /**
-     * Absolute deadline (System.currentTimeMillis()) for the whole fetch
+     * Absolute deadline ({@link java.lang.System#currentTimeMillis}) for the whole fetch
      * operation, or 0 for none. Set once at fetch() entry.
      * @since 0.9.71+
      */
     private volatile long _fetchDeadlineMs;
-    /** Maximum number of complete (zero-byte) failures before giving up */
+    /** Maximum number of complete (zero-byte) failures before giving up. */
     protected volatile int _maxCompleteFails;
-    /** Counter tracking the number of HTTP redirects followed */
+    /** Counter tracking the number of HTTP redirects followed. */
     protected AtomicInteger _redirects;
-    /** Location header value from redirect or 407 proxy auth response */
+    /** Location header value from redirect or 407 proxy auth response. */
     protected String _redirectLocation;
-    /** Whether the response body is gzip-compressed */
+    /** Whether the response body is gzip-compressed. */
     protected boolean _isGzippedResponse;
-    /** IOException from the background decompressor thread, if any */
+    /** IOException from the background decompressor thread, if any. */
     protected IOException _decompressException;
 
-    /** Authentication state for proxy digest/basic auth; created via addAuthorization() */
+    /** Authentication state for proxy digest/basic auth; created via addAuthorization(). */
     protected AuthState _authState;
 
     /**
      * Default User-Agent header value.
-     * This will be replaced by the HTTP Proxy if we are using it
+     * This will be replaced by the HTTP Proxy if we are using it.
      */
     protected static final String USER_AGENT = "Wget/1.11.4";
-    /** Property name for connect timeout configuration */
+    /** Property name for connect timeout configuration. */
     static final String PROP_CONNECT_TIMEOUT = "eepget.connectTimeout";
-    /** Property name for inactivity timeout configuration */
+    /** Property name for inactivity timeout configuration. */
     static final String PROP_INACTIVITY_TIMEOUT = "eepget.inactivityTimeout";
-    /** Property name for max complete fails configuration */
+    /** Property name for max complete fails configuration. */
     static final String PROP_MAX_COMPLETE_FAILS = "eepget.maxCompleteFails";
-    /** Property name for default retries configuration */
+    /** Property name for default retries configuration. */
     static final String PROP_DEFAULT_RETRIES = "eepget.defaultRetries";
     /**
      * Property name for the fixed retry delay in milliseconds.
@@ -220,19 +220,19 @@ public class EepGet {
      * @since 0.9.71+
      */
     static final String PROP_RETRY_DELAY = "eepget.retryDelayMs";
-    /** Default connect timeout in milliseconds (90 seconds) */
+    /** Default connect timeout in milliseconds (90 seconds). */
     protected static final int DEFAULT_CONNECT_TIMEOUT = 90*1000;
-    /** Default inactivity timeout in milliseconds (5 minutes) */
+    /** Default inactivity timeout in milliseconds (5 minutes). */
     protected static final int DEFAULT_INACTIVITY_TIMEOUT = 5*60*1000;
-    /** Maximum times to try without getting any data at all, even if numRetries is higher @since 0.7.14 */
+    /** Maximum times to try without getting any data at all, even if numRetries is higher @since 0.7.14. */
     protected static final int DEFAULT_MAX_COMPLETE_FAILS = 20;
-    /** Default number of retry attempts */
+    /** Default number of retry attempts. */
     protected static final int DEFAULT_NUM_RETRIES = 10;
-    /** Base retry delay in milliseconds when the jittered default is used @since 0.9.71+ */
+    /** Base retry delay in milliseconds when the jittered default is used @since 0.9.71+. */
     protected static final int DEFAULT_RETRY_DELAY = 5*1000;
-    /** Maximum additional jitter in milliseconds added to the base retry delay @since 0.9.71+ */
+    /** Maximum additional jitter in milliseconds added to the base retry delay @since 0.9.71+. */
     protected static final int DEFAULT_RETRY_JITTER = 10*1000;
-    /** Data-phase stall abort message, thrown when the SocketTimeout watchdog fires mid-body @since 0.9.71+ */
+    /** Data-phase stall abort message, thrown when the SocketTimeout watchdog fires mid-body @since 0.9.71+. */
     private static final String MSG_DATA_TIMEOUT = "Timed out reading the HTTP data";
     /**
      * Suffix of the sidecar marker file recording that the output file holds
@@ -242,9 +242,17 @@ public class EepGet {
      */
     static final String GZIP_PARTIAL_MARKER_SUFFIX = ".i2pgz";
 
-    /** @deprecated use DEFAULT_CONNECT_TIMEOUT */
+    /**
+     * Deprecated, use DEFAULT_CONNECT_TIMEOUT.
+     *
+     * @deprecated use DEFAULT_CONNECT_TIMEOUT
+     */
     protected static final int CONNECT_TIMEOUT = DEFAULT_CONNECT_TIMEOUT;
-    /** @deprecated use DEFAULT_INACTIVITY_TIMEOUT */
+    /**
+     * Deprecated, use DEFAULT_INACTIVITY_TIMEOUT.
+     *
+     * @deprecated use DEFAULT_INACTIVITY_TIMEOUT
+     */
     protected static final int INACTIVITY_TIMEOUT = DEFAULT_INACTIVITY_TIMEOUT;
 
     /**
@@ -468,10 +476,10 @@ public class EepGet {
      * command line; it comes from the eepget.connectTimeout property, and the
      * -t option sets the inactivity timeout instead (eepget.inactivityTimeout).
      * <p>
-     * As of 0.9.45, supports https and redirect to https
+     * As of 0.9.45, supports https and redirect to https.
      *
      * @param args command-line arguments, parsed by this method against the
-     *             usage above
+     * usage above
      */
     public static void main(String[] args) {
         String proxyHost = "127.0.0.1";
@@ -677,9 +685,9 @@ public class EepGet {
         return name;
     }
 
-    /** Pattern matching paths consisting only of slashes */
+    /** Pattern matching paths consisting only of slashes. */
     private static final Pattern MULTI_SLASHES = Pattern.compile("/+");
-    /** Characters forbidden in filenames, including control characters (borrowed from snark) */
+    /** Characters forbidden in filenames, including control characters (borrowed from snark). */
     private static final char[] ILLEGAL = new char[] {
         '<', '>', ':', '"', '/', '\\', '|', '?', '*',
         0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15,
@@ -1301,7 +1309,7 @@ public class EepGet {
      * Whether a failed attempt was a data-phase stall on an otherwise working
      * path: the read timed out or our SocketTimeout watchdog aborted the
      * transfer (which closes the socket first, surfacing as a raw
-     * SocketException, so the explicit {@code aborted} signal — flag set or
+     * SocketException, so the explicit {@code aborted} signal. Flag set or
      * socket closed by the watchdog — not exception shape, identifies that
      * path) but the attempt still appended bytes.  Wrapped timeout causes
      * are walked so a single hop of context cannot hide a socket timeout.
@@ -1312,7 +1320,7 @@ public class EepGet {
      * @param ioe failure raised by the attempt
      * @param aborted whether our SocketTimeout watchdog aborted this attempt
      * @param attemptStartBytes body bytes transferred when the attempt started;
-     *                          header and connect phases advance no body bytes
+     * header and connect phases advance no body bytes
      * @param bytesTransferred body bytes transferred now, after the failure
      * @return true when the attempt timed out after making progress
      * @since 0.9.71+
@@ -1331,7 +1339,7 @@ public class EepGet {
      * The budget is operation-wide: SocketTimeout's total period and
      * fetch()'s deadline both start at fetch() entry, so a failure at or
      * past that deadline is the caller's overall timeout, not a transient
-     * stall; it must take the default retry backoff instead of an immediate
+     * stall. It must take the default retry backoff instead of an immediate
      * Range-resume retry.
      *
      * @param totalTimeoutMs total timeout for the fetch, &lt;= 0 for none
@@ -2019,11 +2027,11 @@ public class EepGet {
      * @since 0.9.71+
      */
     static final class ContentRange {
-        /** First byte of the range, or -1 for the unsatisfied form sent with 416 */
+        /** First byte of the range, or -1 for the unsatisfied form sent with 416. */
         final long start;
-        /** Last byte of the range (inclusive), or -1 for the unsatisfied form sent with 416 */
+        /** Last byte of the range (inclusive), or -1 for the unsatisfied form sent with 416. */
         final long end;
-        /** Total length of the representation, or -1 when the server sent a star */
+        /** Total length of the representation, or -1 when the server sent a star. */
         final long total;
 
         /**
@@ -2768,7 +2776,7 @@ public class EepGet {
     }
 
     /**
-     * Show the Server field
+     * Show the Server field.
      *
      * @return the Server header from the response, or null if none was sent
      * @since 0.9.47
@@ -2778,7 +2786,7 @@ public class EepGet {
     }
 
     /**
-     * Show the Content-Language field
+     * Show the Content-Language field.
      *
      * @return the content language
      * @since 0.9.47
@@ -2791,7 +2799,7 @@ public class EepGet {
     }
 
     /**
-     * Show the Transfer-Encoding field
+     * Show the Transfer-Encoding field.
      *
      * @return the transfer encoding
      * @since 0.9.47
@@ -2801,7 +2809,7 @@ public class EepGet {
     }
 
     /**
-     * Show the Content-Encoding field
+     * Show the Content-Encoding field.
      *
      * @return the content encoding
      * @since 0.9.47
@@ -2811,7 +2819,7 @@ public class EepGet {
     }
 
     /**
-     * Show the Cache-Control field
+     * Show the Cache-Control field.
      *
      * @return the cache control
      * @since 0.9.47
@@ -2821,7 +2829,7 @@ public class EepGet {
     }
 
     /**
-     * Show the Accept-Ranges field
+     * Show the Accept-Ranges field.
      *
      * @return the accept ranges
      * @since 0.9.47
@@ -2831,7 +2839,7 @@ public class EepGet {
     }
 
     /**
-     * Show the Expires field
+     * Show the Expires field.
      *
      * @return the expiry date
      * @since 0.9.47
@@ -2841,7 +2849,7 @@ public class EepGet {
     }
 
     /**
-     * Show the Set-Cookie field
+     * Show the Set-Cookie field.
      *
      * @return the Set-Cookie header from the response, or null if none was sent
      * @since 0.9.47
@@ -3061,7 +3069,7 @@ public class EepGet {
      * Double quotes around values are stripped.
      * Ref: RFC 2617
      * <p>
-     * Public for I2PTunnelHTTPClientBase; use outside of tree at own risk, subject to change or removal
+     * Public for I2PTunnelHTTPClientBase; use outside of tree at own risk, subject to change or removal.
      *
      * @param args non-null, starting after "Digest " or "Basic "
      * @return parsed key-value pairs
@@ -3127,13 +3135,13 @@ public class EepGet {
      * Authentication mode enumeration.
      */
     protected enum AUTH_MODE {
-        /** No authentication */
+        /** No authentication. */
         NONE,
-        /** Basic authentication */
+        /** Basic authentication. */
         BASIC,
-        /** Digest authentication */
+        /** Digest authentication. */
         DIGEST,
-        /** Unknown authentication scheme */
+        /** Unknown authentication scheme. */
         UNKNOWN
     }
 
@@ -3258,13 +3266,13 @@ public class EepGet {
 
         /**
          * Generate the digest authentication parameters
-         * Ref: RFC 2617
+         * Ref: RFC 2617.
          *
          * @param method the HTTP method of the request being authorized
          * @param uri the request target, hashed into the A2 value
          * @return the digest parameter names mapped to their already-quoted values
          * @throws IOException if the challenge carried no realm or no nonce
-         * @since 0.9.12 modified from I2PTunnelHTTPClientBase.validateDigest()
+         * @since 0.9.12 modified from {@link net.i2p.i2ptunnel.I2PTunnelHTTPClientBase#validateDigest}
          */
         public Map<String, String> generateAuthArgs(String method, String uri) throws IOException {
             Map<String, String> rv = new HashMap<>(12);
@@ -3341,6 +3349,8 @@ public class EepGet {
     }
 
     /**
+     * Low 8 hex digits of the nonce.
+     *
      * @return 8 hex chars, lower case, e.g. 00000001
      * @since 0.8.10
      */
@@ -3358,7 +3368,7 @@ public class EepGet {
 
     /**
      * Decompressor thread.
-     * Copied / modified from i2ptunnel HTTPResponseOutputStream (GPL)
+     * Copied / modified from i2ptunnel HTTPResponseOutputStream (GPL).
      *
      * @since 0.8.10
      */

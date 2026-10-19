@@ -1,7 +1,7 @@
 package net.i2p.client;
 
 /**
- * Deferred callback for IPSession.lookupNonblocking()
+ * Deferred callback for {@code IPSession.lookupNonblocking()}.
  *
  * @since 0.9.67
  */

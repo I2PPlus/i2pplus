@@ -10,9 +10,8 @@ package net.i2p.data;
  */
 
 /**
- * Test harness for loading / storing SessionKey objects
+ * Test harness for loading / storing SessionKey objects.
  *
- * @author jrandom
  */
 public class SessionKeyTest extends StructureTest {
     @Override

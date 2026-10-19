@@ -22,7 +22,7 @@ public class ConfigUpdateHelper extends HelperBase {
     protected HttpSession _session;
 
     /**
-     * For nonce validation and session-bound nonce generation
+     * For nonce validation and session-bound nonce generation.
      *
      * @param session the console HTTP session the page is being rendered into
      * @since 0.9.69
@@ -35,7 +35,7 @@ public class ConfigUpdateHelper extends HelperBase {
     public ConfigUpdateHelper() {
         // TODO
     }
-    /** hook this so we can call dontInstall() once after getting a context */
+    // Hook this so we can call dontInstall() once after getting a context
     @Override
     public void setContextId(String contextId) {
         super.setContextId(contextId);
@@ -201,7 +201,7 @@ public class ConfigUpdateHelper extends HelperBase {
     }
 
     /**
-     * Right now the jsp hides the whole select box if _dontInstall is true but this could change
+     * Right now the jsp hides the whole select box if _dontInstall is true but this could change.
      * @return the update policy select box
      */
     public String getUpdatePolicySelectBox() {

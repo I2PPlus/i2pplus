@@ -41,13 +41,13 @@ public class JobQueue {
     private final Log _log;
     private final RouterContext _context;
 
-    /** Integer (runnerId) to JobQueueRunner for created runners */
+    /** Integer (runnerId) to JobQueueRunner for created runners. */
     private final Map<Integer, JobQueueRunner> _queueRunners;
-    /** Counter to identify a job runner */
+    /** Counter to identify a job runner. */
     private static final AtomicInteger _runnerId = new AtomicInteger(0);
-    /** List of jobs that are ready to run ASAP */
+    /** List of jobs that are ready to run ASAP. */
     private final BlockingQueue<Job> _readyJobs;
-    /** List of high priority jobs that should run before others */
+    /** List of high priority jobs that should run before others. */
     private final BlockingQueue<Job> _highPriorityJobs;
     /**
      * SortedSet of jobs that are scheduled for running in the future, earliest first.
@@ -55,7 +55,7 @@ public class JobQueue {
      * as the minimum start time rather than re-deriving one per pass.
      */
     private final ConcurrentSkipListSet<Job> _timedJobs;
-    /** Queue of timed jobs that are ready to run (moved from _timedJobs when ready) */
+    /** Queue of timed jobs that are ready to run (moved from _timedJobs when ready). */
     private final BlockingQueue<Job> _timedJobsReady;
     /**
      * Membership index over the three ready queues, so duplicate detection is O(1).
@@ -77,7 +77,7 @@ public class JobQueue {
      * @since 0.9.71+
      */
     private final AtomicInteger _queuedTestJobs;
-    /** Job name to JobStat for that job */
+    /** Job name to JobStat for that job. */
     private final ConcurrentHashMap<String, JobStats> _jobStats;
     private final QueuePumper _pumper;
     /** Will we allow the # job runners to grow beyond 1? */
@@ -87,7 +87,7 @@ public class JobQueue {
     private final Object _jobLock;
     private volatile long _nextPumperRun;
 
-    /** How many when we go parallel */
+    /** How many when we go parallel. */
     static int runners;
     static {
         int cores = SystemVersion.getCores();
@@ -96,24 +96,24 @@ public class JobQueue {
         if (runners > maxRunners) {runners = maxRunners;}
     }
 
-    /** Router.config parameter to override the max runners */
+    /** Router.config parameter to override the max runners. */
     static final String PROP_MAX_RUNNERS = "router.maxJobRunners";
-    /** If a job is this lagged, spit out a warning, but keep going */
+    /** If a job is this lagged, spit out a warning, but keep going. */
     private static final long DEFAULT_LAG_WARNING = 5*1000L;
     private long _lagWarning = DEFAULT_LAG_WARNING;
-    /** If a job is this lagged, the router is hosed, so spit out a warning (don't shut it down) */
+    /** If a job is this lagged, the router is hosed, so spit out a warning (don't shut it down). */
     private static final long DEFAULT_LAG_FATAL = 30*1000L;
     private long _lagFatal = DEFAULT_LAG_FATAL;
-    /** If a job takes this long to run, spit out a warning, but keep going */
+    /** If a job takes this long to run, spit out a warning, but keep going. */
     private static final long DEFAULT_RUN_WARNING = 5*1000L;
     private long _runWarning = DEFAULT_RUN_WARNING;
-    /** If a job takes this long to run, the router is hosed, so spit out a warning (don't shut it down) */
+    /** If a job takes this long to run, the router is hosed, so spit out a warning (don't shut it down). */
     private static final long DEFAULT_RUN_FATAL = 30*1000L;
     private long _runFatal = DEFAULT_RUN_FATAL;
-    /** Don't enforce fatal limits until the router has been up for this long */
+    /** Don't enforce fatal limits until the router has been up for this long. */
     private static final long DEFAULT_WARMUP_TIME = 15*60*1000L;
     private long _warmupTime = DEFAULT_WARMUP_TIME;
-    /** Max ready and waiting jobs before we start dropping 'em - scale with runner count */
+    /** Max ready and waiting jobs before we start dropping 'em - scale with runner count. */
     private static final int DEFAULT_MAX_WAITING_JOBS = SystemVersion.isSlow() ? 24 : 48;
     /**
      * Resolved once from {@link #PROP_MAX_WAITING_JOBS} at construction.
@@ -131,22 +131,24 @@ public class JobQueue {
     private static final long MIN_LAG_TO_DROP = 500;
 
     /**
+     * Config key limiting how many jobs may wait for a job thread.
+     *
      * @since 0.9.52+
      */
     private static final String PROP_MAX_WAITING_JOBS = "router.maxWaitingJobs";
 
     /**
      * Queue runners wait on this whenever they're not doing anything, and
-     * this gets notified *once* whenever there are ready jobs
+     * this gets notified *once* whenever there are ready jobs.
      */
     private final Object _runnerLock = new Object();
 
-    /** Dynamic scaling controller for adjusting runner count based on load */
+    /** Dynamic scaling controller for adjusting runner count based on load. */
     private final JobQueueScaler _scaler;
 
     private static final long[] RATES = RateConstants.SHORT_TERM_RATES;
 
-    /** Track dropped jobs for UI display */
+    /** Track dropped jobs for UI display. */
     private final AtomicInteger _droppedJobsCount = new AtomicInteger();
 
     /**
@@ -996,13 +998,13 @@ public class JobQueue {
                 ((RouterClock) _context.clock()).removeShiftListener(this);
             }
         }
-        /** Handle a clock offset change */
+        /** Handle a clock offset change. */
 
         public void offsetChanged(long delta) {
             updateJobTimings(delta);
             synchronized (_jobLock) {_jobLock.notifyAll();}
         }
-        /** Handle a clock shift event */
+        /** Handle a clock shift event. */
 
         public void clockShift(long delta) {
             if (delta < 0) offsetChanged(delta);
@@ -1027,7 +1029,7 @@ public class JobQueue {
     }
 
     /**
-     * Update stats
+     * Update stats.
      *
      * @param job the job that just finished a run, used for its name and timing
      * @param doStart the millisecond timestamp when the job actually began

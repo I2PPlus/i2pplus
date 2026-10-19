@@ -32,9 +32,6 @@ import net.i2p.util.Log;
  * <p>
  * 2036-compliant as of 0.9.50, see NtpMessage.
  *
- * @author Adam Buckley
- *         (minor refactoring by jrandom)
- *
  * @since 0.9.1 moved from net.i2p.time
  */
 public class NtpClient {
@@ -62,7 +59,7 @@ public class NtpClient {
 
     /**
      * Query the ntp servers, returning the current time from first one we find
-     * Hack to return time and stratum
+     * Hack to return time and stratum.
      *
      * @param serverNames the NTP servers to query, tried in random order
      * @param perServerTimeout how long to wait for each server's reply, in milliseconds
@@ -89,7 +86,7 @@ public class NtpClient {
     }
 
     /**
-     * Query the given NTP server, returning the current internet time and stratum
+     * Query the given NTP server, returning the current internet time and stratum.
      *
      * @param log may be null
      * @return time in rv[0] and stratum in rv[1], or null for error

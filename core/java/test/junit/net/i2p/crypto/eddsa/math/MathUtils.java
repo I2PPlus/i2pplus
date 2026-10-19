@@ -1,5 +1,5 @@
 /**
- * EdDSA-Java by str4d
+ * EdDSA-Java by str4d.
  *
  * To the extent possible under law, the person who associated CC0 with
  * EdDSA-Java has waived all copyright and related or neighboring rights
@@ -64,7 +64,7 @@ public class MathUtils {
     /**
      * Converts a 2^25.5 bit representation to a BigInteger.
      * <p>
-     * Value: 2^exponents[0] * t[0] + 2^exponents[1] * t[1] + ... + 2^exponents[9] * t[9]
+     * Value: 2^exponents[0] * t[0] + 2^exponents[1] * t[1] + ... + 2^exponents[9] * t[9].
      *
      * @param t The 2^25.5 bit representation.
      * @return The BigInteger.

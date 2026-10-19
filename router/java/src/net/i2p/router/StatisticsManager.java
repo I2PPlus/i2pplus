@@ -35,7 +35,7 @@ public class StatisticsManager {
      * Config property controlling whether to publish peer rankings.
      */
     public static final String PROP_PUBLISH_RANKINGS = "router.publishPeerRankings";
-    /** Enhance anonymity by only including build stats one out of this many times */
+    /** Enhance anonymity by only including build stats one out of this many times. */
     private static final int RANDOM_INCLUDE_STATS = 1024;
     private static final boolean SIMPLE_STATS = true;
 
@@ -61,7 +61,7 @@ public class StatisticsManager {
     /**
      * Retrieve a snapshot of the statistics that should be published.
      * <p>
-     * This includes all standard options (as of 0.9.24, network ID and caps)
+     * This includes all standard options (as of 0.9.24, network ID and caps).
      * @return the statistics as an unsigned Properties set
      */
     public Properties publishStatistics() {
@@ -72,7 +72,7 @@ public class StatisticsManager {
     /**
      * Retrieve a snapshot of the statistics that should be published.
      * <p>
-     * This includes all standard options (as of 0.9.24, network ID and caps)
+     * This includes all standard options (as of 0.9.24, network ID and caps).
      *
      * @param h current router hash, non-null
      * @return the statistics as an unsigned Properties set
@@ -228,7 +228,7 @@ public class StatisticsManager {
 
     /**
      * Add tunnel build rates with some mods to hide absolute quantities
-     * In particular, report counts normalized to 100 (i.e. a percentage)
+     * In particular, report counts normalized to 100 (i.e. a percentage).
      */
     private void includeTunnelRates(String tunnelType, Properties stats, long selectedPeriod) {
         long totalEvents = 0;

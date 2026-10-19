@@ -24,7 +24,6 @@ package org.cybergarage.upnp.event;
  * <p>This class is used in UPnP event notifications to communicate changes in service state
  * variables to subscribed control points, enabling real-time monitoring of device status changes.
  *
- * @author Satoshi Konno
  * @since 1.0
  */
 public class Property {

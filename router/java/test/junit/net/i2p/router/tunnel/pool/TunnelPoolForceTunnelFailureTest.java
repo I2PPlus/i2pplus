@@ -37,7 +37,7 @@ public class TunnelPoolForceTunnelFailureTest {
     }
 
     /**
-       * forceTunnelFailure on a tunnel that is not yet failed
+       * ForceTunnelFailure on a tunnel that is not yet failed
        * should mark it dead and remove it from the pool.
        */
     @Test
@@ -52,7 +52,7 @@ public class TunnelPoolForceTunnelFailureTest {
     }
 
     /**
-       * forceTunnelFailure on an already-failed tunnel should be a no-op.
+       * ForceTunnelFailure on an already-failed tunnel should be a no-op.
        */
     @Test
     public void forceTunnelFailureAlreadyFailedIsNoOp() {
@@ -67,7 +67,7 @@ public class TunnelPoolForceTunnelFailureTest {
     }
 
     /**
-       * forceTunnelFailure on a null tunnel should be a no-op.
+       * ForceTunnelFailure on a null tunnel should be a no-op.
        */
     @Test
     public void forceTunnelFailureNullIsNoOp() {
@@ -77,7 +77,7 @@ public class TunnelPoolForceTunnelFailureTest {
     }
 
     /**
-       * forceTunnelFailure should not throw for a healthy tunnel.
+       * ForceTunnelFailure should not throw for a healthy tunnel.
        */
     @Test
     public void forceTunnelFailureNoException() {

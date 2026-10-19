@@ -29,7 +29,6 @@ import org.cybergarage.xml.*;
  * <p>This class is used by UPnP services to manage their metadata, listener registrations, and
  * subscriber information, enabling proper service operation and event notification functionality.
  *
- * @author Satoshi Konno
  * @since 1.0
  */
 public class ServiceData extends NodeData {

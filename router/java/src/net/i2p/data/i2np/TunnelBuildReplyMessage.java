@@ -3,9 +3,9 @@ package net.i2p.data.i2np;
 import net.i2p.I2PAppContext;
 
 /**
- *  The basic build reply message with 8 records.
- *  Transmitted from the new outbound endpoint to the creator through a
- *  reply tunnel
+ * The basic build reply message with 8 records.
+ * Transmitted from the new outbound endpoint to the creator through a
+ * reply tunnel.
  */
 public class TunnelBuildReplyMessage extends TunnelBuildMessageBase {
     /** I2NP message type of a build reply. */

@@ -30,7 +30,6 @@ import java.math.BigInteger;
  * <li>Apply ElGamal encryption</li>
  * </ol>
  *
- * @author crypto, jrandom
  * @since 0.8.0
  */
 public final class ElGamalEngine {
@@ -158,12 +157,12 @@ public final class ElGamalEngine {
     }
 
     /**
-     * Decrypt the data
+     * Decrypt the data.
      *
      * @param encrypted encrypted data, must be exactly 514 bytes
-     *                  Contains the two-part encrypted data starting at bytes 0 and 257.
-     *                  If the encrypted parts are smaller than 257 bytes, they must be
-     *                  padded with leading zeros.
+     * Contains the two-part encrypted data starting at bytes 0 and 257.
+     * If the encrypted parts are smaller than 257 bytes, they must be
+     * padded with leading zeros.
      *
      * @param privateKey private key to decrypt with
      * @return unencrypted data or null on failure

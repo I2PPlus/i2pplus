@@ -246,7 +246,7 @@ public class InfoHelper extends HelperBase {
     /**
      * The build date of the GeoIP database in use.
      *
-     * @return the geo i p build info
+     * @return the geo IP build info
      */
     public String getGeoIPBuildInfo() {
       GeoIP db = new GeoIP(_context);

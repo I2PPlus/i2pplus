@@ -15,7 +15,7 @@ import net.i2p.data.Hash;
 /**
  * Tests for {@link ConnectionManager#pruneEmptyPoolBuckets} (LEAK-03). The
  * per-destination stream pool kept an (eventually empty) deque entry for every
- * destination it had ever pooled a connection to; a destination that went quiet
+ * destination it had ever pooled a connection to. A destination that went quiet
  * was never drained, so the map grew without bound. The sweep drops empty
  * buckets while leaving live ones in place.
  *

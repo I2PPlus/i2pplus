@@ -28,14 +28,14 @@ import net.i2p.util.RandomSource;
  * <p>
  * // Send message
  * DatagramSocket socket = new DatagramSocket();
- * InetAddress address = InetAddress.getByName("ntp.cais.rnp.br");
+ * InetAddress address = {@code InetAddress.getByName(}"ntp.cais.rnp.br");
  * byte[] buf = new NtpMessage().toByteArray();
  * DatagramPacket packet = new DatagramPacket(buf, buf.length, address, 123);
  * socket.send(packet);
  * <p>
  * // Get response
  * socket.receive(packet);
- * System.out.println(msg.toString());
+ * {@link java.lang.System#out}{@code println(}msg.toString());
  * <p>
  * Comments for member variables are taken from RFC2030 by David Mills,
  * University of Delaware.
@@ -61,7 +61,6 @@ import net.i2p.util.RandomSource;
  * https://www.eecis.udel.edu/~mills/time.html
  * https://tools.ietf.org/html/rfc4330 sec. 3
  *
- * @author Adam Buckley
  * @since 0.9.1 moved from net.i2p.time
  */
 class NtpMessage {
@@ -83,7 +82,7 @@ class NtpMessage {
      * 0         no warning
      * 1         last minute has 61 seconds
      * 2         last minute has 59 seconds)
-     * 3         alarm condition (clock not synchronized)
+     * 3         alarm condition (clock not synchronized).
      */
     public byte leapIndicator = 0;
 
@@ -127,7 +126,7 @@ class NtpMessage {
      * 0        unspecified or unavailable
      * 1        primary reference (e.g., radio clock)
      * 2-15     secondary reference (via NTP or SNTP)
-     * 16-255   reserved
+     * 16-255   reserved.
      */
     public short stratum = 0;
 
@@ -135,7 +134,7 @@ class NtpMessage {
     /**
      * This value indicates the maximum interval between successive messages,
      * in seconds to the nearest power of two. The values that can appear in
-     * this field presently range from 4 (16 s) to 14 (16284 s); however, most
+     * this field presently range from 4 (16 s) to 14 (16284 s). However, most
      * applications use only the sub-range 6 (64 s) to 10 (1024 s).
      */
     public byte pollInterval = 0;
@@ -201,7 +200,7 @@ class NtpMessage {
      * LORC     LORAN-C radionavigation system
      * OMEG     OMEGA radionavigation system
      * GPS      Global Positioning Service
-     * GOES     Geostationary Orbit Environment Satellite
+     * GOES     Geostationary Orbit Environment Satellite.
      */
     public final byte[] referenceIdentifier = {0, 0, 0, 0};
 
@@ -325,7 +324,7 @@ class NtpMessage {
 
 
     /**
-     * Returns a string representation of a NtpMessage
+     * Returns a string representation of a NtpMessage.
      */
     @Override
     public String toString() {
@@ -364,7 +363,7 @@ class NtpMessage {
      * and return it as a double, according to the NTP 64-bit timestamp
      * format.
      * <p>
-     * 2036-compliant as of 0.9.50
+     * 2036-compliant as of 0.9.50.
      *
      * @param array 8 bytes starting at pointer
      * @param pointer the index in array where the timestamp begins

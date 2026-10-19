@@ -133,7 +133,7 @@ class InboundMessageFragments /*implements UDPTransport.PartialACKSource */{
     }
 
     /**
-     * Modifiable Long, no locking
+     * Modifiable Long, no locking.
      * @since 0.9.49
      */
     public static class ModifiableLong {

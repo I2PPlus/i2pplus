@@ -183,7 +183,7 @@ class IntroducerLookupJob extends JobImpl {
      * the given deadline (never past this cycle's query budget, never above
      * the standard adaptive RouterInfo lookup cap).
      * Success clears the tracking entry (the RI is then cached locally and
-     * expires through the normal netdb lifecycle); failure increments the
+     * expires through the normal netdb lifecycle). Failure increments the
      * consecutive-failure count, which lengthens the retry backoff. Both
      * outcomes release a concurrency slot.
      */
@@ -300,7 +300,7 @@ class IntroducerLookupJob extends JobImpl {
      * Retry backoff for an introducer whose last lookup failed {@code fails}
      * consecutive times: 0 (in flight / find pending) → {@link #MIN_RETRY_MS};
      * 1+ → {@link #FAIL_BACKOFF_MS} doubling per failure, capped at
-     * {@link #MAX_FAIL_BACKOFF_MS}. Pure decision — safe for unit tests.
+     * {@link #MAX_FAIL_BACKOFF_MS}. Pure decision. Safe for unit tests.
      *
      * @param fails consecutive failed lookup attempts
      * @return the backoff in milliseconds

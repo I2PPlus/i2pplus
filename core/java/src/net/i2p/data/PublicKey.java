@@ -76,7 +76,6 @@ import java.util.Arrays;
  * <li><strong>Safe Sharing:</strong> Instances can be safely shared between threads</li>
  * </ul>
  *
- * @author jrandom
  */
 public class PublicKey extends SimpleDataStructure {
     private static final EncType DEF_TYPE = EncType.ELGAMAL_2048;
@@ -95,7 +94,7 @@ public class PublicKey extends SimpleDataStructure {
     /**
      * Pull from cache or return new.
      * ELGAMAL_2048 only!
-     * Deprecated - used only by deprecated Destination.readBytes(data, off)
+     * Deprecated - used only by deprecated {@code Destination.readBytes(}data, off).
      *
      * @param data the data to decrypt
      * @param off the offset into the data
@@ -213,7 +212,7 @@ public class PublicKey extends SimpleDataStructure {
     /**
      * Type code for unknown encryption types.
      * <p>
-     * Only valid if getType() returns null
+     * Only valid if getType() returns null.
      *
      * @return the unknown type code
      * @since 0.9.38
@@ -261,11 +260,11 @@ public class PublicKey extends SimpleDataStructure {
 
     /**
      * Padding portion of this (type 0) PK based on the Key Cert type given,
-     * if any
+     * if any.
      *
      * @param kcert the key certificate
      * @return the trailing padding, or a shared empty array if there is no
-     *         padding or the type is unknown
+     * padding or the type is unknown
      * @throws IllegalStateException if this is already typed to a different type
      * @since 0.9.42
      */

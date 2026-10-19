@@ -14,7 +14,7 @@ public class ConfigStatsHandler extends FormHandler {
     private String _graphs;
     private boolean _isFull;
 
-    /** ConfigStatsHandler default constructor */
+    /** ConfigStatsHandler default constructor. */
     public ConfigStatsHandler() {
         super();
         _graphs = "";

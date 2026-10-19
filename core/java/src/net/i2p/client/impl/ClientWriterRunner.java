@@ -20,7 +20,6 @@ import java.util.concurrent.atomic.AtomicLong;
  * We need a single thread that writes so we don't have issues with
  * the Piped Streams used in InternalSocket.
  *
- * @author zzz from net.i2p.router.client.ClientWriterRunner
  */
 class ClientWriterRunner implements Runnable {
     private final OutputStream _out;
@@ -34,7 +33,7 @@ class ClientWriterRunner implements Runnable {
      * Create the writer for a session, buffering I2CP messages queued for
      * output to that session.
      * <p>
-     * As of 0.9.11 does not start the thread, caller must call startWriting()
+     * As of 0.9.11 does not start the thread, caller must call startWriting().
      *
      * @param out stream the I2CP messages are written to, buffered internally
      * @param session session to poll for closure and to report write failures to
@@ -73,7 +72,7 @@ class ClientWriterRunner implements Runnable {
     }
 
     /**
-     * No more messages - don't even try to send what we have
+     * No more messages - don't even try to send what we have.
      *
      */
     public void stopWriting() {

@@ -22,7 +22,7 @@ class Request {
     final int off;
     /** Length in bytes. */
     final int len;
-    /** Send time */
+    /** Send time. */
     long sendTime;
 
     /**
@@ -43,7 +43,7 @@ class Request {
     }
 
     /**
-     * Dummy Request for PeerState.returnPartialPieces(). len will be zero.
+     * Dummy Request for {@code PeerState.returnPartialPieces()}; len is zero.
      *
      * @param piece Piece number requested.
      * @param off the offset in the array.
@@ -60,7 +60,7 @@ class Request {
     }
 
     /**
-     * Read from stream
+     * Read from stream.
      *
      * @param din stream carrying the requested block data
      * @param bwl listener credited with the downloaded bytes
@@ -71,7 +71,7 @@ class Request {
     }
 
     /**
-     * The piece number this Request is for
+     * The piece number this Request is for.
      *
      * @return the index of the piece this request covers
      * @since 0.9.1
@@ -81,7 +81,7 @@ class Request {
     }
 
     /**
-     * The PartialPiece this Request is for
+     * The PartialPiece this Request is for.
      *
      * @return the partial piece
      * @since 0.9.1
@@ -90,13 +90,13 @@ class Request {
         return piece;
     }
 
-    /** Hash based on piece number, offset, and length */
+    /** Hash based on piece number, offset, and length. */
     @Override
     public int hashCode() {
         return piece.getPiece() ^ off ^ len;
     }
 
-    /** Two requests are equal if they share the same piece, offset, and length */
+    /** Two requests are equal if they share the same piece, offset, and length. */
     @Override
     public boolean equals(Object o) {
         if (o instanceof Request) {

@@ -26,13 +26,13 @@ import net.i2p.util.SimpleTimer2;
  */
 public class BandwidthGraph extends SimpleTimer2.TimedEvent {
 
-    /** Sample once per minute */
+    /** Sample once per minute. */
     public static final long SAMPLE_INTERVAL_MS = 60 * 1000;
-    /** Ring capacity: 240 samples = 4 hours at 60 s */
+    /** Ring capacity: 240 samples = 4 hours at 60 s. */
     public static final int CAPACITY = 240;
-    /** Window covered by a full ring, in ms; older persisted samples are dropped */
+    /** Window covered by a full ring, in ms; older persisted samples are dropped. */
     public static final long WINDOW_MS = CAPACITY * SAMPLE_INTERVAL_MS;
-    /** Flush to disk every five minutes */
+    /** Flush to disk every five minutes. */
     private static final long FLUSH_INTERVAL_MS = 5 * 60 * 1000;
 
     private static final String FILE_NAME = "i2p-snark-bandwidth.dat";
@@ -214,6 +214,8 @@ public class BandwidthGraph extends SimpleTimer2.TimedEvent {
     }
 
     /**
+     * Encode the graph data for saving.
+     *
      * @return CSV "ts,rxKB,txKB;..." oldest-first — KB keeps the data URL small
      */
     private synchronized String serialize() {

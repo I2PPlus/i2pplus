@@ -17,10 +17,10 @@ import java.util.concurrent.CopyOnWriteArraySet;
  * <p>
  * Provides the following features:
  * <ul>
- * <li>Logging to wrapper log on unexpected termination in {@link #run()}.
+ * <li>Logging to wrapper log on unexpected termination in {@link #run}.
  * <li>Notification of OOM to registered listener (the router),
  * which will cause logging to the wrapper log and a router restart
- * <li>Catching and logging "OOM" caused by thread limit in {@link #start()}
+ * <li>Catching and logging "OOM" caused by thread limit in {@link #start}
  * with distinct message, and does not call the OOM listener.
  * <li>As of 0.9.21, initialization to NORM_PRIORITY
  * (not the priority of the creating thread).

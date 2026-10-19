@@ -54,7 +54,7 @@ public class NewsEntry implements Comparable<NewsEntry> {
      */
     public String authorName;  // subnode of author
 
-    /** reverse, newest first */
+    /** Newest first. */
     @Override
     public int compareTo(NewsEntry e) {
         if (updated > e.updated)
@@ -81,6 +81,8 @@ public class NewsEntry implements Comparable<NewsEntry> {
     }
 
     /**
+     * Hash by the updated timestamp.
+     *
      * @return whether h code is present
      */
     @Override

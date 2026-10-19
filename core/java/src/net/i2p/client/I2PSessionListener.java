@@ -20,7 +20,6 @@ package net.i2p.client;
  * or wish to get notification of certain protocols and ports only,
  * you must use I2PSessionMuxedListener and addMuxedSessionListener() instead.
  *
- * @author jrandom
  */
 public interface I2PSessionListener {
     /**
@@ -53,14 +52,14 @@ public interface I2PSessionListener {
     void reportAbuse(I2PSession session, int severity);
 
     /**
-     * Notify the client that the session has been terminated
+     * Notify the client that the session has been terminated.
      *
      * @param session the session that was terminated
      */
     void disconnected(I2PSession session);
 
     /**
-     * Notify the client that some error occurred
+     * Notify the client that some error occurred.
      *
      * @param session the session that reported the error
      * @param message a human-readable description of the error

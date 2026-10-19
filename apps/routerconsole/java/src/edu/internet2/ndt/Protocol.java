@@ -7,7 +7,7 @@ import java.net.Socket;
 
 /**
  * Class aggregating operations that can be performed for
- * sending/receiving/reading Protocol messages
+ * sending/receiving/reading Protocol messages.
  *
  */
 
@@ -17,7 +17,7 @@ public class Protocol {
     private boolean jsonSupport = true;
 
     /**
-     * Constructor that accepts socket over which to communicate as parameter
+     * Constructor that accepts socket over which to communicate as parameter.
      *
      * @param ctlSocketParam socket used to send the protocol messages over
      * @throws IOException if Input/Output streams cannot be read from/written into correctly
@@ -28,7 +28,7 @@ public class Protocol {
     }
 
     /**
-     * Send message given its Type and data byte
+     * Send message given its Type and data byte.
      *
      * @param bParamType Control Message Type
      * @param bParamToSend Data value to send
@@ -40,7 +40,7 @@ public class Protocol {
     }
 
     /**
-     * Send message given its Type and data byte
+     * Send message given its Type and data byte.
      *
      * @param bParamType Control Message Type
      * @param bParamToSend Data value to send
@@ -52,13 +52,11 @@ public class Protocol {
     }
 
     /**
-     * Send protocol messages given their type and data byte array
+     * Send protocol messages given their type and data byte array.
      *
      * @param bParamType Control Message Type
      * @param bParamToSend Data value array to send
      * @throws IOException If data cannot be successfully written to the Output Stream
-     *
-     *
      */
     public void send_json_msg(byte bParamType, byte[] bParamToSend) throws IOException {
         if (jsonSupport) {send_msg(bParamType, JSONUtils.createJsonObj(bParamToSend));}
@@ -66,7 +64,7 @@ public class Protocol {
     }
 
     /**
-     * Send protocol messages given their type and data byte array
+     * Send protocol messages given their type and data byte array.
      *
      * @param bParamType Control Message Type
      * @param bParamToSend Data value array to send
@@ -83,7 +81,7 @@ public class Protocol {
     }
 
     /**
-     * Send protocol messages given their type and data byte array
+     * Send protocol messages given their type and data byte array.
      *
      * @param bParamType Control Message Type
      * @param bParamToSend Data value array to send
@@ -104,7 +102,7 @@ public class Protocol {
 
     /**
      * Populate Message byte array with specific number of bytes of data from
-     * socket input stream
+     * socket input stream.
      *
      * @param msgParam Message object to be populated
      * @param iParamAmount specified number of bytes to be read
@@ -124,25 +122,25 @@ public class Protocol {
     }
 
     /**
-     * Receive message at end-point of socket
+     * Receive message at end-point of socket.
      *
      * @param msgParam Message object
      * @return integer with values:
-     *         <p>
-     *         a) Success:
-     *         <ul>
-     *         <li>
-     *         value=0 : successfully read expected number of bytes.</li>
-     *         </ul>
-     *         <p>
-     *         b) Error:
-     *         <ul>
-     *         <li>value= 1 : Error reading ctrl-message length and data type
-     *         itself, since NDTP-control packet has to be at the least 3 octets
-     *         long</li>
-     *         <li>value= 3 : Error, mismatch between "length" field of
-     *         ctrl-message and actual data read</li>
-     *         </ul>
+     * <p>
+     * a) Success:
+     * <ul>
+     * <li>
+     * value=0 : successfully read expected number of bytes.</li>
+     * </ul>
+     * <p>
+     * b) Error:
+     * <ul>
+     * <li>value= 1 : Error reading ctrl-message length and data type
+     * itself, since NDTP-control packet has to be at the least 3 octets
+     * long</li>
+     * <li>value= 3 : Error, mismatch between "length" field of
+     * ctrl-message and actual data read</li>
+     * </ul>
      * @throws java.io.IOException if the read fails
      */
     public int recv_msg(Message msgParam) throws IOException {
@@ -161,7 +159,7 @@ public class Protocol {
     }
 
     /**
-     * Method to close open Streams
+     * Method to close open Streams.
      */
     public void close() {
         try {

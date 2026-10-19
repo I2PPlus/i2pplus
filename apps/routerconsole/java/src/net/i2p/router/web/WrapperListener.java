@@ -39,7 +39,7 @@ class WrapperListener {
     }
 
     /**
-     *  Unregister the handler for signals
+     * Unregister the handler for signals.
      */
     public void unregister() {
         WrapperManager.removeWrapperEventListener(_listener);

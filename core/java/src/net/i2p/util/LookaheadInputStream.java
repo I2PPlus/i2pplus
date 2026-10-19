@@ -104,6 +104,8 @@ public class LookaheadInputStream extends FilterInputStream {
     }
 
     /**
+     * Skip forward, respecting the lookahead buffer.
+     *
      * @since 0.9.33
      */
     @Override

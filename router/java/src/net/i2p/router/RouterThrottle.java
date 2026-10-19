@@ -21,20 +21,20 @@ public interface RouterThrottle {
      */
     public int acceptTunnelRequest();
     /**
-     * How backed up we are at the moment processing messages (in milliseconds)
+     * How backed up we are at the moment processing messages (in milliseconds).
      *
      * @return how far behind schedule message processing is, in milliseconds
      */
     public long getMessageDelay();
     /**
-     * How backed up our tunnels are at the moment (in milliseconds)
+     * How backed up our tunnels are at the moment (in milliseconds).
      *
      * @return how far behind schedule tunnel management is, in milliseconds
      */
     public long getTunnelLag();
 
     /**
-     * Message on the state of participating tunnel acceptance
+     * Message on the state of participating tunnel acceptance.
      * @return the tunnel status
      */
     public String getTunnelStatus();
@@ -61,7 +61,7 @@ public interface RouterThrottle {
     public void setShutdownStatus();
 
     /**
-     * Cancel a shutdown previously announced with {@link #setShutdownStatus()}.
+     * Cancel a shutdown previously announced with {@link #setShutdownStatus}.
      *
      * @since 0.8.12
      */

@@ -22,12 +22,12 @@ import org.junit.Test;
  * parts that this class pins:
  *
  * <ul>
- *   <li><b>{@link PacketLocal#writeReleased()}</b> — the discriminator the
- *       retransmit loop uses to skip ACKed/cancelled packets (mirroring the
- *       paced-path guard); {@code isCancelled()} alone misses ACKed packets.</li>
- *   <li><b>{@link Packet#writePacket} local-capture defense-in-depth</b> — a
- *       concurrent release may null {@code _payload} mid-write, so the method
- *       snapshots the payload into a local and tolerates a {@code null}.</li>
+ * <li><b>{@link PacketLocal#writeReleased}</b> — the discriminator the
+ * retransmit loop uses to skip ACKed/cancelled packets (mirroring the
+ * paced-path guard); {@code isCancelled()} alone misses ACKed packets.</li>
+ * <li><b>{@link Packet#writePacket} local-capture defense-in-depth</b> — a
+ * concurrent release may null {@code _payload} mid-write, so the method
+ * snapshots the payload into a local and tolerates a {@code null}.</li>
  * </ul>
  *
  * @since 0.9.71+
@@ -112,7 +112,7 @@ public class PacketPayloadReleaseTest {
 
     /**
      * A non-full-size packet does not go through the buffer pool, so its payload
-     * is not nulled on release; {@code writeReleased()} still reports true
+     * is not nulled on release. {@code writeReleased()} still reports true
      * because {@code _ackOn} is set (the retransmit guard must skip it whether
      * or not the pool was involved).
      */

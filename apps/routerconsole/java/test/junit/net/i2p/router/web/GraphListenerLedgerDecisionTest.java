@@ -12,7 +12,7 @@ import org.junit.Test;
  * Tests for {@link GraphListener}'s ledger and backfill decision helpers.
  *
  * <p>Two rules carry the whole ledger. The baseline makes drift a delta, because
- * {@link Rate#getCoalesceCount()} counts from the Rate's construction and a stat
+ * {@link Rate#getCoalesceCount} counts from the Rate's construction and a stat
  * registered at router startup has been coalescing long before the console attaches -
  * compared raw, it would report the entire pre-attach history as loss on every
  * listener, forever. And the truncation to whole seconds makes the backfill skip rule

@@ -6,7 +6,7 @@ import org.junit.Test;
 
 /**
  * Pure decision tests for the pre-emergency fast-path in
- * {@link TunnelPool#ensureSufficientTunnels()}.
+ * {@link TunnelPool#ensureSufficientTunnels}.
  *
  * <p>Policy: a pool below 50% of target is an emergency and must start
  * builds immediately, not through the normal throttle gate.  At or above

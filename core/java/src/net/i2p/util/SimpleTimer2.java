@@ -24,12 +24,11 @@ import net.i2p.I2PAppContext;
  * blocked events starve every periodic event on this timer without throwing
  * anything or writing anything to the log.
  *
- * @author zzz
  */
 public class SimpleTimer2 {
 
     /**
-     * If you have a context, use context.simpleTimer2() instead
+     * If you have a context, use context.simpleTimer2() instead.
      *
      * @return the global SimpleTimer2 instance
      */
@@ -117,7 +116,7 @@ public class SimpleTimer2 {
 
     /**
      * Ceiling on automatic worker growth. The timer is shared by everything, so an
-     * unbounded count would let one busy subsystem take the process with it; this
+     * unbounded count would let one busy subsystem take the process with it. This
      * leaves ample headroom over the observed need without letting a runaway grow
      * without limit.
      *
@@ -270,7 +269,7 @@ public class SimpleTimer2 {
 
     /**
      * To be instantiated by the context.
-     * Others should use context.simpleTimer2() instead
+     * Others should use context.simpleTimer2() instead.
      *
      * @param context the I2P application context
      */
@@ -293,7 +292,7 @@ public class SimpleTimer2 {
 
     /**
      * To be instantiated by the context.
-     * Others should use context.simpleTimer2() instead
+     * Others should use context.simpleTimer2() instead.
      *
      * @param context the I2P application context
      * @param name the timer name
@@ -570,7 +569,7 @@ public class SimpleTimer2 {
          * learned from the timer's own behaviour rather than a guess.
          */
         private long _maxObservedGapMs;
-        /** Guarded by this */
+        /** Guarded by this. */
         private boolean _stopped;
 
         SaturationWatchdog() {
@@ -582,7 +581,7 @@ public class SimpleTimer2 {
          * Start the sampling thread, warning if the JVM will not run it - a
          * watchdog that silently failed to start is the same invisible failure
          * this class exists to prevent. No reference to the thread is kept: it
-         * runs until {@link #shutdown()}, and being a daemon it cannot hold up
+         * runs until {@link #shutdown}, and being a daemon it cannot hold up
          * JVM exit either way.
          */
         private void start() {
@@ -597,7 +596,7 @@ public class SimpleTimer2 {
 
         /**
          * Stop sampling. Idempotent, cannot throw, and safe when
-         * {@link #start()} failed. The thread is a daemon, so it cannot hold up
+         * {@link #start} failed. The thread is a daemon, so it cannot hold up
          * JVM exit even if this is never called.
          */
         void shutdown() {
@@ -608,7 +607,7 @@ public class SimpleTimer2 {
         }
 
         /**
-         * Sample every {@link #WATCHDOG_INTERVAL_MS} until {@link #shutdown()}.
+         * Sample every {@link #WATCHDOG_INTERVAL_MS} until {@link #shutdown}.
          * <p>The stopped test and the wait share the monitor, so shutdown()
          * cannot land between them and leave this thread parked for the rest
          * of the interval - hence no interrupt is needed.
@@ -884,11 +883,11 @@ public class SimpleTimer2 {
 
         /** State of the current event. All access should be under lock. */
         protected TimedEventState _state;
-        /** Absolute time this event should run next time. LOCKING: this */
+        /** Absolute time this event should run next time. LOCKING: this. */
         private long _nextRun;
-        /** Whether this was scheduled during RUNNING state. LOCKING: this */
+        /** Whether this was scheduled during RUNNING state. LOCKING: this. */
         private boolean _rescheduleAfterRun;
-        /** Whether this was cancelled during RUNNING state. LOCKING: this */
+        /** Whether this was cancelled during RUNNING state. LOCKING: this. */
         private boolean _cancelAfterRun;
 
         /**
@@ -1046,7 +1045,7 @@ public class SimpleTimer2 {
         }
 
         /**
-         * Always use the new time - ignores fuzz
+         * Always use the new time - ignores fuzz.
          *
          * @param timeoutMs timeout in milliseconds
          */
@@ -1227,6 +1226,8 @@ public class SimpleTimer2 {
         }
 
         /**
+         * Timer summary for log messages.
+         *
          * @return the simple class name for log messages
          *
          * @since 0.9.57

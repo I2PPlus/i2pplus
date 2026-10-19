@@ -34,7 +34,7 @@ public abstract class ZipFileComment {
 
     /**
      * Read the archive comment from the end-of-central-directory record.
-     * The string is decoded with UTF-8
+     * The string is decoded with UTF-8.
      *
      * @param file the zip file to scan for the end-of-central-directory comment
      * @param max The max length of the comment in bytes.
@@ -78,9 +78,9 @@ public abstract class ZipFileComment {
     }
 
     /**
-     * go backwards from the end
+     * Go backwards from the end.
      * @return the UTF-8 comment stored after the last end-of-central-directory
-     *         record
+     * record
      */
     private static String getComment(byte[] buffer) throws IOException {
         for (int i = buffer.length - BLOCK_LEN; i >= 0; i--) {

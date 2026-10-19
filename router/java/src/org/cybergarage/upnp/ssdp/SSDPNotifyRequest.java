@@ -28,7 +28,6 @@ import org.cybergarage.http.HTTP;
  * capabilities, and departure from the network. It enables control points to discover and track
  * device presence automatically.
  *
- * @author Satoshi Konno
  * @since 1.0
  */
 public class SSDPNotifyRequest extends SSDPRequest {

@@ -92,7 +92,7 @@ final class ECUtil {
 
     /**
      * P-192 test only.
-     * See KeyGenerator.main() for a test of all supported curves.
+     * See {@link net.i2p.crypto.KeyGenerator#main} for a test of all supported curves.
      */
 
 }

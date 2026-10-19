@@ -13,7 +13,7 @@ import java.util.Properties;
 import net.i2p.data.Hash;
 
 /**
- * Wrap up the client settings specifying their tunnel criteria
+ * Wrap up the client settings specifying their tunnel criteria.
  *
  */
 public class ClientTunnelSettings {

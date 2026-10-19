@@ -44,35 +44,35 @@ public class RequestThrottler {
     private volatile boolean cachedShouldBanExcessive = true;
     private static final long PROPERTY_CHECK_INTERVAL = 30*1000L; // Check every 30 seconds
 
-    /** Minimum request limit per peer. @since 0.9.70+ */
+    /** Minimum request limit per peer. @since 0.9.70+. */
     public static volatile int _reqMinLimit = 10;
-    /** Maximum request limit per peer. @since 0.9.70+ */
+    /** Maximum request limit per peer. @since 0.9.70+. */
     public static volatile int _reqMaxLimit = 300;
-    /** Request limit as percentage of participating tunnel count. @since 0.9.70+ */
+    /** Request limit as percentage of participating tunnel count. @since 0.9.70+. */
     public static volatile int _reqPercentLimit = 20;
-    /** Burst threshold for 1-second sliding window (requests per second). @since 0.9.70+ */
+    /** Burst threshold for 1-second sliding window (requests per second). @since 0.9.70+. */
     public static volatile int _reqBurst1sThreshold = 10;
-    /** Rejection threshold: start rejecting at count/limit ratio this high (30-100, default 70%). @since 0.9.70+ */
+    /** Rejection threshold: start rejecting at count/limit ratio this high (30-100, default 70%). @since 0.9.70+. */
     public static volatile int _reqRejectThreshold = 70;
-    /** Rejection steepness: 100=linear ramp, 200=quadratic. @since 0.9.70+ */
+    /** Rejection steepness: 100=linear ramp, 200=quadratic. @since 0.9.70+. */
     public static volatile int _reqRejectSteepness = 200;
-    /** Load weight: how much load inflates effective ratio (0-300%, default 100%). @since 0.9.70+ */
+    /** Load weight: how much load inflates effective ratio (0-300%, default 100%). @since 0.9.70+. */
     public static volatile int _reqLoadWeight = 100;
 
     // Sustained load thresholds — require load to persist before gating
-    /** High-load job lag threshold (ms) @since 0.9.70+ */
+    /** High-load job lag threshold (ms) @since 0.9.70+. */
     public static volatile int _highLoadLagMs = 1000;
-    /** High-load CPU threshold (percent) @since 0.9.70+ */
+    /** High-load CPU threshold (percent) @since 0.9.70+. */
     public static volatile int _highLoadCpuPct = 95;
-    /** High-load system load threshold (percent, normalized by cores) @since 0.9.70+ */
+    /** High-load system load threshold (percent, normalized by cores) @since 0.9.70+. */
     public static volatile int _highLoadSysLoadPct = 90;
-    /** Moderate-load job lag threshold (ms) @since 0.9.70+ */
+    /** Moderate-load job lag threshold (ms) @since 0.9.70+. */
     public static volatile int _moderateLoadLagMs = 500;
-    /** Moderate-load CPU threshold (percent) @since 0.9.70+ */
+    /** Moderate-load CPU threshold (percent) @since 0.9.70+. */
     public static volatile int _moderateLoadCpuPct = 90;
-    /** Moderate-load system load threshold (percent, normalized by cores) @since 0.9.70+ */
+    /** Moderate-load system load threshold (percent, normalized by cores) @since 0.9.70+. */
     public static volatile int _moderateLoadSysLoadPct = 80;
-    /** Duration (ms) moderate load must persist before disconnecting low-share peers @since 0.9.70+ */
+    /** Duration (ms) moderate load must persist before disconnecting low-share peers @since 0.9.70+. */
     public static volatile long _sustainedModerateLoadMs = 60_000;
 
     /**
@@ -273,13 +273,13 @@ public class RequestThrottler {
     public static void setSustainedModerateLoadMs(long val) { _sustainedModerateLoadMs = Math.max(10_000, Math.min(300_000, val)); }
 
     private static final long CLEAN_TIME = 90 * 1000L; // Reset limits every 90 seconds
-    /** Ban length for LU prev-hops under load */
+    /** Ban length for LU prev-hops under load. */
     private static final long LU_BAN_MS = 5 * 60 * 1000L;
-    /** Burst offenses before a ban issues; earlier offenses only throttle the request */
+    /** Burst offenses before a ban issues; earlier offenses only throttle the request. */
     private static final int BURST_BAN_OFFENSES = 3;
-    /** Ban length for the first banning burst offense, scaling with further offenses */
+    /** Ban length for the first banning burst offense, scaling with further offenses. */
     private static final long BURST_BAN_BASE_MS = 5 * 60 * 1000L;
-    /** Ceiling for burst bans */
+    /** Ceiling for burst bans. */
     private static final long BURST_BAN_MAX_MS = 30 * 60 * 1000L;
     private static final long[] RATES = { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR };
 
@@ -326,7 +326,7 @@ public class RequestThrottler {
      * banned for bursts that limit allows (one tenth of the 90-second
      * request limit as a per-second ceiling).
      *
-     * @param configuredThreshold the i2p.tunnel.requestThrottle.burst1sThreshold value
+     * @param configuredThreshold the {@code i2p.tunnel.requestThrottle.burst1sThreshold} value
      * @param limit the peer's request limit for the current window
      * @return the burst threshold in requests per second
      * @since 0.9.71+

@@ -24,7 +24,7 @@ import java.nio.charset.StandardCharsets;
  */
 public class BlacklistBean {
 
-    /** Default constructor */
+    /** Creates an empty blacklist bean. */
     public BlacklistBean() {}
 
     private static final Log _log = new Log(BlacklistBean.class);

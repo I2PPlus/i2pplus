@@ -20,7 +20,7 @@ import org.junit.Test;
  * Pins the semantics of the combined NetDb responsiveness rate in
  * {@link DBHistory}.
  *
- * <p>{@link DBHistory#getFailedLookupRate()} is one rate covering both lookups
+ * <p>{@link DBHistory#getFailedLookupRate} is one rate covering both lookups
  * and stores: any success adds 0 and any failure adds 1. Peer selection reads
  * this rate, so the add-data value of every mutator has to stay exact.
  *
@@ -56,7 +56,7 @@ public class DBHistoryMetricTest {
 
     /**
      * Fraction of the 1 hour bucket that was recorded as a failure. The lifetime
-     * average is used because {@link Rate#getAverageValue()} only reflects data
+     * average is used because {@link Rate#getAverageValue} only reflects data
      * that has already been coalesced into a completed period.
      */
     private double hourFailRate(DBHistory hist) {

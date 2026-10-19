@@ -164,7 +164,7 @@ public class RouterContext extends I2PAppContext {
 
     /**
      * Remove a property provided during the context construction.
-     * Only for use by the router. Others use Router.saveConfig()
+     * Only for use by the router. Others use {@link net.i2p.router.Router#saveConfig}.
      *
      * @param propName The name of the property.
      */
@@ -290,7 +290,7 @@ public class RouterContext extends I2PAppContext {
 
     /**
      * Convenience method for getting the router hash.
-     * Equivalent to context.router().getRouterInfo().getIdentity().getHash()
+     * Equivalent to context.router().getRouterInfo().getIdentity().getHash().
      *
      * @return may be null if called very early
      */
@@ -384,7 +384,7 @@ public class RouterContext extends I2PAppContext {
     public KeyManager keyManager() { return _keyManager; }
 
     /**
-     * How do we pass messages from our outNetMessagePool to another router
+     * How do we pass messages from our outNetMessagePool to another router.
      *
      * @return the CommSystemFacade instance
      */
@@ -417,7 +417,7 @@ public class RouterContext extends I2PAppContext {
     public ProfileManager profileManager() { return _profileManager; }
 
     /**
-     * Coordinate this router's bandwidth limits
+     * Coordinate this router's bandwidth limits.
      *
      * @return the FIFOBandwidthLimiter instance
      */
@@ -425,14 +425,14 @@ public class RouterContext extends I2PAppContext {
 
     /**
      * Coordinate this router's tunnels (its pools, participation, backup, etc).
-     * Any configuration for the tunnels is rooted from the context's properties
+     * Any configuration for the tunnels is rooted from the context's properties.
      *
      * @return the TunnelManagerFacade instance
      */
     public TunnelManagerFacade tunnelManager() { return _tunnelManager; }
 
     /**
-     * Handle tunnel messages, as well as coordinate the gateways
+     * Handle tunnel messages, as well as coordinate the gateways.
      *
      * @return the TunnelDispatcher instance
      */
@@ -503,8 +503,8 @@ public class RouterContext extends I2PAppContext {
      * Tie in the router's config as properties, as well as whatever the
      * I2PAppContext says.
      *
-     * @return the value of the named property, taken from router.config when set and
-     *         otherwise from the app context, or null if neither defines it
+     * @return the value of the named property, taken from {@code router.config} when set and
+     * otherwise from the app context, or null if neither defines it
      */
     @Override
     public String getProperty(String propName) {
@@ -518,8 +518,8 @@ public class RouterContext extends I2PAppContext {
      * Tie in the router's config as properties, as well as whatever the
      * I2PAppContext says.
      *
-     * @return the value of the named property, taken from router.config when set and
-     *         otherwise from the app context, or defaultVal if neither defines it
+     * @return the value of the named property, taken from {@code router.config} when set and
+     * otherwise from the app context, or defaultVal if neither defines it
      */
     @Override
     public String getProperty(String propName, String defaultVal) {
@@ -531,9 +531,9 @@ public class RouterContext extends I2PAppContext {
     }
 
     /**
-     * Return an int with an int default
+     * Return an int with an int default.
      * @return the value of the named property parsed as an int, or defaultVal if it is
-     *         unset or does not parse as an integer
+     * unset or does not parse as an integer
      */
     @Override
     public int getProperty(String propName, int defaultVal) {
@@ -551,10 +551,10 @@ public class RouterContext extends I2PAppContext {
     }
 
     /**
-     * Return a long with a long default
+     * Return a long with a long default.
      *
      * @return the value of the named property parsed as a long, or defaultVal if it is
-     *         unset or does not parse as a long
+     * unset or does not parse as a long
      * @since 0.9.4
      */
     @Override
@@ -598,7 +598,7 @@ public class RouterContext extends I2PAppContext {
         }
     }
 
-    /** Override to support storage in router.config */
+    /** Override to support storage in {@code router.config}. */
     @Override
     public KeyRing keyRing() {
         if (!_keyRingInitialized)
@@ -648,7 +648,7 @@ public class RouterContext extends I2PAppContext {
     }
 
     /**
-     * Use this instead of context instanceof RouterContext
+     * Use this instead of context instanceof RouterContext.
      *
      * @return true always, as this class is the router's own context
      * @since 0.7.9
@@ -682,10 +682,10 @@ public class RouterContext extends I2PAppContext {
 
     /**
      * The RouterAppManager.
-     * For convenience, same as clientAppManager(), no cast required
+     * For convenience, same as clientAppManager(), no cast required.
      *
      * @return the same RouterAppManager that clientAppManager() returns, already typed
-     *         as the router-specific subclass
+     * as the router-specific subclass
      * @since 0.9.11
      */
     public RouterAppManager routerAppManager() {
@@ -723,7 +723,7 @@ public class RouterContext extends I2PAppContext {
      * may want to test out how things react when peers don't agree on
      * how to skew.
      * <p>
-     * Returns same thing as routerKeyGenerator()
+     * Returns same thing as routerKeyGenerator().
      *
      * @return non-null
      * @since 0.9.16 Overrides I2PAppContext. Returns non-null in RouterContext and null in I2PAppcontext.

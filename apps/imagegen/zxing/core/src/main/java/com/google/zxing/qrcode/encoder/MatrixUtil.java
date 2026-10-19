@@ -23,8 +23,6 @@ import com.google.zxing.qrcode.decoder.Version;
 
 /**
  * Utility class for QR code matrix operations.
- * @author satorux@google.com (Satoru Takabayashi) - creator
- * @author dswitkin@google.com (Daniel Switkin) - ported from C++
  */
 final class MatrixUtil {
 

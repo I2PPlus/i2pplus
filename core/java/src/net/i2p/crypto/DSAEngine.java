@@ -78,7 +78,7 @@ public final class DSAEngine {
     }
 
     /**
-     * Verify using any sig type as of 0.9.12 (DSA only prior to that)
+     * Verify using any sig type as of 0.9.12 (DSA only prior to that).
      *
      * @param signature the signature to verify
      * @param signedData the data that was signed
@@ -117,7 +117,7 @@ public final class DSAEngine {
     }
 
     /**
-     * Verify using DSA-SHA1 ONLY
+     * Verify using DSA-SHA1 ONLY.
      *
      * @param signature the signature to verify
      * @param in the data to hash and verify, read to EOF but not closed
@@ -129,7 +129,7 @@ public final class DSAEngine {
     }
 
     /**
-     * Verify using DSA-SHA1 ONLY
+     * Verify using DSA-SHA1 ONLY.
      *
      * @param signature the signature to verify
      * @param hash SHA-1 hash, NOT a SHA-256 hash
@@ -268,7 +268,7 @@ public final class DSAEngine {
     }
 
     /**
-     * Sign using any key type as of 0.9.12 (DSA-SHA1 only prior to that)
+     * Sign using any key type as of 0.9.12 (DSA-SHA1 only prior to that).
      *
      * @param data the data to sign
      * @param offset index within data of the first byte to sign

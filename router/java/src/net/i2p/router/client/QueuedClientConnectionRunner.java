@@ -11,14 +11,13 @@ import net.i2p.router.RouterContext;
  * Zero-copy in-JVM.
  * While super() starts both a reader and a writer thread, we only need a reader thread here.
  *
- * @author zzz
  * @since 0.8.3
  */
 class QueuedClientConnectionRunner extends ClientConnectionRunner {
     private final I2CPMessageQueue queue;
 
     /**
-     * Create a new runner with the given queues
+     * Create a new runner with the given queues.
      *
      * @param context the router context
      * @param manager the client manager

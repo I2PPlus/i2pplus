@@ -29,7 +29,6 @@ import org.cybergarage.upnp.*;
  * providing standardized response format with required UPnP headers and device information to
  * enable successful device discovery and connection establishment.
  *
- * @author Satoshi Konno
  * @since 1.0
  */
 public class SSDPSearchResponse extends SSDPResponse {

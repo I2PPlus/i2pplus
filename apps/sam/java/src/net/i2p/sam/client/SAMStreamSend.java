@@ -52,7 +52,7 @@ public class SAMStreamSend {
     private boolean _isV32;
     private String _v3ID;
 
-    /** Connection id (Integer) to peer (Flooder) */
+    /** Connection id (Integer) to peer (Flooder). */
     private final Map<String, Sender> _remotePeers;
     private static I2PSSLSocketFactory sslSocketFactory;
 
@@ -295,6 +295,8 @@ public class SAMStreamSend {
     }
 
     /**
+     * Send the HELLO and log in.
+     *
      * @param isMaster is this the control socket
      * @return our b64 dest or null
      */
@@ -507,12 +509,16 @@ public class SAMStreamSend {
         }
 
         /**
+         * SAM connection id.
+         *
          * @return the connection id
          */
         public String getConnectionId() { return _connectionId; }
         /**
+         * Remote destination of the stream.
+         *
          * @return the remote destination read from the dest file, or null before
-         *         the connection is opened
+         * the connection is opened
          */
         public String getDestination() { return _remoteDestination; }
 

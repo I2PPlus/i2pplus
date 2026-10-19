@@ -1,24 +1,24 @@
 package net.i2p.router;
 
 /**
- * Test status for tunnel testing display
+ * Test status for tunnel testing display.
  *
  * @since 0.9.68+
  */
 public enum TunnelTestStatus {
-    /** No test has been run yet */
+    /** No test has been run yet. */
     UNTESTED,
-    /** Test is currently in progress */
+    /** Test is currently in progress. */
     TESTING,
-    /** Recent successful test */
+    /** Recent successful test. */
     GOOD,
-    /** One or two consecutive failures */
+    /** One or two consecutive failures. */
     FAILING,
-    /** Three consecutive failures, marked for removal */
+    /** Three consecutive failures, marked for removal. */
     FAILED,
-    /** Scheduled for early expiry due to slow tunnel */
+    /** Scheduled for early expiry due to slow tunnel. */
     TOO_SLOW,
-    /** Scheduled for early expiry due to pool over budget */
+    /** Scheduled for early expiry due to pool over budget. */
     OVER_BUDGET;
 
     /**
@@ -53,7 +53,7 @@ public enum TunnelTestStatus {
      * excluded only {@link #FAILING}, so a pool holding nothing but dead
      * tunnels still reported full capacity and suppressed its own
      * pre-build.  Callers that need a narrower rule should ask
-     * {@link #isDead()} or {@link #isFailing()} directly.
+     * {@link #isDead} or {@link #isFailing} directly.
      *
      * @return true for {@link #FAILED} and {@link #FAILING}
      * @since 0.9.71+

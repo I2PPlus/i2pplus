@@ -299,7 +299,7 @@ public class WizardHelper extends HelperBase {
         return rv;
     }
 
-    /** test results */
+    /** Test results. */
     private static class TestListener implements MLabRunner.ToolListener {
         private String _summary;
         private String _detail;
@@ -317,18 +317,26 @@ public class WizardHelper extends HelperBase {
          */
         public synchronized void complete(Map<String, Object> results) {_results = results;}
         /**
+         * Whether the wizard finished.
+         *
          * @return whether the run has finished and stored its results
          */
         public synchronized boolean isComplete() {return _results != null;}
         /**
+         * One-line wizard result.
+         *
          * @return the progress line reported by the test, or null before it starts
          */
         public synchronized String getSummary() {return _summary;}
         /**
+         * Detailed wizard result.
+         *
          * @return the detail text reported by the test, or null before it starts
          */
         public synchronized String getDetail() {return _detail;}
         /**
+         * Wizard results as a map.
+         *
          * @return the result map, or null until the run completes
          */
         public synchronized Map<String, Object> getResults() {return _results;}

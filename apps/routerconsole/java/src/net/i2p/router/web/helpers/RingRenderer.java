@@ -21,7 +21,7 @@ public class RingRenderer {
     private static final int RING_RADIUS = (RING_SIZE - RING_STROKE) / 2;
     private static final double RING_CIRCUM = 2 * Math.PI * RING_RADIUS;
 
-    /** Mode: health (green/yellow/red), activity (blue/cyan) */
+    /** Mode: health (green/yellow/red), activity (blue/cyan). */
     public static final String MODE_HEALTH = "health";
     /**
      * Ring mode colouring the arc by how recently the peer was seen.
@@ -31,23 +31,23 @@ public class RingRenderer {
      * Ring mode colouring the arc by the peer's transport latency.
      */
     public static final String MODE_LATENCY = "latency";
-    /** Mode: dual-arc ratio (green + red arcs showing a proportion) */
+    /** Mode: dual-arc ratio (green + red arcs showing a proportion). */
     public static final String MODE_RATIO = "ratio";
-    /** Mode: neutral (green/yellow/cyan, never red — for uptime, metrics that aren't inherently bad) */
+    /** Mode: neutral (green/yellow/cyan, never red — for uptime, metrics that aren't inherently bad). */
     public static final String MODE_NEUTRAL = "neutral";
-    /** Mode: anomaly — color by deviation from the router's own baseline, not an absolute cap */
+    /** Mode: anomaly — color by deviation from the router's own baseline, not an absolute cap. */
     public static final String MODE_ANOMALY = "anomaly";
 
     // Deviation bands for MODE_ANOMALY, as a fraction of baseline
     // (|current - baseline| / baseline)
-    /** Green anomaly band threshold */
+    /** Green anomaly band threshold. */
     static final double ANOMALY_GREEN_BAND = 0.25;
-    /** Yellow anomaly band threshold */
+    /** Yellow anomaly band threshold. */
     static final double ANOMALY_YELLOW_BAND = 0.75;
 
-    /** Plot type: mini bars at the bottom of the ring */
+    /** Plot type: mini bars at the bottom of the ring. */
     public static final String PLOT_BARS = "bars";
-    /** Plot type: line chart clipped to the inner circle area */
+    /** Plot type: line chart clipped to the inner circle area. */
     public static final String PLOT_LINE = "line";
 
     private static final AtomicInteger _clipId = new AtomicInteger();
@@ -362,9 +362,12 @@ public class RingRenderer {
      * Values are normalized to sum to 1.0 at render time.
      */
     public static class RingSection {
-        /** proportion (0.0–1.0) */
+        /** proportion (0.0–1.0). */
         public final double value;
-        /** CSS color class: &quot;green&quot;, &quot;red&quot;, &quot;yellow&quot;, &quot;blue&quot;, &quot;cyan&quot;, &quot;gray&quot; */
+        /**
+         * CSS color class: &quot;green&quot;, &quot;red&quot;, &quot;yellow&quot;, &quot;blue&quot;,
+          * &quot;cyan&quot;, &quot;gray&quot;.
+         */
         public final String cssClass;
 
         /**
@@ -477,7 +480,7 @@ public class RingRenderer {
         return score >= 0.8 ? "green" : score >= 0.5 ? "yellow" : "red";
     }
 
-    /** HTML-escape a string */
+    /** HTML-escape a string. */
     private static String esc(String s) {
         if (s == null) return "";
         StringBuilder buf = new StringBuilder(s.length() + 16);

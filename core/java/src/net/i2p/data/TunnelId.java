@@ -30,7 +30,7 @@ import java.io.OutputStream;
  * <li>{@link #equals(Object)} requires an instance of TunnelId, so unlike
  * {@link SimpleDataStructure} this class is safe to mix with other types
  * in a Set or Map.</li>
- * <li>{@link #hashCode()} is the low 32 bits of the ID, which is the whole
+ * <li>{@link #hashCode} is the low 32 bits of the ID, which is the whole
  * valid range.</li>
  * </ul>
  * <p>Mutability and thread safety:</p>
@@ -44,10 +44,9 @@ import java.io.OutputStream;
  * afterwards can be shared freely between threads.</li>
  * </ul>
  *
- * @author jrandom
  */
 public class TunnelId {
-    /** LOCKING: this, see setTunnelId() */
+    /** LOCKING: this, see setTunnelId(). */
     private long _tunnelId;
 
     /** Maximum tunnel ID value (2^32 - 1). */

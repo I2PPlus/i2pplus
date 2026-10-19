@@ -77,7 +77,7 @@ public class BigIntegerLittleEndianEncoding extends Encoding implements Serializ
     }
 
     /**
-     * Convert in to big endian
+     * Convert in to big endian.
      *
      * @param in the $(b-1)$-bit encoding of a FieldElement.
      * @return the decoded value as a BigInteger

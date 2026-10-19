@@ -70,7 +70,7 @@ class EventPumper implements Runnable {
     private Selector _selector;
     private final Set<NTCPConnection> _wantsWrite = new ConcurrentHashSet<>(32);
     /**
-     * The following 3 are unbounded and lockless for performance in runDelayedEvents()
+     * The following 3 are unbounded and lockless for performance in runDelayedEvents().
      */
     private final Queue<NTCPConnection> _wantsRead = new ConcurrentLinkedQueue<>();
     private final Queue<ServerSocketChannel> _wantsRegister = new ConcurrentLinkedQueue<>();
@@ -79,9 +79,9 @@ class EventPumper implements Runnable {
     private final ObjectCounter<String> _blockedIPs;
     private final ObjectCounter<String> _failedInboundEncryption;
     private long _expireIdleWriteTime;
-    /** Tracks consecutive select() calls that returned immediately (tight loop guard) */
+    /** Tracks consecutive select() calls that returned immediately (tight loop guard). */
     private int _consecutiveFastSelects;
-    /** After this many consecutive immediate select returns, yield briefly */
+    /** After this many consecutive immediate select returns, yield briefly. */
     private static final int MAX_CONSECUTIVE_FAST_SELECTS = 100;
     private static final boolean USE_DIRECT = false;
     private final boolean _nodelay;
@@ -92,11 +92,11 @@ class EventPumper implements Runnable {
     private static final long MIN_RETRY_INTERVAL = 500;
     private static final int MAX_RETRY_INTERVAL = 5 * 60 * 1000; // 5 minutes
     private static final float RETRY_BACKOFF_FACTOR = 1.5f;
-    /** Max consecutive failures before giving up on a peer entirely (until map clearance) */
+    /** Max consecutive failures before giving up on a peer entirely (until map clearance). */
     private static final int MAX_OUTBOUND_RETRY_COUNT = 3;
     private long _lastRetryMapClear = System.currentTimeMillis();
     private static final long RETRY_MAP_CLEAR_INTERVAL = 5 * 60 * 1000L; // 5 minutes
-    /** Max entries before clearing retry maps to prevent unbounded growth under DoS */
+    /** Max entries before clearing retry maps to prevent unbounded growth under DoS. */
     private static final int MAX_RETRY_MAP_SIZE = 1024;
 
     // Cached snapshot of the ntcp.inboundConn one-minute rate, refreshed at most
@@ -152,7 +152,7 @@ class EventPumper implements Runnable {
     private static final int MIN_MAX_IDLE_LPS = 1;
     private static final int MAX_MAX_IDLE_LPS = 5000;
     private static volatile long _selectorLoopDelay = IS_SLOW ? 100 : 5;
-    /** Max delay when idle — must stay low for client responsiveness */
+    /** Max delay when idle — must stay low for client responsiveness. */
     private static final long SELECTOR_MAX_DELAY = 20;
     private static volatile long _currentDelay = _selectorLoopDelay;
     private static final long BLOCKED_IP_FREQ = 43 * 60 * 1000L;
@@ -246,7 +246,7 @@ class EventPumper implements Runnable {
 
     /**
      * Create the pump for a transport, registering the rate stats it writes.
-     * No thread is started until {@link #startPumping()}.
+     * No thread is started until {@link #startPumping}.
      *
      * @param ctx the router context, used for configuration, logging and stats
      * @param transport the NTCP transport whose connections this pump drives
@@ -300,7 +300,7 @@ class EventPumper implements Runnable {
     }
 
     /**
-     * Selector can take quite a while to close after calling stopPumping()
+     * Selector can take quite a while to close after calling stopPumping().
      * @return true until stopPumping() is called and the selector has closed
      */
     public boolean isAlive() {
@@ -309,7 +309,7 @@ class EventPumper implements Runnable {
 
     /**
      * Register the acceptor.
-     * This is only called from NTCPTransport.bindAddress(), so it isn't clear
+     * This is only called from {@link net.i2p.router.transport.ntcp.NTCPTransport#bindAddress}, so it isn't clear
      * why this needs a queue.
      *
      * @param chan the listening channel to add to the selector
@@ -471,10 +471,10 @@ class EventPumper implements Runnable {
     /**
      * Throttle a single idle loop iteration when select() spins faster than the
      * configured maximum (1e9 / _maxIdleLps executes per second). Selector wakeup()
-     * storms can defeat the select() timeout and busy-spin the loop; this holds each
+     * storms can defeat the select() timeout and busy-spin the loop. This holds each
      * no-work iteration to a minimum duration so the real work path never sleeps.
      *
-     * @param iterStartNanos System.nanoTime() taken at the start of the iteration
+     * @param iterStartNanos {@link java.lang.System#nanoTime} taken at the start of the iteration
      * @return {@code true} if throttling was interrupted and the pumper must exit
      * @since 0.9.71+
      */
@@ -580,7 +580,7 @@ class EventPumper implements Runnable {
      * Close every registered channel (NTCP connections and the server socket) and
      * the selector itself on pumper shutdown. Iterates a snapshot copy of the keys
      * because closing a connection cancels its key and mutates the selector's live
-     * key set; iterating the set directly would race with that mutation.
+     * key set. Iterating the set directly would race with that mutation.
      * @since 0.9.71+
      */
     private void cleanupShutdown() {
@@ -612,7 +612,7 @@ class EventPumper implements Runnable {
      * Periodic failsafe scan of all connections to:
      * - Reassert OP_WRITE interest if data is pending
      * - Close idle/stale connections
-     * - Send periodic RouterInfo
+     * - Send periodic RouterInfo.
      */
     private void doFailsafeCheck() {
         long startTime = System.nanoTime();
@@ -772,7 +772,7 @@ class EventPumper implements Runnable {
     }
 
     /**
-     * This is only called from NTCPConnection.complete()
+     * This is only called from {@code NTCPConnection.complete()}
      * if there is more data, which is rare (never?)
      * so we don't need to check for dups or make _wantsRead a Set.
      *
@@ -874,7 +874,7 @@ class EventPumper implements Runnable {
     /**
      * Screen an inbound connection attempt and decide whether to register it.
      * Blocklisted peers and refused attempts skip the flood/establishment
-     * decision entirely; the cheap hard rejections (bans, global limit) are done
+     * decision entirely. The cheap hard rejections (bans, global limit) are done
      * first so the per-IP count and the rate-based flood check run only for
      * otherwise-eligible peers.
      *
@@ -998,7 +998,7 @@ class EventPumper implements Runnable {
      * rejected because the accept rate is spiking well above the recent baseline
      * while the router is already heavily loaded with connections.
      * <p>
-     * This is the pure decision half of {@link #shouldAllowInboundEstablishment()}.
+     * This is the pure decision half of {@link #shouldAllowInboundEstablishment}.
      * It performs no locking and takes raw counters instead of a {@link Rate}, so
      * the hot accept path never blocks on the global Rate monitor. The arithmetic
      * is pinned by {@code InboundFloodDecisionTest} in the router test tree.
@@ -1008,7 +1008,7 @@ class EventPumper implements Runnable {
      * @param rawLastCount events in the most recent full rate period
      * @param periodStart start time of the current rate period, milliseconds
      * @param hasCapacity true if the transport reports spare bandwidth, which
-     *                    relaxes the flood threshold vs. punishing when saturated
+     * relaxes the flood threshold vs. punishing when saturated
      * @param maxConnections the transport connection ceiling
      * @param currentConnections the live peer connection count
      * @param random source of randomness for the probabilistic decision
@@ -1321,7 +1321,7 @@ class EventPumper implements Runnable {
 
     /**
      * Handle a select() wakeup with no readable bytes. A burst of these within a
-     * one-second window is treated as a connection defect and closed; otherwise the
+     * one-second window is treated as a connection defect and closed. Otherwise the
      * connection stays read-interested and the zero-read count is recorded so the
      * Tuner can judge how much of the loop is spurious wakeups.
      *
@@ -1423,14 +1423,14 @@ class EventPumper implements Runnable {
      * Single-writer contract: this must only be called on the pumper thread
      * (via processWrite(SelectionKey) for OP_WRITE events). Producer threads
      * call wantsWrite() to register interest; they never write to the socket
-     * themselves. This keeps SocketChannel.write() strictly single-threaded per
+     * themselves. This keeps {@link java.nio.channels.SocketChannel#write} strictly single-threaded per
      * connection and removes the _writeLock serialization that previously
      * spanned the whole drain loop (which could stall frame pushes from the
      * writer pool and other connections).
      *
      * @since 0.9.71+ single-writer drain without _writeLock; previously the
-     *        drain ran under the connection's write lock and was also
-     *        invoked directly from producer threads
+     * drain ran under the connection's write lock and was also
+     * invoked directly from producer threads
      */
     private boolean processWrite(final NTCPConnection con, final SelectionKey key) {
         boolean rv = false;
@@ -1745,7 +1745,7 @@ class EventPumper implements Runnable {
 
     /**
      * Track failed inbound handshake with invalid encryption and ban if too many failures.
-     * Ban reason: "Invalid encryption"
+     * Ban reason: "Invalid encryption".
      * @param ip byte array IP address
      * @param hash optional router hash if available
      */

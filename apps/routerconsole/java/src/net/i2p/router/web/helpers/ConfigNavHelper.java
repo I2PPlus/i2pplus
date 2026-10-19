@@ -13,7 +13,7 @@ import net.i2p.router.web.PluginStarter;
 
 /**
  * Render the configuration menu at the top of all the config pages.
- * refactored from confignav.jsp to reduce size and make translation easier
+ * refactored from confignav.jsp to reduce size and make translation easier.
  */
 public class ConfigNavHelper extends HelperBase {
     /**
@@ -21,7 +21,7 @@ public class ConfigNavHelper extends HelperBase {
      */
     public ConfigNavHelper() {}
 
-    /** configX.jsp */
+    /** configX.jsp. */
     private static final String[] pages =
                                           {"", "net", "ui", "sidebar", "home", "service", "update", "tunnels",
                                            "clients", "peer", "keyring", "logging", "stats",

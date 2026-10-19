@@ -30,7 +30,7 @@ import net.i2p.util.LogManager;
 
 /**
  * Tests for the checkTunnel-failure path in ExploratoryPeerSelector:
- * the selection must fail as an empty list (never null — the TUN-009
+ * the selection must fail as an empty list (never null. The TUN-009
  * contract), and the cooldown maps must not be swept during selection
  * (TUN-010): expired entries are ignored at read time and only pruned
  * when a map exceeds its size cap, so a selection never mutates the

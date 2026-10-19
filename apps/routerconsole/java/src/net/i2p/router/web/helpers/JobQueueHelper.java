@@ -97,8 +97,8 @@ public class JobQueueHelper extends HelperBase {
     }
 
     /**
-     *  Moved from JobQueue
-     *  @since 0.8.9
+     * Moved from JobQueue.
+     * @since 0.8.9
      */
     private void renderStatusHTML(Writer out) throws IOException {
         List<Job> readyJobs = new ArrayList<>(8);
@@ -402,7 +402,11 @@ public class JobQueueHelper extends HelperBase {
         buf.setLength(0);
     }
 
-    /** @since 0.9.5 */
+    /**
+     * Append per-job counts to the buffer.
+     *
+     * @since 0.9.5
+     */
     private void getJobCounts(StringBuilder buf, ObjectCounterUnsafe<String> counter, int scheduledCount) {
         List<String> names = new ArrayList<>(counter.objects());
         int totalJobs = _context.jobQueue().getReadyCount() + scheduledCount;
@@ -431,9 +435,9 @@ public class JobQueueHelper extends HelperBase {
     }
 
     /**
-     *  Render the HTML for the job stats.
-     *  Moved from JobQueue
-     *  @since 0.8.9
+     * Render the HTML for the job stats.
+     * Moved from JobQueue.
+     * @since 0.8.9
      */
     private void getJobStats(StringBuilder buf) {
         boolean recentMode = isRecentMode();

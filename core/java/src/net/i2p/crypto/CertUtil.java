@@ -176,7 +176,7 @@ public final class CertUtil {
      * Get the set of Subject Alternative Names, including
      * DNSNames, RFC822Names, IPv4 and v6 addresses as strings.
      * <p>
-     * see X509Certificate.getSubjectAlternativeNames()
+     * see {@link java.security.cert.X509Certificate#getSubjectAlternativeNames}.
      *
      * @param cert the certificate to extract names from
      * @return non-null, empty on error or none found

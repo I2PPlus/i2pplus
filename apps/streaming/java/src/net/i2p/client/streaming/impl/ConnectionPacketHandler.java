@@ -94,7 +94,7 @@ class ConnectionPacketHandler {
 
     /**
      * Maximum slow start window size.
-     * Tunable via i2p.streaming.maxSlowStartWindow (default: 32).
+     * Tunable via {@code i2p.streaming.maxSlowStartWindow} (default: 32).
      * @param ctx the I2P application context, unused by this static lookup
      * @return the max slow start window
      */
@@ -542,7 +542,7 @@ class ConnectionPacketHandler {
     /**
      * Adjust the congestion window based on ACKs received.
      * This either does nothing or increases the window; it never decreases it.
-     * Decreasing is done in Connection.ResendPacketEvent.retransmit().
+     * Decreasing is done in {@link net.i2p.client.streaming.impl.Connection.ResendPacketEvent#retransmit()}.
      *
      * @param con the connection whose window is adjusted
      * @param isNew was it a new packet? false for ack-only

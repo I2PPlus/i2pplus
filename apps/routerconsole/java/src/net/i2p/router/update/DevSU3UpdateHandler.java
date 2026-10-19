@@ -58,6 +58,8 @@ class DevSU3UpdateHandler implements Checker, Updater {
     }
 
     /**
+     * Look for a dev SU3 update.
+     *
      * @param currentVersion ignored, we use current router version
      * @return active task or null if unable to check
      */

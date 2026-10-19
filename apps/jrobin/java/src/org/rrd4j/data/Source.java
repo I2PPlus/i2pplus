@@ -61,18 +61,20 @@ abstract class Source {
     /**
      * The time, in seconds since the epoch, of each recorded value.
      *
-     * @return the array of timestamps, index-aligned with {@link #getValues()}
+     * @return the array of timestamps, index-aligned with {@link #getValues}
      */
     long[] getTimestamps() {
         return timestamps;
     }
 
     /**
+     * Compute the aggregate values over the window.
+     *
      * @param tStart start of the aggregation window, in seconds since the epoch
      * @param tEnd end of the aggregation window, in seconds since the epoch
      * @return the Aggregates computed over the window
      * @deprecated This method is deprecated. Uses instance of {@link org.rrd4j.data.Variable}, used
-     *             with {@link org.rrd4j.data.DataProcessor#addDatasource(String, String, Variable)}
+     * with {@link org.rrd4j.data.DataProcessor#addDatasource(String, String, Variable)}
      */
     @Deprecated
     Aggregates getAggregates(long tStart, long tEnd) {
@@ -81,13 +83,15 @@ abstract class Source {
     }
 
     /**
+     * Compute the percentile value over the window.
+     *
      * @param tStart start of the percentile window, in seconds since the epoch
      * @param tEnd end of the percentile window, in seconds since the epoch
      * @param percentile the percentile to compute, from 0.0 through 100.0
      * @return the value at that percentile within the window
      * @deprecated This method is deprecated. Uses instance of {@link
-     *             org.rrd4j.data.Variable.PERCENTILE}, used with {@link
-     *             org.rrd4j.data.DataProcessor#addDatasource(String, String, Variable)}
+     * org.rrd4j.data.Variable.PERCENTILE}, used with {@link
+     * org.rrd4j.data.DataProcessor#addDatasource(String, String, Variable)}
      */
     @Deprecated
     double getPercentile(long tStart, long tEnd, double percentile) {

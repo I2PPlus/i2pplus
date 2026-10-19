@@ -15,7 +15,7 @@ import net.i2p.util.CommandLine;
  */
 public class AddressBookCommandLine extends CommandLine {
 
-    /** List of address book specific classes */
+    /** List of address book specific classes. */
     protected static final List<String> ACLASSES = Arrays.asList(new String[] {
         "net.i2p.addressbook.HostTxtParser",
         "net.i2p.router.naming.BlockfileNamingService",

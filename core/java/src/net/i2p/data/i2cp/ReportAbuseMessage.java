@@ -17,9 +17,8 @@ import java.io.InputStream;
 
 /**
  * Defines the message a client sends to a router when asking the
- * router what its address visibility is
+ * router what its address visibility is.
  *
- * @author jrandom
  */
 public class ReportAbuseMessage extends I2CPMessageImpl {
     /**

@@ -6,7 +6,6 @@ import java.io.Serializable;
  * Common interface for all $(b-1)$-bit encodings of elements
  * of EdDSA finite fields.
  *
- * @author str4d
  * @since 0.9.15
  *
  */
@@ -17,7 +16,7 @@ public abstract class Encoding implements Serializable {
 
     public Encoding() {}
 
-    /** The field */
+    /** The field. */
     protected Field f;
 
     /**

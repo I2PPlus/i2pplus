@@ -77,46 +77,46 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     private static final Pattern COMMA_SPLIT = Pattern.compile("\\s*,\\s*");
     /** Class logger. */
     protected final Log _log;
-    /** Ban logger */
+    /** Ban logger. */
     private BanLogger _banLogger;
-    /** Kbucket set */
+    /** Kbucket set. */
     private KBucketSet<Hash> _kb; // peer hashes sorted into kbuckets, but within kbuckets, unsorted
-    /** Data store */
+    /** Data store. */
     private DataStore _ds; // hash to DataStructure mapping, persisted when necessary
-    /** Where the data store is pushing the data */
+    /** Where the data store is pushing the data. */
     private String _dbDir;
-    /** Hash objects that we should search on (to fill up a bucket, not to get data) */
+    /** Hash objects that we should search on (to fill up a bucket, not to get data). */
     private final Set<Hash> _exploreKeys;
-    /** Max peers held awaiting direct-contact verification. @since 0.9.71+ */
+    /** Max peers held awaiting direct-contact verification. @since 0.9.71+. */
     static final int UNVERIFIED_MAX = 1024;
     /**
      * Drop a pending peer from the verification queue after this long; it is
      * still in the netdb, it just stops being a bucket candidate until it
-     * proves itself. @since 0.9.71+
+     * proves itself. @since 0.9.71+.
      */
     static final long UNVERIFIED_MAX_AGE = 2 * 60 * 60 * 1000L;
     /**
      * Max bucket entries sharing one IP group — eclipse/Sybil resistance,
-     * mirrors kubo's table.go limits. @since 0.9.71+
+     * mirrors kubo's table.go limits. @since 0.9.71+.
      */
     static final int IP_GROUP_BUCKET_LIMIT = 2;
     /**
-     * Max entries across all buckets sharing one IP group. @since 0.9.71+
+     * Max entries across all buckets sharing one IP group. @since 0.9.71+.
      */
     static final int IP_GROUP_GLOBAL_LIMIT = 3;
     /**
      * Peers stored in the netdb but not yet in the routing buckets, awaiting
      * direct-contact evidence before insertion (verify-before-add). Filled by
-     * {@link #addContact}, drained by {@link #promoteUnverifiedPeers()} and
+     * {@link #addContact}, drained by {@link #promoteUnverifiedPeers} and
      * the probe cycle. Capped at {@link #UNVERIFIED_MAX}, entries older than
      * {@link #UNVERIFIED_MAX_AGE} are dropped. Hash -> time queued.
      *
      * @since 0.9.71+
      */
     private final Map<Hash, Long> _unverifiedPeers = new ConcurrentHashMap<>(64);
-    /** Initialized flag */
+    /** Initialized flag. */
     private boolean _initialized;
-    /** Clock independent time of when we started up */
+    /** Clock independent time of when we started up. */
     private StartExplorersJob _exploreJob;
     /** When was the last time an exploration found something new? */
     private long _lastExploreNew;
@@ -124,21 +124,21 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     protected final PeerSelector _peerSelector;
     /** _context. */
     protected final RouterContext _context;
-    /** Reseed checker */
+    /** Reseed checker. */
     private final ReseedChecker _reseedChecker;
-    /** Last RI publish time */
+    /** Last RI publish time. */
     private volatile long _lastRIPublishTime;
-    /** Negative cache */
+    /** Negative cache. */
     private NegativeLookupCache _negativeCache;
     /** Network identifier. */
     protected final int _networkID;
-    /** Blind cache */
+    /** Blind cache. */
     private final BlindCache _blindCache;
-    /** DB ID */
+    /** DB ID. */
     private final Hash _dbid;
-    /** Expire leases job */
+    /** Expire leases job. */
     private final Job _elj;
-    /** Expire routers job */
+    /** Expire routers job. */
     private final Job _erj;
     /** Property: minimum router version for exploration. */
     static final String PROP_MIN_ROUTER_VERSION = "router.minVersionAllowed";
@@ -193,7 +193,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     /** Interval between local leaseset refreshes. */
     private static final long LOCAL_LEASESET_REFRESH_INTERVAL = 150*1000L;  // 2.5 minutes
 
-    /** Singleton job to refresh client LeaseSets - only one instance exists */
+    /** Singleton job to refresh client LeaseSets - only one instance exists. */
     private volatile RefreshClientLeaseSetsJob _refreshClientLeaseSetsJob; // NOSONAR S1450: created and queued in startup()
 
     /**
@@ -217,7 +217,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     /** Cooldown before a floodfill can be queried again in ms. */
     private static final long RECENTLY_QUERIED_COOLDOWN = 60*1000L;
 
-    /** Cached set of blocked countries - lazily initialized */
+    /** Cached set of blocked countries - lazily initialized. */
     private volatile Set<String> _blockedCountries;
 
     /**
@@ -231,11 +231,11 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     /**
      * For 15 minutes after startup, don't fail db entries so that if we were
      * offline for a while, we'll have a chance of finding some live peers with the
-     * previous references
+     * previous references.
      */
     public static long DONT_FAIL_PERIOD = 15*60*1000L;
 
-    /** Don't probe or broadcast data, just respond and search when explicitly needed */
+    /** Don't probe or broadcast data, just respond and search when explicitly needed. */
     private static final boolean QUIET = false;
 
     /** Config property for database directory. */
@@ -254,7 +254,10 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      */
     protected static final int MIN_REMAINING_ROUTERS = MIN_RESEED;
 
-    /** Limits for accepting a dbStore of a router (unless we don't know anyone or just started up) -- see validate() below */
+    /**
+     * Limits for accepting a dbStore of a router (unless we don't know anyone or just started up) -- see
+      * validate() below.
+     */
     private static final long ROUTER_INFO_EXPIRATION = 36*60*60*1000L;
     /** Minimum RouterInfo expiration time in ms. */
     private static final long ROUTER_INFO_EXPIRATION_MIN = 8*60*60*1000L;
@@ -296,21 +299,21 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     /** Delay in ms before starting explore jobs. */
     private static final long EXPLORE_JOB_DELAY = 5*60*1000L;
 
-    /** Don't let leaseSets go too far into the future */
+    /** Don't let leaseSets go too far into the future. */
     private static final long MAX_LEASE_FUTURE = 15*60*1000L;
     /** Maximum future time in ms for meta leases. */
     private static final long MAX_META_LEASE_FUTURE = 65535*1000L;
 
     /**
-     * This needs to be long enough to give us time to start up, but less than 20m
-     * (when we start accepting tunnels and could be a IBGW)
-     * Actually no, we need this soon if we are a new router or other routers have
-     * forgotten about us, else we can't build IB exploratory tunnels.
+     * Long enough to give us time to start up, but less than 20m, when we
+     * start accepting tunnels and could be an IBGW. Actually, we need this
+     * soon if we are a new router or other routers have forgotten about us,
+     * else we can't build IB exploratory tunnels.
      * Unused.
      */
     protected static final long PUBLISH_JOB_DELAY = 15*1000L;
 
-    /** Maximum number of peers to place in the queue to explore */
+    /** Maximum number of peers to place in the queue to explore. */
     static final int MAX_EXPLORE_QUEUE = 64;
 
     /**
@@ -448,7 +451,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     /**
      * The data store.
      *
-     * @return the data store
+     * @return the backing store used to look up and store kademlia data
      */
     DataStore getDataStore() {return _ds;}
 
@@ -623,7 +626,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         if (!QUIET && !isClientDb()) {
             /**
              * Fill the search queue with random keys in buckets that are too small
-             * Disabled since KBucketImpl.generateRandomKey() is b0rked,
+             * Disabled since {@link net.i2p.kademlia.KBucketImpl#generateRandomKey} is b0rked,
              * and anyway, we want to search for a completely random key,
              * not a random key for a particular kbucket.
              */
@@ -645,13 +648,13 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         // PublishLocalRouterInfoJob is now started from Router.setNetDbReady()
     }
 
-    /** Unused, see override */
+    /** Unused, see override. */
     protected void createHandlers() {}
 
     /**
      * The routers closest to that key in response to a remote lookup.
      * Only used by ../HDLMJ
-     * Set MAY INCLUDE our own router - add to peersToIgnore if you don't want
+     * Set MAY INCLUDE our own router - add to peersToIgnore if you don't want.
      *
      * @param key the real key, NOT the routing key
      * @param peersToIgnore can be null
@@ -769,7 +772,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     /**
      * This is only used by StatisticsManager to publish the count if we are floodfill.
      * So to hide a clue that a popular eepsite is hosted on a floodfill router,
-     * only count leasesets that are "received as published", as of 0.7.14
+     * only count leasesets that are "received as published", as of 0.7.14.
      * @return the known lease sets
      */
     @Override
@@ -819,7 +822,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     }
 
     /**
-     * For console ConfigKeyringHelper
+     * For console ConfigKeyringHelper.
      * @param spk the unblinded public key
      * @return true if removed
      */
@@ -828,7 +831,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         return blindCache().removeBlindData(spk);
     }
 
-    /** Notify the netDB that the routing key changed at midnight UTC */
+    /** Notify the netDB that the routing key changed at midnight UTC. */
     @Override
     public void routingKeyChanged() {
         blindCache().rollover();
@@ -967,6 +970,8 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     }
 
     /**
+     * Whether the key is one of our own destinations.
+     *
      * @return true if the key is a destination currently registered locally
      */
     private boolean isLocalDestination(Hash key) {
@@ -1280,7 +1285,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      * Checks if:
      * - we are in strict country mode and router is in same country
      * - blockMyCountry is enabled
-     * - router is in our country (strict country mode)
+     * - router is in our country (strict country mode).
      *
      * @return whether banlist based on country
      */
@@ -1341,7 +1346,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
 
     /**
      * Whether policy bans (country/XG/LU/capability) may be applied to this
-     * router during resolution. Controlled by router.banlist.banNextHop:
+     * router during resolution. Controlled by {@code router.banlist.banNextHop}:
      * when false, peers we are not directly connected to - transit next-hop
      * candidates and client tunnel endpoints heard from the network - are
      * exempt, so transit and client traffic never banlist a peer merely
@@ -1419,11 +1424,11 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
 
     /** Job to asynchronously purge all routers from NetDb matching enabled ban rules. */
     private class PurgeMatchingRoutersJob extends JobImpl {
-        /** To check set */
+        /** To check set. */
         private final Set<Hash> _toCheck;
         /** Iterator over peer hashes during search. */
         private final Iterator<Hash> _iter;
-        /** Purged count */
+        /** Purged count. */
         private int _purged;
 
         /** Job to remove stale router entries. */
@@ -1483,7 +1488,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         return _context.banlist().isBanlistedHostile(key);
     }
 
-    /** Handle banlist and remove */
+    /** Handle banlist and remove. */
     private void handleBanlistAndRemove(RouterInfo ri, Hash key, Job onFailedLookupJob) {
         String caps = ri.getCapabilities();
         String routerId = key.toBase64().substring(0,6);
@@ -1507,7 +1512,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         if (onFailedLookupJob != null) {_context.jobQueue().addJob(onFailedLookupJob);}
     }
 
-    /** Handle permanent blocklist */
+    /** Handle permanent blocklist. */
     private void handlePermanentBlocklist(RouterInfo _ri, Hash key, Job onFailedLookupJob) {
         if (_log.shouldInfo()) {
             _log.info("Dropping RouterInfo [" + key.toBase64().substring(0,6) + "] -> Permanently blocklisted");
@@ -1521,7 +1526,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         }
     }
 
-    /** Handle hostile blocklist */
+    /** Handle hostile blocklist. */
     private void handleHostileBlocklist(RouterInfo _ri, Hash key, Job onFailedLookupJob) {
         if (_log.shouldInfo()) {
             _log.info("Dropping RouterInfo [" + key.toBase64().substring(0,6) + "] -> Blocklisted (tagged as hostile)");
@@ -1540,7 +1545,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      * This will return immediately with the result or null.
      * However, this may still fire off a lookup if the RI is present but expired (and will return null).
      * This may result in deadlocks.
-     * For true local only, use lookupLocallyWithoutValidation()
+     * For true local only, use lookupLocallyWithoutValidation().
      *
      * @return null always for client dbs
      */
@@ -1563,7 +1568,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     /**
      * Proactive republish threshold from config or default (3 minutes).
      * If a lease is expiring within this threshold, it gets republished immediately.
-     * Tunable via i2p.netdb.proactiveRepublishThreshold (default: 180000).
+     * Tunable via {@code i2p.netdb.proactiveRepublishThreshold} (default: 180000).
      * @return the proactive republish threshold
      */
     private long getProactiveRepublishThreshold() {
@@ -1622,7 +1627,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
 
     /**
      * A local client whose LS is not published to the network
-     * (i2cp.dontPublishLeaseSet, e.g. HTTP proxy) still needs the local
+     * ({@code i2cp.dontPublishLeaseSet}, e.g. HTTP proxy) still needs the local
      * copy re-minted while it is active.  Client leases last ~6 min but
      * tunnels rotate on a ~10-min cycle, so without a republish schedule
      * the local LeaseSet shows expired in the netdb for minutes at a time.
@@ -1634,7 +1639,11 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         }
     }
 
-    /** @return true if a graceful shutdown with defined exit codes is in progress */
+    /**
+     * Whether the router is shutting down gracefully.
+     *
+     * @return true if a graceful shutdown with defined exit codes is in progress
+     */
     private boolean isGracefulExitShutdown() {
         if (!_context.router().gracefulShutdownInProgress()) {return false;}
         int code = _context.router().scheduledGracefulExitCode();
@@ -1678,7 +1687,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      */
     private static final long EXPIRY_GRACE_PERIOD = 90*1000L;
 
-    /** Validate lease set expiry */
+    /** Validate lease set expiry. */
     private void validateLeaseSetExpiry(LeaseSet leaseSet) {
         long now = _context.clock().now();
         long earliest = leaseSet.getEarliestLeaseDate();
@@ -2389,7 +2398,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      * Determine whether this routerInfo will be accepted as valid and current
      * given what we know now.
      * <p>
-     * Call this before each use, to check expiration
+     * Call this before each use, to check expiration.
      *
      * @param routerInfo the router info to validate
      * @return reason why the entry is not valid, or null if it is valid
@@ -2489,7 +2498,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     /**
      * Checks if the router's uptime is long enough to begin validating other routers.
      * <p>
-     * The minimum uptime is determined by the property "router.validateRoutersAfter" (in minutes),
+     * The minimum uptime is determined by the property "{@code router.validateRoutersAfter}" (in minutes),
      * or defaults to 20 minutes.
      *
      * @param uptime how long the router has been up, in milliseconds
@@ -2509,7 +2518,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     /**
      * Computes the expiration time for a RouterInfo based on current network conditions.
      * <p>
-     * The expiration time can be customized via the "router.expireRouterInfo" property (in hours),
+     * The expiration time can be customized via the "{@code router.expireRouterInfo}" property (in hours),
      * or defaults based on the number of existing routers or whether this is a floodfill.
      *
      * @param existingRouters the number of routers currently stored on disk
@@ -2541,7 +2550,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      * - Strict country mode
      * - Hidden mode
      * - Configuration-based country bans
-     * - XG router bans
+     * - XG router bans.
      *
      * @param routerInfo the RouterInfo to evaluate
      * @param caps the capabilities string of the router
@@ -2648,7 +2657,7 @@ return false;
       * <p>
       * An XG router is defined as:
       * - Has the G capability (no tunnels)
-      * - Has the X (unlimited bandwidth) capability
+      * - Has the X (unlimited bandwidth) capability.
       *
       * @param routerInfo the RouterInfo to evaluate
       * @param isUs true if the router is the local router
@@ -3008,7 +3017,7 @@ return false;
 
     /**
      * Policy entry point for peers learned from search replies, where no
-     * RouterInfo is in hand yet: direct-contact gate only; the diversity
+     * RouterInfo is in hand yet: direct-contact gate only. The diversity
      * check runs when the RI lands via store(). Rejected peers are queued
      * and probed/promoted by the ProbeStalePeerJob cycle.
      *
@@ -3265,7 +3274,11 @@ return false;
         }
     }
 
-    /** @return the sig type name, or the raw type code when unnamed */
+    /**
+     * Human-readable signature type for log messages.
+     *
+     * @return the sig type name, or the raw type code when unnamed
+     */
     private static String sigTypeDescription(KeyCertificate kc, SigType type) {
         return (type != null) ? type.toString() : Integer.toString(kc.getSigTypeCode());
     }
@@ -3290,7 +3303,7 @@ return false;
         /*
          * We always drop failed leaseSets (timed out), regardless of how many routers we have.
          * This is called on a lease if it has expired *or* its tunnels are failing and we want
-* to see if there are any updates.
+          * to see if there are any updates.
          */
         if (_log.shouldInfo()) {
             _log.info("Dropping LeaseSet [" + dbEntry.toBase32().substring(0,8) + "] -> Lookup / tunnel failure");
@@ -3499,7 +3512,7 @@ return false;
         return routers;
     }
 
-    /** Smallest allowed period */
+    /** Smallest allowed period. */
     private static final int MIN_PER_PEER_TIMEOUT = 2500;
     /**
      * We want FNDF.PUBLISH_TIMEOUT and RepublishLeaseSetJob.REPUBLISH_LEASESET_TIMEOUT
@@ -3529,7 +3542,7 @@ return false;
     }
 
     /**
-     * See implementation in FNDF
+     * See implementation in FNDF.
      *
      * @param key the DatabaseEntry hash
      * @param ds the database entry
@@ -3537,12 +3550,12 @@ return false;
      * @param onFailure may be null; called when no floodfill peers are available or reply-based store fails
      * @param sendTimeout timeout in ms for the reply-based FloodfillStoreJob path
      * @param toIgnore may be null, if non-null, all attempted and skipped targets will be added as of 0.9.53;
-     *                 passed through to FloodfillStoreJob (unused for wide-flood-only RI path)
+     * passed through to FloodfillStoreJob (unused for wide-flood-only RI path)
      */
     abstract void sendStore(Hash key, DatabaseEntry ds, Job onSuccess, Job onFailure, long sendTimeout, Set<Hash> toIgnore);
 
     /**
-     * Increment in the negative lookup cache
+     * Increment in the negative lookup cache.
      *
      * @param key for Destinations or RouterIdentities
      */
@@ -3598,7 +3611,7 @@ return false;
     }
 
     /**
-     * Negative cache until restart
+     * Negative cache until restart.
      *
      * @param dest the Destination to remember as unreachable until restart
      */
@@ -3663,7 +3676,7 @@ return false;
 
     /**
      * Build the bucket table from the rows of
-     * {@link KBucketSet#getDebugBucketRows()}: bucket index, XOR-distance bit
+     * {@link KBucketSet#getDebugBucketRows}: bucket index, XOR-distance bit
      * range, entry count as a details/summary disclosure whose expanded
      * content is the entry hashes rendered by the given function, and fill as
      * a percentage of capacity.
@@ -3783,11 +3796,11 @@ return false;
      * Only applies to client NetDB (not main NetDB).
      * 1. Remove LeaseSets not accessed in 150s
      * 2. Re-fetch every tracked LeaseSet each cycle (unconditional)
-     * 3. If LeaseSet expires in < 90s, refresh proactively (early-out)
+     * 3. If LeaseSet expires in < 90s, refresh proactively (early-out).
      */
     private static final long PROACTIVE_REFRESH_THRESHOLD = 90 * 1000L;  // Refresh if < 90s to expiry
 
-    /** Refresh client lease sets */
+    /** Refresh client lease sets. */
     private void refreshClientLeaseSets() {
         long now = _context.clock().now();
         long inactiveThreshold = now - LOCAL_LEASESET_REFRESH_INTERVAL;          // 150s

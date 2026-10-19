@@ -26,16 +26,14 @@ import net.i2p.util.SimpleByteCache;
  * <li>Easy swapping of underlying AES providers</li>
  * </ul>
  *
- * @author I2P Project
- *
  * @see CryptixAESEngine
  * @since 0.8.0
  */
 public class AESEngine {
-    /** Logger instance */
+    /** Logger instance. */
     protected final Log _log;
 
-    /** I2P application context */
+    /** I2P application context. */
     protected final I2PAppContext _context;
 
     /**
@@ -49,7 +47,7 @@ public class AESEngine {
         if (getClass().equals(AESEngine.class)) _log.logAlways(Log.WARN, "AES is disabled");
     }
 
-    /** Encrypt the payload with the session key
+    /** Encrypt the payload with the session key.
      *
      * @param payload data to be encrypted
      * @param payloadIndex index into the payload to start encrypting
@@ -155,7 +153,7 @@ public class AESEngine {
         return data;
     }
 
-    /** Decrypt the data with the session key
+    /** Decrypt the data with the session key.
      *
      * @param payload data to be decrypted
      * @param payloadIndex index into the payload to start decrypting

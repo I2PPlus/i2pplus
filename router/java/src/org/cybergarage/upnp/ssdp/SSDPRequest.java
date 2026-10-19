@@ -28,7 +28,6 @@ import org.cybergarage.http.*;
  * <p>This class provides the base functionality for SSDP M-SEARCH and NOTIFY requests, handling
  * common header management and HTTP protocol compliance for SSDP operations in UPnP networks.
  *
- * @author Satoshi Konno
  * @since 1.0
  */
 public class SSDPRequest extends HTTPRequest {

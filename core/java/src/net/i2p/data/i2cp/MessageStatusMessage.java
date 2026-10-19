@@ -20,7 +20,6 @@ import java.io.OutputStream;
  * For incoming messages, it tells the client that a new message is available.
  * For outgoing messages, it tells the client whether the message was delivered.
  *
- * @author jrandom
  */
 public class MessageStatusMessage extends I2CPMessageImpl {
     /**
@@ -304,7 +303,7 @@ public class MessageStatusMessage extends I2CPMessageImpl {
     }
 
     /**
-     * This is the router's ID for the message
+     * This is the router's ID for the message.
      * @return the message id
      */
     public long getMessageId() {
@@ -312,7 +311,7 @@ public class MessageStatusMessage extends I2CPMessageImpl {
     }
 
     /**
-     * This is the router's ID for the message
+     * This is the router's ID for the message.
      *
      * @param id the router-assigned identifier of the message this status describes
      */
@@ -338,7 +337,7 @@ public class MessageStatusMessage extends I2CPMessageImpl {
     }
 
     /**
-     * This is the client's ID for the message
+     * This is the client's ID for the message.
      * @return the client-chosen nonce for this message
      */
     public long getNonce() {
@@ -346,7 +345,7 @@ public class MessageStatusMessage extends I2CPMessageImpl {
     }
 
     /**
-     * This is the client's ID for the message
+     * This is the client's ID for the message.
      *
      * @param nonce the client-chosen identifier the router echoes back in this status
      */
@@ -391,7 +390,7 @@ public class MessageStatusMessage extends I2CPMessageImpl {
     }
 
     /**
-     * Override to reduce mem churn
+     * Override to reduce mem churn.
      *
      * @throws IOException if the stream rejects the written fields
      */

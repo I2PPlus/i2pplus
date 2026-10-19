@@ -30,7 +30,6 @@ import org.cybergarage.xml.XML;
  * <p>This class is used by UPnP devices to send action invocation responses to control points,
  * enabling structured XML responses through SOAP messaging over HTTP.
  *
- * @author Satoshi Konno
  * @since 1.0
  */
 public class SOAPResponse extends HTTPResponse {

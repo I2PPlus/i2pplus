@@ -26,7 +26,6 @@ import java.util.Date;
  * If we really need some more bits we could use the first few bits
  * of the third byte.
  *
- * @author zzz
  * @since 0.8.4
  */
 public class DateAndFlags extends DataStructureImpl {
@@ -72,7 +71,7 @@ public class DateAndFlags extends DataStructureImpl {
     }
 
     /**
-     * Sets the flags value.
+     * Replace the 16-bit flags field.
      *
      * @param flags 0 - 65535
      */

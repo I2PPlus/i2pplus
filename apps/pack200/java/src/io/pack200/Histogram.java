@@ -30,7 +30,6 @@ import java.util.Arrays;
 
 /**
  * Histogram derived from an integer array of events (int[]).
- * @author John Rose
  */
 final class Histogram {
     // Compact histogram representation:  4 bytes per distinct value,

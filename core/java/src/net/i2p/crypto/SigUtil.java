@@ -59,7 +59,6 @@ import java.util.Map;
  * <li>Key validation and rectification</li>
  * </ul>
  *
- * @author I2P Project
  * @since 0.9.9, public since 0.9.12
  */
 public final class SigUtil {
@@ -654,7 +653,7 @@ public final class SigUtil {
         return kf.generatePrivate(ks);
     }
 
-    /** 16 KB max */
+    /** 16 KB max. */
     private static byte[] getData(File file) throws IOException {
         byte[] buf = new byte[1024];
         InputStream in = null;
@@ -677,7 +676,7 @@ public final class SigUtil {
     }
 
     /**
-     * Split a byte array into two BigIntegers
+     * Split a byte array into two BigIntegers.
      *
      * @param b length must be even
      * @return array of two BigIntegers
@@ -696,7 +695,7 @@ public final class SigUtil {
     }
 
     /**
-     * Combine two BigIntegers of nominal length = len / 2
+     * Combine two BigIntegers of nominal length = len / 2.
      *
      * @param x non-negative first value
      * @param y non-negative second value
@@ -832,7 +831,7 @@ public final class SigUtil {
 
     /**
      * Output an length or integer value in ASN.1
-     * Does NOT output the tag e.g. 0x02 / 0x30
+     * Does NOT output the tag e.g. 0x02 / 0x30.
      *
      * @param d the destination buffer to write the ASN.1 form into
      * @param idx the offset in d to start writing at, advanced past what is written

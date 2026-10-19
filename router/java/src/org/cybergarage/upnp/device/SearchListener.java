@@ -27,7 +27,6 @@ import org.cybergarage.upnp.ssdp.*;
  * search requests from control points, enabling responsive device discovery and advertisement
  * functionality.
  *
- * @author Satoshi Konno
  * @since 1.0
  */
 public interface SearchListener {

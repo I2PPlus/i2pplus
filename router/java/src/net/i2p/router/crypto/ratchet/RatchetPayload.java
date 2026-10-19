@@ -10,7 +10,7 @@ import net.i2p.data.i2np.GarlicClove;
 
 /**
  *
- * Ratchet payload generation and parsing
+ * Ratchet payload generation and parsing.
  *
  * @since 0.9.44 adapted from NTCP2Payload
  */
@@ -19,7 +19,7 @@ class RatchetPayload {
     /** Utility class with static methods only, not instantiable. */
     private RatchetPayload() {}
 
-    /** Block header size in bytes */
+    /** Block header size in bytes. */
     public static final int BLOCK_HEADER_SIZE = 3;
 
     private static final int BLOCK_DATETIME = 0;
@@ -669,7 +669,7 @@ class RatchetPayload {
 
     /**
      * Big endian.
-     * Same as DataHelper.toLong(target, offset, 4, value) but allows negative value
+     * Same as {@link net.i2p.data.DataHelper#toLong}target, offset, 4, value) but allows negative value.
      *
      * @param target the buffer the 4 big endian bytes are written into
      * @param offset the index of the first of the 4 bytes in target

@@ -6,11 +6,11 @@ import java.io.PipedInputStream;
 import java.net.SocketTimeoutException;
 
 /**
- *  Adds setReadTimeout().
- *  Must be used with a TimeoutPipedOutputStream.
+ * Adds setReadTimeout().
+ * Must be used with a TimeoutPipedOutputStream.
  * <p>
- *  To support InternalSocket.setSoTimeout().
- *  Package private, not a part of the public API, not for general use.
+ * To support {@link net.i2p.util.InternalSocket#setSoTimeout}.
+ * Package private, not a part of the public API, not for general use.
  *
  * @since 0.9.34
  */
@@ -82,8 +82,8 @@ class TimeoutPipedInputStream extends PipedInputStream {
     }
 
     /**
-     *  Overridden to save state.
-     *  We have to do this because can't get to closedByReader in super
+     * Overridden to save state.
+     * We have to do this because can't get to closedByReader in super.
      */
     @Override
     public void close() throws IOException {

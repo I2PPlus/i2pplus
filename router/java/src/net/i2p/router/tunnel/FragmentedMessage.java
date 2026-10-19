@@ -13,7 +13,7 @@ import net.i2p.util.SimpleTimer2;
  * Gather fragments of I2NPMessages at a tunnel endpoint, making them available
  * for reading when complete.
  * <p>
- * Warning - this is all unsynchronized here - receivers must implement synchronization
+ * Warning - this is all unsynchronized here - receivers must implement synchronization.
  *
  */
 class FragmentedMessage {
@@ -170,7 +170,7 @@ class FragmentedMessage {
      * into, and the mark is never lowered, so scanning past it cannot add to the
      * count. Bounding the scan therefore costs nothing in accuracy while
      * skipping the unused tail of the array, and it makes this accessor agree
-     * with {@link #isComplete()}, {@link #getCompleteSize()},
+     * with {@link #isComplete}, {@link #getCompleteSize},
      * {@link #writeComplete} and {@link #releaseFragments}, all of which already
      * stop at the mark.
      * <p>
@@ -307,7 +307,7 @@ class FragmentedMessage {
     }
 
     /**
-     * Called as one of the endpoints for the tunnel cache pipeline (see TunnelDataMessage)
+     * Called as one of the endpoints for the tunnel cache pipeline (see TunnelDataMessage).
      *
      */
     private void releaseFragments() {

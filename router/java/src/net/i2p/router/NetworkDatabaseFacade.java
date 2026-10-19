@@ -34,7 +34,7 @@ public abstract class NetworkDatabaseFacade implements Service {
 
     /**
      * Return the RouterInfo structures for the routers closest to the given key.
-     * At most maxNumRouters will be returned
+     * At most maxNumRouters will be returned.
      *
      * @param key the hash to measure Kademlia distance from, normally our own router hash
      * @param maxNumRouters The maximum number of routers to return
@@ -53,7 +53,7 @@ public abstract class NetworkDatabaseFacade implements Service {
     public abstract DatabaseEntry lookupLocally(Hash key);
 
     /**
-     * Not for use without validation
+     * Not for use without validation.
      *
      * @param key the hash of the RouterInfo or LeaseSet to look up
      * @return RouterInfo, LeaseSet, or null, NOT validated
@@ -72,7 +72,7 @@ public abstract class NetworkDatabaseFacade implements Service {
     public abstract void lookupLeaseSet(Hash key, Job onFindJob, Job onFailedLookupJob, long timeoutMs);
 
     /**
-     * Lookup using the client's tunnels
+     * Lookup using the client's tunnels.
      *
      * @param key the destination hash whose LeaseSet is sought
      * @param onFindJob job to run on success
@@ -133,7 +133,7 @@ public abstract class NetworkDatabaseFacade implements Service {
 
     /**
      * Lookup using the client's tunnels
-     * Succeeds even if LS validation fails due to unsupported sig type
+     * Succeeds even if LS validation fails due to unsupported sig type.
      *
      * @param key the destination hash whose LeaseSet is sought
      * @param onFinishedJob job to run on success
@@ -145,7 +145,7 @@ public abstract class NetworkDatabaseFacade implements Service {
 
     /**
      * Lookup locally in netDB and in badDest cache
-     * Succeeds even if LS validation failed due to unsupported sig type
+     * Succeeds even if LS validation failed due to unsupported sig type.
      *
      * @param key the destination hash to look up
      * @return the Destination, or null if it is not known or is cached as bad
@@ -280,7 +280,7 @@ public abstract class NetworkDatabaseFacade implements Service {
      */
     public void rescan() {}
 
-    /** Debug only - all user info moved to NetDbRenderer in router console */
+    /** Debug only - all user info moved to NetDbRenderer in router console. */
     public void renderStatusHTML(Writer out) throws IOException {}
 
     /**
@@ -299,7 +299,7 @@ public abstract class NetworkDatabaseFacade implements Service {
      */
     public Set<LeaseSet> getLeases() {return Collections.emptySet();}
     /**
-     * Public for NetDbRenderer in routerconsole
+     * Public for NetDbRenderer in routerconsole.
      *
      * @return the set of known RouterInfos, empty in the base facade
      */
@@ -387,7 +387,7 @@ public abstract class NetworkDatabaseFacade implements Service {
     }
 
     /**
-     * For console ConfigKeyringHelper
+     * For console ConfigKeyringHelper.
      *
      * @param spk the signing key whose blind data is to be dropped
      * @return true if removed
@@ -398,7 +398,7 @@ public abstract class NetworkDatabaseFacade implements Service {
     }
 
     /**
-     * Notify the netDB that the routing key changed at midnight UTC
+     * Notify the netDB that the routing key changed at midnight UTC.
      *
      * @since 0.9.50
      */

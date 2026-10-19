@@ -8,13 +8,13 @@ import net.i2p.util.Log;
 
 /**
  * I2P source implementation for streaming data.
- * Refactored in 0.9.53 to support I2CP protocols and ports
+ * Refactored in 0.9.53 to support I2CP protocols and ports.
  */
 public class I2PSource implements Source {
 
-    /** The I2P session */
+    /** The I2P session. */
     protected final I2PSession sess;
-    /** The sink to receive datagrams */
+    /** The sink to receive datagrams. */
     protected Sink sink;
     /** UDP protocol (unencrypted or encrypted). */
     private final Protocol protocol;
@@ -29,11 +29,11 @@ public class I2PSource implements Source {
      *  @since 0.9.53
      */
     public enum Protocol {
-        /** Repliable datagrams */
+        /** Repliable datagrams. */
         REPLIABLE,
-        /** Raw datagrams */
+        /** Raw datagrams. */
         RAW,
-        /** Both repliable and raw datagrams */
+        /** Both repliable and raw datagrams. */
         BOTH
     }
 
@@ -118,7 +118,11 @@ public class I2PSource implements Source {
             throw new IllegalStateException("muxed");
         }
 
-        /** @since 0.9.53 */
+        /**
+         * Receive a datagram from I2P and queue it for the local socket.
+         *
+         * @since 0.9.53
+         */
         public void messageAvailable(I2PSession session, int id, long size, int proto, int fromPort, int toPort) {
             if (log.shouldDebug())
                 log.debug("Got " + size + " bytes, proto: " + proto + " from port: " + fromPort + " to port: " + toPort);

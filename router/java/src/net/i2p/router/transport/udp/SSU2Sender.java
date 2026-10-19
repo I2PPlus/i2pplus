@@ -15,7 +15,7 @@ interface SSU2Sender {
     /**
      * Remote host ID.
      *
-     * @return remote host ID
+     * @return the peer's IP and port as a RemoteHostId
      */
     RemoteHostId getRemoteHostId();
     /**

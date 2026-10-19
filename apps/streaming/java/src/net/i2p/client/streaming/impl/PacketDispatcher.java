@@ -34,7 +34,7 @@ import net.i2p.util.Log;
  * <p>
  * SYN / unknown-stream establishment is intentionally not offloaded; it
  * continues on the notifier thread and the {@link ConnectionHandler}.
- * Shutdown replaces the synchronous path once more: {@link #shutdown()}
+ * Shutdown replaces the synchronous path once more: {@link #shutdown}
  * stops the workers and frees any queued-but-unprocessed packets without
  * leaving the notifier thread blocked.
  *
@@ -73,7 +73,7 @@ class PacketDispatcher {
     /**
      * Guards the shard array.  Dispatch holds the read lock (one reader in
      * practice — a single notifier thread), so it is uncontended on the hot
-     * path; resize and shutdown hold the write lock, excluding every dispatch
+     * path. Resize and shutdown hold the write lock, excluding every dispatch
      * while the array is rebuilt, an old worker retired, or the dispatcher
      * stopped.
      */
@@ -129,10 +129,10 @@ class PacketDispatcher {
 
     /**
      * Route (con, packet) to the shard owning the connection and return
-     * promptly; wait for space only while that shard's queue is full.  Records
+     * promptly. Wait for space only while that shard's queue is full.  Records
      * the target shard's queue depth and any producer-blind back-pressure.
      * <p>The 1ms back-pressure wait runs OUTSIDE the read lock: a saturated
-     * shard must not pin the lock, or {@link #shutdown()} / {@link #resize(int)}
+     * shard must not pin the lock, or {@link #shutdown} / {@link #resize(int)}
      * (which need the write lock to flip {@code _running} / rebuild the shard
      * array) would deadlock exactly when a worker is stuck behind a full
      * queue. The shard is therefore re-resolved each iteration, so an entry
@@ -174,7 +174,7 @@ class PacketDispatcher {
 
     /**
      * Rebuild the shard array at a new size.  Takes the write lock, so no
-     * dispatch is in flight; each old shard is drained to idle (queue empty,
+     * dispatch is in flight. Each old shard is drained to idle (queue empty,
      * no entry mid-process) before its worker is retired and the new workers
      * take over.  A no-op when the size is unchanged.
      *
@@ -245,7 +245,7 @@ class PacketDispatcher {
      * Deterministic, in-range shard index for a connection's inbound stream id.
      * <p>
      * The id is masked to 31 bits so the result is always non-negative even if
-     * the id space wraps; inbound stream ids are unique per live connection
+     * the id space wraps. Inbound stream ids are unique per live connection
      * within a manager, giving a stable per-connection (and thus
      * order-preserving) mapping.
      *

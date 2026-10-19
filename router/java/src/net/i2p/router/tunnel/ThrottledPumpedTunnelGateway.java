@@ -21,10 +21,10 @@ import net.i2p.util.SyntheticREDQueue;
  * @since 0.7.9
  */
 class ThrottledPumpedTunnelGateway extends PumpedTunnelGateway {
-    /** Configuration and statistics for this hop, used to count dropped messages */
+    /** Configuration and statistics for this hop, used to count dropped messages. */
     private final HopConfig _config;
 
-    /** Synthetic Random Early Drop queue to estimate bandwidth usage and perform drops */
+    /** Synthetic Random Early Drop queue to estimate bandwidth usage and perform drops. */
     private final SyntheticREDQueue _partBWE;
 
     /**

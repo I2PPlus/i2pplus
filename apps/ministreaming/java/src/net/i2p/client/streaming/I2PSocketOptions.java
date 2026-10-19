@@ -2,7 +2,7 @@ package net.i2p.client.streaming;
 
 /**
  * Define the configuration for streaming and verifying data on the socket.
- * Use I2PSocketManager.buildOptions() to get one of these.
+ * Use {@link net.i2p.client.streaming.I2PSocketManager#buildOptions} to get one of these.
  */
 public interface I2PSocketOptions {
     /** How much data will we accept that hasn't been written out yet. */
@@ -26,7 +26,7 @@ public interface I2PSocketOptions {
     public static final String PROP_MAX_CONNECT_TIMEOUT = "i2p.streaming.maxConnectTimeout";
     /** How long to block on read. */
     public static final String PROP_READ_TIMEOUT = "i2p.streaming.readTimeout";
-    /** How long to block on write/flush */
+    /** How long to block on write/flush. */
     public static final String PROP_WRITE_TIMEOUT = "i2p.streaming.writeTimeout";
     /**
      * If set, the profile used to prioritize packets on the network.
@@ -63,7 +63,7 @@ public interface I2PSocketOptions {
     /**
      * Define how long we will wait for the ACK from a SYN, in milliseconds.
      *
-     * The value is the base window only; see {@link #getConnectTimeout()} for
+     * The value is the base window only; see {@link #getConnectTimeout} for
      * how the effective window is derived.
      *
      * Default 30 seconds.
@@ -98,7 +98,7 @@ public interface I2PSocketOptions {
      * How much data will we accept that hasn't been written out yet.  After
      * this amount has been exceeded, subsequent .write calls will block until
      * either some data is removed or the connection is closed.  If this is
-     * less than or equal to zero, there is no limit (warning: can eat ram)
+     * less than or equal to zero, there is no limit (warning: can eat ram).
      *
      * Default is platform-dependent: 512 KB on a slow system or one with less
      * than 512 MB of memory, otherwise 1 MB.
@@ -111,7 +111,7 @@ public interface I2PSocketOptions {
      * How much data will we accept that hasn't been written out yet.  After
      * this amount has been exceeded, subsequent .write calls will block until
      * either some data is removed or the connection is closed.  If this is
-     * less than or equal to zero, there is no limit (warning: can eat ram)
+     * less than or equal to zero, there is no limit (warning: can eat ram).
      *
      * Default is platform-dependent: 512 KB on a slow system or one with less
      * than 512 MB of memory, otherwise 1 MB.

@@ -142,7 +142,7 @@ public class CountryLookup {
     }
 
     /**
-     * This takes too long to run on the SimpleTimer2 queue
+     * This takes too long to run on the SimpleTimer2 queue.
      * @since 0.9.10
      */
     private class LookupThread extends I2PThread {
@@ -184,7 +184,7 @@ public class CountryLookup {
     public String getOurCountry() {return _context.getProperty(GeoIP.PROP_IP_COUNTRY);}
 
     /**
-     * Are we in a strict country
+     * Are we in a strict country.
      * @return whether in strict country
      * @since 0.8.13
      */
@@ -210,7 +210,7 @@ public class CountryLookup {
     }
 
     /**
-     * Are they in a strict country
+     * Are they in a strict country.
      * @param ri non-null
      * @return whether in strict country
      * @since 0.9.16
@@ -317,8 +317,8 @@ public class CountryLookup {
 
     /**
      * Convert IP string to Hash and call existing getCountry method
-     * Return two-letter country code or null if unknown
-     * @return the country from i p address
+     * Return two-letter country code or null if unknown.
+     * @return the country from IP address
      */
     private String getCountryFromIPAddress(String ipAddress) {
         try {
@@ -328,7 +328,7 @@ public class CountryLookup {
     }
 
     /**
-     * Clean up stale entries from the country cache
+     * Clean up stale entries from the country cache.
      */
     private void cleanupCountryCache() {
         int removed = evictExpired(countryCache, countryCacheTimestamps, System.currentTimeMillis(), COUNTRY_CACHE_EXPIRY);
@@ -410,10 +410,10 @@ public class CountryLookup {
         return filtered.get(len - 2) + "." + filtered.get(len - 1);
     }
 
-    /** Pre-compiled dot split for domain parsing */
+    /** Pre-compiled dot split for domain parsing. */
     private static final Pattern DOT_SPLIT = Pattern.compile("\\.");
 
-    /** Multi-part TLD list for domain extraction */
+    /** Multi-part TLD list for domain extraction. */
     private static final Set<String> MULTI_PART_TLDS;
 
     static {
@@ -519,7 +519,7 @@ public class CountryLookup {
      * First valid IP of the specified type (IPv4 or IPv6).
      * @param ri the RouterInfo whose addresses are scanned
      * @param wantIPv6 true to accept a 16 byte address, false to accept a 4 byte one
-     * @return the first valid i p of type
+     * @return the first valid IP of type
      */
     static byte[] getFirstValidIPOfType(RouterInfo ri, boolean wantIPv6) {
         if (ri == null) {return null;}

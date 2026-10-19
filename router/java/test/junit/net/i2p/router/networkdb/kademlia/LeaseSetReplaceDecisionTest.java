@@ -14,8 +14,10 @@ import net.i2p.router.Router;
 
 /**
  * Tests the replace/reject decision for incoming LeaseSet stores.
- * The decision is the choke point shared by KademliaNetworkDatabaseFacade.store()
- * and TransientDataStore.put(): keep the freshest copy, but never let a lapsed
+  * The decision is the choke point shared by
+ * {@link net.i2p.router.networkdb.kademlia.KademliaNetworkDatabaseFacade#store}
+  * and {@link net.i2p.router.networkdb.kademlia.TransientDataStore#put} : keep the freshest copy, but
+   * never let a lapsed
  * entry hold a destination unreachable when an equal- or older-dated copy arrives.
  */
 public class LeaseSetReplaceDecisionTest {

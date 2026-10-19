@@ -7,7 +7,6 @@ import java.security.spec.KeySpec;
 /**
  * EdDSA public key specification.
  *
- * @author str4d
  * @since 0.9.15
  */
 public class EdDSAPublicKeySpec implements KeySpec {

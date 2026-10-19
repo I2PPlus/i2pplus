@@ -51,7 +51,7 @@ import net.i2p.I2PAppContext;
  * Simple helper to query the appropriate router for data necessary to render
  * the summary sections on the router console.
  * <p>
- * For the full summary bar use renderSummaryBar()
+ * For the full summary bar use renderSummaryBar().
  */
 public class SidebarHelper extends HelperBase {
 
@@ -61,26 +61,26 @@ public class SidebarHelper extends HelperBase {
      */
     public SidebarHelper() {}
 
-    /** Active HTTP session for nonce-based form validation */
+    /** Active HTTP session for nonce-based form validation. */
     private HttpSession _session;
 
     // Cached stats survive the request-scoped bean, so they are recomputed
     // once per sidebar refresh cycle instead of on every render.
-    /** Expiry for the cached tunnel build success */
+    /** Expiry for the cached tunnel build success. */
     private static volatile long _buildSuccessCachedUntil;
-    /** Expiry for the cached concurrency string */
+    /** Expiry for the cached concurrency string. */
     private static volatile long _concurrencyCachedUntil;
-    /** Expiry for the cached share ratio string */
+    /** Expiry for the cached share ratio string. */
     private static volatile long _shareRatioCachedUntil;
-    /** Expiry for the cached active profile count */
+    /** Expiry for the cached active profile count. */
     private static volatile long _activeProfilesCachedUntil;
-    /** Cached tunnel build success percentage */
+    /** Cached tunnel build success percentage. */
     private static volatile int _cachedTunnelBuildSuccess;
-    /** Cached concurrency string */
+    /** Cached concurrency string. */
     private static volatile String _cachedConcurrency;
-    /** Cached share ratio string */
+    /** Cached share ratio string. */
     private static volatile String _cachedShareRatio;
-    /** Cached active profile count */
+    /** Cached active profile count. */
     private static volatile int _cachedActiveProfiles;
 
 /**
@@ -97,37 +97,37 @@ public class SidebarHelper extends HelperBase {
     }
 
     /**
-     * For form validation and session-bound nonce generation
+     * For form validation and session-bound nonce generation.
      *
      * @param session the request session to bind, read back when minting CSRF
-     *                nonces and when rendering the config restart status
+     * nonces and when rendering the config restart status
      * @since 0.9.69
      */
     public void storeSession(HttpSession session) { _session = session; }
 
-    /** Thin space separator */
+    /** Thin space separator. */
     static final String THINSP = " / ";
-    /** Separator character for summary bar section configuration */
+    /** Separator character for summary bar section configuration. */
     private static final char S = ',';
-    /** Integer formatter with thousands separators */
+    /** Integer formatter with thousands separators. */
     private static final DecimalFormat INTEGER_FORMAT = new DecimalFormat("###,###,##0");
-    /** Format a long value with thousands separators */
+    /** Format a long value with thousands separators. */
     private static String fmtInt(long val) { synchronized (INTEGER_FORMAT) { return INTEGER_FORMAT.format(val); } }
-    /** One-decimal-place formatter */
+    /** One-decimal-place formatter. */
     private static final DecimalFormat ONE_DECIMAL = new DecimalFormat("#0.0");
-    /** Two-decimal-place formatter */
+    /** Two-decimal-place formatter. */
     private static final DecimalFormat TWO_DECIMALS = new DecimalFormat("#0.00");
-    /** Zero-decimal-place formatter */
+    /** Zero-decimal-place formatter. */
     private static final DecimalFormat ZERO_DECIMAL = new DecimalFormat("##0");
-    /** Zero-decimal one-digit formatter */
+    /** Zero-decimal one-digit formatter. */
     private static final DecimalFormat ZERO_ONE_DECIMAL = new DecimalFormat("##0.0");
-    /** Zero-decimal two-digit formatter */
+    /** Zero-decimal two-digit formatter. */
     private static final DecimalFormat ZERO_TWO_DECIMALS = new DecimalFormat("##0.00");
-    /** Global application context */
+    /** Global application context. */
     I2PAppContext ctx = I2PAppContext.getGlobalContext();
-    /** Property name for advanced mode toggle */
+    /** Property name for advanced mode toggle. */
     private static final String PROP_ADVANCED = "routerconsole.advanced";
-    /** Property name for unified sidebar toggle */
+    /** Property name for unified sidebar toggle. */
     private static final String PROP_UNIFIED_SIDEBAR = "routerconsole.unifiedSidebar";
     /**
      * True if advanced mode is enabled in config.
@@ -140,14 +140,14 @@ public class SidebarHelper extends HelperBase {
      * @return true if unified sidebar is enabled
      */
     public boolean unifiedSidebar() {return _context.getBooleanProperty(PROP_UNIFIED_SIDEBAR);}
-    /** Property prefix for summary bar section configuration per page */
+    /** Property prefix for summary bar section configuration per page. */
     static final String PROP_SUMMARYBAR = "routerconsole.summaryBar.";
-    /** First version the router was started with, used to detect new installs */
+    /** First version the router was started with, used to detect new installs. */
     String firstVersion = ctx.getProperty("router.firstVersion");
-    /** Current I2P core version */
+    /** Current I2P core version. */
     String version = CoreVersion.VERSION;
 
-    /** Default full summary bar sections for new users */
+    /** Default full summary bar sections for new users. */
     static final String DEFAULT_FULL_NEWUSER =
         "RouterInfo" + S +
         "CPUBar" + S +
@@ -168,7 +168,7 @@ public class SidebarHelper extends HelperBase {
         "Destinations" + S +
         "";
 
-    /** Default full summary bar sections */
+    /** Default full summary bar sections. */
     static final String DEFAULT_FULL =
         "RouterInfo" + S +
         "CPUBar" + S +
@@ -188,7 +188,7 @@ public class SidebarHelper extends HelperBase {
         "Destinations" + S +
         "";
 
-    /** Default full summary bar sections for advanced mode */
+    /** Default full summary bar sections for advanced mode. */
     static final String DEFAULT_FULL_ADVANCED =
         "AdvancedRouterInfo" + S +
         "CPUBar" + S +
@@ -209,7 +209,7 @@ public class SidebarHelper extends HelperBase {
         "Destinations" + S +
         "";
 
-    /** Default minimal summary bar sections */
+    /** Default minimal summary bar sections. */
     static final String DEFAULT_MINIMAL =
         "ShortRouterInfo" + S +
         "CPUBar" + S +
@@ -226,7 +226,7 @@ public class SidebarHelper extends HelperBase {
         "Destinations" + S +
         "";
 
-     /** Default minimal summary bar sections for advanced mode @since 0.9.32 */
+     /** Default minimal summary bar sections for advanced mode @since 0.9.32. */
     static final String DEFAULT_MINIMAL_ADVANCED =
         "AdvancedRouterInfo" + S +
         "CPUBar" + S +
@@ -266,10 +266,10 @@ public class SidebarHelper extends HelperBase {
     public String getVersion() {return RouterVersion.FULL_VERSION;}
 
     /**
-     * Retrieve a pretty printed uptime count (ala 4d or 7h or 39m)
+     * Retrieve a pretty printed uptime count (ala 4d or 7h or 39m).
      *
      * @return the formatted duration, or the {@code "[no router]"} /
-     *         {@code "[not up]"} placeholder when no router is running
+     * {@code "[not up]"} placeholder when no router is running
      */
     public String getUptime() {
         if (_context == null) {return "[no router]";}
@@ -293,7 +293,7 @@ public class SidebarHelper extends HelperBase {
     }
 
     /**
-     * How many routers we know about, minus ourselves
+     * How many routers we know about, minus ourselves.
      *
      * @return peer count, minimum 0
      */
@@ -304,21 +304,21 @@ public class SidebarHelper extends HelperBase {
      * @since 0.9.33
      */
     public enum NetworkState {
-        /** Hidden mode active */
+        /** Hidden mode active. */
         HIDDEN,
-        /** Reachability testing in progress */
+        /** Reachability testing in progress. */
         TESTING,
-        /** Firewalled but operational */
+        /** Firewalled but operational. */
         FIREWALLED,
-        /** Fully reachable */
+        /** Fully reachable. */
         RUNNING,
-        /** Warning state */
+        /** Warning state. */
         WARN,
-        /** Error state */
+        /** Error state. */
         ERROR,
-        /** Clock skew detected */
+        /** Clock skew detected. */
         CLOCKSKEW,
-        /** VM comm system active */
+        /** VM comm system active. */
         VMCOMM;
     }
 
@@ -332,22 +332,22 @@ public class SidebarHelper extends HelperBase {
         private String msg;
 
         /**
-         * Create a network state message
+         * Create a network state message.
          *
          * @param state the reachability state
          * @param msg   text already localized by the caller, which may be a
-         *              {@link java.text.MessageFormat} pattern such as
-         *              "Clock Skew of {0}"
+         * {@link java.text.MessageFormat} pattern such as
+         * "Clock Skew of {0}"
          */
         NetworkStateMessage(NetworkState state, String msg) {setMessage(state, msg);}
 
         /**
-         * Update the state and message
+         * Update the state and message.
          *
          * @param state the reachability state
          * @param msg   text already localized by the caller, which may be a
-         *              {@link java.text.MessageFormat} pattern such as
-         *              "Clock Skew of {0}"
+         * {@link java.text.MessageFormat} pattern such as
+         * "Clock Skew of {0}"
          */
         public void setMessage(NetworkState state, String msg) {
             this.state = state;
@@ -387,8 +387,8 @@ public class SidebarHelper extends HelperBase {
             !_context.router().gracefulShutdownInProgress() &&
             !_context.router().isRestarting())
             return new NetworkStateMessage(NetworkState.ERROR, _t("Client Manager I2CP Error"));
-            // TODO: display advice in .sb_warning i.e. repurposed showFirewallWarning  ->  _t("Check logs!"));  // not a router problem but the user should know
-*/
+// TODO: display advice in .sb_warning i.e. repurposed showFirewallWarning  ->  _t("Check logs!"));  // not a router problem but the user should know
+    */
         // Warn based on actual skew from peers, not update status, so if we successfully offset
         // the clock, we don't complain.
         long skew = _context.commSystem().getFramedAveragePeerClockSkew(10);
@@ -456,7 +456,7 @@ public class SidebarHelper extends HelperBase {
 
             case HOSED:
                 return new NetworkStateMessage(NetworkState.ERROR, _t("UDP Port In Use"));
-                // TODO: display advice in .sb_warning -> _t("Set i2np.udp.internalPort=xxxx in advanced config and restart"));
+            // TODO: display advice in .sb_warning -> _t("Set i2np.udp.internalPort=xxxx in advanced config and restart"));
 
             case UNKNOWN:
                 state = NetworkState.TESTING;
@@ -509,7 +509,7 @@ public class SidebarHelper extends HelperBase {
     }
 
     /**
-     * Render the memory usage bar with blended real-time and one-minute average
+     * Render the memory usage bar with blended real-time and one-minute average.
      *
      * @return HTML for the memory bar display
      * @since 0.9.32
@@ -558,7 +558,7 @@ public class SidebarHelper extends HelperBase {
 
     /**
      * Retrieve CPU Load as a percentage.
-     * @return the c p u load
+     * @return the CPU load
      * @since 0.9.58+
      */
     public int getCPULoad() {
@@ -568,7 +568,7 @@ public class SidebarHelper extends HelperBase {
 
     /**
      * Retrieve CPU Load Average as a percentage.
-     * @return the c p u load avg
+     * @return the CPU load avg
      * @since 0.9.58+
      */
     public int getCPULoadAvg() {
@@ -587,8 +587,8 @@ public class SidebarHelper extends HelperBase {
     }
 
     /**
-     * Render JVM CPU Load Bar
-     * @return the c p u bar
+     * Render JVM CPU Load Bar.
+     * @return the CPU bar
      * @since 0.9.58+
      */
     public String getCPUBar() {
@@ -699,7 +699,7 @@ public class SidebarHelper extends HelperBase {
     }
 
     /**
-     * How many peers we are talking to now
+     * How many peers we are talking to now.
      *
      * @return the active peers
      */
@@ -852,7 +852,7 @@ public class SidebarHelper extends HelperBase {
     }
 
     /**
-     * Output is decimal, not binary
+     * Output is decimal, not binary.
      * @return "x.xx / y.yy {K|M}"
      */
     private static String formatPair(double in, double out) {
@@ -874,7 +874,7 @@ public class SidebarHelper extends HelperBase {
 
     /**
      * How much data have we received since the router started (pretty printed
-     * string with 2 decimal places and the appropriate units - GB/MB/KB/bytes)
+     * string with 2 decimal places and the appropriate units - GB/MB/KB/bytes).
      *
      * @return the inbound transferred
      */
@@ -886,7 +886,7 @@ public class SidebarHelper extends HelperBase {
 
     /**
      * How much data have we sent since the router started (pretty printed
-     * string with 2 decimal places and the appropriate units - GB/MB/KB/bytes)
+     * string with 2 decimal places and the appropriate units - GB/MB/KB/bytes).
      *
      * @return the outbound transferred
      */
@@ -1020,7 +1020,7 @@ public class SidebarHelper extends HelperBase {
 
     /**
      * Compare translated nicknames - put "shared clients" first in the sort
-     * Inner class, can't be Serializable
+     * Inner class, can't be Serializable.
      */
     private class AlphaComparator implements Comparator<Destination> {
         private final String snark = _t("I2PSnark");
@@ -1073,7 +1073,7 @@ public class SidebarHelper extends HelperBase {
      * checking SessionConfig first then TunnelPoolSettings.
      *
      * @param d the destination whose name is wanted, looked up by its
-     *          {@link Destination#calculateHash()} hash
+     * {@link Destination#calculateHash} hash
      * @return translated tunnel name or base32 fallback
      */
     private String getTunnelName(Destination d) {
@@ -1173,7 +1173,7 @@ public class SidebarHelper extends HelperBase {
     }
 
     /**
-     * Participant-to-client tunnel share ratio
+     * Participant-to-client tunnel share ratio.
      *
      * @return ratio string formatted to appropriate precision
      * @since 0.7.10
@@ -1193,7 +1193,7 @@ public class SidebarHelper extends HelperBase {
 
     /**
      * How lagged our job queue is over the last minute (pretty printed with
-     * the units attached)
+     * the units attached).
      *
      * @return the job lag
      */
@@ -1223,7 +1223,7 @@ public class SidebarHelper extends HelperBase {
 
     /**
      * How long it takes us to pump out a message, averaged over the last minute
-     * (pretty printed with the units attached)
+     * (pretty printed with the units attached).
      *
      * @return the message delay
      */
@@ -1243,7 +1243,7 @@ public class SidebarHelper extends HelperBase {
 
     /**
      * How long it takes us to test our tunnels, averaged over the last 10 minutes
-     * (pretty printed with the units attached)
+     * (pretty printed with the units attached).
      *
      * @return the tunnel lag
      */
@@ -1253,7 +1253,7 @@ public class SidebarHelper extends HelperBase {
     }
 
     /**
-     * Localized tunnel status string (e.g. overload/congested/normal)
+     * Localized tunnel status string (e.g. overload/congested/normal).
      *
      * @return tunnel status or empty string if no context
      */
@@ -1263,7 +1263,7 @@ public class SidebarHelper extends HelperBase {
     }
 
     /**
-     * Concurrent build count and average build request time
+     * Concurrent build count and average build request time.
      *
      * @return formatted string "concurrent / requestTime"
      */
@@ -1297,7 +1297,7 @@ public class SidebarHelper extends HelperBase {
     }
 
     /**
-     * Inbound tunnel build queue size
+     * Inbound tunnel build queue size.
      *
      * @return backlog count as string
      */
@@ -1307,7 +1307,7 @@ public class SidebarHelper extends HelperBase {
     }
 
     /**
-     * Average peer test round-trip time (good + too-slow combined)
+     * Average peer test round-trip time (good + too-slow combined).
      *
      * @return average test time in milliseconds
      * @since 0.9.49
@@ -1325,7 +1325,7 @@ public class SidebarHelper extends HelperBase {
     }
 
     /**
-     * Average successful peer test round-trip time
+     * Average successful peer test round-trip time.
      *
      * @return average good-test time in milliseconds
      * @since 0.9.50
@@ -1341,7 +1341,7 @@ public class SidebarHelper extends HelperBase {
     }
 
     /**
-     * Number of router infos stored in the Kademlia netDb
+     * Number of router infos stored in the Kademlia netDb.
      *
      * @return stored router info count
      */
@@ -1396,7 +1396,7 @@ public class SidebarHelper extends HelperBase {
     }
 
     /**
-     * The update status and buttons
+     * The update status and buttons.
      * @return the update status
      * @since 0.8.13 moved from SidebarRenderer
      */
@@ -1551,7 +1551,7 @@ public class SidebarHelper extends HelperBase {
     }
 
     /**
-     * The restart status and buttons
+     * The restart status and buttons.
      * @return the restart status
      * @since 0.8.13 moved from SidebarRenderer
      */
@@ -1567,7 +1567,7 @@ public class SidebarHelper extends HelperBase {
     }
 
     /**
-     * The firewall status and reseed status/buttons
+     * The firewall status and reseed status/buttons.
      * @return the firewall and reseed status
      */
     public String getFirewallAndReseedStatus() {
@@ -1627,7 +1627,7 @@ public class SidebarHelper extends HelperBase {
         return buf.toString();
     }
 
-    /** Cached news helper instance */
+    /** Cached news helper instance. */
     private NewsHelper _newshelper;
     /**
      * NewsHelper to store for sidebar rendering.
@@ -1640,11 +1640,11 @@ public class SidebarHelper extends HelperBase {
      */
     public NewsHelper getNewsHelper() {return _newshelper;}
 
-    /** Separator string for summary bar config */
+    /** Separator string for summary bar config. */
     private static final String SS = Character.toString(S);
 
     /**
-     * Get the list of active summary bar sections for a given page
+     * Get the list of active summary bar sections for a given page.
      *
      * @param page the page name (e.g. "home" or "default")
      * @return list of section identifiers, or empty list if none configured
@@ -1668,11 +1668,11 @@ public class SidebarHelper extends HelperBase {
     }
 
     /**
-     * Save the summary bar section order to router config
+     * Save the summary bar section order to router config.
      *
      * @param ctx      the context whose router config receives the setting
      * @param page     appended to {@code PROP_SUMMARYBAR} to form the config
-     *                 key, so a wrong value silently stores a second setting
+     * key, so a wrong value silently stores a second setting
      * @param sections ordered map of section index to section id
      */
     static void saveSummaryBarSections(RouterContext ctx, String page, Map<Integer, String> sections) {
@@ -1682,7 +1682,7 @@ public class SidebarHelper extends HelperBase {
     }
 
     /**
-     * Render the full summary bar HTML to the output writer
+     * Render the full summary bar HTML to the output writer.
      *
      * @throws IOException if the underlying writer fails partway through the markup
      */
@@ -1693,7 +1693,7 @@ public class SidebarHelper extends HelperBase {
 
     /* below here is stuff we need to get from sidebar_noframe.jsp to SidebarRenderer */
 
-    /** Action parameter from the sidebar form */
+    /** Action parameter from the sidebar form. */
     private String _action;
     /**
      * Form action, HTML-stripped before storing.
@@ -1706,7 +1706,7 @@ public class SidebarHelper extends HelperBase {
      */
     public String getAction() {return _action;}
 
-    /** Console nonce for form validation */
+    /** Console nonce for form validation. */
     private String _consoleNonce;
     /**
      * Console nonce, HTML-stripped before storing.
@@ -1719,7 +1719,7 @@ public class SidebarHelper extends HelperBase {
      */
     public String getConsoleNonce() {return _consoleNonce;}
 
-    /** Update nonce for form validation */
+    /** Update nonce for form validation. */
     private String _updateNonce;
     /**
      * Update nonce, HTML-stripped before storing.
@@ -1732,7 +1732,7 @@ public class SidebarHelper extends HelperBase {
      */
     public String getUpdateNonce() {return _updateNonce;}
 
-    /** Cached request URI */
+    /** Cached request URI. */
     private String _requestURI;
     /**
      * Request URI, HTML-stripped before storing.
@@ -1740,7 +1740,7 @@ public class SidebarHelper extends HelperBase {
      */
     public void setRequestURI(String s) {_requestURI = s == null ? null : DataHelper.stripHTML(s);}
 
-    /** The HTTP servlet request */
+    /** The HTTP servlet request. */
     private HttpServletRequest _request;
     /**
      * Servlet request.

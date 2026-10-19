@@ -9,7 +9,7 @@ package net.i2p.sam;
  */
 
 /**
- * Exception thrown by SAM methods
+ * Exception thrown by SAM methods.
  *
  */
 public class SAMException extends Exception {

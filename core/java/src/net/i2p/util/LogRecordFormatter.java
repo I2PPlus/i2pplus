@@ -17,7 +17,7 @@ import java.util.Date;
 import java.util.regex.Pattern;
 
 /**
- * Render a log record according to the log manager's settings
+ * Render a log record according to the log manager's settings.
  */
 class LogRecordFormatter {
 

@@ -20,7 +20,7 @@ import net.i2p.util.SystemVersion;
  * Logs router message traffic for debugging and network analysis. Records inbound and outbound messages with timestamps when enabled, providing detailed traffic history for troubleshooting.
  * <p>This is always instantiated in context and WriteJob runs every minute,
  * (except on Android, we don't set up the WriteJob)
- * but unless router.keepHistory=true it does nothing.
+ * but unless {@code router.keepHistory}=true it does nothing.
  * It generates a LARGE log file.</p>
  */
 public class MessageHistory {
@@ -38,9 +38,9 @@ public class MessageHistory {
     private static final byte[] NL = DataHelper.getUTF8(System.getProperty("line.separator"));
     private static final int FLUSH_SIZE = 1000; // write out at least once every 1000 entries
 
-    /** Config property determining whether we want to debug with the message history - default false */
+    /** Config property determining whether we want to debug with the message history - default false. */
     public static final String PROP_KEEP_MESSAGE_HISTORY = "router.keepHistory";
-    /** Config property determining where we want to log the message history, if we're keeping one */
+    /** Config property determining where we want to log the message history, if we're keeping one. */
     public static final String PROP_MESSAGE_HISTORY_FILENAME = "router.historyFilename";
     /** Default file name for the message history log. */
     public static final String DEFAULT_MESSAGE_HISTORY_FILENAME = "messageHistory.txt";
@@ -226,7 +226,7 @@ public class MessageHistory {
     }
 
     /**
-     * The local router has detected a failure in the given tunnel
+     * The local router has detected a failure in the given tunnel.
      *
      * @param tunnel the tunnel that failed; a null value logs nothing
      */
@@ -238,7 +238,7 @@ public class MessageHistory {
 
     /**
      * Note that we have reason to believe that the given tunnel is valid, since we could do something
-     * through it in the given amount of time
+     * through it in the given amount of time.
      *
      * @param tunnel tunnel in question
      * @param timeToTest milliseconds to verify the tunnel
@@ -250,7 +250,7 @@ public class MessageHistory {
     }
 
     /**
-     * The peer did not accept the tunnel join for the given reason
+     * The peer did not accept the tunnel join for the given reason.
      *
      * @param peer the router that rejected the join
      * @param tunnel the tunnel whose join was refused
@@ -297,7 +297,7 @@ public class MessageHistory {
 
     /**
      * We don't know about the given tunnel, so we are dropping a message sent to us by the
-     * given router
+     * given router.
      *
      * @param id tunnel ID we received a message for
      * @param msgId the ID of the dropped message
@@ -310,7 +310,7 @@ public class MessageHistory {
     }
 
     /**
-     * We received another message we weren't waiting for and don't know how to handle
+     * We received another message we weren't waiting for and don't know how to handle.
      *
      * @param message the unexpected message that arrived
      * @param from the peer that sent it, or null if the sender is unknown
@@ -354,7 +354,7 @@ public class MessageHistory {
     }
 
     /**
-     * The message wanted a reply but no reply came in the time expected
+     * The message wanted a reply but no reply came in the time expected.
      *
      * @param sentMessage message sent that didn't receive a reply
      */
@@ -365,7 +365,7 @@ public class MessageHistory {
     }
 
     /**
-     * There was an error processing the given message that was received
+     * There was an error processing the given message that was received.
      *
      * @param messageId the ID of the message whose processing failed
      * @param messageType type of message received
@@ -377,7 +377,7 @@ public class MessageHistory {
     }
 
     /**
-     * We banlisted the peer
+     * We banlisted the peer.
      *
      * @param peer the peer added to the banlist
      * @param reason the ban reason recorded alongside the peer
@@ -389,7 +389,7 @@ public class MessageHistory {
     }
 
     /**
-     * We unbanlisted the peer
+     * We unbanlisted the peer.
      *
      * @param peer the peer removed from the banlist
      */
@@ -400,11 +400,11 @@ public class MessageHistory {
     }
 
     /**
-     * We just sent a message to the peer
+     * We just sent a message to the peer.
      *
      * @param messageType class name for the message object (e.g. DatabaseFindNearestMessage, TunnelMessage, etc)
      * @param messageId the unique message id of the message being sent (not including any tunnel or garlic wrapped
-     *                  message ids)
+     * message ids)
      *
      * @param expiration the expiration for the message sent
      * @param peer router that the message was sent to
@@ -464,7 +464,7 @@ public class MessageHistory {
     }
 
     /**
-     * Note that we're wrapping the given message within another message (via tunnel/garlic)
+     * Note that we're wrapping the given message within another message (via tunnel/garlic).
      *
      * @param bodyMessageType class name for the message contained (e.g. DatabaseFindNearestMessage, DataMessage, etc)
      * @param bodyMessageId the unique message id of the message
@@ -477,7 +477,7 @@ public class MessageHistory {
     }
 
     /**
-     * Receive a payload message to distribute to a client
+     * Receive a payload message to distribute to a client.
      *
      * @param messageId the ID of the payload message received
      */
@@ -487,7 +487,7 @@ public class MessageHistory {
     }
 
     /**
-     * Note that the sending of a payload message completed (successfully or as a failure)
+     * Note that the sending of a payload message completed (successfully or as a failure).
      *
      * @param messageId message that the payload message was sent in
      * @param successfullySent whether the message was delivered to the peer successfully
@@ -600,10 +600,10 @@ public class MessageHistory {
     }
 
     /**
-     * Prettify the hash by doing a base64 and returning the first 6 characters
+     * Prettify the hash by doing a base64 and returning the first 6 characters.
      *
      * @return the first 6 characters of the hash in base64 form, or "UNKNOWN" if the
-     *         hash is null and "INVALID" if it cannot be encoded
+     * hash is null and "INVALID" if it cannot be encoded
      */
     private static final String getName(Hash router) {
         if (router == null) return "UNKNOWN";
@@ -634,7 +634,7 @@ public class MessageHistory {
     }
 
     /**
-     * Write out any unwritten entries, and clear the pending list
+     * Write out any unwritten entries, and clear the pending list.
      */
     private void flushEntries() {
         if (!_doLog)
@@ -644,7 +644,7 @@ public class MessageHistory {
     }
 
     /**
-     * Actually write the specified entries
+     * Actually write the specified entries.
      *
      */
     private synchronized void writeEntries() {
@@ -662,7 +662,7 @@ public class MessageHistory {
         }
     }
 
-    /** Write out the message history once per minute, if not sooner */
+    /** Write out the message history once per minute, if not sooner. */
     private static final long WRITE_DELAY = 60*1000L;
     private class WriteJob extends JobImpl {
         /**

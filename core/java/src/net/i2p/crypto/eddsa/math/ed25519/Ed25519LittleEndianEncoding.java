@@ -4,8 +4,6 @@ import net.i2p.crypto.eddsa.math.*;
 
 /**
  * Helper class for encoding/decoding from/to the 32 byte representation.
- * <p>
- * Reviewed/commented by Bloody Rookie (nemproject@gmx.de)
  */
 public class Ed25519LittleEndianEncoding extends Encoding {
     /**
@@ -181,7 +179,7 @@ public class Ed25519LittleEndianEncoding extends Encoding {
     }
 
     /**
-     * Load 3 bytes from input
+     * Load 3 bytes from input.
      * @param in The byte array holding the little-endian value.
      * @param offset The index of the first of the three bytes to read.
      * @return The three bytes as a zero-extended 24-bit value.
@@ -194,7 +192,7 @@ public class Ed25519LittleEndianEncoding extends Encoding {
     }
 
     /**
-     * Load 4 bytes from input
+     * Load 4 bytes from input.
      * @param in The byte array holding the little-endian value.
      * @param offset The index of the first of the four bytes to read.
      * @return The four bytes as an unsigned 32-bit value in the low bits.

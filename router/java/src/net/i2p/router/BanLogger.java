@@ -34,7 +34,7 @@ import net.i2p.util.Log;
  * Dedicated logger for all ban events.
  * Writes to sessionbans.txt in the router's data directory.
  * <p>
- * This allows analysis of ban patterns without parsing router.log.
+ * This allows analysis of ban patterns without parsing {@code router.log}.
  *
  * @since 0.9.68
  */
@@ -610,7 +610,7 @@ public class BanLogger {
 
     /**
      * Extract IP address and port from RouterInfo.
-     * @return the i p from router info
+     * @return the IP from router info
      */
     private String getIPFromRouterInfo(RouterInfo router) {
         if (router == null) { return ""; }

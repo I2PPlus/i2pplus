@@ -47,12 +47,12 @@ public class GarlicMessageBuilder {
     private GarlicMessageBuilder() {}
 
     /**
-     *  ELGAMAL_2048 only; returns false for others
+     * ELGAMAL_2048 only; returns false for others.
      *
-     *  @param ctx the RouterContext supplying the log and session key manager
-     *  @param key the ElGamal 2048 recipient key the tags are decided for
-     *  @param local non-null; do not use this method for the router's SessionKeyManager
-     *  @param minTagOverride 0 for no override, &gt; 0 to override SKM's settings
+     * @param ctx the RouterContext supplying the log and session key manager
+     * @param key the ElGamal 2048 recipient key the tags are decided for
+     * @param local non-null; do not use this method for the router's SessionKeyManager
+     * @param minTagOverride 0 for no override, &gt; 0 to override SKM's settings
      * @return true if the current session key should be accompanied by tags
      */
     static boolean needsTags(RouterContext ctx, PublicKey key, Hash local, int minTagOverride) {
@@ -93,12 +93,12 @@ public class GarlicMessageBuilder {
 
     /**
      * ELGAMAL_2048 only
-     * Called by OCMJH
+     * Called by OCMJH.
      *
      * @param ctx the RouterContext supplying the log and ElGamal/AES engine
      * @param config how/what to wrap
      * @param wrappedKey non-null with null data,
-     *                   output parameter that will be filled with the SessionKey used
+     * output parameter that will be filled with the SessionKey used
      *
      * @param wrappedTags Output parameter that will be filled with the sessionTags used.
                           If non-empty on return you must call skm.tagsDelivered() when sent
@@ -109,7 +109,7 @@ public class GarlicMessageBuilder {
      * @param skm non-null
      * @return null if expired
      * @throws IllegalArgumentException if the recipient is null or carries no public
-     *                                  key, or is not ELGAMAL_2048
+     * key, or is not ELGAMAL_2048
      */
     public static GarlicMessage buildMessage(RouterContext ctx, GarlicConfig config, SessionKey wrappedKey, Set<SessionTag> wrappedTags,
                                              int numTagsToDeliver, SessionKeyManager skm) {
@@ -462,7 +462,7 @@ public class GarlicMessageBuilder {
     }
 
     /**
-     * Build a single clove
+     * Build a single clove.
      *
      * @since 0.9.44
      */

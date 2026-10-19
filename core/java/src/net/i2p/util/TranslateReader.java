@@ -288,16 +288,16 @@ public class TranslateReader extends FilterReader {
     }
 
     /**
-     * put in the pending parse buf
+     * Put in the pending parse buf.
      */
     private void pushit(char c) {
         _inBuf.append(c);
     }
 
     /**
-     * flush _inBuf to _outBuf,
+     * Flush _inBuf to _outBuf,
      * reset state,
-     * and return next char or -1
+     * and return next char or -1.
      */
     private int flushit() {
         _state = S.START;
@@ -309,7 +309,7 @@ public class TranslateReader extends FilterReader {
     }
 
     /**
-     * return next char from _outBuf or -1
+     * Return next char from _outBuf or -1.
      */
     private int popit() {
         if (_outBuf.length() > 0) {
@@ -321,8 +321,8 @@ public class TranslateReader extends FilterReader {
     }
 
     /**
-     * clear _inBuf, translate _args to _outBuf,
-     * reset state
+     * Clear _inBuf, translate _args to _outBuf,
+     * reset state.
      */
     private void translate() {
         int argCount = _args.size();

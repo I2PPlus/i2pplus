@@ -3,7 +3,6 @@ package com.maxmind.geoip;
 /**
  * Represents a country.
  *
- * @author Matt Tucker
  */
 public class Country {
 

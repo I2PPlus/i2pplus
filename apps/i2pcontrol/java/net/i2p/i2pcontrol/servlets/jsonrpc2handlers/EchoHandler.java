@@ -26,7 +26,11 @@ public class EchoHandler implements RequestHandler {
         _helper = helper;
     }
 
-    /** @return method names handled by this handler */
+    /**
+     * Method names this handler services.
+     *
+     * @return method names handled by this handler
+     */
     @Override
     public String[] handledRequests() {
         return new String[] {"Echo"};

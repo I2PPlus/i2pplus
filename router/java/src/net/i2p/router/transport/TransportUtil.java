@@ -72,13 +72,17 @@ public abstract class TransportUtil {
     public static final String PROP_IPV4_FIREWALLED = "i2np.ipv4.firewalled";
     /** If true, this router believes its IPv6 address is firewalled. */
     public static final String PROP_IPV6_FIREWALLED = "i2np.ipv6.firewalled";
-    /** @since 0.9.28 */
+    /**
+     * Config keys for the data port range and minimums.
+     *
+     * @since 0.9.28
+     */
     private static final String PROP_PORT_PFX = "i2np.";
     private static final String PROP_MIN_PORT_SFX = ".minPort";
     private static final String PROP_MAX_PORT_SFX = ".maxPort";
     /**
      * 8998 is monotone, and 31000 is the wrapper outbound, so let's stay between those
-     * Was 9111, increase to skip Tor browser at 9050
+     * Was 9111, increase to skip Tor browser at 9050.
      */
     private static final int MIN_RANDOM_PORT = 9151;
     private static final int MAX_RANDOM_PORT = 30777;
@@ -89,7 +93,7 @@ public abstract class TransportUtil {
      * IPv6 configuration options for transports.
      */
     public enum IPv6Config {
-        /** IPv6 disabled */
+        /** IPv6 disabled. */
         IPV6_DISABLED("false"),
 
         /** Lower priority than IPv4. */
@@ -101,12 +105,12 @@ public abstract class TransportUtil {
         /** Higher priority than IPv4. */
         IPV6_PREFERRED("preferIPv6"),
 
-        /** IPv4 disabled */
+        /** IPv4 disabled. */
         IPV6_ONLY("only"),
 
         /**
          * Force enabled even if we don't have a public IP,
-         * mainly for Docker with an IPv6 bridge
+         * mainly for Docker with an IPv6 bridge.
          * @since 0.9.71
          */
         IPV6_FORCE_ON("force");
@@ -190,7 +194,7 @@ public abstract class TransportUtil {
      * This returns true if the force-firewalled setting is configured, false otherwise.
      *
      * @param ctx the router context
-     * @return whether i pv6 firewalled
+     * @return whether IPv6 firewalled
      * @since 0.9.27, implemented in 0.9.28
      */
     public static boolean isIPv6Firewalled(RouterContext ctx) {
@@ -199,10 +203,10 @@ public abstract class TransportUtil {
 
     /**
      * Addresses without a host (i.e. w/introducers)
-     * are assumed to be IPv4 unless a '6' cap is present
+     * are assumed to be IPv4 unless a '6' cap is present.
      *
      * @param addr non-null
-     * @return whether i pv6
+     * @return whether IPv6
      */
     public static boolean isIPv6(RouterAddress addr) {
         // do this the fast way, without calling getIP() to parse the host string
@@ -342,7 +346,7 @@ public abstract class TransportUtil {
     }
 
     /**
-     * Ref: RFC 5735
+     * Ref: RFC 5735.
      *
      * @param addr non-null
      * @param allowIPv4 true to treat global IPv4 addresses as routable
@@ -491,7 +495,7 @@ public abstract class TransportUtil {
     }
 
     /**
-     * Pick a random port between the configured boundaries
+     * Pick a random port between the configured boundaries.
      *
      * @param ctx the router context
      * @param transportStyle the transport the port is for, NTCP or SSU

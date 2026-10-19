@@ -14,7 +14,7 @@ import java.time.Instant;
  * It is only used by EepGet, its subclasses, and Syndie.
  * Take care not to break Syndie.
  * The only advantage seems to be a total timeout period, which is the second
- * argument to EepGet.fetch(headerTimeout, totalTimeout, inactivityTimeout),
+ * argument to {@link net.i2p.util.EepGet#fetch(long, long, long)},
  * which is most likely always set to -1.
  * <p>
  * Not for use by plugins or external applications, subject to change.
@@ -95,14 +95,14 @@ public class SocketTimeout extends SimpleTimer2.TimedEvent {
     }
 
     /**
-     * Call when there is activity
+     * Call when there is activity.
      */
     public void resetTimer() {
         _lastActivity = System.currentTimeMillis();
     }
 
     /**
-     * Changes the delay provided in the constructor
+     * Changes the delay provided in the constructor.
      *
      * @param delay greater than zero
      */

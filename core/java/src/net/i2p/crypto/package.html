@@ -5,7 +5,11 @@
 </head>
 <body>
 <p>
-    Core cryptographic primitives used throughout I2P: symmetric ciphers (AES, ChaCha20), hashes (SHA-1, SHA-256, SHA-384, SHA-512), HMAC and HKDF key derivation, the ElGamal and DSA/EdDSA/RedDSA engines, key and certificate utilities, and the entropy harvester. The {@link net.i2p.crypto.provider} subpackage registers these algorithms with the Java Cryptography Architecture.
+    Core cryptographic primitives used throughout I2P: symmetric ciphers (AES, ChaCha20), hashes (SHA-1, SHA-256, SHA-384, SHA-512), HMAC and HKDF key derivation, the ElGamal and DSA/EdDSA/RedDSA engines, key and certificate utilities, and the entropy harvester.
+</p>
+
+<p>
+    The {@link net.i2p.crypto.provider} subpackage registers these algorithms with the Java Cryptography Architecture.
 </p>
 <p>
     EdDSA is in {@link net.i2p.crypto.eddsa} and X25519 in {@link net.i2p.crypto.x25519}. Router-specific schemes - ECIES hybrid encryption, post-quantum KEMs, and the Double Ratchet - are in {@link net.i2p.router.crypto}.

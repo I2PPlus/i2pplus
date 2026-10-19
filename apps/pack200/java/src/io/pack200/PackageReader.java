@@ -56,7 +56,6 @@ import java.util.Set;
  * Reader for a package file.
  *
  * @see PackageWriter
- * @author John Rose
  */
 class PackageReader extends BandStructure {
     Package pkg;

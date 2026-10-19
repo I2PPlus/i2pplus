@@ -19,8 +19,8 @@ import org.junit.Test;
 /**
  * Unit tests for the address-selection decisions extracted from
  * {@link NTCPTransport#externalAddressReceived(byte[], boolean, int)} and
- * {@link NTCPTransport#getConfiguredIP()}, plus the pure decisions reused by
- * {@link NTCPTransport#startListening()} and {@link NTCPTransport#bindAddress(int)}.
+ * {@link NTCPTransport#getConfiguredIP}, plus the pure decisions reused by
+ * {@link NTCPTransport#startListening} and {@link NTCPTransport#bindAddress(int)}.
  *
  * <p>All helpers are static/package-visible so the externally triggered and
  * restart-heavy flows they came from are testable without a router: auto-host

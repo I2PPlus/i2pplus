@@ -114,19 +114,31 @@ public class I2PControlController implements RouterApp {
         changeState(STOPPED);
     }
 
-    /** @return current state */
+    /**
+     * Current state of the managed client app.
+     *
+     * @return current state
+     */
     @Override
     public synchronized ClientAppState getState() {
         return _state;
     }
 
-    /** @return "I2PControl" */
+    /**
+     * Unique name of the client app.
+     *
+     * @return "I2PControl"
+     */
     @Override
     public String getName() {
         return "I2PControl";
     }
 
-    /** @return "I2PControl" */
+    /**
+     * Display name of the client app.
+     *
+     * @return "I2PControl"
+     */
     @Override
     public String getDisplayName() {
         return "I2PControl";
@@ -163,7 +175,7 @@ public class I2PControlController implements RouterApp {
     /**
      * Builds the default SSL connector from the current configuration.
      * The connector is neither added to a server nor started here; only
-     * {@link #buildServer()} does that.
+     * {@link #buildServer} does that.
      * @param server the server the connector is created for, may be null
      * @return the new connector
      */

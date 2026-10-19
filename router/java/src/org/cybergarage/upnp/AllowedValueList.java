@@ -29,7 +29,6 @@ import java.util.Vector;
  * state variables, enabling proper XML description generation and validation of variable value
  * sets.
  *
- * @author Satoshi Konno
  * @since 1.0
  */
 public class AllowedValueList extends Vector<AllowedValue> {

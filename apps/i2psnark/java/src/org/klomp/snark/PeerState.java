@@ -36,31 +36,31 @@ class PeerState implements DataLoader {
     private final Log _log = I2PAppContext.getGlobalContext().logManager().getLog(PeerState.class);
     private final Peer peer;
 
-    /** Fixme, used by Peer.disconnect() to get to the coordinator */
+    /** Fixme, used by {@code Peer.disconnect()} to get to the coordinator. */
     final PeerListener listener;
 
     private final BandwidthListener bwListener;
 
-    /** Null before we have it. locking: this */
+    /** Null before we have it. locking: this. */
     private MetaInfo metainfo;
 
-    /** Null unless needed. Contains -1 for all. locking: this */
+    /** Null unless needed. Contains -1 for all. locking: this. */
     private List<Integer> havesBeforeMetaInfo;
 
-    /** Whether we are interested in the peer */
+    /** Whether we are interested in the peer. */
     volatile boolean interesting;
-    /** Whether we are choking the peer */
+    /** Whether we are choking the peer. */
     volatile boolean choking = true;
 
-    /** Whether the peer is interested in us */
+    /** Whether the peer is interested in us. */
     volatile boolean interested;
-    /** Whether the peer has choked us */
+    /** Whether the peer has choked us. */
     volatile boolean choked = true;
 
-    /** BEP 6: pieces we advertised to the peer, servable even while choking it */
+    /** BEP 6: pieces we advertised to the peer, servable even while choking it. */
     private volatile Set<Integer> _allowedFast;
 
-    /** BEP 6: pieces the peer advertised to us, requestable while it chokes us */
+    /** BEP 6: pieces the peer advertised to us, requestable while it chokes us. */
     final Set<Integer> _peerAllowedFast = new HashSet<>(8);
 
     /**
@@ -81,18 +81,18 @@ class PeerState implements DataLoader {
     /** The pieces the peer has. Locking: this. */
     BitField bitfield;
 
-    /** Inbound connection */
+    /** Inbound connection. */
     final PeerConnectionIn in;
-    /** Outbound connection */
+    /** Outbound connection. */
     final PeerConnectionOut out;
 
     // Outstanding request
     private final List<Request> outstandingRequests = new LinkedList<>();
 
-    /** Bytes of piece data the peer cancelled after requesting */
+    /** Bytes of piece data the peer cancelled after requesting. */
     private long _cancelledBytes;
 
-    /** Time of the last inbound request from the peer */
+    /** Time of the last inbound request from the peer. */
     private long _lastRequestTime;
 
     /**
@@ -118,10 +118,10 @@ class PeerState implements DataLoader {
     /** Default cap on a single piece request from a peer. */
     private static final int DEFAULT_MAX_PARTSIZE = 128 * 1024;
 
-    /** Discard-ratio auto-ban: minimum cancelled+uploaded bytes before evaluation */
+    /** Discard-ratio auto-ban: minimum cancelled+uploaded bytes before evaluation. */
     private static final long DISCARD_MIN_BYTES = 5L * 1024 * 1024;
 
-    /** Discard-ratio auto-ban: cancelled percentage above which the peer is banned */
+    /** Discard-ratio auto-ban: cancelled percentage above which the peer is banned. */
     private static final int DISCARD_BAN_PERCENT = 90;
 
     /** Absolute cap on pipeline depth, outbound or inbound. */
@@ -242,13 +242,13 @@ class PeerState implements DataLoader {
 
     // NOTE Methods that inspect or change the state synchronize (on this).
 
-    /** Handle a keepalive message from the peer */
+    /** Handle a keepalive message from the peer. */
     void keepAliveMessage() {
         if (_log.shouldDebug()) _log.debug("Received keepalive request from [" + peer + "]");
     }
 
     /**
-     * Handle a choke or unchoke message from the peer
+     * Handle a choke or unchoke message from the peer.
      *
      * @param choke true if the peer is now choking us, false if it has unchoked
      */
@@ -281,7 +281,7 @@ class PeerState implements DataLoader {
     }
 
     /**
-     * Handle an interested or uninterested message from the peer
+     * Handle an interested or uninterested message from the peer.
      *
      * @param interest true if the peer is now interested in us, false if not
      */
@@ -293,7 +293,7 @@ class PeerState implements DataLoader {
     }
 
     /**
-     * Handle a have message from the peer
+     * Handle a have message from the peer.
      *
      * @param piece the zero-based index of the piece being acted on
      */
@@ -345,7 +345,7 @@ class PeerState implements DataLoader {
     }
 
     /**
-     * Handle a bitfield message from the peer
+     * Handle a bitfield message from the peer.
      *
      * @param bitmap the peer's have bits as received, highest bit first
      */
@@ -447,7 +447,7 @@ class PeerState implements DataLoader {
     }
 
     /**
-     * Handle a request message from the peer
+     * Handle a request message from the peer.
      *
      * @param piece the zero-based index of the piece being acted on
      * @param begin the byte offset into the piece where the requested block starts
@@ -549,7 +549,7 @@ class PeerState implements DataLoader {
     }
 
     /**
-     * This is the callback that PeerConnectionOut calls
+     * This is the callback that PeerConnectionOut calls.
      *
      * @return bytes or null for errors such as not having the piece yet
      * @throws RuntimeException on IOE getting the data
@@ -599,12 +599,12 @@ class PeerState implements DataLoader {
         return pieceBytes;
     }
 
+        // Called when some bytes have left the outgoing connection. XXX - Should indicate whether it
     /**
-     * Called when some bytes have left the outgoing connection. XXX - Should indicate whether it
-     * was a real piece or overhead.
+     * Was a real piece or overhead.
      *
      * @param size the number of bytes just sent to the peer
-     */
+    */
     void uploaded(int size) {
         peer.uploaded(size);
     }
@@ -628,7 +628,7 @@ class PeerState implements DataLoader {
         return System.currentTimeMillis() - lastRequest > SNUB_TIMEOUT;
     }
 
-    /** Flag to back up from firstOutstandingRequest when calculating progress */
+    /** Flag to back up from firstOutstandingRequest when calculating progress. */
     private Request pendingRequest;
 
     /**
@@ -694,11 +694,6 @@ class PeerState implements DataLoader {
         }
     }
 
-    /**
-     * TODO this is how we tell we got all the chunks in pieceMessage() above.
-     *
-     * @return index in outstandingRequests or -1
-     */
     private synchronized int getFirstOutstandingRequest(int piece) {
         for (int i = 0; i < outstandingRequests.size(); i++) {
             if (outstandingRequests.get(i).getPiece() == piece) {
@@ -719,6 +714,7 @@ class PeerState implements DataLoader {
      * @return the outstanding request matching that chunk, or null if none was sent
      */
     Request getOutstandingRequest(int piece, int begin, int length) {
+        // TODO this is how we tell we got all the chunks in pieceMessage() above.
         if (_log.shouldDebug()) {
             _log.debug(
                     "Received start of chunk ("
@@ -911,7 +907,7 @@ class PeerState implements DataLoader {
     }
 
     /**
-     * Handle a cancel message from the peer
+     * Handle a cancel message from the peer.
      *
      * @param piece the zero-based index of the piece being acted on
      * @param begin the byte offset into the piece where the cancelled block starts
@@ -1161,7 +1157,7 @@ class PeerState implements DataLoader {
     }
 
     /**
-     * BEP 6
+     * BEP 6.
      *
      * @param isAll true for have_all, false for have_none
      * @since 0.9.21
@@ -1171,7 +1167,7 @@ class PeerState implements DataLoader {
     }
 
     /**
-     * BEP 6
+     * BEP 6.
      *
      * @param piece the zero-based index of the piece being acted on
      * @param begin the byte offset into the piece where the rejected block starts
@@ -1223,7 +1219,7 @@ class PeerState implements DataLoader {
      * Handle an allowed fast message (BEP 6): the peer will serve this piece even while it chokes
      * us. Store it and pull a request now, while we are still choked.
      *
-     * <p>Indices outside the accepted derivations (see {@link #expectedAllowedFast()}) are
+     * <p>Indices outside the accepted derivations (see {@link #expectedAllowedFast}) are
      * dropped, defending against buggy or malicious senders that invent pieces. Membership
      * bounds what such a sender can get us to request while choked to at most the union size.
      *
@@ -1701,7 +1697,7 @@ class PeerState implements DataLoader {
         }
     }
 
-    /** Last time a choke message was sent */
+    /** Last time a choke message was sent. */
     private long lastChokeSendTime = 0;
 
     /**

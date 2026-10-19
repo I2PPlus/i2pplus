@@ -28,12 +28,12 @@ class AMDInfoImpl extends CPUIDCPUInfo implements AMDCPUInfo {
     private static boolean isZen4Compatible;
     private static boolean isZen5Compatible;
 
-    /**
-     * Default constructor.
-     */
+    /** No-op, all state is static. */
     public AMDInfoImpl() {}
 
      /**
+      * Whether the CPU is at least a K6.
+      *
       * @return true if the CPU present in the machine is at least a 'k6' CPU
       */
     public boolean IsK6Compatible() {return isK6Compatible;}
@@ -52,30 +52,40 @@ class AMDInfoImpl extends CPUIDCPUInfo implements AMDCPUInfo {
     public boolean IsExcavatorCompatible() {return isExcavatorCompatible;}
 
     /**
+     * Whether the CPU is at least Zen.
+     *
      * @return true if the CPU present in the machine is at least a Zen family CPU
      * @since 0.9.48
      */
     public boolean IsZenCompatible() {return isZenCompatible;}
 
     /**
+     * Whether the CPU is at least Zen 2.
+     *
      * @return true if the CPU present in the machine is at least a Zen2 family CPU
      * @since 0.9.48
      */
     public boolean IsZen2Compatible() {return isZen2Compatible;}
 
     /**
+     * Whether the CPU is at least Zen 3.
+     *
      * @return true if the CPU present in the machine is at least a Zen3 family CPU
      * @since 0.9.69+
      */
     public boolean IsZen3Compatible() {return isZen3Compatible;}
 
     /**
+     * Whether the CPU is at least Zen 4.
+     *
      * @return true if the CPU present in the machine is at least a Zen4 family CPU
      * @since 0.9.69+
      */
     public boolean IsZen4Compatible() {return isZen4Compatible;}
 
     /**
+     * Whether the CPU is at least Zen 5.
+     *
      * @return true if the CPU present in the machine is at least a Zen5 family CPU
      * @since 0.9.69+
      */

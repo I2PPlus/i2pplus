@@ -7,7 +7,7 @@ import net.i2p.router.RouterContext;
 import net.i2p.router.tunnel.TunnelCreatorConfig;
 
 /**
- * Data about a tunnel we created
+ * Data about a tunnel we created.
  */
 public class PooledTunnelCreatorConfig extends TunnelCreatorConfig {
     private final TunnelPool _pool;
@@ -37,7 +37,7 @@ public class PooledTunnelCreatorConfig extends TunnelCreatorConfig {
     private static final long ACTIVITY_TIMEOUT = 30*1000L;
 
     /**
-     * Creates a new instance of PooledTunnelCreatorConfig
+     * Creates a new instance of PooledTunnelCreatorConfig.
      *
      * @param ctx the router context supplying the transport and profile lookups
      * @param length the tunnel length in hops, 1 minimum (a 0-hop tunnel is length 1)
@@ -62,7 +62,7 @@ public class PooledTunnelCreatorConfig extends TunnelCreatorConfig {
     public void testJobSuccessful(int ms) {testSuccessful(ms);}
 
     /**
-     * The tunnel failed a test, so (maybe) stop using it
+     * The tunnel failed a test, so (maybe) stop using it.
      */
     @Override
     public boolean tunnelFailed() {
@@ -205,7 +205,7 @@ public class PooledTunnelCreatorConfig extends TunnelCreatorConfig {
     }
 
     /**
-     * The ID of the gateway of the paired tunnel used to send/receive the build request
+     * The ID of the gateway of the paired tunnel used to send/receive the build request.
      *
      * @param gw for paired inbound, the GW rcv tunnel ID; for paired outbound, the GW send tunnel ID.
      * @since 0.9.53
@@ -213,10 +213,10 @@ public class PooledTunnelCreatorConfig extends TunnelCreatorConfig {
     public void setPairedGW(TunnelId gw) {_pairedGW = gw;}
 
     /**
-     * The ID of the gateway of the paired tunnel used to send/receive the build request
+     * The ID of the gateway of the paired tunnel used to send/receive the build request.
      *
      * @return for paired inbound, the GW rcv tunnel ID; for paired outbound, the GW send tunnel ID.
-     *         null if not previously set
+     * null if not previously set
      * @since 0.9.53
      */
     public TunnelId getPairedGW() {return _pairedGW;}

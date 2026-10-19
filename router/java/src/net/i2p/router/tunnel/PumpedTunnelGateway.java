@@ -39,7 +39,7 @@ import net.i2p.util.SystemVersion;
 class PumpedTunnelGateway extends TunnelGateway {
     private final BlockingQueue<PendingGatewayMessage> _prequeue;
     private final TunnelGatewayPumper _pumper;
-    /** Whether this gateway is inbound (vs outbound) */
+    /** Whether this gateway is inbound (vs outbound). */
     public final boolean _isInbound;
     private final Hash _nextHop;
     /**
@@ -59,13 +59,13 @@ class PumpedTunnelGateway extends TunnelGateway {
     private static final int MAX_IB_QUEUE;
     private static volatile boolean _statsCreated;
 
-    /** Property key for max outbound messages per pump */
+    /** Property key for max outbound messages per pump. */
     public static final String PROP_MAX_OB_MSGS_PER_PUMP = "router.pumpMaxOutboundMsgs";
-    /** Property key for max inbound messages per pump */
+    /** Property key for max inbound messages per pump. */
     public static final String PROP_MAX_IB_MSGS_PER_PUMP = "router.pumpMaxInboundMsgs";
-    /** Property key for initial outbound queue size */
+    /** Property key for initial outbound queue size. */
     public static final String PROP_INITIAL_OB_QUEUE = "router.pumpInitialOutboundQueue";
-    /** Property key for max inbound queue size */
+    /** Property key for max inbound queue size. */
     public static final String PROP_MAX_IB_QUEUE = "router.pumpMaxInboundQueue";
 
     static {

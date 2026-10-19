@@ -27,7 +27,6 @@ import org.cybergarage.upnp.*;
  * <p>This class provides the foundational constants and utility methods used throughout the UPnP
  * event notification system for managing subscription lifecycles.
  *
- * @author Satoshi Konno
  * @since 1.0
  */
 public class Subscription {

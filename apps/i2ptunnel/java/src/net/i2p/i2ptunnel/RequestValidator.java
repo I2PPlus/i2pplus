@@ -278,7 +278,7 @@ public class RequestValidator {
      * @since 0.10.0
      */
     public static class ValidationResult {
-        /** Whether the request is valid */
+        /** Whether the request is valid. */
         public boolean isValid = true;
 
         /**
@@ -287,10 +287,10 @@ public class RequestValidator {
          */
         public ValidationResult() {}
 
-        /** Whether this appears to be an exploit attempt */
+        /** Whether this appears to be an exploit attempt. */
         public boolean isPossibleExploit = false;
 
-        /** The error response to send if the request is invalid; null if no response needed */
+        /** The error response to send if the request is invalid; null if no response needed. */
         public String errorResponse = null;
     }
 }

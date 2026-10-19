@@ -7,7 +7,7 @@ import net.i2p.router.RouterContext;
 import net.i2p.update.*;
 
 /**
- * Dummy to lock up the updates for a period of time
+ * Dummy to lock up the updates for a period of time.
  *
  * @since 0.9.4
  */
@@ -26,7 +26,7 @@ class DummyHandler implements Checker, Updater {
     }
 
     /**
-     *  Spins off an UpdateTask that sleeps
+     * Spins off an UpdateTask that sleeps.
      */
     @Override
     public UpdateTask check(UpdateType type, UpdateMethod method,
@@ -37,7 +37,7 @@ class DummyHandler implements Checker, Updater {
     }
 
     /**
-     *  Spins off an UpdateTask that sleeps
+     * Spins off an UpdateTask that sleeps.
      */
     public UpdateTask update(UpdateType type, UpdateMethod method, List<URI> updateSources,
                              String id, String newVersion, long maxTime) {
@@ -47,7 +47,7 @@ class DummyHandler implements Checker, Updater {
     }
 
     /**
-     *  Use for both check and update
+     * Use for both check and update.
      */
     private static class DummyRunner extends UpdateRunner {
         private final long _delay;
@@ -61,6 +61,8 @@ class DummyHandler implements Checker, Updater {
         }
 
         /**
+         * Always DUMMY.
+         *
          * @return METHOD_DUMMY, which never downloads anything
          */
         @Override

@@ -134,7 +134,7 @@ public class NewsManager implements ClientApp {
     // ClientApp methods
 
     /**
-     * ClientApp interface
+     * ClientApp interface.
      */
     @Override
     public synchronized void startup() {
@@ -146,25 +146,31 @@ public class NewsManager implements ClientApp {
     }
 
     /**
-     * ClientApp interface
+     * ClientApp interface.
      * @param args unused; the {@link ClientApp} contract allows stopArgs from
-     *             clients.config, but shutdown only sets the state to STOPPED
+     * {@code clients.config}, but shutdown only sets the state to STOPPED
      */
     @Override
     public synchronized void shutdown(String[] args) {changeState(STOPPED);}
     /**
+     * Current app state.
+     *
      * @return the current {@link ClientAppState}, {@code INITIALIZED} once
-     *         constructed and {@code STARTING}, {@code RUNNING} or
-     *         {@code STOPPED} thereafter
+     * constructed and {@code STARTING}, {@code RUNNING} or
+     * {@code STOPPED} thereafter
      */
     @Override
     public ClientAppState getState() {return _state;}
     /**
+     * The app's internal name.
+     *
      * @return the app name {@code news}, the key this app is registered under
      */
     @Override
     public String getName() {return APP_NAME;}
     /**
+     * The app's display name.
+     *
      * @return the display name
      */
     @Override
@@ -185,7 +191,7 @@ public class NewsManager implements ClientApp {
     }
 
     /**
-     * The initial (Welcome to I2P) news
+     * The initial (Welcome to I2P) news.
      *
      * @return entry with first-installed date stamp, or null
      * @since 0.9.28
@@ -223,7 +229,7 @@ public class NewsManager implements ClientApp {
     }
 
     /**
-     * Used for initialNews.xml and news.xml
+     * Used for initialNews.xml and news.xml.
      *
      * @param addMissingDiv true for initialNews, false for news.xml
      */

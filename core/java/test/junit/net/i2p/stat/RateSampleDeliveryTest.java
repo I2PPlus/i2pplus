@@ -26,7 +26,7 @@ import static org.junit.Assert.*;
  * <p><b>Same-step supersession.</b> Storage holds one value per archive step, so
  * when two samples for one step arrive the older can never be written. The queue
  * must therefore replace the tail rather than grow, and must say so through
- * {@link RateSampleDelivery#getSuperseded()}. A queue that grows on duplicates
+ * {@link RateSampleDelivery#getSuperseded}. A queue that grows on duplicates
  * eventually overruns on a consumer that is merely slow, and turns a harmless
  * repeat into counted data loss.
  *
@@ -455,7 +455,7 @@ public class RateSampleDeliveryTest {
      * caller that closes the listeners' databases right afterwards races an
      * in-flight delivery.
      *
-     * <p>The listener deliberately ignores {@link Thread#interrupt()}: a write
+     * <p>The listener deliberately ignores {@link Thread#interrupt}: a write
      * blocked on a stalled disk is not interruptible, which is the whole reason
      * delivery cannot simply be abandoned at shutdown.
      */

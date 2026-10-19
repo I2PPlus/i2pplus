@@ -28,7 +28,6 @@ import org.cybergarage.xml.Node;
  * variables, enabling proper validation and description generation for numeric variables with
  * restricted ranges.
  *
- * @author Satoshi Konno
  */
 public class AllowedValueRange {
     ////////////////////////////////////////////////

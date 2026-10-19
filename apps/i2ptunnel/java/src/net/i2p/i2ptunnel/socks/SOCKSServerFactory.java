@@ -31,7 +31,7 @@ import net.i2p.i2ptunnel.I2PTunnelHTTPClientBase;
 import net.i2p.socks.SOCKSException;
 
 /**
- * Factory class for creating SOCKS forwarders through I2P
+ * Factory class for creating SOCKS forwarders through I2P.
  */
 class SOCKSServerFactory {
 

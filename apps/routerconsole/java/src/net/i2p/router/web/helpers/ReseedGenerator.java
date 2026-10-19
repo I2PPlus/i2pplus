@@ -6,8 +6,8 @@ import net.i2p.router.networkdb.reseed.ReseedBundler;
 import net.i2p.router.web.HelperBase;
 
 /**
- *  Handler to create a i2preseed.zip file
- *  @since 0.9.19
+ * Handler to create a i2preseed.zip file.
+ * @since 0.9.19
  */
 public class ReseedGenerator extends HelperBase {
 

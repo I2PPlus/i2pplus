@@ -43,7 +43,7 @@ class AccessFilter implements StatefulConnectionFilter {
 
     /**
      * All disk i/o from all instances of this filter
-     * happen on this thread (apart from initial load)
+     * happen on this thread (apart from initial load).
      */
     private static final ExecutorService DISK_WRITER = Executors.newSingleThreadExecutor(r -> {
         Thread t = new Thread(r, "AccLogWtr");
@@ -78,17 +78,17 @@ class AccessFilter implements StatefulConnectionFilter {
 
     /**
      * Per-recorder file read cache; keyed by the persisted breach file and
-     * only touched on the single DISK_WRITER thread inside {@link #record()},
+     * only touched on the single DISK_WRITER thread inside {@link #record},
      * so no locking is required.
      */
     private final Map<File, RecorderFileState> recorderFiles = new HashMap<>();
 
     /**
-     * Trackers for known destinations defined in access lists
+     * Trackers for known destinations defined in access lists.
      */
     private final Map<Hash, DestTracker> knownDests = new HashMap<>();
     /**
-     * Trackers for unknown destinations not defined in access lists
+     * Trackers for unknown destinations not defined in access lists.
      */
     private final Map<Hash, DestTracker> unknownDests = new HashMap<>();
 
@@ -298,13 +298,13 @@ class AccessFilter implements StatefulConnectionFilter {
      * @since 0.9.71+
      */
     static final class RecorderFileState {
-        /** whether the file was a real file when the state was captured */
+        /** Whether the file was a real file when the state was captured. */
         final boolean valid;
-        /** the file's lastModified() in milliseconds since the epoch, or 0 if not valid */
+        /** The file's lastModified() in milliseconds since the epoch, or 0 if not valid. */
         final long modified;
-        /** the file's length in bytes, or 0 if not valid */
+        /** The file's length in bytes, or 0 if not valid. */
         final long length;
-        /** the recorded destination base32 strings, one per line, empty if not valid */
+        /** The recorded destination base32 strings, one per line, empty if not valid. */
         final Set<String> breached;
 
         /**

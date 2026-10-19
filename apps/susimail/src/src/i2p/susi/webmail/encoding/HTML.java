@@ -23,7 +23,11 @@ public class HTML extends Encoding {
   @Override
   public String getName() {return "HTML";}
 
-  /** @return HTML-escaped string */
+  /**
+   * Encode the bytes as HTML entities.
+   *
+   * @return HTML-escaped string
+   */
   public String encode(byte[] in) throws EncodingException {
     throw new EncodingException("unsupported");
   }
@@ -48,7 +52,7 @@ public class HTML extends Encoding {
     return buf.toString();
   }
 
-  /** Decode HTML entities from the stream */
+  /** Decode HTML entities from the stream. */
   public void decode(InputStream in, Buffer out) throws DecodingException {
     throw new DecodingException("unsupported");
   }

@@ -32,7 +32,6 @@ import net.i2p.util.VersionComparator;
  * Defines the message a router sends to another router to search for a
  * key in the network database.
  *
- * @author jrandom
  */
 public class DatabaseLookupMessage extends FastI2NPMessageImpl {
     private final static Log _log = new Log(DatabaseLookupMessage.class);
@@ -57,7 +56,7 @@ public class DatabaseLookupMessage extends FastI2NPMessageImpl {
     public static final boolean USE_ECIES_FF = true;
 
     /** Insanely big. Not much more than 1500 will fit in a message.
-        Have to prevent a huge alloc on rcv of a malicious msg though */
+        Have to prevent a huge alloc on rcv of a malicious msg though. */
     private static final int MAX_NUM_PEERS = 512;
 
     private static final byte FLAG_TUNNEL = 0x01;
@@ -71,7 +70,7 @@ public class DatabaseLookupMessage extends FastI2NPMessageImpl {
     // 0.9.46 or higher
     private static final byte FLAG_RATCHET = 0x10;
 
-    /** Database lookup type enumeration. @since 0.9.16 */
+    /** Database lookup type enumeration. @since 0.9.16. */
     public enum Type {
         /** Default - LS or RI. */
         ANY,
@@ -112,7 +111,7 @@ public class DatabaseLookupMessage extends FastI2NPMessageImpl {
     }
 
     /**
-     * Defines the key being searched for
+     * Defines the key being searched for.
      * @return the search key
      */
     public Hash getSearchKey() { return _key; }
@@ -154,7 +153,7 @@ public class DatabaseLookupMessage extends FastI2NPMessageImpl {
     }
 
     /**
-     * Contains the router who requested this lookup
+     * Contains the router who requested this lookup.
      *
      * @return the hash of the router that requested this lookup
      */
@@ -173,7 +172,7 @@ public class DatabaseLookupMessage extends FastI2NPMessageImpl {
     }
 
     /**
-     * Contains the tunnel ID a reply should be sent to
+     * Contains the tunnel ID a reply should be sent to.
      *
      * @return the reply tunnel
      */
@@ -251,12 +250,12 @@ public class DatabaseLookupMessage extends FastI2NPMessageImpl {
     public SessionTag getReplyTag() { return _replyTag; }
 
     /**
-     *  Only worthwhile if sending reply via tunnel
+     * Only worthwhile if sending reply via tunnel.
      *
-     *  @param encryptKey non-null
-     *  @param encryptTag non-null
-     *  @throws IllegalStateException if key or tag previously set, to protect saved checksum
-     *  @since 0.9.7
+     * @param encryptKey non-null
+     * @param encryptTag non-null
+     * @throws IllegalStateException if key or tag previously set, to protect saved checksum
+     * @since 0.9.7
      */
     public void setReplySession(SessionKey encryptKey, SessionTag encryptTag) {
         if (_replyKey != null || _replyTag != null ||

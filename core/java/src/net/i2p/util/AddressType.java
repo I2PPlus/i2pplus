@@ -6,10 +6,10 @@ package net.i2p.util;
  * @since 0.9.54
  */
 public enum AddressType {
-    /** IPv4 address type */
+    /** IPv4 address type. */
     IPV4,
-    /** IPv6 address type */
+    /** IPv6 address type. */
     IPV6,
-    /** Yggdrasil address type */
+    /** Yggdrasil address type. */
     YGG
 }

@@ -18,9 +18,8 @@ import net.i2p.data.SigningPrivateKey;
 import net.i2p.data.SigningPrivateKeyTest;
 
 /**
- * Test harness for loading / storing CreateLeaseSetMessage objects
+ * Test harness for loading / storing CreateLeaseSetMessage objects.
  *
- * @author jrandom
  */
 public class CreateLeaseSetMessageTest extends I2CPTstBase {
     @Override

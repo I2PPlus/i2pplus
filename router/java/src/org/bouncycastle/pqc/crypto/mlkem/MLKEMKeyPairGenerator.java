@@ -12,7 +12,7 @@ public class MLKEMKeyPairGenerator
 {
     /**
      * Constructs an uninitialised generator; call {@link #init(KeyGenerationParameters)}
-     * before {@link #generateKeyPair()}, which reads the parameters that init() stores.
+     * before {@link #generateKeyPair}, which reads the parameters that init() stores.
      */
     public MLKEMKeyPairGenerator()
     {

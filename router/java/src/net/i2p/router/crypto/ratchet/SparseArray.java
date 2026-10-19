@@ -22,7 +22,7 @@ package net.i2p.router.crypto.ratchet;
  * in ascending order. In the case of <code>valueAt(int)</code>, values
  * corresponding to keys are returned in ascending order.</p>
  * <p>
- * I2P - as of 0.9.48, changed to use chars for the index, max value 65535
+ * I2P - as of 0.9.48, changed to use chars for the index, max value 65535.
  *
  * @param <E> type of objects stored in this sparse array
  */

@@ -57,7 +57,6 @@ import com.thetransactioncompany.jsonrpc2.JSONRPC2Error;
  * <p>The JSON-RPC 2.0 specification and user group forum can be found
  * <a href="http://groups.google.com/group/json-rpc">here</a>.
  *
- * @author <a href="http://dzhuvinov.com">Vladimir Dzhuvinov</a>
  * @version 1.16 (2010-10-04)
  */
 public class JSONRPC2ExtendedError extends JSONRPC2Error {

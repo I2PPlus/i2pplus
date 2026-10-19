@@ -48,9 +48,9 @@ import net.i2p.util.ObjectCounterUnsafe;
  */
 class TunnelRenderer {
     private static final Pattern TUNNEL_PAREN = Pattern.compile("\\([^)]+\\)");
-    /** "AT&T" followed by anything (whois cleanup) */
+    /** "AT&T" followed by anything (whois cleanup). */
     private static final Pattern ATT_PREFIX = Pattern.compile("(?i)AT\\s*&\\s*T\\s+.*");
-    /** A bare "&T" run (whois cleanup) */
+    /** A bare "&T" run (whois cleanup). */
     private static final Pattern AMP_T_RUN = Pattern.compile("(?i)&\\s*T\\b.*");
     private final RouterContext _context;
 
@@ -562,7 +562,7 @@ class TunnelRenderer {
     /**
      * Render the transit-summary table, or a single named fragment of it.
      * With a null fragmentId the full table is written exactly as the public
-     * renderTransitSummary always did; the fragment mode emits only the named
+     * renderTransitSummary always did. The fragment mode emits only the named
      * tbody so the auto-refresh worker can morph just the live rows from a
      * contentonly response.
      *
@@ -721,7 +721,7 @@ class TunnelRenderer {
      * Render the tunnel peer count table, the "all peers" tbody, or the
      * totals footer row.
      * <p>
-     * Full-page mode renders header, rows, and footer as one table; fragment
+     * Full-page mode renders header, rows, and footer as one table. Fragment
      * mode (contentonly) renders just the named element so the page can
      * refresh the tbody rows and footer without re-sending the full table.
      *
@@ -1161,7 +1161,7 @@ class TunnelRenderer {
     }
 
     /**
-     * Sort tunnels by the name of the tunnel
+     * Sort tunnels by the name of the tunnel.
      * @since 0.9.57
      */
     private class TPComparator implements Comparator<TunnelPool> {
@@ -1186,7 +1186,7 @@ class TunnelRenderer {
     }
 
     /**
-     * Get display name for the tunnel
+     * Get display name for the tunnel.
      * @return the tunnel name
      * @since 0.9.57
      */
@@ -1708,7 +1708,7 @@ class TunnelRenderer {
         return (int) (pct * Math.min(irateKBps, orateKBps));
     }
 
-    /** translate a string */
+    /** Translate a string. */
     private String _t(String s) {return Messages.getString(s, _context);}
 
     /**
@@ -1768,7 +1768,7 @@ class TunnelRenderer {
         out.write("</tr></thead>\n</table>\n");
     }
 
-    /** Get next tunnel expiry from pool (excludes failed tunnels) */
+    /** Get next tunnel expiry from pool (excludes failed tunnels). */
     private long getNextExpiry(TunnelPool pool) {
         long next = 0;
         for (TunnelInfo ti : pool.listTunnels()) {

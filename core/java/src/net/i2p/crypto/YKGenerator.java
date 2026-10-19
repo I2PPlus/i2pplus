@@ -40,7 +40,6 @@ import java.util.concurrent.atomic.AtomicInteger;
  * exponentiation per message until the precalc thread catches up.  Raise
  * -Dcrypto.yk.precalc.min if that cost is noticeable.
  *
- * @author jrandom
  */
 final class YKGenerator {
     private final int MIN_NUM_BUILDERS;
@@ -49,7 +48,7 @@ final class YKGenerator {
     private final LinkedBlockingQueue<BigInteger[]> _values;
     /**
      * Pool occupancy, maintained alongside {@link #_values}: sampling
-     * LinkedBlockingQueue.size() takes both the put and the take lock, so it
+     * {@link java.util.concurrent.LinkedBlockingQueue#size} takes both the put and the take lock, so it
      * contends with poll() on the encryption path.
      */
     private final AtomicInteger _size = new AtomicInteger();
@@ -57,17 +56,17 @@ final class YKGenerator {
     private final I2PAppContext ctx;
     private volatile boolean _isRunning;
 
-    /** Property: minimum pool threshold */
+    /** Property: minimum pool threshold. */
     public static final String PROP_YK_PRECALC_MIN = "crypto.yk.precalc.min";
-    /** Property: maximum pool size */
+    /** Property: maximum pool size. */
     public static final String PROP_YK_PRECALC_MAX = "crypto.yk.precalc.max";
-    /** Property: delay between precalc operations (ms) */
+    /** Property: delay between precalc operations (ms). */
     public static final String PROP_YK_PRECALC_DELAY = "crypto.yk.precalc.delay";
-    /** Default minimum pool threshold */
+    /** Default minimum pool threshold. */
     public static final int DEFAULT_YK_PRECALC_MIN = SystemVersion.isSlow() ? 30 : 50;
-    /** Default maximum pool size */
+    /** Default maximum pool size. */
     public static final int DEFAULT_YK_PRECALC_MAX = SystemVersion.isSlow() ? 100 : 200;
-    /** Default delay between precalc operations (ms) */
+    /** Default delay between precalc operations (ms). */
     public static final int DEFAULT_YK_PRECALC_DELAY = SystemVersion.isSlow() ? 200 : 150;
 
     /**

@@ -19,7 +19,6 @@ import java.util.Locale;
  * <p>
  * If there is anything in here that doesn't make sense, turn off your computer and go fly a kite.
  *
- * @author jrandom
  */
 public class Log {
     private final Class<?> _class;
@@ -117,7 +116,7 @@ public class Log {
 
     /**
      * Warning - not recommended.
-     * Use I2PAppContext.getGlobalContext().logManager().getLog(cls)
+     * Use {@link net.i2p.I2PAppContext#getGlobalContext}{@code logManager().getLog(}cls).
      *
      * @param cls the class whose name prefixes each line logged through this log
      */
@@ -128,7 +127,7 @@ public class Log {
 
     /**
      * Warning - not recommended.
-     * Use I2PAppContext.getGlobalContext().logManager().getLog(name)
+     * Use {@link net.i2p.I2PAppContext#getGlobalContext}{@code logManager().getLog(}name).
      *
      * @param name the log's name, used in place of a class name to prefix each line
      */
@@ -504,7 +503,7 @@ public class Log {
     }
 
     /**
-     * Returns the LogScope (private class).
+     * The logging scope object for this log.
      *
      * @return the scope object, whose equals() compares scope strings
      */

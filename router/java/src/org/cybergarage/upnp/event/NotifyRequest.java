@@ -31,7 +31,6 @@ import org.cybergarage.xml.*;
  * informing them of changes in service state variables. It handles both single and multiple
  * property changes in a single notification message.
  *
- * @author Satoshi Konno
  * @since 1.0
  */
 public class NotifyRequest extends SOAPRequest {

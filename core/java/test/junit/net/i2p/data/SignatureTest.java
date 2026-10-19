@@ -10,9 +10,8 @@ package net.i2p.data;
  */
 
 /**
- * Test harness for loading / storing Signature objects
+ * Test harness for loading / storing Signature objects.
  *
- * @author jrandom
  */
 public class SignatureTest extends StructureTest {
     @Override

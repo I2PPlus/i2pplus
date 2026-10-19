@@ -8,7 +8,6 @@ import java.io.IOException;
  * and createTempFile() also. So just use this instead.
  * Probably should have just made this class in the beginning and not had two.
  *
- * @author zzz
  * @since 0.8.2
  */
 public class SecureFile extends SecureDirectory {
@@ -43,7 +42,7 @@ public class SecureFile extends SecureDirectory {
     }
 
     /**
-     * Tries to set file to mode 600 if the file is created
+     * Tries to set file to mode 600 if the file is created.
      */
     @Override
     public boolean createNewFile() throws IOException {
@@ -53,7 +52,7 @@ public class SecureFile extends SecureDirectory {
     }
 
     /**
-     * Tries to set file to mode 600 when the file is created
+     * Tries to set file to mode 600 when the file is created.
      *
      * @param prefix the prefix of the generated file name
      * @param suffix the suffix of the generated file name
@@ -68,7 +67,7 @@ public class SecureFile extends SecureDirectory {
     }
 
     /**
-     * Tries to set file to mode 600 when the file is created
+     * Tries to set file to mode 600 when the file is created.
      *
      * @param prefix the prefix of the generated file name
      * @param suffix the suffix of the generated file name
@@ -85,7 +84,7 @@ public class SecureFile extends SecureDirectory {
 
     /**
      * Tries to set the permissions to 600,
-     * ignores errors
+     * ignores errors.
      */
     @Override
     protected void setPerms() {

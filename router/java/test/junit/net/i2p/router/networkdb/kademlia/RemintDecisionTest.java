@@ -348,7 +348,7 @@ public class RemintDecisionTest {
 
     /**
      * The lease viability window has to be reachable. A tunnel lives 11 minutes
-     * (660s); requiring ten minutes of remaining life would only be satisfiable
+     * (660s). Requiring ten minutes of remaining life would only be satisfiable
      * in roughly the first minute of a tunnel's life, so any gate using it would
      * defer permanently on a healthy pool.
      */

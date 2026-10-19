@@ -47,7 +47,7 @@ public enum EncType {
 
     /**
      * Proposal 144.
-     * Pubkey 32 bytes; privkey 32 bytes
+     * Pubkey 32 bytes; privkey 32 bytes.
      *
      * @since 0.9.38
      */
@@ -55,7 +55,7 @@ public enum EncType {
 
     /**
      * Proposal 169.
-     * Pubkey 32 bytes; privkey 32 bytes
+     * Pubkey 32 bytes; privkey 32 bytes.
      *
      * @since 0.9.67
      */
@@ -63,7 +63,7 @@ public enum EncType {
 
     /**
      * Proposal 169.
-     * Pubkey 32 bytes; privkey 32 bytes
+     * Pubkey 32 bytes; privkey 32 bytes.
      *
      * @since 0.9.67
      */
@@ -71,7 +71,7 @@ public enum EncType {
 
     /**
      * Proposal 169.
-     * Pubkey 32 bytes; privkey 32 bytes
+     * Pubkey 32 bytes; privkey 32 bytes.
      *
      * @since 0.9.67
      */
@@ -80,7 +80,7 @@ public enum EncType {
     /**
      * For internal use only (Alice side)
      * Proposal 169.
-     * Pubkey 800 bytes; privkey 1632 bytes
+     * Pubkey 800 bytes; privkey 1632 bytes.
      *
      * @since 0.9.67
      */
@@ -89,7 +89,7 @@ public enum EncType {
     /**
      * For internal use only (Alice side)
      * Proposal 169.
-     * Pubkey 1184 bytes; privkey 2400 bytes
+     * Pubkey 1184 bytes; privkey 2400 bytes.
      *
      * @since 0.9.67
      */
@@ -98,7 +98,7 @@ public enum EncType {
     /**
      * For internal use only (Alice side)
      * Proposal 169.
-     * Pubkey 1568 bytes; privkey 3168 bytes
+     * Pubkey 1568 bytes; privkey 3168 bytes.
      *
      * @since 0.9.67
      */
@@ -107,7 +107,7 @@ public enum EncType {
     /**
      * For internal use only (Bob side ciphertext)
      * Proposal 169.
-     * Pubkey 768 bytes; privkey 0
+     * Pubkey 768 bytes; privkey 0.
      *
      * @since 0.9.67
      */
@@ -116,7 +116,7 @@ public enum EncType {
     /**
      * For internal use only (Bob side ciphertext)
      * Proposal 169.
-     * Pubkey 1088 bytes; privkey 0
+     * Pubkey 1088 bytes; privkey 0.
      *
      * @since 0.9.67
      */
@@ -125,7 +125,7 @@ public enum EncType {
     /**
      * For internal use only (Bob side ciphertext)
      * Proposal 169.
-     * Pubkey 1568 bytes; privkey 0
+     * Pubkey 1568 bytes; privkey 0.
      *
      * @since 0.9.67
      */
@@ -141,6 +141,7 @@ public enum EncType {
     private final boolean isPQ;
 
     /**
+     * Creates an encryption type with its parameters.
      *
      * @param transformation full JCE transformation string, e.g. "EC/None/NoPadding"
      */
@@ -211,10 +212,10 @@ public enum EncType {
     }
 
     /**
-     * The elliptic curve ECParameterSpec for ECDSA; DSAParameterSpec for DSA
+     * The elliptic curve ECParameterSpec for ECDSA; DSAParameterSpec for DSA.
      *
      * @return the algorithm's parameter spec, ECParameterSpec for ECDSA or
-     *         DSAParameterSpec for DSA
+     * DSAParameterSpec for DSA
      * @throws InvalidParameterSpecException if the algorithm is not available on this JVM.
      */
     public AlgorithmParameterSpec getParams() throws InvalidParameterSpecException {
@@ -317,7 +318,7 @@ public enum EncType {
     }
 
     /**
-     * Convenience for user apps
+     * Convenience for user apps.
      *
      * @param stype the encryption type code or name to look up, as accepted by parseEncType
      * @return null if not found

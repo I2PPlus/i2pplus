@@ -23,7 +23,6 @@ import java.security.spec.X509EncodedKeySpec;
  * EdDSA signature engine implementing the Java Signature API.
  * Supports both standard streaming and one-shot operation modes for efficiency.
  *
- * @author str4d
  * @since 0.9.15
  */
 public class EdDSAEngine extends Signature {
@@ -55,7 +54,7 @@ public class EdDSAEngine extends Signature {
     /**
      * {@link EdDSABlinding#ORDER} as 32 little-endian bytes, so that the
      * RFC 8032 range check on S can be done by subtraction instead of building
-     * a BigInteger. Verified against BigInteger.compareTo().
+     * a BigInteger. Verified against {@code BigInteger.compareTo()}.
      */
     private static final byte[] ORDER_LITTLE_ENDIAN = {
         (byte) 0xed, (byte) 0xd3, (byte) 0xf5, (byte) 0x5c,
@@ -98,6 +97,8 @@ public class EdDSAEngine extends Signature {
     }
 
     /**
+     * Reset the signer and verifier state.
+     *
      * @since 0.9.25
      */
     private void reset() {
@@ -331,9 +332,9 @@ public class EdDSAEngine extends Signature {
      * a fixed 32 iteration borrow chain: every byte is read and every byte is
      * subtracted, and the only carry is folded into the next iteration with
      * arithmetic, so there is no data-dependent branch or memory access. That
-     * makes it strictly better than BigInteger.compareTo(), which exits early
+     * makes it strictly better than {@code BigInteger.compareTo()}, which exits early
      * on the first differing magnitude word. A short-circuiting byte compare
-     * would be a timing oracle here; DataHelper.eq()/MessageDigest.isEqual()
+     * would be a timing oracle here; {@code DataHelper.eq()}/{@link java.security.MessageDigest#isEqual}
      * are equality tests and cannot express an ordering, so they don't apply.
      *
      * @param s the value to test, 32 bytes, little-endian
@@ -511,6 +512,8 @@ public class EdDSAEngine extends Signature {
     }
 
     /**
+     * Deprecated and unsupported.
+     *
      * @deprecated replaced with <a href="#engineSetParameter(java.security.spec.AlgorithmParameterSpec)">this</a>
      */
     @Override

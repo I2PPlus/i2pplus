@@ -24,7 +24,6 @@ import net.i2p.util.SystemVersion;
  * Main class of addressbook.  Performs updates, and runs the main loop.
  * As of 0.9.30, package private, run with DaemonThread.
  *
- * @author Ragnarok
  */
 public class Daemon {
     /**
@@ -149,6 +148,8 @@ public class Daemon {
     }
 
     /**
+     * Add, update or remove subscriptions in the router naming service.
+     *
      * @param knownNames only non-null if router book is a text file
      * @param publishedNS only non-null if we have a published address book
      * @since 0.9.33 split out from above
@@ -637,7 +638,11 @@ public class Daemon {
             }  // entries
     }
 
-    /** @since 0.9.26 */
+    /**
+     * Log an addressbook change.
+     *
+     * @since 0.9.26
+     */
     private static void logInner(Log log, String action, String name, AddressBook addressbook) {
         if (log != null) {
             log.append("Action: " + action + " failed because" +
@@ -647,7 +652,11 @@ public class Daemon {
         }
     }
 
-    /** @since 0.9.26 */
+    /**
+     * Log a subscription missing from the router.
+     *
+     * @since 0.9.26
+     */
     private static void logMissing(Log log, String action, String name, AddressBook addressbook) {
         if (log != null) {
             log.append("Action: " + action + " for " + name +
@@ -656,7 +665,11 @@ public class Daemon {
         }
     }
 
-    /** @since 0.9.26 */
+    /**
+     * Log a destination mismatch with the router.
+     *
+     * @since 0.9.26
+     */
     private static void logMismatch(Log log, String action, String name, List<Destination> dests,
                                     String olddest, AddressBook addressbook) {
         if (log != null) {
@@ -736,7 +749,7 @@ public class Daemon {
         }
     }
 
-    /** depth-first search */
+    /** Depth-first search of the naming service tree. */
     private static NamingService searchNamingService(NamingService ns, String srch) {
         String name = ns.getName();
         if (name.equals(srch) || name.endsWith('/' + srch) || name.endsWith('\\' + srch)) {
@@ -911,7 +924,7 @@ public class Daemon {
     }
 
     /**
-     * Get the HostChecker instance for use by web applications
+     * Get the HostChecker instance for use by web applications.
      * @return HostChecker instance or null if not initialized
      */
     public static HostChecker getHostChecker() {

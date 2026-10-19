@@ -5,7 +5,7 @@ import java.util.HashMap;
 
 /**
  * Bridge class to provide static access to HostChecker functionality for JSP pages
- * This avoids reflection issues and provides a clean interface
+ * This avoids reflection issues and provides a clean interface.
  */
 public class HostCheckerBridge {
 
@@ -20,7 +20,7 @@ public class HostCheckerBridge {
 
     /**
      * Get singleton HostChecker instance
-     * This should be set by Daemon.java to avoid duplicate instances
+     * This should be set by Daemon.java to avoid duplicate instances.
      * @return the shared HostChecker, or null before Daemon sets it
      */
     public static HostChecker getInstance() {
@@ -30,7 +30,7 @@ public class HostCheckerBridge {
     }
 
     /**
-     * Set HostChecker instance (should be called by Daemon.java)
+     * Set HostChecker instance (should be called by Daemon.java).
      *
      * @param checker the shared HostChecker that addressbook calls will ping through
      */
@@ -41,7 +41,7 @@ public class HostCheckerBridge {
     }
 
     /**
-     * Ping a single host and return as result as a Map
+     * Ping a single host and return as result as a Map.
      * @param host hostname to ping
      * @return Map containing ping results (status, reachable, responseTime, timestamp)
      */
@@ -75,7 +75,7 @@ public class HostCheckerBridge {
     }
 
     /**
-     * Get all current ping results
+     * Get all current ping results.
      * @return Map of all ping results
      */
     public static Map<String, HostChecker.PingResult> getAllPingResults() {
@@ -87,7 +87,7 @@ public class HostCheckerBridge {
     }
 
     /**
-     * Start periodic ping checking
+     * Start periodic ping checking.
      */
     public static void startPeriodicChecking() {
         HostChecker checker = getInstance();
@@ -97,7 +97,7 @@ public class HostCheckerBridge {
     }
 
     /**
-     * Stop periodic ping checking
+     * Stop periodic ping checking.
      */
     public static void stopPeriodicChecking() {
         HostChecker checker = getInstance();
@@ -127,7 +127,7 @@ public class HostCheckerBridge {
     }
 
     /**
-     * Get description for a category
+     * Get description for a category.
      * @param category category name
      * @return category description, or category itself if unknown
      */

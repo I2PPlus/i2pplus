@@ -15,8 +15,6 @@ import org.cybergarage.upnp.*;
  * This class manages multiple {@link SSDPSearchResponseSocket} instances to send SSDP search
  * requests and receive responses across different network interfaces.
  *
- * @author Satoshi "skonno" Konno
- * @author Stefano "Kismet" Lenzi
  * @version 1.8
  */
 public class SSDPSearchResponseSocketList extends Vector<SSDPSearchResponseSocket> {

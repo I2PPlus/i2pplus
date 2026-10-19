@@ -222,7 +222,9 @@ class UDPEndpoint implements SocketListener {
     }
 
     /**
-     *  @since 0.9.16
+     * Shut down the endpoint and tell the transport it failed.
+     *
+     * @since 0.9.16
      */
     public void fail() {
         shutdown();
@@ -230,7 +232,9 @@ class UDPEndpoint implements SocketListener {
     }
 
     /**
-     *  @since 0.9.16
+     * Endpoint summary for log messages.
+     *
+     * @since 0.9.16
      */
     @Override
     public String toString() {

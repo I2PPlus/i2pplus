@@ -12,9 +12,8 @@ package net.i2p.data.i2cp;
 import net.i2p.data.DataFormatException;
 
 /**
- * Test harness for loading / storing Hash objects
+ * Tests DestroySessionMessage serialization.
  *
- * @author jrandom
  */
 public class DestroySessionMessageTest extends I2CPTstBase {
     @Override

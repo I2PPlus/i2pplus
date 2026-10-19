@@ -20,7 +20,7 @@ import org.junit.Test;
 
 /**
  * Unit tests for the pure build-accounting helpers extracted from
- * BuildExecutor.calculatePairedBuilds().
+ * {@link net.i2p.router.tunnel.pool.BuildExecutor#calculatePairedBuilds}.
  *
  * @since 0.9.71+
  */
@@ -44,7 +44,7 @@ public class BuildExecutorPairedBuildsTest {
         return cfg;
     }
 
-    /** production failure path: increment the counter, then refresh the status */
+    /** Production failure path: increment the counter, then refresh the status. */
     private static void failOnce(TCConfig cfg) {
         cfg.incrementTestFailures();
         cfg.setTestFailed();

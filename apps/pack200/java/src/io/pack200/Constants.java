@@ -30,7 +30,6 @@ import java.util.List;
 
 /**
  * Shared constants
- * @author John Rose
  */
 class Constants {
 

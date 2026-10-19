@@ -128,13 +128,13 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
     /** Hook to inject and receive datagrams. */
     protected I2PSession _session;
 
-    /** 20 byte random id */
+    /** 20 byte random id. */
     private final byte[] _myID;
 
-    /** 20 byte random id */
+    /** 20 byte random id. */
     private final NID _myNID;
 
-    /** 20 byte random id + 32 byte Hash + 2 byte port */
+    /** 20 byte random id + 32 byte Hash + 2 byte port. */
     private final NodeInfo _myNodeInfo;
 
     /** Unsigned datagrams. */
@@ -161,7 +161,7 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
     /** All-zero NID used for pings. */
     public static final NID FAKE_NID = new NID(new byte[NID.HASH_LENGTH]);
 
-    /** Max number of nodes to return. BEP 5 says 8 */
+    /** Max number of nodes to return. BEP 5 says 8. */
     private static final int K = 8;
 
     /**
@@ -366,7 +366,7 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
     }
 
     /**
-     * Bootstrapping or background thread. Blocking! This is almost the same as getPeers()
+     * Bootstrapping or background thread. Blocking! This is almost the same as getPeers().
      *
      * @param target the key we are searching for
      * @param maxNodes how many to contact
@@ -433,7 +433,7 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
     }
 
     /**
-     * Local lookup only
+     * Local lookup only.
      *
      * @param ih a 20-byte info hash
      * @param max max to return
@@ -1447,7 +1447,7 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
     }
 
     /**
-     * Called for a request or response
+     * Called for a request or response.
      *
      * @return old NodeInfo or nInfo if none, use this to reduce object churn
      */
@@ -1503,7 +1503,7 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
         return rv;
     }
 
-    /** Called when a reply times out */
+    /** Called when a reply times out. */
     private void timeout(NodeInfo nInfo) {
         NID nid = nInfo.getNID();
         // a fake NID means we never heard from the node, so there is no
@@ -1537,7 +1537,7 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
         }
     }
 
-    /** Handle and respond to the query */
+    /** Handle and respond to the query. */
     private void receivePing(MsgID msgID, NodeInfo nInfo) throws InvalidBEncodingException {
         if (_log.shouldDebug()) {
             _log.debug("Received ping from " + nInfo);
@@ -1546,7 +1546,7 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
     }
 
     /**
-     * Handle and respond to the query
+     * Handle and respond to the query.
      *
      * @param tID target ID they are looking for
      */
@@ -1897,7 +1897,7 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
         waiter.gotReply(errorCode, errorString); // this calls heardFrom()
     }
 
-    /** Callback for replies */
+    /** Callback for replies. */
     protected class ReplyWaiter extends SimpleTimer2.TimedEvent {
         private final MsgID mid;
         private final NodeInfo sentTo;
@@ -2024,7 +2024,7 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
     // I2PSessionMuxedListener interface ----------------
 
     /**
-     * Instruct the client that the given session has received a message
+     * Instruct the client that the given session has received a message.
      *
      * <p>Will be called only if you register via addMuxedSessionListener(). Will be called only for
      * the proto(s) and toPort(s) you register for.
@@ -2118,7 +2118,7 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
         }
     }
 
-    /** Cleaner-upper */
+    /** Cleaner-upper. */
     private class Cleaner extends SimpleTimer2.TimedEvent {
 
         public Cleaner() {
@@ -2197,7 +2197,7 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
         }
     }
 
-    /** Fire off explorer thread */
+    /** Fire off explorer thread. */
     private class Explorer extends SimpleTimer2.TimedEvent {
 
         public Explorer(long delay) {

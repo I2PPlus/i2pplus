@@ -32,7 +32,7 @@ class DevSU3UpdateRunner extends UpdateRunner {
             _currentURI = uris.get(0);
     }
 
-    /** Get the file */
+    /** Get the file. */
     @Override
     protected void update() {
         // always proxy for now
@@ -63,7 +63,7 @@ class DevSU3UpdateRunner extends UpdateRunner {
             _mgr.notifyTaskFailed(this, "", null);
     }
 
-    /** eepget listener callback Overrides */
+    /** Eepget listener callback Overrides. */
     @Override
     public void transferComplete(long alreadyTransferred, long bytesTransferred, long bytesRemaining,
                                  String url, String outputFile, boolean notModified) {

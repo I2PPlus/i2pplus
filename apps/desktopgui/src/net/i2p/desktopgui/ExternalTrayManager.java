@@ -80,7 +80,7 @@ class ExternalTrayManager extends TrayManager {
     }
 
     /**
-     * Update the menu
+     * Update the menu.
      * @since 0.9.26
      */
     @Override

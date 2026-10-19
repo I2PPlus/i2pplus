@@ -73,7 +73,7 @@ class RequestLeaseSetJob extends JobImpl {
     /**
      * Attempts before giving up on a backed-up client. The router's request
      * timeout is around a minute, so with a one-second first wait and doubling,
-     * five attempts span roughly 15 seconds — the client has to read one message
+     * five attempts span roughly 15 seconds. The client has to read one message
      * in that time, and anything that cannot is not going to recover inside the
      * request timeout either.
      */
@@ -132,7 +132,7 @@ class RequestLeaseSetJob extends JobImpl {
         if (isLS2) {
             /**
              * Fix for 0.9.38 floodfills, adding some ms doesn't work since
-             * the dates are truncated, and 0.9.38 did not use LeaseSet2.getPublished()
+             * the dates are truncated, and 0.9.38 did not use {@link net.i2p.data.LeaseSet2#getPublished}.
              */
             long earliest = maxFudge + _requestState.getCurrentEarliestLeaseDate();
             if (endTime < earliest) {endTime = earliest;}

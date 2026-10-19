@@ -15,7 +15,7 @@ import com.vuze.plugins.mlab.tools.ndt.swingemu.*;
 public class StatusPanel extends JPanel {
     /**
      * Compiler generated constant that is not related to current classes'
-     * specific functionality
+     * specific functionality.
      */
     private static final long serialVersionUID = 2609233901130079136L;
 
@@ -40,13 +40,13 @@ public class StatusPanel extends JPanel {
     public StatusPanel(int iParamTestsNum, String sParamEnableMultiple) {}
 
     /**
-     * Set Test number being run
+     * Set Test number being run.
      *
      */
     private void setTestNoLabelText() {}
 
     /**
-     * Get intention to stop tests
+     * Get intention to stop tests.
      *
      * @return boolean indicating intention to stop or not
      *
@@ -61,7 +61,7 @@ public class StatusPanel extends JPanel {
     public synchronized void endTest() {_bStop = true;}
 
     /**
-     * Sets a string explaining progress of tests
+     * Sets a string explaining progress of tests.
      *
      * @param sParamText String status of test-run
      *

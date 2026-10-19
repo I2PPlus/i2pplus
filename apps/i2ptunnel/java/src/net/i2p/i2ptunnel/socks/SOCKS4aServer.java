@@ -44,20 +44,21 @@ class SOCKS4aServer extends SOCKSServer {
 
     private boolean setupCompleted;
 
-    /** Sticky proxy cache: host -> selected proxy */
+    /** Sticky proxy cache: host -> selected proxy. */
     private final ConcurrentHashMap<String, String> _proxyCache = new ConcurrentHashMap<>();
 
     /**
      * Create a SOCKS4a server that communicates with the client using
      * the specified socket.  This method should not be invoked
      * directly: new SOCKS4aServer objects should be created by using
-     * SOCKSServerFactory.createSOCSKServer().  It is assumed that the
+     * {@link net.i2p.i2ptunnel.socks.SOCKSServerFactory#createSOCKSServer(net.i2p.I2PAppContext, java.net.Socket, java.util.Properties)}.
+     * It is assumed that the
      * SOCKS VER field has been stripped from the input stream of the
      * client socket.
      *
      * @param ctx application context, passed to the SOCKSServer superclass
      * @param clientSock the already-connected client socket, whose input stream
-     *                   has had its VER field stripped
+     * has had its VER field stripped
      * @param props non-null
      */
     public SOCKS4aServer(I2PAppContext ctx, Socket clientSock, Properties props) {
@@ -206,7 +207,7 @@ class SOCKS4aServer extends SOCKSServer {
     }
 
     /**
-     * Get an I2PSocket that can be used to send/receive 8-bit clean data
+     * Get an I2PSocket for sending/receiving 8-bit clean data
      * to/from the destination of the SOCKS connection.
      *
      * @return an I2PSocket connected with the destination
@@ -313,7 +314,7 @@ class SOCKS4aServer extends SOCKSServer {
         return destSock;
     }
 
-    /** Select a proxy, preferring a cached one for the same host */
+    /** Select a proxy, preferring a cached one for the same host. */
     private String selectProxy(List<String> proxies, String host) {
         if (proxies.size() == 1) return proxies.get(0);
         String cached = _proxyCache.get(host);

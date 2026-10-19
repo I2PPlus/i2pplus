@@ -195,9 +195,7 @@ class MLKEMDHState implements DHState, Cloneable {
         return temp == 0;
     }
 
-    /**
-     *  I2P
-     */
+    // I2P
     @Override
     public boolean hasEncodedPublicKey() {
         return false;
@@ -256,9 +254,7 @@ class MLKEMDHState implements DHState, Cloneable {
         mode = dh.mode;
     }
 
-    /**
-     *  I2P
-     */
+    // I2P
     @Override
     public MLKEMDHState clone() throws CloneNotSupportedException {
         return (MLKEMDHState) super.clone();

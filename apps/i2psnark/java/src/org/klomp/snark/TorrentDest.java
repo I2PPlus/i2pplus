@@ -26,15 +26,15 @@ import org.klomp.snark.dht.TorrentKRPC;
 public class TorrentDest {
 
     private final I2PAppContext _context;
-    /** Base64-encoded info hash of the first torrent assigned, for thread names and logs */
+    /** Base64-encoded info hash of the first torrent assigned, for thread names and logs. */
     private final String _key;
-    /** -1 when dedicated to a single torrent, else the shared pool index */
+    /** -1 when dedicated to a single torrent, else the shared pool index. */
     private final int _poolIndex;
-    /** Sequential pool number for the "I2PSnark - Pool N" nickname, -1 when dedicated */
+    /** Sequential pool number for the "I2PSnark - Pool N" nickname, -1 when dedicated. */
     private final int _poolNum;
     private final I2PSocketManager _mgr;
     private final I2PServerSocket _serverSocket;
-    /** Session property carrying the pool's torrent names, for the /tunnels pool tooltip */
+    /** Session property carrying the pool's torrent names, for the /tunnels pool tooltip. */
     public static final String PROP_POOL_MEMBERS = "i2psnark.poolMembers";
     /**
      * Tunnel quantity most recently pushed to this pool's session by {@link IdleChecker}, so each

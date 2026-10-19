@@ -12,9 +12,6 @@ package net.i2p.crypto;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
-/**
- * @author comwiz
- */
 public class CryptoTestSuite {
 
     public static Test suite() {

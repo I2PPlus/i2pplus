@@ -15,9 +15,8 @@ import net.i2p.data.Hash;
 import net.i2p.data.StructureTest;
 
 /**
- * Test harness for loading / storing Hash objects
+ * Tests MessageId data structure serialization.
  *
- * @author jrandom
  */
 public class MessageIdTest extends StructureTest {
     @Override

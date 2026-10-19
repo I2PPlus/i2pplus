@@ -7,9 +7,9 @@ import net.i2p.data.SessionKey;
 import net.i2p.util.KeyRing;
 
 /**
- *  ConcurrentHashMap with backing in the router.config file.
- *  router.keyring.key.{base64 hash, with = replaced with $}={base64 session key}
- *  Caution - not all HashMap methods are overridden.
+ * ConcurrentHashMap with backing in the {@code router.config} file.
+ * {@code router.keyring.key}.{base64 hash, with = replaced with $}={base64 session key}
+ * Caution - not all HashMap methods are overridden.
  */
 public class PersistentKeyRing extends KeyRing {
 
@@ -20,7 +20,7 @@ public class PersistentKeyRing extends KeyRing {
     /**
      * Retains the context and loads any keys already persisted in the router config.
      *
-     * @param ctx the router context, retained so keys can reach router.config
+     * @param ctx the router context, retained so keys can reach {@code router.config}
      */
     public PersistentKeyRing(RouterContext ctx) {
         super();

@@ -22,12 +22,12 @@ import net.i2p.util.SystemVersion;
  * valve: culling is skipped unless the transit population is near the
  * configured capacity, because every dropped tunnel looks like a failed
  * tunnel to its originator. With defaults, quiet-but-alive tunnels live out
- * their full lifetime; expiration handles normal lifecycle.
+ * their full lifetime. Expiration handles normal lifecycle.
  * <p>
  * Configurable properties:
- * - router.idleTunnelDetectionPeriod: Time before checking for idle (default: 300000ms)
- * - router.idleTunnelMinMessages: Minimum messages to not be considered idle (default: 1)
- * - router.idleTunnelScanInterval: How often to scan (default: 60000ms)
+ * - {@code router.idleTunnelDetectionPeriod}: Time before checking for idle (default: 300000ms)
+ * - {@code router.idleTunnelMinMessages}: Minimum messages to not be considered idle (default: 1)
+ * - {@code router.idleTunnelScanInterval}: How often to scan (default: 60000ms).
  */
 class IdleTunnelMonitor extends SimpleTimer2.TimedEvent {
     private final RouterContext _context;
@@ -48,10 +48,10 @@ class IdleTunnelMonitor extends SimpleTimer2.TimedEvent {
     // Configuration
     /**
      * Five minutes: half of a tunnel's typical lifetime, so genuinely dead
-     * tunnels are still reaped well before expiry
+     * tunnels are still reaped well before expiry.
      */
     private static final long DEFAULT_DETECTION_PERIOD = 300 * 1000L;
-    /** Floor of 1 drops only zero-message tunnels; higher values re-enable low-traffic culling */
+    /** Floor of 1 drops only zero-message tunnels; higher values re-enable low-traffic culling. */
     private static final int DEFAULT_MIN_MESSAGES = 1;
     private static final long DEFAULT_SCAN_INTERVAL = 60 * 1000L; // 60 seconds
 
@@ -115,7 +115,7 @@ class IdleTunnelMonitor extends SimpleTimer2.TimedEvent {
     }
 
     /**
-     * Main scan method - checks all participating tunnels
+     * Main scan method - checks all participating tunnels.
      */
     private void scanAndCleanup() {
         TunnelDispatcher dispatcher = getDispatcher();
@@ -224,7 +224,7 @@ class IdleTunnelMonitor extends SimpleTimer2.TimedEvent {
     }
 
     /**
-     * Drop an idle tunnel by removing it from the dispatcher
+     * Drop an idle tunnel by removing it from the dispatcher.
      */
     private void dropTunnel(HopConfig tunnel) {
         TunnelDispatcher dispatcher = getDispatcher();

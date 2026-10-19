@@ -36,7 +36,7 @@ public class RunStandalone {
     private int _port;
     private static RunStandalone _instance;
 
-    /** The app context config file name */
+    /** The app context config file name. */
     static final File APP_CONFIG_FILE = new File("i2psnark-appctx.config");
 
     private RunStandalone(String[] args) throws Exception {
@@ -135,7 +135,7 @@ public class RunStandalone {
     /**
      * The snark revision.
      *
-     * @return the snark revision
+     * @return the version string of this build
      * @since 0.9.67+
      */
     public String getSnarkRevision() {

@@ -26,7 +26,7 @@ import net.i2p.util.OrderedProperties;
 public class TunnelPeerSelectorDecisionTest {
 
     private static final long MINUTE = 60 * 1000L;
-    /** Arbitrary positive "now" — the helpers use absolute timestamps, 0 means never */
+    /** Arbitrary positive "now" — the helpers use absolute timestamps, 0 means never. */
     private static final long NOW = 1_000_000_000L;
 
     // ---------- hasConnectivitySignal ----------

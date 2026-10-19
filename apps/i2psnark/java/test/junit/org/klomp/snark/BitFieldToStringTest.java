@@ -5,7 +5,7 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 
 /**
- * Tests for the compact range representation of {@link BitField#toString()}:
+ * Tests for the compact range representation of {@link BitField#toString}:
  * consecutive set bits collapse to first-last ranges, singletons stay bare,
  * and boundaries (empty, all-set, trailing range) render correctly.
  *

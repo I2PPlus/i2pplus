@@ -33,6 +33,8 @@ class LocalClientManager extends ClientManager {
     private static int dropX1000 = 0, jitter = 0, latency = 0;
 
     /**
+     * Starts a local I2CP server on the given port.
+     *
      * @param context stub, may be constructed with new RouterContext(null),
      * no initAll() necessary
      */

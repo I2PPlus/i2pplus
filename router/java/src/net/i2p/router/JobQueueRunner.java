@@ -21,17 +21,17 @@ class JobQueueRunner extends I2PThread {
     private volatile long _lastEnd;
 
     /**
-     * Cached "jobQueue.jobRun" handle, resolved on first use.
-     * Null until resolved, and it stays null when stat.full is off (in which
+     * Cached "{@code jobQueue.jobRun}" handle, resolved on first use.
+     * Null until resolved, and it stays null when {@code stat.full} is off (in which
      * case JobQueue's createRateStat() is a no-op). Resolution is idempotent,
      * so a benign race can only assign the same handle twice.
      *
      * @since 0.9.71+
      */
     private volatile RateStat _jobRunStat;
-    /** Cached "jobQueue.jobLag" handle, resolved on first use. @since 0.9.71+ */
+    /** Cached "{@code jobQueue.jobLag}" handle, resolved on first use. @since 0.9.71+. */
     private volatile RateStat _jobLagStat;
-    /** Cached "jobQueue.jobWait" handle, resolved on first use. @since 0.9.71+ */
+    /** Cached "{@code jobQueue.jobWait}" handle, resolved on first use. @since 0.9.71+. */
     private volatile RateStat _jobWaitStat;
 
     /**
@@ -93,8 +93,8 @@ class JobQueueRunner extends I2PThread {
      * stats are created once by the JobQueue constructor before any runner
      * exists, so caching the handles removes the lookups without changing
      * which rates receive data. Left null when the stat was never created
-     * (stat.full off), in which case the update is skipped, matching
-     * StatManager.addRateData()'s own no-op.
+     * ({@code stat.full} off), in which case the update is skipped, matching
+     * {@link net.i2p.stat.StatManager#addRateData}'s own no-op.
      */
     private void resolveStats() {
         if (_jobRunStat == null) {_jobRunStat = _context.statManager().getRate("jobQueue.jobRun");}

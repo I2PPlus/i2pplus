@@ -38,7 +38,6 @@ import java.util.Set;
 /**
  * Population-based coding.
  * See the section "Encodings of Uncorrelated Values" in the Pack200 spec.
- * @author John Rose
  */
 // This tactic alone reduces the final zipped rt.jar by about a percent.
 class PopulationCoding implements CodingMethod {

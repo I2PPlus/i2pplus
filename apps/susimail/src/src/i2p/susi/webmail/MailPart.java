@@ -35,7 +35,7 @@ class MailPart {
      * The raw header lines of this part, in the order they were received.
      */
     public final String[] headerLines;
-    /** encoding non-null */
+    /** Encoding non-null. */
     public final String type;
     /**
      * Content-Transfer-Encoding of this part, never null.
@@ -70,15 +70,13 @@ class MailPart {
      */
     public final String cid;
     /**
-     * begin, end, and beginBody are relative to readBuffer.getOffset().
-     * begin is before the headers
-     * beginBody is after the headers
-     * warning - end is exclusive
+     * Offsets into readBuffer.getOffset(): begin is before the headers,
+     * beginBody is after them, and end is exclusive.
      */
     private final int beginBody;
     private final int begin;
     private final int end;
-    /** Always null, reserved for future use */
+    /** Always null, reserved for future use. */
     public final String filename = null;
     /**
      * The sub-parts, when this part is a multipart container.
@@ -99,13 +97,13 @@ class MailPart {
     private final Log _log;
 
     /**
-     * the decoded length if known, else -1
+     * The decoded length if known, else -1.
      * @since 0.9.34
      */
     public int decodedLength = -1;
 
     /**
-     * the UIDL of the mail, same for all parts
+     * The UIDL of the mail, same for all parts.
      * @since 0.9.33
      */
     public final String uidl;
@@ -113,7 +111,7 @@ class MailPart {
 
     /**
      * Probably the same as InputStream but a different interface.
-     * were already parsed in Mail. Null otherwise
+     * were already parsed in Mail. Null otherwise.
      *
      * @param uidl the IMAP UID of the owning message, kept in the public uidl field
      * @param id a counter from which this part takes its next sequence number
@@ -325,7 +323,7 @@ class MailPart {
     }
 
     /**
-     * Synched because FileBuffer keeps stream open
+     * Synched because FileBuffer keeps stream open.
      *
      * @param offset 2 for sendAttachment, 0 otherwise, probably for \r\n
      * @param out the buffer the decoded body is written to
@@ -368,7 +366,7 @@ class MailPart {
 
     /**
      * Synched because FileBuffer keeps stream open
-     * Caller must close out
+     * Caller must close out.
      *
      * @param out where the raw undecoded bytes are copied
      * @throws IOException if the raw stream cannot be read
@@ -393,7 +391,7 @@ class MailPart {
 
     /**
      * Synched because FileBuffer keeps stream open
-     * Caller must call readComplete() on buffer
+     * Caller must call readComplete() on buffer.
      *
      * @param offset 2 for sendAttachment, 0 otherwise, probably for \r\n
      * @return the raw input stream
@@ -418,6 +416,8 @@ class MailPart {
     }
 
     /**
+     * Extract a quoted attribute value from a header line.
+     *
      * @param attributeName must be lower case, will be matched case-insensitively
      * @return as found, not necessarily lower case
      */
@@ -461,7 +461,7 @@ class MailPart {
         return result;
     }
 
-    /** translate */
+    /** Looks up a localized string in the message bundle. */
     private static String _t(String s, Object o) {return Messages.getString(s, o);}
 
     /**

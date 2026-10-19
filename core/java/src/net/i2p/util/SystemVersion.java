@@ -23,7 +23,7 @@ import java.util.TreeSet;
 
 import java.nio.charset.StandardCharsets;
 /**
- * Methods to find out what system we are running on
+ * Methods to find out what system we are running on.
  *
  * @since 0.9.3 consolidated from various places
  */
@@ -106,7 +106,7 @@ public abstract class SystemVersion {
     private static volatile int _sysLoad;
 
     /**
-     * Cached "router.cpuLoad" RateStat handle, or null if unresolved.
+     * Cached "{@code router.cpuLoad}" RateStat handle, or null if unresolved.
      * getCPULoadAvg() previously did two string-keyed statManager() lookups per
      * call across a dozen call sites (JobQueue pumper, both throttlers, peer
      * tests). The stat is created once at startup and never replaced, so the
@@ -141,7 +141,7 @@ public abstract class SystemVersion {
     private static final int _androidSDK;
 
     /**
-     * Set to true to drop the single-core, low-memory term from {@link #isSlow()},
+     * Set to true to drop the single-core, low-memory term from {@link #isSlow},
      * so a small router can still be treated as fast. It gates only that term: the
      * Android, ARM, GNU and Zero tests, the non-native BigInteger test, and the
      * under-4-cores 32-bit test still apply.
@@ -244,9 +244,9 @@ public abstract class SystemVersion {
 
     /**
      * Returns the OS of the system running I2P as a lower-case string
-     * for reference in clients.config and plugin.config files.
+     * for reference in {@code clients.config} and plugin.config files.
      * <p>
-     * matches the conventions of the Go cross compiler
+     * matches the conventions of the Go cross compiler.
      *
      * @return the OS of the system running I2P as a lower-case string
      * @since 0.9.53
@@ -276,9 +276,9 @@ public abstract class SystemVersion {
 
     /**
      * Returns the architecture of the system running I2P as a string
-     * for reference in clients.config and plugin.config files.
+     * for reference in {@code clients.config} and plugin.config files.
      * <p>
-     * matches the conventions of the Go cross compiler
+     * matches the conventions of the Go cross compiler.
      *
      * @return the architecture of the system running I2P as a string
      * @since 0.9.53
@@ -329,7 +329,7 @@ public abstract class SystemVersion {
     }
 
     /**
-     * Apache Harmony JVM, or Android
+     * Apache Harmony JVM, or Android.
      * @return true when java.vendor starts with "Apache", or on Android
      */
     public static boolean isApache() {
@@ -337,8 +337,8 @@ public abstract class SystemVersion {
     }
 
     /**
-     * Gij or JamVM with GNU Classpath
-     * @return whether g n u
+     * Gij or JamVM with GNU Classpath.
+     * @return whether GNU
      */
     public static boolean isGNU() {
         return _isGNU;
@@ -365,7 +365,7 @@ public abstract class SystemVersion {
     }
 
     /**
-     * Speed: do not cripple down for powerful ARM
+     * Speed: do not cripple down for powerful ARM.
      *
      * @return whether a r m
      * @since 0.9.8
@@ -410,7 +410,8 @@ public abstract class SystemVersion {
     }
 
     /**
-     * Better than (new VersionComparator()).compare(System.getProperty("java.version"), "1.6") &gt;= 0
+     * Better than (new VersionComparator()).compare({@link java.lang.System#getProperty}"java.version"),
+      * "1.6") &gt;= 0
      * as it handles Android also, where java.version = "0".
      *
      * @return true if Java 1.6 or higher, or Android API 9 or higher
@@ -420,7 +421,8 @@ public abstract class SystemVersion {
     }
 
     /**
-     * Better than (new VersionComparator()).compare(System.getProperty("java.version"), "1.7") &gt;= 0
+     * Better than (new VersionComparator()).compare({@link java.lang.System#getProperty}"java.version"),
+      * "1.7") &gt;= 0
      * as it handles Android also, where java.version = "0".
      *
      * @return true if Java 1.7 or higher, or Android API 19 or higher
@@ -581,7 +583,7 @@ public abstract class SystemVersion {
     }
 
     /**
-     * Handles Android also
+     * Handles Android also.
      *
      * @param minVersion e.g. 11
      * @return true if greater than or equal to minVersion
@@ -592,7 +594,7 @@ public abstract class SystemVersion {
     }
 
     /**
-     * Handles Android, and minVersions in both forms (e.g. 11 or 1.11)
+     * Handles Android, and minVersions in both forms (e.g. 11 or 1.11).
      *
      * @param minVersion either 1.x or x form works
      * @return true if greater than or equal to minVersion
@@ -638,10 +640,10 @@ public abstract class SystemVersion {
      * http://stackoverflow.com/questions/807263/how-do-i-detect-which-kind-of-jre-is-installed-32bit-vs-64bit
      * http://mark.koli.ch/2009/10/javas-osarch-system-property-is-the-bitness-of-the-jre-not-the-operating-system.html
      * http://mark.koli.ch/2009/10/reliably-checking-os-bitness-32-or-64-bit-on-windows-with-a-tiny-c-app.html
-     * sun.arch.data.model not on all JVMs
-     * sun.arch.data.model == 64 =&gt; 64 bit processor
-     * sun.arch.data.model == 32 =&gt; A 32 bit JVM but could be either 32 or 64 bit processor or libs
-     * os.arch contains "64" could be 32 or 64 bit libs
+     * {@code sun.arch.data.model} not on all JVMs
+     * {@code sun.arch.data.model} == 64 =&gt; 64 bit processor
+     * {@code sun.arch.data.model} == 32 =&gt; A 32 bit JVM but could be either 32 or 64 bit processor or libs
+     * os.arch contains "64" could be 32 or 64 bit libs.
      * @return whether 64 bit
      */
     public static boolean is64Bit() {
@@ -679,7 +681,7 @@ public abstract class SystemVersion {
     }
 
     /**
-     * Identical to android.os.Build.VERSION.SDK_INT.
+     * Identical to {@code android.os.Build.VERSION.SDK}_INT.
      * For use outside of Android code.
      *
      * @return The SDK (API) version, e.g. 8 for Froyo, 0 if unknown
@@ -690,7 +692,7 @@ public abstract class SystemVersion {
 
     /**
      * Is the wrapper present?
-     * Same as I2PAppContext.hasWrapper()
+     * Same as {@link net.i2p.I2PAppContext#hasWrapper}.
      * @return whether wrapper is present
      */
     public static boolean hasWrapper() {
@@ -698,7 +700,7 @@ public abstract class SystemVersion {
     }
 
     /**
-     * Runtime.getRuntime().maxMemory() but check for bogus values
+     * {@code Runtime.getRuntime().maxMemory()} but check for bogus values.
      *
      * @return the max memory
      * @since 0.9.8
@@ -715,7 +717,7 @@ public abstract class SystemVersion {
      * Total CPUs including parked/offline cores.
      * On Linux, reads /sys/devices/system/cpu/present to get the full
      * CPU topology regardless of cpufreq governor parking.
-     * Falls back to Runtime.getRuntime().availableProcessors().
+     * Falls back to {@code Runtime.getRuntime().availableProcessors()}.
      *
      * @return never smaller than 1
      * @since 0.9.34
@@ -764,7 +766,7 @@ public abstract class SystemVersion {
     public static int usableCores() {
         /**
          * On these OSes we want our threads to occupy the CPU as long as possible
-         * instead of being put to sleep by the power saving features
+         * instead of being put to sleep by the power saving features.
          */
         if (_isWin || _isMac) {
             return 1;
@@ -777,7 +779,7 @@ public abstract class SystemVersion {
          * Reflect CPU unavailable through hyperthreading.
          * 4 virtual cores = 3 threads
          * 8 virtual cores = 6 threads
-         * 12 virtual cores = 9 threads
+         * 12 virtual cores = 9 threads.
          */
         if (_isX86) {
             dividend *= 3;
@@ -791,7 +793,7 @@ public abstract class SystemVersion {
      * The system's time zone, which is probably different from the
      * JVM time zone, because Router changes the JVM default to GMT.
      * It saves the old default in the context properties where we can get it.
-     * Use this to format a time in local time zone with DateFormat.setTimeZone().
+     * Use this to format a time in local time zone with {@code DateFormat.setTimeZone()}.
      *
      * @return non-null
      * @since 0.9.24
@@ -804,10 +806,10 @@ public abstract class SystemVersion {
      * The system's time zone, which is probably different from the
      * JVM time zone, because Router changes the JVM default to GMT.
      * It saves the old default in the context properties where we can get it.
-     * Use this to format a time in local time zone with DateFormat.setTimeZone().
+     * Use this to format a time in local time zone with {@code DateFormat.setTimeZone()}.
      *
      * @param ctx the application context whose properties hold the saved system
-     *            time zone ID
+     * time zone ID
      * @return the saved system time zone, or the JVM default if none was saved
      * @since 0.9.24
      */
@@ -864,11 +866,11 @@ public abstract class SystemVersion {
      * Retrieve CPU Load of the JVM.
      * <p>
      * The MXBean query is expensive — on JDK 19+ each call reads /proc via
-     * Files.lines — so results are cached for {@link #CPU_LOAD_CACHE_MS}.
+     * Files.lines. So results are cached for {@link #CPU_LOAD_CACHE_MS}.
      * Callers such as the JobQueue pumper and the throttlers only need a
      * coarse periodic sample, so up to 1s of staleness is acceptable.
      *
-     * @return the c p u load
+     * @return the CPU load
      * @since 0.9.57+
      */
     public static int getCPULoad() {
@@ -923,7 +925,7 @@ public abstract class SystemVersion {
     }
 
     /**
-     * Resolve and cache the "router.cpuLoad" RateStat handle.
+     * Resolve and cache the "{@code router.cpuLoad}" RateStat handle.
      * The stat is registered once during startup and never replaced, so the
      * handle stays valid for the life of the context. Re-resolves if the
      * context or its StatManager is swapped (as in unit tests).
@@ -952,7 +954,7 @@ public abstract class SystemVersion {
     /**
      * Retrieve CPU Load Average of the JVM.
      *
-     * @return the c p u load avg
+     * @return the CPU load avg
      * @since 0.9.57+
      */
     public static int getCPULoadAvg() {
@@ -989,7 +991,8 @@ public abstract class SystemVersion {
     }
 
     /**
-     * Retrieve System Load as percentage (100% equals full system load)
+     * Retrieve the system load as a percentage, where 100% equals full system load.
+     *
      * <p>
      * The MXBean query is a native /proc read and is cached for
      * {@link #SYSTEM_LOAD_CACHE_MS}, because this sits on the per-request path

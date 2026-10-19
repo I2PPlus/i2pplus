@@ -103,70 +103,70 @@ import net.i2p.util.SimpleTimer2;
 public class Tcpbw100 extends JApplet implements ActionListener {
 
     /**
-     * Compiler generated UID that does not follow naming convention, and is not related to functionality itself
+     * Compiler generated UID that does not follow naming convention, and is not related to functionality itself.
      */
     private static final long serialVersionUID = -2030725073538492542L;
 
-    /**  txt diagnosis */
+    /**  Txt diagnosis. */
     JTextArea _txtDiagnosis, _txtStatistics;
-    /**  results txt pane */
+    /**  Results txt pane. */
     ResultsTextPane _resultsTxtPane;
-    /**  s err msg */
+    /** Error message shown when a test fails. */
     String _sErrMsg;
-    /**  button start test */
+    /**  Button start test. */
     JButton _buttonStartTest;
-    /**  button details */
+    /**  Button details. */
     JButton _buttonDetails;
-    /**  button statistics */
+    /**  Button statistics. */
     JButton _buttonStatistics;
-    /**  chkbox default test */
+    /**  Chkbox default test. */
     JCheckBox _chkboxDefaultTest, _chkboxPreferIPv6;
-    /**  spinner test count */
+    /**  Spinner test count. */
     JSpinner _spinnerTestCount = new JSpinner();
-    /**  sa delays */
+    /**  Sa delays. */
     String[] _saDelays = { "immediate", "1min", "5mins", "10mins", "30mins", "2hours", "12hours", "1day" };
 
-    /**  b failed */
+    /** Set when the current test run failed. */
     boolean _bFailed;
-    /**  frame web100 vars */
+    /**  Frame web100 vars. */
     NewFrame _frameWeb100Vars, _frameDetailedStats;
-    /**  d time */
+    /** Elapsed test time in seconds. */
     double _dTime;
-    /**  s2cspd update time */
+    /** How often, in ms, the down and up speed displays are refreshed. */
     int _s2cspdUpdateTime = 500, _c2sspdUpdateTime = 500; // ms
-    /**  i e c n enabled */
+    /** TCP feature flags: ECN, Nagle, and the MSS sent and received. */
     int _iECNEnabled, _iNagleEnabled, MSSSent, MSSRcvd;
-    /**  i s a c k enabled */
+    /** TCP feature flags: SACK, timestamps, and window scaling sent and received. */
     int _iSACKEnabled, _iTimestampsEnabled, _iWinScaleRcvd, _iWinScaleSent;
-    /**  i fast retran */
+    /** Congestion-control state: fast retransmits, ACKs out, smoothed RTT, and congestion window. */
     int _iFastRetran, _iAckPktsOut, _iSmoothedRTT, _iCurrentCwnd, _iMaxCwnd;
-    /**  i snd lim time rwin */
+    /** Seconds spent send-limited by receive window, congestion window, and sender. */
     int _iSndLimTimeRwin, _iSndLimTimeCwnd, _iSndLimTimeSender;
-    /**  i snd lim trans rwin */
+    /** Send-limited transfer counts for rwin, cwnd, and sender, plus max slow-start threshold. */
     int _iSndLimTransRwin, _iSndLimTransCwnd, _iSndLimTransSender, _iMaxSsthresh;
-    /**  i sum r t t */
+    /** RTT totals and counts, current MSS, timeouts, and retransmitted packets. */
     int _iSumRTT, _iCountRTT, _iCurrentMSS, _iTimeouts, _iPktsRetrans;
-    /**  i s a c ks rcvd */
+    /** SACKs received, duplicate ACKs in, and max receive window sent and received. */
     int _iSACKsRcvd, _iDupAcksIn, _iMaxRwinRcvd, _iMaxRwinSent;
-    /**  i data pkts out */
+    /** Data packets out, socket buffer sizes, and ACKs in. */
     int _iDataPktsOut, _iRcvbuf, _iSndbuf, _iAckPktsIn;
-    /**  i data bytes out */
+    /** Total data bytes sent to the client. */
     long _iDataBytesOut;
-    /**  i pkts out */
+    /** Packets out, congestion signals, and receive-window scale. */
     int _iPktsOut, _iCongestionSignals, _iRcvWinScale;
-    /**  i pkts */
+    /** Packet count, buffer length, and current retransmission timeout. */
     int _iPkts, _iLength = NDTConstants.PREDEFINED_BUFFER_SIZE, _iCurrentRTO;
-    /**  i c2s data */
+    /** Message counts: client-to-server data and ACKs, server-to-client data and ACKs. */
     int _iC2sData, _iC2sAck, _iS2cData, _iS2cAck;
-    /**  s server type */
+    /** Server flavour, "web100" or "web10g", selects which messages the server understands. */
     String _sServerType = "web100"; // Lowercase string either web100 or web10g used to select Message based upon server type
-    /**  d s2cspd */
+    /** Measured speeds: server-to-client, client-to-server, and their slow-start phases. */
     double _dS2cspd, _dC2sspd, _dSc2sspd, _dSs2cspd;
-    /**  i ssndqueue */
+    /** Server send-queue length. */
     int _iSsndqueue;
-    /**  d sbytes */
+    /** Total bytes sent by the server. */
     double _dSbytes;
-    /**  yabuff2 write */
+    /** Scratch buffer for writing test data to the client. */
     byte[] _yabuff2Write;
 
     /*
@@ -179,7 +179,7 @@ public class Tcpbw100 extends JApplet implements ActionListener {
     private String _sClient = "applet";
 
     // These variables are self-explanatory. Do not follow naming convention, but left that way
-    /** Half duplex */
+    /** Half duplex. */
     int half_duplex, congestion, bad_cable, mismatch;
     /** Measured link speed. */
     double mylink;
@@ -191,20 +191,20 @@ public class Tcpbw100 extends JApplet implements ActionListener {
     double aspd;
     // end naming convention-not-followed variables
 
-    /**  b is application */
+    /** Set when the client is a native application rather than a browser. */
     boolean _bIsApplication = false;
     private final AtomicBoolean _bTestInProgress = new AtomicBoolean();
-    /** S host name */
+    /** Server host name used for the test. */
     String sHostName = null;
-    /** Host address */
+    /** Host address. */
     InetAddress hostAddress = null;
-    /**  s test results */
+    /** Accumulated human-readable test results and diagnostics. */
     String _sTestResults = "";
-    /**  y tests */
+    /** Bit mask of the tests to run: C2S, S2C, status and meta. */
     byte _yTests = NDTConstants.TEST_C2S | NDTConstants.TEST_S2C | NDTConstants.TEST_STATUS | NDTConstants.TEST_META;
-    /**  i c2s s f w result */
+    /** Middlebox (firewall) verdict for the client-to-server test. */
     int _iC2sSFWResult = NDTConstants.SFW_NOTTESTED;
-    /**  i s2c s f w result */
+    /** Middlebox (firewall) verdict for the server-to-client test. */
     int _iS2cSFWResult = NDTConstants.SFW_NOTTESTED;
 
     /*
@@ -285,7 +285,7 @@ public class Tcpbw100 extends JApplet implements ActionListener {
     }
 
     /**
-     * public static void main for invoking as an Application
+     * Public static void main for invoking as an Application.
      * @param args String array of command line arguments
      * @throws IllegalArgumentException on bad hostname
      */
@@ -326,13 +326,13 @@ public class Tcpbw100 extends JApplet implements ActionListener {
     //
 
     /**
-     * get_c2sspd.
+     * Measured upload (client-to-server) speed as a plain decimal string.
      *
      * @return the outbound throughput in MiB using base 10, 0 until a test runs
      */
     public String get_c2sspd() {return Double.toString((pub_c2sspd));} // Expressed as MiB using base 10
     /**
-     * get_s2cspd.
+     * Measured download (server-to-client) speed as a plain decimal string.
      *
      * @return the inbound throughput in MiB using base 10, 0 until a test runs
      */
@@ -729,7 +729,7 @@ public class Tcpbw100 extends JApplet implements ActionListener {
     } // end inner class
 
     /**
-     * "Remote Control" function - invoke NDT' runtest() method from the API
+     * "Remote Control" function - invoke NDT' runtest() method from the API.
      */
     public void run_test() {
         pub_errmsg = "Test in progress.";
@@ -737,7 +737,7 @@ public class Tcpbw100 extends JApplet implements ActionListener {
     }
 
     /**
-     * Initialize the base NDT window Applet init() method
+     * Initialize the base NDT window Applet init() method.
      */
     public void init() {
         if (getParameter("country") != null) {_sCountry = getParameter("country");}
@@ -774,7 +774,7 @@ public class Tcpbw100 extends JApplet implements ActionListener {
     /**
      * Initialize the "main" window. The main window is composed of 1. The
      * results pane, which describes the process and displays their results 2.
-     * The buttons pane, which houses all the buttons for various options
+     * The buttons pane, which houses all the buttons for various options.
      */
     private void createMainWindow() {
         // set content manager
@@ -889,7 +889,7 @@ public class Tcpbw100 extends JApplet implements ActionListener {
     }
 
     /**
-     * Action handler method called when an associated action is performed
+     * Action handler method called when an associated action is performed.
      *
      * @param paramEventObj Event object that prompted the call
      */
@@ -1453,7 +1453,7 @@ public class Tcpbw100 extends JApplet implements ActionListener {
     }
 
     /**
-     * Method to run tests and interpret the results sent by the server
+     * Method to run tests and interpret the results sent by the server.
      *
      * @param sPanel StatusPanel object to describe status of tests
      * @throws IOException When sending/receiving messages from server fails
@@ -1842,7 +1842,7 @@ public class Tcpbw100 extends JApplet implements ActionListener {
     }
 
     /**
-     * Return a SSL or standard socket depending on config
+     * Return a SSL or standard socket depending on config.
      */
     private Socket newSocket(InetAddress hostAddress, int ctlPort) throws IOException {
         if (_log.shouldInfo()) {
@@ -2561,7 +2561,8 @@ public class Tcpbw100 extends JApplet implements ActionListener {
     private ThreadGroup _thread_group;
 
     /**
-     * bigly -- must have been started with main() or runIt()
+     * Stop the test and kill its thread group. Only valid after the test
+     * was started via main() or runIt().
      */
     @SuppressWarnings("deprecation")
     public void killIt() {
@@ -2643,6 +2644,8 @@ public class Tcpbw100 extends JApplet implements ActionListener {
     }
 
     /**
+     * Timer base for periodic NDT phases.
+     *
      * @since 0.9.46 to replace Java Timer and TimerTask
      */
     private abstract class PeriodicTimer extends SimpleTimer2.TimedEvent {

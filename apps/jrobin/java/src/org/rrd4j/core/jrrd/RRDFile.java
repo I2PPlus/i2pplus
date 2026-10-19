@@ -18,7 +18,6 @@ import org.rrd4j.core.InvalidRrdException;
  *
  * <p>Currently this can read RRD files that were generated on Solaris (Sparc) and Linux (x86).
  *
- * @author <a href="mailto:ciaran@codeloop.com">Ciaran Treanor</a>
  * @version $Revision: 1.1 $
  */
 class RRDFile implements Constants {

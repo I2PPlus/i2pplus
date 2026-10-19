@@ -1,5 +1,5 @@
 /**
- * EdDSA-Java by str4d
+ * EdDSA-Java by str4d.
  *
  * To the extent possible under law, the person who associated CC0 with
  * EdDSA-Java has waived all copyright and related or neighboring rights
@@ -19,11 +19,6 @@ import org.junit.*;
 
 import java.security.SecureRandom;
 
-/**
- * @author str4d
- * additional test by the NEM project team.
- *
- */
 public class UtilsTest {
     private static final String hex1 = "3b6a27bcceb6a42d62a3a8d02a6f0d73653215771de243a63ac048a18b59da29";
     private static final String hex2 = "47a3f5b71494bcd961f3a4e859a238d6eaf8e648746d2f56a89b5e236f98d45f";
@@ -41,9 +36,6 @@ public class UtilsTest {
         -3, 18, -114, 95, 120, -52, 74, -105, -12, 18, 45, -60, 95, 110, 75, -71
     };
 
-    /**
-     * Test method for {@link net.i2p.crypto.eddsa.Utils#equal(int, int)}.
-     */
     @Test
     public void testIntEqual() {
         assertThat(Utils.equal(0, 0), is(1));
@@ -81,9 +73,6 @@ public class UtilsTest {
         }
     }
 
-    /**
-     * Test method for {@link net.i2p.crypto.eddsa.Utils#equal(byte[], byte[])}.
-     */
     @Test
     public void testByteArrayEqual() {
         byte[] zero = new byte[32];
@@ -96,9 +85,6 @@ public class UtilsTest {
         assertThat(Utils.equal(zero, one), is(0));
     }
 
-    /**
-     * Test method for {@link net.i2p.crypto.eddsa.Utils#negative(int)}.
-     */
     @Test
     public void testNegative() {
         assertThat(Utils.negative(0), is(0));
@@ -110,9 +96,6 @@ public class UtilsTest {
         assertThat(Utils.negative(-255), is(1));
     }
 
-    /**
-     * Test method for {@link net.i2p.crypto.eddsa.Utils#bit(byte[], int)}.
-     */
     @Test
     public void testBit() {
         assertThat(Utils.bit(new byte[] {0}, 0), is(0));

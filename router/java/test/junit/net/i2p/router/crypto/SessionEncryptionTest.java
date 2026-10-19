@@ -74,7 +74,7 @@ public class SessionEncryptionTest extends TestCase {
      * 2       no              yes     no
      * 3       yes (2)         yes     no
      * 4       no              yes     no
-     * 5       no              yes     no
+     * 5       no              yes     no.
      */
     public void testSessions() throws Exception {
         Object[] keys = KeyGenerator.getInstance().generatePKIKeypair();
@@ -164,7 +164,7 @@ public class SessionEncryptionTest extends TestCase {
      * 2   no              yes     no
      * 3   yes (2)         yes     yes
      * 4   no              yes     no
-     * 5   no              yes     no
+     * 5   no              yes     no.
      */
     public void testRekeying() throws Exception {
         Object[] keys = KeyGenerator.getInstance().generatePKIKeypair();
@@ -250,7 +250,7 @@ public class SessionEncryptionTest extends TestCase {
     }
 
     /**
-     * 20 tags every 10 messages, rekey every 50
+     * 20 tags every 10 messages, rekey every 50.
      */
     public void testLongSession() throws Exception {
         Object[] keys = KeyGenerator.getInstance().generatePKIKeypair();

@@ -10,9 +10,8 @@ package net.i2p.data;
  */
 
 /**
- * Test harness for loading / storing Payload objects
+ * Test harness for loading / storing Payload objects.
  *
- * @author jrandom
  */
 public class PayloadTest extends StructureTest {
 

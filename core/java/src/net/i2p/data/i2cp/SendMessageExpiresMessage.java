@@ -24,7 +24,6 @@ import java.util.Date;
  * <p>
  * As of 0.8.4, retrofitted to use DateAndFlags. Backwards compatible.
  *
- * @author zzz
  */
 public class SendMessageExpiresMessage extends SendMessageMessage {
     /**
@@ -35,7 +34,7 @@ public class SendMessageExpiresMessage extends SendMessageMessage {
 
     /**
      * For reading.
-     * Deprecated for writing, use 4-arg constructor
+     * Deprecated for writing, use 4-arg constructor.
      */
     public SendMessageExpiresMessage() {
         super();
@@ -43,7 +42,7 @@ public class SendMessageExpiresMessage extends SendMessageMessage {
     }
 
     /**
-     * For writing
+     * For writing.
      *
      * @deprecated use 5-arg constructor
      * @since 0.9.2
@@ -55,7 +54,7 @@ public class SendMessageExpiresMessage extends SendMessageMessage {
     }
 
     /**
-     * For writing
+     * For writing.
      *
      * @param sessID the session the message is sent under
      * @param dest the destination the message is addressed to
@@ -69,7 +68,7 @@ public class SendMessageExpiresMessage extends SendMessageMessage {
     }
 
     /**
-     * For writing
+     * For writing.
      *
      * @param sessID the session the message is sent under
      * @param dest the destination the message is addressed to
@@ -94,7 +93,7 @@ public class SendMessageExpiresMessage extends SendMessageMessage {
     }
 
     /**
-     * Use this instead of getExpiration().getTime()
+     * Use this instead of getExpiration().getTime().
      *
      * @return the expiration time
      * @since 0.8.4
@@ -144,7 +143,7 @@ public class SendMessageExpiresMessage extends SendMessageMessage {
     }
 
     /**
-     * Read the body into the data structures
+     * Read the body into the data structures.
      *
      * @throws IOException if there's an error reading from the stream
      */
@@ -161,7 +160,7 @@ public class SendMessageExpiresMessage extends SendMessageMessage {
 
     /**
      * Write out the full message to the stream, including the 4 byte size and 1
-     * byte type header.  Override the parent so we can be more mem efficient
+     * byte type header.  Override the parent so we can be more mem efficient.
      *
      * @throws IOException if there's an error writing to the stream
      */

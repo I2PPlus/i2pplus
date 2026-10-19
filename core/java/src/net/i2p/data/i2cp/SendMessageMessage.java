@@ -19,9 +19,8 @@ import java.io.OutputStream;
 
 /**
  * Defines the message a client sends to a router to ask it to deliver
- * a new message
+ * a new message.
  *
- * @author jrandom
  */
 public class SendMessageMessage extends I2CPMessageImpl {
     /**
@@ -47,12 +46,12 @@ public class SendMessageMessage extends I2CPMessageImpl {
 
     /**
      * For reading.
-     * Deprecated for writing, use 4-arg constructor
+     * Deprecated for writing, use 4-arg constructor.
      */
     public SendMessageMessage() {}
 
     /**
-     * For writing
+     * For writing.
      *
      * @param sessID the session the message is to be sent over
      * @param dest the destination to address the payload to
@@ -165,7 +164,7 @@ public class SendMessageMessage extends I2CPMessageImpl {
     }
 
     /**
-     * Read the body into the data structures
+     * Read the body into the data structures.
      *
      * @throws IOException if there's an error reading from the stream
      */
@@ -198,7 +197,7 @@ public class SendMessageMessage extends I2CPMessageImpl {
 
     /**
      * Write out the full message to the stream, including the 4 byte size and 1
-     * byte type header.  Override the parent so we can be more mem efficient
+     * byte type header.  Override the parent so we can be more mem efficient.
      *
      * @throws IOException if there's an error writing to the stream
      */

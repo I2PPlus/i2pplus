@@ -12,7 +12,6 @@ import org.junit.BeforeClass;
 /**
  * Base class for tests that need a functioning router set up.
  *
- * @author zab
  */
 public abstract class RouterITBase {
 

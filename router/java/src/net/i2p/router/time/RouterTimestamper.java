@@ -72,7 +72,7 @@ public class RouterTimestamper extends Timestamper {
     private static final int MAX_VARIANCE = 10*1000;
 
     /**
-     *  Does not start. Caller MUST call startTimestamper()
+     * Does not start. Caller MUST call startTimestamper().
      *
      * @param ctx the application context used to read properties and locate the router
      */
@@ -81,7 +81,7 @@ public class RouterTimestamper extends Timestamper {
     }
 
     /**
-     *  Does not start. Caller MUST call startTimestamper()
+     * Does not start. Caller MUST call startTimestamper().
      *
      * @param ctx the application context used to read properties and locate the router
      * @param lsnr listener notified of each time update, or null to register none yet
@@ -91,7 +91,7 @@ public class RouterTimestamper extends Timestamper {
     }
 
     /**
-     *  Does not start. Caller MUST call startTimestamper()
+     * Does not start. Caller MUST call startTimestamper().
      *
      * @param ctx the application context used to read properties and locate the router
      * @param lsnr listener notified of each time update, or null to register none yet
@@ -233,7 +233,11 @@ public class RouterTimestamper extends Timestamper {
              _timestamperThread.interrupt();
     }
 
-    /** @since 0.8.8 */
+    /**
+     * Flushes timestamp data when the router shuts down.
+     *
+     * @since 0.8.8
+     */
     private class Shutdown implements Runnable {
         /**
          * Stop the timestamper and interrupt the query thread.
@@ -344,7 +348,7 @@ public class RouterTimestamper extends Timestamper {
     }
 
     /**
-     * True if the time was queried successfully, false if it couldn't be
+     * True if the time was queried successfully, false if it couldn't be.
      */
     private boolean queryTime(String[] serverList, int perServerTimeout, boolean preferIPv6) throws IllegalArgumentException {
         long[] found = new long[_concurringServers];
@@ -401,7 +405,7 @@ public class RouterTimestamper extends Timestamper {
     }
 
     /**
-     * Notify the listeners
+     * Notify the listeners.
      *
      * @since stratum param added in 0.7.12
      */
@@ -416,7 +420,7 @@ public class RouterTimestamper extends Timestamper {
 
     /**
      * Reload all the config elements from the appContext.
-     * No logging allowed here
+     * No logging allowed here.
      */
     private void updateConfig() {
         String serverList = _context.getProperty(PROP_SERVER_LIST);

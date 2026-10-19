@@ -10,7 +10,7 @@ import org.junit.Test;
 
 /**
  * Unit tests for the pure scan eligibility gates extracted from
- * TunnelPool.scanPoolForTunnel().
+ * {@link net.i2p.router.tunnel.pool.TunnelPool#scanPoolForTunnel}.
  *
  * @since 0.9.71+
  */

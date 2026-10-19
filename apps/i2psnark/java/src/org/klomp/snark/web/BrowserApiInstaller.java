@@ -68,7 +68,7 @@ public final class BrowserApiInstaller {
      * Linux registration with an explicit home directory (testable).
      *
      * @param consoleBaseUrl base URL of the I2PSnark webapp
-     * @param home the user home dir, e.g. System.getProperty("user.home")
+     * @param home the user home dir, e.g. {@link java.lang.System#getProperty}"user.home")
      * @return a human-readable result message
      * @throws IOException on any failure
      */
@@ -128,7 +128,7 @@ public final class BrowserApiInstaller {
 
     /**
      * The command template used by the OS registration, e.g.
-     * "java" -cp "i2psnark.jar" org.klomp.snark.MagnetHandler --url "base" %u
+     * "java" -cp "i2psnark.jar" org.klomp.snark.MagnetHandler --url "base" %u.
      */
     private static String buildCommand(String consoleBaseUrl, boolean uriPlaceholder) throws IOException {
         StringBuilder rv = new StringBuilder(256);

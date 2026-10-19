@@ -16,13 +16,13 @@ public abstract class StrictCountries {
 
     private StrictCountries() { /* no-op */ }
 
-    /** Sorted ascending for binary search; each key = ((c0 & 0xDF) << 8) | (c1 & 0xDF) */
+    /** Sorted ascending for binary search; each key = ((c0 & 0xDF) << 8) | (c1 & 0xDF). */
     private static final int[] _countries;
 
     /**
      * List updated using the Freedom in the World Index 2020 - https://freedomhouse.org/
      * General guidance: Include countries with a Civil Liberties (CL) score of 16 or less (equivalent to a
-     * CL rating of 6 or 7 in their raw data) or a Internet Freedom score of 39 or less (not free)
+     * CL rating of 6 or 7 in their raw data) or a Internet Freedom score of 39 or less (not free).
      */
     static {
         String[] c = {

@@ -2,7 +2,7 @@ package net.i2p.crypto.eddsa.math;
 
 import net.i2p.crypto.eddsa.Utils;
 
-/** Mathematical constants for EdDSA operations */
+/** Mathematical constants for EdDSA operations. */
 final class Constants {
     /**
      * Constructor. The field elements are compile-time constants, so an instance

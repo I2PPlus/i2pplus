@@ -20,9 +20,8 @@ import net.i2p.I2PAppContext;
  * If the server does not return a Content-Length header of the correct size,
  * the fetch will fail.
  * <p>
- * Useful for checking .sud versions
+ * Useful for checking .sud versions.
  *
- * @author zzz
  * @since 0.7.12
  */
 @SuppressWarnings("PMD.CloseResource")

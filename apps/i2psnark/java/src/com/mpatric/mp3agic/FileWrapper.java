@@ -64,7 +64,7 @@ public class FileWrapper {
      * Returns the filename as a string.
      *
      * @return the path this wrapper was constructed with, in the form given by
-     *         {@link Path#toString()}
+     * {@link Path#toString}
      */
     public String getFilename() {
         return path.toString();

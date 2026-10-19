@@ -18,75 +18,75 @@ import net.i2p.util.SystemVersion;
  * they are Bob.
  */
 class OutboundEstablishState {
-    /** The router context */
+    /** The router context. */
     protected final RouterContext _context;
     /** Logger. */
     protected final Log _log;
     // SessionRequest message
-    /** Bob's IP */
+    /** Bob's IP. */
     protected byte[] _bobIP;
-    /** Bob's port */
+    /** Bob's port. */
     protected int _bobPort;
     // SessionCreated message
-    /** Alice's IP */
+    /** Alice's IP. */
     protected byte[] _aliceIP;
-    /** Alice's port */
+    /** Alice's port. */
     protected int _alicePort;
-    /** Received relay tag */
+    /** Received relay tag. */
     protected long _receivedRelayTag;
-    /** Received signed on time */
+    /** Received signed on time. */
     private long _receivedSignedOnTime;
     // includes trailing padding to mod 16
     // SessionConfirmed messages
-    /** Sent signed on time */
+    /** Sent signed on time. */
     private long _sentSignedOnTime;
     // general status
-    /** Establish begin time */
+    /** Establish begin time. */
     protected final long _establishBegin;
-    /** Last send time */
+    /** Last send time. */
     protected long _lastSend;
-    /** Next send time */
+    /** Next send time. */
     protected long _nextSend;
-    /** Remote host ID */
+    /** Remote host ID. */
     protected RemoteHostId _remoteHostId;
-    /** Claimed address */
+    /** Claimed address. */
     private final RemoteHostId _claimedAddress;
-    /** Remote peer */
+    /** Remote peer. */
     protected final RouterIdentity _remotePeer;
-    /** Whether extended options are allowed */
+    /** Whether extended options are allowed. */
     private final boolean _allowExtendedOptions;
-    /** Whether introduction is needed */
+    /** Whether introduction is needed. */
     private final boolean _needIntroduction;
-    /** Introduction key */
+    /** Introduction key. */
     private final SessionKey _introKey;
-    /** Queued messages */
+    /** Queued messages. */
     private final Queue<OutNetMessage> _queuedMessages;
-    /** Current state */
+    /** Current state. */
     protected OutboundState _currentState;
-    /** Introduction nonce */
+    /** Introduction nonce. */
     private long _introductionNonce;
-    /** Whether first message is our DSM */
+    /** Whether first message is our DSM. */
     private boolean _isFirstMessageOurDSM;
     // intro
-    /** Remote address */
+    /** Remote address. */
     private final UDPAddress _remoteAddress;
-    /** Whether establishment complete */
+    /** Whether establishment complete. */
     private boolean _complete;
     // counts for backoff
-    /** Confirmed sent count */
+    /** Confirmed sent count. */
     private int _confirmedSentCount;
-    /** Request sent count */
+    /** Request sent count. */
     protected int _requestSentCount;
-    /** Intro sent count */
+    /** Intro sent count. */
     private int _introSentCount;
     // Times for timeout
-    /** Confirmed sent time */
+    /** Confirmed sent time. */
     private long _confirmedSentTime;
-    /** Request sent time */
+    /** Request sent time. */
     protected long _requestSentTime;
-    /** Intro sent time */
+    /** Intro sent time. */
     private long _introSentTime;
-    /** Round trip time */
+    /** Round trip time. */
     protected int _rtt;
 
     /**
@@ -106,28 +106,28 @@ class OutboundEstablishState {
         OB_STATE_CONFIRMED_COMPLETELY,
         /** We need to have someone introduce us to the peer, but haven't received a RelayResponse yet. */
         OB_STATE_PENDING_INTRO,
-        /** RelayResponse received */
+        /** RelayResponse received. */
         OB_STATE_INTRODUCED,
-        /** SessionConfirmed failed validation */
+        /** SessionConfirmed failed validation. */
         OB_STATE_VALIDATION_FAILED,
 
         /**
-         * SSU2: We don't have a token
+         * SSU2: We don't have a token.
          * @since 0.9.54
          */
         OB_STATE_NEEDS_TOKEN,
         /**
-         * SSU2: We have sent a token request
+         * SSU2: We have sent a token request.
          * @since 0.9.54
          */
         OB_STATE_TOKEN_REQUEST_SENT,
         /**
-         * SSU2: We have received a retry
+         * SSU2: We have received a retry.
          * @since 0.9.54
          */
         OB_STATE_RETRY_RECEIVED,
         /**
-         * SSU2: We have sent a session request after receiving a retry
+         * SSU2: We have sent a session request after receiving a retry.
          * @since 0.9.54
          */
         OB_STATE_REQUEST_SENT_NEW_TOKEN
@@ -144,13 +144,13 @@ class OutboundEstablishState {
      */
     protected static final long RETRANSMIT_DELAY = SystemVersion.isSlow() ? 300 : 200;
 
-    /** Max delay including backoff (15 seconds) */
+    /** Max delay including backoff (15 seconds). */
     protected static final long MAX_DELAY = 15*1000L;
 
     private static final long WAIT_FOR_HOLE_PUNCH_DELAY = 500;
 
     /**
-     * For SSU2
+     * For SSU2.
      *
      * @param ctx the router context
      * @param claimedAddress the claimed address from the netdb
@@ -252,7 +252,7 @@ class OutboundEstablishState {
 
     /**
      * Should we ask this peer to be an introducer for us?
-     * Ignored unless allowExtendedOptions is true
+     * Ignored unless allowExtendedOptions is true.
      *
      * @return true if introduction is needed
      * @since 0.9.24
@@ -318,7 +318,7 @@ class OutboundEstablishState {
     public RouterIdentity getRemoteIdentity() { return _remotePeer; }
 
     /**
-     * Bob's introduction key, as published in the netdb
+     * Bob's introduction key, as published in the netdb.
      *
      * @return the intro key
      */
@@ -355,7 +355,7 @@ class OutboundEstablishState {
     }
 
     /**
-     * The SessionCreated validation failed
+     * The SessionCreated validation failed.
      */
     public synchronized void fail() {
         _aliceIP = null;
@@ -607,13 +607,13 @@ class OutboundEstablishState {
     }
 
     /**
-     * Call from synchronized method only
+     * Call from synchronized method only.
      */
     protected void packetReceived() {
         _nextSend = _context.clock().now();
     }
 
-    /** String representation */
+    /** String representation. */
     @Override
     public String toString() {
         return "OutboundEstablishState [" + _remotePeer.getHash().toBase64().substring(0, 6) + "] " + _remoteHostId +

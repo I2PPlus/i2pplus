@@ -37,7 +37,6 @@ import org.cybergarage.util.Debug;
  *   <li>I2P-specific security restrictions
  * </ul>
  *
- * @author Satoshi Konno
  * @since 1.0
  */
 public abstract class Parser {

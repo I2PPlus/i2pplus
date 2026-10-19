@@ -77,7 +77,7 @@ public class BatchedFragmentTest extends FragmentTest {
     }
 
     /**
-     * Send a message that fits inside a single fragment through
+     * Send a message that fits inside a single fragment through.
      *
      */
     @Test
@@ -105,7 +105,7 @@ public class BatchedFragmentTest extends FragmentTest {
     }
 
     /**
-     * Send a message with two fragments through with no delay
+     * Send a message with two fragments through with no delay.
      *
      */
     @Test

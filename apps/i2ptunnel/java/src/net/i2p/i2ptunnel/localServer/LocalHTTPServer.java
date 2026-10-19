@@ -46,7 +46,7 @@ import java.nio.charset.StandardCharsets;
  * @since 0.7.6, moved from I2PTunnelHTTPClient in 0.9
  */
 public abstract class LocalHTTPServer {
-    /** default constructor */
+    /** Construct the tunnel's local HTTP server. */
     public LocalHTTPServer() {}
 
     private static final Log _log = new Log(LocalHTTPServer.class);
@@ -106,7 +106,7 @@ public abstract class LocalHTTPServer {
      * Ignore all request headers (If-Modified-Since, etc.)
      * <p>
      * There is basic protection here -
-     * FileUtil.readFile() prevents traversal above the base directory -
+     * {@link net.i2p.util.FileUtil#readFile} prevents traversal above the base directory -
      * but inproxy/gateway ops would be wise to block proxy.i2p to prevent
      * exposing the docs/ directory or perhaps other issues through
      * uncaught vulnerabilities.
@@ -366,7 +366,11 @@ public abstract class LocalHTTPServer {
         out.flush();
     }
 
-    /** @since 0.8.7 */
+    /**
+     * Send the redirect result page to the browser.
+     *
+     * @since 0.8.7
+     */
     private static void writeRedirectPage(OutputStream out, boolean success, String host, String book, String url) throws IOException {
         String tbook;
         if ("hosts.txt".equals(book))
@@ -446,7 +450,7 @@ public abstract class LocalHTTPServer {
      *
      * @param query an ENCODED query, non-null
      * @return map of DECODED keys to DECODED values, non-null. Values may be empty.
-     * @since 0.9.43 adapted from I2PTunnelHTTPClient.removeHelper()
+     * @since 0.9.43 adapted from {@link net.i2p.i2ptunnel.I2PTunnelHTTPClient#removeHelper}
      */
     private static Map<String, String> decodeQuery(String query) {
         Map<String, String> rv = new HashMap<>(8);
@@ -504,7 +508,7 @@ public abstract class LocalHTTPServer {
         return buf.toString();
     }
 
-    /** these strings go in the jar, not the war */
+    /** These strings go in the jar, not the war. */
     private static final String BUNDLE_NAME = "net.i2p.i2ptunnel.proxy.messages";
 
     /**

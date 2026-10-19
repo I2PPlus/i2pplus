@@ -22,7 +22,6 @@ package org.rrd4j.core.timespec;
  * <p>Tokens are immutable objects created by the TimeScanner and consumed by the TimeParser during
  * the parsing process.
  *
- * @author Sasa Markovic
  */
 class TimeToken {
     // ===== TIME OF DAY MARKERS =====

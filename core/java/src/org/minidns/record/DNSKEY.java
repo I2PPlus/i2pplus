@@ -79,7 +79,7 @@ public class DNSKEY extends Data {
     private final byte[] key;
 
     /**
-     * This DNSKEY's key tag. Calculated just-in-time when using {@link #getKeyTag()}
+     * This DNSKEY's key tag. Calculated just-in-time when using {@link #getKeyTag}
      */
     private transient Integer keyTag;
 

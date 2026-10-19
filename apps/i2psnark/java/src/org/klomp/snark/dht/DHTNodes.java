@@ -41,7 +41,7 @@ class DHTNodes {
     private static final long DELTA_EXPIRE_TIME = 6 * (long) 60 * 1000;
     private static final int MAX_PEERS = 1000;
 
-    /** Buckets older than this are refreshed - BEP 5 says 15 minutes */
+    /** Buckets older than this are refreshed - BEP 5 says 15 minutes. */
     private static final long MAX_BUCKET_AGE = 15 * (long) 60 * 1000;
     private static final int KAD_K = 20;
     private static final int KAD_B = 1;

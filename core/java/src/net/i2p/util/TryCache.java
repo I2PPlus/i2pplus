@@ -7,7 +7,6 @@ import java.util.concurrent.ConcurrentLinkedDeque;
  * Designed to avoid object loss due to lock contention.
  *
  * @param <T> type of objects cached
- * @author zab
  */
 public class TryCache<T> {
 
@@ -21,7 +20,7 @@ public class TryCache<T> {
      */
     public interface ObjectFactory<T> {
         /**
-         * Create instance
+         * Create instance.
          *
          * @return a newly created instance of the cached type
          */

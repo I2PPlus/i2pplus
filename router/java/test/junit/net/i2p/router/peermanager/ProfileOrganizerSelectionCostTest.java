@@ -408,7 +408,7 @@ public class ProfileOrganizerSelectionCostTest {
 
     /**
      * The bounded selection must agree with a full sort at the rank it is asked
-     * for — this is the property the removed O(n log n) sort guaranteed, and the
+     * for. This is the property the removed O(n log n) sort guaranteed, and the
      * only thing that matters about which of several equal-speed peers it picks
      * is that the speed value matches.
      */

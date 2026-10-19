@@ -74,10 +74,10 @@ class NewsFetcher extends UpdateRunner {
     private final long _timeout;
     private final boolean _showStatus;
     private String _failMsg;
-    /** is the news newer */
+    /** Is the news newer. */
     private boolean _isNewer;
     private boolean _success;
-    /** did we get a new news entry */
+    /** Did we get a new news entry. */
     private boolean _gotNewEntry;
 
     private static final String TEMP_NEWS_FILE = "news.xml.temp";
@@ -99,7 +99,7 @@ class NewsFetcher extends UpdateRunner {
     }
 
     /**
-     * and we will log status to the sidebar
+     * And we will log status to the sidebar.
      *
      * @param ctx the router context, supplying the router and temp directories
      * @param mgr the manager notified of progress, failure and completion
@@ -212,11 +212,11 @@ class NewsFetcher extends UpdateRunner {
     }
 
     /**
-     *  Add a query param for the local language to get translated news.
-     *  Unchanged if disabled by property, if language is english,
-     *  or if URI already contains a language parameter
+     * Add a query param for the local language to get translated news.
+     * Unchanged if disabled by property, if language is english,
+     * or if URI already contains a language parameter.
      *
-     *  @since 0.9.21
+     * @since 0.9.21
      */
     private URI addLang(URI uri) {
         if (!_context.getBooleanPropertyDefaultTrue(NewsHelper.PROP_TRANSLATE)) {return uri;}
@@ -237,8 +237,10 @@ class NewsFetcher extends UpdateRunner {
     }
 
     /**
-     *  @return true if the language has changed
-     *  @since 0.9.62
+     * Whether the UI language changed since the last fetch.
+     *
+     * @return true if the language has changed
+     * @since 0.9.62
      */
     private boolean langChanged() {
         String old = _context.getProperty(NewsHelper.PROP_LAST_LANG);
@@ -267,14 +269,14 @@ class NewsFetcher extends UpdateRunner {
     private static final String PROP_ENABLE_VANILLA_UPDATES = "router.enableVanillaUpdates";
     private static final boolean DEFAULT_ENABLE_VANILLA_UPDATES = false;
 
-    /** SU3 key for I2P @since 0.9.52 */
+    /** SU3 key for I2P @since 0.9.52. */
     private static final String I2P_SU3_KEY = "su3i2p";
 
     /**
-     *  Parse the installed (not the temp) news file for the latest version.
-     *  Only the first &lt;i2p.release entry is examined, and only with the
-     *  line-oriented fake XML parser described above, so an entry that is
-     *  spread over several lines is not recognized.
+     * Parse the installed (not the temp) news file for the latest version.
+     * Only the first &lt;{@code i2p.release} entry is examined, and only with the
+     * line-oriented fake XML parser described above, so an entry that is
+     * spread over several lines is not recognized.
      */
     void checkForUpdates() {
         FileInputStream in = null;
@@ -309,7 +311,7 @@ class NewsFetcher extends UpdateRunner {
                                 _mgr.notifyVersionConstraint(this, _currentURI, ROUTER_SIGNED, "", ver, msg);
                                 return;
                             }
-*/
+    */
                             if (!ConfigUpdateHandler.USE_SU3_UPDATE) {
                                 String msg = _mgr._t("No update certificates installed.");
                                 _log.logAlways(Log.WARN, "Cannot update to version " + ver + ": " + msg);
@@ -445,9 +447,9 @@ class NewsFetcher extends UpdateRunner {
     }
 
     /**
-     *  Parse URLs and add to the map
-     *  @param urls may be null
-     *  @since 0.9.9
+     * Parse URLs and add to the map.
+     * @param urls may be null
+     * @since 0.9.9
      */
     private void addMethod(UpdateMethod method, String urls, Map<UpdateMethod, List<URI>> map) {
         if (urls != null) {
@@ -459,13 +461,13 @@ class NewsFetcher extends UpdateRunner {
         }
     }
 
-    /** override to prevent status update */
+    /** Override to prevent status update. */
     @Override
     public void bytesTransferred(long alreadyTransferred, int currentWrite, long bytesTransferred, long bytesRemaining, String url) {
         // TODO
     }
     /**
-     *  Overridden to get the last-modified header
+     * Overridden to get the last-modified header.
      */
     @Override
     public void headerReceived(String url, int attemptNum, String key, String val) {
@@ -477,8 +479,8 @@ class NewsFetcher extends UpdateRunner {
     }
 
     /**
-     *  Copies the file from temp dir to the news location,
-     *  calls checkForUpdates()
+     * Copies the file from temp dir to the news location,
+     * calls checkForUpdates().
      */
     @Override
     public void transferComplete(long alreadyTransferred, long bytesTransferred, long bytesRemaining, String url, String outputFile, boolean notModified) {
@@ -518,7 +520,7 @@ class NewsFetcher extends UpdateRunner {
     }
 
     /**
-     * override for status update
+     * Override for status update.
      * @since 0.9.62
      */
     @Override
@@ -533,7 +535,7 @@ class NewsFetcher extends UpdateRunner {
     }
 
     /**
-     * override for status update
+     * Override for status update.
      */
     @Override
     public void transferFailed(String url, long bytesTransferred, long bytesRemaining, int currentAttempt) {
@@ -547,11 +549,11 @@ class NewsFetcher extends UpdateRunner {
     }
 
     /**
-     *  Process the fetched su3 news file _tempFile.
-     *  Handles 3 types of contained files: xml.gz (preferred), xml, and html (old format fake xml)
+     * Process the fetched su3 news file _tempFile.
+     * Handles 3 types of contained files: xml.gz (preferred), xml, and html (old format fake xml).
      *
-     *  @return the temp file containing the HTML-format news.xml
-     *  @since 0.9.17
+     * @return the temp file containing the HTML-format news.xml
+     * @since 0.9.17
      */
     private File processSU3() throws IOException {
         SU3File su3 = new SU3File(_context, _tempFile);
@@ -612,9 +614,9 @@ class NewsFetcher extends UpdateRunner {
     }
 
     /**
-     *  Gunzip the file
+     * Gunzip the file.
      *
-     *  @since 0.9.17
+     * @since 0.9.17
      */
     private static void gunzip(File from, File to) throws IOException {
         ReusableGZIPInputStream in = ReusableGZIPInputStream.acquire();
@@ -632,9 +634,9 @@ class NewsFetcher extends UpdateRunner {
     }
 
     /**
-     *  Output any updated CRL entries
+     * Output any updated CRL entries.
      *
-     *  @since 0.9.26
+     * @since 0.9.26
      */
     private void persistCRLEntries(List<CRLEntry> entries) {
         File dir = new SecureFile(_context.getConfigDir(), "certificates");
@@ -683,9 +685,9 @@ class NewsFetcher extends UpdateRunner {
     }
 
     /**
-     *  Process blocklist entries
+     * Process blocklist entries.
      *
-     *  @since 0.9.28
+     * @since 0.9.28
      */
     private void processBlocklistEntries(BlocklistEntries ble) {
         long oldTime = _context.getProperty(PROP_BLOCKLIST_TIME, 0L);
@@ -856,11 +858,11 @@ class NewsFetcher extends UpdateRunner {
     }
 
     /**
-     *  Write out key="foo,bar,baz".
-     *  Values cannot contain ','
+     * Write out key="foo,bar,baz".
+     * Values cannot contain ','.
      *
-     *  @param values if null or empty, does nothing
-     *  @since 0.9.52
+     * @param values if null or empty, does nothing
+     * @since 0.9.52
      */
     private static void writeList(Writer out, String key, List<String> values) throws IOException {
         if (values == null || values.isEmpty()) {return;}

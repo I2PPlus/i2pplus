@@ -31,7 +31,7 @@ public class ElGamalPrivateKeyImpl implements ElGamalPrivateKey, DHPrivateKey {
 
     /** The private exponent x. */
     private BigInteger x;
-    /** El spec */
+    /** El spec. */
     private ElGamalParameterSpec elSpec;
 
     /** No-arg constructor. */
@@ -215,7 +215,7 @@ public class ElGamalPrivateKeyImpl implements ElGamalPrivateKey, DHPrivateKey {
     }
 
     /**
-     * Read object
+     * Read object.
      * @param in the stream positioned at the serialized exponent and group parameters
      * @throws IOException if the stream cannot be read or ends before the group parameters
      * @throws ClassNotFoundException if a class named in the stream cannot be resolved
@@ -227,7 +227,7 @@ public class ElGamalPrivateKeyImpl implements ElGamalPrivateKey, DHPrivateKey {
     }
 
     /**
-     * Write object
+     * Write object.
      * @param out the stream that receives the exponent and both group parameters
      * @throws IOException if the underlying stream rejects or fails the write
      */

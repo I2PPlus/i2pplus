@@ -47,14 +47,13 @@ public class PublishLocalRouterInfoJob extends JobImpl {
     private static final long PUBLISH_DELAY = 43L*60*1000;
 
     /**
-     * This needs to be long enough to give us time to start up,
-     * but less than 20m (when we start accepting tunnels and could be a IBGW)
-     * Actually no, we need this soon if we are a new router or
-     * other routers have forgotten about us, else
-     * we can't build IB exploratory tunnels.
+     * Long enough to give us time to start up, but less than 20m,
+     * when we start accepting tunnels and could be an IBGW. Actually, we need
+     * this soon if we are a new router or other routers have forgotten about
+     * us, else we can't build IB exploratory tunnels.
      * <p>
      * First publish after netdb ready is now done via state machine
-     * in Router.setNetDbReady(), so we probably don't need this anymore
+     * in {@link net.i2p.router.Router#setNetDbReady}, so we probably don't need this anymore.
      */
     private final AtomicInteger _runCount = new AtomicInteger();
 
@@ -177,7 +176,7 @@ public class PublishLocalRouterInfoJob extends JobImpl {
     }
 
     /**
-     * Arbitrary sort so we can attempt to compare costs between two RIs to see if they have changed
+     * Arbitrary sort so we can attempt to compare costs between two RIs to see if they have changed.
      *
      * @since 0.9.18
      */

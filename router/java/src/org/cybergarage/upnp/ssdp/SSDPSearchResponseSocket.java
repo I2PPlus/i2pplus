@@ -29,7 +29,6 @@ import org.cybergarage.upnp.*;
  * device discovery searches. It runs in a separate thread to continuously listen for incoming
  * search responses without blocking the main application.
  *
- * @author Satoshi Konno
  * @since 1.0
  */
 public class SSDPSearchResponseSocket extends HTTPUSocket implements Runnable {

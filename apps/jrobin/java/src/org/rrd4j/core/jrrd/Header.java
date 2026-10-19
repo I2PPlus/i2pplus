@@ -6,7 +6,6 @@ import org.rrd4j.core.InvalidRrdException;
 /**
  * Instances of this class model the header section of an RRD file.
  *
- * @author <a href="mailto:ciaran@codeloop.com">Ciaran Treanor</a>
  * @version $Revision: 1.1 $
  */
 public class Header implements Constants {

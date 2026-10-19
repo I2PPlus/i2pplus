@@ -40,6 +40,8 @@ public class SkipIterator<K extends Comparable<? super K>, V> implements ListIte
     }
 
 /**
+ * Whether more values follow.
+ *
  * @return whether next is present
  */
 public boolean hasNext() {
@@ -47,6 +49,8 @@ public boolean hasNext() {
     }
 
     /**
+     * Next value in the iteration.
+     *
      * @return the next value, and advances the index
      * @throws NoSuchElementException if the iterator is past the last value
      */
@@ -80,6 +84,8 @@ public boolean hasNext() {
     }
 
 /**
+ * Whether a previous value exists.
+ *
  * @return whether previous is present
  */
 public boolean hasPrevious() {
@@ -87,6 +93,8 @@ public boolean hasPrevious() {
     }
 
     /**
+     * Previous value in the iteration.
+     *
      * @return the previous value, and decrements the index
      * @throws NoSuchElementException if the iterator is before the first value
      */

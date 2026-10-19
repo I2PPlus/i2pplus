@@ -50,7 +50,7 @@ import javax.security.auth.Destroyable;
  * <p><strong>Security Considerations:</strong></p>
  * <ul>
  * <li><strong>Confidentiality:</strong> Private signing keys must never be exposed</li>
- * <li><strong>Secure Destruction:</strong> Call {@link #destroy()} when no longer needed</li>
+ * <li><strong>Secure Destruction:</strong> Call {@link #destroy} when no longer needed</li>
  * <li><strong>Memory Protection:</strong> Zeroize memory after use</li>
  * <li><strong>Algorithm Choice:</strong> Prefer modern algorithms (Ed25519, ECDSA-P256)</li>
  * </ul>
@@ -79,7 +79,6 @@ import javax.security.auth.Destroyable;
  * <li><strong>Exclusive Use:</strong> Each instance should be used by only one thread</li>
  * </ul>
  *
- * @author jrandom
  */
 public class SigningPrivateKey extends SimpleDataStructure implements Destroyable {
     private static final SigType DEF_TYPE = SigType.DSA_SHA1;
@@ -167,7 +166,7 @@ public class SigningPrivateKey extends SimpleDataStructure implements Destroyabl
     }
 
     /**
-     * Only for SigType EdDSA_SHA512_Ed25519
+     * Only for SigType EdDSA_SHA512_Ed25519.
      *
      * @param alpha the secret data
      * @return the blinded private key
@@ -179,7 +178,7 @@ public class SigningPrivateKey extends SimpleDataStructure implements Destroyabl
     }
 
     /**
-     * Constant time
+     * Constant time.
      *
      * @return true if all zeros
      * @since 0.9.39 moved from PrivateKeyFile
@@ -220,6 +219,8 @@ public class SigningPrivateKey extends SimpleDataStructure implements Destroyabl
     }
 
     /**
+     * Key summary for log messages.
+     *
      * @since 0.9.8
      */
     @Override
@@ -249,6 +250,8 @@ public class SigningPrivateKey extends SimpleDataStructure implements Destroyabl
     }
 
     /**
+     * Equal if the keys are equal.
+     *
      * @since 0.9.17
      */
     @Override

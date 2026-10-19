@@ -27,10 +27,8 @@ import java.util.concurrent.CopyOnWriteArrayList;
  * Deprecated - Used only by I2PTunnel
  * <p>
  * If there is anything in here that doesn't make sense, turn off
- * your computer and go fly a kite - (c) 2004 by jrandom
+ * your computer and go fly a kite - (c) 2004 by jrandom.
  *
- * @author human
- * @author jrandom
  */
 public class EventDispatcherImpl implements EventDispatcher {
 

@@ -50,7 +50,6 @@ import org.json.simple.JsonObject;
  * }
  * </pre>
  *
- *
  * <p>And here is an example JSON-RPC 2.0 response string indicating a failure:
  *
  * <pre>
@@ -106,7 +105,6 @@ import org.json.simple.JsonObject;
  *     null        &lt;---&gt;  null
  * </pre>
  *
- * @author Vladimir Dzhuvinov
  */
 public class JSONRPC2Response extends JSONRPC2Message {
 

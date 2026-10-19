@@ -9,7 +9,7 @@ import net.i2p.client.streaming.I2PSocket;
 import net.i2p.client.streaming.I2PSocketManager;
 
 /**
- * Bridge to allow accepting new connections
+ * Bridge to allow accepting new connections.
  */
 class I2PServerSocketFull implements I2PServerSocket {
     private final I2PSocketManagerFull _socketManager;

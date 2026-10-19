@@ -4,9 +4,8 @@ import java.io.Serializable;
 
 /**
  * A twisted Edwards curve.
- * Points on the curve satisfy $-x^2 + y^2 = 1 + d x^2y^2$
+ * Points on the curve satisfy $-x^2 + y^2 = 1 + d x^2y^2$.
  *
- * @author str4d
  */
 public class Curve implements Serializable {
     private static final long serialVersionUID = 4578920872509827L;
@@ -19,13 +18,13 @@ public class Curve implements Serializable {
     /** The square root of -1. */
     private final FieldElement I;
 
-    /** Zero p2 */
+    /** Zero p2. */
     private final GroupElement zeroP2;
-    /** Zero p3 */
+    /** Zero p3. */
     private final GroupElement zeroP3;
-    /** Zero p3 precomputed double */
+    /** Zero p3 precomputed double. */
     private final GroupElement zeroP3PrecomputedDouble;
-    /** Zero precomp */
+    /** Zero precomp. */
     private final GroupElement zeroPrecomp;
 
     /**

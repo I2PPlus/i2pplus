@@ -14,9 +14,8 @@ import net.i2p.data.Hash;
 import net.i2p.util.RandomSource;
 
 /**
- * Test harness for loading / storing DestLookupMessage objects
+ * Test harness for loading / storing DestLookupMessage objects.
  *
- * @author str4d
  */
 public class DestLookupMessageTest extends I2CPTstBase {
     @Override

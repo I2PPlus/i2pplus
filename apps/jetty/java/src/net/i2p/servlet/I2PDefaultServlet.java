@@ -261,6 +261,8 @@ public class I2PDefaultServlet extends DefaultServlet {
         private final Resource _base;
 
         /**
+         * Compares files against the base resource.
+         *
          * @param base the resource base for resolving file entries
          */
         public FileComparator(Resource base) {
@@ -365,8 +367,10 @@ public class I2PDefaultServlet extends DefaultServlet {
     }
 
     /**
+     * The cached resource for the path, if any.
+     *
      * @return the resource for the path, or the first extension alias that
-     *         resolves when the aliases init parameter is "true", else null
+     * resolves when the aliases init parameter is "true", else null
      */
     @Override
     public Resource getResource(String path) {

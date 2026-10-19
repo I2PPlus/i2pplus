@@ -53,7 +53,7 @@ class BlindCache {
     private static final int MAX_CACHE_SIZE = 32;
 
     /**
-     * Caller MUST call startup() to load persistent cache from disk
+     * Caller MUST call startup() to load persistent cache from disk.
      *
      * @param ctx the router context
      */
@@ -77,7 +77,7 @@ class BlindCache {
     }
 
     /**
-     * Enforce maximum cache size
+     * Enforce maximum cache size.
      */
     private void enforceMaxSize() {
         while (_cache.size() > MAX_CACHE_SIZE) {
@@ -159,7 +159,7 @@ class BlindCache {
     }
 
     /**
-     * Mark a destination as known to be blinded
+     * Mark a destination as known to be blinded.
      *
      * @param dest known to be blinded
      * @param blindedType null for default
@@ -197,7 +197,7 @@ class BlindCache {
     }
 
     /**
-     * Persists immediately if secret or privkey is non-null
+     * Persists immediately if secret or privkey is non-null.
      *
      * @param bd the blind data to add
      */
@@ -212,6 +212,8 @@ class BlindCache {
     }
 
     /**
+     * Add blinded lookup data to the cache.
+     *
      * @since 0.9.41 from addToCache()
      */
     private void storeInCache(BlindData bd) {
@@ -223,7 +225,7 @@ class BlindCache {
     }
 
     /**
-     * The cached data or null
+     * The cached data or null.
      *
      * @param dest the destination to look up
      * @return the cached BlindData or null
@@ -241,7 +243,7 @@ class BlindCache {
     }
 
     /**
-     * The cached data or null
+     * The cached data or null.
      *
      * @param spk the unblinded public key
      * @return the cached BlindData or null
@@ -255,7 +257,7 @@ class BlindCache {
     }
 
     /**
-     * The cached data or null
+     * The cached data or null.
      *
      * @param spk the blinded public key
      * @return the cached BlindData or null
@@ -268,7 +270,7 @@ class BlindCache {
     }
 
     /**
-     * Refresh all the data at midnight
+     * Refresh all the data at midnight.
      */
     public synchronized void rollover() {
         _reverseCache.clear();
@@ -278,7 +280,7 @@ class BlindCache {
     }
 
     /**
-     * For console ConfigKeyringHelper
+     * For console ConfigKeyringHelper.
      * @return list is copied
      * @since 0.9.41
      */

@@ -3,9 +3,6 @@ package net.i2p.addressbook;
 
 /**
  * A subscription to a remote address book.
- *
- * @author Ragnarok
- *
  */
 class Subscription {
 

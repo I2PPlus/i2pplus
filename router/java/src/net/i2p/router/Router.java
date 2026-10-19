@@ -84,13 +84,13 @@ public class Router implements RouterClock.ClockShiftListener {
     private Log _log;
     private final RouterContext _context;
     private final Map<String, String> _config;
-    /** Full path to the config file */
+    /** Full path to the config file. */
     private String _configFilename;
     private RouterInfo _routerInfo;
     private final ReentrantReadWriteLock _routerInfoLock = new ReentrantReadWriteLock(false);
     private RouterIdentity _routerIdent;
     private Hash _routerHash;
-    /** Not for external use */
+    /** Not for external use. */
     public final Object routerInfoFileLock = new Object();
     private final Object _configFileLock = new Object();
     private long _started;
@@ -127,20 +127,20 @@ public class Router implements RouterClock.ClockShiftListener {
      */
     public static final String PROP_CONFIG_FILE = "router.configLocation";
 
-    /** Let clocks be off by 30 seconds (reduced from 60s to improve lease renewal timing) */
+    /** Let clocks be off by 30 seconds (reduced from 60s to improve lease renewal timing). */
     public static final long CLOCK_FUDGE_FACTOR = 30L*1000;
 
-    /** Used to differentiate routerInfo files on different networks */
+    /** Used to differentiate routerInfo files on different networks. */
     private static final int DEFAULT_NETWORK_ID = 2;
     private static final String PROP_NETWORK_ID = "router.networkID";
     private final int _networkID;
 
-    /** Coalesce stats this often - should be a little less than one minute, so the graphs get updated */
+    /** Coalesce stats this often - should be a little less than one minute, so the graphs get updated. */
     public static final int COALESCE_TIME = 50*1000;
 
-    /** This puts an 'H' in your routerInfo **/
+    /** This puts an 'H' in your routerInfo *.*/
     public static final String PROP_HIDDEN = "router.hiddenMode";
-    /** This does not put an 'H' in your routerInfo **/
+    /** This does not put an 'H' in your routerInfo *.*/
     public static final String PROP_HIDDEN_HIDDEN = "router.isHidden";
     /** New router keys at every restart. Disabled. */
     public static final String PROP_DYNAMIC_KEYS = "router.dynamicKeys";
@@ -150,7 +150,7 @@ public class Router implements RouterClock.ClockShiftListener {
      * @since 0.9.34
      */
     public static final String PROP_REBUILD_KEYS = "router.rebuildKeys";
-    /** Deprecated, use gracefulShutdownInProgress() */
+    /** Deprecated, use gracefulShutdownInProgress(). */
     private static final String PROP_SHUTDOWN_IN_PROGRESS = "__shutdownInProgress";
     /**
      * Config property for the inbound exploratory pool random key.
@@ -212,7 +212,7 @@ public class Router implements RouterClock.ClockShiftListener {
      * RouterContext is created but not initialized.
      * You must call runRouter() after any constructor to start things up.
      * <p>
-     * Config file name is "router.config" unless router.configLocation set in system properties.
+     * Config file name is "{@code router.config}" unless {@code router.configLocation} set in system properties.
      * <p>
      * See two-arg constructor for more information.
      *
@@ -225,7 +225,8 @@ public class Router implements RouterClock.ClockShiftListener {
      * RouterContext is created but not initialized.
      * You must call runRouter() after any constructor to start things up.
      * <p>
-     * Config file name is "router.config" unless router.configLocation set in envProps or system properties.
+      * Config file name is "{@code router.config}" unless {@code router.configLocation} set in envProps
+       * or system properties.
      * <p>
      * See two-arg constructor for more information.
      *
@@ -253,16 +254,16 @@ public class Router implements RouterClock.ClockShiftListener {
      * <p>
      * If configFilename is non-null, configuration is read in from there.
      * Else if envProps is non-null, configuration is read in from the
-     * location given in the router.configLocation property.
-     * Else it's read in from the System property router.configLocation.
-     * Else from the file "router.config".
+     * location given in the {@code router.configLocation} property.
+     * Else it's read in from the System property {@code router.configLocation}.
+     * Else from the file "{@code router.config}".
      * <p>
-     * The most important properties are i2p.dir.base (the install directory, may be read-only)
-     * and i2p.dir.config (the user's configuration/data directory).
+     * The most important properties are {@code i2p.dir.base} (the install directory, may be read-only)
+     * and {@code i2p.dir.config} (the user's configuration/data directory).
      * <p>
-     * i2p.dir.base defaults to user.dir (CWD) but should almost always be set.
+     * {@code i2p.dir.base} defaults to user.dir (CWD) but should almost always be set.
      * <p>
-     * i2p.dir.config default depends on OS, user name (to detect if running as a service or not),
+     * {@code i2p.dir.config} default depends on OS, user name (to detect if running as a service or not),
      * and auto-detection of whether there appears to be previous data files in the base dir.
      * See WorkingDir for details.
      * If the config dir does not exist, it will be created, and files migrated from the base dir,
@@ -298,10 +299,10 @@ public class Router implements RouterClock.ClockShiftListener {
          * So for now, it doesn't make much sense to set the base or config dirs in the config file -
          * use properties instead. If for some reason, distros need this, we can revisit it.
          * <p>
-         * Then add it to envProps (but not _config, we don't want it in the router.config file)
+         * Then add it to envProps (but not _config, we don't want it in the {@code router.config} file)
          * where it will then be available to all via _context.dir()
          * <p>
-         * This call also migrates all files to the new working directory, including router.config
+         * This call also migrates all files to the new working directory, including {@code router.config}.
          */
 
         // Do we copy all the data files to the new directory? default false
@@ -311,9 +312,10 @@ public class Router implements RouterClock.ClockShiftListener {
         boolean isPortable = Boolean.parseBoolean(isPortableStr);
         String userDir = (!isPortable) ? WorkingDir.getWorkingDir(envProps, migrateFiles) : PortableWorkingDir.getWorkingDir(envProps);
         /**
-         * Use the router.config file specified in the router.configLocation property (default "router.config")
+         * Use the {@code router.config} file specified in the {@code router.configLocation} property
+          * (default "{@code router.config}")
          * if it is an absolute path, otherwise look in the userDir returned by getWorkingDir replace relative
-         * path with absolute
+         * path with absolute.
          */
         File cf = new File(_configFilename);
         if (!cf.isAbsolute()) {
@@ -411,7 +413,7 @@ public class Router implements RouterClock.ClockShiftListener {
      * Starts some threads. Does not install updates.
      * All this was in the constructor.
      * <p>
-     * Could block for 10 seconds or forever if waiting for entropy
+     * Could block for 10 seconds or forever if waiting for entropy.
      *
      * @since 0.8.12
      */
@@ -491,7 +493,7 @@ public class Router implements RouterClock.ClockShiftListener {
      * Configure the router to kill the JVM when the router shuts down, as well
      * as whether to explicitly halt the JVM during the hard fail process.
      * <p>
-     * Defaults to true. Set to false for embedded before calling runRouter()
+     * Defaults to true. Set to false for embedded before calling runRouter().
      *
      * @param shouldDie true to kill VM on shutdown, false for embedded use
      */
@@ -522,7 +524,7 @@ public class Router implements RouterClock.ClockShiftListener {
     /**
      * An unmodifiable set of all configuration property names.
      * <p>Warning: this is a live view of the configuration - use
-     * {@link #saveConfig()} or {@link #saveConfig(String, String)} when you
+     * {@link #saveConfig} or {@link #saveConfig(String, String)} when you
      * modify the returned set, otherwise the router may race with a concurrent
      * write.</p>
      *
@@ -546,7 +548,7 @@ public class Router implements RouterClock.ClockShiftListener {
      * Note: Due to lock contention, especially during a
      * rebuild of the router info, this may take a long time.
      * For determining the current status of the router, use
-     * RouterContext.commSystem().getStatus().
+     * {@link net.i2p.router.RouterContext#commSystem}{@code getStatus()}.
      * @return the router info
      */
     public RouterInfo getRouterInfo() {
@@ -579,7 +581,7 @@ public class Router implements RouterClock.ClockShiftListener {
      * Caller must ensure info is valid - no validation done here.
      * Not for external use.
      * <p>
-     * Warning - risk of deadlock - do not call while holding locks
+     * Warning - risk of deadlock - do not call while holding locks.
      *
      * @param info the router info to adopt as ours; the caller must ensure it is valid
      */
@@ -621,7 +623,7 @@ public class Router implements RouterClock.ClockShiftListener {
 
     /**
      * The network ID. Default 2.
-     * May be changed with the config property router.networkID (restart required).
+     * May be changed with the config property {@code router.networkID} (restart required).
      * Change only if running a test network to prevent cross-network contamination.
      *
      * @return 2 - 254
@@ -677,7 +679,7 @@ public class Router implements RouterClock.ClockShiftListener {
      * checks for updates and then calls this.
      * <p>
      * This may take quite a while, especially if NTP fails
-     * or the system lacks entropy
+     * or the system lacks entropy.
      *
      * @throws IllegalStateException if called more than once
      */
@@ -760,7 +762,7 @@ public class Router implements RouterClock.ClockShiftListener {
 
     /**
      * This does not use ctx.getConfigDir(), must provide a full path in filename
-     * Caller must synchronize
+     * Caller must synchronize.
      *
      * @param ctx will be null at startup when called from constructor
      * @return the settings read from that file, empty if the file does not exist
@@ -792,25 +794,25 @@ public class Router implements RouterClock.ClockShiftListener {
     ////////// begin state management
 
     /**
-     * Startup / shutdown states
+     * Startup / shutdown states.
      *
      * @since 0.9.18
      */
     private enum State {
         UNINITIALIZED,
-        /** Constructor complete */
+        /** Constructor complete. */
         INITIALIZED,
-        /** Startup: runRouter() called */
+        /** Startup: runRouter() called. */
         STARTING_1,
-        /** Startup: startupStuff() complete, most of the time here is NTP */
+        /** Startup: startupStuff() complete, most of the time here is NTP. */
         STARTING_2,
-        /** NTP done, Job queue started, StartupJob queued, runRouter() returned */
+        /** NTP done, Job queue started, StartupJob queued, runRouter() returned. */
         STARTING_3,
-        /** RIs loaded. From STARTING_3 */
+        /** RIs loaded. From STARTING_3. */
         NETDB_READY,
-        /** Non-zero-hop expl. tunnels built. From STARTING_3 */
+        /** Non-zero-hop expl. tunnels built. From STARTING_3. */
         EXPL_TUNNELS_READY,
-        /** From NETDB_READY or EXPL_TUNNELS_READY */
+        /** From NETDB_READY or EXPL_TUNNELS_READY. */
         RUNNING,
         /**
          * A "soft" restart, primarily of the comm system, after
@@ -820,15 +822,15 @@ public class Router implements RouterClock.ClockShiftListener {
          * This is not a graceful restart - all peer connections are dropped immediately.
          */
         RESTARTING,
-        /** Cancellable shutdown has begun */
+        /** Cancellable shutdown has begun. */
         GRACEFUL_SHUTDOWN,
-        /** In shutdown(). Non-cancellable shutdown has begun */
+        /** In shutdown(). Non-cancellable shutdown has begun. */
         FINAL_SHUTDOWN_1,
-        /** In shutdown2(). Killing everything */
+        /** In shutdown2(). Killing everything. */
         FINAL_SHUTDOWN_2,
-        /** In finalShutdown(). Final cleanup */
+        /** In finalShutdown(). Final cleanup. */
         FINAL_SHUTDOWN_3,
-        /** All done */
+        /** All done. */
         STOPPED
     }
 
@@ -849,6 +851,8 @@ public class Router implements RouterClock.ClockShiftListener {
         EnumSet.of(State.FINAL_SHUTDOWN_1, State.FINAL_SHUTDOWN_2, State.FINAL_SHUTDOWN_3, State.STOPPED);
 
     /**
+     * Advance the router state machine, starting or stopping components as needed.
+     *
      * @since 0.9.18
      */
     private void changeState(State state) {
@@ -989,7 +993,7 @@ public class Router implements RouterClock.ClockShiftListener {
      * <p>
      * Not for external use.
      * <p>
-     * Warning - risk of deadlock - do not call while holding locks
+     * Warning - risk of deadlock - do not call while holding locks.
      */
     public void rebuildRouterInfo() {rebuildRouterInfo(false);}
 
@@ -998,7 +1002,7 @@ public class Router implements RouterClock.ClockShiftListener {
      * has changed.
      * Not for external use.
      * <p>
-     * Warning - risk of deadlock - do not call while holding locks
+     * Warning - risk of deadlock - do not call while holding locks.
      *
      * @param blockingRebuild ignored, operation is always nonblocking
      */
@@ -1046,7 +1050,7 @@ public class Router implements RouterClock.ClockShiftListener {
      * Not for external use.
      * If family key is set, first call Will take a while to generate keys.
      * Warning - risk of deadlock - do not call while holding locks
-     * (other than routerInfoLock)
+     * (other than routerInfoLock).
      *
      * @return null on initialization failure
      * @since 0.9.24
@@ -1098,7 +1102,7 @@ public class Router implements RouterClock.ClockShiftListener {
      * @since 0.9.18
      */
     public static final char CAPABILITY_BW_UNLIMITED = 'X';
-    /** For testing */
+    /** For testing. */
     public static final String PROP_FORCE_BWCLASS = "router.forceBandwidthClass";
 
     /**
@@ -1133,7 +1137,7 @@ public class Router implements RouterClock.ClockShiftListener {
      */
     public static final char CAPABILITY_NO_TUNNELS = 'G';
 
-    /** For testing */
+    /** For testing. */
     public static final String PROP_FORCE_UNREACHABLE = "router.forceUnreachable";
 
     /**
@@ -1351,7 +1355,7 @@ public class Router implements RouterClock.ClockShiftListener {
     public EventLog eventLog() {return _eventLog;}
 
     /**
-     * Ugly list of files that we need to kill if we are building a new identity
+     * Ugly list of files that we need to kill if we are building a new identity.
      */
     private static final String[] _rebuildFiles = new String[] {
         CreateRouterInfoJob.INFO_FILENAME,
@@ -1441,7 +1445,7 @@ public class Router implements RouterClock.ClockShiftListener {
     }
 
     /**
-     * Could block for 10 seconds or forever
+     * Could block for 10 seconds or forever.
      */
     private void warmupCrypto() {
         String oldLoaded = _context.getProperty(PROP_JBIGI);
@@ -1510,15 +1514,15 @@ public class Router implements RouterClock.ClockShiftListener {
         if (changes != null) {saveConfig(changes, null);}
     }
 
-    /** Shut down after all tunnels are gone */
+    /** Shut down after all tunnels are gone. */
     public static final int EXIT_GRACEFUL = 2;
-    /** Shut down immediately */
+    /** Shut down immediately. */
     public static final int EXIT_HARD = 3;
-    /** Shut down immediately */
+    /** Shut down immediately. */
     public static final int EXIT_OOM = 10;
-    /** Shut down immediately, and tell the wrapper to restart */
+    /** Shut down immediately, and tell the wrapper to restart. */
     public static final int EXIT_HARD_RESTART = 4;
-    /** Shut down after all tunnels are gone, and tell the wrapper to restart */
+    /** Shut down after all tunnels are gone, and tell the wrapper to restart. */
     public static final int EXIT_GRACEFUL_RESTART = 5;
 
     /**
@@ -1726,7 +1730,7 @@ public class Router implements RouterClock.ClockShiftListener {
 
     /**
      * Disable dynamic key functionality for the moment, as it may be harmful and doesn't
-     * add meaningful anonymity
+     * add meaningful anonymity.
      */
     private static final boolean ALLOW_DYNAMIC_KEYS = true;
 
@@ -1748,7 +1752,7 @@ public class Router implements RouterClock.ClockShiftListener {
             _log.log(Log.CRIT, "Completed graceful restart, now restarting...");
         else if (exitCode == 10)
             _log.log(Log.CRIT, "Completed forced restart, now restarting...");
-*/
+    */
         try {_context.logManager().shutdown();} catch (Throwable t) { /* ignored */ }
         try {BanLogger.shutdown();} catch (Throwable t) { /* ignored */ }
         if (_markLiveliness != null) {
@@ -1848,7 +1852,7 @@ public class Router implements RouterClock.ClockShiftListener {
     }
 
     /**
-     * What exit code do we plan on using when we shut down (or -1, if there isn't a graceful shutdown planned)
+     * What exit code do we plan on using when we shut down (or -1, if there isn't a graceful shutdown planned).
      *
      * @return one of the EXIT_* values or -1
      */
@@ -1875,7 +1879,7 @@ public class Router implements RouterClock.ClockShiftListener {
      * Save the current config options (returning true if save was
      * successful, false otherwise)
      * <p>
-     * Synchronized with file read in getConfig()
+     * Synchronized with file read in getConfig().
      *
      * @return true if the properties were written, false if the write failed
      */
@@ -1898,7 +1902,7 @@ public class Router implements RouterClock.ClockShiftListener {
     /**
      * Updates the current config with the given key/value and then saves it.
      * Prevents a race in the interval between _config.put()/_config.remove() and saveConfig(),
-     * Synchronized with getConfig() / saveConfig()
+     * Synchronized with getConfig() / saveConfig().
      *
      * @param name setting to add/change/remove before saving
      * @param value if non-null, updated value; if null, setting will be removed
@@ -1916,7 +1920,7 @@ public class Router implements RouterClock.ClockShiftListener {
     /**
      * Updates the current config and then saves it.
      * Prevents a race in the interval between _config.putAll()/_config.remove() and saveConfig(),
-     * Synchronized with getConfig() / saveConfig()
+     * Synchronized with getConfig() / saveConfig().
      *
      * @param toAdd settings to add/change before saving, may be null or empty
      * @param toRemove settings to remove before saving, may be null or empty
@@ -2040,7 +2044,7 @@ public class Router implements RouterClock.ClockShiftListener {
     private static final long LIVELINESS_DELAY = 60L*1000;
 
     /**
-     * Check the file "router.ping", but if
+     * Check the file "{@code router.ping}", but if
      * that file already exists and was recently written to, return false as there is
      * another instance running.
      *
@@ -2070,7 +2074,7 @@ public class Router implements RouterClock.ClockShiftListener {
     }
 
     /**
-     * Start a thread that will periodically update the file "router.ping".
+     * Start a thread that will periodically update the file "{@code router.ping}".
      * isOnlyRouterRunning() MUST have been called previously.
      */
     private void beginMarkingLiveliness() {
@@ -2153,7 +2157,7 @@ public class Router implements RouterClock.ClockShiftListener {
     }
 
     /**
-     * Max of inbound and outbound rate in bytes per second
+     * Max of inbound and outbound rate in bytes per second.
      * @return the 1s rate
      */
     public int get1sRate() {return get1sRate(false);}
@@ -2172,7 +2176,7 @@ public class Router implements RouterClock.ClockShiftListener {
     }
 
     /**
-     * Inbound rate in bytes per second
+     * Inbound rate in bytes per second.
      * @return the 1s rate in
      */
     public int get1sRateIn() {
@@ -2181,7 +2185,7 @@ public class Router implements RouterClock.ClockShiftListener {
     }
 
     /**
-     * Max of inbound and outbound rate in bytes per second
+     * Max of inbound and outbound rate in bytes per second.
      * @return the 15s rate
      */
     public int get15sRate() {return get15sRate(false);}
@@ -2200,7 +2204,7 @@ public class Router implements RouterClock.ClockShiftListener {
     }
 
     /**
-     * Inbound rate in bytes per second
+     * Inbound rate in bytes per second.
      * @return the 15s rate in
      */
     public int get15sRateIn() {
@@ -2209,7 +2213,7 @@ public class Router implements RouterClock.ClockShiftListener {
     }
 
     /**
-     * Max of inbound and outbound rate in bytes per second
+     * Max of inbound and outbound rate in bytes per second.
      * @return the 1m rate
      */
     public int get1mRate() {return get1mRate(false);}
@@ -2233,7 +2237,7 @@ public class Router implements RouterClock.ClockShiftListener {
     }
 
     /**
-     * Inbound rate in bytes per second
+     * Inbound rate in bytes per second.
      * @return the 1m rate in
      */
     public int get1mRateIn() {

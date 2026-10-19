@@ -20,9 +20,17 @@ public class IdentityBytes implements Serializer<byte[]> {
      */
     public IdentityBytes() {}
 
-    /** @return byte[] */
+    /**
+     * Return the bytes unchanged.
+     *
+     * @return byte[]
+     */
     public byte[] getBytes(byte[] o) { return o; }
 
-    /** @return b */
+    /**
+     * Return the bytes unchanged.
+     *
+     * @return b
+     */
     public byte[] construct(byte[] b) { return b; }
 }

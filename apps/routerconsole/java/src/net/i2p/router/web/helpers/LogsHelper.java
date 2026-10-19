@@ -160,7 +160,7 @@ public class LogsHelper extends HelperBase {
     };
 
     /**
-     * Sets the router context whose log manager this helper reads from
+     * Sets the router context whose log manager this helper reads from.
      *
      * @param context the context injected by the servlet container before any log call
      */
@@ -223,7 +223,7 @@ public class LogsHelper extends HelperBase {
 
     /**
      * Return HTML rendering of the most recent log messages.
-     * Does not call logManager.flush(); call getCriticalLogs() first to flush
+     * Does not call logManager.flush(); call getCriticalLogs() first to flush.
      * @return the formatted log messages, wrapped in a link to the log file
      */
     public String getLogs() {
@@ -257,7 +257,7 @@ public class LogsHelper extends HelperBase {
 
     /**
      * Returns the ID of the most recent log message, for clearThrough().
-     * Call before getLogs()
+     * Call before getLogs().
      *
      * @return -1 if none
      * @since 0.9.46
@@ -270,7 +270,7 @@ public class LogsHelper extends HelperBase {
 
     /**
      * Call before getLogs(), getCriticalLogs(), or getLastMessageNumber()
-     * Side effect - calls logManager.flush()
+     * Side effect - calls logManager.flush().
      *
      * @return -1 if none
      * @since 0.9.46
@@ -441,7 +441,7 @@ public class LogsHelper extends HelperBase {
     }
 
     /**
-     * Return the Built-By attribute from the i2p.jar manifest.
+     * Return the Built-By attribute from the {@code i2p.jar} manifest.
      *
      * @return the built by
      * @since 0.9.35
@@ -458,10 +458,10 @@ public class LogsHelper extends HelperBase {
     }
 
     /**
-     * Return the build revision and date from the routerconsole.war manifest.
+     * Return the build revision and date from the {@code routerconsole.war} manifest.
      *
      * @return the Base-Revision attribute, linked to the commit when built by z3d,
-     *         or an empty string when the manifest carries no usable attributes
+     * or an empty string when the manifest carries no usable attributes
      * @since 0.9.50+
      */
     public String getRevision() {
@@ -501,7 +501,7 @@ public class LogsHelper extends HelperBase {
         return msg;
     }
 
-    /** formats in forward order */
+    /** Formats in forward order. */
     private String formatMessages(List<String> msgs) {
         if (msgs.isEmpty()) {return "</td></tr><tr><td><p class=nologs><i>" + _t("No log messages") + "</i></p>";}
         boolean colorize = _context.getBooleanPropertyDefaultTrue("routerconsole.logs.color");
@@ -593,14 +593,14 @@ public class LogsHelper extends HelperBase {
      * <p>
      * Warning - this inefficiently allocates a StringBuilder of size maxNumLines*80,
      * so don't make it too big.
-     * Warning - converts \r\n to \n
+     * Warning - converts \r\n to \n.
      *
      * @param utf8 true for utf-8, false for system locale
      * @param maxNumLines max number of lines (greater than zero)
      * @param skipLines number of lines to skip, or zero
      * @param buf out parameter receiving the trailing lines, each terminated by '\n'
      * @return -1 on failure, or number of lines in the file. Does not throw IOException.
-     * @since 0.9.11 modded from FileUtil.readTextFile()
+     * @since 0.9.11 modded from {@link net.i2p.util.FileUtil#readTextFile}
      */
     private static long readTextFile(File f, boolean utf8, int maxNumLines, long skipLines, StringBuilder buf) {
         if (!f.exists()) {return -1;}

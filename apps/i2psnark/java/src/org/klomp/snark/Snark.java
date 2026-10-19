@@ -48,9 +48,9 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
     private final byte[] id;
     private final byte[] infoHash;
     private String additionalTrackerURL;
-    /** The transient destination, when multi-dest is enabled; null otherwise or on stop */
+    /** The transient destination, when multi-dest is enabled; null otherwise or on stop. */
     private volatile TorrentDest _dest;
-    /** The util */
+    /** The util. */
     protected final I2PSnarkUtil _util;
     private final Log _log;
     private final PeerCoordinatorSet _peerCoordinatorSet;
@@ -636,13 +636,13 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
         }
     }
 
-    /** Stop contacting the tracker and talking with peers */
+    /** Stop contacting the tracker and talking with peers. */
     public void stopTorrent() {
         stopTorrent(false, false);
     }
 
     /**
-     * Stop contacting the tracker and talking with peers
+     * Stop contacting the tracker and talking with peers.
      *
      * @param fast if true, limit the life of the unannounce threads
      * @since 0.9.1
@@ -1002,7 +1002,7 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
     /**
      * The peer list.
      *
-     * @return peer list
+     * @return the live list of peers, not a copy
      */
     public List<Peer> getPeerList() {
         PeerCoordinator coord = coordinator;
@@ -1163,7 +1163,7 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
         }
     }
 
-    /** Recalculate piece priorities */
+    /** Recalculate piece priorities. */
     public void updatePiecePriorities() {
         PeerCoordinator coord = coordinator;
         if (coord != null) {
@@ -1185,7 +1185,7 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
     }
 
     /**
-     * The total length of all non-padding torrent files; equals {@link #getTotalLength()} for
+     * The total length of all non-padding torrent files; equals {@link #getTotalLength} for
      * torrents without BEP 47 padding files. The projected downloaded size.
      *
      * @return total of all non-padding files, or -1 if unavailable
@@ -1383,10 +1383,10 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
     }
 
     /**
-     * Throws a unique exception class to blame the router that can be caught by SnarkManager
+     * Throws a unique exception class to blame the router that can be caught by SnarkManager.
      *
      * @throws RouterException always, after logging the failure, stopping the torrent
-     *                         and notifying the CompleteListener
+     * and notifying the CompleteListener
      * @since 0.9.46
      */
     private void fatalRouter(String s, Throwable t) throws RouterException {
@@ -1402,7 +1402,7 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
     }
 
     /**
-     * A unique exception class to blame the router that can be caught by SnarkManager
+     * A unique exception class to blame the router that can be caught by SnarkManager.
      *
      * @since 0.9.46
      */
@@ -1428,7 +1428,7 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
         }
     }
 
-    /** CoordinatorListener no-op */
+    /** CoordinatorListener no-op. */
     @Override
     public void peerChange(PeerCoordinator coordinator, Peer peer) { /* no-op */ }
 
@@ -1517,7 +1517,7 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
 
     ///////////// Begin StorageListener methods
 
-    /** StorageListener no-op */
+    /** StorageListener no-op. */
     @Override
     public void storageCreateFile(Storage storage, String name, long length) { /* no-op */ }
 
@@ -1614,12 +1614,12 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
 
     ///////////// End StorageListener methods
 
-    /** SnarkShutdown callback unused */
+    /** SnarkShutdown callback unused. */
     @Override
     public void shutdown() { /* no-op */ }
 
     /**
-     * StorageListener and CoordinatorListener callback
+     * StorageListener and CoordinatorListener callback.
      *
      * @since 0.9.2
      */
@@ -1630,7 +1630,7 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
         }
     }
 
-    /** Maintain a configurable total uploader cap CoordinatorListener */
+    /** Maintain a configurable total uploader cap CoordinatorListener. */
     static final int MIN_TOTAL_UPLOADERS = 10;
 
     /** Maximum peers we upload to across all torrents. */
@@ -1673,7 +1673,7 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
     }
 
     /**
-     * A unique ID for this torrent, useful for RPC
+     * A unique ID for this torrent, useful for RPC.
      *
      * @return positive value unless you wrap around
      * @since 0.9.30
@@ -1683,7 +1683,7 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
     }
 
     /**
-     * When did we start this torrent For RPC
+     * When did we start this torrent For RPC.
      *
      * @return 0 if not started before. Not cleared when stopped.
      * @since 0.9.30

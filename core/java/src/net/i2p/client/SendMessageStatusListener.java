@@ -13,7 +13,7 @@ public interface SendMessageStatusListener {
 
     /**
      * Tell the client of an update in the send status for a message
-     * previously sent with I2PSession.sendMessage().
+     * previously sent with {@link net.i2p.client.I2PSession#sendMessage}.
      * Multiple calls for a single message ID are possible.
      *
      * @param session session notifying the status change

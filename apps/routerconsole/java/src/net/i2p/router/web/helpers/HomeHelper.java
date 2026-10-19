@@ -29,23 +29,23 @@ import net.i2p.I2PAppContext;
  */
 public class HomeHelper extends HelperBase {
 
-    /** default constructor */
+    /** Construct the home page helper. */
     public HomeHelper() {}
 
     private static final char S = ',';
     private static final String I = "/themes/console/images/";
-    /** service list property */
+    /** Service list property. */
     static final String PROP_SERVICES = "routerconsole.services";
-    /** favorites list property */
+    /** Favorites list property. */
     static final String PROP_FAVORITES = "routerconsole.favorites";
-    /** config opts property */
+    /** Config opts property. */
     static final String PROP_CONFIG = "routerconsole.configopts";
-    /** monitoring property */
+    /** Monitoring property. */
     static final String PROP_MONITORING = "routerconsole.monitoring";
-    /** search property */
+    /** Search property. */
     static final String PROP_SEARCH = "routerconsole.showSearch";
 
-    /** Default services list, comma-separated */
+    /** Default services list, comma-separated. */
     static final String DEFAULT_SERVICES =
         _x("Addressbook") + S + _x("Manage your I2P hosts file here (I2P domain name resolution)") + S + "/dns?book=router&filter=latest" + S + I + "addressbook.svg" + S +
         _x("Graphs") + S + _x("Graph Router Performance") + S + "/graphs" + S + I + "graphs.svg" + S +
@@ -67,7 +67,7 @@ public class HomeHelper extends HelperBase {
         _x("Web Server") + S + _x("Local web server for hosting your own content on I2P") + S + "http://127.0.0.1:7658/" + S + I + "webserver.svg" + S +
         "";
 
-    /** Default services list for new installs */
+    /** Default services list for new installs. */
     static final String NEWINSTALL_SERVICES =
         _x("Addressbook") + S + _x("Manage your I2P hosts file here (I2P domain name resolution)") + S + "/dns?book=router&filter=latest" + S + I + "addressbook.svg" + S +
         _x("Configure Bandwidth") + S + _x("I2P Bandwidth Configuration") + S + "/config" + S + I + "speedometer.svg" + S +
@@ -92,7 +92,7 @@ public class HomeHelper extends HelperBase {
         _x("Wizard") + S + _x("Configuration and bandwidth tester") + S + "/wizard" + S + I + "wizard.svg" + S +
         "";
 
-    /** advanced services list */
+    /** Advanced services list. */
     static final String ADVANCED_SERVICES =
         _x("Addressbook") + S + _x("Manage your I2P hosts file here (I2P domain name resolution)") + S + "/dns?book=router&filter=latest" + S + I + "addressbook.svg" + S +
         _x("Advanced Config") + S + _x("Advanced router configuration") + S + "/configadvanced" + S + I + "configure.svg" + S +
@@ -116,7 +116,7 @@ public class HomeHelper extends HelperBase {
         _x("Web Server") + S + _x("Local web server for hosting your own content on I2P") + S + "http://127.0.0.1:7658/" + S + I + "webserver.svg" + S +
         "";
 
-    /** default favorites list */
+    /** Default favorites list. */
     static final String DEFAULT_FAVORITES =
 
 // I2P specific
@@ -535,7 +535,7 @@ public class HomeHelper extends HelperBase {
         return buf.toString();
     }
 
-    /** ignore case, current locale */
+    /** Ignore case, current locale. */
     private static class AppComparator implements Comparator<App>, Serializable {
         /**
          * Order apps by name, ignoring case and the current locale.

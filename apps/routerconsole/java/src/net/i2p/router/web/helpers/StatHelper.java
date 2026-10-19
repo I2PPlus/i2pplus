@@ -26,7 +26,7 @@ public class StatHelper extends HelperBase {
     private String _export;
 
     /**
-     * Caller should strip HTML (XSS)
+     * Caller should strip HTML (XSS).
      * @param peer the base64 hash selecting a single peer to report on, or null to report on all peers
      */
     public void setPeer(String peer) {
@@ -34,7 +34,7 @@ public class StatHelper extends HelperBase {
     }
 
     /**
-     * Set full flag for stats generation
+     * Set full flag for stats generation.
      * @param f any non-empty value to generate the full stat set; null or empty leaves the flag off
      */
     public void setFull(String f) {
@@ -84,11 +84,11 @@ public class StatHelper extends HelperBase {
     }
 
     /**
-     * Retrieve peer profile or stats based on usage
+     * Retrieve peer profile or stats based on usage.
      * @return the HTML for the requested peer's profile: the "No peer
-     *         specified" notice if none was given, the full profile for a
-     *         complete destination hash, the first profile whose hash starts
-     *         with the given prefix, or a "Peer profile unavailable" message
+     * specified" notice if none was given, the full profile for a
+     * complete destination hash, the first profile whose hash starts
+     * with the given prefix, or a "Peer profile unavailable" message
      */
     public String getProfile() {
         if (_peer == null || _peer.length() <= 0) {
@@ -107,10 +107,10 @@ public class StatHelper extends HelperBase {
     }
 
     /**
-     * Get stats page as string or write to output stream
+     * Get stats page as string or write to output stream.
      * @return the rendered stats page, or an empty string when an output
-     *         stream was supplied and the page was written there instead; an
-     *         error message if generation failed
+     * stream was supplied and the page was written there instead; an
+     * error message if generation failed
      */
     public String getStats() {
         StatsGenerator gen = new StatsGenerator(_context);
@@ -129,7 +129,7 @@ public class StatHelper extends HelperBase {
     }
 
     /**
-     * Look up based on the full b64 - efficient
+     * Look up based on the full b64 - efficient.
      * @since 0.8.5
      */
     private String outputProfile() {
@@ -143,7 +143,7 @@ public class StatHelper extends HelperBase {
     }
 
     /**
-     * Dump the profile
+     * Dump the profile.
      * @since 0.8.5
      */
     private String dumpProfile(Hash peer) {

@@ -5,9 +5,9 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 /**
- * Tests for the coalesce skip counter, {@link Rate#getCoalesceSkips()}.
+ * Tests for the coalesce skip counter, {@link Rate#getCoalesceSkips}.
  *
- * <p>The skip path in {@link Rate#coalesce()} is otherwise completely silent: no
+ * <p>The skip path in {@link Rate#coalesce} is otherwise completely silent: no
  * log line, no exception, no counter. A rate stuck skipping stops feeding its
  * summary listener and therefore its RRD database, while every other health check
  * still reports the listener as healthy. This counter is the only way to tell that

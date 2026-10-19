@@ -49,12 +49,20 @@ public class SmoothRenderTest {
      */
     private static final long END = 1_700_000_000L;
 
-    /** @return the first timestamp covered by the RRD */
+    /**
+     * Start of the test data window.
+     *
+     * @return the first timestamp covered by the RRD
+     */
     private static long start() {
         return END - (long) ROWS * STEP;
     }
 
-    /** @return the first timestamp of the plotted window */
+    /**
+     * Start of the rendered window.
+     *
+     * @return the first timestamp of the plotted window
+     */
     private static long windowStart() {
         return END - (long) WINDOW * STEP;
     }
@@ -135,6 +143,8 @@ public class SmoothRenderTest {
     }
 
     /**
+     * Render a graph to an SVG string.
+     *
      * @param smooth whether to enable smoothing
      * @param line true to plot as a line, false as an area
      * @return the rendered SVG
@@ -145,6 +155,8 @@ public class SmoothRenderTest {
     }
 
     /**
+     * Render a graph to an SVG string from the given time.
+     *
      * @param from start of the plotted window, in seconds
      * @param smooth whether to enable smoothing
      * @param line true to plot as a line, false as an area
@@ -156,6 +168,8 @@ public class SmoothRenderTest {
     }
 
     /**
+     * Render a graph to an SVG string over the given range.
+     *
      * @param from start of the plotted window, in seconds
      * @param to end of the plotted window, in seconds
      * @param smooth whether to enable smoothing
@@ -332,6 +346,8 @@ public class SmoothRenderTest {
     }
 
     /**
+     * Extract the plotted path from the SVG.
+     *
      * @return the longest path in the document body, which is the plot
      */
     private static String plotPath(String svg) {
@@ -661,6 +677,8 @@ public class SmoothRenderTest {
     }
 
     /**
+     * The largest x value, boxed to compare with parsed coordinates.
+     *
      * @param xs x coordinates visited by a path
      * @return the largest of them, boxed so it compares as an object against a parsed coordinate
      */

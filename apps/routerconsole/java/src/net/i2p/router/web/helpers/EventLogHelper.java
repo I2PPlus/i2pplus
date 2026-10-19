@@ -76,7 +76,7 @@ public class EventLogHelper extends FormHandler {
     protected void processForm() {
         // TODO
     }
-    /** set the defaults after we have a context */
+    // Set the defaults after we have a context
     @Override
     public void setContextId(String contextId) {
         super.setContextId(contextId);
@@ -164,6 +164,8 @@ public class EventLogHelper extends FormHandler {
     }
 
     /**
+     * Write one age filter option.
+     *
      * @param age lookback window in seconds; 0 renders as "All events"
      */
     private void writeOption(long age) throws IOException {

@@ -36,7 +36,7 @@ class GarlicConfig {
     private final DeliveryInstructions _instructions;
 
     /**
-     * Creates a new GarlicConfig
+     * Creates a new GarlicConfig.
      *
      * @param cert the certificate, as carried into getCertificate()
      * @param id the unique ID
@@ -48,7 +48,7 @@ class GarlicConfig {
     }
 
     /**
-     * Creates a new GarlicConfig with existing clove configs
+     * Creates a new GarlicConfig with existing clove configs.
      *
      * @param cloveConfigs the list of clove configs
      * @param cert the certificate, as carried into getCertificate()
@@ -66,10 +66,10 @@ class GarlicConfig {
     }
 
     /**
-     * Router to receive and process this clove - the router that will open the
-     * delivery instructions and decide what to do process it locally as an I2NPMessage,
-     * forward it as an I2NPMessage to a router, forward it as an I2NPMessage to a Destination,
-     * or forward it as an I2NPMessage to a tunnel.
+     * Router to receive and process this clove.
+     * It opens the delivery instructions and decides what to do: process it
+     * locally as an I2NPMessage, or forward that I2NPMessage to a router, a
+     * Destination, or a tunnel.
      * <p>
      * Used only if recipient public key is not set.
      *
@@ -77,7 +77,7 @@ class GarlicConfig {
      */
     public void setRecipient(RouterInfo info) { _recipient = info; }
     /**
-     * Returns the recipient router
+     * The router that should receive and process this clove.
      *
      * @return the recipient or null
      */
@@ -87,34 +87,34 @@ class GarlicConfig {
      * Public key of the router to receive and process this clove.  This is useful
      * for garlic routed messages encrypted to the router at the end of a tunnel,
      * as their RouterIdentity is not known, but a PublicKey they handle is exposed
-     * via the LeaseSet
+     * via the LeaseSet.
      *
      * @param recipientPublicKey the recipient's public key
      */
     public void setRecipientPublicKey(PublicKey recipientPublicKey) { _recipientPublicKey = recipientPublicKey; }
     /**
-     * Returns the recipient's public key
+     * The public key of the router that should receive and process this clove.
      *
      * @return the public key or null
      */
     public PublicKey getRecipientPublicKey() { return _recipientPublicKey; }
 
     /**
-     * Certificate for the getRecipient() to pay for their processing
+     * Certificate for the getRecipient() to pay for their processing.
      *
      * @return the certificate passed to the constructor, possibly null
      */
     public Certificate getCertificate() { return _cert; }
 
     /**
-     * Unique ID of the clove
+     * Unique ID of the clove.
      *
      * @return the unique ID
      */
     public long getId() { return _id; }
 
     /**
-     * Expiration of the clove, after which it should be dropped
+     * Expiration of the clove, after which it should be dropped.
      *
      * @return the expiration time
      */
@@ -130,7 +130,7 @@ class GarlicConfig {
     /**
      * Add a clove to the current message - if any cloves are added, an I2NP message
      * cannot be specified via setPayload.  This means that the resulting GarlicClove
-     * represented by this GarlicConfig must be a GarlicMessage itself
+     * represented by this GarlicConfig must be a GarlicMessage itself.
      *
      * @param config the clove config to add
      */
@@ -141,14 +141,14 @@ class GarlicConfig {
     }
 
     /**
-     * Returns the number of clove configs
+     * The number of nested clove configs in this config.
      *
      * @return the clove count
      */
     public int getCloveCount() { return _cloveConfigs.size(); }
 
     /**
-     * Returns the clove at the specified index
+     * The nested clove config at the given position.
      *
      * @param index the 0-based position in the clove list
      * @return the clove config
@@ -156,12 +156,12 @@ class GarlicConfig {
     public GarlicConfig getClove(int index) { return _cloveConfigs.get(index); }
 
     /**
-     * Clears all clove configs
+     * Clears all clove configs.
      */
     public void clearCloves() { _cloveConfigs.clear(); }
 
     /**
-     * Returns sub-data for toString
+     * The sub-data included in the toString() output.
      *
      * @return sub-data string
      */

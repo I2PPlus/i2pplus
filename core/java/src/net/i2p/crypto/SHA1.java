@@ -97,7 +97,7 @@ public final class SHA1 extends MessageDigest implements Cloneable {
 
     /**
      * Creates a SHA1 object with default initial state.
-     * <p><strong>Performance Note:</strong> For optimal performance, use {@link #getInstance()}
+     * <p><strong>Performance Note:</strong> For optimal performance, use {@link #getInstance}
      * instead of direct construction. getInstance() will return the JVM's native
      * MessageDigest implementation if it's faster than the local implementation.</p>
      *
@@ -115,7 +115,8 @@ public final class SHA1 extends MessageDigest implements Cloneable {
      * and the JVM's native MessageDigest based on performance characteristics.
      * On most systems, the JVM's native implementation is preferred for speed.</p>
      *
-     * @return fastest digest, either new SHA1() or MessageDigest.getInstance("SHA-1")
+      * @return fastest digest, either new SHA1() or a
+       * {@link java.security.MessageDigest#getInstance(String) MessageDigest} for "SHA-1"
      * @since 0.8.7
      */
     @SuppressWarnings("PMD.SingletonClassReturningNewInstance")
@@ -749,7 +750,7 @@ public final class SHA1 extends MessageDigest implements Cloneable {
     /**
      * Test the GNU and the JVM's implementations for speed
      * <p>
-     * Results: 2011-05 eeepc Atom
+     * Results: 2011-05 eeepc Atom.
      *  <pre>
      *  JVM strlen  GNU ms  JVM  ms
      *  Oracle  387   1406   2357

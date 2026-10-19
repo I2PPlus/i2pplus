@@ -29,6 +29,8 @@ public class QuotedPrintable extends Encoding {
 	private static int BUFSIZE = 2;
 
 	/**
+	 * Encode the bytes as quoted-printable.
+	 *
 	 * @return Base64-encoded String.
 	 * @throws EncodingException if encoding fails
 	 */
@@ -42,7 +44,7 @@ public class QuotedPrintable extends Encoding {
 	}
 
 	/**
-	 * More efficient than super
+	 * More efficient than super.
 	 *
 	 * @param in the stream of bytes to read and encode
 	 * @see Base64#encode(String)
@@ -124,6 +126,8 @@ public class QuotedPrintable extends Encoding {
 	}
 
 	/**
+	 * Decode quoted-printable input into the buffer.
+	 *
 	 * @since 0.9.34
 	 */
 	public void decode(InputStream in, Buffer bout) throws IOException {

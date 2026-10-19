@@ -28,7 +28,6 @@ import org.cybergarage.http.HTTPRequest;
  * requests, enabling custom device web interfaces and user interaction through standard HTTP
  * protocols.
  *
- * @author Satoshi Konno
  * @since 1.0
  */
 public interface PresentationListener {

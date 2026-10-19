@@ -48,7 +48,7 @@ import java.nio.charset.StandardCharsets;
  */
 public class BEncoder {
 
-    /** Utility class with static methods only */
+    /** Utility class with static methods only. */
     private BEncoder() {}
 
     /**
@@ -246,7 +246,7 @@ public class BEncoder {
      * keys: the first differing byte decides, and a key that is a prefix of the other sorts
      * first because it is shorter.
      *
-     * <p>DataHelper.compareTo() is not usable here: it orders keys of differing length by
+     * <p>{@code DataHelper.compareTo()} is not usable here: it orders keys of differing length by
      * length alone, without comparing the common prefix, so it sorts "info" before "files".
      *
      * @param lhs the first key

@@ -69,7 +69,7 @@ public class InetAddressUtils {
     private static final int MAX_COLON_COUNT = 7;
 
     /**
-     * Checks whether the parameter is a valid IPv4 address
+     * Checks whether the parameter is a valid IPv4 address.
      *
      * @param input the address string to check for validity
      * @return true if the input parameter is a valid IPv4 address
@@ -89,7 +89,7 @@ public class InetAddressUtils {
     }
 
     /**
-     * Checks whether the parameter is a valid standard (non-compressed) IPv6 address
+     * Checks whether the parameter is a valid standard (non-compressed) IPv6 address.
      *
      * @param input the address string to check for validity
      * @return true if the input parameter is a valid standard (non-compressed) IPv6 address
@@ -99,7 +99,7 @@ public class InetAddressUtils {
     }
 
     /**
-     * Checks whether the parameter is a valid compressed IPv6 address
+     * Checks whether the parameter is a valid compressed IPv6 address.
      *
      * @param input the address string to check for validity
      * @return true if the input parameter is a valid compressed IPv6 address

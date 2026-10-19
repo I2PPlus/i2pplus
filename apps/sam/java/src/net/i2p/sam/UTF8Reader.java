@@ -44,6 +44,8 @@ public class UTF8Reader extends Reader {
     }
 
     /**
+     * Read one decoded character.
+     *
      * @return replacement character on decoding error
      */
     @Override

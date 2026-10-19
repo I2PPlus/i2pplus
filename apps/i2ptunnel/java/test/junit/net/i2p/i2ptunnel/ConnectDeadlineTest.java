@@ -221,7 +221,7 @@ public class ConnectDeadlineTest {
      * The per-leg timeout is carried on the caller's options object, so the
      * failover walk must hand the caller's own value back on every exit path.
      * A shrunken value left behind would silently shorten any later connect
-     * that reuses those options — a failure that no pure function test can see.
+     * that reuses those options. A failure that no pure function test can see.
      *
      * <p>I2PSocketOptions has 12 methods, so a proxy stands in for it and
      * records just the two the walk uses.

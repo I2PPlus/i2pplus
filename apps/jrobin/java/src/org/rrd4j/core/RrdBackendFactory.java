@@ -29,28 +29,28 @@ import java.util.stream.Stream;
  * <p>Rrd4j supports six different backend types (backend factories) out of the box:
  *
  * <ul>
- *   <li>{@link org.rrd4j.core.RrdRandomAccessFileBackend}: objects of this class are created from
- *       the {@link org.rrd4j.core.RrdRandomAccessFileBackendFactory} class. This was the default
- *       backend used in all Rrd4j releases before 1.4.0 release. It uses java.io.* package and
- *       RandomAccessFile class to store RRD data in files on the disk.
- *   <li>{@link org.rrd4j.core.RrdSafeFileBackend}: objects of this class are created from the
- *       {@link org.rrd4j.core.RrdSafeFileBackendFactory} class. It uses java.io.* package and
- *       RandomAccessFile class to store RRD data in files on the disk. This backend is SAFE: it
- *       locks the underlying RRD file during update/fetch operations, and caches only static parts
- *       of a RRD file in memory. Therefore, this backend is safe to be used when RRD files should
- *       be shared <b>between several JVMs</b> at the same time. However, this backend is *slow*
- *       since it does not use fast java.nio.* package (it's still based on the RandomAccessFile
- *       class).
- *   <li>{@link org.rrd4j.core.RrdNioBackend}: objects of this class are created from the {@link
- *       org.rrd4j.core.RrdNioBackendFactory} class. The backend uses java.io.* and java.nio.*
- *       classes (mapped ByteBuffer) to store RRD data in files on the disk. This is the default
- *       backend since 1.4.0 release.
- *   <li>{@link org.rrd4j.core.RrdMemoryBackend}: objects of this class are created from the {@link
- *       org.rrd4j.core.RrdMemoryBackendFactory} class. This backend stores all data in memory. Once
- *       JVM exits, all data gets lost. The backend is extremely fast and memory hungry.
+ * <li>{@link org.rrd4j.core.RrdRandomAccessFileBackend}: objects of this class are created from
+ * the {@link org.rrd4j.core.RrdRandomAccessFileBackendFactory} class. This was the default
+ * backend used in all Rrd4j releases before 1.4.0 release. It uses java.io.* package and
+ * RandomAccessFile class to store RRD data in files on the disk.
+ * <li>{@link org.rrd4j.core.RrdSafeFileBackend}: objects of this class are created from the
+ * {@link org.rrd4j.core.RrdSafeFileBackendFactory} class. It uses java.io.* package and
+ * RandomAccessFile class to store RRD data in files on the disk. This backend is SAFE: it
+ * locks the underlying RRD file during update/fetch operations, and caches only static parts
+ * of a RRD file in memory. Therefore, this backend is safe to be used when RRD files should
+ * be shared <b>between several JVMs</b> at the same time. However, this backend is *slow*
+ * since it does not use fast java.nio.* package (it's still based on the RandomAccessFile
+ * class).
+ * <li>{@link org.rrd4j.core.RrdNioBackend}: objects of this class are created from the {@link
+ * org.rrd4j.core.RrdNioBackendFactory} class. The backend uses java.io.* and java.nio.*
+ * classes (mapped ByteBuffer) to store RRD data in files on the disk. This is the default
+ * backend since 1.4.0 release.
+ * <li>{@link org.rrd4j.core.RrdMemoryBackend}: objects of this class are created from the {@link
+ * org.rrd4j.core.RrdMemoryBackendFactory} class. This backend stores all data in memory. Once
+ * JVM exits, all data gets lost. The backend is extremely fast and memory hungry.
  * </ul>
  *
- * <p>Each backend factory used to be identified by its {@link #getName() name}. Constructors are
+ * <p>Each backend factory used to be identified by its {@link #getName name}. Constructors are
  * provided in the {@link org.rrd4j.core.RrdDb} class to create RrdDb objects (RRD databases) backed
  * with a specific backend.
  *

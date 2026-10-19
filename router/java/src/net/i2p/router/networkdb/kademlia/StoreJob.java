@@ -50,32 +50,32 @@ import net.i2p.util.VersionComparator;
  * Unused directly - see FloodfillStoreJob for the concrete implementation.
  */
 abstract class StoreJob extends JobImpl {
-    /** Logger for this class */
+    /** Logger for this class. */
     protected final Log _log;
-    /** Reference to the network database facade */
+    /** Reference to the network database facade. */
     private final KademliaNetworkDatabaseFacade _facade;
-    /** Current state of the store operation */
+    /** Current state of the store operation. */
     protected final StoreState _state;
-    /** Job to run on successful store */
+    /** Job to run on successful store. */
     private final Job _onSuccess;
-    /** Job to run on failed store */
+    /** Job to run on failed store. */
     private final Job _onFailure;
-    /** Timeout in milliseconds for the store operation */
+    /** Timeout in milliseconds for the store operation. */
     private final long _timeoutMs;
-    /** Expiration time for the store operation */
+    /** Expiration time for the store operation. */
     private final long _expiration;
-    /** Peer selector for choosing floodfill participants */
+    /** Peer selector for choosing floodfill participants. */
     private final PeerSelector _peerSelector;
-    /** Checks if we can connect to a peer directly */
+    /** Checks if we can connect to a peer directly. */
     private final ConnectChecker _connectChecker;
-    /** Bitmask for connection types we can use (IPv4, IPv6, etc.) */
+    /** Bitmask for connection types we can use (IPv4, IPv6, etc.). */
     private final int _connectMask;
     private static final int PARALLELIZATION = 8; // how many sent at a time
     private static final int REDUNDANCY = 8; // we want the data sent to 8 peers
     private static final int STORE_PRIORITY = OutNetMessage.PRIORITY_MY_NETDB_STORE;
 
     /**
-     * Send a data structure to the floodfills
+     * Send a data structure to the floodfills.
      *
      * @param context the router context
      * @param facade the network database facade
@@ -91,7 +91,7 @@ abstract class StoreJob extends JobImpl {
     }
 
     /**
-     * Send a data structure to the floodfills, skipping certain peers
+     * Send a data structure to the floodfills, skipping certain peers.
      *
      * @param context the router context
      * @param facade the network database facade
@@ -101,7 +101,7 @@ abstract class StoreJob extends JobImpl {
      * @param onFailure job to run on failure
      * @param timeoutMs timeout in milliseconds
      * @param toSkip set of peer hashes of people we don't want to send the data to (e.g. we
-     *               already know they have it).  This can be null.
+     * already know they have it).  This can be null.
      */
     public StoreJob(RouterContext context, KademliaNetworkDatabaseFacade facade, Hash key,
                     DatabaseEntry data, Job onSuccess, Job onFailure, long timeoutMs, Set<Hash> toSkip) {
@@ -150,7 +150,7 @@ abstract class StoreJob extends JobImpl {
     /**
      * Send the key to the next batch of peers.
      * <p>
-     * Synchronized to enforce parallelization limits and prevent dups
+     * Synchronized to enforce parallelization limits and prevent dups.
      */
     private void sendNext() {
         if (_state.completed()) {
@@ -192,7 +192,7 @@ abstract class StoreJob extends JobImpl {
      * the routing table, but making sure no more than PARALLELIZATION are outstanding
      * at any time
      * <p>
-     * Caller should synchronize to enforce parallelization limits and prevent dups
+     * Caller should synchronize to enforce parallelization limits and prevent dups.
      */
     private synchronized void continueSending() {
         if (_state.completed()) return;
@@ -588,7 +588,7 @@ abstract class StoreJob extends JobImpl {
      * @since 0.9.53 adapted from TunnelPool.TunnelInfoComparator
      */
     private static class LeaseComparator implements Comparator<Lease>, Serializable {
-        /** The target hash for distance comparison */
+        /** The target hash for distance comparison. */
         private final byte[] _base;
 
         /**
@@ -721,7 +721,7 @@ abstract class StoreJob extends JobImpl {
     }
 
     /**
-     * Short ECIES tunnel build messages (1.5.0)
+     * Short ECIES tunnel build messages (1.5.0).
      * @since 0.9.28
      */
     public static final String MIN_STORE_VERSION = "0.9.62";
@@ -744,7 +744,7 @@ abstract class StoreJob extends JobImpl {
     }
 
     /**
-     * Minimum version for LS2 stores
+     * Minimum version for LS2 stores.
      * @since 0.9.38
      */
     public static final String MIN_STORE_LS2_VERSION = "0.9.62";
@@ -762,7 +762,7 @@ abstract class StoreJob extends JobImpl {
     }
 
     /**
-     * Was supported in 38, but they're now sigtype 11 which wasn't added until 39
+     * Was supported in 38, but they're now sigtype 11 which wasn't added until 39.
      * @since 0.9.39
      */
     public static final String MIN_STORE_ENCLS2_VERSION = "0.9.62";
@@ -786,11 +786,11 @@ abstract class StoreJob extends JobImpl {
      * marking the store as successful.
      */
     private class SendSuccessJob extends JobImpl implements ReplyJob {
-        /** The peer we sent to */
+        /** The peer we sent to. */
         private final RouterInfo _peer;
-        /** The tunnel used for sending (null for direct) */
+        /** The tunnel used for sending (null for direct). */
         private final TunnelInfo _sendThrough;
-        /** Message size in bytes (rounded to 1KB) */
+        /** Message size in bytes (rounded to 1KB). */
         private final int _msgSize;
 
         /**
@@ -877,11 +877,11 @@ abstract class StoreJob extends JobImpl {
      * reached, or if the peer could not be contacted at all.
      */
     private class FailedJob extends JobImpl {
-        /** The peer that failed to respond */
+        /** The peer that failed to respond. */
         private final RouterInfo _peer;
-        /** When the message was sent */
+        /** When the message was sent. */
         private final long _sendOn;
-        /** Track if job has already run to prevent duplicate handling */
+        /** Track if job has already run to prevent duplicate handling. */
         private final AtomicBoolean _wasRun = new AtomicBoolean();
 
         /**

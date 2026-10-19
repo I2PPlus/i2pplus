@@ -23,7 +23,6 @@ import java.util.Locale;
  * <p>
  * Decode accepts upper or lower case.
  *
- * @author zzz
  */
 @SuppressWarnings("PMD.CloseResource")
 public class Base32 {

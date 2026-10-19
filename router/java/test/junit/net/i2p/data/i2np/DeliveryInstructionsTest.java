@@ -18,14 +18,13 @@ import net.i2p.data.TunnelId;
 import org.junit.Test;
 
 /**
- * Test harness for loading / storing DeliveryInstructions objects
+ * Test harness for loading / storing DeliveryInstructions objects.
  *
- * @author jrandom
  */
 public class DeliveryInstructionsTest extends StructureTest {
 
     /**
-     * Override because DI doesn't support input/output streams any more
+     * Override because DI doesn't support input/output streams any more.
      */
     @Override
     @Test

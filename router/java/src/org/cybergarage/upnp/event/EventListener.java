@@ -25,7 +25,6 @@ package org.cybergarage.upnp.event;
  * asynchronous notifications when subscribed services publish state variable changes, enabling
  * responsive application behavior.
  *
- * @author Satoshi Konno
  * @since 1.0
  */
 public interface EventListener {

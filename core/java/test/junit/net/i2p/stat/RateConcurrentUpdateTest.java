@@ -20,7 +20,7 @@ import static org.junit.Assert.*;
  * <li><b>No lost or duplicated counts.</b> Every increment must land exactly once.
  * This is what the monitor is for; a lock-free or {@code LongAdder} redesign has to
  * reproduce it.</li>
- * <li><b>No torn composite.</b> {@link Rate#getAverageValue()} divides the last
+ * <li><b>No torn composite.</b> {@link Rate#getAverageValue} divides the last
  * period's total by its event count, so those two must always come from the same
  * period. Two independently-updated accumulators cannot promise this: a reader can
  * observe a total and a count that never coexisted. Every value added here is 1, so

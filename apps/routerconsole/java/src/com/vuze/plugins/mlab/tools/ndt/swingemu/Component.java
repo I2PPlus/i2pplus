@@ -34,7 +34,7 @@ Component
 	}
 
 	/**
-	 * No-op stub.
+	 * Stub, discards its arguments.
 	 *
 	 * @param s the title a real component would be given; discarded here
 	 */
@@ -45,7 +45,7 @@ Component
 	}
 
 	/**
-	 * No-op stub.
+	 * Stub, discards its arguments.
 	 *
 	 * @param c the child a real component would adopt; discarded here
 	 */
@@ -56,7 +56,7 @@ Component
 	}
 
 	/**
-	 * No-op stub.
+	 * Stub, discards its arguments.
 	 *
 	 * @param str the layout constraint that would place c; discarded here
 	 * @param c the child a real component would adopt; discarded here
@@ -67,7 +67,7 @@ Component
 	}
 
 	/**
-	 * No-op stub.
+	 * Stub, discards its arguments.
 	 *
 	 * @param i the index the child would be inserted at; discarded here
 	 * @param c the child a real component would adopt; discarded here
@@ -78,7 +78,7 @@ Component
 	}
 
 	/**
-	 * No-op stub.
+	 * Stub, discards its arguments.
 	 *
 	 * @param b true would allow the component to take input; discarded here
 	 */
@@ -89,7 +89,7 @@ Component
 	}
 
 	/**
-	 * No-op stub.
+	 * Stub, discards its arguments.
 	 *
 	 * @param b true would show the component; discarded here
 	 */
@@ -100,7 +100,7 @@ Component
 	}
 
 	/**
-	 * No-op stub.
+	 * Stub, discards its arguments.
 	 *
 	 * @param b true would let the user edit the component's text; discarded here
 	 */
@@ -111,7 +111,7 @@ Component
 	}
 
 	/**
-	 * No-op stub.
+	 * Stub, discards its arguments.
 	 *
 	 * @param b true would let the user resize the component; discarded here
 	 */
@@ -122,7 +122,7 @@ Component
 	}
 
 	/**
-	 * No-op stub.
+	 * Stub, discards its arguments.
 	 *
 	 * @param i the width in pixels a real component would be given; discarded here
 	 * @param j the height in pixels a real component would be given; discarded here
@@ -134,7 +134,7 @@ Component
 	}
 
 	/**
-	 * No-op stub.
+	 * Stub, discards its arguments.
 	 *
 	 * @param d the preferred size a real component would be given; discarded here
 	 */
@@ -145,7 +145,7 @@ Component
 	}
 
 	/**
-	 * No-op stub.
+	 * Stub, discards its arguments.
 	 *
 	 * @param c the border a real component would be given; discarded here
 	 */
@@ -156,7 +156,7 @@ Component
 	}
 
 	/**
-	 * No-op stub.
+	 * Stub, discards its arguments.
 	 *
 	 * @param l the layout manager a real component would adopt; discarded here
 	 */
@@ -167,7 +167,7 @@ Component
 	}
 
 	/**
-	 * No-op stub.
+	 * Stub, discards its arguments.
 	 *
 	 * @param l the layout manager a real component would adopt; discarded here
 	 */
@@ -178,7 +178,7 @@ Component
 	}
 
 	/**
-	 * No-op stub.
+	 * Stub, discards its arguments.
 	 *
 	 * @param c the mouse cursor a real component would show; discarded here
 	 */
@@ -189,7 +189,7 @@ Component
 	}
 
 	/**
-	 * No-op stub.
+	 * Stub, discards its arguments.
 	 *
 	 * @param c the foreground colour a real component would paint with; discarded here
 	 */
@@ -199,13 +199,13 @@ Component
 	{
 	}
 
-	/** No-op stub. */
+	/** Stub, does nothing. */
 	public void
 	pack()
 	{
 
 	}
-	/** No-op stub. */
+	/** Stub, does nothing. */
 	public void
 	repaint()
 	{
@@ -223,7 +223,7 @@ Component
 	}
 
 	/**
-	 * No-op stub.
+	 * Stub, discards its arguments.
 	 *
 	 * @param l the mouse listener a real component would register; discarded here
 	 */
@@ -235,7 +235,7 @@ Component
 	}
 
 	/**
-	 * No-op stub.
+	 * Stub, discards its arguments.
 	 *
 	 * @param l the window listener a real component would register; discarded here
 	 */

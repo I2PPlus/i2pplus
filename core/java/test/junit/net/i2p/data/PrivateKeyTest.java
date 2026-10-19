@@ -18,9 +18,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.EOFException;
 
 /**
- * Test harness for loading / storing PrivateKey objects
+ * Test harness for loading / storing PrivateKey objects.
  *
- * @author jrandom
  */
 public class PrivateKeyTest extends StructureTest {
 

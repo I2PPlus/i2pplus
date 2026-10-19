@@ -6,7 +6,7 @@ import net.i2p.router.RouterContext;
 
 /**
  * Override to not call failed() in setMessage(),
- * as it will be called from runJob()
+ * as it will be called from runJob().
  *
  * @since 0.9.56
  */
@@ -32,7 +32,7 @@ class DirectLookupMatchJob extends FloodOnlyLookupMatchJob {
 
     /**
      * Override to not call failed() in setMessage(),
-     * as it will be called from runJob()
+     * as it will be called from runJob().
      */
     @Override
     public void setMessage(I2NPMessage message) {

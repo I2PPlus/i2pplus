@@ -243,7 +243,7 @@ public class ClientAppConfig {
     }
 
     /**
-     * Go through the file, and return a List of ClientAppConfig structures
+     * Go through the file, and return a List of ClientAppConfig structures.
      *
      * @param cfgFile the config file to read
      * @return the list of client app configs
@@ -433,7 +433,7 @@ public class ClientAppConfig {
     }
 
     /**
-     * All to a single file, apps.configFile ignored
+     * All to a single file, apps.configFile ignored.
      *
      * @throws IllegalArgumentException if null cfgFile
      * @since 0.9.42 split out from above
@@ -493,7 +493,7 @@ public class ClientAppConfig {
     }
 
     /**
-     * Matches on class, args, and name only
+     * Matches on class, args, and name only.
      *
      * @since 0.9.42
      */

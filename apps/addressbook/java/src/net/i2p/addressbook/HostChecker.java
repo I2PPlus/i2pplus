@@ -110,9 +110,12 @@ public class HostChecker {
     private static final long DEFAULT_PING_INTERVAL = 4 * 60 * 60 * 1000L; // 4 hours
     private static final long DEFAULT_PING_TIMEOUT = 60 * 1000L; // 60 seconds
     private static final int DEFAULT_MAX_CONCURRENT = 16;
-    /** Cap on outbound tunnels for the shared ping session; pings are a bonus check, each tunnel costs a network build */
+    /**
+     * Cap on outbound tunnels for the shared ping session; pings are a
+     * bonus check, each tunnel costs a network build.
+     */
     private static final int MAX_SHARED_PING_TUNNELS = 4;
-    /** A host confirmed up within this window stays up when its LeaseSet can't be fetched this cycle */
+    /** A host confirmed up within this window stays up when its LeaseSet can't be fetched this cycle. */
     private static final long KEEP_UP_MS = 24 * 60 * 60 * 1000L;
 
     // Configuration property names
@@ -121,7 +124,7 @@ public class HostChecker {
 
     /**
      * Load configuration from addressbook/config.txt file
-     * Reads pingInterval and maxConcurrent properties if present
+     * Reads pingInterval and maxConcurrent properties if present.
      */
     private void loadConfiguration() {
         if (!_configFile.exists()) {
@@ -278,15 +281,15 @@ public class HostChecker {
      * Immutable - all fields are final.
      */
     public static class PingResult {
-        /** true if the host was reachable via LeaseSet lookup, ping, or HTTP HEAD */
+        /** True if the host was reachable via LeaseSet lookup, ping, or HTTP HEAD. */
         public final boolean reachable;
-        /** timestamp of when this result was recorded (Java time) */
+        /** Timestamp of when this result was recorded (Java time). */
         public final long timestamp;
-        /** response time in milliseconds, or -1 if not available */
+        /** Response time in milliseconds, or -1 if not available. */
         public final long responseTime;
-        /** the host category from categories.txt, or null */
+        /** The host category from categories.txt, or null. */
         public final String category;
-        /** LeaseSet encryption types as a string like "[6,4]", or null */
+        /** LeaseSet encryption types as a string like "[6,4]", or null. */
         public final String leaseSetTypes;
 
         /**
@@ -381,14 +384,14 @@ public class HostChecker {
 
     /**
      * Construct a HostChecker that uses the default naming service
-     * This works with the blockfile format (hostsdb.blockfile)
+     * This works with the blockfile format (hostsdb.blockfile).
      */
     public HostChecker() {
         this(I2PAppContext.getGlobalContext().namingService());
     }
 
     /**
-     * Construct a HostChecker for given naming service
+     * Construct a HostChecker for given naming service.
      *
      * @param namingService naming service to test entries from
      */
@@ -453,7 +456,7 @@ public class HostChecker {
     }
 
     /**
-     * Start periodic ping testing
+     * Start periodic ping testing.
      */
     public synchronized void start() {
         if (_running.get()) {
@@ -515,7 +518,7 @@ public class HostChecker {
     }
 
     /**
-     * Stop periodic ping testing
+     * Stop periodic ping testing.
      */
     public synchronized void stop() {
         if (!_running.get()) {
@@ -572,7 +575,7 @@ public class HostChecker {
      * Any cached LeaseSet marks the host up directly — even an expired one
      * proves the host exists. Only when no LeaseSet is cached locally do we
      * trigger a fresh remote fetch. If the lookup fails, responseTime
-     * is set to -1 and we skip ping/eephead
+     * is set to -1 and we skip ping/eephead.
      *
      * @param hostname hostname to test
      * @param destination destination for the hostname
@@ -654,7 +657,7 @@ public class HostChecker {
 
     /**
      * Test a single destination immediately
-     * If LeaseSet lookup succeeds, we don't overwrite the result with failed ping/eephead
+     * If LeaseSet lookup succeeds, we don't overwrite the result with failed ping/eephead.
      *
      * @param hostname hostname to test
      * @return the result recorded for this host, blacklisted hosts never pinged
@@ -705,7 +708,7 @@ public class HostChecker {
 
     /**
      * Perform remote LeaseSet lookup via floodfill network
-     * Always returns responseTime of -1 (we measure host response, not lookup time)
+     * Always returns responseTime of -1 (we measure host response, not lookup time).
      */
     private PingResult lookupLeaseSetRemotely(String hostname,
                                            Hash destHash, long startTime, long existingResponseTime) {
@@ -915,7 +918,7 @@ public class HostChecker {
 
     /**
      * Ping destination using single tunnel and I2Ping-style retry handling
-     * Falls back to EepHead HTTP HEAD request if ping fails, accepts leaseSetTypes parameter
+     * Falls back to EepHead HTTP HEAD request if ping fails, accepts leaseSetTypes parameter.
      */
     private PingResult pingDestination(String hostname, Destination destination) {
         return pingDestination(hostname, destination, null);
@@ -923,7 +926,7 @@ public class HostChecker {
 
     /**
      * Ping destination using single tunnel and I2Ping-style retry handling
-     * Falls back to EepHead HTTP HEAD request if ping fails, accepts leaseSetTypes parameter
+     * Falls back to EepHead HTTP HEAD request if ping fails, accepts leaseSetTypes parameter.
      */
     private PingResult pingDestination(String hostname, Destination destination, String leaseSetTypes) {
         return pingDestination(hostname, destination, leaseSetTypes, true);
@@ -931,7 +934,7 @@ public class HostChecker {
 
     /**
      * Ping destination using single tunnel and I2Ping-style retry handling
-     * Falls back to EepHead HTTP HEAD request if ping fails, accepts leaseSetTypes parameter
+     * Falls back to EepHead HTTP HEAD request if ping fails, accepts leaseSetTypes parameter.
      * @param saveResult whether to save the result to _pingResults (false when LeaseSet lookup already succeeded)
      */
     private PingResult pingDestination(String hostname, Destination destination, String leaseSetTypes, boolean saveResult) {
@@ -1054,7 +1057,7 @@ public class HostChecker {
 
     /**
      * Fallback method to use EepHead for HTTP HEAD request testing
-     * Marks site as up if any response is received
+     * Marks site as up if any response is received.
      */
     private PingResult fallbackToEepHead(String hostname, long startTime) {
         return fallbackToEepHead(hostname, startTime, null, true);
@@ -1062,7 +1065,7 @@ public class HostChecker {
 
     /**
      * Fallback method to use EepHead for HTTP HEAD request testing
-     * Marks site as up if any response is received
+     * Marks site as up if any response is received.
      * @param saveResult whether to save the result to _pingResults (false when LeaseSet lookup already succeeded)
      */
     private PingResult fallbackToEepHead(String hostname, long startTime, String leaseSetTypes, boolean saveResult) {
@@ -1169,7 +1172,7 @@ public class HostChecker {
     }
 
     /**
-     * Get ping result for a hostname
+     * Get ping result for a hostname.
      *
      * @param hostname the hostname whose stored ping result is wanted
      * @return ping result, or null if no test has been performed
@@ -1179,7 +1182,7 @@ public class HostChecker {
     }
 
     /**
-     * Get all ping results
+     * Get all ping results.
      *
      * @return map of hostname to ping result
      */
@@ -1188,7 +1191,7 @@ public class HostChecker {
     }
 
     /**
-     * Set whether to use LeaseSet checking
+     * Set whether to use LeaseSet checking.
      *
      * @param useLeaseSetCheck true to use LeaseSet lookup first
      */
@@ -1197,7 +1200,7 @@ public class HostChecker {
     }
 
     /**
-     * Get whether to use LeaseSet checking
+     * Get whether to use LeaseSet checking.
      *
      * @return true if LeaseSet checking is enabled
      */
@@ -1206,7 +1209,7 @@ public class HostChecker {
     }
 
     /**
-     * Check if ping tester is running
+     * Check if ping tester is running.
      *
      * @return true if running
      */
@@ -1215,7 +1218,7 @@ public class HostChecker {
     }
 
     /**
-     * Load ping results from hosts_check.txt file
+     * Load ping results from hosts_check.txt file.
      */
     private void loadPingResults() {
         if (!_hostsCheckFile.exists()) {
@@ -1295,7 +1298,7 @@ public class HostChecker {
     }
 
     /**
-     * Save ping results to hosts_check.txt file
+     * Save ping results to hosts_check.txt file.
      */
     private void savePingResults() {
         try {
@@ -1349,7 +1352,7 @@ public class HostChecker {
     }
 
     /**
-     * Write cleaned hosts_check.txt file with only valid entries
+     * Write cleaned hosts_check.txt file with only valid entries.
      */
     private void writeCleanHostsCheckFile(List<String> validLines) throws IOException {
         try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new BufferedOutputStream(new FileOutputStream(_hostsCheckFile)), StandardCharsets.UTF_8))) {
@@ -1361,7 +1364,7 @@ public class HostChecker {
     }
 
     /**
-     * Get destination for a hostname from naming service
+     * Get destination for a hostname from naming service.
      * @return the destination, or null if the naming service has no entry
      */
     private Destination getDestination(String hostname) {
@@ -1369,7 +1372,7 @@ public class HostChecker {
     }
 
     /**
-     * Get all hostnames from the naming service
+     * Get all hostnames from the naming service.
      * @return the all hostnames
      */
     private Set<String> getAllHostnames() {
@@ -1386,7 +1389,7 @@ public class HostChecker {
 
     /**
      * Remove hosts from _pingResults that are no longer in the address book
-     * This prevents stale entries from accumulating in hosts_check.txt
+     * This prevents stale entries from accumulating in hosts_check.txt.
      */
     private void cleanupStaleHosts() {
         try {
@@ -1427,7 +1430,7 @@ public class HostChecker {
 
     /**
      * Download categories file from notbob.i2p
-     * Falls back to existing stale categories.txt if download fails
+     * Falls back to existing stale categories.txt if download fails.
      */
     private void downloadCategories() {
         boolean downloadSuccess = false;
@@ -1554,7 +1557,7 @@ public class HostChecker {
     }
 
     /**
-     * Write cleaned categories.txt file with only valid entries (no empty lines)
+     * Write cleaned categories.txt file with only valid entries (no empty lines).
      */
     private void writeCleanCategoriesFile(List<String> validLines) throws IOException {
         try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new BufferedOutputStream(new FileOutputStream(_categoriesFile)), StandardCharsets.UTF_8))) {
@@ -1566,7 +1569,7 @@ public class HostChecker {
     }
 
     /**
-     * Load categories from categories.txt file
+     * Load categories from categories.txt file.
      */
     private void loadCategories() {
         if (_hostCategories == null) {
@@ -1638,7 +1641,7 @@ public class HostChecker {
     }
 
     /**
-     * Get category for a hostname
+     * Get category for a hostname.
      * @param hostname the host to look up, as spelled in the categories file
      * @return the category name, or null if the host is uncategorized
      */
@@ -1647,7 +1650,7 @@ public class HostChecker {
     }
 
     /**
-     * Get description for a category
+     * Get description for a category.
      * @param category the category name
      * @return the category description, or the category itself if unknown
      */
@@ -1688,7 +1691,7 @@ public class HostChecker {
     }
 
     /**
-     * Helper method to create PingResult with category
+     * Helper method to create PingResult with category.
      *
      * @param hostname used to look up the category from _hostCategories
      * @return PingResult with category (or null if unknown) and no leaseSetTypes
@@ -1699,7 +1702,7 @@ public class HostChecker {
     }
 
     /**
-     * Helper method to create PingResult with category and leaseSetTypes
+     * Helper method to create PingResult with category and leaseSetTypes.
      */
     private PingResult createPingResult(boolean reachable, long timestamp, long responseTime, String hostname, String leaseSetTypes) {
         String category = _hostCategories.get(hostname);
@@ -1718,7 +1721,7 @@ public class HostChecker {
     }
 
     /**
-     * Get all host categories
+     * Get all host categories.
      * @return the all categories
      */
     public Map<String, String> getAllCategories() {
@@ -1726,7 +1729,7 @@ public class HostChecker {
     }
 
     /**
-     * Schedule periodic category download retries
+     * Schedule periodic category download retries.
      */
     private void scheduleCategoryRetries() {
         _scheduler.scheduleWithFixedDelay(new CategoryRetryTask(),
@@ -1734,7 +1737,7 @@ public class HostChecker {
     }
 
     /**
-     * Task to retry category downloads if they initially failed
+     * Task to retry category downloads if they initially failed.
      */
     private class CategoryRetryTask implements Runnable {
         @Override
@@ -1782,7 +1785,7 @@ public class HostChecker {
 
     /**
      * Attempt to download categories file
-     * Returns true if successful, false otherwise
+     * Returns true if successful, false otherwise.
      */
     private boolean attemptCategoryDownload() {
         // Download to a temporary file first for better control
@@ -1871,7 +1874,7 @@ public class HostChecker {
 
     /**
      * Refresh categories at the start of each HostChecker cycle
-     * Attempts to download fresh categories from notbob.i2p, falls back to existing file
+     * Attempts to download fresh categories from notbob.i2p, falls back to existing file.
      */
     private void refreshCategories() {
         boolean downloadSuccess = false;
@@ -1968,7 +1971,7 @@ public class HostChecker {
     }
 
     /**
-     * Update hosts_check.txt with category information after successful category download
+     * Update hosts_check.txt with category information after successful category download.
      */
     private void updateHostsWithCategories() {
         try {
@@ -2034,7 +2037,7 @@ public class HostChecker {
     }
 
     /**
-     * Task to ping all destinations in address book
+     * Task to ping all destinations in address book.
      */
     private class PingTask implements Runnable {
         @Override
@@ -2283,7 +2286,7 @@ public class HostChecker {
     }
 
     /**
-     * Format LeaseSet encryption types as a string like "[0]" or "[4,0]"
+     * Format LeaseSet encryption types as a string like "[0]" or "[4,0]".
      */
     private static String formatLeaseSetTypes(LeaseSet leaseSet) {
         if (leaseSet == null) {
@@ -2350,11 +2353,11 @@ public class HostChecker {
         return "[" + sb.toString() + "]";
     }
 
-    /** translate */
+    /** Looks up a localized string in the message bundle. */
     private static String _t(String s) {return Messages.getString(s);}
 
     /**
-     * Test method
+     * Test method.
      *
      * @param args command line arguments, unused
      * @throws Exception if the test run cannot be started or stopped

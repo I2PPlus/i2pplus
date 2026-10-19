@@ -21,7 +21,7 @@ public interface I2PSocket extends Closeable {
     public Destination getThisDestination();
 
     /**
-     * Returns the destination of the peer.
+     * The destination of the connected peer.
      *
      * @return the destination of the peer
      */
@@ -32,9 +32,9 @@ public interface I2PSocket extends Closeable {
      * <p>
      * Note that operations on the returned stream may return an
      * {@link IOException} whose <i>cause</i> as returned by
-     * {@link IOException#getCause()} is an {@link I2PSocketException}.
+     * {@link IOException#getCause} is an {@link I2PSocketException}.
      * If so, the client may retrieve a status code via
-     * {@link I2PSocketException#getStatus()} to provide specific feedback to the user.
+     * {@link I2PSocketException#getStatus} to provide specific feedback to the user.
      *
      * @return an InputStream to read from the socket, never null
      * @throws IOException on failure, including if the socket is closed
@@ -46,9 +46,9 @@ public interface I2PSocket extends Closeable {
      * <p>
      * Note that operations on the returned stream may return an
      * {@link IOException} whose <i>cause</i> as returned by
-     * {@link IOException#getCause()} is an {@link I2PSocketException}.
+     * {@link IOException#getCause} is an {@link I2PSocketException}.
      * If so, the client may retrieve a status code via
-     * {@link I2PSocketException#getStatus()} to provide specific feedback to the user.
+     * {@link I2PSocketException#getStatus} to provide specific feedback to the user.
      *
      * @return an OutputStream to write into the socket, never null
      * @throws IOException on failure, including if the socket is closed
@@ -56,20 +56,20 @@ public interface I2PSocket extends Closeable {
     public OutputStream getOutputStream() throws IOException;
 
     /**
-     * Returns the socket's configuration.
+     * The options governing this socket's behaviour.
      *
      * @return the I2PSocketOptions governing this socket
      */
     public I2PSocketOptions getOptions();
     /**
-     * Configure the socket
+     * Configure the socket.
      * @param options I2PSocketOptions to set
      */
     public void setOptions(I2PSocketOptions options);
 
     /**
      * How long we will wait blocked on a read() operation.  This is simply a
-     * helper to query the I2PSocketOptions
+     * helper to query the I2PSocketOptions.
      *
      * @return milliseconds to wait, or -1 if we will wait indefinitely
      */
@@ -78,14 +78,14 @@ public interface I2PSocket extends Closeable {
     /**
      * Define how long we will wait blocked on a read() operation (-1 will make
      * the socket wait forever).  This is simply a helper to adjust the
-     * I2PSocketOptions
+     * I2PSocketOptions.
      *
      * @param ms timeout in ms
      */
     public void setReadTimeout(long ms);
 
     /**
-     * Returns whether this socket has been closed.
+     * Whether this socket has been closed.
      *
      * @return true if this socket has been closed
      */

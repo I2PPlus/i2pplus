@@ -12,7 +12,7 @@ import net.i2p.data.i2cp.DestReplyMessage;
 import net.i2p.data.i2cp.I2CPMessage;
 
 /**
- * Handle I2CP dest replies from the router
+ * Handle I2CP dest replies from the router.
  */
 class DestReplyMessageHandler extends HandlerImpl {
     /**

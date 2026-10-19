@@ -13,7 +13,6 @@ import org.rrd4j.ConsolFun;
  * {@link org.rrd4j.core.RrdDb#createFetchRequest(ConsolFun, long, long, long) createFetchRequest()}
  * method of your {@link org.rrd4j.core.RrdDb RrdDb} object.
  *
- * @author Sasa Markovic
  */
 public class FetchRequest {
     private final RrdDb parentDb;
