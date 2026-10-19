@@ -2593,6 +2593,7 @@ public class PeerState {
      * Compact one-line peer identifier for log output: short hash,
      * direction, version and remote host id. No stats, no newlines.
      *
+     * @return the short hash, direction, version and host id, on one line
      * @since 0.9.71+
      */
     String toShortString() {

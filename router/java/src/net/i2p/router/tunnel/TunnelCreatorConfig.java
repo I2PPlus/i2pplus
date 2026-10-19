@@ -1402,6 +1402,7 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
      * Compact one-line tunnel identifier for log output: role, client or
      * exploratory, nickname and short destination. No hop list, no newlines.
      *
+     * @return the role, class, nickname and short destination, on one line
      * @since 0.9.71+
      */
     public String toShortString() {

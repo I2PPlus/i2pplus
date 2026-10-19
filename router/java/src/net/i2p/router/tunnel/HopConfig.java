@@ -251,6 +251,7 @@ public class HopConfig {
      * Compact one-line hop identifier for log output: the next peer to
      * send to. No message counts or expiration, no newlines.
      *
+     * @return the next-hop identifier, or "local hop" for the final hop
      * @since 0.9.71+
      */
     public String toShortString() {

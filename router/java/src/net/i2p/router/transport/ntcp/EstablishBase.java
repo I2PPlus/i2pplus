@@ -500,6 +500,12 @@ protected void changeState(State state) {
         return reason;
     }
 
+    /**
+     * i18n marker function, returns the string unchanged.
+     *
+     * @param s the string to mark for translation
+     * @return s, unchanged
+     */
     protected static final String _x(String s) { // NOSONAR S1845 i18n marker convention
         return s;
     }

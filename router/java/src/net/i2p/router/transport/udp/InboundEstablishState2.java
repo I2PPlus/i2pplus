@@ -1449,6 +1449,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
      * Compact one-line establish-state identifier for log output: alice
      * address and current state. No lifetime or IDs, no newlines.
      *
+     * @return the alice address and state, on one line
      * @since 0.9.71+
      */
     String toShortString() {

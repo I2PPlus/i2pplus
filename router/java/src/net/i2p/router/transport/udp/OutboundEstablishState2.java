@@ -996,6 +996,7 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
      * Compact one-line establish-state identifier for log output: peer
      * hash and current state. No lifetime or introducer details, no newlines.
      *
+     * @return the peer hash and state, on one line
      * @since 0.9.71+
      */
     String toShortString() {
