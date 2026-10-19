@@ -526,21 +526,26 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                 if (invalidMessage.contains("published over")) {
                     dontBlamePeer = true;
                     if (_log.shouldWarn()) {
-                        _log.warn("Received STALE RouterInfo from [" + _fromHash.toBase64().substring(0,6) + "] * " + invalidMessage);
+                        _log.warn("Received STALE RouterInfo from [" + _fromHash.toBase64().substring(0,6) + "] * " +
+                                  KademliaNetworkDatabaseFacade.stripStoreWrapper(invalidMessage));
                     }
                 // Should we record in the profile?
                 } else if (_log.shouldDebug()) {
-                    _log.warn("Received INVALID data packet from [" + _fromHash.toBase64().substring(0,6) + "] * " + invalidMessage + _from);
+                    _log.debug("Received INVALID data packet from [" + _fromHash.toBase64().substring(0,6) + "] * " +
+                               KademliaNetworkDatabaseFacade.stripStoreWrapper(invalidMessage) + _from);
                 } else if (_log.shouldWarn()) {
-                    _log.warn("Received INVALID data packet from [" + _fromHash.toBase64().substring(0,6) + "] * " + invalidMessage);
+                    _log.warn("Received INVALID data packet from [" + _fromHash.toBase64().substring(0,6) + "] * " +
+                              KademliaNetworkDatabaseFacade.stripStoreWrapper(invalidMessage));
                 }
             }
         } else if (invalidMessage != null && !dontBlamePeer) {
             if (_log.shouldWarn()) {
                 if (invalidMessage.contains("published over")) {
-                    _log.warn("Received STALE RouterInfo from [unknown] \n* " + invalidMessage);
+                    _log.warn("Received STALE RouterInfo from [unknown] * " +
+                              KademliaNetworkDatabaseFacade.stripStoreWrapper(invalidMessage));
                 } else {
-                    _log.warn("Received INVALID data packet from [unknown] \n* " + invalidMessage);
+                    _log.warn("Received INVALID data packet from [unknown] * " +
+                              KademliaNetworkDatabaseFacade.stripStoreWrapper(invalidMessage));
                 }
             }
         }

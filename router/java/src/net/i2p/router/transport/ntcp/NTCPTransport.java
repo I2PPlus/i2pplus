@@ -2139,7 +2139,7 @@ public int getEstimatedRTT(Hash peer) {
     @Override
     public void externalAddressReceived(AddressSource source, byte[] ip, int port) {
         if (_log.shouldWarn()) {
-            _log.warn("Received address: " + Addresses.toString(ip, port) + " from: " + source);
+            _log.warn("Received address [" + Addresses.toString(ip, port) + "] from " + source);
         }
         if ((source == SOURCE_INTERFACE || source == SOURCE_SSU)
              && ip != null && ip.length == 16) {_haveIPv6Address = true;} // must be set before isValid() call
@@ -2367,7 +2367,7 @@ public int getEstimatedRTT(Hash peer) {
             replaceAddress(newAddr);
         }
         if (_log.shouldWarn()) {
-            _log.warn("Updating NTCP Address (IPv6? " + isIPv6 + ") with " + newAddr);
+            _log.warn("Updating NTCP address (IPv6 (" + isIPv6 + ")) with " + newAddr);
         }
         return true;
     }

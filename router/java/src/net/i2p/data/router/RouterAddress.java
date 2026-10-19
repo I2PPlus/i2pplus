@@ -285,24 +285,43 @@ public class RouterAddress extends DataStructureImpl {
     }
 
     /**
-     * This is used on peers.jsp so sort options so it looks better.
-     * We don't just use OrderedProperties for _options because {@link net.i2p.data.DataHelper#writeProperties}
-     * sorts also.
+     * Single-line form for logs and peer pages: style, host:port, then the
+     * remaining options and cost, sorted by {@link OrderedProperties}.
+     * Keys (i, s), version (v), capability bits (caps) and post-quantum
+     * flags (pq) are debugging detail and are omitted.
      */
     @Override
     public String toString() {
-        StringBuilder buf = new StringBuilder(128);
-        buf.append(_transportStyle).append(":");
+        StringBuilder buf = new StringBuilder(64);
+        buf.append(_transportStyle).append(':');
+        Object host = _options.get("host");
+        Object port = _options.get("port");
+        buf.append(host != null ? host : "?").append(':').append(port != null ? port : "?");
         for (Map.Entry<Object, Object> e : _options.entrySet()) {
             String key = (String) e.getKey();
-            String val = (String) e.getValue();
-            String fkey = ("* " + key + ":");
-            buf.append("\n\t").append(fkey);
-            buf.append(" ").append(val);
+            if (_hiddenOption(key)) {continue;}
+            buf.append(" * ").append(_label(key)).append(": ").append(e.getValue());
         }
-        buf.append("\n\t* cost: ").append(_cost);
+        buf.append(" * Cost: ").append(_cost);
         if (_expiration > 0)
-            buf.append("\n\t* expires: ").append(new Date(_expiration));
+            buf.append(" * Expires: ").append(new Date(_expiration));
         return buf.toString();
+    }
+
+    /**
+     * Display label for an option key: MTU uppercased, others capitalized.
+     */
+    private static String _label(String key) {
+        if ("mtu".equals(key))
+            return "MTU";
+        return Character.toUpperCase(key.charAt(0)) + key.substring(1);
+    }
+
+    /**
+     * Options omitted from {@link #toString()} as debugging detail.
+     */
+    private static boolean _hiddenOption(String key) {
+        return "host".equals(key) || "port".equals(key) || "i".equals(key) ||
+               "s".equals(key) || "v".equals(key) || "caps".equals(key) || "pq".equals(key);
     }
 }

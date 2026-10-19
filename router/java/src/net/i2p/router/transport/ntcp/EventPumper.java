@@ -1290,7 +1290,7 @@ class EventPumper implements Runnable {
         }
         con.recv(buf);
         if (eof) {
-            con.close();
+            con.closeOnTimeout("Peer closed mid-handshake", null);
             return false;
         }
         if (con.isReadQueueFull()) {
@@ -1413,7 +1413,7 @@ class EventPumper implements Runnable {
                 _transport.markUnreachable(rem.calculateHash());
             }
         }
-        con.close();
+        con.closeOnTimeout(connectFailReason(ioe), ioe);
     }
 
     private void processWrite(SelectionKey key) {

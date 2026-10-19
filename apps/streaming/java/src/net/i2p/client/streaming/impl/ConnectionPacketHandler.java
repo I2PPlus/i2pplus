@@ -258,8 +258,9 @@ class ConnectionPacketHandler {
         if (!con.getInputStream().ensureCanAccept(seqNum, packet.getPayloadSize())) {
             if (con.getInputStream().isLocallyClosed()) {
                 if (_log.shouldWarn())
-                    _log.warn("More data received after local close on " + con +
-                              ", sending reset and dropping " + packet);
+                    _log.warn("More data received after local close on " + con + " -> Sending reset");
+                if (_log.shouldDebug())
+                    _log.debug("Dropped packet after local close * " + packet);
                 con.disconnect(false);
             } else {
                 if (_log.shouldWarn())
@@ -764,7 +765,7 @@ class ConnectionPacketHandler {
                         packet.releasePayload();
                         return true;
                     } else {
-                        if (_log.shouldWarn()) {_log.warn("Received packet without RESET or SYN where we don't know StreamID: " + packet);}
+                        if (_log.shouldWarn()) {_log.warn("Received packet with unknown StreamID, no RESET or SYN\n* " + packet);}
                         packet.releasePayload();
                         return false;
                     }
@@ -772,7 +773,7 @@ class ConnectionPacketHandler {
             } else {
                 // Apparently an i2pd bug...
                 if (con.getSendStreamId() != packet.getReceiveStreamId()) {
-                    if (_log.shouldWarn()) {_log.warn("Received packet with the WRONG reply StreamID \n* " + con + " / " + packet);}
+                    if (_log.shouldWarn()) {_log.warn("Wrong reply StreamID on " + con + "\n* " + packet);}
                     packet.releasePayload();
                     return false;
                 } else {

@@ -588,7 +588,8 @@ class ConnectionHandler {
             return;
         }
         if (_manager.wasRecentlyClosed(packet.getSendStreamId())) {
-            if (_log.shouldWarn()) {_log.warn("Dropping packet for recently closed stream: " + packet);}
+            if (_log.shouldWarn()) {_log.warn("Dropping packet for recently closed stream [" + Packet.toId(packet.getSendStreamId()) + "]");}
+            if (_log.shouldDebug()) {_log.debug("Packet for recently closed stream * " + packet);}
             return;
         }
         if (packet.getOptionalDelay() == PoisonPacket.POISON_MAX_DELAY_REQUEST) {
@@ -709,7 +710,7 @@ class ConnectionHandler {
         if (con != null) {
             // Send it through the packet handler again
             if (_log.shouldWarn()) {
-                _log.warn("Connection found for queued non-SYN packet: " + packet);
+                _log.warn("Connection found for queued non-SYN packet -> Reprocessing\n* " + packet);
             }
             // false -> don't requeue, fixes a race where a SYN gets dropped
             // between here and PacketHandler, causing the packet to loop forever....
@@ -721,7 +722,7 @@ class ConnectionHandler {
             }
             // goodbye
             if (_log.shouldWarn()) {
-                _log.warn("Connection not found for queued non-SYN packet, dropping... " + packet);
+                _log.warn("Connection not found for queued non-SYN packet -> Dropping\n* " + packet);
             }
             packet.releasePayload();
         }
@@ -742,7 +743,7 @@ class ConnectionHandler {
         boolean ok = packet.verifySignature(_context, ba.getData());
         _cache.release(ba);
         if (!ok) {
-            if (_log.shouldWarn()) {_log.warn("Can't send RESET in response to unverifiable packet: " + packet);}
+            if (_log.shouldWarn()) {_log.warn("Cannot send RESET for unverifiable packet\n* " + packet);}
             return;
         }
         PacketLocal reply = new PacketLocal(_context, packet.getOptionalFrom(), packet.getSession());

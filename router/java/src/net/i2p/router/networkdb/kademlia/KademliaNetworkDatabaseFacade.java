@@ -2982,6 +2982,27 @@ return false;
     }
 
     /**
+     * Strip the "Invalid NetDbStore attempt" wrapper from a store rejection
+     * message, keeping the capability flags and the Router [id] the console
+     * renders as a link.
+     *
+     * @param message the rejection message, may be null
+     * @return the bare rejection detail, for log output
+     * @since 0.9.71+
+     */
+    static String stripStoreWrapper(String message) {
+        if (message == null)
+            return "Unknown";
+        String prefix = "Invalid NetDbStore attempt - ";
+        if (message.startsWith(prefix))
+            return message.substring(prefix.length());
+        String prefix2 = "Invalid NetDbStore attempt -> ";
+        if (message.startsWith(prefix2))
+            return message.substring(prefix2.length());
+        return message;
+    }
+
+    /**
      * Insert a newly-stored peer into the routing buckets, gated on two
      * local-only checks (no wire-format change):
      * <ol>

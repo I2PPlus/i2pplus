@@ -236,7 +236,7 @@ class PacketQueue implements SendMessageStatusListener, Closeable {
             end = _context.clock().now();
 
             if ((end-begin > 1000) && (_log.shouldWarn()))
-                _log.warn("Slow message delivery -> Took " + (end-begin) + "ms to send: " + packet);
+                _log.warn("Slow message delivery (" + (end-begin) + "ms)\n* " + packet);
 
             if ((++_sendMsgSizeCnt & (TELEMETRY_SAMPLE_PERIOD - 1)) == 0)
                 _context.statManager().addRateData("stream.con.sendMessageSize", size * (long) TELEMETRY_SAMPLE_PERIOD,
@@ -269,7 +269,7 @@ class PacketQueue implements SendMessageStatusListener, Closeable {
             _log.info("SYN packet enqueue: sent=" + sent + " elapsed=" + enqueueElapsed + "ms, " + packet);
 
         if (!sent) {
-            if (_log.shouldWarn() && !isLogged) {_log.warn("Send failed for packet " + packet);}
+            if (_log.shouldWarn() && !isLogged) {_log.warn("Packet send failed\n* " + packet);}
             if (con != null) {con.disconnect(false);} // handle race on b0rk
         } else {
             packet.incrementSends();

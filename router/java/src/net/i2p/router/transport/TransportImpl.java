@@ -782,7 +782,7 @@ public abstract class TransportImpl implements Transport {
         if (address != null) {
             isIPv6 = TransportUtil.isIPv6(address);
             if (_log.shouldWarn()) {
-                _log.warn("Replacing  IPv" + (isIPv6 ? '6' : '4') + " address with " + address);
+                _log.warn("Replacing IPv" + (isIPv6 ? '6' : '4') + " address with " + address);
             }
         } else {isIPv6 = false;}
         int sz;
@@ -801,7 +801,7 @@ public abstract class TransportImpl implements Transport {
             refreshCurrentIPv4();
         }
         if (_log.shouldWarn()) {
-             _log.warn("[" + getStyle() + "] now has " + sz + " addresses");
+             _log.warn("[" + getStyle() + "] now has " + sz + (sz == 1 ? " address" : " addresses"));
         }
         if (_listener != null) {_listener.transportAddressChanged();}
     }
@@ -825,7 +825,7 @@ public abstract class TransportImpl implements Transport {
             refreshCurrentIPv4();
         }
         if (changed) {
-            if (_log.shouldWarn()) {_log.warn("[" + getStyle() + "] now has " + sz + " addresses");}
+            if (_log.shouldWarn()) {_log.warn("[" + getStyle() + "] now has " + sz + (sz == 1 ? " address" : " addresses"));}
             if (_listener != null) {_listener.transportAddressChanged();}
         } else if (_log.shouldWarn()) {_log.warn("[" + getStyle() + "] No addresses removed");}
     }
@@ -854,7 +854,7 @@ public abstract class TransportImpl implements Transport {
             refreshCurrentIPv4();
         }
         if (changed) {
-            if (_log.shouldWarn()) {_log.warn("[" + getStyle() + "] now has " + sz + " addresses");}
+            if (_log.shouldWarn()) {_log.warn("[" + getStyle() + "] now has " + sz + (sz == 1 ? " address" : " addresses"));}
             if (_listener != null) {_listener.transportAddressChanged();}
         } else if (_log.shouldWarn()) {_log.warn("[" + getStyle() + "] No addresses removed");}
     }
