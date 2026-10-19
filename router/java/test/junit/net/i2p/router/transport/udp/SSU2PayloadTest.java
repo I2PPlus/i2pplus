@@ -195,7 +195,7 @@ public class SSU2PayloadTest {
     @Test
     public void testFrameOverflowExactFitIsOk() throws Exception {
         byte[] f = blk(SSU2Payload.BLOCK_DATETIME, be(4, 1));
-        SSU2Payload.checkFrameOverflow(f, 0, f.length, 3, 4, 0, SSU2Payload.BLOCK_DATETIME);
+        SSU2Payload.checkFrameOverflow(0, f.length, 3, 4, 0, SSU2Payload.BLOCK_DATETIME);
     }
 
     @Test
@@ -205,7 +205,7 @@ public class SSU2PayloadTest {
         f[1] = 0;
         f[2] = 32;
         try {
-            SSU2Payload.checkFrameOverflow(f, 0, f.length, 3, 32, 0, SSU2Payload.BLOCK_DATETIME);
+            SSU2Payload.checkFrameOverflow(0, f.length, 3, 32, 0, SSU2Payload.BLOCK_DATETIME);
             fail("expected IOException");
         } catch (IOException ioe) {
             assertTrue(ioe.getMessage(), ioe.getMessage().contains("runs over frame of size " + f.length));

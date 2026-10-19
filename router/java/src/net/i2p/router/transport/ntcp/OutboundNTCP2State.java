@@ -529,9 +529,7 @@ class OutboundNTCP2State implements EstablishState {
         byte[] sip_ba = sipkeys[1];
 
         if (_log.shouldDebug()) {
-            _log.debug("Finished establishment for " + this +
-                      "\n* SipHash key generated for A -> B: " + Base64.encode(sip_ab) +
-                      "\n* SipHash key generated for B -> A: " + Base64.encode(sip_ba));
+            _log.debug("Finished establishment for " + this);
         }
         // skew in seconds
         _con.finishOutboundEstablishment(sender, rcvr, sip_ab, sip_ba, _peerSkew);

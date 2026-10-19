@@ -120,7 +120,7 @@ class NTCP2Payload {
             checkBlockOrder(isHandshake, blocks, gotPadding, gotTermination, type);
             int len = (int) DataHelper.fromLong(payload, i, 2);
             i += 2;
-            checkFrameOverflow(payload, off, length, end, i, len, blocks, type);
+            checkFrameOverflow(off, length, end, i, len, blocks, type);
             switch (type) {
                 // don't modify i inside switch
 
@@ -191,15 +191,16 @@ class NTCP2Payload {
     /**
      * Check that the block fits inside the frame.  Called with i pointing just
      * past the 3-byte header, so the block's offset is {@code i - 3 - off}.
+     * The frame contents are deliberately not included, they may be
+     * decrypted data; callers that want a dump log it at DEBUG.
      *
      * @throws IOException if the block runs over the end of the frame
      */
-    private static void checkFrameOverflow(byte[] payload, int off, int length, int end,
+    private static void checkFrameOverflow(int off, int length, int end,
                                            int i, int len, int blocks, int type) throws IOException {
         if (i + len > end) {
             throw new IOException("Block " + blocks + " type " + type + " length " + len +
-                                  " at offset " + (i - 3 - off) + " runs over frame of size " + length +
-                                  '\n' + net.i2p.util.HexDump.dump(payload, off, length));
+                                  " at offset " + (i - 3 - off) + " runs over frame of size " + length);
         }
     }
 

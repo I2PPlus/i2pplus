@@ -255,7 +255,7 @@ class SSU2Payload {
             checkBlockOrder(type, gotPadding, gotTermination, isHandshake, blocks);
             int len = (int) DataHelper.fromLong(payload, i, 2);
             i += 2;
-            checkFrameOverflow(payload, off, length, i, len, blocks, type);
+            checkFrameOverflow(off, length, i, len, blocks, type);
             switch (type) {
                 case BLOCK_DATETIME: parseDateTime(cb, payload, i, len); break;
                 case BLOCK_OPTIONS: parseOptions(cb, payload, i, len, isHandshake); break;
@@ -326,8 +326,9 @@ class SSU2Payload {
     /**
      * Guard that a block's declared length fits inside the frame.
      * Offsets in the error message are byte positions relative to the frame.
+     * The frame contents are deliberately not included, they may be
+     * decrypted data; callers that want a dump log it at DEBUG.
      *
-     * @param payload the whole frame
      * @param off start of the payload in the array
      * @param length frame size in bytes
      * @param dataOff offset of the block's 2-byte length field
@@ -337,12 +338,11 @@ class SSU2Payload {
      * @throws IOException if the block runs past the end of the frame
      * @since 0.9.71+
      */
-    static void checkFrameOverflow(byte[] payload, int off, int length, int dataOff, int len,
+    static void checkFrameOverflow(int off, int length, int dataOff, int len,
                                    int blocks, int type) throws IOException {
         if (dataOff + len > off + length)
             throw new IOException("Block " + blocks + " type " + type + " length " + len +
-                                  " at offset " + (dataOff - 3 - off) + " runs over frame of size " + length +
-                                  '\n' + net.i2p.util.HexDump.dump(payload, off, length));
+                                  " at offset " + (dataOff - 3 - off) + " runs over frame of size " + length);
     }
 
     /**

@@ -14,7 +14,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import net.i2p.data.Base64;
 import net.i2p.data.DataHelper;
 import net.i2p.data.Hash;
 import net.i2p.data.SessionKey;
@@ -1271,7 +1270,7 @@ class PacketBuilder2 {
                        net.i2p.util.HexDump.dump(data, off, pkt.getLength()));
         SSU2Header.encryptHandshakeHeader(packet, hdrKey1, hdrKey2);
         if (_log.shouldDebug())
-            _log.debug("[SSU] HandshakeHeader -> [Key1: " + Base64.encode(hdrKey1) + "] [Key2: " + Base64.encode(hdrKey2) + "]");
+            _log.debug("[SSU] HandshakeHeader encrypted");
     }
 
     /**

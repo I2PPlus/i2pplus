@@ -20,7 +20,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 import net.i2p.crypto.SipHashInline;
-import net.i2p.data.Base64;
 import net.i2p.data.ByteArray;
 import net.i2p.data.DataFormatException;
 import net.i2p.data.DataHelper;
@@ -2242,7 +2241,7 @@ void noteEstablishmentRtt(int rttMs) {
         _sendSipIV = new byte[SIP_IV_LENGTH];
         System.arraycopy(sip_send, 16, _sendSipIV, 0, SIP_IV_LENGTH);
         if (_log.shouldDebug())
-            _log.debug("Send SipHash keys: " + _sendSipk1 + ' ' + _sendSipk2 + ' ' + Base64.encode(_sendSipIV));
+            _log.debug("Send SipHash keys installed");
         _clockSkew = clockSkew;
         _establishState = EstablishBase.VERIFIED;
         _establishedOn = _context.clock().now();
@@ -2287,7 +2286,7 @@ void noteEstablishmentRtt(int rttMs) {
             _sipk2 = fromLong8LE(keyData, 8);
             System.arraycopy(keyData, 16, _sipIV, 0, SIP_IV_LENGTH);
             if (_log.shouldDebug())
-                _log.debug("Recv SipHash keys: " + _sipk1 + ' ' + _sipk2 + ' ' + Base64.encode(_sipIV));
+                _log.debug("Recv SipHash keys installed");
         }
 
         @Override
