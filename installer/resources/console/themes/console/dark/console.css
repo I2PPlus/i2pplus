@@ -799,9 +799,11 @@ h3.stats{border:var(--border);border-radius:0}
 #stats .tab:not(.tab2):active{color:var(--ink)}
 #stats .tab2{text-shadow:var(--textshadow);box-shadow:var(--highlight),inset 3px 3px 2px #010;background:linear-gradient(180deg,#030,#003800)}
 #stats #gatherstats{margin:12px 0 2px}
-.filtered #stats #gatherstats{margin:12px 0 17px}
 #statsWrap{margin-top:-4px;margin-bottom:-9px;padding-bottom:6px;overflow:hidden}
 .confignav+#statsWrap{margin-top:0}
+.filtered #stats h3{margin-top:16px}
+.filtered #stats .confignav{display:none}
+.filtered #stats #gatherstats{display:none}
 
 /* eventlogs */
 form[action="/events"]{background:#000}
@@ -2525,7 +2527,8 @@ a[href^="/netdb"]:hover span{color:var(--hover)}
 #debug ul,.debug_targetinfo{columns:400px 2;column-rule:var(--border_soft);column-gap:30px}
 #debug .tx_header th::before{background:url(images/favicon.svg) no-repeat center center/20px}
 #debug .tab a{width:unset}
-#debug #tx_summary .infohelp{margin:15px auto 5px}
+#debug #tx_summary .infohelp{margin:15px auto 24px}
+#debug #tx_summary hr+h2{margin-top:10px!important}
 #debugstats.ring-grid{margin:-1px auto 14px;width:calc(100% - 16px);border:var(--border);box-shadow:var(--border_table)}
 #portmapper th:last-child,#portmapper td:last-child,#sockets td:last-child{text-align:left}
 #portmapper td:first-child,#sockets td:first-child{font-weight:700}
