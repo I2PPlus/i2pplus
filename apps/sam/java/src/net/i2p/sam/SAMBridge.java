@@ -1094,22 +1094,22 @@ public class SAMBridge implements Runnable, ClientApp {
      *
      * @param rows one entry per session
      * @return the table html, never null
-     * @since 0.9.71
+     * @since 0.9.71+
      */
     static String buildSessionTable(List<String[]> rows) {
         StringBuilder buf = new StringBuilder(rows.size() * 128 + 128);
-        buf.append("<table id=samsessions><thead><tr><th>Nickname</th>" +
-                   "<th>Style</th><th>Destination</th><th>Handler IP</th>" +
-                   "<th>State</th><th>Last Accessed</th></tr></thead>\n<tbody>\n");
+        buf.append("<table id=samsessions><thead><tr><th>Nickname</th>")
+           .append("<th>Style</th><th>Destination</th><th>Handler IP</th>")
+           .append("<th>State</th><th>Last Accessed</th></tr></thead>\n<tbody>\n");
         for (String[] r : rows) {
-            buf.append("<tr><td>").append(DataHelper.escapeHTML(r[0])).
-                append("</td><td>").append(r[1]).
-                append("</td><td>").append(DataHelper.escapeHTML(r[2])).
-                append("</td><td>").append(DataHelper.escapeHTML(r[3])).
-                append("</td><td><span class=\"appdot ").append(stateDotClass(r[4])).
-                append("\"></span>").append(r[4]).
-                append("</td><td>").append(DataHelper.escapeHTML(r[5])).
-                append("</td></tr>\n");
+            buf.append("<tr><td><span>").append(DataHelper.escapeHTML(r[0]))
+               .append("</span></td><td><span>").append(r[1])
+               .append("</span></td><td><span>").append(DataHelper.escapeHTML(r[2]))
+               .append("</span></td><td><span>").append(DataHelper.escapeHTML(r[3]))
+               .append("</span></td><td><span class=\"appdot ")
+               .append(stateDotClass(r[4])).append("\"></span>").append(r[4])
+               .append("</td><td><span>").append(DataHelper.escapeHTML(r[5]))
+               .append("</span></td></tr>\n");
         }
         buf.append("</tbody>\n</table>");
         return buf.toString();

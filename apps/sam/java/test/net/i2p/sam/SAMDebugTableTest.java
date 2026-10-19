@@ -28,7 +28,7 @@ public class SAMDebugTableTest {
         assertTrue(html, html.startsWith("<table id=samsessions>"));
         assertTrue(html, html.contains("<span class=\"appdot green\"></span>control"));
         assertTrue(html, html.contains("<span class=\"appdot red\"></span>orphan"));
-        assertTrue(html, html.contains("<td>dest-base64</td>"));
+        assertTrue(html, html.contains("<td><span>dest-base64</span></td>"));
         assertEquals(2, html.split("<tr><td>", -1).length - 1);
     }
 
