@@ -14,6 +14,7 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.regex.Pattern;
 
 /**
  * Render a log record according to the log manager's settings
@@ -36,6 +37,10 @@ class LogRecordFormatter {
     private static final int MAX_PRIORITY_LENGTH = 5;
     private static final String SEPARATOR = "| ";
     private static final String ELLIPSIS = "...";
+    /** Anchor open tag stripped from messages in the LogManager.MESSAGE format. */
+    private static final Pattern LINK_OPEN = Pattern.compile("<a[^>]*>");
+    /** Anchor close tag stripped from messages in the LogManager.MESSAGE format. */
+    private static final Pattern LINK_CLOSE = Pattern.compile("</a>");
 
     /**
      * Format a log record per manager settings.
@@ -76,7 +81,8 @@ class LogRecordFormatter {
                 case LogManager.MESSAGE: String msg = rec.getMessage();
                     if (msg != null) {
                         // Strip <a>...</a> to just inner text for both raw and console logs
-                        msg = msg.replaceAll("<a[^>]*>", "").replaceAll("</a>", "");
+                        msg = LINK_OPEN.matcher(msg).replaceAll("");
+                        msg = LINK_CLOSE.matcher(msg).replaceAll("");
                         buf.append(msg);
                     }
                     break;
