@@ -163,7 +163,7 @@ class BuildMessageProcessor {
                     }
 
                     if (log.shouldDebug())
-                        log.debug("[MsgID " + msg.getUniqueId() + "] Matching " + privKey.getType() + " record found " + rv);
+                        log.debug("[MsgID " + msg.getUniqueId() + "] Matching " + privKey.getType() + " record found " + rv + rv.toKeyString());
                     ourHop = i;
                     // TODO should we keep looking for a second match and fail if found?
                     break;

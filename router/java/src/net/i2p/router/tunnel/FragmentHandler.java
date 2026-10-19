@@ -286,8 +286,7 @@ class FragmentHandler {
                 if (_log.shouldWarn())
                     _log.warn("Cannot verify message, going past the end [offset: "
                               + offset + "; length: " + length + "; paddingEnd:"
-                              + paddingEnd + "; data: "
-                              + Base64.encode(preprocessed, offset, length));
+                              + paddingEnd + "]");
                 return false;
             }
         }
@@ -313,8 +312,7 @@ class FragmentHandler {
                 _log.warn("Corrupt tunnel message - verification fails: " + Base64.encode(preprocessed, offset+HopProcessor.IV_LENGTH, 4)
                            + " != " + Base64.encode(v, 0, 4));
                 _log.warn("No matching endpoint: # pad bytes: " + (paddingEnd-(HopProcessor.IV_LENGTH+4)-1)
-                           + "; offset: " + offset + "; length: " + length + "; paddingEnd=" + paddingEnd + ' '
-                           + Base64.encode(preprocessed, offset, length), new Exception("trace"));
+                           + "; offset: " + offset + "; length: " + length + "; paddingEnd=" + paddingEnd);
             }
         }
         SimpleByteCache.release(v);
@@ -616,7 +614,7 @@ class FragmentHandler {
             boolean infoLevel = _log.shouldInfo();
             if (_log.shouldWarn()) {
                 _log.warn("Error receiving fragmented message -> Corrupt?\n* " + msg + " (" + ime.getMessage() + ")" +
-                          (infoLevel ? "\nDUMP:\n" + HexDump.dump(data) + "RAW:\n" + Base64.encode(data) : ""));
+                          (infoLevel ? "\n* DUMP:\n* " + HexDump.dump(data, 0, Math.min(data.length, 64)) : ""));
             }
         }
     }

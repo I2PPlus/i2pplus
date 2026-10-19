@@ -5,7 +5,6 @@ import com.southernstorm.noise.protocol.NoiseInit;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
-import java.util.Date;
 import java.util.Properties;
 import net.i2p.I2PAppContext;
 import net.i2p.crypto.EncType;
@@ -854,34 +853,39 @@ public class BuildRequestRecord {
     }
 
     /**
-     * Returns a string representation of this record.
+     * Concise one-line summary for log output: crypto type, hop role and
+     * tunnel IDs.  No key material; no expiration (callers log elapsed or
+     * age deltas separately when relevant); no next-identity (callers print
+     * the peer hash in the message header).
+     * Starts with a newline and an asterisk for multi-line log entries.
+     *
      * @return a string representation
      * @since 0.9.24
      */
     @Override
     public String toString() {
-        StringBuilder buf = new StringBuilder(256);
-        buf.append("\n* Time: ").append(new Date(readRequestTime()))
-           .append(" -> Expires in: ").append(DataHelper.formatDuration(readExpiration()))
-           .append("\n* ")
-           .append(_isEC ? "ECIES" : "ElGamal");
+        StringBuilder buf = new StringBuilder(64);
+        buf.append("\n* ").append(_isEC ? "ECIES" : "ElGamal");
         if (_data.length == LENGTH_EC_SHORT)
             buf.append(" Short");
-        buf.append(" BuildRequestRecord: [");
-        boolean isIBGW = readIsInboundGateway();
-        boolean isOBEP = readIsOutboundEndpoint();
-        if (isIBGW) {
-            buf.append("InboundGateway -> In: ").append(readReceiveTunnelId())
-               .append("; Out: ").append(readNextTunnelId());
-        } else if (isOBEP) {
-            buf.append("OutboundEndpoint -> In: ").append(readReceiveTunnelId());
-        } else {
-            buf.append("Participating ->  In: ").append(readReceiveTunnelId())
-               .append("; Out: ").append(readNextTunnelId());
-        }
-        buf.append("]")
-           .append("\n* Router: [").append(readNextIdentity().toBase64().substring(0,6)).append("]")
-           .append("\n* Layer Key: ").append(readLayerKey())
+        buf.append(" record [").append(readIsInboundGateway() ? "IBGW" :
+                                   readIsOutboundEndpoint() ? "OBEP" : "Middle").append(']');
+        buf.append(" In: ").append(readReceiveTunnelId());
+        if (!readIsOutboundEndpoint())
+            buf.append("; Out: ").append(readNextTunnelId());
+        return buf.toString();
+    }
+
+    /**
+     * Key material for DEBUG-level build interop debugging only.
+     * Never log this at INFO or above.
+     * Starts with a newline and an asterisk for multi-line log entries.
+     *
+     * @since 0.9.71+
+     */
+    public String toKeyString() {
+        StringBuilder buf = new StringBuilder(256);
+        buf.append("\n* Layer Key: ").append(readLayerKey())
            .append("\n* IV Key: ").append(readIVKey());
         if (_data.length != LENGTH_EC_SHORT) {
             buf.append("\n* Reply Key: ").append(readReplyKey())
@@ -898,7 +902,6 @@ public class BuildRequestRecord {
                    .append("\n* Garlic Reply Tag: ").append(_derivedGarlicKeys.rtag);
             }
         }
-        // to chase i2pd bug
         return buf.toString();
     }
 

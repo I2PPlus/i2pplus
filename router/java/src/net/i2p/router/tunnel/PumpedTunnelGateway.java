@@ -255,7 +255,7 @@ class PumpedTunnelGateway extends TunnelGateway {
         boolean backlogged = _context.commSystem().isBacklogged(_nextHop);
 
         if (backlogged && _log.shouldInfo()) {
-            _log.info("PumpedTunnelGateway backlogged, queued to " + _nextHop + " : "
+            _log.info("PumpedTunnelGateway backlogged, queued to [" + _nextHop.toBase64().substring(0,6) + "] : "
                       + _prequeue.size() + " inbound? " + _isInbound);
         }
 

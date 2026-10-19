@@ -146,8 +146,9 @@ class OutboundTunnelEndpoint {
             }
 
             if (_log.shouldInfo()) {
-                _log.info("Full message received from Outbound tunnel " + _config + "\n* " + msg +
-                          " to be forwarded to [" + toRouter.toBase64().substring(0,6) + "]" +
+                _log.info("Full message received from Outbound tunnel " + _config +
+                          "\n* type " + msg.getType() + " [MsgID " + msg.getUniqueId() + "]" +
+                          " -> to be forwarded to [" + toRouter.toBase64().substring(0,6) + "]" +
                           (toTunnel != null ? ":" + toTunnel.getTunnelId() : ""));
             }
             if (toTunnel == null) {

@@ -672,7 +672,7 @@ public abstract class BuildRequestor {
             if (!BuildMessageGenerator.isBlank(cfg, hopIndex)) {
                 RouterInfo peerInfo = hopRIs[hopIndex];
                 if (peerInfo == null) {
-                    log.warn("Peer not found for hop " + hopIndex + ": " + cfg.getPeer(hopIndex) + " in " + cfg);
+                    log.warn("Peer not found for hop " + hopIndex + ": [" + cfg.getPeer(hopIndex).toBase64().substring(0,6) + "] in " + cfg);
                     return null;
                 }
                 key = peerInfo.getIdentity().getPublicKey();

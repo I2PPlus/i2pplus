@@ -222,11 +222,7 @@ class TunnelParticipant {
 
     /** Log a failure to dispatch a tunnel data message. */
     private void logDispatchFailure(TunnelDataMessage msg) {
-        if (_log.shouldInfo()) {
-            _log.warn("Failed to dispatch " + msg +
-                      "\n* Processor: " + _processor +
-                      "\n* Inbound Endpoint: " + _inboundEndpointProcessor);
-        } else if (_log.shouldWarn()) {
+        if (_log.shouldWarn()) {
             _log.warn("Failed to dispatch " + msg + " via " +
                       (_processor != null ? _processor : "NULL tunnel"));
         }
