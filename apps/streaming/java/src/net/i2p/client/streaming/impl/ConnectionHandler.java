@@ -35,6 +35,7 @@ class ConnectionHandler {
     private final LinkedBlockingQueue<Connection> _resultQueue;
     private final List<Thread> _acceptWorkers;
     private final AtomicInteger _activeWorkerCount;
+    private final AtomicInteger _workerId;
     private final SimpleTimer2 _timer;
     private volatile boolean _active;
     /** Explicit per-manager override, or -1 to use the live configured {@link #getAcceptTimeout}.
@@ -86,8 +87,14 @@ class ConnectionHandler {
 
     /** Default max SYN queue size — large enough to absorb bursts. */
     private static final int DEFAULT_MAX_QUEUE_SIZE = 4096;
-    /** Default number of accept worker threads. */
-    private static final int DEFAULT_ACCEPT_WORKERS = 1;
+    /**
+     * Default number of accept worker threads. One worker cannot drain a
+     * queue thousands deep on a busy public server (tracker, mail), so
+     * every SYN behind it waits the full accept timeout.
+     */
+    private static final int DEFAULT_ACCEPT_WORKERS = 4;
+    /** Ceiling for scale-up under SYN queue pressure, see {@link SynReaper}. */
+    private static final int MAX_ACCEPT_WORKERS = 16;
 
     /**
      * This is both SYNs and subsequent packets, and with an initial window size of 12,
@@ -379,6 +386,7 @@ class ConnectionHandler {
         _resultQueue = new LinkedBlockingQueue<>(16384);
         _acceptWorkers = new ArrayList<>();
         _activeWorkerCount = new AtomicInteger(0);
+        _workerId = new AtomicInteger(0);
     }
 
     /**
@@ -442,11 +450,7 @@ class ConnectionHandler {
     private void startAcceptWorkers() {
         int count = getAcceptWorkerCount();
         for (int i = 0; i < count; i++) {
-            Thread t = new Thread(new AcceptWorker(), "StreamingAcceptWorker-" + i);
-            t.setDaemon(true);
-            _acceptWorkers.add(t);
-            t.start();
-            _activeWorkerCount.incrementAndGet();
+            startAcceptWorker();
         }
         // One self-rescheduling sweeper per activation; it stops re-arming
         // when the handler deactivates. Replaces two per-SYN timer events.
@@ -454,9 +458,22 @@ class ConnectionHandler {
     }
 
     /**
+     * Start one accept worker, named uniquely. Synchronized because the
+     * {@link SynReaper} may scale the pool up while the app activates or
+     * deactivates the handler.
+     */
+    private synchronized void startAcceptWorker() {
+        Thread t = new Thread(new AcceptWorker(), "StreamingAcceptWorker-" + _workerId.incrementAndGet());
+        t.setDaemon(true);
+        _acceptWorkers.add(t);
+        t.start();
+        _activeWorkerCount.incrementAndGet();
+    }
+
+    /**
      * Stop all accept worker threads. Called when setActive(false).
      */
-    private void shutdownAcceptWorkers() {
+    private synchronized void shutdownAcceptWorkers() {
         for (Thread t : _acceptWorkers) {
             t.interrupt();
         }
@@ -498,9 +515,15 @@ class ConnectionHandler {
                     }
                     if (syn == null) continue;
                     if (syn.getOptionalDelay() == PoisonPacket.POISON_MAX_DELAY_REQUEST) {
-                        // Re-queue poison for other workers
-                        _synQueue.offer(syn);
-                        break;
+                        // Poison is a local shutdown marker inserted by
+                        // setActive(false), one per worker. If we are still
+                        // active it arrived over the wire - the delay field is
+                        // sender-set, so a remote must never be able to kill a
+                        // worker with it. Drop it and keep working.
+                        if (!_active) break;
+                        if (_log.shouldDebug())
+                            _log.debug("Dropped poison packet while active");
+                        continue;
                     }
                     if (_manager.wasRecentlyClosed(syn.getSendStreamId())) {
                         continue;
@@ -568,9 +591,16 @@ class ConnectionHandler {
             if (_log.shouldWarn()) {_log.warn("Dropping packet for recently closed stream: " + packet);}
             return;
         }
+        if (packet.getOptionalDelay() == PoisonPacket.POISON_MAX_DELAY_REQUEST) {
+            // Poison is a local shutdown marker. Never enqueue one from the
+            // wire, it would kill an accept worker.
+            if (_log.shouldDebug())
+                _log.debug("Dropping inbound packet with poison delay marker");
+            return;
+        }
         int timeoutMs = getEffectiveAcceptTimeout();
-        if (_log.shouldInfo()) {
-            _log.info("Received new SYN packet with " + (timeoutMs / 1000) + "s timeout: " + packet);
+        if (_log.shouldDebug()) {
+            _log.debug("Received new SYN packet with " + (timeoutMs / 1000) + "s timeout: " + packet);
         }
         // Re-read the max queue size dynamically — Tuner override or config change
         // applies without a restart.
@@ -796,9 +826,9 @@ class ConnectionHandler {
     }
 
     /**
-     * Full single-line WARN for a timed-out SYN, folding in both the packet
-     * detail and the queue/timeout pressure that caused the expiry, so the whole
-     * picture lands on one log line instead of a bare trailing colon.
+     * Full single-line DEBUG detail for a timed-out SYN, folding in both the
+     * packet detail and the queue/timeout pressure that caused the expiry.
+     * The WARN-level report is one aggregate per sweep in {@link SynReaper}.
      *
      * @param syn the expired SYN, described as "null SYN" when null
      * @param queueDepth the accept queue depth at expiry, as the count of unaccepted SYNs
@@ -868,7 +898,16 @@ class ConnectionHandler {
         SynReaper() {super();}
 
         public void timeReached() {
+            // Scale up under pressure before draining: a deep queue drained
+            // by one worker still leaves every SYN waiting the full timeout.
+            int max = getMaxQueueSize();
+            if (_active && max > 0 && _synQueue.size() > max / 4 && _activeWorkerCount.get() < MAX_ACCEPT_WORKERS) {
+                startAcceptWorker();
+                _log.info("SYN queue busy (" + _synQueue.size() + '/' + max + ") -> Added accept worker (" + _activeWorkerCount.get() + " total)");
+            }
             long now = _context.clock().now();
+            int expired = 0;
+            int timeoutMs = 0;
             for (Map.Entry<Packet, SynEntry> e : _synEnqueueTimes.entrySet()) {
                 SynEntry entry = e.getValue();
                 if (!entry.expired(now)) {continue;}
@@ -878,9 +917,11 @@ class ConnectionHandler {
                 if (_synQueue.remove(syn)) {
                     _synQueueExpired++;
                     if (syn.isFlagSet(Packet.FLAG_SYNCHRONIZE)) {
-                        if (_log.shouldWarn())
-                            _log.warn(synExpiryMessage(syn, _synQueue.size(),
-                                                       getMaxQueueSize(), entry.timeoutMs));
+                        expired++;
+                        timeoutMs = entry.timeoutMs;
+                        if (_log.shouldDebug())
+                            _log.debug(synExpiryMessage(syn, _synQueue.size(),
+                                                        getMaxQueueSize(), entry.timeoutMs));
                         sendReset(syn);
                     } else {
                         reReceivePacket(syn);
@@ -888,6 +929,14 @@ class ConnectionHandler {
                 }
                 // else: packet was already polled; the reaper only cleans the
                 // stale record so a rejected SYN doesn't linger in the table.
+            }
+            // One aggregate per sweep. A full SYN queue expires thousands of
+            // connections at once; the per-packet lines bury the only fact
+            // that matters, which is how many and how deep.
+            if (expired > 0 && _log.shouldWarn()) {
+                _log.warn("SYN queue expired " + expired + (expired == 1 ? " connection" : " connections") +
+                          " (accept timeout " + timeoutMs + "ms, " +
+                          (max > 0 ? _synQueue.size() + '/' + max : "depth " + _synQueue.size()) + ')');
             }
             if (_active)
                 _timer.addEvent(this, SYN_SWEEP_INTERVAL);
