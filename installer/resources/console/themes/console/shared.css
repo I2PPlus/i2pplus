@@ -234,7 +234,7 @@ a.ring-cell-link{text-decoration:none;color:inherit}
 #streamstats,#samstats{margin:8px auto;padding:16px 4px;width:100%;;display:grid;grid-template-columns:repeat(5,1fr);gap:4px;text-align:center}
 #streamstats .truncB32{width:48px;float:none;font-weight:600}
 
-@keyframes pulse{0%,100%{opacity:1;transform:scale(1.1)}50%{opacity:.7;transform:scale(.9)}}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
 
 @media (max-width:1499px){
   #peerstats {grid-template-columns: repeat(5,1fr)}

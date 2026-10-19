@@ -19,7 +19,7 @@ body.js #tunnelsContainer{display:block!important}
 .failed .status span{background:var(--tunn_reject)}
 .failing .status span{background:var(--tunn_failing)}
 .good .status span{background:var(--tunn_active)}
-.testing .status span{background:var(--tunn_starting);animation:pulse 1.5s infinite}
+.testing .status span{background:var(--tunn_starting);animation:pulse 2s ease 0s infinite}
 .tunnel_id:empty{opacity:0!important}
 .untested .status span{background:var(--tunn_hidden)}
 tr.failed td>*:not(.failed .status span){opacity:.5}
@@ -42,7 +42,7 @@ h3.toggle.nojobs,h3.toggle.nojobs .dropdown,h3.toggle.nojobs .dropdown::after{po
 #tunnels .latency span:not(.left){min-width:36px;text-align:right}
 #tunnels .latency .left{min-width:26px}
 #tunnels .status{width:1%;white-space:nowrap;text-align:center}
-#tunnels .status span{display:inline-block;width:12px;height:12px;border-radius:50%;vertical-align:middle}
+#tunnels .status span{display:inline-block;width:12px;height:12px;line-height:0;vertical-align:middle}
 #tunnels td.direction span,#tunnels td.expiry .percentBarOuter,#tunnels td.status span{vertical-align:middle!important}
 
 @keyframes building{0,100%{filter:saturate(1)}50%{filter:saturate(1.5) brightness(1.3)}}
