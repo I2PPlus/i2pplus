@@ -4,7 +4,6 @@ import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -43,6 +42,13 @@ public class PeerState {
      * is established.
      */
     protected final Hash _remotePeer;
+    /**
+     * Six-char base64 prefix of the remote peer hash, pre-computed for log
+     * messages (the full encode per log line was hot on floodfills).
+     *
+     * @since 0.9.71+
+     */
+    protected final String _shortHash;
 
     /** The key establishment time. */
     protected final long _keyEstablishedTime;
@@ -1001,9 +1007,9 @@ public class PeerState {
                 msg.timestamp("Expired in the active pool");
                 _transport.failed(state);
                 if (logInfo)
-                    _log.info("[SSU] Message expired " + state + " -> " + this);
+                    _log.info("[" + _shortHash + "] Message expired " + state);
             } else if (logInfo) {
-                _log.warn("[SSU] Unable to send direct message " + state + " -> " + this);
+                _log.warn("[" + _shortHash + "] Unable to send direct message " + state);
             }
         }
 
@@ -1084,6 +1090,7 @@ public class PeerState {
         _outboundMessages = new CachedIteratorCollection<>();
         _outboundQueue = new PriBlockingQueue<>(ctx, "UDP-PeerState", outboundQueueSize);
         _remotePeer = remotePeer;
+        _shortHash = remotePeer != null ? remotePeer.toBase64().substring(0, 6) : "null";
         _isInbound = isInbound;
         _remoteHostId = new RemoteHostId(_remoteIP, _remotePort);
         _bwEstimator = new SimpleBandwidthEstimator(ctx, this);
@@ -1589,7 +1596,7 @@ public class PeerState {
         _rto = nextCongestionRTO(_rto, _rtt, _rttDeviation, MIN_RTO, MAX_RTO);
         _retransmitTimer.set(now + _rto);
         if (_log.shouldInfo()) {
-            _log.info("[" + _remotePeer.toBase64().substring(0,6) + "] Estimated bandwidth: " +
+            _log.info("[" + _shortHash + "] Estimated bandwidth: " +
                       DataHelper.formatSize2Decimal((long) (bwe * 1000), false) + "b/s" +
                       "\n* Congestion RTO: " + oldRto + "ms -> " + _rto + "ms" +
                       " * Timer: " + oldTimer + "ms -> " + _rto + "ms" +
@@ -1762,7 +1769,7 @@ public class PeerState {
         }
         _concurrentMessagesAllowed = nextConcurrentLimit(numSends, _rtt, _concurrentMessagesAllowed, queued, randomInt);
         if (numSends < 2 && _log.shouldDebug() && _concurrentMessagesAllowed != oldLimit) {
-            _log.debug("Concurrent msg limit [" + _remotePeer.toBase64().substring(0,6) + "] " +
+            _log.debug("Concurrent msg limit [" + _shortHash + "] " +
                        oldLimit + " -> " + _concurrentMessagesAllowed + " (RTT=" + _rtt + "ms queued=" + queued + ")");
         }
         long now = _context.clock().now();
@@ -1796,7 +1803,7 @@ public class PeerState {
             long oldTimer = _retransmitTimer.get() - now;
             _retransmitTimer.set(now + getRTO());
             if (_log.shouldDebug()) {
-                _log.debug("[" + _remotePeer.toBase64().substring(0,6) + "] ACK, timer: " + oldTimer + " -> " + (_retransmitTimer.get() - now));
+                _log.debug("[" + _shortHash + "] ACK, timer: " + oldTimer + " -> " + (_retransmitTimer.get() - now));
             }
         }
         if (anyPending || anyQueued) {_transport.getOMF().nudge();}
@@ -1811,7 +1818,7 @@ public class PeerState {
             _bwEstimator.addSample(bytesACKed);
         }
         if (numSends >= 2 && _log.shouldDebug()) {
-            _log.debug("[" + _remotePeer.toBase64().substring(0,6) + "] ACKed after numSends=" + numSends +
+            _log.debug("[" + _shortHash + "] ACKed after numSends=" + numSends +
                        " with lifetime=" + lifetime + " and size=" + bytesACKed);
         }
     }
@@ -2316,7 +2323,7 @@ public class PeerState {
             _context.statManager().addRateData("udp.sendRejected", state.getPushCount());
             if (_log.shouldDebug() && now - _lastRejectionLogTime > REJECTION_LOG_INTERVAL) {
                 _lastRejectionLogTime = now;
-                _log.debug("Allocation for [" + _remotePeer.toBase64().substring(0,6) + "] rejected (Window size: " + getSendWindowBytes()
+                _log.debug("Allocation for [" + _shortHash + "] rejected (Window size: " + getSendWindowBytes()
                           + " / available: " + getSendWindowBytesRemaining()
                           + " bytes) for [MsgID" + state.getMessageId() + "]" + state);
             }
@@ -2389,18 +2396,18 @@ public class PeerState {
             if (_log.shouldDebug()) {
                 if (state.getFragmentCount() > 1) {
                     _log.debug("Received partial ACK of [MsgID " + state.getMessageId() + "] from [" +
-                               _remotePeer.toBase64().substring(0,6) + "] -> Newly-acked: " +
+                               _shortHash + "] -> Newly-acked: " +
                                ackedSize + " bytes, now complete for: " + state);
                 } else {
                     _log.debug("Received ACK of [MsgID " + state.getMessageId() + "] from [" +
-                               _remotePeer.toBase64().substring(0,6) + "] after " + lifetime +
+                               _shortHash + "] after " + lifetime +
                                " and " + numSends + " sends");
                 }
             }
         } else {
             if (_log.shouldDebug()) {
                 _log.debug("Received partial ACK of [MsgID " + state.getMessageId() + "] from ["
-                      + _remotePeer.toBase64().substring(0,6) + "] after " + lifetime + " and "
+                      + _shortHash + "] after " + lifetime + " and "
                       + numSends + " sends -> Complete: false"
                       + "\n* Newly-acked: " + ackedSize + " bytes * Fragment: " + f.num
                       + " for: " + state);
@@ -2586,15 +2593,15 @@ public class PeerState {
     public String toString() {
         StringBuilder buf = new StringBuilder(256);
         buf.append("\n* Router: ").append(_remoteHostId.toString());
-        buf.append(" [").append(_remotePeer.toBase64().substring(0,6)).append("]");
+        buf.append(" [").append(_shortHash).append("]");
 
         if (getVersion() >= 2 && getVersion() <= 4) {buf.append(_isInbound? " Inbound v" + getVersion() + " " : " Outbound v" + getVersion() + " ");}
         else {buf.append(_isInbound ? " Inbound" : " Outbound");}
         long now = _context.clock().now();
         buf.append("\n* Received: ").append(now-_lastReceiveTime).append("ms ago");
-        if (_lastSendFullyTime != 0) {buf.append("\n* Last successful send: ").append(new Date(_lastSendFullyTime));}
-        if (_lastSendTime != 0) {buf.append("\n* Last attempted send: ").append(new Date(_lastSendTime));}
-        if (_lastACKSend != 0) {buf.append("\n* Last ACK sent: ").append(new Date(_lastACKSend));}
+        if (_lastSendFullyTime != 0) {buf.append("\n* Last successful send: ").append(now - _lastSendFullyTime).append("ms ago");}
+        if (_lastSendTime != 0) {buf.append("\n* Last attempted send: ").append(now - _lastSendTime).append("ms ago");}
+        if (_lastACKSend != 0) {buf.append("\n* Last ACK sent: ").append(now - _lastACKSend).append("ms ago");}
         if (_log.shouldInfo()) {
             int txQueue = _outboundQueue.size();
             boolean isQueued = _inboundMessages.size() > 0 || !_outboundMessages.isEmpty();
