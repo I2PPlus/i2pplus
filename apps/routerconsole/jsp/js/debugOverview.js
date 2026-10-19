@@ -20,7 +20,7 @@ const REFRESH_INTERVAL = 10 * 1000;
  */
 function refreshGraphs() {
   document.querySelectorAll(".debug_graphs img").forEach(img => {
-    const src = img.src.replace(/t=\d+/, "t=" + Date.now());
+    const src = img.src.replace(/([?&])t=\d+/, "$1t=" + Date.now());
     if (src === img.src) { return; }
     const pre = new Image();
     pre.onload = () => { img.src = src; };
