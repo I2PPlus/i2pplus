@@ -1473,11 +1473,15 @@ public class EepGetTest extends TestCase {
                      EepGet.redactedUrl("http://proxy.example/?action=download&info_hash=%7B%AB&name=x"));
         assertEquals("https://proxy.example/?action=download...",
                      EepGet.redactedUrl("https://proxy.example/?action=download&info_hash=%7B%AB"));
-        // no info_hash, no ampersand, or no ampersand-before-hash: unchanged
+        // no info_hash and no ampersand: unchanged
         assertEquals("http://plain.example/path", EepGet.redactedUrl("http://plain.example/path"));
         assertEquals("http://plain.example/?a=1&b=2", EepGet.redactedUrl("http://plain.example/?a=1&b=2"));
         // schemeless URL keeps its first characters
         assertEquals("plain.example/?a=1...", EepGet.redactedUrl("plain.example/?a=1&info_hash=x"));
+        // hash as the only or first parameter: cut before the hash
+        assertEquals("opentracker.dg2.i2p/scrape?...",
+                     EepGet.redactedUrl("http://opentracker.dg2.i2p/scrape?info_hash=%06%fd%ca%8e"));
+        assertEquals("x.example/?...", EepGet.redactedUrl("http://x.example/?info_hash=A&a=1"));
     }
 
     private static class TestPartialEepGet extends PartialEepGet {

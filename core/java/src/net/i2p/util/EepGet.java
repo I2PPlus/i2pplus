@@ -1209,7 +1209,8 @@ public class EepGet {
                 for (int i = 0; i < _listeners.size(); i++)
                     _listeners.get(i).attemptFailed(_url, _bytesTransferred, _bytesRemaining, _currentAttempt, _numRetries, ioe);
                 if (_log.shouldWarn())
-                    _log.warn("[Eepget] Transfer failed [" + redactedUrl(_url) + "] -> " + ioe.getMessage());
+                    _log.warn("[Eepget] Transfer failed -> " + ioe.getMessage() +
+                             "\n* Request: " + redactedUrl(_url));
                 if (ioe instanceof MalformedURLException ||
                     ioe instanceof UnknownHostException ||
                     ioe instanceof ConnectException) // proxy or nonproxied host Connection Refused
@@ -1280,17 +1281,20 @@ public class EepGet {
 
     /**
      * The request URL for log output. Magnet-style URLs carrying an info_hash
-     * are cut at the first query parameter and the http:// prefix is dropped,
-     * so the hash never reaches the logs; other URLs pass through unchanged.
+     * are cut before the hash, or at an earlier first parameter when one
+     * precedes it, and the http:// prefix is dropped, so the hash never
+     * reaches the logs; other URLs pass through unchanged.
      *
      * @param url the request URL, not null
      * @return the URL, redacted when it carries an info_hash
      * @since 0.9.71+
      */
     static String redactedUrl(String url) {
-        if (url.contains("&") && url.contains("info_hash"))
-            return url.substring(0, url.indexOf("&")).replace("http://", "") + "...";
-        return url;
+        int cut = url.indexOf("info_hash");
+        if (cut < 0) { return url; }
+        int amp = url.indexOf("&");
+        if (amp >= 0 && amp < cut) { cut = amp; }
+        return url.substring(0, cut).replace("http://", "") + "...";
     }
 
     /**
