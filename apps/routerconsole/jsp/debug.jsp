@@ -102,6 +102,11 @@
         }
     }
 %>
+<% if (dd.equals("8")) { %>
+<script src=/js/debugOverview.js type=module></script>
+<% } else if (dd.equals("7")) { %>
+<script src=/js/samDebug.js type=module></script>
+<% } %>
 </div>
 </body>
 </html>
