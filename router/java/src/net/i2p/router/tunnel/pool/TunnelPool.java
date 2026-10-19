@@ -1811,7 +1811,7 @@ public class TunnelPool {
         _log.warn("Pool health excludes " + excluded + " of " + (kept + excluded)
                   + " tunnels with no transport session to their local hop"
                   + " -> Kept: " + kept
-                  + "\n* transport: " + sample
+                  + "\n* Transport: " + sample
                   + " [" + toString() + "]");
     }
 
