@@ -72,16 +72,17 @@ public class I2PSessionDemultiplexer implements I2PSessionMuxedListener {
             l.messageAvailable(session, msgId, size, proto, fromport, toport);
         } else {
             // no listener, throw it out
-            if (_log.shouldWarn()) {
+            if (_log.shouldDebug()) {
                 if (_listeners.isEmpty()) {
-                    _log.warn("No listeners for incoming message");
+                    _log.debug("No listeners for incoming message");
                 } else {
-                    _log.warn("No listener found for proto: " + proto + " fromport: " + fromport + " toport: " + toport + " msg id: " + msgId +
-                           " from pool of " + _listeners.size() + " listeners");
+                    _log.debug("No listener found for proto: " + proto + " fromport: " + fromport +
+                               " toport: " + toport + " msg id: " + msgId +
+                               " from pool of " + _listeners.size() + " listeners");
                 }
                 try {
                     byte[] msg = session.receiveMessage(msgId);
-                    _log.warn("Message:\n" + net.i2p.util.HexDump.dump(msg));
+                    _log.debug("Message:\n" + net.i2p.util.HexDump.dump(msg));
                 } catch (I2PSessionException ise) { /* diagnostic dump only; the message was already undeliverable */ }
             } else {
                 session.discardMessage(msgId);

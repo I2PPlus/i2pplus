@@ -1679,11 +1679,9 @@ class EventPumper implements Runnable {
                 if (debug) {
                     _log.debug("[NTCP] " + (isNetworkingError ? "Connection setup error" : "Unexpected error") +
                               " during outbound registration for " + con.getRemotePeer(), e);
-                } else if (warn) {
-                    _log.warn("[NTCP] " + (isNetworkingError ? "Connection setup error" : "Unexpected error") +
-                              " during outbound registration for " + con.getRemotePeer() +
-                              ": " + e.getClass().getSimpleName() +
-                              (isNetworkingError ? "" : " - " + e.getMessage()));
+                } else if (warn && !isNetworkingError) {
+                    _log.warn("[NTCP] Unexpected error during outbound registration for " + con.getRemotePeer() +
+                              ": " + e.getClass().getSimpleName() + " - " + e.getMessage());
                 }
                 if (isNetworkingError) {
                     _transport.markUnreachable(con.getRemotePeer().calculateHash());

@@ -1134,9 +1134,8 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
         _cache.tunnelCache.put(_hashPair, rotated);
         _cache.tunnelStartTime.put(_hashPair, Long.valueOf(getContext().clock().now()));
         _wantACK = true;
-        if (_log.shouldWarn()) {
-             _log.warn("New connection -> Rotating outbound tunnel for " + _toString
-                       + "\n* " + rotated);
+        if (_log.shouldDebug()) {
+            _log.debug("New connection -> Rotating outbound tunnel for " + _toString + ": " + rotated);
         }
         return rotated;
     }
@@ -1207,22 +1206,23 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
                 break;
             default: statusToString = "Unknown status"; // handle unknown status
         }
-        if (_log.shouldWarn()) {
+        if (_log.shouldDebug()) {
             String lsInfo = _leaseSet != null ?
-                ("LeaseSet: [" + _leaseSet.getHash().toBase32().substring(0, 8) + "]" +
-                 " * leases: " + _leaseSet.getLeaseCount() +
-                 " * current: " + _leaseSet.isCurrent(Router.CLOCK_FUDGE_FACTOR)) :
+                ("LeaseSet [" + _leaseSet.getHash().toBase32().substring(0, 8) + "]" +
+                 " leases=" + _leaseSet.getLeaseCount() +
+                 " current=" + _leaseSet.isCurrent(Router.CLOCK_FUDGE_FACTOR)) :
                 null;
             if (!statusToString.isEmpty() && !statusToString.equals("Unknown status")) {
                 // LS-not-found is routine (cooldown, negative cache) — demote to info;
                 // LookupLeaseSetFailedJob or the cooldown skip already logged at info.
+                // Other send failures are routine churn - the client gets the status message.
                 int level = (status == MessageStatusMessage.STATUS_SEND_FAILURE_NO_LEASESET)
-                    ? Log.INFO : Log.WARN;
+                    ? Log.INFO : Log.DEBUG;
                 _log.log(level, "Send FAIL to " + _toString + " after " + sendTime + "ms -> " +
-                          statusToString + (lsInfo != null ? "\n* " + lsInfo : ""));
+                          statusToString + (lsInfo != null ? " " + lsInfo : ""));
             } else {
-                _log.warn("Sending of " + _clientMessageId + " to " + _toString +
-                          " failed after " + sendTime + "ms (Status code: " + status + ")");
+                _log.debug("Send FAIL to " + _toString + " after " + sendTime +
+                           "ms (status " + status + ")");
             }
         }
 

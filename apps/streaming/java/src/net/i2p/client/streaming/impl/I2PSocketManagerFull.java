@@ -695,8 +695,9 @@ public class I2PSocketManagerFull implements I2PSocketManager {
          con.setSocket(socket);
          if (con.getConnectionError() != null) {
              long totalElapsed = _context.clock().now() - connectStart;
-             if (_log.shouldWarn())
-                 _log.warn("Connect failed to [" + hashPrefix + "] after " + totalElapsed + "ms: " + con.getConnectionError());
+             if (_log.shouldInfo())
+                 _log.info("Connect failed to [" + hashPrefix + "] after " +
+                           totalElapsed + "ms: " + con.getConnectionError());
              con.disconnect(false);
              throw new NoRouteToHostException(con.getConnectionError());
          }

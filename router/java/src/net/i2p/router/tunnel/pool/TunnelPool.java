@@ -6775,9 +6775,9 @@ public class TunnelPool {
               // is still a thin pool, and the old fast-path warned in exactly that
               // case.
               int lastWarned = _lastThinPoolWarned;
-              if (ThinPoolLogState.shouldLog(lastWarned, healthy) && _log.shouldWarn()) {
+              if (ThinPoolLogState.shouldLog(lastWarned, healthy) && _log.shouldInfo()) {
                   _lastThinPoolWarned = healthy;
-                  _log.warn(ThinPoolLogState.formatThinPool(toString(), healthy, target));
+                  _log.info(ThinPoolLogState.formatThinPool(toString(), healthy, target));
               }
               // Pace the burst with the same collapsed-pool floor the deferred path
               // uses below. This branch used to run on every event that reached it,

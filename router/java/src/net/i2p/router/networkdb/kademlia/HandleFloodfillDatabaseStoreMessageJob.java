@@ -274,9 +274,10 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                     if (isBanned) {
                         shouldStore = false;
                         wasNew = false;
-                        if (_log.shouldWarn()) {
+                        if (_log.shouldDebug()) {
                             logged = true;
-                            _log.warn("Dropping unsolicited NetDbStore of banned " + cap + (isFF ? " Floodfill" : " Router") +
+                            _log.debug("Dropping unsolicited NetDbStore of banned " + cap +
+                                      (isFF ? " Floodfill" : " Router") +
                                       " [" + key.toBase64().substring(0,6) + "]");
                         }
                     } else if (isInvalidVersion) {
@@ -298,33 +299,37 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                         if (isUnreachable && isOld) {
                             shouldStore = false;
                             wasNew = false;
-                            if (_log.shouldWarn()) {
+                            if (_log.shouldDebug()) {
                                 logged = true;
-                                _log.warn("Dropping unsolicited NetDbStore of new " + cap + (isFF ? " Floodfill" : " Router") +
+                                _log.debug("Dropping unsolicited NetDbStore of new " + cap +
+                                          (isFF ? " Floodfill" : " Router") +
                                           " [" + key.toBase64().substring(0,6) + "] -> " + v);
                             }
                         } else if (isUnreachable && isSlow) {
                             shouldStore = false;
                             wasNew = false;
-                            if (_log.shouldWarn()) {
+                            if (_log.shouldDebug()) {
                                 logged = true;
-                                _log.warn("Dropping unsolicited NetDbStore of new " + cap + (isFF ? " Floodfill" : " Router") +
+                                _log.debug("Dropping unsolicited NetDbStore of new " + cap +
+                                          (isFF ? " Floodfill" : " Router") +
                                           " [" + key.toBase64().substring(0,6) + "] -> Unreachable and slow");
                             }
                         } else if (isUnreachable) {
                             shouldStore = false;
                             wasNew = false;
-                            if (_log.shouldWarn()) {
+                            if (_log.shouldDebug()) {
                                 logged = true;
-                                _log.warn("Dropping unsolicited NetDbStore of new " + cap + (isFF ? " Floodfill" : " Router") +
+                                _log.debug("Dropping unsolicited NetDbStore of new " + cap +
+                                          (isFF ? " Floodfill" : " Router") +
                                           " [" + key.toBase64().substring(0,6) + "] -> Unreachable");
                             }
                         } else if (isOld && isSlow) {
                             shouldStore = false;
                             wasNew = false;
-                            if (_log.shouldWarn()) {
+                            if (_log.shouldDebug()) {
                                 logged = true;
-                                _log.warn("Dropping unsolicited NetDbStore of new " + cap + (isFF ? " Floodfill" : " Router") +
+                                _log.debug("Dropping unsolicited NetDbStore of new " + cap +
+                                          (isFF ? " Floodfill" : " Router") +
                                           " [" + key.toBase64().substring(0,6) + "] -> Slow (" + v + ")");
                             }
                         }
@@ -525,26 +530,23 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
             } else {
                 if (invalidMessage.contains("published over")) {
                     dontBlamePeer = true;
-                    if (_log.shouldWarn()) {
-                        _log.warn("Received STALE RouterInfo from [" + _fromHash.toBase64().substring(0,6) + "] * " +
+                    if (_log.shouldDebug()) {
+                        _log.debug("Received STALE RouterInfo from [" + _fromHash.toBase64().substring(0,6) + "] * " +
                                   KademliaNetworkDatabaseFacade.stripStoreWrapper(invalidMessage));
                     }
                 // Should we record in the profile?
                 } else if (_log.shouldDebug()) {
                     _log.debug("Received INVALID data packet from [" + _fromHash.toBase64().substring(0,6) + "] * " +
                                KademliaNetworkDatabaseFacade.stripStoreWrapper(invalidMessage) + _from);
-                } else if (_log.shouldWarn()) {
-                    _log.warn("Received INVALID data packet from [" + _fromHash.toBase64().substring(0,6) + "] * " +
-                              KademliaNetworkDatabaseFacade.stripStoreWrapper(invalidMessage));
                 }
             }
         } else if (invalidMessage != null && !dontBlamePeer) {
-            if (_log.shouldWarn()) {
+            if (_log.shouldDebug()) {
                 if (invalidMessage.contains("published over")) {
-                    _log.warn("Received STALE RouterInfo from [unknown] * " +
+                    _log.debug("Received STALE RouterInfo from [unknown] * " +
                               KademliaNetworkDatabaseFacade.stripStoreWrapper(invalidMessage));
                 } else {
-                    _log.warn("Received INVALID data packet from [unknown] * " +
+                    _log.debug("Received INVALID data packet from [unknown] * " +
                               KademliaNetworkDatabaseFacade.stripStoreWrapper(invalidMessage));
                 }
             }

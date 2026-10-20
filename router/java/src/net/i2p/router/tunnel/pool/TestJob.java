@@ -4177,9 +4177,9 @@ static List<PendingTest> prioritizeBatch(List<PendingTest> scan, long now) {
                 int recentExemptions = _cfg.getRecentTestExemptions();
                 if (recentExemptions < 1) {
                     _cfg.incrementRecentTestExemptions();
-                    if (_log.shouldWarn()) {
-                        _log.warn("Tunnel Test failed -> Keeping data-carrying tunnel (recent traffic, exemption " +
-                                  (recentExemptions + 1) + "/1) \n* " + _cfg +
+                    if (_log.shouldInfo()) {
+                        _log.info("Tunnel Test failed -> Keeping data-carrying tunnel (recent traffic, exemption " +
+                                  (recentExemptions + 1) + "/1) - " + _cfg +
                                   " -> Verified: " + _cfg.getVerifiedBytesTransferred() +
                                   " bytes, last transfer " + staleMs + "ms ago");
                     }
@@ -4218,8 +4218,8 @@ static List<PendingTest> prioritizeBatch(List<PendingTest> scan, long now) {
                 decrementIfCounted();
                 return;
             }
-            if (_log.shouldWarn()) {
-                _log.warn("Tunnel Test failed -> Keeping data-carrying tunnel \n* " + _cfg +
+            if (_log.shouldInfo()) {
+                _log.info("Tunnel Test failed -> Keeping data-carrying tunnel - " + _cfg +
                           " -> Verified: " + _cfg.getVerifiedBytesTransferred() +
                           " bytes, failures=" + currentFailures + "/" + maxFailures +
                           ", last transfer " + staleMs + "ms ago");

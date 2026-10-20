@@ -1707,17 +1707,16 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
             // and dereferencing it here threw an NPE out of this catch block and
             // replaced the diagnostic below with a stack trace.
             final String exMsg = DataHelper.messageOf(ex);
-            if (_log.shouldWarn())
-                if (exMsg.indexOf("Name or service not known") >= 0) {
-                    _log.warn("[HTTPServer] Request error: DNS error (blocked?) for: " +
+            if (exMsg.indexOf("Name or service not known") >= 0) {
+                if (_log.shouldInfo())
+                    _log.info("[HTTPServer] Request error: DNS error (blocked?) for: " +
                               exMsg.replace(": Name or service not known", "") +
-                              " "  + tunnelId + "\n* Client: " + peerB32);
-                } else {
-                    _log.warn("[HTTPServer] Request error: " + exMsg + " " + tunnelId +
-                              "\n* Client: " + peerB32 +
-                              "\n* Backend: " + getSocketString(socket.getLocalPort()) +
-                              " (localport=" + socket.getLocalPort() + ")");
-                }
+                              " "  + tunnelId + " client=" + peerB32);
+            } else if (_log.shouldDebug()) {
+                _log.debug("[HTTPServer] Request error: " + exMsg + " " + tunnelId +
+                           " client=" + peerB32 +
+                           " backend=" + getSocketString(socket.getLocalPort()));
+            }
         } catch (OutOfMemoryError oom) {
             // Often actually a file handle limit problem so we can safely send a response
             // java.lang.OutOfMemoryError: unable to create new native thread
@@ -1789,9 +1788,10 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 catch (IOException ioe) { /* ignored */ }
                 // Rate limited per client: a torrent client that reconnects
                 // without ever sending a request generates thousands of these.
-                if (log.shouldWarn() && ste.getMessage() != null
+                if (log.shouldDebug() && ste.getMessage() != null
                         && shouldLogRequestError(peerB32, ctx.clock().now())) {
-                    log.warn("[HTTPServer] Request error: " + ste.getMessage() + " " + tunnelId + "\n* Client: " + peerB32);
+                    log.debug("[HTTPServer] Request error: " + ste.getMessage() +
+                              " " + tunnelId + " client=" + peerB32);
                 }
             }
             try {socket.close();}
@@ -1804,9 +1804,10 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
             } else {
                 try {sendError(socket, ERR_BAD_REQUEST);}
                 catch (IOException ioe) { /* ignored */ }
-                if (log.shouldWarn() && eofe.getMessage() != null
+                if (log.shouldDebug() && eofe.getMessage() != null
                         && shouldLogRequestError(peerB32, ctx.clock().now())) {
-                    log.warn("[HTTPServer] Request error: " + eofe.getMessage() + " " + tunnelId + "\n* Client: " + peerB32);
+                    log.debug("[HTTPServer] Request error: " + eofe.getMessage() +
+                              " " + tunnelId + " client=" + peerB32);
                 }
             }
             try {socket.close();}
@@ -1819,8 +1820,8 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 try {socket.close();}
                 catch (IOException ioe) { /* ignored */ }
             }
-            if (log.shouldWarn()) {
-                log.warn("[HTTPServer] Request error: Headers too large " + tunnelId + "\n* Client: " + peerB32);
+            if (log.shouldDebug()) {
+                log.debug("[HTTPServer] Request error: Headers too large " + tunnelId + " client=" + peerB32);
             }
             return null;
         } catch (RequestTooLongException rtle) {
@@ -1830,8 +1831,8 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 try {socket.close();}
                 catch (IOException ioe) { /* ignored */ }
             }
-            if (log.shouldWarn()) {
-                log.warn("[HTTPServer] Request error: URI too long " + tunnelId + "\n* Client: " + peerB32);
+            if (log.shouldDebug()) {
+                log.debug("[HTTPServer] Request error: URI too long " + tunnelId + " client=" + peerB32);
             }
             return null;
         } catch (BadRequestException bre) {
@@ -1842,7 +1843,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 catch (IOException ioe) { /* ignored */ }
             }
             if (log.shouldDebug() && bre.getMessage() != null) {
-                log.warn("[HTTPServer] Request error: " + bre.getMessage() + " " + tunnelId + "\n* Client: " + peerB32);
+                log.debug("[HTTPServer] Request error: " + bre.getMessage() + " " + tunnelId + " client=" + peerB32);
             }
             return null;
         }

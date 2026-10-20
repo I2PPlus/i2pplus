@@ -327,8 +327,8 @@ protected void changeState(State state) {
                 return;
             changeState(State.CORRUPT);
         }
-        if (_log.shouldWarn()) {
-            _log.warn("[NTCP] Handshake failure " + _con + " -> " + reason);
+        if (_log.shouldDebug()) {
+            _log.debug("[NTCP] Handshake failure " + _con + " -> " + reason);
         }
         if (!bySkew)
             _context.statManager().addRateData("ntcp.receiveCorruptEstablishment", 1);

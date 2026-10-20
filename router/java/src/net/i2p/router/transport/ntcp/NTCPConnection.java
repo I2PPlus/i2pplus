@@ -937,7 +937,7 @@ void noteEstablishmentRtt(int rttMs) {
 
         int size = _outbound.size();
 
-        if (_log.shouldWarn()) {
+        if (_log.shouldInfo()) {
             int writeBufs = _writeBufs.size();
             boolean currentOutboundSet;
 
@@ -947,10 +947,10 @@ void noteEstablishmentRtt(int rttMs) {
 
             try {
                 String writeStatus = _conKey != null ? String.valueOf((_conKey.interestOps() & SelectionKey.OP_WRITE) != 0) : "null_key";
-                _log.warn("Outbound connection too backlogged (Size: " + size +
-                          ") \n* Wants write? " + writeStatus +
-                          "; Current Outbound set? " + currentOutboundSet +
-                          "\n* Write buffers: " + writeBufs + " on " + toString());
+                _log.info("Outbound connection too backlogged (size=" + size +
+                          " wantsWrite=" + writeStatus +
+                          " outboundSet=" + currentOutboundSet +
+                          " writeBufs=" + writeBufs + ") on " + this);
             } catch (RuntimeException ignored) { /* ignored */ }
         }
 

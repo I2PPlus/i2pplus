@@ -666,8 +666,8 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
         if (_currentState != OutboundState.OB_STATE_TOKEN_REQUEST_SENT &&
             _currentState != OutboundState.OB_STATE_REQUEST_SENT) {
             // not fatal
-            if (_log.shouldWarn())
-                _log.warn("Received out-of-order Retry with token " + token + " on " + toShortString());
+            if (_log.shouldDebug())
+                _log.debug("Received out-of-order Retry with token " + token + " on " + toShortString());
             // retransmit session request, rate limit
             _nextSend = Math.max(_context.clock().now(), _lastSend + 750);
             return;

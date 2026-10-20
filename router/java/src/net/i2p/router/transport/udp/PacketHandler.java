@@ -405,23 +405,23 @@ class PacketHandler {
                         header.getVersion() < MIN_VERSION ||
                         header.getVersion() > MAX_VERSION ||
                         header.getNetID() != _networkID) {
-                        if (_log.shouldWarn()) {
-                            _log.warn("Failed to decrypt Session or Token Request after retry \n* " + header +
+                        if (_log.shouldDebug()) {
+                            _log.debug("Failed to decrypt Session or Token Request after retry: " + header +
                                       " (" + packet.getPacket().getLength() + " bytes) on " + state);
                         }
                         return false;
                     }
                 }
                 if (header.getSrcConnID() != state.getSendConnID()) {
-                    if (_log.shouldWarn()) {
-                        _log.warn("Received BAD Source Connection ID \n* " + header +
+                    if (_log.shouldDebug()) {
+                        _log.debug("Received BAD Source Connection ID: " + header +
                                   " (" + packet.getPacket().getLength() + " bytes) on " + state);
                     }
                     return false;
                 }
                 if (header.getDestConnID() != state.getRcvConnID()) {
-                    if (_log.shouldWarn()) {
-                        _log.warn("Received BAD Destination Connection ID \n* " + header +
+                    if (_log.shouldDebug()) {
+                        _log.debug("Received BAD Destination Connection ID: " + header +
                                   " (" + packet.getPacket().getLength() + " bytes) on " + state);
                     }
                     return false;
@@ -437,8 +437,8 @@ class PacketHandler {
                     return false;
                 }
                 if (header.getDestConnID() != state.getRcvConnID()) {
-                    if (_log.shouldWarn()) {
-                        _log.warn("Received BAD Destination Connection ID \n* " + header + " on " + state);
+                    if (_log.shouldDebug()) {
+                        _log.debug("Received BAD Destination Connection ID: " + header + " on " + state);
                     }
                     return false;
                 }

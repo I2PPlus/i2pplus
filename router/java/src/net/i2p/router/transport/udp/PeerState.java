@@ -2374,7 +2374,8 @@ public class PeerState {
             if (isComplete) {
                 if (!_outboundMessages.remove(state)) {
                     // shouldn't happen except on race
-                    if (_log.shouldWarn()) {_log.warn("ACKed but not found in Outbound messages..." + state);}
+                    if (_log.shouldDebug())
+                        _log.debug("ACKed but not found in Outbound messages " + state);
                     return false;
                 }
             }

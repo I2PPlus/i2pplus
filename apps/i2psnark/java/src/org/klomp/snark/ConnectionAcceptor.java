@@ -93,8 +93,8 @@ class ConnectionAcceptor implements Runnable {
     /** May be called even when already running. May be called to start up again after {@link #halt()}. */
     public synchronized void startAccepting() {
         stop = false;
-        if (_log.shouldWarn()) {
-            _log.warn(
+        if (_log.shouldDebug()) {
+            _log.debug(
                     "[I2PSnark] ConnectionAcceptor: Start accepting new thread? "
                             + (thread == null));
         }
