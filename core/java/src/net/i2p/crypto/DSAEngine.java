@@ -19,6 +19,7 @@ import java.math.BigInteger;
 import java.security.GeneralSecurityException;
 import java.security.Key;
 import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.interfaces.DSAKey;
@@ -45,6 +46,32 @@ public final class DSAEngine {
      * no state that can leak between calls.
      */
     private static final ThreadLocal<MessageDigest> _sha1 = ThreadLocal.withInitial(SHA1::getInstance);
+
+    /**
+     * Thread-local SHA-512 digest for the EdDSA sign/verify paths, so that
+     * each operation does not clone a fresh MessageDigest off the SigType
+     * prototype. The engine resets it on every init, and it is never handed
+     * outside this class, so no state can leak between calls.
+     */
+    private static final ThreadLocal<MessageDigest> _sha512 = ThreadLocal.withInitial(DSAEngine::sha512);
+
+    private static MessageDigest sha512() {
+        try {
+            return MessageDigest.getInstance("SHA-512");
+        } catch (NoSuchAlgorithmException e) {
+            throw new IllegalStateException("SHA-512 unavailable", e);
+        }
+    }
+
+    /**
+     * New EdDSA or RedDSA engine for the given type, sharing the caller's
+     * (thread-local) SHA-512 digest.
+     */
+    private static EdDSAEngine engineFor(SigType type, MessageDigest md) {
+        if (type == SigType.RedDSA_SHA512_Ed25519)
+            return new RedDSAEngine(md);
+        return new EdDSAEngine(md);
+    }
 
     /**
      * Create a DSA engine for the given context.
@@ -513,8 +540,8 @@ public final class DSAEngine {
         boolean rv;
         if (type.getBaseAlgorithm() == SigAlgo.EdDSA) {
             // take advantage of one-shot mode
-            MessageDigest md = type.getDigestInstance();
-            EdDSAEngine jsig = (type == SigType.RedDSA_SHA512_Ed25519) ? new RedDSAEngine(md) : new EdDSAEngine(md);
+            MessageDigest md = _sha512.get();
+            EdDSAEngine jsig = engineFor(type, md);
             jsig.initVerify(pubKey);
             rv = jsig.verifyOneShot(data, offset, len, sigbytes);
         } else {
@@ -565,7 +592,8 @@ public final class DSAEngine {
         if (type.getBaseAlgorithm() == SigAlgo.EdDSA) {
             // take advantage of one-shot mode
             // Ignore algo, EdDSAKey includes a hash specification.
-            EdDSAEngine jsig = (type == SigType.RedDSA_SHA512_Ed25519) ? new RedDSAEngine() : new EdDSAEngine();
+            MessageDigest md = _sha512.get();
+            EdDSAEngine jsig = engineFor(type, md);
             jsig.initVerify(pubKey);
             rv = jsig.verifyOneShot(hash.getData(), sigbytes);
         } else {
@@ -608,8 +636,8 @@ public final class DSAEngine {
         byte[] sigbytes;
         if (type.getBaseAlgorithm() == SigAlgo.EdDSA) {
             // take advantage of one-shot mode
-            MessageDigest md = type.getDigestInstance();
-            EdDSAEngine jsig = (type == SigType.RedDSA_SHA512_Ed25519) ? new RedDSAEngine(md) : new EdDSAEngine(md);
+            MessageDigest md = _sha512.get();
+            EdDSAEngine jsig = engineFor(type, md);
             jsig.initSign(privKey);
             sigbytes = jsig.signOneShot(data, offset, len);
         } else {
@@ -667,7 +695,8 @@ public final class DSAEngine {
         if (type.getBaseAlgorithm() == SigAlgo.EdDSA) {
             // take advantage of one-shot mode
             // Ignore algo, EdDSAKey includes a hash specification.
-            EdDSAEngine jsig = (type == SigType.RedDSA_SHA512_Ed25519) ? new RedDSAEngine() : new EdDSAEngine();
+            MessageDigest md = _sha512.get();
+            EdDSAEngine jsig = engineFor(type, md);
             jsig.initSign(privKey);
             sigbytes = jsig.signOneShot(hash.getData());
         } else {
