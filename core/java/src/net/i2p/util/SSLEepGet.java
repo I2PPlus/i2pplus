@@ -107,7 +107,7 @@ public class SSLEepGet extends EepGet {
      * @param ctx the router context supplying config, logging, and the cert directories
      * @param outputStream stream to write the response body to; takes precedence over outputFile
      * @param url the https URL to fetch; redirects back to http are not followed
-     * @param state an SSLState retrieved from a previous SSLEepGet with getSSLState(), or null.
+     * @param state an SSLState retrieved from a previous SSLEepGet with {@link #getSSLState()}, or null.
      *              This makes repeated fetches from the same host MUCH faster,
      *              and prevents repeated key store loads even for different hosts.
      *

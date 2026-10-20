@@ -207,7 +207,7 @@ public final class KeyGenerator {
 
     /**
      * ElGamal only.
-     * Same as generatePKIKeypair() but different return type.
+     * Same as {@link #generatePKIKeypair()} but different return type.
      *
      * @return pair of keys
      * @since 0.8.7

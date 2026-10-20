@@ -14,7 +14,7 @@ public class LogConsoleBuffer {
     private final UIMessages _critBuffer;
 
     /**
-     * Uses default limit from LogManager.
+     * Uses default limit from {@link LogManager}.
      * As of 0.8.8, limit is not checked at runtime.
      *
      * @param context unused; kept so callers can build this from a context

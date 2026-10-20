@@ -60,7 +60,7 @@ public class CachedIteratorCollection<E> extends AbstractCollection<E> {
 
     // Set to true in clear() to signal all iterator instances the collection is gone.
     // ThreadLocalMap entries for other threads will be cleaned lazily via WeakRef key.
-    /** True after clear() to signal iterator instances the collection is gone. */
+    /** True after {@link #clear()} to signal iterator instances the collection is gone. */
     volatile boolean _cleared;
 
     /** Size of the collection. */
@@ -205,7 +205,7 @@ public class CachedIteratorCollection<E> extends AbstractCollection<E> {
     }
 
     /**
-     * Static inner CachedIterator class - implements hasNext(), next() &amp; remove()
+     * Static inner CachedIterator class - implements hasNext(), {@link #next()} &amp; remove()
      * <p>
      * Static to avoid holding an implicit {@code this$0} reference to the enclosing
      * collection, which would prevent GC of the collection (and its owning PeerState)
@@ -251,7 +251,7 @@ public class CachedIteratorCollection<E> extends AbstractCollection<E> {
 
         /**
          * If nextCalled is true (i.e. next() has been called at least once),
-         * remove() will remove the last returned Node.
+         * {@link #remove()} will remove the last returned Node.
          */
         @Override
         public void remove() {

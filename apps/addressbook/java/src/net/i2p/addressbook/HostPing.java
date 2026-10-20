@@ -143,7 +143,7 @@ public class HostPing {
     }
 
     /**
-     * Single ping attempt using I2PSocketManager.
+     * Single ping attempt using {@link I2PSocketManager}.
      */
     private long pingSingle(String hostname) {
         I2PSocketManager socketManager = null;

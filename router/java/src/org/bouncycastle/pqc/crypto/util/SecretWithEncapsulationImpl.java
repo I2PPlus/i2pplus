@@ -20,7 +20,7 @@ public class SecretWithEncapsulationImpl
 
     /**
      * Stores the shared key and the encapsulated key.
-     * @param sessionKey the shared key agreed by the KEM, zeroed by destroy() and copied on every read
+     * @param sessionKey the shared key agreed by the KEM, zeroed by {@link #destroy()} and copied on every read
      * @param cipher_text the encapsulated key produced by the encapsulator, zeroed by destroy() and copied on every read
      */
     public SecretWithEncapsulationImpl(byte[] sessionKey, byte[] cipher_text)

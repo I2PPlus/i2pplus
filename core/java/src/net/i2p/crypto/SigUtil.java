@@ -858,7 +858,7 @@ public final class SigUtil {
      * Only supports sigs up to about 65530 bytes. See code to fix BER encoding for bigger than that.
      *
      * @param len must be even, twice the nominal length of each BigInteger
-     * @return len bytes, call split() on the result to get two BigIntegers
+     * @return len bytes, call {@link #split()} on the result to get two BigIntegers
      * @since 0.8.7, moved to SigUtil in 0.9.9
      */
     private static byte[] aSN1ToSigBytes(byte[] asn, int len) throws SignatureException {

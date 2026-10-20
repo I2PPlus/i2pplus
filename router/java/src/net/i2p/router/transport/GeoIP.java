@@ -1671,7 +1671,7 @@ public class GeoIP {
      * Put our country code in the config, where others (such as Timestamper) can get it,
      * and it will be there next time at startup.
      * <p>
-     * Does nothing in I2PAppContext.
+     * Does nothing in {@link I2PAppContext}.
      * @param ts the timestamp of the geoip file that was read, greater than zero
      */
     private void updateOurCountry(long ts) {

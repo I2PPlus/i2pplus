@@ -972,7 +972,7 @@ public class IndexBean {
     public String getClientDestination(int tunnel) {return _helper.getClientDestination(tunnel);}
 
     /**
-     * Call this to see if it is ok to linkify getServerTarget().
+     * Call this to see if it is ok to linkify {@link #getServerTarget}.
      *
      * @param tunnel index of the tunnel in the configured list, or -1 for a new tunnel
      * @return true if the server target link is valid
@@ -1021,7 +1021,7 @@ public class IndexBean {
      * Get the server target.
      *
      * @param tunnel index of the tunnel in the configured list, or -1 for a new tunnel
-     * @return valid host:port only if isServerTargetLinkValid() is true
+     * @return valid host:port only if {@link #isServerTargetLinkValid} is true
      */
     public String getServerTarget(int tunnel) {
         TunnelController tun = getController(tunnel);
@@ -1164,7 +1164,7 @@ public class IndexBean {
      *
      * @param tunnel index of the tunnel in the configured list, or -1 for a new tunnel
      * @return the spoofed host
-     * @since 0.9.32 moved from EditBean
+     * @since 0.9.32 moved from {@link EditBean}
      */
     public String getSpoofedHost(int tunnel) {return DataHelper.escapeHTML(_helper.getSpoofedHost(tunnel));}
 
@@ -2070,7 +2070,7 @@ public class IndexBean {
 
     /**
      * Decrypt a property using an in-memory key, for
-     * interaction with the UI only, using ChaCha20.
+     * interaction with the UI only, using {@link ChaCha20}.
      * IV is SHA256(k).
      * <p>
      * These are transient keys by design, but are persisted

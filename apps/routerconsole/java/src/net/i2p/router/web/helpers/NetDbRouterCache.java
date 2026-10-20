@@ -7,7 +7,7 @@ import net.i2p.data.router.RouterInfo;
 import net.i2p.router.RouterContext;
 
 /**
- * Cached snapshot of the network database sorted by RouterInfoComparator.
+ * Cached snapshot of the network database sorted by {@link RouterInfoComparator}.
  * <p>
  * The /netdb page auto-refreshes every 10 seconds ({@code netdb.js}
  * REFRESH_INTERVAL_SHORT), so a snapshot up to this age is never

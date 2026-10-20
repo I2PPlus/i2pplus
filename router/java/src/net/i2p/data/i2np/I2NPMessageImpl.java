@@ -32,8 +32,8 @@ public abstract class I2NPMessageImpl implements I2NPMessage {
     protected long _expiration;
 
     /**
-     * Warning, lazily initialized by readBytes(), writeBytes(), toByteArray(),
-     * getUniqueId(), and setUniqueId(). Otherwise will be -1.
+     * Warning, lazily initialized by {@link #readBytes()}, writeBytes(), toByteArray(),
+     * {@link #getUniqueId()}, and setUniqueId(). Otherwise will be -1.
      * Extending classes should take care when accessing this field;
      * to ensure initialization, use getUniqueId() instead.
      */
@@ -215,7 +215,7 @@ public abstract class I2NPMessageImpl implements I2NPMessage {
      * Serialized message size, including the 16-byte header.
      * <p>
      * Kept synchronized: subclasses (DatabaseStoreMessage, TunnelGatewayMessage)
-     * lazily cache mutable state in calculateWrittenLength() and rely on the
+     * lazily cache mutable state in {@link #calculateWrittenLength()} and rely on the
      * enclosing monitor for safe publication.
      * @return the message size
      */
@@ -378,7 +378,7 @@ public abstract class I2NPMessageImpl implements I2NPMessage {
     /**
      * Read the message with a short 5-byte header.
      * The header consists of a one-byte type and a 4-byte expiration in seconds only.
-     * Caller MUST call setUniqueId() on the returned value.
+     * Caller MUST call {@link #setUniqueId} on the returned value.
      * Used by SSU2 only!
      *
      * @param ctx the application context the resulting message belongs to

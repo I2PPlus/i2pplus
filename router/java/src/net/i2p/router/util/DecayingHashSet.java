@@ -30,7 +30,7 @@ import net.i2p.util.ConcurrentHashSet;
  * <li>About 72 bytes of memory per 16 byte entry once loaded (measured: 9.01 MB
  * for 131,000 entries), covering the map node, the {@code ArrayWrapper}
  * and its share of the table. At the 128K soft cap that is roughly 9 MB
- * as a floor, not a ceiling: getInsertedCount() spans both buffers, so a
+ * as a floor, not a ceiling: {@link #getInsertedCount()} spans both buffers, so a
  * window deferred past the cap can take this to about twice that</li>
  * <li>Space-proportional traffic handling</li>
  * </ul>
@@ -97,7 +97,7 @@ public class DecayingHashSet extends DecayingBloomFilter {
      * log once per entry. Same clock as {@link #_lastDecayNanos} on purpose, so
      * one policy decision never mixes a monotonic and a wall clock reading.
      * Volatile because the warn is reached from the unlocked pre-check in
-     * forceDecayIfOverCap(); a lost update here only costs an extra log line.
+     * {@link #forceDecayIfOverCap()}; a lost update here only costs an extra log line.
      * @since 0.9.71+
      */
     private volatile long _lastOverCapWarnNanos;

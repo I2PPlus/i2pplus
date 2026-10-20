@@ -209,7 +209,7 @@ public class ReseedChecker {
     /**
      * Performs a blocking reseed from a zip or su3 InputStream.
      *
-     * @param in InputStream of reseed data
+     * @param in {@link InputStream} of reseed data
      * @return number of routers imported
      * @throws IOException if reseed is already in progress or an IO error occurs
      */

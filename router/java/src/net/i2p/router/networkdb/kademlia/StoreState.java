@@ -115,7 +115,7 @@ class StoreState {
     /**
      * The number of peers attempted.
      * Does not include skipped peers.
-     * Do not use getAttempted().size() as that does include skipped peers.
+     * Do not use {@link #getAttempted()}.size() as that does include skipped peers.
      *
      * @return the attempted count
      * @since 0.9.53
@@ -186,7 +186,7 @@ class StoreState {
      *
      * @param peer the peer the message is queued to, which is also counted as
      *             attempted
-     * @param msg the wrapped message to hand back from getPendingMessage()
+     * @param msg the wrapped message to hand back from {@link #getPendingMessage}
      * @since 0.7.10
      */
     public void addPending(Hash peer, MessageWrapper.WrappedMessage msg) {

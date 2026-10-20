@@ -30,7 +30,7 @@ import net.i2p.util.OrderedProperties;
  * <li>Options and statistics support</li>
  * <li>Blinded and encrypted LeaseSet support</li>
  * </ul>
- * <p>Key differences from LeaseSet:</p>
+ * <p>Key differences from {@link LeaseSet}:</p>
  * <ul>
  * <li>Uses {@link #getPublished} for version comparison instead of lease dates</li>
  * <li>Supports multiple encryption keys via {@link #getEncryptionKeys}</li>
@@ -226,7 +226,7 @@ public class LeaseSet2 extends LeaseSet {
      * Encryption keys should be added in order of server preference, most-preferred first.
      *
      * @param key the key to append; the first one added becomes the key returned
-     *            by getEncryptionKey()
+     *            by {@link #getEncryptionKey()}
      */
     public void addEncryptionKey(PublicKey key) {
         if (_encryptionKey == null) {setEncryptionKey(key);}
@@ -317,7 +317,7 @@ public class LeaseSet2 extends LeaseSet {
     }
 
     /**
-     * Generate a Signature to pass to setOfflineSignature().
+     * Generate a Signature to pass to {@link #setOfflineSignature}.
      *
      * @param expires when the offline signature stops being valid, in milliseconds
      * since the epoch; the signature covers whole seconds only

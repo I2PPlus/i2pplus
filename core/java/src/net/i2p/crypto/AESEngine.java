@@ -115,7 +115,7 @@ public class AESEngine {
     }
 
     /**
-     * See safeEncrypt() for description.
+     * See {@link #safeEncrypt} for description.
      * WARNING - no check for maximum length here, OOM DOS possible, fix it if you're going to use this.
      *
      * @param payload data to be decrypted

@@ -23,7 +23,7 @@ import net.i2p.util.SecureFile;
  * Implements Comparable for prioritization by piece number and completeness.
  *
  * <p>Usage Notes: - Not thread-safe except for synchronized public methods. - Objects for the same
- * piece should not be shared between peers. - Used extensively by PeerCoordinator and PeerState for
+ * piece should not be shared between peers. - Used extensively by {@link PeerCoordinator} and PeerState for
  * request management.
  *
  * @since 0.8.2

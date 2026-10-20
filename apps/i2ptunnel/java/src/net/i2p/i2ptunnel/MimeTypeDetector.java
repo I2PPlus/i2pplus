@@ -7,7 +7,7 @@ import java.util.Set;
  * Utility class for MIME type detection based on URL file extensions.
  * <p>
  * This class provides static methods to determine the MIME type of a resource
- * based on its file extension. It is used by I2PTunnelHTTPServer to set
+ * based on its file extension. It is used by {@link I2PTunnelHTTPServer} to set
  * appropriate Content-Type headers for responses and to determine which
  * security headers and cache policies should be applied.
  * </p>

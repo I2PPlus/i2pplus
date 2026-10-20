@@ -124,7 +124,7 @@ public class MetaInfo {
     }
 
     /**
-     * Preserves privateTorrent int value, for use by main().
+     * Preserves privateTorrent int value, for use by {@link #main}.
      *
      * @param announce the tracker announce URL, may be null
      * @param name the file or top-level directory name
@@ -561,7 +561,7 @@ public class MetaInfo {
 
     /**
      * Returns the requested name for the file or toplevel directory. If it is a toplevel directory
-     * name getFiles() will return a non-null List of file name hierarchy name.
+     * name {@link #getFiles()} will return a non-null List of file name hierarchy name.
      * @return the name the torrent requests for the file, or for the toplevel
      * directory when {@link #getFiles} returns a file hierarchy
      */
@@ -592,7 +592,7 @@ public class MetaInfo {
 
     /**
      * Returns a list of lists of file name hierarchies or null if it is a single name. It has the
-     * same size as the list returned by getLengths().
+     * same size as the list returned by {@link #getLengths()}.
      * @return the per-file name hierarchies, or null for a single-file torrent
      */
     public List<List<String>> getFiles() {
@@ -744,7 +744,7 @@ public class MetaInfo {
 
     /**
      * Return the length of a piece. All pieces are of equal length except for the last one (<code>
-     * getPieces()-1</code>).
+     * {@link #getPieces()}-1</code>).
      *
      * @param piece zero-based piece index, from 0 to {@link #getPieces} - 1
      * @return the piece length
@@ -954,7 +954,7 @@ public class MetaInfo {
     }
 
     /**
-     * The size of getInfoBytes(). Cached.
+     * The size of {@link #getInfoBytes()}. Cached.
      *
      * @return the info bytes length
      * @since 0.9.48

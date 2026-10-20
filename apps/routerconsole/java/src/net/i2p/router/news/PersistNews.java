@@ -100,7 +100,7 @@ class PersistNews {
     /**
      * This does not check for any missing values.
      * Any fields in any NewsEntry may be null.
-     * Content is not sanitized by NewsXMLParser here, do that before storing.
+     * Content is not sanitized by {@link NewsXMLParser} here, do that before storing.
      *
      * @param ctx the router context
      * @return non-null, sorted by updated date, newest first

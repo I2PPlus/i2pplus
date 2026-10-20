@@ -17,7 +17,7 @@ import net.i2p.util.SystemVersion;
  * Note that this class is not fully Thread safe!
  * The following methods must be synchronized externally, they are not
  * synced here or in super():
- * addRandomByte(), addRandomBytes(), nextByte(), nextBytes(), seed()
+ * addRandomByte(), addRandomBytes(), nextByte(), nextBytes(), {@link #seed}
  */
 @SuppressWarnings("java:S2975")
 public class AsyncFortunaStandalone extends FortunaStandalone implements Runnable {
@@ -33,7 +33,7 @@ public class AsyncFortunaStandalone extends FortunaStandalone implements Runnabl
     private final I2PAppContext _context;
     /** The logger for this class. */
     private final Log _log;
-    /** True until shutdown() is called, which stops the refill thread. */
+    /** True until {@link #shutdown()} is called, which stops the refill thread. */
     private volatile boolean _isRunning;
     /** The thread that refills empty buffers in the background. */
     private Thread _refillThread;
@@ -85,7 +85,7 @@ public class AsyncFortunaStandalone extends FortunaStandalone implements Runnabl
         buffer = null;
     }
 
-    /** The seed is only propogated once the prng is started with startup(). */
+    /** The seed is only propogated once the prng is started with {@link #startup()}. */
     @Override
     public void seed(byte[] val) {
         Map<String, byte[]> props = Collections.singletonMap(SEED, val);

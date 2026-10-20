@@ -170,7 +170,7 @@ public class CoalesceStatsEvent extends SimpleTimer2.TimedEvent {
     /**
      * Gather this cycle's statistics and coalesce them into the Rates.
      * <p>
-     * Called every Router.COALESCE_TIME by timeReached(), which guarantees the
+     * Called every Router.COALESCE_TIME by {@link #timeReached()}, which guarantees the
      * reschedule and contains any exception this throws, so nothing here needs
      * its own try/catch.
      *

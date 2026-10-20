@@ -217,7 +217,7 @@ public class LoadClientAppsJob extends JobImpl {
     /**
      * Use to test if the class is present,
      * to propagate an error back to the user,
-     * since runClient() runs in a separate thread.
+     * since {@link #runClient} runs in a separate thread.
      *
      * @param className the client class to check for
      * @param cl can be null

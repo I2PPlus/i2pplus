@@ -257,7 +257,7 @@ abstract class SAMHandler implements Runnable, Handler {
 
     /**
      * If you're crazy enough to write to the raw socket, grab the write lock
-     * with getWriteLock(), synchronize against it, and write to the getOut().
+     * with {@link #getWriteLock()}, synchronize against it, and write to the getOut().
      *
      * @return socket Write lock object
      */
@@ -347,7 +347,7 @@ abstract class SAMHandler implements Runnable, Handler {
     }
 
     /**
-     * Register with the bridge, call handle(),
+     * Register with the bridge, call {@link #handle()},
      * unregister with the bridge.
      */
     public final void run() {

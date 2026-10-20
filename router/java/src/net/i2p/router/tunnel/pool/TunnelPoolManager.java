@@ -267,7 +267,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
 
     /**
      * Pick a random outbound tunnel from any pool — client pools first,
-     * then exploratory.  Used by BuildRequestor for cross-pool build
+     * then exploratory.  Used by {@link BuildRequestor} for cross-pool build
      * replies when the requesting pool's own tunnels are unavailable.
      * Client tunnels provide a lower-latency reply path than exploratory.
      *
@@ -602,7 +602,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
     /**
      * Used only at session startup.
      * Do not use to change settings.
-     * Do not use for aliased destinations; use addAlias().
+     * Do not use for aliased destinations; use {@link #addAlias}.
      */
     public void buildTunnels(Destination client, ClientTunnelSettings settings) {
         Hash dest = client.calculateHash();
@@ -793,7 +793,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
 
     /**
      * This will be called twice, once by the inbound and once by the outbound pool.
-     * Synched with buildTunnels() above.
+     * Synched with {@link #buildTunnels} above.
      * <p>
      * Must be called AFTER deregistration by the client manager.
      * <p>
@@ -2138,7 +2138,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
     /**
      * Emergency pool recovery: Check all registered clients have valid tunnel pools.
      * Recreates missing pools to prevent service interruption.
-     * Called periodically by BuildExecutor.
+     * Called periodically by {@link BuildExecutor}.
      * @return number of pools recovered
      * @since 0.9.69+
      */

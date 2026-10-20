@@ -11,7 +11,7 @@ import java.util.NoSuchElementException;
     of int's, nextIndex and previousIndex methods are not really relevant.
 
     To be clear, this is an iterator through values.
-    To get the key, call nextKey() BEFORE calling next().
+    To get the key, call {@link #nextKey()} BEFORE calling next().
  *
  * @param <K> type of keys maintained by this iterator
  * @param <V> type of values returned by this iterator
@@ -75,7 +75,7 @@ public boolean hasNext() {
 
     /**
      * The key. Does NOT advance the index.
-     * @return the key for which the value will be returned in the subsequent call to next()
+     * @return the key for which the value will be returned in the subsequent call to {@link #next()}
      * @throws NoSuchElementException if the iterator is past the last key
      */
     public K nextKey() {

@@ -71,7 +71,7 @@ class ClientMessageEventListener implements I2CPMessageReader.I2CPMessageEventLi
     private volatile boolean _authorized;
 
     private static final String PROP_AUTH = "i2cp.auth";
-    /** If true, user/pw must be in GetDateMessage. */
+    /** If true, user/pw must be in {@link GetDateMessage}. */
     private static final String PROP_AUTH_STRICT = "i2cp.strictAuth";
 
     /**
@@ -214,7 +214,7 @@ class ClientMessageEventListener implements I2CPMessageReader.I2CPMessageEventLi
      * DisconnectMessage in return, and not wait around for our DisconnectMessage.
      * So keep it simple.
      * <p>
-     * Defaults in SessionConfig options are, in general, NOT honored.
+     * Defaults in {@link SessionConfig} options are, in general, NOT honored.
      * In-JVM client side must promote defaults to the primary map.
      */
     private void handleCreateSession(CreateSessionMessage message) {
@@ -528,7 +528,7 @@ class ClientMessageEventListener implements I2CPMessageReader.I2CPMessageEventLi
      * The client asked for a message, so we send it to them.
      * <p>
      * This is only when not in fast receive mode.
-     * In the default fast receive mode, data is sent in MessageReceivedJob.
+     * In the default fast receive mode, data is sent in {@link MessageReceivedJob}.
      * <p>
      * A message naming no live session is dropped, as is a message for which no
      * payload is retained; see {@link #classifyReceiveBegin}.

@@ -143,7 +143,7 @@ public class TunnelDataMessage extends FastI2NPMessageImpl {
 
         /**
          * We can't cache it in trivial form, as other components (e.g. HopProcessor)
-         * call getData() and use it as the buffer to write with.  It is then used
+         * call {@link #getData()} and use it as the buffer to write with.  It is then used
          * again to pass to the 'receiver', which may even cache it in a FragmentMessage.
          */
         if (PIPELINED_CACHE) {

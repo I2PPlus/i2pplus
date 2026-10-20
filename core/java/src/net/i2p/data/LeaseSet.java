@@ -43,7 +43,7 @@ import java.util.Set;
  * <p><strong>Encryption Support (Legacy):</strong></p>
  * <ul>
  * <li><strong>⚠️ SECURITY WARNING:</strong> Encryption is poorly designed and probably insecure</li>
- * <li><strong>Not Recommended:</strong> Use modern alternatives like EncryptedLeaseSet</li>
+ * <li><strong>Not Recommended:</strong> Use modern alternatives like {@link EncryptedLeaseSet}</li>
  * <li><strong>Limited Scope:</strong> Only encrypts gateway and tunnel ID data</li>
  * <li><strong>No Indication:</strong> Encrypted leases appear identical to unencrypted ones</li>
  * <li><strong>Keyring Required:</strong> Routers need desthash and key to decrypt</li>
@@ -99,7 +99,7 @@ public class LeaseSet extends DatabaseEntry {
     protected final List<Lease> _leases;
     /**
      * Earliest expiration time among all leases.
-     * Cached because isCurrent() and getEarliestLeaseDate() are called frequently.
+     * Cached because {@link #isCurrent} and getEarliestLeaseDate() are called frequently.
      */
     private long _firstExpiration;
     /** Latest expiration time among all leases. */
@@ -121,7 +121,7 @@ public class LeaseSet extends DatabaseEntry {
      * Leasesets larger than 6 should be used with caution,
      * as each lease adds 44 bytes, and routers older than version 0.9
      * will not be able to connect as they will throw an exception in
-     * readBytes(). Also, the churn will be quite rapid, leading to
+     * {@link #readBytes}. Also, the churn will be quite rapid, leading to
      * frequent netdb stores and transmission on existing connections.
      * <p>
      * However we increase it now in case some hugely popular eepsite arrives.
@@ -137,7 +137,7 @@ public class LeaseSet extends DatabaseEntry {
     }
 
     /**
-     * Same as getEarliestLeaseDate().
+     * Same as {@link #getEarliestLeaseDate()}.
      * @return milliseconds since the epoch of the earliest lease expiry
      */
     @Override
@@ -357,7 +357,7 @@ public class LeaseSet extends DatabaseEntry {
      *
      * @param signingKey the key to verify against (if null, falls back to internal key)
      * @return true only if the signature matches
-     * @deprecated Use verifySignature() instead; this method previously ignored the parameter
+     * @deprecated Use {@link #verifySignature()} instead; this method previously ignored the parameter
      */
     @Deprecated
     public boolean verifySignature(SigningPublicKey signingKey) {
@@ -605,7 +605,7 @@ public class LeaseSet extends DatabaseEntry {
      * Decrypt the leases, except for the last one which is partially padding.
      * Store the new decrypted leases in a backing store,
      * and keep the original leases so that verify() still works and the
-     * encrypted leaseset can be sent on to others (via writeBytes()).
+     * encrypted leaseset can be sent on to others (via {@link #writeBytes()}).
      */
     private void decrypt(SessionKey key) throws DataFormatException, IOException {
         int size = _leases.size();

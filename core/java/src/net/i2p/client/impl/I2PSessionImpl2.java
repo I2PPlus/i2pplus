@@ -37,7 +37,7 @@ import net.i2p.util.SimpleTimer2;
 /**
  * Thread safe implementation of an I2P session running over TCP.
  * <p>
- * Unused directly, see I2PSessionMuxedImpl extension.
+ * Unused directly, see {@link I2PSessionMuxedImpl} extension.
  *
  */
 class I2PSessionImpl2 extends I2PSessionImpl {
@@ -92,7 +92,7 @@ class I2PSessionImpl2 extends I2PSessionImpl {
     }
 
     /**
-     * For extension by SubSession via I2PSessionMuxedImpl
+     * For extension by {@link SubSession} via I2PSessionMuxedImpl
      * <p>
      * Create a new session, reading the Destination, PrivateKey, and SigningPrivateKey
      * from the destKeyStream, and using the specified options to connect to the router.
@@ -478,7 +478,7 @@ class I2PSessionImpl2 extends I2PSessionImpl {
     }
 
     /**
-     * Same as sendBestEffort(), except we do not expect any MessageStatusMessage responses -
+     * Same as {@link #sendBestEffort}, except we do not expect any MessageStatusMessage responses -
      * not for accepted, or success, or failure.
      * So we don't create a MessageState and save it on the _sendingStates HashSet.
      *

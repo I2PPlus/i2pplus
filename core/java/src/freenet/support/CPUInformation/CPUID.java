@@ -121,7 +121,7 @@ public class CPUID {
      * then comment out the I2PAppContext usage below.
      *
      * Set to false if not in router context, so scripts using TrustedUpdate
-     * don't spew log messages. main() below overrides to true.
+     * don't spew log messages. {@link #main()} below overrides to true.
      */
     private static boolean _doLog = System.getProperty("jcpuid.dontLog") == null &&
                                     I2PAppContext.getGlobalContext().isRouterContext();

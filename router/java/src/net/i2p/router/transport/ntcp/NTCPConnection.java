@@ -456,7 +456,7 @@ public class NTCPConnection implements Closeable {
 
     /**
      * Only valid during establishment;
-     * replaced with EstablishState.VERIFIED or FAILED afterwards.
+     * replaced with {@link EstablishState}.VERIFIED or FAILED afterwards.
      *
      * @return the establish state
      */
@@ -700,7 +700,7 @@ void noteEstablishmentRtt(int rttMs) {
     public int getVersion() { return _version; }
 
     /**
-     *  Records version 2 from InboundEstablishState.
+     *  Records version 2 from {@link InboundEstablishState}.
      *  Just for logging, so we know before finishInboundEstablish() is called.
      *
      *  @param ver the version to set
@@ -960,7 +960,7 @@ void noteEstablishmentRtt(int rttMs) {
     /**
      *  Inject a DatabaseStoreMessage with our RouterInfo. NTCP 1 or 2.
      * <p>
-     *  Externally, this is only called by NTCPTransport for outbound cons,
+     *  Externally, this is only called by {@link NTCPTransport} for outbound cons,
      *  before the con is established, but we know what version it is.
      * <p>
      *  Internally, may be called for outbound or inbound, but only after the
@@ -1640,8 +1640,8 @@ void noteEstablishmentRtt(int rttMs) {
      *  Does the delayed read.
      * <p>
      *  Fires on the limiter thread when the throttled request completes, and
-     *  synchronously on the closing thread when close() aborts the request.
-     *  The ownership hand-off in removeIBRequest() guarantees the attached
+     *  synchronously on the closing thread when {@link #close()} aborts the request.
+     *  The ownership hand-off in {@link #removeIBRequest()} guarantees the attached
      *  read buffer is delivered or released exactly once across those racers.
      */
     private class InboundListener implements FIFOBandwidthLimiter.CompleteListener {
@@ -1715,10 +1715,10 @@ void noteEstablishmentRtt(int rttMs) {
     /**
      * Call when there is data ready to write.
      * If we have bandwidth, calls write() which calls {@code EventPumnper.wantsWrite(}con).
-     * If no bandwidth, calls queuedWrite().
+     * If no bandwidth, calls {@link #queuedWrite}.
      *
      * @param data the data to write
-     * @since moved from EventPumper in 0.9.52
+     * @since moved from {@link EventPumper} in 0.9.52
      */
     void wantsWrite(byte[] data) {
         wantsWrite(data, 0, data.length);
@@ -1899,7 +1899,7 @@ void noteEstablishmentRtt(int rttMs) {
 
     /**
      * Replaces getWriteBufCount().
-     * Lock-free; backed by ConcurrentLinkedQueue, and only the pumper's drain
+     * Lock-free; backed by {@link ConcurrentLinkedQueue}, and only the pumper's drain
      * loop consumes. No synchronization required.
      *
      * @return true if write buffer is empty
@@ -2401,9 +2401,9 @@ void noteEstablishmentRtt(int rttMs) {
          *  Decrypts in place.
          *  Length is _framelen
          *  Side effects: Sets _received = -2, increments _frameCount and _blockCount if valid,
-         *  calls destroy() and sets _terminated if termination block received or if invalid.
+         *  calls {@link #destroy()} and sets _terminated if termination block received or if invalid.
          * <p>
-         *  Does not call close() on failure. Caller MUST call delayedClose() if this returns false.
+         *  Does not call close() on failure. Caller MUST call {@link #delayedClose()} if this returns false.
          *
          * @return success, false for fatal error (AEAD) only
          */
@@ -2592,7 +2592,7 @@ void noteEstablishmentRtt(int rttMs) {
      * This replaces _curReadState, so no more messages will be received.
      * <p>
      * Call this only on data phase AEAD failure.
-     * For other failures, use sendTermination().
+     * For other failures, use {@link #sendTermination()}.
      *
      * @param buf possibly with data remaining
      * @param validFramesRcvd to be sent in termination message

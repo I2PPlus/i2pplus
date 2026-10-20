@@ -68,7 +68,7 @@ public class Hash extends SimpleDataStructure {
     public static final int HASH_LENGTH = 32;
     /** Placeholder all-zero hash, used as a stand-in when no real router hash is known. */
     public static final Hash FAKE_HASH = new Hash(new byte[HASH_LENGTH]);
-    /** Initial cache capacity, scaled by available memory by SDSCache. */
+    /** Initial cache capacity, scaled by available memory by {@link SDSCache}. */
     private static final int CACHE_SIZE = 2048;
 
     private static final SDSCache<Hash> _cache = new SDSCache<>(Hash.class, HASH_LENGTH, CACHE_SIZE);
@@ -181,7 +181,7 @@ public class Hash extends SimpleDataStructure {
 
     /**
      * The .b32.i2p form of the hash. Cached after the first call, like
-     * toBase64(), and dropped by setData() and readBytes().
+     * {@link #toBase64()}, and dropped by setData() and readBytes().
      *
      * @return "{52 chars}.b32.i2p" or null if data not set.
      * @since 0.9.25

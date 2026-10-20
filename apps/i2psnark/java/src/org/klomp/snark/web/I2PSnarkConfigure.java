@@ -26,7 +26,7 @@ import net.i2p.util.Translate;
 /**
  * Renders the three forms of the /configure page - main settings, torrent
  * creation filters, and tracker management - and applies submitted settings
- * back to SnarkManager. Extracted wholesale from I2PSnarkServlet; bodies are
+ * back to SnarkManager. Extracted wholesale from {@link I2PSnarkServlet}; bodies are
  * verbatim moves qualified for servlet access via {@code srv}.
  */
 class I2PSnarkConfigure {

@@ -48,7 +48,7 @@ import java.util.Arrays;
  * <li><strong>LRU Caching:</strong> Frequently used keys cached for efficiency</li>
  * <li><strong>Factory Methods:</strong> Static creation methods for cache access</li>
  * <li><strong>Efficient Storage:</strong> Optimized byte representation</li>
- * <li><strong>Fast Comparison:</strong> Optimized equals() and hashCode()</li>
+ * <li><strong>Fast Comparison:</strong> Optimized {@link #equals} and hashCode()</li>
  * </ul>
  * <p><strong>Security Considerations:</strong></p>
  * <ul>
@@ -212,7 +212,7 @@ public class PublicKey extends SimpleDataStructure {
     /**
      * Type code for unknown encryption types.
      * <p>
-     * Only valid if getType() returns null.
+     * Only valid if {@link #getType()} returns null.
      *
      * @return the unknown type code
      * @since 0.9.38

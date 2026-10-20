@@ -122,7 +122,7 @@ class ClientConnectionRunner {
     /**
      * Disconnect after this many consecutive LeaseSet request failures.
      * Increased from 5 to 10 to tolerate brief I2CP stalls without mass-disconnect;
-     * see failLeaseRequest() decay handling.
+     * see {@link #failLeaseRequest()} decay handling.
      */
     private static final int MAX_LEASE_FAILS = 10;
     /** Reset consecutive-fail counter if this much time has elapsed since last failure. */
@@ -375,7 +375,7 @@ class ClientConnectionRunner {
     }
 
     /**
-     * Equivalent to getConfig().getDestination().calculateHash();
+     * Equivalent to {@link #getConfig}.getDestination().calculateHash();
      * will be null before session is established
      * Not subsession aware. Returns primary session hash.
      * Don't use if you can help it.
@@ -459,7 +459,7 @@ class ClientConnectionRunner {
     }
 
     /**
-     * To be called only by ClientManager.
+     * To be called only by {@link ClientManager}.
      *
      * @param hash for the session
      * @param id the session id to set

@@ -5,13 +5,13 @@ import java.net.Socket;
 import java.time.Instant;
 
 /**
- * Implements one or two timers; one for inactivity, that is reset by resetTimer(),
- * and optionally, a total time since instantiation, that is configured by setTotalTimeoutPeriod().
+ * Implements one or two timers; one for inactivity, that is reset by {@link #resetTimer()},
+ * and optionally, a total time since instantiation, that is configured by {@link #setTotalTimeoutPeriod}.
  * <p>
  * On timer expiration, this will close a provided socket, and/or run a configured job.
  * <p>
  * Deprecated for external use.
- * It is only used by EepGet, its subclasses, and Syndie.
+ * It is only used by {@link EepGet}, its subclasses, and Syndie.
  * Take care not to break Syndie.
  * The only advantage seems to be a total timeout period, which is the second
  * argument to {@link net.i2p.util.EepGet#fetch(long, long, long)},
@@ -40,7 +40,7 @@ public class SocketTimeout extends SimpleTimer2.TimedEvent {
     }
 
     /**
-     * If socket is non-null, or is set later by setSocket(),
+     * If socket is non-null, or is set later by {@link #setSocket},
      * it will be closed when the timer expires.
      *
      * @param socket may be null

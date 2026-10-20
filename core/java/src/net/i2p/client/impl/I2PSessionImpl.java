@@ -85,8 +85,8 @@ import net.i2p.util.VersionComparator;
  * Implementation of an I2P session running over TCP.  This class is NOT thread safe -
  * only one thread should send messages at any given time
  * <p>
- * Public only for clearCache().
- * Except for methods defined in I2PSession and I2CPMessageEventListener,
+ * Public only for {@link #clearCache()}.
+ * Except for methods defined in {@link I2PSession} and I2CPMessageEventListener,
  * not maintained as a public API, not for external use.
  * Use I2PClientFactory to get an I2PClient and then createSession().
  *
@@ -293,7 +293,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
     }
 
     /**
-     * For extension by SubSession via I2PSessionMuxedImpl and I2PSessionImpl2.
+     * For extension by SubSession via {@link I2PSessionMuxedImpl} and I2PSessionImpl2.
      *
      * @param primary the muxed session sharing this session's context, handlers and producer
      * @param destKeyStream stream containing the private key data,
@@ -502,7 +502,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
      * I2CP host from the config.
      *
      * @return configured host name, or a placeholder for logging if not applicable
-     * @since 0.9.7 was in loadConfig()
+     * @since 0.9.7 was in {@link #loadConfig()}
      */
     private String getHost() {
         if (_context.isRouterContext()) {return "[Internal connection]";} // just for logging
@@ -932,7 +932,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
      *
      * @throws InterruptedException if the calling thread is interrupted while waiting
      * @throws IOException on I/O error
-     * @since 0.9.11 moved from connect()
+     * @since 0.9.11 moved from {@link #connect()}
      */
     protected void waitForDate() throws InterruptedException, IOException {
         if (_log.shouldDebug()) _log.debug(getPrefix() + "After getDate / begin waiting for a response");
@@ -979,7 +979,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
 
     /**
      * Throw away the received message, we don't want it.
-     * Use instead of receiveMessage() to avoid gunzip overhead.
+     * Use instead of {@link #receiveMessage} to avoid gunzip overhead.
      *
      * @since 0.9.71
      */
@@ -1075,7 +1075,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
 
         /**
          * Creates the notifier with its pending queues empty; ids and sizes are
-         * queued by available() and drained by the run loop.
+         * queued by {@link #available} and drained by the run loop.
          */
         public AvailabilityNotifier() {
             _pendingIds = new ArrayList<>(2);
@@ -1215,7 +1215,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
     /**
      * The I2CPMessageEventListener callback.
      * Receive notification of an error reading the I2CP stream.
-     * As of 0.9.41, does NOT call sessionlistener.disconnected(),
+     * As of 0.9.41, does NOT call sessionlistener.{@link #disconnected},
      * the I2CPMessageReader will call disconnected() also.
      *
      * @param reader ignored, only the error is used
@@ -1876,7 +1876,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
      * Blocking. Waits a max of 10 seconds by default.
      * See lookupDest with maxWait parameter to change.
      * Implemented in 0.8.3 in I2PSessionImpl;
-     * previously was available only in I2PSimpleSession.
+     * previously was available only in {@link I2PSimpleSession}.
      * Multiple outstanding lookups are now allowed.
      *
      * @return null on failure
@@ -1980,7 +1980,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
     /**
      * Ask the router to lookup a Destination by host name.
      * Blocking. See above for details.
-     * Same as lookupDest() but with a failure code in the return value.
+     * Same as {@link #lookupDest} but with a failure code in the return value.
      *
      * @param maxWait milliseconds to wait for the router's reply before giving up
      * @return non-null
@@ -2224,7 +2224,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
     }
 
     /**
-     * Always valid in RouterContext. Returns null if not yet connected in I2PAppContext.
+     * Always valid in RouterContext. Returns null if not yet connected in {@link I2PAppContext}.
      *
      * @return null if unknown
      * @since 0.9.46

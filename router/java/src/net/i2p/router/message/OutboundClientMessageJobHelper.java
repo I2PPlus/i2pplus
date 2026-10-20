@@ -49,7 +49,7 @@ import net.i2p.util.Log;
  *         Data Message
  * </pre>
  * <p>
- * The low-level construction is in GarlicMessageBuilder.
+ * The low-level construction is in {@link GarlicMessageBuilder}.
  */
 class OutboundClientMessageJobHelper {
 

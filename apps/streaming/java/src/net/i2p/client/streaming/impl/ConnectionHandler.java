@@ -44,7 +44,7 @@ class ConnectionHandler {
     private boolean _restartPending;
 
     /**
-     * Max time a received SYN may sit in the accept queue before accept() is
+     * Max time a received SYN may sit in the accept queue before {@link #accept} is
      * expected to pull it. If accept() is delayed (busy or slow hosted server),
      * the queued SYN is reset after this window, so it must be long enough to
      * absorb brief stalls without refusing inbound connections. Tunable via

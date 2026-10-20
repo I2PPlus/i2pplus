@@ -220,7 +220,7 @@ public class BuildExecutor implements Runnable {
      *  through a length-1 bootstrap fallback.  Such tunnels provide no
      *  anonymity, so their replacement gets an unconditional build floor
      *  in calculatePairedBuilds() and first claim on dispatch slots in
-     *  run2().  Single shared definition so the allocation stage and the
+     *  {@link #run2()}.  Single shared definition so the allocation stage and the
      *  dispatch stage can never disagree about which pools are urgent.
      *
      * @param pool candidate pool, non-null
@@ -272,12 +272,12 @@ public class BuildExecutor implements Runnable {
     private final ConcurrentHashMap<TunnelPool, Long> _lastRebuildTime = new ConcurrentHashMap<>(64);
     /**
      * Throttle for peer-selection hot path: BldExecutor was pegging at 98%
-     *  in ClientPeerSelector.selectSingleHop → IBGWExcluder.contains
+     *  in {@link ClientPeerSelector}.selectSingleHop → IBGWExcluder.contains
      *  even after endpoint caching, because the tight loop called
      *  pool.configureNewTunnel() for every wanted pool without per-pool
      *  spacing.  Skip the heavy peer selection if this pool built within
      *  the throttle window and still has builds in flight.  Entries are
-     *  dropped in shutdown()/removePoolState() so the map cannot leak.
+     *  dropped in {@link #shutdown()}/removePoolState() so the map cannot leak.
      * @since 0.9.71+
      */
     private final ConcurrentHashMap<TunnelPool, Long> _lastConfigureTime = new ConcurrentHashMap<>(16);
@@ -3179,7 +3179,7 @@ public class BuildExecutor implements Runnable {
     /**
      * This returns the PTCC up to a minute after it 'expired', thus allowing us to
      *  still use a tunnel if it was accepted, and to update peer stats.
-     *  This means that manager.buildComplete() could be called more than once, and
+     *  This means that manager.{@link #buildComplete} could be called more than once, and
      *  a build can be failed or successful after it was timed out,
      *  which will affect the stats and profiles.
      *  But that's ok. A peer that rejects slowly gets penalized twice, for example.

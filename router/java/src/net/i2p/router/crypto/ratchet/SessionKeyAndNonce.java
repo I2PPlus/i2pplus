@@ -79,7 +79,7 @@ class SessionKeyAndNonce extends SessionKey {
 
     /**
      * For inbound ES, else null.
-     * For NSR, use getHandshakeState().getRemotePublicKey().getPublicKey().
+     * For NSR, use {@link #getHandshakeState()}.getRemotePublicKey().getPublicKey().
      *
      * @return the remote key
      * @since 0.9.46

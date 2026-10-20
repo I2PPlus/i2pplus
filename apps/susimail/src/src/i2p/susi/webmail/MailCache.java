@@ -69,7 +69,7 @@ class MailCache {
 
 
     /**
-     * Does NOT load the mails in. Caller MUST call loadFromDisk().
+     * Does NOT load the mails in. Caller MUST call {@link #loadFromDisk}.
      *
      * @param ctx the application context supplying the logger and the disk cache
      * @param mailbox non-null for DIR_FOLDER; null otherwise
@@ -138,7 +138,7 @@ class MailCache {
     /**
      * For writing a new full mail (NOT headers only)
      * Caller must close.
-     * Caller must hold the write lock (see getWriteLock()) for the whole write.
+     * Caller must hold the write lock (see {@link #getWriteLock()}) for the whole write.
      * @param uidl the UIDL identifying the mail being written
      * @return the full write buffer
      * @since 0.9.35
@@ -446,7 +446,7 @@ class MailCache {
     /**
      * Fetch any needed data from pop3 server.
      * Mail objects are inserted into the requests.
-     * After this, call getUIDLs() to get all known mail UIDLs.
+     * After this, call {@link #getUIDLs()} to get all known mail UIDLs.
      * MUST already be connected, otherwise returns false.
      * Call only on inbox!
      *

@@ -125,7 +125,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
     private static final long CLIENT_SUBDB_WARN_INTERVAL = 10*1000L;
     /**
      * Config property for floodfill participation.
-     * @since 0.9.66 moved from FloodfillMonitorJob
+     * @since 0.9.66 moved from {@link FloodfillMonitorJob}
      */
     public static final String PROP_FLOODFILL_PARTICIPANT = "router.floodfillParticipant";
     /**
@@ -277,7 +277,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
 
     /**
      * Start the batched timeout processor.
-     * Called from startup().
+     * Called from {@link #startup()}.
      */
     public void startTimeoutProcessor() {
         _timeoutProcessor.schedule(2000);
@@ -306,7 +306,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
      * Batched job that processes all search timeouts periodically.
      * Instead of having thousands of individual IterativeTimeoutJob in the queue,
      * we have a single job that processes all elapsed timeouts.
-     * Runs via SimpleTimer2 instead of JobQueue to avoid duplicate execution issues.
+     * Runs via {@link SimpleTimer2} instead of JobQueue to avoid duplicate execution issues.
      */
     private class BatchedSearchTimeoutProcessor extends SimpleTimer2.TimedEvent {
         /**
@@ -439,7 +439,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
     private static final int INITIAL_CONCURRENT = 2;
 
     /**
-     * Whether sendStore should wide-flood the entry via flood() when this
+     * Whether sendStore should wide-flood the entry via {@link #flood} when this
      * router participates in floodfill.
      * <p>
      * Floodfill participants wide-flood both RouterInfos (existing) and

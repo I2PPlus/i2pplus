@@ -51,7 +51,7 @@ import java.util.Arrays;
  * <li><strong>LRU Caching:</strong> Frequently used keys cached for efficiency</li>
  * <li><strong>Factory Methods:</strong> Static creation methods for cache access</li>
  * <li><strong>Efficient Storage:</strong> Optimized byte representation</li>
- * <li><strong>Fast Comparison:</strong> Optimized equals() and hashCode()</li>
+ * <li><strong>Fast Comparison:</strong> Optimized {@link #equals} and hashCode()</li>
  * </ul>
  * <p><strong>Security Considerations:</strong></p>
  * <ul>
@@ -91,7 +91,7 @@ public class SigningPublicKey extends SimpleDataStructure {
      */
     private static final byte[] EMPTY = new byte[0];
     /**
-     * Number of leading data bytes that determine the 6-char b64 prefix in toString().
+     * Number of leading data bytes that determine the 6-char b64 prefix in {@link #toString()}.
      * 6 b64 chars carry 36 bits, so 5 bytes are the minimum that reproduce them exactly.
      */
     private static final int B64_PREFIX_BYTES = 5;

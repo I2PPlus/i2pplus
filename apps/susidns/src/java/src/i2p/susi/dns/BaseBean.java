@@ -57,7 +57,7 @@ public class BaseBean {
     /**
      * Returns the addressbook directory.
      * @return the addressbook directory
-     * @since 0.9.13 moved from ConfigBean.addressbookPrefix
+     * @since 0.9.13 moved from {@link ConfigBean}.addressbookPrefix
      */
     protected File addressbookDir() {return new File(_context.getRouterDir(), ADDRESSBOOK_DIR);}
 

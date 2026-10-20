@@ -85,7 +85,7 @@ public class PersistRouterInfoJob extends JobImpl {
      * in the router directory. It uses a synchronized block to ensure
      * thread-safe access to the router info file.
      * <p>
-     * The file is written using SecureFileOutputStream to ensure atomic
+     * The file is written using {@link SecureFileOutputStream} to ensure atomic
      * writes and prevent corruption. Any errors during the write process
      * are logged but do not prevent the job from completing.
      */

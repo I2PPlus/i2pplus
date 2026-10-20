@@ -28,7 +28,7 @@ import net.i2p.util.PortMapper;
  * {@code sam.udp.host} and {@code sam.udp.port} properties.
  * This is used for both repliable and raw datagrams.
  *
- * @since 0.9.24 moved from SAMv3Handler
+ * @since 0.9.24 moved from {@link SAMv3Handler}
  */
 class SAMv3DatagramServer implements Handler {
 
@@ -40,7 +40,7 @@ class SAMv3DatagramServer implements Handler {
 
 	/**
 	 * Does not start listener.
-	 * Caller must call start().
+	 * Caller must call {@link #start()}.
 	 *
 	 * @param parent may be null
 	 * @param host the local address to bind the datagram channel to

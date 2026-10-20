@@ -28,7 +28,7 @@ public interface I2CPMessage {
      *
      * @param in stream to read from
      * @param size number of bytes in the message payload
-     * @param type type of message (should equal getType())
+     * @param type type of message (should equal {@link #getType()})
      * @throws I2CPMessageException if the stream doesn't contain a valid message
      *                              that this class can read.
      *

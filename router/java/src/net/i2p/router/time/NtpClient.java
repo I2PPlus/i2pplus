@@ -28,9 +28,9 @@ import net.i2p.util.Log;
  * Note that on windows platforms, the current time-of-day timestamp is limited
  * to an resolution of 10ms and adversely affects the accuracy of the results.
  * <p>
- * Public only for main(), not a public API, not for external use.
+ * Public only for {@link #main}, not a public API, not for external use.
  * <p>
- * 2036-compliant as of 0.9.50, see NtpMessage.
+ * 2036-compliant as of 0.9.50, see {@link NtpMessage}.
  *
  * @since 0.9.1 moved from net.i2p.time
  */

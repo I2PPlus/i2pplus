@@ -62,7 +62,7 @@ public abstract class DownSampleImpl implements DownSampler {
      * that same set; {@link #downsize} has already rejected inputs shorter than the output
      * and mismatched array lengths.
      *
-     * @param sampled the empty output set allocated by downsize(), holding exactly
+     * @param sampled the empty output set allocated by {@link #downsize}, holding exactly
      *                threshold timestamp and value slots to fill
      * @param timestamps the full source timestamps in seconds since the epoch, more than
      *                   threshold in number

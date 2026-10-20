@@ -52,7 +52,7 @@ public class I2NPMessageHandler {
     }
 
     /**
-     * Result is retrieved with lastRead().
+     * Result is retrieved with {@link #lastRead()}.
      *
      * @param data the buffer holding the serialized message
      * @param offset the index in data at which the message starts

@@ -151,7 +151,7 @@ public class DsDef {
     }
 
     /**
-     * Hashes the data source name alone, matching equals().
+     * Hashes the data source name alone, matching {@link #equals}.
      */
     @Override
     public int hashCode() {

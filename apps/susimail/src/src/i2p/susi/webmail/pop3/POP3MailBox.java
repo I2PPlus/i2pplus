@@ -66,7 +66,7 @@ public class POP3MailBox implements NewMailListener {
     private volatile NewMailListener newMailListener;
 
     /**
-     * Does not connect. Caller must call connectToServer() if desired.
+     * Does not connect. Caller must call {@link #connectToServer} if desired.
      *
      * @param host hostname of the POP3 server to connect to
      * @param port TCP port of the POP3 server
@@ -456,14 +456,14 @@ public class POP3MailBox implements NewMailListener {
      * This will NOT call any configured NewMailListener,
      * only the one passed in. It will be called with the value
      * true if the connect was successful, false if not.
-     * Call getNumMails() to see if there really was any new mail.
+     * Call {@link #getNumMails()} to see if there really was any new mail.
      *
      * After the callback is executed, the information on new mails, if any,
-     * is available via getNumMails(), getUIDLs(), and getSize().
+     * is available via getNumMails(), {@link #getUIDLs()}, and getSize().
      * The connection to the server will remain open, so that
      * new emails may be retrieved via
-     * getHeader(), getBody(), and getBodies().
-     * Failure info is available via lastError().
+     * {@link #getHeader}, getBody(), and getBodies().
+     * Failure info is available via {@link #lastError()}.
      *
      * @param nml notified once the listing is retrieved, or never on a connect or scan failure
      * @return true if nml will be called back, false on failure and nml will NOT be called back
@@ -569,10 +569,10 @@ public class POP3MailBox implements NewMailListener {
      * This will NOT call any configured NewMailListener.
      *
      * After the callback is executed, the information on new mails, if any,
-     * is available via getNumMails(), getUIDLs(), and getSize().
+     * is available via getNumMails(), getUIDLs(), and {@link #getSize}.
      * The connection to the server will remain open, so that
      * new emails may be retrieved via
-     * getHeader(), getBody(), and getBodies().
+     * getHeader(), {@link #getBody}, and getBodies().
      * Failure info is available via lastError().
      *
      * @return true if connected
@@ -699,7 +699,7 @@ public class POP3MailBox implements NewMailListener {
      *
      * @return true if every command was sent and received an OK reply
      * @throws IOException
-     * @since 0.9.34 pulled out of connect()
+     * @since 0.9.34 pulled out of {@link #connect()}
      */
     private boolean doCheckMail() throws IOException {
         if (!isConnected()) {throw new IOException("not connected");}

@@ -83,7 +83,7 @@ public class EstablishmentManager {
     /**
      * Cached "{@code udp.inboundTokenLifetime}" RateStat handle. Registered in the
      * constructor and never replaced, so it is resolved once rather than on
-     * every getInboundToken() call: that path is reachable from an
+     * every {@link #getInboundToken()} call: that path is reachable from an
      * unauthenticated inbound Token Request, so the stat lookup (a name-based
      * map get followed by a synchronized read of the Rate) was attacker
      * triggerable. Resolved lazily because a test may construct this manager
@@ -1394,7 +1394,7 @@ public class EstablishmentManager {
      * <p>
      * SSU 2 only.
      * @param from the sender's IP and port, not yet a trusted peer identity
-     * @param state as looked up in PacketHandler, but null unless retransmitted or retry sent
+     * @param state as looked up in {@link PacketHandler}, but null unless retransmitted or retry sent
      * @param packet header decrypted only
      * @since 0.9.54
      */

@@ -17,7 +17,7 @@ import net.i2p.util.RandomSource;
  *
  * <p>This class encapsulates all essential information about a DHT node including its Node ID
  * (NID), destination hash, port, and optionally the full I2P destination. It serves as the primary
- * data structure stored in DHTNodes for routing table management and node discovery operations.
+ * data structure stored in {@link DHTNodes} for routing table management and node discovery operations.
  *
  * <p>Data structure components:<br>
  * - NID: 20-byte node identifier used for Kademlia distance calculations<br>
@@ -179,7 +179,7 @@ class NodeInfo extends SimpleDataStructure {
     }
 
     /**
-     * Verify the NID matches the Hash. See generateNID() for requirements.
+     * Verify the NID matches the Hash. See {@link #generateNID()} for requirements.
      *
      * @throws IllegalArgumentException if the NID does not match the hash, per generateNID()
      */

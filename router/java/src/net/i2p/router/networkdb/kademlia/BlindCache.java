@@ -53,7 +53,7 @@ class BlindCache {
     private static final int MAX_CACHE_SIZE = 32;
 
     /**
-     * Caller MUST call startup() to load persistent cache from disk.
+     * Caller MUST call {@link #startup()} to load persistent cache from disk.
      *
      * @param ctx the router context
      */
@@ -214,7 +214,7 @@ class BlindCache {
     /**
      * Add blinded lookup data to the cache.
      *
-     * @since 0.9.41 from addToCache()
+     * @since 0.9.41 from {@link #addToCache()}
      */
     private void storeInCache(BlindData bd) {
         _cache.put(bd.getUnblindedPubKey(), bd);

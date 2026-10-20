@@ -12,7 +12,7 @@ import java.io.IOException;
 /**
  * Holds all information needed for a partial piece request.
  *
- * <p>This class should be used only by PeerState, PeerConnectionIn, and PeerConnectionOut.
+ * <p>This class should be used only by {@link PeerState}, PeerConnectionIn, and PeerConnectionOut.
  *
  * @since 0.1.0
  */
@@ -110,7 +110,7 @@ class Request {
     /**
      * A string representation of the request.
      *
-     * @return "(piece,off,len)" as the toString() form
+     * @return "(piece,off,len)" as the {@link #toString()} form
      */
     @Override
     public String toString() {

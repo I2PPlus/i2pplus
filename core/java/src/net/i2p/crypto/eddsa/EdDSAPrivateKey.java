@@ -190,7 +190,7 @@ public class EdDSAPrivateKey implements EdDSAKey, PrivateKey {
      * need to read keys from the default Java keystore.
      * <p>
      * This is really dumb for now. It does not use a general-purpose ASN.1 decoder.
-     * See also getEncoded().
+     * See also {@link #getEncoded()}.
      *
      * @return 32 bytes for Ed25519, throws for other curves
      * @since 0.9.25

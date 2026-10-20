@@ -166,7 +166,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
     private static final int MAX_SESS_CONF_RETX = 5;
     /** Configurable sent-messages sweep interval. Default 60s, shortened under load. */
     private static volatile long _sentMessagesCleanTime = 60*1000L;
-    /** Max _sentMessages entries examined per expireSentMessages() call. @since 0.9.71+. */
+    /** Max _sentMessages entries examined per {@link #expireSentMessages()} call. @since 0.9.71+. */
     private static final int SENT_MESSAGES_EXPIRE_BATCH = 32;
     private boolean shouldLogDebug() { return _log.shouldDebug(); }
 
@@ -232,7 +232,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
 
     /**
      * Send immediate ACK 0 of Session Confirmed. Inbound only.
-     * Bundle relay tag if requested, see InboundEstablishState2.
+     * Bundle relay tag if requested, see {@link InboundEstablishState2}.
      *
      * @since 0.9.62
      */

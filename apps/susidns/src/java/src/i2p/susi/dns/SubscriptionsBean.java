@@ -29,7 +29,7 @@ import java.nio.charset.StandardCharsets;
  */
 public class SubscriptionsBean extends BaseBean {
     /**
-     * No subscription file has been resolved yet; getFileName() and loadConfig() fill
+     * No subscription file has been resolved yet; {@link #getFileName()} and loadConfig() fill
      * fileName and content in from disk on first use.
      */
     public SubscriptionsBean() {}

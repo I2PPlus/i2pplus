@@ -24,7 +24,7 @@ import net.i2p.util.SecureDirectory;
 public class SSLClientUtil {
 
     /**
-     * verifyKeyStore() and the socket factories below are static, and the only fields are
+     * {@link #verifyKeyStore} and the socket factories below are static, and the only fields are
      * property-name constants, so an instance carries nothing.
      */
     public SSLClientUtil() {}

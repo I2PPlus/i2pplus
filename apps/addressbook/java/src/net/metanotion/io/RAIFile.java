@@ -9,8 +9,8 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 
 /**
- * Implementation of RandomAccessInterface using RandomAccessFile.
- * Provides file-based random access with DataInput and DataOutput capabilities.
+ * Implementation of RandomAccessInterface using {@link RandomAccessFile}.
+ * Provides file-based random access with {@link DataInput} and DataOutput capabilities.
  */
 public class RAIFile implements RandomAccessInterface, DataInput, DataOutput {
     private final File f;

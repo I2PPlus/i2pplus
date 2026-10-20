@@ -29,7 +29,7 @@ import net.i2p.stat.Rate;
 public class GraphHelper extends FormHandler {
 
     /**
-     * Leaves the form state unset; setContextId() supplies the context and preferences.
+     * Leaves the form state unset; {@link #setContextId} supplies the context and preferences.
      */
     public GraphHelper() {}
 
@@ -847,7 +847,7 @@ public class GraphHelper extends FormHandler {
     }
 
     /**
-     * We have to do this here because processForm() isn't called unless the nonces are good.
+     * We have to do this here because {@link #processForm()} isn't called unless the nonces are good.
      * @return the all messages
      * @since 0.8.7
      */

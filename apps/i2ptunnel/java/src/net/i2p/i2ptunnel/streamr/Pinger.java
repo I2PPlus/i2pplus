@@ -75,7 +75,7 @@ public class Pinger implements Source, Runnable {
 
     /**
      * Main run loop that periodically sends subscribe messages.
-     * Runs until stop() is called.
+     * Runs until {@link #stop()} is called.
      * @since 0.9.53
      */
     @Override

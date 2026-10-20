@@ -24,7 +24,7 @@ public class
 SpinnerNumberModel
 {
 	/**
-	 * The emulated spinner starts at 0; setValue() is the only thing that moves it.
+	 * The emulated spinner starts at 0; {@link #setValue} is the only thing that moves it.
 	 */
 	public SpinnerNumberModel()
 	{

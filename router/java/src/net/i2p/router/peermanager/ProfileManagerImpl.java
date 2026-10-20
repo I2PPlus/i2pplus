@@ -364,7 +364,7 @@ public class ProfileManagerImpl implements ProfileManager {
     }
 
     /**
-     * Compute floodfill reliability from DBHistory.
+     * Compute floodfill reliability from {@link DBHistory}.
      * Updates the peer's reliability classification based on
      * successful/failed lookup and store counts.
      * <p>

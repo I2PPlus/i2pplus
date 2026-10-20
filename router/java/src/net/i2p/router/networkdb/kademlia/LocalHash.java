@@ -67,7 +67,7 @@ class LocalHash extends Hash {
      * @param key the hash to measure this object's own hash against
      * @return the XOR distance between the two hashes, never null
      * @throws IllegalStateException if you try to use the cache without first
-     *                               preparing this object's cache via .prepareCache()
+     *                               preparing this object's cache via .{@link #prepareCache()}
      */
     public byte[] cachedXor(Hash key) throws IllegalStateException {
         if (_xorCache == null)

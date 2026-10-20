@@ -281,7 +281,7 @@ public class HostChecker {
      * Immutable - all fields are final.
      */
     public static class PingResult {
-        /** True if the host was reachable via LeaseSet lookup, ping, or HTTP HEAD. */
+        /** True if the host was reachable via {@link LeaseSet} lookup, ping, or HTTP HEAD. */
         public final boolean reachable;
         /** Timestamp of when this result was recorded (Java time). */
         public final long timestamp;
@@ -1056,7 +1056,7 @@ public class HostChecker {
     }
 
     /**
-     * Fallback method to use EepHead for HTTP HEAD request testing
+     * Fallback method to use {@link EepHead} for HTTP HEAD request testing
      * Marks site as up if any response is received.
      */
     private PingResult fallbackToEepHead(String hostname, long startTime) {

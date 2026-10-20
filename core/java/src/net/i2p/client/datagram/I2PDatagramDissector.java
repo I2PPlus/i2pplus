@@ -106,7 +106,7 @@ public final class I2PDatagramDissector {
 
     /**
      * The payload carried by an I2P repliable datagram (previously loaded
-     * with the loadI2PDatagram() method), verifying the datagram signature.
+     * with the {@link #loadI2PDatagram} method), verifying the datagram signature.
      *
      * @return A byte array containing the datagram payload
      *

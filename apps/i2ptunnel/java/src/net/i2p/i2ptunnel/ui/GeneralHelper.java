@@ -138,7 +138,7 @@ public class GeneralHelper {
     /**
      * Update the config and if shared, adjust and save the config of other shared clients.
      * If a new tunnel, this will call tcg.addController(), and start it if so configured.
-     * This does NOT save this tunnel's config. Caller must call saveConfig() also.
+     * This does NOT save this tunnel's config. Caller must call {@link #saveConfig} also.
      *
      * @param tcg the group of tunnel controllers, may be null
      * @param tunnel the index of the tunnel in the controller group, or -1 to create a new tunnel

@@ -28,14 +28,14 @@ public interface NotificationService {
      * @param title for the popup, translated
      * @param message body text of the notification, translated
      * @param path in console for more information, starting with /, must be URL-escaped, or null
-     * @return an ID to use with cancel() or update(), or -1 on failure
+     * @return an ID to use with {@link #cancel} or update(), or -1 on failure
      */
     public int notify(String source, String category, int priority, String title, String message, String path);
 
     /**
      * Cancel a notification if possible.
      *
-     * @param id as received from notify()
+     * @param id as received from {@link #notify}
      * @return true if the notification was cancelled
      */
     public boolean cancel(int id);

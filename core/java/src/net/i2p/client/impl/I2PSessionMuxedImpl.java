@@ -94,7 +94,7 @@ class I2PSessionMuxedImpl extends I2PSessionImpl2 {
     }
 
     /**
-     * For extension by SubSession.
+     * For extension by {@link SubSession}.
      *
      * @param primary the SubSession this one multiplexes alongside, or null
      * @param destKeyStream stream containing the private key data,
@@ -421,7 +421,7 @@ class I2PSessionMuxedImpl extends I2PSessionImpl2 {
         }
 
         /**
-         * Notify the client thread of available messages, until stopNotifying()
+         * Notify the client thread of available messages, until {@link #stopNotifying()}
          * is called.
          */
         @Override

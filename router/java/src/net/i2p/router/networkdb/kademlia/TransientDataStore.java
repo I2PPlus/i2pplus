@@ -32,7 +32,7 @@ import net.i2p.util.Log;
  * <p>
  * Provides volatile storage for database entries with no persistence to disk.
  * Optimized for fast access and low memory footprint with concurrent operations
- * using ConcurrentHashMap for thread-safe access patterns.
+ * using {@link ConcurrentHashMap} for thread-safe access patterns.
  * <p>
  * Primarily used for client network databases and temporary storage
  * during router operations where persistence is not required.

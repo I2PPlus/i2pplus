@@ -882,7 +882,7 @@ public class BuildHandler implements Runnable {
 
     /**
      * Decrypt the request, lookup the RI locally,
-     * and call handleReq() if found or queue a lookup job.
+     * and call {@link #handleReq()} if found or queue a lookup job.
      *
      * @return handle time or -1 if it wasn't completely handled
      */
@@ -2085,7 +2085,7 @@ public class BuildHandler implements Runnable {
     }
 
     /**
-     * Extract IP:port from RouterInfo for a peer hash.
+     * Extract IP:port from {@link RouterInfo} for a peer hash.
      * @return the IP port from hash
      */
     private String getIPPortFromHash(Hash h) {

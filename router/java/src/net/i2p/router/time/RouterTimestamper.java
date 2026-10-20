@@ -72,7 +72,7 @@ public class RouterTimestamper extends Timestamper {
     private static final int MAX_VARIANCE = 10*1000;
 
     /**
-     * Does not start. Caller MUST call startTimestamper().
+     * Does not start. Caller MUST call {@link #startTimestamper()}.
      *
      * @param ctx the application context used to read properties and locate the router
      */

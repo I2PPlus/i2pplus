@@ -24,7 +24,7 @@ import org.cybergarage.xml.*;
  *   <li>Extensible data structure
  * </ul>
  *
- * <p>This class serves as the base class for more specific UPnP data containers like DeviceData,
+ * <p>This class serves as the base class for more specific UPnP data containers like {@link DeviceData},
  * ServiceData, and ActionData, providing common XML node management functionality across the
  * framework.
  *

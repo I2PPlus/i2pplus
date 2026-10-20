@@ -65,7 +65,7 @@ public class Datagram2 {
     private static final byte VERSION = 2;
 
     /**
-     * As returned from load().
+     * As returned from {@link #load()}.
      */
     private Datagram2(Destination dest, byte[] data, Properties options) {
         _from = dest;

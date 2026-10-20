@@ -29,9 +29,9 @@ import org.eclipse.jetty.xml.XmlConfiguration;
 /**
  * Start Jetty where the args are one or more XML files.
  * Save a reference to the Server so it can be cleanly stopped later.
- * Caller must call startup()
+ * Caller must call {@link #startup()}
  *
- * This is like XmlConfiguration.main(), which is essentially what
+ * This is like {@link XmlConfiguration}.{@link #main}, which is essentially what
  * org.mortbay.start.Main does.
  *
  * @since 0.9.4

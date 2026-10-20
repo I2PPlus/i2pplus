@@ -223,7 +223,7 @@ public class LogsHelper extends HelperBase {
 
     /**
      * Return HTML rendering of the most recent log messages.
-     * Does not call logManager.flush(); call getCriticalLogs() first to flush.
+     * Does not call logManager.flush(); call {@link #getCriticalLogs()} first to flush.
      * @return the formatted log messages, wrapped in a link to the log file
      */
     public String getLogs() {
@@ -256,8 +256,8 @@ public class LogsHelper extends HelperBase {
     }
 
     /**
-     * Returns the ID of the most recent log message, for clearThrough().
-     * Call before getLogs().
+     * Returns the ID of the most recent log message, for {@link #clearThrough}.
+     * Call before {@link #getLogs()}.
      *
      * @return -1 if none
      * @since 0.9.46
@@ -269,7 +269,7 @@ public class LogsHelper extends HelperBase {
     }
 
     /**
-     * Call before getLogs(), getCriticalLogs(), or getLastMessageNumber()
+     * Call before getLogs(), getCriticalLogs(), or {@link #getLastMessageNumber()}
      * Side effect - calls logManager.flush().
      *
      * @return -1 if none

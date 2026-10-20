@@ -11,7 +11,7 @@ import net.i2p.router.RouterContext;
 public class ContextHelper {
 
     /**
-     * Constructor. The only lookup is the static getContext(), which reads the
+     * Constructor. The only lookup is the static {@link #getContext}, which reads the
      * live context list, so an instance carries no state.
      */
     public ContextHelper() {}

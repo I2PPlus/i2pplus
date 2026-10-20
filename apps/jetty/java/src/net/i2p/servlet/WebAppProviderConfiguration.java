@@ -18,7 +18,7 @@ import org.eclipse.jetty.webapp.WebAppContext;
 public class WebAppProviderConfiguration {
 
     /**
-     * configure() takes the provider it configures as an argument, so a bare instance is
+     * {@link #configure} takes the provider it configures as an argument, so a bare instance is
      * how jetty.xml invokes it.
      */
     public WebAppProviderConfiguration() {}

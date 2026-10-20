@@ -39,7 +39,7 @@ import net.i2p.util.SystemVersion;
  * Exporting to a Maildir format would be just ungzipping
  * each file to a flat directory.
  *
- * This class should only be accessed from MailCache.
+ * This class should only be accessed from {@link MailCache}.
  *
  * @since 0.9.14
 */
@@ -81,7 +81,7 @@ class PersistentMailCache {
     /**
      * Use the params to generate a unique directory name.
      *
-     * Does NOT load the mails in. Caller MUST call getMails().
+     * Does NOT load the mails in. Caller MUST call {@link #getMails()}.
      *
      * @param ctx supplies the log manager and the base directory
      * @param host IMAP host, part of the directory name
@@ -412,7 +412,7 @@ class PersistentMailCache {
 
     /**
      * This is for the initial load only.
-     * Others will use getMail().
+     * Others will use {@link #getMail()}.
      *
      * @return null on failure
      */

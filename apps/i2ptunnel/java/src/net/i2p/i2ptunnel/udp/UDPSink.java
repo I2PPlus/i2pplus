@@ -82,7 +82,7 @@ public class UDPSink implements Sink {
     }
 
     /**
-     *  Returns the underlying DatagramSocket for use by UDPSource constructor.
+     *  Returns the underlying DatagramSocket for use by {@link UDPSource} constructor.
      *
      *  @return the DatagramSocket to hand to the matching UDPSource
      *  @since 0.9.53

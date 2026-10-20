@@ -20,7 +20,7 @@ import net.i2p.util.SystemVersion;
 
 /**
  * Contains a really simple ClientApp "structure" and some static methods
- * so they can be used both by LoadClientAppsJob and by the configuration
+ * so they can be used both by {@link LoadClientAppsJob} and by the configuration
  * page in the router console.
  * <pre>
  *
@@ -397,7 +397,7 @@ public class ClientAppConfig {
      * Classpath and stopargs not supported.
      * All other apps in the files will be deleted.
      * Do not add apps with this method - use writeClientAppConfig(ctx, app).
-     * Do not delete apps with this method - use deleteClientAppConfig().
+     * Do not delete apps with this method - use {@link #deleteClientAppConfig}.
      *
      * @param ctx the I2P app context
      * @param apps the list of client app configs to write

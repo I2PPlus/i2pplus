@@ -28,7 +28,7 @@ public class HostCheckHandler extends HandlerWrapper
     private final Set<String> _listenHosts;
 
     /**
-     * MUST call setListenHosts() afterwards.
+     * MUST call {@link #setListenHosts} afterwards.
      *
      * @param ctx application context, used to obtain the log for rejected Host headers
      */

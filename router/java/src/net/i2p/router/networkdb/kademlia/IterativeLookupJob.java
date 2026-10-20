@@ -20,7 +20,7 @@ import net.i2p.util.Log;
  * confirmed as floodfill. This helps establish reliable floodfill peers
  * and accelerates network discovery.
  * <p>
- * Extracted from IterativeLookupSelector to prevent deadlocks with the
+ * Extracted from {@link IterativeLookupSelector} to prevent deadlocks with the
  * OutboundMessageRegistry during concurrent search operations.
  *
  * @since 0.8.9

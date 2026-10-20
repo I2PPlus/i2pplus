@@ -27,7 +27,7 @@ public class HTTPPacket {
     ////////////////////////////////////////////////
 
     /**
-     * Creates a new HTTP packet with default settings. Initializes with HTTP version and empty
+     * Creates a new HTTP packet with default settings. Initializes with {@link HTTP} version and empty
      * content.
      */
     public HTTPPacket() {

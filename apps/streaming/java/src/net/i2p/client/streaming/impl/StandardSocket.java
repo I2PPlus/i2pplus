@@ -296,7 +296,7 @@ public class StandardSocket extends Socket {
 
     /**
      * Whether closed.
-     * @return true once close() has run, false on a live wrapper
+     * @return true once {@link #close()} has run, false on a live wrapper
      */
     @Override
     public boolean isClosed() {

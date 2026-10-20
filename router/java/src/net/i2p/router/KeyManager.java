@@ -88,7 +88,7 @@ public class KeyManager {
     /**
      * Router key.
      *
-     * @return will be null on error or before startup() or setKeys() is called
+     * @return will be null on error or before startup() or {@link #setKeys} is called
      */
     public synchronized PrivateKey getPrivateKey() { return _privateKey; }
 

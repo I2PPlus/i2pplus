@@ -20,7 +20,7 @@ public abstract class LimitOutputStream extends FilterOutputStream {
 
     /** Single-byte buffer for the write(int) method. */
     private final byte[] _buf1;
-    /** Invoked once by setDone() when the subclass has finished writing. */
+    /** Invoked once by {@link #setDone()} when the subclass has finished writing. */
     protected final DoneCallback _callback;
     /** True once setDone() has run, so the callback cannot fire twice. */
     protected boolean _isDone;

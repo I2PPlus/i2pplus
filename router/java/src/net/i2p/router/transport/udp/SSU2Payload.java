@@ -80,7 +80,7 @@ class SSU2Payload {
 
     /**
      * For all callbacks, recommend throwing exceptions only from the handshake.
-     * Exceptions will get thrown out of processPayload() and prevent
+     * Exceptions will get thrown out of {@link #processPayload} and prevent
      * processing of succeeding blocks.
      */
     public interface PayloadCallback {
@@ -453,7 +453,7 @@ class SSU2Payload {
      * @param ctx context for logging
      * @param bais the RI bytes; position is reset for re-reading identity and signature
      * @param dfe the original parse failure
-     * @return a partially filled-in RouterInfo when the signature verifies
+     * @return a partially filled-in {@link RouterInfo} when the signature verifies
      * @throws IOException on any I/O while re-reading the stream
      * @throws DataFormatException the original parse failure when verification fails
      * @since 0.9.71+

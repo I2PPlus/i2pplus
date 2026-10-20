@@ -24,7 +24,7 @@ public class JettyXmlConfigurationParser
 {
     /**
      * Constructor. Each parse call builds its own SAX parser through
-     * initParser(), so an instance carries no state.
+     * {@link #initParser()}, so an instance carries no state.
      */
     public JettyXmlConfigurationParser()
     {

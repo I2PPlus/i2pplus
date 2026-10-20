@@ -8,7 +8,7 @@ import java.util.Arrays;
  * <p>The country set is stored as a sorted array of case-normalized 2-letter
  * integer keys so {@link #contains(String)} performs no per-call String
  * allocation (callers such as {@code Router.isHidden} check this on the hot
- * path with GeoIP codes that are already lowercase).
+ * path with {@link GeoIP} codes that are already lowercase).
  *
  * @since 0.8.13
  */

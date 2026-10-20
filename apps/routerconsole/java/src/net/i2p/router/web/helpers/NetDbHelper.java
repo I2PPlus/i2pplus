@@ -23,7 +23,7 @@ import net.i2p.util.SystemVersion;
 /**
  * Helper for network database page rendering and form processing.
  * Handles router information searches, filtering, and display operations.
- * Integrates with NetDbRenderer and SybilRenderer for output generation.
+ * Integrates with {@link NetDbRenderer} and SybilRenderer for output generation.
  * Extends FormHandler for form submission handling since 0.9.38.
  *
  * @since 0.9.33

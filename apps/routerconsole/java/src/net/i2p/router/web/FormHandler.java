@@ -22,7 +22,7 @@ import net.i2p.util.Log;
  * &lt;jsp:setProperty name="handler" property="*" /&gt;
  * <p>
  * The form is "processed" after the properties are set and the first output
- * property is retrieved - either getAll(), getNotices() or getErrors().
+ * property is retrieved - either getAll(), {@link #getNotices()} or getErrors().
  * <p>
  * This Handler will only process a single POST. The jsp bean must be declared scope=request.
  */
@@ -172,7 +172,7 @@ public abstract class FormHandler {
     public boolean isAdvanced() {return _context.getBooleanProperty(HelperBase.PROP_ADVANCED);}
 
     /**
-     * setSettings() must have been called previously
+     * {@link #setSettings} must have been called previously
      * Curses Jetty for returning arrays.
      * For nofilter_ prefixed params, validates for XSS patterns.
      *
@@ -199,7 +199,7 @@ public abstract class FormHandler {
      * submission triggers the default save) and real submit buttons named
      * action with their own values. When a button is clicked, the browser
      * submits BOTH values and the servlet layer exposes only the first one -
-     * the hidden blah - to setAction(), which would silently run the default
+     * the hidden blah - to {@link #setAction}, which would silently run the default
      * save instead of the requested operation. This helper scans the raw
      * parameter array for any real action value before falling back.
      *

@@ -14,7 +14,7 @@ import java.security.KeyPair;
 public final class RedKeyPairGenerator extends KeyPairGenerator {
 
     /**
-     * An uninitialised generator; generateKeyPair() falls back to the default key
+     * An uninitialised generator; {@link #generateKeyPair()} falls back to the default key
      * size and the global RandomSource if the caller has not called initialize().
      */
     public RedKeyPairGenerator() {}

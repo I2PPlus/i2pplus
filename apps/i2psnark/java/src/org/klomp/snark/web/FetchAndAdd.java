@@ -35,7 +35,7 @@ import org.klomp.snark.Storage;
  *
  * <p>This Snark may be stopped and restarted, although a partially downloaded file is discarded.
  *
- * @since 0.9.1 Moved from I2PSnarkUtil
+ * @since 0.9.1 Moved from {@link I2PSnarkUtil}
  */
 public class FetchAndAdd extends Snark implements EepGet.StatusListener, Runnable {
 
@@ -84,7 +84,7 @@ public class FetchAndAdd extends Snark implements EepGet.StatusListener, Runnabl
     }
 
     /**
-     * Begin fetching; called by startTorrent().
+     * Begin fetching; called by {@link #startTorrent()}.
      */
     @Override
     public void run() {

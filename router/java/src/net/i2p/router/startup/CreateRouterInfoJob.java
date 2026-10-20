@@ -93,7 +93,7 @@ public class CreateRouterInfoJob extends JobImpl {
      * <p>
      * {@code router.keys.dat} file format: This is the
      * same "eepPriv.dat" format used by the client code,
-     * as documented in PrivateKeyFile.
+     * as documented in {@link PrivateKeyFile}.
      * <p>
      * Old {@code router.keys} file format: Note that this is NOT the
      * same "eepPriv.dat" format used by the client code.
@@ -252,7 +252,7 @@ public class CreateRouterInfoJob extends JobImpl {
     }
 
     /**
-     * Only called at startup via LoadRouterInfoJob and RebuildRouterInfoJob.
+     * Only called at startup via {@link LoadRouterInfoJob} and RebuildRouterInfoJob.
      * Not called by periodic RepublishLocalRouterInfoJob.
      * We don't want to change the cert on the fly as it changes the router hash.
       * {@link net.i2p.data.router.RouterInfo#isHidden} checks the capability, but

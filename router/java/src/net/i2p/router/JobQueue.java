@@ -117,7 +117,7 @@ public class JobQueue {
     private static final int DEFAULT_MAX_WAITING_JOBS = SystemVersion.isSlow() ? 24 : 48;
     /**
      * Resolved once from {@link #PROP_MAX_WAITING_JOBS} at construction.
-     * shouldDrop() read it per addJob() that could exceed the cap.  A
+     * {@link #shouldDrop()} read it per addJob() that could exceed the cap.  A
      * non-positive value disables dropping.
      */
     private final int _maxWaitingJobs;
@@ -189,7 +189,7 @@ public class JobQueue {
 
     /**
      * Claim the job in {@link #_readyIndex} before {@code offer()} publishes it,
-     * so a concurrent addJob() sees it as already queued in that window.
+     * so a concurrent {@link #addJob()} sees it as already queued in that window.
      */
     private void offerReady(Job job, BlockingQueue<Job> queue) {
         _readyIndex.add(job);
@@ -758,7 +758,7 @@ public class JobQueue {
 
     /**
      * Remove a queue runner from the registry.
-     * Package-private for use by JobQueueRunner.
+     * Package-private for use by {@link JobQueueRunner}.
      *
      * @param id the runner ID to remove
      */
@@ -766,7 +766,7 @@ public class JobQueue {
 
     /**
      * Current number of active job runners.
-     * Package-private for use by JobQueueScaler.
+     * Package-private for use by {@link JobQueueScaler}.
      *
      * @return the number of active runners
      * @since 0.9.68+

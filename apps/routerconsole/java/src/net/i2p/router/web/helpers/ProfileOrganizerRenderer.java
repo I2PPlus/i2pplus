@@ -123,7 +123,7 @@ class ProfileOrganizerRenderer {
 
     /**
      * The sorted peer set, hidden-stale count, hide window, and pre-computed
-     * tier snapshots from loadProfiles().  The tier sets are local copies
+     * tier snapshots from {@link #loadProfiles()}.  The tier sets are local copies
      * taken under the organizer read lock once, so renderers and comparators
      * can use {@code contains()} without acquiring any locks.
      * @since 0.9.70+

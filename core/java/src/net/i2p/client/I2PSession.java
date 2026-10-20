@@ -287,7 +287,7 @@ public interface I2PSession {
 
     /**
      * Throw away the received message, we don't want it.
-     * Use instead of receiveMessage() to avoid gunzip overhead.
+     * Use instead of {@link #receiveMessage} to avoid gunzip overhead.
      *
      * @param msgId message whose payload should be dropped rather than returned
      * @since 0.9.71
@@ -365,7 +365,7 @@ public interface I2PSession {
      /**
       * Have we closed the session?
       *
-      * @return true if the session is closed, OR connect() has not been called yet
+      * @return true if the session is closed, OR {@link #connect()} has not been called yet
       */
      public boolean isClosed();
 
@@ -517,7 +517,7 @@ public interface I2PSession {
     /**
      * Ask the router to lookup a Destination by host name.
      * Blocking. See above for details.
-     * Same as lookupDest() but with a failure code in the return value.
+     * Same as {@link #lookupDest} but with a failure code in the return value.
      *
      * @param name the hostname to look up
      * @param maxWait milliseconds to wait for the router's reply before giving up

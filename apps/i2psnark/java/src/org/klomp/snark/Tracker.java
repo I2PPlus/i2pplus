@@ -16,7 +16,7 @@ package org.klomp.snark;
  *   <li>Capability flags (e.g., supports detailed responses)</li>
  * </ul>
  *
- * <p>Trackers are used by TrackerClient to announce torrent status and discover peers.
+ * <p>Trackers are used by {@link TrackerClient} to announce torrent status and discover peers.
  *
  * @since 0.9.1
  */

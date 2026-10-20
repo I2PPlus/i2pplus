@@ -8,7 +8,7 @@ package net.i2p.router.util;
  * levels and sequence numbers to ensure proper FIFO ordering
  * within same priority levels.
  * <p>
- * Used by PriBlockingQueue and CoDelPriorityBlockingQueue
+ * Used by {@link PriBlockingQueue} and CoDelPriorityBlockingQueue
  * to maintain insertion order while supporting priority-based
  * selection and removal operations.
  *

@@ -131,7 +131,7 @@ public interface UpdateManager {
     public void notifyVersionConstraint(UpdateTask task, URI newsSource, UpdateType type, String id, String newVersion, String message);
 
     /**
-     * Called by the Checker after check() was called and all notifyVersionAvailable() callbacks are finished.
+     * Called by the Checker after check() was called and all {@link #notifyVersionAvailable} callbacks are finished.
      *
      * @param task the running check or download this report concerns
      * @param newer notifyVersionAvailable was called
@@ -254,7 +254,7 @@ public interface UpdateManager {
     /**
      * Non-blocking. Does not check.
      * Fails if check or update already in progress.
-     * If returns true, then call isUpdateInProgress() in a loop.
+     * If returns true, then call {@link #isUpdateInProgress()} in a loop.
      *
      * @param type the UpdateType of this request
      * @return true if task started

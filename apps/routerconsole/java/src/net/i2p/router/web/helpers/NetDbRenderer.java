@@ -1517,7 +1517,7 @@ class NetDbRenderer {
 
     /**
      * Reverse DNS cache with TTL (24 hours).
-     * Small cache since we rely on file-backed rdnsCache in CommSystemFacadeImpl.
+     * Small cache since we rely on file-backed rdnsCache in {@link CommSystemFacadeImpl}.
      */
     private final LHMCache<String, CacheEntry> reverseLookupCache = new LHMCache<>(50);
     private static final long TTL_24_HOURS = 24 * 60 * (long) 60 * 1000; // 24 hours

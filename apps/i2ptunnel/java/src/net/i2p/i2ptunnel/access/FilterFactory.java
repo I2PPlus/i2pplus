@@ -19,7 +19,7 @@ import net.i2p.client.streaming.StatefulConnectionFilter;
 public class FilterFactory {
 
     /**
-     * Constructor. Filters are always built by the static createFilter() from a
+     * Constructor. Filters are always built by the static {@link #createFilter} from a
      * definition file, so an instance carries no state.
      */
     public FilterFactory() {}

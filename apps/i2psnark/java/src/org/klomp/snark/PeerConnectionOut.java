@@ -567,7 +567,7 @@ class PeerConnectionOut implements Runnable {
 
     /**
      * Returns the total bytes of piece messages currently queued.
-     * Used by PeerState to limit pipelined requests.
+     * Used by {@link PeerState} to limit pipelined requests.
      *
      * @return total queued piece bytes
      */

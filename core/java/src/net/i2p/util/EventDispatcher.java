@@ -20,14 +20,14 @@ import java.util.Set;
  * and cut'n'paste the following default implementation:
  * <p>
  * <code>
- * public EventDispatcher getEventDispatcher() { return _event; }
+ * public EventDispatcher {@link #getEventDispatcher()} { return _event; }
  * public void attachEventDispatcher(IEventDispatcher e) { _event.attachEventDispatcher(e.getEventDispatcher()); }
  * public void detachEventDispatcher(IEventDispatcher e) { _event.detachEventDispatcher(e.getEventDispatcher()); }
  * public void notifyEvent(String e, Object a) { _event.notifyEvent(e,a); }
  * public Object getEventValue(String n) { return _event.getEventValue(n); }
- * public Set getEvents() { return _event.getEvents(); }
- * public void ignoreEvents() { _event.ignoreEvents(); }
- * public void unIgnoreEvents() { _event.unIgnoreEvents(); }
+ * public Set {@link #getEvents()} { return _event.getEvents(); }
+ * public void {@link #ignoreEvents()} { _event.ignoreEvents(); }
+ * public void {@link #unIgnoreEvents()} { _event.unIgnoreEvents(); }
  * public Object waitEventValue(String n) { return _event.waitEventValue(n); }
  * </code>
  * <p>

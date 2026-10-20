@@ -33,7 +33,7 @@ import org.cybergarage.util.Debug;
  * <li>Packet sending and receiving
  * </ul>
  *
- * <p>This class is used by SSDP components to send multicast discovery messages and receive
+ * <p>This class is used by {@link SSDP} components to send multicast discovery messages and receive
  * multicast advertisements from UPnP devices, enabling the core device discovery functionality in
  * UPnP networks.
  *

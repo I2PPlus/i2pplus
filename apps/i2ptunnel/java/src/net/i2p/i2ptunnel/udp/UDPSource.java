@@ -39,7 +39,7 @@ public class UDPSource implements Source, Runnable {
     }
 
     /**
-     * Creates a source using an existing socket (e.g., from UDPSink).
+     * Creates a source using an existing socket (e.g., from {@link UDPSink}).
      *
      * @param sock the DatagramSocket to receive on
      */

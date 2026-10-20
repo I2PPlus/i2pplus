@@ -82,7 +82,7 @@ public class UpdateHandler {
     }
 
     /**
-     * These two can be set in either order, so call checkUpdateAction() twice.
+     * These two can be set in either order, so call {@link #checkUpdateAction()} twice.
      *
      * @param val the update action name submitted by the form
      */
@@ -114,7 +114,7 @@ public class UpdateHandler {
 
     /**
      * These two can be set in either order, so call checkUpdateAction() twice
-     * storeSession() MUST be called first.
+     * {@link #storeSession()} MUST be called first.
      */
     private void checkUpdateAction() {
         if (_action == null || _nonce == null) {return;}

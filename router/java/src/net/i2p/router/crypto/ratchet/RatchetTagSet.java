@@ -302,7 +302,7 @@ class RatchetTagSet implements TagSetHandle {
 
     /**
      * For inbound and outbound: last used time
-     * Expiration is getDate() + getTimeout().
+     * Expiration is {@link #getDate()} + getTimeout().
      *
      * @return the last used time
      */
@@ -330,7 +330,7 @@ class RatchetTagSet implements TagSetHandle {
 
     /**
      * For inbound and outbound: Idle timeout interval.
-     * Expiration is getDate() + getTimeout().
+     * Expiration is getDate() + {@link #getTimeout()}.
      *
      * @return the timeout duration
      * @since 0.9.46
@@ -565,7 +565,7 @@ class RatchetTagSet implements TagSetHandle {
 
     /**
      * Public for outbound only. Used internally for inbound.
-     * Call before consumeNextKey();
+     * Call before {@link #consumeNextKey()};
      *
      * @return a tag or null if we ran out
      */
@@ -579,8 +579,8 @@ class RatchetTagSet implements TagSetHandle {
     }
 
     /**
-     * For outbound, call after consumeNext().
-     * Also called by consume() to catch up for inbound.
+     * For outbound, call after {@link #consumeNext()}.
+     * Also called by {@link #consume} to catch up for inbound.
      *
      * @return a key and nonce, non-null
      */

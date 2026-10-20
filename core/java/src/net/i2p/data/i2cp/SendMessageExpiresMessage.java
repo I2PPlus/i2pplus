@@ -22,7 +22,7 @@ import java.util.Date;
 /**
  * Same as SendMessageMessage, but with an expiration to be passed to the router
  * <p>
- * As of 0.8.4, retrofitted to use DateAndFlags. Backwards compatible.
+ * As of 0.8.4, retrofitted to use {@link DateAndFlags}. Backwards compatible.
  *
  */
 public class SendMessageExpiresMessage extends SendMessageMessage {
@@ -84,7 +84,7 @@ public class SendMessageExpiresMessage extends SendMessageMessage {
 
     /**
      * The Date object is created here, it is not cached.
-     * Use getExpirationTime() if you only need the long value.
+     * Use {@link #getExpirationTime()} if you only need the long value.
      * @return the absolute date after which the message should be discarded,
      *         built fresh from the wire timestamp on every call and never null
      */
@@ -93,7 +93,7 @@ public class SendMessageExpiresMessage extends SendMessageMessage {
     }
 
     /**
-     * Use this instead of getExpiration().getTime().
+     * Use this instead of {@link #getExpiration()}.getTime().
      *
      * @return the expiration time
      * @since 0.8.4

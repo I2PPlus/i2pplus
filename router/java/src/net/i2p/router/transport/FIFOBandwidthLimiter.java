@@ -1011,7 +1011,7 @@ public class FIFOBandwidthLimiter {
         public synchronized int getPendingRequested() { return _total - _allocated; }
         /**
          * Whether this request has been aborted.
-         * @return true if abort() was called, so no more bytes will be allocated
+         * @return true if {@link #abort()} was called, so no more bytes will be allocated
          */
         public boolean getAborted() { return _aborted; }
         /**
@@ -1050,7 +1050,7 @@ public class FIFOBandwidthLimiter {
         /**
          * Only used by SSU.
          * May return without allocating.
-         * Check getPendingRequested() &gt; 0 in a loop.
+         * Check {@link #getPendingRequested()} &gt; 0 in a loop.
          */
         public void waitForNextAllocation() {
             boolean complete = false;
@@ -1071,7 +1071,7 @@ public class FIFOBandwidthLimiter {
         }
 
         /**
-         * Only returns nonzero if there's no listener and waitForNextAllocation()
+         * Only returns nonzero if there's no listener and {@link #waitForNextAllocation()}
          * has been called (i.e. SSU)
          * Now unused.
          */
@@ -1171,12 +1171,12 @@ public class FIFOBandwidthLimiter {
         public void setCompleteListener(CompleteListener lsnr);
         /**
          * Only supported if the request is not satisfied.
-         * @param obj the caller's own state, returned by attachment()
+         * @param obj the caller's own state, returned by {@link #attachment()}
          */
         public void attach(Object obj);
         /**
          * The attached object, or null.
-         * @return the object passed to attach(), or null if none was attached
+         * @return the object passed to {@link #attach}, or null if none was attached
          */
         public Object attachment();
         /**

@@ -32,7 +32,7 @@ public class EepPost extends EepGet {
 
     /**
      * Constructor for a POST session. The post body is supplied later by one of
-     * the post() methods; fetch() is not supported.
+     * the {@link #post} methods; fetch() is not supported.
      *
      * @param ctx the app context
      * @param proxyHost the proxy hostname, empty for no proxy
@@ -295,7 +295,7 @@ public class EepPost extends EepGet {
     }
 
     /**
-     * Command-line entry point for EepPost. See usage() for the full option list.
+     * Command-line entry point for EepPost. See {@link #usage()} for the full option list.
      * <p>
      * Usage: eeppost [-p 127.0.0.1:4444 | -c] [-n #retries] [-o outputFile]
      * [-s key=value] | [-f key=file] url
@@ -442,7 +442,7 @@ public class EepPost extends EepGet {
 
     /**
      * Usage text for the command-line entry point. Every option accepted by
-     * main() must appear here, with the defaults main() actually uses.
+     * {@link #main} must appear here, with the defaults main() actually uses.
      *
      * @return the help text
      * @since 0.9.71+

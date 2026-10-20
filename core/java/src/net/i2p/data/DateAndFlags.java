@@ -82,7 +82,7 @@ public class DateAndFlags extends DataStructureImpl {
 
     /**
      * The Date object is created here, it is not cached.
-     * Use getTime() if you only need the long value.
+     * Use {@link #getTime()} if you only need the long value.
      * @return a fresh Date, built from the millisecond timestamp on each call
      */
     public Date getDate() {

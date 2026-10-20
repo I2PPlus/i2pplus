@@ -15,7 +15,7 @@ import net.i2p.util.Log;
  * lookup decrement tracking, and coordinates followup searches through
  * SingleLookupJob when appropriate.
  * <p>
- * Largely superseded by IterativeLookupSelector but retained for
+ * Largely superseded by {@link IterativeLookupSelector} but retained for
  * compatibility with existing flood-only search implementations.
  * Provides specialized logic for flood-based search response handling
  * with profile management and search lifecycle coordination.

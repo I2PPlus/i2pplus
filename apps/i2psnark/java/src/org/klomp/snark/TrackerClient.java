@@ -60,11 +60,11 @@ import org.klomp.snark.dht.DHT;
  *   <li>Processing various tracker events (started, completed, stopped)
  * </ul>
  *
- * <p><strong>Threading Model:</strong> The start() method creates a thread that runs one complete
+ * <p><strong>Threading Model:</strong> The {@link #start()} method creates a thread that runs one complete
  * announcement cycle through all trackers, PEX, and DHT, then queues a new timed event and exits.
  * This approach prevents thread accumulation while ensuring regular announcements.
  *
- * <p>The client can be restarted after halt() and handles various tracker responses including
+ * <p>The client can be restarted after {@link #halt} and handles various tracker responses including
  * registration failures and error conditions.
  * @since 0.1.0
  */

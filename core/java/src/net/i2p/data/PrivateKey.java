@@ -48,7 +48,7 @@ import javax.security.auth.Destroyable;
  * cached public key and the zeroing done by {@link #destroy} are
  * unsynchronized writes to plain fields, and {@link #getData} hands
  * out the backing array. Share a fully populated key, or pass it
- * through a synchronized structure, and do not destroy() or write to
+ * through a synchronized structure, and do not {@link #destroy()} or write to
  * the array while another thread may be using it.</li>
  * </ul>
  *
@@ -166,7 +166,7 @@ public class PrivateKey extends SimpleDataStructure implements Destroyable {
     /**
      * Destroy this key and clear its data, per the javax.security.auth.Destroyable
      * interface. The data is zeroed and returned to the byte cache, the cached
-     * public key is dropped, and the key reports isDestroyed() afterwards.
+     * public key is dropped, and the key reports {@link #isDestroyed()} afterwards.
      * Calling this more than once is harmless.
      *
      * @since 0.9.40

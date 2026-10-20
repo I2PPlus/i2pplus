@@ -190,7 +190,7 @@ public class WizardHelper extends HelperBase {
     /**
      * To populate form with.
      * Uses the test result if available, else the current setting
-     * Adapted from ConfigNetHelper.
+     * Adapted from {@link ConfigNetHelper}.
      * @return the inbound bandwidth limit in decimal KB/sec, rounded to an integer
      */
     public String getInboundBurstRate() {

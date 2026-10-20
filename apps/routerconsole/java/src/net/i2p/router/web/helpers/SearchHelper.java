@@ -14,7 +14,7 @@ public class SearchHelper extends HelperBase {
 
     /**
      * No query or engine chosen yet, and the engine map starts empty until
-     * buildEngineMap() parses the router property.
+     * {@link #buildEngineMap()} parses the router property.
      */
     public SearchHelper() {}
 

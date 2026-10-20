@@ -19,7 +19,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 /**
  * A simple in-JVM ServerSocket using Piped Streams.
  * We use port numbers just like regular sockets.
- * Can only be connected by InternalSocket.
+ * Can only be connected by {@link InternalSocket}.
  * <p>
  * Warning - this uses Piped Streams, which don't like multiple writers from threads
  * that may vanish. If you do use multiple writers,

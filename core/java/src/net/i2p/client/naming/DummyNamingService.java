@@ -33,7 +33,7 @@ public class DummyNamingService extends NamingService {
 
     /**
      * The LRU cache, with no expiration time.
-     * Classes should take care to call removeCache() for any entries that
+     * Classes should take care to call {@link #removeCache()} for any entries that
      * are invalidated.
      */
     private static final Map<String, Destination> _cache = new LHMCache<>(CACHE_MAX_SIZE);

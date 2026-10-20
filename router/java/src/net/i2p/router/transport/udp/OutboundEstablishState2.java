@@ -123,7 +123,7 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
     /**
      *  Prepare to start a new handshake with the given peer.
      * <p>
-     *  Caller must then check getState() and build a
+     *  Caller must then check {@link #getState()} and build a
      *  Token Request or Session Request to send to the peer.
      *
      * @param ctx the router context
@@ -841,7 +841,7 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
      * and save them for retransmission.
      *
      * @param packets the UDP packets sent
-     * @return the new PeerState2, may also be retrieved from getPeerState()
+     * @return the new PeerState2, may also be retrieved from {@link #getPeerState()}
      */
     public synchronized PeerState2 confirmedPacketsSent(UDPPacket[] packets) {
         if (_sessConfForReTX == null) {

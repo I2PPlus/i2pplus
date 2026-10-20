@@ -18,7 +18,7 @@ import net.i2p.util.SimpleByteCache;
  * <p>
  * See FragmentHandler Javadoc for tunnel message fragment format
  * <p>
- * Not instantiated directly except in unit tests; see BatchedPreprocessor.
+ * Not instantiated directly except in unit tests; see {@link BatchedPreprocessor}.
  */
 class TrivialPreprocessor implements TunnelGateway.QueuePreprocessor {
     /** The router context. */
@@ -283,7 +283,7 @@ class TrivialPreprocessor implements TunnelGateway.QueuePreprocessor {
     /**
      * Calculate the size of the instructions for a pending message.
      * Does NOT include 4 for the message ID if the message will be fragmented;
-     * call getInstructionAugmentationSize() for that.
+     * call {@link #getInstructionAugmentationSize} for that.
      *
      * @param msg the pending gateway message
      * @return generally 3 or 35 or 39 for first fragment, 7 for subsequent fragments.

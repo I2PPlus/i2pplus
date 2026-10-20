@@ -63,7 +63,7 @@ public class RouterClock extends Clock {
     private volatile long _lastShiftNanos;
 
     /**
-     * Does not start. Caller MUST call start().
+     * Does not start. Caller MUST call {@link #start()}.
      *
      * @param context the router context used to create the timestamper and to
      * resolve clock settings

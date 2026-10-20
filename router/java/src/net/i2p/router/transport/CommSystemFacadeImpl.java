@@ -304,7 +304,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     }
 
     /**
-     * Cannot be restarted after calling this. Use restart() for that.
+     * Cannot be restarted after calling this. Use {@link #restart()} for that.
      * <p>
      * Gracefully shutdown the communication system.
      * <p>
@@ -582,7 +582,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     }
 
     /**
-     * The localized status string from getStatus().toStatusString(), translated if available.
+     * The localized status string from {@link #getStatus()}.toStatusString(), translated if available.
      * @return the localized status string
      * @since 0.9.45
      */
@@ -872,7 +872,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
      * <p>
      * As of 0.9.32, works only for literal IPs, returns null for hostnames.
      *
-     * @param peer not ourselves - use getOurCountry() for that
+     * @param peer not ourselves - use {@link #getOurCountry()} for that
      * @return two-letter lower-case country code or xx for non-banned peers, or null otherwise
      */
     @Override

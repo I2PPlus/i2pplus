@@ -27,7 +27,7 @@ import net.i2p.util.SystemVersion;
  * This utility is typically called by the watchdog when router appears
  * to be unresponsive, but can also be invoked manually for debugging.
  *
- * @since 0.9.3 moved from RouterWatchdog
+ * @since 0.9.3 moved from {@link RouterWatchdog}
  */
 abstract class ThreadDump {
 

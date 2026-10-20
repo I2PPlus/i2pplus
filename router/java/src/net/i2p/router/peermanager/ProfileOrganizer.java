@@ -51,11 +51,11 @@ import net.i2p.util.SystemVersion;
 
 /**
  * Categorizes peers into performance tiers (fast, high-capacity, well-integrated)
- * based on historical metrics from PeerProfile. Requires periodic reorganize() calls
+ * based on historical metrics from {@link PeerProfile}. Requires periodic reorganize() calls
  * to update peer classifications for optimal tunnel selection.
  * <p>
  * Tier assignment during reorganize():
- * 1. All profiles are iterated in capacity order (via InverseCapacityComparator)
+ * 1. All profiles are iterated in capacity order (via {@link InverseCapacityComparator})
  * 2. Expired/unreachable/low-bandwidth peers are filtered out
  * 3. Speed, capacity, and integration thresholds are recalculated from the active set
  * 4. Each surviving profile is evaluated via lockedPromoteProfileToTiers()
@@ -70,7 +70,7 @@ import net.i2p.util.SystemVersion;
  * <p>
  * Concurrency: ReentrantReadWriteLock protects all tier maps.
  * reorganize() acquires the write lock; selection methods use the read lock.
- * getOrCreateProfileNonblocking() uses try-lock escalation so a read path never
+ * {@link #getOrCreateProfileNonblocking} uses try-lock escalation so a read path never
  * blocks on the write lock.
  */
 public class ProfileOrganizer {
@@ -1633,7 +1633,7 @@ public class ProfileOrganizer {
 
     /**
      * Random iterator over not-failing list with optional tier exclusion.
-     * Falls through to selectAllPeers() if shortfall remains.
+     * Falls through to {@link #selectAllPeers()} if shortfall remains.
      *
      * @param howMany target number of peers
      * @param exclude peers to exclude (may be null)
@@ -2599,7 +2599,7 @@ public class ProfileOrganizer {
     }
 
     /**
-     * Result of buildCandidateProfiles(): the candidate set plus the totals
+     * Result of {@link #buildCandidateProfiles()}: the candidate set plus the totals
      * and counts consumed by the threshold and logging sections.
      */
     private static final class CandidateSet {
@@ -4424,7 +4424,7 @@ private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, P
      * nibbles per matched byte.  The leading char differs by address family and
      * port keys begin with 'p', family keys with 'x', so an IP key can never
      * equal a port or family key.  Keeping the {@link MaskedIPSet} format means
-     * an accumulator built by MaskedIPSet's own constructor still compares
+     * an accumulator built by {@link MaskedIPSet}'s own constructor still compares
      * equal; the floodfill path's packed-{@code long} key cannot be used because
      * the accumulator arrives as a {@code MaskedIPSet} from callers outside this
      * package.  {@code ProfileOrganizerSelectionCostTest} pins the format.
@@ -5237,7 +5237,7 @@ private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, P
      * Whether the peer should be skipped for tier promotion: not selectable,
      * in a strict country, low tunnel acceptance, high-latency penalty,
      * congested, or in loss probation.  Mirrors the eligibility gates of
-     * lockedPlaceProfile().
+     * {@link #lockedPlaceProfile}.
      * <p>
      * No side effects. Safe to evaluate without holding locks.
      *
@@ -5571,7 +5571,7 @@ private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, P
 
     /**
      * Immediately demote a peer from the fast tier when a peer test shows it is
-     * no longer low-latency.  Called from PeerTestJob when a test result
+     * no longer low-latency.  Called from {@link PeerTestJob} when a test result
      * arrives that contradicts the peer's tier membership.  Non-blocking — only
      * acts if the peer is currently in the fast tier.
      * <p>High-capacity membership is deliberately left alone. It is earned from
@@ -5955,7 +5955,7 @@ private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, P
     /**
      * Batch-remove peers from fast tier only, keeping them in high-cap.
      * Used to demote peers with test failures from fast to high cap.
-     * Does NOT call promoteToFillTiers() — re-promotion would undo the
+     * Does NOT call {@link #promoteToFillTiers()} — re-promotion would undo the
      * demotion. The next full reorganize() fills any gaps.
      *
      * @param peers peers to remove from fast tier — may be empty (no-op, no lock)
@@ -6401,7 +6401,7 @@ private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, P
     /**
      * Instantly remove a peer from the fast/high-capacity tiers when its decayed loss
      * score exceeds the threshold, and mark it for loss probation. Called from the
-     * transport path via ProfileManagerImpl so a lossy peer is demoted as soon as its
+     * transport path via {@link ProfileManagerImpl} so a lossy peer is demoted as soon as its
      * retransmit ratio crosses the bar, instead of waiting for the next reorganize
      * cycle. Non-blocking: if a reorganize currently holds the write lock, the
      * reorganize purge catches the peer instead.

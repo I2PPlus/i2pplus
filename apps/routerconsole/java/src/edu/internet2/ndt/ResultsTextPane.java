@@ -9,7 +9,7 @@ import com.vuze.plugins.mlab.tools.ndt.swingemu.*;
 public class ResultsTextPane extends JTextPane {
 
     /**
-     * The pane starts empty; text arrives through append() and insert(), so nothing
+     * The pane starts empty; text arrives through {@link #append} and insert(), so nothing
      * is configured at construction.
      */
     public ResultsTextPane() {}

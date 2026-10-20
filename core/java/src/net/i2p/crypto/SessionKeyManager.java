@@ -46,7 +46,7 @@ public class SessionKeyManager {
      * Retrieve the session key currently associated with encryption to the target,
      * or null if a new session key should be generated.
      * <p>
-     * Warning - don't generate a new session if this returns null, it's racy, use getCurrentOrNewKey().
+     * Warning - don't generate a new session if this returns null, it's racy, use {@link #getCurrentOrNewKey}.
      * @param target the destination whose current session key is wanted
      * @return the current key
      */
@@ -69,7 +69,7 @@ public class SessionKeyManager {
      * Associate a new session key with the specified target.  Metrics to determine
      * when to expire that key begin with this call.
      * <p>
-     * Racy if called after getCurrentKey() to check for a current session;
+     * Racy if called after {@link #getCurrentKey} to check for a current session;
      * use getCurrentOrNewKey() in that case.
      *
      * @param target the destination the session is established with

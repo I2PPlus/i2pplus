@@ -10,7 +10,7 @@ import net.i2p.data.SimpleDataStructure;
  */
 public class RejectTrimmer<T extends SimpleDataStructure> implements KBucketTrimmer<T> {
     /**
-     * A bare instance is enough: trim() reads no field, so every instance behaves
+     * A bare instance is enough: {@link #trim} reads no field, so every instance behaves
      * the same way and refuses the add.
      */
     public RejectTrimmer() {}

@@ -59,7 +59,7 @@ class IntroductionManager {
     private static final int MAX_INBOUND = 100;
 
     /**
-     * This is enforced in EstablishmentManager.
+     * This is enforced in {@link EstablishmentManager}.
      * @since 0.8.11
      */
     public static final int MAX_OUTBOUND = 200;
@@ -377,7 +377,7 @@ class IntroductionManager {
     }
 
     /**
-     * Was part of pickInbound(), moved out so we can call it more often.
+     * Was part of {@link #pickInbound}, moved out so we can call it more often.
      * @since 0.8.11
      */
     public void pingIntroducers() {

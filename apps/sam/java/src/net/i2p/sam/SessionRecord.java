@@ -16,7 +16,7 @@ import java.util.Properties;
  * A record of a SAM session stored in the {@link SessionsDB}.
  * Contains the destination, properties, and handler for a session.
  *
- * @since 0.9.25 moved from SAMv3Handler
+ * @since 0.9.25 moved from {@link SAMv3Handler}
  */
 class SessionRecord {
 	private final String m_dest;

@@ -15,7 +15,7 @@ import java.util.Set;
  * Null elements are not permitted.
  * <p>
  * Not appropriate for large Sets that are modified.
- * add(), remove(), and contains() are O(n).
+ * add(), {@link #remove}, and contains() are O(n).
  * Warning: addAll() and the Collection constructor are O(n**2).
  *
  * @param <E> type of elements in this set
@@ -49,7 +49,7 @@ public class ArraySet<E> extends AbstractSet<E> implements Set<E> {
     }
 
     /**
-     * A fixed capacity of max(MAX_CAPACITY, c.size())
+     * A fixed capacity of max(MAX_CAPACITY, c.{@link #size()})
      * Adds over capacity will throw a SetFullException.
      *
      * @param c the collection to copy

@@ -17,8 +17,8 @@ import net.i2p.router.web.FormHandler;
 public class WizardHandler extends FormHandler {
 
     /**
-     * No session-scoped helper is bound yet; setWizardHelper() supplies it before
-     * processForm() runs.
+     * No session-scoped helper is bound yet; {@link #setWizardHelper} supplies it before
+     * {@link #processForm()} runs.
      */
     public WizardHandler() {}
 
@@ -71,7 +71,7 @@ public class WizardHandler extends FormHandler {
     }
 
     /**
-     * Modified from ConfigNetHandler.
+     * Modified from {@link ConfigNetHandler}.
      * @return true if any bandwidth, share or burst setting was written
      */
     private boolean updateRates(Map<String, String> changes) {

@@ -24,7 +24,7 @@ class I2PServerSocketFull implements I2PServerSocket {
 
     /**
      * Waits for the next socket connecting.  If a remote user tried to make a
-     * connection and the local application wasn't .accept()ing new connections,
+     * connection and the local application wasn't .{@link #accept()}ing new connections,
      * they should get refused (if .accept() doesn't occur in some small period).
      * Unlike a regular ServerSocket, a connection left unaccepted is answered
      * with a streaming RESET and accept() reports the failure by throwing

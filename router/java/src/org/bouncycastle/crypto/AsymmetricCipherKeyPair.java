@@ -29,7 +29,7 @@ public class AsymmetricCipherKeyPair
      *
      * @param publicParam a public key parameters object.
      * @param privateParam the corresponding private key parameters.
-     * @deprecated use AsymmetricKeyParameter
+     * @deprecated use {@link AsymmetricKeyParameter}
      */
     public AsymmetricCipherKeyPair(
         CipherParameters    publicParam,

@@ -178,8 +178,8 @@ import net.i2p.util.SimpleTimer2;
     }
 
     /**
-     * Caller MUST also call schedule(), reschedule(),
-     * forceRunSoon(), or forceRunImmediately().
+     * Caller MUST also call schedule(), {@link #reschedule},
+     * {@link #forceRunSoon}, or forceRunImmediately().
      * @param isAlive true keeps the event scheduled for later tests, false
      * cancels it
      */

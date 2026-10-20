@@ -234,7 +234,7 @@ public class DatabaseLookupMessage extends FastI2NPMessageImpl {
 
     /**
      * The included session key or null if unset.
-     * If non-null, either getReplyTag() or getRatchetReplyTag() is non-null.
+     * If non-null, either {@link #getReplyTag()} or getRatchetReplyTag() is non-null.
      *
      * @return the reply key
      * @since 0.9.7

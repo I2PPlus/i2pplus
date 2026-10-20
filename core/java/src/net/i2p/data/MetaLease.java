@@ -46,7 +46,7 @@ import java.io.OutputStream;
  */
 public class MetaLease extends Lease {
 
-    /** Required for deserialization: readBytes() fills the inherited and own fields. */
+    /** Required for deserialization: {@link #readBytes} fills the inherited and own fields. */
     public MetaLease() {}
 
     /** MetaLease length in bytes. */

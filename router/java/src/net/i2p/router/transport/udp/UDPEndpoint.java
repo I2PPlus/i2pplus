@@ -52,7 +52,7 @@ class UDPEndpoint implements SocketListener {
     }
 
     /**
-     *  Caller should call getListenPort() after this to get the actual bound port and determine success .
+     *  Caller should call {@link #getListenPort()} after this to get the actual bound port and determine success .
      * <p>
      *  Can be restarted.
      *
@@ -150,7 +150,7 @@ class UDPEndpoint implements SocketListener {
 
 
     /**
-     * Call after startup() to get the actual port, or -1 on startup failure.
+     * Call after {@link #startup()} to get the actual port, or -1 on startup failure.
      *
      * @return the port the socket was actually bound to, or -1 if no bind succeeded
      */

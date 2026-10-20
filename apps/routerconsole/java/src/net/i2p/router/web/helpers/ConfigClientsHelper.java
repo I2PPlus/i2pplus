@@ -497,7 +497,7 @@ public class ConfigClientsHelper extends HelperBase {
     }
 
     /**
-     *  Like in DataHelper but doesn't convert null to ""
+     *  Like in {@link DataHelper} but doesn't convert null to ""
      *  There's a lot worse things a plugin could do but...
      *
      *  @param props the properties to retrieve from

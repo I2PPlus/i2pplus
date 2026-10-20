@@ -23,7 +23,7 @@ import net.i2p.util.EepGet;
  * 516-byte Base64 destination, or hostname=dest.
  * A trailing \n or \r\n is acceptable.
  * <p>
- * Should be used from MetaNamingService, after HostsTxtNamingService.
+ * Should be used from {@link MetaNamingService}, after HostsTxtNamingService.
  * Cannot be used as the only NamingService! Be sure any naming service hosts
  * are in hosts.txt.
  * Supports caching, b32, and b64.

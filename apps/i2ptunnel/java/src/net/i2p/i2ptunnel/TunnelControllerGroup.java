@@ -67,7 +67,7 @@ public class TunnelControllerGroup implements ClientApp {
 
     /**
      * Flag to indicate if delayed server tunnel shutdown is in progress.
-     * Set by shutdownDelayedServers() and checked by GracefulShutdown.
+     * Set by {@link #shutdownDelayedServers()} and checked by GracefulShutdown.
      * @since 0.9.68+
      */
     private static volatile boolean delayedShutdownInProgress = false;
@@ -80,7 +80,7 @@ public class TunnelControllerGroup implements ClientApp {
 
     /**
      * Flag to signal that delayed shutdown should be cancelled.
-     * Set by cancelDelayedShutdown() and checked by shutdown tasks.
+     * Set by {@link #cancelDelayedShutdown()} and checked by shutdown tasks.
      * @since 0.9.68+
      */
     private static volatile boolean cancelDelayedShutdown = false;
@@ -505,7 +505,7 @@ public class TunnelControllerGroup implements ClientApp {
     }
 
     /**
-     * Instantiation only. Caller must call startup().
+     * Instantiation only. Caller must call {@link #startup()}.
      * Config file problems will not throw exception until startup().
      *
      * @param context the context the tunnels are created in
@@ -701,7 +701,7 @@ public class TunnelControllerGroup implements ClientApp {
 
     /**
      * Warning - destroys the singleton!
-     * Caller must root a new context before calling instance() or main() again.
+     * Caller must root a new context before calling instance() or {@link #main} again.
      * Aggressively kill and null everything to reduce memory usage in the JVM
      * after stopping, and to recognize what must be reinitialized on restart (Android).
      *
@@ -986,7 +986,7 @@ public class TunnelControllerGroup implements ClientApp {
      * Load up all of the tunnels configured in the given file.
      * Prior to 0.9.20, also started the tunnels.
      * As of 0.9.20, does not start the tunnels, you must call startup()
-     * or getInstance() instead of loadControllers().
+     * or {@link #getInstance()} instead of loadControllers().
      * <p>
      * DEPRECATED for use outside this class. Use startup() or getInstance().
      *
@@ -1122,7 +1122,7 @@ public class TunnelControllerGroup implements ClientApp {
     }
 
     /**
-     * Start all of the tunnels. Must call loadControllers() first.
+     * Start all of the tunnels. Must call {@link #loadControllers()} first.
      * @since 0.9.20
      */
     private synchronized void startControllers() {
@@ -1254,7 +1254,7 @@ public class TunnelControllerGroup implements ClientApp {
     /**
      * Stop and remove the given tunnel.
      * Side effect - clears all messages the controller.
-     * Does NOT delete the configuration - must call saveConfig() or removeConfig() also.
+     * Does NOT delete the configuration - must call {@link #saveConfig()} or removeConfig() also.
      *
      * @param controller the tunnel to stop and drop, where null yields an empty message list
      * @return list of messages from the controller as it is stopped
@@ -1376,6 +1376,7 @@ public class TunnelControllerGroup implements ClientApp {
      * Save the configuration of all known tunnels to the default config
      * file.
      *
+     * @throws IOException if the configuration file cannot be written
      * @deprecated use saveConfig(TunnelController) or removeConfig(TunnelController)
      */
     @Deprecated
@@ -1401,6 +1402,9 @@ public class TunnelControllerGroup implements ClientApp {
 
     /**
      * Save the configuration of all known tunnels to the given file.
+     *
+     * @param cfgFile the config file path
+     * @throws IOException if the configuration file cannot be written
      * @deprecated
      */
     @Deprecated
@@ -1721,7 +1725,7 @@ public class TunnelControllerGroup implements ClientApp {
      * monitor. Create/resize races resolve under the lock with a double-check.
      *
      * @return non-null
-     * @since 0.9.8 Moved from I2PTunnelClientBase in 0.9.18
+     * @since 0.9.8 Moved from {@link I2PTunnelClientBase} in 0.9.18
      */
     ThreadPoolExecutor getClientExecutor() {
         ThreadPoolExecutor ex = _executor;
@@ -2813,7 +2817,7 @@ public class TunnelControllerGroup implements ClientApp {
 
     /**
      * Resize the shared (fallback) client executor max pool size. Called by Tuner
-     * for the null-tunnel path; per-tunnel pools are resized by rebalanceAllRunnerPools().
+     * for the null-tunnel path; per-tunnel pools are resized by {@link #rebalanceAllRunnerPools()}.
      *
      * @param newMax the new maximum pool size, applied only while the shared executor is running
      */

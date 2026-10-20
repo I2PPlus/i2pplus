@@ -38,7 +38,7 @@ import java.util.Date;
  * <li><strong>Tunnel Specificity:</strong> Authorizes particular tunnel, not all tunnels</li>
  * <li><strong>Renewable:</strong> Leases can be refreshed before expiration</li>
  * </ul>
- * <p><strong>Usage in LeaseSet:</strong></p>
+ * <p><strong>Usage in {@link LeaseSet}:</strong></p>
  * <ul>
  * <li><strong>Multiple Leases:</strong> Destinations typically have several concurrent leases</li>
  * <li><strong>Load Balancing:</strong> Multiple leases distribute message load</li>
@@ -64,7 +64,7 @@ import java.util.Date;
  * <li><strong>Efficient Lookup:</strong> Hash-based gateway identification</li>
  * <li><strong>Quick Expiration:</strong> Timestamp comparison for validity checks</li>
  * <li><strong>Compact Storage:</strong> Minimal data structure for network transmission</li>
- * <li><strong>Fast Comparison:</strong> Optimized equals() and hashCode() methods</li>
+ * <li><strong>Fast Comparison:</strong> Optimized {@link #equals} and hashCode() methods</li>
  * </ul>
  * <p><strong>Related Structures:</strong></p>
  * <ul>
@@ -123,7 +123,7 @@ public class Lease extends DataStructureImpl {
     }
 
     /**
-     * Convenience wrapper, prefer getEndTime() for new code.
+     * Convenience wrapper, prefer {@link #getEndTime()} for new code.
      *
      * @return when the lease expires, as a Date
      */

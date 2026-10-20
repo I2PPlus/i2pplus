@@ -64,19 +64,19 @@ import net.i2p.util.Log;
  * <p>
  * <b>Key Features:</b>
  * <ul>
- *   <li>Accepts incoming I2P connections via I2PServerSocket</li>
+ *   <li>Accepts incoming I2P connections via {@link I2PServerSocket}</li>
  *   <li>Forwards connections to configurable local TCP destinations</li>
- *   <li>Supports SSL/TLS connections via I2PSSLSocketFactory</li>
+ *   <li>Supports SSL/TLS connections via {@link I2PSSLSocketFactory}</li>
  *   <li>Provides port-based destination mapping (targetForPort.xx)</li>
- *   <li>Implements connection filtering via StatefulConnectionFilter</li>
+ *   <li>Implements connection filtering via {@link StatefulConnectionFilter}</li>
  *   <li>Uses thread pool for concurrent connection handling</li>
  * </ul>
  * <p>
  * <b>Connection Flow:</b>
  * <ol>
  *   <li>Client connects to I2P destination via I2PServerSocket</li>
- *   <li>blockingHandle() is called with the I2PSocket</li>
- *   <li>Local TCP socket is created via getSocket()</li>
+ *   <li>{@link #blockingHandle} is called with the I2PSocket</li>
+ *   <li>Local TCP socket is created via {@link #getSocket}</li>
  *   <li>I2PTunnelRunner handles bidirectional data streaming</li>
  * </ol>
  * <p>
@@ -213,7 +213,7 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
 
     /**
      * Per-tunnel server handler pool cap, -1 = Tuner-managed default.
-     *  Read from PROP_SERVER_THREADS; re-applied live in optionsUpdated().
+     *  Read from PROP_SERVER_THREADS; re-applied live in {@link #optionsUpdated()}.
      * @since 0.9.71+
      */
     private volatile int _serverThreadOverride = -1;
@@ -240,7 +240,7 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
     /**
      * Non-blocking: the key is decoded and a disconnected socket manager is built
      * here; the session is only connected, and the server socket only opened, by
-     * startRunning().
+     * {@link #startRunning()}.
      *
      * @param host server hostname, kept as the remote host and named in the display name
      * @param port server port, kept as the remote port and named in the display name
@@ -591,7 +591,7 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
      *  Try to reserve a slot in the concurrent-connection gate.
      *  Call right after accept(), before dispatching the handler. When this returns
      *  false the connection must be rejected (rejectConnection) and never dispatched.
-     *  The reserved slot is released by releaseConnection(), which runs in the handler's
+     *  The reserved slot is released by {@link #releaseConnection()}, which runs in the handler's
      *  finally block so it also fires on early returns and exceptions.
      *
      *  @return true if under the cap (or unlimited), false if the cap is exceeded
@@ -602,7 +602,7 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
     }
 
     /**
-     *  Release a reservation taken by tryAcquireConnection(). Idempotent-safe only when
+     *  Release a reservation taken by {@link #tryAcquireConnection()}. Idempotent-safe only when
      *  paired with the acquire; must run exactly once per accepted connection.
      *  @since 0.9.71+
      */
@@ -615,7 +615,7 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
      *  Pure decision, no router context: called by the accept loop right after accept(),
      *  before a handler thread is consumed. Cap 0 = unlimited = always available and no
      *  reservation is recorded. The caller MUST pair a successful reservation with
-     *  releaseConnectionSlot() (normally from the handler's finally block).
+     *  {@link #releaseConnectionSlot} (normally from the handler's finally block).
      *
      *  @param maxConnections the configured cap; &lt;= 0 means unlimited
      *  @param active the live reservation counter shared by all connections of the tunnel
@@ -632,7 +632,7 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
     }
 
     /**
-     *  Release a slot reserved by acquireConnectionSlot(). Clamped at zero so a config
+     *  Release a slot reserved by {@link #acquireConnectionSlot}. Clamped at zero so a config
      *  change mid-flight (cap turned on while unlimited connections are live) can never
      *  push the counter negative and permanently disable the gate.
      *
@@ -850,7 +850,7 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
      *  This does not release all resources. In particular, the I2PSocketManager remains
      *  and it may have timer threads that continue running.
      * <p>
-     *  To release all resources permanently, call destroy().
+     *  To release all resources permanently, call {@link #destroy()}.
      *
      * @return true if the tunnel was closed successfully, false if connections exist and forced is false
      */
@@ -1025,7 +1025,7 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
     /**
      * Runs the I2PTunnelServer to accept and handle incoming connections asynchronously.
      * <p>
-     * Accepts connections in a loop, submitting each to the thread pool via CompletableFuture.
+     * Accepts connections in a loop, submitting each to the thread pool via {@link CompletableFuture}.
      * Handles expected exceptions with retries and logs errors. On shutdown, gracefully terminates the pool.
      */
     public void run() {

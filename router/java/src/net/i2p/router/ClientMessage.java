@@ -87,7 +87,7 @@ public class ClientMessage {
     /**
      * Retrieve the destination to which this message is directed.
      * Valid for outbound; null for inbound.
-     * If null, use getDestinationHash().
+     * If null, use {@link #getDestinationHash()}.
      *
      * @return the resolved destination, or null if only the hash is known
      */
@@ -103,7 +103,7 @@ public class ClientMessage {
     /**
      * Retrieve the destination to which this message is directed.
      * Valid for inbound; null for outbound.
-     * If null, use getDestination().
+     * If null, use {@link #getDestination()}.
      *
      * @return the destination hash
      */

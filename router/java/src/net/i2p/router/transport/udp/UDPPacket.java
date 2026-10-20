@@ -238,7 +238,7 @@ class UDPPacket implements CDPQEntry {
     /**
      * Marked type.
      *
-     * @return the mark set by markType(), or -1 if this packet has not been marked
+     * @return the mark set by {@link #markType}, or -1 if this packet has not been marked
      */
     public int getMarkedType() {
         verifyNotReleased();
@@ -347,7 +347,7 @@ class UDPPacket implements CDPQEntry {
     /**
      * Bandwidth request.
      *
-     * @return the limiter request recorded by requestOutboundBandwidth(), or
+     * @return the limiter request recorded by {@link #requestOutboundBandwidth()}, or
      *         null if no bandwidth has been requested for this packet yet
      */
     public FIFOBandwidthLimiter.Request getBandwidthRequest() {

@@ -80,7 +80,7 @@ class ConnThrottler {
      * <p>
      * This method cancels the cleanup timer, clears all peer records,
      * and resets the total connection counter. The throttler may be
-     * restarted by calling start() again.
+     * restarted by calling {@link #start()} again.
      * </p>
      *
      * @since 0.9.40

@@ -284,7 +284,7 @@ public abstract class NamingService {
     }
 
     /**
-     * This may be more or less efficient than getEntries(),
+     * This may be more or less efficient than {@link #getEntries()},
      * depending on the implementation.
      * Warning - This will bring the whole database into memory
      * if options is null, empty, or unsupported, use with caution.
@@ -315,7 +315,7 @@ public abstract class NamingService {
      * Output may or may not contain comment lines, implementation dependent.
      * Caller must close writer.
      * <p>
-     * This implementation calls getBase64Entries().
+     * This implementation calls {@link #getBase64Entries}.
      * Subclasses should override if they store in a hosts.txt format natively.
      *
      * @param out the writer to export to
@@ -400,7 +400,7 @@ public abstract class NamingService {
     /**
      * Add a hostname and Destination to the addressbook.
      * Overwrites old entry if it exists.
-     * See also putIfAbsent() and update().
+     * See also {@link #putIfAbsent} and update().
      *
      * @param hostname the host name to map to the destination, overwriting any existing entry
      * @param d the destination for the hostname
@@ -414,7 +414,7 @@ public abstract class NamingService {
     /**
      * Add a hostname and Destination to the addressbook.
      * Overwrites old entry if it exists.
-     * See also putIfAbsent() and update().
+     * See also putIfAbsent() and {@link #update}.
      *
      * @param hostname the host name to map to the destination, overwriting any existing entry
      * @param d the destination for the hostname
@@ -610,7 +610,7 @@ public abstract class NamingService {
     }
 
     /**
-     * Same as lookupBase32() but with the SHA256 Hash precalculated
+     * Same as {@link #lookupBase32} but with the SHA256 Hash precalculated
      * This implementation returns null.
      *
      * @param hash the hash to look up
@@ -680,7 +680,7 @@ public abstract class NamingService {
      * whether this does resolve Base 32 addresses
      * in the form {52 chars}.b32.i2p is NamingService-specific.
      * <p>
-     * This implementation simply calls lookup().
+     * This implementation simply calls {@link #lookup}.
      * Subclasses implementing multiple destinations per hostname should override.
      *
      * @param hostname the host name to resolve, for which every known destination is returned
@@ -753,7 +753,7 @@ public abstract class NamingService {
      * If additional Destinations remain, it only removes the
      * specified Destination from the entry.
      * <p>
-     * This implementation simply calls lookup() and remove().
+     * This implementation simply calls lookup() and {@link #remove}.
      * Subclasses implementing multiple destinations per hostname,
      * or with more efficient implementations, should override.
      * Fails if entry previously exists.
@@ -873,7 +873,7 @@ public abstract class NamingService {
     }
 
     /**
-     * WARNING - for use by I2PAppContext only - others must use
+     * WARNING - for use by {@link I2PAppContext} only - others must use
      * {@link net.i2p.I2PAppContext#namingService}.
      *
      * <p>

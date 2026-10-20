@@ -159,7 +159,7 @@ public final class HMAC256Generator extends HMACGenerator {
      * Unlike standard SecretKeySpec, this implementation maintains a direct reference
      * to the key data while maintaining compatibility with Mac operations.
      * <p><strong>Implementation Note:</strong> HmacSHA256 only uses the first 32
-     * bytes of the key, so getEncoded() returns exactly those 32 bytes (zero padded
+     * bytes of the key, so {@link #getEncoded()} returns exactly those 32 bytes (zero padded
      * if the caller supplied a shorter key); the full key data may be longer than
      * 32 bytes. The copy is mandatory rather than an optimization: the JDK's
      * {@code HmacCore.engineInit()} zeroes the array returned by getEncoded() once it has

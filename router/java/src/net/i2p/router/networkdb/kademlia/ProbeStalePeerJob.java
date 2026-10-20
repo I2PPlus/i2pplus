@@ -19,7 +19,7 @@ import net.i2p.util.Log;
 
 
 /**
- * Probes peers to verify they are still alive, using DirectLookupJob to ask
+ * Probes peers to verify they are still alive, using {@link DirectLookupJob} to ask
  * for their RouterInfo.  If they respond, lastHeardFrom/lastHeardAbout are
  * updated, making them pass the proof-of-life check in
  * {@link net.i2p.router.peermanager.ProfileOrganizer#isSelectable}.

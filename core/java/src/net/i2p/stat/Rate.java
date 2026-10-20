@@ -498,7 +498,7 @@ public class Rate {
      * as "profile.dbIntroduction.60m.lifetimeEventCount").  The data can be exported
      * through store(outputStream, "profile.dbIntroduction.60m").
      *
-     * @param props the properties previously written by store()
+     * @param props the properties previously written by {@link #store}
      * @param prefix prefix to the property entries (should NOT end with a period)
      * @param treatAsCurrent if true, we'll treat the loaded data as if no time has
      *                       elapsed since it was written out, but if it is false, we'll

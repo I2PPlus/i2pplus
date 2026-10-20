@@ -729,7 +729,7 @@ public class LogManager implements Flushable {
      * Do not log here, deadlock of LogWriter via rereadConfig().
      *
      * @param format null or empty string means use default format for the locale
-     *               (with a SHORT date and a MEDIUM time - see DateFormat)
+     *               (with a SHORT date and a MEDIUM time - see {@link DateFormat})
      *
      * @return true if the format was updated, false if it was invalid
      */

@@ -226,7 +226,7 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
     /**
      * Selects an SSL-capable outproxy for HTTPS connections.
      * <p>
-     * This method is similar to selectProxy() but only considers outproxies
+     * This method is similar to {@link #selectProxy} but only considers outproxies
      * configured for SSL support (via {@code i2ptunnel.httpclient.SSLOutproxies}).
      * </p>
      * <p>
@@ -1362,7 +1362,7 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
          * @param usingProxy whether a WWW outproxy is in use
          * @param wwwProxy the outproxy destination
          * @param id the request identifier
-         * @param targetHost if non-null, call noteProxyResult() with this as host
+         * @param targetHost if non-null, call {@link #noteProxyResult} with this as host
          * @param isSSL to pass to noteProxyResult(). FALSE for ConnectClient.
          */
         public OnTimeout(Socket s, OutputStream out, String target, boolean usingProxy,

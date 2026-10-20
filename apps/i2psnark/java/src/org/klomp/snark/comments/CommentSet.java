@@ -30,9 +30,9 @@ import java.nio.charset.StandardCharsets;
  * removed, only marked as hidden, so they don't reappear. Duplicates are detected based on an
  * approximate time range. Max size of both elements and total text length is enforced.
  *
- * <p>Supports persistence via save() and File constructor.
+ * <p>Supports persistence via {@link #save} and File constructor.
  *
- * <p>NOT THREAD SAFE except for iterating AFTER the iterator() call.
+ * <p>NOT THREAD SAFE except for iterating AFTER the {@link #iterator()} call.
  *
  * @since 0.9.31
  */
@@ -95,7 +95,7 @@ public class CommentSet extends AbstractSet<Comment> {
 
     /**
      * Saves this CommentSet to a gzipped file. Not sorted, includes hidden comments.
-     * Sets isModified() to false on success.
+     * Sets {@link #isModified()} to false on success.
      *
      * @param file the file to write to
      * @throws IOException if an I/O error occurs
@@ -344,9 +344,9 @@ public class CommentSet extends AbstractSet<Comment> {
     /**
      * Returns an iterator over non-hidden comments in reverse-sort order (newest first).
      * Thread-safe after this call. Changes after this call are not reflected.
-     * iter.remove() has no effect on the underlying set.
+     * iter.{@link #remove} has no effect on the underlying set.
      *
-     * <p>Returned values may be fewer than size() due to additional deduping.
+     * <p>Returned values may be fewer than {@link #size()} due to additional deduping.
      *
      * @return an iterator over non-hidden comments
      */

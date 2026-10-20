@@ -367,7 +367,7 @@ public final class CryptixAESEngine extends AESEngine {
      * And we can't get rid of Cryptix because AES-256 is unavailable
      * in several JVMs.
      * Make USE_SYSTEM_AES above non-final to run this.
-     * You also must comment out the length check in encrypt() and decrypt() above.
+     * You also must comment out the length check in {@link #encrypt()} and decrypt() above.
      * <pre>
      *  JVM	Cryptix (ms)	System (ms)
      *  Sun	 8662		n/a

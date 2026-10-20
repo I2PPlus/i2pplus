@@ -24,7 +24,7 @@ import net.i2p.util.Log;
 
 /**
  * Helper for the /health page - renders router health rings
- * using RingRenderer for a quick visual overview.
+ * using {@link RingRenderer} for a quick visual overview.
  *
  * @since 0.9.70+
  */
@@ -279,7 +279,7 @@ public class HealthHelper extends HelperBase {
 
     /**
      * Legacy: renders all rings in a single div.
-     * Kept for backward compat with getHealthContent() / storeWriter path.
+     * Kept for backward compat with {@link #getHealthContent()} / storeWriter path.
      */
     private void renderHealth(Writer out) throws IOException {
         out.write("<div id=healthstats>");

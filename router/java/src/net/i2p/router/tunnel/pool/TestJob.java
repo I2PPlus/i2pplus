@@ -699,7 +699,7 @@ public class TestJob extends JobImpl {
      *  Longest a retest may be pushed out while its tunnel is busy.  Waiting
      *  the full {@link #TRAFFIC_DEFER_MS} window let the tunnel expire out
      *  from under the retest chain (the expiry pre-check compares against
-     *  delay + 3 test periods, so a long delay makes scheduleRetest() give up
+     *  delay + 3 test periods, so a long delay makes {@link #scheduleRetest} give up
      *  and drop the test entirely); a bounded retry instead brings the job
      *  back to re-check contention while the tunnel is still alive.
      *  @since 0.9.71+

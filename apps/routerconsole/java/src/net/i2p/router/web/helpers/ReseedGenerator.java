@@ -12,7 +12,7 @@ import net.i2p.router.web.HelperBase;
 public class ReseedGenerator extends HelperBase {
 
     /**
-     * A stateless handler; createZip() builds a fresh ReseedBundler per call, so a
+     * A stateless handler; {@link #createZip()} builds a fresh ReseedBundler per call, so a
      * bare instance needs no further setup.
      */
     public ReseedGenerator() {}

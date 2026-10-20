@@ -198,7 +198,7 @@ public class FileUtil {
     /**
      * Verify the integrity of a zipfile.
      * There doesn't seem to be any library function to do this,
-     * so we basically go through all the motions of extractZip() above,
+     * so we basically go through all the motions of {@link #extractZip} above,
      * unzipping everything but throwing away the data.
      * <p>
      * Todo: verify zip header? Although this would break the undocumented

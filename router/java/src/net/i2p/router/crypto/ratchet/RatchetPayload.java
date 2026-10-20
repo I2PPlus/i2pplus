@@ -35,7 +35,7 @@ class RatchetPayload {
 
     /**
      * For all callbacks, recommend throwing exceptions only from the handshake.
-     * Exceptions will get thrown out of processPayload() and prevent
+     * Exceptions will get thrown out of {@link #processPayload} and prevent
      * processing of succeeding blocks.
      */
     public interface PayloadCallback {

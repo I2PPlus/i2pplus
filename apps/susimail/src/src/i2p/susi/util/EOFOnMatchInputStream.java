@@ -20,7 +20,7 @@ public class EOFOnMatchInputStream extends PushbackInputStream implements ReadCo
     private final ReadCounter cis;
 
     /**
-     *  Non-counter mode. getRead() will return 0.
+     *  Non-counter mode. {@link #getRead()} will return 0.
      *  @param in the underlying stream to read until the match is seen
      *  @param match will be copied
      */
@@ -111,7 +111,7 @@ public class EOFOnMatchInputStream extends PushbackInputStream implements ReadCo
     /**
      *  FIFO output. Pop the oldest (not the newest).
      *  Only call if pos < size.
-     *  We never call super.read(), it returns the newest.
+     *  We never call super.{@link #read()}, it returns the newest.
      */
     private int pop() {
         // return oldest, shift up

@@ -28,7 +28,7 @@ import org.eclipse.jetty.server.handler.HandlerWrapper;
  */
 public class XI2PLocationFilter extends HandlerWrapper {
     /**
-     * No location header prefix is cached and no failure is recorded; setLocation() picks
+     * No location header prefix is cached and no failure is recorded; {@link #setLocation} picks
      * the prefix up from the first request that carries one.
      */
     public XI2PLocationFilter() {}

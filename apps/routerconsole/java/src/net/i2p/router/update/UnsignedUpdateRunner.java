@@ -13,7 +13,7 @@ import net.i2p.util.RFC822Date;
 
 /**
  *  Eepget the .zip file to the temp dir, then notify.r
- *  Moved from UnsignedUpdateHandler and turned into an UpdateTask.
+ *  Moved from {@link UnsignedUpdateHandler} and turned into an UpdateTask.
  *
  *  @since 0.9.4
  */

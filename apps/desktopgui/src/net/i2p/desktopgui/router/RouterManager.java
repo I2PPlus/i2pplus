@@ -16,7 +16,7 @@ public class RouterManager {
 
     /**
      * The router is reached through the global I2PAppContext rather than through a
-     * field, so an instance holds nothing and start() is the only entry point.
+     * field, so an instance holds nothing and {@link #start()} is the only entry point.
      */
     public RouterManager() {}
 

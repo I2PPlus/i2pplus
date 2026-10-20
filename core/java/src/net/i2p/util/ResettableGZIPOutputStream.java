@@ -100,7 +100,7 @@ public class ResettableGZIPOutputStream extends DeflaterOutputStream {
     }
 
     /**
-     * Calls super.close(). May not be reused after this.
+     * Calls super.{@link #close()}. May not be reused after this.
      *
      * @throws IOException if the wrapped stream cannot be written to or closed
      * @since 0.9.40

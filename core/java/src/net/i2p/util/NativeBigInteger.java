@@ -710,7 +710,7 @@ public class NativeBigInteger extends BigInteger {
     }
 
     /**
-     * CPU model string from CPUID.
+     * CPU model string from {@link CPUID}.
      *
      * @return the model name reported by the CPU, or null if it could not be read
      */
@@ -915,7 +915,7 @@ public class NativeBigInteger extends BigInteger {
 
     /**
      * Generate a list of resources to search for, in-order.
-     * See loadNative() comments for more info.
+     * See {@link #loadNative()} comments for more info.
      *
      * @return non-null
      * @since 0.8.7

@@ -6,7 +6,7 @@ import java.io.File;
 
 /**
  * Prevent systemd from deleting our temp dir or any dirs or files in it.
- * Scheduled by I2PAppContext when the temp dir is created.
+ * Scheduled by {@link I2PAppContext} when the temp dir is created.
  * <p>
  * To configure/test systemd: Edit file /usr/lib/tmpfiles.d/tmp.conf,
  * change line

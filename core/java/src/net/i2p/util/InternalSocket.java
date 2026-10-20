@@ -141,7 +141,7 @@ public class InternalSocket extends Socket {
     }
 
     /**
-     *  Supported as of 0.9.34, if constructed with TimeoutPipedInputStream
+     *  Supported as of 0.9.34, if constructed with {@link TimeoutPipedInputStream}
      *  and TimeoutPipedOutputStream. Otherwise, does nothing.
      *
      *  @see TimeoutPipedInputStream
@@ -154,7 +154,7 @@ public class InternalSocket extends Socket {
     // ignored stuff
 
     /**
-     *  Always returns 0, even if setSoTimeout() was called.
+     *  Always returns 0, even if {@link #setSoTimeout} was called.
      * @return the so timeout
      */
     @Override

@@ -18,7 +18,7 @@ import net.i2p.data.SigningPrivateKey;
 
 /**
  * Wrap up the keys given to the router when a destination connects to it.
- * Used by KeyManager, ClientMessageEventListener, GarlicMessageReceiver.
+ * Used by {@link KeyManager}, ClientMessageEventListener, GarlicMessageReceiver.
  */
 public class LeaseSetKeys {
     private final SigningPrivateKey _revocationKey;

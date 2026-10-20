@@ -167,7 +167,7 @@ public class SocketController implements RouterApp {
     /**
      * Builds a new server. Used for changing ports during operation and such.
      *
-     * Does NOT start the server. Must call start() on the returned server.
+     * Does NOT start the server. Must call {@link #start()} on the returned server.
      *
      * @return Server - A new server built from current configuration.
      * @throws IOException if the configured listen address cannot be resolved, the configured port is

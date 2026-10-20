@@ -33,7 +33,7 @@ public class HostCheckHandler extends GzipHandler
     private static final String PROP_GZIP = "routerconsole.enableCompression";
 
     /**
-     * MUST call setListenHosts() afterwards.
+     * MUST call {@link #setListenHosts} afterwards.
      *
      * @param ctx the context used to resolve console ports, properties and logging
      */

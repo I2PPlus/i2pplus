@@ -14,7 +14,7 @@ public class RrdRandomAccessFileBackend extends RrdBackend implements RrdFileBac
     protected final RandomAccessFile rafile;
 
     /**
-     * Creates RrdFileBackend object for the given file path, backed by RandomAccessFile object.
+     * Creates RrdFileBackend object for the given file path, backed by {@link RandomAccessFile} object.
      *
      * @param path Path to a file
      * @param readOnly True, if file should be open in a read-only mode. False otherwise

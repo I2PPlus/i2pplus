@@ -1532,7 +1532,7 @@ public class RrdDb implements RrdUpdater<RrdDb>, Closeable {
      *
      * @return Canonical path to RRD file;
      * @throws java.io.IOException Thrown in case of I/O error or if the underlying backend is not
-     *                             derived from RrdFileBackend.
+     *                             derived from {@link RrdFileBackend}.
      */
     public String getCanonicalPath() throws IOException {
         if (backend instanceof RrdFileBackend) {

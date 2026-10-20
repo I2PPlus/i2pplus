@@ -288,7 +288,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
 
     /**
      * For most errors here we throw a RIException with a reason code,
-     * which is caught in processPayload() to create a PeerStateDestroyed
+     * which is caught in {@link #processPayload} to create a PeerStateDestroyed
      * and send a termination with that reason.
      * <p>
      * Plain DataFormatExceptions indicate you may not respond in-session.
@@ -527,7 +527,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
         return ik;
     }
 
-    /** Keep the introduction request; createPeerState() sends the relay tag with ACK 0. */
+    /** Keep the introduction request; {@link #createPeerState()} sends the relay tag with ACK 0. */
     static final int INTRO_KEEP = 0;
     /** Drop it: a temporary sent port or no introduction support on the peer's family. */
     static final int INTRO_BLOCKED = 1;
@@ -951,7 +951,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
     }
 
     /**
-     * All exceptions thrown from here will be fatal. fail() will be called before throwing.
+     * All exceptions thrown from here will be fatal. {@link #fail()} will be called before throwing.
      * @param packet the retried Session Request or Token Request, header encryption removed
      * @throws GeneralSecurityException if the packet fails address, connection ID, token,
      *                                  version or clock-skew validation; fail() has already been called
@@ -1089,7 +1089,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
      * Exceptions thrown from here are fatal.
      *
      * @param packet the SessionConfirmed message, header encryption removed
-     * @return the new PeerState2 if are done, may also be retrieved from getPeerState(),
+     * @return the new PeerState2 if are done, may also be retrieved from {@link #getPeerState()},
      *         or null if more fragments to go
      */
     public synchronized PeerState2 receiveSessionConfirmed(UDPPacket packet) {
@@ -1243,7 +1243,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
 
     /**
      * Creates the PeerState and stores in _pstate.
-     * Called from gotRI() so that we can pass any I2NP messages
+     * Called from {@link #gotRI()} so that we can pass any I2NP messages
      * or fragments immediately to the PeerState.
      */
     private void createPeerState() {
@@ -1485,7 +1485,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
         /**
          * Creates the RI exception.
          * @param msg the detail message
-         * @param reason the reason code reported by getReason()
+         * @param reason the reason code reported by {@link #getReason()}
          */
         public RIException(String msg, int reason) {
             super(msg);

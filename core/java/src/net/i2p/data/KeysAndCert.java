@@ -66,7 +66,7 @@ import java.util.Arrays;
  */
 public class KeysAndCert extends DataStructureImpl {
     /**
-     * Constructor. An empty key and certificate set, ready for readBytes() or for
+     * Constructor. An empty key and certificate set, ready for {@link #readBytes} or for
      * the subclasses to populate field by field.
      */
     public KeysAndCert() {}
@@ -98,7 +98,7 @@ public class KeysAndCert extends DataStructureImpl {
     /** Compressed padding block length in bytes. */
     private static final int PAD_COMP_LEN = 32;
     /**
-     * Hash bytes needed for the 8-char b32 hash prefix in toString().
+     * Hash bytes needed for the 8-char b32 hash prefix in {@link #toString()}.
      * 8 b32 chars carry 40 bits, and 5 bytes is the smallest input that
      * produces a full 8 chars.
      */

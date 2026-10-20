@@ -25,7 +25,7 @@ import net.i2p.util.Log;
 class GetBidsJob {
 
     /**
-     * Constructor. Bid collection is driven entirely by the static getBids()
+     * Constructor. Bid collection is driven entirely by the static {@link #getBids}
      * from the context, transport manager and message it is handed, so an
      * instance carries no state.
      */

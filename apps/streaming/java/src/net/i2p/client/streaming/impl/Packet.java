@@ -213,7 +213,7 @@ class Packet {
 
     /**
      * Does no initialization.
-     * See readPacket() for inbound packets, and the setters for outbound packets.
+     * See {@link #readPacket} for inbound packets, and the setters for outbound packets.
      *
      * @param session the session this packet is sent or received on, or null
      *                before one is assigned
@@ -304,10 +304,10 @@ class Packet {
     }
 
     /**
-     * List of packet sequence numbers below the getAckThrough() value
+     * List of packet sequence numbers below the {@link #getAckThrough()} value
      * have not been received.  this may be null.
      * <p>
-     * Warning: This is different than getNACKs() in PacketLocal.
+     * Warning: This is different than getNACKs() in {@link PacketLocal}.
      *
      * @return List of packet sequence numbers not ACKed, or null if there are none.
      */
@@ -419,7 +419,7 @@ class Packet {
      * The signature on the packet (only included if the flag for it is set)
      * <p>
      * Warning, may be typed wrong on incoming packets for EdDSA
-     * before verifySignature() is called.
+     * before {@link #verifySignature} is called.
      *
      * @return signature on the packet if the flag for signatures is set
      */

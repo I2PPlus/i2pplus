@@ -62,7 +62,7 @@ import org.freenetproject.ForwardPortStatus;
  * <p>
  * From Freenet SVN (February 2009) along with the org/freenet, org/cybergarage
  * and org/xmlpull trees, modified to remove Freenet-specific code. The glue
- * to I2P is in UPnPManager, written from scratch.
+ * to I2P is in {@link UPnPManager}, written from scratch.
  * <p>
  * Some code was borrowed from Limewire, see com.limegroup.gnutella.UPnPManager.
  *
@@ -866,7 +866,7 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
     }
 
     /**
-     * We override search() to update the SSDPSearchResponseSocketList,
+     * We override {@link #search()} to update the SSDPSearchResponseSocketList,
      * SSDPNotifySocketList, and HTTPServerList every time.
      * Otherwise, we are just listening on the interfaces that were present when started.
      *
@@ -1017,9 +1017,9 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
     }
 
     /**
-     * A blocking toString(). That's interesting.
+     * A blocking {@link #toString()}. That's interesting.
      * Cache the last ArgumentList to speed it up some.
-     * Count on listSubServices() to call multiple combinations of arguments
+     * Count on {@link #listSubServices()} to call multiple combinations of arguments
      * so we don't get old data.
      */
     private String _lastAction;
@@ -1871,7 +1871,7 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
 
     /**
      * Runs port registration in a background thread; postControlAction() can take many seconds,
-     * especially if it's failing, and onChangePublicPorts() may be called from threads we
+     * especially if it's failing, and {@link #onChangePublicPorts()} may be called from threads we
      * don't want to slow down.
      *
      * @param portsToForwardNow if null, renew subscriptions only, then exit.

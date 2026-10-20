@@ -122,7 +122,7 @@ public final class CertUtil {
      * @param out the output stream to write to
      * @throws IOException if the write fails
      * @throws CertificateEncodingException if the certificate cannot be encoded
-     * @since 0.9.24, pulled out of saveCert(), public since 0.9.25
+     * @since 0.9.24, pulled out of {@link #saveCert}, public since 0.9.25
      */
     public static void exportCert(Certificate cert, OutputStream out) throws IOException, CertificateEncodingException {
         // Get the encoded form which is suitable for exporting
@@ -282,7 +282,7 @@ public final class CertUtil {
      * @return non-null, throws on all errors including certificate invalid
      * @throws IOException if the file cannot be read
      * @throws GeneralSecurityException if the certificate is invalid
-     * @since 0.9.24 moved from SU3File private method
+     * @since 0.9.24 moved from {@link SU3File} private method
      */
     public static PublicKey loadKey(File kd) throws IOException, GeneralSecurityException {
         X509Certificate cert = loadCert(kd);
@@ -470,7 +470,7 @@ public final class CertUtil {
     /**
      * Is the certificate revoked?
      * This loads the CRLs from disk.
-     * For efficiency, call loadCRLs() and then pass to isRevoked().
+     * For efficiency, call {@link #loadCRLs()} and then pass to isRevoked().
      *
      * @param cert the certificate to check
      * @return true if revoked
@@ -483,7 +483,7 @@ public final class CertUtil {
     /**
      * Is the certificate revoked?
      * This loads the CRLs from disk.
-     * For efficiency, call loadCRLs() and then pass to isRevoked().
+     * For efficiency, call loadCRLs() and then pass to {@link #isRevoked}.
      *
      * @param ctx context used to locate and parse the CRLs
      * @param cert the certificate to check

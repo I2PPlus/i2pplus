@@ -111,7 +111,7 @@ public class RrdGraphDef implements RrdGraphConstants, DataHolder {
         }
     }
 
-    /** Whether to use RrdDbPool for accessing RRD files. */
+    /** Whether to use {@link RrdDbPool} for accessing RRD files. */
     boolean poolUsed = DEFAULT_POOL_USAGE_POLICY;
     /** Optional RrdDbPool instance to use. */
     private RrdDbPool pool = null;
@@ -795,7 +795,7 @@ public class RrdGraphDef implements RrdGraphConstants, DataHolder {
     }
 
     /**
-     * Sets image format. ImageIO is used to save the image, so any supported format by ImageIO can
+     * Sets image format. ImageIO is used to save the image, so any supported format by {@link ImageIO} can
      * be used, and it can be extended using <a
      * href="https://github.com/geosolutions-it/imageio-ext">...</a>.
      *

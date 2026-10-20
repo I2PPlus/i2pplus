@@ -38,7 +38,7 @@ public class JsonArray extends ArrayList<Object> implements Jsonable {
         super();
     }
 
-    /** Instantiate a new JsonArray using ArrayList's constructor of the same type.
+    /** Instantiate a new JsonArray using {@link ArrayList}'s constructor of the same type.
      * @param collection represents the elements to produce the JsonArray with. */
     public JsonArray(final Collection<?> collection) {
         super(collection);

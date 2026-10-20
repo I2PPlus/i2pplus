@@ -135,7 +135,7 @@ public class PersistentDataStore extends TransientDataStore {
      * cancellation flag, so it keeps rescanning until the router's graceful
      * shutdown begins and runJob() returns early. A rescan after this point
      * re-reads an empty store and is harmless, but it is an open question
-     * whether stop() should cancel the reader outright.
+     * whether {@link #stop()} should cancel the reader outright.
      */
     @Override
     public void stop() {
@@ -303,7 +303,7 @@ public class PersistentDataStore extends TransientDataStore {
 
         /**
          * Drain up to WRITE_LIMIT pending entries from the write queue.
-         * Returns the drained entries; caller must write and removeQueued() them.
+         * Returns the drained entries; caller must write and {@link #removeQueued()} them.
          */
         private List<Map.Entry<Hash, DatabaseEntry>> drainPending() {
             List<Map.Entry<Hash, DatabaseEntry>> toWrite = new ArrayList<>();
@@ -473,7 +473,7 @@ public class PersistentDataStore extends TransientDataStore {
 
     /**
      * Detect IP spoofing and apply ban decisions for non-storeable peers.
-     * Called only for peers that failed shouldStoreRi() and are not banned.
+     * Called only for peers that failed {@link #shouldStoreRi()} and are not banned.
      *
      * @return true if the on-disk file should be deleted
      */
@@ -661,7 +661,7 @@ public class PersistentDataStore extends TransientDataStore {
      * so this is run way too often.
      * <p>
      * But it's also for migrating and reading the files after a reseed.
-     * Reseed task calls wakeup() on completion.
+     * Reseed task calls {@link #wakeup()} on completion.
      * As of 0.9.4, also initiates an automatic reseed if necessary.
      */
     private class ReadJob extends JobImpl {
@@ -1221,7 +1221,7 @@ public class PersistentDataStore extends TransientDataStore {
     /**
      * Package private for installer BundleRouterInfos.
      *
-     * @param filename the routerinfo filename, including the prefix and suffix added by getRouterInfoFile()
+     * @param filename the routerinfo filename, including the prefix and suffix added by {@link #getRouterInfoFile}
      * @return the hash encoded in the name, or null if the name is malformed or the key does not decode
      */
     static Hash getRouterInfoHash(String filename) {

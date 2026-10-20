@@ -22,10 +22,10 @@ public class LookaheadInputStream extends FilterInputStream {
 
     /**
      * Configure a stream that hides a number of bytes from the reader.
-     * The last n bytes will never be available from read(),
-     * they can only be obtained from getFooter().
+     * The last n bytes will never be available from {@link #read()},
+     * they can only be obtained from {@link #getFooter()}.
      * <p>
-     * initialize() MUST be called before doing any read() calls.
+     * {@link #initialize} MUST be called before doing any read() calls.
      *
      * @param lookaheadSize how many bytes to hide
      */

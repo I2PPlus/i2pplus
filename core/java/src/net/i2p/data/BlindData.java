@@ -365,7 +365,7 @@ public class BlindData {
      * Creation date. Absolute timestamp.
      * Returns zero if not specified.
      *
-     * @return creation date or as overridden by setDate()
+     * @return creation date or as overridden by {@link #setDate}
      * @since 0.9.41
      */
     public long getDate() {
@@ -386,7 +386,7 @@ public class BlindData {
      * Expiration date. Absolute timestamp.
      * Returns zero if not specified.
      *
-     * @return expiration date or as overridden by setExpiration()
+     * @return expiration date or as overridden by {@link #setExpiration}
      * @since 0.9.43
      */
     public long getExpiration() {

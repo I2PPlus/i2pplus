@@ -110,7 +110,7 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
     public static final int DEFAULT_LEASE_TIME = 30 * 60;
 
     /**
-     * Port the built-in HTTP server binds to when none is set.
+     * Port the built-in {@link HTTP} server binds to when none is set.
      */
     public static final int HTTP_DEFAULT_PORT = 4004;
 

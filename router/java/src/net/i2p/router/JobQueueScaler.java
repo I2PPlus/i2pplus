@@ -1079,7 +1079,7 @@ class JobQueueScaler implements Runnable {
     /**
      * Check if the scaler is currently running.
      * @return true between {@link #startup} and {@link #shutdown}, and false when dynamic
-     * scaling is disabled, so startup() may leave it false
+     * scaling is disabled, so {@link #startup()} may leave it false
      */
     public boolean isAlive() {
         return _isAlive;

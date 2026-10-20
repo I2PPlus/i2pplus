@@ -20,8 +20,8 @@ import net.i2p.util.Log;
 import net.i2p.util.SecureFileOutputStream;
 
 /**
- * This used be called from StartAcceptingClientsJob but is now disabled.
- * It is still called once from LoadRouterInfoJob (but not run as a Job).
+ * This used be called from {@link StartAcceptingClientsJob} but is now disabled.
+ * It is still called once from {@link LoadRouterInfoJob} (but not run as a Job).
  * <p>
  * The following comments appear to be incorrect...
  * it rebuilds if the {@code router.info} file does not exist.

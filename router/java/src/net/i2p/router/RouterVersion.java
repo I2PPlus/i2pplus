@@ -16,7 +16,7 @@ import net.i2p.CoreVersion;
  */
 public class RouterVersion {
     /**
-     * The version constants are static and the only method is main(), so an instance
+     * The version constants are static and the only method is {@link #main}, so an instance
      * carries nothing.
      */
     public RouterVersion() {}

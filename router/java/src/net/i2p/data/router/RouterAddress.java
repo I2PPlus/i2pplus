@@ -25,7 +25,7 @@ import net.i2p.util.OrderedProperties;
  * Defines a method of communicating with a router
  * <p>
  * For efficiency, the options methods and structures here are unsynchronized.
- * Initialize the structure with readBytes(), or call the setOptions().
+ * Initialize the structure with {@link #readBytes}, or call the setOptions().
  * Don't change it after that.
  * <p>
  * To ensure integrity of the RouterInfo, methods that change an element of the
@@ -149,7 +149,7 @@ public class RouterAddress extends DataStructureImpl {
      * <p>
      * As of 0.9.32, this works for literal IP addresses only, and does NOT resolve host names.
      * If a host name is specified in the options, this will return null.
-     * Use getHost() if you need the host name.
+     * Use {@link #getHost()} if you need the host name.
      *
      * @return IP or null
      * @since 0.9.3
@@ -170,7 +170,7 @@ public class RouterAddress extends DataStructureImpl {
 
     /**
      * Convenience, same as getOption("host").
-     * Does no parsing, so faster than getIP().
+     * Does no parsing, so faster than {@link #getIP()}.
      *
      * @return host string or null
      */

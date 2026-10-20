@@ -409,7 +409,7 @@ class SidebarRenderer {
      *
      * @param pm the port mapper to resolve the eepsite port against
      * @return null if none
-     * @since 0.9.43 split out from above, used by HomeHelper, fixed for IPv6
+     * @since 0.9.43 split out from above, used by {@link HomeHelper}, fixed for IPv6
      */
     static String getEepsiteURL(PortMapper pm) {
         int port = pm.getPort(PortMapper.SVC_EEPSITE);

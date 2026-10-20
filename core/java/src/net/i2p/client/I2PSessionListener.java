@@ -18,7 +18,7 @@ package net.i2p.client;
  * <p>
  * If you wish to get notification of the protocol, from port, and to port,
  * or wish to get notification of certain protocols and ports only,
- * you must use I2PSessionMuxedListener and addMuxedSessionListener() instead.
+ * you must use {@link I2PSessionMuxedListener} and addMuxedSessionListener() instead.
  *
  */
 public interface I2PSessionListener {

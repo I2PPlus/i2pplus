@@ -606,7 +606,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
      * @param cutoff entries with value &lt;= cutoff are expired and skipped
      * @param exclude the exclusion set to add fresh entries to
      * @return the number of entries added
-     * @since 0.9.71+ (moved from ClientPeerSelector)
+     * @since 0.9.71+ (moved from {@link ClientPeerSelector})
      */
     protected static int addFreshCooldownExclusions(Map<Hash, Long> cooldowns, long cutoff, Set<Hash> exclude) {
         int count = 0;
@@ -1423,7 +1423,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
      * There's several cases of importance:
      * <ol><li>Inbound and we are hidden -
      * Exclude all unless connected.
-     * This is taken care of in ClientPeerSelector and TunnelPeerSelector selectPeers(), not here.
+     * This is taken care of in ClientPeerSelector and TunnelPeerSelector {@link #selectPeers}, not here.
      * <li>We are IPv6-only.
      * Exclude all v4-only peers, unless connected
      * This is taken care of here.
@@ -1436,7 +1436,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
      * Make sure that ClientPeerSelector and TunnelPeerSelector selectPeers() call this when needed.
      * </ol>
      * <p>
-     * As of 0.9.58, this a set with only toAdd, for use in ProfileOrganizer.
+     * As of 0.9.58, this a set with only toAdd, for use in {@link ProfileOrganizer}.
      * The set will be populated via the contains() calls.
      *
      * @param isInbound true for inbound tunnels

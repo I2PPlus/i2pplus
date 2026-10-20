@@ -25,7 +25,7 @@ import net.i2p.util.VersionComparator;
  * The downloader for router signed updates,
  * and the base class for all the other Checkers and Runners.
  *
- * @since 0.9.4 moved from UpdateHandler
+ * @since 0.9.4 moved from {@link UpdateHandler}
  */
 class UpdateRunner extends I2PAppThread implements UpdateTask, EepGet.StatusListener {
     /** Router context. */
@@ -365,8 +365,8 @@ class UpdateRunner extends I2PAppThread implements UpdateTask, EepGet.StatusList
     public void headerReceived(String url, int attemptNum, String key, String val) { /* nop */ }
 
     /**
-     * A retry is starting. Retries are counted by EepGet, which reports the
-     * final failure through transferFailed(), so there is nothing to do.
+     * A retry is starting. Retries are counted by {@link EepGet}, which reports the
+     * final failure through {@link #transferFailed}, so there is nothing to do.
      */
     public void attempting(String url) { /* nop */ }
 

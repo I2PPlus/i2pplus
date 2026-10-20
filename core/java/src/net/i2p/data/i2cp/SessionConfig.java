@@ -168,7 +168,7 @@ public class SessionConfig extends DataStructureImpl {
     /**
      * Set the offline signing data.
      * Does NOT validate the signature.
-     * Must be called AFTER setOptions(). Will throw ISE otherwise.
+     * Must be called AFTER {@link #setOptions}. Will throw ISE otherwise.
      * Side effect - modifies options.
      *
      * @param expires expiration of the offline signature, in milliseconds since the epoch
@@ -290,7 +290,7 @@ public class SessionConfig extends DataStructureImpl {
      * Verify that the signature matches the destination's signing public key.
      * <p>
      * Note that this also returns false if the creation date is too far in the
-     * past or future. See tooOld() and getCreationDate().
+     * past or future. See {@link #tooOld()} and getCreationDate().
      * <p>
      * As of 0.9.38, validates the offline signature if included.
      *

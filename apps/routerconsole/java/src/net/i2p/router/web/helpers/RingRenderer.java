@@ -11,7 +11,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class RingRenderer {
 
     /**
-     * Every renderRing() entry point and every arc and colour constant is static, so an
+     * Every {@link #renderRing} entry point and every arc and colour constant is static, so an
      * instance carries nothing.
      */
     public RingRenderer() {}

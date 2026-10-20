@@ -339,7 +339,7 @@ public class I2PTunnelIRCServer extends I2PTunnelServer implements Runnable {
      * @throws EOFException if EOF is reached before newline
      * @throws RegistrationException if line too long
      * @throws IOException on other errors in the underlying stream
-     * @since 0.9.19 modified from DataHelper and I2PTunnelHTTPServer
+     * @since 0.9.19 modified from {@link DataHelper} and I2PTunnelHTTPServer
      */
     private static String readLine(I2PSocket socket, long timeout) throws IOException {
         StringBuilder buf = new StringBuilder(128);

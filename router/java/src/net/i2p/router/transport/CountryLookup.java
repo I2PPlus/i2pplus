@@ -231,7 +231,7 @@ public class CountryLookup {
      * <p>
      * As of 0.9.32, works only for literal IPs, returns null for hostnames.
      *
-     * @param peer not ourselves - use getOurCountry() for that
+     * @param peer not ourselves - use {@link #getOurCountry()} for that
      * @return two-letter lower-case country code or xx for non-banned peers, or null otherwise
      */
     public String getCountry(Hash peer) {

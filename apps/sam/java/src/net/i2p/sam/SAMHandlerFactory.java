@@ -23,7 +23,7 @@ import net.i2p.util.VersionComparator;
 class SAMHandlerFactory {
 
     /**
-     * createSAMHandler() is static and the class holds only the protocol version and
+     * {@link #createSAMHandler} is static and the class holds only the protocol version and
      * handshake timeout, so an instance carries nothing.
      */
     SAMHandlerFactory() {}

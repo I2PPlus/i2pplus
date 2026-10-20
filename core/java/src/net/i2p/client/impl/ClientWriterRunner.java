@@ -33,7 +33,7 @@ class ClientWriterRunner implements Runnable {
      * Create the writer for a session, buffering I2CP messages queued for
      * output to that session.
      * <p>
-     * As of 0.9.11 does not start the thread, caller must call startWriting().
+     * As of 0.9.11 does not start the thread, caller must call {@link #startWriting()}.
      *
      * @param out stream the I2CP messages are written to, buffered internally
      * @param session session to poll for closure and to report write failures to

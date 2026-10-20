@@ -45,7 +45,7 @@ public class GzipFileBuffer extends FileBuffer {
 
 	/**
 	 * Get a GZIP decompressing InputStream, wrapped with a counter.
-	 * Caller must call readComplete().
+	 * Caller must call {@link #readComplete}.
 	 *
 	 * @return new InputStream chain for reading uncompressed data
 	 * @throws IOException on I/O error
@@ -67,7 +67,7 @@ public class GzipFileBuffer extends FileBuffer {
 
 	/**
 	 * Get a GZIP compressing OutputStream, wrapped with a counter.
-	 * Caller must call writeComplete().
+	 * Caller must call {@link #writeComplete}.
 	 *
 	 * @return new OutputStream chain for writing compressed data
 	 * @throws IllegalStateException if offset > 0 or already open for writing

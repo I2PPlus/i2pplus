@@ -44,7 +44,7 @@ import net.i2p.util.ObjectCounter;
 import net.i2p.util.ObjectCounterUnsafe;
 
 /**
- * For /tunnels.jsp, used by TunnelHelper.
+ * For /tunnels.jsp, used by {@link TunnelHelper}.
  */
 class TunnelRenderer {
     private static final Pattern TUNNEL_PAREN = Pattern.compile("\\([^)]+\\)");
@@ -1696,7 +1696,7 @@ class TunnelRenderer {
     }
 
     /**
-     * Copied from ConfigNetHelper.
+     * Copied from {@link ConfigNetHelper}.
      * @return in KBytes per second
      * @since 0.9.32
      */

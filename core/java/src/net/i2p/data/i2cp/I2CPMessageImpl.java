@@ -112,7 +112,7 @@ public abstract class I2CPMessageImpl implements I2CPMessage {
     }
 
     /**
-     * Read the message from the stream, wrapping I2CPMessageException in DataFormatException.
+     * Read the message from the stream, wrapping I2CPMessageException in {@link DataFormatException}.
      *
      * @param in the input stream to read from
      * @throws DataFormatException if the message format is invalid

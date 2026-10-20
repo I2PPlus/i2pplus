@@ -23,7 +23,7 @@ public class OutboundTunnelBuildReplyMessage extends TunnelBuildReplyMessage {
     public static final int SHORT_RECORD_SIZE = ShortTunnelBuildMessage.SHORT_RECORD_SIZE;
 
     /**
-     * Zero record count, will be set with readMessage().
+     * Zero record count, will be set with {@link #readMessage}.
      *
      * @param context the I2P app context used to read and write the message
      */

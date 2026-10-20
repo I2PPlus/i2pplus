@@ -103,7 +103,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
 
     /**
      * Creates the manager; the update handlers for the router, plugins, news
-     * and the desktop GUI are registered and checks scheduled in startup().
+     * and the desktop GUI are registered and checks scheduled in {@link #startup()}.
      * @param ctx router context supplying the update policy, timers and logging
      * @param listener client app manager to register this with and to notify of state changes
      * @param args command line arguments, unused
@@ -567,7 +567,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
 
     /**
      * Install a plugin. Non-blocking.
-     * If returns true, then call isUpdateInProgress() in a loop.
+     * If returns true, then call {@link #isUpdateInProgress()} in a loop.
      * @param name if null, a new install
      * @param uri where to fetch the plugin, a file: URI installs without a network fetch
      * @return true if task started
@@ -769,7 +769,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
     }
 
     /**
-     * Called by the Updater, either after check() was called, or it found out on its own.
+     * Called by the Updater, either after {@link #check} was called, or it found out on its own.
      * Use this if there is only one UpdateMethod; otherwise use the Map method below.
      *
      * @param newsSource who told us
@@ -972,7 +972,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
     }
 
     /**
-     * Called by the Updater after check() was called and all notifyVersionAvailable() callbacks are finished.
+     * Called by the Updater after check() was called and all {@link #notifyVersionAvailable} callbacks are finished.
      */
     @Override
     public void notifyCheckComplete(UpdateTask task, boolean newer, boolean success) {
@@ -1101,7 +1101,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
      * The manager will verify it.
      * Caller should delete the file upon return, unless it will share it with others,
      * e.g. on a torrent.
-     * If the return value is false, caller must call notifyTaskFailed() or notifyComplete()
+     * If the return value is false, caller must call {@link #notifyTaskFailed} or notifyComplete()
      * again.
      *
      * @param task must be an Updater, not a Checker
@@ -1590,7 +1590,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
         }
 
         /**
-         * Hash code consistent with equals().
+         * Hash code consistent with {@link #equals}.
          * @return a hash code consistent with equals()
          */
         @Override

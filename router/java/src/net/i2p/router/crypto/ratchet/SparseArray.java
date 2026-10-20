@@ -179,7 +179,7 @@ class SparseArray<E> implements Cloneable {
      * a {@link ArrayIndexOutOfBoundsException} is thrown.
      * </p>
      *
-     * @param index position of the mapping to drop, 0 to size()-1
+     * @param index position of the mapping to drop, 0 to {@link #size()}-1
      */
     public void removeAt(int index) {
         if (index >= mSize) {

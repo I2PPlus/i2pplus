@@ -116,7 +116,7 @@ public class SAMBridge implements Runnable, ClientApp {
      * For ClientApp interface.
      * Recommended constructor for external use.
      * Does NOT open the listener socket or start threads; caller must call
-     * startup().
+     * {@link #startup()}.
      *
      * @param context the client context the bridge runs in, supplying the log
      * @param mgr  may be null
@@ -146,7 +146,7 @@ public class SAMBridge implements Runnable, ClientApp {
      * <p>
      * Opens the listener socket but does NOT start the thread, and there's no
      * way to do that externally.
-     * Use main(), or use the other constructor and call startup().
+     * Use {@link #main}, or use the other constructor and call startup().
      * <p>
      * Deprecated for external use, to be made private.
      *
@@ -381,7 +381,7 @@ public class SAMBridge implements Runnable, ClientApp {
      * Count the named v3 sessions held in the SessionsDB, for the console
      * status page.
      *
-     * @return number of registered streams from SessionsDB
+     * @return number of registered streams from {@link SessionsDB}
      * @since 0.9.70+
      */
     public int getSessionCount() {

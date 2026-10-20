@@ -32,7 +32,7 @@ StyledDocument
 {
 	/**
 	 * The emulated document starts as an empty StringBuilder with a logger attached;
-	 * insertString() is what puts text in it.
+	 * {@link #insertString} is what puts text in it.
 	 */
 	public StyledDocument()
 	{

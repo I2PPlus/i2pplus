@@ -29,7 +29,7 @@ import net.i2p.util.SystemVersion;
  * Performance characteristics:
  * <ul>
  * <li>O(N) time complexity for iteration setup</li>
- * <li>O(1) average time for next() calls</li>
+ * <li>O(1) average time for {@link #next()} calls</li>
  * <li>Memory efficient with minimal object allocation</li>
  * </ul>
  * <p>

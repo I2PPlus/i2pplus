@@ -15,7 +15,7 @@ package org.minidns.util;
  */
 /**
  * A CharSequence whose toString() output is guaranteed safe to expose.
- * Subclasses may override toSafeString() if toString() is not safe.
+ * Subclasses may override {@link #toSafeString()} if toString() is not safe.
  */
 public class SafeCharSequence implements CharSequence {
 

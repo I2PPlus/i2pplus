@@ -31,7 +31,7 @@ public class HeaderLine extends Encoding {
 	public HeaderLine() {}
 
 	/**
-	 * Identifier this encoding is registered under, returned by getName().
+	 * Identifier this encoding is registered under, returned by {@link #getName()}.
 	 */
 	public static final String NAME = "HEADERLINE";
 

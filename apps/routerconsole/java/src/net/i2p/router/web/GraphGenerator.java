@@ -37,11 +37,11 @@ import org.rrd4j.core.RrdLog;
 import org.rrd4j.core.RrdNioBackendFactory;
 
 /**
- * A thread started by RouterConsoleRunner that checks the configuration for
+ * A thread started by {@link RouterConsoleRunner} that checks the configuration for
  * stats to be tracked via jrobin, and adds or deletes RRDs as necessary.
  * <p>
  * This also contains methods to generate xml or graph image output.
- * The rendering for graphs is in GraphRenderer.
+ * The rendering for graphs is in {@link GraphRenderer}.
  * <p>
  * To control memory, the number of simultaneous renderings is limited.
  */
@@ -931,7 +931,7 @@ public class GraphGenerator implements Runnable, ClientApp {
      * failure nor a lost Rate registration can silently retire a graph for the
      * remaining life of the router.
      * <p>A detached listener stays in the rate-to-listener map, so it is never rebuilt
-     * by adjustDatabases(): that only adds rates missing from the old spec. The same
+     * by {@link #adjustDatabases()}: that only adds rates missing from the old spec. The same
      * holds for a listener that kept its open RRD but lost the registration, and for a
      * rate whose mapping lost its listener. This runs on the same tick as the spec
      * sync, reusing the existing scheduled task rather than adding a thread.
@@ -1559,7 +1559,7 @@ public class GraphGenerator implements Runnable, ClientApp {
 
     /**
      * Render a single-data graph with the specified options.
-     * For the two-data bandwidth graph see renderCombinedGraph().
+     * For the two-data bandwidth graph see {@link #renderCombinedGraph}.
      * Synchronized to conserve memory.
      *
      * @param rate the rate to graph
@@ -1750,7 +1750,7 @@ GraphListener lsnr = _listenerByRate.get(rate);
 
     /**
      * Render the two-data bandwidth graph with the specified options.
-     * For all other graphs see renderGraph() above.
+     * For all other graphs see {@link #renderGraph} above.
      * Synchronized to conserve memory.
      *
      * @param out the output stream to write the graph image to

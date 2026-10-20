@@ -39,7 +39,7 @@ import java.util.Set;
  * <ul>
  * <li><strong>Authentication Types:</strong> Supports DH, PSK, and no authentication</li>
  * <li><strong>Blinded Keys:</strong> Uses {@link #getSigningKey} for the blinded key (revocation key in super)</li>
- * <li><strong>Encryption:</strong> Content encrypted with ChaCha20-Poly1305 AEAD</li>
+ * <li><strong>Encryption:</strong> Content encrypted with {@link ChaCha20}-Poly1305 AEAD</li>
  * <li><strong>Access Control:</strong> Fine-grained control over who can decrypt the LeaseSet</li>
  * </ul>
  * <p><strong>Usage:</strong></p>
@@ -159,7 +159,7 @@ public class EncryptedLeaseSet extends LeaseSet2 {
 
     /**
      * Must be set before sign or verify.
-     * Must be called before setDestination() or setSigningKey(), or alpha will be wrong.
+     * Must be called before {@link #setDestination} or setSigningKey(), or alpha will be wrong.
      *
      * @param secret null or "" for none (default)
      * @since 0.9.39
@@ -237,7 +237,7 @@ public class EncryptedLeaseSet extends LeaseSet2 {
 
     /**
      * Overridden to set the blinded key.
-     * setSecret() MUST be called before this for non-null secret, or alpha will be wrong.
+     * {@link #setSecret} MUST be called before this for non-null secret, or alpha will be wrong.
      *
      * @param dest non-null, must be EdDSA_SHA512_Ed25519 or RedDSA_SHA512_Ed25519
      * @throws IllegalStateException if already signed
@@ -296,7 +296,7 @@ public class EncryptedLeaseSet extends LeaseSet2 {
     }
 
     /**
-     * Overridden to return the blinded key so super.verifySignature() will work.
+     * Overridden to return the blinded key so super.{@link #verifySignature()} will work.
      *
      * @return SPK or null
      */
@@ -327,7 +327,7 @@ public class EncryptedLeaseSet extends LeaseSet2 {
     }
 
     /**
-     * Before encrypt() is called, the inner leaseset.
+     * Before {@link #encrypt} is called, the inner leaseset.
      * After encrypt() is called, the encrypted data.
      * Without sig. This does NOT validate the signature.
      */
@@ -426,7 +426,7 @@ public class EncryptedLeaseSet extends LeaseSet2 {
     }
 
     /**
-     * This must be used instead of getDestination().getHash().
+     * This must be used instead of getDestination().{@link #getHash()}.
      * <p>
      * Overridden because we have a blinded key, not a dest.
      * This is the hash of the signing public key type and the signing public key.
@@ -463,7 +463,7 @@ public class EncryptedLeaseSet extends LeaseSet2 {
      * Throws IllegalStateException if not initialized.
      * Ref: proposal 123.
      *
-     * @param authType 0, 1, or 3, see BlindData
+     * @param authType 0, 1, or 3, see {@link BlindData}
      * @param clientKeys The client's X25519 public or private keys, null if unused
      * @throws IllegalStateException if already encrypted, not signed, or the inner
      * layer cannot be written

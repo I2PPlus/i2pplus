@@ -97,7 +97,7 @@ public class TunnelPool {
     /**
      * Fixed (tumbling) window of build outcomes for the per-pool timeout
      *  rate that scales the pre-build window — the counters reset to zero
-     *  whenever the window rotates (see timeoutRate() / computePreBuildWindowMs()).
+     *  whenever the window rotates (see {@link #timeoutRate()} / computePreBuildWindowMs()).
      * @since 0.9.71+
      */
     private static final long BUILD_RATE_WINDOW_MS = 10 * 60 * 1000L;
@@ -389,7 +389,7 @@ public class TunnelPool {
     private static final int STRUGGLE_RESERVE = 2;
     /**
      * Consecutive build timeouts at which the pool starts holding one
-     *  spare tunnel above target (see computeDifficultySpare()).
+     *  spare tunnel above target (see {@link #computeDifficultySpare}).
      * @since 0.9.71+
      */
     static final int SPARE_LOW_THRESHOLD = 2;
@@ -408,7 +408,7 @@ public class TunnelPool {
     private static final long IN_USE_TRAFFIC_MS = 5 * 60 * 1000L;
     /**
      * Minimum interval between pre-build triggers per pool.
-     *  pruneExcessTunnels() fires this on every ~15s cycle for every IB pool
+     *  {@link #pruneExcessTunnels()} fires this on every ~15s cycle for every IB pool
      *  whose OB pair is depleted.  Without throttling, this generates ~32
      *  unnecessary BuildExecutor wakeups per minute, each queuing builds into
      *  an already-congested transport pipeline.  The build loop's
@@ -452,7 +452,7 @@ public class TunnelPool {
     private final BlockingQueue<TunnelInfo> _removalQueue = new LinkedBlockingQueue<>(REMOVAL_QUEUE_CAPACITY);
     /**
      * Reentrancy guard for ensureSufficientTunnels().
-     *  pruneNonGoodTunnels() calls removeTunnel() per-tunnel, and removeTunnel()
+     *  {@link #pruneNonGoodTunnels()} calls removeTunnel() per-tunnel, and removeTunnel()
      *  calls ensureSufficientTunnels() — creating recursive build storms that
      *  inflate _inProgress and trigger 800+ "Cancelling excess" per session.
      */
@@ -538,7 +538,7 @@ public class TunnelPool {
      * must not pin recovery on the 30s healthy gate.  Matches
      * {@link #EMERGENCY_COLLAPSE_COOLDOWN_MS} so recovery stays prompt
      * without build-storming; concurrent builds stay capped by
-     * shouldSkipDueToInProgress().
+     * {@link #shouldSkipDueToInProgress()}.
      * @since 0.9.71+
      */
     private static final long DEFICIT_COLLAPSE_COOLDOWN_MS = 5_000;
@@ -1418,7 +1418,7 @@ public class TunnelPool {
 
     /**
      * Return the tunnel from the pool that is XOR-closest to the target.
-     *  By using this instead of the random selectTunnel(),
+     *  By using this instead of the random {@link #selectTunnel()},
      *  we force some locality in OBEP-IBGW connections to minimize
      *  those connections network-wide.
      * <p>
@@ -2941,7 +2941,7 @@ public class TunnelPool {
      * Track recently-added tunnel IDs to prevent duplicates.
      *  Uses a simple sliding window based on add time.
      *  Window is 60 seconds — long enough to catch duplicate
-     *  addTunnel() calls for the same tunnel.
+     *  {@link #addTunnel()} calls for the same tunnel.
      */
     private static final long RECENTLY_ADDED_WINDOW = 60L * 1000;
     /**
@@ -2972,7 +2972,7 @@ public class TunnelPool {
      * Whether this pool is struggling to meet its tunnel targets.
      *  Returns true if this pool can't meet its published LeaseSet target
      *  or has fewer active tunnels than the configured quantity.
-     *  Used by ClientPeerSelector to relax the cross-tunnel peer
+     *  Used by {@link ClientPeerSelector} to relax the cross-tunnel peer
      *  diversity constraint when the pool is starved for build candidates.
      *
      * @return true if the pool is struggling
@@ -3422,7 +3422,7 @@ public class TunnelPool {
     }
 
     /**
-     * Remove a tunnel from ExpireJob's expiration queue if it has one.
+     * Remove a tunnel from {@link ExpireJob}'s expiration queue if it has one.
      */
     private static void removeFromExpirationIfConfig(TunnelInfo info) {
         if (info instanceof PooledTunnelCreatorConfig) {
@@ -3920,7 +3920,7 @@ public class TunnelPool {
 
     /**
      * Remove tunnel and blame all peers (not necessarily equally).
-     *  This may be called multiple times from TestJob.
+     *  This may be called multiple times from {@link TestJob}.
      *  Enhanced with intelligent failure analysis and recovery.
      * @param cfg the tunnel that failed
      */
@@ -4451,7 +4451,7 @@ public class TunnelPool {
      * This ensures the LeaseSet always has fresh lifetime and prevents orphaned LeaseSets
      * where the LeaseSet is technically valid but all leases have expired.
      * <p>
-     * Unlike refreshLeaseSet() which republishes when tunnels are EXPIRING SOON,
+     * Unlike {@link #refreshLeaseSet()} which republishes when tunnels are EXPIRING SOON,
      * this republishes when tunnels are ALL HEALTHY to reset the LeaseSet lifetime.
      * <p>
      * Called for every alive pool on every build loop iteration, so the cheap
@@ -4771,7 +4771,7 @@ public class TunnelPool {
 
     /**
      * Build and return current LeaseSet from our tunnels.
-     * Used by TunnelPoolManager to validate NetDB has current data and by
+     * Used by {@link TunnelPoolManager} to validate NetDB has current data and by
      * RepublishLeaseSetJob to re-mint local-only (unpublished) LeaseSets.
      * @return current LeaseSet or null
      */
@@ -5109,7 +5109,7 @@ public class TunnelPool {
 
     /**
      * Remove non-GOOD tunnels from the pool when enough GOOD ones remain.
-     *  This prevents FAILING tunnel accumulation that stalls getActiveTunnelCount()
+     *  This prevents FAILING tunnel accumulation that stalls {@link #getActiveTunnelCount()}
      *  and prevents the pool from building replacements via ensureSufficientTunnels().
      */
     private void pruneNonGoodTunnels() {
@@ -5196,7 +5196,7 @@ public class TunnelPool {
      * LS fallback reserve to keep among the pruned candidates.  Publishing
      *  pools keep up to (target - good) low-failure tunnels so the LeaseSet
      *  never goes empty; non-publishing pools keep none — dead tunnels just
-     *  inflate size() and block addTunnel/replacement.  Use the base target,
+     *  inflate {@link #size()} and block addTunnel/replacement.  Use the base target,
      *  NOT effectiveTarget — dynamic scaling must not inflate the reserve or
      *  pools full of broken tunnels can never recover.  Never keep zombies
      *  (&gt;5 consecutive failures) as fallback — they're useless and block
@@ -5512,7 +5512,7 @@ public class TunnelPool {
 
     /**
      * This only sets the peers and creation/expiration times in the configuration.
-     *  For the crypto, see BuildRequestor and BuildMessageGenerator.
+     *  For the crypto, see {@link BuildRequestor} and BuildMessageGenerator.
      *
      * @return null on failure
      */
@@ -7563,7 +7563,7 @@ public class TunnelPool {
 
     /**
      * Increment consecutive build timeout counter.
-     *  Called by BuildExecutor for first-hop failures (OTHER_FAILURE with buildTime >= 1000ms)
+     *  Called by {@link BuildExecutor} for first-hop failures (OTHER_FAILURE with buildTime >= 1000ms)
      *  so the pool's build-health checks can respond to sustained first-hop failures.
      * @since 0.9.68
      */

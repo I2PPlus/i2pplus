@@ -131,7 +131,7 @@ public interface I2PClient {
      * Create a destination with the given signature type.
      * It will have a null certificate for DSA 1024/160 and KeyCertificate otherwise.
      * This is not bound to the I2PClient, you must supply the data back again
-     * in createSession().
+     * in {@link #createSession}.
      * <p>
      * Caller must close stream.
      *

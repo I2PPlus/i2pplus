@@ -62,7 +62,7 @@ public class FortunaStandalone extends BasePRNGStandalone implements Serializabl
     static final int MIN_POOL_SIZE = 64;
     /** The underlying PRNG generator. */
     protected final IRandomStandalone generator;
-    /** Null if using DevRandom. */
+    /** Null if using {@link DevRandom}. */
     protected final MessageDigest[] pools;
     /** Timestamp of last reseed. */
     protected long lastReseed;
@@ -96,7 +96,7 @@ public class FortunaStandalone extends BasePRNGStandalone implements Serializabl
     }
 
   /**
-   * Unused, see AsyncFortunaStandalone.
+   * Unused, see {@link AsyncFortunaStandalone}.
    * @param val the seed data (unused)
    */
     public void seed(byte[] val) {

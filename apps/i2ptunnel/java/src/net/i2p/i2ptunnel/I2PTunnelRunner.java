@@ -2089,7 +2089,7 @@ public class I2PTunnelRunner extends I2PAppThread implements DoneCallback {
     }
 
     /**
-     * Warning - overridden in I2PTunnelHTTPClientRunner.
+     * Warning - overridden in {@link I2PTunnelHTTPClientRunner}.
      * Here we ignore keepalive and always close both sides.
      * The HTTP flavor handles keepalive.
      *

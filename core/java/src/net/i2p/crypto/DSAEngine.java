@@ -182,7 +182,7 @@ public final class DSAEngine {
     /**
      * Generic signature type.
      * If you have a Java pubkey, use this, so you don't lose the key parameters,
-     * which may be different than the ones defined in SigType.
+     * which may be different than the ones defined in {@link SigType}.
      * <p>
      * Warning, nonstandard for EdDSA, double-hashes, not recommended.
      *
@@ -579,7 +579,7 @@ public final class DSAEngine {
     }
 
     /**
-     * Alternate to verifySignature() using java.security libraries.
+     * Alternate to {@link #verifySignature()} using java.security libraries.
      *
      * @return true if valid, false otherwise
      * @throws GeneralSecurityException if algorithm unvailable or on other errors
@@ -690,7 +690,7 @@ public final class DSAEngine {
     }
 
     /**
-     * Alternate to sign() using java.security libraries.
+     * Alternate to {@link #sign()} using java.security libraries.
      *
      * @throws GeneralSecurityException if algorithm unvailable or on other errors
      * @since 0.8.7 added off/len args 0.9.12

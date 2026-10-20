@@ -47,7 +47,7 @@ import net.i2p.util.Log;
  * same-/16 IP clusters, so repeated keys don't repeatedly land on the same
  * floodfills and no single one sees enough volume to trigger throttling.
  * Concurrent duplicate searches of the same key are additionally coalesced
- * by IterativeSearchJob. SSU1 introducers carry no router hash
+ * by {@link IterativeSearchJob}. SSU1 introducers carry no router hash
  * (IP/port/intro-key only) and cannot be resolved by netDB lookup; they are
  * skipped here and handled by the transport's existing IP-based introduction
  * path.
@@ -220,7 +220,7 @@ class IntroducerLookupJob extends JobImpl {
 
     /**
      * Bound the attempts map: drop entries whose last attempt predates the
-     * maximum possible backoff window (they would fail canAttempt() as
+     * maximum possible backoff window (they would fail {@link #canAttempt()} as
      * eligible anyway and would be recreated fresh).
      */
     private void pruneAttempts(long now) {

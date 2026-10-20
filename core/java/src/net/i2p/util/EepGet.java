@@ -104,7 +104,7 @@ public class EepGet {
     protected OutputStream _out;
     /** Total bytes transferred across all attempts, including resumed content. */
     protected long _alreadyTransferred;
-    /** Body bytes transferred in the current fetch(), summed across attempts. */
+    /** Body bytes transferred in the current {@link #fetch()}, summed across attempts. */
     protected long _bytesTransferred;
     /** Remaining bytes on the current attempt, -1 if unknown (chunked or no Content-Length). */
     protected long _bytesRemaining;
@@ -197,7 +197,7 @@ public class EepGet {
     /** IOException from the background decompressor thread, if any. */
     protected IOException _decompressException;
 
-    /** Authentication state for proxy digest/basic auth; created via addAuthorization(). */
+    /** Authentication state for proxy digest/basic auth; created via {@link #addAuthorization}. */
     protected AuthState _authState;
 
     /**
@@ -717,7 +717,7 @@ public class EepGet {
     }
 
     /**
-     * The command-line help text, listing every option accepted by main().
+     * The command-line help text, listing every option accepted by {@link #main}.
      * The defaults shown must match the constants and properties read in
      * main().
      *
@@ -815,7 +815,7 @@ public class EepGet {
 
         /**
          * Note: Headers are not processed, and this is not called, for most error response codes,
-         * unless setWriteErrorToOutput() is called before fetch().
+         * unless {@link #setWriteErrorToOutput()} is called before fetch().
          * To be changed?
          *
          * @param url the address the header arrived on
@@ -1374,7 +1374,7 @@ public class EepGet {
     }
 
     /**
-     * Read response body for a single fetch. Call after sendRequest().
+     * Read response body for a single fetch. Call after {@link #sendRequest}.
      *
      * @param timeout may be null
      * @throws IOException on IO error
@@ -1838,7 +1838,7 @@ public class EepGet {
     /**
      * Whether to read the response body.
      *
-     * @return true always, overridden in EepHead
+     * @return true always, overridden in {@link EepHead}
      * @since 0.9.50
      */
     protected boolean shouldReadBody() { return true; }
@@ -2967,7 +2967,7 @@ public class EepGet {
      * output file or stream even on an error response code (4xx, 5xx, etc).
      * The error data will only be written if no previous data was written
      * on an earlier try.
-     * Caller must of course check getStatusCode() or the
+     * Caller must of course check {@link #getStatusCode()} or the
      * fetch() return value.
      *
      * @since 0.8.8

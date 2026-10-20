@@ -13,7 +13,7 @@ package org.klomp.snark;
 public class StaticSnark {
 
     /**
-     * main() is the whole entry point and it refuses to run, so an instance carries
+     * {@link #main} is the whole entry point and it refuses to run, so an instance carries
      * nothing and is never meant to be used.
      */
     public StaticSnark() {}

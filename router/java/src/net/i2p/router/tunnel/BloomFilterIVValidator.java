@@ -224,7 +224,7 @@ public class BloomFilterIVValidator implements IVValidator {
          * @param validator the validator this policy retunes
          * @param ctx router context, held for the sizer but not read by it
          * @param KBps configured share bandwidth in KBps, retained for
-         *             reconfigure()
+         *             {@link #reconfigure}
          */
         public IVFilterSizer(BloomFilterIVValidator validator, RouterContext ctx, int KBps) {
             _validator = validator;

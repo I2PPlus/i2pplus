@@ -145,7 +145,7 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
 
     private final File _dhtFile;
     private final File _backupDhtFile;
-    /** True between start() and stop(), so the reply threads know to keep going. */
+    /** True between {@link #start()} and stop(), so the reply threads know to keep going. */
     protected volatile boolean _isRunning;
     private volatile boolean _hasBootstrapped;
 
@@ -229,7 +229,7 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
      * @param session the I2P session the DHT messages are sent over
      * @param shared the KRPC instance whose routing table, tracker, and blacklist are shared with
      *               this instance, or null for a standalone instance; a TorrentKRPC passes the main
-     *               instance and overrides start() and stop() to run only the message listener
+     *               instance and overrides start() and {@link #stop()} to run only the message listener
      */
     protected KRPC(I2PAppContext ctx, String baseName, I2PSession session, KRPC shared) {
         _context = ctx;
@@ -656,7 +656,7 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
     }
 
     /**
-     * Not recommended - use getPeersAndAnnounce().
+     * Not recommended - use {@link #getPeersAndAnnounce}.
      *
      * <p>Announce to the closest peers in the local DHT. This is NOT iterative - call getPeers()
      * first to get the closest peers into the local DHT. Blocking unless maxWait &lt;= 0 Caller
@@ -1909,7 +1909,7 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
 
         /**
          * Either wait on this object with a timeout, or use non-null Runnables. Any sent data to be
-         * remembered may be stored by setSentObject(). Reply object may be in getReplyObject().
+         * remembered may be stored by {@link #setSentObject}. Reply object may be in getReplyObject().
          *
          * @param mID the message ID of the query being awaited
          * @param nInfo the node the query was sent to, and whose reply is credited
@@ -1936,7 +1936,7 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
         /**
          * Only used for get_peers, to save the Info Hash.
          *
-         * @param o the payload remembered alongside the query, read back by getSentObject()
+         * @param o the payload remembered alongside the query, read back by {@link #getSentObject()}
          */
         public void setSentObject(Object o) {
             sentObject = o;
@@ -1963,7 +1963,7 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
         }
 
         /**
-         * If nonzero, we got a reply, and getReplyObject() may contain something.
+         * If nonzero, we got a reply, and {@link #getReplyObject()} may contain something.
          *
          * @return code or 0 if no error
          */
@@ -1972,8 +1972,8 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
         }
 
         /**
-         * Will notify this and run onReply. Also removes from _sentQueries and calls heardFrom().
-         * @param code the reply status code, as returned by getReplyCode()
+         * Will notify this and run onReply. Also removes from _sentQueries and calls {@link #heardFrom}.
+         * @param code the reply status code, as returned by {@link #getReplyCode()}
          * @param o the parsed reply payload, stored in getReplyObject()
          */
         public void gotReply(int code, Object o) {

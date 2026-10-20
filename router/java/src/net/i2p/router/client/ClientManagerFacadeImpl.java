@@ -50,7 +50,7 @@ public class ClientManagerFacadeImpl extends ClientManagerFacade implements Inte
     /** Default host. */
     public static final String DEFAULT_HOST = "127.0.0.1";
     /**
-     * Creates the facade without starting anything; call startup() to listen for I2CP connections.
+     * Creates the facade without starting anything; call {@link #startup()} to listen for I2CP connections.
      * @param context the router context this facade and the manager it creates are scoped to
      */
     public ClientManagerFacadeImpl(RouterContext context) {

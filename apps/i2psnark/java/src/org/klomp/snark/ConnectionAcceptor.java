@@ -76,7 +76,7 @@ class ConnectionAcceptor implements Runnable {
     private final AtomicInteger activeHandlers = new AtomicInteger();
 
     /**
-     * Multitorrent. Caller MUST call startAccepting().
+     * Multitorrent. Caller MUST call {@link #startAccepting()}.
      *
      * @param util the I2PSnark utility instance supplying the config and
      * storage this acceptor works through
@@ -90,7 +90,7 @@ class ConnectionAcceptor implements Runnable {
         peeracceptor = new PeerAcceptor(set);
     }
 
-    /** May be called even when already running. May be called to start up again after halt(). */
+    /** May be called even when already running. May be called to start up again after {@link #halt()}. */
     public synchronized void startAccepting() {
         stop = false;
         if (_log.shouldWarn()) {

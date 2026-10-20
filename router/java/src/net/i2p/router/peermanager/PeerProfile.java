@@ -137,7 +137,7 @@ public class PeerProfile {
     }
 
     /**
-     * Caller should call setLastHeardAbout() and setFirstHeardAbout().
+     * Caller should call {@link #setLastHeardAbout} and setFirstHeardAbout().
      *
      * @param context the router context
      * @param peer non-null
@@ -145,7 +145,7 @@ public class PeerProfile {
     public PeerProfile(RouterContext context, Hash peer) {this(context, peer, false);}
 
     /**
-     * Caller should call setLastHeardAbout() and setFirstHeardAbout().
+     * Caller should call setLastHeardAbout() and {@link #setFirstHeardAbout()}.
      *
      * @param peer non-null
      * @param expand whether to eagerly expand (default false; auto-expanded on first use)
@@ -282,7 +282,7 @@ public class PeerProfile {
     /**
      * Set when the peer is demoted from the fast/high-cap tiers for packet
      * loss. The peer must then produce fresh clean evidence before it is
-     * re-admitted (see ProfileOrganizer.shouldReadmitLossy).
+     * re-admitted (see {@link ProfileOrganizer}.shouldReadmitLossy).
      *
      * @param when demotion time in ms
      * @since 0.9.71+
@@ -679,7 +679,7 @@ public class PeerProfile {
     /**
      * The tunnel history.
      *
-     * @param history the TunnelHistory to hold, retrieved by getTunnelHistory()
+     * @param history the TunnelHistory to hold, retrieved by {@link #getTunnelHistory()}
      */
     public synchronized void setTunnelHistory(TunnelHistory history) {_tunnelHistory = history;}
 
@@ -719,7 +719,7 @@ public class PeerProfile {
     /**
      * The DB history.
      *
-     * @param hist the DBHistory to hold, retrieved by getDBHistory()
+     * @param hist the DBHistory to hold, retrieved by {@link #getDBHistory()}
      */
     public synchronized void setDBHistory(DBHistory hist) {_dbHistory = hist;}
 
@@ -1265,7 +1265,7 @@ void recalculateLowLatency() {
 
     /**
      * Shrink the profile by dropping the RateStat objects.
-     * They will be re-created lazily by expandProfile()
+     * They will be re-created lazily by {@link #expandProfile()}
      * when the profile is used again.
      */
     public synchronized void shrinkProfile() {
@@ -1343,7 +1343,7 @@ void recalculateLowLatency() {
     }
 
     /**
-     * Caller must next call updateValues().
+     * Caller must next call {@link #updateValues()}.
      * <p>No peak throughput value is decayed: coalescing only folds a new
      * measurement into the peak arrays and never erases demonstrated capacity.
      *
@@ -1402,7 +1402,7 @@ void recalculateLowLatency() {
      * ---                                    ---------
      * 7                                      13 rates total
      * <p>
-     * shrinkProfile() / shrinkDBProfile() drop the PeerProfile
+     * {@link #shrinkProfile()} / shrinkDBProfile() drop the PeerProfile
      * and DBProfile RateStats. TunnelHistory RateStats are final
      * and retained. Re-created lazily on the next expand.
      */

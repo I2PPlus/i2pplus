@@ -16,15 +16,15 @@ import net.i2p.util.SimpleByteCache;
  * This is similar to DataMessage or GarlicMessage but with a variable message type.
  * This is defined so routers can route messages they don't know about.
  * We don't extend those classes so that any code that does (instanceof foo)
- * won't return true for this type. Load tests use DataMessage, for example.
+ * won't return true for this type. Load tests use {@link DataMessage}, for example.
  * Also, those classes include an additional length field that we can't use here.
  * See InboundMessageDistributor.
  * <p>
  * There is no setData() method, the only way to create one of these is to
- * read it with readMessage() (i.e., it came from some other router)
+ * read it with {@link #readMessage} (i.e., it came from some other router)
  * <p>
  * As of 0.8.12 this class is working. It is used at the IBGW to reduce the processing
- * required. For zero-hop IB tunnels, the convert() method is used to reconstitute
+ * required. For zero-hop IB tunnels, the {@link #convert()} method is used to reconstitute
  * a standard message class.
  *
  * @since 0.7.12 but broken before 0.8.12

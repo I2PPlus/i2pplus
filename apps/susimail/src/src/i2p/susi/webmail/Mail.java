@@ -46,7 +46,7 @@ class Mail {
     /** Compiled pattern for bracketed email addresses. */
     private static final Pattern PATTERN2 = Pattern.compile(P2);
     /**
-     * Also used by MailPart
+     * Also used by {@link MailPart}
      * See MailPart for why we don't do \r\n\r\n.
      */
     static final byte[] HEADER_MATCH = DataHelper.getASCII("\r\n\r");
@@ -450,7 +450,7 @@ class Mail {
      * Sets the date from a long value.
      *
      * @param dateLong milliseconds since the epoch, never negative
-     * @since 0.9.34 pulled from parseHeaders()
+     * @since 0.9.34 pulled from {@link #parseHeaders()}
      */
     private synchronized void setDate(long dateLong) {
         date = new Date(dateLong);

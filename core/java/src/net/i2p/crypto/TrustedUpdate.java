@@ -415,7 +415,7 @@ public class TrustedUpdate {
     }
 
     /**
-     * Version in the .sud file, valid only after calling migrateVerified().
+     * Version in the .sud file, valid only after calling {@link #migrateVerified}.
      *
      * @return the new version string
      */
@@ -474,7 +474,7 @@ public class TrustedUpdate {
     /**
      * Verify the version in the sud header matches the version in the zip comment
      * (and that the embedded file is a zip file at all)
-     * isUpdatedVersion() must be called first to set _newVersion.
+     * {@link #isUpdatedVersion()} must be called first to set _newVersion.
      *
      * @return true if matches
      *

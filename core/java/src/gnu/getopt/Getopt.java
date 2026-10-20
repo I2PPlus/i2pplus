@@ -6,7 +6,7 @@ import java.util.ResourceBundle;
 
 /**
  * This is a Java port of GNU getopt, a class for parsing command line
- * arguments passed to programs.  It it based on the C getopt() functions
+ * arguments passed to programs.  It it based on the C {@link #getopt()} functions
  * in glibc 2.0.6 and should parse options in a 100% compatible manner.
  * If it does not, that is a bug.  The programmer's interface is also
  * very compatible.
@@ -20,7 +20,7 @@ import java.util.ResourceBundle;
  * A command line option can be defined to take an argument.  If an
  * option has an argument, the value of that argument is stored in an
  * instance variable called optarg, which can be accessed using the
- * getOptarg() method.  If an option that requires an argument is
+ * {@link #getOptarg()} method.  If an option that requires an argument is
  * found, but there is no argument present, then an error message is
  * printed. Normally getopt() returns a '?' in this situation, but
  * that can be changed as described below.
@@ -28,7 +28,7 @@ import java.util.ResourceBundle;
  * If an invalid option is encountered, an error message is printed
  * to the standard error and getopt() returns a '?'.  The value of the
  * invalid option encountered is stored in the instance variable optopt
- * which can be retrieved using the getOptopt() method.  To suppress
+ * which can be retrieved using the {@link #getOptopt()} method.  To suppress
  * the printing of error messages for this or any other error, set
  * the value of the opterr instance variable to false using the
  * setOpterr() method.
@@ -36,7 +36,7 @@ import java.util.ResourceBundle;
  * Between calls to getopt(), the instance variable optind is used to
  * keep track of where the object is in the parsing process.  After all
  * options have been returned, optind is the index in argv of the first
- * non-option argument.  This variable can be accessed with the getOptind()
+ * non-option argument.  This variable can be accessed with the {@link #getOptind()}
  * method.
  * <p>
  * Note that this object expects command line options to be passed in the
@@ -203,7 +203,7 @@ import java.util.ResourceBundle;
  * encountered, the optopt variable is set to integer 0 and so cannot
  * be used to identify the incorrect option the user entered.
  * <p>
- * Long options are defined by LongOpt objects.  These objects are created
+ * Long options are defined by {@link LongOpt} objects.  These objects are created
  * with a constructor that takes four params: a String representing the
  * object name, a integer specifying what arguments the option takes
  * (the value is one of LongOpt.NO_ARGUMENT, LongOpt.REQUIRED_ARGUMENT,
@@ -228,7 +228,7 @@ import java.util.ResourceBundle;
  * (say, "-h" and "--help") that do the exact same thing.
  * <p>
  * With long options, there is an alternative method of determining
- * which option was selected.  The method getLongind() will return the
+ * which option was selected.  The method {@link #getLongind()} will return the
  * the index in the long option array (NOT argv) of the long option found.
  * So if multiple long options are configured to return the same value,
  * the application can use getLongind() to distinguish between them.
@@ -465,7 +465,7 @@ public class Getopt extends Object
     protected boolean posixly_correct;
 
 /**
- * A flag which communicates whether or not checkLongOption() did all
+ * A flag which communicates whether or not {@link #checkLongOption()} did all
  * necessary processing for the current option
  */
     protected boolean longopt_handled;

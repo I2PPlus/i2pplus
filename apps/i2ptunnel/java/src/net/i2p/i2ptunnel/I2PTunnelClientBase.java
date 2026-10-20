@@ -153,7 +153,7 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
     private volatile boolean _ownExecutor;
     /** Property name: max concurrently active client connections handled by one client tunnel. */
     public static final String PROP_MAX_CONNECTIONS = "i2ptunnel.maxConnections";
-    /** Default socket open timeout in ms, after which close() will proceed even with active sockets. */
+    /** Default socket open timeout in ms, after which {@link #close} will proceed even with active sockets. */
     public static final long DEFAULT_SOCKET_OPEN_TIMEOUT = 30000;
     /**
      * Default cap on concurrently handled client connections.
@@ -201,7 +201,7 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
      * {@link #startRunning} for that. The local socket will be opened
      * immediately (ignoring the <code>i2cp.delayOpen</code> option).
      *
-     * @param localPort if 0, use any port, get actual port selected with getLocalPort()
+     * @param localPort if 0, use any port, get actual port selected with {@link #getLocalPort()}
      * @param l the logging instance
      * @param sktMgr the existing socket manager
      * @param tunnel the I2PTunnel instance
@@ -234,7 +234,7 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
      * The main constructor.
      * <p>
      * As of 0.9.21 this is fast, and does NOT connect the manager to the router,
-     * or open the local socket. You MUST call startRunning() for that.
+     * or open the local socket. You MUST call {@link #startRunning()} for that.
      * <p>
      * (0.9.20 claimed to be fast, but due to a bug it DID connect the manager
      * to the router. It did NOT open the local socket however, so it was still
@@ -317,7 +317,7 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
      * Sets the this.sockMgr field if it is null, or if we want a new one.
      * This may take a LONG time if building a new manager.
      * <p>
-     * We need a socket manager before getDefaultOptions() and most other things.
+     * We need a socket manager before {@link #getDefaultOptions()} and most other things.
      * @throws IllegalStateException if the I2CP configuration is b0rked so
      * badly that we cant create a socketManager
      */
@@ -385,7 +385,7 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
     /**
      * This is ONLY for shared clients.
      * As of 0.9.20 this is fast, and does NOT connect the manager to the router.
-     * Call verifySocketManager() for that.
+     * Call {@link #verifySocketManager()} for that.
      *
      * @param tunnel the I2PTunnel instance
      * @param pkf the private key file path, or null
@@ -1584,7 +1584,7 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
      * This may not release all resources. In particular, the I2PSocketManager remains
      * and it may have timer threads that continue running.
      * <p>
-     * To release all resources permanently, call destroy().
+     * To release all resources permanently, call {@link #destroy()}.
      * <p>
      * Does nothing if open is already false.
      * Sets open = false but does not notifyAll().
@@ -1695,7 +1695,7 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
 
     /**
      * Manage a connection in a separate thread. This only works if
-     * you do not override manageConnection().
+     * you do not override {@link #manageConnection}.
      * <p>
      * This is run in a thread from an unlimited-size thread pool,
      * so it may block or run indefinitely.

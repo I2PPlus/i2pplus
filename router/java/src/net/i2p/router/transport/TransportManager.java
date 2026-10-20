@@ -90,7 +90,7 @@ import static net.i2p.router.transport.Transport.AddressSource.*;
  * <strong>API Access:</strong>
  * This class is primarily internal to the router. Only a few
  * methods are public for console and Android integration.
- * External components should use CommSystemFacadeImpl for
+ * External components should use {@link CommSystemFacadeImpl} for
  * transport access rather than calling this class directly.
  * <p>
  * <strong>Note:</strong> This is not intended as a public API
@@ -113,7 +113,7 @@ public class TransportManager implements TransportEventListener {
     private final boolean _enableUDP;
     private boolean _upnpUpdateQueued;
     /**
-     * Cached getEstablished() result.  Held as a single immutable holder so
+     * Cached {@link #getEstablished()} result.  Held as a single immutable holder so
      * that publishing the list and its deadline is one volatile write — two
      * separate volatiles would let a reader pair a fresh deadline with the
      * previous list.

@@ -10,7 +10,7 @@ import net.i2p.data.i2cp.HostReplyMessage;
  */
 public interface LookupResult {
 
-    /** Successful lookup; getDestination() will be non-null. */
+    /** Successful lookup; {@link #getDestination()} will be non-null. */
     public static final int RESULT_SUCCESS = HostReplyMessage.RESULT_SUCCESS;
 
     /** General failure, probably a local hostname lookup failure, or a b32 lookup timeout. */

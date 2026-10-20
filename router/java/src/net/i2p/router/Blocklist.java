@@ -152,7 +152,7 @@ public class Blocklist {
 
     /**
      * Constructor.
-     * Router MUST call startup().
+     * Router MUST call {@link #startup()}.
      *
      * @param context the router context
      */
@@ -551,7 +551,7 @@ public class Blocklist {
      *
      * @param files the list of blocklist files to read
      * @return the allocated array, or null on out of memory error
-     * @since 0.9.18 split out from readBlocklistFile()
+     * @since 0.9.18 split out from {@link #readBlocklistFile()}
      */
     private long[] allocate(List<BLFile> files) {
         int maxSize = 0;
@@ -588,7 +588,7 @@ public class Blocklist {
     * <a href="https://www.iblocklist.com/support">IBlockList support</a>
     * <a href="https://www.team-cymru.com/bogon-reference-http">Cymru bogon reference</a>
     * <p>
-    * Must call allocate() before and merge() after.
+    * Must call {@link #allocate()} before and merge() after.
     *
     * @param blocklist out parameter, entries stored here
     * @param count current number of entries

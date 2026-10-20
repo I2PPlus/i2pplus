@@ -13,7 +13,7 @@ import net.metanotion.util.skiplist.SkipSpan;
  * <p>Stores only first key in memory to reduce memory usage.
  * Loads keys and values from disk on-demand during operations.</p>
  *
- * <p>Comparison with BSkipSpan:</p>
+ * <p>Comparison with {@link BSkipSpan}:</p>
  * <ul>
  * <li>BSkipSpan stores all keys and values in-memory, backed by file</li>
  * <li>IBSkipSpan stores only first key, and no values, in-memory</li>
@@ -22,7 +22,7 @@ import net.metanotion.util.skiplist.SkipSpan;
  * <p>For get(): performs linear search through span in file and loads only found value
  * (super() does binary search in-memory).</p>
  *
- * <p>For put() or remove(): loads all keys and values for span from file,
+ * <p>For put() or {@link #remove}: loads all keys and values for span from file,
  * makes modification, flushes out keys and values, and nulls out keys and values in-memory.</p>
  *
  * <p>Recommended span size is 16.</p>
@@ -92,7 +92,7 @@ public class IBSkipSpan<K extends Comparable<? super K>, V> extends BSkipSpan<K,
 
     /**
      * Must already be seeked to the end of the span header
-     * via loadInit() or seekData()
+     * via loadInit() or {@link #seekData()}
      */
     private void loadFirstKey() throws IOException {
         if (this.nKeys <= 0)
@@ -316,7 +316,7 @@ public class IBSkipSpan<K extends Comparable<? super K>, V> extends BSkipSpan<K,
 
     /**
      * Load whole span from file, do the operation, flush out, then null out in-memory data again.
-     * This is called only via SkipList.find()
+     * This is called only via {@link SkipList}.find()
      * @return the span carrying the matching key, with search[0] set to its
      *         index, or the empty span if the key is absent
      */

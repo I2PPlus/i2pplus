@@ -18,7 +18,7 @@ import java.util.NoSuchElementException;
  * <p>
  * Each thread gets its own cached iterator to allow safe concurrent
  * iteration. Iterator state is maintained between iterations to support the
- * standard iterator contract while allowing remove() operations
+ * standard iterator contract while allowing {@link #remove} operations
  * with proper fail-fast behavior on concurrent modifications.
  *
  * @param <E>  type of elements in this list
@@ -110,7 +110,7 @@ public class CachedIteratorArrayList<E> extends ArrayList<E> {
          */
         int expectedModCount;
 
-        /** Reference to the owning list, set on each call to iterator(). */
+        /** Reference to the owning list, set on each call to {@link #iterator()}. */
         private transient WeakReference<CachedIteratorArrayList<E>> listRef;
 
         /** Reset iterator state for the given list. */
@@ -157,7 +157,7 @@ public class CachedIteratorArrayList<E> extends ArrayList<E> {
         }
 
         /**
-         * Removes from the underlying list the last element returned by next().
+         * Removes from the underlying list the last element returned by {@link #next()}.
          */
         public void remove() {
             if (lastRet < 0)

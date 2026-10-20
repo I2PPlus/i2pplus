@@ -188,7 +188,7 @@ public abstract class RrdBackend {
     /**
      * Reads all RRD bytes from the underlying storage.
      *
-     * @return every RRD byte, read from offset 0 into a buffer sized by getLength()
+     * @return every RRD byte, read from offset 0 into a buffer sized by {@link #getLength()}
      * @throws java.io.IOException Thrown in case of I/O error
      */
     public final byte[] readAll() throws IOException {

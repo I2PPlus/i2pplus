@@ -14,7 +14,7 @@ import java.util.Comparator;
 public class VersionComparator implements Comparator<String>, Serializable {
 
     /**
-     * A stateless comparator - compare() just delegates to comp() - so a bare instance
+     * A stateless comparator - {@link #compare} just delegates to comp() - so a bare instance
      * behaves exactly like any other.
      */
     public VersionComparator() {}

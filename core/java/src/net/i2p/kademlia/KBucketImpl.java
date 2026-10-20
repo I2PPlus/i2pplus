@@ -18,7 +18,7 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 /**
- * A concurrent implementation using ConcurrentHashSet.
+ * A concurrent implementation using {@link ConcurrentHashSet}.
  * The max size (K) may be temporarily exceeded due to concurrency,
  * a pending split, or the behavior of the supplied trimmer,
  * as explained below.

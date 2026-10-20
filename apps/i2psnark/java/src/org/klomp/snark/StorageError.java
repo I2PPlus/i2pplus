@@ -44,7 +44,7 @@ public enum StorageError {
     STALE_HANDLE("Stale or invalid file handle", false),
     /** transient: file vanished, retry. */
     MISSING("File or directory missing", false),
-    /** Unclassified error; the raw exception text is preserved by describe(). */
+    /** Unclassified error; the raw exception text is preserved by {@link #describe}. */
     OTHER("I/O error", false);
 
     private final String label;

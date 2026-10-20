@@ -576,7 +576,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
     private static volatile int buildFailureBuffer = 0;
 
     /**
-     * Minimum INITIAL_RTO target (ms) in the Tuner's computeTarget().
+     * Minimum INITIAL_RTO target (ms) in the Tuner's {@link #computeTarget()}.
      * Prevents the Tuner from setting RTO too low, which causes
      * spurious retransmits and wasted bandwidth.
      * Default 6000ms — accommodates typical I2P RTT up to ~3s without
@@ -1099,7 +1099,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
     /**
      * Apply the configured values at startup, clamped to the tunable ranges
      *  enforced by MaxDispatchAgeParam / HandlerThreadPriorityParam. These
-     *  fields feed adjustHandlerPriority() and GetBidsJob before the tunable
+     *  fields feed {@link #adjustHandlerPriority()} and GetBidsJob before the tunable
      *  machinery takes over; an out-of-range priority would make setPriority()
      *  throw in every handler loop, and a negative dispatch age is nonsense.
      *  Kept in a static method (called once from the constructor) so the
@@ -1291,7 +1291,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
     /**
      * Compute derived tuning values from subsystem scores and job queue stats.
-     * Updates static volatile fields read by TestJob and TunnelPool.
+     * Updates static volatile fields read by {@link TestJob} and TunnelPool.
      * Called once per tune cycle from {@link #timeReached}.
      */
     private void computeTuningValues() {
@@ -1774,11 +1774,11 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         protected final String _statName;
         /** Factory default: value before any tuning. Persisted on first run for auto-revert. */
         protected int _defaultValue;
-        /** Code-level default captured at construction time. Used by restoreDefaults(). */
+        /** Code-level default captured at construction time. Used by {@link #restoreDefaults()}. */
         protected final int _factoryDefault;
         /** Last known value (from persistence or runtime default). Used as tuning baseline. */
         protected final int _initialValue;
-        /** True until first update() call — applies persisted value from autotune.config. */
+        /** True until first {@link #update()} call — applies persisted value from autotune.config. */
         protected boolean _firstTick = true;
         /**
          * True once a stale persisted default has been reported, so the
@@ -2063,7 +2063,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
         /**
          * Effective default min — override for bandwidth-scaled params.
-         * Called by refreshRanges() instead of _defaultMin.
+         * Called by {@link #refreshRanges} instead of _defaultMin.
          *
          * @param ctx router context passed by refreshRanges, for bandwidth-scaled
          *            overrides
@@ -9176,7 +9176,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      * Breadth (concurrent exploratory searches) of the exploratory search
      * cycle. Scaffolds the network while there are few routers known; raising
      * it warms more neighbors at the cost of more query traffic. Config value
-     * is read by ExploreJob at each job construction.
+     * is read by {@link ExploreJob} at each job construction.
      */
     private class ExploreBredthParam extends BaseParam {
 
@@ -13658,7 +13658,7 @@ protected int computeTarget(double observed) {
     }
 
     /**
-     * Tunes the minimum per-participant transit tunnel limit in ParticipatingThrottler.
+     * Tunes the minimum per-participant transit tunnel limit in {@link ParticipatingThrottler}.
      * Raises when we have capacity (high build success, low CPU), lowers under stress.
      */
     private class ParticipatingThrottleMinParam extends BaseParam {
@@ -13965,7 +13965,7 @@ protected int computeTarget(double observed) {
     }
 
     /**
-     * Tunes the 1-second burst detection threshold in RequestThrottler.
+     * Tunes the 1-second burst detection threshold in {@link RequestThrottler}.
      * Higher = less sensitive (fewer false positives). Lower = more aggressive (more bans).
      * Relax when healthy, tighten under stress.
      */

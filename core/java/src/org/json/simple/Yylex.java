@@ -237,7 +237,7 @@ class Yylex {
   private int zzLexicalState = YYINITIAL;
 
   /** this buffer contains the current text to be matched and is
-      the source of the yytext() string */
+      the source of the {@link #yytext()} string */
   private char[] zzBuffer = new char[ZZ_BUFFERSIZE];
 
   /** the textposition at the last accepting state */
@@ -457,7 +457,7 @@ int getPosition(){
    * It is equivalent to yytext().charAt(pos), but faster
    *
    * @param pos the position of the character to fetch.
-   *            A value from 0 to yylength()-1.
+   *            A value from 0 to {@link #yylength()}-1.
    *
    * @return the character at position pos
    */

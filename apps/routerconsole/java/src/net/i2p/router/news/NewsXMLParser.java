@@ -97,7 +97,7 @@ public class NewsXMLParser {
     /**
      * Sets the action taken when encountering a non-whitelisted
      * XHTML element in the feed content.
-     * Must be set before parse().
+     * Must be set before {@link #parse}.
      * Default REMOVE_ELEMENT.
      *
      * @param mode the XHTML mode to set

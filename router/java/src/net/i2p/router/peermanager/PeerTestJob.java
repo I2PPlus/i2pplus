@@ -558,7 +558,7 @@ public class PeerTestJob extends JobImpl {
         final boolean isReachable;
         /** The peer's bandwidth tier (O, P, X, K, L, M, N) or empty string. */
         final String bandwidthTier;
-        /** Raw capabilities string from RouterInfo (may be null). */
+        /** Raw capabilities string from {@link RouterInfo} (may be null). */
         final String capabilities;
 
         /**

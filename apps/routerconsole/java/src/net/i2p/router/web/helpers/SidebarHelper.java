@@ -51,13 +51,13 @@ import net.i2p.I2PAppContext;
  * Simple helper to query the appropriate router for data necessary to render
  * the summary sections on the router console.
  * <p>
- * For the full summary bar use renderSummaryBar().
+ * For the full summary bar use {@link #renderSummaryBar()}.
  */
 public class SidebarHelper extends HelperBase {
 
     /**
      * No HTTP session is bound yet, so the summary sections fall back to the
-     * session-less nonce path until storeSession() supplies one.
+     * session-less nonce path until {@link #storeSession} supplies one.
      */
     public SidebarHelper() {}
 
@@ -1398,7 +1398,7 @@ public class SidebarHelper extends HelperBase {
     /**
      * The update status and buttons.
      * @return the update status
-     * @since 0.8.13 moved from SidebarRenderer
+     * @since 0.8.13 moved from {@link SidebarRenderer}
      */
     public String getUpdateStatus() {
         StringBuilder buf = new StringBuilder(512);

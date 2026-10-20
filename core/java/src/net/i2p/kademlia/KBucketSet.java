@@ -369,7 +369,7 @@ public class KBucketSet<T extends SimpleDataStructure> {
      * Snapshot of every bucket for the debug console, one row per bucket:
      * {index, bucket count, range begin, range end, key count, keys} as
      * strings. Ranges are bit positions of the XOR distance from the root
-     * key. Keys are the entry keys' toString() values, comma-separated,
+     * key. Keys are the entry keys' {@link #toString()} values, comma-separated,
      * empty if the bucket is empty.
      *
      * @return non-null, empty if no buckets exist
@@ -616,7 +616,7 @@ public class KBucketSet<T extends SimpleDataStructure> {
      * with the actual buckets (not a copy).
      * <p>
      * Primarily for testing. You shouldn't ever need to get all the buckets.
-     * Use getClosest() or getAll() instead to get the keys.
+     * Use {@link #getClosest} or getAll() instead to get the keys.
      *
      * @return non-null
      */

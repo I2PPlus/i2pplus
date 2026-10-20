@@ -47,7 +47,7 @@ import net.i2p.util.VersionComparator;
  * and tunnel-based delivery with garlic encryption for client data.
  * <p>
  * All store operations through this class request a reply to confirm successful delivery.
- * Unused directly - see FloodfillStoreJob for the concrete implementation.
+ * Unused directly - see {@link FloodfillStoreJob} for the concrete implementation.
  */
 abstract class StoreJob extends JobImpl {
     /** Logger for this class. */

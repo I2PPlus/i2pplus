@@ -243,7 +243,7 @@ public class GraphListener implements RateSummaryListener {
     /**
      * Offset (seconds) subtracted from "now" when computing the fetch window end,
      * so a clock skewed slightly ahead of system time does not yield NaNs.
-     * Shared with GraphRenderer, which applies the same window for plotting.
+     * Shared with {@link GraphRenderer}, which applies the same window for plotting.
      *
      * @since 0.9.70+
      */
@@ -526,7 +526,7 @@ public class GraphListener implements RateSummaryListener {
     /**
      * Whether this listener has stopped recording.
      * <p>
-     * A detached listener keeps its entry in GraphGenerator's rate-to-listener
+     * A detached listener keeps its entry in {@link GraphGenerator}'s rate-to-listener
      * map, so the generator uses this to notice that it needs re-creating.
      *
      * @return true if the RRD database is closed and no longer receiving samples

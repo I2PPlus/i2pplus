@@ -32,7 +32,7 @@ import java.nio.charset.StandardCharsets;
  */
 public class I2PDefaultServlet extends DefaultServlet {
     /**
-     * Constructor. Jetty instantiates the servlet itself and init() picks up the
+     * Constructor. Jetty instantiates the servlet itself and {@link #init()} picks up the
      * context handler and resource base, so a bare instance is the starting state.
      */
     public I2PDefaultServlet() {}
@@ -110,7 +110,7 @@ public class I2PDefaultServlet extends DefaultServlet {
     }
 
     /**
-     * Copied and modified from DefaultServlet.java.
+     * Copied and modified from {@link DefaultServlet}.java.
      * Overridden to set the Locale for the dates.
      *
      * Get the resource list as a HTML directory listing.

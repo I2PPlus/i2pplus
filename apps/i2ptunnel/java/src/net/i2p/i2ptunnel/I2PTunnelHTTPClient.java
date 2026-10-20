@@ -331,7 +331,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
      * It is used to add a client to an existing socket manager.
      * <p>
      * As of 0.9.20 this is fast, and does NOT connect the manager to the router,
-     * or open the local socket. You MUST call startRunning() for that.
+     * or open the local socket. You MUST call {@link #startRunning()} for that.
      *
      * @param localPort the local port to bind to
      * @param l the logger inherited from the parent tunnel

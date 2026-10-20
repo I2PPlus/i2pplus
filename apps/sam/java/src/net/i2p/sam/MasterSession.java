@@ -55,7 +55,7 @@ class MasterSession extends SAMv3StreamSession implements SAMDatagramReceiver, S
      * Build a Session according to information
      * registered with the given nickname.
      * <p>
-     * Caller MUST call start().
+     * Caller MUST call {@link #start()}.
      *
      * @param nick nickname of the session
      * @param dgServer the datagram server that raw and datagram subsessions register with

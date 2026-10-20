@@ -1,7 +1,7 @@
 package freenet.support.CPUInformation;
 
 /**
- * Identifies Intel CPUs via CPUID and exposes instruction set support flags.
+ * Identifies Intel CPUs via {@link CPUID} and exposes instruction set support flags.
  *
  * <h2>Identification Strategy</h2>
  * <p>Two identification paths are used, in order of priority:</p>

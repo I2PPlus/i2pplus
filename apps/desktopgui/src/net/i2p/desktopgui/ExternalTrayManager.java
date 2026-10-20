@@ -14,7 +14,7 @@ import net.i2p.desktopgui.router.RouterManager;
  * Tray manager for external use without router context access.
  * Provides minimal I2P management when started before the router.
  * Limited to starting I2P and basic notification controls.
- * Not fully supported - use InternalTrayManager when possible.
+ * Not fully supported - use {@link InternalTrayManager} when possible.
  */
 class ExternalTrayManager extends TrayManager {
 

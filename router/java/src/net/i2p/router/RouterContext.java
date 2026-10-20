@@ -78,7 +78,7 @@ public class RouterContext extends I2PAppContext {
     private static final List<RouterContext> _contexts = new CopyOnWriteArrayList<>();
 
     /**
-     * Caller MUST call initAll() after instantiation.
+     * Caller MUST call {@link #initAll()} after instantiation.
      *
      * @param router may be null for unit tests if you are careful
      */
@@ -102,7 +102,7 @@ public class RouterContext extends I2PAppContext {
      * @param envProps configuration properties to override the defaults, or null to use none
      * @param doInit should this context be used as the global one (if necessary)?
      *               Will only apply if there is no global context now.
-     *               If false, caller should call setGlobalContext() afterwards.
+     *               If false, caller should call {@link #setGlobalContext} afterwards.
      *
      * @since 0.9.33
      */
@@ -143,7 +143,7 @@ public class RouterContext extends I2PAppContext {
 
     /**
      * Properties where the defaults must be different from those
-     * in I2PAppContext.
+     * in {@link I2PAppContext}.
      * <p>
      * Unless we are explicitly disabling the timestamper, we want to use it.
      * We need this now as the new timestamper default is disabled (so we don't
@@ -257,7 +257,7 @@ public class RouterContext extends I2PAppContext {
     }
 
     /**
-     * Same as listContexts() but package private and modifiable.
+     * Same as {@link #listContexts()} but package private and modifiable.
      * The list should only be modified when a new
      * context is created or a router is shut down.
      *
@@ -290,7 +290,7 @@ public class RouterContext extends I2PAppContext {
 
     /**
      * Convenience method for getting the router hash.
-     * Equivalent to context.router().getRouterInfo().getIdentity().getHash().
+     * Equivalent to context.{@link #router()}.getRouterInfo().getIdentity().getHash().
      *
      * @return may be null if called very early
      */
@@ -682,7 +682,7 @@ public class RouterContext extends I2PAppContext {
 
     /**
      * The RouterAppManager.
-     * For convenience, same as clientAppManager(), no cast required.
+     * For convenience, same as {@link #clientAppManager()}, no cast required.
      *
      * @return the same RouterAppManager that clientAppManager() returns, already typed
      * as the router-specific subclass
@@ -723,7 +723,7 @@ public class RouterContext extends I2PAppContext {
      * may want to test out how things react when peers don't agree on
      * how to skew.
      * <p>
-     * Returns same thing as routerKeyGenerator().
+     * Returns same thing as {@link #routerKeyGenerator()}.
      *
      * @return non-null
      * @since 0.9.16 Overrides I2PAppContext. Returns non-null in RouterContext and null in I2PAppcontext.

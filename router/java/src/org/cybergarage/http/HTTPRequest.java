@@ -146,7 +146,7 @@ public class HTTPRequest extends HTTPPacket {
      * Sets the URI for this HTTP request.
      *
      * <p>Sets the request URI and optionally converts it to a relative URL. This is used to handle
-     * both absolute and relative URLs in HTTP requests.
+     * both absolute and relative URLs in {@link HTTP} requests.
      *
      * @param value the URI string to set
      * @param isCheckRelativeURL if true, converts the URI to a relative URL using
@@ -617,7 +617,7 @@ public class HTTPRequest extends HTTPPacket {
      * Sends an HTTP response with the specified status code and no content.
      *
      * <p>This method creates a new HTTP response with the given status code, sets content length to
-     * 0, and sends it back to the client using the post() method. This is commonly used for error
+     * 0, and sends it back to the client using the {@link #post} method. This is commonly used for error
      * responses or responses that don't require a body.
      *
      * @param statusCode the HTTP status code to send (e.g., 200, 404, 500)

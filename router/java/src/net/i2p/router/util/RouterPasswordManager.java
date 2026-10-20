@@ -98,7 +98,7 @@ public class RouterPasswordManager extends PasswordManager {
     }
 
     /**
-     * Same as saveHash().
+     * Same as {@link #saveHash}.
      *
      * @param realm e.g. i2cp, routerconsole, etc.
      * @param user null or "" for no user, already trimmed

@@ -9,7 +9,7 @@ import java.util.NoSuchElementException;
  * <p>
  * Similar to {@code Collections.singleton()} but provides the ability to
  * remove the single element and clear the set. Iterator supports
- * remove() operations while maintaining singleton behavior.
+ * {@link #remove} operations while maintaining singleton behavior.
  * <p>
  * Does not support add() or addAll() operations as they would
  * violate the singleton contract. Item may not be null.
@@ -110,7 +110,7 @@ public class RemovableSingletonSet<E> extends AbstractSet<E> {
         }
 
         /**
-         * Remove the single element after next() has been called.
+         * Remove the single element after {@link #next()} has been called.
          */
         public void remove() {
             if (_elem == null || !done)

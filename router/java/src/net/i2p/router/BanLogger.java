@@ -311,7 +311,7 @@ public class BanLogger {
     }
 
     /**
-     * Log a ban with RouterInfo for direct caps extraction.
+     * Log a ban with {@link RouterInfo} for direct caps extraction.
      * Prefer this when the RouterInfo is available at the callsite,
      * to avoid a NetDB lookup that may fail if the RI was never stored.
      *
@@ -417,7 +417,7 @@ public class BanLogger {
     }
 
     /**
-     * Log a ban by hash with RouterContext (IP will be looked up from banlist).
+     * Log a ban by hash with {@link RouterContext} (IP will be looked up from banlist).
      *
      * @param hash Router hash (may be null)
      * @param context Router context for IP lookup

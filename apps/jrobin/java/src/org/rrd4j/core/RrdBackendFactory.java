@@ -388,7 +388,7 @@ public abstract class RrdBackendFactory implements Closeable {
      * The URI scheme that selects this backend, used to build every RRD URI the
      * factory hands out.
      *
-     * @return the scheme name for URI, default to getName().toLowerCase()
+     * @return the scheme name for URI, default to {@link #getName()}.toLowerCase()
      */
     public String getScheme() {
         return scheme;

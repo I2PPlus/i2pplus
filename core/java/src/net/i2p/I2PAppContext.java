@@ -48,7 +48,7 @@ import net.i2p.util.TempDirScanner;
  * <p>
  * As a simplification, there is also a global context - if some component needs
  * access to one of the singletons but doesn't have its own context from which
- * to root itself, it binds to the I2PAppContext's getGlobalContext(), which is
+ * to root itself, it binds to the I2PAppContext's {@link #getGlobalContext()}, which is
  * the first context that was created within the JVM, or a new one if no context
  * existed already.  This functionality is often used within the I2P core for.
  * logging - e.g. <pre>
@@ -671,7 +671,7 @@ public class I2PAppContext {
      * System.getProperties.
      * <p>
      * WARNING - not overridden in RouterContext, doesn't contain router config settings,
-     * use getProperties() instead.
+     * use {@link #getProperties()} instead.
      *
      * @return set of Strings containing the names of defined system properties
      */

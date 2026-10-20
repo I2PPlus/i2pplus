@@ -628,7 +628,7 @@ public class Tcpbw100 extends JApplet implements ActionListener {
     public boolean isTestInProgress() {return _bTestInProgress.get();}
 
     /**
-     * Class to start tests in a thread. Starts by disabling all buttons, and invokes the dottcp() method.
+     * Class to start tests in a thread. Starts by disabling all buttons, and invokes the {@link #dottcp} method.
      * This thread is stopped when the number of tests that was configured to be run have all completed,
      * or if the user stops it by interrupting from the GUI. Once the tests have been run, the buttons are
      * enabled so that results can be viewed in detail.
@@ -729,7 +729,7 @@ public class Tcpbw100 extends JApplet implements ActionListener {
     } // end inner class
 
     /**
-     * "Remote Control" function - invoke NDT' runtest() method from the API.
+     * "Remote Control" function - invoke NDT' {@link #runtest()} method from the API.
      */
     public void run_test() {
         pub_errmsg = "Test in progress.";
@@ -737,7 +737,7 @@ public class Tcpbw100 extends JApplet implements ActionListener {
     }
 
     /**
-     * Initialize the base NDT window Applet init() method.
+     * Initialize the base NDT window Applet {@link #init()} method.
      */
     public void init() {
         if (getParameter("country") != null) {_sCountry = getParameter("country");}
@@ -2448,7 +2448,7 @@ public class Tcpbw100 extends JApplet implements ActionListener {
 
     /**
      * Check if the given key is one whose value is saved by
-     * save_int_values(), save_dbl_values(), or save_long_values().
+     * {@link #save_int_values()}, save_dbl_values(), or save_long_values().
      *
      * @param sSysvarParam key name string from test results
      * @return true if the key is recognized and saved
@@ -2562,7 +2562,7 @@ public class Tcpbw100 extends JApplet implements ActionListener {
 
     /**
      * Stop the test and kill its thread group. Only valid after the test
-     * was started via main() or runIt().
+     * was started via {@link #main} or runIt().
      */
     @SuppressWarnings("deprecation")
     public void killIt() {

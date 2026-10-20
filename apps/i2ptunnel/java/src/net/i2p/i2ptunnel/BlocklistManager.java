@@ -108,7 +108,7 @@ public class BlocklistManager {
     /**
      * Gets the matched string from the blocklist for a request.
      * <p>
-     * If shouldBlockRequest() returns true, this method can be called
+     * If {@link #shouldBlockRequest} returns true, this method can be called
      * to retrieve the specific pattern that matched.
      * </p>
      *

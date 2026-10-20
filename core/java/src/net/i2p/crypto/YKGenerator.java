@@ -70,7 +70,7 @@ final class YKGenerator {
     public static final int DEFAULT_YK_PRECALC_DELAY = SystemVersion.isSlow() ? 200 : 150;
 
     /**
-     * Caller must also call start() to start the background precalc thread.
+     * Caller must also call {@link #start()} to start the background precalc thread.
      * Unit tests will still work without calling start().
      *
      * @param context application context, source of the precalc pool size and delay properties

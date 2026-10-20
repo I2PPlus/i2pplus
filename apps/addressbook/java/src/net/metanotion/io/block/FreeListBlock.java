@@ -134,7 +134,7 @@ private static final long MAGIC = 0x2366724c69737423L;  // "#frList#"
      * Report whether this block has no free page references left.
      *
      * @return true when no free page references remain, so the block holds no
-     *         space that could be handed out by takePage()
+     *         space that could be handed out by {@link #takePage()}
      */
     public boolean isEmpty() {
         return len <= 0;
@@ -145,7 +145,7 @@ private static final long MAGIC = 0x2366724c69737423L;  // "#frList#"
      * fit on one disk page.
      *
      * @return true once the free page references fill the block's share of the
-     *         disk page, which makes addPage() reject the next page
+     *         disk page, which makes {@link #addPage} reject the next page
      */
     public boolean isFull() {
         return len >= MAX_SIZE;

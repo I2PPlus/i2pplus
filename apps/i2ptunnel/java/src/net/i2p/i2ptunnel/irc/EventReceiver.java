@@ -13,9 +13,9 @@ import net.i2p.util.EventDispatcher;
 
 /**
  * An implementation of the EventDispatcher interface for
- * receiving events via in-line notifyEvent() only.
+ * receiving events via in-line {@link #notifyEvent} only.
  * Does not support chaining to additional dispatchers.
- * Does not support waitEventValue().
+ * Does not support {@link #waitEventValue}.
  * Does not support ignoring.
  *
  * @since 0.8.9

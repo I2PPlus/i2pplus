@@ -162,7 +162,7 @@ public class TryCache<T> {
     }
 
     /**
-     * Return the number of acquire() calls that found an empty cache
+     * Return the number of {@link #acquire()} calls that found an empty cache
      * (misses required allocating a new object).
      *
      * @return the miss count
@@ -173,7 +173,7 @@ public class TryCache<T> {
     }
 
     /**
-     * Return the number of release() calls that were discarded because
+     * Return the number of {@link #release} calls that were discarded because
      * the cache was full.
      *
      * @return the discard count

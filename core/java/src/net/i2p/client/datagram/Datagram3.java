@@ -49,7 +49,7 @@ public class Datagram3 {
     private static final byte VERSION = 3;
 
     /**
-     * As returned from load().
+     * As returned from {@link #load()}.
      */
     private Datagram3(Hash dest, byte[] data, Properties options) {
         _from = dest;

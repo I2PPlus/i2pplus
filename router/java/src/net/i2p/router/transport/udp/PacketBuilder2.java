@@ -41,7 +41,7 @@ class PacketBuilder2 {
 
     /**
      * Per-thread pool of payload block objects and the reusable block list.
-     * Blocks are used only within buildPacket() for serialization and are never
+     * Blocks are used only within {@link #buildPacket()} for serialization and are never
      * retained after the packet is built, so each thread can clear and refill
      * its own pool across calls without synchronization.
      * @since 0.9.71+

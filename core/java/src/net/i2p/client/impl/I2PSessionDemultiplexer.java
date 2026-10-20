@@ -18,11 +18,11 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Implement multiplexing with a 1-byte 'protocol' and a two-byte 'port'.
- * Listeners register with either addListener() or addMuxedListener(),
+ * Listeners register with either {@link #addListener} or addMuxedListener(),
  * depending on whether they want to hear about the
  * protocol, from port, and to port for every received message.
  * <p>
- * messageAvailable() only calls one listener, not all that apply.
+ * {@link #messageAvailable} only calls one listener, not all that apply.
  * The others call all listeners.
  *
  * @since 0.7.1

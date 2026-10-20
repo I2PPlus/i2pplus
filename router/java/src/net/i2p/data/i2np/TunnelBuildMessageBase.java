@@ -8,8 +8,8 @@ import net.i2p.I2PAppContext;
  * There's really no difference between the build and build reply.
  * <p>
  * TBM and VBTM (but not TBRM and VTBRM?) messages are modified
- * in-place by doing a single setRecord(), and retransmitted.
- * Therefore they are NOT good candidates to use FastI2NPMessageImpl;
+ * in-place by doing a single {@link #setRecord}, and retransmitted.
+ * Therefore they are NOT good candidates to use {@link FastI2NPMessageImpl};
  * the checksum would have to be invalidated with every setRecord().
  * Which we could do in TBM and VTBM but not TBRM and VTBRM,
  * but keep it simple for now.
@@ -18,7 +18,7 @@ import net.i2p.I2PAppContext;
  */
 public abstract class TunnelBuildMessageBase extends I2NPMessageImpl {
     /**
-     * The encrypted records, one per hop, or null until readMessage().
+     * The encrypted records, one per hop, or null until {@link #readMessage}.
      */
     protected EncryptedBuildRecord[] _records;
     /**

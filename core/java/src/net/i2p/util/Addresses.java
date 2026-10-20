@@ -68,7 +68,7 @@ public abstract class Addresses {
 
 /**
  * Do we have any address of this type?
- * Use getConnectedAddressTypes() to get all types at once for better performance.
+ * Use {@link #getConnectedAddressTypes()} to get all types at once for better performance.
  *
  * @param type the address type to check
  * @return true if connected to the specified address type
@@ -420,7 +420,7 @@ public abstract class Addresses {
     }
 
 /**
- * Same as toString() but returns IPv6 in compressed form per RFC 5952.
+ * Same as {@link #toString()} but returns IPv6 in compressed form per RFC 5952.
  *
  * @param addr the IP address as byte array
  * @return canonical string representation, or "null" for null input, or "bad IP length x" if length is invalid
@@ -540,12 +540,12 @@ public abstract class Addresses {
  * Caching version of {@link java.net.InetAddress#getByName(String) getByName(host)}.getAddress(), which is slow.
  * Caches numeric addresses only. Will resolve but not cache DNS addresses.
  * <p>
- * DEPRECATED for IPs in RouterAddresses, blocklists, etc.; use getIPOnly() instead.
+ * DEPRECATED for IPs in RouterAddresses, blocklists, etc.; use {@link #getIPOnly} instead.
  * <p>
  * Behavior differences from {@link java.net.InetAddress#getByName}:
  * <ul>
  * <li>Does not allow numeric IPs of the form d.d.d, d.d, or d (considered mistakes)
- * <li>Returns null for null or empty host (vs. 127.0.0.1 in InetAddress).
+ * <li>Returns null for null or empty host (vs. 127.0.0.1 in {@link InetAddress}).
  * </ul>
  *
  * @param host DNS or IPv4 or IPv6 address; if null or empty returns null
@@ -589,7 +589,7 @@ public abstract class Addresses {
  * Caching version of {@link java.net.InetAddress#getByName(String) getByName(host)}.getAddress(), which is slow.
  * Resolves literal IP addresses only without DNS lookups. Returns null for hostnames.
  * <p>
- * PREFERRED for IPs in RouterAddresses, blocklists, etc. over getIP()
+ * PREFERRED for IPs in RouterAddresses, blocklists, etc. over {@link #getIP}
  * because it avoids getByName() in most cases.
  * <p>
  * Behavior differences from {@link java.net.InetAddress#getByName}:
@@ -918,7 +918,7 @@ public abstract class Addresses {
  * Determines if an IPv6 address is dynamic.
  * Reliable on Linux. Best guess on Windows, Mac, and BSD (only valid for global scope).
  *
- * @param addr IPv6 address of a local interface, as returned from getAddresses()
+ * @param addr IPv6 address of a local interface, as returned from {@link #getAddresses()}
  * @return true if address is dynamic
  * @since 0.9.28
  */

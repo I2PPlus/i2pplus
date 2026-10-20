@@ -34,8 +34,8 @@ import net.i2p.util.Log;
 import net.i2p.util.SimpleTimer2;
 
 /**
- * Entry points are runTest() to start a new test as Alice,
- * and receiveTest() for all received test packets.
+ * Entry points are {@link #runTest} to start a new test as Alice,
+ * and {@link #receiveTest} for all received test packets.
  * <p>
  * IPv6 info: All Alice-Bob and Alice-Charlie communication is via IPv4.
  * The Bob-Charlie communication may be via IPv6, however Charlie must
@@ -140,7 +140,7 @@ class PeerTestManager {
     private final Map<Long, PeerTestState> _activeTests;
     /**
      *  Current test we are running (as Alice), or null.  Volatile: cleared by
-     *  testComplete() on the UDP handle threads as well as set under the instance
+     *  {@link #testComplete()} on the UDP handle threads as well as set under the instance
      *  lock by runTest(), and ContinueTimer reads it after dropping the lock.
      *
      *  @since 0.9.71+

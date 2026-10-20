@@ -298,7 +298,7 @@ public class ExploreJob extends SearchJob {
         super.replyFound(message, peer); // This starts a SearchReplyJob
     }
     /**
-     * This is called from SearchReplyJob.
+     * This is called from {@link SearchReplyJob}.
      * @return true if peer was new
      * @since 0.9.67
      */

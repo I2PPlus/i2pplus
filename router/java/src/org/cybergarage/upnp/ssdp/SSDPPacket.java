@@ -27,7 +27,7 @@ import org.cybergarage.upnp.device.*;
  *   <li>Packet data extraction
  * </ul>
  *
- * <p>This class is used by SSDP components to handle incoming UDP packets containing discovery and
+ * <p>This class is used by {@link SSDP} components to handle incoming UDP packets containing discovery and
  * advertisement messages, providing convenient access to both network information and message
  * content.
  *

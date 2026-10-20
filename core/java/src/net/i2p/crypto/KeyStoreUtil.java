@@ -629,7 +629,7 @@ public final class KeyStoreUtil {
     /**
      * Create a keypair and store it in the keystore at ks, creating it if necessary.
      * <p>
-     * For new code, the createKeysAndCRL() with the SigType argument is recommended over this one,
+     * For new code, the {@link #createKeysAndCRL} with the SigType argument is recommended over this one,
      * as it throws exceptions, and returns the certificate and CRL.
      * <p>
      * Warning, may take a long time.
@@ -718,7 +718,7 @@ public final class KeyStoreUtil {
      * Create a keypair and store it in the keystore at ks, creating it if necessary.
      * <p>
      * This returns the public key, private key, certificate, and CRL in an array.
-     * All of these are Java classes. Keys may be converted to I2P classes with SigUtil.
+     * All of these are Java classes. Keys may be converted to I2P classes with {@link SigUtil}.
      * The private key and selfsigned cert are stored in the keystore.
       * The public key may be derived from the private key with
        * {@link net.i2p.crypto.KeyGenerator#getSigningPublicKey} .

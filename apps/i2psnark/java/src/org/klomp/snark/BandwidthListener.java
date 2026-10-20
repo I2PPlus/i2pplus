@@ -39,7 +39,7 @@ public interface BandwidthListener {
 
     /**
      * Checks if we should send the given number of bytes.
-     * Do NOT call uploaded() if this returns true.
+     * Do NOT call {@link #uploaded} if this returns true.
      *
      * @param size the number of bytes to send
      * @return true if the bytes should be sent, false otherwise

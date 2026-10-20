@@ -193,7 +193,7 @@ public class UDPTransport extends TransportImpl {
     private static final String DEFAULT_PREFER_UDP = "false";
 
     /** Override whether we will change our advertised port no matter what our peers tell us.
-     * See getIsPortFixed() for default behaviour.
+     * See {@link #getIsPortFixed} for default behaviour.
      * Value sourced from {@link Transport#PROP_FIXED_PORT}.
      */
     public static final String PROP_FIXED_PORT = Transport.PROP_FIXED_PORT;
@@ -312,7 +312,7 @@ public class UDPTransport extends TransportImpl {
     private final TransportBid[] _cachedBid;
 
     /**
-     * RI sigtypes supported in 0.9.16, but due to a bug in InboundEstablishState
+     * RI sigtypes supported in 0.9.16, but due to a bug in {@link InboundEstablishState}
      * fixed in 0.9.17, we cannot connect out to routers before that version.
      */
     private static final String MIN_SIGTYPE_VERSION = "0.9.17";
@@ -566,7 +566,7 @@ public class UDPTransport extends TransportImpl {
 
     /**
      * Pick a port if not previously configured, so that TransportManager may
-     * call getRequestedPort() before we've started to get a best-guess of what our
+     * call {@link #getRequestedPort()} before we've started to get a best-guess of what our
      * port is going to be, and pass that to NTCP.
      */
     private void setupPort() {
@@ -3522,7 +3522,7 @@ public class UDPTransport extends TransportImpl {
     /**
      * MIGHT we require introducers?
      * This is like introducersRequired, but if we aren't sure, this returns true.
-     * Used only by EstablishmentManager.
+     * Used only by {@link EstablishmentManager}.
      *
      * @param ipv6 {@code true} to test the IPv6 side of our reachability
      * @return {@code true} if introducers may be required
@@ -4299,7 +4299,7 @@ if (_alive)
 
     /**
      * 1) Merge IPv4 or IPv6 newStatus into the current IPv4+IPv6 status
-     * 2a) If current status changed, call rebuildExternalAddress()
+     * 2a) If current status changed, call {@link #rebuildExternalAddress()}
      * 2b) Otherwise, If we need to retest, call {@link net.i2p.router.transport.udp.PeerTestEvent#forceRunSoon}.
      *
      * @param isIPv6 Is the change an IPv6 change?
@@ -4577,10 +4577,10 @@ if (_alive)
     /**
      * Pick a Bob (if we are Alice) or a Charlie (if we are Bob).
      * <p>
-     * For Bob (as called from PeerTestEvent below), returns an established IPv4/v6 peer.
+     * For Bob (as called from {@link PeerTestEvent} below), returns an established IPv4/v6 peer.
      * While the protocol allows Alice to select an unestablished Bob, we don't support that.
      * <p>
-     * For Charlie (as called from PeerTestManager), returns an established IPv4 or IPv6 peer.
+     * For Charlie (as called from {@link PeerTestManager}), returns an established IPv4 or IPv6 peer.
      * (doesn't matter how Bob and Charlie communicate)
      * <p>
      * Any returned peer must advertise an IPv4 address to prove it is IPv4-capable.

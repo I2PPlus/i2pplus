@@ -34,7 +34,7 @@ class ConnectionDataReceiver implements MessageOutputStream.DataReceiver {
     private static final ByteCache _payloadCache = ByteCache.getInstance(128, Packet.MAX_PAYLOAD_SIZE);
     /**
      * Reusable empty payload -- avoids per-packet ByteArray allocation for ACK-only packets.
-     * Shared across all instances via _dataLock in MessageOutputStream.
+     * Shared across all instances via _dataLock in {@link MessageOutputStream}.
      */
     private static final ByteArray EMPTY_PAYLOAD = new ByteArray(new byte[0]);
 

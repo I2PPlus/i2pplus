@@ -48,7 +48,7 @@ import net.i2p.util.SystemVersion;
  * Kademlia, doesn't stop when no closer keys are available - keeps searching
  * until timeout or maximum search limit is reached.
  * <p>
- * Key differences from FloodOnlySearchJob:
+ * Key differences from {@link FloodOnlySearchJob}:
  * - Chases peers in DSRM immediately rather than waiting
  * - Searches one peer at a time with individual per-search timeouts
  * - Uses total timeout rather than per-search timeouts

@@ -81,7 +81,7 @@ import net.i2p.util.Translate;
  *
  */
 public abstract class TransportImpl implements Transport {
-            /** Timestamp labels for afterSend(), constants so neither costs an allocation. */
+            /** Timestamp labels for {@link #afterSend()}, constants so neither costs an allocation. */
     private static final String AFTER_SEND_SUCCESSFUL = "afterSend(successful)";
     private static final String AFTER_SEND_FAILED = "afterSend(failed)";
 
@@ -673,7 +673,7 @@ public abstract class TransportImpl implements Transport {
 
     /**
      * What addresses are we currently listening to?
-     * Replaces getCurrentAddress().
+     * Replaces {@link #getCurrentAddress}.
      * @return a copy of all addresses, non-null
      * @since IPv6
      */

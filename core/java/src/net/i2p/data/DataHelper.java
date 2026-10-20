@@ -69,10 +69,10 @@ import java.nio.charset.StandardCharsets;
  * </ul>
  * <p><strong>Core Operations:</strong></p>
  * <ul>
- * <li><strong>Primitive I/O:</strong> readLong(), writeLong(), readString(), writeString()</li>
- * <li><strong>Hex:</strong> toHexString(), fromHexString() for display and debugging</li>
- * <li><strong>Properties:</strong> readProperties(), writeProperties() for metadata</li>
- * <li><strong>Collections:</strong> toMap(), toString() for data structures</li>
+ * <li><strong>Primitive I/O:</strong> {@link #readLong}, writeLong(), readString(), writeString()</li>
+ * <li><strong>Hex:</strong> {@link #toHexString}, fromHexString() for display and debugging</li>
+ * <li><strong>Properties:</strong> {@link #readProperties}, writeProperties() for metadata</li>
+ * <li><strong>Collections:</strong> toMap(), {@link #toString()} for data structures</li>
  * </ul>
  * <p><strong>Encoding Support:</strong></p>
  * <ul>
@@ -123,7 +123,7 @@ public class DataHelper {
     /** Utility class. */
     private DataHelper() {}
 
-    /** See storeProps(). 600-750 ms on RPi. */
+    /** See {@link #storeProps()}. 600-750 ms on RPi. */
     private static final boolean SHOULD_SYNC = !(SystemVersion.isAndroid() || SystemVersion.isARM());
 
     /**
@@ -696,7 +696,7 @@ public class DataHelper {
      * Properties from the defaults table of props (if any) are not written out by this method.
      * <p>
      * Leading or trailing whitespace in values is not checked but
-     * will be trimmed by loadProps().
+     * will be trimmed by {@link #loadProps}.
      *
      * @param props properties to store
      * @param file the file to write to
@@ -1536,7 +1536,7 @@ public class DataHelper {
     /**
      * This is different than {@link java.io.InputStream#skip}, in that it
      * does repeated reads until the full amount is skipped.
-     * To fix findbugs issues with skip().
+     * To fix findbugs issues with {@link #skip}.
      * <p>
      * Guaranteed to skip exactly n bytes or throw an IOE.
      * <p>
@@ -1733,7 +1733,7 @@ public class DataHelper {
 
     /**
      * Format a duration in milliseconds to a human-readable string.
-     * NOTE: formatDuration2() recommended in most cases for readability.
+     * NOTE: {@link #formatDuration2} recommended in most cases for readability.
      *
      * @param ms the duration in milliseconds
      * @return a compact string like "5s", "30m", "2h", "3d"
@@ -1761,7 +1761,7 @@ public class DataHelper {
      * 0 is unitless, and the unit is translated.
      * This seems consistent with most style guides out there.
      * Use only in HTML.
-     * Thresholds are a little lower than in formatDuration() also,
+     * Thresholds are a little lower than in {@link #formatDuration} also,
      * as precision is less important in the GUI than in logging.
      * <p>
      * Negative numbers handled correctly.
@@ -1879,12 +1879,12 @@ public class DataHelper {
 
     /**
      * This is binary, i.e. multiples of 1024.
-     * For decimal, see formatSize2Decimal().
+     * For decimal, see {@link #formatSize2Decimal}.
      * <p>
      * Caller should append 'B' or 'b' as appropriate.
      * <p>
      * No space between the number and the letter.
-     * NOTE: formatSize2() recommended in most cases for readability.
+     * NOTE: {@link #formatSize2} recommended in most cases for readability.
      *
      * @param bytes the number of bytes
      * @return e.g. "123.05Ki"
@@ -2288,7 +2288,7 @@ public class DataHelper {
     }
 
     /**
-     * The shared output buffer for decompress().
+     * The shared output buffer for {@link #decompress()}.
      * <p>
      * A holder class rather than a static field of DataHelper, so the lookup is
      * done once and I2PAppContext is still not initialized until the first call.
@@ -2543,7 +2543,7 @@ public class DataHelper {
     }
 
     /**
-     * The shared buffer for copy(), resolved once for the same reason and in the
+     * The shared buffer for {@link #copy()}, resolved once for the same reason and in the
      * same way as {@link DecompressCacheHolder}.
      *
      * @since 0.9.72

@@ -86,7 +86,7 @@ public final class ChaChaCore {
      * Initializes the 64-bit initialization vector in a ChaCha20 block.
      *
      * @param output The output block, which must consist of at
-     *               least 16 words and must have been initialized by initKey256()
+     *               least 16 words and must have been initialized by {@link #initKey256}
      *               or initKey128().
      * @param iv The 64-bit initialization vector value.
      *

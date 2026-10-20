@@ -151,7 +151,7 @@ public class BSkipSpan<K extends Comparable<? super K>, V> extends SkipSpan<K, V
     }
 
     /**
-     * I2P - avoid super.flush()
+     * I2P - avoid super.{@link #flush()}
      */
     private void fflush() {
         if (isKilled) {

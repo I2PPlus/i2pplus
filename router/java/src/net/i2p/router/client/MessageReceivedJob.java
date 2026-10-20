@@ -56,7 +56,7 @@ class MessageReceivedJob extends JobImpl {
     }
 
     /**
-     * Same as runJob() but with a return value.
+     * Same as {@link #runJob()} but with a return value.
      *
      * @return true if the payload was handed over, false if the runner is dead
      * or the send threw

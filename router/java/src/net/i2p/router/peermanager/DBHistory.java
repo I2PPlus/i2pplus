@@ -19,7 +19,7 @@ import net.i2p.util.Log;
  * - Lookup reply quality (new/invalid/duplicate peers)
  * - Store verification success/failure
  * <p>
- * All counters use AtomicLong and timestamps use volatile for
+ * All counters use {@link AtomicLong} and timestamps use volatile for
  * thread-safe access from NetDB message handlers and transport threads.
  * <p><b>Combined responsiveness rate.</b> {@link #getFailedLookupRate} is a
  * single rate covering <em>both</em> lookups and stores: every resolved lookup

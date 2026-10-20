@@ -8,7 +8,7 @@ package net.i2p.router.util;
  * Provides methods for accessing priority levels and
  * sequence numbers required for priority-aware queue operations.
  * <p>
- * Used by CoDelPriorityBlockingQueue to implement
+ * Used by {@link CoDelPriorityBlockingQueue} to implement
  * priority-based packet dropping with per-priority
  * statistics tracking and enhanced delay management.
  *

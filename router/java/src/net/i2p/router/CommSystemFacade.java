@@ -391,7 +391,7 @@ public abstract class CommSystemFacade implements Service {
 
     /**
      * Get all the peers we are connected to.
-     * This should be more efficient than repeated calls to isEstablished()
+     * This should be more efficient than repeated calls to {@link #isEstablished}
      * if you have to check a lot.
      *
      * @return the hashes of all the routers we are connected to, non-null

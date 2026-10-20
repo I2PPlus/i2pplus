@@ -29,7 +29,7 @@ import org.cybergarage.util.Debug;
  *   <li>Network interface binding
  * </ul>
  *
- * <p>This class is used by SSDP components to send discovery messages (M-SEARCH) and receive device
+ * <p>This class is used by {@link SSDP} components to send discovery messages (M-SEARCH) and receive device
  * advertisements (NOTIFY messages) over UDP multicast and unicast communication.
  *
  * @since 1.0
@@ -117,7 +117,7 @@ public class HTTPUSocket {
     /**
      * Return the local address this socket reports.
      *
-     * @return the address set by setLocalAddress(), else the bound address, or "" if closed
+     * @return the address set by {@link #setLocalAddress}, else the bound address, or "" if closed
      */
     public String getLocalAddress() {
         if (0 < localAddr.length()) return localAddr;

@@ -646,7 +646,7 @@ public class LookupService {
     }
 
     /**
-     * Sets the prefix length that last_netmask() reports.
+     * Sets the prefix length that {@link #last_netmask()} reports.
      *
      * @param nm the prefix length in bits, 0-32 for IPv4 or 0-128 for IPv6
      */

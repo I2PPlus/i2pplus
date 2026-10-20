@@ -30,7 +30,7 @@ public interface ClientAppManager {
     public boolean register(ClientApp app);
 
     /**
-     * Unregister with the manager. Name must be the same as that from register().
+     * Unregister with the manager. Name must be the same as that from {@link #register}.
      * Only required for apps used by other apps.
      *
      * @param app non-null

@@ -120,7 +120,7 @@ public class I2CPMessageReader {
 
         /**
          * Notify the listener that an exception was thrown while reading from the given
-         * reader. For most errors, disconnected() will also be called, as of 0.9.41.
+         * reader. For most errors, {@link #disconnected} will also be called, as of 0.9.41.
          *
          * @param reader I2CPMessageReader to notify
          * @param error Exception that was thrown, non-null
@@ -129,7 +129,7 @@ public class I2CPMessageReader {
 
         /**
          * Notify the listener that the stream this reader was reading was
-         * closed. For most errors, readError() will be called first, as of 0.9.41.
+         * closed. For most errors, {@link #readError} will be called first, as of 0.9.41.
          *
          * @param reader I2CPMessageReader to notify
          */

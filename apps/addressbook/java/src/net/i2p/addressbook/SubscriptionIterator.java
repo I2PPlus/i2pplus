@@ -10,7 +10,7 @@ import net.i2p.util.PortMapper;
 /**
  * An iterator over the subscriptions in a SubscriptionList.  Note that this iterator
  * returns AddressBook objects, and not Subscription objects.
- * Yes, the EepGet fetch() is done in here in next().
+ * Yes, the EepGet fetch() is done in here in {@link #next()}.
  *
  */
 class SubscriptionIterator implements Iterator<AddressBook> {
@@ -68,7 +68,7 @@ class SubscriptionIterator implements Iterator<AddressBook> {
     /**
      * Not supported.
      *
-     * @throws UnsupportedOperationException if remove() is called on this iterator
+     * @throws UnsupportedOperationException if {@link #remove()} is called on this iterator
      */
     @Override
     public void remove() {

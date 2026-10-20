@@ -632,7 +632,7 @@ class PeerState implements DataLoader {
     private Request pendingRequest;
 
     /**
-     * Called when a full chunk (i.e. a piece message) has been received by PeerConnectionIn.
+     * Called when a full chunk (i.e. a piece message) has been received by {@link PeerConnectionIn}.
      *
      * <p>This may block quite a while if it is the last chunk for a piece, as it calls the
      * listener, who stores the piece and then calls havePiece for every peer on the torrent

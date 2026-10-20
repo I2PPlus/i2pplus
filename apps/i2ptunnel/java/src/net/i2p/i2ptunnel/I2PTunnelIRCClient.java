@@ -55,7 +55,7 @@ public class I2PTunnelIRCClient extends I2PTunnelClientBase {
      * Create an IRC client on the given local port.
      * <p>
      * Since 0.9.20 this is fast, and does NOT connect the manager to the router,
-     * or open the local socket. You MUST call startRunning() for that.
+     * or open the local socket. You MUST call {@link #startRunning()} for that.
      *
      * @param localPort if 0, use any port, get actual port selected with getLocalPort()
      * @param destinations peers we target, comma- or space-separated. Since 0.9.9, each dest may be appended with :port

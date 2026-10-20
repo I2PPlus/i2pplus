@@ -21,7 +21,7 @@ import net.i2p.data.router.RouterInfo;
  * <p>
  * This is the top-level container for a GarlicMessage's cloves, their delivery
  * instructions, and the recipient's encryption key. Individual clove payloads
- * are represented by PayloadGarlicConfig.
+ * are represented by {@link PayloadGarlicConfig}.
  * <p>
  * Despite the name, instances of this class hold the actual clove references,
  * not just configuration metadata.
@@ -38,7 +38,7 @@ class GarlicConfig {
     /**
      * Creates a new GarlicConfig.
      *
-     * @param cert the certificate, as carried into getCertificate()
+     * @param cert the certificate, as carried into {@link #getCertificate()}
      * @param id the unique ID
      * @param expiration the expiration time
      * @param di the delivery instructions
@@ -100,7 +100,7 @@ class GarlicConfig {
     public PublicKey getRecipientPublicKey() { return _recipientPublicKey; }
 
     /**
-     * Certificate for the getRecipient() to pay for their processing.
+     * Certificate for the {@link #getRecipient()} to pay for their processing.
      *
      * @return the certificate passed to the constructor, possibly null
      */
@@ -161,7 +161,7 @@ class GarlicConfig {
     public void clearCloves() { _cloveConfigs.clear(); }
 
     /**
-     * The sub-data included in the toString() output.
+     * The sub-data included in the {@link #toString()} output.
      *
      * @return sub-data string
      */

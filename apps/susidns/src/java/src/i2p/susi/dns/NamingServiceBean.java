@@ -58,7 +58,7 @@ public class NamingServiceBean extends AddressbookBean {
     private int filteredCount;
     private AddressBean[] fullFilteredEntries;
 
-    /** True when the last load applied skip/limit server-side; total is then totalSize(). */
+    /** True when the last load applied skip/limit server-side; total is then {@link #totalSize()}. */
     private boolean _serverPaginated;
     /** How long a cached addressbook load or book size is reused before the naming service is re-queried. */
     private static final long CACHE_TTL = 60*1000;

@@ -18,7 +18,7 @@ import org.klomp.snark.bencode.InvalidBEncodingException;
  * Store the address information about a peer. Prior to 0.8.1, an instantiation required a peer ID,
  * and full Destination address. Starting with 0.8.1, to support compact tracker responses, a PeerID
  * can be instantiated with a Destination Hash alone. The full destination lookup is deferred until
- * getAddress() is called, and the PeerID is not required. Equality is now determined solely by the
+ * {@link #getAddress()} is called, and the PeerID is not required. Equality is now determined solely by the
  * dest hash.
  */
 public class PeerID implements Comparable<PeerID> {

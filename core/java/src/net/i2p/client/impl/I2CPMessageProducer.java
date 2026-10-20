@@ -320,7 +320,7 @@ class I2CPMessageProducer {
      * <p>
      * Blocking so this could be very bad for retransmissions,
      * as it could clog StreamingTimer.
-     * Waits are somewhat "fair" using ReentrantLock.
+     * Waits are somewhat "fair" using {@link ReentrantLock}.
      * While out-of-order transmission is acceptable, fairness
      * reduces the chance of starvation. ReentrantLock does not
      * guarantee in-order execution due to thread priority issues,

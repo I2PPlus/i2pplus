@@ -121,7 +121,7 @@ public class RrdSyncThreadPool {
      * @param initialDelay the wait before the first run
      * @param delay the wait between the end of one run and the start of the next
      * @param unit the time unit the two delays are expressed in
-     * @return the handle for the scheduled task, which is cancelled by shutdown()
+     * @return the handle for the scheduled task, which is cancelled by {@link #shutdown()}
      */
     ScheduledFuture<?> scheduleWithFixedDelay(
             Runnable command, long initialDelay, long delay, TimeUnit unit) {

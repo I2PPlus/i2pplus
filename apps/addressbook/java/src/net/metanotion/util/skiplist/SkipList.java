@@ -83,7 +83,7 @@ public class SkipList<K extends Comparable<? super K>, V> implements Flushable, 
      * Choose the column height for a newly inserted node, using the geometric
      * distribution that keeps the list's search cost logarithmic.
      *
-     * @return 0..maxLevels(), each successive one with probability 1 / P
+     * @return 0..{@link #maxLevels()}, each successive one with probability 1 / P
      */
     public int generateColHeight() {
         int bits = rng.nextInt();

@@ -24,9 +24,9 @@ final class SSU2Header {
      * inbound datagram on the UDP handle threads.
      * <p>
      * Safe because a trial-decrypted Header never escapes the calling method:
-     * acceptTrialDecrypt() copies the bytes into the packet, and no caller
+     * {@link #acceptTrialDecrypt()} copies the bytes into the packet, and no caller
      * stores the Header. One scratch per header size, because {@link net.i2p.router.transport.udp.Header#toString}
-     * and getEphemeralKey() infer the header type from the array length, and
+     * and {@link #getEphemeralKey()} infer the header type from the array length, and
      * because PacketHandler may hold a handshake header while falling back to
      * a long-header decrypt of the same packet.
      *
@@ -36,7 +36,7 @@ final class SSU2Header {
         final Header session = new Header(SESSION_HEADER_SIZE);
         final Header longHdr = new Header(LONG_HEADER_SIZE);
         final Header shortHdr = new Header(SHORT_HEADER_SIZE);
-        /** Reused by decryptDestConnID(), decryptShortHeader(), encryptShortHeader(). */
+        /** Reused by {@link #decryptDestConnID()}, decryptShortHeader(), encryptShortHeader(). */
         final byte[] xor = new byte[HEADER_PROT_DATA_LEN];
     }
 

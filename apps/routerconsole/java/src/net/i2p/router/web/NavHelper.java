@@ -82,7 +82,7 @@ public class NavHelper implements NavService, ClientApp {
 
 
     /**
-     * Translated string is loaded by PluginStarter.
+     * Translated string is loaded by {@link PluginStarter}.
      * @return map of translated name to HTML string, or null if none
      */
     public Map<String, String> getClientAppLinks() {

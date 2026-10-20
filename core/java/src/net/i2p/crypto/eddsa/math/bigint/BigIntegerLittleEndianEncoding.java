@@ -8,7 +8,7 @@ import java.io.Serializable;
 import java.math.BigInteger;
 
 /**
- * Little-endian encoding implementation for EdDSA field elements using BigInteger.
+ * Little-endian encoding implementation for EdDSA field elements using {@link BigInteger}.
  * <p>
  * This class provides encoding and decoding operations for EdDSA field elements,
  * converting between BigInteger values and their little-endian byte representations.

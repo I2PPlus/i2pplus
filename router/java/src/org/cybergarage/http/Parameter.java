@@ -6,7 +6,7 @@
 package org.cybergarage.http;
 
 /**
- * Represents a name-value parameter pair used in HTTP requests and responses. This class provides a
+ * Represents a name-value parameter pair used in {@link HTTP} requests and responses. This class provides a
  * simple container for storing parameter names and their corresponding values, commonly used for
  * query parameters, form data, and HTTP headers.
  */

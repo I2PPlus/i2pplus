@@ -334,8 +334,8 @@ class BanlistRenderer {
     }
 
     /**
-     * Render the compact banlist table; both renderBanlistCompact() and
-     * renderBanlistFragment() delegate here.
+     * Render the compact banlist table; both {@link #renderBanlistCompact()} and
+     * {@link #renderBanlistFragment()} delegate here.
      *
      * @param out the writer to render to
      * @param fragmentKeys when true, emit only the tbody with data-key rows

@@ -184,7 +184,7 @@ public class Banlist {
     private static final int BAN_COUNT_HIGH = 8000;
 
     /**
-     * A ban that expires after this will return true in isBanlistedForever().
+     * A ban that expires after this will return true in {@link #isBanlistedForever()}.
      * In the transports, "forever" is treated as a hard ban, and both
      * inbound and outbound connections will be rejected.
      * Not-forever is treated as a soft ban, with outbound rejected
@@ -399,7 +399,7 @@ public class Banlist {
      * '!'. A router matches when it carries every required character and
      * none of the excluded ones. A pattern with an empty required part can
      * never match, so a bare exclusion cannot ban the entire network.
-     * Case-sensitive: see shouldBanlistByCapability().
+     * Case-sensitive: see {@link #shouldBanlistByCapability}.
      *
      * @param capabilities router capabilities string, may be null
      * @param patternsStr configured patterns, may be null or empty

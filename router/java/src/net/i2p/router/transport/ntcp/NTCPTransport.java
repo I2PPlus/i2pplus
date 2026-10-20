@@ -217,7 +217,7 @@ public class NTCPTransport extends TransportImpl {
 
     /**
      * Registers the NTCP rate statistics and loads or creates the NTCP2 static
-     * keys; nothing is started until startListening().
+     * keys; nothing is started until {@link #startListening()}.
      *
      * @param ctx the router context
      * @param xdh null to disable NTCP2
@@ -499,7 +499,7 @@ public class NTCPTransport extends TransportImpl {
     }
 
     /**
-     * Extract IP:port from RouterInfo for NTCP transport.
+     * Extract IP:port from {@link RouterInfo} for NTCP transport.
      * @return the IP port from router info
      */
     private String getIPPortFromRouterInfo(RouterInfo ri) {
@@ -1492,7 +1492,7 @@ public int getEstimatedRTT(Hash peer) {
     }
 
     /**
-     * Only called by externalAddressReceived().
+     * Only called by {@link #externalAddressReceived()}.
      * Calls replaceAddress() or removeAddress().
      * To remove all addresses, call replaceAddress(null) directly.
      * <p>
@@ -1889,7 +1889,7 @@ public int getEstimatedRTT(Hash peer) {
      * This only creates an address if the hostname AND port are set in {@code router.config},
      * which should be rare.
      * Otherwise, notifyReplaceAddress() below takes care of it.
-     * Note this is only called from startListening() via configureLocalAddress().
+     * Note this is only called from startListening() via {@link #configureLocalAddress()}.
      * Unlike in UDP rebuildExternalAddress(), this only runs once, at startup,
      * so we won't pick up IP changes.
      * Only returns non-null if port is configured.
@@ -2001,7 +2001,7 @@ public int getEstimatedRTT(Hash peer) {
     /**
      * Single configured IP (as a String) or null if not configured or invalid.
      * Resolves a hostname to an IP.
-     * Called at startup via createNTCPAddress() and later via externalAddressReceived().
+     * Called at startup via {@link #createNTCPAddress()} and later via externalAddressReceived().
      *
      * @return the configured IP
      * @since 0.9.32
@@ -2742,8 +2742,8 @@ public int getEstimatedRTT(Hash peer) {
     }
 
     /**
-     * This doesn't (completely) block, caller should check isAlive()
-     * before calling startListening() or restartListening().
+     * This doesn't (completely) block, caller should check {@link #isAlive()}
+     * before calling startListening() or {@link #restartListening}.
      */
     public synchronized void stopListening() {
         if (_log.shouldWarn()) _log.warn("Stopping NTCP transport...");

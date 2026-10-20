@@ -9,7 +9,7 @@ public interface UPnPScannerCallback {
 
     /**
      * Called before a SSDP search begins.
-     * This may be called more than once before afterScan()
+     * This may be called more than once before {@link #afterScan()}
      * if there are multiple searches in parallel.
      */
     public void beforeScan();

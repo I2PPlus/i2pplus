@@ -31,7 +31,7 @@ import java.nio.charset.StandardCharsets;
  */
 public class USN {
     /**
-     * The USN constants and the isRootDevice() test below are static, so an instance
+     * The USN constants and the {@link #isRootDevice} test below are static, so an instance
      * carries nothing.
      */
     public USN() {}

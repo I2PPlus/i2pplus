@@ -12,7 +12,7 @@ import java.util.Map;
 class TrustedPluginKeys {
 
     /**
-     * The signer list is static and getKeys() rebuilds the map on every call, so an
+     * The signer list is static and {@link #getKeys()} rebuilds the map on every call, so an
      * instance carries nothing.
      */
     TrustedPluginKeys() {}

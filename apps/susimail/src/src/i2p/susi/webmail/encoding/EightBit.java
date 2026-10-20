@@ -8,7 +8,7 @@ import java.io.InputStream;
 import net.i2p.data.DataHelper;
 
 /**
- * Decode only. See encode().
+ * Decode only. See {@link #encode}.
  */
 public class EightBit extends Encoding {
 

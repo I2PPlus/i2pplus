@@ -15,7 +15,7 @@ import net.i2p.util.SimpleTimer2;
  *
  * Every SAMPLE_INTERVAL_MS, snapshots the cumulative traffic counters (peer wire
  * rates summed over torrents, datagram counters fed by DatagramSender and the
- * receive paths, HTTP tracker counters fed by I2PSnarkUtil) and stores per-interval
+ * receive paths, HTTP tracker counters fed by {@link I2PSnarkUtil}) and stores per-interval
  * byte totals in a fixed ring. Runs for the webapp's lifetime, independent of any
  * browser being open, so the graph stays continuous.
  *

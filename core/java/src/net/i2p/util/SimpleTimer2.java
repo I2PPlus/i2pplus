@@ -12,11 +12,11 @@ import java.util.concurrent.atomic.AtomicLong;
 import net.i2p.I2PAppContext;
 
 /**
- * Scheduled event executor backed by ScheduledThreadPoolExecutor.
+ * Scheduled event executor backed by {@link ScheduledThreadPoolExecutor}.
  * Replaces the legacy SimpleTimer (deleted; had lock contention issues).
  * Supports cancel and reschedule. Events must NOT block.
  * <p>
- * All timer events should extend TimedEvent and use schedule()/cancel() directly.
+ * All timer events should extend TimedEvent and use {@link #schedule}/cancel() directly.
  * <p>
  * A saturation watchdog samples this pool from a thread of its own and warns
  * when every worker has stayed occupied with a backlog behind it: a
@@ -636,7 +636,7 @@ public class SimpleTimer2 {
 
         /**
          * Take one sample and act on it. All the executor counters are safe to
-         * read after shutdown, so a sample racing stop() degrades to reporting
+         * read after shutdown, so a sample racing {@link #stop()} degrades to reporting
          * nothing rather than throwing.
          */
         private void sample() {
@@ -866,12 +866,12 @@ public class SimpleTimer2 {
 
 
     /**
-     * Base class for timer events. Extend this and use schedule()/cancel()
+     * Base class for timer events. Extend this and use schedule()/{@link #cancel()}
      * directly instead of going through SimpleTimer2.
      * <p>
      * Synchronization is on this to avoid queue duplicates.
      * schedule() is idempotent if already scheduled.
-     * reschedule() and forceReschedule() replace the existing timer.
+     * reschedule() and {@link #forceReschedule} replace the existing timer.
      */
     public static abstract class TimedEvent implements Runnable {
         private Log _log;
@@ -901,7 +901,7 @@ public class SimpleTimer2 {
 
         /**
          * Create a new timed event without scheduling.
-         * Pool is set later via setPool() or addEvent().
+         * Pool is set later via {@link #setPool} or addEvent().
          *
          * @since 0.9.70+
          */
@@ -944,7 +944,7 @@ public class SimpleTimer2 {
 
         /**
          * Timer pool for this event. Must be called before schedule() for events created
-         * via the no-arg constructor. Called automatically by addEvent()/addPeriodicEvent().
+         * via the no-arg constructor. Called automatically by {@link #addEvent}/addPeriodicEvent().
          * Not thread-safe to call concurrently with schedule() or cancel().
          *
          * @param pool the timer pool

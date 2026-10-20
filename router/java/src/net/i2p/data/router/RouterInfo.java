@@ -44,7 +44,7 @@ import net.i2p.util.OrderedProperties;
  * provides to trusted peers.
  * <p>
  * For efficiency, the methods and structures here are now unsynchronized.
- * Initialize the RI with readBytes(), or call the setters and then sign() in a single thread.
+ * Initialize the RI with {@link #readBytes}, or call the setters and then sign() in a single thread.
  * Don't change it after that.
  * <p>
  * To ensure integrity of the RouterInfo, methods that change an element of the
@@ -216,7 +216,7 @@ public class RouterInfo extends DatabaseEntry {
 
     /**
      * Return the number of router addresses.
-     * More efficient than getAddresses().size().
+     * More efficient than {@link #getAddresses()}.size().
      *
      * @return the address count
      * @since 0.9.27
@@ -288,7 +288,7 @@ public class RouterInfo extends DatabaseEntry {
 
     /**
      * Retrieve a set of options or statistics that the router can expose.
-     * Prefer getOptionsMap() for an unmodifiable view.
+     * Prefer {@link #getOptionsMap()} for an unmodifiable view.
      *
      * @return sorted, non-null, NOT a copy, do not modify!!!
      */
@@ -509,7 +509,7 @@ public class RouterInfo extends DatabaseEntry {
 
     /**
      * Pull the first workable target address for the given transport.
-     * Use to check for any address. For all addresses, use getTargetAddresses(),
+     * Use to check for any address. For all addresses, use {@link #getTargetAddresses},
      * which you probably want if you care about IPv6.
      * @param transportStyle the transport style to match, e.g. NTCP2 or SSU2
      * @return the target address, or null if this router advertises none for that style

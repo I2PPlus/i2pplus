@@ -49,7 +49,7 @@ public class ByteArrayStream extends ByteArrayOutputStream {
     /**
      *  Returns the byte array containing the written data.
      *  Zero-copy only if the data fills the buffer.
-     *  Use asInputStream() for guaranteed zero-copy.
+     *  Use {@link #asInputStream()} for guaranteed zero-copy.
      *
      * @return the byte array containing the written data
      */

@@ -10,7 +10,7 @@ import net.i2p.data.DataHelper;
  */
 class InverseCapacityComparator implements Comparator<PeerProfile>, Serializable {
     /**
-     * Constructor. The ordering is read from the two profiles passed to compare()
+     * Constructor. The ordering is read from the two profiles passed to {@link #compare}
      * and is fully determined, so an instance holds no state.
      */
     InverseCapacityComparator() {}

@@ -63,7 +63,7 @@ public class I2PTunnelConnectClient extends I2PTunnelHTTPClientBase implements R
      * Create an HTTPS proxy tunnel for connecting out to arbitrary destinations,
      * with optional outproxy chaining.
      * As of 0.9.20 this is fast, and does NOT connect the manager to the router,
-     * or open the local socket. You MUST call startRunning() for that.
+     * or open the local socket. You MUST call {@link #startRunning()} for that.
      *
      * @param localPort the local port to bind to
      * @param l the Logging instance this tunnel's status messages are sent to

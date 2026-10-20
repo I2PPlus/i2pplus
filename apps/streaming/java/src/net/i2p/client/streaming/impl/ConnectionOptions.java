@@ -41,7 +41,7 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
     /** Min rtt. Unknown until the first sample: seeding the floor with a
      * guess (e.g. the initial RTT) would fabricate a minimum on any path whose
      * real floor is higher, and _minRtt feeds the bandwidth-derived ssthresh
-     * floor. Like mainline: Integer.MAX_VALUE until updateRTT() narrows it. */
+     * floor. Like mainline: Integer.MAX_VALUE until {@link #updateRTT()} narrows it. */
     private volatile int _minRtt = Integer.MAX_VALUE;
     /** Rtt deviation. */
     private volatile int _rttDeviation;
@@ -341,7 +341,7 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
      * Per-tunnel cap on concurrent streams; a manager's effective cap is
      * the min of this and the Tuner override.
      *
-     * @since 0.9.3 moved from I2PSocketManagerFull.
+     * @since 0.9.3 moved from {@link I2PSocketManagerFull}.
      */
     public static final String PROP_MAX_STREAMS = "i2p.streaming.maxConcurrentStreams";
 
@@ -760,7 +760,7 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
 
     /**
      * Copy all local (streaming-specific) options from opts.
-     * Note: getMaxWindowSize() returns the effective value (clamped by the
+     * Note: {@link #getMaxWindowSize()} returns the effective value (clamped by the
      * Tuner global), so copying that would pin the destination's window down-
      * only if the global ever decreased. Copy the raw configured value instead
      * so a later Tuner re-enable propagates to this connection.
@@ -832,7 +832,7 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
 
     /**
      * Apply properties from opts. When onlyIfSet is true, only properties
-     * explicitly present in opts are applied (used by setProperties()).
+     * explicitly present in opts are applied (used by {@link #setProperties()}).
      * When false, defaults are applied for missing properties (used by constructors).
      *
      * @param opts properties to read from, ignored when null
@@ -1071,7 +1071,7 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
      * lets a stale outlier pin steady-state RTT at the ceiling, which in turn
      * pins RTO at its max and locks the recovery cadence. Single samples are
      * already clamped at ingestion (see {@link #updateRTT(int)}), and RTO is
-     * independently bounded by computeRTO(), so the smoothed value tracks the
+     * independently bounded by {@link #computeRTO()}, so the smoothed value tracks the
      * path honestly.
      *
      * @param ms new RTT value in ms

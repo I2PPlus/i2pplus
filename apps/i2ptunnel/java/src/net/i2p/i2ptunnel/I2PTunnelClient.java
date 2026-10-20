@@ -54,7 +54,7 @@ public class I2PTunnelClient extends I2PTunnelClientBase {
      * Create a standard client tunnel listening on localPort, forwarding to the
      * given destinations.
      * As of 0.9.20 this is fast, and does NOT connect the manager to the router,
-     * or open the local socket. You MUST call startRunning() for that.
+     * or open the local socket. You MUST call {@link #startRunning()} for that.
      *
      * @param localPort if 0, use any port, get actual port selected with getLocalPort()
      * @param destinations peers we target, comma- or space-separated. Since 0.9.9, each dest may be appended with :port

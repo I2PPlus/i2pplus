@@ -32,7 +32,7 @@ import java.security.SecureRandom;
  * call the hashpw method with a random salt, like this:
  * <p>
  * <code>
- * String pw_hash = BCrypt.hashpw(plain_password, BCrypt.gensalt());
+ * String pw_hash = BCrypt.hashpw(plain_password, BCrypt.{@link #gensalt()});
  * </code>
  * <p>
  * To check whether a plaintext password matches one that has been
@@ -62,7 +62,7 @@ import java.security.SecureRandom;
 public class BCrypt {
 	/**
 	 * Constructor. The instance holds only the per-hash key schedule,
-	 * which init_key() copies from the constant P_orig and S_orig tables.
+	 * which {@link #init_key()} copies from the constant P_orig and S_orig tables.
 	 */
 	public BCrypt() {}
 
@@ -709,7 +709,7 @@ public class BCrypt {
 	}
 
 	/**
-	 * Generate a salt for use with the BCrypt.hashpw() method
+	 * Generate a salt for use with the BCrypt.{@link #hashpw} method
 	 * @param log_rounds	the log2 of the number of rounds of
 	 *                   hashing to apply - the work factor therefore increases as
 	 *                   2**log_rounds.

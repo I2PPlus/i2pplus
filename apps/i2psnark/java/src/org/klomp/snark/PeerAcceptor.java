@@ -20,7 +20,7 @@ import net.i2p.data.DataHelper;
 import net.i2p.util.Log;
 
 /**
- * Accepts incoming connections from peers. The ConnectionAcceptor will call the connection()
+ * Accepts incoming connections from peers. The ConnectionAcceptor will call the {@link #connection}
  * method when it detects an incoming BT protocol connection. The PeerAcceptor will then create a
  * new peer if the PeerCoordinator wants more peers.
  */

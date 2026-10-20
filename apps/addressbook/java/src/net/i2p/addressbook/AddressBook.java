@@ -69,8 +69,8 @@ class AddressBook implements Iterable<Map.Entry<String, HostTxtEntry>> {
      * Yes, the EepGet fetch() is done in this constructor.
      * <p>
      * This stores the subscription in a temporary file and does not read the whole thing into memory.
-     * An AddressBook created with this constructor may not be modified or written using write().
-     * It may be a merge source (an parameter for another AddressBook's merge())
+     * An AddressBook created with this constructor may not be modified or written using {@link #write()}.
+     * It may be a merge source (an parameter for another AddressBook's {@link #merge})
      * but may not be a merge target (this.merge() will throw an exception).
      *
      * @param subscription A Subscription instance pointing at a remote address book.

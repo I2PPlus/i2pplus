@@ -120,7 +120,7 @@ public final class SHA256Generator {
     /**
      * Check out a SHA-256 MessageDigest, reset and ready to use.
      * <p>
-     * For uses where the one-shot calculateHash() would require copying the
+     * For uses where the one-shot {@link #calculateHash} would require copying the
      * data. Hand it back via {@link #release(MessageDigest)} when done. A
      * MessageDigest is not thread-safe and must not be shared, so a caller
      * holding two at once must have checked out two.

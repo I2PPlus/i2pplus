@@ -34,7 +34,7 @@ import net.i2p.router.networkdb.kademlia.PersistentDataStore;
 import net.i2p.util.Log;
 
 /**
- * Run once or twice at startup by StartupJob,
+ * Run once or twice at startup by {@link StartupJob},
  * and then runs BootCommSystemJob.
  */
 class LoadRouterInfoJob extends JobImpl {

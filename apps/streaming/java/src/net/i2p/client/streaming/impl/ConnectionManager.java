@@ -65,7 +65,7 @@ class ConnectionManager {
     private static final Object DUMMY = new Object();
 
     /**
-     * Lock for interruptible cooldown wait in connect() — notified on shutdown.
+     * Lock for interruptible cooldown wait in {@link #connect()} — notified on shutdown.
      */
     private final Object _cooldownLock = new Object();
 
@@ -220,7 +220,7 @@ class ConnectionManager {
     /**
      * Temporary bans keyed by destination hash -> bannedUntil epoch ms.
      * Autoban hammering dests for 24h (or {@code i2p.streaming.tempBanMinutes}).
-     * Enforced in shouldRejectConnection() before the port/budget counters so a
+     * Enforced in {@link #shouldRejectConnection()} before the port/budget counters so a
      * banned dest no longer consumes its per-dest budget or per-peer throttlers.
      * Expired entries
      * are removed by BanExpiry. @since 0.9.71+.
@@ -281,7 +281,7 @@ class ConnectionManager {
     /**
      * Admission barrier: readers hold it across a whole reserve-to-bind span
      * (tryReserveStream through assignReceiveStreamId) so a reservation can
-     * never straddle disconnectAllHard()'s ledger clear. Without the barrier
+     * never straddle {@link #disconnectAllHard()}'s ledger clear. Without the barrier
      * a SYN admitted mid-clear would bind a token against an erased count and
      * its teardown would then decrement a DIFFERENT stream's fresh count.
      * The write side wraps only the hard-disconnect loop and the clears, so
@@ -293,7 +293,7 @@ class ConnectionManager {
     /**
      * The sweeper owned by this manager. Held so {@link #shutdown} can stop
      * it: a fired-and-cancelled TimedEvent would otherwise re-arm itself from
-     * inside timeReached(), outliving the manager it reads. @since 0.9.71+.
+     * inside {@link #timeReached()}, outliving the manager it reads. @since 0.9.71+.
      */
     private volatile BanExpiry _banExpiry;
 
@@ -735,7 +735,7 @@ class ConnectionManager {
      * here for a connection whose slot was already returned (a hard-disconnect
      * sweep racing an async teardown, or a teardown after the sweeper
      * released it), and the peer fallback would then decrement a DIFFERENT
-     * stream's count. The claim is re-armed by assignReceiveStreamId() when a
+     * stream's count. The claim is re-armed by {@link #assignReceiveStreamId()} when a
      * pooled connection starts a new generation.
      *
      * @param con the connection leaving the manager, non-null
@@ -1046,7 +1046,7 @@ class ConnectionManager {
      * distinct window inside the strike window: leave the original strike in
      * place (the ban supersedes further strikes), return true.
      * <p>Autoban is re-checked live here (the callers already gate
-     * checkSynBurst() on a per-SYN snapshot): if enforcement is switched off
+     * {@link #checkSynBurst()} on a per-SYN snapshot): if enforcement is switched off
      * between the trip and this record, no strike may be stored, or the map
      * would keep evidence recorded under a policy the operator has since
      * disabled. Callers' snapshot decides BAN for the trip in flight; this
@@ -1736,7 +1736,7 @@ class ConnectionManager {
      *
      * @param con null if unknown
      * @param ping Ping packet to process, must have From and Sig fields,
-     * with signature already verified, only if answerPings() returned true
+     * with signature already verified, only if {@link #answerPings()} returned true
      * @return true if we sent a pong
      * @since 0.9.12 from {@code PacketHandler.receivePing()}
      */
@@ -1803,7 +1803,7 @@ class ConnectionManager {
      * @param con the connection to assign an ID to
      * @param destHash the remote dest whose budget admitted this stream; the
      *                 reservation token for the new ID points here
-     * @since 0.9.12 consolidated from receiveConnection() and connect();
+     * @since 0.9.12 consolidated from {@link #receiveConnection()} and connect();
      *        destHash added 0.9.71+ for reservation binding
      */
     private void assignReceiveStreamId(Connection con, Hash destHash) {
@@ -2120,7 +2120,7 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
         /**
          * Record a rejection reason that logs at WARN on every occurrence.
          *
-         * @param text text recorded as the reason and returned by toString()
+         * @param text text recorded as the reason and returned by {@link #toString()}
          * @param secs seconds for the Retry-After header
          */
         public Reason(String text, int secs) {
@@ -2481,7 +2481,7 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
 
     /**
      * Return a connection to the pool if healthy.
-     * Called from removeConnection().
+     * Called from {@link #removeConnection()}.
      */
     private void returnToPool(Connection con) {
         if (!isPoolEnabled())

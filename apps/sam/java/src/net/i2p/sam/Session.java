@@ -3,7 +3,7 @@ package net.i2p.sam;
 /**
  * A V3 session.
  *
- * @since 0.9.25 moved from SAMv3Handler
+ * @since 0.9.25 moved from {@link SAMv3Handler}
  */
 interface Session extends SAMMessageSess {
 	/**

@@ -18,7 +18,7 @@ import java.util.Set;
 
 /**
  * Abstract base class for peer selection in Kademlia routing tables.
- * <p>All peer selection logic is implemented in FloodfillPeerSelector.
+ * <p>All peer selection logic is implemented in {@link FloodfillPeerSelector}.
  * This class only provides common constructor and logging functionality.</p>
  */
 abstract class PeerSelector {

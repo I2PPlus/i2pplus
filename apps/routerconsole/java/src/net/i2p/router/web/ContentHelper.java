@@ -12,8 +12,8 @@ public class ContentHelper extends HelperBase {
 
     /**
      *  Constructor, used by the console to build the bean before the setters
-     *  below populate it. Nothing is selected until setPage() supplies a file,
-     *  and getContent() has nothing to read before that.
+     *  below populate it. Nothing is selected until {@link #setPage} supplies a file,
+     *  and {@link #getContent()} has nothing to read before that.
      */
     public ContentHelper() {}
 
@@ -29,7 +29,7 @@ public class ContentHelper extends HelperBase {
      * Caution, use absolute paths only, do not assume files are in CWD.
      *
      * @param page the absolute path of the content file to include, resolved by
-     * filename() to a localized variant such as file_lang.ext when one exists
+     * {@link #filename()} to a localized variant such as file_lang.ext when one exists
      */
     public void setPage(String page) { _page = page; }
     /**
@@ -44,7 +44,7 @@ public class ContentHelper extends HelperBase {
     /**
      *  Bean property setter, intentionally a no-op. An earlier version
      *  persisted the language here for the desktopgui, but that bypassed the
-     *  CSRF nonce check; language is now handled by CSSHelper.
+     *  CSRF nonce check; language is now handled by {@link CSSHelper}.
      *
      * @param l the requested language, accepted so the bean property keeps
      *          working but discarded

@@ -70,7 +70,7 @@ import net.i2p.util.VersionComparator;
  * <p>
  * Provides core network database functionality using Kademlia DHT for peer discovery,
  * routing table management, and data storage/lookup operations.
- * Never instantiated directly; see FloodfillNetworkDatabaseFacade.
+ * Never instantiated directly; see {@link FloodfillNetworkDatabaseFacade}.
  */
 public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacade {
     /** Pattern.compile. */
@@ -176,7 +176,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
 
     /**
      * Pending set for batch deduplication — a hash is in this set iff it is in the
-     * batch queue or being processed. Prevents duplicate entries under rapid publish() calls.
+     * batch queue or being processed. Prevents duplicate entries under rapid {@link #publish()} calls.
      */
     private final Set<Hash> _batchRepublishPending = ConcurrentHashMap.newKeySet(16);
 
@@ -256,7 +256,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
 
     /**
      * Limits for accepting a dbStore of a router (unless we don't know anyone or just started up) -- see
-      * validate() below.
+      * {@link #validate()} below.
      */
     private static final long ROUTER_INFO_EXPIRATION = 36*60*60*1000L;
     /** Minimum RouterInfo expiration time in ms. */
@@ -553,7 +553,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      * For the main DB only.
      * Sub DBs are not persisted and must not access this directory.
      *
-     * @return null before startup() is called; non-null thereafter, even for subdbs.
+     * @return null before {@link #startup()} is called; non-null thereafter, even for subdbs.
      */
     String getDbDir() {return _dbDir;}
 
@@ -893,7 +893,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
 
     /**
      * Lookup using the client's tunnels
-     * Use lookupDestination() if you don't need the LS or don't need it validated.
+     * Use {@link #lookupDestination} if you don't need the LS or don't need it validated.
      * <p>A negative-cached key is not searched again: the failure job is run
      * instead. A client sub-NetDb local miss for a destination this router
      * hosts also fails without a search, since only the main NetDb holds such
@@ -1153,7 +1153,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      * Succeeds even if LS validation and store fails due to unsupported sig type, expired, etc.
      * <p>
      * Note that there are not separate success and fail jobs. Caller must call
-     * lookupDestinationLocally() in the job to determine success.
+     * {@link #lookupDestinationLocally} in the job to determine success.
      * <p>The finished job is also run, without any search, if the router is
      * uninitialized or the key is negative-cached.
      *
@@ -1249,7 +1249,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
 
     /**
      * Look up a RouterInfo by hash, performing a network search if not locally cached.
-     * Unlike lookupRouterInfo() which calls onFailedLookupJob immediately for unknown
+     * Unlike {@link #lookupRouterInfo} which calls onFailedLookupJob immediately for unknown
      * routers, this method schedules an IterativeSearchJob when the RI is absent from
      * the local netdb. The caller should provide a timeoutMs shorter than the acceptable
      * delay (typical: 8-15 seconds).
@@ -1257,7 +1257,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      * The onFindJob fires when the RI is available locally (either it was already present
      * or the search completed). The onFailedLookupJob fires on search timeout or failure.
      * <p>
-     * Caller must clean up via removeRouterInfo() after extracting the needed data.
+     * Caller must clean up via {@link #removeRouterInfo} after extracting the needed data.
      *
      * @param key the Router hash to look up
      * @param onFindJob run when RI is local (may be null)
@@ -1545,7 +1545,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      * This will return immediately with the result or null.
      * However, this may still fire off a lookup if the RI is present but expired (and will return null).
      * This may result in deadlocks.
-     * For true local only, use lookupLocallyWithoutValidation().
+     * For true local only, use {@link #lookupLocallyWithoutValidation}.
      *
      * @return null always for client dbs
      */
@@ -3039,7 +3039,7 @@ return false;
     /**
      * Policy entry point for peers learned from search replies, where no
      * RouterInfo is in hand yet: direct-contact gate only. The diversity
-     * check runs when the RI lands via store(). Rejected peers are queued
+     * check runs when the RI lands via {@link #store}. Rejected peers are queued
      * and probed/promoted by the ProbeStalePeerJob cycle.
      *
      * @param key the peer hash
@@ -3800,7 +3800,7 @@ return false;
     }
 
     /**
-     * Number of RouterInfo files stored on disk, if using PersistentDataStore.
+     * Number of RouterInfo files stored on disk, if using {@link PersistentDataStore}.
      *
      * @return number of RIs on disk, or 0 if not using persistent storage
      */

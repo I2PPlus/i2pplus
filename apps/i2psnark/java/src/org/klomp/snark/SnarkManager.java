@@ -95,7 +95,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
 
     /**
      * Map of (canonical) filename of the .torrent file to Snark instance. This is a CHM so
-     * listTorrentFiles() need not be synced, but all adds, deletes, and the DirMonitor should sync
+     * {@link #listTorrentFiles()} need not be synced, but all adds, deletes, and the DirMonitor should sync
      * on it.
      */
     private final Map<String, Snark> _snarks;
@@ -2070,7 +2070,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     }
 
     /**
-     * Call from DirMonitor since loadConfig() is called before router I2CP is up. We also use this
+     * Call from DirMonitor since {@link #loadConfig()} is called before router I2CP is up. We also use this
      * as a test that the router is there for standalone.
      *
      * @return true if we got a response from the router
@@ -2211,7 +2211,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      * that differ from the applied ones, so edits to i2psnark.config take
      * effect without a restart. Called by the directory monitor on its
      * periodic scan. Changed values are re-applied through the same
-     * updateConfig() path used at startup. Settings removed from the file
+     * {@link #updateConfig()} path used at startup. Settings removed from the file
      * keep their current value.
      *
      * @since 0.9.71+
@@ -4476,7 +4476,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     }
 
     /**
-     * Add and start a FetchAndAdd task. Remove it with deleteMagnet().
+     * Add and start a FetchAndAdd task. Remove it with {@link #deleteMagnet}.
      *
      * @param torrent must be instanceof FetchAndAdd
      * @throws RuntimeException if the downloader cannot reach I2P
@@ -5303,7 +5303,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     }
 
     /**
-     * This calls monitorTorrents() once a minute. It also gets the bandwidth limits and loads
+     * This calls {@link #monitorTorrents()} once a minute. It also gets the bandwidth limits and loads
      * magnets on first run. For standalone, it also handles checking that the external router is
      * there, and restarting torrents once the router appears.
      */
@@ -6350,7 +6350,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     /**
      * Start all currently-stopped torrents of the given batch in the
      * background using the same pool-aware staggering and parallel pool
-     * startup as startBatch(). Returns immediately so the caller's request
+     * startup as {@link #startBatch}. Returns immediately so the caller's request
      * thread is never blocked by tunnel builds.
      *
      * Torrents that are not stopped are ignored, so a repeated invocation
@@ -6662,7 +6662,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
 
     /**
      * Stop all running torrents, and close the tunnel after a delay to allow for announces. If
-     * called at router shutdown via Jetty shutdown hook -&gt; webapp destroy() -&gt; stop(), the
+     * called at router shutdown via Jetty shutdown hook -&gt; webapp destroy() -&gt; {@link #stop()}, the
      * tunnel won't actually be closed as the SimpleTimer2 is already shutdown or will be soon, so
      * we delay a few seconds inline.
      *

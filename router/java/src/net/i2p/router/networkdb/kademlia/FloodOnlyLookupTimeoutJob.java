@@ -8,7 +8,7 @@ import net.i2p.util.Log;
  * Timeout handler for flood-only search operations.
  * <p>
  * Triggers search failure when the overall search timeout expires.
- * Used by FloodOnlySearchJob to enforce total time limits
+ * Used by {@link FloodOnlySearchJob} to enforce total time limits
  * and ensure searches don't run indefinitely without resolution.
  * <p>
  * This complements the per-peer timeout mechanisms by providing

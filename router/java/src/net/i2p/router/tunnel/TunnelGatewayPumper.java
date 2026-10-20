@@ -24,7 +24,7 @@ import net.i2p.util.SimpleTimer2;
  * and multiple consumer threads (pumper threads).
  * <p>
  * Shutdown coordination:
- * - The stopPumping() method sets a stop flag and enqueues a special poison pill for each thread.
+ * - The {@link #stopPumping()} method sets a stop flag and enqueues a special poison pill for each thread.
  * - Threads detect the poison pill and exit cleanly.
  * - Threads are interrupted and joined to ensure complete termination.
  * <p>

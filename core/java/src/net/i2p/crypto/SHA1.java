@@ -98,7 +98,7 @@ public final class SHA1 extends MessageDigest implements Cloneable {
     /**
      * Creates a SHA1 object with default initial state.
      * <p><strong>Performance Note:</strong> For optimal performance, use {@link #getInstance}
-     * instead of direct construction. getInstance() will return the JVM's native
+     * instead of direct construction. {@link #getInstance()} will return the JVM's native
      * MessageDigest implementation if it's faster than the local implementation.</p>
      *
      * @see #getInstance()

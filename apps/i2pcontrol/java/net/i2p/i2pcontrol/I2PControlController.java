@@ -188,7 +188,7 @@ public class I2PControlController implements RouterApp {
     /**
      * Builds a new server. Used for changing ports during operation and such.
      *
-     * Does NOT start the server. Must call start() on the returned server.
+     * Does NOT start the server. Must call {@link #start()} on the returned server.
      *
      * @return Server - A new server built from current configuration.
      */

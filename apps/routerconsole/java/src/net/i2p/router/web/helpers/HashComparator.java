@@ -9,7 +9,7 @@ import net.i2p.data.Hash;
  * Sorts in true binary order, not Base64 string order.
  * A-Z a-z 0-9 -~.
  *
- * @since 0.9.64 moved from BanlistRenderer
+ * @since 0.9.64 moved from {@link BanlistRenderer}
  */
 class HashComparator implements Comparator<Hash>, Serializable {
     /**

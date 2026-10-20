@@ -587,7 +587,7 @@ class OutboundEstablishState {
      * This should be what the state is currently indexed by in the _outboundStates table.
      * Beware -
      * During introduction, this is a router hash.
-     * After introduced() is called, this is set to the IP/port the introducer told us.
+     * After {@link #introduced} is called, this is set to the IP/port the introducer told us.
      * @return non-null
      */
     RemoteHostId getRemoteHostId() { return _remoteHostId; }

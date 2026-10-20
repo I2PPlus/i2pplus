@@ -32,7 +32,7 @@ public class RandomSource extends SecureRandom implements EntropyHarvester {
 
     /**
      * Deprecated - do not instantiate this directly, as you won't get the
-     * good one (Fortuna). Use getInstance() or
+     * good one (Fortuna). Use {@link #getInstance()} or
      * {@link net.i2p.I2PAppContext#getGlobalContext}{@code random()} to get the FortunaRandomSource
      * instance.
      *
@@ -61,7 +61,7 @@ public class RandomSource extends SecureRandom implements EntropyHarvester {
      * Ok, so we're going to have it return between 0 and n (including 0, excluding n), since
      * thats what it has been used for.
      * <p>
-     * This code unused, see FortunaRandomSource override.
+     * This code unused, see {@link FortunaRandomSource} override.
      */
     @Override
     public int nextInt(int n) {

@@ -181,7 +181,7 @@ public class SigningPrivateKey extends SimpleDataStructure implements Destroyabl
      * Constant time.
      *
      * @return true if all zeros
-     * @since 0.9.39 moved from PrivateKeyFile
+     * @since 0.9.39 moved from {@link PrivateKeyFile}
      */
     public boolean isOffline() {
         if (_data == null) return true;
@@ -210,7 +210,7 @@ public class SigningPrivateKey extends SimpleDataStructure implements Destroyabl
     /**
      * Whether this key has been destroyed.
      *
-     * @return true if destroy() has cleared the key data, or it was never set
+     * @return true if {@link #destroy()} has cleared the key data, or it was never set
      * @since 0.9.40
      */
     @Override

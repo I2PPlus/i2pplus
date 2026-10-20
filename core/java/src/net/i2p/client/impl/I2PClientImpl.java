@@ -63,7 +63,7 @@ public class I2PClientImpl implements I2PClient {
     /**
      * Create a destination with a DSA 1024/160 signature type and a null certificate.
      * This is not bound to the I2PClient, you must supply the data back again
-     * in createSession().
+     * in {@link #createSession}.
      * <p>
      * Caller must close stream.
      *

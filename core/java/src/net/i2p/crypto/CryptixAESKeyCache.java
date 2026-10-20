@@ -16,7 +16,7 @@ import java.io.Serializable;
 public final class CryptixAESKeyCache {
     /**
      * Constructor. The round-key cache itself is never instantiated - entries
-     * come from the static createNew() - so a bare instance holds nothing.
+     * come from the static {@link #createNew()} - so a bare instance holds nothing.
      */
     public CryptixAESKeyCache() {}
 

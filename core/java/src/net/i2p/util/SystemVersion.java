@@ -69,7 +69,7 @@ public abstract class SystemVersion {
     private static final boolean _isWindowsService = _isWin && _hasWrapper && Boolean.parseBoolean(System.getProperty("wrapper.service"));
     private static final boolean _isService;
     private static final boolean _isSlow;
-    /** Cached CPU core count, computed lazily on first getCores() call. */
+    /** Cached CPU core count, computed lazily on first {@link #getCores()} call. */
     private static volatile int _cores;
 
     /**
@@ -82,7 +82,7 @@ public abstract class SystemVersion {
      */
     static final long CPU_LOAD_CACHE_MS = 1000;
 
-    /** Last wall-clock ms a getCPULoad() OS query ran, or 0 if never. */
+    /** Last wall-clock ms a {@link #getCPULoad()} OS query ran, or 0 if never. */
     private static volatile long _cpuLoadQueried;
 
     /** Cached getCPULoad() result, 0..100. */
@@ -99,7 +99,7 @@ public abstract class SystemVersion {
      */
     static final long SYSTEM_LOAD_CACHE_MS = 1000;
 
-    /** Last wall-clock ms a getSystemLoad() OS query ran, or 0 if never. */
+    /** Last wall-clock ms a {@link #getSystemLoad()} OS query ran, or 0 if never. */
     private static volatile long _sysLoadQueried;
 
     /** Cached getSystemLoad() result, 0..100. */
@@ -107,7 +107,7 @@ public abstract class SystemVersion {
 
     /**
      * Cached "{@code router.cpuLoad}" RateStat handle, or null if unresolved.
-     * getCPULoadAvg() previously did two string-keyed statManager() lookups per
+     * {@link #getCPULoadAvg()} previously did two string-keyed statManager() lookups per
      * call across a dozen call sites (JobQueue pumper, both throttlers, peer
      * tests). The stat is created once at startup and never replaced, so the
      * handle is resolved once and reused until the context changes.

@@ -402,7 +402,7 @@ public class WorkingDir {
 
     /**
      * Copy over the jetty.xml file with modifications
-     * It was already copied over once in migrate(), throw that out and
+     * It was already copied over once in {@link #migrate}, throw that out and
      * do it again with modifications.
      *
      * @param olddir the directory holding the unmodified copy

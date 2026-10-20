@@ -25,7 +25,7 @@ import net.i2p.util.SystemVersion;
  * the next hop.
  * <p>
  * There is only one of these.
- * Instantiated by BuildHandler.
+ * Instantiated by {@link BuildHandler}.
  *
  * @since 0.9.51 moved to {@code tunnel.pool} package
  */

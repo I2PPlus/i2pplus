@@ -486,7 +486,7 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
 
     /**
      * Send a message to a lease.
-     * Note: This is generally run inline by runJob() above.
+     * Note: This is generally run inline by {@link #runJob()} above.
      * It is only run on the job queue after a LS lookup.
      */
     private class SendJob extends JobImpl {
@@ -866,7 +866,7 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
 
     // TODO replace with a method
     /**
-     * Note: This is run inline by send(), not on the job queue.
+     * Note: This is run inline by {@link #send()}, not on the job queue.
     */
     private class DispatchJob extends JobImpl {
         private final GarlicMessage _msg;

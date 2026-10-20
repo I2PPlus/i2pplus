@@ -4,8 +4,8 @@ import java.io.File;
 import java.io.IOException;
 
 /**
- * Same as SecureDirectory but sets the file mode after createNewFile()
- * and createTempFile() also. So just use this instead.
+ * Same as SecureDirectory but sets the file mode after {@link #createNewFile()}
+ * and {@link #createTempFile} also. So just use this instead.
  * Probably should have just made this class in the beginning and not had two.
  *
  * @since 0.8.2

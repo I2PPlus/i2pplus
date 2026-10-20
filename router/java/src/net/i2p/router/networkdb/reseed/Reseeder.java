@@ -45,7 +45,7 @@ import net.i2p.util.VersionComparator;
  * Uses the built-in URL list unless "{@code i2p.reseedURL}" is overridden.
  * Writes results to ./netDb/. Logs to console, router log, and wrapper log.
  * <p>
- * Moved from ReseedHandler in routerconsole; see ReseedChecker for additional validation.
+ * Moved from ReseedHandler in routerconsole; see {@link ReseedChecker} for additional validation.
  */
 public class Reseeder {
     private final RouterContext _context;
@@ -408,7 +408,7 @@ public class Reseeder {
         /**
          * Log and report a failed reseed attempt.
          * readURL() runs an EepGet with 0 retries, so errors arrive here
-         * with the failure cause (unlike transferFailed()).
+         * with the failure cause (unlike {@link #transferFailed()}).
          * @param url the full URL that failed
          * @param bytesTransferred bytes transferred before failure
          * @param bytesRemaining bytes remaining when failed
@@ -435,7 +435,7 @@ public class Reseeder {
         public void bytesTransferred(long alreadyTransferred, int currentWrite, long bytesTransferred, long bytesRemaining, String url) {}
         /** Completion handled in caller. */
         public void transferComplete(long alreadyTransferred, long bytesTransferred, long bytesRemaining, String url, String outputFile, boolean notModified) {}
-        /** Failure handled in attemptFailed(). */
+        /** Failure handled in {@link #attemptFailed()}. */
         public void transferFailed(String url, long bytesTransferred, long bytesRemaining, int currentAttempt) {}
 
         /**

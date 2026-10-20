@@ -147,7 +147,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
     }
 
     /**
-     * See usage() for options.
+     * See {@link #usage()} for options.
      *
      * @param args the CLI arguments, parsed per usage()
      * @throws IllegalArgumentException if the arguments are unparseable, name
@@ -622,7 +622,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
      * <p>
      * Event "clientoptions_onResult" = "ok" on completion.
      * <p>
-     * Deprecated To be made private, use setClientOptions().
+     * Deprecated To be made private, use {@link #setClientOptions}.
      * This does NOT update a running TunnelTask.
      *
      * @param args each args[i] is a key=value pair to add to the options
@@ -670,7 +670,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
     /**
      * Generic options used for clients and servers.
      * This DOES update a running TunnelTask, but NOT the session.
-     * A more efficient runClientOptions().
+     * A more efficient {@link #runClientOptions}.
      * <p>
      * Defaults in opts properties are not recommended, they may or may not be honored.
      *

@@ -30,7 +30,7 @@ import java.util.Properties;
  * Using an existing I2PSession is much more efficient and
  * flexible than using this class.
  * <p>
- * Public since 0.9.45 only for main(). Not a public API.
+ * Public since 0.9.45 only for {@link #main}. Not a public API.
  */
 public class LookupDest {
 

@@ -210,7 +210,7 @@ public class I2PTunnelOutproxyRunner extends I2PAppThread {
     }
 
     /**
-     * Forwards data from InputStream to OutputStream.
+     * Forwards data from {@link InputStream} to OutputStream.
      * Flushes are batched by checking available bytes without forced sleeps.
      */
     private class StreamForwarder extends I2PAppThread {

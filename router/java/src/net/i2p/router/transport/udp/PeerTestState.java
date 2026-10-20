@@ -10,7 +10,7 @@ import net.i2p.data.SessionKey;
 
 /**
  * Track the state of a peer test.
- * Used only by PeerTestManager.
+ * Used only by {@link PeerTestManager}.
  */
 class PeerTestState {
     private final long _testNonce;
@@ -105,7 +105,7 @@ class PeerTestState {
 
     /**
      * If we are Alice, return the IP that Bob says we can be reached at.
-     * The IP that Charlie reports is available via getAliceIPFromCharlie().
+     * The IP that Charlie reports is available via {@link #getAliceIPFromCharlie()}.
      * @return Alice's IP as reported by Bob
      */
     public InetAddress getAliceIP() { return _aliceIP; }
@@ -189,7 +189,7 @@ class PeerTestState {
     public void setAliceIPFromCharlie(InetAddress ip) { _aliceIPFromCharlie = ip; }
     /**
      * If we are Alice, return the port that Bob says we can be reached at.
-     * The port Charlie reports is available via getAlicePortFromCharlie().
+     * The port Charlie reports is available via {@link #getAlicePortFromCharlie()}.
      * @return Alice's port as reported by Bob
      */
     public int getAlicePort() { return _alicePort; }

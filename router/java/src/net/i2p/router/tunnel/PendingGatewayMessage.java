@@ -10,7 +10,7 @@ import net.i2p.router.util.CDQEntry;
 /**
  * Stores all the state for an unsent or partially-sent message.
  *
- * @since 0.9.3 refactored from TunnelGateway.Pending
+ * @since 0.9.3 refactored from {@link TunnelGateway}.Pending
  */
 class PendingGatewayMessage implements CDQEntry {
     /** The destination router. */

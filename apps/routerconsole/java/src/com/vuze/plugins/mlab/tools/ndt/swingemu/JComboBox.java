@@ -49,7 +49,7 @@ JComboBox
 	/**
 	 * Return the selected index.
 	 *
-	 * @return the index last passed to setSelectedIndex(), or 0 if none was
+	 * @return the index last passed to {@link #setSelectedIndex}, or 0 if none was
 	 */
 	public int
 	getSelectedIndex()

@@ -23,7 +23,7 @@ import java.util.Properties;
  */
 public class I2PSimpleClient implements I2PClient {
     /**
-     * Constructor. Sessions are created by createSession() against the router
+     * Constructor. Sessions are created by {@link #createSession} against the router
      * named in the properties it is handed, so a bare instance is ready to connect.
      */
     public I2PSimpleClient() {}

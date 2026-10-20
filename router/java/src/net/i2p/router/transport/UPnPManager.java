@@ -53,7 +53,7 @@ import org.freenetproject.ForwardPortStatus;
  * <strong>Integration:</strong>
  * <ul>
  * <li>Bridges I2P RouterAddress to FreeNet structures</li>
- * <li>Works with TransportManager for address updates</li>
+ * <li>Works with {@link TransportManager} for address updates</li>
  * <li>Provides callbacks for transport events</li>
  * <li>Handles multiple router discovery protocols</li>
  * </ul>
@@ -211,7 +211,7 @@ class UPnPManager {
     /**
      * Call when IP or network connectivity might have changed.
      * Starts UPnP if previous start failed, else starts a search.
-     * Must have called start() first, and not called stop().
+     * Must have called {@link #start()} first, and not called stop().
      * <p>
      * Should be fast. This only starts the search, the responses
      * will come in over the MX time (3 seconds).

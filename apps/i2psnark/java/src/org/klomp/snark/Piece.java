@@ -7,7 +7,7 @@ import java.util.Set;
 /**
  * Represents a torrent piece and tracks which peers have it and are requesting it.
  *
- * <p>This class is used internally by PeerCoordinator to manage piece selection and distribution
+ * <p>This class is used internally by {@link PeerCoordinator} to manage piece selection and distribution
  * strategies. It maintains:
  *
  * <ul>

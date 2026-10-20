@@ -103,7 +103,7 @@ public class PortMapper {
 
     /**
      * To indicate presence, alternative to {@code WebAppStarter.isWebappRunning()}.
-     * For actual base URL, use getConsoleURL().
+     * For actual base URL, use {@link #getConsoleURL()}.
      *
      * @since 0.9.34
      */
@@ -197,7 +197,7 @@ public class PortMapper {
     /**
      * Add the service.
      * If service is SVC_EEPSITE or SVC_HTTPS_EEPSITE,
-     * the URL will be included in getEepsites().
+     * the URL will be included in {@link #getEepsites()}.
      *
      * @param service the service name
      * @param host the hostname to map the service to

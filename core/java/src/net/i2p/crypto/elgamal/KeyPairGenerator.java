@@ -28,7 +28,7 @@ import java.security.spec.AlgorithmParameterSpec;
  */
 public final class KeyPairGenerator extends KeyPairGeneratorSpi {
     /**
-     * Constructor. The JCA framework calls initialize() with the strength, so the
+     * Constructor. The JCA framework calls {@link #initialize} with the strength, so the
      * instance starts uninitialized with no parameters set.
      */
     public KeyPairGenerator() {}

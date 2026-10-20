@@ -36,7 +36,7 @@ import net.i2p.data.DataHelper;
 public class LoginServlet extends HttpServlet {
 
     /**
-     *  Constructor, used by the servlet container. The container calls init()
+     *  Constructor, used by the servlet container. The container calls {@link #init()}
      *  afterwards, which is where the persisted sessions are loaded.
      */
     public LoginServlet() {}

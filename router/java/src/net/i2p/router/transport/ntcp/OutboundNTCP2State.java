@@ -29,7 +29,7 @@ import net.i2p.util.Log;
  *
  * NTCP 2 only. We are Alice.
  * <p>
- * Also contains static constants and methods used by InboundEstablishState for NTCP2.
+ * Also contains static constants and methods used by {@link InboundEstablishState} for NTCP2.
  * Does not extend EstablishBase.
  *
  * @since 0.9.35
@@ -230,7 +230,7 @@ class OutboundNTCP2State implements EstablishState {
     public int getVersion() { return _version; }
 
     /**
-     * Check if the connection is in initial state and ready for prepareOutbound().
+     * Check if the connection is in initial state and ready for {@link #prepareOutbound()}.
      *
      * @return whether initial state
      * @since 0.9.59

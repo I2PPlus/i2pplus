@@ -71,7 +71,7 @@ public class IBSkipIterator<K extends Comparable<? super K>, V> extends SkipIter
 
     /**
      * The key. Does NOT advance the index.
-     * @return the key for which the value will be returned in the subsequent call to next()
+     * @return the key for which the value will be returned in the subsequent call to {@link #next()}
      * @throws NoSuchElementException if the iterator is past the last key
      * @throws RuntimeException wrapping any IOException from loading the span
      */

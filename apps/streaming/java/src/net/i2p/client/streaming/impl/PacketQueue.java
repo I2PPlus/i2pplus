@@ -81,7 +81,7 @@ class PacketQueue implements SendMessageStatusListener, Closeable {
     /**
      * Add a new packet to be sent out ASAP.
      * This updates the acks.
-     * keys and tags disabled since dropped in I2PSession.
+     * keys and tags disabled since dropped in {@link I2PSession}.
      *
      * @param packet the packet to send ahead of the queue, updating the acks
      * @return true if sent
@@ -304,7 +304,7 @@ class PacketQueue implements SendMessageStatusListener, Closeable {
      *
      * @param session the session reporting the new status, not otherwise consulted
      * @param msgId message number returned from a previous sendMessage() call
-     * @param status of the message, as defined in MessageStatusMessage and this class.
+     * @param status of the message, as defined in {@link MessageStatusMessage} and this class.
      * @since 0.9.14
      */
     public void messageStatus(I2PSession session, long msgId, int status) {

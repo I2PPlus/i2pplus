@@ -15,7 +15,7 @@ import net.i2p.client.streaming.I2PSocketAddress;
  * Bridge to I2PServerSocket.
  * <p>
  * This extends ServerSocket to make porting apps easier.
- * accept() returns a real Socket (a StandardSocket).
+ * {@link #accept()} returns a real Socket (a StandardSocket).
  * accept() throws IOExceptions like ServerSockets do, rather than returning
  * null or throwing I2PExceptions.
  * <p>
@@ -31,7 +31,7 @@ class StandardServerSocket extends ServerSocket {
     /**
      * Doesn't really throw IOE but super() does.
      *
-     * @param socket the I2P server socket that accept() and close() delegate to
+     * @param socket the I2P server socket that accept() and {@link #close()} delegate to
      * @throws IOException always, from the no-argument ServerSocket constructor this must call
      */
     StandardServerSocket(I2PServerSocketFull socket) throws IOException {

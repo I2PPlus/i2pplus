@@ -20,8 +20,8 @@ public class SameSiteCookieFilter implements Filter {
     private static final Log _log = I2PAppContext.getGlobalContext().logManager().getLog(SameSiteCookieFilter.class);
 
     /**
-     * The filter holds no configuration - init() is a nop and the logger is static - so a
-     * bare instance is ready for the container to call doFilter() on.
+     * The filter holds no configuration - {@link #init} is a nop and the logger is static - so a
+     * bare instance is ready for the container to call {@link #doFilter} on.
      */
     public SameSiteCookieFilter() {}
 

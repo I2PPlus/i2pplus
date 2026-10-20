@@ -14,7 +14,7 @@ public class SevenBit extends Encoding {
 
 	/**
 	 * A bare instance is ready to decode; the only inherited state is the logger that
-	 * Encoding's constructor sets up from the global context. encode() always rejects.
+	 * Encoding's constructor sets up from the global context. {@link #encode} always rejects.
 	 */
 	public SevenBit() {}
 

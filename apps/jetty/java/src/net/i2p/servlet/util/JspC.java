@@ -34,7 +34,7 @@ import net.i2p.util.VersionComparator;
  */
 public class JspC {
     /**
-     * Constructor. The build script drives compilation through main(), reading
+     * Constructor. The build script drives compilation through {@link #main}, reading
      * every option from the system properties and arguments, so an instance
      * carries no state.
      */
@@ -54,7 +54,7 @@ public class JspC {
     /**
      * rewrites them when build.reproducible is set
      *
-     * @param args arguments forwarded to org.apache.jasper.JspC, after fixupArgs()
+     * @param args arguments forwarded to org.apache.jasper.JspC, after {@link #fixupArgs}
      * @throws IllegalArgumentException if -webapp is repeated, has no value, or does
      *                                  not name an existing directory; fixupArgs() runs outside the try below
      */

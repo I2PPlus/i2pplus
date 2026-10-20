@@ -40,7 +40,7 @@ public class InfoHash extends SHA1Hash {
      *
      * <p>Formats the info hash as hexadecimal within brackets for easy identification in log files
      * and debug output. This provides a more readable representation than the default SHA1Hash
-     * toString() method.
+     * {@link #toString()} method.
      *
      * @return a formatted string containing the info hash in hexadecimal format
      */

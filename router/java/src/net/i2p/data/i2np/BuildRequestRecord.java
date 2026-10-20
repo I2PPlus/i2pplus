@@ -486,7 +486,7 @@ public class BuildRequestRecord {
      * The ChaCha reply key and IV will be available via the getters
      * after this call.
      * For short records, derived keys will be available via
-     * readLayerKey(), readIVKey(), and readGarlicKeys() after this call.
+     * {@link #readLayerKey()}, readIVKey(), and readGarlicKeys() after this call.
      * See class javadocs for format.
      * See proposals 152 and 157.
      * @param ctx the router context
@@ -554,7 +554,7 @@ public class BuildRequestRecord {
 
     /**
      * Returns the ChaCha reply key.
-     * Valid after calling encryptECIESRecord() or after the decrypting constructor
+     * Valid after calling {@link #encryptECIESRecord} or after the decrypting constructor
      * with an ECIES private key.
      * See proposal 152.
      * @return the session key, or null if no ECIES encrypt/decrypt operation was performed

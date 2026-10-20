@@ -57,7 +57,7 @@ public class FileBuffer implements Buffer {
 
  /**
   * Get an InputStream for the file, skipping to the offset if needed.
-  * Caller must call readComplete().
+  * Caller must call {@link #readComplete}.
   *
 	 * @return a stream positioned at the offset, reusing the open one
 	 * @throws IOException on I/O error
@@ -73,7 +73,7 @@ public class FileBuffer implements Buffer {
 
  /**
   * Get an OutputStream for the file.
-  * Caller must call writeComplete().
+  * Caller must call {@link #writeComplete}.
   *
 	 * @return a file output stream, reusing the open one
 	 * @throws IOException on I/O error

@@ -11,7 +11,7 @@ import java.util.List;
 public class SSLHelper {
 
     /**
-     * parseArgs() is the only method and the class holds no fields, so an instance
+     * {@link #parseArgs} is the only method and the class holds no fields, so an instance
      * carries nothing.
      */
     public SSLHelper() {}

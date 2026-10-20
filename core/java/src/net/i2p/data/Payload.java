@@ -26,7 +26,7 @@ import java.util.Arrays;
  * <ul>
  * <li><strong>End-to-End Encryption:</strong> Previously encrypted messages between clients</li>
  * <li><strong>Protocol Change:</strong> End-to-end encryption removed in I2P</li>
- * <li><strong>Current Usage:</strong> Use get/setEncryptedData() methods instead</li>
+ * <li><strong>Current Usage:</strong> Use get/{@link #setEncryptedData} methods instead</li>
  * <li><strong>I2CP Focus:</strong> Now mainly used for I2CP message transport</li>
  * </ul>
  * <p><strong>Current Structure:</strong></p>
@@ -38,9 +38,9 @@ import java.util.Arrays;
  * </ul>
  * <p><strong>Usage Patterns:</strong></p>
  * <ul>
- * <li><strong>Modern Usage:</strong> Use getEncryptedData()/setEncryptedData() for payload</li>
+ * <li><strong>Modern Usage:</strong> Use {@link #getEncryptedData()}/setEncryptedData() for payload</li>
  * <li><strong>I2CP Messages:</strong> Transport messages between client and router</li>
- * <li><strong>Legacy Support:</strong> getUnencryptedData() for backward compatibility</li>
+ * <li><strong>Legacy Support:</strong> {@link #getUnencryptedData()} for backward compatibility</li>
  * <li><strong>Size Management:</strong> Monitor payload size to prevent resource exhaustion</li>
  * </ul>
  * <p><strong>Security Considerations:</strong></p>

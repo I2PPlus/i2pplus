@@ -159,7 +159,7 @@ class PacketLocal extends Packet implements MessageOutputStream.WriteStatus {
 
     /**
      * Shared outbound payload cache (MAX_PAYLOAD_SIZE buffers).
-     * Must match the cache in ConnectionDataReceiver._payloadCache.
+     * Must match the cache in {@link ConnectionDataReceiver}._payloadCache.
      *
      * @return the static cache of outbound payload buffers
      */
@@ -314,7 +314,7 @@ class PacketLocal extends Packet implements MessageOutputStream.WriteStatus {
     public int getNACKs() { return _nackCount.get(); }
 
     /**
-     * Used by PacketQueue to feed an expiration to the router.
+     * Used by {@link PacketQueue} to feed an expiration to the router.
      *
      * @return time from now, not absolute time. May be zero if unset.
      * @since 0.9.46

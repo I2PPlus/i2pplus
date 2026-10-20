@@ -33,7 +33,7 @@ import net.i2p.util.SystemVersion;
  * <li>_prequeue is a thread-safe blocking queue managing pending messages</li>
  * <li>_queue is synchronized for modifications and preprocessing</li>
  * <li>Expiration pruning is done outside locks to minimize contention</li>
- * <li>The pump() method is safe for concurrent invocation by pumper threads</li>
+ * <li>The {@link #pump} method is safe for concurrent invocation by pumper threads</li>
  * </ul>
  */
 class PumpedTunnelGateway extends TunnelGateway {

@@ -71,7 +71,7 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
     /**
      * Create the torrent in multitorrent mode.
      *
-     * <p>Will not start itself. Caller must call startTorrent() if desired.
+     * <p>Will not start itself. Caller must call {@link #startTorrent()} if desired.
      *
      * @param util the I2PSnarkUtil
      * @param torrent the .torrent file name, used as the storage base name
@@ -401,7 +401,7 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
     private long _retryStart;
 
     /**
-     * Stop count, incremented by stopTorrent() so a retry event that already fired cannot
+     * Stop count, incremented by {@link #stopTorrent()} so a retry event that already fired cannot
      * reconnect a torrent stopped while its event was pending.
      *
      * @since 0.9.71+
@@ -783,7 +783,7 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
     /**
      * The base name of the torrent.
      *
-     * @return base name of torrent [filtered version of getMetaInfo.getName()], or a fake name if
+     * @return base name of torrent [filtered version of getMetaInfo.{@link #getName()}], or a fake name if
      *         in magnet mode
      * @since 0.8.4
      */
@@ -1200,7 +1200,7 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
     /**
      * Bytes not yet in storage. Does NOT account for skipped files.
      *
-     * @return exact value. or -1 if no storage yet. getNeeded() * pieceLength(0) isn't accurate if
+     * @return exact value. or -1 if no storage yet. {@link #getNeeded()} * pieceLength(0) isn't accurate if
      *         last piece is still needed.
      * @since 0.8.9
      */
@@ -1383,7 +1383,7 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
     }
 
     /**
-     * Throws a unique exception class to blame the router that can be caught by SnarkManager.
+     * Throws a unique exception class to blame the router that can be caught by {@link SnarkManager}.
      *
      * @throws RouterException always, after logging the failure, stopping the torrent
      * and notifying the CompleteListener

@@ -47,14 +47,14 @@ public class BSkipLevels<K extends Comparable<? super K>, V> extends SkipLevels<
     private final BSkipList<K, V> bsl;
     /** Whether this level has been killed */
     private boolean isKilled;
-    /** The level pages, passed from the constructor to initializeLevels() */
+    /** The level pages, passed from the constructor to {@link #initializeLevels()} */
     private final int[] lps;
 
     /**
      * Create a BSkipLevels and load it from disk.
      * Non-recursive initializer initializeLevels() MUST be called on the first
      * BSkipLevel in the skiplist after the constructor, unless it's a new empty
-     * level and init() was previously called.
+     * level and {@link #init} was previously called.
      *
      * @param bf the BlockFile that owns the page this level is read from
      * @param levelPage the page number of this level
@@ -365,7 +365,7 @@ public class BSkipLevels<K extends Comparable<? super K>, V> extends SkipLevels<
     }
 
     /**
-     * Comparator for sorting levels in blvlfix().
+     * Comparator for sorting levels in {@link #blvlfix()}.
      * Sorts in REVERSE order.
      *
      * @param <K> the key type

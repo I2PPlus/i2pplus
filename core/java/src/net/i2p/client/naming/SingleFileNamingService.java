@@ -38,12 +38,12 @@ import java.nio.charset.StandardCharsets;
  * Supports adds, removes, and listeners.
  * <p>
  * All methods here are case-sensitive.
- * Conversion to lower case is done in HostsTxtNamingService.
+ * Conversion to lower case is done in {@link HostsTxtNamingService}.
  * <p>
  * This does NOT provide .b32.i2p or {b64} resolution.
  * It also does not do any caching.
  * Use from HostsTxtNamingService or chain with another NamingService
- * via MetaNamingService if you need those features.
+ * via {@link MetaNamingService} if you need those features.
  *
  * @since 0.8.7
  */

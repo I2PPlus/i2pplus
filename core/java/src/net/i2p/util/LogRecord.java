@@ -107,7 +107,7 @@ class LogRecord {
 
     /**
      * Matches source class, first part of message string, and throwable class only.
-     * Used only by LogWriter to eliminate dups.
+     * Used only by {@link LogWriter} to eliminate dups.
      *
      * @since 0.9.3
      */

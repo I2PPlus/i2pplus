@@ -36,7 +36,7 @@ import net.i2p.socks.SOCKSException;
 class SOCKSServerFactory {
 
     /**
-     * createSOCKSServer() is static and the only field is the HTTP-rejection text, so an
+     * {@link #createSOCKSServer} is static and the only field is the HTTP-rejection text, so an
      * instance carries nothing.
      */
     SOCKSServerFactory() {}

@@ -1227,7 +1227,7 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
 
         /**
          * Either wait on this object with a timeout, or use non-null Runnables. Any sent data to be
-         * remembered may be stored by setSentObject(). Reply object may be in getReplyObject().
+         * remembered may be stored by setSentObject(). Reply object may be in {@link #getReplyObject()}.
          */
         public ReplyWaiter(int tid, Tracker tracker, int action, byte[] payload, long toWait) {
             super(SimpleTimer2.getInstance(), toWait);

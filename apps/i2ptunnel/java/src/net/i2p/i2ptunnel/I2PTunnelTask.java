@@ -48,13 +48,13 @@ public abstract class I2PTunnelTask extends EventDispatcherImpl {
     /**
      * The I2PTunnel this task runs inside.
      *
-     * @return the tunnel this task runs inside, as set by the constructor or setTunnel()
+     * @return the tunnel this task runs inside, as set by the constructor or {@link #setTunnel}
      */
     public I2PTunnel getTunnel() {return tunnel;}
     /**
      * The id of the client list entry for this task.
      *
-     * @return the client list entry id, -1 until setId() is called
+     * @return the client list entry id, -1 until {@link #setId} is called
      */
     public int getId() {return this.id;}
     /**
@@ -83,7 +83,7 @@ public abstract class I2PTunnelTask extends EventDispatcherImpl {
      * This may not release all resources. In particular, the I2PSocketManager remains
      * and it may have timer threads that continue running.
      * <p>
-     * To release all resources permanently, call destroy().
+     * To release all resources permanently, call {@link #destroy()}.
      *
      * @param forced true to interrupt an in-progress build, false to close gracefully
      * @return true if the tunnel was closed and can be reopened by startRunning()

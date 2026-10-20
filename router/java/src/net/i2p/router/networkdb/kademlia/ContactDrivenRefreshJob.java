@@ -15,7 +15,7 @@ import net.i2p.util.Log;
  * interacted with.  When we receive a DatabaseStore (or other direct contact)
  * from a peer, we enqueue them here.  On each cycle, we process a batch:
  * if the peer's stored RouterInfo is stale (published &gt; 1h ago) or missing,
- * we proactively refresh it via DirectLookupJob.
+ * we proactively refresh it via {@link DirectLookupJob}.
  * <p>
  * This is the contact-driven half of proactive RouterInfo freshness:
  * peers we actively communicate with are likely to be re-selected as tunnel

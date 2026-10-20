@@ -82,7 +82,7 @@ import org.klomp.snark.dht.DHT;
 public class I2PSnarkServlet extends BasicServlet {
 
     private static final long serialVersionUID = 1L;
-    /** Context path, generally "/i2psnark"; set once in init(). */
+    /** Context path, generally "/i2psnark"; set once in {@link #init()}. */
     private String _contextPath;
     /** Context display name, generally "i2psnark"; set once in init(). */
     private String _contextName;
@@ -438,7 +438,7 @@ public class I2PSnarkServlet extends BasicServlet {
     }
 
     /**
-     * Handle what we can here, calling super.doGet() for the rest.
+     * Handle what we can here, calling super.{@link #doGet} for the rest.
      * @since 0.8.3
      */
     @Override
@@ -447,7 +447,7 @@ public class I2PSnarkServlet extends BasicServlet {
     }
 
     /**
-     * Handle what we can here, calling super.doPost() for the rest.
+     * Handle what we can here, calling super.{@link #doPost} for the rest.
      */
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -474,11 +474,11 @@ public class I2PSnarkServlet extends BasicServlet {
  * Handle what we can here, calling super.doGet() or super.doPost() for the rest.
  *
  * Routing, in order: gatekeeping (Origin check on POST, CSP, static WARBASE);
- * handleAjaxRequest() for the XHR fragment endpoints; /_add; /magnet;
- * handleUnmanagedPath() for listings, playlists and passthrough;
- * handleFormSubmission() for nonce'd POST actions; then page assembly - head,
- * navbar, search scaffolding, either writeConfigurePanels() or
- * writeTorrentsSection(), and writePageTail().
+ * {@link #handleAjaxRequest()} for the XHR fragment endpoints; /_add; /magnet;
+ * {@link #handleUnmanagedPath()} for listings, playlists and passthrough;
+ * {@link #handleFormSubmission()} for nonce'd POST actions; then page assembly - head,
+ * navbar, search scaffolding, either {@link #writeConfigurePanels()} or
+ * {@link #writeTorrentsSection()}, and writePageTail().
  */
     private void doGetAndPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         // Get HTTP method and servlet path
@@ -1025,7 +1025,7 @@ public class I2PSnarkServlet extends BasicServlet {
      * @param resp the HttpServletResponse object to which headers will be added
      * @param cspNonce the nonce value for Content Security Policy (CSP)
      * @param allowMedia whether to allow media sources in CSP
-     * @since 0.9.16 moved from doGetAndPost()
+     * @since 0.9.16 moved from {@link #doGetAndPost()}
      */
     private void setHTMLHeaders(HttpServletResponse resp, String cspNonce, boolean allowMedia) {
         String mimeType = resp.getContentType();
@@ -2095,7 +2095,7 @@ public class I2PSnarkServlet extends BasicServlet {
      * sort/filter persistence on parameterless page loads.
      *
      * @param path leading URL path including trailing '/'
-     * @param qs query portion from getQueryString(): '', 'k=v' or '?k=v...'
+     * @param qs query portion from {@link #getQueryString}: '', 'k=v' or '?k=v...'
      * @param extra additional pairs joined by '&amp;', no leading mark, may be empty
      * @return composed URL, never null
      * @since 0.9.71+
@@ -2737,7 +2737,7 @@ public class I2PSnarkServlet extends BasicServlet {
 
     /**
      * Validate the browser API payload and extract a display name for the OK reply.
-     * Mirrors the formats accepted by handleAddURL().
+     * Mirrors the formats accepted by {@link #handleAddURL()}.
      *
      * @param url the URL, magnet, info hash, or file path
      * @return a display name, or null if unsupported
@@ -4270,7 +4270,7 @@ public class I2PSnarkServlet extends BasicServlet {
 
     /**
      * Pure decision function mirroring the historical if/else cascade of
-     * buildStatusString(), extracted so state classification can be tested
+     * {@link #buildStatusString}, extracted so state classification can be tested
      * without rendering. Branch order here is load-bearing: earlier states
      * win, exactly as in the original cascade.
      *
@@ -5311,18 +5311,18 @@ public class I2PSnarkServlet extends BasicServlet {
      * Section map, in output order:
      * <ol>
      * <li>POST dispatch - torrent actions (priorities, comments, stop/start/
-     * recheck, edit) via handleDirectoryPost(); P-R-G means no rendering
+     * recheck, edit) via {@link #handleDirectoryPost}; P-R-G means no rendering
      * after a POST</li>
-     * <li>renderHeader() - doctype, head, theme/font CSS, navbar</li>
-     * <li>form open, appendTorrentInfo(), displayTorrentEdit()</li>
-     * <li>appendResourceError() when the path does not exist on disk</li>
-     * <li>no-listing branch - appendMediaSection() player, comments section,
+     * <li>{@link #renderHeader} - doctype, head, theme/font CSS, navbar</li>
+     * <li>form open, {@link #appendTorrentInfo}, displayTorrentEdit()</li>
+     * <li>{@link #appendResourceError} when the path does not exist on disk</li>
+     * <li>no-listing branch - {@link #appendMediaSection} player, comments section,
      * footer, return</li>
-     * <li>file listing - wrapFileList() + sort, appendFileTableHead(),
-     * appendParentDirRow(), renderFileRow() loop, per-counter scripts;
+     * <li>file listing - {@link #wrapFileList} + sort, appendFileTableHead(),
+     * {@link #appendParentDirRow}, renderFileRow() loop, per-counter scripts;
      * streamed when out != null and the table reaches
      * STREAM_MIN_FILE_ROWS</li>
-     * <li>renderCommentsSection(), form close, lightbox/refresh scripts,
+     * <li>{@link #renderCommentsSection}, form close, lightbox/refresh scripts,
      * footer</li>
      * </ol>
      *

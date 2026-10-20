@@ -22,7 +22,7 @@ import net.i2p.util.SystemVersion;
 
 /**
  * Main class of addressbook.  Performs updates, and runs the main loop.
- * As of 0.9.30, package private, run with DaemonThread.
+ * As of 0.9.30, package private, run with {@link DaemonThread}.
  *
  */
 public class Daemon {

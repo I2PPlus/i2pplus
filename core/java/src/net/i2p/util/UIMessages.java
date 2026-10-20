@@ -73,7 +73,7 @@ public class UIMessages {
 
     /**
      * Newest last, or empty list.
-     * Provide id of last one back to clearThrough().
+     * Provide id of last one back to {@link #clearThrough}.
      *
      * @return a new list of the retained messages, newest last; empty if none
      */

@@ -14,7 +14,7 @@ public interface I2PSessionMuxedListener extends I2PSessionListener {
     /**
      * Will be called only if you register via
      * setSessionListener() or addSessionListener().
-     * And if you are doing that, just use I2PSessionListener.
+     * And if you are doing that, just use {@link I2PSessionListener}.
      * <p>
      * If you register via addSessionListener(),
      * this will be called only for the proto(s) and toport(s) you register for.

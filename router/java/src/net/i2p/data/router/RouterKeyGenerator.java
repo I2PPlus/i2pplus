@@ -35,7 +35,7 @@ import net.i2p.util.Log;
  * then returns the SHA256 of that concatenation. This makes Sybil attacks much harder
  * as she needs to essentially take over the whole keyspace.
  * <p>
- * Note: generateDateBasedModData() should be called after midnight GMT once per day
+ * Note: {@link #generateDateBasedModData()} should be called after midnight GMT once per day
  * to generate the correct routing keys.
  *
  * @since 0.9.16 moved from net.i2p.data.RoutingKeyGenerator

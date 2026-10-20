@@ -178,7 +178,7 @@ public class GarlicClove extends DataStructureImpl {
     /**
      * Serialized clove.
      *
-     * @return the clove in standard (non-ratchet) format, sized by estimateSize()
+     * @return the clove in standard (non-ratchet) format, sized by {@link #estimateSize()}
      */
     @Override
     public byte[] toByteArray() {

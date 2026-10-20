@@ -61,7 +61,7 @@ public class SessionManager {
 
     /**
      * Create a new session for a user with default 30 min expiry.
-     * @param username the user the session is issued to, returned by validateSession()
+     * @param username the user the session is issued to, returned by {@link #validateSession}
      * @return the 64-character hex session token to hand to the client
      */
     public String createSession(String username) {

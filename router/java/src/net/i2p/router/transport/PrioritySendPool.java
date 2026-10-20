@@ -181,7 +181,7 @@ public final class PrioritySendPool {
     /**
      * Resize the pool. New capacity takes effect immediately;
      * if the pool currently exceeds the new capacity, excess
-     * low-priority messages are evicted on the next offer().
+     * low-priority messages are evicted on the next {@link #offer}.
      *
      * @param newCapacity the new maximum live depth, clamped up to a minimum of 1
      */

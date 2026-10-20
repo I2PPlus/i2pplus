@@ -30,7 +30,7 @@ import java.nio.charset.StandardCharsets;
  * Entire tag (from '_' to ')') must be on one line.
  * Multiple tags allowed on one line.
  * <p>
- * Also will extract strings to a dummy java file for postprocessing by xgettext - see main().
+ * Also will extract strings to a dummy java file for postprocessing by xgettext - see {@link #main}.
  *
  * @since 0.9.8
  */

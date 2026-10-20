@@ -6,7 +6,7 @@ import java.io.PipedInputStream;
 import java.net.SocketTimeoutException;
 
 /**
- * Adds setReadTimeout().
+ * Adds {@link #setReadTimeout}.
  * Must be used with a TimeoutPipedOutputStream.
  * <p>
  * To support {@link net.i2p.util.InternalSocket#setSoTimeout}.

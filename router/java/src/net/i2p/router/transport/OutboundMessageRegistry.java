@@ -40,7 +40,7 @@ public class OutboundMessageRegistry {
     private final Map<MessageSelector, Object> _selectorToMessage;
     /**
      * Set of active OutNetMessage (for quick removal and selector fetching).
-     * Apparently only used for dup detection in registerPending().
+     * Apparently only used for dup detection in {@link #registerPending()}.
      * Changed to concurrent, but it could perhaps be removed completely,
      * It would seem difficult to add a dup since every OutNetMessage is different,
      * and it's generally instantiated just before ctx.outNetMessagePool().add().
@@ -171,7 +171,7 @@ public class OutboundMessageRegistry {
      * @param replySelector non-null; The same selector may be used for more than one message.
      * @param onReply non-null
      * @param onTimeout may be null
-     * @return a dummy OutNetMessage where getMessage() is null. Use it to call unregisterPending() later if desired.
+     * @return a dummy OutNetMessage where getMessage() is null. Use it to call {@link #unregisterPending} later if desired.
      */
     public OutNetMessage registerPending(MessageSelector replySelector, ReplyJob onReply, Job onTimeout) {
         OutNetMessage msg = new OutNetMessage(_context);

@@ -14,7 +14,7 @@ public class VariableTunnelBuildReplyMessage extends TunnelBuildReplyMessage {
     public static final int MESSAGE_TYPE = 24;
 
     /**
-     * Zero record count, will be set with readMessage().
+     * Zero record count, will be set with {@link #readMessage}.
      *
      * @param context the I2P app context used to read and write the message
      */

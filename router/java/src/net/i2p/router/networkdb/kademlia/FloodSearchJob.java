@@ -18,7 +18,7 @@ import net.i2p.util.SystemVersion;
  * falls back to standard Kademlia iterative search through normal channels.
  * This reduces spurious lookups caused by response delays from floodfill peers.
  * <p>
- * Note: Unused directly - see FloodOnlySearchJob extension which overrides
+ * Note: Unused directly - see {@link FloodOnlySearchJob} extension which overrides
  * almost everything. This does NOT extend SearchJob.
  */
 abstract class FloodSearchJob extends JobImpl {

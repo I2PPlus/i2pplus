@@ -284,7 +284,7 @@ public class SendMessageOptions extends DateAndFlags {
 
     /**
      * Gzip compression setting.
-     * @return non-null, DEFAULT unless setGzip() was called
+     * @return non-null, DEFAULT unless {@link #setGzip} was called
      */
     public GzipOption getGzip() {
         return _gzip;

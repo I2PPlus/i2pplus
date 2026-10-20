@@ -7,7 +7,7 @@ package net.i2p.router.util;
  * (Controlled Delay) queues. Provides methods for accessing
  * and managing enqueue timestamps for delay calculation.
  * <p>
- * Used by CoDelBlockingQueue and CoDelPriorityBlockingQueue
+ * Used by {@link CoDelBlockingQueue} and CoDelPriorityBlockingQueue
  * to implement Active Queue Management with timestamp-based
  * delay monitoring and packet dropping functionality.
  *

@@ -23,7 +23,7 @@ import net.i2p.util.Log;
 /**
  * HTTP response stream with transparent gzip decompression (client side).
  * <p>
- * Extended in I2PTunnelHTTPServer for server-side compression.
+ * Extended in {@link I2PTunnelHTTPServer} for server-side compression.
  * Simple filtered response stream ensuring "Connection: close" header.
  * Could handle Content-Encoding: x-i2p-gzip transparently,
  * adjusting to Content-Encoding: identity. gzip encoding trivial,

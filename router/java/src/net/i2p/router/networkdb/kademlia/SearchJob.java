@@ -581,7 +581,7 @@ public class SearchJob extends JobImpl {
      * @param replyTunnelId tunnel to receive replies through
      * @param replyGateway gateway for the reply tunnel
      * @param expiration when the search should stop
-     * @param peer unused here; see ExploreJob extension
+     * @param peer unused here; see {@link ExploreJob} extension
      *
      * @return the message to send to the peer; the base implementation always
      * throws, while ExploreJob returns a lookup message for the search

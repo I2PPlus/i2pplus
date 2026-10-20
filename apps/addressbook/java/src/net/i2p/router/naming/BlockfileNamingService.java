@@ -469,7 +469,7 @@ public class BlockfileNamingService extends DummyNamingService {
      * Side effect: sets _version field
      * <p>
      * Caller must synchronize.
-     * @since 0.9.26 pulled out of upgrade()
+     * @since 0.9.26 pulled out of {@link #upgrade()}
      */
     private void setVersion(String version) throws IOException {
         SkipList<String, Properties> hdr = _bf.getIndex(INFO_SKIPLIST, _stringSerializer, _infoSerializer);
@@ -1767,8 +1767,8 @@ public class BlockfileNamingService extends DummyNamingService {
     }
 
     /**
-     * Remove and log all invalid entries queued by validate()
-     * while scanning in lookup() or getEntries().
+     * Remove and log all invalid entries queued by {@link #validate()}
+     * while scanning in {@link #lookup()} or getEntries().
      * We delete in the order detected, as an error may be corrupting later entries in the skiplist.
      * Caller must sync!
      */

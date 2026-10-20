@@ -91,7 +91,7 @@ public class RequestVariableLeaseSetMessage extends I2CPMessageImpl {
 
     /**
      * Gets the tunnel at a position in this LeaseSet.
-     * @param endpoint the zero-based position in the list, 0 to getEndpoints() - 1
+     * @param endpoint the zero-based position in the list, 0 to {@link #getEndpoints()} - 1
      * @return the tunnel at that position, or null if out of range
      */
     public Lease getEndpoint(int endpoint) {

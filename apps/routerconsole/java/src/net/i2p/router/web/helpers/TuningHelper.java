@@ -29,7 +29,7 @@ public class TuningHelper extends HelperBase {
 
     /**
      * No CSRF nonce set yet, so the rendered form would carry an empty hidden field
-     * until setNonce() is called.
+     * until {@link #setNonce} is called.
      */
     public TuningHelper() {}
 

@@ -9,7 +9,7 @@ import net.i2p.router.RouterContext;
 
 /**
  * Ask a connected peer for his RI.
- * Modified from SingleSearchJob.
+ * Modified from {@link SingleSearchJob}.
  * <p>
  * Mainly for older routers. As of 0.9.55, transports will
  * periodically send their RI.

@@ -141,7 +141,7 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
 
     /**
      * IV length for {@link #getAESReplyIV}.
-     * @since 0.9.48 moved from HopConfig
+     * @since 0.9.48 moved from {@link HopConfig}
      */
     public static final int REPLY_IV_LENGTH = 16;
 
@@ -341,14 +341,14 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
 
     /**
      * For convenience.
-     * @return getPeer(getLength() - 1)
+     * @return getPeer({@link #getLength()} - 1)
      * @since 0.8.9
      */
     public Hash getEndpoint() {return _peers[_peers.length - 1];}
 
     /**
      * For convenience.
-     * @return isInbound() ? getGateway() : getEndpoint()
+     * @return {@link #isInbound()} ? getGateway() : getEndpoint()
      * @since 0.8.9
      */
     public Hash getFarEnd() {return _peers[_isInbound ? 0 : _peers.length - 1];}
@@ -458,7 +458,7 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
      * throughput profile wants *every* byte, including the 1024 a test round
      * pushes, or the per-peer throughput figures understate a busy tunnel.
      * The data-verified test trust wants *only* real traffic, because it
-     * reads getLastTransferred() to decide the tunnel has proven itself in
+     * reads {@link #getLastTransferred()} to decide the tunnel has proven itself in
      * production.  When the test round called the unconditional form, a
      * passing test stamped the real-traffic clock on the tunnel under test —
      * which for an outbound test is the tunnel itself — so a tunnel that had
@@ -633,7 +633,7 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
 
     /**
      * Increment the soft best-effort timeout counter only.
-     * Soft status-3 must not trip getTunnelFailed() or selection gates
+     * Soft status-3 must not trip {@link #getTunnelFailed()} or selection gates
      * that key on the hard/test counter. Congestion is not tunnel death.
      * The streak is time-windowed: a failure that arrives after
      * {@link #SOFT_FAILURE_WINDOW_MS} without one starts the count over at

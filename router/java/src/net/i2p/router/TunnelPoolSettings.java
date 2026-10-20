@@ -203,7 +203,7 @@ public class TunnelPoolSettings {
     /**
      * Adds the primary and backup quantities into one target total.
      *
-     * @return getQuantity() + getBackupQuantity()
+     * @return {@link #getQuantity()} + getBackupQuantity()
      * @since 0.8.11
      */
     public int getTotalQuantity() {
@@ -231,7 +231,7 @@ public class TunnelPoolSettings {
      * Prior to 0.9.35, generally true for client.
      * As of 0.9.35, generally false for client, but true if
      * {@link java.lang.Math#min(long, long) getLength() + min(getLengthVariance(), 0)} &lt;= 0,
-     * OR if getLengthOverride() == 0.
+     * OR if {@link #getLengthOverride()} == 0.
      * @return the allow zero hop
      */
     public boolean getAllowZeroHop() {

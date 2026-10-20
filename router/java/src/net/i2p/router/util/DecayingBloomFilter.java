@@ -47,7 +47,7 @@ public class DecayingBloomFilter {
     /**
      * Entries seen in the most recently completed decay window, written under
      * the write lock. This is the quantity a filter has to be sized against,
-     * and decay() already computes it, so tracking it is free.
+     * and {@link #decay()} already computes it, so tracking it is free.
      */
     private volatile int _lastWindowCount;
     /** Current bloom filter. */
@@ -66,7 +66,7 @@ public class DecayingBloomFilter {
     private final ThreadLocal<byte[]> _extendedBuf;
     /**
      * Thread-local buffer for the long-to-entry conversion, sized _entryBytes.
-     * Only the long overloads of add()/isKnown() use it, so it is null when the
+     * Only the long overloads of add()/{@link #isKnown()} use it, so it is null when the
      * entries are too wide to hold a long.
      * @since 0.9.71+
      */
@@ -159,7 +159,7 @@ public class DecayingBloomFilter {
     }
 
     /**
-     * Only for extension by DecayingHashSet, which validates entryBytes itself
+     * Only for extension by {@link DecayingHashSet}, which validates entryBytes itself
      * and never stretches entries, so it is deliberately not checked here.
      *
      * @param durationMs entries last for at least this long

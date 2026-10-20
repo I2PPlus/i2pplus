@@ -134,7 +134,7 @@ abstract class TrayManager {
     }
 
     /**
-     * Create a Swing tray icon with JPopupMenu.
+     * Create a Swing tray icon with {@link JPopupMenu}.
      *
      * @param tooltip the tooltip text
      * @return the tray icon
@@ -296,7 +296,7 @@ abstract class TrayManager {
      *  Does not save. See InternalTrayManager.
      *
      *  @param enable true to display notifications, false to suppress them
-     *  @since 0.9.58 moved up from InternalTrayManager
+     *  @since 0.9.58 moved up from {@link InternalTrayManager}
      */
     protected void configureNotifications(boolean enable) {
         _showNotifications = enable;

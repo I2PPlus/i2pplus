@@ -405,7 +405,7 @@ public class EepHead extends EepGet {
     }
 
     /**
-     * We don't decrement the variable (unlike in EepGet), so this is valid.
+     * We don't decrement the variable (unlike in {@link EepGet}), so this is valid.
      *
      * @return the Content-Length reported by the server, in bytes
      */

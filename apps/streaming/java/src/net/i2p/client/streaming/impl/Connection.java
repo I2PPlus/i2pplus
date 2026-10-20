@@ -146,8 +146,8 @@ class Connection {
     private volatile long _lastCongestionHighestUnacked;
     /**
      * Consecutive loss events since the last recovery (graduated backoff).
-     *  Reset in ackPackets() once the lost window is fully recovered, and
-     *  decayed by one tier in retransmit() when a fresh strike arrives more
+     *  Reset in {@link #ackPackets()} once the lost window is fully recovered, and
+     *  decayed by one tier in {@link #retransmit()} when a fresh strike arrives more
      *  than one smoothed RTT after the previous one (see
      *  {@link #decayLossStrikes(int, long, long, long)}).
      * Accessed only under the _outboundPacketsLock.
@@ -267,7 +267,7 @@ class Connection {
     /**
      * Flag set when ackPackets() recorded forward progress since the
      * last RetransmitEvent.fire.  Used to decide whether to reset
-     * _retransmitCount in timeReached().
+     * _retransmitCount in {@link #timeReached()}.
      * Written and read on the router callback thread.
      */
     private volatile boolean _ackProgress;
@@ -2285,7 +2285,7 @@ class Connection {
      * net.i2p.client.streaming.impl.PacketLocal#getNumSends})
      * @param softResends of those, resends tagged as soft-failure-triggered
      * ({@link net.i2p.client.streaming.impl.PacketLocal#getNumSoftResends})
-     * @param maxSynSends per-connection SYN give-up budget (getMaxSynSends())
+     * @param maxSynSends per-connection SYN give-up budget ({@link #getMaxSynSends()})
      * @return true if the non-soft SYN send attempts exceed the budget
      * @since 0.9.71+
      */
@@ -2313,7 +2313,7 @@ class Connection {
     }
 
     /**
-     * Notify all threads waiting in packetSendChoke().
+     * Notify all threads waiting in {@link #packetSendChoke}.
      * Also update pacing rate since window size may have changed.
      */
     void windowAdjusted() {
@@ -2452,7 +2452,7 @@ class Connection {
      *  This sends all 'normal' packets (acks and data) for the first time.
      *  Retransmits are done in ResendPacketEvent below.
      *  Resets, pings, and pongs are done elsewhere in this class,
-     *  or in ConnectionManager or ConnectionHandler.
+     *  or in {@link ConnectionManager} or ConnectionHandler.
      *
      *  @param packet the ACK or data packet to send for the first time;
      *                null is ignored
@@ -2911,7 +2911,7 @@ class Connection {
     /**
      * Always true at the start, even if we haven't gotten a reply on an
      * outbound connection. Only set to false on disconnect.
-     * For outbound, use getHighestAckedThrough() &gt;= 0 also,
+     * For outbound, use {@link #getHighestAckedThrough()} &gt;= 0 also,
      * to determine if the connection is up.
      * <p>
      * In general, this is true until either:
@@ -2975,7 +2975,7 @@ class Connection {
      *
      *  @param cleanDisconnect if true, normal close; if false, send a RESET
      *  @param removeFromConMgr if true, enters TIME-WAIT if necessary.
-     *                          if false, MUST call disconnectComplete() later.
+     *                          if false, MUST call {@link #disconnectComplete()} later.
      *                          Should always be true unless called from ConnectionManager.
      */
     public void disconnect(boolean cleanDisconnect, boolean removeFromConMgr) {
@@ -3132,7 +3132,7 @@ class Connection {
     }
 
     /**
-     * Called from SchedulerImpl.
+     * Called from {@link SchedulerImpl}.
      *
      * @param msToWait wait in ms before the ConEvent releases its waiters
      * @since 0.9.23 moved here so we can use our timer
@@ -3185,7 +3185,7 @@ class Connection {
     /**
      *  The key to verify signatures with.
      *  The transient SPK if previously received,
-     *  else getRemotePeer().getSigningPublicKey() if previously received,
+     *  else {@link #getRemotePeer()}.getSigningPublicKey() if previously received,
      *  else null.
      *
      *  @return peer Destination or null if unset
@@ -4159,7 +4159,7 @@ if (!on) {
          *  a soft-failure notification triggers a retransmit without
          *  waiting for the current RTO to elapse.
          * <p>
-         *  Unlike pushBackRTO(), this always schedules a new timer event
+         *  Unlike {@link #pushBackRTO}, this always schedules a new timer event
          *  rather than relying on reschedule(..., false) which won't
          *  shorten a running timer.
          */

@@ -285,7 +285,7 @@ public class TunnelController implements Logging {
      * before being interpreted by this controller)
      * <p>
      * If config contains the "configFile" property, it will be set as the config path
-     * and may be retrieved with getConfigFile().
+     * and may be retrieved with {@link #getConfigFile()}.
      * <p>
      * Defaults in config properties are not recommended, they may or may not be honored.
      *
@@ -403,7 +403,7 @@ public class TunnelController implements Logging {
      * Creates alternate Destination with the same encryption keys as the primary Destination,
      * but a different signing key.
      * <p>
-     * Must have already called createPrivateKey() successfully.
+     * Must have already called {@link #createPrivateKey()} successfully.
      * Does nothing unless option OPT_ALT_PKF is set with the privkey file name.
      * Does nothing if the file already exists.
      *
@@ -810,7 +810,7 @@ public class TunnelController implements Logging {
      * Defaults in config properties are not honored.
      *
      * @return keys with the "option." prefix stripped, non-null
-     *         Much better than getClientOptions()
+     *         Much better than {@link #getClientOptions()}
      */
     public Properties getClientOptionProps() {
         Properties opts = new Properties();
@@ -871,7 +871,7 @@ public class TunnelController implements Logging {
     }
 
     /**
-     * May be restarted with restartTunnel() or startTunnel() later.
+     * May be restarted with {@link #restartTunnel()} or startTunnel() later.
      * This may not release all resources. In particular, the I2PSocketManager remains
      * and it may have timer threads that continue running.
      */
@@ -963,7 +963,7 @@ public class TunnelController implements Logging {
      }
 
      /**
-      * Set the startup delay end time. Called by TunnelControllerGroup when setting up delayed startup.
+      * Set the startup delay end time. Called by {@link TunnelControllerGroup} when setting up delayed startup.
       * @param delayMs the delay in milliseconds
       */
      void setStartupDelayEndTime(long delayMs) {
@@ -971,7 +971,7 @@ public class TunnelController implements Logging {
      }
 
      /**
-      * May NOT be restarted with restartTunnel() or startTunnel() later.
+      * May NOT be restarted with restartTunnel() or {@link #startTunnel()} later.
       * This should release all resources.
       */
      public void destroyTunnel() {
@@ -1351,7 +1351,7 @@ public class TunnelController implements Logging {
      * These are the ones with a prefix of "option.".
      *
      * @return one big string of "key=val key=val ..."
-     * @deprecated why would you want this? Use getClientOptionProps() instead
+     * @deprecated why would you want this? Use {@link #getClientOptionProps()} instead
      */
     @Deprecated
     public String getClientOptions() {
@@ -1390,7 +1390,7 @@ public class TunnelController implements Logging {
     public String getSpoofedHost() { return _config.getProperty(PROP_SPOOFED_HOST); }
 
     /**
-     * Probably not absolute. May be null. getPrivateKeyFile() recommended.
+     * Probably not absolute. May be null. {@link #getPrivateKeyFile()} recommended.
      * @return the priv key file
      */
     public String getPrivKeyFile() { return _config.getProperty(PROP_FILE); }

@@ -10,7 +10,7 @@ import net.i2p.data.DataHelper;
 /**
  * Store a single comment and/or rating. Unmodifiable except for marking as hidden. Stores a
  * one-second timestamp but designed so identical comments within a certain time frame (bucket) are
- * equal. Don't store in a plain set - see equals().
+ * equal. Don't store in a plain set - see {@link #equals}.
  *
  * @since 0.9.31
  */

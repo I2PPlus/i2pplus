@@ -57,7 +57,7 @@ public interface TunnelInfo {
     /**
      * For convenience.
      *
-     * @return getPeer(getLength() - 1)
+     * @return getPeer({@link #getLength()} - 1)
      * @since 0.8.9
      */
     public Hash getEndpoint();
@@ -65,7 +65,7 @@ public interface TunnelInfo {
     /**
      * For convenience.
      *
-     * @return isInbound() ? getGateway() : getEndpoint()
+     * @return {@link #isInbound()} ? getGateway() : getEndpoint()
      * @since 0.8.9
      */
     public Hash getFarEnd();

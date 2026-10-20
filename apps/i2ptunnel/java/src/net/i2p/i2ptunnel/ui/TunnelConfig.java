@@ -1291,7 +1291,7 @@ public class TunnelConfig {
 
     /**
      * Servers only.
-     * @since 0.9.41 pulled out from getConfig() above
+     * @since 0.9.41 pulled out from {@link #getConfig()} above
      */
     private void processEncryptMode(Properties config) {
         switch (_encryptMode) {

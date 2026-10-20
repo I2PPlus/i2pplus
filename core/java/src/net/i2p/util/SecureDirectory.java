@@ -6,9 +6,9 @@ import java.nio.file.attribute.PosixFilePermission;
 import java.util.EnumSet;
 
 /**
- * Same as File but sets the file mode after mkdir() so it can
+ * Same as File but sets the file mode after {@link #mkdir()} so it can
  * be read and written by the owner only (i.e. 700 on linux)
- * As of 0.8.2, just use SecureFile instead of this.
+ * As of 0.8.2, just use {@link SecureFile} instead of this.
  *
  * @since 0.8.1
  */

@@ -581,7 +581,7 @@ public class PrivateKeyFile {
      *  Create with the default signature type if nonexistent.
      * <p>
      *  Also reads in the file to get the privKey and signingPrivKey,
-     *  which aren't available from I2PClient.
+     *  which aren't available from {@link I2PClient}.
      *
      * @return the destination for this key file, creating it if the file does not exist
      * @throws I2PException if creation fails
@@ -731,7 +731,7 @@ public class PrivateKeyFile {
     }
 
     /**
-     * Change cert type - caller must also call write().
+     * Change cert type - caller must also call {@link #write()}.
      * Side effect - creates new Destination object.
      *
      * @param t the certificate type

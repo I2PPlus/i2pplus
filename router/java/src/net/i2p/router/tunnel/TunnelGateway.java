@@ -30,7 +30,7 @@ import net.i2p.util.SimpleTimer2;
  * or if debugging, verify that it can be decrypted properly)</li>
  * </ol>
  * <p>
- * Unused directly - see PumpedTunnelGateway, ThrottledPumpedTunnelGateway, and TunnelGatewayZeroHop overrides.
+ * Unused directly - see {@link PumpedTunnelGateway}, ThrottledPumpedTunnelGateway, and TunnelGatewayZeroHop overrides.
  */
 abstract class TunnelGateway {
     /** The router context. */

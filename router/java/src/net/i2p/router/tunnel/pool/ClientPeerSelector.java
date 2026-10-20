@@ -1885,7 +1885,7 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
         return rv;
     }
 
-    /** Immutable selection parameters computed once per selectPeers() call. */
+    /** Immutable selection parameters computed once per {@link #selectPeers()} call. */
     private static final class SelectionParams {
         final boolean isInbound;
         final double buildSuccess;
@@ -2397,7 +2397,7 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
 
     /**
      * A Set of Hashes that automatically adds to the
-     * Set in the contains() check.
+     * Set in the {@link #contains()} check.
      * <p>
      * So we don't need to generate the exclude set up front.
      *

@@ -12,7 +12,7 @@ import net.i2p.router.RouterContext;
  * this handles individual peer response timeouts while allowing
  * the broader iterative search to continue with other peers.
  * <p>
- * Coordinates with IterativeSearchJob to mark peers as failed
+ * Coordinates with {@link IterativeSearchJob} to mark peers as failed
  * when they don't respond within the expected time window.
  * The decision whether a timeout actually occurred is delegated
  * to the parent search job's failure detection logic.

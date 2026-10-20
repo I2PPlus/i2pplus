@@ -66,7 +66,7 @@ class PeerStateDestroyed implements SSU2Payload.PayloadCallback, SSU2Sender {
 
     /**
      * This must be called after the first termination or termination ack
-     * was sent from PeerState2, so the next packet number is correct.
+     * was sent from {@link PeerState2}, so the next packet number is correct.
      *
      * @param ctx the router context
      * @param transport the UDP transport

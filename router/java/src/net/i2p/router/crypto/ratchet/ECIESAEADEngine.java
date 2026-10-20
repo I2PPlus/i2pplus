@@ -109,10 +109,10 @@ public final class ECIESAEADEngine {
     // 1656
     private static final int MIN_NSR_MLKEM1024_SIZE = EncType.MLKEM1024_X25519_CT.getPubkeyLen() + MIN_NSR_SIZE + MACLEN;
     /**
-     * Caller MUST call startup() to get threaded generation.
+     * Caller MUST call {@link #startup()} to get threaded generation.
      * Will still work without, will just generate inline.
      * <p>
-     * startup() is called from RatchetSKM constructor so it's deferred until we need it.
+     * startup() is called from {@link RatchetSKM} constructor so it's deferred until we need it.
      * @param ctx the router context used to obtain the log, stats and sub-engines
      */
     public ECIESAEADEngine(RouterContext ctx) {

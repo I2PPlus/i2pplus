@@ -399,7 +399,7 @@ public class MLabRunner {
         public String getStatus();
     }
 
-    /** The parameter for runNDT() */
+    /** The parameter for {@link #runNDT} */
     public interface ToolListener {
         /**
          * Report a summary message

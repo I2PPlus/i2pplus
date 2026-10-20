@@ -47,7 +47,7 @@ public abstract class RoutingKeyGenerator {
     /**
      * Generator for this context.
      *
-     * @return null in I2PAppContext; non-null in RouterContext.
+     * @return null in {@link I2PAppContext}; non-null in RouterContext.
      */
     public static RoutingKeyGenerator getInstance() {
         return I2PAppContext.getGlobalContext().routingKeyGenerator();
@@ -65,7 +65,7 @@ public abstract class RoutingKeyGenerator {
      * Routing key for a key.
      * <p>
      * The result depends on the mod data of the implementing generator, so
-     * compare getLastChanged() before reusing a previously derived key.
+     * compare {@link #getLastChanged()} before reusing a previously derived key.
      *
      * @param origKey non-null
      * @return the routing key

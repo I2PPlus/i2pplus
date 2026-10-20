@@ -78,7 +78,7 @@ import java.nio.charset.StandardCharsets;
 public class WebMail extends HttpServlet {
     /**
      * A fresh servlet: the logger is built by the field initialiser and every other
-     * setting is static, so init() and the requests do the rest.
+     * setting is static, so {@link #init()} and the requests do the rest.
      */
     public WebMail() {}
 
@@ -3427,7 +3427,7 @@ public class WebMail extends HttpServlet {
      * The sender string.
      *
      * @return non-null
-     * @since 0.9.63 pulled out of showCompose()
+     * @since 0.9.63 pulled out of {@link #showCompose()}
      */
     private static String getDefaultSender(SessionObject sessionObject) {
         String from;

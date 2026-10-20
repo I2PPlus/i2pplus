@@ -78,7 +78,7 @@ import net.i2p.util.Translate;
  * Core router implementation that manages I2P node lifecycle, configuration, and subsystem coordination.
  * Handles startup/shutdown, router info management, bandwidth capabilities, and provides the main entry point for both embedded and standalone router operation.
  * <p>
- * For embedded use, instantiate, call setKillVMOnEnd(false), and then call runRouter().
+ * For embedded use, instantiate, call setKillVMOnEnd(false), and then call {@link #runRouter()}.
  */
 public class Router implements RouterClock.ClockShiftListener {
     private Log _log;
@@ -150,7 +150,7 @@ public class Router implements RouterClock.ClockShiftListener {
      * @since 0.9.34
      */
     public static final String PROP_REBUILD_KEYS = "router.rebuildKeys";
-    /** Deprecated, use gracefulShutdownInProgress(). */
+    /** Deprecated, use {@link #gracefulShutdownInProgress()}. */
     private static final String PROP_SHUTDOWN_IN_PROGRESS = "__shutdownInProgress";
     /**
      * Config property for the inbound exploratory pool random key.
@@ -295,7 +295,7 @@ public class Router implements RouterClock.ClockShiftListener {
          * of initializing the user's config directory if it did not exist.
          * <p>
          * If the base dir and/or config dir are set in the config file, they wil be used after
-         * the initialization of the (possibly different) dirs determined by WorkingDir.
+         * the initialization of the (possibly different) dirs determined by {@link WorkingDir}.
          * So for now, it doesn't make much sense to set the base or config dirs in the config file -
          * use properties instead. If for some reason, distros need this, we can revisit it.
          * <p>
@@ -675,7 +675,7 @@ public class Router implements RouterClock.ClockShiftListener {
      * This must be called after instantiation.
      * Starts the threads. Does not install updates.
      * This is for embedded use.
-     * Standard standalone installation uses main() instead, which
+     * Standard standalone installation uses {@link #main} instead, which
      * checks for updates and then calls this.
      * <p>
      * This may take quite a while, especially if NTP fails
@@ -747,7 +747,7 @@ public class Router implements RouterClock.ClockShiftListener {
      * It does not clear the config first, so settings not found in
      * the file will remain in the config.
      * <p>
-     * This is synchronized with saveConfig().
+     * This is synchronized with {@link #saveConfig()}.
      * Not for external use.
      */
     @SuppressWarnings({"unchecked", "rawtypes" })
@@ -804,7 +804,7 @@ public class Router implements RouterClock.ClockShiftListener {
         INITIALIZED,
         /** Startup: runRouter() called. */
         STARTING_1,
-        /** Startup: startupStuff() complete, most of the time here is NTP. */
+        /** Startup: {@link #startupStuff()} complete, most of the time here is NTP. */
         STARTING_2,
         /** NTP done, Job queue started, StartupJob queued, runRouter() returned. */
         STARTING_3,
@@ -824,11 +824,11 @@ public class Router implements RouterClock.ClockShiftListener {
         RESTARTING,
         /** Cancellable shutdown has begun. */
         GRACEFUL_SHUTDOWN,
-        /** In shutdown(). Non-cancellable shutdown has begun. */
+        /** In {@link #shutdown()}. Non-cancellable shutdown has begun. */
         FINAL_SHUTDOWN_1,
-        /** In shutdown2(). Killing everything. */
+        /** In {@link #shutdown2()}. Killing everything. */
         FINAL_SHUTDOWN_2,
-        /** In finalShutdown(). Final cleanup. */
+        /** In {@link #finalShutdown()}. Final cleanup. */
         FINAL_SHUTDOWN_3,
         /** All done. */
         STOPPED
@@ -1879,7 +1879,7 @@ public class Router implements RouterClock.ClockShiftListener {
      * Save the current config options (returning true if save was
      * successful, false otherwise)
      * <p>
-     * Synchronized with file read in getConfig().
+     * Synchronized with file read in {@link #getConfig}.
      *
      * @return true if the properties were written, false if the write failed
      */
@@ -1963,7 +1963,7 @@ public class Router implements RouterClock.ClockShiftListener {
      * This is not a graceful restart - all peer connections are dropped immediately.
      * <p>
      * As of 0.8.8, this returns immediately and does the actual restart in a separate thread.
-     * Poll isAlive() if you need to know when the restart is complete.
+     * Poll {@link #isAlive()} if you need to know when the restart is complete.
      * <p>
      * Not recommended for external use.
      */
@@ -2075,7 +2075,7 @@ public class Router implements RouterClock.ClockShiftListener {
 
     /**
      * Start a thread that will periodically update the file "{@code router.ping}".
-     * isOnlyRouterRunning() MUST have been called previously.
+     * {@link #isOnlyRouterRunning()} MUST have been called previously.
      */
     private void beginMarkingLiveliness() {
         File f = getPingFile();

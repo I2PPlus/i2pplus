@@ -5,7 +5,7 @@ import net.i2p.data.i2np.I2NPMessage;
 import net.i2p.router.RouterContext;
 
 /**
- * Override to not call failed() in setMessage(),
+ * Override to not call failed() in {@link #setMessage},
  * as it will be called from runJob().
  *
  * @since 0.9.56

@@ -92,7 +92,7 @@ class SAMStreamSession implements SAMMessageSess {
     /**
      * Create a new SAM STREAM session.
      * <p>
-     * Caller MUST call start().
+     * Caller MUST call {@link #start()}.
      *
      * @param dest Base64-encoded destination and private keys,
      * and optional offline signature section (same format as PrivateKeyFile)
@@ -266,7 +266,7 @@ class SAMStreamSession implements SAMMessageSess {
     /** Closes SAM session when the underlying I2P manager disconnects. */
     protected class DisconnectListener implements I2PSocketManager.DisconnectListener {
         /**
-         * The enclosing SAMStreamSession is what sessionDisconnected() closes; this inner
+         * The enclosing SAMStreamSession is what {@link #sessionDisconnected()} closes; this inner
          * class adds no state, and the compiler supplies the outer instance.
          */
         protected DisconnectListener() {}

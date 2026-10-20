@@ -505,7 +505,7 @@ public class Log {
     /**
      * The logging scope object for this log.
      *
-     * @return the scope object, whose equals() compares scope strings
+     * @return the scope object, whose {@link #equals} compares scope strings
      */
     public Object getScope() {
         return _scope;

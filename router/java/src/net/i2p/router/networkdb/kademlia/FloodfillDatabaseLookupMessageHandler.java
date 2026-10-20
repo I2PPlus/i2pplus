@@ -289,7 +289,7 @@ public class FloodfillDatabaseLookupMessageHandler implements HandlerJobBuilder 
     }
 
     /**
-     * Extract IP:port from RouterInfo for a peer hash.
+     * Extract IP:port from {@link RouterInfo} for a peer hash.
      * @return the IP from hash
      */
     private String getIPFromHash(Hash h) {

@@ -70,7 +70,7 @@ class I2PSocketFull implements I2PSocket {
 
     /**
      * Resets and closes this socket. Sends a RESET indication to the far-end.
-     * This is the equivalent of setSoLinger(true, 0) followed by close() on a Java Socket.
+     * This is the equivalent of setSoLinger(true, 0) followed by {@link #close()} on a Java Socket.
      * <p>
      * Nonblocking.
      * Any thread currently blocked in an I/O operation upon this socket will throw an IOException.

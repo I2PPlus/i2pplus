@@ -46,7 +46,7 @@ import java.io.OutputStream;
  *
  */
 public class TunnelId {
-    /** LOCKING: this, see setTunnelId(). */
+    /** LOCKING: this, see {@link #setTunnelId()}. */
     private long _tunnelId;
 
     /** Maximum tunnel ID value (2^32 - 1). */

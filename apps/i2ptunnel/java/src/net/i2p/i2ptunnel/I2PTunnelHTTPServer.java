@@ -197,7 +197,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
         new ConcurrentHashMap<>(4);
     private static final Object _ioExecutorLock = new Object();
     /**
-     * Default I/O transfer threads (global budget); Tuner adjusts via TunnelControllerGroup.
+     * Default I/O transfer threads (global budget); Tuner adjusts via {@link TunnelControllerGroup}.
      * Sized for concurrent body transfers across many server tunnels (e.g. 16
      * eepsites x floor 8 = 128 threads when fully loaded).
      */
@@ -1907,7 +1907,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
      * Handle port 443 (SSL passthrough).
      * If no target is configured for port 443, reset the socket.
      * Otherwise, set a long timeout and forward directly to the server
-     * via I2PTunnelRunner.
+     * via {@link I2PTunnelRunner}.
      *
      * @param socket the incoming I2P socket
      * @return true if the socket was handled (port 443), false otherwise
@@ -3521,7 +3521,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
      * @throws EOFException if EOF is reached before newline
      * @throws LineTooLongException if too long
      * @throws IOException on other errors in the underlying stream
-     * @since 0.9.19 modified from DataHelper
+     * @since 0.9.19 modified from {@link DataHelper}
      */
     private static void readLine(I2PSocket socket, StringBuilder buf, long timeout) throws IOException {
         if (timeout <= 0) {throw new SocketTimeoutException();}

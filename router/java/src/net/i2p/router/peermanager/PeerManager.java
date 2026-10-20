@@ -35,7 +35,7 @@ import net.i2p.util.SimpleTimer2;
   * - Runs Reorg on SimpleTimer2 which calls
    * {@link net.i2p.router.peermanager.ProfileOrganizer#reorganize} at adaptive intervals
  * (30s early uptime → 90s medium → 250s steady state)
- * - Periodically stores profiles to disk via ProfilePersistenceHelper (every 15 min)
+ * - Periodically stores profiles to disk via {@link ProfilePersistenceHelper} (every 15 min)
  * - Loads stored profiles from disk on startup in a background thread
  * - Selects peers for PeerTestJob via selectPeers(criteria) — PURPOSE_TEST only
  * <p>
@@ -399,7 +399,7 @@ class PeerManager {
      * Find some peers that meet the criteria and we have the netDb info for locally.
      * Returned list will not include ourselves.
      * <p>
-     * Only supports PURPOSE_TEST — used exclusively by PeerTestJob.
+     * Only supports PURPOSE_TEST — used exclusively by {@link PeerTestJob}.
      * Other purpose constants were removed; add new purposes as needed.
      *
      * @param criteria supplies the selection purpose and the minimum number of

@@ -240,7 +240,7 @@ public class FloodfillPeerSelector extends PeerSelector {
      * out for 45 minutes would hurt the most vulnerable moment.
      */
     private static final long STARTUP_GRACE_PERIOD = HEARD_AGE;
-    /** Floodfills with RouterInfo published longer ago than this are skipped. */
+    /** Floodfills with {@link RouterInfo} published longer ago than this are skipped. */
     private static final long MAX_RI_AGE = 3*60*60*1000L;
 
     /**

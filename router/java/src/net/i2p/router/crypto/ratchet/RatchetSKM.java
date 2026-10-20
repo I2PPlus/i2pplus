@@ -873,7 +873,7 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
 
     /**
      * Return a map of PublicKey to a set of inbound RatchetTagSets for that key.
-     * Only for renderStatusHTML() below.
+     * Only for {@link #renderStatusHTML()} below.
      * Does not return expired sets or sets with null keys.
      * @return the ratchet tag sets by public key
      */
@@ -1631,7 +1631,7 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
          * <p>
          * Note: We do NOT remove remaining inbound tags from _inboundTagSets here.
          * The addTags() sliding window in consume() already handles tag lifecycle —
-         * generating new tags ahead and trimming old ones via expireTag(). Purging
+         * generating new tags ahead and trimming old ones via {@link #expireTag}. Purging
          * all tags on first consumption broke subsequent ES decryptions because
          * Alice's retransmitted SYNs (using pre-generated tags 1-N) could no longer
          * be found in _inboundTagSets.

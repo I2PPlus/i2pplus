@@ -20,7 +20,7 @@ import net.i2p.util.Log;
  * reading the whole thing into memory.
  * Keys are always converted to lower case.
  * <p>
- * Callers should iterate all the way through or call close()
+ * Callers should iterate all the way through or call {@link #close()}
  * to ensure the underlying stream is closed.
  * <p>
  * This is not used for config files.
@@ -35,7 +35,7 @@ class HostTxtIterator implements Iterator<Map.Entry<String, HostTxtEntry>>, Clos
     private MapEntry next;
 
     /**
-     * A dummy iterator in which hasNext() is always false.
+     * A dummy iterator in which {@link #hasNext()} is always false.
      */
     public HostTxtIterator() {
         // Default constructor

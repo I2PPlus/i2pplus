@@ -33,7 +33,7 @@ class SortHelper {
      * WARNING - this sort order must be consistent network-wide, so while the order is arbitrary,
      * it cannot be changed.
      * Why? Just because it has to be consistent so signing will work.
-     * DEPRECATED - Only used by RouterInfo.
+     * DEPRECATED - Only used by {@link RouterInfo}.
      *
      * @param <T> the DataStructure subtype being ordered
      * @param dataStructures the structures to order, or null to get an empty result
@@ -63,7 +63,7 @@ class SortHelper {
     }
 
     /**
-     * See sortStructures() comments.
+     * See {@link #sortStructures} comments.
      * @since 0.8.3
      */
     private static class DataStructureComparator implements Comparator<DataStructure>, Serializable {

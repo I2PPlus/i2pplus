@@ -127,7 +127,7 @@ final class NetDbComparators {
         private static final long serialVersionUID = 1L;
 
         /**
-         * A stateless comparator, so a bare instance is enough: compare() reads
+         * A stateless comparator, so a bare instance is enough: {@link #compare} reads
          * nothing but the two addresses it is handed.
          */
         RAComparator() {}

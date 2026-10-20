@@ -176,7 +176,7 @@ class SubSession extends I2PSessionMuxedImpl {
 
     /**
      * Deliver an I2CP message to the router.
-     * Does NOT check state. Call only from connect() or other methods that need to
+     * Does NOT check state. Call only from {@link #connect()} or other methods that need to
      * send messages when not in OPEN state.
      *
      * @throws I2PSessionException if the message is malformed or there is an error writing it out
@@ -289,7 +289,7 @@ class SubSession extends I2PSessionMuxedImpl {
 
     /**
      * Blocking. Waits a max of 10 seconds by default.  See lookupDest with maxWait parameter to change.
-     * Implemented in 0.8.3 in I2PSessionImpl; previously was available only in I2PSimpleSession.
+     * Implemented in 0.8.3 in {@link I2PSessionImpl}; previously was available {@link I2PSimpleSession}eSession.
      * Multiple outstanding lookups are now allowed.
      *
      * @return null on failure

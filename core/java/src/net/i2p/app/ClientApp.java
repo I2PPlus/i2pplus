@@ -13,7 +13,7 @@ package net.i2p.app;
  * Do not take a long time. Do not block. Never start threads or processes in it.
  * The ClientAppState of the returned object must be INITIALIZED,
  * or else throw something.
- * The startup() method will be called next.
+ * The {@link #startup()} method will be called next.
  * <p>
  * Never ever hold a static reference to the context or anything derived from it.
  *

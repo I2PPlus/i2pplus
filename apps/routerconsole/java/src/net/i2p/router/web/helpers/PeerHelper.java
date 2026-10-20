@@ -108,7 +108,7 @@ public class PeerHelper extends HelperBase {
      * Warning - blocking, very slow, queries the active UPnP router,
      * will take many seconds if it has vanished.
      *
-     * @since 0.9.31 moved from TransportManager
+     * @since 0.9.31 moved from {@link TransportManager}
      */
     private void renderStatusHTML(Writer out, String urlBase, int sortFlags) throws IOException {
         if (_context.commSystem().isDummy()) {
@@ -688,7 +688,7 @@ public class PeerHelper extends HelperBase {
     /**
      * Render the NTCP transport peer listing.
      *
-     * @since 0.9.31 moved from NTCPTransport
+     * @since 0.9.31 moved from {@link NTCPTransport}
      */
     private void render(NTCPTransport nt, Writer out, int sortFlags) throws IOException {
         boolean IPv6Enabled = _context.getBooleanProperty("i2np.ntcp.ipv6") ||
@@ -1002,7 +1002,7 @@ public class PeerHelper extends HelperBase {
     /**
      * Render the SSU/UDP transport peer listing.
      *
-     * @since 0.9.31 moved from UDPTransport
+     * @since 0.9.31 moved from {@link UDPTransport}
      */
     private void render(UDPTransport ut, Writer out, String urlBase, int sortFlags, boolean debugmode) throws IOException {
         TreeSet<PeerState> peers = new TreeSet<>(getComparator(sortFlags));

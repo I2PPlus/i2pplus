@@ -159,7 +159,7 @@ class GraphRenderer {
     /**
      * SimpleDateFormats are expensive to construct and not thread-safe, so
      * cache one per thread for each timezone variant instead of allocating
-     * new ones on every render() call.
+     * new ones on every {@link #render()} call.
      */
     private static final ThreadLocal<SimpleDateFormat> LOCAL_DATE_FMT =
             ThreadLocal.withInitial(() -> new SimpleDateFormat("dd MMM HH:mm", Locale.US));
@@ -254,7 +254,7 @@ class GraphRenderer {
      * @param titleOverride If non-null, overrides the title
      * @param showRestarts if true, draw the vertical restart lines and "Router restarted" label
      * @throws IOException if the graph cannot be produced
-     * @since 0.9.6 consolidated from GraphGenerator for bw.combined
+     * @since 0.9.6 consolidated from {@link GraphGenerator} for bw.combined
      */
     public void render(
             OutputStream out,

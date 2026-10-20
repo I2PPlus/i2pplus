@@ -717,7 +717,7 @@ class Sorters {
     /**
      * Sort alphabetically in current locale, ignore case, directories first.
      *
-     * @since 0.9.6 moved from I2PSnarkServlet in 0.9.16
+     * @since 0.9.6 moved from {@link I2PSnarkServlet} in 0.9.16
      */
     private static class FileNameComparator implements Comparator<FileAndIndex>, Serializable {
 

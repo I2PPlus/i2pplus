@@ -7,7 +7,7 @@ import org.jfree.svg.SVGGraphics2D;
 
 /**
  * I2P adapter for jfreesvg. State deduplication in {@link ImageWorker} handles inline style
- * reduction; SVG element grouping is handled by postProcessSvg consolidation in SVGGraphics2D.
+ * reduction; SVG element grouping is handled by postProcessSvg consolidation in {@link SVGGraphics2D}.
  *
  */
 public class SVGImageWorker extends ImageWorker {

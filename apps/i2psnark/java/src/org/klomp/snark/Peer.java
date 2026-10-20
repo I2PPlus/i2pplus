@@ -279,7 +279,7 @@ public class Peer implements Comparable<Peer>, BandwidthListener {
     }
 
     /**
-     * Compares this peer to another by PeerID, then by internal ID.
+     * Compares this peer to another by {@link PeerID}, then by internal ID.
      *
      * @param p the peer to compare to
      * @return a negative, zero, or positive integer
@@ -816,7 +816,7 @@ public class Peer implements Comparable<Peer>, BandwidthListener {
 
     /**
      * Returns the number of bytes that have been downloaded. Can be reset to zero with <code>
-     * resetCounters()</code> which is called every CHECK_PERIOD by PeerCheckerTask.
+     * resetCounters()</code> which is called every CHECK_PERIOD by {@link PeerCheckerTask}.
      * @return the downloaded byte count since the last counter reset
      */
     public long getDownloaded() {
@@ -851,7 +851,7 @@ public class Peer implements Comparable<Peer>, BandwidthListener {
     }
 
     /**
-     * Should we send this many bytes? Do NOT call uploaded() after this.
+     * Should we send this many bytes? Do NOT call {@link #uploaded} after this.
      *
      * @return true if the bandwidth listener allows the send, which is then counted
      * @since 0.9.62
@@ -1013,7 +1013,7 @@ public class Peer implements Comparable<Peer>, BandwidthListener {
 
     /**
      * Retransmit outstanding requests if necessary
-     * Does nothing if supportsFast().
+     * Does nothing if {@link #supportsFast()}.
      */
     public void retransmitRequests() {
         if (supportsFast())

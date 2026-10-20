@@ -148,7 +148,7 @@ class SAMv3Handler extends SAMv1Handler
     }
 
     /**
-     * For subsessions created by MasterSession.
+     * For subsessions created by {@link MasterSession}.
      * @param sess the raw session to route reply traffic to
      * @since 0.9.25
      */
@@ -177,7 +177,7 @@ class SAMv3Handler extends SAMv1Handler
 
     /**
      * Process a single complete command line dispatched by the pool
-     * or the legacy handle() loop. Returns false to signal the caller
+     * or the legacy {@link #handle()} loop. Returns false to signal the caller
      * that the handler should stop.
      *
      * @param line the complete command line (without trailing newline)
@@ -254,7 +254,7 @@ class SAMv3Handler extends SAMv1Handler
     /**
      * Legacy handle() method. Not used when the handler is managed by
      * {@link SAMHandlerPool}, which dispatches via processLine().
-     * Retained to fulfill the abstract contract in SAMHandler.
+     * Retained to fulfill the abstract contract in {@link SAMHandler}.
      */
     @Override
     public void handle() {

@@ -70,7 +70,7 @@ class EventPumper implements Runnable {
     private Selector _selector;
     private final Set<NTCPConnection> _wantsWrite = new ConcurrentHashSet<>(32);
     /**
-     * The following 3 are unbounded and lockless for performance in runDelayedEvents().
+     * The following 3 are unbounded and lockless for performance in {@link #runDelayedEvents()}.
      */
     private final Queue<NTCPConnection> _wantsRead = new ConcurrentLinkedQueue<>();
     private final Queue<ServerSocketChannel> _wantsRegister = new ConcurrentLinkedQueue<>();
@@ -300,7 +300,7 @@ class EventPumper implements Runnable {
     }
 
     /**
-     * Selector can take quite a while to close after calling stopPumping().
+     * Selector can take quite a while to close after calling {@link #stopPumping()}.
      * @return true until stopPumping() is called and the selector has closed
      */
     public boolean isAlive() {
@@ -554,7 +554,7 @@ class EventPumper implements Runnable {
      * and the idle-loop count used by the Tuner to derive an idle ratio. Also scales
      * _currentDelay to curb busy-spinning: raise it quickly when the loop rate stays
      * far above the spin threshold, lower it slowly once the rate drops. The hard
-     * idle cap lives in throttleIdleLoop(); this stays as a responsiveness lever.
+     * idle cap lives in {@link #throttleIdleLoop()}; this stays as a responsiveness lever.
      *
      * @param loopCountSinceLastRate  total iterations in the window
      * @param idleLoopCountSinceLastRate  no-work iterations in the window
@@ -799,7 +799,7 @@ class EventPumper implements Runnable {
 
     /**
      * Read buffer returned to the pool.
-     * These buffers must be from acquireBuf(), i.e. capacity() == BUF_SIZE.
+     * These buffers must be from {@link #acquireBuf()}, i.e. capacity() == BUF_SIZE.
      * High-frequency path in thread.
      *
      * @param buf the buffer to give back, null and undersized buffers are ignored
@@ -1387,7 +1387,7 @@ class EventPumper implements Runnable {
 
     /**
      * Handle an I/O error on a read. An inbound connection that errored before its
-     * first message escalates its IP through countInboundNoMessage(); the connection
+     * first message escalates its IP through {@link #countInboundNoMessage()}; the connection
      * is recorded as a read error when established or as a failed connect otherwise
      * (marking the peer unreachable if it was an outbound attempt).
      *
@@ -1434,7 +1434,7 @@ class EventPumper implements Runnable {
      * <p>
      * Single-writer contract: this must only be called on the pumper thread
      * (via processWrite(SelectionKey) for OP_WRITE events). Producer threads
-     * call wantsWrite() to register interest; they never write to the socket
+     * call {@link #wantsWrite()} to register interest; they never write to the socket
      * themselves. This keeps {@link java.nio.channels.SocketChannel#write} strictly single-threaded per
      * connection and removes the _writeLock serialization that previously
      * spanned the whole drain loop (which could stall frame pushes from the

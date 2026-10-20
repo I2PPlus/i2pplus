@@ -172,7 +172,7 @@ public class X25519KeyFactory extends I2PThread implements KeyFactory {
     /**
      * Called by the Tuner every 15 seconds. Manages fill ceiling (_maxSize)
      * based on demand and memory pressure. Does NOT override the Tuner-set
-     * _minSize — the Tuner owns that value via setMinSize().
+     * _minSize — the Tuner owns that value via {@link #setMinSize}.
      *
      * @since 0.9.70+
      */

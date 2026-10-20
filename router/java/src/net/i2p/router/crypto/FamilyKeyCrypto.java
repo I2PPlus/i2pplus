@@ -150,7 +150,7 @@ public class FamilyKeyCrypto {
     /**
      * Periodic cleanup to prevent unbounded growth of the negative cache.
      * Clears old entries so they can be re-checked on next access.
-     * Runs every hour via SimpleTimer2.
+     * Runs every hour via {@link SimpleTimer2}.
      */
     private void cleanup() {
         int sz = _negativeCache.size();

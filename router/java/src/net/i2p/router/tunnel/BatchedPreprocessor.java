@@ -86,7 +86,7 @@ class BatchedPreprocessor extends TrivialPreprocessor {
     static long DEFAULT_DELAY = SystemVersion.isSlow() ? 100 : 20;
     /**
      * Wait up to this long before sending (flushing) a small tunnel message
-     * Warning - overridden in BatchedRouterPreprocessor.
+     * Warning - overridden in {@link BatchedRouterPreprocessor}.
      *
      * @return the send delay in ms
      */
@@ -135,7 +135,7 @@ class BatchedPreprocessor extends TrivialPreprocessor {
      * Pressure is the max of buffer fullness (allocated/FULL_SIZE)
      * and queue pressure (pending.size/FORCE_BATCH_FLUSH), bounded [0,1].
      * <p>
-     * delay = MIN_FLUSH_DELAY + (getSendDelay() - MIN_FLUSH_DELAY) * (1 - pressure).
+     * delay = MIN_FLUSH_DELAY + ({@link #getSendDelay()} - MIN_FLUSH_DELAY) * (1 - pressure).
      */
     private long computePendingDelay(long allocated, int pendingSize) {
         int fullnessPct = (int) (allocated * 100L / FULL_SIZE);

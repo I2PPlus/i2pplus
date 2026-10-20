@@ -37,7 +37,7 @@ class MessageState {
     private State _state = State.INIT;
 
     /**
-     *  For synchronous waiting for accept with waitForAccept().
+     *  For synchronous waiting for accept with {@link #waitForAccept}.
      *  UNUSED.
      *
      *  @param ctx the context supplying the clock and log used for the

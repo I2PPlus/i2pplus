@@ -57,7 +57,7 @@ import net.i2p.util.SystemVersion;
  * <ul>
  * <li>Creating and managing files/directories for torrent data</li>
  * <li>Reading and writing piece data to disk</li>
- * <li>Tracking downloaded pieces via BitField</li>
+ * <li>Tracking downloaded pieces via {@link BitField}</li>
  * <li>Validating downloaded pieces against piece hashes</li>
  * <li>File pre-allocation for sparse file support</li>
  * <li>Priority-based file selection for partial downloads</li>
@@ -173,7 +173,7 @@ public class Storage implements Closeable {
     /**
      * Creates a new storage based on the supplied MetaInfo.
      *
-     * <p>Does not check storage. Caller MUST call check(), which will try to create and/or check
+     * <p>Does not check storage. Caller MUST call {@link #check()}, which will try to create and/or check
      * all needed files in the MetaInfo.
      *
      * @param util the wrapper for general configuration and torrent filtering
@@ -503,7 +503,7 @@ public class Storage implements Closeable {
     /**
      * Record a file or folder that exists but could not be read, and warn.
      * The creation proceeds with the readable data; if there is none, the
-     * caller fails with noDataMessage() naming the unreadable paths.
+     * caller fails with {@link #noDataMessage()} naming the unreadable paths.
      *
      * @param f the unreadable file or folder
      * @param reason a short human-readable reason
@@ -784,7 +784,7 @@ public class Storage implements Closeable {
     /**
      * File checking in progress.
      *
-     * @return true while checkCreateFiles() holds the check, cleared in a finally
+     * @return true while {@link #checkCreateFiles} holds the check, cleared in a finally
      * @since 0.9.3
      */
     public boolean isChecking() {
@@ -816,7 +816,7 @@ public class Storage implements Closeable {
     }
 
     /**
-     * Index to pass to remaining(), getPriority(), setPriority().
+     * Index to pass to {@link #remaining()}, getPriority(), setPriority().
      *
      * @param file non-canonical path (non-directory)
      * @return internal index of file; -1 if unknown file
@@ -837,7 +837,7 @@ public class Storage implements Closeable {
     /**
      * For efficiency, calculate remaining bytes for all files at once.
      *
-     * @return number of bytes remaining for each file, use indexOf() to get index for a file
+     * @return number of bytes remaining for each file, use {@link #indexOf} to get index for a file
      * @since 0.9.23
      */
     public long[] remaining() {
@@ -991,7 +991,7 @@ public class Storage implements Closeable {
     }
 
     /**
-     * Call setPriority() for all changed files first, then call this. Set the piece priority to the
+     * Call {@link #setPriority} for all changed files first, then call this. Set the piece priority to the
      * highest priority of all files spanning the piece. Caller must pass array to the
      * PeerCoordinator.
      *
@@ -1079,7 +1079,7 @@ public class Storage implements Closeable {
 
     /**
      * Creates (and/or checks) all files from the metainfo file list. Only call this once, and only
-     * after the constructor with the metainfo. Use recheck() to check again later.
+     * after the constructor with the metainfo. Use {@link #recheck()} to check again later.
      *
      * @throws IllegalStateException if called more than once
      * @throws IOException if a required file or directory cannot be created or deleted
@@ -2191,7 +2191,7 @@ public class Storage implements Closeable {
      * @param shouldPreallocate whether to balloon sparse files
      * @param forceRW if true, open the data files read-write even when the
      *                storage thinks they are complete, and try to make them writable
-     *                if permissions deny it.  Without this, checkRAF() opens files
+     *                if permissions deny it.  Without this, {@link #checkRAF()} opens files
      *                read-only for a complete torrent, and the write (or the
      *                pre-allocation ballooning) then fails with EBADF on a healthy
      *                disk.
@@ -2968,10 +2968,10 @@ public class Storage implements Closeable {
          * whether the file is still sparse.
          *
          * <p>The file MUST already exist or this throws an IOE. A sparse file is defragged
-         * later by balloonFile(), when the caller that is checking the storage gets there.
+         * later by {@link #balloonFile()}, when the caller that is checking the storage gets there.
          *
          * <p>Opens the file read-write through checkRAF(true); the caller must synchronize
-         * and call closeRAF().
+         * and call {@link #closeRAF()}.
          */
         public synchronized void allocateFile() throws IOException {
             // caller synchronized
@@ -3009,7 +3009,7 @@ public class Storage implements Closeable {
          * This "balloons" the file with zeros to eliminate disk fragmentation., Overwrites the
          * entire file with zeros. Sets isSparse[nr] = false.
          *
-         * <p>Caller must synchronize and call checkRAF() or openRAF().
+         * <p>Caller must synchronize and call checkRAF() or {@link #openRAF()}.
          *
          * @since 0.9.1
          */

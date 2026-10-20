@@ -14,7 +14,7 @@ package net.i2p.router;
 public class RouterLaunch {
 
     /**
-     * Launching is entirely main()'s job - it hands the arguments to Router - so an
+     * Launching is entirely {@link #main}'s job - it hands the arguments to Router - so an
      * instance starts nothing and carries no state.
      */
     public RouterLaunch() {}

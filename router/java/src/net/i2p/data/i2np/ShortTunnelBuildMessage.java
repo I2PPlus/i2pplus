@@ -19,7 +19,7 @@ public class ShortTunnelBuildMessage extends TunnelBuildMessage {
     public static final int SHORT_RECORD_SIZE = 218;
 
     /**
-     * Zero record count, will be set with readMessage().
+     * Zero record count, will be set with {@link #readMessage}.
      *
      * @param context the context to use for the message
      */

@@ -10,7 +10,7 @@ import net.i2p.util.Log;
  */
 public class ProfilesHelper extends HelperBase {
     /**
-     * Starts on tab 0, which lists every profile; setFull() or setShow() moves the
+     * Starts on tab 0, which lists every profile; {@link #setFull} or setShow() moves the
      * helper to a single tier before anything is rendered.
      */
     public ProfilesHelper() {}

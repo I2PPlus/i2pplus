@@ -20,7 +20,7 @@ public class TuningFormHandler extends FormHandler {
 
     /**
      * Construct a handler for one tuning-page submission; submitted field
-     * values arrive through the setters below and are applied by processForm().
+     * values arrive through the setters below and are applied by {@link #processForm()}.
      */
     public TuningFormHandler() {}
 
@@ -376,7 +376,7 @@ public class TuningFormHandler extends FormHandler {
     /**
      * Record the Default control for the ACK_FREQUENCY Tuner param: the default
      * the auto-tuner starts from and reverts toward.
-     * @param v raw text from the Default input, parsed by saveField()
+     * @param v raw text from the Default input, parsed by {@link #saveField}
      */
     public void setAckFrequencyDefault(String v) { _formValues.put("ackFrequencyDefault", v); }
     /**

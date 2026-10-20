@@ -15,7 +15,7 @@ import java.util.Map;
  * A database of SAM sessions, mapping nicknames to {@link SessionRecord}s.
  * Provides synchronized access for concurrent SAM handlers.
  *
- * @since 0.9.25 moved from SAMv3Handler
+ * @since 0.9.25 moved from {@link SAMv3Handler}
  */
 class SessionsDB {
 

@@ -145,7 +145,7 @@ public class PeerState {
     /**
      * Minimum transmitted packets before a loss ratio is reported, from
      * {@link ProfileOrganizer#PROP_LOSSY_MIN_PACKETS}. Read once per peer
-     * rather than per volley: reportLossRatio() is called under _outboundLock,
+     * rather than per volley: {@link #reportLossRatio()} is called under _outboundLock,
      * and a property lookup there falls through to System.getProperty every
      * time. A peer reads it once at construction, which is off the hot path.
      *
@@ -289,7 +289,7 @@ public class PeerState {
 
     /**
      * Compute aggregate transport stats across all peers for tuner visibility.
-     * Called periodically from OutboundMessageFragments.
+     * Called periodically from {@link OutboundMessageFragments}.
      *
      * @param peers collection of active peer states
      * @return array: [avgSendWindow, avgRTO, avgConcurrentMsgs, avgEffectiveRTO],
@@ -432,7 +432,7 @@ public class PeerState {
      */
     public static final int MAX_MTU = Math.max(LARGE_MTU, MAX_IPV6_MTU);
 
-    /** Amount to adjust up or down in adjustMTU() - should be multiple of 16, at least for SSU 1. */
+    /** Amount to adjust up or down in {@link #adjustMTU()} - should be multiple of 16, at least for SSU 1. */
     private static final int MTU_STEP = 64;
 
     /**
@@ -521,7 +521,7 @@ public class PeerState {
     /**
      * Minimum RTO floor (called by Tuner).
      * Floor is 100 so the Tuner's death-spiral cut is effective;
-     * recalculateTimeouts() still uses max(MIN_RTO, RTT-based estimate).
+     * {@link #recalculateTimeouts} still uses max(MIN_RTO, RTT-based estimate).
      * @param ms minimum RTO in ms, clamped 100-2000
      * @since 0.9.70+
      */

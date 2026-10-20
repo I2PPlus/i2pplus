@@ -22,7 +22,7 @@ import net.i2p.util.EepGet;
  * <p>
  * Overrides UpdateRunner for convenience, this is not an Updater.
  *
- * @since 0.9.4 moved from NewsFetcher, public since 0.9.57 for CLI only
+ * @since 0.9.4 moved from {@link NewsFetcher}, public since 0.9.57 for CLI only
  */
 public class NewsHandler extends UpdateHandler implements Checker {
 

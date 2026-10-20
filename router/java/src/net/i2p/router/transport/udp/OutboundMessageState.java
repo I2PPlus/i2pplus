@@ -39,7 +39,7 @@ class OutboundMessageState implements CDPQEntry {
     // we can't use the ones in _message since it is null for injections
     private volatile long _enqueueTime;
     private volatile long _seqNum;
-    /** How many bytes push() is allowed to send. */
+    /** How many bytes {@link #push()} is allowed to send. */
     private int _allowedSendBytes;
     private final AtomicInteger _nacks = new AtomicInteger();
     /**
@@ -68,7 +68,7 @@ class OutboundMessageState implements CDPQEntry {
     /**
      * "injected" message from the establisher.
      * <p>
-     * Called from UDPTransport.
+     * Called from {@link UDPTransport}.
      * @param context the router context supplying the clock and bandwidth manager
      * @param msg the message to fragment and send
      * @param peer the peer the message is destined for
@@ -81,7 +81,7 @@ class OutboundMessageState implements CDPQEntry {
     /**
      * Normal constructor.
      * <p>
-     * Called from OutboundMessageFragments.
+     * Called from {@link OutboundMessageFragments}.
      * @param context the router context supplying the clock and bandwidth manager
      * @param m the outbound message carrying the payload and its send options
      * @param peer the peer the message is destined for
@@ -435,14 +435,14 @@ class OutboundMessageState implements CDPQEntry {
 
     /**
      * The max number of sends for any fragment.
-     * As of 0.9.49, may be less than getPushCount() if we pushed only some fragments.
+     * As of 0.9.49, may be less than {@link #getPushCount()} if we pushed only some fragments.
      * @return the max sends
      */
     public synchronized int getMaxSends() { return _maxSends; }
 
     /**
      * The number of times we've pushed some fragments.
-     * As of 0.9.49, may be greater than getMaxSends() if we pushed only some fragments.
+     * As of 0.9.49, may be greater than {@link #getMaxSends()} if we pushed only some fragments.
      * @return the push count
      */
     public synchronized int getPushCount() { return _pushCount; }

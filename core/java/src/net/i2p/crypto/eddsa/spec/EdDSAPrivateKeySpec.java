@@ -54,7 +54,7 @@ public class EdDSAPrivateKeySpec implements KeySpec {
 
     /**
      * Initialize directly from the hash.
-     * getSeed() will return null if this constructor is used.
+     * {@link #getSeed()} will return null if this constructor is used.
      *
      * @param spec the parameter specification for this key
      * @param h the private key
@@ -80,7 +80,7 @@ public class EdDSAPrivateKeySpec implements KeySpec {
 
     /**
      * No validation of any parameters other than a.
-     * getSeed() and getH() will return null if this constructor is used.
+     * getSeed() and {@link #getH()} will return null if this constructor is used.
      *
      * @param a must be "clamped" (for Ed) or reduced mod l (for Red)
      * @param aPoint if null, will be derived from a.

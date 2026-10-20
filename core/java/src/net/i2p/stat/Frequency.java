@@ -60,7 +60,7 @@ public class Frequency {
 
     /**
      * Calculate how many events would occur in a period given the current (rolling) average.
-     * Use getStrictAverageInterval() for the real lifetime average.
+     * Use {@link #getStrictAverageInterval()} for the real lifetime average.
      * @return the average events per period
      */
     public synchronized double getAverageEventsPerPeriod() {
@@ -71,7 +71,7 @@ public class Frequency {
 
     /**
      * Calculate how many events would occur in a period given the maximum rolling average.
-     * Use getStrictAverageEventsPerPeriod() for the real lifetime average.
+     * Use {@link #getStrictAverageEventsPerPeriod()} for the real lifetime average.
      * @return the max average events per period
      */
     public synchronized double getMaxAverageEventsPerPeriod() {

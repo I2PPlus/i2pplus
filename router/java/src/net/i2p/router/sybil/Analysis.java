@@ -142,7 +142,7 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
     private static final byte[] IPV6_NAT64 = new byte[16];
     static { IPV6_NAT64[1] = 0x64; IPV6_NAT64[2] = (byte) 0xff; IPV6_NAT64[3] = (byte) 0x9b; }
 
-    /** Use getInstance() instead. */
+    /** Use {@link #getInstance()} instead. */
     private Analysis(RouterContext ctx, ClientAppManager mgr, String[] args) {
         super(ctx);
         _context = ctx;

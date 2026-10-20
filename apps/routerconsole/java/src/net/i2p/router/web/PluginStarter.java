@@ -718,7 +718,7 @@ public class PluginStarter implements Runnable {
      * its directory and drop its plugins.config entries.
      * @param ctx router context supplying the config dir and logging
      * @param appName plugin directory name under $I2P/plugins
-     * @return true on success - caller should call stopPlugin() first
+     * @return true on success - caller should call {@link #stopPlugin} first
      * @throws Exception just about anything, caller would be wise to catch Throwable
      * @since 0.9.33
      */
@@ -1266,7 +1266,7 @@ public class PluginStarter implements Runnable {
     }
 
     /**
-     * Like in DataHelper but doesn't convert null to ""
+     * Like in {@link DataHelper} but doesn't convert null to ""
      * There's a lot worse things a plugin could do but...
      * @param props plugin properties to read from
      * @param key plugin.config key to look up

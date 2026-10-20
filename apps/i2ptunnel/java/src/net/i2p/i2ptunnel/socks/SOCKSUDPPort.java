@@ -14,7 +14,7 @@ import net.i2p.i2ptunnel.udp.*;
  * ports, it happens outside of here.
  * <p>
  * TX:
- *   UDPSource -&gt; SOCKSUDPUnwrapper -&gt; (I2PSink in SOCKSUDPTunnel)
+ *   UDPSource -&gt; SOCKSUDPUnwrapper -&gt; (I2PSink in {@link SOCKSUDPTunnel})
  * <p>
  * RX:
  *   UDPSink &lt;- SOCKSUDPWrapper ( &lt;- MultiSink &lt;- I2PSource in SOCKSUDPTunnel)

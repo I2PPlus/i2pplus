@@ -652,7 +652,7 @@ public class AddressbookBean extends BaseBean {
      * Can't figure out why, so just replace it with book.validBook:
      * <pre><code>&lt;c:if test="${book.master || book.router || book.published || book.private}"&gt;</code></pre>
      *
-     * This always returns true anyway, because getBook() always returns a valid book.
+     * This always returns true anyway, because {@link #getBook()} always returns a valid book.
      *
      * @return true if the book is one of router, master, local, published or private
      * @since 0.9.28
@@ -763,7 +763,7 @@ public class AddressbookBean extends BaseBean {
 
     /**
      * Gets the beginning index into results for display purposes.
-     * Returns the actual page start index, not clamped to resultSize().
+     * Returns the actual page start index, not clamped to {@link #resultSize()}.
      * @return the page start index (0-based)
      * @since 0.9.60
      */

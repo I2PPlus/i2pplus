@@ -24,7 +24,7 @@ import net.i2p.util.SimpleTimer2;
  * <li>Last reply request cache - ensures periodic replies to detect failed tunnels.</li>
  * <li>Multihomed cache - tracks LeaseSets for multihomed routers.</li>
  * </ul>
- * <p>All caches use ConcurrentHashMap with tuned initial capacity, load factor, and concurrency level
+ * <p>All caches use {@link ConcurrentHashMap} with tuned initial capacity, load factor, and concurrency level
  * to allow safe concurrent access and high throughput with low contention.
  * Tunnel caches have been converted from HashMaps with explicit synchronization to ConcurrentHashMaps
  * for consistent concurrency management without external locking.
@@ -334,7 +334,7 @@ public class OutboundCache {
     /**
      * Choose the outbound tunnel for a fresh connection, preferring a candidate
      * different from the one used by the previous connection to the same
-     * destination.  Called by OutboundClientMessageOneShotJob on the first
+     * destination.  Called by {@link OutboundClientMessageOneShotJob} on the first
      * message of a new stream (streaming SYN carrying the fresh-connection
      * marker), so an HTTP/protocol retry does not ride the same tunnel that
      * stalled the prior connection.

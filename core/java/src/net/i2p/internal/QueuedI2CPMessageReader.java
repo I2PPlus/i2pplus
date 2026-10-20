@@ -38,7 +38,7 @@ public class QueuedI2CPMessageReader extends I2CPMessageReader {
 
     /**
      * Creates a new instance of this QueuedMessageReader and registers with the shared dispatcher.
-     * Call startReading() to begin.
+     * Call {@link #startReading()} to begin.
      *
      * @param in the in-JVM queue holding this session's incoming messages
      * @param lsnr notified with each message as it is dequeued for this session

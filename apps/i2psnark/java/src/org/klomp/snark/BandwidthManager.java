@@ -127,7 +127,7 @@ public class BandwidthManager implements BandwidthListener {
         _down.addSample(size);
     }
 
-    /** Should we send this many bytes? Do NOT call uploaded() if this returns true. */
+    /** Should we send this many bytes? Do NOT call {@link #uploaded} if this returns true. */
     @Override
     public boolean shouldSend(int size) {
         boolean rv = _up.offer(size, 1.0f);

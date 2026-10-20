@@ -38,7 +38,7 @@ import net.i2p.util.Log;
  * - Extending class must have a constructor with host and 2 port arguments
  * <p>
  * So the implementing class must create a UDPSource and/or UDPSink,
- * and must call setSink().
+ * and must call {@link #setSink}.
  */
 
 public class I2PTunnelUDPServerBase extends I2PTunnelTask implements Source, Sink {
@@ -169,7 +169,7 @@ public class I2PTunnelUDPServerBase extends I2PTunnelTask implements Source, Sin
 
     /**
      * Sets the receiver of the UDP datagrams from I2P.
-     * Subclass must call this after constructor and before start().
+     * Subclass must call this after constructor and before {@link #start()}.
      *
      * @param s the sink to receive incoming datagrams
      * @since 0.9.53

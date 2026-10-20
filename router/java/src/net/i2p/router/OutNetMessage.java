@@ -478,7 +478,7 @@ public class OutNetMessage implements CDPQEntry {
 
     /**
      * Only useful if log level is INFO or DEBUG;
-     * locked_initTimestamps() must have been called previously.
+     * {@link #locked_initTimestamps()} must have been called previously.
      */
     private void renderTimestamps(StringBuilder buf) {
         synchronized (this) {

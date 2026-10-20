@@ -49,7 +49,7 @@ import java.util.Arrays;
  * safely (final field, or a happens-before edge) before other threads
  * read it. Safe sharing applies only to a fully populated instance that
  * nobody mutates - and callers that mutate the array returned by
- * getData() break that.</li>
+ * {@link #getData()} break that.</li>
  * </ul>
  *
  * @since 0.8.2
@@ -59,7 +59,7 @@ public abstract class SimpleDataStructure implements DataStructure {
     protected byte[] _data;
 
     /**
-     * A new instance with the data set to null. Call readBytes(), setData(), or fromByteArray() after this to set the data.
+     * A new instance with the data set to null. Call {@link #readBytes}, setData(), or fromByteArray() after this to set the data.
      */
     public SimpleDataStructure() {}
 
@@ -181,7 +181,7 @@ public abstract class SimpleDataStructure implements DataStructure {
     }
 
     /**
-     * Does the same thing as setData() but null not allowed.
+     * Does the same thing as {@link #setData} but null not allowed.
      *
      * @param data non-null byte array
      * @throws DataFormatException if null or wrong length

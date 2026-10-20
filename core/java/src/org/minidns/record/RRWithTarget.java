@@ -17,7 +17,7 @@ import java.io.IOException;
 
 /**
  * Abstract base class for DNS resource records that point to a target domain name.<br>
- * Extended by record types like CNAME, NS, and others that contain a target field.
+ * Extended by record types like {@link CNAME}, NS, and others that contain a target field.
  */
 public abstract class RRWithTarget extends Data {
 

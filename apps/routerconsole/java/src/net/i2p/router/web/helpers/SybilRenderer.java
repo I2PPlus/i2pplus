@@ -47,7 +47,7 @@ import net.i2p.util.Translate;
  * Renders Sybil attack analysis and detection information for debugging.
  * Displays router relationships, clustering analysis, and potential attack patterns.
  * Provides visualization of network topology and security metrics.
- * Adapted from NetDbRenderer; may become periodic router monitor.
+ * Adapted from {@link NetDbRenderer}; may become periodic router monitor.
  *
  * @since 0.9.24
  */
@@ -440,7 +440,7 @@ public class SybilRenderer {
     /**
      * Render the floodfill summary section.
      *
-     * @since 0.9.38 split out from renderRouterInfoHTML()
+     * @since 0.9.38 split out from {@link #renderRouterInfoHTML()}
      */
     @SuppressWarnings("PMD.UnsynchronizedStaticFormatter")
     private synchronized void renderFFSummary(Writer out, StringBuilder buf, List<RouterInfo> ris, double avgMinDist) throws IOException {

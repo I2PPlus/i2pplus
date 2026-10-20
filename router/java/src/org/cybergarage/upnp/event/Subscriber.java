@@ -238,7 +238,7 @@ public class Subscriber {
     /**
      * Records the notification count.
      *
-     * @param cnt the notification count to record, as zeroed again by renew()
+     * @param cnt the notification count to record, as zeroed again by {@link #renew()}
      */
     public void setNotifyCount(int cnt) {
         notifyCount = cnt;

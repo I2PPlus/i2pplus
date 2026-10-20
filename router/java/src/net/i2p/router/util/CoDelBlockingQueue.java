@@ -288,7 +288,7 @@ public class CoDelBlockingQueue<E extends CDQEntry> extends LinkedBlockingQueue<
 
     /**
      * Updates stats and possibly drops while draining.
-     * May exit early if a CoDel drop occurs (poll() returns null for a dropped item).
+     * May exit early if a CoDel drop occurs ({@link #poll()} returns null for a dropped item).
      */
     @Override
     public int drainTo(Collection<? super E> c) {

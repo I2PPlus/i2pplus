@@ -21,8 +21,8 @@ import java.util.concurrent.atomic.AtomicReference;
 public class RrdMemoryBackendFactory extends RrdBackendFactory {
 
     /**
-     * A factory holding no open backends; the map starts empty and is filled by open()
-     * as RRDs are opened and released by delete().
+     * A factory holding no open backends; the map starts empty and is filled by {@link #open}
+     * as RRDs are opened and released by {@link #delete}.
      */
     public RrdMemoryBackendFactory() {}
 

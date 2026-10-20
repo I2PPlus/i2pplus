@@ -12,12 +12,12 @@ import java.util.Set;
  * <p>This class provides a lightweight alternative to ObjectCounter for
  * single-threaded scenarios. It offers better performance with reduced
  * object churn by using primitive integers instead of AtomicInteger.</p>
- * <p><strong>Key differences from ObjectCounter:</strong></p>
+ * <p><strong>Key differences from {@link ObjectCounter}:</strong></p>
  * <ul>
  * <li>NOT thread-safe - use only in single-threaded contexts</li>
  * <li>Lower memory overhead and better performance</li>
  * <li>Additional add() method for incrementing by arbitrary values</li>
- * <li>sortedObjects() method for retrieving objects by count</li>
+ * <li>{@link #sortedObjects()} method for retrieving objects by count</li>
  * </ul>
  * <p>Typical use cases include UI components and Sybil attack detection
  * where thread safety is not required.</p>

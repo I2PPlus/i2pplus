@@ -138,7 +138,7 @@ public class RouterConsoleRunner implements RouterApp {
     private static final String USAGE = "Bad RouterConsoleRunner arguments, check clientApp.0.args in your clients.config file! " +
                                         "Usage: [[port host[,host]] [-s sslPort [host[,host]]] [webAppsDir]]";
 
-    /** Handler thread counts, adjusted for connectors and acceptors in startConsole(). */
+    /** Handler thread counts, adjusted for connectors and acceptors in {@link #startConsole()}. */
     private static final int MIN_THREADS = 0;
     /** Handler thread counts, adjusted for connectors and acceptors in startConsole(). */
     private static final int MAX_THREADS = 48;

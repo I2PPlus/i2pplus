@@ -227,7 +227,7 @@ public class TransientSessionKeyManager extends SessionKeyManager {
      * Retrieve the session key currently associated with encryption to the target,
      * or null if a new session key should be generated.
      * <p>
-     * Warning - don't generate a new session if this returns null, it's racy, use getCurrentOrNewKey().
+     * Warning - don't generate a new session if this returns null, it's racy, use {@link #getCurrentOrNewKey}.
      * @return the current key
      */
     @Override
@@ -277,7 +277,7 @@ public class TransientSessionKeyManager extends SessionKeyManager {
      * Associate a new session key with the specified target.  Metrics to determine
      * when to expire that key begin with this call.
      * <p>
-     * Racy if called after getCurrentKey() to check for a current session;
+     * Racy if called after {@link #getCurrentKey} to check for a current session;
      * use getCurrentOrNewKey() in that case.
      *
      * @param target public key to which the data should be encrypted, must be ELGAMAL_2048.
@@ -290,7 +290,7 @@ public class TransientSessionKeyManager extends SessionKeyManager {
 
     /**
      * Same as above but for internal use, returns OutboundSession so we don't have
-     * to do a subsequent getSession().
+     * to do a subsequent {@link #getSession()}.
      */
     private OutboundSession createAndReturnSession(PublicKey target, SessionKey key) {
         EncType type = target.getType();
@@ -409,7 +409,7 @@ public class TransientSessionKeyManager extends SessionKeyManager {
      * @param key the session key the tags are bound to
      * @param sessionTags the tags that were sent
      * @return the TagSetHandle, or null if the session could not be created.
-     *         Caller MUST subsequently call failTags() or tagsAcked()
+     *         Caller MUST subsequently call {@link #failTags} or tagsAcked()
      *         with this handle.
      */
     @Override
@@ -733,7 +733,7 @@ public class TransientSessionKeyManager extends SessionKeyManager {
      * Return a map of session key to a set of inbound TagSets for that SessionKey.
      *
      * @return the inbound tag sets by session key
-     * @since 0.9.33 split out from renderStatusHTML()
+     * @since 0.9.33 split out from {@link #renderStatusHTML()}
      */
     private Map<SessionKey, Set<TagSet>> getInboundTagSetsBySessionKey() {
         Set<TagSet> inbound = getInboundTagSets();
@@ -1211,7 +1211,7 @@ public class TransientSessionKeyManager extends SessionKeyManager {
 
         /**
          * For outbound only.
-         * @return true if setAcked() has been called, meaning the peer has
+         * @return true if {@link #setAcked()} has been called, meaning the peer has
          *         acknowledged using these tags
          */
         public boolean getAcked() { return _acked; }

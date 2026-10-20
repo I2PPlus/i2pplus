@@ -17,7 +17,7 @@ import net.i2p.client.impl.I2PClientImpl;
  */
 public class I2PClientFactory {
     /**
-     * Constructor. Clients are always built by the static createClient() for a
+     * Constructor. Clients are always built by the static {@link #createClient()} for a
      * given context, so an instance carries no state.
      */
     public I2PClientFactory() {}

@@ -190,7 +190,7 @@ public class Destination extends KeysAndCert {
 
     /**
      * Serialized size of this destination.
-     * Must match writeBytes(); the KEYSIZE_BYTES hardcode broke
+     * Must match {@link #writeBytes}; the KEYSIZE_BYTES hardcode broke
      * 32-byte key destinations. For typed keys the wire layout is
      * [pk data][pad1][pad2][spk data][cert], so the base is the actual
      * public key length plus the truncated signing key length.

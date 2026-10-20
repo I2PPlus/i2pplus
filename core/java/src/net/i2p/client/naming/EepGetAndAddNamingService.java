@@ -20,7 +20,7 @@ import java.util.Locale;
  * Note that there is little protection - there are a lot of validity checks in addressbook that are
  * not included here.
  * <p>
- * MUST be used from MetaNamingService, after HostsTxtNamingService.
+ * MUST be used from {@link MetaNamingService}, after HostsTxtNamingService.
  * Cannot be used as the only NamingService! Be sure any naming service hosts
  * are in hosts.txt. If this isn't after HostsTxtNamingService, you will
  * clog up your hosts.txt with duplicate entries.

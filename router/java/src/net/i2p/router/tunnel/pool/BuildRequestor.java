@@ -137,7 +137,7 @@ public abstract class BuildRequestor {
 
     /**
      * How long we wait for a reply before trying a different pool/peers.
-     * Adaptive mechanism in BuildExecutor adjusts this upward when
+     * Adaptive mechanism in {@link BuildExecutor} adjusts this upward when
      * success rates are low or timeout rates are high.
      * Default: 13s (normal), 18s (slow systems).
      *

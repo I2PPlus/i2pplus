@@ -152,7 +152,7 @@ public class BSkipList<K extends Comparable<? super K>, V> extends SkipList<K, V
 
     /**
      * Delete this skiplist and free all its pages.
-     * Must be open (do not call close() first).
+     * Must be open (do not call {@link #close()} first).
      *
      * @throws IOException if an I/O error occurs
      */

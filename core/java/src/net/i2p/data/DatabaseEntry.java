@@ -166,7 +166,7 @@ public abstract class DatabaseEntry extends DataStructureImpl {
 
     /**
      * A common interface to the timestamp of the two subclasses.
-     * Identical to getEarliestLeaseDate() in LeaseSet,
+     * Identical to getEarliestLeaseDate() in {@link LeaseSet},
      * and getPublished() in RouterInfo.
      * Note that for a LeaseSet this will be in the future,
      * and for a RouterInfo it will be in the past.
@@ -192,7 +192,7 @@ public abstract class DatabaseEntry extends DataStructureImpl {
     /**
      * A common interface to the Hash of the two subclasses.
      * Identical to getDestination().calculateHash() in LeaseSet,
-     * and getIdentity().getHash() in RouterInfo.
+     * and getIdentity().{@link #getHash()} in RouterInfo.
      *
      * @return Hash or null
      * @since 0.8.2
@@ -244,7 +244,7 @@ public abstract class DatabaseEntry extends DataStructureImpl {
     }
 
     /**
-     * Returns the raw payload data, excluding the signature, to be signed by sign().
+     * Returns the raw payload data, excluding the signature, to be signed by {@link #sign}.
      * <p>
      * Most callers should use writeBytes() or toByteArray() instead.
      *
@@ -328,7 +328,7 @@ public abstract class DatabaseEntry extends DataStructureImpl {
     }
 
     /**
-     * Identical to getDestination().getSigningPublicKey() in LeaseSet,
+     * Identical to getDestination().{@link #getSigningPublicKey()} in LeaseSet,
      * and getIdentity().getSigningPublicKey() in RouterInfo.
      *
      * @return SPK or null
@@ -342,7 +342,7 @@ public abstract class DatabaseEntry extends DataStructureImpl {
 
     /**
      * This is the same as isValid() in RouterInfo
-     * or verifySignature() in LeaseSet.
+     * or {@link #verifySignature()} in LeaseSet.
      *
      * @return true if the entry carries a signature that verifies over its own data
      * @since public since 0.9.47, was protected

@@ -37,7 +37,7 @@ interface ACKBitfield {
 
     /**
      * Number of fragments acked in this bitfield.
-     * Faster than looping through received().
+     * Faster than looping through {@link #received}.
      *
      * @return number of fragments acked
      * @since 0.9.16

@@ -60,7 +60,7 @@ class LookupBanHammer {
     }
 
     /**
-     * Read the cap last set by setMaxEntries().
+     * Read the cap last set by {@link #setMaxEntries}.
      * @return cap on the number of tracked (peer, tunnel) pairs
      */
     static int getMaxEntries() { return _maxEntries; }

@@ -110,7 +110,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
      */
     private final AtomicInteger interestedUploaders = new AtomicInteger();
 
-    /** External use by PeerCheckerTask only. */
+    /** External use by {@link PeerCheckerTask} only. */
     private final AtomicInteger interestedAndChoking = new AtomicInteger();
 
     private final AtomicLong uploaded = new AtomicLong();
@@ -595,7 +595,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
     }
 
     /**
-     * Should we send this many bytes? Do NOT call uploaded() if this returns true.
+     * Should we send this many bytes? Do NOT call {@link #uploaded} if this returns true.
      *
      * @return whether the bandwidth allowance permits sending that many bytes
      * @since 0.9.62
@@ -2076,7 +2076,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
 
     /**
      * Called when we are downloading from the peer and may need to ask for a new piece. Returns
-     * true if wantPiece() or getPartialPiece() would return a piece.
+     * true if {@link #wantPiece} or getPartialPiece() would return a piece.
      *
      * @param peer the Peer that will be asked to provide the piece.
      * @param havePieces a BitField containing the pieces that the other side has.
@@ -2476,7 +2476,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
     }
 
     /**
-     * Called by TrackerClient.
+     * Called by {@link TrackerClient}.
      *
      * @return the Set itself, modifiable, not a copy, caller should clear()
      * @since 0.8.4

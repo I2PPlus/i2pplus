@@ -9,7 +9,7 @@ import net.i2p.util.SystemVersion;
 /**
  * Performs targeted followup lookups for RouterInfo entries from search replies.
  * <p>
- * Processes RouterInfo hashes received in DatabaseSearchReplyMessage by
+ * Processes RouterInfo hashes received in {@link DatabaseSearchReplyMessage} by
  * initiating direct queries to obtain missing or stale RouterInfo data.
  * For each unknown peer, queries the peer that provided the hash; for
  * known peers with outdated data or non-floodfill status, queries the

@@ -2,7 +2,7 @@ package org.rrd4j.graph;
 
 /**
  * Abstract base class for graph axes in RRD graphs. Provides common functionality for time and
- * value axes. All axis implementations must implement the draw() method to render the axis.
+ * value axes. All axis implementations must implement the {@link #draw()} method to render the axis.
  */
 public abstract class Axis implements RrdGraphConstants {
 

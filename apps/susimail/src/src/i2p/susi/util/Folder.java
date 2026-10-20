@@ -16,9 +16,9 @@ import net.i2p.data.DataHelper;
 /**
  * Manages an Object array with paging and sorting support.
  *
- * Create a folder, set contents with setElements(), add comparators with addSorter(),
- * select a sort method with setSortBy(), and retrieve the current page with
- * currentPageIterator().
+ * Create a folder, set contents with {@link #setElements}, add comparators with addSorter(),
+ * select a sort method with {@link #setSortBy}, and retrieve the current page with
+ * {@link #currentPageIterator()}.
  *
  * All public methods are synchronized.
  *
@@ -318,7 +318,7 @@ public class Folder<O extends Object> {
 	 * match the one stored with {@link #addSorter(String, Comparator)}.
 	 * Set the sorting direction of the folder.
 	 *
-	 * Warning: this does not do the actual sort, only addElements() and setElements() do.
+	 * Warning: this does not do the actual sort, only {@link #addElements} and setElements() do.
 	 *
 	 * @param id identifier for the Comparator
 	 * @param direction UP or DOWN. UP is reverse sort.

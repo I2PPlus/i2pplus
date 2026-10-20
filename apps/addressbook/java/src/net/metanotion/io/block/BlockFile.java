@@ -111,7 +111,7 @@ public class BlockFile implements Closeable {
      * Run an integrity check on the blockfile and all the skiplists in it.
      *
      * WARNING:
-     * This only works on skiplists using UTF8StringBytes as a key
+     * This only works on skiplists using {@link UTF8StringBytes} as a key
      * serializer, unless the exception has been coded in bfck below.
      * Will CORRUPT other skiplists.
      *
@@ -224,7 +224,7 @@ public class BlockFile implements Closeable {
 
     /**
      * Skip length bytes across multiple pages.
-     * The same as readMultiPageData() without returning a result
+     * The same as {@link #readMultiPageData} without returning a result
      *
      * @param length number of bytes to skip
      * @param page index of the page the skip starts at

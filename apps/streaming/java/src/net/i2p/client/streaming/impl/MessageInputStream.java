@@ -25,13 +25,13 @@ import net.i2p.util.Log;
  *   <li>Out-of-order message handling</li>
  *   <li>Flow control via blocking reads</li>
  *   <li>Optional read timeouts</li>
- *   <li>EOF signaling via closeReceived()</li>
+ *   <li>EOF signaling via {@link #closeReceived()}</li>
  *   <li>Error propagation via streamErrorOccurred()</li>
  * </ul>
  * <p><b>Thread Safety:</b> This class is synchronized internally and safe for use by one reader thread
  * and potentially multiple message-receiving threads.
  * <p><b>Performance:</b> Designed for high-throughput scenarios such as large file downloads.
- * Avoids unnecessary copying by using ByteArray references.
+ * Avoids unnecessary copying by using {@link ByteArray} references.
  * <p><b>Lifecycle:</b> The stream can be closed locally or receive an EOF signal remotely.
  * Once closed, no further reads or message receptions are allowed.
  * <p><b>Usage:</b>
@@ -102,7 +102,7 @@ class MessageInputStream extends InputStream {
      * Sentinel used for out-of-order duplicates when stream is closed.
      * When locallyClosed is true and an out-of-order message arrives, we store this sentinel
      * instead of the actual payload to prevent memory accumulation while still allowing
-     * canAccept() to return true for retransmits of already-processed messages.
+     * {@link #canAccept()} to return true for retransmits of already-processed messages.
      * This enables proper handling of late-arriving duplicate packets after stream closure.
      * <p>Note: the payload size of this sentinel is 0, so it does not count toward
      * {@link #_readyDataSize} or buffer limits.  See {@link #canAccept(long, int)}.

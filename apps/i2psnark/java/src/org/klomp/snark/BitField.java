@@ -62,7 +62,7 @@ public class BitField {
     }
 
     /**
-     * For CompleteBitField. All methods except size() must be overridden.
+     * For CompleteBitField. All methods except {@link #size()} must be overridden.
      *
      * @param size the number of bits in the bit field
      * @param dummy an ignored marker, here only to tell this constructor

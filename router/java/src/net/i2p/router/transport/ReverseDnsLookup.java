@@ -122,7 +122,7 @@ public class ReverseDnsLookup {
 
     /**
      * In-memory reverse DNS cache storing IP-to-hostname mappings.
-     * Backed by ConcurrentHashMap for lock-free reads. Entries are
+     * Backed by {@link ConcurrentHashMap} for lock-free reads. Entries are
      * periodically flushed to disk and expired entries are cleaned up.
      * <p>
      * Keys are IP addresses as Strings. Values are CacheEntry objects

@@ -281,7 +281,7 @@ public class KeyCertificate extends Certificate {
     /**
      * Signing Key extra data, if any, is first in the array.
      * Crypto Key extra data, if any, is second in the array,
-     * at offset max(0, getSigType().getPubkeyLen() - 128).
+     * at offset max(0, {@link #getSigType()}.getPubkeyLen() - 128).
      *
      * @return empty array if unset or none
      */

@@ -106,7 +106,7 @@ public class I2PSnarkUtil implements DisconnectListener {
     private int _maxUploaders;
     private int _maxUpBW;
     private int _maxConnections;
-    /** Discard-ratio auto-ban toggle, set by SnarkManager from config. */
+    /** Discard-ratio auto-ban toggle, set by {@link SnarkManager} from config. */
     private volatile boolean _banDiscardRatio;
     /** Discard-ratio auto-ban period in ms, set by SnarkManager from config. */
     private volatile long _banDiscardPeriod;
@@ -1257,7 +1257,7 @@ public class I2PSnarkUtil implements DisconnectListener {
     /**
      * Pool index that would be assigned to the torrent, -1 when pooling is off.
      * Deterministic within a run, so batch starts can compute pool membership up
-     * front; matches the assignment in getOrCreateTorrentDest().
+     * front; matches the assignment in {@link #getOrCreateTorrentDest}.
      *
      * @param ih the torrent's info hash, or null
      * @return the pool index in [0, _maxDest), or -1 for a dedicated destination

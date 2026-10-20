@@ -109,7 +109,7 @@ public class ElGamalPrivateKeyImpl implements ElGamalPrivateKey, DHPrivateKey {
     }
 
     /**
-     * The encoding format produced by getEncoded().
+     * The encoding format produced by {@link #getEncoded()}.
      *
      * @return the encoding format name, always "PKCS#8"
      */

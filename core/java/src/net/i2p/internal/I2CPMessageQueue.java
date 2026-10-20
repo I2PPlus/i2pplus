@@ -14,7 +14,7 @@ import java.io.Closeable;
  * The methods are identical to those in java.util.concurrent.BlockingQueue.
  * <p>
  * Reading may be done in a thread using the QueuedI2CPMessageReader class.
- * Non-blocking writing may be done directly with offer().
+ * Non-blocking writing may be done directly with {@link #offer}.
  *
  * @since 0.8.3
  */

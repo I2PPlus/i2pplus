@@ -156,7 +156,7 @@ public class Base64 {
     /**
      * Translates a Base64 value to either its 6-bit reconstruction value
      * or a negative number indicating some other meaning.
-     * As of 0.9.14 this is the decoding for the I2P alphabet. See safeDecode().
+     * As of 0.9.14 this is the decoding for the I2P alphabet. See {@link #safeDecode()}.
      */
     private final static byte[] DECODABET = {
         -9, -9, -9, -9, -9, -9, -9, -9, -9,                     // Decimal  0 -  8

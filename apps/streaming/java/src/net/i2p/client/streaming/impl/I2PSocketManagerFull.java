@@ -46,7 +46,7 @@ import net.i2p.util.Log;
  * Centralize the coordination and multiplexing of the local client's streaming.
  * There should be one I2PSocketManager for each I2PSession, and if an application
  * is sending and receiving data through the streaming library using an
- * I2PSocketManager, it should not attempt to call I2PSession's setSessionListener
+ * I2PSocketManager, it should not attempt to call {@link I2PSession}'s setSessionListener
  * or receive any messages with its .receiveMessage
  * <p>
  * This is what {@link net.i2p.client.streaming.I2PSocketManagerFactory#createManager} returns.
@@ -243,7 +243,7 @@ public class I2PSocketManagerFull implements I2PSocketManager {
     }
 
     /**
-     * Create a copy of the current options, to be used in a setDefaultOptions() call.
+     * Create a copy of the current options, to be used in a {@link #setDefaultOptions} call.
      *
      * @return a copy of the current default options
      */
@@ -273,7 +273,7 @@ public class I2PSocketManagerFull implements I2PSocketManager {
     }
 
     /**
-     * For a server, you must call connect() on the returned object.
+     * For a server, you must call {@link #connect} on the returned object.
      * Connecting the primary session does NOT connect any subsessions.
      * If the primary session is not connected, connecting a subsession will connect the primary session first.
      *
@@ -536,7 +536,7 @@ public class I2PSocketManagerFull implements I2PSocketManager {
       * Update the options on a running socket manager.
       * Parameters in the I2PSocketOptions interface may be changed directly
       * with the setters; no need to use this method for those.
-      * This does NOT update the underlying I2CP or tunnel options; use getSession().updateOptions() for that.
+      * This does NOT update the underlying I2CP or tunnel options; use {@link #getSession()}.updateOptions() for that.
       *
       * @param options as created from a call to buildOptions(properties), non-null
       */
@@ -838,7 +838,7 @@ public class I2PSocketManagerFull implements I2PSocketManager {
     /**
      * Has the socket manager been destroyed?
      *
-     * @return true once destroySocketManager() has completed; the flag is set at
+     * @return true once {@link #destroySocketManager()} has completed; the flag is set at
      *         the start of that method, so it also guards against a second destroy
      * @since 0.9.9
      */

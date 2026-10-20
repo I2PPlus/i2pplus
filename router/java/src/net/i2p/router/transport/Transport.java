@@ -37,7 +37,7 @@ import net.i2p.router.OutNetMessage;
  * <li>Handle both IPv4 and IPv6 addressing</li>
  * <li>Support concurrent message sending and receiving</li>
  * <li>Provide proper error handling and logging</li>
- * <li>Integrate with TransportManager lifecycle</li>
+ * <li>Integrate with {@link TransportManager} lifecycle</li>
  * </ul>
  * <p>
  * <strong>Plugin Development:</strong>
@@ -64,7 +64,7 @@ public interface Transport {
     // compile unchanged while every value is defined here, once.
 
     /**
-     * Style identifier for the NTCP transport, used in RouterAddress style tags,
+     * Style identifier for the NTCP transport, used in {@link RouterAddress} style tags,
      * transport map keys, and style comparisons.
      */
     public static final String STYLE_NTCP = "NTCP";
@@ -187,7 +187,7 @@ public interface Transport {
      * <p>
      * This method handles the actual message transmission. If the send
      * operation succeeds, it queues up any follow-up jobs defined in
-     * msg.getOnSendJob() and registers them with OutboundMessageRegistry
+     * msg.getOnSendJob() and registers them with {@link OutboundMessageRegistry}
      * (if the message has a reply selector). If the send fails,
      * it queues up any failure handling jobs from msg.getOnFailedSendJob().
      * <p>
@@ -263,7 +263,7 @@ public interface Transport {
      * representing all network endpoints (both IPv4 and IPv6) that
      * this transport is actively listening for connections on.
      * <p>
-     * This method replaces the older getCurrentAddress() method
+     * This method replaces the older {@link #getCurrentAddress} method
      * to support multiple addresses per transport.
      *
      * @return list of all currently listening addresses, never null
@@ -282,7 +282,7 @@ public interface Transport {
      *
      * @param ipv6 true to return IPv6 address only; false to return IPv4 address only
      * @return first matching address for the specified IP version, or null if no such address exists
-     * @since 0.9.50 lifted from TransportImpl for interface consistency
+     * @since 0.9.50 lifted from {@link TransportImpl} for interface consistency
      */
     public RouterAddress getCurrentAddress(boolean ipv6);
 
@@ -355,7 +355,7 @@ public interface Transport {
      * </ul>
      * <p>
      * <strong>Timing:</strong>
-     * Can be called before startListening() to set initial address,
+     * Can be called before {@link #startListening()} to set initial address,
      * or after transport is already running.
      *
      * @param source the address source reporting the newly seen address
@@ -586,7 +586,7 @@ public interface Transport {
      * <li>This is NOT reset if the peer contacts us successfully</li>
      * <li>Status persists until peer is contacted or expires</li>
      * <li>Used for connection retry decisions</li>
-     * <li>Different from isUnreachable() which checks current state</li>
+     * <li>Different from {@link #isUnreachable} which checks current state</li>
      * </ul>
      *
      * @param peer hash of the peer to check reachability for
@@ -628,7 +628,7 @@ public interface Transport {
      * <p>
      * This method returns true when the transport has accepted a message
      * for this peer and initiated a connection handshake, but the
-     * handshake has not yet completed. Unlike isEstablished(), which
+     * handshake has not yet completed. Unlike {@link #isEstablished}, which
      * only returns true for fully-connected peers, this method detects
      * connections that are still being set up.
      * <p>
@@ -667,7 +667,7 @@ public interface Transport {
      * Force immediate disconnection from specified peer.
      * <p>
      * This method commands the transport to immediately terminate
-     * the connection to the specified peer. Unlike mayDisconnect(),
+     * the connection to the specified peer. Unlike {@link #mayDisconnect},
      * this is not advisory - the transport must comply and
      * disconnect as soon as possible.
      * <p>

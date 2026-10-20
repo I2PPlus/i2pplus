@@ -12,7 +12,7 @@ import java.io.OutputStream;
  * <li>Uses 4-byte timestamps instead of 8-byte for space efficiency</li>
  * <li>Timestamps have 1-second resolution (stored as seconds since epoch)</li>
  * <li>Fixed length of 40 bytes for consistent serialization</li>
- * <li>Designed for use with LeaseSet2 and its variants</li>
+ * <li>Designed for use with {@link LeaseSet2} and its variants</li>
  * </ul>
  * <p><strong>Structure:</strong></p>
  * <ul>
@@ -41,7 +41,7 @@ public class Lease2 extends Lease {
 
     /**
      * Constructor. An empty lease; the gateway, tunnel id and end date are filled
-     * in by readBytes() or by the LeaseSet that owns it.
+     * in by {@link #readBytes} or by the LeaseSet that owns it.
      */
     public Lease2() {}
 

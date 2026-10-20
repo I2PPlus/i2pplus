@@ -69,9 +69,9 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
 
     /** Current encrypted block we are reading (IB only) or an IV buf used at the end for OB. */
     private byte[] _curEncrypted;
-    /** Alice's RouterIdentity, set after gotRI() validation succeeds. */
+    /** Alice's RouterIdentity, set after {@link #gotRI()} validation succeeds. */
     private RouterIdentity _aliceIdent; // NOSONAR S1450: set and read in gotRI()
-    /** Flag to ensure releaseBufs() is called only once. */
+    /** Flag to ensure {@link #releaseBufs()} is called only once. */
     private volatile boolean _released;
 
     //// NTCP2 things
@@ -135,7 +135,7 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
     /**
      * Entry point for receiving data on an inbound NTCP connection.
      * Parses the contents of the buffer as part of the handshake.
-     * <p>Delegates to receiveInbound() for actual processing.
+     * <p>Delegates to {@link #receiveInbound} for actual processing.
      * All data is copied out of the buffer as {@link net.i2p.router.transport.ntcp.Reader#processRead}
      * will return it to the pool.
      * <p>If there are additional data in the buffer after the handshake is complete,
@@ -284,7 +284,7 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
      * @param aliceHash the hash of Alice's RouterIdentity to validate
      * @return true if the peer is valid and connection should proceed;
      *         false if validation failed (caller should return immediately)
-     * @since 0.9.36 pulled out of verifyInbound()
+     * @since 0.9.36 pulled out of {@link #verifyInbound()}
      */
     private boolean verifyInbound(Hash aliceHash) {
         // get inet-addr
@@ -735,7 +735,7 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
      * <li>Calls con.failInboundEstablishment() with termination reason</li>
      * <li>Transitions to CORRUPT state</li>
      * </ul>
-     * <p>Note: If you don't call this method, call fail() directly.
+     * <p>Note: If you don't call this method, call {@link #fail()} directly.
      *
      * @param buf ByteBuffer possibly containing "extra" data for immediate processing
      *            in the data phase; typically present for inbound connections
@@ -1111,7 +1111,7 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
 
     /**
      * Converts a termination reason code to a human-readable string.
-     * <p>Reason codes are defined in NTCPConnection and used in termination
+     * <p>Reason codes are defined in {@link NTCPConnection} and used in termination
      * messages to indicate why a connection failed.
      *
      * @param reasonCode the numeric reason code from NTCPConnection

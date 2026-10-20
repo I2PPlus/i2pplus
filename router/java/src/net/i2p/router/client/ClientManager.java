@@ -73,7 +73,7 @@ class ClientManager {
     protected final RouterContext _ctx;
     /** I2CP listen port. */
     protected final int _port;
-    /** True after start() completes. */
+    /** True after {@link #start()} completes. */
     protected volatile boolean _isStarted;
     /** True if start() was ever called. */
     protected volatile boolean _wasStarted;
@@ -384,7 +384,7 @@ class ClientManager {
     }
 
     /**
-     * Call after destinationEstablished(),
+     * Call after {@link #destinationEstablished},
      * when an encrypted leaseset is created, so we know it's local.
      * Add to the clients list. Check for a dup hash.
      * Caller must call runner.disconnectClient() on failure.

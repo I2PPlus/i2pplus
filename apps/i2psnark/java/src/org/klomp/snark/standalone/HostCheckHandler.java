@@ -54,7 +54,7 @@ public class HostCheckHandler extends AbstractHandler {
     }
 
     /**
-     * Unused, we can't get here from RunStandalone.
+     * Unused, we can't get here from {@link RunStandalone}.
      *
      * @param hosts contains hostnames or IPs. But we allow all IPs anyway.
      */
