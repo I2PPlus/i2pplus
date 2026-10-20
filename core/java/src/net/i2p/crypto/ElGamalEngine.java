@@ -118,12 +118,15 @@ public final class ElGamalEngine {
 
         BigInteger m = new NativeBigInteger(1, d2);
         if (m.compareTo(CryptoConstants.elgp) >= 0) throw new IllegalArgumentException("ARGH.  Data cannot be larger than the ElGamal prime.  FIXME");
-        BigInteger aalpha = new NativeBigInteger(1, publicKey.getData());
+        NativeBigInteger aalpha = new NativeBigInteger(1, publicKey.getData());
         BigInteger[] yk = getNextYK();
         BigInteger k = yk[1];
         BigInteger y = yk[0];
 
-        BigInteger d = aalpha.modPow(k, CryptoConstants.elgp);
+        // Constant-time exponentiation - k is the secret ephemeral exponent,
+        // and the decrypt side below already uses modPowCT. The elgp modulus
+        // is an odd prime, as required by mpz_powm_sec.
+        BigInteger d = aalpha.modPowCT(k, CryptoConstants.elgp);
         d = d.multiply(m);
         d = d.mod(CryptoConstants.elgp);
 
@@ -165,6 +168,16 @@ public final class ElGamalEngine {
         byte[] buf = SimpleByteCache.acquire(ELG_HALF_LENGTH);
         System.arraycopy(encrypted, 0, buf, 0, ELG_HALF_LENGTH);
         NativeBigInteger y = new NativeBigInteger(1, buf);
+        // Reject out-of-range and small-subgroup y values before any DH work.
+        // A valid y = g^k mod p lies strictly between 1 and p-1; y = 1 or
+        // y = p-1 (order 2) would leak the parity of the static key through
+        // the pad+hash check below, and is oracle-repeatable.
+        if (y.compareTo(BigInteger.ONE) <= 0 || y.compareTo(ELGPM1) >= 0) {
+            if (_log.shouldWarn())
+                _log.warn("ElGamal decrypt rejected: y out of range (1, p-1)");
+            SimpleByteCache.release(buf);
+            return null;
+        }
         BigInteger ya = y.modPowCT(y1p, CryptoConstants.elgp);
         System.arraycopy(encrypted, ELG_HALF_LENGTH, buf, 0, ELG_HALF_LENGTH);
         BigInteger d = new NativeBigInteger(1, buf);

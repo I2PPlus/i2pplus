@@ -37,12 +37,21 @@ final class ECUtil {
 
     /**
      * Scalar multiplication on the curve.
+     * <p>
+     * Deprecated: this is a textbook affine double-and-add with a
+     * variable-time modular inverse per bit, so it leaks a secret scalar
+     * through timing and cache side channels. Deriving the public point via
+     * the JDK's EC KeyFactory (constant-time in sunEC) would be the fix, but
+     * PrivateKey.getPublic() is Java 15+ and the compile floor is 8; the one
+     * internal caller (KeyGenerator.getSigningPublicKey) is keygen-time only.
      *
      * @param p the point to multiply; may be {@link ECPoint#POINT_INFINITY} to get the identity back
      * @param kin the scalar, reduced modulo the field prime before use
      * @param curve the prime field curve both points and the intermediate results belong to
      * @return the resulting ECPoint
+     * @deprecated since 0.9.71+, do not use on secret scalars
      */
+    @Deprecated
     public static ECPoint scalarMult(ECPoint p, BigInteger kin, EllipticCurve curve) {
         ECPoint r = ECPoint.POINT_INFINITY;
         BigInteger prime = ((ECFieldFp) curve.getField()).getP();

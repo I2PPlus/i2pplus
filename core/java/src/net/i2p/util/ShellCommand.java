@@ -48,23 +48,26 @@ public class ShellCommand {
      */
     private class CommandThread extends I2PAppThread {
         private final Object shellCommand;
+        private final String[] envp;
         private final Result result;
 
         /**
-         * Runs the shell command in a thread.
+         * Runs the shell command in a thread with an explicit environment.
          *
          * @param shellCommand either a String or a String[] (since 0.8.3)
-         * @param result holder for the exit status, written when the thread runs
+         * @param envp environment entries as NAME=value strings, or null to inherit
+         * @param res holder for the exit status, written when the thread runs
          */
-        CommandThread(Object shellCommand, Result result) {
+        CommandThread(Object shellCommand, String[] envp, Result res) {
             super("ShellCommand Executor");
             this.shellCommand = shellCommand;
-            this.result = result;
+            this.envp = envp;
+            this.result = res;
         }
 
         @Override
         public void run() {
-            result.commandSuccessful = execute(shellCommand);
+            result.commandSuccessful = execute(shellCommand, envp);
         }
     }
 
@@ -114,7 +117,7 @@ public class ShellCommand {
      * @since 0.9.38
      */
     public boolean executeSilentAndWait(String[] commandArray) {
-        return execute(commandArray);
+        return execute(commandArray, null);
     }
 
     /**
@@ -141,7 +144,7 @@ public class ShellCommand {
      * else <code>false</code>.
      */
     public boolean executeSilentAndWaitTimed(String shellCommand, int seconds) {
-        return executeSAWT(shellCommand, seconds);
+        return executeSAWT(shellCommand, null, seconds);
     }
 
     /**
@@ -167,7 +170,25 @@ public class ShellCommand {
      * @since 0.8.3
      */
     public boolean executeSilentAndWaitTimed(String[] commandArray, int seconds) {
-        return executeSAWT(commandArray, seconds);
+        return executeSAWT(commandArray, null, seconds);
+    }
+
+    /**
+     * Execute the command array with an explicit environment, waiting for
+     * completion with a timeout, e.g. to hand a password to keytool via
+     * {@code -storepass:env} instead of the visible command line.
+     *
+     * @param commandArray the command and its arguments
+     * @param envp environment entries as NAME=value strings, replacing the
+     * inherited environment (include those entries you want to keep), or null to inherit it
+     * @param seconds the maximum time to wait, in seconds
+     * @return true if the spawned process returns an exit status of 0 (indicating success),
+     * OR if the time expires, else false
+     *
+     * @since 0.9.71+
+     */
+    public boolean executeSilentAndWaitTimed(String[] commandArray, String[] envp, int seconds) {
+        return executeSAWT(commandArray, envp, seconds);
     }
 
     /**
@@ -175,7 +196,7 @@ public class ShellCommand {
      *
      * @since 0.8.3
      */
-    private boolean executeSAWT(Object shellCommand, int seconds) {
+    private boolean executeSAWT(Object shellCommand, String[] envp, int seconds) {
         String name = null;
         long begin = 0;
         Log log = I2PAppContext.getGlobalContext().logManager().getLog(ShellCommand.class);
@@ -189,7 +210,7 @@ public class ShellCommand {
             begin = System.currentTimeMillis();
         }
         Result result = new Result();
-        Thread commandThread = new CommandThread(shellCommand, result);
+        Thread commandThread = new CommandThread(shellCommand, envp, result);
         commandThread.start();
         try {
             if (seconds > 0) {
@@ -225,13 +246,14 @@ public class ShellCommand {
     }
 
     /**
-     * Executes the command and waits for it to complete.
-     * The process is destroyed if the wait is interrupted.
+     * Executes the command with an explicit environment and waits for it to
+     * complete. The process is destroyed if the wait is interrupted.
      *
      * @param shellCommand either a String or a String[] (since 0.8.3) - quick hack
+     * @param envp environment entries as NAME=value strings, or null to inherit
      * @return true if the process exited with status 0, else false
      */
-    private boolean execute(Object shellCommand) {
+    private boolean execute(Object shellCommand, String[] envp) {
         Process process;
         String name = null; // for debugging only
         Log log = I2PAppContext.getGlobalContext().logManager().getLog(ShellCommand.class);
@@ -240,14 +262,14 @@ public class ShellCommand {
             if (shellCommand instanceof String) {
                 name = (String) shellCommand;
                 if (log.shouldDebug()) log.debug("ShellCommand exec \"" + name + "\"");
-                process = Runtime.getRuntime().exec(name);
+                process = Runtime.getRuntime().exec(name, envp);
             } else if (shellCommand instanceof String[]) {
                 String[] arr = (String[]) shellCommand;
                 if (log.shouldDebug()) {
                     name = Arrays.toString(arr);
                     log.debug("ShellCommand exec \"" + name + "\"");
                 }
-                process = Runtime.getRuntime().exec(arr);
+                process = Runtime.getRuntime().exec(arr, envp);
             } else {
                 throw new ClassCastException("shell command must be a String or a String[]");
             }

@@ -132,7 +132,7 @@ public class AESEngine {
 
         byte[] h = SimpleByteCache.acquire(Hash.HASH_LENGTH);
         _context.sha().calculateHash(iv, 0, 16, h, 0);
-        boolean eq = DataHelper.eq(decr, 0, h, 0, Hash.HASH_LENGTH);
+        boolean eq = DataHelper.eqCT(decr, 0, h, 0, Hash.HASH_LENGTH);
         SimpleByteCache.release(h);
         if (!eq) {
             _log.error("Hash does not match [iv = " + DataHelper.toString(iv, iv.length) + "]", new Exception("Hash error"));

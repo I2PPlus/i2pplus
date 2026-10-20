@@ -4,6 +4,8 @@ package net.i2p.crypto;
 
 import com.southernstorm.noise.crypto.chacha20.ChaChaCore;
 
+import java.util.Arrays;
+
 import net.i2p.data.DataHelper;
 
 /**
@@ -94,6 +96,11 @@ public final class ChaCha20 {
             ciphertextOffset += tempLen;
             length -= tempLen;
         }
+        // Wipe the key schedule and keystream from the reused scratch so they
+        // do not linger on the thread past this operation. The next call
+        // re-initializes via ChaChaCore.initKey256 anyway.
+        Arrays.fill(input, 0);
+        Arrays.fill(output, 0);
     }
 
     /**

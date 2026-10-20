@@ -196,6 +196,9 @@ class PeerTestManager {
         protected ChaChaPolyCipherState initialValue() {return new ChaChaPolyCipherState();}
     };
 
+    /** Used to wipe the reused per-thread cipher's key schedule after use. @since 0.9.71+ */
+    private static final byte[] ZERO_INTRO_KEY = new byte[32];
+
     /** How long a "no RouterInfo for this Peer Test" answer is reused. @since 0.9.71+. */
     private static final long TEST_RI_MISS_TTL = 250;
     /**
@@ -811,6 +814,10 @@ class PeerTestManager {
         } catch (Exception e) {
             if (_log.shouldWarn())
                 _log.warn("Bad PeerTest packet:\n" + HexDump.dump(data, off, len), e);
+        } finally {
+            // Wipe the intro-key schedule out of the reused per-thread cipher
+            // when done; the next use re-initializes it anyway.
+            chacha.initializeKey(ZERO_INTRO_KEY, 0);
         }
     }
 

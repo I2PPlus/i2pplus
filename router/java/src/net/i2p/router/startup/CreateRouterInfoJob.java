@@ -214,8 +214,14 @@ public class CreateRouterInfoJob extends JobImpl {
                 cstype = ntype;
         }
         // fallback?
-        if (cstype != SigType.DSA_SHA1 && !cstype.isAvailable())
+        if (cstype != SigType.DSA_SHA1 && !cstype.isAvailable()) {
+            // Loud - a silently downgraded router identity is a weak default.
+            ctx.logManager().getLog(CreateRouterInfoJob.class)
+               .error("Configured signature type " + cstype + " is not available on this JVM, " +
+                      "falling back to legacy 1024-bit DSA-SHA1 for the router identity",
+                      new Exception("Why"));
             cstype = SigType.DSA_SHA1;
+        }
         return cstype;
     }
 

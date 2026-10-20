@@ -88,21 +88,32 @@ public final class CryptixAESEngine extends AESEngine {
     private final ConcurrentMap<SessionKey, SecretKeySpec> _keySpecReads = new ConcurrentHashMap<>(KEY_SPEC_CACHE_SIZE);
 
     /**
-     * Check for AES-NI support in processor and JVM.
+     * Check for AES support in processor and JVM.
+     * <p>
+     * On x86-64 this consults CPUID when libjcpuid is available; a missing
+     * helper library must not silently disable the JDK path, so the JDK's own
+     * implementation (AES-NI intrinsics where present, tables otherwise) is
+     * assumed instead - it is at least as good as the bundled Cryptix tables.
+     * On other 64-bit ABIs (notably AArch64, which has AES in the base ISA)
+     * the JDK path is used as well. 32-bit and non-mainstream JVMs keep the
+     * Cryptix tables.
      *
-     * @return whether AESNI is present
+     * @return whether the JDK Cipher path should be used
      * @since 0.9.14
      */
     private static boolean hasAESNI() {
-        if (SystemVersion.isX86() && SystemVersion.is64Bit() && SystemVersion.isJava7() && !SystemVersion.isApache() && !SystemVersion.isGNU()) {
-            try {
-                return CPUID.getInfo().hasAES();
-            } catch (UnknownCPUException e) {
-                return false;
+        if (SystemVersion.is64Bit() && SystemVersion.isJava7() &&
+            !SystemVersion.isApache() && !SystemVersion.isGNU()) {
+            if (SystemVersion.isX86()) {
+                try {
+                    return CPUID.getInfo().hasAES();
+                } catch (UnknownCPUException e) {
+                    return true;
+                }
             }
-        } else {
-            return false;
+            return true;
         }
+        return false;
     }
 
     /**

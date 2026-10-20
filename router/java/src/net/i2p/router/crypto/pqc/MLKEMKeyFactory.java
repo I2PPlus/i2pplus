@@ -42,8 +42,11 @@ public class MLKEMKeyFactory extends I2PThread implements KeyFactory {
     private static final String PROP_MLKEM_PRECALC_MIN = "crypto.mlkem.precalc.min";
     private static final String PROP_MLKEM_PRECALC_MAX = "crypto.mlkem.precalc.max";
     private static final String PROP_MLKEM_PRECALC_DELAY = "crypto.mlkem.precalc.delay";
-    // MLKEM-768 pair is ~3.5KB so even 1000 keys is <4MB.
-    // Scale up by factor (cores/memory) at construction time.
+    // An ML-KEM-768 keypair is ~3.5KB on the heap. The pool scales with
+    // cores/memory, so the scaled defaults are capped by a byte budget
+    // below - an uncapped count scale can reach 100+MB on high-core boxes.
+    private static final int BYTES_PER_PAIR = 4 * 1024;
+    private static final long MAX_POOL_BYTES = 16L * 1024 * 1024;
     private static final int DEFAULT_MLKEM_PRECALC_MIN = 64;
     private static final int DEFAULT_MLKEM_PRECALC_MAX = 256;
     private static final int DEFAULT_MLKEM_PRECALC_DELAY = 25;
@@ -63,20 +66,21 @@ public class MLKEMKeyFactory extends I2PThread implements KeyFactory {
         ctx.statManager().createRequiredRateStat("crypto.MLKEMUsed", "MLKEM keys consumed from precalc pool", "Encryption", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR });
         ctx.statManager().createRequiredRateStat("crypto.MLKEMEmpty", "MLKEM queue empty", "Encryption", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR });
 
-        // Scale precomputation with available memory and cores.
-        // MLKEM-768 keypair is ~3.5KB so even 1000 keys is <4MB.
+        // Scale precomputation with available memory and cores, then cap
+        // the scaled defaults by the byte budget (BYTES_PER_PAIR above).
         long maxMemory = SystemVersion.getMaxMemory();
         int cores = SystemVersion.getCores();
         // Memory factor: +1 per 128MB
         int memFactor = Math.max(1, (int)(maxMemory / (128L * 1024 * 1024)));
         // Core factor: +1 per core
         int coreFactor = cores;
-        // Use the larger — memory cost is negligible, no cap
+        // Use the larger
         int factor = Math.max(memFactor, coreFactor);
         if (SystemVersion.isSlow())
             factor *= 2;
-        int defaultMin = DEFAULT_MLKEM_PRECALC_MIN * factor;
-        int defaultMax = DEFAULT_MLKEM_PRECALC_MAX * factor;
+        int byteCap = (int) Math.min(HARD_MAX, MAX_POOL_BYTES / BYTES_PER_PAIR);
+        int defaultMin = Math.min(DEFAULT_MLKEM_PRECALC_MIN * factor, byteCap);
+        int defaultMax = Math.min(DEFAULT_MLKEM_PRECALC_MAX * factor, byteCap);
         _minSize = ctx.getProperty(PROP_MLKEM_PRECALC_MIN, defaultMin);
         int cfgMax = ctx.getProperty(PROP_MLKEM_PRECALC_MAX, defaultMax);
         _maxSize = Math.max(_minSize + 4, (_minSize + cfgMax) / 2);

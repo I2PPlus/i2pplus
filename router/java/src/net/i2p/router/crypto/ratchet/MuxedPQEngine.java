@@ -27,36 +27,25 @@ final class MuxedPQEngine {
         _log = _context.logManager().getLog(MuxedPQEngine.class);
     }
 
-    // Constants for minimum new session sizes (copied from ECIESAEADEngine)
-
-    private static final int MACLEN = 16;
-    private static final int KEYLEN = 32;
-    private static final int BHLEN = 3; // RatchetPayload.BLOCK_HEADER_SIZE
-    private static final int DATETIME_SIZE = BHLEN + 4; // 7
-    private static final int NS_OVERHEAD = KEYLEN + KEYLEN + MACLEN + MACLEN; // 96
-    private static final int MIN_NS_SIZE = NS_OVERHEAD + DATETIME_SIZE; // 103
-    private static final int NS_MLKEM_OVERHEAD = NS_OVERHEAD + MACLEN; // 112
-    private static final int MIN_NS_MLKEM512_SIZE = 800 + NS_MLKEM_OVERHEAD + DATETIME_SIZE; // 919
-    private static final int MIN_NS_MLKEM768_SIZE = 1184 + NS_MLKEM_OVERHEAD + DATETIME_SIZE; // 1303
-    private static final int MIN_NS_MLKEM1024_SIZE = 1568 + NS_MLKEM_OVERHEAD + DATETIME_SIZE; // 1687
-
     /**
      * The minimum new session size for the given encryption type.
+     * Sizes come from ECIESAEADEngine, the single source of truth for
+     * the wire format.
      *
      * @return the minimum new-session message size in bytes
      */
     private static int getMinNSSize(EncType type) {
         switch(type) {
           case ECIES_X25519:
-              return MIN_NS_SIZE;
+              return ECIESAEADEngine.MIN_NS_SIZE;
           case MLKEM512_X25519:
-              return MIN_NS_MLKEM512_SIZE;
+              return ECIESAEADEngine.MIN_NS_MLKEM512_SIZE;
           case MLKEM768_X25519:
-              return MIN_NS_MLKEM768_SIZE;
+              return ECIESAEADEngine.MIN_NS_MLKEM768_SIZE;
           case MLKEM1024_X25519:
-              return MIN_NS_MLKEM1024_SIZE;
+              return ECIESAEADEngine.MIN_NS_MLKEM1024_SIZE;
           default:
-              return MIN_NS_SIZE;
+              return ECIESAEADEngine.MIN_NS_SIZE;
         }
     }
 

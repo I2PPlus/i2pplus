@@ -85,16 +85,17 @@ public class MuxedPQSKM extends SessionKeyManager {
         }
 
         // Structured logging for PQ vs EC success/failure ratios.
-        // Only report on successful decrypts (failures do not increment the
-        // counters, so total == 0 would otherwise match every failure), and
-        // only every 25th success - the ratio warnings below are evaluated
-        // at each checkpoint, so an "interesting" state is still reported
-        // promptly without flooding on steady-state skew.
+        // Only report on successful decrypts: failures do not increment the
+        // counters, so a failure flood would otherwise re-trigger the
+        // checkpoint on every failure (and total == 0 would match every
+        // failure). Every 25th success is a checkpoint; the ratio warnings
+        // below are evaluated there, so an "interesting" state is still
+        // reported promptly without flooding on steady-state skew.
         int ec = _ecCounter.get();
         int pq = _pqCounter.get();
         int total = ec + pq;
 
-        if (total > 0 && (total % 25) == 0 && _log.shouldInfo()) {
+        if (success && total > 0 && (total % 25) == 0 && _log.shouldInfo()) {
             double ecRatio = total > 0 ? (double) ec / total * 100.0 : 0.0;
             double pqRatio = total > 0 ? (double) pq / total * 100.0 : 0.0;
             String status = String.format("PQ vs EC decrypt ratios after %d attempts - EC: %d (%.1f%%) PQ: %d (%.1f%%) - Prefer ratchet: %s",

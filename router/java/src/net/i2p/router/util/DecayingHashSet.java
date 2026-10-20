@@ -255,6 +255,28 @@ public class DecayingHashSet extends DecayingBloomFilter {
         return add(entry, false);
     }
 
+    /**
+     * Check whether a byte array entry is already known, without adding it.
+     *
+     * @return true if the entry is already known. This does NOT add the
+     * entry however.
+     * @since 0.9.71+
+     */
+    @Override
+    public boolean isKnown(byte[] entry, int off, int len) {
+        if (entry == null)
+            throw new IllegalArgumentException("Null entry");
+        if (len != _entryBytes)
+            throw new IllegalArgumentException("Bad entry [" + len + ", expected "
+                                               + _entryBytes + "]");
+        forceDecayIfOverCap();
+        ArrayWrapper w = new ArrayWrapper(entry, off, len);
+        getReadLock();
+        try {
+            return locked_add(w, false);
+        } finally { releaseReadLock(); }
+    }
+
     private boolean add(long entry, boolean addIfNew) {
         forceDecayIfOverCap();
         ArrayWrapper w = new ArrayWrapper(entry);

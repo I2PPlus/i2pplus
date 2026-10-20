@@ -455,7 +455,7 @@ public class GroupElement implements Serializable {
      * $r = p$
      * <p>
      * Supported conversions:
-     * <p><ul>
+     * <ul>
      * <li>P3 $\rightarrow$ P2
      * <li>P3 $\rightarrow$ CACHED (1 multiply, 1 add, 1 subtract)
      * <li>P1P1 $\rightarrow$ P2 (3 multiply)
@@ -633,14 +633,14 @@ public class GroupElement implements Serializable {
      * $r$ in $P \times P$ representation:
      * <p>
      * $r = ((X' : Z'), (Y' : T'))$ where.
-     * <p><ul>
+     * <ul>
      * <li>$X' = (Y1 + X1) * q.X - (Y1 - X1) * q.Y = ((Y1 + X1) * (Y2 + X2) - (Y1 - X1) * (Y2 - X2)) * 1/Z2$
      * <li>$Y' = (Y1 + X1) * q.X + (Y1 - X1) * q.Y = ((Y1 + X1) * (Y2 + X2) + (Y1 - X1) * (Y2 - X2)) * 1/Z2$
      * <li>$Z' = 2 * Z1 + T1 * q.Z = 2 * Z1 + T1 * 2 * d * X2 * Y2 * 1/Z2^2 = (2 * Z1 * Z2 + 2 * d * T1 * T2) * 1/Z2$
      * <li>$T' = 2 * Z1 - T1 * q.Z = 2 * Z1 - T1 * 2 * d * X2 * Y2 * 1/Z2^2 = (2 * Z1 * Z2 - 2 * d * T1 * T2) * 1/Z2$
      * </ul><p>
      * Setting $A = (Y1 - X1) * (Y2 - X2), B = (Y1 + X1) * (Y2 + X2), C = 2 * d * T1 * T2, D = 2 * Z1 * Z2$ we get
-     * <p><ul>
+     * <ul>
      * <li>$X' = (B - A) * 1/Z2$
      * <li>$Y' = (B + A) * 1/Z2$
      * <li>$Z' = (D + C) * 1/Z2$
@@ -649,7 +649,7 @@ public class GroupElement implements Serializable {
      * $r$ converted from $P \times P$ to $P^2$ representation:
      * <p>
      * $r = (X'' : Y'' : Z'' : T'')$ where
-     * <p><ul>
+     * <ul>
      * <li>$X'' = X' * Z' = (B - A) * (D + C) * 1/Z2^2$
      * <li>$Y'' = Y' * T' = (B + A) * (D - C) * 1/Z2^2$
      * <li>$Z'' = Z' * T' = (D + C) * (D - C) * 1/Z2^2$

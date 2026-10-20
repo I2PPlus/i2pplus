@@ -28,6 +28,7 @@ import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Set;
 import net.i2p.I2PAppContext;
 import net.i2p.crypto.provider.I2PProvider;
@@ -934,6 +935,25 @@ public final class KeyStoreUtil {
         return rv;
     }
 
+    /** Env var names used by createKeysCLI() to pass passwords to keytool via :env. */
+    private static final String STOREPASS_ENV = "I2P_KEYSTORE_STOREPASS";
+    private static final String KEYPASS_ENV = "I2P_KEYSTORE_KEYPASS";
+
+    /**
+     * Build a child-process environment array: the current process
+     * environment plus the two given entries.
+     */
+    private static String[] buildEnv(String key1, String val1, String key2, String val2) {
+        Map<String, String> env = System.getenv();
+        String[] envp = new String[env.size() + 2];
+        int i = 0;
+        for (Map.Entry<String, String> e : env.entrySet())
+            envp[i++] = e.getKey() + '=' + e.getValue();
+        envp[i++] = key1 + '=' + val1;
+        envp[i] = key2 + '=' + val2;
+        return envp;
+    }
+
     /**
      * OLD way - keytool
      * Create a keypair and store it in the keystore at ks, creating it if necessary.
@@ -995,8 +1015,8 @@ public final class KeyStoreUtil {
         a.add(KeyStore.getDefaultType());
         a.add("-keystore");
         a.add(ks.getAbsolutePath());
-        a.add("-storepass");
-        a.add(ksPW);
+        a.add("-storepass:env");
+        a.add(STOREPASS_ENV);
         a.add("-alias");
         a.add(alias);
         a.add("-dname");
@@ -1009,8 +1029,8 @@ public final class KeyStoreUtil {
         a.add(getSigAlg(keySize, keyAlg));
         a.add("-keysize");
         a.add(Integer.toString(keySize));
-        a.add("-keypass");
-        a.add(keyPW);
+        a.add("-keypass:env");
+        a.add(KEYPASS_ENV);
         if (keyAlg.equals("Ed") || keyAlg.equals("EdDSA") || keyAlg.equals("ElGamal")) {
             File f = I2PAppContext.getGlobalContext().getLibDir();
             f = new File(f, "i2p.jar");
@@ -1021,8 +1041,31 @@ public final class KeyStoreUtil {
             a.add("net.i2p.crypto.provider.I2PProvider");
         }
         String[] args = a.toArray(new String[a.size()]);
-        // TODO pipe key password to process; requires ShellCommand enhancements
-        boolean success = (new ShellCommand()).executeSilentAndWaitTimed(args, 240);
+        // Pass the passwords via the environment (keytool :env, JDK 8u151+)
+        // so they never appear in the process list or the debug log.
+        String[] envp = buildEnv(STOREPASS_ENV, ksPW, KEYPASS_ENV, keyPW);
+        boolean success = (new ShellCommand()).executeSilentAndWaitTimed(args, envp, 240);
+        if (!success) {
+            // keytool from before JDK 8u151 does not understand :env.
+            // Retry the old way (password visible in the process list) so
+            // behavior on ancient JDKs is unchanged.
+            List<String> legacy = new ArrayList<>(a.size());
+            for (int i = 0; i < a.size(); i++) {
+                String s = a.get(i);
+                if (s.equals("-storepass:env")) {
+                    legacy.add("-storepass");
+                    legacy.add(ksPW);
+                    i++;
+                } else if (s.equals("-keypass:env")) {
+                    legacy.add("-keypass");
+                    legacy.add(keyPW);
+                    i++;
+                } else {
+                    legacy.add(s);
+                }
+            }
+            success = (new ShellCommand()).executeSilentAndWaitTimed(legacy.toArray(new String[legacy.size()]), 240);
+        }
         if (success) {
             success = ks.exists();
             if (success) {

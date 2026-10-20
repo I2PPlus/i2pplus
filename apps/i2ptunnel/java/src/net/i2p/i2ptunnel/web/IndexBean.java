@@ -2071,13 +2071,13 @@ public class IndexBean {
     /**
      * Decrypt a property using an in-memory key, for
      * interaction with the UI only, using {@link ChaCha20}.
-     * IV is SHA256(k).
+     * The IV is random and prepended to the ciphertext (12 bytes).
      * <p>
      * These are transient keys by design, but are persisted
      * to hide restarts. They are hidden inputs in the edit form.
      * Storage in config files is not encrypted.
      *
-     * @param k non-null
+     * @param k property name, unused since the IV moved into the ciphertext
      * @param v Base64, or empty, or null
      * @since 0.9.46
      */
@@ -2085,19 +2085,20 @@ public class IndexBean {
         if (v == null || v.length() <= 0) {return v;}
         byte[] enc = Base64.decode(v);
         if (enc == null) {return null;}
+        if (enc.length < 12) {return null;}
         SessionKey key;
         synchronized(_formKeys) {key = _formKeys.get(Integer.valueOf(_tunnel));}
         if (key == null) {return null;}
-        byte[] kb = DataHelper.getUTF8(k);
-        byte[] iv = new byte[32];
-        _context.sha().calculateHash(kb, 0, kb.length, iv, 0);
-        ChaCha20.decrypt(key.getData(), iv, enc, 0, enc, 0, enc.length);
-        return DataHelper.getUTF8(enc);
+        byte[] plain = new byte[enc.length - 12];
+        ChaCha20.decrypt(key.getData(), enc, 0, enc, 12, plain, 0, plain.length);
+        return DataHelper.getUTF8(plain);
     }
 
     /**
      * Encrypt a property using an in-memory key, for interaction with the UI only,
-     * using ChaCha20. IV is SHA256(k).
+     * using ChaCha20. The IV is random and prepended to the ciphertext (12 bytes);
+     * the previous IV = SHA256(k) reused the keystream for the same property name
+     * under the same cached form key.
      * <p>
      * These are transient keys by design, but are persisted to hide restarts.
      * They are hidden inputs in the edit form. Storage in config files is not encrypted.
@@ -2131,11 +2132,14 @@ public class IndexBean {
                 _formKeys.put(Integer.valueOf(tunnel), key);
             }
         }
-        byte[] kb = DataHelper.getUTF8(k);
-        byte[] iv = new byte[32];
-        _context.sha().calculateHash(kb, 0, kb.length, iv, 0);
-        ChaCha20.encrypt(key.getData(), iv, dec, 0, dec, 0, dec.length);
-        return Base64.encode(dec);
+        byte[] iv = new byte[12];
+        _context.random().nextBytes(iv);
+        byte[] enc = new byte[dec.length];
+        ChaCha20.encrypt(key.getData(), iv, dec, 0, enc, 0, dec.length);
+        byte[] both = new byte[iv.length + enc.length];
+        System.arraycopy(iv, 0, both, 0, iv.length);
+        System.arraycopy(enc, 0, both, iv.length, enc.length);
+        return Base64.encode(both);
     }
 
     /** Modify or create a destination. */

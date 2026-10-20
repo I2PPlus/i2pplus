@@ -49,7 +49,13 @@ public class AsyncFortunaStandalone extends FortunaStandalone implements Runnabl
      * @param context the I2P app context
      */
     public AsyncFortunaStandalone(I2PAppContext context) {
-        super(context.getBooleanPropertyDefaultTrue("prng.useDevRandom") && !SystemVersion.isWindows() && !SystemVersion.isSlow());
+        // Default to the in-process Fortuna generator. The DevRandom path
+        // opens /dev/random afresh for every nextBytes() call (a syscall
+        // storm on hot paths, and it can block on low-entropy systems);
+        // Fortuna is already seeded from /dev/urandom, the seedfile and
+        // SecureRandom at startup. Set prng.useDevRandom=true to opt back in.
+        super(context.getBooleanProperty("prng.useDevRandom") &&
+              !SystemVersion.isWindows() && !SystemVersion.isSlow());
         _bufferCount = Math.max(context.getProperty("prng.buffers", DEFAULT_BUFFERS), 2);
         _bufferSize = Math.max(context.getProperty("prng.bufferSize", DEFAULT_BUFSIZE), 16*1024);
         _emptyBuffers = new LinkedBlockingQueue<>(_bufferCount);

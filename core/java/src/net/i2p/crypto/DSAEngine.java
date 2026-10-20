@@ -55,6 +55,13 @@ public final class DSAEngine {
      */
     private static final ThreadLocal<MessageDigest> _sha512 = ThreadLocal.withInitial(DSAEngine::sha512);
 
+    /**
+     * dsaq - 2, the Fermat exponent for the constant-time DSA nonce inverse.
+     *
+     * @see #signIt
+     */
+    private static final BigInteger DSAQ_MINUS_2 = CryptoConstants.dsaq.subtract(BigInteger.valueOf(2));
+
     private static MessageDigest sha512() {
         try {
             return MessageDigest.getInstance("SHA-512");
@@ -425,7 +432,7 @@ public final class DSAEngine {
         if (signingKey.getType() != SigType.DSA_SHA1) throw new IllegalArgumentException("Bad key type " + signingKey.getType());
         long start = _context.clock().now();
 
-        BigInteger k;
+        NativeBigInteger k;
         boolean ok;
         do {
             k = new NativeBigInteger(160, _context.random());
@@ -434,7 +441,10 @@ public final class DSAEngine {
         } while (!ok);
 
         BigInteger r = CryptoConstants.dsag.modPowCT(k, CryptoConstants.dsap).mod(CryptoConstants.dsaq);
-        BigInteger kinv = k.modInverse(CryptoConstants.dsaq);
+        // Constant-time inverse via Fermat's little theorem: dsaq is prime and
+        // 0 < k < q, so k^-1 = k^(q-2) mod q. The GMP mpz_invert behind
+        // k.modInverse() is variable-time on the secret nonce.
+        BigInteger kinv = k.modPowCT(DSAQ_MINUS_2, CryptoConstants.dsaq);
 
         BigInteger m = new NativeBigInteger(1, hash.getData());
         BigInteger x = new NativeBigInteger(1, signingKey.getData());

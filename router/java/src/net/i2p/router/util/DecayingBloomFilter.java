@@ -510,6 +510,29 @@ public class DecayingBloomFilter {
         } finally { releaseReadLock(); }
     }
 
+    /**
+     * Check whether a byte array entry is already known, without adding it.
+     *
+     * @param entry the entry data
+     * @param off index in entry of the first byte to filter
+     * @param len number of bytes to filter, must equal _entryBytes
+     * @return true if the entry is already known. This does NOT add the
+     * entry however.
+     * @since 0.9.71+
+     */
+    public boolean isKnown(byte[] entry, int off, int len) {
+        if (ALWAYS_MISS) return false;
+        if (entry == null)
+            throw new IllegalArgumentException("Null entry");
+        if (len != _entryBytes)
+            throw new IllegalArgumentException("Bad entry [" + len + ", expected "
+                                               + _entryBytes + "]");
+        getReadLock();
+        try {
+            return locked_add(entry, off, len, false);
+        } finally { releaseReadLock(); }
+    }
+
     private boolean locked_add(byte[] entry, int offset, int len, boolean addIfNew) {
         if (_extenders != null) {
             // extend the entry to 32 bytes

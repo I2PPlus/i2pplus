@@ -241,4 +241,18 @@ public class DecayingBloomFilterTest {
         filter.stopDecaying();
         filter.stopDecaying();
     }
+
+    /** byte[] isKnown(): check-only lookup, must not add the entry. */
+    @Test
+    public void testIsKnownBytes() {
+        byte[] v = new byte[8];
+        v[0] = 77;
+        assertFalse(filter.isKnown(v, 0, v.length));
+        assertFalse(filter.add(v, 0, v.length));
+        assertTrue(filter.isKnown(v, 0, v.length));
+        byte[] w = new byte[8];
+        w[0] = 78;
+        assertFalse(filter.isKnown(w, 0, w.length));
+        assertFalse("isKnown must not add", filter.isKnown(w, 0, w.length));
+    }
 }

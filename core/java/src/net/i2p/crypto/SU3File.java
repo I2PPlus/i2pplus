@@ -462,8 +462,8 @@ public class SU3File {
         FileOutputStream out = null;
         boolean rv = false;
         try (BufferedInputStream in = new BufferedInputStream(new FileInputStream(_file))) {
-            // read 10 bytes to get the sig type
-            in.mark(10);
+            // read 11 bytes to get the sig type
+            in.mark(16);
             // following is a dup of that in verifyHeader()
             byte[] magic = new byte[MAGIC_BYTES.length];
             DataHelper.read(in, magic);
@@ -471,8 +471,7 @@ public class SU3File {
             skip(in, 1);
             int foo = in.read();
             if (foo != FILE_VERSION) throw new IOException("Bad file version");
-            skip(in, 1);
-            int sigTypeCode = in.read();
+            int sigTypeCode = (int) DataHelper.readLong(in, 2);
             _sigType = SigType.getByCode(sigTypeCode);
             if (_sigType == null) throw new IOException("Unknown signature type: " + sigTypeCode);
             // end duplicate code

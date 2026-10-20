@@ -297,9 +297,10 @@ public final class CertUtil {
      * Throws if the certificate is invalid (e.g. expired).
      * <p>
      * This does NOT check for revocation.
-     * This verifies the signature, assuming it is self-signed,
-     * but will not throw an exception,
-     * will log a warning only, as of 0.9.54.
+     * This verifies the signature assuming the cert is self-signed.
+     * A non-self-issued (chain) cert that fails self-verification only
+     * logs a warning, as of 0.9.54; a self-issued cert with a bad
+     * signature throws.
      * We do NOT fetch additional certs or attempt to validate a cert up the chain.
      *
      * @param kd the certificate file
@@ -316,6 +317,12 @@ public final class CertUtil {
             try {
                 cert.verify(cert.getPublicKey());
             } catch (Exception e) {
+                // A self-issued cert that does not verify against its own key
+                // is definitively broken - fail. A cert whose issuer differs
+                // from its subject is a chain cert and is not expected to
+                // self-verify, so it keeps the warn-only behavior of 0.9.54.
+                if (cert.getIssuerX500Principal().equals(cert.getSubjectX500Principal()))
+                    throw new GeneralSecurityException("Cert is self-issued but has a bad signature: " + kd, e);
                 System.out.println("Warning: Cert is not self-signed or has a bad signature: " + kd + " - " + e);
             }
             return cert;

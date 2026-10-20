@@ -417,6 +417,7 @@ public final class KeyGenerator {
      * @return a SigningPublicKey object
      * @throws IllegalArgumentException on bad key or unknown type
      */
+    @SuppressWarnings("deprecation")  // EC case below, see note there
     public static SigningPublicKey getSigningPublicKey(SigningPrivateKey priv) {
         SigType type = priv.getType();
         if (type == null) throw new IllegalArgumentException("Unknown type");
@@ -435,6 +436,10 @@ public final class KeyGenerator {
                     ECParameterSpec spec = (ECParameterSpec) type.getParams();
                     EllipticCurve curve = spec.getCurve();
                     ECPoint g = spec.getGenerator();
+                    // ECUtil.scalarMult is variable-time (see its deprecation
+                    // note, suppressed on the method above); delegating to the
+                    // JDK's sunEC would need PrivateKey.getPublic(), which is
+                    // Java 15+. Keygen-time only, kept for the Java 8 floor.
                     ECPoint w = ECUtil.scalarMult(g, s, curve);
                     ECPublicKeySpec ecks = new ECPublicKeySpec(w, ecpriv.getParams());
                     KeyFactory eckf = KeyFactory.getInstance("EC");

@@ -445,7 +445,7 @@ public final class ElGamalAESEngine {
             //Hash calcHash = _context.sha().calculateHash(unencrData);
             byte[] calcHash = SimpleByteCache.acquire(32);
             _context.sha().calculateHash(unencrData, 0, (int) len, calcHash, 0);
-            boolean eq = DataHelper.eq(decrypted, hashIndex, calcHash, 0, 32);
+            boolean eq = DataHelper.eqCT(decrypted, hashIndex, calcHash, 0, 32);
             SimpleByteCache.release(calcHash);
 
             if (eq) {

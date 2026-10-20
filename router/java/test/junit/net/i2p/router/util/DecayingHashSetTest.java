@@ -215,4 +215,28 @@ public class DecayingHashSetTest {
         set.stopDecaying();
         set.stopDecaying();
     }
+
+    /**
+     * byte[] isKnown(): check-only lookup for the ratchet NS pre-decode
+     * replay gate. It must not add the entry, so a second isKnown of an
+     * un-added entry stays false.
+     */
+    @Test
+    public void testIsKnownBytes() {
+        DecayingHashSet set32 = new DecayingHashSet(ctx, 60 * 1000, 32);
+        try {
+            byte[] entry = new byte[32];
+            entry[0] = (byte) 0xAB;
+            entry[31] = (byte) 0x01;
+            assertFalse("unknown before add", set32.isKnown(entry, 0, 32));
+            assertFalse("first add is not a duplicate", set32.add(entry, 0, 32));
+            assertTrue("known after add", set32.isKnown(entry, 0, 32));
+            byte[] other = new byte[32];
+            other[31] = (byte) 0xCD;
+            assertFalse(set32.isKnown(other, 0, 32));
+            assertFalse("isKnown must not add", set32.isKnown(other, 0, 32));
+        } finally {
+            set32.stopDecaying();
+        }
+    }
 }

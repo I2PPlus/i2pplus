@@ -45,6 +45,8 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
     private final long _sendConnID;
     private final long _rcvConnID;
     private final AtomicLong _packetNumber = new AtomicLong();
+    /** Last usable outbound packet number, see getNextPacketNumber(). @since 0.9.71+ */
+    private static final long MAX_PACKET_NUMBER = 0xFFFFFF00L;
     private final AtomicInteger _lastAckHashCode = new AtomicInteger(-1);
     private final CipherState _sendCha;
     private final CipherState _rcvCha;
@@ -471,7 +473,15 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
     /**
      * Next outbound packet number,
      * starts at 1 for Alice (0 is Session Confirmed) and 0 for Bob.
+     * The packet number is a 4-byte header field and doubles as the ChaCha20
+     * and Poly1305 nonce, so the session must not outlive the number space -
+     * wrapping would silently reuse keystream and the Poly1305 key.
+     * A busy router can burn 2^32 numbers in hours, hence the guard.
+     * Leaves 256 numbers of headroom for the destroy packets sent after death.
+     *
      * @return the next packet number
+     * @throws IOException if the number space is exhausted, killing the session
+     * so the caller re-handshakes with fresh keys
      */
     public long getNextPacketNumber() throws IOException {
          if (_dead) {
@@ -479,7 +489,15 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
              if (shouldLogDebug()) {_log.debug("Router [" + _shortHash + "] is dead -> Cannot forward packet");}
              throw ioe;
          }
-         return _packetNumber.getAndIncrement();
+         long n = _packetNumber.getAndIncrement();
+         if (n > MAX_PACKET_NUMBER) {
+             IOException ioe = new IOException("Packet number space exhausted, " +
+                                               "re-handshake required: [" + _shortHash + "]");
+             if (shouldLogDebug())
+                 _log.debug("Router [" + _shortHash + "] packet number exhausted -> No packet");
+             throw ioe;
+         }
+         return n;
     }
 
     /**

@@ -44,7 +44,8 @@ public class DirKeyRing implements KeyRing {
      *
      * @param keyName the key name, also the expected certificate CN
      * @param scope the directory under the keyring base
-     * @param type ignored; this ring is read-only and keys are not filtered by signature type
+     * @param type the expected signature type, checked against the cert's
+     * actual key type; null skips the check
      * @return null if file doesn't exist, throws on all other errors
      */
     @Override
@@ -57,6 +58,17 @@ public class DirKeyRing implements KeyRing {
         if (!kd.exists()) return null;
         X509Certificate cert = CertUtil.loadCert(kd);
         if (CertUtil.isRevoked(cert)) throw new CRLException("Certificate is revoked");
+        if (type != null) {
+            // The declared signature type must match the cert's actual key
+            // type. A DSA-declared SU3 verified against an RSA pin used to
+            // fail only incidentally on the key class; fail here with a
+            // clear error instead.
+            SigAlgo expected = type.getBaseAlgorithm();
+            SigAlgo actual = jcaAlgorithm(cert.getPublicKey().getAlgorithm());
+            if (actual != null && actual != expected)
+                throw new GeneralSecurityException("Cert key type " + cert.getPublicKey().getAlgorithm() +
+                                                   " does not match expected " + expected + ": " + kd);
+        }
         if (!SystemVersion.isAndroid()) {
             // getSubjectValue() unsupported on Android.
             // Any cert problems will be caught in non-Android testing.
@@ -64,6 +76,18 @@ public class DirKeyRing implements KeyRing {
             if (!keyName.equals(cn)) throw new GeneralSecurityException("CN mismatch: " + cn);
         }
         return cert.getPublicKey();
+    }
+
+    /**
+     * Map a JCA public key algorithm name to a SigAlgo, or null if the
+     * name is not recognized (check is then skipped).
+     */
+    private static SigAlgo jcaAlgorithm(String alg) {
+        if ("DSA".equals(alg)) return SigAlgo.DSA;
+        if ("EC".equals(alg) || "ECDSA".equals(alg)) return SigAlgo.EC;
+        if ("RSA".equals(alg)) return SigAlgo.RSA;
+        if ("EdDSA".equals(alg) || "Ed25519".equals(alg) || "Ed448".equals(alg)) return SigAlgo.EdDSA;
+        return null;
     }
 
     /**

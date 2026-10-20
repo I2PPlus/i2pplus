@@ -71,7 +71,9 @@ public final class ECIESAEADEngine {
     private static final int NS_N_OVERHEAD = KEYLEN + MACLEN; // 48
     private static final int NSR_OVERHEAD = TAGLEN + KEYLEN + MACLEN + MACLEN; // 72
     private static final int ES_OVERHEAD = TAGLEN + MACLEN; // 24
-    private static final int MIN_NS_SIZE = NS_OVERHEAD + DATETIME_SIZE; // 103
+    // Package-visible: MuxedPQEngine sizes its decrypt attempts with these
+    /** Minimum new-session message size in bytes (103). */
+    static final int MIN_NS_SIZE = NS_OVERHEAD + DATETIME_SIZE; // 103
     private static final int MIN_NS_N_SIZE = NS_N_OVERHEAD + DATETIME_SIZE; // 55
     private static final int MIN_NSR_SIZE = NSR_OVERHEAD; // 72
     private static final int MIN_ES_SIZE = ES_OVERHEAD; // 24
@@ -96,12 +98,15 @@ public final class ECIESAEADEngine {
     // It contains an extra MLKEM key and MAC.
     // 112
     private static final int NS_MLKEM_OVERHEAD = NS_OVERHEAD + MACLEN;
-    // 800 + 112 + 7 = 919
-    private static final int MIN_NS_MLKEM512_SIZE = EncType.MLKEM512_X25519_INT.getPubkeyLen() + NS_MLKEM_OVERHEAD + DATETIME_SIZE;
-    // 1184 + 112 + 7 = 1303
-    private static final int MIN_NS_MLKEM768_SIZE = EncType.MLKEM768_X25519_INT.getPubkeyLen() + NS_MLKEM_OVERHEAD + DATETIME_SIZE;
-    // 1568 + 112 + 7 = 1687
-    private static final int MIN_NS_MLKEM1024_SIZE = EncType.MLKEM1024_X25519_INT.getPubkeyLen() + NS_MLKEM_OVERHEAD + DATETIME_SIZE;
+    /** Minimum ML-KEM-512 new-session message size, 800 + 112 + 7 = 919 bytes. */
+    static final int MIN_NS_MLKEM512_SIZE =
+        EncType.MLKEM512_X25519_INT.getPubkeyLen() + NS_MLKEM_OVERHEAD + DATETIME_SIZE;
+    /** Minimum ML-KEM-768 new-session message size, 1184 + 112 + 7 = 1303 bytes. */
+    static final int MIN_NS_MLKEM768_SIZE =
+        EncType.MLKEM768_X25519_INT.getPubkeyLen() + NS_MLKEM_OVERHEAD + DATETIME_SIZE;
+    /** Minimum ML-KEM-1024 new-session message size, 1568 + 112 + 7 = 1687 bytes. */
+    static final int MIN_NS_MLKEM1024_SIZE =
+        EncType.MLKEM1024_X25519_INT.getPubkeyLen() + NS_MLKEM_OVERHEAD + DATETIME_SIZE;
     // 856
     private static final int MIN_NSR_MLKEM512_SIZE = EncType.MLKEM512_X25519_CT.getPubkeyLen() + MIN_NSR_SIZE + MACLEN;
     // 1176
@@ -550,6 +555,15 @@ public final class ECIESAEADEngine {
         // Elg2
         byte[] xx = new byte[KEYLEN];
         System.arraycopy(data, 0, xx, 0, KEYLEN);
+        // Replay check on the raw encoded key, before paying for Elligator2
+        // (3 modPows) plus DH plus AEAD. Check only - the entry is added on
+        // success below, so a retransmission after a failed attempt (e.g. a
+        // tag race) is not blocked.
+        if (keyManager.isDuplicateRaw(xx)) {
+            if (_log.shouldWarn())
+                _log.warn("Duplicate raw ephemeral key in Inbound NewSession: " + Base64.encode(xx));
+            return NO_CLOVES;
+        }
         // decode corrupts last byte, save for restore below
         byte xx31 = xx[KEYLEN - 1];
         PublicKey pk = Elligator2.decode(xx);
@@ -636,6 +650,9 @@ public final class ECIESAEADEngine {
             state.destroy();
             return NO_CLOVES;
         }
+        // Also remember the raw encoding, so a replay of this exact packet
+        // is caught by the pre-decode check at the top next time.
+        keyManager.addRaw(xx);
 
         // payload
         if (payloadlen == 0) {
@@ -715,6 +732,13 @@ public final class ECIESAEADEngine {
                 _log.debug("Bad PK N");
             return null;
         }
+        // Replay check before DH/AEAD work, see decryptNewSession() above.
+        // Check only - added on success below.
+        if (keyManager.isDuplicateRaw(data)) {
+            if (_log.shouldWarn())
+                _log.warn("Dup raw ephemeral key in IB N: " + Base64.encode(data, 0, KEYLEN));
+            return NO_CLOVES;
+        }
 
         HandshakeState state;
         try {
@@ -750,6 +774,8 @@ public final class ECIESAEADEngine {
             state.destroy();
             return NO_CLOVES;
         }
+        // Remember the raw bytes for the pre-check at the top, see above.
+        keyManager.addRaw(xx);
 
         // payload
         if (payloadlen == 0) {

@@ -2414,7 +2414,9 @@ void noteEstablishmentRtt(int rttMs) {
             try {
                 _rcvr.decryptWithAd(null, data, off, data, off, _framelen);
             } catch (GeneralSecurityException gse) {
-                // TODO set a random length, then close
+                // Probing resistance is handled by the caller: it calls
+                // delayedClose(), which reads a random number of bytes with
+                // a brief timeout before closing (NTCP2FailState).
                 if (_log.shouldDebug())
                     _log.warn("Bad AEAD data phase frame " + _frameCount +
                               " with " + _framelen + " bytes on " + NTCPConnection.this, gse);

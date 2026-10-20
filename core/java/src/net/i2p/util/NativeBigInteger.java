@@ -495,6 +495,11 @@ public class NativeBigInteger extends BigInteger {
                 warn("jbigi version " + _jbigiVersion + " but GMP version not available???", t);
             }
         }
+        // Make the silent fallback visible - callers of modPowCT() cannot
+        // detect it, so surface it once at load time instead.
+        if (!_nativeCTOk)
+            warn("jbigi constant-time modPowCT unavailable (jbigi version " + _jbigiVersion +
+                 ", GMP " + _libGMPVersion + "), modPowCT() falls back to variable-time modPow()");
         // Don't overwrite _loadStatus
         // warn("jbigi version: " + _jbigiVersion + "; GMP version: " + _libGMPVersion);
     }

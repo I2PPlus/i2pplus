@@ -245,6 +245,31 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
     }
 
     /**
+     * Check whether the raw (pre-decode) bytes of a NewSession ephemeral key
+     * are a replay of a previously processed one, without adding them.
+     * Lets replays be rejected before paying for Elligator2 decoding.
+     *
+     * @param data at least 32 bytes
+     * @return true if a dup
+     * @since 0.9.71+
+     */
+    boolean isDuplicateRaw(byte[] data) {
+        return _replayFilter.isKnown(data, 0, 32);
+    }
+
+    /**
+     * Remember the raw (pre-decode) bytes of a successfully processed
+     * NewSession key, so a later replay of the same packet is caught by
+     * isDuplicateRaw() before any crypto work.
+     *
+     * @param data at least 32 bytes
+     * @since 0.9.71+
+     */
+    void addRaw(byte[] data) {
+        _replayFilter.add(data, 0, 32);
+    }
+
+    /**
      * Inbound or outbound. Checks state.getRole() to determine.
      * For outbound (NS sent), adds to list of pending inbound sessions and returns true.
      * For inbound (NS rcvd), if no other pending outbound sessions, creates one
