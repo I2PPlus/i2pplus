@@ -6,8 +6,8 @@ import java.util.StringTokenizer;
 
 /**
  * Class to represent data source values for the given timestamp. Objects of this class are never
- * created directly (no public constructor is provided). To learn more how to update RRDs, see
- * RRDTool's <a href="../../../../man/rrdupdate.html" target="man">rrdupdate man page</a>.
+ * created directly (no public constructor is provided). For RRD update semantics see the
+ * <a href="https://oss.oetiker.ch/rrdtool/doc/rrdupdate.en.html">rrdupdate</a> man page.
  *
  * <p>To update a RRD with Rrd4j use the following procedure:
  *

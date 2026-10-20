@@ -21,7 +21,7 @@
  * <p><b>Package dependencies:</b> The classes in this package rely on the
  * {@code org.json.simple} and {@code org.json.simple.parser} packages
  * (version 1.1.1 and compabile) for JSON encoding and decoding. You can obtain
- * them from the <a href="http://code.google.com/p/json-smart/">JSON-Smart</a>
+ * them from the <a href="https://github.com/netplex/json-smart-v2">JSON-Smart</a>
  * website.
  *
  * @author Vladimir Dzhuvinov

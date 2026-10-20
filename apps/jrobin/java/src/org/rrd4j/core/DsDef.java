@@ -14,8 +14,8 @@ import org.rrd4j.DsType;
  *   <li>maximal value
  * </ul>
  *
- * <p>For the complete explanation of all source definition parameters, see RRDTool's <a
- * href="http://oss.oetiker.ch/rrdtool/doc/rrdcreate.en.html" target="man">rrdcreate man page</a>.
+ * <p>For the complete explanation of all source definition parameters, see the <a
+ * href="https://oss.oetiker.ch/rrdtool/doc/rrdcreate.en.html">rrdcreate</a> man page.
  *
  */
 public class DsDef {
@@ -32,9 +32,8 @@ public class DsDef {
      * org.rrd4j.core.RrdDef#addDatasource(DsDef) addDatasource()} method of {@link RrdDb RrdDb}
      * object.
      *
-     * <p>For the complete explanation of all source definition parameters, see RRDTool's <a
-     * href="http://oss.oetiker.ch/rrdtool/doc/rrdcreate.en.html" target="man">rrdcreate man
-     * page</a>
+     * <p>For the complete explanation of all source definition parameters, see the <a
+     * href="https://oss.oetiker.ch/rrdtool/doc/rrdcreate.en.html">rrdcreate</a> man page
      *
      * <p><b>IMPORTANT NOTE:</b> If datasource name ends with '!', corresponding archives will never
      * store NaNs as datasource values. In that case, NaN datasource values will be silently

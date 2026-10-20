@@ -34,8 +34,8 @@ import org.rrd4j.DsType;
  * </ul>
  *
  * <p>RrdDef provides API to set all these elements. For the complete explanation of all RRD
- * definition parameters, see RRDTool's <a href="../../../../man/rrdcreate.html"
- * target="man">rrdcreate man page</a>.
+ * definition parameters, see the
+ * <a href="https://oss.oetiker.ch/rrdtool/doc/rrdcreate.en.html">rrdcreate</a> man page.
  *
  */
 public class RrdDef {
@@ -316,8 +316,8 @@ public class RrdDef {
     /**
      * Adds single datasource to RRD definition by specifying its data source name, source type,
      * heartbeat, minimal and maximal value. For the complete explanation of all data source
-     * definition parameters see RRDTool's <a href="../../../../man/rrdcreate.html"
-     * target="man">rrdcreate man page</a>.
+     * definition parameters see the
+     * <a href="https://oss.oetiker.ch/rrdtool/doc/rrdcreate.en.html">rrdcreate</a> man page.
      *
      * <p><b>IMPORTANT NOTE:</b> If datasource name ends with '!', corresponding archives will never
      * store NaNs as datasource values. In that case, NaN datasource values will be silently
@@ -351,8 +351,8 @@ public class RrdDef {
      * DS:input:COUNTER:600:0:U
      * </pre>
      *
-     * <p>For more information on datasource definition parameters see <code>rrdcreate</code> man
-     * page.
+     * <p>For more information on datasource definition parameters see the
+     * <a href="https://oss.oetiker.ch/rrdtool/doc/rrdcreate.en.html">rrdcreate</a> man page.
      *
      * @param rrdToolDsDef Datasource definition string with the syntax borrowed from RRDTool.
      * @throws java.lang.IllegalArgumentException Thrown if invalid string is supplied.
@@ -443,7 +443,8 @@ public class RrdDef {
     /**
      * Adds single archive definition by specifying its consolidation function, X-files factor,
      * number of steps and rows. For the complete explanation of all archive definition parameters
-     * see RRDTool's <a href="../../../../man/rrdcreate.html" target="man">rrdcreate man page</a>.
+     * see the <a href="https://oss.oetiker.ch/rrdtool/doc/rrdcreate.en.html">rrdcreate</a>
+     * man page.
      *
      * @param consolFun Consolidation function, must not duplicate an existing archive.
      * @param xff X-files factor. Valid values are between 0 and 1.

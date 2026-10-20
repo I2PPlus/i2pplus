@@ -81,14 +81,11 @@ import org.jfree.svg.util.RadialGradientPaintKey;
  * String svgElement = g2.getSVGElement();}</pre>
  *
  * <p>For the content generation step, you can make use of third party libraries, such as <a
- * href="http://www.jfree.org/jfreechart/">JFreeChart</a> and <a
- * href="http://www.object-refinery.com/orsoncharts/">Orson Charts</a>, that render output using
+ * href="http://www.jfree.org/jfreechart/">JFreeChart</a>, that render output using
  * standard Java2D API calls. <b>Rendering Hints</b><br>
  *
  * <p>The {@code SVGGraphics2D} supports a couple of custom rendering hints - for details, refer to
- * the {@link SVGHints} class documentation. Also see the examples in this blog post: <a
- * href="http://www.object-refinery.com/blog/blog-20140509.html">Orson Charts 3D / Enhanced SVG
- * Export</a>. <b>Other Notes</b><br>
+ * the {@link SVGHints} class documentation. <b>Other Notes</b><br>
  * Some additional notes:
  *
  * <ul>
@@ -2090,11 +2087,9 @@ public final class SVGGraphics2D extends Graphics2D {
     /**
      * Clips to the intersection of the current clipping region and the specified shape.
      *
-     * <p>According to the Oracle API specification, this method will accept a {@code null}
-     * argument, but there is an open bug report (since 2004) that suggests this is wrong:
-     *
-     * <p><a href="http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=6206189">
-     * http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=6206189</a>
+     * <p>The pre-JDK 17 API specification said this method accepts a {@code null}
+     * argument; <a href="https://bugs.openjdk.org/browse/JDK-6206189">JDK-6206189</a>
+     * corrected the spec — a null argument throws NPE.
      *
      * @param s the clip shape ({@code null} not permitted).
      */

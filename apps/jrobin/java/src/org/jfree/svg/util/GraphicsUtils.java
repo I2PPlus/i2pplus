@@ -115,10 +115,7 @@ public final class GraphicsUtils {
 
     /**
      * Converts a rendered image to a {@code BufferedImage}. This utility method has come from a
-     * forum post by Jim Moore at:
-     *
-     * <p><a href="http://www.jguru.com/faq/view.jsp?EID=114602">
-     * http://www.jguru.com/faq/view.jsp?EID=114602</a>
+     * forum post by Jim Moore (jguru EID 114602).
      *
      * @param img the rendered image ({@code null} not permitted).
      * @return A buffered image.

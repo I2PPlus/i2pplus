@@ -13,8 +13,8 @@ import org.rrd4j.ConsolFun;
  *   <li>number of rows.
  * </ul>
  *
- * For the complete explanation of all archive definition parameters, see RRDTool's <a
- * href="http://oss.oetiker.ch/rrdtool/doc/rrdcreate.en.html" target="man">rrdcreate man page</a>
+ * For the complete explanation of all archive definition parameters, see the <a
+ * href="https://oss.oetiker.ch/rrdtool/doc/rrdcreate.en.html">rrdcreate</a> man page
  *
  */
 public class ArcDef {
@@ -27,9 +27,8 @@ public class ArcDef {
      * Creates new archive definition object. This object should be passed as argument to {@link
      * org.rrd4j.core.RrdDef#addArchive(ArcDef) addArchive()} method of {@link RrdDb RrdDb} object.
      *
-     * <p>For the complete explanation of all archive definition parameters, see RRDTool's <a
-     * href="http://oss.oetiker.ch/rrdtool/doc/rrdcreate.en.html" target="man">rrdcreate man
-     * page</a>
+     * <p>For the complete explanation of all archive definition parameters, see the <a
+     * href="https://oss.oetiker.ch/rrdtool/doc/rrdcreate.en.html">rrdcreate</a> man page
      *
      * @param consolFun Consolidation function. Allowed values are "AVERAGE", "MIN", "MAX", "LAST"
      *                  and "TOTAL" (these string constants are conveniently defined in the {@link

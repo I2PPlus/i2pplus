@@ -30,15 +30,14 @@ import org.rrd4j.ConsolFun;
  * create, update and fetch operations, you will get exactly the same results from Rrd4j and
  * RRDTool.</b>
  *
- * <p>You will not be able to use Rrd4j API if you are not familiar with basic RRDTool concepts.
- * Good place to start is the <a
- * href="https://oss.oetiker.ch/rrdtool/tut/rrdtutorial.en.html">official RRD
- * tutorial</a> and relevant RRDTool man pages: <a href="../../../../man/rrdcreate.html"
- * target="man">rrdcreate</a>, <a href="../../../../man/rrdupdate.html" target="man">rrdupdate</a>,
- * <a href="../../../../man/rrdfetch.html" target="man">rrdfetch</a> and <a
- * href="../../../../man/rrdgraph.html" target="man">rrdgraph</a>. For RRDTool's advanced graphing
- * capabilities (RPN extensions), also supported in Rrd4j, there is an excellent <a
- * href="http://oss.oetiker.ch/rrdtool/tut/cdeftutorial.en.html" target="man">CDEF tutorial</a>.
+ * <p>See also the <a href="https://oss.oetiker.ch/rrdtool/tut/rrdtutorial.en.html">RRDtool
+ * tutorial</a> and the man pages for
+ * <a href="https://oss.oetiker.ch/rrdtool/doc/rrdcreate.en.html">rrdcreate</a>,
+ * <a href="https://oss.oetiker.ch/rrdtool/doc/rrdupdate.en.html">rrdupdate</a>,
+ * <a href="https://oss.oetiker.ch/rrdtool/doc/rrdfetch.en.html">rrdfetch</a> and
+ * <a href="https://oss.oetiker.ch/rrdtool/doc/rrdgraph.en.html">rrdgraph</a>; see the
+ * <a href="https://oss.oetiker.ch/rrdtool/tut/cdeftutorial.en.html">CDEF tutorial</a> for RPN
+ * extensions, also supported here.
  *
  * @see RrdBackend
  * @see RrdBackendFactory

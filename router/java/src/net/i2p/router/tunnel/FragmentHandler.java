@@ -29,7 +29,8 @@ import net.i2p.util.SimpleTimer2;
  * From tunnel-alt.html.
 
 <p>When the gateway wants to deliver data through the tunnel, it first
-gathers zero or more <a href="i2np.html">I2NP</a> messages, selects how much padding will be used,
+gathers zero or more <a href="{@docRoot}/net/i2p/data/i2np/package-summary.html">I2NP</a>
+messages, selects how much padding will be used,
 fragments it across the necessary number of 1KB tunnel messages, and decides how
 each I2NP message should be handled by the tunnel endpoint, encoding that
 data into the raw tunnel payload:</p>

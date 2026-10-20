@@ -359,8 +359,6 @@ public final class SVGHints {
      * false} otherwise. This method is used to auto-register keys from Orson Charts that should
      * translate to the behaviour of {@link SVGHints#KEY_BEGIN_GROUP} and {@link
      * SVGHints#KEY_END_GROUP}. <br>
-     * <br>
-     * The Orson Charts library can be found at http://www.object-refinery.com/orsoncharts/
      *
      * @return {@code true} if {@code com.orsoncharts.Chart3DHints.KEY_BEGIN_ELEMENT}
      *         could be read.
