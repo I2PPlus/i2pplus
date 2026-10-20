@@ -659,7 +659,8 @@ public class GroupElement implements Serializable {
      * @param q the PRECOMP representation of the GroupElement to add.
      * @return the P1P1 representation of the result.
      */
-    private GroupElement madd(GroupElement q) {
+    // Method is package private only so that benchmarks run.
+    GroupElement madd(GroupElement q) {
         if (this.repr != Representation.P3)
             throw new UnsupportedOperationException();
         if (q.repr != Representation.PRECOMP)
