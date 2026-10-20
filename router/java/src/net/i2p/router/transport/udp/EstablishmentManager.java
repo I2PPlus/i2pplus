@@ -1682,7 +1682,7 @@ public class EstablishmentManager {
         try {state.receiveRetry(packet);}
         catch (GeneralSecurityException gse) {
             if (_log.shouldDebug() && !shouldSuppressException(gse)) {
-                _log.debug("[SSU] Received CORRUPT Retry -> Router: " + state, gse);
+                _log.debug("[SSU] CORRUPT Retry -> Router: " + state, gse);
             }
             _outboundStates.remove(state.getRemoteHostId());
             RouterIdentity rid = state.getRemoteIdentity();

@@ -406,23 +406,24 @@ class PacketHandler {
                         header.getVersion() > MAX_VERSION ||
                         header.getNetID() != _networkID) {
                         if (_log.shouldDebug()) {
-                            _log.debug("Failed to decrypt Session or Token Request after retry: " + header +
-                                      " (" + packet.getPacket().getLength() + " bytes) on " + state);
+                            _log.debug("Undecryptable Session/Token Request (" +
+                                      packet.getPacket().getLength() + " bytes) on " + state +
+                                      ": " + header);
                         }
                         return false;
                     }
                 }
                 if (header.getSrcConnID() != state.getSendConnID()) {
                     if (_log.shouldDebug()) {
-                        _log.debug("Received BAD Source Connection ID: " + header +
-                                  " (" + packet.getPacket().getLength() + " bytes) on " + state);
+                        _log.debug("BAD Src ConnID (" + packet.getPacket().getLength() +
+                                  " bytes) on " + state + ": " + header);
                     }
                     return false;
                 }
                 if (header.getDestConnID() != state.getRcvConnID()) {
                     if (_log.shouldDebug()) {
-                        _log.debug("Received BAD Destination Connection ID: " + header +
-                                  " (" + packet.getPacket().getLength() + " bytes) on " + state);
+                        _log.debug("BAD Dest ConnID (" + packet.getPacket().getLength() +
+                                  " bytes) on " + state + ": " + header);
                     }
                     return false;
                 }
@@ -438,7 +439,7 @@ class PacketHandler {
                 }
                 if (header.getDestConnID() != state.getRcvConnID()) {
                     if (_log.shouldDebug()) {
-                        _log.debug("Received BAD Destination Connection ID: " + header + " on " + state);
+                        _log.debug("BAD Dest ConnID on " + state + ": " + header);
                     }
                     return false;
                 }
@@ -518,7 +519,7 @@ class PacketHandler {
                 // and Retry, so we can bail out now if it doesn't match
                 if (header.getDestConnID() != state.getRcvConnID()) {
                     if (_log.shouldDebug())
-                        _log.debug("Received BAD Destination Connection ID: " + header);
+                        _log.debug("BAD Dest ConnID: " + header);
                     return false;
                 }
             }
@@ -550,7 +551,7 @@ class PacketHandler {
         }
         if (header.getSrcConnID() != state.getSendConnID()) {
             if (_log.shouldDebug())
-                _log.debug("Received BAD Source Connection ID: " + header);
+                _log.debug("BAD Src ConnID: " + header);
             return false;
         }
 

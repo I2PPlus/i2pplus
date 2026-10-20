@@ -935,9 +935,11 @@ class ConnectionHandler {
             // connections at once; the per-packet lines bury the only fact
             // that matters, which is how many and how deep.
             if (expired > 0 && _log.shouldDebug()) {
-                _log.debug("SYN queue expired " + expired + (expired == 1 ? " connection" : " connections") +
-                          " (accept timeout " + timeoutMs + "ms, " +
-                          (max > 0 ? _synQueue.size() + '/' + max : "depth " + _synQueue.size()) + ')');
+                _log.debug("SYN queue expired " + expired +
+                           (expired == 1 ? " connection" : " connections") +
+                           " (timeout " + timeoutMs + "ms, " +
+                           (max > 0 ? _synQueue.size() + '/' + max
+                                     : "depth " + _synQueue.size()) + ')');
             }
             if (_active)
                 _timer.addEvent(this, SYN_SWEEP_INTERVAL);

@@ -1135,7 +1135,8 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
         _cache.tunnelStartTime.put(_hashPair, Long.valueOf(getContext().clock().now()));
         _wantACK = true;
         if (_log.shouldDebug()) {
-            _log.debug("New connection -> Rotating outbound tunnel for " + _toString + ": " + rotated);
+            _log.debug("New connection - rotating outbound tunnel: " + _toString
+                       + "\n* " + rotated);
         }
         return rotated;
     }
@@ -1208,18 +1209,20 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
         }
         if (_log.shouldDebug()) {
             String lsInfo = _leaseSet != null ?
-                ("LeaseSet [" + _leaseSet.getHash().toBase32().substring(0, 8) + "]" +
+                ("LS [" + _leaseSet.getHash().toBase32().substring(0, 8) + "]" +
                  " leases=" + _leaseSet.getLeaseCount() +
                  " current=" + _leaseSet.isCurrent(Router.CLOCK_FUDGE_FACTOR)) :
                 null;
             if (!statusToString.isEmpty() && !statusToString.equals("Unknown status")) {
                 // LS-not-found is routine (cooldown, negative cache) — demote to info;
                 // LookupLeaseSetFailedJob or the cooldown skip already logged at info.
-                // Other send failures are routine churn - the client gets the status message.
+                // Other send failures are routine churn - the client
+                // gets the status message.
                 int level = (status == MessageStatusMessage.STATUS_SEND_FAILURE_NO_LEASESET)
                     ? Log.INFO : Log.DEBUG;
-                _log.log(level, "Send FAIL to " + _toString + " after " + sendTime + "ms -> " +
-                          statusToString + (lsInfo != null ? " " + lsInfo : ""));
+                _log.log(level, "Send FAIL to " + _toString + " after " +
+                          sendTime + "ms -> " + statusToString +
+                          (lsInfo != null ? "\n* " + lsInfo : ""));
             } else {
                 _log.debug("Send FAIL to " + _toString + " after " + sendTime +
                            "ms (status " + status + ")");

@@ -302,7 +302,7 @@ public class InNetMessagePool implements Service {
                 if (timeDiff > MAX_DELIVERY_SKEW) {
                     long timeSinceSent = now - arr;
                     if (_log.shouldDebug())
-                        _log.debug("Dropping unhandled DeliveryStatusMessage" + messageBody);
+                        _log.debug("Dropped unhandled DeliveryStatus" + messageBody);
                     _context.statManager().addRateData("inNetPool.droppedDeliveryStatusDelay", timeSinceSent);
                 }
                 break;

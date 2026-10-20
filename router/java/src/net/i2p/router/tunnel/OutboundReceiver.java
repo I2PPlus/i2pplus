@@ -196,9 +196,10 @@ class OutboundReceiver implements TunnelGateway.Receiver {
             _context.statManager().addRateData("tunnel.firstHopSendFailure", streak);
             _config.firstHopSendFailureStreak(streak);
             if (_log.shouldDebug()) {
-                _log.debug("Send to [" + _config.getPeer(1).toBase64().substring(0,6) + "] failed "
-                          + streak + "/" + TunnelCreatorConfig.FIRST_HOP_FAILURE_THRESHOLD
-                          + " times for " + _config.toShortString());
+                _log.debug("Send to [" + _config.getPeer(1).toBase64().substring(0,6) +
+                           "] failed " + streak + "/" +
+                           TunnelCreatorConfig.FIRST_HOP_FAILURE_THRESHOLD +
+                           " times for " + _config.toShortString());
             }
             if (streak >= TunnelCreatorConfig.FIRST_HOP_FAILURE_THRESHOLD) {
                 _config.tunnelFailedFirstHop();

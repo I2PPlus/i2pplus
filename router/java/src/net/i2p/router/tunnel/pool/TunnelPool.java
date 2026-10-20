@@ -4852,10 +4852,10 @@ public class TunnelPool {
                 long now = _context.clock().now();
                 if (now - _lastFallbackWarnTime > 30_000L) {
                     _lastFallbackWarnTime = now;
-                    _log.info(toString()
-                              + " - refusing to build a fallback (zero-hop) tunnel"
-                              + " - non-exploratory pool with zero-hop disabled"
-                              + " (usable: " + usable + ")");
+                    _log.info("Refusing fallback (zero-hop) tunnel for " +
+                              toString() +
+                              "\n* Non-exploratory pool, zero-hop disabled" +
+                              " (usable: " + usable + ")");
                 }
             }
             return false;
@@ -6775,7 +6775,8 @@ public class TunnelPool {
               // is still a thin pool, and the old fast-path warned in exactly that
               // case.
               int lastWarned = _lastThinPoolWarned;
-              if (ThinPoolLogState.shouldLog(lastWarned, healthy) && _log.shouldInfo()) {
+              if (ThinPoolLogState.shouldLog(lastWarned, healthy) &&
+                  _log.shouldInfo()) {
                   _lastThinPoolWarned = healthy;
                   _log.info(ThinPoolLogState.formatThinPool(toString(), healthy, target));
               }

@@ -1709,12 +1709,12 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
             final String exMsg = DataHelper.messageOf(ex);
             if (exMsg.indexOf("Name or service not known") >= 0) {
                 if (_log.shouldInfo())
-                    _log.info("[HTTPServer] Request error: DNS error (blocked?) for: " +
-                              exMsg.replace(": Name or service not known", "") +
-                              " "  + tunnelId + " client=" + peerB32);
+                    _log.info("[HTTPServer] Request error: DNS error (blocked?)" +
+                              " for: " + exMsg.replace(": Name or service not known", "") +
+                              " " + tunnelId + " client=" + peerB32);
             } else if (_log.shouldDebug()) {
-                _log.debug("[HTTPServer] Request error: " + exMsg + " " + tunnelId +
-                           " client=" + peerB32 +
+                _log.debug("[HTTPServer] Request error: " + exMsg +
+                           " " + tunnelId + " client=" + peerB32 +
                            " backend=" + getSocketString(socket.getLocalPort()));
             }
         } catch (OutOfMemoryError oom) {
@@ -1821,7 +1821,8 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 catch (IOException ioe) { /* ignored */ }
             }
             if (log.shouldDebug()) {
-                log.debug("[HTTPServer] Request error: Headers too large " + tunnelId + " client=" + peerB32);
+                log.debug("[HTTPServer] Request error: Headers too large " +
+                          tunnelId + " client=" + peerB32);
             }
             return null;
         } catch (RequestTooLongException rtle) {
@@ -1832,7 +1833,8 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 catch (IOException ioe) { /* ignored */ }
             }
             if (log.shouldDebug()) {
-                log.debug("[HTTPServer] Request error: URI too long " + tunnelId + " client=" + peerB32);
+                log.debug("[HTTPServer] Request error: URI too long " +
+                          tunnelId + " client=" + peerB32);
             }
             return null;
         } catch (BadRequestException bre) {
@@ -1843,7 +1845,8 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 catch (IOException ioe) { /* ignored */ }
             }
             if (log.shouldDebug() && bre.getMessage() != null) {
-                log.debug("[HTTPServer] Request error: " + bre.getMessage() + " " + tunnelId + " client=" + peerB32);
+                log.debug("[HTTPServer] Request error: " + bre.getMessage() +
+                          " " + tunnelId + " client=" + peerB32);
             }
             return null;
         }

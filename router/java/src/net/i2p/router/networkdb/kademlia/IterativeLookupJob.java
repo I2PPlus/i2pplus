@@ -55,7 +55,8 @@ class IterativeLookupJob extends JobImpl {
         if (!_search.wasQueried(from) && !IterativeSearchJob.wasRecentlyQueried(from)) {
             if (log.shouldDebug()) {
                 boolean isBanlisted = ctx.banlist().isBanlisted(from);
-                String msg = "Received unsolicited DbSearchReply message from [" + from.toBase64().substring(0, 6) + "]";
+                String msg = "Unsolicited DbSearchReply from [" +
+                             from.toBase64().substring(0, 6) + "]";
                 if (isBanlisted) {msg += " (Router is banlisted)";}
                 log.debug(msg);
             }

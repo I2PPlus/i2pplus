@@ -2042,8 +2042,9 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
                       if (shouldLogCooldownWarn(lastWarn, now, getDestCooldownMs())) {
                           _cooldownWarned.put(destHash, Long.valueOf(now));
                           if (_log.shouldDebug())
-                              _log.debug("Delaying connect to [" + destHash.toBase64().substring(0,6) +
-                                        "] for " + delay + "ms (cooldown from previous failure)");
+                              _log.debug("Delaying connect to [" +
+                                         destHash.toBase64().substring(0,6) +
+                                         "] " + delay + "ms (cooldown)");
                       }
                       synchronized (_cooldownLock) {
                           try {

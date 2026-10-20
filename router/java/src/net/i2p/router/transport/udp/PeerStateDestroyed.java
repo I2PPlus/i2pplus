@@ -309,7 +309,8 @@ class PeerStateDestroyed implements SSU2Payload.PayloadCallback, SSU2Sender {
             if (header.getType() != DATA_FLAG_BYTE) {
                 // for direct from IES2, these could be retransmitted session confirmed
                 if (_log.shouldDebug())
-                    _log.debug("BAD " + len + " byte data packet (Type: " + header.getType() + ") from " + this);
+                    _log.debug("BAD " + len + "B packet (type " + header.getType() +
+                               ") from " + this);
                 // Track bad packets for repeat offender detection (skip if already blocklisted)
                 // Prefer the peer hash for full-context BanLogger output; fall back to IP string
                 // for direct peers whose hash is unknown at this layer

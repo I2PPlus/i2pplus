@@ -2793,14 +2793,15 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             // The runtime read is only needed to tell a real clamp from a deadband
             // no-op, so it is deferred until the value was actually clamped.
             if (unclamped != target && target != getRuntimeValue()) {
-                // A static out-of-range config would otherwise repeat this every
-                // cycle; warn once per target, then debug.
+                // A static out-of-range config would otherwise repeat
+                // this every cycle; warn once per target, then debug.
                 if (!_clampWarned && _log.shouldWarn()) {
                     _clampWarned = true;
-                    _log.warn("Clamped target " + unclamped + " to " + target + " for " + _name +
-                              " (range " + _min + "-" + _max + ")");
+                    _log.warn("Clamped target " + unclamped + " to " + target +
+                              " for " + _name + " (range " + _min + '-' + _max + ')');
                 } else if (_log.shouldDebug()) {
-                    _log.debug("Clamped target " + unclamped + " to " + target + " for " + _name);
+                    _log.debug("Clamped target " + unclamped + " to " + target +
+                               " for " + _name);
                 }
             }
             return target;
