@@ -620,8 +620,6 @@ class OutboundNTCP2State implements EstablishState {
         if (_log.shouldDebug()) {
             _log.debug("[NTCP] Handshake failure " + _handshakeState);
             _log.debug(this + "\n* " + reason, e);
-        } else if (_log.shouldWarn()) {
-            _log.warn("[NTCP] Handshake failure " + _con + " -> " + reason);
         }
         _handshakeState.destroy();
         if (!bySkew) {

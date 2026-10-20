@@ -517,7 +517,8 @@ class PacketHandler {
                 // dest conn ID decrypts the same for both Session Created
                 // and Retry, so we can bail out now if it doesn't match
                 if (header.getDestConnID() != state.getRcvConnID()) {
-                    if (_log.shouldWarn()) {_log.warn("Received BAD Destination Connection ID \n* " + header);}
+                    if (_log.shouldDebug())
+                        _log.debug("Received BAD Destination Connection ID: " + header);
                     return false;
                 }
             }
@@ -543,11 +544,13 @@ class PacketHandler {
             type = SSU2Util.RETRY_FLAG_BYTE;
         } else {type = SSU2Util.SESSION_CREATED_FLAG_BYTE;}
         if (header.getDestConnID() != state.getRcvConnID()) {
-            if (_log.shouldWarn()) {_log.warn("Received BAD Destination Connection ID \n* " + header);}
+            if (_log.shouldDebug())
+                _log.debug("Received BAD Destination Connection ID: " + header);
             return false;
         }
         if (header.getSrcConnID() != state.getSendConnID()) {
-            if (_log.shouldWarn()) {_log.warn("Received BAD Source Connection ID \n* " + header);}
+            if (_log.shouldDebug())
+                _log.debug("Received BAD Source Connection ID: " + header);
             return false;
         }
 

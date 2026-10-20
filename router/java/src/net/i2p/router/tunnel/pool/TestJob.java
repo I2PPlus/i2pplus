@@ -3319,8 +3319,8 @@ static List<PendingTest> prioritizeBatch(List<PendingTest> scan, long now) {
                         _outTunnel = ctx.tunnelManager().selectOutboundTunnel();
                         if (_outTunnel != null) {
                             _partnerFallback = true;
-                            if (_log.shouldWarn())
-                                _log.warn("Falling back to exploratory outbound tunnel for test \n* " + _cfg);
+                            if (_log.shouldInfo())
+                                _log.info("Falling back to exploratory outbound tunnel for test - " + _cfg);
                         }
                     }
                 }
@@ -3374,8 +3374,8 @@ static List<PendingTest> prioritizeBatch(List<PendingTest> scan, long now) {
                         _replyTunnel = ctx.tunnelManager().selectInboundTunnel();
                         if (_replyTunnel != null) {
                             _partnerFallback = true;
-                            if (_log.shouldWarn()) {
-                                _log.warn("Falling back to exploratory inbound tunnel for test \n* " + _cfg);
+                            if (_log.shouldInfo()) {
+                                _log.info("Falling back to exploratory inbound tunnel for test - " + _cfg);
                             }
                         }
                     }
@@ -4064,11 +4064,11 @@ static List<PendingTest> prioritizeBatch(List<PendingTest> scan, long now) {
             if (_partnerDeferrals >= MAX_PARTNER_DEFERRALS) {
                 _partnerDeferrals = 0;
             } else {
-                if (_log.shouldWarn()) {
-                    _log.warn("Tunnel Test failed -> Partner is not usable" +
+                if (_log.shouldInfo()) {
+                    _log.info("Tunnel Test failed -> Partner is not usable" +
                               (_partnerFallback ? " (exploratory fallback)" : "") +
-                               "\n* Partner: " + partner.getGateway().toBase64().substring(0, 6) +
-                              "\n* Deferring test of " + _cfg +
+                              " partner=" + partner.getGateway().toBase64().substring(0, 6) +
+                              " - deferring test of " + _cfg +
                               " (" + _partnerDeferrals + "/" + MAX_PARTNER_DEFERRALS + ")");
                 }
                 deferForMissingPartner(_pool.getPairedPool(),
@@ -4480,8 +4480,8 @@ static List<PendingTest> prioritizeBatch(List<PendingTest> scan, long now) {
             }
         } else {
             ctx.statManager().addRateData("tunnel.testDeferred", _cfg.getLength());
-            if (_log.shouldWarn()) {
-                _log.warn("No " + direction + " tunnel for test of " + _cfg + "\n* Deferring (" +
+            if (_log.shouldInfo()) {
+                _log.info("No " + direction + " tunnel for test of " + _cfg + " - deferring (" +
                           _deferredCount + "/" + MAX_DEFERRED + " -> Pool may be recovering...)");
             }
         }

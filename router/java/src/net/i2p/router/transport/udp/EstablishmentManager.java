@@ -1607,7 +1607,7 @@ public class EstablishmentManager {
                 if (_log.shouldWarn() && shouldLogCorruptConfirm(_context.clock().now())) {
                     long suppressed = getCorruptConfirmSuppressed();
                     _log.warn("[SSU] Corrupt SessionConfirmed received from " + state.toShortString()
-                              + " -> " + corruptConfirmReason(e)
+                              + "\n* " + corruptConfirmReason(e)
                               + (suppressed > 0 ? " (suppressed " + suppressed + ")" : ""));
                 }
                 // Track probing attempts

@@ -1108,7 +1108,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
                 // real protocol failure. They were indistinguishable in the log.
                 long suppressed = EstablishmentManager.getCorruptConfirmSuppressed();
                 _log.warn("[SSU] Corrupt SessionConfirmed received from " + toShortString()
-                          + " -> " + EstablishmentManager.corruptConfirmReason(re)
+                          + "\n* " + EstablishmentManager.corruptConfirmReason(re)
                           + (suppressed > 0 ? " (suppressed " + suppressed + ")" : ""));
             }
             // Track probing attempts (skip if already blocklisted)

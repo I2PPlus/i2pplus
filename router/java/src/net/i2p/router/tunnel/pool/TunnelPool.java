@@ -4848,13 +4848,13 @@ public class TunnelPool {
             // in flight this is transient and would spam the log.  Rate-limit
             // to once per 30s regardless, since a collapsed pool that keeps
             // failing selection otherwise floods the log (observed 940 lines).
-            if (_log.shouldWarn() && getInProgressCount() <= 0) {
+            if (_log.shouldInfo() && getInProgressCount() <= 0) {
                 long now = _context.clock().now();
                 if (now - _lastFallbackWarnTime > 30_000L) {
                     _lastFallbackWarnTime = now;
-                    _log.warn(toString()
-                              + "\n* Refusing to build a fallback (zero-hop) tunnel"
-                              + "\n* Non-exploratory pool with zero-hop disabled"
+                    _log.info(toString()
+                              + " - refusing to build a fallback (zero-hop) tunnel"
+                              + " - non-exploratory pool with zero-hop disabled"
                               + " (usable: " + usable + ")");
                 }
             }
