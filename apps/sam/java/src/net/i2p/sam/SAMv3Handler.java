@@ -465,13 +465,13 @@ class SAMv3Handler extends SAMv1Handler
             _log.error("Invalid SAM destination" + "\n* Error: " + e.getMessage());
             return writeString("SESSION STATUS RESULT=INVALID_KEY", e.getMessage());
         } catch (I2PSessionException e) {
-            _log.error("Failed to start SAM session" + "\n* Error: " + e.getMessage());
+            logSessionError("Failed to start SAM session", e);
             return writeString(SESSION_ERROR, e.getMessage());
         } catch (SAMException e) {
-            _log.error("Failed to start SAM session" + "\n* Error: " + e.getMessage());
+            logSessionError("Failed to start SAM session", e);
             return writeString(SESSION_ERROR, e.getMessage());
         } catch (IOException e) {
-            _log.error("Failed to start SAM session" + "\n* Error: " + e.getMessage());
+            logSessionError("Failed to start SAM session", e);
             return writeString(SESSION_ERROR, e.getMessage());
         } finally {
             if (!ok && nick != null) {

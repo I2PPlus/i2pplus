@@ -45,6 +45,10 @@ import java.io.Writer;
 public class SAMBridge implements Runnable, ClientApp {
     private static final Log _logStatic = new Log(SAMBridge.class);
     private final Log _log;
+
+    /** When this bridge was instantiated, for the session-error grace window. */
+    private final long _started = System.currentTimeMillis();
+
     private volatile ServerSocketChannel serverSocket; // NOSONAR volatile is correct: single-assignment visibility flag read by the accept loop
     private final String _listenHost;
     private final int _listenPort;
@@ -529,6 +533,19 @@ public class SAMBridge implements Runnable, ClientApp {
             }
             return _v3DGServer;
         }
+    }
+
+    /**
+     * Milliseconds since this bridge was instantiated, minimum 1000 while
+     * racing on startup, mirroring Router.getUptime(). The bridge is
+     * started by the router app manager during router startup, so this is
+     * a close proxy for router uptime.
+     *
+     * @return the uptime in ms, minimum 1000
+     * @since 0.9.71+
+     */
+    public long getUptime() {
+        return Math.max(1000, System.currentTimeMillis() - _started);
     }
 
     ////// begin ClientApp interface, use only if using correct construtor

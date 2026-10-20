@@ -205,6 +205,23 @@ abstract class SAMHandler implements Runnable, Handler {
     }
 
     /**
+     * Log a session startup failure. During the first minute of uptime
+     * these are expected - the router's client manager may not be
+     * listening yet - so log at warn level; after that they are errors.
+     *
+     * @param msg the message
+     * @param e the failure
+     * @since 0.9.71+
+     */
+    protected void logSessionError(String msg, Exception e) {
+        String full = msg + ": " + e.getMessage();
+        if (bridge.getUptime() < 60 * 1000L)
+            _log.warn(full);
+        else
+            _log.error(full);
+    }
+
+    /**
      * Start handling the SAM connection, detaching a handling thread.
      * Subclasses (e.g. SAMv3Handler) may override to use a shared
      * thread pool instead of a dedicated thread.
