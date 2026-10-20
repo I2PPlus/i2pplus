@@ -39,12 +39,12 @@ import net.i2p.util.SystemVersion;
  * <li> NIST FIPS PUB 180-2, "Secure Hash Signature Standard (SHS) with
  * change notice", National Institute of Standards and Technology (NIST),
  * 2002 August 1, and U.S. Department of Commerce, August 26.<br>
- * <a href="http://csrc.ncsl.nist.gov/CryptoToolkit/Hash.html">
- * http://csrc.ncsl.nist.gov/CryptoToolkit/Hash.html</a>
+ * <a href="https://csrc.nist.gov/pubs/fips/180-2/final">
+ * FIPS 180-2</a>
  * <li> NIST FIPS PUB 180-1, "Secure Hash Standard",
  * U.S. Department of Commerce, May 1993.<br>
- * <a href="http://www.itl.nist.gov/div897/pubs/fip180-1.htm">
- * http://www.itl.nist.gov/div897/pubs/fip180-1.htm</a></li>
+ * <a href="https://www.itl.nist.gov/div897/pubs/fip180-1.htm">
+ * FIPS 180-1</a></li>
  * <li> Bruce Schneier, "Section 18.7 Secure Hash Algorithm (SHA)",
  * <cite>Applied Cryptography, 2nd edition</cite>, <br>
  * John Wiley &amp; Sons, 1996</li>

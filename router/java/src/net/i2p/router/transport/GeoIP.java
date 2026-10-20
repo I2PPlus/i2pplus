@@ -1525,7 +1525,7 @@ public class GeoIP {
     * US,UNITED STATES
     * <p>
     * To create:
-    * wget http://ip-to-country.webhosting.info/downloads/ip-to-country.csv.zip
+    * wget https://web.archive.org/web/2010id_/http://ip-to-country.webhosting.info/downloads/ip-to-country.csv.zip
     * unzip ip-to-country.csv.zip
     * cut -d, -f3,5 < ip-to-country.csv|sed 's/"//g' | sort | uniq > countries.txt.
     */
@@ -1578,7 +1578,7 @@ public class GeoIP {
     * Thanks to Tor for finding a source for the data, and the format script.
     * <p>
     * To create:
-    * wget http://ip-to-country.webhosting.info/downloads/ip-to-country.csv.zip
+    * wget https://web.archive.org/web/2010id_/http://ip-to-country.webhosting.info/downloads/ip-to-country.csv.zip
     * unzip ip-to-country.csv.zip
     * cut -d, -f0-3 < ip-to-country.csv|sed 's/"//g' > geoip.txt.
     *

@@ -32,7 +32,7 @@ import org.rrd4j.ConsolFun;
  *
  * <p>You will not be able to use Rrd4j API if you are not familiar with basic RRDTool concepts.
  * Good place to start is the <a
- * href="http://people.ee.ethz.ch/~oetiker/webtools/rrdtool/tutorial/rrdtutorial.html">official RRD
+ * href="https://oss.oetiker.ch/rrdtool/tut/rrdtutorial.en.html">official RRD
  * tutorial</a> and relevant RRDTool man pages: <a href="../../../../man/rrdcreate.html"
  * target="man">rrdcreate</a>, <a href="../../../../man/rrdupdate.html" target="man">rrdupdate</a>,
  * <a href="../../../../man/rrdfetch.html" target="man">rrdfetch</a> and <a

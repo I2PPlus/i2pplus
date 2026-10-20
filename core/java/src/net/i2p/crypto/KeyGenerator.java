@@ -158,10 +158,10 @@ public final class KeyGenerator {
     /**
      * Short exponent size, considered safe for use with Oakley primes.
      * Per "On Diffie-Hellman Key Agreement with Short Exponents" - van Oorschot, Weiner
-     * at EuroCrypt 96, and crypto++'s benchmarks at http://www.eskimo.com/~weidai/benchmarks.html
+     * at EuroCrypt 96, and crypto++'s <a href="https://web.archive.org/web/20080513022259/http://www.eskimo.com/~weidai/benchmarks.html">benchmarks</a>
      * Also, "Koshiba &amp; Kurosawa: Short Exponent Diffie-Hellman Problems" (PKC 2004, LNCS 2947, pp. 173-186)
      * apparently supports this, according to
-     * http://groups.google.com/group/sci.crypt/browse_thread/thread/1855a5efa7416677/339fa2f945cc9ba0#339fa2f945cc9ba0
+     * <a href="https://groups.google.com/group/sci.crypt/browse_thread/thread/1855a5efa7416677/339fa2f945cc9ba0#339fa2f945cc9ba0">sci.crypt discussion</a>
      */
     private static final int PUBKEY_EXPONENT_SIZE_SHORT = 226;
 

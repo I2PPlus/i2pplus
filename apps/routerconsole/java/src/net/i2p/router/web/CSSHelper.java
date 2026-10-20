@@ -559,9 +559,7 @@ public class CSSHelper extends HelperBase {
         return _context.getBooleanProperty("routerconsole.advanced");
     }
 
-    /** Capitalize first letter of each word of string
-     * https://www.javatpoint.com/java-program-to-capitalize-each-word-in-string
-     */
+    /** Capitalize first letter of each word of string */
     public static class StringFormatter {
 
         /** All methods are static; the ctor exists only for javadoc. */

@@ -33,7 +33,7 @@ import java.util.Map;
  * <p>References:</p>
  *
  * <ol>
- * <li><a href="http://www.cacr.math.uwaterloo.ca/hac">[HAC]</a>: Handbook of
+ * <li><a href="https://cacr.uwaterloo.ca/hac/">[HAC]</a>: Handbook of
  * Applied Cryptography.<br>
  * CRC Press, Inc. ISBN 0-8493-8523-7, 1997<br>
  * Menezes, A., van Oorschot, P. and S. Vanstone.</li>

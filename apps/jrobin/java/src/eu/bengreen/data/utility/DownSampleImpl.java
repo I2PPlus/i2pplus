@@ -4,7 +4,7 @@ import org.rrd4j.graph.DownSampler;
 
 /**
  * Naive implementation of down sample with simple array input Largest-Triangle-Three-Buckets, from
- * <a href="http://skemman.is/en/item/view/1946/15343">Sveinn Steinarsson's thesis</a>, section
+ * <a href="https://skemman.is/en/item/view/1946/15343">Sveinn Steinarsson's thesis</a>, section
  * 4.2..
  *
  */

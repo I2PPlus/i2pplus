@@ -346,7 +346,7 @@ public class FetchData {
      *
      * <p>Read more about this topic at:
      *
-     * <p><a href="http://www.red.net/support/resourcecentre/leasedline/percentile.php">Rednet</a>
+     * <p><a href="https://www.bytemark.co.uk/support/tech/95thpercentile.html">Bytemark</a>
      * or<br>
      * <a href="http://www.bytemark.co.uk/support/tech/95thpercentile.html">Bytemark</a>.
      *

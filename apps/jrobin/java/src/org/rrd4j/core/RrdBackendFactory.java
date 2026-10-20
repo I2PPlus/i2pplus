@@ -113,10 +113,10 @@ public abstract class RrdBackendFactory implements Closeable {
      *             <li><b>MEMORY</b>: Factory which creates memory-oriented backends. RRD data is stored
      *             in memory, it gets lost as soon as JVM exits.
      *             <li><b>BERKELEY</b>: a memory-oriented backend that ensure persistent in a <a
-     *             href="http://www.oracle.com/technetwork/database/berkeleydb/overview/index-093405.html">Berkeley
+     *             href="https://www.oracle.com/database/technologies/related/berkeleydb.html">Berkeley
      *             Db</a> storage.
      *             <li><b>MONGODB</b>: a memory-oriented backend that ensure persistent in a <a
-     *             href="http://www.mongodb.org/">MongoDB</a> storage.
+     *             href="https://www.mongodb.org/">MongoDB</a> storage.
      *             </ul>
      *
      * @deprecated Uses active factory instead

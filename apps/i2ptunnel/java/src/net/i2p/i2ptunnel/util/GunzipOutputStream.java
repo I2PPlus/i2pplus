@@ -14,7 +14,7 @@ import net.i2p.util.Log;
 
 /**
  * Gunzip implementation per
- * <a href="http://www.faqs.org/rfcs/rfc1952.html">RFC 1952</a>, reusing
+ * <a href="https://www.rfc-editor.org/rfc/rfc1952">RFC 1952</a>, reusing
  * java's standard CRC32 and Inflater and InflaterOutputStream implementations.
  * <p>
  * Note that the underlying InflaterOutputStream cannot be reused after close(),

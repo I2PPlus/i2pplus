@@ -97,7 +97,7 @@ import net.i2p.util.SystemVersion;
  * identify a specific CPU model, as model number ranges can overlap across
  * product lines (e.g., model 0x44 is Granite Ridge desktop, not Strix Halo).</p>
  *
- * @see <a href="http://en.wikipedia.org/wiki/Cpuid">Wikipedia: CPUID</a>
+ * @see <a href="https://en.wikipedia.org/wiki/Cpuid">Wikipedia: CPUID</a>
  * @see <a href="https://www.amd.com/en/search/documentation/hub.html">AMD PPR / CPUID references</a>
  */
 public class CPUID {

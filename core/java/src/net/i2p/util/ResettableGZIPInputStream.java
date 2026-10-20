@@ -11,7 +11,7 @@ import java.util.zip.InflaterInputStream;
 
 /**
  * GZIP implementation per
- * <a href="http://www.faqs.org/rfcs/rfc1952.html">RFC 1952</a>, reusing
+ * <a href="https://www.rfc-editor.org/rfc/rfc1952">RFC 1952</a>, reusing
  * java's standard CRC32 and Inflater and InflaterInputStream implementations.
  * The main difference is that this implementation allows its state to be
  * reset to initial values, and hence reused, while the standard
@@ -40,7 +40,8 @@ public class ResettableGZIPInputStream extends InflaterInputStream {
         //   LookaheadInputStream that removes last 8 bytes ->
         //     ExtraByteInputStream that adds 1 byte ->
         //       InflaterInputStream
-        // See below for why this is necessary
+        // See below for why this is necessary, and
+        // https://bugs.java.com/bugdatabase/view_bug.do?bug_id=4795299
         super(new ExtraByteInputStream(new LookaheadInputStream(FOOTER_SIZE)), new Inflater(true));
         _extraByteInputStream = (ExtraByteInputStream) in;
         _lookaheadStream = (LookaheadInputStream) _extraByteInputStream.getInputStream();
@@ -326,7 +327,7 @@ public class ResettableGZIPInputStream extends InflaterInputStream {
      * "Note: When using the 'nowrap' option it is also necessary to provide an extra "dummy" byte as input.
      * This is required by the ZLIB native library in order to support certain optimizations."
      * <p>
-     * http://docs.oracle.com/javase/1.5.0/docs/api/java/util/zip/Inflater.html
+     * <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/zip/Inflater.html">Inflater</a>
      * <p>
      * This is for sure:
      * <p>
@@ -334,11 +335,9 @@ public class ResettableGZIPInputStream extends InflaterInputStream {
      * extra 'dummy' byte" expected?  What is it to contain? When calling setInput() is the 'len'
      * argument incremented to include the dummy byte or not?"
      * <p>
-     * http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=4795299
-     * <p>
      * This is useless:
      * <p>
-     * http://www.java-forums.org/new-java/38604-decompress-un-gzip-byte.html
+     * <a href="https://web.archive.org/web/2014/http://www.java-forums.org/new-java/38604-decompress-un-gzip-byte.html">java-forums thread</a>
      * <p>
      * This seems to be the definitive answer:
      * <p>

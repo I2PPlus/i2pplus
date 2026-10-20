@@ -16,7 +16,7 @@ import java.util.Set;
 import org.rrd4j.core.RrdException;
 
 /**
- * Instances of this class model <a href="http://people.ee.ethz.ch/~oetiker/webtools/rrdtool/">Round
+ * Instances of this class model <a href="https://oss.oetiker.ch/rrdtool/">Round
  * Robin Database</a> (RRD) files.
  *
  * @version $Revision: 1.1 $
@@ -416,7 +416,7 @@ public class RRDatabase implements Closeable {
     /**
      * Outputs the header information of the database to the given print stream using the given
      * number format. The format is almost identical to that produced by <a
-     * href="http://people.ee.ethz.ch/~oetiker/webtools/rrdtool/manual/rrdinfo.html">rrdtool
+     * href="https://oss.oetiker.ch/rrdtool/doc/rrdinfo.en.html">rrdtool
      * info</a>
      *
      * @param s the PrintStream to print the header information to.
@@ -449,7 +449,7 @@ public class RRDatabase implements Closeable {
     /**
      * Outputs the content of the database to the given print stream as a stream of XML. The XML
      * format is almost identical to that produced by <a
-     * href="http://people.ee.ethz.ch/~oetiker/webtools/rrdtool/manual/rrddump.html">rrdtool
+     * href="https://oss.oetiker.ch/rrdtool/doc/rrddump.en.html">rrdtool
      * dump</a>
      *
      * <p>A flush is issued at the end of the XML generation, so auto flush of the PrintStream can

@@ -151,7 +151,7 @@ public class ExternalMain implements ClientApp, NotificationService {
 
     /**
      * Avoids the app terminating because no Window is opened anymore.
-     * More info: http://java.sun.com/javase/6/docs/api/java/awt/doc-files/AWTThreadIssues.html#Autoshutdown
+     * More info: <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.desktop/java/awt/doc-files/AWTThreadIssues.html#Autoshutdown">AWT Thread Issues</a>
      */
     private static void launchForeverLoop() {
        Runnable r = new Runnable() {

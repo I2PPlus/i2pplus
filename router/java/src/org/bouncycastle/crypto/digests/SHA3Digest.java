@@ -4,7 +4,7 @@ package org.bouncycastle.crypto.digests;
 import org.bouncycastle.crypto.CryptoServicePurpose;
 
 /**
- * implementation of SHA-3 based on following KeccakNISTInterface.c from https://keccak.noekeon.org/
+ * implementation of SHA-3 based on following KeccakNISTInterface.c from <a href="https://keccak.team/">keccak.team</a>
  * <p>
  * Following the naming conventions used in the C source code to enable easy review of the implementation.
  */

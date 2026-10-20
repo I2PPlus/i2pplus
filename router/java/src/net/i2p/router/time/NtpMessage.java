@@ -41,7 +41,7 @@ import net.i2p.util.RandomSource;
  * University of Delaware.
  * <p>
  * Number format conversion code in NtpMessage(byte[] array) and toByteArray()
- * inspired by http://www.pps.jussieu.fr/~jch/enseignement/reseaux/
+ * inspired by <a href="https://web.archive.org/web/20111004052904/http://www.pps.jussieu.fr/~jch/enseignement/reseaux/">the Jussieu networks course</a>
  * NTPMessage.java which is copyright (c) 2003 by Juliusz Chroboczek
  * <h2>Year 2036 compliance</h2>
  * <p>

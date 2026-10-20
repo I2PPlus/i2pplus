@@ -408,7 +408,7 @@ public class DataProcessor implements DataHolder {
      * average.
      *
      * <p>Read more about this topic at <a
-     * href="http://www.red.net/support/resourcecentre/leasedline/percentile.php">Rednet</a> or <a
+     * href="https://www.bytemark.co.uk/support/tech/95thpercentile.html">Bytemark</a> or <a
      * href="http://www.bytemark.co.uk/support/tech/95thpercentile.html">Bytemark</a>.
      *
      * @param sourceName Datasource name
@@ -429,7 +429,7 @@ public class DataProcessor implements DataHolder {
      * average.
      *
      * <p>Read more about this topic at <a
-     * href="http://www.red.net/support/resourcecentre/leasedline/percentile.php">Rednet</a> or <a
+     * href="https://www.bytemark.co.uk/support/tech/95thpercentile.html">Bytemark</a> or <a
      * href="http://www.bytemark.co.uk/support/tech/95thpercentile.html">Bytemark</a>.
      *
      * @param sourceName Datasource name

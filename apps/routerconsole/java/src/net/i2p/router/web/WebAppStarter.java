@@ -30,9 +30,7 @@ import org.eclipse.jetty.webapp.WebAppContext;
  * See WebAppConfiguration for more information.
  * but let's just do it in {@code webapps.config}.
  * <p>
- * No, wac.addClassPath() does not work. For more info see:
- * <p>
- * http://servlets.com/archive/servlet/ReadMsg?msgId=511113&amp;listName=jetty-support
+ * No, wac.addClassPath() does not work.
  *
  * @since 0.7.12
  */

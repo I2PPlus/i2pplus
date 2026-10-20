@@ -36,7 +36,7 @@ public final class Record<D extends Data> {
      * The resource record type.
      *
      * @see <a href=
-     *      "http://www.iana.org/assignments/dns-parameters/dns-parameters.xhtml#dns-parameters-4">
+     *      "https://www.iana.org/assignments/dns-parameters/dns-parameters.xhtml#dns-parameters-4">
      *      IANA DNS Parameters - Resource Record (RR) TYPEs</a>
      */
     public enum TYPE {
@@ -299,7 +299,7 @@ public final class Record<D extends Data> {
     /**
      * The symbolic class of a DNS record (usually {@link CLASS#IN} for Internet).
      *
-     * @see <a href="http://www.iana.org/assignments/dns-parameters/dns-parameters.xhtml#dns-parameters-2">IANA Domain Name System (DNS) Parameters - DNS CLASSes</a>
+     * @see <a href="https://www.iana.org/assignments/dns-parameters/dns-parameters.xhtml#dns-parameters-2">IANA Domain Name System (DNS) Parameters - DNS CLASSes</a>
      */
     public enum CLASS {
 

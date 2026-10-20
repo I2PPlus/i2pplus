@@ -39,7 +39,7 @@ public class Edns {
     /**
      * The EDNS option code.
      *
-     * @see <a href="http://www.iana.org/assignments/dns-parameters/dns-parameters.xhtml#dns-parameters-11">IANA - DNS EDNS0 Option Codes (OPT)</a>
+     * @see <a href="https://www.iana.org/assignments/dns-parameters/dns-parameters.xhtml#dns-parameters-11">IANA - DNS EDNS0 Option Codes (OPT)</a>
      */
     public enum OptionCode {
         /** Unknown option code */

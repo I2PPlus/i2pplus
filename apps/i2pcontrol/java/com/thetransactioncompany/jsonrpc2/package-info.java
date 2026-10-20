@@ -3,8 +3,8 @@
  * notifications and responses.
  *
  * <p>JSON-RPC is a protocol for
- * <a href="http://en.wikipedia.org/wiki/Remote_procedure_call">remote
- * procedure calls</a> (RPC) using <a href="http://www.json.org" >JSON</a>
+ * <a href="https://en.wikipedia.org/wiki/Remote_procedure_call">remote
+ * procedure calls</a> (RPC) using <a href="https://www.json.org" >JSON</a>
  * - encoded requests and responses. It can be easily relayed over HTTP
  * and is of JavaScript origin, making it ideal for use in dynamic web
  * applications in the spirit of Ajax and Web 2.0.
@@ -13,7 +13,7 @@
  * exception of <i>batching / multicall</i>. This feature is deliberately left
  * out as it tends to confuse users (judging by posts in the JSON-RPC forum).
  *
- * <p>See the <a href="http://www.jsonrpc.org/specification">JSON-RPC 2.0
+ * <p>See the <a href="https://www.jsonrpc.org/specification">JSON-RPC 2.0
  * specification</a> for more information or write to the
  * <a href="https://groups.google.com/forum/#!forum/json-rpc">user group</a> if
  * you have questions.

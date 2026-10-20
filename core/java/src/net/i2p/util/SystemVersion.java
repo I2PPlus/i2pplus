@@ -638,8 +638,8 @@ public abstract class SystemVersion {
     /**
      * This isn't always correct.
      * http://stackoverflow.com/questions/807263/how-do-i-detect-which-kind-of-jre-is-installed-32bit-vs-64bit
-     * http://mark.koli.ch/2009/10/javas-osarch-system-property-is-the-bitness-of-the-jre-not-the-operating-system.html
-     * http://mark.koli.ch/2009/10/reliably-checking-os-bitness-32-or-64-bit-on-windows-with-a-tiny-c-app.html
+     * <a href="https://web.archive.org/web/2020/http://mark.koli.ch/2009/10/javas-osarch-system-property-is-the-bitness-of-the-jre-not-the-operating-system.html">os.arch is the bitness of the JRE</a>
+     * <a href="https://web.archive.org/web/20121221174620/http://mark.koli.ch/2009/10/reliably-checking-os-bitness-32-or-64-bit-on-windows-with-a-tiny-c-app.html">checking OS bitness on Windows</a>
      * {@code sun.arch.data.model} not on all JVMs
      * {@code sun.arch.data.model} == 64 =&gt; 64 bit processor
      * {@code sun.arch.data.model} == 32 =&gt; A 32 bit JVM but could be either 32 or 64 bit processor or libs

@@ -55,9 +55,9 @@ public class DnsMessage {
      * Possible DNS response codes.
      *
      * @see <a href=
-     *      "http://www.iana.org/assignments/dns-parameters/dns-parameters.xhtml#dns-parameters-6">
+     *      "https://www.iana.org/assignments/dns-parameters/dns-parameters.xhtml#dns-parameters-6">
      *      IANA Domain Name System (DNS) Parameters - DNS RCODEs</a>
-     * @see <a href="http://tools.ietf.org/html/rfc6895#section-2.3">RFC 6895 § 2.3</a>
+     * @see <a href="https://www.rfc-editor.org/rfc/rfc6895#section-2.3">RFC 6895 § 2.3</a>
      */
     public enum RESPONSE_CODE {
         /** No error */
@@ -153,7 +153,7 @@ public class DnsMessage {
      * Symbolic DNS Opcode values.
      *
      * @see <a href=
-     *      "http://www.iana.org/assignments/dns-parameters/dns-parameters.xhtml#dns-parameters-5">
+     *      "https://www.iana.org/assignments/dns-parameters/dns-parameters.xhtml#dns-parameters-5">
      *      IANA Domain Name System (DNS) Parameters - DNS OpCodes</a>
      */
     public enum OPCODE {

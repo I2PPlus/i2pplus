@@ -585,9 +585,8 @@ public class Blocklist {
     * No whitespace allowed after the last ':'.
     * <p>
     * For further information and downloads:
-    * http://www.bluetack.co.uk/forums/index.php?autocom=faq&CODE=02&qid=17
-    * http://blocklist.googlepages.com/
-    * http://www.cymru.com/Documents/bogon-list.html
+    * <a href="https://www.iblocklist.com/support">IBlockList support</a>
+    * <a href="https://www.team-cymru.com/bogon-reference-http">Cymru bogon reference</a>
     * <p>
     * Must call allocate() before and merge() after.
     *

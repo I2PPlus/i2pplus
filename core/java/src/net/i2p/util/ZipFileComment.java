@@ -12,12 +12,11 @@ import java.util.zip.ZipException;
 import java.nio.charset.StandardCharsets;
 /**
  * Not available in ZipFile until Java 7. Refs:
- * https://secure.wikimedia.org/wikipedia/en/wiki/ZIP_%28file_format%29
- * http://download.oracle.com/javase/1.5.0/docs/api/java/util/zip/ZipFile.html
- * http://bugs.sun.com/view_bug.do?bug_id=6646605
+ * <a href="https://secure.wikimedia.org/wikipedia/en/wiki/ZIP_%28file_format%29">ZIP file format</a>
+ * <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/zip/ZipFile.html">ZipFile</a>
  * <p>
  * Code modified from:
- * http://www.flattermann.net/2009/01/read-a-zip-file-comment-with-java/
+ * <a href="https://web.archive.org/web/2015/http://www.flattermann.net/2009/01/read-a-zip-file-comment-with-java/">read a zip file comment with Java</a>
  * Beerware.
  *
  * @deprecated scheduled for removal late 2017, not for external use
@@ -26,6 +25,8 @@ import java.nio.charset.StandardCharsets;
 @Deprecated
 public abstract class ZipFileComment {
 
+    // ZipFile.getComment() was added in Java 7, see
+    // https://bugs.java.com/bugdatabase/view_bug.do?bug_id=6646605
     private static final int BLOCK_LEN = 22;
     private static final byte[] magicStart = {0x50, 0x4b, 0x03, 0x04};
     private static final int HEADER_LEN = magicStart.length;

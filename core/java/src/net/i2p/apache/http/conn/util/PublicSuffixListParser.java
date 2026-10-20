@@ -33,7 +33,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Parses the list from <a href="http://publicsuffix.org/">publicsuffix.org</a>
+ * Parses the list from <a href="https://publicsuffix.org/">publicsuffix.org</a>
  * and configures a PublicSuffixFilter.
  *
  * @since 4.4

@@ -747,7 +747,7 @@ public final class SigUtil {
     /**
      * Encode raw signature bytes (r || s) into ASN.1 DER SEQUENCE format.
      * <p>
-     * See http://download.oracle.com/javase/1.5.0/docs/guide/security/CryptoSpec.html
+     * See <a href="https://docs.oracle.com/en/java/javase/17/docs/specs/security/standard-names.html">Standard Algorithm Names</a>
      * <p>
      * Convert to BigInteger and back so we have the minimum length representation, as required.
      * r and s are always non-negative.
@@ -789,8 +789,8 @@ public final class SigUtil {
      * @param s non-negative
      * @return ASN.1 DER-encoded SEQUENCE { r INTEGER, s INTEGER }
      * @throws IllegalArgumentException if too big
-     * @see <a href="http://download.oracle.com/javase/1.5.0/docs/guide/security/CryptoSpec.html">Java Cryptography Architecture Reference Guide</a>
-     * @see <a href="http://en.wikipedia.org/wiki/Abstract_Syntax_Notation_One">Abstract Syntax Notation One</a>
+     * @see <a href="https://docs.oracle.com/en/java/javase/17/docs/specs/security/standard-names.html">Java Cryptography Architecture Standard Algorithm Name Documentation</a>
+     * @see <a href="https://en.wikipedia.org/wiki/Abstract_Syntax_Notation_One">Abstract Syntax Notation One</a>
      * @since 0.9.25, split out from sigBytesToASN1(byte[])
      */
     public static byte[] sigBytesToASN1(BigInteger r, BigInteger s) {

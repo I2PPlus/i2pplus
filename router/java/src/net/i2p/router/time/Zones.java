@@ -32,8 +32,7 @@ class Zones {
     private static final String CONTINENT_FILE_DEFAULT = "continents.txt";
 
     /**
-     * Ref: http://dev.maxmind.com/geoip/legacy/codes/country_continent/
-     * Ref: http://www.pool.ntp.org/zone/@
+     * Ref: <a href="https://www.pool.ntp.org/zone/@">NTP zone list</a>
      */
     private static final String[] ZONES = {
         // not an NTP zone
@@ -86,7 +85,7 @@ class Zones {
      * US,NA
      * <p>
      * Modified from {@link net.i2p.router.transport.GeoIP#readCountryFile}
-     * ref: http://dev.maxmind.com/geoip/legacy/codes/country_continent/
+     * ref: <a href="https://www.pool.ntp.org/zone/">NTP zone list</a>
      */
     private void readContinentFile() {
         String geoDir = _context.getProperty(GeoIP.PROP_GEOIP_DIR, GeoIP.GEOIP_DIR_DEFAULT);

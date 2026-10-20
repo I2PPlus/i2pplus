@@ -37,7 +37,7 @@ import net.i2p.apache.http.util.Args;
  * Utility class that can test if DNS names match the content of the Public Suffix List.
  * <p>
  * An up-to-date list of suffixes can be obtained from
- * <a href="http://publicsuffix.org/">publicsuffix.org</a>.
+ * <a href="https://publicsuffix.org/">publicsuffix.org</a>.
  *
  * @see net.i2p.apache.http.conn.util.PublicSuffixList
  *

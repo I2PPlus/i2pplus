@@ -163,7 +163,7 @@ public class LinearInterpolator extends Plottable {
      * setInterpolationMethod()} instead.
      *
      * <p>The full explanation of this interpolation method can be found <a
-     * href="http://www.JerryDallal.com/LHSP/slr.htm">here</a>.
+     * href="https://www.JerryDallal.com/LHSP/slr.htm">here</a>.
      *
      * @param interpolationMethod Should be <code>INTERPOLATE_LEFT</code>, <code>INTERPOLATE_RIGHT
      *                            </code>, <code>INTERPOLATE_LINEAR</code> or <code>INTERPOLATE_REGRESSION</code>. Any
@@ -198,7 +198,7 @@ public class LinearInterpolator extends Plottable {
      * that the total square distance of real data points from from the best-fit line is at minimum.
      *
      * <p>The full explanation of this interpolation method can be found <a
-     * href="http://www.JerryDallal.com/LHSP/slr.htm">here</a>.
+     * href="https://www.JerryDallal.com/LHSP/slr.htm">here</a>.
      *
      * @param interpolationMethod a method from {@link org.rrd4j.data.LinearInterpolator.Method}.
      */

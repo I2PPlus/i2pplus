@@ -8,7 +8,7 @@ import java.util.zip.DeflaterOutputStream;
 
 /**
  * GZIP implementation per
- * <a href="http://www.faqs.org/rfcs/rfc1952.html">RFC 1952</a>, reusing
+ * <a href="https://www.rfc-editor.org/rfc/rfc1952">RFC 1952</a>, reusing
  * java's standard CRC32 and Deflater implementations.  The main difference
  * is that this implementation allows its state to be reset to initial
  * values, and hence reused, while the standard GZIPOutputStream writes the

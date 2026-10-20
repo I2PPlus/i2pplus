@@ -8,7 +8,7 @@ import org.bouncycastle.crypto.ExtendedDigest;
 import org.bouncycastle.util.Pack;
 
 /**
- * implementation of Keccak based on following KeccakNISTInterface.c from https://keccak.noekeon.org/
+ * implementation of Keccak based on following KeccakNISTInterface.c from <a href="https://keccak.team/">keccak.team</a>
  * <p>
  * Following the naming conventions used in the C source code to enable easy review of the implementation.
  */

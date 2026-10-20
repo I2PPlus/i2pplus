@@ -2190,7 +2190,7 @@ public class RrdGraphDef implements RrdGraphConstants, DataHolder {
     /**
      * Allows to set a downsampler, used to improved the visual representation of graph.
      *
-     * <p>More details can be found on <a href="http://skemman.is/en/item/view/1946/15343">Sveinn
+     * <p>More details can be found on <a href="https://skemman.is/en/item/view/1946/15343">Sveinn
      * Steinarsson's thesis</a>
      *
      * @param downsampler The downsampler that will be used

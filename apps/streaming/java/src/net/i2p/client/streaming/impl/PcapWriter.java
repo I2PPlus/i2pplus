@@ -24,7 +24,7 @@ import net.i2p.util.Log;
  * <p>
  * Reference: http://wiki.wireshark.org/Development/LibpcapFileFormat
  * <p>
- * The Jpcap library http://netresearch.ics.uci.edu/kfujii/jpcap/doc/
+ * The <a href="https://sourceforge.net/projects/jpcap/">Jpcap library</a>
  * was close to what I want, but it requires you to instantiate a "captor"
  * before you can write a file, and it requires a native lib to do so,
  * and even then, it only wants to read the file, not write it.
