@@ -24,6 +24,7 @@ import net.i2p.crypto.eddsa.spec.EdDSAPublicKeySpec;
 
 import org.junit.Test;
 
+import java.math.BigInteger;
 import java.nio.charset.Charset;
 import java.security.MessageDigest;
 import java.security.PrivateKey;
@@ -68,6 +69,69 @@ public class EdDSAEngineTest {
 
             assertThat("Test case " + testCase.caseNum + " failed", sgr.verify(testCase.sig), is(true));
         }
+    }
+
+    /**
+     * CVE-2020-36843 regression: signatures whose S scalar is at or above the
+     * group order l are malleable (S, S+l, S+2l... all verify without a range
+     * check) and MUST be rejected per RFC 8032 8.2 / 5.1.7.
+     */
+    @Test
+    public void testVerifyRejectsSAtOrAboveOrder() throws Exception {
+        EdDSAParameterSpec spec = EdDSANamedCurveTable.getByName(EdDSANamedCurveTable.ED_25519);
+        EdDSAEngine sgr = new EdDSAEngine(MessageDigest.getInstance(spec.getHashAlgorithm()));
+        PublicKey vKey = new EdDSAPublicKey(new EdDSAPublicKeySpec(TEST_PK, spec));
+
+        // sanity: the canonical signature verifies
+        sgr.initVerify(vKey);
+        assertThat("canonical sig must verify", sgr.verifyOneShot(TEST_MSG, TEST_MSG_SIG), is(true));
+
+        byte[] sBytes = new byte[32];
+        System.arraycopy(TEST_MSG_SIG, 32, sBytes, 0, 32);
+        BigInteger s = littleToBig(sBytes);
+        BigInteger l = EdDSABlinding.ORDER;
+
+        // Malleated variants S+l, S+2l and a top-bit-set S are all out of
+        // range and must be rejected (without the isBelowOrder check they
+        // would all verify against the same R).
+        BigInteger[] bad = new BigInteger[] {s.add(l), s.add(l.multiply(BigInteger.valueOf(2))),
+                                             s.setBit(255)};
+        for (BigInteger badS : bad) {
+            byte[] mangled = malleate(TEST_MSG_SIG, badS);
+            sgr.initVerify(vKey);
+            assertThat("S = " + badS.bitLength() + "-bit out-of-range scalar must NOT verify",
+                       sgr.verifyOneShot(TEST_MSG, mangled), is(false));
+        }
+    }
+
+    private static byte[] malleate(byte[] sig, BigInteger newS) throws Exception {
+        byte[] out = new byte[64];
+        System.arraycopy(sig, 0, out, 0, 32);
+        byte[] le = bigToLittle(newS.toByteArray());
+        System.arraycopy(le, 0, out, 32, 32);
+        return out;
+    }
+
+    private static BigInteger littleToBig(byte[] le) {
+        return new BigInteger(1, reversed(le));
+    }
+
+    private static byte[] bigToLittle(byte[] big) {
+        // big.toByteArray() is big-endian, possibly with a leading sign byte;
+        // produce exactly 32 little-endian bytes
+        byte[] out = new byte[32];
+        int be = big.length;
+        int src = be - 1;
+        for (int i = 0; i < 32 && src >= 0; i++, src--)
+            out[i] = big[src];
+        return out;
+    }
+
+    private static byte[] reversed(byte[] in) {
+        byte[] out = new byte[in.length];
+        for (int i = 0; i < in.length; i++)
+            out[i] = in[in.length - 1 - i];
+        return out;
     }
 
     /**
