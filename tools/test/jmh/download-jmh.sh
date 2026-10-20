@@ -79,11 +79,11 @@ up_to_date() {
 }
 
 if [ "$FORCE" = false ] && up_to_date; then
-    echo "JMH $INSTALLED libraries are up to date."
+    echo "JMH $INSTALLED libraries are up to date in tools/test/jmh."
     exit 0
 fi
 
-echo "Fetching JMH $TARGET libraries into ${SCRIPT_DIR}..."
+echo "Fetching JMH $TARGET libraries into tools/test/jmh..."
 for entry in "${ARTIFACTS[@]}"; do
     IFS=: read -r name path ver <<<"$entry"
     [ "$ver" = "JMH" ] && ver="$TARGET"
@@ -96,4 +96,4 @@ for entry in "${ARTIFACTS[@]}"; do
     echo "  ${name} (${ver})"
 done
 echo "$TARGET" > "$VERSION_FILE"
-echo "JMH libraries cached in ${SCRIPT_DIR} (gitignored)."
+echo "JMH libraries cached in tools/test/jmh (gitignored)."

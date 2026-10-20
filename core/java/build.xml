@@ -590,18 +590,23 @@
   </target>
 
   <target name="jmhLibCheck">
-    <!-- Set if unset. override.properties is read at parse time, so a
-         jmh.home set there is already visible here: remember that before
-         defaulting, so a hand-installed copy stays authoritative and is
-         not silently replaced by the downloaded one. -->
+    <!-- Default first, then detect an override: a jmh.home set in
+         override.properties is already visible here, and comparing
+         against the default (rather than mere isset) keeps a
+         hand-installed copy authoritative while staying correct if
+         this target runs more than once in a build. -->
+    <property name="jmh.home.default" location="../../tools/test/jmh"/>
     <condition property="jmh.home.preset">
-      <isset property="jmh.home"/>
+      <and>
+        <isset property="jmh.home"/>
+        <not><equals arg1="${jmh.home}" arg2="${jmh.home.default}"/></not>
+      </and>
     </condition>
-    <property name="jmh.home" value="../../tools/test/jmh"/>
+    <property name="jmh.home" location="${jmh.home.default}"/>
     <if>
       <isset property="jmh.home.preset"/>
       <then>
-        <echo message="Using the JMH libraries configured at ${jmh.home} (jmh.home is set, not downloading)."/>
+        <echo message="Using the JMH libraries from the configured jmh.home (not downloading)."/>
       </then>
       <else>
         <antcall target="download-jmh"/>
@@ -675,13 +680,46 @@
   </target>
 
   <target name="bench.run" depends="bench.jar">
-    <!-- Runs the benchmark suite. The default is a quick profile; pass
+    <!-- Runs the benchmark suite with a quick profile; pass
          your own JMH arguments with -Dbench.args="...", e.g.
          ant bench -Dbench.args="AESBench -f 2 -wi 5 -i 10"
          java -jar <build.dir>/i2p-benchmarks.jar -l lists the names. -->
     <property name="bench.args" value="-f 1 -wi 2 -i 3"/>
+    <antcall target="bench.exec"/>
+  </target>
+
+  <target name="bench.fast" depends="bench.jar">
+    <!-- Smoke profile: one warmup and one measurement iteration per
+         benchmark, enough for allocation figures and ballpark timings. -->
+    <property name="bench.args" value="-f 1 -wi 1 -i 1"/>
+    <antcall target="bench.exec"/>
+  </target>
+
+  <!-- Internal runner shared by bench.run and bench.fast; both already
+       depend on bench.jar, and this target must not (an antcall would
+       re-run the whole dependency chain, jmhLibCheck included). -->
+  <target name="bench.exec">
+    <!-- Shared run parameters, printed once instead of JMH's per-benchmark
+         header blocks. -->
+    <loadfile property="jmh.version.label" srcFile="${jmh.home}/version.txt" failonerror="false">
+      <filterchain><striplinebreaks/></filterchain>
+    </loadfile>
+    <condition property="jmh.version.label" value="unknown">
+      <not><isset property="jmh.version.label"/></not>
+    </condition>
+    <echo message="JMH ${jmh.version.label} | ${java.vm.name} ${java.vm.version} (Java ${java.version}) | args: ${bench.args}"/>
+    <!-- Drop JMH's per-benchmark "#" header chatter (VM info, fork and
+         warmup progress) and keep iteration timings, warnings, and the
+         final results table. -->
     <java jar="${build.dir}/i2p-benchmarks.jar" fork="true" failonerror="true">
       <arg line="${bench.args}"/>
+      <redirector>
+        <outputfilterchain>
+          <linecontainsregexp negate="true">
+            <regexp pattern="^#"/>
+          </linecontainsregexp>
+        </outputfilterchain>
+      </redirector>
     </java>
   </target>
 

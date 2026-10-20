@@ -242,6 +242,7 @@
     <echo message=""/>
     <echo message=" === Testing ==="/>
     <echo message="  bench                                        Build and run the JMH benchmarks (-Dbench.args=... to customize)"/>
+    <echo message="  bench-fast                                   Run the JMH benchmarks with the minimum profile (1 warmup + 1 measurement iteration)"/>
     <echo message="  test                                         Run JUnit tests (Core, MiniStreaming, Streaming) via tools/scripts/run-tests.sh"/>
     <echo message="  test-js                                      Run various validation tests on console and webapp Javascript files (requires node)"/>
     <echo message="  testJbigi                                    Benchmark jbigi: native vs pure Java modPow/modPowCT/modInverse"/>
@@ -4306,6 +4307,11 @@
 
   <target name="bench" depends="jbigi">
     <ant dir="core/java/" target="bench.run">
+      <property name="build.dir" location="${build.root}core/java/build"/>
+      </ant>
+  </target>
+  <target name="bench-fast" depends="jbigi">
+    <ant dir="core/java/" target="bench.fast">
       <property name="build.dir" location="${build.root}core/java/build"/>
       </ant>
   </target>

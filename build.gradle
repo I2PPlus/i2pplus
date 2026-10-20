@@ -213,6 +213,13 @@ tasks.register('bench') {
     dependsOn project(':core').tasks.named('jmh')
 }
 
+// ./gradlew bench-fast: same benchmarks with the minimum profile
+// (1 fork, 1 warmup + 1 measurement iteration), mirroring ant's bench-fast.
+tasks.register('bench-fast') {
+    description = 'Run the JMH crypto benchmarks with the minimum profile'
+    dependsOn project(':core').tasks.named('jmh')
+}
+
 // Coverage report. Only registered when jacoco is applied (-Pcoverage); the
 // JacocoReport type does not exist otherwise, so registering it unconditionally
 // would break the default build.

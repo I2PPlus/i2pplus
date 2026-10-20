@@ -12,6 +12,11 @@ base {
     archivesName = 'i2p'
 }
 
+// ./gradlew bench-fast selects the minimum profile below, mirroring ant's
+// bench-fast target (the plugin has a single jmh task, so the profile is
+// chosen at configuration time from the requested task name).
+def benchFast = gradle.startParameter.taskNames.any { it.endsWith('bench-fast') }
+
 jmh {
     javaLauncher = javaToolchains.launcherFor {
         languageVersion = JavaLanguageVersion.current()
@@ -23,11 +28,17 @@ jmh {
     // from freenet's CPUID loader used by i2p's CPUInformation.
     jvmArgsAppend = ['--sun-misc-unsafe-memory-access=allow',
                      '--enable-native-access=ALL-UNNAMED']
-    // Quick-profile defaults, matching ant's bench target. To customize,
-    // edit this block (fork, warmupIterations, iterations, includes).
-    fork = 1
-    warmupIterations = 2
-    iterations = 3
+    // Quick-profile defaults, matching ant's bench target; bench-fast uses
+    // the minimum profile. To customize, edit here (also: includes = [...]).
+    if (benchFast) {
+        fork = 1
+        warmupIterations = 1
+        iterations = 1
+    } else {
+        fork = 1
+        warmupIterations = 2
+        iterations = 3
+    }
     includeTests = false
 }
 
