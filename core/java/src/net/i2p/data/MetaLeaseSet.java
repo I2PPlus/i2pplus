@@ -10,7 +10,7 @@ import java.util.Map;
 
 /**
  * Implementation of MetaLeaseSet as specified in
- * <a href="https://geti2p.net/spec/proposals/123-new-netdb-entries">Proposal 123: New NetDb Entries</a>.
+ * <a href="https://i2p.net/en/proposals/123-new-netdb-entries/">Proposal 123: New NetDb Entries</a>.
  * <p>MetaLeaseSet is a specialized LeaseSet2 that contains references to other LeaseSets
  * rather than direct tunnel endpoints. This enables advanced routing and load balancing strategies.</p>
  * <p>Key characteristics of MetaLeaseSet:</p>

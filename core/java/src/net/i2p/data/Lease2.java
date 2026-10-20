@@ -6,7 +6,7 @@ import java.io.OutputStream;
 
 /**
  * Implementation of Lease2 as specified in
- * <a href="https://geti2p.net/spec/proposals/123-new-netdb-entries">Proposal 123: New NetDb Entries</a>.
+ * <a href="https://i2p.net/en/proposals/123-new-netdb-entries/">Proposal 123: New NetDb Entries</a>.
  * <p>Lease2 extends the original Lease format with enhanced timestamp resolution:</p>
  * <ul>
  * <li>Uses 4-byte timestamps instead of 8-byte for space efficiency</li>

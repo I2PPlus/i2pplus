@@ -26,7 +26,7 @@ import java.util.Set;
 
 /**
  * Implementation of EncryptedLeaseSet as specified in
- * <a href="https://geti2p.net/spec/proposals/123-new-netdb-entries">Proposal 123: New NetDb Entries</a>.
+ * <a href="https://i2p.net/en/proposals/123-new-netdb-entries/">Proposal 123: New NetDb Entries</a>.
  * <p>EncryptedLeaseSet provides privacy and authentication enhancements over standard LeaseSet2:</p>
  * <ul>
  * <li>LeaseSet content is encrypted using authenticated encryption</li>

@@ -79,7 +79,7 @@ public class Reseeder {
      * Please contact him for support, change requests, or issues.
      * See also the reseed forum http://zzz.i2p/forums/18
      * and the reseed setup and testing guide
-     * https://geti2p.net/en/get-involved/guides/reseed
+     * https://i2p.net/en/docs/guides/reseed-server/
      * <p>
      * All supported reseed hosts need a corresponding reseed (SU3)
      * signing certificate installed in the router.

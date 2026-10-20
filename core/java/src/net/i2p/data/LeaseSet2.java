@@ -21,7 +21,7 @@ import net.i2p.util.OrderedProperties;
 
 /**
  * Implementation of LeaseSet2 as specified in
- * <a href="https://geti2p.net/spec/proposals/123-new-netdb-entries">Proposal 123: New NetDb Entries</a>.
+ * <a href="https://i2p.net/en/proposals/123-new-netdb-entries/">Proposal 123: New NetDb Entries</a>.
  * <p>LeaseSet2 provides several enhancements over the original LeaseSet format:</p>
  * <ul>
  * <li>Support for multiple encryption keys with server preference ordering</li>

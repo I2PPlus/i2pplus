@@ -8,7 +8,7 @@ import java.time.Instant;
 
 /**
  * Cache data for EdDSA key blinding as specified in
- * <a href="https://geti2p.net/spec/proposals/123-new-netdb-entries">Proposal 123: New NetDb Entries</a>.
+ * <a href="https://i2p.net/en/proposals/123-new-netdb-entries/">Proposal 123: New NetDb Entries</a>.
  * <p>BlindData provides the infrastructure for cryptographic key blinding in I2P:</p>
  * <ul>
  * <li>Manages blinded and unblinded EdDSA signing key pairs</li>

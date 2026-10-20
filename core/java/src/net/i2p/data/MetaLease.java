@@ -6,7 +6,7 @@ import java.io.OutputStream;
 
 /**
  * Implementation of MetaLease as specified in
- * <a href="https://geti2p.net/spec/proposals/123-new-netdb-entries">Proposal 123: New NetDb Entries</a>.
+ * <a href="https://i2p.net/en/proposals/123-new-netdb-entries/">Proposal 123: New NetDb Entries</a>.
  * <p>MetaLease extends the Lease concept to reference other LeaseSets rather than tunnel endpoints:</p>
  * <ul>
  * <li>Points to another LeaseSet via its hash instead of a gateway router</li>
