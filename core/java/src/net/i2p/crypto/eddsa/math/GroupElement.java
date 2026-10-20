@@ -460,6 +460,7 @@ public class GroupElement implements Serializable {
      * <li>P3 $\rightarrow$ CACHED (1 multiply, 1 add, 1 subtract)
      * <li>P1P1 $\rightarrow$ P2 (3 multiply)
      * <li>P1P1 $\rightarrow$ P3 (4 multiply).
+     * </ul>
      *
      * @param repr The representation to convert to.
      * @return A new group element in the given representation.
@@ -959,7 +960,8 @@ public class GroupElement implements Serializable {
      * @return $a * B$ as a group element
      */
     public GroupElement scalarMultiply(final byte[] a) {
-        // TODO: Check the preconditions apply here
+        // Precondition from the javadoc: a[31] <= 127 (clamped or reduced scalar).
+        assert (a[31] & 0x80) == 0;
         GroupElement t;
         int i;
 
@@ -1041,7 +1043,10 @@ public class GroupElement implements Serializable {
      * @return $a * A + b * B$, with $A$ aPoint and $B$ this point
      */
     public GroupElement doubleScalarMultiplyVariableTime(final GroupElement aPoint, final byte[] a, final byte[] b) {
-        // TODO-CR BR: A check that this is the base point is needed.
+        // Preconditions: both points must carry precomputed doubles (the method
+        // indexes their dblPrecmp tables directly).
+        assert this.dblPrecmp != null;
+        assert aPoint.dblPrecmp != null;
         final byte[] aslide = slide(a);
         final byte[] bslide = slide(b);
 

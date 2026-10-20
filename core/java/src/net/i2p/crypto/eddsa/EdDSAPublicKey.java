@@ -25,8 +25,8 @@ public class EdDSAPublicKey implements EdDSAKey, PublicKey {
     private static final long serialVersionUID = 9837459837498475L;
     /** The public key point. */
     private final GroupElement A;
-    /** The negated public key point, lazily initialized. */
-    private GroupElement Aneg = null;
+    /** The negated public key point, lazily initialized. Volatile for safe publication across verify threads. */
+    private volatile GroupElement Aneg = null;
     /** The encoded public key (Abyte). */
     private final byte[] Abyte;
     /** Ed dsa spec. */

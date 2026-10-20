@@ -4,9 +4,10 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.lessThan;
-import static org.junit.Assert.fail;
+import static org.hamcrest.Matchers.not;
 
 import java.math.BigInteger;
+import java.security.MessageDigest;
 
 import net.i2p.crypto.eddsa.spec.EdDSANamedCurveTable;
 import net.i2p.crypto.eddsa.spec.EdDSANamedCurveSpec;
@@ -17,7 +18,7 @@ import org.junit.Test;
 
 /**
  * EdDSABlinding behavior pins: blind public/private consistency,
- * reduce range, and the current (throwing) unblind landmine.
+ * reduce range, and the blind/unblind round-trip.
  */
 public class EdDSABlindingTest {
 
@@ -25,6 +26,7 @@ public class EdDSABlindingTest {
             "a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3");
     private static final byte[] ALPHA_SEED = Utils.hexToBytes(
             "b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1");
+    private static final byte[] MSG = "blinding round trip".getBytes();
 
     @Test
     public void testBlindPublicMatchesBlindPrivatePublic() throws Exception {
@@ -56,21 +58,28 @@ public class EdDSABlindingTest {
     }
 
     /**
-     * Landmine pin: unblind() is routed from Blinding.unblind but has never
-     * been implemented. If R5 implements it, update this test to a real
-     * blind/unblind round-trip instead of deleting it.
+     * blind then unblind must recover a key with the same public point.
+     * The recovered scalar is the original reduced mod l, which is
+     * cryptographically equivalent (same point, same signatures).
      */
     @Test
-    public void testUnblindCurrentlyThrows() throws Exception {
+    public void testBlindUnblindRoundTrip() throws Exception {
         EdDSANamedCurveSpec spec = EdDSANamedCurveTable.getByName(EdDSANamedCurveTable.ED_25519);
         EdDSAPrivateKey key = new EdDSAPrivateKey(new EdDSAPrivateKeySpec(SEED, spec));
         EdDSAPrivateKey alpha = new EdDSAPrivateKey(new EdDSAPrivateKeySpec(ALPHA_SEED, spec));
+
         EdDSAPrivateKey blinded = EdDSABlinding.blind(key, alpha);
-        try {
-            EdDSABlinding.unblind(blinded, alpha);
-            fail("unblind currently must throw UnsupportedOperationException");
-        } catch (UnsupportedOperationException e) {
-            // expected
-        }
+        assertThat("blinding must change the public point", blinded.getA(), is(not(equalTo(key.getA()))));
+
+        EdDSAPrivateKey unblinded = EdDSABlinding.unblind(blinded, alpha);
+        assertThat("unblind(blind(k)) must recover the public point", unblinded.getA(), equalTo(key.getA()));
+
+        // Cross-check: a signature by the original verifies under the
+        // unblinded key's public point.
+        EdDSAEngine sgr = new EdDSAEngine(MessageDigest.getInstance(spec.getHashAlgorithm()));
+        sgr.initSign(key);
+        byte[] sig = sgr.signOneShot(MSG);
+        sgr.initVerify(new EdDSAPublicKey(new EdDSAPublicKeySpec(unblinded.getA(), spec)));
+        assertThat("signature must verify under the recovered key", sgr.verifyOneShot(MSG, sig), is(true));
     }
 }

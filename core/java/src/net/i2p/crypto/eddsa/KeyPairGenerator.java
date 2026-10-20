@@ -90,7 +90,10 @@ public class KeyPairGenerator extends KeyPairGeneratorSpi {
             edParams = createNamedCurveSpec(((EdDSAGenParameterSpec) params).getName());
         } else throw new InvalidAlgorithmParameterException("parameter object not a EdDSAParameterSpec");
 
+        // JCA contract: a null random means an implementation default
         this.random = random;
+        if (this.random == null)
+            this.random = RandomSource.getInstance();
         initialized = true;
     }
 
