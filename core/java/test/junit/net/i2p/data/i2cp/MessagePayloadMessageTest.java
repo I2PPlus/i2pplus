@@ -20,11 +20,7 @@ import net.i2p.data.PayloadTest;
 public class MessagePayloadMessageTest extends I2CPTstBase {
     @Override
     public I2CPMessageImpl createDataStructure() throws DataFormatException {
-        MessagePayloadMessage msg = new MessagePayloadMessage();
-        msg.setMessageId(123);
-        msg.setPayload((Payload) (new PayloadTest()).createDataStructure());
-        msg.setSessionId(321);
-        return msg;
+        return new MessagePayloadMessage(321, 123, (Payload) (new PayloadTest()).createDataStructure());
     }
 
     @Override

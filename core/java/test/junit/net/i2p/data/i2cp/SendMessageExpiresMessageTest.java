@@ -25,15 +25,11 @@ public class SendMessageExpiresMessageTest extends I2CPTstBase {
 
     @Override
     public I2CPMessageImpl createDataStructure() throws DataFormatException {
-        SendMessageExpiresMessage msg = new SendMessageExpiresMessage();
-        msg.setDestination((Destination) (new DestinationTest()).createDataStructure());
-        msg.setPayload((Payload) (new PayloadTest()).createDataStructure());
-        msg.setSessionId((SessionId) (new SessionIdTest()).createDataStructure());
-        msg.setNonce(1);
         DateAndFlags daf = (DateAndFlags) (new DateAndFlagsTest()).createDataStructure();
-        msg.setExpiration(daf.getDate());
-        msg.setFlags(daf.getFlags());
-        return msg;
+        return new SendMessageExpiresMessage((SessionId) (new SessionIdTest()).createDataStructure(),
+                                             (Destination) (new DestinationTest()).createDataStructure(),
+                                             (Payload) (new PayloadTest()).createDataStructure(),
+                                             1, daf);
     }
 
     @Override

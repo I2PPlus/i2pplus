@@ -86,17 +86,6 @@ class Curve25519DHState implements DHState, Cloneable {
     }
 
     /**
-     * @deprecated use setKeys()
-     */
-    @Deprecated
-    @Override
-    public void setPrivateKey(byte[] key, int offset) {
-        System.arraycopy(key, offset, privateKey, 0, 32);
-        Curve25519.eval(publicKey, 0, privateKey, null);
-        mode = 0x03;
-    }
-
-    /**
      * Sets the private and public keys for this object.
      * I2P for efficiency, since setPrivateKey() calculates the public key
      * and overwrites it.

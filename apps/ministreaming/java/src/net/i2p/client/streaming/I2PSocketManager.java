@@ -14,7 +14,6 @@ import java.net.Socket;
 import java.util.List;
 import java.util.Properties;
 import java.util.Set;
-import net.i2p.I2PAppContext;
 import net.i2p.I2PException;
 import net.i2p.client.I2PSession;
 import net.i2p.client.I2PSessionException;
@@ -236,20 +235,6 @@ public interface I2PSocketManager {
      * @param name the label reported in logs and console output
      */
     public void setName(String name);
-
-    /**
-     * Deprecated - Factory will initialize.
-     *
-     * @param context the I2P app context
-     * @param session the session the manager is to use for all its connections
-     * @param opts the properties the factory would otherwise have read from a config file
-     * @param name the display name the factory would otherwise have read from a config file
-     * @throws UnsupportedOperationException always; this interface has no body
-     * @deprecated nothing calls this; build the manager with
-     * {@link net.i2p.client.streaming.I2PSocketManagerFactory#createManager}.
-     */
-    @Deprecated
-    public void init(I2PAppContext context, I2PSession session, Properties opts, String name);
 
     /**
      * Register a listener to be notified when the I2P session disconnects.

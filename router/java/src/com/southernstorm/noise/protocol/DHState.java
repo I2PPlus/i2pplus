@@ -66,20 +66,6 @@ public interface DHState extends Destroyable, Cloneable {
     void getPrivateKey(byte[] key, int offset);
 
     /**
-     * Sets the private key for this object.
-     *
-     * @param key The buffer containing the private key.
-     * @param offset The first offset in the buffer that contains the key.
-     *
-     *               If this object previously held only a public key, then
-     *               this function will change it into a key pair.
-     *
-     * @deprecated use setKeys()
-     */
-    @Deprecated
-    void setPrivateKey(byte[] key, int offset);
-
-    /**
      * Sets the private and public keys for this object.
      * I2P for efficiency, since setPrivateKey() calculates the public key
      * and overwrites it.

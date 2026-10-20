@@ -3,7 +3,6 @@ package net.i2p.client.streaming.impl;
 import java.net.ConnectException;
 import java.net.SocketTimeoutException;
 import net.i2p.I2PException;
-import net.i2p.client.streaming.AcceptingChannel;
 import net.i2p.client.streaming.I2PServerSocket;
 import net.i2p.client.streaming.I2PSocket;
 import net.i2p.client.streaming.I2PSocketManager;
@@ -41,19 +40,6 @@ class I2PServerSocketFull implements I2PServerSocket {
     @Override
     public I2PSocket accept() throws I2PException, ConnectException, SocketTimeoutException {
         return _socketManager.receiveSocket();
-    }
-
-    /**
-     * Unimplemented, unlikely to ever be implemented.
-     *
-     * @deprecated
-     * @return null always
-     * @since 0.8.11
-     */
-    @Deprecated
-    @Override
-    public synchronized AcceptingChannel getChannel() {
-        return null;
     }
 
     /**

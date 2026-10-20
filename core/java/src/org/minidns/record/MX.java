@@ -10,10 +10,10 @@
  */
 package org.minidns.record;
 
+import java.io.DataInputStream;
 import org.minidns.dnsname.DnsName;
 import org.minidns.record.Record.TYPE;
 
-import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 

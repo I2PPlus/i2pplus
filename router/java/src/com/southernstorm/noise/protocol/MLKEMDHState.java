@@ -146,15 +146,6 @@ class MLKEMDHState implements DHState, Cloneable {
      */
     @Deprecated
     @Override
-    public void setPrivateKey(byte[] key, int offset) {
-            throw new UnsupportedOperationException();
-    }
-
-    /**
-     * @deprecated
-     */
-    @Deprecated
-    @Override
     public void setKeys(byte[] privkey, int privoffset, byte[] pubkey, int puboffset) {
             throw new UnsupportedOperationException();
     }

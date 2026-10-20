@@ -167,20 +167,6 @@ public class UDPSender {
     }
 
     /**
-     * Adds a packet to the queue, blocking if necessary until space is available.
-     * <p>
-     * This method is deprecated; use {@link #add(UDPPacket)} instead.
-     *
-     * @param packet the UDP packet to add
-     * @param blockTime max blocking time in ms parameter
-     * @deprecated use {@link #add(UDPPacket)} instead
-     */
-    @Deprecated
-    public void add(UDPPacket packet, int blockTime) {
-        add(packet);
-    }
-
-    /**
      * Adds a UDP packet to the send queue.
      * <p>
      * This operation blocks if the queue is full, which may back up the PacketPusher thread.

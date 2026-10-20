@@ -88,33 +88,12 @@ public class SendMessageMessage extends I2CPMessageImpl {
     }
 
     /**
-     * Session ID the message is being sent to.
-     *
-     * @param id the session ID
-     * @deprecated use 4-arg constructor
-     */
-    @Deprecated
-    public synchronized void setSessionId(SessionId id) {
-        _sessionId = id;
-    }
-
-    /**
      * Destination the message is being sent to.
      *
      * @return the peer the message is addressed to, or null if unset
      */
     public synchronized Destination getDestination() {
         return _destination;
-    }
-
-    /**
-     * Destination to send the message to.
-     * @param destination the target replacing the destination already set
-     * @deprecated use 4-arg constructor
-     */
-    @Deprecated
-    public synchronized void setDestination(Destination destination) {
-        _destination = destination;
     }
 
     /**
@@ -127,34 +106,12 @@ public class SendMessageMessage extends I2CPMessageImpl {
     }
 
     /**
-     * Message payload being sent.
-     *
-     * @param payload the payload replacing the payload already set
-     * @deprecated use 4-arg constructor
-     */
-    @Deprecated
-    public synchronized void setPayload(Payload payload) {
-        _payload = payload;
-    }
-
-    /**
      * Message nonce.
      *
      * @return 0 to 0xffffffff
      */
     public synchronized long getNonce() {
         return _nonce;
-    }
-
-    /**
-     * Message nonce.
-     *
-     * @param nonce 0 to 0xffffffff
-     * @deprecated use 4-arg constructor
-     */
-    @Deprecated
-    public synchronized void setNonce(long nonce) {
-        _nonce = nonce;
     }
 
     /** {@inheritDoc} */

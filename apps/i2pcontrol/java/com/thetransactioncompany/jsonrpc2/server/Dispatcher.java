@@ -129,16 +129,6 @@ public class Dispatcher implements RequestHandler, NotificationHandler {
         return notificationHandlers.get(notificationName);
     }
 
-    /**
-     * Deprecated, use the variant that takes an origin.
-     *
-     * @deprecated
-     */
-    @Deprecated
-    public JSONRPC2Response dispatch(final JSONRPC2Request request, final MessageContext requestCtx) {
-        return process(request, requestCtx);
-    }
-
     @Override
     public JSONRPC2Response process(final JSONRPC2Request request, final MessageContext requestCtx) {
         long startNanosec = 0;
@@ -168,16 +158,6 @@ public class Dispatcher implements RequestHandler, NotificationHandler {
         }
 
         return response;
-    }
-
-    /**
-     * Deprecated, use the variant that takes an origin.
-     *
-     * @deprecated
-     */
-    @Deprecated
-    public void dispatch(final JSONRPC2Notification notification, final MessageContext notificationCtx) {
-        process(notification, notificationCtx);
     }
 
     @Override

@@ -243,19 +243,6 @@ public class EepGet {
     static final String GZIP_PARTIAL_MARKER_SUFFIX = ".i2pgz";
 
     /**
-     * Deprecated, use DEFAULT_CONNECT_TIMEOUT.
-     *
-     * @deprecated use DEFAULT_CONNECT_TIMEOUT
-     */
-    protected static final int CONNECT_TIMEOUT = DEFAULT_CONNECT_TIMEOUT;
-    /**
-     * Deprecated, use DEFAULT_INACTIVITY_TIMEOUT.
-     *
-     * @deprecated use DEFAULT_INACTIVITY_TIMEOUT
-     */
-    protected static final int INACTIVITY_TIMEOUT = DEFAULT_INACTIVITY_TIMEOUT;
-
-    /**
      * Creates a new EepGet instance with proxy support, defaulting to allow caching.
      *
      * @param ctx I2P app context

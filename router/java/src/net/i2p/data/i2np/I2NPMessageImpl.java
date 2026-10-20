@@ -54,14 +54,6 @@ public abstract class I2NPMessageImpl implements I2NPMessage {
     /** Unused custom message-type builders. */
     private static final Map<Integer, Builder> _builders = new ConcurrentHashMap<>(1);
 
-    /**
-     * Register a builder for a message type.
-     *
-     * @deprecated unused
-     */
-    @Deprecated
-    public static final void registerBuilder(Builder builder, int type) { _builders.put(Integer.valueOf(type), builder); }
-
     /** Interface for extending the types of messages handled - unused. */
     public interface Builder {
         /**

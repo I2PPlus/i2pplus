@@ -75,20 +75,6 @@ public class ArgumentList extends Vector<Argument> {
     ////////////////////////////////////////////////
     //	Methods
     ////////////////////////////////////////////////
-    /**
-     * @deprecated
-     */
-    @Deprecated
-    public void set(ArgumentList inArgList) {
-        int nInArgs = inArgList.size();
-        for (int n = 0; n < nInArgs; n++) {
-            Argument inArg = inArgList.getArgument(n);
-            String inArgName = inArg.getName();
-            Argument arg = getArgument(inArgName);
-            if (arg == null) continue;
-            arg.setValue(inArg.getValue());
-        }
-    }
 
     /**
      * Set all the Argument which are Input Argument to the given value in the argument list

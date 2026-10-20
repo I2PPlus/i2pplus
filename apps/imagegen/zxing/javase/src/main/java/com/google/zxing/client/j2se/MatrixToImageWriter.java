@@ -18,7 +18,6 @@ package com.google.zxing.client.j2se;
 
 import com.google.zxing.common.BitMatrix;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.file.Path;
@@ -72,20 +71,6 @@ public final class MatrixToImageWriter {
   }
 
   /**
-   * Write the matrix as an image file.
-   *
-   * @param matrix {@link BitMatrix} to write
-   * @param format the ImageIO format name, e.g. PNG
-   * @param file file {@link File} to write image to
-   * @throws IOException if writes to the file fail
-   * @deprecated use {@link #writeToPath(BitMatrix, String, Path)}
-   */
-  @Deprecated
-  public static void writeToFile(BitMatrix matrix, String format, File file) throws IOException {
-    writeToPath(matrix, format, file.toPath());
-  }
-
-  /**
    * Writes a {@link BitMatrix} to a file with default configuration.
    *
    * @param matrix {@link BitMatrix} to write
@@ -99,23 +84,7 @@ public final class MatrixToImageWriter {
   }
 
   /**
-   * Write the matrix as an image file with the given hints.
-   *
-   * @param matrix {@link BitMatrix} to write
-   * @param format the ImageIO format name, e.g. PNG
-   * @param file file {@link File} to write image to
-   * @param config the {@link MatrixToImageConfig} supplying the colors and color model
-   * @throws IOException if writes to the file fail
-   * @deprecated use {@link #writeToPath(BitMatrix, String, Path, MatrixToImageConfig)}
-   */
-  @Deprecated
-  public static void writeToFile(BitMatrix matrix, String format, File file, MatrixToImageConfig config)
-      throws IOException {
-    writeToPath(matrix, format, file.toPath(), config);
-  }
-
-  /**
-   * As {@link #writeToFile(BitMatrix, String, File)}, but allows customization of the output.
+   * As {@link #writeToPath(BitMatrix, String, Path)}, but allows customization of the output.
    *
    * @param matrix {@link BitMatrix} to write
    * @param format the ImageIO format name, e.g. PNG

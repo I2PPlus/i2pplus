@@ -68,14 +68,6 @@ public abstract class JobImpl implements Job {
     public long getMadeReadyOn() { return _madeReadyOn; }
 
     /**
-     * Deprecated to avoid JobQueue deadlocks.
-     *
-     * @deprecated use madeReady(long)
-     */
-    @Deprecated
-    public void madeReady() { _madeReadyOn = _context.clock().now(); }
-
-    /**
      * For JobQueue only, not for external use.
      *
      * @param now the current time in milliseconds

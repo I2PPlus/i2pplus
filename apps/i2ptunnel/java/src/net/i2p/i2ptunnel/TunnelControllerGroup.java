@@ -1373,6 +1373,31 @@ public class TunnelControllerGroup implements ClientApp {
     }
 
     /**
+     * Save the configuration of all known tunnels to the given file.
+     * Side effect: for split config, sets "confFile" property to absolute path.
+     * @since 0.9.42
+     */
+    private synchronized void saveConfig(File cfgFile) throws IOException {
+        File parent = cfgFile.getParentFile();
+        if (parent != null && !parent.exists())
+            parent.mkdirs();
+        Properties map = new OrderedProperties();
+        _controllersLock.readLock().lock();
+        try {
+            int i = 0;
+            for (TunnelController controller : _controllers) {
+                Properties cur = controller.getConfig(PREFIX + i + ".");
+                map.putAll(cur);
+                i++;
+            }
+            map.setProperty(TunnelController.PROP_CONFIG_FILE, cfgFile.getAbsolutePath());
+        } finally {
+            _controllersLock.readLock().unlock();
+        }
+        DataHelper.storeProps(map, cfgFile);
+    }
+
+    /**
      * Save the configuration of all known tunnels to the default config
      * file.
      *
@@ -1398,43 +1423,6 @@ public class TunnelControllerGroup implements ClientApp {
                 _controllersLock.readLock().unlock();
             }
         }
-    }
-
-    /**
-     * Save the configuration of all known tunnels to the given file.
-     *
-     * @param cfgFile the config file path
-     * @throws IOException if the configuration file cannot be written
-     * @deprecated
-     */
-    @Deprecated
-    public synchronized void saveConfig(String cfgFile) throws IOException {
-        saveConfig(new File(cfgFile));
-    }
-
-    /**
-     * Save the configuration of all known tunnels to the given file.
-     * Side effect: for split config, sets "confFile" property to absolute path.
-     * @since 0.9.42
-     */
-    private synchronized void saveConfig(File cfgFile) throws IOException {
-        File parent = cfgFile.getParentFile();
-        if (parent != null && !parent.exists())
-            parent.mkdirs();
-        Properties map = new OrderedProperties();
-        _controllersLock.readLock().lock();
-        try {
-            int i = 0;
-            for (TunnelController controller : _controllers) {
-                Properties cur = controller.getConfig(PREFIX + i + ".");
-                map.putAll(cur);
-                i++;
-            }
-            map.setProperty(TunnelController.PROP_CONFIG_FILE, cfgFile.getAbsolutePath());
-        } finally {
-            _controllersLock.readLock().unlock();
-        }
-        DataHelper.storeProps(map, cfgFile);
     }
 
     /**

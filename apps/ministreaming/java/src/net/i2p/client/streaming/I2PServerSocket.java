@@ -40,16 +40,6 @@ public interface I2PServerSocket {
     public I2PSocket accept() throws I2PException, ConnectException, SocketTimeoutException;
 
     /**
-     * Unimplemented, unlikely to ever be implemented.
-     *
-     * @deprecated
-     * @return null always
-     * @since 0.8.11
-     */
-    @Deprecated
-    public AcceptingChannel getChannel();
-
-    /**
      * Accept timeout for incoming connections, in ms.
      * @param x timeout in ms
      */

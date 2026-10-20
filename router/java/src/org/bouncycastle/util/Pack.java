@@ -289,22 +289,6 @@ public abstract class Pack
     }
 
     /**
-     * @param value the number to convert to big endian
-     * @param bs    the target byte array to write into
-     * @param off   Position in target to start.
-     * @param bytes number of bytes to write.
-     * @deprecated Will be removed
-     */
-    public static void longToBigEndian(long value, byte[] bs, int off, int bytes)
-    {
-        for (int i = bytes - 1; i >= 0; i--)
-        {
-            bs[i + off] = (byte)(value & 0xff);
-            value >>>= 8;
-        }
-    }
-
-    /**
      * Convert a little-endian byte array to a short.
      *
      * @param bs the byte array

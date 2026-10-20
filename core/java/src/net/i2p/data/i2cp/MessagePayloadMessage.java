@@ -74,17 +74,6 @@ public class MessagePayloadMessage extends I2CPMessageImpl {
     }
 
     /**
-     * Deprecated, set the session id in the constructor.
-     *
-     * @param id 0-65535
-     * @deprecated use 3-arg constructor
-     */
-    @Deprecated
-    public synchronized void setSessionId(long id) {
-        _sessionId = (int) id;
-    }
-
-    /**
      * Get the message ID, unique within the session.
      *
      * @return the message ID
@@ -94,34 +83,12 @@ public class MessagePayloadMessage extends I2CPMessageImpl {
     }
 
     /**
-     * Deprecated, set the message id in the constructor.
-     *
-     * @param id the message ID
-     * @deprecated use 3-arg constructor
-     */
-    @Deprecated
-    public synchronized void setMessageId(long id) {
-        _messageId = id;
-    }
-
-    /**
      * Get the payload carried by this message.
      *
      * @return the payload to deliver to the session, or null if not yet set
      */
     public synchronized Payload getPayload() {
         return _payload;
-    }
-
-    /**
-     * Deprecated, set the payload in the constructor.
-     *
-     * @param payload the payload to deliver to the session
-     * @deprecated use 3-arg constructor
-     */
-    @Deprecated
-    public synchronized void setPayload(Payload payload) {
-        _payload = payload;
     }
 
     /** {@inheritDoc} */

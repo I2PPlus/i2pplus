@@ -101,32 +101,6 @@ public class JsonObject extends HashMap<String, Object> implements Jsonable {
     /** A convenience method that assumes there is a BigDecimal, Number, or String at the given key. If a Number is
      * there its Number#toString() is used to construct a new BigDecimal(String). If a String is there it is used to
      * construct a new BigDecimal(String).
-     * @param key representing where the value ought to be stored at.
-     * @return the value stored at the key.
-     * @throws ClassCastException if the value didn't match the assumed return type.
-     * @throws NumberFormatException if a String isn't a valid representation of a BigDecimal or if the Number
-     *                               represents the double or float Infinity or NaN.
-     * @see BigDecimal
-     * @see Number#toString()
-     * @deprecated 2.3.0 in favor of {@link #getBigDecimal(JsonKey)} */
-    @Deprecated
-    public BigDecimal getBigDecimal(final String key) {
-        Object returnable = this.get(key);
-        if (returnable instanceof BigDecimal) {
-            /* Success there was a BigDecimal or it defaulted. */
-        } else if (returnable instanceof Number) {
-            /* A number can be used to construct a BigDecimal */
-            returnable = new BigDecimal(returnable.toString());
-        } else if (returnable instanceof String) {
-            /* A number can be used to construct a BigDecimal */
-            returnable = new BigDecimal((String) returnable);
-        }
-        return (BigDecimal) returnable;
-    }
-
-    /** A convenience method that assumes there is a BigDecimal, Number, or String at the given key. If a Number is
-     * there its Number#toString() is used to construct a new BigDecimal(String). If a String is there it is used to
-     * construct a new BigDecimal(String).
      * @param key representing where the value ought to be paired with.
      * @return a BigDecimal representing the value paired with the key or JsonKey#getValue() if the key isn't present.
      * @throws ClassCastException if the value didn't match the assumed return type.
@@ -171,20 +145,6 @@ public class JsonObject extends HashMap<String, Object> implements Jsonable {
     }
 
     /** A convenience method that assumes there is a Boolean or String value at the given key.
-     * @param key representing where the value ought to be stored at.
-     * @return the value stored at the key.
-     * @throws ClassCastException if the value didn't match the assumed return type.
-     * @deprecated 2.3.0 in favor of {@link #getBoolean(JsonKey)} */
-    @Deprecated
-    public Boolean getBoolean(final String key) {
-        Object returnable = this.get(key);
-        if (returnable instanceof String) {
-            returnable = Boolean.valueOf((String) returnable);
-        }
-        return (Boolean) returnable;
-    }
-
-    /** A convenience method that assumes there is a Boolean or String value at the given key.
      * @param key representing where the value ought to be paired with.
      * @return a Boolean representing the value paired with the key or JsonKey#getValue() if the key isn't present.
      * @throws ClassCastException if the value didn't match the assumed return type.
@@ -215,27 +175,6 @@ public class JsonObject extends HashMap<String, Object> implements Jsonable {
      * @since 2.3.0 to utilize JsonKey */
     public Byte getByte(final JsonKey key) {
         Object returnable = this.get(key.getKey());
-        if (returnable == null) {
-            return null;
-        }
-        if (returnable instanceof String) {
-            /* A String can be used to construct a BigDecimal. */
-            returnable = new BigDecimal((String) returnable);
-        }
-        return ((Number) returnable).byteValue();
-    }
-
-    /** A convenience method that assumes there is a Number or String value at the given key.
-     * @param key representing where the value ought to be stored at.
-     * @return the value stored at the key (which may involve rounding or truncation).
-     * @throws ClassCastException if the value didn't match the assumed return type.
-     * @throws NumberFormatException if a String isn't a valid representation of a BigDecimal or if the Number
-     *                               represents the double or float Infinity or NaN.
-     * @see Number#byteValue()
-     * @deprecated 2.3.0 in favor of {@link #getByte(JsonKey)} */
-    @Deprecated
-    public Byte getByte(final String key) {
-        Object returnable = this.get(key);
         if (returnable == null) {
             return null;
         }
@@ -292,21 +231,6 @@ public class JsonObject extends HashMap<String, Object> implements Jsonable {
     /** A convenience method that assumes there is a Collection at the given key.
      * @param <T> the kind of collection to expect at the key. Note unless manually added, collection values will be a
      *            JsonArray.
-     * @param key representing where the value ought to be stored at.
-     * @return the value stored at the key.
-     * @throws ClassCastException if the value didn't match the assumed return type.
-     * @deprecated 2.3.0 in favor of {@link #getCollection(JsonKey)} */
-    @Deprecated
-    @SuppressWarnings("unchecked")
-    public <T extends Collection<?>> T getCollection(final String key) {
-        /* The unchecked warning is suppressed because there is no way of guaranteeing at compile time the cast will
-         * work. */
-        return (T) this.get(key);
-    }
-
-    /** A convenience method that assumes there is a Collection at the given key.
-     * @param <T> the kind of collection to expect at the key. Note unless manually added, collection values will be a
-     *            JsonArray.
      * @param key representing where the value ought to be paired with.
      * @return a Collection representing the value paired with the key or JsonKey#getValue() if the key isn't present..
      * @throws ClassCastException if the value didn't match the assumed return type.
@@ -348,27 +272,6 @@ public class JsonObject extends HashMap<String, Object> implements Jsonable {
     }
 
     /** A convenience method that assumes there is a Number or String value at the given key.
-     * @param key representing where the value ought to be stored at.
-     * @return the value stored at the key (which may involve rounding or truncation).
-     * @throws ClassCastException if the value didn't match the assumed return type.
-     * @throws NumberFormatException if a String isn't a valid representation of a BigDecimal or if the Number
-     *                               represents the double or float Infinity or NaN.
-     * @see Number#doubleValue()
-     * @deprecated 2.3.0 in favor of {@link #getDouble(JsonKey)} */
-    @Deprecated
-    public Double getDouble(final String key) {
-        Object returnable = this.get(key);
-        if (returnable == null) {
-            return null;
-        }
-        if (returnable instanceof String) {
-            /* A String can be used to construct a BigDecimal. */
-            returnable = new BigDecimal((String) returnable);
-        }
-        return ((Number) returnable).doubleValue();
-    }
-
-    /** A convenience method that assumes there is a Number or String value at the given key.
      * @param key representing where the value ought to be paired with.
      * @return a Double representing the value paired with the key or JsonKey#getValue() if the key isn't present (which
      *         may involve rounding or truncation).
@@ -396,129 +299,6 @@ public class JsonObject extends HashMap<String, Object> implements Jsonable {
     }
 
     /** A convenience method that assumes there is a Number or String value at the given key.
-    /** A convenience method that assumes there is a String value at the given key representing a fully qualified name
-     * in dot notation of an enum.
-     * @param key representing where the value ought to be paired with.
-     * @param <T> the Enum type the value at the key is expected to belong to.
-     * @return an Enum representing the value paired with the key.
-     * @throws ClassNotFoundException if the value was a String but the declaring enum type couldn't be determined with
-     *                                it.
-     * @throws ClassCastException if the element at the index was not a String or if the fully qualified enum name is of
-     *                            the wrong type.
-     * @throws IllegalArgumentException if an enum type was determined but it doesn't define an enum with the determined
-     *                                  name.
-     * @see Enum#valueOf(Class, String)
-     * @see JsonKey
-     * @since 2.3.0 to utilize JsonKey
-     * @deprecated 2.3.0 Jsoner deprecated automatically serializing enums as Strings. */
-    @Deprecated
-    @SuppressWarnings("unchecked")
-    public <T extends Enum<T>> T getEnum(final JsonKey key) throws ClassNotFoundException {
-        /* Supressing the unchecked warning because the returnType is dynamically identified and could lead to a
-         * ClassCastException when returnType is cast to Class<T>, which is acceptable by the method's contract. */
-        T returnable;
-        final String value;
-        final String[] splitValues;
-        final int numberOfSplitValues;
-        final StringBuilder returnTypeName;
-        final StringBuilder enumName;
-        final Class<T> returnType;
-        /* Make sure the value at the key is a String. */
-        value = this.getString(key);
-        if (value == null) {
-            return null;
-        }
-        /* Get the package, class, and enum names. */
-        splitValues = value.split("\\.");
-        numberOfSplitValues = splitValues.length;
-        returnTypeName = new StringBuilder();
-        enumName = new StringBuilder();
-        for (int i = 0; i < numberOfSplitValues; i++) {
-            if (i == (numberOfSplitValues - 1)) {
-                /* If it is the last split value then it should be the name of the Enum since dots are not allowed
-                 * in enum names. */
-                enumName.append(splitValues[i]);
-            } else if (i == (numberOfSplitValues - 2)) {
-                /* If it is the penultimate split value then it should be the end of the package/enum type and not
-                 * need a dot appended to it. */
-                returnTypeName.append(splitValues[i]);
-            } else {
-                /* Must be part of the package/enum type and will need a dot appended to it since they got removed
-                 * in the split. */
-                returnTypeName.append(splitValues[i]);
-                returnTypeName.append(".");
-            }
-        }
-        /* Use the package/class and enum names to get the Enum<T>. */
-        String className = returnTypeName.toString();
-        if (!isValidClassName(className)) {
-            throw new ClassNotFoundException("Invalid class name: " + className);
-        }
-        returnType = (Class<T>) Class.forName(className);
-        returnable = Enum.valueOf(returnType, enumName.toString());
-        return returnable;
-    }
-
-    /** A convenience method that assumes there is a String value at the given key representing a fully qualified name
-     * in dot notation of an enum.
-     * @param key representing where the value ought to be stored at.
-     * @param <T> the Enum type the value at the key is expected to belong to.
-     * @return the enum based on the string found at the key, or null if the value paired with the provided key is null.
-     * @throws ClassNotFoundException if the value was a String but the declaring enum type couldn't be determined with
-     *                                it.
-     * @throws ClassCastException if the element at the index was not a String or if the fully qualified enum name is of
-     *                            the wrong type.
-     * @throws IllegalArgumentException if an enum type was determined but it doesn't define an enum with the determined
-     *                                  name.
-     * @see Enum#valueOf(Class, String)
-     * @deprecated 2.3.0 in favor of {@link #getEnum(JsonKey)} */
-    @Deprecated
-    @SuppressWarnings("unchecked")
-    public <T extends Enum<T>> T getEnum(final String key) throws ClassNotFoundException {
-        /* Supressing the unchecked warning because the returnType is dynamically identified and could lead to a
-         * ClassCastException when returnType is cast to Class<T>, which is expected by the method's contract. */
-        T returnable;
-        final String value;
-        final String[] splitValues;
-        final int numberOfSplitValues;
-        final StringBuilder returnTypeName;
-        final StringBuilder enumName;
-        final Class<T> returnType;
-        /* Make sure the value at the key is a String. */
-        value = this.getStringOrDefault(key, "");
-        if (value == null) {
-            return null;
-        }
-        /* Get the package, class, and enum names. */
-        splitValues = value.split("\\.");
-        numberOfSplitValues = splitValues.length;
-        returnTypeName = new StringBuilder();
-        enumName = new StringBuilder();
-        for (int i = 0; i < numberOfSplitValues; i++) {
-            if (i == (numberOfSplitValues - 1)) {
-                /* If it is the last split value then it should be the name of the Enum since dots are not allowed
-                 * in enum names. */
-                enumName.append(splitValues[i]);
-            } else if (i == (numberOfSplitValues - 2)) {
-                /* If it is the penultimate split value then it should be the end of the package/enum type and not
-                 * need a dot appended to it. */
-                returnTypeName.append(splitValues[i]);
-            } else {
-                /* Must be part of the package/enum type and will need a dot appended to it since they got removed
-                 * in the split. */
-                returnTypeName.append(splitValues[i]);
-                returnTypeName.append(".");
-            }
-        }
-        /* Use the package/class and enum names to get the Enum<T>. */
-        String className = returnTypeName.toString();
-        if (!isValidClassName(className)) {
-            throw new ClassNotFoundException("Invalid class name: " + className);
-        }
-        returnType = (Class<T>) Class.forName(className);
-        returnable = Enum.valueOf(returnType, enumName.toString());
-        return returnable;
-    }
 
     private static boolean isValidClassName(String className) {
         if (className == null || className.isEmpty()) {
@@ -541,27 +321,6 @@ public class JsonObject extends HashMap<String, Object> implements Jsonable {
      * @since 2.3.0 to utilize JsonKey */
     public Float getFloat(final JsonKey key) {
         Object returnable = this.get(key.getKey());
-        if (returnable == null) {
-            return null;
-        }
-        if (returnable instanceof String) {
-            /* A String can be used to construct a BigDecimal. */
-            returnable = new BigDecimal((String) returnable);
-        }
-        return ((Number) returnable).floatValue();
-    }
-
-    /** A convenience method that assumes there is a Number or String value at the given key.
-     * @param key representing where the value ought to be stored at.
-     * @return the value stored at the key (which may involve rounding or truncation).
-     * @throws ClassCastException if the value didn't match the assumed return type.
-     * @throws NumberFormatException if a String isn't a valid representation of a BigDecimal or if the Number
-     *                               represents the double or float Infinity or NaN.
-     * @see Number#floatValue()
-     * @deprecated 2.3.0 in favor of {@link #getFloat(JsonKey)} */
-    @Deprecated
-    public Float getFloat(final String key) {
-        Object returnable = this.get(key);
         if (returnable == null) {
             return null;
         }
@@ -622,27 +381,6 @@ public class JsonObject extends HashMap<String, Object> implements Jsonable {
     }
 
     /** A convenience method that assumes there is a Number or String value at the given key.
-     * @param key representing where the value ought to be stored at.
-     * @return the value stored at the key (which may involve rounding or truncation).
-     * @throws ClassCastException if the value didn't match the assumed return type.
-     * @throws NumberFormatException if a String isn't a valid representation of a BigDecimal or if the Number
-     *                               represents the double or float Infinity or NaN.
-     * @see Number#intValue()
-     * @deprecated 2.3.0 in favor of {@link #getInteger(JsonKey)} */
-    @Deprecated
-    public Integer getInteger(final String key) {
-        Object returnable = this.get(key);
-        if (returnable == null) {
-            return null;
-        }
-        if (returnable instanceof String) {
-            /* A String can be used to construct a BigDecimal. */
-            returnable = new BigDecimal((String) returnable);
-        }
-        return ((Number) returnable).intValue();
-    }
-
-    /** A convenience method that assumes there is a Number or String value at the given key.
      * @param key representing where the value ought to be paired with.
      * @return an Integer representing the value paired with the key or JsonKey#getValue() if the key isn't present
      *         (which may involve rounding or truncation).
@@ -681,27 +419,6 @@ public class JsonObject extends HashMap<String, Object> implements Jsonable {
      * @since 2.3.0 to utilize JsonKey */
     public Long getLong(final JsonKey key) {
         Object returnable = this.get(key.getKey());
-        if (returnable == null) {
-            return null;
-        }
-        if (returnable instanceof String) {
-            /* A String can be used to construct a BigDecimal. */
-            returnable = new BigDecimal((String) returnable);
-        }
-        return ((Number) returnable).longValue();
-    }
-
-    /** A convenience method that assumes there is a Number or String value at the given key.
-     * @param key representing where the value ought to be stored at.
-     * @return the value stored at the key (which may involve rounding or truncation).
-     * @throws ClassCastException if the value didn't match the assumed return type.
-     * @throws NumberFormatException if a String isn't a valid representation of a BigDecimal or if the Number
-     *                               represents the double or float Infinity or NaN.
-     * @see Number#longValue()
-     * @deprecated 2.3.0 in favor of {@link #getLong(JsonKey)} */
-    @Deprecated
-    public Long getLong(final String key) {
-        Object returnable = this.get(key);
         if (returnable == null) {
             return null;
         }
@@ -756,20 +473,6 @@ public class JsonObject extends HashMap<String, Object> implements Jsonable {
 
     /** A convenience method that assumes there is a Map at the given key.
      * @param <T> the kind of map to expect at the key. Note unless manually added, Map values will be a JsonObject.
-     * @param key representing where the value ought to be stored at.
-     * @return the value stored at the key.
-     * @throws ClassCastException if the value didn't match the assumed return type.
-     * @deprecated 2.3.0 in favor of {@link #getMap(JsonKey)} */
-    @Deprecated
-    @SuppressWarnings("unchecked")
-    public <T extends Map<?, ?>> T getMap(final String key) {
-        /* The unchecked warning is suppressed because there is no way of guaranteeing at compile time the cast will
-         * work. */
-        return (T) this.get(key);
-    }
-
-    /** A convenience method that assumes there is a Map at the given key.
-     * @param <T> the kind of map to expect at the key. Note unless manually added, Map values will be a JsonObject.
      * @param key representing where the value ought to be paired with.
      * @return a Map representing the value paired with the key or JsonKey#getValue() if the key isn't present.
      * @throws ClassCastException if the value didn't match the assumed return type.
@@ -800,27 +503,6 @@ public class JsonObject extends HashMap<String, Object> implements Jsonable {
      * @since 2.3.0 to utilize JsonKey */
     public Short getShort(final JsonKey key) {
         Object returnable = this.get(key.getKey());
-        if (returnable == null) {
-            return null;
-        }
-        if (returnable instanceof String) {
-            /* A String can be used to construct a BigDecimal. */
-            returnable = new BigDecimal((String) returnable);
-        }
-        return ((Number) returnable).shortValue();
-    }
-
-    /** A convenience method that assumes there is a Number or String value at the given key.
-     * @param key representing where the value ought to be stored at.
-     * @return the value stored at the key (which may involve rounding or truncation).
-     * @throws ClassCastException if the value didn't match the assumed return type.
-     * @throws NumberFormatException if a String isn't a valid representation of a BigDecimal or if the Number
-     *                               represents the double or float Infinity or NaN.
-     * @see Number#shortValue()
-     * @deprecated 2.3.0 in favor of {@link #getShort(JsonKey)} */
-    @Deprecated
-    public Short getShort(final String key) {
-        Object returnable = this.get(key);
         if (returnable == null) {
             return null;
         }
@@ -867,22 +549,6 @@ public class JsonObject extends HashMap<String, Object> implements Jsonable {
      * @since 2.3.0 to utilize JsonKey */
     public String getString(final JsonKey key) {
         Object returnable = this.get(key.getKey());
-        if (returnable instanceof Boolean) {
-            returnable = returnable.toString();
-        } else if (returnable instanceof Number) {
-            returnable = returnable.toString();
-        }
-        return (String) returnable;
-    }
-
-    /** A convenience method that assumes there is a Boolean, Number, or String value at the given key.
-     * @param key representing where the value ought to be stored at.
-     * @return the value stored at the key.
-     * @throws ClassCastException if the value didn't match the assumed return type.
-     * @deprecated 2.3.0 in favor of {@link #getString(JsonKey)} */
-    @Deprecated
-    public String getString(final String key) {
-        Object returnable = this.get(key);
         if (returnable instanceof Boolean) {
             returnable = returnable.toString();
         } else if (returnable instanceof Number) {

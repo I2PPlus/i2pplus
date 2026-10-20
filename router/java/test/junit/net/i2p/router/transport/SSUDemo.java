@@ -240,11 +240,6 @@ public class SSUDemo {
      * Deal with an Foo message received.
      */
     private class FooJobBuilder implements HandlerJobBuilder {
-        @SuppressWarnings("deprecation")
-        public FooJobBuilder() {
-            I2NPMessageImpl.registerBuilder(new FooBuilder(), FooMessage.MESSAGE_TYPE);
-        }
-
         public Job createJob(I2NPMessage receivedMessage, RouterIdentity from, Hash fromHash) {
             return new FooHandleJob(_us, receivedMessage, from, fromHash);
         }
@@ -269,12 +264,6 @@ public class SSUDemo {
 
         public String getName() {
             return "Handle Foo message";
-        }
-    }
-
-    private static class FooBuilder implements I2NPMessageImpl.Builder {
-        public I2NPMessage build(I2PAppContext ctx) {
-            return new FooMessage(ctx, null);
         }
     }
 
