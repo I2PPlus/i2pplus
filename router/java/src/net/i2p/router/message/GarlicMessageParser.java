@@ -102,22 +102,18 @@ public class GarlicMessageParser {
                     }
                     return rv;
                 } else {
-                    if (debug || warn) {
+                    if (debug) {
                         StringBuilder buf = new StringBuilder(256);
                         buf.append("PQ decryption failed [").append(type).append("]");
                         if (skm instanceof MuxedPQSKM) {
                             MuxedPQSKM mpq = (MuxedPQSKM) skm;
-                            if (debug) {
-                                buf.append(" SKM type: MuxedPQSKM");
-                            }
+                            buf.append(" SKM type: MuxedPQSKM");
                             // Convert PrivateKey to PublicKey for tag lookup
                             PublicKey ecPubKey = encryptionKey.toPublic();
                             int ecTags = mpq.getECSKM().getAvailableTags(ecPubKey, null);
                             int pqTags = mpq.getPQSKM().getAvailableTags(ecPubKey, null);
-                            if (debug) {
-                                buf.append(" EC tags: ").append(ecTags);
-                                buf.append(" PQ tags: ").append(pqTags);
-                            }
+                            buf.append(" EC tags: ").append(ecTags);
+                            buf.append(" PQ tags: ").append(pqTags);
                             if (ecTags == 0 && pqTags == 0) {
                                 buf.append(" -> No session tags available");
                             } else if (pqTags == 0) {
@@ -131,9 +127,7 @@ public class GarlicMessageParser {
                             // Convert PrivateKey to PublicKey for tag lookup
                             PublicKey pubKey = encryptionKey.toPublic();
                             int tags = ((RatchetSKM) skm).getAvailableTags(pubKey, null);
-                            if (debug) {
-                                buf.append(" Tags: ").append(tags);
-                            }
+                            buf.append(" Tags: ").append(tags);
                             if (tags == 0) {
                                 buf.append(" -> No session tags available");
                             } else {
@@ -141,15 +135,16 @@ public class GarlicMessageParser {
                             }
                             buf.append(" (PQ-only destination)");
                         } else {
-                            if (debug) {
-                                buf.append(" SKM type: ").append(skm.getClass().getSimpleName());
-                            }
+                            buf.append(" SKM type: ").append(skm.getClass().getSimpleName());
                             buf.append(" -> Incompatible Session Key Manager");
                         }
-                        if (debug) {
-                            buf.append(" (Data size: ").append(encData.length).append(")");
-                        }
-                        _log.warn(buf.toString());
+                        buf.append(" (Data size: ").append(encData.length).append(")");
+                        _log.debug(buf.toString());
+                    } else if (warn) {
+                        // Throttled - this fires on every failed PQ garlic
+                        // message. The tag-count enrichment above is debug-only
+                        // detail, skip it here.
+                        _log.warnThrottled("pq-decrypt-fail", "PQ decryption failed [" + type + ']');
                     }
                     return null;
                 }

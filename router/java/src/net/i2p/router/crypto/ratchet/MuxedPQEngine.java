@@ -154,7 +154,10 @@ final class MuxedPQEngine {
                 msg += " -> Cryptographic failure";
             }
             if (warn) {
-                _log.warn(msg + " after all tag attempts failed");
+                // Throttled - this fires on every junk NewSession message.
+                // The key must not vary per occurrence (no data.length in it)
+                // or the suppressor cannot collapse it.
+                _log.warnThrottled("pq-ns-fail", msg + " after all tag attempts failed");
             } else {
                 _log.debug(msg);
             }
