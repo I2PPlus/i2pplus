@@ -34,11 +34,6 @@ import java.util.Random;
 import javax.crypto.KeyAgreement;
 import net.i2p.I2PAppContext;
 import net.i2p.crypto.CryptoConstants;
-import net.i2p.crypto.eddsa.EdDSAEngine;
-import net.i2p.crypto.eddsa.EdDSAPrivateKey;
-import net.i2p.crypto.eddsa.EdDSAPublicKey;
-import net.i2p.crypto.eddsa.spec.EdDSANamedCurveSpec;
-import net.i2p.crypto.eddsa.spec.EdDSANamedCurveTable;
 import net.i2p.data.DataHelper;
 
 /**

@@ -11,14 +11,9 @@
  */
 package net.i2p.crypto.eddsa.math;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-
 import net.i2p.crypto.eddsa.Utils;
 import net.i2p.crypto.eddsa.math.ed25519.*;
 import net.i2p.crypto.eddsa.spec.*;
-
-import org.hamcrest.core.IsEqual;
-import org.junit.*;
 
 import java.math.BigInteger;
 import java.security.SecureRandom;
@@ -395,58 +390,4 @@ public class MathUtils {
 
         return GroupElement.p3(g.getCurve(), g.getX().negate(), g.getY(), g.getZ(), g.getT().negate());
     }
-
-    // Start TODO BR: Remove when finished!
-    @Test
-    public void mathUtilsWorkAsExpected() {
-        final GroupElement neutral = GroupElement.p3(curve, curve.getField().ZERO, curve.getField().ONE, curve.getField().ONE, curve.getField().ZERO);
-        for (int i = 0; i < 1000; i++) {
-            final GroupElement g = getRandomGroupElement();
-
-            // Act:
-            final GroupElement h1 = addGroupElements(g, neutral);
-            final GroupElement h2 = addGroupElements(neutral, g);
-
-            // Assert:
-            assertThat(g, IsEqual.equalTo(h1));
-            assertThat(g, IsEqual.equalTo(h2));
-        }
-
-        for (int i = 0; i < 1000; i++) {
-            GroupElement g = getRandomGroupElement();
-
-            // P3 -> P2.
-            GroupElement h = toRepresentation(g, GroupElement.Representation.P2);
-            assertThat(h, IsEqual.equalTo(g));
-            // P3 -> P1P1.
-            h = toRepresentation(g, GroupElement.Representation.P1P1);
-            assertThat(g, IsEqual.equalTo(h));
-
-            // P3 -> CACHED.
-            h = toRepresentation(g, GroupElement.Representation.CACHED);
-            assertThat(h, IsEqual.equalTo(g));
-
-            // P3 -> P2 -> P3.
-            g = toRepresentation(g, GroupElement.Representation.P2);
-            h = toRepresentation(g, GroupElement.Representation.P3);
-            assertThat(g, IsEqual.equalTo(h));
-
-            // P3 -> P2 -> P1P1.
-            g = toRepresentation(g, GroupElement.Representation.P2);
-            h = toRepresentation(g, GroupElement.Representation.P1P1);
-            assertThat(g, IsEqual.equalTo(h));
-        }
-
-        for (int i = 0; i < 10; i++) {
-            // Arrange:
-            final GroupElement g = MathUtils.getRandomGroupElement();
-
-            // Act:
-            final GroupElement h = MathUtils.scalarMultiplyGroupElement(g, curve.getField().ZERO);
-
-            // Assert:
-            assertThat(curve.getZero(GroupElement.Representation.P3), IsEqual.equalTo(h));
-        }
-    }
-    // End TODO BR: Remove when finished!
 }
