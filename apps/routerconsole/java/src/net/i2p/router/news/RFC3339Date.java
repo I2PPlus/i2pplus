@@ -23,6 +23,9 @@ import net.i2p.util.SystemVersion;
  * concurrent access. Includes comprehensive format support for
  * various date representations encountered in news feeds.
  *
+ * @see <a href="https://datatracker.ietf.org/doc/html/rfc3339">RFC 3339 (date and time format)</a>
+ * @see <a href="https://datatracker.ietf.org/doc/html/rfc4287">RFC 4287 (Atom feed format)</a>
+ *
  * @since 0.9.17
  */
 public abstract class RFC3339Date {
