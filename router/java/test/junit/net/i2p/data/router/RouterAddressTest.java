@@ -93,7 +93,7 @@ public class RouterAddressTest extends StructureTest {
         options.setProperty("portnum", "1234");
         RouterAddress addr = new RouterAddress("Blah", options, 42);
 
-        String expected = "Blah:\n" + "\t* hostname: localhost\n" + "\t* portnum: 1234\n" + "\t* cost: 42";
+        String expected = "Blah:?:? * Hostname: localhost * Portnum: 1234 * Cost: 42";
 
         assertEquals(expected, addr.toString());
     }
