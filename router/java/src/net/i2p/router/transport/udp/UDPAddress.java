@@ -92,6 +92,57 @@ class UDPAddress {
     }
 
     /**
+     * Check whether a peer address declares more introducers than the spec
+     * allows. Each introducer requires a tag property, so any tag at or
+     * beyond our cap means the peer is out of spec.
+     *
+     * @param addr the peer's transport address
+     * @return true if introducer properties beyond MAX_INTRODUCERS are present
+     * @since 0.9.71+
+     */
+    static boolean tooManyIntroducers(RouterAddress addr) {
+        for (int i = MAX_INTRODUCERS; i < 32; i++) {
+            if (addr.getOption(PROP_INTRO_TAG_PREFIX + i) != null) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Check whether a property-order parse error names an introducer
+     * property beyond our cap, e.g. "iexp10". Such a peer wrote its
+     * introducer options numerically instead of in the required sorted
+     * order, which only happens with more introducers than we support.
+     *
+     * @param msg the DataFormatException message
+     * @return true if an over-cap introducer key appears in the message
+     * @since 0.9.71+
+     */
+    static boolean overCapIntroducerKey(String msg) {
+        String[] prefixes = {PROP_INTRO_HOST_PREFIX, PROP_INTRO_PORT_PREFIX,
+                             PROP_INTRO_KEY_PREFIX, PROP_INTRO_TAG_PREFIX,
+                             PROP_INTRO_EXP_PREFIX, PROP_INTRO_HASH_PREFIX};
+        for (String prefix : prefixes) {
+            int i = msg.indexOf(prefix);
+            while (i >= 0) {
+                int j = i + prefix.length();
+                int k = j;
+                while (k < msg.length() && Character.isDigit(msg.charAt(k))) {k++;}
+                if (k > j) {
+                    try {
+                        if (Integer.parseInt(msg.substring(j, k)) >= MAX_INTRODUCERS) {
+                            return true;
+                        }
+                    } catch (NumberFormatException nfe) { /* absurdly long digits */ }
+                }
+                i = msg.indexOf(prefix, i + 1);
+            }
+        }
+        return false;
+    }
+
+    /**
      * Parse and cache router address data.
      *
      * @param addr the address to parse, null for an invalid address

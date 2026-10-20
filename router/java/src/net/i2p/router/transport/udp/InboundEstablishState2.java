@@ -629,6 +629,21 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
             throw new RIException("BAD SSU2 v", REASON_VERSION);
         }
 
+        if (UDPAddress.tooManyIntroducers(ra)) {
+            // More introducers than the spec allows; ban the verified
+            // identity rather than silently ignoring the extras.
+            _context.banlist().banlistRouter(h, "Too many introducers", null, null,
+                                             _context.clock().now() + 4 * 60 * 60 * 1000L);
+            _banLogger.logBan(h, ipPort, "Too many introducers", 4 * 60 * 60 * 1000L, ri);
+            if (_log.shouldWarn() && !isBanned) {
+                _log.warn("Banning for 4h and disconnecting from Router [" +
+                          h.toBase64().substring(0, 6) + "] -> More than " +
+                          UDPAddress.MAX_INTRODUCERS + " introducers");
+            }
+            _context.commSystem().forceDisconnect(h, "Too many introducers");
+            throw new RIException("Too many introducers: " + h, REASON_BANNED);
+        }
+
         String cap = ri.getCapabilities();
         String bw = ri.getBandwidthTier();
         boolean reachable = cap != null && cap.indexOf(Router.CAPABILITY_REACHABLE) >= 0;

@@ -477,8 +477,13 @@ class SSU2Payload {
         sig.readBytes(bais);
         if (DSAEngine.getInstance().verifySignature(sig, data, pub)) {
             Log log = ctx.logManager().getLog(SSU2Payload.class);
-            if (log.shouldDebug()) {log.warn("Error reading RouterInfo", dfe);}
-            else if (log.shouldWarn()) {log.warn("Error reading RouterInfo -> " + dfe.getMessage());}
+            String msg = dfe.getMessage();
+            if (msg != null && msg.contains("out of order") &&
+                UDPAddress.overCapIntroducerKey(msg) && log.shouldWarn()) {
+                log.warn("Error reading RouterInfo -> >" + UDPAddress.MAX_INTRODUCERS +
+                         " introducers * " + msg);
+            } else if (log.shouldDebug()) {log.warn("Error reading RouterInfo", dfe);}
+            else if (log.shouldWarn()) {log.warn("Error reading RouterInfo -> " + msg);}
             // partially filled-in RI, -1 is signal to IES2.gotRI()
             RouterInfo alice = new RouterInfo();
             alice.setIdentity(ident);
