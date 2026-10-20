@@ -30,8 +30,15 @@ public class JavaVersion
      */
     public static final String JAVA_TARGET_PLATFORM = "org.eclipse.jetty.javaTargetPlatform";
 
+    /** The version of the currently running JVM. */
     public static final JavaVersion VERSION = parse(System.getProperty("java.version"));
 
+    /**
+     * Parse a JVM version string such as the java.version system property.
+     *
+     * @param v the version string to parse
+     * @return the parsed version
+     */
     public static JavaVersion parse(String v)
     {
         // $VNUM is a dot-separated list of integers of arbitrary length

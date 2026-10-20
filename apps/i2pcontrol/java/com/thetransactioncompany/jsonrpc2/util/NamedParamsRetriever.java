@@ -272,6 +272,11 @@ public class NamedParamsRetriever
 	/**
 	 * Whether a parameter exists with the name.
 	 *
+	 * @param name The parameter name.
+	 *
+	 * @return {@code true} if a parameter exists with the name, else
+	 *         {@code false}.
+	 *
 	 * @see #hasParam
 	 */
 	@Deprecated
@@ -297,6 +302,10 @@ public class NamedParamsRetriever
 
 	/**
 	 * Whether parameters exist with all the names.
+	 *
+	 * @param names The parameter names. Must not be {@code null}.
+	 *
+	 * @return {@code true} if the parameters exist, else {@code false}.
 	 *
 	 * @see #hasParams(String[])
 	 */
@@ -354,6 +363,14 @@ public class NamedParamsRetriever
 
 	/**
 	 * Whether the mandatory parameters exist and the optional ones match their types.
+	 *
+	 * @param mandatoryNames The expected mandatory parameter names. Must
+	 *                       not be {@code null}.
+	 * @param optionalNames  The expected optional parameter names,
+	 *                       empty array or {@code null} if none.
+	 *
+	 * @return {@code true} if the specified mandatory names and only any
+	 *         of the optional are present, else {@code false}.
 	 *
 	 * @see #hasParams(String[], String[])
 	 */
@@ -453,6 +470,11 @@ public class NamedParamsRetriever
 	/**
 	 * Throw if no parameter exists with the name.
 	 *
+	 * @param name The parameter name.
+	 *
+	 * @throws JSONRPC2Error On a missing parameter
+	 *                       ({@link JSONRPC2Error#INVALID_PARAMS}).
+	 *
 	 * @see #ensureParam(String)
 	 */
 	@Deprecated
@@ -493,6 +515,13 @@ public class NamedParamsRetriever
 	 * Throw if the named parameter is missing or of the wrong type.
 	 *
 	 * @param <T> the type the named parameter must map to
+	 * @param name  The parameter name.
+	 * @param clazz The corresponding Java class that the parameter should
+	 *              map to.
+	 *
+	 * @throws JSONRPC2Error On a missing parameter, {@code null} value or
+	 *                       bad type ({@link JSONRPC2Error#INVALID_PARAMS}).
+	 *
 	 * @see #ensureParam(String, Class)
 	 */
 	@Deprecated
@@ -551,6 +580,16 @@ public class NamedParamsRetriever
 
 	/**
 	 * Throw if the named parameter fails the given criteria.
+	 *
+	 * @param <T> the type the named parameter must map to
+	 * @param name      The parameter name.
+	 * @param clazz     The corresponding Java class that the parameter
+	 *                  should map to.
+	 * @param allowNull If {@code true} allows a {@code null} parameter
+	 *                  value.
+	 *
+	 * @throws JSONRPC2Error On a missing parameter or bad type
+	 *                       ({@link JSONRPC2Error#INVALID_PARAMS}).
 	 *
 	 * @see #ensureParam(String, Class, boolean)
 	 */

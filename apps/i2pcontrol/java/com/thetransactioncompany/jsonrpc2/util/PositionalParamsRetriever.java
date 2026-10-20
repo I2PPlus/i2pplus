@@ -256,6 +256,10 @@ public class PositionalParamsRetriever
 	/**
 	 * Whether a parameter exists at the position.
 	 *
+	 * @param position The parameter position.
+	 *
+	 * @return {@code true} if the parameter exists, else {@code false}.
+	 *
 	 * @see #hasParam
 	 */
 	@Deprecated
@@ -288,6 +292,12 @@ public class PositionalParamsRetriever
 
 	/**
 	 * Throw if no parameter exists at the position.
+	 *
+	 * @param position The parameter position, starting with zero for the
+	 *                 first.
+	 *
+	 * @throws JSONRPC2Error On a missing parameter
+	 *                       ({@link JSONRPC2Error#INVALID_PARAMS}).
 	 *
 	 * @see #ensureParam
 	 */
@@ -327,6 +337,14 @@ public class PositionalParamsRetriever
 
 	/**
 	 * Throw if the parameter at the position is missing or of the wrong type.
+	 *
+	 * @param <T>      The type the parameter value must map to.
+	 * @param position The parameter position.
+	 * @param clazz    The corresponding Java class that the parameter
+	 *                 should map to.
+	 *
+	 * @throws JSONRPC2Error On a missing parameter, {@code null} value or
+	 *                       bad type ({@link JSONRPC2Error#INVALID_PARAMS}).
 	 *
 	 * @see #ensureParam(int, Class)
 	 */
@@ -385,6 +403,16 @@ public class PositionalParamsRetriever
 
 	/**
 	 * Throw if the parameter at the position fails the given criteria.
+	 *
+	 * @param <T>       The type the parameter value must map to.
+	 * @param position  The parameter position.
+	 * @param clazz     The corresponding Java class that the parameter
+	 *                  should map to.
+	 * @param allowNull If {@code true} allows a {@code null} parameter
+	 *                  value.
+	 *
+	 * @throws JSONRPC2Error On a missing parameter or bad type
+	 *                       ({@link JSONRPC2Error#INVALID_PARAMS}).
 	 *
 	 * @see #ensureParam(int, Class, boolean)
 	 */

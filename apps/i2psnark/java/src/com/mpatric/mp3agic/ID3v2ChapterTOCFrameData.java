@@ -5,18 +5,38 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+/** Table of contents frame data for ID3v2 chapter and table-of-contents frames. */
 public class ID3v2ChapterTOCFrameData extends AbstractID3v2FrameData {
 
+    /** True if this is the root table of contents. */
     protected boolean isRoot;
+    /** True if the child elements are ordered. */
     protected boolean isOrdered;
+    /** The element ID of this table of contents. */
     protected String id;
+    /** The element IDs of the children of this table of contents. */
     protected String[] children;
+    /** The subframes contained in this frame. */
     protected ArrayList<ID3v2Frame> subframes = new ArrayList<>();
 
+        /**
+         * Create an empty chapter table of contents frame.
+         *
+         * @param unsynchronisation whether the frame uses unsynchronisation
+         */
     public ID3v2ChapterTOCFrameData(boolean unsynchronisation) {
         super(unsynchronisation);
     }
 
+        /**
+         * Create a chapter table of contents frame with the given values.
+         *
+         * @param unsynchronisation whether the frame uses unsynchronisation
+         * @param isRoot true if this is the root table of contents
+         * @param isOrdered true if the child elements are ordered
+         * @param id the element ID of this table of contents
+         * @param children the element IDs of the children
+         */
     public ID3v2ChapterTOCFrameData(
             boolean unsynchronisation,
             boolean isRoot,
@@ -30,6 +50,13 @@ public class ID3v2ChapterTOCFrameData extends AbstractID3v2FrameData {
         this.children = children;
     }
 
+        /**
+         * Create a chapter table of contents frame from the given frame bytes.
+         *
+         * @param unsynchronisation whether the frame uses unsynchronisation
+         * @param bytes the raw frame bytes
+         * @throws InvalidDataException if the bytes cannot be parsed
+         */
     public ID3v2ChapterTOCFrameData(boolean unsynchronisation, byte[] bytes)
             throws InvalidDataException {
         super(unsynchronisation);
@@ -65,6 +92,12 @@ public class ID3v2ChapterTOCFrameData extends AbstractID3v2FrameData {
         }
     }
 
+        /**
+         * Add a subframe with the given ID and data.
+         *
+         * @param id the subframe ID
+         * @param frame the subframe data
+         */
     public void addSubframe(String id, AbstractID3v2FrameData frame) {
         subframes.add(new ID3v2Frame(id, frame.toBytes()));
     }
@@ -105,42 +138,92 @@ public class ID3v2ChapterTOCFrameData extends AbstractID3v2FrameData {
         return b;
     }
 
+    /**
+     * Whether this is the root table of contents.
+     *
+     * @return true if this is the root table of contents
+     */
     public boolean isRoot() {
         return isRoot;
     }
 
+    /**
+     * Sets whether this is the root table of contents.
+     *
+     * @param isRoot true if this is the root table of contents
+     */
     public void setRoot(boolean isRoot) {
         this.isRoot = isRoot;
     }
 
+    /**
+     * Whether the child elements are ordered.
+     *
+     * @return true if the child elements are ordered
+     */
     public boolean isOrdered() {
         return isOrdered;
     }
 
+    /**
+     * Sets whether the child elements are ordered.
+     *
+     * @param isOrdered true if the child elements are ordered
+     */
     public void setOrdered(boolean isOrdered) {
         this.isOrdered = isOrdered;
     }
 
+    /**
+     * The element ID of this table of contents.
+     *
+     * @return the element ID of this table of contents
+     */
     public String getId() {
         return id;
     }
 
+    /**
+     * Sets the element ID of this table of contents.
+     *
+     * @param id the element ID of this table of contents
+     */
     public void setId(String id) {
         this.id = id;
     }
 
+    /**
+     * The element IDs of the children of this table of contents.
+     *
+     * @return the element IDs of the children
+     */
     public String[] getChildren() {
         return children;
     }
 
+    /**
+     * Sets the element IDs of the children of this table of contents.
+     *
+     * @param children the element IDs of the children
+     */
     public void setChildren(String[] children) {
         this.children = children;
     }
 
+    /**
+     * The subframes contained in this frame.
+     *
+     * @return the subframes contained in this frame
+     */
     public ArrayList<ID3v2Frame> getSubframes() {
         return subframes;
     }
 
+    /**
+     * Sets the subframes contained in this frame.
+     *
+     * @param subframes the subframes contained in this frame
+     */
     public void setSubframes(ArrayList<ID3v2Frame> subframes) {
         this.subframes = subframes;
     }
