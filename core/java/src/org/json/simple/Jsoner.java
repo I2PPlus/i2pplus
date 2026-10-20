@@ -53,12 +53,7 @@ public class Jsoner {
         /** Instead of aborting serialization on non-JSON values that implement Jsonable it will continue serialization
          * by deferring serialization to the Jsonable.
          * @see Jsonable */
-        ALLOW_JSONABLES,
-        /** Instead of aborting serialization on non-JSON values it will continue serialization by using reflection to
-         * best describe the value as a JsonObject.
-         * @deprecated 2.3.0 there is no passive way to accomplish this contract and so will be abandoned. */
-        @Deprecated
-        ALLOW_UNDEFINEDS;
+        ALLOW_JSONABLES;
     }
 
     /** The possible States of a JSON deserializer. */

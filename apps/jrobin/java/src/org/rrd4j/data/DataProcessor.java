@@ -269,19 +269,6 @@ public class DataProcessor implements DataHolder {
     }
 
     /**
-     * Returns ending timestamp. Basically, this value is equal to the ending timestamp specified in
-     * the constructor. However, if the ending timestamps was zero, it will be replaced with the
-     * real timestamp when the {@link #processData} method returns. The real value will be
-     * calculated from the last update times of processed RRD files.
-     *
-     * @return Ending timestamp in seconds
-     * @deprecated Uses {@link #getEndTime} instead.
-     */
-    @Deprecated
-    public long getEndingTimestamp() {
-        return tEnd;
-    }
-
     /**
      * Returns consolidated timestamps created with the {@link #processData} method.
      *

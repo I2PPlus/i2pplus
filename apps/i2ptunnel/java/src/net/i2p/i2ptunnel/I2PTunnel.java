@@ -1855,21 +1855,6 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
     }
 
     /**
-     * Generates a Destination from a name. Now only supports base64 names -
-     * may support naming servers later. "file:&lt;filename&gt;" is also supported,
-     * where filename is a file that either contains a binary Destination structure,
-     * or the Base64 encoding of that structure.
-     * <p>
-     * Since file:&lt;filename&gt; isn't really used, this method is deprecated,
-     * just call {@code context.namingService.lookup()} directly.
-      * @deprecated Don't use i2ptunnel for lookup! Use {@link net.i2p.I2PAppContext#getGlobalContext}
-       * {@code namingService().lookup(} name) from {@code i2p.jar}
-     */
-    @Deprecated
-    public static Destination destFromName(String name) throws DataFormatException {
-        return destFromName(name, null, null, false, null, null);
-    }
-
     /**
      * Resolve a destination from a name or Base64 string.
      *

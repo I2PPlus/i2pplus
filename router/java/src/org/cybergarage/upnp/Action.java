@@ -265,16 +265,6 @@ public class Action {
     }
 
     /**
-     * @deprecated You should use one of the following methods instead:<br>
-     *             - {@link #setInArgumentValues(ArgumentList)} <br>
-     *             - {@link #setOutArgumentValues(ArgumentList)}
-     * @param argList the argument list to set
-     */
-    @Deprecated
-    public void setArgumentValues(ArgumentList argList) {
-        getArgumentList().set(argList);
-    }
-
     /**
      * Sets the values of input arguments.
      *

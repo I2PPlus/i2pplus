@@ -316,26 +316,6 @@ public class FetchData {
     }
 
     /**
-     * Returns aggregated value for a set of values calculated by applying an RPN expression to the
-     * fetched data. For example, if you have two datasources named <code>x</code> and <code>y
-     * </code> in this FetchData and you want to calculate MAX value of <code>(x+y)/2</code> use
-     * something like:
-     *
-     * <p><code>getRpnAggregate("x,y,+,2,/", "MAX");</code>
-     *
-     * @param rpnExpression RRDTool-like RPN expression
-     * @param consolFun Consolidation function (MIN, MAX, LAST, FIRST, AVERAGE or TOTAL)
-     * @return Aggregated value for the expression under the named consolidation function
-     * @throws java.lang.IllegalArgumentException Thrown if invalid RPN expression is supplied
-     * @deprecated This method is deprecated. Uses instance of {@link org.rrd4j.data.Variable}, used
-     *             with {@link org.rrd4j.data.DataProcessor#addDatasource(String, String, Variable)}
-     */
-    @Deprecated
-    public double getRpnAggregate(String rpnExpression, ConsolFun consolFun) {
-        DataProcessor dataProcessor = createDataProcessor(rpnExpression);
-        return dataProcessor.getAggregate(RPN_SOURCE_NAME, consolFun);
-    }
-
     /**
      * Used by ISPs which charge for bandwidth utilization on a "95th percentile" basis.
      *
@@ -364,22 +344,6 @@ public class FetchData {
     }
 
     /**
-     * Same as {@link #get95Percentile(String)}, but for a set of values calculated with the given
-     * RPN expression.
-     *
-     * @param rpnExpression RRDTool-like RPN expression
-     * @return 95-percentile of the values the expression produced
-     * @throws java.lang.IllegalArgumentException Thrown if invalid RPN expression is supplied
-     * @deprecated This method is deprecated. Uses instance of {@link
-     *             org.rrd4j.data.Variable.PERCENTILE}, used with {@link
-     *             org.rrd4j.data.DataProcessor#addDatasource(String, String, Variable)}
-     */
-    @Deprecated
-    public double getRpn95Percentile(String rpnExpression) {
-        DataProcessor dataProcessor = createDataProcessor(rpnExpression);
-        return dataProcessor.get95Percentile(RPN_SOURCE_NAME);
-    }
-
     /**
      * Dumps fetch data to output stream in XML format. A flush is issued at the end of the xml
      * generation.

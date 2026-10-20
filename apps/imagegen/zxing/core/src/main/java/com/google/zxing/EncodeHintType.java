@@ -44,23 +44,6 @@ public enum EncodeHintType {
   DATA_MATRIX_SHAPE,
 
   /**
-   * Specifies a minimum barcode size (type Dimension). Only applicable to Data Matrix now.
-   *
-   * @deprecated use width/height params in
-   *             com.google.zxing.datamatrix.DataMatrixWriter#encode(String, BarcodeFormat, int, int)
-   */
-  @Deprecated
-  MIN_SIZE,
-
-  /**
-   * Specifies a maximum barcode size (type Dimension). Only applicable to Data Matrix now.
-   *
-   * @deprecated without replacement
-   */
-  @Deprecated
-  MAX_SIZE,
-
-  /**
    * Specifies margin, in pixels, to use when generating the barcode. The meaning can vary
    * by format; for example it controls margin before and after the barcode horizontally for
    * most 1D formats. (Type {@link Integer}, or {@link String} representation of the integer value).

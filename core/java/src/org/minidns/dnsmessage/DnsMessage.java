@@ -1257,17 +1257,6 @@ public class DnsMessage {
         }
 
         /**
-         * Change the check status of this packet.
-         *
-         * @param checkingDisabled The new check disabled value.
-         * @return a reference to this builder.
-         */
-        @Deprecated
-        public Builder setCheckDisabled(boolean checkingDisabled) {
-            this.checkingDisabled = checkingDisabled;
-            return this;
-        }
-
         /**
          * Change the check status of this packet.
          *

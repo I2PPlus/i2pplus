@@ -137,16 +137,6 @@ public class ID3v2ChapterTOCFrameData extends AbstractID3v2FrameData {
         this.children = children;
     }
 
-    @Deprecated
-    public String[] getChilds() {
-        return children;
-    }
-
-    @Deprecated
-    public void setChilds(String[] childs) {
-        this.children = childs;
-    }
-
     public ArrayList<ID3v2Frame> getSubframes() {
         return subframes;
     }

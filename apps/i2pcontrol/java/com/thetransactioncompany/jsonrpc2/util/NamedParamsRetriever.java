@@ -396,22 +396,11 @@ public class NamedParamsRetriever
 	public void ensureParams(final String[] mandatoryNames)
 		throws JSONRPC2Error {
 
-		ensureParameters(mandatoryNames, null);
+		ensureParams(mandatoryNames, null);
 	}
 
 
 	/**
-	 * Throw if any mandatory parameter is missing.
-	 *
-	 * @see #ensureParams(String[])
-	 */
-	@Deprecated
-	public void ensureParameters(final String[] mandatoryNames)
-		throws JSONRPC2Error {
-
-		ensureParams(mandatoryNames);
-	}
-
 
 	/**
 	 * Throws a {@code JSONRPC2Error.INVALID_PARAMS} if the specified
@@ -440,18 +429,6 @@ public class NamedParamsRetriever
 
 
 	/**
-	 * Throw if a mandatory parameter is missing or an optional one has the wrong type.
-	 *
-	 * @see #ensureParams(String[], String[])
-	 */
-	@Deprecated
-	public void ensureParameters(final String[] mandatoryNames,
-		                     final String[] optionalNames)
-		throws JSONRPC2Error {
-
-		ensureParams(mandatoryNames, optionalNames);
-	}
-
 
 	/**
 	 * Throws a {@code JSONRPC2Error.INVALID_PARAMS} exception if there is

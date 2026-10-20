@@ -56,7 +56,7 @@ import java.util.stream.Stream;
  *
  * <p>A more generic management was added in version 3.2 that allows multiple instances of a backend
  * to be used. Each backend can manage custom URL. They are tried in the declared order by the
- * {@link #setActiveFactories(RrdBackendFactory...)} or {@link #addFactories(RrdBackendFactory...)}
+ * {@link #setActiveFactories(RrdBackendFactory...)}
  * and the method {@link #canStore(URI)} return true when it can manage the given URI. Using {@link
  * #setActiveFactories(RrdBackendFactory...)} with new created instance is the preferred way to
  * manage factories, as it provides a much precise control of creation and end of life of factories.
@@ -134,35 +134,7 @@ public abstract class RrdBackendFactory implements Closeable {
     }
 
     /**
-     * Registers new (custom) backend factory within the Rrd4j framework.
-     *
-     * @deprecated Uses active factory instead
-     * @param factory Factory to be registered
-     */
-    @Deprecated
-    public static synchronized void registerFactory(RrdBackendFactory factory) {
-        String name = factory.getName();
-        if (!Registry.factories.containsKey(name)) {
-            Registry.factories.put(name, factory);
-        } else {
-            throw new IllegalArgumentException(
-                    "Backend factory '" + name + "' cannot be registered twice");
-        }
-    }
-
     /**
-     * Registers new (custom) backend factory within the Rrd4j framework and sets this factory as
-     * the default.
-     *
-     * @deprecated Uses {@link #setActiveFactories(RrdBackendFactory...)} instead.
-     * @param factory Factory to be registered and set as default
-     */
-    @Deprecated
-    public static synchronized void registerAndSetAsDefaultFactory(RrdBackendFactory factory) {
-        registerFactory(factory);
-        setDefaultFactory(factory.getName());
-    }
-
     /**
      * Returns the default backend factory. This factory is used to construct {@link
      * org.rrd4j.core.RrdDb} objects if no factory is specified in the RrdDb constructor.
@@ -220,16 +192,6 @@ public abstract class RrdBackendFactory implements Closeable {
     }
 
     /**
-     * Add factories to the list of active factories, i.e. the factory used to resolve URI.
-     *
-     * @deprecated Uses {@link #addActiveFactories(RrdBackendFactory...)} instead.
-     * @param newFactories active factories to add.
-     */
-    @Deprecated
-    public static synchronized void addFactories(RrdBackendFactory... newFactories) {
-        addActiveFactories(newFactories);
-    }
-
     /**
      * Add factories to the list of active factories, i.e. the factory used to resolve URI.
      *

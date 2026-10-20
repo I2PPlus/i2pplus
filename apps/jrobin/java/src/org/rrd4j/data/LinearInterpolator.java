@@ -20,26 +20,26 @@ import org.rrd4j.core.Util;
 public class LinearInterpolator extends Plottable {
 
     /**
-     * Constant used to specify LEFT interpolation. See {@link #setInterpolationMethod(int)
+     * Constant used to specify LEFT interpolation. See {@link #setInterpolationMethod(Method)
      * setInterpolationMethod()} for explanation.
      */
     public static final int INTERPOLATE_LEFT = 0;
 
     /**
-     * Constant used to specify RIGHT interpolation. See {@link #setInterpolationMethod(int)
+     * Constant used to specify RIGHT interpolation. See {@link #setInterpolationMethod(Method)
      * setInterpolationMethod()} for explanation.
      */
     public static final int INTERPOLATE_RIGHT = 1;
 
     /**
      * Constant used to specify LINEAR interpolation (default interpolation method). See {@link
-     * #setInterpolationMethod(int) setInterpolationMethod()} for explanation.
+     * #setInterpolationMethod(Method) setInterpolationMethod()} for explanation.
      */
     public static final int INTERPOLATE_LINEAR = 2;
 
     /**
      * Constant used to specify LINEAR REGRESSION as interpolation method. See {@link
-     * #setInterpolationMethod(int) setInterpolationMethod()} for explanation.
+     * #setInterpolationMethod(Method) setInterpolationMethod()} for explanation.
      */
     public static final int INTERPOLATE_REGRESSION = 3;
 
@@ -141,44 +141,6 @@ public class LinearInterpolator extends Plottable {
     }
 
     /**
-     * Sets interpolation method to be used. Suppose that we have two timestamp/value pairs:<br>
-     * <code>(t, 100)</code> and <code>(t + 100, 300)</code>. Here are the results interpolator
-     * returns for t + 50 seconds, for various <code>interpolationMethods</code>:
-     *
-     * <ul>
-     *   <li><code>INTERPOLATE_LEFT:   100</code>
-     *   <li><code>INTERPOLATE_RIGHT:  300</code>
-     *   <li><code>INTERPOLATE_LINEAR: 200</code>
-     * </ul>
-     *
-     * <p>If not set, interpolation method defaults to <code>INTERPOLATE_LINEAR</code>.
-     *
-     * <p>The fourth available interpolation method is INTERPOLATE_REGRESSION. This method uses
-     * simple linear regression to interpolate supplied data with a simple straight line which does
-     * not necessarily pass through all data points. The slope of the best-fit line will be chosen
-     * so that the total square distance of real data points from from the best-fit line is at
-     * minimum.
-     *
-     * <p>This method is deprecated, one should use {@link #setInterpolationMethod(Method)
-     * setInterpolationMethod()} instead.
-     *
-     * <p>The full explanation of this interpolation method can be found <a
-     * href="https://www.JerryDallal.com/LHSP/slr.htm">here</a>.
-     *
-     * @param interpolationMethod Should be <code>INTERPOLATE_LEFT</code>, <code>INTERPOLATE_RIGHT
-     *                            </code>, <code>INTERPOLATE_LINEAR</code> or <code>INTERPOLATE_REGRESSION</code>. Any
-     *                            other value will be interpreted as INTERPOLATE_LINEAR (default).
-     * @deprecated uses {@link #setInterpolationMethod(Method)} instead.
-     */
-    @Deprecated
-    public void setInterpolationMethod(int interpolationMethod) {
-        if (interpolationMethod >= Method.values().length || interpolationMethod < 0) {
-            setInterpolationMethod(Method.LINEAR);
-        } else {
-            setInterpolationMethod(Method.values()[interpolationMethod]);
-        }
-    }
-
     /**
      * Sets interpolation method to be used. Suppose that we have two timestamp/value pairs:<br>
      * <code>(t, 100)</code> and <code>(t + 100, 300)</code>. Here are the results interpolator

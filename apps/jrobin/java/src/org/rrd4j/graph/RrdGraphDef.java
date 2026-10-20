@@ -1105,28 +1105,7 @@ public class RrdGraphDef implements RrdGraphConstants, DataHolder {
     }
 
     /**
-     * Sets default font for graphing. Note that Rrd4j will behave unpredictably if proportional
-     * font is selected.
-     *
-     * @param smallFont Default font for graphing. Use only monospaced fonts.
-     * @deprecated Use {@link org.rrd4j.graph.RrdGraphConstants.FontTag} based method instead.
-     */
-    @Deprecated
-    public void setSmallFont(final Font smallFont) {
-        this.setFont(FontTag.DEFAULT, smallFont);
-    }
-
     /**
-     * Sets title font.
-     *
-     * @param largeFont Font to be used for graph title.
-     * @deprecated Use {@link org.rrd4j.graph.RrdGraphConstants.FontTag} based method instead.
-     */
-    @Deprecated
-    public void setLargeFont(final Font largeFont) {
-        this.setFont(FontTag.TITLE, largeFont);
-    }
-
     /**
      * Sets font to be used for a specific font tag. The fontTag must be one of the following
      * constants defined in the {@link RrdGraphConstants}: {@link RrdGraphConstants#FONTTAG_DEFAULT
@@ -1416,30 +1395,7 @@ public class RrdGraphDef implements RrdGraphConstants, DataHolder {
     }
 
     /**
-     * Create a new virtual datasource to get the 95th percentile value from another datasource
-     *
-     * @param name Source name.
-     * @param defName Other source name.
-     * @deprecated Use {@link Variable} based method instead.
-     */
-    @Deprecated
-    public void percentile(String name, String defName) {
-        percentile(name, defName, DataProcessor.DEFAULT_PERCENTILE);
-    }
-
     /**
-     * Create a new virtual datasource to get a percentile value from another datasource
-     *
-     * @param name Source name.
-     * @param defName Other source name.
-     * @param percent the percentile to report, from 0.0 to 1.0
-     * @deprecated Use {@link Variable} based method instead.
-     */
-    @Deprecated
-    public void percentile(String name, String defName, double percent) {
-        datasource(name, defName, new Variable.PERCENTILE(percent));
-    }
-
     /**
      * Calculates the chosen consolidation function CF over the given datasource and creates the
      * result by using the given format string. In the format string there should be a '%[l]f',
