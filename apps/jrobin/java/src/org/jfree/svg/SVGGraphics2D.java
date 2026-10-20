@@ -3334,9 +3334,6 @@ public final class SVGGraphics2D extends Graphics2D {
      */
     public String getSVGDocument() {
         StringBuilder b = new StringBuilder();
-        // b.append("<?xml version=\"1.0\"?>\n");
-        // b.append("<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.0//EN\" ");
-        // b.append("\"http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd\">\n");
         b.append(getSVGElement());
         return b.append("\n").toString();
     }

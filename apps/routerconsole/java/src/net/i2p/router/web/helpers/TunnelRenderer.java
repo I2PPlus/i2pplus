@@ -464,9 +464,6 @@ class TunnelRenderer {
 
                         long recv = cfg.getReceiveTunnelId();
                         if (isAdvanced) {
-                            //sb.append("<td class=limit data-sort=").append(cfg.getAllocatedBW()).append(">");
-                            //    sb.append("<span>").append(DataHelper.formatSize2Decimal(cfg.getAllocatedBW())).append("B/s").append("</span>");
-                            //sb.append("</td>");
                             if (recv != 0) {
                                 sb.append("<td class=rx title=\"").append(tunnelIdTip).append("\"><span class=tunnel_id>")
                                   .append(recv).append("</span></td>");

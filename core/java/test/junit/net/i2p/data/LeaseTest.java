@@ -39,20 +39,6 @@ public class LeaseTest extends StructureTest {
         return new Lease();
     }
 
-    /* TODO: Delete this if Lease.getNumSuccess() / getNumFailure() get deleted
-    public void testNumSuccessFail() throws Exception{
-        Lease lease = new Lease();
-        lease.setEndDate(new Date(1000*60*2));
-        byte[] h = new byte[Hash.HASH_LENGTH];
-        lease.setGateway(new Hash(h));
-        StructureTest tst = new TunnelIdTest();
-        lease.setTunnelId((TunnelId)tst.createDataStructure());
-
-        lease.getNumSuccess();
-        lease.getNumFailure();
-    }
-    */
-
     @Test
     public void testExpiration() throws Exception {
         Lease lease = new Lease();

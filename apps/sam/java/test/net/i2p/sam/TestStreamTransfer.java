@@ -188,15 +188,6 @@ public class TestStreamTransfer {
                     Thread.sleep(5 * 1000);
                 } catch (InterruptedException ie) {
                 }
-                /*
-                // now echo it back
-                String reply = "STREAM SEND ID=" + id +
-                               " SIZE=" + payloadSize +
-                               "\n" + new String(payload);
-                _out.write(reply.getBytes());
-                _out.flush();
-                _log.info("Reply sent back [" + new String(reply.getBytes()) + "]");
-                 */
             } else {
                 _log.error("Received unsupported type [" + maj + "/" + min + "]");
                 return;

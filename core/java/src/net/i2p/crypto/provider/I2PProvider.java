@@ -31,11 +31,6 @@ public final class I2PProvider extends Provider {
                     public Void run() {
         */
         setup();
-        /*
-                        return null;
-                    }
-                });
-        */
     }
 
     private void setup() {

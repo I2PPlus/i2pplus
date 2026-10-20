@@ -101,58 +101,6 @@ public class UDPEndpointTestStandalone {
         public void run() {
             System.out.println("Rewrite me for SSU2!");
             throw new UnsupportedOperationException("Rewrite me for SSU2!");
-            /*
-                        while (!_beginTest) {
-                            try { Thread.sleep(2000); } catch (InterruptedException ie) {}
-                        }
-                            try { Thread.sleep(2000); } catch (InterruptedException ie) {}
-                        PacketBuilder builder = new PacketBuilder(_context, null);
-                        InetAddress localhost = null;
-                        try {
-                            localhost = InetAddress.getLocalHost();
-                        } catch (UnknownHostException uhe) {
-                            _log.error("die", uhe);
-                            System.exit(0);
-                        }
-                        int MIN = 1 + UDPPacket.MAC_SIZE + UDPPacket.IV_SIZE;
-                        int MAX = PeerState.LARGE_MTU - PacketBuilder.IP_HEADER_SIZE;
-                        _log.debug("Beginning to write");
-                        for (int curPacket = 0; curPacket < 2000; curPacket++) {
-                            int sz = MIN + _context.random().nextInt(MAX - MIN - 1);
-                            byte[] data = new byte[sz];
-                            _context.random().nextBytes(data);
-                            int curPeer = (curPacket % _endpoints.length);
-                            if (_endpoints[curPeer] == _endpoint) curPeer++;
-                            if (curPeer >= _endpoints.length) curPeer = 0;
-                            UDPPacket packet = builder.buildPacket(data, localhost, _endpoints[curPeer].getListenPort());
-                            int outstanding = _sentNotReceived.size() + 1;
-                            _sentNotReceived.add(new ByteArray(data));
-                            _log.debug("Sending test packet: " + curPacket + " with " + sz + " byte payload, outstanding " + outstanding);
-                            try {
-                                _endpoint.send(packet);
-                            } catch (Exception e) {
-                                _log.error("die", e);
-                                break;
-                            }
-                            int batch = 32 + _context.random().nextInt(32);
-                            if (curPacket % batch == 0 || _sentNotReceived.size() > 100) {
-                                try { Thread.sleep(3); } catch (InterruptedException ie) {}
-                            }
-                            //if (_log.shouldDebug())
-                        }
-                        _log.debug("Done sending packets");
-                        for (int i = 0; i < 20; i++) {
-                            if (_sentNotReceived.isEmpty()) break;
-                            try { Thread.sleep(500); } catch (InterruptedException e) {}
-                        }
-                        if (_sentNotReceived.isEmpty()) {
-                            _log.info("Test passed");
-                            System.exit(0);
-                        } else {
-                            _log.error("Test failed, " + _sentNotReceived.size() + " not received");
-                            System.exit(1);
-                        }
-            */
         }
     }
 

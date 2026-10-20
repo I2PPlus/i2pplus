@@ -416,9 +416,6 @@ public final class KeyStoreUtil {
                         byte[] enc = c.getEncoded();
                         if (enc != null) {
                             byte[] h = md.digest(enc);
-                            //    if (i < hex.length() - 2)
-                            //        buf.append(':');
-                            // info("hex is: " + buf);
                             if (_blacklist.contains(new SHA1Hash(h))) {
                                 toRemove.add(alias);
                                 if (!_blacklistLogged) {

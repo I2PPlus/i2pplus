@@ -648,33 +648,17 @@ public class PluginStarter implements Runnable {
 
         // stop console webapps in console/webapps
         //ContextHandlerCollection server = WebAppStarter.getConsoleServer();
-        /*
-            File consoleDir = new File(pluginDir, "console");
-            Properties props = RouterConsoleRunner.webAppProperties(consoleDir.getAbsolutePath());
-            File webappDir = new File(consoleDir, "webapps");
-            String[] fileNames = webappDir.list(RouterConsoleRunner.WarFilenameFilter.instance());
-            if (fileNames != null) {
-                for (int i = 0; i < fileNames.length; i++) {
-                    String warName = fileNames[i].substring(0, fileNames[i].lastIndexOf(".war"));
-                    if (Arrays.asList(STANDARD_WEBAPPS).contains(warName)) {
-                        continue;
-                    }
-                    WebAppStarter.stopWebApp(server, warName);
+        if (s != null) {
+            Collection<String> wars = pluginWars.remove(appName);
+            if (wars != null) {
+                for (String warName : wars) {
+                    if (log.shouldInfo())
+                        log.info("Stopping webapp " + warName + " in plugin " + appName);
+                    WebAppStarter.stopWebApp(ctx, s, warName);
                 }
+                wars.clear();
             }
-        */
-            if (s != null) {
-                Collection<String> wars = pluginWars.remove(appName);
-                if (wars != null) {
-                    for (String warName : wars) {
-                        if (log.shouldInfo())
-                            log.info("Stopping webapp " + warName + " in plugin " + appName);
-                        WebAppStarter.stopWebApp(ctx, s, warName);
-                    }
-                    wars.clear();
-                }
-            }
-        //}
+        }
 
         // remove summary bar link
         NavHelper.getInstance(ctx).unregisterApp(appName);
@@ -1199,27 +1183,6 @@ public class PluginStarter implements Runnable {
 
         return rv;
     }
-
-/*
-    private static void addToClasspath(String classpath, String clientName, Log log) {
-        StringTokenizer tok = new StringTokenizer(classpath, ",");
-        while (tok.hasMoreTokens()) {
-            String elem = tok.nextToken().trim();
-            File f = new File(elem);
-            if (!f.isAbsolute()) {
-                log.error("Plugin client " + clientName + " classpath element is not absolute: " + f);
-                continue;
-            }
-            try {
-                addPath(f.toURI().toURL());
-                if (log.shouldWarn())
-                    log.warn("INFO: Adding plugin to classpath: " + f);
-            } catch (Exception e) {
-                log.error("Plugin client " + clientName + " bad classpath element: " + f, e);
-            }
-        }
-    }
-*****/
 
     /**
      * Convert a plugin classpath to URL array, for the plugin's own

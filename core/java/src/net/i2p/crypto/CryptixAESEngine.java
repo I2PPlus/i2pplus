@@ -227,15 +227,6 @@ public final class CryptixAESEngine extends AESEngine {
             cur = iv;
         }
 
-        /*
-        decryptBlock(payload, payloadIndex, sessionKey, out, outIndex);
-        DataHelper.xor(out, outIndex, iv, 0, out, outIndex, 16);
-        for (int x = 1; x < numblock; x++) {
-            decryptBlock(payload, payloadIndex + (x * 16), sessionKey, out, outIndex + (x * 16));
-            DataHelper.xor(out, outIndex + x * 16, payload, payloadIndex + (x - 1) * 16, out, outIndex + x * 16, 16);
-        }
-         */
-
         SimpleByteCache.release(prev);
         SimpleByteCache.release(cur);
     }

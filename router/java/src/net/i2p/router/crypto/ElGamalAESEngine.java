@@ -429,9 +429,6 @@ public final class ElGamalAESEngine {
             cur += 4;
             if ((len < 0) || (len > decrypted.length - cur - Hash.HASH_LENGTH - 1))
                 throw new IllegalArgumentException("Invalid size of payload (" + len + ", remaining " + (decrypted.length-cur) +")");
-            //System.arraycopy(decrypted, cur, hashval, 0, Hash.HASH_LENGTH);
-            //readHash.setData(hashval);
-            //readHash = Hash.create(decrypted, cur);
             int hashIndex = cur;
             cur += Hash.HASH_LENGTH;
             byte flag = decrypted[cur++];

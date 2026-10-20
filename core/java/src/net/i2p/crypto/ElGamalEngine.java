@@ -132,20 +132,6 @@ public final class ElGamalEngine {
         byte[] out = new byte[ELG_ENCRYPTED_LENGTH];
         System.arraycopy(ybytes, 0, out, (ybytes.length < ELG_HALF_LENGTH ? ELG_HALF_LENGTH - ybytes.length : 0), (ybytes.length > ELG_HALF_LENGTH ? ELG_HALF_LENGTH : ybytes.length));
         System.arraycopy(dbytes, 0, out, (dbytes.length < ELG_HALF_LENGTH ? ELG_ENCRYPTED_LENGTH - dbytes.length : ELG_HALF_LENGTH), (dbytes.length > ELG_HALF_LENGTH ? ELG_HALF_LENGTH : dbytes.length));
-        /*
-        StringBuilder buf = new StringBuilder(1024);
-        buf.append("Timing\n");
-        buf.append("0-1: ").append(t1 - t0).append('\n');
-        buf.append("1-2: ").append(t2 - t1).append('\n');
-        buf.append("2-3: ").append(t3 - t2).append('\n');
-        //buf.append("3-4: ").append(t4-t3).append('\n');
-        //buf.append("4-5: ").append(t5-t4).append('\n');
-        //buf.append("5-6: ").append(t6-t5).append('\n');
-        //buf.append("6-7: ").append(t7-t6).append('\n');
-        buf.append("7-8: ").append(t8 - t7).append('\n');
-        buf.append("8-9: ").append(t9 - t8).append('\n');
-        buf.append("9-10: ").append(t10 - t9).append('\n');
-         */
         long end = _context.clock().now();
 
         long diff = end - start;

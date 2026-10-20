@@ -1082,16 +1082,6 @@ public class HTTPPacket {
         setHeader(HTTP.HOST, hostAddr + ":" + Integer.toString(port));
     }
 
-    /*  I2P No - we always want port also. libupnp-based devices will reject 403 without the port
-    	public void setHost(String host)
-    	{
-    		String hostAddr = host;
-    		if (HostInterface.isIPv6Address(host) == true)
-    			hostAddr = "[" + host + "]";
-    		setHeader(HTTP.HOST, hostAddr);
-    	}
-    */
-
     /**
      * Get the Host header value.
      * @return the host string including port
@@ -1159,22 +1149,4 @@ public class HTTPPacket {
         if (transEnc == null) return false;
         return transEnc.equalsIgnoreCase(HTTP.CHUNKED);
     }
-
-    ////////////////////////////////////////////////
-    //	set
-    ////////////////////////////////////////////////
-
-    /*
-    	public final static boolean parse(HTTPPacket httpPacket, InputStream in)
-    	{
-     		try {
-    			BufferedReader reader = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
-    			return parse(httpPacket, reader);
-    		}
-    		catch (Exception e) {
-    			Debug.warning(e);
-    		}
-    		return false;
-    	}
-    */
 }

@@ -79,13 +79,6 @@ public class BloomSHA1 {
      */
     public BloomSHA1( int m, int k) {
         // XXX need to devise more reasonable set of checks
-        //if ( m < 2 || m > 20) {
-        //    throw new IllegalArgumentException("m out of range");
-        //}
-        //if ( k < 1 || ( k * m > 160 )) {
-        //    throw new IllegalArgumentException(
-        //        "too many hash functions for filter size");
-        //}
         this.m = m;
         this.k = k;
         filterBits = 1 << m;
@@ -97,10 +90,6 @@ public class BloomSHA1 {
         bufPool = ThreadLocal.withInitial(() -> new ArrayDeque<int[]>(2));
 
         // DEBUG
-        //System.out.println("Bloom constructor: m = " + m + ", k = " + k
-        //    + "\n    filterBits = " + filterBits
-        //    + ", filterWords = " + filterWords);
-        // END
     }
 
     /**

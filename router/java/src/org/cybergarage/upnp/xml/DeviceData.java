@@ -241,12 +241,6 @@ public class DeviceData extends NodeData {
         return controlActionListenerList;
     }
 
-    /*
-    	public void setControlActionListenerList(ListenerList controlActionListenerList) {
-    		this.controlActionListenerList = controlActionListenerList;
-    	}
-    */
-
     ////////////////////////////////////////////////
     // SSDPSearchSocket
     ////////////////////////////////////////////////

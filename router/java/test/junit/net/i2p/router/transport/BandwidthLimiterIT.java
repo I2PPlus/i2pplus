@@ -114,13 +114,6 @@ public class BandwidthLimiterIT {
         prepareLimiter(-1, -1, -1, -1);
         long ms = testOutboundThrottle(NUM_KB * 1024, 1 * 1024);
 
-        /*prepareLimiter(-1, 4, -1, 4*1024);
-        ms = testOutboundThrottle(NUM_KB*1024, 1*1024);
-        predict = (NUM_KB/4)*1000;
-        error = predict/ms;
-        //assertTrue(error>.89);
-        assertTrue(error<1.05); */
-
         prepareLimiter(-1, 32, -1, 32 * 1024);
         ms = testOutboundThrottle(NUM_KB * 1024, 1 * 1024);
         predict = (NUM_KB / 32) * 1000;
@@ -149,13 +142,6 @@ public class BandwidthLimiterIT {
         prepareLimiter(-1, -1, -1, -1);
         long ms = testInboundThrottle(NUM_KB * 1024, 1 * 1024);
 
-        /*prepareLimiter(4, -1, 4*1024, -1);
-        ms = testInboundThrottle(NUM_KB*1024, 1*1024);
-        predict = (NUM_KB/4)*1000;
-        error = predict/ms;
-        //assertTrue(error>.89);
-        assertTrue(error<1.05); */
-
         prepareLimiter(32, -1, 32 * 1024, -1);
         ms = testInboundThrottle(NUM_KB * 1024, 1 * 1024);
         predict = (NUM_KB / 32) * 1000;
@@ -183,16 +169,6 @@ public class BandwidthLimiterIT {
         start = System.currentTimeMillis();
         // long[] runningTimes = testOutboundContention(10, NUM_KB*1024);
         end = System.currentTimeMillis();
-
-        // prepareLimiter(-1, 4, -1, 5*1024*1024);
-        // start = System.currentTimeMillis();
-        // runningTimes = testOutboundContention(10, NUM_KB*1024);
-        // end = System.currentTimeMillis();
-
-        // prepareLimiter(-1, 32, -1, 32*1024);
-        // start = System.currentTimeMillis();
-        // runningTimes = testOutboundContention(10, NUM_KB*1024);
-        // end = System.currentTimeMillis();
 
         prepareLimiter(-1, 256, -1, 256 * 1024);
         start = System.currentTimeMillis();

@@ -198,9 +198,6 @@ public final class Reader implements Closeable {
             int record = startNode(32);
             walk(record, 0, 0);
             // TODO if supported in blocklist
-            //record = startNode(128);
-            //_ipv6 = true;
-            //walk(record, 0, 0);
         }
 
         /**
@@ -248,15 +245,10 @@ public final class Reader implements Closeable {
                 }
                 if (found) {
                     String sip;
-                    //if (_ipv6) {
-                    //    sip = Integer.toHexString((ip >> 16) & 0xffff) + ":" +
-                    //          Integer.toHexString(ip & 0xffff) + "::/" + depth;
-                    //} else {
-                        sip = ((ip >> 24) & 0xff) + "." +
-                                 ((ip >> 16) & 0xff) + '.' +
-                                 ((ip >> 8) & 0xff) + '.' +
-                                 (ip & 0xff);
-                    //}
+                    sip = ((ip >> 24) & 0xff) + "." +
+                          ((ip >> 16) & 0xff) + '.' +
+                          ((ip >> 8) & 0xff) + '.' +
+                          (ip & 0xff);
                     _out.write(sip);
                     if (depth < 32) {
                         _out.write('/');

@@ -1417,9 +1417,6 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
         instructions.setDestination(_to.calculateHash());
 
         // defaults
-        //instructions.setDelayRequested(false);
-        //instructions.setDelaySeconds(0);
-        //instructions.setEncrypted(false);
 
         DataMessage msg = new DataMessage(getContext());
         Payload p = _clientMessage.getPayload();

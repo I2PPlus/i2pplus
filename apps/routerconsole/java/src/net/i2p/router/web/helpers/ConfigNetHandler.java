@@ -500,13 +500,6 @@ public class ConfigNetHandler extends FormHandler {
                 // No, this doesn't work well, really need to call SSU Transport externalAddressReceived(),
                 // but that's hard to get to, and doesn't handle port changes, etc.
                 // So don't do this...
-                //_context.router().rebuildRouterInfo();
-                //addFormNotice("Router Info rebuilt");
-              //} else {
-                // There's a few changes that don't really require restart (e.g. enabling inbound TCP)
-                // But it would be hard to get right, so just do a restart.
-                //addFormError(_t("Gracefully restarting I2P to change published router address"));
-                //_context.router().shutdownGracefully(Router.EXIT_GRACEFUL_RESTART);
             }
         }
     }

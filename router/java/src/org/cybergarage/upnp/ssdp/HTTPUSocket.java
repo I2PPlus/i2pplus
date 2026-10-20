@@ -168,21 +168,6 @@ public class HTTPUSocket {
             return false;
         }
 
-        /*
-        try {
-        	// Bind only using the port without the interface address. (2003/12/12)
-        	InetSocketAddress bindInetAddr = new InetSocketAddress(bindPort);
-        	ssdpUniSock = new DatagramSocket(null);
-        	ssdpUniSock.setReuseAddress(true);
-        	ssdpUniSock.bind(bindInetAddr);
-        	return true;
-        }
-        catch (Exception e) {
-        	Debug.warning(e);
-        	return false;
-        }
-        */
-
         setLocalAddress(bindAddr);
 
         return true;
@@ -296,36 +281,6 @@ public class HTTPUSocket {
     ////////////////////////////////////////////////
     //	join/leave
     ////////////////////////////////////////////////
-
-    /*
-    	boolean joinGroup(String mcastAddr, int mcastPort, String bindAddr)
-    	{
-    		try {
-    			InetSocketAddress mcastGroup = new InetSocketAddress(InetAddress.getByName(mcastAddr), mcastPort);
-    			NetworkInterface mcastIf = NetworkInterface.getByInetAddress(InetAddress.getByName(bindAddr));
-    			ssdpUniSock.joinGroup(mcastGroup, mcastIf);
-    		}
-    		catch (Exception e) {
-    			Debug.warning(e);
-    			return false;
-    		}
-    		return true;
-    	}
-
-    	boolean leaveGroup(String mcastAddr, int mcastPort, String bindAddr)
-    	 {
-    		try {
-    			InetSocketAddress mcastGroup = new InetSocketAddress(InetAddress.getByName(mcastAddr), mcastPort);
-    			NetworkInterface mcastIf = NetworkInterface.getByInetAddress(InetAddress.getByName(bindAddr));
-    			ssdpUniSock.leaveGroup(mcastGroup, mcastIf);
-    		 }
-    		 catch (Exception e) {
-    			 Debug.warning(e);
-    			 return false;
-    		 }
-    		 return true;
-    	 }
-    */
 
     /**
      * Return the local address this socket reports.

@@ -304,27 +304,6 @@ public interface RrdGraphConstants {
          * @return a new {@link java.awt.Font} instance
          */
         public static Font getFont(int type, int size) {
-            /*
-                        Function<String, InputStream> fontStream;
-                        String fontPath = fileProps.getProperty(type == Font.BOLD ? PROPERTYFONTBOLDURL : PROPERTYFONTPLAINURL);
-                        if (fontPath!= null) {
-                            fontStream = s -> {
-                                try {
-                                    return new URL(s).openStream();
-                                } catch (IOException e) {
-                                    throw new UncheckedIOException(e);
-                                }
-                            };
-                        } else {
-                            fontPath = fileProps.getProperty(type == Font.BOLD ? PROPERTYFONTBOLD : PROPERTYFONTPLAIN);
-                            fontStream = RrdGraphConstants.class::getResourceAsStream;
-                        }
-                        try (InputStream fontstream = fontStream.apply(fontPath)) {
-                            return Font.createFont(Font.TRUETYPE_FONT, fontstream).deriveFont((float)size);
-                        } catch (FontFormatException | IOException e) {
-                            throw new RuntimeException(e);
-                        }
-            */
             return new Font("Monospaced", type, size);
         }
     }

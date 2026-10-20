@@ -383,54 +383,6 @@ public class ConfigNetHelper extends HelperBase {
         return Integer.toString(Math.round(_context.bandwidthLimiter().getOutboundBurstKBytesPerSecond() * 1.024f));
     }
 
-/*
-    public String getInboundBurstFactorBox() {
-        int numSeconds = 1;
-        int rateKBps = _context.bandwidthLimiter().getInboundBurstKBytesPerSecond();
-        int burstKB = _context.bandwidthLimiter().getInboundBurstBytes() / 1024;
-        if ( (rateKBps > 0) && (burstKB > 0) )
-            numSeconds = burstKB / rateKBps;
-        return getBurstFactor(numSeconds, "inboundburstfactor");
-    }
-
-    public String getOutboundBurstFactorBox() {
-        int numSeconds = 1;
-        int rateKBps = _context.bandwidthLimiter().getOutboundBurstKBytesPerSecond();
-        int burstKB = _context.bandwidthLimiter().getOutboundBurstBytes() / 1024;
-        if ( (rateKBps > 0) && (burstKB > 0) )
-            numSeconds = burstKB / rateKBps;
-        return getBurstFactor(numSeconds, "outboundburstfactor");
-    }
-
-    private static String getBurstFactor(int numSeconds, String name) {
-        StringBuilder buf = new StringBuilder(256);
-        buf.append("<select name=\"").append(name).append("\">\n");
-        boolean found = false;
-        for (int i = 10; i <= 70; i += 10) {
-            int val = i;
-            if (i == 70) {
-                if (found)
-                    break;
-                else
-                    val = numSeconds;
-            }
-            buf.append("<option value=\"").append(val).append("\" ");
-            if (val == numSeconds) {
-                buf.append("selected ");
-                found = true;
-            }
-            buf.append(">");
-            buf.append(val).append(" seconds</option>\n");
-        }
-        buf.append("</select>\n");
-        return buf.toString();
-    }
-
-    public String getEnableLoadTesting() {
-        return "";
-    }
-****/
-
     /**
      * Get the share percentage selection box HTML.
      * @return the select element for the share percentage, with the current

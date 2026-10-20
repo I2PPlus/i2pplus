@@ -114,13 +114,6 @@ public class RandomIterator<E> implements Iterator<E> {
         int range = upper - lower + 1;
 
         // This has unbounded behavior, even with lower/upper
-        //int index;
-        //do {
-        //    index = lower + rand.nextInt(range);
-        //} while (served.get(index));
-
-        // This tends to "clump" results, escpecially toward the end of the iteration.
-        // It also tends to leave the first and last few elements until the end.
         int start = lower + rand.nextInt(range);
         int index;
         if ((start % 2) == 0)  // coin flip

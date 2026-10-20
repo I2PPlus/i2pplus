@@ -85,11 +85,6 @@ class MLKEMIndCpa
         {
             secretKey.getVectorIndex(i).getEta1Noise(noiseSeed, count);
 
-            // System.out.print("SecretKeyPolyVec["+i+"] = [");
-            // for (int j =0; j < KyberEngine.KyberN; j++) {
-            //     System.out.print(secretKey.getVectorIndex(i).getCoeffIndex(j) + ", ");
-            // }
-            // System.out.println("]");
             count = (byte)(count + (byte)1);
         }
 
@@ -170,12 +165,6 @@ class MLKEMIndCpa
 
             PolyVec.pointwiseAccountMontgomery(bp.getVectorIndex(i), aMatrixTranspose[i], sp, engine);
         }
-        // System.out.print("bp = [");
-        // for (i = 0; i < kyberK; i++) {
-        //     Helper.printShortArray(bp.getVectorIndex(i).getCoeffs());
-        //     System.out.print("], \n");
-        // }
-        // System.out.println("]");
 
         PolyVec.pointwiseAccountMontgomery(v, publicKeyPolyVec, sp, engine);
 
@@ -190,17 +179,6 @@ class MLKEMIndCpa
 
         bp.reducePoly();
         v.reduce();
-
-        //         System.out.print("bp = [");
-        // for (i = 0; i < kyberK; i++) {
-        //     Helper.printShortArray(bp.getVectorIndex(i).getCoeffs());
-        //     System.out.print("], \n");
-        // }
-        // System.out.println("]");
-
-        // System.out.print("v = ");
-        // Helper.printShortArray(v.getCoeffs());
-        // System.out.println();
 
         byte[] outputCipherText = packCipherText(bp, v);
 

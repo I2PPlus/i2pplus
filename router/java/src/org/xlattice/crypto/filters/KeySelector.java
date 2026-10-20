@@ -180,10 +180,6 @@ public class KeySelector {
      *                                  consider using larger key sizes or alternative selection algorithms.</p>
      */
     public KeySelector (int m, int k) {
-        //if ( (m < 2) || (m > 20)|| (k < 1)
-        //             || (bitOffset == null) || (wordOffset == null)) {
-        //    throw new IllegalArgumentException();
-        //}
         this.m = m;
         this.k = k;
         bitSel  = new GenericBitSelector();

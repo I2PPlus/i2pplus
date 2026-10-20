@@ -1448,20 +1448,6 @@ public class SidebarHelper extends HelperBase {
         String constraint = avail ? NewsHelper.updateConstraint() : null;
         String unsignedConstraint = unsignedAvail ? NewsHelper.unsignedUpdateConstraint() : null;
         String devSU3Constraint = devSU3Avail ? NewsHelper.devSU3UpdateConstraint() : null;
-/*
-        if (avail && constraint != null &&
-            !NewsHelper.isUpdateInProgress() &&
-            !_context.router().gracefulShutdownInProgress()) {
-            if (needSpace)
-                buf.append("<hr>");
-            else
-                needSpace = true;
-            buf.append("<h4 class=\"sb_info sb_update volatile\"><b>").append(_t("Update available")).append(":<br>");
-            buf.append(_t("Version {0}", getUpdateVersion())).append("<br>");
-            buf.append(constraint).append("</b></h4>");
-            avail = false;
-        }
-*/
         if (unsignedAvail && unsignedConstraint != null &&
             !NewsHelper.isUpdateInProgress() &&
             !_context.router().gracefulShutdownInProgress()) {

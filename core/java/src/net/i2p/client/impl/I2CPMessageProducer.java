@@ -207,9 +207,6 @@ class I2CPMessageProducer {
         session.sendMessage_unchecked(dmsg);
         // use DisconnectMessage only if we fail and drop connection...
         // todo: update the code to fire off DisconnectMessage on socket error
-        // DisconnectMessage msg = new DisconnectMessage();
-        // msg.setReason("Destroy called");
-        // session.sendMessage(msg);
     }
 
     /**

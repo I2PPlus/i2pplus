@@ -139,13 +139,6 @@ public class MLabRunner {
                             try {
                                 ByteArrayOutputStream baos = new ByteArrayOutputStream(1024);
                                 // http to name server
-                                // public EepGet(I2PAppContext ctx, boolean shouldProxy, String proxyHost, int proxyPort,
-                                //               int numRetries, long minSize, long maxSize, String outputFile, OutputStream outputStream,
-                                //               String url, boolean allowCaching, String etag, String postData) {
-                                //EepGet eepget = new EepGet(_context, false, null, 0,
-                                //                           0, 2, 1024, null, baos,
-                                //                           NS_URL, false, null, null);
-                                // https to name server
                                 String nsURL = useSSL ? NS_URL_SSL_SSL : NS_URL_SSL;
                                 EepGet eepget = new SSLEepGet(_context, baos, nsURL);
                                 boolean ok = eepget.fetch(NS_TIMEOUT, NS_TIMEOUT, NS_TIMEOUT);

@@ -519,9 +519,6 @@ public class Jsoner {
             /* This is according to the method's contract. */
             return null;
         }
-        // System.out.println(printable);
-        // System.out.println(returnable);
-        // System.out.println(Jsoner.escape(returnable.toString()));
         return returnable.toString();
     }
 

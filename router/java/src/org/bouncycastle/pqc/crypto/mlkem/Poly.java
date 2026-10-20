@@ -155,10 +155,6 @@ class Poly
         int count = 0;
         this.conditionalSubQ();
 
-        // System.out.print("v = [");
-        // Helper.printShortArray(this.coeffs);
-        // System.out.print("]\n");
-
         if (polyCompressedBytes == 128)
         {
             for (i = 0; i < MLKEMEngine.KyberN / 8; i++)
@@ -224,10 +220,6 @@ class Poly
         {
             throw new RuntimeException("PolyCompressedBytes is neither 128 or 160!");
         }
-
-        // System.out.print("r = ");
-        // Helper.printByteArray(r);
-        // System.out.println();
 
         return r;
     }

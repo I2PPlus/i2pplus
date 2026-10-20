@@ -185,9 +185,6 @@ abstract class TunnelGateway {
          */
         public void timeReached() {
             boolean wantRequeue = false;
-            //int remaining = 0;
-            //long beforeLock = _context.clock().now();
-            //long afterChecked = -1;
             long delayAmount = -1;
             synchronized (_queue) {
                 if (!_queue.isEmpty()) {

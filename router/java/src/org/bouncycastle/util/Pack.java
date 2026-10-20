@@ -653,11 +653,6 @@ public abstract class Pack
         }
     }
 
-//    public static void longToLittleEndian_Low(long n, byte[] bs, int off, int len)
-//    {
-//        longToLittleEndian_High(n << ((8 - len) << 3), bs, off, len);
-//    }
-
     /**
      * Convert a little-endian byte array of variable length to the high-order bits of a long.
      *

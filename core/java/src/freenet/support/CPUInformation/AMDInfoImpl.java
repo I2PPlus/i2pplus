@@ -606,10 +606,6 @@ class AMDInfoImpl extends CPUIDCPUInfo implements AMDCPUInfo {
                 isAthlonCompatible = true;
                 isAthlon64Compatible = true;
                 // Pending testing of the bulldozer jbigi
-                //isPiledriverCompatible = true;
-                //isSteamrollerCompatible = true;
-                //isExcavatorCompatible = true;
-                //isBulldozerCompatible = true;
                 modelString = "Hygon Dhyana model " + model;
             }
             break;

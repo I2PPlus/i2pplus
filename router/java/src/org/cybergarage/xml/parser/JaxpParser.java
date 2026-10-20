@@ -176,13 +176,6 @@ public class JaxpParser extends Parser {
             org.w3c.dom.Element docElem = doc.getDocumentElement();
 
             if (docElem != null) root = parse(root, docElem);
-            /*
-            			NodeList rootList = doc.getElementsByTagName("root");
-            			Debug.message("rootList = " + rootList.getLength());
-
-            			if (0 < rootList.getLength())
-            				root = parse(root, rootList.item(0));
-            */
         } catch (Exception e) {
             throw new ParserException(e);
         }

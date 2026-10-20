@@ -1745,14 +1745,6 @@ public class Router implements RouterClock.ClockShiftListener {
         clearCaches();
         if (exitCode == 2) {_log.log(Log.CRIT, "Completed graceful shutdown");}
         else if (exitCode == 3) {_log.log(Log.CRIT, "Completed hard shutdown");}
-/*
-        else if (exitCode == 4)
-            _log.log(Log.CRIT, "Completed hard restart, now restarting...");
-        else if (exitCode == 5)
-            _log.log(Log.CRIT, "Completed graceful restart, now restarting...");
-        else if (exitCode == 10)
-            _log.log(Log.CRIT, "Completed forced restart, now restarting...");
-    */
         try {_context.logManager().shutdown();} catch (Throwable t) { /* ignored */ }
         try {BanLogger.shutdown();} catch (Throwable t) { /* ignored */ }
         if (_markLiveliness != null) {
