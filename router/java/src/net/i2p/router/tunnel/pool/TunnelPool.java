@@ -1810,9 +1810,9 @@ public class TunnelPool {
             countSessionLossCause(localHop(t));
         }
         long now = _context.clock().now();
-        if (!_log.shouldLog(Log.WARN) || now < _nextZombieLog) {return;}
+        if (!_log.shouldInfo() || now < _nextZombieLog) {return;}
         _nextZombieLog = now + ZOMBIE_LOG_INTERVAL_MS;
-        _log.warn("Pool health excludes " + excluded + " of " + (kept + excluded)
+        _log.info("Pool health excludes " + excluded + " of " + (kept + excluded)
                   + " tunnels with no transport session to their local hop"
                   + " -> Kept: " + kept
                   + "\n* Transport: " + sample

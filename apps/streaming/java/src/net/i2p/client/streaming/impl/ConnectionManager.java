@@ -1525,8 +1525,9 @@ class ConnectionManager {
                 // this may not be right if more than one is enabled
                 Reason why = shouldRejectConnection(synPacket);
                 if (why != null) {
-                    if ((!_defaultOptions.getDisableRejectLogging()) && !why.isSilent() && _log.shouldWarn())
-                        _log.warn("Refusing connection from [" + client + "] -> " + why);
+                    if ((!_defaultOptions.getDisableRejectLogging()) && !why.isSilent() &&
+                        _log.shouldInfo())
+                        _log.info("Refusing connection from [" + client + "] -> " + why);
                     reject = true;
                     retryAfter = why.getSeconds();
                 }

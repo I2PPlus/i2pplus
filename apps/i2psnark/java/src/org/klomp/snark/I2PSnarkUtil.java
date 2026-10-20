@@ -1777,8 +1777,8 @@ public class I2PSnarkUtil implements DisconnectListener {
                                 + " bytes)");
             return true;
         } else {
-            if (_log.shouldWarn())
-                _log.warn(
+            if (_log.shouldInfo())
+                _log.info(
                         "Timeout ("
                                 + timeout / 1000
                                 + "s) requesting ["

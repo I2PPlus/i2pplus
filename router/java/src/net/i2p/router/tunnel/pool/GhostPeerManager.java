@@ -303,9 +303,10 @@ static final long OFFENSE_DECAY_MS = 30 * 60 * 1000L;
                        (offenses > 0 ? " (repeat offense " + offenses + ")" : "") +
                        (underAttack ? " (network under stress)" : ""));
         }
-        if (_log.shouldWarn() && now - _lastGhostWarnTime >= GHOST_WARN_INTERVAL_MS) {
+        if (_log.shouldInfo() && now - _lastGhostWarnTime >= GHOST_WARN_INTERVAL_MS) {
             _lastGhostWarnTime = now;
-            _log.warn("Tunnel build timeouts are marking peers as ghost -> Enable debug logging for per-peer detail");
+            _log.info("Tunnel build timeouts are marking peers as ghost" +
+                      " -> Enable debug logging for per-peer detail");
         }
     }
 

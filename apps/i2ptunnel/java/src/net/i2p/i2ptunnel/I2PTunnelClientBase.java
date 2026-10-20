@@ -951,8 +951,8 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
         } finally {
             opt.setConnectTimeout(callerTimeoutMs);
         }
-        if (legsFailed > 0 && _log.shouldWarn()) {
-            _log.warn("Connect failed after " + legsFailed + "/" + tunnelCount + " tunnel legs" +
+        if (legsFailed > 0 && _log.shouldInfo()) {
+            _log.info("Connect failed after " + legsFailed + "/" + tunnelCount + " tunnel legs" +
                       (timeoutFailures > 0 ? " (" + timeoutFailures + " timed out)" : "") + ": " +
                       (lastEx != null ? lastEx.getMessage() : "no route to host"));
         }

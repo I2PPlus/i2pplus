@@ -651,15 +651,17 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
                 // Java I2P thru 0.9.55 would send 35-39 byte ping packets
                 // Java I2P thru 0.9.56 retransmits session confirmed with 1-2 byte packets
                 if (len > 2 && len < 35 && shouldLogDebug()) {
-                    _log.warn("[SSU] Inbound packet from: " + from + " too short [" + len + " bytes] " + this);
+                    _log.debug("[SSU] Inbound packet from: " + from +
+                               " too short [" + len + " bytes] " + this);
                 }
                 return;
             }
             if (header.getDestConnID() != _rcvConnID) {
                 if (shouldLogDebug()) {
-                    _log.warn("[SSU] BAD Destination ConnectionID from: " + from + "\n* " + header + " -> Size: " + len + " bytes " + this);
-                } else if (_log.shouldWarn()) {
-                    _log.warn("[SSU] BAD Destination ConnectionID from: " + from);
+                    _log.debug("[SSU] BAD Dest ConnID from: " + from +
+                               "\n* " + header + " -> Size: " + len + " bytes " + this);
+                } else if (_log.shouldDebug()) {
+                    _log.debug("[SSU] BAD Dest ConnID from: " + from);
                 }
                 if (!_isInbound && _ackedMessages.getOffset() == 0 && !_ackedMessages.get(0)) {
                     // This was probably a retransmitted session created, sent with k_header_1 = bob's intro key,

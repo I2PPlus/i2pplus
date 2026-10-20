@@ -4303,8 +4303,8 @@ static List<PendingTest> prioritizeBatch(List<PendingTest> scan, long now) {
             int maxFailures = removalThreshold(baseRemovalThreshold(isDegraded()), _pool.size());
             if (currentFailures > maxFailures) {
                 getContext().statManager().addRateData(directionStat(_cfg.isInbound(), "Condemned"), 1);
-                if (_log.shouldWarn()) {
-                    _log.warn("Tunnel Test failed -> Marking FAILED " + (maxFailures > 3 ?
+                if (_log.shouldInfo()) {
+                    _log.info("Tunnel Test failed -> Marking FAILED " + (maxFailures > 3 ?
                               " (degraded mode)" : "") + "\n* " + _cfg);
                 }
                 getContext().statManager().addRateData(

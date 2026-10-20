@@ -2175,8 +2175,9 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
             return false;
         String referer = h.get(0);
         if (referer.startsWith("http://") || referer.startsWith("https://")) {
-            if (_log.shouldWarn()) {
-                _log.warn("[HTTPServer] " + getTunnelLogId(socket.getThisDestination()) + " Refusing access (Bad referer) \n* Client: " + peerB32 +
+            if (_log.shouldInfo()) {
+                _log.info("[HTTPServer] " + getTunnelLogId(socket.getThisDestination()) +
+                          " Refusing access (Bad referer) \n* Client: " + peerB32 +
                           "\n* Referer: " + referer);
             }
             try {sendError(socket, ERR_FORBIDDEN);}
@@ -2212,8 +2213,10 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 String ag = agents[i].trim();
                 if (ag.equals("none")) {continue;}
                 if (!ag.isEmpty() && ua.contains(ag)) {
-                    if (_log.shouldWarn()) {
-                        _log.warn("[HTTPServer] " + getTunnelLogId(socket.getThisDestination()) + " Refusing access: Blacklisted User Agent (" + ua + ") \n* Client: " + peerB32);
+                    if (_log.shouldInfo()) {
+                        _log.info("[HTTPServer] " + getTunnelLogId(socket.getThisDestination()) +
+                                  " Refusing access: Blacklisted User Agent (" + ua + ")" +
+                                  " \n* Client: " + peerB32);
                     }
                     try {sendError(socket, ERR_FORBIDDEN);}
                     catch (IOException ioe) { /* ignored */ }
@@ -2227,8 +2230,10 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
             for (int i = 0; i < agents.length; i++) {
                 String ag = agents[i].trim();
                 if (ag.equals("none")) {
-                    if (_log.shouldWarn()) {
-                        _log.warn("[HTTPServer] " + getTunnelLogId(socket.getThisDestination()) + " Refusing access: User Agent header is blank \n* Client: " + peerB32);
+                    if (_log.shouldInfo()) {
+                        _log.info("[HTTPServer] " + getTunnelLogId(socket.getThisDestination()) +
+                                  " Refusing access: User Agent header is blank" +
+                                  " \n* Client: " + peerB32);
                     }
                     try {sendError(socket, ERR_FORBIDDEN);}
                     catch (IOException ioe) { /* ignored */ }

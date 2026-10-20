@@ -2234,8 +2234,8 @@ public class I2PTunnelRunner extends I2PAppThread implements DoneCallback {
                     finishLock.notifyAll();
                 }
             } catch (IOException ex) {
-                if (_log.shouldWarn())
-                    _log.warn(direction + " IO Error: " + ex);
+                if (_log.shouldDebug())
+                    _log.debug(direction + " IO Error: " + ex);
                 _failure = ex;
                 synchronized (finishLock) {
                     finished = true;

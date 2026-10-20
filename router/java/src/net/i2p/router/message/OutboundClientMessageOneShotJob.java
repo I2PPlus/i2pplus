@@ -1645,8 +1645,8 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
                 }
             }
             if (old == Result.NONE) {
-                if (_log.shouldWarn()) {
-                    _log.warn("Send TIMEOUT to " + _toString + " after " +
+                if (_log.shouldInfo()) {
+                    _log.info("Send TIMEOUT to " + _toString + " after " +
                               DataHelper.formatDuration(getContext().clock().now() - _start));
                 }
                 dieFatal(MessageStatusMessage.STATUS_SEND_BEST_EFFORT_FAILURE);
