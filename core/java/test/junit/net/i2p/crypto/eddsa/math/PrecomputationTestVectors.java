@@ -71,7 +71,7 @@ public class PrecomputationTestVectors {
         EdDSANamedCurveSpec ed25519 = EdDSANamedCurveTable.getByName(EdDSANamedCurveTable.ED_25519);
         Curve curve = ed25519.getCurve();
         Field field = curve.getField();
-        GroupElement[] dblPrecmp = new GroupElement[8];
+        GroupElement[] dblPrecmp = new GroupElement[16];
         BufferedReader file = null;
         int row = 0;
         try {

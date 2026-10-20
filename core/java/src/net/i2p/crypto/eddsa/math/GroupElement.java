@@ -544,10 +544,10 @@ public class GroupElement implements Serializable {
      */
     private GroupElement[] precomputeDouble() {
         // Precomputation for double scalar multiplication.
-        // P,3P,5P,7P,9P,11P,13P,15P
-        GroupElement[] dblPrecmp = new GroupElement[8];
+        // P,3P,5P,7P,9P,11P,13P,15P,17P,19P,21P,23P,25P,27P,29P,31P
+        GroupElement[] dblPrecmp = new GroupElement[16];
         GroupElement bi = this;
-        for (int i = 0; i < 8; i++) {
+        for (int i = 0; i < 16; i++) {
             final FieldElement recip = bi.Z.invert();
             final FieldElement x = bi.X.multiply(recip);
             final FieldElement y = bi.Y.multiply(recip);
@@ -988,7 +988,7 @@ public class GroupElement implements Serializable {
      * To learn more about it see [6] page 8.
      * <p>
      * Output: $r$ which satisfies
-     * $a = r0 * 2^0 + r1 * 2^1 + \dots + r255 * 2^{255}$ with $ri$ in $\{-15, -13, -11, -9, -7, -5, -3, -1, 0, 1, 3, 5, 7, 9, 11, 13, 15\}$
+     * $a = r0 * 2^0 + r1 * 2^1 + \dots + r255 * 2^{255}$ with $ri$ in $\{-31, -29, \dots, -1, 0, 1, \dots, 29, 31\}$
      * <p>
      * Method is package private only so that tests run.
      *
@@ -1009,10 +1009,10 @@ public class GroupElement implements Serializable {
                 for (int b = 1; b <= 6 && i + b < 256; ++b) {
                     // Accumulate bits if possible
                     if (r[i + b] != 0) {
-                        if (r[i] + (r[i + b] << b) <= 15) {
+                        if (r[i] + (r[i + b] << b) <= 31) {
                             r[i] = (byte)(r[i] + (r[i + b] << b));
                             r[i + b] = 0;
-                        } else if (r[i] - (r[i + b] << b) >= -15) {
+                        } else if (r[i] - (r[i + b] << b) >= -31) {
                             r[i] -= r[i + b] << b;
                             for (int k = i + b; k < 256; ++k) {
                                 if (r[k] == 0) {

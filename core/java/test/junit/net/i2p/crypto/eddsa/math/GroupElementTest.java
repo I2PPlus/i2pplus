@@ -498,7 +498,7 @@ public class GroupElementTest {
         GroupElement h = MathUtils.addGroupElements(g, g);
 
         // Act + Assert:
-        for (int i = 0; i < 8; i++) {
+        for (int i = 0; i < 16; i++) {
             assertThat(MathUtils.toRepresentation(g, GroupElement.Representation.PRECOMP), IsEqual.equalTo(ed25519.getB().dblPrecmp[i]));
             g = MathUtils.addGroupElements(g, h);
         }
