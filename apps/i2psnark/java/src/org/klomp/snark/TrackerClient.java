@@ -363,8 +363,8 @@ public class TrackerClient implements Runnable {
      */
     public synchronized void start() {
         if (!stop) {
-            if (_log.shouldWarn()) {
-                _log.warn("Already started: " + _threadName);
+            if (_log.shouldDebug()) {
+                _log.debug("Already started: " + _threadName);
             }
             return;
         }
@@ -405,12 +405,12 @@ public class TrackerClient implements Runnable {
     public synchronized void halt(boolean fast) {
         boolean wasStopped = stop;
         if (wasStopped) {
-            if (_log.shouldWarn()) {
-                _log.warn("Already stopped: " + _threadName);
+            if (_log.shouldDebug()) {
+                _log.debug("Already stopped: " + _threadName);
             }
         } else {
-            if (_log.shouldWarn()) {
-                _log.warn("Stopping: " + _threadName);
+            if (_log.shouldDebug()) {
+                _log.debug("Stopping: " + _threadName);
             }
             stop = true;
         }
@@ -947,8 +947,8 @@ public class TrackerClient implements Runnable {
         boolean hasMeta = left >= 0;
         boolean newlyGotMeta = hasMeta && !lastHadMeta;
         lastHadMeta = hasMeta;
-        if ((newlyCompleted || newlyGotMeta) && _log.shouldWarn())
-            _log.warn("State change completed? " + newlyCompleted + " gotMeta? " + newlyGotMeta + ", announcing early for " + snark.getBaseName());
+        if ((newlyCompleted || newlyGotMeta) && _log.shouldDebug())
+            _log.debug("State change completed? " + newlyCompleted + " gotMeta? " + newlyGotMeta + " -> Announcing early for " + snark.getBaseName());
 
         // *** loop once for each tracker
         int maxSeenPeers = 0;
@@ -1049,8 +1049,8 @@ public class TrackerClient implements Runnable {
                             && snark.getTotalLength() > 0
                             && uploaded >= snark.getTotalLength() / 2) {
 
-                        if (_log.shouldWarn()) {
-                            _log.warn("Auto stopping " + snark.getBaseName());
+                        if (_log.shouldInfo()) {
+                            _log.info("Auto stopping " + snark.getBaseName());
                         }
                         snark.setAutoStoppable(false);
                         snark.stopTorrent();

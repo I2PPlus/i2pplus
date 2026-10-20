@@ -219,8 +219,9 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
                 // Stay in the IB_NTCP2_GOT_X state, and wait for more data.
                 src.get(_X, _received, remaining);
                 _received += remaining;
-                if (_log.shouldWarn())
-                    _log.warn("Short buffer -> Received " + _received + " bytes, remaining " + remaining + " * " + this);
+                if (_log.shouldDebug())
+                    _log.debug("Short buffer -> Received " + _received + " bytes, remaining " +
+                               remaining + " * " + this);
                 return;
             }
         }
@@ -912,7 +913,7 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
             }
             reason = "Invalid Router version (" + version + " / " + bw +
                       flag + ")";
-            _banLogger.logBan(h, ipPort, reason, now + 24*60*60*1000L, ri);
+            _banLogger.logBan(h, ipPort, reason, 24*60*60*1000L, ri);
             _context.banlist().banlistRouter(h, reason, null, null, now + 24*60*60*1000L);
             _msg3p2FailReason = NTCPConnection.REASON_BANNED;
             if (_log.shouldWarn() && !isBanned)
@@ -924,7 +925,7 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
 
         if (!reachable && isSlow && isOld) {
             reason = "Old and slow (" + version + " / " + bw + "U)";
-            _banLogger.logBan(h, ipPort, reason, now + 60*60*1000L, ri);
+            _banLogger.logBan(h, ipPort, reason, 60*60*1000L, ri);
             _context.banlist().banlistRouter(h, reason, null, null, now + 60*60*1000L);
             _msg3p2FailReason = NTCPConnection.REASON_BANNED;
             if (_log.shouldInfo() && !isBanned)
@@ -936,7 +937,7 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
 
         if (reachable && unreachable) {
             reason = "Invalid published capabilities (RU)";
-            _banLogger.logBan(h, ipPort, reason, now + 24*60*60*1000L, ri);
+            _banLogger.logBan(h, ipPort, reason, 24*60*60*1000L, ri);
             _context.banlist().banlistRouter(h, reason, null, null, now + 24*60*60*1000L);
             _msg3p2FailReason = NTCPConnection.REASON_BANNED;
             if (_log.shouldWarn() && !isBanned) {

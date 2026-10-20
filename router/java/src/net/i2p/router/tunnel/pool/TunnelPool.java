@@ -6815,8 +6815,8 @@ public class TunnelPool {
                        _log.debug(toString() + " -> Pre-emergency (" + healthy + "/" +
                                   target + " healthy) -> Initial fill, starting " +
                                   PRE_EMERGENCY_BURST + " builds");
-              } else if (_log.shouldWarn()) {
-                  _log.warn(toString() + " -> Pre-emergency (" + healthy + "/" +
+              } else if (_log.shouldInfo()) {
+                  _log.info(toString() + " -> Pre-emergency (" + healthy + "/" +
                             target + " healthy) -> Starting " + PRE_EMERGENCY_BURST + " builds");
               }
               int budget = Math.max(0, MAX_INPROGRESS_PER_POOL_DIR - getInProgressCount());

@@ -1016,7 +1016,8 @@ public class PeerState {
         if (failedSize > 0) {
             if (totalFail) {
                 if (logWarn)
-                    _log.warn("[SSU] First outbound message failed (timeout after 60s) -> " + toShortString());
+                    _log.info("[SSU] First outbound message failed (timeout after 60s) -> " +
+                              toShortString());
                 _transport.sendDestroy(this, SSU2Util.REASON_FRAME_TIMEOUT);
                 _transport.dropPeer(this, true, "OB First Message Fail");
                 _cachedOutboundCount = 0;

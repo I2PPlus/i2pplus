@@ -831,8 +831,10 @@ class FloodfillVerifyStoreJob extends JobImpl {
             // pass over all the ignores for the next attempt
             // unless we've had a crazy number of attempts, then start over
             if (_ignore.size() < 50) {toSkip.addAll(_ignore);}
-            if (_log.shouldWarn()) {
-                _log.warn("Floodfill Verify failed" + name + " [" + _key.toBase32().substring(0,8) + "] -> Starting new NetDbStore...");
+            if (_log.shouldInfo()) {
+                _log.info("Floodfill Verify failed" + name +
+                          " [" + _key.toBase32().substring(0,8) + "]" +
+                          " -> Starting new NetDbStore");
             }
             _facade.sendStore(_key, ds, null, null, FloodfillNetworkDatabaseFacade.PUBLISH_TIMEOUT, toSkip);
         }

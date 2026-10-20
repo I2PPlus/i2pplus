@@ -136,8 +136,11 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     private UpdateHandler _uhandler;
     private SimpleTimer2.TimedEvent _idleChecker;
 
-    /** Max concurrent DHT lookup threads (zzzot lookups). @since 0.9.71+. */
-    private static final int MAX_LOOKUP_CONCURRENCY = 8;
+    /**
+     * Max concurrent DHT lookup threads (zzzot lookups).
+     * @since 0.9.71+.
+     */
+    private static final int MAX_LOOKUP_CONCURRENCY = 16;
     /**
      * Age past which a lookup torrent is swept. Package-visible so the boundary can be
      * pinned by test rather than restated as a literal.
@@ -149,7 +152,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     private static final String LOOKUP_PATH_MARKER = "zzzot-lookup";
     private final Semaphore _lookupSemaphore = new Semaphore(MAX_LOOKUP_CONCURRENCY, true);
     /** Infohash to time (ms) when the lookup was created, for stale cleanup. */
-    private final Map<SHA1Hash, Long> _lookupCreationTimes = new ConcurrentHashMap<>(8);
+    private final Map<SHA1Hash, Long> _lookupCreationTimes = new ConcurrentHashMap<>(16);
     private volatile boolean _staleLookupCleanupRunning;
     /**
      * Snark's own scheduler for periodic chores, deliberately not {@link SimpleTimer2}.
@@ -4017,8 +4020,8 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
             // held only across the create and released before the poll below acquires it
             // again, so it cannot deadlock against the polling permit.
             if (!_lookupSemaphore.tryAcquire()) {
-                if (_log.shouldWarn()) {
-                    _log.warn("lookupTorrentName: " + MAX_LOOKUP_CONCURRENCY
+                if (_log.shouldInfo()) {
+                    _log.info("lookupTorrentName: " + MAX_LOOKUP_CONCURRENCY
                         + " concurrent lookups in progress, rejecting " + hex);
                 }
                 try { FileUtil.rmdir(lookupDir, false); } catch (Exception ignore) { /* best-effort temp dir cleanup; a leftover dir is swept by scheduleStaleLookupCleanup() */ }
@@ -4050,8 +4053,8 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         }
         // Wait for metadata — bounded by semaphore to prevent thread explosion
         if (!_lookupSemaphore.tryAcquire()) {
-            if (_log.shouldWarn()) {
-                _log.warn("lookupTorrentName: " + MAX_LOOKUP_CONCURRENCY
+            if (_log.shouldInfo()) {
+                _log.info("lookupTorrentName: " + MAX_LOOKUP_CONCURRENCY
                     + " concurrent lookups in progress, rejecting " + hex);
             }
             // Still clean up the magnet we just created
@@ -4230,8 +4233,8 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         if (getTorrentByInfoHash(infoHash) == null) {
             // Bound concurrent creations; released before the poll below re-acquires.
             if (!_lookupSemaphore.tryAcquire()) {
-                if (_log.shouldWarn()) {
-                    _log.warn("lookupTorrentInfo: " + MAX_LOOKUP_CONCURRENCY
+                if (_log.shouldInfo()) {
+                    _log.info("lookupTorrentInfo: " + MAX_LOOKUP_CONCURRENCY
                         + " concurrent lookups in progress, rejecting " + hex);
                 }
                 try { FileUtil.rmdir(lookupDir, false); } catch (Exception ignore) { /* best-effort temp dir cleanup; a leftover dir is swept by scheduleStaleLookupCleanup() */ }
