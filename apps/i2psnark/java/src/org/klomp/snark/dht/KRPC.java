@@ -1205,8 +1205,11 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
                 return true;
             }
         } catch (I2PSessionException ise) {
-            if (_log.shouldWarn()) {
-                _log.warn("Lookup failed", ise);
+            // Usually thread interrupted on torrent/router shutdown -
+            // the info line below reports the outcome
+            if (_log.shouldDebug()) {
+                _log.debug("Dest lookup threw for " + nInfo +
+                           ": " + ise.getMessage());
             }
         }
         if (_log.shouldInfo()) {
