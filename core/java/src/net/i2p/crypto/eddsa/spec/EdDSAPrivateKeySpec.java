@@ -31,13 +31,14 @@ public class EdDSAPrivateKeySpec implements KeySpec {
         if (seed.length != bd8) throw new IllegalArgumentException("seed length is wrong");
 
         this.spec = spec;
-        this.seed = seed;
+        // Defensive copy: the caller may mutate or retain its array afterwards.
+        this.seed = seed.clone();
 
         try {
             MessageDigest hash = MessageDigest.getInstance(spec.getHashAlgorithm());
 
             // H(k)
-            h = hash.digest(seed);
+            h = hash.digest(this.seed);
 
             // Saves ~0.4ms per key when running signing tests.
             // TODO: are these bitflips the same for any hash function?
@@ -57,7 +58,8 @@ public class EdDSAPrivateKeySpec implements KeySpec {
      * {@link #getSeed()} will return null if this constructor is used.
      *
      * @param spec the parameter specification for this key
-     * @param h the private key
+     * @param h the private key; copied and clamped on the copy, the caller's
+     * array is never modified
      * @throws IllegalArgumentException if hash length is wrong
      * @since 0.9.27 (GitHub issue #17)
      */
@@ -67,13 +69,15 @@ public class EdDSAPrivateKeySpec implements KeySpec {
         int bd8 = bd4 / 2;
 
         this.seed = null;
-        this.h = h;
+        // Copy before clamping so the caller's array is never mutated in place
+        // nor retained by reference.
+        this.h = h.clone();
         this.spec = spec;
 
-        h[0] &= 248;
-        h[bd8 - 1] &= 63;
-        h[bd8 - 1] |= 64;
-        a = Arrays.copyOfRange(h, 0, bd8);
+        this.h[0] &= 248;
+        this.h[bd8 - 1] &= 63;
+        this.h[bd8 - 1] |= 64;
+        a = Arrays.copyOfRange(this.h, 0, bd8);
 
         A = spec.getB().scalarMultiply(a);
     }
@@ -82,10 +86,11 @@ public class EdDSAPrivateKeySpec implements KeySpec {
      * No validation of any parameters other than a.
      * getSeed() and {@link #getH()} will return null if this constructor is used.
      *
-     * @param a must be "clamped" (for Ed) or reduced mod l (for Red)
+     * @param a must be "clamped" (for Ed) or reduced mod l (for Red); it is
+     * not validated - an invalid scalar silently yields a wrong public key.
+     * The array is copied, later changes by the caller have no effect.
      * @param aPoint if null, will be derived from a.
      * @param spec the domain parameters naming the curve and cofactor this key belongs to
-     * @throws IllegalArgumentException if a not clamped or reduced
      * @since 0.9.39
      */
     public EdDSAPrivateKeySpec(byte[] a, GroupElement aPoint, EdDSAParameterSpec spec) {
@@ -95,47 +100,57 @@ public class EdDSAPrivateKeySpec implements KeySpec {
     /**
      * No validation of any parameters other than a.
      *
-     * @param seed may be null
-     * @param h may be null
-     * @param a must be "clamped" (for Ed) or reduced mod l (for Red)
+     * @param seed may be null; copied
+     * @param h may be null; copied
+     * @param a must be "clamped" (for Ed) or reduced mod l (for Red); it is
+     * not validated - an invalid scalar silently yields a wrong public key.
+     * The array is copied, later changes by the caller have no effect.
      * @param aPoint if null, will be derived from a.
      * @param spec the domain parameters naming the curve and cofactor this key belongs to
-     * @throws IllegalArgumentException if a not clamped or reduced
      */
     public EdDSAPrivateKeySpec(byte[] seed, byte[] h, byte[] a, GroupElement aPoint, EdDSAParameterSpec spec) {
-        this.seed = seed;
-        this.h = h;
-        this.a = a;
+        this.seed = copy(seed);
+        this.h = copy(h);
+        this.a = copy(a);
         this.A = (aPoint != null) ? aPoint : spec.getB().scalarMultiply(a);
         this.spec = spec;
     }
 
     /**
+     * Defensive copy; null passes through unchanged.
+     */
+    private static byte[] copy(byte[] b) {
+        if (b == null)
+            return null;
+        return b.clone();
+    }
+
+    /**
      * Return the seed, or null if constructed from the private key directly.
      *
-     * @return will be null if constructed directly from the private key
+     * @return a copy of the seed, or null if constructed directly from the private key
      */
     public byte[] getSeed() {
-        return seed;
+        return copy(seed);
     }
 
     /**
      * Return the clamped hash of the seed, H(k), from which the scalar a is derived.
      *
-     * @return the clamped hash of the seed, 2*bd8 bytes with the low bits of
-     *         the first byte cleared and bit 6 of the last byte set
+     * @return a copy of the clamped hash of the seed, 2*bd8 bytes with the
+     * low bits of the first byte cleared and bit 6 of the last byte set
      */
     public byte[] getH() {
-        return h;
+        return copy(h);
     }
 
     /**
      * Return the private key.
      *
-     * @return the private key
+     * @return a copy of the private key
      */
     public byte[] geta() {
-        return a;
+        return copy(a);
     }
 
     /**
