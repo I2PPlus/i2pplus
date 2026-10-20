@@ -16,6 +16,29 @@ jmh {
     javaLauncher = javaToolchains.launcherFor {
         languageVersion = JavaLanguageVersion.current()
     }
+    jmhVersion = '1.37' // match the version ant's bench target fetches
+    // The launcher above is the current JDK, so these modern flags are safe
+    // here (ant's JDK 8 path never emits these warnings). Suppress the
+    // sun.misc.Unsafe warning from jmh-core and the native-access warning
+    // from freenet's CPUID loader used by i2p's CPUInformation.
+    jvmArgsAppend = ['--sun-misc-unsafe-memory-access=allow',
+                     '--enable-native-access=ALL-UNNAMED']
+    // Quick-profile defaults, matching ant's bench target. To customize,
+    // edit this block (fork, warmupIterations, iterations, includes).
+    fork = 1
+    warmupIterations = 2
+    iterations = 3
+    includeTests = false
+}
+
+// The root build forks JDK 8 javac via forkOptions.javaHome on every
+// JavaCompile task; the jmh plugin also pins a javaCompiler toolchain
+// (jmh.javaLauncher above) on its generated-harness compile, and Gradle 9
+// rejects the mismatch. Clear the inherited javaHome on that task so the
+// plugin's own toolchain applies; only generated benchmark classes are
+// affected, nothing that ships.
+tasks.matching { it.name == 'jmhCompileGeneratedClasses' }.configureEach {
+    options.forkOptions.javaHome = null
 }
 
 sourceSets {
@@ -63,7 +86,7 @@ dependencies {
     testImplementation 'junit:junit:4.13.2'
     testImplementation 'org.hamcrest:hamcrest-library:1.3'
     testImplementation 'org.mockito:mockito-core:4.11.0'
-    
+
     // don't use 2.12.4, stack overflow: https://github.com/sbt/zinc/issues/1010
     // Updated to 2.12.19 for Java 21 compatibility
     testImplementation "org.scala-lang:scala-library:2.12.19"

@@ -185,6 +185,9 @@ tools/pmd/ruleset-java-jpinpoint.xml
 !tools/test/
 !tools/test/*
 tools/test/*.jar
+# JMH benchmark libraries: downloaded on first use by tools/test/jmh/download-jmh.sh
+tools/test/jmh/*.jar
+tools/test/jmh/version.txt
 !tools/ant-contrib.jar
 !tools/java-format/google-java-format.jar
 !tools/java-format/exclude.txt

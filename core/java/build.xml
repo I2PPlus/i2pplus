@@ -585,18 +585,40 @@
   <!-- end unit tests -->
 
   <!-- benchmarks -->
+  <target name="download-jmh">
+    <exec executable="../../tools/test/jmh/download-jmh.sh" failonerror="true"/>
+  </target>
+
   <target name="jmhLibCheck">
-    <!-- override to Ant home if not set -->
-    <property name="jmh.home" value="../../tools/test/hamcrest"/>
+    <!-- Set if unset. override.properties is read at parse time, so a
+         jmh.home set there is already visible here: remember that before
+         defaulting, so a hand-installed copy stays authoritative and is
+         not silently replaced by the downloaded one. -->
+    <condition property="jmh.home.preset">
+      <isset property="jmh.home"/>
+    </condition>
+    <property name="jmh.home" value="../../tools/test/jmh"/>
+    <if>
+      <isset property="jmh.home.preset"/>
+      <then>
+        <echo message="Using the JMH libraries configured at ${jmh.home} (jmh.home is set, not downloading)."/>
+      </then>
+      <else>
+        <antcall target="download-jmh"/>
+      </else>
+    </if>
+    <condition property="jmh.libs.available">
+      <and>
+        <available file="${jmh.home}/jmh-core.jar"/>
+        <available file="${jmh.home}/jmh-generator-annprocess.jar"/>
+        <available file="${jmh.home}/jopt-simple.jar"/>
+        <available file="${jmh.home}/commons-math3.jar"/>
+      </and>
+    </condition>
     <fail message="Please set jmh.home to a directory containing the necessary JMH libraries. See build.properties for details.">
       <condition>
         <not>
-          <and>
-            <available file="${jmh.home}/jmh-core.jar"/>
-            <available file="${jmh.home}/jmh-generator-annprocess.jar"/>
-            <available file="${jmh.home}/jopt-simple.jar"/>
-            <available file="${jmh.home}/commons-math3.jar"/>
-          </and>
+          <isset property="jmh.libs.available"/>
         </not>
       </condition>
     </fail>
@@ -617,6 +639,12 @@
         <pathelement location="${build.dir}/obj"/>
       </classpath>
       <compilerarg line="${javac.compilerargs}"/>
+      <!-- JDK 23+ no longer discovers annotation processors on the plain
+           classpath, and the JMH runner needs the generated
+           META-INF/BenchmarkList, so name the processor explicitly.
+           Works on JDK 8 the same way. -->
+      <compilerarg value="-processor"/>
+      <compilerarg value="org.openjdk.jmh.generators.BenchmarkProcessor"/>
     </javac>
   </target>
 
@@ -644,6 +672,17 @@
       <srcfiles dir="${build.dir}/obj" includes="**/*.class"/>
       <srcfiles dir="${build.dir}/obj_bench" includes="**/*.class"/>
     </uptodate>
+  </target>
+
+  <target name="bench.run" depends="bench.jar">
+    <!-- Runs the benchmark suite. The default is a quick profile; pass
+         your own JMH arguments with -Dbench.args="...", e.g.
+         ant bench -Dbench.args="AESBench -f 2 -wi 5 -i 10"
+         java -jar <build.dir>/i2p-benchmarks.jar -l lists the names. -->
+    <property name="bench.args" value="-f 1 -wi 2 -i 3"/>
+    <java jar="${build.dir}/i2p-benchmarks.jar" fork="true" failonerror="true">
+      <arg line="${bench.args}"/>
+    </java>
   </target>
 
   <target name="clean">

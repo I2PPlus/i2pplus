@@ -124,6 +124,7 @@
     <echo message="  installer-osx                                Build OS X GUI installer &#10140; ./dist/i2pinstall&#8230;osx.tar.bz2"/>
     <echo message="  installer-windows / installer5-windows       Build Windows GUI installer (IzPack4 / IzPack5) &#10140; ./dist/i2pinstall&#8230;windows.exe"/>
     <echo message="  download-izpack5                             Download or update the IzPack 5 compiler into ./installer/lib/izpack/5/"/>
+    <echo message="  download-jmh                                 Download or update the JMH benchmark libraries into ./tools/test/jmh/"/>
     <echo message="  jpackage-win                                 Build native Windows64 installer bundle via jpackage (JDK 14+) &#10140; ./dist/i2pinstaller&#8230;.exe"/>
     <echo message="  7zip-freebsd                                 Installation 7zip for FreeBSD without installer &#10140; ./dist/i2p-freebsd.7z"/>
     <echo message="  7zip-linux                                   Installation 7zip for Linux without installer &#10140; ./dist/i2p-linux.7z"/>
@@ -240,7 +241,7 @@
     <echo message="  report-all-java-quick                        Compile combined report from existing results (no re-analysis) &#10140; dist/report-all-java.html + dist/report-all-java-local.html"/>
     <echo message=""/>
     <echo message=" === Testing ==="/>
-    <echo message="  bench                                        Build benchmarks"/>
+    <echo message="  bench                                        Build and run the JMH benchmarks (-Dbench.args=... to customize)"/>
     <echo message="  test                                         Run JUnit tests (Core, MiniStreaming, Streaming) via tools/scripts/run-tests.sh"/>
     <echo message="  test-js                                      Run various validation tests on console and webapp Javascript files (requires node)"/>
     <echo message="  testJbigi                                    Benchmark jbigi: native vs pure Java modPow/modPowCT/modInverse"/>
@@ -4304,9 +4305,17 @@
   <target name="testscripts-all" depends="testscripts,testscripts-net"/>
 
   <target name="bench" depends="jbigi">
-    <ant dir="core/java/" target="bench.jar">
+    <ant dir="core/java/" target="bench.run">
       <property name="build.dir" location="${build.root}core/java/build"/>
       </ant>
+  </target>
+
+  <!-- Fetches the JMH libraries into tools/test/jmh/ (gitignored cache).
+       Separate target so it can also be run on its own, mirroring
+       download-izpack5; the bench targets call the same script through
+       core/java/build.xml's jmhLibCheck. -->
+  <target name="download-jmh">
+    <ant dir="core/java/" target="download-jmh"/>
   </target>
 
   <!-- standalone i2psnark zip -->

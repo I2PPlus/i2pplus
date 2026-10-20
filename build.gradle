@@ -91,7 +91,7 @@ subprojects {
     if (project.name == 'apps') {
         return
     }
-    
+
     buildDir = file("/tmp/build-i2p/gradle/${project.path.replace(':', '/').replaceFirst('/', '')}")
 
     apply plugin: 'java'
@@ -202,6 +202,15 @@ tasks.register('testReport', Exec) {
 
 tasks.named('test') {
     dependsOn tasks.named('testReport')
+}
+
+// ./gradlew bench: alias for :core:jmh (me.champeau.jmh plugin, configured in
+// core/build.gradle), mirroring ant's bench target - both run the benchmarks
+// in core/java/bench. Tune by editing the jmh { } block in core/build.gradle
+// (fork, warmupIterations, iterations, includes).
+tasks.register('bench') {
+    description = 'Run the JMH crypto benchmarks (alias for :core:jmh)'
+    dependsOn project(':core').tasks.named('jmh')
 }
 
 // Coverage report. Only registered when jacoco is applied (-Pcoverage); the
