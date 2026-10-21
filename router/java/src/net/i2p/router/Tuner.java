@@ -8595,16 +8595,98 @@ public class Tuner extends SimpleTimer2.TimedEvent {
     // =====================================================================
 
     /**
+     * Completed outgoing NetDb searches that must have finished before a failure
+     * ratio is trusted. Below this the ratio is noise: one failed lookup on a
+     * quiet router would otherwise re-arm every search budget in the group.
+     *
+     * @since 0.9.72+
+     */
+    static final int MIN_SEARCH_SAMPLES = 4;
+
+    /**
+     * Outgoing-search failure ratio above which no NetDb search budget may be
+     * tightened, and above which the budgets grow instead.
+     *
+     * @since 0.9.72+
+     */
+    static final double SEARCH_FAIL_RATIO = 0.25;
+
+    /**
+     * Failure ratio of this router's own outgoing NetDb searches.
+     * <p>Use the per-search outcome stats: {@code netDb.successTime} and
+     * {@code netDb.failedTime} each fire once per completed iterative search in
+     * {@link net.i2p.router.networkdb.kademlia.IterativeSearchJob}, so their
+     * event counts are our successes and our failures.
+     * <p>Do not use {@code netDb.lookupsMatched} or
+     * {@code netDb.lookupsMatchedLeaseSet} for this — those are written by
+     * {@link net.i2p.router.networkdb.HandleDatabaseLookupMessageJob} when this
+     * router ANSWERS another router's lookup. They measure floodfill service,
+     * not our own searches, and sit near zero on a non-floodfill, which reads as
+     * "every lookup failed" and parks the whole budget group at its floor.
+     *
+     * @param successes event count of {@code netDb.successTime}, or NaN
+     * @param failures event count of {@code netDb.failedTime}, or NaN
+     * @return the failure ratio in [0, 1], or NaN when too few searches completed
+     * @since 0.9.72+
+     */
+    static double searchFailureRatio(double successes, double failures) {
+        return outcomeRatio(successes, failures, MIN_SEARCH_SAMPLES);
+    }
+
+    /**
+     * Failure ratio from per-attempt outcome event counts.
+     * <p>Both arguments are event counts of stats that fire once per completed
+     * attempt, one on the success path and one on the failure path. A NaN side is
+     * read as zero events, so a stat with no traffic in the window does not skew
+     * the ratio; it just lowers the sample count.
+     *
+     * @param successes event count of the success-path stat, or NaN
+     * @param failures event count of the failure-path stat, or NaN
+     * @param minSamples completed attempts needed before the ratio is trusted
+     * @return the failure ratio in [0, 1], or NaN when too few attempts completed
+     * @since 0.9.72+
+     */
+    static double outcomeRatio(double successes, double failures, int minSamples) {
+        double ok = Double.isNaN(successes) ? 0 : successes;
+        double bad = Double.isNaN(failures) ? 0 : failures;
+        double total = ok + bad;
+        if (total < minSamples) {return Double.NaN;}
+        return bad / total;
+    }
+
+    /**
+     * Per-peer reply budget implied by a completed successful search.
+     * <p>{@code netDb.successTime} is the whole multi-round search and
+     * {@code netDb.successRetries} is (peers queried - 1), so the quotient is the
+     * mean cost of one round; doubling it leaves headroom for a slow round
+     * without letting the per-peer window run out to the total search cap.
+     *
+     * @param successTime mean successful search duration in ms, or NaN
+     * @param successRetries mean additional queries per successful search, or NaN
+     * @return the per-peer budget in ms, or NaN when there is no signal
+     * @since 0.9.72+
+     */
+    static double perPeerSearchTimeMs(double successTime, double successRetries) {
+        if (Double.isNaN(successTime) || successTime <= 0) {return Double.NaN;}
+        double rounds = Double.isNaN(successRetries) ? 1 : Math.max(1, successRetries + 1);
+        return successTime / rounds * 2;
+    }
+
+    /**
      * NetDB search limit (max peers per iterative search).
-     * Scales with network latency.
+     * Grows while our own searches are failing or a failed search burns the whole
+     * candidate budget, and only shrinks when searches converge well inside it.
      */
     private class NetDBSearchLimitParam extends BaseParam {
 
         NetDBSearchLimitParam() {
+            // 16..40 brackets the untuned values (32 normally, 24 on a floodfill);
+            // the old 8..24 range sat entirely below stock, so the tuner could only
+            // ever cut the candidate set, and it did so hardest when lookups failed.
             super("netdb.searchLimit", "NetDB peers per search",
                   SUB_NETDB,
 
-                   8, 24, 1, "transport.sendProcessingTime", _context);
+                   16, 40, 1, "netDb.failedRetries", _context);
         }
 
         protected void applyValue(int value) {
@@ -8625,28 +8707,32 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
-            // observed = transport.sendProcessingTime (ms, network latency proxy)
-            // Cross-refs: netDb.lookupsMatched (match events), client.leaseSetFoundRemoteTime, jobLag (CPU)
-            double matchCount = getAdditionalEventCount(_context, "netDb.lookupsMatched");
-            double leaseTime = getAdditionalStat(_context, "client.leaseSetFoundRemoteTime");
+            // observed = netDb.failedRetries: peers queried beyond the first by
+            // searches that failed anyway. At or above the limit those searches
+            // exhausted the candidate set, so more peers is the fix.
+            double successes = getAdditionalEventCount(_context, "netDb.successTime");
+            double failures = getAdditionalEventCount(_context, "netDb.failedTime");
+            double okRetries = getAdditionalStat(_context, "netDb.successRetries");
             double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
 
-            boolean networkSlow = observed > 300;
             boolean systemBusy = !Double.isNaN(jobLag) && jobLag > 100;
-            boolean hasMatches = !Double.isNaN(matchCount) && matchCount > 0;
-            boolean lsSlow = !Double.isNaN(leaseTime) && leaseTime > 500;
+            double ratio = searchFailureRatio(successes, failures);
+            boolean failing = !Double.isNaN(ratio) && ratio > SEARCH_FAIL_RATIO;
+            boolean exhausted = !Double.isNaN(observed) && observed + 1 >= current;
 
-            // No matches = lookups are failing, shrink limit to reduce load
-            if (!hasMatches && !systemBusy)
-                return Math.max(_min, current - _step);
+            if (systemBusy)
+                return current;
 
-            // Fast network + matches present = decrease limit (searches succeed with fewer peers)
-            if (!networkSlow && hasMatches && !lsSlow)
-                return Math.max(_min, current - _step);
-
-            // Slow LS lookups + matches present = increase limit slightly
-            if (lsSlow && hasMatches && !systemBusy)
+            // Searches are failing, or failed searches queried up to the limit and
+            // still came up empty: widen the candidate set. Cutting it here removes
+            // the only peers a slow network has left to ask.
+            if (failing || exhausted)
                 return Math.min(_max, current + _step);
+
+            // Healthy searches that converge well inside the limit: give the
+            // query traffic back.
+            if (!Double.isNaN(okRetries) && okRetries + 1 < current / 2)
+                return Math.max(_min, current - _step);
 
             return current;
         }
@@ -8655,16 +8741,20 @@ public class Tuner extends SimpleTimer2.TimedEvent {
     /**
      * NetDB total search time cap (ms) — the hard deadline each iterative search
      * works within, bounding the LS deadline cap and the per-hop message window.
-     * Grows toward its ceiling while failing lookups run up against it, and
-     * follows network success time otherwise.
+     * Tracks how long our own failed searches actually run: when they die at the
+     * cap, the cap and not the network ended them, so the cap grows. It relaxes
+     * toward the floor only while searches succeed and finish well inside it.
      */
     private class NetDBMaxSearchTimeParam extends BaseParam {
 
         NetDBMaxSearchTimeParam() {
+            // Floor is the untuned default (15s). The old 10s floor let the tuner
+            // cut the cap below stock, which is where live routers were pinning it
+            // while LeaseSet searches died at the deadline.
             super(IterativeSearchJob.PROP_MAX_SEARCH_TIME, "NetDB search cap (ms)",
                   SUB_NETDB,
 
-                  10 * 1000, 30 * 1000, 1000, "transport.sendProcessingTime", _context);
+                  15 * 1000, 30 * 1000, 1000, "netDb.failedTime", _context);
         }
 
         protected void applyValue(int value) {
@@ -8685,26 +8775,51 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
-            // observed = transport.sendProcessingTime (ms, network latency proxy)
+            // observed = netDb.failedTime (ms): how long a failed search ran. A
+            // failure landing at the cap means the cap ended it, not the network.
+            double successes = getAdditionalEventCount(_context, "netDb.successTime");
+            double failures = getAdditionalEventCount(_context, "netDb.failedTime");
+            double successTime = getAdditionalStat(_context, "netDb.successTime");
             double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
+
             boolean systemBusy = !Double.isNaN(jobLag) && jobLag > 100;
+            double ratio = searchFailureRatio(successes, failures);
+            boolean failing = !Double.isNaN(ratio) && ratio > SEARCH_FAIL_RATIO;
+            boolean capBinding = !Double.isNaN(observed) && observed >= current * 0.9;
 
             if (systemBusy)
                 return current;
 
-            // Slow network: keep a generous cap so searches can converge across hops.
-            if (observed > 300)
+            // Failed searches are dying at the deadline: widen it so the next
+            // round of a slow-but-viable search fits.
+            if (capBinding || failing)
                 return Math.min(_max, current + _step);
 
-            // Fast network with healthy lookups: relax toward the floor, but keep
-            // enough headroom for multi-round searches.
-            return Math.max(10 * 1000, current - _step);
+            // Successful searches finish inside a quarter of the budget: relax,
+            // but never below the floor, so multi-round searches keep room.
+            if (!Double.isNaN(successTime) && successTime < current * 0.25)
+                return Math.max(_min, current - _step);
+
+            return current;
         }
     }
 
     /**
+     * Idle target for the NetDB max concurrent searches param.
+     * <p>Mirrors the untuned default in
+     * {@link net.i2p.router.networkdb.kademlia.IterativeSearchJob} (16, or 4 on a
+     * slow router). A quiet router settles here rather than at the hard
+     * {@code min}, so the router keeps enough search capacity to resolve a cold
+     * destination without ramping up from the floor one slot per cycle.
+     *
+     * @since 0.9.72+
+     */
+    static final int MAX_CONCURRENT_IDLE_TARGET = 16;
+
+    /**
      * NetDB max concurrent searches.
-     * Scales with network latency.
+     * Bounded by demand: it grows while searches queue for want of a free slot,
+     * and settles back to {@link #MAX_CONCURRENT_IDLE_TARGET} when nothing queues.
      */
     private class NetDBMaxConcurrentParam extends BaseParam {
 
@@ -8712,7 +8827,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             super("netdb.maxConcurrent", "NetDB max concurrent searches",
                   SUB_NETDB,
 
-                  4, 64, 1, "transport.sendProcessingTime", _context);
+                  4, 64, 1, "netDb.lookupDeferred", _context);
         }
 
         protected void applyValue(int value) {
@@ -8723,59 +8838,64 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return IterativeSearchJob.getMaxConcurrentDefault();
         }
 
+        /**
+         * Deferred-search events this cycle, not the stat's mean value — the stat
+         * records the deferred search's remaining lifetime as its value, so the
+         * mean says nothing about how often the cap actually bound.
+         */
         protected double getObservedStat(RouterContext ctx) {
-            RateStat rs = _context.statManager().getRate(_statName);
-            if (rs == null) return Double.NaN;
-            Rate rate = rs.getRate(STAT_PERIOD);
-            if (rate == null || rate.getLastEventCount() == 0) return Double.NaN;
-            return rate.getAverageValue();
+            return getAdditionalEventCount(ctx, _statName);
         }
 
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
-            // observed = transport.sendProcessingTime (ms, network latency proxy)
-            double matchCount = getAdditionalEventCount(_context, "netDb.lookupsMatched");
-            double leaseTime = getAdditionalStat(_context, "client.leaseSetFoundRemoteTime");
+            // observed = netDb.lookupDeferred events: searches queued because no
+            // slot was free, which is this cap binding, measured directly.
+            double searchCount = getAdditionalEventCount(_context, "netDb.searchCount");
             double lsDropped = getAdditionalStat(_context, "client.requestLeaseSetDropped");
             double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
 
-            boolean networkSlow = observed > 300;
             boolean systemBusy = !Double.isNaN(jobLag) && jobLag > 100;
-            boolean hasMatches = !Double.isNaN(matchCount) && matchCount > 0;
-            boolean lsSlow = !Double.isNaN(leaseTime) && leaseTime > 500;
-            boolean lsUnhealthy = !Double.isNaN(lsDropped) && lsDropped > 0;
+            boolean leaseRequestsDropped = !Double.isNaN(lsDropped) && lsDropped > 0;
 
-            // No matches = lookups failing, pull back concurrency
-            if (!hasMatches && !systemBusy)
-                return Math.max(_min, current - 1);
+            if (systemBusy)
+                return current;
 
-            // LS requests getting dropped = too much concurrency, pull back
-            if (lsUnhealthy)
-                return Math.max(_min, current - 1);
+            // Searches are queueing on the cap: add a slot. Refuse the growth only
+            // if the leaseSet request path is already shedding work.
+            if (!Double.isNaN(observed) && observed > 0)
+                return leaseRequestsDropped ? current : Math.min(_max, current + _step);
 
-            // Slow LS lookups + matches present = increase concurrency slightly
-            if (lsSlow && hasMatches && !systemBusy && !lsUnhealthy)
-                return Math.min(_max, current + 1);
-
-            // Fast network + matches + healthy LS = decrease concurrency (not needed)
-            if (!networkSlow && hasMatches && !lsSlow && !lsUnhealthy)
-                return Math.max(_min, current - 1);
+            // Nothing queueing and search volume well under the cap: settle toward
+            // the idle target, so a quiet router keeps real search capacity rather
+            // than drifting to the floor and ramping up one slot per cycle when the
+            // first cold destination shows up.
+            if (!Double.isNaN(searchCount) && searchCount < current &&
+                current != MAX_CONCURRENT_IDLE_TARGET)
+                return current > MAX_CONCURRENT_IDLE_TARGET ? Math.max(MAX_CONCURRENT_IDLE_TARGET, current - _step)
+                                                            : Math.min(MAX_CONCURRENT_IDLE_TARGET, current + _step);
 
             return current;
         }
     }
 
     /**
-     * NetDB single search time (per-peer timeout).
-     * Scales with network latency.
+     * NetDB single search time (per-peer reply budget, ms).
+     * Derived from how long our own successful searches take divided by the rounds
+     * they needed. While searches are failing this only ever grows: a peer that
+     * misses the window is written off as a dead peer, so tightening the window
+     * during a failure converts slow peers into failed ones and feeds the loop.
      */
     private class NetDBSingleSearchTimeParam extends BaseParam {
 
         NetDBSingleSearchTimeParam() {
+            // 2500..8000 brackets the untuned SINGLE_SEARCH_TIME of 6s. The old
+            // 1000ms floor was a sixth of stock, and live routers were pinned there
+            // with LeaseSet searches timing out per peer.
             super("netdb.singleSearchTime", "NetDB search timeout (ms)",
                   SUB_NETDB,
 
-                  1000, 6000, 250, "transport.sendProcessingTime", _context);
+                  2500, 8000, 250, "netDb.successTime", _context);
         }
 
         protected void applyValue(int value) {
@@ -8796,61 +8916,41 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
-            // observed = transport.sendProcessingTime (ms, per-peer network latency proxy)
-            // Per-peer timeout should track actual per-peer response times, not total
-            // multi-round search duration.  Using total search time (netDb.successTime,
-            // client.leaseSetFoundRemoteTime) inflates this timeout pointlessly when a
-            // search needs more rounds (which is the total cap's job, not per-peer).
-            double matchCount = getAdditionalEventCount(_context, "netDb.lookupsMatchedLeaseSet");
-            double failCount = getAdditionalEventCount(_context, "netDb.lookupsFailedLeaseSet");
-            double leaseFailTime = getAdditionalStat(_context, "client.leaseSetFailedRemoteTime");
+            // observed = netDb.successTime (ms): the whole outgoing search, which
+            // is what this per-peer budget bounds. netDb.successRetries says how
+            // many extra rounds that search needed, so the pair gives the mean
+            // cost of one round — the per-peer figure — without borrowing the
+            // total cap's job.
+            double successes = getAdditionalEventCount(_context, "netDb.successTime");
+            double failures = getAdditionalEventCount(_context, "netDb.failedTime");
+            double okRetries = getAdditionalStat(_context, "netDb.successRetries");
             double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
 
             boolean systemBusy = !Double.isNaN(jobLag) && jobLag > 100;
-            boolean hasMatches = !Double.isNaN(matchCount) && matchCount > 0;
-            boolean hasFails = !Double.isNaN(failCount) && failCount > 0;
-
-            // Network latency is the primary per-peer signal
-            boolean networkFast = observed < 200;
-            boolean networkSlow = observed > 500;
-
-            // Failure ratio: are per-peer queries actually timing out?
-            double totalLookups = (hasMatches ? matchCount : 0) + (hasFails ? failCount : 0);
-            double failRatio = totalLookups > 3 ? failCount / totalLookups : 0;
-            boolean failingHard = failRatio > 0.5;
-
-            // Cap binding: failing lookups run up against the total LS deadline,
-            // meaning the total search cap is truncating multi-round convergence.
-            // More per-peer time just wastes the remaining budget — actively decrease.
-            double lsLookupCap = IterativeSearchJob.getMaxLeaseSetLookupTime();
-            boolean capBinding = hasFails && !Double.isNaN(leaseFailTime) &&
-                                 leaseFailTime >= lsLookupCap * 0.9;
+            double ratio = searchFailureRatio(successes, failures);
+            boolean failing = !Double.isNaN(ratio) && ratio > SEARCH_FAIL_RATIO;
 
             if (systemBusy)
                 return current;
 
-            // Cap binding: total timeout is the bottleneck, not per-peer responsiveness.
-            // Shrink per-peer timeout to fit more rounds within the total cap.
-            if (capBinding)
-                return Math.max(_min, current - _step);
-
-            // Network slow + per-peer queries failing: increase timeout
-            if (networkSlow && failingHard)
+            // Searches are failing: raise the per-peer budget. This is the whole
+            // point of the group — a lookup failure must widen the time the next
+            // lookup gets, never narrow it.
+            if (failing)
                 return Math.min(_max, current + _step);
 
-            // Network fast + lookups succeeding: decrease (peers respond quickly)
-            if (networkFast && hasMatches && !failingHard)
-                return Math.max(_min, current - _step);
+            double perPeer = perPeerSearchTimeMs(observed, okRetries);
+            // No completed successful search to learn from: hold. Drifting to the
+            // floor here is what starved cold-destination lookups.
+            if (Double.isNaN(perPeer))
+                return current;
 
-            // Matches present + network reasonably fast: gradual decrease
-            if (hasMatches && !networkSlow)
-                return Math.max(_min, current - _step);
+            int target = (int) Math.max(_min, Math.min(_max, perPeer));
+            // Dead zone: a value within one step of target is close enough.
+            if (Math.abs(target - current) <= _step)
+                return current;
 
-            // No matches at all: fail fast, decrease
-            if (!hasMatches)
-                return Math.max(_min, current - _step);
-
-            return current;
+            return clamp(current, target, _step);
         }
     }
 
@@ -9070,10 +9170,12 @@ public class Tuner extends SimpleTimer2.TimedEvent {
     private class ResendTimeoutParam extends BaseParam {
 
         ResendTimeoutParam() {
+            // Floor 15s: the untuned value is 30s and a 5s window was measured to
+            // drop the heal stores outright, so the tuner may relax only this far.
             super("netdb.resendTimeout", "NetDB republish window (ms)",
                   SUB_NETDB,
 
-                  10 * 1000, 30 * 1000, 2000, "transport.sendProcessingTime", _context);
+                  15 * 1000, 30 * 1000, 2000, "netDb.ackTime", _context);
         }
 
         protected void applyValue(int value) {
@@ -9094,36 +9196,28 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
-            // observed = transport.sendProcessingTime (ms, network latency proxy)
-            // Cross-refs: client.leaseSetFailedRemoteTime and netDb.lookupsFailedLeaseSet
-            // tell us republish heals aren't landing; honor failures even when the
-            // latency signal is quiet.
-            double leaseFailTime = getAdditionalStat(_context, "client.leaseSetFailedRemoteTime");
-            double lsFails = getAdditionalEventCount(_context, "netDb.lookupsFailedLeaseSet");
+            // observed = netDb.ackTime (ms): how long a peer takes to ACK a DbStore,
+            // i.e. the round trip this window has to cover for the republish stores.
+            // transport.sendProcessingTime measured local queueing on successful
+            // sends only, so it read "fast" exactly when stores were not landing.
+            double republishFails = getAdditionalEventCount(_context, "netDb.republishLeaseSetFail");
             double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
 
             boolean systemBusy = !Double.isNaN(jobLag) && jobLag > 100;
-            boolean failsElevated = !Double.isNaN(lsFails) && lsFails > 0;
-            // Failed lookups running up against the current window mean the store
-            // is dying in transit — widen it.
-            boolean capBinding = failsElevated && !Double.isNaN(leaseFailTime) &&
-                                 leaseFailTime >= current * 0.9;
+            boolean failing = !Double.isNaN(republishFails) && republishFails > 0;
 
             if (systemBusy)
                 return current;
 
-            // Republish messages are losing the race: widen the window.
-            if (capBinding)
+            // Republish stores are not landing: widen the window so the multi-hop
+            // stores survive the trip.
+            if (failing)
                 return Math.min(_max, current + _step);
 
-            // Slow network: keep a generous window so stores survive the trip.
-            if (observed > 300)
-                return current;
-
-            // Fast network with no failures: relax toward the floor, but floor
-            // at 15s so we never go back to the 5s drop-ball behavior.
-            if (!failsElevated)
-                return Math.max(15 * 1000, current - _step);
+            // Stores are ACKed promptly and nothing is failing: relax toward the
+            // floor, keeping four round trips of headroom.
+            if (!Double.isNaN(observed) && observed * 4 < current)
+                return Math.max(_min, current - _step);
 
             return current;
         }
@@ -11761,11 +11855,25 @@ protected int computeTarget(double observed) {
     }
 
     /**
-     * Tunes max concurrent test jobs based on transport latency.
-     * When latency is high, fewer tests = less transport pressure.
-     * When latency is low, more tests = faster pool recovery.
-     * Primary signal: {@code transport.sendProcessingTime} (message latency).
-     * Cross-refs: {@code udp.sendConfirmTime} (RTT), {@code jobQueue.testJobCount}.
+     * Completed tunnel test rounds needed before a failure ratio is trusted.
+     *
+     * @since 0.9.72+
+     */
+    static final int MIN_TEST_SAMPLES = 4;
+
+    /**
+     * Tunnel-test failure ratio above which the test schedule may not be relaxed.
+     *
+     * @since 0.9.72+
+     */
+    static final double TEST_FAIL_RATIO = 0.25;
+
+    /**
+     * Tunes max concurrent test jobs.
+     * Grows while test batches are turned away for want of a slot, and while tests
+     * are failing — the pool needs detection and replacement of dead tunnels most
+     * at that moment, so shedding test concurrency then is self-harm.
+     * Primary signal: {@code tunnel.testBatchDenied} (event count).
      *
      * @since 0.9.70+
      */
@@ -11775,7 +11883,7 @@ protected int computeTarget(double observed) {
             super("tunnel.testJob.maxQueued", "Tunnel max concurrent test jobs",
                   SUB_TUNNEL,
 
-                  12, 256, 4, "transport.sendProcessingTime", _context);
+                  12, 256, 4, "tunnel.testBatchDenied", _context);
         }
 
         protected void applyValue(int value) {
@@ -11786,36 +11894,38 @@ protected int computeTarget(double observed) {
             return TestJob.maxQueuedTests;
         }
 
+        /**
+         * Denial events this cycle, not the stat's mean value — the stat is a
+         * counter, so its average is a constant 1 whenever anything was denied.
+         */
         protected double getObservedStat(RouterContext ctx) {
-            RateStat rs = _context.statManager().getRate(_statName);
-            if (rs == null) return Double.NaN;
-            Rate rate = rs.getRate(STAT_PERIOD);
-            if (rate == null || rate.getLastEventCount() == 0) return Double.NaN;
-            return rate.getAverageValue();
+            return getAdditionalEventCount(ctx, _statName);
         }
 
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
-            // observed = transport.sendProcessingTime (ms, message lifetime)
-            // Cross-refs: udp.sendConfirmTime (RTT), jobQueue.testJobCount
-            double rtt = getAdditionalStat(_context, "udp.sendConfirmTime");
+            // observed = tunnel.testBatchDenied events: batches turned away
+            // because too many tests were already in flight.
+            double successes = getAdditionalEventCount(_context, "tunnel.testSuccessTime");
+            double failures = getAdditionalEventCount(_context, "tunnel.testFailedTime");
             double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
             boolean cpuPressure = !Double.isNaN(jobLag) && jobLag > 50;
-            boolean highLatency = !Double.isNaN(observed) && observed > 200;
-            boolean severeLatency = !Double.isNaN(observed) && observed > 1000;
-            boolean highRTT = !Double.isNaN(rtt) && rtt > 500;
+            double ratio = outcomeRatio(successes, failures, MIN_TEST_SAMPLES);
+            boolean failing = !Double.isNaN(ratio) && ratio > TEST_FAIL_RATIO;
 
-            // Severe latency — slash test count to free transport
-            if (severeLatency || highRTT)
-                return Math.max(_min, current / 2);
+            // Tests are failing: keep, or add to, the test concurrency. Cutting it
+            // here delays replacing dead tunnels, which is exactly when the pool
+            // needs the tests.
+            if (failing)
+                return cpuPressure ? current : Math.min(_max, current + _step);
 
-            // Moderate latency — reduce tests
-            if (highLatency && !cpuPressure)
-                return Math.max(_min, current - _step * 2);
-
-            // Low latency + no CPU pressure — allow more tests for faster pool recovery
-            if (!highLatency && !highRTT && !cpuPressure && current < _max)
+            // Batches are being turned away: raise the cap.
+            if (!Double.isNaN(observed) && observed > 0)
                 return Math.min(_max, current + _step);
+
+            // Tests are healthy and the job queue is behind: shed some pressure.
+            if (cpuPressure)
+                return Math.max(_min, current - _step * 2);
 
             return current;
         }
@@ -11823,10 +11933,10 @@ protected int computeTarget(double observed) {
 
     /**
      * Tunes minimum delay between tests per tunnel.
-     * Longer delay = fewer tests = less transport pressure.
-     * Shorter delay = faster detection of tunnel failures.
-     * Primary signal: {@code transport.sendProcessingTime}.
-     * Cross-refs: {@code tunnel.testFailedTime}, {@code tunnel.testSuccessTime}.
+     * Shortens while tests are failing, so a dying tunnel is retested and replaced
+     * inside the failure window; lengthens only when tests pass and the transport
+     * is slow to confirm them.
+     * Primary signal: {@code tunnel.testSuccessTime} (ms per passing test).
      *
      * @since 0.9.70+
      */
@@ -11836,7 +11946,7 @@ protected int computeTarget(double observed) {
             super("tunnel.testJob.minTestDelay", "Tunnel min test delay (ms)",
                   SUB_TUNNEL,
 
-                  10000, 120000, 5000, "transport.sendProcessingTime", _context);
+                  10000, 120000, 5000, "tunnel.testSuccessTime", _context);
         }
 
         protected void applyValue(int value) {
@@ -11857,23 +11967,34 @@ protected int computeTarget(double observed) {
 
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
-            // observed = transport.sendProcessingTime (ms)
-            // Cross-refs: tunnel.testFailedTime, tunnel.testSuccessTime
-            double testFailTime = getAdditionalStat(_context, "tunnel.testFailedTime");
+            // observed = tunnel.testSuccessTime (ms): how long a passing test takes.
+            // transport.sendProcessingTime measured local queueing on successful
+            // sends only, so it read "quiet" while tests were failing outright.
+            double successes = getAdditionalEventCount(_context, "tunnel.testSuccessTime");
+            double failures = getAdditionalEventCount(_context, "tunnel.testFailedTime");
+            double confirmTime = getAdditionalStat(_context, "udp.sendConfirmTime");
             double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
             boolean cpuPressure = !Double.isNaN(jobLag) && jobLag > 50;
-            boolean highLatency = !Double.isNaN(observed) && observed > 200;
-            boolean testsSlow = !Double.isNaN(testFailTime) && testFailTime > 15000;
+            double ratio = outcomeRatio(successes, failures, MIN_TEST_SAMPLES);
+            boolean failing = !Double.isNaN(ratio) && ratio > TEST_FAIL_RATIO;
 
-            // High transport latency or slow tests — increase delay to reduce pressure
-            if (highLatency || testsSlow || cpuPressure) {
-                int maxDelay = _context.getProperty("i2p.tunnel.testJob.maxTestDelay", 90000);
-                return Math.min(Math.min(_max, maxDelay), current + _step);
-            }
-
-            // Low latency — decrease delay for faster failure detection
-            if (!highLatency && !cpuPressure && current > _min)
+            // Tests are failing: shorten the delay. Lengthening it while tunnels
+            // die keeps broken tunnels in the pool longer, which is the opposite
+            // of what the failures are asking for.
+            if (failing)
                 return Math.max(_min, current - _step);
+
+            if (cpuPressure)
+                return current;
+
+            // Tests pass but the transport is slow to confirm them: back off.
+            if (!Double.isNaN(confirmTime) && confirmTime > 1000)
+                return Math.min(_max, current + _step);
+
+            // Healthy and quick: test more often, staying clear of the max delay.
+            int maxDelay = _context.getProperty("i2p.tunnel.testJob.maxTestDelay", 90000);
+            if (current > _min)
+                return Math.max(_min, Math.min(current - _step, maxDelay));
 
             return current;
         }
@@ -11881,9 +12002,10 @@ protected int computeTarget(double observed) {
 
     /**
      * Tunes maximum delay between tests per tunnel.
-     * Works with min delay — max caps the backoff for healthy tunnels.
-     * Primary signal: {@code transport.sendProcessingTime}.
-     * Cross-refs: {@code tunnel.testSuccessTime}.
+     * Works with min delay — max caps the backoff for healthy tunnels. Pulls the
+     * ceiling in while tests are failing, and only widens the backoff while the
+     * periods actually in use are running up against it.
+     * Primary signal: {@code tunnel.testPeriod} (the period in effect, ms).
      *
      * @since 0.9.70+
      */
@@ -11893,7 +12015,7 @@ protected int computeTarget(double observed) {
             super("tunnel.testJob.maxTestDelay", "Tunnel max test delay (ms)",
                   SUB_TUNNEL,
 
-                  60000, 600000, 10000, "transport.sendProcessingTime", _context);
+                  60000, 600000, 10000, "tunnel.testPeriod", _context);
         }
 
         protected void applyValue(int value) {
@@ -11914,15 +12036,26 @@ protected int computeTarget(double observed) {
 
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
-            // observed = transport.sendProcessingTime (ms)
-            boolean highLatency = !Double.isNaN(observed) && observed > 200;
+            // observed = tunnel.testPeriod (ms): the test period actually in use,
+            // the quantity this ceiling bounds.
+            double successes = getAdditionalEventCount(_context, "tunnel.testSuccessTime");
+            double failures = getAdditionalEventCount(_context, "tunnel.testFailedTime");
+            double ratio = outcomeRatio(successes, failures, MIN_TEST_SAMPLES);
+            boolean failing = !Double.isNaN(ratio) && ratio > TEST_FAIL_RATIO;
 
-            // High latency — increase max delay (healthier tunnels tested less often)
-            if (highLatency)
+            // Tests are failing: pull the ceiling in so a tunnel that looks healthy
+            // is retested inside the failure window, not at the backoff cap.
+            if (failing)
+                return Math.max(_min, current - _step);
+
+            // Nothing failing and the periods in use crowd the ceiling: healthy
+            // tunnels may back off further.
+            if (!Double.isNaN(observed) && observed >= current * 0.9)
                 return Math.min(_max, current + _step);
 
-            // Low latency — decrease max delay (catch failures faster)
-            if (!highLatency && current > _min) {
+            // Periods well inside the ceiling: relax the backoff, staying clear of
+            // the configured min delay.
+            if (!Double.isNaN(observed) && observed < current * 0.5) {
                 int minDelay = _context.getProperty("i2p.tunnel.testJob.minTestDelay", 30000);
                 return Math.max(Math.max(_min, minDelay), current - _step);
             }
