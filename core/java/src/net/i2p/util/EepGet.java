@@ -1139,6 +1139,7 @@ public class EepGet {
         if (_log.shouldDebug())
             _log.debug("[Eepget] Fetching (" + (_shouldProxy ? "proxied" : "direct") + ")\n* Request: " + redactedUrl(_actualURL));
         boolean usedStallImmediateRetry = false;
+        IOException lastFailure = null;
         while (_keepFetching) {
             final long now = System.currentTimeMillis();
             if (_fetchDeadlineMs > 0 && now >= _fetchDeadlineMs)
@@ -1196,6 +1197,7 @@ public class EepGet {
                 // The baseline is this attempt's body progress; header and
                 // connect phases advance no body bytes, so a file length
                 // loaded by sendRequest() is never mistaken for progress.
+                lastFailure = ioe;
                 stalledProgressing = _keepFetching
                         && !isTotalBudgetExhausted(_fetchTotalTimeout,
                                 fetchStartMs, System.currentTimeMillis())
@@ -1204,7 +1206,7 @@ public class EepGet {
                 for (int i = 0; i < _listeners.size(); i++)
                     _listeners.get(i).attemptFailed(_url, _bytesTransferred, _bytesRemaining, _currentAttempt, _numRetries, ioe);
                 if (_log.shouldWarn())
-                    _log.warn("[Eepget] Transfer failed -> " + ioe.getMessage() +
+                    _log.warn("[Eepget] Transfer failed -> " + failureReason(ioe, inactivityBudget()) +
                              "\n* Request: " + redactedUrl(_url));
                 if (ioe instanceof MalformedURLException ||
                     ioe instanceof UnknownHostException ||
@@ -1270,8 +1272,56 @@ public class EepGet {
         for (int i = 0; i < _listeners.size(); i++)
             _listeners.get(i).transferFailed(_url, _bytesTransferred, _bytesRemaining, _currentAttempt);
         if (_log.shouldWarn())
-            _log.warn("[Eepget] All retrieval attempts failed\n* Request: " + redactedUrl(_url));
+            _log.warn("[Eepget] All retrieval attempts failed" +
+                      (lastFailure != null ? " -> " + failureReason(lastFailure, inactivityBudget()) : "") +
+                      "\n* Request: " + redactedUrl(_url));
         return false;
+    }
+
+    /**
+     * The inactivity timeout in force for a fetch, the default when none was
+     * configured. Matches what doFetch() installs as the socket soTimeout.
+     *
+     * @return the inactivity budget in milliseconds
+     */
+    private long inactivityBudget() {
+        return _fetchInactivityTimeout > 0 ? _fetchInactivityTimeout : DEFAULT_INACTIVITY_TIMEOUT;
+    }
+
+    /**
+     * The failure reason for a transfer-failed log line. Socket exceptions
+     * frequently carry no message at all, and "-> null" tells the reader
+     * nothing. A bare read timeout is named together with the inactivity
+     * budget that expired, so the line says how long the peer stayed quiet;
+     * any other message-less exception falls back to its class name - or its
+     * full name, which an anonymous or local class leaves blank as a simple
+     * name.
+     *
+     * @param t the failure, non-null
+     * @param inactivityMs the inactivity timeout in force on the failed read
+     * @return a non-empty reason for the log line
+     * @since 0.9.72+
+     */
+    static String failureReason(Throwable t, long inactivityMs) {
+        String msg = t.getMessage();
+        if (msg != null && !msg.isEmpty()) {return msg;}
+        if (t instanceof SocketTimeoutException) {
+            return t.getClass().getSimpleName() + ": no data for " + seconds(inactivityMs);
+        }
+        String name = t.getClass().getSimpleName();
+        return !name.isEmpty() ? name : t.getClass().getName();
+    }
+
+    /**
+     * Render a millisecond duration in seconds for log output, keeping
+     * milliseconds only for sub-second or non-whole-second values.
+     *
+     * @param ms the duration in milliseconds
+     * @return the duration as "30s", or "1500ms" when it is not a whole number of seconds
+     * @since 0.9.72+
+     */
+    static String seconds(long ms) {
+        return ms >= 1000 && ms % 1000 == 0 ? (ms / 1000) + "s" : ms + "ms";
     }
 
     /**
