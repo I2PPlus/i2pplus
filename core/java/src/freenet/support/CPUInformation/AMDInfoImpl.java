@@ -102,27 +102,69 @@ class AMDInfoImpl extends CPUIDCPUInfo implements AMDCPUInfo {
     }
 
     private String identifyCPU() {
-        // Use the CPUID brand string (Fn8000_0002-4) as primary identifier.
-        // This is what AMD programmed into the CPU and is always correct.
-        // Model number ranges are unreliable — AMD reuses them across product lines
-        // (e.g. model 0x44 is both Granite Ridge and appears in Strix ranges).
+        // The name and the compatibility flags are resolved separately, and both
+        // passes always run. The flags are what jbigi library selection depends
+        // on, and every modern x86 CPU reports a brand string, so returning the
+        // brand here would skip the pass that sets them and leave every
+        // Is*Compatible() false - jbigi then loads the generic library instead
+        // of the tuned one.
+        String modelString = identifyCPUByModel(CPUID.getCPUFamily(), CPUID.getCPUModel(),
+                                                CPUID.getCPUExtendedFamily(), CPUID.getCPUExtendedModel());
+        // Use the CPUID brand string (Fn8000_0002-4) as the primary identifier
+        // when it is available. This is what AMD programmed into the CPU and it
+        // is always correct. Model number ranges are unreliable - AMD reuses
+        // them across product lines (e.g. model 0x44 is both Granite Ridge and
+        // appears in Strix ranges).
         String brand = CPUID.getCPUModelName();
         if (brand != null && brand.length() > 0) {
             return brand;
         }
-        // Fallback: model-based detection when brand string is unavailable
-        return identifyCPUByModel();
+        return modelString;
     }
 
-    private String identifyCPUByModel() {
+    /**
+     * Sets the instruction-set compatibility flags from the raw CPUID family and
+     * model numbers, and returns the microarchitecture guessed from them. The
+     * flags are static, so they are cleared first: this runs more than once per
+     * JVM (the jbigi probe and the router's processor-change check), and a second
+     * call must not inherit the first result.
+     * <p>
+     * Package visible and parameterised so the family and model table can be
+     * tested without a CPU to probe. A few pre-Zen families also consult live
+     * CPUID feature bits, so only the Zen ranges are fully reproducible.
+     *
+     * @param family the CPUID base family
+     * @param model the CPUID base model
+     * @param extFamily the CPUID extended family, added to a base family of 15
+     * @param extModel the CPUID extended model, folded into the model in that case
+     * @return the microarchitecture name, or null if the family is unknown
+     * @since 0.9.72+
+     */
+    String identifyCPUByModel(int family, int model, int extFamily, int extModel) {
         // http://en.wikipedia.org/wiki/Cpuid
         // #include "llvm/Support/Host.h", http://llvm.org/docs/doxygen/html/Host_8cpp_source.html
         String modelString = null;
-        int family = CPUID.getCPUFamily();
-        int model = CPUID.getCPUModel();
+        isK6Compatible = false;
+        isK6_2_Compatible = false;
+        isK6_3_Compatible = false;
+        isGeodeCompatible = false;
+        isAthlonCompatible = false;
+        isAthlon64Compatible = false;
+        isK10Compatible = false;
+        isBobcatCompatible = false;
+        isJaguarCompatible = false;
+        isBulldozerCompatible = false;
+        isPiledriverCompatible = false;
+        isSteamrollerCompatible = false;
+        isExcavatorCompatible = false;
+        isZenCompatible = false;
+        isZen2Compatible = false;
+        isZen3Compatible = false;
+        isZen4Compatible = false;
+        isZen5Compatible = false;
         if (family == 15) {
-            family += CPUID.getCPUExtendedFamily();
-            model += CPUID.getCPUExtendedModel() << 4;
+            family += extFamily;
+            model += extModel << 4;
         }
 
         switch (family) {

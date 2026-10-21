@@ -15,12 +15,19 @@
 <tr><td><b>I2P:</b></td><td><%=net.i2p.router.RouterVersion.FULL_VERSION%>&ensp;<b>API:</b>&ensp;<%=net.i2p.CoreVersion.PUBLISHED_VERSION%>&ensp;<b>Wrapper:</b>&ensp;<%=System.getProperty("wrapper.version", "none")%> &ensp;<b>Built by:</b>&ensp;<jsp:getProperty name="logsHelper" property="builtBy"/></td></tr>
 <tr><td><b>Revision:</b></td><td><jsp:getProperty name="logsHelper" property="revision"/></td></tr>
 <tr><td><b>Platform:</b></td><td><%=System.getProperty("os.name")%>&ensp;<%=System.getProperty("os.arch")%>&ensp;<%=System.getProperty("os.version")%></td></tr>
-<tr><td><b>Processor:</b></td><td><span id=cputype><%=net.i2p.util.NativeBigInteger.cpuType().replace("zen2", "zen3 or later")%></span>
-<%  boolean isX86 = net.i2p.util.SystemVersion.isX86();
-    if (isX86) {
-%>&ensp;<%=net.i2p.util.NativeBigInteger.cpuModel()%>
-<%  } %>
-</td></tr>
+<tr><td><b>Processor:</b></td><td><%
+    String cufamily = net.i2p.util.NativeBigInteger.cpuFamily();
+    String cumodel = net.i2p.util.SystemVersion.isX86() ? net.i2p.util.NativeBigInteger.cpuModel() : null;
+    if (cufamily != null) {
+%><span id=cputype><%=cufamily%></span><%
+    }
+    if (cumodel != null) {
+        if (cufamily != null) {
+%>&ensp;<%
+        }
+%><%=cumodel%><%
+    }
+%></td></tr>
 <tr><td><b>Java:</b></td><td><%=System.getProperty("java.vendor")%>&ensp;<%=System.getProperty("java.version")%>&ensp;(<%=System.getProperty("java.runtime.name")%>&ensp;<%=System.getProperty("java.runtime.version")%>)
 <%  boolean recentJavaVersion = net.i2p.util.SystemVersion.isJava(17);
     if (!recentJavaVersion) {

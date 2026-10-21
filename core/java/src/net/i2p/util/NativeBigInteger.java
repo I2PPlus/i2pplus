@@ -327,6 +327,13 @@ public class NativeBigInteger extends BigInteger {
 
     private static final String sCPUType; // The CPU Type to optimize for (one of the above strings)
 
+    /**
+     * Microarchitecture name for display, or null if unknown. Kept separate from
+     * {@link #sCPUType} because that names the jbigi build to load, which stops
+     * at zen3 and so cannot name a Zen 4 or Zen 5 part.
+     */
+    private static String _cpuFamily;
+
     static {
         sCPUType = resolveCPUType();
         loadNative();
@@ -350,6 +357,7 @@ public class NativeBigInteger extends BigInteger {
                     return JBIGI_OPTIMIZATION_X86;
                 } else if (c instanceof AMDCPUInfo) {
                     AMDCPUInfo amdcpu = (AMDCPUInfo) c;
+                    _cpuFamily = amdFamily(amdcpu);
                     if (amdcpu.IsZen3Compatible()) return JBIGI_OPTIMIZATION_ZEN3;
                     if (amdcpu.IsZen2Compatible()) return JBIGI_OPTIMIZATION_ZEN2;
                     if (amdcpu.IsZenCompatible()) return JBIGI_OPTIMIZATION_ZEN;
@@ -707,6 +715,58 @@ public class NativeBigInteger extends BigInteger {
     public static String cpuType() {
         if (sCPUType != null) return sCPUType;
         return "unrecognized";
+    }
+
+    /**
+     * Processor family for the console info page, named the way a reader would
+     * expect rather than the way the jbigi library is named. The optimization
+     * name is imprecise at the top of the AMD range on purpose - zen3 is the
+     * newest tuned build, so a Zen 4 or Zen 5 part resolves to it - and "none"
+     * only says that no tuned build matched, which is not a processor to print.
+     *
+     * @return the family name, or null if the processor could not be classified
+     * @since 0.9.72+
+     */
+    public static String cpuFamily() {
+        if (_cpuFamily != null) return _cpuFamily;
+        return familyFor(sCPUType);
+    }
+
+    /**
+     * Microarchitecture name for an AMD CPU, reported at the newest generation
+     * its compatibility flags support. The jbigi build stops at zen3, so the
+     * library name cannot tell a Zen 3 part from a Zen 4 or Zen 5 one - naming
+     * the library here would hide which chip the machine actually has.
+     *
+     * @param cpu the probed CPU, may be null
+     * @return the generation name, or null if it is not a Zen CPU
+     * @since 0.9.72+
+     */
+    public static String amdFamily(AMDCPUInfo cpu) {
+        if (cpu == null) return null;
+        if (cpu.IsZen5Compatible()) return "Zen5";
+        if (cpu.IsZen4Compatible()) return "Zen4";
+        if (cpu.IsZen3Compatible()) return "Zen3";
+        if (cpu.IsZen2Compatible()) return "Zen2";
+        if (cpu.IsZenCompatible()) return "Zen";
+        return null;
+    }
+
+    /**
+     * Display name for a jbigi optimization name, or null when the name carries
+     * no information about the processor - "none" only says that no tuned build
+     * matched. AMD is named from the CPU flags instead, by {@link #amdFamily}.
+     * Package visible for testing.
+     *
+     * @param type the optimization name, or null
+     * @return the family name, or null if there is nothing useful to show
+     * @since 0.9.72+
+     */
+    static String familyFor(String type) {
+        if (type == null || JBIGI_OPTIMIZATION_X86.equals(type)) {
+            return null;
+        }
+        return type;
     }
 
     /**
