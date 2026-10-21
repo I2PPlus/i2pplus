@@ -107,10 +107,19 @@
 <tr><td><%=intl._t("This setting, when set to true, will block direct communication from all X tier routers that publish a G congestion cap and are neither reachable or unreachable, adding them to the session banlist. [Default is false]")%></td></tr>
 
 <tr class=config><th>router.banlistLU={true|false} <span class=plus>I2P+</span></th></tr>
-<tr><td><%=intl._t("This setting, when set to true, will block direct communication from all LU tier routers (low bandwidth, unreachable, or firewalled), adding them to the session banlist. [Default is true]")%></td></tr>
+<tr><td><%=intl._t("This setting, when set to true, will block direct communication from all LU tier routers (low bandwidth, unreachable, or firewalled), adding them to the session banlist. [Default is false]")%></td></tr>
 
-<tr class=config><th>router.hashScan.frequency={n} <span class=plus>I2P+</span></th></tr>
-<tr><td><%=intl._t("The frequency in milliseconds to scan for suspicious hash patterns (potential Sybil attacks). Set to 0 to disable. [Default is 3600000]")%></td></tr>
+<tr class=config><th>router.banlistIntroducers={true|false} <span class=plus>I2P+</span></th></tr>
+<tr><td><%=intl._t("This setting, when set to true, will ban routers that advertise more than the five introducers the SSU2 specification allows on a single transport address, adding them to the session banlist. The check runs as a RouterInfo is stored or looked up, and during the SSU2 handshake. [Default is true]")%></td></tr>
+
+<tr class=config><th>router.banlistInvalidVersion={true|false} <span class=plus>I2P+</span></th></tr>
+<tr><td><%=intl._t("This setting, when set to true, will ban routers that publish a router version above every version that has been released. No released version reaches that ceiling, so the RouterInfo was built by hand, usually by a scanner probing for netdb storage. The ban lasts 24 hours. [Default is true]")%></td></tr>
+
+<tr class=config><th>router.banlistPubDate={true|false} <span class=plus>I2P+</span></th></tr>
+<tr><td><%=intl._t("This setting, when set to true, will ban routers whose RouterInfo carries an impossible publication date, for 24 hours. The RouterInfo is rejected either way; this controls only whether the identity is also banlisted. [Default is true]")%></td></tr>
+
+<tr class=config><th>router.banlistRUCaps={true|false} <span class=plus>I2P+</span></th></tr>
+<tr><td><%=intl._t("This setting, when set to true, will ban routers that publish both the reachable and the unreachable capability flag at once. The two flags are mutually exclusive, so a router publishing both has assembled its own RouterInfo rather than measured its reachability. The ban lasts 24 hours. [Default is true]")%></td></tr>
 
 <tr class=config><th>router.blockOldRouters={true|false}</th></tr>
 <tr><td><%=intl._t("When set to false, the router will not block tunnel build requests from slower or unreachable routers running older versions. [Default is true, restart required]")%></td></tr>

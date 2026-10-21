@@ -29,6 +29,10 @@ public class ConfigBanHandler extends FormHandler {
     private boolean _enableCountryBan;
     private boolean _enableXgBan;
     private boolean _enableLuBan;
+    private boolean _enableIntroducerBan;
+    private boolean _enableInvalidVersionBan;
+    private boolean _enablePubDateBan;
+    private boolean _enableRUCapsBan;
     private boolean _enableBlockMyCountry;
     private boolean _enableUnresponsiveFloodfillBan;
     private boolean _enableNoVersionBan;
@@ -68,18 +72,22 @@ public class ConfigBanHandler extends FormHandler {
         defaults.put(PROP_OFFENSE_WINDOW, String.valueOf(15*60*1000));
         defaults.put(PROP_STARTUP_GRACE, String.valueOf(3*60*1000));
         defaults.put(PROP_BAD_PACKET_DURATION, String.valueOf(60*60*1000));
-        defaults.put(PROP_ENABLE_BAD_PACKET_BAN, "true");
-        defaults.put(PROP_ENABLE_CORRUPT_CONNECTION_BAN, "true");
-        defaults.put(PROP_ENABLE_PORT_HOPPING_BAN, "true");
+        defaults.put(PROP_ENABLE_BAD_PACKET_BAN, "false");
+        defaults.put(PROP_ENABLE_CORRUPT_CONNECTION_BAN, "false");
+        defaults.put(PROP_ENABLE_PORT_HOPPING_BAN, "false");
         defaults.put(PROP_ENABLE_BLOCKLIST, "true");
         defaults.put(PROP_ENABLE_TOR_BLOCKLIST, "true");
         defaults.put(PROP_ENABLE_COUNTRY_BAN, "false");
         defaults.put(PROP_ENABLE_XG_BAN, "false");
-        defaults.put(PROP_ENABLE_LU_BAN, "true");
+        defaults.put(PROP_ENABLE_LU_BAN, "false");
+        defaults.put(PROP_ENABLE_INTRODUCER_BAN, "true");
+        defaults.put(PROP_ENABLE_INVALID_VERSION_BAN, "true");
+        defaults.put(PROP_ENABLE_PUB_DATE_BAN, "true");
+        defaults.put(PROP_ENABLE_RU_CAPS_BAN, "true");
         defaults.put(PROP_ENABLE_BLOCK_MY_COUNTRY, "false");
-        defaults.put(PROP_ENABLE_UNRESPONSIVE_FLOODFILL_BAN, "true");
+        defaults.put(PROP_ENABLE_UNRESPONSIVE_FLOODFILL_BAN, "false");
         defaults.put(PROP_ENABLE_NO_VERSION_BAN, "true");
-        defaults.put(PROP_ENABLE_EXCESSIVE_TUNNEL_REQUESTS_BAN, "true");
+        defaults.put(PROP_ENABLE_EXCESSIVE_TUNNEL_REQUESTS_BAN, "false");
         defaults.put(PROP_BAN_NEXT_HOP, "true");
         defaults.put(PROP_CUSTOM_CAPABILITY_BANS, "");
         defaults.put(PROP_COUNTRY_CODES, "");
@@ -149,6 +157,29 @@ public class ConfigBanHandler extends FormHandler {
      * @param val the value
      */
     public void setEnableLuBan(String val) { _enableLuBan = true; }
+    /**
+     * Enable or disable banning of routers advertising more introducers on one
+     * address than the SSU2 spec allows.
+     * @param val the value
+     */
+    public void setEnableIntroducerBan(String val) { _enableIntroducerBan = true; }
+    /**
+     * Enable or disable banning RouterInfos that publish a version above every
+     * released version, which only a hand-built RouterInfo can do.
+     * @param val the value
+     */
+    public void setEnableInvalidVersionBan(String val) { _enableInvalidVersionBan = true; }
+    /**
+     * Enable or disable banning RouterInfos with an invalid publication date.
+     * @param val the value
+     */
+    public void setEnablePubDateBan(String val) { _enablePubDateBan = true; }
+    /**
+     * Enable or disable banning routers that publish both the reachable and the
+     * unreachable flag at once.
+     * @param val the value
+     */
+    public void setEnableRUCapsBan(String val) { _enableRUCapsBan = true; }
     /**
      * Enable or disable blocking of the router's own country.
      * @param val the value
@@ -238,6 +269,10 @@ public class ConfigBanHandler extends FormHandler {
         changes.put(PROP_ENABLE_COUNTRY_BAN, Boolean.toString(_enableCountryBan));
         changes.put(PROP_ENABLE_XG_BAN, Boolean.toString(_enableXgBan));
         changes.put(PROP_ENABLE_LU_BAN, Boolean.toString(_enableLuBan));
+        changes.put(PROP_ENABLE_INTRODUCER_BAN, Boolean.toString(_enableIntroducerBan));
+        changes.put(PROP_ENABLE_INVALID_VERSION_BAN, Boolean.toString(_enableInvalidVersionBan));
+        changes.put(PROP_ENABLE_PUB_DATE_BAN, Boolean.toString(_enablePubDateBan));
+        changes.put(PROP_ENABLE_RU_CAPS_BAN, Boolean.toString(_enableRUCapsBan));
         changes.put(PROP_ENABLE_BLOCK_MY_COUNTRY, Boolean.toString(_enableBlockMyCountry));
         changes.put(PROP_ENABLE_UNRESPONSIVE_FLOODFILL_BAN, Boolean.toString(_enableUnresponsiveFloodfillBan));
         changes.put(PROP_ENABLE_NO_VERSION_BAN, Boolean.toString(_enableNoVersionBan));
@@ -257,6 +292,10 @@ public class ConfigBanHandler extends FormHandler {
         // Check if retroactive NetDb purge is needed (LU/XG enabled or custom caps changed)
         boolean xgWasEnabled = "true".equals(_context.getProperty(PROP_ENABLE_XG_BAN, "false"));
         boolean luWasEnabled = "true".equals(_context.getProperty(PROP_ENABLE_LU_BAN, "true"));
+        boolean introducerWasEnabled = "true".equals(_context.getProperty(PROP_ENABLE_INTRODUCER_BAN, "true"));
+        boolean invalidVersionWasEnabled = "true".equals(_context.getProperty(PROP_ENABLE_INVALID_VERSION_BAN, "true"));
+        boolean pubDateWasEnabled = "true".equals(_context.getProperty(PROP_ENABLE_PUB_DATE_BAN, "true"));
+        boolean ruCapsWasEnabled = "true".equals(_context.getProperty(PROP_ENABLE_RU_CAPS_BAN, "true"));
         String existingCaps = _context.getProperty(PROP_CUSTOM_CAPABILITY_BANS, "");
         // Re-evaluate the existing netdb whenever the pattern list actually
         // changes - not only when it goes from empty to non-empty. Without
@@ -266,6 +305,10 @@ public class ConfigBanHandler extends FormHandler {
 
         boolean purgeNeeded = (_enableXgBan && !xgWasEnabled) ||
                               (_enableLuBan && !luWasEnabled) ||
+                              (_enableIntroducerBan && !introducerWasEnabled) ||
+                              (_enableInvalidVersionBan && !invalidVersionWasEnabled) ||
+                              (_enablePubDateBan && !pubDateWasEnabled) ||
+                              (_enableRUCapsBan && !ruCapsWasEnabled) ||
                               (!validatedCaps.isEmpty() && capsChanged);
 
         if (!changes.isEmpty()) {

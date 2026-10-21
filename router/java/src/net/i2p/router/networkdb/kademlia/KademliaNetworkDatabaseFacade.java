@@ -154,6 +154,14 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     public static final String MIN_ROUTER_VERSION = "0.9.20";
     /** Lowest peer version whose LeaseSets we will store and serve. */
     public static final String MIN_VERSION = "0.9.66";
+    /**
+     * Introducer slots per transport address. Mirrors UDPAddress.MAX_INTRODUCERS,
+     * which is package-private in the transport package - the same deliberate
+     * duplication IntroducerLookupJob already carries.
+     */
+    static final int MAX_INTRO_SLOTS = 5;
+    /** Introducer relay tag option prefix ("itag0".."itag4"); required in every slot. */
+    private static final String PROP_INTRO_TAG_PREFIX = "itag";
     /** Current minor version identifier for net DB format. */
     public static String CURRENT_VERSION = "0.9.67";
     /** Lock object for netdb access. */
@@ -1242,6 +1250,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         else if (policyBanAllowed && shouldBanlistXG(ri)) {handleBanlistAndRemove(ri, key, onFailedLookupJob);}
         else if (policyBanAllowed && shouldBanlistLU(ri)) {handleBanlistAndRemove(ri, key, onFailedLookupJob);}
         else if (policyBanAllowed && shouldBanlistByCapability(ri)) {handleCustomCapabilityBan(ri, key, onFailedLookupJob);}
+        else if (policyBanAllowed && shouldBanlistIntroducers(ri)) {handleIntroducerBan(ri, key, onFailedLookupJob);}
         else if (isPermanentlyBlocklisted(key)) {handlePermanentBlocklist(ri, key, onFailedLookupJob);}
         else if (isHostileBlocklisted(key)) {handleHostileBlocklist(ri, key, onFailedLookupJob);}
         else if (onFindJob != null) {_context.jobQueue().addJob(onFindJob);}
@@ -1301,7 +1310,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      *
      * @param ri the router info to evaluate
      * @return true if the router matches the XG banlist criteria
-     * @since 0.9.72
+     * @since 0.9.72+
      */
     private boolean shouldBanlistXG(RouterInfo ri) {
         if (!_context.banlist().isXgBanEnabled()) return false;
@@ -1320,7 +1329,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      *
      * @param ri the router info to evaluate
      * @return true if the router matches the LU banlist criteria
-     * @since 0.9.72
+     * @since 0.9.72+
      */
     private boolean shouldBanlistLU(RouterInfo ri) {
         if (!_context.banlist().isLuBanEnabled()) return false;
@@ -1329,6 +1338,88 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         boolean isUnreachable = containsCapability(ri, Router.CAPABILITY_UNREACHABLE) ||
                                 !containsCapability(ri, Router.CAPABILITY_REACHABLE);
         return !isUs && isLTier && isUnreachable;
+    }
+
+    /**
+     * Whether any single transport address advertises more introducers than the
+     * SSU2 spec allows. Every introducer slot carries a relay tag, so a tag at
+     * or beyond the cap means the peer wrote more slots than it may. Checked
+     * per address, not in total: a dual-stack router may legitimately carry the
+     * cap once on v4 and again on v6, and the console flattens both lists.
+     *
+     * @param addrs the router's transport addresses, may be null or empty
+     * @return true if one address declares more than {@link #MAX_INTRO_SLOTS} introducers
+     * @since 0.9.72+
+     */
+    static boolean tooManyIntroducers(Collection<RouterAddress> addrs) {
+        if (addrs == null) {return false;}
+        String overCapTag = PROP_INTRO_TAG_PREFIX + MAX_INTRO_SLOTS;
+        for (RouterAddress addr : addrs) {
+            if (addr.getOption(overCapTag) != null) {return true;}
+        }
+        return false;
+    }
+
+    /**
+     * Determine whether the given router should be banlisted for advertising
+     * more introducers on one transport address than the SSU2 spec allows.
+     * Out-of-spec introducer counts are used by scanners to inflate netdb
+     * storage and by modified clients to hide behind relay churn.
+     *
+     * @param ri the router info to evaluate
+     * @return true if the router matches the introducer-cap ban criteria
+     * @since 0.9.72+
+     */
+    private boolean shouldBanlistIntroducers(RouterInfo ri) {
+        if (!_context.banlist().isIntroducerBanEnabled()) return false;
+        boolean isUs = _context.routerHash().equals(ri.getIdentity().getHash());
+        return !isUs && tooManyIntroducers(ri.getAddresses());
+    }
+
+    /**
+     * The ban reason if this RouterInfo fails one of the RouterInfo validation
+     * rules - a version above every released version, an impossible publication
+     * date, or both the reachable and the unreachable flag at once - or null if
+     * it passes. Each rule has its own toggle on /configban. The reason strings
+     * match what the transport handshakes record, so a peer is penalised
+     * identically however we learn of it.
+     *
+     * @param ri the router info to evaluate
+     * @return the ban reason for the first rule it breaks, or null if it breaks none
+     * @since 0.9.72+
+     */
+    String invalidRouterInfoBanReason(RouterInfo ri) {
+        if (_context.routerHash().equals(ri.getIdentity().getHash())) {return null;}
+        Banlist bans = _context.banlist();
+        return invalidRouterInfoBanReason(ri, bans.isInvalidVersionBanEnabled(),
+                                          bans.isPubDateBanEnabled(), bans.isRUCapsBanEnabled());
+    }
+
+    /**
+     * The validation rule a RouterInfo breaks, given which of the three rules
+     * are switched on. The self-router check and the toggle reads stay with the
+     * caller; this is the pure part, so the rule ordering and the reason
+     * strings can be tested without a router context.
+     *
+     * @param ri the router info to evaluate, may be null
+     * @param banVersion whether the fabricated-version rule is enabled
+     * @param banPubDate whether the impossible-publication-date rule is enabled
+     * @param banCaps whether the contradictory-reachability rule is enabled
+     * @return the reason for the first rule broken, or null if none
+     * @since 0.9.72+
+     */
+    static String invalidRouterInfoBanReason(RouterInfo ri, boolean banVersion, boolean banPubDate, boolean banCaps) {
+        if (ri == null) {return null;}
+        if (banVersion && Banlist.isInvalidVersion(ri.getVersion())) {
+            return "Invalid Router version (" + ri.getVersion() + ")";
+        }
+        if (banPubDate && ri.getPublished() < 0) {
+            return "Invalid publication date";
+        }
+        if (banCaps && Banlist.publishesContradictoryCaps(ri.getCapabilities())) {
+            return "Invalid published capabilities (RU)";
+        }
+        return null;
     }
 
     /**
@@ -1369,6 +1460,55 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         String reason = "Custom ban: " + matchedCap + " Router";
         if (_log.shouldWarn()) {
             _log.warn("Banning by custom capability: " + caps + " [" + routerId + "] for " + (banDuration/60000) + " min");
+        }
+        _context.banlist().banlistRouter(key, reason, null, null,
+                                         _context.clock().now() + banDuration);
+        String ipPort = TransportImpl.getRouterIPPort(ri);
+        _banLogger.logBan(key, ipPort, reason, banDuration, ri);
+        removeFromNetDb(key);
+        if (onFailedLookupJob != null) {
+            _context.jobQueue().addJob(onFailedLookupJob);
+        }
+    }
+
+    /**
+     * Handle banning a router that advertises more introducers on one address
+     * than the SSU2 spec allows. Same four-hour term the SSU2 handshake ban
+     * uses, so a peer is penalised identically however we learn of it.
+     */
+    private void handleIntroducerBan(RouterInfo ri, Hash key, Job onFailedLookupJob) {
+        long banDuration = 4*60*60*1000;
+        String reason = "Too many introducers";
+        if (_log.shouldWarn()) {
+            _log.warn("Banning for 4h and removing Router [" + key.toBase64().substring(0,6) +
+                      "] -> More than " + MAX_INTRO_SLOTS + " introducers on one address");
+        }
+        _context.banlist().banlistRouter(key, reason, null, null,
+                                         _context.clock().now() + banDuration);
+        String ipPort = TransportImpl.getRouterIPPort(ri);
+        _banLogger.logBan(key, ipPort, reason, banDuration, ri);
+        removeFromNetDb(key);
+        if (onFailedLookupJob != null) {
+            _context.jobQueue().addJob(onFailedLookupJob);
+        }
+    }
+
+    /**
+     * Handle banning a RouterInfo that breaks one of the RouterInfo validation
+     * rules - fabricated version, impossible publication date, or contradictory
+     * reachability flags. Same 24-hour term the transport handshakes use for the
+     * same rule, so a peer is penalised identically however we learn of it.
+     *
+     * @param ri the offending router info
+     * @param key the router hash
+     * @param reason the rule it broke, from {@link #invalidRouterInfoBanReason}
+     * @param onFailedLookupJob job to requeue a lookup that resolved to this router, or null
+     * @since 0.9.72+
+     */
+    private void handleInvalidRouterInfoBan(RouterInfo ri, Hash key, String reason, Job onFailedLookupJob) {
+        long banDuration = 24*60*60*1000;
+        if (_log.shouldWarn()) {
+            _log.warn("Banning for 24h and removing Router [" + key.toBase64().substring(0,6) + "] -> " + reason);
         }
         _context.banlist().banlistRouter(key, reason, null, null,
                                          _context.clock().now() + banDuration);
@@ -1460,7 +1600,14 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
                 DatabaseEntry data = _ds.get(key);
                 if (data == null || !data.isRouterInfo()) continue;
                 RouterInfo ri = (RouterInfo) data;
-                if (shouldBanlistLU(ri) || shouldBanlistXG(ri) || shouldBanlistByCapability(ri)) {
+                String invalidReason = invalidRouterInfoBanReason(ri);
+                if (invalidReason != null) {
+                    handleInvalidRouterInfoBan(ri, key, invalidReason, null);
+                    _purged++;
+                } else if (shouldBanlistIntroducers(ri)) {
+                    handleIntroducerBan(ri, key, null);
+                    _purged++;
+                } else if (shouldBanlistLU(ri) || shouldBanlistXG(ri) || shouldBanlistByCapability(ri)) {
                     handleBanlistAndRemove(ri, key, null);
                     _purged++;
                 }
@@ -2973,6 +3120,10 @@ return false;
         }
         if (shouldBanlistByCapability(routerInfo)) {
             handleCustomCapabilityBan(routerInfo, key, null);
+            return null;
+        }
+        if (shouldBanlistIntroducers(routerInfo)) {
+            handleIntroducerBan(routerInfo, key, null);
             return null;
         }
         _context.peerManager().setCapabilities(key, routerInfo.getCapabilities());

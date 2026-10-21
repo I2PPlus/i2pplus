@@ -21,11 +21,11 @@ public class ConfigBanHelper extends HelperBase {
     public static final String PROP_STARTUP_GRACE = "router.banlist.startupGrace";
     /** Milliseconds a bad packet offender stays banned (default 60 minutes). */
     public static final String PROP_BAD_PACKET_DURATION = "router.banlist.badPacketDuration";
-    /** Set to false to stop banning IPs that send malformed packets; default true. */
+    /** Set to true to start banning IPs that send malformed packets; default false. */
     public static final String PROP_ENABLE_BAD_PACKET_BAN = "router.banlist.enableBadPacketBan";
-    /** Set to false to stop banning peers seen with corrupt transport connections; default true. */
+    /** Set to true to start banning peers seen with corrupt transport connections; default false. */
     public static final String PROP_ENABLE_CORRUPT_CONNECTION_BAN = "router.banlist.enableCorruptConnectionBan";
-    /** Set to false to stop banning peers abusing port hopping; default true. */
+    /** Set to true to start banning peers abusing port hopping; default false. */
     public static final String PROP_ENABLE_PORT_HOPPING_BAN = "router.banlist.enablePortHoppingBan";
     /** Set to false to stop loading the subscription blocklist; default true. */
     public static final String PROP_ENABLE_BLOCKLIST = "router.blocklist.enable";
@@ -35,8 +35,16 @@ public class ConfigBanHelper extends HelperBase {
     public static final String PROP_ENABLE_COUNTRY_BAN = "router.blocklistCountries.enable";
     /** Set to true to ban XG routers, which take no transit; default false. */
     public static final String PROP_ENABLE_XG_BAN = "router.banlistXG";
-    /** Set to false to stop banning unreachable low bandwidth routers; default true. */
+    /** Set to true to start banning unreachable low bandwidth routers; default false. */
     public static final String PROP_ENABLE_LU_BAN = "router.banlistLU";
+    /** Set to false to stop banning routers advertising more than five introducers on one address; default true. */
+    public static final String PROP_ENABLE_INTRODUCER_BAN = "router.banlistIntroducers";
+    /** Set to false to stop banning RouterInfos publishing a version above every released version; default true. */
+    public static final String PROP_ENABLE_INVALID_VERSION_BAN = "router.banlistInvalidVersion";
+    /** Set to false to stop banning RouterInfos with an invalid publication date; default true. */
+    public static final String PROP_ENABLE_PUB_DATE_BAN = "router.banlistPubDate";
+    /** Set to false to stop banning routers publishing both the reachable and unreachable flags; default true. */
+    public static final String PROP_ENABLE_RU_CAPS_BAN = "router.banlistRUCaps";
     /** Set to true to refuse RouterInfos published in our own country; default false. */
     public static final String PROP_ENABLE_BLOCK_MY_COUNTRY = "i2np.blockMyCountry";
     /**
@@ -47,11 +55,11 @@ public class ConfigBanHelper extends HelperBase {
     public static final String PROP_CUSTOM_CAPABILITY_BANS = "router.banlistCapabilities";
     /** Two letter country codes to refuse RouterInfos from, comma or space separated. */
     public static final String PROP_COUNTRY_CODES = "router.blockCountries";
-    /** Set to false to stop banning floodfills that fail to respond; default true. */
+    /** Set to true to start banning floodfills that fail to respond; default false. */
     public static final String PROP_ENABLE_UNRESPONSIVE_FLOODFILL_BAN = "router.banlist.enableUnresponsiveFloodfillBan";
     /** Set to false to stop banning routers publishing no version; default true. */
     public static final String PROP_ENABLE_NO_VERSION_BAN = "router.banlist.enableNoVersionBan";
-    /** Set to false to stop banning peers demanding excess tunnels; default true. */
+    /** Set to true to start banning peers demanding excess tunnels; default false. */
     public static final String PROP_ENABLE_EXCESSIVE_TUNNEL_REQUESTS_BAN = "router.banlist.enableExcessiveTunnelRequestsBan";
     /** When false, peers seen only as transit next hops are exempt from policy bans. */
     public static final String PROP_BAN_NEXT_HOP = "router.banlist.banNextHop";
@@ -101,7 +109,7 @@ public class ConfigBanHelper extends HelperBase {
      * @return "checked" if enabled, empty string otherwise
      */
     public String getBadPacketBanChecked() {
-        boolean enabled = "true".equals(_context.getProperty(PROP_ENABLE_BAD_PACKET_BAN, "true"));
+        boolean enabled = "true".equals(_context.getProperty(PROP_ENABLE_BAD_PACKET_BAN, "false"));
         return enabled ? "checked" : "";
     }
 
@@ -111,7 +119,7 @@ public class ConfigBanHelper extends HelperBase {
      * @return "checked" if enabled, empty string otherwise
      */
     public String getCorruptConnectionBanChecked() {
-        boolean enabled = "true".equals(_context.getProperty(PROP_ENABLE_CORRUPT_CONNECTION_BAN, "true"));
+        boolean enabled = "true".equals(_context.getProperty(PROP_ENABLE_CORRUPT_CONNECTION_BAN, "false"));
         return enabled ? "checked" : "";
     }
 
@@ -121,7 +129,7 @@ public class ConfigBanHelper extends HelperBase {
      * @return "checked" if enabled, empty string otherwise
      */
     public String getPortHoppingBanChecked() {
-        boolean enabled = "true".equals(_context.getProperty(PROP_ENABLE_PORT_HOPPING_BAN, "true"));
+        boolean enabled = "true".equals(_context.getProperty(PROP_ENABLE_PORT_HOPPING_BAN, "false"));
         return enabled ? "checked" : "";
     }
 
@@ -171,7 +179,47 @@ public class ConfigBanHelper extends HelperBase {
      * @return "checked" if enabled, empty string otherwise
      */
     public String getLuBanChecked() {
-        boolean enabled = "true".equals(_context.getProperty(PROP_ENABLE_LU_BAN, "true"));
+        boolean enabled = "true".equals(_context.getProperty(PROP_ENABLE_LU_BAN, "false"));
+        return enabled ? "checked" : "";
+    }
+
+    /**
+     * Get the checked status of the introducer-cap ban option.
+     *
+     * @return "checked" if enabled, empty string otherwise
+     */
+    public String getIntroducerBanChecked() {
+        boolean enabled = "true".equals(_context.getProperty(PROP_ENABLE_INTRODUCER_BAN, "true"));
+        return enabled ? "checked" : "";
+    }
+
+    /**
+     * Get the checked status of the fabricated RouterInfo version ban option.
+     *
+     * @return "checked" if enabled, empty string otherwise
+     */
+    public String getInvalidVersionBanChecked() {
+        boolean enabled = "true".equals(_context.getProperty(PROP_ENABLE_INVALID_VERSION_BAN, "true"));
+        return enabled ? "checked" : "";
+    }
+
+    /**
+     * Get the checked status of the invalid publication date ban option.
+     *
+     * @return "checked" if enabled, empty string otherwise
+     */
+    public String getPubDateBanChecked() {
+        boolean enabled = "true".equals(_context.getProperty(PROP_ENABLE_PUB_DATE_BAN, "true"));
+        return enabled ? "checked" : "";
+    }
+
+    /**
+     * Get the checked status of the contradictory reachability caps ban option.
+     *
+     * @return "checked" if enabled, empty string otherwise
+     */
+    public String getRuCapsBanChecked() {
+        boolean enabled = "true".equals(_context.getProperty(PROP_ENABLE_RU_CAPS_BAN, "true"));
         return enabled ? "checked" : "";
     }
 
@@ -209,7 +257,7 @@ public class ConfigBanHelper extends HelperBase {
      * @return "checked" if enabled, empty string otherwise
      */
     public String getUnresponsiveFloodfillBanChecked() {
-        boolean enabled = "true".equals(_context.getProperty(PROP_ENABLE_UNRESPONSIVE_FLOODFILL_BAN, "true"));
+        boolean enabled = "true".equals(_context.getProperty(PROP_ENABLE_UNRESPONSIVE_FLOODFILL_BAN, "false"));
         return enabled ? "checked" : "";
     }
 
@@ -229,7 +277,7 @@ public class ConfigBanHelper extends HelperBase {
      * @return "checked" if enabled, empty string otherwise
      */
     public String getExcessiveTunnelRequestsBanChecked() {
-        boolean enabled = "true".equals(_context.getProperty(PROP_ENABLE_EXCESSIVE_TUNNEL_REQUESTS_BAN, "true"));
+        boolean enabled = "true".equals(_context.getProperty(PROP_ENABLE_EXCESSIVE_TUNNEL_REQUESTS_BAN, "false"));
         return enabled ? "checked" : "";
     }
 

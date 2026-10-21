@@ -23,9 +23,9 @@ import net.i2p.data.Hash;
 import net.i2p.data.router.RouterAddress;
 import net.i2p.data.router.RouterInfo;
 import net.i2p.time.BuildTime;
-
 import net.i2p.util.ConcurrentHashSet;
 import net.i2p.util.Log;
+import net.i2p.util.VersionComparator;
 
 
 /**
@@ -63,13 +63,13 @@ public class Banlist {
     private long _badPacketDuration;
     // Enable/disable auto-banning features (configurable)
     private static final String PROP_ENABLE_BAD_PACKET_BAN = "router.banlist.enableBadPacketBan";
-    private static final boolean ENABLE_BAD_PACKET_BAN_DEFAULT = true;
+    private static final boolean ENABLE_BAD_PACKET_BAN_DEFAULT = false;
     private boolean _enableBadPacketBan;
     private static final String PROP_ENABLE_CORRUPT_CONNECTION_BAN = "router.banlist.enableCorruptConnectionBan";
-    private static final boolean ENABLE_CORRUPT_CONNECTION_BAN_DEFAULT = true;
+    private static final boolean ENABLE_CORRUPT_CONNECTION_BAN_DEFAULT = false;
     private boolean _enableCorruptConnectionBan;
     private static final String PROP_ENABLE_PORT_HOPPING_BAN = "router.banlist.enablePortHoppingBan";
-    private static final boolean ENABLE_PORT_HOPPING_BAN_DEFAULT = true;
+    private static final boolean ENABLE_PORT_HOPPING_BAN_DEFAULT = false;
     private boolean _enablePortHoppingBan;
     // Blocklist enable (maps to router.blocklist.enable)
     private static final String PROP_ENABLE_BLOCKLIST = "router.blocklist.enable";
@@ -89,8 +89,24 @@ public class Banlist {
     private boolean _enableXgBan;
     // LU router ban (low bandwidth tier, unreachable/firewalled)
     private static final String PROP_ENABLE_LU_BAN = "router.banlistLU";
-    private static final boolean ENABLE_LU_BAN_DEFAULT = true;
+    private static final boolean ENABLE_LU_BAN_DEFAULT = false;
     private boolean _enableLuBan;
+    // Introducer-cap router ban (an SSU2 address advertising more introducers than the spec allows)
+    private static final String PROP_ENABLE_INTRODUCER_BAN = "router.banlistIntroducers";
+    private static final boolean ENABLE_INTRODUCER_BAN_DEFAULT = true;
+    private boolean _enableIntroducerBan;
+    // Invalid RouterInfo version ban (a version above the highest one we know)
+    private static final String PROP_ENABLE_INVALID_VERSION_BAN = "router.banlistInvalidVersion";
+    private static final boolean ENABLE_INVALID_VERSION_BAN_DEFAULT = true;
+    private boolean _enableInvalidVersionBan;
+    // Invalid RouterInfo publication date ban (a RouterInfo published in the past epoch)
+    private static final String PROP_ENABLE_PUB_DATE_BAN = "router.banlistPubDate";
+    private static final boolean ENABLE_PUB_DATE_BAN_DEFAULT = true;
+    private boolean _enablePubDateBan;
+    // Contradictory reachability caps ban (publishing both R and U)
+    private static final String PROP_ENABLE_RU_CAPS_BAN = "router.banlistRUCaps";
+    private static final boolean ENABLE_RU_CAPS_BAN_DEFAULT = true;
+    private boolean _enableRUCapsBan;
     // Custom capability bans (e.g., "LG", "XfU", "DGU")
     private static final String PROP_CUSTOM_CAPABILITY_BANS = "router.banlistCapabilities";
     private static final Pattern COMMA_SPLIT = Pattern.compile("[,\\s]+");
@@ -227,6 +243,10 @@ public class Banlist {
         _enableCountryBan = "true".equals(_context.getProperty(PROP_ENABLE_COUNTRY_BAN, String.valueOf(ENABLE_COUNTRY_BAN_DEFAULT)));
         _enableXgBan = "true".equals(_context.getProperty(PROP_ENABLE_XG_BAN, String.valueOf(ENABLE_XG_BAN_DEFAULT)));
         _enableLuBan = "true".equals(_context.getProperty(PROP_ENABLE_LU_BAN, String.valueOf(ENABLE_LU_BAN_DEFAULT)));
+        _enableIntroducerBan = "true".equals(_context.getProperty(PROP_ENABLE_INTRODUCER_BAN, String.valueOf(ENABLE_INTRODUCER_BAN_DEFAULT)));
+        _enableInvalidVersionBan = "true".equals(_context.getProperty(PROP_ENABLE_INVALID_VERSION_BAN, String.valueOf(ENABLE_INVALID_VERSION_BAN_DEFAULT)));
+        _enablePubDateBan = "true".equals(_context.getProperty(PROP_ENABLE_PUB_DATE_BAN, String.valueOf(ENABLE_PUB_DATE_BAN_DEFAULT)));
+        _enableRUCapsBan = "true".equals(_context.getProperty(PROP_ENABLE_RU_CAPS_BAN, String.valueOf(ENABLE_RU_CAPS_BAN_DEFAULT)));
         _customCapabilityBans = _context.getProperty(PROP_CUSTOM_CAPABILITY_BANS, "");
     }
 
@@ -351,14 +371,93 @@ public class Banlist {
     public boolean isLuBanEnabled() { return _enableLuBan; }
 
     /**
+     * Check if introducer-cap router bans are enabled. An SSU2 address
+     * advertising more than the spec's five introducers is out of spec -
+     * usually a scanner or a modified client - so it can be banned when we
+     * learn of it, not only when we handshake.
+     *
+     * @return true if over-cap introducer bans are enabled
+     * @since 0.9.72+
+     */
+    public boolean isIntroducerBanEnabled() { return _enableIntroducerBan; }
+
+    /**
+     * Check the invalid-RouterInfo-version ban is enabled. A RouterInfo
+     * publishing a version above every released version is fabricated, so it
+     * can be banned where it is seen rather than only at the handshake.
+     *
+     * @return true if fabricated-version bans are enabled
+     * @since 0.9.72+
+     */
+    public boolean isInvalidVersionBanEnabled() { return _enableInvalidVersionBan; }
+
+    /**
+     * Check the invalid-publication-date ban is enabled.
+     *
+     * @return true if bad-publication-date bans are enabled
+     * @since 0.9.72+
+     */
+    public boolean isPubDateBanEnabled() { return _enablePubDateBan; }
+
+    /**
+     * Check the contradictory-reachability-caps ban is enabled.
+     *
+     * @return true if routers publishing both R and U are banned
+     * @since 0.9.72+
+     */
+    public boolean isRUCapsBanEnabled() { return _enableRUCapsBan; }
+
+    /**
+     * Highest I2P version recognised as real. No released version reaches it,
+     * so a RouterInfo publishing a version at or above this ceiling has built
+     * the RouterInfo by hand - usually a scanner probing for netdb storage.
+     * Kept here so the NTCP2 handshake, the floodfill store path and the data
+     * store all agree on one ceiling.
+     *
+     * @since 0.9.72+
+     */
+    static final String MAX_VALID_VERSION = "2.5.0";
+
+    /**
+     * Whether a RouterInfo version is above every version that has been
+     * released, which makes the RouterInfo fabricated rather than merely old.
+     *
+     * @param version the version string from the RouterInfo, may be null
+     * @return true if the version is not a plausible released version
+     * @since 0.9.72+
+     */
+    public static boolean isInvalidVersion(String version) {
+        return version != null && VersionComparator.comp(version, MAX_VALID_VERSION) >= 0;
+    }
+
+    /**
+     * Whether a capability string claims to be reachable and unreachable at
+     * once. The two flags are mutually exclusive by definition, so a router
+     * publishing both has assembled its own RouterInfo rather than run a
+     * router that measured its reachability.
+     *
+     * @param caps the capability string, may be null
+     * @return true if both the R and U flags are present
+     * @since 0.9.72+
+     */
+    public static boolean publishesContradictoryCaps(String caps) {
+        return caps != null &&
+               caps.indexOf(Router.CAPABILITY_REACHABLE) >= 0 &&
+               caps.indexOf(Router.CAPABILITY_UNREACHABLE) >= 0;
+    }
+
+    /**
      * Check if a retroactive NetDb purge sweep is needed.
-     * True if LU/XG bans or custom capability bans are enabled.
+     * True if LU/XG/introducer bans, the RouterInfo validation bans (version,
+     * publication date, reachability flags), or custom capability bans are
+     * enabled.
      *
      * @return true if existing routers should be purged
      * @since 0.9.70+
      */
     public boolean shouldPurgeExistingRouters() {
-        return _enableLuBan || _enableXgBan ||
+        return _enableLuBan || _enableXgBan || _enableIntroducerBan ||
+               _enableInvalidVersionBan || _enablePubDateBan || _enableRUCapsBan ||
                (_customCapabilityBans != null && !_customCapabilityBans.isEmpty());
     }
 

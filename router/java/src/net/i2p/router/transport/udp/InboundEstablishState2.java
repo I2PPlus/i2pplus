@@ -598,14 +598,21 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
             if (ri.verifySignature()) {
                 _context.blocklist().add(_aliceIP);
             }
-            // These really hammer the floodfills, so reduce the time on floodfills
-            long banDuration = _context.netDb().floodfillEnabled() ? 36*60*60*1000L : 4*24*60*60*1000L;
-            _context.banlist().banlistRouter(h, "Invalid publication date",
-                                             null, null, _context.clock().now() + banDuration);
-            _banLogger.logBan(h, ipPort, "Invalid publication date", banDuration, ri);
-            if (_log.shouldWarn() && !isBanned) {
-                _log.warn("Banning for 1h and disconnecting from Router [" +
+            // The RouterInfo is unusable either way, so the session is always
+            // dropped. Whether the verified identity is also banlisted is the
+            // operator's call - see the publication-date toggle on /configban.
+            boolean ban = _context.banlist().isPubDateBanEnabled();
+            if (ban) {
+                _context.banlist().banlistRouter(h, "Invalid publication date",
+                                                 null, null, _context.clock().now() + 24*60*60*1000L);
+                _banLogger.logBan(h, ipPort, "Invalid publication date", 24*60*60*1000L, ri);
+            }
+            if (ban && _log.shouldWarn() && !isBanned) {
+                _log.warn("Banning for 24h and disconnecting from Router [" +
                           h.toBase64().substring(0,6) + "] -> Invalid publication date");
+            } else if (!ban && _log.shouldInfo()) {
+                _log.info("Disconnecting from Router [" + h.toBase64().substring(0,6) +
+                          "] -> Invalid publication date");
             }
             throw new RIException("Invalid publication date in RouterInfo", REASON_BANNED);
         }
@@ -630,15 +637,23 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
         }
 
         if (UDPAddress.tooManyIntroducers(ra)) {
-            // More introducers than the spec allows; ban the verified
-            // identity rather than silently ignoring the extras.
-            _context.banlist().banlistRouter(h, "Too many introducers", null, null,
-                                             _context.clock().now() + 4 * 60 * 60 * 1000L);
-            _banLogger.logBan(h, ipPort, "Too many introducers", 4 * 60 * 60 * 1000L, ri);
-            if (_log.shouldWarn() && !isBanned) {
+            // More introducers than the spec allows; the address is unusable
+            // either way, so the session is always dropped. Whether the verified
+            // identity is also banned is the operator's call - see the
+            // introducer toggle on /configban.
+            boolean ban = _context.banlist().isIntroducerBanEnabled();
+            if (ban) {
+                _context.banlist().banlistRouter(h, "Too many introducers", null, null,
+                                                 _context.clock().now() + 4 * 60 * 60 * 1000L);
+                _banLogger.logBan(h, ipPort, "Too many introducers", 4 * 60 * 60 * 1000L, ri);
+            }
+            if (ban && _log.shouldWarn() && !isBanned) {
                 _log.warn("Banning for 4h and disconnecting from Router [" +
                           h.toBase64().substring(0, 6) + "] -> More than " +
                           UDPAddress.MAX_INTRODUCERS + " introducers");
+            } else if (!ban && _log.shouldInfo()) {
+                _log.info("Disconnecting from Router [" + h.toBase64().substring(0, 6) +
+                          "] -> More than " + UDPAddress.MAX_INTRODUCERS + " introducers");
             }
             _context.commSystem().forceDisconnect(h, "Too many introducers");
             throw new RIException("Too many introducers: " + h, REASON_BANNED);
