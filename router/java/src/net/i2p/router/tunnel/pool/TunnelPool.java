@@ -6563,9 +6563,9 @@ public class TunnelPool {
             _context.statManager().addRateData("tunnel.poolStarvationDeclined", fastPeers);
             if (_log.shouldWarn()) {
                 _log.warn(toString() + " -> Starvation: pool empty but peer supply is ample" +
-                          "\n* Fast peers: " + fastPeers + " * threshold: " +
+                          "\n* Fast peers: " + fastPeers + " * Threshold: " +
                           TunnelPeerSelector.SCARCE_FAST_PEERS +
-                          " * not widening the peer activity window");
+                          " -> Not widening the peer activity window");
             }
             return;
         }
@@ -6579,7 +6579,7 @@ public class TunnelPool {
         if (_log.shouldWarn()) {
             _log.warn(toString() + " -> Starvation: peer activity window multiplier " +
                       before + " -> " + TunnelPeerSelector.getWindowMultiplier() +
-                      "\n* Zero usable tunnels * peer supply scarce");
+                      "\n* Zero usable tunnels -> Peer supply scarce");
         }
     }
 
@@ -6620,8 +6620,8 @@ public class TunnelPool {
         if (_log.shouldWarn()) {
             String boost = _consecutiveEmergencies > 0 ?
                 " (dynamic target " + effectiveTarget + ", collapse #" + _consecutiveEmergencies + ")" : "";
-            _log.warn(toString() + " -> EMERGENCY: Zero usable tunnels, " +
-                      "forcing " + needed + " replacement builds" + boost);
+            _log.warn(toString() + " -> EMERGENCY: Zero usable tunnels -> " +
+                      "Forcing " + needed + " replacement builds" + boost);
         }
         buildReplacementTunnels(needed, true);
     }
@@ -6716,7 +6716,7 @@ public class TunnelPool {
         long[] state = snapshotPoolState();
         if (isEmergencyCooldownActive(elapsed, state[0], state[1])) {
             if (_log.shouldDebug()) {
-                _log.debug(toString() + " -> Skipping EMERGENCY: cooldown (" +
+                _log.debug(toString() + " -> Skipping EMERGENCY: Cooldown (" +
                           elapsed + "ms)");
             }
             return true;
@@ -6753,7 +6753,7 @@ public class TunnelPool {
                 if (_log.shouldInfo()) {
                     _log.info(toString() + " -> Skipping EMERGENCY: " +
                               thisUsable + " usable vs " +
-                              pairedUsable + " usable in paired pool, letting pair catch up");
+                              pairedUsable + " usable in paired pool -> Letting pair catch up");
                 }
                 return true;
             }
@@ -6960,7 +6960,7 @@ public class TunnelPool {
             _lastDeficitBuildTime = now;
             if (_log.shouldInfo()) {
                 _log.info(toString() + " -> Fresh build: " + fresh + "/" + target +
-                          " leases fresh, building " + needed + " replacement(s) for re-mint");
+                          " leases fresh -> Building " + needed + " replacement(s) for re-mint");
             }
             buildReplacementTunnels(needed, false);
         } finally { _ensuringTunnels.set(false); }
@@ -6973,8 +6973,8 @@ public class TunnelPool {
         if (!_alive || !isServerPool()) {
             if (_log.shouldDebug()) {
                 _log.debug(toString() + " -> Skipping fresh build: alive: " + _alive +
-                          ", inbound: " + _settings.isInbound() +
-                          ", exploratory: " + _settings.isExploratory());
+                          " * Inbound: " + _settings.isInbound() +
+                          " * Exploratory: " + _settings.isExploratory());
             }
             return false;
         }
@@ -7139,7 +7139,8 @@ public class TunnelPool {
             // where selection will exclude the peer.
             if (!hasAllPeerRIs(peers)) {
                 if (_log.shouldWarn()) {
-                    _log.warn("Peer RouterInfo missing after selection, deferring build for " + toString());
+                    _log.warn("Peer's RouterInfo missing after selection, deferring build for " +
+                              toString());
                 }
                 return null;
             }

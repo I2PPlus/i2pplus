@@ -375,9 +375,10 @@ public class ProfileOrganizerPromotionTest {
     @Test
     public void promotionEvidenceOmitsDefaults() {
         assertNull(ProfileOrganizer.promotionEvidence(0, 0, true));
-        assertEquals("\n* capBonus: 3", ProfileOrganizer.promotionEvidence(3, 0, true));
-        assertEquals("\n* raw: -2", ProfileOrganizer.promotionEvidence(0, -2, true));
-        assertEquals("\n* capBonus: 3 * raw: 5", ProfileOrganizer.promotionEvidence(3, 5, true));
+        assertEquals("\n* Capacity bonus: 3", ProfileOrganizer.promotionEvidence(3, 0, true));
+        assertEquals("\n* Raw: -2", ProfileOrganizer.promotionEvidence(0, -2, true));
+        assertEquals("\n* Capacity bonus: 3 * Raw: 5",
+                     ProfileOrganizer.promotionEvidence(3, 5, true));
         String stale = ProfileOrganizer.promotionEvidence(0, 0, false);
         assertTrue("stale copy reported: " + stale,
                    stale != null && stale.contains("No live profile"));

@@ -4211,11 +4211,11 @@ private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, P
             return;
         _lastStarveWarn = now;
         if (_log.shouldWarn()) {
-            String tier = peers == _fastPeers ? "fast"
-                          : peers == _highCapacityPeers ? "highcapacity" : "tier";
-            _log.warn("Peer " + tier + " tier returned no candidates after " + examined +
-                      " examined\n* excluded: " + skipExcluded + " * gated: " + skipGated +
-                      " * subtier: " + skipSliced + " * ip: " + skipIp + " * rtt: " + skipRtt);
+            String tier = peers == _fastPeers ? "Fast"
+                          : peers == _highCapacityPeers ? "High capacity" : "Standard";
+            _log.warn(tier + " tier selection returned no candidates after " + examined +
+                      " examined\n* Excluded: " + skipExcluded + " * Gated: " + skipGated +
+                      " * Sub-tier: " + skipSliced + " * IP: " + skipIp + " * RTT: " + skipRtt);
         }
     }
 
@@ -5445,8 +5445,8 @@ private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, P
      */
     static String promotionEvidence(int bonus, int raw, boolean promotedIsLive) {
         StringBuilder sb = new StringBuilder(48);
-        if (bonus != 0) {sb.append("\n* capBonus: ").append(bonus);}
-        if (raw != 0) {sb.append(sb.length() > 0 ? " * " : "\n* ").append("raw: ").append(raw);}
+        if (bonus != 0) {sb.append("\n* Capacity bonus: ").append(bonus);}
+        if (raw != 0) {sb.append(sb.length() > 0 ? " * " : "\n* ").append("Raw: ").append(raw);}
         if (!promotedIsLive) {sb.append(sb.length() > 0 ? " * " : "\n* ").append("No live profile -> Promoted a possibly stale profile copy");}
         return sb.length() > 0 ? sb.toString() : null;
     }

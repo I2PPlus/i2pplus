@@ -1496,8 +1496,8 @@ public class TunnelPoolManager implements TunnelManagerFacade {
 
         int configuredThreshold = _context.getProperty(PROP_SLOW_TUNNEL_THRESHOLD, DEFAULT_SLOW_THRESHOLD_MS);
         if (_log.shouldInfo()) {
-            _log.info("Replace slow tunnels: avg latency: " + String.format("%.0f", avg) +
-                      "ms * min latency: " + minLatency + "ms * configured threshold: " +
+            _log.info("Replace slow tunnels: Average latency: " + String.format("%.0f", avg) +
+                      "ms * Min latency: " + minLatency + "ms * Configured threshold: " +
                       configuredThreshold + "ms");
         }
         double threshold;
