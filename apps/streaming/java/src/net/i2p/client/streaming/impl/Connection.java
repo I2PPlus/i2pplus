@@ -4002,12 +4002,12 @@ if (!on) {
         // detail for investigating one connection, which is what debug is for.
         if  (_log.shouldDebug()) {
             buf.append("\n* Up: ").append(DataHelper.formatDuration(now - _createdOn));
-            buf.append("; Window size: ").append(_options.getWindowSize());
-            buf.append("; Congestion window: ").append(_congestionWindowEnd - _highestAckedThrough.get());
-            buf.append("; RTT: ").append(_options.getRTT());
-            buf.append("; RTO: ").append(_options.getRTO());
+            buf.append(" * Window size: ").append(_options.getWindowSize());
+            buf.append(" * Congestion window: ").append(_congestionWindowEnd - _highestAckedThrough.get());
+            buf.append(" * RTT: ").append(_options.getRTT());
+            buf.append(" * RTO: ").append(_options.getRTO());
             // not synchronized to avoid some kooky races
-            buf.append("; UnACKed out: ").append(_outboundPackets == null ? 0 : _outboundPackets.size()).append("; ");
+            buf.append(" * UnACKed out: ").append(_outboundPackets == null ? 0 : _outboundPackets.size()).append(" * ");
             buf.append("UnACKed in: ").append(getUnackedPacketsReceived());
             int missing = 0;
             long[] nacks = _inputStream.getNacks();
@@ -4016,12 +4016,12 @@ if (!on) {
                 buf.append(" [").append(missing).append(" missing]");
             }
             buf.append("\n* Sent: ").append(1 + _lastSendId.get());
-            buf.append("; Received: ").append(1 + _inputStream.getHighestBlockId() - missing);
-            buf.append("; ACKThru: ").append(_highestAckedThrough.get());
-            buf.append("; SSThresh: ").append(_ssthresh);
-            buf.append("; MinRTT: ").append(_options.getMinRTT());
-            buf.append("; MaxWin: ").append(_options.getMaxWindowSize());
-            buf.append("; MTU: ").append(_options.getMaxMessageSize());
+            buf.append(" * Received: ").append(1 + _inputStream.getHighestBlockId() - missing);
+            buf.append(" * ACKThru: ").append(_highestAckedThrough.get());
+            buf.append(" * SSThresh: ").append(_ssthresh);
+            buf.append(" * MinRTT: ").append(_options.getMinRTT());
+            buf.append(" * MaxWin: ").append(_options.getMaxWindowSize());
+            buf.append(" * MTU: ").append(_options.getMaxMessageSize());
             if (getResetSent())
                 buf.append("\n* Reset sent: ").append(DataHelper.formatDuration(now - getResetSentOn())).append(" ago");
             if (getResetReceived())
