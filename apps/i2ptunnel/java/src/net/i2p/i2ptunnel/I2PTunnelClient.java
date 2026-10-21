@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 import java.util.StringTokenizer;
+import java.util.concurrent.RejectedExecutionException;
 import java.util.concurrent.ThreadPoolExecutor;
 import net.i2p.I2PException;
 import net.i2p.client.streaming.I2PSocket;
@@ -161,18 +162,22 @@ public class I2PTunnelClient extends I2PTunnelClientBase {
     public long getReadTimeout() { return readTimeout; }
 
     /**
-     * Execute a runnable task, running inline when called from an unlimited thread pool
-     * to avoid creating unnecessary threads, otherwise start a new thread.
+     * Execute a runnable task, running inline when there is no runner pool to
+     * avoid creating unnecessary threads, otherwise handing it to the pool.
      *
      * @param task the Thread task to execute
+     * @return true if the task went to the pool and may still be running, in
+     * which case the runner owns the sockets it was given
+     * @since 0.9.72+
      */
-    private void executeTask(Thread task) {
+    private boolean executeTask(Thread task) {
         ThreadPoolExecutor tpe = _executor;
         if (tpe != null) {
             tpe.execute(task);
-        } else {
-            task.run();
+            return true;
         }
+        task.run();
+        return false;
     }
 
     /**
@@ -180,6 +185,7 @@ public class I2PTunnelClient extends I2PTunnelClientBase {
      */
     protected void clientConnectionRun(Socket s) {
         I2PSocket i2ps = null;
+        boolean handedOff = false;
         try {
             I2PSocketAddress addr = pickDestination();
             if (addr == null) {throw new UnknownHostException("No valid destination configured");}
@@ -191,19 +197,30 @@ public class I2PTunnelClient extends I2PTunnelClientBase {
             I2PTunnelRunner t = new I2PTunnelRunner(s, i2ps, sockLock, null, null, mySockets,
                                 (I2PTunnelRunner.FailCallback) null);
             t.setExecutor(_executor);
-            // Execute task (inline when called from unlimited thread pool)
-            executeTask(t);
+            // Execute task (inline when there is no runner pool)
+            handedOff = executeTask(t);
         } catch (IOException ex) {
             if (_log.shouldWarn()) {_log.warn("Error connecting: " + ex.getMessage());}
         } catch (I2PException ex) {
             if (_log.shouldWarn()) {_log.warn("Error connecting: " + ex.getMessage());}
+        } catch (RejectedExecutionException ree) {
+            // The pool was saturated after the tunnel admitted this connection, so
+            // no runner will ever see these sockets -> the finally below closes them.
+            if (_log.shouldWarn())
+                _log.warn("Dropping client connection -> runner pool saturated * Port: " + getLocalPort());
         } finally {
-            // only because we are running it inline
-            closeSocket(s);
-            if (i2ps != null) {
-                try {i2ps.close();}
-                catch (IOException ioe) { /* ignored */ }
-                synchronized (sockLock) {mySockets.remove(i2ps);}
+            // The runner closes both sockets when it ends, so ownership of them
+            // travels with the task. Closing here after an async hand-off tore the
+            // connection down before the runner had even started: the client saw
+            // EOF with no greeting at all, and the runner died on the closed
+            // socket's null streams.
+            if (!handedOff) {
+                closeSocket(s);
+                if (i2ps != null) {
+                    try {i2ps.close();}
+                    catch (IOException ioe) { /* ignored */ }
+                    synchronized (sockLock) {mySockets.remove(i2ps);}
+                }
             }
         }
     }

@@ -1801,6 +1801,17 @@ public class I2PTunnelRunner extends I2PAppThread implements DoneCallback {
             i2pout = i2ps.getOutputStream();
             String direction = (toI2P != null ? "[To I2P]" : "[From I2P]");
 
+            if (out == null || i2pin == null || i2pout == null) {
+                // An InternalSocket hands back null streams once it is closed, where a
+                // TCP socket would throw SocketException, so a client that hung up
+                // while we were queued on the runner pool lands here instead of in
+                // the IOException path. Nothing can be forwarded; the finally closes
+                // what is left.
+                if (_log.shouldInfo())
+                    _log.info(direction + " Nothing to forward -> Local or I2P socket already closed");
+                return;
+            }
+
             if (initialI2PData != null) {
                 i2pout.write(initialI2PData);
                 /*
@@ -2185,7 +2196,9 @@ public class I2PTunnelRunner extends I2PAppThread implements DoneCallback {
             byte[] buffer = ba.getData();
             try {
                 int len;
-                while (!done && (len = in.read(buffer)) != -1) {
+                // The null stream checks are for a closed InternalSocket, which
+                // reports null instead of throwing on the getters.
+                while (in != null && out != null && !done && (len = in.read(buffer)) != -1) {
                     if (len > 0) {
                         if (_toI2P) {totalSent += len;}
                         else {
@@ -2256,7 +2269,7 @@ public class I2PTunnelRunner extends I2PAppThread implements DoneCallback {
                     _log.info(direction + " Done forwarding " + (_toI2P ? totalSent : totalReceived) + " bytes from [" + from + "] " +
                               (keepAliveFrom ? "(KeepAlive)" : "") + " to [" + to + "] " + (keepAliveTo ? "(KeepAlive)" : ""));
                 }
-                if (!keepAliveFrom) {
+                if (!keepAliveFrom && in != null) {
                     try {in.close();}
                     catch (IOException ex) {
                         if (_log.shouldWarn()) {_log.warn(direction + " Error closing input stream (" + ex.getMessage() + ")");}
@@ -2276,7 +2289,12 @@ public class I2PTunnelRunner extends I2PAppThread implements DoneCallback {
                      * is still pending — closing it would sever the splice target.
                      */
                     boolean resumePending = !_toI2P && isBodyResumePending();
-                    if (!((onTimeout != null || _onFail != null) && (!_toI2P) && totalReceived <= 0)) {
+                    if (out == null) {
+                        // A closed InternalSocket reports null streams instead of
+                        // throwing, so there is nothing left to flush or close.
+                        if (_log.shouldDebug())
+                            {_log.debug(direction + " Stream already closed by the socket -> Nothing to close");}
+                    } else if (!((onTimeout != null || _onFail != null) && (!_toI2P) && totalReceived <= 0)) {
                         if (keepAliveTo || resumePending) {out.flush();}
                         else {out.close();}
                     } else {
