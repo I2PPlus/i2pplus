@@ -1105,12 +1105,19 @@ public class NTCPTransport extends TransportImpl {
         boolean isBlocklisted = _context.blocklist().isBlocklisted(peer);
         if (con != null) {
             // Only log if not already banlisted (blocklisted may result in new ban)
-            if (!isBanned && !isBannedHard && _log.shouldWarn()) {
+            if (!isBanned && !isBannedHard && _log.shouldInfo()) {
                 String reasonStr = reason != null ? " -> " + reason : "";
                 String banStatus = isBlocklisted ? "blocklisted " : "";
-                _log.warn("[NTCP] Forcing immediate disconnection of " +
-                          banStatus +
-                          "Router [" + peer.toBase64().substring(0,6) + "]" + reasonStr);
+                String msg = "[NTCP] Forcing immediate disconnection of " +
+                             banStatus +
+                             "Router [" + peer.toBase64().substring(0,6) + "]" + reasonStr;
+                // A blocklist action is an event worth a warning;
+                // a plain forced disconnect is routine churn.
+                if (banStatus.isEmpty()) {
+                    _log.info(msg);
+                } else {
+                    _log.warn(msg);
+                }
             }
             con.close();
         }

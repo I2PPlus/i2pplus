@@ -3801,7 +3801,7 @@ public class UDPTransport extends TransportImpl {
         boolean isBannedHard = _context.banlist().isBanlistedForever(peer);
         boolean isBlocklisted = _context.blocklist().isBlocklisted(peer);
         if (ps != null) {
-            if (_log.shouldWarn()) {
+            if (_log.shouldInfo()) {
                 String reasonStr = reason != null ? " -> " + reason : "";
                 String banStatus;
                 if (isBannedHard) {
@@ -3813,9 +3813,16 @@ public class UDPTransport extends TransportImpl {
                 } else {
                     banStatus = "";
                 }
-                _log.warn("[SSU2] Forcing immediate disconnection of " +
-                          banStatus +
-                          "Router [" + peer.toBase64().substring(0,6) + "]" + reasonStr);
+                String msg = "[SSU2] Forcing immediate disconnection of " +
+                             banStatus +
+                             "Router [" + peer.toBase64().substring(0,6) + "]" + reasonStr;
+                // A ban or blocklist action is an event worth a warning;
+                // a plain forced disconnect is routine churn.
+                if (banStatus.isEmpty()) {
+                    _log.info(msg);
+                } else {
+                    _log.warn(msg);
+                }
             }
             dropPeer(ps, true, "router");
         }
