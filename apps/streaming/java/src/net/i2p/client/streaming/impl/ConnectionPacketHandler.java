@@ -482,12 +482,11 @@ class ConnectionPacketHandler {
         // Received ack.
         final boolean receivedAck = con.getOptions().receivedAck();
         if ((acked != null) && (!acked.isEmpty())) {
-            if (_log.shouldDebug())
-                _log.debug(acked.size() + " of our packets ACKed with " + packet);
             // use the highest RTT, since these would likely be bunched together,
             // and the highest rtt lets us set our resend delay properly
             // RFC 6298 part 3 dictates only use packets that haven't been re-sent.
             int highestRTT = -1;
+            int lowestRTT = -1;
             for (int i = 0; i < acked.size(); i++) {
                 PacketLocal p = acked.get(i);
 
@@ -500,28 +499,40 @@ class ConnectionPacketHandler {
                 // counted below. Lifetime since creation is kept for the stat.
                 final int rttTime = p.getRttTime();
 
-                if (numSends > 1 && receivedAck)
+                if (numSends > 1 && receivedAck) {
                     numResends++;
-                else if (rttTime > highestRTT)
-                    highestRTT = rttTime;
+                } else {
+                    if (rttTime > highestRTT)
+                        highestRTT = rttTime;
+                    if (lowestRTT < 0 || rttTime < lowestRTT)
+                        lowestRTT = rttTime;
+                }
 
                 _context.statManager().addRateData("stream.sendsBeforeAck", numSends, p.getAckTime());
-
-                if (_log.shouldDebug())
-                    _log.debug("Packet ACKed after " + rttTime + "ms of network time: " + p);
+            }
+            // One line per ACK batch rather than one per packet: the batch is what
+            // the RTT update and the window adjustment act on, and the per-packet
+            // lines were the loudest output on a busy connection.
+            if (_log.shouldDebug()) {
+                _log.debug("ACKed: " + acked.size() + " packets" +
+                           (highestRTT > 0 ? " * RTT: " + lowestRTT + " ms - " + highestRTT + " ms" : "") +
+                           "\n* Resends: " + numResends + "\n* " + con);
             }
             if (highestRTT > 0) {
-                if (_log.shouldInfo()) {
-                    int oldrtt = con.getOptions().getRTT();
-                    int oldrto = con.getOptions().getRTO();
-                    int olddev = con.getOptions().getRTTDev();
-                    con.getOptions().updateRTT(highestRTT);
-                    _log.info("ACKed: " + acked.size() + " [Highest RTT: " + highestRTT +
-                              "; RTT: " + oldrtt + " -> " + con.getOptions().getRTT() +
-                              "; RTO: " + oldrto + " -> " + con.getOptions().getRTO() +
-                              "; Deviance: " + olddev + " -> " + con.getOptions().getRTTDev()+ "]");
-                } else {
-                    con.getOptions().updateRTT(highestRTT);
+                int oldrtt = con.getOptions().getRTT();
+                int oldrto = con.getOptions().getRTO();
+                int olddev = con.getOptions().getRTTDev();
+                con.getOptions().updateRTT(highestRTT);
+                int newrtt = con.getOptions().getRTT();
+                int newrto = con.getOptions().getRTO();
+                int newdev = con.getOptions().getRTTDev();
+                // Worth a line only when the sample actually moved a timer, since
+                // this path runs for every ACK on every connection.
+                if (_log.shouldInfo() && (newrtt != oldrtt || newrto != oldrto || newdev != olddev)) {
+                    _log.info("RTT updated * Highest RTT: " + highestRTT + " ms" +
+                              "\n* RTT: " + oldrtt + " ms -> " + newrtt + " ms * RTO: " + oldrto + " ms -> " + newrto + " ms" +
+                              "\n* Deviation: " + olddev + " ms -> " + newdev + " ms" +
+                              "\n* " + con);
                 }
                 if (firstAck) {
                     if (con.isInbound())
@@ -566,8 +577,6 @@ class ConnectionPacketHandler {
         synchronized(con.getWindowLock()) {
             boolean congested;
             if (choke || (!isNew && sequenceNum > 0) || con.isChoked()) {
-                if (_log.shouldDebug())
-                    _log.debug("Congestion on the sending side, not adjusting window...\n* " + con);
                 congested = true;
             } else {
                 congested = false;
@@ -590,6 +599,9 @@ class ConnectionPacketHandler {
                 // new packet that ack'ed uncongested data, or an empty ack
                 int oldWindow = con.getOptions().getWindowSize();
                 int newWindowSize = oldWindow;
+                // Which growth rule applied, for the one result line below;
+                // null means neither ran (congested, or nothing ACKed).
+                String growth = null;
 
                 if ((!congested) && (acked > 0)) {
                     int ssthresh = con.getSSThresh();
@@ -597,6 +609,7 @@ class ConnectionPacketHandler {
                         // slow start - exponential growth
                         // grow acked/N times (where N = the slow start factor)
                         // always grow at least 1
+                        growth = "slow start";
                         int factor = con.getOptions().getSlowStartGrowthRateFactor();
                         if (factor <= 1) {
                             // above a certain point, don't grow exponentially
@@ -608,12 +621,11 @@ class ConnectionPacketHandler {
                             newWindowSize++;
                         else
                             newWindowSize += acked / factor;
-                        if (_log.shouldDebug())
-                            _log.debug("Slow start ACKs = " + acked + " for " + con);
                     // this is too fast since we mostly disabled the CongestionWindowEnd test above
                     } else {
                         // congestion avoidance
                         // linear growth - increase window 1/N per RTT
+                        growth = "congestion avoidance";
                         // we can't use newWindowSize += acked/(oldWindow*N) (where N = the cong. avoid. factor), since we're
                         // integers, so lets use a random distribution instead
                         int caFactor = con.getOptions().getCongestionAvoidanceGrowthRateFactor();
@@ -644,13 +656,7 @@ class ConnectionPacketHandler {
                             newWindowSize += caWindowIncrements(accum);
                             con._caWindowAccumulator = caWindowRemainder(accum);
                         }
-                        if (_log.shouldDebug())
-                            _log.debug("Congestion Avoidance ACKs = " + acked + " for " + con);
                     }
-                } else {
-                    if (_log.shouldDebug())
-                        _log.debug("No change to [Window " + con.getOptions().getWindowSize() +
-                                   "]\n* Congested? " + congested + "; ACKed: " + acked + "; Resends: " + numResends);
                 }
 
                 if (newWindowSize <= 0)
@@ -664,14 +670,23 @@ class ConnectionPacketHandler {
                 con.getOptions().setWindowSize(newWindowSize);
                 con.setCongestionWindowEnd(newWindowSize + lowest);
 
-                if (_log.shouldDebug())
-                    _log.debug("New window size: " + newWindowSize + "/" + oldWindow + "/" + con.getOptions().getWindowSize() +
-                              " (resends: " + numResends + ") for " + con);
+                // One line per adjustment instead of a growth-mode line plus a
+                // result line. Growth names the rule that ran; when none did,
+                // Congested says why on its own line.
+                if (_log.shouldDebug()) {
+                    _log.debug("Window: " + newWindowSize + " * Previous: " + oldWindow +
+                               " * Growth: " + (growth != null ? growth : "none") +
+                               " * ACKed: " + acked + " * Resends: " + numResends +
+                               (growth != null ? "" : "\n* Congested: " + congested) +
+                               "\n* " + con);
+                }
             } else {
-                if (_log.shouldDebug())
-                    _log.debug("No change to [Window " + con.getOptions().getWindowSize() +
-                               "]\n* HighestAckedThrough: " + lowest + "; congestionWindowEnd: " + con.getCongestionWindowEnd() +
-                               "; ACKed: " + acked + "; UnACKed: " + con.getUnackedPacketsSent());
+                if (_log.shouldDebug()) {
+                    _log.debug("No window adjustment\n* Window: " + con.getOptions().getWindowSize() +
+                               " * ACKed: " + acked + " * UnACKed sent: " + con.getUnackedPacketsSent() +
+                               "\n* Highest ACKed through: " + lowest +
+                               " * Congestion window end: " + con.getCongestionWindowEnd());
+                }
             }
 
             con.windowAdjusted();
