@@ -47,9 +47,7 @@ public class RouterTestHelper {
             // sessionbans/, netDb/, peerProfiles/, ...) out of the source
             // tree. Defaults to the ant build.root; the junit target passes
             // i2p.build.root explicitly.
-            String buildRoot = System.getProperty("i2p.build.root",
-                                                  System.getProperty("java.io.tmpdir") + File.separator + "build-i2p" + File.separator);
-            String dataDir = new File(buildRoot, "test-router").getAbsolutePath();
+            String dataDir = dataDir().getAbsolutePath();
             props.setProperty("i2p.dir.config", dataDir);
             props.setProperty("i2p.dir.router", dataDir);
             props.setProperty("i2p.dir.log", dataDir);
@@ -62,6 +60,35 @@ public class RouterTestHelper {
         } catch (Exception e) {
             return null;
         }
+    }
+
+    /**
+     * The directory test runs put their router data files in: ant's build
+     * root, which the junit target passes as {@code i2p.build.root}, falling
+     * back to the same location when a test is run from an IDE or a main
+     * method. Nothing a test writes may land in the source tree.
+     *
+     * @return an absolute directory, created if it does not exist
+     */
+    public static File dataDir() {
+        String buildRoot = System.getProperty("i2p.build.root",
+                                              System.getProperty("java.io.tmpdir") + File.separator + "build-i2p" + File.separator);
+        File dir = new File(buildRoot, "test-router");
+        dir.mkdirs();
+        return dir;
+    }
+
+    /**
+     * An absolute {@code router.config} path under {@link #dataDir()}. A Router
+     * constructed without a config location defaults to the relative name
+     * {@code router.config} and writes it into the current working directory,
+     * which for a test run is the source tree, so anything that builds one must
+     * pass this instead.
+     *
+     * @return an absolute config file path, outside the workspace
+     */
+    public static String routerConfig() {
+        return new File(dataDir(), "router.config").getAbsolutePath();
     }
 
     /**

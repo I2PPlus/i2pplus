@@ -25,6 +25,7 @@ import net.i2p.data.i2np.TunnelBuildMessage;
 import net.i2p.data.i2np.TunnelBuildReplyMessage;
 import net.i2p.router.Router;
 import net.i2p.router.RouterContext;
+import net.i2p.router.RouterTestHelper;
 import net.i2p.router.tunnel.HopConfig;
 import net.i2p.router.tunnel.TCConfig;
 import net.i2p.router.tunnel.TunnelCreatorConfig;
@@ -51,7 +52,9 @@ public class BuildMessageTestStandalone extends TestCase {
     private long _replyTunnel;
 
     public void testBuildMessage() {
-        Router router = new Router();
+        // Absolute config path - the no-arg constructor would write
+        // router.config into the working directory, i.e. the source tree.
+        Router router = new Router(RouterTestHelper.routerConfig());
         RouterContext ctx = router.getContext();
         ctx.initAll();
         for (int i = 1; i <= 6; i++) {
@@ -288,7 +291,7 @@ public class BuildMessageTestStandalone extends TestCase {
      */
     public static void main(String[] args) {
         BuildMessageTestStandalone test = new BuildMessageTestStandalone();
-        Router r = new Router();
+        Router r = new Router(RouterTestHelper.routerConfig());
         RouterContext ctx = r.getContext();
         ctx.initAll();
         try {

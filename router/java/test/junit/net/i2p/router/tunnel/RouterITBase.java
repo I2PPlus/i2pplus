@@ -6,6 +6,7 @@ import net.i2p.data.router.RouterIdentity;
 import net.i2p.data.router.RouterInfo;
 import net.i2p.router.Router;
 import net.i2p.router.RouterContext;
+import net.i2p.router.RouterTestHelper;
 
 import org.junit.BeforeClass;
 
@@ -21,7 +22,9 @@ public abstract class RouterITBase {
     @BeforeClass
     public static void routerClassSetup() {
         // order of these matters
-        Router r = new Router();
+        // Absolute config path - the no-arg constructor would write
+        // router.config into the working directory, i.e. the source tree.
+        Router r = new Router(RouterTestHelper.routerConfig());
         _context = new RouterContext(r);
         _context.initAll();
         r.runRouter();

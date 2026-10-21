@@ -13,6 +13,7 @@ import static junit.framework.TestCase.*;
 
 import net.i2p.router.Router;
 import net.i2p.router.RouterContext;
+import net.i2p.router.RouterTestHelper;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -40,7 +41,9 @@ public class BandwidthLimiterIT {
 
     @BeforeClass
     public static void setUp() {
-        _context = new RouterContext(new Router());
+        // Absolute config path - the no-arg constructor would write
+        // router.config into the working directory, i.e. the source tree.
+        _context = new RouterContext(new Router(RouterTestHelper.routerConfig()));
         _context.initAll();
     }
 

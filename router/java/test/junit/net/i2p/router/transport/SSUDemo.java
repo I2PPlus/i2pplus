@@ -16,6 +16,7 @@ import net.i2p.router.JobImpl;
 import net.i2p.router.OutNetMessage;
 import net.i2p.router.Router;
 import net.i2p.router.RouterContext;
+import net.i2p.router.RouterTestHelper;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -42,7 +43,9 @@ public class SSUDemo {
     public SSUDemo() {}
 
     public void run(boolean testNTCP) {
-        String cfgFile = "router.config";
+        // Absolute config path - the relative default would land in the
+        // directory this is launched from.
+        String cfgFile = new File(RouterTestHelper.dataDir(), "router.config").getPath();
         Properties envProps = getEnv(testNTCP);
         Router r = new Router(cfgFile, envProps);
         System.out.println("Starting router...");
@@ -109,15 +112,18 @@ public class SSUDemo {
         // write the logs to ./logs/log-router-*.txt (logger configured with the file
         // ./logger.config, or another config file specified as
         // -Dlogger.configLocation=blah)
+        // Everything this demo writes goes under the build root, never the
+        // directory it happens to be launched from.
+        File dir = RouterTestHelper.dataDir();
         // avoid conflicts over log
-        envProps.setProperty("loggerFilenameOverride", "logs/log-router-" + port + "-@.txt");
-        System.setProperty("wrapper.logfile", "wrapper-" + port + ".log");
+        envProps.setProperty("loggerFilenameOverride", new File(dir, "logs/log-router-" + port + "-@.txt").getPath());
+        System.setProperty("wrapper.logfile", new File(dir, "wrapper-" + port + ".log").getPath());
         // avoid conflicts over key backup etc. so we don't all use the same keys
-        envProps.setProperty("router.keyBackupDir", "keyBackup/router-" + port);
-        envProps.setProperty("router.info.location", "router-" + port + ".info");
-        envProps.setProperty("router.keys.location", "router-" + port + ".keys");
-        envProps.setProperty("router.configLocation", "router-" + port + ".config");
-        envProps.setProperty("router.pingFile", "router-" + port + ".ping");
+        envProps.setProperty("router.keyBackupDir", new File(dir, "keyBackup/router-" + port).getPath());
+        envProps.setProperty("router.info.location", new File(dir, "router-" + port + ".info").getPath());
+        envProps.setProperty("router.keys.location", new File(dir, "router-" + port + ".keys").getPath());
+        envProps.setProperty("router.configLocation", new File(dir, "router-" + port + ".config").getPath());
+        envProps.setProperty("router.pingFile", new File(dir, "router-" + port + ".ping").getPath());
         // avoid conflicts over blockfile
         envProps.setProperty("i2p.naming.impl", "net.i2p.client.naming.HostsTxtNamingService");
         return envProps;
