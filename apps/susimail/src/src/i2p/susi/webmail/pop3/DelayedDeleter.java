@@ -86,12 +86,14 @@ class DelayedDeleter {
                 long idle = System.currentTimeMillis() - mailbox.getLastActivity();
                 if (idle >= MIN_IDLE) {
                     if (_log.shouldDebug()) {
-                        _log.debug("Threading delayed delete for " + toDelete.size() + " mails after " + idle + " ms idle");
+                        _log.debug("Deleting " + toDelete.size() + " queued messages after " + idle + " ms idle");
                     }
                     Thread t = new Deleter();
                     isDeleting = true;
                     t.start();
-                } else if (_log.shouldDebug()) {_log.debug("Not deleting " + toDelete.size() + ", only idle " + idle);}
+                } else if (_log.shouldDebug()) {
+                    _log.debug("Not deleting " + toDelete.size() + " messages yet, idle only " + idle + " ms");
+                }
             } else if (_log.shouldDebug()) {_log.debug("Nothing to delete");}
             schedule(CHECK_TIME);
         }

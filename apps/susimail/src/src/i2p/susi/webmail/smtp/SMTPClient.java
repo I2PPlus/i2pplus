@@ -125,7 +125,7 @@ public class SMTPClient {
     private void sendCmdNoWait(String cmd, boolean mask) throws IOException {
         if (_log.shouldDebug()) {
             String logCmd = mask || cmd.startsWith("PASS ") ? "****" : cmd;
-            _log.debug("SMTP sendCmd(" + logCmd + ")");
+            _log.debug("SMTP command " + logCmd);
         }
         if (socket == null) {throw new IOException("No socket");}
         OutputStream out = socket.getOutputStream();
@@ -329,10 +329,13 @@ public class SMTPClient {
                 out.flush();
                 int result = sendCmd(null);
                 if (result == 250) {mailSent = true;}
-                else {error += _t("Error sending mail") + " (" + result +  ")\n";}
+                else {
+                    error += _t("Error sending mail") + " (" + result +  ")\n";
+                    _log.warn("The SMTP server did not accept the message -> Reply code " + result);
+                }
             }
         } catch (IOException e) {
-            if (_log.shouldWarn()) {_log.warn("Error sending mail", e);}
+            _log.error("Sending the message over SMTP failed -> " + e.getLocalizedMessage(), e);
             error += _t("Error sending mail") + ": " + e.getMessage() + '\n';
         }
         if (!mailSent && !lastResponse.isEmpty()) {

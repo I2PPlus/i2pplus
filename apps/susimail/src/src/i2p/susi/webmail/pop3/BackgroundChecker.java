@@ -90,15 +90,17 @@ class BackgroundChecker {
             long last = System.currentTimeMillis() - mailbox.getLastChecked();
             if (idle >= MIN_IDLE && last >= MIN_SINCE) {
                 if (_log.shouldDebug()) {
-                    _log.debug("Threading check for mail after " + idle + " ms idle and " + last + " since last check");
+                    _log.debug("Checking for new mail after " + idle + " ms idle and " + last +
+                               " since the last check");
                 }
                 Thread t = new Getter();
                 isChecking = true;
                 t.start();
             } else if (_log.shouldDebug()) {
-                _log.debug("Not checking after " + idle + " ms idle and " + last + " since last check");
+                _log.debug("Not checking yet after " + idle + " ms idle and " + last +
+                           " since the last check");
             }
-        } else if (_log.shouldDebug()) {_log.debug("Not checking, still connected");}
+        } else if (_log.shouldDebug()) {_log.debug("Not checking for mail, the connection is still open");}
             schedule(getCheckTime());
         }
     }
@@ -112,7 +114,9 @@ class BackgroundChecker {
                 if (mailbox.blockingConnectToServer()) {
                     int found = mailbox.getNumMails();
                     if (found > 0) {
-                        if (_log.shouldDebug()) {_log.debug("Found " + found + " mails, calling listener");}
+                        if (_log.shouldDebug()) {
+                            _log.debug("The server holds " + found + " messages, notifying the webmail session");
+                        }
                         mailbox.foundNewMail(true); // may not really be new
                     }
                 }

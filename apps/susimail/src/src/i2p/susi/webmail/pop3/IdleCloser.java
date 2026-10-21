@@ -76,11 +76,11 @@ class IdleCloser {
                 long remaining = config - idle;
                 Log log = IdleCloser.this._log;
                 if (remaining <= 0) {
-                    if (log.shouldDebug()) {log.debug("Threading close after " + idle + " ms idle");}
+                    if (log.shouldDebug()) {log.debug("Closing the connection after " + idle + " ms idle");}
                     Thread t = new Closer();
                     isClosing = true;
                     t.start();
-                } else if (log.shouldDebug()) {log.debug("Not closing after " + idle + " ms idle");}
+                } else if (log.shouldDebug()) {log.debug("Keeping the connection open, idle " + idle + " ms");}
                 schedule(remaining + 5000);
             }
         }

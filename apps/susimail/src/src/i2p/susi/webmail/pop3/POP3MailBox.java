@@ -75,7 +75,7 @@ public class POP3MailBox implements NewMailListener {
      */
     public POP3MailBox(String host, int port, String user, String pass) {
         _log = I2PAppContext.getGlobalContext().logManager().getLog(POP3MailBox.class);
-        if (_log.shouldDebug()) {_log.debug("Mailbox(" + host + "," + port + "," + user + ",password)");}
+        if (_log.shouldDebug()) {_log.debug("Mailbox created for " + host + ':' + port);}
         this.host = host;
         this.port = port;
         this.user = user;
@@ -383,6 +383,7 @@ public class POP3MailBox implements NewMailListener {
             mails = Integer.parseInt(i != -1 ? response.substring(4, i)
                                              : response.substring(4));
         } catch (NumberFormatException nfe) {mails = 0;}
+        if (_log.shouldDebug()) _log.debug("Server reports " + mails + " messages on " + host + ':' + port);
     }
 
     /**
@@ -536,7 +537,9 @@ public class POP3MailBox implements NewMailListener {
                     socket = null;
                     connected = false;
                 }
-                if (_log.shouldDebug()) {_log.debug("Error rechecking", e1);}
+                if (_log.shouldDebug()) {_log.debug("Timed out rechecking for mail", e1);}
+                _log.warnThrottled("pop3timeout", "Rechecking POP3 mail on " + host + ':' + port +
+                                   " -> No response before the timeout");
             } catch (IOException e1) {
                 if (socket != null) {
                     try {socket.close();}
@@ -545,7 +548,9 @@ public class POP3MailBox implements NewMailListener {
                     connected = false;
                 }
                 lastError = _t("Cannot connect") + ": " + e1.getLocalizedMessage();
-                if (_log.shouldDebug()) _log.debug("Error rechecking", e1);
+                _log.warnThrottled("pop3recheck", "Rechecking POP3 mail on " + host + ':' + port +
+                                   " -> " + e1.getLocalizedMessage() + ", reconnecting");
+                if (_log.shouldDebug()) _log.debug("Recheck failed, reconnecting", e1);
 
                 // we probably weren't really connected.
                 // Let's try again from the top.
@@ -593,14 +598,16 @@ public class POP3MailBox implements NewMailListener {
      * Caller must sync.
      */
     private void connect() {
-        if (_log.shouldDebug()) _log.debug("connect()", new Exception("I did it"));
+        if (_log.shouldDebug()) _log.debug("Connecting to the POP3 server at " + host + ':' + port);
         clear();
         if (socket != null && socket.isConnected()) {close();}
 
         try {socket = InternalSocket.getSocket(host, port);}
         catch (IOException e) {
-            if (_log.shouldDebug()) {_log.debug("Error connecting", e);}
             lastError = _t("Cannot connect") + " (" + host + ':' + port + ") - " + e.getLocalizedMessage();
+            _log.warnThrottled("pop3connect", "Connecting to POP3 server " + host + ':' + port +
+                               " -> " + e.getLocalizedMessage());
+            if (_log.shouldDebug()) {_log.debug("Connection attempt failed", e);}
             return;
         }
         if (socket != null) {
@@ -620,6 +627,7 @@ public class POP3MailBox implements NewMailListener {
                 }
                 if (loginOK) {
                     connected = true;
+                    if (_log.shouldDebug()) _log.debug("Logged in to the POP3 server " + host + ':' + port);
                     ok = doCheckMail();
                     if (ok && backgroundChecker == null &&
                         Boolean.parseBoolean(Config.getProperty(WebMail.CONFIG_BACKGROUND_CHECK)))
@@ -630,6 +638,11 @@ public class POP3MailBox implements NewMailListener {
                     if (ok && !loginOK) {
                         lastError += '\n' + _t("Mail server login failed, wrong username or password.") +
                                      '\n' + _t("Logout and then login again with the correct username and password.");
+                        _log.warn("POP3 login rejected by " + host + ':' + port +
+                                  " -> Check the username and password");
+                    } else {
+                        _log.warnThrottled("pop3handshake", "POP3 handshake with " + host + ':' + port +
+                                           " -> " + lastLine);
                     }
                     close();
                 }
@@ -641,7 +654,9 @@ public class POP3MailBox implements NewMailListener {
                     socket = null;
                     connected = false;
                 }
-                if (_log.shouldDebug()) {_log.debug("Error connecting", e1);}
+                _log.warnThrottled("pop3timeout", "POP3 server " + host + ':' + port +
+                                   " -> No response before the timeout");
+                if (_log.shouldDebug()) {_log.debug("Timed out waiting for the server", e1);}
             } catch (IOException e1) {
                 lastError = _t("Cannot connect") + ": " + e1.getLocalizedMessage();
                 if (socket != null) {
@@ -650,7 +665,9 @@ public class POP3MailBox implements NewMailListener {
                     socket = null;
                     connected = false;
                 }
-                if (_log.shouldDebug()) _log.debug("Error connecting", e1);
+                _log.warnThrottled("pop3connect", "Talking to POP3 server " + host + ':' + port +
+                                   " -> " + e1.getLocalizedMessage());
+                if (_log.shouldDebug()) {_log.debug("Connection lost while talking to the server", e1);}
             }
         }
     }
@@ -714,11 +731,11 @@ public class POP3MailBox implements NewMailListener {
         socket.setSoTimeout(120*1000);
         boolean ok = sendCmds(cmds);
         if (stat.result) {updateMailCount(stat.response);}
-        else if (_log.shouldDebug()) {_log.debug("STAT failed");}
+        else {_log.warn("POP3 STAT command rejected -> " + stat.response);}
         if (uidl.result) {updateUIDLs(uidl.ls);}
-        else if (_log.shouldDebug()) {_log.debug("UIDL failed");}
+        else if (_log.shouldDebug()) {_log.debug("POP3 UIDL command rejected: " + uidl.response);}
         if (list.result) {updateSizes(list.ls);}
-        else if (_log.shouldDebug()) {_log.debug("LIST failed");}
+        else if (_log.shouldDebug()) {_log.debug("POP3 LIST command rejected: " + list.response);}
 
         // delete all pending deletions
         doDelete(false);
@@ -796,16 +813,16 @@ public class POP3MailBox implements NewMailListener {
         if (foo != null) {
             lastLine = foo;
             if (lastLine.startsWith("+OK")) {
-                if (cmd.startsWith("PASS")) {cmd = "PASS provided";}
-                if (_log.shouldDebug()) {_log.debug("sendCmd1a: (" + cmd + ") success: \"" + lastLine.trim() + '"');}
+                if (_log.shouldDebug()) {_log.debug("POP3 command " + maskCommand(cmd) + " accepted");}
                 result = true;
             } else {
-                if (cmd.startsWith("PASS")) {cmd = "PASS provided";}
-                if (_log.shouldDebug()) _log.debug("sendCmd1a: (" + cmd + ") FAIL: \"" + lastLine.trim() + '"');
+                if (_log.shouldDebug()) {
+                    _log.debug("POP3 command " + maskCommand(cmd) + " rejected -> " + lastLine.trim());
+                }
                 lastError = lastLine;
             }
         } else {
-            if (_log.shouldDebug()) _log.debug("sendCmd1a: (" + cmd + ") NO RESPONSE");
+            if (_log.shouldDebug()) {_log.debug("POP3 command " + maskCommand(cmd) + " got no response");}
             lastError = _t("No response from server");
             throw new IOException(lastError);
         }
@@ -852,12 +869,16 @@ public class POP3MailBox implements NewMailListener {
             sr.response = foo.trim();
             i++;
             if (!foo.startsWith("+OK")) {
-                if (_log.shouldDebug()) {_log.debug("Fail after " + i + " of " + cmds.size() + " responses: \"" + foo.trim() + '"');}
+                if (_log.shouldDebug()) {
+                    _log.debug("POP3 reply " + i + " of " + cmds.size() + " rejected -> " + foo.trim());
+                }
                 if (result) {lastError = foo;} // actually the first error, for better info to the user
                 result = false;
                 sr.result = false;
             } else {
-                if (_log.shouldDebug()) {_log.debug("OK after " + i + " of " + cmds.size() + " responses: \"" + foo.trim() + '"');}
+                if (_log.shouldDebug()) {
+                    _log.debug("POP3 reply " + i + " of " + cmds.size() + " accepted -> " + foo.trim());
+                }
                 switch (sr.mode) {
                     case A1:
                     sr.result = true;
@@ -868,7 +889,7 @@ public class POP3MailBox implements NewMailListener {
                         getResultNa(sr.rb);
                         sr.result = true;
                     } catch (IOException ioe) {
-                        if (_log.shouldDebug()) _log.debug("Error getting RB", ioe);
+                        if (_log.shouldDebug()) _log.debug("Reading the message body failed", ioe);
                         result = false;
                         sr.result = false;
                         if (socket != null) {
@@ -885,7 +906,7 @@ public class POP3MailBox implements NewMailListener {
                         sr.ls = getResultNl();
                         sr.result = true;
                     } catch (IOException ioe) {
-                        if (_log.shouldDebug()) _log.debug("Error getting LS", ioe);
+                        if (_log.shouldDebug()) _log.debug("Reading the message list failed", ioe);
                         result = false;
                         sr.result = false;
                         if (socket != null) {
@@ -1287,6 +1308,21 @@ public class POP3MailBox implements NewMailListener {
          * @param headerOnly true to request headers only
          */
         public void setHeaderOnly(boolean headerOnly);
+    }
+
+    /**
+     * The command as it may be written to the log. The login credentials are
+     * dropped so that neither the account name nor the password reaches the
+     * log files, which are readable through the web console.
+     *
+     * @param cmd the POP3 command to be logged, non-null
+     * @return the command with any credential argument replaced
+     * @since 0.9.72+
+     */
+    static String maskCommand(String cmd) {
+        if (cmd.startsWith("PASS")) {return "PASS (hidden)";}
+        if (cmd.startsWith("USER")) {return "USER (hidden)";}
+        return cmd;
     }
 
     /** Looks up a localized string in the message bundle. */

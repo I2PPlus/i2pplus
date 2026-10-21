@@ -319,11 +319,6 @@ public class WebMail extends HttpServlet {
             nonces = new ArrayList<>(MAX_NONCES + 1);
             caches = new HashMap<>(8);
             this.log = log;
-            String dbg = Config.getProperty(CONFIG_DEBUG);
-            if (dbg != null) {
-                boolean release = !Boolean.parseBoolean(dbg);
-                log.setMinimumPriority(release ? Log.ERROR : Log.DEBUG);
-            }
         }
 
         /**
@@ -1034,22 +1029,24 @@ public class WebMail extends HttpServlet {
                     while (mc.isLoading() && System.currentTimeMillis() < end) {
                         try {_so.wait(end - System.currentTimeMillis());}
                         catch (InterruptedException ie) {
-                            if (log.shouldDebug()) {log.debug("Interrupted waiting for load", ie);}
+                            if (log.shouldDebug()) {
+                                log.debug("Interrupted waiting for the folder to load", ie);
+                            }
                             return;
                         }
                     }
                 }
-                if (log.shouldDebug()) {log.debug("Done waiting for folder load");}
+                if (log.shouldDebug()) {log.debug("Folder cache finished loading");}
                 // fetch the mail outside the lock
                 // TODO, would be better to add each email as we get it
                 found = mc.getMail(MailCache.FetchMode.HEADER);
             }
-            if (log.shouldDebug()) {log.debug("CW.FNM connected? " + connected + " found? " + found);}
             synchronized(_so) {
                 if (!connected) {
                     String error = _mb.lastError();
-                    if (!error.isEmpty()) {_so.connectError = error;}
-                    else {_so.connectError = _t("Error connecting to server");}
+                    if (error.isEmpty()) {error = _t("Error connecting to server");}
+                    _so.connectError = error;
+                    log.warnThrottled("pop3check", "Checking for new mail failed -> " + error);
                 } else if (!found) {
                     if (log.shouldInfo()) log.info("No new emails");
                     _so.newMails = 0;
@@ -1060,7 +1057,9 @@ public class WebMail extends HttpServlet {
                     _so.newMails = added;
                     _so.connectError = null;
                     if (log.shouldInfo()) log.info("Added " + added + " new emails");
-                } else if (log.shouldDebug()) {log.debug("MailCache vanished?");}
+                } else {
+                    log.warn("New mail was found but the mail cache is gone -> The messages cannot be listed");
+                }
                 _mb.setNewMailListener(_so);
                 _so.isFetching = false;
                 _so.notifyAll();
@@ -1886,12 +1885,6 @@ public class WebMail extends HttpServlet {
                 }
 
                 Config.saveConfiguration(props);
-                String dbg = props.getProperty(CONFIG_DEBUG);
-                if (dbg != null) {
-                    boolean release = !Boolean.parseBoolean(dbg);
-                    Log log = sessionObject.log;
-                    log.setMinimumPriority(release ? Log.ERROR : Log.DEBUG);
-                }
                 state = folder != null ? State.LIST : State.AUTH;
                 sessionObject.info = _t("Configuration saved");
             } catch (IOException ioe) {sessionObject.error = ioe.toString();}
@@ -1932,11 +1925,15 @@ public class WebMail extends HttpServlet {
             sessionObject = new SessionObject(_log);
             try {httpSession.setAttribute("sessionObject", sessionObject);}
             catch (IllegalStateException ise) { /* ignored */ }
-            if (_log.shouldDebug()) _log.debug("NEW session " + httpSession.getId());
+            if (_log.shouldDebug()) {
+                try {
+                    _log.debug("New webmail session\n* Session: " + httpSession.getId());
+                } catch (IllegalStateException ise) { /* ignored */ }
+            }
         } else {
             if (_log.shouldDebug()) {
                 try {
-                    _log.debug("Existing session " + httpSession.getId() +
+                    _log.debug("Reusing a webmail session\n* Session: " + httpSession.getId() +
                                "\n* Created: " + new Date(httpSession.getCreationTime()));
                 } catch (IllegalStateException ise) { /* ignored */ }
             }
@@ -2026,6 +2023,79 @@ public class WebMail extends HttpServlet {
     }
 
     //// Start request handling here ////
+
+    /**
+     * Plain-language name of the page a state value leads to, for the request log.
+     * <p>The state names are internal ({@code LIST}, {@code SHOW}, {@code NEW}),
+     * and a log line that prints one says nothing to a reader trying to work out
+     * why a page came up empty. This maps each to what the browser is about to
+     * show. An unknown value falls back to the name itself so the log stays
+     * greppable against the code.
+     *
+     * @param stateName the {@code State} name, as given by {@code state.name()}
+     * @return the page description, never null
+     * @since 0.9.72+
+     */
+    static String pageName(String stateName) {
+        if (stateName == null) {return "no page chosen yet";}
+        switch (stateName) {
+            case "AUTH":
+                return "the login page";
+            case "LOADING":
+                return "the loading page, while the mailbox is fetched";
+            case "LIST":
+                return "the message list";
+            case "SHOW":
+                return "one message";
+            case "NEW":
+                return "the compose form";
+            case "CONFIG":
+                return "the settings page";
+            default:
+                return stateName;
+        }
+    }
+
+    /**
+     * Null-tolerant wrapper for the log call sites.
+     * <p>{@code state} starts null and stays that way on a GET for a mailbox that
+     * needs no login step, so the call sites cannot assume a value.
+     *
+     * @param state the state to describe, or null before any page is chosen
+     * @return the page description, never null
+     * @since 0.9.72+
+     */
+    private static String pageName(State state) {
+        return pageName(state != null ? state.name() : null);
+    }
+
+    /**
+     * Readiness of the mailbox cache, for the request log.
+     * <p>An empty message list is usually a cache that has not finished fetching,
+     * not a state-machine problem, so the log names the condition rather than a
+     * boolean the reader has to interpret.
+     *
+     * @param mc the cache to describe, or null when no mailbox is selected
+     * @return one of None, Ready, Loading, Not loaded, never null
+     * @since 0.9.72+
+     */
+    static String cacheState(MailCache mc) {
+        return mc == null ? "None" : cacheStateText(mc.isLoaded(), mc.isLoading());
+    }
+
+    /**
+     * Readiness wording, split out so it can be tested without a mailbox.
+     *
+     * @param loaded whether the mailbox listing has been read
+     * @param loading whether the listing is being read right now
+     * @return one of Ready, Loading, Not loaded, never null
+     * @since 0.9.72+
+     */
+    static String cacheStateText(boolean loaded, boolean loading) {
+        if (loaded) {return "Ready";}
+        if (loading) {return "Loading";}
+        return "Not loaded";
+    }
 
     /**
      * The entry point for all web page loads.
@@ -2145,7 +2215,7 @@ public class WebMail extends HttpServlet {
             state = processStateChangeButtons(sessionObject, request, isPOST, state);
             if (oldstate != State.AUTH && state == State.AUTH) {
                 if (_log.shouldDebug())
-                     _log.debug("OLD state is " + oldstate + " NEW state is AUTH, session invalidated");
+                     _log.debug("Session invalidated -> State reset to AUTH (was " + pageName(oldstate) + ')');
                 httpSession = request.getSession( true );
                 // get new sessionObject so we can put the nonce in it below, otherwise
                 // user will get nonce error on login
@@ -2156,7 +2226,10 @@ public class WebMail extends HttpServlet {
                 // and now we're synched inside the old sessionObject, not the new one, oh well
             }
             state = processConfigButtons(sessionObject, request, isPOST, state);
-            if (_log.shouldDebug()) _log.debug("Prelim. state is " + state);
+            if (_log.shouldDebug() && state != oldstate) {
+                _log.debug("Page changed while handling the request: " + pageName(oldstate) +
+                           " -> " + pageName(state));
+            }
             if (state == State.CONFIG && isPOST) {
                 // P-R-G
                 String q = '?' + CONFIGURE;
@@ -2316,7 +2389,11 @@ public class WebMail extends HttpServlet {
             Folder<String> folder = mc != null ? mc.getFolder() : null;
 
             //// End state determination, state will not change after here
-            if (_log.shouldDebug()) {_log.debug("Final state is " + state);}
+            if (_log.shouldDebug()) {
+                _log.debug("Showing " + pageName(state) +
+                           "\n* Folder: " + (mc != null ? mc.getFolderName() : "None") +
+                           "\n* Mail cache: " + cacheState(mc));
+            }
 
             if (state == State.LIST || state == State.SHOW) {
                 // mc non-null
@@ -2662,7 +2739,7 @@ public class WebMail extends HttpServlet {
         resp.setHeader("Location", buf.toString());
         resp.setStatus(303);
         resp.getOutputStream().close();
-        if (_log.shouldDebug()) _log.debug("P-R-G to " + q);
+        if (_log.shouldDebug()) _log.debug("Redirecting the form POST to a GET: " + q);
     }
 
     /**
