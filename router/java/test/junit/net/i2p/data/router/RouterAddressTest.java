@@ -93,8 +93,94 @@ public class RouterAddressTest extends StructureTest {
         options.setProperty("portnum", "1234");
         RouterAddress addr = new RouterAddress("Blah", options, 42);
 
-        String expected = "Blah:?:? * Hostname: localhost * Portnum: 1234 * Cost: 42";
+        String expected = "Blah: : * Hostname: localhost * Portnum: 1234 * Cost: 42";
 
         assertEquals(expected, addr.toString());
+    }
+
+    /**
+     * The log form wraps onto a continuation line every four pairs so a full
+     * SSU2 address stays readable in the log file.
+     */
+    @Test
+    public void testToStringWrapsEveryFourPairs() {
+        OrderedProperties options = new OrderedProperties();
+        for (int i = 1; i <= 5; i++)
+            options.setProperty("a" + i, Integer.toString(i));
+        RouterAddress addr = new RouterAddress("Blah", options, 42);
+
+        String expected = "Blah: : * A1: 1 * A2: 2 * A3: 3 * A4: 4\n * A5: 5 * Cost: 42";
+
+        assertEquals(expected, addr.toString());
+    }
+
+    /**
+     * The HTML form names the keys readably, keeps the ones the log form omits,
+     * and pads the labels so the values line up in a monospace block.
+     */
+    @Test
+    public void testToHtmlLabelsAndPadding() {
+        OrderedProperties options = new OrderedProperties();
+        options.setProperty("host", "1.2.3.4");
+        options.setProperty("port", "1234");
+        options.setProperty("mtu", "1472");
+        options.setProperty("caps", "BC");
+        options.setProperty("pq", "1");
+        options.setProperty("ih0", "abc");
+        options.setProperty("itag0", "1716583659");
+        options.setProperty("iexp0", "1792557344");
+        RouterAddress addr = new RouterAddress("SSU2", options, 5);
+
+        String expected = "<span class=key>SSU2        </span> <span class=value>1.2.3.4:1234</span>\n" +
+                          "<span class=key>Capacity    </span> <span class=value>BC</span>\n" +
+                          "<span class=key>Cost        </span> <span class=value>5</span>\n" +
+                          "<span class=key>Intro Exp 0 </span> <span class=value>1792557344</span>\n" +
+                          "<span class=key>Intro Hash 0</span> <span class=value>abc</span>\n" +
+                          "<span class=key>Intro Tag 0 </span> <span class=value>1716583659</span>\n" +
+                          "<span class=key>MTU         </span> <span class=value>1472</span>\n" +
+                          "<span class=key>PQ Version  </span> <span class=value>1</span>\n";
+
+        assertEquals(expected, addr.toHtml());
+    }
+
+    /**
+     * The HTML form orders the lines by the name the reader sees, not by the
+     * option key - "key" sorts after every "i*" key but its name belongs with
+     * the other introducer rows.
+     */
+    @Test
+    public void testToHtmlSortsByLabel() {
+        OrderedProperties options = new OrderedProperties();
+        options.setProperty("key", "abc");
+        options.setProperty("itag0", "1716583659");
+        options.setProperty("ihost0", "1.2.3.4");
+        options.setProperty("iexp0", "1792557344");
+        RouterAddress addr = new RouterAddress("SSU2", options, 5);
+
+        String expected = "<span class=key>SSU2        </span> <span class=value>:</span>\n" +
+                          "<span class=key>Cost        </span> <span class=value>5</span>\n" +
+                          "<span class=key>Intro Exp 0 </span> <span class=value>1792557344</span>\n" +
+                          "<span class=key>Intro Host 0</span> <span class=value>1.2.3.4</span>\n" +
+                          "<span class=key>Intro Key   </span> <span class=value>abc</span>\n" +
+                          "<span class=key>Intro Tag 0 </span> <span class=value>1716583659</span>\n";
+
+        assertEquals(expected, addr.toHtml());
+    }
+
+    /**
+     * An unknown key falls back to its capitalized name, and values are escaped
+     * before they reach the console.
+     */
+    @Test
+    public void testToHtmlEscapesAndFallsBack() {
+        OrderedProperties options = new OrderedProperties();
+        options.setProperty("weird", "<a> & \"b\"");
+        RouterAddress addr = new RouterAddress("Blah", options, 42);
+
+        String expected = "<span class=key>Blah        </span> <span class=value>:</span>\n" +
+                          "<span class=key>Cost        </span> <span class=value>42</span>\n" +
+                          "<span class=key>Weird       </span> <span class=value>&lt;a&gt; &amp; &quot;b&quot;</span>\n";
+
+        assertEquals(expected, addr.toHtml());
     }
 }

@@ -41,6 +41,7 @@ summary{cursor:pointer}
 #advconf .newKey:empty:not(:focus)::before{width:12px;height:12px;display:inline-block;vertical-align:middle;background:var(--star) no-repeat center center/12px;content:""}
 #advconf .value{word-break:break-all}
 #advancedconfig{position:relative}
+#activetransports .value{opacity:.8}
 #banconfig input[type="number"]{width:64px}
 #banconfig input[type="text"]{width:240px}
 #banconfig label,#banconfig .nowrap{display:inline-block}

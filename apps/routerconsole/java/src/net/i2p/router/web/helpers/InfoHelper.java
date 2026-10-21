@@ -361,7 +361,7 @@ public class InfoHelper extends HelperBase {
             for (Transport t : transports.values()) {
                 if (t.hasCurrentAddress()) {
                     for (RouterAddress ra : t.getCurrentAddresses()) {
-                        buf.append(ra.toString()).append("\n\n");
+                        buf.append(ra.toHtml()).append("\n");
                     }
                 } else {buf.append(_t("{0} is used for outbound connections only", t.getStyle())).append("\n\n");}
             }
