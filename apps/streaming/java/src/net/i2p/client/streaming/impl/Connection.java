@@ -4220,7 +4220,7 @@ if (!on) {
 
            if (_resetSentOn.get() > 0 || _resetReceived.get() || _finalDisconnect.get()) {
                 if (_log.shouldDebug()) {
-                    _log.debug(Connection.this + " rtx event after close or reset");
+                    _log.debug(Connection.this + " -> rtx event after close or reset");
                 }
                 return;
             }
@@ -4237,7 +4237,7 @@ if (!on) {
                 if (shouldLogStallEdge(true, _retransmitStallLogged)) {
                     _retransmitStallLogged = true;
                     if (_log.shouldWarn()) {
-                        _log.warn(Connection.this + " no forward ACK progress for "
+                        _log.warn(Connection.this + " -> No forward ACK progress for "
                                   + (getRetransmitStallAgeMs(_context.clock().now()) / 1000L)
                                   + "s across " + _retransmitCount
                                   + " retransmit firings");
@@ -4246,11 +4246,11 @@ if (!on) {
             } else if (_retransmitStallLogged) {
                 _retransmitStallLogged = false;
                 if (_log.shouldInfo()) {
-                    _log.info(Connection.this + " forward ACK progress resumed");
+                    _log.info(Connection.this + " -> Forward ACK progress resumed");
                 }
             }
             if (_log.shouldDebug()) {
-                _log.debug(Connection.this + " rtx timer timeReached()");
+                _log.debug(Connection.this + " -> rtx timer timeReached()");
             }
 
             congestionOccurred();
