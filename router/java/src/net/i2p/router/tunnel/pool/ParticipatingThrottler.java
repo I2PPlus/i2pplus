@@ -846,7 +846,7 @@ public class ParticipatingThrottler {
      * @param ri the router info for IP extraction and logging
      */
     private void handleExcessiveRequests(Hash h, String caps, int count, int limit, int bantime, RouterInfo ri) {
-        if ("true".equals(context.getProperty("router.banlist.enableExcessiveTunnelRequestsBan", "true"))) {
+        if ("true".equals(context.getProperty("router.banlist.enableExcessiveTunnelRequestsBan", "false"))) {
             String ipPort = TransportImpl.getRouterIPPort(ri);
             String banReason = "Excessive tunnel requests";
             _banLogger.logBan(h, ipPort, banReason, bantime, ri);

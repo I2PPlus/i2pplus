@@ -61,7 +61,7 @@ public class FloodfillPeerSelector extends PeerSelector {
         long now = ctx.clock().now();
         if (_cfgCtx == ctx && now - _cfgRefreshed < CONFIG_REFRESH_MS)
             return;
-        _cachedEnableUnresponsiveFloodfillBan = ctx.getProperty("router.banlist.enableUnresponsiveFloodfillBan", true);
+        _cachedEnableUnresponsiveFloodfillBan = ctx.getProperty("router.banlist.enableUnresponsiveFloodfillBan", false);
         _cfgCtx = ctx;
         _cfgRefreshed = now;
     }

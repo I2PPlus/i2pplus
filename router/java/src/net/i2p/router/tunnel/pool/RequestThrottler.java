@@ -353,7 +353,7 @@ public class RequestThrottler {
 
     private static final boolean DEFAULT_BLOCK_OLD_ROUTERS = true;
     private static final String PROP_BLOCK_OLD_ROUTERS = "router.blockOldRouters";
-    private static final boolean DEFAULT_BAN_EXCESSIVE_REQUESTS = true;
+    private static final boolean DEFAULT_BAN_EXCESSIVE_REQUESTS = false;
     private static final String PROP_BAN_EXCESSIVE_REQUESTS = "router.banlist.enableExcessiveTunnelRequestsBan";
 
     /**
