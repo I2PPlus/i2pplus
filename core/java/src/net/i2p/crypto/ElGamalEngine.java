@@ -147,6 +147,16 @@ public final class ElGamalEngine {
 
     /**
      * Decrypt the data.
+     * <p>
+     * The too-small-payload branch below is effectively unreachable. The
+     * encrypt side builds the masked value as one random non-zero byte, then a
+     * 32-byte SHA-256, then the payload, so a correctly-recovered value always
+     * has a non-zero leading byte and {@code payloadLen} is at least 0. Reaching
+     * that branch requires {@code (d * y^a) mod p} to fall below 2^256 against a
+     * 2048-bit prime, a probability of roughly 2^-1888 for any input an attacker
+     * can supply. It is kept as a defensive guard, and the pooled buffer is
+     * released on that path so the acquire/release accounting stays uniform
+     * across every exit from this method.
      *
      * @param encrypted encrypted data, must be exactly 514 bytes
      * Contains the two-part encrypted data starting at bytes 0 and 257.
@@ -192,6 +202,11 @@ public final class ElGamalEngine {
         int payloadLen = val.length - i - 1 - Hash.HASH_LENGTH;
         if (payloadLen < 0) {
             if (_log.shouldError()) _log.error("Decrypted data is too small (" + (val.length - i) + ")");
+            // Release before leaving - every other exit from this method does,
+            // and buf is dead from here on. This branch is unreachable in
+            // practice (see the method javadoc), but the accounting must stay
+            // uniform so a future caller cannot leak.
+            SimpleByteCache.release(buf);
             return null;
         }
 

@@ -2,6 +2,7 @@ package net.i2p.crypto;
 
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
 import java.math.BigInteger;
@@ -109,5 +110,22 @@ public class ElGamalEngineTest {
         byte[] enc = encryptTo(keys, "tamper me");
         enc[128] ^= (byte) 0xFF;
         assertNull(ctx.elGamalEngine().decrypt(enc, (PrivateKey) keys[1]));
+    }
+
+    /**
+     * encrypt() permits an empty payload, so the smallest well-formed masked
+     * value is 1 + 32 bytes and decrypt() must return a zero-length array
+     * rather than null. Pins payloadLen == 0 as the boundary, which is the
+     * smallest value the guard in decrypt() accepts.
+     *
+     * @since 0.9.72+
+     */
+    @Test
+    public void testEmptyPayloadDecryptsToZeroLength() {
+        Object[] keys = makeKeys();
+        byte[] enc = ctx.elGamalEngine().encrypt(new byte[0], (PublicKey) keys[0]);
+        byte[] dec = ctx.elGamalEngine().decrypt(enc, (PrivateKey) keys[1]);
+        assertNotNull(dec);
+        assertEquals(0, dec.length);
     }
 }
