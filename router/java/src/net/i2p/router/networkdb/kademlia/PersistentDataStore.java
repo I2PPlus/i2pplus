@@ -30,6 +30,7 @@ import net.i2p.data.DatabaseEntry;
 import net.i2p.data.Hash;
 import net.i2p.data.router.RouterInfo;
 import net.i2p.router.BanLogger;
+import net.i2p.router.Banlist;
 import net.i2p.router.JobImpl;
 import net.i2p.router.Router;
 import net.i2p.router.RouterContext;
@@ -436,7 +437,7 @@ public class PersistentDataStore extends TransientDataStore {
         int stored = countStoredRIs();
 
         boolean isOld = VersionComparator.comp(version, MIN_VERSION) < 0;
-        boolean isInvalidVersion = VersionComparator.comp(version, "2.5.0") >= 0;
+        boolean isInvalidVersion = Banlist.isInvalidVersion(version);
         boolean isLTier = "L".equals(bw);
         boolean isSlow;
         if (stored < 500) {

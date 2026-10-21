@@ -27,6 +27,7 @@ import net.i2p.router.OutNetMessage;
 import net.i2p.router.Router;
 import net.i2p.router.RouterContext;
 import net.i2p.router.BanLogger;
+import net.i2p.router.Banlist;
 import net.i2p.router.TunnelInfo;
 import net.i2p.router.message.SendMessageDirectJob;
 import net.i2p.util.I2PThread;
@@ -266,7 +267,7 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                     String MIN_VERSION = "0.9.64";
                     String v = ri.getVersion();
                     boolean isOld = VersionComparator.comp(v, MIN_VERSION) < 0;
-                    boolean isInvalidVersion = VersionComparator.comp(v, "2.5.0") >= 0;
+                    boolean isInvalidVersion = Banlist.isInvalidVersion(v);
                     boolean notFrom = !key.equals(_fromHash);
                     boolean logged = false;
                     boolean bypassThrottle = false;
@@ -283,14 +284,25 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                     } else if (isInvalidVersion) {
                         shouldStore = false;
                         wasNew = false;
-                        if (_log.shouldWarn()) {
+                        // The RouterInfo is dropped either way; whether the
+                        // identity is also banlisted is the operator's call -
+                        // see the version toggle on /configban.
+                        boolean ban = getContext().banlist().isInvalidVersionBanEnabled();
+                        if (ban) {
+                            getContext().banlist().banlistRouter(key, "Invalid Router version (" + v + ")", null, null, now + 24L * 60 * 60 * 1000);
+                            _banLogger.logBan(key, _riIP, "Invalid Router version (" + v + ")", 24L * 60 * 60 * 1000, ri);
+                        }
+                        if (ban && _log.shouldWarn()) {
                             logged = true;
                             _log.warn("Dropping unsolicited NetDbStore of " + cap + (isFF ? " Floodfill" : " Router") +
                                       " [" + key.toBase64().substring(0,6) + "]" +
                                       " and banning for 24h" +
                                       "\n* Invalid Router version: " + v);
-                            getContext().banlist().banlistRouter(key, "Invalid Router version (" + v + ")", null, null, now + 24L * 60 * 60 * 1000);
-                            _banLogger.logBan(key, _riIP, "Invalid Router version (" + v + ")", 24L * 60 * 60 * 1000, ri);
+                        } else if (!ban && _log.shouldInfo()) {
+                            logged = true;
+                            _log.info("Dropping unsolicited NetDbStore of " + cap + (isFF ? " Floodfill" : " Router") +
+                                      " [" + key.toBase64().substring(0,6) + "]" +
+                                      "\n* Invalid Router version: " + v);
                         }
                     } else if (isFast && !isOld && prevNetDb == null) {
                         shouldStore = true;

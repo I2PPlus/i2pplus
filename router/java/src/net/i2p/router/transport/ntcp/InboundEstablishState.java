@@ -30,6 +30,7 @@ import net.i2p.data.router.RouterAddress;
 import net.i2p.data.router.RouterIdentity;
 import net.i2p.data.router.RouterInfo;
 import net.i2p.router.BanLogger;
+import net.i2p.router.Banlist;
 import net.i2p.router.Router;
 import net.i2p.router.RouterContext;
 import net.i2p.router.networkdb.kademlia.FloodfillNetworkDatabaseFacade;
@@ -451,7 +452,7 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
                       } catch (UnknownHostException uhe) {
                           ip = "unknown";
                       }
-                      _log.warn("[NTCP] BAD NTCP2 handshake #1 from " + ip + ", waiting for " + _padlen1 + " more bytes -> Probable probe");
+                      _log.warnThrottled("ntcp2-probe", "[NTCP] BAD NTCP2 handshake #1 from " + ip + ", waiting for " + _padlen1 + " more bytes -> Probable probe");
                       // Track probe attempts for repeat offender detection
                       _context.banlist().badPacket(ip, null);
                      }
@@ -464,7 +465,7 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
                        } catch (UnknownHostException uhe) {
                            ip = "unknown";
                        }
-                        _log.warn("[NTCP] BAD NTCP2 handshake #1 from " + ip +
+                        _log.warnThrottled("ntcp2-invalid-enc", "[NTCP] BAD NTCP2 handshake #1 from " + ip +
                                   " -> Invalid encryption" +
                                   "\n* All bytes received but handshake failed");
                        _transport.getPumper().trackInvalidEncryption(_con.getRemoteIP(), null);
@@ -543,7 +544,7 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
             _received += src.remaining(); // Read more bytes before failing
             if (_received < _padlen1) {
                 if (_log.shouldWarn()) {
-                    _log.warn("[NTCP] BAD Establishment handshake message #1: Received " + src.remaining() +
+                    _log.warnThrottled("ntcp2-bad-msg1", "[NTCP] BAD Establishment handshake message #1: Received " + src.remaining() +
                               " bytes, waiting for " + (_padlen1 - _received) + " more");
                 }
             } else {
@@ -898,7 +899,7 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
                           bw.equals("L") || bw.equals("M") || bw.equals("N");
         String version = ri.getVersion();
         boolean isOld = VersionComparator.comp(version, "0.9.67") < 0;
-        boolean isInvalidVersion = VersionComparator.comp(version, "2.5.0") >= 0;
+        boolean isInvalidVersion = Banlist.isInvalidVersion(version);
         long now = _context.clock().now();
         String reason = "";
 
@@ -913,12 +914,23 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
             }
             reason = "Invalid Router version (" + version + " / " + bw +
                       flag + ")";
-            _banLogger.logBan(h, ipPort, reason, 24*60*60*1000L, ri);
-            _context.banlist().banlistRouter(h, reason, null, null, now + 24*60*60*1000L);
+            // A version no release ever reached means the RouterInfo was built
+            // by hand, so it is rejected either way; whether the identity is
+            // also banlisted is the operator's call - see the version toggle
+            // on /configban.
+            boolean ban = _context.banlist().isInvalidVersionBanEnabled();
+            if (ban) {
+                _banLogger.logBan(h, ipPort, reason, 24*60*60*1000L, ri);
+                _context.banlist().banlistRouter(h, reason, null, null, now + 24*60*60*1000L);
+            }
             _msg3p2FailReason = NTCPConnection.REASON_BANNED;
-            if (_log.shouldWarn() && !isBanned)
+            if (ban && _log.shouldWarn() && !isBanned) {
                 _log.warn("[NTCP] Banning for 24h and disconnecting from Router [" + h.toBase64().substring(0,6) + "]" +
                           " -> Invalid version " + version + " / " + bw + (unreachable ? "U" : ""));
+            } else if (!ban && _log.shouldInfo()) {
+                _log.info("[NTCP] Disconnecting from Router [" + h.toBase64().substring(0,6) + "]" +
+                          " -> Invalid version " + version + " / " + bw + (unreachable ? "U" : ""));
+            }
             _context.commSystem().forceDisconnect(h, "Invalid version (" + version + ")");
             throw new DataFormatException("Invalid Router version " + version + ": " + h);
         }
@@ -935,13 +947,23 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
             throw new DataFormatException("Old and slow: " + h);
         }
 
-        if (reachable && unreachable) {
+        if (Banlist.publishesContradictoryCaps(cap)) {
             reason = "Invalid published capabilities (RU)";
-            _banLogger.logBan(h, ipPort, reason, 24*60*60*1000L, ri);
-            _context.banlist().banlistRouter(h, reason, null, null, now + 24*60*60*1000L);
+            // R and U are mutually exclusive, so the RouterInfo is self-
+            // contradictory and is rejected either way; banning the identity
+            // is the operator's call - see the reachability toggle on
+            // /configban.
+            boolean ban = _context.banlist().isRUCapsBanEnabled();
+            if (ban) {
+                _banLogger.logBan(h, ipPort, reason, 24*60*60*1000L, ri);
+                _context.banlist().banlistRouter(h, reason, null, null, now + 24*60*60*1000L);
+            }
             _msg3p2FailReason = NTCPConnection.REASON_BANNED;
-            if (_log.shouldWarn() && !isBanned) {
+            if (ban && _log.shouldWarn() && !isBanned) {
                 _log.warn("[NTCP] Banning for 24h and disconnecting from Router [" + h.toBase64().substring(0,6) + "]" +
+                          " -> Publishing both R and U caps");
+            } else if (!ban && _log.shouldInfo()) {
+                _log.info("[NTCP] Disconnecting from Router [" + h.toBase64().substring(0,6) + "]" +
                           " -> Publishing both R and U caps");
             }
             _context.commSystem().forceDisconnect(h, "Invalid published capabilities (RU)");
