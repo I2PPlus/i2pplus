@@ -11,7 +11,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Locale;
 import net.i2p.data.DataHelper;
-import net.i2p.util.HexDump;
 
 import java.nio.charset.StandardCharsets;
 /**
@@ -195,6 +194,21 @@ public class HeaderLine extends Encoding {
 	private static final int DECODE_MAX = 256;
 
 	/**
+	 * Describes a malformed encoded-word: what was wrong with it and what the
+	 * decoder did about it. The header text is not quoted back, since it is
+	 * what the reader is trying to fix, and a hex dump of the bytes would run
+	 * to many lines for a per-header message.
+	 *
+	 * @param situation what was wrong with the encoded-word
+	 * @param action what the decoder did about it
+	 * @return the log message
+	 * @since 0.9.72+
+	 */
+	static String malformedText(String situation, String action) {
+		return "Encoded-word is malformed -> " + situation + " -> " + action;
+	}
+
+	/**
 	 * Decode all the header lines, up through \r\n\r\n,
 	 * and puts them in the ReadBuffer, including the \r\n\r\n.
 	 */
@@ -277,20 +291,20 @@ public class HeaderLine extends Encoding {
 					} else if (f2 == 0) {
 						// =? but no more ?
 						// output what we buffered
-						if (_log.shouldDebug()) _log.debug("2nd '?' not found");
+						if (_log.shouldDebug()) _log.debug(malformedText("no closing question mark", "Output the buffered text as-is"));
 						for (int i = 0; i < offset; i++) {
 							out.write(encodedWord[i] & 0xff);
 						}
 						continue;
 					} else if (f3 == 0) {
 						// discard what we buffered
-						if (_log.shouldDebug()) _log.debug("3rd '?' not found");
+						if (_log.shouldDebug()) _log.debug(malformedText("no encoding terminator", "Discarded the buffered text"));
 						continue;
 					} else {
 						// probably just too long, but could be end of line without the "?=".
 						// synthesize a 4th '?' in an attempt to output
 						// something, probably with some trailing garbage
-						if (_log.shouldDebug()) _log.debug("4th '?' not found");
+						if (_log.shouldDebug()) _log.debug(malformedText("no encoded-word terminator", "Decoded what could be read"));
 						f4 = offset + 1;
 						// keep going and output what we have
 					}
@@ -316,8 +330,8 @@ public class HeaderLine extends Encoding {
 								// probably Base64 exceeded DECODE_MAX
 								// Keep going and output what we got, if any
 								if (_log.shouldDebug()) {
-									_log.debug("Quoted-word decode hit end of data; encoding: " + enc);
-									_log.debug(HexDump.dump(encodedWord));
+									_log.debug(malformedText("the encoded data ended early", "Output what was decoded") +
+										" * Encoding: " + enc);
 								}
 							}
 							tmp.writeComplete(true);
@@ -353,22 +367,16 @@ public class HeaderLine extends Encoding {
 							lastCharWasQuoted = true;
 							continue;
 						} catch (IOException e1) {
-							_log.error("Quoted-word decode failed; encoding: " + enc + "; " + e1.getMessage());
-							if (_log.shouldDebug()) {
-								_log.debug(net.i2p.util.HexDump.dump(encodedWord));
-							}
+							_log.error("Decoding the encoded-word failed\n* Encoding: " + enc + " * Error: " + e1.getMessage());
 						} catch (RuntimeException e1) {
-							_log.error("Quoted-word decode failed; encoding: " + enc, e1);
-							if (_log.shouldDebug()) {
-								_log.debug(net.i2p.util.HexDump.dump(encodedWord));
-							}
+							_log.error("Decoding the encoded-word failed\n* Encoding: " + enc, e1);
 						}
 					} else {
 						// can't happen
-						if (_log.shouldDebug()) _log.debug("No decoder for " + enc);
+						if (_log.shouldDebug()) _log.debug("Encoded-word decoder not found\n* Encoding: " + enc);
 					}  // e != null
 				} else {
-					if (_log.shouldDebug()) _log.debug("Invalid encoding '" + (char) encodedWord[f2+1] + '\'');
+					if (_log.shouldDebug()) _log.debug("Encoded-word encoding unknown\n* Found: " + (char) encodedWord[f2+1]);
 				}  // enc != null
 			}  // c == '='
 			else if( c == '\r' ) {
@@ -379,7 +387,7 @@ public class HeaderLine extends Encoding {
 					linebreak = true;
 				} else {
 					// pushback?
-					if (_log.shouldDebug()) _log.debug("No \\n after \\r");
+					if (_log.shouldDebug()) _log.debug("Header line fold is not a line feed\n* Found: " + (char) c);
 				}
 			}
 			// swallow whitespace here if lastCharWasQuoted

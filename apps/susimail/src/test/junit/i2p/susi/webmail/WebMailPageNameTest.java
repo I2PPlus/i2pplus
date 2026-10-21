@@ -54,13 +54,4 @@ public class WebMailPageNameTest {
         // 500 on /susimail/. The wording must come from a null-tolerant path.
         assertEquals("no page chosen yet", WebMail.pageName((String) null));
     }
-
-    @Test
-    public void testCacheReadiness() {
-        assertEquals("Ready", WebMail.cacheStateText(true, true));
-        assertEquals("Loading", WebMail.cacheStateText(false, true));
-        assertEquals("Not loaded", WebMail.cacheStateText(false, false));
-        // No mailbox selected at all is a distinct condition from an unloaded one.
-        assertEquals("None", WebMail.cacheState(null));
-    }
 }

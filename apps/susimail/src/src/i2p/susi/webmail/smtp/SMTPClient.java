@@ -54,6 +54,7 @@ public class SMTPClient {
     public String error;
     private String lastResponse;
     private boolean supportsPipelining;
+    private boolean supports8BitMime;
     private long maxSize = DEFAULT_MAX_SIZE;
     private static final Encoding base64;
     static {base64 = EncodingFactory.getEncoding("base64");}
@@ -125,12 +126,30 @@ public class SMTPClient {
     private void sendCmdNoWait(String cmd, boolean mask) throws IOException {
         if (_log.shouldDebug()) {
             String logCmd = mask || cmd.startsWith("PASS ") ? "****" : cmd;
-            _log.debug("SMTP command " + logCmd);
+            _log.debug("SMTP command\n* Command: " + logCmd);
         }
         if (socket == null) {throw new IOException("No socket");}
         OutputStream out = socket.getOutputStream();
         cmd += "\r\n";
         out.write(DataHelper.getASCII(cmd));
+    }
+
+    /**
+     * Reports what the server's EHLO response allowed, so a reader can tell why
+     * a message was refused on size or sent without pipelining. Each capability
+     * is answered yes or no rather than left as a bare phrase, and the wire name
+     * is kept beside the prose so the line stays greppable.
+     *
+     * @param pipelining whether the server accepts pipelined commands
+     * @param maxSize the message size limit the server reported, in bytes
+     * @param eightBitMime whether the server accepts unencoded 8-bit bodies
+     * @return the multi-line log message
+     * @since 0.9.72+
+     */
+    static String capsText(boolean pipelining, long maxSize, boolean eightBitMime) {
+        return "SMTP server capabilities\n* Pipelining (PIPELINING): " + (pipelining ? "Yes" : "No") +
+               " * 8-bit bodies (8BITMIME): " + (eightBitMime ? "Yes" : "No") +
+               "\n* Max message size (SIZE): " + DataHelper.formatSize2(maxSize, false) + 'B';
     }
 
     /**
@@ -144,7 +163,7 @@ public class SMTPClient {
     private int sendCmds(List<SendExpect> cmds) {
         int rv = 0;
         if (supportsPipelining) {
-            if (_log.shouldDebug()) {_log.debug("SMTP pipelining " + cmds.size() + " commands");}
+            if (_log.shouldDebug()) _log.debug("SMTP pipelining " + cmds.size() + " commands");
             try {
                 for (SendExpect cmd : cmds) {sendCmdNoWait(cmd.send, cmd.sensitive);}
                 socket.getOutputStream().flush();
@@ -166,7 +185,9 @@ public class SMTPClient {
                 rv++;
             }
         }
-        if (_log.shouldDebug()) {_log.debug("SMTP success in " + rv + " of " + cmds.size() + " commands");}
+        if (_log.shouldDebug()) {
+            _log.debug("SMTP commands answered\n* Accepted: " + rv + " * Total: " + cmds.size());
+        }
         return rv;
     }
 
@@ -193,7 +214,6 @@ public class SMTPClient {
             InputStream in = socket.getInputStream();
             StringBuilder buf = new StringBuilder(128);
             while (DataHelper.readLine(in, buf)) {
-                if (_log.shouldDebug()) {_log.debug("SMTP rcv \"" + buf.toString().trim() + '"');}
                 int len = buf.length();
                 if (len < 4) {
                     result = 0;
@@ -267,23 +287,25 @@ public class SMTPClient {
                     for (String c : caps) {
                         if (c.equals("PIPELINING")) {
                             supportsPipelining = true;
-                            if (_log.shouldDebug()) {_log.debug("Server supports pipelining");}
                         } else if (c.startsWith("SIZE ")) {
                             try {
                                 maxSize = Long.parseLong(c.substring(5));
-                                if (_log.shouldDebug()) {_log.debug("Server max size: " + maxSize);}
                             } catch (NumberFormatException nfe) { /* ignored */ }
                         } else if (c.equals("8BITMIME")) {
-                            if (_log.shouldDebug()) {_log.debug("Server supports 8bitmime");}
+                            supports8BitMime = true;
                         }
                     }
+                    if (_log.shouldDebug()) _log.debug(capsText(supportsPipelining, maxSize, supports8BitMime));
                 } else {
                     error += _t("Server refused connection") + " (" + r +  ")\n";
                     ok = false;
                 }
             }
             if (ok && maxSize < DEFAULT_MAX_SIZE) {
-                if (_log.shouldDebug()) _log.debug("Rechecking with new max size");
+                if (_log.shouldDebug()) {
+                    _log.debug("Server reported a smaller limit of " + DataHelper.formatSize2(maxSize, false) + 'B' +
+                               " -> Recalculating the message size");
+                }
                 // recalculate whether we'll fit
                 // copied from WebMail
                 long total = body.length();
@@ -331,11 +353,11 @@ public class SMTPClient {
                 if (result == 250) {mailSent = true;}
                 else {
                     error += _t("Error sending mail") + " (" + result +  ")\n";
-                    _log.warn("The SMTP server did not accept the message -> Reply code " + result);
+                    _log.warn("The SMTP server did not accept the message\n* Reply code: " + result);
                 }
             }
         } catch (IOException e) {
-            _log.error("Sending the message over SMTP failed -> " + e.getLocalizedMessage(), e);
+            _log.error("Sending the message over SMTP failed\n* Error: " + e.getLocalizedMessage(), e);
             error += _t("Error sending mail") + ": " + e.getMessage() + '\n';
         }
         if (!mailSent && !lastResponse.isEmpty()) {

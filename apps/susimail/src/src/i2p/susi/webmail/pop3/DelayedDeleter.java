@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 import net.i2p.I2PAppContext;
+import net.i2p.data.DataHelper;
 import net.i2p.util.ConcurrentHashSet;
 import net.i2p.util.I2PAppThread;
 import net.i2p.util.Log;
@@ -86,15 +87,17 @@ class DelayedDeleter {
                 long idle = System.currentTimeMillis() - mailbox.getLastActivity();
                 if (idle >= MIN_IDLE) {
                     if (_log.shouldDebug()) {
-                        _log.debug("Deleting " + toDelete.size() + " queued messages after " + idle + " ms idle");
+                        _log.debug("Deleting the queued messages\n* Queued: " + toDelete.size() +
+                                   " * Idle: " + DataHelper.formatDuration(idle));
                     }
                     Thread t = new Deleter();
                     isDeleting = true;
                     t.start();
                 } else if (_log.shouldDebug()) {
-                    _log.debug("Not deleting " + toDelete.size() + " messages yet, idle only " + idle + " ms");
+                    _log.debug("Not deleting the queued messages yet\n* Queued: " + toDelete.size() +
+                               " * Idle: " + DataHelper.formatDuration(idle));
                 }
-            } else if (_log.shouldDebug()) {_log.debug("Nothing to delete");}
+            } else if (_log.shouldDebug()) {_log.debug("Not deleting any messages -> None queued");}
             schedule(CHECK_TIME);
         }
     }
@@ -108,7 +111,9 @@ class DelayedDeleter {
                 int origSize = toDelete.size();
                 mailbox.deletePending(false);
                 int delSize = origSize - toDelete.size();
-                if (_log.shouldDebug()) _log.debug("Deleted " + delSize + " of " + origSize + " mails");
+                if (_log.shouldDebug()) {
+                    _log.debug("Deleted the queued messages\n* Deleted: " + delSize + " * Queued: " + origSize);
+                }
             } finally {
                 isDeleting = false;
                 if (!isDead) {timer.schedule(CHECK_TIME);}

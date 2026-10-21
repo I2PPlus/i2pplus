@@ -47,8 +47,6 @@ public class RegexOutputStream extends FilterOutputStream {
         noMatch = onNoMatch;
         buf = new StringBuilder(64);
         _log = I2PAppContext.getGlobalContext().logManager().getLog(RegexOutputStream.class);
-        if (_log.shouldDebug())
-            _log.debug("New regex replace '" + match + "' with '" + repl + "'");
     }
 
         /**
@@ -114,9 +112,25 @@ public class RegexOutputStream extends FilterOutputStream {
                 out.write(repl.charAt(i));
             }
         }
-        if (_log.shouldInfo())
-            _log.info("Replaced '" + match + "' with '" + repl + "' buf: '" + buf + "'");
+        if (_log.shouldDebug()) {
+            _log.debug("Replaced the matched text\n* Pattern: " + logText(match) + " * Replacement: " + logText(repl) +
+                       " * Buffer: " + logText(buf.toString()));
+        }
         clearit();
+    }
+
+    /**
+     * Keeps a pattern, replacement or buffer readable in the log. These values
+     * are HTML fragments of several hundred characters, and one of them per
+     * replacement would bury the message the reader is scanning for.
+     *
+     * @param s the value to shorten, never null
+     * @return the value, or its head with an ellipsis when it is long
+     * @since 0.9.72+
+     */
+    static String logText(String s) {
+        if (s.length() <= 40) {return s;}
+        return s.substring(0, 40) + "...";
     }
 
     /**
@@ -134,8 +148,10 @@ public class RegexOutputStream extends FilterOutputStream {
     public void close() throws IOException {
         flushit();
         if (!found && noMatch != null) {
-            if (_log.shouldInfo())
-                _log.info("No match, appending '" + noMatch + "'");
+            if (_log.shouldDebug()) {
+                _log.debug("Pattern not found -> Appending the fallback text\n* Pattern: " + logText(match) +
+                           " * Fallback: " + logText(noMatch));
+            }
             out.write(DataHelper.getASCII(noMatch));
         }
         super.close();

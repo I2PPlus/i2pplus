@@ -7,6 +7,7 @@ import i2p.susi.util.DummyOutputStream;
 import i2p.susi.util.EOFOnMatchInputStream;
 import i2p.susi.util.FilenameUtil;
 import i2p.susi.util.LimitInputStream;
+import i2p.susi.util.LogHelper;
 import i2p.susi.util.MemoryBuffer;
 import i2p.susi.util.OutputStreamBuffer;
 import i2p.susi.util.ReadCounter;
@@ -142,7 +143,9 @@ class MailPart {
             EOFOnMatchInputStream eofin = new EOFOnMatchInputStream(in, Mail.HEADER_MATCH);
             MemoryBuffer decodedHeaders = new MemoryBuffer(4096);
             EncodingFactory.getEncoding("HEADERLINE").decode(eofin, decodedHeaders);
-            if (!eofin.wasFound() && _log.shouldDebug()) {_log.debug("EOF hit before \\r\\n\\r\\n in MailPart");}
+            if (!eofin.wasFound() && _log.shouldDebug()) {
+                _log.debug("Message for [" + LogHelper.head(uidl) + "] has no blank line before the body");
+            }
             // Fixme UTF-8 to bytes to UTF-8
             headerLines = DataHelper.split(new String(decodedHeaders.getContent(),
                                                       decodedHeaders.getOffset(),
@@ -221,8 +224,7 @@ class MailPart {
         // See above re: \n
         if (multipart) {beginBody = (int) counter.getRead() + 1;} // EOFOnMatch will eat the \n
         else {
-            int c = in.read(); // swallow the \n
-            if (c != '\n' && _log.shouldDebug()) {_log.debug("Wasn't a \\n, it was " + c);}
+            in.read(); // swallow the \n
             beginBody = (int) counter.getRead();
         }
 
@@ -237,9 +239,15 @@ class MailPart {
                     // Read through first boundary line, not including "\r\n" or "--\r\n"
                     OutputStream dummy = new DummyOutputStream();
                     DataHelper.copy(eofin, dummy);
-                    if (!eofin.wasFound() && _log.shouldDebug()) _log.debug("EOF hit before first boundary " + boundary + " UIDL: " + uidl);
+                    if (!eofin.wasFound() && _log.shouldDebug()) {
+                        _log.debug("MIME boundary for [" + LogHelper.head(uidl) + "] not found before the end" +
+                                   "\n* Boundary: " + boundary);
+                    }
                     if (readBoundaryTrailer(in)) {
-                        if (!eofin.wasFound() && _log.shouldDebug()) _log.debug("EOF hit before first part body " + boundary + " UIDL: " + uidl);
+                        if (!eofin.wasFound() && _log.shouldDebug()) {
+                            _log.debug("MIME part body for [" + LogHelper.head(uidl) +
+                                       "] not found before the end of the data\n* Boundary: " + boundary);
+                        }
                         tmpEnd = (int) eofin.getRead();
                         break;
                     }
@@ -253,7 +261,10 @@ class MailPart {
                 if (!eofin.wasFound()) {
                     // if MailPart contains a MailPart, we may not have drained to the end
                     DataHelper.copy(eofin, DUMMY_OUTPUT);
-                    if (_log.shouldDebug()) _log.debug("EOF hit before end of body " + i + " boundary: " + boundary + " UIDL: " + uidl);
+                    if (_log.shouldDebug()) {
+                        _log.debug("MIME part body for [" + LogHelper.head(uidl) +
+                                   "] not found before the end of the data\n* Part: " + i + " * Boundary: " + boundary);
+                    }
                 }
                 if (readBoundaryTrailer(in)) {break;}
             }
@@ -297,29 +308,52 @@ class MailPart {
             // end of parts with this boundary
             c = in.read();
             if (c != '-' && _log.shouldDebug()) {
-                _log.debug("Unexpected char after boundary-: " + c);
+                _log.debug("MIME boundary trailer unexpected character\n* Expected: a second dash * Read: " +
+                           charText(c));
             }
             if (c != '-') {return true;}
             c = in.read();
             if (c == -1) {return true;}
             if (c != '\r' && _log.shouldDebug()) {
-                _log.debug("Unexpected char after boundary--: " + c);
+                _log.debug("MIME boundary trailer unexpected character\n* Expected: a carriage return * Read: " +
+                           charText(c));
             }
             if (c != '\r') {return true;}
             c = in.read();
             if (c != '\n' && _log.shouldDebug()) {
-                _log.debug("Unexpected char after boundary--\\r: " + c);
+                _log.debug("MIME boundary trailer unexpected character\n* Expected: a line feed * Read: " +
+                           charText(c));
             }
             return true;
         } else if (c == '\r') {
             c = in.read();
             if (c != '\n' && _log.shouldDebug()) {
-                _log.debug("Unexpected char after boundary\\r: " + c);
+                _log.debug("MIME boundary trailer unexpected character\n* Expected: a line feed * Read: " +
+                           charText(c));
             }
         } else if (_log.shouldDebug()) {
-            _log.debug("Unexpected char after boundary: " + c);
+            _log.debug("MIME boundary trailer unexpected character\n* Expected: a dash or a carriage return * Read: " +
+                       charText(c));
         }
         return c == -1;
+    }
+
+    /**
+     * Writes a character read from the stream in a form a reader can act on.
+     * Control characters and the end of the data would otherwise be logged as a
+     * bare number or as nothing at all.
+     *
+     * @param c the character read, or -1 for the end of the data
+     * @return the bracketed description
+     * @since 0.9.72+
+     */
+    static String charText(int c) {
+        if (c == -1) {return "[end of data]";}
+        if (c == '\r') {return "[carriage return]";}
+        if (c == '\n') {return "[line feed]";}
+        if (c == ' ') {return "[space]";}
+        if (c < 0x20 || c >= 0x7f) {return "[0x" + Integer.toHexString(c) + ']';}
+        return "[" + (char) c + ']';
     }
 
     /**
@@ -347,9 +381,14 @@ class MailPart {
             enc.decode(lin, dout);
         } catch (IOException ioe) {
             if (_log.shouldDebug()) {
-                if (lin != null) {_log.debug("Decode IOE at in position " + lin.getRead() + " offset " + offset, ioe);}
-                if (cos != null) {_log.debug("Decode IOE at out position " + cos.getWritten() + " offset " + offset, ioe);}
-                else {_log.debug("Decode IOE", ioe);}
+                StringBuilder positions = new StringBuilder();
+                if (lin != null) {
+                    positions.append(" * Read up to: ").append(lin.getRead());
+                }
+                if (cos != null) {
+                    positions.append(" * Written up to: ").append(cos.getWritten());
+                }
+                _log.debug("Decoding the message part failed\n* Offset: " + offset + positions + " * Error: " + ioe);
             }
             throw ioe;
         } finally {
@@ -378,7 +417,9 @@ class MailPart {
             lin = getRawInputStream(0);
             DataHelper.copy(lin, out);
         } catch (IOException ioe) {
-            if (_log.shouldDebug()) {_log.debug("Decode IOE", ioe);}
+            if (_log.shouldDebug()) {
+                _log.debug("Copying the raw message part failed\n* Error: " + ioe);
+            }
             throw ioe;
         } finally {
             if (lin != null) {

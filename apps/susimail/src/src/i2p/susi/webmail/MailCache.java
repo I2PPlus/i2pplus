@@ -7,6 +7,7 @@ import i2p.susi.util.Buffer;
 import i2p.susi.util.Config;
 import i2p.susi.util.FileBuffer;
 import i2p.susi.util.Folder;
+import i2p.susi.util.LogHelper;
 import i2p.susi.util.MemoryBuffer;
 import i2p.susi.webmail.pop3.POP3MailBox;
 import i2p.susi.webmail.pop3.POP3MailBox.FetchRequest;
@@ -269,7 +270,6 @@ class MailCache {
     public synchronized boolean loadFromDisk(NewMailListener nml) {
         if (_isLoaded || _loadInProgress != null)
             return false;
-        if (_log.shouldDebug()) _log.debug("Loading folder: " + folderName);
         Thread t = new I2PAppThread(new LoadMailRunner(nml), "EmailLoader");
         _loadInProgress = nml;
         try {
@@ -308,7 +308,6 @@ class MailCache {
                 blockingLoadFromDisk();
                 if(!mails.isEmpty())
                     result = true;
-                if (_log.shouldDebug()) _log.debug("Folder loaded: " + folderName);
             } finally {
                 synchronized(MailCache.this) {
                     if (_loadInProgress == _nml)
@@ -330,7 +329,7 @@ class MailCache {
         synchronized(mails) {
             if (_isLoaded)
                 throw new IllegalStateException();
-            Collection<Mail> dmails = disk.getMails();
+            Collection<Mail> dmails = disk.getMails(folderName);
             for (Mail mail : dmails) {
                 mails.put(mail.uidl, mail);
             }
@@ -400,7 +399,7 @@ class MailCache {
         if (mode == FetchMode.HEADER) {
             if (!mail.hasHeader() && mailbox != null) {
                 if (_log.shouldInfo()) {
-                    _log.info("Fetching the message header from the server: " + shortId(uidl));
+                    _log.info("Fetching the message header from the server for " + LogHelper.shortId(uidl));
                 }
                 Buffer buf = mailbox.getHeader(uidl);
                 if (buf != null)
@@ -411,12 +410,12 @@ class MailCache {
                 // shouldn't happen
                 if (disk.getMail(mail, true)) {
                     if (_log.shouldInfo()) {
-                        _log.info("Loaded the deferred header from the disk cache: " + shortId(uidl));
+                        _log.info("Loaded the deferred header for " + LogHelper.shortId(uidl));
                     }
                     return mail;
                 } else {
-                    if (_log.shouldWarn()) {
-                        _log.warn("Failed to load the deferred header from the disk cache: " + shortId(uidl));
+                    if (_log.shouldDebug()) {
+                        _log.debug("Loading the deferred header for [" + LogHelper.head(uidl) + "] failed");
                     }
                 }
             }
@@ -426,19 +425,19 @@ class MailCache {
                 // body was not loaded at startup but we have it, load it now
                 if (disk.getMail(mail, false)) {
                     if (_log.shouldDebug()) {
-                        _log.debug("Loaded the deferred body from the disk cache: " + shortId(uidl));
+                        _log.debug("Loaded the deferred body for " + LogHelper.shortId(uidl));
                     }
                     return mail;
                 }
-                if (_log.shouldWarn()) {
-                    _log.warn("Failed to load the deferred body from the disk cache: " + shortId(uidl));
+                if (_log.shouldDebug()) {
+                    _log.debug("Loading the deferred body for [" + LogHelper.head(uidl) + "] failed");
                 }
             } else {
-                if (_log.shouldWarn()) {_log.warn("The message body is not in the disk cache: " + shortId(uidl));}
+                if (_log.shouldDebug()) _log.debug("Message body for [" + LogHelper.head(uidl) + "] is not cached");
             }
             if (mode == FetchMode.ALL && mailbox != null) {
                 if (_log.shouldInfo()) {
-                    _log.info("Fetching the message body from the server: " + shortId(uidl));
+                    _log.info("Fetching the message body from the server for " + LogHelper.shortId(uidl));
                 }
                 File file = new File(_context.getTempDir(), "susimail-new-" + _context.random().nextLong());
                 Buffer rb = mailbox.getBody(uidl, new FileBuffer(file));
@@ -473,8 +472,8 @@ class MailCache {
             throw new IllegalArgumentException();
         if (mailbox == null) {
             if (_log.shouldDebug()) {
-                _log.debug("Asked for mail from the wrong folder -> Mode: " + mode +
-                           "; Folder: " + getFolderName(), new Exception());
+                _log.debug("Asked for mail with no mailbox set -> Listing not refreshed\n* Folder: " + getFolderName() +
+                           "\n* Mode: " + mode);
             }
             return false;
         }
@@ -516,7 +515,9 @@ class MailCache {
                     boolean loadFull = !Boolean.parseBoolean(Config.getProperty(WebMail.CONFIG_LEAVE_ON_SERVER)) &&
                                        disk.getFullFile(uidl).exists();
                     if (disk.getMail(mail, !loadFull)) {
-                        if (_log.shouldDebug()) _log.debug("Loaded the header from the disk cache: " + shortId(uidl));
+                        if (_log.shouldDebug()) {
+                            _log.debug("Loaded the header for [" + LogHelper.head(uidl) + "] from the cache");
+                        }
                         // note that disk loaded the full body if we asked for it
                         if (mail.hasBody() &&
                             !Boolean.parseBoolean(Config.getProperty(WebMail.CONFIG_LEAVE_ON_SERVER))) {
@@ -537,7 +538,9 @@ class MailCache {
             } else {
                 if(!mail.hasBody()) {
                     if (disk.getMail(mail, false)) {
-                        if (_log.shouldDebug()) _log.debug("Loaded the body from the disk cache: " + shortId(uidl));
+                        if (_log.shouldDebug()) {
+                            _log.debug("Loaded the body for [" + LogHelper.head(uidl) + "] from the cache");
+                        }
                         // disk may only have the header file; never delete the
                         // server copy unless we actually have the body
                         if (mail.hasBody() &&
@@ -736,20 +739,6 @@ class MailCache {
         public synchronized boolean getSuccess() {
             return success;
         }
-    }
-
-    /**
-     * The message id as it is written to the log. A UIDL is a base64 blob of up
-     * to 70 characters that nothing in the log viewer links, so only its head
-     * is kept and bracketed.
-     *
-     * @param uidl the server-side unique message id, may be null
-     * @return the bracketed head of the id
-     * @since 0.9.72+
-     */
-    static String shortId(String uidl) {
-        if (uidl == null) {return "[unknown]";}
-        return '[' + (uidl.length() <= 8 ? uidl : uidl.substring(0, 8)) + ']';
     }
 
     /** Looks up a localized string in the message bundle. */

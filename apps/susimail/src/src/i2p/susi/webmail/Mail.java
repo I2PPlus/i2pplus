@@ -5,6 +5,7 @@ import i2p.susi.util.Buffer;
 import i2p.susi.util.CountingInputStream;
 import i2p.susi.util.EOFOnMatchInputStream;
 import i2p.susi.util.FileBuffer;
+import i2p.susi.util.LogHelper;
 import i2p.susi.util.MemoryBuffer;
 import i2p.susi.webmail.encoding.Encoding;
 import i2p.susi.webmail.encoding.EncodingFactory;
@@ -22,7 +23,6 @@ import java.util.TimeZone;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Pattern;
 import net.i2p.I2PAppContext;
-import net.i2p.data.Base64;
 import net.i2p.data.DataHelper;
 import net.i2p.servlet.util.ServletUtil;
 import net.i2p.util.Log;
@@ -136,7 +136,9 @@ class Mail {
     public synchronized void setHeader(Buffer rb) {
         try {setHeader(rb, rb.getInputStream(), true);}
         catch (IOException ioe) { // TODO...
-            if (_log.shouldWarn()) {_log.warn("Header read error", ioe);}
+            if (_log.shouldWarn()) {
+                _log.warn("Reading the message header for [" + LogHelper.head(uidl) + "] failed\n* Error: " + ioe);
+            }
         }
     }
 
@@ -210,8 +212,8 @@ class Mail {
             // may only be available after reading and calling readComplete()
             size = rb.getLength();
             success = true;
-        } catch (IOException de) {_log.error("Decode error", de);}
-        catch (RuntimeException e) {_log.error("Parse error", e);}
+        } catch (IOException de) {_log.error("Decoding the message for [" + LogHelper.head(uidl) + "] failed", de);}
+        catch (RuntimeException e) {_log.error("Parsing the message for [" + LogHelper.head(uidl) + "] failed", e);}
         finally {
             if (in != null) {
                 try {in.close();}
@@ -490,7 +492,7 @@ class Mail {
                     MemoryBuffer decoded = new MemoryBuffer(4096);
                     hl.decode(eofin, decoded);
                     if (!eofin.wasFound() && _log.shouldDebug()) {
-                        _log.debug("EOF hit before \\r\\n\\r\\n in Mail");
+                        _log.debug("Message for [" + LogHelper.head(uidl) + "] has no blank line before the body");
                     }
                     // Fixme UTF-8 to bytes to UTF-8
                     headerLines = DataHelper.split(new String(decoded.getContent(), decoded.getOffset(), decoded.getLength(), StandardCharsets.UTF_8), "\r\n");
@@ -554,9 +556,8 @@ class Mail {
                         } else if (hlc.startsWith("message-id:")) {messageID = line.substring(11).trim();}
                         else if (hlc.startsWith("x-uidl:") && !uidl.equals(line.substring(7).trim())) {
                             if (_log.shouldWarn()) {
-                                _log.warn("UIDL mismatch, may be unable to load body later. Original: " + uidl +
-                                          " b64: " + Base64.encode(uidl) +
-                                          " header: " + line.substring(7).trim());
+                                _log.warn("Message id [" + LogHelper.head(uidl) + "] is not the one in the header" +
+                                          " -> The body may not load later\n* Header: " + line.substring(7).trim());
                             }
                         }
                     }
@@ -564,7 +565,7 @@ class Mail {
                 }
                 catch(Exception e) {
                     error += "Error parsing mail header: " + e.getClass().getName() + '\n';
-                    _log.error("Parse error", e);
+                    _log.error("Parsing the message header for [" + LogHelper.head(uidl) + "] failed", e);
                 }
             }
         }

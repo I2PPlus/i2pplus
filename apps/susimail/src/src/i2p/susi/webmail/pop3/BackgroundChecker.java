@@ -7,6 +7,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 import net.i2p.I2PAppContext;
+import net.i2p.data.DataHelper;
 import net.i2p.util.ConcurrentHashSet;
 import net.i2p.util.I2PAppThread;
 import net.i2p.util.Log;
@@ -90,17 +91,17 @@ class BackgroundChecker {
             long last = System.currentTimeMillis() - mailbox.getLastChecked();
             if (idle >= MIN_IDLE && last >= MIN_SINCE) {
                 if (_log.shouldDebug()) {
-                    _log.debug("Checking for new mail after " + idle + " ms idle and " + last +
-                               " since the last check");
+                    _log.debug("Checking for new mail\n* Idle: " + DataHelper.formatDuration(idle) +
+                               " * Since the last check: " + DataHelper.formatDuration(last));
                 }
                 Thread t = new Getter();
                 isChecking = true;
                 t.start();
             } else if (_log.shouldDebug()) {
-                _log.debug("Not checking yet after " + idle + " ms idle and " + last +
-                           " since the last check");
+                _log.debug("Not checking for new mail yet\n* Idle: " + DataHelper.formatDuration(idle) +
+                           " * Since the last check: " + DataHelper.formatDuration(last));
             }
-        } else if (_log.shouldDebug()) {_log.debug("Not checking for mail, the connection is still open");}
+        } else if (_log.shouldDebug()) {_log.debug("Not checking for new mail -> The connection is still open");}
             schedule(getCheckTime());
         }
     }
@@ -115,7 +116,7 @@ class BackgroundChecker {
                     int found = mailbox.getNumMails();
                     if (found > 0) {
                         if (_log.shouldDebug()) {
-                            _log.debug("The server holds " + found + " messages, notifying the webmail session");
+                            _log.debug("Server reports " + found + " messages -> Notifying the webmail session");
                         }
                         mailbox.foundNewMail(true); // may not really be new
                     }

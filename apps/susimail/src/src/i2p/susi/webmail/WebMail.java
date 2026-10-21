@@ -37,7 +37,6 @@ import java.net.URISyntaxException;
 import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -1924,14 +1923,7 @@ public class WebMail extends HttpServlet {
             catch (IllegalStateException ise) { /* ignored */ }
             if (_log.shouldDebug()) {
                 try {
-                    _log.debug("New webmail session\n* Session: " + httpSession.getId());
-                } catch (IllegalStateException ise) { /* ignored */ }
-            }
-        } else {
-            if (_log.shouldDebug()) {
-                try {
-                    _log.debug("Reusing a webmail session\n* Session: " + httpSession.getId() +
-                               "\n* Created: " + new Date(httpSession.getCreationTime()));
+                    _log.debug("New webmail session " + shortSessionId(httpSession.getId()));
                 } catch (IllegalStateException ise) { /* ignored */ }
             }
         }
@@ -2067,31 +2059,17 @@ public class WebMail extends HttpServlet {
     }
 
     /**
-     * Readiness of the mailbox cache, for the request log.
-     * <p>An empty message list is usually a cache that has not finished fetching,
-     * not a state-machine problem, so the log names the condition rather than a
-     * boolean the reader has to interpret.
+     * A Jetty session id is a long hex blob that nothing in the log viewer
+     * links, and it repeats on every request, so only its head is kept and
+     * bracketed.
      *
-     * @param mc the cache to describe, or null when no mailbox is selected
-     * @return one of None, Ready, Loading, Not loaded, never null
+     * @param id the http session id, may be null
+     * @return the bracketed head of the id, never null
      * @since 0.9.72+
      */
-    static String cacheState(MailCache mc) {
-        return mc == null ? "None" : cacheStateText(mc.isLoaded(), mc.isLoading());
-    }
-
-    /**
-     * Readiness wording, split out so it can be tested without a mailbox.
-     *
-     * @param loaded whether the mailbox listing has been read
-     * @param loading whether the listing is being read right now
-     * @return one of Ready, Loading, Not loaded, never null
-     * @since 0.9.72+
-     */
-    static String cacheStateText(boolean loaded, boolean loading) {
-        if (loaded) {return "Ready";}
-        if (loading) {return "Loading";}
-        return "Not loaded";
+    static String shortSessionId(String id) {
+        if (id == null) {return "[unknown]";}
+        return '[' + (id.length() <= 8 ? id : id.substring(0, 8)) + ']';
     }
 
     /**
@@ -2211,8 +2189,9 @@ public class WebMail extends HttpServlet {
             State oldstate = state;
             state = processStateChangeButtons(sessionObject, request, isPOST, state);
             if (oldstate != State.AUTH && state == State.AUTH) {
-                if (_log.shouldDebug())
-                     _log.debug("Session invalidated -> State reset to AUTH (was " + pageName(oldstate) + ')');
+                if (_log.shouldDebug()) {
+                    _log.debug("Session invalidated: " + pageName(oldstate) + " -> the login page");
+                }
                 httpSession = request.getSession( true );
                 // get new sessionObject so we can put the nonce in it below, otherwise
                 // user will get nonce error on login
@@ -2223,10 +2202,6 @@ public class WebMail extends HttpServlet {
                 // and now we're synched inside the old sessionObject, not the new one, oh well
             }
             state = processConfigButtons(sessionObject, request, isPOST, state);
-            if (_log.shouldDebug() && state != oldstate) {
-                _log.debug("Page changed while handling the request: " + pageName(oldstate) +
-                           " -> " + pageName(state));
-            }
             if (state == State.CONFIG && isPOST) {
                 // P-R-G
                 String q = '?' + CONFIGURE;
@@ -2386,10 +2361,11 @@ public class WebMail extends HttpServlet {
             Folder<String> folder = mc != null ? mc.getFolder() : null;
 
             //// End state determination, state will not change after here
-            if (_log.shouldDebug()) {
-                _log.debug("Showing " + pageName(state) +
-                           "\n* Folder: " + (mc != null ? mc.getFolderName() : "None") +
-                           "\n* Mail cache: " + cacheState(mc));
+            // The page itself is not logged per request - the browser polls the
+            // same page every few seconds, so a per-request line is 90% repeats.
+            // Only a request that changed the page is worth a line.
+            if (_log.shouldDebug() && state != oldstate) {
+                _log.debug("Page changed while handling the request: " + pageName(oldstate) + " -> " + pageName(state));
             }
 
             if (state == State.LIST || state == State.SHOW) {

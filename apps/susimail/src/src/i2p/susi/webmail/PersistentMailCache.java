@@ -3,6 +3,7 @@ package i2p.susi.webmail;
 import i2p.susi.util.Buffer;
 import i2p.susi.util.FixCRLFOutputStream;
 import i2p.susi.util.GzipFileBuffer;
+import i2p.susi.util.LogHelper;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -81,7 +82,7 @@ class PersistentMailCache {
     /**
      * Use the params to generate a unique directory name.
      *
-     * Does NOT load the mails in. Caller MUST call {@link #getMails()}.
+     * Does NOT load the mails in. Caller MUST call {@link #getMails(String)}.
      *
      * @param ctx supplies the log manager and the base directory
      * @param host IMAP host, part of the directory name
@@ -113,17 +114,19 @@ class PersistentMailCache {
     }
 
     /**
-     * Fetch all mails from disk.
+     * Fetch all mails from disk, naming the folder in the completion log so a
+     * reader can tell which mailbox the counts belong to.
      *
+     * @param folder label for the log, null if the caller has none to give
      * @return a new collection
      */
-    public Collection<Mail> getMails() {
+    public Collection<Mail> getMails(String folder) {
         synchronized(_lock) {
-            return locked_getMails();
+            return locked_getMails(folder);
         }
     }
 
-    private Collection<Mail> locked_getMails() {
+    private Collection<Mail> locked_getMails(String folder) {
         Queue<File> fq = new LinkedBlockingQueue<>();
         for (int j = 0; j < B64.length(); j++) {
             File subdir = new File(_cacheDir, DIR_PREFIX + B64.charAt(j));
@@ -154,7 +157,8 @@ class PersistentMailCache {
         }
         long end = _context.clock().now();
         if (_log.shouldDebug()) {
-            _log.debug("Loaded " + sz + " emails with " + tcnt + " threads in " + DataHelper.formatDuration(end - begin));
+            _log.debug("Loaded the folder from disk in " + DataHelper.formatDuration(end - begin) + ":\n* Folder: " +
+                       folder + " * Messages: " + sz + " * Threads: " + tcnt);
         }
         return rv;
     }
@@ -216,9 +220,14 @@ class PersistentMailCache {
                     mail.setHeader(rb);
                     return true;
                 }
-                if (_log.shouldWarn()) {_log.warn("Unable to read file " + hf);}
+                if (_log.shouldWarn()) {
+                    _log.warn("Header file for " + LogHelper.shortId(mail.uidl) + " could not be read\n* File: " +
+                              hf.getName());
+                }
             }
-            if (_log.shouldWarn()) {_log.warn("Unable to find header file " + hf + " for mail " + Base64.encode(mail.uidl));}
+            if (_log.shouldDebug()) {
+                _log.debug("Header file for " + LogHelper.shortId(mail.uidl) + " not cached\n* File: " + hf.getName());
+            }
             return false;
         }
         File f = getFullFile(mail.uidl);
@@ -228,7 +237,10 @@ class PersistentMailCache {
                 mail.setBody(rb);
                 return true;
             } else {
-                if (_log.shouldWarn()) {_log.warn("Unable to read file " + f);}
+                if (_log.shouldWarn()) {
+                    _log.warn("Message file for " + LogHelper.shortId(mail.uidl) + " could not be read\n* File: " +
+                              f.getName());
+                }
             }
         }
         f = getHeaderFile(mail.uidl);
@@ -238,10 +250,15 @@ class PersistentMailCache {
                 mail.setHeader(rb);
                 return true;
             } else {
-                if (_log.shouldWarn()) {_log.warn("Unable to read file " + f);}
+                if (_log.shouldWarn()) {
+                    _log.warn("Header file for " + LogHelper.shortId(mail.uidl) + " could not be read\n* File: " +
+                              f.getName());
+                }
             }
         }
-        if (_log.shouldWarn()) {_log.warn("Unable to find file " + f + " for mail " + Base64.encode(mail.uidl));}
+        if (_log.shouldDebug()) {
+            _log.debug("Message file for " + LogHelper.shortId(mail.uidl) + " not cached\n* File: " + f.getName());
+        }
         return false;
     }
 
@@ -385,7 +402,7 @@ class PersistentMailCache {
             rb.readComplete(true);
             return true;
         } catch (IOException ioe) {
-            _log.error("Error writing: " + f + ": " + ioe);
+            _log.error("Writing the message to the cache failed for " + f.getName() + "\n* Error: " + ioe);
             rb.readComplete(false);
             return false;
         } finally {
@@ -482,7 +499,7 @@ class PersistentMailCache {
                         }
                     }
                 } catch (IOException ioe) {
-                    _log.error("Import failed " + f, ioe);
+                    _log.error("Reading the message to import failed\n* File: " + f.getName(), ioe);
                     continue;
                 } finally {
                     if (in != null) {
@@ -494,7 +511,10 @@ class PersistentMailCache {
                     uidl = Long.toString(_context.random().nextLong());
                 File to = getFullFile(uidl);
                 if (to.exists()) {
-                    if (_log.shouldDebug()) {_log.debug("Already have " + f + " as UIDL " + uidl);}
+                    if (_log.shouldDebug()) {
+                        _log.debug("Import for " + LogHelper.shortId(uidl) + " already cached -> Discarded\n* File: " +
+                                   f.getName());
+                    }
                     f.delete();
                     continue;
                 }
@@ -507,7 +527,7 @@ class PersistentMailCache {
                     out = new FixCRLFOutputStream(gb.getOutputStream());
                     DataHelper.copy(in, out);
                 } catch (IOException ioe) {
-                    _log.error("Import failed " + f, ioe);
+                    _log.error("Writing the imported message to the cache failed\n* File: " + f.getName(), ioe);
                     continue;
                 } finally {
                     if (in != null) {
@@ -520,7 +540,9 @@ class PersistentMailCache {
                     }
                 }
                 f.delete();
-                if (_log.shouldDebug()) {_log.debug("Imported " + f + " as UIDL " + uidl);}
+                if (_log.shouldDebug()) {
+                    _log.debug("Imported " + LogHelper.shortId(uidl) + " into the cache\n* File: " + f.getName());
+                }
             }
         }
     }
