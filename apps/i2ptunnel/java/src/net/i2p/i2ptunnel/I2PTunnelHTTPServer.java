@@ -1618,7 +1618,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                     // per-read budget and the local socket's header-read budget.
                     _log.info("[HTTPServer] " + toString()
                               + "\n* Read timeout: " + readTimeout
-                              + " Header Read timeout: " + SERVER_READ_TIMEOUT_GET
+                              + " * Header Read timeout: " + SERVER_READ_TIMEOUT_GET
                               + "\n* Client: " + peerB32);
                 }
 
@@ -1637,7 +1637,10 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 if (alt) {headers.remove("X-Accept-Encoding");}
 
                 String modifiedHeader = HttpHeaderFormatter.formatHeaders(headers, command);
-                if (_log.shouldDebug()) {_log.debug("[HTTPServer] Modified headers\n\t" + modifiedHeader);}
+                if (_log.shouldDebug()) {
+                    _log.debug("[HTTPServer] Modified headers" +
+                               HttpHeaderFormatter.formatHeadersForLog(headers, command));
+                }
                 else if (_log.shouldInfo() && !command.toString().toLowerCase().contains("head")) {
                     String compactHeaders = HttpHeaderFormatter.formatHeadersCompact(headers, command);
                     _log.info("[HTTPServer] Received request headers" + compactHeaders);
@@ -1645,9 +1648,9 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
 
                 boolean compress = allowGZIP && useGZIP;
                 AtomicInteger waiter = keepalive ? new AtomicInteger() : null;
-                  Runnable t = new CompressedRequestor(s, socket, modifiedHeader, getTunnel().getContext(),
-                                                       _log, compress, upgrade, _clientExecutor, keepalive, waiter,
-                                                       this::getIOExecutor, tunnelId);
+                 Runnable t = new CompressedRequestor(s, socket, modifiedHeader, getTunnel().getContext(),
+                                                      _log, compress, upgrade, _clientExecutor, keepalive, waiter,
+                                                      this::getIOExecutor, tunnelId);
                 // Persistent connections run inline so the waiter can gate the
                 // next request on this connection. Non-keepalive requests
                 // (including GET/HEAD with keepalive off or Connection: close)

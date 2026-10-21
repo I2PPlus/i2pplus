@@ -1,7 +1,9 @@
 package net.i2p.i2ptunnel;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.regex.Pattern;
 
 /**
@@ -136,6 +138,109 @@ public class HttpHeaderFormatter {
             }
         }
         return buf.toString();
+    }
+
+    /**
+     * Request lines longer than this are cut at the query string. A tracker or
+     * client request carries a whole base64 destination in the query, which is
+     * the same destination the headers already name.
+     *
+     * @since 0.9.72+
+     */
+    static final int MAX_REQUEST = 96;
+
+    /**
+     * Header values longer than this are cut. No log line is readable once a
+     * 500 character blob lands in it.
+     *
+     * @since 0.9.72+
+     */
+    static final int MAX_VALUE = 64;
+
+    /**
+     * Formats the request and headers for the log, in the house continuation
+     * form. Unlike the wire form this is not what is sent to the server: the
+     * base64 and hash forms of the client destination are dropped as repeats of
+     * the base32 form, that form is shortened to the eight characters the log
+     * viewer links, and over-long values are cut.
+     *
+     * @param headers the HTTP headers map (header name to list of values)
+     * @param command the request command line (e.g., "GET / HTTP/1.1")
+     * @return a string of "\n* name: value" lines, never null
+     * @since 0.9.72+
+     */
+    public static String formatHeadersForLog(Map<String, List<String>> headers, StringBuilder command) {
+        StringBuilder buf = new StringBuilder(128 + headers.size() * 32);
+        buf.append("\n* Request: ").append(shortRequest(stripLineBreaks(command.toString().trim())));
+        Set<String> seen = new HashSet<>(headers.size() * 2);
+        for (Map.Entry<String, List<String>> e : headers.entrySet()) {
+            List<String> values = e.getValue();
+            if (values == null || values.isEmpty()) {continue;}
+            String name = stripLineBreaks(e.getKey().trim());
+            String lc = name.toLowerCase();
+            // Three spellings of one destination: keep the base32, which is the
+            // short one, and drop the hash and the base64 blob as repeats.
+            if (lc.equals("x-i2p-destb64") || lc.equals("x-i2p-desthash")) {continue;}
+            if (lc.equals("x-i2p-destb32")) {
+                String shortB32 = shortB32(values.get(0));
+                if (seen.add(lc + shortB32)) {buf.append("\n* ").append(name).append(": ").append(shortB32);}
+                continue;
+            }
+            for (String val : values) {
+                String value = shortValue(stripLineBreaks(val.trim()));
+                if (!seen.add(lc + value)) {continue;}
+                buf.append("\n* ").append(name).append(": ").append(value);
+            }
+        }
+        return buf.toString();
+    }
+
+    /**
+     * Cuts a request line to what a reader can actually scan, keeping the
+     * method, the path and the protocol version.
+     *
+     * @param request the request line, non-null
+     * @return the request line, or its head plus an ellipsis when over
+     *         {@link #MAX_REQUEST} characters
+     * @since 0.9.72+
+     */
+    static String shortRequest(String request) {
+        if (request.length() <= MAX_REQUEST) {return request;}
+        String tail = request.endsWith("HTTP/1.1") ? " HTTP/1.1" :
+                      request.endsWith("HTTP/1.0") ? " HTTP/1.0" : "";
+        int q = request.indexOf('?');
+        if (q > 0) {return request.substring(0, q) + "?..." + tail;}
+        return request.substring(0, MAX_REQUEST) + "..." + tail;
+    }
+
+    /**
+     * The eight-character head of a base32 address in brackets, the form the
+     * console log viewer turns into a link. The full address is 60 characters
+     * naming the same destination.
+     *
+     * @param b32 the base32 address, may be null
+     * @return the bracketed head, or [unknown] if there is no address
+     * @since 0.9.72+
+     */
+    static String shortB32(String b32) {
+        if (b32 == null) {return "[unknown]";}
+        String s = b32.trim();
+        int dot = s.indexOf(".b32.i2p");
+        if (dot > 0) {s = s.substring(0, dot);}
+        return '[' + (s.length() <= 8 ? s : s.substring(0, 8)) + ']';
+    }
+
+    /**
+     * Cuts an over-long header value, keeping its head so it stays recognizable
+     * and reporting the length that was hidden.
+     *
+     * @param value the header value, non-null
+     * @return the value, or its head plus an ellipsis and the full length
+     * @since 0.9.72+
+     */
+    static String shortValue(String value) {
+        if (value.length() <= MAX_VALUE) {return value;}
+        return value.substring(0, MAX_VALUE) + "... [" + value.length() + " chars]";
     }
 
     /**
