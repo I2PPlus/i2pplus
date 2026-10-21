@@ -6,7 +6,6 @@ import static i2p.susi.webmail.Sorters.*;
 import i2p.susi.util.Buffer;
 import i2p.susi.util.Config;
 import i2p.susi.util.DecodingOutputStream;
-import i2p.susi.util.EscapeHTMLOutputStream;
 import i2p.susi.util.EscapeHTMLWriter;
 import i2p.susi.util.FileBuffer;
 import i2p.susi.util.FilenameUtil;
@@ -63,7 +62,6 @@ import net.i2p.data.Base64;
 import net.i2p.data.DataHelper;
 import net.i2p.servlet.RequestWrapper;
 import net.i2p.servlet.util.ServletUtil;
-import net.i2p.servlet.util.WriterOutputStream;
 import net.i2p.util.I2PAppThread;
 import net.i2p.util.Log;
 import net.i2p.util.RFC822Date;
@@ -251,7 +249,6 @@ public class WebMail extends HttpServlet {
      * Property key setting the POP3 idle timeout, in seconds.
      */
     public static final String CONFIG_IDLE_SECONDS = "pop3.idle.timeout.seconds";
-    private static final String CONFIG_DEBUG = "debug";
     private static final String RC_PROP_THEME = "routerconsole.theme";
     private static final String RC_PROP_UNIVERSAL_THEMING = "routerconsole.universal.theme";
     private static final String RC_PROP_FORCE_MOBILE_CONSOLE = "routerconsole.forceMobileConsole";
@@ -4008,8 +4005,10 @@ public class WebMail extends HttpServlet {
     /**
      * Show one message with its parts.
      *
-     * @param out
-     * @param sessionObject
+     * @param out where the rendered message is written
+     * @param sessionObject the session holding the mailbox and the view settings
+     * @param mc the cache the message is fetched from
+     * @param showUIDL the UIDL of the message to show
      * @param reallyDelete was the delete button pushed, if so, show the really delete? message
      * @param allowHTML allow display of text/html parts
      */
@@ -4024,23 +4023,6 @@ public class WebMail extends HttpServlet {
                .append(button(CANCEL, _t("Cancel"))).append("</p>");
         }
         Mail mail = mc.getMail(showUIDL, MailCache.FetchMode.ALL);
-        boolean debug = Boolean.parseBoolean(Config.getProperty(CONFIG_DEBUG));
-        if (debug && mail != null && mail.hasBody() && mail.getSize() < 16384) {
-            buf.append("<!--").append("Debug: Mail header and body follow");
-            Buffer body = mail.getBody();
-            InputStream in = null;
-            OutputStream sout = null;
-            try {
-                in = body.getInputStream();
-                sout = new EscapeHTMLOutputStream(new WriterOutputStream(out));
-                DataHelper.copy(in, sout);
-            } catch (IOException ioe) { /* ignored */ } finally {
-                if (in != null) try {in.close();} catch (IOException ioe) { /* ignored */ }
-                if (sout != null) try {sout.close();} catch (IOException ioe) { /* ignored */ }
-                body.readComplete(true);
-            }
-            buf.append("-->");
-        }
         buf.append("<div class=topbuttons id=readmail>").append(button(NEW, _t("New")) + spacer);
         boolean hasHeader = mail != null && mail.hasHeader();
         if (hasHeader) {
