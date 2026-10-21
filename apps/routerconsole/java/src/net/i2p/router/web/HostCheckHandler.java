@@ -1,7 +1,6 @@
 package net.i2p.router.web;
 
 import java.io.IOException;
-import java.net.InetAddress;
 import java.util.HashSet;
 import java.util.Set;
 import javax.servlet.ServletException;
@@ -198,9 +197,33 @@ public class HostCheckHandler extends GzipHandler
      * @return true if allowed
      */
     private boolean allowOrigin(HttpServletRequest request) {
-        String origin = request.getHeader("Origin");
-        String host = request.getHeader("Host");
+        return originAllowed(request.getHeader("Origin"),
+                             request.getHeader("Host"),
+                             request.isSecure());
+    }
 
+    /**
+     * Decide whether an Origin header is acceptable for a request to the given
+     * Host header. Same-origin is allowed, as is a request where both sides are
+     * loopback <em>and</em> the ports match; anything else is rejected.
+     * <p>
+     * Both sides are compared as literal text. Neither header is ever resolved
+     * through DNS: a hostname whose A record points at 127.0.0.1 (DNS
+     * rebinding) is not loopback here, which is what keeps the localhost
+     * allowance from becoming a CSRF bypass. Resolving attacker-supplied host
+     * names on the request thread would also hand a slow or hostile resolver
+     * control of the Jetty thread pool.
+     *
+     * @param origin the Origin header value, null or empty for a same-origin
+     *               form POST that carries no Origin
+     * @param hostHeader the Host header value, "host" or "host:port", IPv6
+     *                   addresses bracketed
+     * @param secure true when the request arrived over TLS, used only for the
+     *               default port when the Host header omits one
+     * @return true if the request is allowed
+     * @since 0.9.72+
+     */
+    static boolean originAllowed(String origin, String hostHeader, boolean secure) {
         // Allow if no Origin header (same-origin form POST without Origin)
         if (origin == null || origin.isEmpty()) {
             return true;
@@ -214,44 +237,25 @@ public class HostCheckHandler extends GzipHandler
         // Extract origin host:port
         String originHost;
         int originPort;
-        try {
-            // Origin format: "https://host:port" or "http://host:port"
-            if (origin.startsWith("http://")) {
-                String rest = origin.substring(7);
-                originHost = extractHost(rest);
-                originPort = extractPort(rest, 80);
-            } else if (origin.startsWith("https://")) {
-                String rest = origin.substring(8);
-                originHost = extractHost(rest);
-                originPort = extractPort(rest, 443);
-            } else {
-                // Unknown scheme, reject
-                return false;
-            }
-        } catch (Exception e) {
-            // Parse error, allow
-            return true;
+        if (origin.startsWith("http://")) {
+            String rest = origin.substring(7);
+            originHost = extractHost(rest);
+            originPort = extractPort(rest, 80);
+        } else if (origin.startsWith("https://")) {
+            String rest = origin.substring(8);
+            originHost = extractHost(rest);
+            originPort = extractPort(rest, 443);
+        } else {
+            // Unknown scheme, reject
+            return false;
         }
-
-        // Normalize IPv6 for comparison
-        originHost = normalizeIP(originHost);
 
         // Extract request host:port
-        String requestHost;
-        int requestPort;
-        try {
-            if (host == null) {
-                return true;
-            }
-            requestHost = extractHost(host);
-            requestPort = extractPort(host, request.isSecure() ? 443 : 80);
-        } catch (Exception e) {
-            // Parse error, allow
+        if (hostHeader == null) {
             return true;
         }
-
-        // Normalize IPv6 for comparison
-        requestHost = normalizeIP(requestHost);
+        String requestHost = extractHost(hostHeader);
+        int requestPort = extractPort(hostHeader, secure ? 443 : 80);
 
         // Allow if origin matches request host
         if (originHost != null && requestHost != null &&
@@ -259,13 +263,38 @@ public class HostCheckHandler extends GzipHandler
             return true;
         }
 
-        // Also allow localhost variants (127.x.x.x, localhost, ::1, and equivalent)
-        if (isLocalhost(originHost) && isLocalhost(requestHost)) {
-            return true;
-        }
+        // Also allow localhost variants, compared literally - see the note above.
+        // The port must still match: without it, a page on any other local port
+        // (another web UI on 8080, say) would be accepted as same-origin against
+        // the console, since both sides are then "localhost".
+        return originPort == requestPort &&
+               isLoopbackName(originHost) && isLoopbackName(requestHost);
+    }
 
-        // Reject cross-origin POST
-        return false;
+    /**
+     * True when the host is a textual loopback name: an IPv4 address in 127/8,
+     * the IPv6 loopback in its written forms, or "localhost". No DNS lookup is
+     * performed, so a hostname that happens to resolve to a loopback address is
+     * not accepted.
+     *
+     * @param host the host to test, null-safe
+     * @return true if the name itself denotes the local host
+     * @since 0.9.72+
+     */
+    static boolean isLoopbackName(String host) {
+        if (host == null || host.isEmpty())
+            return false;
+        if (host.equalsIgnoreCase("localhost"))
+            return true;
+        if (host.startsWith("127."))
+            return true;
+        // Bracketed form, in case a caller passes "[::1]" rather than "::1"
+        if (host.startsWith("[") && host.endsWith("]"))
+            host = host.substring(1, host.length() - 1);
+        return host.equals("::1") ||
+               host.equals("0:0:0:0:0:0:0:1") ||
+               host.equals("0:0:0:0:0:0:0:0") ||
+               host.equals("::");
     }
 
     /**
@@ -287,6 +316,9 @@ public class HostCheckHandler extends GzipHandler
 
     /**
      * Extract port from "host:port" or "[ipv6]:port", default to defaultPort if not found.
+     *
+     * @return the port, or -1 if a port was present but is not a number, so a
+     *         malformed header fails the comparison instead of throwing
      */
     private static int extractPort(String hostPort, int defaultPort) {
         if (hostPort.startsWith("[")) {
@@ -294,47 +326,30 @@ public class HostCheckHandler extends GzipHandler
             if (brack > 0) {
                 String rest = hostPort.substring(brack + 1);
                 if (rest.startsWith(":")) {
-                    return Integer.parseInt(rest.substring(1));
+                    return parsePort(rest.substring(1));
                 }
                 return defaultPort;
             }
         }
         int colon = hostPort.indexOf(':');
         if (colon > 0) {
-            return Integer.parseInt(hostPort.substring(colon + 1));
+            return parsePort(hostPort.substring(colon + 1));
         }
         return defaultPort;
     }
 
     /**
-     * Normalize IPv6 address to canonical form.
+     * Parse a port written in a header value.
+     *
+     * @param s the digits after the colon
+     * @return the port, or -1 if it is not a valid port number
      */
-    private static String normalizeIP(String host) {
-        if (host == null) return null;
+    private static int parsePort(String s) {
         try {
-            InetAddress addr = InetAddress.getByName(host);
-            return addr.getHostAddress();
-        } catch (Exception e) {
-            return host;
+            return Integer.parseInt(s);
+        } catch (NumberFormatException e) {
+            return -1;
         }
-    }
-
-    /**
-     * Check if host is localhost/loopback.
-     * @return true if the host resolves to a loopback address
-     */
-    private static boolean isLocalhost(String host) {
-        if (host == null) return false;
-        String normalized = normalizeIP(host);
-        // 127.x.x.x, localhost, ::1, 0:0:0:0:0:0:0:1, etc.
-        return normalized != null && (
-            normalized.equals("127.0.0.1") ||
-            normalized.equals("localhost") ||
-            normalized.startsWith("127.") ||
-            normalized.equals("::1") ||
-            normalized.equals("0:0:0:0:0:0:0:1") ||
-            normalized.equals("::")
-        );
     }
 
     /**

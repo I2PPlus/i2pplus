@@ -925,6 +925,11 @@
         <!-- Checked in rather than taken from the jetty package dir, which does not
              assemble it; tests that touch servlet types cannot compile without it. -->
         <pathelement location="../../../apps/jetty/jettylib/javax.servlet.jar"/>
+        <!-- HostCheckHandler extends GzipHandler, so any test that references the
+             console's origin check needs the jar holding that supertype, plus
+             jetty-util.jar for the LifeCycle/ContainerLifeCycle above it. -->
+        <pathelement location="../../../apps/jetty/jettylib/org.mortbay.jetty.jar"/>
+        <pathelement location="../../../apps/jetty/jettylib/jetty-util.jar"/>
       </classpath>
     </javac>
   </target>
@@ -957,6 +962,10 @@
              compile classpath carries jetty-i2p.jar (where ServletUtil lives) so
              the test runtime classpath must too. -->
         <pathelement location="${jetty.pkg.dir}/jetty-i2p.jar"/>
+        <!-- HostCheckHandler extends GzipHandler; loading the class at runtime
+             needs its supertype on the classpath as well. -->
+        <pathelement location="../../../apps/jetty/jettylib/org.mortbay.jetty.jar"/>
+        <pathelement location="../../../apps/jetty/jettylib/jetty-util.jar"/>
       </classpath>
       <formatter type="xml"/>
       <batchtest todir="${junit.reports.dir}/routerconsole/junit">
