@@ -8,6 +8,7 @@ package i2p.susi.webmail.pop3;
 
 import i2p.susi.util.Buffer;
 import i2p.susi.util.Config;
+import i2p.susi.util.LogHelper;
 import i2p.susi.util.MemoryBuffer;
 import i2p.susi.webmail.Messages;
 import i2p.susi.webmail.NewMailListener;
@@ -75,7 +76,6 @@ public class POP3MailBox implements NewMailListener {
      */
     public POP3MailBox(String host, int port, String user, String pass) {
         _log = I2PAppContext.getGlobalContext().logManager().getLog(POP3MailBox.class);
-        if (_log.shouldDebug()) {_log.debug("Mailbox created for " + host + ':' + port);}
         this.host = host;
         this.port = port;
         this.user = user;
@@ -99,7 +99,8 @@ public class POP3MailBox implements NewMailListener {
         synchronized(synchronizer) {
             try {checkConnection();} // we must be connected to know the UIDL to ID mapping
             catch (IOException ioe) {
-                if (_log.shouldDebug()) {_log.debug("Error fetching header", ioe);}
+                _log.warn("Fetching the header for [" + LogHelper.head(uidl) + "] failed -> No POP3 connection" +
+                          "\n* Error: " + ioe);
                 return null;
             }
             int id = getIDfromUIDL(uidl);
@@ -117,20 +118,22 @@ public class POP3MailBox implements NewMailListener {
      * @return Byte buffer containing header data or null
      */
     private Buffer getHeader(int id) {
-            if (_log.shouldDebug()) _log.debug("getHeader(" + id + ")");
-            Buffer header = null;
-            if (id >= 1 && id <= mails) {
+        Buffer header = null;
+        if (id >= 1 && id <= mails) {
+            // sendCmdN closes and nulls the socket when a command fails, so the
+            // second attempt must not assume it is still there
+            if (socket != null) {
                 try {socket.setSoTimeout(120*1000);}
                 catch (IOException ioe) { /* ignored */ }
-                header = sendCmdN("TOP " + id + " 0", new MemoryBuffer(1024)); // try 'TOP n 0' command
-                if (header == null) {header = sendCmdN("RETR " + id, new MemoryBuffer(2048));} // try 'RETR n' command
-                if (header == null && _log.shouldDebug()) {_log.debug("RETR returned null");}
-                if (socket != null) {
-                    try {socket.setSoTimeout(300*1000);}
-                    catch (IOException ioe) { /* ignored */ }
-                }
-            } else {lastError = "Message id out of range.";}
-            return header;
+            }
+            header = sendCmdN("TOP " + id + " 0", new MemoryBuffer(1024)); // try 'TOP n 0' command
+            if (header == null) {header = sendCmdN("RETR " + id, new MemoryBuffer(2048));} // try 'RETR n' command
+            if (socket != null) {
+                try {socket.setSoTimeout(300*1000);}
+                catch (IOException ioe) { /* ignored */ }
+            }
+        } else {lastError = "Message id out of range.";}
+        return header;
     }
 
     /**
@@ -144,7 +147,8 @@ public class POP3MailBox implements NewMailListener {
         synchronized(synchronizer) {
             try {checkConnection();} // we must be connected to know the UIDL to ID mapping
             catch (IOException ioe) {
-                if (_log.shouldDebug()) {_log.debug("Error fetching body", ioe);}
+                _log.warn("Fetching the body for [" + LogHelper.head(uidl) + "] failed -> No POP3 connection" +
+                          "\n* Error: " + ioe);
                 return null;
             }
             int id = getIDfromUIDL(uidl);
@@ -166,7 +170,7 @@ public class POP3MailBox implements NewMailListener {
         synchronized(synchronizer) {
             try {checkConnection();} // we must be connected to know the UIDL to ID mapping
             catch (IOException ioe) {
-                if (_log.shouldDebug()) {_log.debug("Error fetching", ioe);}
+                _log.warn("Fetching " + requests.size() + " bodies failed -> No POP3 connection\n* Error: " + ioe);
                 return;
             }
             for (FetchRequest fr : requests) {
@@ -184,7 +188,7 @@ public class POP3MailBox implements NewMailListener {
             if (srs.isEmpty()) {return;}
             try {sendCmds(srs);}
             catch (IOException ioe) {
-                if (_log.shouldDebug()) {_log.debug("Error fetching bodies", ioe);}
+                _log.warn("Fetching message bodies failed -> Reconnecting\n* Error: " + ioe);
                 if (socket != null) {
                     try {socket.close();}
                     catch (IOException e) { /* ignored */ }
@@ -209,16 +213,18 @@ public class POP3MailBox implements NewMailListener {
      * @return the buffer containing body data or null
      */
     private Buffer getBody(int id, Buffer buffer) {
-        if (_log.shouldDebug()) _log.debug("getBody(" + id + ")");
         Buffer body = null;
         if (id >= 1 && id <= mails) {
             try {
-                try { socket.setSoTimeout(120*1000); } catch (IOException ioe) { /* ignored */ }
+                // sendCmdN closes and nulls the socket when a command fails, so the
+                // caller may reach here without one
+                if (socket != null) {
+                    try { socket.setSoTimeout(120*1000); } catch (IOException ioe) { /* ignored */ }
+                }
                 body = sendCmdN("RETR " + id, buffer);
                 if (socket != null) try { socket.setSoTimeout(300*1000); } catch (IOException ioe) { /* ignored */ }
-                if (body == null && _log.shouldDebug()) {_log.debug("RETR returned null");}
             } catch (OutOfMemoryError oom) {
-                _log.error("OOM fetching mail", oom);
+                _log.error("Fetching the message ran out of memory -> Closing the connection", oom);
                 lastError = oom.toString();
                 close();
             }
@@ -244,7 +250,6 @@ public class POP3MailBox implements NewMailListener {
      * @since 0.9.13
      */
     public void queueForDeletion(String uidl) {
-        if (_log.shouldDebug()) {_log.debug("Queueing for deletion: " + uidl);}
         delayedDeleter.queueDelete(uidl);
     }
 
@@ -273,7 +278,9 @@ public class POP3MailBox implements NewMailListener {
                     }
                 }
             } catch (IOException ioe) {
-                if (_log.shouldDebug()) {_log.debug("Error deleting", ioe);}
+                if (_log.shouldDebug()) {
+                    _log.debug("Deleting the queued messages failed -> Closing the connection\n* Error: " + ioe);
+                }
                 if (socket != null) {
                     try {socket.close();}
                     catch (IOException e) { /* ignored */ }
@@ -309,7 +316,6 @@ public class POP3MailBox implements NewMailListener {
             int result = 0;
             Integer resultObj = sizes.get(Integer.valueOf(id)); // find value in hashtable
             if (resultObj != null) {result = resultObj.intValue();}
-            if (_log.shouldDebug()) {_log.debug("getSize(" + id + ") = " + result);}
             return result;
     }
 
@@ -337,7 +343,6 @@ public class POP3MailBox implements NewMailListener {
      * @return true or false
      */
     private void checkConnection() throws IOException {
-        if (_log.shouldDebug()) _log.debug("checkConnection()");
         if (!isConnected()) {
             connect();
             if (!isConnected()) {throw new IOException(_t("Cannot connect"));}
@@ -383,7 +388,51 @@ public class POP3MailBox implements NewMailListener {
             mails = Integer.parseInt(i != -1 ? response.substring(4, i)
                                              : response.substring(4));
         } catch (NumberFormatException nfe) {mails = 0;}
-        if (_log.shouldDebug()) _log.debug("Server reports " + mails + " messages on " + host + ':' + port);
+        if (_log.shouldDebug()) _log.debug(mailCountText(mails, host, port));
+    }
+
+    /**
+     * Names the server the count came from, so a reader can tell which mailbox
+     * is being reported without parsing the sentence.
+     *
+     * @param mails message count the server reported in its STAT response
+     * @param host hostname of the POP3 server
+     * @param port TCP port of the POP3 server
+     * @return the log message
+     * @since 0.9.72+
+     */
+    static String mailCountText(int mails, String host, int port) {
+        return "Server reports " + mails + " messages in the mailbox\n* Server: " + host + ':' + port;
+    }
+
+    /**
+     * Names the server the login succeeded against.
+     *
+     * @param host hostname of the POP3 server
+     * @param port TCP port of the POP3 server
+     * @return the log message
+     * @since 0.9.72+
+     */
+    static String loggedInText(String host, int port) {
+        return "Logged in to the POP3 server " + host + ':' + port;
+    }
+
+    /**
+     * Reports what the server's CAPA (capability) response allowed, so a reader
+     * can tell why a listing used TOP or fell back to RETR. Each capability is
+     * spelled out in prose with its wire name beside it, and answered yes or no
+     * rather than with a question mark, which reads like an unanswered question.
+     *
+     * @param pipelining whether the server accepts pipelined commands
+     * @param uidl whether the server supports the UIDL command
+     * @param top whether the server supports the TOP command
+     * @return the multi-line log message
+     * @since 0.9.72+
+     */
+    static String capsText(boolean pipelining, boolean uidl, boolean top) {
+        return "POP3 server capabilities\n* Pipelining (PIPELINING): " + (pipelining ? "Yes" : "No") +
+               " * Stable message ids (UIDL): " + (uidl ? "Yes" : "No") +
+               "\n* Headers without the body (TOP): " + (top ? "Yes" : "No");
     }
 
     /**
@@ -394,6 +443,7 @@ public class POP3MailBox implements NewMailListener {
     private void updateUIDLs(List<String> lines) {
         uidlToID.clear();
         if (lines != null) {
+            int bad = 0;
             for (String line : lines) {
                 int j = line.indexOf(' ');
                 if (j != -1) {
@@ -402,14 +452,18 @@ public class POP3MailBox implements NewMailListener {
                         String uidl = line.substring(j + 1).trim();
                         uidlToID.put(uidl, Integer.valueOf(n));
                     } catch (NumberFormatException nfe) {
-                        if (_log.shouldDebug()) {_log.debug("UIDL error", nfe);}
+                        bad++;
                     } catch (IndexOutOfBoundsException ioobe) {
-                        if (_log.shouldDebug()) {_log.debug("UIDL error", ioobe);}
+                        bad++;
                     }
                 }
             }
+            if (bad > 0 && _log.shouldWarn()) {
+                _log.warn("UIDL list lines skipped -> Could not be parsed\n* Skipped: " + bad +
+                           " * Total: " + lines.size());
+            }
             lastChecked.set(System.currentTimeMillis());
-        } else if (_log.shouldDebug()) {_log.debug("Error getting UIDL list from server.");}
+        } else if (_log.shouldWarn()) {_log.warn("Server returned no UIDL list");}
     }
 
     /**
@@ -423,6 +477,7 @@ public class POP3MailBox implements NewMailListener {
          */
         sizes.clear();
         if (lines != null) {
+            int bad = 0;
             for (String line : lines) {
                 int j = line.indexOf(' ');
                 if (j != -1) {
@@ -431,12 +486,16 @@ public class POP3MailBox implements NewMailListener {
                         int value = Integer.parseInt(line.substring(j + 1).trim());
                         sizes.put(Integer.valueOf(key), Integer.valueOf(value));
                     } catch (NumberFormatException nfe) {
-                        if (_log.shouldDebug()) _log.debug("LIST error", nfe);
+                        bad++;
                     }
                 }
             }
+            if (bad > 0 && _log.shouldWarn()) {
+                _log.warn("Message size lines skipped -> Could not be parsed\n* Skipped: " + bad +
+                           " * Total: " + lines.size());
+            }
         } else {
-            if (_log.shouldDebug()) _log.debug("Error getting LIST from server.");
+            if (_log.shouldWarn()) _log.warn("Server returned no message size list");
         }
     }
 
@@ -537,7 +596,6 @@ public class POP3MailBox implements NewMailListener {
                     socket = null;
                     connected = false;
                 }
-                if (_log.shouldDebug()) {_log.debug("Timed out rechecking for mail", e1);}
                 _log.warnThrottled("pop3timeout", "Rechecking POP3 mail on " + host + ':' + port +
                                    " -> No response before the timeout");
             } catch (IOException e1) {
@@ -549,8 +607,7 @@ public class POP3MailBox implements NewMailListener {
                 }
                 lastError = _t("Cannot connect") + ": " + e1.getLocalizedMessage();
                 _log.warnThrottled("pop3recheck", "Rechecking POP3 mail on " + host + ':' + port +
-                                   " -> " + e1.getLocalizedMessage() + ", reconnecting");
-                if (_log.shouldDebug()) _log.debug("Recheck failed, reconnecting", e1);
+                                   " -> Reconnecting\n* Error: " + e1.getLocalizedMessage());
 
                 // we probably weren't really connected.
                 // Let's try again from the top.
@@ -598,7 +655,7 @@ public class POP3MailBox implements NewMailListener {
      * Caller must sync.
      */
     private void connect() {
-        if (_log.shouldDebug()) _log.debug("Connecting to the POP3 server at " + host + ':' + port);
+        if (_log.shouldDebug()) _log.debug("Connecting to the POP3 server\n* Server: " + host + ':' + port);
         clear();
         if (socket != null && socket.isConnected()) {close();}
 
@@ -607,7 +664,6 @@ public class POP3MailBox implements NewMailListener {
             lastError = _t("Cannot connect") + " (" + host + ':' + port + ") - " + e.getLocalizedMessage();
             _log.warnThrottled("pop3connect", "Connecting to POP3 server " + host + ':' + port +
                                " -> " + e.getLocalizedMessage());
-            if (_log.shouldDebug()) {_log.debug("Connection attempt failed", e);}
             return;
         }
         if (socket != null) {
@@ -627,7 +683,7 @@ public class POP3MailBox implements NewMailListener {
                 }
                 if (loginOK) {
                     connected = true;
-                    if (_log.shouldDebug()) _log.debug("Logged in to the POP3 server " + host + ':' + port);
+                    if (_log.shouldDebug()) _log.debug(loggedInText(host, port));
                     ok = doCheckMail();
                     if (ok && backgroundChecker == null &&
                         Boolean.parseBoolean(Config.getProperty(WebMail.CONFIG_BACKGROUND_CHECK)))
@@ -656,7 +712,6 @@ public class POP3MailBox implements NewMailListener {
                 }
                 _log.warnThrottled("pop3timeout", "POP3 server " + host + ':' + port +
                                    " -> No response before the timeout");
-                if (_log.shouldDebug()) {_log.debug("Timed out waiting for the server", e1);}
             } catch (IOException e1) {
                 lastError = _t("Cannot connect") + ": " + e1.getLocalizedMessage();
                 if (socket != null) {
@@ -667,7 +722,6 @@ public class POP3MailBox implements NewMailListener {
                 }
                 _log.warnThrottled("pop3connect", "Talking to POP3 server " + host + ':' + port +
                                    " -> " + e1.getLocalizedMessage());
-                if (_log.shouldDebug()) {_log.debug("Connection lost while talking to the server", e1);}
             }
         }
     }
@@ -685,7 +739,7 @@ public class POP3MailBox implements NewMailListener {
         cmds.add(new SendRecv(null, Mode.A1));
         SendRecv capa = null;
         if (gotCAPA) {
-            if (_log.shouldDebug()) {_log.debug("Skipping CAPA");}
+            if (_log.shouldDebug()) _log.debug("Skipping the capabilities check (CAPA) -> Already asked");
         } else {
             capa = new SendRecv("CAPA", Mode.LS);
             cmds.add(capa);
@@ -701,10 +755,7 @@ public class POP3MailBox implements NewMailListener {
                 }
             }
             gotCAPA = true;
-            if (_log.shouldDebug()) {
-                _log.debug("POP3 server caps: pipelining? " + supportsPipelining + " UIDL? " + supportsUIDL +
-                           " TOP? " + supportsTOP);
-            }
+            if (_log.shouldDebug()) _log.debug(capsText(supportsPipelining, supportsUIDL, supportsTOP));
         }
         return rv;
     }
@@ -731,11 +782,17 @@ public class POP3MailBox implements NewMailListener {
         socket.setSoTimeout(120*1000);
         boolean ok = sendCmds(cmds);
         if (stat.result) {updateMailCount(stat.response);}
-        else {_log.warn("POP3 STAT command rejected -> " + stat.response);}
+        else if (_log.shouldWarn()) {
+            _log.warn("POP3 STAT command rejected\n* Response: " + stat.response);
+        }
         if (uidl.result) {updateUIDLs(uidl.ls);}
-        else if (_log.shouldDebug()) {_log.debug("POP3 UIDL command rejected: " + uidl.response);}
+        else if (_log.shouldWarn()) {
+            _log.warn("POP3 UIDL command rejected\n* Response: " + uidl.response);
+        }
         if (list.result) {updateSizes(list.ls);}
-        else if (_log.shouldDebug()) {_log.debug("POP3 LIST command rejected: " + list.response);}
+        else if (_log.shouldWarn()) {
+            _log.warn("POP3 LIST command rejected\n* Response: " + list.response);
+        }
 
         // delete all pending deletions
         doDelete(false);
@@ -813,16 +870,17 @@ public class POP3MailBox implements NewMailListener {
         if (foo != null) {
             lastLine = foo;
             if (lastLine.startsWith("+OK")) {
-                if (_log.shouldDebug()) {_log.debug("POP3 command " + maskCommand(cmd) + " accepted");}
                 result = true;
             } else {
                 if (_log.shouldDebug()) {
-                    _log.debug("POP3 command " + maskCommand(cmd) + " rejected -> " + lastLine.trim());
+                    _log.debug("POP3 command rejected: " + maskCommand(cmd) + "\n* Response: " + lastLine.trim());
                 }
                 lastError = lastLine;
             }
         } else {
-            if (_log.shouldDebug()) {_log.debug("POP3 command " + maskCommand(cmd) + " got no response");}
+            if (_log.shouldWarn()) {
+                _log.warn("POP3 command got no response -> Command failed\n* Command: " + maskCommand(cmd));
+            }
             lastError = _t("No response from server");
             throw new IOException(lastError);
         }
@@ -843,7 +901,7 @@ public class POP3MailBox implements NewMailListener {
         boolean result = true;
         boolean pipe = supportsPipelining;
         if (pipe) {
-            if (_log.shouldDebug()) _log.debug("POP3 pipelining " + cmds.size() + " commands");
+            if (_log.shouldDebug()) _log.debug("POP3 pipelining the commands\n* Commands: " + cmds.size());
             for (SendRecv sr : cmds) {
                 String cmd = sr.send;
                 if (cmd != null) {sendCmd1aNoWait(cmd);}
@@ -870,15 +928,12 @@ public class POP3MailBox implements NewMailListener {
             i++;
             if (!foo.startsWith("+OK")) {
                 if (_log.shouldDebug()) {
-                    _log.debug("POP3 reply " + i + " of " + cmds.size() + " rejected -> " + foo.trim());
+                    _log.debug("POP3 reply " + i + " of " + cmds.size() + " rejected\n* Response: " + foo.trim());
                 }
                 if (result) {lastError = foo;} // actually the first error, for better info to the user
                 result = false;
                 sr.result = false;
             } else {
-                if (_log.shouldDebug()) {
-                    _log.debug("POP3 reply " + i + " of " + cmds.size() + " accepted -> " + foo.trim());
-                }
                 switch (sr.mode) {
                     case A1:
                     sr.result = true;
@@ -889,7 +944,9 @@ public class POP3MailBox implements NewMailListener {
                         getResultNa(sr.rb);
                         sr.result = true;
                     } catch (IOException ioe) {
-                        if (_log.shouldDebug()) _log.debug("Reading the message body failed", ioe);
+                        if (_log.shouldDebug()) {
+                            _log.debug("Reading the message body failed\n* Error: " + ioe);
+                        }
                         result = false;
                         sr.result = false;
                         if (socket != null) {
@@ -906,7 +963,9 @@ public class POP3MailBox implements NewMailListener {
                         sr.ls = getResultNl();
                         sr.result = true;
                     } catch (IOException ioe) {
-                        if (_log.shouldDebug()) _log.debug("Reading the message list failed", ioe);
+                        if (_log.shouldDebug()) {
+                            _log.debug("Reading the message list failed\n* Error: " + ioe);
+                        }
                         result = false;
                         sr.result = false;
                         if (socket != null) {
@@ -933,12 +992,6 @@ public class POP3MailBox implements NewMailListener {
      * @since 0.9.13
      */
     private void sendCmd1aNoWait(String cmd) throws IOException {
-        /*
-         * don't log password
-         */
-        String msg = cmd;
-        if (msg.startsWith("PASS")) {msg = "PASS provided";}
-        if (_log.shouldDebug()) {_log.debug("sendCmd1a(" + msg + ")");}
         cmd += "\r\n";
         socket.getOutputStream().write(DataHelper.getASCII(cmd));
         updateActivity();
@@ -955,7 +1008,10 @@ public class POP3MailBox implements NewMailListener {
             try {return sendCmdNa(cmd, buffer);}
             catch (IOException e) {
                 lastError = e.toString();
-                if (_log.shouldDebug()) {_log.debug("sendCmdNa throws", e);}
+                if (_log.shouldDebug()) {
+                    _log.debug("POP3 command failed -> Closing the connection\n* Command: " + maskCommand(cmd) +
+                               " * Error: " + e);
+                }
                 if (socket != null) {
                     try {socket.close();}
                     catch (IOException ioe) { /* ignored */ }
@@ -968,7 +1024,9 @@ public class POP3MailBox implements NewMailListener {
                 try {return sendCmdNa(cmd, buffer);}
                 catch (IOException e2) {
                     lastError = e2.toString();
-                    if (_log.shouldDebug()) {_log.debug("2nd sendCmdNa throws", e2);}
+                    if (_log.shouldDebug()) {
+                        _log.debug("POP3 command failed after reconnecting: " + maskCommand(cmd) + "\n* Error: " + e2);
+                    }
                     if (socket != null) {
                         try {socket.close();}
                         catch (IOException e) { /* ignored */ }
@@ -976,7 +1034,7 @@ public class POP3MailBox implements NewMailListener {
                         connected = false;
                     }
                 }
-            } else if (_log.shouldDebug()) {_log.debug("Not connected after reconnect");}
+            } else if (_log.shouldWarn()) {_log.warn("Reconnecting to the POP3 server failed -> Command not sent");}
         }
         return null;
     }
@@ -993,7 +1051,6 @@ public class POP3MailBox implements NewMailListener {
             getResultNa(buffer);
             return buffer;
         } else {
-            if (_log.shouldDebug()) {_log.debug("sendCmd1a returned false");}
             return null;
         }
     }
@@ -1012,7 +1069,6 @@ public class POP3MailBox implements NewMailListener {
     private List<String> sendCmdNl(String cmd) throws IOException {
         if (sendCmd1a(cmd)) {return getResultNl();}
         else {
-            if (_log.shouldDebug()) _log.debug("sendCmd1a returned false");
             return null;
         }
     }
@@ -1092,7 +1148,6 @@ public class POP3MailBox implements NewMailListener {
      */
     public int getNumMails() {
         synchronized(synchronizer) {
-            if (_log.shouldDebug()) {_log.debug("getNumMails()");}
             try {checkConnection();}
             catch (IOException ioe) { /* ignored */ }
             return connected ? mails : 0;
@@ -1178,7 +1233,6 @@ public class POP3MailBox implements NewMailListener {
      */
     void close(boolean shouldWait) {
         synchronized(synchronizer) {
-            if (_log.shouldDebug()) _log.debug("close()");
             if (idleCloser != null) {idleCloser.cancel();}
             if (socket != null && socket.isConnected()) {
                 try {
@@ -1186,7 +1240,9 @@ public class POP3MailBox implements NewMailListener {
                     if (socket != null && socket.isConnected()) {
                         if (shouldWait) {
                             sendCmd1a("QUIT");
-                            if (_log.shouldDebug()) {_log.debug("close() with wait complete");}
+                            if (_log.shouldDebug()) {
+                                _log.debug("Closing the POP3 connection -> Server acknowledged QUIT");
+                            }
                         } else {sendCmd1aNoWait("QUIT");}
                     }
                 } catch (IOException e) { /* ignored */ }
