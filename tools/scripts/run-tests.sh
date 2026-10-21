@@ -156,6 +156,8 @@ run_test_bg() {
     local test_dir="${dir}/test"
     if [ "$dir" = "apps/addressbook" ]; then
       test_dir="${dir}/java/test"
+    elif [ "$dir" = "apps/susimail" ]; then
+      test_dir="${dir}/src/test"
     fi
     if [ ! -d "${REPO_ROOT}/${test_dir}" ]; then
       echo "0 0 0" > "$result_file"
@@ -190,6 +192,8 @@ run_test() {
   local test_dir="${dir}/test"
   if [ "$dir" = "apps/addressbook" ]; then
     test_dir="${dir}/java/test"
+  elif [ "$dir" = "apps/susimail" ]; then
+    test_dir="${dir}/src/test"
   fi
   if [ ! -d "${REPO_ROOT}/${test_dir}" ]; then
     echo -e "${BOLD}${label}${RESET}"

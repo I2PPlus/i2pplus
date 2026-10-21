@@ -326,6 +326,7 @@
         <pathelement location="${core.java.build.dir}/i2p.jar"/>
         <pathelement location="${core.java.build.dir}/i2ptest.jar"/>
         <pathelement location="${junit.home}/junit4.jar"/>
+        <pathelement location="../jetty/jettylib/javax.servlet.jar"/>
         <pathelement location="${classes.dir}"/>
       </classpath>
       <compilerarg line="${javac.compilerargs}"/>
@@ -351,6 +352,7 @@
         <pathelement location="${hamcrest.home}/hamcrest-core.jar"/>
         <pathelement location="${hamcrest.home}/hamcrest-library.jar"/>
         <pathelement location="${hamcrest.home}/hamcrest-all.jar"/>
+        <pathelement location="../jetty/jettylib/javax.servlet.jar"/>
         <pathelement location="${build.dir}/obj_test"/>
         <pathelement location="${classes.dir}"/>
       </classpath>
