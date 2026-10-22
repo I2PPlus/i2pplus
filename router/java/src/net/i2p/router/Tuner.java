@@ -564,8 +564,51 @@ public class Tuner extends SimpleTimer2.TimedEvent {
     private static volatile int codelTargetMs = -1;
     private static volatile int codelIntervalMs = -1;
 
+    /**
+     * The value a param last applied, or the config-or-default reading when nothing
+     * has been applied yet.
+     *
+     * <p>Some params push a value into a component that offers no reading back - the
+     * CoDel queues hold theirs per instance, with no static getter. Those params'
+     * getRuntimeValue() used to read a config property the tuning path never writes,
+     * so a successful apply was indistinguishable from a setter that refused to move,
+     * and the cycle re-applied and re-warned forever. They record what they applied
+     * and read it back through here instead.
+     *
+     * @param tuned the last applied value, or -1 when nothing has been applied
+     * @param fallback the config-or-default reading to use until then
+     * @return the applied value if there is one, otherwise fallback
+     * @since 0.9.72+
+     */
+    static int tunedOr(int tuned, int fallback) {
+        return tuned >= 0 ? tuned : fallback;
+    }
+
+    /**
+     * Records the tuned dispatch age. The startup tunables, the auto-tuner's apply
+     * and the console override all write it here, so the verify and
+     * {@link net.i2p.router.transport.GetBidsJob} read one value.
+     *
+     * @param value the max time in ms a message may sit in the outbound dispatch queue
+     * @since 0.9.72+
+     */
+    static void setMaxDispatchAgeMs(int value) {
+        maxDispatchAgeMs = value;
+    }
+
     /** Priority for I/O handler threads — boosted under load, reduced when idle. */
     private static volatile int handlerThreadPriority = Thread.NORM_PRIORITY;
+
+    /**
+     * Records the tuned I/O handler thread priority, so the verify and
+     * {@link #getHandlerThreadPriority()} read one value.
+     *
+     * @param priority the thread priority to apply, in {@link Thread} scale
+     * @since 0.9.72+
+     */
+    static void setHandlerThreadPriority(int priority) {
+        handlerThreadPriority = priority;
+    }
 
     /**
      * Per-pool test budget for client tunnels — high enough to never throttle.
@@ -1169,11 +1212,11 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      */
     private static void applyStartupTunables(AutotuneConfig autotune, RouterContext ctx) {
         BaseParam.sharedAutotune = autotune;
-        maxDispatchAgeMs = Math.max(2000, Math.min(30000,
-                ctx.getProperty("i2p.router.maxDispatchAge", 3000)));
-        handlerThreadPriority = Math.max(Thread.MIN_PRIORITY + 2,
+        setMaxDispatchAgeMs(Math.max(2000, Math.min(30000,
+                ctx.getProperty("i2p.router.maxDispatchAge", 3000))));
+        setHandlerThreadPriority(Math.max(Thread.MIN_PRIORITY + 2,
                 Math.min(Thread.MAX_PRIORITY - 1,
-                ctx.getProperty("i2p.router.handlerThreadPriority", Thread.NORM_PRIORITY)));
+                ctx.getProperty("i2p.router.handlerThreadPriority", Thread.NORM_PRIORITY))));
     }
 
     /**
@@ -2983,6 +3026,11 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      */
     static Method findStaticMethod(Class<?> c, String name, Class<?>... args)
                                                             throws NoSuchMethodException {
+        // The call sites guard this, so a null class is a programming error reaching
+        // here, not a runtime state: say so in the exception rather than throwing an
+        // NullPointerException out of the failure path below.
+        if (c == null)
+            throw new NoSuchMethodException("(class not loaded)." + name);
         for (Class<?> k = c; k != null; k = k.getSuperclass()) {
             try {
                 Method m = k.getDeclaredMethod(name, args);
@@ -3011,14 +3059,51 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      * @since 0.9.72+
      */
     static void reportReflectorFailure(Class<?> c, String name, Throwable t) {
-        String key = c != null ? c.getName() + '#' + name : name;
-        if (_reflectorFailures.add(key)) {
+        if (!shouldReportReflectorFailure(c, name))
+            return;
+        try {
             // Resolved lazily and only on the failure path: holding a Log in a
             // static field would pull the log manager in at class-load time.
+            String key = reflectorFailureKey(c, name);
             I2PAppContext.getGlobalContext().logManager().getLog(Tuner.class)
                 .warn("Auto-tuning call " + key + " failed -> Ignoring it now"
                       + "\n* Any param it backs cannot be auto-tuned", t);
+        } catch (Throwable t2) {
+            // Reporting must not cost the caller its fallback. An unreachable param
+            // stays untuned, which is a degraded but working router; a logger that
+            // cannot be resolved here would instead throw out of the tuning cycle
+            // from inside the handler that was meant to contain the failure.
         }
+    }
+
+    /**
+     * The identity a reflective failure is deduplicated by.
+     *
+     * @param c the class the call was made against, null when it is not loaded
+     * @param name the static method that failed
+     * @return the dedup key for that class and method
+     * @since 0.9.72+
+     */
+    static String reflectorFailureKey(Class<?> c, String name) {
+        return c != null ? c.getName() + '#' + name : name;
+    }
+
+    /**
+     * Whether a reflective failure has not been reported yet, claiming the one
+     * report it is owed.
+     *
+     * <p>Every method the tuner calls through reflection is reported the first time
+     * it fails and never again, because the call site cannot tell a sentinel apart
+     * from a reading: silence after the first failure is what let a whole set of
+     * streaming params tune nothing while their getters reported plausible values.
+     *
+     * @param c the class the call was made against, null when it is not loaded
+     * @param name the static method that failed
+     * @return true the first time this class and method pair fails, false afterwards
+     * @since 0.9.72+
+     */
+    static boolean shouldReportReflectorFailure(Class<?> c, String name) {
+        return _reflectorFailures.add(reflectorFailureKey(c, name));
     }
 
     /**
@@ -3804,7 +3889,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         }
 
         protected void applyValue(int value) {
-            maxDispatchAgeMs = value;
+            setMaxDispatchAgeMs(value);
         }
 
         /**
@@ -3814,14 +3899,14 @@ public class Tuner extends SimpleTimer2.TimedEvent {
          * apply, and the param looked stuck while it was tuning fine.
          */
         protected int getRuntimeValue() {
-            return maxDispatchAgeMs;
+            return getMaxDispatchAgeMs();
         }
 
         /**
          * The runtime value for this parameter.
          */
         protected void setRuntimeValue(int value) {
-            maxDispatchAgeMs = value;
+            setMaxDispatchAgeMs(value);
         }
 
         protected double getObservedStat(RouterContext ctx) {
@@ -3914,7 +3999,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         }
 
         protected void applyValue(int value) {
-            handlerThreadPriority = value;
+            setHandlerThreadPriority(value);
         }
 
         /**
@@ -3924,7 +4009,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
          * successful apply, and the param looked stuck while it was tuning fine.
          */
         protected int getRuntimeValue() {
-            return handlerThreadPriority;
+            return getHandlerThreadPriority();
         }
 
         protected double getObservedStat(RouterContext ctx) {
@@ -5946,8 +6031,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         }
 
         protected int getRuntimeValue() {
-            int tuned = codelTargetMs;
-            return tuned >= 0 ? tuned : _context.getProperty("router.codelTarget", 5);
+            return tunedOr(codelTargetMs, _context.getProperty("router.codelTarget", 5));
         }
 
         protected double getObservedStat(RouterContext ctx) {
@@ -6017,8 +6101,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         }
 
         protected int getRuntimeValue() {
-            int tuned = codelIntervalMs;
-            return tuned >= 0 ? tuned : _context.getProperty("router.codelInterval", 50);
+            return tunedOr(codelIntervalMs, _context.getProperty("router.codelInterval", 50));
         }
 
         protected double getObservedStat(RouterContext ctx) {
@@ -12944,6 +13027,23 @@ protected int computeTarget(double observed) {
     }
 
     /**
+     * The floor the tuner may propose for i2ptunnel.clientRunner.max.
+     *
+     * <p>{@code TunnelControllerGroup.setClientRunnerMax} floors the pool at the
+     * tunnel's admission gate, {@code clientDefaultMaxConnections}, whose own floor
+     * is {@code I2PTunnelClientBase.DEFAULT_MAX_CONNECTIONS}. A target below the gate
+     * is rewritten back on the way in, so the tuner must never offer one. The floor
+     * is hardcoded here because the router module cannot reference the i2ptunnel
+     * constant; {@code TunerCalleeBoundsTest} pins it against the live value.
+     *
+     * @return the lowest client runner pool size the setter will accept
+     * @since 0.9.72+
+     */
+    static int clientRunnerMaxMin() {
+        return 256;
+    }
+
+    /**
      * Tunes I2PTunnel client runner max pool size.
      * Pool is cached-style (core=0, SynchronousQueue), so threads are created on demand
      * and time out after 2 min idle. Grow fast on a shed so every burst connection gets
@@ -12954,11 +13054,11 @@ protected int computeTarget(double observed) {
 
         I2PTunnelClientRunnerMaxParam() {
             // TunnelControllerGroup.setClientRunnerMax floors the value at the tunnel's
-            // max connections (256 by default), so a lower target was rewritten back
-            // every cycle.
+            // admission gate, so a lower target was rewritten back every cycle.
             super("i2ptunnel.clientRunner.max", "I2PTunnel client threads",
                   SUB_TUNNEL,
-                   256, 16384, 4, "i2ptunnel.clientRunner.activeThreads", _context);
+                   clientRunnerMaxMin(), 16384, 4,
+                   "i2ptunnel.clientRunner.activeThreads", _context);
             // Engaged on the fast cycle even when primary stats are quiet so the worker
             // pool can decay slowly (idle) rather than freezing at a burst-inflated size.
             _cpuDriven = true;

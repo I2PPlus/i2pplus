@@ -58,9 +58,12 @@ public class TunerReflectorTest {
         Class<?> c = Class.forName(HIDDEN);
         int before = Tuner.callStaticInt(c, "getValue", -1);
         assertTrue("the getter must read the live value, not the fallback", before > 0);
-        Tuner.callStaticSetInt(c, "setValue", before + 5);
-        assertEquals(before + 5, Tuner.callStaticInt(c, "getValue", -1));
-        Tuner.callStaticSetInt(c, "setValue", before);
+        try {
+            Tuner.callStaticSetInt(c, "setValue", before + 5);
+            assertEquals(before + 5, Tuner.callStaticInt(c, "getValue", -1));
+        } finally {
+            Tuner.callStaticSetInt(c, "setValue", before);
+        }
     }
 
     /** A package-private member is invisible to getMethod, so it needs getDeclaredMethod. */
@@ -69,16 +72,24 @@ public class TunerReflectorTest {
         Class<?> c = Class.forName(HIDDEN);
         int before = Tuner.callStaticInt(c, "getHiddenValue", -1);
         assertTrue("the package-private getter must resolve", before > 0);
-        Tuner.callStaticSetInt(c, "setHiddenValue", before + 3);
-        assertEquals(before + 3, Tuner.callStaticInt(c, "getHiddenValue", -1));
-        Tuner.callStaticSetInt(c, "setHiddenValue", before);
+        try {
+            Tuner.callStaticSetInt(c, "setHiddenValue", before + 3);
+            assertEquals(before + 3, Tuner.callStaticInt(c, "getHiddenValue", -1));
+        } finally {
+            Tuner.callStaticSetInt(c, "setHiddenValue", before);
+        }
     }
 
     /** A non-public static on a public class must be reachable too. */
     @Test
     public void reachesPackagePrivateStaticOnPublicClass() {
-        Tuner.callStaticSetInt(VisibleClass.class, "setValue", 13);
-        assertEquals(13, Tuner.callStaticInt(VisibleClass.class, "getValue", -1));
+        int before = Tuner.callStaticInt(VisibleClass.class, "getValue", -1);
+        try {
+            Tuner.callStaticSetInt(VisibleClass.class, "setValue", before + 2);
+            assertEquals(before + 2, Tuner.callStaticInt(VisibleClass.class, "getValue", -1));
+        } finally {
+            Tuner.callStaticSetInt(VisibleClass.class, "setValue", before);
+        }
     }
 
     /**
@@ -114,14 +125,79 @@ public class TunerReflectorTest {
         Tuner.callStaticSetLong(null, "setValue", 1L);
     }
 
+    /**
+     * A null class handed to the lookup directly is a programming error, and it has
+     * to read as one: NoSuchMethodException, not the NullPointerException the
+     * failure message would otherwise produce by dereferencing the argument.
+     */
+    @Test
+    public void nullClassYieldsNoSuchMethodNotNpe() {
+        try {
+            Tuner.findStaticMethod(null, "getValue");
+            fail("a null class must not resolve to a method");
+        } catch (NoSuchMethodException e) {
+            assertTrue("the message must name the method that was sought: " + e.getMessage(),
+                       e.getMessage().contains("getValue"));
+        }
+    }
+
     /** Long and double getters reach the same non-public shapes as the int ones. */
     @Test
     public void reachesLongAndDoubleMembers() {
         Tuner.callStaticSetLong(WideTarget.class, "setLong", 17L);
         assertEquals(17L, Tuner.callStaticLong(WideTarget.class, "getLong", -1L));
-        // no int-argument setDouble: a signature mismatch must fall back, not crash
-        Tuner.callStaticSetInt(WideTarget.class, "setDouble", 0);
         assertEquals(2.5d, Tuner.callStaticDouble(WideTarget.class, "getDouble", -1.0d), 0.0d);
+    }
+
+    /**
+     * A wrong parameter type is a missing method, not a call: the streaming module
+     * has setters differing only by signature (setMinPacingRate takes a long,
+     * setMinPacingRateKBps an int), so resolving must refuse the near-miss rather
+     * than invoke something adjacent. Asserted on the lookup, so the failure
+     * reporter is not involved.
+     */
+    @Test
+    public void wrongSignatureIsNotResolved() {
+        try {
+            Tuner.findStaticMethod(WideTarget.class, "setDouble", int.class);
+            fail("an int-argument setDouble does not exist and must not resolve");
+        } catch (NoSuchMethodException e) {
+            assertEquals(WideTarget.class.getName() + ".setDouble", e.getMessage());
+        }
+    }
+
+    /**
+     * A reflective failure is reported once per class and method, and never again.
+     * The dedup is the behaviour that keeps a permanent failure visible without
+     * emitting it every cycle, so it is pinned here: it must fire on the first
+     * failure, stay quiet on repeats, and keep separate keys for separate methods,
+     * classes and the unresolved-class case.
+     */
+    @Test
+    public void failureIsReportedOncePerMethod() {
+        assertTrue("the first failure must be reported",
+                   Tuner.shouldReportReflectorFailure(WideTarget.class, "firstReportMethod"));
+        assertFalse("a repeat must not be reported again",
+                    Tuner.shouldReportReflectorFailure(WideTarget.class, "firstReportMethod"));
+        assertFalse("still quiet on a third attempt",
+                    Tuner.shouldReportReflectorFailure(WideTarget.class, "firstReportMethod"));
+        assertTrue("a different method is its own failure",
+                   Tuner.shouldReportReflectorFailure(WideTarget.class, "secondReportMethod"));
+        assertTrue("the same method on another class is its own failure",
+                   Tuner.shouldReportReflectorFailure(VisibleClass.class, "firstReportMethod"));
+        assertTrue("an unresolved class still gets its one report",
+                   Tuner.shouldReportReflectorFailure(null, "unloadedClassMethod"));
+        assertFalse("and it too is reported only once",
+                    Tuner.shouldReportReflectorFailure(null, "unloadedClassMethod"));
+    }
+
+    /** The dedup key names the class and method, so the log line stays greppable. */
+    @Test
+    public void failureKeyNamesClassAndMethod() {
+        assertEquals(VisibleClass.class.getName() + "#getValue",
+                     Tuner.reflectorFailureKey(VisibleClass.class, "getValue"));
+        assertEquals("an unresolved class has no name to lead with", "getValue",
+                     Tuner.reflectorFailureKey(null, "getValue"));
     }
 
     /**
