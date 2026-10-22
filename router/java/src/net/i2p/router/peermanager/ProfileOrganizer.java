@@ -3874,7 +3874,20 @@ private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, P
      * @since 0.9.71+
      */
     private RouterInfo lookupRouterInfoUnvalidated(Hash peer) {
-        NetworkDatabaseFacade netDb = _context.netDb();
+        return lookupRouterInfoUnvalidated(_context, peer);
+    }
+
+    /**
+     * {@link #lookupRouterInfoUnvalidated(Hash)} with the context passed in, so
+     * the fingerprint builder below is reachable from tests.
+     *
+     * @param ctx the context holding the NetDb to look the peer up in
+     * @param peer the peer hash
+     * @return the local RouterInfo, or null if absent or not a RouterInfo
+     * @since 0.9.71+
+     */
+    static RouterInfo lookupRouterInfoUnvalidated(RouterContext ctx, Hash peer) {
+        NetworkDatabaseFacade netDb = ctx.netDb();
         if (netDb == null) return null;
         DatabaseEntry ds = netDb.lookupLocallyWithoutValidation(peer);
         if (ds != null) {
@@ -4471,100 +4484,108 @@ private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, P
     }
 
     /**
-     * Subnet-diversity probe: claims the peer's masked addresses, ports and
-     * family option in {@code ipSet} and reports whether any of them was
-     * already present.  Claimed in one pass rather than through a throwaway
-     * {@link MaskedIPSet} that was then walked twice.
-     * <p>
-     * BUG: the polarity is inverted for this method's name and its call sites,
-     * which read true as "allowed".  As written, a peer on a fresh subnet is
-     * skipped and only a peer colliding with an already-claimed fingerprint
-     * passes.  Before the peer-selection refactor this returned the negation.
+     * Subnet-diversity gate for the running router.
      *
      * @param peer the peer whose addresses, ports and family are fingerprinted
      * @param ipSet the fingerprints claimed by the peers evaluated so far
-     * @param mask leading address bytes to match, as taken by {@link #maskedIPKey}
-     * @return true if at least one of the peer's fingerprints was already claimed
+     * @param mask leading address bytes to match, as taken by
+     *             {@link MaskedIPSet#maskedIPKey(byte[], int)}
+     * @return true if the peer passed the gate and may be selected
      */
     private boolean notRestricted(Hash peer, MaskedIPSet ipSet, int mask) {
-        return addSameIPFingerprint(ipSet, peer, mask);
+        return notRestricted(_context, peer, ipSet, mask);
     }
 
     /**
-     * Claim a candidate's IP/port/family fingerprint in {@code keys},
-     * reporting whether anything was already claimed.
-     * <p>Load-bearing asymmetry: the peer is rejected if <em>any</em> of its keys
-     * was already present, but <em>all</em> of its keys are added either way, so
-     * a peer colliding on its last key still leaves its earlier keys claimed.
-     * Claiming conditionally would make selection order-dependent.
+     * Subnet-diversity gate: does this peer pass the masked-subnet, port and
+     * family check, and if it does, claim its fingerprints so that no later peer
+     * sharing any one of them passes as well.  Every selection path taking a
+     * {@code mask} and an {@code ipSet} calls this, and all of them read true as
+     * "allowed".
+     * <p>
+     * Before the peer-selection refactor this built a throwaway
+     * {@link MaskedIPSet}, tested {@code containsAny} against the accumulator,
+     * then added the keys. Inlining the build folded the collision test into the
+     * adds, which inverted the result and let a peer collide with itself; both
+     * are corrected here while keeping the single pass over the RouterInfo.
      *
-     * @param keys the fingerprints claimed by the peers accepted so far
-     * @param peer the peer whose IP, port and family keys are claimed
-     * @param mask leading address bytes to match, 1-4
-     * @return true if any of the peer's keys was already claimed, meaning it collides
-     *         with an accepted peer
+     * @param ctx supplies the comm system IP and the NetDb lookup
+     * @param peer the peer whose addresses, ports and family are fingerprinted
+     * @param ipSet the fingerprints claimed by the peers evaluated so far
+     * @param mask leading address bytes to match, as taken by
+     *             {@link MaskedIPSet#maskedIPKey(byte[], int)}
+     * @return true if the peer passed the gate and may be selected
+     * @since 0.9.71+ split out of the instance method so tests can drive it
      */
-    private boolean addSameIPFingerprint(MaskedIPSet keys, Hash peer, int mask) {
-        RouterContext ctx = _context;
-        RouterInfo info = lookupRouterInfoUnvalidated(peer);
-        boolean sameIP = false;
-        byte[] commIP = ctx.commSystem() != null ? ctx.commSystem().getIP(peer) : null;
+    static boolean notRestricted(RouterContext ctx, Hash peer, MaskedIPSet ipSet, int mask) {
+        return tryClaimKeys(ipSet, fingerprints(ctx, peer, mask));
+    }
+
+    /**
+     * One peer's fingerprints: the masked IP the comm system recorded, the
+     * masked IP and port of every published address, and the family option.
+     * <p>
+     * Collected in their own set rather than added straight to the shared
+     * accumulator, because a peer normally publishes two transports on one
+     * address and its own keys overlap by design — a peer must not collide with
+     * itself.
+     *
+     * @param ctx supplies the comm system IP and the NetDb lookup
+     * @param peer the peer to fingerprint
+     * @param mask leading address bytes to match, 1-4
+     * @return the peer's fingerprint keys, empty if nothing is known about it
+     * @since 0.9.71+
+     */
+    static Set<String> fingerprints(RouterContext ctx, Hash peer, int mask) {
+        Set<String> keys = new HashSet<>(6);
+        CommSystemFacade comm = ctx.commSystem();
+        byte[] commIP = comm != null ? comm.getIP(peer) : null;
         if (commIP != null)
-            sameIP |= !keys.add(maskedIPKey(commIP, mask));
+            keys.add(MaskedIPSet.maskedIPKey(commIP, mask));
+        RouterInfo info = lookupRouterInfoUnvalidated(ctx, peer);
         if (info != null) {
             for (RouterAddress pa : info.getAddresses()) {
                 byte[] ip = pa.getIP();
                 if (ip == null) continue;
-                sameIP |= !keys.add(maskedIPKey(ip, mask));
+                keys.add(MaskedIPSet.maskedIPKey(ip, mask));
                 // Routers with a common port may be run by a single entity
                 // with a common configuration
                 int port = pa.getPort();
                 if (port > 0)
-                    sameIP |= !keys.add("p" + port);
+                    keys.add("p" + port);
             }
             String family = info.getOption("family");
             // Prefixed so an IP cannot be spoofed into a family match
             if (family != null)
-                sameIP |= !keys.add('x' + family);
+                keys.add('x' + family);
         }
-        return sameIP;
+        return keys;
     }
 
     /**
-     * Fingerprint key for one masked IP, byte-identical to the key
-     * {@code MaskedIPSet.maskedIP} builds for the same address and mask.
-     * <p>Format: a family-delimiting leading char ('.' for IPv4, ':' for IPv6,
-     * which also doubles the matched byte count), then two '0'-offset hex
-     * nibbles per matched byte.  The leading char differs by address family and
-     * port keys begin with 'p', family keys with 'x', so an IP key can never
-     * equal a port or family key.  Keeping the {@link MaskedIPSet} format means
-     * an accumulator built by {@link MaskedIPSet}'s own constructor still compares
-     * equal; the floodfill path's packed-{@code long} key cannot be used because
-     * the accumulator arrives as a {@code MaskedIPSet} from callers outside this
-     * package.  {@code ProfileOrganizerSelectionCostTest} pins the format.
+     * The diversity gate itself: report whether any of this peer's fingerprints
+     * is already claimed, and claim them all either way.  A peer passes only when
+     * none of its keys was claimed, so one peer per masked subnet, per port and
+     * per family gets through.
+     * <p>
+     * Claiming a rejected peer's keys is load-bearing: it keeps the outcome the
+     * same whichever order the candidates are evaluated in, so a peer cannot
+     * pass the gate merely because selection happened to look at it first.
      *
-     * @param ip an IPv4 (4-byte) or IPv6 (16-byte) address
-     * @param mask 1-4, the number of leading bytes to match
-     * @return the fingerprint key; equal keys mean "same masked subnet"
+     * @param claimed the fingerprints claimed by the peers evaluated so far
+     * @param candidateKeys one peer's fingerprints, already deduplicated
+     * @return true if none of the candidate keys was claimed yet, i.e. the peer
+     *         passed; an empty candidate list passes vacuously
      * @since 0.9.71+
      */
-    static String maskedIPKey(byte[] ip, int mask) {
-        final char delim;
-        if (ip.length == 16) {
-            mask *= 2;
-            delim = ':';
-        } else {
-            delim = '.';
+    static boolean tryClaimKeys(Set<String> claimed, Set<String> candidateKeys) {
+        boolean collision = false;
+        for (String key : candidateKeys) {
+            if (claimed.contains(key))
+                collision = true;
         }
-        final char[] buf = new char[1 + (mask * 2)];
-        buf[0] = delim;
-        for (int i = 0; i < mask; i++) {
-            // fake hex "0123456789:;<=>?"
-            byte b = ip[i];
-            buf[1 + (i * 2)] = (char) ('0' + ((b >> 4) & 0x0f));
-            buf[2 + (i * 2)] = (char) ('0' + (b & 0x0f));
-        }
-        return new String(buf);
+        claimed.addAll(candidateKeys);
+        return !collision;
     }
 
     /**

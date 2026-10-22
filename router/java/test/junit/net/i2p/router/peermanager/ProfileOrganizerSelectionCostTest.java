@@ -28,7 +28,7 @@ import org.junit.Test;
  * <ul>
  * <li>{@link ProfileOrganizer#isModeratelyLossy} — the lossiness band that
  * now receives hoisted thresholds instead of two config reads per candidate</li>
- * <li>{@link ProfileOrganizer#maskedIPKey} — the subnet fingerprint, whose
+ * <li>{@link MaskedIPSet#maskedIPKey(byte[], int)} — the subnet fingerprint, whose
  * key-space separation (IP vs port vs family) is what the subnet gate
  * depends on</li>
  * <li>{@link ProfileOrganizer#isExcessiveLifetimeFailure} — the profile-taking
@@ -106,9 +106,9 @@ public class ProfileOrganizerSelectionCostTest {
     /** IPv4 keys carry the '.' family delimiter and two hex nibbles per byte. */
     @Test
     public void ipv4KeyFormat() {
-        assertEquals(".0:14", ProfileOrganizer.maskedIPKey(new byte[] {10, 20}, 2));
-        assertEquals(".<0:0", ProfileOrganizer.maskedIPKey(new byte[] {(byte) 192, (byte) 160}, 2));
-        assertEquals(".0:", ProfileOrganizer.maskedIPKey(new byte[] {10}, 1));
+        assertEquals(".0:14", MaskedIPSet.maskedIPKey(new byte[] {10, 20}, 2));
+        assertEquals(".<0:0", MaskedIPSet.maskedIPKey(new byte[] {(byte) 192, (byte) 160}, 2));
+        assertEquals(".0:", MaskedIPSet.maskedIPKey(new byte[] {10}, 1));
     }
 
     /**
@@ -118,9 +118,9 @@ public class ProfileOrganizerSelectionCostTest {
      */
     @Test
     public void nibblesUseTheFakeHexAlphabet() {
-        assertEquals(".0?", ProfileOrganizer.maskedIPKey(new byte[] {0x0f}, 1));
-        assertEquals(".0:", ProfileOrganizer.maskedIPKey(new byte[] {0x0a}, 1));
-        assertEquals(".0??0", ProfileOrganizer.maskedIPKey(new byte[] {0x0f, (byte) 0xf0}, 2));
+        assertEquals(".0?", MaskedIPSet.maskedIPKey(new byte[] {0x0f}, 1));
+        assertEquals(".0:", MaskedIPSet.maskedIPKey(new byte[] {0x0a}, 1));
+        assertEquals(".0??0", MaskedIPSet.maskedIPKey(new byte[] {0x0f, (byte) 0xf0}, 2));
     }
 
     /**
@@ -132,9 +132,9 @@ public class ProfileOrganizerSelectionCostTest {
         byte[] v6 = new byte[16];
         v6[0] = 10;
         v6[1] = 20;
-        String key = ProfileOrganizer.maskedIPKey(v6, 2);
+        String key = MaskedIPSet.maskedIPKey(v6, 2);
         assertEquals(":0:140000", key);
-        assertFalse(key.equals(ProfileOrganizer.maskedIPKey(new byte[] {10, 20}, 2)));
+        assertFalse(key.equals(MaskedIPSet.maskedIPKey(new byte[] {10, 20}, 2)));
     }
 
     /** Equal prefixes produce equal keys; differing prefixes do not. */
@@ -143,8 +143,8 @@ public class ProfileOrganizerSelectionCostTest {
         byte[] a = new byte[] {(byte) 203, 0, 113, 5};
         byte[] b = new byte[] {(byte) 203, 0, 113, (byte) 200};
         byte[] c = new byte[] {(byte) 198, 51, 100, 5};
-        assertEquals(ProfileOrganizer.maskedIPKey(a, 3), ProfileOrganizer.maskedIPKey(b, 3));
-        assertFalse(ProfileOrganizer.maskedIPKey(a, 3).equals(ProfileOrganizer.maskedIPKey(c, 3)));
+        assertEquals(MaskedIPSet.maskedIPKey(a, 3), MaskedIPSet.maskedIPKey(b, 3));
+        assertFalse(MaskedIPSet.maskedIPKey(a, 3).equals(MaskedIPSet.maskedIPKey(c, 3)));
     }
 
     /**
@@ -154,21 +154,21 @@ public class ProfileOrganizerSelectionCostTest {
     @Test
     public void widerMaskYieldsLongerKey() {
         byte[] ip = new byte[] {1, 2, 3, 4};
-        assertEquals(ProfileOrganizer.maskedIPKey(ip, 2).length() + 4,
-                     ProfileOrganizer.maskedIPKey(ip, 4).length());
+        assertEquals(MaskedIPSet.maskedIPKey(ip, 2).length() + 4,
+                     MaskedIPSet.maskedIPKey(ip, 4).length());
     }
 
     /** A zero mask is the degenerate prefix and is allowed. */
     @Test
     public void zeroMaskIsTheDegeneratePrefix() {
-        assertEquals(".", ProfileOrganizer.maskedIPKey(new byte[] {9, 9, 9, 9}, 0));
+        assertEquals(".", MaskedIPSet.maskedIPKey(new byte[] {9, 9, 9, 9}, 0));
     }
 
     /** No IP key can collide with a port or family key, which use 'p' / 'x'. */
     @Test
     public void keySpacesCannotCollide() {
         for (int mask = 1; mask <= 4; mask++) {
-            String ipKey = ProfileOrganizer.maskedIPKey(
+            String ipKey = MaskedIPSet.maskedIPKey(
                 new byte[] {(byte) 0xab, (byte) 0xcd, (byte) 0xef, 1}, mask);
             assertFalse("IP key must not look like a port key",
                         ipKey.equals("p" + 1234));
@@ -479,7 +479,7 @@ public class ProfileOrganizerSelectionCostTest {
     @Test
     public void maskedIpKeyRoundTripThroughASet() {
         Set<String> claimed = new HashSet<>();
-        String key = ProfileOrganizer.maskedIPKey(new byte[] {(byte) 203, 0, 113, 5}, 2);
+        String key = MaskedIPSet.maskedIPKey(new byte[] {(byte) 203, 0, 113, 5}, 2);
         assertTrue(claimed.add(key));
         assertFalse("second add of the same key must report a collision",
                     claimed.add(key));
@@ -491,10 +491,10 @@ public class ProfileOrganizerSelectionCostTest {
     public void maskedIPSetIsUsableAsTheAccumulator() {
         MaskedIPSet set = new MaskedIPSet(4);
         assertTrue(set.isEmpty());
-        assertTrue(set.add(ProfileOrganizer.maskedIPKey(new byte[] {1, 2, 3, 4}, 2)));
+        assertTrue(set.add(MaskedIPSet.maskedIPKey(new byte[] {1, 2, 3, 4}, 2)));
         assertFalse(set.isEmpty());
         assertEquals(1, set.size());
-        assertTrue(set.contains(ProfileOrganizer.maskedIPKey(new byte[] {1, 2, 9, 9}, 2)));
+        assertTrue(set.contains(MaskedIPSet.maskedIPKey(new byte[] {1, 2, 9, 9}, 2)));
         Collection<String> asCollection = set;
         assertEquals(1, asCollection.size());
     }

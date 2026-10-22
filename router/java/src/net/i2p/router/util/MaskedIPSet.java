@@ -107,12 +107,12 @@ public class MaskedIPSet extends HashSet<String> {
             return;
         byte[] commIP = ctx.commSystem().getIP(peer);
         if (commIP != null)
-            add(maskedIP(commIP, mask));
+            add(maskedIPKey(commIP, mask));
         Collection<RouterAddress> paddr = pinfo.getAddresses();
         for (RouterAddress pa : paddr) {
             byte[] pib = pa.getIP();
             if (pib == null) continue;
-            add(maskedIP(pib, mask));
+            add(maskedIPKey(pib, mask));
             // Routers with a common port may be run
             // by a single entity with a common configuration
             int port = pa.getPort();
@@ -131,12 +131,23 @@ public class MaskedIPSet extends HashSet<String> {
     }
 
     /**
-     * Generate an arbitrary unique value for this ip/mask (mask = 1-4)
+     * Generate an arbitrary unique value for this ip/mask (mask = 1-4).
      * If IPv6, double the mask value.
+     * <p>Format: a family-delimiting leading char, '.' for IPv4 or ':' for IPv6,
+     * and the IPv6 form also doubles the matched byte count; then two
+     * '0'-offset hex nibbles per matched byte — the fake hex range
+     * <code>0123456789:;&lt;=&gt;?</code>. Equal keys mean "same masked subnet".
+     * <p>Public as of 0.9.71+ so callers that build keys without building a set
+     * share this format. A peer's fingerprints are compared against keys claimed
+     * by other peers, so two different formats silently never match and the
+     * diversity gate stops rejecting anything.
      *
-     * @param mask is 1-4 (number of bytes to match)
+     * @param ip an IPv4 (4-byte) or IPv6 (16-byte) address
+     * @param mask 1-4, the number of leading bytes to match
+     * @return the fingerprint key
+     * @since 0.9.71+ public
      */
-    private static String maskedIP(byte[] ip, int mask) {
+    public static String maskedIPKey(byte[] ip, int mask) {
         final char delim;
         if (ip.length == 16) {
             mask *= 2;
@@ -149,8 +160,8 @@ public class MaskedIPSet extends HashSet<String> {
         for (int i = 0; i < mask; i++) {
             // fake hex "0123456789:;<=>?"
             byte b = ip[i];
-            buf.append('0' + (char) ((b >> 4) & 0x0f));
-            buf.append('0' + (char) (b & 0x0f));
+            buf.append((char) ('0' + ((b >> 4) & 0x0f)));
+            buf.append((char) ('0' + (b & 0x0f)));
         }
         return buf.toString();
     }
