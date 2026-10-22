@@ -545,6 +545,7 @@
   <target name="compileTest" depends="compile">
     <property name="junit.home" value="../../../tools/test/junit"/>
     <property name="hamcrest.home" value="../../../tools/test/hamcrest"/>
+    <property name="mockito.home" value="../../../tools/test/mockito"/>
     <mkdir dir="${build.dir}/obj_test"/>
     <javac
       srcdir="./test/junit"
@@ -564,6 +565,10 @@
         <pathelement location="${streaming.java.build.dir}/streaming.jar"/>
         <pathelement location="${junit.home}/junit4.jar"/>
         <pathelement location="${hamcrest.home}/hamcrest-core.jar"/>
+        <pathelement location="${mockito.home}/mockito-core.jar"/>
+        <pathelement location="${mockito.home}/byte-buddy.jar"/>
+        <pathelement location="${mockito.home}/byte-buddy-agent.jar"/>
+        <pathelement location="${mockito.home}/objenesis.jar"/>
       </classpath>
     </javac>
     <echo message="I2PSnark test compilation completed"/>
@@ -573,6 +578,7 @@
     <property name="junit.reports.dir" value="${java.io.tmpdir}/build-i2p/reports"/>
     <property name="junit.home" value="../../../tools/test/junit"/>
     <property name="hamcrest.home" value="../../../tools/test/hamcrest"/>
+    <property name="mockito.home" value="../../../tools/test/mockito"/>
     <!-- Scratch I2P base: I2PAppContext defaults i2p.dir.base to user.dir (the
          module dir), so SnarkManager/I2PSnarkUtil in tests would write *.config.d/,
          dht.dat, torrent dirs etc. into the workspace. Redirect to a temp dir that
@@ -601,6 +607,10 @@
         <pathelement location="${junit.home}/junit4.jar"/>
         <pathelement location="${hamcrest.home}/hamcrest-core.jar"/>
         <pathelement location="${hamcrest.home}/hamcrest-library.jar"/>
+        <pathelement location="${mockito.home}/mockito-core.jar"/>
+        <pathelement location="${mockito.home}/byte-buddy.jar"/>
+        <pathelement location="${mockito.home}/byte-buddy-agent.jar"/>
+        <pathelement location="${mockito.home}/objenesis.jar"/>
       </classpath>
       <batchtest todir="${junit.reports.dir}/i2psnark/junit">
         <fileset dir="./test/junit" includes="**/*Test.java"/>
