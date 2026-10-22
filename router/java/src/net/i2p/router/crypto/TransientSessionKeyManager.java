@@ -225,7 +225,11 @@ public class TransientSessionKeyManager extends SessionKeyManager {
         return new HashSet<>(_inboundTagSets.values());
     }
 
-    /** OutboundSession - used only by HTML. */
+    /**
+     * OutboundSession - used only by HTML.
+     *
+     * @return a snapshot of all outbound sessions
+     */
     private Set<OutboundSession> getOutboundSessions() {
         synchronized (_outboundSessions) {
             return new HashSet<>(_outboundSessions.values());
@@ -300,6 +304,10 @@ public class TransientSessionKeyManager extends SessionKeyManager {
     /**
      * Same as above but for internal use, returns OutboundSession so we don't have
      * to do a subsequent {@link #getSession(PublicKey)}.
+     *
+     * @param target the peer's public key, must be ElGamal 2048
+     * @param key the session key the new session uses
+     * @return the newly created outbound session
      */
     private OutboundSession createAndReturnSession(PublicKey target, SessionKey key) {
         EncType type = target.getType();
@@ -556,6 +564,9 @@ public class TransientSessionKeyManager extends SessionKeyManager {
      * across the entire _inboundTagSets map, but it should be very rare,
      * and the stats we can gather can hopefully reduce the frequency of
      * using too many session tags in the future.
+     *
+     * @param overage the number of tags by which the limit was exceeded, the
+     *                cleanup removes twice this many
      */
     private void clearExcess(int overage) {
         long now = _context.clock().now();
@@ -867,6 +878,9 @@ public class TransientSessionKeyManager extends SessionKeyManager {
 
     /**
      * For debugging.
+     *
+     * @param target the key to render, null allowed
+     * @return the key in Base64, or the string null
      */
     private static String toString(PublicKey target) {
         if (target == null)

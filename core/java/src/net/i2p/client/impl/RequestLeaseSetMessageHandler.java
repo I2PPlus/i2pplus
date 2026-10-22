@@ -817,6 +817,9 @@ class RequestLeaseSetMessageHandler extends HandlerImpl {
     /**
      * First 6 chars of a base64 key string, for logging without leaking
      * key material.
+     *
+     * @param b64 the base64-encoded key string
+     * @return its first 6 chars, or the whole string if shorter
      */
     private static String keyPrefix(String b64) {
         return b64.length() <= 6 ? b64 : b64.substring(0, 6);
@@ -886,7 +889,9 @@ class RequestLeaseSetMessageHandler extends HandlerImpl {
         /**
          * New keys.
          *
+         * @param dest the destination these keys belong to
          * @param types must be available
+         * @param isLS2 true for LS2, which omits the signing keypair
          */
         public LeaseInfo(Destination dest, List<EncType> types, boolean isLS2) {
             if (types.size() > 1 && PREFER_NEW_ENC) {
@@ -996,6 +1001,7 @@ class RequestLeaseSetMessageHandler extends HandlerImpl {
         /**
          * The blinded public keys.
          *
+         * @return the list of blinded public keys
          * @since 0.9.39
          */
         public List<PublicKey> getPublicKeys() {
@@ -1005,6 +1011,7 @@ class RequestLeaseSetMessageHandler extends HandlerImpl {
         /**
          * The blinded private keys.
          *
+         * @return the list of blinded private keys
          * @since 0.9.39
          */
         public List<PrivateKey> getPrivateKeys() {

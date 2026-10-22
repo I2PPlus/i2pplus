@@ -250,7 +250,14 @@ public abstract class FormHandler {
         return action;
     }
 
-    /** Check for common XSS patterns @since 0.9.70+. */
+    /**
+     * Check for common XSS patterns.
+     *
+     * @param val the value to test; null or empty is not XSS
+     * @return true if the value contains a script tag, inline event handler or
+     *         another common XSS pattern
+     * @since 0.9.70+
+     */
     private boolean containsXSS(String val) {
         if (val == null || val.isEmpty()) return false;
         String lower = val.toLowerCase();

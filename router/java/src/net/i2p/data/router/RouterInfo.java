@@ -360,8 +360,9 @@ public class RouterInfo extends DatabaseEntry {
      * Write out the raw payload of the routerInfo, excluding the signature.  This
      * caches the data in memory if possible.
      *
+     * @param out the stream to write to
      * @throws DataFormatException if the data is somehow b0rked (missing props, etc)
-     * @throws IOException
+     * @throws IOException if writing to the stream fails
      * @since 0.9.24
      */
     private void writeDataBytes(OutputStream out) throws DataFormatException, IOException {

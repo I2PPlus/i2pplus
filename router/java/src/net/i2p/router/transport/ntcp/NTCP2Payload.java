@@ -171,7 +171,7 @@ class NTCP2Payload {
      * follow padding, only padding may follow termination, and the first block
      * of a handshake frame must be a RouterInfo.
      *
-     * @param isHandshake true for the handshake frame
+     * @param isHandshake true for the handshake frame, where the block is not allowed
      * @param blocks blocks already processed in this frame
      * @param gotPadding whether padding was already seen
      * @param gotTermination whether termination was already seen
@@ -194,6 +194,13 @@ class NTCP2Payload {
      * The frame contents are deliberately not included, they may be
      * decrypted data; callers that want a dump log it at DEBUG.
      *
+     * @param off index in payload of the first block's type byte, for the error message
+     * @param length frame size in bytes, for the error message
+     * @param end exclusive end index of the frame, i.e. off + length
+     * @param i index of the block's first data byte, just past its 3-byte header
+     * @param len the block's data length, as read from its header
+     * @param blocks blocks already processed in this frame, for the error message
+     * @param type the current block's type, for the error message
      * @throws IOException if the block runs over the end of the frame
      */
     private static void checkFrameOverflow(int off, int length, int end,
@@ -207,6 +214,8 @@ class NTCP2Payload {
     /**
      * Check that the block type is not allowed in a handshake frame.
      *
+     * @param isHandshake true for the handshake frame, where the block is not allowed
+     * @param type the block's type, for the error message
      * @throws IOException if the block appears in a handshake frame
      */
     private static void checkHandshakeOnly(boolean isHandshake, int type) throws IOException {
@@ -216,6 +225,13 @@ class NTCP2Payload {
 
     /**
      * Parse a DATETIME block (exactly 4 bytes) and report it to the callback.
+     *
+     * @param cb receives the peer's clock, in milliseconds
+     * @param payload the frame bytes
+     * @param i index of the block's first data byte
+     * @param len the block's data length, must be exactly 4
+     * @throws IOException if the length is not 4
+     * @throws DataFormatException if the callback cannot process the block
      */
     private static void processDateTime(PayloadCallback cb, byte[] payload, int i, int len)
                                         throws IOException, DataFormatException {
@@ -227,6 +243,13 @@ class NTCP2Payload {
 
     /**
      * Copy an OPTIONS block and report it to the callback.
+     *
+     * @param cb receives a copy of the block's data
+     * @param payload the frame bytes
+     * @param i index of the block's first data byte
+     * @param len the block's data length
+     * @param isHandshake true for the handshake frame, passed on to the callback
+     * @throws DataFormatException if the callback cannot process the block
      */
     private static void processOptions(PayloadCallback cb, byte[] payload, int i, int len,
                                        boolean isHandshake) throws DataFormatException {
@@ -238,6 +261,15 @@ class NTCP2Payload {
     /**
      * Deserialize a ROUTERINFO block (a 1-byte flag then the RouterInfo) and
      * report it to the callback.
+     *
+     * @param ctx used to deserialize the RouterInfo
+     * @param cb receives the RouterInfo and whether the peer is a floodfill
+     * @param payload the frame bytes
+     * @param i index of the block's first data byte, the 1-byte flag
+     * @param len the block's data length, including the flag byte
+     * @param isHandshake true for the handshake frame, passed on to the callback
+     * @throws IOException if the RouterInfo cannot be read
+     * @throws DataFormatException if the RouterInfo is too big, or the callback rejects it
      */
     private static void processRouterInfo(I2PAppContext ctx, PayloadCallback cb, byte[] payload,
                                           int i, int len, boolean isHandshake) throws IOException, DataFormatException {
@@ -252,6 +284,15 @@ class NTCP2Payload {
 
     /**
      * Parse an I2NP block (at least 9 bytes) and report it to the callback.
+     *
+     * @param ctx used to deserialize the message
+     * @param cb receives the message
+     * @param payload the frame bytes
+     * @param i index of the block's first data byte
+     * @param len the block's data length, at least 9
+     * @throws IOException if the block is shorter than 9 bytes
+     * @throws I2NPMessageException if the message cannot be deserialized, or the callback
+     *                              cannot process it
      */
     private static void processI2NP(I2PAppContext ctx, PayloadCallback cb, byte[] payload,
                                     int i, int len) throws IOException, I2NPMessageException {
@@ -264,7 +305,12 @@ class NTCP2Payload {
     /**
      * Parse a TERMINATION block (at least 9 bytes) and report it to the callback.
      *
+     * @param cb receives the reason and the peer's last received date and time
+     * @param payload the frame bytes
+     * @param i index of the block's first data byte
+     * @param len the block's data length, at least 9
      * @return true, so the caller records that termination has been seen
+     * @throws IOException if the block is shorter than 9 bytes
      */
     private static boolean processTermination(PayloadCallback cb, byte[] payload, int i, int len)
                                               throws IOException {

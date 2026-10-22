@@ -174,9 +174,12 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
     /**
      * Creates the tunnel with its listener and controller.
      *
+     * @param args the command-line arguments, parsed for the option letters and a trailing
+     *             command file
      * @param lsnr may be null
      * @param tc may be null
-     * @throws IllegalArgumentException
+     * @throws IllegalArgumentException if the options are unparseable, or the command file named
+     *                                  at the end of the arguments does not exist
      * @since 0.9.48
      */
     private I2PTunnel(String[] args, ConnectionEventListener lsnr, TunnelController tc) {
@@ -334,7 +337,11 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
         } catch (IOException ex) {System.err.println("Error: " + ex);}
     }
 
-    /** With newlines except for last line. */
+    /**
+     * The command-line usage text, one option per line.
+     *
+     * @return the usage text, with newlines except for last line
+     */
     private static String usage() {
         // Hand-maintained mirror of the Getopt spec in the constructor;
         // option letters here must match longopts and the short option string.
@@ -424,7 +431,13 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
         }
     }
 
-    /** Java 1.3 vs 1.4 :).
+    /**
+     * Java 1.3 vs 1.4 :).
+     *
+     * @param src the string to break into tokens
+     * @param delim the characters that separate tokens, any one of which splits, and runs of
+     *              them produce no empty tokens
+     * @return the tokens in order, an empty array when there are none
      */
     private static String[] split(String src, String delim) {
         StringTokenizer tok = new StringTokenizer(src, delim);
@@ -1636,6 +1649,9 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
 
     /**
      * Send a BlindingInfo message, just for testing.
+     *
+     * @param argv the arguments after the "blinding" command word, parsed for the option letters
+     *             d, p, k, s and e
      * @since 0.9.43
      */
     private void runBlinding(String[] argv) {
@@ -1743,7 +1759,14 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
         }
     }
 
-    /** Helper method to actually close the given task number (optionally forcing closure). */
+    /**
+     * Helper method to actually close the given task number (optionally forcing closure).
+     *
+     * @param num the task id to look for, the search stops at a higher id
+     * @param mode how to close it: normal, forced, or destroy
+     * @param l unused, the class logger is used instead
+     * @return true if a task with that id was found and closed
+     */
     private boolean closetask(int num, CloseMode mode, Logging l) {
         boolean closed = false;
 
@@ -1761,7 +1784,13 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
         return closed;
     }
 
-    /** Helper method to actually close the given task number (optionally forcing closure). */
+    /**
+     * Helper method to actually close the given task (optionally forcing closure).
+     *
+     * @param t the task to close
+     * @param mode how to close it: normal, forced, or destroy
+     * @return true if the task reported it is closed
+     */
     private boolean closetask(I2PTunnelTask t, CloseMode mode) {
         if (_log.shouldInfo()) {_log.info("Closing task " + t.getId() + " mode: " + mode);}
         boolean success;
@@ -1847,6 +1876,8 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
      * @param d Destination to write
      * @param o stream to write the destination to, or null for noop
      * @param l logger to send messages to
+     * @throws I2PException if the destination's key cannot be encoded, a DataFormatException
+     * @throws IOException if the stream write fails
      */
     private static void writePubKey(Destination d, OutputStream o, Logging l) throws I2PException, IOException {
         if (o == null) {return;}
@@ -1855,13 +1886,17 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
     }
 
     /**
-    /**
      * Resolve a destination from a name or Base64 string.
      *
+     * @param name the destination as a local name, a base32 or base64 string, or a "file:" path
      * @param i2cpHost may be null
      * @param i2cpPort may be null
+     * @param isSSL true to reach the router's I2CP proxy over TLS instead of plain TCP
      * @param user may be null
      * @param pw may be null
+     * @return the destination, or null if the name is unknown, the file cannot be read, or the
+     *         lookup fails
+     * @throws DataFormatException if name is null or blank
      * @since 0.9.11
      */
     private static Destination destFromName(String name, String i2cpHost,

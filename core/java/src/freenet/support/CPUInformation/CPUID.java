@@ -103,8 +103,8 @@ import net.i2p.util.SystemVersion;
 public class CPUID {
 
     /**
-     *  Constructs an instance that carries no per-instance state: every
-     *  detection method here is static and reads process-global CPUID state.
+     * Constructs an instance that carries no per-instance state: every
+     * detection method here is static and reads process-global CPUID state.
      */
     public CPUID() {}
 
@@ -210,6 +210,8 @@ public class CPUID {
     /**
      * Get the jbigi version, only available since jbigi version 3
      * Caller must catch Throwable
+     *
+     * @return the version reported by the native jcpuid code
      * @since 0.9.26
      */
     private native static int nativeJcpuidVersion();
@@ -697,6 +699,8 @@ public class CPUID {
      * and attempt to load it. If the load succeeds, copy it to the installation
      * directory. Return value reflects only load success - copy will fail silently.
      *
+     * @param resourceName the classpath resource holding the native library to
+     *                     extract, load and copy
      * @return true if it was loaded successfully, else false.
      * @since 0.8.7
      */
@@ -745,7 +749,11 @@ public class CPUID {
         else {return "lib";}
     }
 
-    /** 64-bit only, jcpuid is not built for 32-bit platforms */
+    /**
+     * 64-bit only, jcpuid is not built for 32-bit platforms
+     *
+     * @return the platform-specific library name, e.g. jcpuid-x86_64-linux
+     */
     private static final String getLibraryMiddlePart() {
         if (isWindows) {return "jcpuid-x86_64-windows";}
         if (isKFreebsd) {return "jcpuid-x86_64-kfreebsd";}

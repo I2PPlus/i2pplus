@@ -126,6 +126,10 @@ class FloodfillStoreJob extends StoreJob {
 
     /**
      * Check if verify should be skipped due to existing verify or shutdown.
+     *
+     * @param key the key being stored, checked for an in-progress verify
+     * @param keyB64 the key in Base64, used only in the log messages
+     * @param shouldLog true to log the reason when verify is skipped
      * @return whether skip verify
      */
     private boolean shouldSkipVerify(Hash key, String keyB64, boolean shouldLog) {
@@ -146,6 +150,7 @@ class FloodfillStoreJob extends StoreJob {
     /**
      * The published timestamp from the data.
      *
+     * @param data the entry stored, a LeaseSet2 or a dated entry
      * @return the published timestamp
      */
     private long getPublishedTimestamp(DatabaseEntry data) {
@@ -156,6 +161,9 @@ class FloodfillStoreJob extends StoreJob {
     /**
      * The client hash from the data, or the key if not available.
      *
+     * @param data the entry stored, an encrypted LS2 carries the client's
+     *             destination
+     * @param key the key hash, returned when the entry has no client
      * @return the client hash
      */
     private Hash getClientHash(DatabaseEntry data, Hash key) {

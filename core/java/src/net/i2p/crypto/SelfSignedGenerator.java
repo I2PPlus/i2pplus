@@ -208,15 +208,20 @@ public final class SelfSignedGenerator {
     /**
      * Create a self-signed certificate with the given keypair.
      *
+     * @param jpub the public key to be embedded in the certificate, as a Java key
+     * @param jpriv the private key as a Java key, currently unused
+     * @param priv the signing private key used to sign the certificate
+     * @param type the signature type, must be a supported type, non-null
      * @param cname the common name, non-null. Must be a hostname or email address. IP addresses will not be correctly encoded.
      * @param altNames the Subject Alternative Names. May be null. May contain hostnames and/or IP addresses.
      *                 cname, localhost, 127.0.0.1, and ::1 will be automatically added.
      *
      * @param ou The OU (organizational unit) in the distinguished name, non-null before 0.9.28, may be null as of 0.9.28
-     * @param o The O (organization)in the distinguished name, non-null before 0.9.28, may be null as of 0.9.28
+     * @param o The O (organization) in the distinguished name, non-null before 0.9.28, may be null as of 0.9.28
      * @param l The L (city or locality) in the distinguished name, non-null before 0.9.28, may be null as of 0.9.28
      * @param st The ST (state or province) in the distinguished name, non-null before 0.9.28, may be null as of 0.9.28
      * @param c The C (country) in the distinguished name, non-null before 0.9.28, may be null as of 0.9.28
+     * @param validDays the certificate validity period, in days from now
      *
      * @return length 4 array:
      *         rv[0] is a Java PublicKey
@@ -224,6 +229,8 @@ public final class SelfSignedGenerator {
      *         rv[2] is a Java X509Certificate
      *         rv[3] is a Java X509CRL
      *
+     * @throws java.security.GeneralSecurityException if the signature type is not supported,
+     *                                                or signing the certificate fails
      * @since 0.9.34 added altNames param
      */
     private static Object[] generate(
@@ -369,6 +376,14 @@ public final class SelfSignedGenerator {
 
     /**
      * Generate a CRL for the given cert, signed with the given private key.
+     *
+     * @param cert the certificate whose issuer signs the CRL and which is listed as revoked
+     * @param validDays the CRL validity period, in days from now
+     * @param crlNum the CRL number extension value, 0-255
+     * @param sigoid the encoded signature algorithm OID sequence, as from getEncodedOIDSeq()
+     * @param priv the signing private key used to sign the CRL
+     * @return the CRL object parsed back from the encoded bytes
+     * @throws java.security.GeneralSecurityException if signing fails or the CRL cannot be parsed
      */
     private static X509CRL generateCRL(
             X509Certificate cert, int validDays, int crlNum, byte[] sigoid, SigningPrivateKey priv)
@@ -425,10 +440,15 @@ public final class SelfSignedGenerator {
      *                 cname, localhost, 127.0.0.1, and ::1 will be automatically added.
      *
      * @param ou The OU (organizational unit) in the distinguished name, non-null before 0.9.28, may be null as of 0.9.28
-     * @param o The O (organization)in the distinguished name, non-null before 0.9.28, may be null as of 0.9.28
+     * @param o The O (organization) in the distinguished name, non-null before 0.9.28, may be null as of 0.9.28
      * @param l The L (city or locality) in the distinguished name, non-null before 0.9.28, may be null as of 0.9.28
      * @param st The ST (state or province) in the distinguished name, non-null before 0.9.28, may be null as of 0.9.28
      * @param c The C (country) in the distinguished name, non-null before 0.9.28, may be null as of 0.9.28
+     * @param validDays the certificate validity period, in days from now
+     * @param sigoid the encoded signature algorithm OID sequence, as from getEncodedOIDSeq()
+     * @param jpub the public key to be embedded in the certificate, as a Java key
+     * @return the encoded to-be-signed certificate, including the algorithm identifier but
+     *         not the signature
      */
     private static byte[] genTBS(
             String cname,
@@ -524,7 +544,10 @@ public final class SelfSignedGenerator {
     /**
      * Generate the TBS portion of the CRL.
      *
+     * @param cert the certificate whose issuer is the CRL issuer and whose serial number is revoked
+     * @param validDays the CRL validity period, in days from now
      * @param crlNum 0-255 because lazy
+     * @param sigalg the encoded signature algorithm OID sequence
      * @return ASN.1 encoded object
      */
     private static byte[] genTBSCRL(X509Certificate cert, int validDays, int crlNum, byte[] sigalg)
@@ -625,6 +648,8 @@ public final class SelfSignedGenerator {
     /**
      * Sequence of two UTCDates.
      *
+     * @param validDays the not-valid-after date is this many days past the backdated
+     *                  not-valid-before date
      * @return 32 bytes ASN.1 encoded object
      */
     private static byte[] getValidity(int validDays) {
@@ -644,6 +669,7 @@ public final class SelfSignedGenerator {
     /**
      * A single UTCDate.
      *
+     * @param now the instant to encode, in milliseconds since the epoch
      * @return 15 bytes ASN.1 encoded object
      */
     private static byte[] getDate(long now) {
@@ -695,6 +721,7 @@ public final class SelfSignedGenerator {
      * Ref: RFC 5280.
      *
      * @param pubbytes the DER-encoded public key bit string the extension identifier is derived from
+     * @param cname the common name, added to the SANs and used to decide if the cert is a CA
      * @param altNames the Subject Alternative Names. May be null. May contain hostnames and/or IP addresses.
      * cname, localhost, 127.0.0.1, and ::1 will be automatically added.
      *
@@ -973,8 +1000,9 @@ public final class SelfSignedGenerator {
     /**
      * 0x30 len 0x06 len encodedbytes... 0x05 0.
      *
+     * @param oid the dotted object identifier, e.g. 1.2.840.113549.1.1.1
      * @return ASN.1 encoded object
-     * @throws IllegalArgumentException
+     * @throws IllegalArgumentException if getEncodedOID() rejects the identifier as invalid
      */
     private static byte[] getEncodedOIDSeq(String oid) {
         byte[] b = getEncodedOID(oid);

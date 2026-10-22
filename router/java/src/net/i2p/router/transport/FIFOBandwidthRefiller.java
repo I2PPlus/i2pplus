@@ -395,7 +395,7 @@ public class FIFOBandwidthRefiller implements Runnable {
      * Returns true if the message can be sent within the current
      * share bandwidth limits, or false if it should be dropped.
      *
-     * @param size bytes
+     * @param size the message size in bytes
      * @param factor multiplier of size for the drop calculation, 1 for no adjustment
      * @return true for accepted, false for drop
      * @since 0.8.12
@@ -410,7 +410,7 @@ public class FIFOBandwidthRefiller implements Runnable {
      * Returns true if the message can be accepted within the current
      * share bandwidth limits, or false if it should be dropped.
      *
-     * @param size bytes
+     * @param size the message size in bytes
      * @param factor multiplier of size for the drop calculation, 1 for no adjustment
      * @return true for accepted, false for drop
      */
@@ -450,6 +450,7 @@ public class FIFOBandwidthRefiller implements Runnable {
     /**
      * Call a few times a minute to update the stats.
      *
+     * @param now the current time in ms; currently unused
      * @since 0.8.12
      */
     private void updateParticipating(long now) {

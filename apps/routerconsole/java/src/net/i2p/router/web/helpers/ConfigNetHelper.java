@@ -357,7 +357,8 @@ public class ConfigNetHelper extends HelperBase {
     /**
      * Convert KB/s to a bit-rate string.
      *
-     * @param kbytes binary K
+     * @param kbytes the rate in binary kilobytes per second
+     * @return the formatted rate and monthly data HTML span
      */
     private String kbytesToBits(float kbytes) {
         return ("<span class=\"net_bwrate\">"

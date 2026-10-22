@@ -352,6 +352,7 @@ public class I2PSSLSocketFactory {
      * What does this get us?
      * Deciding whether to issue or accept an SSL wildcard certificate for *.public.suffix.
      *
+     * @param ctx the app context supplying the geoip directory property
      * @return null on failure
      * @since 0.9.20
      */
@@ -408,6 +409,9 @@ public class I2PSSLSocketFactory {
      * Merge two PublicSuffixLists
      * Have to do this because they are unmodifiable.
      *
+     * @param a the first list, its rules and exceptions come first
+     * @param b the second list, appended after the first
+     * @return a new list holding the rules and exceptions of both
      * @since 0.9.20
      */
     private static PublicSuffixList merge(PublicSuffixList a, PublicSuffixList b) {
@@ -429,6 +433,7 @@ public class I2PSSLSocketFactory {
      * It would almost be easier just to add all possible 26*26 two-letter codes.
      * Adapted from the GeoIP country-file loader.
      *
+     * @param ctx the app context supplying the geoip directory property
      * @param tlds list that collects each lowercased TLD read from the country file
      * @since 0.9.20
      */
@@ -465,7 +470,14 @@ public class I2PSSLSocketFactory {
      * the ~/.i2p/certificates/ and $I2P/certificates/ directories,
      * or from the absolute path given.
      *
+     * @param context the app context, source of the log, the config and base directories, and the
+     *                randomness for the SSL context
+     * @param loadSystemCerts true to start from the JVM's default trust store, which also lets the
+     *                        result stand when no I2P certificates are found
      * @param relativeCertPath e.g. "certificates/i2cp"; as of 0.9.41, may be absolute
+     * @return a socket factory trusting the certificates that were loaded
+     * @throws GeneralSecurityException if the key store cannot be created, or no trusted
+     *                                  certificates were found at all
      */
     private static SSLSocketFactory initSSLContext(
             I2PAppContext context, boolean loadSystemCerts, String relativeCertPath) throws GeneralSecurityException {
@@ -598,8 +610,12 @@ public class I2PSSLSocketFactory {
     /**
      * Adapted from Jetty SslContextFactory.java.
      *
+     * @param enabledArr the cipher suites the socket has enabled to start from
+     * @param supportedArr the cipher suites the socket supports, the only ones that can be added
      * @param toEnable Add all these to what is enabled, if supported
      * @param toExclude Remove all these from what is enabled
+     * @return the cipher suites to enable, in no particular order, or enabledArr unchanged when
+     *         the selection comes out empty
      * @since 0.9.16
      */
     private static String[] select(

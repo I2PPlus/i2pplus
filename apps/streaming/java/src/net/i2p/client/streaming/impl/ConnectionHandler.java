@@ -61,7 +61,11 @@ class ConnectionHandler {
      */
     synchronized void setAcceptTimeout(int ms) { _acceptTimeout = ms; }
 
-    /** Live configured accept timeout; re-read each SYN so config changes apply without a restart. */
+    /**
+     * Live configured accept timeout; re-read each SYN so config changes apply without a restart.
+     *
+     * @return the i2p.streaming.acceptTimeout property in ms, 60000 if unset
+     */
     private int getAcceptTimeout() {
         return _context.getProperty("i2p.streaming.acceptTimeout", 60*1000);
     }
@@ -732,6 +736,8 @@ class ConnectionHandler {
     /**
      * We found a non-SYN packet that was queued in the syn queue,
      * check to see if it has a home now, else drop it ...
+     *
+     * @param packet the queued packet to re-route, logged and ignored if null
      */
     private void reReceivePacket(Packet packet) {
         if (packet == null) {

@@ -238,6 +238,9 @@ class TimeAxis extends Axis {
     }
     /**
      * Find next time
+     *
+     * @param timeUnit the calendar unit to advance
+     * @param timeUnitCount the number of units to advance
      */
 
     private void findNextTime(TimeUnit timeUnit, int timeUnitCount) {
@@ -272,6 +275,9 @@ class TimeAxis extends Axis {
     }
     /**
      * Adjust starting time
+     *
+     * @param timeUnit the calendar unit to align to
+     * @param timeUnitCount the tick spacing in those units
      */
 
     private void adjustStartingTime(TimeUnit timeUnit, int timeUnitCount) {

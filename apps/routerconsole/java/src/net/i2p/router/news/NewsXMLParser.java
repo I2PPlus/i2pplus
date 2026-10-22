@@ -321,6 +321,11 @@ public class NewsXMLParser {
     /**
      * This does not check for any missing values.
      * Any field in any NewsEntry may be null.
+     *
+     * @param feed the feed node containing the entry elements
+     * @return the sorted entries, empty if none
+     * @throws I2PParserException in ABORT mode if an entry's content
+     *                            contains a node not in the XHTML whitelist
      */
     private List<NewsEntry> extractNewsEntries(Node feed) throws I2PParserException {
         List<NewsEntry> rv = new ArrayList<>();
@@ -422,6 +427,7 @@ public class NewsXMLParser {
      * This does not check for any missing values.
      * Any field in any CRLEntry may be null.
      *
+     * @param feed the feed node containing the i2p:revocations element
      * @return null if none
      * @since 0.9.26
      */
@@ -457,6 +463,7 @@ public class NewsXMLParser {
      * Any field in a BlocklistEntry may be null.
      * Signature is verified here.
      *
+     * @param feed the feed node containing the i2p:blocklist element
      * @return null if none
      * @since 0.9.28
      */
@@ -523,6 +530,7 @@ public class NewsXMLParser {
     /**
      * Validate an XML node, throwing if it is invalid.
      *
+     * @param node the node to check against the XHTML whitelist
      * @return true if node was removed from parent (only for REMOVE_ELEMENT mode)
      * @throws I2PParserException if any node not in whitelist (depends on mode)
      */

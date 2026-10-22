@@ -55,12 +55,12 @@ import net.i2p.util.TryCache;
  * avoid synchronization, allocations, and unnecessary syscalls.
  * <p>Key performance characteristics:
  * <ul>
- *   <li>Fixed 200ms selector timeout for consistent latency</li>
- *   <li>Immediate {@code wakeup()} on pending I/O</li>
- *   <li>Duplicate-free write request tracking via {@code ConcurrentHashSet}</li>
- *   <li>Spin detection: yields briefly when select() returns repeatedly without blocking</li>
- *   <li>Failsafe iteration every 2 seconds to clean stale connections</li>
- *   <li>Efficient buffer pooling with bounded size</li>
+ * <li>Fixed 200ms selector timeout for consistent latency</li>
+ * <li>Immediate {@code wakeup()} on pending I/O</li>
+ * <li>Duplicate-free write request tracking via {@code ConcurrentHashSet}</li>
+ * <li>Spin detection: yields briefly when select() returns repeatedly without blocking</li>
+ * <li>Failsafe iteration every 2 seconds to clean stale connections</li>
+ * <li>Efficient buffer pooling with bounded size</li>
  * </ul>
  */
 class EventPumper implements Runnable {
@@ -117,6 +117,11 @@ class EventPumper implements Runnable {
     private static final int BUF_SIZE = 8 * 1024;
 
     private static class BufferFactory implements TryCache.ObjectFactory<ByteBuffer> {
+        /**
+         * Factory for the pooled read buffers.
+         */
+        private BufferFactory() {}
+
         /**
          * Create a new buffer of BUF_SIZE, direct or heap.
          */
@@ -193,6 +198,11 @@ class EventPumper implements Runnable {
     private static final int WRITE_BUFSIZE = NTCPConnection.BUFFER_SIZE + OutboundNTCP2State.MAC_SIZE + 2;
 
     private static class WriteBufferFactory implements TryCache.ObjectFactory<byte[]> {
+        /**
+         * Factory for the pooled NTCP2 write buffers.
+         */
+        private WriteBufferFactory() {}
+
         /**
          * Create a new NTCP2 frame buffer.
          *
@@ -1159,16 +1169,12 @@ class EventPumper implements Runnable {
     }
 
     /**
-     * Remember a failed outbound connect attempt for retry backoff, evicting the
-     * whole history when the cap is hit so the maps never grow past MAX_RETRY_MAP_SIZE.
-     *
-     * @param remote  the failed peer's identity; ignored when null
-     * @since 0.9.71+
-     */
-    /**
      * The bare failure reason from a failed connect: the exception message
      * without the JDK 13+ " (connect failed)" operation suffix, or the
      * exception class name when there is no message.
+     *
+     * @param e the exception from the failed connect attempt
+     * @return the failure reason for the close-on-timeout message, never null
      */
     private static String connectFailReason(Exception e) {
         String msg = e.getMessage();
@@ -1179,6 +1185,13 @@ class EventPumper implements Runnable {
         return msg;
     }
 
+    /**
+     * Remember a failed outbound connect attempt for retry backoff, evicting the
+     * whole history when the cap is hit so the maps never grow past MAX_RETRY_MAP_SIZE.
+     *
+     * @param remote  the failed peer's identity; ignored when null
+     * @since 0.9.71+
+     */
     private void recordFailedOutbound(RouterIdentity remote) {
         if (remote == null) return;
         Hash peerHash = remote.calculateHash();
@@ -1440,6 +1453,10 @@ class EventPumper implements Runnable {
      * spanned the whole drain loop (which could stall frame pushes from the
      * writer pool and other connections).
      *
+     * @param con the connection whose outbound data is drained
+     * @param key the selection key for the OP_WRITE event being processed
+     * @return true if OP_WRITE interest was cleared (drain done or connection closed),
+     *         false if it was re-set to keep draining
      * @since 0.9.71+ single-writer drain without _writeLock; previously the
      * drain ran under the connection's write lock and was also
      * invoked directly from producer threads

@@ -35,7 +35,14 @@ class LogService {
 
     private LogService() {}
 
-    /** Compute logarithm for the purposes of y-axis. */
+    /**
+     * Compute logarithm for the purposes of y-axis.
+     *
+     * @param v the data value to scale
+     * @param correction multiplicative factor bringing the value into log range
+     * @param minval the axis minimum, mapped to zero
+     * @return the log-scaled value carrying the sign of v, never negative
+     */
     private static double log10(double v, double correction, double minval) {
         if (v == minval) {
             return 0.0;
@@ -51,6 +58,9 @@ class LogService {
     }
     /**
      * Compute base-10 logarithm with zero-crossing protection
+     *
+     * @param v the data value to scale
+     * @return the log-scaled value carrying the sign of v, never negative
      */
 
     private static double log10(double v) {

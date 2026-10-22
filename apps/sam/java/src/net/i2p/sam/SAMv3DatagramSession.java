@@ -67,6 +67,7 @@ class SAMv3DatagramSession extends SAMDatagramSession implements Session, SAMDat
      * Look up the registered session record for the given nickname,
      * throwing if it has already disappeared.
      *
+     * @param nick the nickname the session was registered under
      * @return the registered session record, never null because a missing one is thrown
      *         rather than returned
      * @throws SAMException if the nickname is not registered

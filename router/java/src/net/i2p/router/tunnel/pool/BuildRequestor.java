@@ -108,6 +108,8 @@ public abstract class BuildRequestor {
      * Refresh the cached build configuration from properties at most once
      * per CONFIG_REFRESH_MS, or immediately when the context changes.
      * Benign race: duplicate refreshes are idempotent writes.
+     *
+     * @param ctx the context supplying the clock and the timeout properties
      */
     private static void refreshBuildConfig(RouterContext ctx) {
         long now = ctx.clock().now();
@@ -331,6 +333,13 @@ public abstract class BuildRequestor {
      * On failure, the hops of a timed-out or refused build are cooled down
      * out of selection (see BuildExecutor.penalizeTimeout / cooldownFailedPeers),
      * so retries reselect peers rather than retrying the same failing set.
+     *
+     * @param ctx the context supplying the tunnel manager
+     * @param pool the pool being built for, deciding exploratory vs strict client pairing
+     * @param cfg the new tunnel's config, whose far end the reply tunnel must reach
+     * @param exec the build executor, currently unused
+     * @param log the logger for the no-tunnel info messages
+     * @return the tunnel to carry the build reply, or null if none is available
      */
     private static TunnelInfo selectPairedTunnel(RouterContext ctx, TunnelPool pool,
                                                   PooledTunnelCreatorConfig cfg,
@@ -395,6 +404,12 @@ public abstract class BuildRequestor {
      * the ShortTBM when the IBGW differs from the paired tunnel's endpoint so the
      * IBGW identity stays hidden.
      *
+     * @param ctx the context supplying the key manager and garlic layer
+     * @param cfg the inbound tunnel config, whose first hop receives the request
+     * @param pairedTunnel the tunnel carrying the request toward the IBGW
+     * @param msgIn the inbound TunnelBuildMessage, wrapped if the IBGW must stay hidden
+     * @param exec completes the build as failed when there is no first hop or sending fails
+     * @param log the logger for the warning and error messages
      * @return true if the request was dispatched
      */
     private static boolean handleInboundBuild(RouterContext ctx, PooledTunnelCreatorConfig cfg,
@@ -562,6 +577,11 @@ public abstract class BuildRequestor {
      * Creates a tunnel build message using the most efficient format supported
      * by all hops and the local router.
      *
+     * @param ctx the context supplying the key manager and router identity
+     * @param pool the pool being built for; client pools check their destination for ECIES support
+     * @param cfg the new tunnel's config, supplying the hop session keys
+     * @param pairedTunnel the tunnel carrying the reply, its first hop being the reply router
+     * @param exec the build executor, currently unused
      * @return the message, or {@code null} on error
      */
     private static TunnelBuildMessage createTunnelBuildMessage(RouterContext ctx, TunnelPool pool,

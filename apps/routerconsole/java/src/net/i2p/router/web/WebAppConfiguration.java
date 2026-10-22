@@ -47,6 +47,9 @@ public class WebAppConfiguration implements Configuration {
     /**
      * This was the interface in Jetty 5, in Jetty 6 was configureClassLoader(),
      * now it's configure().
+     *
+     * @param wac the web app context to set the extra classpath on
+     * @throws Exception if the plugin's webapp properties cannot be read
      */
     private void configureClassPath(WebAppContext wac) throws Exception {
         String ctxPath = wac.getContextPath();
@@ -130,6 +133,8 @@ public class WebAppConfiguration implements Configuration {
      * Convert URL to URI so there's no blocking equals(),
      * not that there's really any hostnames in here,
      * but keep findbugs happy.
+     *
+     * @param ctx the context, used to locate the lib directory on Java 9 and later
      * @return the system class path
      */
     private static Set<URI> getSystemClassPath(I2PAppContext ctx) {

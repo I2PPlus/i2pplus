@@ -136,6 +136,11 @@ class BatchedPreprocessor extends TrivialPreprocessor {
      * and queue pressure (pending.size/FORCE_BATCH_FLUSH), bounded [0,1].
      * <p>
      * delay = MIN_FLUSH_DELAY + ({@link #getSendDelay()} - MIN_FLUSH_DELAY) * (1 - pressure).
+     *
+     * @param allocated bytes allocated in the current tunnel message
+     * @param pendingSize number of messages waiting to be batched
+     * @return the flush delay in ms, from MIN_FLUSH_DELAY up to the configured
+     *         send delay, lower the higher the buffer pressure
      */
     private long computePendingDelay(long allocated, int pendingSize) {
         int fullnessPct = (int) (allocated * 100L / FULL_SIZE);
@@ -500,6 +505,11 @@ class BatchedPreprocessor extends TrivialPreprocessor {
      * Write the fragments out of the pending list onto the target, updating
      * each of the Pending message's offsets accordingly.
      *
+     * @param pending the list of pending messages
+     * @param startAt first index in pending to write (inclusive)
+     * @param sendThrough last index in pending to write (inclusive)
+     * @param target the preprocessed buffer to write the fragments into
+     * @param offset where in target to start writing
      * @return new offset into the target for further bytes to be written
      */
     private int writeFragments(List<PendingGatewayMessage> pending, int startAt, int sendThrough, byte[] target, int offset) {

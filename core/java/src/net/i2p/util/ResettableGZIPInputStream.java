@@ -236,6 +236,9 @@ public class ResettableGZIPInputStream extends InflaterInputStream {
 
     /**
      * Make sure the header is valid, throwing an IOException if its b0rked.
+     *
+     * @throws IOException if the magic bytes or compression method are wrong,
+     *                     or the stream ends mid-header
      */
     private void verifyHeader() throws IOException {
         int c = in.read();

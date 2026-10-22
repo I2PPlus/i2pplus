@@ -644,6 +644,8 @@ public class RequestThrottler {
 
     /**
      * Checks if router has low bandwidth sharing capabilities.
+     *
+     * @param ri the router to check, null returns false
      * @return whether low share
      */
     private boolean isLowShare(RouterInfo ri) {
@@ -656,6 +658,8 @@ public class RequestThrottler {
 
     /**
      * Checks if router has high bandwidth capabilities.
+     *
+     * @param ri the router to check, null returns false
      * @return true if the router advertises BW256, BW512 or unbounded bandwidth
      */
     private boolean isFast(RouterInfo ri) {

@@ -408,7 +408,7 @@ public class Reseeder {
         /**
          * Log and report a failed reseed attempt.
          * readURL() runs an EepGet with 0 retries, so errors arrive here
-         * with the failure cause (unlike {@link #transferFailed()}).
+         * with the failure cause (unlike {@link #transferFailed}).
          * @param url the full URL that failed
          * @param bytesTransferred bytes transferred before failure
          * @param bytesRemaining bytes remaining when failed
@@ -435,7 +435,7 @@ public class Reseeder {
         public void bytesTransferred(long alreadyTransferred, int currentWrite, long bytesTransferred, long bytesRemaining, String url) {}
         /** Completion handled in caller. */
         public void transferComplete(long alreadyTransferred, long bytesTransferred, long bytesRemaining, String url, String outputFile, boolean notModified) {}
-        /** Failure handled in {@link #attemptFailed()}. */
+        /** Failure handled in {@link #attemptFailed}. */
         public void transferFailed(String url, long bytesTransferred, long bytesRemaining, int currentAttempt) {}
 
         /**
@@ -736,7 +736,10 @@ public class Reseeder {
         /**
          * Verify and extract router infos from a downloaded SU3 bundle.
          *
+         * @param contentRaw the downloaded file holding the SU3 bundle
          * @return 2 ints: number successful and number of errors
+         * @throws IOException if the SU3 content type is not reseed, the file is
+         *                     too old, or reading or verifying it fails
          * @since 0.9.19 pulled from reseedSU3
          */
         public int[] extractSU3(File contentRaw) throws IOException {
@@ -785,7 +788,9 @@ public class Reseeder {
         /**
          * Extract and validate router info files from a zip bundle.
          *
+         * @param zip the downloaded file holding the zip bundle
          * @return 2 ints: number successful and number of errors
+         * @throws IOException if the zip cannot be read or unpacked
          * @since 0.9.19 pulled from reseedSU3
          */
         public int[] extractZip(File zip) throws IOException {
@@ -960,6 +965,7 @@ public class Reseeder {
          * Display string for what we're fetching.
          * Untranslated, for logs only.
          *
+         * @param type the proxy type being fetched
          * @return the display string
          * @since 0.9.33
          */
@@ -982,22 +988,47 @@ public class Reseeder {
 
     private static final String BUNDLE_NAME = "net.i2p.router.web.messages";
 
-    /** Look up a localized string from the router console bundle. */
+    /**
+     * Look up a localized string from the router console bundle.
+     *
+     * @param key the message key in the bundle
+     * @return the localized string for the key
+     */
     private String _t(String key) {
         return Translate.getString(key, _context, BUNDLE_NAME);
     }
 
-    /** Look up a localized string with one {0} substitution. */
+    /**
+     * Look up a localized string with one {0} substitution.
+     *
+     * @param s the message key, with {0} where the argument goes
+     * @param o the argument substituted for {0}
+     * @return the localized string with the substitution applied
+     */
     private String _t(String s, Object o) {
         return Translate.getString(s, o, _context, BUNDLE_NAME);
     }
 
-    /** Look up a localized string with {0} and {1} substitutions. */
+    /**
+     * Look up a localized string with {0} and {1} substitutions.
+     *
+     * @param s the message key, with {0} and {1} where the arguments go
+     * @param o the argument substituted for {0}
+     * @param o2 the argument substituted for {1}
+     * @return the localized string with both substitutions applied
+     */
     private String _t(String s, Object o, Object o2) {
         return Translate.getString(s, o, o2, _context, BUNDLE_NAME);
     }
 
-    /** Look up a localized string with singular/plural forms. */
+    /**
+     * Look up a localized string with singular/plural forms.
+     *
+     * @param s the singular form, may contain {0} for the count
+     * @param p the plural form, may contain {0} for the count
+     * @param n the count, used to choose between s and p
+     * @return the localized form matching the count
+     */
     private String ngettext(String s, String p, int n) {
         return Translate.getString(n, s, p, _context, BUNDLE_NAME);
     }

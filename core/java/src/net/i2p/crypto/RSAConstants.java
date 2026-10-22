@@ -19,6 +19,9 @@ final class RSAConstants {
 
     /**
      * Parameter spec.
+     *
+     * @param size the key size in bits
+     * @param exp the public exponent
      * @return the parameter spec
      */
     private static RSAKeyGenParameterSpec genSpec(int size, BigInteger exp) {

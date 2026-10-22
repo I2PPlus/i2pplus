@@ -91,6 +91,11 @@ class SOCKS4aServer extends SOCKSServer {
      * SOCKS4a request management.  This method assumes that all the
      * stuff preceding or enveloping the actual request
      * has been stripped out of the input/output streams.
+     *
+     * @param in the client input stream, positioned at the request command byte
+     * @param out the client output stream for the failure reply
+     * @throws IOException if a stream read or write fails, or if the request has
+     *                     an unsupported command or an invalid port number
      */
     private void manageRequest(DataInputStream in, DataOutputStream out) throws IOException {
 
@@ -182,9 +187,14 @@ class SOCKS4aServer extends SOCKSServer {
     }
 
     /**
-     * Send the specified reply to a request of the client.  Either
-     * one of inetAddr or domainName can be null, depending on
-     * addressType.
+     * Send the specified reply to a request of the client.  The reply
+     * carries the given IPv4 address and port.
+     *
+     * @param replyCode the Reply constant to send
+     * @param inetAddr the IPv4 address to report in the reply
+     * @param bindPort the port to report in the reply, 0-65535
+     * @param out the client output stream
+     * @throws IOException if the write to the client fails
      */
     private void sendRequestReply(int replyCode, InetAddress inetAddr,
                                   int bindPort, DataOutputStream out) throws IOException {
@@ -314,7 +324,15 @@ class SOCKS4aServer extends SOCKSServer {
         return destSock;
     }
 
-    /** Select a proxy, preferring a cached one for the same host. */
+    /**
+     * Select a proxy, preferring a cached one for the same host.
+     *
+     * @param proxies the configured proxy destinations, non-empty
+     * @param host the destination host whose earlier choice is reused if
+     *             it is still in the list
+     * @return the proxy to use: the cached one for this host if still
+     *         listed, otherwise a random pick that is then cached
+     */
     private String selectProxy(List<String> proxies, String host) {
         if (proxies.size() == 1) return proxies.get(0);
         String cached = _proxyCache.get(host);

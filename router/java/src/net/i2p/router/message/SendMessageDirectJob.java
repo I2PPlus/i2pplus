@@ -155,6 +155,8 @@ public class SendMessageDirectJob extends JobImpl {
      * Simple class name of the message being sent, unwrapping a
      * {@link TunnelGatewayMessage} to its inner message for a more
      * informative log entry.
+     *
+     * @return the simple class name of the message type
      */
     private String messageTypeName() {
         I2NPMessage m = _message;

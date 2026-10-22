@@ -318,8 +318,6 @@ public class CoDelPriorityBlockingQueue<E extends CDPQEntry> extends PriBlocking
                size() >= _context.getProperty(PROP_BACKLOG_SIZE, DEFAULT_BACKLOG_SIZE);
     }
 
-    /////// private below here
-
     /**
      * Timestamp the added element.
      */
@@ -336,6 +334,8 @@ public class CoDelPriorityBlockingQueue<E extends CDPQEntry> extends PriBlocking
      * Caller must synch on this.
      *
      * @param entry may be null
+     * @return true if the sojourn time has stayed above target for at least the
+     *         interval, making it OK to drop
      */
     private boolean updateVars(E entry) {
         /*
@@ -368,6 +368,8 @@ public class CoDelPriorityBlockingQueue<E extends CDPQEntry> extends PriBlocking
      * Dequeue the next element, applying CoDel drops as needed.
      *
      * @return if null, call again
+     * @throws InterruptedException if interrupted while waiting for the next
+     *                              element
      */
     private E deque() throws InterruptedException {
         E rv = super.take();
@@ -453,6 +455,8 @@ public class CoDelPriorityBlockingQueue<E extends CDPQEntry> extends PriBlocking
 
     /**
      * Caller must synch on this.
+     *
+     * @param t the time, in ms, to schedule the next drop from
      */
     private void control_law(long t) {
         _drop_next = t + (long) (_interval / Math.sqrt(_count));

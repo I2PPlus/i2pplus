@@ -143,6 +143,8 @@ class ExpireLeasesJob extends JobImpl {
     /**
      * Run through the entire data store, finding all expired leaseSets (ones that
      * don't have any leases that haven't yet passed, even with the CLOCK_FUDGE_FACTOR).
+     *
+     * @return the keys of the leaseSets to expire, empty if none
      */
     private List<Hash> selectKeysToExpire() {
         RouterContext ctx = getContext();
@@ -212,6 +214,11 @@ class ExpireLeasesJob extends JobImpl {
      * @since 0.9.65
      */
     private static class LeaseSetComparator implements Comparator<LeaseSet>, Serializable {
+        /**
+         * Orders lease sets by latest lease date, oldest first.
+         */
+        private LeaseSetComparator() {}
+
         /**
          * Compare lease sets by latest lease date, oldest first.
          */

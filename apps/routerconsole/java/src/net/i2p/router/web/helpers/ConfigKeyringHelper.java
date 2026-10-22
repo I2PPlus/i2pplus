@@ -37,6 +37,7 @@ public class ConfigKeyringHelper extends HelperBase {
     /**
      * Render the keyring page.
      *
+     * @param out the writer the rendered page is appended to
      * @since 0.9.33 moved from PersistentKeyRing
      */
     private void renderStatusHTML(StringWriter out) {
@@ -56,10 +57,12 @@ public class ConfigKeyringHelper extends HelperBase {
     }
 
     /**
-     *  True for local (Enc. LS1 only), false for remote (all types).
-     *  @param local true for local (Enc. LS1 only), false for remote (all types)
-     *  @return true if there were any entries
-     *  @since 0.9.33 moved from PersistentKeyRing
+     * Render the table of encrypted destinations into buf.
+     *
+     * @param buf the buffer to append the table HTML to
+     * @param local true for local (Enc. LS1 only), false for remote (all types)
+     * @return true if there were any entries
+     * @since 0.9.33 moved from PersistentKeyRing
      */
     private boolean render(StringBuilder buf, boolean local) {
         boolean rv = false;
@@ -167,10 +170,15 @@ public class ConfigKeyringHelper extends HelperBase {
     }
 
     /**
-     *  Comparator for sorting blind data by base32 string.
-     *  @since 0.9.41
+     * Comparator for sorting blind data by base32 string.
+     * @since 0.9.41
      */
     private static class BDComparator implements Comparator<BlindData>, Serializable {
+         /**
+          * Sorts blind data by its base32 string.
+          */
+         private BDComparator() {}
+
          @Override
          public int compare(BlindData l, BlindData r) {return l.toBase32().compareTo(r.toBase32());}
     }

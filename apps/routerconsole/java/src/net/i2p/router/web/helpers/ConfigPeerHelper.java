@@ -124,6 +124,9 @@ public class ConfigPeerHelper extends HelperBase {
 
     /**
      * Convert a (non-negative) two's complement IP to exactly 16 bytes.
+     *
+     * @param bi the IP address as a non-negative integer
+     * @return the address as exactly 16 big-endian bytes, zero-padded
      */
     private static byte[] toIPBytes(BigInteger bi) {
         byte[] ba = bi.toByteArray();

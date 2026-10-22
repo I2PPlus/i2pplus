@@ -162,6 +162,11 @@ public class X25519KeyFactory extends I2PThread implements KeyFactory {
     /**
      * Clamp a value to within a factor of the previous value.
      * Prevents wild swings between refresh cycles.
+     *
+     * @param prev the previous cycle's value, center of the allowed range
+     * @param target the desired new value to clamp
+     * @param factor maximum multiplicative change allowed in either direction
+     * @return target clamped to prev/factor - prev*factor and to the hard limits
      */
     private static int clampSmooth(int prev, int target, int factor) {
         int lo = Math.max(HARD_MIN, prev / factor);
@@ -353,6 +358,7 @@ public class X25519KeyFactory extends I2PThread implements KeyFactory {
     /**
      * Adds a precomputed key pair to the pool.
      *
+     * @param kp the key pair to offer to the queue
      * @return true if successful, false if at or above max size
      */
     private final boolean addKeys(KeyPair kp) {

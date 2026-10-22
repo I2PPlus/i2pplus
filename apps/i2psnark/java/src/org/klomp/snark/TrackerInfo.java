@@ -160,7 +160,17 @@ class TrackerInfo {
         failure_reason = error;
     }
 
-    /** List of Dictionaries or List of Strings. */
+    /**
+     * List of Dictionaries or List of Strings.
+     *
+     * @param l the peer list from a non-compact announce, each entry a dictionary or a raw string
+     * @param my_id our peer id from the tracker, used by each Peer for its handshake
+     * @param infohash the 20-byte torrent info hash carried by each Peer
+     * @param metainfo the torrent metadata carried by each Peer
+     * @param util supplies the crypto used to decrypt peer ids
+     * @return the parsed peers, entries that fail to parse being skipped
+     * @throws IOException declared on the method; every parse failure is caught and skipped
+     */
     private static Set<Peer> getPeers(
             List<BEValue> l, byte[] my_id, byte[] infohash, MetaInfo metainfo, I2PSnarkUtil util)
             throws IOException {
@@ -188,8 +198,14 @@ class TrackerInfo {
     /**
      * One big string of concatenated 32-byte hashes.
      *
+     * @param l concatenated 32-byte peer hashes, a trailing partial hash being ignored
+     * @param my_id our peer id from the tracker, used by each Peer for its handshake
+     * @param infohash the 20-byte torrent info hash carried by each Peer
+     * @param metainfo the torrent metadata carried by each Peer
+     * @param util supplies the crypto used to decrypt peer ids
      * @return a peer for each whole 32-byte hash in the array, skipping any that fail to
      * parse as a peer ID; a trailing partial hash is ignored
+     * @throws IOException declared on the method; every parse failure is caught and skipped
      * @since 0.8.1
      */
     private static Set<Peer> getPeers(
@@ -217,6 +233,11 @@ class TrackerInfo {
     /**
      * From Hash to Peer.
      *
+     * @param hashes the peer hashes from the router's cache, null yielding an empty set
+     * @param my_id our peer id from the tracker, used by each Peer for its handshake
+     * @param infohash the 20-byte torrent info hash carried by each Peer
+     * @param metainfo the torrent metadata carried by each Peer
+     * @param util supplies the crypto used to decrypt peer ids
      * @return a peer for each hash, empty if {@code hashes} is null
      * @since 0.9.14
      */

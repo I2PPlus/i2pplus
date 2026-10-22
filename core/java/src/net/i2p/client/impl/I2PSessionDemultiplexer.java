@@ -185,7 +185,13 @@ public class I2PSessionDemultiplexer implements I2PSessionMuxedListener {
         _listeners.remove(key(proto, port));
     }
 
-    /** Find the one listener that most specifically matches the request. */
+    /**
+     * Find the one listener that most specifically matches the request.
+     *
+     * @param proto the protocol number
+     * @param port the port number
+     * @return the best-matching listener, or null if none matches
+     */
     private I2PSessionMuxedListener findListener(int proto, int port) {
         I2PSessionMuxedListener rv = getListener(proto, port);
         if (rv != null) return rv;

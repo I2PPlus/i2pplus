@@ -152,6 +152,7 @@ class PersistNews {
      * Any fields in any NewsEntry may be null.
      * Content is not sanitized by NewsXMLParser here, do that before storing.
      *
+     * @param entry the news XML node whose title, link and other fields are read
      * @return non-null, throws on errors
      */
     private static NewsEntry extract(Node entry) {
@@ -235,7 +236,11 @@ class PersistNews {
 
     /**
      * Non-null.
+     *
+     * @param ctx the context whose SHA-256 implementation hashes the id
      * @param id non-null
+     * @return the file name for the entry: news- prefix, then Base64 of the
+     *         SHA-256 of the UTF-8 id, then the .xml.gz suffix
      */
     private static String idToName(I2PAppContext ctx, String id) {
         byte[] bid = DataHelper.getUTF8(id);

@@ -123,17 +123,19 @@ public class LocaleWebAppHandler extends HandlerWrapper
 
     /**
      * Mysteriously removed from Jetty 7.
+     *
+     * @param params the init parameter map to copy to the web app context
      */
     private void setInitParams(Map<?,?> params) {
         setInitParams(_wac, params);
     }
 
     /**
-     *  Copy init params from map to WebAppContext.
+     * Copy init params from map to WebAppContext.
      *
-     *  @param context the web app context the parameters are copied into
-     *  @param params the init parameter map to copy from
-     *  @since Jetty 7
+     * @param context the web app context the parameters are copied into
+     * @param params the init parameter map to copy from
+     * @since Jetty 7
      */
     public static void setInitParams(WebAppContext context, Map<?,?> params) {
         for (Map.Entry<?,?> e : params.entrySet()) {

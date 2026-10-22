@@ -45,6 +45,11 @@ public final class SimpleByteCache {
      * Global cleanup task that iterates over all caches.
      */
     private static class GlobalCleanup extends SimpleTimer2.TimedEvent {
+        /**
+         * Timer task that periodically cleans up every byte cache.
+         */
+        private GlobalCleanup() {}
+
         @Override
         public void timeReached() {
             for (SimpleByteCache cache : _caches.values()) {
@@ -185,6 +190,8 @@ public final class SimpleByteCache {
 
     /**
      * Next available array, either from the cache or a brand new one.
+     *
+     * @return an array of this cache's entry size, never null
      */
     private byte[] acquire() {
         return _available.acquire();
@@ -204,6 +211,9 @@ public final class SimpleByteCache {
 
     /**
      * Put this array back onto the available cache for reuse.
+     *
+     * @param entry the array to recycle; ignored if its length does not match
+     *              this cache's entry size
      */
     private void releaseIt(byte[] entry) {
         if (entry.length != _entrySize) {
@@ -257,7 +267,13 @@ public final class SimpleByteCache {
             _table = new Table(capacity);
         }
 
-        /** Mixes the key, so that nearby sizes land in different slots. */
+        /**
+         * Mixes the key, so that nearby sizes land in different slots.
+         *
+         * @param key the array size being cached
+         * @param mask table capacity minus one
+         * @return the table slot index for the key
+         */
         private static int slot(int key, int mask) {
             int h = key * 0x9E3779B1;
             h ^= h >>> 16;
@@ -309,7 +325,11 @@ public final class SimpleByteCache {
             return val;
         }
 
-        /** Double the table. Caller must synchronize on this. */
+        /**
+         * Double the table. Caller must synchronize on this.
+         *
+         * @return the new table, twice the size, already rehashed
+         */
         private Table grow() {
             Table old = _table;
             Table t = new Table(old.keys.length * 2);

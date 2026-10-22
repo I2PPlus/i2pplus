@@ -48,6 +48,8 @@ public class TempDirScanner extends SimpleTimer2.TimedEvent {
      * Recursively timestamp all files and empty dirs
      * We can't count on the filesystem updating access time.
      * This should not affect any known usage of our temp dir.
+     *
+     * @param f the file or directory to scan
      */
     @SuppressWarnings("PMD.AvoidInfiniteRecursion")
     private static void scan(File f) {

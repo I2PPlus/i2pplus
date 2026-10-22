@@ -101,7 +101,12 @@ class LogRecordFormatter {
         return buf.toString();
     }
 
-    /** Format thread name to exactly MAX_THREAD_LENGTH chars, padded or truncated. */
+    /**
+     * Format thread name to exactly MAX_THREAD_LENGTH chars, padded or truncated.
+     *
+     * @param logRecord the record whose thread name is rendered
+     * @return the thread name, padded with spaces or truncated to fit the column
+     */
     private static String getThread(LogRecord logRecord) {
         return padOrTruncate(logRecord.getThreadName(), MAX_THREAD_LENGTH);
     }
@@ -109,10 +114,10 @@ class LogRecordFormatter {
     /**
      * Format the record timestamp.
      *
-     * @param manager the log manager supplying the date format, shared and therefore
+     * @param manager the log manager supplying the date format, shared and
+     *                therefore not thread-safe
      * @param logRecord the record whose date field is rendered
      * @return the formatted timestamp string
-     *         not thread-safe
      */
     public static String getWhen(LogManager manager, LogRecord logRecord) {
         SimpleDateFormat fmt = manager.getDateFormat();
@@ -133,6 +138,9 @@ class LogRecordFormatter {
     /**
      * Return the localized priority label.
      *
+     * @param rec the record whose priority level is labeled
+     * @param ctx the context used to select the translation language
+     * @return the localized level name, padded or truncated to the column width
      * @since 0.7.14
      */
     private static String getPriority(LogRecord rec, I2PAppContext ctx) {
@@ -147,6 +155,9 @@ class LogRecordFormatter {
 
     /**
      * Format the source class name, padded or truncated to MAX_WHERE_LENGTH.
+     *
+     * @param rec the record whose source class is rendered
+     * @return the source class name, or "&lt;none&gt;" when the record has no source
      */
     private static String getWhere(LogRecord rec) {
         String src = (rec.getSource() != null ? rec.getSource().getName() : rec.getSourceName());
@@ -185,6 +196,7 @@ class LogRecordFormatter {
      * Use this only in static initializers.
      * It does not translate!
      *
+     * @param s the string to mark for extraction
      * @return the string, unchanged and untranslated
      */
     private static String _x(String s) {

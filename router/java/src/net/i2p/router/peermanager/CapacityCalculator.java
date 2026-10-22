@@ -57,6 +57,7 @@ class CapacityCalculator {
 
     /**
      * Get the D-cap penalty, cached to avoid repeated Double.parseDouble.
+     * @param ctx the router context, source of the d-cap property
      * @return the cached dcap
      */
     private static double getCachedDcap(RouterContext ctx) {
@@ -72,6 +73,7 @@ class CapacityCalculator {
 
     /**
      * Get the E-cap penalty, cached to avoid repeated Double.parseDouble.
+     * @param ctx the router context, source of the e-cap property
      * @return the cached ecap
      */
     private static double getCachedEcap(RouterContext ctx) {
@@ -214,6 +216,10 @@ class CapacityCalculator {
 
     /**
      * If we haven't heard from them in an hour, they aren't too useful.
+     *
+     * @param profile the peer profile whose activity is checked
+     * @param now the current time in ms since epoch
+     * @return true if the peer has not been active in the last hour
      */
     private static boolean tooOld(PeerProfile profile, long now) {
         return !profile.getIsActive(60*60*1000L, now);
@@ -232,6 +238,7 @@ class CapacityCalculator {
      * @param acceptStat Accept counter (1 = 1 accept)
      * @param rejectStat Reject counter (1 = 1 reject)
      * @param failedStat Failed counter (100 = 1 fail)
+     * @param period the rate period in ms whose rates are evaluated
      * @return estimated and adjusted accepts per hour, for the given period
      *         which is, more or less, max(0, 5 + (A * (A / (A + 2R))) - (4 * F))
      */

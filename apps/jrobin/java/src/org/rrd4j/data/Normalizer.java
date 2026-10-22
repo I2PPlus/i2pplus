@@ -75,6 +75,7 @@ class Normalizer {
     /**
      * Copy of the values, NaN for missing.
      *
+     * @param rawValues the values to copy, left unmodified
      * @return a copy of rawValues
      */
     private static double[] getCopyOf(double[] rawValues) {

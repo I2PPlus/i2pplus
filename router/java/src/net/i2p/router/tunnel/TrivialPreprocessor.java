@@ -129,6 +129,10 @@ class TrivialPreprocessor implements TunnelGateway.QueuePreprocessor {
     /**
      * Efficiently fill with nonzero random data
      * Don't waste too much entropy or call random() too often.
+     *
+     * @param b the buffer to fill
+     * @param off the index in b of the first byte to fill
+     * @param len the number of bytes to fill, none of which will be zero
      * @since 0.8.5
      */
     private void fillRandomNonZero(byte[] b, int off, int len) {

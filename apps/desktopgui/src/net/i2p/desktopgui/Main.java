@@ -318,6 +318,7 @@ public class Main implements RouterApp, NotificationService {
     /**
      * Update the tray on a router state change.
      *
+     * @param state the new client state to show in the tray
      * @since 0.9.26
      */
     private void changeState(ClientAppState state) {
@@ -327,6 +328,9 @@ public class Main implements RouterApp, NotificationService {
     /**
      * Update the tray with a state change message.
      *
+     * @param state the new client state, recorded and passed to the tray manager
+     * @param msg an optional message describing the change, null if none
+     * @param e an optional exception to log with the change, null if none
      * @since 0.9.26
      */
     private synchronized void changeState(ClientAppState state, String msg, Exception e) {

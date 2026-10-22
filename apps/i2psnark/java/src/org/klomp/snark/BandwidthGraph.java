@@ -208,6 +208,11 @@ public class BandwidthGraph extends SimpleTimer2.TimedEvent {
     /**
      * Counter delta with reset detection: a cumulative source that shrank was
      * reset, so only the post-reset amount is attributable to this interval.
+     *
+     * @param current the cumulative counter at the end of the interval
+     * @param previous the cumulative counter at the start of the interval
+     * @return the amount added during the interval, or current itself if the
+     *         source was reset
      */
     private static long delta(long current, long previous) {
         return current >= previous ? current - previous : current;
@@ -299,6 +304,8 @@ public class BandwidthGraph extends SimpleTimer2.TimedEvent {
     /**
      * Persistence location: the JVM tmp dir (defaulting to /tmp), matching the
      * BandwidthHistory pattern.
+     *
+     * @return the file i2p-snark-bandwidth.dat in the JVM tmp dir
      */
     private static File file() {
         String dir = System.getProperty("java.io.tmpdir", "/tmp");

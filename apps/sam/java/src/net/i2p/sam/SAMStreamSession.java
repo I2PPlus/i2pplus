@@ -475,7 +475,11 @@ class SAMStreamSession implements SAMMessageSess {
         return id;
     }
 
-    /** Create a unique id, either positive or negative. */
+    /**
+     * Create a unique id, always negative.
+     *
+     * @return the new unique handler id
+     */
     private int createUniqueId() {
         return lastNegativeId.decrementAndGet();
     }
@@ -483,15 +487,20 @@ class SAMStreamSession implements SAMMessageSess {
     /**
      * Get a SAM STREAM session socket handler.
      *
-     * @param id Handler id
-     * @return SAM StreamSender handler
+     * @param id the connection's handler id
+     * @return the socket reader for that id, or null if none is registered
      */
     protected SAMStreamSessionSocketReader getSocketReader ( int id ) {
         synchronized (handlersMap) {
             return handlersMap.get(Integer.valueOf(id));
         }
     }
-    /** Look up stream sender by connection id. */
+    /**
+     * Look up stream sender by connection id.
+     *
+     * @param id the connection's handler id
+     * @return the sender for that id, or null if none is registered
+     */
     private StreamSender getSender(int id) {
         synchronized (handlersMap) {
             return sendersMap.get(Integer.valueOf(id));
@@ -904,6 +913,10 @@ class SAMStreamSession implements SAMMessageSess {
 
 	/**
 	 * V1StreamSender.
+	 *
+	 * @param s the socket to send stream data over
+	 * @param id the connection's handler id
+	 * @throws IOException if the socket's output stream cannot be opened
 	 */
 	public V1StreamSender ( I2PSocket s, int id ) throws IOException {
 	    super ( s, id );

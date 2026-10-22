@@ -297,7 +297,12 @@ public class TunnelHistory {
         decayLifetimeCounters(_context.clock().now());
     }
 
-    /** Apply decay to a counter. 3/4 per 8 h = ~1% after 128 hours. */
+    /**
+     * Apply decay to a counter. 3/4 per 8 h = ~1% after 128 hours.
+     *
+     * @param counter the lifetime counter to scale down, left alone when already zero
+     * @param name the counter's name, for the debug log
+     */
     private void decayCounter(AtomicLong counter, String name) {
         long val = counter.get();
         if (val > 0) {

@@ -283,6 +283,8 @@ public class CoalesceStatsEvent extends SimpleTimer2.TimedEvent {
      * Mark a string for extraction by xgettext and translation.
      * Use this only in static initializers.
      * It does not translate!
+     *
+     * @param s the literal string to mark for extraction
      * @return the string unchanged, present only so xgettext can extract it
      * @since 0.8.7
      */

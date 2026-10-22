@@ -52,7 +52,8 @@ public class JspC {
     private static final String JASPER_JAR = System.getProperty("jasper.jar");
 
     /**
-     * rewrites them when build.reproducible is set
+     * Runs Tomcat JspC with the given arguments, rewriting them
+     * when build.reproducible is set.
      *
      * @param args arguments forwarded to org.apache.jasper.JspC, after {@link #fixupArgs}
      * @throws IllegalArgumentException if -webapp is repeated, has no value, or does
@@ -78,6 +79,11 @@ public class JspC {
      *
      * Convert "-webapp dir/" arguments in the args to
      * a sorted list of files, for reproducible builds.
+     *
+     * @param args the command line arguments to rewrite
+     * @return args unchanged if there is no -webapp argument, otherwise the
+     *         rewritten list using -uriroot, one thread, and the sorted JSP
+     *         file paths
      */
     private static String[] fixupArgs(String[] args) {
         List<String> largs = new ArrayList<>(32);
@@ -154,6 +160,9 @@ public class JspC {
 
     /**
      * Recursively collect the *.jsp files under dir, sorted.
+     *
+     * @param dir the directory to scan
+     * @param files the list the sorted .jsp files are added to
      */
     private static void collectJspFiles(File dir, List<File> files) {
         File[] listed = dir.listFiles();
@@ -170,7 +179,8 @@ public class JspC {
     }
 
     /**
-     * jar manifest attributes
+     * Jar manifest attributes
+     * @param f the jar file path whose META-INF/MANIFEST.MF is read
      * @return null if not found
      */
     private static Attributes attributes(String f) {

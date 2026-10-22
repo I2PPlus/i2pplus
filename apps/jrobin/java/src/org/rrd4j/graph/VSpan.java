@@ -28,6 +28,10 @@ class VSpan extends Span {
     }
     /**
      * True if v is between min and max inclusive.
+     *
+     * @param v the timestamp to test
+     * @param min lower bound of the range, inclusive
+     * @param max upper bound of the range, inclusive
      * @return true if v is between min and max inclusive
      */
     private boolean checkRange(long v, long min, long max) {

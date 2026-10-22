@@ -104,6 +104,8 @@ class Elligator2 {
      * as the second argument of the function.
      * It should be unpredictable, because it's recoverable from the representative.
      *
+     * @param point the public key whose x coordinate is converted
+     * @param alternative picks which of the two possible roots to encode
      * @return "representative", little endian or null on failure
      * @deprecated
      */
@@ -123,6 +125,8 @@ class Elligator2 {
      * as the second argument of the function.
      * It should be unpredictable, because it's recoverable from the representative.
      *
+     * @param point the public key whose x coordinate is converted
+     * @param alternative picks which of the two possible roots to encode
      * @param highBits High two bits will be ORed into rv[31]
      * @return "representative", little endian or null on failure
      * @since 0.9.45 to add highBits arg
@@ -286,11 +290,12 @@ class Elligator2 {
     }
 
     /**
+     * Legendre symbol of a modulo the field prime p, computed as a^((p-1)/2) mod p.
+     * <p>
      * https://gmplib.org/manual/Number-Theoretic-Functions.html
      * https://en.wikipedia.org/wiki/Legendre_symbol
      *
      * @param a must already be mod(p)
-     *
      * @return -1/0/1
      */
     private static int legendre(BigInteger a) {

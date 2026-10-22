@@ -303,6 +303,8 @@ public class MLabRunner {
 
     /**
      * Non-blocking, spawns a thread and returns immediately.
+     *
+     * @param target the task to run on the spawned thread
      */
     private void runTool(final Runnable target) {
         new I2PAppThread("MLabRunner")

@@ -190,8 +190,9 @@ public class KBucketSet<T extends SimpleDataStructure> {
     /**
      * No lock required.
      *
+     * @param b the bucket to test
      * @return true if the bucket is over BUCKET_SIZE and its range covers more
-     * than one key
+     *         than one key
      */
     private boolean shouldSplit(KBucket<T> b) {
         // FIXME will split the closest buckets too far if B > 1 and K < 2**B
@@ -595,6 +596,7 @@ public class KBucketSet<T extends SimpleDataStructure> {
      * The bucket number (NOT the range number) that the xor of the key goes in
      * Caller must hold read lock.
      *
+     * @param key the key whose bucket is wanted
      * @return 0 to max-1 or -1 for us
      */
     private int pickBucket(T key) {
@@ -633,6 +635,7 @@ public class KBucketSet<T extends SimpleDataStructure> {
      * The bucket that the xor of the key goes in
      * Caller must hold read lock.
      *
+     * @param key the key whose bucket is wanted
      * @return null if key is us
      */
     private KBucket<T> getBucket(T key) {
@@ -647,6 +650,7 @@ public class KBucketSet<T extends SimpleDataStructure> {
      * The bucket number that contains this range number
      * Caller must hold read lock or write lock.
      *
+     * @param range the range number whose bucket is wanted
      * @return 0 to max-1 or -1 for us
      */
     private int pickBucket(int range) {
@@ -861,10 +865,11 @@ public class KBucketSet<T extends SimpleDataStructure> {
     }
 
     /**
-     * Make a new SimpleDataStrucure from the data.
+     * Make a new SimpleDataStructure from the data.
      *
-     * @param data size &lt;= SDS length, else throws IAE
-     * Can be 1 bigger if top byte is zero
+     * @param data size &lt;= SDS length, else throws IAE,
+     *             can be 1 bigger if top byte is zero
+     * @return a new data structure holding the given key bytes
      */
     @SuppressWarnings("unchecked")
     private T makeKey(byte[] data) {

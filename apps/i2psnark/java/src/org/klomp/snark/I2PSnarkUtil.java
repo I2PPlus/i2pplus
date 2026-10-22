@@ -67,14 +67,14 @@ import java.nio.charset.StandardCharsets;
  * operations. It handles:
  *
  * <ul>
- *   <li>I2P socket management and connection configuration
- *   <li>Proxy settings for external tracker communication
- *   <li>Peer banlist management
- *   <li>Bandwidth and connection limits
- *   <li>DHT integration and UDP tracker support
- *   <li>File and directory management
- *   <li>UI preferences and display options
- *   <li>Comments and ratings system configuration
+ * <li>I2P socket management and connection configuration
+ * <li>Proxy settings for external tracker communication
+ * <li>Peer banlist management
+ * <li>Bandwidth and connection limits
+ * <li>DHT integration and UDP tracker support
+ * <li>File and directory management
+ * <li>UI preferences and display options
+ * <li>Comments and ratings system configuration
  * </ul>
  *
  * <p>This class acts as a singleton-like context that allows multiple individual Snark instances to
@@ -812,6 +812,8 @@ public class I2PSnarkUtil implements DisconnectListener {
      * @param nickname the tunnel nickname to assign, or null to leave the configured nickname
      * @param capTunnels whether to cap the tunnel quantities at two, used for the shared session
      *                   which IdleChecker ramps up and down as necessary
+     * @return the merged context and session properties for the new socket
+     *         manager
      */
     private Properties buildOpts(String nickname, boolean capTunnels) {
         Properties opts = _context.getProperties();
@@ -1641,7 +1643,17 @@ public class I2PSnarkUtil implements DisconnectListener {
         return connect(peer, _manager, getMyDestination());
     }
 
-    /** Connect to the given destination via the given socket manager. */
+    /**
+     * Connect to the given destination via the given socket manager.
+     *
+     * @param peer the peer to connect to, its address must be known
+     * @param mgr the socket manager to connect with, null throws
+     * @param myDest our own destination, a connection to it is refused
+     * @return the connected socket, or null if the manager returned none
+     * @throws IOException if the manager is missing, the peer has no address,
+     *                     the peer is us or is banlisted, or the connection
+     *                     fails, in which case the peer is banlisted
+     */
     private I2PSocket connect(PeerID peer, I2PSocketManager mgr, Destination myDest)
             throws IOException {
         if (mgr == null) {

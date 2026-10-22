@@ -130,6 +130,7 @@ class I2CPMessageProducer {
     /**
      * Strip out the client-side options from the session options.
      *
+     * @param session the session whose options are copied and filtered
      * @return a new copy, may be modified
      * @since 0.9.38
      */
@@ -408,7 +409,9 @@ class I2CPMessageProducer {
      * Create a new payload.
      * No more end-to-end encryption, just set the "encrypted" data to the payload.
      *
+     * @param payload the message data, must not be null
      * @return a Payload wrapping a copy of the supplied data, unencrypted
+     * @throws I2PSessionException if the payload is null
      */
     private static Payload createPayload(byte[] payload) throws I2PSessionException {
         if (payload == null) throw new I2PSessionException("No payload specified");

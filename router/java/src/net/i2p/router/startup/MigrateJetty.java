@@ -167,7 +167,11 @@ abstract class MigrateJetty {
             ctx.router().saveConfig(PROP_JETTY9_MIGRATED_2, "true");
     }
 
-    /** Whether the latest Jetty (7/8/9) is available. */
+    /**
+     * Whether the latest Jetty (7/8/9) is available.
+     *
+     * @return true if the Jetty client test class loads
+     */
     private static boolean hasLatestJetty() {
         if (!_wasChecked) {
             try {
@@ -181,8 +185,11 @@ abstract class MigrateJetty {
 
     /**
      * Backup a file with given suffix.
+     *
+     * @param from the file to back up
+     * @param suffix appended to the original name for the backup copy
      * @return true if the copy succeeded, or if there was nothing to copy; false
-     * if the copy failed
+     *         if the copy failed
      */
     private static boolean backupFile(File from, String suffix) {
         if (!from.exists())

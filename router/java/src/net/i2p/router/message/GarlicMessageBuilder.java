@@ -98,18 +98,18 @@ public class GarlicMessageBuilder {
      * @param ctx the RouterContext supplying the log and ElGamal/AES engine
      * @param config how/what to wrap
      * @param wrappedKey non-null with null data,
-     * output parameter that will be filled with the SessionKey used
+     *                   output parameter that will be filled with the SessionKey used
      *
      * @param wrappedTags Output parameter that will be filled with the sessionTags used.
-                          If non-empty on return you must call skm.tagsDelivered() when sent
-                          and then call skm.tagsAcked() or skm.failTags() later.
+     *                    If non-empty on return you must call skm.tagsDelivered() when sent
+     *                    and then call skm.tagsAcked() or skm.failTags() later.
      * @param numTagsToDeliver Only if the estimated available tags are below the threshold.
-                               Set to zero to disable tag delivery. You must set to zero if you are not
-                               equipped to confirm delivery and call skm.tagsAcked() or skm.failTags() later.
+     *                         Set to zero to disable tag delivery. You must set to zero if you are not
+     *                         equipped to confirm delivery and call skm.tagsAcked() or skm.failTags() later.
      * @param skm non-null
      * @return null if expired
      * @throws IllegalArgumentException if the recipient is null or carries no public
-     * key, or is not ELGAMAL_2048
+     *                                  key, or is not ELGAMAL_2048
      */
     public static GarlicMessage buildMessage(RouterContext ctx, GarlicConfig config, SessionKey wrappedKey, Set<SessionTag> wrappedTags,
                                              int numTagsToDeliver, SessionKeyManager skm) {
@@ -126,12 +126,12 @@ public class GarlicMessageBuilder {
      *                   output parameter that will be filled with the SessionKey used
      *
      * @param wrappedTags Output parameter that will be filled with the sessionTags used.
-                          If non-empty on return you must call skm.tagsDelivered() when sent
-                          and then call skm.tagsAcked() or skm.failTags() later.
+     *                    If non-empty on return you must call skm.tagsDelivered() when sent
+     *                    and then call skm.tagsAcked() or skm.failTags() later.
      * @param numTagsToDeliver only if the estimated available tags are below the threshold.
-                               Set to zero to disable tag delivery. You must set to zero if you are not
-                               equipped to confirm delivery and call skm.tagsAcked() or failTags() later.
-                               If this is always 0, it forces ElGamal every time.
+     *                         Set to zero to disable tag delivery. You must set to zero if you are not
+     *                         equipped to confirm delivery and call skm.tagsAcked() or failTags() later.
+     *                         If this is always 0, it forces ElGamal every time.
      * @param lowTagsThreshold the available-tag count below which the session key
      *                         manager considers tags low enough to send
      * @param skm non-null
@@ -182,9 +182,9 @@ public class GarlicMessageBuilder {
     }
 
     /**
-     *  ELGAMAL_2048 only.
-     *  Used by TestJob, and directly above,
-     *  and by MessageWrapper for encrypting DatabaseLookupMessages and DSM/DSRM replies.
+     * ELGAMAL_2048 only.
+     * Used by TestJob, and directly above,
+     * and by MessageWrapper for encrypting DatabaseLookupMessages and DSM/DSRM replies.
      *
      * @param ctx the RouterContext supplying the log and ElGamal/AES engine
      * @param config how/what to wrap
@@ -234,9 +234,9 @@ public class GarlicMessageBuilder {
     }
 
     /**
-     *  Ratchet only.
-     *  Used by TestJob,
-     *  and by MessageWrapper for encrypting DatabaseLookupMessages and DSM/DSRM replies.
+     * Ratchet only.
+     * Used by TestJob,
+     * and by MessageWrapper for encrypting DatabaseLookupMessages and DSM/DSRM replies.
      *
      * @param ctx the RouterContext supplying the log and ElGamal/AES engine
      * @param config how/what to wrap
@@ -372,6 +372,9 @@ public class GarlicMessageBuilder {
      * It contains the number of cloves, followed by each clove,
      * followed by a certificate, ID, and expiration date.
      *
+     * @param ctx the router context for the clove builder
+     * @param config single payload config, or a multi-clove config
+     * @return the unencrypted clove set bytes, ready to encrypt
      * @throws IllegalArgumentException if a clove is not a PayloadGarlicConfig, or
      *                                  the clove set cannot be serialized
      */
@@ -436,6 +439,9 @@ public class GarlicMessageBuilder {
      * ID and expiration, and the CloveSet does not contain
      * a unique certificate, ID, or expiration date.
      *
+     * @param ctx the router context for the clove builder
+     * @param config single payload config, or a multi-clove config
+     * @return a CloveSet of the built cloves with a null certificate
      * @throws IllegalArgumentException if a clove is not a PayloadGarlicConfig
      * @since 0.9.44
      */
@@ -464,6 +470,9 @@ public class GarlicMessageBuilder {
     /**
      * Build a single clove.
      *
+     * @param ctx the router context for the clove
+     * @param config the payload config supplying data, expiration and instructions
+     * @return an unencrypted clove with a null certificate and clove ID 0
      * @since 0.9.44
      */
     private static GarlicClove buildECIESClove(RouterContext ctx, PayloadGarlicConfig config) {

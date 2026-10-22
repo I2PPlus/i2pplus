@@ -719,6 +719,8 @@ public class TunnelController implements Logging {
     /**
      * Note the fact that we are no longer using some sessions, and if
      * no other tunnels are using them, close them.
+     *
+     * @param sessions the sessions to release, empty for none
      */
     private void release(Collection<I2PSession> sessions) {
         if (!sessions.isEmpty()) {
@@ -1246,6 +1248,11 @@ public class TunnelController implements Logging {
 
     /**
      * Is property p different in p1 and p2?
+     *
+     * @param p1 the old properties
+     * @param p2 the new properties
+     * @param p the property key to compare
+     * @return true if the value changed or was newly set
      */
     private static boolean configChanged(Properties p1, Properties p2, String p) {
         String s1 = p1.getProperty(p);

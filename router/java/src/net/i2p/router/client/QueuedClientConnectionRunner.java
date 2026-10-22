@@ -94,6 +94,8 @@ class QueuedClientConnectionRunner extends ClientConnectionRunner {
      * <p>Names the client's side of the queue rather than saying only that a write
      * failed, because that is the fact the operator needs: the router's own writer is
      * healthy and the client is the side that has stopped reading.
+     *
+     * @return a fresh exception carrying the pending and free-slot counts of the queue
      */
     private I2CPMessageException queueFull() {
         _context.statManager().addRateData("client.internalQueueFull", 1);

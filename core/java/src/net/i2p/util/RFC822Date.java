@@ -25,8 +25,10 @@ public abstract class RFC822Date {
     private static final ThreadLocal<SimpleDateFormat[]> RFC822_DATE_FORMATS = ThreadLocal.withInitial(RFC822Date::createDateFormats);
 
     /**
-     *  Build the set of RFC822 date formats used for parsing, all in GMT.
-     *  @since 0.9.70+
+     * Build the set of RFC822 date formats used for parsing, all in GMT.
+     *
+     * @return the array of accepted date formats
+     * @since 0.9.70+
      */
     private static SimpleDateFormat[] createDateFormats() {
         SimpleDateFormat[] fmts = new SimpleDateFormat[] {

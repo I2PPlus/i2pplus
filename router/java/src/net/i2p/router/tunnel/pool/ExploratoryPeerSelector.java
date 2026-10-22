@@ -655,7 +655,13 @@ import net.i2p.util.SystemVersion;
         return (int)(100 * pct);
     }
 
-    /** Use current + last to get more recent and smoother data. */
+    /**
+     * Use current + last to get more recent and smoother data.
+     *
+     * @param stat the full stat name, e.g. {@code tunnel.buildExpire}
+     * @param period the rate period in milliseconds
+     * @return the event count for that period, 0 if the stat or rate is unknown
+     */
     private int getEvents(String stat, long period) {
         RateStat rs = ctx.statManager().getRate(stat);
         if (rs == null)

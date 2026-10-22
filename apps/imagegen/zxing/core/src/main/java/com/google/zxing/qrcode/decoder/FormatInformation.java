@@ -20,7 +20,7 @@ package com.google.zxing.qrcode.decoder;
  * <p>Encapsulates a QR Code's format information, including the data mask used and
  * error correction level.</p>
  *
- *         See DataMask
+ * See DataMask
  * @see ErrorCorrectionLevel
  */
 final class FormatInformation {
@@ -87,7 +87,7 @@ final class FormatInformation {
   }
 
   /**
-   * to establish best match
+   * To establish best match
    * if doesn't seem to match any known pattern
    *
    * @param maskedFormatInfo1 format info indicator, with mask still applied
@@ -106,7 +106,13 @@ final class FormatInformation {
                                      maskedFormatInfo2 ^ FORMAT_INFO_MASK_QR);
   }
 
-  /** Decode with optional mask XOR applied */
+  /**
+   * Decode with optional mask XOR applied
+   *
+   * @param maskedFormatInfo1 the format info bits read from the symbol, mask possibly applied
+   * @param maskedFormatInfo2 second copy of same info; both are checked at the same time
+   * @return the matching format information, or null if nothing is within 3 bits
+   */
   private static FormatInformation doDecodeFormatInformation(int maskedFormatInfo1, int maskedFormatInfo2) {
     // Find the int in FORMAT_INFO_DECODE_LOOKUP with fewest bits differing
     int bestDifference = Integer.MAX_VALUE;

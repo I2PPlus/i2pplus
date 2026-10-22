@@ -197,6 +197,9 @@ class LegendComposer implements RrdGraphConstants {
         }
         /**
          * Assigns an x and y coordinate to each of the line's comments
+         *
+         * @param xStart the x coordinate of the first comment
+         * @param space the gap to leave between consecutive comments
          */
 
         private void placeComments(double xStart, double space) {

@@ -293,6 +293,12 @@ static final long OFFENSE_DECAY_MS = 30 * 60 * 1000L;
      * and callers are already inside the section that owns the map mutation, so
      * folding it in avoids a second acquisition per marked peer.
      *
+     * @param peer the peer just marked as a ghost, named in the debug log
+     * @param underAttack true if the network is under stress, noted in the
+     *                    debug log
+     * @param cooldownMs the exclusion duration applied to the peer, in
+     *                   milliseconds
+     * @param offenses the peer's repeat offense count, 0 for a first mark
      * @param now the caller's view of the clock, reused instead of re-reading it
      */
     private void logGhostMarkLocked(Hash peer, boolean underAttack, long cooldownMs,

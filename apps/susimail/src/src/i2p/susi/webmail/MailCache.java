@@ -229,6 +229,8 @@ class MailCache {
 
     /**
      * Moved a mail from another MailCache.
+     *
+     * @param mail the mail moved into this cache, its body is re-read from disk
      * @since 0.9.35
      */
     private void movedTo(Mail mail) {
@@ -689,7 +691,7 @@ class MailCache {
         /**
          * The message's unique ID listing id.
          *
-         * @return the UIDL
+         * @return the unique ID listing id of the mail in this request
          */
         public String getUIDL() {
             return mail.uidl;
@@ -741,12 +743,24 @@ class MailCache {
         }
     }
 
-    /** Looks up a localized string in the message bundle. */
+    /**
+     * Looks up a localized string in the message bundle.
+     *
+     * @param s the message key
+     * @return the localized string
+     */
     private static String _t(String s) {
         return Messages.getString(s);
     }
 
-    /** Looks up the localized plural form for n items. */
+    /**
+     * Looks up the localized plural form for n items.
+     *
+     * @param s the message key of the singular form
+     * @param p the message key of the plural form
+     * @param n the item count, 1 selects the singular form
+     * @return the localized form matching the count
+     */
     private static String ngettext(String s, String p, int n) {
         return Messages.getString(n, s, p);
     }

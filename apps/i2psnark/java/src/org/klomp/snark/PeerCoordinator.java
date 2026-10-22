@@ -46,14 +46,14 @@ import org.klomp.snark.dht.DHT;
  * <p>This class manages the core BitTorrent coordination logic:
  *
  * <ul>
- *   <li>Managing connected peers and their states</li>
- *   <li>Choking/unchoking logic for upload slots</li>
- *   <li>Piece selection and rarest-first distribution</li>
- *   <li>Request queue management and pipeline control</li>
- *   <li>Bandwidth distribution among peers</li>
- *   <li>Peer Exchange (PEX) for peer discovery</li>
- *   <li>DHT integration for trackerless operation</li>
- *   <li>Tracker announcements and response processing</li>
+ * <li>Managing connected peers and their states</li>
+ * <li>Choking/unchoking logic for upload slots</li>
+ * <li>Piece selection and rarest-first distribution</li>
+ * <li>Request queue management and pipeline control</li>
+ * <li>Bandwidth distribution among peers</li>
+ * <li>Peer Exchange (PEX) for peer discovery</li>
+ * <li>DHT integration for trackerless operation</li>
+ * <li>Tracker announcements and response processing</li>
  * </ul>
  *
  * <p>Thread safety: This class uses extensive synchronization for thread-safe peer management.
@@ -570,10 +570,9 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
         return downloaded.get();
     }
 
-    /////// begin BandwidthListener interface ///////
-
     /**
-     * Called when a peer has uploaded some bytes of a piece.
+     * BandwidthListener interface method, called when a peer has uploaded
+     * some bytes of a piece.
      *
      * @since 0.9.62 params changed
      */
@@ -797,8 +796,6 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
     public boolean overDownBWLimit() {
         return bwListener.overDownBWLimit();
     }
-
-    /////// end BandwidthListener interface ///////
 
     /**
      * Returns the metainfo for this torrent.
@@ -1057,6 +1054,8 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
     /**
      * The peer with the given ID, or null.
      *
+     * @param pid the peer id to look for
+     * @param peers the collection of peers to scan
      * @return peer if peer id is in the collection, else null
      */
     private static Peer peerIDInList(PeerID pid, Collection<Peer> peers) {
@@ -1265,8 +1264,12 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
      * Returns one of pieces in the given BitField that is still wanted or null if none of the given
      * pieces are wanted.
      *
+     * @param peer the peer to request the piece from
+     * @param havePieces the pieces the peer claims to have
      * @param record if true, actually record in our data structures that we gave the request to
      *               this peer. If false, do not update the data structures.
+     * @return the piece to request, or null if none of the peer's pieces are
+     *         wanted
      * @since 0.8.2
      */
     private Piece wantPiece(Peer peer, BitField havePieces, boolean record) {
@@ -1280,9 +1283,13 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
      * <p>When the allowed set is not null, only pieces in it are eligible, for requesting BEP 6
      * allowed fast pieces from a peer that chokes us.
      *
+     * @param peer the peer to request the piece from
+     * @param havePieces the pieces the peer claims to have
      * @param record if true, actually record in our data structures that we gave the request to
      *               this peer. If false, do not update the data structures.
      * @param allowed the pieces servable while choked, or null for no restriction
+     * @return the piece to request, or null if none of the peer's allowed
+     *         pieces are wanted
      * @since 0.9.71+
      */
     private Piece wantPiece(
@@ -1830,6 +1837,8 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
 
     /**
      * Called when a peer is removed, to prevent it from being used in rarest-first calculations.
+     *
+     * @param peer the peer being removed from all piece records
      */
     private void removePeerFromPieces(Peer peer) {
         synchronized (wantedPieces) {
@@ -2107,6 +2116,8 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
     /**
      * Remove saved state for this piece. Unless we are in the end game there shouldnt be anything
      * in there. Do not call with wantedPieces lock held (deadlock).
+     *
+     * @param piece the piece number whose saved partial data is dropped
      */
     private void removePartialPiece(int piece) {
         synchronized (wantedPieces) {
@@ -2122,7 +2133,12 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
         }
     }
 
-    /** Clear the requested flag for a piece. */
+    /**
+     * Clear the requested flag for a piece.
+     *
+     * @param peer the peer the piece was requested from
+     * @param piece the piece number to clear the flag for
+     */
     private void markUnrequested(Peer peer, int piece) {
         synchronized (wantedPieces) {
             Piece pc = wantedMap.get(Integer.valueOf(piece));

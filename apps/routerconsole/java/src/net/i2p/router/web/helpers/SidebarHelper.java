@@ -111,7 +111,12 @@ public class SidebarHelper extends HelperBase {
     private static final char S = ',';
     /** Integer formatter with thousands separators. */
     private static final DecimalFormat INTEGER_FORMAT = new DecimalFormat("###,###,##0");
-    /** Format a long value with thousands separators. */
+    /**
+     * Format a long value with thousands separators.
+     *
+     * @param val the number to format, grouped in thousands
+     * @return the formatted digits with grouping separators
+     */
     private static String fmtInt(long val) { synchronized (INTEGER_FORMAT) { return INTEGER_FORMAT.format(val); } }
     /** One-decimal-place formatter. */
     private static final DecimalFormat ONE_DECIMAL = new DecimalFormat("#0.0");
@@ -853,6 +858,8 @@ public class SidebarHelper extends HelperBase {
 
     /**
      * Output is decimal, not binary.
+     * @param in the receive rate in bytes per second
+     * @param out the send rate in bytes per second
      * @return "x.xx / y.yy {K|M}"
      */
     private static String formatPair(double in, double out) {

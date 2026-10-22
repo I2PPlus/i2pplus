@@ -237,15 +237,15 @@ class FragmentHandler {
     }
 
     /**
-     *  Fragments received and complete.
+     * Fragments received and complete.
      *
-     *  @return the number of fragments that completed
+     * @return the number of fragments that completed
      */
     public int getCompleteCount() { return _completed.get(); }
     /**
-     *  Fragments that failed.
+     * Fragments that failed.
      *
-     *  @return the number of fragments that failed
+     * @return the number of fragments that failed
      */
     public int getFailedCount() { return _failed.get(); }
 
@@ -277,6 +277,14 @@ class FragmentHandler {
      * payload are therefore not adjacent in the buffer, so the two ranges are
      * fed to the digest separately, payload first, avoiding a copy into a
      * contiguous staging buffer.
+     *
+     * @param preprocessed the preprocessed buffer holding this message's IV,
+     *                     checksum, padding and fragment data
+     * @param offset where this message's data starts within the buffer
+     * @param length one past the last valid byte in the buffer
+     * @return true if the recomputed H(payload+IV) matches the checksum stored
+     *         in the buffer, false if it differs or the padding runs past the end
+     * @throws RuntimeException if the SHA-256 digest computation fails
      */
     private boolean verifyPreprocessed(byte[] preprocessed, int offset, int length) {
         // now we need to verify that the message was received correctly
@@ -352,8 +360,11 @@ class FragmentHandler {
     /**
      * The offset for the next byte after the received fragment, or -1 on error.
      *
+     * @param preprocessed the preprocessed buffer holding the fragment
+     * @param offset where the fragment starts within the buffer
+     * @param length one past the last valid byte in the buffer
      * @return the offset for the next byte after the received fragment or -1 on error
-     * @throws RuntimeException
+     * @throws RuntimeException if a subsequent fragment carries a negative message id
      */
     private int receiveFragment(byte[] preprocessed, int offset, int length) {
         if (0 == (preprocessed[offset] & MASK_IS_SUBSEQUENT))
@@ -365,8 +376,10 @@ class FragmentHandler {
     /**
      * Handle the initial fragment in a message (or a full message, if it fits).
      *
+     * @param preprocessed the preprocessed buffer holding the fragment
+     * @param offset where the fragment starts within the buffer
+     * @param length one past the last valid byte in the buffer
      * @return offset after reading the full fragment or -1 on error
-     * @throws RuntimeException
      */
     private int receiveInitialFragment(byte[] preprocessed, int offset, int length) {
         if (_log.shouldDebug())
@@ -523,8 +536,11 @@ class FragmentHandler {
     /**
      * Handle a fragment beyond the initial fragment in a message.
      *
+     * @param preprocessed the preprocessed buffer holding the fragment
+     * @param offset where the fragment starts within the buffer
+     * @param length one past the last valid byte in the buffer
      * @return offset after reading the full fragment or -1 on error
-     * @throws RuntimeException
+     * @throws RuntimeException if the fragment's message id is negative
      */
     private int receiveSubsequentFragment(byte[] preprocessed, int offset, int length) {
         if (_log.shouldDebug())
@@ -625,7 +641,13 @@ class FragmentHandler {
     }
 
     /**
-     *  Zero-copy reception of an unfragmented message.
+     * Zero-copy reception of an unfragmented message.
+     *
+     * @param data the buffer holding the message payload, bad bounds drop it
+     * @param offset where the payload starts in data, negative drops it
+     * @param len the payload length in bytes, 0 or less drops it
+     * @param router the destination router hash from the delivery instructions, null if none
+     * @param tunnelId the destination tunnel id, null if none
      */
     private void receiveComplete(byte[] data, int offset, int len, Hash router, TunnelId tunnelId) {
         if (data == null || offset < 0 || len <= 0 || offset + len > data.length) {

@@ -381,6 +381,11 @@ public final class RyuDouble {
      * Compute the high digits of m * 5^p / 10^q = m * 5^(p - q) / 2^q = m * 5^i / 2^j, with q
      * chosen such that m * 5^i / 2^j has sufficiently many decimal digits to represent the original
      * floating point number.
+     *
+     * @param m the value to multiply, at most 55 bits
+     * @param i the POW5_SPLIT row selecting the power of 5
+     * @param j the total right shift in bits
+     * @return the high digits of m * 5^i / 2^j
      */
     private static long mulPow5divPow2(long m, int i, int j) {
         // m has at most 55 bits.
@@ -409,6 +414,11 @@ public final class RyuDouble {
     /**
      * Compute the high digits of m / 5^i / 2^j such that the result is accurate to at least 9
      * decimal digits. i and j are already chosen appropriately.
+     *
+     * @param m the value to multiply, at most 55 bits
+     * @param i the POW5_INV_SPLIT row selecting the inverse power of 5
+     * @param j the total right shift in bits
+     * @return the high digits of m / 5^i / 2^j
      */
     private static long mulPow5InvDivPow2(long m, int i, int j) {
         // m has at most 55 bits.

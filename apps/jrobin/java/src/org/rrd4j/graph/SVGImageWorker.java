@@ -71,6 +71,9 @@ public class SVGImageWorker extends ImageWorker {
     }
     /**
      * Init graphics
+     *
+     * @param width the image width in pixels
+     * @param height the image height in pixels
      */
 
     private void initGraphics(int width, int height) {

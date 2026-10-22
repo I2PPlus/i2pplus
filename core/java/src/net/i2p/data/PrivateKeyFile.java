@@ -447,28 +447,28 @@ public class PrivateKeyFile {
     }
 
     /**
-     *  Create a new PrivateKeyFile from a file name.
+     * Create a new PrivateKeyFile from a file name.
      *
-     *  @param file the key file name
+     * @param file the key file name
      */
     public PrivateKeyFile(String file) {
         this(new File(file), I2PClientFactory.createClient());
     }
 
     /**
-     *  Create a new PrivateKeyFile from a File.
+     * Create a new PrivateKeyFile from a File.
      *
-     *  @param file the key file
+     * @param file the key file
      */
     public PrivateKeyFile(File file) {
         this(file, I2PClientFactory.createClient());
     }
 
     /**
-     *  Create a new PrivateKeyFile with a client.
+     * Create a new PrivateKeyFile with a client.
      *
-     *  @param file the key file
-     *  @param client the I2P client
+     * @param file the key file
+     * @param client the I2P client
      */
     public PrivateKeyFile(File file, I2PClient client) {
         this.file = file;
@@ -476,25 +476,25 @@ public class PrivateKeyFile {
     }
 
     /**
-     *  Create a new PrivateKeyFile from an I2P session.
+     * Create a new PrivateKeyFile from an I2P session.
      *
-     *  @param file the key file
-     *  @param session the I2P session
-     *  @since 0.8.9
+     * @param file the key file
+     * @param session the I2P session
+     * @since 0.8.9
      */
     public PrivateKeyFile(File file, I2PSession session) {
         this(file, session.getMyDestination(), session.getDecryptionKey(), session.getPrivateKey());
     }
 
     /**
-     *  Create a new PrivateKeyFile with a destination and keys.
+     * Create a new PrivateKeyFile with a destination and keys.
      *
-     *  @param file the key file
-     *  @param dest the destination the keys belong to; its signing key type must match spk
-     *  @param pk the private key
-     *  @param spk the signing private key
-     *  @throws IllegalArgumentException on mismatch of spubkey and spk types
-     *  @since 0.8.9
+     * @param file the key file
+     * @param dest the destination the keys belong to; its signing key type must match spk
+     * @param pk the private key
+     * @param spk the signing private key
+     * @throws IllegalArgumentException on mismatch of spubkey and spk types
+     * @since 0.8.9
      */
     public PrivateKeyFile(File file, Destination dest, PrivateKey pk, SigningPrivateKey spk) {
         if (dest.getSigningPublicKey().getType() != spk.getType())
@@ -507,16 +507,16 @@ public class PrivateKeyFile {
     }
 
     /**
-     *  Create a new PrivateKeyFile from individual key components.
+     * Create a new PrivateKeyFile from individual key components.
      *
-     *  @param file the key file
-     *  @param pubkey the public key
-     *  @param spubkey the signing public key
-     *  @param cert the certificate to install in the destination
-     *  @param pk the private key
-     *  @param spk the signing private key
-     *  @throws IllegalArgumentException on mismatch of spubkey and spk types
-     *  @since 0.8.9
+     * @param file the key file
+     * @param pubkey the public key
+     * @param spubkey the signing public key
+     * @param cert the certificate to install in the destination
+     * @param pk the private key
+     * @param spk the signing private key
+     * @throws IllegalArgumentException on mismatch of spubkey and spk types
+     * @since 0.8.9
      */
     public PrivateKeyFile(
             File file,
@@ -529,17 +529,17 @@ public class PrivateKeyFile {
     }
 
     /**
-     *  Create a new PrivateKeyFile from individual key components with padding.
+     * Create a new PrivateKeyFile from individual key components with padding.
      *
-     *  @param file the key file
-     *  @param pubkey the public key
-     *  @param spubkey the signing public key
-     *  @param cert the certificate to install in the destination
-     *  @param pk the private key
-     *  @param spk the signing private key
-     *  @param padding null OK, must be non-null if spubkey length &lt; 128
-     *  @throws IllegalArgumentException on mismatch of spubkey and spk types
-     *  @since 0.9.16
+     * @param file the key file
+     * @param pubkey the public key
+     * @param spubkey the signing public key
+     * @param cert the certificate to install in the destination
+     * @param pk the private key
+     * @param spk the signing private key
+     * @param padding null OK, must be non-null if spubkey length &lt; 128
+     * @throws IllegalArgumentException on mismatch of spubkey and spk types
+     * @since 0.9.16
      */
     public PrivateKeyFile(
             File file,
@@ -578,10 +578,10 @@ public class PrivateKeyFile {
     }
 
     /**
-     *  Create with the default signature type if nonexistent.
+     * Create with the default signature type if nonexistent.
      * <p>
-     *  Also reads in the file to get the privKey and signingPrivKey,
-     *  which aren't available from {@link I2PClient}.
+     * Also reads in the file to get the privKey and signingPrivKey,
+     * which aren't available from {@link I2PClient}.
      *
      * @return the destination for this key file, creating it if the file does not exist
      * @throws I2PException if creation fails
@@ -592,10 +592,10 @@ public class PrivateKeyFile {
     }
 
     /**
-     *  Create with the specified signature type if nonexistent.
+     * Create with the specified signature type if nonexistent.
      * <p>
-     *  Also reads in the file to get the privKey and signingPrivKey,
-     *  which aren't available from I2PClient.
+     * Also reads in the file to get the privKey and signingPrivKey,
+     * which aren't available from I2PClient.
      *
      * @param type the signature type to use
      * @return the destination for this key file, creating it if the file does not exist
@@ -623,6 +623,12 @@ public class PrivateKeyFile {
      * Also reads in the file to get the privKey and signingPrivKey,
      * which aren't available from I2PClient.
      *
+     * @param type signature type for the new signing keys
+     * @param ptype encryption type; padding-only for destinations, real
+     *              keypair for routers
+     * @return the existing or newly created destination, never null
+     * @throws I2PException if the destination cannot be created
+     * @throws IOException if the key file cannot be written or read back
      * @since 0.9.42
      */
     private Destination createIfAbsent(SigType type, EncType ptype)
@@ -691,13 +697,13 @@ public class PrivateKeyFile {
     }
 
     /**
-     *  If the destination is not set, read it in from the file.
-     *  Also sets the local privKey and signingPrivKey.
+     * If the destination is not set, read it in from the file.
+     * Also sets the local privKey and signingPrivKey.
      *
-     *  @return the destination, reading it from the file if it is not already set
-     *  @throws I2PSessionException if reading fails
+     * @return the destination, reading it from the file if it is not already set
+     * @throws I2PSessionException if reading fails
      * @throws IOException if file operations fail
-     *  @throws DataFormatException if data is malformed
+     * @throws DataFormatException if data is malformed
      */
     public Destination getDestination() throws I2PSessionException, IOException, DataFormatException {
         if (dest == null) {
@@ -722,9 +728,9 @@ public class PrivateKeyFile {
     }
 
     /**
-     *  Destination for this key file.
+     * Destination for this key file.
      *
-     *  @param d the destination to associate with this key file
+     * @param d the destination to associate with this key file
      */
     public void setDestination(Destination d) {
         this.dest = d;
@@ -847,9 +853,9 @@ public class PrivateKeyFile {
     }
 
     /**
-     *  Signing private key.
+     * Signing private key.
      *
-     *  @return null on error or if not initialized
+     * @return null on error or if not initialized
      */
     public SigningPrivateKey getSigningPrivKey() {
         try {
@@ -861,13 +867,11 @@ public class PrivateKeyFile {
         return this.signingPrivKey;
     }
 
-    //// offline methods
-
     /**
-     *  Does this session have offline and transient keys?
+     * Does this session have offline and transient keys?
      *
-     *  @return true if offline keys are configured
-     *  @since 0.9.38
+     * @return true if offline keys are configured
+     * @since 0.9.38
      */
     public boolean isOffline() {
         try {
@@ -902,30 +906,30 @@ public class PrivateKeyFile {
     }
 
     /**
-     *  Offline key expiration time.
+     * Offline key expiration time.
      *
-     *  @return Java time (ms) or 0 if not initialized or does not have offline keys
-     *  @since 0.9.38
+     * @return Java time (ms) or 0 if not initialized or does not have offline keys
+     * @since 0.9.38
      */
     public long getOfflineExpiration() {
         return _offlineExpiration;
     }
 
     /**
-     *  Offline signature.
+     * Offline signature.
      *
-     *  @return the signature, or null if not initialized or does not have offline keys
-     *  @since 0.9.38
+     * @return the signature, or null if not initialized or does not have offline keys
+     * @since 0.9.38
      */
     public Signature getOfflineSignature() {
         return _offlineSignature;
     }
 
     /**
-     *  Transient signing public key.
+     * Transient signing public key.
      *
-     *  @return null on error or if not initialized or does not have offline keys
-     *  @since 0.9.38
+     * @return null on error or if not initialized or does not have offline keys
+     * @since 0.9.38
      */
     public SigningPublicKey getTransientSigningPubKey() {
         try {
@@ -938,10 +942,10 @@ public class PrivateKeyFile {
     }
 
     /**
-     *  Transient signing private key.
+     * Transient signing private key.
      *
-     *  @return null on error or if not initialized or does not have offline keys
-     *  @since 0.9.38
+     * @return null on error or if not initialized or does not have offline keys
+     * @since 0.9.38
      */
     public SigningPrivateKey getTransientSigningPrivKey() {
         try {
@@ -953,26 +957,24 @@ public class PrivateKeyFile {
         return _transientSigningPrivKey;
     }
 
-    //// end offline methods
-
     /**
-     *  Open an I2P session.
+     * Open an I2P session.
      *
-     *  @return the I2P session
-     *  @throws I2PSessionException if session creation fails
-     *  @throws IOException if there is an error reading the key file
+     * @return the I2P session
+     * @throws I2PSessionException if session creation fails
+     * @throws IOException if there is an error reading the key file
      */
     public I2PSession open() throws I2PSessionException, IOException {
         return this.open(new Properties());
     }
 
     /**
-     *  Open a session with the given options.
+     * Open a session with the given options.
      *
-     *  @param opts the options for the session
-     *  @return the I2P session
-     *  @throws I2PSessionException if session creation fails
-     *  @throws IOException if there is an error reading the key file
+     * @param opts the options for the session
+     * @return the I2P session
+     * @throws I2PSessionException if session creation fails
+     * @throws IOException if there is an error reading the key file
      */
     public I2PSession open(Properties opts) throws I2PSessionException, IOException {
         try (InputStream in = new BufferedInputStream(new FileInputStream(this.file))) {
@@ -1064,19 +1066,19 @@ public class PrivateKeyFile {
     }
 
     /**
-     *  Verify the signature on a destination.
-     *  <p>Sample code that goes through all the hosts.txt files and tries
-     *  everybody.  You need to be in the $I2P directory or have a local
-     *  hosts.txt for this to work.  Doubt this is what you want as it is
-     *  super-slow, and what good is a signing scheme where anybody is
-     *  allowed to sign?  In a real application you would make a list of
-     *  approved signers, do a naming lookup to get their Destinations, and
-     *  try those only.  Or do a netDb lookup of the Hash in the Certificate,
-     *  do a reverse naming lookup to see if it is allowed, then verify the
-     *  Signature.</p>
+     * Verify the signature on a destination.
+     * <p>Sample code that goes through all the hosts.txt files and tries
+     * everybody.  You need to be in the $I2P directory or have a local
+     * hosts.txt for this to work.  Doubt this is what you want as it is
+     * super-slow, and what good is a signing scheme where anybody is
+     * allowed to sign?  In a real application you would make a list of
+     * approved signers, do a naming lookup to get their Destinations, and
+     * try those only.  Or do a netDb lookup of the Hash in the Certificate,
+     * do a reverse naming lookup to see if it is allowed, then verify the
+     * Signature.</p>
      *
-     *  @param d the destination to verify
-     *  @return true if the signature is valid
+     * @param d the destination to verify
+     * @return true if the signature is valid
      */
     public static boolean verifySignature(Destination d) {
         if (d.getCertificate().getCertificateType() != Certificate.CERTIFICATE_TYPE_SIGNED) return false;
@@ -1146,12 +1148,12 @@ public class PrivateKeyFile {
     }
 
     /**
-     *  Check a signature against data with a public key.
+     * Check a signature against data with a public key.
      *
-     *  @param s the signature to verify
-     *  @param data the data that was signed
-     *  @param spk the signing public key
-     *  @return true if the signature is valid
+     * @param s the signature to verify
+     * @param data the data that was signed
+     * @param spk the signing public key
+     * @return true if the signature is valid
      */
     public static boolean checkSignature(Signature s, byte[] data, SigningPublicKey spk) {
         return DSAEngine.getInstance().verifySignature(s, data, spk);

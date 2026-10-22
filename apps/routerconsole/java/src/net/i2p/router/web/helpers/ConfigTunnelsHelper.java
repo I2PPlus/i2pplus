@@ -24,9 +24,9 @@ public class ConfigTunnelsHelper extends HelperBase {
     private static final String HOP = "hop";
     private static final String TUNNEL = "tunnel";
     /**
-     *  Render the tunnel configuration form.
+     * Render the tunnel configuration form.
      *
-     *  @return the HTML form
+     * @return the HTML form
      */
     public String getForm() {
         StringBuilder buf = new StringBuilder(1024);
@@ -116,6 +116,8 @@ public class ConfigTunnelsHelper extends HelperBase {
 
     /**
      * Get display name for the tunnel.
+     *
+     * @param ins the inbound tunnel pool settings to name
      * @return the tunnel name
      * @since 0.9.57
      */

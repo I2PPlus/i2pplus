@@ -344,6 +344,8 @@ class OutboundNTCP2State implements EstablishState {
      * Extra bytes in message 2 for the PQ ciphertext and its MAC,
      * 0 for version 2. Mirrors the sizing in
      * {@link InboundEstablishState#prepareOutbound2}.
+     *
+     * @return the extra byte count for the negotiated version, 0 for version 2
      */
     private int pqMsg2Extra() {
         switch (_version) {
@@ -368,6 +370,8 @@ class OutboundNTCP2State implements EstablishState {
      * will return it to the pool.
      * <p>
      * Caller must synch.
+     *
+     * @param src the buffer holding the received message 2 bytes
      */
     private void receiveOutbound(ByteBuffer src) {
         // Read in message #2 except for the padding
@@ -639,6 +643,9 @@ class OutboundNTCP2State implements EstablishState {
      * Only call once.
      * <p>
      * Caller must synch.
+     *
+     * @param isVerified whether the handshake data was verified; currently
+     *                   unused
      */
     private void releaseBufs(boolean isVerified) {
         Arrays.fill(_tmp, (byte) 0);

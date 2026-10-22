@@ -164,6 +164,9 @@ class BanlistRenderer {
     /**
      * Extract IP address from IP:PORT format.
      * Handles both IPv4 (1.2.3.4:port) and IPv6 ([::1]:port) formats.
+     *
+     * @param ipPort the address string to split, may be null or empty
+     * @return the IP without the port; the input unchanged when null, empty or portless
      */
     private String extractIP(String ipPort) {
         if (ipPort == null || ipPort.isEmpty()) {
@@ -201,6 +204,9 @@ class BanlistRenderer {
     /**
      * Extract port from IP:PORT format.
      * Returns null if no port is found.
+     *
+     * @param ipPort the address string to split, may be null or empty
+     * @return the port as a string, or null when no port is present
      */
     private String extractPort(String ipPort) {
         if (ipPort == null || ipPort.isEmpty()) {
@@ -237,6 +243,11 @@ class BanlistRenderer {
 
     /**
      * Parse duration string to expiration timestamp.
+     *
+     * @param durationStr the duration to parse, e.g. "7d", "12h", "30m", "500ms" or "FOREVER"
+     * @param now the current time in ms the expiration is based on
+     * @return the expiration time in ms; FOREVER means 180 days out, an
+     *         unparseable or unit-less value means now
      */
     private long parseDuration(String durationStr, long now) {
         if (durationStr.equals("FOREVER")) {
@@ -618,7 +629,12 @@ class BanlistRenderer {
         out.flush();
     }
 
-    /** Translate a string. */
+    /**
+     * Translate a string.
+     *
+     * @param s the string to translate
+     * @return the translated string
+     */
     private String _t(String s) {
         return Messages.getString(s, _context);
     }
@@ -634,11 +650,20 @@ class BanlistRenderer {
      * To translate parameter also, use _t("foo {0} bar", _t("baz"))
      * Do not double the single quotes in the parameter.
      * Use autoboxing to call with ints, longs, floats, etc.
+     *
+     * @return the translated string with the first {0} replaced by the parameter
      */
     private String _t(String s, Object o) {
         return Messages.getString(s, o, _context);
     }
 
+    /**
+     * Router version for a banned hash, from NetDB or parsed out of the ban reason.
+     *
+     * @param hash the router hash to look up, null yields no version
+     * @param reason the ban reason string, searched for a version pattern
+     * @return the version string, or null if neither source carries one
+     */
     private String getRouterVersion(Hash hash, String reason) {
         if (hash == null) {
             return null;
@@ -667,6 +692,8 @@ class BanlistRenderer {
 
     /**
      * Get router capabilities string from NetDB.
+     *
+     * @param hash the router hash to look up, null yields the empty string
      * @return caps string or empty string
      */
     private String getRouterCaps(Hash hash) {

@@ -1133,6 +1133,8 @@ public class GraphListener implements RateSummaryListener {
     /**
      * The RRD backend for persistent or in-memory data.
      *
+     * @param isPersistent whether the graph data is kept in files on disk
+     * @return the default NIO file factory when persistent, the in-memory factory otherwise
      * @since 0.9.46
      */
     @SuppressWarnings("deprecation")

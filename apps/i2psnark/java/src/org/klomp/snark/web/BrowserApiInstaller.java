@@ -103,6 +103,8 @@ public final class BrowserApiInstaller {
 
     /**
      * The java binary that launched this router, or javaw on Windows.
+     *
+     * @return the absolute path to the java executable for this OS
      */
     private static String javaBinary() {
         String bin = System.getProperty("java.home") + File.separator + "bin" + File.separator;
@@ -113,6 +115,9 @@ public final class BrowserApiInstaller {
     /**
      * The jar (or classes dir) that contains MagnetHandler, resolved from its
      * code source so no shell quoting or path guessing is needed.
+     *
+     * @return the absolute path of that jar or classes directory
+     * @throws IOException if the code source location is missing or is not a usable URI
      */
     private static String handlerClasspath() throws IOException {
         java.net.URL loc = MagnetHandler.class.getProtectionDomain().getCodeSource().getLocation();
@@ -129,6 +134,11 @@ public final class BrowserApiInstaller {
     /**
      * The command template used by the OS registration, e.g.
      * "java" -cp "i2psnark.jar" org.klomp.snark.MagnetHandler --url "base" %u.
+     *
+     * @param consoleBaseUrl the console URL passed to the handler as --url
+     * @param uriPlaceholder true to append the %u desktop placeholder, false for the "%1" shell argument
+     * @return the command template string for the desktop entry
+     * @throws IOException if the MagnetHandler classpath cannot be located
      */
     private static String buildCommand(String consoleBaseUrl, boolean uriPlaceholder) throws IOException {
         StringBuilder rv = new StringBuilder(256);
@@ -153,6 +163,10 @@ public final class BrowserApiInstaller {
     /**
      * Add or update the two MIME registrations in the [Default Applications]
      * section of mimeapps.list, preserving everything else.
+     *
+     * @param file the mimeapps.list to update, created with its parents if absent
+     * @param mimes the MIME types to point at the desktop entry
+     * @throws IOException if the parent directories cannot be created or the file cannot be read
      */
     private static void updateMimeapps(File file, String... mimes) throws IOException {
         File parent = file.getParentFile();

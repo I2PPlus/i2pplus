@@ -165,7 +165,15 @@ public class SendMessageOptions extends DateAndFlags {
         return codeToVal(exp, TAGS_REQD);
     }
 
-    /** Round the value down to the nearest code in the array. */
+    /**
+     * Round the value down to the nearest code in the array.
+     *
+     * @param val the value to round; a positive value at or below codes[1] rounds up to 1
+     *            so it does not become the default
+     * @param codes the ascending table of possible values, index 0 being the unset default
+     * @return the index of the largest code not exceeding val, or the last index if val
+     *         exceeds them all; 0 for a non-positive val
+     */
     private static int valToCode(int val, int[] codes) {
         // special case, round up so we don't turn it into default
         if (val > 0 && val <= codes[1]) return 1;

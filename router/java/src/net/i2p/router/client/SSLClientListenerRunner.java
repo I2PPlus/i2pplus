@@ -50,6 +50,7 @@ class SSLClientListenerRunner extends ClientListenerRunner {
     /**
      * Verify the keystore exists and is usable, creating it if necessary.
      *
+     * @param ks the keystore file to verify
      * @return success if it exists and we have a password, or it was created successfully.
      */
     private boolean verifyKeyStore(File ks) {
@@ -82,6 +83,7 @@ class SSLClientListenerRunner extends ClientListenerRunner {
      * libs or using proprietary Sun libs, and it's a huge mess.
      * If successful, stores the keystore password and key password in {@code router.config}.
      *
+     * @param ks the keystore file to create
      * @return true if the keystore was created and its passwords saved
      */
     private boolean createKeyStore(File ks) {
@@ -117,6 +119,8 @@ class SSLClientListenerRunner extends ClientListenerRunner {
     /**
      * Pull the cert back OUT of the keystore and save it as ascii
      * so the clients can get to it.
+     *
+     * @param ks the keystore to export the certificate from
      */
     private void exportCert(File ks) {
         File sdir = new SecureDirectory(_context.getConfigDir(), "certificates/i2cp");
@@ -134,6 +138,7 @@ class SSLClientListenerRunner extends ClientListenerRunner {
     /**
      * The SSLContext and socket factory set up from the given keystore.
      *
+     * @param ks the keystore to read the key material from
      * @return true if the factory was built and stored, false if the keystore could not be read
      */
     private boolean initializeFactory(File ks) {

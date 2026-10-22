@@ -710,6 +710,8 @@ class ClientManager {
 
     /**
      * Looks up a client's runner by hash without holding the lock.
+     *
+     * @param destHash the destination hash to look up, null returns null
      * @return the runner registered under that hash, or null
      */
     private ClientConnectionRunner getRunner(Hash destHash) {
@@ -768,6 +770,8 @@ class ClientManager {
      * Render client status as HTML.
      *
      * @deprecated unused
+     * @param out the writer the HTML would be written to, unused
+     * @throws IOException never thrown, the method body is empty
      */
     @Deprecated
     public void renderStatusHTML(Writer out) throws IOException {

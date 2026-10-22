@@ -542,6 +542,7 @@ public class TuningHelper extends HelperBase {
     /**
      * Return a human-readable display name for a raw param name,
      * falling back to the raw name if unmapped.
+     * @param name the raw Tuner parameter name to look up
      * @return the display name
      */
     private String getDisplayName(String name) {
@@ -555,6 +556,10 @@ public class TuningHelper extends HelperBase {
      * Diverging bar chart: center line = default value, bars in the single
      * tuner graph colour, above the line when tuned up and below when tuned
      * down. Newest sample on the left.
+     *
+     * @param values the sampled tuner values, newest sample drawn on the left
+     * @param defaultValue the untuned value, drawn as the chart's center line
+     * @return the inline SVG markup, or a "Collecting..." span if fewer than two samples
      */
     private static String renderSparkline(int[] values, int defaultValue) {
         int n = values.length;
@@ -719,6 +724,9 @@ public class TuningHelper extends HelperBase {
      * Returns an HTML div with a grid of SVG ring charts, one per subsystem.
      * NaN-scored subsystems show a gray "collecting..." ring.
      *
+     * @param tuner the Tuner whose subsystem scores are rendered
+     * @param defer true to force every score to NaN, showing gray collecting rings
+     * @return the HTML div with the ring grid, empty if there are no subsystem scores
      * @since 0.9.70+
      */
     private String renderSubsystemRings(Tuner tuner, boolean defer) {

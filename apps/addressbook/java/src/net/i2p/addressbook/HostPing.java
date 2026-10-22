@@ -43,7 +43,7 @@ public class HostPing {
     private boolean _debug = false;
 
     /**
-     *  Default constructor, uses global context.
+     * Default constructor, uses global context.
      */
     public HostPing() {
         _context = I2PAppContext.getGlobalContext();
@@ -67,6 +67,9 @@ public class HostPing {
 
     /**
      * Multiple ping mode like I2PIng's default behavior.
+     *
+     * @param destination the destination to ping, in any naming service format
+     * @return 0 if at least one ping got a pong, 1 if all of them failed
      */
     private int pingMultiple(String destination) {
         List<Long> responseTimes = new ArrayList<>();
@@ -103,6 +106,9 @@ public class HostPing {
 
     /**
      * Consecutive mode - requires 5 consecutive successes.
+     *
+     * @param destination the destination to ping, in any naming service format
+     * @return 0 once 5 consecutive pings succeeded, 1 if the attempt budget ran out first
      */
     private int pingConsecutive(String destination) {
         int consecutiveSuccesses = 0;
@@ -144,6 +150,9 @@ public class HostPing {
 
     /**
      * Single ping attempt using {@link I2PSocketManager}.
+     *
+     * @param hostname the destination to look up and ping
+     * @return the response time in ms, or -1 if the lookup, connect or pong failed
      */
     private long pingSingle(String hostname) {
         I2PSocketManager socketManager = null;
@@ -217,6 +226,11 @@ public class HostPing {
 
     /**
      * Print summary in I2PIng format.
+     *
+     * @param destination the destination name printed in the summary
+     * @param successCount the number of pings that got a pong
+     * @param totalCount the number of pings attempted
+     * @param responseTimes the response times in ms of the successful pings
      */
     private void printSummary(String destination, int successCount, int totalCount, List<Long> responseTimes) {
         if (successCount > 0 && !responseTimes.isEmpty()) {
@@ -273,6 +287,10 @@ public class HostPing {
 
     /**
      * Read destinations from file.
+     *
+     * @param filename the file to read, one destination per line
+     * @return the valid destinations extracted from the lines, empty if the file is
+     *         missing; on a read error, only those read so far
      */
     private List<String> readDestinationsFromFile(String filename) {
         List<String> destinations = new ArrayList<>();
@@ -328,6 +346,8 @@ public class HostPing {
 
     /**
      * Validate destination format (B64, B32, or .i2p).
+     *
+     * @param dest the destination string to check, null or empty is invalid
      * @return whether valid destination
      */
     private boolean isValidDestination(String dest) {

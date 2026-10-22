@@ -251,19 +251,34 @@ public class DeliveryInstructions extends DataStructureImpl {
         return cur - offset;
     }
 
-    /** Extract the delivery mode from the flags byte. */
+    /**
+     * Extract the delivery mode from the flags byte.
+     *
+     * @param flags the raw flags byte from the wire
+     * @return the delivery mode, 0-3, held in the two high bits
+     */
     private static int flagMode(int flags) {
         int v = flags & FLAG_MODE;
         v >>>= 5;
         return v;
     }
 
-    /** Whether the delay flag is set in the flags byte. */
+    /**
+     * Whether the delay flag is set in the flags byte.
+     *
+     * @param flags the raw flags byte from the wire
+     * @return true if the delay bit is set
+     */
     private static boolean flagDelay(int flags) {
         return (0 != (flags & FLAG_DELAY));
     }
 
-    /** Encodes the current delivery mode and delay into flag byte. */
+    /**
+     * Encodes the current delivery mode and delay into flag byte.
+     *
+     * @return the flags byte: the delivery mode in the two high bits, plus the
+     *         delay bit set if a delay was requested
+     */
     private int getFlags() {
         int val = 0;
 
@@ -285,7 +300,12 @@ public class DeliveryInstructions extends DataStructureImpl {
         return val;
     }
 
-    /** Size of the serialized additional delivery info in bytes. */
+    /**
+     * Size of the serialized additional delivery info in bytes.
+     *
+     * @return the total size of the destination or router hash, tunnel ID and
+     *         delay fields required by the current delivery mode
+     */
     private int getAdditionalInfoSize() {
         int additionalSize = 0;
 
@@ -313,7 +333,13 @@ public class DeliveryInstructions extends DataStructureImpl {
         return additionalSize;
     }
 
-    /** Serializes additional delivery info (hash, tunnel ID, delay) into buffer. */
+    /**
+     * Serializes additional delivery info (hash, tunnel ID, delay) into buffer.
+     *
+     * @param rv the buffer to write into, large enough for the current mode
+     * @param offset where in the buffer to start writing
+     * @return the number of bytes written
+     */
     private int getAdditionalInfo(byte[] rv, int offset) {
         int origOffset = offset;
 
@@ -442,7 +468,10 @@ public class DeliveryInstructions extends DataStructureImpl {
      * @since 0.9.9
      */
     private static final class LocalInstructions extends DeliveryInstructions {
-        //private static final byte flag = DELIVERY_MODE_LOCAL << 5;  // 0
+        /**
+         * Local delivery with no options, the mode fixed to LOCAL.
+         */
+        private LocalInstructions() {}
 
         /**
          * Delivery mode for this local delivery.

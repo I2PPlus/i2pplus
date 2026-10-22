@@ -93,6 +93,8 @@ public class IBSkipSpan<K extends Comparable<? super K>, V> extends BSkipSpan<K,
     /**
      * Must already be seeked to the end of the span header
      * via loadInit() or {@link #seekData()}
+     *
+     * @throws IOException if the span's data pages cannot be read
      */
     private void loadFirstKey() throws IOException {
         if (this.nKeys <= 0)
@@ -119,6 +121,8 @@ public class IBSkipSpan<K extends Comparable<? super K>, V> extends BSkipSpan<K,
 
     /**
      * Seek past the span header
+     *
+     * @throws IOException if the span was killed or its magic number is wrong
      */
     private void seekData() throws IOException {
         if (isKilled)
@@ -143,7 +147,10 @@ public class IBSkipSpan<K extends Comparable<? super K>, V> extends BSkipSpan<K,
 
     /**
      * Linear search through the span in the file for the value.
+     *
+     * @param key the key to search for
      * @return the value stored under {@code key}, or null if not found
+     * @throws IOException if the span was killed, its magic is wrong, or a record page cannot be read
      */
     private V getData(K key) throws IOException {
         seekData();

@@ -11,9 +11,9 @@ import net.i2p.util.FileUtil;
 public class ContentHelper extends HelperBase {
 
     /**
-     *  Constructor, used by the console to build the bean before the setters
-     *  below populate it. Nothing is selected until {@link #setPage} supplies a file,
-     *  and {@link #getContent()} has nothing to read before that.
+     * Constructor, used by the console to build the bean before the setters
+     * below populate it. Nothing is selected until {@link #setPage} supplies a file,
+     * and {@link #getContent()} has nothing to read before that.
      */
     public ContentHelper() {}
 
@@ -42,9 +42,9 @@ public class ContentHelper extends HelperBase {
         _startAtBeginning = Boolean.parseBoolean(moo);
     }
     /**
-     *  Bean property setter, intentionally a no-op. An earlier version
-     *  persisted the language here for the desktopgui, but that bypassed the
-     *  CSRF nonce check; language is now handled by {@link CSSHelper}.
+     * Bean property setter, intentionally a no-op. An earlier version
+     * persisted the language here for the desktopgui, but that bypassed the
+     * CSRF nonce check; language is now handled by {@link CSSHelper}.
      *
      * @param l the requested language, accepted so the bean property keeps
      *          working but discarded
@@ -111,6 +111,8 @@ public class ContentHelper extends HelperBase {
      * Convert file.ext to file_lang.ext if it exists.
      * Get lang from the cgi lang param, then properties, then from the default locale.
      * _context must be set to check the property.
+     *
+     * @return the localized page filename, or the original page if no localized file exists
      */
     private String filename() {
         int lastdot = _page.lastIndexOf('.');

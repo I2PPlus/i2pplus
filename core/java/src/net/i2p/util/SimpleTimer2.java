@@ -678,6 +678,11 @@ public class SimpleTimer2 {
 
         /**
          * Warn once per episode of a fully occupied pool with a backlog.
+         *
+         * @param active the number of currently active threads
+         * @param pool the configured pool size
+         * @param queued the number of tasks queued behind the active threads
+         * @param completed the total number of tasks completed so far
          */
         private void checkSaturation(int active, int pool, int queued, long completed) {
             WatchdogDecision rv = evaluateSaturation(active, pool, queued, _saturatedSamples,
@@ -710,6 +715,9 @@ public class SimpleTimer2 {
          * Warn once per episode of a pool that completes nothing at all.
          * <p>The bar is the timer's own longest observed gap, learned as the timer
          * comes and goes, rather than its mean interval. See {@link #evaluateStall}.
+         *
+         * @param completed the total number of tasks completed so far
+         * @param workDue true if a task is due to run right now
          */
         private void checkStall(long completed, boolean workDue) {
             long now = System.currentTimeMillis();
@@ -778,6 +786,8 @@ public class SimpleTimer2 {
  * The timer log, looked up per message rather than cached: the router
  * replaces its LogManager after start-up, and a cached Log would go
  * quiet from then on. Only log paths pay for this, never a sample.
+ *
+ * @return the current log for this class
  */
         private Log log() {
             return _context.logManager().getLog(SimpleTimer2.class);
@@ -1150,6 +1160,9 @@ public class SimpleTimer2 {
          * Validate state before running. Returns true if execution should proceed,
          * false if the event was cancelled or needs to be rescheduled (already handled).
          * Must be called inside synchronized(this).
+         *
+         * @param now the current time in ms since the epoch
+         * @return true if execution should proceed, false if cancelled or rescheduled
          */
         private boolean checkAndPrepareRun(long now) {
             if (Thread.currentThread().isInterrupted()) {
@@ -1211,6 +1224,8 @@ public class SimpleTimer2 {
 
         /**
          * Log execution duration and periodic stats.
+         *
+         * @param before the time the event started running, in ms since the epoch
          */
         private void logTimingAndStats(long before) {
             long time = System.currentTimeMillis() - before;
@@ -1254,7 +1269,11 @@ public class SimpleTimer2 {
         return _name;
     }
 
-    /** Warning - slow. */
+    /**
+     * Warning - slow.
+     *
+     * @return a multi-line string with pool, queue and event state
+     */
     private String debug() {
         _executor.purge();  // Remove cancelled tasks from the queue so we get a good queue size stat
         return

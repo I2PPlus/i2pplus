@@ -122,6 +122,7 @@ public class UrlLauncher implements ClientApp {
      * Prevent bad user experience by waiting for the server to be there
      * before launching the browser.
      *
+     * @param urlString the URL to probe, host and port are used for the socket
      * @return true once the socket connects, false if the retries run out or
      *         the URL cannot be parsed
      */
@@ -258,7 +259,8 @@ public class UrlLauncher implements ClientApp {
      * Takes a registry query in the same format as getDefaultOutOfRegistry
      * but follows the ProgID instead of the default entry.
      *
-     * @param hkeyquery
+     * @param hkeyquery the registry query in the same format as
+     *                  getDefaultOutOfRegistry, whose ProgID entry is followed
      * @return the command required to run the application referenced in hkeyquery, or null
      */
     private String followUserConfiguredBrowserToCommand(String hkeyquery) {
@@ -271,7 +273,9 @@ public class UrlLauncher implements ClientApp {
      * HKEY_CLASSES_ROOT\%ProgId%\shell\open\command, which holds the value of the command
      * which we need to run to launch the default browser.
      *
-     * @param progid
+     * @param progid the ProgID obtained by
+     *               followUserConfiguredBrowserToCommand, interpolated into the
+     *               registry path
      * @return the command required to run the application referenced in hkeyquery, or null
      */
     private String followProgIdToCommand(String progid) {
@@ -408,7 +412,9 @@ public class UrlLauncher implements ClientApp {
      * There is no mechanism to escape quotes or other chars with backslashes.
      * Adapted from i2ptunnel SSLHelper.
      *
-     * @return param args non-null
+     * @param args the command line template to parse, non-null
+     * @param url the URL substituted for %1, or appended if no %1 is present
+     * @return the parsed argument array with the URL substituted
      * @since 0.9.38
      */
     private static String[] parseArgs(String args, String url) {
@@ -544,6 +550,7 @@ public class UrlLauncher implements ClientApp {
     /**
      * React to a client app state change.
      *
+     * @param state the new client app state
      * @since 0.9.18
      */
     private void changeState(ClientAppState state) {
@@ -553,6 +560,8 @@ public class UrlLauncher implements ClientApp {
     /**
      * React to a state change with an error.
      *
+     * @param state the new client app state
+     * @param e the error that caused the change, null if none
      * @since 0.9.18
      */
     private synchronized void changeState(ClientAppState state, Exception e) {

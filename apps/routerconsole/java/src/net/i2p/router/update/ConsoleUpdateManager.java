@@ -135,8 +135,6 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
         return (ConsoleUpdateManager) cmgr.getRegisteredApp(APP_NAME);
     }
 
-    // ClientApp methods
-
     /**
      * UpdateManager interface.
      */
@@ -272,8 +270,11 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
     @Override
     public String getDisplayName() {return "Console Update Manager";}
 
-    /////// end ClientApp methods
-
+    /**
+     * Record the app state and notify the client app manager of the change.
+     *
+     * @param state the new state of this client app
+     */
     private synchronized void changeState(ClientAppState state) {
         _state = state;
         if (_cmgr != null) {_cmgr.notify(this, state, null, null);}
@@ -429,6 +430,9 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
 
     /**
      * The highest of the installed or downloaded version.
+     *
+     * @param type the UpdateType to look up
+     * @param id id of the request to look up
      * @return new version or null if nothing was downloaded or installed
      */
     private String getDownloadedOrInstalledVersion(UpdateType type, String id) {
@@ -637,6 +641,9 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
      * Non-blocking. Does not check.
      * Fails update already in progress. Use this to call from within a checker task.
      * If returns true, then call isUpdateInProgress() in a loop.
+     *
+     * @param type the UpdateType to update
+     * @param id id of the request to update
      * @param maxTime not honored by all Updaters
      * @return true if task started
      */
@@ -692,8 +699,6 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
         if (_log.shouldWarn()) {_log.warn("Nothing left to try for: " + ui);}
         return null;
     }
-
-    // start UpdateManager interface
 
     /**
      * Add the Updater to the set consulted for each update type and method.
@@ -1180,10 +1185,12 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
         if (old != null && old.compareTo(ver) <= 0) {_available.remove(ui);}
     }
 
-    // End UpdateManager interface
-
     /**
      * Adds to downloaded, removes from available.
+     *
+     * @param type the UpdateType that was downloaded
+     * @param id id of the downloaded item
+     * @param version the version string that was downloaded
      */
     private void notifyDownloaded(UpdateType type, String id, String version) {
         UpdateItem ui = new UpdateItem(type, id);
@@ -1321,6 +1328,10 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
      * Process sud, su2, or su3.
      * Only for router updates.
      *
+     * @param uri the download source, recorded in the update status
+     * @param actualVersion the version string reported by the download
+     * @param f the downloaded file to verify and stage
+     * @param updateType router update type selecting the verification path
      * @return true if the file verified and was staged for install at next
      *         restart, false if verification or the copy failed
      * @since 0.9.9
@@ -1506,6 +1517,8 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
         private final String _msg;
         /**
          * Clears the status message once it has been displayed long enough.
+         *
+         * @param msg the status message to clear when the timer fires
          */
         public StatusCleaner(String msg) {_msg = msg;}
         /**
@@ -2054,8 +2067,8 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
      * treated as empty.
      * Pure, for unit tests.
      *
-     * @param checkers registered checkers
-     * @param updaters registered updaters
+     * @param checkers the registered checkers, null treated as empty
+     * @param updaters the registered updaters, null treated as empty
      * @param postProcessors registered post-processors by type id
      * @param activeCheckers currently running check tasks
      * @param downloaders currently running update tasks to their remaining updaters

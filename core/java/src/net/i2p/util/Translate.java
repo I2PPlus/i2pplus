@@ -84,48 +84,48 @@ public abstract class Translate {
     }
 
     /**
-     *  Translate a string with a parameter
-     *  This is a lot more expensive than getString(s, ctx), so use sparingly.
+     * Translate a string with a parameter
+     * This is a lot more expensive than getString(s, ctx), so use sparingly.
      *
-     *  @param s string to be translated containing {0}
-     *           The {0} will be replaced by the parameter.
-     *           Single quotes must be doubled, i.e. ' -&gt; '' in the string.
+     * @param s string to be translated containing {0}
+     *          The {0} will be replaced by the parameter.
+     *          Single quotes must be doubled, i.e. ' -&gt; '' in the string.
      *
-     *  @param o parameter, not translated.
-     *           To translate parameter also, use _t("foo {0} bar", _t("baz"))
-     *           Do not double the single quotes in the parameter.
-     *           Use autoboxing to call with ints, longs, floats, etc.
-     *  @param ctx the application context, which supplies the language and country
-     *  @param bun base name of the resource bundle to translate in, e.g. "routerconsole"
-     *  @return the translated string with {0} replaced by o, or s itself if no translation exists
+     * @param o parameter, not translated.
+     *          To translate parameter also, use _t("foo {0} bar", _t("baz"))
+     *          Do not double the single quotes in the parameter.
+     *          Use autoboxing to call with ints, longs, floats, etc.
+     * @param ctx the application context, which supplies the language and country
+     * @param bun base name of the resource bundle to translate in, e.g. "routerconsole"
+     * @return the translated string with {0} replaced by o, or s itself if no translation exists
      */
     public static String getString(String s, Object o, I2PAppContext ctx, String bun) {
         return getString(s, ctx, bun, o);
     }
 
     /**
-     *  For {0} and {1}.
+     * For {0} and {1}.
      *
-     *  @param s the string to be translated, containing {0} and {1} placeholders
-     *  @param o the value substituted for {0}, not translated
-     *  @param o2 the value substituted for {1}, not translated
-     *  @param ctx the application context, which supplies the language and country
-     *  @param bun base name of the resource bundle to translate in, e.g. "routerconsole"
-     *  @return the translated string with {0} and {1} replaced, or s itself if no translation exists
+     * @param s the string to be translated, containing {0} and {1} placeholders
+     * @param o the value substituted for {0}, not translated
+     * @param o2 the value substituted for {1}, not translated
+     * @param ctx the application context, which supplies the language and country
+     * @param bun base name of the resource bundle to translate in, e.g. "routerconsole"
+     * @return the translated string with {0} and {1} replaced, or s itself if no translation exists
      */
     public static String getString(String s, Object o, Object o2, I2PAppContext ctx, String bun) {
         return getString(s, ctx, bun, o, o2);
     }
 
     /**
-     *  Varargs form, accepting any number of values substituted for the {0}, {1}, ... placeholders.
+     * Varargs form, accepting any number of values substituted for the {0}, {1}, ... placeholders.
      *
-     *  @param s the string to be translated, containing {0}, {1}, ... placeholders
-     *  @param ctx the application context, which supplies the language and country
-     *  @param bun base name of the resource bundle to translate in, e.g. "routerconsole"
-     *  @param oArray the values substituted for the placeholders, in order
-     *  @return the translated string with the placeholders replaced, or s itself if no translation exists
-     *  @since 0.9.8
+     * @param s the string to be translated, containing {0}, {1}, ... placeholders
+     * @param ctx the application context, which supplies the language and country
+     * @param bun base name of the resource bundle to translate in, e.g. "routerconsole"
+     * @param oArray the values substituted for the placeholders, in order
+     * @return the translated string with the placeholders replaced, or s itself if no translation exists
+     * @since 0.9.8
      */
     public static String getString(String s, I2PAppContext ctx, String bun, Object... oArray) {
         String lang = getLanguage(ctx);
@@ -141,16 +141,16 @@ public abstract class Translate {
     }
 
     /**
-     *  Use GNU ngettext
-     *  For .po file format see http://www.gnu.org/software/gettext/manual/gettext.html.gz#Translating-plural-forms
+     * Use GNU ngettext
+     * For .po file format see http://www.gnu.org/software/gettext/manual/gettext.html.gz#Translating-plural-forms
      *
-     *  @param n item count; 1 selects the singular, anything else the plural
-     *  @param s singluar string, optionally with {0} e.g. "one tunnel"
-     *  @param p plural string optionally with {0} e.g. "{0} tunnels"
-     *  @param ctx the application context, which supplies the language and country
-     *  @param bun base name of the resource bundle to translate in, e.g. "routerconsole"
-     *  @return the singular or plural form as selected by n, with {0} replaced by n
-     *  @since 0.7.14
+     * @param n item count; 1 selects the singular, anything else the plural
+     * @param s singluar string, optionally with {0} e.g. "one tunnel"
+     * @param p plural string optionally with {0} e.g. "{0} tunnels"
+     * @param ctx the application context, which supplies the language and country
+     * @param bun base name of the resource bundle to translate in, e.g. "routerconsole"
+     * @return the singular or plural form as selected by n, with {0} replaced by n
+     * @since 0.7.14
      */
     public static String getString(int n, String s, String p, I2PAppContext ctx, String bun) {
         String lang = getLanguage(ctx);
@@ -194,11 +194,11 @@ public abstract class Translate {
     }
 
     /**
-     *  Is this a right-to-left language?
+     * Is this a right-to-left language?
      *
-     *  @param lang Two- or three-letter lower case
-     *  @return true for supported RTL languages
-     *  @since 0.9.46
+     * @param lang Two- or three-letter lower case
+     * @return true for supported RTL languages
+     * @since 0.9.46
      */
     public static boolean isRTL(String lang) {
         return lang.equals("ar") || lang.equals("fa") || lang.equals("iw");
@@ -218,14 +218,14 @@ public abstract class Translate {
     }
 
     /**
-     *  Only for use by standalone apps in App Context.
-     *  NOT for use in Router Context.
-     *  Does not persist, apps must implement their own persistence.
-     *  Does NOT override context properties.
+     * Only for use by standalone apps in App Context.
+     * NOT for use in Router Context.
+     * Does not persist, apps must implement their own persistence.
+     * Does NOT override context properties.
      *
-     *  @param lang Two- or three-letter lower case, or null for default
-     *  @param country Two-letter upper case, or null for default, or "" for none
-     *  @since 0.9.27
+     * @param lang Two- or three-letter lower case, or null for default
+     * @param country Two-letter upper case, or null for default, or "" for none
+     * @since 0.9.27
      */
     public static void setLanguage(String lang, String country) {
         if (lang != null) System.setProperty(PROP_LANG, lang);
@@ -237,6 +237,7 @@ public abstract class Translate {
     /**
      * Cache both found and not found for speed.
      *
+     * @param bun base name of the resource bundle, e.g. "routerconsole"
      * @param lang non-null, if "" returns null
      * @param country non-null, may be ""
      * @return null if not found
@@ -266,12 +267,12 @@ public abstract class Translate {
     /**
      * Return the "display language", e.g. "English" for the language specified
      * by langCode, using the current language.
-      * Uses translation if available, then JVM {@link java.util.Locale#getDisplayLanguage} if available,
-       * else default param.
+     * Uses translation if available, then JVM {@link java.util.Locale#getDisplayLanguage} if available,
+     * else default param.
      *
      * @param langCode two- or three-letter lower-case
      * @param dflt name returned untranslated when no bundle entry or JVM
-     * display name is available
+     *             display name is available
      * @param ctx the application context, which supplies the current language
      * @param bun base name of the resource bundle to translate in, e.g. "routerconsole"
      * @return the display language
@@ -290,10 +291,10 @@ public abstract class Translate {
     }
 
     /**
-     *  Clear the cache.
-     *  Call this after adding new bundles to the classpath.
+     * Clear the cache.
+     * Call this after adding new bundles to the classpath.
      *
-     *  @since 0.7.12
+     * @since 0.7.12
      */
     public static void clearCache() {
         _missing.clear();

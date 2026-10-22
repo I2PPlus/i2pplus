@@ -2156,6 +2156,7 @@ public class EepGet {
      * Parse the first status line and extract the response code.
      * Side effect: stores status text in _responseText.
      *
+     * @param line the first line of the HTTP response
      * @return HTTP response code (200, 206, other)
      */
     private int handleStatus(String line) {
@@ -3392,6 +3393,7 @@ public class EepGet {
     /**
      * Low 8 hex digits of the nonce.
      *
+     * @param nc the nonce value to format
      * @return 8 hex chars, lower case, e.g. 00000001
      * @since 0.8.10
      */

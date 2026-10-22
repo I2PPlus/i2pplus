@@ -281,6 +281,7 @@ public class PersistSybil {
     /**
      * Read the blocklist.
      *
+     * @param blFile the blocklist file to read
      * @return map of ip or hash to expiration (ms), or null on failure
      * @since 0.9.50
      */
@@ -358,6 +359,7 @@ public class PersistSybil {
     /**
      * Notify the update manager of a new blocklist version.
      *
+     * @param v the newly installed blocklist version number
      * @since 0.9.50
      */
     private void notifyVersion(long v) {

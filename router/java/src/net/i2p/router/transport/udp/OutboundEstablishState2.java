@@ -121,10 +121,10 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
     }
 
     /**
-     *  Prepare to start a new handshake with the given peer.
+     * Prepare to start a new handshake with the given peer.
      * <p>
-     *  Caller must then check {@link #getState()} and build a
-     *  Token Request or Session Request to send to the peer.
+     * Caller must then check {@link #getState()} and build a
+     * Token Request or Session Request to send to the peer.
      *
      * @param ctx the router context
      * @param transport the UDP transport
@@ -265,6 +265,9 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
      * the encryption changes if the token does.
      * <p>
      * caller must synch.
+     *
+     * @param addr the introducer's RouterAddress carrying the SSU2 keys and token
+     * @throws IllegalArgumentException if the address has no SSU2 static key option
      */
     private void createNewState(RouterAddress addr) {
         String ss = addr.getOption("s");
@@ -459,14 +462,9 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
         // won't be called, SSU2Payload will throw
     }
 
-    /////////////////////////////////////////////////////////
-    // end payload callbacks
-    /////////////////////////////////////////////////////////
-
-    // SSU 1 overrides
-
     /**
-     * Overridden to destroy the handshake state.
+     * Overridden from SSU1 to destroy the handshake state.
+     *
      * @since 0.9.56
      */
     @Override
@@ -484,10 +482,10 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
     }
 
     /**
-     *  Overridden because we don't have to wait for Relay Response first.
+     * Overridden because we don't have to wait for Relay Response first.
      *
-     *  @return true if we should send the SessionRequest now
-     *  @since 0.9.55
+     * @return true if we should send the SessionRequest now
+     * @since 0.9.55
      */
     @Override
     synchronized boolean receiveHolePunch() {
@@ -507,21 +505,21 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
     @Override
     public int getVersion() { return _version; }
     /**
-     *  Connection ID we use when sending.
+     * Connection ID we use when sending.
      *
-     *  @return the send connection ID
+     * @return the send connection ID
      */
     public long getSendConnID() { return _sendConnID; }
     /**
-     *  Connection ID we receive from the peer.
+     * Connection ID we receive from the peer.
      *
-     *  @return the receive connection ID
+     * @return the receive connection ID
      */
     public long getRcvConnID() { return _rcvConnID; }
     /**
-     *  Current session token.
+     * Current session token.
      *
-     *  @return the current token
+     * @return the current token
      */
     public long getToken() { return _token; }
     /**
@@ -535,54 +533,54 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
         return _transport.getEstablisher().getInboundToken(_remoteHostId);
     }
     /**
-     *  Current handshake state.
+     * Current handshake state.
      *
-     *  @return the handshake state
+     * @return the handshake state
      */
     public HandshakeState getHandshakeState() { return _handshakeState; }
     /**
-     *  Header encryption key 1 for sending.
+     * Header encryption key 1 for sending.
      *
-     *  @return the send header encrypt key 1
+     * @return the send header encrypt key 1
      */
     public byte[] getSendHeaderEncryptKey1() { return _headerEncryptKey1; }
     /**
-     *  Header encryption key 1 for receiving.
+     * Header encryption key 1 for receiving.
      *
-     *  @return the receive header encrypt key 1
+     * @return the receive header encrypt key 1
      */
     public byte[] getRcvHeaderEncryptKey1() { return _headerEncryptKey1; }
     /**
-     *  Header encryption key 2 for sending.
+     * Header encryption key 2 for sending.
      *
-     *  @return the send header encrypt key 2
+     * @return the send header encrypt key 2
      */
     public byte[] getSendHeaderEncryptKey2() { return _sendHeaderEncryptKey2; }
     /**
-     *  Header encryption key 2 for receiving.
+     * Header encryption key 2 for receiving.
      *
-     *  @return null before Session Request is sent (i.e. we sent a Token Request first)
+     * @return null before Session Request is sent (i.e. we sent a Token Request first)
      */
     public byte[] getRcvHeaderEncryptKey2() { return _rcvHeaderEncryptKey2; }
     /**
-     *  Retry header encryption key 2 for receiving.
+     * Retry header encryption key 2 for receiving.
      *
-     *  @return the retry header encrypt key 2
+     * @return the retry header encrypt key 2
      */
     public byte[] getRcvRetryHeaderEncryptKey2() { return _rcvRetryHeaderEncryptKey2; }
     /**
-     *  Socket address we sent the session request to.
+     * Socket address we sent the session request to.
      *
-     *  @return the Bob socket address
+     * @return the Bob socket address
      */
     public InetSocketAddress getSentAddress() { return _bobSocketAddress; }
 
     /**
-     *  What is the largest packet we can send to the peer?
-     *  Only used for Session Confirmed packets.
-     *  Session Request is very small.
+     * What is the largest packet we can send to the peer?
+     * Only used for Session Confirmed packets.
+     * Session Request is very small.
      *
-     *  @return the MTU in bytes
+     * @return the MTU in bytes
      */
     public int getMTU() {
         // To avoid PMTU problems on brokered IPv6 tunnels, make it the minimum.
@@ -615,6 +613,9 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
     /**
      * Process a Retry packet, with the lock held.
      *
+     * @param packet the Retry packet from the peer
+     * @throws GeneralSecurityException if the source address does not match the
+     *                                  configured one, or decrypting or validating the retry fails
      * @since 0.9.56
      */
     private void locked_receiveRetry(UDPPacket packet) throws GeneralSecurityException {
@@ -713,6 +714,9 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
     /**
      * Process SessionCreated, with the lock held.
      *
+     * @param packet the SessionCreated packet from the peer
+     * @throws GeneralSecurityException if the source address does not match or
+     *                                  decrypting or validating the response fails
      * @since 0.9.56
      */
     private void locked_receiveSessionCreated(UDPPacket packet) throws GeneralSecurityException {
@@ -1015,20 +1019,22 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
     }
 
     /**
-     *  Number of current introducers.
+     * Number of current introducers.
      *
-     *  @return the number of introducers
+     * @return the number of introducers
      */
     public int countIntroducers() {
         return _introducers != null ? _introducers.size() : 0;
     }
 
     /**
-     *  Mark a string for extraction by xgettext and translation.
-     *  Use this only in static initializers.
-     *  It does not translate!
-     *  @return the string unchanged and untranslated
-     *  @since 0.9.57
+     * Mark a string for extraction by xgettext and translation.
+     * Use this only in static initializers.
+     * It does not translate!
+     *
+     * @param s the string to mark for extraction
+     * @return the string unchanged and untranslated
+     * @since 0.9.57
      */
     private static final String _x(String s) {
         return s;

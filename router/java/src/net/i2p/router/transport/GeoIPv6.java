@@ -79,7 +79,11 @@ public class GeoIPv6 {
      * Lookup search items in the geoip file.
      * See below for format.
      *
+     * @param context the application context, notified of the data file version
+     * @param geoFile the gzip-compressed IPv6 geoip data file to read
      * @param search a sorted array of IPs to search
+     * @param codeCache reuses one String per lower-case country code
+     * @param log where to log read errors and timing
      * @return an array of country codes, same order as the search param,
      *         or a zero-length array on total failure.
      *         Individual array elements will be null for lookup failure of that item.
@@ -165,6 +169,8 @@ public class GeoIPv6 {
     * <p>
     * SLOW. For preprocessing only!
     *
+    * @param inFiles the CSV files to merge, each plain or gzip-compressed
+    * @param outFile the merged binary database to write, gzip-compressed
     * @return true if the merged database was written, false on an I/O error
      */
     private static boolean compressGeoIPv6CSVFiles(List<File> inFiles, File outFile) {
@@ -315,7 +321,13 @@ public class GeoIPv6 {
         return rv;
     }
 
-    /** Like {@link net.i2p.data.DataHelper#writeLong}rawStream, 8, value) but allows negative values. */
+    /**
+     * Like {@link net.i2p.data.DataHelper#writeLong} but allows negative values.
+     *
+     * @param rawStream where to write the eight big-endian bytes
+     * @param value the value to write, negative allowed
+     * @throws IOException if the stream write fails
+     */
     private static void writeLong(OutputStream rawStream, long value) throws IOException {
         for (int i = 56; i >= 0; i -= 8) {
             byte cur = (byte) (value >> i);
@@ -323,7 +335,13 @@ public class GeoIPv6 {
         }
     }
 
-    /** Like {@link net.i2p.data.DataHelper#readLong}src, offset, 8) but allows negative values. */
+    /**
+     * Like {@link net.i2p.data.DataHelper#readLong} but allows negative values.
+     *
+     * @param src the bytes to read eight big-endian bytes from
+     * @param offset index of the first byte to read
+     * @return the decoded value, negative when the high bit is set
+     */
     private static long readLong(byte[] src, int offset) {
         long rv = 0;
         int limit = offset + 8;

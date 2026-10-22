@@ -413,7 +413,11 @@ public class SearchJob extends JobImpl {
         else {requeuePending(REQUEUE_DELAY);}
     }
 
-    /** Requeue pending. */
+    /**
+     * Requeue pending.
+     *
+     * @param ms delay from now before the requeue job runs, in milliseconds
+     */
     private void requeuePending(long ms) {
         if (_pendingRequeueJob == null) {
             _pendingRequeueJob = new RequeuePending(getContext());
@@ -444,6 +448,9 @@ public class SearchJob extends JobImpl {
      * Hash structures for routers we want to check next.  This is the 'interesting' part of
      * the algorithm.  But to keep you on your toes, we've refactored it to the PeerSelector.selectNearestExplicit.
      *
+     * @param key the hash being searched for, converted to a routing key first
+     * @param numClosest maximum number of routers to return
+     * @param alreadyChecked routers already queried, excluded from the result
      * @return ordered list of Hash objects
      */
     private List<Hash> getClosestRouters(Hash key, int numClosest, Set<Hash> alreadyChecked) {
@@ -779,6 +786,10 @@ public class SearchJob extends JobImpl {
     /**
      * Resend the leaseSet to the peer who had previously failed to
      * provide us with the data when we asked them.
+     *
+     * @param toPeer the peer that previously failed to store the lease set
+     * @param ls the lease set to resend to that peer
+     * @return true if dispatched via an outbound exploratory tunnel, false if none was available
      */
     private boolean resend(RouterInfo toPeer, LeaseSet ls) {
         Hash to = toPeer.getIdentity().getHash();
@@ -865,7 +876,12 @@ public class SearchJob extends JobImpl {
         } else {return deferred;}
     }
 
-    /** Handle deferred. */
+    /**
+     * Handle deferred.
+     *
+     * @param success true if the search that just finished succeeded, deciding whether
+     *                the deferred searches run their find or fail callbacks
+     */
     private void handleDeferred(boolean success) {
         List<Search> deferred = null;
         synchronized (_deferredSearches) {

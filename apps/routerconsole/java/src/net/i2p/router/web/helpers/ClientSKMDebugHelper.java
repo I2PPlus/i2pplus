@@ -131,6 +131,11 @@ public class ClientSKMDebugHelper {
 
     /**
      * Pre-ratchet SKMs keep their own tag-status rendering.
+     *
+     * @param out where the section HTML is written
+     * @param title the client title, already HTML-escaped, used in the heading
+     * @param skm the key manager that renders its own status HTML
+     * @throws IOException if the writer fails partway through the section
      */
     private static void legacySection(Writer out, String title, SessionKeyManager skm) throws IOException {
         out.write("<div class=debug_section>\n<h2>Session Key Manager: " + title + "</h2>\n");
@@ -141,6 +146,11 @@ public class ClientSKMDebugHelper {
     /**
      * The client's nickname when its inbound tunnel has one, otherwise the
      * base32 destination.
+     *
+     * @param ctx the router context whose tunnel manager is asked for the settings
+     * @param dest the client's destination, shown as base32 when there is no nickname
+     * @param h the client's hash, used to look up the inbound tunnel settings
+     * @return the escaped nickname, or the base32 destination wrapped in a span
      */
     private static String clientTitle(RouterContext ctx, Destination dest, Hash h) {
         TunnelPoolSettings tps = ctx.tunnelManager().getInboundSettings(h);

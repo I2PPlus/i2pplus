@@ -148,6 +148,8 @@ class PeerManager {
 
         /**
          * Create the thread that performs the reorganization.
+         *
+         * @param event the timer event used to schedule the next reorganization
          */
         public ReorgThread(SimpleTimer2.TimedEvent event) {
             super("PeerManager Reorg");
@@ -242,6 +244,7 @@ class PeerManager {
     /**
      * Save a peer's profile to disk if it is still usable.
      *
+     * @param peer the peer whose profile may be written to disk
      * @param cutoff only store if most recent activity is newer than this (absolute time)
      * @return true if the profile was written to disk, false if it was skipped
      */
@@ -494,7 +497,12 @@ class PeerManager {
         }
     }
 
-    /** Locking no longer required. */
+    /**
+     * Locking no longer required.
+     *
+     * @param c the capability character, any case, lower-cased before the lookup
+     * @return the peers with that capability, null if none are tracked for it
+     */
     private Set<Hash> locked_getPeers(char c) {
         c = Character.toLowerCase(c);
         return _peersByCapability.get(Character.valueOf(c));

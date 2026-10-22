@@ -354,6 +354,7 @@ public class DecayingHashSet extends DecayingBloomFilter {
     /**
      * Add the entry to the current set if new, or check membership only.
      *
+     * @param w the wrapped entry to add or test for membership
      * @param addIfNew if true, add the element to current if it is not already there or in previous;
      *                 if false, only check
      *
@@ -423,7 +424,11 @@ public class DecayingHashSet extends DecayingBloomFilter {
         return new DecayCounters(currentCount, dups);
     }
 
-    /** Caller must not hold the write lock. */
+    /**
+     * Caller must not hold the write lock.
+     *
+     * @param counters the element and duplicate counts carried out of the decay, to log
+     */
     private void logDecay(DecayCounters counters) {
         if (_log.shouldDebug())
             _log.debug("Decaying the " + _name + " filter after inserting "

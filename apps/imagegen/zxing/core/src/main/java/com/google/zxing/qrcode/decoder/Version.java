@@ -332,6 +332,8 @@ public final class Version {
 
   /**
    * See ISO 18004:2006 6.5.1 Table 9
+   *
+   * @return the table of all QR code symbol versions, 1 through 40
    */
   private static Version[] buildVersions() {
     return new Version[]{

@@ -75,7 +75,9 @@ public class StreamHelper extends HelperBase {
 
     /**
      * Read a rate stat value from the stat manager, returning 0 if unavailable.
-     * @return the stat avg
+     * @param name the rate stat name, e.g. "stream.rtt"
+     * @param period the rate period in ms, one of the {@link RateConstants} values
+     * @return the rate's average value, or 0 when the stat or period has no data
      */
     private double getStatAvg(String name, long period) {
         RateStat rs = _context.statManager().getRate(name);
@@ -86,7 +88,9 @@ public class StreamHelper extends HelperBase {
 
     /**
      * Read the last-event-count from a rate stat, returning 0 if unavailable.
-     * @return the stat count
+     * @param name the rate stat name, e.g. "stream.connectionCreated"
+     * @param period the rate period in ms, one of the {@link RateConstants} values
+     * @return the event count of the most recent period, or 0 when the stat has no data
      */
     private long getStatCount(String name, long period) {
         RateStat rs = _context.statManager().getRate(name);
@@ -191,7 +195,9 @@ public class StreamHelper extends HelperBase {
     /**
      * Read the average event weight (duration in ms) from a rate stat,
      * returning 0 if unavailable.
-     * @return the stat average duration
+     * @param name the rate stat name, e.g. "stream.con.lifetimeBytesSent"
+     * @param period the rate period in ms, one of the {@link RateConstants} values
+     * @return the average event duration in ms, or 0 when the stat has no data
      * @since 0.9.71
      */
     private double getStatAvgDuration(String name, long period) {
@@ -227,6 +233,11 @@ public class StreamHelper extends HelperBase {
 
     /**
      * Render the streaming health ring dashboard.
+     *
+     * @param out the writer the dashboard HTML is written to
+     * @param totalSockets the number of open streaming sockets, shown in the
+     *                     Active ring; 0 renders that ring with no data
+     * @throws IOException if writing to the writer fails
      */
     private void renderStreamStats(Writer out, int totalSockets) throws IOException {
         // Live RTT samples are recorded whenever a connection's RTT updates;
@@ -283,6 +294,16 @@ public class StreamHelper extends HelperBase {
 
     /**
      * Render the combined table for the main page with inbound and outbound sections.
+     *
+     * @param out the writer the HTML is written to
+     * @param controllers the tunnel controllers scanned for open sockets
+     * @param inCount the number of inbound sockets, shown in the section header
+     * @param inSent total bytes sent on inbound sockets, shown in the header
+     * @param inRecv total bytes received on inbound sockets, shown in the header
+     * @param outCount the number of outbound sockets, shown in the section header
+     * @param outSent total bytes sent on outbound sockets, shown in the header
+     * @param outRecv total bytes received on outbound sockets, shown in the header
+     * @throws IOException if writing to the writer fails
      */
     private void renderCombinedTable(Writer out, List<TunnelController> controllers,
                                      int inCount, long inSent, long inRecv,
@@ -299,6 +320,15 @@ public class StreamHelper extends HelperBase {
 
     /**
      * Render one thead (section header + column headers) + tbody for a direction.
+     *
+     * @param out the writer the HTML is written to
+     * @param controllers the tunnel controllers scanned for open sockets
+     * @param inbound true renders the inbound (server) section, false the outbound one
+     * @param peerHeader the header text for the peer column, "Peer" or "Target"
+     * @param count the number of sockets in this direction, shown in the header
+     * @param totalSent total bytes sent in this direction, shown in the header
+     * @param totalReceived total bytes received in this direction, shown in the header
+     * @throws IOException if writing to the writer fails
      */
     private void renderTableSection(Writer out, List<TunnelController> controllers,
                                     boolean inbound, String peerHeader, int count,
@@ -396,6 +426,15 @@ public class StreamHelper extends HelperBase {
 
     /**
      * Render a simple filtered table (single section, no section header).
+     *
+     * @param out the writer the HTML is written to
+     * @param controllers the tunnel controllers scanned for open sockets
+     * @param inbound true renders the inbound (server) rows, false the outbound ones
+     * @param peerHeader the header text for the peer column, "Peer" or "Target"
+     * @param count the number of sockets in this direction, shown in the header
+     * @param totalSent total bytes sent in this direction, shown in the header
+     * @param totalReceived total bytes received in this direction, shown in the header
+     * @throws IOException if writing to the writer fails
      */
     private void renderTable(Writer out, List<TunnelController> controllers,
                              boolean inbound, String peerHeader,
@@ -478,7 +517,13 @@ public class StreamHelper extends HelperBase {
         out.write("</div>\n");
     }
 
-    /** Format bytes/sec as KB/s or MB/s (decimal units, no HTML entities). */
+    /**
+     * Format bytes/sec as KB/s or MB/s (decimal units, no HTML entities).
+     *
+     * @param bytesPerSec the rate to format, in bytes per second
+     * @return the formatted rate with one decimal for KB/s and MB/s, whole
+     *         B/s below 1000
+     */
     private static String formatKBps(double bytesPerSec) {
         if (bytesPerSec >= 1000000)
             return String.format("%.1f MB/s", bytesPerSec / 1000000);
@@ -488,12 +533,23 @@ public class StreamHelper extends HelperBase {
             return (int) bytesPerSec + " B/s";
     }
 
-    /** Format bytes without space before unit: "0B", "1.23KiB". */
+    /**
+     * Format bytes without space before unit: "0B", "1.23KiB".
+     *
+     * @param bytes the byte count to format
+     * @return the size with a binary unit suffix and no space, e.g. "1.23KiB"
+     */
     private static String formatSize(long bytes) {
         return DataHelper.formatSize2(bytes, false).replace(" ", "") + "B";
     }
 
-    /** HTML-escape a string. */
+    /**
+     * HTML-escape a string.
+     *
+     * @param s the text to escape; null is rendered as an empty string
+     * @return the text with ampersands, angle brackets and quotes replaced by
+     *         HTML entities
+     */
     private static String esc(String s) {
         if (s == null) return "";
         StringBuilder buf = new StringBuilder(s.length() + 16);

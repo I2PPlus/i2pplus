@@ -634,6 +634,8 @@ public class I2PTunnelRunner extends I2PAppThread implements DoneCallback {
     /**
      * Starts itself.
      *
+     * @param s the local socket, non-null
+     * @param i2ps the I2P socket carrying the tunnel, non-null
      * @param slock the socket lock, non-null
      * @param initialI2PData may be null
      * @param sockList may be null. Caller must add i2ps to the list! It will be removed here on completion.
@@ -648,6 +650,8 @@ public class I2PTunnelRunner extends I2PAppThread implements DoneCallback {
     /**
      * Starts itself.
      *
+     * @param s the local socket, non-null
+     * @param i2ps the I2P socket carrying the tunnel, non-null
      * @param slock the socket lock, non-null
      * @param initialI2PData may be null
      * @param initialSocketData may be null
@@ -664,6 +668,8 @@ public class I2PTunnelRunner extends I2PAppThread implements DoneCallback {
     /**
      * Starts itself.
      *
+     * @param s the local socket, non-null
+     * @param i2ps the I2P socket carrying the tunnel, non-null
      * @param slock the socket lock, non-null
      * @param initialI2PData may be null
      * @param sockList may be null. Caller must add i2ps to the list! It will be removed here on completion.
@@ -681,6 +687,8 @@ public class I2PTunnelRunner extends I2PAppThread implements DoneCallback {
     /**
      * Starts itself.
      *
+     * @param s the local socket, non-null
+     * @param i2ps the I2P socket carrying the tunnel, non-null
      * @param slock the socket lock, non-null
      * @param initialI2PData may be null
      * @param initialSocketData may be null
@@ -741,6 +749,8 @@ public class I2PTunnelRunner extends I2PAppThread implements DoneCallback {
     /**
      * Base constructor.
      *
+     * @param s the local socket, non-null
+     * @param i2ps the I2P socket carrying the tunnel, non-null
      * @param slock the socket lock, non-null
      * @param initialI2PData may be null
      * @param initialSocketData may be null
@@ -758,6 +768,8 @@ public class I2PTunnelRunner extends I2PAppThread implements DoneCallback {
     /**
      * Base constructor with keepAlive args.
      *
+     * @param s the local socket, non-null
+     * @param i2ps the I2P socket carrying the tunnel, non-null
      * @param slock the socket lock, non-null
      * @param initialI2PData may be null
      * @param initialSocketData may be null
@@ -2171,6 +2183,9 @@ public class I2PTunnelRunner extends I2PAppThread implements DoneCallback {
         /**
          * Forwards data between a local socket and the tunnel.
          *
+         * @param in the stream to read bytes from
+         * @param out the stream to write bytes to
+         * @param toI2P true when forwarding from the local socket to the I2P stream
          * @param cb may be null, only used for toI2P == false
          */
         public StreamForwarder(InputStream in, OutputStream out, boolean toI2P, SuccessCallback cb) {

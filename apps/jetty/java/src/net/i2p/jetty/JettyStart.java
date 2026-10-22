@@ -73,6 +73,9 @@ public class JettyStart implements ClientApp {
 
     /**
      * Modified from XmlConfiguration.main()
+     *
+     * @param args the command line arguments, Jetty XML config files and properties
+     * @throws Exception if a Jetty XML configuration file cannot be read or applied
      */
     @SuppressWarnings({"unchecked", "rawtypes"})
     private void parseArgs(String[] args) throws Exception {

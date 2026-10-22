@@ -37,10 +37,10 @@ import net.i2p.util.SystemVersion;
 
 /**
  * Single threaded controller of the tunnel creation process, spanning all tunnel pools.
- *  Essentially, this loops across the pools, sees which want to build tunnels, and fires
- *  off the necessary activities if the load allows.  If nothing wants to build any tunnels,
- *  it waits for a short period before looping again (or until it is told that something
- *  changed, such as a tunnel failed, new client started up, or tunnel creation was aborted).
+ * Essentially, this loops across the pools, sees which want to build tunnels, and fires
+ * off the necessary activities if the load allows.  If nothing wants to build any tunnels,
+ * it waits for a short period before looping again (or until it is told that something
+ * changed, such as a tunnel failed, new client started up, or tunnel creation was aborted).
  * <p>
  * Note that the default 11 minute tunnel expiration is assumed in here.
  * <p>
@@ -58,6 +58,9 @@ public class BuildExecutor implements Runnable {
      * Zero-hop emergency pools are not ranked here. They are ordered by
      * {@link #DISPATCH_COMPARATOR} ahead of every scored pool, so this
      * score only arbitrates among ordinary demand.
+     *
+     * @param p the pool to score
+     * @return the priority score, higher builds sooner
      */
     private static int score(TunnelPool p) {
         int active = p.getUsableTunnelCount();
@@ -86,13 +89,13 @@ public class BuildExecutor implements Runnable {
 
     /**
      * Elevated ceiling when urgent demand cannot be served at the current one.
-     *  Pure, so the rule is testable without a router.
+     * Pure, so the rule is testable without a router.
      * <p>Elevates only for the urgent pool's own build plus headroom, bounded by
-     *  the ceiling's own maximum, and only when there is not already room under
-     *  it. An ordinary deficit does not elevate: that demand is served a pool
-     *  per cycle in score order, which is what keeps a busy router from
-     *  permanently raising its ceiling to service pools that are merely below
-     *  target.
+     * the ceiling's own maximum, and only when there is not already room under
+     * it. An ordinary deficit does not elevate: that demand is served a pool
+     * per cycle in score order, which is what keeps a busy router from
+     * permanently raising its ceiling to service pools that are merely below
+     * target.
      *
      * @param base the ceiling now in force
      * @param urgent pools holding leases about to expire
@@ -147,7 +150,7 @@ public class BuildExecutor implements Runnable {
 
     /**
      * Pure form of the dispatch score, so the ordering can be pinned without
-     *  building pools.
+     * building pools.
      * <p>Tiers, highest first:
      * <ol>
      * <li>collapsed (no usable tunnel) — a pool with no service at all;</li>
@@ -157,14 +160,14 @@ public class BuildExecutor implements Runnable {
      * <li>paired balance — the direction behind its pair.</li>
      * </ol>
      * <p>Expiry sits above deficit and below near-collapse deliberately. A pool
-     *  holding fewer tunnels than target but with hours on its leases can wait a
-     *  cycle; a pool whose leases lapse in the pre-build window is losing its
-     *  service in minutes and the replacement needs that same window to build.
-     *  It stays below near-collapse so a genuinely thin pool is never starved by
-     *  a merely time-urgent one.
+     * holding fewer tunnels than target but with hours on its leases can wait a
+     * cycle; a pool whose leases lapse in the pre-build window is losing its
+     * service in minutes and the replacement needs that same window to build.
+     * It stays below near-collapse so a genuinely thin pool is never starved by
+     * a merely time-urgent one.
      * <p>The expiry bonus is capped at {@link #MAX_EXPIRY_BONUS} tunnels, so a
-     *  pool that keeps producing near-expiry tunnels cannot accumulate unbounded
-     *  priority — the urgency is consumed when the lease lapses.
+     * pool that keeps producing near-expiry tunnels cannot accumulate unbounded
+     * priority — the urgency is consumed when the lease lapses.
      *
      * @param active usable tunnels in the pool
      * @param target the pool's target quantity, already floored at 2
@@ -193,24 +196,24 @@ public class BuildExecutor implements Runnable {
 
     /**
      * Tunnels near expiry at which the urgency bonus saturates. Beyond this,
-     *  counting more tunnels adds no priority, so one pool with a whole tier
-     *  about to lapse cannot outrank every other pool indefinitely.
+     * counting more tunnels adds no priority, so one pool with a whole tier
+     * about to lapse cannot outrank every other pool indefinitely.
      */
     private static final int MAX_EXPIRY_BONUS = 4;
 
     /**
      * Score per near-expiry tunnel. Below a near-collapsed pool's boost and
-     *  above the largest ordinary deficit for a small pool, so expiry lifts a
-     *  nearly-full pool above a thinly-covered one without inverting the two.
+     * above the largest ordinary deficit for a small pool, so expiry lifts a
+     * nearly-full pool above a thinly-covered one without inverting the two.
      */
     private static final int EXPIRY_BONUS_PER_TUNNEL = 5000;
 
     /**
      * Comparator for snapshotted {@code Object[2]} rows where
-     *  {@code row[0]} is the score (Integer) and {@code row[1]} is the
-     *  pool.  Higher score first, then stable tiebreaker.
-     *  Must never be called with rows from different array instances
-     *  (identityHashCode is only unique within one snapshot).
+     * {@code row[0]} is the score (Integer) and {@code row[1]} is the
+     * pool.  Higher score first, then stable tiebreaker.
+     * Must never be called with rows from different array instances
+     * (identityHashCode is only unique within one snapshot).
      */
     private static final Comparator<Object[]> SCORE_COMPARATOR =
             (a, b) -> {
@@ -221,13 +224,13 @@ public class BuildExecutor implements Runnable {
 
     /**
      * Dispatch comparator for snapshotted {@code Object[3]} rows where
-     *  {@code row[0]} is the score (Integer), {@code row[1]} the pool and
-     *  {@code row[2]} the zero-hop emergency flag (Boolean): emergency
-     *  replacements go first regardless of deficit, then higher score
-     *  first.  Deliberately no identity-hash tiebreaker — Arrays.sort is
-     *  stable, so full ties keep their allocation order from
-     *  calculatePairedBuilds() instead of an arbitrary per-session order
-     *  that could starve one of two equally-ranked pools indefinitely.
+     * {@code row[0]} is the score (Integer), {@code row[1]} the pool and
+     * {@code row[2]} the zero-hop emergency flag (Boolean): emergency
+     * replacements go first regardless of deficit, then higher score
+     * first.  Deliberately no identity-hash tiebreaker — Arrays.sort is
+     * stable, so full ties keep their allocation order from
+     * calculatePairedBuilds() instead of an arbitrary per-session order
+     * that could starve one of two equally-ranked pools indefinitely.
      *
      * @since 0.9.71+
      */
@@ -240,12 +243,12 @@ public class BuildExecutor implements Runnable {
 
     /**
      * Whether this pass should treat the pool as a zero-hop emergency:
-     *  a multi-hop-configured, non-ping pool currently serving traffic
-     *  through a length-1 bootstrap fallback.  Such tunnels provide no
-     *  anonymity, so their replacement gets an unconditional build floor
-     *  in calculatePairedBuilds() and first claim on dispatch slots in
-     *  {@link #run2()}.  Single shared definition so the allocation stage and the
-     *  dispatch stage can never disagree about which pools are urgent.
+     * a multi-hop-configured, non-ping pool currently serving traffic
+     * through a length-1 bootstrap fallback.  Such tunnels provide no
+     * anonymity, so their replacement gets an unconditional build floor
+     * in calculatePairedBuilds() and first claim on dispatch slots in
+     * {@link #run2()}.  Single shared definition so the allocation stage and the
+     * dispatch stage can never disagree about which pools are urgent.
      *
      * @param pool candidate pool, non-null
      * @return true if the pool carries a zero-hop fallback it did not ask for
@@ -260,11 +263,11 @@ public class BuildExecutor implements Runnable {
 
     /**
      * Effective tunnel-count target a pool builds toward.  Pools flagged
-     *  keepConfiguredQty (ping pools, and pools expressly configured for
-     *  zero hops where a length-1 tunnel IS the product) keep their
-     *  configured quantity; all others hold at least targetMin tunnels
-     *  per direction so a single failure can't empty the pool or starve
-     *  the LeaseSet.
+     * keepConfiguredQty (ping pools, and pools expressly configured for
+     * zero hops where a length-1 tunnel IS the product) keep their
+     * configured quantity; all others hold at least targetMin tunnels
+     * per direction so a single failure can't empty the pool or starve
+     * the LeaseSet.
      *
      * @param ctx router context, for the configurable floor and tuner buffer
      * @param s settings of the pool in question
@@ -296,12 +299,12 @@ public class BuildExecutor implements Runnable {
     private final ConcurrentHashMap<TunnelPool, Long> _lastRebuildTime = new ConcurrentHashMap<>(64);
     /**
      * Throttle for peer-selection hot path: BldExecutor was pegging at 98%
-     *  in {@link ClientPeerSelector}.selectSingleHop → IBGWExcluder.contains
-     *  even after endpoint caching, because the tight loop called
-     *  pool.configureNewTunnel() for every wanted pool without per-pool
-     *  spacing.  Skip the heavy peer selection if this pool built within
-     *  the throttle window and still has builds in flight.  Entries are
-     *  dropped in {@link #shutdown()}/removePoolState() so the map cannot leak.
+     * in {@link ClientPeerSelector}.selectSingleHop → IBGWExcluder.contains
+     * even after endpoint caching, because the tight loop called
+     * pool.configureNewTunnel() for every wanted pool without per-pool
+     * spacing.  Skip the heavy peer selection if this pool built within
+     * the throttle window and still has builds in flight.  Entries are
+     * dropped in {@link #shutdown()}/removePoolState() so the map cannot leak.
      * @since 0.9.71+
      */
     private final ConcurrentHashMap<TunnelPool, Long> _lastConfigureTime = new ConcurrentHashMap<>(16);
@@ -325,10 +328,10 @@ public class BuildExecutor implements Runnable {
     private static final byte FIRST_HOP_FAILURE = 0;
     /**
      * Sliding window of recent build results for smooth rate calculation.
-     *  Replaces the old counter-halving approach which caused sawtooth
-     *  oscillation in the timeout rate.  Each entry is a Result ordinal:
-     *  SUCCESS(0), BAD_RESPONSE(1), ..., TIMEOUT(10), etc.  The window
-     *  is indexed by a monotonically increasing counter modulo WINDOW_SIZE.
+     * Replaces the old counter-halving approach which caused sawtooth
+     * oscillation in the timeout rate.  Each entry is a Result ordinal:
+     * SUCCESS(0), BAD_RESPONSE(1), ..., TIMEOUT(10), etc.  The window
+     * is indexed by a monotonically increasing counter modulo WINDOW_SIZE.
      *
      * @since 0.9.71+
      */
@@ -345,10 +348,10 @@ public class BuildExecutor implements Runnable {
     static final int ADAPTIVE_TIMEOUT_RECALC_BUILDS = 50;
     /**
      * Adaptive concurrency throttle: tracks the timeout rate and adjusts
-     *  maxConcurrentBuilds dynamically.  When timeout rate exceeds 30%,
-     *  builds are throttled to prevent overwhelming the IB reply path.
-     *  When timeout rate drops below 15% and success exceeds 80%,
-     *  concurrency is gradually restored.
+     * maxConcurrentBuilds dynamically.  When timeout rate exceeds 30%,
+     * builds are throttled to prevent overwhelming the IB reply path.
+     * When timeout rate drops below 15% and success exceeds 80%,
+     * concurrency is gradually restored.
      *
      * @since 0.9.71+
      */
@@ -387,7 +390,7 @@ public class BuildExecutor implements Runnable {
 
     /**
      * Last dispatch time per first-hop peer, for staggering builds.
-     *  Maps: Hash -&gt; dispatch timestamp in ms.
+     * Maps: Hash -&gt; dispatch timestamp in ms.
      *
      * @since 0.9.71+
      */
@@ -401,8 +404,8 @@ public class BuildExecutor implements Runnable {
 
     /**
      * Maximum age (ms) for first-hop failure history entries.
-     *  Entries older than this are ignored during lookup.
-     *  Tunable via {@link net.i2p.router.Tuner}.
+     * Entries older than this are ignored during lookup.
+     * Tunable via {@link net.i2p.router.Tuner}.
      *
      * @since 0.9.71+
      */
@@ -410,9 +413,9 @@ public class BuildExecutor implements Runnable {
 
     /**
      * Number of failures within {@link #_firstHopCooldownMs}
-     *  required to skip a peer as first hop.  A single transient failure
-     *  should not permanently exclude a peer; repeated failures indicate
-     *  a persistent issue.
+     * required to skip a peer as first hop.  A single transient failure
+     * should not permanently exclude a peer; repeated failures indicate
+     * a persistent issue.
      *
      * @since 0.9.71+
      */
@@ -444,9 +447,9 @@ public class BuildExecutor implements Runnable {
     public static void setFirstHopFailureThreshold(int count) { _firstHopFailureThreshold = Math.max(1, Math.min(10, count)); }
     /**
      * Stale build pruning threshold fraction.  When the time elapsed
-     *  since a build was configured exceeds this fraction of the adaptive
-     *  timeout budget, the build is skipped (it would timeout anyway).
-     *  Expressed as percentage (e.g. 40 means 40%).  Tunable via {@link net.i2p.router.Tuner}.
+     * since a build was configured exceeds this fraction of the adaptive
+     * timeout budget, the build is skipped (it would timeout anyway).
+     * Expressed as percentage (e.g. 40 means 40%).  Tunable via {@link net.i2p.router.Tuner}.
      *
      * @since 0.9.71+
      */
@@ -454,13 +457,13 @@ public class BuildExecutor implements Runnable {
 
     /**
      * Maximum concurrent in-flight builds per pool per direction (inbound
-     *  or outbound).  Enforces fair build distribution across pools so no
-     *  single pool monopolizes build slots.  Each pool's inbound and
-     *  outbound directions are tracked independently, so a pool with
-     *  target 3/2 can have 2 in-flight inbound and 2 in-flight outbound
-     *  simultaneously.
-     *  Raised from 2 so incomplete-LeaseSet / depleted pools can stage
-     *  replacements in parallel without serializing on the configure throttle.
+     * or outbound).  Enforces fair build distribution across pools so no
+     * single pool monopolizes build slots.  Each pool's inbound and
+     * outbound directions are tracked independently, so a pool with
+     * target 3/2 can have 2 in-flight inbound and 2 in-flight outbound
+     * simultaneously.
+     * Raised from 2 so incomplete-LeaseSet / depleted pools can stage
+     * replacements in parallel without serializing on the configure throttle.
      *
      * @since 0.9.71+
      */
@@ -499,8 +502,8 @@ public class BuildExecutor implements Runnable {
 
     /**
      * Jittered backoff: randomize within ±33% of {@link #_poolBackoffMs}
-     *  to prevent synchronized backoff where all pools are skipped in the
-     *  same cycle.  With a 12s base, the effective range is 8-16s.
+     * to prevent synchronized backoff where all pools are skipped in the
+     * same cycle.  With a 12s base, the effective range is 8-16s.
      *
      * @return a jittered backoff duration in ms
      * @since 0.9.71+
@@ -627,9 +630,9 @@ public class BuildExecutor implements Runnable {
 
     /**
      * The adaptive maximum concurrent builds, adjusted based on the
-     *  current timeout rate.  Returns the throttled value when the
-     *  timeout rate exceeds {@link #_concurrencyThrottleThreshold},
-     *  otherwise returns the configured maximum.
+     * current timeout rate.  Returns the throttled value when the
+     * timeout rate exceeds {@link #_concurrencyThrottleThreshold},
+     * otherwise returns the configured maximum.
      *
      * @return adaptive maximum concurrent builds
      * @since 0.9.71+
@@ -691,18 +694,18 @@ public class BuildExecutor implements Runnable {
 
     /**
      * Minimum time between consecutive build passes.  Fast build completions
-     *  wake the loop (buildComplete notifyAll), so without a floor the loop
-     *  re-passes near-continuously during a cascade (~180 builds/min observed)
-     *  instead of building in fewer, higher-quality bursts.
+     * wake the loop (buildComplete notifyAll), so without a floor the loop
+     * re-passes near-continuously during a cascade (~180 builds/min observed)
+     * instead of building in fewer, higher-quality bursts.
      * @since 0.9.71+
      */
     private static final int MIN_BUILD_SPACING_MS = 2000;
 
     /**
      * Pool-backoff counting excludes results that are not peer failures:
-     *  SUCCESS, DUP_ID (already handled), REJECT (peer said no),
-     *  NO_TUNNELS (local resource condition), NO_NETDB (local netdb miss),
-     *  and SKIPPED (local policy, no build dispatched).
+     * SUCCESS, DUP_ID (already handled), REJECT (peer said no),
+     * NO_TUNNELS (local resource condition), NO_NETDB (local netdb miss),
+     * and SKIPPED (local policy, no build dispatched).
      *
      * @param result the build result
      * @return true if the result increments the pool consecutive-failure counter
@@ -716,7 +719,7 @@ public class BuildExecutor implements Runnable {
 
     /**
      * Remaining build-pass spacing in ms: 0 when the spacing floor since the
-     *  last pass is satisfied, otherwise the time still left to wait.
+     * last pass is satisfied, otherwise the time still left to wait.
      *
      * @param lastPassTime the end of the last build pass in ms
      * @param now the current time in ms
@@ -873,8 +876,8 @@ public class BuildExecutor implements Runnable {
 
     /**
      * Remove failure state for a pool that is being removed.
-     *  Prevents unbounded growth of _poolFailureState, _lastRebuildTime,
-     *  and _lastConfigureTime across pool lifecycles.
+     * Prevents unbounded growth of _poolFailureState, _lastRebuildTime,
+     * and _lastConfigureTime across pool lifecycles.
      * @param pool the pool to remove state for
      * @since 0.9.70
      */
@@ -886,8 +889,9 @@ public class BuildExecutor implements Runnable {
 
     /**
      * Failure tracking state for a pool, created if absent.
-     *  Uses get()+putIfAbsent() instead of computeIfAbsent() to avoid
-     *  per-call allocation of the fallback array and reduce lock contention.
+     * Uses get()+putIfAbsent() instead of computeIfAbsent() to avoid
+     * per-call allocation of the fallback array and reduce lock contention.
+     * @param pool the pool whose failure tracking state is wanted
      * @return existing or newly-created long[2]
      * @since 0.9.70+
      */
@@ -904,9 +908,9 @@ public class BuildExecutor implements Runnable {
 
     /**
      * Name of a per-direction build outcome stat, so build success can be
-     *  compared inbound against outbound.  The aggregate
-     *  {@code tunnel.buildSuccessRate} cannot answer that: it mixes both
-     *  directions, and they do not fail for the same reasons.
+     * compared inbound against outbound.  The aggregate
+     * {@code tunnel.buildSuccessRate} cannot answer that: it mixes both
+     * directions, and they do not fail for the same reasons.
      *
      * @param inbound true for an inbound tunnel build
      * @param event Attempted, Succeeded, Failed, TimedOut or SuccessRate
@@ -919,8 +923,8 @@ public class BuildExecutor implements Runnable {
 
     /**
      * Record one build outcome against the direction being built.  Called for
-     *  every completed build, including the ones excluded from the adaptive
-     *  timeout statistics, so the counts are a true per-direction sample.
+     * every completed build, including the ones excluded from the adaptive
+     * timeout statistics, so the counts are a true per-direction sample.
      *
      * @param cfg the tunnel that was being built, may be null
      * @param result the outcome, bucketed by {@link #buildOutcomeEvent(Result)}
@@ -1166,10 +1170,10 @@ public class BuildExecutor implements Runnable {
 
     /**
      * Adaptive concurrency throttle thresholds.
-     *  When timeout rate exceeds {@code THROTTLE_THRESHOLD}, concurrent
-     *  builds are reduced to prevent overwhelming the IB reply path.
-     *  When timeout rate drops below {@code RESTORE_THRESHOLD} and success
-     *  exceeds {@code RESTORE_SUCCESS_THRESHOLD}, concurrency is restored.
+     * When timeout rate exceeds {@code THROTTLE_THRESHOLD}, concurrent
+     * builds are reduced to prevent overwhelming the IB reply path.
+     * When timeout rate drops below {@code RESTORE_THRESHOLD} and success
+     * exceeds {@code RESTORE_SUCCESS_THRESHOLD}, concurrency is restored.
      *
      * @since 0.9.71+
      */
@@ -1200,8 +1204,8 @@ public class BuildExecutor implements Runnable {
 
     /**
      * Calculate the per-iteration build cap from the current timeout rate.
-     *  Proportional scaling (1-4) avoids the binary oscillation that the
-     *  old 2-vs-4 threshold caused around the 30% boundary.
+     * Proportional scaling (1-4) avoids the binary oscillation that the
+     * old 2-vs-4 threshold caused around the 30% boundary.
      *
      * @param timeoutRate the current timeout rate (0.0-1.0)
      * @return cap between 1 and 4
@@ -1311,7 +1315,7 @@ public class BuildExecutor implements Runnable {
 
     /**
      * Safety ceiling for any computed adaptive build timeout, regardless of
-     *  tunnel length, direction, system load, or measured RTT.
+     * tunnel length, direction, system load, or measured RTT.
      *
      * @since 0.9.71+
      */
@@ -1323,15 +1327,15 @@ public class BuildExecutor implements Runnable {
     /**
      * Build completion time above which a build counts as slow.
      * <p>Half the floor the build reply deadline is clamped to in
-     *  {@link #calculateAdaptiveTimeoutFromSuccess}. Half rather than the deadline itself, so the
-     *  count stays selective:
-     *  anything it records is a build that would have been at risk of expiring had the budget
-     *  been at its floor. If nearly every build were counted the stat would just mirror
-     *  {@code tunnel.buildClientSuccess} and say nothing new, and if none were it would be dead.
+     * {@link #calculateAdaptiveTimeoutFromSuccess}. Half rather than the deadline itself, so the
+     * count stays selective:
+     * anything it records is a build that would have been at risk of expiring had the budget
+     * been at its floor. If nearly every build were counted the stat would just mirror
+     * {@code tunnel.buildClientSuccess} and say nothing new, and if none were it would be dead.
      * <p>This exists for the same reason as {@code udp.*EstablishSlow}. The success stats
-     *  record a duration but expose only a mean, and build latency is right-skewed, so the mean
-     *  says little about the builds that nearly timed out - which are exactly the ones a reply
-     *  budget has to cover.
+     * record a duration but expose only a mean, and build latency is right-skewed, so the mean
+     * says little about the builds that nearly timed out - which are exactly the ones a reply
+     * budget has to cover.
      *
      * @since 0.9.71+
      */
@@ -1422,22 +1426,22 @@ public class BuildExecutor implements Runnable {
     /**
      * The adjustment to add to the base build timeout, from the success rate alone.
      * <p>The timeout rate is deliberately not an input. It used to be, and reaching that
-     *  branch was itself a bug worth recording: the test sat after {@code successRate > 0.50},
-     *  so the intended +7s was unreachable for every success rate above half - exactly the band
-     *  where a high timeout rate is most expensive, a timeout burning a whole build slot where
-     *  a reject costs a round trip. Reordering fixed the reachability and the +7s then did
-     *  what it said.
+     * branch was itself a bug worth recording: the test sat after {@code successRate > 0.50},
+     * so the intended +7s was unreachable for every success rate above half - exactly the band
+     * where a high timeout rate is most expensive, a timeout burning a whole build slot where
+     * a reject costs a round trip. Reordering fixed the reachability and the +7s then did
+     * what it said.
      * <p>It no longer belongs here. The +7s was justified while an outbound session
-     *  establishment was abandoning ~117 handshakes a minute at 2250ms: a build waiting on
-     *  one of those genuinely needed more time. That deadline is now floored at 4000ms and
-     *  the abandonments are gone, so the timeouts that remain are not premature ones, and
-     *  buying them 7 extra seconds only holds a build slot longer. Measured across an
-     *  11.8 minute window either side of that change, build success fell from 64.5% to
-     *  56.0% (-8.5pp, 4.2 sigma) and throughput 12%, with the timeout-to-reject ratio
-     *  worsening from 1.55:1 to 3.2:1 - the signature of builds waiting rather than failing.
+     * establishment was abandoning ~117 handshakes a minute at 2250ms: a build waiting on
+     * one of those genuinely needed more time. That deadline is now floored at 4000ms and
+     * the abandonments are gone, so the timeouts that remain are not premature ones, and
+     * buying them 7 extra seconds only holds a build slot longer. Measured across an
+     * 11.8 minute window either side of that change, build success fell from 64.5% to
+     * 56.0% (-8.5pp, 4.2 sigma) and throughput 12%, with the timeout-to-reject ratio
+     * worsening from 1.55:1 to 3.2:1 - the signature of builds waiting rather than failing.
      * <p>The timeout rate still drives the concurrency throttle below, which is the lever
-     *  that reduces occupancy. One signal, one lever: timeouts should shrink the amount of
-     *  work in flight, not inflate how long each item may hold a slot.
+     * that reduces occupancy. One signal, one lever: timeouts should shrink the amount of
+     * work in flight, not inflate how long each item may hold a slot.
      *
      * @param successRate fraction of recent builds that succeeded, 0..1
      * @return milliseconds to add to the base timeout; may be negative
@@ -1459,18 +1463,18 @@ public class BuildExecutor implements Runnable {
     /**
      * Combine the Tuner's base timeout with the success-rate adjustment.
      * <p>Pure, and deliberately unclamped. The base is already bounded by the
-     *  Tuner's own range, and the final budget is bounded by
-     *  {@link #computeAdaptiveTimeout} through {@code MAX_ADAPTIVE_TIMEOUT_MS}, so
-     *  clamping here to the same endpoints as the base only destroyed information:
-     *  with the base at 30s the GOOD (+0), MODERATE (+2s) and LOW (+5s) branches all
-     *  collapsed onto 30s, and with the base at 10s the FAST (-3s) branch collapsed up
-     *  to 10s. Logged samples sat pinned at the 30s ceiling 75% of the time, which is
-     *  what a degenerate ladder looks like from outside.
+     * Tuner's own range, and the final budget is bounded by
+     * {@link #computeAdaptiveTimeout} through {@code MAX_ADAPTIVE_TIMEOUT_MS}, so
+     * clamping here to the same endpoints as the base only destroyed information:
+     * with the base at 30s the GOOD (+0), MODERATE (+2s) and LOW (+5s) branches all
+     * collapsed onto 30s, and with the base at 10s the FAST (-3s) branch collapsed up
+     * to 10s. Logged samples sat pinned at the 30s ceiling 75% of the time, which is
+     * what a degenerate ladder looks like from outside.
      * <p>Extracted from the adaptive-timeout update so that reachability of every
-     *  branch across the base range is unit-testable without a router. While the
-     *  arithmetic lived only inside the instance method, the sole way to test it was
-     *  to reimplement it in the test -- which passes whether or not the real code
-     *  clamps, so it proved nothing.
+     * branch across the base range is unit-testable without a router. While the
+     * arithmetic lived only inside the instance method, the sole way to test it was
+     * to reimplement it in the test -- which passes whether or not the real code
+     * clamps, so it proved nothing.
      *
      * @param baseTimeout the Tuner's current build request timeout in ms
      * @param successRate fraction of recent builds that succeeded, 0..1
@@ -1545,12 +1549,12 @@ public class BuildExecutor implements Runnable {
 
     /**
      * The concurrency ceiling for one throttle crossing: 20% off the current value,
-     *  never below 60% of base.
+     * never below 60% of base.
      * <p>Scaling the current value rather than the base is what makes this a ramp. The
-     *  previous form took 80% of base and clamped with 60% of base, and since 0.8x is
-     *  always greater than 0.6x the clamp could never bind: the value was pinned at a
-     *  single shallow step and the documented floor was unreachable. Repeated crossings
-     *  now walk 96 to 76 to 60 to 57 and stop.
+     * previous form took 80% of base and clamped with 60% of base, and since 0.8x is
+     * always greater than 0.6x the clamp could never bind: the value was pinned at a
+     * single shallow step and the documented floor was unreachable. Repeated crossings
+     * now walk 96 to 76 to 60 to 57 and stop.
      *
      * @param current current adaptive concurrency ceiling
      * @param base the unthrottled configured ceiling
@@ -1570,10 +1574,10 @@ public class BuildExecutor implements Runnable {
     /**
      * The concurrency ceiling for one restore step: a small step toward base.
      * <p>Stepping by a sixteenth rather than a quarter keeps recovery slower than the
-     *  20% the throttle removes, so a transient spike does not put the router back at
-     *  full concurrency and straight into another throttle crossing. The previous
-     *  quarter-step reached base from a single 20% cut in one window, which made the
-     *  throttle and the restore symmetric and the control oscillatory.
+     * 20% the throttle removes, so a transient spike does not put the router back at
+     * full concurrency and straight into another throttle crossing. The previous
+     * quarter-step reached base from a single 20% cut in one window, which made the
+     * throttle and the restore symmetric and the control oscillatory.
      *
      * @param current current adaptive concurrency ceiling
      * @param base the unthrottled configured ceiling
@@ -1588,8 +1592,8 @@ public class BuildExecutor implements Runnable {
     /**
      * Scale a base build timeout for hop count, system load and direction.
      * <p>The length, load and direction terms are added to the base, then the
-     *  measured RTT floor replaces the sum if it is larger, so a peer that
-     *  cannot answer within its own round trip still gets its chance.
+     * measured RTT floor replaces the sum if it is larger, so a peer that
+     * cannot answer within its own round trip still gets its chance.
      *
      * @param baseTimeout  starting budget in milliseconds
      * @param length  tunnel hop count; each hop past the 3-hop baseline adds 5s
@@ -1627,28 +1631,28 @@ public class BuildExecutor implements Runnable {
     /**
      * Describe the peers an expired build was routed through, at DEBUG.
      * <p>An expire is counted as a single outcome, but each one silently also
-     *  costs a test round and a test partner, so the reason a peer looked
-     *  selectable and then never answered is the signal worth having.
+     * costs a test round and a test partner, so the reason a peer looked
+     * selectable and then never answered is the signal worth having.
      * <p>Each hop is labelled with its role, and the hop where the local router
-     *  legitimately belongs is identified as ours rather than reported as a
-     *  peer. A router is one end of every tunnel it builds —
-     *  {@code ClientPeerSelector.finalizeSelection} inserts us as the gateway —
-     *  so naming our own identity here is expected and says nothing about
-     *  failure. Emitting it as an ordinary peer previously read as evidence of
-     *  self-selection when it was only the gateway slot. The gateway index
-     *  depends on direction: inbound puts us at the last hop, outbound at the
-     *  first. An appearance at any <em>other</em> index is the thing worth
-     *  noticing, and is labelled as unexpected.
+     * legitimately belongs is identified as ours rather than reported as a
+     * peer. A router is one end of every tunnel it builds —
+     * {@code ClientPeerSelector.finalizeSelection} inserts us as the gateway —
+     * so naming our own identity here is expected and says nothing about
+     * failure. Emitting it as an ordinary peer previously read as evidence of
+     * self-selection when it was only the gateway slot. The gateway index
+     * depends on direction: inbound puts us at the last hop, outbound at the
+     * first. An appearance at any <em>other</em> index is the thing worth
+     * noticing, and is labelled as unexpected.
      * <p>The three reachability fields are separate because they imply
-     *  different fixes. A peer already known unreachable is a selection filter
-     *  that did not fire. A peer never established and silent is a draw that
-     *  reached past the activity window. A peer that is established and still
-     *  silent accepts a connection and then ignores build requests, which
-     *  neither recency nor reachability filtering will address.
+     * different fixes. A peer already known unreachable is a selection filter
+     * that did not fire. A peer never established and silent is a draw that
+     * reached past the activity window. A peer that is established and still
+     * silent accepts a connection and then ignores build requests, which
+     * neither recency nor reachability filtering will address.
      * <p>{@code wasUnreachable} and {@code isConnecting} are declared on
-     *  {@link CommSystemFacade} with a {@code false} default and are only
-     *  meaningful through the live implementation, which is what
-     *  {@code _context.commSystem()} returns.
+     * {@link CommSystemFacade} with a {@code false} default and are only
+     * meaningful through the live implementation, which is what
+     * {@code _context.commSystem()} returns.
      *
      * @since 0.9.71+
      */
@@ -1681,7 +1685,7 @@ public class BuildExecutor implements Runnable {
 
     /**
      * The peer is on record as unreachable: selection admitted a peer we had already
-     *  written off, so the eligibility filter failed to fire.
+     * written off, so the eligibility filter failed to fire.
      *
      * @since 0.9.71+
      */
@@ -1690,8 +1694,8 @@ public class BuildExecutor implements Runnable {
     /**
      * The peer holds an established connection but did not answer the build request.
      * <p>This is the signature that recency and reachability filtering cannot address: the
-     *  peer accepts the connection and then ignores build requests, so it looks healthy to
-     *  every filter that exists and still consumes a share of the timeout budget.
+     * peer accepts the connection and then ignores build requests, so it looks healthy to
+     * every filter that exists and still consumes a share of the timeout budget.
      *
      * @since 0.9.71+
      */
@@ -1714,8 +1718,8 @@ public class BuildExecutor implements Runnable {
     /**
      * Reduce one hop of an expired build to a single classification token.
      * <p>Order matters: an unreachable peer is reported as such even if a connection flag is
-     *  also set, because "we already know this peer is dead" is the more actionable fact and
-     *  the one that indicts selection rather than the peer.
+     * also set, because "we already know this peer is dead" is the more actionable fact and
+     * the one that indicts selection rather than the peer.
      *
      * @param assigned whether a peer was assigned to this hop
      * @param isUs whether the assigned peer is this router
@@ -1738,7 +1742,7 @@ public class BuildExecutor implements Runnable {
 
     /**
      * Whether a classification describes a hop whose state explains, or at least indicts,
-     *  the expiry - as opposed to a hop that was simply the gateway slot or an ordinary peer.
+     * the expiry - as opposed to a hop that was simply the gateway slot or an ordinary peer.
      *
      * @param classification a token returned by {@link #classifyExpiredHop}
      * @return true when the classification is actionable for diagnosis
@@ -1776,9 +1780,9 @@ public class BuildExecutor implements Runnable {
      * Rate-limit the exhausted-budget report.
      *
      * <p>The condition holds on every pass while the building map is full, so an
-     *  unthrottled line would emit one every dispatch tick. The state is sticky
-     *  enough that once a minute is more than enough to notice it, and the pass
-     *  itself already logs the map size and oldest build age for context.
+     * unthrottled line would emit one every dispatch tick. The state is sticky
+     * enough that once a minute is more than enough to notice it, and the pass
+     * itself already logs the map size and oldest build age for context.
      *
      * @param now current time in milliseconds
      * @return true when the exhausted budget should be reported
@@ -1891,11 +1895,11 @@ public class BuildExecutor implements Runnable {
     /**
      * Append the build request's I2NP message ID, when known.
      * <p>This is the join key to the {@code [MsgID ...]} emitted by
-     *  {@code BuildRequestor} on send. With it, an expiring build can be traced
-     *  to a specific send and the "hop never answered" and "reply lost" cases
-     *  become separable; without it both look identical as {@code established,
-     *  silent}. Omitted entirely when unset rather than printed as 0, so a zero
-     *  is never mistaken for a real message ID.
+     * {@code BuildRequestor} on send. With it, an expiring build can be traced
+     * to a specific send and the "hop never answered" and "reply lost" cases
+     * become separable; without it both look identical as {@code established,
+     * silent}. Omitted entirely when unset rather than printed as 0, so a zero
+     * is never mistaken for a real message ID.
      *
      * @param buf the line being assembled
      * @param cfg the expired build's config
@@ -1915,11 +1919,11 @@ public class BuildExecutor implements Runnable {
     /**
      * Record which hop position failed to answer, for every expired build.
      * <p>Counts one rate stat per (position, classification) pair, skipping
-     *  ourselves and the states that are expected rather than failures, so the
-     *  resulting distribution answers "where do builds die?" without relying on
-     *  the rate-limited log reporter. Hop1 -- the first remote hop, since Hop0 is
-     *  us -- was already the worst position in the sampled data, which is what
-     *  makes the first-hop cooldown the most consequential knob.
+     * ourselves and the states that are expected rather than failures, so the
+     * resulting distribution answers "where do builds die?" without relying on
+     * the rate-limited log reporter. Hop1 -- the first remote hop, since Hop0 is
+     * us -- was already the worst position in the sampled data, which is what
+     * makes the first-hop cooldown the most consequential knob.
      *
      * @param cfg the expired build's config
      * @since 0.9.71+
@@ -2016,13 +2020,13 @@ public class BuildExecutor implements Runnable {
     /**
      * Config index at which the local router sits as this tunnel's gateway.
      * <p>{@code TunnelPool.createConfig} reverses the selected peer list into
-     *  the config, so config index 0 is the last selected peer.
-     *  {@code ClientPeerSelector.finalizeSelection} inserts the local router at
-     *  the front for inbound tunnels and at the end for outbound, which puts
-     *  us at the highest config index inbound and at index 0 outbound.
-     *  {@code ExploratoryPeerSelector} never selects us at all, so for an
-     *  exploratory build no index is ours; the returned index is still used
-     *  only for labelling and any match is reported as unexpected.
+     * the config, so config index 0 is the last selected peer.
+     * {@code ClientPeerSelector.finalizeSelection} inserts the local router at
+     * the front for inbound tunnels and at the end for outbound, which puts
+     * us at the highest config index inbound and at index 0 outbound.
+     * {@code ExploratoryPeerSelector} never selects us at all, so for an
+     * exploratory build no index is ours; the returned index is still used
+     * only for labelling and any match is reported as unexpected.
      *
      * @param cfg the build's config
      * @param length the hop count
@@ -2323,19 +2327,19 @@ public class BuildExecutor implements Runnable {
 
     /**
      * Penalize the peers of an expired build.  Only the hop the build
-     *  request was dispatched to — the gateway (peer 0) for inbound, the
-     *  next hop (peer 1) for outbound, per
-     *  {@link BuildRequestor#getBuildRequestPeer(PooledTunnelCreatorConfig)} —
-     *  failed to deliver a reply; the other hops may never have received
-     *  the request, or may be waiting downstream of a silent peer.  Blaming
-     *  them all shrinks the pool on innocent peers during network-wide
-     *  no-reply events, so the profile penalty and ghost mark go to the
-     *  contacted hop only.  The per-tier expire stat and the didNotReply
-     *  debug log stay per-hop for accounting and triage.
+     * request was dispatched to — the gateway (peer 0) for inbound, the
+     * next hop (peer 1) for outbound, per
+     * {@link BuildRequestor#getBuildRequestPeer(PooledTunnelCreatorConfig)} —
+     * failed to deliver a reply; the other hops may never have received
+     * the request, or may be waiting downstream of a silent peer.  Blaming
+     * them all shrinks the pool on innocent peers during network-wide
+     * no-reply events, so the profile penalty and ghost mark go to the
+     * contacted hop only.  The per-tier expire stat and the didNotReply
+     * debug log stay per-hop for accounting and triage.
      * <p>
      * Every non-self hop is additionally cooled down out of the immediate
-     *  retry selection ({@link #cooldownFailedPeers(PooledTunnelCreatorConfig)}),
-     *  since any of them may have been the silent one.
+     * retry selection ({@link #cooldownFailedPeers(PooledTunnelCreatorConfig)}),
+     * since any of them may have been the silent one.
      *
      * @param cfg the expired build config, non-null
      * @since 0.9.71+
@@ -2810,6 +2814,8 @@ public class BuildExecutor implements Runnable {
     /**
      * Iterate over the 0hop tunnels, running them all inline regardless of how many are allowed.
      *
+     * @param wanted the pools wanting builds; zero-hop pools are removed once processed
+     * @param allowed the number of builds still permitted this cycle
      * @return number of tunnels allowed after processing these zero hop tunnels (almost always the same as before)
      */
     private int buildZeroHopTunnels(List<TunnelPool> wanted, int allowed) {
@@ -2841,12 +2847,12 @@ public class BuildExecutor implements Runnable {
 
     /**
      * Check if a pool is in backoff due to consecutive build failures.
-     *  Uses a jittered backoff window (8-16s, centered on {@link #_poolBackoffMs})
-     *  to prevent synchronized backoff where all pools are skipped in the same
-     *  cycle.  During collapse (0 usable tunnels), backoff is skipped entirely
-     *  so collapsed pools get rebuilt immediately instead of waiting.
-     *  On backoff expiry, resets the failure counter so the pool gets a
-     *  fresh window of attempts.
+     * Uses a jittered backoff window (8-16s, centered on {@link #_poolBackoffMs})
+     * to prevent synchronized backoff where all pools are skipped in the same
+     * cycle.  During collapse (0 usable tunnels), backoff is skipped entirely
+     * so collapsed pools get rebuilt immediately instead of waiting.
+     * On backoff expiry, resets the failure counter so the pool gets a
+     * fresh window of attempts.
      *
      * @param pool the tunnel pool to check
      * @return true if the pool is in backoff
@@ -3089,10 +3095,10 @@ public class BuildExecutor implements Runnable {
 
     /**
      * Record a first-hop failure for a given peer hash.  Called from
-     *  {@link #buildComplete} when a build fails due to first-hop issues.
-     *  Uses exponential decay: old failure counts decay over time, so a
-     *  peer that failed once 10 minutes ago but succeeded since is not
-     *  penalized.
+     * {@link #buildComplete} when a build fails due to first-hop issues.
+     * Uses exponential decay: old failure counts decay over time, so a
+     * peer that failed once 10 minutes ago but succeeded since is not
+     * penalized.
      *
      * @param hash the first-hop peer identity
      * @since 0.9.71+
@@ -3113,9 +3119,9 @@ public class BuildExecutor implements Runnable {
 
     /**
      * Check whether a peer has recently failed as a first hop more than
-     *  {@link #_firstHopFailureThreshold} times within the cooldown window.
-     *  Used by {@link #hasBuildInFlightToFirstHop} to skip peers with a
-     *  pattern of repeated first-hop failures.
+     * {@link #_firstHopFailureThreshold} times within the cooldown window.
+     * Used by {@link #hasBuildInFlightToFirstHop} to skip peers with a
+     * pattern of repeated first-hop failures.
      *
      * @param hash the first-hop peer identity
      * @return true if the peer has exceeded the failure threshold
@@ -3343,7 +3349,7 @@ public class BuildExecutor implements Runnable {
 
     /**
      * Trim a FIFO id set to at most {@code max} entries, dropping the oldest
-     *  (head) entries first.  Insertion order is preserved by the caller.
+     * (head) entries first.  Insertion order is preserved by the caller.
      *
      * @param ids the id set, held by the caller's monitor
      * @param max the maximum size to keep
@@ -3380,6 +3386,7 @@ public class BuildExecutor implements Runnable {
 
     /**
      * Only do this for non-fallback tunnels.
+     * @param cfg the new tunnel configuration to reserve a building slot for
      * @return true if refused because of a duplicate key
      * @since 0.7.12
      */
@@ -3401,11 +3408,11 @@ public class BuildExecutor implements Runnable {
 
     /**
      * This returns the PTCC up to a minute after it 'expired', thus allowing us to
-     *  still use a tunnel if it was accepted, and to update peer stats.
-     *  This means that manager.{@link #buildComplete} could be called more than once, and
-     *  a build can be failed or successful after it was timed out,
-     *  which will affect the stats and profiles.
-     *  But that's ok. A peer that rejects slowly gets penalized twice, for example.
+     * still use a tunnel if it was accepted, and to update peer stats.
+     * This means that manager.{@link #buildComplete} could be called more than once, and
+     * a build can be failed or successful after it was timed out,
+     * which will affect the stats and profiles.
+     * But that's ok. A peer that rejects slowly gets penalized twice, for example.
      *
      * @param id the build message ID
      * @return ptcc or null
@@ -3440,6 +3447,9 @@ public class BuildExecutor implements Runnable {
      * 1x at 210-270s, 2x at 150-210s, 4x at 90-150s, 6x at &lt;90s.
      * This ensures tunnels are rebuilt predictively before they expire,
      * rather than only reactively after failure.
+     *
+     * @param pools all pools examined this cycle
+     * @param wanted the pools wanting builds; pools whose urgency warrants a build are added here
      */
     private void calculatePairedBuilds(List<TunnelPool> pools, List<TunnelPool> wanted) {
         long now = _context.clock().now();
@@ -3697,11 +3707,11 @@ public class BuildExecutor implements Runnable {
 
     /**
      * Collect per-direction build quantity targets for paired destinations,
-     *  used by the proportional per-direction cap in calculatePairedBuilds().
-     *  For each destination the inbound and outbound quantities are the maxima
-     *  of the quantities configured on the pools for that direction, so a pair
-     *  with asymmetric quantities (e.g. 4 inbound / 2 outbound) splits the
-     *  build budget proportionally instead of 50/50.
+     * used by the proportional per-direction cap in calculatePairedBuilds().
+     * For each destination the inbound and outbound quantities are the maxima
+     * of the quantities configured on the pools for that direction, so a pair
+     * with asymmetric quantities (e.g. 4 inbound / 2 outbound) splits the
+     * build budget proportionally instead of 50/50.
      *
      * @param pools pools to scan; dead pools and pools without a destination
      *              are skipped
@@ -3848,13 +3858,13 @@ public class BuildExecutor implements Runnable {
         public final int fallbackCount;
         /**
          * Tunnels per expiry window, cumulative: {@code expire30s} covers the
-         *  already-expired through 30s out, each later field the band above the
-         *  previous one, and {@code expireLater} everything beyond 330s.
+         * already-expired through 30s out, each later field the band above the
+         * previous one, and {@code expireLater} everything beyond 330s.
          */
         public final int expire30s, expire90s, expire150s, expire210s, expire270s, expire330s, expireLater;
         /**
          * GOOD-status subsets of the matching expiry window above, in the same
-         *  order, for proactive replacement.
+         * order, for proactive replacement.
          */
         public final int goodExpire30s, goodExpire90s, goodExpire150s, goodExpire210s, goodExpire270s,
                          goodExpire330s, goodExpireLater;

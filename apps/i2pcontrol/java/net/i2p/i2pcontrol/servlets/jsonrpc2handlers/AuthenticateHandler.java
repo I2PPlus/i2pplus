@@ -98,6 +98,9 @@ public class AuthenticateHandler implements RequestHandler {
 
     /**
      * Validate the provided I2PControl API version against the ones supported by I2PControl.
+     *
+     * @param api the API version value from the request
+     * @return null if the version is supported, an error otherwise
      */
     private static JSONRPC2Error validateAPIVersion(Object api) {
 

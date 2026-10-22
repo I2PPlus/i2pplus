@@ -64,6 +64,8 @@ public class ResettableGZIPOutputStream extends DeflaterOutputStream {
 
     /**
      * Obviously not threadsafe, but it's a stream, that's standard.
+     *
+     * @throws IOException if writing the header to the underlying stream fails
      */
     private void ensureHeaderIsWritten() throws IOException {
         if (_headerWritten) return;

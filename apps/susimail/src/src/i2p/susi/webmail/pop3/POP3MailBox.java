@@ -210,6 +210,8 @@ public class POP3MailBox implements NewMailListener {
      *
      * @param id the 1-based message number from 1 to the mailbox size;
      * out of range sets lastError
+     * @param buffer where the retrieved body lines are written, left untouched when the id is
+     *               out of range
      * @return the buffer containing body data or null
      */
     private Buffer getBody(int id, Buffer buffer) {
@@ -339,6 +341,8 @@ public class POP3MailBox implements NewMailListener {
      * If not connected, connect now.
      * Should be called from all public methods before sending a command.
      * Caller must sync.
+     *
+     * @throws IOException if a fresh connection cannot be opened either
      */
     private void checkConnection() throws IOException {
         if (!isConnected()) {
@@ -435,6 +439,9 @@ public class POP3MailBox implements NewMailListener {
 
     /**
      * Caller must sync.
+     *
+     * @param lines the UIDL response, one "message number uidl" pair per line, null when the
+     *              server returned no list
      */
     private void updateUIDLs(List<String> lines) {
         uidlToID.clear();
@@ -464,6 +471,9 @@ public class POP3MailBox implements NewMailListener {
 
     /**
      * Caller must sync.
+     *
+     * @param lines the LIST response, one "message number octets" pair per line, null when the
+     *              server returned no list
      */
     private void updateSizes(List<String> lines) {
         /*
@@ -725,7 +735,7 @@ public class POP3MailBox implements NewMailListener {
      * Caller must sync.
      *
      * @return true if successful
-     * @throws IOException
+     * @throws IOException if a handshake command cannot be written or answered
      * @since 0.9.13
      */
     private boolean doHandshake() throws IOException {
@@ -760,7 +770,7 @@ public class POP3MailBox implements NewMailListener {
      * Leaves socket connected. Caller must close on IOE.
      *
      * @return true if every command was sent and received an OK reply
-     * @throws IOException
+     * @throws IOException if not connected, or a command cannot be written or answered
      * @since 0.9.34 pulled out of {@link #connect()}
      */
     private boolean doCheckMail() throws IOException {
@@ -803,7 +813,7 @@ public class POP3MailBox implements NewMailListener {
      * @param noWait true to send each DELE and drop it from the pending set
      *               without waiting for a reply; false to batch them and
      *               wait, pruning only if the connection survives
-     * @throws IOException
+     * @throws IOException if a DELE command cannot be written to the server
      * @since 0.9.35 pulled out of delete()
      */
     private void doDelete(boolean noWait) throws IOException {
@@ -853,7 +863,7 @@ public class POP3MailBox implements NewMailListener {
      *
      * @param cmd command to send
      * @return true if command was successful (+OK)
-     * @throws IOException
+     * @throws IOException if the server closes the connection without answering
      */
     private boolean sendCmd1a(String cmd) throws IOException {
         boolean result = false;
@@ -888,7 +898,7 @@ public class POP3MailBox implements NewMailListener {
      *
      * @param cmds command to send
      * @return true if ALL received lines were successful (+OK)
-     * @throws IOException
+     * @throws IOException if a command cannot be written, or the server sends no reply line
      * @since 0.9.13
      */
     private boolean sendCmds(List<SendRecv> cmds) throws IOException {
@@ -982,7 +992,7 @@ public class POP3MailBox implements NewMailListener {
      * Caller must sync.
      *
      * @param cmd command to send non-null
-     * @throws IOException
+     * @throws IOException if the command cannot be written to the socket
      * @since 0.9.13
      */
     private void sendCmd1aNoWait(String cmd) throws IOException {
@@ -995,6 +1005,8 @@ public class POP3MailBox implements NewMailListener {
      * Tries twice
      * Caller must sync.
      *
+     * @param cmd the command to send, such as "RETR 3"
+     * @param buffer where the multi-line result is written
      * @return the buffer or null
      */
     private Buffer sendCmdN(String cmd, Buffer buffer) {
@@ -1037,8 +1049,10 @@ public class POP3MailBox implements NewMailListener {
      * No total timeout (result could be large)
      * Caller must sync.
      *
+     * @param cmd the command to send, such as "RETR 3"
+     * @param buffer where the multi-line result is written
      * @return the buffer or null
-     * @throws IOException
+     * @throws IOException if the server sends no reply, or the result cannot be read
      */
     private Buffer sendCmdNa(String cmd, Buffer buffer) throws IOException {
         if (sendCmd1a(cmd)) {
@@ -1055,6 +1069,7 @@ public class POP3MailBox implements NewMailListener {
      * Total timeout 2 minutes.
      * Caller must sync.
      *
+     * @param cmd the command to send, such as "LIST"
      * @return the lines or null on error
      * @throws IOException if the server goes 2 minutes without
      *                     sending the terminating dot
@@ -1072,7 +1087,7 @@ public class POP3MailBox implements NewMailListener {
      * Caller must sync.
      *
      * @param buffer non-null
-     * @throws IOException
+     * @throws IOException if a line cannot be read from the server or the buffer write fails
      */
     private void getResultNa(Buffer buffer) throws IOException {
         InputStream input = socket.getInputStream();
@@ -1308,6 +1323,7 @@ public class POP3MailBox implements NewMailListener {
          * A command to send and the response mode expected.
          *
          * @param s may be null
+         * @param m how the reply is read back, single line, buffer or list
          */
         public SendRecv(String s, Mode m) {
             send = s;
@@ -1317,7 +1333,9 @@ public class POP3MailBox implements NewMailListener {
 
         /**
          * RB mode only.
+         *
          * @param s may be null
+         * @param buffer where the reply lines are read into
          * @since 0.9.34
          */
         public SendRecv(String s, Buffer buffer) {
@@ -1375,7 +1393,12 @@ public class POP3MailBox implements NewMailListener {
         return cmd;
     }
 
-    /** Looks up a localized string in the message bundle. */
+    /**
+     * Looks up a localized string in the message bundle.
+     *
+     * @param s the English text used as the lookup key
+     * @return the translation for the current language, or s itself when untranslated
+     */
     private static String _t(String s) {return Messages.getString(s);}
 
 }

@@ -123,8 +123,8 @@ class Mail {
     }
 
     /**
-     *  This may or may not contain the body also.
-     *  @return if null, nothing has been loaded yet for this UIDL
+     * This may or may not contain the body also.
+     * @return if null, nothing has been loaded yet for this UIDL
      */
     public synchronized Buffer getHeader() {return header;}
 
@@ -145,6 +145,10 @@ class Mail {
     /**
      * Parse and store the message headers.
      *
+     * @param rb the fetched header buffer, null to do nothing
+     * @param in stream to read the header lines from
+     * @param closeIn whether to mark the buffer read-complete when done
+     * @return all headers, to pass to MailPart, or null on error
      * @since 0.9.34
      */
     private synchronized String[] setHeader(Buffer rb, InputStream in, boolean closeIn) {
@@ -170,8 +174,8 @@ class Mail {
     public synchronized boolean hasHeader() {return header != null;}
 
     /**
-     *  This contains the header also.
-     *  @return may be null
+     * This contains the header also.
+     * @return may be null
      */
     public synchronized Buffer getBody() {return body;}
 
@@ -299,9 +303,9 @@ class Mail {
     }
 
     /**
-     *  Get the attachment type.
-     *  @return the attachment type string
-     *  @since 0.9.62+
+     * Get the attachment type.
+     * @return the attachment type string
+     * @since 0.9.62+
      */
     public synchronized String getAttachmentType() {
         if (contentType == null) {return "none";}
@@ -465,6 +469,7 @@ class Mail {
     /**
      * Parse the header lines of a message.
      *
+     * @param in stream to read the header lines from
      * @return all headers, to pass to MailPart, or null on error
      */
     private String[] parseHeaders(InputStream in) {

@@ -560,6 +560,10 @@ public class LeaseSet extends DatabaseEntry {
      * <li>Add an extra lease</li>
      * <li>Replace the Hash and TunnelID in each Lease</li>
      * </ul>
+     *
+     * @param key the AES session key to encrypt the lease data with
+     * @throws DataFormatException if a lease's gateway or tunnel ID is not set
+     * @throws IOException if the lease data cannot be written
      */
     private void encryp(SessionKey key) throws DataFormatException, IOException {
         int size = _leases.size();
@@ -606,6 +610,10 @@ public class LeaseSet extends DatabaseEntry {
      * Store the new decrypted leases in a backing store,
      * and keep the original leases so that verify() still works and the
      * encrypted leaseset can be sent on to others (via {@link #writeBytes(OutputStream)}).
+     *
+     * @param key the AES session key to decrypt the lease data with
+     * @throws DataFormatException if there are fewer than two leases, or the data is invalid
+     * @throws IOException if the lease data cannot be read
      */
     private void decrypt(SessionKey key) throws DataFormatException, IOException {
         int size = _leases.size();

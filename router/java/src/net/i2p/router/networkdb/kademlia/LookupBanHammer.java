@@ -109,6 +109,8 @@ class LookupBanHammer {
     /**
      * Check whether the requester has an active ban. Removes expired entries inline.
      *
+     * @param rt the reply tunnel whose ban is checked
+     * @param now the current time in ms, compared against the ban expiry
      * @return true if the ban is still active
      */
     private boolean isBanned(ReplyTunnel rt, long now) {
@@ -119,13 +121,24 @@ class LookupBanHammer {
         return false;
     }
 
-    /** Remove entries older than 30s from the deque. */
+    /**
+     * Remove entries older than 30s from the deque.
+     *
+     * @param deque lookup timestamps in ms, oldest first
+     * @param now the current time in ms
+     */
     private static void slideWindow(ConcurrentLinkedDeque<Long> deque, long now) {
         while (!deque.isEmpty() && (now - deque.peekFirst() > 30000))
             deque.pollFirst();
     }
 
-    /** Count entries in the last 1-second window (newest-first iteration). */
+    /**
+     * Count entries in the last 1-second window (newest-first iteration).
+     *
+     * @param deque lookup timestamps in ms, counted newest first
+     * @param now the current time in ms
+     * @return the number of lookups within the last BURST_WINDOW_MS
+     */
     private static int burstCount(ConcurrentLinkedDeque<Long> deque, long now) {
         int count = 0;
         Iterator<Long> it = deque.descendingIterator();
@@ -138,7 +151,13 @@ class LookupBanHammer {
         return count;
     }
 
-    /** Record a ban, evicting the oldest if at capacity. Returns true. */
+    /**
+     * Record a ban, evicting the oldest if at capacity. Returns true.
+     *
+     * @param rt the reply tunnel to ban
+     * @param now the current time in ms, the base of the ban expiry
+     * @return always true, so callers can return the call directly
+     */
     private boolean imposeBan(ReplyTunnel rt, long now) {
         if (banExpiration.size() >= _maxEntries)
             evictOneBan();

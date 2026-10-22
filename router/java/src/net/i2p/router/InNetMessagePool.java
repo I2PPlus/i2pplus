@@ -219,6 +219,14 @@ public class InNetMessagePool implements Service {
     /**
      * Handles invalid or duplicate messages by logging, statistics updates,
      * and history recording.
+     *
+     * @param messageBody the message being dropped
+     * @param invalidReason lower-case reason, capitalized in the log; containing "expire"
+     *                      counts the drop as expired rather than duplicate
+     * @param fromRouter the sender's identity, or null if unknown
+     * @param fromRouterHash the sender's hash, used when fromRouter is null
+     * @param doHistory true to record the drop in the message history
+     * @param msgIDBloomXor the XOR applied to the message id for the history entry
      */
     private void handleInvalidMessage(I2NPMessage messageBody, String invalidReason, RouterIdentity fromRouter, Hash fromRouterHash, boolean doHistory, long msgIDBloomXor) {
         if (_log.shouldInfo()) {
@@ -244,6 +252,12 @@ public class InNetMessagePool implements Service {
 
     /**
      * Processes DatabaseStoreMessage types by running or queueing corresponding jobs.
+     *
+     * @param messageBody the DatabaseStoreMessage to process
+     * @param fromRouter the sender's identity, or null if unknown
+     * @param fromRouterHash the sender's hash
+     * @param doHistory whether to record in the message history, currently unused
+     * @return always true, a job was run or queued
      */
     private boolean processDatabaseStoreMessage(I2NPMessage messageBody, RouterIdentity fromRouter, Hash fromRouterHash, boolean doHistory) {
         List<OutNetMessage> origMessages = _context.messageRegistry().getOriginalMessages(messageBody);
@@ -287,6 +301,11 @@ public class InNetMessagePool implements Service {
 
     /**
      * Handles dropping messages that are not matched or handled.
+     *
+     * @param messageBody the unmatched message being dropped
+     * @param fromRouter the sender's identity, or null if unknown
+     * @param fromRouterHash the sender's hash, used when fromRouter is null
+     * @param doHistory true to record the drop in the message history
      */
     private void handleDroppedUnmatchedMessage(I2NPMessage messageBody, RouterIdentity fromRouter, Hash fromRouterHash, boolean doHistory) {
         MessageHistory history = _context.messageHistory();

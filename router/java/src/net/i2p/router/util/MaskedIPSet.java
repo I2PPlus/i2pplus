@@ -67,6 +67,9 @@ public class MaskedIPSet extends HashSet<String> {
      * This gets the peer from the netdb without validation,
      * for efficiency and to avoid deadlocks.
      *
+     * @param ctx the context holding the NetDb to search
+     * @param peer the peer hash to look up
+     * @return the peer's RouterInfo, or null if the NetDb holds no RouterInfo for it
      * @since 0.9.38
      */
     private static RouterInfo lookupRILocally(RouterContext ctx, Hash peer) {

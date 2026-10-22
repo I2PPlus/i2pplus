@@ -323,6 +323,12 @@ public class BloomFilterIVValidator implements IVValidator {
     /**
      * Log a one-time WARN when the IV filter may be too small.
      *
+     * @param maxMemory the maximum memory available to the JVM, in bytes
+     * @param KBps the configured share bandwidth in KBps
+     * @param recMaxMem the recommended minimum memory in bytes, the amount to
+     *                  raise the setting to
+     * @param threshKBps the share bandwidth in KBps above which the memory
+     *                   recommendation applies
      * @since 0.9.20
      */
     private void warn(long maxMemory, int KBps, long recMaxMem, int threshKBps) {

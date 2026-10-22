@@ -115,6 +115,8 @@ public class RouterKeyGenerator extends RoutingKeyGenerator {
     /**
      * Previous midnight (GMT) for the time given.
      * Caller must synch.
+     *
+     * @param now the time in milliseconds since the epoch
      * @return the previous midnight
      * @since 0.9.10
      */
@@ -125,6 +127,9 @@ public class RouterKeyGenerator extends RoutingKeyGenerator {
     /**
      * Generate mod data from the given GMT day.
      * Caller must synch.
+     *
+     * @param day the GMT day to derive the modifier from
+     * @return the modifier bytes, the date as ASCII yyyyMMdd
      * @since 0.9.10
      */
     private byte[] generateModDataFromCal(LocalDate day) {
@@ -214,6 +219,8 @@ public class RouterKeyGenerator extends RoutingKeyGenerator {
      * Generate a modified (yet consistent) hash from the origKey by generating the
      * SHA256 of the targetKey with the specified modData appended to it.
      *
+     * @param origKey the original routing key to modify
+     * @param modData the modifier bytes appended before hashing, LENGTH bytes
      * @return the modified hash, computed over {@code origKey} followed by the modifier
      * @throws IllegalArgumentException if origKey is null
      */

@@ -26,35 +26,35 @@ public class SkipSpan<K extends Comparable<? super K>, V> implements Flushable {
     public SkipSpan<K, V> prev;
 
     /**
-     *  Create a new instance of this span type.
+     * Create a new instance of this span type.
      *
-     *  @param sl the SkipList to create the span for
-     *  @return a new SkipSpan instance
+     * @param sl the SkipList to create the span for
+     * @return a new SkipSpan instance
      */
     public SkipSpan<K, V> newInstance(SkipList<K, V> sl) { return new SkipSpan<>(keys.length); }
 
     /**
-     *  Mark this instance as killed.
+     * Mark this instance as killed.
      */
     public void killInstance() { /* no-op */ }
 
     /**
-     *  Flush this span to disk.
+     * Flush this span to disk.
      */
     public void flush() { /* no-op */ }
 
     /**
-     *  Protected constructor for subclasses.
+     * Protected constructor for subclasses.
      */
     protected SkipSpan() {
         // Protected constructor for subclasses
     }
 
     /**
-     *  Create a new SkipSpan with the specified capacity.
+     * Create a new SkipSpan with the specified capacity.
      *
-     *  @param size the maximum number of key-value pairs
-     *  @throws IllegalArgumentException if size too big or too small
+     * @param size the maximum number of key-value pairs
+     * @throws IllegalArgumentException if size too big or too small
      */
     @SuppressWarnings("unchecked")
     public SkipSpan(int size) {
@@ -65,9 +65,9 @@ public class SkipSpan<K extends Comparable<? super K>, V> implements Flushable {
     }
 
     /**
-     *  Dump all data from this span to the end.
+     * Dump all data from this span to the end.
      *
-     *  @return a string representation of this span and all following spans
+     * @return a string representation of this span and all following spans
      */
     public String print() {
         StringBuilder buf = new StringBuilder(1024);
@@ -101,9 +101,9 @@ public class SkipSpan<K extends Comparable<? super K>, V> implements Flushable {
     }
 
     /**
-     *  Get the end span of this chain.
+     * Get the end span of this chain.
      *
-     *  @return the last SkipSpan in the chain
+     * @return the last SkipSpan in the chain
      */
     public SkipSpan<K, V> getEnd() {
         if(next == null) { return this; }
@@ -111,11 +111,11 @@ public class SkipSpan<K extends Comparable<? super K>, V> implements Flushable {
     }
 
     /**
-     *  Get the span containing the given key.
+     * Get the span containing the given key.
      *
-     *  @param key the key to locate, compared using its natural ordering
-     *  @param search search parameters and results
-     *  @return the SkipSpan containing the key
+     * @param key the key to locate, compared using its natural ordering
+     * @param search search parameters and results
+     * @return the SkipSpan containing the key
      */
     public SkipSpan<K, V> getSpan(K key, int[] search) {
         if(nKeys == 0) {
@@ -135,10 +135,10 @@ public class SkipSpan<K extends Comparable<? super K>, V> implements Flushable {
     }
 
     /**
-     *  Get the value associated with the given key.
+     * Get the value associated with the given key.
      *
-     *  @param key the key whose associated value is wanted
-     *  @return the value, or null if not found
+     * @param key the key whose associated value is wanted
+     * @return the value, or null if not found
      */
     public V get(K key) {
         if(nKeys == 0) { return null; }
@@ -204,6 +204,10 @@ public class SkipSpan<K extends Comparable<? super K>, V> implements Flushable {
     /**
      * Insert a span at the given position.
      *
+     * @param loc the index in this span's key and value arrays to insert at
+     * @param key the key to insert
+     * @param val the value stored under the key
+     * @param sl the list the entry belongs to, used to create a span on split
      * @return the new span if it caused a split, else null if it went in this span
      */
     private SkipSpan<K, V> insert(int loc, K key, V val, SkipList<K, V> sl) {
@@ -222,12 +226,12 @@ public class SkipSpan<K extends Comparable<? super K>, V> implements Flushable {
     }
 
     /**
-     *  Put a key-value pair into this span.
+     * Put a key-value pair into this span.
      *
-     *  @param key the key to store the value under
-     *  @param val the value
-     *  @param sl the list to bump and split
-     *  @return the new span if it caused a split, else null if it went in this span
+     * @param key the key to store the value under
+     * @param val the value
+     * @param sl the list to bump and split
+     * @return the new span if it caused a split, else null if it went in this span
      */
     public SkipSpan<K, V> put(K key, V val, SkipList<K, V> sl)  {
         if(nKeys == 0) {
@@ -277,14 +281,14 @@ public class SkipSpan<K extends Comparable<? super K>, V> implements Flushable {
     }
 
     /**
-     *  Remove a key-value pair from this span.
+     * Remove a key-value pair from this span.
      *
-     *  @param key the key whose entry is to be deleted
-     *  @param sl the list to shrink if this span empties out
-     *  @return An array of two objects or null.
-     *          rv[0] is the removed object.
-     *          rv[1] is the deleted SkipSpan if the removed object was the last in the SkipSpan.
-     *          rv is null if no object was removed.
+     * @param key the key whose entry is to be deleted
+     * @param sl the list to shrink if this span empties out
+     * @return An array of two objects or null.
+     *         rv[0] is the removed object.
+     *         rv[1] is the deleted SkipSpan if the removed object was the last in the SkipSpan.
+     *         rv is null if no object was removed.
      */
     public Object[] remove(K key, SkipList<K, V> sl) {
         if(nKeys == 0) { return null; }
@@ -348,9 +352,9 @@ public class SkipSpan<K extends Comparable<? super K>, V> implements Flushable {
     }
 
     /**
-     *  Get the first key in this span.
+     * Get the first key in this span.
      *
-     *  @return the first key, or null if empty
+     * @return the first key, or null if empty
      */
     public K firstKey() {
         return keys[0];

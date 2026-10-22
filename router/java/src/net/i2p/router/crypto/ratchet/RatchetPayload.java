@@ -387,6 +387,8 @@ class RatchetPayload {
         /**
          * Padding block filled with random data from the given context.
          *
+         * @param context the context used to generate the random padding data
+         * @param size padding size, with random data
          * @deprecated Use {@link #PaddingBlock(int)} instead.
          * @since 0.9.70
          */
@@ -669,12 +671,15 @@ class RatchetPayload {
 
     /**
      * Big endian.
-     * Same as {@link net.i2p.data.DataHelper#toLong}target, offset, 4, value) but allows negative value.
+     * Same as {@link net.i2p.data.DataHelper#toLong} for 4 bytes, but allows a
+     * negative value.
      *
      * @param target the buffer the 4 big endian bytes are written into
      * @param offset the index of the first of the 4 bytes in target
      * @param value the value to encode, negative values included
-     * @throws ArrayIndexOutOfBoundsException
+     * @throws ArrayIndexOutOfBoundsException if offset is negative or the 4
+     *                                        bytes at offset run past the end
+     *                                        of target
      * @since 0.9.46
      */
     private static void toInt4(byte[] target, int offset, int value) {

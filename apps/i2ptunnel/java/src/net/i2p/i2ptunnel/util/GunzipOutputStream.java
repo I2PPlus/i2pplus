@@ -225,6 +225,9 @@ public class GunzipOutputStream extends InflaterOutputStream {
      * Make sure the header is valid, throwing an IOException if it is bad.
      * Pushes through the state machine, checking as we go.
      * Call for each byte until HeaderState is DONE.
+     *
+     * @param b the next header byte, read as unsigned
+     * @throws IOException if the byte does not match what the current header state expects
      */
     private void verifyHeader(byte b) throws IOException {
         int c = b & 0xff;

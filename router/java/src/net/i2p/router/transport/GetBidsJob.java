@@ -138,6 +138,8 @@ class GetBidsJob {
      * Mark a string for extraction by xgettext and translation.
      * Use this only in static initializers.
      * It does not translate!
+     *
+     * @param s the string literal to mark for extraction
      * @return s unchanged, so xgettext still sees the literal in the source
      */
     private static final String _x(String s) {

@@ -745,8 +745,12 @@ class ConnectionPacketHandler {
      * using the packet's ReceiveStreamId and OptionalFrom,
      * If this is a SYN packet and the con's SendStreamId is not set.
      *
+     * @param packet the incoming packet to verify
+     * @param con the connection the packet is being processed on
      * @return true if the packet is ok for this connection, false if we shouldn't
      *         continue processing.
+     * @throws I2PException if the packet is from the wrong destination, or a
+     *                      required signature is missing or forged
      */
     private boolean verifyPacket(Packet packet, Connection con) throws I2PException {
         if (packet.isFlagSet(Packet.FLAG_RESET)) {
@@ -805,6 +809,7 @@ class ConnectionPacketHandler {
      * a reset arriving on an established stream is checked against the peer we
      * actually negotiated with, not against a FROM field in the packet.
      *
+     * @param packet the RST packet to validate and act on
      * @param con non-null
      */
     private void verifyReset(Packet packet, Connection con) {

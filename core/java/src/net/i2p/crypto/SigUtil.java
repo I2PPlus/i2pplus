@@ -398,6 +398,8 @@ public final class SigUtil {
      *
      * @param pk non-null
      * @return Java EdDSAPublicKey
+     * @throws GeneralSecurityException as InvalidKeyException if the key bytes do not
+     *                                  form a valid key for the type
      * @since 0.9.15
      */
     private static EdDSAPublicKey cvtToJavaEdDSAKey(SigningPublicKey pk) throws GeneralSecurityException {
@@ -413,6 +415,8 @@ public final class SigUtil {
      *
      * @param pk non-null
      * @return Java EdDSAPrivateKey
+     * @throws GeneralSecurityException as InvalidKeyException if the type is neither
+     *                                  EdDSA nor RedDSA, or the key bytes are invalid
      * @since 0.9.15
      */
     private static EdDSAPrivateKey cvtToJavaEdDSAKey(SigningPrivateKey pk) throws GeneralSecurityException {
@@ -653,7 +657,13 @@ public final class SigUtil {
         return kf.generatePrivate(ks);
     }
 
-    /** 16 KB max. */
+    /**
+     * Read the whole file, capped at 16 KB.
+     *
+     * @param file the file to read
+     * @return the bytes read, never more than 16 KB
+     * @throws IOException if the file cannot be read, or holds more than 16 KB
+     */
     private static byte[] getData(File file) throws IOException {
         byte[] buf = new byte[1024];
         InputStream in = null;
@@ -854,12 +864,14 @@ public final class SigUtil {
     }
 
     /**
-     * See above.
+     * Decode a DER-encoded signature into the fixed-width r then s bytes I2P signs.
      * Only supports sigs up to about 65530 bytes. See code to fix BER encoding for bigger than that.
      *
+     * @param asn the DER-encoded signature to decode
      * @param len must be even, twice the nominal length of each BigInteger
      * @return a byte array of len bytes; call {@link #split(byte[])} on the result to
      *         get the two BigIntegers
+     * @throws SignatureException if the input is not an ASN.1 sequence of two integers
      * @since 0.8.7, moved to SigUtil in 0.9.9
      */
     private static byte[] aSN1ToSigBytes(byte[] asn, int len) throws SignatureException {

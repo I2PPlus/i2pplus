@@ -158,7 +158,9 @@ public class EdDSAPublicKey implements EdDSAKey, PublicKey {
      * This is really dumb for now. It does not use a general-purpose ASN.1 decoder.
      * See also {@link #getEncoded()}.
      *
+     * @param d the encoded key bytes from the keystore
      * @return 32 bytes for Ed25519, throws for other curves
+     * @throws InvalidKeySpecException if the encoding is not a supported EdDSA key spec
      * @since 0.9.25
      */
     private static byte[] decode(byte[] d) throws InvalidKeySpecException {

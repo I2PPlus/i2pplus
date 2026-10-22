@@ -60,13 +60,26 @@ public class QRServlet extends HttpServlet {
     /** How long a rendered identicon stays in the cache. */
     private long identiconExpiresInMillis = DEFAULT_IDENTICON_EXPIRES_IN_MILLIS;
 
-    /** Check if client accepts SVG. */
+    /**
+     * Check if client accepts SVG.
+     *
+     * @param req the request whose Accept header is inspected
+     * @return true if the Accept header mentions image/svg+xml
+     */
     private static boolean acceptsSvg(HttpServletRequest req) {
         String accept = req.getHeader("Accept");
         return accept != null && accept.contains("image/svg+xml");
     }
 
-    /** Convert QR BitMatrix to SVG markup. */
+    /**
+     * Convert QR BitMatrix to SVG markup.
+     *
+     * @param matrix the QR code modules to render
+     * @param text the label to draw under the QR code, may be null
+     * @param textName the label used when text is null or empty
+     * @return the complete SVG document markup, with the label text only if a
+     *         non-empty label was given
+     */
     private static String bitMatrixToSvg(BitMatrix matrix, String text, String textName) {
         int qrWidth = matrix.getWidth();
         int qrHeight = matrix.getHeight();
@@ -106,7 +119,16 @@ public class QRServlet extends HttpServlet {
         }
     }
 
-    /** Append SVG path data for QR modules. */
+    /**
+     * Append SVG path data for QR modules.
+     *
+     * @param sb the buffer the path data is appended to
+     * @param matrix the QR code modules to scan
+     * @param width the number of columns to scan
+     * @param height the number of rows to scan
+     * @param yOffset rows added to each module's y coordinate
+     * @return the largest y coordinate written, for placing the label text
+     */
     private static int appendQrPath(StringBuilder sb, BitMatrix matrix, int width, int height, int yOffset) {
         boolean first = true;
         int maxY = 0;
@@ -134,7 +156,13 @@ public class QRServlet extends HttpServlet {
         return maxY;
     }
 
-    /** Escape XML special characters. */
+    /**
+     * Escape XML special characters.
+     *
+     * @param s the text to escape
+     * @return s with &amp;, &lt;, &gt;, a double quote and an apostrophe
+     *         replaced by their XML entities
+     */
     private static String escapeXml(String s) {
         StringBuilder sb = new StringBuilder(s.length());
         for (int i = 0; i < s.length(); i++) {

@@ -65,6 +65,7 @@ public class I2CPMessageHandler {
      *
      * @param type the message type
      * @return the new I2CPMessage instance
+     * @throws I2CPMessageException if the type is not a known I2CP message type
      */
     private static I2CPMessage createMessage(int type) throws I2CPMessageException {
         switch (type) {

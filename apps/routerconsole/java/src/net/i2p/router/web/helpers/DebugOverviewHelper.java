@@ -287,6 +287,8 @@ public class DebugOverviewHelper extends HelperBase {
 
     /**
      * Sum the ratchet stats across distinct client session key managers.
+     *
+     * @return the summed stats, or null if no client reported any
      */
     private long[] _clientSKMSum() {
         java.util.Set<net.i2p.data.Destination> clients = _context.clientManager().listClients();

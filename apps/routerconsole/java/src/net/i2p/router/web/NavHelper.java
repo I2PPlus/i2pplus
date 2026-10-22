@@ -113,7 +113,10 @@ public class NavHelper implements NavService, ClientApp {
 
     /**
      * Get 16x16 icon img and append to buf.
+     *
+     * @param buf the page output to append the img tag to
      * @param name standard app name
+     * @param iconpath the app's custom icon path, or null for the default plugin icon
      * @since 0.9.45
      */
     private void getClientAppImg(StringBuilder buf, String name, String iconpath) {

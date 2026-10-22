@@ -435,7 +435,10 @@ public class ClientAppConfig {
     /**
      * All to a single file, apps.configFile ignored.
      *
+     * @param apps the client app configs to write, in order
+     * @param cfgFile the single file to write them all to
      * @throws IllegalArgumentException if null cfgFile
+     * @throws IOException if the file cannot be written
      * @since 0.9.42 split out from above
      */
     private static void writeClientAppConfig(List<ClientAppConfig> apps, File cfgFile) throws IOException {

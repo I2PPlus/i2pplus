@@ -126,6 +126,7 @@ public abstract class XmlTemplate {
     /**
      * Format one channel of a colour as two lowercase hex digits.
      *
+     * @param i the colour channel value, 0 to 255
      * @return the two-digit hex form of a colour channel, 0 to 255
      */
     private String byteToHex(int i) {

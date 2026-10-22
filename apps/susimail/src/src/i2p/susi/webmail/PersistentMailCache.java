@@ -322,6 +322,13 @@ class PersistentMailCache {
     /**
      * ~/.i2p/susimail/cache/cache-xxxxx/cur/s[b64char]/mail-xxxxx.full.txt.gz
      * folder1 is the base.
+     *
+     * @param host the mail server host, part of the cache key
+     * @param port the mail server port, part of the cache key
+     * @param user the user name, part of the cache key
+     * @param folder the folder base name, e.g. cur
+     * @return the base folder directory, with one subdirectory per base64 character
+     * @throws IOException if any of the directories cannot be created
      */
     private File makeCacheDirs(String host, int port, String user, String folder) throws IOException {
         File f = new SecureDirectory(_context.getConfigDir(), DIR_SUSI);
@@ -386,6 +393,8 @@ class PersistentMailCache {
     /**
      * Save data to disk.
      *
+     * @param rb the in-memory buffer whose data is written to disk
+     * @param f the gzip cache file to write
      * @return true if the buffer was written in full; false on an IOException,
      *         which also leaves the buffer marked incomplete
      */
@@ -420,6 +429,7 @@ class PersistentMailCache {
     /**
      * Wrap a cache file in a decompressing buffer.
      *
+     * @param f the gzip cache file to read
      * @return null on failure
      */
     private static Buffer read(File f) {
@@ -431,6 +441,8 @@ class PersistentMailCache {
      * This is for the initial load only.
      * Others will use {@link #getMail(Mail, boolean)}.
      *
+     * @param f the cache file to parse, in full or header form
+     * @param isDrafts true if the file is in the drafts folder
      * @return null on failure
      */
     private static Mail load(File f, boolean isDrafts) {

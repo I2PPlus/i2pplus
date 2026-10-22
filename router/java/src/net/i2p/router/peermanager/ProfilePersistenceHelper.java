@@ -325,6 +325,11 @@ _context.statManager().createRequiredRateStat(STAT_STORED_PROFILES,
     /**
      * Write a date property, with a comment if requested.
      *
+     * @param buf the builder to append the line to
+     * @param addComments true to append the comment line, false the property line
+     * @param name the property name to write
+     * @param val the timestamp in ms, 0 or less meaning never
+     * @param description comment text, the rendered date is appended to it
      * @since 0.8.5
      */
     private static void addDate(StringBuilder buf, boolean addComments, String name, long val, String description) {
@@ -337,6 +342,11 @@ _context.statManager().createRequiredRateStat(STAT_STORED_PROFILES,
     /**
      * Write a profile property, with a comment if requested.
      *
+     * @param buf the builder to append the line to
+     * @param addComments true to append the comment line, false the property line
+     * @param name the property name to write
+     * @param val the numeric value to write
+     * @param description comment text for the property
      * @since 0.8.5
      */
     private static void add(StringBuilder buf, boolean addComments, String name, long val, String description) {
@@ -432,6 +442,11 @@ List<PeerProfile> profiles = new ArrayList<>(Math.min(LIMIT_PROFILES, freshFiles
 
     private static class ProfileFilter implements FilenameFilter {
         /**
+         * Filter accepting filenames that match the profile naming pattern.
+         */
+        private ProfileFilter() {}
+
+        /**
          * Whether the filename matches the profile naming pattern.
          */
         @Override
@@ -459,6 +474,7 @@ List<PeerProfile> profiles = new ArrayList<>(Math.min(LIMIT_PROFILES, freshFiles
     /**
      * Migrate from one-level to two-level directory structure.
      *
+     * @param files the flat profile files to move into the two-level structure
      * @since 0.9.4
      */
     private void migrate(File[] files) { // NOSONAR S3012: called from selectFiles()
@@ -634,6 +650,7 @@ List<PeerProfile> profiles = new ArrayList<>(Math.min(LIMIT_PROFILES, freshFiles
      * First heard about wasn't always set correctly before,
      * set it to the minimum of all recorded timestamps.
      *
+     * @param p the profile whose firstHeardAbout is corrected in place
      * @since 0.9.24
      */
     private void fixupFirstHeardAbout(PeerProfile p) {

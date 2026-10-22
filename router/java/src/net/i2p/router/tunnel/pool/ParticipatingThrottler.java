@@ -566,6 +566,8 @@ public class ParticipatingThrottler {
      * Rate-limited background resolution for transit peers missing from our
      * local netDb, so throttler decisions graduate from count-only to full
      * classification without blocking or hammering the netdb.
+     *
+     * @param h the hash of the transit peer to resolve
      */
     private void scheduleRouterLookup(Hash h) {
         Long last = _recentLookups.get(h);
@@ -586,6 +588,7 @@ public class ParticipatingThrottler {
      * @param h hash of the router being evaluated
      * @param isBanned true if already banned
      * @param caps router capabilities string
+     * @param ri the router info, used for the IP:port in the ban log
      * @return true if the router should be dropped (banned), false otherwise
      */
     private boolean checkVersionAndCompressibility(String version, boolean isCompressible, boolean shouldDisconnect, Hash h, boolean isBanned, String caps, RouterInfo ri) {
@@ -614,6 +617,7 @@ public class ParticipatingThrottler {
      * @param isBanned true if already banned
      * @param caps router capabilities string
      * @param bantime ban duration in milliseconds
+     * @param ri the router info, used for the IP:port in the ban log
      * @return true if the router should be dropped (banned), false otherwise
      */
     private boolean checkLowShareAndVersion(String version, boolean isLU, boolean shouldBlockOldRouters, Hash h,
@@ -860,7 +864,14 @@ public class ParticipatingThrottler {
         }
     }
 
-    /** Logs warnings for high count tunnel request rejections. */
+    /**
+     * Logs warnings for high count tunnel request rejections.
+     *
+     * @param h the router whose requests are being rejected
+     * @param caps the router capabilities string, may be null
+     * @param count the request count in the 90 second window
+     * @param limit the allowed maximum in the 90 second window
+     */
     private void _logHighRequestCount(Hash h, String caps, int count, int limit) {
         if (_log.shouldWarn()) {
             _log.warn("Rejecting Tunnel Requests from " + (caps != null ? caps : "") +
@@ -869,7 +880,12 @@ public class ParticipatingThrottler {
         }
     }
 
-    /** Logs debug information for accepted tunnel requests. */
+    /**
+     * Logs debug information for accepted tunnel requests.
+     *
+     * @param caps the router capabilities string, empty when none
+     * @param count the request count in the 90 second window
+     */
     private void _logAcceptRequest(String caps, int count) {
         if (_log.shouldDebug()) {
             _log.debug("Accepting Tunnel Request from " + (!caps.isEmpty() ? caps : "") +
@@ -906,6 +922,9 @@ public class ParticipatingThrottler {
         private final String version;
         /**
          * Force disconnect the peer on timer expiry.
+         *
+         * @param h the peer to disconnect when the timer fires
+         * @param version the peer version named in the disconnect reason, null or empty gives a generic reason
          */
         public Disconnector(Hash h, String version) { super(context.simpleTimer2()); this.h = h; this.version = version; }
         /**

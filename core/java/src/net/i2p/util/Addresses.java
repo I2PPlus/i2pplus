@@ -346,6 +346,9 @@ public abstract class Addresses {
 
     /**
      * Strip the trailing "%nn" from {@link java.net.Inet6Address#getHostAddress}.
+     *
+     * @param ip the host address string, possibly with a %nn scope suffix
+     * @return the address with any scope suffix removed
      */
     private static String stripScope(String ip) {
         int pct = ip.indexOf('%');
@@ -481,6 +484,7 @@ public abstract class Addresses {
      * Does the RFC 5952 substitution and drops a redundant leading zero group.
      *
      * @param host non-null
+     * @return the canonical form of the IPv6 host string
      * @since 0.9.57
      */
     private static String x_toCanonicalString(String host) {
@@ -1113,6 +1117,7 @@ public abstract class Addresses {
     /**
      * Print the addresses to stdout.
      *
+     * @param a the address strings to print, one per line, or "none" if empty
      * @since 0.9.34
      */
     private static void print(Set<String> a) {
@@ -1128,6 +1133,7 @@ public abstract class Addresses {
     /**
      * Print the addresses in canonical form to stdout.
      *
+     * @param a the address strings to print canonically, one per line, or "none" if empty
      * @since 0.9.57
      */
     private static void printCanonical(Set<String> a) {
@@ -1185,6 +1191,7 @@ public abstract class Addresses {
     /**
      * Return first line in a file as a long.
      *
+     * @param s the file path whose first line is parsed as a decimal long
      * @return -1 on failure
      * @since 0.9.34
      */

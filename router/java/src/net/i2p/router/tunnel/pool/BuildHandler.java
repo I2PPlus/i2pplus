@@ -210,6 +210,8 @@ public class BuildHandler implements Runnable {
      * Refresh the cached build configuration from properties at most once
      * per CONFIG_REFRESH_MS, or immediately when the context changes.
      * Benign race: duplicate refreshes are idempotent writes.
+     *
+     * @param ctx the router context supplying the clock and properties
      */
     private static void refreshBuildConfig(RouterContext ctx) {
         long now = ctx.clock().now();
@@ -441,6 +443,9 @@ public class BuildHandler implements Runnable {
     /**
      * Upper bound on participating tunnels before the router drops
      * incoming build requests, tunable via {@code router.maxParticipatingTunnels}.
+     *
+     * @param ctx the router context whose properties are cached
+     * @return the cached limit on participating tunnels
      */
     private static int getMaxParticipatingTunnels(RouterContext ctx) {
         refreshBuildConfig(ctx);
@@ -712,6 +717,8 @@ public class BuildHandler implements Runnable {
 
     /**
      * Blocking call to handle a single inbound reply.
+     *
+     * @param state the received reply message with its receive time
      */
     private void handleReply(BuildReplyMessageState state) {
         // search through the tunnels for a reply
@@ -727,6 +734,10 @@ public class BuildHandler implements Runnable {
 
     /**
      * Blocking call to handle a single inbound reply.
+     *
+     * @param msg the reply message whose records report each hop's result
+     * @param cfg the building tunnel config this reply was matched to
+     * @param delay ms this reply waited in the queue before being handled, 0 or more
      */
     private void handleReply(TunnelBuildReplyMessage msg, PooledTunnelCreatorConfig cfg, long delay) {
         // From the config's own creation time, not from its expiry minus ten minutes. The expiry
@@ -889,6 +900,8 @@ public class BuildHandler implements Runnable {
      * Decrypt the request, lookup the RI locally,
      * and call {@link #handleReq(RouterInfo, BuildMessageState, BuildRequestRecord, Hash)} if found or queue a lookup job.
      *
+     * @param state the received build message with sender and receive time
+     * @param now the current time in ms, compared against the receive time
      * @return handle time or -1 if it wasn't completely handled
      */
     private long handleRequest(BuildMessageState state, long now) {
@@ -1064,6 +1077,8 @@ public class BuildHandler implements Runnable {
 
     /**
      * This request is actually a reply, process it as such.
+     *
+     * @param state the received end message holding the reply records
      */
     private void handleRequestAsInboundEndpoint(BuildEndMessageState state) {
         int records = state.msg.getRecordCount();
@@ -1368,6 +1383,11 @@ public class BuildHandler implements Runnable {
      * and the bandwidth is not credited to any tunnel.
      * If we did credit the reply to the tunnel, it would
      * prevent the classification of the tunnel as 'inactive' on tunnels.jsp.
+     *
+     * @param nextPeerInfo the local RouterInfo of the next hop to forward toward
+     * @param state the received build message with sender hash and receive time
+     * @param req the decrypted request record to act on
+     * @param nextPeer hash of the next hop this request is addressed to
      */
     private void handleReq(RouterInfo nextPeerInfo, BuildMessageState state, BuildRequestRecord req, Hash nextPeer) {
         long ourId = req.readReceiveTunnelId();
@@ -1862,6 +1882,11 @@ public class BuildHandler implements Runnable {
 
         /**
          * Either f or h may be null, but both should be null only if we're to be a IBGW and it came from us as a OBEP.
+         *
+         * @param ctx the router context
+         * @param m the received message, cast to a tunnel build message
+         * @param f the sender's RouterIdentity, may be null
+         * @param h the sender's hash, may be null
          */
         public BuildMessageState(RouterContext ctx, I2NPMessage m, RouterIdentity f, Hash h) {
             _ctx = ctx;
@@ -1872,6 +1897,8 @@ public class BuildHandler implements Runnable {
         }
         /**
          * No-op; the enqueue time is fixed at construction.
+         *
+         * @param time ignored, accepted only to satisfy the interface
          */
         @Override
         public void setEnqueueTime(long time) {
@@ -1886,6 +1913,8 @@ public class BuildHandler implements Runnable {
         public long getEnqueueTime() {return recvTime;}
         /**
          * The time the next hop lookup started.
+         *
+         * @param time the lookup start stamp in ms
          */
         public void setLookupStartTime(long time) {this.lookupStartTime = time;}
         /**
@@ -1917,6 +1946,8 @@ public class BuildHandler implements Runnable {
         final long recvTime;
         /**
          * The reply message and the time it was received.
+         *
+         * @param m the received message, cast to a tunnel build reply message
          */
         public BuildReplyMessageState(I2NPMessage m) {
             msg = (TunnelBuildReplyMessage)m;
@@ -1931,6 +1962,9 @@ public class BuildHandler implements Runnable {
         final long recvTime;
         /**
          * The tunnel config, message, and receive time of a build end reply.
+         *
+         * @param c the config of the tunnel whose end reply arrived
+         * @param m the received message, cast to a tunnel build message
          */
         public BuildEndMessageState(PooledTunnelCreatorConfig c, I2NPMessage m) {
             cfg = c;
@@ -2139,7 +2173,10 @@ public class BuildHandler implements Runnable {
 
     /**
      * Extract IP:port from {@link RouterInfo} for a peer hash.
-     * @return the IP port from hash
+     *
+     * @param h the peer hash to look up locally, unvalidated
+     * @return host:port of the first usable address, or "UNKNOWN" if the
+     *         RouterInfo is not stored locally
      */
     private String getIPPortFromHash(Hash h) {
         try {
@@ -2165,6 +2202,8 @@ public class BuildHandler implements Runnable {
      * Mark a string for extraction by xgettext and translation.
      * Use this only in static initializers.
      * It does not translate!
+     *
+     * @param s the string to mark for extraction
      * @return s unchanged; marking happens by side effect only
      */
     private static final String _x(String s) {return s;}

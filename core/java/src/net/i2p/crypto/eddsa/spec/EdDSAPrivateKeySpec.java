@@ -118,6 +118,9 @@ public class EdDSAPrivateKeySpec implements KeySpec {
 
     /**
      * Defensive copy; null passes through unchanged.
+     *
+     * @param b the array to copy, may be null
+     * @return a clone of b, or null if b was null
      */
     private static byte[] copy(byte[] b) {
         if (b == null)

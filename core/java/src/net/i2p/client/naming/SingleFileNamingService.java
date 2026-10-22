@@ -147,6 +147,7 @@ public class SingleFileNamingService extends NamingService {
      * @param host case-sensitive; caller should convert to lower case
      * @return the base64 destination key mapped to that hostname in the hosts
      * file, or null if the file holds no such entry
+     * @throws IOException if the hosts file changed and could not be re-read
      */
     @SuppressWarnings("PMD.AvoidBranchingStatementAsLastInLoop")
     private String getKey(String host) throws IOException {
@@ -164,6 +165,8 @@ public class SingleFileNamingService extends NamingService {
     /**
      * Full-scan parse of the hosts file into _keyCache (hostname -&gt; base64 key).
      * Caller must hold the read lock. Sets _cacheStamp on success.
+     *
+     * @throws IOException if the hosts file exists but could not be read
      * @since 0.9.71+
      */
     private void loadKeyCacheLocked() throws IOException {
@@ -637,6 +640,7 @@ public class SingleFileNamingService extends NamingService {
     /**
      * Whether the file ends with a newline.
      *
+     * @param file the file to inspect
      * @return true if the file exists, is non-empty and ends with a newline
      */
     private static boolean endsWithNewline(File file) {

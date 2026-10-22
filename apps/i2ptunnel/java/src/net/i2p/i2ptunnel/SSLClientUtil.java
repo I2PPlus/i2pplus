@@ -153,6 +153,7 @@ public class SSLClientUtil {
      * Pull the cert back OUT of the keystore and save it as ascii
      * so the clients can get to it.
      *
+     * @param ks the keystore file holding the certificate
      * @param name used to generate output file name
      * @param opts must contain optPfx + PROP_KEY_ALIAS
      * @param optPfx add this prefix when getting options

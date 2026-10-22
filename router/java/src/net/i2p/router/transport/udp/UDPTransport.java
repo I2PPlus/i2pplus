@@ -1002,7 +1002,11 @@ public class UDPTransport extends TransportImpl {
         }
     }
 
-    /** Check if inbound fragment handler is alive. */
+    /**
+     * Check if inbound fragment handler is alive.
+     *
+     * @return true if the inbound fragment handler job is still running
+     */
     private boolean isAlive() {
         return _inboundFragments.isAlive();
     }
@@ -1104,6 +1108,8 @@ public class UDPTransport extends TransportImpl {
      * Host/port must already be set in props if they are going to be.
      * Must only be called if SSU2 is enabled.
      *
+     * @param props the address options to add the SSU2 intro key, static key
+     *              and version entries to
      * @since 0.9.54
      */
     private void addSSU2Options(Properties props) {
@@ -1178,6 +1184,8 @@ public class UDPTransport extends TransportImpl {
     /**
      * The current port of the first matching endpoint.
      * To be enhanced to handle multiple endpoints of the same type.
+     *
+     * @param ipv6 true to match an IPv6 endpoint, false for IPv4
      * @return port or -1
      */
     private int getListenPort(boolean ipv6) {
@@ -1206,6 +1214,8 @@ public class UDPTransport extends TransportImpl {
      * UDPEndpoint should always be instantiated (and a random port picked if not configured)
      * before this is called, so the returned value should be &gt; 0
      * unless the endpoint failed to bind.
+     *
+     * @param ipv6 true to return the IPv6 port, false for IPv4
      * @return the requested port
      */
     private int getRequestedPort(boolean ipv6) {
@@ -1826,7 +1836,12 @@ public class UDPTransport extends TransportImpl {
     /**
      * Compare two address and port pairs for equality; either address may be null.
      *
-     * @param laddr and raddr may be null
+     * @param laddr local address, may be null
+     * @param lport local port, 0-65535
+     * @param raddr remote address, may be null
+     * @param rport remote port, 0-65535
+     * @return true if the ports are equal and the addresses are equal, with
+     *         null addresses equal only when both are null
      */
     private static final boolean eq(byte[] laddr, int lport, byte[] raddr, int rport) {
         return (rport == lport) && DataHelper.eq(laddr, raddr);
@@ -1855,7 +1870,10 @@ public class UDPTransport extends TransportImpl {
      * our signature of the SessionCreated packet will be invalid.
      * <p>
      * As of 0.9.58, returns false if status is UNKNOWN.
-     * @return the is port fixed
+     *
+     * @param isIPv6 true to evaluate the IPv6 reachability status, false for IPv4
+     * @return true if our port is fixed and stable, false if we are firewalled
+     *         or the status for that family is unknown
      */
     private boolean getIsPortFixed(boolean isIPv6) {
         String prop = _context.getProperty(PROP_FIXED_PORT);
@@ -2332,7 +2350,9 @@ public class UDPTransport extends TransportImpl {
     /**
      * This does not send a session destroy, caller must do that if desired.
      *
+     * @param peer the peer state to remove from all peer maps and drop
      * @param shouldBanlist doesn't really, only sets unreachable
+     * @param why unused, the reason for the drop given at the call site
      */
     private void locked_dropPeer(PeerState peer, boolean shouldBanlist, String why) {
         peer.dropOutbound();
@@ -3014,6 +3034,7 @@ public class UDPTransport extends TransportImpl {
      * here and in NTCP would be required to publish multiple v4 or v6 addresses.
      *
      * @param allowRebuildRouterInfo whether to tell the router
+     * @param ipv6 true to rebuild the IPv6 address, false for IPv4
      * @return the new address if changed, else null
      */
     private RouterAddress rebuildExternalAddress(boolean allowRebuildRouterInfo, boolean ipv6) {
@@ -3130,6 +3151,9 @@ public class UDPTransport extends TransportImpl {
      *
      * @param host new validated IPv4 or IPv6 or DNS hostname or null
      *             or ":" to force IPv6 introducer rebuild
+     * @param port the port to publish, 0 or less if unknown
+     * @param allowRebuildRouterInfo whether to rebuild and republish the router info
+     * @return the new RouterAddress, or null if it equals the current one
      */
     private RouterAddress locked_rebuildExternalAddress(String host, int port, boolean allowRebuildRouterInfo) {
         if (_log.shouldDebug())
@@ -3398,6 +3422,8 @@ public class UDPTransport extends TransportImpl {
      * <p>
      * Caller must sync on _rebuildLock.
      *
+     * @param ra the new external address to store, with host and port options
+     * @param isIPv6 true to store it as the current IPv6 address, false for IPv4
      * @since 0.9.18
      */
     private void replaceCurrentExternalAddress(RouterAddress ra, boolean isIPv6) {
@@ -3491,6 +3517,10 @@ public class UDPTransport extends TransportImpl {
 
     /**
      * Do we require introducers?
+     *
+     * @param ipv6 true to test the IPv6 side of our reachability, false for IPv4
+     * @return true if we cannot accept unsolicited UDP packets on that side, or
+     *         direct connections are disallowed, so outbound introducers are needed
      */
     private boolean introducersRequired(boolean ipv6) {
         if (_context.router().isHidden())
@@ -3621,7 +3651,11 @@ public class UDPTransport extends TransportImpl {
             _introManager.introducedCount() < getMaxConnections() / 4;
     }
 
-    /** Whether direct UDP connections to other routers are allowed; defaults to true. */
+    /**
+     * Whether direct UDP connections to other routers are allowed; defaults to true.
+     *
+     * @return false only if i2np.udp.allowDirect is explicitly set to false
+     */
     private boolean allowDirectUDP() {
         return _context.getBooleanPropertyDefaultTrue(PROP_ALLOW_DIRECT);
     }
@@ -3955,7 +3989,11 @@ public class UDPTransport extends TransportImpl {
      * Cache the bid to reduce object churn
      */
     private class SharedBid extends TransportBid {
-        /** Latency ms. */
+        /**
+         * Latency ms.
+         *
+         * @param ms the bid latency in milliseconds
+         */
         public SharedBid(int ms) { super(); setLatencyMs(ms); }
         @Override
         public Transport getTransport() { return UDPTransport.this; }
@@ -4109,7 +4147,12 @@ if (_alive)
                 schedule(loopTime);
         }
 
-        /** Alive flag. */
+        /**
+         * Alive flag.
+         *
+         * @param isAlive true to mark the job alive and reschedule it at the
+         *                long loop time, false to let it wind down
+         */
         public void setIsAlive(boolean isAlive) {
             _alive = isAlive;
             if (isAlive) {
@@ -4308,6 +4351,8 @@ if (_alive)
 
     /**
      * IPv4 only.
+     *
+     * @param status the new IPv4 reachability status
      */
     private void setReachabilityStatus(Status status) {
         setReachabilityStatus(status, false);
@@ -4332,6 +4377,7 @@ if (_alive)
      * 2a) If current status changed, call {@link #rebuildExternalAddress(boolean)}
      * 2b) Otherwise, If we need to retest, call {@link net.i2p.router.transport.udp.PeerTestEvent#forceRunSoon(boolean)}.
      *
+     * @param newStatus the new IPv4 or IPv6 status to merge into the combined status
      * @param isIPv6 Is the change an IPv6 change?
      */
     private void locked_setReachabilityStatus(Status newStatus, boolean isIPv6) {
@@ -4727,7 +4773,11 @@ if (_alive)
      */
     private static class DestroyedCache extends LHMCache<Long, PeerStateDestroyed> {
 
-        /** Maximum threshold. */
+        /**
+         * Maximum threshold.
+         *
+         * @param max the maximum number of entries kept before eviction
+         */
         public DestroyedCache(int max) {
             super(max);
         }

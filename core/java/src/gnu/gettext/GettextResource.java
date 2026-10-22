@@ -13,28 +13,28 @@ import java.util.*;
  * The main differences between the Sun ResourceBundle approach and the
  * GNU gettext approach are:
  * <UL>
- *   <LI>In the Sun approach, the keys are abstract textual shortcuts.
- *       In the GNU gettext approach, the keys are the English/ASCII version
- *       of the messages.
- *   <LI>In the Sun approach, the translation files are called
- *       "<VAR>Resource</VAR>_<VAR>locale</VAR>.properties" and have non-ASCII
- *       characters encoded in the Java
- *       <CODE>\</CODE><CODE>u<VAR>nnnn</VAR></CODE> syntax. Very few editors
- *       can natively display international characters in this format. In the
- *       GNU gettext approach, the translation files are called
- *       "<VAR>Resource</VAR>.<VAR>locale</VAR>.po"
- *       and are in the encoding the translator has chosen. Many editors
- *       can be used. There are at least three GUI translating tools
- *       (Emacs PO mode, KDE KBabel, GNOME gtranslator).
- *   <LI>In the Sun approach, the function
- *       <CODE>ResourceBundle.getString</CODE> throws a
- *       <CODE>MissingResourceException</CODE> when no translation is found.
- *       In the GNU gettext approach, the <CODE>gettext</CODE> function
- *       returns the (English) message key in that case.
- *   <LI>In the Sun approach, there is no support for plural handling.
- *       Even the most elaborate MessageFormat strings cannot provide decent
- *       plural handling. In the GNU gettext approach, we have the
- *       <CODE>ngettext</CODE> function.
+ * <LI>In the Sun approach, the keys are abstract textual shortcuts.
+ * In the GNU gettext approach, the keys are the English/ASCII version
+ * of the messages.
+ * <LI>In the Sun approach, the translation files are called
+ * "<VAR>Resource</VAR>_<VAR>locale</VAR>.properties" and have non-ASCII
+ * characters encoded in the Java
+ * <CODE>\</CODE><CODE>u<VAR>nnnn</VAR></CODE> syntax. Very few editors
+ * can natively display international characters in this format. In the
+ * GNU gettext approach, the translation files are called
+ * "<VAR>Resource</VAR>.<VAR>locale</VAR>.po"
+ * and are in the encoding the translator has chosen. Many editors
+ * can be used. There are at least three GUI translating tools
+ * (Emacs PO mode, KDE KBabel, GNOME gtranslator).
+ * <LI>In the Sun approach, the function
+ * <CODE>ResourceBundle.getString</CODE> throws a
+ * <CODE>MissingResourceException</CODE> when no translation is found.
+ * In the GNU gettext approach, the <CODE>gettext</CODE> function
+ * returns the (English) message key in that case.
+ * <LI>In the Sun approach, there is no support for plural handling.
+ * Even the most elaborate MessageFormat strings cannot provide decent
+ * plural handling. In the GNU gettext approach, we have the
+ * <CODE>ngettext</CODE> function.
  * </UL>
  * <P>
  * To compile GNU gettext message catalogs into Java ResourceBundle classes,
@@ -60,6 +60,8 @@ public abstract class GettextResource extends ResourceBundle {
   /**
    * Like gettext(catalog,msgid), except that it returns <CODE>null</CODE>
    * when no translation was found.
+   * @param catalog the ResourceBundle holding the translated message catalogs
+   * @param msgid the key string to be translated, an ASCII string
    * @return the translation, or null when none is found
    */
     private static String gettextnull (ResourceBundle catalog, String msgid) {
@@ -93,6 +95,10 @@ public abstract class GettextResource extends ResourceBundle {
   /**
    * Like ngettext(catalog,msgid,msgid_plural,n), except that it returns
    * <CODE>null</CODE> when no translation was found.
+   * @param catalog the ResourceBundle holding the translated message catalogs
+   * @param msgid the singular key string to be translated, an ASCII string
+   * @param n the plural selection count, selecting the singular or plural form
+   * @return the plural-correct translation, or null when none is found
    */
     private static String ngettextnull (ResourceBundle catalog, String msgid, long n) {
     // The reason why we use so many reflective API calls instead of letting

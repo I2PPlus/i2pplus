@@ -427,6 +427,8 @@ public class PeerTestJob extends JobImpl {
      * Fire off the necessary jobs and messages to test the given peer
      * The message is a store of the peer's RI to itself,
      * with a reply token.
+     *
+     * @param peer the peer to test
      */
     private void testPeer(RouterInfo peer) {
         TunnelInfo inTunnel = getInboundTunnelId();
@@ -498,6 +500,13 @@ public class PeerTestJob extends JobImpl {
      * Build a message to test the peer with.
      * The message is a store of the peer's RI to itself,
      * with a reply token.
+     *
+     * @param peer the peer whose own RouterInfo is stored back to it
+     * @param replyTunnel the id of our inbound tunnel the reply must return through
+     * @param replyGateway the hash of that tunnel's gateway, asked to forward the reply
+     * @param nonce the reply token echoed in the response so we can match it to this test
+     * @param expiration the message expiration time in ms since epoch
+     * @return the assembled DatabaseStoreMessage carrying the reply token
      */
     private DatabaseStoreMessage buildMessage(RouterInfo peer, TunnelId replyTunnel, Hash replyGateway, long nonce, long expiration) {
         DatabaseStoreMessage msg = new DatabaseStoreMessage(getContext());
@@ -520,6 +529,9 @@ public class PeerTestJob extends JobImpl {
      * comparison meant 4 lock acquisitions per comparison across an
      * {@code O(n log n)} sort.
      *
+     * @param organizer the profile organizer holding the fast and high-capacity sets
+     * @param peer the test candidate whose tier is ranked
+     * @return 0 for fast, 1 for high capacity, 2 for everything else
      * @since 0.9.71+
      */
     private static int tierRank(ProfileOrganizer organizer, Hash peer) {

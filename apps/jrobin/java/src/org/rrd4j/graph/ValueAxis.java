@@ -157,6 +157,15 @@ class ValueAxis extends Axis {
      * Draws all grid lines for the value axis. Minor grid lines use the grid color; major grid
      * lines use the mgrid color. Separated from label drawing to produce consecutive SVG elements
      * with identical stroke/paint, enabling tighter SVG grouping.
+     *
+     * @param sgrid index of the first grid line to consider, one below the minimum value
+     * @param egrid index of the last grid line to consider, one above the maximum value
+     * @param gridstep distance in graph values between adjacent grid lines
+     * @param x0 left pixel of the line
+     * @param x1 right pixel of the line
+     * @param gridColor paint used for the minor grid lines
+     * @param mGridColor paint used for the major grid lines
+     * @param labfact every labfact-th grid line counts as major, so 1 makes all of them major
      */
     private void drawGridLines(int sgrid, int egrid, double gridstep, int x0, int x1,
             Paint gridColor, Paint mGridColor, int labfact) {
@@ -174,6 +183,18 @@ class ValueAxis extends Axis {
 
     /**
      * Draws all labels for the value axis at major grid positions.
+     *
+     * @param sgrid index of the first grid position to consider, one below the minimum value
+     * @param egrid index of the last grid position to consider, one above the maximum value
+     * @param gridstep distance in graph values between adjacent grid lines, used to find the pixel
+     *                 row of each position
+     * @param x0 left pixel of the plot, the label is drawn to end this far in from it
+     * @param scaledstep gridstep divided by the magnitude factor, the value printed per label
+     * @param fractional true to print one decimal place in the label, false to print whole numbers
+     * @param labfact only positions divisible by this get a label
+     * @param font font used to draw and measure the label text
+     * @param fontColor paint used for the label text
+     * @param labelOffset pixels added to the grid line's row to place the label's baseline
      */
     private void drawLabels(int sgrid, int egrid, double gridstep, int x0, double scaledstep,
             boolean fractional, int labfact, Font font, Paint fontColor, int labelOffset) {
@@ -218,7 +239,12 @@ class ValueAxis extends Axis {
      * negative on the y-axis, then desiredMinimumLabelCount is checked as well, to ensure the
      * chosen YLabel definition will result in the required number of labels
      *
-     * <p>Returns null if none are acceptable (none the right size or with enough labels)
+     * <p>If none of the built-in definitions is acceptable, one is generated from the range.
+     *
+     * @param desiredMinimumLabelCount the label count the axis must exceed, only checked when the
+     *                                 graph spans both positive and negative values
+     * @return the first definition with more than five pixels per gridline and enough labels, or a
+     *         generated power-of-ten definition when none of the built-in ones qualifies
      */
     private YLabel findYLabel(int desiredMinimumLabelCount) {
         double scaledrange = this.getScaledRange();
@@ -268,6 +294,10 @@ class ValueAxis extends Axis {
     /**
      * Find the smallest labelFactor acceptable (can fit labels) for the given YLab definition
      * Returns the label factor if one is ok, otherwise returns -1 if none are acceptable
+     *
+     * @param thisYLabel the definition whose four label factors are tried in order
+     * @return the first label factor that leaves at least two lines of text between grid lines,
+     *         or -1 when none of the four fits
      */
     private int findLabelFactor(YLabel thisYLabel) {
         int pixel = this.getPixelsPerGridline(thisYLabel);
@@ -280,7 +310,13 @@ class ValueAxis extends Axis {
         return -1;
     }
 
-    /** Finds the number of pixels per gridline that the given YLabel definition will result in */
+    /**
+     * Finds the number of pixels per gridline that the given YLabel definition will result in
+     *
+     * @param thisYLabel the definition whose grid step is measured against the graph height
+     * @return the whole pixels between two grid lines, rounded down, zero if the grid is finer
+     *         than one pixel
+     */
     private int getPixelsPerGridline(YLabel thisYLabel) {
         double scaledrange = this.getScaledRange();
         return (int) (im.ysize / (scaledrange / thisYLabel.grid));
@@ -295,7 +331,14 @@ class ValueAxis extends Axis {
         return range / im.magfact;
     }
 
-    /** Returns true if some or all labels have fractional part (other than zero). */
+    /**
+     * Returns true if some or all labels have fractional part (other than zero).
+     *
+     * @param scaledstep the label step in scaled units, never fractional when it is 1 or more
+     * @param labfact the number of grid steps between two printed labels
+     * @return true when scaledstep times labfact is not a whole number, so the labels need a
+     *         decimal place
+     */
     private static boolean isFractional(double scaledstep, int labfact) {
         if (scaledstep >= 1) {
             return false;

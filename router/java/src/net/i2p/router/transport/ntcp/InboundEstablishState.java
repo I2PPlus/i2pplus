@@ -237,6 +237,7 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
      * Decodes the first 32 bytes (X) from the inbound NTCP2 message 1.
      * Performs replay check, decryption, zero-key check, and MSB-based version detection.
      *
+     * @param src the inbound data buffer to read X from
      * @since 0.9.69 split out from below
      */
     private synchronized void decodeInboundNTCP2X(ByteBuffer src) {
@@ -393,6 +394,7 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
      * All data must be copied out of the buffer as {@link net.i2p.router.transport.ntcp.Reader#processRead}
      * will return it to the pool.
      *
+     * @param src the inbound data buffer holding the rest of message 1 and any padding
      * @since 0.9.36
      */
     private synchronized void receiveInboundNTCP2(ByteBuffer src) {
@@ -790,8 +792,6 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
         Arrays.fill(sip_ba, (byte) 0);
     }
 
-    //// PayloadCallbacks
-
     /**
      * Validates Alice's RouterInfo and extracts the static key for comparison.
      * <p>This is a PayloadCallback method invoked during message 3 processing.
@@ -1037,12 +1037,10 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
         // Illegal during handshake - no-op
     }
 
-    // These payload types are illegal during the NTCP 2 handshake
-    // and will never be received. Stub implementations are required
-    // by the PayloadCallback interface.
-
     /**
      * Illegal during handshake - termination is only valid after connection is established.
+     * Stub implementations are required by the PayloadCallback interface, and these
+     * payload types will never be received.
      *
      * @param reason the termination reason code
      * @param lastReceived the number of bytes received when termination occurred

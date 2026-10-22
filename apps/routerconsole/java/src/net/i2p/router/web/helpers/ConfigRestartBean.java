@@ -145,6 +145,11 @@ public class ConfigRestartBean {
 
     /**
      * Value,class,label,... triplets.
+     *
+     * @param ctx the router context used to translate the button labels
+     * @param buf the HTML form is appended to
+     * @param url the form's action URL
+     * @param nonce the console nonce, added as a hidden field
      * @param s value,class,label,... triplets
      */
     private static void buttons(RouterContext ctx, StringBuilder buf, String url, String nonce, String[] s) {
@@ -204,13 +209,25 @@ public class ConfigRestartBean {
         return Messages.getString(s, o, ctx);
     }
 
-    /** translate (ngettext) @since 0.9.10. */
+    /**
+     * Translate a string whose form depends on a count (ngettext).
+     *
+     * @param s the singular English text, also the lookup key
+     * @param p the plural English text
+     * @param n the count deciding which form is used
+     * @param ctx the router context supplying the language
+     * @return the translated string for that count
+     * @since 0.9.10
+     */
     private static String ngettext(String s, String p, int n, RouterContext ctx) {
         return Messages.getString(n, s, p, ctx);
     }
 
     /**
      * Format seconds as "1m 30s" or just "45s".
+     *
+     * @param seconds the delay to format, 0 or less is shown as "0s"
+     * @return the delay with an m and an s part, either omitted when it is zero
      * @since 0.9.68+
      */
     private static String formatDelay(int seconds) {

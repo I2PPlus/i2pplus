@@ -194,6 +194,10 @@ public class ShellCommand {
     /**
      * Execute the command, timing it for the debug log.
      *
+     * @param shellCommand a command string or a String[] command array
+     * @param envp the environment for the command, or null to inherit the current one
+     * @param seconds how long to wait for the command to finish, 0 or less to wait forever
+     * @return true if the command succeeded or the wait timed out, false if it failed
      * @since 0.8.3
      */
     private boolean executeSAWT(Object shellCommand, String[] envp, int seconds) {

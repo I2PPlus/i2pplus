@@ -206,6 +206,11 @@ final class MaskUtil {
   /**
    * Helper function for applyMaskPenaltyRule1. We need this for doing this calculation in both
    * vertical and horizontal orders respectively.
+   *
+   * @param matrix the QR code matrix to scan
+   * @param isHorizontal true to scan row by row, false to scan column by column
+   * @return the penalty for runs of five or more identical cells in any row or
+   *         column of the matrix
    */
   private static int applyMaskPenaltyRule1Internal(ByteMatrix matrix, boolean isHorizontal) {
     int penalty = 0;

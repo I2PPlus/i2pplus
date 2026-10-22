@@ -32,6 +32,7 @@ final class MuxedPQEngine {
      * Sizes come from ECIESAEADEngine, the single source of truth for
      * the wire format.
      *
+     * @param type the encryption type to get the size for
      * @return the minimum new-session message size in bytes
      */
     private static int getMinNSSize(EncType type) {

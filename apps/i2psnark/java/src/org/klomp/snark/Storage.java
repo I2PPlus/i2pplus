@@ -443,6 +443,9 @@ public class Storage implements Closeable {
      * handle open for the duration exhausts the process file descriptor limit on torrents
      * with many files, and there is no periodic sweep running yet because the Storage has not
      * been handed to a PeerCheckerTask.
+     *
+     * @return the concatenated 20-byte SHA-1 hash of every piece
+     * @throws IOException if a file cannot be read while hashing
      */
     private byte[] fast_digestCreate() throws IOException {
         // Calculate piece_hashes
@@ -602,6 +605,9 @@ public class Storage implements Closeable {
     /**
      * Count the files in the torrent.
      *
+     * @param l the list the discovered files are added to
+     * @param f the file or directory to walk
+     * @param filters the torrent-create filters applied to each name
      * @throws IOException if too many total files
      */
     private void addFiles(List<File> l, File f, List<TorrentCreateFilter> filters)
@@ -1481,6 +1487,8 @@ public class Storage implements Closeable {
      * Filter the name, but only if configured to do so. We will do so on torrents received from
      * others, but not on those we created ourselves, so we do not lose track of files.
      *
+     * @param name one unfiltered path element
+     * @return the filtered name, or name unchanged when file-name filtering is off
      * @since 0.9.15
      */
      private String optFilterName(String name) {
@@ -1565,8 +1573,13 @@ public class Storage implements Closeable {
      * Note that filtering each path element individually may lead to things going in the wrong
      * place if there are duplicates in intermediate path elements after filtering.
      *
+     * @param base the directory the path is created under
      * @param names the unfiltered path elements, each passed through the name
      *              filter in turn
+     * @param areFilesPublic whether to create plain files, readable by other users,
+     *                       rather than private ones
+     * @return the file at the end of the created path
+     * @throws IOException if a directory or file in the path cannot be created
      */
     private File createFileFromNames(File base, List<String> names, boolean areFilesPublic)
             throws IOException {
@@ -1800,9 +1813,10 @@ public class Storage implements Closeable {
      * locking.
      *
      * @param recheck if true, this is a check after we downloaded the last piece, and we don't
-     * modify the global bitfield unless the check fails.
+     *                modify the global bitfield unless the check fails.
      * @return true if changed (only valid if recheck == true)
-    */
+     * @throws IOException if a file cannot be read, or the wait to check is interrupted
+     */
     private boolean checkCreateFiles(boolean recheck) throws IOException {
         return checkCreateFiles(recheck, null);
     }
@@ -1823,7 +1837,11 @@ public class Storage implements Closeable {
      * Variant that skips hashing pieces marked trusted, for resuming with a partially trusted
      * saved state.
      *
+     * @param recheck if true, this is a check after we downloaded the last piece, and we don't
+     *                modify the global bitfield unless the check fails
      * @param pieceTrusted array indexed by piece, or null to hash everything
+     * @return true if changed (only valid if recheck == true)
+     * @throws IOException if a file cannot be read, or the wait to check is interrupted
      */
     private boolean checkCreateFiles(boolean recheck, boolean[] pieceTrusted) throws IOException {
         try {
@@ -1849,8 +1867,11 @@ public class Storage implements Closeable {
     /**
      * Check the pieces, reporting whether anything changed.
      *
+     * @param recheck if true, this is a check after we downloaded the last piece, and we don't
+     *                modify the global bitfield unless the check fails
      * @param pieceTrusted array indexed by piece, or null to hash everything
      * @return true if changed (only valid if recheck == true)
+     * @throws IOException if a file cannot be read while hashing
      */
     private boolean locked_checkCreateFiles(boolean recheck, boolean[] pieceTrusted) throws IOException {
         I2PAppContext ctx = I2PAppContext.getGlobalContext();
@@ -2103,7 +2124,12 @@ public class Storage implements Closeable {
         return rv;
     }
 
-    /** BEP 47: true if the piece lies entirely within padding files, so it hashes as zeros. */
+    /**
+     * BEP 47: true if the piece lies entirely within padding files, so it hashes as zeros.
+     *
+     * @param pieceStart the byte offset the piece begins at
+     * @return true if the whole piece range is padding
+     */
     private boolean isPaddingPiece(long pieceStart) {
         return metainfo.isRangePadding(
                 pieceStart, (int) Math.min(piece_size, total_length - pieceStart));
@@ -2542,6 +2568,8 @@ public class Storage implements Closeable {
      * Copies a file's contents to the destination, truncating the destination
      * first.
      *
+     * @param src the file to read
+     * @param dst the file overwritten with the copy
      * @return true on success, false on transient failure (e.g. disk full)
      * @since 0.9.71+
      */
@@ -2583,10 +2611,10 @@ public class Storage implements Closeable {
 
     /**
      * This is a dup of {@link org.klomp.snark.MetaInfo#getPieceLength} but we need it before the
-     * MetaInfo is created in
-     * our second constructor.
+     * MetaInfo is created in our second constructor.
      *
-     * @return the piece length
+     * @param piece the piece number whose length is wanted
+     * @return the number of bytes in that piece, less than piece_size for the last piece
      * @since 0.8.5
      */
     private int getPieceLength(int piece) {

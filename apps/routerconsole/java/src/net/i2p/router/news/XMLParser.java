@@ -151,6 +151,11 @@ public class XMLParser extends JaxpParser {
     /**
      * A replacement for {@link org.cybergarage.xml.Node#output}, which does not recognize #text.
      * Also, we use the empty entity, so &lt;br /&gt; does not turn into &lt;br&gt;&lt;/br&gt;.
+     *
+     * @param buf the buffer receiving the rendered XML of the node and its children
+     * @param node the root of the subtree to render
+     * @param indentLevel the nesting depth of this node, incremented per child level,
+     *                    currently not rendered
      */
     private static void output(StringBuilder buf, Node node, int indentLevel) {
         String name = node.getName();

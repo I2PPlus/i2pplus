@@ -300,7 +300,9 @@ class MailPart {
      * Swallow "\r\n" or "--\r\n".
      * We don't have any pushback if this goes wrong.
      *
+     * @param in the stream positioned just after the boundary line
      * @return true if end of input
+     * @throws IOException if reading the stream fails
      */
     private boolean readBoundaryTrailer(InputStream in) throws IOException {
         int c = in.read();
@@ -436,6 +438,7 @@ class MailPart {
      *
      * @param offset 2 for sendAttachment, 0 otherwise, probably for \r\n
      * @return the raw input stream
+     * @throws IOException if the backing buffer's stream cannot be opened
      * @since 0.9.35
      */
     private synchronized LimitInputStream getRawInputStream(int offset) throws IOException {
@@ -459,6 +462,7 @@ class MailPart {
     /**
      * Extract a quoted attribute value from a header line.
      *
+     * @param line the header line to search, e.g. a Content-Type or Content-Disposition line
      * @param attributeName must be lower case, will be matched case-insensitively
      * @return as found, not necessarily lower case
      */
@@ -502,7 +506,13 @@ class MailPart {
         return result;
     }
 
-    /** Looks up a localized string in the message bundle. */
+    /**
+     * Looks up a localized string in the message bundle.
+     *
+     * @param s the translation key
+     * @param o substituted for {0} in the translated string
+     * @return the translated string, or s itself if no translation exists
+     */
     private static String _t(String s, Object o) {return Messages.getString(s, o);}
 
     /**

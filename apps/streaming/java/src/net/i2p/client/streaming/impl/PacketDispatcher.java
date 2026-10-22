@@ -255,7 +255,12 @@ class PacketDispatcher {
      */
     int getWorkerCount() { return _workers.length; }
 
-    /** Build and start the shard array of the given size. */
+    /**
+     * Build and start the shard array of the given size.
+     *
+     * @param n the number of worker shards to create and start
+     * @return the started workers, in shard order
+     */
     private Worker[] newWorkers(int n) {
         Worker[] w = new Worker[n];
         for (int i = 0; i < n; i++) {

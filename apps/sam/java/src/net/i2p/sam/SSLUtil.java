@@ -39,12 +39,12 @@ class SSLUtil {
     private static final String CERT_DIR = "certificates/sam";
 
     /**
-     *  Create a new selfsigned cert and keystore and pubkey cert if they don't exist.
-     *  May take a while.
+     * Create a new selfsigned cert and keystore and pubkey cert if they don't exist.
+     * May take a while.
      *
-     *  @param opts in/out, updated if rv is true
-     *  @return false if it already exists; if true, caller must save opts
-     *  @throws IOException on creation fail
+     * @param opts in/out, updated if rv is true
+     * @return false if it already exists; if true, caller must save opts
+     * @throws IOException on creation fail
      */
     public static boolean verifyKeyStore(Properties opts) throws IOException {
         String name = opts.getProperty(PROP_KEY_ALIAS);
@@ -83,11 +83,11 @@ class SSLUtil {
 
 
     /**
-     *  Call out to keytool to create a new keystore with a keypair in it.
+     * Call out to keytool to create a new keystore with a keypair in it.
      *
-     *  @param ks used in CNAME
-     *  @param opts in/out, updated if rv is true, must contain PROP_KEY_ALIAS
-     *  @return success, if true, opts will have password properties added to be saved
+     * @param ks used in CNAME
+     * @param opts in/out, updated if rv is true, must contain PROP_KEY_ALIAS
+     * @return success, if true, opts will have password properties added to be saved
      */
     private static boolean createKeyStore(File ks, Properties opts) {
         // make a random 48 character password (30 * 8 / 5)
@@ -116,11 +116,12 @@ class SSLUtil {
     }
 
     /**
-     *  Pull the cert back OUT of the keystore and save it as ascii
-     *  so the clients can get to it.
+     * Pull the cert back OUT of the keystore and save it as ascii
+     * so the clients can get to it.
      *
-     *  @param name used to generate output file name
-     *  @param opts must contain PROP_KEY_ALIAS
+     * @param ks the keystore to read the certificate from
+     * @param name used to generate output file name
+     * @param opts must contain PROP_KEY_ALIAS
      */
     private static void exportCert(File ks, String name, Properties opts) {
         File sdir = new SecureDirectory(I2PAppContext.getGlobalContext().getConfigDir(), CERT_DIR);
@@ -137,8 +138,8 @@ class SSLUtil {
     }
 
     /**
-     *  Sets up the SSLContext and sets the socket factory.
-     *  No option prefix allowed.
+     * Sets up the SSLContext and sets the socket factory.
+     * No option prefix allowed.
      *
      * @param opts the SAM properties naming the keystore and its passwords
      * @return factory, throws on all errors

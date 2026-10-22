@@ -257,6 +257,9 @@ class PacketHandler {
 
     /**
      * Handles echo packets on known connections.
+     *
+     * @param con the connection the ECHO packet arrived on
+     * @param packet the received ECHO packet
      */
     private void handleEchoPacket(Connection con, Packet packet) {
         if (packet == null || con == null) {return;}
@@ -274,6 +277,9 @@ class PacketHandler {
 
     /**
      * Handles a packet that appears on a known connection, but with stream ID mismatches or other anomalies.
+     *
+     * @param con the connection the packet arrived on
+     * @param packet the misrouted packet to reclassify
      */
     private void handleMisroutedPacket(Connection con, Packet packet) {
         if (packet == null || con == null) {return;}

@@ -102,7 +102,7 @@ public class Base64 extends Encoding {
 	/**
 	 * The base64 character for a 6-bit value.
 	 *
-	 * @param b
+	 * @param b the 6-bit value to encode
 	 * @return Encoded single byte.
 	 */
 	private static int encodeByte(int b) {

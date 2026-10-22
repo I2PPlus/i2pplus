@@ -119,9 +119,10 @@ public class DatabaseReader implements Closeable {
         }
 
         /**
-         * preferred to least preferred.
+         * Set the locale preference order for name properties.
          *
          * @param val List of locale codes to use in name property from most
+         *            preferred to least preferred.
          * @return Builder object
          */
         public Builder locales(List<String> val) {
@@ -158,9 +159,9 @@ public class DatabaseReader implements Closeable {
         }
 
         /**
-         * fields set on this builder.
+         * Build a reader from the fields set on this builder.
          *
-         * @return an instance of {@code DatabaseReader} created from the
+         * @return an instance of {@code DatabaseReader} created from these fields
          * @throws IOException if there is an error reading the database
          */
         public DatabaseReader build() throws IOException {
@@ -191,6 +192,7 @@ public class DatabaseReader implements Closeable {
      * </ul>
      *
      * @param ipAddress IPv4 or IPv6 address to lookup.
+     * @param type the database type required, e.g. city or country
      * @return A Map with the data for the IP address
      * @throws IOException              if there is an error opening or reading from the file.
      */

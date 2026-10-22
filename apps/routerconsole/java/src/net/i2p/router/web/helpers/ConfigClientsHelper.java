@@ -61,18 +61,18 @@ public class ConfigClientsHelper extends HelperBase {
         // TODO
     }
     /**
-     *  Whether client configuration changes are allowed.
-     *  @return true if enabled, false otherwise
-     *  @since 0.9.14.1
+     * Whether client configuration changes are allowed.
+     * @return true if enabled, false otherwise
+     * @since 0.9.14.1
      */
     public boolean isClientChangeEnabled() {
         return _context.getBooleanProperty(PROP_ENABLE_CLIENT_CHANGE) || isAdvanced();
     }
 
     /**
-     *  Whether plugin installation is enabled.
-     *  @return true if enabled, false otherwise
-     *  @since 0.9.14.1
+     * Whether plugin installation is enabled.
+     * @return true if enabled, false otherwise
+     * @since 0.9.14.1
      */
     public boolean isPluginInstallEnabled() {
         return PluginStarter.pluginsEnabled(_context) &&
@@ -80,18 +80,18 @@ public class ConfigClientsHelper extends HelperBase {
     }
 
     /**
-     *  Whether any plugins have updates available.
-     *  @return true if updates available, false otherwise
-     *  @since 0.9.15
+     * Whether any plugins have updates available.
+     * @return true if updates available, false otherwise
+     * @since 0.9.15
      */
     public boolean isPluginUpdateEnabled() {
         return !PluginStarter.getPlugins().isEmpty();
     }
 
     /**
-     *  Get the configured I2CP port.
-     *  @return the port number string
-     *  @since 0.8.3
+     * Get the configured I2CP port.
+     * @return the port number string
+     * @since 0.8.3
      */
     public String getPort() {
         return _context.getProperty(ClientManagerFacadeImpl.PROP_CLIENT_PORT,
@@ -99,10 +99,10 @@ public class ConfigClientsHelper extends HelperBase {
     }
 
     /**
-     *  Get checked attribute for I2CP mode radio buttons.
-     *  @param mode the mode number (0=disabled, 1=clear, 2=SSL)
-     *  @return CHECKED if this mode is selected, otherwise ""
-     *  @since 0.8.3
+     * Get checked attribute for I2CP mode radio buttons.
+     * @param mode the mode number (0=disabled, 1=clear, 2=SSL)
+     * @return CHECKED if this mode is selected, otherwise ""
+     * @since 0.8.3
      */
     public String i2cpModeChecked(int mode) {
         boolean disabled =  _context.getBooleanProperty(PROP_DISABLE_EXTERNAL);
@@ -115,9 +115,9 @@ public class ConfigClientsHelper extends HelperBase {
     }
 
     /**
-     *  Whether I2CP authentication is enabled.
-     *  @return CHECKED if enabled, otherwise ""
-     *  @since 0.8.3
+     * Whether I2CP authentication is enabled.
+     * @return CHECKED if enabled, otherwise ""
+     * @since 0.8.3
      */
     public String getAuth() {
         boolean enabled =  _context.getBooleanProperty(PROP_AUTH);
@@ -127,9 +127,9 @@ public class ConfigClientsHelper extends HelperBase {
     }
 
     /**
-     *  Whether local-local loopback delivery is disabled.
-     *  @return CHECKED if disabled, otherwise ""
-     *  @since 0.9.71+
+     * Whether local-local loopback delivery is disabled.
+     * @return CHECKED if disabled, otherwise ""
+     * @since 0.9.71+
      */
     public String getDisableLoopback() {
         boolean disabled =  _context.getBooleanProperty(PROP_DISABLE_LOOPBACK);
@@ -139,9 +139,9 @@ public class ConfigClientsHelper extends HelperBase {
     }
 
     /**
-     *  Get available network interface addresses.
-     *  @return array of address strings
-     *  @since 0.8.3
+     * Get available network interface addresses.
+     * @return array of address strings
+     * @since 0.8.3
      */
     public String[] intfcAddresses() {
         // Exclude IPv6 temporary
@@ -150,10 +150,10 @@ public class ConfigClientsHelper extends HelperBase {
     }
 
     /**
-     *  Whether the given address is the selected I2CP interface.
-     *  @param addr the address to check
-     *  @return true if selected, false otherwise
-     *  @since 0.8.3
+     * Whether the given address is the selected I2CP interface.
+     * @param addr the address to check
+     * @return true if selected, false otherwise
+     * @since 0.8.3
      */
     public boolean isIFSelected(String addr) {
         boolean bindAll = _context.getBooleanProperty(BIND_ALL_INTERFACES);
@@ -165,9 +165,9 @@ public class ConfigClientsHelper extends HelperBase {
     }
 
     /**
-     *  Set the edit mode for a specific client or for adding a new client.
+     * Set the edit mode for a specific client or for adding a new client.
      *
-     *  @param edit the edit command string
+     * @param edit the edit command string
      */
     public void setEdit(String edit) {
         if (edit == null)
@@ -180,8 +180,8 @@ public class ConfigClientsHelper extends HelperBase {
     }
 
     /**
-     *  Generate the clients configuration table HTML.
-     *  @return the HTML string
+     * Generate the clients configuration table HTML.
+     * @return the HTML string
      */
     public String getForm1() {
         StringBuilder buf = new StringBuilder(1024);
@@ -252,8 +252,8 @@ public class ConfigClientsHelper extends HelperBase {
     }
 
     /**
-     *  A client app config entry with display index.
-     *  @since 0.9.20
+     * A client app config entry with display index.
+     * @since 0.9.20
      */
     private static class CAC {
         public final int index;
@@ -266,8 +266,8 @@ public class ConfigClientsHelper extends HelperBase {
     }
 
     /**
-     *  Comparator for sorting client app configs by name.
-     *  @since 0.9.20
+     * Comparator for sorting client app configs by name.
+     * @since 0.9.20
      */
     private class CACComparator implements Comparator<CAC> {
          private static final long serialVersionUID = 1L;
@@ -285,8 +285,8 @@ public class ConfigClientsHelper extends HelperBase {
     }
 
     /**
-     *  Generate the webapps configuration table HTML.
-     *  @return the HTML string
+     * Generate the webapps configuration table HTML.
+     * @return the HTML string
      */
     public String getForm2() {
         StringBuilder buf = new StringBuilder(1024);
@@ -331,16 +331,16 @@ public class ConfigClientsHelper extends HelperBase {
     }
 
     /**
-     *  Whether plugins are enabled.
-     *  @return true if plugins are enabled for this router
+     * Whether plugins are enabled.
+     * @return true if plugins are enabled for this router
      */
     public boolean showPlugins() {
         return PluginStarter.pluginsEnabled(_context);
     }
 
     /**
-     *  Generate the plugins configuration table HTML.
-     *  @return the HTML string
+     * Generate the plugins configuration table HTML.
+     * @return the HTML string
      */
     public String getForm3() {
         StringBuilder buf = new StringBuilder(1024);
@@ -430,11 +430,22 @@ public class ConfigClientsHelper extends HelperBase {
     }
 
     /**
-     *  Misnamed, renders a single line in a table for a single client/webapp/plugin.
+     * Misnamed, renders a single line in a table for a single client/webapp/plugin.
      *
-     *  @param name will be escaped here
-     *  @param ro trumps edit and showEditButton
-     *  @param escapedDesc description, must be HTML escaped, except for plugins
+     * @param buf the builder the table row is appended to
+     * @param index the client's config index, used to name its form fields
+     * @param name will be escaped here
+     * @param urlify true to render the name as a link to the app instead of a label
+     * @param enabled true to check the enable checkbox
+     * @param ro trumps edit and showEditButton
+     * @param preventDisable true to disable the enable checkbox so the app cannot be turned off
+     * @param escapedDesc description, must be HTML escaped, except for plugins
+     * @param edit true when the row is being rendered as an editable form
+     * @param showEditButton true to offer the edit button
+     * @param showUpdateButton true to offer the update button
+     * @param showStopButton true to offer the stop button
+     * @param showDeleteButton true to offer the delete button
+     * @param showStartButton true to offer the start button
      */
     private void renderForm(StringBuilder buf, String index, String name, boolean urlify, boolean enabled, boolean ro,
                             boolean preventDisable, String escapedDesc, boolean edit, boolean showEditButton, boolean showUpdateButton,
@@ -497,12 +508,12 @@ public class ConfigClientsHelper extends HelperBase {
     }
 
     /**
-     *  Like in {@link DataHelper} but doesn't convert null to ""
-     *  There's a lot worse things a plugin could do but...
+     * Like in {@link DataHelper} but doesn't convert null to ""
+     * There's a lot worse things a plugin could do but...
      *
-     *  @param props the properties to retrieve from
-     *  @param key the property key
-     *  @return the stripped value, or null
+     * @param props the properties to retrieve from
+     * @param key the property key
+     * @return the stripped value, or null
      */
     public static String stripHTML(Properties props, String key) {
         return PluginStarter.stripHTML(props, key);

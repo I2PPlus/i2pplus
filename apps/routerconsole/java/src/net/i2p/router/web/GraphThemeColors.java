@@ -835,6 +835,9 @@ public final class GraphThemeColors {
      * <p>An absent variable and an unusable one are the same case on purpose: both mean the
      * theme has no opinion, so both fall back rather than failing the render.
      *
+     * @param themeDir the console themes root holding the theme's CSS
+     * @param theme the console theme name whose variables are read
+     * @param var the CSS custom property name to look up
      * @param fallback the built-in width, used when the variable is absent or out of range
      * @return the width in pixels, within {@link #MIN_LINE_WIDTH} and {@link #MAX_LINE_WIDTH}
      */
@@ -857,6 +860,9 @@ public final class GraphThemeColors {
     /**
      * Parse a dash variable into a dot length and a stated gap.
      *
+     * @param themeDir the console themes root holding the theme's CSS
+     * @param theme the console theme name whose variables are read
+     * @param var the CSS custom property name to look up
      * @param fallback the built-in {@code {dot, gap}}, used when the variable is absent or
      *                 unusable
      * @return {@code {dot, gap}}, with a dot of zero meaning "no pattern" and a gap of
@@ -878,6 +884,8 @@ public final class GraphThemeColors {
     /**
      * Parse {@code --graph_plotDash} into a dot length and a stated gap.
      *
+     * @param themeDir the console themes root holding the theme's CSS
+     * @param theme the console theme name whose variables are read
      * @return {@code {dot, gap}}, with a dot of zero meaning "no pattern" and a gap of
      *         zero meaning "derive it"; never null
      */
@@ -893,6 +901,7 @@ public final class GraphThemeColors {
      * for a single dot and gap, and silently dropping the rest would render something the
      * stylesheet never asked for.
      *
+     * @param value the raw variable text, one or two lengths separated by whitespace or commas
      * @return the values, or null when the text is not a usable dash list
      */
     private static float[] parseDashList(String value) {
@@ -919,6 +928,11 @@ public final class GraphThemeColors {
      * The colour a theme declared, or null when it declared nothing usable.
      * <p>An absent variable and an unparseable one are the same case on purpose: both mean
      * "this theme has no opinion about this slot", so both fall back to the default.
+     *
+     * @param themeDir the console themes root holding the theme's CSS
+     * @param theme the console theme name whose variables are read
+     * @param var the CSS custom property name to look up
+     * @return the parsed colour, or null if the theme omits var or names an unparseable value
      */
     private static Color declared(File themeDir, String theme, String var) {
         String v = variables(themeDir, theme).get(var);
@@ -929,6 +943,9 @@ public final class GraphThemeColors {
      * The ink a declaration names: a colour, or the first stop of a gradient.
      * <p>A gradient is a wash rather than a colour, so a caller that wants one colour - a
      * legend swatch, an alpha check - gets the ink the wash is made of.
+     *
+     * @param value the raw declaration text, a colour or a gradient, null yields null
+     * @return the colour named, or null if value is null or names nothing parseable
      */
     private static Color declaredInk(String value) {
         if (value == null) {return null;}
@@ -943,6 +960,7 @@ public final class GraphThemeColors {
      * paint is a no-op rather than a guess. A stop's stated position is dropped for the same
      * reason - it moves where the middle of the wash sits, not which inks it is between.
      *
+     * @param value the raw declaration text, a linear-gradient() or a bare colour list
      * @return the stops, or null when the value is not a gradient this class paints
      */
     private static List<Color> gradientStops(String value) {
@@ -995,6 +1013,7 @@ public final class GraphThemeColors {
     /**
      * Colours from already-split terms, dropping a direction keyword where one is allowed.
      *
+     * @param terms the split declaration terms, each a colour or a direction keyword
      * @param gradient true for a {@code linear-gradient()} stop list, where a leading
      *                 direction keyword is allowed and has to be skipped
      * @return the colours, or null when any term is unusable or nothing remains
@@ -1066,6 +1085,7 @@ public final class GraphThemeColors {
     /**
      * Read a file's stamp, treating an absent file as its own cacheable state.
      *
+     * @param file the stylesheet to stat, null counts as absent
      * @return the last-modified time, or {@link #NO_FILE}
      */
     private static long stamp(File file) {
@@ -1075,6 +1095,7 @@ public final class GraphThemeColors {
     /**
      * Read a theme's stylesheet and collect its custom properties.
      *
+     * @param css the stylesheet to read, null or absent yields an empty map
      * @return the declarations, empty when the file is absent or unreadable, which is the
      *         normal case in a source checkout where the theme lives under installer/
      */
@@ -1098,6 +1119,8 @@ public final class GraphThemeColors {
     /**
      * Locate a theme's {@code console.css}.
      *
+     * @param themeDir the installed themes root, null when there is none
+     * @param theme the console theme name, null or empty matches nothing
      * @return the file, or null when there is no theme directory to look in
      */
     private static File themeFile(File themeDir, String theme) {

@@ -179,6 +179,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
      * sentinel), so the count can never be corrupted by writes of -1/0 and
      * over-admission is impossible even under heavy parallel load.
      *
+     * @param dest the destination to take a permit for, null always acquires
      * @return true if the permit was acquired, false if the destination is at
      *         its connection limit
      * @since 0.9.71+
@@ -204,6 +205,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
      * bound over the lifetime of the process.  Safe to call with null or when
      * the count is already zero (underflow-guarded).
      *
+     * @param dest the destination to release one permit for, null does nothing
      * @since 0.9.71+
      */
     private static void releaseConnPermit(Hash dest) {
@@ -2464,8 +2466,14 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
     /**
      * Write the HTML form that prompts the user to save an address helper destination.
      *
+     * @param outs the stream to write the page to, does nothing if null
      * @param destination the hostname echoed into the hidden form field, the page
      *                    text, and the IDN-decoded lookup
+     * @param ahelperKey the base64 destination from the naming service, shown and embedded
+     *                   in the save forms
+     * @param targetRequest the original request URL, the action of the continue-without-saving form
+     * @param referer the referring URL for a hidden field, null if none was sent
+     * @throws IOException if writing the page to the output stream fails
      * @since 0.8.7
      */
     private void writeHelperSaveForm(OutputStream outs, String destination, String ahelperKey,
@@ -2534,6 +2542,12 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
 
     /**
      * Write the HTML form that prompts the user to supply decryption/authentication data.
+     *
+     * @param outs the stream to write the page to, does nothing if null
+     * @param destination the base32 address whose lookup needs more data
+     * @param code the lookup result code naming what is required
+     * @param targetRequest the original request URL, the action of the supplied form
+     * @throws IOException if writing the page to the output stream fails
      * @since 0.9.43
      */
     private void writeB32SaveForm(OutputStream outs, String destination, int code,
@@ -2666,6 +2680,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
 
     /**
      * The hostname of the given host.
+     * @param host the requested hostname, null yields null
      * @return b32hash.b32.i2p, or "i2p" on lookup failure.
      *         Prior to 0.7.12, returned b64 key
      */
@@ -2753,6 +2768,13 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
      * Path changed if non-null.
      * Query always preserved.
      * Fragment always cleared.
+     *
+     * @param uri the URI to rebuild
+     * @param host the new host, null keeps the original
+     * @param port the new port, 0 keeps the original
+     * @param path the new path, null keeps the original
+     * @return the rebuilt URI
+     * @throws URISyntaxException if the replaced parts do not form a valid URI
      */
     private static URI changeURI(URI uri, String host, int port, String path) throws URISyntaxException {
         return new URI(uri.getScheme(),
@@ -2769,7 +2791,10 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
      * Userinfo cleared if uri contained a query.
      * Fragment cleared if uri contained a query.
      *
+     * @param uri the URI whose query is replaced
      * @param query an ENCODED query, removed if null
+     * @return the URI carrying the new query, the original if it had none and none is given
+     * @throws URISyntaxException if the URI assembled from the parts is not valid
      */
     private static URI replaceQuery(URI uri, String query) throws URISyntaxException {
         URI rv = uri;

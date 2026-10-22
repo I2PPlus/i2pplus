@@ -269,7 +269,12 @@ public class PersistentDataStore extends TransientDataStore {
             _waitLock = new Object();
         }
 
-        /** Add entry to the disk write queue. */
+        /**
+         * Add entry to the disk write queue.
+         *
+         * @param key the hash of the router whose entry is queued
+         * @param data the entry to write on the next cycle
+         */
         public void queue(Hash key, DatabaseEntry data) {
             int pending = _keys.size();
             _keysToRemove.remove(key);
@@ -278,7 +283,11 @@ public class PersistentDataStore extends TransientDataStore {
             _context.statManager().addRateData("netDb.writePending", pending);
         }
 
-        /** Mark a key for removal from disk on next cycle. */
+        /**
+         * Mark a key for removal from disk on next cycle.
+         *
+         * @param key the hash of the router whose on-disk file should go
+         */
         public void remove(Hash key) {
             _keys.remove(key);
             _keysToRemove.add(key);
@@ -305,6 +314,9 @@ public class PersistentDataStore extends TransientDataStore {
         /**
          * Drain up to WRITE_LIMIT pending entries from the write queue.
          * Returns the drained entries; caller must write and {@link #removeQueued()} them.
+         *
+         * @return the drained entries, at most WRITE_LIMIT of them; empty when
+         *         nothing is pending
          */
         private List<Map.Entry<Hash, DatabaseEntry>> drainPending() {
             List<Map.Entry<Hash, DatabaseEntry>> toWrite = new ArrayList<>();
@@ -326,6 +338,8 @@ public class PersistentDataStore extends TransientDataStore {
         /**
          * Write a batch of RouterInfo entries to disk under the _dbDir lock.
          * Each entry is individually locked to avoid holding the lock across the entire batch.
+         *
+         * @param entries the entries drained from the queue; null data values are skipped
          */
         private void writeBatch(List<Map.Entry<Hash, DatabaseEntry>> entries) {
             for (Map.Entry<Hash, DatabaseEntry> entry : entries) {
@@ -340,6 +354,10 @@ public class PersistentDataStore extends TransientDataStore {
 
         /**
          * Log write statistics and reset the timer.
+         *
+         * @param written the number of RouterInfo files written this cycle;
+         *                nothing is logged for 0
+         * @param startTime the wall-clock time in ms when the write cycle began
          */
         private void logWriteStats(int written, long startTime) {
             if (written > 0) {
@@ -425,7 +443,14 @@ public class PersistentDataStore extends TransientDataStore {
         }
     }
 
-    /** Extract classification flags from raw RouterInfo data. */
+    /**
+     * Extract classification flags from raw RouterInfo data.
+     *
+     * @param key the hash of the router, used for the banlist checks
+     * @param ri the router info to classify
+     * @return a RiFlags snapshot of the version, capability, bandwidth, IP and
+     *         banlist state used by the store decision
+     */
     private RiFlags extractRiFlags(Hash key, RouterInfo ri) {
         String version = ri.getVersion();
         String caps = ri.getCapabilities();
@@ -465,6 +490,7 @@ public class PersistentDataStore extends TransientDataStore {
      * Should this RouterInfo be persisted to disk?
      * Returns true only for reachable, non-degraded peers with sufficient bandwidth.
      *
+     * @param f the pre-computed classification flags for the peer
      * @return false if the RI should be skipped or deleted
      */
     private static boolean shouldStoreRi(RiFlags f) {
@@ -476,6 +502,9 @@ public class PersistentDataStore extends TransientDataStore {
      * Detect IP spoofing and apply ban decisions for non-storeable peers.
      * Called only for peers that failed {@link #shouldStoreRi(RiFlags)} and are not banned.
      *
+     * @param key the hash of the peer being checked
+     * @param ri the peer's router info, used for the spoof check and ban logging
+     * @param f the pre-computed classification flags for the peer
      * @return true if the on-disk file should be deleted
      */
     private boolean checkSpoofAndBan(Hash key, RouterInfo ri, RiFlags f) {
@@ -548,7 +577,13 @@ public class PersistentDataStore extends TransientDataStore {
     /**
      * Write a single RouterInfo to disk. Skips if the file is already current.
      *
+     * @param key the hash of the router, used for the log messages
+     * @param data the RouterInfo entry to serialize
+     * @param dbFile the destination file; skipped when its last-modified time
+     *               is already at or after the entry's publish date
      * @return true if the write failed (file should be deleted)
+     * @throws IOException if the output stream cannot be opened or the data
+     *                     cannot be written
      */
     private boolean writeRiFile(Hash key, DatabaseEntry data, File dbFile) throws IOException {
         long dataPublishDate = getPublishDate(data);
@@ -568,7 +603,12 @@ public class PersistentDataStore extends TransientDataStore {
         }
     }
 
-    /** Persist a single RouterInfo to disk, applying spoof/ban checks. */
+    /**
+     * Persist a single RouterInfo to disk, applying spoof/ban checks.
+     *
+     * @param key the hash of the router to write
+     * @param data the entry to write; a null entry is ignored
+     */
     private void write(Hash key, DatabaseEntry data) {
         if (isShuttingDown(_context)) {return;}
 
@@ -708,6 +748,8 @@ public class PersistentDataStore extends TransientDataStore {
 
         /**
          * Decide whether to reseed based on router count and time since last reseed.
+         *
+         * @param routerCount the number of RouterInfo files loaded, passed to the reseed checker
          */
         private void checkReseed(int routerCount) {
             if (!_initialized) {
@@ -796,6 +838,8 @@ public class PersistentDataStore extends TransientDataStore {
         /**
          * Read RouterInfo files from the flat (non-subdirectory) layout.
          *
+         * @param routerInfoFiles the files listed from the root directory;
+         *                        null means there was nothing to read
          * @return total router count
          */
         private int readFlatFiles(File[] routerInfoFiles) {
@@ -818,6 +862,8 @@ public class PersistentDataStore extends TransientDataStore {
          * Migrates root-level files, shuffles to avoid load bias, and triggers
          * intermediate netdbReady events on slow systems.
          *
+         * @param routerInfoFiles root-level RouterInfo files to migrate into the
+         *                        subdirectories, may be null
          * @return total router count
          */
         private int readHierarchicalFiles(File[] routerInfoFiles) {
@@ -876,6 +922,7 @@ public class PersistentDataStore extends TransientDataStore {
         /**
          * Creates a job to read a RouterInfo from disk.
          *
+         * @param routerFile the on-disk RouterInfo file to read
          * @param key must match the RI hash in the file
          */
         public ReadRouterJob(File routerFile, Hash key) {
@@ -1127,7 +1174,14 @@ public class PersistentDataStore extends TransientDataStore {
         }
     }
 
-    /** Resolve and prepare the database directory, creating subdirs if needed. */
+    /**
+     * Resolve and prepare the database directory, creating subdirs if needed.
+     *
+     * @param dbDir the database directory path, relative to the router directory
+     * @return the directory, created and verified readable and writable
+     * @throws IOException if the directory cannot be created, is not a
+     *                     directory, or is not readable or writable
+     */
     private File getDbDir(String dbDir) throws IOException {
         File f = new SecureDirectory(_context.getRouterDir(), dbDir);
         if (!f.exists()) {
@@ -1155,6 +1209,7 @@ public class PersistentDataStore extends TransientDataStore {
 
     /**
      * Migrate from two-level to one-level directory structure.
+     * @param dbdir the NetDb root directory whose subdirs are emptied
      * @since 0.9.5
      */
     private static void unmigrate(File dbdir) {
@@ -1172,6 +1227,8 @@ public class PersistentDataStore extends TransientDataStore {
 
     /**
      * Migrate from one-level to two-level directory structure.
+     * @param dbdir the NetDb root directory the files currently sit in
+     * @param files the RouterInfo files to move into the subdirectories
      * @since 0.9.5
      */
     private static void migrate(File dbdir, File[] files) {
@@ -1229,7 +1286,15 @@ public class PersistentDataStore extends TransientDataStore {
         return getHash(filename, ROUTERINFO_PREFIX, ROUTERINFO_SUFFIX);
     }
 
-    /** Extract hash from a prefixed+suffixed filename. */
+    /**
+     * Extract hash from a prefixed+suffixed filename.
+     *
+     * @param filename the file name as stored on disk
+     * @param prefix the leading part to strip, e.g. "routerInfo-"
+     * @param suffix the trailing part to strip, e.g. ".dat"
+     * @return the decoded hash, or null if the name is malformed or the
+     *         embedded base64 key does not decode
+     */
     private static Hash getHash(String filename, String prefix, String suffix) {
         try {
             String key = filename.substring(prefix.length());
@@ -1240,7 +1305,12 @@ public class PersistentDataStore extends TransientDataStore {
         } catch (RuntimeException e) {return null;}
     }
 
-    /** Remove file. */
+    /**
+     * Delete the RouterInfo file for a hash, if it is present.
+     *
+     * @param key the hash of the router whose file name is derived
+     * @param dir the NetDb root directory the file path is resolved against
+     */
     private void removeFile(Hash key, File dir) {
         String riName = getRouterInfoName(key);
         File f = new File(dir, riName);

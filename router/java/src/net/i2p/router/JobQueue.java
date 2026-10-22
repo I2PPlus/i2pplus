@@ -190,6 +190,9 @@ public class JobQueue {
     /**
      * Claim the job in {@code _readyIndex} before {@code offer()} publishes it,
      * so a concurrent {@link #addJob(Job)} sees it as already queued in that window.
+     *
+     * @param job the job being published
+     * @param queue the ready queue to publish it to
      */
     private void offerReady(Job job, BlockingQueue<Job> queue) {
         _readyIndex.add(job);
@@ -201,6 +204,8 @@ public class JobQueue {
      * Remove from a ready queue, releasing the index and TestJob claims only if
      * the job was actually present.
      *
+     * @param job the job to remove
+     * @param queue the ready queue to remove it from
      * @return true if the job was in the queue and has been removed
      */
     private boolean removeReady(Job job, BlockingQueue<Job> queue) {
@@ -214,6 +219,7 @@ public class JobQueue {
      * Dispatch from a ready queue, releasing the index claim here rather than at
      * completion.
      *
+     * @param queue the ready queue to dispatch from
      * @return the next job, or null if the queue was empty
      */
     private Job takeReady(BlockingQueue<Job> queue) {
@@ -224,7 +230,11 @@ public class JobQueue {
         return job;
     }
 
-    /** Add to the future-scheduled skip list, keeping {@link #_queuedTestJobs} in step. */
+    /**
+     * Add to the future-scheduled skip list, keeping {@link #_queuedTestJobs} in step.
+     *
+     * @param job the job scheduled for a future time
+     */
     private void addTimed(Job job) {
         _timedJobs.add(job);
         if (job instanceof TestJob) {_queuedTestJobs.incrementAndGet();}
@@ -233,6 +243,7 @@ public class JobQueue {
     /**
      * Remove from the future-scheduled skip list.
      *
+     * @param job the job to unschedule
      * @return true if the job was scheduled and has been removed
      */
     private boolean removeTimed(Job job) {
@@ -1097,6 +1108,11 @@ public class JobQueue {
     private static final int POISON_ID = -99999;
 
     private static class PoisonJob implements Job {
+        /**
+         * Sentinel job that ends a runner thread when dequeued.
+         */
+        private PoisonJob() {}
+
         @Override
         public String getName() {return null;}
         @Override
@@ -1110,6 +1126,11 @@ public class JobQueue {
     }
 
     private static class JobComparator implements Comparator<Job>, Serializable {
+        /**
+         * Orders jobs by scheduled start time, then by job ID.
+         */
+        private JobComparator() {}
+
           @Override
           public int compare(Job l, Job r) {
               if (l.equals(r)) return 0;

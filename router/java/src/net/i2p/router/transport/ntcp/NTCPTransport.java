@@ -180,7 +180,6 @@ public class NTCPTransport extends TransportImpl {
      */
     public static final String MIN_SIGTYPE_VERSION = "0.9.16";
 
-    // NTCP2 stuff
     /**
      * Style identifier for the NTCP transport.
      * Value sourced from {@link Transport#STYLE_NTCP}.
@@ -501,6 +500,8 @@ public class NTCPTransport extends TransportImpl {
 
     /**
      * Extract IP:port from {@link RouterInfo} for NTCP transport.
+     *
+     * @param ri the router info to read the NTCP host and port from, null yields "UNKNOWN"
      * @return the IP port from router info
      */
     private String getIPPortFromRouterInfo(RouterInfo ri) {
@@ -873,6 +874,8 @@ public class NTCPTransport extends TransportImpl {
 
     /**
      * Get first available address we can use.
+     *
+     * @param target the peer whose first usable NTCP address is returned
      * @return address or null
      * @since 0.9.6
      */
@@ -1276,7 +1279,7 @@ public int getEstimatedRTT(Hash peer) {
     /**
      * A positive number means our clock is ahead of theirs.
      *
-     * @param skew in seconds
+     * @param skew the rejected clock skew in seconds
      */
     void setLastBadSkew(long skew) {_lastBadSkew = skew;}
 
@@ -1476,6 +1479,8 @@ public int getEstimatedRTT(Hash peer) {
 
     /**
      * Outbound only, either IPv4 or IPv6, NTCP2 with "s" and "v" only.
+     *
+     * @param ipv6 true to build the IPv6 outbound address, false for IPv4
      * @since 0.9.50
      */
     private void setOutboundNTCP2Address(boolean ipv6) {
@@ -1779,7 +1784,7 @@ public int getEstimatedRTT(Hash peer) {
 
     /**
      * Transport style.
-     * @return always "NTCP"
+     * @return always the string "NTCP"
      */
     public String getStyle() {return STYLE;}
 
@@ -1876,6 +1881,9 @@ public int getEstimatedRTT(Hash peer) {
      * Caller must synch on this.
      * Note this is only called from startListening().
      * Only returns non-null if port is configured.
+     *
+     * @return the configured local address, normally null for outbound-only,
+     *         non-null only when a valid NTCP port is set
      */
     private RouterAddress configureLocalAddress() {
         // this generally returns null -- see javadoc
@@ -1901,6 +1909,9 @@ public int getEstimatedRTT(Hash peer) {
      * Unlike in UDP rebuildExternalAddress(), this only runs once, at startup,
      * so we won't pick up IP changes.
      * Only returns non-null if port is configured.
+     *
+     * @return the address built from the configured hostname and port, null
+     *         if either is missing or invalid
      */
     private RouterAddress createNTCPAddress() {
         int p = _context.getProperty(PROP_I2NP_NTCP_PORT, -1);
@@ -1921,6 +1932,7 @@ public int getEstimatedRTT(Hash peer) {
      * Add the required options to the properties for a NTCP2 address.
      * Host/port must already be set in props if they are going to be.
      *
+     * @param props the address properties to add the NTCP2 options to
      * @since 0.9.35
      */
     private void addNTCP2Options(Properties props) {
@@ -1970,6 +1982,7 @@ public int getEstimatedRTT(Hash peer) {
      * Valid NTCP version of Bob's NTCP address
      * for our outbound connections as Alice.
      *
+     * @param addr Bob's NTCP router address to evaluate
      * @return the valid version 2-5, 1 for old NTCP1, or 0 if unusable
      * @since 0.9.35
      */
@@ -2206,6 +2219,7 @@ public int getEstimatedRTT(Hash peer) {
      * Only called if SSU is disabled AND our address changed.
      * Tell the event log, and tell the router.
      *
+     * @param old the reachability status before the change
      * @since 0.9.40
      */
     private void addressChanged(Status old) {
@@ -2228,6 +2242,8 @@ public int getEstimatedRTT(Hash peer) {
      * Port may be set to indicate requested port even if ip is null.
      *
      * @param ip previously validated; may be null to indicate IPv4 failure or port info only
+     * @param isIPv6 true for the IPv6 address, false for IPv4
+     * @param port the requested port, 0 when not specified
      * @return true if our address changed
      */
     private synchronized boolean externalAddressReceived(byte[] ip, boolean isIPv6, int port) {
@@ -2801,7 +2817,11 @@ public int getEstimatedRTT(Hash peer) {
      * Cache the bid to reduce object churn.
      */
     private class SharedBid extends TransportBid {
-        /** Bid for this transport with a fixed latency. */
+        /**
+         * Bid for this transport with a fixed latency.
+         *
+         * @param ms the latency of this bid in milliseconds
+         */
         public SharedBid(int ms) {super(); setLatencyMs(ms);}
         /**
          * The transport this bid is for.
@@ -2814,8 +2834,6 @@ public int getEstimatedRTT(Hash peer) {
         @Override
         public String toString() {return "NTCP bid @ " + getLatencyMs();}
     }
-
-    // ==================== Tuner delegation ====================
 
     /**
      * Selector loop delay in milliseconds.

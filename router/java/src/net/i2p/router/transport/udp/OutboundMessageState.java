@@ -94,7 +94,10 @@ class OutboundMessageState implements CDPQEntry {
     /**
      * Fragments the given message for transmission.
      *
+     * @param context the application context
      * @param m null if msg is "injected"
+     * @param msg the message to fragment
+     * @param peer the peer the message is being sent to
      * @throws IllegalArgumentException if too big or if msg or peer is null
      */
     private OutboundMessageState(I2PAppContext context, OutNetMessage m, I2NPMessage msg, PeerState peer) {
@@ -144,6 +147,7 @@ class OutboundMessageState implements CDPQEntry {
      * Bit mask for the given fragment index.
      *
      * @param fragment 0-63
+     * @return a long with bit {@code fragment} set
      */
     private static long mask(int fragment) {
         return 1L << fragment;

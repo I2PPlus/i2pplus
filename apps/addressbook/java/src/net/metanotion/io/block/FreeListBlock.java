@@ -89,6 +89,8 @@ private static final long MAGIC = 0x2366724c69737423L;  // "#frList#"
 
     /**
      * Write the length only
+     *
+     * @throws IOException if the seek or write to this block's page fails
      */
     private void writeLen() throws IOException {
         BlockFile.pageSeek(file, page);
@@ -120,6 +122,8 @@ private static final long MAGIC = 0x2366724c69737423L;  // "#frList#"
 
     /**
      * Write the length and new page only
+     *
+     * @throws IOException if the seek or write to this block's page fails
      */
     private void writeFreePage() throws IOException {
         BlockFile.pageSeek(file, page);

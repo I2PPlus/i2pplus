@@ -20,19 +20,19 @@ public class EOFOnMatchInputStream extends PushbackInputStream implements ReadCo
     private final ReadCounter cis;
 
     /**
-     *  Non-counter mode. {@link #getRead()} will return 0.
-     *  @param in the underlying stream to read until the match is seen
-     *  @param match will be copied
+     * Non-counter mode. {@link #getRead()} will return 0.
+     * @param in the underlying stream to read until the match is seen
+     * @param match will be copied
      */
     public EOFOnMatchInputStream(InputStream in, byte[] match) {
         this(in, null, match);
     }
 
     /**
-     *  Counter mode. getRead() will the ReadCounter's value, not including the match bytes.
-     *  @param in the underlying stream to read until the match is seen
-     *  @param ctr counts the bytes read from the underlying stream, or null for non-counter mode
-     *  @param match will be copied
+     * Counter mode. getRead() will the ReadCounter's value, not including the match bytes.
+     * @param in the underlying stream to read until the match is seen
+     * @param ctr counts the bytes read from the underlying stream, or null for non-counter mode
+     * @param match will be copied
      */
     public EOFOnMatchInputStream(InputStream in, ReadCounter ctr, byte[] match) {
         super(in, match.length);
@@ -54,9 +54,9 @@ public class EOFOnMatchInputStream extends PushbackInputStream implements ReadCo
     }
 
     /**
-     *  If constructed with a counter, returns the count
-     *  (not necessarily starting at 0) minus the buffered/matched count.
-     *  Otherwise returns 0.
+     * If constructed with a counter, returns the count
+     * (not necessarily starting at 0) minus the buffered/matched count.
+     * Otherwise returns 0.
      * @return the number of bytes read from the underlying stream that were not
      *         buffered here or matched against the search pattern, or 0 if this
      *         stream was not wrapped around a counting stream
@@ -109,9 +109,11 @@ public class EOFOnMatchInputStream extends PushbackInputStream implements ReadCo
     }
 
     /**
-     *  FIFO output. Pop the oldest (not the newest).
-     *  Only call if pos &lt; size.
-     *  We never call super.{@link #read()}, it returns the newest.
+     * FIFO output. Pop the oldest (not the newest).
+     * Only call if pos &lt; size.
+     * We never call super.{@link #read()}, it returns the newest.
+     *
+     * @return the oldest byte in the buffer, unsigned 0-255
      */
     private int pop() {
         // return oldest, shift up

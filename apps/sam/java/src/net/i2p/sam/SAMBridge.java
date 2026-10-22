@@ -222,6 +222,7 @@ public class SAMBridge implements Runnable, ClientApp {
     /**
      * Open and bind the server socket (TCP or SSL).
      *
+     * @throws IOException if the socket cannot be bound to the host and port
      * @since 0.9.6
      */
     private void openSocket() throws IOException {
@@ -548,8 +549,6 @@ public class SAMBridge implements Runnable, ClientApp {
         return Math.max(1000, System.currentTimeMillis() - _started);
     }
 
-    ////// begin ClientApp interface, use only if using correct construtor
-
     /**
      * Start the bridge.
      * @since 0.9.6
@@ -627,12 +626,10 @@ public class SAMBridge implements Runnable, ClientApp {
         return "SAM " + _listenHost + ':' + _listenPort;
     }
 
-    ////// end ClientApp interface
-    ////// begin ClientApp helpers
-
     /**
      * Record a state change with no associated error.
      *
+     * @param state the new state of this client app
      * @since 0.9.6
      */
     private void changeState(ClientAppState state) {
@@ -643,6 +640,8 @@ public class SAMBridge implements Runnable, ClientApp {
      * Record the new state and tell the ClientAppManager about it, if there
      * is one.
      *
+     * @param state the new state of this client app
+     * @param e the error associated with the change, or null if none
      * @since 0.9.6
      */
     private synchronized void changeState(ClientAppState state, Exception e) {
@@ -744,6 +743,13 @@ public class SAMBridge implements Runnable, ClientApp {
 
         /**
          * Configure with parsed command-line values.
+         *
+         * @param host hostname to listen on
+         * @param port TCP port to listen on
+         * @param isSSL true to serve SAM over SSL
+         * @param opts parsed name=value bridge options
+         * @param keyFile keystore file name for SSL, may be null
+         * @param configFile i2p-tunnel-props config file, may be null
          */
         public Options(String host, int port, boolean isSSL, Properties opts, String keyFile, File configFile) {
             this.host = host;
@@ -884,6 +890,8 @@ public class SAMBridge implements Runnable, ClientApp {
     /**
      * Parse key=value options starting at startArgs.
      *
+     * @param args the command line arguments to parse
+     * @param startArgs index of the first option to parse
      * @param props out parameter, any options found are added
      * @throws HelpRequestedException on any item not of the form key=value.
      */

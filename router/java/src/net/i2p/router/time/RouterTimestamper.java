@@ -224,8 +224,9 @@ public class RouterTimestamper extends Timestamper {
     }
 
     /**
-     *  Update the time immediately.
-     *  @since 0.8.8
+     * Update the time immediately.
+     *
+     * @since 0.8.8
      */
     @Override
     public void timestampNow() {
@@ -348,7 +349,13 @@ public class RouterTimestamper extends Timestamper {
     }
 
     /**
-     * True if the time was queried successfully, false if it couldn't be.
+     * Query the NTP servers, compare the results, and stamp the time if they agree.
+     *
+     * @param serverList the NTP servers to query, tried in random order
+     * @param perServerTimeout how long to wait for each server's reply, in milliseconds
+     * @param preferIPv6 true to query the server's IPv6 address first
+     * @return true if the time was stamped, false if the queries did not agree
+     * @throws IllegalArgumentException if none of the servers are reachable
      */
     private boolean queryTime(String[] serverList, int perServerTimeout, boolean preferIPv6) throws IllegalArgumentException {
         long[] found = new long[_concurringServers];
@@ -407,6 +414,8 @@ public class RouterTimestamper extends Timestamper {
     /**
      * Notify the listeners.
      *
+     * @param now the current internet time in milliseconds
+     * @param stratum 1-15, 1 being the best
      * @since stratum param added in 0.7.12
      */
     private void stampTime(long now, int stratum) {

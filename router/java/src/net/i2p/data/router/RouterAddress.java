@@ -333,6 +333,9 @@ public class RouterAddress extends DataStructureImpl {
      * Separator before a pair in the log form: the plain {@code " * "} bullet,
      * or that bullet at the start of a fresh line once {@link #LOG_WRAP} pairs
      * have been written.
+     *
+     * @param buf the builder the separator is appended to
+     * @param pairs the number of pairs written so far, a line break comes every LOG_WRAP of them
      */
     private static void _logSep(StringBuilder buf, int pairs) {
         buf.append(pairs > 0 && pairs % LOG_WRAP == 0 ? "\n * " : " * ");
@@ -415,6 +418,10 @@ public class RouterAddress extends DataStructureImpl {
      * class=value>value</span>} line, padding the label and escaping the value.
      * There is no punctuation between the two spans - the theme styles the key
      * span, and that styling is what separates the label from the value.
+     *
+     * @param buf the builder the line is appended to
+     * @param label the display name, right-padded to HTML_LABEL_WIDTH
+     * @param value the text to HTML-escape and place in the value span
      */
     private static void _htmlPair(StringBuilder buf, String label, String value) {
         int pad = HTML_LABEL_WIDTH - label.length();
@@ -428,6 +435,10 @@ public class RouterAddress extends DataStructureImpl {
      * Human-readable name for an option key, or the capitalized key if it is
      * unknown. Introducer keys are a prefix plus a slot index, so {@code ih0}
      * reads as the {@code ih} name followed by the slot number.
+     *
+     * @param key the option key, possibly with a numeric slot suffix
+     * @return the human-readable name, with the slot number appended for
+     *         suffixed keys, or the capitalized key if unknown
      */
     private static String _htmlLabel(String key) {
         String label = HTML_LABELS.get(key);
@@ -446,6 +457,9 @@ public class RouterAddress extends DataStructureImpl {
 
     /**
      * Display label for an option key: MTU uppercased, others capitalized.
+     *
+     * @param key the option key to label
+     * @return "MTU" for the mtu key, otherwise the key with its first letter uppercased
      */
     private static String _label(String key) {
         if ("mtu".equals(key))
@@ -455,6 +469,9 @@ public class RouterAddress extends DataStructureImpl {
 
     /**
      * Options omitted from {@link #toString()} as debugging detail.
+     *
+     * @param key the option key to test
+     * @return true for the host, port, i, s, v, caps and pq keys, which are hidden
      */
     private static boolean _hiddenOption(String key) {
         return "host".equals(key) || "port".equals(key) || "i".equals(key) ||

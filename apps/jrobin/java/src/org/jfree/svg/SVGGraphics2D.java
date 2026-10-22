@@ -1290,6 +1290,8 @@ public final class SVGGraphics2D extends Graphics2D {
 
     /**
      * Convert a Path2D to SVG path data without smoothing (original behavior).
+     *
+     * @param path the path to convert
      * @return the s v g path data raw
      */
     private String getSVGPathDataRaw(Path2D path) {
@@ -2016,6 +2018,7 @@ public final class SVGGraphics2D extends Graphics2D {
      * element.
      *
      * @param clip the clip (ignored if {@code null})
+     * @return the clip's reference key, or null if there is no clip
      */
     private String registerClip(Shape clip) {
         if (clip == null) {

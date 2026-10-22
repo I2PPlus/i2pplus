@@ -65,6 +65,7 @@ class SAMv3RawSession extends SAMRawSession implements Session, SAMRawReceiver {
      * Look up the registered session record for the given nickname,
      * throwing if it has already disappeared.
      *
+     * @param nick the registered session nickname to look up
      * @return the registered session record
      * @throws InterruptedIOException if the nickname is not registered
      */

@@ -95,6 +95,7 @@ public class I2PTunnelClient extends I2PTunnelClientBase {
     /**
      * Parse the destination list from config.
      *
+     * @param destinations comma or space separated destinations, ignored if null
      * @since 0.9.9 moved from constructor
      */
     private void buildAddresses(String destinations) {

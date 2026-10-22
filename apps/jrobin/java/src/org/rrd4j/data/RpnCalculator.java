@@ -719,7 +719,12 @@ class RpnCalculator {
         Token_Symbol(String token_string) {
             this.token_string = token_string;
         }
-        /** Do method */
+        /**
+         * Do method
+         *
+         * @param c the calculator evaluating this token
+         * @param s the mutable evaluation state for the current slot
+         */
         abstract void do_method(RpnCalculator c, State s);
     }
     private static final Token_Symbol[] symbols;
@@ -780,7 +785,12 @@ class RpnCalculator {
             tokens[i] = createToken(tokensString[i].trim());
         }
     }
-    /** Create token */
+    /**
+     * Create token
+     *
+     * @param parsedText one RPN token string: a symbol, PREV, PREV(variable), a number or a source name
+     * @return the token built from the text
+     */
     private Token createToken(String parsedText) {
         Token token;
         int hash = perfect.hashAsInt(parsedText);
@@ -833,23 +843,38 @@ class RpnCalculator {
 
     /**
      * Calendar field value from timestamp.
+     *
+     * @param timestamp the unix time in seconds
+     * @param field the java.util.Calendar field constant to read
      * @return calendar field value from timestamp
      */
     private double getCalendarField(double timestamp, int field) {
         Calendar calendar = Util.getCalendar((long) (timestamp));
         return calendar.get(field);
     }
-    /** Push a value onto the RPN stack */
+    /**
+     * Push a value onto the RPN stack
+     *
+     * @param x the value to push
+     */
 
     private void push(final double x) {
         stack.push(x);
     }
-    /** Pop a value from the RPN stack */
+    /**
+     * Pop a value from the RPN stack
+     *
+     * @return the top value, removed from the stack
+     */
 
     private double pop() {
         return stack.pop();
     }
-    /** Examine the top value on the stack without removing it */
+    /**
+     * Examine the top value on the stack without removing it
+     *
+     * @return the top value, left on the stack
+     */
 
     private double peek() {
         return stack.peek();
@@ -876,7 +901,11 @@ class RpnCalculator {
         private final double[] stack = new double[MAX_STACK_SIZE];
         /** Current stack position */
         private int pos = 0;
-        /** Push a value onto the RPN stack */
+        /**
+         * Push a value onto the RPN stack
+         *
+         * @param x the value to push
+         */
         void push(double x) {
             if (pos >= MAX_STACK_SIZE) {
                 throw new IllegalArgumentException(
@@ -884,14 +913,22 @@ class RpnCalculator {
             }
             stack[pos++] = x;
         }
-        /** Pop a value from the RPN stack */
+        /**
+         * Pop a value from the RPN stack
+         *
+         * @return the top value, removed from the stack
+         */
         double pop() {
             if (pos <= 0) {
                 throw new IllegalArgumentException("POP failed, RPN stack is empty");
             }
             return stack[--pos];
         }
-        /** Examine the top value on the stack without removing it */
+        /**
+         * Examine the top value on the stack without removing it
+         *
+         * @return the top value, left on the stack
+         */
         double peek() {
             if (pos <= 0) {
                 throw new IllegalArgumentException("PEEK failed, RPN stack is empty");

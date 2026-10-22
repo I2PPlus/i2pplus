@@ -248,6 +248,8 @@ public class SAMStreamSend {
     private class SendEventHandler extends SAMEventHandler {
         /**
          * Creates the handler that tracks stream closes reported by the bridge.
+         *
+         * @param ctx the app context for the handler
          */
         public SendEventHandler(I2PAppContext ctx) { super(ctx); }
 
@@ -297,7 +299,15 @@ public class SAMStreamSend {
     /**
      * Send the HELLO and log in.
      *
+     * @param samOut the stream to write the HELLO and session commands to
+     * @param version the maximum SAM version to request, e.g. "3.5"
      * @param isMaster is this the control socket
+     * @param eventHandler the handler that waits for the HELLO reply and later events
+     * @param mode the session mode, one of the STREAM, DG, V1DG or V1RAW
+     *             constants, with the MASTER bit added for a master session
+     * @param user the SAM user name to log in with, null if no authentication
+     * @param password the SAM password to log in with, null if no authentication
+     * @param opts extra SESSION CREATE options to append, may be empty
      * @return our b64 dest or null
      */
     private String handshake(OutputStream samOut, String version, boolean isMaster,
@@ -438,6 +448,11 @@ public class SAMStreamSend {
 
         /**
          * Registers a sender with the stream, opening a datagram socket for datagram modes.
+         *
+         * @param samOut the SAM output stream for stream modes, null for datagram modes
+         * @param eventHandler the handler tracking events for this stream
+         * @param mode the SAM mode, stream, datagram or raw
+         * @throws IOException if the datagram socket cannot be opened
          */
         public Sender(OutputStream samOut, SAMEventHandler eventHandler, int mode) throws IOException {
             _samOut = samOut;
@@ -462,6 +477,8 @@ public class SAMStreamSend {
 
         /**
          * Reads the destination key from disk and issues STREAM CONNECT.
+         *
+         * @return true if the bridge reported the stream connected, false on any error
          */
         public boolean openConnection() {
             InputStream fin = null;

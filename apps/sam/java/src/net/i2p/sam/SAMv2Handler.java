@@ -133,7 +133,12 @@ class SAMv2Handler extends SAMv1Handler implements SAMRawReceiver, SAMDatagramRe
 		}
 
 
-		/** Execute STREAM RECEIVE message. */
+		/**
+		 * Execute STREAM RECEIVE message.
+		 *
+		 * @param props the parameters parsed from the message
+		 * @return true if the receive was set up, false if the parameters were bad
+		 */
 		private boolean execStreamReceive ( Properties props )
 		{
 			if (props.isEmpty())

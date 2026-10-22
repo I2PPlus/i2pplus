@@ -543,6 +543,8 @@ class RatchetTagSet implements TagSetHandle {
 
     /**
      * Inbound only.
+     *
+     * @param usedTagNumber the tag number the peer just used, which drives the window size
      */
     private void addTags(int usedTagNumber) {
         int lookAhead;

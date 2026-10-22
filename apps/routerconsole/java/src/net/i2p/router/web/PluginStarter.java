@@ -60,9 +60,9 @@ public class PluginStarter implements Runnable {
      * Prefix of every plugin property key.
      */
     public static final String PREFIX = "plugin.";
-    // false, true, or deleted
     /**
-     * Suffix of the property recording whether a plugin starts at load.
+     * Suffix of the property recording whether a plugin starts at load,
+     * false, true, or deleted.
      */
     public static final String ENABLED = ".startOnLoad";
     /**
@@ -171,6 +171,8 @@ public class PluginStarter implements Runnable {
 
         /**
          * Hold the context the update runs against.
+         *
+         * @param ctx the router context the update runs against
          */
         public PluginUpdater(RouterContext ctx) {
             _ctx = ctx;
@@ -187,6 +189,10 @@ public class PluginStarter implements Runnable {
 
     /**
      * Fetches and restarts the installed plugins in the calling thread.
+     *
+     * @param ctx the router context, used for the update manager and router state
+     * @param delay true to first wait for the router to be running, up to 30
+     *              minutes, and for the scheduled update delay
      * @since 0.8.13
      */
     private static void updateAll(RouterContext ctx, boolean delay) {
@@ -324,6 +330,7 @@ public class PluginStarter implements Runnable {
     /**
      * Deferred deletion of plugins that we failed to delete before.
      *
+     * @param ctx the router context, used for the log
      * @since 0.9.13
      */
     private static void deferredDeletePlugins(RouterContext ctx) {
@@ -758,7 +765,8 @@ public class PluginStarter implements Runnable {
     }
 
     /**
-     * plugin.config.
+     * Read the plugin.config file for a single plugin.
+     *
      * @param ctx context to resolve the config dir holding the plugin
      * @param appName plugin directory name under $I2P/plugins
      * @return non-null, empty if plugin.config is missing or unreadable
@@ -773,8 +781,9 @@ public class PluginStarter implements Runnable {
     }
 
     /**
-     * plugins.config
-     * this auto-adds a property for every dir in the plugin directory.
+     * Read the plugins.config file, this auto-adds a property for every dir
+     * in the plugin directory.
+     *
      * @return non-null, empty if plugins.config is missing or unreadable
      */
     public static Properties pluginProperties() {
@@ -880,7 +889,8 @@ public class PluginStarter implements Runnable {
     }
 
     /**
-     * plugins.config.
+     * Write the plugins.config file.
+     *
      * @param props written to plugins.config, converted to OrderedProperties if needed
      */
     public static void storePluginProperties(Properties props) {
@@ -898,6 +908,9 @@ public class PluginStarter implements Runnable {
     /**
      * Start the client apps of a plugin.
      *
+     * @param ctx the router context, used for the logs and client apps
+     * @param pluginDir the plugin's installation directory, its name is the plugin name
+     * @param apps the client app configs to run, in order
      * @param action "start" or "stop" or "uninstall"
      * @throws Exception just about anything if an app has a delay less than zero, caller would be wise to catch Throwable
      * If no apps have a delay less than zero, it shouldn't throw anything
@@ -1190,6 +1203,9 @@ public class PluginStarter implements Runnable {
      * {@link java.lang.Thread#setContextClassLoader}, but I don't see how to make it
      * magically get used for everything.
      *
+     * @param classpath the plugin classpath, comma-separated absolute file paths
+     * @param clientName the plugin client name, used in the log messages
+     * @param log the log to report invalid classpath elements to
      * @return null if no valid elements
      */
     private static URL[] classpathToURLArray(String classpath, String clientName, Log log) {
@@ -1216,9 +1232,13 @@ public class PluginStarter implements Runnable {
     }
 
     /**
+     * Append a URL to the system classpath at runtime, as described at
      * http://jimlife.wordpress.com/2007/12/19/java-adding-new-classpath-at-runtime/
      *
+     * @param u the URL to append to the system classloader's classpath
      * @throws ClassCastException in Java 9
+     * @throws Exception if the reflective lookup or invocation of the
+     *                   classloader's addURL method fails
      */
     private static void addPath(URL u) throws Exception {
         URLClassLoader urlClassLoader = (URLClassLoader) ClassLoader.getSystemClassLoader();
@@ -1245,6 +1265,10 @@ public class PluginStarter implements Runnable {
 
     /**
      * Translate a string.
+     *
+     * @param s the message key to translate
+     * @param o optional argument for the message, null if none
+     * @param ctx the app context supplying the locale
      * @return the translated text for s
      * @since 0.9.30
      */
@@ -1252,7 +1276,15 @@ public class PluginStarter implements Runnable {
         return Messages.getString(s, o, ctx);
     }
 
-    /** Translate a string. */
+    /**
+     * Translate a string.
+     *
+     * @param s the singular form of the message
+     * @param p the plural form of the message
+     * @param n the count selecting the singular or plural form
+     * @param ctx the app context supplying the locale
+     * @return the translated form matching the count
+     */
     private static String ngettext(String s, String p, int n, I2PAppContext ctx) {
         return Messages.getString(n, s, p, ctx);
     }

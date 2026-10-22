@@ -313,7 +313,12 @@ class HTTPResponseOutputStream extends FilterOutputStream {
         }
     }
 
-    /** Are the headers finished? */
+    /**
+     * Are the headers finished?
+     *
+     * @return true if the buffered data ends with a blank line, \n\r\n or \n\n,
+     *         so the response headers are complete
+     */
     private boolean headerReceived() {
         int valid = _headerBuffer.getValid();
         if (valid < 3)
@@ -329,7 +334,12 @@ class HTTPResponseOutputStream extends FilterOutputStream {
         return second == NL; //   \n\n
     }
 
-    /** Parse the received header, adjust it as needed, and write it to the client. */
+    /**
+     * Parse the received header, adjust it as needed, and write it to the client.
+     *
+     * @throws IOException if a suppressed resume response cannot be spliced, or
+     *                     writing to the client fails
+     */
     private void writeHeader() throws IOException {
         _chunked = false;
         _connectionSent = false;

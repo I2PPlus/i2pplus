@@ -214,6 +214,7 @@ class BlindCache {
     /**
      * Add blinded lookup data to the cache.
      *
+     * @param bd the blind data to place in the in-memory caches
      * @since 0.9.41 from {@link #addToCache(BlindData)}
      */
     private void storeInCache(BlindData bd) {
@@ -389,6 +390,11 @@ class BlindCache {
      * <p>
      * If timestamp is positive, it's a creation date;
      * if negative, it's a negative expiration date.
+     *
+     * @param line the comma-separated record as written by {@link #toPersistentString(BlindData)}
+     * @return the parsed blind data, never null
+     * @throws DataFormatException if the line is malformed, or a signature type
+     *                             is unknown or unavailable
      */
     private BlindData fromPersistentString(String line) throws DataFormatException {
         String[] ss = DataHelper.split(line, ",", 8);
@@ -454,6 +460,9 @@ class BlindCache {
      * <p>
      * If timestamp is positive, it's a creation date;
      * if negative, it's a negative expiration date.
+     *
+     * @param bd the blind data to encode
+     * @return the comma-separated record, parseable by {@link #fromPersistentString(String)}
      */
     private static String toPersistentString(BlindData bd) {
         StringBuilder buf = new StringBuilder(1024);

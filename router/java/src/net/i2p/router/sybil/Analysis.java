@@ -142,7 +142,13 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
     private static final byte[] IPV6_NAT64 = new byte[16];
     static { IPV6_NAT64[1] = 0x64; IPV6_NAT64[2] = (byte) 0xff; IPV6_NAT64[3] = (byte) 0x9b; }
 
-    /** Use {@link #getInstance()} instead. */
+    /**
+     * Use {@link #getInstance(RouterContext)} instead.
+     *
+     * @param ctx the router context
+     * @param mgr the client app manager the app is registered with
+     * @param args not used, may be null
+     */
     private Analysis(RouterContext ctx, ClientAppManager mgr, String[] args) {
         super(ctx);
         _context = ctx;
@@ -518,6 +524,8 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
 
     /**
      * Blocklist and Banlist if configured.
+     *
+     * @param points the per-router scores, those at or over the threshold are banned
      * @since 0.9.41
      */
     private void doBlocking(Map<Hash, Points> points) {
@@ -630,7 +638,12 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
         return biLog2(min);
     }
 
-    /** IPv4 only. */
+    /**
+     * IPv4 only.
+     *
+     * @param ri the router whose addresses are scanned
+     * @return the first 4-byte address, or null if the router has none
+     */
     private static byte[] getIP(RouterInfo ri) {
         for (RouterAddress ra : ri.getAddresses()) {
             byte[] rv = ra.getIP();
@@ -642,7 +655,9 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
     /**
      * IPv6 only.
      *
-     * @return the IPv6
+     * @param ri the router whose addresses are scanned
+     * @return the IPv6, skipping the localhost and NAT64 forms i2pd gets wrong, or null when
+     *         there is none
      * @since 0.9.57
      */
     private static byte[] getIPv6(RouterInfo ri) {
@@ -1294,6 +1309,8 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
      * For debugging
      * http://forums.sun.com/thread.jspa?threadID=597652
      *
+     * @param a the value to take the base 2 logarithm of
+     * @return the base 2 logarithm of a, as a double
      * @since 0.7.14
      */
     private static double biLog2(BigInteger a) {
@@ -1317,6 +1334,7 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
      *          To translate parameter also, use _t("foo {0} bar", _t("baz"))
      *          Do not double the single quotes in the parameter.
      *          Use autoboxing to call with ints, longs, floats, etc.
+     * @return the translated string, with {0} replaced by the parameter
      */
     private String _t(String s, Object o) {
         return Translate.getString(s, o, _context, BUNDLE_NAME);

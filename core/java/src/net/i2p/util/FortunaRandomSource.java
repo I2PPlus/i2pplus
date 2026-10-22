@@ -79,6 +79,8 @@ public class FortunaRandomSource extends RandomSource implements EntropyHarveste
      * Mix as much varying system state into a seed value as can be found.
      * Only used when every real entropy source has failed - it is not
      * cryptographically strong on its own, but it beats a ~32 bit time seed.
+     *
+     * @return a seed mixed from as much varying system state as could be found
      */
     private long mixedSeed() {
         Runtime rt = Runtime.getRuntime();

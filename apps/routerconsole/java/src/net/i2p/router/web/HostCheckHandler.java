@@ -299,6 +299,9 @@ public class HostCheckHandler extends GzipHandler
 
     /**
      * Extract host from "host:port" or "[ipv6]:port".
+     *
+     * @param hostPort the header value to split
+     * @return the host without brackets, or the input itself when no port is present
      */
     private static String extractHost(String hostPort) {
         if (hostPort.startsWith("[")) {
@@ -317,6 +320,8 @@ public class HostCheckHandler extends GzipHandler
     /**
      * Extract port from "host:port" or "[ipv6]:port", default to defaultPort if not found.
      *
+     * @param hostPort the header value to split
+     * @param defaultPort the port to assume when the value carries none
      * @return the port, or -1 if a port was present but is not a number, so a
      *         malformed header fails the comparison instead of throwing
      */
@@ -355,6 +360,10 @@ public class HostCheckHandler extends GzipHandler
     /**
      * Redirect to HTTPS.
      *
+     * @param httpsPort the port to redirect the browser to
+     * @param httpRequest the request whose server name, URI and query string form the target
+     * @param httpResponse the response given the 307 status and Location header
+     * @throws IOException if the response output stream cannot be opened
      * @since 0.9.34
      */
     @SuppressWarnings("PMD.AvoidUnnecessaryStringBuilderCreation")

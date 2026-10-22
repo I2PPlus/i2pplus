@@ -513,6 +513,7 @@ public class GroupElement implements Serializable {
     /**
      * Precomputes table for {@link #scalarMultiply(byte[])}.
      *
+     * @return the 32 by 8 table of precomputed multiples of this element
      * @since 0.9.36 split out from precompute()
      */
     private GroupElement[][] precomputeSingle() {
@@ -540,6 +541,7 @@ public class GroupElement implements Serializable {
     /**
      * Precomputes table for {@link #doubleScalarMultiplyVariableTime(GroupElement, byte[], byte[])}.
      *
+     * @return the 16-entry table of odd multiples (P through 31P) of this element
      * @since 0.9.36 split out from precompute()
      */
     private GroupElement[] precomputeDouble() {

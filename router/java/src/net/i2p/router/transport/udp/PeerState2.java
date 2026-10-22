@@ -117,7 +117,6 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
     /** Base interval between path challenge sends in ms, doubled per retransmission. */
     static final long PATH_CHALLENGE_DELAY = 5*1000L;
 
-    // As SSU
     /**
      * MIN_SSU_IPV4_MTU.
      */
@@ -142,7 +141,6 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
      * DEFAULT_SSU_IPV6_MTU.
      */
     public static final int DEFAULT_SSU_IPV6_MTU = MIN_SSU_IPV6_MTU; // should always be published
-    // As SSU2
     /**
      * Smallest MTU we will advertise to SSU2 peers, in bytes.
      */
@@ -253,8 +251,6 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
             _transport.send(pkt);
         } catch (IOException ioe) { /* build failed */ }
     }
-
-    // SSU 1 overrides
 
     /**
      * The version.
@@ -415,6 +411,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
     /**
      * Only call for outbound, if we don't have ack 0 yet.
      *
+     * @param now the current time in ms for the retransmit timer
      * @param force ignore timer, always send
      * @return success, false if total fail
      * @since 0.9.55 split out from above
@@ -437,6 +434,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
     /**
      * Only call for outbound, if we don't have ack 0 yet.
      *
+     * @param now the current time in ms for the retransmit timer
      * @param force ignore timer, always send
      * @return success, false if total fail
      * @since 0.9.65 split out from above
@@ -465,10 +463,6 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
         }
         return true;
     }
-
-    // SSU 2 things
-
-    /// begin SSU2Sender interface ///
 
     /**
      * Next outbound packet number,
@@ -539,8 +533,6 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
      * @since 0.9.57
      */
     public void setDestroyReason(int reason) {_destroyReason = reason;}
-
-    /// end SSU2Sender interface ///
 
     /**
      * The connection ID we expect to receive packets with.
@@ -912,6 +904,9 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
 
     /**
      * Caller must synch on _migrationState.
+     *
+     * @param toIP the address to send the path challenge to
+     * @param toPort the port to send the path challenge to
      * @since 0.9.56
      */
     private void sendPathChallenge(InetAddress toIP, int toPort) {
@@ -932,10 +927,6 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
             _transport.send(packet);
         } catch (IOException ioe) { /* build failed */ }
     }
-
-    /////////////////////////////////////////////////////////
-    // begin payload callbacks
-    /////////////////////////////////////////////////////////
 
     /**
      * Process a received DateTime block.
@@ -1386,10 +1377,6 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
         }
     }
 
-    /////////////////////////////////////////////////////////
-    // end payload callbacks
-    /////////////////////////////////////////////////////////
-
     /**
      * Caller should sync; UDPTransport must remove and add to peersByRemoteHost map.
      *
@@ -1404,6 +1391,8 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
     /**
      * Do what MessageReceiver does, but inline and for SSU2.
      * Will always be more than one fragment.
+     *
+     * @param state the complete multi-fragment message to reassemble and queue
      */
     private void receiveMessage(InboundMessageState state) {
         int sz = state.getCompleteSize();

@@ -586,39 +586,39 @@ public class RrdGraphDef implements RrdGraphConstants, DataHolder {
      * <p>If the returned {@link Optional} is empty, the default formatting will be kept
      *
      * <table border="1">
-     *     <caption>Default formatting</caption>
-     *   <thead>
-     *     <tr>
-     *       <th>{@link TimeUnit}</th>
-     *       <th>Default pattern</th>
-     *     </tr>
-     *   </thead>
-     *   <tbody>
-     *     <tr>
-     *       <td>MINUTE</td>
-     *       <td>HH:mm</td>
-     *     </tr>
-     *     <tr>
-     *       <td>HOUR</td>
-     *       <td>HH:mm</td>
-     *     </tr>
-     *     <tr>
-     *       <td>DAY</td>
-     *       <td>EEE dd</td>
-     *     </tr>
-     *     <tr>
-     *       <td>WEEK</td>
-     *       <td>'Week 'w</td>
-     *     </tr>
-     *     <tr>
-     *       <td>MONTH</td>
-     *       <td>MMM</td>
-     *     </tr>
-     *     <tr>
-     *       <td>YEAR</td>
-     *       <td>yy</td>
-     *     </tr>
-     *   </tbody>
+     * <caption>Default formatting</caption>
+     * <thead>
+     * <tr>
+     * <th>{@link TimeUnit}</th>
+     * <th>Default pattern</th>
+     * </tr>
+     * </thead>
+     * <tbody>
+     * <tr>
+     * <td>MINUTE</td>
+     * <td>HH:mm</td>
+     * </tr>
+     * <tr>
+     * <td>HOUR</td>
+     * <td>HH:mm</td>
+     * </tr>
+     * <tr>
+     * <td>DAY</td>
+     * <td>EEE dd</td>
+     * </tr>
+     * <tr>
+     * <td>WEEK</td>
+     * <td>'Week 'w</td>
+     * </tr>
+     * <tr>
+     * <td>MONTH</td>
+     * <td>MMM</td>
+     * </tr>
+     * <tr>
+     * <td>YEAR</td>
+     * <td>yy</td>
+     * </tr>
+     * </tbody>
      * </table>
      *
      * @param formatProvider An {@link Optional} holding the {@link TimeLabelFormat} to use or empy
@@ -1944,6 +1944,9 @@ public class RrdGraphDef implements RrdGraphConstants, DataHolder {
     }
     /**
      * Find parent
+     *
+     * @return the most recently added sourced plot element (LINE, AREA or STACK)
+     *         this element can be stacked onto
      */
 
     private SourcedPlotElement findParent() {

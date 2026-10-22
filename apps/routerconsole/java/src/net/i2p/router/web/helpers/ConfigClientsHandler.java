@@ -312,6 +312,8 @@ public class ConfigClientsHandler extends FormHandler {
 
     /**
      * Stop a running client by index.
+     *
+     * @param i index into the client app list of the client to stop
      */
     private void stopClient(int i) {
         List<ClientAppConfig> clients = ClientAppConfig.getClientApps(_context);
@@ -409,6 +411,8 @@ public class ConfigClientsHandler extends FormHandler {
      * Big hack for the moment, not using properties for directory and port
      * Go through all the Jetty servers, find the one serving port 7657,
      * requested and add the .war to that one.
+     *
+     * @param app the web app name, also the base name of the .war file in webapps
      */
     private void startWebApp(String app) {
         ContextHandlerCollection s = WebAppStarter.getConsoleServer(_context);

@@ -52,7 +52,12 @@ class IPThrottler {
         return Integer.valueOf(rv);
     }
 
-    /** Hash an IP address for throttling. */
+    /**
+     * Hash an IP address for throttling.
+     *
+     * @param ip the raw address bytes, at least 8 bytes long
+     * @return the hash value used as the throttle map key
+     */
     private static Integer hashCode(byte[] ip) {
         int rv = 0;
         for (int i = 0; i < 8; i++) {

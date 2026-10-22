@@ -90,6 +90,11 @@ class MessageReceivedJob extends JobImpl {
 
     /**
      * Deliver notification to the client that the given message is available.
+     *
+     * @param id the id of the message that became available
+     * @param size the message size in bytes
+     * @throws I2CPMessageException if the status message cannot be sent to the
+     *                              client
      */
     private void messageAvailable(MessageId id, long size) throws I2CPMessageException {
         MessageStatusMessage msg = new MessageStatusMessage();
@@ -111,6 +116,9 @@ class MessageReceivedJob extends JobImpl {
     /**
      * Deliver the message directly, skip notification.
      *
+     * @param id the id of the queued message to deliver
+     * @throws I2CPMessageException if the payload message cannot be sent to
+     *                              the client
      * @since 0.9.4
      */
     private void sendMessage(long id) throws I2CPMessageException {

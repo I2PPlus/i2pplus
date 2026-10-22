@@ -17,7 +17,7 @@ import net.i2p.util.Log;
 public class CertHelper extends HelperBase {
 
     /**
-     *  Creates the helper that renders the local SSL certificate summary.
+     * Creates the helper that renders the local SSL certificate summary.
      */
     public CertHelper() {}
 
@@ -31,8 +31,8 @@ public class CertHelper extends HelperBase {
     private Log _log;
 
     /**
-     *  Generate the certificate summary HTML.
-     *  @return the HTML string
+     * Generate the certificate summary HTML.
+     * @return the HTML string
      */
     public String getSummary() {
         if (_log == null)
@@ -112,7 +112,9 @@ public class CertHelper extends HelperBase {
     /**
      * Send a certificate file to the browser.
      *
+     * @param name the certificate name to show as a heading
      * @param file may be null
+     * @throws IOException if writing to the console output fails
      */
     private void output(String name, File file) throws IOException {
         if (file != null && file.exists()) {

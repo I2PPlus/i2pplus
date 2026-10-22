@@ -212,6 +212,9 @@ public final class PrioritySendPool {
      * insertion, so both call sites share the comparison but keep their own
      * bookkeeping.
      *
+     * @param msg the message being inserted, compared against the entries in range
+     * @param from the first index to search
+     * @param to the index one past the last entry to search
      * @return the index within {@code [from, to)} at which msg must be inserted
      */
     private int insertPosition(OutNetMessage msg, int from, int to) {

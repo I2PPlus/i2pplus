@@ -226,7 +226,10 @@ class PluginUpdateRunner extends UpdateRunner {
     /**
      * Whether the file has a SU3 magic header.
      *
-     * @return if SU3
+     * @param f the file whose first bytes are compared with the SU3 magic
+     * @return true if the file begins with the SU3 magic header, false
+     *         otherwise
+     * @throws IOException if the file cannot be opened or read
      * @since 0.9.15
      */
     private static boolean isSU3File(File f) throws IOException {
@@ -248,6 +251,9 @@ class PluginUpdateRunner extends UpdateRunner {
     /**
      * Install a .sud plugin update.
      *
+     * @param f the downloaded .sud update file
+     * @param appDir the applications directory to install into
+     * @param url the source URL, used in status messages
      * @since 0.9.15
      */
     private void processSUD(File f, File appDir, String url) {
@@ -361,6 +367,10 @@ class PluginUpdateRunner extends UpdateRunner {
 
     /**
      * Process a SU3 plugin file.
+     *
+     * @param f the downloaded SU3 file
+     * @param appDir the applications directory to install into
+     * @param url the source URL, used in status messages
      * @since 0.9.15
      */
     private void processSU3(File f, File appDir, String url) {
@@ -407,6 +417,9 @@ class PluginUpdateRunner extends UpdateRunner {
     /**
      * Load the plugin's config for the update.
      *
+     * @param f the downloaded update file, deleted on error
+     * @param to the temporary zip extracted from the update
+     * @param url the source URL, used in status messages
      * @return null on error
      * @since 0.9.15
      */
@@ -441,7 +454,14 @@ class PluginUpdateRunner extends UpdateRunner {
     /**
      * Move the downloaded update into place.
      *
+     * @param to the temporary zip holding the plugin to install
+     * @param appDir the applications directory to install into
+     * @param url the source URL, used in status messages
+     * @param props the plugin config read from the update
+     * @param sudVersion the version recorded in the update container, checked
+     *                   against the config version
      * @param pubkey null OK for su3
+     * @param signer the name of the signature's signer, for status messages
      * @since 0.9.15
      */
     private void processFinal(

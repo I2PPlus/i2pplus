@@ -277,7 +277,12 @@ public class DBHistory {
         decayLifetimeCounters(System.currentTimeMillis());
     }
 
-    /** Apply decay to a counter. 3/4 per 8 h = ~1% after 128 hours. */
+    /**
+     * Apply decay to a counter. 3/4 per 8 h = ~1% after 128 hours.
+     *
+     * @param counter the lifetime counter to decay in place
+     * @param name the counter's name, used only in the debug log
+     */
     private void decayCounter(AtomicLong counter, String name) {
         long val = counter.get();
         if (val > 0) {

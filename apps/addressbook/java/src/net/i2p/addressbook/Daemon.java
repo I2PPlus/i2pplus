@@ -150,8 +150,12 @@ public class Daemon {
     /**
      * Add, update or remove subscriptions in the router naming service.
      *
+     * @param router the router's naming service to add, change or delete entries in
      * @param knownNames only non-null if router book is a text file
      * @param publishedNS only non-null if we have a published address book
+     * @param addressbook the source addressbook, used only to name it in log messages
+     * @param iter iterator over the subscription entries to apply
+     * @param log where to log progress, or null for no logging
      * @since 0.9.33 split out from above
      */
     private static void update(NamingService router, Set<String> knownNames,
@@ -641,6 +645,10 @@ public class Daemon {
     /**
      * Log an addressbook change.
      *
+     * @param log where to append the message, or null to skip logging
+     * @param action the subscription action that was attempted
+     * @param name the key whose inner signature check failed
+     * @param addressbook the source addressbook, named in the log message
      * @since 0.9.26
      */
     private static void logInner(Log log, String action, String name, AddressBook addressbook) {
@@ -655,6 +663,10 @@ public class Daemon {
     /**
      * Log a subscription missing from the router.
      *
+     * @param log where to append the message, or null to skip logging
+     * @param action the subscription action that was attempted
+     * @param name the subscription whose required parameters are missing
+     * @param addressbook the source addressbook, named in the log message
      * @since 0.9.26
      */
     private static void logMissing(Log log, String action, String name, AddressBook addressbook) {
@@ -668,6 +680,12 @@ public class Daemon {
     /**
      * Log a destination mismatch with the router.
      *
+     * @param log where to append the message, or null to skip logging
+     * @param action the subscription action that was attempted
+     * @param name the subscription whose destinations conflict
+     * @param dests the destinations from the subscription, listed in the message
+     * @param olddest the router's current destination base64, truncated for the message
+     * @param addressbook the source addressbook, named in the log message
      * @since 0.9.26
      */
     private static void logMismatch(Log log, String action, String name, List<Destination> dests,
@@ -749,7 +767,14 @@ public class Daemon {
         }
     }
 
-    /** Depth-first search of the naming service tree. */
+    /**
+     * Depth-first search of the naming service tree.
+     *
+     * @param ns the naming service node to search, including its children
+     * @param srch the name to find, matched against the full name or the last
+     *             path segment
+     * @return the matching naming service, or null if the tree has no such name
+     */
     private static NamingService searchNamingService(NamingService ns, String srch) {
         String name = ns.getName();
         if (name.equals(srch) || name.endsWith('/' + srch) || name.endsWith('\\' + srch)) {
@@ -768,6 +793,7 @@ public class Daemon {
     /**
      * Find the configured NamingService, or return the root.
      *
+     * @param srch the naming service name to search for in the tree
      * @return the configured NamingService, or the root NamingService
      */
     private static NamingService getNamingService(String srch) {

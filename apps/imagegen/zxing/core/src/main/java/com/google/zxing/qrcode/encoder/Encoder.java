@@ -189,6 +189,11 @@ public final class Encoder {
   /**
    * Decides the smallest version of QR code that will contain all of the provided data.
    *
+   * @param ecLevel the required error-correction level
+   * @param mode the data encoding mode
+   * @param headerBits the header bits counted against the version capacity
+   * @param dataBits the encoded data bits that must fit
+   * @return the smallest version whose capacity holds header and data bits
    * @throws WriterException if the data cannot fit in any version
    */
   private static Version recommendVersion(ErrorCorrectionLevel ecLevel,
@@ -239,6 +244,10 @@ public final class Encoder {
   /**
    * Choose the best mode by examining the content. Note that 'encoding' is used as a hint;
    * if it is Shift_JIS, and the input is only double-byte Kanji, then we return {@link Mode#KANJI}.
+   *
+   * @param content the text to examine
+   * @param encoding the character-set hint, may be null
+   * @return the most compact encoding mode for the content
    */
   private static Mode chooseMode(String content, String encoding) {
     if ("Shift_JIS".equals(encoding) && isOnlyDoubleByteKanji(content)) {
@@ -318,6 +327,9 @@ public final class Encoder {
   /**
    * Whether the data fits in the version at this error-correction level.
    *
+   * @param numInputBits the number of data bits to fit
+   * @param version the QR code version to test
+   * @param ecLevel the error-correction level the code uses
    * @return true if the number of input bits will fit in a code with the specified version and
    * error correction level.
    */

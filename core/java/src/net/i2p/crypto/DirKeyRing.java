@@ -81,6 +81,9 @@ public class DirKeyRing implements KeyRing {
     /**
      * Map a JCA public key algorithm name to a SigAlgo, or null if the
      * name is not recognized (check is then skipped).
+     *
+     * @param alg the JCA public key algorithm name
+     * @return the matching signature algorithm, or null if unrecognized
      */
     private static SigAlgo jcaAlgorithm(String alg) {
         if ("DSA".equals(alg)) return SigAlgo.DSA;

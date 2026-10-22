@@ -216,6 +216,8 @@ class NewsFetcher extends UpdateRunner {
      * Unchanged if disabled by property, if language is english,
      * or if URI already contains a language parameter.
      *
+     * @param uri the news feed URI to modify
+     * @return the same URI if unchanged, otherwise a copy with a lang query param
      * @since 0.9.21
      */
     private URI addLang(URI uri) {
@@ -365,11 +367,12 @@ class NewsFetcher extends UpdateRunner {
     }
 
     /**
-     *  Modified from LoadClientAppsJob and I2PTunnelHTTPClientBase
-     *  All keys are mapped to lower case.
+     * Modified from LoadClientAppsJob and I2PTunnelHTTPClientBase
+     * All keys are mapped to lower case.
      *
-     *  @param args non-null
-     *  @since 0.9.4
+     * @param args non-null
+     * @return the parameter names mapped to their values, keys lower-cased, empty if no args
+     * @since 0.9.4
      */
     private static Map<String, String> parseArgs(String args) {
         Map<String, String> rv = new HashMap<>(8);
@@ -440,7 +443,9 @@ class NewsFetcher extends UpdateRunner {
 
     /**
      * Parse URLs and add to the map.
+     * @param method the update method to associate the URLs with
      * @param urls may be null
+     * @param map the map the shuffled URI list is stored in
      * @since 0.9.9
      */
     private void addMethod(UpdateMethod method, String urls, Map<UpdateMethod, List<URI>> map) {
@@ -545,6 +550,7 @@ class NewsFetcher extends UpdateRunner {
      * Handles 3 types of contained files: xml.gz (preferred), xml, and html (old format fake xml).
      *
      * @return the temp file containing the HTML-format news.xml
+     * @throws IOException if the SU3 file fails verification or cannot be read or written
      * @since 0.9.17
      */
     private File processSU3() throws IOException {
@@ -608,6 +614,10 @@ class NewsFetcher extends UpdateRunner {
     /**
      * Gunzip the file.
      *
+     * @param from the gzipped file to read
+     * @param to the output file the decompressed contents are written to,
+     *           overwritten if it exists
+     * @throws IOException if the input cannot be read or the output cannot be written
      * @since 0.9.17
      */
     private static void gunzip(File from, File to) throws IOException {
@@ -628,6 +638,7 @@ class NewsFetcher extends UpdateRunner {
     /**
      * Output any updated CRL entries.
      *
+     * @param entries the CRL entries from the news feed, stored one file per entry
      * @since 0.9.26
      */
     private void persistCRLEntries(List<CRLEntry> entries) {
@@ -679,6 +690,8 @@ class NewsFetcher extends UpdateRunner {
     /**
      * Process blocklist entries.
      *
+     * @param ble the blocklist feed data, ignored if its update time is
+     *            not newer than the stored one
      * @since 0.9.28
      */
     private void processBlocklistEntries(BlocklistEntries ble) {
@@ -777,9 +790,15 @@ class NewsFetcher extends UpdateRunner {
     }
 
     /**
-     *  Output in the old format.
+     * Output in the old format.
      *
-     *  @since 0.9.17
+     * @param data the news metadata, its first release supplies the version attributes
+     * @param entries the news entries to write
+     * @param sudVersion the SU3 version string, written as the SUD version
+     * @param signingKeyName the SU3 signer key name, written as the signing key
+     * @param to the output file to write, overwritten if it exists
+     * @throws IOException if the output file cannot be opened or written
+     * @since 0.9.17
      */
     private void outputOldNewsXML(NewsMetadata data, List<NewsEntry> entries,
                                   String sudVersion, String signingKeyName, File to) throws IOException {
@@ -853,7 +872,10 @@ class NewsFetcher extends UpdateRunner {
      * Write out key="foo,bar,baz".
      * Values cannot contain ','.
      *
+     * @param out the writer the attribute is appended to
+     * @param key the attribute name to write
      * @param values if null or empty, does nothing
+     * @throws IOException if writing to the writer fails
      * @since 0.9.52
      */
     private static void writeList(Writer out, String key, List<String> values) throws IOException {

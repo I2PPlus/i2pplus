@@ -134,7 +134,15 @@ class OutboundClientMessageJobHelper {
      * <p>
      * The returned GarlicConfig will have the recipientPublicKey set.
      *
+     * @param ctx the router context, source of the log and the random clove set IDs
+     * @param replyToken the token the receiver echoes back in the ack, negative when no reply is
+     *                   expected
+     * @param expiration the expiration time in milliseconds, also used for the ack clove 60
+     *                   seconds later
+     * @param recipientPK the key the whole message is encrypted to, set on the returned config
      * @param dataClove may be null for ECIES-layer ack
+     * @param from our own hash, named in the log when the ack clove cannot be built
+     * @param dest the remote destination we are sending to, named in the INFO log
      * @param replyTunnel non-null if requireAck is true or bundledReplyLeaseSet is non-null
      * @param requireAck if true, bundle replyToken in an ack clove
      * @param bundledReplyLeaseSet may be null; if non-null, put it in a clove
@@ -184,6 +192,14 @@ class OutboundClientMessageJobHelper {
     /**
      * Build a clove that sends a DeliveryStatusMessage to us.
      * As of 0.9.12, the DSM is wrapped in a GarlicMessage.
+     *
+     * @param ctx the router context, source of the log, our keys and the random clove set IDs
+     * @param from our own hash, whose keys are looked up and named when no inbound tunnel is
+     *             available
+     * @param replyToTunnel the inbound tunnel the ack travels back on, null means no ack is
+     *                      possible
+     * @param replyToken the token the DSM carries so the receiver can match it to the data message
+     * @param expiration the clove's expiration time in milliseconds
      * @param skm encrypt dsm with this skm non-null
      * @return null on error
      */
@@ -241,6 +257,10 @@ class OutboundClientMessageJobHelper {
 
     /**
      * Make a basic DSM.
+     *
+     * @param ctx the context the message is created for
+     * @param replyToken the message id the receiver matches the ack against
+     * @return a DSM stamped with the current time and the given reply token
      * @since 0.9.12
      */
     private static DeliveryStatusMessage buildDSM(RouterContext ctx, long replyToken) {
@@ -255,7 +275,11 @@ class OutboundClientMessageJobHelper {
      * Since 0.9.12 it is encrypted, to hide it from the target and the return
      * path OBEP and IBGW.
      *
+     * @param ctx the router context, source of the random session key and tags
      * @param skm encrypt dsm with this skm non-null
+     * @param dsm the delivery status message to wrap
+     * @param expiration the message's expiration time in milliseconds, from which the fake
+     *                   session's lifetime is taken
      * @return null on error
      * @since 0.9.12
      */
@@ -272,6 +296,11 @@ class OutboundClientMessageJobHelper {
 
     /**
      * Build a clove that stores the leaseSet locally.
+     *
+     * @param ctx the router context, source of the random clove set ID
+     * @param expiration the clove's expiration time in milliseconds
+     * @param replyLeaseSet the lease set the target is asked to store for us
+     * @return a clove with local delivery instructions, carrying the database store message
      */
     private static PayloadGarlicConfig buildLeaseSetClove(RouterContext ctx, long expiration, LeaseSet replyLeaseSet) {
         DatabaseStoreMessage msg = new DatabaseStoreMessage(ctx);

@@ -244,6 +244,11 @@ public class HostTxtEntry {
 
     /**
      * Write the props part (if any) only, without newline.
+     *
+     * @param out the writer to write to
+     * @param omitSig true to skip the "sig" property
+     * @param omitOldSig true to skip the "oldsig" property
+     * @throws IOException if writing fails
      */
     private void writeProps(Writer out, boolean omitSig, boolean omitOldSig) throws IOException {
         if (props == null) return;

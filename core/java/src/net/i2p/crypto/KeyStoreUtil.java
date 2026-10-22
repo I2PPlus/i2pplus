@@ -236,6 +236,8 @@ public final class KeyStoreUtil {
      * Load all X509 Certs from a key store File into a KeyStore
      * Note that each call reinitializes the KeyStore.
      *
+     * @param file the key store file to read, a missing file yields false
+     * @param ks the key store to reinitialize and load the certs into
      * @return true if the file was loaded, false if it is missing or cannot be read
      * @since 0.8.2, moved from SSLEepGet in 0.9.9
      */
@@ -399,6 +401,7 @@ public final class KeyStoreUtil {
     /**
      * Remove all blacklisted X509 Certs in a key store.
      *
+     * @param ks the key store whose certificate entries are checked and pruned
      * @return number successfully removed
      * @since 0.9.24
      */
@@ -718,8 +721,8 @@ public final class KeyStoreUtil {
      * This returns the public key, private key, certificate, and CRL in an array.
      * All of these are Java classes. Keys may be converted to I2P classes with {@link SigUtil}.
      * The private key and selfsigned cert are stored in the keystore.
-      * The public key may be derived from the private key with
-       * {@link net.i2p.crypto.KeyGenerator#getSigningPublicKey} .
+     * The public key may be derived from the private key with
+     * {@link net.i2p.crypto.KeyGenerator#getSigningPublicKey}.
      * The public key certificate may be stored separately with
      * {@link net.i2p.crypto.CertUtil#saveCert} if desired.
      * The CRL is not stored by this method, store it with
@@ -770,8 +773,8 @@ public final class KeyStoreUtil {
      * This returns the public key, private key, certificate, and CRL in an array.
      * All of these are Java classes. Keys may be converted to I2P classes with SigUtil.
      * The private key and selfsigned cert are stored in the keystore.
-      * The public key may be derived from the private key with
-       * {@link net.i2p.crypto.KeyGenerator#getSigningPublicKey} .
+     * The public key may be derived from the private key with
+     * {@link net.i2p.crypto.KeyGenerator#getSigningPublicKey}.
      * The public key certificate may be stored separately with
      * {@link net.i2p.crypto.CertUtil#saveCert} if desired.
      * The CRL is not stored by this method, store it with
@@ -835,8 +838,8 @@ public final class KeyStoreUtil {
      * This returns the public key, private key, certificate, and CRL in an array.
      * All of these are Java classes. Keys may be converted to I2P classes with SigUtil.
      * The private key and selfsigned cert are stored in the keystore.
-      * The public key may be derived from the private key with
-       * {@link net.i2p.crypto.KeyGenerator#getSigningPublicKey} .
+     * The public key may be derived from the private key with
+     * {@link net.i2p.crypto.KeyGenerator#getSigningPublicKey}.
      * The public key certificate may be stored separately with
      * {@link net.i2p.crypto.CertUtil#saveCert} if desired.
      * The CRL is not stored by this method, store it with
@@ -877,8 +880,8 @@ public final class KeyStoreUtil {
      * This returns the public key, private key, certificate, and CRL in an array.
      * All of these are Java classes. Keys may be converted to I2P classes with SigUtil.
      * The private key and selfsigned cert are stored in the keystore.
-      * The public key may be derived from the private key with
-       * {@link net.i2p.crypto.KeyGenerator#getSigningPublicKey} .
+     * The public key may be derived from the private key with
+     * {@link net.i2p.crypto.KeyGenerator#getSigningPublicKey}.
      * The public key certificate may be stored separately with
      * {@link net.i2p.crypto.CertUtil#saveCert} if desired.
      * The CRL is not stored by this method, store it with
@@ -942,6 +945,12 @@ public final class KeyStoreUtil {
     /**
      * Build a child-process environment array: the current process
      * environment plus the two given entries.
+     *
+     * @param key1 name of the first extra environment variable
+     * @param val1 value of the first extra environment variable
+     * @param key2 name of the second extra environment variable
+     * @param val2 value of the second extra environment variable
+     * @return an array of KEY=VALUE strings for ProcessBuilder, never null
      */
     private static String[] buildEnv(String key1, String val1, String key2, String val2) {
         Map<String, String> env = System.getenv();
@@ -1355,6 +1364,8 @@ public final class KeyStoreUtil {
     /**
      * Log a keystore warning.
      *
+     * @param msg the warning message
+     * @param t the related exception, or null if there is none
      * @since 0.9.17
      */
     private static void warn(String msg, Throwable t) {

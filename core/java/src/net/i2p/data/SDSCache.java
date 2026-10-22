@@ -172,7 +172,13 @@ public class SDSCache<V extends SimpleDataStructure> {
         return get(data);
     }
 
-    /** We assume the data has enough randomness in it, so use the first 4 bytes for speed. */
+    /**
+     * We assume the data has enough randomness in it, so use the first 4 bytes for speed.
+     *
+     * @param data the raw encoded bytes, at least 4 bytes long
+     * @return the first 4 bytes of data combined into an int, used as the
+     *         cache key
+     */
     private static int hashCodeOf(byte[] data) {
         int rv = data[0];
         for (int i = 1; i < 4; i++) rv ^= (data[i] << (i * 8));

@@ -93,6 +93,11 @@ public class RouterThrottleImpl implements RouterThrottle {
      * @since 0.8.12
      */
     private class ResetStatus extends SimpleTimer2.TimedEvent {
+        /**
+         * Timer event that clears the "Starting up" tunnel status later.
+         */
+        private ResetStatus() {}
+
         public void timeReached() {
             if (_tunnelStatus.contains(_x("Starting up"))) {cancelShutdownStatus();}
         }
@@ -359,6 +364,11 @@ public class RouterThrottleImpl implements RouterThrottle {
      * With bytesAllocated already accounted for across the numTunnels existing
      * tunnels we have agreed to, can we handle another tunnel with our existing
      * bandwidth?
+     *
+     * @param bytesAllocated bytes per second already allocated across the
+     *                       existing tunnels
+     * @param numTunnels the number of participating tunnels we are in
+     * @return true if another tunnel request should be allowed
      */
     private boolean allowTunnel(double bytesAllocated, int numTunnels) {
         int maxKBpsIn = _context.bandwidthLimiter().getInboundKBytesPerSecond();
@@ -449,7 +459,12 @@ public class RouterThrottleImpl implements RouterThrottle {
         return !reject;
     }
 
-    /** Don't ever probabilistically throttle tunnels if we have less than this many. */
+    /**
+     * Don't ever probabilistically throttle tunnels if we have less than this many.
+     *
+     * @return the configured minimum, or two thirds of the maximum tunnel
+     *         count when the property is unset or invalid
+     */
     private int getMinThrottleTunnels() {
         String p = _context.getProperty(PROP_MIN_THROTTLE_TUNNELS);
         if (!(p != null && p.equals(_cachedMinThrottleTunnelsProp))) {
@@ -744,6 +759,7 @@ public class RouterThrottleImpl implements RouterThrottle {
      * Use this only in static initializers.
      * It does not translate!
      *
+     * @param s the literal string to mark for extraction
      * @return s unchanged, so xgettext still sees the literal in the source
      */
     private static final String _x(String s) {return s;}

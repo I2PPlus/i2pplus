@@ -124,6 +124,9 @@ class RefreshRoutersJob extends JobImpl {
     /**
      * Score a peer for refresh priority.
      * Higher score = refresh sooner (high-value peers first).
+     *
+     * @param peer the router to score from its RouterInfo in the local NetDb
+     * @return the score, 0 when the router is not cached locally or has no valuable capability
      * @since 0.9.70
      */
     private int scorePeer(Hash peer) {
@@ -244,7 +247,10 @@ class RefreshRoutersJob extends JobImpl {
     /**
      * Determines whether to refresh the given router info.
      * Includes checks for age, version, capabilities, and context properties.
-     * @return whether refresh router
+     *
+     * @param ri the router info whose age and capabilities are examined
+     * @param _routerHash unused, the hash is taken from ri instead
+     * @return true if the router has been published longer than its age threshold
      */
     private boolean shouldRefreshRouter(RouterInfo ri, Hash _routerHash) {
         RouterContext ctx = getContext();
@@ -278,7 +284,14 @@ class RefreshRoutersJob extends JobImpl {
 
     /**
      * Returns the router age threshold in milliseconds for refresh decision.
-     * @return the router age threshold
+     *
+     * @param uninteresting true for a router flagged unreachable, low bandwidth, or old version
+     * @param refreshUninteresting the router.refreshUninteresting property, true to refresh those
+     *                             routers on the normal schedule
+     * @param netDbCount the routers we know, a larger NetDb gets a longer threshold
+     * @param _uptime unused, the caller has already applied the uptime gate
+     * @param isFloodfill true if we are a floodfill, which uses the longer thresholds
+     * @return the age in milliseconds a router must exceed before it is refreshed again
      */
     private int getRouterAgeThreshold(boolean uninteresting, boolean refreshUninteresting, int netDbCount,
                                       long _uptime, boolean isFloodfill) {
@@ -302,6 +315,9 @@ class RefreshRoutersJob extends JobImpl {
 
     /**
      * Performs the router refresh operation by calling the facade search with proper timeout.
+     *
+     * @param routerHash the router to look up again
+     * @param ri its current router info, used for the reverse DNS lookup and the log line
      */
     private void performRouterRefresh(Hash routerHash, RouterInfo ri) {
         RouterContext ctx = getContext();
@@ -406,6 +422,8 @@ class RefreshRoutersJob extends JobImpl {
         private final Hash h;
         /**
          * Force a disconnect for the peer on refresh timeout.
+         *
+         * @param h the peer to disconnect if its refresh does not finish in time
          */
         public Disconnector(Hash h) {super(getContext().simpleTimer2()); this.h = h;}
         /**

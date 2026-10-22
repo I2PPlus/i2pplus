@@ -786,6 +786,10 @@ public class ReverseDnsLookup {
      * The cleanup sweep is amortized to at most one full map pass per
      * {@link #CLEANUP_BITS} inserts while at the cap; see
      * {@link #needRdnscacheSweep(int, int, int)} for the rationale.
+     *
+     * @param ipAddress the cache key the entry is stored under
+     * @param entry the entry to insert; its hostname is normalized first, replacing
+     *              the entry if the normalized form differs
      */
     private static void rdnsCachePut(String ipAddress, CacheEntry entry) {
         String hostname = entry.getHostname();
@@ -989,6 +993,7 @@ public class ReverseDnsLookup {
     /**
      * Localized string for the given key using the router console bundle.
      * @param key the translation key
+     * @return the translated string, or the key itself if no translation exists
      */
     private final String _t(String key) {return Translate.getString(key, _context, BUNDLE_NAME);}
 }

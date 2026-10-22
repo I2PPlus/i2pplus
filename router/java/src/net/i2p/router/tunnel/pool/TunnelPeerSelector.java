@@ -109,6 +109,9 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
      * Amortized: only one prune scan per {@link #ENDPOINT_PRUNE_STRIDE}
      * oversized misses so a hot selection loop cannot burn CPU on
      * full-map removeIf every insert.
+     *
+     * @param cache the endpoint decision cache to prune
+     * @param now the current time in ms, compared against each entry's expiry
      */
     private static void pruneEndpointCache(ConcurrentHashMap<Hash, EndpointCacheEntry> cache, long now) {
         if (cache.size() <= ENDPOINT_CACHE_MAX_SIZE) return;
@@ -128,6 +131,9 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
      * changes.  Benign race: duplicate refreshes are idempotent writes.
      * Values without a configured property cache as null, preserving the
      * per-call default behavior of the callers.
+     *
+     * @param ctx the context whose properties are cached; a new context
+     *            forces an immediate refresh
      */
     private static void refreshPeerConfig(RouterContext ctx) {
         long now = ctx.clock().now();
@@ -342,6 +348,8 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
      * Effective first-hop fail cooldown.
      * During ghost cascades (&gt;50 ghosts), shorten from 5 min to 60s
      * to rehabilitate peers faster when the network is stressed.
+     *
+     * @param ctx the context to read the current ghost count from
      * @return the effective first hop cooldown
      * @since 0.9.70
      */
@@ -1003,6 +1011,12 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
      * as tunnel candidates.  Only bans, unreachable, no-RouterInfo,
      * congestion, and slow/capped peers remain excluded.
      *
+     * @param peerHash the candidate peer to check
+     * @param isInbound true for inbound tunnel selection, chooses the
+     *                  applicable unreachable and slow filters
+     * @param isExploratory true for exploratory selections, excludes floodfill peers
+     * @param buildSuccess the current tunnel build success ratio, 0.0-1.0, cached by the caller
+     * @return the hard exclusion reason, or null if the peer passes all hard gates
      * @since 0.9.71+
      */
     private String getHardExclusionReason(Hash peerHash, boolean isInbound,
@@ -1291,7 +1305,12 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
         return stripCaps(configured);
     }
 
-    /** Remove the M/N/O/D/P capability exclusions, leaving every other cap intact. */
+    /**
+     * Remove the M/N/O/D/P capability exclusions, leaving every other cap intact.
+     *
+     * @param configured the configured capability exclusion string
+     * @return the same caps with M, N, O, D and P removed
+     */
     private static String stripCaps(String configured) {
         // Remove M, N, O, D, P from exclusions
         StringBuilder adjusted = new StringBuilder();
@@ -1483,6 +1502,8 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
 
     /**
      * Exclude caps to apply during peer selection.
+     *
+     * @param ctx the context to read the exclusion property from
      * @return non-null, possibly empty
      */
     private static String getExcludeCaps(RouterContext ctx) {
@@ -1605,6 +1626,9 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
 
     /**
      * Whether to skip unreachable peers.
+     *
+     * @param isInbound true for inbound tunnel selection
+     * @param isExploratory true for exploratory tunnel selection
      * @return true if unreachable peers should be skipped
      */
     private boolean filterUnreachable(boolean isInbound, boolean isExploratory) {
@@ -2113,6 +2137,8 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
          * or we can connect to it (for outbound)
          * and add the Hash to the set if not.
          *
+         * @param isInbound true to check that the peer can connect to us,
+         *                  false to check that we can connect to it
          * @param set not copied, contents will be modified by all methods
          */
         public ClosestHopExcluder(boolean isInbound, Set<Hash> set) {

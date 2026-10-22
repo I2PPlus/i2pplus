@@ -170,7 +170,10 @@ public class I2PTunnelDCCServer extends I2PTunnelServer {
     /**
      * Register an outgoing DCC session, returning its id.
      *
+     * @param ip local irc client IP
      * @param port local dcc server I2P port or 0 to pick one at random
+     * @param i2pPort the I2P port to reserve, or 0 to pick an unused one at random
+     * @return the reserved I2P port, or -1 on error
      */
     private int newOutgoing(byte[] ip, int port, int i2pPort) {
         expireOutbound();

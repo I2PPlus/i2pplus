@@ -239,6 +239,11 @@ class PacketHandler {
 
     private class Handler implements Runnable {
 
+        /**
+         * The packet-reading task run by each UDP receive handler thread.
+         */
+        private Handler() {}
+
         @Override
         public void run() {
             try {
@@ -279,6 +284,8 @@ class PacketHandler {
          * <li>Pending outbound establishment
          * <li>No established or pending session found.
          * </ol>
+         *
+         * @param packet the received packet to classify and dispatch
          */
         private void handlePacket(UDPPacket packet) {
             RemoteHostId rem = packet.getRemoteHost();
@@ -327,6 +334,8 @@ class PacketHandler {
      * <p>
      * Min packet data size: 56 (token request) if state is null; 40 (data) if state is non-null.
      *
+     * @param from the remote host the packet came from
+     * @param packet the received packet
      * @param state must be version 2, but will be null for session request unless retransmitted
      * @return true if the header was validated as a SSU2 packet, cannot fallback to SSU 1
      * @since 0.9.54
@@ -503,6 +512,7 @@ class PacketHandler {
      * <p>
      * Min packet data size: 56 (retry).
      *
+     * @param packet the received packet
      * @param state must be version 2, non-null
      * @return true if the header was validated as a SSU2 packet, cannot fallback to SSU 1
      * @since 0.9.54

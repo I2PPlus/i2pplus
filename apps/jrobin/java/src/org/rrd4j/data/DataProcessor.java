@@ -532,7 +532,7 @@ public class DataProcessor implements DataHolder {
      *
      * <ul>
      *   <li>To specify sources for line, area and stack plots.
-     *   <li>To define other complex sources.
+     * <li>To define other complex sources.
      * </ul>
      *
      * The supported RPN functions, operators and constants are detailed at <a
@@ -560,7 +560,7 @@ public class DataProcessor implements DataHolder {
      *
      * <ul>
      *   <li>To specify sources for line, area and stack plots.
-     *   <li>To define other complex sources.
+     * <li>To define other complex sources.
      * </ul>
      *
      * The supported RPN functions, operators and constants are detailed at <a
@@ -658,7 +658,7 @@ public class DataProcessor implements DataHolder {
      *
      * <ul>
      *   <li>To specify sources for line, area and stack plots.
-     *   <li>To define complex sources
+     * <li>To define complex sources
      * </ul>
      *
      * @param name source name.
@@ -677,7 +677,7 @@ public class DataProcessor implements DataHolder {
      *
      * <ul>
      *   <li>To specify sources for line, area and stack plots.
-     *   <li>To define complex sources
+     * <li>To define complex sources
      * </ul>
      *
      * @param name source name.
@@ -698,7 +698,7 @@ public class DataProcessor implements DataHolder {
      *
      * <ul>
      *   <li>To specify sources for line, area and stack plots.
-     *   <li>To define complex sources
+     * <li>To define complex sources
      * </ul>
      *
      * @param name source name.
@@ -718,7 +718,7 @@ public class DataProcessor implements DataHolder {
      *
      * <ul>
      *   <li>To specify sources for line, area and stack plots.
-     *   <li>To define complex sources
+     * <li>To define complex sources
      * </ul>
      *
      * @param name Source name.
@@ -744,7 +744,7 @@ public class DataProcessor implements DataHolder {
      *
      * <ul>
      *   <li>To specify sources for line, area and stack plots.
-     *   <li>To define complex sources
+     * <li>To define complex sources
      * </ul>
      *
      * @param name Source name.
@@ -772,7 +772,7 @@ public class DataProcessor implements DataHolder {
      *
      * <ul>
      *   <li>To specify sources for line, area and stack plots.
-     *   <li>To define complex sources
+     * <li>To define complex sources
      * </ul>
      *
      * @param name Source name.
@@ -800,7 +800,7 @@ public class DataProcessor implements DataHolder {
      *
      * <ul>
      *   <li>To specify sources for line, area and stack plots.
-     *   <li>To define complex sources
+     * <li>To define complex sources
      * </ul>
      *
      * @param name Source name.
@@ -1022,6 +1022,8 @@ public class DataProcessor implements DataHolder {
     }
     /**
      * Fetch rrd data
+     *
+     * @throws IOException if an RRD file cannot be read while fetching its datapoints
      */
 
     private void fetchRrdData() throws IOException {
@@ -1129,9 +1131,9 @@ public class DataProcessor implements DataHolder {
         }
     }
 
-    // Tricky and ugly. Should be redesigned some time in the future
     /**
-     * Choose optimal step
+     * Choose optimal step.
+     * Tricky and ugly. Should be redesigned some time in the future.
      */
     private void chooseOptimalStep() {
         long newStep = Long.MAX_VALUE;
@@ -1206,6 +1208,10 @@ public class DataProcessor implements DataHolder {
     }
     /**
      * Right-pad a string with spaces to the requested length.
+     *
+     * @param s the string to pad
+     * @param length the minimum width of the result
+     * @return the padded string
      */
 
     private static String format(String s, int length) {

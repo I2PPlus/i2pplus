@@ -55,7 +55,13 @@ class Sorters {
          */
         protected abstract int compare(Mail a, Mail b);
 
-        /** Date-based fallback comparator. */
+        /**
+         * Date-based fallback comparator.
+         *
+         * @param a the first mail to compare
+         * @param b the second mail to compare
+         * @return negative, zero or positive as a's date sorts before or after b's
+         */
         private int fallbackCompare(Mail a, Mail b) {return DateSorter.scompare(a, b);}
     }
 

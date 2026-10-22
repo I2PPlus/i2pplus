@@ -169,6 +169,11 @@ public class I2PSocketManagerFull implements I2PSocketManager {
 
     /**
      * No longer supported, throws UnsupportedOperationException.
+     *
+     * @param context ignored, the call always throws
+     * @param session ignored, the call always throws
+     * @param opts ignored, the call always throws
+     * @param name ignored, the call always throws
      * @deprecated use 4-arg constructor
      * @throws UnsupportedOperationException always; this overload has no
      *                                       implementation and never initialises the manager
@@ -333,6 +338,8 @@ public class I2PSocketManagerFull implements I2PSocketManager {
      * Sig type from the options, or the default if unset or unsupported.
      * @param opts may be null
      * @return the sig type
+     * @throws I2PSessionException if the options name a sig type that is
+     *                             unavailable on this router
      * @since 0.9.21 copied from I2PSocketManagerFactory
      */
     private SigType getSigType(Properties opts) throws I2PSessionException {
@@ -620,6 +627,9 @@ public class I2PSocketManagerFull implements I2PSocketManager {
     /**
      * Throw unless the session is alive and ready.
      *
+     * @param session the session to check, reconnected if it is closed
+     * @throws I2PException if this manager is destroyed or the closed session
+     *                      cannot be reconnected
      * @since 0.9.21
      */
     private void verifySession(I2PSession session) throws I2PException {
@@ -783,7 +793,11 @@ public class I2PSocketManagerFull implements I2PSocketManager {
     /**
      * Like connect() but returns a real Socket, and throws only IOE,
      * for easier porting of apps.
+     *
+     * @param peer the destination to connect to
      * @param options may be null
+     * @return a socket wrapping the established I2P socket
+     * @throws IOException if the connect fails, with the I2P failure as its cause
      * @since 0.8.4
      */
     private Socket connectToSocket(Destination peer, I2PSocketOptions options) throws IOException {
@@ -918,10 +932,9 @@ public class I2PSocketManagerFull implements I2PSocketManager {
         }
     }
 
-    // ==================== Tuner delegation ====================
-
     /**
-     * Initial window size.
+     * Initial window size, Tuner delegation to ConnectionOptions.
+     *
      * @return the initial window size
      * @since 0.9.70+
      */

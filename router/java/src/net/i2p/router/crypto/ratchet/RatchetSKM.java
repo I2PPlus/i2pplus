@@ -196,7 +196,11 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
         }
     }
 
-    /** OutboundSession - used only by HTML. */
+    /**
+     * OutboundSession - used only by HTML.
+     *
+     * @return a snapshot copy of the current outbound sessions, never null
+     */
     private Set<OutboundSession> getOutboundSessions() {
         return new HashSet<>(_outboundSessions.values());
     }
@@ -751,6 +755,7 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
      * For inbound, we are Bob, NS received, replace if very old
      * For outbound, we are Alice, NSR received, never replace.
      *
+     * @param sess the outbound session to add, keyed by its target key
      * @param isInbound Bob if true
      * @return true if added
      */
@@ -838,10 +843,8 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
         return removed + oremoved + premoved;
     }
 
-    /// begin SessionTagListener ///
-
     /**
-     * Map the tag to this tagset.
+     * SessionTagListener: map the tag to this tagset.
      *
      * @return true if added, false if dup
      */
@@ -858,12 +861,8 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
         _inboundTagSets.remove(tag, ts);
     }
 
-    /// end SessionTagListener ///
-
-    /// ACKS ///
-
     /**
-     * Register a callback for an ACK.
+     * ACKS: Register a callback for an ACK.
      *
      * @param target the target public key
      * @param id the callback ID
@@ -915,12 +914,11 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
             _log.warn("No session found for ACK request");
     }
 
-    /// end ACKS ///
-
     /**
      * Return a map of PublicKey to a set of inbound RatchetTagSets for that key.
      * Only for {@link #renderStatusHTML(Writer)} below.
      * Does not return expired sets or sets with null keys.
+     *
      * @return the ratchet tag sets by public key
      */
     private Map<PublicKey, Set<RatchetTagSet>> getRatchetTagSetsByPublicKey() {
@@ -1043,6 +1041,9 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
 
     /**
      * Console translation for the debug page strings.
+     *
+     * @param s the message key in the router console bundle
+     * @return the translated string
      */
     private String _t(String s) {
         return Translate.getString(s, _context, "net.i2p.router.web.messages");
@@ -1243,6 +1244,9 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
 
     /**
      * For debugging.
+     *
+     * @param target the public key to abbreviate, null renders "null"
+     * @return the first 20 characters of the base64 key with an ellipsis
      */
     private static String toString(PublicKey target) {
         if (target == null)

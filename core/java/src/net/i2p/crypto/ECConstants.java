@@ -101,6 +101,13 @@ final class ECConstants {
         /**
          * P and N in decimal, no spaces;
          * Seed, B, Gx, Gy in hex, spaces allowed.
+         *
+         * @param pss prime p, decimal
+         * @param nss order n of the base point, decimal
+         * @param sss curve seed, hex
+         * @param bss curve parameter b, hex
+         * @param gxss x coordinate of the base point, hex
+         * @param gyss y coordinate of the base point, hex
          */
         public ECParms(String pss, String nss, String sss, String bss, String gxss, String gyss) {
             ps = pss; ns = nss; ss = sss; bs = bss; gxs = gxss; gys = gyss;
@@ -304,6 +311,7 @@ final class ECConstants {
     /**
      * Generate a spec from a curve name.
      *
+     * @param name the standard curve name, e.g. secp256r1
      * @return null if fail
      */
     private static ECParameterSpec genSpec(String name) {
@@ -340,6 +348,7 @@ final class ECConstants {
     /**
      * Tries curve name1, then name2, then creates new from parms.
      *
+     * @param name1 the first standard curve name to try
      * @param name2 null to skip
      * @param parms null to skip
      * @return null if all fail

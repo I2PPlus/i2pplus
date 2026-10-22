@@ -110,6 +110,8 @@ class NewsTimerTask extends SimpleTimer2.TimedEvent {
     /**
      * Whether dev SU3 fetching is enabled.
      *
+     * @return true if a dev SU3 URL is set, the dev SU3 update property is
+     *         enabled, and news installation is not disabled
      * @since 0.9.20
      */
     private boolean shouldFetchDevSU3() {

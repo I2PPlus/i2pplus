@@ -185,6 +185,8 @@ class IdleChecker extends SimpleTimer2.TimedEvent {
      * driven by its own members rather than by the whole client.
      *
      * @param td the pool whose assigned torrents are scanned
+     * @param poolIndex the pool index to match torrents against, or -1 to match a
+     *                  dedicated destination by its info hash instead
      * @return peers connected across the pool's torrents
      */
     private int peersIn(TorrentDest td, int poolIndex) {

@@ -60,6 +60,8 @@ class OutboundGatewayMessage extends PendingGatewayMessage implements CDPQEntry 
      * any message fragment in a TunnelDataMessage to the OutboundReceiver, to
      * set the OutNetMessage priority - but that may just make more of an
      * out-of-order mess and failed reconstruction of fragments.
+     *
+     * @param message the message to classify, its type selects the priority
      * @return the CDPQ priority for the message type, 1000 for a tagset
      *         reply down to 100 for regular data and anything unexpected
      */

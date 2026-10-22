@@ -168,7 +168,12 @@ public final class RrdGraphMeta {
         return b.toString();
     }
 
-    /** Rounds for transport: three decimals is finer than any axis label. */
+    /**
+     * Rounds for transport: three decimals is finer than any axis label.
+     *
+     * @param v the value to round
+     * @return v rounded to three decimals, as a string
+     */
     private static String round(double v) {
         return String.valueOf(Math.round(v * 1000D) / 1000D);
     }

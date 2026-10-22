@@ -14,8 +14,8 @@ import net.i2p.router.web.FormHandler;
 import net.i2p.router.web.Messages;
 
 /**
- *  Handler for reseed configuration form processing.
- *  @since 0.8.3
+ * Handler for reseed configuration form processing.
+ * @since 0.8.3
  */
 public class ConfigReseedHandler extends FormHandler {
     /**
@@ -114,10 +114,11 @@ public class ConfigReseedHandler extends FormHandler {
     }
 
     /**
-     *  Add checker error or status messages to the form.
+     * Add checker error or status messages to the form.
      *
-     *  @return true if anything was output
-     *  @since 0.9.33
+     * @param checker the reseed checker whose error or status text is displayed
+     * @return true if anything was output
+     * @since 0.9.33
      */
     private boolean addCheckerStatus(ReseedChecker checker) {
         String error = checker.getError();
@@ -143,6 +144,8 @@ public class ConfigReseedHandler extends FormHandler {
     /**
      * Save a string reseed setting.
      *
+     * @param config the reseed configuration property to change
+     * @param param the form field name to read the value from, empty means remove
      * @since 0.8.9
      */
     private void saveString(String config, String param) {
@@ -156,6 +159,8 @@ public class ConfigReseedHandler extends FormHandler {
     /**
      * Save a boolean reseed setting.
      *
+     * @param config the reseed configuration property to change
+     * @param param the form field name, true if the field is present in the request
      * @since 0.8.9
      */
     private void saveBoolean(String config, String param) {

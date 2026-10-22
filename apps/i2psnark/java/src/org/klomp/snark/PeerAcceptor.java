@@ -180,6 +180,11 @@ class PeerAcceptor {
      * first 20 bytes for the correct protocol here and throw IOE if bad, so we don't hang waiting
      * for 48 bytes if it's not a bittorrent client. The 20 bytes are checked again in
      * {@code Peer.handshake()}.
+     *
+     * @param in the stream to read the handshake prefix from
+     * @return the 20-byte infohash following the protocol header
+     * @throws IOException if the leading bytes are not the bittorrent protocol
+     *                     string, or the hash cannot be fully read
      */
     private static byte[] readHash(InputStream in) throws IOException {
         for (int i = 0; i < PROTO_LEN; i++) {

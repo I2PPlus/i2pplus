@@ -157,6 +157,10 @@ class BuildReplyHandler {
      * Do not call this more than once for a given message.
      * Do not call for blank hops.
      *
+     * @param reply the received reply message, decrypted in place
+     * @param cfg the building tunnel's config, supplying the decryption layers
+     * @param recordNum index of the record to decrypt
+     * @param hop the hop whose key should finish the decryption
      * @return the status 0-255, or -1 on decrypt failure
      */
     private Result decryptRecord(TunnelBuildReplyMessage reply, TunnelCreatorConfig cfg, int recordNum, int hop) {

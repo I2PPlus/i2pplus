@@ -110,6 +110,7 @@ public class SMTPClient {
      * Does not flush, wait, or read.
      *
      * @param cmd the command to write, never null
+     * @throws IOException if there is no connected socket, or the write fails
      * @since 0.9.13
      */
     private void sendCmdNoWait(String cmd) throws IOException {
@@ -121,6 +122,7 @@ public class SMTPClient {
      *
      * @param cmd the command to write, never null
      * @param mask true to mask the command in debug logs (credentials)
+     * @throws IOException if there is no connected socket, or the write fails
      * @since 0.9.13
      */
     private void sendCmdNoWait(String cmd, boolean mask) throws IOException {
@@ -485,7 +487,8 @@ public class SMTPClient {
         /**
          * Creates a reply with its code and text.
          *
-         * @param t non-null
+         * @param r the three-digit reply code, or 0 on error
+         * @param t the reply text, non-null
          */
         public Result(int r, String t) {
             result = r;
@@ -506,10 +509,21 @@ public class SMTPClient {
         }
     }
 
-    /** Looks up a localized string in the message bundle. */
+    /**
+     * Looks up a localized string in the message bundle.
+     *
+     * @param s the English text used as the lookup key
+     * @return the translation for the current language, or s itself when untranslated
+     */
     private static String _t(String s) {return Messages.getString(s);}
 
-    /** Looks up a localized string in the message bundle. */
+    /**
+     * Looks up a localized string in the message bundle, substituting one parameter.
+     *
+     * @param s the English text used as the lookup key, with {0} where the value goes
+     * @param o substituted for {0} in the message
+     * @return the translation for the current language, or s itself when untranslated
+     */
     private static String _t(String s, Object o) {return Messages.getString(s, o);}
 
 }

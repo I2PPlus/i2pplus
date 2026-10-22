@@ -40,9 +40,9 @@ public class NewsHandler extends UpdateHandler implements Checker {
     }
 
     /**
-     *  This will check for news or router updates (it does the same thing).
-     *  Should not block.
-     *  @param currentVersion ignored, stored locally
+     * This will check for news or router updates (it does the same thing).
+     * Should not block.
+     * @param currentVersion ignored, stored locally
      */
     public UpdateTask check(UpdateType type, UpdateMethod method,
                             String id, String currentVersion, long maxTime) {
@@ -122,6 +122,11 @@ public class NewsHandler extends UpdateHandler implements Checker {
     /**
      * CLI fetch.
      *
+     * @param ctx the context for the HTTP client
+     * @param phost the proxy host, or null for no proxy
+     * @param pport the proxy port, ignored without a proxy
+     * @param url the news SU3 URL to fetch
+     * @param file the local file to write the download to
      * @since 0.9.57
      */
     private static void test(I2PAppContext ctx, String phost, int pport, String url, File file) {

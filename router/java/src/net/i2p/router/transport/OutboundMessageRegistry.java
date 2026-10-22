@@ -197,6 +197,7 @@ public class OutboundMessageRegistry {
     /**
      * Add a message to the pending registry, optionally allowing a null payload.
      *
+     * @param msg the message to register; its reply selector must be non-null
      * @param allowEmpty is msg.getMessage() allowed to be null?
      */
     @SuppressWarnings("unchecked")

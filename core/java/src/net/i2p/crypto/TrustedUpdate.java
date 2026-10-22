@@ -216,6 +216,11 @@ public class TrustedUpdate {
 
     /**
      * Generate signing key pair files via CLI.
+     *
+     * @param publicKeyFile path of the public key file to create, not
+     *                      overwritten if it exists
+     * @param privateKeyFile path of the private key file to create, not
+     *                       overwritten if it exists
      * @return true if key files were generated successfully
      */
     private static final boolean genKeysCLI(String publicKeyFile, String privateKeyFile) {
@@ -269,6 +274,8 @@ public class TrustedUpdate {
 
     /**
      * Display version string from a signed file via CLI.
+     *
+     * @param signedFile path of the signed file to read the version from
      * @return true if version string was extracted from the file
      */
     private static final boolean showVersionCLI(String signedFile) {
@@ -281,6 +288,11 @@ public class TrustedUpdate {
 
     /**
      * Sign an input file via CLI.
+     *
+     * @param inputFile path of the file to sign
+     * @param signedFile path of the signed output file to write
+     * @param privateKeyFile path of the signing private key file to read
+     * @param version version string to embed in the signed file
      * @return true if the file was signed successfully
      */
     private static final boolean signCLI(String inputFile, String signedFile, String privateKeyFile, String version) {
@@ -293,6 +305,8 @@ public class TrustedUpdate {
 
     /**
      * Verify signature on a signed file via CLI.
+     *
+     * @param signedFile path of the signed file whose signature is checked
      * @return true if the signature is valid
      */
     private static final boolean verifySigCLI(String signedFile) {
@@ -305,6 +319,9 @@ public class TrustedUpdate {
 
     /**
      * Check whether a signed file is a newer version via CLI.
+     *
+     * @param signedFile path of the signed file whose version is compared with
+     *                   the running CoreVersion
      * @return true if the signed file is a newer version
      */
     private static final boolean verifyUpdateCLI(String signedFile) {
@@ -318,6 +335,9 @@ public class TrustedUpdate {
 
     /**
      * True if there's no version mismatch.
+     *
+     * @param signedFile path of the signed file whose header and zip comment
+     *                   versions are compared
      * @return true if there's no version mismatch
      * @since 0.8.8
      */
@@ -475,6 +495,9 @@ public class TrustedUpdate {
      * Verify the version in the sud header matches the version in the zip comment
      * (and that the embedded file is a zip file at all)
      * {@link #isUpdatedVersion(String, File)} must be called first to set _newVersion.
+     *
+     * @param signedFile the signed update file, its zip comment is compared
+     *                   against the version read earlier
      *
      * @return true if matches
      *

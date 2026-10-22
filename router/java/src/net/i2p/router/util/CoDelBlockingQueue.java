@@ -341,12 +341,11 @@ public class CoDelBlockingQueue<E extends CDQEntry> extends LinkedBlockingQueue<
                remainingCapacity() < _capacity / 4;
     }
 
-    /////// private below here
-
     /**
      * Caller must synch on this.
      *
      * @param entry may be null
+     * @return true if the sojourn time has been above target long enough to drop
      */
     private boolean updateVars(E entry) {
         // This is a helper routine that tracks whether the sojourn time
@@ -380,6 +379,7 @@ public class CoDelBlockingQueue<E extends CDQEntry> extends LinkedBlockingQueue<
      * Dequeue the next element, applying CoDel drops as needed.
      *
      * @return if null, call again
+     * @throws InterruptedException if the calling thread is interrupted while waiting
      */
     private E deque() throws InterruptedException {
         E rv = super.take();
@@ -472,6 +472,8 @@ public class CoDelBlockingQueue<E extends CDQEntry> extends LinkedBlockingQueue<
 
     /**
      * Caller must synch on this.
+     *
+     * @param t the current time in ms, the base for the next drop time
      */
     private void control_law(long t) {
         _drop_next = t + (long) (_interval / Math.sqrt(_count));

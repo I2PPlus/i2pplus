@@ -320,6 +320,8 @@ public class FileUtil {
      * <p>
      * Caller must close streams.
      *
+     * @param in the .pack format input stream to read from
+     * @param out the jar output stream the unpacked entries are written to
      * @throws IOException on unpack error or if the library is unavailable.
      * Will not throw ClassNotFoundException.
      * @throws java.lang.reflect.InvocationTargetException on duplicate zip entries in the packed jar

@@ -363,6 +363,8 @@ public class IndexBean {
 
     /**
      * Restart all running tunnels only, stopped tunnels will remain stopped.
+     *
+     * @return empty string, or an error message if no services are configured
      * @since 0.9.67+
      */
     private String restartAll() {
@@ -400,6 +402,8 @@ public class IndexBean {
 
     /**
      * Restart all running client tunnels only, stopped tunnels will remain stopped.
+     *
+     * @return empty string, or an error message if no clients are configured
      * @since 0.9.67+
      */
     private String restartAllClients() {
@@ -439,6 +443,8 @@ public class IndexBean {
 
     /**
      * Restart all running server tunnels only, stopped tunnels will remain stopped.
+     *
+     * @return empty string, or an error message if no servers are configured
      * @since 0.9.67+
      */
     private String restartAllServers() {
@@ -2075,6 +2081,7 @@ public class IndexBean {
      *
      * @param k property name, unused since the IV moved into the ciphertext
      * @param v Base64, or empty, or null
+     * @return the decrypted value as UTF-8, v unchanged if empty, null on any error
      * @since 0.9.46
      */
     private String decrypt(String k, String v) {
@@ -2138,7 +2145,11 @@ public class IndexBean {
         return Base64.encode(both);
     }
 
-    /** Modify or create a destination. */
+    /**
+     * Modify or create a destination.
+     *
+     * @return a message to display, with the new destination on success
+     */
     private String modifyDestination() {
         String privKeyFile = _config.getPrivKeyFile();
         if (privKeyFile == null) {return "Private Key File not specified";}
@@ -2204,7 +2215,11 @@ public class IndexBean {
                "New Destination is " + newdest.toBase64();
      }
 
-    /** New key. */
+    /**
+     * Generate a new random LeaseSet encryption key and save it.
+     *
+     * @return a message with the new Base64 key, or an error if the tunnel is running
+     */
     private String generateNewEncryptionKey() {
         TunnelController tun = getController(_tunnel);
         if (tun == null) { /* ignored */ } // creating new

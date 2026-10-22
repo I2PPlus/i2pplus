@@ -262,6 +262,7 @@ public class Elg2KeyFactory extends I2PThread implements KeyFactory {
     /**
      * Adds a precomputed key pair to the pool.
      *
+     * @param kp the key pair to add
      * @return true if successful, false if full
      */
     private final boolean addKeys(Elg2KeyPair kp) {return _keys.offer(kp);}

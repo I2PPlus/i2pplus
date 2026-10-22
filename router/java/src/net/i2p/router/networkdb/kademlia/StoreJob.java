@@ -404,6 +404,9 @@ abstract class StoreJob extends JobImpl {
      * with the reply to come back through an exploratory tunnel.
      * There is no garlic encryption added.
      *
+     * @param msg the store message to send
+     * @param peer the remote peer to store at
+     * @param expiration when the message expires
      * @since 0.9.41 renamed from sendStoreThroughGarlic()
      */
     private void sendStoreThroughExploratory(DatabaseStoreMessage msg, RouterInfo peer, long expiration) {
@@ -461,6 +464,8 @@ abstract class StoreJob extends JobImpl {
      * exploratory tunnels.
      *
      * @param msg must contain a leaseset
+     * @param peer the remote peer to store at
+     * @param expiration when the message expires
      * @since 0.7.10
      */
     private void sendStoreThroughClient(DatabaseStoreMessage msg, RouterInfo peer, long expiration) {
@@ -627,6 +632,8 @@ abstract class StoreJob extends JobImpl {
      * Only for Meta LS2, for now.
      *
      * @param msg must contain a leaseset
+     * @param peer the remote peer to store at
+     * @param expiration when the message expires
      * @since 0.9.41
      */
     private void sendWrappedStoreThroughExploratory(DatabaseStoreMessage msg, RouterInfo peer, long expiration) {

@@ -108,6 +108,7 @@ public class LookupDest {
     /**
      * I2CP options from the context.
      *
+     * @param ctx the application context supplying the I2CP client settings
      * @return a fresh Properties holding the I2CP host, port, SSL, user, and
      *         password settings from the context, empty when the context is a
      *         router context and has no I2CP client settings to copy

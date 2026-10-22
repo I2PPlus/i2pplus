@@ -261,10 +261,13 @@ public class CreateRouterInfoJob extends JobImpl {
      * Only called at startup via {@link LoadRouterInfoJob} and RebuildRouterInfoJob.
      * Not called by periodic RepublishLocalRouterInfoJob.
      * We don't want to change the cert on the fly as it changes the router hash.
-      * {@link net.i2p.data.router.RouterInfo#isHidden} checks the capability, but
-       * {@link net.i2p.data.router.RouterIdentity#isHidden} checks the cert.
+     * {@link net.i2p.data.router.RouterInfo#isHidden} checks the capability, but
+     * {@link net.i2p.data.router.RouterIdentity#isHidden} checks the cert.
      * There's no reason to ever add a hidden cert?
      *
+     * @param ctx the router context, consulted for the hidden property
+     * @param spk the signing public key to certify
+     * @param pk the encryption public key to certify
      * @return the certificate for a new RouterInfo - probably a null cert.
      * @since 0.9.16 moved from Router
      */

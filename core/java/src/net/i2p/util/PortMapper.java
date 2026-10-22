@@ -439,6 +439,10 @@ public class PortMapper {
     /**
      * Control URL for the mapped service.
      *
+     * @param svc the service name, https:// is used only for the HTTPS eepsite
+     * @param host the bound host, wildcards become 127.0.0.1 and IPv6 hosts get brackets
+     * @param port the port number to append after the host
+     * @return the control URL, terminated with a slash
      * @since 0.9.50 from SummaryBarRenderer
      */
     private static String toURL(String svc, String host, int port) {

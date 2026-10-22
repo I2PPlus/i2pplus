@@ -56,10 +56,10 @@ import org.klomp.snark.bencode.InvalidBEncodingException;
  *
  * <ul>
  *   <li>Kademlia routing table management
- *   <li>DHT queries (ping, find_node, get_peers, announce_peer)
- *   <li>Token-based peer announcement system
- *   <li>Node discovery and maintenance
- *   <li>Blacklist management for unreachable nodes
+ * <li>DHT queries (ping, find_node, get_peers, announce_peer)
+ * <li>Token-based peer announcement system
+ * <li>Node discovery and maintenance
+ * <li>Blacklist management for unreachable nodes
  * </ul>
  *
  * <h2>I2P-Specific Modifications:</h2>
@@ -325,8 +325,6 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
     public void removeServedTorrent(InfoHash ih) {
         _servedTorrents.remove(ih);
     }
-
-    ///////////////// Public methods
 
     /**
      * Known nodes, not estimated total network size.
@@ -862,16 +860,8 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
         return buf.toString();
     }
 
-    ////////// All private below here /////////////////////////////////////
-
-    ///// Sending.....
-
-    // Queries.....
-    // The first 3 queries use the query port.
-    // Announces use the response port.
-
     /**
-     * Send a ping query to a node.
+     * Send a ping query to a node, on the query port.
      * Blocking if we have to look up the dest for the nodeinfo.
      *
      * @param nInfo who to send it to
@@ -889,7 +879,7 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
     }
 
     /**
-     * Send a find_node query.
+     * Send a find_node query to a node, on the query port.
      * Blocking if we have to look up the dest for the nodeinfo.
      *
      * @param nInfo who to send it to
@@ -909,7 +899,7 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
     }
 
     /**
-     * Send a get_peers query.
+     * Send a get_peers query to a node, on the query port.
      * Blocking if we have to look up the dest for the nodeinfo.
      *
      * @param nInfo who to send it to
@@ -944,7 +934,7 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
     }
 
     /**
-     * Send an announce_peer query.
+     * Send an announce_peer query to a node, on the response port.
      * Non-blocking, will fail if we don't have the dest for the nodeinfo.
      *
      * @param nInfo who to send it to
@@ -969,11 +959,8 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
         return rv;
     }
 
-    // Responses.....
-    // All responses use the response port.
-
     /**
-     * Send a pong response.
+     * Send a pong response, on the response port used by all responses.
      *
      * @param nInfo who to send it to
      * @param msgID the message ID to respond to
@@ -1300,12 +1287,12 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
         }
     }
 
-    ///// Reception.....
-
     /**
      * Handle an incoming datagram.
      *
      * @param from dest or null if it didn't come in on signed port
+     * @param fromPort the sender's port, 1-65535 or 0 if unspecified
+     * @param payload the bencoded KRPC message to parse
      */
     private void receiveMessage(Destination from, int fromPort, byte[] payload) {
         BandwidthGraph.datagramReceived(payload.length);
@@ -1358,8 +1345,6 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
             }
         }
     }
-
-    // Queries.....
 
     /**
      * Handle and respond to an incoming query. Adds sender to our DHT.
@@ -1452,6 +1437,7 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
     /**
      * Called for a request or response.
      *
+     * @param nInfo the node we heard from
      * @return old NodeInfo or nInfo if none, use this to reduce object churn
      */
     private NodeInfo heardFrom(NodeInfo nInfo) {
@@ -1506,7 +1492,11 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
         return rv;
     }
 
-    /** Called when a reply times out. */
+    /**
+     * Called when a reply times out.
+     *
+     * @param nInfo the node whose reply timed out
+     */
     private void timeout(NodeInfo nInfo) {
         NID nid = nInfo.getNID();
         // a fake NID means we never heard from the node, so there is no
@@ -1540,7 +1530,13 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
         }
     }
 
-    /** Handle and respond to the query. */
+    /**
+     * Handle and respond to the query.
+     *
+     * @param msgID the message ID of the query
+     * @param nInfo the node the query came from
+     * @throws InvalidBEncodingException not thrown by this method
+     */
     private void receivePing(MsgID msgID, NodeInfo nInfo) throws InvalidBEncodingException {
         if (_log.shouldDebug()) {
             _log.debug("Received ping from " + nInfo);
@@ -1551,7 +1547,10 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
     /**
      * Handle and respond to the query.
      *
+     * @param msgID the message ID of the query
+     * @param nInfo the node the query came from
      * @param tID target ID they are looking for
+     * @throws InvalidBEncodingException not thrown by this method
      */
     private void receiveFindNode(MsgID msgID, NodeInfo nInfo, NID tID)
             throws InvalidBEncodingException {
@@ -1590,7 +1589,12 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
     /**
      * Handle and respond to the query.
      *
+     * @param msgID the message ID of the query
+     * @param nInfo the node the query came from
+     * @param ih the info hash of the torrent being looked up
+     * @param noSeeds true if the requester does not want seeds in the result
      * @param scrape true if BEP 33 scrape was requested, may add BFsd and BFpe to the response
+     * @throws InvalidBEncodingException not thrown by this method
      */
     private void receiveGetPeers(MsgID msgID, NodeInfo nInfo, InfoHash ih, boolean noSeeds, boolean scrape)
             throws InvalidBEncodingException {
@@ -1662,6 +1666,12 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
      * Handle and respond to the query. We have no node info here, it came on response port, we have
      * to get it from the token. So we can't verify that it came from the same peer, as BEP 5
      * specifies.
+     *
+     * @param msgID the message ID of the query
+     * @param ih the info hash of the torrent being announced
+     * @param tok the token from a previous get_peers response, identifies the announcer
+     * @param isSeed true if the announcer claims to be a seed
+     * @throws InvalidBEncodingException not thrown by this method
      */
     private void receiveAnnouncePeer(MsgID msgID, InfoHash ih, byte[] tok, boolean isSeed)
             throws InvalidBEncodingException {
@@ -1687,8 +1697,6 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
         _tracker.announce(ih, nInfo.getHash(), isSeed);
         sendPong(nInfo, msgID); // the reply for an announce is the same as the reply for a ping
     }
-
-    // Responses.....
 
     /**
      * Handle the response and alert whoever sent the query it is responding to. Adds sender
@@ -1860,7 +1868,12 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
         return rv;
     }
 
-    /** If node info was previously created with the dummy NID, replace it with the received NID. */
+    /**
+     * If node info was previously created with the dummy NID, replace it with the received NID.
+     *
+     * @param nInfo the node the pong arrived from
+     * @param nid the node ID from the reply, replacing the dummy NID if one was in use
+     */
     private void receivePong(NodeInfo nInfo, byte[] nid) {
         if (nInfo.getNID().equals(FAKE_NID)) {
             NodeInfo newInfo = new NodeInfo(new NID(nid), nInfo.getHash(), nInfo.getPort());
@@ -1874,8 +1887,6 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
             _log.debug("Received pong from " + nInfo);
         }
     }
-
-    // Errors.....
 
     /**
      * Handle an error response.
@@ -2023,8 +2034,6 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
             }
         }
     }
-
-    // I2PSessionMuxedListener interface ----------------
 
     /**
      * Instruct the client that the given session has received a message.

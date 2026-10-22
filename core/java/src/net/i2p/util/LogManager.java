@@ -681,6 +681,8 @@ public class LogManager implements Flushable {
 
     /**
      * Do not log here, deadlock of LogWriter via rereadConfig().
+     *
+     * @param config the properties to read the log limits from, may be null
      */
     private void parseLimits(Properties config) {
         parseLimits(config, PROP_RECORD_PREFIX);
@@ -688,6 +690,9 @@ public class LogManager implements Flushable {
 
     /**
      * Do not log here, deadlock of LogWriter via rereadConfig().
+     *
+     * @param config the properties to read the log limits from, may be null
+     * @param recordPrefix required key prefix, stripped before matching; null for any key
      */
     private void parseLimits(Properties config, String recordPrefix) {
         _limits.clear();
@@ -844,6 +849,8 @@ public class LogManager implements Flushable {
 
     /**
      * Do not log here, deadlock of LogWriter via rereadConfig().
+     *
+     * @param log the log to apply the longest matching limit to
      */
     private void updateLimit(Log log) {
         List<LogLimit> limits = getLimits(log);
@@ -868,6 +875,7 @@ public class LogManager implements Flushable {
     /**
      * Do not log here, deadlock of LogWriter via rereadConfig().
      *
+     * @param log the log to match the configured limits against
      * @return null if no matches
      */
     private List<LogLimit> getLimits(Log log) {

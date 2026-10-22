@@ -193,6 +193,8 @@ class KBucketImpl<T extends SimpleDataStructure> implements KBucket<T> {
     /**
      * Hold a rejected newcomer as a future slot-filler, dropping the oldest
      * candidate when over capacity.
+     *
+     * @param peer the rejected newcomer to hold for a future free slot
      */
     private void offerReplacement(T peer) {
         synchronized (_replacements) {
@@ -208,6 +210,8 @@ class KBucketImpl<T extends SimpleDataStructure> implements KBucket<T> {
 
     /**
      * Take the newest replacement candidate, or null if the cache is empty.
+     *
+     * @return the most recently held candidate, removed from the cache, or null if it was empty
      */
     private T pollReplacement() {
         synchronized (_replacements) {

@@ -1018,6 +1018,8 @@ public class TunnelControllerGroup implements ClientApp {
 
     /**
      * Load the controllers from the config file.
+     *
+     * @param cfgFile the i2ptunnel config file to read
      * @param shouldMigrate migrate to, and load from, {@code i2ptunnel.config.d}
      * @throws IllegalArgumentException if unable to load from file
      * @since 0.9.42
@@ -1391,6 +1393,9 @@ public class TunnelControllerGroup implements ClientApp {
     /**
      * Save the configuration of all known tunnels to the given file.
      * Side effect: for split config, sets "confFile" property to absolute path.
+     *
+     * @param cfgFile the file to write all tunnel configs to
+     * @throws IOException if the file cannot be created or written
      * @since 0.9.42
      */
     private synchronized void saveConfig(File cfgFile) throws IOException {
@@ -1496,6 +1501,9 @@ public class TunnelControllerGroup implements ClientApp {
 
     /**
      * Replace problematic characters in file name.
+     *
+     * @param rv the proposed file name, replaced characters become '_'
+     * @return the name with every illegal character replaced by '_'
      * @since 0.9.42
      */
     private static String sanitize(String rv) {
@@ -1510,6 +1518,7 @@ public class TunnelControllerGroup implements ClientApp {
      * Return the config File associated with a TunnelController or a default
      * File based on the tunnel name.
      *
+     * @param tc the controller whose config file is wanted
      * @return the File ready for use
      * @since 0.9.42
      */
@@ -1563,6 +1572,7 @@ public class TunnelControllerGroup implements ClientApp {
      * Load up the config data from either type of config file automatically.
      * Side effect: for split config, sets "confFile" property to absolute path.
      *
+     * @param cfgFile the monolithic or split config file to read
      * @return non-null, properties loaded, one for each tunnel
      * @throws IOException if unable to load from file
      * @since 0.9.42
@@ -1591,6 +1601,7 @@ public class TunnelControllerGroup implements ClientApp {
      * Split up the config data loaded from a single file, this is the old version for the
      * numbered config file, into properties one for each tunnel.
      *
+     * @param config the monolithic properties with numbered tunnel key prefixes
      * @return non-null, properties loaded, one for each tunnel
      * @since 0.9.42
      */
@@ -1638,6 +1649,7 @@ public class TunnelControllerGroup implements ClientApp {
      * Side effect: if the tunnels have not been loaded from config yet, they
      * will be.
      *
+     * @param cfgFile the config file to load from if not loaded yet
      * @return list of TunnelController objects
      * @throws IllegalArgumentException if unable to load config from file
      * @since 0.9.42

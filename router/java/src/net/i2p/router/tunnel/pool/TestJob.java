@@ -143,28 +143,28 @@ public class TestJob extends JobImpl {
     private static final int MAX_POST_KICK_DEFERRALS = 2 * MAX_DEFERRED;
     private int _postKickDeferrals = 0;
     /**
-     *  Upper bound on remembered reply partners, so a router that churns
-     *  through many destinations cannot grow this without limit.  Reaching the
-     *  cap evicts the oldest entries.
-     *  @since 0.9.71+
+     * Upper bound on remembered reply partners, so a router that churns
+     * through many destinations cannot grow this without limit.  Reaching the
+     * cap evicts the oldest entries.
+     * @since 0.9.71+
      */
     private static final int MAX_REPLY_PARTNER_MEMORY = 512;
     /**
-     *  Consecutive rounds that may be deferred because the same reply partner
-     *  was already blamed for a failed round, before the tunnel is charged
-     *  regardless.  Separate from {@link #MAX_PARTNER_DEFERRALS}, which
-     *  covers a partner that is <em>known</em> bad: this one covers a partner
-     *  that merely looks implicated, and it is deliberately smaller, because
-     *  the evidence is weaker.  Reaching the cap means the reply path is not
-     *  going to recover by trying another round, and continuing to defer would
-     *  let a genuinely dead tunnel sit in the pool indefinitely.
-     *  @since 0.9.71+
+     * Consecutive rounds that may be deferred because the same reply partner
+     * was already blamed for a failed round, before the tunnel is charged
+     * regardless.  Separate from {@link #MAX_PARTNER_DEFERRALS}, which
+     * covers a partner that is <em>known</em> bad: this one covers a partner
+     * that merely looks implicated, and it is deliberately smaller, because
+     * the evidence is weaker.  Reaching the cap means the reply path is not
+     * going to recover by trying another round, and continuing to defer would
+     * let a genuinely dead tunnel sit in the pool indefinitely.
+     * @since 0.9.71+
      */
     static final int MAX_REPLY_PARTNER_DEFERRALS = 2;
     /**
-     *  Bytes credited to a tunnel for one completed test round.  Nominal: it
-     *  feeds the throughput profile, not the traffic proof.
-     *  @since 0.9.71+
+     * Bytes credited to a tunnel for one completed test round.  Nominal: it
+     * feeds the throughput profile, not the traffic proof.
+     * @since 0.9.71+
      */
     static final int TEST_ROUND_BYTES = 1024;
     /**
@@ -243,18 +243,18 @@ public class TestJob extends JobImpl {
     }
 
     /**
-     *  Classify a failed round's far endpoint into exactly one bucket.
-     *  <p>Unreachable outranks established, because a peer that is both
-     *  currently reachable and recently unreachable is a peer that was gone and
-     *  has since returned — which is the case where the tunnel's condemnation
-     *  was correct at the time.  "Unknown" is kept separate rather than folded
-     *  into either side, so a missed lookup cannot inflate the established
-     *  share that the whole diagnosis turns on.
+     * Classify a failed round's far endpoint into exactly one bucket.
+     * <p>Unreachable outranks established, because a peer that is both
+     * currently reachable and recently unreachable is a peer that was gone and
+     * has since returned — which is the case where the tunnel's condemnation
+     * was correct at the time.  "Unknown" is kept separate rather than folded
+     * into either side, so a missed lookup cannot inflate the established
+     * share that the whole diagnosis turns on.
      *
      * @param unreachable the far endpoint was recently unreachable
      * @param established the far endpoint has a live transport session
      * @return the event name
-     *  @since 0.9.71+
+     * @since 0.9.71+
      */
     static String farEndVerdict(boolean unreachable, boolean established) {
         if (unreachable) {return "FarEndUnreachable";}
@@ -263,17 +263,17 @@ public class TestJob extends JobImpl {
     }
 
     /**
-     *  Excuse a failed round because the tunnel is still inside its grace
-     *  period: it has not yet had a realistic chance to settle, join the
-     *  LeaseSet, or carry the traffic that would prove it, so the round is
-     *  observed but not charged.  Without this, the fastest retest interval
-     *  plus a four-strike threshold condemns a new tunnel in about 90s — a
-     *  sixth of its lifetime — and the pool never settles.
-     *  <p>Split out of {@link #testFailed}, which is already well past the
-     *  complexity budget, so this does not add to it.
+     * Excuse a failed round because the tunnel is still inside its grace
+     * period: it has not yet had a realistic chance to settle, join the
+     * LeaseSet, or carry the traffic that would prove it, so the round is
+     * observed but not charged.  Without this, the fastest retest interval
+     * plus a four-strike threshold condemns a new tunnel in about 90s — a
+     * sixth of its lifetime — and the pool never settles.
+     * <p>Split out of {@link #testFailed}, which is already well past the
+     * complexity budget, so this does not add to it.
      *
      * @return true when the round was deferred
-     *  @since 0.9.71+
+     * @since 0.9.71+
      */
     private boolean deferIfTooYoungToJudge() {
         if (!withinYoungTunnelGrace(_cfg.getCreationTime(), System.currentTimeMillis())) {
@@ -291,14 +291,14 @@ public class TestJob extends JobImpl {
     }
 
     /**
-     *  Whether a failed round should be excused because the tunnel is too new
-     *  to have been fairly judged.  Static and clock-injected so the boundary
-     *  is testable, and so "never built" is representable.
+     * Whether a failed round should be excused because the tunnel is too new
+     * to have been fairly judged.  Static and clock-injected so the boundary
+     * is testable, and so "never built" is representable.
      *
      * @param creationTimeMs when the tunnel was built, 0 if unknown
      * @param nowMs current time in ms
      * @return true when the tunnel is still inside its grace period
-     *  @since 0.9.71+
+     * @since 0.9.71+
      */
     static boolean withinYoungTunnelGrace(long creationTimeMs, long nowMs) {
         if (creationTimeMs <= 0) {return false;}
@@ -308,32 +308,32 @@ public class TestJob extends JobImpl {
     }
     private int _replyPartnerDeferrals = 0;
     /**
-     *  Failure rate at or above which a reply partner counts as implicated in
-     *  the round that just failed.  A rate rather than a repeat flag: a flag
-     *  tracks how often a partner is re-picked, which measures pool churn
-     *  instead of partner health.
-     *  @since 0.9.71+
+     * Failure rate at or above which a reply partner counts as implicated in
+     * the round that just failed.  A rate rather than a repeat flag: a flag
+     * tracks how often a partner is re-picked, which measures pool churn
+     * instead of partner health.
+     * @since 0.9.71+
      */
     static final double IMPLICATED_REPLY_PARTNER_RATE = 0.5d;
     /**
-     *  Reply partner router hash to the time it was last blamed for a failed
-     *  round, per direction.  Split by direction because the diagnosis is
-     *  asymmetric: a reply leg that repeatedly fails for inbound tests is a
-     *  different finding from one that does so for outbound.
-     *  @since 0.9.71+
+     * Reply partner router hash to the time it was last blamed for a failed
+     * round, per direction.  Split by direction because the diagnosis is
+     * asymmetric: a reply leg that repeatedly fails for inbound tests is a
+     * different finding from one that does so for outbound.
+     * @since 0.9.71+
      */
     private static final Map<Hash, long[]> _inboundReplyPartnerTally = new ConcurrentHashMap<>();
     private static final Map<Hash, long[]> _outboundReplyPartnerTally = new ConcurrentHashMap<>();
 
     /**
-     *  The pool manager, reached through this job's own pool rather than
-     *  {@code RouterContext.tunnelManager()}.  The latter is the public
-     *  {@link net.i2p.router.TunnelManagerFacade} interface, and adding the
-     *  ranked-partner methods there would break every out-of-tree implementor
-     *  for the sake of two test-cycle call sites.
+     * The pool manager, reached through this job's own pool rather than
+     * {@code RouterContext.tunnelManager()}.  The latter is the public
+     * {@link net.i2p.router.TunnelManagerFacade} interface, and adding the
+     * ranked-partner methods there would break every out-of-tree implementor
+     * for the sake of two test-cycle call sites.
      *
      * @return the pool manager, or null if this job has no pool
-     *  @since 0.9.71+
+     * @since 0.9.71+
      */
     private TunnelPoolManager poolManager() {
         return _pool == null ? null : _pool.getTunnelPoolManager();
@@ -364,14 +364,14 @@ public class TestJob extends JobImpl {
     }
 
     /**
-     *  Record one round against its reply partner: the use always, the failure
-     *  only when the round failed.  Bounded, because this rolls over every
-     *  destination the router serves.
+     * Record one round against its reply partner: the use always, the failure
+     * only when the round failed.  Bounded, because this rolls over every
+     * destination the router serves.
      *
      * @param tally partner to failure/use counts
      * @param replyPartner the tunnel the reply came back through, may be null
      * @param failed true when the round failed
-     *  @since 0.9.71+
+     * @since 0.9.71+
      */
     static void noteReplyPartnerRound(Map<Hash, long[]> tally, TunnelInfo replyPartner, boolean failed) {
         if (tally == null || replyPartner == null) {return;}
@@ -392,13 +392,13 @@ public class TestJob extends JobImpl {
     }
 
     /**
-     *  Keep the tally bounded.  Drops an arbitrary entry once over the cap:
-     *  the per-partner rate is a running diagnostic, so evicting the least
-     *  interesting entry is preferable to the scan that an oldest-first
-     *  eviction needs on every round.
+     * Keep the tally bounded.  Drops an arbitrary entry once over the cap:
+     * the per-partner rate is a running diagnostic, so evicting the least
+     * interesting entry is preferable to the scan that an oldest-first
+     * eviction needs on every round.
      *
      * @param tally partner to failure/use counts
-     *  @since 0.9.71+
+     * @since 0.9.71+
      */
     static void pruneReplyPartnerTally(Map<Hash, long[]> tally) {
         while (tally.size() > MAX_REPLY_PARTNER_MEMORY) {
@@ -508,20 +508,20 @@ public class TestJob extends JobImpl {
         return _cachedMinTestDelay;
     }
     /**
-     *  Minimum gap between two tests of the <b>same already-tested</b> tunnel.
-     *  <p>The retest delay is derived from the observed success rate and can
-     *  bottom out near {@link #getMinTestDelay}, so a pool full of healthy,
-     *  fast-testing tunnels can re-enter the queue faster than tests complete.
-     *  That fills the job queue with test work and starves the builds and
-     *  dispatches that actually move a pool. A floor bounds the retest rate.
-     *  <p>Applies only to retests. A tunnel's <b>first</b> test is never
-     *  delayed, so pool population is unaffected.
-     *  <p>An <b>expedited</b> test bypasses the floor. Expedited is set when a
-     *  pool is critical, in deficit, or has zero active tunnels, and those are
-     *  exactly the states where a long gap would leave a pool empty — the
-     *  pre-emptive recovery path depends on those tests being prompt.
+     * Minimum gap between two tests of the <b>same already-tested</b> tunnel.
+     * <p>The retest delay is derived from the observed success rate and can
+     * bottom out near {@link #getMinTestDelay}, so a pool full of healthy,
+     * fast-testing tunnels can re-enter the queue faster than tests complete.
+     * That fills the job queue with test work and starves the builds and
+     * dispatches that actually move a pool. A floor bounds the retest rate.
+     * <p>Applies only to retests. A tunnel's <b>first</b> test is never
+     * delayed, so pool population is unaffected.
+     * <p>An <b>expedited</b> test bypasses the floor. Expedited is set when a
+     * pool is critical, in deficit, or has zero active tunnels, and those are
+     * exactly the states where a long gap would leave a pool empty — the
+     * pre-emptive recovery path depends on those tests being prompt.
      *
-     *  @since 0.9.71+
+     * @since 0.9.71+
      */
     // Raised from 90s: live logs showed a large minority of retest rounds
     // refused by the in-flight gates (see reserveInFlightForToken), so the
@@ -544,9 +544,11 @@ public class TestJob extends JobImpl {
     }
 
     /**
-     *  Refresh the cached test-job configuration from properties at most once
-     *  per CONFIG_REFRESH_MS, or immediately when the context changes.
-     *  Benign race: duplicate refreshes are idempotent writes.
+     * Refresh the cached test-job configuration from properties at most once
+     * per CONFIG_REFRESH_MS, or immediately when the context changes.
+     * Benign race: duplicate refreshes are idempotent writes.
+     *
+     * @param ctx the router context supplying the clock and properties
      */
     private static void refreshTestJobConfig(RouterContext ctx) {
         long now = ctx.clock().now();
@@ -584,6 +586,8 @@ public class TestJob extends JobImpl {
      * Prevents overwhelming the router with too many simultaneous tunnel tests.
      * This value can be adjusted based on system capacity.
      * Tunable via {@code i2p.tunnel.testJob.maxConcurrent} (default: 64 fast / 32 slow).
+     *
+     * @param ctx the router context whose properties are cached
      * @return the max concurrent tests
      */
     private static int getMaxConcurrentTests(RouterContext ctx) {
@@ -614,8 +618,8 @@ public class TestJob extends JobImpl {
     private static final int MAX_LAG_FOR_SCHEDULE = 150;
     /**
      * Hard ceiling on consecutive test failures for server pool tunnels.
-     *  Without this, dead server pool tunnels keep their slot indefinitely
-     *  because incrementTestFailures() holds them for the LS republish cycle.
+     * Without this, dead server pool tunnels keep their slot indefinitely
+     * because incrementTestFailures() holds them for the LS republish cycle.
      * At 10+ failures the tunnel is clearly dead — mark it conclusively.
      */
     private static final int MAX_SERVER_POOL_TEST_FAILURES = 10;
@@ -633,15 +637,15 @@ public class TestJob extends JobImpl {
     }
 
     /**
-     *  Per-pool test budget for client pools, bounded by three knobs:
-     *  the Tuner budget (dynamic), the pool-coverage cap (at most
-     *  coverageThreshold of a pool's active tunnels under test at once),
-     *  and the absolute per-pool cap.  With defaults the Tuner budget
-     *  (effectively unlimited) is superseded by the coverage cap.
+     * Per-pool test budget for client pools, bounded by three knobs:
+     * the Tuner budget (dynamic), the pool-coverage cap (at most
+     * coverageThreshold of a pool's active tunnels under test at once),
+     * and the absolute per-pool cap.  With defaults the Tuner budget
+     * (effectively unlimited) is superseded by the coverage cap.
      * <p>
-     *  Takes a pre-fetched active count: callers that already needed it
-     *  (criticality checks, zero-active bypasses) avoid a second O(tunnels)
-     *  scan inside this method.
+     * Takes a pre-fetched active count: callers that already needed it
+     * (criticality checks, zero-active bypasses) avoid a second O(tunnels)
+     * scan inside this method.
      *
      * @param ctx the router context
      * @param pool the client pool, never null
@@ -656,63 +660,63 @@ public class TestJob extends JobImpl {
     private static final float DEFAULT_SUCCESS_RATE = 0.5f; // 50% for new tunnels
 
     /**
-     *  How recently data must have flowed through a tunnel for us to trust
-     *  it over the test result.  If data was seen within this window, the
-     *  test failure is treated as a false negative (reply-path issue).
-     *  @since 0.9.69+
+     * How recently data must have flowed through a tunnel for us to trust
+     * it over the test result.  If data was seen within this window, the
+     * test failure is treated as a false negative (reply-path issue).
+     * @since 0.9.69+
      */
     private static final long RECENT_TRAFFIC_MS = 30 * 1000L;
 
     /**
-     *  How recently a tunnel must have carried real (non-test) traffic for
-     *  the pool to clear its FAILING flag and mark it GOOD.  Real traffic is
-     *  proof the tunnel works — a tunnel receiving or sending data has not
-     *  failed.  Only FAILING (not FAILED) tunnels are cleared, so a genuinely
-     *  dead tunnel still accumulates failures during quiet periods and is
-     *  removed.
-     *  @since 0.9.71+
+     * How recently a tunnel must have carried real (non-test) traffic for
+     * the pool to clear its FAILING flag and mark it GOOD.  Real traffic is
+     * proof the tunnel works — a tunnel receiving or sending data has not
+     * failed.  Only FAILING (not FAILED) tunnels are cleared, so a genuinely
+     * dead tunnel still accumulates failures during quiet periods and is
+     * removed.
+     * @since 0.9.71+
      */
     static final long TRAFFIC_PROOF_MS = 2 * 60 * 1000L;
 
     /**
-     *  How long after the last real traffic a tunnel test is held back.  Tests
-     *  are deferred while the tunnel is carrying recent traffic: the traffic
-     *  proves it works, and testing now would waste a job-queue slot and risk a
-     *  false negative under load.  The defer is load-aware, not absolute —
-     *  during an ebb in test traffic the retest runs anyway (see
-     *  {@link #shouldDeferActiveGoodTunnel}).  This is the recency window that
-     *  arms the defer; the wait itself is bounded by
-     *  {@link #ACTIVE_GOOD_EBB_RETRY_MS}.
-     *  @since 0.9.71+
+     * How long after the last real traffic a tunnel test is held back.  Tests
+     * are deferred while the tunnel is carrying recent traffic: the traffic
+     * proves it works, and testing now would waste a job-queue slot and risk a
+     * false negative under load.  The defer is load-aware, not absolute —
+     * during an ebb in test traffic the retest runs anyway (see
+     * {@link #shouldDeferActiveGoodTunnel}).  This is the recency window that
+     * arms the defer; the wait itself is bounded by
+     * {@link #ACTIVE_GOOD_EBB_RETRY_MS}.
+     * @since 0.9.71+
      */
     static final long TRAFFIC_DEFER_MS = 3 * 60 * 1000L;
 
     /**
-     *  Shortest wait before re-checking an active-GOOD deferral.  Below this
-     *  the recheck is not worth a queue slot: it would fire almost
-     *  immediately and re-evaluate the same contention it just saw.
-     *  @since 0.9.71+
+     * Shortest wait before re-checking an active-GOOD deferral.  Below this
+     * the recheck is not worth a queue slot: it would fire almost
+     * immediately and re-evaluate the same contention it just saw.
+     * @since 0.9.71+
      */
     static final long EBB_RETRY_FLOOR_MS = 5 * 1000L;
 
     /**
-     *  Longest a retest may be pushed out while its tunnel is busy.  Waiting
-     *  the full {@link #TRAFFIC_DEFER_MS} window let the tunnel expire out
-     *  from under the retest chain (the expiry pre-check compares against
-     *  delay + 3 test periods, so a long delay makes {@link #scheduleRetest} give up
-     *  and drop the test entirely); a bounded retry instead brings the job
-     *  back to re-check contention while the tunnel is still alive.
-     *  @since 0.9.71+
+     * Longest a retest may be pushed out while its tunnel is busy.  Waiting
+     * the full {@link #TRAFFIC_DEFER_MS} window let the tunnel expire out
+     * from under the retest chain (the expiry pre-check compares against
+     * delay + 3 test periods, so a long delay makes {@link #scheduleRetest} give up
+     * and drop the test entirely); a bounded retry instead brings the job
+     * back to re-check contention while the tunnel is still alive.
+     * @since 0.9.71+
      */
     static final long ACTIVE_GOOD_EBB_RETRY_MS = 30 * 1000L;
 
     /**
-     *  In-flight cap divisor defining an "ebb" for active-GOOD retests: when
-     *  fewer than {@code maxConcurrent / ACTIVE_GOOD_EBB_DIVISOR} tests are
-     *  on the wire there is spare capacity to verify a busy tunnel.  With the
-     *  default cap of 64 the ebb is below 16 in flight, leaving the rest of
-     *  the cap for first-test dispatch so untested tunnels keep priority.
-     *  @since 0.9.71+
+     * In-flight cap divisor defining an "ebb" for active-GOOD retests: when
+     * fewer than {@code maxConcurrent / ACTIVE_GOOD_EBB_DIVISOR} tests are
+     * on the wire there is spare capacity to verify a busy tunnel.  With the
+     * default cap of 64 the ebb is below 16 in flight, leaving the rest of
+     * the cap for first-test dispatch so untested tunnels keep priority.
+     * @since 0.9.71+
      */
     static final int ACTIVE_GOOD_EBB_DIVISOR = 4;
 
@@ -734,8 +738,10 @@ public class TestJob extends JobImpl {
     public static volatile int maxQueuedTests = DEFAULT_QUEUED_LIMIT;
 
     /**
-     *  Refresh {@link #maxQueuedTests} from the configured property when the
-     *  Tuner has not overridden the static dynamically.
+     * Refresh {@link #maxQueuedTests} from the configured property when the
+     * Tuner has not overridden the static dynamically.
+     *
+     * @param ctx the router context holding the configured limit
      */
     private static void applyConfiguredQueuedLimit(RouterContext ctx) {
         int configured = getBaseMaxQueuedTests(ctx);
@@ -745,9 +751,9 @@ public class TestJob extends JobImpl {
     }
 
     /**
-     *  Base max queued tests value, read from PROP or static default.
-     *  @param ctx the router context whose configuration supplies the limit
-     *  @return configured base max queued tests
+     * Base max queued tests value, read from PROP or static default.
+     * @param ctx the router context whose configuration supplies the limit
+     * @return configured base max queued tests
      */
     private static int getBaseMaxQueuedTests(RouterContext ctx) {
         refreshTestJobConfig(ctx);
@@ -776,18 +782,18 @@ public class TestJob extends JobImpl {
     }
 
     /**
-     *  Scale the TestJob hard limit down when the job queue is lagging, with
-     *  the scale-down floored at half the base limit.  Quartering under
-     *  sustained lag starved the tunnel test queue — UNTESTED tunnels piled
-     *  up while the shrunken limit blocked scheduling, and the pool never
-     *  recovered enough GOOD tunnels to publish — so extreme lag now gets
-     *  the same half-limit response as moderate lag.
+     * Scale the TestJob hard limit down when the job queue is lagging, with
+     * the scale-down floored at half the base limit.  Quartering under
+     * sustained lag starved the tunnel test queue — UNTESTED tunnels piled
+     * up while the shrunken limit blocked scheduling, and the pool never
+     * recovered enough GOOD tunnels to publish — so extreme lag now gets
+     * the same half-limit response as moderate lag.
      *
-     *  @param base configured hard limit; values &lt;= 0 pass through untouched
-     *  @param maxLag current job queue max lag (ms)
-     *  @return base unchanged when lag is at or below 5s (or base is
-     *          non-positive), otherwise at least {@code base / 2}
-     *  @since 0.9.71+
+     * @param base configured hard limit; values &lt;= 0 pass through untouched
+     * @param maxLag current job queue max lag (ms)
+     * @return base unchanged when lag is at or below 5s (or base is
+     *         non-positive), otherwise at least {@code base / 2}
+     * @since 0.9.71+
      */
     static int scaleHardLimit(int base, long maxLag) {
         if (base <= 0 || maxLag <= 5_000) {
@@ -903,12 +909,12 @@ public class TestJob extends JobImpl {
      * {@code addRateData()} records real rates instead of reporting invalid
      * names.  Called once per router context from
      * {@code TunnelPoolManager}'s constructor.
-     *  <p>Units: every batch rate is an event count (value 1 per event), so a
-     *  rate of N means N events in the period.  {@code testBufferOffered} and
-     *  {@code testBufferRejected} count candidates, {@code testBufferDropped}
-     *  counts candidates evicted or discarded as stale, {@code
-     *  testBatchDenied} counts drain passes refused by a gate, and {@code
-     *  testBatchDispatched} counts rounds actually sent.
+     * <p>Units: every batch rate is an event count (value 1 per event), so a
+     * rate of N means N events in the period.  {@code testBufferOffered} and
+     * {@code testBufferRejected} count candidates, {@code testBufferDropped}
+     * counts candidates evicted or discarded as stale, {@code
+     * testBatchDenied} counts drain passes refused by a gate, and {@code
+     * testBatchDispatched} counts rounds actually sent.
      *
      * @param stats the context's stat manager, never null
      * @param periods the rate periods to record on, never null
@@ -1076,7 +1082,7 @@ public class TestJob extends JobImpl {
      *
      * @param partner the partner whose failure triggered this, may be null
      * @return true if the confirming round was scheduled, false if it could
-     * not be and the caller should charge the tunnel as before
+     *         not be and the caller should charge the tunnel as before
      * @since 0.9.71+
      */
     private boolean beginConfirmationRound(TunnelInfo partner) {
@@ -1096,11 +1102,11 @@ public class TestJob extends JobImpl {
     }
 
     /**
-     *  The partner the current round was actually routed through.
+     * The partner the current round was actually routed through.
      *
      * @return the reply tunnel for an inbound test, the outbound for an
      *         outbound test; null when none was selected
-     *  @since 0.9.71+
+     * @since 0.9.71+
      */
     private TunnelInfo currentPartner() {
         return _cfg.isInbound() ? _outTunnel : _replyTunnel;
@@ -1374,7 +1380,11 @@ public class TestJob extends JobImpl {
         return maxQueuedTests;
     }
 
-            /** This job's per-context runtime state. */
+            /**
+             * This job's per-context runtime state.
+             *
+             * @return the BatchState shared by all TestJobs of this context
+             */
     private BatchState state() {
         return batchState(getContext());
     }
@@ -1667,12 +1677,12 @@ public class TestJob extends JobImpl {
     }
 
     /**
-     *  Whether the tunnel belongs to a ping pool, which is short-lived and
-     *  does not need testing.  Ping pools are named "I2Ping" or "Ping*[n]".
+     * Whether the tunnel belongs to a ping pool, which is short-lived and
+     * does not need testing.  Ping pools are named "I2Ping" or "Ping*[n]".
      *
-     *  @param cfg the tunnel config, never null
-     *  @return true if the pool nickname identifies a ping pool
-     *  @since 0.9.71+
+     * @param cfg the tunnel config, never null
+     * @return true if the pool nickname identifies a ping pool
+     * @since 0.9.71+
      */
     static boolean isPingTunnel(PooledTunnelCreatorConfig cfg) {
         TunnelPool pool = cfg.getTunnelPool();
@@ -1683,20 +1693,20 @@ public class TestJob extends JobImpl {
     }
 
     /**
-     *  Whether the tunnel expires so soon it is not worth testing — it has
-     *  already been pruned for early expiry.
-     *  <p>A tunnel the pool explicitly admitted for a last-chance test is
-     *  exempt until that admission's deadline: the sweep keeps stale UNTESTED
-     *  tunnels with {@link TunnelPool#LAST_CHANCE_MIN_LIFE_MS} (60s) of life
-     *  precisely so they get one first test, while this gate would otherwise
-     *  drop anything inside the 120s early-expiry window the moment the test
-     *  reaches the front of the queue.
+     * Whether the tunnel expires so soon it is not worth testing — it has
+     * already been pruned for early expiry.
+     * <p>A tunnel the pool explicitly admitted for a last-chance test is
+     * exempt until that admission's deadline: the sweep keeps stale UNTESTED
+     * tunnels with {@link TunnelPool#LAST_CHANCE_MIN_LIFE_MS} (60s) of life
+     * precisely so they get one first test, while this gate would otherwise
+     * drop anything inside the 120s early-expiry window the moment the test
+     * reaches the front of the queue.
      *
-     *  @param cfg the tunnel config, never null
-     *  @param now current time in ms
-     *  @return true if the tunnel expires within the early-expiry window
-     *          and no last-chance admission covers it
-     *  @since 0.9.71+
+     * @param cfg the tunnel config, never null
+     * @param now current time in ms
+     * @return true if the tunnel expires within the early-expiry window
+     *         and no last-chance admission covers it
+     * @since 0.9.71+
      */
     static boolean isEarlyExpiry(PooledTunnelCreatorConfig cfg, long now) {
         if (cfg.isLastChanceAdmitted(now)) {
@@ -1706,13 +1716,13 @@ public class TestJob extends JobImpl {
     }
 
     /**
-     *  Whether a client pool has zero active tunnels, i.e. it is collapsed
-     *  and its test jobs must bypass the queue cap and per-pool budget.
-     *  Exploratory pools are never critical — they have no LeaseSet to feed.
+     * Whether a client pool has zero active tunnels, i.e. it is collapsed
+     * and its test jobs must bypass the queue cap and per-pool budget.
+     * Exploratory pools are never critical — they have no LeaseSet to feed.
      *
-     *  @param pool the pool, may be null (then not critical)
-     *  @return true if a non-exploratory pool with no active tunnels
-     *  @since 0.9.71+
+     * @param pool the pool, may be null (then not critical)
+     * @return true if a non-exploratory pool with no active tunnels
+     * @since 0.9.71+
      */
     static boolean isZeroActivePool(TunnelPool pool) {
         return pool != null && !pool.getSettings().isExploratory() &&
@@ -1736,53 +1746,53 @@ public class TestJob extends JobImpl {
     }
 
     /**
-     *  Whether a pool is running below its target active-tunnel count.
-     *  Deficit pools get expedited test treatment (see the expedited
-     *  request in {@link #shouldSchedule}) so their UNTESTED backlog drains
-     *  before the pool drops further behind — but unlike
-     *  {@link #isPoolCritical(int, int)} they do not bypass queue caps or
-     *  per-pool budgets, which stay reserved for collapsed pools.
+     * Whether a pool is running below its target active-tunnel count.
+     * Deficit pools get expedited test treatment (see the expedited
+     * request in {@link #shouldSchedule}) so their UNTESTED backlog drains
+     * before the pool drops further behind — but unlike
+     * {@link #isPoolCritical(int, int)} they do not bypass queue caps or
+     * per-pool budgets, which stay reserved for collapsed pools.
      *
-     *  @param activeCount current active tunnel count
-     *  @param target configured total quantity
-     *  @return true when the pool has fewer active tunnels than its target
-     *  @since 0.9.71+
+     * @param activeCount current active tunnel count
+     * @param target configured total quantity
+     * @return true when the pool has fewer active tunnels than its target
+     * @since 0.9.71+
      */
     static boolean isPoolDeficit(int activeCount, int target) {
         return activeCount < target;
     }
 
     /**
-     *  Test-job capacity derived from the queue state: at least 12 jobs (or
-     *  3 per pool), scaled up by active runners, but never above the hard
-     *  queued limit.
+     * Test-job capacity derived from the queue state: at least 12 jobs (or
+     * 3 per pool), scaled up by active runners, but never above the hard
+     * queued limit.
      *
-     *  @param maxQueuedTests hard cap from {@link #maxQueuedTests}
-     *  @param activeRunners current job-queue runner count
-     *  @param numPools number of tunnel pools
-     *  @return the capacity in test jobs
-     *  @since 0.9.71+
+     * @param maxQueuedTests hard cap from {@link #maxQueuedTests}
+     * @param activeRunners current job-queue runner count
+     * @param numPools number of tunnel pools
+     * @return the capacity in test jobs
+     * @since 0.9.71+
      */
     static int computeMaxTestJobs(int maxQueuedTests, int activeRunners, int numPools) {
         return Math.min(maxQueuedTests, Math.max(activeRunners, Math.max(numPools * 3, 12)));
     }
 
     /**
-     *  Whether the job queue is too backed up to accept another test job.
-     *  Non-critical pools are deferred when the ready queue outruns the
-     *  runners, the max lag exceeds the (possibly expedited) limit, or the
-     *  current test job count meets the (possibly expedited) job limit.
-     *  Critical pools always get through.
+     * Whether the job queue is too backed up to accept another test job.
+     * Non-critical pools are deferred when the ready queue outruns the
+     * runners, the max lag exceeds the (possibly expedited) limit, or the
+     * current test job count meets the (possibly expedited) job limit.
+     * Critical pools always get through.
      *
-     *  @param critical whether the pool is critical (bypasses the gate)
-     *  @param readyCount jobs waiting in the queue
-     *  @param activeRunners jobs being processed
-     *  @param maxLag measured queue lag in ms
-     *  @param expeditedLagLimit lag threshold (doubled for expedited)
-     *  @param currentTestJobs running test job count
-     *  @param expeditedJobLimit job threshold (1.5x for expedited)
-     *  @return true if scheduling should be deferred
-     *  @since 0.9.71+
+     * @param critical whether the pool is critical (bypasses the gate)
+     * @param readyCount jobs waiting in the queue
+     * @param activeRunners jobs being processed
+     * @param maxLag measured queue lag in ms
+     * @param expeditedLagLimit lag threshold (doubled for expedited)
+     * @param currentTestJobs running test job count
+     * @param expeditedJobLimit job threshold (1.5x for expedited)
+     * @return true if scheduling should be deferred
+     * @since 0.9.71+
      */
     static boolean isTestQueueOverloaded(boolean critical, int readyCount, int activeRunners,
                                          long maxLag, long expeditedLagLimit,
@@ -1792,22 +1802,20 @@ public class TestJob extends JobImpl {
                              currentTestJobs >= expeditedJobLimit);
     }
 
-    // ---------------- Batched first-test dispatch ----------------
-    //
-    //  First tests (fresh builds, stranded sweeps, last-chance offers) flow
-    //  through a bounded buffer drained by a single PumpJob instead of one
-    //  queue entry per tunnel.  The pump claims candidates under the
-    //  in-flight gates and runs their TestJob directly, so draining a large
-    //  UNTESTED backlog costs one ready-queue slot per batch — paced by
-    //  queue health — instead of flooding the queue and having the queued
-    //  cap drop (and lose) the excess.
-
     /**
-     * Maximum first-test candidates held in the batch buffer.  When full the
-     * oldest is evicted, which simply returns that tunnel to the unbuffered
-     * state: recovery depends on the pool sweep re-offering it, so the buffer
-     * is best-effort, not lossless. An eviction delays a test rather than
-     * discarding it, but only for as long as the sweep runs again.
+     * Batched first-test dispatch. First tests, i.e. fresh builds, stranded
+     * sweeps and last-chance offers, flow through a bounded buffer drained by
+     * a single PumpJob instead of one queue entry per tunnel. The pump claims
+     * candidates under the in-flight gates and runs their TestJob directly,
+     * so draining a large UNTESTED backlog costs one ready-queue slot per
+     * batch - paced by queue health - instead of flooding the queue and
+     * having the queued cap drop (and lose) the excess.
+     * <p>
+     * This is the maximum first-test candidates held in the batch buffer.
+     * When full the oldest is evicted, which simply returns that tunnel to the
+     * unbuffered state: recovery depends on the pool sweep re-offering it, so
+     * the buffer is best-effort, not lossless. An eviction delays a test rather
+     * than discarding it, but only for as long as the sweep runs again.
      * @since 0.9.71+
      */
     static final int MAX_BUFFERED_FIRST_TESTS = 128;
@@ -2222,17 +2230,17 @@ public class TestJob extends JobImpl {
     }
 
     /**
-     *  Whether a tunnel has never produced a latency reading, i.e. no test
-     *  has ever completed against it.  True for every UNTESTED tunnel, and
-     *  for tunnels promoted to GOOD by {@link TunnelPool}-side traffic proof
-     *  — those are untested in every way that matters: they have no
-     *  measurement, the console shows no latency, and no retest chain exists
-     *  for them.  Such tunnels are first-test candidates and must outrank
-     *  retests of already-measured tunnels.
+     * Whether a tunnel has never produced a latency reading, i.e. no test
+     * has ever completed against it.  True for every UNTESTED tunnel, and
+     * for tunnels promoted to GOOD by {@link TunnelPool}-side traffic proof
+     * — those are untested in every way that matters: they have no
+     * measurement, the console shows no latency, and no retest chain exists
+     * for them.  Such tunnels are first-test candidates and must outrank
+     * retests of already-measured tunnels.
      *
-     *  @param cfg the tunnel to inspect, may be null
-     *  @return true when no latency reading exists yet
-     *  @since 0.9.71+
+     * @param cfg the tunnel to inspect, may be null
+     * @return true when no latency reading exists yet
+     * @since 0.9.71+
      */
     static boolean firstReadingPending(TunnelInfo cfg) {
         return cfg != null && cfg.getLastLatency() < 0;
@@ -2571,9 +2579,9 @@ static List<PendingTest> prioritizeBatch(List<PendingTest> scan, long now) {
        * peer array, the candidate ranks untiered rather than being dropped from
        * the batch.
        *
-       * @param p the candidate
+       * @param p the pending test whose first hop determines the rank
        * @param ctx router context, may be null
-       * @return the rank
+       * @return the tier rank 0, 1 or 2; 2 when the tier cannot be read
        * @since 0.9.71+
        */
       static int tierRank(PendingTest p, RouterContext ctx) {
@@ -2765,13 +2773,13 @@ static List<PendingTest> prioritizeBatch(List<PendingTest> scan, long now) {
     }
 
     /**
-     *  Why a round was refused its in-flight permits.  The two gates bind for
-     *  very different reasons and need different tuning: {@link #GLOBAL_CAP}
-     *  means the router as a whole is saturated, while {@link #POOL_BUDGET}
-     *  means one pool is oversubscribed relative to its own coverage budget.
-     *  Reporting only "refused" (as this code once did) made the two
-     *  indistinguishable in the log, so the wrong knob would be tuned.
-     *  @since 0.9.71+
+     * Why a round was refused its in-flight permits.  The two gates bind for
+     * very different reasons and need different tuning: {@link #GLOBAL_CAP}
+     * means the router as a whole is saturated, while {@link #POOL_BUDGET}
+     * means one pool is oversubscribed relative to its own coverage budget.
+     * Reporting only "refused" (as this code once did) made the two
+     * indistinguishable in the log, so the wrong knob would be tuned.
+     * @since 0.9.71+
      */
     enum InFlightRefusal {
                         /** Permits were taken; the round may dispatch. */
@@ -2785,17 +2793,17 @@ static List<PendingTest> prioritizeBatch(List<PendingTest> scan, long now) {
     }
 
     /**
-     *  Take the global and per-pool in-flight permits for a round, atomically,
-     *  reporting which gate refused it.  See {@link #tryReserveInFlight} for
-     *  the reservation rules; this is the same logic with the reason retained.
+     * Take the global and per-pool in-flight permits for a round, atomically,
+     * reporting which gate refused it.  See {@link #tryReserveInFlight} for
+     * the reservation rules; this is the same logic with the reason retained.
      *
-     *  @param state the context's batch state
-     *  @param maxConcurrent global in-flight cap
-     *  @param poolId pool identity captured on the token, or null to skip the per-pool gate
-     *  @param poolBudget per-pool budget; negative means unbounded
-     *  @param token the round being armed
-     *  @return the gate that refused the round, or {@link InFlightRefusal#NONE}
-     *  @since 0.9.71+
+     * @param state the context's batch state
+     * @param maxConcurrent global in-flight cap
+     * @param poolId pool identity captured on the token, or null to skip the per-pool gate
+     * @param poolBudget per-pool budget; negative means unbounded
+     * @param token the round being armed
+     * @return the gate that refused the round, or {@link InFlightRefusal#NONE}
+     * @since 0.9.71+
      */
     static InFlightRefusal reserveInFlightWithReason(BatchState state, int maxConcurrent,
                                                     String poolId, int poolBudget, RoundToken token) {
@@ -2877,44 +2885,44 @@ static List<PendingTest> prioritizeBatch(List<PendingTest> scan, long now) {
     }
 
     /**
-     *  Arm {@code next} as the active round and return the permits held by the
-     *  round it supersedes.
-     *  <p>This closes a permit leak. Every release path — the reply handler,
-     *  the timeout handler, {@link #abandonRound}, and
-     *  {@link #cancelForReset} — reaches the permits only after
-     *  {@link #claimRound}, which requires the token to still be the active
-     *  round. So a round that is still holding permits when a new round arms
-     *  becomes unreachable: nothing can ever claim it, and its permits are
-     *  never returned. The gauge then drifts upward by one per occurrence until
-     *  it sits at {@code maxConcurrent}, at which point every subsequent test
-     *  is refused with {@link InFlightRefusal#GLOBAL_CAP} and no test dispatches
-     *  at all while tunnel builds continue normally.
-     *  <p>Swapping and releasing together makes the accounting correct by
-     *  construction rather than by auditing each caller. The release is a no-op
-     *  when the prior round already returned its own permit (a CAS on the
-     *  token's held flag guards it), so this is safe on every path, including
-     *  the common one where the prior round completed normally.
+     * Arm {@code next} as the active round and return the permits held by the
+     * round it supersedes.
+     * <p>This closes a permit leak. Every release path — the reply handler,
+     * the timeout handler, {@link #abandonRound}, and
+     * {@link #cancelForReset} — reaches the permits only after
+     * {@link #claimRound}, which requires the token to still be the active
+     * round. So a round that is still holding permits when a new round arms
+     * becomes unreachable: nothing can ever claim it, and its permits are
+     * never returned. The gauge then drifts upward by one per occurrence until
+     * it sits at {@code maxConcurrent}, at which point every subsequent test
+     * is refused with {@link InFlightRefusal#GLOBAL_CAP} and no test dispatches
+     * at all while tunnel builds continue normally.
+     * <p>Swapping and releasing together makes the accounting correct by
+     * construction rather than by auditing each caller. The release is a no-op
+     * when the prior round already returned its own permit (a CAS on the
+     * token's held flag guards it), so this is safe on every path, including
+     * the common one where the prior round completed normally.
      *
-     *  @param state the context's batch state
-     *  @param active the active-round slot for this job
-     *  @param next the round to arm
-     *  @since 0.9.71+
+     * @param state the context's batch state
+     * @param active the active-round slot for this job
+     * @param next the round to arm
+     * @since 0.9.71+
      */
     static void armRound(BatchState state, AtomicReference<RoundToken> active, RoundToken next) {
         releaseTokenPermits(state, active.getAndSet(next));
     }
 
     /**
-     *  Reserve in-flight permits and arm the round, reporting which gate
-     *  refused it so the caller can log a specific reason.  Split from
-     *  {@link #reserveInFlight} because the two gates bind for different
-     *  reasons: a global cap means router-wide saturation, a pool budget means
-     *  one pool is oversubscribed.  A single "budget exhausted" line for both
-     *  made the log useless for deciding which knob to tune.
+     * Reserve in-flight permits and arm the round, reporting which gate
+     * refused it so the caller can log a specific reason.  Split from
+     * {@link #reserveInFlight} because the two gates bind for different
+     * reasons: a global cap means router-wide saturation, a pool budget means
+     * one pool is oversubscribed.  A single "budget exhausted" line for both
+     * made the log useless for deciding which knob to tune.
      *
-     *  @param token the round being armed
-     *  @return the gate that refused the round, or {@link InFlightRefusal#NONE}
-     *  @since 0.9.71+
+     * @param token the round being armed
+     * @return the gate that refused the round, or {@link InFlightRefusal#NONE}
+     * @since 0.9.71+
      */
     InFlightRefusal reserveInFlightForToken(RoundToken token) {
         final RouterContext ctx = getContext();
@@ -3538,12 +3546,12 @@ static List<PendingTest> prioritizeBatch(List<PendingTest> scan, long now) {
     }
 
     /**
-     *  Short log fragment naming which gate refused a round.  Pure so the
-     *  wording is testable and the two cases cannot drift back together.
+     * Short log fragment naming which gate refused a round.  Pure so the
+     * wording is testable and the two cases cannot drift back together.
      *
-     *  @param refusal the gate that refused
-     *  @return a log fragment, never null
-     *  @since 0.9.71+
+     * @param refusal the gate that refused
+     * @return a log fragment, never null
+     * @since 0.9.71+
      */
     static String refusalReasonText(InFlightRefusal refusal) {
         switch (refusal) {
@@ -3555,8 +3563,8 @@ static List<PendingTest> prioritizeBatch(List<PendingTest> scan, long now) {
     }
 
     /**
-     *  Give up a round that was armed but never made it onto the wire: mark it
-     *  claimed so any straggler callback is a no-op, then return its permits.
+     * Give up a round that was armed but never made it onto the wire: mark it
+     * claimed so any straggler callback is a no-op, then return its permits.
      *
      * @param token the round being abandoned
      * @since 0.9.71+
@@ -3568,11 +3576,11 @@ static List<PendingTest> prioritizeBatch(List<PendingTest> scan, long now) {
     }
 
       /**
-       *  Update the rolling average test duration and adapt the timeout multiplier.
-       *  Called after each test completion (success or failure).
+       * Update the rolling average test duration and adapt the timeout multiplier.
+       * Called after each test completion (success or failure).
        *
-       *  @param durationMs the test duration in ms
-       *  @since 0.9.71+
+       * @param durationMs the test duration in ms
+       * @since 0.9.71+
        */
       private void updateTestDuration(long durationMs) {
           _pool.updateAdaptiveTestDuration(durationMs);
@@ -3580,15 +3588,15 @@ static List<PendingTest> prioritizeBatch(List<PendingTest> scan, long now) {
 
 
       /**
-       *  Get the current test timeout, adapted to the rolling average duration.
-       *  <p>The adaptive state lives on the pool, not on this job: a
-       *  {@code TestJob} is constructed per build-request batch, so per-instance
-       *  state resets to 1.0 before it can ever accumulate and the adaptation
-       *  never engages.
+       * Get the current test timeout, adapted to the rolling average duration.
+       * <p>The adaptive state lives on the pool, not on this job: a
+       * {@code TestJob} is constructed per build-request batch, so per-instance
+       * state resets to 1.0 before it can ever accumulate and the adaptation
+       * never engages.
        *
-       *  @param baseTimeout the base timeout in ms
-       *  @return the adapted timeout in ms
-       *  @since 0.9.71+
+       * @param baseTimeout the base timeout in ms
+       * @return the adapted timeout in ms
+       * @since 0.9.71+
        */
       long getAdaptiveTimeout(long baseTimeout) {
           return _pool.getAdaptiveTestTimeout(baseTimeout);
@@ -3688,11 +3696,11 @@ static List<PendingTest> prioritizeBatch(List<PendingTest> scan, long now) {
     }
 
     /**
-     *  Whether tunnel build success has fallen below the attack threshold.
-     *  @return true when build success is below the attack threshold,
-     *          indicating the router is struggling to find suitable peers.
-     *          In this state, the test cycle should run more slowly and
-     *          tolerate more failures to avoid wasting pool build capacity.
+     * Whether tunnel build success has fallen below the attack threshold.
+     * @return true when build success is below the attack threshold,
+     *         indicating the router is struggling to find suitable peers.
+     *         In this state, the test cycle should run more slowly and
+     *         tolerate more failures to avoid wasting pool build capacity.
      */
     private boolean isDegraded() {
         try {
@@ -3703,15 +3711,15 @@ static List<PendingTest> prioritizeBatch(List<PendingTest> scan, long now) {
     }
 
     /**
-     *  Apply the minimum retest gap to a computed delay.
-     *  <p>Pure, so the floor and its exemption are testable without a router.
+     * Apply the minimum retest gap to a computed delay.
+     * <p>Pure, so the floor and its exemption are testable without a router.
      *
-     *  @param delayMs   the delay the success-rate scaling produced
-     *  @param minGapMs  the floor; non-positive disables it
-     *  @param expedited true when the tunnel is marked expedited and must not be
-     *                   held back
-     *  @return the delay to actually use, in ms
-     *  @since 0.9.71+
+     * @param delayMs   the delay the success-rate scaling produced
+     * @param minGapMs  the floor; non-positive disables it
+     * @param expedited true when the tunnel is marked expedited and must not be
+     *                  held back
+     * @return the delay to actually use, in ms
+     * @since 0.9.71+
      */
     static int applyMinRetestGap(int delayMs, long minGapMs, boolean expedited) {
         if (expedited || minGapMs <= 0) {return delayMs;}
@@ -3830,27 +3838,27 @@ static List<PendingTest> prioritizeBatch(List<PendingTest> scan, long now) {
     private volatile int _successCount = 0;
 
     /**
-     *  Base removal bar for data-carrying and client/exploratory tunnels.
-     *  Under degraded mode (low build success), allow more consecutive failures
-     *  before removal so pool churn does not waste scarce build capacity.
+     * Base removal bar for data-carrying and client/exploratory tunnels.
+     * Under degraded mode (low build success), allow more consecutive failures
+     * before removal so pool churn does not waste scarce build capacity.
      * @param degraded true while the pool's build success is low, raising the base bar from 3 to 5
-     *  @return the base max consecutive failures before removal
-     *  @since 0.9.71+
+     * @return the base max consecutive failures before removal
+     * @since 0.9.71+
      */
     static int baseRemovalThreshold(boolean degraded) {
         return degraded ? 5 : 3;
     }
 
     /**
-     *  Raise the removal bar when the pool is nearly empty so a burst of
-     *  concurrent test failures cannot cascade the last tunnels out before
-     *  replacements finish building.  Thin pools (remaining ≤ 2) get +2
-     *  extra failures of grace.
+     * Raise the removal bar when the pool is nearly empty so a burst of
+     * concurrent test failures cannot cascade the last tunnels out before
+     * replacements finish building.  Thin pools (remaining ≤ 2) get +2
+     * extra failures of grace.
      *
-     *  @param base the base threshold from {@link #baseRemovalThreshold}
-     *  @param remainingTunnels tunnels still in the pool after this removal
-     *  @return the effective max consecutive failures before removal
-     *  @since 0.9.71+
+     * @param base the base threshold from {@link #baseRemovalThreshold}
+     * @param remainingTunnels tunnels still in the pool after this removal
+     * @return the effective max consecutive failures before removal
+     * @since 0.9.71+
      */
     static int removalThreshold(int base, int remainingTunnels) {
         if (remainingTunnels <= 2) {
@@ -3860,41 +3868,41 @@ static List<PendingTest> prioritizeBatch(List<PendingTest> scan, long now) {
     }
 
     /**
-     *  Whether an ASAP retest should be deferred because the pool is thin
-     *  and the tunnel already has failures.  Scheduling ASAP retries for a
-     *  failing tunnel while the pool has ≤ 2 remaining tunnels competes
-     *  with replacement builds and risks cascading the last survivors out.
+     * Whether an ASAP retest should be deferred because the pool is thin
+     * and the tunnel already has failures.  Scheduling ASAP retries for a
+     * failing tunnel while the pool has ≤ 2 remaining tunnels competes
+     * with replacement builds and risks cascading the last survivors out.
      *
-     *  @param remainingTunnels tunnels still in the pool
-     *  @param failures consecutive test failures for this tunnel
-     *  @return true when the retest should use the normal (non-ASAP) delay
-     *  @since 0.9.71+
+     * @param remainingTunnels tunnels still in the pool
+     * @param failures consecutive test failures for this tunnel
+     * @return true when the retest should use the normal (non-ASAP) delay
+     * @since 0.9.71+
      */
     static boolean shouldDeferFailingRetest(int remainingTunnels, int failures) {
         return remainingTunnels <= 2 && failures > 0;
     }
 
     /**
-     *  Whether a retest of a GOOD tunnel carrying recent real traffic must
-     *  wait for the traffic to stop.  The traffic defer exists so busy
-     *  tunnels don't burn test slots or risk load-induced false negatives,
-     *  but deferring unconditionally starves a continuously-busy GOOD tunnel
-     *  of any test at all — it keeps no fresh latency sample, so the console
-     *  never shows a latency for it.  So the defer is load-aware: it holds
-     *  only while test slots are actually contended (in-flight at or above
-     *  {@code maxConcurrent / ACTIVE_GOOD_EBB_DIVISOR}); during an ebb the
-     *  retest runs now and refreshes the latency sample.  Untested tunnels
-     *  keep strict priority — they are never subject to this defer, and the
-     *  ebb line leaves most of the in-flight cap free for first tests.
+     * Whether a retest of a GOOD tunnel carrying recent real traffic must
+     * wait for the traffic to stop.  The traffic defer exists so busy
+     * tunnels don't burn test slots or risk load-induced false negatives,
+     * but deferring unconditionally starves a continuously-busy GOOD tunnel
+     * of any test at all — it keeps no fresh latency sample, so the console
+     * never shows a latency for it.  So the defer is load-aware: it holds
+     * only while test slots are actually contended (in-flight at or above
+     * {@code maxConcurrent / ACTIVE_GOOD_EBB_DIVISOR}); during an ebb the
+     * retest runs now and refreshes the latency sample.  Untested tunnels
+     * keep strict priority — they are never subject to this defer, and the
+     * ebb line leaves most of the in-flight cap free for first tests.
      *
-     *  @param lastTraffic ms timestamp of the tunnel's last real traffic,
-     *                     or &lt;= 0 when it has carried none
-     *  @param now current time in ms
-     *  @param status the tunnel's current test status
-     *  @param inFlight tests currently dispatched to the network (all pools)
-     *  @param maxConcurrent configured in-flight cap
-     *  @return true when the retest should wait for the traffic to ebb
-     *  @since 0.9.71+
+     * @param lastTraffic ms timestamp of the tunnel's last real traffic,
+     *                    or &lt;= 0 when it has carried none
+     * @param now current time in ms
+     * @param status the tunnel's current test status
+     * @param inFlight tests currently dispatched to the network (all pools)
+     * @param maxConcurrent configured in-flight cap
+     * @return true when the retest should wait for the traffic to ebb
+     * @since 0.9.71+
      */
     static boolean shouldDeferActiveGoodTunnel(long lastTraffic, long now, TunnelTestStatus status,
                                                int inFlight, int maxConcurrent) {
@@ -3905,22 +3913,22 @@ static List<PendingTest> prioritizeBatch(List<PendingTest> scan, long now) {
     }
 
     /**
-     *  Delay for a retest that was held back because its tunnel is busy:
-     *  the time left in the traffic window, clamped to
-     *  [{@link #EBB_RETRY_FLOOR_MS}, {@link #ACTIVE_GOOD_EBB_RETRY_MS}], or
-     *  the normal retest delay when there is nothing left to wait for.
-     *  <p>Unclamped, the remaining window is up to
-     *  {@link #TRAFFIC_DEFER_MS}, which is long enough for the tunnel to
-     *  expire out from under the retest chain — scheduleRetest() refuses a
-     *  delay it cannot fit before expiration and drops the test entirely.
-     *  Clamping turns the wait into a short poll: come back while the
-     *  tunnel is still alive, re-check contention, and run as soon as it
-     *  has ebbed.
+     * Delay for a retest that was held back because its tunnel is busy:
+     * the time left in the traffic window, clamped to
+     * [{@link #EBB_RETRY_FLOOR_MS}, {@link #ACTIVE_GOOD_EBB_RETRY_MS}], or
+     * the normal retest delay when there is nothing left to wait for.
+     * <p>Unclamped, the remaining window is up to
+     * {@link #TRAFFIC_DEFER_MS}, which is long enough for the tunnel to
+     * expire out from under the retest chain — scheduleRetest() refuses a
+     * delay it cannot fit before expiration and drops the test entirely.
+     * Clamping turns the wait into a short poll: come back while the
+     * tunnel is still alive, re-check contention, and run as soon as it
+     * has ebbed.
      *
-     *  @param remainingDeferMs ms left in the traffic window; &lt;= 0 when none
-     *  @param normalDelayMs the delay to use when nothing is being waited out
-     *  @return the delay in ms, never negative
-     *  @since 0.9.71+
+     * @param remainingDeferMs ms left in the traffic window; &lt;= 0 when none
+     * @param normalDelayMs the delay to use when nothing is being waited out
+     * @return the delay in ms, never negative
+     * @since 0.9.71+
      */
     static long activeGoodDeferDelay(long remainingDeferMs, long normalDelayMs) {
         if (remainingDeferMs <= 0) {
@@ -3951,7 +3959,7 @@ static List<PendingTest> prioritizeBatch(List<PendingTest> scan, long now) {
      *
      * @param partner the tunnel the round was routed through, may be null
      * @param partnerFallback true when the partner came from the exploratory
-     * pool because the paired pool could not supply one
+     *                        pool because the paired pool could not supply one
      * @return true to defer the round rather than count the failure
      * @since 0.9.71+
      */
@@ -3972,17 +3980,17 @@ static List<PendingTest> prioritizeBatch(List<PendingTest> scan, long now) {
     }
 
     /**
-     *  Defer a round because the same reply partner was already blamed for a
-     *  recent failure, and kick the reply pool so the side that is actually
-     *  degraded is the side that rebuilds.  Bounded by
-     *  {@link #MAX_REPLY_PARTNER_DEFERRALS}: once spent the caller falls
-     *  through and charges the tunnel, so a reply path that never recovers
-     *  cannot shield a dead tunnel indefinitely.
-     *  <p>Split out of {@link #testFailed}, which is already well past the
-     *  complexity budget, so this does not add to it.
+     * Defer a round because the same reply partner was already blamed for a
+     * recent failure, and kick the reply pool so the side that is actually
+     * degraded is the side that rebuilds.  Bounded by
+     * {@link #MAX_REPLY_PARTNER_DEFERRALS}: once spent the caller falls
+     * through and charges the tunnel, so a reply path that never recovers
+     * cannot shield a dead tunnel indefinitely.
+     * <p>Split out of {@link #testFailed}, which is already well past the
+     * complexity budget, so this does not add to it.
      *
      * @return true when the round was deferred
-     *  @since 0.9.71+
+     * @since 0.9.71+
      */
     private boolean deferForImplicatedReplyPartner() {
         if (_replyPartnerDeferrals >= MAX_REPLY_PARTNER_DEFERRALS) {return false;}
@@ -4338,7 +4346,7 @@ static List<PendingTest> prioritizeBatch(List<PendingTest> scan, long now) {
      * the period itself, so a short window never strands a selector.
      *
      * @param successTimeAvgMs average {@code tunnel.testSuccessTime} over the last minute,
-     * NaN if never measured
+     *                         NaN if never measured
      * @param sendProcessingMs average {@code transport.sendProcessingTime}, NaN if unknown
      * @param outLen outbound tunnel length, &lt;= 0 if no outbound tunnel
      * @param replyLen reply tunnel length, &lt;= 0 if no reply tunnel
@@ -4420,22 +4428,22 @@ static List<PendingTest> prioritizeBatch(List<PendingTest> scan, long now) {
     private boolean scheduleRetest(boolean asap) {return scheduleRetest(asap, false);}
 
     /**
-     *  Handle a test round whose paired pool had no tunnel to pair with.
+     * Handle a test round whose paired pool had no tunnel to pair with.
      * <p>
-     *  A partner shortage is a property of the pools, not of this tunnel, so
-     *  the round defers instead of failing: on a server pool a failed test
-     *  would drop a healthy inbound tunnel out of the published LeaseSet.
-     *  Recovery is requested by kicking the paired pool to rebuild, but the
-     *  kick is bounded by {@link #MAX_PAIRED_POOL_KICKS} for the life of this
-     *  job — a paired pool that cannot recover must not be rebuilt once per
-     *  deferral window against a tunnel that has no say in the matter.  Once
-     *  the kick budget is spent the round keeps deferring at the normal
-     *  retest cadence, but only for {@link #MAX_POST_KICK_DEFERRALS} more
-     *  rounds: a tunnel whose paired pool is permanently gone must not sit in
-     *  the pool forever inflating {@code untestedCount} and blocking new
-     *  builds via the {@code addTunnel()} cap, so the post-kick deferral
-     *  budget is the termination condition and the tunnel is failed when it
-     *  is exhausted.
+     * A partner shortage is a property of the pools, not of this tunnel, so
+     * the round defers instead of failing: on a server pool a failed test
+     * would drop a healthy inbound tunnel out of the published LeaseSet.
+     * Recovery is requested by kicking the paired pool to rebuild, but the
+     * kick is bounded by {@link #MAX_PAIRED_POOL_KICKS} for the life of this
+     * job — a paired pool that cannot recover must not be rebuilt once per
+     * deferral window against a tunnel that has no say in the matter.  Once
+     * the kick budget is spent the round keeps deferring at the normal
+     * retest cadence, but only for {@link #MAX_POST_KICK_DEFERRALS} more
+     * rounds: a tunnel whose paired pool is permanently gone must not sit in
+     * the pool forever inflating {@code untestedCount} and blocking new
+     * builds via the {@code addTunnel()} cap, so the post-kick deferral
+     * budget is the termination condition and the tunnel is failed when it
+     * is exhausted.
      *
      * @param paired pool that could not supply a partner, may be null
      * @param direction "inbound" or "outbound", for the log line
@@ -4493,16 +4501,16 @@ static List<PendingTest> prioritizeBatch(List<PendingTest> scan, long now) {
     }
 
     /**
-     *  Schedule a retest of this tunnel.
+     * Schedule a retest of this tunnel.
      *
-     *  @param asap expedite the retest (failing tunnels)
-     *  @param deferWhileActive when true, replace the delay with the bounded
-     *                          ebb retry from {@link #activeGoodDeferDelay}, so the job comes
-     *                          back to re-check contention shortly instead of vanishing for
-     *                          the full traffic window — a long push here is what used to let
-     *                          the tunnel expire out from under the retest chain
-     *  @return true if the retest was scheduled
-     *  @since 0.9.71+
+     * @param asap expedite the retest (failing tunnels)
+     * @param deferWhileActive when true, replace the delay with the bounded
+     *                         ebb retry from {@link #activeGoodDeferDelay}, so the job comes
+     *                         back to re-check contention shortly instead of vanishing for
+     *                         the full traffic window — a long push here is what used to let
+     *                         the tunnel expire out from under the retest chain
+     * @return true if the retest was scheduled
+     * @since 0.9.71+
      */
     boolean scheduleRetest(boolean asap, boolean deferWhileActive) {
         if (_pool == null || !_pool.isAlive()) return false;
@@ -4677,6 +4685,8 @@ static List<PendingTest> prioritizeBatch(List<PendingTest> scan, long now) {
 
         /**
          * Store the outbound message sent to the gateway for cleanup.
+         *
+         * @param m the build or test message awaiting a reply
          */
         public void setSentMessage(OutNetMessage m) { _sentMessage = m; }
 

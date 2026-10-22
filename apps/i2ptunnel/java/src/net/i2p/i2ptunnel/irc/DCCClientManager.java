@@ -104,7 +104,10 @@ public class DCCClientManager extends EventReceiver {
     /**
      * Register an incoming DCC session, returning its id.
      *
+     * @param b32 the base32 destination address of the peer offering the session
+     * @param port the remote DCC port
      * @param localPort bind to port or 0; if nonzero it will be the rv
+     * @return the new session id, or -1 if the address is invalid
      */
     private int newIncoming(String b32, int port, int localPort) {
         b32 = b32.toLowerCase(Locale.US);

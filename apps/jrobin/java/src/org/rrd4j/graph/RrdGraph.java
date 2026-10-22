@@ -87,8 +87,10 @@ public class RrdGraph implements RrdGraphConstants {
     }
     /**
      * Generate image worker
+     *
+     * @param gdef the graph definition the worker renders
+     * @return the image worker for the definition
      */
-
     private static ImageWorker generateImageWorker(RrdGraphDef gdef) {
         return BufferedImageWorker.getBuilder().setGdef(gdef).build();
     }

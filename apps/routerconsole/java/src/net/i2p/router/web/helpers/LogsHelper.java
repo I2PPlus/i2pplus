@@ -33,8 +33,8 @@ import net.i2p.util.UIMessages;
 public class LogsHelper extends HelperBase {
 
     /**
-     *  Constructor, used by the console when it builds this bean. The rewrite
-     *  tables below are static, so a bare instance needs no initialization.
+     * Constructor, used by the console when it builds this bean. The rewrite
+     * tables below are static, so a bare instance needs no initialization.
      */
     public LogsHelper() {}
 
@@ -501,7 +501,12 @@ public class LogsHelper extends HelperBase {
         return msg;
     }
 
-    /** Formats in forward order. */
+    /**
+     * Formats in forward order.
+     *
+     * @param msgs the captured log messages, rendered newest first
+     * @return the HTML table-cell fragment, or a "no log messages" notice when the list is empty
+     */
     private String formatMessages(List<String> msgs) {
         if (msgs.isEmpty()) {return "</td></tr><tr><td><p class=nologs><i>" + _t("No log messages") + "</i></p>";}
         boolean colorize = _context.getBooleanPropertyDefaultTrue("routerconsole.logs.color");
@@ -595,6 +600,7 @@ public class LogsHelper extends HelperBase {
      * so don't make it too big.
      * Warning - converts \r\n to \n.
      *
+     * @param f the file to read, -1 is returned if it does not exist
      * @param utf8 true for utf-8, false for system locale
      * @param maxNumLines max number of lines (greater than zero)
      * @param skipLines number of lines to skip, or zero
@@ -641,6 +647,9 @@ public class LogsHelper extends HelperBase {
 
     /**
      * Translate a string from the core bundle.
+     *
+     * @param s the string to translate
+     * @return the translated string
      * @since 0.9.45
      */
     private String _c(String s) {
@@ -657,6 +666,10 @@ public class LogsHelper extends HelperBase {
 
     /**
      * Compare two log lines by timestamp (first space-delimited token) then content.
+     *
+     * @param a the first log line to compare
+     * @param b the second log line to compare
+     * @return negative if a sorts before b, zero for equal, positive if a sorts after
      * @since 0.9.70+
      */
     private static int compareLogLines(String a, String b) {

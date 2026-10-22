@@ -300,7 +300,11 @@ public class Rate {
         return now - coalesceDueMs(lastCoalesce, period) >= period;
     }
 
-    /** Add a sample to the retained ring, evicting the oldest when full. */
+    /**
+     * Add a sample to the retained ring, evicting the oldest when full.
+     *
+     * @param sample the coalesced sample to keep, replacing the oldest once the ring is full
+     */
     private void retain(CoalescedSample sample) {
         _recentSamples[_recentNext] = sample;
         _recentNext = (_recentNext + 1) % RECENT_SAMPLE_RING;

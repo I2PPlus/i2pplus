@@ -72,10 +72,10 @@ public class ConfigLoggingHelper extends HelperBase {
     }
 
     /**
-     *  Whether log compression is enabled.
+     * Whether log compression is enabled.
      *
-     *  @return the CHECKED constant if compression is enabled, empty string otherwise
-     *  @since 0.9.57
+     * @return the CHECKED constant if compression is enabled, empty string otherwise
+     * @since 0.9.57
      */
     public String getLogCompress() {
         return _mgr.shouldGzip() ? CHECKED : "";
@@ -141,11 +141,11 @@ public class ConfigLoggingHelper extends HelperBase {
     }
 
     /**
-     *  All the classes the log manager knows about, except ones that
-     *  already have overrides.
+     * All the classes the log manager knows about, except ones that
+     * already have overrides.
      *
-     *  @return the HTML string for the new class selection box
-     *  @since 0.8.1
+     * @return the HTML string for the new class selection box
+     * @since 0.8.1
      */
     public String getNewClassBox() {
         List<Log> logs = _mgr.getLogs();
@@ -212,6 +212,9 @@ public class ConfigLoggingHelper extends HelperBase {
 
     /**
      * Translate a string from the core bundle.
+     *
+     * @param s the translation key
+     * @return the translated string
      * @since 0.9.45
      */
     private String _c(String s) {

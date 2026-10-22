@@ -184,6 +184,8 @@ class ClientMessageEventListener implements I2CPMessageReader.I2CPMessageEventLi
      * Defaults in GetDateMessage options are NOT honored.
      * Defaults are not serialized out-of-JVM, and the router does not recognize defaults in-JVM.
      * Client side must promote defaults to the primary map.
+     *
+     * @param message the client's date request carrying its version and options
      */
     private void handleGetDate(GetDateMessage message) {
         // sent by clients >= 0.8.7
@@ -202,6 +204,8 @@ class ClientMessageEventListener implements I2CPMessageReader.I2CPMessageEventLi
     /**
      * Do not allow a client to set the router's clock.
      * As of 0.8.7 this handler deliberately does nothing.
+     *
+     * @param message the client's date request, ignored
      */
     private void handleSetDate(SetDateMessage message) {
         // intentionally empty - do not allow clients to set the router clock
@@ -216,6 +220,8 @@ class ClientMessageEventListener implements I2CPMessageReader.I2CPMessageEventLi
      * <p>
      * Defaults in {@link SessionConfig} options are, in general, NOT honored.
      * In-JVM client side must promote defaults to the primary map.
+     *
+     * @param message the session creation request carrying the SessionConfig
      */
     private void handleCreateSession(CreateSessionMessage message) {
         SessionConfig in = message.getSessionConfig();
@@ -416,6 +422,8 @@ class ClientMessageEventListener implements I2CPMessageReader.I2CPMessageEventLi
     /**
      * Handle a SendMessageMessage: give it a message Id, have the ClientManager distribute
      * it, and send the client an ACCEPTED message.
+     *
+     * @param message the outbound message with its session id and payload
      */
     private void handleSendMessage(SendMessageMessage message) {
         SessionId sid = message.getSessionId();
@@ -532,6 +540,8 @@ class ClientMessageEventListener implements I2CPMessageReader.I2CPMessageEventLi
      * <p>
      * A message naming no live session is dropped, as is a message for which no
      * payload is retained; see {@link #classifyReceiveBegin}.
+     *
+     * @param message the request naming the message id to deliver
      */
     private void handleReceiveBegin(ReceiveMessageBeginMessage message) {
         if (_runner.isDead()) {return;}
@@ -567,6 +577,8 @@ class ClientMessageEventListener implements I2CPMessageReader.I2CPMessageEventLi
      * The message must name a live session on this connection. The payload map
      * is per connection rather than per session, so a message id alone would
      * otherwise let a client release a payload it was never sent.
+     *
+     * @param message the confirmation naming the fully received message id
      */
     private void handleReceiveEnd(ReceiveMessageEndMessage message) {
         Payload payload = _runner.getPayload(new MessageId(message.getMessageId()));
@@ -842,6 +854,8 @@ class ClientMessageEventListener implements I2CPMessageReader.I2CPMessageEventLi
      * <p>
      * Defaults in SessionConfig options are, in general, NOT honored.
      * In-JVM client side must promote defaults to the primary map.
+     *
+     * @param message the reconfiguration request with the session id and new config
      */
     private void handleReconfigureSession(ReconfigureSessionMessage message) {
         SessionId id = message.getSessionId();
@@ -911,6 +925,7 @@ class ClientMessageEventListener implements I2CPMessageReader.I2CPMessageEventLi
     /**
      * Handle blinded-lookup info from a peer.
      *
+     * @param message the blinding data sent by the client
      * @since 0.9.43
      */
     private void handleBlindingInfo(BlindingInfoMessage message) {

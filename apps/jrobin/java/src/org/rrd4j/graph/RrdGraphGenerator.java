@@ -123,6 +123,8 @@ class RrdGraphGenerator {
     }
     /**
      * Save image
+     *
+     * @throws IOException if the image file cannot be written
      */
 
     private void saveImage() throws IOException {
@@ -153,6 +155,8 @@ class RrdGraphGenerator {
     }
     /**
      * Draw overlay
+     *
+     * @throws IOException if the overlay image file cannot be read
      */
 
     private void drawOverlay() throws IOException {
@@ -577,6 +581,8 @@ class RrdGraphGenerator {
     }
     /**
      * Draw background
+     *
+     * @throws IOException if a background or canvas image file cannot be read
      */
 
     private void drawBackground() throws IOException {
@@ -919,6 +925,8 @@ class RrdGraphGenerator {
     }
     /**
      * Fetch data
+     *
+     * @throws IOException if a source's RRD file cannot be read
      */
 
     private void fetchData() throws IOException {
@@ -941,6 +949,9 @@ class RrdGraphGenerator {
     }
     /**
      * Lazy check
+     *
+     * @return true if the existing image is fresh enough that the graph need not be redrawn
+     * @throws IOException if the image file's last-modified time cannot be read
      */
 
     private boolean lazyCheck() throws IOException {
@@ -1005,8 +1016,6 @@ class RrdGraphGenerator {
         }
     }
 
-    // helper methods
-
     /**
      * Return the font height
      *
@@ -1070,6 +1079,9 @@ class RrdGraphGenerator {
     }
     /**
      * Converts timestamps to pixel coordinates, duplicating each step.
+     *
+     * @param timestamps the sample timestamps to map, at least one
+     * @return the pixel x of each timestamp, each repeated so the polyline steps
      */
 
     private double[] xtr(long[] timestamps) {
@@ -1105,6 +1117,9 @@ class RrdGraphGenerator {
     }
     /**
      * Converts values to pixel coordinates, duplicating each step.
+     *
+     * @param values the sample values to map, NaN marks a gap, at least one
+     * @return the pixel y of each value, each repeated so the polyline steps
      */
 
     private double[] ytr(double[] values) {

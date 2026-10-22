@@ -154,9 +154,11 @@ public class I2PDefaultServlet extends DefaultServlet {
      * Modified to set the Locale for the dates.
      *
      * Get the resource list as a HTML directory listing.
+     * @param res the directory resource to render as a listing
      * @param base The base URL
      * @param parent True if the parent directory should be included
      * @return String of HTML
+     * @throws IOException declared on the copied method, but every call that throws it is caught here
      */
     private static String getListHTML(Resource res, String base, boolean parent) throws IOException {
         base = URIUtil.canonicalPath(base);
@@ -341,6 +343,9 @@ public class I2PDefaultServlet extends DefaultServlet {
 
     /**
      * Copied unchanged from Resource.java
+     *
+     * @param raw the text to strip XML markup from
+     * @return the sanitized text, safe to embed in the directory listing
      */
     private static String deTag(String raw) {return StringUtil.sanitizeXmlString(raw);}
 

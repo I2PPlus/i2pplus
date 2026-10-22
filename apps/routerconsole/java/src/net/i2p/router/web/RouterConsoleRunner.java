@@ -768,6 +768,9 @@ public class RouterConsoleRunner implements RouterApp {
      * Expand the listen-host set with the local addresses and the allowed-hosts
      * property, unless a wildcard address was configured, and hand it to the
      * host check handler.
+     *
+     * @param listenHosts the configured hosts, modified in place
+     * @param chCollWrapper the handler that rejects requests with an unexpected Host header
      */
     private void fixUpListenHosts(Set<String> listenHosts, HostCheckHandler chCollWrapper) {
         if (listenHosts.contains("0.0.0.0") ||
@@ -794,6 +797,8 @@ public class RouterConsoleRunner implements RouterApp {
     /**
      * Start the server, then add and start each connector one at a time so a
      * failing bind does not take down the console.
+     *
+     * @param connectors the connectors to add, started in list order
      */
     private void startConnectors(List<Connector> connectors) {
         try {
@@ -955,6 +960,8 @@ public class RouterConsoleRunner implements RouterApp {
     /**
      * Check the console keystore, creating one with a self-signed keypair if needed.
      *
+     * @param ks the keystore file to check
+     * @param altNames the Subject Alternative Names if a new keystore is created, may be null
      * @return true if the keystore exists with a password or was created successfully
      * @since 0.8.3
      */
@@ -974,6 +981,8 @@ public class RouterConsoleRunner implements RouterApp {
     /**
      * Create a new keystore with a keypair in it.
      *
+     * @param ks the keystore file to create
+     * @param altNames the Subject Alternative Names for the new certificate, may be null
      * @return true if the keystore was created
      * @since 0.8.3
      */

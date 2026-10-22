@@ -263,7 +263,13 @@ public class I2Ping extends I2PTunnelClientBase {
 
     /**
      * Attempts to "ping" by opening an I2P socket to the destination.
-     * Returns true if connection succeeds within timeout.
+     * The result reports whether the connection succeeded within the timeout.
+     *
+     * @param dest the destination to ping
+     * @param fromPort the local port to open the socket on
+     * @param toPort the destination port to connect to
+     * @param timeout how long to wait for the connection, in ms
+     * @return the ping result with success state and round-trip time
      */
     private PingResult ping(Destination dest, int fromPort, int toPort, long timeout) {
         long pingStart = System.currentTimeMillis();

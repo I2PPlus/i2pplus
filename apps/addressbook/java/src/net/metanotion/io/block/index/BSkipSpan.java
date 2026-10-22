@@ -126,6 +126,8 @@ public class BSkipSpan<K extends Comparable<? super K>, V> extends SkipSpan<K, V
      * Free a chain of continuation pages
      * @param curPage the first page to be freed, if 0 this does nothing.
      * @return the number of pages freed
+     * @throws IOException if a page read or free fails, or a continuation page
+     *                     has a bad magic number
      */
     private int freeContinuationPages(int curPage) throws IOException {
         int rv = 0;

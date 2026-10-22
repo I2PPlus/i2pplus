@@ -267,12 +267,8 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
         }
     }
 
-    /////////////////////////////////////////////////////////
-    // begin payload callbacks
-    /////////////////////////////////////////////////////////
-
     /**
-     * Got a DateTime block.
+     * Payload callback: got a DateTime block.
      */
     @Override
     public void gotDateTime(long time) {
@@ -573,6 +569,11 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
      * - IP match
      * - SSU2 version
      * - Old/slow router status.
+     *
+     * @param ri the received RouterInfo to validate
+     * @param ra the peer's selected RouterAddress for this session
+     * @param mismatchMessage address mismatch warning from the address selection, null if none
+     * @throws RIException if the RouterInfo fails any of the checks above
      */
     private void validateRouterInfo(RouterInfo ri, RouterAddress ra, String mismatchMessage) throws RIException {
         Hash h = _receivedUnconfirmedIdentity.calculateHash();
@@ -841,14 +842,9 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
         throw new IllegalStateException("BAD block in handshake");
     }
 
-    /////////////////////////////////////////////////////////
-    // end payload callbacks
-    /////////////////////////////////////////////////////////
-
-    // SSU 1 overrides
-
     /**
-     * Overridden to destroy the handshake state.
+     * Overridden from SSU1 to destroy the handshake state.
+     *
      * @since 0.9.56
      */
     @Override
@@ -866,10 +862,9 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
         super.fail();
     }
 
-    // SSU 2 things
-
     /**
-     * The send conn ID.
+     * The SSU2 send connection ID.
+     *
      * @return the 64-bit connection ID used on our outbound packets
      */
     public long getSendConnID() {return _sendConnID;}
@@ -1002,6 +997,9 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
     /**
      * Process a session or token request after a retry, with the lock held.
      *
+     * @param packet the repeated SessionRequest or TokenRequest packet from the peer
+     * @throws GeneralSecurityException if the source address does not match the
+     *                                  initiator's, or decrypting or validating the request fails
      * @since 0.9.56
      */
     private void locked_receiveSessionOrTokenRequestAfterRetry(UDPPacket packet) throws GeneralSecurityException {
@@ -1155,6 +1153,11 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
     /**
      * Process SessionConfirmed and create the peer state, with the lock held.
      *
+     * @param packet the SessionConfirmed packet from the peer
+     * @return the newly created peer state for the established session
+     * @throws GeneralSecurityException if the state is wrong for a confirmation,
+     *                                  the source address does not match, or decrypting or
+     *                                  validating the confirmation fails
      * @since 0.9.56
      */
     private PeerState2 locked_receiveSessionConfirmed(UDPPacket packet) throws GeneralSecurityException {
@@ -1332,6 +1335,8 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
      * Creates a PeerStateDestroyed after msg 3 failure,
      * so we can send a termination and deal with subsequent in-session messages.
      *
+     * @param reason the SSU2 termination reason code recorded in the destroyed state
+     * @return the destroyed peer state holding the session's chaining keys
      * @since 0.9.57
      */
     private PeerStateDestroyed createPeerStateDestroyed(int reason) {

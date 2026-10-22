@@ -124,9 +124,12 @@ public class NoiseInit {
             private final byte[] h;
 
             /**
-             *  Parse the protocol name into its components, validate,
-             *  lookup the Pattern,
-             *  and generate initial CK and H
+             * Parse the protocol name into its components, validate,
+             * lookup the Pattern,
+             * and generate initial CK and H
+             *
+             * @param pid the pattern ID to look up, e.g. "XX"
+             * @param protocolName the protocol name, five components separated by "_"
              */
             PatternID(String pid, String protocolName) {
                 patternId = pid;
@@ -222,10 +225,10 @@ public class NoiseInit {
             public byte[] getInitialH() { return Arrays.copyOf(h, h.length); }
 
             /**
-             *  Lookup PatternID by string pattern ID
-             *  @param pid the pattern name to look up, e.g. "XK"
-             *  @return the enum constant whose pattern name equals pid
-             *  @throws IllegalArgumentException if not found
+             * Lookup PatternID by string pattern ID
+             * @param pid the pattern name to look up, e.g. "XK"
+             * @return the enum constant whose pattern name equals pid
+             * @throws IllegalArgumentException if not found
              */
             public static PatternID byPatternId(String pid) {
                 for (PatternID p : values()) {
@@ -239,6 +242,10 @@ public class NoiseInit {
 
         /**
          * Moved from SymmetricState
+         *
+         * @param protocolName the protocol name to hash, e.g. Noise_XK_25519_AESGCM_SHA256
+         * @param shash the hash algorithm to use if the name is longer than 32 bytes
+         * @return the 32-byte initial handshake hash
          */
         private static byte[] initHash(String protocolName, String shash) {
             byte[] protocolNameBytes = DataHelper.getUTF8(protocolName);

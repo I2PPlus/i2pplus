@@ -242,6 +242,8 @@ class LoadRouterInfoJob extends JobImpl {
     /**
      * Does our RI ElGamal private key length match the configuration?
      * If not, return true.
+     *
+     * @param privkey the router's ElGamal private key whose data length is checked
      * @return true if the ElGamal key length disagrees with the configured
      *         exponent, so the RouterInfo must be rebuilt; at most once ever
      * @since 0.9.8

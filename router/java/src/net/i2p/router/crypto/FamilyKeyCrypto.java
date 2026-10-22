@@ -131,6 +131,9 @@ public class FamilyKeyCrypto {
 
     /**
      * Create (if necessary) and load the key store, then run.
+     *
+     * @return the family's private key, read from the key store
+     * @throws GeneralSecurityException if the key store cannot be opened or the key is missing
      */
     private SigningPrivateKey initialize() throws GeneralSecurityException {
         File dir = new SecureDirectory(_context.getConfigDir(), KS_DIR);
@@ -371,6 +374,10 @@ public class FamilyKeyCrypto {
     /**
      * Verify the family in a RouterInfo, name already retrieved.
      *
+     * @param ri the router whose family signature is checked
+     * @param name the family name already read from the router, compared with the cached one
+     * @return the verification result, NO_SIG when the router has no signature, otherwise the
+     *         cached or freshly computed result
      * @since 0.9.28
      */
     private Result verify(RouterInfo ri, String name) {
@@ -499,6 +506,7 @@ public class FamilyKeyCrypto {
      * Verify the family keystore can be opened and its aliases used.
      * Succeeds if it exists and we have a password, or it was created successfully.
      *
+     * @param ks the keystore file to check, created when it does not exist
      * @throws GeneralSecurityException on keystore error
      */
     private void verifyKeyStore(File ks) throws GeneralSecurityException {
@@ -535,7 +543,9 @@ public class FamilyKeyCrypto {
      * libs or using proprietary Sun libs, and it's a huge mess.
      * If successful, stores the keystore password and key password in {@code router.config}.
      *
+     * @param ks the keystore file to create, together with its key pair
      * @throws GeneralSecurityException on all errors
+     * @throws IOException if keytool cannot be run or the files cannot be written
      */
     private void createKeyStore(File ks) throws GeneralSecurityException, IOException {
         // make a random 48 character password (30 * 8 / 5)
@@ -570,6 +580,8 @@ public class FamilyKeyCrypto {
     /**
      * Save the public key certificate
      * so the clients can get to it.
+     *
+     * @param cert the family's certificate to write into the certificate directory
      */
     private void exportCert(X509Certificate cert) {
         File sdir = new SecureDirectory(_context.getConfigDir(), CERT_DIR);
@@ -595,6 +607,7 @@ public class FamilyKeyCrypto {
      * Save the CRL just in case.
      *
      * @param ksdir parent of directory to save in
+     * @param crl the certificate revocation list to write out
      * @since 0.9.25
      */
     private void exportCRL(File ksdir, X509CRL crl) {
@@ -646,6 +659,7 @@ public class FamilyKeyCrypto {
     /**
      * Load a public key from a cert.
      *
+     * @param file the certificate file to read
      * @return null on all errors
      */
     private SigningPublicKey loadCert(File file) {
@@ -663,7 +677,10 @@ public class FamilyKeyCrypto {
     /**
      * Load the private key for this family from the keystore.
      *
+     * @param ks the keystore to read the family key from
      * @return non-null, throws on all errors
+     * @throws GeneralSecurityException if no key password is set, the family key is missing, or
+     *                                  the keystore cannot be read
      */
     private SigningPrivateKey getPrivKey(File ks) throws GeneralSecurityException {
         String ksPass = _context.getProperty(PROP_KEYSTORE_PASSWORD, KeyStoreUtil.DEFAULT_KEYSTORE_PASSWORD);

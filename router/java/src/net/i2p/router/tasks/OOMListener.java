@@ -115,7 +115,9 @@ public class OOMListener implements I2PThread.OOMEventListener {
 
     /**
      * Best guess if running from a Debian package.
-     * @return whether debian package
+     *
+     * @param ctx the router context, used for the base directory and the update property
+     * @return true if the install directory and settings match a Debian package install
      * @since 0.9.35
      */
     private static boolean isDebianPackage(RouterContext ctx) {

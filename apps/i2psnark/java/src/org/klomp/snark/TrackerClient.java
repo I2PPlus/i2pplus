@@ -52,12 +52,12 @@ import org.klomp.snark.dht.DHT;
  *
  * <ul>
  *   <li>Announcing torrent status to HTTP/HTTPS trackers
- *   <li>Processing tracker responses and extracting peer information
- *   <li>Managing UDP tracker communication
- *   <li>Integrating with DHT for trackerless peer discovery
- *   <li>Handling Peer Exchange (PEX) when available
- *   <li>Managing announcement intervals and retry logic
- *   <li>Processing various tracker events (started, completed, stopped)
+ * <li>Processing tracker responses and extracting peer information
+ * <li>Managing UDP tracker communication
+ * <li>Integrating with DHT for trackerless peer discovery
+ * <li>Handling Peer Exchange (PEX) when available
+ * <li>Managing announcement intervals and retry logic
+ * <li>Processing various tracker events (started, completed, stopped)
  * </ul>
  *
  * <p><strong>Threading Model:</strong> The {@link #start()} method creates a thread that runs one complete
@@ -158,14 +158,14 @@ public class TrackerClient implements Runnable {
     static final int MAGNET_INITIAL_SLEEP = 3 * 1000;
     private static final int MAX_CONSEC_FAILS = 10; // slow down after this
     /**
-     *  Global cap on tracker HTTP requests in flight across ALL torrents, so
-     *  simultaneous announce/scrape rounds cannot stampede a tracker (or our
-     *  own netdb lookup path) when many TrackerClient threads wake together.
-     *  Requests beyond the cap queue on the permit; the fetch timeout clock
-     *  only starts once the permit is held.
-     *  Increased from 3 to 10 to allow parallel DHT metadata lookups
-     *  (e.g. zzzot hashlist) while per-tracker throttle below prevents
-     *  hammering any single tracker.
+     * Global cap on tracker HTTP requests in flight across ALL torrents, so
+     * simultaneous announce/scrape rounds cannot stampede a tracker (or our
+     * own netdb lookup path) when many TrackerClient threads wake together.
+     * Requests beyond the cap queue on the permit; the fetch timeout clock
+     * only starts once the permit is held.
+     * Increased from 3 to 10 to allow parallel DHT metadata lookups
+     * (e.g. zzzot hashlist) while per-tracker throttle below prevents
+     * hammering any single tracker.
      */
     private static final Semaphore ANNOUNCE_PERMITS = new Semaphore(10);
 
@@ -213,7 +213,7 @@ public class TrackerClient implements Runnable {
     }
     /**
      * Sleep after lots of fails — shortened from 10m so post-recovery
-     *  tracker retries fire within ~2m instead of waiting a full cycle.
+     * tracker retries fire within ~2m instead of waiting a full cycle.
      */
     private static final int LONG_SLEEP = 2 * 60 * 1000;
     /**
@@ -223,17 +223,17 @@ public class TrackerClient implements Runnable {
     private static final int LONG_SLEEP_JITTER = 30 * 1000;
 
     /**
-     *  Failure backoff for a tracker that just hit MAX_CONSEC_FAILS: floor the
-     *  announce interval at LONG_SLEEP and add up to LONG_SLEEP_JITTER of
-     *  randomness so many torrents failing together don't re-announce in
-     *  lockstep every 2 minutes.  Intervals already at or above the floor and
-     *  out-of-range random values are handled: the jitter is clamped to
-     *  [0, LONG_SLEEP_JITTER] and only applied when the floor was raised.
+     * Failure backoff for a tracker that just hit MAX_CONSEC_FAILS: floor the
+     * announce interval at LONG_SLEEP and add up to LONG_SLEEP_JITTER of
+     * randomness so many torrents failing together don't re-announce in
+     * lockstep every 2 minutes.  Intervals already at or above the floor and
+     * out-of-range random values are handled: the jitter is clamped to
+     * [0, LONG_SLEEP_JITTER] and only applied when the floor was raised.
      *
-     *  @param currentInterval tracker's current announce interval in ms
-     *  @param randomJitter raw random jitter in ms, before clamping
-     *  @return the new announce interval in ms
-     *  @since 0.9.71+
+     * @param currentInterval tracker's current announce interval in ms
+     * @param randomJitter raw random jitter in ms, before clamping
+     * @return the new announce interval in ms
+     * @since 0.9.71+
      */
     static long longSleepWithJitter(long currentInterval, long randomJitter) {
         if (currentInterval >= LONG_SLEEP)
@@ -249,14 +249,14 @@ public class TrackerClient implements Runnable {
 
     /**
      * Random jitter added to {@link #MIN_DHT_ANNOUNCE_INTERVAL} so DHT
-     *  announces from many torrents do not fire in lockstep; the effective
+     * announces from many torrents do not fire in lockstep; the effective
      * threshold is 15m..19m.
      */
     private static final int DHT_ANNOUNCE_JITTER = 4 * 60 * 1000;
 
     /**
      * Periodic scrape interval: refresh the swarm size (seeds + leeches) between
-     *  announces (BEP 15/48). The announce loop wakes every 5m, so this fires on
+     * announces (BEP 15/48). The announce loop wakes every 5m, so this fires on
      * every other wake per active torrent.
      */
     private static final long SCRAPE_INTERVAL = 10 * (long) 60 * 1000;
@@ -809,29 +809,29 @@ public class TrackerClient implements Runnable {
 
 
     /**
-     *  Lower-cases a tracker problem message for prefix matching.
+     * Lower-cases a tracker problem message for prefix matching.
      *
-     *  <p>Never null: several {@link IOException} subtypes return a null
-     *  {@code getMessage()}, and the announce loop calls this on the result directly.
-     *  Letting that NPE escape would abort the announce for every remaining tracker
-     *  because of one malformed response from the first one.
+     * <p>Never null: several {@link IOException} subtypes return a null
+     * {@code getMessage()}, and the announce loop calls this on the result directly.
+     * Letting that NPE escape would abort the announce for every remaining tracker
+     * because of one malformed response from the first one.
      *
-     *  @param trackerProblem message from the exception, may be null
-     *  @return lower-cased message, or the empty string when there was none
-     *  @since 0.9.71+
+     * @param trackerProblem message from the exception, may be null
+     * @return lower-cased message, or the empty string when there was none
+     * @since 0.9.71+
      */
     static String normalizeTrackerProblem(String trackerProblem) {
         return trackerProblem == null ? "" : trackerProblem.toLowerCase(Locale.US);
     }
 
     /**
-     *  Whether a tracker problem means this tracker will never accept the torrent,
-     *  as opposed to a transient failure worth retrying.
+     * Whether a tracker problem means this tracker will never accept the torrent,
+     * as opposed to a transient failure worth retrying.
      *
-     *  @param trackerProblem message already passed through
-     *                        {@link #normalizeTrackerProblem}, never null
-     *  @return true if the tracker is rejecting the torrent outright
-     *  @since 0.9.71+
+     * @param trackerProblem message already passed through
+     *                       {@link #normalizeTrackerProblem}, never null
+     * @return true if the tracker is rejecting the torrent outright
+     * @since 0.9.71+
      */
     static boolean isRegistrationFailure(String trackerProblem) {
         return trackerProblem.startsWith(NOT_REGISTERED)
@@ -862,36 +862,36 @@ public class TrackerClient implements Runnable {
      * @since 0.9.71+
      */
     /**
-     *  Delay before a torrent's first announce.
+     * Delay before a torrent's first announce.
      *
-     *  <p>Pure decision, separated so the magnet case can be pinned by test: the spread
-     *  exists to protect the trackers from a thundering herd, and that concern does not
-     *  apply to a single lookup, which is actively waiting for an answer.
+     * <p>Pure decision, separated so the magnet case can be pinned by test: the spread
+     * exists to protect the trackers from a thundering herd, and that concern does not
+     * apply to a single lookup, which is actively waiting for an answer.
      *
-     *  @param hasMeta true once the torrent has its metainfo
-     *  @param fullSpread random value in [0, INITIAL_SLEEP)
-     *  @param magnetSpread random value in [0, MAGNET_INITIAL_SLEEP)
-     *  @return ms to wait before the first announce
-     *  @since 0.9.71+
+     * @param hasMeta true once the torrent has its metainfo
+     * @param fullSpread random value in [0, INITIAL_SLEEP)
+     * @param magnetSpread random value in [0, MAGNET_INITIAL_SLEEP)
+     * @return ms to wait before the first announce
+     * @since 0.9.71+
      */
     static long initialAnnounceDelayMs(boolean hasMeta, int fullSpread, int magnetSpread) {
         return hasMeta ? fullSpread : magnetSpread;
     }
 
     /**
-     *  Should the fallback trackers be tried after a round that produced no peers?
+     * Should the fallback trackers be tried after a round that produced no peers?
      *
-     *  <p>{@link #needBackupTrackers} deliberately refuses to consult backups while a
-     *  primary tracker is configured, which is right for a download that is already
-     *  finding peers but leaves a magnet with nothing: every announce failed and the
-     *  next cycle is 90s away. A different transport is the only remaining option, and
-     *  the caller has already paid for the round that failed.
+     * <p>{@link #needBackupTrackers} deliberately refuses to consult backups while a
+     * primary tracker is configured, which is right for a download that is already
+     * finding peers but leaves a magnet with nothing: every announce failed and the
+     * next cycle is 90s away. A different transport is the only remaining option, and
+     * the caller has already paid for the round that failed.
      *
-     *  @param peersFromPrimaries peers returned by the primary trackers this cycle
-     *  @param haveBackup whether any fallback tracker is configured
-     *  @param downloading whether the torrent still wants peers
-     *  @return true if the fallback round should run
-     *  @since 0.9.71+
+     * @param peersFromPrimaries peers returned by the primary trackers this cycle
+     * @param haveBackup whether any fallback tracker is configured
+     * @param downloading whether the torrent still wants peers
+     * @return true if the fallback round should run
+     * @since 0.9.71+
      */
     static boolean shouldTryFallbackTrackers(int peersFromPrimaries, boolean haveBackup,
                                              boolean downloading) {
@@ -930,6 +930,7 @@ public class TrackerClient implements Runnable {
      *
      * @param trckrs the list of trackers to query
      * @return max peers seen
+     * @throws Throwable from a tracker announce or scrape, e.g. I/O or protocol errors
      */
     private int getPeersFromTrackers(List<TCTracker> trckrs) throws Throwable {
         long left = coordinator.getLeft(); // -1 in magnet mode
@@ -1178,11 +1179,13 @@ public class TrackerClient implements Runnable {
     }
 
     /**
-     *  Handle a successful scrape response: refresh the swarm composition and
-     *  clear the tracker's error indicator — the response proves the tracker
-     *  is reachable, so a "No response from..." announce failure no longer
-     *  applies.
+     * Handle a successful scrape response: refresh the swarm composition and
+     * clear the tracker's error indicator — the response proves the tracker
+     * is reachable, so a "No response from..." announce failure no longer
+     * applies.
      *
+     * @param tr the tracker that answered, its error indicator is cleared
+     * @param scrape the parsed scrape response carrying the swarm counts
      * @return true if the response reported a non-zero swarm size
      */
     private boolean processScrapeResponse(TCTracker tr, TrackerInfo scrape) {
@@ -1507,7 +1510,14 @@ public class TrackerClient implements Runnable {
      *
      * <p>Note: IOException message text gets displayed in the UI
      *
+     * @param tr the tracker to announce to, its isUDP flag picks the transport
+     * @param uploaded bytes uploaded by this client
+     * @param downloaded bytes downloaded by this client
+     * @param left bytes remaining to download, -1 in magnet mode
+     * @param event the BEP-3 announce event, e.g. started, completed or stopped
      * @return null if _fastUnannounce &amp;&amp; event == STOPPED
+     * @throws IOException if the HTTP announce fails, the message shows in the UI
+     * @throws Throwable if the UDP announce fails
      * @since 0.9.71+
      */
     private TrackerInfo doRequest(
@@ -1689,6 +1699,17 @@ public class TrackerClient implements Runnable {
      * HTTP - blocking.
      *
      * <p>Note: IOException message text gets displayed in the UI
+     *
+     * @param tr the tracker to announce to, its announce URL gets the query parameters
+     * @param infoHash the hex info hash of the torrent, sent as the info_hash parameter
+     * @param peerID our peer id, sent as the peer_id parameter
+     * @param uploaded bytes uploaded by this client
+     * @param downloaded bytes downloaded by this client
+     * @param left bytes remaining to download, -1 in magnet mode
+     * @param event the BEP-3 announce event, e.g. started, completed or stopped
+     * @return the tracker's parsed announce response, never null
+     * @throws IOException if the tracker is unreachable, returned HTML, or reported a failure
+     * @throws Throwable if the bencoded response cannot be parsed
      */
     private TrackerInfo doRequestHTTP(
             TCTracker tr,
@@ -1789,7 +1810,13 @@ public class TrackerClient implements Runnable {
     /**
      * UDP - blocking.
      *
+     * @param tr the tracker to announce to over BEP 15
+     * @param uploaded bytes uploaded by this client
+     * @param downloaded bytes downloaded by this client
+     * @param left bytes remaining to download, -1 in magnet mode
+     * @param event the BEP-3 announce event, e.g. started, completed or stopped
      * @return null if _fastUnannounce &amp;&amp; event == STOPPED
+     * @throws IOException if the UDP tracker client is unavailable or the exchange fails
      * @since 0.9.54
      */
     private TrackerInfo doRequestUDP(

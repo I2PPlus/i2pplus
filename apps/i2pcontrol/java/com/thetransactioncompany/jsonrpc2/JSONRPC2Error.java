@@ -217,6 +217,9 @@ public class JSONRPC2Error extends Exception {
 	/**
 	 * Encode the error as a JSON object.
 	 *
+	 * @return A JSON object representation of this error object,
+	 *         as produced by {@link #toJSONObject}.
+	 *
 	 * @see #toJSONObject
 	 */
 	@Deprecated

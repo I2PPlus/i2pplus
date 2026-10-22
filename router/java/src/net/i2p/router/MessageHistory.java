@@ -602,8 +602,9 @@ public class MessageHistory {
     /**
      * Prettify the hash by doing a base64 and returning the first 6 characters.
      *
+     * @param router the router hash to prettify, may be null
      * @return the first 6 characters of the hash in base64 form, or "UNKNOWN" if the
-     * hash is null and "INVALID" if it cannot be encoded
+     *         hash is null and "INVALID" if it cannot be encoded
      */
     private static final String getName(Hash router) {
         if (router == null) return "UNKNOWN";
@@ -624,6 +625,7 @@ public class MessageHistory {
      * Responsible for adding the entry, flushing if necessary.
      * This is the only thing that adds to _unwrittenEntries.
      *
+     * @param entry the log entry line to add, ignored if null
      */
     private void addEntry(String entry) {
         if (entry == null) return;

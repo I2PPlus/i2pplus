@@ -477,6 +477,10 @@ public class GraphHelper extends FormHandler {
      * <p>A group appears only when at least two members are enabled and carry data, so
      * enabling a single stat is never silently turned into a combined plot.
      *
+     * @param enabledStats the enabled stats, from which group members are picked
+     * @param hideLegend true to hide the legend, shrinking the tile height to match
+     * @param hideRestarts true to hide restart markers on the tile's graphs
+     * @param now the graph end time in ms since epoch
      * @return markup for every qualifying group, empty when none qualify
      * @since 0.9.71+
      */
@@ -726,6 +730,15 @@ public class GraphHelper extends FormHandler {
     /**
      * Link to the graph page for a stat.
      *
+     * @param stat the stat name to link to
+     * @param showEvents true to ask the graph page for event markers
+     * @param periodCount the number of periods to plot, sent as the c parameter
+     * @param end the end-time offset, left out of the URL when 0 or less
+     * @param width the graph width in pixels
+     * @param height the graph height in pixels
+     * @param hideLegend this page's legend setting, written inverted into the URL
+     * @param hideRestarts this page's restart-marker setting, passed through
+     * @return the opening anchor tag for the graph page with these parameters
      * @since 0.9
      */
     private static String link(String stat, boolean showEvents, int periodCount, int end, int width, int height,

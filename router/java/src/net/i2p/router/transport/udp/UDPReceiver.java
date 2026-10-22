@@ -71,12 +71,19 @@ class UDPReceiver {
     }
 
 
-    /** Receive a UDP packet. */
+    /**
+     * Receive a UDP packet.
+     *
+     * @param packet the received packet to process
+     * @return zero (was queue size)
+     */
     private int receive(UDPPacket packet) {return doReceive(packet);}
 
     /**
      * BLOCKING if queue between here and PacketHandler is full.
      *
+     * @param packet the received packet, queued for processing or released if
+     *               it is invalid or from a drop-listed peer
      * @return zero (was queue size)
      */
     private final int doReceive(UDPPacket packet) { // NOSONAR S3516 returns 0 by design

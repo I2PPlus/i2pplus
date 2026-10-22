@@ -120,6 +120,8 @@ public class BuildTime {
     /**
      * Won't be available on Android or on any builds not using our build.xml.
      *
+     * @param fmt the format of the jar's Build-Date manifest attribute
+     * @param jar the jar to read, relative to the lib directory, e.g. router.jar
      * @return 0 if unknown
      */
     private static long getBuildTime(SimpleDateFormat fmt, String jar) {

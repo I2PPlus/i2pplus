@@ -88,6 +88,9 @@ public class NtpClient {
     /**
      * Query the given NTP server, returning the current internet time and stratum.
      *
+     * @param serverName the NTP server host name or address to query
+     * @param timeout the socket timeout in ms
+     * @param preferIPv6 true to prefer an IPv6 address for the server
      * @param log may be null
      * @return time in rv[0] and stratum in rv[1], or null for error
      * @since 0.7.12

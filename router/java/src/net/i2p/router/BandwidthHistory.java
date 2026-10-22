@@ -234,6 +234,10 @@ public class BandwidthHistory extends SimpleTimer2.TimedEvent {
     /**
      * Build a comma-separated string of the last n values from the given array.
      * Must be called under synchronized(this).
+     *
+     * @param n how many of the most recent samples to include; 0 or less returns an empty string
+     * @param values the ring buffer array to read (size {@code _capacity}), indexed modulo capacity
+     * @return the samples joined with commas, oldest first, empty if there is nothing to show
      */
     private String formatLast(int n, long[] values) {
         if (n <= 0 || _count == 0) {return "";}

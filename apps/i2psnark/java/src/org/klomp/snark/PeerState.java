@@ -599,12 +599,12 @@ class PeerState implements DataLoader {
         return pieceBytes;
     }
 
-        // Called when some bytes have left the outgoing connection. XXX - Should indicate whether it
     /**
-     * Was a real piece or overhead.
+     * Called when some bytes have left the outgoing connection.
+     * XXX - Should indicate whether it was a real piece or overhead.
      *
      * @param size the number of bytes just sent to the peer
-    */
+     */
     void uploaded(int size) {
         peer.uploaded(size);
     }
@@ -820,6 +820,7 @@ class PeerState implements DataLoader {
     /**
      * The lowest offset of any request for the piece.
      *
+     * @param piece the piece number to look for among the outstanding requests
      * @return lowest offset of any request for the piece
      * @since 0.8.2
      */
@@ -1259,9 +1260,9 @@ class PeerState implements DataLoader {
      *
      * <ul>
      *   <li>our own destination-hash-based set - matches other I2PSnark peers</li>
-     *   <li>the libtorrent-style set derived from a zeroed IPv4 address - qBittorrent and
+     * <li>the libtorrent-style set derived from a zeroed IPv4 address - qBittorrent and
      *       other libtorrent clients over I2P see 0.0.0.0 as their remote address for every
-     *       I2P connection, so their advertised set is torrent-wide and computable by anyone</li>
+     * I2P connection, so their advertised set is torrent-wide and computable by anyone</li>
      * </ul>
      *
      * <p>Membership is still enforced: indices outside this union are dropped, bounding what
@@ -1624,6 +1625,7 @@ class PeerState implements DataLoader {
      * requests, false otherwise. Caller should synchronize.
      *
      * @param allowed the pieces servable while choked, or null for no restriction
+     * @return true if a request was added for this peer, false if nothing was requested
      */
     private boolean requestNextPiece(Set<Integer> allowed) {
         // Check that we already know what the other side has.

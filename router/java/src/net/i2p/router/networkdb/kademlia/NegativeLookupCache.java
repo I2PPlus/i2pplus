@@ -270,6 +270,7 @@ class NegativeLookupCache {
     /**
      * Whether the cache is full enough to stop storing.
      *
+     * @param h the key whose fail counters are compared with the thresholds
      * @return true if either counter is at or over its cache threshold.
      */
     private boolean isTripped(Hash h) {
@@ -280,6 +281,9 @@ class NegativeLookupCache {
     /**
      * If the key already has a per-entry TTL, drop counts when due (lazy expire).
      * Does not touch permanent {@link #badDests}.
+     *
+     * @param h the key whose per-entry TTL is checked
+     * @param now the current time in epoch milliseconds
      */
     private void expireDue(Hash h, long now) {
         Long until = cachedUntil.get(h);
@@ -296,6 +300,9 @@ class NegativeLookupCache {
      * Discard a below-threshold fail streak that has outlived
      * {@code cleanTime} so "N fails within the window" still holds
      * without a global wipe.
+     *
+     * @param h the key whose fail streak may have gone stale
+     * @param now the current time in epoch milliseconds
      */
     private void refreshStreak(Hash h, long now) {
         expireDue(h, now);
@@ -313,6 +320,10 @@ class NegativeLookupCache {
     /**
      * On the transition into the cached state, set a per-entry TTL
      * with backoff from how many times this key has tripped before.
+     *
+     * @param h the key that may be entering the cached state
+     * @param now the current time in epoch milliseconds, the base of the new TTL
+     * @param wasTripped true if the key was already tripped, in which case nothing changes
      */
     private void maybeTrip(Hash h, long now, boolean wasTripped) {
         if (wasTripped || !isTripped(h)) {
@@ -327,6 +338,7 @@ class NegativeLookupCache {
         /**
          * Schedules itself.
          *
+         * @param pool the timer pool the cleaner reschedules itself on
          * @since 0.9.61
          */
         public Cleaner(SimpleTimer2 pool) {

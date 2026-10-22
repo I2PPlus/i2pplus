@@ -273,6 +273,7 @@ public class WorkingDir {
      * is usually migrated from the base install.
      * This allows to pre-install plugins before the first router start.
      *
+     * @param dir the directory to check for files migrated from the base install
      * @return true if already set up
      */
     private static boolean isSetup(File dir) {
@@ -292,15 +293,15 @@ public class WorkingDir {
     }
 
     /**
-     *  Redirect stdout and stderr to a wrapper.log file if there is no wrapper,
-     *  unless system property I2P_DISABLE_OUTPUT_OVERRIDE is set.
+     * Redirect stdout and stderr to a wrapper.log file if there is no wrapper,
+     * unless system property I2P_DISABLE_OUTPUT_OVERRIDE is set.
      * <p>
-     *  If there is no -Dwrapper.log=/path/to/wrapper.log on the java command line
-     *  to specify a log file, check for existence of wrapper.log in CWD,
-     *  for backward compatibility in old installations (don't move it).
-     *  Otherwise, use (system temp dir)/wrapper.log.
-     *  Create if it doesn't exist, and append to it if it does.
-     *  Put the location in the environment as an absolute path, so logs.jsp can find it.
+     * If there is no -Dwrapper.log=/path/to/wrapper.log on the java command line
+     * to specify a log file, check for existence of wrapper.log in CWD,
+     * for backward compatibility in old installations (don't move it).
+     * Otherwise, use (system temp dir)/wrapper.log.
+     * Create if it doesn't exist, and append to it if it does.
+     * Put the location in the environment as an absolute path, so logs.jsp can find it.
      *
      * @param dir if null, use Java temp dir; System property wrapper.logfile overrides
      * @since 0.8.13
@@ -367,6 +368,10 @@ public class WorkingDir {
 
     /**
      * Copy over the {@code clients.config} file with modifications.
+     *
+     * @param olddir the directory holding the unmodified copy
+     * @param todir the directory to write the modified copy to
+     * @return true if copied, or if the file was not there to begin with; false on failure
      */
     private static boolean migrateClientsConfig(File olddir, File todir) {
         File oldFile = new File(olddir, "clients.config");
@@ -503,7 +508,7 @@ public class WorkingDir {
     }
 
     /**
-     *  Copy a file with secure permissions.
+     * Copy a file with secure permissions.
      *
      * @param src not a directory, must exist
      * @param dst not a directory, will be overwritten if existing, will be mode 600

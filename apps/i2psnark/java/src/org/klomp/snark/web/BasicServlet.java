@@ -748,7 +748,13 @@ class BasicServlet extends HttpServlet {
         return URIUtil.encodePath(path);
     }
 
-    /** Write from in to out. */
+    /**
+     * Write from in to out.
+     *
+     * @param in the input stream to read from
+     * @param out the output stream to write to
+     * @throws IOException if an I/O error occurs
+     */
     private void copy(InputStream in, OutputStream out) throws IOException {
         copy(in, 0, out, -1);
     }

@@ -186,6 +186,8 @@ abstract class LogWriter implements Runnable {
     /**
      * Write a msg with the date stamp of the last duplicate.
      *
+     * @param dupCount how many identical messages were omitted
+     * @param lastRecord the last of the omitted duplicates, supplying priority and date
      * @since 0.9.21
      */
     private void writeDupMessage(int dupCount, LogRecord lastRecord) {
@@ -200,6 +202,11 @@ abstract class LogWriter implements Runnable {
     /**
      * Return a msg with the date stamp of the last duplicate.
      *
+     * @param dupCount how many identical messages were omitted
+     * @param lastRecord the last of the omitted duplicates, supplying the date stamp
+     * @param reverse true for the down arrows used in the reverse-display buffer, false for up
+     * @param html true to use HTML arrow entities, ignored on Android
+     * @return the formatted omission message, terminated with the log newline marker
      * @since 0.9.3
      */
     private String dupMessage(int dupCount, LogRecord lastRecord, boolean reverse, boolean html) {
@@ -214,6 +221,10 @@ abstract class LogWriter implements Runnable {
     /**
      * Choose the singular or plural form for a translated count.
      *
+     * @param b the singular form
+     * @param c the plural form
+     * @param a the count selecting which form applies
+     * @return the translated form for that count
      * @since 0.9.3
      */
     private String ngettext(String b, String c, int a) {

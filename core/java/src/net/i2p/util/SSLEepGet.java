@@ -284,6 +284,11 @@ public class SSLEepGet extends EepGet {
     /**
      * Output file and output stream: one null, one non-null.
      *
+     * @param ctx the application context, may be null
+     * @param outputFile the file to write the content to, or null to use the stream
+     * @param outputStream the stream to write the content to, or null to use the file
+     * @param url the https URL to fetch
+     * @param maxSize the maximum content size in bytes, -1 for unlimited
      * @param state an SSLState retrieved from a previous SSLEepGet with getSSLState(), or null.
      * This makes repeated fetches from the same host MUCH faster,
      * and prevents repeated key store loads even for different hosts.
@@ -413,6 +418,8 @@ public class SSLEepGet extends EepGet {
     /**
      * Modified from http://blogs.sun.com/andreas/resource/InstallCert.java
      *
+     * @param host the server host name, used to name the saved .crt files
+     * @param stm the trust manager holding the captured server certificate chain
      * @since 0.8.2
      */
     private static void saveCerts(String host, SavingTrustManager stm) {
@@ -488,9 +495,6 @@ public class SSLEepGet extends EepGet {
     public void forceDNSOverHTTPS(boolean on, boolean forceIPv6) {
         _forceDoH = on ? (forceIPv6 ? 3 : 2) : 1;
     }
-
-    ///// end of all the SSL stuff
-    ///// start of overrides
 
     /**
      * Fetch the resource over SSL.
@@ -859,6 +863,7 @@ public class SSLEepGet extends EepGet {
      *
      * @param host what the proxy should connect to
      * @param port what the proxy should connect to
+     * @throws IOException if connecting to the proxy fails
      * @since 0.9.33
      */
     private void httpProxyConnect(String host, int port) throws IOException {
@@ -880,7 +885,9 @@ public class SSLEepGet extends EepGet {
      * Side effects: Sets _proxy, _proxyIn, _proxyOut,
      * and other globals via readHeaders().
      *
+     * @param host what the proxy should connect to
      * @param port what the proxy should connect to, probably 4444
+     * @throws IOException if connecting to the proxy fails
      * @since 0.9.33
      */
     private void internalHttpProxyConnect(String host, int port) throws IOException {
@@ -895,8 +902,11 @@ public class SSLEepGet extends EepGet {
      * Side effects: Sets _proxyIn, _proxyOut,
      * and other globals via readHeaders().
      *
+     * @param proxy the connected proxy socket to send the CONNECT request over
      * @param host what the proxy should connect to
      * @param port what the proxy should connect to
+     * @throws IOException if the proxy header read times out or the proxy
+     *                     response is not 200
      * @since 0.9.33
      */
     private void httpProxyConnect(Socket proxy, String host, int port) throws IOException {
@@ -945,8 +955,11 @@ public class SSLEepGet extends EepGet {
      * Side effects: Sets _proxy, _proxyIn, _proxyOut,
      * and other globals via readHeaders().
      *
+     * @param isSocks5 true to use SOCKS 5, false for SOCKS 4
      * @param host what the proxy should connect to
      * @param port what the proxy should connect to
+     * @throws IOException if connecting to the proxy fails, or credentials are
+     *                     set while using SOCKS 4
      * @since 0.9.33
      */
     private void socksProxyConnect(boolean isSocks5, String host, int port) throws IOException {

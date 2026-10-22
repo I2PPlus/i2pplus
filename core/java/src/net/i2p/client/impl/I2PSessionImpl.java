@@ -441,6 +441,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
      * Parse the config for anything we know about.
      * Also fill in the authorization properties if missing.
      *
+     * @param opts the caller-supplied session options, copied and augmented
      * @return the configuration properties
      */
     private final Properties loadConfig(Properties opts) {
@@ -537,6 +538,8 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
      * Save some memory, don't pass along the pointless properties.
      * As of 0.9.19, defaults from options will be promoted to real values in rv.
      *
+     * @param options the properties to filter, system and disallowed streaming
+     *                keys are dropped
      * @return a new Properties without defaults
      */
     private Properties filter(Properties options) {
@@ -677,6 +680,8 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
      * This does NOT validate consistency of the destKeyStream,
      * e.g. pubkey/privkey match or valid offline sig. The router does that.
      *
+     * @param destKeyStream the stream to read the Destination, PrivateKey and
+     *                      SigningPrivateKey from
      * @throws DataFormatException if the file is in the wrong format or keys are invalid
      * @throws IOException if there is a problem reading the file
      */
@@ -1630,6 +1635,8 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
     /**
      * Append the session name for log messages.
      *
+     * @param buf the buffer the nickname, or the class name if none is set, is
+     *            appended to
      * @since 0.9.46
      */
     private void getName(StringBuilder buf) {
@@ -2007,6 +2014,8 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
      * @param name the hostname to look up
      * @param maxWait milliseconds to wait for the router's reply before giving up
      * @return null on failure
+     * @throws I2PSessionException if the thread is interrupted while waiting
+     *                             for the router's reply
      * @since 0.9.11
      */
     private LookupWaiter x_lookupDest(String name, long maxWait) throws I2PSessionException {

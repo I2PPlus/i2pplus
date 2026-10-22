@@ -318,6 +318,7 @@ public class CountryLookup {
     /**
      * Convert IP string to Hash and call existing getCountry method
      * Return two-letter country code or null if unknown.
+     * @param ipAddress the IP address string to resolve and look up
      * @return the country from IP address
      */
     private String getCountryFromIPAddress(String ipAddress) {

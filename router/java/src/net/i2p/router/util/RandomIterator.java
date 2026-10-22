@@ -146,6 +146,8 @@ public class RandomIterator<E> implements Iterator<E> {
      * Workaround for bug in Android (ICS only?)
      * http://code.google.com/p/android/issues/detail?id=31036
      *
+     * @param n the index to start searching from
+     * @return the first unserved index at or after n, -1 if there is none
      * @since 0.9.2
      */
     private int nextClearBit(int n) {

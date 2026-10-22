@@ -98,6 +98,9 @@ public class JobQueueHelper extends HelperBase {
 
     /**
      * Moved from JobQueue.
+     *
+     * @param out the writer the job queue status HTML is appended to
+     * @throws IOException if writing to out fails
      * @since 0.8.9
      */
     private void renderStatusHTML(Writer out) throws IOException {
@@ -405,6 +408,10 @@ public class JobQueueHelper extends HelperBase {
     /**
      * Append per-job counts to the buffer.
      *
+     * @param buf the buffer the job count HTML list is appended to
+     * @param counter per-job counts keyed by job name
+     * @param scheduledCount number of timed jobs, added to the ready count for
+     *                       the queue total
      * @since 0.9.5
      */
     private void getJobCounts(StringBuilder buf, ObjectCounterUnsafe<String> counter, int scheduledCount) {
@@ -437,6 +444,8 @@ public class JobQueueHelper extends HelperBase {
     /**
      * Render the HTML for the job stats.
      * Moved from JobQueue.
+     *
+     * @param buf the buffer the job statistics HTML is appended to
      * @since 0.8.9
      */
     private void getJobStats(StringBuilder buf) {

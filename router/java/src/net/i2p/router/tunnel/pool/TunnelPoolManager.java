@@ -1137,6 +1137,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
          * activity is what makes the pass fill its budget instead of coming
          * back nearly empty once busy peers are excluded.
          *
+         * @param batch the maximum number of peers to probe in this pass
          * @return how many peers were actually probed
          */
         private int probeBatch(int batch) {
@@ -2034,6 +2035,15 @@ public class TunnelPoolManager implements TunnelManagerFacade {
      * Rate-limited log of the participation share limit actually in force, so a
      * surprising exclusion count can be read against the reason for it instead
      * of guessed at.
+     *
+     * @param now the current time in ms, for the log rate limit
+     * @param basePct the base participation share, percent
+     * @param max the effective share limit after adjustments, percent
+     * @param buildSuccess the tunnel build success fraction, 0 to 1
+     * @param firewalled whether the router is firewalled
+     * @param incompleteLeaseSet whether a recent incomplete lease set relaxed
+     *                           the share
+     * @param excluded the number of peers excluded from selection
      */
     private void logShareLimit(long now, int basePct, int max, double buildSuccess,
                                boolean firewalled, boolean incompleteLeaseSet, int excluded) {
@@ -2246,6 +2256,8 @@ public class TunnelPoolManager implements TunnelManagerFacade {
     /**
      * Fail all (outbound) tunnels with this peer as first hop (not counting us).
      *
+     * @param pool the pool whose tunnels are scanned
+     * @param peer the banlisted peer looked for at the first hop
      * @since 0.8.13
      */
     private void failTunnelsWithFirstHop(TunnelPool pool, Hash peer) {
@@ -2267,6 +2279,8 @@ public class TunnelPoolManager implements TunnelManagerFacade {
     /**
      * Fail all (inbound) tunnels with this peer as last hop (not counting us).
      *
+     * @param pool the pool whose tunnels are scanned
+     * @param peer the banlisted peer looked for at the last hop
      * @since 0.8.13
      */
     private void failTunnelsWithLastHop(TunnelPool pool, Hash peer) {

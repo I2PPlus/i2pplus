@@ -192,7 +192,9 @@ public class EdDSAPrivateKey implements EdDSAKey, PrivateKey {
      * This is really dumb for now. It does not use a general-purpose ASN.1 decoder.
      * See also {@link #getEncoded()}.
      *
+     * @param d the DER-encoded private key bytes to decode
      * @return 32 bytes for Ed25519, throws for other curves
+     * @throws InvalidKeySpecException if the encoding is invalid or the curve is not Ed25519
      * @since 0.9.25
      */
     private static byte[] decode(byte[] d) throws InvalidKeySpecException {

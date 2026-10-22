@@ -98,6 +98,9 @@ class InboundEndpointProcessor {
     /**
      * Iteratively undo the crypto that the various layers in the tunnel added.
      *
+     * @param ctx the router context, passed on to each layer's decryption
+     * @param cfg the tunnel's configuration, supplying the crypto settings of every
+     *            hop except the endpoint (this gateway created the tunnel)
      * @param orig original data with an extra 16 byte IV prepended.
      * @param offset index into the array where the extra 16 bytes (IV) begins
      * @param length how much of orig can we write to (must be a multiple of 16).

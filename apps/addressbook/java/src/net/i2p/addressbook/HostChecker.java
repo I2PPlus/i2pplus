@@ -361,6 +361,9 @@ public class HostChecker {
 
         /**
          * Block until below the concurrent limit, then count one more acquisition.
+         *
+         * @throws InterruptedException if the calling thread is interrupted
+         *                              while waiting for a permit
          */
         void acquire() throws InterruptedException {
             synchronized (_lock) {
@@ -707,8 +710,18 @@ public class HostChecker {
     }
 
     /**
-     * Perform remote LeaseSet lookup via floodfill network
-     * Always returns responseTime of -1 (we measure host response, not lookup time).
+     * Perform remote LeaseSet lookup via floodfill network and record the
+     * result. A found LeaseSet marks the host up, keeping the previously known
+     * response time; a failed lookup retains a recent up-result or records a
+     * down-result with response time -1.
+     *
+     * @param hostname the host being checked, used as the result cache key
+     * @param destHash hash of the destination whose LeaseSet is fetched
+     * @param startTime test start time in ms, used as the result timestamp
+     * @param existingResponseTime last known response time in ms, or -1 if
+     *                             never measured
+     * @return the recorded PingResult: up if a LeaseSet was found or a recent
+     *         up-result retained, down otherwise
      */
     private PingResult lookupLeaseSetRemotely(String hostname,
                                            Hash destHash, long startTime, long existingResponseTime) {
@@ -868,6 +881,9 @@ public class HostChecker {
     /**
      * Remove LeaseSet from client refresh tracking after HostChecker is done with it.
      * This prevents unnecessary refreshes of LeaseSets that were only looked up for ping checking.
+     *
+     * @param destHash the destination to untrack; a null value, or a context
+     *                 that is not a router context, makes this a no-op
      */
     private void removeFromClientTracking(Hash destHash) {
         if (destHash == null || !(_context instanceof RouterContext)) return;
@@ -899,6 +915,8 @@ public class HostChecker {
      * @param nickname nickname for the inbound and outbound pools
      * @param inboundQuantity number of inbound tunnels to build
      * @param outboundQuantity number of outbound tunnels to build
+     * @return a fresh Properties object holding the I2CP session options,
+     *         including the fixed localhost connection and LS3 encryption settings
      */
     private static Properties createPingSessionOptions(String nickname, int inboundQuantity, int outboundQuantity) {
         Properties options = new Properties();
@@ -919,6 +937,10 @@ public class HostChecker {
     /**
      * Ping destination using single tunnel and I2Ping-style retry handling
      * Falls back to EepHead HTTP HEAD request if ping fails, accepts leaseSetTypes parameter.
+     *
+     * @param hostname the host to ping, used as the result cache key
+     * @param destination the destination to ping
+     * @return the PingResult from the ping, or from the EepHead fallback if the ping failed
      */
     private PingResult pingDestination(String hostname, Destination destination) {
         return pingDestination(hostname, destination, null);
@@ -927,6 +949,11 @@ public class HostChecker {
     /**
      * Ping destination using single tunnel and I2Ping-style retry handling
      * Falls back to EepHead HTTP HEAD request if ping fails, accepts leaseSetTypes parameter.
+     *
+     * @param hostname the host to ping, used as the result cache key
+     * @param destination the destination to ping
+     * @param leaseSetTypes LeaseSet types string to carry into the result, or null for "[]"
+     * @return the PingResult from the ping, or from the EepHead fallback if the ping failed
      */
     private PingResult pingDestination(String hostname, Destination destination, String leaseSetTypes) {
         return pingDestination(hostname, destination, leaseSetTypes, true);
@@ -935,7 +962,13 @@ public class HostChecker {
     /**
      * Ping destination using single tunnel and I2Ping-style retry handling
      * Falls back to EepHead HTTP HEAD request if ping fails, accepts leaseSetTypes parameter.
+     *
+     * @param hostname the host to ping, used as the result cache key
+     * @param destination the destination to ping
+     * @param leaseSetTypes LeaseSet types string to carry into the result, or null for "[]"
      * @param saveResult whether to save the result to _pingResults (false when LeaseSet lookup already succeeded)
+     * @return the PingResult from the ping, or from the EepHead fallback when
+     *         the ping failed and the result was saved
      */
     private PingResult pingDestination(String hostname, Destination destination, String leaseSetTypes, boolean saveResult) {
         long startTime = System.currentTimeMillis();
@@ -1058,6 +1091,11 @@ public class HostChecker {
     /**
      * Fallback method to use {@link EepHead} for HTTP HEAD request testing
      * Marks site as up if any response is received.
+     *
+     * @param hostname the host to probe, used as the result cache key
+     * @param startTime test start time in ms, used as the result timestamp
+     * @return the PingResult: up with the HEAD round-trip time if any response
+     *         was received, down with response time -1 otherwise
      */
     private PingResult fallbackToEepHead(String hostname, long startTime) {
         return fallbackToEepHead(hostname, startTime, null, true);
@@ -1066,7 +1104,13 @@ public class HostChecker {
     /**
      * Fallback method to use EepHead for HTTP HEAD request testing
      * Marks site as up if any response is received.
+     *
+     * @param hostname the host to probe, used as the result cache key
+     * @param startTime test start time in ms, used as the result timestamp
+     * @param leaseSetTypes LeaseSet types string to carry into the result, or null for "[]"
      * @param saveResult whether to save the result to _pingResults (false when LeaseSet lookup already succeeded)
+     * @return the PingResult: up with the HEAD round-trip time if any response
+     *         was received, down with response time -1 otherwise
      */
     private PingResult fallbackToEepHead(String hostname, long startTime, String leaseSetTypes, boolean saveResult) {
         try {
@@ -1353,6 +1397,9 @@ public class HostChecker {
 
     /**
      * Write cleaned hosts_check.txt file with only valid entries.
+     *
+     * @param validLines the cleaned lines to write, in order, headers included
+     * @throws IOException if the hosts_check.txt file cannot be opened or written
      */
     private void writeCleanHostsCheckFile(List<String> validLines) throws IOException {
         try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new BufferedOutputStream(new FileOutputStream(_hostsCheckFile)), StandardCharsets.UTF_8))) {
@@ -1365,6 +1412,8 @@ public class HostChecker {
 
     /**
      * Get destination for a hostname from naming service.
+     *
+     * @param hostname the host name to look up
      * @return the destination, or null if the naming service has no entry
      */
     private Destination getDestination(String hostname) {
@@ -1558,6 +1607,9 @@ public class HostChecker {
 
     /**
      * Write cleaned categories.txt file with only valid entries (no empty lines).
+     *
+     * @param validLines the cleaned lines to write, in order, headers included
+     * @throws IOException if the categories.txt file cannot be opened or written
      */
     private void writeCleanCategoriesFile(List<String> validLines) throws IOException {
         try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new BufferedOutputStream(new FileOutputStream(_categoriesFile)), StandardCharsets.UTF_8))) {
@@ -1693,6 +1745,9 @@ public class HostChecker {
     /**
      * Helper method to create PingResult with category.
      *
+     * @param reachable true if the host was found reachable
+     * @param timestamp time the result was recorded, in Java ms
+     * @param responseTime round-trip time in ms, or -1 when not measured
      * @param hostname used to look up the category from _hostCategories
      * @return PingResult with category (or null if unknown) and no leaseSetTypes
      */
@@ -1703,6 +1758,18 @@ public class HostChecker {
 
     /**
      * Helper method to create PingResult with category and leaseSetTypes.
+     * An existing non-empty leaseSetTypes string is kept when the new lookup
+     * brings nothing or the same value, so a transient failure cannot erase
+     * known-good types.
+     *
+     * @param reachable true if the host was found reachable
+     * @param timestamp time the result was recorded, in Java ms
+     * @param responseTime round-trip time in ms, or -1 when not measured
+     * @param hostname used to look up the category from _hostCategories
+     * @param leaseSetTypes LeaseSet types string like "[6,4]", or null or "[]"
+     *                      to keep any previously recorded value
+     * @return a new PingResult with the category (or null if unknown) and the
+     *         effective leaseSetTypes
      */
     private PingResult createPingResult(boolean reachable, long timestamp, long responseTime, String hostname, String leaseSetTypes) {
         String category = _hostCategories.get(hostname);
@@ -1786,6 +1853,10 @@ public class HostChecker {
     /**
      * Attempt to download categories file
      * Returns true if successful, false otherwise.
+     *
+     * @return true if the fetch produced at least one data line and the
+     *         categories file was rewritten with it, false on any fetch,
+     *         validation, or write failure
      */
     private boolean attemptCategoryDownload() {
         // Download to a temporary file first for better control
@@ -2287,6 +2358,11 @@ public class HostChecker {
 
     /**
      * Format LeaseSet encryption types as a string like "[0]" or "[4,0]".
+     *
+     * @param leaseSet the LeaseSet to inspect, v1 or v2; a null value, or one
+     *                 whose encryption keys cannot be read, yields "[]"
+     * @return the encryption type codes joined without spaces inside square
+     *         brackets, or "[]" when no types were found
      */
     private static String formatLeaseSetTypes(LeaseSet leaseSet) {
         if (leaseSet == null) {
@@ -2353,7 +2429,12 @@ public class HostChecker {
         return "[" + sb.toString() + "]";
     }
 
-    /** Looks up a localized string in the message bundle. */
+    /**
+     * Looks up a localized string in the message bundle.
+     *
+     * @param s the message key in the addressbook bundle
+     * @return the translated string, or s itself if no translation exists
+     */
     private static String _t(String s) {return Messages.getString(s);}
 
     /**

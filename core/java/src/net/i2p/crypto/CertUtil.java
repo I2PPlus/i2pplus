@@ -137,6 +137,9 @@ public final class CertUtil {
      * Writes a private key in base64 format.
      * Does NOT close the stream. Throws on all errors.
      *
+     * @param pk the private key to export
+     * @param out where to write the PEM block, not closed
+     * @throws IOException if the write to out fails
      * @throws InvalidKeyException if the key does not support encoding
      * @since 0.9.24
      */
@@ -156,6 +159,10 @@ public final class CertUtil {
      * Writes data in base64 format.
      * Does NOT close the stream. Throws on all errors.
      *
+     * @param buf the data to base64-encode into the PEM body
+     * @param what the PEM label, e.g. "PRIVATE KEY", used in the BEGIN and END lines
+     * @param out where to write the PEM block, not closed
+     * @throws IOException if the write to out fails
      * @since 0.9.25 consolidated from other methods
      */
     private static void writePEM(byte[] buf, String what, OutputStream out) throws IOException {
@@ -590,7 +597,10 @@ public final class CertUtil {
     /**
      * Load a CRL.
      *
+     * @param file the CRL file to read
      * @return non-null, possibly empty
+     * @throws IOException if the file cannot be opened or read
+     * @throws GeneralSecurityException if the CRL cannot be parsed
      * @since 0.9.25
      */
     private static X509CRL loadCRL(File file) throws IOException, GeneralSecurityException {
@@ -665,6 +675,8 @@ public final class CertUtil {
     /**
      * For use in the build process.
      *
+     * @param dir the data directory holding the certificates and the
+     *            revocation subdirectory
      * @return 0 for success, nonzero for failure
      * @since 0.9.38
      */

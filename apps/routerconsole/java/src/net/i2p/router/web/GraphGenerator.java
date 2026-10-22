@@ -858,7 +858,12 @@ public class GraphGenerator implements Runnable, ClientApp {
         return isCoalesceSweepStalled(sweepAgeMs);
     }
 
-    /** Whether the coalesce sweep is currently stalled, per {@link #isCoalesceStalledNow}. */
+    /**
+     * Whether the coalesce sweep is currently stalled, per {@link #isCoalesceStalledNow}.
+     *
+     * @param now the current time in ms since the epoch
+     * @return true only once a sweep should have come round and has not
+     */
     private boolean isCoalesceStalled(long now) {
         StatManager sm = _context.statManager();
         if (sm == null) {
@@ -1396,8 +1401,6 @@ public class GraphGenerator implements Runnable, ClientApp {
         }
     }
 
-    /////// ClientApp methods
-
     /**
      * Does nothing, we aren't tracked.
      * @since 0.9.38
@@ -1437,8 +1440,6 @@ public class GraphGenerator implements Runnable, ClientApp {
      */
     @Override
     public String getDisplayName() {return "I2P+ Graph Generator";}
-
-    /////// End ClientApp methods
 
     /**
      * List of GraphListener instances.
@@ -1684,6 +1685,7 @@ public class GraphGenerator implements Runnable, ClientApp {
      * @param end number of periods before now to end at
      * @param showCredit if true, show the I2P+ credit line
      * @param showRestarts if true, draw the vertical restart lines and &quot;Router restarted&quot; label
+     * @param meta true to write the metadata instead of the image
      * @return true on success, false if the stat is not currently renderable
      * @throws IOException if rendering fails
      */
@@ -1890,6 +1892,7 @@ GraphListener lsnr = _listenerByRate.get(rate);
      * @param end number of periods before now to end at
      * @param showCredit if true, show the I2P+ credit line
      * @param showRestarts if true, draw the vertical restart lines and &quot;Router restarted&quot; label
+     * @param meta true to write the metadata instead of the image
      * @return true on success, false if the stat is not currently renderable
      * @throws IOException if rendering fails
      */

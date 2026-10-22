@@ -281,6 +281,7 @@ public class EncryptedLeaseSet extends LeaseSet2 {
      * Generate blinded pubkey from the unblinded pubkey in the destination,
      * which must have been previously set.
      *
+     * @param spk the unblinded signing public key from the destination
      * @return the blinded public key
      * @since 0.9.39
      */
@@ -637,7 +638,10 @@ public class EncryptedLeaseSet extends LeaseSet2 {
      * Throws IllegalStateException if not initialized.
      *
      * @param csk PrivateKey for DH or PSK, or null if none
-     * @throws IllegalStateException
+     * @throws IllegalStateException if this object holds no encrypted data
+     * @throws DataFormatException if the per-client auth entry is missing or unusable, or the
+     *                             decrypted data is not a valid LeaseSet
+     * @throws IOException if the decrypted inner LeaseSet cannot be read
      */
     private void decrypt(PrivateKey csk) throws DataFormatException, IOException {
         try {
@@ -651,7 +655,10 @@ public class EncryptedLeaseSet extends LeaseSet2 {
      * Throws IllegalStateException if not initialized.
      *
      * @param csk PrivateKey for DH or PSK, or null if none
-     * @throws IllegalStateException
+     * @throws IllegalStateException if this object holds no encrypted data
+     * @throws DataFormatException if the per-client auth type or entry is missing or
+     *                             unusable, or the decrypted data is not a valid LeaseSet
+     * @throws IOException if the decrypted inner LeaseSet cannot be read
      */
     private void x_decrypt(PrivateKey csk) throws DataFormatException, IOException {
         if (_encryptedData == null) throw new IllegalStateException("Not encrypted");
@@ -799,6 +806,7 @@ public class EncryptedLeaseSet extends LeaseSet2 {
     /**
      * The HKDF input (with per-client auth).
      *
+     * @param ctx the context supplying the keys used to derive the subcredential
      * @param authcookie 32 bytes
      * @return 68 bytes
      * @since 0.9.41
@@ -815,6 +823,7 @@ public class EncryptedLeaseSet extends LeaseSet2 {
     /**
      * The subcredential.
      *
+     * @param ctx the context supplying the hash used to derive it
      * @return 32 bytes
      * @throws IllegalStateException if we don't have it
      * @since 0.9.39
@@ -837,6 +846,9 @@ public class EncryptedLeaseSet extends LeaseSet2 {
     /**
      * Hash with a personalization string.
      *
+     * @param ctx the context supplying the SHA implementation
+     * @param p the personalization string prepended to the data
+     * @param d the data to hash
      * @return 32 bytes
      * @since 0.9.39
      */

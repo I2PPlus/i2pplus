@@ -244,6 +244,11 @@ public class RingRenderer {
     /**
      * Append sparkline bar chart to the SVG buffer.
      * Histogram bars rendered at the bottom of the ring area.
+     *
+     * @param buf the SVG buffer to append the bars to
+     * @param history histogram values; NaN entries are skipped and fewer than
+     *                two valid values render nothing
+     * @param cls CSS class for the bar rects
      */
     private static void appendBarPlot(StringBuilder buf, double[] history, String cls) {
         int count = 0;
@@ -355,8 +360,6 @@ public class RingRenderer {
         return buf.toString();
     }
 
-    // ---- Multi-section ring (N-way split) ----
-
     /**
      * A section of a multi-section ring with a proportion and color class.
      * Values are normalized to sum to 1.0 at render time.
@@ -366,7 +369,7 @@ public class RingRenderer {
         public final double value;
         /**
          * CSS color class: &quot;green&quot;, &quot;red&quot;, &quot;yellow&quot;, &quot;blue&quot;,
-          * &quot;cyan&quot;, &quot;gray&quot;.
+         * &quot;cyan&quot;, &quot;gray&quot;.
          */
         public final String cssClass;
 
@@ -480,7 +483,13 @@ public class RingRenderer {
         return score >= 0.8 ? "green" : score >= 0.5 ? "yellow" : "red";
     }
 
-    /** HTML-escape a string. */
+    /**
+     * HTML-escape a string.
+     *
+     * @param s the text to escape, may be null
+     * @return the text with &amp;, &lt;, &gt;, quotes and apostrophes escaped,
+     *         or "" for null input
+     */
     private static String esc(String s) {
         if (s == null) return "";
         StringBuilder buf = new StringBuilder(s.length() + 16);

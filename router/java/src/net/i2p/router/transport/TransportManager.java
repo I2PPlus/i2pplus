@@ -67,20 +67,20 @@ import static net.i2p.router.transport.Transport.AddressSource.*;
  * <strong>Core Responsibilities:</strong>
  * <ul>
  *   <li>Transport lifecycle management (start/stop/restart)</li>
- *   <li>Address discovery and configuration</li>
- *   <li>Peer connection management and statistics</li>
- *   <li>Message routing between transports</li>
- *   <li>UPnP integration for NAT traversal</li>
- *   <li>Bandwidth allocation and coordination</li>
- *   <li>Transport event handling and notifications</li>
+ * <li>Address discovery and configuration</li>
+ * <li>Peer connection management and statistics</li>
+ * <li>Message routing between transports</li>
+ * <li>UPnP integration for NAT traversal</li>
+ * <li>Bandwidth allocation and coordination</li>
+ * <li>Transport event handling and notifications</li>
  * </ul>
  * <p>
  * <strong>Transport Support:</strong>
  * <ul>
  *   <li>Built-in transports: NTCP, UDP, SSU</li>
- *   <li>Pluggable transport support (incomplete)</li>
- *   <li>IPv4 and IPv6 addressing</li>
- *   <li>Automatic transport selection and failover</li>
+ * <li>Pluggable transport support (incomplete)</li>
+ * <li>IPv4 and IPv6 addressing</li>
+ * <li>Automatic transport selection and failover</li>
  * </ul>
  * <p>
  * <strong>UPnP Integration:</strong>
@@ -168,8 +168,8 @@ public class TransportManager implements TransportEventListener {
 
     /**
      * Interval for the outbound connection maintainer (60 seconds).
-     *  Periodically checks whether we have enough outbound connections
-     *  to Fast peers and proactively establishes new ones.
+     * Periodically checks whether we have enough outbound connections
+     * to Fast peers and proactively establishes new ones.
      */
     private static final long MAINTAINER_INTERVAL = 60*1000L;
             /** Maximum per-cycle establishments to avoid flooding the network. */
@@ -278,12 +278,12 @@ public class TransportManager implements TransportEventListener {
      * <strong>Process:</strong>
      * <ul>
      *   <li>Validates transport is not built-in (NTCP/UDP)</li>
-     *   <li>Checks for duplicate transport styles</li>
-     *   <li>Adds to pluggable transport registry</li>
-     *   <li>Sets transport event listener</li>
-     *   <li>Initializes transport addresses</li>
-     *   <li>Starts transport listening if first transport</li>
-     *   <li>Rebuilds router info with new addresses</li>
+     * <li>Checks for duplicate transport styles</li>
+     * <li>Adds to pluggable transport registry</li>
+     * <li>Sets transport event listener</li>
+     * <li>Initializes transport addresses</li>
+     * <li>Starts transport listening if first transport</li>
+     * <li>Rebuilds router info with new addresses</li>
      * </ul>
      *
      * @param t the transport to register and start
@@ -319,11 +319,11 @@ public class TransportManager implements TransportEventListener {
      * <strong>Process:</strong>
      * <ul>
      *   <li>Validates transport is not built-in (NTCP/UDP)</li>
-     *   <li>Removes transport event listener</li>
-     *   <li>Removes from pluggable transport registry</li>
-     *   <li>Stops transport listening</li>
-     *   <li>Removes from main transport registry</li>
-     *   <li>Rebuilds router info without transport addresses</li>
+     * <li>Removes transport event listener</li>
+     * <li>Removes from pluggable transport registry</li>
+     * <li>Stops transport listening</li>
+     * <li>Removes from main transport registry</li>
+     * <li>Rebuilds router info without transport addresses</li>
      * </ul>
      *
      * @param t the transport to stop and unregister
@@ -412,7 +412,9 @@ public class TransportManager implements TransportEventListener {
 
     /**
      * Notify transport of ALL routable interface addresses, including IPv6.
-     *  It's the transport's job to ignore what it can't handle.
+     * It's the transport's job to ignore what it can't handle.
+     *
+     * @param t the transport to notify
      */
     private void initializeAddress(Transport t) {
         initializeAddress(Collections.singleton(t));
@@ -420,7 +422,7 @@ public class TransportManager implements TransportEventListener {
 
     /**
      * Notify all transports of ALL routable interface addresses, including IPv6.
-     *  It's the transport's job to ignore what it can't handle.
+     * It's the transport's job to ignore what it can't handle.
      * @since 0.9.34
      */
     void initializeAddress() {
@@ -429,7 +431,9 @@ public class TransportManager implements TransportEventListener {
 
     /**
      * Notify transports of ALL routable interface addresses, including IPv6.
-     *  It's the transport's job to ignore what it can't handle.
+     * It's the transport's job to ignore what it can't handle.
+     *
+     * @param ts the transports to notify
      * @since 0.9.34
      */
     private void initializeAddress(Collection<Transport> ts) {
@@ -689,7 +693,7 @@ public class TransportManager implements TransportEventListener {
 
     /**
      * How many peers are we currently connected to, that we have
-     *  sent a message to or received a message from in the last five minutes.
+     * sent a message to or received a message from in the last five minutes.
      * @return the summed count across every transport
      */
     int countActivePeers() {
@@ -1320,9 +1324,9 @@ public class TransportManager implements TransportEventListener {
      * to:
      * <ul>
      *   <li>UPnP address discovery</li>
-     *   <li>Interface address changes</li>
-     *   <li>Configuration updates</li>
-     *   <li>Network topology changes</li>
+     * <li>Interface address changes</li>
+     * <li>Configuration updates</li>
+     * <li>Network topology changes</li>
      * </ul>
      */
     public void transportAddressChanged() {
@@ -1435,8 +1439,10 @@ public class TransportManager implements TransportEventListener {
 
     /**
      * Mark a string for extraction by xgettext and translation.
-     *  Use this only in static initializers.
-     *  It does not translate!
+     * Use this only in static initializers.
+     * It does not translate!
+     *
+     * @param s the literal string to mark for extraction
      * @return s, unchanged; the marker works by naming the literal
      */
     private static final String _x(String s) {
@@ -1447,6 +1453,9 @@ public class TransportManager implements TransportEventListener {
 
     /**
      * Looks up a localised string in the console bundle.
+     *
+     * @param s the string to translate
+     * @return the localised string, or s itself when no translation exists
      */
     private final String _t(String s) {
         return Translate.getString(s, _context, BUNDLE_NAME);
@@ -1456,13 +1465,13 @@ public class TransportManager implements TransportEventListener {
      * Periodically ensures we have enough outbound connections to Fast peers.
      * <p>
      * The transport layer creates outbound connections on-demand when a message
-     *  needs to be sent. However, in low-traffic scenarios or when the I2P+ pre-send
-     *  check blocks sends to unconnected peers, outbound connections can dry up,
-     *  causing tunnel build failures ("first hop unreachable").
+     * needs to be sent. However, in low-traffic scenarios or when the I2P+ pre-send
+     * check blocks sends to unconnected peers, outbound connections can dry up,
+     * causing tunnel build failures ("first hop unreachable").
      * <p>
      * This maintainer runs every 60 seconds, checks how many outbound connections
-     *  we have to Fast/HiCap peers, and proactively establishes new ones if the count
-     *  is below the threshold.
+     * we have to Fast/HiCap peers, and proactively establishes new ones if the count
+     * is below the threshold.
      */
     private class OutboundMaintainerEvent extends SimpleTimer2.TimedEvent {
         /**
@@ -1525,10 +1534,12 @@ public class TransportManager implements TransportEventListener {
 
     /**
      * Trigger transport connection establishment to a peer.
-     *  Uses a DatabaseLookupMessage to warm the connection, which triggers
-     *  a real handshake and keeps the session alive (peer replies with its
-     *  RouterInfo). NTCP crashes on null messages, so we always provide
-     *  a real payload.
+     * Uses a DatabaseLookupMessage to warm the connection, which triggers
+     * a real handshake and keeps the session alive (peer replies with its
+     * RouterInfo). NTCP crashes on null messages, so we always provide
+     * a real payload.
+     *
+     * @param peer the peer to connect to
      */
     private void establishTo(Hash peer) {
         RouterInfo ri = _context.netDb().lookupRouterInfoLocally(peer);

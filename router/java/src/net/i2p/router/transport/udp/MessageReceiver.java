@@ -265,6 +265,8 @@ class MessageReceiver {
      * This calls state.releaseResources(), do not access state after calling this.
      *
      * @param buf temp buffer for convenience
+     * @param state the fragments to assemble, released by this call
+     * @param handler the handler the assembled message is delivered to
      * @return null on error
      */
     private I2NPMessage readMessage(ByteArray buf, InboundMessageState state, I2NPMessageHandler handler) {

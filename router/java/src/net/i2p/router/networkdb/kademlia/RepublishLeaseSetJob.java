@@ -53,12 +53,14 @@ public class RepublishLeaseSetJob extends JobImpl {
     public static final int RETRY_DELAY_DEFAULT = (int) (10L * 1000);
     /** Maximum backoff delay for publish retries. */
     public static final int RETRY_MAX_DELAY_DEFAULT = (int) (120L * 1000);
-    /** Window before lease expiry to trigger a re-mint instead of flooding the
+    /**
+     * Window before lease expiry to trigger a re-mint instead of flooding the
      * dying copy.  Must stay below (lease cap - republish interval) — here
      * 240s &lt; 600s - 300s — so a freshly re-minted copy (capped at ~600s) still
      * presents above this window at the next interval check and gets flooded
      * directly; with an equal boundary the check lands at the knife edge and
-     * re-mints forever, starving the floodfill. */
+     * re-mints forever, starving the floodfill.
+     */
     private static final long EXPIRY_WINDOW = 4L * 60 * 1000;
     /** Minimum reschedule interval — prevents sub-minute flood treadmills. */
     private static final long MIN_RESCHEDULE = 60L * 1000;
@@ -138,10 +140,13 @@ public class RepublishLeaseSetJob extends JobImpl {
      * pool's own lease-eligibility floor (LEASE_MIN_REMAINING_MS = 2 min): a
      * lease the pool refuses to publish cannot outlive floodfill propagation,
      * so once we are inside that floor there is no further capacity to wait
-     * for. */
+     * for.
+     */
     private static final long EMERGENCY_REMINT_WINDOW = 2L * MIN_RESCHEDULE;
-    /** Retry interval after a missing local LeaseSet — long enough for the
-     * pool to build and test a replacement tunnel before we ask again. */
+    /**
+     * Retry interval after a missing local LeaseSet — long enough for the
+     * pool to build and test a replacement tunnel before we ask again.
+     */
     private static final long MISSING_LEASESET_RETRY = 30L * 1000;
     /**
      * A lease is viable for a re-mint while it has at least this much time
@@ -321,8 +326,12 @@ public class RepublishLeaseSetJob extends JobImpl {
         }
     }
 
-    // LeaseSet has expired — request a fresh one and check back soon
-    /** Handle expired lease set. */
+    /**
+     * Handle expired lease set: request a fresh one and check back soon.
+     *
+     * @param ls the expired lease set, named in the log by its hash
+     * @param name the log suffix naming the destination, " for 'nickname'" or " for key"
+     */
     private void handleExpiredLeaseSet(LeaseSet ls, String name) {
         if (_log.shouldWarn()) {
             _log.warn("LeaseSet EXPIRED -> Triggering immediate rebuild" + name +
@@ -398,19 +407,28 @@ public class RepublishLeaseSetJob extends JobImpl {
         }
     }
 
-    // True if the destination is still a configured local tunnel even when
-    // its I2CP session is closed (close-on-idle), i.e. a pool still exists.
-    /** Determine if client is still a configured local tunnel. */
+    /**
+     * Determine if client is still a configured local tunnel even when its I2CP session is
+     * closed (close-on-idle), that is, a pool still exists.
+     *
+     * @return true if the destination is local, or has inbound or outbound tunnel settings
+     */
     private boolean isTrackedLocal() {
         return getContext().clientManager().isLocal(_dest) ||
                getContext().tunnelManager().getInboundSettings(_dest) != null ||
                getContext().tunnelManager().getOutboundSettings(_dest) != null;
     }
 
-    // Publish a valid LeaseSet.  Startup gate defers first publication until
-    // target tunnel count met (or FIRST_PUBLISH_TIMEOUT elapses).  After first
-    // successful publish, subsequent renewals proceed immediately.
-    /** Handle valid lease set. */
+    /**
+     * Handle valid lease set: publish it. The startup gate defers the first publication until
+     * the target tunnel count is met, or FIRST_PUBLISH_TIMEOUT elapses. After the first
+     * successful publish, subsequent renewals proceed immediately.
+     *
+     * @param ls the unexpired lease set to publish
+     * @param name the log suffix naming the destination, " for 'nickname'" or " for key"
+     * @param now the current time in milliseconds
+     * @param timeUntilExpiry milliseconds until the earliest lease of ls expires
+     */
     private void handleValidLeaseSet(LeaseSet ls, String name, long now, long timeUntilExpiry) {
         Long lastPubLog = _lastPublishLogTime.get(_dest);
         boolean expiring = timeUntilExpiry <= EXPIRY_WINDOW;
@@ -475,14 +493,15 @@ public class RepublishLeaseSetJob extends JobImpl {
         scheduleRepublish(computeNextRepublish(timeUntilExpiry));
     }
 
-    // At startup, defer first publication until target tunnels met.
-    // Falls through after FIRST_PUBLISH_TIMEOUT so pools at partial
-    // capacity (e.g. 70% build success) don't block indefinitely.
-    // One-time only: once a destination publishes, _publishedOnce prevents
-    // re-deferral on subsequent cycles (no 15s treadmill).
     /**
-     * Whether publication was deferred while waiting for target tunnels.
+     * Whether publication was deferred while waiting for target tunnels. At startup the first
+     * publication is deferred until the target tunnel count is met; it falls through after
+     * FIRST_PUBLISH_TIMEOUT so pools at partial capacity (e.g. 70% build success) do not block
+     * indefinitely. One-time only: once a destination publishes, _publishedOnce prevents
+     * re-deferral on subsequent cycles (no 15s treadmill).
      *
+     * @param leaseCount the leases the published lease set currently carries
+     * @param targetLeases the inbound tunnel count the destination's pool is configured for
      * @return true if publication was deferred
      */
     private boolean maybeDeferFirstPublish(int leaseCount, int targetLeases) {
@@ -724,6 +743,9 @@ public class RepublishLeaseSetJob extends JobImpl {
      * Re-publish the lease set before it expires from the network DB.
      *
      * @param storedLeaseSet the LeaseSet currently published, for no-op detection
+     * @param name the log suffix naming the destination, " for 'nickname'" or " for key"
+     * @param now the current time in milliseconds
+     * @param timeUntilExpiry milliseconds until the earliest lease of the stored set expires
      */
     private void refloatLeaseSet(LeaseSet storedLeaseSet, String name, long now, long timeUntilExpiry) {
         LeaseSet fresh = getFreshPoolLeaseSet();
@@ -953,9 +975,12 @@ public class RepublishLeaseSetJob extends JobImpl {
         return job;
     }
 
-    // Schedule the next republish cycle.  Unregisters current job first
-    // so hasActiveRepublishJob() doesn't block the successor.
-    /** Schedule republish. */
+    /**
+     * Schedule republish: queue the next republish cycle, unregistering the current job first so
+     * hasActiveRepublishJob() doesn't block the successor.
+     *
+     * @param delayMs how long from now the successor job should start, in milliseconds
+     */
     private void scheduleRepublish(long delayMs) {
         _facade.removePublishingJob(_dest, this);
         if (_facade.hasActiveRepublishJob(_dest)) {
@@ -1070,7 +1095,12 @@ public class RepublishLeaseSetJob extends JobImpl {
         return previous == null || now - previous > PUBLISH_LOG_THROTTLE;
     }
 
-    /** Cleanup map. */
+    /**
+     * Cleanup map: drop the entries whose timestamp is older than the cleanup threshold.
+     *
+     * @param map the destination to timestamp map to prune in place
+     * @param now the current time in milliseconds, compared against each entry's timestamp
+     */
     private static void cleanupMap(ConcurrentHashMap<Hash, Long> map, long now) {
         Iterator<Map.Entry<Hash, Long>> iter = map.entrySet().iterator();
         while (iter.hasNext()) {
@@ -1081,8 +1111,13 @@ public class RepublishLeaseSetJob extends JobImpl {
         }
     }
 
-    // Reset global fail counters idle beyond the threshold
-    /** Cleanup global fail count. */
+    /**
+     * Cleanup global fail count: reset the counters of destinations no longer being tracked,
+     * assuming their publication has finished.
+     *
+     * @param now the current time in milliseconds, unused because the counters carry no
+     *            timestamps
+     */
     private static void cleanupGlobalFailCount(long now) {
         // Global fail count has no timestamp per entry; just clear entries
         // for destinations no longer being tracked in the publish log.
@@ -1182,7 +1217,12 @@ public class RepublishLeaseSetJob extends JobImpl {
             }
         }
 
-        /** Verify and retry. */
+        /**
+         * Verify and retry: ask the floodfill whether the lease set is published, and re-queue
+         * the republish if it is not confirmed.
+         *
+         * @param ls the lease set to confirm on the floodfill
+         */
         private void verifyAndRetry(final LeaseSet ls) {
             String tunnelName = getTunnelName(ls.getDestination());
             String name = !tunnelName.isEmpty() ? " for '" + tunnelName + "'" : " for key";

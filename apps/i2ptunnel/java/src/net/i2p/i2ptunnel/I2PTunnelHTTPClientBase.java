@@ -78,11 +78,11 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
     private static final int MAX_NONCE_COUNT = 1024;
     /**
      * Property to use local outproxy plugin.
-     * */
+     */
     public static final String PROP_USE_OUTPROXY_PLUGIN = "i2ptunnel.useLocalOutproxy";
     /**
      * Property for SSL outproxies.
-     * */
+     */
     public static final String PROP_SSL_OUTPROXIES = "i2ptunnel.httpclient.SSLOutproxies";
     private static final String SLASH = System.getProperty("file.separator");
 
@@ -470,8 +470,9 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
         /**
          * Whether the nonce is still usable.
          *
+         * @param nc the nonce count from the request, above zero and below MAX_NONCE_COUNT
          * @return AUTH_GOOD when the nonce has not expired and this nonce count has
-         * not been seen before, otherwise AUTH_BAD or AUTH_STALE
+         *         not been seen before, otherwise AUTH_BAD or AUTH_STALE
          */
         public AuthResult isValid(int nc) {
             if (nc <= 0) {return AuthResult.AUTH_BAD;}
@@ -758,7 +759,10 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
      * Verify all of it.
      * Ref: RFC 2617.
      *
+     * @param method the HTTP method from the request line, hashed as part of the digest
+     * @param args the parsed Authorization header parameters, keyed by name
      * @param s just to log the IP on failure
+     * @return AUTH_GOOD if everything checks out, otherwise AUTH_BAD, AUTH_STALE or AUTH_BAD_REQ
      */
     private AuthResult validateDigest(String method, Map<String, String> args, Socket s) {
         String user = args.get("username");
@@ -1139,8 +1143,10 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
     /**
      * Verify the Base 64 of 40 bytes: (now, sha256 of (now, proxy nonce))
      * and the nonce count.
+     *
      * @param b64 nonce non-null
      * @param ncs nonce count string non-null
+     * @return AUTH_GOOD if the nonce is valid and the count is new, otherwise AUTH_BAD or AUTH_STALE
      */
     private AuthResult verifyNonce(String b64, String ncs) {
         if (_nonceCleanCounter.incrementAndGet() % 16 == 0) {cleanNonces();}
@@ -1220,7 +1226,8 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
      * All keys are mapped to lower case.
      * Ref: RFC 2617.
      *
-     * @param args non-null
+     * @param args non-null, starting after "Digest " or "Basic "
+     * @return the parsed key-value pairs, with the keys lower-cased
      */
     private static Map<String, String> parseArgs(String args) {
         // moved to EepGet, since it needs this too
@@ -1239,7 +1246,7 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
      * @param base the error page base name
      * @param backup fallback string if the file cannot be read
      * @return non-null
-     * */
+     */
     protected String getErrorPage(String base, String backup) {
         return getErrorPage(_context, base, backup);
     }
@@ -1255,7 +1262,7 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
      * @param base the error page base name
      * @param backup fallback string if the file cannot be read
      * @return non-null
-     * */
+     */
     protected static String getErrorPage(I2PAppContext ctx, String base, String backup) {
         File errorDir = new File(ctx.getBaseDir(), "docs" + SLASH + "proxy");
         File file = new File(errorDir, base + "-header.ht");
@@ -1321,7 +1328,7 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
 
     /**
      * Callback for timeout events.
-     * */
+     */
     protected class OnTimeout implements I2PTunnelRunner.FailCallback {
         private final Socket _socket;
         private final OutputStream _out;
@@ -1431,7 +1438,7 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
      * @param usingWWWProxy whether a WWW outproxy is in use
      * @param wwwProxy the outproxy destination
      * @param requestId the request identifier for logging
-     * */
+     */
     protected void handleClientException(Exception ex, OutputStream out, String targetRequest,
                                          boolean usingWWWProxy, String wwwProxy, long requestId) {
         if (out == null) {return;}
@@ -1508,7 +1515,7 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
      * @param wwwProxy the outproxy destination
      * @param jumpServers comma- or space-separated list, or null
      * @throws java.io.IOException on write error
-     * */
+     */
     protected void writeErrorMessage(String errMessage, OutputStream out, String targetRequest,
                                      boolean usingWWWProxy, String wwwProxy, String jumpServers) throws IOException {
         writeErrorMessage(errMessage, null, out, targetRequest, usingWWWProxy, wwwProxy, jumpServers);
@@ -1661,7 +1668,7 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
      * Public only for LocalHTTPServer, not for general use.
      * @param out the output stream to write to
      * @throws java.io.IOException on write error
-     * */
+     */
     public static void writeFooter(OutputStream out) throws IOException {
         out.write(getFooter().getBytes(StandardCharsets.UTF_8));
         out.flush();
@@ -1690,7 +1697,7 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
      *
      * @param key the translation key
      * @return the translated string
-     * */
+     */
     protected String _t(String key) {
         return Translate.getString(key, _context, BUNDLE_NAME);
     }
@@ -1701,7 +1708,7 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
      * @param key the translation key
      * @param o the parameter to insert
      * @return the translated string
-     * */
+     */
     protected String _t(String key, Object o) {
         return Translate.getString(key, o, _context, BUNDLE_NAME);
     }
@@ -1713,7 +1720,7 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
      * @param o the first parameter to insert
      * @param o2 the second parameter to insert
      * @return the translated string
-     * */
+     */
     protected String _t(String key, Object o, Object o2) {
         return Translate.getString(key, o, o2, _context, BUNDLE_NAME);
     }

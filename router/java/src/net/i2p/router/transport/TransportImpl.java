@@ -19,19 +19,19 @@ package net.i2p.router.transport;
  * <strong>Core Features:</strong>
  * <ul>
  *   <li>Peer connection management and state tracking</li>
- *   <li>Message sending and receiving queues</li>
- *   <li>Address management and validation</li>
- *   <li>Event listener integration</li>
- *   <li>Statistics collection and reporting</li>
- *   <li>Clock skew monitoring and compensation</li>
- *   <li>Reachability testing and status tracking</li>
+ * <li>Message sending and receiving queues</li>
+ * <li>Address management and validation</li>
+ * <li>Event listener integration</li>
+ * <li>Statistics collection and reporting</li>
+ * <li>Clock skew monitoring and compensation</li>
+ * <li>Reachability testing and status tracking</li>
  * </ul>
  * <p>
  * <strong>Extending Classes:</strong>
  * <ul>
  *   <li>NTCPTransport - Stream-based TCP with encryption</li>
- *   <li>UDPTransport - Datagram-based with reliability</li>
- *   <li>SSUTransport - Sessionless UDP for introductions</li>
+ * <li>UDPTransport - Datagram-based with reliability</li>
+ * <li>SSUTransport - Sessionless UDP for introductions</li>
  * </ul>
  * <p>
  * <strong>Thread Safety:</strong>
@@ -89,11 +89,11 @@ public abstract class TransportImpl implements Transport {
     private TransportEventListener _listener;
     private final List<RouterAddress> _currentAddresses;
     /**
-     *  IP of the current IPv4 address, or null.  Maintained by every mutation of
-     *  _currentAddresses so the per-packet "is this us?" check need not take that
-     *  list's monitor.  Cloned on read and on write, so no array escapes.
+     * IP of the current IPv4 address, or null.  Maintained by every mutation of
+     * _currentAddresses so the per-packet "is this us?" check need not take that
+     * list's monitor.  Cloned on read and on write, so no array escapes.
      *
-     *  @since 0.9.71+
+     * @since 0.9.71+
      */
     private volatile byte[] _currentIPv4;
     // Only used by NTCP. SSU does not use. See send() below.
@@ -413,9 +413,9 @@ public abstract class TransportImpl implements Transport {
     }
 
     /**
-     *  Whether we are under the given capacity level.
+     * Whether we are under the given capacity level.
      *
-     *  @param pct are we under x% 0-100
+     * @param pct are we under x% 0-100
      */
     public boolean haveCapacity(int pct) {
         return countPeers() < getMaxConnections() * pct / 100;
@@ -708,10 +708,10 @@ public abstract class TransportImpl implements Transport {
     }
 
     /**
-     *  What address are we currently listening to?
-     *  Replaces getCurrentAddress()
+     * What address are we currently listening to?
+     * Replaces getCurrentAddress()
      * <p>
-     *  Note: An address without a host is considered IPv4.
+     * Note: An address without a host is considered IPv4.
      *
      * @param ipv6 true for IPv6 only; false for IPv4 only
      * @return first matching address or null
@@ -727,11 +727,11 @@ public abstract class TransportImpl implements Transport {
     }
 
     /**
-     *  Recompute the cached IPv4 address. Must be called with _currentAddresses
-     *  held, after every change to the list, so that
-     *  {@link #isCurrentIPv4(byte[])} tracks exactly what getCurrentAddress(false)
-     *  would return. Clones the IP so later mutation of the RouterAddress cannot
-     *  be seen through the cache.
+     * Recompute the cached IPv4 address. Must be called with _currentAddresses
+     * held, after every change to the list, so that
+     * {@link #isCurrentIPv4(byte[])} tracks exactly what getCurrentAddress(false)
+     * would return. Clones the IP so later mutation of the RouterAddress cannot
+     * be seen through the cache.
      */
     private void refreshCurrentIPv4() {
         byte[] ip = null;
@@ -746,11 +746,11 @@ public abstract class TransportImpl implements Transport {
     }
 
     /**
-     *  Is the given IP the current external IPv4 address?
+     * Is the given IP the current external IPv4 address?
      * <p>
-     *  Equivalent to comparing against {@link #getCurrentAddress(boolean)}
-     *  with ipv6 false, but without taking the address-list monitor. For the
-     *  hot inbound path (per-packet "did this come from us?" check).
+     * Equivalent to comparing against {@link #getCurrentAddress(boolean)}
+     * with ipv6 false, but without taking the address-list monitor. For the
+     * hot inbound path (per-packet "did this come from us?" check).
      *
      * @param ip the IP to test, may be null
      * @return true if we currently have an IPv4 address equal to ip
@@ -762,11 +762,11 @@ public abstract class TransportImpl implements Transport {
     }
 
     /**
-     *  IP of the current IPv4 address, from the cache maintained by the address
-     *  mutators. Does not take the address-list monitor.
+     * IP of the current IPv4 address, from the cache maintained by the address
+     * mutators. Does not take the address-list monitor.
      *
-     *  @return a copy of the IP, or null if we have no IPv4 address
-     *  @since 0.9.71+
+     * @return a copy of the IP, or null if we have no IPv4 address
+     * @since 0.9.71+
      */
     protected byte[] getCurrentIPv4() {
         byte[] current = _currentIPv4;
@@ -793,13 +793,13 @@ public abstract class TransportImpl implements Transport {
     }
 
     /**
-     *  Replace any existing addresses for the current transport
-     *  with the same IP length (4 or 16) with the given one.
-     *  Note: Does not currently allow multiple addresses of the same length.
-     *  Calls listener.transportAddressChanged()
-     *  To remove all IPv4 or IPv6 addresses, use removeAddress(boolean).
+     * Replace any existing addresses for the current transport
+     * with the same IP length (4 or 16) with the given one.
+     * Note: Does not currently allow multiple addresses of the same length.
+     * Calls listener.transportAddressChanged()
+     * To remove all IPv4 or IPv6 addresses, use removeAddress(boolean).
      *
-     *  @param address null to remove all
+     * @param address null to remove all
      */
     protected void replaceAddress(RouterAddress address) {
         boolean isIPv6;
@@ -858,12 +858,12 @@ public abstract class TransportImpl implements Transport {
     }
 
     /**
-     *  Remove all existing addresses with the specified IP length (4 or 16).
-     *  Calls listener.transportAddressChanged().
-     *  To remove all IPv4 and IPv6 addresses, use replaceAddress(null).
+     * Remove all existing addresses with the specified IP length (4 or 16).
+     * Calls listener.transportAddressChanged().
+     * To remove all IPv4 and IPv6 addresses, use replaceAddress(null).
      *
-     *  @param ipv6 true to remove all IPv6 addresses, false to remove all IPv4 addresses
-     *  @since 0.9.20
+     * @param ipv6 true to remove all IPv6 addresses, false to remove all IPv4 addresses
+     * @since 0.9.20
      */
     protected void removeAddress(boolean ipv6) {
         if (_log.shouldWarn()) {_log.warn("Removing addresses, ipv6? " + ipv6);}
@@ -911,11 +911,11 @@ public abstract class TransportImpl implements Transport {
     }
 
     /**
-     *  All available addresses we can use, shuffled and then sorted by cost/preference.
-     *  Lowest cost (most preferred) first.
-     *  @param target the RouterInfo whose addresses are wanted
-     *  @return non-null, possibly empty
-     *  @since IPv6, public since 0.9.50, was protected
+     * All available addresses we can use, shuffled and then sorted by cost/preference.
+     * Lowest cost (most preferred) first.
+     * @param target the RouterInfo whose addresses are wanted
+     * @return non-null, possibly empty
+     * @since IPv6, public since 0.9.50, was protected
      */
     public List<RouterAddress> getTargetAddresses(RouterInfo target) {
         List<RouterAddress> rv;
@@ -953,9 +953,9 @@ public abstract class TransportImpl implements Transport {
     }
 
     /**
-     *  Compare based on published cost, adjusting for our IPv6 preference.
-     *  Lowest cost (most preferred) first.
-     *  @since IPv6
+     * Compare based on published cost, adjusting for our IPv6 preference.
+     * Lowest cost (most preferred) first.
+     * @since IPv6
      */
     private static class AddrComparator implements Comparator<RouterAddress>, Serializable {
         private final int adj;
@@ -985,16 +985,16 @@ public abstract class TransportImpl implements Transport {
     }
 
     /**
-     *  Notify a transport of an external address change.
-     *  This may be from a local interface, UPnP, a config change, etc.
-     *  This should not be called if the ip didn't change
-     *  (from that source's point of view), or is a local address.
-     *  May be called multiple times for IPv4 or IPv6.
-     *  The transport should also do its own checking on whether to accept
-     *  notifications from this source.
+     * Notify a transport of an external address change.
+     * This may be from a local interface, UPnP, a config change, etc.
+     * This should not be called if the ip didn't change
+     * (from that source's point of view), or is a local address.
+     * May be called multiple times for IPv4 or IPv6.
+     * The transport should also do its own checking on whether to accept
+     * notifications from this source.
      * <p>
-     *  This can be called before startListening() to set an initial address,
-     *  or after the transport is running.
+     * This can be called before startListening() to set an initial address,
+     * or after the transport is running.
      *
      * @param source defined in Transport.java
      * @param ip typ. IPv4 or IPv6 non-local; may be null to indicate IPv4 failure or port info only
@@ -1003,17 +1003,17 @@ public abstract class TransportImpl implements Transport {
     public abstract void externalAddressReceived(AddressSource source, byte[] ip, int port);
 
     /**
-     *  Notify a transport of an external address change.
-     *  This may be from a local interface, UPnP, a config change, etc.
-     *  This should not be called if the ip didn't change
-     *  (from that source's point of view), or is a local address.
-     *  May be called multiple times for IPv4 or IPv6.
-     *  The transport should also do its own checking on whether to accept
-     *  notifications from this source.
+     * Notify a transport of an external address change.
+     * This may be from a local interface, UPnP, a config change, etc.
+     * This should not be called if the ip didn't change
+     * (from that source's point of view), or is a local address.
+     * May be called multiple times for IPv4 or IPv6.
+     * The transport should also do its own checking on whether to accept
+     * notifications from this source.
      * <p>
-     *  This can be called after the transport is running.
+     * This can be called after the transport is running.
      * <p>
-     *  This implementation does nothing. Transports should override if they want notification.
+     * This implementation does nothing. Transports should override if they want notification.
      *
      * @param source defined in Transport.java
      * @since 0.9.20
@@ -1253,6 +1253,9 @@ public abstract class TransportImpl implements Transport {
 
     /**
      * Maintain the WasUnreachable list.
+     *
+     * @param peer the peer to add or remove
+     * @param yes true to add the peer to the list, false to remove it
      */
     private void markWasUnreachable(Hash peer, boolean yes) {
         if (yes) {
@@ -1273,10 +1276,10 @@ public abstract class TransportImpl implements Transport {
     public boolean allowLocal() {return _context.getBooleanProperty("i2np.allowLocal");}
 
     /**
-     *  IP of the peer from the last connection (in or out, any transport).
+     * IP of the peer from the last connection (in or out, any transport).
      *
-     *  @param peer the router hash the address was last seen for
-     *  @param ip IPv4 or IPv6, non-null
+     * @param peer the router hash the address was last seen for
+     * @param ip IPv4 or IPv6, non-null
      */
     public void setIP(Hash peer, byte[] ip) {
         byte[] old;
@@ -1285,22 +1288,22 @@ public abstract class TransportImpl implements Transport {
     }
 
     /**
-     *  IP of the peer from the last connection (in or out, any transport).
+     * IP of the peer from the last connection (in or out, any transport).
      *
-     *  @param peer the router hash to look the IP up for
-     *  @return IPv4 or IPv6 or null
+     * @param peer the router hash to look the IP up for
+     * @return IPv4 or IPv6 or null
      */
     public static byte[] getIP(Hash peer) {
         synchronized (_IPMap) {return _IPMap.get(peer);}
     }
 
     /**
-     *  Format an IP byte array (4 or 16 bytes) as host:port, for logging.
+     * Format an IP byte array (4 or 16 bytes) as host:port, for logging.
      *
-     *  @param ip 4 or 16 byte address
-     *  @param port port number, may be 0
-     *  @return "host:port" or "[host]:port", "UNKNOWN" for other lengths
-     *  @since 0.9.70
+     * @param ip 4 or 16 byte address
+     * @param port port number, may be 0
+     * @return "host:port" or "[host]:port", "UNKNOWN" for other lengths
+     * @since 0.9.70
      */
     public static String formatIPPort(byte[] ip, int port) {
         if (ip.length == 4) {
@@ -1318,13 +1321,13 @@ public abstract class TransportImpl implements Transport {
     }
 
     /**
-     *  Best IP:port for a router, for ban logging: the direct connection
-     *  IP from the transport layer, else a compatible address, else any
-     *  announced address.
+     * Best IP:port for a router, for ban logging: the direct connection
+     * IP from the transport layer, else a compatible address, else any
+     * announced address.
      *
-     *  @param router may be null
-     *  @return "host:port" or "UNKNOWN"
-     *  @since 0.9.70
+     * @param router may be null
+     * @return "host:port" or "UNKNOWN"
+     * @since 0.9.70
      */
     public static String getRouterIPPort(RouterInfo router) {
         if (router == null) {return "UNKNOWN";}
@@ -1388,10 +1391,10 @@ public abstract class TransportImpl implements Transport {
     }
 
     /**
-     *  Allows IPv6 only if the transport is configured for it.
-     *  Caller must check if we actually have a public IPv6 address.
-     *  @param addr non-null
-     *  @return whether publicly routable
+     * Allows IPv6 only if the transport is configured for it.
+     * Caller must check if we actually have a public IPv6 address.
+     * @param addr non-null
+     * @return whether publicly routable
      */
     protected boolean isPubliclyRoutable(byte[] addr) {
         TransportUtil.IPv6Config cfg = getIPv6Config();

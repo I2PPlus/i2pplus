@@ -347,6 +347,11 @@ class UPnPManager {
      */
     private class UPnPCallback implements ForwardPortCallback {
 
+        /**
+         * Callback that relays UPnP port-forward status changes to the transport.
+         */
+        private UPnPCallback() {}
+
         /** Called to indicate status on one or more forwarded ports. */
         public void portForwardStatus(Map<ForwardPort,ForwardPortStatus> statuses) {
             if (_log.shouldDebug())
@@ -444,6 +449,9 @@ class UPnPManager {
 
     /**
      * Look up a translation key in the router web message bundle.
+     *
+     * @param s the translation key
+     * @return the translated string
      */
     private final String _t(String s) {
         return Translate.getString(s, _context, BUNDLE_NAME);

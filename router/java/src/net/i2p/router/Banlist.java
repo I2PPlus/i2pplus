@@ -83,6 +83,7 @@ public class Banlist {
     private static final String PROP_ENABLE_COUNTRY_BAN = "router.blocklistCountries.enable";
     private static final boolean ENABLE_COUNTRY_BAN_DEFAULT = false;
     private boolean _enableCountryBan;
+    // Country ban duration - uses existing router.blockCountries property (session-based)
     // XG router ban (unlimited bandwidth, no transit tunnels)
     private static final String PROP_ENABLE_XG_BAN = "router.banlistXG";
     private static final boolean ENABLE_XG_BAN_DEFAULT = false;
@@ -111,7 +112,6 @@ public class Banlist {
     private static final String PROP_CUSTOM_CAPABILITY_BANS = "router.banlistCapabilities";
     private static final Pattern COMMA_SPLIT = Pattern.compile("[,\\s]+");
     private String _customCapabilityBans;
-    // Country ban duration - uses existing router.blockCountries property (session-based)
 
     /**
      * Hash of 387 zeros.
@@ -576,6 +576,9 @@ public class Banlist {
      * remaining durations of eligible entries (between BAN_REDUCTION_MIN
      * and BAN_REDUCTION_MAX) to keep the list manageable under memory pressure.
      * Scaling: remaining *= max(MIN_BAN_SCALE, (double) BAN_COUNT_BASELINE / count).
+     *
+     * @param now the current time in ms, the reference for each entry's
+     *            remaining duration
      */
     private void reduceDurations(long now) {
         int count = _entries.size();
@@ -1313,6 +1316,8 @@ public class Banlist {
     /**
      * Render banlist status as HTML.
      *
+     * @param out the writer the status would be rendered to, unused
+     * @throws IOException never thrown by this deprecated no-op
      * @deprecated moved to router console
      */
     @Deprecated

@@ -44,6 +44,7 @@ class OutboundGatewayProcessor {
      * Iteratively undo the crypto that the various layers in the tunnel added.  This is used
      * by the outbound gateway (preemptively undoing the crypto peers will add).
      *
+     * @param cfg the tunnel config whose layers to undo
      * @param orig original data with an extra 16 byte IV prepended.
      * @param offset index into the array where the extra 16 bytes (IV) begins
      * @param length how much of orig can we write to (must be a multiple of 16).

@@ -55,8 +55,9 @@ public class SubscriptionsBean extends BaseBean {
     /**
      * The subscriptions file.
      *
+     * @return the subscriptions file under the addressbook directory
      * @since 0.9.13
-      */
+     */
     private File subsFile() {return new File(addressbookDir(), SUBS_FILE);}
 
     private void reloadSubs() {

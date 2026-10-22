@@ -7,10 +7,10 @@ import net.i2p.router.transport.FIFOBandwidthRefiller;
 import net.i2p.router.web.FormHandler;
 
 /**
- *  The new user wizard.
+ * The new user wizard.
  * <p>
- *  This handler has request scope (as all FormHandlers must), so it controls
- *  the test via the helper, which has session scope.
+ * This handler has request scope (as all FormHandlers must), so it controls
+ * the test via the helper, which has session scope.
  *
  * @since 0.9.38
  */
@@ -72,6 +72,9 @@ public class WizardHandler extends FormHandler {
 
     /**
      * Modified from {@link ConfigNetHandler}.
+     *
+     * @param changes the map of config key-value pairs to be saved; each rate
+     *                setting that changed is added to it
      * @return true if any bandwidth, share or burst setting was written
      */
     private boolean updateRates(Map<String, String> changes) {

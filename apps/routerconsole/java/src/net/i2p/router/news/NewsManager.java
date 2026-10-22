@@ -131,10 +131,9 @@ public class NewsManager implements ClientApp {
         Collections.sort(_currentNews);
     }
 
-    // ClientApp methods
-
     /**
-     * ClientApp interface.
+     * ClientApp interface method. Loads the persisted news, sets the state to
+     * running, and registers for state change notifications.
      */
     @Override
     public synchronized void startup() {
@@ -175,8 +174,6 @@ public class NewsManager implements ClientApp {
      */
     @Override
     public String getDisplayName() {return "News Manager";}
-
-    /////// end ClientApp methods
 
     private synchronized void changeState(ClientAppState state) {
         _state = state;
@@ -231,7 +228,9 @@ public class NewsManager implements ClientApp {
     /**
      * Used for initialNews.xml and news.xml.
      *
+     * @param newsContent the raw news file contents to scan for headings
      * @param addMissingDiv true for initialNews, false for news.xml
+     * @return the news entries found in document order, empty if no headings
      */
     private List<NewsEntry> parseNews(String newsContent, boolean addMissingDiv) {
         List<NewsEntry> rv = new ArrayList<>();

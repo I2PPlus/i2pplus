@@ -2257,6 +2257,8 @@ public class DataHelper {
      * <p>
      * Ref: RFC 1951, RFC 1952, ResettableGzipOutputStream.
      *
+     * @param in the data to wrap in a stored gzip stream
+     * @param off the offset in in where the data begins
      * @param len 32767 max
      * @return 23 bytes longer
      * @since 0.9.46
@@ -2369,6 +2371,7 @@ public class DataHelper {
      * Ref: RFC 1951, RFC 1952, ResettableGzipOutputStream.
      *
      * @param in in[off + 10] MUST BE VALIDATED == 1 before calling this.
+     * @param off the offset in in where the gzip stream begins
      * @param len 65558 max
      * @return 23 bytes shorter
      * @throws IOException on all errors

@@ -566,6 +566,7 @@ public class TunnelDispatcher implements Service {
      * Create a preprocessor for an inbound tunnel gateway.
      *
      * @param cfg the hop configuration for the inbound gateway
+     * @return a preprocessor batching the gateway's outbound sends
      */
     private TunnelGateway.QueuePreprocessor createPreprocessor(HopConfig cfg) {
         return new BatchedRouterPreprocessor(_context, cfg);
@@ -575,6 +576,7 @@ public class TunnelDispatcher implements Service {
      * Create a preprocessor for an outbound tunnel gateway.
      *
      * @param cfg the tunnel creator configuration for the outbound gateway
+     * @return a preprocessor batching the gateway's outbound sends
      */
     private TunnelGateway.QueuePreprocessor createPreprocessor(TunnelCreatorConfig cfg) {
         return new BatchedRouterPreprocessor(_context, cfg);
@@ -941,6 +943,8 @@ public class TunnelDispatcher implements Service {
      * <p>
      * Only remove() may decrement this counter. A second decrement path let
      * IdleTunnelMonitor double-free and drift the transit total negative.
+     *
+     * @param bw the bandwidth in bytes to release; zero or negative is ignored
      */
     private void freeBandwidth(int bw) {
         if (bw > 0) {

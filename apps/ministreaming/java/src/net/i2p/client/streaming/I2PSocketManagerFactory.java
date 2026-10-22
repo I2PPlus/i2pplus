@@ -437,6 +437,8 @@ public class I2PSocketManagerFactory {
      * @param connect true to connect (blocking)
      * @param filter The filter to use for incoming connections
      * @return the newly created socket manager, non-null (throws on error)
+     * @throws I2PSessionException if the session cannot be created from the key
+     *                             stream, or connect is true and connecting fails
      * @since 0.9.40
      */
     private static I2PSocketManager createManager(InputStream myPrivateKeyStream, String i2cpHost, int i2cpPort,
@@ -535,6 +537,7 @@ public class I2PSocketManagerFactory {
     /**
      * The logger for this class.
      *
+     * @return the Log instance from the global context's log manager
      * @since 0.9.7
      */
     private static Log getLog() {

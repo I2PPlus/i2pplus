@@ -85,6 +85,8 @@ public class RegexOutputStream extends FilterOutputStream {
 
     /**
      * Put in the pending parse buf.
+     *
+     * @param c the character to append to the parse buffer
      */
     private void pushit(char c) {
         buf.append(c);
@@ -92,6 +94,8 @@ public class RegexOutputStream extends FilterOutputStream {
 
     /**
      * Flush buf to out, start over.
+     *
+     * @throws IOException if writing to the underlying writer fails
      */
     private void flushit() throws IOException {
         int len = buf.length();
@@ -104,6 +108,8 @@ public class RegexOutputStream extends FilterOutputStream {
     }
     /**
      * Throw out inbuf, output replacement, start over.
+     *
+     * @throws IOException if writing the replacement to the underlying writer fails
      */
     private void replaceit() throws IOException {
         int len = repl.length();

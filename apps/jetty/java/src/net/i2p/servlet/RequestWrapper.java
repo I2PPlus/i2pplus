@@ -227,6 +227,7 @@ public class RequestWrapper {
     /**
      * Log a request error.
      *
+     * @param e the exception to log
      * @since 0.9.33
      */
     private static void log(Exception e) {

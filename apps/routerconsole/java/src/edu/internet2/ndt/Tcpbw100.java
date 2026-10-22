@@ -516,7 +516,6 @@ public class Tcpbw100 extends JApplet implements ActionListener {
         return result;
     }
 
-    // get PC buffer imposed throughput limit
     /**
      * Returns the throughput ceiling the receive window over round trip time sets.
      *
@@ -639,9 +638,8 @@ public class Tcpbw100 extends JApplet implements ActionListener {
          * Creates a worker that runs the configured number of tests in sequence.
          */
         TestWorker() {}
-        // I2P
         /**
-         * Runs the tests, refusing to start a second run while one is active.
+         * I2P: Runs the tests, refusing to start a second run while one is active.
          */
         public void run() {
             if (_bTestInProgress.compareAndSet(false, true)) {
@@ -1843,6 +1841,11 @@ public class Tcpbw100 extends JApplet implements ActionListener {
 
     /**
      * Return a SSL or standard socket depending on config.
+     *
+     * @param hostAddress the host to connect to
+     * @param ctlPort the control port to connect to
+     * @return a connected socket, SSL or plain per {@link #_useSSL}
+     * @throws IOException if the connection fails
      */
     private Socket newSocket(InetAddress hostAddress, int ctlPort) throws IOException {
         if (_log.shouldInfo()) {

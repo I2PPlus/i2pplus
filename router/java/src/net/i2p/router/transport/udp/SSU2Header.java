@@ -33,10 +33,18 @@ final class SSU2Header {
      * @since 0.9.71+
      */
     private static final class Scratch {
+        /**
+         * Per-thread scratch headers and xor buffer for header protection.
+         */
+        private Scratch() {}
+
         final Header session = new Header(SESSION_HEADER_SIZE);
         final Header longHdr = new Header(LONG_HEADER_SIZE);
         final Header shortHdr = new Header(SHORT_HEADER_SIZE);
-        /** Reused by {@link #decryptDestConnID()}, decryptShortHeader(), encryptShortHeader(). */
+        /**
+         * Reused by {@link #decryptDestConnID(DatagramPacket, byte[])},
+         * decryptShortHeader(), encryptShortHeader().
+         */
         final byte[] xor = new byte[HEADER_PROT_DATA_LEN];
     }
 
@@ -153,6 +161,12 @@ final class SSU2Header {
      * Decrypt bytes 0-63 from pkt to header
      * First 64 bytes
      * Packet is unmodified.
+     *
+     * @param pkt the received packet, 64 bytes min
+     * @param key1 the 32-byte ChaCha20 key for the short header
+     * @param key2 the 32-byte ChaCha20 key for the remaining bytes
+     * @param header the scratch Header to write the decrypted bytes to
+     * @param scratch per-thread scratch buffers for the header protection
      */
     private static void decryptHandshakeHeader(DatagramPacket pkt, byte[] key1, byte[] key2, Header header, Scratch scratch) {
         byte[] data = pkt.getData();
@@ -165,6 +179,12 @@ final class SSU2Header {
      * Decrypt bytes 0-31 from pkt to header.
      * First 32 bytes
      * Packet is unmodified.
+     *
+     * @param pkt the received packet, 32 bytes min
+     * @param key1 the 32-byte ChaCha20 key for the short header
+     * @param key2 the 32-byte ChaCha20 key for the remaining bytes
+     * @param header the scratch Header to write the decrypted bytes to
+     * @param scratch per-thread scratch buffers for the header protection
      */
     private static void decryptLongHeader(DatagramPacket pkt, byte[] key1, byte[] key2, Header header, Scratch scratch) {
         byte[] data = pkt.getData();
@@ -179,6 +199,12 @@ final class SSU2Header {
      * <p>
      * First 8 bytes uses key1 and the next-to-last 12 bytes as the IV.
      * Next 8 bytes uses key2 and the last 12 bytes as the IV.
+     *
+     * @param pkt the received packet, 16 bytes min
+     * @param key1 the 32-byte ChaCha20 key for the first 8 bytes
+     * @param key2 the 32-byte ChaCha20 key for the next 8 bytes
+     * @param header the scratch Header to write the decrypted bytes to
+     * @param scratch per-thread scratch buffers for the header protection
      */
     private static void decryptShortHeader(DatagramPacket pkt, byte[] key1, byte[] key2, Header header, Scratch scratch) {
         byte[] data = pkt.getData();
@@ -301,10 +327,8 @@ final class SSU2Header {
         }
     }
 
-    ////////// Encryption ///////////
-
     /**
-     * First 64 bytes.
+     * Encryption - first 64 bytes.
      *
      * @param packet the outbound packet whose header bytes are encrypted in place
      * @param key1 the 32-byte ChaCha20 key protecting header bytes 0-7

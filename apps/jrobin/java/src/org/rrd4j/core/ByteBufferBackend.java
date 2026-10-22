@@ -177,8 +177,9 @@ public abstract class ByteBufferBackend extends RrdBackend {
     /**
      * Ensure that the conversion from long offset to integer offset will not overflow
      *
-     * @param offset
-     * @throws RrdException
+     * @param offset the position in the file, from 0 to Integer.MAX_VALUE
+     * @throws RrdException if the backing buffer is null (empty rrd)
+     * @throws IllegalArgumentException if the offset is negative or too large
      */
     private void checkOffsetAndByteBuffer(long offset) throws RrdException {
         if (offset < 0 || offset > Integer.MAX_VALUE) {

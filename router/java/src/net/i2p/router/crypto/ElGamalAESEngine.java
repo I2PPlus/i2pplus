@@ -283,6 +283,10 @@ public final class ElGamalAESEngine {
      * Then encrypt with AES using that session key and the first 16 bytes of the SHA256 of the pre-IV, using
      * the decryptAESBlock method &amp; structure.
      *
+     * @param data the encrypted message: the ElGamal-encrypted section first,
+     *             then the AES-encrypted section
+     * @param targetPrivateKey our private key used to ElGamal-decrypt the
+     *                         session key and pre-IV
      * @param foundTags set which is filled with any sessionTags found during decryption
      * @param usedKey out parameter. Data must be unset when called; usedKey.setData() will be called by this method on success.
      * @param foundKey  out parameter. Data must be unset when called; may be filled with a new sessionKey found during decryption
@@ -341,11 +345,18 @@ public final class ElGamalAESEngine {
      * <p>
      * If anything doesn't match up in decryption, it falls back to decryptNewSession
      *
+     * @param data the encrypted message, beginning with the 32-byte session
+     *             tag that also serves as the pre-IV
+     * @param key the existing session key to decrypt with
+     * @param targetPrivateKey our private key for the decryptNewSession
+     *                         fallback if the existing key fails
      * @param foundTags set which is filled with any sessionTags found during decryption
      * @param usedKey out parameter. Data must be unset when called; usedKey.setData() will be called by this method on success.
      * @param foundKey  out parameter. Data must be unset when called; may be filled with a new sessionKey found during decryption
      *
      * @return decrypted data or null on failure
+     * @throws DataFormatException declared on the method; decryption failures
+     *                             are caught and reported as a null return
      */
     private byte[] decryptExistingSession(byte[] data, SessionKey key, PrivateKey targetPrivateKey, Set<SessionTag> foundTags,
                                          SessionKey usedKey, SessionKey foundKey) throws DataFormatException {
@@ -552,9 +563,14 @@ public final class ElGamalAESEngine {
      * No new session key
      * No current tag (encrypt as new session).
      *
+     * @param data the plaintext to encrypt
+     * @param target public key to encrypt to, must be ELGAMAL_2048
+     * @param key session key to use during encryption
      * @param tagsForDelivery session tags to be associated with the key or null;
      * 200 max enforced at receiver
+     * @param paddedSize minimum size in bytes of the body after padding it
      *
+     * @return the encrypted data, at least paddedSize bytes and up to 514 bytes larger
      * @throws IllegalArgumentException on bad target EncType
      * @deprecated unused
      */
@@ -568,6 +584,12 @@ public final class ElGamalAESEngine {
      * No new session key
      * No current tag (encrypt as new session).
      *
+     * @param data the plaintext to encrypt
+     * @param target public key to encrypt to, must be ELGAMAL_2048
+     * @param key session key to use during encryption
+     * @param paddedSize minimum size in bytes of the body after padding it
+     *
+     * @return the encrypted data, at least paddedSize bytes and up to 514 bytes larger
      * @throws IllegalArgumentException on bad target EncType
      * @deprecated unused
      */
@@ -596,8 +618,17 @@ public final class ElGamalAESEngine {
      * - random bytes, padding the total size to greater than paddedSize with a mod 16 = 0
      * </pre>
      *
+     * @param data the plaintext to encrypt into the AES section
+     * @param target public key of the recipient, must be ELGAMAL_2048
+     * @param key the new session key, delivered to the target in the ElGamal
+     *            section and used for the AES section
      * @param tagsForDelivery session tags to be associated with the key or null;
      *                        200 max enforced at receiver
+     * @param newKey a further session key to deliver to the target, or null for
+     *               no rekey block
+     * @param paddedSize minimum size in bytes of the AES section after padding it
+     *
+     * @return the 514-byte ElGamal section followed by the encrypted AES section
      */
     private byte[] encryptNewSession(byte[] data, PublicKey target, SessionKey key, Set<SessionTag> tagsForDelivery,
                                     SessionKey newKey, long paddedSize) {
@@ -646,8 +677,18 @@ public final class ElGamalAESEngine {
      * - random bytes, padding the total size to greater than paddedSize with a mod 16 = 0
      * </pre>
      *
+     * @param data the plaintext to encrypt into the AES section
+     * @param key the existing session key used for the AES section
      * @param tagsForDelivery session tags to be associated with the key or null;
      *                        200 max enforced at receiver
+     * @param currentTag the session tag identifying the existing session, also
+     *                   used as the pre-IV
+     * @param newKey a new session key to deliver to the target, or null for no
+     *               rekey block
+     * @param paddedSize minimum size in bytes of the AES section after padding it
+     *
+     * @return the encrypted AES section with the 32-byte session tag copied over
+     *         the reserved prefix
      */
     private byte[] encryptExistingSession(byte[] data, SessionKey key, Set<SessionTag> tagsForDelivery,
                                          SessionTag currentTag, SessionKey newKey, long paddedSize) {
@@ -719,8 +760,17 @@ public final class ElGamalAESEngine {
      * Encrypt the AES area with the given key and IV, reserving the specified
      * number of bytes at the beginning of the result for the session tag prefix.
      *
+     * @param data the plaintext to encrypt into the AES area
+     * @param key the AES session key to encrypt with
+     * @param iv the 16 byte AES initialization vector
      * @param tagsForDelivery session tags to be associated with the key or null;
      *                        200 max enforced at receiver
+     * @param newKey key to deliver to the target, or null for no new key block
+     * @param paddedSize minimum size in bytes of the AES area after padding
+     * @param prefixBytes number of bytes reserved unwritten at the start of the
+     *                    result for the caller to prepend the session tag, 0 if none
+     *
+     * @return the encrypted AES area, preceded by prefixBytes unwritten bytes
      */
     private final byte[] encryptAESBlock(byte[] data, SessionKey key, byte[] iv, Set<SessionTag> tagsForDelivery, SessionKey newKey,
                                         long paddedSize, int prefixBytes) {

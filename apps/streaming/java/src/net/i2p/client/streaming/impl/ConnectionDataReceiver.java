@@ -198,7 +198,13 @@ class ConnectionDataReceiver implements MessageOutputStream.DataReceiver {
         return packet;
     }
 
-    /** Whether the packet carries no data and only serves to elicit an ACK. */
+    /**
+     * Whether the packet carries no data and only serves to elicit an ACK.
+     *
+     * @param size the payload size in bytes, 0 or less meaning no data
+     * @return true if there is no data, this is not a SYN, and it is not the
+     *         first CLOSE packet
+     */
     private boolean isAckOnly(int size) {
         return size <= 0 && // no data
                           _connection.getLastSendId() >= 0 && // not a SYN

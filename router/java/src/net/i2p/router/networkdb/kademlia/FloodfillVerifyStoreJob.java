@@ -508,6 +508,9 @@ class FloodfillVerifyStoreJob extends JobImpl {
 
     /**
      * Pick a responsive floodfill close to the key, but not the one we sent to.
+     *
+     * @return the floodfill to verify against; falls back to the floodfill we
+     *         already stored to when no other peer is available
      */
     private Hash pickTarget() {
         Hash rkey = getContext().routingKeyGenerator().getRoutingKey(_key);
@@ -559,6 +562,8 @@ class FloodfillVerifyStoreJob extends JobImpl {
     /**
      * Builds the database lookup message for verification.
      *
+     * @param replyTunnelInfo the tunnel to receive the reply on, source of the
+     *                        reply tunnel id and the From field
      * @return non-null
      */
     private DatabaseLookupMessage buildLookup(TunnelInfo replyTunnelInfo) {

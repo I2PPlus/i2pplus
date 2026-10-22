@@ -19,7 +19,7 @@ import net.i2p.router.update.ConsoleUpdateManager;
 public class NewsHelper extends ContentHelper {
 
     /**
-     *  Leaves the context unset; setContextId() must supply it first.
+     * Leaves the context unset; setContextId() must supply it first.
      */
     public NewsHelper() {}
 
@@ -116,10 +116,10 @@ public class NewsHelper extends ContentHelper {
     }
 
     /**
-     *  Release update only.
-     *  Available version, will be null if already downloaded.
-     *  @return null if none
-     *  @since 0.9.4 moved from NewsFetcher
+     * Release update only.
+     * Available version, will be null if already downloaded.
+     * @return null if none
+     * @since 0.9.4 moved from NewsFetcher
      */
     public static String updateVersion() {
         return null;
@@ -160,10 +160,10 @@ public class NewsHelper extends ContentHelper {
     }
 
     /**
-     *  Release update only.
-     *  Already downloaded but not installed version.
-     *  @return null if none
-     *  @since 0.9.4
+     * Release update only.
+     * Already downloaded but not installed version.
+     * @return null if none
+     * @since 0.9.4
      */
     public static String updateVersionDownloaded() {
         ConsoleUpdateManager mgr = ConsoleUpdateManager.getInstance();
@@ -247,7 +247,8 @@ public class NewsHelper extends ContentHelper {
     /**
      * Convert long date stamp to
      * date/time in the system locale, local time zone.
-     * @return null if ver = null
+     * @param ver the unsigned update's version, a modification time in ms
+     * @return the date and time in the local zone, null if ver is null or not a number
      * @since 0.9.4 moved from NewsFetcher
      */
     private static String formatUnsignedVersion(String ver) {
@@ -325,31 +326,31 @@ public class NewsHelper extends ContentHelper {
     }
 
     /**
-     *  The news and update status block: how long ago news was last fetched and
-     *  updated, which update is on offer, and links to hide or show the news.
-     *  @return the rendered status block
-     *  @since 0.9.4 moved from NewsFetcher
+     * The news and update status block: how long ago news was last fetched and
+     * updated, which update is on offer, and links to hide or show the news.
+     * @return the rendered status block
+     * @since 0.9.4 moved from NewsFetcher
      */
     public String status() {
         return status(_context);
     }
 
     /**
-     *  The news and update status block.
-     *  @param ctx the router context supplying the news and update state
-     *  @return the rendered status block
-     *  @since 0.9.4 moved from NewsFetcher
+     * The news and update status block.
+     * @param ctx the router context supplying the news and update state
+     * @return the rendered status block
+     * @since 0.9.4 moved from NewsFetcher
      */
     public static String status(RouterContext ctx) {
         return status(ctx, null);
     }
 
     /**
-     *  The news and update status block.
-     *  @param ctx the router context supplying the news and update state
-     *  @param session the caller's session, not consulted while rendering
-     *  @return the rendered status block
-     *  @since 0.9.69
+     * The news and update status block.
+     * @param ctx the router context supplying the news and update state
+     * @param session the caller's session, not consulted while rendering
+     * @return the rendered status block
+     * @since 0.9.69
      */
     public static String status(RouterContext ctx, HttpSession session) {
         StringBuilder buf = new StringBuilder(128);
@@ -458,6 +459,9 @@ public class NewsHelper extends ContentHelper {
 
     /**
      * When we last got a new news entry.
+     *
+     * @param ctx the router context, used for the property and to save the fallback
+     * @return the last new entry time, or the last update time if none is stored
      * @since 0.9.55
      */
     private static long lastNewEntry(RouterContext ctx) {

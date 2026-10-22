@@ -167,6 +167,7 @@ public class EventLogHelper extends FormHandler {
      * Write one age filter option.
      *
      * @param age lookback window in seconds; 0 renders as "All events"
+     * @throws IOException if the output writer fails
      */
     private void writeOption(long age) throws IOException {
          _out.write("<option value=\"");

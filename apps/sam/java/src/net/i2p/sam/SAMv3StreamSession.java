@@ -334,6 +334,7 @@ class SAMv3StreamSession extends SAMStreamSession implements Session {
     /**
      * Nickname truncated to four characters.
      *
+     * @param n the session nickname, any length
      * @return first 4 chars of the session nickname for thread names
      */
     private static String truncNick(String n) { return n.length() > 4 ? n.substring(0, 4) : n; }
@@ -387,6 +388,9 @@ class SAMv3StreamSession extends SAMStreamSession implements Session {
     /**
      * Blocking accept executed in a dedicated thread so pool workers
      * are never blocked waiting for incoming I2P connections.
+     *
+     * @param handler the handler whose bridge accepts the connection
+     * @param verbose true to report the incoming connection back to the SAM client
      */
     private void doAccept(SAMv3Handler handler, boolean verbose) {
         I2PSocket i2ps = null;

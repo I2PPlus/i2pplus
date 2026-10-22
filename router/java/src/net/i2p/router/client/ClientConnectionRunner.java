@@ -1316,6 +1316,10 @@ class ClientConnectionRunner {
     /**
      * True if the client has already been sent the ACCEPTED state for the given
      * message id, false otherwise.
+     *
+     * @param id the message id whose ACCEPTED notification state is queried
+     * @return true if ACCEPTED has already been sent, false if it is still pending
+     *         or the runner is dead
      */
     private boolean alreadyAccepted(MessageId id) {
         if (_dead) return false;

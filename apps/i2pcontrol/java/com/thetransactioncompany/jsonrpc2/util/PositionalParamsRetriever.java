@@ -144,6 +144,7 @@ public class PositionalParamsRetriever
 	 * Throws a JSON-RPC 2.0 error indicating a positional parameter with
 	 * an unexpected enumerated value.
 	 *
+	 * @param <T>       The enumeration type.
 	 * @param position  The parameter position. Should be non-negative.
 	 * @param enumClass The enumeration class specifying the acceptable
 	 *                  string values. Must not be {@code null}.

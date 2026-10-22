@@ -597,6 +597,8 @@ class WebPeer extends Peer implements EepGet.StatusListener {
     /**
      * {@inheritDoc}
      *
+     * Counted in the coordinator as well, since super doesn't have a PeerState.
+     *
      * @since 0.9.62
      */
     @Override
@@ -618,10 +620,8 @@ class WebPeer extends Peer implements EepGet.StatusListener {
 
     // end BandwidthListener interface overrides
 
-    // private methods below here implementing parts of PeerState
-
     /**
-     * Add requests for outstanding pieces.
+     * Add requests for outstanding pieces, implementing part of PeerState.
      */
     private synchronized void addRequest() {
         boolean more_pieces = true;
@@ -650,6 +650,9 @@ class WebPeer extends Peer implements EepGet.StatusListener {
     /**
      * Starts requesting first chunk of next piece. Returns true if something has been added to the
      * requests, false otherwise.
+     *
+     * @return true if a request for the next piece, or an adopted partial piece, was queued,
+     *         false if nothing was added
      */
     private synchronized boolean requestNextPiece() {
         // Check for adopting an orphaned partial piece
@@ -726,9 +729,9 @@ class WebPeer extends Peer implements EepGet.StatusListener {
         return rv;
     }
 
-    // EepGet status listeners to maintain the state for the web page
-
     /**
+     * This EepGet status listener helps maintain the state for the web page.
+     *
      * {@inheritDoc}
      */
     public void bytesTransferred(

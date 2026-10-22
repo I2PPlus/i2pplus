@@ -506,8 +506,10 @@ public class ConfigNetHandler extends FormHandler {
 
     /**
      * Do basic verification of address here to prevent problems later.
+     *
+     * @param addr the address string to verify
      * @return true if the address parses and is publicly routable; false adds a
-     * form error describing which check failed
+     *         form error describing which check failed
      * @since 0.8.9
      */
     private boolean verifyAddress(String addr) {

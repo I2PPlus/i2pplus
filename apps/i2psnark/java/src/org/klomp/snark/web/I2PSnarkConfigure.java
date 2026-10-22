@@ -76,6 +76,9 @@ class I2PSnarkConfigure {
     /**
      * User Interface panel: theme, refresh interval, page size, language,
      * collapsible panels, filter bar, lightbox, Add/Create persistence.
+     *
+     * @param buf the HTML of the panel is appended to
+     * @param req the request whose user agent decides whether the panels may collapse
      */
     private void appendUIConfig(StringBuilder buf, HttpServletRequest req) {
         boolean collapsePanels = srv.manager().util().collapsePanels();
@@ -205,7 +208,11 @@ class I2PSnarkConfigure {
            .append("</div>\n</td></tr>\n");
     }
 
-    /** Comments &amp; Ratings panel: global toggles and the author name. */
+    /**
+     * Comments &amp; Ratings panel: global toggles and the author name.
+     *
+     * @param buf the HTML of the panel is appended to
+     */
     private void appendCommentsRatingsConfig(StringBuilder buf) {
         boolean useRatings = srv.manager().util().ratingsEnabled();
         boolean useComments = srv.manager().util().commentsEnabled();
@@ -236,7 +243,11 @@ class I2PSnarkConfigure {
            .append("</div>\n</td></tr>\n");
     }
 
-    /** Torrent Options panel: bandwidth, uploaders, open trackers, DHT, auto-start. */
+    /**
+     * Torrent Options panel: bandwidth, uploaders, open trackers, DHT, auto-start.
+     *
+     * @param buf the HTML of the panel is appended to
+     */
     private void appendTorrentOptionsConfig(StringBuilder buf) {
         boolean useOpenTrackers = srv.manager().util().shouldUseOpenTrackers();
         boolean useDHT = srv.manager().util().shouldUseDHT();
@@ -312,7 +323,11 @@ class I2PSnarkConfigure {
 
     }
 
-    /** Data Storage panel: directories, permissions, preallocation, file cap. */
+    /**
+     * Data Storage panel: directories, permissions, preallocation, file cap.
+     *
+     * @param buf the HTML of the panel is appended to
+     */
     private void appendDataStorageConfig(StringBuilder buf) {
         String dataDir = srv.manager().getDataDir().getAbsolutePath();
         String tempDir = srv.manager().util().getTempDirProp();
@@ -366,7 +381,11 @@ class I2PSnarkConfigure {
 
     }
 
-    /** Tunnel Configuration panel: destination, hop settings, multi-dest, I2CP. */
+    /**
+     * Tunnel Configuration panel: destination, hop settings, multi-dest, I2CP.
+     *
+     * @param buf the HTML of the panel is appended to
+     */
     private void appendTunnelConfig(StringBuilder buf) {
         boolean varyInbound = srv.manager().util().enableVaryInboundHops();
         boolean varyOutbound = srv.manager().util().enableVaryOutboundHops();
@@ -505,7 +524,12 @@ class I2PSnarkConfigure {
            .append("</div>\n</td></tr>\n");
     }
 
-    /** Browser Integration panel: nonce-free adds, allowed hosts, API key. */
+    /**
+     * Browser Integration panel: nonce-free adds, allowed hosts, API key.
+     *
+     * @param buf the HTML of the panel is appended to
+     * @param req unused, kept for symmetry with the other panel methods
+     */
     private void appendBrowserIntegrationConfig(StringBuilder buf, HttpServletRequest req) {
         buf.append("<tr><th class=suboption>")
            .append(srv._t("Browser Integration"))
@@ -537,7 +561,12 @@ class I2PSnarkConfigure {
 
     }
 
-    /** Browser-handler install/update control plus the Save row. */
+    /**
+     * Browser-handler install/update control plus the Save row.
+     *
+     * @param buf the HTML of the row is appended to
+     * @param req the request whose User-Agent decides whether the browser-handler row is shown
+     */
     private void appendSaveConfigRow(StringBuilder buf, HttpServletRequest req) {
         String spacer = "<tr class=spacer><td></td></tr>\n";
         buf.append(spacer)
@@ -578,7 +607,11 @@ class I2PSnarkConfigure {
            .append(spacer).append("</table></div></div></form>");
     }
 
-    /** The API key target for the Browser API panel, defaulting to the context name. */
+    /**
+     * The API key target for the Browser API panel, defaulting to the context name.
+     *
+     * @return the configured target, or the servlet's context name when none is set
+     */
     private String browserApiTarget() {
         String t = srv.manager().util().getAPITarget();
         if (t != null && !t.isEmpty()) {return t;}

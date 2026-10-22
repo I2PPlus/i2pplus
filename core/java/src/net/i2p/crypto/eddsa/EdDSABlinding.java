@@ -97,6 +97,9 @@ public final class EdDSABlinding {
 
     /**
      * Encode a positive BigInteger below 2^256 as 32 little-endian bytes.
+     *
+     * @param v the value to encode
+     * @return the value as 32 little-endian bytes, zero-padded
      */
     private static byte[] toLittleEndian(BigInteger v) {
         byte[] be = v.toByteArray();

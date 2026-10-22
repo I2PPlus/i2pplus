@@ -140,6 +140,7 @@ public class ProfilesHelper extends HelperBase {
     /**
      * Render the profiles navigation bar.
      *
+     * @throws IOException if writing the rendered bar to the response output fails
      * @since 0.9.1
      */
     private void renderNavBar() throws IOException {

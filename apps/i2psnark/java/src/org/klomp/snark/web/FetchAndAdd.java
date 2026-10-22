@@ -162,6 +162,8 @@ public class FetchAndAdd extends Snark implements EepGet.StatusListener, Runnabl
     /**
      * Tell SnarkManager to copy the torrent file over and add it to the Snarks list. This Snark may
      * then be deleted.
+     *
+     * @param file the downloaded torrent file to copy over and add
      */
     private void add(File file) {
         _mgr.addMessageNoEscape(_t("Torrent downloaded from {0}", urlify(_url)));

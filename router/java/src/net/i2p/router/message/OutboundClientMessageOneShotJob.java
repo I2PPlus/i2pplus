@@ -437,6 +437,8 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
 
     /**
      * Resolve a human-readable nickname for a destination, if available.
+     *
+     * @param dest the destination hash to look up
      * @return nickname or null
      */
     private String getDestNickname(Hash dest) {
@@ -877,6 +879,7 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
         /**
          * Create a dispatch job.
          *
+         * @param msg the garlic message to dispatch to the reply selector
          * @param sel may be null
          * @param success non-null if sel non-null
          * @param timeout non-null if sel non-null
@@ -989,6 +992,8 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
     /**
      * Choose our outbound tunnel to send the message through.
      * Sets _wantACK if it's new or changed.
+     *
+     * @param _to the destination we are sending to
      * @return the tunnel or null on failure
      */
     private TunnelInfo selectOutboundTunnel(Destination _to) {
@@ -1076,6 +1081,8 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
      * to minimize network OBEP - IBGW connections?
      * This would also eliminate a connection when OBEP == IBGW.
      * Anonymity issues?
+     *
+     * @return an outbound tunnel, or null if none are available
      */
     private TunnelInfo selectOutboundTunnel() {
         // hurts reliability? let's try picking at random again
@@ -1143,6 +1150,8 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
 
     /**
      * Pick an arbitrary inbound tunnel for any deliveryStatusMessage to come back in.
+     *
+     * @return an inbound tunnel, or null if none are available
      */
     private TunnelInfo selectInboundTunnel() {
         // Use tunnel EP closest to his hash, as a simple cache to minimize connections
@@ -1152,6 +1161,8 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
     /**
      * Give up the ghost, this message just aint going through. tell the client.
      * This is safe to call multiple times (only tells the client once). We may still succeed later.
+     *
+     * @param status the MessageStatusMessage.STATUS_SEND_FAILURE_* code to report to the client
      */
     private void dieFatal(int status) {
         // never fail twice or fail after success

@@ -1010,6 +1010,9 @@ public abstract class CommSystemFacade implements Service {
 
         /**
          * Tag for translation.
+         *
+         * @param s the string to mark for extraction
+         * @return the string, unchanged and untranslated
          */
         private static String _x(String s) { return s; }
     }

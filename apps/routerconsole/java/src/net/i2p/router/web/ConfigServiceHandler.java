@@ -39,6 +39,8 @@ public class ConfigServiceHandler extends FormHandler {
      * Register two shutdown hooks, one to rekey and/or tell the wrapper we are stopping,
      * and a final one to tell the wrapper we are stopped.
      *
+     * @param code the exit code
+     * @param rekey true to kill the router's keys on shutdown
      * @since 0.8.8
      */
     private void registerWrapperNotifier(int code, boolean rekey) {
@@ -352,6 +354,8 @@ public class ConfigServiceHandler extends FormHandler {
      * The legacy EnableI2P+Service.bat / DisableI2P+Service.bat shims were
      * removed; the Enable/Disable actions now live in service.ps1.
      *
+     * @param action the action to pass to the script, "Enable" or "Disable"
+     * @throws IOException if powershell.exe cannot be started
      * @since 0.9.72+
      */
     private void execServiceAction(String action) throws IOException {
@@ -402,6 +406,7 @@ public class ConfigServiceHandler extends FormHandler {
     /**
      * Enable/disable and start/stop systray.
      *
+     * @param enable true to start the systray app, false to shut it down
      * @since 0.9.26
      */
     private void changeSystray(boolean enable) {

@@ -2450,7 +2450,15 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
         /**
          * Serves a gzipped response from the web server to the browser.
          *
+         * @param webserver the web server socket to read the response from
+         * @param browser the browser socket to send the response to
+         * @param headers the request headers to forward to the web server
+         * @param ctx the application context, used to schedule the stall watchdog
+         * @param log the logger for the transfer logs
          * @param shouldCompress if false, don't compress, just filter server headers
+         * @param upgrade true if the request is a protocol upgrade, which disables keepalive
+         * @param tpe the thread pool that runs the inline server-to-browser sender
+         * @param keepalive true if the browser connection may be reused afterwards
          * @param waiter to notify when done, if non-null; will set value to 1: not keepalive-able response, or 2: keepalive
          * @param ioPool resolves the owning tunnel's I/O transfer pool (never returns null in production)
          */
@@ -2465,8 +2473,19 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
           /**
            * Serves a gzipped response, with an optional stall watchdog.
            *
+           * @param webserver the web server socket to read the response from
+           * @param browser the browser socket to send the response to
+           * @param headers the request headers to forward to the web server
+           * @param ctx the application context, used to schedule the stall watchdog
+           * @param log the logger for the transfer logs
+           * @param shouldCompress if false, don't compress, just filter server headers
+           * @param upgrade true if the request is a protocol upgrade, which disables keepalive
+           * @param tpe the thread pool that runs the inline server-to-browser sender
+           * @param keepalive true if the browser connection may be reused afterwards
+           * @param waiter to notify when done, if non-null; will set value to 1: not keepalive-able response, or 2: keepalive
+           * @param ioPool resolves the owning tunnel's I/O transfer pool (never returns null in production)
            * @param tunnelId far-side label for transfer logs, e.g.
-           * {@code [skank / aanoquc2]}; may be null
+           *                 {@code [skank / aanoquc2]}; may be null
            * @since 0.9.71+
            */
           public CompressedRequestor(Socket webserver, I2PSocket browser, String headers,
@@ -3540,6 +3559,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
      * Warning - 8KB line length limit as of 0.7.13, @throws IOException if exceeded
      * Warning - not UTF-8.
      *
+     * @param socket the socket to read the line from
      * @param buf StringBuilder the line is appended to, without its newline
      * @param timeout throws SocketTimeoutException immediately if zero or negative
      * @throws SocketTimeoutException if timeout is reached before newline

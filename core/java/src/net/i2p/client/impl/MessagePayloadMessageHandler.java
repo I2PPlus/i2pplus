@@ -76,7 +76,9 @@ class MessagePayloadMessageHandler extends HandlerImpl {
      * We don't really decrypt (no more end-to-end crypto)
      * If we do, we need to use the correct key manager in the decrypt() call below.
      *
-     * @return the decrypted payload
+     * @param msg the message carrying the payload
+     * @param session unused, kept for the end-to-end crypto that was removed
+     * @return the payload with its encrypted data copied to the unencrypted data
      */
     private Payload decryptPayload(MessagePayloadMessage msg, I2PSessionImpl session) {
         Payload payload = msg.getPayload();

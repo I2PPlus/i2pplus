@@ -333,6 +333,9 @@ public class ConfigBanHandler extends FormHandler {
      * Separates multiple patterns with comma or space. A pattern may carry
      * an exclusion group after '!': "G!f" bans G routers unless floodfill;
      * exclusions require at least one required character.
+     *
+     * @param input the patterns as entered, comma or space separated, may be null or empty
+     * @return the valid patterns joined with commas, invalid patterns dropped
      */
     private String validateCapabilityBans(String input) {
         if (input == null || input.isEmpty()) return "";
@@ -370,6 +373,9 @@ public class ConfigBanHandler extends FormHandler {
 
     /**
      * Validate country codes - only allow valid 2-letter codes.
+     *
+     * @param input the codes as entered, comma or space separated, may be null or empty
+     * @return the valid codes lower-cased and joined with commas, invalid codes dropped
      */
     private String validateCountryCodes(String input) {
         if (input == null || input.isEmpty()) return "";

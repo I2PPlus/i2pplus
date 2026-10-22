@@ -291,6 +291,8 @@ public class DNSOverHTTPS implements EepGet.StatusListener {
     /**
      * Lookup in cache, then query servers.
      *
+     * @param host the host name to resolve
+     * @param type the record type to return, A or AAAA
      * @param url null to query several default servers, or specify single server
      * @return null if not found
      * @since 0.9.48
@@ -340,6 +342,8 @@ public class DNSOverHTTPS implements EepGet.StatusListener {
     /**
      * Lookup in cache.
      *
+     * @param host the host name to look up
+     * @param cache the cache to search, keyed by host name
      * @return null if not found or expired
      */
     private static String lookup(String host, Map<String, Result> cache) {
@@ -356,6 +360,8 @@ public class DNSOverHTTPS implements EepGet.StatusListener {
     /**
      * Query servers.
      *
+     * @param host the host name to resolve
+     * @param type the record type to return, A or AAAA
      * @param url null to query several default servers, or specify single server
      * @return null if not found
      */
@@ -389,6 +395,11 @@ public class DNSOverHTTPS implements EepGet.StatusListener {
     /**
      * Query one host over DNS-over-HTTPS.
      *
+     * @param host the host name to resolve
+     * @param isv6 true to query AAAA for an IPv6 answer, false for A
+     * @param toQuery the DoH server URLs to try
+     * @param timeout the absolute deadline in ms, servers are tried until it
+     *                passes
      * @return null if not found
      */
     private String query(String host, boolean isv6, List<String> toQuery, long timeout) {
@@ -443,6 +454,12 @@ public class DNSOverHTTPS implements EepGet.StatusListener {
     /**
      * Fetch one DNS answer over HTTPS.
      *
+     * @param eepget the fetcher, already set up for the DoH server URL
+     * @param host the host name being resolved, used for the CNAME fallback
+     *             question
+     * @param isv6 true if the original question was AAAA, used to re-query
+     *             after a CNAME
+     * @param q the DNS question whose answers are wanted
      * @return null if not found
      */
     private String fetch(SSLEepGet eepget, String host, boolean isv6, Question q) {
@@ -757,6 +774,8 @@ public class DNSOverHTTPS implements EepGet.StatusListener {
      * e.g. sdns://AgMAAAAAAAAADjE2My40Ny4xMTcuMTc2oMwQYNOcgym2K2-8fQ1t-TCYabmB5-Y5LVzY-kCPTYDmIEROvWe7g_iAezkh6TiskXi4gr1QqtsRIx8ETPXwjffOEGFkbC5hZGZpbHRlci5uZXQKL2Rucy1xdWVyeQ
      * Ref: https://dnscrypt.info/stamps-specifications/
      *
+     * @param sdns the sdns:// stamp to decode
+     * @param log true to print decode errors to standard output
      * @return the URL, or null on error or if not a DoH (type 2) stamp
      * @since 0.9.62
      */
@@ -831,6 +850,8 @@ public class DNSOverHTTPS implements EepGet.StatusListener {
      * Decode sdns:// stamps found in file.
      * Stamps that are not DoH (type 2), or fail to decode, are skipped.
      *
+     * @param file the file to scan line by line for sdns:// stamps
+     * @throws IOException if the file cannot be read
      * @since 0.9.62
      */
     private static void decodeStamps(String file) throws IOException {

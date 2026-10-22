@@ -15,12 +15,12 @@ import net.i2p.util.Log;
 import net.i2p.util.SystemVersion;
 
 /**
- *  Try to keep key pairs at the ready.
- *  It's important to do this in a separate thread, because if we run out,
- *  the pairs are generated other threads,
- *  and it can fall behind.
+ * Try to keep key pairs at the ready.
+ * It's important to do this in a separate thread, because if we run out,
+ * the pairs are generated other threads,
+ * and it can fall behind.
  * <p>
- *  Started by ECIESAEADEngine. One type per-thread. Only used for 768, for now.
+ * Started by ECIESAEADEngine. One type per-thread. Only used for 768, for now.
  *
  * @since 0.9.68 adapted from X25519KeyFactory
  */
@@ -369,9 +369,10 @@ public class MLKEMKeyFactory extends I2PThread implements KeyFactory {
     }
 
     /**
-     *  Adds a precomputed key pair to the pool.
+     * Adds a precomputed key pair to the pool.
      *
-     *  @return true if successful, false if full
+     * @param kp the key pair to add
+     * @return true if successful, false if full
      */
     private final boolean addKeys(KeyPair kp) {
         return _keys.offer(kp);

@@ -146,6 +146,8 @@ final class YKGenerator {
 
     /**
      * Add a precomputed YK value to the buffer.
+     *
+     * @param yk the precomputed YK values to add
      * @return true if successful, false if full
      */
     private final boolean addValues(BigInteger[] yk) {

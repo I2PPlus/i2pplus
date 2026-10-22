@@ -150,6 +150,9 @@ public class RouterContext extends I2PAppContext {
      * have each I2PAppContext creating their own SNTP queries all the time)
      * <p>
      * Set more PRNG buffers, as the default is now small for the I2PAppContext.
+     *
+     * @param envProps the properties to filter, may be null
+     * @return the same properties with the router defaults added, never null
      */
 
     private static final Properties filterProps(Properties envProps) {

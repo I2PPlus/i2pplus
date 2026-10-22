@@ -130,6 +130,8 @@ public class StatHelper extends HelperBase {
 
     /**
      * Look up based on the full b64 - efficient.
+     *
+     * @return the dumped profile, or an error message for a bad peer hash
      * @since 0.8.5
      */
     private String outputProfile() {
@@ -144,6 +146,10 @@ public class StatHelper extends HelperBase {
 
     /**
      * Dump the profile.
+     *
+     * @param peer the peer whose profile to dump
+     * @return empty string if the profile was written to the output,
+     *         otherwise an error message
      * @since 0.8.5
      */
     private String dumpProfile(Hash peer) {

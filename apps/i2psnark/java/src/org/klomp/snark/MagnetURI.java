@@ -28,12 +28,13 @@ public class MagnetURI {
     /** Maggot protocol prefix. */
     public static final String MAGGOT = "maggot://";
 
-        // https://blog.libtorrent.org/2020/09/bittorrent-v2/ TODO, dup param parsing, as a dual v1/v2
     /**
      * Link will contain two xt params.
+     * See https://blog.libtorrent.org/2020/09/bittorrent-v2/
+     * TODO dup param parsing, as a dual v1/v2
      *
      * @since 0.9.48
-    */
+     */
     public static final String MAGNET_FULL_V2 = MAGNET + "?xt=urn:btmh:";
 
     /**
@@ -155,6 +156,8 @@ public class MagnetURI {
     /**
      * The first decoded parameter, or null.
      *
+     * @param key the parameter name to look for
+     * @param uri the magnet URI to search
      * @return first decoded parameter or null
      */
     private static String getParam(String key, String uri) {
@@ -183,6 +186,8 @@ public class MagnetURI {
     /**
      * All decoded parameters, or null.
      *
+     * @param key the parameter name to look for
+     * @param uri the magnet URI to search
      * @return all decoded parameters or null
      * @since 0.9.1
      */
@@ -222,6 +227,7 @@ public class MagnetURI {
     /**
      * All valid I2P trackers, or null if none.
      *
+     * @param uri the magnet URI whose tr parameters are filtered
      * @return all valid I2P trackers or null if none
      * @since 0.9.1
      */
@@ -257,6 +263,8 @@ public class MagnetURI {
      * application/x-www-form-urlencoded form so the pluses are in there... hopefully any real + is
      * encoded as %2B.
      *
+     * @param s the string to decode, %xx escapes and + for space
+     * @return the decoded string, s unchanged if it contains neither % nor +
      * @since 0.9.1
      */
     private static String decode(String s) {

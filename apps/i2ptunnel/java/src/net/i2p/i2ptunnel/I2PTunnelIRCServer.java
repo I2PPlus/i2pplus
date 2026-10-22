@@ -251,6 +251,10 @@ public class I2PTunnelIRCServer extends I2PTunnelServer implements Runnable {
      * Or do we want the full hash if the ircd is going to use this for
      * nickserv auto-login? Or even Base32 if it will be used in a
      * case-insensitive manner?
+     *
+     * @param d the destination to cloak
+     * @return the hostname template with %f replaced by the destination hash
+     *         prefix and %c by the cloaked hash prefix
      */
     private String cloakDest(Destination d) {
         String hf;
@@ -270,6 +274,9 @@ public class I2PTunnelIRCServer extends I2PTunnelServer implements Runnable {
      * Keep reading until we see USER or SERVER.
      * This modifies the socket readTimeout, caller must save and restore.
      *
+     * @param socket the client socket to read the registration lines from
+     * @param newHostname the cloaked .i2p hostname substituted into the USER line
+     * @return the rewritten registration lines ending at the USER or SERVER line
      * @throws SocketTimeoutException if timeout is reached before newline
      * @throws EOFException if EOF is reached before newline
      * @throws RegistrationException if line too long
@@ -334,7 +341,9 @@ public class I2PTunnelIRCServer extends I2PTunnelServer implements Runnable {
      * Warning - 8KB line length limit as of 0.7.13, @throws IOException if exceeded
      * Warning - not UTF-8.
      *
+     * @param socket the socket to read one line from
      * @param timeout throws SocketTimeoutException immediately if zero or negative
+     * @return the line without the terminating newline, carriage returns kept
      * @throws SocketTimeoutException if timeout is reached before newline
      * @throws EOFException if EOF is reached before newline
      * @throws RegistrationException if line too long

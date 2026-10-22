@@ -297,6 +297,9 @@ public class PeerHTMLRenderer {
 
     /**
      * Looks up the console translation of a string in this renderer's bundle.
+     *
+     * @param s the string to look up
+     * @return the localized string, or s itself when no translation exists
      */
     private final String _t(String s) {return Translate.getString(s, _context, BUNDLE_NAME);}
 }

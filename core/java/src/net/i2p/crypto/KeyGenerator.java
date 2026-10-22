@@ -481,6 +481,8 @@ public final class KeyGenerator {
 
     /**
      * Usage: KeyGenerator [sigtype...].
+     *
+     * @param args signature type names to generate keys for, or none for the default set
      */
     private static void main2(String[] args) {
         RandomSource.getInstance().nextBoolean();

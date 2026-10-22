@@ -169,6 +169,8 @@ public class ReseedBundler {
 
     /**
      * Copied/modded from PersistentDataStore.
+     *
+     * @param hash the router's hash
      * @return the router info name
      */
     private static String getRouterInfoName(Hash hash) {

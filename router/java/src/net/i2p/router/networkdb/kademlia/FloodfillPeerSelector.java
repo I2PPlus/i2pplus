@@ -56,6 +56,8 @@ public class FloodfillPeerSelector extends PeerSelector {
      * Refresh the cached configuration from properties at most once per
      * CONFIG_REFRESH_MS, or immediately when the context changes.
      * Benign race: duplicate refreshes are idempotent writes.
+     *
+     * @param ctx the router context supplying the clock and properties
      */
     private static void refreshConfig(RouterContext ctx) {
         long now = ctx.clock().now();
@@ -74,6 +76,10 @@ public class FloodfillPeerSelector extends PeerSelector {
     /**
      * Get the RateStat handle, caching it in the slot for subsequent calls.
      * Null is not cached, the stat may register later.
+     *
+     * @param slot one-element array holding the cached stat between calls
+     * @param name full stat name, e.g. "peer.failedLookupRate"
+     * @return the registered stat, or null while it does not exist yet
      */
     private RateStat getRateStat(RateStat[] slot, String name) {
         RateStat rs = slot[0];
@@ -277,8 +283,11 @@ public class FloodfillPeerSelector extends PeerSelector {
      * Returns new list, may be modified.
      *
      * @param key the ROUTING key (NOT the original key)
+     * @param howMany maximum number of floodfill peers to return
      * @param toIgnore can be null
      * @param kbuckets unused, retained for signature compatibility; null is accepted
+     * @return a new shuffled-by-tier list of up to howMany floodfill hashes,
+     *         GOOD peers first, then OK, then BAD; shorter if too few qualify
      */
     private List<Hash> selectFloodfillParticipantsIncludingUs(Hash key, int howMany, Set<Hash> toIgnore, KBucketSet<Hash> kbuckets) {
         List<Hash> sorted = buildFloodfillCandidates(toIgnore);
@@ -475,6 +484,12 @@ public class FloodfillPeerSelector extends PeerSelector {
      * Compute the maximum acceptable failure rate for a floodfill peer,
      * based on the network average over the last 10 minutes.
      * Returns a value between 0.20 and 0.95.
+     *
+     * @param uptime router uptime in ms; under 2 hours the network average is
+     *               not consulted
+     * @return the failure rate ceiling, 0.95 while uptime or stats are too
+     *         fresh, otherwise 1.25 times the network average clamped to
+     *         0.20 - 0.95
      */
     private double computeMaxFailRate(long uptime) {
         double maxFailRate = 0.95;
@@ -496,6 +511,16 @@ public class FloodfillPeerSelector extends PeerSelector {
      * GOOD: no recent failures, fast response, good profile.
      * OK: some recent failures but still usable.
      * BAD: unreachable, stale, slow, same IP, strict country, or poor profile.
+     *
+     * @param entry hash of the floodfill peer being classified
+     * @param info the peer's RouterInfo from the local netdb, or null when absent
+     * @param sameIP true if the peer shares a /16, port, or family with an
+     *               already-accepted candidate
+     * @param now the current time in ms for age comparisons
+     * @param enforceHeard true after the startup grace period, to reject peers
+     *                     heard about less than 45 minutes ago
+     * @param maxFailRate failure rate ceiling from {@link #computeMaxFailRate(long)}
+     * @return the peer's class: GOOD, OK, or BAD
      */
     private PeerClass classifyFloodfillPeer(Hash entry, RouterInfo info, boolean sameIP,
                                              long now, boolean enforceHeard, double maxFailRate) {
@@ -685,6 +710,10 @@ public class FloodfillPeerSelector extends PeerSelector {
 
     /**
      * Log the classification results at debug level.
+     *
+     * @param good hashes classified GOOD, listed first
+     * @param ok hashes classified OK
+     * @param bad hashes classified BAD, listed last
      */
     private void logSelectionResults(List<Hash> good, List<Hash> ok, List<Hash> bad) {
         if (_log.shouldDebug()) {
@@ -725,6 +754,8 @@ public class FloodfillPeerSelector extends PeerSelector {
          * Warning - may return our router hash - add to toIgnore if necessary.
          * @param key the ROUTING key (NOT the original key)
          * @param toIgnore can be null
+         * @param wanted target match count; non-floodfill candidates stop being
+         *               collected once matches reach wanted plus {@link #EXTRA_MATCHES}
          */
         public FloodfillSelectionCollector(Hash key, Set<Hash> toIgnore, int wanted) {
             _key = key;
@@ -860,7 +891,10 @@ public class FloodfillPeerSelector extends PeerSelector {
 
     /**
      * Extract IP:port from RouterInfo.
-     * @return the IP from router info
+     *
+     * @param ri the router info to read addresses from, may be null
+     * @return host:port of the first address with both set, or null if ri is
+     *         null or no address qualifies
      */
     private String getIPFromRouterInfo(RouterInfo ri) {
         if (ri == null) return null;

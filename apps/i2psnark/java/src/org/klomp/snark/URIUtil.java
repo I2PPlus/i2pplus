@@ -233,7 +233,12 @@ public class URIUtil {
         return buf;
     }
 
-    /** Modded from Jetty TypeUtil. */
+    /**
+     * Modded from Jetty TypeUtil.
+     *
+     * @param b the byte to encode
+     * @param buf the builder to append the %XX escape to
+     */
     private static void toHex(byte b, StringBuilder buf) {
         buf.append('%');
         int d = 0xf & ((0xF0 & b) >> 4);
@@ -242,7 +247,12 @@ public class URIUtil {
         buf.append((char) ((d > 9 ? ('A' - 10) : '0') + d));
     }
 
-    /** UTF-8. */
+    /**
+     * Append the character as one or more %XX escapes, UTF-8 encoded.
+     *
+     * @param c the character to encode
+     * @param buf the builder to append the escapes to
+     */
     private static void toHex(char c, StringBuilder buf) {
         if (c > 0x7f) {
             byte[] b = DataHelper.getUTF8(Character.toString(c));

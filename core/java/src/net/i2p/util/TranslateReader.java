@@ -289,6 +289,8 @@ public class TranslateReader extends FilterReader {
 
     /**
      * Put in the pending parse buf.
+     *
+     * @param c the character to append to the pending input buffer
      */
     private void pushit(char c) {
         _inBuf.append(c);
@@ -298,6 +300,8 @@ public class TranslateReader extends FilterReader {
      * Flush _inBuf to _outBuf,
      * reset state,
      * and return next char or -1.
+     *
+     * @return the next character from the output buffer, or -1 when it is empty
      */
     private int flushit() {
         _state = S.START;
@@ -310,6 +314,8 @@ public class TranslateReader extends FilterReader {
 
     /**
      * Return next char from _outBuf or -1.
+     *
+     * @return the next character from the output buffer, or -1 when it is empty
      */
     private int popit() {
         if (_outBuf.length() > 0) {
@@ -417,7 +423,11 @@ public class TranslateReader extends FilterReader {
 
     /**
      * Tag PO files with translation metadata.
-     * @param files ignore 0
+     *
+     * @param files command line arguments; files[0] is ignored, the rest name
+     *              the input files and the output file
+     * @throws IOException if a directory listing fails or a file cannot be
+     *                     read or written
      */
     private static void tag(String[] files) throws IOException {
         char[] buf = new char[256];

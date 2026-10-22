@@ -71,6 +71,8 @@ public class CachedIteratorCollection<E> extends AbstractCollection<E> {
      * (1) Data object
      * (2) Link to previous Node object
      * (3) Link to next Node object.
+     *
+     * @param <E> the type of the element held in the node
      */
     private static class Node<E> {
         E item;
@@ -145,6 +147,8 @@ public class CachedIteratorCollection<E> extends AbstractCollection<E> {
 
     /**
      * Unlink a node from the doubly-linked list.
+     *
+     * @param x the node to unlink
      */
     private void unlink(Node<E> x) {
         Node<E> prev = x.prev;

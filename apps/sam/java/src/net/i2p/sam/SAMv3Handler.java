@@ -487,6 +487,9 @@ class SAMv3Handler extends SAMv1Handler
      * @param dest DESTINATION value, may be "TRANSIENT"
      * @param props properties (SIGNATURE_TYPE consumed if TRANSIENT)
      * @return Base64-encoded private key
+     * @throws DataFormatException if SIGNATURE_TYPE names an unsupported type,
+     *                             or the supplied DESTINATION is not a valid
+     *                             private destination
      */
     private static String initDestination(String dest, Properties props) throws DataFormatException {
         if (dest.equals("TRANSIENT")) {
@@ -511,6 +514,17 @@ class SAMv3Handler extends SAMv1Handler
     /**
      * Create and start the session object for the given style.
      * Blocks in the session constructors while tunnels are built.
+     *
+     * @param style session style: RAW, DATAGRAM, STREAM, MASTER or PRIMARY
+     * @param nick session nickname, used as the session ID
+     * @param allProps all message properties, handed to a MASTER session
+     * @param props message properties, used to build the datagram server
+     * @throws DataFormatException if stored destination or key data is malformed
+     * @throws I2PSessionException if the underlying I2P session cannot be created
+     * @throws IOException if the datagram server cannot bind its host and port,
+     *                     or the session constructors hit an I/O error
+     * @throws SAMException if the style is not one of the recognized values, or
+     *                      the I2P session cannot be created
      */
     private void instantiateSession(String style, String nick,
                                      Properties allProps, Properties props)
@@ -541,6 +555,11 @@ class SAMv3Handler extends SAMv1Handler
 
     /**
      * Execute SESSION ADD or REMOVE for MASTER sessions.
+     *
+     * @param opcode the sub-command, ADD or REMOVE
+     * @param nick session ID of the sub-session to add or remove
+     * @param props message properties, STYLE consumed when adding
+     * @return true if the handler should continue processing commands
      */
     private boolean execSessionAddRemove(String opcode, String nick, Properties props) {
         if (streamSession == null || datagramSession == null || rawSession == null)
@@ -556,7 +575,14 @@ class SAMv3Handler extends SAMv1Handler
     /**
      * Create a stream session for a login.
      *
+     * @param login nickname of the registered session to reuse
+     * @return the new, not yet started, stream session
      * @throws NullPointerException if login nickname is not registered
+     * @throws IOException if the stored key stream cannot be read or the I2CP
+     *                     connection fails
+     * @throws DataFormatException if the stored destination or key data is malformed
+     * @throws SAMException if the I2CP port property is not a number, or the
+     *                      I2P session cannot be created
      */
     private static SAMv3StreamSession newSAMStreamSession(String login )
         throws IOException, DataFormatException, SAMException {
@@ -697,7 +723,13 @@ class SAMv3Handler extends SAMv1Handler
         }
     }
 
-    /** Exec stream forward incoming. */
+    /**
+     * Exec stream forward incoming.
+     *
+     * @param props the parsed message properties, including the receiver PORT
+     *              and SILENT flag
+     * @return true if forwarding was started, false when it failed
+     */
     private boolean execStreamForwardIncoming( Properties props ) {
         // Messages ARE sent if SILENT=true,
         // which is different from CONNECT and ACCEPT.
@@ -722,6 +754,7 @@ class SAMv3Handler extends SAMv1Handler
      * blocking accept in a background thread.  Result (TIMEOUT, I2P_ERROR,
      * or the actual streaming data) arrives asynchronously.
      *
+     * @param props the parsed message properties, SILENT flag read
      * @return true if accept was launched, false on immediate error
      */
     private boolean execStreamAccept(Properties props) {
@@ -867,6 +900,10 @@ class SAMv3Handler extends SAMv1Handler
     /**
      * Handle the AUTH message.
      *
+     * @param opcode the AUTH sub-command: ENABLE, DISABLE, ADD or REMOVE
+     * @param props the parsed message properties, USER and PASSWORD read for
+     *              ADD and REMOVE
+     * @return true if the handler should continue processing commands
      * @since 0.9.24
      */
     private boolean execAuthMessage(String opcode, Properties props) {

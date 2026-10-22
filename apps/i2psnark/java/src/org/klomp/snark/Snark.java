@@ -1385,6 +1385,8 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
     /**
      * Throws a unique exception class to blame the router that can be caught by {@link SnarkManager}.
      *
+     * @param s the error message to log and pass to the CompleteListener
+     * @param t the cause, attached to the thrown RouterException
      * @throws RouterException always, after logging the failure, stopping the torrent
      * and notifying the CompleteListener
      * @since 0.9.46

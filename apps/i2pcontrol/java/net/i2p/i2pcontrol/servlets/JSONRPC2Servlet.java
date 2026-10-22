@@ -184,7 +184,11 @@ public class JSONRPC2Servlet extends HttpServlet {
         out.close();
     }
 
-    /** HTTP security headers. */
+    /**
+     * HTTP security headers.
+     *
+     * @param resp the response to add the security headers to
+     */
     private static void setHeaders(HttpServletResponse resp) {
         resp.setContentType("text/html");
         resp.setHeader("X-Frame-Options", "SAMEORIGIN");
@@ -194,7 +198,14 @@ public class JSONRPC2Servlet extends HttpServlet {
         resp.setHeader("Cache-Control","private, no-cache, max-age=14400");
     }
 
-    /** Handle API password change form submission. */
+    /**
+     * Handle API password change form submission.
+     *
+     * @param req the form submission carrying the password, password2 and password3 fields
+     * @param httpServletResponse the response the result page is written to
+     * @throws IOException if the response writer cannot be obtained
+     * @throws ServletException declared for the servlet API, never thrown here
+     */
     private void doPasswordChange(HttpServletRequest req, HttpServletResponse httpServletResponse) throws ServletException, IOException {
         setHeaders(httpServletResponse);
         PrintWriter out = httpServletResponse.getWriter();

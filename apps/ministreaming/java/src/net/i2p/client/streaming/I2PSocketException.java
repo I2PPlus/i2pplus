@@ -155,6 +155,9 @@ public class I2PSocketException extends SocketException {
 
     /**
      * Looks a string up in this class's translation bundle.
+     *
+     * @param s the string to look up
+     * @return the localized string, or s itself when no translation exists
      */
     private static String _t(String s) {
         return Translate.getString(s, I2PAppContext.getGlobalContext(), BUNDLE_NAME);
@@ -162,6 +165,9 @@ public class I2PSocketException extends SocketException {
 
     /**
      * Tag for translation.
+     *
+     * @param s the string to mark for extraction
+     * @return the string, unchanged and untranslated
      */
     private static String _x(String s) {
         return s;

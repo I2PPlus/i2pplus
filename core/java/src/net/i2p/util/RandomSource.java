@@ -88,6 +88,9 @@ public class RandomSource extends SecureRandom implements EntropyHarvester {
      * <p>
      * This code unused, see FortunaRandomSource override
      * NOPMD - nextLong(long) doesn't override SecureRandom (added in Java 17).
+     *
+     * @param n the upper bound, exclusive
+     * @return a random long from 0 (inclusive) to n (exclusive)
      */
     public long nextLong(long n) {
         long v = super.nextLong();
@@ -227,6 +230,8 @@ public class RandomSource extends SecureRandom implements EntropyHarvester {
 
         /**
          * Wraps the buffer that the background secure random seed is written into.
+         *
+         * @param buf the buffer to fill with secure random bytes
          */
         public SecureRandomInit(byte[] buf) {
             this.buf = buf;
@@ -256,6 +261,7 @@ public class RandomSource extends SecureRandom implements EntropyHarvester {
      * XORs the seed into buf.
      *
      * @param f the seed file to read; its first {@code buf.length} bytes are XORed in
+     * @param buf the buffer to XOR the seed bytes into
      * @return true if the file was read, even if it held fewer than {@code buf.length} bytes
      */
     private static final boolean seedFromFile(File f, byte[] buf) {

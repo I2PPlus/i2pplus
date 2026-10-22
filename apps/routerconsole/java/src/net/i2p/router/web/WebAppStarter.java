@@ -371,6 +371,8 @@ public class WebAppStarter {
     /**
      * The handler for the named webapp, if deployed.
      *
+     * @param server the handler collection holding the deployed web apps
+     * @param appName the web app name, matched against the context path /appName
      * @return the web app
      * @since 0.9.41
      */
@@ -409,6 +411,7 @@ public class WebAppStarter {
     /**
      * The console's handler collection.
      *
+     * @param s the console server to search for the handler collection
      * @return the console server
      * @since 0.9.41
      */

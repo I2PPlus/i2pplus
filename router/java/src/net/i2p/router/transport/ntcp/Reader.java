@@ -237,6 +237,8 @@ public class Reader {
     /**
      * Process everything read.
      * Return read buffers back to the pool as we process them.
+     *
+     * @param con the connection whose read buffers are processed, ignored if null
      */
     private void processRead(NTCPConnection con) {
         if (con == null) {

@@ -139,11 +139,11 @@ class PeerTestManager {
     /** Map of Long(nonce) to PeerTestState for tests currently in progress (as Bob/Charlie). */
     private final Map<Long, PeerTestState> _activeTests;
     /**
-     *  Current test we are running (as Alice), or null.  Volatile: cleared by
-     *  {@link #testComplete()} on the UDP handle threads as well as set under the instance
-     *  lock by runTest(), and ContinueTimer reads it after dropping the lock.
+     * Current test we are running (as Alice), or null.  Volatile: cleared by
+     * {@link #testComplete()} on the UDP handle threads as well as set under the instance
+     * lock by runTest(), and ContinueTimer reads it after dropping the lock.
      *
-     *  @since 0.9.71+
+     * @since 0.9.71+
      */
     private volatile PeerTestState _currentTest;
     private volatile boolean _currentTestComplete;
@@ -185,11 +185,11 @@ class PeerTestManager {
     private static final boolean ENABLE_SSU2_SYMNAT_TEST = true;
 
     /**
-     *  Per-thread ChaChaPoly scratch for decrypting out-of-session Peer Test
-     *  packets.  Every such packet uses the same static intro key and sets the
-     *  nonce from the packet number, so one instance per thread is safe.
+     * Per-thread ChaChaPoly scratch for decrypting out-of-session Peer Test
+     * packets.  Every such packet uses the same static intro key and sets the
+     * nonce from the packet number, so one instance per thread is safe.
      *
-     *  @since 0.9.71+
+     * @since 0.9.71+
      */
     private static final ThreadLocal<ChaChaPolyCipherState> _testCipher = new ThreadLocal<ChaChaPolyCipherState>() {
         @Override
@@ -202,12 +202,12 @@ class PeerTestManager {
     /** How long a "no RouterInfo for this Peer Test" answer is reused. @since 0.9.71+. */
     private static final long TEST_RI_MISS_TTL = 250;
     /**
-     *  Last hash whose RouterInfo lookup missed, with the time it was recorded.
-     *  Both in one immutable holder: read as two separate volatiles a writer
-     *  landing between the reads could pair a hash with a foreign timestamp and
-     *  stretch or collapse the TTL.
+     * Last hash whose RouterInfo lookup missed, with the time it was recorded.
+     * Both in one immutable holder: read as two separate volatiles a writer
+     * landing between the reads could pair a hash with a foreign timestamp and
+     * stretch or collapse the TTL.
      *
-     *  @since 0.9.71+
+     * @since 0.9.71+
      */
     private static final class RIMiss {
         private final Hash hash;
@@ -320,7 +320,11 @@ class PeerTestManager {
     private class ContinueTimer extends SimpleTimer2.TimedEvent {
         private final long _nonce;
 
-        /** Schedules itself. */
+        /**
+         * Schedules itself.
+         *
+         * @param nonce the peer test to continue when the timer fires
+         */
         public ContinueTimer(long nonce) {
             super(_context.simpleTimer2());
             _nonce = nonce;
@@ -417,17 +421,17 @@ class PeerTestManager {
     private static final long SYMNAT_GRACE = 5000;
 
     /**
-     *  Which retransmit (if any) the ContinueTimer should make.  Pure decision
-     *  logic, with the test state passed in as scalars so it is testable without
-     *  a running test.
+     * Which retransmit (if any) the ContinueTimer should make.  Pure decision
+     * logic, with the test state passed in as scalars so it is testable without
+     * a running test.
      *
-     *  @param bobTime when msg 4 was received, or 0
-     *  @param charlieTime when msg 5 was received, or 0
-     *  @param charliePort Charlie's reported port, or {@link #PENDING_PORT} if firewalled
-     *  @param haveCharlieIntroKey whether msg 4 supplied Charlie's intro key
-     *  @param now the current time, in milliseconds
-     *  @return {@link #ACTION_NONE}, {@link #ACTION_SEND_BOB} or {@link #ACTION_SEND_CHARLIE}
-     *  @since 0.9.71+
+     * @param bobTime when msg 4 was received, or 0
+     * @param charlieTime when msg 5 was received, or 0
+     * @param charliePort Charlie's reported port, or {@link #PENDING_PORT} if firewalled
+     * @param haveCharlieIntroKey whether msg 4 supplied Charlie's intro key
+     * @param now the current time, in milliseconds
+     * @return {@link #ACTION_NONE}, {@link #ACTION_SEND_BOB} or {@link #ACTION_SEND_CHARLIE}
+     * @since 0.9.71+
      */
     static int decideRetransmit(long bobTime, long charlieTime, int charliePort,
                                 boolean haveCharlieIntroKey, long now) {
@@ -472,8 +476,10 @@ class PeerTestManager {
     }
 
     /** Has the given test (which may be null) run past its time budget?
-     *  @return true if the test is null or expired
-     *  @since 0.9.71+
+     *
+     * @param state the test being tracked, or null when no test is running
+     * @return true if the test is null or expired
+     * @since 0.9.71+
      */
     private boolean expired(PeerTestState state) {
         if (state != null)
@@ -612,7 +618,7 @@ class PeerTestManager {
      *
      * If Alice gets msg 5:
      * .. If Alice does not get msg 4:  UNKNOWN (says the SSU 1 spec,
-     *                                             but Java I2P proceeds for SSU 1)
+     * but Java I2P proceeds for SSU 1)
      * .. If Alice does not get msg 7:  UNKNOWN
      * .. If Alice gets msgs 4/5/7 and IP/port match:  OK
      * .. If Alice gets msgs 4/5/7 and IP/port do not match:  SYMNAT
@@ -630,7 +636,7 @@ class PeerTestManager {
      *
      * If Alice gets msg 5:
      * .. If Alice does not get msg 4:  OK unless currently SYMNAT, else UNKNOWN
-     *                                       (in SSU2 have to stop here anyway)
+     * (in SSU2 have to stop here anyway)
      * .. If Alice does not get msg 7:  OK unless currently SYMNAT, else UNKNOWN
      * .. If Alice gets msgs 4/5/7 and IP/port match:  OK
      * .. If Alice gets msgs 4/5/7 and IP matches, port does not match:  OK, charlie is probably sym. natted
@@ -762,10 +768,11 @@ class PeerTestManager {
     }
 
     /**
-     *  Depending upon the status, fire off different events (using received port/ip/etc as
-     *  necessary).
+     * Depending upon the status, fire off different events (using received port/ip/etc as
+     * necessary).
      *
-     *  @param isIPv6 Is the change an IPv6 change?
+     * @param status the test outcome to report to the transport
+     * @param isIPv6 Is the change an IPv6 change?
      */
     private void honorStatus(Status status, boolean isIPv6) {
         if (_log.shouldInfo())
@@ -856,6 +863,12 @@ class PeerTestManager {
      * <p>
      * We are Alice for msg 4, Charlie for msg 2.
      *
+     * @param from remote host id of the sender
+     * @param fromPeer peer state of the sender
+     * @param msg message number, 2 or 4
+     * @param h hash of the RouterInfo the test refers to
+     * @param data signed peer test data, kept for the retry
+     * @param retryCount retries so far, 0 on first receipt; capped at 5
      * @return true if RI found, false to delay and retry.
      * @since 0.9.55
      */
@@ -874,13 +887,13 @@ class PeerTestManager {
     }
 
     /**
-     *  Look up the RouterInfo a Peer Test message refers to, with a short
-     *  negative cache.
+     * Look up the RouterInfo a Peer Test message refers to, with a short
+     * negative cache.
      * <p>
-     *  DelayTest retries on a 50ms doubling backoff, so a miss would otherwise be
-     *  re-probed on every retry.  The cache is single-entry: it only collapses the
-     *  closely spaced retries of one hash, and concurrent tests for different
-     *  hashes do not share it.  Only misses are cached, so a hit is never stale.
+     * DelayTest retries on a 50ms doubling backoff, so a miss would otherwise be
+     * re-probed on every retry.  The cache is single-entry: it only collapses the
+     * closely spaced retries of one hash, and concurrent tests for different
+     * hashes do not share it.  Only misses are cached, so a hit is never stale.
      *
      * @param h the hash to look up, non-null
      * @return the RouterInfo, or null if not found (or looked up too recently)
@@ -909,7 +922,15 @@ class PeerTestManager {
         private volatile int count;
         private static final long DELAY = 50;
 
-        /** Schedules itself. */
+        /**
+         * Schedules itself.
+         *
+         * @param f remote host id of the sender
+         * @param fp peer state of the sender
+         * @param m message number, 2 or 4
+         * @param h hash of the RouterInfo awaited
+         * @param d signed peer test data to retry with
+         */
         public DelayTest(RemoteHostId f, PeerState2 fp, int m, Hash h, byte[] d) {
             super(_context.simpleTimer2());
             from = f;
@@ -1835,9 +1856,12 @@ class PeerTestManager {
     }
 
     /**
-     *  Send reject to Alice. We are Bob. SSU2 only.
+     * Send reject to Alice. We are Bob. SSU2 only.
      *
-     *  @since 0.9.57
+     * @param reason reject reason code to send
+     * @param data received peer test data echoed in the reject
+     * @param alice peer state to send the reject to
+     * @since 0.9.57
      */
     private void sendRejectToAlice(int reason, byte[] data, PeerState2 alice) {
         try {
@@ -1847,10 +1871,12 @@ class PeerTestManager {
     }
 
     /**
-     *  Get an address out of a RI. SSU2 only.
+     * Get an address out of a RI. SSU2 only.
      *
-     *  @return address or null
-     *  @since 0.9.54
+     * @param ri the router info to pick an address from
+     * @param isIPv6 true to look for IPv6 addresses, false for IPv4
+     * @return address or null
+     * @since 0.9.54
      */
     private RouterAddress getAddress(RouterInfo ri, boolean isIPv6) {
         List<RouterAddress> addrs = _transport.getTargetAddresses(ri);
@@ -1858,12 +1884,12 @@ class PeerTestManager {
     }
 
     /**
-     *  Get an address out of a list of addresses. SSU2 only.
+     * Get an address out of a list of addresses. SSU2 only.
      *
-     *  @param addrs the list of addresses
-     *  @param isIPv6 whether to look for IPv6 addresses
-     *  @return address or null
-     *  @since 0.9.55
+     * @param addrs the list of addresses
+     * @param isIPv6 whether to look for IPv6 addresses
+     * @return address or null
+     * @since 0.9.55
      */
     static RouterAddress getAddress(List<RouterAddress> addrs, boolean isIPv6) {
         RouterAddress ra = null;
@@ -1895,11 +1921,11 @@ class PeerTestManager {
     }
 
     /**
-     *  Get an intro key out of an address. SSU2 only.
+     * Get an intro key out of an address. SSU2 only.
      *
-     *  @param ra the router address
-     *  @return the intro key or null
-     *  @since 0.9.54, pkg private since 0.9.55 for IntroManager
+     * @param ra the router address
+     * @return the intro key or null
+     * @since 0.9.54, pkg private since 0.9.55 for IntroManager
      */
     static SessionKey getIntroKey(RouterAddress ra) {
         if (ra == null)
@@ -1913,16 +1939,19 @@ class PeerTestManager {
         return new SessionKey(ik);
     }
 
-    // Below here are methods for when we are Bob or Charlie
-
     /**
-     * SSU 1 Bob/Charlie and SSU 2 Bob
+     * For when we are Bob or Charlie: SSU 1 Bob/Charlie and SSU 2 Bob
      * forget about charlie's nonce after a short while.
      */
     private class RemoveTest extends SimpleTimer2.TimedEvent {
         private final Long _nonce;
 
-        /** Schedules itself. */
+        /**
+         * Schedules itself.
+         *
+         * @param nonce the test whose nonce should be forgotten
+         * @param delay ms to wait before expiring the test
+         */
         public RemoveTest(Long nonce, long delay) {
             super(_context.simpleTimer2());
             _nonce = nonce;
@@ -1949,7 +1978,11 @@ class PeerTestManager {
     private class CharlieTimer extends SimpleTimer2.TimedEvent {
         private final Long _nonce;
 
-        /** Schedules itself. */
+        /**
+         * Schedules itself.
+         *
+         * @param nonce the peer test to retransmit for when the timer fires
+         */
         public CharlieTimer(Long nonce) {
             super(_context.simpleTimer2());
             _nonce = nonce;
@@ -2002,6 +2035,7 @@ class PeerTestManager {
      * @param hash alice for msg 2, charlie for msg 4
      * @param data signed peer test data
      * @param to charlie for msg 2, alice for msg 4
+     * @param now the current time in ms for packet expiration
      * @throws IOException if to peer is dead
      * @since 0.9.57
      */
@@ -2073,10 +2107,10 @@ class PeerTestManager {
     }
 
     /**
-     *  This is only for out-of-session messages 5-7,
-     *  where most blocks are not allowed.
+     * This is only for out-of-session messages 5-7,
+     * where most blocks are not allowed.
      *
-     *  @since 0.9.54
+     * @since 0.9.54
      */
     /**
      * The bare cause from a netdb store rejection, stripped of the

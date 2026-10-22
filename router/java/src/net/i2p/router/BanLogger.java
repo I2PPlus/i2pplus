@@ -118,7 +118,9 @@ public class BanLogger {
 
     /**
      * Check if an IP already has an active ban in sessionbans.txt.
-     * @return whether active ban is present
+     *
+     * @param ip the address to search for, without a port; null is never banned
+     * @return true if a hash-less ban line for this IP has not expired yet
      */
     private boolean hasActiveBan(String ip) {
         if (_logFile == null || !_logFile.exists() || ip == null) {
@@ -443,6 +445,8 @@ public class BanLogger {
 
     /**
      * Capabilities string from RouterInfo for the given hash.
+     *
+     * @param hash the router to look up in the local NetDb, null yields an empty string
      * @return caps string or empty string
      */
     private String getCaps(Hash hash) {
@@ -459,6 +463,9 @@ public class BanLogger {
 
     /**
      * Version string from RouterInfo for the given hash.
+     *
+     * @param hash the router whose version is looked up in the local NetDb, null yields an
+     *             empty string
      * @return version string or empty string
      */
     private String getVersion(Hash hash) {
@@ -475,6 +482,9 @@ public class BanLogger {
 
     /**
      * Extract the bare IP (strip port) from an "ip:port" or "[ipv6]:port" string.
+     *
+     * @param ipPort the address and port as stored in the ban log
+     * @return the address without its port, or null for null, empty or "UNKNOWN" input
      */
     private static String stripPort(String ipPort) {
         if (ipPort == null || ipPort.isEmpty() || "UNKNOWN".equals(ipPort))
@@ -493,6 +503,8 @@ public class BanLogger {
 
     /**
      * Country code from IP using GeoIP.
+     *
+     * @param ipPort the banned address with port; the port is stripped before the lookup
      * @return country code or empty string
      */
     private String getCountry(String ipPort) {
@@ -512,6 +524,8 @@ public class BanLogger {
     /**
      * Hostname or ASN org name from IP using the local ASN database.
      * Non-blocking — uses cached results or fast local MMDB lookup.
+     *
+     * @param ipPort the banned address with port; the port is stripped before the lookup
      * @return hostname/ASN or empty string
      */
     private String getHost(String ipPort) {
@@ -530,7 +544,11 @@ public class BanLogger {
 
     /**
      * IP address from banlist for the given hash.
-     * @return the IP address from context
+     *
+     * @param hash the router to look up, null yields "UNKNOWN"
+     * @param context the context whose NetDb is searched, unused when the hash is null
+     * @return the router's address with port, or "UNKNOWN" if the hash is null or the router is
+     *         not cached locally
      */
     private String getIPFromContext(Hash hash, RouterContext context) {
         if (hash == null) {return "UNKNOWN";}
@@ -610,7 +628,11 @@ public class BanLogger {
 
     /**
      * Extract IP address and port from RouterInfo.
-     * @return the IP from router info
+     *
+     * @param router the router whose first address with a host is used, null yields an empty
+     *               string
+     * @return the address as "host:port", with an IPv6 host in brackets, or an empty string when
+     *         no address has a host
      */
     private String getIPFromRouterInfo(RouterInfo router) {
         if (router == null) { return ""; }
@@ -642,6 +664,15 @@ public class BanLogger {
      * Internal method to write the log entry.
      * Skips logging if this IP already has an active ban in sessionbans.txt,
      * or if this hash is already banlisted.
+     *
+     * @param hashStr the router's base64 hash, or "UNKNOWN" for an IP-only ban
+     * @param ip the banned address with port, "UNKNOWN" when it is not known
+     * @param reason the ban reason as shown in the console, HTML markup is stripped
+     * @param durationStr the ban duration already formatted, "FOREVER" for a permanent ban
+     * @param caps the router's capabilities string, null or empty leaves the field blank
+     * @param version the router's version string, null or empty leaves the field blank
+     * @param country the two-letter country code of the IP, null or empty leaves it blank
+     * @param host the hostname or ASN organisation of the IP, null or empty leaves it blank
      */
     private void writeLog(String hashStr, String ip, String reason, String durationStr,
                           String caps, String version, String country, String host) {
@@ -689,6 +720,9 @@ public class BanLogger {
 
     /**
      * Format duration in milliseconds to human-readable string.
+     *
+     * @param durationMs the ban length in milliseconds, 0 or less means permanent
+     * @return the length with a unit suffix of ms, m, h or d, or "FOREVER" for a permanent ban
      */
     private static String formatDuration(long durationMs) {
         if (durationMs <= 0) {
@@ -707,6 +741,12 @@ public class BanLogger {
 
     /**
      * Parse duration string to expiration timestamp.
+     *
+     * @param durationStr the duration as written in the log: "FOREVER", or a number with an
+     *                    optional ms, m, h or d suffix; null or empty means already expired
+     * @param now the current time in milliseconds, added to the parsed length
+     * @return the expiry time in milliseconds, Long.MAX_VALUE for a permanent ban, or now when
+     *         the string is empty or cannot be parsed
      */
     private static long parseDuration(String durationStr, long now) {
         if (durationStr == null || durationStr.isEmpty()) {

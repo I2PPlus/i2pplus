@@ -607,6 +607,9 @@ class NetDbRenderer {
      * The background worker processes one lookup every {@link #LOOKUP_INTERVAL_MS},
      * with a pause after every {@link #LOOKUPS_BEFORE_PAUSE} lookups.
      * Results accumulate in rdnsCache for future page loads.
+     *
+     * @param ips numeric addresses to resolve, as formatted for display;
+     *            addresses already queued are ignored
      */
     private void enqueueRdnsLookups(List<String> ips) {
         for (String ip : ips) {
@@ -1229,6 +1232,11 @@ class NetDbRenderer {
 
     /**
      * Renders the summary tables (versions, bandwidth, transports, countries).
+     *
+     * @param buf buffer the table HTML is appended to
+     * @param versions router counts keyed by the router.version option string
+     * @param countries router counts keyed by two-letter country code
+     * @param transportCount router counts indexed by the classifyTransports value
      * @param countryTiers per-country [X-tier, floodfill] counts
      */
     private void renderSummaryTables(StringBuilder buf, ObjectCounterUnsafe<String> versions,
@@ -1248,7 +1256,11 @@ class NetDbRenderer {
     }
 
     /**
-     * Renders the router versions table.
+     * Renders the router versions table, highest version first, with one row per
+     * version present in the router list.
+     *
+     * @param buf buffer the table HTML is appended to
+     * @param versions router counts keyed by the router.version option string
      */
     private void renderVersionsTable(StringBuilder buf, ObjectCounterUnsafe<String> versions) {
         List<String> versionList = new ArrayList<>(versions.objects());
@@ -1284,7 +1296,9 @@ class NetDbRenderer {
     };
 
     /**
-     * Renders the bandwidth tiers table.
+     * Renders the bandwidth tiers table, one row per tier that has peers.
+     *
+     * @param buf buffer the table HTML is appended to
      */
     private void renderBandwidthTiers(StringBuilder buf) {
         String showAll = _t("Show all routers with this capability in the NetDb");
@@ -1311,7 +1325,10 @@ class NetDbRenderer {
     }
 
     /**
-     * Renders the congestion capabilities table.
+     * Renders the congestion capabilities table, or nothing at all when no router
+     * in the NetDb advertises one of the three congestion capabilities.
+     *
+     * @param buf buffer the table HTML is appended to
      */
     private void renderCongestionCaps(StringBuilder buf) {
         String showAll = _t("Show all routers with this capability in the NetDb");
@@ -1344,7 +1361,12 @@ class NetDbRenderer {
     }
 
     /**
-     * Renders the transports table.
+     * Renders the transports table, one row per transport combination that at
+     * least one router uses.
+     *
+     * @param buf buffer the table HTML is appended to
+     * @param transportCount router counts indexed by the classifyTransports value,
+     *                       so the array is as long as the transport name table
      */
     private void renderTransportsTable(StringBuilder buf, int[] transportCount) {
         buf.append("<table id=netdbtransports>\n<thead><tr><th data-sort-default data-sort-direction=ascending>")
@@ -1360,7 +1382,14 @@ class NetDbRenderer {
     }
 
     /**
-     * Renders the country list table.
+     * Renders the country list table with the X-tier, floodfill and total counts
+     * for each country; countries whose total drops to zero are left out.
+     *
+     * @param buf buffer the table HTML is appended to
+     * @param countries router counts keyed by two-letter country code, the local
+     *                  router included; the row total subtracts that one
+     * @param countryTiers per-country [X-tier, floodfill] counts; a country absent
+     *                     from the map counts as zero for both columns
      */
     private void renderCountryTable(StringBuilder buf, ObjectCounterUnsafe<String> countries,
                                     Map<String, int[]> countryTiers) {
@@ -1466,6 +1495,12 @@ class NetDbRenderer {
      * Counts the summary statistics for the /netdb overview in a single
      * pass: versions, countries, transports, and per-country X-tier /
      * floodfill totals.
+     *
+     * @param routers routers to tally, the local router included
+     * @param versions version string to count, filled in here
+     * @param countries country code to count, the local router included
+     * @param transportCount transport class index to count, sized for TNAMES
+     * @param countryTiers country code to [X-tier count, floodfill count]
      */
     private void countFullRouterStats(List<RouterInfo> routers, ObjectCounterUnsafe<String> versions,
                                      ObjectCounterUnsafe<String> countries, int[] transportCount,
@@ -1492,7 +1527,10 @@ class NetDbRenderer {
 
     /**
      * Translated country name for the given country code.
-     * @return the translated country
+     *
+     * @param code the two-letter country code to resolve
+     * @return the country name translated into the console language, or the
+     *         untranslated geoIP name, which is the code itself when unknown
      * @since 0.9.9
      */
     private String getTranslatedCountry(String code) {
@@ -1524,7 +1562,10 @@ class NetDbRenderer {
 
     /**
      * Cached reverse DNS hostname for the IP, or null if absent or expired.
-     * @return the cached hostname or null
+     *
+     * @param ip the address whose cached hostname is wanted
+     * @return the hostname cached for the IP, or null if it was never cached or
+     *         the 24-hour entry has expired
      */
     private String getCachedReverseDNS(String ip) {
         CacheEntry entry = reverseLookupCache.get(ip);
@@ -1537,7 +1578,12 @@ class NetDbRenderer {
     }
 
     /**
-     * Puts a new value into the cache with TTL.
+     * Caches a reverse DNS result for 24 hours. A result that repeats the IP or
+     * is the literal "unknown" is not worth caching and is dropped.
+     *
+     * @param ip the address the hostname was resolved for
+     * @param hostname the hostname to store, ignored when null, equal to ip, or
+     *                 "unknown"
      */
     private void putCachedReverseDNS(String ip, String hostname) {
         if (hostname != null && !hostname.equals(ip) && !hostname.equals("unknown")) {
@@ -2043,6 +2089,10 @@ class NetDbRenderer {
 
     /**
      * Classifies router transports into bit flags.
+     *
+     * @param info the router whose transport addresses and their options are read
+     * @return an index into the transport name table for the router's addresses,
+     *         or 0 when no transport was recognised
      */
     private static int classifyTransports(RouterInfo info) {
         int rv = 0;
@@ -2081,9 +2131,19 @@ class NetDbRenderer {
         return (fullname ? _t("Standard Tier") : "isStandard");
     }
 
-    /** Translate a string via the router console messages bundle. */
+    /**
+     * Translate a string via the router console messages bundle.
+     *
+     * @param s the string to look up in the bundle
+     * @return the translated string, or s itself when no translation exists
+     */
     private String _t(String s) {return Messages.getString(s, _context);}
-    /** Mark a string for translation extraction (no-op at runtime). */
+    /**
+     * Mark a string for translation extraction, a no-op at runtime.
+     *
+     * @param s the string to mark for extraction
+     * @return the same string, unchanged, ready for the extractor to find it
+     */
     private static final String _x(String s) {return s;}
 
     /**

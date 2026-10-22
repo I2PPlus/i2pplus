@@ -336,7 +336,13 @@ final class Decoder {
         }
     }
 
-    /** @return modifiable, don't modify it */
+    /**
+     * Decode an array of size entries from the data section.
+     *
+     * @param size the number of entries to decode
+     * @return modifiable, don't modify it
+     * @throws IOException if the data section is truncated or invalid
+     */
     private List<Object> decodeArray(int size) throws IOException {
 
         List<Object> array = new ArrayList<>(size);
@@ -348,7 +354,13 @@ final class Decoder {
         return array;
     }
 
-    /** @return modifiable, don't modify it */
+    /**
+     * Decode a map with size key-value entries from the data section.
+     *
+     * @param size the number of entries to decode
+     * @return modifiable, don't modify it
+     * @throws IOException if the data section is truncated or invalid
+     */
     private Map<String, Object> decodeMap(int size) throws IOException {
         int capacity = (int) (size / 0.75F + 1.0F);
         Map<String, Object> map = new HashMap<>(capacity);

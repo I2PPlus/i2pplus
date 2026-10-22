@@ -116,6 +116,7 @@ public class I2PTunnelIRCClient extends I2PTunnelClientBase {
     /**
      * Parse the destination list from config.
      *
+     * @param destinations comma-separated destination list, null for none
      * @since 0.9.9 moved from constructor
      */
     private void buildAddresses(String destinations) {

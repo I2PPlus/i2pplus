@@ -56,6 +56,8 @@ class UnsignedUpdateChecker extends UpdateRunner {
     /**
      * HEAD the update url, and if the last-mod time is newer than the last update we
      * downloaded, as stored in the properties, then we download it using eepget.
+     *
+     * @return true if the HEAD request succeeded, false if there is no URL or the request failed
      */
     private boolean fetchUnsignedHead() {
         if (_urls.isEmpty()) {return false;}

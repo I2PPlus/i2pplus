@@ -61,6 +61,7 @@ final class CBD
      * Returns a 32-bit unsigned integer as a long
      *
      * @param x the byte array to convert
+     * @param offset the index of the first byte to convert
      * @return the converted 32-bit unsigned integer as a long
      */
     private static long convertByteTo32BitUnsignedInt(byte[] x, int offset)
@@ -82,6 +83,7 @@ final class CBD
      * Returns a 24-bit unsigned integer as a long from byte x
      *
      * @param x the byte array to convert
+     * @param offset the index of the first byte to convert
      * @return the converted 24-bit unsigned integer as a long
      */
     private static long convertByteTo24BitUnsignedInt(byte[] x, int offset)

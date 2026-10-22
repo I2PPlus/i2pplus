@@ -33,8 +33,8 @@ import net.i2p.util.VersionComparator;
 import java.io.Serializable;
 
 /**
- *  Keep track of inbound and outbound introductions.
- *  See http://i2p-projekt.i2p/spec/ssu2 for documentation.
+ * Keep track of inbound and outbound introductions.
+ * See http://i2p-projekt.i2p/spec/ssu2 for documentation.
  */
 class IntroductionManager {
     private final RouterContext _context;
@@ -315,11 +315,11 @@ class IntroductionManager {
     }
 
     /**
-     *  For picking introducers.
-     *  Lowest uptime first, to reduce idle timeout and disconnect,
-     *  and ensure variety.
+     * For picking introducers.
+     * Lowest uptime first, to reduce idle timeout and disconnect,
+     * and ensure variety.
      *
-     *  @since 0.9.55
+     * @since 0.9.55
      */
     private static class PeerStateComparator implements Comparator<PeerState>, Serializable {
 
@@ -344,6 +344,10 @@ class IntroductionManager {
 
         /**
          * SSU 2.
+         *
+         * @param h the hash of the introducer router
+         * @param tag the inbound introduction tag
+         * @param exp the introduction expiration time in seconds since the epoch, as a string
          * @since 0.9.55
          */
         public Introducer(Hash h, long tag, String exp) {
@@ -431,11 +435,11 @@ class IntroductionManager {
     }
 
     /**
-     *  We are Bob and we got this from Alice.
-     *  Send Alice's RI and a RelayIntro to Charlie, or reject with a RelayResponse to Alice.
-     *  We should already have a session with Charlie and definitely with Alice.
+     * We are Bob and we got this from Alice.
+     * Send Alice's RI and a RelayIntro to Charlie, or reject with a RelayResponse to Alice.
+     * We should already have a session with Charlie and definitely with Alice.
      * <p>
-     *  SSU 2 only.
+     * SSU 2 only.
      *
      * @param alice the peer that asked us to relay
      * @param data the encrypted request, with the timestamp in the first 4 bytes
@@ -663,15 +667,20 @@ class IntroductionManager {
     }
 
     /**
-     *  We are Charlie and we got this from Bob.
-     *  Bob should have sent us the RI, but maybe it's in the block
-     *  after this, or maybe it's in a different packet.
-     *  Check for RI, if not found, return true to retry, unless retryCount is at the limit.
-     *  Creates the timer if retryCount == 0.
+     * We are Charlie and we got this from Bob.
+     * Bob should have sent us the RI, but maybe it's in the block
+     * after this, or maybe it's in a different packet.
+     * Check for RI, if not found, return true to retry, unless retryCount is at the limit.
+     * Creates the timer if retryCount == 0.
      * <p>
-     *  SSU 2 only.
+     * SSU 2 only.
      *
-     * @return DELAYED if should retry (no RI), DROPPED on fatal error, or REPLIED if we replied to Bob with a RelayResponse
+     * @param bob the peer that relayed the introduction to us
+     * @param alice the hash of the peer being introduced
+     * @param data the relay intro payload to forward once Alice's RI is known
+     * @param retryCount the number of retries so far, 0 on first receipt, retried up to 5 times
+     * @return false if Alice's RouterInfo is not yet available and the intro should be retried,
+     *         true if the intro was processed
      * @since 0.9.55
      */
     private boolean receiveRelayIntro(PeerState2 bob, Hash alice, byte[] data, int retryCount) {
@@ -740,12 +749,18 @@ class IntroductionManager {
     }
 
     /**
-     *  We are Charlie and we got this from Bob.
-     *  Send a HolePunch to Alice, who will soon be sending us a SessionRequest.
-     *  And send a RelayResponse to bob.
+     * We are Charlie and we got this from Bob.
+     * Send a HolePunch to Alice, who will soon be sending us a SessionRequest.
+     * And send a RelayResponse to bob.
      * <p>
-     *  SSU 2 only.
+     * SSU 2 only.
      *
+     * @param bob the peer that relayed the introduction to us
+     * @param alice the hash of the peer being introduced
+     * @param data the signed relay intro payload to validate
+     * @param aliceRI Alice's router info, or null if Bob did not deliver it
+     * @return true if a RelayResponse was sent to Bob, false if the intro was
+     *         invalid or the reply could not be built
      * @since 0.9.55
      */
     private boolean receiveRelayIntro(PeerState2 bob, Hash alice, byte[] data, RouterInfo aliceRI) {
@@ -860,14 +875,14 @@ class IntroductionManager {
     }
 
     /**
-     *  We are Bob and we got this from Charlie, OR
-     *  we are Alice and we got this from Bob.
+     * We are Bob and we got this from Charlie, OR
+     * we are Alice and we got this from Bob.
      * <p>
-     *  If we are Bob, send to Alice.
-     *  If we are Alice, send a SessionRequest to Charlie.
-     *  We should already have a session with Charlie, but not necessarily with Alice.
+     * If we are Bob, send to Alice.
+     * If we are Alice, send a SessionRequest to Charlie.
+     * We should already have a session with Charlie, but not necessarily with Alice.
      * <p>
-     *  SSU 2 only.
+     * SSU 2 only.
      *
      * @param peer the peer that answered our relay request
      * @param status the status code the peer replied with
@@ -944,10 +959,10 @@ class IntroductionManager {
     }
 
     /**
-     *  We are Alice and we got this from Charlie.
-     *  Send a SessionRequest to Charlie, whether or not we got the Relay Response already.
+     * We are Alice and we got this from Charlie.
+     * Send a SessionRequest to Charlie, whether or not we got the Relay Response already.
      * <p>
-     *  SSU 2 only, out-of-session.
+     * SSU 2 only, out-of-session.
      *
      * @param charlie the peer we were relaying to
      * @param data the encrypted response, with the nonce and timestamp first
@@ -959,10 +974,12 @@ class IntroductionManager {
     }
 
     /**
-     *  Address out of a RouterInfo. SSU2 only.
+     * Address out of a RouterInfo. SSU2 only.
      *
-     *  @return address or null
-     *  @since 0.9.55
+     * @param ri the router info to take the address from
+     * @param isIPv6 true to select an IPv6 address, false for IPv4
+     * @return address or null
+     * @since 0.9.55
      */
     private RouterAddress getAddress(RouterInfo ri, boolean isIPv6) {
         List<RouterAddress> addrs = _transport.getTargetAddresses(ri);

@@ -171,6 +171,8 @@ public class FloodfillDatabaseLookupMessageHandler implements HandlerJobBuilder 
      * - Fix loopback DLM bug (pre-0.9.67) where from was set to self
      * - Reject direct floodfill-to-floodfill lookups of type EXPL or ANY.
      *
+     * @param dlm the received lookup message, never modified - corrections return a copy
+     * @param fromHash the peer the message actually arrived from, or null if unknown
      * @return the corrected DLM, or null to drop the message
      */
     private DatabaseLookupMessage preProcessDatabaseLookup(DatabaseLookupMessage dlm, Hash fromHash) {
@@ -290,6 +292,7 @@ public class FloodfillDatabaseLookupMessageHandler implements HandlerJobBuilder 
 
     /**
      * Extract IP:port from {@link RouterInfo} for a peer hash.
+     * @param h the peer hash whose RouterInfo is looked up locally
      * @return the IP from hash
      */
     private String getIPFromHash(Hash h) {

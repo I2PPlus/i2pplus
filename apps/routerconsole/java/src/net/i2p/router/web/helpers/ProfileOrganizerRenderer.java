@@ -241,7 +241,12 @@ class ProfileOrganizerRenderer {
      * participated in a tunnel build (neither agreed to nor rejected a build
      * request).
      *
+     * @param prof the candidate peer's profile
+     * @param peer the candidate peer's hash
+     * @param us our own router hash, never valid
      * @param requireTunnelHistory true for modes 0-2, false for mode 3
+     * @return true if the peer is not us and has been heard from, and when
+     *         requireTunnelHistory is set also has tunnel build history
      * @since 0.9.71+
      */
     private static boolean isValid(PeerProfile prof, Hash peer, Hash us, boolean requireTunnelHistory) {
@@ -886,6 +891,11 @@ class ProfileOrganizerRenderer {
      * @since 0.9.71+
      */
     private static class FloodfillStats {
+        /**
+         * Aggregates with every counter at zero, filled by one pass over the peers.
+         */
+        private FloodfillStats() {}
+
         /** Floodfill-capable peers known to the peer manager (matches sidebar). */
         int known;
         /** Peers passing the table's emit filter. */
@@ -1244,6 +1254,11 @@ class ProfileOrganizerRenderer {
      * @since 0.9.8
      */
     private static class ProfComparator implements Comparator<PeerProfile>, Serializable {
+        /**
+         * Comparator using the default binary peer-hash order.
+         */
+        private ProfComparator() {}
+
         @Override
         public int compare(PeerProfile left, PeerProfile right) {
             return HashComparator.comp(left.getPeer(), right.getPeer());
@@ -1271,6 +1286,11 @@ class ProfileOrganizerRenderer {
      * @since 0.9.70+
      */
     private static class FloodfillRowComparator implements Comparator<FloodfillRow>, Serializable {
+        /**
+         * Comparator sorting rows by the 1h lookup fail rate, best first.
+         */
+        private FloodfillRowComparator() {}
+
         @Override
         public int compare(FloodfillRow left, FloodfillRow right) {
             return left.hourFailPct - right.hourFailPct;
@@ -1279,6 +1299,10 @@ class ProfileOrganizerRenderer {
 
     /**
      * 1h lookup fail rate as an integer percent, the same value the render emits.
+     *
+     * @param prof the floodfill's profile
+     * @param ra scratch RateAverages object reused to compute the rate
+     * @return the 1h failed-lookup average as an integer percent, 0 when there is no data
      */
     private static int failRatePct(PeerProfile prof, RateAverages ra) {
         DBHistory dbh = prof.getDBHistory();
@@ -1296,13 +1320,23 @@ class ProfileOrganizerRenderer {
     private final static String num(double num) { synchronized (_fmt) { return _fmt.format(num); } }
     private final static String NA = "&ensp;";
 
-    /** Format a 0.0-1.0 fraction as an integer percent, e.g. "62%". */
+    /**
+     * Format a 0.0-1.0 fraction as an integer percent, e.g. "62%".
+     *
+     * @param frac the fraction to format, 0.0-1.0
+     * @return the truncated percent with a "%" suffix
+     */
     private final static String pct(double frac) { return (int) (frac * 100) + "%"; }
 
     /**
      * Average DB response time for the rate in ms, or -1 when no data.
      * Used for the raw sort key of the 1h Resp. Time column; display uses
      * formatDuration2() so the two never share varying units.
+     *
+     * @param prof the peer whose DB response time stat is read
+     * @param rate the rate window in milliseconds, e.g. 60*60*1000 for 1h
+     * @param ra scratch RateAverages object reused to compute the average
+     * @return the average response time in ms, or -1 when no data
      */
     private long avgMs(PeerProfile prof, long rate, RateAverages ra) {
         RateStat rs = prof.getDbResponseTime();
@@ -1317,6 +1351,9 @@ class ProfileOrganizerRenderer {
     /**
      * Format a time span for display.
      *
+     * @param now the current time in ms
+     * @param then the earlier event time in ms, 0 or less renders the placeholder
+     * @return the span from then to now formatted for display, at least 1 ms
      * @since 0.9.21
      */
     private String formatInterval(long now, long then) {
@@ -1326,7 +1363,12 @@ class ProfileOrganizerRenderer {
         return DataHelper.formatDuration2(now - then);
     }
 
-    /** Translate a string. */
+    /**
+     * Translate a string.
+     *
+     * @param s the message key to translate
+     * @return the translated text for s
+     */
     private String _t(String s) {return Messages.getString(s, _context);}
 
     private String _t(String s, Object o) {return Messages.getString(s, o, _context);}

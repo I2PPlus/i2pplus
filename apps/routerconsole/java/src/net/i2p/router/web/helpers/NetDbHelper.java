@@ -524,6 +524,7 @@ public class NetDbHelper extends FormHandler {
     /**
      * Render the NetDb navigation bar.
      *
+     * @return the navigation bar HTML
      * @since 0.9.1
      */
     private String renderNavBar() {
@@ -567,6 +568,7 @@ public class NetDbHelper extends FormHandler {
     /**
      * Render the NetDb search/lookup form.
      *
+     * @throws IOException if writing to the console output fails
      * @since 0.9.28
      */
     private void renderLookupForm() throws IOException {

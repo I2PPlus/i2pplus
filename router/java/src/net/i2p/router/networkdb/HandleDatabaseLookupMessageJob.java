@@ -204,6 +204,8 @@ public class HandleDatabaseLookupMessageJob extends JobImpl {
      * honoring the message's dontInclude set.
      * Will not include us.
      * Side effect - adds us to the message's dontInclude set.
+     *
+     * @param lookupType the message's lookup type, EXPL also excludes the fake hash
      * @return the nearest routers
      */
     private Set<Hash> getNearestRouters(DatabaseLookupMessage.Type lookupType) {

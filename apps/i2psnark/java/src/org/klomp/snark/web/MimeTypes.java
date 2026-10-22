@@ -65,6 +65,10 @@ class MimeTypes {
     /**
      * Tries both webapp and system class loader, since Jetty blocks its classes from the webapp
      * class loader.
+     *
+     * @param map the map filled with lower-case extension to MIME type mappings
+     * @param resourcePath the resource path in the classpath, without the
+     *                     ".properties" extension
      */
     private static void loadMimeMap(Map<String, String> map, String resourcePath) {
         try {

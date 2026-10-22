@@ -355,10 +355,10 @@ public class RrdDbPool {
      * <ul>
      *   <li>If the RRD is already open, previously returned RrdDb reference will be returned. Its
      *       usage count will be incremented by one.
-     *   <li>If the RRD is not already open and the number of already open RRD is less than {@link
+     * <li>If the RRD is not already open and the number of already open RRD is less than {@link
      *       #getCapacity()}, it will be opened and a new RrdDb reference will be returned. If the
-     *       RRD is not already open and the number of already open RRD is equal to {@link
-     *       #getCapacity()}, the method blocks until some RRD are closed.
+     * RRD is not already open and the number of already open RRD is equal to {@link
+     * #getCapacity()}, the method blocks until some RRD are closed.
      * </ul>
      *
      * <p>The path is transformed to an URI using the default factory defined at the creation of the
@@ -378,10 +378,10 @@ public class RrdDbPool {
      * <ul>
      *   <li>If the RRD is already open, previously returned RrdDb reference will be returned. Its
      *       usage count will be incremented by one.
-     *   <li>If the RRD is not already open and the number of already open RRD is less than {@link
+     * <li>If the RRD is not already open and the number of already open RRD is less than {@link
      *       #getCapacity()}, it will be opened and a new RrdDb reference will be returned. If the
-     *       RRD is not already open and the number of already open RRD is equal to {@link
-     *       #getCapacity()}, the method blocks until some RRD are closed.
+     * RRD is not already open and the number of already open RRD is equal to {@link
+     * #getCapacity()}, the method blocks until some RRD are closed.
      * </ul>
      *
      * <p>If the default backend factory for the pool can handle this URI, it will be used, or else
@@ -400,7 +400,7 @@ public class RrdDbPool {
      *
      * @param uri the canonical storage URI of the RRD to wait for
      * @return an reference with no usage
-     * @throws InterruptedException
+     * @throws InterruptedException if the thread is interrupted while waiting
      */
     private RrdEntry waitEmpty(URI uri) throws InterruptedException {
         RrdEntry ref = getEntry(uri, true);
@@ -425,7 +425,7 @@ public class RrdDbPool {
      *
      * @param uri the canonical storage URI of the RRD to wait for
      * @return an reference with no usage
-     * @throws InterruptedException
+     * @throws InterruptedException if the thread is interrupted while waiting
      */
     private RrdEntry requestEmpty(URI uri) throws InterruptedException {
         return waitEmpty(uri);
@@ -546,10 +546,10 @@ public class RrdDbPool {
      * <ul>
      *   <li>If the RRD with the path specified in the RrdDef object is already open, the method
      *       blocks until the file is closed.
-     *   <li>If the RRD is not already open and the number of already open RRD is less than {@link
+     * <li>If the RRD is not already open and the number of already open RRD is less than {@link
      *       #getCapacity()}, a new RRD will be created and it's RrdDb reference will be returned.
-     *       If the RRD is not already open and the number of already open RRD is equal to {@link
-     *       #getCapacity()}, the method blocks until some RrdDb references are closed.
+     * If the RRD is not already open and the number of already open RRD is equal to {@link
+     * #getCapacity()}, the method blocks until some RrdDb references are closed.
      * </ul>
      *
      * <p>If the factory defined when creating the pool can handle the URI, it will be used, or else
@@ -571,10 +571,10 @@ public class RrdDbPool {
      * <ul>
      *   <li>If the RRD with the path specified is already open, the method blocks until the file is
      *       closed.
-     *   <li>If the RRD is not already open and the number of already open RRD is less than {@link
+     * <li>If the RRD is not already open and the number of already open RRD is less than {@link
      *       #getCapacity()}, a new RRD will be created and it's RrdDb reference will be returned.
-     *       If the RRD is not already open and the number of already open RRD is equal to {@link
-     *       #getCapacity()}, the method blocks until some RrdDb references are closed.
+     * If the RRD is not already open and the number of already open RRD is equal to {@link
+     * #getCapacity()}, the method blocks until some RrdDb references are closed.
      * </ul>
      *
      * <p>The path is transformed to an URI using the default factory of the pool.
@@ -598,10 +598,10 @@ public class RrdDbPool {
      * <ul>
      *   <li>If the RRD with the URI specified is already open, the method blocks until the file is
      *       closed.
-     *   <li>If the RRD is not already open and the number of already open RRD is less than {@link
+     * <li>If the RRD is not already open and the number of already open RRD is less than {@link
      *       #getCapacity()}, a new RRD will be created and it's RrdDb reference will be returned.
-     *       If the RRD is not already open and the number of already open RRD is equal to {@link
-     *       #getCapacity()}, the method blocks until some RrdDb references are closed.
+     * If the RRD is not already open and the number of already open RRD is equal to {@link
+     * #getCapacity()}, the method blocks until some RrdDb references are closed.
      * </ul>
      *
      * If the factory defined when creating the pool can handle the URI, it will be used, or else

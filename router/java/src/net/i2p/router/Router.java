@@ -646,6 +646,11 @@ public class Router implements RouterClock.ClockShiftListener {
 
     private class LoggerCallback implements UPnPScannerCallback {
         /**
+         * Callback that logs the UPnP/SSDP scan start and finish.
+         */
+        private LoggerCallback() {}
+
+        /**
          * Log that the SSDP scan is about to begin.
          */
         public void beforeScan() {_log.info("SSDP beforeScan()");}
@@ -770,6 +775,7 @@ public class Router implements RouterClock.ClockShiftListener {
      * Caller must synchronize.
      *
      * @param ctx will be null at startup when called from constructor
+     * @param filename full path of the config file to read
      * @return the settings read from that file, empty if the file does not exist
      */
     private static Properties getConfig(RouterContext ctx, String filename) {
@@ -796,10 +802,8 @@ public class Router implements RouterClock.ClockShiftListener {
         return props;
     }
 
-    ////////// begin state management
-
     /**
-     * Startup / shutdown states.
+     * State management - startup / shutdown states.
      *
      * @since 0.9.18
      */
@@ -829,11 +833,11 @@ public class Router implements RouterClock.ClockShiftListener {
         RESTARTING,
         /** Cancellable shutdown has begun. */
         GRACEFUL_SHUTDOWN,
-        /** In {@link #shutdown()}. Non-cancellable shutdown has begun. */
+        /** In {@link #shutdown(int)}. Non-cancellable shutdown has begun. */
         FINAL_SHUTDOWN_1,
-        /** In {@link #shutdown2()}. Killing everything. */
+        /** In {@link #shutdown2(int)}. Killing everything. */
         FINAL_SHUTDOWN_2,
-        /** In {@link #finalShutdown()}. Final cleanup. */
+        /** In {@link #finalShutdown(int)}. Final cleanup. */
         FINAL_SHUTDOWN_3,
         /** All done. */
         STOPPED
@@ -858,6 +862,7 @@ public class Router implements RouterClock.ClockShiftListener {
     /**
      * Advance the router state machine, starting or stopping components as needed.
      *
+     * @param state the new state to advance to
      * @since 0.9.18
      */
     private void changeState(State state) {
@@ -989,8 +994,6 @@ public class Router implements RouterClock.ClockShiftListener {
         synchronized(_stateLock) {return STATES_FINAL.contains(_state);}
     }
 
-    ////////// end state management
-
     /**
      * Rebuild and republish our routerInfo since something significant
      * has changed.
@@ -1023,6 +1026,8 @@ public class Router implements RouterClock.ClockShiftListener {
     /**
      * Rebuild and republish our routerInfo since something significant
      * has changed.
+     *
+     * @param addresses the current router addresses to publish
      */
     private void locked_rebuildRouterInfo(List<RouterAddress> addresses) {
         RouterInfo ri;
@@ -1074,9 +1079,8 @@ public class Router implements RouterClock.ClockShiftListener {
         return _familyKeyCrypto;
     }
 
-    // publicize our ballpark capacity
     /**
-     * Bandwidth class capability for 12 KB/s.
+     * Bandwidth class capability for 12 KB/s, publicizing our ballpark capacity.
      */
     public static final char CAPABILITY_BW12 = 'K';
     /**

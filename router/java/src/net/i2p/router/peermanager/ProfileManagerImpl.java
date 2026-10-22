@@ -458,6 +458,7 @@ public class ProfileManagerImpl implements ProfileManager {
      * Blocking.
      * Creates a new profile if it didn't exist.
      *
+     * @param peer the router hash whose profile is wanted
      * @return non-null
      */
     private PeerProfile getProfile(Hash peer) {
@@ -474,6 +475,7 @@ public class ProfileManagerImpl implements ProfileManager {
      * Non-blocking.
      * Creates a new profile if it didn't exist.
      *
+     * @param peer the router hash whose profile is wanted
      * @return null if the fetch or create would have blocked
      * @since 0.8.12
      */

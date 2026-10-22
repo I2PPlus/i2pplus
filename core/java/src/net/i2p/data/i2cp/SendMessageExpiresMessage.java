@@ -44,6 +44,7 @@ public class SendMessageExpiresMessage extends SendMessageMessage {
     /**
      * For writing.
      *
+     * @param options the date and flags to write in the message
      * @deprecated use 5-arg constructor
      * @since 0.9.2
      */

@@ -438,6 +438,12 @@ public class Peer implements Comparable<Peer>, BandwidthListener {
 
     /**
      * Perform the handshake over the data streams and return the ID reported by the other side.
+     *
+     * @param in the socket input stream to read the peer's handshake from
+     * @param out the socket output stream to write our handshake to
+     * @return the 20-byte peer ID reported by the other side
+     * @throws IOException if the peer's handshake is malformed or its metainfo
+     *                     hash does not match ours
      */
     private byte[] handshake(InputStream in, OutputStream out) throws IOException {
         dout = new DataOutputStream(out);
@@ -786,10 +792,8 @@ public class Peer implements Comparable<Peer>, BandwidthListener {
         return (s != null) && s.isSnubbing();
     }
 
-    /////// begin BandwidthListener interface ///////
-
     /**
-     * Increments the download counter for this peer.
+     * BandwidthListener interface - increments the download counter for this peer.
      *
      * @param size the number of bytes downloaded
      * @since 0.8.4
@@ -967,8 +971,6 @@ public class Peer implements Comparable<Peer>, BandwidthListener {
         long down = downloaded.getAndSet(0);
         PeerCoordinator.setRate(down, downloaded_old);
     }
-
-    /////// end BandwidthListener interface ///////
 
     /**
      * Returns the time in milliseconds since the last activity on either

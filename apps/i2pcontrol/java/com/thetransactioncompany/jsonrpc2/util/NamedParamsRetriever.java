@@ -162,6 +162,7 @@ public class NamedParamsRetriever
 	 * Throws a JSON-RPC 2.0 error indicating a named parameter with an
 	 * unexpected enumerated value.
 	 *
+	 * @param <T> the enum type of the parameter
 	 * @param name      The parameter name.
 	 * @param enumClass The enumeration class specifying the acceptable
 	 *                  string values. Must not be {@code null}.

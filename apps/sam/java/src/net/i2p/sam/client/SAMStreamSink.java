@@ -275,6 +275,8 @@ public class SAMStreamSink {
 
         /**
          * Thread receiving datagrams sent to the SAM datagram port.
+         *
+         * @param mode the receive mode, DG or RAWHDR
          */
         public DGRcvr(int mode) {
             super("SAM-DGRX");
@@ -339,6 +341,9 @@ public class SAMStreamSink {
 
         /**
          * Thread accepting forwarded connections from the SAM forwarding port.
+         *
+         * @param isSSL true to accept the forwarded connection over SSL
+         * @param opts SSL connection options, used only when isSSL is true
          */
         public FwdRcvr(boolean isSSL, Properties opts) {
             super("SAM-FwdRX");
@@ -414,6 +419,8 @@ public class SAMStreamSink {
 
         /**
          * Thread sending the SAM keepalive PING to the bridge.
+         *
+         * @param out the bridge output stream to write PING commands to
          */
         public Pinger(OutputStream out) {
             super("SAM-SinkPing");
@@ -451,6 +458,9 @@ public class SAMStreamSink {
 
         /**
          * Remember the bridge output stream for the event replies.
+         *
+         * @param ctx the application context for the event handler
+         * @param out the bridge output stream, used to answer keepalives
          */
         public SinkEventHandler(I2PAppContext ctx, OutputStream out) {
             super(ctx);
@@ -567,6 +577,11 @@ public class SAMStreamSink {
 
         /**
          * SinkEventHandler2.
+         *
+         * @param ctx the application context for the event handler
+         * @param in the forwarded connection's input stream, read for the
+         *           destination line and the streamed data
+         * @param out the bridge output stream, used to answer keepalives
          */
         public SinkEventHandler2(I2PAppContext ctx, InputStream in, OutputStream out) {
             super(ctx, out);
@@ -664,7 +679,15 @@ public class SAMStreamSink {
     /**
      * Send the HELLO and log in.
      *
+     * @param samOut where to write the HELLO and session commands
+     * @param version maximum SAM protocol version to request, e.g. "3.3"
      * @param isMaster is this the control socket
+     * @param eventHandler reads the HELLO and status replies from the socket
+     * @param mode STREAM, FORWARD or FORWARDSSL, selects the initial STREAM
+     *             command on a non-master socket
+     * @param user SAM authentication user, sent only together with a password
+     * @param password SAM authentication password, sent only together with a user
+     * @param sopts extra session options appended to the SESSION command
      * @return our b64 dest or null
      */
     private String handshake(OutputStream samOut, String version, boolean isMaster,
@@ -878,6 +901,10 @@ public class SAMStreamSink {
 
         /**
          * Opens the sink file and starts the connection lifetime statistics.
+         *
+         * @param conId connection id, names the sink file and the stats
+         * @param remDest remote destination name recorded in the stats
+         * @throws IOException if the sink file cannot be created or opened
          */
         public Sink(String conId, String remDest) throws IOException {
             _connectionId = conId;
@@ -929,6 +956,10 @@ public class SAMStreamSink {
         }
         /**
          * Appends incoming data to the sink file.
+         *
+         * @param data the received bytes
+         * @param offset start of the data to write within data
+         * @param len number of bytes to write from offset
          */
         public void received(byte[] data, int offset, int len) {
             if (_closed) return;

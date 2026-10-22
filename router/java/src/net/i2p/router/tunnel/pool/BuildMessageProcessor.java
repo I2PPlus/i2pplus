@@ -51,6 +51,7 @@ class BuildMessageProcessor {
      * <p>
      * Target false positive rate is 1E-5 or lower.
      *
+     * @return the IV filter sized for this router's memory and tunnel count
      * @since 0.9.24
      */
     private DecayingBloomFilter selectFilter() {

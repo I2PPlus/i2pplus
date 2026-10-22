@@ -353,6 +353,10 @@ public class FIFOBandwidthLimiter {
      * The transports don't use this any more, so make it private
      * and a SimpleRequest instead of a Request
      * So there's no more casting.
+     *
+     * @param req the request to enqueue, satisfied when bytes are available
+     * @param bytesIn the number of inbound bytes wanted
+     * @param purpose label naming the requester, currently unused
      */
     private void requestInbound(SimpleRequest req, int bytesIn, String purpose) {
         int pending;
@@ -674,7 +678,11 @@ public class FIFOBandwidthLimiter {
         }
     }
 
-    /** Called from debug logging only. */
+    /**
+     * Called from debug logging only.
+     *
+     * @return how long the longest-waiting inbound request has waited in ms, 0 if none pending
+     */
     private long locked_getLongestInboundWait() {
         long start = -1;
         for (int i = 0; i < _pendingInboundRequests.size(); i++) {
@@ -688,7 +696,11 @@ public class FIFOBandwidthLimiter {
             return now() - start;
     }
 
-    /** Called from debug logging only. */
+    /**
+     * Called from debug logging only.
+     *
+     * @return how long the longest-waiting outbound request has waited in ms, 0 if none pending
+     */
     private long locked_getLongestOutboundWait() {
         long start = -1;
         for (int i = 0; i < _pendingOutboundRequests.size(); i++) {
@@ -944,6 +956,8 @@ public class FIFOBandwidthLimiter {
     /**
      * No-op, the HTML status page was not worth translating.
      *
+     * @param out ignored, nothing is ever written
+     * @throws IOException declared for the interface, never thrown here
      * @deprecated not worth translating
      */
     @Deprecated

@@ -192,6 +192,11 @@ public class StatisticsManager {
      *  if number of periods greater than zero:
      *       avg freq;exteremeEventCount;lifetimeEventCount;
      * </pre>
+     *
+     * @param rate the rate to render
+     * @param fudgeQuantity true to replace the event counts with the
+     *                      placeholder 555, hiding absolute quantities
+     * @return the semicolon-separated statistics fields
      */
     private String renderRate(Rate rate, boolean fudgeQuantity) {
         if (SIMPLE_STATS)
@@ -229,6 +234,10 @@ public class StatisticsManager {
     /**
      * Add tunnel build rates with some mods to hide absolute quantities
      * In particular, report counts normalized to 100 (i.e. a percentage).
+     *
+     * @param tunnelType the tunnel type in the rate name, e.g. Exploratory
+     * @param stats the properties the rendered rates are stored in
+     * @param selectedPeriod the rate period in milliseconds to report
      */
     private void includeTunnelRates(String tunnelType, Properties stats, long selectedPeriod) {
         long totalEvents = 0;
@@ -260,6 +269,11 @@ public class StatisticsManager {
      * </pre>
      * <p>
      * Previous format: see above
+     *
+     * @param rate the rate to render
+     * @param fudgeQuantity the value rendered in place of the event count,
+     *                      normally the count normalized to 100
+     * @return the semicolon-separated statistics fields
      */
     private String renderRate(Rate rate, double fudgeQuantity) {
         if (SIMPLE_STATS)

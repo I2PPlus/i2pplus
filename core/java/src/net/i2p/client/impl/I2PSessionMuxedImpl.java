@@ -140,12 +140,12 @@ class I2PSessionMuxedImpl extends I2PSessionImpl2 {
     }
 
     /**
-     *  Listen on specified protocol and port, and receive notification
-     *  of proto, fromPort, and toPort for every message.
+     * Listen on specified protocol and port, and receive notification
+     * of proto, fromPort, and toPort for every message.
      *
-     *  @param l the listener to add
-     *  @param proto 1-254 or PROTO_ANY (0) for all; 255 disallowed
-     *  @param port 1-65535 or PORT_ANY (0) for all
+     * @param l the listener to add
+     * @param proto 1-254 or PROTO_ANY (0) for all; 255 disallowed
+     * @param port 1-65535 or PORT_ANY (0) for all
      */
     @Override
     public void addMuxedSessionListener(I2PSessionMuxedListener l, int proto, int port) {
@@ -208,20 +208,20 @@ class I2PSessionMuxedImpl extends I2PSessionImpl2 {
     }
 
     /**
-     *  Send a message with protocol and port information.
+     * Send a message with protocol and port information.
      *
-     *  @param keyUsed unused - no end-to-end crypto
-     *  @param tagsSent unused - no end-to-end crypto
-     *  @param proto 1-254 or 0 for unset; recommended:
-     *               I2PSession.PROTO_UNSPECIFIED
-     *               I2PSession.PROTO_STREAMING
-     *               I2PSession.PROTO_DATAGRAM
-     *               255 disallowed
+     * @param keyUsed unused - no end-to-end crypto
+     * @param tagsSent unused - no end-to-end crypto
+     * @param proto 1-254 or 0 for unset; recommended:
+     *              I2PSession.PROTO_UNSPECIFIED
+     *              I2PSession.PROTO_STREAMING
+     *              I2PSession.PROTO_DATAGRAM
+     *              255 disallowed
      *
-     *  @param fromPort 1-65535 or 0 for unset
-     *  @param toPort 1-65535 or 0 for unset
-     *  @return true unless the router reported a failed send status
-     *  @since 0.7.1
+     * @param fromPort 1-65535 or 0 for unset
+     * @param toPort 1-65535 or 0 for unset
+     * @return true unless the router reported a failed send status
+     * @since 0.7.1
      */
     @Override
     public boolean sendMessage(Destination dest, byte[] payload, int offset, int size, SessionKey keyUsed, Set<SessionTag> tagsSent, long expires, int proto, int fromPort, int toPort) throws I2PSessionException {
@@ -229,21 +229,21 @@ class I2PSessionMuxedImpl extends I2PSessionImpl2 {
     }
 
     /**
-     *  Send a message with protocol, port, and flags.
+     * Send a message with protocol, port, and flags.
      *
-     *  @param keyUsed unused - no end-to-end crypto
-     *  @param tagsSent unused - no end-to-end crypto
-     *  @param proto 1-254 or 0 for unset; recommended:
-     *               I2PSession.PROTO_UNSPECIFIED
-     *               I2PSession.PROTO_STREAMING
-     *               I2PSession.PROTO_DATAGRAM
-     *               255 disallowed
+     * @param keyUsed unused - no end-to-end crypto
+     * @param tagsSent unused - no end-to-end crypto
+     * @param proto 1-254 or 0 for unset; recommended:
+     *              I2PSession.PROTO_UNSPECIFIED
+     *              I2PSession.PROTO_STREAMING
+     *              I2PSession.PROTO_DATAGRAM
+     *              255 disallowed
      *
-     *  @param fromPort 1-65535 or 0 for unset
-     *  @param toPort 1-65535 or 0 for unset
-     *  @param flags to be passed to the router
-     *  @return true unless the router reported a failed send status
-     *  @since 0.8.4
+     * @param fromPort 1-65535 or 0 for unset
+     * @param toPort 1-65535 or 0 for unset
+     * @param flags to be passed to the router
+     * @return true unless the router reported a failed send status
+     * @since 0.8.4
      */
     @Override
     public boolean sendMessage(Destination dest, byte[] payload, int offset, int size, SessionKey keyUsed, Set<SessionTag> tagsSent, long expires, int proto, int fromPort, int toPort, int flags) throws I2PSessionException {
@@ -302,7 +302,16 @@ class I2PSessionMuxedImpl extends I2PSessionImpl2 {
     /**
      * Prepare the payload for sending.
      *
+     * @param payload the message data to wrap
+     * @param offset start of the message data within payload
+     * @param size number of message bytes to take from offset
+     * @param proto protocol written to the gzip OS byte, 1-254 or 0 for unset
+     * @param fromPort source port written to the MTIME field, 1-65535 or 0 for unset
+     * @param toPort destination port written to the MTIME field, 1-65535 or 0 for unset
+     * @param gzo gzip selection; DEFAULT compresses by size heuristic,
+     *            GZIP_ON forces compression
      * @return gzip compressed payload, ready to send
+     * @throws I2PSessionException if the session is not open
      * @since 0.9.14
      */
     private byte[] prepPayload(byte[] payload, int offset, int size, int proto, int fromPort, int toPort, SendMessageOptions.GzipOption gzo) throws I2PSessionException {
@@ -328,6 +337,11 @@ class I2PSessionMuxedImpl extends I2PSessionImpl2 {
     /**
      * Send a message without expecting a response.
      *
+     * @param dest the destination to deliver the message to
+     * @param payload the already-prepared message data
+     * @param options delivery options, expiration and flags applied to the message
+     * @throws I2PSessionException if the message cannot be queued to the router,
+     *                             e.g. the write queue is full or the session closed
      * @since 0.9.2
      */
     private void sendNoEffort(Destination dest, byte[] payload, SendMessageOptions options) throws I2PSessionException {
@@ -464,6 +478,12 @@ class I2PSessionMuxedImpl extends I2PSessionImpl2 {
 
         /**
          * Carries the message id, size, protocol and port fields hidden in the gzip header.
+         *
+         * @param i the message ID from the I2CP message
+         * @param s the message size in bytes
+         * @param p the protocol number from the gzip OS byte
+         * @param f the origin port from the upper MTIME bytes
+         * @param t the destination port from the lower MTIME bytes
          */
         public MsgData(int i, int s, int p, int f, int t) {
             id = i;
@@ -499,18 +519,33 @@ class I2PSessionMuxedImpl extends I2PSessionImpl2 {
     /** Lower two bytes of MTIME in gzip header. */
     private static final int TOPORT_BYTES = 6;
 
-    /** Non-muxed sets the OS byte to 0xff. */
+    /**
+     * Non-muxed sets the OS byte to 0xff.
+     *
+     * @param msg the received payload message to read the header from
+     * @return the protocol 0-254, or PROTO_UNSPECIFIED when the OS byte is 0xff
+     */
     private static int getProto(MessagePayloadMessage msg) {
         int rv = getByte(msg, PROTO_BYTE) & 0xff;
         return rv == 0xff ? PROTO_UNSPECIFIED : rv;
     }
 
-    /** Non-muxed sets the MTIME bytes to 0. */
+    /**
+     * Non-muxed sets the MTIME bytes to 0.
+     *
+     * @param msg the received payload message to read the header from
+     * @return the source port 0-65535 from the upper two MTIME bytes, 0 if unset
+     */
     private static int getFromPort(MessagePayloadMessage msg) {
         return (((getByte(msg, FROMPORT_BYTES) & 0xff) << 8) | (getByte(msg, FROMPORT_BYTES + 1) & 0xff));
     }
 
-    /** Non-muxed sets the MTIME bytes to 0. */
+    /**
+     * Non-muxed sets the MTIME bytes to 0.
+     *
+     * @param msg the received payload message to read the header from
+     * @return the destination port 0-65535 from the lower two MTIME bytes, 0 if unset
+     */
     private static int getToPort(MessagePayloadMessage msg) {
         return (((getByte(msg, TOPORT_BYTES) & 0xff) << 8) | (getByte(msg, TOPORT_BYTES + 1) & 0xff));
     }

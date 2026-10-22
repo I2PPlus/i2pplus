@@ -113,6 +113,13 @@ class SOCKS5Server extends SOCKSServer {
     /**
      * SOCKS5 connection initialization.  This method assumes that
      * SOCKS "VER" field has been stripped from the input stream.
+     *
+     * @param in the client input stream, positioned after the VER byte,
+     *           carrying the method count and the offered method list
+     * @param out the client output stream for the method selection reply
+     * @param client the client's IP address, used in the authentication log messages
+     * @throws IOException if a stream read or write fails, or if the client
+     *                     offers no acceptable authentication method
      */
     private void init(DataInputStream in, DataOutputStream out, InetAddress client) throws IOException {
         int nMethods = in.readUnsignedByte();
@@ -149,6 +156,13 @@ class SOCKS5Server extends SOCKSServer {
 
     /**
      * Wait for the username/password message and verify or throw SOCKSException on failure.
+     *
+     * @param in the client input stream, positioned at the start of the
+     *           username/password subnegotiation
+     * @param out the client output stream for the authentication reply
+     * @param client the client's IP address, used only in the log messages
+     * @throws IOException if a stream read or write fails, or if the subnegotiation
+     *                     version, the user or password fields, or the credentials are invalid
      * @since 0.8.2
      */
     private void verifyPassword(DataInputStream in, DataOutputStream out, InetAddress client) throws IOException {
@@ -199,6 +213,12 @@ class SOCKS5Server extends SOCKSServer {
      * stuff preceding or enveloping the actual request (e.g. protocol
      * initialization, integrity/confidentiality encapsulations, etc)
      * has been stripped out of the input/output streams.
+     *
+     * @param in the client input stream, positioned at the request's version byte
+     * @param out the client output stream for the failure reply
+     * @return the validated command byte, Command.CONNECT or Command.UDP_ASSOCIATE
+     * @throws IOException if a stream read or write fails, or if the request has an
+     *                     invalid protocol version, command, or port number
      */
     private int manageRequest(DataInputStream in, DataOutputStream out) throws IOException {
         int socksVer = in.readUnsignedByte();
@@ -381,6 +401,10 @@ class SOCKS5Server extends SOCKSServer {
 
     /**
      * Send the specified reply during SOCKS5 initialization.
+     *
+     * @param replyCode the selected Method constant to send back
+     * @param out the client output stream
+     * @throws IOException if the write to the client fails
      */
     private void sendInitReply(int replyCode, DataOutputStream out) throws IOException {
         byte[] reply = new byte[2];
@@ -393,6 +417,10 @@ class SOCKS5Server extends SOCKSServer {
 
     /**
      * Send the specified reply during SOCKS5 authorization.
+     *
+     * @param replyCode the result to send back, AUTH_SUCCESS or AUTH_FAILURE
+     * @param out the client output stream
+     * @throws IOException if the write to the client fails
      * @since 0.8.2
      */
     private void sendAuthReply(int replyCode, DataOutputStream out) throws IOException {
@@ -408,6 +436,15 @@ class SOCKS5Server extends SOCKSServer {
      * Send the specified reply to a request of the client.  Either
      * one of inetAddr or domainName can be null, depending on
      * addressType.
+     *
+     * @param replyCode the Reply constant to send
+     * @param addressType an AddressType constant selecting how the bound
+     *                    address is encoded: IPV4, IPV6, or DOMAINNAME
+     * @param inetAddr the IPv4 or IPv6 address to report, null if none
+     * @param domainName the domain name to report for DOMAINNAME type, null if none
+     * @param bindPort the port to report in the reply, 0-65535
+     * @param out the client output stream
+     * @throws IOException if the write to the client fails
      */
     private void sendRequestReply(int replyCode, int addressType, InetAddress inetAddr, String domainName,
                                   int bindPort, DataOutputStream out) throws IOException {
@@ -590,7 +627,15 @@ class SOCKS5Server extends SOCKSServer {
         }
     }
 
-    /** Select a proxy, preferring a cached one for the same host. */
+    /**
+     * Select a proxy, preferring a cached one for the same host.
+     *
+     * @param proxies the configured proxy destinations, non-empty
+     * @param host the destination host whose earlier choice is reused if
+     *             it is still in the list
+     * @return the proxy to use: the cached one for this host if still
+     *         listed, otherwise a random pick that is then cached
+     */
     private String selectProxy(List<String> proxies, String host) {
         if (proxies.size() == 1) return proxies.get(0);
         String cached = _proxyCache.get(host);
@@ -613,6 +658,11 @@ class SOCKS5Server extends SOCKSServer {
      * RFC 1928 defines one UDP relay per TCP control connection, but a client
      * may open more; each additional ASSOCIATE request gets its own local port.
      * The loop ends on any other command, or on a closed control connection.
+     *
+     * @param in the control connection input stream, read for further ASSOCIATE commands
+     * @param out the control connection output stream, for the relay port replies
+     * @throws SOCKSException always, after the UDP relays are closed, so the
+     *                        caller never opens a streaming connection
      */
     private void handleUDP(DataInputStream in, DataOutputStream out) throws SOCKSException {
         List<Integer> ports = new ArrayList<>(1);

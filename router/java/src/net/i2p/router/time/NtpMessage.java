@@ -349,6 +349,9 @@ class NtpMessage {
     /**
      * Converts an unsigned byte to a short.  By default, Java assumes that
      * a byte is signed.
+     *
+     * @param b the byte to widen
+     * @return the same bit pattern read as an unsigned value, 0-255
      */
     private static short unsignedByteToShort(byte b) {
         if((b & 0x80)==0x80)
@@ -471,7 +474,11 @@ class NtpMessage {
      * Returns a string representation of a reference identifier according
      * to the rules set out in RFC 2030.
      *
-     * @return non-null, "" if unset
+     * @param ref the 4-byte reference identifier field from the packet
+     * @param stratum the packet's stratum, 0 or 1 renders ref as ASCII text
+     * @param version the NTP version from the packet, 3 renders ref as an IPv4
+     *                address and 4 as a fractional timestamp
+     * @return non-null, "" if unset, or for a version other than 3 or 4
      */
     private static String referenceIdentifierToString(byte[] ref, short stratum, byte version) {
         // From the RFC 2030:

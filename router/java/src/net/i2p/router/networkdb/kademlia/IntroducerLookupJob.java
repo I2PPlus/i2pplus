@@ -186,6 +186,11 @@ class IntroducerLookupJob extends JobImpl {
      * expires through the normal netdb lifecycle). Failure increments the
      * consecutive-failure count, which lengthens the retry backoff. Both
      * outcomes release a concurrency slot.
+     *
+     * @param ctx the router context for the lookup jobs
+     * @param h hash of the peer whose RouterInfo is to be looked up
+     * @param now the current time in ms, recorded as the attempt timestamp
+     * @param timeoutMs lookup deadline in ms for this attempt
      */
     private void requestLookup(RouterContext ctx, final Hash h, long now, final int timeoutMs) {
         _attempts.compute(h, (k, v) -> v == null ? new long[] {now, 0}
@@ -213,7 +218,12 @@ class IntroducerLookupJob extends JobImpl {
         ctx.statManager().addRateData("netDb.introducerRILookups", 1);
     }
 
-    /** Next cycle delay: CYCLE_INTERVAL with uniform ±CYCLE_JITTER. */
+    /**
+     * Next cycle delay: CYCLE_INTERVAL with uniform ±CYCLE_JITTER.
+     *
+     * @param ctx the router context supplying the random source
+     * @return the delay in ms until the next lookup cycle
+     */
     private long nextInterval(RouterContext ctx) {
         return CYCLE_INTERVAL - CYCLE_JITTER + ctx.random().nextLong(2 * CYCLE_JITTER + 1);
     }
@@ -222,6 +232,8 @@ class IntroducerLookupJob extends JobImpl {
      * Bound the attempts map: drop entries whose last attempt predates the
      * maximum possible backoff window (they would fail {@link #canAttempt(long, long[])} as
      * eligible anyway and would be recreated fresh).
+     *
+     * @param now the current time in ms, used for the age cutoff
      */
     private void pruneAttempts(long now) {
         if (_attempts.size() <= ATTEMPT_MAP_MAX)

@@ -142,6 +142,9 @@ public class InstallUpdate {
      * <p>
      * Copied from NativeBigInteger, which we can't access here or the
      * libs will get loaded.
+     *
+     * @param context provides the lib directory holding jbigi.jar and the base
+     *                directory holding the extracted native libraries
      */
     private static void deleteJbigiFiles(RouterContext context) {
         boolean isX86 = SystemVersion.isX86();
@@ -174,6 +177,9 @@ public class InstallUpdate {
     /**
      * Delete a native library if the jbigi.jar is newer.
      * Copies to .bak first, then deletes.
+     *
+     * @param jbigiJar the jar whose modification time is compared with the library's
+     * @param lib the native library file to back up and delete
      */
     private static void deleteNativeLib(File jbigiJar, File lib) {
         if (lib.canWrite() && jbigiJar.lastModified() > lib.lastModified()) {
@@ -196,6 +202,8 @@ public class InstallUpdate {
      * All file names must be relative to $I2P, absolute file names not allowed.
      * Summarizes deletions at the end.
      * Use no new I2P classes here so it may be called after zip extraction.
+     *
+     * @param context provides the base directory holding the delete file
      * @since 0.8.12
      */
     private static void deleteListedFiles(RouterContext context) {
@@ -241,6 +249,8 @@ public class InstallUpdate {
 
     /**
      * Recursive directory delete.
+     *
+     * @param dir the directory to delete along with everything inside it
      * @return true if the directory was deleted
      */
     private static boolean deleteDir(File dir) {

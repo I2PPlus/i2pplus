@@ -122,6 +122,8 @@ class OutboundMessageDistributor {
     /**
      * Throttle msgs to unconnected routers after we hit
      * the limit of new routers in a given time period.
+     *
+     * @param target the destination router's hash
      * @return true if the throttle has been exceeded and the message should
      *         be dropped, false to pass it on
      * @since 0.9.12
@@ -148,6 +150,10 @@ class OutboundMessageDistributor {
     /**
      * Warning - as of 0.9.63, msg will be an UnknownI2NPMessage,
      * and must be converted before handling locally.
+     *
+     * @param msg the message to distribute
+     * @param target the router the message is destined for
+     * @param tunnel the tunnel id the message arrived on, for the reply path
      */
     private void distribute(I2NPMessage msg, RouterInfo target, TunnelId tunnel) {
         boolean toUs = _context.routerHash().equals(target.getIdentity().calculateHash());

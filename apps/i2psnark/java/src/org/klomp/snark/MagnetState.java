@@ -233,7 +233,8 @@ class MagnetState {
      * @return the built MetaInfo
      * @throws IOException if the info hash doesn't match or data is corrupt
      * @throws Exception if there's an error parsing the metadata
-     * @throws StackOverflowError
+     * @throws StackOverflowError if the bencoded metadata is nested too deeply
+     *                            for the decoder
      */
     private MetaInfo buildMetaInfo() throws Throwable {
         // top map has nothing in it but the info map (no announce)

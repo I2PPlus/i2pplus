@@ -57,6 +57,8 @@ public class HeaderLine extends Encoding {
 	/**
 	 * Whether the char is header whitespace.
 	 *
+	 * @param c the character to test
+	 * @return true for space and tab only
 	 * @since 0.9.33
 	 */
 	private static boolean isWhiteSpace(char c) {
@@ -66,6 +68,9 @@ public class HeaderLine extends Encoding {
 	/**
 	 * Whether the char is a control or non-ASCII character.
 	 *
+	 * @param c the character to test
+	 * @return true for control characters below 32 except space and tab, and
+	 *         for characters 127 and above
 	 * @since 0.9.33
 	 */
 	private static boolean isControlOrMultiByte(char c) {
@@ -75,6 +80,8 @@ public class HeaderLine extends Encoding {
 	/**
 	 * Whether the char is an RFC 2047 special.
 	 *
+	 * @param c the character to test
+	 * @return true for one of ! * + - / = _
 	 * @since 0.9.33
 	 */
 	private static boolean isPSpecial(char c) {
@@ -85,6 +92,8 @@ public class HeaderLine extends Encoding {
 	/**
 	 * Whether the char is safe unencoded in an encoded-word.
 	 *
+	 * @param c the character to test
+	 * @return true for letters, digits and the RFC 2047 specials
 	 * @since 0.9.33
 	 */
 	private static boolean isPSafe(char c) {

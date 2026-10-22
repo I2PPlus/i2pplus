@@ -64,20 +64,20 @@ import net.i2p.util.Log;
  * <p>
  * <b>Key Features:</b>
  * <ul>
- *   <li>Accepts incoming I2P connections via {@link I2PServerSocket}</li>
- *   <li>Forwards connections to configurable local TCP destinations</li>
- *   <li>Supports SSL/TLS connections via {@link I2PSSLSocketFactory}</li>
- *   <li>Provides port-based destination mapping (targetForPort.xx)</li>
- *   <li>Implements connection filtering via {@link StatefulConnectionFilter}</li>
- *   <li>Uses thread pool for concurrent connection handling</li>
+ * <li>Accepts incoming I2P connections via {@link I2PServerSocket}</li>
+ * <li>Forwards connections to configurable local TCP destinations</li>
+ * <li>Supports SSL/TLS connections via {@link I2PSSLSocketFactory}</li>
+ * <li>Provides port-based destination mapping (targetForPort.xx)</li>
+ * <li>Implements connection filtering via {@link StatefulConnectionFilter}</li>
+ * <li>Uses thread pool for concurrent connection handling</li>
  * </ul>
  * <p>
  * <b>Connection Flow:</b>
  * <ol>
- *   <li>Client connects to I2P destination via I2PServerSocket</li>
- *   <li>{@link #blockingHandle} is called with the I2PSocket</li>
- *   <li>Local TCP socket is created via {@link #getSocket}</li>
- *   <li>I2PTunnelRunner handles bidirectional data streaming</li>
+ * <li>Client connects to I2P destination via I2PServerSocket</li>
+ * <li>{@link #blockingHandle} is called with the I2PSocket</li>
+ * <li>Local TCP socket is created via {@link #getSocket}</li>
+ * <li>I2PTunnelRunner handles bidirectional data streaming</li>
  * </ol>
  * <p>
  * <b>Subclasses:</b> I2PTunnelHTTPServer, I2PTunnelIRCServer, and others
@@ -213,7 +213,7 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
 
     /**
      * Per-tunnel server handler pool cap, -1 = Tuner-managed default.
-     *  Read from PROP_SERVER_THREADS; re-applied live in {@link #optionsUpdated(I2PTunnel)}.
+     * Read from PROP_SERVER_THREADS; re-applied live in {@link #optionsUpdated(I2PTunnel)}.
      * @since 0.9.71+
      */
     private volatile int _serverThreadOverride = -1;
@@ -227,7 +227,7 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
      */
     protected boolean bidir;
     /**
-     *  Server ID for HTTP bidirectional proxies; not incremented, always 0.
+     * Server ID for HTTP bidirectional proxies; not incremented, always 0.
      */
     protected static volatile long serverId = 0;
     private static final int DEFAULT_LOCAL_PORT = 4488;
@@ -317,17 +317,17 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
     }
 
     /**
-     *  Non-blocking: wraps a socket manager the caller has already built and
-     *  connected, and marks the server open, so the caller is responsible for
-     *  the session rather than this constructor.
+     * Non-blocking: wraps a socket manager the caller has already built and
+     * connected, and marks the server open, so the caller is responsible for
+     * the session rather than this constructor.
      *
-     *  @param host server hostname, kept as the remote host and named in the display name
-     *  @param port server port, kept as the remote port and named in the display name
-     *  @param sktMgr the existing socket manager
-     *  @param l logger receiving the client-visible notices and warnings
-     *  @param notifyThis dispatcher notified of this server's events, e.g. openServerResult
-     *  @param tunnel owning tunnel, supplying the RouterContext, client options and host
-     *  @since 0.8.9
+     * @param host server hostname, kept as the remote host and named in the display name
+     * @param port server port, kept as the remote port and named in the display name
+     * @param sktMgr the existing socket manager
+     * @param l logger receiving the client-visible notices and warnings
+     * @param notifyThis dispatcher notified of this server's events, e.g. openServerResult
+     * @param tunnel owning tunnel, supplying the RouterContext, client options and host
+     * @since 0.8.9
      */
     public I2PTunnelServer(InetAddress host, int port, I2PSocketManager sktMgr,
                            Logging l, EventDispatcher notifyThis, I2PTunnel tunnel) {
@@ -349,11 +349,13 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
     private static final int MAX_RETRIES = 20;
 
     /**
-     *  Create the socket manager from the private key data.
+     * Create the socket manager from the private key data.
      *
-     *  @throws IllegalArgumentException if the I2CP configuration is b0rked so
-     *                                   badly that we cant create a socketManager
-     *  @since 0.9.8
+     * @param privData the stream to read the destination and private key from
+     * @return the new socket manager
+     * @throws IllegalArgumentException if the I2CP configuration is b0rked so
+     *                                  badly that we cant create a socketManager
+     * @since 0.9.8
      */
     private I2PSocketManager createManager(InputStream privData) {
         Properties props = new Properties();
@@ -397,21 +399,21 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
     }
 
     /**
-     *  Add an alternate EdDSA_SHA512_Ed25519 subsession alongside a DSA_SHA1
-     *  primary session.
-     *  <p>
-     *  Runs only when {@link #PROP_ALT_PKF} names a resolvable key file and the
-     *  primary session's destination really is DSA_SHA1; a primary session of
-     *  any other signature type is left alone. Any failure to read the file or
-     *  add the subsession is logged and null is returned, leaving the primary
-     *  session and its tunnel running without the alternate destination. The
-     *  signature type is declared here rather than read back from the key file,
-     *  so the nickname labels below assume an EdDSA key file.
+     * Add an alternate EdDSA_SHA512_Ed25519 subsession alongside a DSA_SHA1
+     * primary session.
+     * <p>
+     * Runs only when {@link #PROP_ALT_PKF} names a resolvable key file and the
+     * primary session's destination really is DSA_SHA1; a primary session of
+     * any other signature type is left alone. Any failure to read the file or
+     * add the subsession is logged and null is returned, leaving the primary
+     * session and its tunnel running without the alternate destination. The
+     * signature type is declared here rather than read back from the key file,
+     * so the nickname labels below assume an EdDSA key file.
      *
-     *  @param sMgr the primary session's socket manager
-     *  @param alt value of {@link #PROP_ALT_PKF}, a key file path
-     *  @return the subsession, or null if none was added
-     *  @since 0.9.30
+     * @param sMgr the primary session's socket manager
+     * @param alt value of {@link #PROP_ALT_PKF}, a key file path
+     * @return the subsession, or null if none was added
+     * @since 0.9.30
      */
     private I2PSession addSubsession(I2PSocketManager sMgr, String alt) {
         File altFile = TunnelController.filenameToFile(alt);
@@ -441,9 +443,9 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
     }
 
     /**
-     *  Connect the session and subsessions with retries.
+     * Connect the session and subsessions with retries.
      *
-     *  @throws IllegalArgumentException if max retries reached
+     * @throws IllegalArgumentException if max retries reached
      */
     private void connectSessionWithRetry() {
         int retries = 0;
@@ -543,12 +545,12 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
     }
 
     /**
-     *  Check if the session's offline signature is about to expire.
-     *  Throws if expiration is imminent, logs a warning if soon.
+     * Check if the session's offline signature is about to expire.
+     * Throws if expiration is imminent, logs a warning if soon.
      *
-     *  @param session the I2P session to check
-     *  @param name the tunnel name for log messages
-     *  @param detail extra text in log messages (e.g. " alternate destination")
+     * @param session the I2P session to check
+     * @param name the tunnel name for log messages
+     * @param detail extra text in log messages (e.g. " alternate destination")
      */
     private void checkOfflineExpiration(I2PSession session, String name, String detail) {
         if (!session.isOffline()) {return;}
@@ -588,39 +590,39 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
     public void setReadTimeout(long ms) {readTimeout = ms;}
 
     /**
-     *  Try to reserve a slot in the concurrent-connection gate.
-     *  Call right after accept(), before dispatching the handler. When this returns
-     *  false the connection must be rejected (rejectConnection) and never dispatched.
-     *  The reserved slot is released by {@link #releaseConnection()}, which runs in the handler's
-     *  finally block so it also fires on early returns and exceptions.
+     * Try to reserve a slot in the concurrent-connection gate.
+     * Call right after accept(), before dispatching the handler. When this returns
+     * false the connection must be rejected (rejectConnection) and never dispatched.
+     * The reserved slot is released by {@link #releaseConnection()}, which runs in the handler's
+     * finally block so it also fires on early returns and exceptions.
      *
-     *  @return true if under the cap (or unlimited), false if the cap is exceeded
-     *  @since 0.9.71+
+     * @return true if under the cap (or unlimited), false if the cap is exceeded
+     * @since 0.9.71+
      */
     protected boolean tryAcquireConnection() {
         return acquireConnectionSlot(_maxConnections, _activeConnections);
     }
 
     /**
-     *  Release a reservation taken by {@link #tryAcquireConnection()}. Idempotent-safe only when
-     *  paired with the acquire; must run exactly once per accepted connection.
-     *  @since 0.9.71+
+     * Release a reservation taken by {@link #tryAcquireConnection()}. Idempotent-safe only when
+     * paired with the acquire; must run exactly once per accepted connection.
+     * @since 0.9.71+
      */
     protected void releaseConnection() {
         releaseConnectionSlot(_activeConnections);
     }
 
     /**
-     *  Decide whether a concurrent-connection slot is available and, if so, reserve it.
-     *  Pure decision, no router context: called by the accept loop right after accept(),
-     *  before a handler thread is consumed. Cap 0 = unlimited = always available and no
-     *  reservation is recorded. The caller MUST pair a successful reservation with
-     *  {@link #releaseConnectionSlot} (normally from the handler's finally block).
+     * Decide whether a concurrent-connection slot is available and, if so, reserve it.
+     * Pure decision, no router context: called by the accept loop right after accept(),
+     * before a handler thread is consumed. Cap 0 = unlimited = always available and no
+     * reservation is recorded. The caller MUST pair a successful reservation with
+     * {@link #releaseConnectionSlot} (normally from the handler's finally block).
      *
-     *  @param maxConnections the configured cap; &lt;= 0 means unlimited
-     *  @param active the live reservation counter shared by all connections of the tunnel
-     *  @return true if a slot was reserved (or the cap is unlimited); false if over the cap
-     *  @since 0.9.71+
+     * @param maxConnections the configured cap; &lt;= 0 means unlimited
+     * @param active the live reservation counter shared by all connections of the tunnel
+     * @return true if a slot was reserved (or the cap is unlimited); false if over the cap
+     * @since 0.9.71+
      */
     static boolean acquireConnectionSlot(int maxConnections, AtomicInteger active) {
         if (maxConnections <= 0) {return true;}
@@ -632,12 +634,12 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
     }
 
     /**
-     *  Release a slot reserved by {@link #acquireConnectionSlot}. Clamped at zero so a config
-     *  change mid-flight (cap turned on while unlimited connections are live) can never
-     *  push the counter negative and permanently disable the gate.
+     * Release a slot reserved by {@link #acquireConnectionSlot}. Clamped at zero so a config
+     * change mid-flight (cap turned on while unlimited connections are live) can never
+     * push the counter negative and permanently disable the gate.
      *
-     *  @param active the reservation counter shared by all connections of the tunnel
-     *  @since 0.9.71+
+     * @param active the reservation counter shared by all connections of the tunnel
+     * @since 0.9.71+
      */
     static void releaseConnectionSlot(AtomicInteger active) {
         int prev;
@@ -648,14 +650,14 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
     }
 
     /**
-     *  Parse the per-tunnel server handler pool override.
-     *  Pure decision: null or non-numeric values yield -1 (use the Tuner-managed
-     *  default); values below the floor (&lt; 2) are also treated as "no override"
-     *  to match {@link TunnelControllerGroup#normalizeThreadOverride(int)}.
+     * Parse the per-tunnel server handler pool override.
+     * Pure decision: null or non-numeric values yield -1 (use the Tuner-managed
+     * default); values below the floor (&lt; 2) are also treated as "no override"
+     * to match {@link TunnelControllerGroup#normalizeThreadOverride(int)}.
      *
-     *  @param st the raw option value; may be null
-     *  @return the override thread count, or -1 for the default
-     *  @since 0.9.71+
+     * @param st the raw option value; may be null
+     * @return the override thread count, or -1 for the default
+     * @since 0.9.71+
      */
     static int parseServerThreadOverride(String st) {
         if (st == null) {return -1;}
@@ -668,30 +670,30 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
     }
 
     /**
-     *  Decide whether a connection should be rejected because the handler
-     *  queue is already drowning. Pure decision, no router context: called
-     *  from the accept loop after accept() and before a handler thread is
-     *  consumed.
-     *  <p>Admission policy (high throughput, minimal drops):
-     *  <ul>
-     *    <li>Hard stop near queue capacity (would hit AbortPolicy anyway).</li>
-     *    <li>If any handler thread is free, admit — the backlog drains as soon
-     *        as work is submitted; rejecting while capacity exists only creates
-     *        empty responses the browser reports as failures.</li>
-     *    <li>Only when the pool is fully busy is a drain-time estimate applied:
-     *        {@code queueDepth * avgHandleMs / threads}. Reject only when that
-     *        exceeds {@link #MAX_QUEUE_DRAIN_MS}, so short bursts queue and
-     *        drain instead of being dropped, while a hopeless backlog fails
-     *        fast rather than pinning sockets for minutes.</li>
-     *  </ul>
+     * Decide whether a connection should be rejected because the handler
+     * queue is already drowning. Pure decision, no router context: called
+     * from the accept loop after accept() and before a handler thread is
+     * consumed.
+     * <p>Admission policy (high throughput, minimal drops):
+     * <ul>
+     * <li>Hard stop near queue capacity (would hit AbortPolicy anyway).</li>
+     * <li>If any handler thread is free, admit — the backlog drains as soon
+     * as work is submitted; rejecting while capacity exists only creates
+     * empty responses the browser reports as failures.</li>
+     * <li>Only when the pool is fully busy is a drain-time estimate applied:
+     * {@code queueDepth * avgHandleMs / threads}. Reject only when that
+     * exceeds {@link #MAX_QUEUE_DRAIN_MS}, so short bursts queue and
+     * drain instead of being dropped, while a hopeless backlog fails
+     * fast rather than pinning sockets for minutes.</li>
+     * </ul>
      *
-     *  @param queueDepth current queued task count
-     *  @param capacity total queue capacity; &lt;= 0 disables this gate
-     *  @param active currently busy handler threads
-     *  @param threads pool max threads; &lt;= 0 disables this gate
-     *  @param avgHandleMs average handler time in ms; &lt;= 0 uses {@link #DEFAULT_HANDLE_MS}
-     *  @return true if the connection should be rejected with a 503
-     *  @since 0.9.71+
+     * @param queueDepth current queued task count
+     * @param capacity total queue capacity; &lt;= 0 disables this gate
+     * @param active currently busy handler threads
+     * @param threads pool max threads; &lt;= 0 disables this gate
+     * @param avgHandleMs average handler time in ms; &lt;= 0 uses {@link #DEFAULT_HANDLE_MS}
+     * @return true if the connection should be rejected with a 503
+     * @since 0.9.71+
      */
     static boolean shouldRejectOnQueue(int queueDepth, int capacity, int active, int threads,
                                        long avgHandleMs) {
@@ -706,41 +708,41 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
     }
 
     /**
-     *  Back-compat overload when the caller has no handle-time sample yet.
-     *  Uses {@link #DEFAULT_HANDLE_MS} for the drain estimate.
+     * Back-compat overload when the caller has no handle-time sample yet.
+     * Uses {@link #DEFAULT_HANDLE_MS} for the drain estimate.
      *
-     *  @param queueDepth current queued task count
-     *  @param capacity total queue capacity; &lt;= 0 disables this gate
-     *  @param active currently busy handler threads
-     *  @param threads pool max threads; &lt;= 0 disables this gate
-     *  @return true if the connection should be rejected
-     *  @since 0.9.71+
+     * @param queueDepth current queued task count
+     * @param capacity total queue capacity; &lt;= 0 disables this gate
+     * @param active currently busy handler threads
+     * @param threads pool max threads; &lt;= 0 disables this gate
+     * @return true if the connection should be rejected
+     * @since 0.9.71+
      */
     static boolean shouldRejectOnQueue(int queueDepth, int capacity, int active, int threads) {
         return shouldRejectOnQueue(queueDepth, capacity, active, threads, DEFAULT_HANDLE_MS);
     }
 
     /**
-     *  Fallback average handler time (ms) when no recent blockingHandleTime
-     *  sample is available for the drain estimate.
-     *  @since 0.9.71+
+     * Fallback average handler time (ms) when no recent blockingHandleTime
+     * sample is available for the drain estimate.
+     * @since 0.9.71+
      */
     static final long DEFAULT_HANDLE_MS = 2_000L;
     /**
-     *  Reject only when a fully busy pool would need longer than this to drain
-     *  the queue. Generous enough that normal bursts queue and complete
-     *  (minimal drops) without pinning sockets indefinitely.
-     *  @since 0.9.71+
+     * Reject only when a fully busy pool would need longer than this to drain
+     * the queue. Generous enough that normal bursts queue and complete
+     * (minimal drops) without pinning sockets indefinitely.
+     * @since 0.9.71+
      */
     static final long MAX_QUEUE_DRAIN_MS = 30_000L;
 
     /**
-     *  Refuse an inbound connection when the gate cap is exceeded. Base implementation
-     *  closes the socket; I2PTunnelHTTPServer overrides to send a 503 first. Warnings are
-     *  rate-limited so a flood of rejections cannot spam the log.
+     * Refuse an inbound connection when the gate cap is exceeded. Base implementation
+     * closes the socket; I2PTunnelHTTPServer overrides to send a 503 first. Warnings are
+     * rate-limited so a flood of rejections cannot spam the log.
      *
-     *  @param socket the accepted but undelivered I2PSocket to reject
-     *  @since 0.9.71+
+     * @param socket the accepted but undelivered I2PSocket to reject
+     * @since 0.9.71+
      */
     protected void rejectConnection(I2PSocket socket) {
         rejectConnection(socket, false);
@@ -774,14 +776,14 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
     }
 
     /**
-     *  Rate-limited queue-full warning with the real pool metrics that drove
-     *  the gate (not the connection-slot counter, which is often 0 here).
+     * Rate-limited queue-full warning with the real pool metrics that drove
+     * the gate (not the connection-slot counter, which is often 0 here).
      *
-     *  @param ex the saturated handler pool
-     *  @param queueDepth queued task count at reject time
-     *  @param active busy handler threads at reject time
-     *  @param threads pool maximum at reject time
-     *  @since 0.9.71+
+     * @param ex the saturated handler pool
+     * @param queueDepth queued task count at reject time
+     * @param active busy handler threads at reject time
+     * @param threads pool maximum at reject time
+     * @since 0.9.71+
      */
     private void warnQueueFull(ThreadPoolExecutor ex, int queueDepth, int active, int threads) {
         long now = System.currentTimeMillis();
@@ -797,11 +799,11 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
     }
 
     /**
-     *  60s average handler time in ms for the queue drain estimate, or 0 when
-     *  no recent sample exists (caller falls back to the default).
+     * 60s average handler time in ms for the queue drain estimate, or 0 when
+     * no recent sample exists (caller falls back to the default).
      *
-     *  @return average blockingHandleTime, or 0 if unavailable
-     *  @since 0.9.71+
+     * @return average blockingHandleTime, or 0 if unavailable
+     * @since 0.9.71+
      */
     private long avgHandleMs() {
         I2PAppContext ctx = getTunnel() != null ? getTunnel().getContext() : null;
@@ -832,10 +834,10 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
     public long getReadTimeout() {return readTimeout;}
 
     /**
-     *  Return the socket manager, or null if destroyed.
+     * Return the socket manager, or null if destroyed.
      *
-     *  @return the socket manager, or null
-     *  @since 0.9.63
+     * @return the socket manager, or null
+     * @since 0.9.63
      */
     @Override
     public I2PSocketManager getSocketManager() {
@@ -846,11 +848,11 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
     }
 
     /**
-     *  Note that the tunnel can be reopened after this by calling startRunning().
-     *  This does not release all resources. In particular, the I2PSocketManager remains
-     *  and it may have timer threads that continue running.
+     * Note that the tunnel can be reopened after this by calling startRunning().
+     * This does not release all resources. In particular, the I2PSocketManager remains
+     * and it may have timer threads that continue running.
      * <p>
-     *  To release all resources permanently, call {@link #destroy()}.
+     * To release all resources permanently, call {@link #destroy()}.
      *
      * @return true if the tunnel was closed successfully, false if connections exist and forced is false
      */
@@ -882,11 +884,11 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
     }
 
     /**
-     *  Note that the tunnel cannot be reopened after this by calling startRunning(),
-     *  as it will destroy the underlying socket manager.
-     *  This releases all resources.
+     * Note that the tunnel cannot be reopened after this by calling startRunning(),
+     * as it will destroy the underlying socket manager.
+     * This releases all resources.
      *
-     *  @since 0.9.17
+     * @since 0.9.17
      */
     @Override
     public synchronized boolean destroy() {
@@ -898,10 +900,10 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
     }
 
     /**
-     *  Update the I2PSocketManager.
-     *  And since 0.9.15, the target host and port.
+     * Update the I2PSocketManager.
+     * And since 0.9.15, the target host and port.
      *
-     *  @since 0.9.1
+     * @since 0.9.1
      */
     @Override
     public void optionsUpdated(I2PTunnel tunnel) {
@@ -994,9 +996,10 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
     }
 
     /**
-     *  Update the ports map.
+     * Update the ports map.
      *
-     *  @since 0.9.9
+     * @param props the tunnel options, targetForPort.N entries define the map
+     * @since 0.9.9
      */
     private void buildSocketMap(Properties props) {
         _socketMap.clear();
@@ -1164,7 +1167,9 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
     }
 
     /**
-     *  Sleep for the given duration, ignoring interruption (but restoring the flag).
+     * Sleep for the given duration, ignoring interruption (but restoring the flag).
+     *
+     * @param delayMs the time to sleep in milliseconds
      */
     private static void sleepIgnoringInterrupt(long delayMs) {
         try {
@@ -1175,7 +1180,7 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
     }
 
     /**
-     *  Sleep for 2 minutes and recreate the server socket.
+     * Sleep for 2 minutes and recreate the server socket.
      */
     private void reconnectServerSocket() {
         sleepIgnoringInterrupt(RECONNECT_DELAY_2MIN);
@@ -1183,10 +1188,10 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
     }
 
     /**
-     *  Attempt to recover the server socket with a shorter delay.
-     *  On failure, destroy the tunnel.
+     * Attempt to recover the server socket with a shorter delay.
+     * On failure, destroy the tunnel.
      *
-     *  @return true if recovered, false if gave up
+     * @return true if recovered, false if gave up
      */
     private boolean recoverServerSocket() {
         sleepIgnoringInterrupt(RECONNECT_DELAY_10S);
@@ -1211,6 +1216,8 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
 
     /**
      * Close an I2P socket silently, ignoring any exceptions.
+     *
+     * @param s the socket to close, null is ignored
      */
     private static void closeSilently(I2PSocket s) {
         if (s != null) try { s.close(); } catch (IOException ioe) { /* ignore */ }
@@ -1225,7 +1232,7 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
         public Handler(I2PSocket socket) {_i2ps = socket;}
 
         /**
-         *  Handle the connection by delegating to blockingHandle().
+         * Handle the connection by delegating to blockingHandle().
          */
         @Override
         public void run() {
@@ -1403,7 +1410,11 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
     }
 
     /**
-     *  Get or lazily create the SSL socket factory.
+     * Get or lazily create the SSL socket factory.
+     *
+     * @return the shared SSL socket factory, created on first use
+     * @throws IOException if the factory cannot be initialized, wrapping the
+     *                     underlying security exception
      */
     private I2PSSLSocketFactory getOrCreateSSLFactory() throws IOException {
         synchronized(sslLock) {
@@ -1422,7 +1433,15 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
     }
 
     /**
-     *  Create a socket with a unique local address derived from the peer hash.
+     * Create a socket with a unique local address derived from the peer hash.
+     *
+     * @param from the peer's destination hash, supplying the unique local
+     *             address bytes
+     * @param remoteHost the address to connect to
+     * @param remotePort the port to connect to
+     * @param timeout the connect timeout in milliseconds
+     * @return a connected socket bound to a unique loopback address
+     * @throws IOException if the socket cannot be bound or connected
      */
     private Socket createUniqueLocalSocket(Hash from, InetAddress remoteHost, int remotePort, int timeout) throws IOException {
         byte[] addr;
@@ -1443,7 +1462,13 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
     }
 
     /**
-     *  Create a plain (non-SSL) socket connection.
+     * Create a plain (non-SSL) socket connection.
+     *
+     * @param host the address to connect to
+     * @param port the port to connect to
+     * @param timeout the connect timeout in milliseconds
+     * @return a connected socket
+     * @throws IOException if the connection fails
      */
     private static Socket createPlainSocket(InetAddress host, int port, int timeout) throws IOException {
         Socket s = new Socket();
@@ -1452,14 +1477,16 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
     }
 
     /**
-     *  Get a regular or SSL socket depending on config.
-     *  The SSL config applies to all hosts/ports, unless forced off.
+     * Get a regular or SSL socket depending on config.
+     * The SSL config applies to all hosts/ports, unless forced off.
      *
-     *  @param from hash of the peer's destination for local address binding
-     *  @param remoteHost the target host to connect to
-     *  @param remotePort the target port to connect to
-     *  @param forceNonSSL true to skip SSL even when the SSL option is set
-     *  @since 0.9.50
+     * @param from hash of the peer's destination for local address binding
+     * @param remoteHost the target host to connect to
+     * @param remotePort the target port to connect to
+     * @param forceNonSSL true to skip SSL even when the SSL option is set
+     * @return a connected regular or SSL socket
+     * @throws IOException if the connection fails
+     * @since 0.9.50
      */
     private Socket getSocket(Hash from, InetAddress remoteHost, int remotePort, boolean forceNonSSL) throws IOException {
         int timeout = TunnelControllerGroup.getSocketConnectTimeout();

@@ -88,8 +88,6 @@ public class I2PControlController implements RouterApp {
         _state = INITIALIZED;
     }
 
-    /////// ClientApp methods
-
     /** Start the Jetty server */
     @Override
     public synchronized void startup() {
@@ -117,7 +115,7 @@ public class I2PControlController implements RouterApp {
     /**
      * Current state of the managed client app.
      *
-     * @return current state
+     * @return the current state of this app
      */
     @Override
     public synchronized ClientAppState getState() {
@@ -144,8 +142,11 @@ public class I2PControlController implements RouterApp {
         return "I2PControl";
     }
 
-    /////// end ClientApp methods
-
+    /**
+     * Change the app state and notify the update manager.
+     *
+     * @param state the new state of the app
+     */
     private void changeState(ClientAppState state) {
         changeState(state, null, null);
     }
@@ -230,6 +231,8 @@ public class I2PControlController implements RouterApp {
 
     /**
      * Creates a SSLListener with all the default options. The listener will use all the default options.
+     *
+     * @param server the server to add the connector to, may be null
      * @param address - The address the listener will listen to.
      * @param port - The port the listener will listen to.
      * @return - Newly created listener

@@ -1640,15 +1640,28 @@ class SidebarRenderer {
         return buf.toString();
     }
 
-    /** Tag only. */
+    /**
+     * Tag only.
+     *
+     * @param s the string literal to mark for extraction
+     * @return s unchanged, not translated
+     */
     private static final String _x(String s) {return s;}
 
-    /** Translate a string. */
+    /**
+     * Translate a string.
+     *
+     * @param s the message key
+     * @return the translated string
+     */
     private String _t(String s) {return Messages.getString(s, _context);}
 
     /**
      * Translate a message.
      *
+     * @param s the message key
+     * @param o the argument substituted into the message
+     * @return the translated message
      * @since 0.9.23
      */
     private String _t(String s, Object o) {return Messages.getString(s, o, _context);}
@@ -1657,6 +1670,9 @@ class SidebarRenderer {
      * Where the translation is to two words or more,
      * prevent splitting across lines.
      *
+     * @param s the translated string
+     * @return s with spaces replaced by &nbsp; if it is 30 characters or less,
+     *         otherwise s unchanged
      * @since 0.9.18
      */
     private static String nbsp(String s) {

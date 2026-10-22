@@ -102,7 +102,8 @@ public class ConfigurationManager {
     /**
      * Try to parse the input as 'key=value',
      * where value will (in order) be parsed as integer/boolean/string.
-     * @param input
+     * @param input the properties to parse, each value tried as an integer, then a
+     *              boolean, then a string
      */
     private void parseConfigStr(Properties input) {
         for (Entry<Object, Object> entry : input.entrySet()) {

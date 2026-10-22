@@ -369,6 +369,12 @@ public abstract class LocalHTTPServer {
     /**
      * Send the redirect result page to the browser.
      *
+     * @param out the stream to write the HTTP response to
+     * @param success true if the entry was saved to the addressbook, false to report the failure
+     * @param host the host that was added, shown decoded as an IDN in the page title
+     * @param book the addressbook file changed, e.g. "hosts.txt", shown by translated name
+     * @param url the URL to redirect the browser to
+     * @throws IOException if writing to the browser stream fails
      * @since 0.8.7
      */
     private static void writeRedirectPage(OutputStream out, boolean success, String host, String book, String url) throws IOException {

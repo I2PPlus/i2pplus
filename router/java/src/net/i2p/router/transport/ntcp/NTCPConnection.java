@@ -217,10 +217,10 @@ public class NTCPConnection implements Closeable {
     private static final int INFO_FREQUENCY = 50*60*1000;
 
     /**
-     *  Why this is 16K, and where it is documented, good question?
-     *  We claim we can do 32K datagrams so this is a problem.
-     *  Needs to be fixed. But SSU can handle it?
-     *  In the meantime, don't let the transport bid on big messages.
+     * Why this is 16K, and where it is documented, good question?
+     * We claim we can do 32K datagrams so this is a problem.
+     * Needs to be fixed. But SSU can handle it?
+     * In the meantime, don't let the transport bid on big messages.
      */
     static final int BUFFER_SIZE = 16*1024;
     private static final int MAX_DATA_READ_BUFS = SystemVersion.isSlow() ? 4 : 16;
@@ -231,8 +231,8 @@ public class NTCPConnection implements Closeable {
 
     /**
      * See spec. Max Noise payload 65535,
-     *  minus 16 byte MAC and 3 byte block header.
-     *  Includes 9-byte I2NP header.
+     * minus 16 byte MAC and 3 byte block header.
+     * Includes 9-byte I2NP header.
      */
     static final int NTCP2_MAX_MSG_SIZE = 65516;
     private static final int PADDING_MAX = 64;
@@ -392,8 +392,8 @@ public class NTCPConnection implements Closeable {
     public SelectionKey getKey() { return _conKey; }
 
     /**
-     *  Socket channel for this connection.
-     *  @param chan the channel this connection reads and writes through
+     * Socket channel for this connection.
+     * @param chan the channel this connection reads and writes through
      */
     public void setChannel(SocketChannel chan) { _chan = chan; }
 
@@ -404,34 +404,34 @@ public class NTCPConnection implements Closeable {
     public void setKey(SelectionKey key) { _conKey = key; }
 
     /**
-     *  Whether this is an inbound connection.
+     * Whether this is an inbound connection.
      *
-     *  @return true if inbound
+     * @return true if inbound
      */
     public boolean isInbound() { return _isInbound; }
 
     /**
-     *  Whether the connection is established.
+     * Whether the connection is established.
      *
-     *  @return true if established
+     * @return true if established
      */
     public boolean isEstablished() { return _establishState.isComplete(); }
 
     /**
-     *  Whether the connection is over IPv6.
+     * Whether the connection is over IPv6.
      *
-     *  @return true if IPv6
-     *  @since IPv6
+     * @return true if IPv6
+     * @since IPv6
      */
     public boolean isIPv6() {
         return _chan != null && _chan.socket().getInetAddress() instanceof Inet6Address;
     }
 
     /**
-     *  Return the remote peer's IP address.
+     * Return the remote peer's IP address.
      *
-     *  @return null if unknown
-     *  @since 0.9.53
+     * @return null if unknown
+     * @since 0.9.53
      */
     public byte[] getRemoteIP() {
         if (_chan == null)
@@ -443,10 +443,10 @@ public class NTCPConnection implements Closeable {
     }
 
     /**
-     *  Return the remote peer's UDP port.
+     * Return the remote peer's UDP port.
      *
-     *  @return 0 if unknown
-     *  @since 2.11.0
+     * @return 0 if unknown
+     * @since 2.11.0
      */
     public int getRemotePort() {
         if (_chan == null)
@@ -484,15 +484,15 @@ public class NTCPConnection implements Closeable {
     public void setRemotePeer(RouterIdentity ident) { _remotePeer = ident; }
 
     /**
-     *  A positive number means our clock is ahead of theirs.
-     *  @return the clock skew in seconds, positive if our clock runs ahead
+     * A positive number means our clock is ahead of theirs.
+     * @return the clock skew in seconds, positive if our clock runs ahead
      */
     public long getClockSkew() { return _clockSkew; }
 
     /**
-     *  Connection uptime in milliseconds.
+     * Connection uptime in milliseconds.
      *
-     *  @return the uptime in ms
+     * @return the uptime in ms
      */
     public long getUptime() {
         long establishedOn;
@@ -518,23 +518,23 @@ public class NTCPConnection implements Closeable {
     }
 
     /**
-     *  Messages sent on this connection.
+     * Messages sent on this connection.
      *
-     *  @return how many messages have been written on this connection
+     * @return how many messages have been written on this connection
      */
     public int getMessagesSent() { return _messagesWritten.get(); }
 
     /**
-     *  Messages received on this connection.
+     * Messages received on this connection.
      *
-     *  @return how many messages have been read on this connection
+     * @return how many messages have been read on this connection
      */
     public int getMessagesReceived() { return _messagesRead.get(); }
 
     /**
-     *  Return the number of messages waiting to be sent.
+     * Return the number of messages waiting to be sent.
      *
-     *  @return outbound queue size
+     * @return outbound queue size
      */
     public int getOutboundQueueSize() {
             int queued = _outbound.size();
@@ -544,7 +544,11 @@ public class NTCPConnection implements Closeable {
             return queued;
     }
 
-    /** Check if there are pending outbound messages. */
+    /**
+     * Check if there are pending outbound messages.
+     *
+     * @return true if a message is still held for the current outbound write
+     */
     private boolean hasCurrentOutbound() {
         synchronized(_writeLock) {
             return ! _currentOutbound.isEmpty();
@@ -553,6 +557,7 @@ public class NTCPConnection implements Closeable {
 
     /**
      * Drain any pending outbound messages to a new queue.
+     * @param to the queue the pending messages are moved into
      * @return how many pending messages were moved into the given queue
      * @since 0.9.46
      */
@@ -570,9 +575,9 @@ public class NTCPConnection implements Closeable {
     }
 
     /**
-     *  Time since last send in milliseconds.
+     * Time since last send in milliseconds.
      *
-     *  @return time since last send in ms
+     * @return time since last send in ms
      */
     public long getTimeSinceSend() { return _context.clock().now()-_lastSendTime; }
 
@@ -585,9 +590,9 @@ public class NTCPConnection implements Closeable {
     public long getTimeSinceSend(long now) { return now - _lastSendTime; }
 
     /**
-     *  Time since last receive in milliseconds.
+     * Time since last receive in milliseconds.
      *
-     *  @return time since last receive in ms
+     * @return time since last receive in ms
      */
     public long getTimeSinceReceive() { return _context.clock().now()-_lastReceiveTime; }
 
@@ -600,9 +605,9 @@ public class NTCPConnection implements Closeable {
     public long getTimeSinceReceive(long now) { return now - _lastReceiveTime; }
 
     /**
-     *  Time since connection creation in milliseconds.
+     * Time since connection creation in milliseconds.
      *
-     *  @return time since creation in ms
+     * @return time since creation in ms
      */
     public long getTimeSinceCreated() { return _context.clock().now()-_created; }
 
@@ -682,29 +687,29 @@ void noteEstablishmentRtt(int rttMs) {
     public long getTimeSinceCreated(long now) { return now -_created; }
 
     /**
-     *  When this connection was created (not established).
+     * When this connection was created (not established).
      *
-     *  @return the creation timestamp
-     *  @since 0.9.20
+     * @return the creation timestamp
+     * @since 0.9.20
      */
     public long getCreated() { return _created; }
 
     /**
-     *  The NTCP2 version, for the console.
-     *  For outbound, will not change.
-     *  For inbound, defaults to 1, may change to 2 after establishment.
+     * The NTCP2 version, for the console.
+     * For outbound, will not change.
+     * For inbound, defaults to 1, may change to 2 after establishment.
      *
-     *  @return the version, 1 or 2
-     *  @since 0.9.36
+     * @return the version, 1 or 2
+     * @since 0.9.36
      */
     public int getVersion() { return _version; }
 
     /**
-     *  Records version 2 from {@link InboundEstablishState}.
-     *  Just for logging, so we know before finishInboundEstablish() is called.
+     * Records version 2 from {@link InboundEstablishState}.
+     * Just for logging, so we know before finishInboundEstablish() is called.
      *
-     *  @param ver the version to set
-     *  @since 0.9.36
+     * @param ver the version to set
+     * @since 0.9.36
      */
     public void setVersion(int ver) { _version = ver; }
 
@@ -715,16 +720,16 @@ void noteEstablishmentRtt(int rttMs) {
     public void setMayDisconnect() { _mayDisconnect = true; }
 
     /**
-     *  Whether the connection may be disconnected.
+     * Whether the connection may be disconnected.
      *
-     *  @return true if may disconnect
-     *  @since 0.9.24
+     * @return true if may disconnect
+     * @since 0.9.24
      */
     public boolean getMayDisconnect() { return _mayDisconnect; }
 
     /**
-     *  Reset the zero-read counters the EventPumper uses to spot a stalled peer.
-     *  @since 0.8.12
+     * Reset the zero-read counters the EventPumper uses to spot a stalled peer.
+     * @since 0.8.12
      */
     public void clearZeroRead() {
         _consecutiveZeroReads.set(0);
@@ -746,18 +751,18 @@ void noteEstablishmentRtt(int rttMs) {
     }
 
     /**
-     *  Time of the last zero-byte read.
+     * Time of the last zero-byte read.
      *
-     *  @return last zero read time
+     * @return last zero read time
      */
     public long getLastZeroReadTime() {
         return _lastZeroReadTime;
     }
 
     /**
-     *  Whether the connection is closed.
+     * Whether the connection is closed.
      *
-     *  @return true if closed
+     * @return true if closed
      */
     public boolean isClosed() { return _closed.get(); }
 
@@ -765,8 +770,8 @@ void noteEstablishmentRtt(int rttMs) {
     public void close() { close(false); }
 
     /**
-     *  Close the connection, dropping or requeueing whatever is still pending.
-     *  @param allowRequeue if true, requeue pending messages for another tunnel
+     * Close the connection, dropping or requeueing whatever is still pending.
+     * @param allowRequeue if true, requeue pending messages for another tunnel
      */
     public void close(boolean allowRequeue) {
         if (!_closed.compareAndSet(false,true)) {
@@ -796,10 +801,10 @@ void noteEstablishmentRtt(int rttMs) {
     }
 
     /**
-     *  Close and release EstablishState resources.
-     *  @param cause the cause of the timeout
-     *  @param e may be null
-     *  @since 0.9.16
+     * Close and release EstablishState resources.
+     * @param cause the cause of the timeout
+     * @param e may be null
+     * @since 0.9.16
      */
     void closeOnTimeout(String cause, Exception e) {
         EstablishState es = _establishState;
@@ -817,6 +822,7 @@ void noteEstablishmentRtt(int rttMs) {
 
     /**
      * The connection; usually this, but could be a second connection with the same peer.
+     * @param allowRequeue whether to hand the unsent messages back for requeueing
      * @return usually this, but could be a second connection with the same peer...
      *         only this or null as of 0.9.37
      */
@@ -918,9 +924,9 @@ void noteEstablishmentRtt(int rttMs) {
     }
 
     /**
-     *  Whether the outbound queue is backlogged.
+     * Whether the outbound queue is backlogged.
      *
-     *  @return true if outbound queue is backlogged
+     * @return true if outbound queue is backlogged
      */
     public boolean isBacklogged() { return _outbound.isBacklogged(); }
 
@@ -958,13 +964,13 @@ void noteEstablishmentRtt(int rttMs) {
     }
 
     /**
-     *  Inject a DatabaseStoreMessage with our RouterInfo. NTCP 1 or 2.
+     * Inject a DatabaseStoreMessage with our RouterInfo. NTCP 1 or 2.
      * <p>
-     *  Externally, this is only called by {@link NTCPTransport} for outbound cons,
-     *  before the con is established, but we know what version it is.
+     * Externally, this is only called by {@link NTCPTransport} for outbound cons,
+     * before the con is established, but we know what version it is.
      * <p>
-     *  Internally, may be called for outbound or inbound, but only after the
-     *  con is established, so we know what the version is.
+     * Internally, may be called for outbound or inbound, but only after the
+     * con is established, so we know what the version is.
      */
     void enqueueInfoMessage() {
         if (_isInbound) {
@@ -1021,12 +1027,12 @@ void noteEstablishmentRtt(int rttMs) {
     }
 
     /**
-     *  Reusable NTCP2 payload block list and blocks, per writer thread.
-     *  The list and the pooled blocks are only used within the
-     *  prepareNextWriteNTCP2(), sendRouterInfo(), and sendTermination()
-     *  call stacks, so no other thread can observe or modify them mid-write.
-     *  Package-private for testing.
-     *  @since 0.9.71+
+     * Reusable NTCP2 payload block list and blocks, per writer thread.
+     * The list and the pooled blocks are only used within the
+     * prepareNextWriteNTCP2(), sendRouterInfo(), and sendTermination()
+     * call stacks, so no other thread can observe or modify them mid-write.
+     * Package-private for testing.
+     * @since 0.9.71+
      */
     static class BlockPool {
         /** Blocks allocated for the frame being built. */
@@ -1093,176 +1099,176 @@ void noteEstablishmentRtt(int rttMs) {
     //// Frame packing decisions (package-visible for testing) ////
 
     /**
-     *  NTCP2 frame-size contribution of one message.
-     *  <p>The NTCP2 block header (3 bytes, see {@link NTCP2Payload#BLOCK_HEADER_SIZE})
-     *  replaces NTCP1's 16-byte I2NP framing, so a message adds roughly 7 bytes less
-     *  than its serialized size to a frame. The exact figure mirrors the established
-     *  packing arithmetic in {@link #prepareNextWriteNTCP2} so frame sizes are
-     *  unchanged.
+     * NTCP2 frame-size contribution of one message.
+     * <p>The NTCP2 block header (3 bytes, see {@link NTCP2Payload#BLOCK_HEADER_SIZE})
+     * replaces NTCP1's 16-byte I2NP framing, so a message adds roughly 7 bytes less
+     * than its serialized size to a frame. The exact figure mirrors the established
+     * packing arithmetic in {@link #prepareNextWriteNTCP2} so frame sizes are
+     * unchanged.
      *
-     *  @param m the message being packed into the frame
-     *  @return the message's estimated contribution in bytes
-     *  @since 0.9.71+
+     * @param m the message being packed into the frame
+     * @return the message's estimated contribution in bytes
+     * @since 0.9.71+
      */
     static int getMessageDataSize(I2NPMessage m) {
         return m.getMessageSize() - 7;
     }
 
     /**
-     *  Whether a secondary message fits within the preferred NTCP2 payload cap.
-     *  <p>The cap keeps frames near the preferred 5 KB working size instead of
-     *  filling the whole 16 KB buffer, so a trailing message is added only while
-     *  the accumulated frame size (MAC plus already-packed blocks) stays under
-     *  {@link #NTCP2_PREFERRED_PAYLOAD_MAX}.
+     * Whether a secondary message fits within the preferred NTCP2 payload cap.
+     * <p>The cap keeps frames near the preferred 5 KB working size instead of
+     * filling the whole 16 KB buffer, so a trailing message is added only while
+     * the accumulated frame size (MAC plus already-packed blocks) stays under
+     * {@link #NTCP2_PREFERRED_PAYLOAD_MAX}.
      *
-     *  @param size current frame size (MAC + packed blocks)
-     *  @param messageDataSize the candidate message's contribution
-     *  @return true if adding the message keeps the frame at or below the cap
-     *  @since 0.9.71+
+     * @param size current frame size (MAC + packed blocks)
+     * @param messageDataSize the candidate message's contribution
+     * @return true if adding the message keeps the frame at or below the cap
+     * @since 0.9.71+
      */
     static boolean canPackMoreMessages(int size, int messageDataSize) {
         return size + messageDataSize <= NTCP2_PREFERRED_PAYLOAD_MAX;
     }
 
     /**
-     *  Whether an unsolicited datetime block may be packed into the frame.
-     *  <p>Scheduled by {@link #_nextMetaTime}; the block is a 2-byte type, 2-byte
-     *  length and 4-byte datetime, and is only added while the frame still fits in
-     *  the full 16 KB buffer after its 3-byte block header.
+     * Whether an unsolicited datetime block may be packed into the frame.
+     * <p>Scheduled by {@link #_nextMetaTime}; the block is a 2-byte type, 2-byte
+     * length and 4-byte datetime, and is only added while the frame still fits in
+     * the full 16 KB buffer after its 3-byte block header.
      *
-     *  @param size current frame size (MAC + packed blocks)
-     *  @param nextMetaTime when the next datetime block is due, {@link Long#MAX_VALUE}
-     *                      until the connection is established
-     *  @param now current router time
-     *  @return true if a datetime block is due and fits
-     *  @since 0.9.71+
+     * @param size current frame size (MAC + packed blocks)
+     * @param nextMetaTime when the next datetime block is due, {@link Long#MAX_VALUE}
+     *                     until the connection is established
+     * @param now current router time
+     * @return true if a datetime block is due and fits
+     * @since 0.9.71+
      */
     static boolean canSendDatetimeBlock(int size, long nextMetaTime, long now) {
         return nextMetaTime <= now && size + NTCP2Payload.BLOCK_HEADER_SIZE + 4 <= BUFFER_SIZE;
     }
 
     /**
-     *  Whether an unsolicited RouterInfo block may be attempted.
-     *  <p>Scheduled by {@link #_nextInfoTime}; the heuristic estimate of 1024 bytes
-     *  is only a first gate - the block is discarded and retried later if its real
-     *  size does not fit (see {@link #canFitRouterInfoBlock}).
+     * Whether an unsolicited RouterInfo block may be attempted.
+     * <p>Scheduled by {@link #_nextInfoTime}; the heuristic estimate of 1024 bytes
+     * is only a first gate - the block is discarded and retried later if its real
+     * size does not fit (see {@link #canFitRouterInfoBlock}).
      *
-     *  @param size current frame size (MAC + packed blocks)
-     *  @param nextInfoTime when the next RouterInfo block is due, {@link Long#MAX_VALUE}
-     *                      until the connection is established
-     *  @param now current router time
-     *  @return true if a RouterInfo block is due and plausibly fits
-     *  @since 0.9.71+
+     * @param size current frame size (MAC + packed blocks)
+     * @param nextInfoTime when the next RouterInfo block is due, {@link Long#MAX_VALUE}
+     *                     until the connection is established
+     * @param now current router time
+     * @return true if a RouterInfo block is due and plausibly fits
+     * @since 0.9.71+
      */
     static boolean canSendRouterInfoBlock(int size, long nextInfoTime, long now) {
         return nextInfoTime <= now && size + 1024 <= BUFFER_SIZE;
     }
 
     /**
-     *  Whether the serialized RouterInfo block actually fits in the frame.
-     *  <p>This is the authoritative check after the 1024-byte estimate in
-     *  {@link #canSendRouterInfoBlock}.
+     * Whether the serialized RouterInfo block actually fits in the frame.
+     * <p>This is the authoritative check after the 1024-byte estimate in
+     * {@link #canSendRouterInfoBlock}.
      *
-     *  @param size current frame size (MAC + packed blocks)
-     *  @param infoSize the sized RouterInfo block's total length
-     *  @return true if the block fits within the 16 KB buffer
-     *  @since 0.9.71+
+     * @param size current frame size (MAC + packed blocks)
+     * @param infoSize the sized RouterInfo block's total length
+     * @return true if the block fits within the 16 KB buffer
+     * @since 0.9.71+
      */
     static boolean canFitRouterInfoBlock(int size, int infoSize) {
         return size + infoSize <= BUFFER_SIZE;
     }
 
     /**
-     *  Whether a received NTCP2 frame length is sane.
-     *  <p>A frame always carries a 16-byte MAC at minimum; anything shorter is
-     *  definitely corrupt and the connection is torn down rather than buffered.
+     * Whether a received NTCP2 frame length is sane.
+     * <p>A frame always carries a 16-byte MAC at minimum; anything shorter is
+     * definitely corrupt and the connection is torn down rather than buffered.
      *
-     *  @param framelen the length announced in the frame header
-     *  @return true if the frame is long enough to hold its MAC
-     *  @since 0.9.71+
+     * @param framelen the length announced in the frame header
+     * @return true if the frame is long enough to hold its MAC
+     * @since 0.9.71+
      */
     static boolean isValidFrameLength(int framelen) {
         return framelen >= OutboundNTCP2State.MAC_SIZE;
     }
 
     /**
-     *  The payload length of a data-phase frame: the announced frame length minus
-     *  the trailing 16-byte AEAD MAC.
+     * The payload length of a data-phase frame: the announced frame length minus
+     * the trailing 16-byte AEAD MAC.
      *
-     *  @param framelen the full frame length, including the MAC
-     *  @return the number of bytes to pass to {@link NTCP2Payload#processPayload}
-     *  @since 0.9.71+
+     * @param framelen the full frame length, including the MAC
+     * @return the number of bytes to pass to {@link NTCP2Payload#processPayload}
+     * @since 0.9.71+
      */
     static int framePayloadLength(int framelen) {
         return framelen - OutboundNTCP2State.MAC_SIZE;
     }
 
     /**
-     *  Whether the outbound queue is too backlogged to accept new messages.
-     *  <p>There is a 15 second grace period right after connection establishment so
-     *  messages queued for a brand-new connection are not refused, then the decision
-     *  is delegated to the bandwidth limiter's backlog flag.
+     * Whether the outbound queue is too backlogged to accept new messages.
+     * <p>There is a 15 second grace period right after connection establishment so
+     * messages queued for a brand-new connection are not refused, then the decision
+     * is delegated to the bandwidth limiter's backlog flag.
      *
-     *  @param uptimeMs the connection uptime, in milliseconds
-     *  @param outboundBacklogged the bandwidth limiter's backlog flag for the outbound queue
-     *  @return true if the queue is too backlogged
-     *  @since 0.9.71+
+     * @param uptimeMs the connection uptime, in milliseconds
+     * @param outboundBacklogged the bandwidth limiter's backlog flag for the outbound queue
+     * @return true if the queue is too backlogged
+     * @since 0.9.71+
      */
     static boolean isTooBacklogged(long uptimeMs, boolean outboundBacklogged) {
         return uptimeMs >= 15*1000L && outboundBacklogged;
     }
 
     /**
-     *  Whether a received RouterInfo's hash identifies the peer we are talking to.
+     * Whether a received RouterInfo's hash identifies the peer we are talking to.
      *
-     *  @param h the hash of the received RouterInfo
-     *  @param peerHash the hash of the remote peer of this connection
-     *  @return true if the hash matches the remote peer
-     *  @since 0.9.71+
+     * @param h the hash of the received RouterInfo
+     * @param peerHash the hash of the remote peer of this connection
+     * @return true if the hash matches the remote peer
+     * @since 0.9.71+
      */
     static boolean isSamePeer(Hash h, Hash peerHash) {
         return peerHash.equals(h);
     }
 
     /**
-     *  Whether a received RouterInfo's hash identifies us.
+     * Whether a received RouterInfo's hash identifies us.
      *
-     *  @param h the hash of the received RouterInfo
-     *  @param ourHash our own router hash
-     *  @return true if the hash is our own
-     *  @since 0.9.71+
+     * @param h the hash of the received RouterInfo
+     * @param ourHash our own router hash
+     * @return true if the hash is our own
+     * @since 0.9.71+
      */
     static boolean isOwnRouterInfo(Hash h, Hash ourHash) {
         return ourHash.equals(h);
     }
 
     /**
-     *  Whether a RouterInfo we just stored is strictly newer than whatever was
-     *  stored before (or there was no previous copy, so the store is new).
-     *  copy claims a later publication time.
-     *  <p>Used on the flood path in {@link NTCP2Payload.PayloadCallback#gotRI}.
+     * Whether a RouterInfo we just stored is strictly newer than whatever was
+     * stored before (or there was no previous copy, so the store is new).
+     * copy claims a later publication time.
+     * <p>Used on the flood path in {@link NTCP2Payload.PayloadCallback#gotRI}.
 
-     *  @param old the previously stored RouterInfo, or null if this is a new store
-     *  @param ri the RouterInfo that was just stored
-     *  @return true if flooding is justified by freshness
-     *  @since 0.9.71+
+     * @param old the previously stored RouterInfo, or null if this is a new store
+     * @param ri the RouterInfo that was just stored
+     * @return true if flooding is justified by freshness
+     * @since 0.9.71+
      */
     static boolean isNewerOrNew(RouterInfo old, RouterInfo ri) {
         return old == null || ri.getPublished() > old.getPublished();
     }
 
     /**
-     *  Whether the whole frame can be decrypted in place, bypassing the scratch
-     *  buffer.
-     *  <p>Requires being at a frame boundary ({@code received == 0}) with the full
-     *  announced frame already present in the pumper's buffer, so the ciphertext
-     *  can be overwritten in place zero-copy.
+     * Whether the whole frame can be decrypted in place, bypassing the scratch
+     * buffer.
+     * <p>Requires being at a frame boundary ({@code received == 0}) with the full
+     * announced frame already present in the pumper's buffer, so the ciphertext
+     * can be overwritten in place zero-copy.
      *
-     *  @param received bytes of the current frame read so far outside the shortcut
-     *  @param remaining bytes left in the pumper buffer
-     *  @param framelen the announced frame length
-     *  @return true when the shortcut applies
-     *  @since 0.9.71+
+     * @param received bytes of the current frame read so far outside the shortcut
+     * @param remaining bytes left in the pumper buffer
+     * @param framelen the announced frame length
+     * @return true when the shortcut applies
+     * @since 0.9.71+
      */
     static boolean canZeroCopyFrame(int received, int remaining, int framelen) {
         return received == 0 && remaining >= framelen;
@@ -1448,6 +1454,8 @@ void noteEstablishmentRtt(int rttMs) {
     /**
      * NTCP2 only.
      *
+     * @param ri the router info to send to this peer
+     * @param shouldFlood whether to flood the router info
      * @since 0.9.36
      */
     private void sendRouterInfo(RouterInfo ri, boolean shouldFlood) {
@@ -1482,10 +1490,10 @@ void noteEstablishmentRtt(int rttMs) {
     }
 
     /**
-     *  NTCP2.
-     *  For NTCP2, sends termination and then closes the connection after a brief delay.
+     * NTCP2.
+     * For NTCP2, sends termination and then closes the connection after a brief delay.
      *
-     *  @since 0.9.36
+     * @since 0.9.36
      */
     void sendTerminationAndClose() {
         ReadState rs = null;
@@ -1501,9 +1509,11 @@ void noteEstablishmentRtt(int rttMs) {
     }
 
     /**
-     *  NTCP2 only. Also closes the connection after a brief delay.
+     * NTCP2 only. Also closes the connection after a brief delay.
      *
-     *  @since 0.9.36
+     * @param reason the termination reason code, one of the REASON_* constants
+     * @param validFramesRcvd how many valid frames were received, reported to the peer
+     * @since 0.9.36
      */
     private void sendTermination(int reason, int validFramesRcvd) {
         // So we don't get called again by the event pumper idle closer
@@ -1556,8 +1566,10 @@ void noteEstablishmentRtt(int rttMs) {
      * used {@code 2 + framelen} prefix is handed to the writer; the pumper returns
      * the buffer to the pool after the frame has fully drained.
      *
-     * @param tmp to be used for output of {@link net.i2p.router.transport.ntcp.NTCP2Payload#writePayload},
-     * must have room for block output. May be released immediately on return.
+     * @param tmp the output buffer, must have room for the blocks written by
+     *            {@link net.i2p.router.transport.ntcp.NTCP2Payload#writePayload}; may be
+     *            released immediately on return
+     * @param blocks the blocks to write into tmp
      * @since 0.9.36
      */
     private void sendNTCP2(byte[] tmp, List<Block> blocks) {
@@ -1636,13 +1648,13 @@ void noteEstablishmentRtt(int rttMs) {
     }
 
     /**
-     *  The FifoBandwidthLimiter.CompleteListener callback.
-     *  Does the delayed read.
+     * The FifoBandwidthLimiter.CompleteListener callback.
+     * Does the delayed read.
      * <p>
-     *  Fires on the limiter thread when the throttled request completes, and
-     *  synchronously on the closing thread when {@link #close()} aborts the request.
-     *  The ownership hand-off in {@link #removeIBRequest(FIFOBandwidthLimiter.Request)} guarantees the attached
-     *  read buffer is delivered or released exactly once across those racers.
+     * Fires on the limiter thread when the throttled request completes, and
+     * synchronously on the closing thread when {@link #close()} aborts the request.
+     * The ownership hand-off in {@link #removeIBRequest(FIFOBandwidthLimiter.Request)} guarantees the attached
+     * read buffer is delivered or released exactly once across those racers.
      */
     private class InboundListener implements FIFOBandwidthLimiter.CompleteListener {
         @Override
@@ -1668,8 +1680,8 @@ void noteEstablishmentRtt(int rttMs) {
     }
 
     /**
-     *  The FifoBandwidthLimiter.CompleteListener callback.
-     *  Does the delayed write.
+     * The FifoBandwidthLimiter.CompleteListener callback.
+     * Does the delayed write.
      */
     private class OutboundListener implements FIFOBandwidthLimiter.CompleteListener {
         @Override
@@ -1685,16 +1697,16 @@ void noteEstablishmentRtt(int rttMs) {
     }
 
     /**
-     *  Hands off ownership of an in-flight read bandwidth request back to the
-     *  caller. Exactly one caller - the limiter thread when the request is
-     *  fully allocated, or the closing thread via abort() -&gt; notifyAllocation()
-     *  - receives true and thereby owns the request's attached read buffer;
-     *  false callers must leave the buffer alone. This membership check is what
-     *  makes the read-back pressure release path exactly-once without a lock.
+     * Hands off ownership of an in-flight read bandwidth request back to the
+     * caller. Exactly one caller - the limiter thread when the request is
+     * fully allocated, or the closing thread via abort() -&gt; notifyAllocation()
+     * - receives true and thereby owns the request's attached read buffer;
+     * false callers must leave the buffer alone. This membership check is what
+     * makes the read-back pressure release path exactly-once without a lock.
      *
-     *  @param req the request to hand off
-     *  @return true if this caller won the hand-off and owns the attached buffer
-     *  @since 0.9.71+
+     * @param req the request to hand off
+     * @return true if this caller won the hand-off and owns the attached buffer
+     * @since 0.9.71+
      */
     private boolean removeIBRequest(FIFOBandwidthLimiter.Request req) {
         return _bwInRequests.remove(req);
@@ -1767,7 +1779,14 @@ void noteEstablishmentRtt(int rttMs) {
         req.setCompleteListener(_inboundListener);
     }
 
-    /** Ditto for writes. */
+    /**
+     * Queue a buffer for writing once its bandwidth has been allocated, the
+     * outbound counterpart of
+     * {@link #queuedRecv(ByteBuffer, FIFOBandwidthLimiter.Request)}.
+     *
+     * @param buf the buffer to queue
+     * @param req the bandwidth request that re-triggers the write once satisfied
+     */
     private void queuedWrite(ByteBuffer buf, FIFOBandwidthLimiter.Request req) {
         req.attach(buf);
         req.setCompleteListener(_outboundListener);
@@ -1845,6 +1864,7 @@ void noteEstablishmentRtt(int rttMs) {
      * time, so frame bytes can never interleave. It also removes the need to
      * hold _writeLock across the socket drain.
      *
+     * @param buf the fully allocated buffer to write out
      * @since 0.9.71+ single-writer contract (previously attempted a direct,
      * lock-serialized drain from the calling thread); the
      * "{@code ntcp.writeBufs.size}" stat is now sampled at most
@@ -1994,15 +2014,15 @@ void noteEstablishmentRtt(int rttMs) {
     private float _recvBps;
 
     /**
-     *  Current send rate in Bps.
+     * Current send rate in Bps.
      *
-     *  @return current send rate in Bps
+     * @return current send rate in Bps
      */
     public float getSendRate() { synchronized(_statLock) { return _sendBps; } }
     /**
-     *  Current receive rate in Bps.
+     * Current receive rate in Bps.
      *
-     *  @return current receive rate in Bps
+     * @return current receive rate in Bps
      */
     public float getRecvRate() { synchronized(_statLock) { return _recvBps; } }
 
@@ -2330,9 +2350,9 @@ void noteEstablishmentRtt(int rttMs) {
         private boolean _terminated;
 
         /**
-         *  NTCP2 read state initialized from the given key data.
+         * NTCP2 read state initialized from the given key data.
          *
-         *  @param keyData using first 24 bytes
+         * @param keyData using first 24 bytes
          */
         public NTCP2ReadState(CipherState rcvr, byte[] keyData) {
             _rcvr = rcvr;
@@ -2424,17 +2444,17 @@ void noteEstablishmentRtt(int rttMs) {
         }
 
         /**
-         *  Allocate the scratch buffer for the announced frame on the buffered
-         *  (split-frame) read path.
-         *  <p>A pooled 16 KB buffer is used for regular frames; oversized frames get
-         *  a one-off allocation since the pool only holds the fixed 16 KB class and
-         *  a pooled buffer would be too small. A previous pooled buffer that is too
-         *  small is returned to the pool first so the bounded pool is not drained by
-         *  repeated large frames.
+         * Allocate the scratch buffer for the announced frame on the buffered
+         * (split-frame) read path.
+         * <p>A pooled 16 KB buffer is used for regular frames; oversized frames get
+         * a one-off allocation since the pool only holds the fixed 16 KB class and
+         * a pooled buffer would be too small. A previous pooled buffer that is too
+         * small is returned to the pool first so the bounded pool is not drained by
+         * repeated large frames.
          *
-         *  @param framelen the announced frame length
-         *  @return a fresh buffer for the frame; never null
-         *  @since 0.9.71+
+         * @param framelen the announced frame length
+         * @return a fresh buffer for the frame; never null
+         * @since 0.9.71+
          */
         private ByteArray allocReadBuf(int framelen) {
             if (_dataBuf != null && _dataBuf.getData().length == BUFFER_SIZE)
@@ -2448,12 +2468,12 @@ void noteEstablishmentRtt(int rttMs) {
         }
 
         /**
-         *  Decrypts in place.
-         *  Length is _framelen
-         *  Side effects: Sets _received = -2, increments _frameCount and _blockCount if valid,
-         *  calls {@link #destroy()} and sets _terminated if termination block received or if invalid.
+         * Decrypts in place.
+         * Length is _framelen
+         * Side effects: Sets _received = -2, increments _frameCount and _blockCount if valid,
+         * calls {@link #destroy()} and sets _terminated if termination block received or if invalid.
          * <p>
-         *  Does not call close() on failure. Caller MUST call {@link #delayedClose()} if this returns false.
+         * Does not call close() on failure. Caller MUST call {@link #delayedClose()} if this returns false.
          *
          * @return success, false for fatal error (AEAD) only
          */
@@ -2484,13 +2504,13 @@ void noteEstablishmentRtt(int rttMs) {
         }
 
         /**
-         *  Process the decrypted payload of the current frame, delivering each
-         *  block to the PayloadCallback.  Payload errors are logged but never
-         *  escalate to a connection close; only AEAD failures (handled by the
-         *  caller before this point) are fatal.
+         * Process the decrypted payload of the current frame, delivering each
+         * block to the PayloadCallback.  Payload errors are logged but never
+         * escalate to a connection close; only AEAD failures (handled by the
+         * caller before this point) are fatal.
          *
-         *  @param data the buffer holding the decrypted frame
-         *  @param off the offset of the frame in the buffer
+         * @param data the buffer holding the decrypted frame
+         * @param off the offset of the frame in the buffer
          */
         private void processFrameBlocks(byte[] data, int off) {
             try {
@@ -2681,10 +2701,10 @@ void noteEstablishmentRtt(int rttMs) {
         private int _read;
 
         /**
-         *  Read state for the NTCP2 failure message.
+         * Read state for the NTCP2 failure message.
          *
-         *  @param toRead how much left to read
-         *  @param validFramesRcvd to be sent in termination message
+         * @param toRead how much left to read
+         * @param validFramesRcvd to be sent in termination message
          */
         public NTCP2FailState(int toRead, int validFramesRcvd) {
             super(_context.simpleTimer2());
@@ -2751,6 +2771,9 @@ void noteEstablishmentRtt(int rttMs) {
      * Same as {@link net.i2p.data.DataHelper#fromLongLE(byte[], int, int)} called with
      * 8 bytes, but allows a negative result.
      *
+     * @param src the array to read 8 bytes from
+     * @param offset the index of the first byte to read
+     * @return the 8 bytes read little-endian, as a signed long
      * @throws ArrayIndexOutOfBoundsException if offset is not inside the array
      * @since 0.9.36
      */
@@ -2767,6 +2790,10 @@ void noteEstablishmentRtt(int rttMs) {
      * Little endian.
      * Same as {@link net.i2p.data.DataHelper#toLongLE(byte[], int, int, long)} called
      * with 8 bytes, but allows a negative value.
+     *
+     * @param target the array to write 8 bytes into
+     * @param offset the index of the first byte to write
+     * @param value the value to write, low byte first
      */
     private static void toLong8LE(byte[] target, int offset, long value) {
         int limit = offset + 8;
@@ -2777,20 +2804,20 @@ void noteEstablishmentRtt(int rttMs) {
     }
 
     /**
-     *  Whether the pumper has registered write interest.
+     * Whether the pumper has registered write interest.
      *
-     *  @return true if write interest is pending
+     * @return true if write interest is pending
      */
     public boolean hasWriteInterestPending() {
         return _writeInterestPending.get();
     }
 
     /**
-     *  Atomically updates the write-interest-pending flag.
+     * Atomically updates the write-interest-pending flag.
      *
-     *  @param expected the flag value currently stored, compared against for equality
-     *  @param update the flag value to store if the comparison succeeds
-     *  @return true if CAS succeeded
+     * @param expected the flag value currently stored, compared against for equality
+     * @param update the flag value to store if the comparison succeeds
+     * @return true if CAS succeeded
      */
     public boolean compareAndSetWriteInterestPending(boolean expected, boolean update) {
         return _writeInterestPending.compareAndSet(expected, update);
@@ -2802,9 +2829,9 @@ void noteEstablishmentRtt(int rttMs) {
     }
 
     /**
-     *  Time of the last activity.
+     * Time of the last activity.
      *
-     *  @return last active time
+     * @return last active time
      */
     public long getLastActiveTime() {
         return _lastActiveTime;
@@ -2835,6 +2862,7 @@ void noteEstablishmentRtt(int rttMs) {
      * Compact one-line connection identifier for log output: direction,
      * remote address, connection id and peer hash. No stats, no newlines.
      *
+     * @return the identifier, never null
      * @since 0.9.71+
      */
     private String toShortString() {

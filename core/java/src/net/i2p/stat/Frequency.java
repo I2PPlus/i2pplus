@@ -22,7 +22,8 @@ public class Frequency {
     /**
      * Creates a new Frequency with the specified period.
      *
-     * @param period ms
+     * @param period the length of one period in milliseconds, the window
+     *               over which events are averaged
      */
     public Frequency(long period) {
         _period = period;
@@ -142,6 +143,10 @@ public class Frequency {
      * only effect is that the thread which loses the race computes its interval
      * from a timestamp a few nanoseconds older. At millisecond resolution, and with
      * the interval already clamped to {@code [1, _period]}, that is not observable.
+     *
+     * @param eventOccurred true to record an event: the last-event time is
+     *                      updated and the count incremented; false recalculates
+     *                      the average interval only
      */
     private void recalculate(boolean eventOccurred) {
         long now = now();

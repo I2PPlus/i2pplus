@@ -176,6 +176,11 @@ class SimpleBandwidthEstimator implements BandwidthEstimator {
 
     /**
      * As in kernel tcp_westwood.c.
+     *
+     * @param a the previous filtered estimate in packets per millisecond
+     * @param b the new sample in packets per millisecond
+     * @return the exponentially decayed average of a and b, in packets per
+     *         millisecond
      */
     private float westwood_do_filter(float a, float b) {
         return (((decayFactor - 1) * a) + b) / decayFactor;

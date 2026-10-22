@@ -25,7 +25,12 @@ class TunnelParticipant {
     private final HopConfig _config;
     private final HopProcessor _processor;
 
-    /** Format a bandwidth value in B/s to a human-readable string. */
+    /**
+     * Format a bandwidth value in B/s to a human-readable string.
+     *
+     * @param bps the bandwidth in bytes per second
+     * @return the value with a B/s, KB/s, MB/s or GB/s unit chosen by magnitude
+     */
     private static String formatBandwidth(int bps) {
         if (bps >= 1000000000) {
             return String.format("%.2fGB/s", bps / 1000000000.0);
@@ -77,6 +82,11 @@ class TunnelParticipant {
 
     /**
      * Internal constructor shared by all variants.
+     *
+     * @param ctx the router context supplying the log and the tunnel pools
+     * @param config the hop configuration, null for inbound endpoints
+     * @param processor the hop processor, null for inbound endpoints
+     * @param inEndProc the inbound endpoint processor, null for intermediate hops
      */
     private TunnelParticipant(RouterContext ctx, HopConfig config, HopProcessor processor,
                               InboundEndpointProcessor inEndProc) {
@@ -135,6 +145,8 @@ class TunnelParticipant {
     private class Found extends JobImpl {
         /**
          * Binds the router context.
+         *
+         * @param ctx the router context for the job
          */
         public Found(RouterContext ctx) {
             super(ctx);
@@ -220,7 +232,11 @@ class TunnelParticipant {
         }
     }
 
-    /** Log a failure to dispatch a tunnel data message. */
+    /**
+     * Log a failure to dispatch a tunnel data message.
+     *
+     * @param msg the message that could not be dispatched
+     */
     private void logDispatchFailure(TunnelDataMessage msg) {
         if (_log.shouldWarn()) {
             _log.warn("Failed to dispatch " + msg + " via " +
@@ -228,7 +244,11 @@ class TunnelParticipant {
         }
     }
 
-    /** Distribute blame among tunnel peers when message processing fails. */
+    /**
+     * Distribute blame among tunnel peers when message processing fails.
+     *
+     * @param cfg the config of the tunnel whose peers are blamed
+     */
     private void blameTunnelPeers(TunnelCreatorConfig cfg) {
         int lenm1 = cfg.getLength() - 1;
         if (lenm1 > 0) {
@@ -282,6 +302,11 @@ class TunnelParticipant {
      */
     private class DefragmentedHandler implements FragmentHandler.DefragmentedReceiver {
         /**
+         * Receiver distributing defragmented messages to their targets.
+         */
+        private DefragmentedHandler() {}
+
+        /**
          * Distribute the complete message to its target.
          */
         public void receiveComplete(I2NPMessage msg, Hash toRouter, TunnelId toTunnel) {
@@ -296,6 +321,10 @@ class TunnelParticipant {
      * Forward a tunnel message to the next hop.
      * Resets the expiration to 20s from now, and drops the message instead of
      * forwarding it once it is more than 75s past its original expiration.
+     *
+     * @param config the next hop's config, used for the send-to peer
+     * @param msg the tunnel data message to forward
+     * @param ri the next hop's router info, null to look it up by hash
      */
     private void send(HopConfig config, TunnelDataMessage msg, RouterInfo ri) {
         if (_context.tunnelDispatcher().shouldDropParticipatingMessage(
@@ -350,6 +379,9 @@ class TunnelParticipant {
 
         /**
          * The tunnel data message to send after the lookup.
+         *
+         * @param ctx the router context for the job
+         * @param msg the tunnel data message to send after the lookup
          */
         public SendJob(RouterContext ctx, TunnelDataMessage msg) {
             super(ctx);
@@ -398,6 +430,9 @@ class TunnelParticipant {
 
         /**
          * The tunnel data message dropped on lookup timeout.
+         *
+         * @param ctx the router context for the job
+         * @param msg the tunnel data message dropped on lookup timeout
          */
         public TimeoutJob(RouterContext ctx, TunnelDataMessage msg) {
             super(ctx);

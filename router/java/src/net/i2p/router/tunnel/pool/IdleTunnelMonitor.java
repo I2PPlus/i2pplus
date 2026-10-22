@@ -45,10 +45,10 @@ class IdleTunnelMonitor extends SimpleTimer2.TimedEvent {
         return _dispatcher;
     }
 
-    // Configuration
     /**
-     * Five minutes: half of a tunnel's typical lifetime, so genuinely dead
-     * tunnels are still reaped well before expiry.
+     * Default value of the router.idleTunnelDetectionPeriod property: five
+     * minutes, half of a tunnel's typical lifetime, so genuinely dead tunnels
+     * are still reaped well before expiry.
      */
     private static final long DEFAULT_DETECTION_PERIOD = 300 * 1000L;
     /** Floor of 1 drops only zero-message tunnels; higher values re-enable low-traffic culling. */
@@ -199,6 +199,8 @@ class IdleTunnelMonitor extends SimpleTimer2.TimedEvent {
     /**
      * The peer hash for a tunnel - this is the "entry point" peer
      * who first introduced this tunnel to us (IBGW or closest hop to IBGW).
+     *
+     * @param tunnel the tunnel to find the entry point peer of
      * @return the peer hash
      */
     private Hash getPeerHash(HopConfig tunnel) {
@@ -228,6 +230,8 @@ class IdleTunnelMonitor extends SimpleTimer2.TimedEvent {
      * <p>
      * Package-visible so a test can drive a single drop against a dispatcher it
      * controls and check the bandwidth accounting exactly.
+     *
+     * @param tunnel the idle tunnel to drop
      */
     void dropTunnel(HopConfig tunnel) {
         TunnelDispatcher dispatcher = getDispatcher();

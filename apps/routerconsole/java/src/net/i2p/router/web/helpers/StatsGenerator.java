@@ -32,12 +32,13 @@ public class StatsGenerator {
     public StatsGenerator(RouterContext context) {_context = context;}
 
     /**
-     *  Generate CSV export of all stats (optionally filtered by name).
-     *  @param out where the CSV text is written and flushed
-     *  @param filter optional case-insensitive stat name substring, null or empty
-     *                for every stat
-     *  @throws IOException if the writer fails partway through the export
-     *  @since 0.9.70+
+     * Generate CSV export of all stats (optionally filtered by name).
+     *
+     * @param out where the CSV text is written and flushed
+     * @param filter optional case-insensitive stat name substring, null or empty
+     *               for every stat
+     * @throws IOException if the writer fails partway through the export
+     * @since 0.9.70+
      */
     public void generateCSV(Writer out, String filter) throws IOException {
         StringBuilder buf = new StringBuilder(512);
@@ -373,13 +374,31 @@ public class StatsGenerator {
         }
     }
 
-    /** Translate a string. */
+    /**
+     * Translate a string.
+     *
+     * @param s the string to look up in the console bundle
+     * @return the translation, or s itself when there is none
+     */
     private String _t(String s) {return Messages.getString(s, _context);}
 
-    /** Translate a string. */
+    /**
+     * Translate a string carrying one parameter.
+     *
+     * @param s the string to look up, with {0} where the parameter goes
+     * @param o the parameter substituted for {0}, not itself translated
+     * @return the translated string with {0} replaced
+     */
     private String _t(String s, Object o) {return Messages.getString(s, o, _context);}
 
-    /** Translate a string. */
+    /**
+     * Translate a string whose form depends on a count (ngettext).
+     *
+     * @param s the singular English text, also the lookup key
+     * @param p the plural English text
+     * @param n the count deciding which form is used
+     * @return the translated form for that count
+     */
     private String ngettext(String s, String p, int n) {return Messages.getString(n, s, p, _context);}
 
 }

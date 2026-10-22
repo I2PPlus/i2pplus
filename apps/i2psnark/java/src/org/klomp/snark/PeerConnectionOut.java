@@ -366,6 +366,8 @@ class PeerConnectionOut implements Runnable {
      * Adds a message to the sendQueue and notifies the method waiting on the sendQueue to change.
      * Control messages are never silently dropped: if the queue is full, a queued piece message is
      * dropped to make room for it. Piece messages are dropped instead, the requester will retry.
+     *
+     * @param m the message to queue for sending to the peer
      */
     private void addMessage(Message m) {
         synchronized (sendQueue) {

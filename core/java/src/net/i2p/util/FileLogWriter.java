@@ -147,6 +147,7 @@ class FileLogWriter extends LogWriter {
     /**
      * Gzip the closed file.
      *
+     * @param currentFile the log file just closed, gzipped if it is large enough
      * @param threadGzipper if true, spin off a thread
      * @since 0.9.55
      */
@@ -254,7 +255,14 @@ class FileLogWriter extends LogWriter {
      * Retrieve the first file, updating the rotation number accordingly
      * <p>
      * Caller must synch.
-     * @return the first file
+     *
+     * @param base the log directory the file name is resolved against, null if
+     *             the pattern is a full path
+     * @param pattern the file name pattern where each # or @ is replaced by the
+     *                rotation number
+     * @param max the maximum number of rotation files
+     * @return the first rotation file that does not exist yet, or the oldest
+     *         one if all of them exist
      */
     private File getFirstFile(File base, String pattern, int max) {
         for (int i = 0; i < max; i++) {

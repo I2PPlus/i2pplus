@@ -319,6 +319,9 @@ public class SAMReader {
      * Big ugly method parsing everything.  If I cared, I'd factor this out into
      * a dozen tiny methods.
      *
+     * @param major the event's major verb, e.g. HELLO or SESSION
+     * @param minor the event's minor noun, e.g. REPLY or STATUS
+     * @param params the name-value pairs parsed from the event line
      */
     private void processEvent(String major, String minor, Properties params) {
         if ("HELLO".equals(major)) {

@@ -12,10 +12,10 @@ import java.awt.Color;
  *
  * <p>Supported, all with an optional alpha:
  * <ul>
- *   <li>{@code #rgb} and {@code #rgba} — {@code #f0a}, {@code #ee9d}</li>
- *   <li>{@code #rrggbb} and {@code #rrggbbaa} — {@code #00ff99}, {@code #00ff9980}</li>
- *   <li>{@code rgb(r,g,b)} and {@code rgba(r,g,b,a)} — {@code rgb(0,255,153)},
- *       {@code rgba(0,255,153,.5)}</li>
+ * <li>{@code #rgb} and {@code #rgba} — {@code #f0a}, {@code #ee9d}</li>
+ * <li>{@code #rrggbb} and {@code #rrggbbaa} — {@code #00ff99}, {@code #00ff9980}</li>
+ * <li>{@code rgb(r,g,b)} and {@code rgba(r,g,b,a)} — {@code rgb(0,255,153)},
+ *      {@code rgba(0,255,153,.5)}</li>
  * </ul>
  *
  * <p>Alpha is 0–255 as written in hex, or 0–1 as written in {@code rgb}/{@code rgba},
@@ -56,6 +56,7 @@ public final class SvgColor {
      * Convert hex digits to a color.
      *
      * @param digits the text after '#', 3, 4, 6 or 8 characters
+     * @return the color, or null if the digits are not valid hex
      */
     private static Color parseHex(String digits) {
         int len = digits.length();
@@ -127,6 +128,9 @@ public final class SvgColor {
     /**
      * Parse a decimal without {@code Float.parseFloat}, so a stray character yields
      * null instead of an exception propagating out of a theme lookup.
+     *
+     * @param s the text to parse
+     * @return the parsed value, or null if s is not a plain decimal number
      */
     private static Float parseFloat(String s) {
         String t = s.trim();

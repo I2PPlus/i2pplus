@@ -1291,6 +1291,9 @@ public class TunnelConfig {
 
     /**
      * Servers only.
+     *
+     * @param config the tunnel config properties whose lease set options are
+     *               set or cleared to match the selected encryption mode
      * @since 0.9.41 pulled out from {@link #getConfig()} above
      */
     private void processEncryptMode(Properties config) {
@@ -1454,6 +1457,10 @@ public class TunnelConfig {
     /**
      * Servers only.
      * Also sets/clears {@code i2cp.leaseSetType}.
+     *
+     * @param config the tunnel config properties to store the private key in
+     * @param isBlinded true for a blinded lease set, which also stores the key
+     *                  in i2cp.leaseSetPrivKey and sets lease set type 5
      * @since 0.9.41
      */
     private void addLeaseSetPrivKey(Properties config, boolean isBlinded) {
@@ -1672,6 +1679,8 @@ public class TunnelConfig {
      * Keys without values, e.g. key= or key will be returned with "" for the value.
      *
      * @param args non-null
+     * @return the parsed key-value pairs, empty if none; a key with no value
+     *         maps to the empty string
      * @since 0.9.43
      */
     private static Map<String, String> parseCustomOptions(String args) {

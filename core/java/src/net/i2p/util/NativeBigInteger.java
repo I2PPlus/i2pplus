@@ -435,7 +435,10 @@ public class NativeBigInteger extends BigInteger {
     /**
      * Compute the modular inverse of base modulo d.
      *
-     * @throws ArithmeticException
+     * @param base big endian twos complement representation of the number to invert
+     * @param d big endian twos complement representation of the modulus
+     * @return big endian twos complement representation of the inverse
+     * @throws ArithmeticException if the modulus is not positive or the inverse does not exist
      * @since 0.9.26 and libjbigi version 3
      */
     private static native byte[] nativeModInverse(byte[] base, byte[] d);
@@ -443,6 +446,7 @@ public class NativeBigInteger extends BigInteger {
     /**
      * The jbigi version, only available since jbigi version 3.
      *
+     * @return the version number reported by the loaded native library
      * @since 0.9.26
      */
     private static native int nativeJbigiVersion();
@@ -450,6 +454,7 @@ public class NativeBigInteger extends BigInteger {
     /**
      * The libmp major version, only available since jbigi version 3.
      *
+     * @return the major version number of the libmp the native library links against
      * @since 0.9.26
      */
     private static native int nativeGMPMajorVersion();
@@ -457,6 +462,7 @@ public class NativeBigInteger extends BigInteger {
     /**
      * The libmp minor version, only available since jbigi version 3.
      *
+     * @return the minor version number of the libmp the native library links against
      * @since 0.9.26
      */
     private static native int nativeGMPMinorVersion();
@@ -464,6 +470,7 @@ public class NativeBigInteger extends BigInteger {
     /**
      * The libmp patch version, only available since jbigi version 3.
      *
+     * @return the patch version number of the libmp the native library links against
      * @since 0.9.26
      */
     private static native int nativeGMPPatchVersion();
@@ -832,6 +839,7 @@ public class NativeBigInteger extends BigInteger {
     /**
      * Log a native math debug message.
      *
+     * @param s the message to log
      * @since 0.8.7
      */
     private static void debug(String s) {
@@ -857,6 +865,8 @@ public class NativeBigInteger extends BigInteger {
     /**
      * Log a native math warning.
      *
+     * @param s the message to log
+     * @param t the cause to print and record, or null
      * @since 0.8.7
      */
     private static void warn(String s, Throwable t) {
@@ -875,6 +885,7 @@ public class NativeBigInteger extends BigInteger {
     /**
      * Log a native math error.
      *
+     * @param s the message to log
      * @since 0.9.26
      */
     private static void error(String s) {
@@ -884,6 +895,8 @@ public class NativeBigInteger extends BigInteger {
     /**
      * Log a native math error with its cause.
      *
+     * @param s the message to log
+     * @param t the cause to print and record, or null
      * @since 0.9.26
      */
     private static void error(String s, Throwable t) {
@@ -903,6 +916,7 @@ public class NativeBigInteger extends BigInteger {
      * <p>Try loading it from an explicitly build jbigi.dll / libjbigi.so first, before
      * looking into a jbigi.jar for any other libraries.</p>
      *
+     * @param name the library name to load, null means do nothing
      * @return true if it was loaded successfully, else false
      */
     private static final boolean loadGeneric(String name) {
@@ -937,6 +951,8 @@ public class NativeBigInteger extends BigInteger {
      * so we transparently support read-only base dirs.
      * </p>
      *
+     * @param resourceName the resource to load, named by the "jbigi.impl"
+     *                     property, null means do nothing
      * @return true if it was loaded successfully, else false
      */
     private static final boolean loadFromResource(String resourceName) {
@@ -1017,6 +1033,7 @@ public class NativeBigInteger extends BigInteger {
     /**
      * The middle part of the native library name, based on the CPU type.
      *
+     * @param optimized true to use the detected CPU type, false for the generic "none" library
      * @return may be null if optimized is true
      */
     private static final String getMiddleName2(boolean optimized) {
