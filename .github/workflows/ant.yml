@@ -22,7 +22,7 @@ jobs:
     steps:
       - name: PackageInstall
         run: |
-          sudo apt install -y gettext ant-contrib parallel uglifyjs
+          sudo apt install -y gettext ant ant-optional libjunit4-java ant-contrib parallel uglifyjs
           sudo npm install -g minify
 
       - uses: actions/checkout@v7
