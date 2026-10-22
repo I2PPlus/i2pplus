@@ -454,6 +454,9 @@ public class UDPTransport extends TransportImpl {
         _context.statManager().createRateStat("udp.dropPeerDroplist", "Number of current peers experiencing dropped packets when new peer is added to list", "Transport [UDP]", RATES);
         _context.statManager().createRateStat("udp.inboundIPv4Conn", "Inbound IPv4 UDP Connection", "Transport [UDP]", RATES);
         _context.statManager().createRateStat("udp.inboundIPv6Conn", "Inbound IPv6 UDP Connection", "Transport [UDP]", RATES);
+        _context.statManager().createRateStat("udp.inboundMessageEvicted",
+                                              "Partial inbound messages evicted",
+                                              "Transport [UDP]", RATES);
         _context.statManager().createRateStat("udp.proactiveReestablish", "Time session was idle for when we proactively reestablished it", "Transport [UDP]", RATES);
         // Required rate stats for tuner cross-refs (CoDel queue delay/drop stats)
         _context.statManager().createRequiredRateStat("codel.UDP-Receiver.delay",

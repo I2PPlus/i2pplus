@@ -334,6 +334,16 @@ class InboundMessageState implements CDQEntry {
     }
 
     /**
+     * Whether the pooled fragment buffers have been returned already.
+     *
+     * @return true once releaseResources() has run on this state
+     * @since 0.9.72+
+     */
+    public boolean isReleased() {
+        return _released;
+    }
+
+    /**
      * The array of fragments, throws if already released.
      * @return the fragment array, indexed by fragment number
      */

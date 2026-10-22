@@ -1118,6 +1118,23 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
                 messageDup = _transport.getInboundFragments().wasRecentlyReceived(messageId);
                 if (!messageDup) {
                     // Create new state only if not duplicate recently received
+                    // Cap first: a peer spraying distinct message IDs would
+                    // otherwise grow this map, and its pooled fragment buffers,
+                    // without bound.
+                    if (_inboundMessages.size() >= MAX_INBOUND_MESSAGES) {
+                        InboundMessageState evicted = evictInboundMessage(_inboundMessages);
+                        if (evicted != null) {
+                            _context.statManager().addRateData("udp.inboundMessageEvicted", 1);
+                            // One line per burst, not per message id: a peer sitting
+                            // at the cap is by definition repeating this at packet
+                            // rate, and the suppressed count is the fact worth
+                            // having, which the suppressor appends to the line.
+                            _log.warnThrottled("ssu-inbound-evict",
+                                               "Dropping a partial inbound message [" +
+                                               _shortHash + "] -> Peer holds " +
+                                               MAX_INBOUND_MESSAGES + " at once");
+                        }
+                    }
                     state = new InboundMessageState(_context, messageId, _remotePeer, data, off, len, frag, isLast);
                     _inboundMessages.put(messageId, state);
                 }

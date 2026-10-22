@@ -188,6 +188,14 @@ public class PeerState {
     private static volatile int MIN_CONCURRENT_MSGS = SystemVersion.isSlow() ? 8 : 32;
     /** Maximum lifetime before a message is considered stuck and expired (60 seconds). */
     private static final long MAX_MESSAGE_LIFETIME = 60 * 1000L;
+    /**
+     * Hard cap on partially-received inbound messages held per peer. Each entry
+     * owns pooled fragment buffers of up to {@link UDPPacket#MAX_PACKET_SIZE}, and
+     * a peer that sends one fragment per distinct message ID never trips the
+     * same-ID expiry branch, so without a cap the map grows for the life of the
+     * connection.
+     */
+    static final int MAX_INBOUND_MESSAGES = 64;
     /** After this time, we start adding backoff delay (5 seconds). */
     private static final long BACKOFF_START_LIFETIME = 5 * 1000L;
     /** Initial concurrent messages per peer — configurable. */
@@ -1559,6 +1567,46 @@ public class PeerState {
             }
         }
         return rv;
+    }
+
+    /**
+     * Make room for one more partially-received inbound message. Expired and
+     * complete entries go first, since they are dead weight that simply has not
+     * been swept yet; only when none are left do we drop the live entry that has
+     * been waiting longest, which under a fragment flood is the one least likely
+     * ever to complete.
+     * <p>
+     * The caller must hold {@link #_inboundLock}.
+     *
+     * @param inbound the per-peer map of partial inbound messages
+     * @return the evicted state, already released, or null if the map was empty
+     * @since 0.9.72+
+     */
+    static InboundMessageState evictInboundMessage(
+            ConcurrentMap<Long, InboundMessageState> inbound) {
+        Map.Entry<Long, InboundMessageState> victim = null;
+        long oldest = -1;
+        for (Iterator<Map.Entry<Long, InboundMessageState>> iter = inbound.entrySet().iterator();
+             iter.hasNext(); ) {
+            Map.Entry<Long, InboundMessageState> entry = iter.next();
+            InboundMessageState state = entry.getValue();
+            if (state.isExpired() || state.isComplete()) {
+                state.releaseResources();
+                iter.remove();
+                return state;
+            }
+            long lifetime = state.getLifetime();
+            if (lifetime > oldest) {
+                oldest = lifetime;
+                victim = entry;
+            }
+        }
+        if (victim == null)
+            return null;
+        InboundMessageState state = victim.getValue();
+        state.releaseResources();
+        inbound.remove(victim.getKey());
+        return state;
     }
 
     /**

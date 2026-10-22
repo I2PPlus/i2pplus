@@ -2096,14 +2096,58 @@ void noteEstablishmentRtt(int rttMs) {
     }
 
     /**
-     *  Check if the peer is blocklisted or banned.
-     *  If so, log and close the connection.
+     * How long a connection's ban/blocklist verdict stays cached, in ms.
+     * <p>
+     * isBanned() is called on every data-phase frame, and each call copies the
+     * remote IP and binary-searches the blocklist's range array before it looks
+     * the peer up in the banlist. Caching the verdict for a few seconds takes
+     * that work off the busiest receive path; a ban or block added while a
+     * connection is already up takes effect on the next check instead of the
+     * next frame.
+     * @since 0.9.72+
+     */
+    static final long BAN_RECHECK_MS = 5000;
+
+    /** Cached ban/blocklist verdict, valid until {@link #_nextBanCheck}. */
+    private volatile boolean _banned;
+    /** Clock time after which the cached verdict is stale, in ms. */
+    private volatile long _nextBanCheck;
+
+    /**
+     * Whether the cached ban/blocklist verdict has to be re-read.
+     * <p>
+     * Pure and static so the boundary can be pinned without a socket: the
+     * deadline is inclusive, so a verdict cached at T is re-read at T + interval
+     * and not before.
      *
-     *  @return true if banned or blocklisted, false otherwise
-     *  @since 0.9.68+
+     * @param now current clock time in ms
+     * @param nextCheckAt the time the cached verdict stops being valid, in ms;
+     *                    0 means nothing is cached yet
+     * @return true if the lists must be read again
+     * @since 0.9.72+
+     */
+    static boolean banCheckIsDue(long now, long nextCheckAt) {
+        return now >= nextCheckAt;
+    }
+
+    /**
+     * Check if the peer is blocklisted or banned.
+     * If so, log and close the connection.
+     * <p>
+     * The answer is cached for {@link #BAN_RECHECK_MS}, so a caller on a frame
+     * loop does not pay for the lookup per frame. The first call on a connection
+     * is never served from the cache, so establishment still rejects a banned
+     * peer immediately.
+     *
+     * @return true if banned or blocklisted, false otherwise
+     * @since 0.9.68+
      */
     public boolean isBanned() {
         if (_remotePeer == null) {return false;}
+
+        long now = _context.clock().now();
+        if (!banCheckIsDue(now, _nextBanCheck)) {return _banned;}
+        _nextBanCheck = now + BAN_RECHECK_MS;
 
         Hash peerHash = _remotePeer.calculateHash();
         if (peerHash == null) {return false;}
@@ -2113,6 +2157,7 @@ void noteEstablishmentRtt(int rttMs) {
                 if (_log.shouldInfo()) {
                     _log.info("IP address " + Addresses.toString(ip) + " is blocklisted -> Closing connection...");
                 }
+                _banned = true;
                 close();
                 return true;
         }
@@ -2121,10 +2166,15 @@ void noteEstablishmentRtt(int rttMs) {
             if (_log.shouldInfo()) {
                 _log.info("Router [" + peerHash.toBase64().substring(0,6) + "] is banned -> Closing connection...");
             }
+            _banned = true;
             close();
             return true;
         }
 
+        // Clear the cached verdict on the clean answer as well, so a connection
+        // already closing does not keep reporting itself banned from a verdict
+        // written in an earlier window.
+        _banned = false;
         return false;
     }
 
