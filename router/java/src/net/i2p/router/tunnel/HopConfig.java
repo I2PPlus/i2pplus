@@ -141,6 +141,7 @@ public class HopConfig {
      * @return the layer session key, or null if this hop does not relay layers
      */
     public SessionKey getLayerKey() { return _layerKey; }
+
     /**
      * The key to encrypt the layer with before passing it on.
      *
@@ -154,6 +155,7 @@ public class HopConfig {
      * @return the IV session key, or null if this hop does not relay IVs
      */
     public SessionKey getIVKey() { return _ivKey; }
+
     /**
      * The key to encrypt the IV with before passing it on.
      *
@@ -167,6 +169,7 @@ public class HopConfig {
      * @return the expiration time in milliseconds since the epoch
      */
     public long getExpiration() { return _expiration; }
+
     /**
      * The tunnel expiration time, in ms since the epoch.
      *
@@ -180,6 +183,7 @@ public class HopConfig {
      * @return the creation time in milliseconds since the epoch
      */
     public long getCreation() { return _creation; }
+
     /**
      * The tunnel creation time, in ms since the epoch.
      *
@@ -196,6 +200,7 @@ public class HopConfig {
     public int getAllocatedBW() {
         return _allocatedBW;
     }
+
     /**
      * The bandwidth allocated for this hop.
      *
@@ -270,4 +275,5 @@ public class HopConfig {
         buf.append("\n* Expires: ").append(DataHelper.formatTime(_expiration));
         return buf.toString();
     }
+
 }
