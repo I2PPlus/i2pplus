@@ -18,29 +18,38 @@ import org.junit.Test;
  */
 public class ConnectionHandlerWorkerTest {
 
-    /** Default accept worker count is 1 when unset. */
+    /**
+     * The accept-worker override starts unset, so the configured
+     * {@code i2p.streaming.acceptWorkerThreads} applies out of the box.
+     */
     @Test
-    public void testDefaultAcceptWorkerCount() {
-        assertEquals(1, ConnectionOptions.getAcceptWorkerThreads());
+    public void testAcceptWorkerOverrideStartsUnset() {
+        assertEquals(0, ConnectionOptions.getAcceptWorkerThreads());
+        assertEquals(0, I2PSocketManagerFull.getAcceptWorkerThreads());
     }
 
-    /** SetAcceptWorkerThreads clamps to [0, 16]. */
+    /**
+     * The override is clamped to [0, 16] however it is set, and a write through
+     * either entry point is visible through the other - one store, not a
+     * ConnectionOptions copy shadowed by an I2PSocketManagerFull one.
+     */
     @Test
-    public void testAcceptWorkerCountClamping() {
-        ConnectionOptions.setAcceptWorkerThreads(-1);
-        assertEquals(0, ConnectionOptions.getAcceptWorkerThreads());
-        ConnectionOptions.setAcceptWorkerThreads(0);
-        assertEquals(0, ConnectionOptions.getAcceptWorkerThreads());
-        ConnectionOptions.setAcceptWorkerThreads(1);
-        assertEquals(1, ConnectionOptions.getAcceptWorkerThreads());
-        ConnectionOptions.setAcceptWorkerThreads(8);
-        assertEquals(8, ConnectionOptions.getAcceptWorkerThreads());
-        ConnectionOptions.setAcceptWorkerThreads(16);
-        assertEquals(16, ConnectionOptions.getAcceptWorkerThreads());
-        ConnectionOptions.setAcceptWorkerThreads(17);
-        assertEquals(16, ConnectionOptions.getAcceptWorkerThreads());
-        ConnectionOptions.setAcceptWorkerThreads(100);
-        assertEquals(16, ConnectionOptions.getAcceptWorkerThreads());
+    public void testAcceptWorkerOverrideClampedAndShared() {
+        int saved = ConnectionOptions.getAcceptWorkerThreads();
+        try {
+            ConnectionOptions.setAcceptWorkerThreads(-1);
+            assertEquals(0, ConnectionOptions.getAcceptWorkerThreads());
+            ConnectionOptions.setAcceptWorkerThreads(8);
+            assertEquals(8, I2PSocketManagerFull.getAcceptWorkerThreads());
+            ConnectionOptions.setAcceptWorkerThreads(100);
+            assertEquals(16, ConnectionOptions.getAcceptWorkerThreads());
+            I2PSocketManagerFull.setAcceptWorkerThreads(3);
+            assertEquals(3, ConnectionOptions.getAcceptWorkerThreads());
+            I2PSocketManagerFull.setAcceptWorkerThreads(17);
+            assertEquals(16, I2PSocketManagerFull.getAcceptWorkerThreads());
+        } finally {
+            ConnectionOptions.setAcceptWorkerThreads(saved);
+        }
     }
 
     /** GetMaxQueueSize defaults to 4096 for non-slow systems. */
@@ -97,25 +106,6 @@ public class ConnectionHandlerWorkerTest {
     @Test
     public void testRttScaleDefault() {
         assertEquals(4, ConnectionHandler.SYN_RTT_SCALE_DEFAULT);
-    }
-
-    /** I2PSocketManagerFull acceptWorkerThreads defaults to 0 (unset). */
-    @Test
-    public void testManagerDefaultAcceptWorkerThreads() {
-        assertEquals(0, I2PSocketManagerFull.getAcceptWorkerThreads());
-    }
-
-    /** I2PSocketManagerFull setAcceptWorkerThreads clamps to [0, 16]. */
-    @Test
-    public void testManagerAcceptWorkerClamping() {
-        I2PSocketManagerFull.setAcceptWorkerThreads(-1);
-        assertEquals(0, I2PSocketManagerFull.getAcceptWorkerThreads());
-        I2PSocketManagerFull.setAcceptWorkerThreads(8);
-        assertEquals(8, I2PSocketManagerFull.getAcceptWorkerThreads());
-        I2PSocketManagerFull.setAcceptWorkerThreads(16);
-        assertEquals(16, I2PSocketManagerFull.getAcceptWorkerThreads());
-        I2PSocketManagerFull.setAcceptWorkerThreads(100);
-        assertEquals(16, I2PSocketManagerFull.getAcceptWorkerThreads());
     }
 
     /** Default max SYN queue size is 0 (unset), falls back to config. */

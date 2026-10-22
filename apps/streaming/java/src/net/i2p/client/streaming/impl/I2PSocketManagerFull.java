@@ -1126,19 +1126,23 @@ public class I2PSocketManagerFull implements I2PSocketManager {
      */
     public static void setSynExprExpireThresh(int val) { _synExprExpireThresh = val; }
 
-    private static volatile int _acceptWorkerThreads;
-
     /**
-     * Number of accept worker threads, dynamically adjustable by the Tuner.
-     * @return the current number of accept worker threads
+     * The Tuner-managed accept-worker override; 0 = no override, so each
+     * manager's configured {@code i2p.streaming.acceptWorkerThreads} applies.
+     * @return the current override worker count, or 0 if disabled
      * @since 0.9.71+
      */
-    public static int getAcceptWorkerThreads() { return _acceptWorkerThreads; }
+    public static int getAcceptWorkerThreads() {
+        return ConnectionOptions.getAcceptWorkerThreads();
+    }
 
     /**
-     * Number of accept worker threads, dynamically adjustable by the Tuner.
-     * @param val the new number of accept worker threads (clamped to [0, 16])
+     * Set the Tuner-managed accept-worker override. Clamped to {@code [0, 16]};
+     * 0 removes the override.
+     * @param val the new override worker count, or 0 to disable
      * @since 0.9.71+
      */
-    public static void setAcceptWorkerThreads(int val) { _acceptWorkerThreads = Math.max(0, Math.min(16, val)); }
+    public static void setAcceptWorkerThreads(int val) {
+        ConnectionOptions.setAcceptWorkerThreads(val);
+    }
 }

@@ -104,7 +104,15 @@ class PacketHandler {
      * signature work no longer stalls the session notifier thread for all other
      * connections on the same destination.  If the shard's queue is full the
      * notifier waits for space (the same blocking behaviour as processing the
-     * packet synchronously), so packets are never dropped and never reordered.
+     * packet synchronously), so a packet is never dropped for want of queue
+     * space, and a connection always maps to the same shard, so it is never
+     * reordered.
+     * <p>
+     * Two exits do drop a packet, both rare and both releasing the payload
+     * rather than leaking it: the interrupt handled below, and a worker-set
+     * resize - an entry handed to a worker between that worker idling out and
+     * being retired is freed when the retiring worker drains its queue. The peer
+     * recovers either way by retransmission.
      *
      * @param con the connection, indexed by sendId
      * @param packet the packet; ownership passes to the receiving shard

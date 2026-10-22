@@ -93,6 +93,21 @@ class MessageInputStream extends InputStream {
     private static final int MAX_GROW_BUFFER = 8 * 1024 * 1024;
 
     private int _maxBufferSize;  // Max total buffer size in bytes
+
+    /**
+     * The size this stream was configured with. Dynamic growth goes above it,
+     * the decay never goes below it - the configured size is derived from the
+     * window and the message size, so a smaller buffer would drop data the
+     * window is able to deliver.
+     */
+    private final int _configuredBufferSize;
+
+    /**
+     * Most bytes buffered since the last decay check. The peak, not the current
+     * level, is what shows whether a grown buffer is actually in use.
+     */
+    private int _peakBuffered;
+
     private final int _maxPacketCount; // Max number of packets regardless of size
 
     private final byte[] _oneByte = new byte[1]; // For single-byte reads
@@ -141,6 +156,7 @@ class MessageInputStream extends InputStream {
         _highestBlockId = -1;
         _maxMessageSize = maxMessageSize;
         _maxWindowSize = maxWindowSize;
+        _configuredBufferSize = maxBufferSize;
         _maxBufferSize = maxBufferSize;
         _maxPacketCount = maxPacketCount;
     }
@@ -272,6 +288,76 @@ class MessageInputStream extends InputStream {
     }
 
     /**
+     * Decide the receive-buffer cap once the reader has emptied the buffer.
+     * <p>
+     * The peak, not the current level, is the signal: it says how much buffer
+     * the drain just finished actually needed. Keeping room for twice the peak
+     * means a connection that is genuinely using the larger buffer keeps it, and
+     * the cap converges on the working set instead of alternating a grow with a
+     * shrink on every burst.
+     *
+     * @param current the cap in effect, in bytes
+     * @param floor the configured size, which the cap never falls below
+     * @param peak most bytes buffered since the previous check, in bytes
+     * @return the new cap: half of current clamped to floor, or current if the
+     *         peak shows the larger buffer is in use
+     * @since 0.9.72+
+     */
+    static int decayBufferSize(int current, int floor, int peak) {
+        if (current <= floor) {
+            return current;
+        }
+        if (peak * 2 >= current) {
+            return current;
+        }
+        return Math.max(floor, current / 2);
+    }
+
+    /**
+     * Decay the receive-buffer cap toward the configured size after the reader
+     * empties the buffer.
+     * <p>
+     * Without this the cap only ratchets up. One transient burst that trips
+     * canAccept() doubles it, and every later packet on that connection is then
+     * judged against the larger window for the rest of its life, so the memory
+     * stays committed whether the traffic needs it or not.
+     * <p>
+     * Caller must hold _dataLock.
+     *
+     * @since 0.9.72+
+     */
+    private void decayBuffer() {
+        _maxBufferSize = decayBufferSize(_maxBufferSize, _configuredBufferSize, _peakBuffered);
+        _peakBuffered = 0;
+    }
+
+    /**
+     * Record the buffered level for the decay check.
+     * <p>
+     * Caller must hold _dataLock.
+     *
+     * @since 0.9.72+
+     */
+    private void noteBuffered() {
+        int buffered = _readyDataSize - _readyDataBlockIndex;
+        if (buffered > _peakBuffered) {
+            _peakBuffered = buffered;
+        }
+    }
+
+    /**
+     * Current receive-buffer cap, including any growth done by growBuffer().
+     *
+     * @return the cap in bytes
+     * @since 0.9.72+
+     */
+    int getMaxBufferSize() {
+        synchronized (_dataLock) {
+            return _maxBufferSize;
+        }
+    }
+
+    /**
      * Combined canAccept with automatic buffer growth.
      * If the buffer is full, tries to grow it before rejecting.
      *
@@ -388,6 +474,7 @@ class MessageInputStream extends InputStream {
                 _highestReadyBlockId = cur;
                 cur++;
             }
+            noteBuffered();
             if (_log.shouldDebug()) {
                 _log.debug("Close received: ready blocks=" + _readyDataBlocks.size()
                         + ", not ready blocks=" + _notYetReadyBlocks.size()
@@ -447,6 +534,7 @@ class MessageInputStream extends InputStream {
                     cur++;
                     _highestReadyBlockId++;
                 }
+                noteBuffered();
                 _dataLock.notifyAll();
             } else {
                 if (_locallyClosed.get()) {
@@ -590,6 +678,9 @@ class MessageInputStream extends InputStream {
                     _readyDataSize -= blockSize;
                     _readyDataBlockIndex = 0;
                     _readyDataBlocks.remove(0);
+                    if (_readyDataBlocks.isEmpty()) {
+                        decayBuffer();
+                    }
                 }
             }
             // arraycopy outside the lock — ByteArray data is immutable

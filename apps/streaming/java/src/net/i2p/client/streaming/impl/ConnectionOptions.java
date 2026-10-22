@@ -453,17 +453,18 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
      */
     static void setReceiveWorkerThreads(int val) { receiveWorkerThreads = Math.max(0, Math.min(PacketHandler.MAX_RECEIVE_WORKERS, val)); }
 
-    /** Number of accept worker threads, Tuner-managed default. @since 0.9.71+. */
-    static volatile int acceptWorkerThreads = 1;
+    /** Accept worker threads, Tuner-managed override; 0 = no override. @since 0.9.71+. */
+    static volatile int acceptWorkerThreads = 0;
 
     /**
-     * The Tuner's accept-worker default; 0 = use compiled default (1). @since 0.9.71+.
-     * @return the reactive accept-worker default
+     * The Tuner's accept-worker override; 0 = no override, so the configured
+     * {@code i2p.streaming.acceptWorkerThreads} applies. @since 0.9.71+.
+     * @return the reactive accept-worker override, or 0 if none
      */
     static int getAcceptWorkerThreads() { return acceptWorkerThreads; }
     /**
-     * The Tuner's accept-worker default; clamped to [0, 16]. @since 0.9.71+.
-     * @param val the reactive accept-worker default; 0 means use the compiled default
+     * The Tuner's accept-worker override; clamped to [0, 16]. @since 0.9.71+.
+     * @param val the reactive accept-worker override; 0 removes it
      */
     static void setAcceptWorkerThreads(int val) { acceptWorkerThreads = Math.max(0, Math.min(16, val)); }
 
@@ -799,6 +800,7 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
             _limitAction = opts.getLimitAction();
             _tagsToSend = opts.getTagsToSend();
             _tagThreshold = opts.getTagThreshold();
+            _retransmitTimeout = opts._retransmitTimeout;
     }
 
     /**
@@ -894,7 +896,7 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
         applyInt(opts, PROP_TAGS_TO_SEND, DEFAULT_TAGS_TO_SEND, onlyIfSet, v -> _tagsToSend = v);
         applyInt(opts, PROP_TAG_THRESHOLD, DEFAULT_TAG_THRESHOLD, onlyIfSet, v -> _tagThreshold = v);
 
-        _retransmitTimeout = getInt(opts, PROP_INITIAL_RTO, defaultInitialRTO);
+        applyInt(opts, PROP_INITIAL_RTO, defaultInitialRTO, onlyIfSet, v -> _retransmitTimeout = v);
     }
 
     /**

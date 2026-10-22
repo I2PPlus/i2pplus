@@ -634,8 +634,17 @@ class MessageOutputStream extends OutputStream {
             return;
         }
         _flusher.cancel();
+        ByteArray ba = null;
         synchronized (_dataLock) {
+            if (_buf != null) {
+                ba = new ByteArray(_buf);
+                _buf = null;
+                _valid = 0;
+            }
             _dataLock.notifyAll();
+        }
+        if (ba != null) {
+            _dataCache.release(ba);
         }
     }
 

@@ -23,6 +23,7 @@ import net.i2p.data.Hash;
 import net.i2p.stat.RateConstants;
 import net.i2p.stat.StatManager;
 import net.i2p.util.ByteCache;
+import net.i2p.util.Clock;
 import net.i2p.util.ConcurrentHashSet;
 import net.i2p.util.ConvertToHash;
 import net.i2p.util.LHMCache;
@@ -99,6 +100,41 @@ class ConnectionManager {
      */
     static boolean shouldLogCooldownWarn(long lastWarnTime, long now, long cooldownMs) {
         return lastWarnTime <= 0 || now - lastWarnTime >= cooldownMs;
+    }
+
+    /**
+     * Wait out the remainder of a destination's connect cooldown.
+     * Re-arms after every wakeup until the deadline passes, so a notify - the
+     * one shutdown sends, or a spurious one - cannot cut the cooldown short and
+     * let a connect through to a peer we just failed to reach. The deadline is
+     * fixed at entry, so an early wakeup costs one more short wait, never a
+     * longer cooldown. An interrupt does end the wait, since that is a
+     * deliberate cancellation rather than a stray signal.
+     *
+     * @param lock the monitor to wait on, notified on shutdown
+     * @param delay milliseconds of cooldown left to sit out, non-positive to skip
+     * @param clock the clock the deadline is measured against
+     * @return milliseconds actually waited
+     * @since 0.9.72+
+     */
+    static long awaitCooldown(Object lock, long delay, Clock clock) {
+        if (delay <= 0) {
+            return 0;
+        }
+        long start = clock.now();
+        long until = start + delay;
+        synchronized (lock) {
+            long remaining;
+            while ((remaining = until - clock.now()) > 0) {
+                try {
+                    lock.wait(remaining);
+                } catch (InterruptedException ie) {
+                    Thread.currentThread().interrupt();
+                    break;
+                }
+            }
+        }
+        return clock.now() - start;
     }
 
     /**
@@ -1404,6 +1440,12 @@ class ConnectionManager {
 
     /**
      * Create a new connection based on the SYN packet we received.
+     * <p>
+     * Ownership of the packet's pooled payload is decided here:
+     * {@link #acceptSyn(Packet)} never touches it, so every exit from that stage
+     * - all of the rejections, and any throw - returns the buffer. The
+     * {@code receivePacket()} call below takes ownership, and nothing after it
+     * may release the payload, its own verification-failure path included.
      *
      * @param synPacket SYN packet to process
      * @return created Connection with the packet's data already delivered to it,
@@ -1411,6 +1453,55 @@ class ConnectionManager {
      *         or if the connection was rejected
      */
     public Connection receiveConnection(Packet synPacket) {
+        Connection con;
+        try {
+            con = acceptSyn(synPacket);
+        } catch (RuntimeException | Error e) {
+            // Never reached the handoff, so the payload is still ours to return.
+            synPacket.releasePayload();
+            throw e;
+        }
+        if (con == null) {
+            synPacket.releasePayload();
+            return null;
+        }
+        // finally, we know enough that we can log the packet with the conn filled in
+        if (I2PSocketManagerFull.pcapWriter != null &&
+            _context.getBooleanProperty(I2PSocketManagerFull.PROP_PCAP))
+            synPacket.logTCPDump(con);
+        try {
+            // This validates the packet, and sets the con's SendStreamID and RemotePeer.
+            // Ownership of the payload transfers at this call: receivePacket()
+            // releases it, except when it passes it to the MessageInputStream.
+            con.getPacketHandler().receivePacket(synPacket, con);
+        } catch (I2PException ie) {
+            _connectionByInboundId.remove(Long.valueOf(con.getReceiveStreamId()));
+            // Token lookup, not the peer: the peer may never have been learned
+            // on this failure path, and it can be expensive to recompute.
+            // Claimed so a timer armed by the half-run receivePacket cannot
+            // release this slot a second time on its async teardown.
+            releaseConnectionReservation(con);
+            return null;
+        }
+
+        _context.statManager().addRateData("stream.connectionReceived", 1);
+        return con;
+    }
+
+    /**
+     * Everything about a new inbound connection up to the point where its
+     * payload is handed over: the SYN burst gates, the admission reservation,
+     * the options and MTU negotiation, and the connection's construction.
+     * Leaves the packet's payload alone - the caller owns it and returns it on
+     * every exit from here.
+     *
+     * @param synPacket the SYN packet to process
+     * @return the connection with its receive slot bound, or null if the SYN was
+     *         dropped or refused
+     * @since 0.9.72+ split out of {@link #receiveConnection(Packet)} to give the
+     *        payload handoff a single visible boundary
+     */
+    private Connection acceptSyn(Packet synPacket) {
         Destination from = synPacket.getOptionalFrom();
         if (from == null) {
             if (_log.shouldWarn())
@@ -1603,24 +1694,6 @@ class ConnectionManager {
             _admissionLock.readLock().unlock();
         }
 
-        // finally, we know enough that we can log the packet with the conn filled in
-        if (I2PSocketManagerFull.pcapWriter != null &&
-            _context.getBooleanProperty(I2PSocketManagerFull.PROP_PCAP))
-            synPacket.logTCPDump(con);
-        try {
-            // This validates the packet, and sets the con's SendStreamID and RemotePeer
-            con.getPacketHandler().receivePacket(synPacket, con);
-        } catch (I2PException ie) {
-            _connectionByInboundId.remove(Long.valueOf(con.getReceiveStreamId()));
-            // Token lookup, not the peer: the peer may never have been learned
-            // on this failure path, and it can be expensive to recompute.
-            // Claimed so a timer armed by the half-run receivePacket cannot
-            // release this slot a second time on its async teardown.
-            releaseConnectionReservation(con);
-            return null;
-        }
-
-        _context.statManager().addRateData("stream.connectionReceived", 1);
         return con;
     }
 
@@ -2047,13 +2120,7 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
                                          destHash.toBase64().substring(0,6) +
                                          "] " + delay + "ms (cooldown)");
                       }
-                      synchronized (_cooldownLock) {
-                          try {
-                               _cooldownLock.wait(delay);
-                           } catch (InterruptedException ie) {
-                              Thread.currentThread().interrupt();
-                          }
-                      }
+                      awaitCooldown(_cooldownLock, delay, _context.clock());
                   } else {
                       _destFailures.remove(destHash, lastFailure);
                   }

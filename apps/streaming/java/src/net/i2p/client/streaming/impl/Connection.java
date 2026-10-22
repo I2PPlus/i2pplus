@@ -422,27 +422,55 @@ class Connection {
     /** Weight of a new goodput sample in the baseline EWMA, scaled by 100. @since 0.9.71+. */
     private static final int FLOOR_EWMA_PERCENT = 30;
 
-    /** EWMA of achieved goodput in bytes/sec, 0 until the floor arms. @since 0.9.71+. */
-    private double _floorBaselineBps;
+    /**
+     * EWMA of achieved goodput in bytes/sec, 0 until the floor arms.
+     * <p>
+     * Volatile: written on the ACK path and read by {@link FloorCheckEvent} on the
+     * timer thread. A non-volatile double is not required to be read atomically,
+     * so the timer could see a half-written value and call a live connection
+     * stalled, or vice versa.
+     * @since 0.9.71+
+     */
+    private volatile double _floorBaselineBps;
 
-    /** Completed goodput samples backing {@link #_floorBaselineBps}. @since 0.9.71+. */
-    private int _floorSamples;
+    /**
+     * Completed goodput samples backing {@link #_floorBaselineBps}.
+     * Volatile for the same cross-thread reason.
+     * @since 0.9.71+
+     */
+    private volatile int _floorSamples;
 
-    /** Bytes counted toward the sample open at {@link #_floorSampleStart}. @since 0.9.71+. */
-    private long _floorSampleBytes;
+    /**
+     * Bytes counted toward the sample open at {@link #_floorSampleStart}. Only
+     * the ACK path touches this one; it is volatile with the rest of the group
+     * for cross-thread visibility of each field on its own, not because volatile
+     * keeps the pair consistent - the timer can still read a byte count from one
+     * sample window against a start time from another.
+     * @since 0.9.71+
+     */
+    private volatile long _floorSampleBytes;
 
-    /** Clock value at which the current goodput sample opened. @since 0.9.71+. */
-    private long _floorSampleStart;
+    /**
+     * Clock value at which the current goodput sample opened. Volatile for the
+     * same cross-thread reason.
+     * @since 0.9.71+
+     */
+    private volatile long _floorSampleStart;
 
-    /** Clock value of the most recent observed progress, for stall detection. @since 0.9.71+. */
-    private long _lastProgressAt;
+    /**
+     * Clock value of the most recent observed progress, for stall detection.
+     * Volatile: the ACK path advances it and the timer thread reads it to decide
+     * whether the connection has gone quiet.
+     * @since 0.9.71+
+     */
+    private volatile long _lastProgressAt;
 
     /**
      * Consecutive sample windows that fell below the floor. Reset by any
-     * at-or-above-floor window.
+     * at-or-above-floor window. Volatile for the same cross-thread reason.
      * @since 0.9.71+
      */
-    private int _floorBelowCount;
+    private volatile int _floorBelowCount;
 
     /**
      * Periodic floor evaluation. Armed only once a baseline exists, so a
@@ -454,8 +482,13 @@ class Connection {
      */
     private final FloorCheckEvent _floorCheckEvent;
 
-    /** Last reported verdict, so the caller can log a rising edge only. @since 0.9.71+. */
-    private StallState _lastStallState = StallState.NONE;
+    /**
+     * Last reported verdict, so the caller can log a rising edge only. Volatile:
+     * both the ACK path and {@link FloorCheckEvent} report verdicts, and each has
+     * to see the other's to avoid logging the same edge twice.
+     * @since 0.9.71+
+     */
+    private volatile StallState _lastStallState = StallState.NONE;
 
 
     /** Lifetime bytes sent, for stats. */
@@ -1997,6 +2030,20 @@ class Connection {
             }
         }
     }
+    /**
+     * How many packets a retransmission timeout resends: at most half the
+     * packets in flight (RFC 5681 section 4.3), never more than the retransmit
+     * cap, and at least one so a lone lost packet is not skipped.
+     *
+     * @param inFlight unacked packets in the window, &gt;= 1
+     * @param maxRtx the retransmit cap, &gt;= 1
+     * @return how many of the oldest in-flight packets to resend
+     * @since 0.9.72+
+     */
+    static int retransmitCount(int inFlight, int maxRtx) {
+        return Math.max(1, Math.min(maxRtx, inFlight / 2));
+    }
+
     /**
      *  Graduated congestion response: the window is cut by an amount that
      *  scales with the number of CONSECUTIVE loss events since the last
@@ -4332,8 +4379,18 @@ if (!on) {
                 // packets in ascending sequence number order (lower = higher priority).
                 // Round down (RFC 5681 section 4.3 "MUST be no more than half")
                 // https://datatracker.ietf.org/doc/html/rfc5681#section-4.3
-                toResend = new ArrayList<>(ob.values());
-                toResend = toResend.subList(0, Math.max(1, Math.min(getMaxRtx(), toResend.size() / 2)));
+                // Walk to the front half instead of copying the window to find
+                // it: the copy cost a list as long as the window, up to
+                // ABSOLUTE_MAX_WINDOW entries, on every RTO, and only the first
+                // getMaxRtx() of them are ever resent.
+                int toResendCount = retransmitCount(ob.size(), getMaxRtx());
+                toResend = new ArrayList<PacketLocal>(toResendCount);
+                for (PacketLocal packet : ob.values()) {
+                    if (toResend.size() >= toResendCount) {
+                        break;
+                    }
+                    toResend.add(packet);
+                }
             }
 
             // 3. Retransmit up to half of the packets in flight (RFC 6298 section 5.4 and RFC 5681 section 4.3)

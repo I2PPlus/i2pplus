@@ -10,6 +10,7 @@ import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.LongAdder;
 import net.i2p.I2PAppContext;
 import net.i2p.client.streaming.RouterRestartException;
 import net.i2p.data.ByteArray;
@@ -190,10 +191,19 @@ class ConnectionHandler {
     private volatile long _lastSynExpireSampleAt;
     /** Cached tunnel build success fraction; NaN when unavailable. */
     private volatile double _tunnelBuildSuccess;
-    /** SYNs added to the acceptance queue within the current sample window. */
-    private volatile int _synQueueProcessed;
-    /** SYNs that expired un-accepted (removed by {@code SynReaper}) in the current window. */
-    private volatile int _synQueueExpired;
+    /**
+     * SYNs added to the acceptance queue within the current sample window.
+     * A {@link LongAdder} because the accept workers (4-16 of them) and the
+     * {@code SynReaper} all increment it; a volatile int with {@code ++} is not
+     * atomic and the window silently lost updates, which is what the adaptive
+     * clamp below is built on.
+     */
+    private final LongAdder _synQueueProcessed = new LongAdder();
+    /**
+     * SYNs that expired un-accepted (removed by {@code SynReaper}) in the current
+     * window. Same multi-writer reasoning as {@link #_synQueueProcessed}.
+     */
+    private final LongAdder _synQueueExpired = new LongAdder();
     /** Most recently observed SYN accept-queue residence time (ms), i.e. how long a fresh SYN
      * waited in the queue before being accepted. 0 until the first acceptance. */
     private volatile int _synQueueResidenceMs;
@@ -253,30 +263,38 @@ class ConnectionHandler {
             // rate (so the Tuner sees the router-wide accept-queue health), then
             // reset for the next window. Returning the completed rate instead of
             // -1 avoids discarding the window's data at the rollover instant.
-            int rate = currentSynExpireRatePct();
+            // sumThenReset() takes each count in one pass, so an increment racing
+            // the rollover lands wholly in the old window or the new one.
+            int processed = (int) _synQueueProcessed.sumThenReset();
+            int expired = (int) _synQueueExpired.sumThenReset();
             _lastSynExpireSampleAt = now;
-            _synQueueProcessed = 0;
-            _synQueueExpired = 0;
+            int rate = synExpireRatePct(processed, expired);
             publishSynExpireRate(rate);
             return rate;
         }
-        return currentSynExpireRatePct();
+        return synExpireRatePct((int) _synQueueProcessed.sum(), (int) _synQueueExpired.sum());
     }
 
     /**
-     * The expire-rate of the current (in-progress) sample window: percent of
-     * queued SYNs that expired un-accepted, or -1 when there is no evidence yet
-     * (no SYNs processed this window). Kept separate from the window rollover so
-     * the publish-on-rollover path can report the completed window.
+     * The expire rate of one sample window: percent of queued SYNs that were
+     * removed by SynReaper without ever being accepted.
+     * <p>
+     * Pure and static so the input to the adaptive stress clamp can be tested
+     * without a running streaming handler.
      *
-     * @return percent [0,100] of queued SYNs that expired, or -1 when no evidence
+     * @param processed SYNs added to the accept queue during the window
+     * @param expired of those, SYNs that expired un-accepted
+     * @return percent [0,100] of queued SYNs that expired, or -1 when the window
+     *         holds no evidence yet, i.e. nothing was processed. Clamped at 100:
+     *         a SYN enqueued in an earlier window and reaped in this one is
+     *         counted as expired here without having been processed here, so the
+     *         raw ratio can exceed 1.
+     * @since 0.9.72+
      */
-    private int currentSynExpireRatePct() {
-        int processed = _synQueueProcessed;
+    static int synExpireRatePct(int processed, int expired) {
         if (processed <= 0) {return -1;}
-        int expired = _synQueueExpired;
         if (expired <= 0) {return 0;}
-        return (int) (100L * expired / processed);
+        return (int) Math.min(100L, 100L * expired / processed);
     }
 
     /**
@@ -414,8 +432,8 @@ class ConnectionHandler {
             _synQueue.clear();
             _synEnqueueTimes.clear();
             _resultQueue.clear();
-            _synQueueProcessed = 0;
-            _synQueueExpired = 0;
+            _synQueueProcessed.reset();
+            _synQueueExpired.reset();
             startAcceptWorkers();
         }
         boolean wasActive = _active;
@@ -425,8 +443,8 @@ class ConnectionHandler {
             _synQueue.clear();
             _synEnqueueTimes.clear();
             _resultQueue.clear();
-            _synQueueProcessed = 0;
-            _synQueueExpired = 0;
+            _synQueueProcessed.reset();
+            _synQueueExpired.reset();
             // Wake all worker threads with poison packets
             int count = _activeWorkerCount.get();
             for (int i = 0; i < count; i++) {
@@ -526,6 +544,7 @@ class ConnectionHandler {
                         continue;
                     }
                     if (_manager.wasRecentlyClosed(syn.getSendStreamId())) {
+                        syn.releasePayload();
                         continue;
                     }
                     // Check for duplicate/retransmitted SYN
@@ -534,15 +553,18 @@ class ConnectionHandler {
                         Connection oldcon = _manager.getConnectionByOutboundId(syn.getReceiveStreamId());
                         if (oldcon != null && from.equals(oldcon.getRemotePeer())) {
                             if (!oldcon.shouldResendSynAck(_context.clock().now())) {
+                                syn.releasePayload();
                                 continue; // SYN-ACK throttle active
                             }
                             // Hash only when we reach the flood gate — a throttled
                             // duplicate SYN (the common flood case) never pays the
                             // SHA-256 over the freshly-parsed wire Destination.
                             if (_manager.checkInboundSynFlood(from.calculateHash(), _context.clock().now())) {
+                                syn.releasePayload();
                                 continue; // flood gate
                             }
                             resendSynAck(oldcon, syn);
+                            syn.releasePayload();
                             continue;
                         }
                     }
@@ -550,7 +572,7 @@ class ConnectionHandler {
                     // Refreshes the enqueue record so a depart-of-timeout SYN matches
                     // the timeout quoted when the worker picked it up.
                     _synEnqueueTimes.put(syn, new SynEntry(_context.clock().now(), timeoutMs));
-                    _synQueueProcessed++;
+                    _synQueueProcessed.increment();
                     try {
                         sampleSynResidence(syn);
                         Connection con = _manager.receiveConnection(syn);
@@ -580,16 +602,20 @@ class ConnectionHandler {
      */
     public void receiveNewSyn(Packet packet) {
         if (packet == null) return;
+        // Every exit below drops the packet without queueing it, so no accept
+        // worker will ever see it and the payload is ours to return.
         if (!_active) {
             if (packet.isFlagSet(Packet.FLAG_SYNCHRONIZE)) {
                 if (_log.shouldWarn()) {_log.warn("Dropping new SYN request because we're not listening");}
                 sendReset(packet);
             } else if (_log.shouldWarn()) {_log.warn("Dropping non-SYN packet -> Not listening");}
+            packet.releasePayload();
             return;
         }
         if (_manager.wasRecentlyClosed(packet.getSendStreamId())) {
             if (_log.shouldWarn()) {_log.warn("Dropping packet for recently closed stream [" + Packet.toId(packet.getSendStreamId()) + "]");}
             if (_log.shouldDebug()) {_log.debug("Packet for recently closed stream * " + packet);}
+            packet.releasePayload();
             return;
         }
         if (packet.getOptionalDelay() == PoisonPacket.POISON_MAX_DELAY_REQUEST) {
@@ -597,6 +623,7 @@ class ConnectionHandler {
             // wire, it would kill an accept worker.
             if (_log.shouldDebug())
                 _log.debug("Dropping inbound packet with poison delay marker");
+            packet.releasePayload();
             return;
         }
         int timeoutMs = getEffectiveAcceptTimeout();
@@ -608,7 +635,7 @@ class ConnectionHandler {
         boolean success = _synQueue.size() < getMaxQueueSize() && _synQueue.offer(packet);
         if (success) {
             _synEnqueueTimes.put(packet, new SynEntry(_context.clock().now(), timeoutMs));
-            _synQueueProcessed++;
+            _synQueueProcessed.increment();
         } else {
             // Send RESET so the client can establish a new connection
             // immediately (via its own connect retry logic) rather than
@@ -619,6 +646,9 @@ class ConnectionHandler {
                 _log.warn("SYN queue full, sending RESET to client");
             }
             sendReset(packet);
+            // Ours to release - the offer failed, so no accept worker will
+            // ever pick this packet up.
+            packet.releasePayload();
         }
     }
 
@@ -646,6 +676,8 @@ class ConnectionHandler {
                 if (packet == null || packet.getOptionalDelay() == PoisonPacket.POISON_MAX_DELAY_REQUEST) break;
                 _synEnqueueTimes.remove(packet);
                 sendReset(packet);
+                // Polled, so no accept worker will see it - ours to return.
+                packet.releasePayload();
             }
             boolean restartPending;
             synchronized(this) { restartPending = _restartPending; }
@@ -916,7 +948,7 @@ class ConnectionHandler {
                 // atomic vs. the worker's refresh: only reap the record we read
                 if (!_synEnqueueTimes.remove(syn, entry)) {continue;}
                 if (_synQueue.remove(syn)) {
-                    _synQueueExpired++;
+                    _synQueueExpired.increment();
                     if (syn.isFlagSet(Packet.FLAG_SYNCHRONIZE)) {
                         expired++;
                         timeoutMs = entry.timeoutMs;
@@ -924,6 +956,9 @@ class ConnectionHandler {
                             _log.debug(synExpiryMessage(syn, _synQueue.size(),
                                                         getMaxQueueSize(), entry.timeoutMs));
                         sendReset(syn);
+                        // Ours to release - remove() above won the race with any
+                        // accept worker, so this packet is off the queue for good.
+                        syn.releasePayload();
                     } else {
                         reReceivePacket(syn);
                     }

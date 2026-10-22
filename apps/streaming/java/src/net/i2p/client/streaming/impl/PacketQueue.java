@@ -107,8 +107,16 @@ class PacketQueue implements SendMessageStatusListener, Closeable {
          long enqueueStart = _context.clock().now();
          try {
              int size = 0;
-             if (packet.shouldSign()) {size = packet.writeSignedPacket(buf, 0);}
-             else {size = packet.writePacket(buf, 0);}
+             // The check and the serialize are one critical section on the
+             // packet's monitor. releasePayload() hands the payload buffer back
+             // to the shared pool, and a copy started after a separate check can
+             // be overtaken by the buffer's next owner, which writes a different
+             // payload into it mid-copy - a corrupted retransmit.
+             synchronized (packet) {
+                 if (packet.writeReleased()) {return false;}
+                 if (packet.shouldSign()) {size = packet.writeSignedPacket(buf, 0);}
+                 else {size = packet.writePacket(buf, 0);}
+             }
 
              // last chance to short circuit...
               if (packet.writeReleased()) {return false;}

@@ -60,10 +60,18 @@ class PacketDispatcher {
     }
 
     /** Queue element: keeps the already-resolved connection with its packet. */
-    private static final class Entry {
+    static final class Entry {
+        /** The connection the packet belongs to, resolved before queueing. */
         final Connection con;
+        /** The packet to process, payload still held until it is drained. */
         final Packet packet;
 
+        /**
+         * Pairs the two so a retired shard can free the payload on its own.
+         *
+         * @param con the connection the packet belongs to, null if unmatched
+         * @param packet the packet to process
+         */
         Entry(Connection con, Packet packet) {
             this.con = con;
             this.packet = packet;
@@ -138,7 +146,9 @@ class PacketDispatcher {
      * queue. The shard is therefore re-resolved each iteration, so an entry
      * offered across a resize lands on the shard's <em>current</em> worker —
      * a resize drains each old shard to idle before swapping, so ordering is
-     * still preserved.
+     * still preserved. A worker retired in the gap between picking it and
+     * handing the entry over refuses the handoff rather than keeping it in a
+     * queue nothing will drain again, and the shard is resolved once more.
      *
      * @param sendStreamId the connection's inbound stream id (shard key)
      * @param con the resolved connection, passed through to the processor
@@ -162,8 +172,22 @@ class PacketDispatcher {
             } finally {
                 _lock.readLock().unlock();
             }
-            if (w._queue.offer(e)) {
+            if (w.offer(e)) {
                 return;
+            }
+            // Refused - the shard was retired between the lookup and the
+            // handoff. Wait for any resize / shutdown holding the write lock,
+            // then re-resolve: resize() installs the replacement before
+            // retiring the old workers, and shutdown() clears _running first,
+            // so while _running is true every worker in the array is live.
+            _lock.readLock().lock();
+            try {
+                if (!_running) {
+                    packet.releasePayload();
+                    return;
+                }
+            } finally {
+                _lock.readLock().unlock();
             }
             if (_context != null) {
                 _context.statManager().addRateData("stream.receiveBacklogged", 1);
@@ -260,13 +284,28 @@ class PacketDispatcher {
     }
 
     /** One worker drains its own bounded queue; started in the dispatcher ctor. */
-    private class Worker extends Thread {
+    class Worker extends Thread {
         private final LinkedBlockingQueue<Entry> _queue;
         private final PacketProcessor _processor;
         private final I2PAppContext _context;
         /** Entries currently inside process(); read by resize to prove idle. */
-        private volatile int _busy;
+        volatile int _busy;
+        /**
+         * Set by retire() before it drains, under the same monitor as offer(),
+         * so a handoff either lands before the drain (and is freed by it) or is
+         * refused - never accepted into a queue nothing will ever drain again.
+         */
+        private boolean _retired;
 
+        /**
+         * A shard's worker, not started here - the dispatcher starts the whole
+         * array at once so a resize can swap the shards over as a unit.
+         *
+         * @param shard shard index, used only to name the thread
+         * @param queueCapacity entries this shard holds before producers wait
+         * @param processor how to process an entry, from the dispatcher
+         * @param context for the backlog and queue-depth rates, null in tests
+         */
         Worker(int shard, int queueCapacity, PacketProcessor processor, I2PAppContext context) {
             super("StreamRxPkt-" + shard);
             setDaemon(true);
@@ -275,6 +314,25 @@ class PacketDispatcher {
             _context = context;
         }
 
+        /**
+         * Hand an entry to this worker, refusing it if the worker has been
+         * retired, so a handoff racing with a resize or shutdown cannot park
+         * the entry in a queue nothing will drain again.
+         *
+         * @param e the entry to enqueue
+         * @return true if the entry was queued and will be processed
+         * @since 0.9.72+
+         */
+        synchronized boolean offer(Entry e) {
+            return !_retired && _queue.offer(e);
+        }
+
+        /**
+         * Wait until this shard has nothing queued and nothing in process(), so
+         * retiring it cannot drop an entry that was already accepted.
+         *
+         * @throws InterruptedException if interrupted while waiting
+         */
         void awaitIdle() throws InterruptedException {
             while (!_queue.isEmpty() || _busy > 0) {
                 Thread.sleep(1);
@@ -282,7 +340,8 @@ class PacketDispatcher {
         }
 
         /** Interrupt the worker and free any queued-but-unprocessed entries. */
-        void retire() {
+        synchronized void retire() {
+            _retired = true;
             interrupt();
             Entry e;
             while ((e = _queue.poll()) != null) {

@@ -147,9 +147,13 @@ class PacketLocal extends Packet implements MessageOutputStream.WriteStatus {
      * Return the payload to the shared pool instead of letting it GC.
      * Only returns buffers that came from the MAX_PAYLOAD_SIZE pool;
      * zero-length or other-size payloads fall through to default no-op.
+     * <p>
+     * Synchronized on this packet, the same monitor {@code writeReleased()} and
+     * the send path's serialize take, so the buffer cannot go back to the pool
+     * while a copy of it is in flight.
      */
     @Override
-    public void releasePayload() {
+    public synchronized void releasePayload() {
         ByteArray payload = getPayload();
         if (payload != null && payload.getData().length == Packet.MAX_PAYLOAD_SIZE) {
             setPayload(null);
