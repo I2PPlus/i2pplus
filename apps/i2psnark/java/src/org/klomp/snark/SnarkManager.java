@@ -4562,7 +4562,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                                 _t("Failed to copy torrent file to {0}", f.getAbsolutePath())
                                         + _t(" - torrent file already exists");
                         addMessageAndPrint(msg);
-                        _log.error("[I2PSnark] Torrent file already exists: " + f);
+                        _log.error("[Snark] Torrent file already exists: " + f);
                     }
                     filename = f.getAbsolutePath();
                 }
@@ -4588,7 +4588,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
             } catch (IOException ioe) {
                 String msg = _t("Failed to copy torrent file to {0}", filename);
                 addMessageAndPrint(msg);
-                _log.error("[I2PSnark] Failed to write torrent file", ioe);
+                _log.error("[Snark] Failed to write torrent file", ioe);
                 return false;
             }
         }
@@ -5536,7 +5536,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                             freeSpaceMB);
             if (_log.shouldWarn()) {
                 _log.warn(
-                        "[I2PSnark] Partition containing data directory only has "
+                        "[Snark] Partition containing data directory only has "
                                 + freeSpaceMB
                                 + "MB free");
             }
@@ -5588,7 +5588,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                             freeSpaceMB);
             if (_log.shouldWarn()) {
                 _log.warn(
-                        "[I2PSnark] Partition containing temp directory only has "
+                        "[Snark] Partition containing temp directory only has "
                                 + freeSpaceMB
                                 + "MB free");
             }
@@ -6265,7 +6265,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
             out.writeObject(_torrentCreateFilterMap);
         } catch (IOException ex) {
             String msg = _t("Unable to save torrent create file filter config: ");
-            _log.error("[I2PSnark] " + msg + ex);
+            _log.error("[Snark] " + msg + ex);
             addMessageAndPrint(msg + ex.getMessage());
         }
     }
@@ -7007,7 +7007,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                                 + " -> "
                                 + _t("Cannot create diskspace bar");
                 if (_log.shouldError()) {
-                    _log.error("[I2PSnark] " + msg);
+                    _log.error("[Snark] " + msg);
                 }
                 if (!_context.isRouterContext()) {
                     System.out.println(" • " + msg);
@@ -7077,7 +7077,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
             return rv;
         } catch (Exception e) {
             if (_log.shouldError()) {
-                _log.error("[I2PSnark] Error retrieving disk usage: " + e.getMessage());
+                _log.error("[Snark] Error retrieving disk usage: " + e.getMessage());
             }
             return "";
         }

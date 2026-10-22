@@ -268,7 +268,7 @@ class IdleChecker extends SimpleTimer2.TimedEvent {
                         + MIN_TUNNEL_QTY
                         + "...";
         if (_log.shouldInfo()) {
-            _log.info("[I2PSnark] " + msg);
+            _log.info("[Snark] " + msg);
         }
         if (!_util.getContext().isRouterContext()) {
             System.out.println(" • " + msg);

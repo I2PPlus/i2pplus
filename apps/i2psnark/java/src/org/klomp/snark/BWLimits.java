@@ -59,7 +59,7 @@ public class BWLimits {
             I2PAppContext.getGlobalContext()
                     .logManager()
                     .getLog(BWLimits.class)
-                    .warn("[I2PSnark] Bandwidth Limiter failed", ise);
+                    .warn("[Snark] Bandwidth Limiter failed", ise);
         }
         return cachedResult;
     }

@@ -3158,7 +3158,7 @@ public class I2PSnarkServlet extends BasicServlet {
                 allDeleted = false;
                 _manager.addMessage(_t("Directory could not be deleted: {0}", dir.getAbsolutePath()));
                 if (_log.shouldWarn()) {
-                    _log.warn("[I2PSnark] Could not delete directory: " + dir);
+                    _log.warn("[Snark] Could not delete directory: " + dir);
                 }
             }
         }
@@ -3537,7 +3537,7 @@ public class I2PSnarkServlet extends BasicServlet {
             List<String> filesExcluded = storage.getExcludedFiles(_manager.getDataDir());
             if (_log.shouldInfo() && !filesExcluded.isEmpty()) {
                 String msg = filesExcluded.size() + " excluded from \"" + baseFile.getName() + "\" due to filter rules [" + String.join(", ", filesExcluded) + "]";
-                _log.info("[I2PSnark] " + msg);
+                _log.info("[Snark] " + msg);
                 if (isStandalone()) System.out.println(" • " + msg);
             }
             if (filesExcluded.size() > 5) {
@@ -5198,11 +5198,17 @@ public class I2PSnarkServlet extends BasicServlet {
 
     /**
      * This is for a full URL. For a path only, use encodePath().
+     * <p>
+     * Every caller embeds the result inside a double-quoted href attribute, so a
+     * literal quote would close the attribute and let the rest of the URL become
+     * new attributes - a stored XSS through any URL the user or a tracker supplied.
+     *
      * @since 0.8.13
      */
     private static String urlEncode(String s) {
         return s.replace(";", "%3B").replace("&", "&amp;").replace(" ", "%20")
                 .replace("<", "%3C").replace(">", "%3E")
+                .replace("\"", "%22")
                 .replace("[", "%5B").replace("]", "%5D");
     }
 

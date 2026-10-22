@@ -512,7 +512,7 @@ public class Storage implements Closeable {
     private void addUnreadable(File f, String reason) {
         _unreadableFiles.add(f.getPath());
         if (_log.shouldWarn()) {
-            _log.warn("[I2PSnark] Skipping '" + f + "' -> " + reason);
+            _log.warn("[Snark] Skipping '" + f + "' -> " + reason);
         }
     }
 
@@ -673,7 +673,7 @@ public class Storage implements Closeable {
             File[] files = f.listFiles();
             if (files == null) {
                 if (_log.shouldWarn()) {
-                    _log.warn("[I2PSnark] WARNING: Skipping '" + f + "' -> Not a normal file!");
+                    _log.warn("[Snark] WARNING: Skipping '" + f + "' -> Not a normal file!");
                 }
                 return;
             }
@@ -1111,7 +1111,7 @@ public class Storage implements Closeable {
         if (files == null) {
             // Create base as file.
             if (_log.shouldInfo()) {
-                _log.info("[I2PSnark] Creating/checking file: " + _base);
+                _log.info("[Snark] Creating/checking file: " + _base);
             }
             File active = _base;
             File workFile = null;
@@ -1121,7 +1121,7 @@ public class Storage implements Closeable {
                 workFile = new File(_stagingBase, _base.getName());
                 if (_base.exists() && _base.length() == metainfo.getTotalLength()) {
                     if (!workFile.delete()) {
-                        _log.warn("[I2PSnark] Unable to delete stale file: " + workFile);
+                        _log.warn("[Snark] Unable to delete stale file: " + workFile);
                     }
                     // already in the data dir; the movedToDataDir flag must reflect that
                     workFile = null;
@@ -1157,7 +1157,7 @@ public class Storage implements Closeable {
         } else {
             // Create base as dir.
             if (_log.shouldInfo()) {
-                _log.info("[I2PSnark] Creating/checking directory: " + _base);
+                _log.info("[Snark] Creating/checking directory: " + _base);
             }
             if (!_base.mkdir() && !_base.isDirectory()) {
                 throw new IOException("Could not create directory " + _base);
@@ -1201,7 +1201,7 @@ public class Storage implements Closeable {
                     File stagingFile = buildFilePath(_stagingBase, path);
                     if (finalFile.exists() && finalFile.length() == len) {
                         if (!stagingFile.delete()) {
-                            _log.warn("[I2PSnark] Unable to delete stale file: " + stagingFile);
+                            _log.warn("[Snark] Unable to delete stale file: " + stagingFile);
                         }
                     } else {
                         if (!_stagingBase.mkdir() && !_stagingBase.isDirectory()) {
@@ -1248,7 +1248,7 @@ public class Storage implements Closeable {
                 _probablyComplete = complete();
                 if (_log.shouldInfo())
                     _log.info(
-                            "[I2PSnark] Found saved state and files unchanged, skipping integrity"
+                            "[Snark] Found saved state and files unchanged, skipping integrity"
                                 + " check");
             } else {
                 // Some files changed since the save: re-verify only the pieces overlapping those
@@ -1256,7 +1256,7 @@ public class Storage implements Closeable {
                 changed = true;
                 if (_log.shouldInfo()) {
                     _log.info(
-                            "[I2PSnark] Found saved state, rechecking "
+                            "[Snark] Found saved state, rechecking "
                                 + (trusted.size() - Collections.frequency(trusted, Boolean.TRUE))
                                 + " of "
                                 + trusted.size()
@@ -1275,7 +1275,7 @@ public class Storage implements Closeable {
             // the following sets the needed variable
             changed = true;
             if (_log.shouldInfo()) {
-                _log.info("[I2PSnark] Forcing integrity check...");
+                _log.info("[Snark] Forcing integrity check...");
             }
             checkCreateFiles(false);
         }
@@ -1284,13 +1284,13 @@ public class Storage implements Closeable {
         checkFileCompletions();
         if (complete()) {
             if (_log.shouldInfo()) {
-                _log.info("[I2PSnark] Torrent is complete");
+                _log.info("[Snark] Torrent is complete");
             }
         } else {
             // fixme saved priorities
             if (_log.shouldInfo()) {
                 _log.info(
-                        "[I2PSnark] Still need "
+                        "[Snark] Still need "
                                 + needed
                                 + " out of "
                                 + metainfo.getPieces()
@@ -1599,7 +1599,7 @@ public class Storage implements Closeable {
                 // If preserveFileNames is on and the original name differed from the filtered
                 // name, the file was created with the safe fallback name above. Log a warning.
                 if (_preserveFileNames && !origName.equals(name)) {
-                    String msg = "[I2PSnark] Filename contained illegal characters, using safe fallback: " + origName + " -> " + name;
+                    String msg = "[Snark] Filename contained illegal characters, using safe fallback: " + origName + " -> " + name;
                     _log.warn(msg);
                     listener.addMessage(msg);
                 }
@@ -1771,10 +1771,10 @@ public class Storage implements Closeable {
         // remove any empty dirs too; only the torrent's own subdir is touched
         if (FileUtil.rmdir(_stagingBase, false)) {
             if (_log.shouldInfo()) {
-                _log.info("[I2PSnark] Deleted staging data: " + _stagingBase);
+                _log.info("[Snark] Deleted staging data: " + _stagingBase);
             }
         } else if (_log.shouldWarn()) {
-            _log.warn("[I2PSnark] Unable to delete staging data: " + _stagingBase);
+            _log.warn("[Snark] Unable to delete staging data: " + _stagingBase);
         }
     }
 
@@ -2134,7 +2134,7 @@ public class Storage implements Closeable {
             try {
                 tf.closeRAF();
             } catch (IOException ioe) {
-                _log.error("[I2PSnark] Error closing " + tf, ioe);
+                _log.error("[Snark] Error closing " + tf, ioe);
             }
         }
         changed = false;
@@ -2173,7 +2173,7 @@ public class Storage implements Closeable {
                 System.out.println(" • " + msg);
             }
             if (_log.shouldWarn()) {
-                _log.warn("[I2PSnark] " + msg, oom);
+                _log.warn("[Snark] " + msg, oom);
             }
             return null;
         }
@@ -2228,7 +2228,7 @@ public class Storage implements Closeable {
                         if (tf.priority >= 0) {
                             if (_log.shouldInfo()) {
                                 String msg = "Pre-allocating file: " + tf + "...";
-                                _log.info("[I2PSnark] " + msg);
+                                _log.info("[Snark] " + msg);
                                 if (!ctx.isRouterContext()) {
                                     System.out.println(" • " + msg);
                                 }
@@ -2243,7 +2243,7 @@ public class Storage implements Closeable {
                                     "Not pre-allocating file: "
                                             + tf
                                             + " -> Disabled by configuration";
-                            _log.info("[I2PSnark] " + msg);
+                            _log.info("[Snark] " + msg);
                             if (!ctx.isRouterContext()) {
                                 System.out.println(" • " + msg);
                             }
@@ -2305,7 +2305,7 @@ public class Storage implements Closeable {
                 // reopen.
                 if (_log.shouldWarn()) {
                     _log.warn(
-                            "[I2PSnark] Write failed on piece "
+                            "[Snark] Write failed on piece "
                                     + piece
                                     + " for "
                                     + metainfo.getName()
@@ -2348,7 +2348,7 @@ public class Storage implements Closeable {
             if (needed > 0) {
                 if (listener != null) listener.setWantedPieces(this);
                 if (_log.shouldWarn()) {
-                    _log.warn("[I2PSnark] WARNING: Not really done, missing " + needed + " pieces");
+                    _log.warn("[Snark] WARNING: Not really done, missing " + needed + " pieces");
                 }
             }
         }
@@ -2469,7 +2469,7 @@ public class Storage implements Closeable {
             }
             if (_log.shouldWarn()) {
                 _log.warn(
-                        "[I2PSnark] Giving up copying "
+                        "[Snark] Giving up copying "
                                 + tf.name
                                 + " to the data directory after "
                                 + MAX_COPY_RETRIES
@@ -2516,20 +2516,20 @@ public class Storage implements Closeable {
             }
             synchronized (tf) {
                 if (!workFile.delete()) {
-                    _log.warn("[I2PSnark] Unable to delete staging file: " + workFile);
+                    _log.warn("[Snark] Unable to delete staging file: " + workFile);
                 }
                 tf.RAFfile = finalFile;
                 tf.isSparse = false;
                 tf.movedToDataDir = true;
             }
             if (_log.shouldInfo()) {
-                _log.info("[I2PSnark] Moved " + tf.name + " to " + finalFile);
+                _log.info("[Snark] Moved " + tf.name + " to " + finalFile);
             }
             return true;
         } catch (IOException ioe) {
             if (_log.shouldWarn()) {
                 _log.warn(
-                        "[I2PSnark] Error copying "
+                        "[Snark] Error copying "
                                 + tf.name
                                 + " to the data directory: "
                                 + ioe);
@@ -2559,7 +2559,7 @@ public class Storage implements Closeable {
             return true;
         } catch (IOException ioe) {
             if (_log.shouldWarn()) {
-                _log.warn("[I2PSnark] Error copying " + src + " to " + dst + ": " + ioe);
+                _log.warn("[Snark] Error copying " + src + " to " + dst + ": " + ioe);
             }
             return false;
         } finally {
@@ -2920,7 +2920,7 @@ public class Storage implements Closeable {
                 }
                 if (forceRW && !RAFfile.canWrite() && !RAFfile.setWritable(true)) {
                     if (_log.shouldWarn()) {
-                        _log.warn("[I2PSnark] Unable to make file writable: " + RAFfile.getAbsolutePath());
+                        _log.warn("[Snark] Unable to make file writable: " + RAFfile.getAbsolutePath());
                     }
                 }
                 openRAF(false, forceRW);
@@ -2994,12 +2994,12 @@ public class Storage implements Closeable {
                 isSparse = true;
             } else if (_log.shouldWarn()) {
                 if (!shouldPreallocate) {
-                    _log.warn("[I2PSnark] Not pre-allocating files -> Disabled by configuration");
+                    _log.warn("[Snark] Not pre-allocating files -> Disabled by configuration");
                 } else if (_isWindows) {
-                    _log.warn("[I2PSnark] Not pre-allocating files -> Windows OS detected");
+                    _log.warn("[Snark] Not pre-allocating files -> Windows OS detected");
                 } else if (_isARM) {
                     _log.warn(
-                            "[I2PSnark] Not pre-allocating files -> ARM processor detected,"
+                            "[Snark] Not pre-allocating files -> ARM processor detected,"
                                 + " assuming solid state storage");
                 }
             }
