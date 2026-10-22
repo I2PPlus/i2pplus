@@ -126,7 +126,24 @@ build_jetty() {
   if [ ! -f "${jettylib}/jetty-util.jar" ] && [ -f "${distro}/lib/jetty-util-9.3.30.v20211001.jar" ]; then
     cp "${distro}/lib/jetty-util-9.3.30.v20211001.jar" "${jettylib}/jetty-util.jar"
   fi
-  javac --release 8 -Xlint:-options -cp "$cp" -d "$out" "${REPO_ROOT}/apps/jetty/java/src/net/i2p/servlet/util/ServletUtil.java" "${REPO_ROOT}/apps/jetty/java/src/net/i2p/servlet/util/WriterOutputStream.java" "${REPO_ROOT}/apps/jetty/java/src/net/i2p/servlet/util/JspC.java" "${REPO_ROOT}/apps/jetty/java/src/net/i2p/servlet/I2PDefaultServlet.java" "${REPO_ROOT}/apps/jetty/java/src/net/i2p/servlet/WebAppProviderConfiguration.java" "${REPO_ROOT}/apps/jetty/java/src/net/i2p/servlet/RequestWrapper.java" "${REPO_ROOT}/apps/jetty/java/src/net/i2p/servlet/ErrorServlet.java" "${REPO_ROOT}/apps/jetty/java/src/net/i2p/servlet/filters/XSSRequestWrapper.java" "${REPO_ROOT}/apps/jetty/java/src/net/i2p/servlet/filters/XI2PLocationFilter.java" "${REPO_ROOT}/apps/jetty/java/src/net/i2p/servlet/filters/XSSFilter.java" "${REPO_ROOT}/apps/jetty/java/src/net/i2p/jetty/JettyXmlConfigurationParser.java" "${REPO_ROOT}/apps/jetty/java/src/net/i2p/jetty/I2PRequestLog.java" "${REPO_ROOT}/apps/jetty/java/src/net/i2p/jetty/I2PLogger.java" "${REPO_ROOT}/apps/jetty/java/src/net/i2p/jetty/JettyStart.java" 2>&1
+  # Pick a javac release flag this compiler actually understands. `--release`
+  # (JDK 9+) pins the bootclasspath to the target platform; on JDK 8 only
+  # -source/-target are available. Probing beats assuming a JDK version, and a
+  # compiler that understands neither must fail here rather than at javac.
+  local javac_help
+  javac_help=$(javac --help 2>&1 || true)
+  if printf '%s\n' "$javac_help" | grep -q -- '--release'; then
+    JAVAC_RELEASE="--release 8"
+  elif printf '%s\n' "$javac_help" | grep -q -- '-source'; then
+    JAVAC_RELEASE="-source 8 -target 8"
+  else
+    JAVAC_RELEASE=""
+  fi
+  if [ -z "${JAVAC_RELEASE:-}" ]; then
+    echo "ERROR: no compatible javac release flag found" >&2
+    return 1
+  fi
+  javac $JAVAC_RELEASE -Xlint:-options -cp "$cp" -d "$out" "${REPO_ROOT}/apps/jetty/java/src/net/i2p/servlet/util/ServletUtil.java" "${REPO_ROOT}/apps/jetty/java/src/net/i2p/servlet/util/WriterOutputStream.java" "${REPO_ROOT}/apps/jetty/java/src/net/i2p/servlet/util/JspC.java" "${REPO_ROOT}/apps/jetty/java/src/net/i2p/servlet/I2PDefaultServlet.java" "${REPO_ROOT}/apps/jetty/java/src/net/i2p/servlet/WebAppProviderConfiguration.java" "${REPO_ROOT}/apps/jetty/java/src/net/i2p/servlet/RequestWrapper.java" "${REPO_ROOT}/apps/jetty/java/src/net/i2p/servlet/ErrorServlet.java" "${REPO_ROOT}/apps/jetty/java/src/net/i2p/servlet/filters/XSSRequestWrapper.java" "${REPO_ROOT}/apps/jetty/java/src/net/i2p/servlet/filters/XI2PLocationFilter.java" "${REPO_ROOT}/apps/jetty/java/src/net/i2p/servlet/filters/XSSFilter.java" "${REPO_ROOT}/apps/jetty/java/src/net/i2p/jetty/JettyXmlConfigurationParser.java" "${REPO_ROOT}/apps/jetty/java/src/net/i2p/jetty/I2PRequestLog.java" "${REPO_ROOT}/apps/jetty/java/src/net/i2p/jetty/I2PLogger.java" "${REPO_ROOT}/apps/jetty/java/src/net/i2p/jetty/JettyStart.java" 2>&1
   local src_d="$out"
   (cd "$src_d" && jar cf jetty-i2p.jar net/)
   # Copy needed jetty lib jars to build dir for other modules
