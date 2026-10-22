@@ -20,6 +20,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.Executor;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.RejectedExecutionException;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -50,6 +51,7 @@ class SAMHandlerPool {
     private final Selector _selector;
     private final ThreadPoolExecutor _workers;
     private final ThreadPoolExecutor _connectors;
+    private final ThreadPoolExecutor _teardowns;
     private final Map<SocketChannel, ConnContext> _contexts;
     private volatile boolean _running;
     private I2PAppThread _selectThread;
@@ -134,6 +136,29 @@ class SAMHandlerPool {
                     return t;
                 }
             });
+        // Handler teardowns get their own pool. A teardown runs
+        // SAMv3Handler.die(), which waits up to 10 seconds for a session's
+        // threads to exit, and the connector threads are the ones a user-facing
+        // STREAM CONNECT or FORWARD is waiting on - sharing them let four slow
+        // sessions block every new connection behind them. The queue is
+        // unbounded, as for the connectors, so the only rejection the selector
+        // thread can see is after stop(), and the depth is bounded by how many
+        // clients the pool is holding sockets for.
+        _teardowns = new ThreadPoolExecutor(
+            2, 2,
+            60, TimeUnit.SECONDS,
+            new LinkedBlockingQueue<Runnable>(),
+            new java.util.concurrent.ThreadFactory() {
+                private final AtomicInteger _count = new AtomicInteger();
+                /**
+                 * Starts a named daemon thread for a handler teardown.
+                 */
+                public Thread newThread(Runnable r) {
+                    Thread t = new Thread(r, "SAM-Teardown." + _count.incrementAndGet());
+                    t.setDaemon(true);
+                    return t;
+                }
+            });
         _contexts = new HashMap<SocketChannel, ConnContext>();
     }
 
@@ -158,6 +183,51 @@ class SAMHandlerPool {
         } catch (IOException ioe) {
             _log.error("Cannot configure non-blocking", ioe);
         }
+    }
+
+    /**
+     * Hand a handler teardown to a pool that is allowed to block, instead of
+     * running it wherever the disconnect was noticed.
+     * <p>
+     * stopHandling() runs SAMv3Handler.die(), which waits up to 10 seconds for a
+     * session's threads to exit. The selector thread is shared by every pooled
+     * connection, so running a teardown on it stalls all of them behind one slow
+     * client. Extracted so the hand-off itself is testable.
+     *
+     * @param pool the executor to hand the teardown to
+     * @param teardown the teardown to run
+     * @return true if the pool accepted it; false if it was rejected, in which
+     *         case the caller must still run the teardown somewhere
+     * @since 0.9.72+
+     */
+    static boolean queueTeardown(Executor pool, Runnable teardown) {
+        try {
+            pool.execute(teardown);
+            return true;
+        } catch (RejectedExecutionException e) {
+            return false;
+        }
+    }
+
+    /**
+     * Run a handler teardown off the thread that noticed the disconnect, on the
+     * pool built for that work - not on the connector pool, whose four threads
+     * are what a user-facing STREAM CONNECT or FORWARD waits on.
+     * <p>
+     * Falls back to running the teardown on the caller's thread only when the
+     * teardown pool has already shut down and there is nowhere left to hand it
+     * to. See {@link #queueTeardown(Executor, Runnable)} for why the hand-off
+     * matters.
+     *
+     * @param teardown the teardown to run
+     * @since 0.9.72+
+     */
+    void runTeardown(Runnable teardown) {
+        if (queueTeardown(_teardowns, teardown))
+            return;
+        if (_log.shouldWarn())
+            _log.warn("Teardown rejected -> Closing handler on the selector thread");
+        teardown.run();
     }
 
     /**
@@ -196,6 +266,7 @@ class SAMHandlerPool {
             _selectThread.interrupt();
         _workers.shutdown();
         _connectors.shutdown();
+        _teardowns.shutdown();
         try {
             _workers.awaitTermination(5, TimeUnit.SECONDS);
         } catch (InterruptedException ie) {
@@ -206,6 +277,12 @@ class SAMHandlerPool {
             _connectors.awaitTermination(5, TimeUnit.SECONDS);
         } catch (InterruptedException ie) {
             _connectors.shutdownNow();
+            Thread.currentThread().interrupt();
+        }
+        try {
+            _teardowns.awaitTermination(5, TimeUnit.SECONDS);
+        } catch (InterruptedException ie) {
+            _teardowns.shutdownNow();
             Thread.currentThread().interrupt();
         }
         try {
@@ -252,10 +329,27 @@ class SAMHandlerPool {
      * Limits concurrent connects to prevent overwhelming the streaming layer
      * while keeping pool workers unblocked. Excess CONNECTs queue up and are
      * dispatched as connector threads become available.
+     * <p>
+     * Handler teardowns do not run here - they have their own pool, because a
+     * teardown waits up to 10 seconds for a session's threads and would take a
+     * connect slot with it.
+     *
      * @return the shared pool of four daemon threads that run blocking STREAM CONNECT operations
      * @since 0.9.70+
      */
     ThreadPoolExecutor getConnectors() { return _connectors; }
+
+    /**
+     * Thread pool that runs handler teardowns off the selector thread.
+     * Fixed pool of 2 daemon threads with an unbounded work queue, sized apart
+     * from the connector pool so a slow die() cannot stall new connections.
+     * runTeardown() hands its teardowns here, so this is the one place that
+     * pairing is stated.
+     *
+     * @return the pool teardowns are handed to
+     * @since 0.9.72+
+     */
+    ThreadPoolExecutor getTeardowns() { return _teardowns; }
 
     /**
      * NIO selector loop. Reads available data from all registered handler
@@ -326,7 +420,7 @@ class SAMHandlerPool {
                     for (ConnContext ctx : toDisconnect) {
                         String reason = ctx.handler.sendPorts ? "PONG timeout" : "command timeout, bye";
                         ctx.handler.writeString(SAMv1Handler.SESSION_ERROR, reason);
-                        ctx.handler.stopHandling();
+                        closeOffSelector(ctx);
                     }
                 } catch (IOException ioe) {
                     if (_running) _log.error("Selector error", ioe);
@@ -395,7 +489,7 @@ class SAMHandlerPool {
                 if (_log.shouldWarn())
                     _log.warn("Pool overloaded, disconnecting client");
                 ctx.handler.writeString("SESSION STATUS RESULT=I2P_ERROR MESSAGE=\"server busy\"\n");
-                ctx.handler.stopHandling();
+                closeOffSelector(ctx);
             }
         }
 
@@ -433,7 +527,15 @@ class SAMHandlerPool {
             }
             if (_log.shouldWarn())
                 _log.warn("Disconnecting SAM client: " + reason);
-            ctx.handler.stopHandling();
+            closeOffSelector(ctx);
+        }
+
+        /**
+         * Hand this context's teardown to the pool built for that work, so the
+         * selector thread stays free for the other connections it serves.
+         */
+        private void closeOffSelector(ConnContext ctx) {
+            runTeardown(() -> ctx.handler.stopHandling());
         }
     }
 }
