@@ -177,11 +177,35 @@ public abstract class TransportImpl implements Transport {
      * @since 0.9.70+
      */
     public static void setSendPoolCapacity(int capacity) {
+        SEND_POOL_CAPACITY = Math.max(sendPoolCapacityMin(),
+                                      Math.min(sendPoolCapacityMax(), capacity));
+    }
+
+    /**
+     * The smallest capacity {@link #setSendPoolCapacity} accepts.
+     *
+     * @return half the platform default, in queued messages
+     * @since 0.9.72+
+     */
+    public static int sendPoolCapacityMin() {
+        return (SystemVersion.isSlow() ? 64 : 128) / 2;
+    }
+
+    /**
+     * The largest capacity {@link #setSendPoolCapacity} accepts.
+     *
+     * <p>Public because the auto-tuner declares a range for this pool and must not
+     * propose a value the setter silently rewrites back — that reads as a param that
+     * will not take effect.
+     *
+     * @return the core-scaled ceiling, in queued messages
+     * @since 0.9.72+
+     */
+    public static int sendPoolCapacityMax() {
         int def = SystemVersion.isSlow() ? 64 : 128;
         // Scale max with cores: more connections = more queued sends
         // 4 cores → 2048, 8 cores → 4096, 16 cores → 8192
-        int max = Math.max(def * 16, SystemVersion.getCores() * 512);
-        SEND_POOL_CAPACITY = Math.max(def / 2, Math.min(max, capacity));
+        return Math.max(def * 16, SystemVersion.getCores() * 512);
     }
 
     /**

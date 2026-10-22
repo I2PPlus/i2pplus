@@ -569,9 +569,29 @@ public class RouterThrottleImpl implements RouterThrottle {
      */
     public static int getThrottleRejectExponent(RouterContext ctx) {
         int tuned = _tunedThrottleRejectExponent;
-        if (tuned >= 0) return Math.max(3, Math.min(20, tuned));
-        return Math.max(3, Math.min(20, ctx.getProperty("router.throttleRejectExponent", 10)));
+        int exp = tuned >= 0 ? tuned : ctx.getProperty("router.throttleRejectExponent", 10);
+        return Math.max(throttleRejectExponentMin(), Math.min(throttleRejectExponentMax(), exp));
     }
+
+    /**
+     * The lowest rejection exponent the throttle applies.
+     *
+     * <p>Public because the auto-tuner declares a range for this exponent and must
+     * not propose a value the read path clamps away: the target lands back on the
+     * current value and the param reads as one that will not take effect.
+     *
+     * @return the lower end of the validity window
+     * @since 0.9.72+
+     */
+    public static int throttleRejectExponentMin() { return 3; }
+
+    /**
+     * The highest rejection exponent the throttle applies.
+     *
+     * @return the upper end of the validity window
+     * @since 0.9.72+
+     */
+    public static int throttleRejectExponentMax() { return 20; }
 
     private int getMaxProcessingTime() {
         int tuned = _tunedMaxProcessingTime;

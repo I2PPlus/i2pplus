@@ -552,6 +552,18 @@ public class Tuner extends SimpleTimer2.TimedEvent {
     /** Max time (ms) a message may sit in the outbound dispatch queue before being dropped. */
     private static volatile int maxDispatchAgeMs = 3000;
 
+    /**
+     * The last autotuned CoDel target and interval, in ms. The queues carry the
+     * value per instance and offer no reading, and the tuning path never writes the
+     * {@code router.codelTarget} / {@code router.codelInterval} config properties,
+     * so reading those back reported a value that never moved after an apply.
+     * Like {@link #untestedMultiplier} these track the last autotuned setting only.
+     * -1 = no tuned value yet; use the config-or-default path.
+     * @since 0.9.72+
+     */
+    private static volatile int codelTargetMs = -1;
+    private static volatile int codelIntervalMs = -1;
+
     /** Priority for I/O handler threads — boosted under load, reduced when idle. */
     private static volatile int handlerThreadPriority = Thread.NORM_PRIORITY;
 
@@ -646,8 +658,28 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      * @since 0.9.70+
      */
     public static void setInternalQueueSize(int size) {
-        int def = SystemVersion.isSlow() ? 256 : 512;
-        internalQueueSize = Math.max(def / 2, Math.min(def * 4, size));
+        internalQueueSize = Math.max(internalQueueSizeMin(),
+                                     Math.min(internalQueueSizeMax(), size));
+    }
+
+    /**
+     * The smallest queue size {@link #setInternalQueueSize} accepts.
+     *
+     * @return half the platform default, in messages
+     * @since 0.9.72+
+     */
+    static int internalQueueSizeMin() {
+        return (SystemVersion.isSlow() ? 256 : 512) / 2;
+    }
+
+    /**
+     * The largest queue size {@link #setInternalQueueSize} accepts.
+     *
+     * @return four times the platform default, in messages
+     * @since 0.9.72+
+     */
+    static int internalQueueSizeMax() {
+        return (SystemVersion.isSlow() ? 256 : 512) * 4;
     }
 
     /** Subsystem labels for grouping in the UI. */
@@ -687,6 +719,20 @@ public class Tuner extends SimpleTimer2.TimedEvent {
     private static int memoryDerivedInitMsgMax() {
         return Math.max(64, Math.min(1024, (int) (SystemVersion.getMaxMemory() / (8 * 1024 * 1024))));
     }
+
+    /**
+     * The ceiling the tuner may propose for udp.peer.initConcurrentMsgs.
+     *
+     * <p>Capped by what {@link net.i2p.router.transport.udp.PeerState#setInitConcurrentMsgs}
+     * itself accepts: a target above that is rewritten back to the current value and
+     * then reads forever as a param that will not take effect.
+     *
+     * @return the memory-derived ceiling, never past the setter's own 256
+     * @since 0.9.72+
+     */
+    static int initConcurrentMsgsMax() {
+        return Math.min(memoryDerivedInitMsgMax(), 256);
+    }
     /**
      * Memory-derived ceiling for the I2PTunnel client worker pool and its admission
      * gate. A thread-per-connection {@link java.util.concurrent.SynchronousQueue} pool
@@ -706,6 +752,19 @@ public class Tuner extends SimpleTimer2.TimedEvent {
     private static final int MLKEM_FACTOR = Math.max(MEM_FACTOR, CORE_FACTOR);
     private static final int MLKEM_PRECALC_MIN = Math.max(512, 8 * MLKEM_FACTOR);
     private static final int MLKEM_PRECALC_MAX = Math.max(16384, 64 * MLKEM_FACTOR);
+
+    /**
+     * The ceiling the tuner may propose for crypto.mlkem.precalcMin.
+     *
+     * <p>The factory caps the pool at its byte budget rather than at its hard cap, so
+     * a floor above that is rewritten back on the way in and the param looks stuck.
+     *
+     * @return the declared ceiling, never past {@code MLKEMKeyFactory.getByteCap()}
+     * @since 0.9.72+
+     */
+    static int mlkemPreCalcMax() {
+        return Math.min(MLKEM_PRECALC_MAX, net.i2p.router.crypto.pqc.MLKEMKeyFactory.getByteCap());
+    }
     /** X25519/EDH precalc — each pair ~64 bytes, scale with cores and memory. */
     private static final int XDH_FACTOR = Math.max(MEM_FACTOR, CORE_FACTOR);
     private static final int XDH_PRECALC_MIN = Math.max(256, 128 * XDH_FACTOR);
@@ -2896,6 +2955,166 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         }
     }
 
+    /** Methods whose reflective call has already been reported, keyed class#name. */
+    private static final Set<String> _reflectorFailures =
+        new java.util.concurrent.ConcurrentHashMap<String, Boolean>().keySet(true);
+
+    /**
+     * Find a static method reflectively and make it callable.
+     *
+     * <p>Two properties of the targets break the obvious lookup, and both fail
+     * quietly. The member may be package-private, which {@link Class#getMethod}
+     * does not see at all, and it may sit on a package-private class, which makes
+     * even a public member throw IllegalAccessException at invoke time. Streaming's
+     * {@code ConnectionOptions} and {@code Connection} are non-public classes with
+     * public static members, so a getMethod-based call site took the first branch
+     * and a bare invoke took the second: either way the param tuned nothing while
+     * its getter handed back a fallback that looked like a live reading.
+     *
+     * <p>Superclasses are walked because the members are not all declared on the
+     * class named at the call site.
+     *
+     * @param c the class to search
+     * @param name the static method name
+     * @param args the parameter types, empty for a getter
+     * @return the method, already made accessible
+     * @throws NoSuchMethodException if no class in the hierarchy declares it
+     * @since 0.9.72+
+     */
+    static Method findStaticMethod(Class<?> c, String name, Class<?>... args)
+                                                            throws NoSuchMethodException {
+        for (Class<?> k = c; k != null; k = k.getSuperclass()) {
+            try {
+                Method m = k.getDeclaredMethod(name, args);
+                // setAccessible rather than trySetAccessible: the source level is 8.
+                // If the boundary cannot be crossed the exception reaches the call
+                // site's Throwable handler, which reports it once.
+                m.setAccessible(true);
+                return m;
+            } catch (NoSuchMethodException e) {
+                // keep walking
+            }
+        }
+        throw new NoSuchMethodException(c.getName() + '.' + name);
+    }
+
+    /**
+     * Report a reflective failure once per method.
+     *
+     * <p>A getter returning its sentinel is indistinguishable from "unknown" at the
+     * call site, where it becomes a plausible-looking fallback, so a swallowed
+     * exception here reads downstream as a healthy runtime reading.
+     *
+     * @param c the class the call was made against
+     * @param name the method that failed
+     * @param t what went wrong
+     * @since 0.9.72+
+     */
+    static void reportReflectorFailure(Class<?> c, String name, Throwable t) {
+        String key = c != null ? c.getName() + '#' + name : name;
+        if (_reflectorFailures.add(key)) {
+            // Resolved lazily and only on the failure path: holding a Log in a
+            // static field would pull the log manager in at class-load time.
+            I2PAppContext.getGlobalContext().logManager().getLog(Tuner.class)
+                .warn("Auto-tuning call " + key + " failed -> Ignoring it now"
+                      + "\n* Any param it backs cannot be auto-tuned", t);
+        }
+    }
+
+    /**
+     * Invoke a static int getter, or return {@code fallback} if it cannot be reached.
+     *
+     * @param c the class to call, null when it is not loaded yet
+     * @param name the static method name
+     * @param fallback the value to return when the call is unavailable
+     * @return the value read, or fallback
+     * @since 0.9.72+
+     */
+    static int callStaticInt(Class<?> c, String name, int fallback) {
+        if (c == null) return fallback;
+        try {
+            Object rv = findStaticMethod(c, name).invoke(null);
+            return rv instanceof Integer ? (Integer) rv : fallback;
+        } catch (Throwable t) {
+            reportReflectorFailure(c, name, t);
+            return fallback;
+        }
+    }
+
+    /**
+     * Invoke a static int setter, reporting a call that cannot be made.
+     *
+     * @param c the class to call, null when it is not loaded yet
+     * @param name the static method name
+     * @param value the value to hand over
+     * @since 0.9.72+
+     */
+    static void callStaticSetInt(Class<?> c, String name, int value) {
+        if (c == null) return;
+        try {
+            findStaticMethod(c, name, int.class).invoke(null, value);
+        } catch (Throwable t) {
+            reportReflectorFailure(c, name, t);
+        }
+    }
+
+    /**
+     * Invoke a static double getter, or return {@code fallback} if it cannot be reached.
+     *
+     * @param c the class to call, null when it is not loaded yet
+     * @param name the static method name
+     * @param fallback the value to return when the call is unavailable
+     * @return the value read, or fallback
+     * @since 0.9.72+
+     */
+    static double callStaticDouble(Class<?> c, String name, double fallback) {
+        if (c == null) return fallback;
+        try {
+            Object rv = findStaticMethod(c, name).invoke(null);
+            return rv instanceof Double ? (Double) rv : fallback;
+        } catch (Throwable t) {
+            reportReflectorFailure(c, name, t);
+            return fallback;
+        }
+    }
+
+    /**
+     * Invoke a static long getter, or return {@code fallback} if it cannot be reached.
+     *
+     * @param c the class to call, null when it is not loaded yet
+     * @param name the static method name
+     * @param fallback the value to return when the call is unavailable
+     * @return the value read, or fallback
+     * @since 0.9.72+
+     */
+    static long callStaticLong(Class<?> c, String name, long fallback) {
+        if (c == null) return fallback;
+        try {
+            Object rv = findStaticMethod(c, name).invoke(null);
+            return rv instanceof Long ? (Long) rv : fallback;
+        } catch (Throwable t) {
+            reportReflectorFailure(c, name, t);
+            return fallback;
+        }
+    }
+
+    /**
+     * Invoke a static long setter, reporting a call that cannot be made.
+     *
+     * @param c the class to call, null when it is not loaded yet
+     * @param name the static method name
+     * @param value the value to hand over
+     * @since 0.9.72+
+     */
+    static void callStaticSetLong(Class<?> c, String name, long value) {
+        if (c == null) return;
+        try {
+            findStaticMethod(c, name, long.class).invoke(null, value);
+        } catch (Throwable t) {
+            reportReflectorFailure(c, name, t);
+        }
+    }
+
     /**
      * Reflection helper for calling streaming class methods across module boundaries.
      * <p>The streaming module depends on router, not vice versa, so we use
@@ -2923,24 +3142,12 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
         /** Call a static int getter via reflection. */
         static int invokeGetInt(String methodName) {
-            Class<?> c = getCLS();
-            if (c == null) return -1;
-            try {
-                return (Integer) c.getMethod(methodName).invoke(null);
-            } catch (Exception e) {
-                return -1;
-            }
+            return callStaticInt(getCLS(), methodName, -1);
         }
 
         /** Call a static int setter via reflection. */
         static void invokeSetInt(String methodName, int value) {
-            Class<?> c = getCLS();
-            if (c == null) return;
-            try {
-                c.getMethod(methodName, int.class).invoke(null, value);
-            } catch (Exception e) {
-                // ignore
-            }
+            callStaticSetInt(getCLS(), methodName, value);
         }
     }
 
@@ -2979,109 +3186,35 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             }
         }
 
-        /** Method name for reflection-based config invocation. */
+        /**
+         * Call a getter on ConnectionOptions via reflection.
+         *
+         * <p>ConnectionOptions is a package-private class with public static
+         * members, so this cannot go through getMethod: the lookup succeeds and the
+         * invoke then throws IllegalAccessException, which used to be turned into
+         * the -1 sentinel and read downstream as a live reading.
+         */
         static int invokeConnectionOptionsInt(String methodName) {
             resolve();
-            if (connectionOptionsCls == null) return -1;
-            try {
-                return (Integer) connectionOptionsCls.getMethod(methodName).invoke(null);
-            } catch (Exception e) {
-                return -1;
-            }
+            return callStaticInt(connectionOptionsCls, methodName, -1);
         }
 
         /** Call a setter on ConnectionOptions via reflection. */
         static void invokeConnectionOptionsSet(String methodName, int value) {
             resolve();
-            if (connectionOptionsCls == null) return;
-            try {
-                connectionOptionsCls.getMethod(methodName, int.class).invoke(null, value);
-            } catch (Exception e) {
-                // ignore
-            }
+            callStaticSetInt(connectionOptionsCls, methodName, value);
         }
-
-        /**
-         * Whether a failure has already been reported for a reflector method, so a
-         * permanent one is logged once rather than on every tuning cycle.
-         */
-        private static final Set<String> reported = new java.util.concurrent.ConcurrentHashMap<String, Boolean>().keySet(true);
 
         /** Call a getter on Connection via reflection. */
         static int invokeConnectionInt(String methodName) {
             resolve();
-            if (connectionCls == null) return -1;
-            try {
-                Method m = connectionCls.getDeclaredMethod(methodName);
-                makeAccessible(m);
-                return (Integer) m.invoke(null);
-            } catch (Throwable t) {
-                reportReflectorFailure(methodName, t);
-                return -1;
-            }
+            return callStaticInt(connectionCls, methodName, -1);
         }
 
         /** Call a setter on Connection via reflection. */
         static void invokeConnectionSet(String methodName, int value) {
             resolve();
-            if (connectionCls == null) return;
-            try {
-                Method m = connectionCls.getDeclaredMethod(methodName, int.class);
-                makeAccessible(m);
-                m.invoke(null, value);
-            } catch (Throwable t) {
-                reportReflectorFailure(methodName, t);
-            }
-        }
-
-        /**
-         * Permit the reflective call.
-         *
-         * <p>The member being reached is public static on a public class, so on a
-         * single classpath nothing should need this. It is needed anyway: the
-         * streaming jar is reached across a boundary the default access check does
-         * not cross, and the resulting IllegalAccessException is indistinguishable
-         * from a missing method at the call site. Four streaming params - max window,
-         * max retransmissions, max SYN resends and connect timeout multiplier - have
-         * silently done nothing for the life of that check.
-         *
-         * <p>The lookup reaching this uses {@link Class#getDeclaredMethod} rather
-         * than {@link Class#getMethod}, because the members being called are not all
-         * public - the streaming module declares some of them package-private, and
-         * getMethod sees only public ones, so it reports a missing method for one
-         * that is merely non-public. This override is what then makes reaching that
-         * non-public member legal.
-         *
-         * @param m the method to make callable
-         * @since 0.9.71+
-         */
-        private static void makeAccessible(Method m) {
-            // setAccessible rather than trySetAccessible because the source level is
-            // 8; if the boundary cannot be crossed the exception propagates to the
-            // caller's Throwable handler, which reports it once per method.
-            m.setAccessible(true);
-        }
-
-
-
-        /**
-         * Report a reflector failure once per method.
-         *
-         * <p>A getter returning -1 is indistinguishable from "unknown" at the call
-         * site, where it becomes a plausible-looking fallback value, so a silently
-         * swallowed exception here reads as a healthy runtime reading downstream.
-         *
-         * @param methodName the reflector method that failed
-         * @param t what went wrong
-         */
-        private static void reportReflectorFailure(String methodName, Throwable t) {
-            if (reported.add(methodName)) {
-                // Resolved lazily and only on the failure path: holding a Log in a
-                // static field would pull the log manager in at class-load time.
-                I2PAppContext.getGlobalContext().logManager().getLog(Tuner.class)
-                    .warn("Streaming reflector call " + methodName + " failed -> Ignoring it now"
-                          + "\n* Any param it backs cannot be auto-tuned", t);
-            }
+            callStaticSetInt(connectionCls, methodName, value);
         }
     }
 
@@ -3110,59 +3243,29 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
         /** Call a static int getter via reflection. */
         static int invokeGetInt(String methodName) {
-            Class<?> c = getCLS();
-            if (c == null) return -1;
-            try {
-                return (Integer) c.getMethod(methodName).invoke(null);
-            } catch (Exception e) {
-                return -1;
-            }
+            return callStaticInt(getCLS(), methodName, -1);
         }
 
         /** Call a static double getter via reflection.
          *  Returns {@code -1.0d} when the class or method cannot be resolved —
          *  a sentinel the caller must treat as "no data", not as a measurement. */
         static double invokeGetDouble(String methodName) {
-            Class<?> c = getCLS();
-            if (c == null) return -1.0d;
-            try {
-                return (Double) c.getMethod(methodName).invoke(null);
-            } catch (Exception e) {
-                return -1.0d;
-            }
+            return callStaticDouble(getCLS(), methodName, -1.0d);
         }
 
         /** Call a static int setter via reflection. */
         static void invokeSetInt(String methodName, int value) {
-            Class<?> c = getCLS();
-            if (c == null) return;
-            try {
-                c.getMethod(methodName, int.class).invoke(null, value);
-            } catch (Exception e) {
-                // ignore
-            }
+            callStaticSetInt(getCLS(), methodName, value);
         }
 
         /** Call a static long getter via reflection. */
         static long invokeGetLong(String methodName) {
-            Class<?> c = getCLS();
-            if (c == null) return -1L;
-            try {
-                return (Long) c.getMethod(methodName).invoke(null);
-            } catch (Exception e) {
-                return -1L;
-            }
+            return callStaticLong(getCLS(), methodName, -1L);
         }
 
         /** Call a static long setter via reflection. */
         static void invokeSetLong(String methodName, long value) {
-            Class<?> c = getCLS();
-            if (c == null) return;
-            try {
-                c.getMethod(methodName, long.class).invoke(null, value);
-            } catch (Exception e) {
-                // ignore
-            }
+            callStaticSetLong(getCLS(), methodName, value);
         }
     }
 
@@ -3704,8 +3807,14 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             maxDispatchAgeMs = value;
         }
 
+        /**
+         * Read the live static, not the config property. applyValue writes the static
+         * and {@link net.i2p.router.transport.GetBidsJob} reads it, so reading the
+         * property here reported a value that never moved even after a successful
+         * apply, and the param looked stuck while it was tuning fine.
+         */
         protected int getRuntimeValue() {
-            return _context.getProperty("i2p.router.maxDispatchAge", 3000);
+            return maxDispatchAgeMs;
         }
 
         /**
@@ -3808,8 +3917,14 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             handlerThreadPriority = value;
         }
 
+        /**
+         * Read the live static, not the config property. applyValue writes the static
+         * and {@link #getHandlerThreadPriority()} is what the I/O threads read, so
+         * reading the property here reported a value that never moved even after a
+         * successful apply, and the param looked stuck while it was tuning fine.
+         */
         protected int getRuntimeValue() {
-            return _context.getProperty("i2p.router.handlerThreadPriority", Thread.NORM_PRIORITY);
+            return handlerThreadPriority;
         }
 
         protected double getObservedStat(RouterContext ctx) {
@@ -4761,7 +4876,10 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         MaxInboundBufferParam() {
             super("i2p.streaming.maxInboundBuffer", "Max inbound buffer (bytes)",
                     SUB_STREAMING,
-                    8388608, 134217728, 8388608, "stream.con.lifetimeBytesReceived", _context, null, 8388608);
+                    // 64 MB is the ceiling setMaxInboundBufferStatic accepts; offering
+                    // more only produced a target that was rewritten back.
+                    8388608, 64 * 1024 * 1024, 8388608,
+                    "stream.con.lifetimeBytesReceived", _context, null, 8388608);
         }
 
         /** Apply the cap via I2PSocketManagerFull. */
@@ -5822,12 +5940,14 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         }
 
         protected void applyValue(int value) {
+            codelTargetMs = value;
             CoDelBlockingQueue.updateAllTargets(value);
             CoDelPriorityBlockingQueue.updateAllTargets(value);
         }
 
         protected int getRuntimeValue() {
-            return _context.getProperty("router.codelTarget", 5);
+            int tuned = codelTargetMs;
+            return tuned >= 0 ? tuned : _context.getProperty("router.codelTarget", 5);
         }
 
         protected double getObservedStat(RouterContext ctx) {
@@ -5891,12 +6011,14 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         }
 
         protected void applyValue(int value) {
+            codelIntervalMs = value;
             CoDelBlockingQueue.updateAllIntervals(value);
             CoDelPriorityBlockingQueue.updateAllIntervals(value);
         }
 
         protected int getRuntimeValue() {
-            return _context.getProperty("router.codelInterval", 50);
+            int tuned = codelIntervalMs;
+            return tuned >= 0 ? tuned : _context.getProperty("router.codelInterval", 50);
         }
 
         protected double getObservedStat(RouterContext ctx) {
@@ -6357,7 +6479,10 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             super("crypto.mlkem.precalcMin", "Min precomputed ML-KEM key pairs",
                   SUB_CRYPTO,
 
-                  MLKEM_PRECALC_MIN, MLKEM_PRECALC_MAX, 64, "crypto.MLKEMEmpty", _context);
+                  // The factory caps the pool at its byte budget, not at HARD_MAX, so
+                  // the tuner must not offer a floor above it.
+                  MLKEM_PRECALC_MIN, mlkemPreCalcMax(),
+                  64, "crypto.MLKEMEmpty", _context);
         }
 
         protected void applyValue(int value) {
@@ -7084,7 +7209,12 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             super("router.throttleRejectExponent", "Rejection curve steepness",
                   SUB_ROUTER,
 
-                  1, 50, 1, "tunnel.buildSuccessRate", _context);
+                  // The read path clamps to the throttle's own validity window, so a
+                  // target outside it lands back on the current value and the param
+                  // reads as one that will not take effect.
+                  RouterThrottleImpl.throttleRejectExponentMin(),
+                  RouterThrottleImpl.throttleRejectExponentMax(),
+                  1, "tunnel.buildSuccessRate", _context);
         }
 
         protected void applyValue(int value) {
@@ -10920,7 +11050,9 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             super("udp.peer.initConcurrentMsgs", "Initial UDP concurrent messages",
                   SUB_TRANSPORT,
 
-                  16, memoryDerivedInitMsgMax(), 4, "udp.sendConfirmTime", _context);
+                  // PeerState.setInitConcurrentMsgs clamps to [16, 256]; a tuner range
+                  // above that only produced targets the setter rewrote back.
+                  16, initConcurrentMsgsMax(), 4, "udp.sendConfirmTime", _context);
         }
 
         protected void applyValue(int value) {
@@ -11533,10 +11665,12 @@ SendPoolCapacityParam() {
 
                   // Scale min with cores: at least 64, up to 256 on 16+ cores
                   Math.max(64, SystemVersion.getCores() * 16),
-                  // Scale max with cores and memory: 16 slots per core, or 1 per MB heap
+                  // Scale max with cores and memory: 16 slots per core, or 1 per MB heap,
+                  // but never past what setSendPoolCapacity itself accepts
+                  Math.min(TransportImpl.sendPoolCapacityMax(),
                   Math.max(2048, Math.min(16384,
                       Math.max(SystemVersion.getCores() * 512,
-                          (int) (SystemVersion.getMaxMemory() / (2 * 1024 * 1024))))),
+                          (int) (SystemVersion.getMaxMemory() / (2 * 1024 * 1024)))))),
                   64, "ntcp.sendPool.utilization", _context);
         }
 
@@ -11665,10 +11799,13 @@ protected int computeTarget(double observed) {
             super("i2cp.internalQueueSize", "I2CP internal queue (messages)",
                   SUB_I2CP,
 
-                  // Min 128, max 2048 scaled to memory (1 msg per 2MB heap)
-                  128,
-                  Math.max(512, Math.min(4096,
-                      (int) (SystemVersion.getMaxMemory() / (2 * 1024 * 1024)))),
+                  // Min and max are the bounds setInternalQueueSize itself accepts: a
+                  // target outside them is rewritten back and reads as a param that
+                  // will not take effect.
+                  internalQueueSizeMin(),
+                  Math.min(internalQueueSizeMax(),
+                      Math.max(512, Math.min(4096,
+                          (int) (SystemVersion.getMaxMemory() / (2 * 1024 * 1024))))),
                   64, "udp.sendConfirmTime", _context);
         }
 
@@ -12816,9 +12953,12 @@ protected int computeTarget(double observed) {
     private class I2PTunnelClientRunnerMaxParam extends BaseParam {
 
         I2PTunnelClientRunnerMaxParam() {
+            // TunnelControllerGroup.setClientRunnerMax floors the value at the tunnel's
+            // max connections (256 by default), so a lower target was rewritten back
+            // every cycle.
             super("i2ptunnel.clientRunner.max", "I2PTunnel client threads",
                   SUB_TUNNEL,
-                   4, 16384, 4, "i2ptunnel.clientRunner.activeThreads", _context);
+                   256, 16384, 4, "i2ptunnel.clientRunner.activeThreads", _context);
             // Engaged on the fast cycle even when primary stats are quiet so the worker
             // pool can decay slowly (idle) rather than freezing at a burst-inflated size.
             _cpuDriven = true;

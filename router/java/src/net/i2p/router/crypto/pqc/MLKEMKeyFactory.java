@@ -68,6 +68,18 @@ public class MLKEMKeyFactory extends I2PThread implements KeyFactory {
     static final int BYTE_CAP = (int) Math.min(HARD_MAX, MAX_POOL_BYTES / BYTES_PER_PAIR);
 
     /**
+     * The pool ceiling in keypairs that {@link #setMinSize} will accept.
+     *
+     * <p>Public because the auto-tuner declares a range for this pool and must not
+     * propose a floor the setter silently rewrites; a target above this cap lands
+     * back on the current value and reads as a param that will not tune.
+     *
+     * @return the byte-budget cap expressed in keypairs
+     * @since 0.9.72+
+     */
+    public static int getByteCap() { return BYTE_CAP; }
+
+    /**
      * Alice side only.
      *
      * @param ctx the application context whose log, stat and system info are used
