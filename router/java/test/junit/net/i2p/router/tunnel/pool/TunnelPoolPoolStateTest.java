@@ -250,9 +250,9 @@ public class TunnelPoolPoolStateTest {
     @Test
     public void renderingNamesEveryBucket() {
         String s = new TunnelPool.PoolState(3, 1, 1, 1).toString();
-        assertTrue(s, s.contains("pool=3"));
-        assertTrue(s, s.contains("usable=1"));
-        assertTrue(s, s.contains("lastResort=1"));
-        assertTrue(s, s.contains("backlogged=1"));
+        assertTrue(s, s.contains("Pool: 3"));
+        assertTrue(s, s.contains("Usable: 1"));
+        assertTrue(s, s.contains("Last resort: 1"));
+        assertTrue(s, s.contains("Backlogged: 1"));
     }
 }

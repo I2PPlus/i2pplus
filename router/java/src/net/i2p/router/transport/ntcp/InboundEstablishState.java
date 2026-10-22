@@ -756,8 +756,12 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
 
         if (_msg3p2FailReason >= 0) {
             String reason = parseReason(_msg3p2FailReason);
-            if (_log.shouldWarn() && (_log.shouldInfo() || !reason.contains("banned"))) {
-                _log.warn("[NTCP] Handshake failure -> " + reason + " * " + this);
+            if (_log.shouldInfo() || !reason.contains("banned")) {
+                // Throttled: one failing or spoofed peer drives this into the
+                // thousands per hour. No shouldWarn() guard - the suppressor has
+                // to see every occurrence for its collapsed count to be right.
+                _log.warnThrottled("ntcp2-handshake-fail",
+                                   "[NTCP] Handshake failure -> " + reason + " * " + this);
             }
             _con.failInboundEstablishment(sender, sip_ba, _msg3p2FailReason);
             changeState(State.CORRUPT);

@@ -719,8 +719,8 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
         }
 
         if (_leaseSet != null && !_leaseSet.isCurrent(Router.CLOCK_FUDGE_FACTOR / 4) && _log.shouldWarn()) {
-            _log.warn("Sending with STALE LeaseSet for " + _toString + " (expires " +
-                      DataHelper.formatDuration(now - _leaseSet.getLatestLeaseDate()) + " ago)");
+            _log.warn("Sending with STALE LeaseSet for " + _toString + " -> Expired " +
+                      DataHelper.formatDuration(now - _leaseSet.getLatestLeaseDate()) + " ago");
         }
 
         _outTunnel = selectOutboundTunnel(_to);
@@ -1125,9 +1125,9 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
              _cache.tunnelCache.remove(_hashPair);
              _cache.tunnelStartTime.remove(_hashPair);
              if (_log.shouldWarn()) {
-                  _log.warn("New connection -> Rotation saturated for " + _toString
-                            + " -> Evicting outbound tunnel"
-                            + "\n* " + cached + " so the retry re-selects");
+                _log.warn("Rotation saturated for " + _toString
+                          + " -> Evicting the outbound tunnel so the retry re-selects"
+                          + "\n* Evicted: " + cached);
              }
              return null;
          }

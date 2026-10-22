@@ -288,8 +288,16 @@ class PeerStateDestroyed implements SSU2Payload.PayloadCallback, SSU2Sender {
      * @since 0.9.55
      */
     void receivePacket(RemoteHostId from, UDPPacket packet) {
-        if (!from.equals(_remoteHostId) && _log.shouldWarn())
-            _log.warn("Dropping irregular packet from " + from + " -> Host/packet ID mimsmatch");
+        if (!from.equals(_remoteHostId)) {
+            // One line per burst, not per packet: a peer whose state was already
+            // destroyed keeps sending until its own timeout, so this used to run
+            // at packet rate. No shouldWarn() guard - the suppressor has to see
+            // every occurrence for its collapsed count to be right. The address
+            // is in the message, the key is fixed.
+            _log.warnThrottled("ssu2-host-id-mismatch",
+                               "Dropping irregular packet from " + from +
+                               " -> Host/packet ID mismatch");
+        }
         DatagramPacket dpacket = packet.getPacket();
         byte[] data = dpacket.getData();
         int off = dpacket.getOffset();

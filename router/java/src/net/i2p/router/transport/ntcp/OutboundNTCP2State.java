@@ -198,7 +198,7 @@ class OutboundNTCP2State implements EstablishState {
     @Override
     public synchronized void receive(ByteBuffer src) {
         if (_state == State.VERIFIED || _state == State.CORRUPT)
-            throw new IllegalStateException(this + "received unexpected data on " + _con);
+            throw new IllegalStateException(this + " received unexpected data on " + _con);
         if (_log.shouldDebug())
             _log.debug(this + "\n* Receiving: " + src.remaining() + " Received: " + _received);
         if (!src.hasRemaining())
@@ -649,6 +649,8 @@ class OutboundNTCP2State implements EstablishState {
      */
     @Override
     public String toString() {
-        return _con.toString() + (_state != State.CORRUPT ? " (" + _state + ')' : "");
+        // Trimmed for the same reason as EstablishBase.toString() - the connection's
+        // own form ends with a space when the remote peer is not yet known.
+        return _con.toString().trim() + (_state != State.CORRUPT ? " (" + _state + ')' : "");
     }
 }

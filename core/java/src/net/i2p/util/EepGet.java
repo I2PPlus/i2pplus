@@ -1205,9 +1205,13 @@ public class EepGet {
                                 attemptStartBodyBytes, _bytesTransferred);
                 for (int i = 0; i < _listeners.size(); i++)
                     _listeners.get(i).attemptFailed(_url, _bytesTransferred, _bytesRemaining, _currentAttempt, _numRetries, ioe);
-                if (_log.shouldWarn())
-                    _log.warn("[Eepget] Transfer failed -> " + failureReason(ioe, inactivityBudget()) +
-                             "\n* Request: " + redactedUrl(_url));
+                // INFO, not WARN: this is one attempt of several, and the retry
+                // loop follows it up. The final "All retrieval attempts failed"
+                // stays a WARN, so nothing is lost at WARN level.
+                if (_log.shouldInfo())
+                    _log.info("[Eepget] Transfer failed -> " +
+                              failureReason(ioe, inactivityBudget()) +
+                              "\n* Request: " + redactedUrl(_url));
                 if (ioe instanceof MalformedURLException ||
                     ioe instanceof UnknownHostException ||
                     ioe instanceof ConnectException) // proxy or nonproxied host Connection Refused

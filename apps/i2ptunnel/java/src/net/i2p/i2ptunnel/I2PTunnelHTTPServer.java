@@ -2694,9 +2694,12 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 } catch (IOException ioe) { /* ignored */ }
                 _keepalive = false;
             } catch (IOException ioe) {
-                if (_log.shouldWarn()) {
-                    _log.warn("[HTTPServer] Error compressing -> " + ioe.getMessage()  +
-                              urlSuffix(req));
+                // DEBUG: usually the browser hanging up mid-request or mid-response,
+                // not a server fault - the 105 lines this made in one run were all
+                // "EOF reached before the end of the headers"
+                if (_log.shouldDebug()) {
+                    _log.debug("[HTTPServer] Error compressing -> " + ioe.getMessage() +
+                               urlSuffix(req));
                 }
                 ioex = ioe;
                 _keepalive = false;

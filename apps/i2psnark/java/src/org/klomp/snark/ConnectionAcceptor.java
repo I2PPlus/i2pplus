@@ -413,16 +413,18 @@ class ConnectionAcceptor implements Runnable {
         }
         int bad = _badCounter.count(h);
         if (bad >= MAX_BAD || _util.isBanned(h)) {
-            if (_log.shouldWarn()) {
-                String reason = _badReasons.get(h);
-                _log.warn(
-                        "[Snark] Rejecting incoming connection from client ["
-                                + h.toBase32().substring(0, 8)
-                                + "] after "
-                                + bad
-                                + "/" + MAX_BAD + " failures -> "
-                                + (reason != null ? reason : "Banlisted"));
-            }
+            // Throttled: a client that keeps retrying a failed download lands
+            // here on every attempt. The client hash is in the message, the key
+            // is fixed, and the suppressor has to see every occurrence.
+            String reason = _badReasons.get(h);
+            _log.warnThrottled(
+                    "snark-reject-client",
+                    "[Snark] Rejecting incoming connection from client ["
+                            + h.toBase32().substring(0, 8)
+                            + "] after "
+                            + bad
+                            + "/" + MAX_BAD + " failures -> "
+                            + (reason != null ? reason : "Banlisted"));
             try {
                 socket.reset();
             } catch (IOException ioe) { /* ignored */ }

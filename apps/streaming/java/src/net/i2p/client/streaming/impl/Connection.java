@@ -4632,18 +4632,22 @@ synchronized boolean checkRetransmitStall() {
             long now = _context.clock().now();
             if (stuckLifetimeExceeded(_options.getStallGiveupMs(), now,
                                         first.getValue().getCreatedOn())) {
-                if (_log.shouldWarn()) {
-                    _log.warn(this + " oldest unacked packet stuck (" + (now - first.getValue().getCreatedOn()) + "ms) -> Forcing disconnect");
-                }
+                // Throttled, and with no shouldWarn() guard: a stalled stream lands
+                // here on every retransmit pass, and the suppressor has to see each
+                // occurrence for its collapsed count to be right.
+                _log.warnThrottled("connStalled",
+                                   "Oldest unacked packet stalled (" +
+                                   (now - first.getValue().getCreatedOn()) +
+                                   "ms) -> Forcing disconnect for " + getRemotePeerString());
                 return true;
             }
             long inactivityWindow = effectiveInactivityTimeout(_options.getInactivityTimeout(),
                                                                REMOTE_SILENT_FALLBACK_MS);
             if (remoteSilentTooLong(_lastReceivedOn, (int) inactivityWindow, now)) {
-                if (_log.shouldWarn()) {
-                    _log.warn(this + " remote silent (" + (now - _lastReceivedOn) + "ms > " +
-                              inactivityWindow + "ms) -> Forcing disconnect");
-                }
+                _log.warnThrottled("connPeerSilent",
+                                   "Peer silent (" + (now - _lastReceivedOn) + "ms > " +
+                                   inactivityWindow + "ms) -> Forcing disconnect for " +
+                                   getRemotePeerString());
                 return true;
             }
             return false;

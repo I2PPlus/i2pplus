@@ -1323,17 +1323,17 @@ public class TunnelPool {
         }
         @Override
         public String toString() {
-            return "pool=" + pooled + " usable=" + usable
-                   + " lastResort=" + lastResort + " backlogged=" + backlogged;
+            return "Pool: " + pooled + " * Usable: " + usable
+                   + " * Last resort: " + lastResort + " * Backlogged: " + backlogged;
         }
     }
 
     /**
      * Count the pool by selection outcome. Pure: no lock, no clock, no logging.
      * <p>A tunnel is counted as usable when it clears the same gates
-     *  {@link #passesScanGates} applies and is not set aside, so a pool reporting
-     *  {@code usable=0} against a non-zero pool count has tunnels it is refusing
-     *  to use -- which is the case worth investigating.
+     * {@link #passesScanGates} applies and is not set aside, so a pool reporting
+     * {@code Usable: 0} against a non-zero pool count has tunnels it is refusing
+     * to use -- which is the case worth investigating.
      *
      * @param tunnels the pool's tunnels, not necessarily locked
      * @param now current time in ms
@@ -1377,10 +1377,10 @@ public class TunnelPool {
             if (!destReachable) {
                 warning = toString() + " -> Destination not reachable (no LeaseSet found)";
             } else {
-                warning = toString() + " -> No tunnels available (" + state + ")";
+                warning = toString() + " -> No tunnels available\n* " + state;
             }
         } else {
-            warning = toString() + " -> No tunnels available (" + state + ")";
+            warning = toString() + " -> No tunnels available\n* " + state;
         }
         if (!warning.contains("Ping")) {
             _log.warn(warning);

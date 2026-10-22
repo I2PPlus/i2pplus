@@ -336,9 +336,10 @@ class PacketQueue implements SendMessageStatusListener, Closeable {
           switch (status) {
              case MessageStatusMessage.STATUS_SEND_BEST_EFFORT_FAILURE:
                  // Best effort delivery failed — not guaranteed, may be transient
-                 if (_log.shouldWarn()) {
-                     _log.warn("Received Best Effort Failure status [" + status + "] for [MsgID " + msgId + "] * " + con);
-                 }
+                 // Throttled: peers send these often enough to bury the log.
+                 _log.warnThrottled("statusBestEffortFail",
+                                    "Received Best Effort Failure status [" + status +
+                                    "] for [MsgID " + msgId + "] * " + con);
                  _messageStatusMap.remove(id);
                  break;
              case MessageStatusMessage.STATUS_SEND_GUARANTEED_FAILURE:
@@ -392,11 +393,13 @@ class PacketQueue implements SendMessageStatusListener, Closeable {
             case SendMessageStatusListener.STATUS_CANCELLED:
                 if (con.getHighestAckedThrough() >= 0) {
                     // a retxed SYN succeeded before the first SYN failed
-                    if (_log.shouldWarn())
-                        _log.warn("Received Hard Failure but Already Connected status [" + status + "] for [MsgID " + msgId + "] * " + con);
+                    _log.warnThrottled("statusHardFailConnected",
+                                       "Received Hard Failure but Already Connected status [" +
+                                       status + "] for [MsgID " + msgId + "] * " + con);
                 } else if (!con.getIsConnected() || con.getHighestAckedThrough() < 0) {
-                    if (_log.shouldWarn())
-                        _log.warn("Received Hard Failure but Already Closed status [" + status + "] for [MsgID " + msgId + "] * " + con);
+                    _log.warnThrottled("statusHardFailClosed",
+                                       "Received Hard Failure but Already Closed status [" +
+                                       status + "] for [MsgID " + msgId + "] * " + con);
                 } else {
                     if (_log.shouldWarn())
                         _log.warn("Received Hard Failure status [" + status + "] for [MsgID " + msgId + "] * " + con);

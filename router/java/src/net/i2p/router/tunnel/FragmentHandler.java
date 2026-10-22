@@ -591,7 +591,8 @@ class FragmentHandler {
             data = msg.toByteArray();
             if (data == null) {
                 if (_log.shouldWarn())
-                    _log.warn("Error receiving fragmented message -> Corrupt?\n* " + msg + " (null data)");
+                    _log.warn("Reassembling the fragments produced no bytes" +
+                              " -> Dropping the message\n* " + msg);
                 return;
             }
             if (_log.shouldDebug())
@@ -607,14 +608,17 @@ class FragmentHandler {
             }
             if (m == null) {
                 if (_log.shouldWarn())
-                    _log.warn("Error receiving fragmented message -> Corrupt?\n* " + msg + " (null message)");
+                    _log.warn("Reassembling the fragments produced no message" +
+                              " -> Dropping the bytes\n* " + msg);
                 return;
             }
             _receiver.receiveComplete(m, msg.getTargetRouter(), msg.getTargetTunnel());
         } catch (I2NPMessageException ime) {
             boolean infoLevel = _log.shouldInfo();
             if (_log.shouldWarn()) {
-                _log.warn("Error receiving fragmented message -> Corrupt?\n* " + msg + " (" + ime.getMessage() + ")" +
+                _log.warn("Reassembled message is malformed -> Dropping it" +
+                          "\n* " + msg +
+                          "\n* Reason: " + ime.getMessage() +
                           (infoLevel ? "\n* DUMP:\n* " + HexDump.dump(data, 0, Math.min(data.length, 64)) : ""));
             }
         }
@@ -626,8 +630,9 @@ class FragmentHandler {
     private void receiveComplete(byte[] data, int offset, int len, Hash router, TunnelId tunnelId) {
         if (data == null || offset < 0 || len <= 0 || offset + len > data.length) {
             if (_log.shouldWarn())
-                _log.warn("Error receiving unfragmented message" + (router != null ? " from [" +
-                          router.toBase64().substring(0,6) + "]" : "") +  " -> Corrupt? (bad data bounds)");
+                _log.warn("Receiving an unfragmented message" + (router != null ? " from [" +
+                          router.toBase64().substring(0,6) + "]" : "") +
+                          " -> Bad data bounds, dropping it");
             _context.statManager().addRateData("tunnel.corruptMessage", 1);
             return;
         }
@@ -650,16 +655,18 @@ class FragmentHandler {
             }
             if (m == null) {
                 if (_log.shouldWarn())
-                    _log.warn("Error receiving unfragmented message" + (router != null ? " from [" +
-                              router.toBase64().substring(0,6) + "]" : "") +  " -> Corrupt? (null message)");
+                    _log.warn("Receiving an unfragmented message" + (router != null ? " from [" +
+                              router.toBase64().substring(0,6) + "]" : "") +
+                              " -> The handler read no message, dropping the bytes");
                 _context.statManager().addRateData("tunnel.corruptMessage", 1);
                 return;
             }
             _receiver.receiveComplete(m, router, tunnelId);
         } catch (I2NPMessageException ime) {
             if (_log.shouldWarn()) {
-                _log.warn("Error receiving unfragmented message" + (router != null ? " from [" +
-                          router.toBase64().substring(0,6) + "]" : "") +  " -> Corrupt?", ime);
+                _log.warn("Receiving an unfragmented message" + (router != null ? " from [" +
+                          router.toBase64().substring(0,6) + "]" : "") +
+                          " -> Malformed, dropping it", ime);
             }
         }
     }

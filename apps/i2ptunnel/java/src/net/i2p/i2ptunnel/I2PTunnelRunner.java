@@ -1517,8 +1517,8 @@ public class I2PTunnelRunner extends I2PAppThread implements DoneCallback {
             if (!budget.tryConsume(bp.bodyReceived, bp.contentLength)) {
                 if (_log.shouldWarn()) {
                     _log.warn("Body-resume budget exhausted at " + bp.bodyReceived + '/' +
-                              bp.contentLength + " bytes (stalls=" + budget.getStallCycles() +
-                              ", attempts=" + budget.getTotalCycles() + ')');
+                              bp.contentLength + " bytes (stalls: " + budget.getStallCycles() +
+                              "; attempts: " + budget.getTotalCycles() + ')');
                 }
                 return;
             }

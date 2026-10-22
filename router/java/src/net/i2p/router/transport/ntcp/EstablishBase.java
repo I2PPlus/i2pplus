@@ -253,7 +253,7 @@ protected void changeState(State state) {
     public synchronized void receive(ByteBuffer src) {
         synchronized(_stateLock) {
             if (STATES_DONE.contains(_state))
-                throw new IllegalStateException(prefix() + "received unexpected data on " + _con);
+                throw new IllegalStateException(prefix() + " received unexpected data on " + _con);
         }
         if (_log.shouldDebug())
             _log.debug(prefix() + "\n* Receiving: " + src.remaining() + " Received: " + _received);
@@ -373,7 +373,9 @@ protected void changeState(State state) {
      */
     @Override
     public String toString() {
-        return _con.toString() + " (" + _state + ')';
+        // The connection's own form ends with a space when the remote peer is not
+        // yet known, which used to render as "ip:port  (CORRUPT)".
+        return _con.toString().trim() + " (" + _state + ')';
     }
 
     /**

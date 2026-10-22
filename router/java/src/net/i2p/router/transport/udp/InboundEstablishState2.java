@@ -968,8 +968,9 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
                             _currentState == InboundState.IB_STATE_RETRY_SENT,
                             EstablishmentManager.getMaxIbEstablishTime(),
                             EstablishmentManager.getIbRetrySentMaxTime()) + 1;
-            if (_log.shouldWarn())
-                _log.warn("[SSU] Retransmit RETRY on " + this);
+            // DEBUG: a retransmit is the handshake working as designed, not a fault
+            if (_log.shouldDebug())
+                _log.debug("[SSU] Retransmit RETRY on " + this);
         } else {
         _currentState = InboundState.IB_STATE_RETRY_SENT;
         // Won't really be retransmitted, they have 5 sec to respond or
@@ -1030,9 +1031,10 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
             return;
         }
         if (type == TOKEN_REQUEST_FLAG_BYTE) {
-            // retransmitted token request
-            if (_log.shouldWarn())
-                _log.warn("[SSU] Received RETRANSMIT Token Request on: " + this);
+            // A retransmitted token request is the handshake working as designed,
+            // so DEBUG rather than WARN
+            if (_log.shouldDebug())
+                _log.debug("[SSU] Received RETRANSMIT Token Request on: " + this);
             // Est. mgr will resend retry and call retryPacketSent()
             // Note that Java I2P < 0.9.57 doesn't handle retransmitted retries correctly,
             // so this won't work for them

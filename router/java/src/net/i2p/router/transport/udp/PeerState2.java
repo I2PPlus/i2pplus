@@ -673,10 +673,18 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
                 return;
             }
             if (header.getType() != DATA_FLAG_BYTE) {
+                // Throttled: a confused or spoofed peer sends these at packet rate.
+                // One key for both forms - it is a single condition, and the
+                // suppressor has to see every occurrence to count the burst.
                 if (shouldLogDebug()) {
-                    _log.warn("[SSU] BAD " + len + " byte data packet from: " + from + " [Type " + (header.getType() & 0xff) + "] received " + this);
-                } else if (_log.shouldWarn()) {
-                    _log.warn("[SSU] BAD " + len + " byte data packet from: " + from + " [Type " + (header.getType() & 0xff) + "]");
+                    _log.warnThrottled("ssu-bad-data-packet",
+                                       "[SSU] BAD " + len + " byte data packet from: " + from +
+                                       " [Type " + (header.getType() & 0xff) + "]" +
+                                       " received " + this);
+                } else {
+                    _log.warnThrottled("ssu-bad-data-packet",
+                                       "[SSU] BAD " + len + " byte data packet from: " + from +
+                                       " [Type " + (header.getType() & 0xff) + "]");
                 }
                 // Track bad packets for repeat offender detection (skip if already blocklisted)
                 // Use the peer hash for full-context BanLogger output (caps, version) instead of IP-only
