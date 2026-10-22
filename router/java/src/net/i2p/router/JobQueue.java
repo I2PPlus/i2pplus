@@ -271,36 +271,53 @@ public class JobQueue {
         if (!alreadyExists) {
             // _timedJobs is ConcurrentSkipListSet — safe to modify outside the lock.
             boolean removed = removeTimed(job);
+
             if (removed && _log.shouldWarn()) {_log.warn("Removed " + job + " from queue and"
                                                          + " rescheduled -> Duplicate instance");}
 
-            // Don't re-add if it was already in _timedJobs (duplicate from requeue while still scheduled)
-            if (!removed) {
-                if (shouldDrop(job, numReady)) {
-                    if (_log.shouldWarn() && job.getName().contains("Remove Slow")) {
-                        _log.warn("Dropping RemoveSlowTunnelsJob: numReady: " + numReady
-                                  + " * maxLag: " + getMaxLag());
-                    }
-                    job.dropped();
-                    dropped = true;
+            if (removed) {
+                // It was already scheduled, so re-arm it with the caller's start
+                // time. Leaving it out of every queue here dropped the job outright,
+                // and the warning above promises "rescheduled" - a periodic job that
+                // never runs again is not something the router recovers from.
+                if (start <= now) {
+                    job.getTiming().setStartAfter(now);
+                    if (job instanceof JobImpl) {((JobImpl) job).madeReady(now);}
+                    offerReady(job, _readyJobs);
+                    readyNow = true;
                 } else {
-                    if (start <= now) {
-                        job.getTiming().setStartAfter(now);
-                        if (job instanceof JobImpl) {((JobImpl) job).madeReady(now);}
-                        offerReady(job, _readyJobs);
-                        readyNow = true;
-                    } else {
-                        addTimed(job);
-                        if (_log.shouldDebug()) {
-                            long diff = _nextPumperRun - start;
-                            _log.debug("Waking pumper: job " + job.getName() + " early by " + diff + "ms");
+                    addTimed(job);
+                    if (start < _nextPumperRun) {
+                        synchronized (_jobLock) {
+                            _jobLock.notifyAll();
                         }
-                        // Wake pumper if this job is due before its next scheduled run.
-                        // Must be inside _jobLock to pair with the pumper's wait() call.
-                        if (start < _nextPumperRun) {
-                            synchronized (_jobLock) {
-                                _jobLock.notifyAll();
-                            }
+                    }
+                }
+            } else if (shouldDrop(job, numReady)) {
+                if (_log.shouldWarn() && job.getName().contains("Remove Slow")) {
+                    _log.warn("Dropping RemoveSlowTunnelsJob: numReady: " + numReady
+                              + " * maxLag: " + getMaxLag());
+                }
+                job.dropped();
+                dropped = true;
+            } else {
+                if (start <= now) {
+                    job.getTiming().setStartAfter(now);
+                    if (job instanceof JobImpl) {((JobImpl) job).madeReady(now);}
+                    offerReady(job, _readyJobs);
+                    readyNow = true;
+                } else {
+                    addTimed(job);
+                    if (_log.shouldDebug()) {
+                        long diff = _nextPumperRun - start;
+                        _log.debug("Waking pumper: job " + job.getName() +
+                                   " early by " + diff + "ms");
+                    }
+                    // Wake pumper if this job is due before its next scheduled run.
+                    // Must be inside _jobLock to pair with the pumper's wait() call.
+                    if (start < _nextPumperRun) {
+                        synchronized (_jobLock) {
+                            _jobLock.notifyAll();
                         }
                     }
                 }

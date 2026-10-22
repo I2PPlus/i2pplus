@@ -167,8 +167,14 @@ public class RepublishLeaseSetJob extends JobImpl {
     private static volatile long _lastCleanupTime;
     /** Tracks destinations currently being retried to prevent duplicate retries. */
     private static final ConcurrentHashMap<Hash, Boolean> _retryInProgress = new ConcurrentHashMap<>();
-    /** Last log timestamp per destination to throttle publish log messages. */
+    /**
+     * Last publish attempt per destination. Doubles as the throttle for publish
+     * log messages and as the liveness set the stale-entry cleanups key off, so
+     * it is written regardless of log level.
+     */
     private static final ConcurrentHashMap<Hash, Long> _lastPublishLogTime = new ConcurrentHashMap<>();
+    /** Minimum interval between repeated publish log messages for one destination. */
+    private static final long PUBLISH_LOG_THROTTLE = 10L * 1000;
     /** Last log timestamp per destination to throttle verification log messages. */
     private static final ConcurrentHashMap<Hash, Long> _lastVerifyLogTime = new ConcurrentHashMap<>();
     /** Last log timestamp per destination to throttle no-requeue log messages. */
@@ -415,10 +421,10 @@ public class RepublishLeaseSetJob extends JobImpl {
             }
             lastPubLog = null;
         }
-        if (_log.shouldInfo() && (lastPubLog == null || (now - lastPubLog > 10L * 1000))) {
+        if (recordPublishAttempt(_lastPublishLogTime, _dest, lastPubLog, now) &&
+            _log.shouldInfo()) {
             _log.info("Publishing LeaseSet" + name + " [" + shortHash() +
                        "] (expires in " + (timeUntilExpiry / 1000) + "s)...");
-            _lastPublishLogTime.put(_dest, now);
         }
 
         int leaseCount = ls.getLeaseCount();
@@ -1039,6 +1045,31 @@ public class RepublishLeaseSetJob extends JobImpl {
         _publishedOnce.retainAll(_lastPublishLogTime.keySet());
     }
 
+    /**
+     * Record that we tried to publish for this destination, and report whether
+     * the event is worth logging.
+     * <p>
+     * The timestamp is written unconditionally. Several cleanups key off
+     * {@link #_lastPublishLogTime} - cleanupPublishedOnce(),
+     * cleanupGlobalFailCount() and cleanupRemintDefers() - so writing it only
+     * inside a shouldInfo() guard left those maps permanently empty at the
+     * default log level, wiping the failure counters every cleanup cycle and
+     * leaving the escalation path unable to fire. State must never depend on
+     * the log level.
+     *
+     * @param times the per-destination last-log timestamps
+     * @param dest the destination being published
+     * @param previous the timestamp already recorded for it, or null
+     * @param now current time in ms
+     * @return true if enough time has passed that the event should be logged
+     * @since 0.9.72+
+     */
+    static boolean recordPublishAttempt(ConcurrentHashMap<Hash, Long> times, Hash dest,
+                                        Long previous, long now) {
+        times.put(dest, now);
+        return previous == null || now - previous > PUBLISH_LOG_THROTTLE;
+    }
+
     /** Cleanup map. */
     private static void cleanupMap(ConcurrentHashMap<Hash, Long> map, long now) {
         Iterator<Map.Entry<Hash, Long>> iter = map.entrySet().iterator();
@@ -1208,13 +1239,9 @@ public class RepublishLeaseSetJob extends JobImpl {
             _publishedOnce.add(_dest);
             _globalFailCount.remove(_dest);
             _remintDefers.remove(_dest);
-            if (_log.shouldInfo()) {
-                long now = getContext().clock().now();
-                Long lastLog = _lastPublishLogTime.get(_dest);
-                if (lastLog == null || now - lastLog > 10L * 1000) {
-                    _log.info("LeaseSet publication confirmed for [" + shortHash() + "]");
-                    _lastPublishLogTime.put(_dest, now);
-                }
+            if (recordPublishAttempt(_lastPublishLogTime, _dest, _lastPublishLogTime.get(_dest),
+                                     getContext().clock().now()) && _log.shouldInfo()) {
+                _log.info("LeaseSet publication confirmed for [" + shortHash() + "]");
             }
         }
     }

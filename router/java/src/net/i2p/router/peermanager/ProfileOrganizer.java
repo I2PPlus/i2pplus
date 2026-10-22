@@ -2508,12 +2508,21 @@ public class ProfileOrganizer {
             // Step 10: Enforce memory cap
             enforceProfileCap();
 
-            // Step 11: Clean up persisted profiles
-            purgeStaleProfileFiles();
-
         } finally {
             releaseWriteLockAndRefresh();
         }
+
+        // Step 11: Clean up persisted profiles.
+        //
+        // Deliberately after the lock is released. The purge gunzips and
+        // property-parses every stored profile file (up to MAX_STORED_PROFILE_FILES)
+        // and does a netdb lookup per file, and _reorganizeLock is the lock tunnel
+        // peer selection contends on - holding it across that I/O stalled every pool
+        // build for as long as the walk took. selectAllPeers() takes the read lock
+        // itself for the in-memory snapshot, so the only thing the unlocked window
+        // can cost is deleting the file of a peer registered after that snapshot,
+        // and its profile is re-stored on the next store cycle.
+        purgeStaleProfileFiles();
     }
 
     /**

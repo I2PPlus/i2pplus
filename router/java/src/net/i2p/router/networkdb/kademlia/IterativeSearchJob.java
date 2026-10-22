@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.PriorityQueue;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -726,21 +727,34 @@ public class IterativeSearchJob extends FloodSearchJob {
     /**
      * Add the closest cap peers of allRouters, by XOR distance from rkey,
      * excluding us and key. Package private for testing.
+     * <p>
+     * Selects the cap closest rather than sorting everything: allRouters is the
+     * whole netdb (up to 10 000 hashes) and this runs on the first failed lookup
+     * of a key, so a full {@code O(n log n)} sort bought an ordering of entries
+     * nobody reads. A bounded farthest-first heap keeps the cap closest in
+     * {@code O(n log cap)}, and us and the target are skipped while walking
+     * instead of by two {@code O(n)} list removals afterwards.
      *
      * @param candidates the search's candidate set to add to
      * @param allRouters known router hashes
      * @param rkey the routing key the search is chasing
      * @param us our router hash
      * @param key the lookup target
-     * @param cap max peers to add
+     * @param cap max peers to add; nothing is added when it is not positive
      */
     static void addClosest(Collection<Hash> candidates, Collection<Hash> allRouters, Hash rkey,
                            Hash us, Hash key, int cap) {
-        List<Hash> all = new ArrayList<>(allRouters);
-        all.remove(us);
-        all.remove(key);
-        all.sort(new XORComparator<>(rkey));
-        candidates.addAll(all.subList(0, Math.min(cap, all.size())));
+        if (cap <= 0) {return;}
+        // Reverse order so the head is the farthest of the kept set and poll()
+        // drops exactly the peer that should not have been kept.
+        PriorityQueue<Hash> closest =
+                new PriorityQueue<>(cap + 1, new XORComparator<Hash>(rkey).reversed());
+        for (Hash h : allRouters) {
+            if (h.equals(us) || h.equals(key)) {continue;}
+            closest.offer(h);
+            if (closest.size() > cap) {closest.poll();}
+        }
+        candidates.addAll(closest);
     }
 
     /**
@@ -994,16 +1008,16 @@ public class IterativeSearchJob extends FloodSearchJob {
         _facade.markQueried(peer);
 
         // Track active floodfill query count for load distribution.
-        // Check _dead under sync to avoid leaking counters when the search
-        // completes before we finish sending.
+        // The add and the increment must happen under the same lock as
+        // releaseFloodfillQueries(): if the increment landed after a release
+        // had already run, nothing would ever undo it, and since the counter
+        // has no expiry sweep the floodfill would read as overloaded forever.
         if (peer != null) {
-            boolean isDead;
             synchronized(this) {
-                isDead = _dead;
-                if (!isDead) {_queriedFloodfills.add(peer);}
-            }
-            if (!isDead) {
-                _facade.incrementActiveFloodfillQuery(peer);
+                if (!_dead) {
+                    _queriedFloodfills.add(peer);
+                    _facade.incrementActiveFloodfillQuery(peer);
+                }
             }
         }
 

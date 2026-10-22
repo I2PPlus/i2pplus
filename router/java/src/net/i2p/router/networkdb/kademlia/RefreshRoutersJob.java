@@ -1,9 +1,11 @@
 package net.i2p.router.networkdb.kademlia;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.Deque;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -34,7 +36,13 @@ import net.i2p.util.VersionComparator;
 class RefreshRoutersJob extends JobImpl {
     private final Log _log;
     private final FloodfillNetworkDatabaseFacade _facade;
-    private List<Hash> _routers;
+    /**
+     * The routers still to visit this cycle, highest-value first. A deque, not
+     * an ArrayList: the job drains from the head a few at a time, and
+     * {@code ArrayList.remove(0)} shifts every remaining element - up to the
+     * whole netdb - on each visit.
+     */
+    private Deque<Hash> _routers;
 
     private long _restartDelayMs = 60 * 1000L;            // Default restart delay 1 min
 
@@ -164,7 +172,8 @@ class RefreshRoutersJob extends JobImpl {
                     return Integer.compare(sb, sa);
                 }
             });
-            _routers = new ArrayList<>(floodfills);
+            _routers = new ArrayDeque<>(floodfills.size() + nonFloodfills.size());
+            _routers.addAll(floodfills);
             _routers.addAll(nonFloodfills);
 
             if (_log.shouldInfo()) {
@@ -216,7 +225,7 @@ class RefreshRoutersJob extends JobImpl {
             Hash routerHash;
             synchronized (this) {
                 if (_routers == null || _routers.isEmpty()) return;
-                routerHash = _routers.remove(0);
+                routerHash = _routers.pollFirst();
             }
 
             if (routerHash == null) continue;
