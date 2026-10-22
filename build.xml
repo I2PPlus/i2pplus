@@ -1657,6 +1657,12 @@
     <copy quiet="true" verbose="false" file="./installer/resources/eepsite/docroot/favicon.ico" tofile="${build.dir}/javadoc/favicon.ico"/>
     <!-- Set if unset -->
     <property name="javac.version" value="1.8"/>
+    <!-- Stylesheet for the generated javadoc; -Djavadoc.css=<path> overrides it. -->
+    <available file="tools/javadoc/assets/css/javadoc.css" property="javadoc.css.assets"/>
+    <condition property="javadoc.css" value="${basedir}/tools/javadoc/assets/css/javadoc.css">
+      <isset property="javadoc.css.assets"/>
+    </condition>
+    <property name="javadoc.css" location="${basedir}/tools/javadoc/jdk8/javadoc.css"/>
     <javadoc access="package"
       source="${javac.version}"
       destdir="${build.dir}/javadoc"
@@ -1664,7 +1670,7 @@
       failonerror="false"
       charset="utf-8"
       author="no"
-      additionalparam="-notimestamp -stylesheetFile ${basedir}/tools/javadoc/jdk8/javadoc.css -quiet -Xmaxwarns 100000 -nodeprecated -nosince"
+      additionalparam="-notimestamp -stylesheetFile ${javadoc.css} -quiet -Xmaxwarns 100000 -nodeprecated -nosince"
       doctitle="I2P+ Javadocs [${release.number}-${i2p.build.number}${build.extra}]"
       windowtitle="Javadocs [I2P+ ${release.number}+] - API Version ${api.version}+"
       excludepackagenames="com.mpatric.mp3agic">
