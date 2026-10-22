@@ -3,8 +3,8 @@
 [![I2P+ Update zip](../tools/badges/update-badge.svg)](https://i2pplus.github.io/i2pupdate.zip)
 [![I2P+ I2PSnark standalone](../tools/badges/i2psnark-badge.svg)](https://i2pplus.github.io/installers/i2psnark-standalone.zip)
 [![I2P+ Javadocs](../tools/badges/javadocs-badge.svg)](https://i2pplus.github.io/javadoc.zip)
-[![Docker](../tools/badges/docker-badge.svg)](docker/README.md)
-[![AppImage](../tools/badges/appimage-badge.svg)](tools/appimage/README.md)
+[![Docker](../tools/badges/docker-badge.svg)](../docker/README.md)
+[![AppImage](../tools/badges/appimage-badge.svg)](../tools/appimage/README.md)
 
 # I2P+
 
@@ -16,7 +16,7 @@ Viimane versioon: https://i2pplus.github.io/
 
 ## Paigaldamine
 
-Paigaldusjuhised on leitavad dokumendis [INSTALL.md](docs/INSTALL.md) ning veebisaidil https://i2pplus.github.io/
+Paigaldusjuhised on leitavad dokumendis [INSTALL.md](INSTALL.md) ning veebisaidil https://i2pplus.github.io/
 
 ### Windowsi paigaldaja märkus
 
@@ -33,7 +33,7 @@ või käivitage 'ant javadoc' ning seejärel alustage failist build/javadoc/inde
 
 ## Kuidas panustada / I2P+ kallal töötada
 
-Palun tutvuge failiga [HACKING.md](docs/HACKING.md) ja teiste dokumentidega kataloogis docs.
+Palun tutvuge failiga [HACKING.md](HACKING.md) ja teiste dokumentidega kataloogis docs.
 
 ## Pakettide ehitamine lähtekoodist
 
@@ -100,7 +100,7 @@ Linuxi AppImage'i ehitamiseks:
 ant buildAppImage
 ```
 
-Üksikasjad: [tools/appimage/README.md](tools/appimage/README.md).
+Üksikasjad: [tools/appimage/README.md](../tools/appimage/README.md).
 
 Debian/Ubuntu jaoks iseseisva Debiani paketi ehitamiseks ilma väliste Jetty/Tomcat-sõltuvusteta:
 ```bash
@@ -109,7 +109,7 @@ ant buildDeb
 
 See loob iseseisva `.deb`-paki, mis sisaldab kaasas olevaid Jetty ja Tomcat teeke. Nõuab ainult OpenJDK jooksutuskeskkonda (paigaldatakse automaatselt pakihalduri abil).
 
-Dockeris käivitamiseks vt [docker/README.md](docker/README.md)
+Dockeris käivitamiseks vt [docker/README.md](../docker/README.md)
 
 ## Kontaktandmed
 
@@ -121,50 +121,50 @@ Vearaportid: https://github.com/I2PPlus/i2pplus/issues
 
 I2P+ on litsentseeritud AGPL v.3 litsentsi alusel.
 
-Alamkomponentide litsentside kohta vt: [README.md](docs/LICENSES.md)
+Alamkomponentide litsentside kohta vt: [LICENSES.md](LICENSES.md)
 
 ## Vaata ka
 
 ### Dokumentatsioon
 
-- [docs/README.md](docs/README.md) - Täielik dokumentatsiooni register
-- [docs/INSTALL.md](docs/INSTALL.md) - Paigaldusjuhend
-- [docs/INSTALL-headless.md](docs/INSTALL-headless.md) - Headless-paigaldus (konsolirežiim)
-- [docs/HACKING.md](docs/HACKING.md) - Arendaja juhend ja ehitussüsteemid
-- [docs/DIRECTORIES.md](docs/DIRECTORIES.md) - Lähtepuu struktuur ja kuhu asju leida
-- [router/java/src/net/i2p/README.md](router/java/src/net/i2p/README.md) - Ruuteri lähtepuu ülevaade
-- [core/java/src/net/i2p/README.md](core/java/src/net/i2p/README.md) - Tuumteegi lähtepuu ülevaade
-- [docs/DEBUGGING.md](docs/DEBUGGING.md) - Jooksuaegne silumine JDWP ja muude tööriistadega
-- [docs/THEMING.md](docs/THEMING.md) - Konsoli ja veebirakenduste teemade süsteem
-- [docs/LICENSES.md](docs/LICENSES.md) - Kolmanda poole litsentsid
-- [docs/history.txt](docs/history.txt) - Täielik muudatuste logi
+- [docs/README.md](README.md) - Täielik dokumentatsiooni register
+- [docs/INSTALL.md](INSTALL.md) - Paigaldusjuhend
+- [docs/INSTALL-headless.md](INSTALL-headless.md) - Headless-paigaldus (konsolirežiim)
+- [docs/HACKING.md](HACKING.md) - Arendaja juhend ja ehitussüsteemid
+- [docs/DIRECTORIES.md](DIRECTORIES.md) - Lähtepuu struktuur ja kuhu asju leida
+- [router/java/src/net/i2p/README.md](../router/java/src/net/i2p/README.md) - Ruuteri lähtepuu ülevaade
+- [core/java/src/net/i2p/README.md](../core/java/src/net/i2p/README.md) - Tuumteegi lähtepuu ülevaade
+- [docs/DEBUGGING.md](DEBUGGING.md) - Jooksuaegne silumine JDWP ja muude tööriistadega
+- [docs/THEMING.md](THEMING.md) - Konsoli ja veebirakenduste teemade süsteem
+- [docs/LICENSES.md](LICENSES.md) - Kolmanda poole litsentsid
+- [docs/history.txt](history.txt) - Täielik muudatuste logi
 
 ### Alamprojektid
 
-- [apps/README.md](apps/README.md) - Rakenduste ülevaade
-- [apps/addressbook/README.md](apps/addressbook/README.md) - Aadressiraamatu rakendus
-- [apps/desktopgui/README.md](apps/desktopgui/README.md) - Töölaua GUI rakendus
-- [apps/i2pcontrol/README.md](apps/i2pcontrol/README.md) - I2P Control API
-- [apps/i2psnark/README.md](apps/i2psnark/README.md) - I2PSnark BitTorrenti klient
-- [apps/i2ptunnel/README.md](apps/i2ptunnel/README.md) - I2P tunnelirakendus
-- [apps/imagegen/README.md](apps/imagegen/README.md) - Pildigeneratsiooni tööriistad
-- [apps/jetty/README.md](apps/jetty/README.md) - Jetty HTTP-server
-- [apps/jrobin/README.md](apps/jrobin/README.md) - JRobin seireteek
-- [apps/ministreaming/README.md](apps/ministreaming/README.md) - Minimaalne voogedastusteek
-- [apps/pack200/README.md](apps/pack200/README.md) - Pack200 tihendus
-- [apps/proxyscript/README.md](apps/proxyscript/README.md) - Proxyskiptid
-- [apps/routerconsole/README.md](apps/routerconsole/README.md) - Ruuteri konsool
-- [apps/sam/README.md](apps/sam/README.md) - Simple Anonymous Messaging
-- [apps/streaming/README.md](apps/streaming/README.md) - Voogedastusteek
-- [apps/susidns/README.md](apps/susidns/README.md) - DNS-server
-- [apps/susimail/README.md](apps/susimail/README.md) - I2P e-posti klient
-- [apps/systray/README.md](apps/systray/README.md) - Süsteemisalve rakendus
-- [core/README.md](core/README.md) - Tuumteegi dokumentatsioon
-- [installer/lib/jbigi/README.md](installer/lib/jbigi/README.md) - Krüptograafia jaoks süsteemikohane JNI-teek (GMP)
+- [apps/README.md](../apps/README.md) - Rakenduste ülevaade
+- [apps/addressbook/README.md](../apps/addressbook/README.md) - Aadressiraamatu rakendus
+- [apps/desktopgui/README.md](../apps/desktopgui/README.md) - Töölaua GUI rakendus
+- [apps/i2pcontrol/README.md](../apps/i2pcontrol/README.md) - I2P Control API
+- [apps/i2psnark/README.md](../apps/i2psnark/README.md) - I2PSnark BitTorrenti klient
+- [apps/i2ptunnel/README.md](../apps/i2ptunnel/README.md) - I2P tunnelirakendus
+- [apps/imagegen/README.md](../apps/imagegen/README.md) - Pildigeneratsiooni tööriistad
+- [apps/jetty/README.md](../apps/jetty/README.md) - Jetty HTTP-server
+- [apps/jrobin/README.md](../apps/jrobin/README.md) - JRobin seireteek
+- [apps/ministreaming/README.md](../apps/ministreaming/README.md) - Minimaalne voogedastusteek
+- [apps/pack200/README.md](../apps/pack200/README.md) - Pack200 tihendus
+- [apps/proxyscript/README.md](../apps/proxyscript/README.md) - Proxyskiptid
+- [apps/routerconsole/README.md](../apps/routerconsole/README.md) - Ruuteri konsool
+- [apps/sam/README.md](../apps/sam/README.md) - Simple Anonymous Messaging
+- [apps/streaming/README.md](../apps/streaming/README.md) - Voogedastusteek
+- [apps/susidns/README.md](../apps/susidns/README.md) - DNS-server
+- [apps/susimail/README.md](../apps/susimail/README.md) - I2P e-posti klient
+- [apps/systray/README.md](../apps/systray/README.md) - Süsteemisalve rakendus
+- [core/README.md](../core/README.md) - Tuumteegi dokumentatsioon
+- [installer/lib/jbigi/README.md](../installer/lib/jbigi/README.md) - Krüptograafia jaoks süsteemikohane JNI-teek (GMP)
 
 ### Muud
 
-- [docs/i2p-sessionban-nftables.md](docs/i2p-sessionban-nftables.md) - I2P seansside keelustamine nftablesi abil
-- [installer/resources/README.md](installer/resources/README.md) - Kaasas olevad paigaldaja ressursid
-- [tools/scripts/README.md](tools/scripts/README.md) - Arenduseks ja halduseks mõeldud abiskriptid
-- [tools/scripts/tests/README.md](tools/scripts/tests/README.md) - Valideerimise ja testimise skriptid
+- [docs/i2p-sessionban-nftables.md](i2p-sessionban-nftables.md) - I2P seansside keelustamine nftablesi abil
+- [installer/resources/README.md](../installer/resources/README.md) - Kaasas olevad paigaldaja ressursid
+- [tools/scripts/README.md](../tools/scripts/README.md) - Arenduseks ja halduseks mõeldud abiskriptid
+- [tools/scripts/tests/README.md](../tools/scripts/tests/README.md) - Valideerimise ja testimise skriptid

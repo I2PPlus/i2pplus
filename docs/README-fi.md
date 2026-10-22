@@ -3,8 +3,8 @@
 [![I2P+ Update zip](../tools/badges/update-badge.svg)](https://i2pplus.github.io/i2pupdate.zip)
 [![I2P+ I2PSnark standalone](../tools/badges/i2psnark-badge.svg)](https://i2pplus.github.io/installers/i2psnark-standalone.zip)
 [![I2P+ Javadocs](../tools/badges/javadocs-badge.svg)](https://i2pplus.github.io/javadoc.zip)
-[![Docker](../tools/badges/docker-badge.svg)](docker/README.md)
-[![AppImage](../tools/badges/appimage-badge.svg)](tools/appimage/README.md)
+[![Docker](../tools/badges/docker-badge.svg)](../docker/README.md)
+[![AppImage](../tools/badges/appimage-badge.svg)](../tools/appimage/README.md)
 
 # I2P+
 
@@ -16,7 +16,7 @@ Uusin versio: https://i2pplus.github.io/
 
 ## Asennus
 
-Katso asennusohjeet tiedostosta [INSTALL.md](docs/INSTALL.md) tai osoitteesta https://i2pplus.github.io/
+Katso asennusohjeet tiedostosta [INSTALL.md](INSTALL.md) tai osoitteesta https://i2pplus.github.io/
 
 ### Huomio Windows-asentajasta
 
@@ -33,7 +33,7 @@ tai aja 'ant javadoc' ja aloita sivulta build/javadoc/index.html
 
 ## Miten osallistua / Kehittää I2P+:aa
 
-Tutustu [HACKING.md](docs/HACKING.md)-dokumenttiin ja muihin docs-hakemiston dokumentteihin.
+Tutustu [HACKING.md](HACKING.md)-dokumenttiin ja muihin docs-hakemiston dokumentteihin.
 
 ## Pakettien rakentaminen lähdetiedostoista
 
@@ -100,7 +100,7 @@ AppImage-paketin rakentamiseksi Linuxille:
 ant buildAppImage
 ```
 
-Katso yksityiskohdat tiedostosta [tools/appimage/README.md](tools/appimage/README.md).
+Katso yksityiskohdat tiedostosta [tools/appimage/README.md](../tools/appimage/README.md).
 
 Oman sisältävän Debian-paketin rakentamiseksi Debian/Ubuntu:lle ilman ulkoisia Jetty/Tomcat-riippuvuuksia:
 ```bash
@@ -109,7 +109,7 @@ ant buildDeb
 
 Tämä luo oman sisältävän `.deb`-paketin, joka sisältää mukana toimitetut Jetty- ja Tomcat-kirjastot. Vaatii vain OpenJDK-ajoympäristön (asennetaan automaattisesti pakettihallinnan kautta).
 
-Dockerissa ajamiseksi katso [docker/README.md](docker/README.md)
+Dockerissa ajamiseksi katso [docker/README.md](../docker/README.md)
 
 ## Yhteystiedot
 
@@ -121,50 +121,50 @@ Virheraportit: https://github.com/I2PPlus/i2pplus/issues
 
 I2P+ on lisensoitu AGPL v.3:n mukaisesti.
 
-Eri osakomponenttien lisensseistä katso: [README.md](docs/LICENSES.md)
+Eri osakomponenttien lisensseistä katso: [LICENSES.md](LICENSES.md)
 
 ## Katso myös
 
 ### Dokumentaatio
 
-- [docs/README.md](docs/README.md) - Täydellinen dokumentaatioluettelo
-- [docs/INSTALL.md](docs/INSTALL.md) - Asennusopas
-- [docs/INSTALL-headless.md](docs/INSTALL-headless.md) - Headless-asennus (konsolitila)
-- [docs/HACKING.md](docs/HACKING.md) - Kehittäjän opas ja käännösjärjestelmät
-- [docs/DIRECTORIES.md](docs/DIRECTORIES.md) - Lähdepuun rakenne ja mistä asiat löytyvät
-- [router/java/src/net/i2p/README.md](router/java/src/net/i2p/README.md) - Reitittimen lähdepuun yleiskuva
-- [core/java/src/net/i2p/README.md](core/java/src/net/i2p/README.md) - Ydin-kirjaston lähdepuun yleiskuva
-- [docs/DEBUGGING.md](docs/DEBUGGING.md) - Ajoaikainen vianjälitys JDWP:n ja muiden työkalujen avulla
-- [docs/THEMING.md](docs/THEMING.md) - Konsolin ja web-sovelluksen teemajärjestelmä
-- [docs/LICENSES.md](docs/LICENSES.md) - Kolmansien osapuolten lisenssit
-- [docs/history.txt](docs/history.txt) - Täydellinen muutosloki
+- [docs/README.md](README.md) - Täydellinen dokumentaatioluettelo
+- [docs/INSTALL.md](INSTALL.md) - Asennusopas
+- [docs/INSTALL-headless.md](INSTALL-headless.md) - Headless-asennus (konsolitila)
+- [docs/HACKING.md](HACKING.md) - Kehittäjän opas ja käännösjärjestelmät
+- [docs/DIRECTORIES.md](DIRECTORIES.md) - Lähdepuun rakenne ja mistä asiat löytyvät
+- [router/java/src/net/i2p/README.md](../router/java/src/net/i2p/README.md) - Reitittimen lähdepuun yleiskuva
+- [core/java/src/net/i2p/README.md](../core/java/src/net/i2p/README.md) - Ydin-kirjaston lähdepuun yleiskuva
+- [docs/DEBUGGING.md](DEBUGGING.md) - Ajoaikainen vianjälitys JDWP:n ja muiden työkalujen avulla
+- [docs/THEMING.md](THEMING.md) - Konsolin ja web-sovelluksen teemajärjestelmä
+- [docs/LICENSES.md](LICENSES.md) - Kolmansien osapuolten lisenssit
+- [docs/history.txt](history.txt) - Täydellinen muutosloki
 
 ### Aliprojektit
 
-- [apps/README.md](apps/README.md) - Sovellusten yleiskuva
-- [apps/addressbook/README.md](apps/addressbook/README.md) - Osoitekirjasovellus
-- [apps/desktopgui/README.md](apps/desktopgui/README.md) - Työpöydän käyttöliittymäsovellus
-- [apps/i2pcontrol/README.md](apps/i2pcontrol/README.md) - I2P Control API
-- [apps/i2psnark/README.md](apps/i2psnark/README.md) - I2PSnark BitTorrent-asiakasohjelma
-- [apps/i2ptunnel/README.md](apps/i2ptunnel/README.md) - I2P Tunnel -sovellus
-- [apps/imagegen/README.md](apps/imagegen/README.md) - Kuvagenerointityökalut
-- [apps/jetty/README.md](apps/jetty/README.md) - Jetty HTTP -palvelin
-- [apps/jrobin/README.md](apps/jrobin/README.md) - JRobin-valvontakirjasto
-- [apps/ministreaming/README.md](apps/ministreaming/README.md) - Minimaalinen streaming-kirjasto
-- [apps/pack200/README.md](apps/pack200/README.md) - Pack200-pakkaus
-- [apps/proxyscript/README.md](apps/proxyscript/README.md) - Proxy-skriptit
-- [apps/routerconsole/README.md](apps/routerconsole/README.md) - Reitittimen konsoli
-- [apps/sam/README.md](apps/sam/README.md) - Simple Anonymous Messaging
-- [apps/streaming/README.md](apps/streaming/README.md) - Streaming-kirjasto
-- [apps/susidns/README.md](apps/susidns/README.md) - DNS-palvelin
-- [apps/susimail/README.md](apps/susimail/README.md) - I2P-sähköpostiohjelma
-- [apps/systray/README.md](apps/systray/README.md) - Järjestelmäteline-sovellus
-- [core/README.md](core/README.md) - Ydin-kirjaston dokumentaatio
-- [installer/lib/jbigi/README.md](installer/lib/jbigi/README.md) - Alkuperäinen JNI-kirjasto salaukseen (GMP)
+- [apps/README.md](../apps/README.md) - Sovellusten yleiskuva
+- [apps/addressbook/README.md](../apps/addressbook/README.md) - Osoitekirjasovellus
+- [apps/desktopgui/README.md](../apps/desktopgui/README.md) - Työpöydän käyttöliittymäsovellus
+- [apps/i2pcontrol/README.md](../apps/i2pcontrol/README.md) - I2P Control API
+- [apps/i2psnark/README.md](../apps/i2psnark/README.md) - I2PSnark BitTorrent-asiakasohjelma
+- [apps/i2ptunnel/README.md](../apps/i2ptunnel/README.md) - I2P Tunnel -sovellus
+- [apps/imagegen/README.md](../apps/imagegen/README.md) - Kuvagenerointityökalut
+- [apps/jetty/README.md](../apps/jetty/README.md) - Jetty HTTP -palvelin
+- [apps/jrobin/README.md](../apps/jrobin/README.md) - JRobin-valvontakirjasto
+- [apps/ministreaming/README.md](../apps/ministreaming/README.md) - Minimaalinen streaming-kirjasto
+- [apps/pack200/README.md](../apps/pack200/README.md) - Pack200-pakkaus
+- [apps/proxyscript/README.md](../apps/proxyscript/README.md) - Proxy-skriptit
+- [apps/routerconsole/README.md](../apps/routerconsole/README.md) - Reitittimen konsoli
+- [apps/sam/README.md](../apps/sam/README.md) - Simple Anonymous Messaging
+- [apps/streaming/README.md](../apps/streaming/README.md) - Streaming-kirjasto
+- [apps/susidns/README.md](../apps/susidns/README.md) - DNS-palvelin
+- [apps/susimail/README.md](../apps/susimail/README.md) - I2P-sähköpostiohjelma
+- [apps/systray/README.md](../apps/systray/README.md) - Järjestelmäteline-sovellus
+- [core/README.md](../core/README.md) - Ydin-kirjaston dokumentaatio
+- [installer/lib/jbigi/README.md](../installer/lib/jbigi/README.md) - Alkuperäinen JNI-kirjasto salaukseen (GMP)
 
 ### Sekalaista
 
-- [docs/i2p-sessionban-nftables.md](docs/i2p-sessionban-nftables.md) - I2P-istuntokieltojen hallinta nftablesilla
-- [installer/resources/README.md](installer/resources/README.md) - Mukana toimitetut asentajan resurssit
-- [tools/scripts/README.md](tools/scripts/README.md) - Apuskriptit kehitykseen ja ylläpitoon
-- [tools/scripts/tests/README.md](tools/scripts/tests/README.md) - Validointi- ja testaus-skriptit
+- [docs/i2p-sessionban-nftables.md](i2p-sessionban-nftables.md) - I2P-istuntokieltojen hallinta nftablesilla
+- [installer/resources/README.md](../installer/resources/README.md) - Mukana toimitetut asentajan resurssit
+- [tools/scripts/README.md](../tools/scripts/README.md) - Apuskriptit kehitykseen ja ylläpitoon
+- [tools/scripts/tests/README.md](../tools/scripts/tests/README.md) - Validointi- ja testaus-skriptit

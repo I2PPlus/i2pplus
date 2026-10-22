@@ -3,8 +3,8 @@
 [![I2P+ Update zip](../tools/badges/update-badge.svg)](https://i2pplus.github.io/i2pupdate.zip)
 [![I2P+ I2PSnark standalone](../tools/badges/i2psnark-badge.svg)](https://i2pplus.github.io/installers/i2psnark-standalone.zip)
 [![I2P+ Javadocs](../tools/badges/javadocs-badge.svg)](https://i2pplus.github.io/javadoc.zip)
-[![Docker](../tools/badges/docker-badge.svg)](docker/README.md)
-[![AppImage](../tools/badges/appimage-badge.svg)](tools/appimage/README.md)
+[![Docker](../tools/badges/docker-badge.svg)](../docker/README.md)
+[![AppImage](../tools/badges/appimage-badge.svg)](../tools/appimage/README.md)
 
 # I2P+
 
@@ -16,7 +16,7 @@
 
 ## Εγκατάσταση
 
-Δείτε τις οδηγίες εγκατάστασης στο [INSTALL.md](docs/INSTALL.md) ή στο https://i2pplus.github.io/
+Δείτε τις οδηγίες εγκατάστασης στο [INSTALL.md](INSTALL.md) ή στο https://i2pplus.github.io/
 
 ### Σημείωση για τον εγκαταστάτη Windows
 
@@ -33,7 +33,7 @@ API: https://i2pplus.github.io/javadoc/
 
 ## Πώς να συνεισφέρετε / Να χακάρετε το I2P
 
-Παρακαλώ ελέγξτε το [HACKING.md](docs/HACKING.md) και άλλα έγγραφα στον κατάλογο docs.
+Παρακαλώ ελέγξτε το [HACKING.md](HACKING.md) και άλλα έγγραφα στον κατάλογο docs.
 
 ## Δημιουργία πακέτων από τον πηγαίο κώδικα
 
@@ -94,7 +94,7 @@ API: https://i2pplus.github.io/javadoc/
 
 
 
-Για περισσότερες πληροφορίες σχετικά με την εκτέλεση του I2P σε Docker, δείτε το [docker/README.md](docker/README.md)
+Για περισσότερες πληροφορίες σχετικά με την εκτέλεση του I2P σε Docker, δείτε το [docker/README.md](../docker/README.md)
 
 
 
@@ -125,7 +125,7 @@ API: https://i2pplus.github.io/javadoc/
 
 ## Στοιχεία επικοινωνίας
 ## Άδειες
-Για τις άδειες των διάφορων υποσυστατικών, δείτε: [README.md](docs/LICENSES.md)
+Για τις άδειες των διάφορων υποσυστατικών, δείτε: [LICENSES.md](LICENSES.md)
 
 ## Στοιχεία επικοινωνίας
 ## Άδειες
@@ -138,44 +138,44 @@ API: https://i2pplus.github.io/javadoc/
 ## Στοιχεία επικοινωνίας
 ## Άδειες
 ## Τεκμηρίωση
-- [docs/README.md](docs/README.md) - Πλήρες ευρετήριο τεκμηρίωσης
+- [docs/README.md](README.md) - Πλήρες ευρετήριο τεκμηρίωσης
 
 ## Στοιχεία επικοινωνίας
 ## Άδειες
 ## Τεκμηρίωση
-- [docs/INSTALL.md](docs/INSTALL.md) - Οδηγός εγκατάστασης
+- [docs/INSTALL.md](INSTALL.md) - Οδηγός εγκατάστασης
 
 ## Στοιχεία επικοινωνίας
 ## Άδειες
 ## Τεκμηρίωση
-- [docs/INSTALL-headless.md](docs/INSTALL-headless.md) - Εγκατάσταση χωρίς GUI (λειτουργία κονσόλας)
+- [docs/INSTALL-headless.md](INSTALL-headless.md) - Εγκατάσταση χωρίς GUI (λειτουργία κονσόλας)
 
 ## Στοιχεία επικοινωνίας
 ## Άδειες
 ## Τεκμηρίωση
-- [docs/HACKING.md](docs/HACKING.md) - Οδηγός προγραμματιστή και συστήματα build
+- [docs/HACKING.md](HACKING.md) - Οδηγός προγραμματιστή και συστήματα build
 
 ## Στοιχεία επικοινωνίας
 ## Άδειες
 ## Τεκμηρίωση
-- [docs/DIRECTORIES.md](docs/DIRECTORIES.md) - Διάταξη δέντρου πηγαίου κώδικα
-- [docs/DEBUGGING.md](docs/DEBUGGING.md) - Εντοπισμός σφαλμάτων σε χρόνο εκτέλεσης με JDWP και άλλα εργαλεία
+- [docs/DIRECTORIES.md](DIRECTORIES.md) - Διάταξη δέντρου πηγαίου κώδικα
+- [docs/DEBUGGING.md](DEBUGGING.md) - Εντοπισμός σφαλμάτων σε χρόνο εκτέλεσης με JDWP και άλλα εργαλεία
 
 ## Στοιχεία επικοινωνίας
 ## Άδειες
 ## Τεκμηρίωση
-- [docs/i2p-sessionban-nftables.md](docs/i2p-sessionban-nftables.md) - Διαχείριση απαγορεύσεων συνεδρίας I2P με nftables
+- [docs/i2p-sessionban-nftables.md](i2p-sessionban-nftables.md) - Διαχείριση απαγορεύσεων συνεδρίας I2P με nftables
 
 ## Στοιχεία επικοινωνίας
 ## Άδειες
 ## Τεκμηρίωση
-- [docs/THEMING.md](docs/THEMING.md) - Console and webapp theming system
-- [docs/LICENSES.md](docs/LICENSES.md) - Άδειες τρίτων μερών
+- [docs/THEMING.md](THEMING.md) - Console and webapp theming system
+- [docs/LICENSES.md](LICENSES.md) - Άδειες τρίτων μερών
 
 ## Στοιχεία επικοινωνίας
 ## Άδειες
 ## Τεκμηρίωση
-- [docs/history.txt](docs/history.txt) - Πλήρες αρχείο αλλαγών
+- [docs/history.txt](history.txt) - Πλήρες αρχείο αλλαγών
 
 ## Στοιχεία επικοινωνίας
 ## Άδειες
@@ -195,102 +195,102 @@ API: https://i2pplus.github.io/javadoc/
 ## Στοιχεία επικοινωνίας
 ## Άδειες
 ## Τεκμηρίωση
-- [apps/README.md](apps/README.md) - Επισκόπηση εφαρμογών
+- [apps/README.md](../apps/README.md) - Επισκόπηση εφαρμογών
 
 ## Στοιχεία επικοινωνίας
 ## Άδειες
 ## Τεκμηρίωση
-- [apps/addressbook/README.md](apps/addressbook/README.md) - Εφαρμογή βιβλίου διευθύνσεων
+- [apps/addressbook/README.md](../apps/addressbook/README.md) - Εφαρμογή βιβλίου διευθύνσεων
 
 ## Στοιχεία επικοινωνίας
 ## Άδειες
 ## Τεκμηρίωση
-- [apps/desktopgui/README.md](apps/desktopgui/README.md) - Εφαρμογή Desktop GUI
+- [apps/desktopgui/README.md](../apps/desktopgui/README.md) - Εφαρμογή Desktop GUI
 
 ## Στοιχεία επικοινωνίας
 ## Άδειες
 ## Τεκμηρίωση
-- [apps/i2pcontrol/README.md](apps/i2pcontrol/README.md) - API ελέγχου I2P
+- [apps/i2pcontrol/README.md](../apps/i2pcontrol/README.md) - API ελέγχου I2P
 
 ## Στοιχεία επικοινωνίας
 ## Άδειες
 ## Τεκμηρίωση
-- [apps/i2psnark/README.md](apps/i2psnark/README.md) - Πελάτης BitTorrent I2PSnark
+- [apps/i2psnark/README.md](../apps/i2psnark/README.md) - Πελάτης BitTorrent I2PSnark
 
 ## Στοιχεία επικοινωνίας
 ## Άδειες
 ## Τεκμηρίωση
-- [apps/i2ptunnel/README.md](apps/i2ptunnel/README.md) - Εφαρμογή τούνελ I2P
+- [apps/i2ptunnel/README.md](../apps/i2ptunnel/README.md) - Εφαρμογή τούνελ I2P
 
 ## Στοιχεία επικοινωνίας
 ## Άδειες
 ## Τεκμηρίωση
-- [apps/imagegen/README.md](apps/imagegen/README.md) - Εργαλεία δημιουργίας εικόνων
+- [apps/imagegen/README.md](../apps/imagegen/README.md) - Εργαλεία δημιουργίας εικόνων
 
 ## Στοιχεία επικοινωνίας
 ## Άδειες
 ## Τεκμηρίωση
-- [apps/jetty/README.md](apps/jetty/README.md) - HTTP διακομιστής Jetty
+- [apps/jetty/README.md](../apps/jetty/README.md) - HTTP διακομιστής Jetty
 
 ## Στοιχεία επικοινωνίας
 ## Άδειες
 ## Τεκμηρίωση
-- [apps/jrobin/README.md](apps/jrobin/README.md) - Βιβλιοθήκη παρακολούθησης JRobin
+- [apps/jrobin/README.md](../apps/jrobin/README.md) - Βιβλιοθήκη παρακολούθησης JRobin
 
 ## Στοιχεία επικοινωνίας
 ## Άδειες
 ## Τεκμηρίωση
-- [apps/ministreaming/README.md](apps/ministreaming/README.md) - Ελάχιστη βιβλιοθήκη streaming
+- [apps/ministreaming/README.md](../apps/ministreaming/README.md) - Ελάχιστη βιβλιοθήκη streaming
 
 ## Στοιχεία επικοινωνίας
 ## Άδειες
 ## Τεκμηρίωση
-- [apps/pack200/README.md](apps/pack200/README.md) - Συμπίεση Pack200
+- [apps/pack200/README.md](../apps/pack200/README.md) - Συμπίεση Pack200
 
 ## Στοιχεία επικοινωνίας
 ## Άδειες
 ## Τεκμηρίωση
-- [apps/proxyscript/README.md](apps/proxyscript/README.md) - Proxy scripts
+- [apps/proxyscript/README.md](../apps/proxyscript/README.md) - Proxy scripts
 
 ## Στοιχεία επικοινωνίας
 ## Άδειες
 ## Τεκμηρίωση
-- [apps/routerconsole/README.md](apps/routerconsole/README.md) - Κονσόλα δρομολογητή
+- [apps/routerconsole/README.md](../apps/routerconsole/README.md) - Κονσόλα δρομολογητή
 
 ## Στοιχεία επικοινωνίας
 ## Άδειες
 ## Τεκμηρίωση
-- [apps/sam/README.md](apps/sam/README.md) - Απλή Ανώνυμη Ανταλλαγή Μηνυμάτων
+- [apps/sam/README.md](../apps/sam/README.md) - Απλή Ανώνυμη Ανταλλαγή Μηνυμάτων
 
 ## Στοιχεία επικοινωνίας
 ## Άδειες
 ## Τεκμηρίωση
-- [apps/streaming/README.md](apps/streaming/README.md) - Βιβλιοθήκη streaming
+- [apps/streaming/README.md](../apps/streaming/README.md) - Βιβλιοθήκη streaming
 
 ## Στοιχεία επικοινωνίας
 ## Άδειες
 ## Τεκμηρίωση
-- [apps/susidns/README.md](apps/susidns/README.md) - DNS διακομιστής
+- [apps/susidns/README.md](../apps/susidns/README.md) - DNS διακομιστής
 
 ## Στοιχεία επικοινωνίας
 ## Άδειες
 ## Τεκμηρίωση
-- [apps/susimail/README.md](apps/susimail/README.md) - Πελάτης email I2P
+- [apps/susimail/README.md](../apps/susimail/README.md) - Πελάτης email I2P
 
 ## Στοιχεία επικοινωνίας
 ## Άδειες
 ## Τεκμηρίωση
-- [apps/systray/README.md](apps/systray/README.md) - Εφαρμογή συστημικής θήκης
+- [apps/systray/README.md](../apps/systray/README.md) - Εφαρμογή συστημικής θήκης
 
 ## Στοιχεία επικοινωνίας
 ## Άδειες
 ## Τεκμηρίωση
-- [core/README.md](core/README.md) - Τεκμηρίωση βιβλιοθήκης core
+- [core/README.md](../core/README.md) - Τεκμηρίωση βιβλιοθήκης core
 
 ## Στοιχεία επικοινωνίας
 ## Άδειες
 ## Τεκμηρίωση
-- [installer/lib/jbigi/README.md](installer/lib/jbigi/README.md) - Native JNI βιβλιοθήκη για κρυπτογράφηση (GMP)
+- [installer/lib/jbigi/README.md](../installer/lib/jbigi/README.md) - Native JNI βιβλιοθήκη για κρυπτογράφηση (GMP)
 
 ## Στοιχεία επικοινωνίας
 ## Άδειες
@@ -310,27 +310,22 @@ API: https://i2pplus.github.io/javadoc/
 ## Στοιχεία επικοινωνίας
 ## Άδειες
 ## Τεκμηρίωση
-- [docs/i2p-sessionban-nftables.md](docs/i2p-sessionban-nftables.md) - Διαχείριση απαγορεύσεων συνεδρίας I2P με nftables
+- [docs/i2p-sessionban-nftables.md](i2p-sessionban-nftables.md) - Διαχείριση απαγορεύσεων συνεδρίας I2P με nftables
 
 ## Στοιχεία επικοινωνίας
 ## Άδειες
 ## Τεκμηρίωση
-- [installer/resources/README.md](installer/resources/README.md) - Πόροι εγκατάστασης
+- [installer/resources/README.md](../installer/resources/README.md) - Πόροι εγκατάστασης
 
 ## Στοιχεία επικοινωνίας
 ## Άδειες
 ## Τεκμηρίωση
-- [tools/scripts/README.md](tools/scripts/README.md) - Βοηθητικά scripts για ανάπτυξη και διαχείριση
+- [tools/scripts/README.md](../tools/scripts/README.md) - Βοηθητικά scripts για ανάπτυξη και διαχείριση
 
 ## Στοιχεία επικοινωνίας
 ## Άδειες
 ## Τεκμηρίωση
-- [tools/scripts/tests/README.md](tools/scripts/tests/README.md) - Scripts επικύρωσης και δοκιμής
-
-## Στοιχεία επικοινωνίας
-## Άδειες
-## Τεκμηρίωση
-
+- [tools/scripts/tests/README.md](../tools/scripts/tests/README.md) - Scripts επικύρωσης και δοκιμής
 
 ## Στοιχεία επικοινωνίας
 ## Άδειες
@@ -340,7 +335,12 @@ API: https://i2pplus.github.io/javadoc/
 ## Στοιχεία επικοινωνίας
 ## Άδειες
 ## Τεκμηρίωση
-- [docker/README.md](docker/README.md) - Εκτέλεση I2P+ σε Docker
+
+
+## Στοιχεία επικοινωνίας
+## Άδειες
+## Τεκμηρίωση
+- [docker/README.md](../docker/README.md) - Εκτέλεση I2P+ σε Docker
 
 ## Στοιχεία επικοινωνίας
 ## Άδειες

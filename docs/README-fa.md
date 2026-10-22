@@ -3,8 +3,8 @@
 [![I2P+ Update zip](../tools/badges/update-badge.svg)](https://i2pplus.github.io/i2pupdate.zip)
 [![I2P+ I2PSnark standalone](../tools/badges/i2psnark-badge.svg)](https://i2pplus.github.io/installers/i2psnark-standalone.zip)
 [![I2P+ Javadocs](../tools/badges/javadocs-badge.svg)](https://i2pplus.github.io/javadoc.zip)
-[![Docker](../tools/badges/docker-badge.svg)](docker/README.md)
-[![AppImage](../tools/badges/appimage-badge.svg)](tools/appimage/README.md)
+[![Docker](../tools/badges/docker-badge.svg)](../docker/README.md)
+[![AppImage](../tools/badges/appimage-badge.svg)](../tools/appimage/README.md)
 
 # I2P+
 
@@ -36,8 +36,8 @@ API: https://i2pplus.github.io/javadoc/
 لطفاً [HACKING.md](HACKING.md) و سایر اسناد در پوشه docs را بررسی کنید.
 
 
-- [docs/DEBUGGING.md](docs/DEBUGGING.md) - اشکال‌زدایی در زمان اجرا با JDWP و سایر ابزارها
-- [docs/THEMING.md](docs/THEMING.md) - Console and webapp theming system
+- [docs/DEBUGGING.md](DEBUGGING.md) - اشکال‌زدایی در زمان اجرا با JDWP و سایر ابزارها
+- [docs/THEMING.md](THEMING.md) - Console and webapp theming system
 ## ساخت بسته‌ها از منبع
 
 برای گرفتن شاخه توسعه از کنترل منبع: https://github.com/I2PPlus/i2pplus/
@@ -107,10 +107,10 @@ ant buildDeb
 ant buildAppImage
 ```
 
-برای جزئیات به [tools/appimage/README.md](tools/appimage/README.md) مراجعه کنید.
+برای جزئیات به [tools/appimage/README.md](../tools/appimage/README.md) مراجعه کنید.
 
 
-برای اطلاعات بیشتر در مورد نحوه اجرای I2P در Docker، به [Docker.md](../docker/Docker.md) مراجعه کنید
+برای اطلاعات بیشتر در مورد نحوه اجرای I2P در Docker، به [README.md](../docker/README.md) مراجعه کنید
 
 
 
@@ -141,7 +141,7 @@ I2P+ تحت AGPL v.3 مجوز دارد.
 
 ## اطلاعات تماس
 ## مجوزها
-برای مجوزهای اجزای فرعی مختلف، به: [README.md](docs/LICENSES.md) مراجعه کنید
+برای مجوزهای اجزای فرعی مختلف، به: [LICENSES.md](LICENSES.md) مراجعه کنید
 
 ## اطلاعات تماس
 ## مجوزها

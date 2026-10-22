@@ -4,4 +4,4 @@ A Proxy Auto-Configuration (PAC) script that configures browsers to route `.i2p`
 
 ## Contents
 
-- `i2p.pac` - PAC script file
+- `i2pProxy.pac` - PAC script file

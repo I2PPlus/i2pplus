@@ -29,7 +29,7 @@ https://geti2p.net/how
 FAQ: https://geti2p.net/faq
 
 API: https://i2pplus.github.io/javadoc/
-or run 'ant javadoc' then start at build/javadoc/index.html
+or run 'ant javadoc' then start at dist/javadoc/index.html
 
 ## How to contribute / Hack on I2P+
 
@@ -111,6 +111,17 @@ This creates a self-contained `.deb` package that includes bundled Jetty and Tom
 
 To run in Docker, see [docker/README.md](docker/README.md)
 
+### Running the tests
+
+```bash
+ant test                     # all 12 JUnit suites, HTML report in dist/test-report.html
+tools/scripts/run-tests.sh   # same, plus dependency downloads and per-suite build order
+tools/scripts/run-tests.sh core
+```
+
+Test dependencies (JUnit, Hamcrest, Mockito, ScalaTest) are downloaded to
+`tools/test/` on first run. See [tools/test/README.md](tools/test/README.md).
+
 ## Contact info
 
 Need help? Visit the IRC channel #saltR on the I2P IRC network
@@ -121,7 +132,7 @@ Bug reports: https://github.com/I2PPlus/i2pplus/issues
 
 I2P+ is licensed under the AGPL v.3.
 
-For the various sub-component licenses, see: [README.md](docs/LICENSES.md)
+For the various sub-component licenses, see: [docs/LICENSES.md](docs/LICENSES.md)
 
 ## See also
 
@@ -130,12 +141,18 @@ For the various sub-component licenses, see: [README.md](docs/LICENSES.md)
 - [docs/README.md](docs/README.md) - Full documentation index
 - [docs/INSTALL.md](docs/INSTALL.md) - Installation guide
 - [docs/INSTALL-headless.md](docs/INSTALL-headless.md) - Headless (console mode) installation
+- [docs/BUILD.md](docs/BUILD.md) - Building I2P+ for developers
 - [docs/HACKING.md](docs/HACKING.md) - Developer guide and build systems
+- [docs/CODING.md](docs/CODING.md) - Coding guide and style rules
 - [docs/DIRECTORIES.md](docs/DIRECTORIES.md) - Source tree layout and where to find things
 - [router/java/src/net/i2p/README.md](router/java/src/net/i2p/README.md) - Router source tree overview
 - [core/java/src/net/i2p/README.md](core/java/src/net/i2p/README.md) - Core library source tree overview
 - [docs/DEBUGGING.md](docs/DEBUGGING.md) - Runtime debugging with JDWP and other tools
 - [docs/THEMING.md](docs/THEMING.md) - Console and webapp theming system
+- [docs/TRANSLATING.md](docs/TRANSLATING.md) - Translating I2P+
+- [docs/WINDOWS.md](docs/WINDOWS.md) - I2P+ on Windows
+- [docs/CHECKLIST.md](docs/CHECKLIST.md) - Release checklist and process
+- [docs/i2psnark-beps.md](docs/i2psnark-beps.md) - I2PSnark BitTorrent extension (BEP) support
 - [docs/LICENSES.md](docs/LICENSES.md) - Third-party licenses
 - [docs/history.txt](docs/history.txt) - Full changelog
 
@@ -159,8 +176,12 @@ For the various sub-component licenses, see: [README.md](docs/LICENSES.md)
 - [apps/susidns/README.md](apps/susidns/README.md) - DNS server
 - [apps/susimail/README.md](apps/susimail/README.md) - I2P email client
 - [apps/systray/README.md](apps/systray/README.md) - System tray application
+- [router/README.md](router/README.md) - Router module documentation
 - [core/README.md](core/README.md) - Core library documentation
+- [installer/README.md](installer/README.md) - Installer build and resources
 - [installer/lib/jbigi/README.md](installer/lib/jbigi/README.md) - Native JNI library for cryptography (GMP)
+- [tools/README.md](tools/README.md) - Development tools overview
+- [tools/gradle/README.md](tools/gradle/README.md) - Gradle build system
 
 ### MISC
 

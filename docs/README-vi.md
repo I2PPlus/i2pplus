@@ -3,8 +3,8 @@
 [![I2P+ Update zip](../tools/badges/update-badge.svg)](https://i2pplus.github.io/i2pupdate.zip)
 [![I2P+ I2PSnark standalone](../tools/badges/i2psnark-badge.svg)](https://i2pplus.github.io/installers/i2psnark-standalone.zip)
 [![I2P+ Javadocs](../tools/badges/javadocs-badge.svg)](https://i2pplus.github.io/javadoc.zip)
-[![Docker](../tools/badges/docker-badge.svg)](docker/README.md)
-[![AppImage](../tools/badges/appimage-badge.svg)](tools/appimage/README.md)
+[![Docker](../tools/badges/docker-badge.svg)](../docker/README.md)
+[![AppImage](../tools/badges/appimage-badge.svg)](../tools/appimage/README.md)
 
 # I2P+
 
@@ -16,7 +16,7 @@ Phiên bản mới nhất: https://i2pplus.github.io/
 
 ## Cài đặt
 
-Xem [INSTALL.md](docs/INSTALL.md) hoặc https://i2pplus.github.io/ để biết hướng dẫn cài đặt.
+Xem [INSTALL.md](INSTALL.md) hoặc https://i2pplus.github.io/ để biết hướng dẫn cài đặt.
 
 ### Lưu ý về trình cài đặt Windows
 
@@ -33,7 +33,7 @@ hoặc chạy 'ant javadoc' rồi bắt đầu tại build/javadoc/index.html
 
 ## Cách đóng góp / Hack trên I2P
 
-Vui lòng xem [HACKING.md](docs/HACKING.md) và các tài liệu khác trong thư mục docs.
+Vui lòng xem [HACKING.md](HACKING.md) và các tài liệu khác trong thư mục docs.
 
 ## Xây dựng gói cài đặt từ mã nguồn
 
@@ -103,10 +103,10 @@ ant buildDeb
 ant buildAppImage
 ```
 
-Xem [tools/appimage/README.md](tools/appimage/README.md) để biết chi tiết.
+Xem [tools/appimage/README.md](../tools/appimage/README.md) để biết chi tiết.
 
 
-Để biết thêm thông tin về cách chạy I2P trong Docker, xem [docker/README.md](docker/README.md)
+Để biết thêm thông tin về cách chạy I2P trong Docker, xem [docker/README.md](../docker/README.md)
 
 
 ## Thông tin liên hệ
@@ -119,54 +119,54 @@ Báo lỗi: https://i2pgit.org/i2p-hackers/i2p.i2p/-/issues hoặc https://githu
 
 I2P+ được cấp phép theo AGPL v.3.
 
-Để xem giấy phép của các thành phần phụ, xem: [README.md](docs/LICENSES.md)
+Để xem giấy phép của các thành phần phụ, xem: [LICENSES.md](LICENSES.md)
 
 ## Xem thêm
 
 ### Tài liệu
 
-- [docs/README.md](docs/README.md) - Chỉ mục tài liệu đầy đủ
-- [docs/INSTALL.md](docs/INSTALL.md) - Hướng dẫn cài đặt
-- [docs/INSTALL-headless.md](docs/INSTALL-headless.md) - Cài đặt headless (console mode)
-- [docs/HACKING.md](docs/HACKING.md) - Hướng dẫn phát triển và hệ thống build
-- [docs/DIRECTORIES.md](docs/DIRECTORIES.md) - Bố trí cây mã nguồn và nơi tìm thứ
-- [docs/DEBUGGING.md](docs/DEBUGGING.md) - Gỡ lỗi thời gian chạy với JDWP và các công cụ khác
-- [docs/i2p-sessionban-nftables.md](docs/i2p-sessionban-nftables.md) - Quản lý lệnh cấm session I2P với nftables
-- [docs/THEMING.md](docs/THEMING.md) - Console and webapp theming system
-- [docs/LICENSES.md](docs/LICENSES.md) - Giấy phép third-party
-- [docs/history.txt](docs/history.txt) - Lịch sử thay đổi đầy đủ
+- [docs/README.md](README.md) - Chỉ mục tài liệu đầy đủ
+- [docs/INSTALL.md](INSTALL.md) - Hướng dẫn cài đặt
+- [docs/INSTALL-headless.md](INSTALL-headless.md) - Cài đặt headless (console mode)
+- [docs/HACKING.md](HACKING.md) - Hướng dẫn phát triển và hệ thống build
+- [docs/DIRECTORIES.md](DIRECTORIES.md) - Bố trí cây mã nguồn và nơi tìm thứ
+- [docs/DEBUGGING.md](DEBUGGING.md) - Gỡ lỗi thời gian chạy với JDWP và các công cụ khác
+- [docs/i2p-sessionban-nftables.md](i2p-sessionban-nftables.md) - Quản lý lệnh cấm session I2P với nftables
+- [docs/THEMING.md](THEMING.md) - Console and webapp theming system
+- [docs/LICENSES.md](LICENSES.md) - Giấy phép third-party
+- [docs/history.txt](history.txt) - Lịch sử thay đổi đầy đủ
 
 ### Sub-projects
 
-- [apps/README.md](apps/README.md) - Tổng quan ứng dụng
-- [apps/addressbook/README.md](apps/addressbook/README.md) - Ứng dụng addressbook
-- [apps/desktopgui/README.md](apps/desktopgui/README.md) - Ứng dụng Desktop GUI
-- [apps/i2pcontrol/README.md](apps/i2pcontrol/README.md) - I2P Control API
-- [apps/i2psnark/README.md](apps/i2psnark/README.md) - I2PSnark BitTorrent client
-- [apps/i2ptunnel/README.md](apps/i2ptunnel/README.md) - Ứng dụng I2P Tunnel
-- [apps/imagegen/README.md](apps/imagegen/README.md) - Công cụ tạo hình ảnh
-- [apps/jetty/README.md](apps/jetty/README.md) - Jetty HTTP server
-- [apps/jrobin/README.md](apps/jrobin/README.md) - Thư viện giám sát JRobin
-- [apps/ministreaming/README.md](apps/ministreaming/README.md) - Thư viện streaming tối thiểu
-- [apps/pack200/README.md](apps/pack200/README.md) - Nén Pack200
-- [apps/proxyscript/README.md](apps/proxyscript/README.md) - Proxy scripts
-- [apps/routerconsole/README.md](apps/routerconsole/README.md) - Router console
-- [apps/sam/README.md](apps/sam/README.md) - Simple Anonymous Messaging
-- [apps/streaming/README.md](apps/streaming/README.md) - Thư viện streaming
-- [apps/susidns/README.md](apps/susidns/README.md) - DNS server
-- [apps/susimail/README.md](apps/susimail/README.md) - I2P email client
-- [apps/systray/README.md](apps/systray/README.md) - Ứng dụng system tray
-- [core/README.md](core/README.md) - Tài liệu thư viện core
-- [installer/lib/jbigi/README.md](installer/lib/jbigi/README.md) - Thư viện JNI native cho mật mã học (GMP)
+- [apps/README.md](../apps/README.md) - Tổng quan ứng dụng
+- [apps/addressbook/README.md](../apps/addressbook/README.md) - Ứng dụng addressbook
+- [apps/desktopgui/README.md](../apps/desktopgui/README.md) - Ứng dụng Desktop GUI
+- [apps/i2pcontrol/README.md](../apps/i2pcontrol/README.md) - I2P Control API
+- [apps/i2psnark/README.md](../apps/i2psnark/README.md) - I2PSnark BitTorrent client
+- [apps/i2ptunnel/README.md](../apps/i2ptunnel/README.md) - Ứng dụng I2P Tunnel
+- [apps/imagegen/README.md](../apps/imagegen/README.md) - Công cụ tạo hình ảnh
+- [apps/jetty/README.md](../apps/jetty/README.md) - Jetty HTTP server
+- [apps/jrobin/README.md](../apps/jrobin/README.md) - Thư viện giám sát JRobin
+- [apps/ministreaming/README.md](../apps/ministreaming/README.md) - Thư viện streaming tối thiểu
+- [apps/pack200/README.md](../apps/pack200/README.md) - Nén Pack200
+- [apps/proxyscript/README.md](../apps/proxyscript/README.md) - Proxy scripts
+- [apps/routerconsole/README.md](../apps/routerconsole/README.md) - Router console
+- [apps/sam/README.md](../apps/sam/README.md) - Simple Anonymous Messaging
+- [apps/streaming/README.md](../apps/streaming/README.md) - Thư viện streaming
+- [apps/susidns/README.md](../apps/susidns/README.md) - DNS server
+- [apps/susimail/README.md](../apps/susimail/README.md) - I2P email client
+- [apps/systray/README.md](../apps/systray/README.md) - Ứng dụng system tray
+- [core/README.md](../core/README.md) - Tài liệu thư viện core
+- [installer/lib/jbigi/README.md](../installer/lib/jbigi/README.md) - Thư viện JNI native cho mật mã học (GMP)
 
 ### MISC
 
-- [docs/i2p-sessionban-nftables.md](docs/i2p-sessionban-nftables.md) - Quản lý lệnh cấm session I2P với nftables
-- [installer/resources/README.md](installer/resources/README.md) - Tài nguyên installer bundled
-- [tools/scripts/README.md](tools/scripts/README.md) - Script tiện ích cho phát triển và quản trị
-- [tools/scripts/tests/README.md](tools/scripts/tests/README.md) - Script xác thực và kiểm tra
+- [docs/i2p-sessionban-nftables.md](i2p-sessionban-nftables.md) - Quản lý lệnh cấm session I2P với nftables
+- [installer/resources/README.md](../installer/resources/README.md) - Tài nguyên installer bundled
+- [tools/scripts/README.md](../tools/scripts/README.md) - Script tiện ích cho phát triển và quản trị
+- [tools/scripts/tests/README.md](../tools/scripts/tests/README.md) - Script xác thực và kiểm tra
 
 
 
-- [docker/README.md](docker/README.md) - Chạy I2P+ trong Docker
+- [docker/README.md](../docker/README.md) - Chạy I2P+ trong Docker
 

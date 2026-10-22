@@ -22,12 +22,15 @@ sm.destroy();
 
 ## Key Classes
 
-| Class              | Purpose                              |
-| ------------------ | ------------------------------------ |
-| `I2PSocketManager` | Creates sockets, manages connections |
-| `I2PSocket`        | Connected socket (like `Socket`)     |
-| `I2PServerSocket`  | Accepts incoming connections         |
-| `I2PStreamSession` | Session state                        |
+| Class                      | Purpose                                     |
+| -------------------------- | ------------------------------------------- |
+| `I2PSocketManager`         | Creates sockets, manages connections        |
+| `I2PSocketManagerFactory`  | Obtains a manager for the current router    |
+| `I2PSocket`                | Connected socket (like `Socket`)            |
+| `I2PServerSocket`          | Accepts incoming connections                |
+| `I2PSocketOptions`         | Per-socket settings (window size, ports)    |
+| `I2PSocketAddress`         | I2P port attached to a destination          |
+| `StatefulConnectionFilter` | Accepts only connections it has seen before |
 
 ## Differences from TCP
 
@@ -40,14 +43,17 @@ sm.destroy();
 ## Usage
 
 ```java
-// Server side
-I2PServerSocket ss = sm.getServerSocket(6666);
-I2PClientSocket client = ss.accept();
+// Server side - the destination is the listening address, so there is no port
+I2PServerSocket ss = sm.getServerSocket();
+I2PSocket client = ss.accept();
 
-// Client side  
+// Client side
 Destination serverDest = ...;
 I2PSocket socket = sm.connect(serverDest);
 ```
+
+I2P ports are carried in the message, not in the socket address, so use
+`I2PSocketOptions.setLocalPort()` when a specific port matters to the peer.
 
 ## Packages
 

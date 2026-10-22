@@ -3,8 +3,8 @@
 [![I2P+ Update zip](../tools/badges/update-badge.svg)](https://i2pplus.github.io/i2pupdate.zip)
 [![I2P+ I2PSnark standalone](../tools/badges/i2psnark-badge.svg)](https://i2pplus.github.io/installers/i2psnark-standalone.zip)
 [![I2P+ Javadocs](../tools/badges/javadocs-badge.svg)](https://i2pplus.github.io/javadoc.zip)
-[![Docker](../tools/badges/docker-badge.svg)](docker/README.md)
-[![AppImage](../tools/badges/appimage-badge.svg)](tools/appimage/README.md)
+[![Docker](../tools/badges/docker-badge.svg)](../docker/README.md)
+[![AppImage](../tools/badges/appimage-badge.svg)](../tools/appimage/README.md)
 
 # I2P+
 
@@ -16,7 +16,7 @@
 
 ## لګول
 
-د نصبې لارښود لپاره [INSTALL.md](docs/INSTALL.md) یا https://i2pplus.github.io/ وګورئ.
+د نصبې لارښود لپاره [INSTALL.md](INSTALL.md) یا https://i2pplus.github.io/ وګورئ.
 
 ### د Windows نصب‌کوونکي یادونه
 
@@ -33,7 +33,7 @@ API: https://i2pplus.github.io/javadoc/
 
 ## څنګه مرسته ورکول / په I2P+ کې پروګرام کول
 
-لطفاً [HACKING.md](docs/HACKING.md) او په docs پوښښ کې نورې اسناد وګورئ.
+لطفاً [HACKING.md](HACKING.md) او په docs پوښښ کې نورې اسناد وګورئ.
 
 ## له سورس څخه بستې جوړول
 
@@ -96,7 +96,7 @@ API: https://i2pplus.github.io/javadoc/
 ant buildAppImage
 ```
 
-تفصیلاتو لپاره [tools/appimage/README.md](tools/appimage/README.md) وګورئ.
+تفصیلاتو لپاره [tools/appimage/README.md](../tools/appimage/README.md) وګورئ.
 
 د Debian/Ubuntu لپاره پرته له بهیرني Jetty/Tomcat اینابونو، خپور Debian بسته جوړولو لپاره:
 ```bash
@@ -105,7 +105,7 @@ ant buildDeb
 
 دا خپور `.deb` بسته جوړوي چې لګولې Jetty او Tomcat لایبررۍ منل کوي. یوازې OpenJDK runtime غواړي (له پیکجینډر له لارې پخپله نصبېږي).
 
-Docker کې چلولو لپاره [docker/README.md](docker/README.md) وګورئ
+Docker کې چلولو لپاره [docker/README.md](../docker/README.md) وګورئ
 
 ## اړیکې
 
@@ -117,50 +117,50 @@ Docker کې چلولو لپاره [docker/README.md](docker/README.md) وګور�
 
 I2P+ د AGPL v.3 لاندې جواز لري.
 
-د مختلف فرعي توکوو جوازونو لپاره وګورئ: [README.md](docs/LICENSES.md)
+د مختلف فرعي توکوو جوازونو لپاره وګورئ: [LICENSES.md](LICENSES.md)
 
 ## همدارنګه وګورئ
 
 ### اسناد
 
-- [docs/README.md](docs/README.md) - بشپړ د اسنادو فهرست
-- [docs/INSTALL.md](docs/INSTALL.md) - د نصبې لارښود
-- [docs/INSTALL-headless.md](docs/INSTALL-headless.md) - بې سرې (کنسول حالت) نصب
-- [docs/HACKING.md](docs/HACKING.md) - د پرمختیاکوونکي لارښود او جوړولو سیسټمونه
-- [docs/DIRECTORIES.md](docs/DIRECTORIES.md) - د سورس ډلې بیاځای او څه چېرتا وموندل کیږي
-- [router/java/src/net/i2p/README.md](router/java/src/net/i2p/README.md) - د راوتر سورس ډلې عمومي پرت
-- [core/java/src/net/i2p/README.md](core/java/src/net/i2p/README.md) - د بنسټ لایبررۍ سورس ډلې عمومي پرت
-- [docs/DEBUGGING.md](docs/DEBUGGING.md) - د JDWP او نورو اوزارونو سره د خنډ لیدل
-- [docs/THEMING.md](docs/THEMING.md) - د کنسول او وب اپلیکېشنونو بڼه‌ونې سیستم
-- [docs/LICENSES.md](docs/LICENSES.md) - د دریوې ټاکړو شرکتونو جوازونه
-- [docs/history.txt](docs/history.txt) - بشپړ د بدلونونو لیک
+- [docs/README.md](README.md) - بشپړ د اسنادو فهرست
+- [docs/INSTALL.md](INSTALL.md) - د نصبې لارښود
+- [docs/INSTALL-headless.md](INSTALL-headless.md) - بې سرې (کنسول حالت) نصب
+- [docs/HACKING.md](HACKING.md) - د پرمختیاکوونکي لارښود او جوړولو سیسټمونه
+- [docs/DIRECTORIES.md](DIRECTORIES.md) - د سورس ډلې بیاځای او څه چېرتا وموندل کیږي
+- [router/java/src/net/i2p/README.md](../router/java/src/net/i2p/README.md) - د راوتر سورس ډلې عمومي پرت
+- [core/java/src/net/i2p/README.md](../core/java/src/net/i2p/README.md) - د بنسټ لایبررۍ سورس ډلې عمومي پرت
+- [docs/DEBUGGING.md](DEBUGGING.md) - د JDWP او نورو اوزارونو سره د خنډ لیدل
+- [docs/THEMING.md](THEMING.md) - د کنسول او وب اپلیکېشنونو بڼه‌ونې سیستم
+- [docs/LICENSES.md](LICENSES.md) - د دریوې ټاکړو شرکتونو جوازونه
+- [docs/history.txt](history.txt) - بشپړ د بدلونونو لیک
 
 ### فرعي پروژې
 
-- [apps/README.md](apps/README.md) - د اپلیکېشن عمومي پرت
-- [apps/addressbook/README.md](apps/addressbook/README.md) - د پتې لیکونکي اپلیکېشن
-- [apps/desktopgui/README.md](apps/desktopgui/README.md) - د ډیسک‌ټاپ GUI اپلیکېشن
-- [apps/i2pcontrol/README.md](apps/i2pcontrol/README.md) - I2P Control API
-- [apps/i2psnark/README.md](apps/i2psnark/README.md) - I2PSnark BitTorrent کلاینت
-- [apps/i2ptunnel/README.md](apps/i2ptunnel/README.md) - I2P تونل اپلیکېشن
-- [apps/imagegen/README.md](apps/imagegen/README.md) - د انځورونو جوړولو اوزارونه
-- [apps/jetty/README.md](apps/jetty/README.md) - Jetty HTTP یاور
-- [apps/jrobin/README.md](apps/jrobin/README.md) - JRobin د پلټنې لایبررۍ
-- [apps/ministreaming/README.md](apps/ministreaming/README.md) - کمینه streaming لایبررۍ
-- [apps/pack200/README.md](apps/pack200/README.md) - Pack200 فشردنه
-- [apps/proxyscript/README.md](apps/proxyscript/README.md) - پروکسی اسکریپتونه
-- [apps/routerconsole/README.md](apps/routerconsole/README.md) - د راوتر کنسول
-- [apps/sam/README.md](apps/sam/README.md) - ساده نامرښتینېز پیغام‌وړونه (SAM)
-- [apps/streaming/README.md](apps/streaming/README.md) - streaming لایبررۍ
-- [apps/susidns/README.md](apps/susidns/README.md) - DNS یاور
-- [apps/susimail/README.md](apps/susimail/README.md) - I2P بریښنالیک کلاینت
-- [apps/systray/README.md](apps/systray/README.md) - د سیسټم‌ټرې اپلیکېشن
-- [core/README.md](core/README.md) - د بنسټ لایبررۍ اسناد
-- [installer/lib/jbigi/README.md](installer/lib/jbigi/README.md) - د ټاکلي‌کولو لپاره ټاکړه JNI لایبررۍ (GMP)
+- [apps/README.md](../apps/README.md) - د اپلیکېشن عمومي پرت
+- [apps/addressbook/README.md](../apps/addressbook/README.md) - د پتې لیکونکي اپلیکېشن
+- [apps/desktopgui/README.md](../apps/desktopgui/README.md) - د ډیسک‌ټاپ GUI اپلیکېشن
+- [apps/i2pcontrol/README.md](../apps/i2pcontrol/README.md) - I2P Control API
+- [apps/i2psnark/README.md](../apps/i2psnark/README.md) - I2PSnark BitTorrent کلاینت
+- [apps/i2ptunnel/README.md](../apps/i2ptunnel/README.md) - I2P تونل اپلیکېشن
+- [apps/imagegen/README.md](../apps/imagegen/README.md) - د انځورونو جوړولو اوزارونه
+- [apps/jetty/README.md](../apps/jetty/README.md) - Jetty HTTP یاور
+- [apps/jrobin/README.md](../apps/jrobin/README.md) - JRobin د پلټنې لایبررۍ
+- [apps/ministreaming/README.md](../apps/ministreaming/README.md) - کمینه streaming لایبررۍ
+- [apps/pack200/README.md](../apps/pack200/README.md) - Pack200 فشردنه
+- [apps/proxyscript/README.md](../apps/proxyscript/README.md) - پروکسی اسکریپتونه
+- [apps/routerconsole/README.md](../apps/routerconsole/README.md) - د راوتر کنسول
+- [apps/sam/README.md](../apps/sam/README.md) - ساده نامرښتینېز پیغام‌وړونه (SAM)
+- [apps/streaming/README.md](../apps/streaming/README.md) - streaming لایبررۍ
+- [apps/susidns/README.md](../apps/susidns/README.md) - DNS یاور
+- [apps/susimail/README.md](../apps/susimail/README.md) - I2P بریښنالیک کلاینت
+- [apps/systray/README.md](../apps/systray/README.md) - د سیسټم‌ټرې اپلیکېشن
+- [core/README.md](../core/README.md) - د بنسټ لایبررۍ اسناد
+- [installer/lib/jbigi/README.md](../installer/lib/jbigi/README.md) - د ټاکلي‌کولو لپاره ټاکړه JNI لایبررۍ (GMP)
 
 ### نورې
 
-- [docs/i2p-sessionban-nftables.md](docs/i2p-sessionban-nftables.md) - د nftables سره د I2P سیشن بنونو اداره کول
-- [installer/resources/README.md](installer/resources/README.md) - لګولې د نصب‌کوونکي سرچینې
-- [tools/scripts/README.md](tools/scripts/README.md) - د پرمختیا او ادارې لپاره کارګار اسکریپتونه
-- [tools/scripts/tests/README.md](tools/scripts/tests/README.md) - د سمه‌کړنو او ازمېښت اسکریپتونه
+- [docs/i2p-sessionban-nftables.md](i2p-sessionban-nftables.md) - د nftables سره د I2P سیشن بنونو اداره کول
+- [installer/resources/README.md](../installer/resources/README.md) - لګولې د نصب‌کوونکي سرچینې
+- [tools/scripts/README.md](../tools/scripts/README.md) - د پرمختیا او ادارې لپاره کارګار اسکریپتونه
+- [tools/scripts/tests/README.md](../tools/scripts/tests/README.md) - د سمه‌کړنو او ازمېښت اسکریپتونه

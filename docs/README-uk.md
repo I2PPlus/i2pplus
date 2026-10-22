@@ -3,8 +3,8 @@
 [![I2P+ Update zip](../tools/badges/update-badge.svg)](https://i2pplus.github.io/i2pupdate.zip)
 [![I2P+ I2PSnark standalone](../tools/badges/i2psnark-badge.svg)](https://i2pplus.github.io/installers/i2psnark-standalone.zip)
 [![I2P+ Javadocs](../tools/badges/javadocs-badge.svg)](https://i2pplus.github.io/javadoc.zip)
-[![Docker](../tools/badges/docker-badge.svg)](docker/README.md)
-[![AppImage](../tools/badges/appimage-badge.svg)](tools/appimage/README.md)
+[![Docker](../tools/badges/docker-badge.svg)](../docker/README.md)
+[![AppImage](../tools/badges/appimage-badge.svg)](../tools/appimage/README.md)
 
 # I2P+
 
@@ -33,7 +33,7 @@ API: https://i2pplus.github.io/javadoc/
 
 ## Як долучитися / Розробляти I2P
 
-Будь ласка, перегляньте [HACKING.md](docs/HACKING.md) та інші документи в директорії docs.
+Будь ласка, перегляньте [HACKING.md](HACKING.md) та інші документи в директорії docs.
 
 ## Збірка пакетів з вихідного коду
 
@@ -105,10 +105,10 @@ ant buildDeb
 ant buildAppImage
 ```
 
-Див. [tools/appimage/README.md](tools/appimage/README.md) для деталей.
+Див. [tools/appimage/README.md](../tools/appimage/README.md) для деталей.
 
 
-Для отримання додаткової інформації про запуск I2P в Docker див. [docker/README.md](docker/README.md)
+Для отримання додаткової інформації про запуск I2P в Docker див. [docker/README.md](../docker/README.md)
 
 
 
@@ -139,7 +139,7 @@ I2P+ ліцензується за AGPL v.3.
 
 ## Контактна інформація
 ## Ліцензії
-Для ліцензій різних підкомпонентів див.: [README.md](docs/LICENSES.md)
+Для ліцензій різних підкомпонентів див.: [LICENSES.md](LICENSES.md)
 
 ## Контактна інформація
 ## Ліцензії
@@ -162,39 +162,39 @@ I2P+ ліцензується за AGPL v.3.
 ## Контактна інформація
 ## Ліцензії
 ## Див. також
-- [docs/README.md](docs/README.md) - Повний індекс документації
+- [docs/README.md](README.md) - Повний індекс документації
 
 ## Контактна інформація
 ## Ліцензії
 ## Див. також
-- [docs/INSTALL.md](docs/INSTALL.md) - Посібник зі встановлення
+- [docs/INSTALL.md](INSTALL.md) - Посібник зі встановлення
 
 ## Контактна інформація
 ## Ліцензії
 ## Див. також
-- [docs/INSTALL-headless.md](docs/INSTALL-headless.md) - Встановлення без GUI (консольний режим)
+- [docs/INSTALL-headless.md](INSTALL-headless.md) - Встановлення без GUI (консольний режим)
 
 ## Контактна інформація
 ## Ліцензії
 ## Див. також
-- [docs/HACKING.md](docs/HACKING.md) - Посібник для розробників та системи збірки
+- [docs/HACKING.md](HACKING.md) - Посібник для розробників та системи збірки
 
 ## Контактна інформація
 ## Ліцензії
 ## Див. також
-- [docs/DIRECTORIES.md](docs/DIRECTORIES.md) - Структура дерева вихідного коду та де шукати
-- [docs/DEBUGGING.md](docs/DEBUGGING.md) - Налагодження в середовищі виконання за допомогою JDWP та інших інструментів
-- [docs/THEMING.md](docs/THEMING.md) - Console and webapp theming system
+- [docs/DIRECTORIES.md](DIRECTORIES.md) - Структура дерева вихідного коду та де шукати
+- [docs/DEBUGGING.md](DEBUGGING.md) - Налагодження в середовищі виконання за допомогою JDWP та інших інструментів
+- [docs/THEMING.md](THEMING.md) - Console and webapp theming system
 
 ## Контактна інформація
 ## Ліцензії
 ## Див. також
-- [docs/i2p-sessionban-nftables.md](docs/i2p-sessionban-nftables.md) - Керування блокуванням сесій I2P за допомогою nftables
+- [docs/i2p-sessionban-nftables.md](i2p-sessionban-nftables.md) - Керування блокуванням сесій I2P за допомогою nftables
 
 ## Контактна інформація
 ## Ліцензії
 ## Див. також
-- [docs/history.txt](docs/history.txt) - Повний журнал змін
+- [docs/history.txt](history.txt) - Повний журнал змін
 
 ## Контактна інформація
 ## Ліцензії
@@ -214,102 +214,102 @@ I2P+ ліцензується за AGPL v.3.
 ## Контактна інформація
 ## Ліцензії
 ## Див. також
-- [apps/README.md](apps/README.md) - Огляд додатків
+- [apps/README.md](../apps/README.md) - Огляд додатків
 
 ## Контактна інформація
 ## Ліцензії
 ## Див. також
-- [apps/addressbook/README.md](apps/addressbook/README.md) - Додаток адресної книги
+- [apps/addressbook/README.md](../apps/addressbook/README.md) - Додаток адресної книги
 
 ## Контактна інформація
 ## Ліцензії
 ## Див. також
-- [apps/desktopgui/README.md](apps/desktopgui/README.md) - Десктопний GUI-додаток
+- [apps/desktopgui/README.md](../apps/desktopgui/README.md) - Десктопний GUI-додаток
 
 ## Контактна інформація
 ## Ліцензії
 ## Див. також
-- [apps/i2pcontrol/README.md](apps/i2pcontrol/README.md) - API керування I2P
+- [apps/i2pcontrol/README.md](../apps/i2pcontrol/README.md) - API керування I2P
 
 ## Контактна інформація
 ## Ліцензії
 ## Див. також
-- [apps/i2psnark/README.md](apps/i2psnark/README.md) - BitTorrent-клієнт I2PSnark
+- [apps/i2psnark/README.md](../apps/i2psnark/README.md) - BitTorrent-клієнт I2PSnark
 
 ## Контактна інформація
 ## Ліцензії
 ## Див. також
-- [apps/i2ptunnel/README.md](apps/i2ptunnel/README.md) - Додаток тунелю I2P
+- [apps/i2ptunnel/README.md](../apps/i2ptunnel/README.md) - Додаток тунелю I2P
 
 ## Контактна інформація
 ## Ліцензії
 ## Див. також
-- [apps/imagegen/README.md](apps/imagegen/README.md) - Інструменти генерації зображень
+- [apps/imagegen/README.md](../apps/imagegen/README.md) - Інструменти генерації зображень
 
 ## Контактна інформація
 ## Ліцензії
 ## Див. також
-- [apps/jetty/README.md](apps/jetty/README.md) - HTTP-сервер Jetty
+- [apps/jetty/README.md](../apps/jetty/README.md) - HTTP-сервер Jetty
 
 ## Контактна інформація
 ## Ліцензії
 ## Див. також
-- [apps/jrobin/README.md](apps/jrobin/README.md) - Бібліотека моніторингу JRobin
+- [apps/jrobin/README.md](../apps/jrobin/README.md) - Бібліотека моніторингу JRobin
 
 ## Контактна інформація
 ## Ліцензії
 ## Див. також
-- [apps/ministreaming/README.md](apps/ministreaming/README.md) - Мінімальна бібліотека стрімінгу
+- [apps/ministreaming/README.md](../apps/ministreaming/README.md) - Мінімальна бібліотека стрімінгу
 
 ## Контактна інформація
 ## Ліцензії
 ## Див. також
-- [apps/pack200/README.md](apps/pack200/README.md) - Стиснення Pack200
+- [apps/pack200/README.md](../apps/pack200/README.md) - Стиснення Pack200
 
 ## Контактна інформація
 ## Ліцензії
 ## Див. також
-- [apps/proxyscript/README.md](apps/proxyscript/README.md) - Проксі-скрипти
+- [apps/proxyscript/README.md](../apps/proxyscript/README.md) - Проксі-скрипти
 
 ## Контактна інформація
 ## Ліцензії
 ## Див. також
-- [apps/routerconsole/README.md](apps/routerconsole/README.md) - Консоль маршрутизатора
+- [apps/routerconsole/README.md](../apps/routerconsole/README.md) - Консоль маршрутизатора
 
 ## Контактна інформація
 ## Ліцензії
 ## Див. також
-- [apps/sam/README.md](apps/sam/README.md) - Простий анонімний обмін повідомленнями
+- [apps/sam/README.md](../apps/sam/README.md) - Простий анонімний обмін повідомленнями
 
 ## Контактна інформація
 ## Ліцензії
 ## Див. також
-- [apps/streaming/README.md](apps/streaming/README.md) - Бібліотека стрімінгу
+- [apps/streaming/README.md](../apps/streaming/README.md) - Бібліотека стрімінгу
 
 ## Контактна інформація
 ## Ліцензії
 ## Див. також
-- [apps/susidns/README.md](apps/susidns/README.md) - DNS-сервер
+- [apps/susidns/README.md](../apps/susidns/README.md) - DNS-сервер
 
 ## Контактна інформація
 ## Ліцензії
 ## Див. також
-- [apps/susimail/README.md](apps/susimail/README.md) - Поштовий клієнт I2P
+- [apps/susimail/README.md](../apps/susimail/README.md) - Поштовий клієнт I2P
 
 ## Контактна інформація
 ## Ліцензії
 ## Див. також
-- [apps/systray/README.md](apps/systray/README.md) - Додаток системного лотка
+- [apps/systray/README.md](../apps/systray/README.md) - Додаток системного лотка
 
 ## Контактна інформація
 ## Ліцензії
 ## Див. також
-- [core/README.md](core/README.md) - Документація основної бібліотеки
+- [core/README.md](../core/README.md) - Документація основної бібліотеки
 
 ## Контактна інформація
 ## Ліцензії
 ## Див. також
-- [installer/lib/jbigi/README.md](installer/lib/jbigi/README.md) - Нативна JNI-бібліотека для криптографії (GMP)
+- [installer/lib/jbigi/README.md](../installer/lib/jbigi/README.md) - Нативна JNI-бібліотека для криптографії (GMP)
 
 ## Контактна інформація
 ## Ліцензії
@@ -329,27 +329,22 @@ I2P+ ліцензується за AGPL v.3.
 ## Контактна інформація
 ## Ліцензії
 ## Див. також
-- [docs/i2p-sessionban-nftables.md](docs/i2p-sessionban-nftables.md) - Керування блокуванням сесій I2P за допомогою nftables
+- [docs/i2p-sessionban-nftables.md](i2p-sessionban-nftables.md) - Керування блокуванням сесій I2P за допомогою nftables
 
 ## Контактна інформація
 ## Ліцензії
 ## Див. також
-- [installer/resources/README.md](installer/resources/README.md) - Ресурси інсталятора
+- [installer/resources/README.md](../installer/resources/README.md) - Ресурси інсталятора
 
 ## Контактна інформація
 ## Ліцензії
 ## Див. також
-- [tools/scripts/README.md](tools/scripts/README.md) - Утилітні скрипти для розробки та адміністрування
+- [tools/scripts/README.md](../tools/scripts/README.md) - Утилітні скрипти для розробки та адміністрування
 
 ## Контактна інформація
 ## Ліцензії
 ## Див. також
-- [tools/scripts/tests/README.md](tools/scripts/tests/README.md) - Скрипти валідації та тестування
-
-## Контактна інформація
-## Ліцензії
-## Див. також
-
+- [tools/scripts/tests/README.md](../tools/scripts/tests/README.md) - Скрипти валідації та тестування
 
 ## Контактна інформація
 ## Ліцензії
@@ -359,7 +354,12 @@ I2P+ ліцензується за AGPL v.3.
 ## Контактна інформація
 ## Ліцензії
 ## Див. також
-- [docker/README.md](docker/README.md) - Запуск I2P+ в Docker
+
+
+## Контактна інформація
+## Ліцензії
+## Див. також
+- [docker/README.md](../docker/README.md) - Запуск I2P+ в Docker
 
 ## Контактна інформація
 ## Ліцензії

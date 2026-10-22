@@ -49,7 +49,7 @@ ant buildCore
 ./gradlew :core:jmh
 ```
 
-Translations are compiled from `.po` files into Java resource bundles automatically during the build via `java/bundle-messages.sh`.
+Translations are compiled from `.po` files into Java resource bundles automatically during the build via `tools/scripts/bundle-messages.sh` (`core/java/bundle-messages.cfg` holds the per-bundle list).
 
 ## Native Libraries
 

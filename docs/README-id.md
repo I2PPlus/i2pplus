@@ -3,8 +3,8 @@
 [![I2P+ Update zip](../tools/badges/update-badge.svg)](https://i2pplus.github.io/i2pupdate.zip)
 [![I2P+ I2PSnark standalone](../tools/badges/i2psnark-badge.svg)](https://i2pplus.github.io/installers/i2psnark-standalone.zip)
 [![I2P+ Javadocs](../tools/badges/javadocs-badge.svg)](https://i2pplus.github.io/javadoc.zip)
-[![Docker](../tools/badges/docker-badge.svg)](docker/README.md)
-[![AppImage](../tools/badges/appimage-badge.svg)](tools/appimage/README.md)
+[![Docker](../tools/badges/docker-badge.svg)](../docker/README.md)
+[![AppImage](../tools/badges/appimage-badge.svg)](../tools/appimage/README.md)
 
 # I2P+
 
@@ -33,7 +33,7 @@ atau jalankan 'ant javadoc' kemudian mulai di build/javadoc/index.html
 
 ## Cara Berkontribusi / Mengembangkan I2P
 
-Silakan periksa [HACKING.md](docs/HACKING.md) dan dokumen lain di direktori docs.
+Silakan periksa [HACKING.md](HACKING.md) dan dokumen lain di direktori docs.
 
 ## Membangun Paket dari Sumber
 
@@ -105,10 +105,10 @@ Untuk membuat AppImage untuk Linux:
 ant buildAppImage
 ```
 
-Lihat [tools/appimage/README.md](tools/appimage/README.md) untuk detailnya.
+Lihat [tools/appimage/README.md](../tools/appimage/README.md) untuk detailnya.
 
 
-Untuk informasi lebih lanjut tentang cara menjalankan I2P di Docker, lihat [docker/README.md](docker/README.md)
+Untuk informasi lebih lanjut tentang cara menjalankan I2P di Docker, lihat [docker/README.md](../docker/README.md)
 
 
 ## Info Kontak
@@ -121,54 +121,54 @@ Laporan bug: https://i2pgit.org/i2p-hackers/i2p.i2p/-/issues atau https://github
 
 I2P+ dilisensikan di bawah AGPL v.3.
 
-Untuk lisensi sub-komponen lainnya, lihat: [README.md](docs/LICENSES.md)
+Untuk lisensi sub-komponen lainnya, lihat: [LICENSES.md](LICENSES.md)
 
 ## Lihat Juga
 
 ### Dokumentasi
 
-- [docs/README.md](docs/README.md) - Indeks dokumentasi lengkap
-- [docs/INSTALL.md](docs/INSTALL.md) - Panduan instalasi
-- [docs/INSTALL-headless.md](docs/INSTALL-headless.md) - Instalasi headless (mode konsol)
-- [docs/HACKING.md](docs/HACKING.md) - Panduan pengembang dan sistem build
-- [docs/DIRECTORIES.md](docs/DIRECTORIES.md) - Tata letak pohon sumber
-- [docs/DEBUGGING.md](docs/DEBUGGING.md) - Debugging runtime dengan JDWP dan alat lainnya
-- [docs/i2p-sessionban-nftables.md](docs/i2p-sessionban-nftables.md) - Mengelola pelarangan sesi I2P dengan nftables
-- [docs/THEMING.md](docs/THEMING.md) - Console and webapp theming system
-- [docs/LICENSES.md](docs/LICENSES.md) - Lisensi pihak ketiga
-- [docs/history.txt](docs/history.txt) - Log perubahan lengkap
+- [docs/README.md](README.md) - Indeks dokumentasi lengkap
+- [docs/INSTALL.md](INSTALL.md) - Panduan instalasi
+- [docs/INSTALL-headless.md](INSTALL-headless.md) - Instalasi headless (mode konsol)
+- [docs/HACKING.md](HACKING.md) - Panduan pengembang dan sistem build
+- [docs/DIRECTORIES.md](DIRECTORIES.md) - Tata letak pohon sumber
+- [docs/DEBUGGING.md](DEBUGGING.md) - Debugging runtime dengan JDWP dan alat lainnya
+- [docs/i2p-sessionban-nftables.md](i2p-sessionban-nftables.md) - Mengelola pelarangan sesi I2P dengan nftables
+- [docs/THEMING.md](THEMING.md) - Console and webapp theming system
+- [docs/LICENSES.md](LICENSES.md) - Lisensi pihak ketiga
+- [docs/history.txt](history.txt) - Log perubahan lengkap
 
 ### Sub-proyek
 
-- [apps/README.md](apps/README.md) - Ikhtisar aplikasi
-- [apps/addressbook/README.md](apps/addressbook/README.md) - Aplikasi buku alamat
-- [apps/desktopgui/README.md](apps/desktopgui/README.md) - Aplikasi GUI desktop
-- [apps/i2pcontrol/README.md](apps/i2pcontrol/README.md) - API kontrol I2P
-- [apps/i2psnark/README.md](apps/i2psnark/README.md) - Klien BitTorrent I2PSnark
-- [apps/i2ptunnel/README.md](apps/i2ptunnel/README.md) - Aplikasi terowongan I2P
-- [apps/imagegen/README.md](apps/imagegen/README.md) - Alat pembuatan gambar
-- [apps/jetty/README.md](apps/jetty/README.md) - Server HTTP Jetty
-- [apps/jrobin/README.md](apps/jrobin/README.md) - Pustaka pemantauan JRobin
-- [apps/ministreaming/README.md](apps/ministreaming/README.md) - Pustaka streaming minimal
-- [apps/pack200/README.md](apps/pack200/README.md) - Kompresi Pack200
-- [apps/proxyscript/README.md](apps/proxyscript/README.md) - Skrip proxy
-- [apps/routerconsole/README.md](apps/routerconsole/README.md) - Konsol router
-- [apps/sam/README.md](apps/sam/README.md) - Simple Anonymous Messaging
-- [apps/streaming/README.md](apps/streaming/README.md) - Pustaka streaming
-- [apps/susidns/README.md](apps/susidns/README.md) - Server DNS
-- [apps/susimail/README.md](apps/susimail/README.md) - Klien email I2P
-- [apps/systray/README.md](apps/systray/README.md) - Aplikasi baki sistem
-- [core/README.md](core/README.md) - Dokumentasi pustaka core
-- [installer/lib/jbigi/README.md](installer/lib/jbigi/README.md) - Pustaka JNI native untuk kriptografi (GMP)
+- [apps/README.md](../apps/README.md) - Ikhtisar aplikasi
+- [apps/addressbook/README.md](../apps/addressbook/README.md) - Aplikasi buku alamat
+- [apps/desktopgui/README.md](../apps/desktopgui/README.md) - Aplikasi GUI desktop
+- [apps/i2pcontrol/README.md](../apps/i2pcontrol/README.md) - API kontrol I2P
+- [apps/i2psnark/README.md](../apps/i2psnark/README.md) - Klien BitTorrent I2PSnark
+- [apps/i2ptunnel/README.md](../apps/i2ptunnel/README.md) - Aplikasi terowongan I2P
+- [apps/imagegen/README.md](../apps/imagegen/README.md) - Alat pembuatan gambar
+- [apps/jetty/README.md](../apps/jetty/README.md) - Server HTTP Jetty
+- [apps/jrobin/README.md](../apps/jrobin/README.md) - Pustaka pemantauan JRobin
+- [apps/ministreaming/README.md](../apps/ministreaming/README.md) - Pustaka streaming minimal
+- [apps/pack200/README.md](../apps/pack200/README.md) - Kompresi Pack200
+- [apps/proxyscript/README.md](../apps/proxyscript/README.md) - Skrip proxy
+- [apps/routerconsole/README.md](../apps/routerconsole/README.md) - Konsol router
+- [apps/sam/README.md](../apps/sam/README.md) - Simple Anonymous Messaging
+- [apps/streaming/README.md](../apps/streaming/README.md) - Pustaka streaming
+- [apps/susidns/README.md](../apps/susidns/README.md) - Server DNS
+- [apps/susimail/README.md](../apps/susimail/README.md) - Klien email I2P
+- [apps/systray/README.md](../apps/systray/README.md) - Aplikasi baki sistem
+- [core/README.md](../core/README.md) - Dokumentasi pustaka core
+- [installer/lib/jbigi/README.md](../installer/lib/jbigi/README.md) - Pustaka JNI native untuk kriptografi (GMP)
 
 ### Lainnya
 
-- [docs/i2p-sessionban-nftables.md](docs/i2p-sessionban-nftables.md) - Mengelola pelarangan sesi I2P dengan nftables
-- [installer/resources/README.md](installer/resources/README.md) - Sumber daya installer
-- [tools/scripts/README.md](tools/scripts/README.md) - Skrip utilitas untuk pengembangan dan administrasi
-- [tools/scripts/tests/README.md](tools/scripts/tests/README.md) - Skrip validasi dan pengujian
+- [docs/i2p-sessionban-nftables.md](i2p-sessionban-nftables.md) - Mengelola pelarangan sesi I2P dengan nftables
+- [installer/resources/README.md](../installer/resources/README.md) - Sumber daya installer
+- [tools/scripts/README.md](../tools/scripts/README.md) - Skrip utilitas untuk pengembangan dan administrasi
+- [tools/scripts/tests/README.md](../tools/scripts/tests/README.md) - Skrip validasi dan pengujian
 
 
 
-- [docker/README.md](docker/README.md) - Menjalankan I2P+ di Docker
+- [docker/README.md](../docker/README.md) - Menjalankan I2P+ di Docker
 

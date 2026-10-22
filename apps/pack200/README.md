@@ -50,11 +50,13 @@ Build the jar on its own:
 
 ```bash
 ant -f java/build.xml jar
+# -> /tmp/build-i2p/apps/pack200/java/build/pack200.jar
 ```
 
 From the top level, `ant buildPack200` does the same and drops the result in
-`build/pack200.jar`; every updater target pulls it in automatically. To
-regenerate the payload zip itself:
+`${build.root}build/pack200.jar` (`build.root` defaults to `/tmp/build-i2p/`);
+every updater target pulls it in automatically. To regenerate the payload zip
+itself:
 
 ```bash
 ant updater200
@@ -66,16 +68,18 @@ The CLI entry point is `io.pack200.Driver` (`io.pack200.Pack200` has no
 `main`):
 
 ```bash
+PACK=/tmp/build-i2p/build/pack200.jar
+
 # compress: -g/--no-gzip emits a plain .pack stream
-java -cp build/pack200.jar io.pack200.Driver \
+java -cp $PACK io.pack200.Driver \
      --effort=5 --modification-time=latest --segment-limit=-1 \
      -g app.jar.pack app.jar
 
 # unpack (note the undocumented --unpack switch)
-java -cp build/pack200.jar io.pack200.Driver --unpack app.jar.pack app.jar
+java -cp $PACK io.pack200.Driver --unpack app.jar.pack app.jar
 
 # normalise a jar in place so jarsigner produces a stable signature
-java -cp build/pack200.jar io.pack200.Driver -r app.jar
+java -cp $PACK io.pack200.Driver -r app.jar
 ```
 
 `tools/scripts/pack200.sh` wraps all of this and is what the build targets call.

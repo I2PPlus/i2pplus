@@ -6,12 +6,15 @@ Validation and testing scripts for I2P+ builds.
 
 | Command                           | Description                                                    |
 | --------------------------------- | -------------------------------------------------------------- |
-| `ant test`                        | Run all unit tests (Core, MiniStreaming, Streaming)            |
+| `ant test`                        | Run all unit tests (12 suites, see below)                      |
 | `ant testJbigi`                   | Benchmark native vs pure Java BigInteger performance           |
 | `tools/scripts/run-tests.sh`      | Wrapper for `ant test` — handles dep downloads and build order |
-| `tools/scripts/run-tests.sh core` | Run core tests only                                            |
+| `tools/scripts/run-tests.sh core` | Run core tests only (`router` also accepted)                   |
 
-`ant test` auto-downloads test dependencies (JUnit, Hamcrest, Mockito, Scala) to `tools/test/` on first run via `tools/scripts/ensure-testdeps.sh`. Requires JDK 17+.
+`ant test` runs the Core, MiniStreaming, Streaming, Router, Addressbook, I2PTunnel,
+RouterConsole, I2PSnark, Susimail, SAM, Pack200 and JRobin suites.
+
+`ant test` auto-downloads test dependencies (JUnit, Hamcrest, Mockito, Scala) to `tools/test/` on first run via `tools/scripts/ensure-testdeps.sh`. The build compiles to Java 8 bytecode, so any newer JDK can run Ant; the extra prerequisite for the wrapper is `python3` with `markdown-it-py`, used to render the HTML report.
 
 An HTML report is generated at `dist/test-report.html` after each run. Report includes per-module pass/fail counts, timing, and failure traces.
 

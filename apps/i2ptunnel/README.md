@@ -29,12 +29,20 @@ I2PTunnel creates two-way bridges between I2P and the regular internet:
 | `I2PTunnelHTTPServer` | Serve local HTTP to I2P    |
 | `I2PTunnelHTTPClient` | Proxy external through I2P |
 | `I2PTunnelClientBase` | Base for client tunnels    |
-| `I2PTunnelServerBase` | Base for server tunnels    |
+| `I2PTunnelServer`     | Base for server tunnels    |
 
 ## Packages
 
 - `net.i2p.i2ptunnel` - Core tunnel framework, controller, and configuration
-- `net.i2p.i2ptunnel.sockets` - Protocol-specific tunnel implementations (HTTP, SOCKS, IRC)
+- `net.i2p.i2ptunnel.socks` - SOCKS client tunnels
+- `net.i2p.i2ptunnel.irc` - IRC client and server tunnels
+- `net.i2p.i2ptunnel.streamr` - Streamr UDP tunnels
+- `net.i2p.i2ptunnel.udp` / `udpTunnel` - UDP tunnel support
+- `net.i2p.i2ptunnel.localServer` - Local (clearnet) socket side of tunnels
+- `net.i2p.i2ptunnel.access` - Tunnel access control and throttling
+- `net.i2p.i2ptunnel.ui` - Tunnel type names and console strings
+- `net.i2p.i2ptunnel.web` - Console servlets for the tunnel manager
+- `net.i2p.i2ptunnel.util` - Shared helpers
 
 ## Building
 

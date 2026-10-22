@@ -648,7 +648,7 @@ Set these in `SESSION CREATE` parameters (v3):
 | Stream/RAW send size        | 1–32768 bytes                    | Per message payload                                 |
 | Datagram send size          | 1–31744 bytes                    | Slightly smaller than RAW due to repliable overhead |
 | UDP datagram payload        | ~60 KB                           | v3, limited by MTU and I2P message size             |
-| STREAM forward accept queue | 64                               | v3 `MAX_ACCEPT_QUEUE`                               |
+| STREAM forward accept queue | 16384                            | v3 `MAX_ACCEPT_QUEUE`                               |
 | Stale session expiry        | 10 min                           | Removed by periodic sweeper                         |
 
 ---
@@ -736,7 +736,9 @@ Build and run standalone SAM:
 
 ```bash
 ant buildSAM
-java -cp build/i2p.jar:build/mstreaming.jar:build/streaming.jar:build/sam.jar \
+# Ant stages its jars under ${build.root}, which defaults to /tmp/build-i2p/
+BUILD=/tmp/build-i2p/build
+java -cp $BUILD/i2p.jar:$BUILD/mstreaming.jar:$BUILD/streaming.jar:$BUILD/sam.jar \
     -Djava.library.path=. net.i2p.sam.SAMBridge
 ```
 
@@ -746,11 +748,14 @@ Build Java test clients:
 cd apps/sam/java
 ant clientjar
 
+# The client jar is staged under ${build.root}apps/sam/java/build/
+CLIENT=/tmp/build-i2p/apps/sam/java/build/samclient.jar
+
 # Run sink (receiver) client:
-java -cp build/i2p.jar:apps/sam/java/build/samclient.jar \
+java -cp $BUILD/i2p.jar:$CLIENT \
     net.i2p.sam.client.SAMStreamSink samdest.txt samsinkdir -v 3.2
 
 # Run send client:
-java -cp build/i2p.jar:apps/sam/java/build/samclient.jar \
+java -cp $BUILD/i2p.jar:$CLIENT \
     net.i2p.sam.client.SAMStreamSend samdest.txt samtestdata -v 3.2
 ```

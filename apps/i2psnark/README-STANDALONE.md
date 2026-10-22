@@ -24,7 +24,7 @@ without a restart.
   restarted so their destinations rotate to fresh identities, breaking
   long-lived linkage between your IP address and the torrents' destinations at
   trackers and in the DHT. The cycle runs every 3 hours plus a random delay of
-  1 to 60 minutes, is skipped while any torrent is actively downloading, and
+  0 to 60 minutes, is skipped while any torrent is actively downloading, and
   restarts only the torrents that were running.
 
 - `i2psnark.clientId={random|i2psnark|Vuze|BiglyBT|Transmission|KTorrent|Deluge|qBittorrent|libtorrent|Tixati}`

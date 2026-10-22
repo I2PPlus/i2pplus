@@ -4,7 +4,8 @@ The Gradle build provides an alternative to Ant for compiling Java modules and b
 
 ## Prerequisites
 
-- Java SDK 1.8+ (JDK 21 recommended)
+- JDK 17+ to run Gradle 9.x (JDK 21 recommended). Modules still compile with
+  `options.release = 8`, so the output is Java 8 bytecode
 - The Gradle wrapper at `gradlew` bootstraps itself — no pre-installed Gradle required
 
 ## Build output

@@ -14,15 +14,15 @@ Web-based control panel for the I2P router. The primary user interface for confi
 
 ## Sections
 
-| Section   | Features                     |
-| --------- | ---------------------------- |
-| Home      | Summary dashboard            |
-| Tunnels   | Client/server status         |
-| Peers     | Peer list and profiles       |
-| Console   | Router console logs          |
-| Config    | Network, bandwidth, advanced |
-| Plugins   | Plugin list and updates      |
-| Debug     | Profiling, profiling         |
+| Section   | Features                                |
+| --------- | --------------------------------------- |
+| Home      | Summary dashboard                       |
+| Tunnels   | Client/server status                    |
+| Peers     | Peer list and profiles                  |
+| Console   | Router console logs                     |
+| Config    | Network, bandwidth, advanced            |
+| Plugins   | Plugin list and updates                 |
+| Debug     | Port mapper, session keys, DHT, streams |
 
 ## Packages
 

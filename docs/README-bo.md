@@ -3,8 +3,8 @@
 [![I2P+ Update zip](../tools/badges/update-badge.svg)](https://i2pplus.github.io/i2pupdate.zip)
 [![I2P+ I2PSnark standalone](../tools/badges/i2psnark-badge.svg)](https://i2pplus.github.io/installers/i2psnark-standalone.zip)
 [![I2P+ Javadocs](../tools/badges/javadocs-badge.svg)](https://i2pplus.github.io/javadoc.zip)
-[![Docker](../tools/badges/docker-badge.svg)](docker/README.md)
-[![AppImage](../tools/badges/appimage-badge.svg)](tools/appimage/README.md)
+[![Docker](../tools/badges/docker-badge.svg)](../docker/README.md)
+[![AppImage](../tools/badges/appimage-badge.svg)](../tools/appimage/README.md)
 
 # I2P+
 
@@ -36,8 +36,8 @@ API: https://i2pplus.github.io/javadoc/
 ཁྱེད་ཀྱིས་[HACKING.md](HACKING.md)དང་docsཐོག་གི་ཡིག་ཆ་གཞན་དག་ལ་གཟིགས་རོགས།
 
 
-- [docs/DEBUGGING.md](docs/DEBUGGING.md) - JDWP དང་ལག་ཆ་གཞན་དག་སྤྱད་དེ་ལས་རིམ་ནོར་འདོམས།
-- [docs/THEMING.md](docs/THEMING.md) - Console and webapp theming system
+- [docs/DEBUGGING.md](DEBUGGING.md) - JDWP དང་ལག་ཆ་གཞན་དག་སྤྱད་དེ་ལས་རིམ་ནོར་འདོམས།
+- [docs/THEMING.md](THEMING.md) - Console and webapp theming system
 ## འབྱུང་ཁུངས་ནས་ཐུམ་སྒྲིལ་བཟོ་བ།
 
 འཕེལ་རྒྱས་ཡན་ལག་འབྱུང་ཁུངས་ཚོད་འཛིན་ནས་ལེན་ཐབས། https://github.com/I2PPlus/i2pplus/
@@ -107,10 +107,10 @@ Linux གྱི་AppImage བཟོ་བྱེད་པའི་ཆེད་�
 ant buildAppImage
 ```
 
-[tools/appimage/README.md](tools/appimage/README.md) ལ་གཟིགས་རོགས།
+[tools/appimage/README.md](../tools/appimage/README.md) ལ་གཟིགས་རོགས།
 
 
-Dockerནང་I2Pཇི་ལྟར་ལག་བསྟར་བྱ་ཐབས་ཀྱི་ཆེད་དུ། [Docker.md](../docker/Docker.md) ལ་གཟིགས་རོགས།
+Dockerནང་I2Pཇི་ལྟར་ལག་བསྟར་བྱ་ཐབས་ཀྱི་ཆེད་དུ། [README.md](../docker/README.md) ལ་གཟིགས་རོགས།
 
 
 ## འབྲེལ་གཏུག་ཆ་འཕྲིན།
@@ -123,4 +123,4 @@ Dockerནང་I2Pཇི་ལྟར་ལག་བསྟར་བྱ་ཐབ�
 
 I2P+ནི་AGPL v.3འོག་ཆོག་འཕྲལ་བཞག་ཡོད།
 
-ལྟེ་བའི་ཆ་ལག་སོ་སོའི་ཆོག་འཕྲལ་ཁང་གི་ཆེད་དུ། [README.md](docs/LICENSES.md)ལ་གཟིགས་རོགས།
+ལྟེ་བའི་ཆ་ལག་སོ་སོའི་ཆོག་འཕྲལ་ཁང་གི་ཆེད་དུ། [LICENSES.md](LICENSES.md)ལ་གཟིགས་རོགས།

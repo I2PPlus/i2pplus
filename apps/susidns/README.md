@@ -21,7 +21,7 @@ SusiDNS provides the naming service that translates `.i2p` destinations:
 | -------------- | ----------------------------------------- |
 | Destination    | I2P identity (like IP + port)             |
 | Base32 address | SHA256 of destination, `.b32.i2p`         |
-| hosts.txt      | Text file of `destination=host.i2p` lines |
+| hosts.txt      | Text file of `host.i2p=destination` lines |
 | Subscription   | URL to fetch hosts.txt from               |
 
 ## Use Cases

@@ -3,8 +3,8 @@
 [![I2P+ Update zip](../tools/badges/update-badge.svg)](https://i2pplus.github.io/i2pupdate.zip)
 [![I2P+ I2PSnark standalone](../tools/badges/i2psnark-badge.svg)](https://i2pplus.github.io/installers/i2psnark-standalone.zip)
 [![I2P+ Javadocs](../tools/badges/javadocs-badge.svg)](https://i2pplus.github.io/javadoc.zip)
-[![Docker](../tools/badges/docker-badge.svg)](docker/README.md)
-[![AppImage](../tools/badges/appimage-badge.svg)](tools/appimage/README.md)
+[![Docker](../tools/badges/docker-badge.svg)](../docker/README.md)
+[![AppImage](../tools/badges/appimage-badge.svg)](../tools/appimage/README.md)
 
 # I2P+
 
@@ -33,7 +33,7 @@ API: https://i2pplus.github.io/javadoc/
 
 ## 기여 방법 / I2P에서 개발
 
-[HACKING.md](docs/HACKING.md)와 docs 디렉토리의 다른 문서를 확인하세요.
+[HACKING.md](HACKING.md)와 docs 디렉토리의 다른 문서를 확인하세요.
 
 ## 소스에서 패키지 빌드
 
@@ -104,10 +104,10 @@ Linux용 AppImage를 빌드하려면:
 ant buildAppImage
 ```
 
-세부사항은 [tools/appimage/README.md](tools/appimage/README.md)를 참조하세요.
+세부사항은 [tools/appimage/README.md](../tools/appimage/README.md)를 참조하세요.
 
 
-Docker에서 I2P를 실행하는 방법에 대한 자세한 내용은 [docker/README.md](docker/README.md)를 참조하세요
+Docker에서 I2P를 실행하는 방법에 대한 자세한 내용은 [docker/README.md](../docker/README.md)를 참조하세요
 
 
 ## 연락처 정보
@@ -120,49 +120,49 @@ Docker에서 I2P를 실행하는 방법에 대한 자세한 내용은 [docker/RE
 
 I2P+는 AGPL v.3으로 라이선스됩니다.
 
-various 하위 구성 요소 라이선스는 다음을 참조하세요: [README.md](docs/LICENSES.md)
+various 하위 구성 요소 라이선스는 다음을 참조하세요: [LICENSES.md](LICENSES.md)
 
 ## 참고하세요
 
 ### 문서
-- [docs/README.md](docs/README.md) - 전체 문서 색인
-- [docs/INSTALL.md](docs/INSTALL.md) - 설치 가이드
-- [docs/INSTALL-headless.md](docs/INSTALL-headless.md) - 헤드리스(콘솔 모드) 설치
-- [docs/HACKING.md](docs/HACKING.md) - 개발자 가이드 및 빌드 시스템
-- [docs/DIRECTORIES.md](docs/DIRECTORIES.md) - 소스 트리 레이아웃
-- [docs/DEBUGGING.md](docs/DEBUGGING.md) - JDWP 및 기타 도구를 사용한 런타임 디버깅
-- [docs/i2p-sessionban-nftables.md](docs/i2p-sessionban-nftables.md) - nftables로 I2P 세션 금지 관리
-- [docs/THEMING.md](docs/THEMING.md) - Console and webapp theming system
-- [docs/LICENSES.md](docs/LICENSES.md) - 서드파티 라이선스
-- [docs/history.txt](docs/history.txt) - 전체 변경 로그
+- [docs/README.md](README.md) - 전체 문서 색인
+- [docs/INSTALL.md](INSTALL.md) - 설치 가이드
+- [docs/INSTALL-headless.md](INSTALL-headless.md) - 헤드리스(콘솔 모드) 설치
+- [docs/HACKING.md](HACKING.md) - 개발자 가이드 및 빌드 시스템
+- [docs/DIRECTORIES.md](DIRECTORIES.md) - 소스 트리 레이아웃
+- [docs/DEBUGGING.md](DEBUGGING.md) - JDWP 및 기타 도구를 사용한 런타임 디버깅
+- [docs/i2p-sessionban-nftables.md](i2p-sessionban-nftables.md) - nftables로 I2P 세션 금지 관리
+- [docs/THEMING.md](THEMING.md) - Console and webapp theming system
+- [docs/LICENSES.md](LICENSES.md) - 서드파티 라이선스
+- [docs/history.txt](history.txt) - 전체 변경 로그
 
 ### 하위 프로젝트
-- [apps/README.md](apps/README.md) - 애플리케이션 개요
-- [apps/addressbook/README.md](apps/addressbook/README.md) - 주소록 애플리케이션
-- [apps/desktopgui/README.md](apps/desktopgui/README.md) - 데스크톱 GUI 애플리케이션
-- [apps/i2pcontrol/README.md](apps/i2pcontrol/README.md) - I2P 제어 API
-- [apps/i2psnark/README.md](apps/i2psnark/README.md) - I2PSnark BitTorrent 클라이언트
-- [apps/i2ptunnel/README.md](apps/i2ptunnel/README.md) - I2P 터널 애플리케이션
-- [apps/imagegen/README.md](apps/imagegen/README.md) - 이미지 생성 도구
-- [apps/jetty/README.md](apps/jetty/README.md) - Jetty HTTP 서버
-- [apps/jrobin/README.md](apps/jrobin/README.md) - JRobin 모니터링 라이브러리
-- [apps/ministreaming/README.md](apps/ministreaming/README.md) - 최소 스트리밍 라이브러리
-- [apps/pack200/README.md](apps/pack200/README.md) - Pack200 압축
-- [apps/proxyscript/README.md](apps/proxyscript/README.md) - 프록시 스크립트
-- [apps/routerconsole/README.md](apps/routerconsole/README.md) - 라우터 콘솔
-- [apps/sam/README.md](apps/sam/README.md) - 단순 익명 메시징
-- [apps/streaming/README.md](apps/streaming/README.md) - 스트리밍 라이브러리
-- [apps/susidns/README.md](apps/susidns/README.md) - DNS 서버
-- [apps/susimail/README.md](apps/susimail/README.md) - I2P 이메일 클라이언트
-- [apps/systray/README.md](apps/systray/README.md) - 시스템 트레이 애플리케이션
-- [core/README.md](core/README.md) - 코어 라이브러리 문서
-- [installer/lib/jbigi/README.md](installer/lib/jbigi/README.md) - 암호화용 네이티브 JNI 라이브러리(GMP)
+- [apps/README.md](../apps/README.md) - 애플리케이션 개요
+- [apps/addressbook/README.md](../apps/addressbook/README.md) - 주소록 애플리케이션
+- [apps/desktopgui/README.md](../apps/desktopgui/README.md) - 데스크톱 GUI 애플리케이션
+- [apps/i2pcontrol/README.md](../apps/i2pcontrol/README.md) - I2P 제어 API
+- [apps/i2psnark/README.md](../apps/i2psnark/README.md) - I2PSnark BitTorrent 클라이언트
+- [apps/i2ptunnel/README.md](../apps/i2ptunnel/README.md) - I2P 터널 애플리케이션
+- [apps/imagegen/README.md](../apps/imagegen/README.md) - 이미지 생성 도구
+- [apps/jetty/README.md](../apps/jetty/README.md) - Jetty HTTP 서버
+- [apps/jrobin/README.md](../apps/jrobin/README.md) - JRobin 모니터링 라이브러리
+- [apps/ministreaming/README.md](../apps/ministreaming/README.md) - 최소 스트리밍 라이브러리
+- [apps/pack200/README.md](../apps/pack200/README.md) - Pack200 압축
+- [apps/proxyscript/README.md](../apps/proxyscript/README.md) - 프록시 스크립트
+- [apps/routerconsole/README.md](../apps/routerconsole/README.md) - 라우터 콘솔
+- [apps/sam/README.md](../apps/sam/README.md) - 단순 익명 메시징
+- [apps/streaming/README.md](../apps/streaming/README.md) - 스트리밍 라이브러리
+- [apps/susidns/README.md](../apps/susidns/README.md) - DNS 서버
+- [apps/susimail/README.md](../apps/susimail/README.md) - I2P 이메일 클라이언트
+- [apps/systray/README.md](../apps/systray/README.md) - 시스템 트레이 애플리케이션
+- [core/README.md](../core/README.md) - 코어 라이브러리 문서
+- [installer/lib/jbigi/README.md](../installer/lib/jbigi/README.md) - 암호화용 네이티브 JNI 라이브러리(GMP)
 
 ### Misc
-- [docs/i2p-sessionban-nftables.md](docs/i2p-sessionban-nftables.md) - nftables로 I2P 세션 금지 관리
-- [installer/resources/README.md](installer/resources/README.md) - 번들된 인스톨러 리소스
-- [tools/scripts/README.md](tools/scripts/README.md) - 개발 및 관리용 유틸리티 스크립트
-- [tools/scripts/tests/README.md](tools/scripts/tests/README.md) - 검증 및 테스트 스크립트
+- [docs/i2p-sessionban-nftables.md](i2p-sessionban-nftables.md) - nftables로 I2P 세션 금지 관리
+- [installer/resources/README.md](../installer/resources/README.md) - 번들된 인스톨러 리소스
+- [tools/scripts/README.md](../tools/scripts/README.md) - 개발 및 관리용 유틸리티 스크립트
+- [tools/scripts/tests/README.md](../tools/scripts/tests/README.md) - 검증 및 테스트 스크립트
 
-- [docker/README.md](docker/README.md) - Docker에서 I2P+ 실행
+- [docker/README.md](../docker/README.md) - Docker에서 I2P+ 실행
 

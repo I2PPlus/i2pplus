@@ -40,7 +40,7 @@ See also: [Project README](../README.md)
 - [README-pt.md](README-pt.md) - Portuguese
 - [README-ro.md](README-ro.md) - Romanian
 - [README-ru.md](README-ru.md) - Russian
-- [README-sl.md](README-sl.md) - Slovak
+- [README-sl.md](README-sl.md) - Slovak (Slovenčina; the file name uses the `sl` code)
 - [README-sv.md](README-sv.md) - Swedish
 - [README-sw.md](README-sw.md) - Swahili
 - [README-th.md](README-th.md) - Thai
@@ -50,16 +50,22 @@ See also: [Project README](../README.md)
 - [README-ur.md](README-ur.md) - Urdu
 - [README-vi.md](README-vi.md) - Vietnamese
 - [README-zh.md](README-zh.md) - Chinese
+- [README-zh_TW.md](README-zh_TW.md) - Traditional Chinese
 
 ### Sub-project READMEs
 
 - [HACKING.md](HACKING.md) - Developer guide and build systems
+- [BUILD.md](BUILD.md) - Building I2P+ for developers
+- [CODING.md](CODING.md) - Coding guide and style rules
 - [CHECKLIST.md](CHECKLIST.md) - Release checklist and process
 - [TRANSLATING.md](TRANSLATING.md) - Adding and updating translations
 - [DEBUGGING.md](DEBUGGING.md) - Runtime debugging with JDWP and other tools
-- [INSTALL.md](INSTALL.md) - Building from source
+- [INSTALL.md](INSTALL.md) - Installing and running I2P+ (end users)
 - [INSTALL-headless.md](INSTALL-headless.md) - Headless installation guide
 - [DIRECTORIES.md](DIRECTORIES.md) - Source tree layout
+- [DIRECTORIES-zh.md](DIRECTORIES-zh.md) - Source tree layout (Chinese)
+- [WINDOWS.md](WINDOWS.md) - I2P+ on Windows
+- [i2psnark-beps.md](i2psnark-beps.md) - I2PSnark BitTorrent extension (BEP) support
 - [i2p-sessionban-nftables.md](i2p-sessionban-nftables.md) - Managing I2P session bans with nftables
 
 ### Module READMEs
@@ -83,6 +89,8 @@ See also: [Project README](../README.md)
 | Document                                        | Description                                    |
 | ----------------------------------------------- | ---------------------------------------------- |
 | [HACKING.md](HACKING.md)                        | Build systems, developer guide, and workflow   |
+| [BUILD.md](BUILD.md)                            | Building, packaging, and test targets          |
+| [CODING.md](CODING.md)                          | Coding guide and style rules                   |
 | [DIRECTORIES.md](DIRECTORIES.md)                | Source tree layout and where to find things    |
 | [DEBUGGING.md](DEBUGGING.md)                    | Runtime debugging with JDWP and other tools    |
 
@@ -90,8 +98,9 @@ See also: [Project README](../README.md)
 
 | Document                                     | Description                                                            |
 | -------------------------------------------- | ---------------------------------------------------------------------- |
-| [INSTALL.md](INSTALL.md)                     | Building and installing I2P+ from source                               |
+| [INSTALL.md](INSTALL.md)                     | Installing and running I2P+, including system services                 |
 | [INSTALL-headless.md](INSTALL-headless.md)   | Headless (console mode) installation guide                             |
+| [WINDOWS.md](WINDOWS.md)                     | Installing and running I2P+ on Windows                                 |
 
 ## Administration
 
@@ -101,8 +110,9 @@ See also: [Project README](../README.md)
 
 ## Other
 
-| Document                     | Description                       |
-| ---------------------------- | --------------------------------- |
-| [THEMING.md](THEMING.md)     | Console and webapp theming system |
-| [history.txt](history.txt)   | Full changelog                    |
-| [LICENSES.md](LICENSES.md)   | Third-party licenses              |
+| Document                             | Description                           |
+| ------------------------------------ | ------------------------------------- |
+| [THEMING.md](THEMING.md)             | Console and webapp theming system     |
+| [i2psnark-beps.md](i2psnark-beps.md) | I2PSnark BitTorrent extension support |
+| [history.txt](history.txt)           | Full changelog                        |
+| [LICENSES.md](LICENSES.md)           | Third-party licenses                  |

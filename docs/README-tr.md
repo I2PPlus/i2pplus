@@ -3,8 +3,8 @@
 [![I2P+ Update zip](../tools/badges/update-badge.svg)](https://i2pplus.github.io/i2pupdate.zip)
 [![I2P+ I2PSnark standalone](../tools/badges/i2psnark-badge.svg)](https://i2pplus.github.io/installers/i2psnark-standalone.zip)
 [![I2P+ Javadocs](../tools/badges/javadocs-badge.svg)](https://i2pplus.github.io/javadoc.zip)
-[![Docker](../tools/badges/docker-badge.svg)](docker/README.md)
-[![AppImage](../tools/badges/appimage-badge.svg)](tools/appimage/README.md)
+[![Docker](../tools/badges/docker-badge.svg)](../docker/README.md)
+[![AppImage](../tools/badges/appimage-badge.svg)](../tools/appimage/README.md)
 
 # I2P+
 
@@ -33,7 +33,7 @@ veya 'ant javadoc' komutunu çalıştırın ve ardından build/javadoc/index.htm
 
 ## Nasıl Katkıda Bulunulur / I2P Üzerinde Çalışılır
 
-Lütfen [HACKING.md](docs/HACKING.md) dosyasını ve docs dizinindeki diğer belgeleri inceleyin.
+Lütfen [HACKING.md](HACKING.md) dosyasını ve docs dizinindeki diğer belgeleri inceleyin.
 
 ## Kaynak Koddan Paket Oluşturma
 
@@ -105,10 +105,10 @@ Linux için AppImage derlemek için:
 ant buildAppImage
 ```
 
-Ayrıntılar için [tools/appimage/README.md](tools/appimage/README.md) bölümüne bakın.
+Ayrıntılar için [tools/appimage/README.md](../tools/appimage/README.md) bölümüne bakın.
 
 
-I2P'yi Docker'da çalıştırma hakkında daha fazla bilgi için [docker/README.md](docker/README.md) dosyasına bakın
+I2P'yi Docker'da çalıştırma hakkında daha fazla bilgi için [docker/README.md](../docker/README.md) dosyasına bakın
 
 
 
@@ -125,56 +125,56 @@ Hata raporları: https://i2pgit.org/i2p-hackers/i2p.i2p/-/issues veya https://gi
 
 I2P+, AGPL v.3 altında lisanslanmıştır.
 
-Çeşitli alt bileşen lisansları için bkz: [README.md](docs/LICENSES.md)
+Çeşitli alt bileşen lisansları için bkz: [LICENSES.md](LICENSES.md)
 
 ## Ayrıca Bkz
 
 ### Belgeler
 
-- [docs/README.md](docs/README.md) - Tam belge dizini
-- [docs/INSTALL.md](docs/INSTALL.md) - Kurulum kılavuzu
-- [docs/INSTALL-headless.md](docs/INSTALL-headless.md) - Headless (konsol modu) kurulum
-- [docs/HACKING.md](docs/HACKING.md) - Geliştirici kılavuzu ve derleme sistemleri
-- [docs/DIRECTORIES.md](docs/DIRECTORIES.md) - Kaynak ağacı düzeni
-- [docs/DEBUGGING.md](docs/DEBUGGING.md) - JDWP ve diğer araçlarla çalışma zamanı hata ayıklama
-- [docs/i2p-sessionban-nftables.md](docs/i2p-sessionban-nftables.md) - nftables ile I2P oturum yasaklarını yönetme
-- [docs/THEMING.md](docs/THEMING.md) - Console and webapp theming system
-- [docs/LICENSES.md](docs/LICENSES.md) - Üçüncü taraf lisansları
-- [docs/history.txt](docs/history.txt) - Tam değişiklik günlüğü
+- [docs/README.md](README.md) - Tam belge dizini
+- [docs/INSTALL.md](INSTALL.md) - Kurulum kılavuzu
+- [docs/INSTALL-headless.md](INSTALL-headless.md) - Headless (konsol modu) kurulum
+- [docs/HACKING.md](HACKING.md) - Geliştirici kılavuzu ve derleme sistemleri
+- [docs/DIRECTORIES.md](DIRECTORIES.md) - Kaynak ağacı düzeni
+- [docs/DEBUGGING.md](DEBUGGING.md) - JDWP ve diğer araçlarla çalışma zamanı hata ayıklama
+- [docs/i2p-sessionban-nftables.md](i2p-sessionban-nftables.md) - nftables ile I2P oturum yasaklarını yönetme
+- [docs/THEMING.md](THEMING.md) - Console and webapp theming system
+- [docs/LICENSES.md](LICENSES.md) - Üçüncü taraf lisansları
+- [docs/history.txt](history.txt) - Tam değişiklik günlüğü
 
 ### Alt Projeler
 
-- [apps/README.md](apps/README.md) - Uygulama genel bakış
-- [apps/addressbook/README.md](apps/addressbook/README.md) - Adres defteri uygulaması
-- [apps/desktopgui/README.md](apps/desktopgui/README.md) - Masaüstü GUI uygulaması
-- [apps/i2pcontrol/README.md](apps/i2pcontrol/README.md) - I2P Kontrol API
-- [apps/i2psnark/README.md](apps/i2psnark/README.md) - I2PSnark BitTorrent istemcisi
-- [apps/i2ptunnel/README.md](apps/i2ptunnel/README.md) - I2P Tünel uygulaması
-- [apps/imagegen/README.md](apps/imagegen/README.md) - Görüntü oluşturma araçları
-- [apps/jetty/README.md](apps/jetty/README.md) - Jetty HTTP sunucusu
-- [apps/jrobin/README.md](apps/jrobin/README.md) - JRobin izleme kütüphanesi
-- [apps/ministreaming/README.md](apps/ministreaming/README.md) - Minimal akış kütüphanesi
-- [apps/pack200/README.md](apps/pack200/README.md) - Pack200 sıkıştırma
-- [apps/proxyscript/README.md](apps/proxyscript/README.md) - Proxy betikleri
-- [apps/routerconsole/README.md](apps/routerconsole/README.md) - Yönlendirici konsolu
-- [apps/sam/README.md](apps/sam/README.md) - Basit Anonim Mesajlaşma
-- [apps/streaming/README.md](apps/streaming/README.md) - Akış kütüphanesi
-- [apps/susidns/README.md](apps/susidns/README.md) - DNS sunucusu
-- [apps/susimail/README.md](apps/susimail/README.md) - I2P e-posta istemcisi
-- [apps/systray/README.md](apps/systray/README.md) - Sistem tepsisi uygulaması
-- [core/README.md](core/README.md) - Çekirdek kütüphane belgeleri
-- [installer/lib/jbigi/README.md](installer/lib/jbigi/README.md) - Şifreleme için yerel JNI kütüphanesi (GMP)
+- [apps/README.md](../apps/README.md) - Uygulama genel bakış
+- [apps/addressbook/README.md](../apps/addressbook/README.md) - Adres defteri uygulaması
+- [apps/desktopgui/README.md](../apps/desktopgui/README.md) - Masaüstü GUI uygulaması
+- [apps/i2pcontrol/README.md](../apps/i2pcontrol/README.md) - I2P Kontrol API
+- [apps/i2psnark/README.md](../apps/i2psnark/README.md) - I2PSnark BitTorrent istemcisi
+- [apps/i2ptunnel/README.md](../apps/i2ptunnel/README.md) - I2P Tünel uygulaması
+- [apps/imagegen/README.md](../apps/imagegen/README.md) - Görüntü oluşturma araçları
+- [apps/jetty/README.md](../apps/jetty/README.md) - Jetty HTTP sunucusu
+- [apps/jrobin/README.md](../apps/jrobin/README.md) - JRobin izleme kütüphanesi
+- [apps/ministreaming/README.md](../apps/ministreaming/README.md) - Minimal akış kütüphanesi
+- [apps/pack200/README.md](../apps/pack200/README.md) - Pack200 sıkıştırma
+- [apps/proxyscript/README.md](../apps/proxyscript/README.md) - Proxy betikleri
+- [apps/routerconsole/README.md](../apps/routerconsole/README.md) - Yönlendirici konsolu
+- [apps/sam/README.md](../apps/sam/README.md) - Basit Anonim Mesajlaşma
+- [apps/streaming/README.md](../apps/streaming/README.md) - Akış kütüphanesi
+- [apps/susidns/README.md](../apps/susidns/README.md) - DNS sunucusu
+- [apps/susimail/README.md](../apps/susimail/README.md) - I2P e-posta istemcisi
+- [apps/systray/README.md](../apps/systray/README.md) - Sistem tepsisi uygulaması
+- [core/README.md](../core/README.md) - Çekirdek kütüphane belgeleri
+- [installer/lib/jbigi/README.md](../installer/lib/jbigi/README.md) - Şifreleme için yerel JNI kütüphanesi (GMP)
 
 ### Çeşitli
 
-- [docs/i2p-sessionban-nftables.md](docs/i2p-sessionban-nftables.md) - nftables ile I2P oturum yasaklarını yönetme
-- [installer/resources/README.md](installer/resources/README.md) - Paketlenmiş yükleyici kaynakları
-- [tools/scripts/README.md](tools/scripts/README.md) - Geliştirme ve yönetim için yardımcı betikler
-- [tools/scripts/tests/README.md](tools/scripts/tests/README.md) - Doğrulama ve test betikleri
+- [docs/i2p-sessionban-nftables.md](i2p-sessionban-nftables.md) - nftables ile I2P oturum yasaklarını yönetme
+- [installer/resources/README.md](../installer/resources/README.md) - Paketlenmiş yükleyici kaynakları
+- [tools/scripts/README.md](../tools/scripts/README.md) - Geliştirme ve yönetim için yardımcı betikler
+- [tools/scripts/tests/README.md](../tools/scripts/tests/README.md) - Doğrulama ve test betikleri
 
 
 
 ## İletişim Bilgileri
-- [docker/README.md](docker/README.md) - Docker'da I2P+ çalıştırma
+- [docker/README.md](../docker/README.md) - Docker'da I2P+ çalıştırma
 
 ## İletişim Bilgileri

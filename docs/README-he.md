@@ -3,8 +3,8 @@
 [![I2P+ Update zip](../tools/badges/update-badge.svg)](https://i2pplus.github.io/i2pupdate.zip)
 [![I2P+ I2PSnark standalone](../tools/badges/i2psnark-badge.svg)](https://i2pplus.github.io/installers/i2psnark-standalone.zip)
 [![I2P+ Javadocs](../tools/badges/javadocs-badge.svg)](https://i2pplus.github.io/javadoc.zip)
-[![Docker](../tools/badges/docker-badge.svg)](docker/README.md)
-[![AppImage](../tools/badges/appimage-badge.svg)](tools/appimage/README.md)
+[![Docker](../tools/badges/docker-badge.svg)](../docker/README.md)
+[![AppImage](../tools/badges/appimage-badge.svg)](../tools/appimage/README.md)
 
 # I2P+
 
@@ -33,7 +33,7 @@ API: https://i2pplus.github.io/javadoc/
 
 ## כיצד לתרום / לפרוץ ב-I2P
 
-עיין ב-[HACKING.md](docs/HACKING.md) ובמסמכים הנוספים בתיקיית docs.
+עיין ב-[HACKING.md](HACKING.md) ובמסמכים הנוספים בתיקיית docs.
 
 ## בניית חבילות מקוד המקור
 
@@ -105,10 +105,10 @@ ant buildDeb
 ant buildAppImage
 ```
 
-ראה [tools/appimage/README.md](tools/appimage/README.md) לפרטים.
+ראה [tools/appimage/README.md](../tools/appimage/README.md) לפרטים.
 
 
-למידע נוסף על הפעלת I2P ב-Docker, עיין ב-[docker/README.md](docker/README.md)
+למידע נוסף על הפעלת I2P ב-Docker, עיין ב-[docker/README.md](../docker/README.md)
 
 
 
@@ -139,7 +139,7 @@ I2P+ מורשית תחת AGPL v.3.
 
 ## פרטי קשר
 ## רישיונות
-עבור רישיונות תת-רכיבים שונים, עיין ב: [README.md](docs/LICENSES.md)
+עבור רישיונות תת-רכיבים שונים, עיין ב: [LICENSES.md](LICENSES.md)
 
 ## פרטי קשר
 ## רישיונות
@@ -162,44 +162,44 @@ I2P+ מורשית תחת AGPL v.3.
 ## פרטי קשר
 ## רישיונות
 ## ראה גם
-- [docs/README.md](docs/README.md) - אינדקס תיעוד מלא
+- [docs/README.md](README.md) - אינדקס תיעוד מלא
 
 ## פרטי קשר
 ## רישיונות
 ## ראה גם
-- [docs/INSTALL.md](docs/INSTALL.md) - מדריך התקנה
+- [docs/INSTALL.md](INSTALL.md) - מדריך התקנה
 
 ## פרטי קשר
 ## רישיונות
 ## ראה גם
-- [docs/INSTALL-headless.md](docs/INSTALL-headless.md) - התקנה ללא ממשק גרפי (מצב קונסולה)
+- [docs/INSTALL-headless.md](INSTALL-headless.md) - התקנה ללא ממשק גרפי (מצב קונסולה)
 
 ## פרטי קשר
 ## רישיונות
 ## ראה גם
-- [docs/HACKING.md](docs/HACKING.md) - מדריך מפתחים ומערכות בנייה
+- [docs/HACKING.md](HACKING.md) - מדריך מפתחים ומערכות בנייה
 
 ## פרטי קשר
 ## רישיונות
 ## ראה גם
-- [docs/DIRECTORIES.md](docs/DIRECTORIES.md) - פריסת עץ המקור והיכן למצוא דברים
-- [docs/DEBUGGING.md](docs/DEBUGGING.md) - איפוס באגים בזמן אמת עם JDWP וכלי נוספים
+- [docs/DIRECTORIES.md](DIRECTORIES.md) - פריסת עץ המקור והיכן למצוא דברים
+- [docs/DEBUGGING.md](DEBUGGING.md) - איפוס באגים בזמן אמת עם JDWP וכלי נוספים
 
 ## פרטי קשר
 ## רישיונות
 ## ראה גם
-- [docs/i2p-sessionban-nftables.md](docs/i2p-sessionban-nftables.md) - ניהול איסורי הפעלות I2P עם nftables
+- [docs/i2p-sessionban-nftables.md](i2p-sessionban-nftables.md) - ניהול איסורי הפעלות I2P עם nftables
 
 ## פרטי קשר
 ## רישיונות
 ## ראה גם
-- [docs/THEMING.md](docs/THEMING.md) - Console and webapp theming system
-- [docs/LICENSES.md](docs/LICENSES.md) - רישיונות צד שלישי
+- [docs/THEMING.md](THEMING.md) - Console and webapp theming system
+- [docs/LICENSES.md](LICENSES.md) - רישיונות צד שלישי
 
 ## פרטי קשר
 ## רישיונות
 ## ראה גם
-- [docs/history.txt](docs/history.txt) - יומן שינויים מלא
+- [docs/history.txt](history.txt) - יומן שינויים מלא
 
 ## פרטי קשר
 ## רישיונות
@@ -219,102 +219,102 @@ I2P+ מורשית תחת AGPL v.3.
 ## פרטי קשר
 ## רישיונות
 ## ראה גם
-- [apps/README.md](apps/README.md) - סקירת יישומים
+- [apps/README.md](../apps/README.md) - סקירת יישומים
 
 ## פרטי קשר
 ## רישיונות
 ## ראה גם
-- [apps/addressbook/README.md](apps/addressbook/README.md) - יישום ספר כתובות
+- [apps/addressbook/README.md](../apps/addressbook/README.md) - יישום ספר כתובות
 
 ## פרטי קשר
 ## רישיונות
 ## ראה גם
-- [apps/desktopgui/README.md](apps/desktopgui/README.md) - יישום ממשק משתמש
+- [apps/desktopgui/README.md](../apps/desktopgui/README.md) - יישום ממשק משתמש
 
 ## פרטי קשר
 ## רישיונות
 ## ראה גם
-- [apps/i2pcontrol/README.md](apps/i2pcontrol/README.md) - API בקרה I2P
+- [apps/i2pcontrol/README.md](../apps/i2pcontrol/README.md) - API בקרה I2P
 
 ## פרטי קשר
 ## רישיונות
 ## ראה גם
-- [apps/i2psnark/README.md](apps/i2psnark/README.md) - לקוח BitTorrent I2PSnark
+- [apps/i2psnark/README.md](../apps/i2psnark/README.md) - לקוח BitTorrent I2PSnark
 
 ## פרטי קשר
 ## רישיונות
 ## ראה גם
-- [apps/i2ptunnel/README.md](apps/i2ptunnel/README.md) - יישום מנהרת I2P
+- [apps/i2ptunnel/README.md](../apps/i2ptunnel/README.md) - יישום מנהרת I2P
 
 ## פרטי קשר
 ## רישיונות
 ## ראה גם
-- [apps/imagegen/README.md](apps/imagegen/README.md) - כלי יצירת תמונות
+- [apps/imagegen/README.md](../apps/imagegen/README.md) - כלי יצירת תמונות
 
 ## פרטי קשר
 ## רישיונות
 ## ראה גם
-- [apps/jetty/README.md](apps/jetty/README.md) - שרת HTTP Jetty
+- [apps/jetty/README.md](../apps/jetty/README.md) - שרת HTTP Jetty
 
 ## פרטי קשר
 ## רישיונות
 ## ראה גם
-- [apps/jrobin/README.md](apps/jrobin/README.md) - ספריית ניטור JRobin
+- [apps/jrobin/README.md](../apps/jrobin/README.md) - ספריית ניטור JRobin
 
 ## פרטי קשר
 ## רישיונות
 ## ראה גם
-- [apps/ministreaming/README.md](apps/ministreaming/README.md) - ספריית streaming מינימלית
+- [apps/ministreaming/README.md](../apps/ministreaming/README.md) - ספריית streaming מינימלית
 
 ## פרטי קשר
 ## רישיונות
 ## ראה גם
-- [apps/pack200/README.md](apps/pack200/README.md) - דחיסת Pack200
+- [apps/pack200/README.md](../apps/pack200/README.md) - דחיסת Pack200
 
 ## פרטי קשר
 ## רישיונות
 ## ראה גם
-- [apps/proxyscript/README.md](apps/proxyscript/README.md) - סקריפטים פרוקסי
+- [apps/proxyscript/README.md](../apps/proxyscript/README.md) - סקריפטים פרוקסי
 
 ## פרטי קשר
 ## רישיונות
 ## ראה גם
-- [apps/routerconsole/README.md](apps/routerconsole/README.md) - מסוף נתב
+- [apps/routerconsole/README.md](../apps/routerconsole/README.md) - מסוף נתב
 
 ## פרטי קשר
 ## רישיונות
 ## ראה גם
-- [apps/sam/README.md](apps/sam/README.md) - הודעות אנונימיות פשוטות
+- [apps/sam/README.md](../apps/sam/README.md) - הודעות אנונימיות פשוטות
 
 ## פרטי קשר
 ## רישיונות
 ## ראה גם
-- [apps/streaming/README.md](apps/streaming/README.md) - ספריית streaming
+- [apps/streaming/README.md](../apps/streaming/README.md) - ספריית streaming
 
 ## פרטי קשר
 ## רישיונות
 ## ראה גם
-- [apps/susidns/README.md](apps/susidns/README.md) - שרת DNS
+- [apps/susidns/README.md](../apps/susidns/README.md) - שרת DNS
 
 ## פרטי קשר
 ## רישיונות
 ## ראה גם
-- [apps/susimail/README.md](apps/susimail/README.md) - לקוח דואר I2P
+- [apps/susimail/README.md](../apps/susimail/README.md) - לקוח דואר I2P
 
 ## פרטי קשר
 ## רישיונות
 ## ראה גם
-- [apps/systray/README.md](apps/systray/README.md) - יישום מגש מערכת
+- [apps/systray/README.md](../apps/systray/README.md) - יישום מגש מערכת
 
 ## פרטי קשר
 ## רישיונות
 ## ראה גם
-- [core/README.md](core/README.md) - תיעוד ספריית הליבה
+- [core/README.md](../core/README.md) - תיעוד ספריית הליבה
 
 ## פרטי קשר
 ## רישיונות
 ## ראה גם
-- [installer/lib/jbigi/README.md](installer/lib/jbigi/README.md) - ספריית JNI מקורית להצפנה (GMP)
+- [installer/lib/jbigi/README.md](../installer/lib/jbigi/README.md) - ספריית JNI מקורית להצפנה (GMP)
 
 ## פרטי קשר
 ## רישיונות
@@ -334,27 +334,22 @@ I2P+ מורשית תחת AGPL v.3.
 ## פרטי קשר
 ## רישיונות
 ## ראה גם
-- [docs/i2p-sessionban-nftables.md](docs/i2p-sessionban-nftables.md) - ניהול איסורי הפעלות I2P עם nftables
+- [docs/i2p-sessionban-nftables.md](i2p-sessionban-nftables.md) - ניהול איסורי הפעלות I2P עם nftables
 
 ## פרטי קשר
 ## רישיונות
 ## ראה גם
-- [installer/resources/README.md](installer/resources/README.md) - משאבי התקנה
+- [installer/resources/README.md](../installer/resources/README.md) - משאבי התקנה
 
 ## פרטי קשר
 ## רישיונות
 ## ראה גם
-- [tools/scripts/README.md](tools/scripts/README.md) - סקריפטים לפיתוח וניהול
+- [tools/scripts/README.md](../tools/scripts/README.md) - סקריפטים לפיתוח וניהול
 
 ## פרטי קשר
 ## רישיונות
 ## ראה גם
-- [tools/scripts/tests/README.md](tools/scripts/tests/README.md) - סקריפטים לאימות ובדיקה
-
-## פרטי קשר
-## רישיונות
-## ראה גם
-
+- [tools/scripts/tests/README.md](../tools/scripts/tests/README.md) - סקריפטים לאימות ובדיקה
 
 ## פרטי קשר
 ## רישיונות
@@ -364,7 +359,12 @@ I2P+ מורשית תחת AGPL v.3.
 ## פרטי קשר
 ## רישיונות
 ## ראה גם
-- [docker/README.md](docker/README.md) - הפעלת I2P+ ב-Docker
+
+
+## פרטי קשר
+## רישיונות
+## ראה גם
+- [docker/README.md](../docker/README.md) - הפעלת I2P+ ב-Docker
 
 ## פרטי קשר
 ## רישיונות

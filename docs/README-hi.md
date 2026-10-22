@@ -3,8 +3,8 @@
 [![I2P+ Update zip](../tools/badges/update-badge.svg)](https://i2pplus.github.io/i2pupdate.zip)
 [![I2P+ I2PSnark standalone](../tools/badges/i2psnark-badge.svg)](https://i2pplus.github.io/installers/i2psnark-standalone.zip)
 [![I2P+ Javadocs](../tools/badges/javadocs-badge.svg)](https://i2pplus.github.io/javadoc.zip)
-[![Docker](../tools/badges/docker-badge.svg)](docker/README.md)
-[![AppImage](../tools/badges/appimage-badge.svg)](tools/appimage/README.md)
+[![Docker](../tools/badges/docker-badge.svg)](../docker/README.md)
+[![AppImage](../tools/badges/appimage-badge.svg)](../tools/appimage/README.md)
 
 # I2P+
 
@@ -35,8 +35,8 @@ API: [https://i2pplus.github.io/javadoc/](https://i2pplus.github.io/javadoc/) �
 कृपया [HACKING.md](HACKING.md) और docs डायरेक्टरी में अन्य दस्तावेज़ों की जांच करें।
 
 
-- [docs/DEBUGGING.md](docs/DEBUGGING.md) - JDWP और अन्य उपकरणों के साथ रनटाइम डिबगिंग
-- [docs/THEMING.md](docs/THEMING.md) - Console and webapp theming system
+- [docs/DEBUGGING.md](DEBUGGING.md) - JDWP और अन्य उपकरणों के साथ रनटाइम डिबगिंग
+- [docs/THEMING.md](THEMING.md) - Console and webapp theming system
 ## स्रोत से पैकेज बनाना
 
 स्रोत नियंत्रण से विकास शाखा प्राप्त करने के लिए: [https://github.com/I2PPlus/i2pplus/](https://github.com/I2PPlus/i2pplus/)
@@ -92,10 +92,10 @@ Linux के लिए AppImage बनाने के लिए:
 ant buildAppImage
 ```
 
-विवरण के लिए [tools/appimage/README.md](tools/appimage/README.md) देखें।
+विवरण के लिए [tools/appimage/README.md](../tools/appimage/README.md) देखें।
 
 
-I2P को डॉकर में चलाने के अधिक जानकारी के लिए, देखें [Docker.md](../docker/Docker.md)
+I2P को डॉकर में चलाने के अधिक जानकारी के लिए, देखें [README.md](../docker/README.md)
 
 ## संपर्क जानकारी
 
@@ -107,4 +107,4 @@ I2P को डॉकर में चलाने के अधिक जान�
 
 I2P+ AGPL v.3 के अंतर्गत लाइसेंसित है।
 
-विभिन्न उप-घटक लाइसेंसों के लिए, देखें: [README.md](docs/LICENSES.md)
+विभिन्न उप-घटक लाइसेंसों के लिए, देखें: [LICENSES.md](LICENSES.md)

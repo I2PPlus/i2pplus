@@ -3,8 +3,8 @@
 [![I2P+ Update zip](../tools/badges/update-badge.svg)](https://i2pplus.github.io/i2pupdate.zip)
 [![I2P+ I2PSnark standalone](../tools/badges/i2psnark-badge.svg)](https://i2pplus.github.io/installers/i2psnark-standalone.zip)
 [![I2P+ Javadocs](../tools/badges/javadocs-badge.svg)](https://i2pplus.github.io/javadoc.zip)
-[![Docker](../tools/badges/docker-badge.svg)](docker/README.md)
-[![AppImage](../tools/badges/appimage-badge.svg)](tools/appimage/README.md)
+[![Docker](../tools/badges/docker-badge.svg)](../docker/README.md)
+[![AppImage](../tools/badges/appimage-badge.svg)](../tools/appimage/README.md)
 
 # I2P+
 
@@ -16,7 +16,7 @@ Toleo jipya zaidi: https://i2pplus.github.io/
 
 ## Usakinishaji
 
-Angalia [INSTALL.md](docs/INSTALL.md) au https://i2pplus.github.io/ kwa maagizo ya usakinishaji.
+Angalia [INSTALL.md](INSTALL.md) au https://i2pplus.github.io/ kwa maagizo ya usakinishaji.
 
 ### Maelezo kuhusu kisakinishaji cha Windows
 
@@ -33,7 +33,7 @@ au endesha 'ant javadoc' kisha anza katika build/javadoc/index.html
 
 ## Jinsi ya kuchangia / Kufanya kazi kwenye I2P+
 
-Tafadhali angalia [HACKING.md](docs/HACKING.md) na nyaraka nyingine katika mfolda wa docs.
+Tafadhali angalia [HACKING.md](HACKING.md) na nyaraka nyingine katika mfolda wa docs.
 
 ## Kujenga vifurushi kutoka kwenye chanzo
 
@@ -101,7 +101,7 @@ Kujenga AppImage kwa Linux:
 ant buildAppImage
 ```
 
-Angalia [tools/appimage/README.md](tools/appimage/README.md) kwa maelezo.
+Angalia [tools/appimage/README.md](../tools/appimage/README.md) kwa maelezo.
 
 Kujenga kifurushi cha Debian kinachojitosheza kwa Debian/Ubuntu bila utegemezi wa nje wa Jetty/Tomcat:
 ```bash
@@ -110,7 +110,7 @@ ant buildDeb
 
 Hii hufanya kifurushi cha `.deb` kinachojitosheza chenye maktabi za Jetty na Tomcat zilizounganishwa. Kinahitaji tu mzunguko wa OpenJDK (unasakinishwa kiotomatiki kupitia kijidhibiti cha vifurushi).
 
-Kwa kuendesha kwenye Docker, angalia [docker/README.md](docker/README.md)
+Kwa kuendesha kwenye Docker, angalia [docker/README.md](../docker/README.md)
 
 ## Taarifa za mawasiliano
 
@@ -122,50 +122,50 @@ Ripoti za hitilafu: https://github.com/I2PPlus/i2pplus/issues
 
 I2P+ ina leseni chini ya AGPL v.3.
 
-Kwa leseni za vipengele mbalimbali vya ndani, angalia: [README.md](docs/LICENSES.md)
+Kwa leseni za vipengele mbalimbali vya ndani, angalia: [LICENSES.md](LICENSES.md)
 
 ## Tazama pia
 
 ### Nyaraka
 
-- [docs/README.md](docs/README.md) - Faharasa kamili ya nyaraka
-- [docs/INSTALL.md](docs/INSTALL.md) - Mwongozo wa usakinishaji
-- [docs/INSTALL-headless.md](docs/INSTALL-headless.md) - Usakinishaji wa headless (hali ya konsoli)
-- [docs/HACKING.md](docs/HACKING.md) - Mwongozo wa wasanidi na mifumo ya kujenga
-- [docs/DIRECTORIES.md](docs/DIRECTORIES.md) - Muundo wa mti wa chanzo na mahali pa kupata vitu
-- [router/java/src/net/i2p/README.md](router/java/src/net/i2p/README.md) - Muhtasari wa mti wa chanzo wa kiruta
-- [core/java/src/net/i2p/README.md](core/java/src/net/i2p/README.md) - Muhtasari wa mti wa chanzo wa maktabi ya msingi
-- [docs/DEBUGGING.md](docs/DEBUGGING.md) - Utatuzi wa wakati wa uendeshaji kwa JDWP na zana nyingine
-- [docs/THEMING.md](docs/THEMING.md) - Mfumo wa mandharinyuma wa konsoli na programu za wavuti
-- [docs/LICENSES.md](docs/LICENSES.md) - Leseni za wahusika wa tatu
-- [docs/history.txt](docs/history.txt) - Katalogi kamili ya mabadiliko
+- [docs/README.md](README.md) - Faharasa kamili ya nyaraka
+- [docs/INSTALL.md](INSTALL.md) - Mwongozo wa usakinishaji
+- [docs/INSTALL-headless.md](INSTALL-headless.md) - Usakinishaji wa headless (hali ya konsoli)
+- [docs/HACKING.md](HACKING.md) - Mwongozo wa wasanidi na mifumo ya kujenga
+- [docs/DIRECTORIES.md](DIRECTORIES.md) - Muundo wa mti wa chanzo na mahali pa kupata vitu
+- [router/java/src/net/i2p/README.md](../router/java/src/net/i2p/README.md) - Muhtasari wa mti wa chanzo wa kiruta
+- [core/java/src/net/i2p/README.md](../core/java/src/net/i2p/README.md) - Muhtasari wa mti wa chanzo wa maktabi ya msingi
+- [docs/DEBUGGING.md](DEBUGGING.md) - Utatuzi wa wakati wa uendeshaji kwa JDWP na zana nyingine
+- [docs/THEMING.md](THEMING.md) - Mfumo wa mandharinyuma wa konsoli na programu za wavuti
+- [docs/LICENSES.md](LICENSES.md) - Leseni za wahusika wa tatu
+- [docs/history.txt](history.txt) - Katalogi kamili ya mabadiliko
 
 ### Miradi midogo
 
-- [apps/README.md](apps/README.md) - Muhtasari wa programu
-- [apps/addressbook/README.md](apps/addressbook/README.md) - Programu ya kitabu cha anwani
-- [apps/desktopgui/README.md](apps/desktopgui/README.md) - Programu ya GUI ya eneo-kazi
-- [apps/i2pcontrol/README.md](apps/i2pcontrol/README.md) - I2P Control API
-- [apps/i2psnark/README.md](apps/i2psnark/README.md) - I2PSnark mteja wa BitTorrent
-- [apps/i2ptunnel/README.md](apps/i2ptunnel/README.md) - Programu ya tunnel ya I2P
-- [apps/imagegen/README.md](apps/imagegen/README.md) - Zana za kutengeneza picha
-- [apps/jetty/README.md](apps/jetty/README.md) - Seva ya HTTP ya Jetty
-- [apps/jrobin/README.md](apps/jrobin/README.md) - Maktabi ya ufuatiliaji ya JRobin
-- [apps/ministreaming/README.md](apps/ministreaming/README.md) - Maktabi ndogo ya kutiririka
-- [apps/pack200/README.md](apps/pack200/README.md) - Mfinyo wa Pack200
-- [apps/proxyscript/README.md](apps/proxyscript/README.md) - Skripti za proksi
-- [apps/routerconsole/README.md](apps/routerconsole/README.md) - Konsoli ya kiruta
-- [apps/sam/README.md](apps/sam/README.md) - Simple Anonymous Messaging
-- [apps/streaming/README.md](apps/streaming/README.md) - Maktabi ya kutiririka
-- [apps/susidns/README.md](apps/susidns/README.md) - Seva ya DNS
-- [apps/susimail/README.md](apps/susimail/README.md) - Mteja wa barua pepe wa I2P
-- [apps/systray/README.md](apps/systray/README.md) - Programu ya jopo la mfumo
-- [core/README.md](core/README.md) - Nyaraka za maktabi ya msingi
-- [installer/lib/jbigi/README.md](installer/lib/jbigi/README.md) - Maktabi ya asili ya JNI kwa usimbaji fiche (GMP)
+- [apps/README.md](../apps/README.md) - Muhtasari wa programu
+- [apps/addressbook/README.md](../apps/addressbook/README.md) - Programu ya kitabu cha anwani
+- [apps/desktopgui/README.md](../apps/desktopgui/README.md) - Programu ya GUI ya eneo-kazi
+- [apps/i2pcontrol/README.md](../apps/i2pcontrol/README.md) - I2P Control API
+- [apps/i2psnark/README.md](../apps/i2psnark/README.md) - I2PSnark mteja wa BitTorrent
+- [apps/i2ptunnel/README.md](../apps/i2ptunnel/README.md) - Programu ya tunnel ya I2P
+- [apps/imagegen/README.md](../apps/imagegen/README.md) - Zana za kutengeneza picha
+- [apps/jetty/README.md](../apps/jetty/README.md) - Seva ya HTTP ya Jetty
+- [apps/jrobin/README.md](../apps/jrobin/README.md) - Maktabi ya ufuatiliaji ya JRobin
+- [apps/ministreaming/README.md](../apps/ministreaming/README.md) - Maktabi ndogo ya kutiririka
+- [apps/pack200/README.md](../apps/pack200/README.md) - Mfinyo wa Pack200
+- [apps/proxyscript/README.md](../apps/proxyscript/README.md) - Skripti za proksi
+- [apps/routerconsole/README.md](../apps/routerconsole/README.md) - Konsoli ya kiruta
+- [apps/sam/README.md](../apps/sam/README.md) - Simple Anonymous Messaging
+- [apps/streaming/README.md](../apps/streaming/README.md) - Maktabi ya kutiririka
+- [apps/susidns/README.md](../apps/susidns/README.md) - Seva ya DNS
+- [apps/susimail/README.md](../apps/susimail/README.md) - Mteja wa barua pepe wa I2P
+- [apps/systray/README.md](../apps/systray/README.md) - Programu ya jopo la mfumo
+- [core/README.md](../core/README.md) - Nyaraka za maktabi ya msingi
+- [installer/lib/jbigi/README.md](../installer/lib/jbigi/README.md) - Maktabi ya asili ya JNI kwa usimbaji fiche (GMP)
 
 ### Mbalimbali
 
-- [docs/i2p-sessionban-nftables.md](docs/i2p-sessionban-nftables.md) - Kudhibiti marufuku za vikao vya I2P kwa nftables
-- [installer/resources/README.md](installer/resources/README.md) - Rasilimali za kisakinishaji zilizounganishwa
-- [tools/scripts/README.md](tools/scripts/README.md) - Skripti za matumizi kwa maendeleo na utawala
-- [tools/scripts/tests/README.md](tools/scripts/tests/README.md) - Skripti za uthibitisho na majaribio
+- [docs/i2p-sessionban-nftables.md](i2p-sessionban-nftables.md) - Kudhibiti marufuku za vikao vya I2P kwa nftables
+- [installer/resources/README.md](../installer/resources/README.md) - Rasilimali za kisakinishaji zilizounganishwa
+- [tools/scripts/README.md](../tools/scripts/README.md) - Skripti za matumizi kwa maendeleo na utawala
+- [tools/scripts/tests/README.md](../tools/scripts/tests/README.md) - Skripti za uthibitisho na majaribio

@@ -6,33 +6,42 @@ Development tools, scripts, and static analysis utilities for I2P+.
 
 | Directory                      | Description                                                     |
 | ------------------------------ | --------------------------------------------------------------- |
-| [`scripts/`](scripts/)         | Build, code quality, translation, and admin scripts             |
+| [`ant/`](ant/)                 | Pinned Ant distribution and ant-contrib used by the build       |
+| [`appimage/`](appimage/)       | Linux AppImage packaging                                        |
+| [`badges/`](badges/)           | README status badges and their generator                        |
+| [`build/`](build/)             | Build-time Ant listener (`ConciseLogger`) source                |
 | [`checkstyle/`](checkstyle/)   | Checkstyle static analysis for Java code style                  |
-| [`pmd/`](pmd/)                 | PMD static analysis for Java and JavaScript                     |
-| [`spotbugs/`](spotbugs/)       | SpotBugs bytecode analysis for Java bugs                        |
 | [`codeql/`](codeql/)           | CodeQL semantic code analysis                                   |
-| [`sonarqube/`](sonarqube/)     | SonarQube static analysis with offline/cached report generation |
+| [`gradle/`](gradle/)           | Gradle build scripts for installer, packaging and updates       |
 | [`java-format/`](java-format/) | Google Java Format integration                                  |
+| [`javadoc/`](javadoc/)         | Javadoc configuration, stylesheets and warning tooling          |
+| [`jsdoc/`](jsdoc/)             | JSDoc configuration and templates                               |
+| [`pmd/`](pmd/)                 | PMD static analysis for Java and JavaScript                     |
+| [`scripts/`](scripts/)         | Build, code quality, translation, and admin scripts             |
+| [`sonarqube/`](sonarqube/)     | SonarQube static analysis with offline/cached report generation |
+| [`spotbugs/`](spotbugs/)       | SpotBugs bytecode analysis for Java bugs                        |
 | [`template/`](template/)       | Shared templates for HTML reports                               |
 | [`test/`](test/)               | Test dependencies (JUnit, Mockito, etc.)                        |
-| [`jsdoc/`](jsdoc/)             | JSDoc configuration and templates                               |
 
 ## Quick Start
 
 ```bash
 # Static analysis
-ant checkstyle        # Code style → dist/checkstyle.html
-ant pmd               # Java + JS → dist/pmd-java.html + dist/pmd-js.html
-ant spotbugs          # Bytecode bugs → dist/spotbugs.html
-ant sonar             # SonarQube (full scan) → dist/sonarqube.html
-ant sonar-report      # SonarQube (cached/offline)
-ant report-all-java   # Combined report
+ant checkstyle             # Code style → dist/checkstyle.html
+ant pmd                    # Java + JS → dist/pmd-java.html + dist/pmd-js.html
+ant spotbugs               # Bytecode bugs → dist/spotbugs.html
+ant codeql                 # Semantic security analysis (downloads CodeQL)
+ant sonarqube-report       # SonarQube scan + report → dist/sonarqube.html
+ant sonarqube-report-full  # Same, with local rule documentation
+ant report-all-java        # Combined report
 
 # Run analysis targets
 ant -p | grep -E "checkstyle|pmd|spotbugs|codeql|sonar"
 
-# Test dependencies (auto-downloaded on first run)
-ant test
+# Tests (test dependencies are auto-downloaded on first run)
+ant test                   # Java unit tests
+ant test-js                # JavaScript tests for the console
+ant download-jmh           # Fetch the JMH benchmark harness
 ```
 
 ## Tools Overview

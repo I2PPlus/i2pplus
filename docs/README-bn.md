@@ -51,8 +51,8 @@
 ### বাহ্যিক README
 
 - [../docker/README.md](../docker/README.md) - ডকারে আই২প্লাস চালানো
-- [../scripts/README.md](../scripts/README.md) - ডেভেলপমেন্ট এবং অ্যাডমিনিস্ট্রেশনের জন্য ইউটিলিটি স্ক্রিপ্ট
-- [../scripts/tests/README.md](../scripts/tests/README.md) - ভ্যালিডেশন এবং টেস্টিং স্ক্রিপ্ট
+- [../tools/scripts/README.md](../tools/scripts/README.md) - ডেভেলপমেন্ট এবং অ্যাডমিনিস্ট্রেশনের জন্য ইউটিলিটি স্ক্রিপ্ট
+- [../tools/scripts/tests/README.md](../tools/scripts/tests/README.md) - ভ্যালিডেশন এবং টেস্টিং স্ক্রিপ্ট
 - [../installer/resources/README.md](../installer/resources/README.md) - বান্ডেল করা ইনস্টলার রিসোর্স
 - [../installer/lib/jbigi/README.md](../installer/lib/jbigi/README.md) - ক্রিপ্টোগ্রাফির জন্য নেটিভ জেএনআই লাইব্রেরি (GMP)
 - [../apps/imagegen/zxing/README.md](../apps/imagegen/zxing/README.md) - বারকোড লাইব্রেরি (মেইনটেনেন্স মোড)
@@ -86,4 +86,4 @@
 | ডকুমেন্ট                     | বিবরণ                   |
 | ---------------------------- | ----------------------- |
 | [history.txt](history.txt)   | সম্পূর্ণ চেঞ্জলগ        |
-| [licenses/](licenses/)       | থার্ড-পার্টি লাইসেন্স   |
+| [LICENSES.md](LICENSES.md)   | থার্ড-পার্টি লাইসেন্স   |

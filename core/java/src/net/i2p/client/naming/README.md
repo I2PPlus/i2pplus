@@ -20,4 +20,4 @@ The default implementation (`HostsTxtNamingService`) is driven by `hosts.txt`; a
 ## Docs
 
 - [package.html](package.html) — canonical package description
-- [`core/java/src/net/i2p/README.md`](../README.md) — core source map
+- [`core/java/src/net/i2p/README.md`](../../README.md) — core source map

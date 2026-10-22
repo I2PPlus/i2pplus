@@ -14,12 +14,13 @@ The router boot sequence: loading configuration, creating or rebuilding the Rout
 | `BootCommSystemJob`        | Starts the comm system                                                 |
 | `BootNetworkDbJob`         | Starts the netdb                                                       |
 | `BootPeerManagerJob`       | Starts the peer manager, then the tunnel manager                       |
-| `BuildTrustedLinksJob`     | Legacy, never used                                                     |
+| `BuildTrustedLinksJob`     | Scheduled at boot; currently a no-op, kept for restricted routes       |
 | `StartAcceptingClientsJob` | Starts the client manager                                              |
 
 Other classes: `RouterAppManager` (starts bundled apps), `WorkingDir` / `PortableWorkingDir` (data directory resolution), `ClientAppConfig` (app config loading), `MigrateJetty` (legacy Jetty migration).
 
-`ReadConfigJob` (in `tasks/`) then reloads config every 30 seconds.
+`ReadConfigJob` (in `tasks/`) then rereads `router.config` when it changes: every
+60 seconds normally, every 90 seconds in advanced mode.
 
 ## Docs
 

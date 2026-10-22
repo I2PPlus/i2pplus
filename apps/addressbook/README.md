@@ -7,7 +7,7 @@ Subscription-based destination management. Fetches hosts.txt files and updates t
 - Fetch remote hosts.txt files via HTTP
 - Parse and validate destinations
 - Update local address book with new entries
-- Package as Android app for mobile use
+- Ping destinations and report which ones answer
 
 ## How It Works
 
@@ -26,6 +26,8 @@ b32addr.b32.i2p=Base64Destination
 ## Packages
 
 - `net.i2p.addressbook` - Subscription fetching, host parsing, and address book management
+- `net.i2p.router.naming` - `BlockfileNamingService`, the local address book store
+- `net.metanotion.io` - Vendored random-access file layer used by the store
 
 ## Building
 

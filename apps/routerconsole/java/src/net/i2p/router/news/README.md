@@ -21,4 +21,4 @@ Parses the I2P news format — Atom with additional metadata for the update-noti
 ## Docs
 
 - [package.html](package.html) — canonical package description
-- [`routerconsole/README.md`](../../../README.md) — console module overview
+- [`routerconsole/README.md`](../../../../../../README.md) — console module overview

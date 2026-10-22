@@ -11,25 +11,30 @@ Embedded Jetty web server for I2P web applications.
 
 ## Structure
 
-| Layer             | Purpose              |
-| ----------------- | -------------------- |
-| `I2PJettyStartup` | Initializes Jetty    |
-| `I2PHttpServer`   | Main server instance |
-| `I2PHandler`      | Request routing      |
-| Connectors        | Network listeners    |
+| Class                         | Purpose                                          |
+| ----------------------------- | ------------------------------------------------ |
+| `JettyStart`                  | Client app that boots the Jetty server           |
+| `JettyXmlConfigurationParser` | Applies the `jetty.xml` configuration            |
+| `I2PRequestLog`               | I2P request logging                              |
+| `I2PLogger`                   | Bridges Jetty logging to the I2P log manager     |
 
 ## Default Ports
 
-| Port   | Application          |
-| ------ | -------------------- |
-| 7657   | Router console       |
-| 7658   | HTTP proxy (clients) |
-| 7659   | I2PSnark             |
-| 7660   | I2PTunnel            |
+Jetty serves the router console and the web server. The HTTP proxy, I2PSnark
+and the other client-facing ports belong to I2PTunnel, not to Jetty.
+
+| Port   | Application                                     |
+| ------ | ----------------------------------------------- |
+| 7657   | Router console (http://)                        |
+| 7658   | I2P web server (webapps, eepsite)               |
+| 7667   | Router console (https://, disabled by default)  |
+| 4444   | HTTP proxy — I2PTunnel, not served by Jetty     |
 
 ## Packages
 
 - `net.i2p.jetty` - Server bootstrap, I2P request logging, logger integration
+- `net.i2p.servlet` - Servlet and filter support: `I2PDefaultServlet`,
+  `ErrorServlet`, `RequestWrapper`, XSS and location filters
 
 ## Building
 

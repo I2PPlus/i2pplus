@@ -6,18 +6,20 @@ Complements PMD (which covers error-prone patterns, performance, threading).
 ## Quick Start
 
 ```bash
-ant checkstyle              # Generate report → dist/checkstyle.html
-ant checkstyle-local        # Report with clickable local file links → dist/checkstyle-local.html
+ant checkstyle    # Writes dist/checkstyle.html and dist/checkstyle-local.html
 ```
+
+`checkstyle-local.html` is the same report with clickable `file://` links; the
+single `checkstyle` target produces both.
 
 ## Fix Style Violations
 
 ```bash
 # Dry run (preview changes)
-python3 tools/checkstyle/fix-style.py -p core/java/src/net/i2p -x dist/checkstyle.xml -n
+python3 tools/checkstyle/fix-style.py -p core/java/src/net/i2p -x /tmp/build-i2p/reports/checkstyle.xml -n
 
 # Fix a directory
-python3 tools/checkstyle/fix-style.py -p router/java/src -x dist/checkstyle.xml
+python3 tools/checkstyle/fix-style.py -p router/java/src -x /tmp/build-i2p/reports/checkstyle.xml
 
 # Fix without Checkstyle XML (runs checkstyle internally)
 python3 tools/checkstyle/fix-style.py -p apps/i2psnark/java
@@ -73,8 +75,8 @@ Both the Checkstyle scan and `fix-style.py` read from `BeforeExecutionExclusionF
 
 Reports go to `dist/`. Use `ant distclean` to remove them.
 
-| File                         | Contents                                   |
-| ---------------------------- | ------------------------------------------ |
-| `dist/checkstyle.html`       | HTML report (shared with team)             |
-| `dist/checkstyle-local.html` | HTML report with clickable `file://` links |
-| `dist/checkstyle.xml`        | Raw XML (retained for `fix-style.py -x`)   |
+| File                                    | Contents                                   |
+| --------------------------------------- | ------------------------------------------ |
+| `dist/checkstyle.html`                  | HTML report (shared with team)             |
+| `dist/checkstyle-local.html`            | HTML report with clickable `file://` links |
+| `/tmp/build-i2p/reports/checkstyle.xml` | Raw XML, input for `fix-style.py -x`       |

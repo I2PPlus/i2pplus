@@ -3,6 +3,13 @@
 
 A clean, responsive documentation template theme for JSDoc 4.
 
+**Note (I2P+)**: this is the vendored docdash template used by `ant jsdoc`,
+which runs `npx jsdoc -c tools/jsdoc/jsdoc.json -t tools/jsdoc/docdash-template`
+and then post-processes `dist/jsdoc` with `tools/jsdoc/jsdoc-patch.js`. Install
+the npm dependencies with `tools/jsdoc/install-jsdoc-deps.sh`. The upstream
+install instructions below do not apply to this copy; see also
+`tools/jsdoc/minami-local` for the second template the build uses.
+
 ![docdash-screenshot](https://cloud.githubusercontent.com/assets/447956/13398144/4dde7f36-defd-11e5-8909-1a9013302cb9.png)
 
 ![docdash-screenshot-2](https://cloud.githubusercontent.com/assets/447956/13401057/e30effd8-df0a-11e5-9f51-66257ac38e94.jpg)

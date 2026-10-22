@@ -3,8 +3,8 @@
 [![I2P+ Update zip](../tools/badges/update-badge.svg)](https://i2pplus.github.io/i2pupdate.zip)
 [![I2P+ I2PSnark standalone](../tools/badges/i2psnark-badge.svg)](https://i2pplus.github.io/installers/i2psnark-standalone.zip)
 [![I2P+ Javadocs](../tools/badges/javadocs-badge.svg)](https://i2pplus.github.io/javadoc.zip)
-[![Docker](../tools/badges/docker-badge.svg)](docker/README.md)
-[![AppImage](../tools/badges/appimage-badge.svg)](tools/appimage/README.md)
+[![Docker](../tools/badges/docker-badge.svg)](../docker/README.md)
+[![AppImage](../tools/badges/appimage-badge.svg)](../tools/appimage/README.md)
 
 # I2P+
 
@@ -33,7 +33,7 @@ nebo spusťte 'ant javadoc' a poté začněte v build/javadoc/index.html
 
 ## Jak přispět / Hackovat na I2P
 
-Prohlédněte si prosím [HACKING.md](docs/HACKING.md) a další dokumenty v adresáři docs.
+Prohlédněte si prosím [HACKING.md](HACKING.md) a další dokumenty v adresáři docs.
 
 ## Sestavování balíčků ze zdrojového kódu
 
@@ -105,10 +105,10 @@ Pro vytvoření AppImage pro Linux:
 ant buildAppImage
 ```
 
-Podrobnosti viz [tools/appimage/README.md](tools/appimage/README.md).
+Podrobnosti viz [tools/appimage/README.md](../tools/appimage/README.md).
 
 
-Další informace o spouštění I2P v Docker naleznete v [docker/README.md](docker/README.md)
+Další informace o spouštění I2P v Docker naleznete v [docker/README.md](../docker/README.md)
 
 
 ## Kontaktní informace
@@ -121,54 +121,54 @@ Nahlašování chyb: https://i2pgit.org/i2p-hackers/i2p.i2p/-/issues nebo https:
 
 I2P+ je licencováno pod AGPL v.3.
 
-Pro licence různých subkomponent viz: [README.md](docs/LICENSES.md)
+Pro licence různých subkomponent viz: [LICENSES.md](LICENSES.md)
 
 ## Viz také
 
 ### Dokumentace
 
-- [docs/README.md](docs/README.md) - Úplný rejstřík dokumentace
-- [docs/INSTALL.md](docs/INSTALL.md) - Průvodce instalací
-- [docs/INSTALL-headless.md](docs/INSTALL-headless.md) - Instalace bez GUI (konzolový režim)
-- [docs/HACKING.md](docs/HACKING.md) - Průvodce pro vývojáře a build systémy
-- [docs/DIRECTORIES.md](docs/DIRECTORIES.md) - Rozložení zdrojového stromu
-- [docs/DEBUGGING.md](docs/DEBUGGING.md) - Ladicí runtime prostředí pomocí JDWP a dalších nástrojů
-- [docs/i2p-sessionban-nftables.md](docs/i2p-sessionban-nftables.md) - Správa zákazů relací I2P pomocí nftables
-- [docs/THEMING.md](docs/THEMING.md) - Console and webapp theming system
-- [docs/LICENSES.md](docs/LICENSES.md) - Licence třetích stran
-- [docs/history.txt](docs/history.txt) - Úplný seznam změn
+- [docs/README.md](README.md) - Úplný rejstřík dokumentace
+- [docs/INSTALL.md](INSTALL.md) - Průvodce instalací
+- [docs/INSTALL-headless.md](INSTALL-headless.md) - Instalace bez GUI (konzolový režim)
+- [docs/HACKING.md](HACKING.md) - Průvodce pro vývojáře a build systémy
+- [docs/DIRECTORIES.md](DIRECTORIES.md) - Rozložení zdrojového stromu
+- [docs/DEBUGGING.md](DEBUGGING.md) - Ladicí runtime prostředí pomocí JDWP a dalších nástrojů
+- [docs/i2p-sessionban-nftables.md](i2p-sessionban-nftables.md) - Správa zákazů relací I2P pomocí nftables
+- [docs/THEMING.md](THEMING.md) - Console and webapp theming system
+- [docs/LICENSES.md](LICENSES.md) - Licence třetích stran
+- [docs/history.txt](history.txt) - Úplný seznam změn
 
 ### Sub-projekty
 
-- [apps/README.md](apps/README.md) - Přehled aplikací
-- [apps/addressbook/README.md](apps/addressbook/README.md) - Aplikace adresář
-- [apps/desktopgui/README.md](apps/desktopgui/README.md) - Desktopová GUI aplikace
-- [apps/i2pcontrol/README.md](apps/i2pcontrol/README.md) - I2P Control API
-- [apps/i2psnark/README.md](apps/i2psnark/README.md) - I2PSnark BitTorrent klient
-- [apps/i2ptunnel/README.md](apps/i2ptunnel/README.md) - Aplikace I2P Tunnel
-- [apps/imagegen/README.md](apps/imagegen/README.md) - Nástroje pro generování obrázků
-- [apps/jetty/README.md](apps/jetty/README.md) - HTTP server Jetty
-- [apps/jrobin/README.md](apps/jrobin/README.md) - Monitorovací knihovna JRobin
-- [apps/ministreaming/README.md](apps/ministreaming/README.md) - Minimální streamovací knihovna
-- [apps/pack200/README.md](apps/pack200/README.md) - Komprese Pack200
-- [apps/proxyscript/README.md](apps/proxyscript/README.md) - Proxy skripty
-- [apps/routerconsole/README.md](apps/routerconsole/README.md) - Router konzole
-- [apps/sam/README.md](apps/sam/README.md) - Simple Anonymous Messaging
-- [apps/streaming/README.md](apps/streaming/README.md) - Streamovací knihovna
-- [apps/susidns/README.md](apps/susidns/README.md) - DNS server
-- [apps/susimail/README.md](apps/susimail/README.md) - I2P email klient
-- [apps/systray/README.md](apps/systray/README.md) - System tray aplikace
-- [core/README.md](core/README.md) - Dokumentace core knihovny
-- [installer/lib/jbigi/README.md](installer/lib/jbigi/README.md) - Nativní JNI knihovna pro kryptografii (GMP)
+- [apps/README.md](../apps/README.md) - Přehled aplikací
+- [apps/addressbook/README.md](../apps/addressbook/README.md) - Aplikace adresář
+- [apps/desktopgui/README.md](../apps/desktopgui/README.md) - Desktopová GUI aplikace
+- [apps/i2pcontrol/README.md](../apps/i2pcontrol/README.md) - I2P Control API
+- [apps/i2psnark/README.md](../apps/i2psnark/README.md) - I2PSnark BitTorrent klient
+- [apps/i2ptunnel/README.md](../apps/i2ptunnel/README.md) - Aplikace I2P Tunnel
+- [apps/imagegen/README.md](../apps/imagegen/README.md) - Nástroje pro generování obrázků
+- [apps/jetty/README.md](../apps/jetty/README.md) - HTTP server Jetty
+- [apps/jrobin/README.md](../apps/jrobin/README.md) - Monitorovací knihovna JRobin
+- [apps/ministreaming/README.md](../apps/ministreaming/README.md) - Minimální streamovací knihovna
+- [apps/pack200/README.md](../apps/pack200/README.md) - Komprese Pack200
+- [apps/proxyscript/README.md](../apps/proxyscript/README.md) - Proxy skripty
+- [apps/routerconsole/README.md](../apps/routerconsole/README.md) - Router konzole
+- [apps/sam/README.md](../apps/sam/README.md) - Simple Anonymous Messaging
+- [apps/streaming/README.md](../apps/streaming/README.md) - Streamovací knihovna
+- [apps/susidns/README.md](../apps/susidns/README.md) - DNS server
+- [apps/susimail/README.md](../apps/susimail/README.md) - I2P email klient
+- [apps/systray/README.md](../apps/systray/README.md) - System tray aplikace
+- [core/README.md](../core/README.md) - Dokumentace core knihovny
+- [installer/lib/jbigi/README.md](../installer/lib/jbigi/README.md) - Nativní JNI knihovna pro kryptografii (GMP)
 
 ### Různé
 
-- [docs/i2p-sessionban-nftables.md](docs/i2p-sessionban-nftables.md) - Správa zákazů relací I2P pomocí nftables
-- [installer/resources/README.md](installer/resources/README.md) - Zdroje instalátoru
-- [tools/scripts/README.md](tools/scripts/README.md) - Utilitní skripty pro vývoj a správu
-- [tools/scripts/tests/README.md](tools/scripts/tests/README.md) - Validační a testovací skripty
+- [docs/i2p-sessionban-nftables.md](i2p-sessionban-nftables.md) - Správa zákazů relací I2P pomocí nftables
+- [installer/resources/README.md](../installer/resources/README.md) - Zdroje instalátoru
+- [tools/scripts/README.md](../tools/scripts/README.md) - Utilitní skripty pro vývoj a správu
+- [tools/scripts/tests/README.md](../tools/scripts/tests/README.md) - Validační a testovací skripty
 
 
 
-- [docker/README.md](docker/README.md) - Spouštění I2P+ v Docker
+- [docker/README.md](../docker/README.md) - Spouštění I2P+ v Docker
 

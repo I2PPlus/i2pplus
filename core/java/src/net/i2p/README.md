@@ -30,5 +30,5 @@ With a few exceptions, this package and everything else in `i2p.jar` is maintain
 ## Docs
 
 - [package.html](package.html) — canonical package description
-- [`core/README.md`](../../../../../README.md) — module overview
+- [`core/README.md`](../../../../README.md) — module overview
 - [`router/java/src/net/i2p/README.md`](../../../../../router/java/src/net/i2p/README.md) — router source tree (depends on this module)

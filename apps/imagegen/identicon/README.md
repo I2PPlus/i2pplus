@@ -1,3 +1,9 @@
+**Note (I2P+)**: this is a vendored copy of the upstream identicon sources. See
+[README-i2p.txt](README-i2p.txt) for what was changed and where it came from. It
+is built as part of imagegen with `ant buildImagegen` (or
+`./gradlew :apps:imagegen:jar`) from the repository root — not with the Maven
+commands below, which describe the upstream project.
+
 Identicon
 =========
 

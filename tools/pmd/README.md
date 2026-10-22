@@ -9,7 +9,8 @@
 | `ant pmd-java` | Analyze Java source (core, router, apps) |
 | `ant pmd-js`   | Analyze JavaScript source (apps/)        |
 
-Reports go to `dist/pmd-java.html` and `dist/pmd-js.html`. PMD auto-downloads on first run. Requires Java 11+ (auto-detected; override with `pmd.java=/path/to/java` in `override.properties`).
+Each target also writes a `-local` variant with clickable `file://` links: `dist/pmd-java.html` and
+`dist/pmd-java-local.html`, `dist/pmd-js.html` and `dist/pmd-js-local.html`. PMD auto-downloads on first run. Requires Java 11+ (auto-detected; override with `pmd.java=/path/to/java` in `override.properties`).
 
 ## Rulesets
 

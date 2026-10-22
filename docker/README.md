@@ -16,11 +16,10 @@ Then open http://127.0.0.1:7657 in your browser. The web console binds to `0.0.0
 
 1. Install git, docker-io and docker-compose via your package manager
 2. Download the I2P+ git repository with the command: `git clone https://github.com/I2PPlus/i2pplus.git`
-3. Copy `docker/docker-compose.yml` to `docker-compose.yml` in the root directory of your local I2P+ git workspace
-4. cd to the i2pplus git workspace and execute `docker-compose up --build`
-5. Start a browser and go to `http://127.0.0.1:7657` and then hit the Wizard link to configure your router
-6. To stop the router, hit Ctrl+C and then, optionally, `docker-compose down`
-7. To remove all existing cache files and generated images, run `docker system prune -a -f`
+3. cd to the i2pplus git workspace and execute `docker compose -f docker/docker-compose.yml up --build`. Do not copy `docker-compose.yml` to the repository root — its `build.context: ..` is resolved relative to the file, so it only builds correctly from `docker/`.
+4. Start a browser and go to `http://127.0.0.1:7657` and then hit the Wizard link to configure your router
+5. To stop the router, hit Ctrl+C and then, optionally, `docker compose -f docker/docker-compose.yml down`
+6. To remove all existing cache files and generated images, run `docker system prune -a -f`
 
 ## Running a container
 
@@ -161,16 +160,24 @@ docker rm -f i2pplus
 ```
 
 ### docker-compose
+
+Run from the repository root, pointing at the file in `docker/` (see
+[Or build locally](#or-build-locally) — the file's `build.context` is `..`):
+
 ```bash
 # Start
-docker-compose up --build -d
+docker compose -f docker/docker-compose.yml up --build -d
 
 # View logs
-docker-compose logs -f
+docker compose -f docker/docker-compose.yml logs -f
 
 # Stop
-docker-compose down
+docker compose -f docker/docker-compose.yml down
 ```
+
+The compose file uses `network_mode: host`, so it publishes no port mappings —
+the router's ports are bound directly on the host, subject to the bind
+addresses in the port table above.
 
 ### Troubleshooting
 ```bash
@@ -192,14 +199,20 @@ bash -n docker/rootfs/startapp.sh && echo "OK"
 #### Remove all data and restart fresh
 ```bash
 # Stop container (if running) and remove
-docker stop i2pplus 2>/dev || true
+docker stop i2pplus 2>/dev/null || true
 docker rm -f i2pplus
 
-# Remove volumes (config, plugins, reseed data)
-docker volume rm i2pplus_i2p-home  # or your volume name
-docker volume rm i2pplus_i2psnark  # or your volume name
+# Delete the host directories behind the bind mounts. The compose file mounts
+# ./docker/run/home/config and ./docker/run/torrents unless I2P_CONFIG_DIR and
+# TORRENTS_DIR are set in .env.
+rm -rf docker/run/home/config
+rm -rf docker/run/torrents
 
-# Or if using bind mounts, delete the host directories
+# If you ran plain `docker run` without -v, the data is in anonymous volumes
+# instead; remove them with:
+docker volume prune -f
+
+# If you ran `docker run -v /path/to/...`, delete those directories instead
 rm -rf /path/to/i2p-data
 rm -rf /path/to/snark
 
@@ -213,8 +226,8 @@ docker run -d -v /path/to/i2p-data:/i2p/.i2p -v /path/to/snark:/i2psnark i2pplus
 # Enter container
 docker exec -it i2pplus /bin/bash
 
-# Clear router cache
-rm -rf /i2p/.i2p/routerCache
+# Clear the network database (router cache). The router rebuilds it by reseeding.
+rm -rf /i2p/.i2p/router/netDb
 
 # Clear profile (WARNING: this deletes ALL data including config - only use if you want a fresh start)
 rm -rf /i2p/.i2p/

@@ -21,5 +21,5 @@ Update checking and applying runs through the console. Updates are downloaded, s
 ## Docs
 
 - [package.html](package.html) — canonical package description
-- [`routerconsole/README.md`](../../../README.md) — console module overview
+- [`routerconsole/README.md`](../../../../../../README.md) — console module overview
 - Update interfaces without router context: `net.i2p.update` in core

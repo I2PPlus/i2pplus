@@ -3,8 +3,8 @@
 [![I2P+ Update zip](../tools/badges/update-badge.svg)](https://i2pplus.github.io/i2pupdate.zip)
 [![I2P+ I2PSnark standalone](../tools/badges/i2psnark-badge.svg)](https://i2pplus.github.io/installers/i2psnark-standalone.zip)
 [![I2P+ Javadocs](../tools/badges/javadocs-badge.svg)](https://i2pplus.github.io/javadoc.zip)
-[![Docker](../tools/badges/docker-badge.svg)](docker/README.md)
-[![AppImage](../tools/badges/appimage-badge.svg)](tools/appimage/README.md)
+[![Docker](../tools/badges/docker-badge.svg)](../docker/README.md)
+[![AppImage](../tools/badges/appimage-badge.svg)](../tools/appimage/README.md)
 
 # I2P+
 
@@ -16,7 +16,7 @@ Siste versjon: https://i2pplus.github.io/
 
 ## Installasjon
 
-Se [INSTALL.md](docs/INSTALL.md) eller https://i2pplus.github.io/ for installasjonsinstruksjoner.
+Se [INSTALL.md](INSTALL.md) eller https://i2pplus.github.io/ for installasjonsinstruksjoner.
 
 ### Merknad om Windows-installeren
 
@@ -33,7 +33,7 @@ eller kjør 'ant javadoc' og start deretter ved build/javadoc/index.html
 
 ## Hvordan bidra / utvikle på I2P+
 
-Sjekk ut [HACKING.md](docs/HACKING.md) og andre dokumenter i docs-mappen.
+Sjekk ut [HACKING.md](HACKING.md) og andre dokumenter i docs-mappen.
 
 ## Bygge pakker fra kildekode
 
@@ -100,7 +100,7 @@ For å bygge et AppImage for Linux:
 ant buildAppImage
 ```
 
-Se [tools/appimage/README.md](tools/appimage/README.md) for detaljer.
+Se [tools/appimage/README.md](../tools/appimage/README.md) for detaljer.
 
 For å bygge en selvstendig Debian-pakke for Debian/Ubuntu uten eksterne Jetty/Tomcat-avhengigheter:
 ```bash
@@ -109,7 +109,7 @@ ant buildDeb
 
 Dette oppretter en selvstendig `.deb`-pakke som inneholder inkluderte Jetty- og Tomcat-biblioteker. Krever bare en OpenJDK-runtime (installeres automatisk via pakkehåndtereren).
 
-For å kjøre i Docker, se [docker/README.md](docker/README.md)
+For å kjøre i Docker, se [docker/README.md](../docker/README.md)
 
 ## Kontaktinformasjon
 
@@ -121,50 +121,50 @@ Feilrapporter: https://github.com/I2PPlus/i2pplus/issues
 
 I2P+ er lisensiert under AGPL v.3.
 
-For de ulike lisensene for underkomponenter, se: [README.md](docs/LICENSES.md)
+For de ulike lisensene for underkomponenter, se: [LICENSES.md](LICENSES.md)
 
 ## Se også
 
 ### Dokumentasjon
 
-- [docs/README.md](docs/README.md) - Fullstendig dokumentasjonsindeks
-- [docs/INSTALL.md](docs/INSTALL.md) - Installasjonsguide
-- [docs/INSTALL-headless.md](docs/INSTALL-headless.md) - Headless-installasjon (konsollmodus)
-- [docs/HACKING.md](docs/HACKING.md) - Uviklerveiledning og byggesystemer
-- [docs/DIRECTORIES.md](docs/DIRECTORIES.md) - Oppsett av kildetreet og hvor du finner ting
-- [router/java/src/net/i2p/README.md](router/java/src/net/i2p/README.md) - Oversikt over ruterens kildetre
-- [core/java/src/net/i2p/README.md](core/java/src/net/i2p/README.md) - Oversikt over kjernebibliotekets kildetre
-- [docs/DEBUGGING.md](docs/DEBUGGING.md) - Feilsøking under kjøring med JDWP og andre verktøy
-- [docs/THEMING.md](docs/THEMING.md) - Temasystem for konsoll og webapp
-- [docs/LICENSES.md](docs/LICENSES.md) - Lisenser fra tredjeparter
-- [docs/history.txt](docs/history.txt) - Fullstendig endringslogg
+- [docs/README.md](README.md) - Fullstendig dokumentasjonsindeks
+- [docs/INSTALL.md](INSTALL.md) - Installasjonsguide
+- [docs/INSTALL-headless.md](INSTALL-headless.md) - Headless-installasjon (konsollmodus)
+- [docs/HACKING.md](HACKING.md) - Uviklerveiledning og byggesystemer
+- [docs/DIRECTORIES.md](DIRECTORIES.md) - Oppsett av kildetreet og hvor du finner ting
+- [router/java/src/net/i2p/README.md](../router/java/src/net/i2p/README.md) - Oversikt over ruterens kildetre
+- [core/java/src/net/i2p/README.md](../core/java/src/net/i2p/README.md) - Oversikt over kjernebibliotekets kildetre
+- [docs/DEBUGGING.md](DEBUGGING.md) - Feilsøking under kjøring med JDWP og andre verktøy
+- [docs/THEMING.md](THEMING.md) - Temasystem for konsoll og webapp
+- [docs/LICENSES.md](LICENSES.md) - Lisenser fra tredjeparter
+- [docs/history.txt](history.txt) - Fullstendig endringslogg
 
 ### Underprosjekter
 
-- [apps/README.md](apps/README.md) - Oversikt over applikasjonene
-- [apps/addressbook/README.md](apps/addressbook/README.md) - Adressebok-applikasjonen
-- [apps/desktopgui/README.md](apps/desktopgui/README.md) - Skrivebords-GUI-applikasjon
-- [apps/i2pcontrol/README.md](apps/i2pcontrol/README.md) - I2P Control API
-- [apps/i2psnark/README.md](apps/i2psnark/README.md) - I2PSnark BitTorrent-klient
-- [apps/i2ptunnel/README.md](apps/i2ptunnel/README.md) - I2P Tunnel-applikasjon
-- [apps/imagegen/README.md](apps/imagegen/README.md) - Verktøy for bildegenerering
-- [apps/jetty/README.md](apps/jetty/README.md) - Jetty HTTP-server
-- [apps/jrobin/README.md](apps/jrobin/README.md) - JRobin-overvåkningsbibliotek
-- [apps/ministreaming/README.md](apps/ministreaming/README.md) - Minimalt strømmebibliotek
-- [apps/pack200/README.md](apps/pack200/README.md) - Pack200-komprimering
-- [apps/proxyscript/README.md](apps/proxyscript/README.md) - Proxy-skript
-- [apps/routerconsole/README.md](apps/routerconsole/README.md) - Ruterkonsollen
-- [apps/sam/README.md](apps/sam/README.md) - Simple Anonymous Messaging
-- [apps/streaming/README.md](apps/streaming/README.md) - Strømmebibliotek
-- [apps/susidns/README.md](apps/susidns/README.md) - DNS-server
-- [apps/susimail/README.md](apps/susimail/README.md) - I2P e-postklient
-- [apps/systray/README.md](apps/systray/README.md) - Systemkurv-applikasjon
-- [core/README.md](core/README.md) - Dokumentasjon for kjernebiblioteket
-- [installer/lib/jbigi/README.md](installer/lib/jbigi/README.md) - Nativt JNI-bibliotek for kryptografi (GMP)
+- [apps/README.md](../apps/README.md) - Oversikt over applikasjonene
+- [apps/addressbook/README.md](../apps/addressbook/README.md) - Adressebok-applikasjonen
+- [apps/desktopgui/README.md](../apps/desktopgui/README.md) - Skrivebords-GUI-applikasjon
+- [apps/i2pcontrol/README.md](../apps/i2pcontrol/README.md) - I2P Control API
+- [apps/i2psnark/README.md](../apps/i2psnark/README.md) - I2PSnark BitTorrent-klient
+- [apps/i2ptunnel/README.md](../apps/i2ptunnel/README.md) - I2P Tunnel-applikasjon
+- [apps/imagegen/README.md](../apps/imagegen/README.md) - Verktøy for bildegenerering
+- [apps/jetty/README.md](../apps/jetty/README.md) - Jetty HTTP-server
+- [apps/jrobin/README.md](../apps/jrobin/README.md) - JRobin-overvåkningsbibliotek
+- [apps/ministreaming/README.md](../apps/ministreaming/README.md) - Minimalt strømmebibliotek
+- [apps/pack200/README.md](../apps/pack200/README.md) - Pack200-komprimering
+- [apps/proxyscript/README.md](../apps/proxyscript/README.md) - Proxy-skript
+- [apps/routerconsole/README.md](../apps/routerconsole/README.md) - Ruterkonsollen
+- [apps/sam/README.md](../apps/sam/README.md) - Simple Anonymous Messaging
+- [apps/streaming/README.md](../apps/streaming/README.md) - Strømmebibliotek
+- [apps/susidns/README.md](../apps/susidns/README.md) - DNS-server
+- [apps/susimail/README.md](../apps/susimail/README.md) - I2P e-postklient
+- [apps/systray/README.md](../apps/systray/README.md) - Systemkurv-applikasjon
+- [core/README.md](../core/README.md) - Dokumentasjon for kjernebiblioteket
+- [installer/lib/jbigi/README.md](../installer/lib/jbigi/README.md) - Nativt JNI-bibliotek for kryptografi (GMP)
 
 ### Diverse
 
-- [docs/i2p-sessionban-nftables.md](docs/i2p-sessionban-nftables.md) - Håndtering av I2P-øktforbud med nftables
-- [installer/resources/README.md](installer/resources/README.md) - Inkluderte installasjonsressurser
-- [tools/scripts/README.md](tools/scripts/README.md) - Hjelpeskript for utvikling og administrasjon
-- [tools/scripts/tests/README.md](tools/scripts/tests/README.md) - Validerings- og testskript
+- [docs/i2p-sessionban-nftables.md](i2p-sessionban-nftables.md) - Håndtering av I2P-øktforbud med nftables
+- [installer/resources/README.md](../installer/resources/README.md) - Inkluderte installasjonsressurser
+- [tools/scripts/README.md](../tools/scripts/README.md) - Hjelpeskript for utvikling og administrasjon
+- [tools/scripts/tests/README.md](../tools/scripts/tests/README.md) - Validerings- og testskript

@@ -14,15 +14,18 @@ SonarQube static analysis tooling for the I2P+ codebase.
 | Server     | ~885 MB | SonarQube Community Edition zip     |
 | Scanner    | ~59 MB  | SonarScanner CLI zip                |
 
-Binaries are auto-downloaded on first `ant sonar`. Versions are pinned in `download-sonar.sh` (hardcoded); updating requires editing the
+Binaries are auto-downloaded on first `ant sonarqube-report`. Versions are pinned in `download-sonar.sh` (hardcoded); updating requires editing the
 version string in the script and `version.txt` / `server-version.txt` manually. No auto-update. If a newer version is available upstream,
 the pinned version must be bumped by a developer.
 
-### Ant Target
+### Ant Targets
 
-| Target                 | Description                                                                                                   |
-| ---------------------- | ------------------------------------------------------------------------------------------------------------- |
-| `ant sonarqube-report` | Full analysis: download/start server, run scanner, generate HTML report, stop server                          |
+| Target                      | Description                                                                                                   |
+| --------------------------- | ------------------------------------------------------------------------------------------------------------- |
+| `ant sonarqube-report`      | Full analysis: download/start server, run scanner, generate HTML report, stop server                          |
+| `ant sonarqube-report-full` | Same, plus local rule documentation; writes `dist/sonarqube/report.html` and `report-local.html`              |
+| `ant sonarqube-report-zip`  | Runs `-full`, then packages `dist/sonarqube/` into `dist/sonarqube-report.zip`                                |
+| `ant sonarqube-rules`       | Fetch the Java rules from a running server into `tools/sonarqube/rules/` (no scan)                            |
 
 ### Workflow
 
@@ -30,6 +33,12 @@ the pinned version must be bumped by a developer.
 
 This downloads the server + scanner on first run, starts the server, runs the analysis, generates HTML reports
 to `dist/sonarqube.html` and `dist/sonarqube-local.html`, then stops the server.
+
+    ant sonarqube-report-full
+
+Same scan, but the rule documentation is served from local pages: the reports land in
+`dist/sonarqube/report.html` and `dist/sonarqube/report-local.html`, with the rule pages copied to
+`dist/sonarqube/rules/`.
 
 ### Environment
 
@@ -59,7 +68,7 @@ to `dist/sonarqube.html` and `dist/sonarqube-local.html`, then stops the server.
 Each issue in the HTML report includes a Doc link pointing to a SonarQube `coding_rules` page.
 The base URL defaults to `SONAR_RULES_URL` and can be overridden:
 
-    SONAR_RULES_URL=https://my-sonar.instance ant sonar-report
+    SONAR_RULES_URL=https://my-sonar.instance ant sonarqube-report
 
 ### Direct Script Usage (Linux / macOS)
 
@@ -124,9 +133,9 @@ overrides. Current overrides:
    ```
 2. Edit the XML — find the `<rule>` for `S116` and change its `<format>` value.
 3. Change `<name>Sonar way</name>` to a unique name.
-4. Save to `tools/sonarqube/`    prepended with `my-profile-java.xml` — or replace
-   `i2pplus-custom-java.xml` entirely (the script imports whatever file
-   `CUSTOM_PROFILE` points to at the top of the import block).
+4. Save it into `tools/sonarqube/` — either as `my-profile-java.xml` and point
+   `CUSTOM_PROFILE` at it in the import block near the top of `run-sonar.sh`,
+   or as `i2pplus-custom-java.xml` to replace the shipped profile outright.
 
 The profile is imported as the default Java profile on the server
 via `api/qualityprofiles/set_default` — no per-project association needed.
@@ -137,8 +146,12 @@ and the server's existing defaults are used.
 
 - `run-sonar.sh` -- orchestrates server start/stop, scanning, and report generation
 - `sonarqube-to-html.py` -- fetches issues from the API (or cache) and generates the HTML report
+- `fetch-rules.py` -- exports the rule documentation to `rules/` for offline links
 - `download-sonar.sh` -- auto-downloads server and scanner binaries
 
 ### Output
 
-The HTML report is written to `dist/sonarqube.html`.
+`ant sonarqube-report` writes `dist/sonarqube.html` and `dist/sonarqube-local.html`.
+`ant sonarqube-report-full` writes `dist/sonarqube/report.html` and
+`dist/sonarqube/report-local.html` with the rule pages under `dist/sonarqube/rules/`,
+and `ant sonarqube-report-zip` packages that directory into `dist/sonarqube-report.zip`.

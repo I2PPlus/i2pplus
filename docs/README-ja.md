@@ -3,8 +3,8 @@
 [![I2P+ Update zip](../tools/badges/update-badge.svg)](https://i2pplus.github.io/i2pupdate.zip)
 [![I2P+ I2PSnark standalone](../tools/badges/i2psnark-badge.svg)](https://i2pplus.github.io/installers/i2psnark-standalone.zip)
 [![I2P+ Javadocs](../tools/badges/javadocs-badge.svg)](https://i2pplus.github.io/javadoc.zip)
-[![Docker](../tools/badges/docker-badge.svg)](docker/README.md)
-[![AppImage](../tools/badges/appimage-badge.svg)](tools/appimage/README.md)
+[![Docker](../tools/badges/docker-badge.svg)](../docker/README.md)
+[![AppImage](../tools/badges/appimage-badge.svg)](../tools/appimage/README.md)
 
 # I2P+
 
@@ -89,46 +89,46 @@ IzPack 5のディストリビューションを`installer/lib/izpack/5/`に初�
 
 ### ドキュメント
 
-- [docs/README.md](docs/README.md) - 完全的ドキュメント索引
-- [docs/INSTALL.md](docs/INSTALL.md) - インストールガイド
-- [docs/INSTALL-headless.md](docs/INSTALL-headless.md) - ヘッドレス（コンソールモード）インストール
-- [docs/HACKING.md](docs/HACKING.md) - 開発者ガイドとビルドシステム
-- [docs/DIRECTORIES.md](docs/DIRECTORIES.md) - ソースツリー構造
-- [docs/DEBUGGING.md](docs/DEBUGGING.md) - JDWPおよびその他のツールによるランタイムデバッグ
-- [docs/i2p-sessionban-nftables.md](docs/i2p-sessionban-nftables.md) - nftablesによるI2Pセッション禁止の管理
-- [docs/THEMING.md](docs/THEMING.md) - Console and webapp theming system
-- [docs/LICENSES.md](docs/LICENSES.md) - サードパーティライセンス
-- [docs/history.txt](docs/history.txt) - 完全な変更履歴
+- [docs/README.md](README.md) - 完全的ドキュメント索引
+- [docs/INSTALL.md](INSTALL.md) - インストールガイド
+- [docs/INSTALL-headless.md](INSTALL-headless.md) - ヘッドレス（コンソールモード）インストール
+- [docs/HACKING.md](HACKING.md) - 開発者ガイドとビルドシステム
+- [docs/DIRECTORIES.md](DIRECTORIES.md) - ソースツリー構造
+- [docs/DEBUGGING.md](DEBUGGING.md) - JDWPおよびその他のツールによるランタイムデバッグ
+- [docs/i2p-sessionban-nftables.md](i2p-sessionban-nftables.md) - nftablesによるI2Pセッション禁止の管理
+- [docs/THEMING.md](THEMING.md) - Console and webapp theming system
+- [docs/LICENSES.md](LICENSES.md) - サードパーティライセンス
+- [docs/history.txt](history.txt) - 完全な変更履歴
 
 ### サブプロジェクト
 
-- [apps/README.md](apps/README.md) - アプリケーション概要
-- [apps/addressbook/README.md](apps/addressbook/README.md) - アドレス帳アプリケーション
-- [apps/desktopgui/README.md](apps/desktopgui/README.md) - デスクトップGUIアプリケーション
-- [apps/i2pcontrol/README.md](apps/i2pcontrol/README.md) - I2PコントロールAPI
-- [apps/i2psnark/README.md](apps/i2psnark/README.md) - I2PSnark BitTorrentクライアント
-- [apps/i2ptunnel/README.md](apps/i2ptunnel/README.md) - I2Pトンネルアプリケーション
-- [apps/imagegen/README.md](apps/imagegen/README.md) - 画像生成ツール
-- [apps/jetty/README.md](apps/jetty/README.md) - Jetty HTTPサーバー
-- [apps/jrobin/README.md](apps/jrobin/README.md) - JRobin監視ライブラリ
-- [apps/ministreaming/README.md](apps/ministreaming/README.md) - 最小ストリーミングライブラリ
-- [apps/pack200/README.md](apps/pack200/README.md) - Pack200圧縮
-- [apps/proxyscript/README.md](apps/proxyscript/README.md) - プロキシスクリプト
-- [apps/routerconsole/README.md](apps/routerconsole/README.md) - ルーターコンソール
-- [apps/sam/README.md](apps/sam/README.md) - シンプル匿名メッセージング
-- [apps/streaming/README.md](apps/streaming/README.md) - ストリーミングライブラリ
-- [apps/susidns/README.md](apps/susidns/README.md) - DNSサーバー
-- [apps/susimail/README.md](apps/susimail/README.md) - I2Pメールクライアント
-- [apps/systray/README.md](apps/systray/README.md) - システムトレイアプリケーション
-- [core/README.md](core/README.md) - コアライブラリのドキュメント
-- [installer/lib/jbigi/README.md](installer/lib/jbigi/README.md) - 暗号化用ネイティブJNIライブラリ(GMP)
+- [apps/README.md](../apps/README.md) - アプリケーション概要
+- [apps/addressbook/README.md](../apps/addressbook/README.md) - アドレス帳アプリケーション
+- [apps/desktopgui/README.md](../apps/desktopgui/README.md) - デスクトップGUIアプリケーション
+- [apps/i2pcontrol/README.md](../apps/i2pcontrol/README.md) - I2PコントロールAPI
+- [apps/i2psnark/README.md](../apps/i2psnark/README.md) - I2PSnark BitTorrentクライアント
+- [apps/i2ptunnel/README.md](../apps/i2ptunnel/README.md) - I2Pトンネルアプリケーション
+- [apps/imagegen/README.md](../apps/imagegen/README.md) - 画像生成ツール
+- [apps/jetty/README.md](../apps/jetty/README.md) - Jetty HTTPサーバー
+- [apps/jrobin/README.md](../apps/jrobin/README.md) - JRobin監視ライブラリ
+- [apps/ministreaming/README.md](../apps/ministreaming/README.md) - 最小ストリーミングライブラリ
+- [apps/pack200/README.md](../apps/pack200/README.md) - Pack200圧縮
+- [apps/proxyscript/README.md](../apps/proxyscript/README.md) - プロキシスクリプト
+- [apps/routerconsole/README.md](../apps/routerconsole/README.md) - ルーターコンソール
+- [apps/sam/README.md](../apps/sam/README.md) - シンプル匿名メッセージング
+- [apps/streaming/README.md](../apps/streaming/README.md) - ストリーミングライブラリ
+- [apps/susidns/README.md](../apps/susidns/README.md) - DNSサーバー
+- [apps/susimail/README.md](../apps/susimail/README.md) - I2Pメールクライアント
+- [apps/systray/README.md](../apps/systray/README.md) - システムトレイアプリケーション
+- [core/README.md](../core/README.md) - コアライブラリのドキュメント
+- [installer/lib/jbigi/README.md](../installer/lib/jbigi/README.md) - 暗号化用ネイティブJNIライブラリ(GMP)
 
 ### その他
 
-- [docs/i2p-sessionban-nftables.md](docs/i2p-sessionban-nftables.md) - nftablesによるI2Pセッション禁止の管理
-- [installer/resources/README.md](installer/resources/README.md) - バンドルされたインストーラーリソース
-- [tools/scripts/README.md](tools/scripts/README.md) - 開発・管理用ユーティリティスクリプト
-- [tools/scripts/tests/README.md](tools/scripts/tests/README.md) - 検証・テストスクリプト
+- [docs/i2p-sessionban-nftables.md](i2p-sessionban-nftables.md) - nftablesによるI2Pセッション禁止の管理
+- [installer/resources/README.md](../installer/resources/README.md) - バンドルされたインストーラーリソース
+- [tools/scripts/README.md](../tools/scripts/README.md) - 開発・管理用ユーティリティスクリプト
+- [tools/scripts/tests/README.md](../tools/scripts/tests/README.md) - 検証・テストスクリプト
 
 
 
@@ -137,7 +137,7 @@ Linux 用 AppImage をビルドする場合：
 ant buildAppImage
 ```
 
-詳細は [tools/appimage/README.md](tools/appimage/README.md) を参照してください。
+詳細は [tools/appimage/README.md](../tools/appimage/README.md) を参照してください。
 
 
 Debian/Ubuntu 用の自己完結型 Debian パッケージをビルドする場合（外部 Jetty/Tomcat 依存関係なし）：
@@ -148,7 +148,7 @@ ant buildDeb
 これは、バンドルされた Jetty と Tomcat ライブラリを含む自己完結型の `.deb` パッケージを生成し、外部依存関係は不要です。
 
 
-- [docker/README.md](docker/README.md) - DockerでのI2P+の実行
+- [docker/README.md](../docker/README.md) - DockerでのI2P+の実行
 
 
 
@@ -179,7 +179,7 @@ I2P+はAGPL v.3の下でライセンスされています。
 
 ## 連絡先情報
 ## ライセンス
-さまざまなサブコンポーネントのライセンスについては、[README.md](docs/LICENSES.md)を参照してください。
+さまざまなサブコンポーネントのライセンスについては、[LICENSES.md](LICENSES.md)を参照してください。
 
 ## 連絡先情報
 ## ライセンス

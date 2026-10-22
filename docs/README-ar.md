@@ -3,8 +3,8 @@
 [![I2P+ Update zip](../tools/badges/update-badge.svg)](https://i2pplus.github.io/i2pupdate.zip)
 [![I2P+ I2PSnark standalone](../tools/badges/i2psnark-badge.svg)](https://i2pplus.github.io/installers/i2psnark-standalone.zip)
 [![I2P+ Javadocs](../tools/badges/javadocs-badge.svg)](https://i2pplus.github.io/javadoc.zip)
-[![Docker](../tools/badges/docker-badge.svg)](docker/README.md)
-[![AppImage](../tools/badges/appimage-badge.svg)](tools/appimage/README.md)
+[![Docker](../tools/badges/docker-badge.svg)](../docker/README.md)
+[![AppImage](../tools/badges/appimage-badge.svg)](../tools/appimage/README.md)
 
 # I2P+
 
@@ -33,7 +33,7 @@ https://geti2p.net/how
 
 ## كيفية المساهمة / البرمجة على I2P
 
-يرجى مراجعة [HACKING.md](docs/HACKING.md) والمستندات الأخرى في دليل المستندات.
+يرجى مراجعة [HACKING.md](HACKING.md) والمستندات الأخرى في دليل المستندات.
 
 ## بناء الحزم من المصدر
 
@@ -106,10 +106,10 @@ ant buildDeb
 ant buildAppImage
 ```
 
-انظر [tools/appimage/README.md](tools/appimage/README.md) للتفاصيل.
+انظر [tools/appimage/README.md](../tools/appimage/README.md) للتفاصيل.
 
 
-لمزيد من المعلومات حول كيفية تشغيل I2P في Docker، انظر [docker/README.md](docker/README.md)
+لمزيد من المعلومات حول كيفية تشغيل I2P في Docker، انظر [docker/README.md](../docker/README.md)
 
 
 
@@ -140,7 +140,7 @@ ant buildAppImage
 
 ## معلومات الاتصال
 ## التراخيص
-للتراخيص الفرعية للمكونات المختلفة، انظر: [README.md](docs/LICENSES.md)
+للتراخيص الفرعية للمكونات المختلفة، انظر: [LICENSES.md](LICENSES.md)
 
 ## معلومات الاتصال
 ## التراخيص
@@ -163,44 +163,44 @@ ant buildAppImage
 ## معلومات الاتصال
 ## التراخيص
 ## انظر أيضًا
-- [docs/README.md](docs/README.md) - فهرس التوثيق الكامل
+- [docs/README.md](README.md) - فهرس التوثيق الكامل
 
 ## معلومات الاتصال
 ## التراخيص
 ## انظر أيضًا
-- [docs/INSTALL.md](docs/INSTALL.md) - دليل التثبيت
+- [docs/INSTALL.md](INSTALL.md) - دليل التثبيت
 
 ## معلومات الاتصال
 ## التراخيص
 ## انظر أيضًا
-- [docs/INSTALL-headless.md](docs/INSTALL-headless.md) - التثبيت بدون واجهة رسومية (وضع وحدة التحكم)
+- [docs/INSTALL-headless.md](INSTALL-headless.md) - التثبيت بدون واجهة رسومية (وضع وحدة التحكم)
 
 ## معلومات الاتصال
 ## التراخيص
 ## انظر أيضًا
-- [docs/HACKING.md](docs/HACKING.md) - دليل المطور وأنظمة البناء
+- [docs/HACKING.md](HACKING.md) - دليل المطور وأنظمة البناء
 
 ## معلومات الاتصال
 ## التراخيص
 ## انظر أيضًا
-- [docs/DIRECTORIES.md](docs/DIRECTORIES.md) - تخطيط شجرة المصدر وأين تجد الأشياء
-- [docs/DEBUGGING.md](docs/DEBUGGING.md) - التصحيح في الوقت الفعلي باستخدام JDWP وأدوات أخرى
+- [docs/DIRECTORIES.md](DIRECTORIES.md) - تخطيط شجرة المصدر وأين تجد الأشياء
+- [docs/DEBUGGING.md](DEBUGGING.md) - التصحيح في الوقت الفعلي باستخدام JDWP وأدوات أخرى
 
 ## معلومات الاتصال
 ## التراخيص
 ## انظر أيضًا
-- [docs/i2p-sessionban-nftables.md](docs/i2p-sessionban-nftables.md) - إدارة حظر جلسات I2P باستخدام nftables
+- [docs/i2p-sessionban-nftables.md](i2p-sessionban-nftables.md) - إدارة حظر جلسات I2P باستخدام nftables
 
 ## معلومات الاتصال
 ## التراخيص
 ## انظر أيضًا
-- [docs/THEMING.md](docs/THEMING.md) - Console and webapp theming system
-- [docs/LICENSES.md](docs/LICENSES.md) - تراخيص الأطراف الثالثة
+- [docs/THEMING.md](THEMING.md) - Console and webapp theming system
+- [docs/LICENSES.md](LICENSES.md) - تراخيص الأطراف الثالثة
 
 ## معلومات الاتصال
 ## التراخيص
 ## انظر أيضًا
-- [docs/history.txt](docs/history.txt) - سجل التغييرات الكامل
+- [docs/history.txt](history.txt) - سجل التغييرات الكامل
 
 ## معلومات الاتصال
 ## التراخيص
@@ -220,102 +220,102 @@ ant buildAppImage
 ## معلومات الاتصال
 ## التراخيص
 ## انظر أيضًا
-- [apps/README.md](apps/README.md) - نظرة عامة على التطبيقات
+- [apps/README.md](../apps/README.md) - نظرة عامة على التطبيقات
 
 ## معلومات الاتصال
 ## التراخيص
 ## انظر أيضًا
-- [apps/addressbook/README.md](apps/addressbook/README.md) - تطبيق دفتر العناوين
+- [apps/addressbook/README.md](../apps/addressbook/README.md) - تطبيق دفتر العناوين
 
 ## معلومات الاتصال
 ## التراخيص
 ## انظر أيضًا
-- [apps/desktopgui/README.md](apps/desktopgui/README.md) - تطبيق واجهة المستخدم الرسومية للسطح المكتب
+- [apps/desktopgui/README.md](../apps/desktopgui/README.md) - تطبيق واجهة المستخدم الرسومية للسطح المكتب
 
 ## معلومات الاتصال
 ## التراخيص
 ## انظر أيضًا
-- [apps/i2pcontrol/README.md](apps/i2pcontrol/README.md) - واجهة برمجة تطبيقات تحكم I2P
+- [apps/i2pcontrol/README.md](../apps/i2pcontrol/README.md) - واجهة برمجة تطبيقات تحكم I2P
 
 ## معلومات الاتصال
 ## التراخيص
 ## انظر أيضًا
-- [apps/i2psnark/README.md](apps/i2psnark/README.md) - عميل BitTorrent I2PSnark
+- [apps/i2psnark/README.md](../apps/i2psnark/README.md) - عميل BitTorrent I2PSnark
 
 ## معلومات الاتصال
 ## التراخيص
 ## انظر أيضًا
-- [apps/i2ptunnel/README.md](apps/i2ptunnel/README.md) - تطبيق نفق I2P
+- [apps/i2ptunnel/README.md](../apps/i2ptunnel/README.md) - تطبيق نفق I2P
 
 ## معلومات الاتصال
 ## التراخيص
 ## انظر أيضًا
-- [apps/imagegen/README.md](apps/imagegen/README.md) - أدوات إنشاء الصور
+- [apps/imagegen/README.md](../apps/imagegen/README.md) - أدوات إنشاء الصور
 
 ## معلومات الاتصال
 ## التراخيص
 ## انظر أيضًا
-- [apps/jetty/README.md](apps/jetty/README.md) - خادم HTTP Jetty
+- [apps/jetty/README.md](../apps/jetty/README.md) - خادم HTTP Jetty
 
 ## معلومات الاتصال
 ## التراخيص
 ## انظر أيضًا
-- [apps/jrobin/README.md](apps/jrobin/README.md) - مكتبة المراقبة JRobin
+- [apps/jrobin/README.md](../apps/jrobin/README.md) - مكتبة المراقبة JRobin
 
 ## معلومات الاتصال
 ## التراخيص
 ## انظر أيضًا
-- [apps/ministreaming/README.md](apps/ministreaming/README.md) - مكتبة البث المصغرة
+- [apps/ministreaming/README.md](../apps/ministreaming/README.md) - مكتبة البث المصغرة
 
 ## معلومات الاتصال
 ## التراخيص
 ## انظر أيضًا
-- [apps/pack200/README.md](apps/pack200/README.md) - ضغط Pack200
+- [apps/pack200/README.md](../apps/pack200/README.md) - ضغط Pack200
 
 ## معلومات الاتصال
 ## التراخيص
 ## انظر أيضًا
-- [apps/proxyscript/README.md](apps/proxyscript/README.md) - نصوص الوكيل
+- [apps/proxyscript/README.md](../apps/proxyscript/README.md) - نصوص الوكيل
 
 ## معلومات الاتصال
 ## التراخيص
 ## انظر أيضًا
-- [apps/routerconsole/README.md](apps/routerconsole/README.md) - وحدة تحكم الموجه
+- [apps/routerconsole/README.md](../apps/routerconsole/README.md) - وحدة تحكم الموجه
 
 ## معلومات الاتصال
 ## التراخيص
 ## انظر أيضًا
-- [apps/sam/README.md](apps/sam/README.md) - المراسلة المجهولة البسيطة
+- [apps/sam/README.md](../apps/sam/README.md) - المراسلة المجهولة البسيطة
 
 ## معلومات الاتصال
 ## التراخيص
 ## انظر أيضًا
-- [apps/streaming/README.md](apps/streaming/README.md) - مكتبة البث
+- [apps/streaming/README.md](../apps/streaming/README.md) - مكتبة البث
 
 ## معلومات الاتصال
 ## التراخيص
 ## انظر أيضًا
-- [apps/susidns/README.md](apps/susidns/README.md) - خادم DNS
+- [apps/susidns/README.md](../apps/susidns/README.md) - خادم DNS
 
 ## معلومات الاتصال
 ## التراخيص
 ## انظر أيضًا
-- [apps/susimail/README.md](apps/susimail/README.md) - عميل البريد الإلكتروني I2P
+- [apps/susimail/README.md](../apps/susimail/README.md) - عميل البريد الإلكتروني I2P
 
 ## معلومات الاتصال
 ## التراخيص
 ## انظر أيضًا
-- [apps/systray/README.md](apps/systray/README.md) - تطبيق علبة النظام
+- [apps/systray/README.md](../apps/systray/README.md) - تطبيق علبة النظام
 
 ## معلومات الاتصال
 ## التراخيص
 ## انظر أيضًا
-- [core/README.md](core/README.md) - توثيق المكتبة الأساسية
+- [core/README.md](../core/README.md) - توثيق المكتبة الأساسية
 
 ## معلومات الاتصال
 ## التراخيص
 ## انظر أيضًا
-- [installer/lib/jbigi/README.md](installer/lib/jbigi/README.md) - مكتبة JNI الأصلية للتشفير (GMP)
+- [installer/lib/jbigi/README.md](../installer/lib/jbigi/README.md) - مكتبة JNI الأصلية للتشفير (GMP)
 
 ## معلومات الاتصال
 ## التراخيص
@@ -335,27 +335,22 @@ ant buildAppImage
 ## معلومات الاتصال
 ## التراخيص
 ## انظر أيضًا
-- [docs/i2p-sessionban-nftables.md](docs/i2p-sessionban-nftables.md) - إدارة حظر جلسات I2P باستخدام nftables
+- [docs/i2p-sessionban-nftables.md](i2p-sessionban-nftables.md) - إدارة حظر جلسات I2P باستخدام nftables
 
 ## معلومات الاتصال
 ## التراخيص
 ## انظر أيضًا
-- [installer/resources/README.md](installer/resources/README.md) - موارد المثبت المجمعة
+- [installer/resources/README.md](../installer/resources/README.md) - موارد المثبت المجمعة
 
 ## معلومات الاتصال
 ## التراخيص
 ## انظر أيضًا
-- [tools/scripts/README.md](tools/scripts/README.md) - نصوص مساعدة للتطوير والإدارة
+- [tools/scripts/README.md](../tools/scripts/README.md) - نصوص مساعدة للتطوير والإدارة
 
 ## معلومات الاتصال
 ## التراخيص
 ## انظر أيضًا
-- [tools/scripts/tests/README.md](tools/scripts/tests/README.md) - نصوص التحقق والاختبار
-
-## معلومات الاتصال
-## التراخيص
-## انظر أيضًا
-
+- [tools/scripts/tests/README.md](../tools/scripts/tests/README.md) - نصوص التحقق والاختبار
 
 ## معلومات الاتصال
 ## التراخيص
@@ -365,7 +360,12 @@ ant buildAppImage
 ## معلومات الاتصال
 ## التراخيص
 ## انظر أيضًا
-- [docker/README.md](docker/README.md) - تشغيل I2P+ في Docker
+
+
+## معلومات الاتصال
+## التراخيص
+## انظر أيضًا
+- [docker/README.md](../docker/README.md) - تشغيل I2P+ في Docker
 
 ## معلومات الاتصال
 ## التراخيص

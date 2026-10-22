@@ -11,16 +11,23 @@ RRD uses fixed-size databases that store data at regular intervals. Older data i
 
 ## How I2P Uses It
 
-Router statistics ( bandwidth, peer count, tunnel usage) are logged at regular intervals. The console then graphs these:
+Router statistics (bandwidth, peer count, tunnel usage) are logged at regular
+intervals. The console then graphs these. Each stat period gets its own RRD
+file with a single archive (`GraphListener.java`):
 
 ```
-Resolution    Storage    Retention (days)
------------------------------------------
-  1 min        ~400B      2 days
-  5 min        ~400B     10 days  
-  1 hour       ~400B     25 days
-  1 day        ~400B    >1 year
+Stat period    Rows                    Retention
+-----------------------------------------------------
+  1 min        131040 (the cap)        91 days
+  5 min        26208                   91 days
+  1 hour       2184                    91 days
+  1 day        1440 (the floor)        1440 steps
 ```
+
+Rows are `clamp(91 days / period, 1440, 131040)`, so anything sampled hourly or
+more often is kept for 91 days, and a longer period keeps at least 1440 rows.
+Each archive uses the `AVERAGE` consolidation function, XFF 0.9, and one step
+per row.
 
 ## Data Consolidation
 
@@ -29,16 +36,18 @@ When moving between resolutions, RRD applies functions:
 - `MAX` / `MIN` - Peak values
 - `LAST` - Most recent value
 
-This preserves both average behavior and peaks (important for bandwidth).
+The router only creates `AVERAGE` archives; the other functions are available
+from the library.
 
 ## Key Classes
 
-| Class     | Purpose                     |
-| --------- | --------------------------- |
-| `RrdDb`   | Database, holds datasources |
-| `RrdDef`  | Database definition         |
-| `Sampler` | Insert values               |
-| `Graph`   | Render to image             |
+| Class          | Purpose                       |
+| -------------- | ----------------------------- |
+| `RrdDb`        | Database, holds datasources   |
+| `RrdDef`       | Database definition           |
+| `Sample`       | Insert values                 |
+| `RrdGraph`     | Render to image               |
+| `RrdGraphDef`  | Graph definition              |
 
 ## Packages
 

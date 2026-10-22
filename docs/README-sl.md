@@ -3,8 +3,8 @@
 [![I2P+ Update zip](../tools/badges/update-badge.svg)](https://i2pplus.github.io/i2pupdate.zip)
 [![I2P+ I2PSnark standalone](../tools/badges/i2psnark-badge.svg)](https://i2pplus.github.io/installers/i2psnark-standalone.zip)
 [![I2P+ Javadocs](../tools/badges/javadocs-badge.svg)](https://i2pplus.github.io/javadoc.zip)
-[![Docker](../tools/badges/docker-badge.svg)](docker/README.md)
-[![AppImage](../tools/badges/appimage-badge.svg)](tools/appimage/README.md)
+[![Docker](../tools/badges/docker-badge.svg)](../docker/README.md)
+[![AppImage](../tools/badges/appimage-badge.svg)](../tools/appimage/README.md)
 
 # I2P+
 
@@ -16,7 +16,7 @@ Najnovšie vydanie: https://i2pplus.github.io/
 
 ## Inštalácia
 
-Pozrite si [INSTALL.md](docs/INSTALL.md) alebo https://i2pplus.github.io/ pre podrobnosti k inštalácii.
+Pozrite si [INSTALL.md](INSTALL.md) alebo https://i2pplus.github.io/ pre podrobnosti k inštalácii.
 
 ### Poznámka k inštalátoru pre Windows
 
@@ -33,7 +33,7 @@ alebo spustite 'ant javadoc' a potom otvorte build/javadoc/index.html
 
 ## Ako prispieť / Práca na I2P+
 
-Pozrite si [HACKING.md](docs/HACKING.md) a ďalšie dokumenty v adresári docs.
+Pozrite si [HACKING.md](HACKING.md) a ďalšie dokumenty v adresári docs.
 
 ## Budovanie balíkov zo zdrojového kódu
 
@@ -100,7 +100,7 @@ Ak chcete zostaviť AppImage pre Linux:
 ant buildAppImage
 ```
 
-Podrobnosti pozrite v [tools/appimage/README.md](tools/appimage/README.md).
+Podrobnosti pozrite v [tools/appimage/README.md](../tools/appimage/README.md).
 
 Ak chcete zostaviť samostatný balík pre Debian/Ubuntu bez externých závislostí Jetty/Tomcat:
 ```bash
@@ -109,7 +109,7 @@ ant buildDeb
 
 Tým sa vytvorí samostatný `.deb` balík, ktorý obsahuje pribalené knižnice Jetty a Tomcat. Vyžaduje iba bežiace prostredie OpenJDK (inštalované automaticky prostredníctvom správcu balíkov).
 
-Ak chcete spustiť v Docker, pozrite si [docker/README.md](docker/README.md)
+Ak chcete spustiť v Docker, pozrite si [docker/README.md](../docker/README.md)
 
 ## Kontaktné údaje
 
@@ -121,50 +121,50 @@ Hlásenie chýb: https://github.com/I2PPlus/i2pplus/issues
 
 I2P+ je licencovaný pod licenciou AGPL v.3.
 
-Licencie jednotlivých podkomponentov: [README.md](docs/LICENSES.md)
+Licencie jednotlivých podkomponentov: [LICENSES.md](LICENSES.md)
 
 ## Pozri tiež
 
 ### Dokumentácia
 
-- [docs/README.md](docs/README.md) - Úplný index dokumentácie
-- [docs/INSTALL.md](docs/INSTALL.md) - Inštalačná príručka
-- [docs/INSTALL-headless.md](docs/INSTALL-headless.md) - Headless inštalácia (konzolový režim)
-- [docs/HACKING.md](docs/HACKING.md) - Príručka pre vývojárov a systémy zostavenia
-- [docs/DIRECTORIES.md](docs/DIRECTORIES.md) - Štruktúra zdrojového stromu a kde čo nájsť
-- [router/java/src/net/i2p/README.md](router/java/src/net/i2p/README.md) - Prehľad zdrojového stromu smerovača
-- [core/java/src/net/i2p/README.md](core/java/src/net/i2p/README.md) - Prehľad zdrojového stromu knižnice jadra
-- [docs/DEBUGGING.md](docs/DEBUGGING.md) - Ladenie počas behu pomocou JDWP a iných nástrojov
-- [docs/THEMING.md](docs/THEMING.md) - Systém tém konzoly a webovej aplikácie
-- [docs/LICENSES.md](docs/LICENSES.md) - Licencie tretích strán
-- [docs/history.txt](docs/history.txt) - Úplný zoznam zmien
+- [docs/README.md](README.md) - Úplný index dokumentácie
+- [docs/INSTALL.md](INSTALL.md) - Inštalačná príručka
+- [docs/INSTALL-headless.md](INSTALL-headless.md) - Headless inštalácia (konzolový režim)
+- [docs/HACKING.md](HACKING.md) - Príručka pre vývojárov a systémy zostavenia
+- [docs/DIRECTORIES.md](DIRECTORIES.md) - Štruktúra zdrojového stromu a kde čo nájsť
+- [router/java/src/net/i2p/README.md](../router/java/src/net/i2p/README.md) - Prehľad zdrojového stromu smerovača
+- [core/java/src/net/i2p/README.md](../core/java/src/net/i2p/README.md) - Prehľad zdrojového stromu knižnice jadra
+- [docs/DEBUGGING.md](DEBUGGING.md) - Ladenie počas behu pomocou JDWP a iných nástrojov
+- [docs/THEMING.md](THEMING.md) - Systém tém konzoly a webovej aplikácie
+- [docs/LICENSES.md](LICENSES.md) - Licencie tretích strán
+- [docs/history.txt](history.txt) - Úplný zoznam zmien
 
 ### Podprojekty
 
-- [apps/README.md](apps/README.md) - Prehľad aplikácií
-- [apps/addressbook/README.md](apps/addressbook/README.md) - Aplikácia knihy adries
-- [apps/desktopgui/README.md](apps/desktopgui/README.md) - Desktopová GUI aplikácia
-- [apps/i2pcontrol/README.md](apps/i2pcontrol/README.md) - I2P Control API
-- [apps/i2psnark/README.md](apps/i2psnark/README.md) - BitTorrent klient I2PSnark
-- [apps/i2ptunnel/README.md](apps/i2ptunnel/README.md) - Aplikácia I2PTunnel
-- [apps/imagegen/README.md](apps/imagegen/README.md) - Nástroje na generovanie obrázkov
-- [apps/jetty/README.md](apps/jetty/README.md) - HTTP server Jetty
-- [apps/jrobin/README.md](apps/jrobin/README.md) - Knižnica monitorovania JRobin
-- [apps/ministreaming/README.md](apps/ministreaming/README.md) - Minimálna knižnica streaming
-- [apps/pack200/README.md](apps/pack200/README.md) - Kompresia Pack200
-- [apps/proxyscript/README.md](apps/proxyscript/README.md) - Skripty proxy
-- [apps/routerconsole/README.md](apps/routerconsole/README.md) - Konzola smerovača
-- [apps/sam/README.md](apps/sam/README.md) - Simple Anonymous Messaging
-- [apps/streaming/README.md](apps/streaming/README.md) - Knižnica streaming
-- [apps/susidns/README.md](apps/susidns/README.md) - DNS server
-- [apps/susimail/README.md](apps/susimail/README.md) - E-mailový klient I2P
-- [apps/systray/README.md](apps/systray/README.md) - Aplikácia pre systémovú lištu
-- [core/README.md](core/README.md) - Dokumentácia knižnice jadra
-- [installer/lib/jbigi/README.md](installer/lib/jbigi/README.md) - Natívna JNI knižnica pre kryptografiu (GMP)
+- [apps/README.md](../apps/README.md) - Prehľad aplikácií
+- [apps/addressbook/README.md](../apps/addressbook/README.md) - Aplikácia knihy adries
+- [apps/desktopgui/README.md](../apps/desktopgui/README.md) - Desktopová GUI aplikácia
+- [apps/i2pcontrol/README.md](../apps/i2pcontrol/README.md) - I2P Control API
+- [apps/i2psnark/README.md](../apps/i2psnark/README.md) - BitTorrent klient I2PSnark
+- [apps/i2ptunnel/README.md](../apps/i2ptunnel/README.md) - Aplikácia I2PTunnel
+- [apps/imagegen/README.md](../apps/imagegen/README.md) - Nástroje na generovanie obrázkov
+- [apps/jetty/README.md](../apps/jetty/README.md) - HTTP server Jetty
+- [apps/jrobin/README.md](../apps/jrobin/README.md) - Knižnica monitorovania JRobin
+- [apps/ministreaming/README.md](../apps/ministreaming/README.md) - Minimálna knižnica streaming
+- [apps/pack200/README.md](../apps/pack200/README.md) - Kompresia Pack200
+- [apps/proxyscript/README.md](../apps/proxyscript/README.md) - Skripty proxy
+- [apps/routerconsole/README.md](../apps/routerconsole/README.md) - Konzola smerovača
+- [apps/sam/README.md](../apps/sam/README.md) - Simple Anonymous Messaging
+- [apps/streaming/README.md](../apps/streaming/README.md) - Knižnica streaming
+- [apps/susidns/README.md](../apps/susidns/README.md) - DNS server
+- [apps/susimail/README.md](../apps/susimail/README.md) - E-mailový klient I2P
+- [apps/systray/README.md](../apps/systray/README.md) - Aplikácia pre systémovú lištu
+- [core/README.md](../core/README.md) - Dokumentácia knižnice jadra
+- [installer/lib/jbigi/README.md](../installer/lib/jbigi/README.md) - Natívna JNI knižnica pre kryptografiu (GMP)
 
 ### RÔZNE
 
-- [docs/i2p-sessionban-nftables.md](docs/i2p-sessionban-nftables.md) - Správa zákazov relácií I2P pomocou nftables
-- [installer/resources/README.md](installer/resources/README.md) - Pribalené zdroje inštalátora
-- [tools/scripts/README.md](tools/scripts/README.md) - Pomocné skripty pre vývoj a správu
-- [tools/scripts/tests/README.md](tools/scripts/tests/README.md) - Skripty na overovanie a testovanie
+- [docs/i2p-sessionban-nftables.md](i2p-sessionban-nftables.md) - Správa zákazov relácií I2P pomocou nftables
+- [installer/resources/README.md](../installer/resources/README.md) - Pribalené zdroje inštalátora
+- [tools/scripts/README.md](../tools/scripts/README.md) - Pomocné skripty pre vývoj a správu
+- [tools/scripts/tests/README.md](../tools/scripts/tests/README.md) - Skripty na overovanie a testovanie

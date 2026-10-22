@@ -20,9 +20,11 @@ The router module implements the core I2P router: tunnel management, transport p
 | `java/src/net/i2p/router/tunnel/`      | Tunnel building, dispatch, encryption/decryption at each hop             |
 | `java/src/net/i2p/router/util/`        | Router-specific utilities                                                |
 | `java/src/net/i2p/router/dummy/`       | Stub facades for testing and embedded builds                             |
-| `doc/`                                 | Router documentation                                                     |
+| `java/src/net/i2p/data/`               | Router-side data classes (`i2np` wire messages, `router` RouterInfo)     |
 | `locale/`                              | Translation `.po` files                                                  |
-| `peerProfiles/`                        | Persistent peer profile storage                                          |
+
+Runtime data is not stored in this module: `router.config`, `netDb/` and
+`peerProfiles/` live in the router's data directory (`i2p.dir.router`).
 
 ## Key Packages
 
@@ -36,7 +38,7 @@ The router module implements the core I2P router: tunnel management, transport p
 - **`net.i2p.router.transport`** - NTCP2 (`NTCPTransport`) and SSU2 (`UDPTransport`) outbound/inbound connections, `CommSystemFacadeImpl`, bandwidth limiting
 - **`net.i2p.router.tunnel`** - `TunnelDispatcher`, `HopProcessor`, `FragmentHandler`, `TunnelGateway` (per-hop encryption and message forwarding)
 - **`net.i2p.router.tunnel.pool`** - `TunnelPool`, `BuildExecutor`, `TestJob`, `ExpireJob`, `BuildRequestor`, `TunnelPeerSelector` (pool lifecycle, build storms, collapse detection)
-- **`net.i2p.router.sybil`** - Sybil attack detection (`SybilRenderer`)
+- **`net.i2p.router.sybil`** - Sybil attack detection and scoring (`Analysis`, `Points`, `PersistSybil`, `Pair`, `Util`)
 
 ## Key Classes
 

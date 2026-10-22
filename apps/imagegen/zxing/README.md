@@ -1,3 +1,9 @@
+**Note (I2P+)**: this is a vendored subset of zxing — only what is needed to
+generate QR codes. See [README-i2p.txt](README-i2p.txt) for the version and
+source. It is built as part of imagegen with `ant buildImagegen` (or
+`./gradlew :apps:imagegen:jar`) from the repository root; the Maven and upstream
+instructions below do not apply to this copy.
+
 <img align="right" src="https://raw.github.com/wiki/zxing/zxing/zxing-logo.png"/>
 
 ## Project in Maintenance Mode Only

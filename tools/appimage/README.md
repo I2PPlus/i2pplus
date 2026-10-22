@@ -21,7 +21,15 @@ ant buildAppImage
 Or directly:
 
 ```bash
-bash tools/appimage/build-appimage.sh
+bash tools/appimage/build-appimage.sh [version] [appimagetool-update] [pkg-temp-dir]
+```
+
+Pass the third argument to keep the staging directory out of the workspace, as
+the ant target does — without it the script defaults to `pkg-temp/` in the
+repository root:
+
+```bash
+bash tools/appimage/build-appimage.sh "" never /tmp/build-i2p/pkg-temp
 ```
 
 The build script automatically downloads appimagetool if not present.

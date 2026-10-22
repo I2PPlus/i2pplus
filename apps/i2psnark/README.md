@@ -23,7 +23,10 @@ I2PSnark brings BitTorrent to I2P with privacy built-in:
 - **DHT** - Distributed hash table for peer discovery without trackers
 - **PEX** - Peer exchange from connected peers
 - **Magnet links** - Share `.i2p` torrent links
-- **Auto-scaling tunnels** - Tunnel count adjusts based on activity
+- **Per-torrent destinations** - Each torrent gets its own destination, so
+  trackers and peers cannot correlate your torrents (`i2psnark.multiDest`)
+- **Destination rotation** - Torrents are periodically restarted on fresh
+  destinations (`i2psnark.destCycle`)
 
 ## Packages
 

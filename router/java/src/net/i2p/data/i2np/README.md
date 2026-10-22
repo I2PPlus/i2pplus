@@ -24,4 +24,4 @@ Routers exchange typed `I2NPMessage` instances — data, tunnel build/management
 ## Docs
 
 - [package.html](package.html) — canonical package description
-- [`router/java/src/net/i2p/README.md`](../README.md) — router source map
+- [`router/java/src/net/i2p/README.md`](../../README.md) — router source map

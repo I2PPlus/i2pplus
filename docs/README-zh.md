@@ -3,8 +3,8 @@
 [![I2P+ Update zip](../tools/badges/update-badge.svg)](https://i2pplus.github.io/i2pupdate.zip)
 [![I2P+ I2PSnark standalone](../tools/badges/i2psnark-badge.svg)](https://i2pplus.github.io/installers/i2psnark-standalone.zip)
 [![I2P+ Javadocs](../tools/badges/javadocs-badge.svg)](https://i2pplus.github.io/javadoc.zip)
-[![Docker](../tools/badges/docker-badge.svg)](docker/README.md)
-[![AppImage](../tools/badges/appimage-badge.svg)](tools/appimage/README.md)
+[![Docker](../tools/badges/docker-badge.svg)](../docker/README.md)
+[![AppImage](../tools/badges/appimage-badge.svg)](../tools/appimage/README.md)
 
 # I2P+
 
@@ -84,7 +84,7 @@ API：https://i2pplus.github.io/javadoc/
 ant buildAppImage
 ```
 
-详情请参阅 [tools/appimage/README.md](tools/appimage/README.md)。
+详情请参阅 [tools/appimage/README.md](../tools/appimage/README.md)。
 
 构建 Debian/Ubuntu 的自包含 Debian 包，无需外部 Jetty/Tomcat 依赖：
 ```bash
@@ -104,49 +104,49 @@ ant buildDeb
 
 I2P+已根据AGPL v.3许可。
 
-有关各子组件许可证，请参阅：[README.md](docs/LICENSES.md)
+有关各子组件许可证，请参阅：[LICENSES.md](LICENSES.md)
 
 ## 相关链接
 
 ### 文档
 
-- [docs/README.md](docs/README.md) - 完整文档索引
-- [docs/INSTALL.md](docs/INSTALL.md) - 安装指南
-- [docs/INSTALL-headless.md](docs/INSTALL-headless.md) - 无GUI安装（控制台模式）
-- [docs/HACKING.md](docs/HACKING.md) - 开发者指南和构建系统
-- [docs/DIRECTORIES.md](docs/DIRECTORIES.md) - 源代码树布局
-- [docs/DEBUGGING.md](docs/DEBUGGING.md) - 使用JDWP和其他工具进行运行时调试
-- [docs/i2p-sessionban-nftables.md](docs/i2p-sessionban-nftables.md) - 使用nftables管理I2P会话禁令
-- [docs/THEMING.md](docs/THEMING.md) - Console and webapp theming system
-- [docs/LICENSES.md](docs/LICENSES.md) - 第三方许可证
-- [docs/history.txt](docs/history.txt) - 完整更改日志
+- [docs/README.md](README.md) - 完整文档索引
+- [docs/INSTALL.md](INSTALL.md) - 安装指南
+- [docs/INSTALL-headless.md](INSTALL-headless.md) - 无GUI安装（控制台模式）
+- [docs/HACKING.md](HACKING.md) - 开发者指南和构建系统
+- [docs/DIRECTORIES.md](DIRECTORIES.md) - 源代码树布局
+- [docs/DEBUGGING.md](DEBUGGING.md) - 使用JDWP和其他工具进行运行时调试
+- [docs/i2p-sessionban-nftables.md](i2p-sessionban-nftables.md) - 使用nftables管理I2P会话禁令
+- [docs/THEMING.md](THEMING.md) - Console and webapp theming system
+- [docs/LICENSES.md](LICENSES.md) - 第三方许可证
+- [docs/history.txt](history.txt) - 完整更改日志
 
 ### 子项目
 
-- [apps/README.md](apps/README.md) - 应用程序概述
-- [apps/addressbook/README.md](apps/addressbook/README.md) - 地址簿应用
-- [apps/desktopgui/README.md](apps/desktopgui/README.md) - 桌面GUI应用
-- [apps/i2pcontrol/README.md](apps/i2pcontrol/README.md) - I2P控制API
-- [apps/i2psnark/README.md](apps/i2psnark/README.md) - I2PSnark BitTorrent客户端
-- [apps/i2ptunnel/README.md](apps/i2ptunnel/README.md) - I2P隧道应用
-- [apps/imagegen/README.md](apps/imagegen/README.md) - 图像生成工具
-- [apps/jetty/README.md](apps/jetty/README.md) - Jetty HTTP服务器
-- [apps/jrobin/README.md](apps/jrobin/README.md) - JRobin监控库
-- [apps/ministreaming/README.md](apps/ministreaming/README.md) - 最小流库
-- [apps/pack200/README.md](apps/pack200/README.md) - Pack200压缩
-- [apps/proxyscript/README.md](apps/proxyscript/README.md) - 代理脚本
-- [apps/routerconsole/README.md](apps/routerconsole/README.md) - 路由器控制台
-- [apps/sam/README.md](apps/sam/README.md) - 简单匿名消息
-- [apps/streaming/README.md](apps/streaming/README.md) - 流库
-- [apps/susidns/README.md](apps/susidns/README.md) - DNS服务器
-- [apps/susimail/README.md](apps/susimail/README.md) - I2P邮件客户端
-- [apps/systray/README.md](apps/systray/README.md) - 系统托盘应用
-- [core/README.md](core/README.md) - 核心库文档
-- [installer/lib/jbigi/README.md](installer/lib/jbigi/README.md) - 本地JNI加密库(GMP)
+- [apps/README.md](../apps/README.md) - 应用程序概述
+- [apps/addressbook/README.md](../apps/addressbook/README.md) - 地址簿应用
+- [apps/desktopgui/README.md](../apps/desktopgui/README.md) - 桌面GUI应用
+- [apps/i2pcontrol/README.md](../apps/i2pcontrol/README.md) - I2P控制API
+- [apps/i2psnark/README.md](../apps/i2psnark/README.md) - I2PSnark BitTorrent客户端
+- [apps/i2ptunnel/README.md](../apps/i2ptunnel/README.md) - I2P隧道应用
+- [apps/imagegen/README.md](../apps/imagegen/README.md) - 图像生成工具
+- [apps/jetty/README.md](../apps/jetty/README.md) - Jetty HTTP服务器
+- [apps/jrobin/README.md](../apps/jrobin/README.md) - JRobin监控库
+- [apps/ministreaming/README.md](../apps/ministreaming/README.md) - 最小流库
+- [apps/pack200/README.md](../apps/pack200/README.md) - Pack200压缩
+- [apps/proxyscript/README.md](../apps/proxyscript/README.md) - 代理脚本
+- [apps/routerconsole/README.md](../apps/routerconsole/README.md) - 路由器控制台
+- [apps/sam/README.md](../apps/sam/README.md) - 简单匿名消息
+- [apps/streaming/README.md](../apps/streaming/README.md) - 流库
+- [apps/susidns/README.md](../apps/susidns/README.md) - DNS服务器
+- [apps/susimail/README.md](../apps/susimail/README.md) - I2P邮件客户端
+- [apps/systray/README.md](../apps/systray/README.md) - 系统托盘应用
+- [core/README.md](../core/README.md) - 核心库文档
+- [installer/lib/jbigi/README.md](../installer/lib/jbigi/README.md) - 本地JNI加密库(GMP)
 
 ### 杂项
 
-- [docs/i2p-sessionban-nftables.md](docs/i2p-sessionban-nftables.md) - 使用nftables管理I2P会话禁令
-- [installer/resources/README.md](installer/resources/README.md) - 安装程序资源
-- [tools/scripts/README.md](tools/scripts/README.md) - 开发和管理实用脚本
-- [tools/scripts/tests/README.md](tools/scripts/tests/README.md) - 验证和测试脚本
+- [docs/i2p-sessionban-nftables.md](i2p-sessionban-nftables.md) - 使用nftables管理I2P会话禁令
+- [installer/resources/README.md](../installer/resources/README.md) - 安装程序资源
+- [tools/scripts/README.md](../tools/scripts/README.md) - 开发和管理实用脚本
+- [tools/scripts/tests/README.md](../tools/scripts/tests/README.md) - 验证和测试脚本

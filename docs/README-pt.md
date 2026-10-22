@@ -3,8 +3,8 @@
 [![I2P+ Update zip](../tools/badges/update-badge.svg)](https://i2pplus.github.io/i2pupdate.zip)
 [![I2P+ I2PSnark standalone](../tools/badges/i2psnark-badge.svg)](https://i2pplus.github.io/installers/i2psnark-standalone.zip)
 [![I2P+ Javadocs](../tools/badges/javadocs-badge.svg)](https://i2pplus.github.io/javadoc.zip)
-[![Docker](../tools/badges/docker-badge.svg)](docker/README.md)
-[![AppImage](../tools/badges/appimage-badge.svg)](tools/appimage/README.md)
+[![Docker](../tools/badges/docker-badge.svg)](../docker/README.md)
+[![AppImage](../tools/badges/appimage-badge.svg)](../tools/appimage/README.md)
 
 # I2P+
 
@@ -33,7 +33,7 @@ ou execute 'ant javadoc' e depois inicie em build/javadoc/index.html
 
 ## Como contribuir / Programar no I2P
 
-Por favor, verifique [HACKING.md](docs/HACKING.md) e outros documentos no diretório docs.
+Por favor, verifique [HACKING.md](HACKING.md) e outros documentos no diretório docs.
 
 ## Compilando pacotes a partir do código fonte
 
@@ -106,10 +106,10 @@ Para criar um AppImage para Linux:
 ant buildAppImage
 ```
 
-Veja [tools/appimage/README.md](tools/appimage/README.md) para detalhes.
+Veja [tools/appimage/README.md](../tools/appimage/README.md) para detalhes.
 
 
-Para mais informações sobre como executar o I2P no Docker, veja [docker/README.md](docker/README.md)
+Para mais informações sobre como executar o I2P no Docker, veja [docker/README.md](../docker/README.md)
 
 
 ## Informações de contato
@@ -122,54 +122,54 @@ Relatórios de bugs: https://i2pgit.org/i2p-hackers/i2p.i2p/-/issues ou https://
 
 I2P+ é licenciado sob a AGPL v.3.
 
-Para as licenças dos vários subcomponentes, veja: [README.md](docs/LICENSES.md)
+Para as licenças dos vários subcomponentes, veja: [LICENSES.md](LICENSES.md)
 
 ## Veja também
 
 ### Documentação
 
-- [docs/README.md](docs/README.md) - Índice completo de documentação
-- [docs/INSTALL.md](docs/INSTALL.md) - Guia de instalação
-- [docs/INSTALL-headless.md](docs/INSTALL-headless.md) - Instalação headless (modo console)
-- [docs/HACKING.md](docs/HACKING.md) - Guia do desenvolvedor e sistemas de build
-- [docs/DIRECTORIES.md](docs/DIRECTORIES.md) - Layout da árvore de código fonte
-- [docs/DEBUGGING.md](docs/DEBUGGING.md) - Depuração em tempo de execução com JDWP e outras ferramentas
-- [docs/i2p-sessionban-nftables.md](docs/i2p-sessionban-nftables.md) - Gerenciamento de proibições de sessão I2P com nftables
-- [docs/THEMING.md](docs/THEMING.md) - Console and webapp theming system
-- [docs/LICENSES.md](docs/LICENSES.md) - Licenças de terceiros
-- [docs/history.txt](docs/history.txt) - Registro completo de alterações
+- [docs/README.md](README.md) - Índice completo de documentação
+- [docs/INSTALL.md](INSTALL.md) - Guia de instalação
+- [docs/INSTALL-headless.md](INSTALL-headless.md) - Instalação headless (modo console)
+- [docs/HACKING.md](HACKING.md) - Guia do desenvolvedor e sistemas de build
+- [docs/DIRECTORIES.md](DIRECTORIES.md) - Layout da árvore de código fonte
+- [docs/DEBUGGING.md](DEBUGGING.md) - Depuração em tempo de execução com JDWP e outras ferramentas
+- [docs/i2p-sessionban-nftables.md](i2p-sessionban-nftables.md) - Gerenciamento de proibições de sessão I2P com nftables
+- [docs/THEMING.md](THEMING.md) - Console and webapp theming system
+- [docs/LICENSES.md](LICENSES.md) - Licenças de terceiros
+- [docs/history.txt](history.txt) - Registro completo de alterações
 
 ### Sub-projects
 
-- [apps/README.md](apps/README.md) - Visão geral dos aplicativos
-- [apps/addressbook/README.md](apps/addressbook/README.md) - Aplicativo de catálogo de endereços
-- [apps/desktopgui/README.md](apps/desktopgui/README.md) - Aplicativo GUI de desktop
-- [apps/i2pcontrol/README.md](apps/i2pcontrol/README.md) - API de controle I2P
-- [apps/i2psnark/README.md](apps/i2psnark/README.md) - Cliente BitTorrent I2PSnark
-- [apps/i2ptunnel/README.md](apps/i2ptunnel/README.md) - Aplicativo de túnel I2P
-- [apps/imagegen/README.md](apps/imagegen/README.md) - Ferramentas de geração de imagem
-- [apps/jetty/README.md](apps/jetty/README.md) - Servidor HTTP Jetty
-- [apps/jrobin/README.md](apps/jrobin/README.md) - Biblioteca de monitoramento JRobin
-- [apps/ministreaming/README.md](apps/ministreaming/README.md) - Biblioteca de streaming mínima
-- [apps/pack200/README.md](apps/pack200/README.md) - Compressão Pack200
-- [apps/proxyscript/README.md](apps/proxyscript/README.md) - Scripts proxy
-- [apps/routerconsole/README.md](apps/routerconsole/README.md) - Console do router
-- [apps/sam/README.md](apps/sam/README.md) - Simple Anonymous Messaging
-- [apps/streaming/README.md](apps/streaming/README.md) - Biblioteca de streaming
-- [apps/susidns/README.md](apps/susidns/README.md) - Servidor DNS
-- [apps/susimail/README.md](apps/susimail/README.md) - Cliente de email I2P
-- [apps/systray/README.md](apps/systray/README.md) - Aplicativo de bandeja do sistema
-- [core/README.md](core/README.md) - Documentação da biblioteca core
-- [installer/lib/jbigi/README.md](installer/lib/jbigi/README.md) - Biblioteca JNI nativa para criptografia (GMP)
+- [apps/README.md](../apps/README.md) - Visão geral dos aplicativos
+- [apps/addressbook/README.md](../apps/addressbook/README.md) - Aplicativo de catálogo de endereços
+- [apps/desktopgui/README.md](../apps/desktopgui/README.md) - Aplicativo GUI de desktop
+- [apps/i2pcontrol/README.md](../apps/i2pcontrol/README.md) - API de controle I2P
+- [apps/i2psnark/README.md](../apps/i2psnark/README.md) - Cliente BitTorrent I2PSnark
+- [apps/i2ptunnel/README.md](../apps/i2ptunnel/README.md) - Aplicativo de túnel I2P
+- [apps/imagegen/README.md](../apps/imagegen/README.md) - Ferramentas de geração de imagem
+- [apps/jetty/README.md](../apps/jetty/README.md) - Servidor HTTP Jetty
+- [apps/jrobin/README.md](../apps/jrobin/README.md) - Biblioteca de monitoramento JRobin
+- [apps/ministreaming/README.md](../apps/ministreaming/README.md) - Biblioteca de streaming mínima
+- [apps/pack200/README.md](../apps/pack200/README.md) - Compressão Pack200
+- [apps/proxyscript/README.md](../apps/proxyscript/README.md) - Scripts proxy
+- [apps/routerconsole/README.md](../apps/routerconsole/README.md) - Console do router
+- [apps/sam/README.md](../apps/sam/README.md) - Simple Anonymous Messaging
+- [apps/streaming/README.md](../apps/streaming/README.md) - Biblioteca de streaming
+- [apps/susidns/README.md](../apps/susidns/README.md) - Servidor DNS
+- [apps/susimail/README.md](../apps/susimail/README.md) - Cliente de email I2P
+- [apps/systray/README.md](../apps/systray/README.md) - Aplicativo de bandeja do sistema
+- [core/README.md](../core/README.md) - Documentação da biblioteca core
+- [installer/lib/jbigi/README.md](../installer/lib/jbigi/README.md) - Biblioteca JNI nativa para criptografia (GMP)
 
 ### Misc
 
-- [docs/i2p-sessionban-nftables.md](docs/i2p-sessionban-nftables.md) - Gerenciamento de proibições de sessão I2P com nftables
-- [installer/resources/README.md](installer/resources/README.md) - Recursos do instalador agrupados
-- [tools/scripts/README.md](tools/scripts/README.md) - Scripts utilitários para desenvolvimento e administração
-- [tools/scripts/tests/README.md](tools/scripts/tests/README.md) - Scripts de validação e teste
+- [docs/i2p-sessionban-nftables.md](i2p-sessionban-nftables.md) - Gerenciamento de proibições de sessão I2P com nftables
+- [installer/resources/README.md](../installer/resources/README.md) - Recursos do instalador agrupados
+- [tools/scripts/README.md](../tools/scripts/README.md) - Scripts utilitários para desenvolvimento e administração
+- [tools/scripts/tests/README.md](../tools/scripts/tests/README.md) - Scripts de validação e teste
 
 
 
-- [docker/README.md](docker/README.md) - Executar I2P+ no Docker
+- [docker/README.md](../docker/README.md) - Executar I2P+ no Docker
 

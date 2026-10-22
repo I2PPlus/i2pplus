@@ -3,8 +3,8 @@
 [![I2P+ Update zip](../tools/badges/update-badge.svg)](https://i2pplus.github.io/i2pupdate.zip)
 [![I2P+ I2PSnark standalone](../tools/badges/i2psnark-badge.svg)](https://i2pplus.github.io/installers/i2psnark-standalone.zip)
 [![I2P+ Javadocs](../tools/badges/javadocs-badge.svg)](https://i2pplus.github.io/javadoc.zip)
-[![Docker](../tools/badges/docker-badge.svg)](docker/README.md)
-[![AppImage](../tools/badges/appimage-badge.svg)](tools/appimage/README.md)
+[![Docker](../tools/badges/docker-badge.svg)](../docker/README.md)
+[![AppImage](../tools/badges/appimage-badge.svg)](../tools/appimage/README.md)
 
 # I2P+
 
@@ -33,7 +33,7 @@ vagy futtasd az 'ant javadoc' parancsot, majd nyisd meg a build/javadoc/index.ht
 
 ## Hogyan contribute- / Hackeld az I2P-t
 
-Kérlek nézd meg a [HACKING.md](docs/HACKING.md) fájlt és a docs könyvtár egyéb dokumentumait.
+Kérlek nézd meg a [HACKING.md](HACKING.md) fájlt és a docs könyvtár egyéb dokumentumait.
 
 ## Csomagok fordítása forrásból
 
@@ -104,10 +104,10 @@ Linux AppImage építéséhez:
 ant buildAppImage
 ```
 
-Részletekért lásd: [tools/appimage/README.md](tools/appimage/README.md).
+Részletekért lásd: [tools/appimage/README.md](../tools/appimage/README.md).
 
 
-Ha többet szeretnél tudni az I2P Docker-ben történő futtatásáról, lásd: [docker/README.md](docker/README.md)
+Ha többet szeretnél tudni az I2P Docker-ben történő futtatásáról, lásd: [docker/README.md](../docker/README.md)
 
 
 ## Kapcsolati adatok
@@ -120,54 +120,54 @@ Hibajelentések: https://i2pgit.org/i2p-hackers/i2p.i2p/-/issues vagy https://gi
 
 Az I2P+ az AGPL v.3 licenciával rendelkezik.
 
-A különböző alkomponensek licenciájáért lásd: [README.md](docs/LICENSES.md)
+A különböző alkomponensek licenciájáért lásd: [LICENSES.md](LICENSES.md)
 
 ## Lásd még
 
 ### Dokumentáció
 
-- [docs/README.md](docs/README.md) - Teljes dokumentációs jegyzék
-- [docs/INSTALL.md](docs/INSTALL.md) - Telepítési útmutató
-- [docs/INSTALL-headless.md](docs/INSTALL-headless.md) - Fej nélküli (konzol) telepítés
-- [docs/HACKING.md](docs/HACKING.md) - Fejlesztői útmutató és build rendszerek
-- [docs/DIRECTORIES.md](docs/DIRECTORIES.md) - Forrásfa elrendezés és hol mi található
-- [docs/DEBUGGING.md](docs/DEBUGGING.md) - Futtatási hibakeresés JDWP-vel és más eszközökkel
-- [docs/i2p-sessionban-nftables.md](docs/i2p-sessionban-nftables.md) - I2P session tiltások kezelése nftables-szel
-- [docs/THEMING.md](docs/THEMING.md) - Console and webapp theming system
-- [docs/LICENSES.md](docs/LICENSES.md) - Harmadik fél licenciák
-- [docs/history.txt](docs/history.txt) - Teljes változtatási napló
+- [docs/README.md](README.md) - Teljes dokumentációs jegyzék
+- [docs/INSTALL.md](INSTALL.md) - Telepítési útmutató
+- [docs/INSTALL-headless.md](INSTALL-headless.md) - Fej nélküli (konzol) telepítés
+- [docs/HACKING.md](HACKING.md) - Fejlesztői útmutató és build rendszerek
+- [docs/DIRECTORIES.md](DIRECTORIES.md) - Forrásfa elrendezés és hol mi található
+- [docs/DEBUGGING.md](DEBUGGING.md) - Futtatási hibakeresés JDWP-vel és más eszközökkel
+- [docs/i2p-sessionban-nftables.md](i2p-sessionban-nftables.md) - I2P session tiltások kezelése nftables-szel
+- [docs/THEMING.md](THEMING.md) - Console and webapp theming system
+- [docs/LICENSES.md](LICENSES.md) - Harmadik fél licenciák
+- [docs/history.txt](history.txt) - Teljes változtatási napló
 
 ### Alprojektek
 
-- [apps/README.md](apps/README.md) - Alkalmazás áttekintés
-- [apps/addressbook/README.md](apps/addressbook/README.md) - Címjegyzék alkalmazás
-- [apps/desktopgui/README.md](apps/desktopgui/README.md) - Desktop GUI alkalmazás
-- [apps/i2pcontrol/README.md](apps/i2pcontrol/README.md) - I2P Control API
-- [apps/i2psnark/README.md](apps/i2psnark/README.md) - I2PSnark BitTorrent kliens
-- [apps/i2ptunnel/README.md](apps/i2ptunnel/README.md) - I2P Tunnel alkalmazás
-- [apps/imagegen/README.md](apps/imagegen/README.md) - Képgeneráló eszközök
-- [apps/jetty/README.md](apps/jetty/README.md) - Jetty HTTP szerver
-- [apps/jrobin/README.md](apps/jrobin/README.md) - JRobin monitoring könyvtár
-- [apps/ministreaming/README.md](apps/ministreaming/README.md) - Minimális streaming könyvtár
-- [apps/pack200/README.md](apps/pack200/README.md) - Pack200 tömörítés
-- [apps/proxyscript/README.md](apps/proxyscript/README.md) - Proxy szkriptek
-- [apps/routerconsole/README.md](apps/routerconsole/README.md) - Router konzol
-- [apps/sam/README.md](apps/sam/README.md) - Simple Anonymous Messaging
-- [apps/streaming/README.md](apps/streaming/README.md) - Streaming könyvtár
-- [apps/susidns/README.md](apps/susidns/README.md) - DNS szerver
-- [apps/susimail/README.md](apps/susimail/README.md) - I2P levelező kliens
-- [apps/systray/README.md](apps/systray/README.md) - Rendszer tálca alkalmazás
-- [core/README.md](core/README.md) - Core könyvtár dokumentáció
-- [installer/lib/jbigi/README.md](installer/lib/jbigi/README.md) - Natív JNI könyvtár kriptográfiához (GMP)
+- [apps/README.md](../apps/README.md) - Alkalmazás áttekintés
+- [apps/addressbook/README.md](../apps/addressbook/README.md) - Címjegyzék alkalmazás
+- [apps/desktopgui/README.md](../apps/desktopgui/README.md) - Desktop GUI alkalmazás
+- [apps/i2pcontrol/README.md](../apps/i2pcontrol/README.md) - I2P Control API
+- [apps/i2psnark/README.md](../apps/i2psnark/README.md) - I2PSnark BitTorrent kliens
+- [apps/i2ptunnel/README.md](../apps/i2ptunnel/README.md) - I2P Tunnel alkalmazás
+- [apps/imagegen/README.md](../apps/imagegen/README.md) - Képgeneráló eszközök
+- [apps/jetty/README.md](../apps/jetty/README.md) - Jetty HTTP szerver
+- [apps/jrobin/README.md](../apps/jrobin/README.md) - JRobin monitoring könyvtár
+- [apps/ministreaming/README.md](../apps/ministreaming/README.md) - Minimális streaming könyvtár
+- [apps/pack200/README.md](../apps/pack200/README.md) - Pack200 tömörítés
+- [apps/proxyscript/README.md](../apps/proxyscript/README.md) - Proxy szkriptek
+- [apps/routerconsole/README.md](../apps/routerconsole/README.md) - Router konzol
+- [apps/sam/README.md](../apps/sam/README.md) - Simple Anonymous Messaging
+- [apps/streaming/README.md](../apps/streaming/README.md) - Streaming könyvtár
+- [apps/susidns/README.md](../apps/susidns/README.md) - DNS szerver
+- [apps/susimail/README.md](../apps/susimail/README.md) - I2P levelező kliens
+- [apps/systray/README.md](../apps/systray/README.md) - Rendszer tálca alkalmazás
+- [core/README.md](../core/README.md) - Core könyvtár dokumentáció
+- [installer/lib/jbigi/README.md](../installer/lib/jbigi/README.md) - Natív JNI könyvtár kriptográfiához (GMP)
 
 ### Egyéb
 
-- [docs/i2p-sessionban-nftables.md](docs/i2p-sessionban-nftables.md) - I2P session tiltások kezelése nftables-szel
-- [installer/resources/README.md](installer/resources/README.md) - Telepítő erőforrások
-- [tools/scripts/README.md](tools/scripts/README.md) - Fejlesztési és adminisztrációs segédszkriptek
-- [tools/scripts/tests/README.md](tools/scripts/tests/README.md) - Validációs és tesztelési szkriptek
+- [docs/i2p-sessionban-nftables.md](i2p-sessionban-nftables.md) - I2P session tiltások kezelése nftables-szel
+- [installer/resources/README.md](../installer/resources/README.md) - Telepítő erőforrások
+- [tools/scripts/README.md](../tools/scripts/README.md) - Fejlesztési és adminisztrációs segédszkriptek
+- [tools/scripts/tests/README.md](../tools/scripts/tests/README.md) - Validációs és tesztelési szkriptek
 
 
 
-- [docker/README.md](docker/README.md) - I2P+ futtatása Docker-ben
+- [docker/README.md](../docker/README.md) - I2P+ futtatása Docker-ben
 

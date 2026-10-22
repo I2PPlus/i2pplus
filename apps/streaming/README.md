@@ -7,7 +7,7 @@ Implementation of I2P's streaming protocol, providing TCP-like reliable, ordered
 The streaming library abstracts I2P's message-based transport into familiar socket semantics:
 
 1. **Connection** - Client creates an `I2PSocket` via `I2PSocketManager`
-2. **Handshake** - Outbound destination created, connected to peer's destination  
+2. **Handshake** - Outbound destination created, connected to peer's destination
 3. **Data** - Messages fragmented, encrypted, sent through tunnel hops
 4. **Ack/Nak** - Acks confirm delivery, naks trigger retransmission
 5. **Congestion** - Sliding window limits in-flight messages
@@ -31,9 +31,10 @@ Unlike TCP's cumulative ACKs, I2P uses selective ACKs per-packet:
 
 ## Differences from TCP
 
-- No 3-way handshake (destinations pre-established)
-- No sliding window (fixed window at sender, acks advance window)
-- No FIN (explicit close message)
+- Handshake runs over an already-established I2P session (SYN / SYN-ACK / ACK),
+  not over a new transport connection
+- Selective per-packet acks instead of cumulative acks
+- No FIN — an explicit close message ends the connection
 - Built-in encryption (no TLS needed)
 
 See `ministreaming/` for the client API (`I2PSocket`, `I2PServerSocket`).

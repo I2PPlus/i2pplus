@@ -3,8 +3,8 @@
 [![I2P+ Update zip](../tools/badges/update-badge.svg)](https://i2pplus.github.io/i2pupdate.zip)
 [![I2P+ I2PSnark standalone](../tools/badges/i2psnark-badge.svg)](https://i2pplus.github.io/installers/i2psnark-standalone.zip)
 [![I2P+ Javadocs](../tools/badges/javadocs-badge.svg)](https://i2pplus.github.io/javadoc.zip)
-[![Docker](../tools/badges/docker-badge.svg)](docker/README.md)
-[![AppImage](../tools/badges/appimage-badge.svg)](tools/appimage/README.md)
+[![Docker](../tools/badges/docker-badge.svg)](../docker/README.md)
+[![AppImage](../tools/badges/appimage-badge.svg)](../tools/appimage/README.md)
 
 # I2P+
 
@@ -16,7 +16,7 @@ Pinakabagong release: https://i2pplus.github.io/
 
 ## Pag-iinstall
 
-Tingnan ang [INSTALL.md](docs/INSTALL.md) o https://i2pplus.github.io/ para sa mga tagubilin sa pag-iinstall.
+Tingnan ang [INSTALL.md](INSTALL.md) o https://i2pplus.github.io/ para sa mga tagubilin sa pag-iinstall.
 
 ### Tala tungkol sa Windows installer
 
@@ -33,7 +33,7 @@ o patakbuhin ang 'ant javadoc' tapos magsimula sa build/javadoc/index.html
 
 ## Paano mag-ambag / Mag-hack sa I2P+
 
-Pakitingnan ang [HACKING.md](docs/HACKING.md) at iba pang mga dokumento sa docs directory.
+Pakitingnan ang [HACKING.md](HACKING.md) at iba pang mga dokumento sa docs directory.
 
 ## Pagbuo ng mga package mula sa source
 
@@ -100,7 +100,7 @@ Para bumuo ng AppImage para sa Linux:
 ant buildAppImage
 ```
 
-Tingnan ang [tools/appimage/README.md](tools/appimage/README.md) para sa mga detalye.
+Tingnan ang [tools/appimage/README.md](../tools/appimage/README.md) para sa mga detalye.
 
 Para bumuo ng self-contained na Debian package para sa Debian/Ubuntu nang walang mga external na dependency sa Jetty/Tomcat:
 ```bash
@@ -109,7 +109,7 @@ ant buildDeb
 
 Nagbibigay ito ng self-contained na `.deb` na package na may kasamang nakabundleng Jetty at Tomcat na mga library. Kinakailangan lamang ang OpenJDK runtime (awtomatikong nai-install sa pamamagitan ng package manager).
 
-Para patakbuhin sa Docker, tingnan ang [docker/README.md](docker/README.md)
+Para patakbuhin sa Docker, tingnan ang [docker/README.md](../docker/README.md)
 
 ## Impormasyon sa pakikipag-ugnayan
 
@@ -121,50 +121,50 @@ Mga ulat ng bug: https://github.com/I2PPlus/i2pplus/issues
 
 Ang I2P+ ay lisensyado sa ilalim ng AGPL v.3.
 
-Para sa iba't ibang lisensya ng mga sub-component, tingnan: [README.md](docs/LICENSES.md)
+Para sa iba't ibang lisensya ng mga sub-component, tingnan: [LICENSES.md](LICENSES.md)
 
 ## Tingnan din
 
 ### Dokumentasyon
 
-- [docs/README.md](docs/README.md) - Kumpletong index ng dokumentasyon
-- [docs/INSTALL.md](docs/INSTALL.md) - Gabay sa pag-iinstall
-- [docs/INSTALL-headless.md](docs/INSTALL-headless.md) - Headless (console mode) na pag-iinstall
-- [docs/HACKING.md](docs/HACKING.md) - Gabay sa pag-develop at mga sistema ng pagbuo
-- [docs/DIRECTORIES.md](docs/DIRECTORIES.md) - Ayos ng source tree at kung saan makakahanap ng mga bagay
-- [router/java/src/net/i2p/README.md](router/java/src/net/i2p/README.md) - Pangkalahatang-ideya ng source tree ng router
-- [core/java/src/net/i2p/README.md](core/java/src/net/i2p/README.md) - Pangkalahatang-ideya ng source tree ng core library
-- [docs/DEBUGGING.md](docs/DEBUGGING.md) - Runtime debugging gamit ang JDWP at iba pang mga tool
-- [docs/THEMING.md](docs/THEMING.md) - Sistema ng theming ng console at webapp
-- [docs/LICENSES.md](docs/LICENSES.md) - Mga lisensya ng third-party
-- [docs/history.txt](docs/history.txt) - Kumpletong changelog
+- [docs/README.md](README.md) - Kumpletong index ng dokumentasyon
+- [docs/INSTALL.md](INSTALL.md) - Gabay sa pag-iinstall
+- [docs/INSTALL-headless.md](INSTALL-headless.md) - Headless (console mode) na pag-iinstall
+- [docs/HACKING.md](HACKING.md) - Gabay sa pag-develop at mga sistema ng pagbuo
+- [docs/DIRECTORIES.md](DIRECTORIES.md) - Ayos ng source tree at kung saan makakahanap ng mga bagay
+- [router/java/src/net/i2p/README.md](../router/java/src/net/i2p/README.md) - Pangkalahatang-ideya ng source tree ng router
+- [core/java/src/net/i2p/README.md](../core/java/src/net/i2p/README.md) - Pangkalahatang-ideya ng source tree ng core library
+- [docs/DEBUGGING.md](DEBUGGING.md) - Runtime debugging gamit ang JDWP at iba pang mga tool
+- [docs/THEMING.md](THEMING.md) - Sistema ng theming ng console at webapp
+- [docs/LICENSES.md](LICENSES.md) - Mga lisensya ng third-party
+- [docs/history.txt](history.txt) - Kumpletong changelog
 
 ### Mga sub-proyek
 
-- [apps/README.md](apps/README.md) - Pangkalahatang-ideya ng mga application
-- [apps/addressbook/README.md](apps/addressbook/README.md) - Application na addressbook
-- [apps/desktopgui/README.md](apps/desktopgui/README.md) - Desktop GUI na application
-- [apps/i2pcontrol/README.md](apps/i2pcontrol/README.md) - I2P Control API
-- [apps/i2psnark/README.md](apps/i2psnark/README.md) - BitTorrent client na I2PSnark
-- [apps/i2ptunnel/README.md](apps/i2ptunnel/README.md) - Application na I2P Tunnel
-- [apps/imagegen/README.md](apps/imagegen/README.md) - Mga tool sa paggawa ng larawan
-- [apps/jetty/README.md](apps/jetty/README.md) - Jetty HTTP server
-- [apps/jrobin/README.md](apps/jrobin/README.md) - Library sa pagsubaybay ng JRobin
-- [apps/ministreaming/README.md](apps/ministreaming/README.md) - Minimal na streaming library
-- [apps/pack200/README.md](apps/pack200/README.md) - Pack200 compression
-- [apps/proxyscript/README.md](apps/proxyscript/README.md) - Mga script sa proxy
-- [apps/routerconsole/README.md](apps/routerconsole/README.md) - Router console
-- [apps/sam/README.md](apps/sam/README.md) - Simple Anonymous Messaging
-- [apps/streaming/README.md](apps/streaming/README.md) - Streaming library
-- [apps/susidns/README.md](apps/susidns/README.md) - DNS server
-- [apps/susimail/README.md](apps/susimail/README.md) - Kliyente ng email sa I2P
-- [apps/systray/README.md](apps/systray/README.md) - Application sa system tray
-- [core/README.md](core/README.md) - Dokumentasyon ng core library
-- [installer/lib/jbigi/README.md](installer/lib/jbigi/README.md) - Native na JNI library para sa cryptography (GMP)
+- [apps/README.md](../apps/README.md) - Pangkalahatang-ideya ng mga application
+- [apps/addressbook/README.md](../apps/addressbook/README.md) - Application na addressbook
+- [apps/desktopgui/README.md](../apps/desktopgui/README.md) - Desktop GUI na application
+- [apps/i2pcontrol/README.md](../apps/i2pcontrol/README.md) - I2P Control API
+- [apps/i2psnark/README.md](../apps/i2psnark/README.md) - BitTorrent client na I2PSnark
+- [apps/i2ptunnel/README.md](../apps/i2ptunnel/README.md) - Application na I2P Tunnel
+- [apps/imagegen/README.md](../apps/imagegen/README.md) - Mga tool sa paggawa ng larawan
+- [apps/jetty/README.md](../apps/jetty/README.md) - Jetty HTTP server
+- [apps/jrobin/README.md](../apps/jrobin/README.md) - Library sa pagsubaybay ng JRobin
+- [apps/ministreaming/README.md](../apps/ministreaming/README.md) - Minimal na streaming library
+- [apps/pack200/README.md](../apps/pack200/README.md) - Pack200 compression
+- [apps/proxyscript/README.md](../apps/proxyscript/README.md) - Mga script sa proxy
+- [apps/routerconsole/README.md](../apps/routerconsole/README.md) - Router console
+- [apps/sam/README.md](../apps/sam/README.md) - Simple Anonymous Messaging
+- [apps/streaming/README.md](../apps/streaming/README.md) - Streaming library
+- [apps/susidns/README.md](../apps/susidns/README.md) - DNS server
+- [apps/susimail/README.md](../apps/susimail/README.md) - Kliyente ng email sa I2P
+- [apps/systray/README.md](../apps/systray/README.md) - Application sa system tray
+- [core/README.md](../core/README.md) - Dokumentasyon ng core library
+- [installer/lib/jbigi/README.md](../installer/lib/jbigi/README.md) - Native na JNI library para sa cryptography (GMP)
 
 ### Iba pa
 
-- [docs/i2p-sessionban-nftables.md](docs/i2p-sessionban-nftables.md) - Pamamahala ng mga I2P session ban gamit ang nftables
-- [installer/resources/README.md](installer/resources/README.md) - Nakabundleng mga resource ng installer
-- [tools/scripts/README.md](tools/scripts/README.md) - Mga utility script para sa pag-unlad at administrasyon
-- [tools/scripts/tests/README.md](tools/scripts/tests/README.md) - Mga script sa pagpapatunay at pagsubok
+- [docs/i2p-sessionban-nftables.md](i2p-sessionban-nftables.md) - Pamamahala ng mga I2P session ban gamit ang nftables
+- [installer/resources/README.md](../installer/resources/README.md) - Nakabundleng mga resource ng installer
+- [tools/scripts/README.md](../tools/scripts/README.md) - Mga utility script para sa pag-unlad at administrasyon
+- [tools/scripts/tests/README.md](../tools/scripts/tests/README.md) - Mga script sa pagpapatunay at pagsubok
