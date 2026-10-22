@@ -283,12 +283,19 @@ public class StatsGenerator {
             } else {buf.append(" <i>").append(_t("No events")).append(" </i>");}
 
             if (curRate.getSummaryListener() != null) {
-                buf.append("<br><span class=statsViewGraphs><a class=graphstat href=\"graph?stat=").append(name.replace(" ", "%20"))
-                   .append('.').append(periods[i]).append("&amp;w=600&amp;h=200\">").append(_t("Graph Data")).append("</a> ")
-                   .append(" <a class=graphstat href=\"graph?stat=").append(name.replace(" ", "%20")).append('.').append(periods[i])
-                   .append("&amp;w=600&amp;h=200&amp;showEvents=true\">").append(_t("Graph Event Count")).append("</a> ")
-                   .append(" <a class=graphstat href=\"/viewstat.jsp?stat=").append(name.replace(" ", "%20")).append("&amp;period=").append(periods[i])
-                   .append("&amp;format=xml\" download=\"graphdata_").append(name.replace(".", "_").replace("%20", "_")).append(".xml\">")
+                String encName = GraphHelper.urlStatName(name);
+                buf.append("<br><span class=statsViewGraphs><a class=graphstat href=\"graph?stat=")
+                   .append(encName)
+                   .append('.').append(periods[i]).append("&amp;w=600&amp;h=200\">")
+                   .append(_t("Graph Data")).append("</a> ")
+                   .append(" <a class=graphstat href=\"graph?stat=").append(encName)
+                   .append('.').append(periods[i])
+                   .append("&amp;w=600&amp;h=200&amp;showEvents=true\">")
+                   .append(_t("Graph Event Count")).append("</a> ")
+                   .append(" <a class=graphstat href=\"/viewstat.jsp?stat=").append(encName)
+                   .append("&amp;period=").append(periods[i])
+                   .append("&amp;format=xml\" download=\"graphdata_").append(downloadName(name))
+                   .append(".xml\">")
                    .append(_t("Export Data as XML")).append("</a>").append("</span>");
             }
             buf.append("</li>\n");
@@ -302,6 +309,23 @@ public class StatsGenerator {
 
     private static void renderPeriod(StringBuilder buf, long period, String name) {
         buf.append("<b>").append(DataHelper.formatDuration2(period)).append(" ").append(name).append(":</b> ");
+    }
+
+    /**
+     * The download filename offered for a stat's XML export.
+     *
+     * <p>Stat names carry dots, spaces and, for a per-tunnel stat, brackets around a
+     * user-supplied nickname, all of which landed in the download attribute verbatim,
+     * so a nickname holding a double quote closed the attribute early. Dots and
+     * spaces become underscores and anything HTML-significant is escaped; a plain
+     * name such as {@code bw.sendRate} still reads {@code graphdata_bw_sendRate.xml}.
+     *
+     * @param name the stat name as registered
+     * @return a filename safe inside a quoted HTML attribute
+     * @since 0.9.72+
+     */
+    static String downloadName(String name) {
+        return DataHelper.escapeHTML(name.replace('.', '_').replace(' ', '_'));
     }
 
     private static final ThreadLocal<DecimalFormat> _fmt = ThreadLocal.withInitial(() -> new DecimalFormat("###,##0.0##"));

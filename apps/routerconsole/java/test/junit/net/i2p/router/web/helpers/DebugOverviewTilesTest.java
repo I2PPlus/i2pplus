@@ -118,6 +118,25 @@ public class DebugOverviewTilesTest {
         assertTrue(html, html.contains("alt=\"bw.combined\""));
     }
 
+    /**
+     * A backfilled stat can be a per-tunnel rate named after the user's nickname, and
+     * that name is user input: an unescaped & held the query where it sat, and a quote
+     * ended the alt attribute. The urls carry the escaped name, the caption and alt
+     * carry it as text.
+     */
+    @Test
+    public void aTunnelNicknameIsEscapedInUrlsAndAlt() {
+        List<String> stats = java.util.Arrays.asList("[a&b] InBps");
+        java.util.Map<String, String> none = java.util.Collections.emptyMap();
+        String html = DebugOverviewHelper.buildGraphs(stats, 1234L, none);
+        assertTrue(html, html.contains("viewstat.jsp?stat=%5Ba%26b%5D%20InBps&amp;period=60000"));
+        assertTrue(html, html.contains("<a href=\"/stats?stat=%5Ba%26b%5D%20InBps\">"));
+        assertTrue(html, html.contains("alt=\"[a&amp;b] InBps\""));
+        assertTrue(html, html.contains("<div class=graph-label>[a&amp;b] InBps</div>"));
+        assertEquals("no raw & may sit in a query value", -1,
+                     html.indexOf("stat=[a&b]"));
+    }
+
     @Test
     public void everyPriorityStatHasALabel() {
         for (String stat : DebugOverviewHelper.GRAPH_STATS) {

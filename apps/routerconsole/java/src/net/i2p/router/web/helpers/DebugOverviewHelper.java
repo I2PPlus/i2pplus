@@ -3,6 +3,7 @@ package net.i2p.router.web.helpers;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.i2p.data.DataHelper;
 import net.i2p.router.web.HelperBase;
 
 /**
@@ -243,14 +244,21 @@ public class DebugOverviewHelper extends HelperBase {
         buf.append("<div class=debug_graphs>");
         for (String stat : stats) {
             boolean combined = "bw.combined".equals(stat);
-            String label = labels.getOrDefault(stat, stat);
+            // The caption is a translated label, or the stat name itself when the stat
+            // was backfilled - and a backfilled name may be user input.
+            String label = labels.get(stat);
+            if (label == null) {label = DataHelper.escapeHTML(stat);}
+            // A backfilled stat may be a per-tunnel rate named after the user's
+            // nickname, so the name is escaped for the url and for the alt attribute.
+            String encStat = GraphHelper.urlStatName(stat);
             buf.append("\n<div class=graph-cell><a href=\"")
-               .append(combined ? "/stats" : "/stats?stat=" + stat)
+               .append(combined ? "/stats" : "/stats?stat=" + encStat)
                .append("\"><div class=graph-label>").append(label)
-               .append("</div><img src=\"/viewstat.jsp?stat=").append(stat);
+               .append("</div><img src=\"/viewstat.jsp?stat=").append(encStat);
             if (!combined) {buf.append("&amp;period=60000");}
             buf.append("&amp;periodCount=60&amp;width=600&amp;height=120&amp;hideTitle=true&amp;hideLegend=true&amp;t=")
-               .append(now).append("\" alt=\"").append(stat).append("\"></a></div>");
+               .append(now)
+               .append("\" alt=\"").append(DataHelper.escapeHTML(stat)).append("\"></a></div>");
         }
         buf.append("</div>");
         return buf.toString();

@@ -530,6 +530,21 @@ public class GraphGroupsTest {
         assertFalse(GraphGroups.isPairId("pair:"));
     }
 
+    /**
+     * A nickname holding URL-significant characters is still one pool. The encoder
+     * runs only where a name is written into a link, so pairing keeps seeing the
+     * registered name with its brackets, space and ampersand intact.
+     */
+    @Test
+    public void aNicknameHoldingUrlCharactersStillPairs() {
+        Set<String> enabled = on("[a&b] InBps", "[a&b] OutBps");
+        assertEquals(Collections.singleton("pair:[a&b]"), GraphGroups.pairGroupIds(enabled));
+        assertEquals(Arrays.asList("[a&b] InBps", "[a&b] OutBps"),
+                     GraphGroups.members("pair:[a&b]"));
+        assertEquals(Arrays.asList("[a&b] InBps", "[a&b] OutBps"),
+                     GraphGroups.enabledMembers("pair:[a&b]", enabled));
+    }
+
     /** One direction switched on is one graph, never a half-empty frame. */
     @Test
     public void halfAPoolIsNotAPair() {

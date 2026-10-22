@@ -3,6 +3,7 @@ package net.i2p.router.web.helpers;
 import static net.i2p.router.web.GraphConstants.*;
 
 import java.io.Serializable;
+import java.nio.charset.StandardCharsets;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -81,6 +82,9 @@ public class GraphHelper extends FormHandler {
     private static final String TIME_PARAM = AMP + "time=";
     private static final String STAT_PARAM = "/viewstat.jsp?stat=";
     private static final String GRAPH_HREF = "/graph?stat=";
+
+    /** Hex digits for the percent-escapes urlStatName() emits. */
+    private static final char[] HEX = "0123456789ABCDEF".toCharArray();
 
     /** Set the defaults after we have a context. */
     @Override
@@ -435,7 +439,7 @@ public class GraphHelper extends FormHandler {
             title = title.replace("&nbsp;", "");
             buf.append("<span class=graphContainer><a href=\"")
                .append(GRAPH_HREF)
-               .append(rName.replace(" ", "%20"))
+               .append(urlStatName(rName))
                .append(".")
                .append(r.getPeriod())
                .append(AMP)
@@ -448,7 +452,7 @@ public class GraphHelper extends FormHandler {
             // Build img src url with cached constants
             buf.append("<img class=statimage border=0 src=\"")
                .append(STAT_PARAM)
-               .append(rName.replace(" ", "%20"))
+               .append(urlStatName(rName))
                .append(SHOW_EVENTS_PARAM).append(_showEvents)
                .append(AMP).append("period=").append(r.getPeriod())
                .append(PERIOD_COUNT_PARAM).append(_periodCount)
@@ -503,8 +507,8 @@ public class GraphHelper extends FormHandler {
                               DataHelper.formatDuration2(_periodCount * r.getPeriod()));
             title = title.replace("&nbsp;", "");
             // A generated pair id carries the pool's name verbatim, and that name may
-            // hold spaces; registry ids never do.
-            String encId = groupId.replace(" ", "%20");
+            // hold spaces or URL-significant characters; registry ids never do.
+            String encId = urlStatName(groupId);
             out.append("<span class=graphContainer><a href=\"").append(GRAPH_HREF)
                .append(encId)
                .append(AMP).append("c=").append(3 * _periodCount)
@@ -612,7 +616,7 @@ public class GraphHelper extends FormHandler {
            .append("<div class=graphspanel id=single>\n<span class=graphContainer><a class=singlegraph href=/graphs title=\"")
            .append(_t("Return to main graphs page"))
            .append("\"><img class=statimage id=graphSingle border=0 src=\"")
-           .append(STAT_PARAM).append(name.replace(" ", "%20"))
+           .append(STAT_PARAM).append(urlStatName(name))
            .append(SHOW_EVENTS_PARAM).append(_showEvents)
            .append(AMP).append("period=").append(period)
            .append(PERIOD_COUNT_PARAM).append(_periodCount)
@@ -688,6 +692,38 @@ public class GraphHelper extends FormHandler {
     private boolean _hideLegend;
 
     /**
+     * Percent-encode a stat or group name for use as a URL query value.
+     *
+     * <p>Only the space was escaped before, so a tunnel nickname carrying &amp;, +, =
+     * or % silently split or corrupted the graph link, since per-tunnel stats are
+     * named {@code [nickname] InBps} and the nickname is user input. Everything
+     * outside the unreserved set of RFC 3986 is escaped, UTF-8, uppercase hex. The
+     * name itself is never rewritten: the space that {@link GraphGroups} pairs In/Out
+     * rates on stays intact in the model and only becomes {@code %20} on the wire,
+     * and a plain name such as {@code bw.sendRate} comes back byte-identical.
+     *
+     * <p>URLEncoder is deliberately not used: it turns the space into {@code +} and
+     * rewrites characters that are already safe, which would change URLs that work
+     * today.
+     *
+     * @param name the stat or group name as registered
+     * @return the name safe to append to a query value
+     * @since 0.9.72+
+     */
+    static String urlStatName(String name) {
+        StringBuilder sb = new StringBuilder(name.length() + 8);
+        for (byte b : name.getBytes(StandardCharsets.UTF_8)) {
+            int c = b & 0xff;
+            if (c >= 'A' && c <= 'Z' || c >= 'a' && c <= 'z' || c >= '0' && c <= '9' ||
+                c == '.' || c == '-' || c == '_' || c == '~')
+                sb.append((char) c);
+            else
+                sb.append('%').append(HEX[c >> 4]).append(HEX[c & 0xf]);
+        }
+        return sb.toString();
+    }
+
+    /**
      * Link to the graph page for a stat.
      *
      * @since 0.9
@@ -696,7 +732,7 @@ public class GraphHelper extends FormHandler {
                                boolean hideLegend, boolean hideRestarts) {
         return
                "<a href=\"/graph?stat="
-               + stat.replace(" ", "%20")
+               + urlStatName(stat)
                + AMP + "c=" + periodCount
                + AMP + "w=" + width
                + AMP + "h=" + height
