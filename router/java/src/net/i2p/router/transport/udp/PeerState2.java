@@ -1421,7 +1421,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
              if (off != sz) {
                  if (_log.shouldWarn()) {
                      _log.warn("[SSU] Fragment reassembly offset mismatch: assembled: " + off +
-                               " * expected: " + sz);
+                               " * Expected: " + sz + " bytes");
                  }
                  return;
              }
@@ -1431,13 +1431,14 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
             if (shouldLogDebug()) {
                 _log.warn("[SSU] Received invalid message... " + state + "\n* PeerState: " + this + ime);
             } else if (_log.shouldWarn()) {
-                _log.warn("[SSU] Received invalid message [MsgID " + state.getMessageId() + "] " + toShortString() +
-                          " * error: " + ime.getMessage());
+                _log.warn("[SSU] Received invalid message [MsgID " + state.getMessageId() + "] from " + toShortString() +
+                          "\n* Error: " + ime.getMessage());
             }
         } catch (RuntimeException e) {
             // e.g. AIOOBE
             if (shouldLogDebug()) {_log.warn("[SSU] Error handling a message: " + state, e);}
-            else if (_log.shouldWarn()) {_log.warn("[SSU] Error handling a message [MsgID " + state.getMessageId() + "] " + toShortString() + " * error: " + e.getMessage());}
+            else if (_log.shouldWarn()) {_log.warn("[SSU] Error handling a message [MsgID " + state.getMessageId() + "] from " + toShortString() +
+                                                   "\n* Error: " + e.getMessage());}
         } finally {state.releaseResources();}
     }
 
