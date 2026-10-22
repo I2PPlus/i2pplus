@@ -113,6 +113,30 @@ public class BuildExecutor implements Runnable {
     private static final int MAX_BUILD_CONCURRENCY = 96;
 
     /**
+     * Recomputes the concurrency ceiling for the dispatch pass about to run, from
+     * the pools it wants to build, and records it on this instance.
+     * <p>
+     * Recomputed every pass rather than latched: an earlier version wrote the
+     * elevated value into the static configured ceiling, so the lift survived
+     * the urgency that caused it and the router never came back down.
+     *
+     * @param wanted the pools this pass wants to build
+     * @return the ceiling for this pass, which may equal the adaptive one
+     * @since 0.9.72+
+     */
+    int refreshUrgentCeiling(List<TunnelPool> wanted) {
+        int urgentCount = countExpiryUrgent(wanted);
+        int ceiling = elevateForUrgent(getAdaptiveMaxConcurrentBuilds(),
+                                       urgentCount, _currentlyBuildingMap.size());
+        _urgentMaxConcurrentBuilds = ceiling;
+        if (ceiling > getAdaptiveMaxConcurrentBuilds() && _log.shouldInfo()) {
+            _log.info("Elevating build concurrency to " + ceiling + " for " + urgentCount +
+                      " expiry-urgent pool(s)");
+        }
+        return ceiling;
+    }
+
+    /**
      * How many pools the global dispatch budget must be able to serve at the same
      * time. Two pools can both reach their {@code MAX_INPROGRESS_PER_POOL_DIR} cap
      * at once, and the budget must not be below what that costs.
@@ -283,8 +307,22 @@ public class BuildExecutor implements Runnable {
     private final ConcurrentHashMap<TunnelPool, Long> _lastConfigureTime = new ConcurrentHashMap<>(16);
     private static final long CONFIGURE_THROTTLE_MS = 10000L;
     private final AtomicInteger _buildTimeoutCount = new AtomicInteger();
-    private final AtomicInteger _firstHopSuccessCount = new AtomicInteger();
-    private final AtomicInteger _firstHopFailureCount = new AtomicInteger();
+    /**
+     * Sliding window of recent first-hop outcomes, the same shape as
+     * {@link #_buildResults} but with its own membership, since the first-hop
+     * timeout counts a different set of results than the build timeout does.
+     * Replaces two lifetime counters that were never reset: their ratio
+     * converged on the router's whole-uptime average, so the "adaptive"
+     * first-hop timeout stopped responding to anything happening now.
+     * @see #recordFirstHopOutcome
+     * @since 0.9.72+
+     */
+    private final byte[] _firstHopResults = new byte[WINDOW_SIZE];
+    private final AtomicInteger _firstHopWriteIndex = new AtomicInteger();
+    /** {@link #_firstHopResults} entry for a first hop that replied. */
+    private static final byte FIRST_HOP_SUCCESS = 1;
+    /** {@link #_firstHopResults} entry for a first hop that did not. */
+    private static final byte FIRST_HOP_FAILURE = 0;
     /**
      * Sliding window of recent build results for smooth rate calculation.
      *  Replaces the old counter-halving approach which caused sawtooth
@@ -298,6 +336,14 @@ public class BuildExecutor implements Runnable {
     private final byte[] _buildResults = new byte[WINDOW_SIZE];
     private final AtomicInteger _windowWriteIndex = new AtomicInteger();
     /**
+     * How many recorded builds pass before the adaptive timeout is recalculated
+     * from the window. Package-visible so the trigger can be tested without a
+     * running router.
+     *
+     * @since 0.9.72+
+     */
+    static final int ADAPTIVE_TIMEOUT_RECALC_BUILDS = 50;
+    /**
      * Adaptive concurrency throttle: tracks the timeout rate and adjusts
      *  maxConcurrentBuilds dynamically.  When timeout rate exceeds 30%,
      *  builds are throttled to prevent overwhelming the IB reply path.
@@ -309,6 +355,19 @@ public class BuildExecutor implements Runnable {
     private volatile double _timeoutRate;
     private volatile int _adaptiveMaxConcurrentBuilds;
     /**
+     * Concurrency ceiling for the current dispatch pass: the adaptive ceiling,
+     * lifted when expiry-urgent pools cannot be served at it. Recomputed at the
+     * top of every pass, so the lift goes away as soon as the urgency does.
+     * Elevation used to be written into the static configured ceiling instead,
+     * which nothing ever lowered again - a single urgent burst left the router
+     * permanently above its Tuner setting, and the throttle's restore step then
+     * ramped back up to the elevated value rather than to the configured one.
+     *
+     * @see #refreshUrgentCeiling
+     * @since 0.9.72+
+     */
+    private volatile int _urgentMaxConcurrentBuilds;
+    /**
      * First-hop failure history: tracks recent first-hop failures to avoid
      * repeatedly selecting peers that have recently failed as first hops.
      * Maps: Hash -> [failureCount, lastFailureTimeMs].
@@ -316,6 +375,15 @@ public class BuildExecutor implements Runnable {
      * @since 0.9.71+
      */
     private final ConcurrentHashMap<Hash, long[]> _firstHopFailureHistory = new ConcurrentHashMap<>(64);
+
+    /**
+     * Bound on the first-hop failure history before expired entries are pruned.
+     * Well above the number of peers any pool uses as first hops at one time,
+     * so the prune only ever reclaims peers that have gone away.
+     *
+     * @since 0.9.72+
+     */
+    private static final int FIRST_HOP_HISTORY_MAX = 512;
 
     /**
      * Last dispatch time per first-hop peer, for staggering builds.
@@ -570,6 +638,15 @@ public class BuildExecutor implements Runnable {
     int getAdaptiveMaxConcurrentBuilds() { return _adaptiveMaxConcurrentBuilds; }
 
     /**
+     * The concurrency ceiling in force for the current dispatch pass, the adaptive
+     * one lifted for expiry-urgent pools.
+     *
+     * @return the ceiling this pass builds under
+     * @since 0.9.72+
+     */
+    int getUrgentMaxConcurrentBuilds() { return _urgentMaxConcurrentBuilds; }
+
+    /**
      * The current timeout rate (0.0-1.0) for adaptive throttling.
      *
      * @return the timeout rate
@@ -583,6 +660,26 @@ public class BuildExecutor implements Runnable {
      * @since 0.9.71+
      */
     int getWindowCount() { return Math.min(_windowWriteIndex.get(), WINDOW_SIZE); }
+
+    /**
+     * Package-visible for tests: returns how many first-hop outcomes are in the
+     * window. Saturates at the window size, which is the point - the lifetime
+     * counters this replaced kept growing, so the first-hop success rate was
+     * diluted by history the window no longer held.
+     * @return number of outcomes recorded so far, saturating at the 100-slot window
+     * @since 0.9.72+
+     */
+    int getFirstHopWindowCount() { return firstHopWindowCount(_firstHopWriteIndex.get()); }
+
+    /**
+     * Package-visible for tests: returns the successes among the first-hop
+     * outcomes currently in the window.
+     * @return number of successes in the window
+     * @since 0.9.72+
+     */
+    int getFirstHopSuccessCount() {
+        return firstHopSuccessCount(_firstHopResults, getFirstHopWindowCount());
+    }
 
     /**
      * The maximum number of concurrent builds allowed.
@@ -682,6 +779,7 @@ public class BuildExecutor implements Runnable {
         _adaptiveTimeout = BuildRequestor.getRequestTimeout(ctx);
         _adaptiveFirstHopTimeout = BuildRequestor.getFirstHopTimeout(ctx);
         _adaptiveMaxConcurrentBuilds = getMaxConcurrentBuilds();
+        _urgentMaxConcurrentBuilds = _adaptiveMaxConcurrentBuilds;
         _timeoutRate = 0.0;
         _currentlyBuilding = new Object();
         int maxConcurrentBuilds = getMaxConcurrentBuilds();
@@ -907,6 +1005,79 @@ public class BuildExecutor implements Runnable {
     }
 
     /**
+     * How many of the first {@code count} window entries recorded {@code want} as
+     * their outcome.
+     * <p>
+     * A window entry packs the inbound flag into its top bit, so the outcome has to
+     * be masked out before it is compared. Comparing the raw byte instead matches
+     * nothing for an inbound build, and that is how the adaptive timeout and the
+     * concurrency throttle came to be decided on outbound-only evidence while
+     * claiming the whole window.
+     *
+     * @param results the window array, oldest entry first
+     * @param count how many leading entries to examine; entries past the array end
+     *              are ignored, so a count larger than the array is safe
+     * @param want the outcome to count
+     * @return the number of entries whose outcome is {@code want}
+     * @since 0.9.72+
+     */
+    static int windowResultCount(byte[] results, int count, Result want) {
+        int n = 0;
+        int max = Math.min(count, results.length);
+        for (int i = 0; i < max; i++) {
+            if (windowResult(results[i]) == want)
+                n++;
+        }
+        return n;
+    }
+
+    /**
+     * Records whether the first hop of a build replied, in the window the adaptive
+     * first-hop timeout is computed from. Package-visible for tests.
+     *
+     * @param success true if the first hop accepted the build
+     * @since 0.9.72+
+     */
+    void recordFirstHopOutcome(boolean success) {
+        int idx = _firstHopWriteIndex.getAndIncrement() % WINDOW_SIZE;
+        _firstHopResults[idx] = success ? FIRST_HOP_SUCCESS : FIRST_HOP_FAILURE;
+    }
+
+    /**
+     * How many first-hop outcomes the window holds for a given write index.
+     * Saturates at the window size: the array is a ring, so outcomes older than
+     * WINDOW_SIZE have been overwritten and must not stay in the denominator.
+     *
+     * @param writeIndex the window's write index, one past the last entry written
+     * @return the number of entries to read back, never more than WINDOW_SIZE
+     * @since 0.9.72+
+     */
+    static int firstHopWindowCount(long writeIndex) {
+        return (int) Math.min(writeIndex, WINDOW_SIZE);
+    }
+
+    /**
+     * How many of the first {@code count} first-hop window entries were successes.
+     * Pure and static so the input to the adaptive first-hop timeout can be tested
+     * without a running build executor.
+     *
+     * @param results the window array, oldest entry first
+     * @param count how many leading entries to examine; entries past the array end
+     *              are ignored, so a count larger than the array is safe
+     * @return the number of successes among the entries examined
+     * @since 0.9.72+
+     */
+    static int firstHopSuccessCount(byte[] results, int count) {
+        int n = 0;
+        int max = Math.min(count, results.length);
+        for (int i = 0; i < max; i++) {
+            if (results[i] == FIRST_HOP_SUCCESS)
+                n++;
+        }
+        return n;
+    }
+
+    /**
      * Update success/failure/timeout counters and calculate adaptive timeout.
      * <p>The per-direction success rates and the aggregate are all computed from
      * this one window in this one pass. That is deliberate: smoothing computed
@@ -920,8 +1091,11 @@ public class BuildExecutor implements Runnable {
      */
     private void updateBuildStats(Result result, boolean inbound) {
         StatManager sm = _context.statManager();
-        // Record result and direction together in the sliding window
-        int idx = _windowWriteIndex.getAndIncrement() % WINDOW_SIZE;
+        // Record result and direction together in the sliding window. Keep the
+        // sequence number, not just the slot - the recalc trigger below is decided
+        // from it.
+        int seq = _windowWriteIndex.getAndIncrement();
+        int idx = seq % WINDOW_SIZE;
         _buildResults[idx] = windowEntry(result, inbound);
         // Also track legacy counters for backward-compatible stat emission
         if (result == Result.SUCCESS) {
@@ -967,9 +1141,28 @@ public class BuildExecutor implements Runnable {
             }
         }
         // Recalculate adaptive timeout every 50 builds (smooth window, no counter reset)
-        if (_windowWriteIndex.get() % 50 == 0 && _windowWriteIndex.get() >= 50) {
+        if (recalcAdaptiveTimeout(seq)) {
             calculateAdaptiveTimeoutFromSuccess();
         }
+    }
+
+
+    /**
+     * Whether the build numbered seq should recalculate the adaptive timeout.
+     * <p>
+     * Decided from the caller's own sequence number, never from a fresh read of
+     * the counter: builds are recorded concurrently, and a counter read here can
+     * land past the boundary that no thread acted on, silently skipping a
+     * recalculation for as much as a full period.
+     *
+     * @param seq the zero-based number of this build, as returned by the
+     *            increment that recorded it
+     * @return true if this build completes a period of
+     *         {@code ADAPTIVE_TIMEOUT_RECALC_BUILDS} builds
+     * @since 0.9.72+
+     */
+    static boolean recalcAdaptiveTimeout(int seq) {
+        return seq % ADAPTIVE_TIMEOUT_RECALC_BUILDS == ADAPTIVE_TIMEOUT_RECALC_BUILDS - 1;
     }
 
     /**
@@ -1040,12 +1233,8 @@ public class BuildExecutor implements Runnable {
         int count = Math.min(_windowWriteIndex.get(), WINDOW_SIZE);
         if (count < 10) { return; }
 
-        int successes = 0, timeouts = 0;
-        for (int i = 0; i < count; i++) {
-            byte r = _buildResults[i];
-            if (r == Result.SUCCESS.ordinal()) successes++;
-            else if (r == Result.TIMEOUT.ordinal()) timeouts++;
-        }
+        int successes = windowResultCount(_buildResults, count, Result.SUCCESS);
+        int timeouts = windowResultCount(_buildResults, count, Result.TIMEOUT);
         double successRate = (double) successes / count;
         double timeoutRate = (double) timeouts / count;
         _timeoutRate = timeoutRate;
@@ -1082,9 +1271,10 @@ public class BuildExecutor implements Runnable {
         }
 
         // Also calculate adaptive first-hop timeout based on first-hop success rate
-        int firstHopTotal = _firstHopSuccessCount.get() + _firstHopFailureCount.get();
+        int firstHopTotal = firstHopWindowCount(_firstHopWriteIndex.get());
         if (firstHopTotal >= 10) {
-            double firstHopSuccessRate = (double) _firstHopSuccessCount.get() / firstHopTotal;
+            int firstHopSuccesses = firstHopSuccessCount(_firstHopResults, firstHopTotal);
+            double firstHopSuccessRate = (double) firstHopSuccesses / firstHopTotal;
 
             // Base first-hop timeout from mainline (10s)
             long baseFirstHop = BuildRequestor.getFirstHopTimeout(_context);
@@ -1107,7 +1297,8 @@ public class BuildExecutor implements Runnable {
             if (_log.shouldDebug()) {
                 _log.debug("Adaptive first-hop timeout: " + (_adaptiveFirstHopTimeout / 1000) +
                            "s (success: " + (int)(firstHopSuccessRate * 100) +
-                           "%, failures: " + _firstHopFailureCount.get() + "/" + firstHopTotal + ")");
+                           "%, failures: " + (firstHopTotal - firstHopSuccesses) +
+                           "/" + firstHopTotal + ")");
             }
         }
 
@@ -1928,7 +2119,9 @@ public class BuildExecutor implements Runnable {
             }
         }
 
-        int maxConcurrentBuilds = getAdaptiveMaxConcurrentBuilds();
+        // The pass ceiling rather than the adaptive one - it carries this pass's
+        // urgency lift, recomputed just before allowed() runs.
+        int maxConcurrentBuilds = getUrgentMaxConcurrentBuilds();
         // Use base (unthrottled) max for the throughput calculation so the
         // adaptive throttle doesn't compound with the bandwidth constraint.
         // Without this, throttling adaptiveMax from 32→25 also reduces
@@ -2355,10 +2548,26 @@ public class BuildExecutor implements Runnable {
                     TunnelPeerSelector.keepAlive(_context, true);
                 }
 
+                // Housekeeping for the first-hop failure history. It is written
+                // when a build fails, but its only removal is inside the lookup
+                // that consults it, so a peer that fails once and then leaves is
+                // never read again and its entry stays forever.
+                int pruned = pruneFirstHopFailures(_firstHopFailureHistory, _context.clock().now(),
+                                                   _firstHopCooldownMs, FIRST_HOP_HISTORY_MAX);
+                if (pruned > 0 && _log.shouldDebug()) {
+                    _log.debug("Pruned expired first-hop failure entries: " + pruned);
+                }
+
                 // Simplified paired replenishment algorithm
                 // Target: max(4, wanted + 2) tunnels per direction with > 5 min expiry
                 wanted.clear();
                 calculatePairedBuilds(pools, wanted);
+
+                // Lift the concurrency ceiling for expiry-urgent pools before
+                // allowed() reads it, so this pass can act on the urgency it just
+                // found. A pool whose leases lapse is losing service in minutes and
+                // its replacement needs that same window to build.
+                refreshUrgentCeiling(wanted);
 
                 // Determine how many tunnels are allowed to build concurrently
                 int allowed = allowed(); // also expires timed out requests
@@ -2424,22 +2633,6 @@ public class BuildExecutor implements Runnable {
                                   " buildingMap: " + _currentlyBuildingMap.size());
                     }
                     if (allowed > 0 && !wanted.isEmpty()) {
-                        // Elevate the ceiling when urgent demand cannot be served
-                        // at the current one. A pool whose leases lapse is losing
-                        // service in minutes and the replacement needs that same
-                        // window to build, so the ceiling rises rather than the
-                        // pool waiting for a later cycle.
-                        int urgentCount = countExpiryUrgent(wanted);
-                        int ceiling = elevateForUrgent(getAdaptiveMaxConcurrentBuilds(),
-                                                       urgentCount, _currentlyBuildingMap.size());
-                        if (ceiling > getAdaptiveMaxConcurrentBuilds()) {
-                            if (_log.shouldInfo()) {
-                                _log.info("Elevating build concurrency to " + ceiling +
-                                          " for " + urgentCount + " expiry-urgent pool(s)");
-                            }
-                            setMaxConcurrentBuilds(ceiling);
-                        }
-
                         // Snapshot scores before sorting to avoid TimSort crash from
                         // concurrent tunnel state changes during comparison (activeTunnelCount
                         // can change as TestJobs complete or tunnels expire mid-sort).
@@ -2946,6 +3139,37 @@ public class BuildExecutor implements Runnable {
     }
 
     /**
+     * Prune the first-hop failure history once it has outgrown its cap.
+     * An entry older than the cooldown is already ignored by
+     * hasRecentlyFailedAsFirstHop(), and the only place it is ever removed is
+     * that lookup - so a peer that fails once and then leaves the network is
+     * never consulted again and its entry stays for the router's uptime.
+     * Within the cap the stale entries are cheap to carry, so nothing is
+     * touched and no sweep runs on every pass.
+     *
+     * @param history the map to prune in place
+     * @param now current time in ms
+     * @param cooldown the first-hop failure cooldown in ms; an entry last
+     *                 written more than this long ago carries nothing usable
+     * @param cap the size above which the sweep runs
+     * @return the number of entries removed, 0 if the map was within the cap
+     * @since 0.9.72+
+     */
+    static int pruneFirstHopFailures(Map<Hash, long[]> history, long now, long cooldown, int cap) {
+        if (history.size() <= cap) {
+            return 0;
+        }
+        int before = history.size();
+        history.entrySet().removeIf(e -> {
+            long[] state = e.getValue();
+            synchronized (state) {
+                return now - state[1] > cooldown;
+            }
+        });
+        return before - history.size();
+    }
+
+    /**
      * Handle a completed tunnel build.
      *
      * @param cfg the tunnel configuration to build
@@ -3063,9 +3287,9 @@ public class BuildExecutor implements Runnable {
             updateBuildStats(result, cfg.isInbound());
         }
         if (result == Result.SUCCESS) {
-            _firstHopSuccessCount.incrementAndGet();
+            recordFirstHopOutcome(true);
         } else if (result == Result.TIMEOUT || result == Result.BAD_RESPONSE || firstHopFailure) {
-            _firstHopFailureCount.incrementAndGet();
+            recordFirstHopOutcome(false);
         }
 
         /* Only wake up the build thread if it took a reasonable amount of time -

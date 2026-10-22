@@ -366,7 +366,8 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
      * the shared static maps when they exceed their size caps.
      *
      * @param ctx the router context
-     * @param peer the candidate to test; its first-hop reachability is probed
+     * @param peer the first-hop router to record as currently unreachable for new
+     *             tunnel builds
      * @since 0.9.70+
      */
     protected static void recordFirstHopFail(RouterContext ctx, Hash peer) {
@@ -382,7 +383,11 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
 
     /**
      * Prune expired entries from static peer maps.
-     * Called periodically from peer selection to prevent unbounded growth.
+     * <p>
+     * Not on a timer - recordFirstHopFail() calls it once any of the maps has
+     * grown past its size cap. Read-time filtering in the selectors is what
+     * keeps selection correct; this is hygiene for the entries that filtering
+     * leaves in place.
      *
      * @param ctx the router context
      * @since 0.9.70

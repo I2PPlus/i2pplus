@@ -225,23 +225,21 @@ class IdleTunnelMonitor extends SimpleTimer2.TimedEvent {
 
     /**
      * Drop an idle tunnel by removing it from the dispatcher.
+     * <p>
+     * Package-visible so a test can drive a single drop against a dispatcher it
+     * controls and check the bandwidth accounting exactly.
      */
-    private void dropTunnel(HopConfig tunnel) {
+    void dropTunnel(HopConfig tunnel) {
         TunnelDispatcher dispatcher = getDispatcher();
         if (dispatcher == null) return;
 
         try {
-            // Remove immediately using the dispatcher's remove method
+            // Remove immediately using the dispatcher's remove method.
+            // remove() owns the bandwidth accounting and the expiration-queue
+            // removal itself; doing either again here double-decremented
+            // _allocatedBW, which drifted the transit total permanently
+            // negative by one tunnel's allocation per idle drop.
             dispatcher.remove(tunnel);
-
-            // Free the allocated bandwidth for this tunnel
-            int allocated = tunnel.getAllocatedBW();
-            if (allocated > 0) {
-                dispatcher.freeBandwidth(allocated);
-            }
-
-            // Remove from expiration tracking to prevent memory leak
-            dispatcher.removeFromExpirationQueue(tunnel);
 
             if (_log.shouldDebug()) {
                 _log.debug("Dropped idle tunnel [" + tunnel.getReceiveTunnelId() +

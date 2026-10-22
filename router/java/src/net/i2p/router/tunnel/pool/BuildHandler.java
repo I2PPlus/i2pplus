@@ -16,6 +16,7 @@ import net.i2p.data.DatabaseEntry;
 import net.i2p.data.DataHelper;
 import net.i2p.data.EmptyProperties;
 import net.i2p.stat.RateConstants;
+import net.i2p.stat.StatManager;
 import net.i2p.data.Hash;
 import net.i2p.data.TunnelId;
 import net.i2p.data.i2np.BuildRequestRecord;
@@ -503,9 +504,8 @@ public class BuildHandler implements Runnable {
         ctx.statManager().createRequiredRateStat("tunnel.receiveRejectionCritical", "Received tunnel build rejection (critical failure)", "Tunnels [Participating]", RATES);
         ctx.statManager().createRequiredRateStat("tunnel.receiveRejectionProbabalistic", "Received tunnel build rejection probabalistically", "Tunnels [Participating]", RATES);
         ctx.statManager().createRequiredRateStat("tunnel.receiveRejectionTransient", "Received tunnel build rejection (transient overload)", "Tunnels [Participating]", RATES);
-        // Removed: tunnel.reject.30 (dotted name is a refactor artefact). It was never emitted, so it read as an
-        // absent stat rather than a zero one, and every graph, Tuner rule and health
-        // check that referenced it silently no-oped. Nothing here ever measured.
+        // receiveRejection* above count rejections of our own builds; the reject*
+        // stats below are the ones we send back.
         ctx.statManager().createRequiredRateStat("tunnel.rejectConnLimits", "Rejected tunnel build (connection limits)", "Tunnels [Participating]", RATES);
         ctx.statManager().createRequiredRateStat("tunnel.rejectFuture", "Rejected tunnel build (time in future)", "Tunnels [Participating]", RATES);
         ctx.statManager().createRequiredRateStat("tunnel.rejectTimeout2", "Rejected tunnel build (can't contact next hop)", "Tunnels [Participating]", RATES);
@@ -534,6 +534,11 @@ public class BuildHandler implements Runnable {
         ctx.statManager().createRequiredRateStat("tunnel.rejectHopThrottle", "Rejected tunnel build (per-hop limit)", "Tunnels [Participating]", RATES);
         ctx.statManager().createRequiredRateStat("tunnel.rejectHostile", "Rejected malicious tunnel build", "Tunnels [Participating]", RATES);
         ctx.statManager().createRequiredRateStat("tunnel.rejectOverloaded", "Delay processing rejected request (ms)", "Tunnels [Participating]", RATES);
+        // The three reasons handleReq() can answer a request with: the two it
+        // picks itself, and the throttler's probabilistic reject from
+        // acceptTunnelRequest(). Registered here so the per-reason counts exist
+        // - see rejectStatName().
+        createRejectStats(ctx.statManager(), RATES);
         _processor = new BuildMessageProcessor(ctx);
         boolean testMode = ctx.getBooleanProperty("i2np.allowLocal"); // previous hop, all requests
         boolean shouldThrottle = _context.getBooleanPropertyDefaultTrue(PROP_SHOULD_THROTTLE);
@@ -1300,6 +1305,56 @@ public class BuildHandler implements Runnable {
     }
 
     /**
+     * Register the per-reason counters for build rejections we send back.
+     * <p>
+     * Split out from the constructor so a test can prove that every name
+     * rejectStatName() hands to addRateData() is registered here. An unregistered
+     * name is dropped silently by StatManager.addRateData(), which is how the
+     * earlier "tunnel.reject." + response form measured nothing for its whole life.
+     *
+     * @param mgr the stat manager to register the counters with
+     * @param periods the rate periods, normally RateConstants.SHORT_TERM_RATES
+     * @since 0.9.72+
+     */
+    static void createRejectStats(StatManager mgr, long[] periods) {
+        mgr.createRequiredRateStat("tunnel.rejectBandwidth",
+                                   "Rejected tunnel build (bandwidth)",
+                                   "Tunnels [Participating]", periods);
+        mgr.createRequiredRateStat("tunnel.rejectTransient",
+                                   "Rejected tunnel build (transient overload)",
+                                   "Tunnels [Participating]", periods);
+        mgr.createRequiredRateStat("tunnel.rejectProbabilistic",
+                                   "Rejected tunnel build (probabilistic throttle)",
+                                   "Tunnels [Participating]", periods);
+    }
+
+    /**
+     * Stat name for the rejection reason we answer a build request with, or null
+     * if that reason has no stat.
+     * <p>
+     * A table rather than "tunnel.reject." + response: the concatenated names were
+     * never registered, so StatManager.addRateData() dropped every write and the
+     * router had no count of why it was rejecting builds, while the concatenation
+     * allocated a string per rejection on a path a remote peer can inflate.
+     *
+     * @param response the TunnelHistory reject code
+     * @return the registered stat name, or null if the code has none
+     * @since 0.9.72+
+     */
+    static String rejectStatName(int response) {
+        switch (response) {
+            case TunnelHistory.TUNNEL_REJECT_BANDWIDTH:
+                return "tunnel.rejectBandwidth";
+            case TunnelHistory.TUNNEL_REJECT_TRANSIENT_OVERLOAD:
+                return "tunnel.rejectTransient";
+            case TunnelHistory.TUNNEL_REJECT_PROBABALISTIC_REJECT:
+                return "tunnel.rejectProbabilistic";
+            default:
+                return null;
+        }
+    }
+
+    /**
      * Actually process the request and send the reply.
      * <p>
      * Todo: Replies are not subject to RED for bandwidth reasons,
@@ -1519,8 +1574,8 @@ public class BuildHandler implements Runnable {
                 response = TunnelHistory.TUNNEL_REJECT_BANDWIDTH;
             }
         }
-        // BW params
-        int avail = 0;
+        // BW params - parse and validate the requester's proposal; a malformed
+        // value rejects the build. The proposal itself does not size the tunnel.
         if (response == 0) {
             Properties props = req.readOptions();
             if (props != null && !props.isEmpty()) {
@@ -1543,11 +1598,6 @@ public class BuildHandler implements Runnable {
                         try {ibgwmax = 1000 * Integer.parseInt(smax);}
                         catch (NumberFormatException nfe) {response = TunnelHistory.TUNNEL_REJECT_BANDWIDTH;}
                     }
-                }
-                if ((min > 0 || rqu > 0 || ibgwmax > 0) && response == 0) {
-                    int share = 1000 * TunnelDispatcher.getShareBandwidth(_context);
-                    int max = share / 2;
-
                 }
             }
         }
@@ -1572,8 +1622,7 @@ public class BuildHandler implements Runnable {
                 cfg.setSendTo(nextPeer);
                 cfg.setSendTunnelId(nextId);
             }
-            if (avail > 0) {cfg.setAllocatedBW(avail);}
-            else {cfg.setAllocatedBW(RouterThrottleImpl.getMinBandwidthFloorPerTunnel(_context));}
+            cfg.setAllocatedBW(RouterThrottleImpl.getMinBandwidthFloorPerTunnel(_context));
             if (_log.shouldDebug())
                 _log.debug("Tunnel join - Allocated: " + formatBandwidth(cfg.getAllocatedBW()));
             // now "actually" join
@@ -1591,7 +1640,9 @@ public class BuildHandler implements Runnable {
         }
         // determination of response is now complete
         if (response != 0) {
-            _context.statManager().addRateData("tunnel.reject." + response, 1);
+            String rejectStat = rejectStatName(response);
+            if (rejectStat != null)
+                _context.statManager().addRateData(rejectStat, 1);
             _context.messageHistory().tunnelRejected(from, new TunnelId(ourId), nextPeer, Integer.toString(response));
             if (from != null) {_context.commSystem().mayDisconnect(from);}
             // Connection congestion control:
@@ -1623,13 +1674,8 @@ public class BuildHandler implements Runnable {
         }
         EncryptedBuildRecord reply;
         if (isEC) {
-            Properties props;
-            if (avail > 0) {
-                props = new Properties();
-                props.setProperty(BuildRequestor.PROP_AVAIL_BW, Integer.toString(avail / 1000));
-            } else {
-                props = EmptyProperties.INSTANCE;
-            }
+            // We never report available bandwidth, so the EC reply carries no options
+            Properties props = EmptyProperties.INSTANCE;
             if (state.msg.getType() == ShortTunnelBuildMessage.MESSAGE_TYPE) {
                 reply = BuildResponseRecord.createShort(_context, response, req.getChaChaReplyKey(), req.getChaChaReplyAD(), props, ourSlot);
             } else {

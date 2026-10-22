@@ -11,9 +11,7 @@ import java.util.Properties;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.TreeSet;
-import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
@@ -448,8 +446,6 @@ public class TunnelPool {
      */
     private static final long EMERGENCY_COLLAPSE_COOLDOWN_MS = 5_000;
     private volatile boolean _leaseSetRepublishPending;
-    private static final int REMOVAL_QUEUE_CAPACITY = 2000;
-    private final BlockingQueue<TunnelInfo> _removalQueue = new LinkedBlockingQueue<>(REMOVAL_QUEUE_CAPACITY);
     /**
      * Reentrancy guard for ensureSufficientTunnels().
      *  {@link #pruneNonGoodTunnels()} calls removeTunnel() per-tunnel, and removeTunnel()
@@ -934,12 +930,6 @@ public class TunnelPool {
             }
             _tunnels.clear();
         } finally {_tunnelsLock.unlock();}
-
-        // Clean up removal queue
-        TunnelInfo ti;
-        while ((ti = _removalQueue.poll()) != null) {
-            removeFromDispatcherAndExpiration(ti);
-        }
     }
 
     /**
@@ -3215,7 +3205,7 @@ public class TunnelPool {
      */
     private void swapInReplacement(TunnelInfo replacee, TunnelInfo info, TunnelId gatewayId, long now) {
         _tunnels.remove(replacee);
-        removeFromExpirationIfConfig(replacee);
+        removeFromDispatcherAndExpiration(replacee);
         _tunnels.add(info);
         _recentlyAddedTunnels.put(gatewayId, now);
     }
@@ -3415,23 +3405,18 @@ public class TunnelPool {
                 if (_log.shouldInfo()) {
                     _log.info(toString() + " -> Removing bootstrap zero-hop tunnel " + t);
                 }
-                removeFromExpirationIfConfig(t);
+                removeFromDispatcherAndExpiration(t);
                 iter.remove();
             }
         }
     }
 
     /**
-     * Remove a tunnel from {@link ExpireJob}'s expiration queue if it has one.
-     */
-    private static void removeFromExpirationIfConfig(TunnelInfo info) {
-        if (info instanceof PooledTunnelCreatorConfig) {
-            ExpireJob.removeFromExpiration((PooledTunnelCreatorConfig) info);
-        }
-    }
-
-    /**
-     * Remove a tunnel config from the dispatcher and the expiration queue.
+     * Remove a tunnel config from the dispatcher and the expiration queue, in
+     * that order. remove() owns the bandwidth accounting and ignores a config
+     * that was never joined, so zero-hop tunnels are safe here. Cancelling only
+     * the expiry job leaves the dispatcher holding the config, and with it the
+     * whole hop object graph, for the life of the router.
      */
     private void removeFromDispatcherAndExpiration(TunnelInfo info) {
         if (info instanceof PooledTunnelCreatorConfig) {
@@ -5812,12 +5797,14 @@ public class TunnelPool {
     }
 
     /**
-     * Remove a tunnel from the pool and, if it is a build config, from
-     *  the expiry map as well.
+     * Remove a tunnel from the pool and, if it is a build config, from the
+     * dispatcher and the expiry map as well. Cancelling only the expiry job
+     * leaves the dispatcher holding the config, and with it the whole hop
+     * object graph, for the life of the router.
      */
     private void removeTunnelFromPool(Iterator<TunnelInfo> it, TunnelInfo t) {
         it.remove();
-        removeFromExpirationIfConfig(t);
+        removeFromDispatcherAndExpiration(t);
     }
 
     /**
@@ -7204,28 +7191,43 @@ public class TunnelPool {
         // checks touch the concurrent _peerCooldowns map and don't
         // need the pool lock.
         while (peers == null) {
-            peers = findReusableCandidate(len, now, idx);
-            if (peers == null) {
+            TunnelInfo ti = findReusableCandidateLocked(len, now, idx);
+            if (ti == null) {
                 // no candidate found; fall through to normal selection
                 break;
             }
             idx++;
+            List<Hash> candidate = peersEndpointFirst(ti);
             // Skip reuse if any non-self peer is on cooldown
-            if (hasPeerOnCooldown(peers, cooldownCutoff)) {
-                peers = null;
+            if (hasPeerOnCooldown(candidate, cooldownCutoff)) {
                 continue; // try the next tunnel
             }
             // Skip reuse if any peer's RouterInfo has dropped out of our
             // local netdb since the tunnel was built; building through it
             // would fail fast at dispatch.
-            if (!hasAllPeerRIs(peers)) {
-                peers = null;
+            if (!hasAllPeerRIs(candidate)) {
                 continue; // try the next tunnel
             }
+            // Retire the tunnel only once its reuse has actually gone ahead.
+            // Marking it during the scan left every rejected candidate out of
+            // reuse for the rest of its life.
+            ti.setReused();
             // Record cooldown for reused peers so selectPeers respects them
-            recordPeerCooldowns(peers, now);
+            recordPeerCooldowns(candidate, now);
+            peers = candidate;
         }
         return peers;
+    }
+
+    /**
+     * {@link #findReusableCandidate} with the pool lock held, so the scan sees a
+     * stable tunnel list.
+     */
+    private TunnelInfo findReusableCandidateLocked(int len, long now, int idx) {
+        _tunnelsLock.lock();
+        try {
+            return findReusableCandidate(_tunnels, len, now, idx);
+        } finally {_tunnelsLock.unlock();}
     }
 
     /**
@@ -7273,25 +7275,39 @@ public class TunnelPool {
 
     /**
      * Scan the tunnel list from the given index for a reusable tunnel.
-     *  On match, marks it reused and builds the peer list (endpoint first).
-     * @return the peer list, or null if no candidate remains
+     * <p>
+     * Does not mark the tunnel reused. The caller rejects some candidates after
+     * the scan - peers on cooldown, or RouterInfos that have left the local
+     * netdb - and marking during the scan left every rejected candidate
+     * permanently excluded from reuse, and invisible to
+     * {@link #findReusedPredecessor}, which only matches reused tunnels.
+     *
+     * @param tunnels the pool's current tunnels, gateway first
+     * @param len minimum acceptable length, including ourselves
+     * @param now current time, for the expiry window
+     * @param idx index to start scanning at
+     * @return the first eligible tunnel, or null if none remains
+     * @since 0.9.72+
      */
-    private List<Hash> findReusableCandidate(int len, long now, int idx) {
-        _tunnelsLock.lock();
-        try {
-            for (; idx < _tunnels.size(); idx++) {
-                TunnelInfo ti = _tunnels.get(idx);
-                if (ti.getLength() >= len && ti.getExpiration() < now + 3L * 60 * 1000 && !ti.wasReused()) {
-                    ti.setReused();
-                    len = ti.getLength();
-                    List<Hash> peers = new ArrayList<>(len);
-                    // Peers list is ordered endpoint first, but cfg.getPeer() is ordered gateway first
-                    for (int i = len - 1; i >= 0; i--) {peers.add(ti.getPeer(i));}
-                    return peers;
-                }
-            }
-        } finally {_tunnelsLock.unlock();}
+    static TunnelInfo findReusableCandidate(List<TunnelInfo> tunnels, int len, long now, int idx) {
+        for (; idx < tunnels.size(); idx++) {
+            TunnelInfo ti = tunnels.get(idx);
+            if (ti.getLength() >= len && ti.getExpiration() < now + 3L * 60 * 1000 &&
+                !ti.wasReused())
+                return ti;
+        }
         return null;
+    }
+
+    /**
+     * The tunnel's peers, endpoint first, the order selectPeers() returns them in.
+     */
+    private static List<Hash> peersEndpointFirst(TunnelInfo ti) {
+        int len = ti.getLength();
+        List<Hash> peers = new ArrayList<>(len);
+        // Peers list is ordered endpoint first, but cfg.getPeer() is ordered gateway first
+        for (int i = len - 1; i >= 0; i--) {peers.add(ti.getPeer(i));}
+        return peers;
     }
 
     /**

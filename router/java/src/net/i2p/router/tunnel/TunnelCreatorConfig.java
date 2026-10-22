@@ -53,6 +53,17 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
      */
     private volatile long _lastTransferredTime;
     /**
+     * Start of the current pre-connect retry window, 0 until the first retry.
+     * Guarded by {@code this} along with {@link #_preConnectRetries}.
+     * @since 0.9.72+
+     */
+    private long _preConnectWindowStart;
+    /**
+     * Pre-connect retries already spent in the current window.
+     * @since 0.9.72+
+     */
+    private int _preConnectRetries;
+    /**
      * Wall-clock time this config was created, i.e. when its build started.
      * Lets the test cycle give a freshly built tunnel a grace period before
      * its results count against it. A tunnel cannot fairly be judged on a
@@ -549,6 +560,35 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
      * @return the last transferred
      */
     public long getLastTransferred() { return _lastTransferredTime; }
+
+    /**
+     * Claim one of at most {@code maxRetries} pre-connect retries for this
+     * tunnel, forgetting retries older than {@code windowMs}.
+     * <p>
+     * A first hop with no transport session re-dispatches the whole build through
+     * BuildRequestor.preConnectFallback(), and each retry costs a full request
+     * timeout. Nothing bounded that, so a dead first hop retried forever and kept
+     * the tunnel pinned in the pool's in-progress set. The window is what makes
+     * the bound fair: a tunnel that fails once every few minutes keeps its retry,
+     * while a runaway loop, which retries on every timeout, spends its budget and
+     * stops.
+     *
+     * @param now current time in ms
+     * @param maxRetries retries one window may spend, 0 disables retrying
+     * @param windowMs how long a spent retry is remembered
+     * @return true if a retry was claimed, false if the budget is already spent
+     * @since 0.9.72+
+     */
+    public synchronized boolean claimPreConnectRetry(long now, int maxRetries, long windowMs) {
+        if (now - _preConnectWindowStart >= windowMs) {
+            _preConnectWindowStart = now;
+            _preConnectRetries = 0;
+        }
+        if (_preConnectRetries >= maxRetries)
+            return false;
+        _preConnectRetries++;
+        return true;
+    }
 
     /**
      * When this tunnel was built, in wall-clock ms.  Never zero, so a caller

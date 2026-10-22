@@ -348,9 +348,12 @@ public class TunnelDispatcher implements Service {
      * Clean up expired tunnels from all dispatcher maps.
      * This is a defensive measure to remove tunnels that may have been orphaned
      * due to race conditions or missed expirations.
+     * <p>
+     * Package-visible for tests, so the sweep can be driven without waiting on
+     * the periodic timer.
      * @return number of tunnels cleaned up
      */
-    private int cleanupExpiredTunnels() {
+    int cleanupExpiredTunnels() {
         int cleaned = 0;
         long now = _context.clock().now();
         // Remove tunnels that have passed expiration + fudge
@@ -364,19 +367,17 @@ public class TunnelDispatcher implements Service {
             if (cfg != null) {
                 // Remove if expiration + fudge has passed
                 if (cfg.getExpiration() + TUNNEL_EXPIRY_FUDGE < cutoff) {
-                    // Check if already being removed
-                    if (_configsBeingRemoved.contains(cfg)) {
-                        continue;
-                    }
-                    _configsBeingRemoved.add(cfg);
-                    pcit.remove();
-                    _participants.remove(entry.getKey());
-                    _leaveJob.remove(cfg);
+                    // Go through remove(), the single owner of the allocated
+                    // bandwidth accounting and of the duplicate-removal guard.
+                    // Dropping the map entries by hand here left the tunnel's
+                    // bandwidth counted as allocated for the rest of the run,
+                    // and left _lastParticipatingExpiration pointing at a tunnel
+                    // that no longer exists.
+                    remove(cfg);
                     cleaned++;
                     if (_log.shouldDebug()) {
                         _log.debug("Periodic cleanup removed expired participating tunnel: " + entry.getKey());
                     }
-                    _configsBeingRemoved.remove(cfg);
                 }
             }
         }
@@ -895,17 +896,24 @@ public class TunnelDispatcher implements Service {
         try {
             TunnelId recvId = cfg.getReceiveTunnel();
 
-            // Remove from ALL maps unconditionally to prevent leaks
-            _participatingConfig.remove(recvId);
+            // Remove from ALL maps unconditionally to prevent leaks.
+            // All three joins write _participatingConfig, so a null there means
+            // this config was never joined, or was already removed - and in
+            // either case the bandwidth must not be given back again.
+            boolean wasJoined = _participatingConfig.remove(recvId) != null;
             TunnelParticipant participant = _participants.remove(recvId);
             _inboundGateways.remove(recvId);
             _outboundEndpoints.remove(recvId);
-
-            // Decrement allocated bandwidth (single owner of this accounting)
-            int bw = cfg.getAllocatedBW();
-            if (bw > 0) {
-                _allocatedBW.addAndGet(-bw);
+            if (!wasJoined) {
+                if (_log.shouldDebug())
+                    _log.debug("Skipping remove -> not registered: " + recvId);
+                return;
             }
+
+            // Decrement allocated bandwidth (single owner of this accounting).
+            // remove() returns early for a config that was never joined, so this
+            // runs at most once per join.
+            freeBandwidth(cfg.getAllocatedBW());
 
             if (_leaveJob != null) {
                 _leaveJob.remove(cfg);
@@ -930,27 +938,13 @@ public class TunnelDispatcher implements Service {
 
     /**
      * Free allocated bandwidth for a tunnel.
-     * Called when dropping idle tunnels.
-     *
-     * @param bw bytes per second to give back to the participating allocation;
-     *           0 or less is ignored so the total can never go negative
+     * <p>
+     * Only remove() may decrement this counter. A second decrement path let
+     * IdleTunnelMonitor double-free and drift the transit total negative.
      */
-    public void freeBandwidth(int bw) {
+    private void freeBandwidth(int bw) {
         if (bw > 0) {
             _allocatedBW.addAndGet(-bw);
-        }
-    }
-
-    /**
-     * Remove a tunnel from the expiration queue.
-     * Called when dropping idle tunnels to prevent memory leaks.
-     *
-     * @param cfg tunnel to stop tracking for expiry, matched by identity;
-     *            null is ignored
-     */
-    public void removeFromExpirationQueue(HopConfig cfg) {
-        if (cfg != null) {
-            _leaveJob.remove(cfg);
         }
     }
 
@@ -1392,8 +1386,28 @@ public class TunnelDispatcher implements Service {
     }
 
     /**
-     * Job to expire tunnels we are participating in.
+     * The queued configs whose expiration, plus the expiry fudge, has already
+     * passed.
+     * <p>
+     * The whole queue is scanned. It is filled in join order, so an entry that is
+     * still live can sit in front of entries that expired long ago; stopping at
+     * the first live entry left those behind, holding a tunnel ID and transit
+     * bandwidth until the head itself expired.
+     *
+     * @param configs the queued participating tunnels
+     * @param now current time, already allowing for the clock fudge
+     * @return the expired configs, in queue order; an empty list if none
+     * @since 0.9.72+
      */
+    static List<HopConfig> expiredConfigs(Collection<HopConfig> configs, long now) {
+        List<HopConfig> rv = new ArrayList<>(8);
+        for (HopConfig cfg : configs) {
+            if (cfg.getExpiration() + TUNNEL_EXPIRY_FUDGE < now)
+                rv.add(cfg);
+        }
+        return rv;
+    }
+
     private class LeaveTunnel extends JobImpl {
         private final ConcurrentLinkedQueue<HopConfig> _configs = new ConcurrentLinkedQueue<>();
 
@@ -1426,7 +1440,6 @@ public class TunnelDispatcher implements Service {
         public void runJob() {
             long now = getContext().clock().now() + 1000;
             long nextTime;
-
             // Scale expiration more gradually with tunnel count to reduce churn
             // High tunnel counts expire faster to maintain pool health
             int count = getParticipatingCount();
@@ -1438,31 +1451,30 @@ public class TunnelDispatcher implements Service {
             else if (count > 500) {nextTime = now + 300 * 1000L;}     // 500-750: 5 min
             else {nextTime = now + 600 * 1000L;}                      // 0-500: 10 min
 
-            // Process tunnels in expiration order - peek first (earliest expiring)
-            int processed = 0;
+            // Process every queued config. _configs is a join-ordered
+            // ConcurrentLinkedQueue, not an expiration-ordered one, so stopping at
+            // the first not-yet-expired entry left every expired entry behind it
+            // waiting for the head's own expiration - up to a full tunnel
+            // lifetime of holding transit bandwidth and a tunnel ID.
             int expired = 0;
-            while (true) {
-                HopConfig cur = _configs.peek();
-                if (cur == null) break;
-
+            for (HopConfig cur : expiredConfigs(_configs, now)) {
+                // Tunnel expired - remove from queue and maps
+                _configs.remove(cur);
+                expired++;
+                if (_log.shouldInfo())
+                    _log.info("Expiring Participating tunnel... " + cur);
+                TunnelDispatcher.this.remove(cur);
+            }
+            // Wake up again when the earliest survivor expires.
+            for (HopConfig cur : _configs) {
                 long exp = cur.getExpiration() + TUNNEL_EXPIRY_FUDGE;
-                if (exp < now) {
-                    // Tunnel expired - remove from queue and maps
-                    _configs.poll();
-                    expired++;
-                    if (_log.shouldInfo())
-                        _log.info("Expiring Participating tunnel... " + cur);
-                    TunnelDispatcher.this.remove(cur);
-                    processed++;
-                } else {
-                    // Tunnel not expired - since queue is sorted by expiration, all remaining are also not expired
-                    if (exp < nextTime) nextTime = exp;
-                    break;
-                }
+                if (exp < nextTime) nextTime = exp;
             }
 
-            if (_log.shouldInfo() && processed > 0) {
-                _log.info("LeaveTunnel processed " + processed + " tunnels, expired " + expired + ", next check in " + (nextTime - now) + "ms");
+            if (_log.shouldInfo() && expired > 0) {
+                _log.info("Expiring participating tunnels -> " + expired + " removed * " +
+                          _configs.size() + " remaining * next check in " +
+                          (nextTime - now) + "ms");
             }
 
             long expiryCutoff = now - RECENT_EXPIRY_WINDOW_MS;

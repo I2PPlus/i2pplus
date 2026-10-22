@@ -294,7 +294,8 @@ class TunnelParticipant {
 
     /**
      * Forward a tunnel message to the next hop.
-     * Unconditionally resets TTL to 10s unless the message is more than 60s stale.
+     * Resets the expiration to 20s from now, and drops the message instead of
+     * forwarding it once it is more than 75s past its original expiration.
      */
     private void send(HopConfig config, TunnelDataMessage msg, RouterInfo ri) {
         if (_context.tunnelDispatcher().shouldDropParticipatingMessage(

@@ -64,6 +64,18 @@ public abstract class BuildRequestor {
     static final String PROP_PRECONNECT_ENABLED = "i2p.tunnel.preConnect.enabled";
     /** Default: true. */
     private static final boolean PROP_PRECONNECT_ENABLED_DEFAULT = true;
+    /**
+     * Pre-connect retries one tunnel may spend per window. The fallback
+     * re-dispatches the whole build, so more than one retry per window buys
+     * nothing when the first hop is simply dead.
+     */
+    static final int MAX_PRECONNECT_RETRIES = 1;
+    /**
+     * How long a spent pre-connect retry is remembered. Longer than two request
+     * timeouts, so a runaway first-hop loop hits the cap, while isolated
+     * failures minutes apart still get their retry.
+     */
+    static final long PRECONNECT_RETRY_WINDOW_MS = 2 * 60 * 1000L;
 
     private static volatile RouterContext _cfgCtx;
     private static volatile long _cfgRefreshed;
@@ -813,6 +825,10 @@ public abstract class BuildRequestor {
      * Calls {@link TunnelPeerSelector#preConnectTo} to force the
      * session handshake, then re-dispatches the tunnel build
      * message.  Returns true if the retry was initiated.
+     * <p>
+     * A tunnel may spend at most {@link #MAX_PRECONNECT_RETRIES} retries per
+     * {@link #PRECONNECT_RETRY_WINDOW_MS}; once the budget is spent the build is
+     * abandoned rather than re-dispatched again.
      *
      * @param ctx the router context
      * @param peer the first-hop peer that failed
@@ -830,6 +846,15 @@ public abstract class BuildRequestor {
         // established.  Use the full request timeout so it survives
         // the handshake.
         Log log = ctx.logManager().getLog(BuildRequestor.class);
+        // Bound the re-dispatch. Without a per-tunnel budget a dead first hop
+        // retried forever, each pass costing a full request timeout and keeping
+        // the tunnel pinned in the pool's in-progress set.
+        if (cfg != null && !cfg.claimPreConnectRetry(ctx.clock().now(), MAX_PRECONNECT_RETRIES,
+                                                     PRECONNECT_RETRY_WINDOW_MS)) {
+            if (log.shouldWarn())
+                log.warn("Pre-connect retry budget spent for " + cfg + " -> Abandoning build");
+            return false;
+        }
         if (log.shouldInfo()) {
             log.info("Pre-connect fallback: retrying build to [" +
                      peer.toBase64().substring(0, 6) + "] after pre-connect");
