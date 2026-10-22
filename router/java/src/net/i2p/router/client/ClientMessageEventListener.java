@@ -477,7 +477,7 @@ class ClientMessageEventListener implements I2CPMessageReader.I2CPMessageEventLi
      * Outcome of validating a client-supplied receive request against the state
      * the router holds for this connection.
      *
-     * @since 0.9.72
+     * @since 0.9.72+
      */
     enum ReceiveRequest {
         /** The session is live and a payload is retained; serve or release it. */
@@ -500,7 +500,7 @@ class ClientMessageEventListener implements I2CPMessageReader.I2CPMessageEventLi
      * @param cfg the session named by the message, or null if there is no such session
      * @param payload the retained payload for the message id, or null if none is retained
      * @return the request outcome, never null
-     * @since 0.9.72
+     * @since 0.9.72+
      */
     static ReceiveRequest classifyReceiveBegin(SessionConfig cfg, Payload payload) {
         if (cfg == null) {return ReceiveRequest.UNKNOWN_SESSION;}
@@ -518,7 +518,7 @@ class ClientMessageEventListener implements I2CPMessageReader.I2CPMessageEventLi
      * @param cfg the session named by the message, or null if there is no such session
      * @param payload the retained payload for the message id, or null if none is retained
      * @return the request outcome, never null
-     * @since 0.9.72
+     * @since 0.9.72+
      */
     static ReceiveRequest classifyReceiveEnd(SessionConfig cfg, Payload payload) {
         return classifyReceiveBegin(cfg, payload);

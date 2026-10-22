@@ -465,11 +465,11 @@ abstract class IRCFilter {
 
     /**
      * <pre>
-     *  DCC CHAT chat xxx.b32.i2p i2p-port        -> DCC CHAT chat IP port
-     *  DCC SEND file xxx.b32.i2p i2p-port length -> DCC SEND file IP port length
-     *  DCC RESUME file i2p-port offset           -> DCC RESUME file port offset
-     *  DCC ACCEPT file i2p-port offset           -> DCC ACCEPT file port offset
-     *  DCC xxx                                   -> null.
+     *  DCC CHAT chat xxx.b32.i2p i2p-port        -&gt; DCC CHAT chat IP port
+     *  DCC SEND file xxx.b32.i2p i2p-port length -&gt; DCC SEND file IP port length
+     *  DCC RESUME file i2p-port offset           -&gt; DCC RESUME file port offset
+     *  DCC ACCEPT file i2p-port offset           -&gt; DCC ACCEPT file port offset
+     *  DCC xxx                                   -&gt; null.
      * </pre>
      *
      * @param pfx the message through the "DCC " part
@@ -557,11 +557,11 @@ abstract class IRCFilter {
 
     /**
      * <pre>
-     *  DCC CHAT chat IP port        -> DCC CHAT chat xxx.b32.i2p i2p-port
-     *  DCC SEND file IP port length -> DCC SEND file xxx.b32.i2p i2p-port length
-     *  DCC RESUME file port offset  -> DCC RESUME file i2p-port offset
-     *  DCC ACCEPT file port offset  -> DCC ACCEPT file i2p-port offset
-     *  DCC xxx                      -> null.
+     *  DCC CHAT chat IP port        -&gt; DCC CHAT chat xxx.b32.i2p i2p-port
+     *  DCC SEND file IP port length -&gt; DCC SEND file xxx.b32.i2p i2p-port length
+     *  DCC RESUME file port offset  -&gt; DCC RESUME file i2p-port offset
+     *  DCC ACCEPT file port offset  -&gt; DCC ACCEPT file i2p-port offset
+     *  DCC xxx                      -&gt; null.
      * </pre>
      *
      * @param pfx the message through the "DCC " part

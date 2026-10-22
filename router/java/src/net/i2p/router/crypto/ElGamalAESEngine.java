@@ -281,7 +281,7 @@ public final class ElGamalAESEngine {
      * </pre>
      * After encryption, the ElG section is 514 bytes long.
      * Then encrypt with AES using that session key and the first 16 bytes of the SHA256 of the pre-IV, using
-     * the decryptAESBlock method & structure.
+     * the decryptAESBlock method &amp; structure.
      *
      * @param foundTags set which is filled with any sessionTags found during decryption
      * @param usedKey out parameter. Data must be unset when called; usedKey.setData() will be called by this method on success.
@@ -670,9 +670,10 @@ public final class ElGamalAESEngine {
      * Here we are careful to use the SHA256Generator method that does not
      * generate a Hash object or cache the result.
      *
-      * @param preIV the 32 byte pre-IV. Caller should call {@link net.i2p.util.SimpleByteCache#release}
-       * data) after use.
-     * @return a 16 byte array. Caller should call {@link net.i2p.util.SimpleByteCache#release}rv) after use.
+     * @param preIV the 32 byte pre-IV to hash, from the byte cache; the caller
+     *              should call {@link net.i2p.util.SimpleByteCache#release(byte[])} on it after use
+     * @return a 16 byte array from the byte cache; the caller should call
+     *         {@link net.i2p.util.SimpleByteCache#release(byte[])} on it after use
      * @since 0.8.9
      */
     private byte[] halfHash(byte[] preIV) {

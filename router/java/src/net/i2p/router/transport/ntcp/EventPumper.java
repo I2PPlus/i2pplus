@@ -136,7 +136,7 @@ class EventPumper implements Runnable {
      * As the number of connections grows, we should try to make this happen
      * less frequently (or not at all), but while the connection count is small,
      * the time to iterate across them to check a few flags shouldn't be a problem.
-     * @return true if the runtime is slow enough to throttle the failsafe iteration
+     * True if the runtime is slow enough to throttle the failsafe iteration.
      */
     private static final boolean IS_SLOW = SystemVersion.isSlow();
     private static volatile long _failsafeIterationFreq = 2 * 1000L;
@@ -554,7 +554,7 @@ class EventPumper implements Runnable {
      * and the idle-loop count used by the Tuner to derive an idle ratio. Also scales
      * _currentDelay to curb busy-spinning: raise it quickly when the loop rate stays
      * far above the spin threshold, lower it slowly once the rate drops. The hard
-     * idle cap lives in {@link #throttleIdleLoop()}; this stays as a responsiveness lever.
+     * idle cap lives in {@link #throttleIdleLoop(long)}; this stays as a responsiveness lever.
      *
      * @param loopCountSinceLastRate  total iterations in the window
      * @param idleLoopCountSinceLastRate  no-work iterations in the window
@@ -1387,7 +1387,7 @@ class EventPumper implements Runnable {
 
     /**
      * Handle an I/O error on a read. An inbound connection that errored before its
-     * first message escalates its IP through {@link #countInboundNoMessage()}; the connection
+     * first message escalates its IP through {@link #countInboundNoMessage(String, NTCPConnection, String)}; the connection
      * is recorded as a read error when established or as a failed connect otherwise
      * (marking the peer unreachable if it was an outbound attempt).
      *
@@ -1434,7 +1434,7 @@ class EventPumper implements Runnable {
      * <p>
      * Single-writer contract: this must only be called on the pumper thread
      * (via processWrite(SelectionKey) for OP_WRITE events). Producer threads
-     * call {@link #wantsWrite()} to register interest; they never write to the socket
+     * call {@link #wantsWrite(NTCPConnection)} to register interest; they never write to the socket
      * themselves. This keeps {@link java.nio.channels.SocketChannel#write} strictly single-threaded per
      * connection and removes the _writeLock serialization that previously
      * spanned the whole drain loop (which could stall frame pushes from the

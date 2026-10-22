@@ -142,7 +142,7 @@ class SessionsDB {
 	}
 
 	/**
-	 * Return a snapshot of all entries (nick -> SessionRecord).
+	 * Return a snapshot of all entries (nick -&gt; SessionRecord).
 	 * @return a new map holding a copy of every session, keyed by nick
 	 * @since 0.9.70+
 	 */

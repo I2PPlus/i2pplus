@@ -919,7 +919,7 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
 
     /**
      * Return a map of PublicKey to a set of inbound RatchetTagSets for that key.
-     * Only for {@link #renderStatusHTML()} below.
+     * Only for {@link #renderStatusHTML(Writer)} below.
      * Does not return expired sets or sets with null keys.
      * @return the ratchet tag sets by public key
      */

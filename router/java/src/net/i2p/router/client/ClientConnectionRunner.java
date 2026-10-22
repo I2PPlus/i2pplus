@@ -122,7 +122,7 @@ class ClientConnectionRunner {
     /**
      * Disconnect after this many consecutive LeaseSet request failures.
      * Increased from 5 to 10 to tolerate brief I2CP stalls without mass-disconnect;
-     * see {@link #failLeaseRequest()} decay handling.
+     * see {@link #failLeaseRequest(LeaseRequestState)} decay handling.
      */
     private static final int MAX_LEASE_FAILS = 10;
     /** Reset consecutive-fail counter if this much time has elapsed since last failure. */

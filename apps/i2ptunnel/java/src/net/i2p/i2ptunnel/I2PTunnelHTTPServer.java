@@ -2967,7 +2967,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
         private final String _name;
         /**
          * Identity of the far side, e.g. {@code [skank / aanoquc2]}. The
-         * request direction used to log a bare "from Client -> Server" with no
+         * request direction used to log a bare "from Client -&gt; Server" with no
          * indication of which eepsite or client a transfer belonged to, which
          * made slow small transfers impossible to attribute.
          *

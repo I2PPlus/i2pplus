@@ -84,7 +84,7 @@ public class RouterInfo extends DatabaseEntry {
     /**
      * Maybe we should check if we are floodfill?
      * If we do bring this back, don't do on ARM or Android.
-     * @return the max memory
+     * The disabled initializer below uses the max memory.
      */
     private static final boolean CACHE_ALL = false; // SystemVersion.getMaxMemory() > 128*1024*1024L;
     /** Property key for network id. */

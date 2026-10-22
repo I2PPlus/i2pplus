@@ -1146,7 +1146,7 @@ public class TunnelDispatcher implements Service {
 
     /**
      * The participating tunnels for console display.
-     * Filters out tunnels that are > 30 seconds past expiration.
+     * Filters out tunnels that are &gt; 30 seconds past expiration.
      *
      * @return snapshot list of the participating tunnel configs still within
      *         30s of their expiration

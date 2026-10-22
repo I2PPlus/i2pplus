@@ -146,8 +146,8 @@ class Connection {
     private volatile long _lastCongestionHighestUnacked;
     /**
      * Consecutive loss events since the last recovery (graduated backoff).
-     *  Reset in {@link #ackPackets()} once the lost window is fully recovered, and
-     *  decayed by one tier in {@link #retransmit()} when a fresh strike arrives more
+     *  Reset in {@link #ackPackets(long, long[])} once the lost window is fully recovered, and
+     *  decayed by one tier in {@link ResendPacketEvent#retransmit()} when a fresh strike arrives more
      *  than one smoothed RTT after the previous one (see
      *  {@link #decayLossStrikes(int, long, long, long)}).
      * Accessed only under the _outboundPacketsLock.
@@ -267,7 +267,7 @@ class Connection {
     /**
      * Flag set when ackPackets() recorded forward progress since the
      * last RetransmitEvent.fire.  Used to decide whether to reset
-     * _retransmitCount in {@link #timeReached()}.
+     * _retransmitCount in {@link RetransmitEvent#timeReached}.
      * Written and read on the router callback thread.
      */
     private volatile boolean _ackProgress;
@@ -2146,13 +2146,13 @@ class Connection {
      *  result and refresh {@code _lastLossStrikeTime} under
      *  {@code _outboundPacketsLock}.
      *
-     *  @param strikes current consecutive-loss count (&gt;= 0)
-     *  @param lastLossTime wall-clock ms of the most recent strike (&lt;= 0 if none)
-     *  @param now wall-clock ms
-     *  @param smoothedRtt the connection's smoothed RTT in ms (&gt;= 0)
-     *  @return strikes - 1 when at least max(smoothedRtt, 500) ms have elapsed
-     *          since the last strike, otherwise the current count; never below 0
-     *  @since 0.9.71+
+     * @param strikes current consecutive-loss count (&gt;= 0)
+     * @param lastLossTime wall-clock ms of the most recent strike (&lt;= 0 if none)
+     * @param now wall-clock ms to compare the elapsed interval against
+     * @param smoothedRtt the connection's smoothed RTT in ms (&gt;= 0)
+     * @return strikes - 1 when at least max(smoothedRtt, 500) ms have elapsed
+     *         since the last strike, otherwise the current count; never below 0
+     * @since 0.9.71+
      */
     static int decayLossStrikes(int strikes, long lastLossTime, long now, long smoothedRtt) {
         if (strikes <= 0)
@@ -4043,7 +4043,12 @@ if (!on) {
      */
     public MessageOutputStream getOutputStream() {return _outputStream;}
 
-    /** Receive/send stream IDs as {@code "recv/send"}, {@code "Unknown"} when not yet assigned. */
+    /**
+     * Receive/send stream IDs as {@code "recv/send"}, {@code "Unknown"} when
+     * not yet assigned.
+     *
+     * @return the receive and send stream IDs joined with a slash, never null
+     */
     private String streamIds() {
         long r = _receiveStreamId.get();
         long s = _sendStreamId.get();
@@ -4055,6 +4060,8 @@ if (!on) {
      * names which of this router's services owns the stream. "unknown" until
      * the session has a local destination.
      *
+     * @return the 8-character base32 tag, or "unknown" if the session has no
+     *         local destination yet
      * @since 0.9.71+
      */
     private String localTag() {

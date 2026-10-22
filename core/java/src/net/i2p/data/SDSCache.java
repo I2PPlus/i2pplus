@@ -193,7 +193,7 @@ public class SDSCache<V extends SimpleDataStructure> {
      * seen rather than with the number of live entries.
      *
      * @param <V> type of object cached
-     * @since 0.9.72
+     * @since 0.9.72+
      */
     private static final class IntWeakCache<V> {
 

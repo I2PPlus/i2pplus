@@ -99,7 +99,7 @@ abstract class BuildMessageGenerator {
 
     /**
      * Create an unencrypted build request record for a tunnel hop.
-     * Returns null if hop >= cfg.length.
+     * Returns null if hop &gt;= cfg.length.
      *
      * @param ctx the I2P application context
      * @param cfg the tunnel creator configuration
@@ -109,7 +109,7 @@ abstract class BuildMessageGenerator {
      * @param isEC must be true if isShort is true
      * @param isShort short EC record
      * @param props to go in the build record, non-null
-     * @return the build request record, or null if hop >= cfg.length
+     * @return the build request record, or null if hop &gt;= cfg.length
      * @throws IllegalArgumentException if isShort is true but isEC is false
      */
     private static BuildRequestRecord createUnencryptedRecord(I2PAppContext ctx, TunnelCreatorConfig cfg, int hop,

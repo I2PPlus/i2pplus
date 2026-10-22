@@ -474,7 +474,7 @@ public class TrustedUpdate {
     /**
      * Verify the version in the sud header matches the version in the zip comment
      * (and that the embedded file is a zip file at all)
-     * {@link #isUpdatedVersion()} must be called first to set _newVersion.
+     * {@link #isUpdatedVersion(String, File)} must be called first to set _newVersion.
      *
      * @return true if matches
      *

@@ -21,7 +21,7 @@ public final class StringUtil {
      * Checks if a string contains valid data (not null and not empty).
      *
      * @param value the string to check
-     * @return true if the string is not null and has length > 0, false otherwise
+     * @return true if the string is not null and has length &gt; 0, false otherwise
      */
     public static final boolean hasData(String value) {
         if (value == null) return false;

@@ -212,6 +212,9 @@ public class EepPost extends EepGet {
 
     /**
      * Adapted from old jrandom EepPost.
+     *
+     * @param out the StringBuilder the urlencoded body is appended to
+     * @param fields field names mapped to values, stringified with toString()
      */
     private static void sendFields(StringBuilder out, Map<String, Object> fields) {
         boolean first = true;
@@ -229,7 +232,10 @@ public class EepPost extends EepGet {
      * Multipart
      * Adapted from old jrandom EepPost.
      *
+     * @param out the stream the multipart body is written to
      * @param separator non-null
+     * @param fields field names mapped to values, File values sent as file parts
+     * @throws IOException if writing fails or a File value cannot be read
      */
     private static void sendFields(OutputStream out, String separator, Map<String, Object> fields) throws IOException {
         for (Map.Entry<String, Object> e : fields.entrySet()) {
@@ -246,6 +252,10 @@ public class EepPost extends EepGet {
 
     /**
      * Adapted from old jrandom EepPost.
+     *
+     * @param out the StringBuilder the name=value pair is appended to
+     * @param field the field name, spaces replaced with '+'
+     * @param val the field value, spaces replaced with '+' as well
      */
     private static void sendField(StringBuilder out, String field, String val) {
         // Only the space-to-plus substitution of
@@ -258,7 +268,11 @@ public class EepPost extends EepGet {
      * Multipart
      * Adapted from old jrandom EepPost.
      *
+     * @param out the stream the part is written to
      * @param separator non-null
+     * @param field the field name, written into the content disposition
+     * @param val the field value, written as the part body
+     * @throws IOException if writing to the stream fails
      */
     private static void sendField(OutputStream out, String separator, String field, String val) throws IOException {
         out.write(DataHelper.getUTF8("--" + separator + CRLF));
@@ -271,7 +285,11 @@ public class EepPost extends EepGet {
      * Multipart
      * Adapted from old jrandom EepPost.
      *
+     * @param out the stream the part is written to
      * @param separator non-null
+     * @param field the field name, written into the content disposition
+     * @param file the file to upload, sent as application/octet-stream
+     * @throws IOException if the file cannot be read or writing fails
      */
     private static void sendFile(OutputStream out, String separator, String field, File file) throws IOException {
         out.write(DataHelper.getUTF8("--" + separator + CRLF));

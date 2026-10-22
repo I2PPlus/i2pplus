@@ -265,9 +265,9 @@ public class PeerTestJob extends JobImpl {
      * </ol>
      * <p><b>Adaptive Behavior:</b></p>
      * <ul>
-     * <li>Skip the round and multiply delay by 5 if job lag > 2000ms</li>
+     * <li>Skip the round and multiply delay by 5 if job lag &gt; 2000ms</li>
      * <li>Scale delay proportionally to lag (1 + lag/500, capped at 5 min) if
-     *     job lag > 300ms or CPU load > 80%</li>
+     *     job lag &gt; 300ms or CPU load &gt; 80%</li>
      * <li>Normal delay otherwise</li>
      * </ul>
      */

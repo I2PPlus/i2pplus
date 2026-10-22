@@ -314,7 +314,7 @@ public class UPnP {
      * This method loads the default XML Parser using the following behavior: - First if present
      * loads the parsers specified by the system property {@link UPnP#XML_CLASS_PROPERTTY}<br>
      * - Second by a fall-back technique, it tries to load the XMLParser from one<br>
-     * of the following classes: {@link JaxpParser}, {@link kXML2Parser}, {@link XercesParser}
+     * of the following classes: {@link org.cybergarage.xml.parser.JaxpParser}, {@code kXML2Parser}, {@code XercesParser}
      *
      * @return {@link Parser} which has been loaded successfully or null otherwise
      * @since 1.8.0

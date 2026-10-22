@@ -299,7 +299,7 @@ public class TransientSessionKeyManager extends SessionKeyManager {
 
     /**
      * Same as above but for internal use, returns OutboundSession so we don't have
-     * to do a subsequent {@link #getSession()}.
+     * to do a subsequent {@link #getSession(PublicKey)}.
      */
     private OutboundSession createAndReturnSession(PublicKey target, SessionKey key) {
         EncType type = target.getType();
@@ -771,7 +771,7 @@ public class TransientSessionKeyManager extends SessionKeyManager {
      * Return a map of session key to a set of inbound TagSets for that SessionKey.
      *
      * @return the inbound tag sets by session key
-     * @since 0.9.33 split out from {@link #renderStatusHTML()}
+     * @since 0.9.33 split out from {@link #renderStatusHTML(Writer)}
      */
     private Map<SessionKey, Set<TagSet>> getInboundTagSetsBySessionKey() {
         Set<TagSet> inbound = getInboundTagSets();

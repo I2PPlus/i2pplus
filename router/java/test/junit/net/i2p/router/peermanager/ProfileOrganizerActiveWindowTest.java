@@ -16,7 +16,7 @@ import static org.mockito.Mockito.when;
  * rendered 100% unconditionally while claiming a 24-hour activity window. It now counts profiles
  * with recent activity over a one-hour window, matching the sidebar's Peers row.
  *
- * @since 0.9.72
+ * @since 0.9.72+
  */
 public class ProfileOrganizerActiveWindowTest {
 

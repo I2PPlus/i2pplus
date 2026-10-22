@@ -192,15 +192,15 @@ public class Banlist {
      */
     private static final int BAN_COUNT_BASELINE = 3000;
     private static final double MIN_BAN_SCALE = 0.25;
-    /** Eligible ban durations for reduction: > 4 hours. */
+    /** Eligible ban durations for reduction: &gt; 4 hours. */
     private static final long BAN_REDUCTION_MIN = 4 * 60 * 60 * 1000L;
-    /** Eligible ban durations for reduction: < 1 week. */
+    /** Eligible ban durations for reduction: &lt; 1 week. */
     private static final long BAN_REDUCTION_MAX = 7 * 24 * 60 * 60 * 1000L;
     /** Above this count, ALL bans over 1h are halved regardless of existing scaling. */
     private static final int BAN_COUNT_HIGH = 8000;
 
     /**
-     * A ban that expires after this will return true in {@link #isBanlistedForever()}.
+     * A ban that expires after this will return true in {@link #isBanlistedForever(Hash)}.
      * In the transports, "forever" is treated as a hard ban, and both
      * inbound and outbound connections will be rejected.
      * Not-forever is treated as a soft ban, with outbound rejected

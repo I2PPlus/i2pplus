@@ -605,7 +605,7 @@ public class LeaseSet extends DatabaseEntry {
      * Decrypt the leases, except for the last one which is partially padding.
      * Store the new decrypted leases in a backing store,
      * and keep the original leases so that verify() still works and the
-     * encrypted leaseset can be sent on to others (via {@link #writeBytes()}).
+     * encrypted leaseset can be sent on to others (via {@link #writeBytes(OutputStream)}).
      */
     private void decrypt(SessionKey key) throws DataFormatException, IOException {
         int size = _leases.size();

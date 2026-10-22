@@ -829,8 +829,8 @@ public class DNSOverHTTPS implements EepGet.StatusListener {
 
     /**
      * Decode sdns:// stamps found in file.
+     * Stamps that are not DoH (type 2), or fail to decode, are skipped.
      *
-     * @return the URL, or null on error or if not a DoH (type 2) stamp
      * @since 0.9.62
      */
     private static void decodeStamps(String file) throws IOException {

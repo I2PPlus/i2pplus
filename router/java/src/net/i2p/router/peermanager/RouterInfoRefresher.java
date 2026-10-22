@@ -17,7 +17,7 @@ package net.i2p.router.peermanager;
  *
  * @see ProfileOrganizer#needsRouterInfoRefresh
  * @see ProfileOrganizer#shouldDeferPromotionOnStaleRouterInfo
- * @since 0.9.72
+ * @since 0.9.72+
  */
 class RouterInfoRefresher {
 
@@ -57,7 +57,7 @@ class RouterInfoRefresher {
      * @param fastFloor    fast-tier size at or above which a promotion may be held back
      * @param highCapFloor high-capacity tier size at or above which a promotion may be held back
      * @return whether promotions are being held back this cycle
-     * @since 0.9.72
+     * @since 0.9.72+
      */
     boolean beginCycle(long refreshAgeMs, int fastFloor, int highCapFloor) {
         _refreshAgeMs = refreshAgeMs;
@@ -74,7 +74,7 @@ class RouterInfoRefresher {
      * increment: this runs on the promotion path, once per held tier insert, and
      * has to stay cheap enough for the loop that calls it.
      *
-     * @since 0.9.72
+     * @since 0.9.72+
      */
     void noteDeferral() {
         if (!_deferring) return;
@@ -86,7 +86,7 @@ class RouterInfoRefresher {
      * is already known to be stale.  This is the population the
      * {@code peer.promotedStaleRouterInfo} stat reports.
      *
-     * @since 0.9.72
+     * @since 0.9.72+
      */
     void noteStalePromotion() {
         _promotedStale++;
@@ -96,7 +96,7 @@ class RouterInfoRefresher {
      * Get the staleness threshold applied this cycle.
      *
      * @return the staleness threshold in force this cycle, in ms
-     * @since 0.9.72
+     * @since 0.9.72+
      */
     long refreshAgeMs() { return _refreshAgeMs; }
 
@@ -104,7 +104,7 @@ class RouterInfoRefresher {
      * Test whether promotions are being held back this cycle.
      *
      * @return whether promotions are being held back this cycle
-     * @since 0.9.72
+     * @since 0.9.72+
      */
     boolean isDeferring() { return _deferring; }
 
@@ -112,7 +112,7 @@ class RouterInfoRefresher {
      * Get the fast-tier size at which promotion may be deferred.
      *
      * @return fast-tier size at or above which a promotion may be held back
-     * @since 0.9.72
+     * @since 0.9.72+
      */
     int fastFloor() { return _fastFloor; }
 
@@ -120,7 +120,7 @@ class RouterInfoRefresher {
      * Get the high-capacity size at which promotion may be deferred.
      *
      * @return high-capacity size at or above which a promotion may be held back
-     * @since 0.9.72
+     * @since 0.9.72+
      */
     int highCapFloor() { return _highCapFloor; }
 
@@ -128,7 +128,7 @@ class RouterInfoRefresher {
      * Get the number of promotions deferred this cycle.
      *
      * @return promotions held back this cycle, counted across both tiers
-     * @since 0.9.72
+     * @since 0.9.72+
      */
     int deferredCount() { return _deferred; }
 
@@ -137,7 +137,7 @@ class RouterInfoRefresher {
      * already known to be stale.
      *
      * @return stale promotions counted since the last beginCycle()
-     * @since 0.9.72
+     * @since 0.9.72+
      */
     int promotedStaleCount() { return _promotedStale; }
 
@@ -153,7 +153,7 @@ class RouterInfoRefresher {
      * fire-and-forget {@code lookupRouterInfo}, and the netdb negatively caches
      * known-dead keys, so peers that never come back cost little on repeat.
      *
-     * @since 0.9.72
+     * @since 0.9.72+
      */
     static final int MISSING_ROUTERINFO_BATCH = 32;
     /**
@@ -161,7 +161,7 @@ class RouterInfoRefresher {
      * <p>Sets the rate at {@link #MISSING_ROUTERINFO_BATCH} per interval, about 64 a
      * minute, so a couple of thousand profiles take roughly half an hour to recover.
      *
-     * @since 0.9.72
+     * @since 0.9.72+
      */
     static final long MISSING_ROUTERINFO_MIN_INTERVAL_MS = 30 * 1000L;
     /**
@@ -170,7 +170,7 @@ class RouterInfoRefresher {
      * this size the extra peers are not worth the memory and the lookups: they are
      * peers the netdb has already stopped telling us about.
      *
-     * @since 0.9.72
+     * @since 0.9.72+
      */
     static final int MAX_MISSING_ROUTERINFO = 4096;
 
@@ -280,7 +280,7 @@ class RouterInfoRefresher {
      *
      * @param peer the peer whose profile was loaded
      * @return true if the peer was recorded, false if the set was already full
-     * @since 0.9.72
+     * @since 0.9.72+
      */
     synchronized boolean noteMissingRouterInfo(net.i2p.data.Hash peer) {
         if (peer == null) {return false;}
@@ -296,7 +296,7 @@ class RouterInfoRefresher {
      *
      * @param now current time in milliseconds
      * @return true if the drain interval has elapsed
-     * @since 0.9.72
+     * @since 0.9.72+
      */
     synchronized boolean mayDrainMissingRouterInfo(long now) {
         return now - _lastMissingDrain >= MISSING_ROUTERINFO_MIN_INTERVAL_MS;
@@ -307,7 +307,7 @@ class RouterInfoRefresher {
      *
      * @param now current time in milliseconds
      * @return the peers to look up, possibly empty
-     * @since 0.9.72
+     * @since 0.9.72+
      */
     synchronized java.util.List<net.i2p.data.Hash> takeMissingRouterInfoBatch(long now) {
         java.util.List<net.i2p.data.Hash> batch = new java.util.ArrayList<>(MISSING_ROUTERINFO_BATCH);

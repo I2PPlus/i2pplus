@@ -159,7 +159,7 @@ class GraphRenderer {
     /**
      * SimpleDateFormats are expensive to construct and not thread-safe, so
      * cache one per thread for each timezone variant instead of allocating
-     * new ones on every {@link #render()} call.
+     * new ones on every {@link #render(OutputStream)} call.
      */
     private static final ThreadLocal<SimpleDateFormat> LOCAL_DATE_FMT =
             ThreadLocal.withInitial(() -> new SimpleDateFormat("dd MMM HH:mm", Locale.US));
@@ -510,6 +510,22 @@ class GraphRenderer {
 
     /**
      * Builds the immutable render configuration from parameters and context.
+     *
+     * @param width image width in pixels
+     * @param height image height in pixels
+     * @param hideLegend true to omit the legend
+     * @param hideGrid true to omit the grid lines
+     * @param hideTitle true to omit the derived title
+     * @param showEvents true to plot the event count rather than the stat
+     * @param periodCount periods in the window; zero or more than the
+     *                    archive draws all of them
+     * @param endp number of periods before now; ignored unless positive
+     * @param showCredit true to show the signature line
+     * @param extras extra series in legend order, or null or empty for none
+     * @param titleOverride title to draw, or null for the primary stat
+     *                      description
+     * @param showRestarts true to draw a vertical line per router restart
+     * @return the assembled configuration, never null
      */
     private GraphRenderConfig buildRenderConfig(int width, int height, boolean hideLegend,
             boolean hideGrid, boolean hideTitle, boolean showEvents, int periodCount, int endp,
@@ -521,7 +537,24 @@ class GraphRenderer {
     /**
      * Assemble the render settings for one graph.
      *
+     * @param width image width in pixels
+     * @param height image height in pixels
+     * @param hideLegend true to omit the legend
+     * @param hideGrid true to omit the grid lines
+     * @param hideTitle true to omit the derived title
+     * @param showEvents true to plot the event count rather than the stat
+     * @param periodCount periods in the window; zero or more than the
+     *                    archive draws all of them
+     * @param endp number of periods before now; ignored unless positive
+     * @param showCredit true to show the signature line
+     * @param extras extra series in legend order, or null or empty for none
+     * @param titleOverride title to draw, or null for the primary stat
+     *                      description
+     * @param showRestarts true to draw a vertical line per router restart
      * @param allLines draw the primary as a line rather than a filled area
+     * @param meta true to write the geometry and series as JSON instead of
+     *             drawing
+     * @return the assembled configuration, never null
      */
     private GraphRenderConfig buildRenderConfig(int width, int height, boolean hideLegend,
             boolean hideGrid, boolean hideTitle, boolean showEvents, int periodCount, int endp,
@@ -952,6 +985,10 @@ class GraphRenderer {
      * <p>The one exception is the wide, chrome-less sparkline used in the sidebar, which
      * stays a neutral grey: it is drawn small and unlabelled, so it takes a colour from
      * neither the theme nor the plot palette and must not imply a second series.
+     *
+     * @param def the graph definition being built
+     * @param cfg render configuration; the sparkline special case keys off its
+     *            width, height and hide flags
      */
     private void configureArea(RrdGraphDef def, GraphRenderConfig cfg) {
         if (cfg.width == 2000 && cfg.height == 160 && cfg.hideTitle && cfg.hideLegend && cfg.hideGrid) {
@@ -1035,6 +1072,11 @@ class GraphRenderer {
      * series only when there is exactly one, matching the long-standing
      * combined-bandwidth graph. With more, four legend lines per series would
      * bury the plot.
+     *
+     * @param def the graph definition being built
+     * @param cfg render configuration; extras, theme, fillSeries and
+     *            numberFormat drive the series rendering
+     * @throws IOException if a listener's datasource names cannot be read
      */
     private void configureExtraDataSources(RrdGraphDef def, GraphRenderConfig cfg) throws IOException {
         List<GraphListener> extras = cfg.extras;
@@ -1074,7 +1116,15 @@ class GraphRenderer {
         }
     }
 
-    /** Emit the max/min/avg/now legend block for one series. */
+    /**
+     * Emit the max/min/avg/now legend block for one series.
+     *
+     * @param def the graph definition being built
+     * @param plotName the series' datasource name to summarize
+     * @param suffix appended to the min/max/avg/last ids so they do not
+     *               collide with the primary's
+     * @param numberFormat the rrd format string for each printed value
+     */
     private void addSummaryPrints(RrdGraphDef def, String plotName, String suffix, String numberFormat) {
         Variable var = new Variable.MAX();
         def.datasource("max" + suffix, plotName, var);
@@ -1133,6 +1183,10 @@ class GraphRenderer {
      * Whether a frame is the wide, chrome-less sidebar sparkline.
      * <p>Identified by its exact size with every other element hidden, which is the only
      * combination the console requests and the only one drawn unlabelled.
+     *
+     * @param cfg the render configuration to classify
+     * @return true if the frame is the 250x50 sparkline with title, legend and
+     *         grid all hidden
      */
     private static boolean isSparkline(GraphRenderConfig cfg) {
         return cfg.width == 250 && cfg.height == 50
@@ -1143,6 +1197,10 @@ class GraphRenderer {
      * Whether a tile is carrying enough periods that a thicker line would merge them.
      * <p>A wide tile keeps the thicker line because it has room to show the crowding; the
      * narrow form is what needs thinning.
+     *
+     * @param cfg the render configuration to classify
+     * @return true at 720 or more periods, or 480 or more on a tile 600 pixels
+     *         wide or less
      */
     private static boolean isCrowdedTile(GraphRenderConfig cfg) {
         return cfg.periodCount >= 720 || (cfg.periodCount >= 480 && cfg.width <= 600);
@@ -1387,6 +1445,8 @@ class GraphRenderer {
      * the dots, which is decided in {@code RrdGraphConstants.minimumDashGap}. A dot length
      * of zero, from {@code --graph_plotDash:0}, asks for a solid line and leaves no gap to set.
      *
+     * @param def the graph definition being built
+     * @param cfg render configuration; its theme selects the dot and gap values
      * @since 0.9.71+
      */
     private static void applyDash(RrdGraphDef def, GraphRenderConfig cfg) {
@@ -1403,6 +1463,9 @@ class GraphRenderer {
      * <p>Every one of them is the theme's to state in its own {@code console.css}; this class
      * holds only the fallbacks for a stylesheet that declares nothing, so a frame reads as
      * part of the page it is drawn on.
+     *
+     * @param def the graph definition being built
+     * @param cfg render configuration; its theme and frame size select the colours
      */
     private static void applyTheme(RrdGraphDef def, GraphRenderConfig cfg) {
         applyDash(def, cfg);
@@ -1466,7 +1529,7 @@ class GraphRenderer {
     /**
      * Title replacement rules, ordered by key length descending (longest first)
      * so that longer prefixes are matched before their shorter ancestors.
-     * Each entry: key -> replacement.
+     * Each entry: key maps to replacement.
      */
     private static final List<Map.Entry<String, String>> TITLE_REPLACEMENTS;
     static {
@@ -1529,6 +1592,10 @@ class GraphRenderer {
     /**
      * Derive a human-readable graph title from the rate stat name.
      * Pure function — no side effects — uses ordered prefix map for deterministic results.
+     *
+     * @param name the raw rate stat name, e.g. tunnel.buildClient
+     * @return the display title: prefix and post replacements applied, then
+     *         word-capitalized
      */
     private static String deriveTitle(String name) {
         String graphTitle = name;
@@ -2056,7 +2123,13 @@ class GraphRenderer {
         }
     }
 
-    /** Translate a string. */
+    /**
+     * Translate a string.
+     *
+     * @param s the message key to translate
+     * @return the translated string; returned untranslated on Windows with a
+     *         zh locale, whose RRD font lacks the CJK glyphs
+     */
     private String _t(String s) {
         // the RRD font doesn't have zh chars, at least on my system
         // Works on 1.5.9 except on windows
@@ -2068,6 +2141,11 @@ class GraphRenderer {
 
     /**
      * Translate a string with a parameter.
+     *
+     * @param s the message key, with the value substituted for {0}
+     * @param o the value replacing the {0} placeholder
+     * @return the translated string; on Windows with a zh locale only the
+     *         substitution is applied
      */
     private String _t(String s, String o) {
         // the RRD font doesn't have zh chars, at least on my system

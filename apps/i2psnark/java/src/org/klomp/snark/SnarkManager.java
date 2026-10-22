@@ -492,8 +492,8 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     public static final String PROP_CLIENT_ID = "i2psnark.clientId";
 
     /**
-     * Optional comma-separated subset of client names (see
-     * {@link org.klomp.snark.ClientID#profiles}) to choose from when
+     * Optional comma-separated subset of client names, see
+     * {@link org.klomp.snark.ClientID#profiles}, to choose from when
      * {@link #PROP_CLIENT_ID} is "random"; unknown names are ignored.
      *
      * @since 0.9.71+
@@ -1401,6 +1401,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      * zmeta entries into the metadata file and writes the remaining config.
      * Caller must synch.
      *
+     * @param oldFile the old flat config file to migrate from, may not exist
      * @return the new config directory, non-null
      * @throws RuntimeException on creation fail
      * @since 0.9.15
@@ -1535,6 +1536,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     /**
      * The config for a torrent.
      *
+     * @param snark the torrent whose config properties are wanted
      * @return non-null, possibly empty
      * @since 0.9.15
      */
@@ -1573,6 +1575,10 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     /**
      * Build a metadata key for a torrent property.
      *
+     * @param ih the 20-byte infohash of the torrent the property belongs to
+     * @param prop the property name to store under that torrent's prefix
+     * @return the flat metadata key: META_PREFIX, the hex infohash and prop,
+     *         joined with dots
      * @since 0.9.71+
      */
     private static String metaKey(byte[] ih, String prop) {
@@ -1695,6 +1701,9 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      * Recursively scan for .config files and migrate them.
      * Skips the root config dir itself (only scans children).
      *
+     * @param dir the directory to scan, its subdirectories included
+     * @param migrated count of files migrated so far, threaded through the recursion
+     * @return the running total of migrated files, including those found in dir
      * @since 0.9.71+
      */
     private int scanForConfigFiles(File dir, int migrated) {
@@ -1744,6 +1753,9 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     /**
      * Merge per-torrent properties into _metadata.
      *
+     * @param ih the 20-byte infohash of the torrent the properties belong to
+     * @param props the per-torrent properties to copy in; the internal infohash
+     *              key and the deprecated keys are skipped
      * @since 0.9.71+
      */
     private void mergeIntoMetadata(byte[] ih, Properties props) {
@@ -1764,6 +1776,8 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     /**
      * Move a comment file from legacy/subdir location to config dir root.
      *
+     * @param configConf the legacy config file whose companion comment file is moved
+     * @param ih the 20-byte infohash, unused: the comment name comes from the file name
      * @since 0.9.71+
      */
     private void moveCommentFile(File configConf, byte[] ih) {
@@ -1785,6 +1799,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      * The comment file for a torrent, stored alongside the config.
      *
      * @param ih 20-byte infohash
+     * @return the path the comment file would be at, whether or not it exists
      * @since 0.9.31
      */
     private File commentFile(byte[] ih) {
@@ -1834,7 +1849,9 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     /**
      * Extract the info hash from a config file name.
      *
-     * @return null for invalid name
+     * @param file the config file whose name is the hex infohash
+     * @return the infohash parsed from the name, null if the name is not 40 hex
+     *         digits plus the config suffix
      * @since 0.9.20
      */
     private static SHA1Hash configFileToInfoHash(File file) {
@@ -1866,7 +1883,11 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         }
     }
 
-    /** Null to set initial defaults. */
+    /**
+     * Load the config from the given file. Caller must hold _configLock.
+     *
+     * @param filename null to set initial defaults
+     */
     private void locked_loadConfig(String filename) {
         if (_config == null) {
             _config = new OrderedProperties();
@@ -2073,8 +2094,9 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     }
 
     /**
-     * Call from DirMonitor since {@link #loadConfig()} is called before router I2CP is up. We also use this
-     * as a test that the router is there for standalone.
+     * Call from DirMonitor since {@link #loadConfig(String)} is called before
+     * router I2CP is up. We also use this as a test that the router is there for
+     * standalone.
      *
      * @return true if we got a response from the router
      */
@@ -2277,10 +2299,11 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     }
 
     /**
-     * Trims whitespace and strips surrounding double quotes (so the value may
-     * contain spaces). An unset, blank, or quoted-empty value disables the
+     * Trims whitespace and strips surrounding double quotes, so the value may
+     * contain spaces. An unset, blank, or quoted-empty value disables the
      * staging feature.
      *
+     * @param s the raw configured value, may be null or blank
      * @return the staging directory, or null if disabled
      * @since 0.9.71+
      */
@@ -3314,8 +3337,10 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     /**
      * Deserialize the given list property from the config.
      *
+     * @param prop the config property holding a comma-separated list
      * @param dflt default or null
-     * @return non-null, fixed size
+     * @return the split values, non-null and fixed size, empty if neither the
+     *         property nor the default is set
      * @since 0.9.1
      */
     private List<String> getListConfig(String prop, String dflt) {
@@ -3332,6 +3357,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     /**
      * Serialize the given list into the config for the given property, does NOT save it.
      *
+     * @param prop the config property to write to, removed when values is empty
      * @param values may be null or empty
      * @return the comma-separated config string, non-null
      * @since 0.9.1
@@ -3427,6 +3453,9 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     /**
      * Add the snark. Caller must sync on _snarks.
      *
+     * @param torrentFile the torrent file path used as the map key
+     * @param snark the torrent to register under that path, its infohash and its
+     *              storage base name
      * @since 0.9.42
      */
     private void putSnark(String torrentFile, Snark snark) {
@@ -3441,6 +3470,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     /**
      * Remove the snark. Caller must sync on _snarks.
      *
+     * @param snark the torrent to drop from the name, infohash and base-name maps
      * @since 0.9.42
      */
     private void removeSnark(Snark snark) {
@@ -3455,6 +3485,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     /**
      * Remove the snark. Caller must sync on _snarks.
      *
+     * @param torrentFile the path the snark was registered under
      * @return the removed Snark or null
      * @since 0.9.42
      */
@@ -3473,6 +3504,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     /**
      * Rename the torrent file to add a .BAD suffix, log messages.
      *
+     * @param torrentFile the bad torrent file to delete, or rename with a .BAD suffix
      * @since 0.9.42
      */
     private void disableTorrentFile(String torrentFile) {
@@ -4629,12 +4661,15 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     }
 
     /**
-     * Write the metainfo to the file, caller must hold the snarks lock to prevent interference from
-     * the DirMonitor.
+     * Write the metainfo to the file, caller must hold the snarks lock to prevent
+     * interference from the DirMonitor.
      *
      * @param metainfo The metainfo for the torrent
-     * @param filename The absolute path to save the metainfo to, generally ending in ".torrent".
-     *                 Must be a filesystem-safe name.
+     * @param filename The absolute path to save the metainfo to, generally ending in
+     *                 ".torrent". Must be a filesystem-safe name.
+     * @param areFilesPublic true to write with the normal umask permissions, false
+     *                       to restrict the file with SecureFileOutputStream
+     * @throws IOException if the file already exists or the write fails
      * @since 0.8.4
      */
     private static void locked_writeMetaInfo(
@@ -4731,7 +4766,8 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     /**
      * Base location for a torrent from the metadata file.
      *
-     * @return File or null, doesn't necessarily exist
+     * @param ih the 20-byte infohash of the torrent
+     * @return the saved base location, null if not stored, and it need not exist
      * @since 0.9.15
      */
     private File getSavedBaseFile(byte[] ih) {
@@ -4746,7 +4782,8 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     /**
      * Setting for a torrent from the metadata file.
      *
-     * @return setting, 0 if not found
+     * @param snark the torrent whose saved upload total is wanted
+     * @return total bytes uploaded, 0 if not found
      * @since 0.9.15
      */
     @Override
@@ -4821,6 +4858,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      * Save the completion status of a torrent and other data in the metadata file.
      * Does nothing for magnets.
      *
+     * @param snark the torrent to save; a magnet, with no metainfo or storage, is skipped
      * @param comments null for no change
      * @since 0.9.31
      */
@@ -4851,6 +4889,9 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      * @param bitfield non-null
      * @param priorities may be null
      * @param base may be null
+     * @param uploaded total bytes uploaded, stored as the torrent's upload total
+     * @param activity last activity time in ms since the epoch, 0 leaves it unset
+     * @param stopped true records the torrent as not running, so it is not restarted
      * @param comments null for no change
      * @since 0.9.31
      */
@@ -4960,6 +5001,8 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     /**
      * Save per-torrent config to the single metadata file.
      *
+     * @param ih the 20-byte infohash whose metadata entries are replaced
+     * @param config the properties to store, without the per-torrent prefix
      * @since 0.9.23
      */
     private void locked_saveTorrentStatus(byte[] ih, Properties config) {
@@ -4990,6 +5033,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     /**
      * Remove the status of a torrent from the metadata file.
      *
+     * @param snark the torrent whose metadata entries and comment file are dropped
      * @since 0.9.20
      */
     private void removeTorrentStatus(Snark snark) {
@@ -5157,6 +5201,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      * Does not really delete on failure, that's the caller's responsibility. Warning - does not
      * validate announce URL - use {@link org.klomp.snark.TrackerClient#isValidAnnounce}.
      *
+     * @param info the parsed metainfo to check against the configured limits
      * @return failure message or null on success
      */
     private String validateTorrent(MetaInfo info) {
@@ -5306,9 +5351,10 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     }
 
     /**
-     * This calls {@link #monitorTorrents()} once a minute. It also gets the bandwidth limits and loads
-     * magnets on first run. For standalone, it also handles checking that the external router is
-     * there, and restarting torrents once the router appears.
+     * This calls {@link #monitorTorrents(File)} once a minute. It also gets the
+     * bandwidth limits and loads magnets on first run. For standalone, it also
+     * handles checking that the external router is there, and restarting
+     * torrents once the router appears.
      */
     private class DirMonitor implements Runnable {
         public void run() {
@@ -5773,12 +5819,15 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     @Override
     public void gotPiece(Snark snark) { /* no-op */ }
 
-    // End Snark.CompleteListeners
+    /* End Snark.CompleteListeners */
 
     /**
      * An HTML link to the file if complete and a single file, to the directory if not complete or
      * not a single file, or simply the unlinkified name of the snark if a magnet.
      *
+     * @param snark the torrent to link to
+     * @return the HTML link, or the escaped base name alone for a magnet or a
+     *         torrent without metainfo or storage
      * @since 0.9.23
      */
     private String linkify(Snark snark) {
@@ -5827,6 +5876,8 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     /**
      * Add all magnets from the config file.
      *
+     * @param autostart true to start each magnet as it is added, in randomized
+     *                  pool order with start delays, false to only add them
      * @since 0.8.4
      */
     private void addMagnets(boolean autostart) {
@@ -5908,6 +5959,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      * is started by the caller AFTER releasing the lock, since starting
      * staggers pools with long sleeps.
      *
+     * @param dir the directory scanned for .torrent files
      * @return the newly added torrents; empty if none were added, or null
      *         if a fatal error aborted the pass
      */
@@ -5980,17 +6032,37 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         return added;
     }
 
-    /** Translate the given string. */
+    /**
+     * Translate the given string.
+     *
+     * @param s the English text to look up in the I2PSnark bundle
+     * @return the localized text from the bundle
+     */
     private String _t(String s) {
         return _util.getString(s);
     }
 
-    /** Translate the given string with one substitution. */
+    /**
+     * Translate the given string with one substitution.
+     *
+     * @param s the text to translate, containing a {0} placeholder; single quotes
+     *          must be doubled
+     * @param o the substitution for {0}, not itself translated
+     * @return the localized text with {0} replaced by o
+     */
     private String _t(String s, Object o) {
         return _util.getString(s, o);
     }
 
-    /** Translate the given string with two substitutions. */
+    /**
+     * Translate the given string with two substitutions.
+     *
+     * @param s the text to translate, containing {0} and {1} placeholders; single
+     *          quotes must be doubled
+     * @param o the substitution for {0}, not itself translated
+     * @param o2 the substitution for {1}, not itself translated
+     * @return the localized text with {0} and {1} replaced
+     */
     private String _t(String s, Object o, Object o2) {
         return _util.getString(s, o, o2);
     }
@@ -6191,6 +6263,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     /**
      * Restore the default tracker map.
      *
+     * @param save true to save the config, and only if a custom tracker list was set
      * @since 0.9.1
      */
     private void setDefaultTrackerMap(boolean save) {
@@ -6212,6 +6285,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     /**
      * Restore the default torrent-create filter map.
      *
+     * @param save true to write the restored filters to the config
      * @since 0.9.62+
      */
     private void setDefaultTorrentCreateFilterMap(boolean save) {
@@ -6463,8 +6537,8 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     /**
      * Filters a candidate start batch down to the torrents that were running
      * when last saved. A torrent whose per-torrent config has no
-     * {@link #PROP_META_RUNNING} entry counts as previously running (matches
-     * the auto-start default); one explicitly saved as stopped stays stopped.
+     * {@link #PROP_META_RUNNING} entry counts as previously running, matching
+     * the auto-start default; one explicitly saved as stopped stays stopped.
      *
      * Used by the startup auto-start paths, where torrents are first loaded
      * without starting them (so pool-mates can batch together) and must then
@@ -6487,8 +6561,8 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
 
     /**
      * Returns true if the torrent's persisted config indicates it was running
-     * when last saved. A missing entry counts as previously running (matches
-     * the auto-start default); an explicitly false entry means it was stopped.
+     * when last saved. A missing entry counts as previously running, matching
+     * the auto-start default; an explicitly false entry means it was stopped.
      *
      * @param config the torrent's persisted properties
      * @return true if the torrent should be auto-started
@@ -6763,9 +6837,9 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     }
 
     /**
-     * Restart all running torrents on fresh destinations: stop them all (which
-     * destroys their sessions, and schedules the Disconnector to close the main
-     * session too), then restart only the torrents that were running when the
+     * Restart all running torrents on fresh destinations: stop them all, which
+     * destroys their sessions and schedules the Disconnector to close the main
+     * session too, then restart only the torrents that were running when the
      * cycle fired, once the old session is gone. Skipped while any torrent is
      * actively downloading, and when the router is already stopping.
      *

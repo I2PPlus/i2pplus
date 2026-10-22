@@ -81,7 +81,7 @@ import net.i2p.util.Translate;
  *
  */
 public abstract class TransportImpl implements Transport {
-            /** Timestamp labels for {@link #afterSend()}, constants so neither costs an allocation. */
+            /** Timestamp labels for {@link #afterSend(OutNetMessage, boolean, boolean, long)}, constants so neither costs an allocation. */
     private static final String AFTER_SEND_SUCCESSFUL = "afterSend(successful)";
     private static final String AFTER_SEND_FAILED = "afterSend(failed)";
 
@@ -112,7 +112,7 @@ public abstract class TransportImpl implements Transport {
     private volatile int _sendPoolDroppedLast;
     private long _lastSendPoolStatTime;
 
-            /** Global router ident -> IP map. */
+            /** Global router ident -&gt; IP map. */
     private static final Map<Hash, byte[]> _IPMap;
 
     private final long UNREACHABLE_PERIOD;
@@ -1021,14 +1021,14 @@ public abstract class TransportImpl implements Transport {
     public void externalAddressRemoved(AddressSource source, boolean ipv6) { /* no-op */ }
 
     /**
-     *  Notify a transport of the results of trying to forward a port.
+     * Notify a transport of the results of trying to forward a port.
      * <p>
-     *  This implementation does nothing. Transports should override if they want notification.
+     * This implementation does nothing. Transports should override if they want notification.
      *
      * @param ip may be null
      * @param port the internal port
      * @param externalPort the external port, which for now should always be the same as
-     *                      the internal port if the forwarding was successful.
+     *                     the internal port if the forwarding was successful.
      */
     public void forwardPortStatus(byte[] ip, int port, int externalPort, boolean success, String reason) { /* no-op */ }
 

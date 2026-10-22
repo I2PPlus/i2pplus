@@ -474,7 +474,7 @@ public class PersistentDataStore extends TransientDataStore {
 
     /**
      * Detect IP spoofing and apply ban decisions for non-storeable peers.
-     * Called only for peers that failed {@link #shouldStoreRi()} and are not banned.
+     * Called only for peers that failed {@link #shouldStoreRi(RiFlags)} and are not banned.
      *
      * @return true if the on-disk file should be deleted
      */

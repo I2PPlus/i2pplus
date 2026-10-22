@@ -188,7 +188,7 @@ public class RrdGraphDef implements RrdGraphConstants, DataHolder {
      * Paint for standard graph elements indexed by {@link ElementsNames}.
      *
      * @since 0.9.71 the array also has an eleventh slot,
-     *        {@link RrdGraphConstants#COLOR_SERIES_DASH}, which holds a {@link Float} dash
+     *        {@code RrdGraphConstants#COLOR_SERIES_DASH}, which holds a {@link Float} dash
      *        length rather than a colour. Widening to an Object array keeps the long-standing
      *        Paint[] contract for every colour index, so the field is left typed as it was.
      */
@@ -209,7 +209,7 @@ public class RrdGraphDef implements RrdGraphConstants, DataHolder {
 
     /**
      * Ink length of one dot in a series line, for
-     * {@link RrdGraphConstants#COLOR_SERIES_DASH}. Kept out of {@link #colors} so that
+     * {@code RrdGraphConstants#COLOR_SERIES_DASH}. Kept out of {@link #colors} so that
      * array stays a {@code Paint[]} for the ten colour indices it has always held.
      * Zero, as a theme's {@code --graph_plotDash:0} states, draws solid instead.
      */

@@ -39,7 +39,7 @@ class OutboundMessageState implements CDPQEntry {
     // we can't use the ones in _message since it is null for injections
     private volatile long _enqueueTime;
     private volatile long _seqNum;
-    /** How many bytes {@link #push()} is allowed to send. */
+    /** How many bytes {@link #push(List)} is allowed to send. */
     private int _allowedSendBytes;
     private final AtomicInteger _nacks = new AtomicInteger();
     /**

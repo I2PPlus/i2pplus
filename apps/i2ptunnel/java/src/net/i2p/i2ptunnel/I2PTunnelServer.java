@@ -152,10 +152,10 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
      * Default write timeout for the outbound I2P stream (ms). Without a bounded value,
      * a stalled peer (send window not advancing, e.g. under a SYN flood) holds a server
      * handler thread for the full streaming disconnect timeout (default 120s) inside
-      * {@link net.i2p.client.streaming.impl.MessageOutputStream#flush} /close(). A bounded write timeout
-       * fails after no ACK
-     * progress instead of blocking the handler. It does not cap throughput for a peer
-     * that is progressing, so it is safe for legitimate slow transfers.
+     * {@code MessageOutputStream#flush} or {@code close()}. A bounded write timeout
+     * fails when there is no ACK progress instead of blocking the handler. It does not
+     * cap throughput for a peer that is progressing, so it is safe for legitimate slow
+     * transfers.
      * 60s is long enough that a normal I2P RTO blip (~30s avgRTO) with no other
      * forward-ACK progress does not fail the write, while still bounding a dead peer
      * well under the 120s disconnect timeout. A tighter default (15s) was tried and
@@ -213,7 +213,7 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
 
     /**
      * Per-tunnel server handler pool cap, -1 = Tuner-managed default.
-     *  Read from PROP_SERVER_THREADS; re-applied live in {@link #optionsUpdated()}.
+     *  Read from PROP_SERVER_THREADS; re-applied live in {@link #optionsUpdated(I2PTunnel)}.
      * @since 0.9.71+
      */
     private volatile int _serverThreadOverride = -1;
@@ -969,10 +969,10 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
      * <p>
      * A stalled peer (send window not advancing, e.g. under a SYN flood) otherwise holds a
      * server handler thread for the full streaming disconnect timeout (default 120s) inside
-      * {@link net.i2p.client.streaming.impl.MessageOutputStream#flush} /close(). Bounding the write
-       * timeout fails on no ACK
-     * progress rather than blocking the handler; it does not cap throughput for a peer that
-     * is progressing, so it is safe for legitimate slow transfers.
+     * {@code MessageOutputStream#flush} or {@code close()}. Bounding the write timeout
+     * fails when there is no ACK progress rather than blocking the handler; it does not
+     * cap throughput for a peer that is progressing, so it is safe for legitimate slow
+     * transfers.
      * <p>
      * If either the tunnel's own key ({@link #PROP_WRITE_TIMEOUT}) or the streaming
      * standard key ({@link I2PSocketOptions#PROP_WRITE_TIMEOUT}) is present, honor it:

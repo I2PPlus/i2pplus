@@ -19,7 +19,7 @@ import org.junit.Test;
  * comparison says it is, or a peer is either promoted while its entry is still
  * authoritative or held back on an entry that should have been replaced.
  *
- * @since 0.9.72
+ * @since 0.9.72+
  */
 public class ProfileOrganizerRefreshDecisionTest {
 

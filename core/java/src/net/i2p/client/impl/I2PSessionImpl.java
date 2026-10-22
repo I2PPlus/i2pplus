@@ -502,7 +502,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
      * I2CP host from the config.
      *
      * @return configured host name, or a placeholder for logging if not applicable
-     * @since 0.9.7 was in {@link #loadConfig()}
+     * @since 0.9.7 was in {@link #loadConfig(Properties)}
      */
     private String getHost() {
         if (_context.isRouterContext()) {return "[Internal connection]";} // just for logging

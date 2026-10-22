@@ -91,7 +91,7 @@ class SAMv3StreamSession extends SAMStreamSession implements Session {
      * @throws DataFormatException likewise declared, but not raised by the body
      * @throws SAMException if the destination or properties read from the record
      *                      name no known direction or cannot build a session
-     * @throws NullPointerException if login nickname is not registered
+     * @throws NullPointerException if the login nickname is not registered
      */
     public SAMv3StreamSession(String login) throws IOException, DataFormatException, SAMException {
         super(getDB().get(login).getDest(), "__v3__", getDB().get(login).getProps(), getDB().get(login).getHandler());
@@ -623,13 +623,13 @@ class SAMv3StreamSession extends SAMStreamSession implements Session {
      * Instances are registered as handlers in {@link SessionsDB} so
      * that the client's worker thread can return immediately and
      * data transfer continues on the NIO thread pool. The handler's
-     * {@link Handler#handle(Selector)} method copies available data
+     * {@link #run()} method copies available data
      * on each NIO select tick.
-     * <p>When either side reaches end-of-stream, {@link Handler#close}
+     * <p>When either side reaches end-of-stream, {@link Handler#stopHandling()}
      * is called to tear down both channels and remove this handler
      * from the sessions database. Idle timeout is checked periodically
      * in {@code handle()} and forces a close if no data flows for
-     * {@link SAMBridge#IDLE_TIMEOUT_SECS} seconds.
+     * {@code IDLE_TIMEOUT_SECS} seconds.
      *
      * @since 0.9.60
      */

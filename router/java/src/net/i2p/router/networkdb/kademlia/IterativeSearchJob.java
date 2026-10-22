@@ -170,10 +170,11 @@ public class IterativeSearchJob extends FloodSearchJob {
     private static final int MAX_FINGERPRINT_ENTRIES = 1 + MAX_RI_ADDRESSES;
 
     /**
-     * Look up a peer's RouterInfo in the router's main NetDb without running
-     * {@link net.i2p.router.NetworkDatabase#lookupRouterInfoLocally}'s full
-     * validation. The main NetDb is used rather than this job's facade, which
-     * may be a client NetDb.
+     * Look up a peer's RouterInfo in the router's main NetDb, skipping the full
+     * validation performed by
+     * {@link net.i2p.router.NetworkDatabaseFacade#lookupRouterInfoLocally(Hash)}.
+     * The main NetDb is used rather than this job's facade, which may be a client
+     * NetDb.
      *
      * @param ctx the router context
      * @param peer the peer hash
@@ -300,7 +301,7 @@ public class IterativeSearchJob extends FloodSearchJob {
     private static long getGracePeriod() {
         return _lateReplyGracePeriod;
     }
-    /** Static cache of recently completed searches: peer hash -> expiration timestamp. */
+    /** Static cache of recently completed searches: peer hash -&gt; expiration timestamp. */
     private static final ConcurrentHashMap<Hash, Long> _recentlyCompleted = new ConcurrentHashMap<>(COMPLETED_CACHE_SIZE);
     /**
      * The time before we give up and start a new search - much shorter than the message's expire time
@@ -325,8 +326,7 @@ public class IterativeSearchJob extends FloodSearchJob {
      */
     private int _maxConcurrent;
     /**
-     * The default _maxConcurrent.
-     * @return 4 on a slow system, otherwise 16
+     * The default _maxConcurrent, 4 on a slow system, otherwise 16.
      */
     private static volatile int _maxConcurrentDefault = SystemVersion.isSlow() ? 4 : 16;
 

@@ -70,7 +70,7 @@ public class GzipFileBuffer extends FileBuffer {
 	 * Caller must call {@link #writeComplete}.
 	 *
 	 * @return new OutputStream chain for writing compressed data
-	 * @throws IllegalStateException if offset > 0 or already open for writing
+	 * @throws IllegalStateException if offset &gt; 0 or already open for writing
 	 * @throws IOException on I/O error
 	 */
 	@Override

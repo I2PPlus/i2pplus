@@ -223,6 +223,11 @@ public class BlockfileNamingService extends DummyNamingService {
      * Create a new database and initialize it from the local files
      * privatehosts.txt, userhosts.txt, and hosts.txt,
      * creating a skiplist in the database for each.
+     *
+     * @param f open file the new database is written into
+     * @return the new database, with one skiplist per hosts file found
+     * @throws IOException if the file cannot be written, or initialization
+     *                     fails and the cause is wrapped into an IOException
      */
     private BlockFile initNew(RAIFile f) throws IOException {
         long start = _context.clock().now();
@@ -293,6 +298,12 @@ public class BlockfileNamingService extends DummyNamingService {
 
     /**
      * Read the info block of an existing database.
+     *
+     * @param raf open file of the existing database
+     * @return the database, with version, creation date and list names read
+     * @throws IOException if the header, its info, the list names or the
+     *                     version are missing, or the version is newer than
+     *                     this implementation supports
      */
     private BlockFile initExisting(RAIFile raf) throws IOException {
         long start = _context.clock().now();
@@ -359,8 +370,8 @@ public class BlockfileNamingService extends DummyNamingService {
     /**
      * Whether the database is in an old format.
      *
-     * @return true if needs an upgrade
-     * @throws IOE on bad version
+     * @param bf database being considered, only writable files can upgrade
+     * @return true if the version is old and the file is writable
      * @since 0.8.9
      */
     private boolean needsUpgrade(BlockFile bf) {
@@ -376,10 +387,10 @@ public class BlockfileNamingService extends DummyNamingService {
     /**
      * Blockfile must be writable of course.
      * <p>
-     * Version 1->2: Add reverse skiplist and populate
-     * Version 2->3: Re-populate reverse skiplist as version 2 didn't keep it updated
-     * after the upgrade. No change to format.
-     * Version 3->4: Change format to support multiple destinations per hostname.
+     * Version 1-&gt;2: Add reverse skiplist and populate
+     * Version 2-&gt;3: Re-populate reverse skiplist as version 2 didn't keep it
+     * updated after the upgrade. No change to format.
+     * Version 3-&gt;4: Change format to support multiple destinations per hostname.
      *
      * @return true if upgraded successfully
      * @since 0.8.9
@@ -469,6 +480,9 @@ public class BlockfileNamingService extends DummyNamingService {
      * Side effect: sets _version field
      * <p>
      * Caller must synchronize.
+     *
+     * @param version version string to record, e.g. "2", "3" or "4"
+     * @throws IOException if the header or its info block is missing
      * @since 0.9.26 pulled out of {@link #upgrade()}
      */
     private void setVersion(String version) throws IOException {
@@ -489,7 +503,12 @@ public class BlockfileNamingService extends DummyNamingService {
     /**
      * For either v1 or v4.
      * Caller must synchronize.
-     * @return entry or null, or throws ioe
+     *
+     * @param listname skiplist to read, one of the configured hosts file names
+     * @param key lower-case hostname to look up
+     * @return the stored entry, or null if the list or the name is absent
+     * @throws IOException if the database read fails, or a runtime error is
+     *                     wrapped into one
      */
     private DestEntry getEntry(String listname, String key) throws IOException {
         try {
@@ -509,7 +528,14 @@ public class BlockfileNamingService extends DummyNamingService {
 
     /**
      * Caller must synchronize.
-     * @param source may be null
+     *
+     * @param bf database to write into, must be writable
+     * @param listname skiplist the entry goes into, created if absent
+     * @param key lower-case hostname to add
+     * @param dest destination stored under the key
+     * @param source how the entry was added, may be null
+     * @throws IOException if the index cannot be read or written, or a
+     *                     runtime error is wrapped into one
      */
     private void addEntry(BlockFile bf, String listname, String key, Destination dest, String source) throws IOException {
         try {
@@ -537,8 +563,11 @@ public class BlockfileNamingService extends DummyNamingService {
      * Single dest version.
      * Caller must synchronize.
      *
-     * @param props may be null
-     * @throws RuntimeException
+     * @param sl skiplist to write into
+     * @param key lower-case hostname, any previous entry is replaced
+     * @param dest destination stored under the key
+     * @param props per-entry properties such as add time and source, may be null
+     * @throws RuntimeException if the skiplist write fails
      */
     private static void addEntry(SkipList<String, DestEntry> sl, String key, Destination dest, Properties props) {
         DestEntry de = new DestEntry();
@@ -552,8 +581,12 @@ public class BlockfileNamingService extends DummyNamingService {
      * DB MUST be version 4.
      * Caller must synchronize.
      *
-     * @param propsList may be null, or entries may be null
-     * @throws RuntimeException
+     * @param sl skiplist to write into
+     * @param key lower-case hostname, any previous entry is replaced
+     * @param dests destinations for the name, the first is also stored as dest
+     * @param propsList properties parallel to dests, may be null, or entries
+     *                  may be null
+     * @throws RuntimeException if the skiplist write fails
      * @since 0.9.26
      */
     private static void addEntry(SkipList<String, DestEntry> sl, String key, List<Destination> dests, List<Properties> propsList) {
@@ -576,21 +609,26 @@ public class BlockfileNamingService extends DummyNamingService {
 
     /**
      * Caller must synchronize.
+     *
+     * @param <V> value type held by the skiplist
+     * @param sl skiplist to remove the key from
+     * @param key lower-case hostname to remove
      * @return removed object or null
-     * @throws RuntimeException
+     * @throws RuntimeException if the skiplist write fails
      */
     private static <V> V removeEntry(SkipList<String, V> sl, String key) {
         return sl.remove(key);
     }
 
-    ///// Reverse index methods
+    /* Reverse index methods */
 
     /**
      * Caller must synchronize.
      * Returns null without exception on error (logs only).
      * Returns without logging if no reverse skiplist (version 1).
      *
-     * @return all found if more than one
+     * @param hash destination hash to look the names up by
+     * @return all hostnames found for the hash, or null if none or on error
      * @since 0.9.26 from getReverseEntry() 0.8.9
      */
     private List<String> getReverseEntries(Hash hash) {
@@ -628,6 +666,9 @@ public class BlockfileNamingService extends DummyNamingService {
     /**
      * Caller must synchronize.
      * Fails without exception on error (logs only).
+     *
+     * @param key lower-case hostname to record against the hash
+     * @param dest destination whose hash is the reverse index key
      * @since 0.8.9
      */
     private void addReverseEntry(String key, Destination dest) {
@@ -642,8 +683,14 @@ public class BlockfileNamingService extends DummyNamingService {
      * We store one or more hostnames for a given hash.
      * The skiplist key is a signed Integer, the first 4 bytes of the dest hash.
      * For convenience (since we have a serializer already) we use
-     * a Properties as the value, with a null string as the value for each hostname property.
-     * We could in the future use the property value for something.
+     * a Properties as the value, with a null string as the value for each
+     * hostname property. We could in the future use the property value for
+     * something.
+     *
+     * @param bf database to write into, must be writable
+     * @param key lower-case hostname to record against the hash
+     * @param dest destination whose hash is the reverse index key
+     * @param log where a failed write is logged, nothing is rethrown
      * @since 0.8.9
      */
     private static void addReverseEntry(BlockFile bf, String key, Destination dest, Log log) {
@@ -671,6 +718,9 @@ public class BlockfileNamingService extends DummyNamingService {
     /**
      * Caller must synchronize.
      * Fails without exception on error (logs only).
+     *
+     * @param key lower-case hostname to forget
+     * @param dest destination whose hash is the reverse index key
      * @since 0.8.9
      */
     private void removeReverseEntry(String key, Destination dest) {
@@ -696,7 +746,8 @@ public class BlockfileNamingService extends DummyNamingService {
     /**
      * Reverse lookup key for the destination.
      *
-     * @return the reverse key
+     * @param dest destination whose hash is keyed
+     * @return the first 4 hash bytes as a signed Integer
      * @since 0.8.9
      */
     private static Integer getReverseKey(Destination dest) {
@@ -706,7 +757,8 @@ public class BlockfileNamingService extends DummyNamingService {
     /**
      * Reverse lookup key for the hash.
      *
-     * @return the reverse key
+     * @param hash destination hash to key on
+     * @return the first 4 hash bytes as a signed Integer
      * @since 0.8.9
      */
     private static Integer getReverseKey(Hash hash) {
@@ -715,7 +767,7 @@ public class BlockfileNamingService extends DummyNamingService {
         return Integer.valueOf(i);
     }
 
-    ////////// Start NamingService API
+    /* Start NamingService API */
 
     /**
      * Lookup a hostname. Will strip a "www." prefix and retry if lookup fails.
@@ -753,6 +805,7 @@ public class BlockfileNamingService extends DummyNamingService {
     /**
      * Single dest version lookup.
      *
+     * @param hostname name to look up, mixed case ok, lower-cased for the key
      * @param lookupOptions If non-null and contains the key "list", lookup in
      *                      that list only, otherwise all lists
      * @param storedOptions If non-null, stored properties will be added
@@ -912,7 +965,13 @@ public class BlockfileNamingService extends DummyNamingService {
      * Single dest version
      * This does not prevent adding b32. Caller must check.
      *
+     * @param hostname name to store, mixed case ok, lower-cased for the key
+     * @param d destination to store
+     * @param options If non-null and contains the key "list", add to that list
+     *                (default "hosts.txt"). Use the key "s" for the source
      * @param checkExisting if true, fail if entry already exists
+     * @return true if the entry was written, false if the database is
+     *         read-only or closed, the name was taken, or the write failed
      */
     private boolean put(String hostname, Destination d, Properties options, boolean checkExisting) {
         if (_readOnly) {
@@ -972,8 +1031,13 @@ public class BlockfileNamingService extends DummyNamingService {
      * DB MUST be version 4.
      * This does not prevent adding b32. Caller must check.
      *
+     * @param hostname name to store, mixed case ok, lower-cased for the key
+     * @param dests destinations for the name, at least one is required
      * @param propsList may be null, or entries may be null
      * @param checkExisting if true, fail if entry already exists
+     * @return true if the entry was written, false if the database is
+     *         read-only or closed, the name was taken, or the write failed
+     * @throws IllegalArgumentException if dests is empty
      * @since 0.9.26
      */
     private boolean put(String hostname, List<Destination> dests, List<Properties> propsList, boolean checkExisting) {
@@ -1608,7 +1672,7 @@ public class BlockfileNamingService extends DummyNamingService {
 
     ////////// End NamingService API
 
-    //// Begin new API for multiple Destinations
+    /* Begin new API for multiple Destinations */
 
     /**
      * Return all of the entries found in the first list found, or in the list
@@ -1738,12 +1802,16 @@ public class BlockfileNamingService extends DummyNamingService {
         return false;
     }
 
-    //// End new API for multiple Destinations
+    /* End new API for multiple Destinations */
 
     /**
      * Continuously validate anything we read in.
      * Queue anything invalid to be removed at the end of the operation.
      * Caller must sync!
+     *
+     * @param key hostname read from the skiplist, null or empty is invalid
+     * @param de entry read from the skiplist, null is invalid
+     * @param listname skiplist the entry came from, recorded for the cleanup
      * @return true if the entry is well-formed and has a usable destination
      */
     private boolean validate(String key, DestEntry de, String listname) {
@@ -1767,9 +1835,11 @@ public class BlockfileNamingService extends DummyNamingService {
     }
 
     /**
-     * Remove and log all invalid entries queued by {@link #validate()}
-     * while scanning in {@link #lookup()} or getEntries().
-     * We delete in the order detected, as an error may be corrupting later entries in the skiplist.
+     * Remove and log all invalid entries queued by
+     * {@link #validate(String, DestEntry, String)} while scanning in
+     * {@link #lookup(String, Properties, Properties)} or getEntries().
+     * We delete in the order detected, as an error may be corrupting later
+     * entries in the skiplist.
      * Caller must sync!
      */
     private void deleteInvalid() {
@@ -1822,7 +1892,12 @@ public class BlockfileNamingService extends DummyNamingService {
         clearCache();
     }
 
-    /** For logging errors in the static serializers below. */
+    /**
+     * For logging errors in the static serializers below.
+     *
+     * @param msg message logged at error level
+     * @param t the failure being reported
+     */
     private static void logError(String msg, Throwable t) {
         I2PAppContext.getGlobalContext().logManager().getLog(BlockfileNamingService.class).error(msg, t);
     }
@@ -2035,12 +2110,14 @@ public class BlockfileNamingService extends DummyNamingService {
 
     /**
      * Same as DataHelper.writeProperties, UTF-8, unsorted,
-     * except that values may up to 4K bytes.
+     * except that values may be up to 4K bytes.
      *
+     * @param rawStream stream the length-prefixed mapping is written into
      * @param p source may be null
      * @throws DataFormatException if any key string is over 255 bytes long,
      *                             if any value string is over 4096 bytes long, or if the total length
      *                             (not including the two length bytes) is greater than 65535 bytes.
+     * @throws IOException if the stream cannot be written
      * @since 0.9.26
      */
     private static void writeProperties(ByteArrayOutputStream rawStream, Properties p)
@@ -2066,13 +2143,12 @@ public class BlockfileNamingService extends DummyNamingService {
 
     /**
      * Same as DataHelper.readProperties, UTF-8, unsorted,
-     * except that values may up to 4K bytes.
-     * <p>
-     * Throws DataFormatException on duplicate key.
+     * except that values may be up to 4K bytes.
      *
      * @param in stream to read the mapping from
      * @return the properties read, UTF-8 and unsorted
-     * @throws DataFormatException if the format is invalid
+     * @throws DataFormatException if the format is invalid, including a
+     *                             duplicate key
      * @throws IOException if there is a problem reading the data
      * @since 0.9.26
      */

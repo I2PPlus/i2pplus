@@ -16,7 +16,7 @@ public abstract class StrictCountries {
 
     private StrictCountries() { /* no-op */ }
 
-    /** Sorted ascending for binary search; each key = ((c0 & 0xDF) << 8) | (c1 & 0xDF). */
+    /** Sorted ascending for binary search; each key = ((c0 &amp; 0xDF) &lt;&lt; 8) | (c1 &amp; 0xDF). */
     private static final int[] _countries;
 
     /**

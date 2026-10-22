@@ -287,7 +287,7 @@ public class NativeBigInteger extends BigInteger {
 
     /**
      * Operating systems.
-     * @return true when running on Windows
+     * True when running on Windows.
      */
     private static final boolean _isWin = SystemVersion.isWindows();
 

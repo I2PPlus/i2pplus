@@ -179,7 +179,7 @@ class NodeInfo extends SimpleDataStructure {
     }
 
     /**
-     * Verify the NID matches the Hash. See {@link #generateNID()} for requirements.
+     * Verify the NID matches the Hash. See {@link #generateNID(Hash, int, RandomSource)} for requirements.
      *
      * @throws IllegalArgumentException if the NID does not match the hash, per generateNID()
      */

@@ -370,7 +370,7 @@ public class BuildExecutor implements Runnable {
     /**
      * First-hop failure history: tracks recent first-hop failures to avoid
      * repeatedly selecting peers that have recently failed as first hops.
-     * Maps: Hash -> [failureCount, lastFailureTimeMs].
+     * Maps: Hash -&gt; [failureCount, lastFailureTimeMs].
      *
      * @since 0.9.71+
      */
@@ -387,7 +387,7 @@ public class BuildExecutor implements Runnable {
 
     /**
      * Last dispatch time per first-hop peer, for staggering builds.
-     *  Maps: Hash -> dispatch timestamp in ms.
+     *  Maps: Hash -&gt; dispatch timestamp in ms.
      *
      * @since 0.9.71+
      */
@@ -402,7 +402,7 @@ public class BuildExecutor implements Runnable {
     /**
      * Maximum age (ms) for first-hop failure history entries.
      *  Entries older than this are ignored during lookup.
-     *  Tunable via {@link Tuner}.
+     *  Tunable via {@link net.i2p.router.Tuner}.
      *
      * @since 0.9.71+
      */
@@ -446,7 +446,7 @@ public class BuildExecutor implements Runnable {
      * Stale build pruning threshold fraction.  When the time elapsed
      *  since a build was configured exceeds this fraction of the adaptive
      *  timeout budget, the build is skipped (it would timeout anyway).
-     *  Expressed as percentage (e.g. 40 means 40%).  Tunable via {@link Tuner}.
+     *  Expressed as percentage (e.g. 40 means 40%).  Tunable via {@link net.i2p.router.Tuner}.
      *
      * @since 0.9.71+
      */
@@ -482,7 +482,7 @@ public class BuildExecutor implements Runnable {
      * Per-pool consecutive build failure tracking for backoff.
      * When a pool exceeds _consecutiveFailureThreshold, builds are
      * paused for _poolBackoffMs to prevent build storms.
-     * Maps: TunnelPool -> [consecutiveFailures, backoffUntilMs]
+     * Maps: TunnelPool -&gt; [consecutiveFailures, backoffUntilMs]
      * <p>
      * Threshold of 5 allows transient failures (network hiccups, slow peers)
      * without triggering premature backoff.  Previous threshold of 3 caused
@@ -614,7 +614,6 @@ public class BuildExecutor implements Runnable {
      * The maximum number of concurrent tunnel builds allowed.
      * Calculated based on CPU cores and configurable multiplier.
      *
-     * @return maximum concurrent builds allowed
      * @since 0.9.70+ configurable via setter
      */
     private static volatile int _maxConcurrentBuilds = Math.max(SystemVersion.getCores() * 4, 32);
@@ -1492,7 +1491,7 @@ public class BuildExecutor implements Runnable {
      * expired such a build.
      *
      * @param created the first hop's creation time in ms, or a non-positive value
-     *                 when no caller ever stamped it
+     *                when no caller ever stamped it
      * @param now current time in ms
      * @param adaptiveTimeout the deadline in ms this build was allowed; a
      *                        non-positive value disables expiry rather than
@@ -2899,7 +2898,7 @@ public class BuildExecutor implements Runnable {
      * that will reject the request.  Saves 12-18 build slots per minute.
      * <p>
      * Stale build pruning: skips builds that would timeout before being
-     * dispatched (queue wait + expected build time > timeout budget),
+     * dispatched (queue wait + expected build time &gt; timeout budget),
      * reducing wasted builds that would timeout anyway.
      *
      * @param cfg the tunnel configuration to build
@@ -3438,7 +3437,7 @@ public class BuildExecutor implements Runnable {
     /**
      * Graduated-urgency replenishment - replaces simple deficit-based approach.
      * Uses expiry-window urgency multipliers from mainline I2P:
-     * 1x at 210-270s, 2x at 150-210s, 4x at 90-150s, 6x at <90s.
+     * 1x at 210-270s, 2x at 150-210s, 4x at 90-150s, 6x at &lt;90s.
      * This ensures tunnels are rebuilt predictively before they expire,
      * rather than only reactively after failure.
      */
@@ -3732,15 +3731,15 @@ public class BuildExecutor implements Runnable {
 
     /**
      * Urgency score used to sort pools before build allocation, so a
-     *  collapsed or near-collapse pool earlier in the list cannot consume
-     *  build slots (or trigger the proportional cap) before an urgent pool
-     *  later in the list gets any.  Scores are tiered far apart on purpose:
-     *  0 usable tunnels (1 &lt;&lt; 20) outrank 1-2 usable (1 &lt;&lt; 16) which outrank
-     *  any numerical deficit, so the sort order is stable regardless of
-     *  configured quantities.
+     * collapsed or near-collapse pool earlier in the list cannot consume
+     * build slots (or trigger the proportional cap) before an urgent pool
+     * later in the list gets any.  Scores are tiered far apart on purpose:
+     * 0 usable tunnels (1 &lt;&lt; 20) outrank 1-2 usable (1 &lt;&lt; 16) which outrank
+     * any numerical deficit, so the sort order is stable regardless of
+     * configured quantities.
      *
      * @param usableCount current usable tunnel count of the pool
-     * @param target minimum desired tunnel count (already clamped to >= 2)
+     * @param target minimum desired tunnel count (already clamped to &gt;= 2)
      * @return urgency score; larger sorts earlier
      * @since 0.9.71+
      */

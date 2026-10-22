@@ -132,7 +132,7 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
      * @param remoteHostId non-null, == claimedAddress if direct, or a hash-based one if indirect
      * @param remotePeer must have supported sig type
      * @param needIntroduction should we ask Bob to be an introducer for us?
-     *                          ignored unless allowExtendedOptions is true
+     *                         ignored unless allowExtendedOptions is true
      * @param introKey Bob's introduction key, as published in the netdb
      * @param ra the router address
      * @param addr non-null

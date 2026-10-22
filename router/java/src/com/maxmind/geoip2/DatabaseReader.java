@@ -187,6 +187,8 @@ public class DatabaseReader implements Closeable {
      * <li>geoname_id: Long
      * </ul>
      * </ul>
+     * </ul>
+     * </ul>
      *
      * @param ipAddress IPv4 or IPv6 address to lookup.
      * @return A Map with the data for the IP address

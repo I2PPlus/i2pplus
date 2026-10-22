@@ -83,11 +83,11 @@ public class EstablishmentManager {
     /**
      * Cached "{@code udp.inboundTokenLifetime}" RateStat handle. Registered in the
      * constructor and never replaced, so it is resolved once rather than on
-     * every {@link #getInboundToken()} call: that path is reachable from an
-     * unauthenticated inbound Token Request, so the stat lookup (a name-based
-     * map get followed by a synchronized read of the Rate) was attacker
-     * triggerable. Resolved lazily because a test may construct this manager
-     * before the stat exists.
+     * every {@link #getInboundToken(RemoteHostId)} call: that path is
+     * reachable from an unauthenticated inbound Token Request, so the stat
+     * lookup (a name-based map get followed by a synchronized read of the Rate)
+     * was attacker triggerable. Resolved lazily because a test may construct
+     * this manager before the stat exists.
      *
      * @since 0.9.71+
      */
@@ -893,7 +893,7 @@ public class EstablishmentManager {
     /**
      * Is this a rejection from the introducer (Bob) rather than from Charlie
      * or a success? SSU2 relay response codes 1-63 reject at the introducer
-     * layer. 0 is success and >=64 reject at the destination (Charlie).
+     * layer. 0 is success and &gt;= 64 reject at the destination (Charlie).
      * Both the live-introduction map handling and the signer selection in
      * {@link #receiveRelayResponse} branch on this.
      *
@@ -991,6 +991,7 @@ public class EstablishmentManager {
     /**
      * Establishes a connection to send the message, or queues it if the limit is exceeded.
      *
+     * @param msg the outbound message to send, queued if we are at the concurrency limit
      * @param queueIfMaxExceeded true normally, false if called from locked_admit so we don't loop
      * @since 0.9.2
      */
@@ -1150,6 +1151,8 @@ public class EstablishmentManager {
      * or send/fail it immediately if the state is already complete or failed.
      *
      * @param inState non-null
+     * @param msg the outbound message to queue on the state, or send or fail
+     *            right away if the state is already finished
      */
     private void queueToInboundState(InboundEstablishState inState, OutNetMessage msg) {
         synchronized (inState) {
@@ -1185,6 +1188,9 @@ public class EstablishmentManager {
      * Look up an existing outbound establish state for the peer, first by
      * address, then by hash (for indirect connections).
      *
+     * @param to the claimed address or hash key the state is filed under
+     * @param toHash the peer's router hash, the fallback key tried when the
+     *               address key misses
      * @return the state, or null if none
      */
     private OutboundEstablishState lookupOutboundState(RemoteHostId to, Hash toHash) {
@@ -1203,8 +1209,26 @@ public class EstablishmentManager {
      * the peer unreachable and fails the message, banning the peer if it isn't
      * already banned.
      *
+     * @param msg the outbound message to fail if the peer turns out to be
+     *            unusable
      * @param to the key in _outboundStates: the claimed address (direct) or the hash (indirect)
      * @param maybeTo the claimed address, or null if indirect
+     * @param toIdentity the peer's router identity, stored in the new state
+     * @param isIndirect true to reach the peer through an introducer, so a
+     *                   valid v2 introducer is required
+     * @param addr the peer's parsed SSU address options, source of the MTU and
+     *             the introducer list
+     * @param ra the peer's router address entry, source of the SSU version,
+     *           transport style and introduction key option
+     * @param toHash the peer's router hash, used for bans and unreachable
+     *               marking
+     * @param truncHash the first 6 base64 chars of toHash, for logging only
+     * @param ipAddress the claimed IP as text, empty when there is no claimed
+     *                  address
+     * @param maybePort the claimed port, 0 when there is no claimed address
+     * @param now the current time in ms, used for the introducer validity check
+     * @param isBanned true if the peer is already banlisted, so no new ban is
+     *                 added
      * @return the new state, or null if the message was failed
      */
     private OutboundEstablishState createOutboundState(OutNetMessage msg, RemoteHostId to,
@@ -1285,12 +1309,19 @@ public class EstablishmentManager {
      * (has a hash) and not already banned, ban it for the given duration and
      * log a warning; otherwise warn that the claimed address is bad.
      *
+     * @param msg the outbound message to fail
+     * @param toHash the peer's router hash, or null when the peer cannot be
+     *               named, in which case no ban is recorded
      * @param failReason reason given to the failed message
      * @param banReason reason used for the ban and the ban log
      * @param noHashWarn warning text used when the peer has no hash
      * @param ipAddress the claimed IP, may be empty for indirect peers
      * @param port the claimed port
+     * @param truncHash the first 6 base64 chars of toHash, for the warning log
      * @param banDuration ban duration in ms, e.g. {@link #BAN_DURATION_INVALID_ADDRESS_MS}
+     * @param now the current time in ms, the base for the ban's expiry
+     * @param isBanned true if the peer is already banlisted, so no new ban is
+     *                 added
      */
     private void banAndFail(OutNetMessage msg, Hash toHash, String failReason, String banReason,
                             String noHashWarn, String ipAddress, int port, String truncHash,
@@ -1536,6 +1567,7 @@ public class EstablishmentManager {
      * <p>
      * Rate limited to MAX_TERMINATIONS per peer every FAILSAFE_INTERVAL.
      *
+     * @param to the peer's address to reject, ignored if null or banlisted
      * @param fromPacket header already decrypted, must be session or token request
      * @param terminationCode SSU2 reason code placed in the Retry packet
      * @since 0.9.57
@@ -1755,7 +1787,9 @@ public class EstablishmentManager {
 
     /**
      * Is the peer on the blocklist or banlist?
-     * @return whether peer banned
+     *
+     * @param hostId the peer's address and hash to test
+     * @return true if the peer's IP is blocklisted or its hash is banlisted
      * @since 0.9.68+
      */
     private boolean isPeerBanned(RemoteHostId hostId) {
@@ -1764,7 +1798,10 @@ public class EstablishmentManager {
 
     /**
      * Is the peer on the blocklist or banlist?
-     * @return whether peer banned
+     *
+     * @param hostId the peer's address and hash to test
+     * @param context what to call the peer in the log line naming the match
+     * @return true if the peer's IP is blocklisted or its hash is banlisted
      * @since 0.9.68+
      */
     private boolean isPeerBanned(RemoteHostId hostId, String context) {
@@ -1791,7 +1828,9 @@ public class EstablishmentManager {
 
     /**
      * Is the peer on the blocklist or banlist?
-     * @return whether peer banned
+     *
+     * @param state the inbound attempt whose peer to test
+     * @return true if the peer's IP is blocklisted or its hash is banlisted
      * @since 0.9.68+
      */
     private boolean isPeerBanned(InboundEstablishState2 state) {
@@ -1800,7 +1839,9 @@ public class EstablishmentManager {
 
     /**
      * Is the peer on the blocklist or banlist?
-     * @return whether peer banned
+     *
+     * @param state the outbound attempt whose peer to test
+     * @return true if the peer's IP is blocklisted or its hash is banlisted
      * @since 0.9.68+
      */
     private boolean isPeerBanned(OutboundEstablishState2 state) {
@@ -1889,6 +1930,9 @@ public class EstablishmentManager {
     /**
      * Ok, fully received, add it to the established cons and queue up a
      * netDb store to them.
+     *
+     * @param state the inbound attempt that just completed, an SSU2 state,
+     *              ignored if it is already marked complete
      */
     private void handleCompletelyEstablished(InboundEstablishState state) {
         if (state.isComplete()) return;
@@ -1934,6 +1978,8 @@ public class EstablishmentManager {
      * The two messages share a packet, so this stays separate from
      * sendAck0() rather than being folded into it: sendAck0() may run before
      * the PeerState exists, and only this path needs the peer's RouterInfo.
+     *
+     * @param peer the newly established peer to send our RouterInfo to
      */
     private void sendInboundComplete(PeerState peer) {
         if (_log.shouldDebug()) {_log.debug("Completing initial handshake with " + peer);}
@@ -1951,7 +1997,8 @@ public class EstablishmentManager {
      * Ok, fully received, add it to the established cons and send any
      * queued messages.
      *
-     * @return the new PeerState
+     * @param state the outbound attempt that just completed, an SSU2 state
+     * @return the new PeerState, or null if the state has no remote identity
      */
     private PeerState handleCompletelyEstablished(OutboundEstablishState state) {
         if (state.complete()) {
@@ -2027,6 +2074,9 @@ public class EstablishmentManager {
      * This may be called more than once.
      * <p>
      * Caller must synch on state.
+     *
+     * @param state the inbound attempt to answer, an SSU2 state whose current
+     *              inbound state selects which packet is sent
      */
     private void sendCreated(InboundEstablishState state) {
         UDPPacket pkt;
@@ -2078,6 +2128,10 @@ public class EstablishmentManager {
      * This may be called more than once.
      * <p>
      * Caller must synch on state.
+     *
+     * @param state the outbound attempt to drive, an SSU2 state whose current
+     *              outbound state selects whether a Token Request or a Session
+     *              Request is sent
      */
     private void sendRequest(OutboundEstablishState state) {
         UDPPacket packet;
@@ -2270,6 +2324,9 @@ public class EstablishmentManager {
      * <p>
      * SSU 2 only.
      *
+     * @param tag the per-tunnel introducer tag taken from Charlie's address
+     *            entry, echoed in the signed request data
+     * @param bob the already-connected introducer's session to ask
      * @param charlie must be SSU2
      * @return true if the RelayRequest was queued; false if we have no address to
      *         send from or the payload could not be signed or written
@@ -2761,6 +2818,9 @@ public class EstablishmentManager {
      * For SSU 2, it contains a full router info, so it may be fragmented.
      * <p>
      * Caller must synch on state.
+     *
+     * @param state the outbound attempt to confirm, an SSU2 state, failed if
+     *              its SessionCreated does not validate
      */
     private void sendConfirmation(OutboundEstablishState state) {
         boolean valid = state.validateSessionCreated();
@@ -3040,6 +3100,10 @@ public class EstablishmentManager {
 
     /**
      * Caller should probably synch on outboundState.
+     *
+     * @param outboundState the outbound attempt that timed out; dropped from
+     *                      the pending maps, and its queued messages failed
+     *                      unless the session is already confirmed
      */
     private void processExpired(OutboundEstablishState outboundState) {
         long nonce = outboundState.getIntroNonce();
@@ -3083,6 +3147,10 @@ public class EstablishmentManager {
 
     /**
      * Caller should probably synch on inboundState.
+     *
+     * @param inboundState the inbound attempt that timed out; its address is
+     *                     added to the inbound ban map and its queued
+     *                     messages are failed
      * @since 0.9.2
      */
     private void processExpired(InboundEstablishState inboundState) {

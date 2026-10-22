@@ -19,7 +19,7 @@ import org.junit.Test;
  * {@code coalesceOnly()} therefore takes no decay argument: there is nothing for
  * it to control.
  *
- * @since 0.9.72
+ * @since 0.9.72+
  */
 public class PeerProfilePeakDecayTest {
 

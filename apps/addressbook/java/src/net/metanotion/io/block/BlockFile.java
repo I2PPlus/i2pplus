@@ -76,7 +76,7 @@ public class BlockFile implements Closeable {
 
     private final BSkipList<String, Integer> metaIndex;
     private boolean _isClosed;
-    /** cached list of free pages, only valid if freListStart > 0 */
+    /** cached list of free pages, only valid if freListStart &gt; 0 */
     private FreeListBlock flb;
     private final HashMap<String, BSkipList> openIndices = new HashMap<>();
 

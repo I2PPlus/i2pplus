@@ -70,9 +70,9 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
 
     /** Current encrypted block we are reading (IB only) or an IV buf used at the end for OB. */
     private byte[] _curEncrypted;
-    /** Alice's RouterIdentity, set after {@link #gotRI()} validation succeeds. */
+    /** Alice's RouterIdentity, set after {@link #gotRI(RouterInfo, boolean, boolean)} validation succeeds. */
     private RouterIdentity _aliceIdent; // NOSONAR S1450: set and read in gotRI()
-    /** Flag to ensure {@link #releaseBufs()} is called only once. */
+    /** Flag to ensure {@link #releaseBufs(boolean)} is called only once. */
     private volatile boolean _released;
 
     //// NTCP2 things
@@ -286,7 +286,7 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
      * @param aliceHash the hash of Alice's RouterIdentity to validate
      * @return true if the peer is valid and connection should proceed;
      *         false if validation failed (caller should return immediately)
-     * @since 0.9.36 pulled out of {@link #verifyInbound()}
+     * @since 0.9.36 pulled out of {@link #verifyInbound(Hash)}
      */
     private boolean verifyInbound(Hash aliceHash) {
         // get inet-addr
@@ -737,7 +737,7 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
      * <li>Calls con.failInboundEstablishment() with termination reason</li>
      * <li>Transitions to CORRUPT state</li>
      * </ul>
-     * <p>Note: If you don't call this method, call {@link #fail()} directly.
+     * <p>Note: If you don't call this method, call {@link #fail(String)} directly.
      *
      * @param buf ByteBuffer possibly containing "extra" data for immediate processing
      *            in the data phase; typically present for inbound connections

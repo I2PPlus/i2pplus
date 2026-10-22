@@ -340,17 +340,17 @@ public class PeerState {
     private static volatile int TARGET_RTT = 2000;
     /**
      * RTT multiplier above which we multiplicative-decrease concurrency.
-     * Only decrease when RTT > TARGET_RTT * RTT_DECREASE_FACTOR — truly congested.
+     * Only decrease when RTT &gt; TARGET_RTT * RTT_DECREASE_FACTOR — truly congested.
      * Configurable via {@code i2p.transport.udp.rttDecreaseFactor}.
      */
     private static volatile int RTT_DECREASE_FACTOR = 4;
-    /** When RTT > TARGET_RTT but there are queued messages, increase modestly. */
+    /** When RTT &gt; TARGET_RTT but there are queued messages, increase modestly. */
     private static final int QUEUE_BACKPRESSURE_INCREASE = 4;
     /**
      * How many concurrent outbound messages do we allow OutboundMessageFragments to send.
      * This counts full messages, NOT fragments (UDP packets).
-     * Dynamically adjusted based on measured RTT: increased when RTT < TARGET_RTT,
-     * decreased when RTT > TARGET_RTT * RTT_DECREASE_FACTOR.
+     * Dynamically adjusted based on measured RTT: increased when RTT &lt; TARGET_RTT,
+     * decreased when RTT &gt; TARGET_RTT * RTT_DECREASE_FACTOR.
      */
     private int _concurrentMessagesAllowed = INIT_CONCURRENT_MSGS;
     /** How many concurrency rejections have we had in a row. */
@@ -440,7 +440,10 @@ public class PeerState {
      */
     public static final int MAX_MTU = Math.max(LARGE_MTU, MAX_IPV6_MTU);
 
-    /** Amount to adjust up or down in {@link #adjustMTU()} - should be multiple of 16, at least for SSU 1. */
+    /**
+     * Amount to adjust up or down in {@link #adjustMTU(int, boolean)} - should be
+     * multiple of 16, at least for SSU 1.
+     */
     private static final int MTU_STEP = 64;
 
     /**
@@ -1389,6 +1392,12 @@ public class PeerState {
      * not adjusted at all.
      * <p>
      * Caller should synch.
+     *
+     * @param state the message to allocate send-window space for
+     * @param now current time in ms, recorded as the last send time when the
+     *            allocation succeeds
+     * @return true if the message's bytes were deducted from the send window,
+     *         false if the concurrency limit or the remaining window blocked it
      */
     private boolean allocateSendingBytes(OutboundMessageState state, long now) {
         int messagePushCount = state.getPushCount();
@@ -1804,6 +1813,17 @@ public class PeerState {
     /**
      * We sent a message which was ACKed containing the given # of bytes.
      * Caller should synch on this.
+     *
+     * @param bytesACKed bytes newly confirmed by the ACK, added to the send window
+     * @param maxPktSz full packet size of the ACKed message's first fragment,
+     *                 including the block header and IP/UDP overhead
+     * @param lifetime ms from the first send to this ACK, the RTT sample
+     * @param numSends how many times the message was sent; below 2 the RTT, MTU
+     *                 and congestion-window updates run
+     * @param anyPending true if other sent messages are still unACKed; false clears
+     *                   the retransmit timer and exits fast retransmit
+     * @param anyQueued true if the outbound queue still holds messages, used to
+     *                  decide whether to nudge the message fragments job
      */
     private void locked_messageACKed(int bytesACKed, int maxPktSz, long lifetime, int numSends, boolean anyPending, boolean anyQueued) {
         _consecutiveFailedSends = 0;
@@ -1860,6 +1880,15 @@ public class PeerState {
 
     /**
      * We sent a message which was ACKed containing the given # of bytes.
+     * Takes the send-window lock and delegates to
+     * {@link #locked_messageACKed(int, int, long, int, boolean, boolean)}.
+     *
+     * @param bytesACKed bytes newly confirmed by the ACK
+     * @param maxPktSz full packet size of the ACKed message's first fragment
+     * @param lifetime ms from the first send to this ACK, the RTT sample
+     * @param numSends how many times the message was sent
+     * @param anyPending true if other sent messages are still unACKed
+     * @param anyQueued true if the outbound queue still holds messages
      */
     private void messageACKed(int bytesACKed, int maxPktSz, long lifetime, int numSends, boolean anyPending, boolean anyQueued) {
         synchronized(_sendWindowBytesRemainingLock) {
@@ -2363,6 +2392,11 @@ public class PeerState {
 
     /**
      * Locks this.
+     *
+     * @param state the message to allocate send-window space for
+     * @param now current time in ms, used to throttle the rejection log
+     * @return true if send-window space was allocated for the message, false if
+     *         it was rejected and counted in udp.sendRejected
      */
     private boolean locked_shouldSend(OutboundMessageState state, long now) {
         if (allocateSendingBytes(state, now)) {

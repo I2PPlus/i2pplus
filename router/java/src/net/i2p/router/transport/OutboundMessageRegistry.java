@@ -40,11 +40,11 @@ public class OutboundMessageRegistry {
     private final Map<MessageSelector, Object> _selectorToMessage;
     /**
      * Set of active OutNetMessage (for quick removal and selector fetching).
-     * Apparently only used for dup detection in {@link #registerPending()}.
+     * Apparently only used for dup detection in {@link #registerPending(OutNetMessage, boolean)}.
      * Changed to concurrent, but it could perhaps be removed completely,
      * It would seem difficult to add a dup since every OutNetMessage is different,
      * and it's generally instantiated just before ctx.outNetMessagePool().add().
-      * But in {@link net.i2p.router.transport.TransportImpl#afterSend} it does requeue a previous ONM if
+     * But in {@link net.i2p.router.transport.TransportImpl#afterSend} it does requeue a previous ONM if
      * allowRequeue=true.
      */
     private final Set<OutNetMessage> _activeMessages;

@@ -61,7 +61,7 @@ public class LogsHelper extends HelperBase {
  * double-bracket cleanup. Order is load-bearing and not mergeable: this table
  * turns "&amp;hellip;" into "...", which MSG_REWRITES_C turns into
  * "&hellip;", and it ticks "false" before a later rewrite can restore
- * "[&#10008;] positives" to "false positives".
+ * "[&amp;#10008;] positives" to "false positives".
  *
  * @since 0.9.72+
  */
@@ -92,8 +92,8 @@ public class LogsHelper extends HelperBase {
 
 /**
  * The middle of the rewrite chain, run after the double-bracket cleanup and
- * before the newline-bullet rewrite. The un-ticking has to see the "&#10004;"
- * and "&#10008;" that the first table produces. The last entry converts the
+ * before the newline-bullet rewrite. The un-ticking has to see the "&amp;#10004;"
+ * and "&amp;#10008;" that the first table produces. The last entry converts the
  * inline {@code " * "} value separator that source log messages write for the
  * file log into the bullet separator the console renders. The literal
  * {@code \u2022} is used rather than {@code &bullet;} so the rewrite cannot be

@@ -1048,10 +1048,10 @@ class Packet {
      * Format as a string builder for logging.
      *
      * @param withContext when {@code false}, omit the facts the caller's own
-     *        message already carries - the stream-ID header and the sequence
-     *        number here, the send count and the connection pair in
-     *        {@link PacketLocal}: a caller that leads with the connection
-     *        prefix must not print them a second time
+     *                    message already carries - the stream-ID header and the sequence
+     *                    number here, the send count and the connection pair in
+     *                    {@link PacketLocal}: a caller that leads with the connection
+     *                    prefix must not print them a second time
      * @return a buffer holding the human readable form of this packet, ready to
      *         be appended to a log message
      * @since 0.9.71+

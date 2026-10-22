@@ -117,7 +117,7 @@ public class JobQueue {
     private static final int DEFAULT_MAX_WAITING_JOBS = SystemVersion.isSlow() ? 24 : 48;
     /**
      * Resolved once from {@link #PROP_MAX_WAITING_JOBS} at construction.
-     * {@link #shouldDrop()} read it per addJob() that could exceed the cap.  A
+     * {@link #shouldDrop(Job, int)} read it per addJob() that could exceed the cap.  A
      * non-positive value disables dropping.
      */
     private final int _maxWaitingJobs;
@@ -188,8 +188,8 @@ public class JobQueue {
     }
 
     /**
-     * Claim the job in {@link #_readyIndex} before {@code offer()} publishes it,
-     * so a concurrent {@link #addJob()} sees it as already queued in that window.
+     * Claim the job in {@code _readyIndex} before {@code offer()} publishes it,
+     * so a concurrent {@link #addJob(Job)} sees it as already queued in that window.
      */
     private void offerReady(Job job, BlockingQueue<Job> queue) {
         _readyIndex.add(job);

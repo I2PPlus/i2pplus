@@ -171,7 +171,7 @@ public class FloodfillPeerSelector extends PeerSelector {
      * Build the floodfill candidate list with only the cheap per-peer checks:
      * the exclusion set, the two banlist tiers, and the unreachable capability
      * flag. No profile is touched.
-     * <p>{@link #peerSendsBadReplies(Hash)} is deliberately not applied here —
+     * <p>{@link net.i2p.router.peermanager.ProfileOrganizer#peerSendsBadReplies(Hash)} is deliberately not applied here —
      * it takes ProfileOrganizer's read lock and then four synchronized Rate reads
      * per peer, which on a healthy router is ~1000 lock acquisitions and ~4000
      * Rate reads for a single exploratory lookup, nearly all of them thrown away

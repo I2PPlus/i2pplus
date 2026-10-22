@@ -87,7 +87,7 @@ public class Hash extends SimpleDataStructure {
      * @return the cached or new hash
      * @throws NullPointerException if data is null
      * @throws RuntimeException if data is not the correct number of bytes
-     *         (SDSCache wraps the constructor's IllegalArgumentException)
+     *                          (SDSCache wraps the constructor's IllegalArgumentException)
      * @since 0.8.3
      */
     public static Hash create(byte[] data) {

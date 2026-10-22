@@ -562,6 +562,9 @@ public class GeoIP {
 
    /**
     * Open the ASN database reader (lazy, cached).
+    *
+    * @return the reader for the ASN database, or null if the database file is missing
+    * @throws IOException if the file exists but cannot be read as a MaxMind database
     */
     private com.maxmind.db.Reader openASN() throws IOException {
         File asnFile = getASN();
@@ -748,7 +751,12 @@ public class GeoIP {
         "etisalat", "techtel"
     ));
 
-    /** Reverse a single word. */
+    /**
+     * Reverse a single word.
+     *
+     * @param word the characters to reverse
+     * @return the same characters in the opposite order
+     */
     private static String reverseWord(String word) {
         return new StringBuilder(word).reverse().toString();
     }
@@ -811,7 +819,10 @@ public class GeoIP {
         for (String[] b : brands) {BRAND_NAMES.put(b[0], b[1]);}
     }
 
-    /** Vodafone subsidiaries: "Vodafone <Country>" names (longest first for matching). */
+    /**
+     * Vodafone subsidiaries: "Vodafone &lt;Country&gt;" names, longest first so a
+     * multi-word country matches before a shorter prefix of it.
+     */
     private static final List<String> VODAFONE_COUNTRIES;
     /** Vodafone regional brand aliases that are not country names. */
     private static final Map<String, String> VODAFONE_ALIASES;
@@ -935,7 +946,12 @@ public class GeoIP {
         ABBREV_ALL = Pattern.compile(sb.toString(), Pattern.CASE_INSENSITIVE);
     }
 
-    /** Single-pass abbreviation replacement (was 29× replaceAll). */
+    /**
+     * Single-pass abbreviation replacement (was 29× replaceAll).
+     *
+     * @param name the organisation name to shorten
+     * @return the name with every verbose-word match replaced by its abbreviation
+     */
     private static String applyAbbreviation(String name) {
         StringBuilder sb = new StringBuilder(name.length() + 16);
         Matcher m = ABBREV_ALL.matcher(name);
@@ -1007,19 +1023,24 @@ public class GeoIP {
 
     /**
      * Detect and fix character-reversed words from MaxMind ASN DB.
-     * e.g. "eteicoS esiacnarF uD enohpeletoidaR" -> "Societe France Du RadioTelephone"
+     * e.g. "eteicoS esiacnarF uD enohpeletoidaR" -&gt; "Societe France Du RadioTelephone"
      * <p>
-     * Four-pass detection:
+     * Detection passes:
      * 1. Word-by-word: words starting lowercase and ending uppercase are likely reversed.
      * 2. Full-string: try reversing the entire name for compound words without spaces.
-     * 3. Full word-level char reversal: reverse every word unconditionally (catches
-     * all-lowercase reversed words like "enofadov" where decode isn't in known-words).
-     * 4. Word-order reversal: reverse word order (catches "loclix as trading sciacca...").
-     * 5. Combined: char-reversal then word-order (catches both like "tsohxuled sa gnidart...").
+     * 3. First/last char case-swap: turns "techteL" back into "Techtel".
+     * 4. Full word-level char reversal: reverse every word unconditionally, catching
+     * all-lowercase reversed words like "enofadov" where decode isn't in known-words.
+     * 5. Word-order reversal: flip the word order (catches "loclix as trading...").
+     * 6. Combined: char-reversal then word-order, catching both at once, as in
+     * "tsohxuled sa gnidart inolletram oettam".
      * Also detects "as trading" pattern which strongly signals word-order is reversed.
      * Picks whichever pass scores highest (known-word matches + title-case words).
      * <p>
      * AS numbers must be stripped before calling this (see normalizeOrgName).
+     *
+     * @param name the organisation name as read from the database
+     * @return the corrected name, or the input unchanged if no reversal was detected
      */
     private static String fixReversedWords(String name) {
         String[] words = SPACE_SPLIT.split(name);
@@ -1082,13 +1103,22 @@ public class GeoIP {
      * Score a candidate by known-word matches (weighted 3x) plus title-case word count.
      * Title-case words are a strong signal because ASN org names are stored title-cased,
      * and reversed names are all-lowercase.
+     *
+     * @param text the candidate name to score
+     * @return the score, or -1 for an empty candidate so that it always loses
      */
     private static int scoreCandidate(String text) {
         if (text.isEmpty()) return -1;
         return countKnownWordMatches(text) * 3 + countTitleCaseWords(text);
     }
 
-    /** Count words starting with uppercase (title-case signal for proper org names). */
+    /**
+     * Count words starting with uppercase (title-case signal for proper org names).
+     *
+     * @param text the name to scan
+     * @return how many space-separated words of two or more characters start with an
+     *         uppercase letter
+     */
     private static int countTitleCaseWords(String text) {
         int count = 0;
         for (String w : SPACE_SPLIT.split(text)) {
@@ -1100,9 +1130,15 @@ public class GeoIP {
     }
 
     /**
-     * Detect "as trading" pattern (lowercase) — strong signal that word order is reversed.
-     * A correct org name has "Trading as X", but word-order reversal produces "X as trading".
+     * Detect "as trading" pattern (lowercase), a strong signal that word order is
+     * reversed.
+     * A correct org name has "Trading as X", but word-order reversal produces
+     * "X as trading".
      * Also checks the char-reversed candidate for the same pattern.
+     *
+     * @param name the original organisation name
+     * @param allWordReversed the candidate with every word char-reversed, may be empty
+     * @return the reordered name when the "as trading" pattern is present, otherwise ""
      */
     private static String tryFixAsTrading(String name, String allWordReversed) {
         // Check original name
@@ -1116,7 +1152,12 @@ public class GeoIP {
         return "";
     }
 
-    /** If text contains "as trading", reverse word order and check for "trading as". */
+    /**
+     * If text contains "as trading", reverse word order and check for "trading as".
+     *
+     * @param text the candidate name to test
+     * @return the reordered name if it now reads "trading as", otherwise ""
+     */
     private static String tryWordOrderIfHasAsTrading(String text) {
         String lower = text.toLowerCase(Locale.US);
         if (!lower.contains("as trading")) return "";
@@ -1126,7 +1167,12 @@ public class GeoIP {
         return "";
     }
 
-    /** Try reversing individual words that look reversed (lowercase start, uppercase end). */
+    /**
+     * Try reversing individual words that look reversed (lowercase start, uppercase end).
+     *
+     * @param words the name split on spaces
+     * @return the name with the reversed-looking words flipped, "" if none look reversed
+     */
     private static String tryWordReversal(String[] words) {
         boolean anyReversed = false;
         for (String w : words) {
@@ -1144,9 +1190,13 @@ public class GeoIP {
 
     /**
      * Try swapping the case of first and last characters in each word.
-     * Handles MaxMind corruption where "Techtel" becomes "techteL" (first/last case swapped).
-     * Only acts if at least one word has the corruption signature (lowercase start, uppercase end).
-     * Words that don't match the corruption pattern are left unchanged.
+     * Handles MaxMind corruption where "Techtel" becomes "techteL", with the first and
+     * last characters' case swapped.
+     * Only acts if at least one word has the corruption signature, a lowercase start
+     * with an uppercase end; words that don't match the pattern are left unchanged.
+     *
+     * @param words the name split on spaces
+     * @return the name with the corrupted words' case swapped, "" if none are corrupted
      */
     private static String tryCaseSwap(String[] words) {
         boolean anyCorrupted = false;
@@ -1163,7 +1213,12 @@ public class GeoIP {
         return fixed.toString();
     }
 
-    /** Swap the case of the first and last characters of a word. */
+    /**
+     * Swap the case of the first and last characters of a word.
+     *
+     * @param word the word to swap; returned as-is if shorter than two characters
+     * @return the word with its first and last characters' case flipped
+     */
     private static String swapFirstLastCase(String word) {
         if (word.length() < 2) {return word;}
         char first = word.charAt(0);
@@ -1173,7 +1228,13 @@ public class GeoIP {
         return newFirst + word.substring(1, word.length() - 1) + newLast;
     }
 
-    /** Try reversing the entire string as one block (for compound words). */
+    /**
+     * Try reversing the entire string as one block (for compound words).
+     *
+     * @param name the organisation name to reverse as a whole
+     * @return the reversed name if some word of it starts with an uppercase letter,
+     *         otherwise ""
+     */
     private static String tryFullStringReversal(String name) {
         String reversed = reverseWord(name);
         // Only use if the reversed form looks like normal text
@@ -1190,6 +1251,9 @@ public class GeoIP {
      * Catches all-lowercase reversed words like "enofadov" where the decoded
      * form ("vodafone") isn't in the known-words list, so case-pattern detection
      * wouldn't trigger.
+     *
+     * @param words the name split on spaces
+     * @return every word reversed, in the original word order
      */
     private static String tryFullWordReversal(String[] words) {
         StringBuilder fixed = new StringBuilder();
@@ -1204,6 +1268,9 @@ public class GeoIP {
      * Reverse the order of words.
      * Catches word-order reversal like "loclix as trading sciacca filiberto matteo"
      * → "matteo filiberto sciacca trading as loclix".
+     *
+     * @param name the organisation name to reorder
+     * @return the words in reverse order, "" if there are fewer than two words
      */
     private static String tryWordOrderReversal(String name) {
         String[] words = SPACE_SPLIT.split(name);
@@ -1216,7 +1283,12 @@ public class GeoIP {
         return fixed.toString();
     }
 
-    /** Count how many space-separated words match known words. */
+    /**
+     * Count how many space-separated words match known words.
+     *
+     * @param text the name to scan
+     * @return how many of its words are in the known-words set, ignoring case
+     */
     private static int countKnownWordMatches(String text) {
         if (text.isEmpty()) {return 0;}
         int count = 0;
@@ -1233,7 +1305,11 @@ public class GeoIP {
      * 2. Reversing its letters yields a known word (e.g. "CSJP" → "PJSC").
      * <p>
      * Leading/trailing non-letter characters are ignored for the letter check
-     * so that ")puorG" and "talasite(" are correctly detected.
+     * so that "talasite(" and ")puorG" are correctly detected.
+     *
+     * @param word the word to test
+     * @return true if the word's case pattern, or the word its letters decode to when
+     *         reversed, suggests it was stored reversed
      */
     private static boolean looksReversed(String word) {
         if (word.length() < 2) {return false;}
@@ -1372,8 +1448,8 @@ public class GeoIP {
     }
 
     /**
-     * Collapse "Vodafone <Country> ..." names (with corporate-suffix cruft from
-     * truncated MaxMind entries) to just "Vodafone <Country>".
+     * Collapse "Vodafone &lt;Country&gt; ..." names, with corporate-suffix cruft from
+     * truncated MaxMind entries, to just "Vodafone &lt;Country&gt;".
      * Country matching is multi-word aware ("Czech Republic", "New Zealand").
      * Non-country Vodafone names (Group, Idea, etc.) pass through unchanged.
      *
@@ -1408,7 +1484,13 @@ public class GeoIP {
         return name;
     }
 
-    /** First whitespace-delimited word of a string with trailing punctuation stripped, or the whole string. */
+    /**
+     * First whitespace-delimited word of a string with trailing punctuation stripped,
+     * or the whole string.
+     *
+     * @param s the string to take the first word of
+     * @return the text up to the first space, without trailing non-alphanumerics
+     */
     private static String firstWord(String s) {
         int i = s.indexOf(' ');
         String w = i > 0 ? s.substring(0, i) : s;
@@ -1419,6 +1501,10 @@ public class GeoIP {
 
     /**
      * Title-case a name while preserving acronyms and brand names.
+     *
+     * @param name the name to re-case, split on spaces
+     * @return the re-cased name, with brand names, short all-caps acronyms and
+     *         KEEP_UPPER words left as they are
      */
     private static String titleCasePreserve(String name) {
         String[] words = SPACE_SPLIT.split(name);
@@ -1449,6 +1535,11 @@ public class GeoIP {
 
      /**
       * Open a GeoIP2 database.
+      *
+      * @param geoFile the GeoIP2 database file to open
+      * @return a reader with a 256-entry cache, whose build date is also reported to
+      *         the update manager
+      * @throws IOException if the file cannot be read, or is not a valid MaxMind database
       * @since 0.9.38
       */
     private DatabaseReader openGeoIP2(File geoFile) throws IOException {
@@ -1462,8 +1553,9 @@ public class GeoIP {
     }
 
    /**
-    * Return the current GeoIP database version.
-    * @return the geo IP build info
+    * Formats a database build date for the console, e.g. "Oct 22, 2026".
+    * One formatter per thread, as SimpleDateFormat is not thread-safe.
+    *
     * @since 0.9.65+
     */
     private static final ThreadLocal<DateFormat> _GEOIP_DATE_FORMAT = ThreadLocal.withInitial(() -> new SimpleDateFormat("MMM d, yyyy", Locale.US));
@@ -1527,7 +1619,7 @@ public class GeoIP {
     * To create:
     * wget https://web.archive.org/web/2010id_/http://ip-to-country.webhosting.info/downloads/ip-to-country.csv.zip
     * unzip ip-to-country.csv.zip
-    * cut -d, -f3,5 < ip-to-country.csv|sed 's/"//g' | sort | uniq > countries.txt.
+    * cut -d, -f3,5 &lt; ip-to-country.csv|sed 's/"//g' | sort | uniq &gt; countries.txt.
     */
     private void readCountryFile() {
         String geoDir = _context.getProperty(PROP_GEOIP_DIR, GEOIP_DIR_DEFAULT);
@@ -1580,11 +1672,12 @@ public class GeoIP {
     * To create:
     * wget https://web.archive.org/web/2010id_/http://ip-to-country.webhosting.info/downloads/ip-to-country.csv.zip
     * unzip ip-to-country.csv.zip
-    * cut -d, -f0-3 < ip-to-country.csv|sed 's/"//g' > geoip.txt.
+    * cut -d, -f0-3 &lt; ip-to-country.csv|sed 's/"//g' &gt; geoip.txt.
     *
     * @param search a sorted array of IPs to search
-    * @return an array of country codes, same order as the search param,
-    * or a zero-length array on failure
+    * @return an array of country codes, same order as the search param, with null for
+    *         an IP outside every range in the file; a zero-length array if the file is
+    *         missing
     */
     private String[] readGeoIPFile(Long[] search) {
         String geoDir = _context.getProperty(PROP_GEOIP_DIR, GEOIP_DIR_DEFAULT);
@@ -1628,6 +1721,8 @@ public class GeoIP {
     /**
      * Tell the update manager.
      *
+     * @param subtype the updater subtype recorded against the GEOIP update type
+     * @param version the version number to report; zero or below is ignored
      * @since 0.9.45
      */
     private void notifyVersion(String subtype, long version) {
@@ -1834,7 +1929,11 @@ public class GeoIP {
         add(toLong(ip));
     }
 
-    /** See above for ip-to-long mapping. */
+    /**
+     * See above for ip-to-long mapping.
+     *
+     * @param ip the address as a long, IPv4 in the low 32 bits, IPv6 as the first 8 bytes
+     */
     private void add(long ip) {
         Long li = Long.valueOf(ip);
         if (!(_IPToCountry.containsKey(li) || _notFound.contains(li))) {
@@ -1868,10 +1967,22 @@ public class GeoIP {
         return get(toLong(ip));
     }
 
-    /** See above for ip-to-long mapping. */
+    /**
+     * The country for an IP from the cache.
+     * See above for ip-to-long mapping.
+     *
+     * @param ip the address as a long, IPv4 in the low 32 bits, IPv6 as the first 8 bytes
+     * @return lower-case code, generally two letters, or null if not cached
+     */
     private String get(long ip) {return _IPToCountry.get(Long.valueOf(ip));}
 
-    /** See above for ip-to-long mapping. */
+    /**
+     * Convert an address to the long form used as the cache key.
+     * See above for ip-to-long mapping.
+     *
+     * @param ip four bytes for IPv4, sixteen bytes for IPv6
+     * @return IPv4 as a non-negative long, IPv6 as the first 8 bytes as a signed long
+     */
     private static long toLong(byte[] ip) {
         long rv = 0;
         if (ip.length == 16) {
@@ -1885,6 +1996,7 @@ public class GeoIP {
 
     /**
      * The given IPv4 as a dotted-quad string.
+     * @param ip the IPv4 address as a non-negative long
      * @return the address in dotted-quad form, for example 1.2.3.4
      * @since 0.9.38 for maxmind
      */
@@ -1900,6 +2012,7 @@ public class GeoIP {
 
     /**
      * The given IPv6 as a hex string.
+     * @param ip the first 8 bytes of the IPv6 address as a long
      * @return the address in hex form, for example aabb:ccdd:eeff:1122::
      * @since 0.9.26 for maxmind
      */

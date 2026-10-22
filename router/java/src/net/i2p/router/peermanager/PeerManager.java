@@ -32,8 +32,8 @@ import net.i2p.util.SimpleTimer2;
  * <p>
  * Responsibilities:
  * - Maintains `_peersByCapability` index (character → Set of Hash) for quick capability lookups
-  * - Runs Reorg on SimpleTimer2 which calls
-   * {@link net.i2p.router.peermanager.ProfileOrganizer#reorganize} at adaptive intervals
+ * - Runs Reorg on SimpleTimer2 which calls
+ * {@link net.i2p.router.peermanager.ProfileOrganizer#reorganize} at adaptive intervals
  * (30s early uptime → 90s medium → 250s steady state)
  * - Periodically stores profiles to disk via {@link ProfilePersistenceHelper} (every 15 min)
  * - Loads stored profiles from disk on startup in a background thread
@@ -74,7 +74,7 @@ class PeerManager {
      * Timeout for a RouterInfo lookup issued on behalf of a stored profile whose peer
      * the netdb cannot resolve, in ms.
      *
-     * @since 0.9.72
+     * @since 0.9.72+
      */
     private static final long ADDRESS_REFRESH_TIMEOUT_MS = 30 * 1000L;
 
@@ -361,7 +361,7 @@ class PeerManager {
      * negatively caches keys it has already failed to resolve, so a peer that never
      * comes back is cheap to keep skipping.
      *
-     * @since 0.9.72
+     * @since 0.9.72+
      */
     private class MissingRouterInfoDrain extends SimpleTimer2.TimedEvent {
 

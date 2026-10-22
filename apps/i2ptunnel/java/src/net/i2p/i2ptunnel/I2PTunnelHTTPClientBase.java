@@ -1230,7 +1230,7 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
     //////// Error page stuff
 
     /**
-     * Load the error page header file, e.g. foo => errordir/foo-header_xx.ht for lang xx,
+     * Load the error page header file, e.g. foo =&gt; errordir/foo-header_xx.ht for lang xx,
      * or errordir/foo-header.ht, or the backup byte array on fail.
      * <p>.ht files must be UTF-8 encoded and use \r\n terminators so the
      * HTTP headers are conformant.
@@ -1245,7 +1245,7 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
     }
 
     /**
-     * Load the error page header file, e.g. foo => errordir/foo-header_xx.ht for lang xx,
+     * Load the error page header file, e.g. foo =&gt; errordir/foo-header_xx.ht for lang xx,
      * or errordir/foo-header.ht, or the backup byte array on fail.
      * <p>.ht files must be UTF-8 encoded and use \r\n terminators so the
      * HTTP headers are conformant.

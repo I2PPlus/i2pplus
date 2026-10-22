@@ -18,7 +18,7 @@ package org.cybergarage.xml;
  *   <li>&lt; - escaped as &amp;lt;
  *   <li>&gt; - escaped as &amp;gt;
  *   <li>&quot; - escaped as &amp;quot; (when quotes are enabled)
- *   <li>&apos; - escaped as &amp;apos; (when quotes are enabled)
+ *   <li>&#39; - escaped as &amp;apos; (when quotes are enabled)
  * </ul>
  *
  * @since 1.0
@@ -56,12 +56,12 @@ public class XML {
      *   <li>&amp; - always escaped as &amp;amp;
      *   <li>&lt; - always escaped as &amp;lt;
      *   <li>&gt; - always escaped as &amp;gt;
-     *   <li>&apos; - escaped as &amp;apos; when quote is true
+     *   <li>&#39; - escaped as &amp;apos; when quote is true
      *   <li>&quot; - escaped as &amp;quot; when quote is true
      * </ul>
      *
      * @param input the string to escape, may be null
-     * @param quote whether to escape quote characters (&apos; and &quot;)
+     * @param quote whether to escape quote characters (&#39; and &quot;)
      * @return the escaped string, or null if input is null
      */
     private static final String escapeXMLChars(String input, boolean quote) {
@@ -132,7 +132,7 @@ public class XML {
      *   <li>&amp;amp; - replaced with &amp;
      *   <li>&amp;lt; - replaced with &lt;
      *   <li>&amp;gt; - replaced with &gt;
-     *   <li>&amp;apos; - replaced with &apos;
+     *   <li>&amp;apos; - replaced with &#39;
      *   <li>&amp;quot; - replaced with &quot;
      * </ul>
      *

@@ -121,16 +121,16 @@ class I2PSessionMuxedImpl extends I2PSessionImpl2 {
     }
 
     /**
-     *  Listen on specified protocol and port.
+     * Listen on specified protocol and port.
      * <p>
-     *  An existing listener with the same proto and port is replaced.
-     *  Only the listener with the best match is called back for each message.
+     * An existing listener with the same proto and port is replaced.
+     * Only the listener with the best match is called back for each message.
      *
      * @param lsnr the listener to add
      * @param proto 1-254 or PROTO_ANY (0) for all; recommended:
-     *               I2PSession.PROTO_STREAMING
-     *               I2PSession.PROTO_DATAGRAM
-     *               255 disallowed
+     *              I2PSession.PROTO_STREAMING
+     *              I2PSession.PROTO_DATAGRAM
+     *              255 disallowed
      *
      * @param port 1-65535 or PORT_ANY (0) for all
      */
@@ -253,15 +253,15 @@ class I2PSessionMuxedImpl extends I2PSessionImpl2 {
     }
 
     /**
-     *  See SendMessageOptions for option details.
+     * See SendMessageOptions for option details.
      * <p>
-     *  Always uses sendNoEffort for now.
+     * Always uses sendNoEffort for now.
      *
      * @param proto 1-254 or 0 for unset; recommended:
-     *               I2PSession.PROTO_UNSPECIFIED
-     *               I2PSession.PROTO_STREAMING
-     *               I2PSession.PROTO_DATAGRAM
-     *               255 disallowed
+     *              I2PSession.PROTO_UNSPECIFIED
+     *              I2PSession.PROTO_STREAMING
+     *              I2PSession.PROTO_DATAGRAM
+     *              255 disallowed
      *
      * @param fromPort 1-65535 or 0 for unset
      * @param toPort 1-65535 or 0 for unset

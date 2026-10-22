@@ -17,7 +17,7 @@ import org.junit.Test;
  * session, so a client-supplied message id alone must never authorize reading or
  * releasing a retained payload: the message must also name a live session.
  *
- * @since 0.9.72
+ * @since 0.9.72+
  */
 public class ClientMessageEventListenerReceiveTest {
 

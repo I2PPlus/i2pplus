@@ -150,7 +150,7 @@ public class XMLParser extends JaxpParser {
 
     /**
      * A replacement for {@link org.cybergarage.xml.Node#output}, which does not recognize #text.
-     * Also, we use the empty entity, so <br /> does not turn into <br></br>.
+     * Also, we use the empty entity, so &lt;br /&gt; does not turn into &lt;br&gt;&lt;/br&gt;.
      */
     private static void output(StringBuilder buf, Node node, int indentLevel) {
         String name = node.getName();

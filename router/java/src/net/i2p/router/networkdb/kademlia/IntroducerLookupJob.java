@@ -220,7 +220,7 @@ class IntroducerLookupJob extends JobImpl {
 
     /**
      * Bound the attempts map: drop entries whose last attempt predates the
-     * maximum possible backoff window (they would fail {@link #canAttempt()} as
+     * maximum possible backoff window (they would fail {@link #canAttempt(long, long[])} as
      * eligible anyway and would be recreated fresh).
      */
     private void pruneAttempts(long now) {

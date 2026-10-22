@@ -452,9 +452,10 @@ public class WebMail extends HttpServlet {
     /**
      * Returns html string of a form button with name and label.
      *
-     * @param name
-     * @param label
-     * @return html string
+     * @param name the button name, also used as its CSS class; some known
+     *             names get extra classes or a title attribute
+     * @param label the text displayed on the button
+     * @return the HTML for an input type=submit element, non-null
      */
     private static String button(String name, String label) {
         StringBuilder buf = new StringBuilder(128);
@@ -477,9 +478,9 @@ public class WebMail extends HttpServlet {
     /**
      * Returns html string of a disabled form button with name and label.
      *
-     * @param name
-     * @param label
-     * @return html string
+     * @param name the button name, also used as its CSS class
+     * @param label the text displayed on the button
+     * @return the HTML for a disabled input type=submit element, non-null
      */
     private static String button2(String name, String label) {
         return "<input type=submit class=\"" + name + "\" name=\"" + name + "\" value=\"" + label + "\" disabled>";
@@ -489,10 +490,18 @@ public class WebMail extends HttpServlet {
      * Returns a html string of the label and two imaged links using the parameter name
      * (used for sorting buttons in folder view).
      *
-     * @param name
-     * @param label
+     * @param name the column name this header sorts by, also the sort link's
+     *             parameter value
+     * @param label the text displayed in the header cell
+     * @param imgPath URL prefix for the up and down arrow images
+     * @param currentName the column currently sorted by; when it equals name
+     *                    the active arrow is drawn as a plain image
+     * @param currentOrder the current sort direction, UP (descending) or
+     *                     DOWN (ascending)
+     * @param page current page number, kept in the sort links
+     * @param folder current folder name, kept in the sort links
      * @return the HTML markup for the header cell: the label followed by the
-     * up and down image links
+     *         up and down image links
      */
     private static String sortHeader(String name, String label, String imgPath,
                                      String currentName, SortOrder currentOrder, int page, String folder) {
@@ -521,9 +530,10 @@ public class WebMail extends HttpServlet {
     /**
      * Check whether the named submit button "was pressed" in the request.
      *
-     * @param request
-     * @param key
-     * @return true if pressed
+     * @param request the current HTTP request
+     * @param key the button name to look up as a request parameter
+     * @return true if the parameter is present; CONFIGURE and NEW_UIDL also
+     *         count when sent with an empty value
      */
     private static boolean buttonPressed(RequestWrapper request, String key) {
         String value = request.getParameter(key);
@@ -537,8 +547,9 @@ public class WebMail extends HttpServlet {
      * 3. if type is text/plain (or mail is not mime), print out
      * 4. in all other cases print out message, that part is not displayed
      *
-     * @param out
-     * @param mailPart
+     * @param out where the rendered part is written
+     * @param mailPart the MIME part to render, recursed into for multipart
+     *                 types
      * @param level is increased by recursively calling sub parts
      * @param html use html styling
      * @param allowHtml allow display of text/html parts
@@ -784,14 +795,15 @@ public class WebMail extends HttpServlet {
         return line;
     }
 
-    //// Start state change and button processing here ////
-
     /**
-     * Handle the login form, connecting to the mailbox.
+     * Start of state change and button processing: handle the login form,
+     * connecting to the mailbox.
      *
-     * @param sessionObject
-     * @param request
-     * @return new state, or null if unknown
+     * @param sessionObject the session to authenticate and store the mailbox in
+     * @param request the current HTTP request carrying the login form fields
+     * @param state the current state; acted on only when it is AUTH
+     * @return the next state: LOADING or LIST after a successful login,
+     *         otherwise the incoming state unchanged
      */
     private static State processLogin(SessionObject sessionObject, RequestWrapper request, State state) {
         if (state == State.AUTH) {
@@ -889,6 +901,17 @@ public class WebMail extends HttpServlet {
      *
      * The user may view the local folder once the first (loader) thread is done.
      *
+     * @param sessionObject the session to initialize: caches, mailbox, and
+     *                      credentials are stored here
+     * @param offline true to skip the POP3 connection and read only the disk
+     *                cache
+     * @param state the current state; ignored, always replaced
+     * @param host the mail server host name to connect to
+     * @param pop3PortNo the POP3 port number, 0-65535
+     * @param user the mailbox user name
+     * @param pass the mailbox password
+     * @return LOADING if the disk load is still running, LIST if it
+     *         finished, AUTH if creating the disk cache failed
      * @since 0.9.34
      */
     private static State threadedStartup(SessionObject sessionObject, boolean offline, State state,
@@ -1009,7 +1032,8 @@ public class WebMail extends HttpServlet {
         /**
          * Wake the waiting page when mail arrives.
          *
-         * @param connected are we?
+         * @param connected true if the connection to the server succeeded,
+         *                  false to record the connection error instead
          */
         public void foundNewMail(boolean connected) {
             MailCache mc = null;
@@ -1066,9 +1090,12 @@ public class WebMail extends HttpServlet {
     /**
      * End the session and show the login page.
      *
-     * @param sessionObject
-     * @param request
-     * @return new state, or null if unknown
+     * @param sessionObject the session to invalidate and disconnect on logout
+     * @param request the current HTTP request
+     * @param isPOST true for a POST request; logout is only honored then
+     * @param state the current state; replaced by AUTH on logout
+     * @return the next state: AUTH after a logout, otherwise the incoming
+     *         state unchanged
      */
     private static State processLogout(SessionObject sessionObject, RequestWrapper request, boolean isPOST, State state) {
         Log log = sessionObject.log;
@@ -1102,10 +1129,11 @@ public class WebMail extends HttpServlet {
      * Process all buttons, which possibly change internal state.
      * Also processes ?show=x for a GET.
      *
-     * @param sessionObject
-     * @param request
+     * @param sessionObject the current session with the mailbox and caches
+     * @param request the current HTTP request
      * @param isPOST disallow button pushes if false
-     * @return new state, or null if unknown
+     * @param state the current state, replaced when a button changes it
+     * @return the next state to render, never null
      */
     private static State processStateChangeButtons(SessionObject sessionObject, RequestWrapper request,
                                                    boolean isPOST, State state) {
@@ -1402,8 +1430,10 @@ public class WebMail extends HttpServlet {
     }
 
     /**
-     * Returns e.g. 3,5 for ?check3=1&check5=1 (or POST equivalent).
-     * @param request
+     * Returns e.g. 3,5 for ?check3=1&amp;check5=1 (or POST equivalent).
+     *
+     * @param request the current HTTP request, scanned for checkN parameters
+     *                set to 1
      * @return non-null List of Base64 UIDLs, or attachment numbers as Strings
      */
     private static List<String> getCheckedItems(RequestWrapper request) {
@@ -1421,10 +1451,12 @@ public class WebMail extends HttpServlet {
     /**
      * Handle the common folder and message buttons.
      *
-     * @param sessionObject
-     * @param request
-     * @return the state to render next: {@link State#AUTH} if the connection was lost,
-     * otherwise the incoming state unchanged
+     * @param sessionObject the current session, whose mailbox is reconnected
+     *                      on refresh
+     * @param request the current HTTP request
+     * @param state the current state, returned unless the connection is lost
+     * @return the state to render next: {@link State#AUTH} if the connection
+     *         was lost, otherwise the incoming state unchanged
      */
     private static State processGenericButtons(SessionObject sessionObject, RequestWrapper request, State state) {
         if (buttonPressed(request, REFRESH)) {
@@ -1454,9 +1486,11 @@ public class WebMail extends HttpServlet {
      * Process buttons of compose message dialog
      * This must be called BEFORE processStateChangeButtons so we can add the attachment before SEND.
      *
-     * @param sessionObject
-     * @param request
-     * @return new state, or null if unknown
+     * @param sessionObject the current session; uploaded attachments are
+     *                      stored in its attachments list
+     * @param request the current HTTP request, read for the uploaded file and
+     *                the draft UIDL
+     * @return NEW if an attachment was uploaded or deleted, null otherwise
      */
     private static State processComposeButtons(SessionObject sessionObject, RequestWrapper request) {
         State state = null;
@@ -1548,10 +1582,15 @@ public class WebMail extends HttpServlet {
 
     /**
      * Process buttons of message view.
-     * @param sessionObject
-     * @param request
-     * @return the next UIDL to see (if PREV/NEXT pushed), or null (if REALLYDELETE pushed), or showUIDL,
-     * or "delete" (if DELETE pushed). If null, next state should be LIST.
+     *
+     * @param sessionObject the current session, used to locate the mail cache
+     *                      for delete and move
+     * @param showUIDL the UIDL of the message being shown, returned unchanged
+     *                 when no button takes effect
+     * @param request the current HTTP request
+     * @return the next UIDL to see if PREV or NEXT was pushed, or null if
+     *         REALLYDELETE was pushed, or showUIDL, or "delete" if DELETE was
+     *         pushed. If null, next state should be LIST.
      */
     private static String processMessageButtons(SessionObject sessionObject, String showUIDL, RequestWrapper request) {
         if (buttonPressed(request, PREV)) {
@@ -1608,9 +1647,15 @@ public class WebMail extends HttpServlet {
 
     /**
      * Process download link in message view.
-     * @param sessionObject
-     * @param request
-     * @return If true, we sent an attachment or 404, do not send any other response
+     *
+     * @param sessionObject the current session, used to locate the mail cache
+     * @param showUIDL the UIDL of the message whose attachment is requested
+     * @param request the current HTTP request, read for the download or
+     *                attachment parameter
+     * @param response the response the attachment or the 404 error is written
+     *                 to
+     * @return If true, we sent an attachment or 404, do not send any other
+     *         response
      */
     private static boolean processDownloadLink(SessionObject sessionObject, String showUIDL,
                                                RequestWrapper request, HttpServletResponse response) {
@@ -1656,6 +1701,12 @@ public class WebMail extends HttpServlet {
     * Process thumbnail link in compose view
     * Draft attachments are stored in the SessionObject and identified by hashcode only.
     *
+    * @param sessionObject the current session, whose attachment list is
+    *                      searched for the id
+    * @param request the current HTTP request, read for the draft attachment
+    *                id
+    * @param response the response the attachment bytes or the 404 error are
+    *                 written to
     * @since 0.9.62
     */
     private static void processDraftAttachmentLink(SessionObject sessionObject,
@@ -1700,9 +1751,12 @@ public class WebMail extends HttpServlet {
     /**
      * Process save-as link in message view.
      *
-     * @param sessionObject
-     * @param request
-     * @return If true, we sent the file or 404, do not send any other response
+     * @param sessionObject the current session, used to locate the mail cache
+     * @param showUIDL the UIDL of the message to save
+     * @param request the current HTTP request, read for the save-as parameter
+     * @param response the response the file or the 404 error is written to
+     * @return If true, we sent the file or 404, do not send any other
+     *         response
      * @since 0.9.18
      */
     private static boolean processSaveAsLink(SessionObject sessionObject, String showUIDL,
@@ -1724,8 +1778,10 @@ public class WebMail extends HttpServlet {
     /**
      * Find the part with the given id, recursively.
      *
+     * @param part the root part to search, may be null
      * @param id as retrieved from getID()
-     * @return the part or null
+     * @return the part with that id, or null if part is null or no sub-part
+     *         matches
      */
     private static MailPart getMailPartFromID(MailPart part, int id) {
         if (part == null) {return null;}
@@ -1742,8 +1798,10 @@ public class WebMail extends HttpServlet {
     /**
      * Find the part with the given content-id, recursively.
      *
+     * @param part the root part to search, may be null
      * @param id a content-id, without the surrounding &lt;&gt; or trailing @ part
-     * @return the part or null
+     * @return the part with that content-id, or null if part is null or no
+     *         sub-part matches
      * @since 0.9.62
      */
     private static MailPart getMailPartFromID(MailPart part, String id) {
@@ -1767,9 +1825,13 @@ public class WebMail extends HttpServlet {
 
     /**
      * Process buttons of folder view.
-     * @param sessionObject
-     * @param page the current page
-     * @param request
+     *
+     * @param sessionObject the current session; error and info messages and
+     *                      the reallyDelete flag are updated here
+     * @param page the current page number, 1-based
+     * @param request the current HTTP request
+     * @return the page to display next, unchanged unless a paging button was
+     *         pressed
      */
     private static int processFolderButtons(SessionObject sessionObject, int page, RequestWrapper request) {
         if (buttonPressed(request, PREVPAGE)) {
@@ -1903,15 +1965,14 @@ public class WebMail extends HttpServlet {
             state = (folder != null) ? State.LIST : State.AUTH;
         }
         return state;
-    }
-
-    //// End state change and button processing ////
+    } // End state change and button processing
 
     /**
      * The session's state, creating it if needed.
      *
-     * @param httpSession
-     * @return non-null
+     * @param httpSession the servlet session the state is stored in under the
+     *                    "sessionObject" attribute
+     * @return the session state, created and attached if absent, never null
      */
     private synchronized SessionObject getSessionObject(HttpSession httpSession) {
         SessionObject sessionObject = null;
@@ -1946,7 +2007,10 @@ public class WebMail extends HttpServlet {
     /**
      * The mail cache for the requested folder.
      *
-     * @return folder or null
+     * @param session the current session, holding the caches by folder name
+     * @param request the current HTTP request, read for the folder name
+     * @return the cache for the requested folder, falling back to the inbox,
+     *         or null if none is available
      * @since 0.9.35
      */
     private static MailCache getCurrentMailCache(SessionObject session, RequestWrapper request) {
@@ -1978,7 +2042,10 @@ public class WebMail extends HttpServlet {
     /**
      * The folder selected in the request.
      *
-     * @return folder or null
+     * @param session the current session, holding the caches by folder name
+     * @param request the current HTTP request, read for the folder name
+     * @return the folder of the current mail cache, or null if there is no
+     *         cache
      * @since 0.9.35
      */
     private static Folder<String> getCurrentFolder(SessionObject session, RequestWrapper request) {
@@ -1989,6 +2056,11 @@ public class WebMail extends HttpServlet {
     /**
      * Blocking wait, bounded to 5 seconds so a stuck loader cannot hang the
      * servlet thread indefinitely.
+     *
+     * @param sessionObject the session whose monitor is held while waiting
+     *                      for the load notification
+     * @param mc the cache to load; returns once it is loaded or the wait
+     *           times out
      * @since 0.9.35
      */
     private static void waitForLoad(SessionObject sessionObject, MailCache mc) {
@@ -2009,9 +2081,7 @@ public class WebMail extends HttpServlet {
                 }
             }
         }
-    }
-
-    //// Start request handling here ////
+    } // Start request handling here
 
     /**
      * Plain-language name of the page a state value leads to, for the request log.
@@ -2075,11 +2145,15 @@ public class WebMail extends HttpServlet {
     /**
      * The entry point for all web page loads.
      *
-     * @param httpRequest
-     * @param response
+     * @param httpRequest the incoming request, read for parameters, headers,
+     *                    and session
+     * @param response the response the page, redirect, or attachment is
+     *                 written to
      * @param isPOST disallow button pushes if false
-     * @throws IOException
-     * @throws ServletException
+     * @throws IOException if a redirect or attachment response cannot be
+     *                     written
+     * @throws ServletException declared for the servlet API contract, not
+     *                          actually thrown by this method
      */
     private void processRequest(HttpServletRequest httpRequest, HttpServletResponse response, boolean isPOST)
     throws IOException, ServletException {
@@ -2696,7 +2770,11 @@ public class WebMail extends HttpServlet {
 
     /**
      * Redirect a POST to a GET (P-R-G), replacing the query string.
+     *
+     * @param req the current request, source of the redirect URL
+     * @param resp the response the 303 status and Location header are set on
      * @param q starting with '?' or null
+     * @throws IOException if the response output stream cannot be opened
      * @since 0.9.33 adapted from I2PSnarkServlet
      */
     @SuppressWarnings("PMD.AvoidUnnecessaryStringBuilderCreation")
@@ -2717,6 +2795,10 @@ public class WebMail extends HttpServlet {
 
     /**
      * Translate with the console bundle.
+     *
+     * @param s the English string to look up
+     * @param ctx the app context supplying the translation
+     * @return the translated string, or the original if untranslated
      * @since 0.9.27
      */
     private static String consoleGetString(String s, I2PAppContext ctx) {
@@ -2726,11 +2808,13 @@ public class WebMail extends HttpServlet {
     /**
      * Stream one attachment part to the browser.
      *
-     * @param sessionObject
-     * @param response
+     * @param sessionObject the current session, used for logging
+     * @param part the MIME part to stream, or null for nothing to send
+     * @param response the response the attachment is written to, zipped
+     *                 unless isRaw
      * @param isRaw if true, don't zip it
-     * @return true if the part was written to the response, false if the part was
-     * null or the write threw an IOException
+     * @return true if the part was written to the response, false if the part
+     *         was null or the write threw an IOException
      */
     private static boolean sendAttachment(SessionObject sessionObject, MailPart part, HttpServletResponse response, boolean isRaw) {
         boolean shown = false;
@@ -2829,10 +2913,12 @@ public class WebMail extends HttpServlet {
     /**
      * Send the mail to be saved by the browser.
      *
-     * @param sessionObject
-     * @param response
-     * @return true if the message was copied to the response, false if it has no
-     * body or the copy threw an IOException
+     * @param sessionObject the current session, used for logging a failed
+     *                      copy
+     * @param mail the message whose raw body is copied out
+     * @param response the response the .eml file is written to
+     * @return true if the message was copied to the response, false if it has
+     *         no body or the copy threw an IOException
      * @since 0.9.18
      */
     private static boolean sendMailSaveAs(SessionObject sessionObject, Mail mail,
@@ -2875,7 +2961,8 @@ public class WebMail extends HttpServlet {
      * We do no validation of recipients, total length, sender, etc. here.
      *
      * @param sessionObject only for error messages and attachments. All other data is in the request.
-     * @param request
+     * @param request the current HTTP request, read for the compose form
+     *                fields
      * @return null on error
      * @since 0.9.35
      */
@@ -2898,7 +2985,16 @@ public class WebMail extends HttpServlet {
      * All params except session may be null.
      *
      * @param sessionObject only for error messages. All data is in the parameters.
-     * @return null on error
+     * @param from the From header value, replaced by the default sender when
+     *             the sender is fixed in the config
+     * @param to the To recipients, a comma-separated list
+     * @param cc the Cc recipients, a comma-separated list
+     * @param bcc the Bcc recipients, kept only in the draft
+     * @param subject the subject line, "no subject" when blank
+     * @param text the message body, quoted-printable encoded
+     * @param attachments the files to attach, null for none
+     * @return null on error, with the reason appended to the session's error
+     *         field
      * @since 0.9.35
      */
     private static StringBuilder composeDraft(SessionObject sessionObject,
@@ -2975,6 +3071,8 @@ public class WebMail extends HttpServlet {
      * Write out the draft.
      *
      * @param sessionObject only for error messages.
+     * @param uidl the UIDL identifying the draft in the Drafts folder
+     * @param draft the composed draft text to write out
      * @return true if the draft was written to the Drafts folder, false if there is
      *         no Drafts folder or the write failed
      * @since 0.9.35
@@ -2995,6 +3093,14 @@ public class WebMail extends HttpServlet {
 
     /**
      * Caller must hold the MailCache write lock.
+     *
+     * @param log the session log, used for debug messages
+     * @param sessionObject the current session; the failure reason is
+     *                      appended to its error field
+     * @param toMC the Drafts cache to write into
+     * @param uidl the UIDL identifying the draft in that cache
+     * @param draft the composed draft text, null if composing failed
+     * @return true if the draft was written, false on any error
      */
     private static boolean saveDraftLocked(Log log, SessionObject sessionObject, MailCache toMC,
                                            String uidl, StringBuilder draft) {
@@ -3026,6 +3132,8 @@ public class WebMail extends HttpServlet {
      * suitable for writing out as a Draft.
      *
      * @param sessionObject only for error messages. All data is in the draft.
+     * @param draft the saved draft message to send, read for sender,
+     *              recipients, subject, and attachments
      * @return true if the message passed validation and was handed to the SMTP
      *         client, false if any check failed and no send was attempted
      */
@@ -3242,6 +3350,10 @@ public class WebMail extends HttpServlet {
      * Validate Origin header for POST requests.
      * Allows requests with matching Origin (same-origin), or no Origin header.
      * Rejects cross-origin POST requests to prevent CSRF attacks.
+     *
+     * @param request the POST request, read for the Origin and Host headers
+     * @return false only for a parseable cross-origin mismatch, true for a
+     *         same-origin, missing, or unparseable Origin
      */
     private boolean allowOrigin(HttpServletRequest request) {
         String origin = request.getHeader("Origin");
@@ -3323,9 +3435,10 @@ public class WebMail extends HttpServlet {
     }
 
     /**
-     * Join the array as a quoted CSV string.
+     * Join the array elements into a comma-separated string.
      *
-     * @param arr may be null
+     * @param arr the values to join, may be null
+     * @return the joined string, empty if arr is null
      * @since 0.9.35
      */
     private static String arrayToCSV(String[] arr) {
@@ -3342,9 +3455,11 @@ public class WebMail extends HttpServlet {
     /**
      * Show the compose form.
      *
-     * @param out
-     * @param sessionObject
-     * @param request
+     * @param out where the form is written
+     * @param sessionObject the current session; supplies the Drafts cache and
+     *                      pending attachments, errors are appended to it
+     * @param request the current HTTP request, read for the draft UIDL and
+     *                form values
      */
     private static void showCompose(PrintWriter out, SessionObject sessionObject, RequestWrapper request) {
         StringBuilder buf = new StringBuilder(1024);
@@ -3476,8 +3591,11 @@ public class WebMail extends HttpServlet {
     /**
      * The sender string.
      *
-     * @return non-null
-     * @since 0.9.63 pulled out of {@link #showCompose()}
+     * @param sessionObject the current session, supplying the logged-in user
+     * @return the sender as an RFC 822 personal name plus angle-addr, e.g.
+     *         Name &lt;user@mail.i2p&gt;, never null
+     * @since 0.9.63 pulled out of
+     *         {@link #showCompose(PrintWriter, SessionObject, RequestWrapper)}
      */
     private static String getDefaultSender(SessionObject sessionObject) {
         String from;
@@ -3505,7 +3623,7 @@ public class WebMail extends HttpServlet {
     /**
      * Show the login form.
      *
-     * @param out
+     * @param out where the form is written
      */
     private static void showLogin(PrintWriter out) {
         boolean fixed = Boolean.parseBoolean(Config.getProperty(CONFIG_PORTS_FIXED, "true"));
@@ -3553,6 +3671,9 @@ public class WebMail extends HttpServlet {
     /**
      * Show the loading page, refreshed by meta tag.
      *
+     * @param out where the page is written
+     * @param sessionObject the current session, unused by the current page
+     * @param request the current HTTP request, unused by the current page
      * @since 0.9.34
      */
     private static void showLoading(PrintWriter out, SessionObject sessionObject, RequestWrapper request) {
@@ -3564,9 +3685,12 @@ public class WebMail extends HttpServlet {
     /**
      * Show the message list for a folder.
      *
-     * @param out
-     * @param sessionObject
-     * @param request
+     * @param out where the list is written
+     * @param sessionObject the current session, supplying the fetch state and
+     *                      error output
+     * @param mc the cache of the folder to display, supplying the folder and
+     *           its pages
+     * @param request the current HTTP request, read for paging and sorting
      */
     private static void showFolder(PrintWriter out, SessionObject sessionObject, MailCache mc, RequestWrapper request) {
         StringBuilder sb = new StringBuilder(8192);
@@ -3707,18 +3831,17 @@ public class WebMail extends HttpServlet {
      * overall page builder. The caller is responsible for providing the correct
      * state (spam status, whether to show "To" vs "From", sorting context, etc.).
      *
-     * Parameters
-     * - mail: The Mail object for which the row is being rendered.
-     * - b64UIDL: The Base64-encoded UIDL of the mail used for identifiers.
-     * - loc: The URL that the row should link to when opened.
-     * - jslink: The string used to enable JavaScript-driven row interactions.
-     * - isSpamFolder: True if the current folder is the spam folder.
-     * - showToColumn: True to show the "To" column; false to show "From".
-     * - sessionObject: Current session context, including user preferences.
-     * - floc: Folder location fragment appended to loc when needed.
-     *
-     * Returns
-     * A String containing the HTML markup for a single <tr> representing the mail row.
+     * @param mail the message to render, read for its flags, date, subject,
+     *             sender, and recipients
+     * @param b64UIDL the Base64-encoded UIDL of the mail used for identifiers
+     * @param loc the URL that the row should link to when opened
+     * @param jslink the CSS class string that enables JavaScript-driven row
+     *               interactions
+     * @param isSpamFolder true if the current folder is the spam folder,
+     *                     rendering its rows in spam style
+     * @param showToColumn true to show the "To" column, false to show "From"
+     * @return the HTML markup for a single &lt;tr&gt; representing the mail
+     *         row, never null
      */
     private static String renderMailRow(Mail mail, String b64UIDL, String loc, String jslink, boolean isSpamFolder,
                                         boolean showToColumn) {
@@ -3825,6 +3948,7 @@ public class WebMail extends HttpServlet {
      * Builds the HTML for the date cell of a mail row.
      * @param mail The Mail object for which the date cell is being rendered
      * @param jslink The string used to enable JavaScript-driven row interactions
+     * @return the date cell markup, empty if mail is null
      * @since 0.9.68+
      */
     private static String renderDateCell(Mail mail, String jslink) {
@@ -3853,6 +3977,9 @@ public class WebMail extends HttpServlet {
 
     /**
      * HTML escaping helper.
+     *
+     * @param s the text to escape, may be null
+     * @return the escaped text, empty if s is null or empty
      * @since 0.9.68+
      */
     private static String escapeHtml(String s) {
@@ -3877,6 +4004,7 @@ public class WebMail extends HttpServlet {
     /**
      * Render pagination controls for a given page.
      * @param out          writer to emit HTML
+     * @param folderName   folder being listed, unused by the current markup
      * @param page         current page number (1-based)
      * @param pages        total number of pages
      * @param outputHidden whether to emit hidden inputs to preserve state
@@ -3949,7 +4077,10 @@ public class WebMail extends HttpServlet {
     /**
      * HTML select control listing the folders.
      *
+     * @param currentName the folder being viewed, left out of the list since
+     *                    one cannot move or switch to the current folder
      * @param disableCurrent true for move to folder, false for select folder
+     * @return the HTML for the select element, non-null
      * @since 0.9.35
      */
     private static String showFolderSelect(String currentName, boolean disableCurrent) {
@@ -4109,7 +4240,8 @@ public class WebMail extends HttpServlet {
     /**
      * Build a comma-separated recipient line from the addresses.
      *
-     * @param to non-null
+     * @param to the addresses, null yields an empty line
+     * @return the HTML-quoted CSV line, never null
      * @since 0.9.33
      */
     private static String buildRecipientLine(String[] to) {
@@ -4130,7 +4262,8 @@ public class WebMail extends HttpServlet {
     /**
      * Simple configure page.
      *
-     * @param folder may be null
+     * @param out where the page is written
+     * @param folder the folder whose page size is shown, null before login
      * @since 0.9.13
      */
     private static void showConfig(PrintWriter out, Folder<String> folder) {
@@ -4160,34 +4293,67 @@ public class WebMail extends HttpServlet {
         out.print("</div>\n");
     }
 
-    /** Tag for translation. */
+    /**
+     * Tag for translation.
+     *
+     * @param s the English string to mark for extraction
+     * @return the same string, unchanged
+     */
     private static String _x(String s) {
         return s;
     }
 
-    /** Looks up a localized string in the message bundle. */
+    /**
+     * Looks up a localized string in the message bundle.
+     *
+     * @param s the message key
+     * @return the localized string
+     */
     private static String _t(String s) {
         return Messages.getString(s);
     }
 
-    /** Looks up a localized string in the message bundle. */
+    /**
+     * Looks up a localized string in the message bundle.
+     *
+     * @param s the message key
+     * @param o the value substituted for {0}
+     * @return the localized string
+     */
     private static String _t(String s, Object o) {
         return Messages.getString(s, o);
     }
 
-    /** Looks up a localized string in the message bundle. */
+    /**
+     * Looks up a localized string in the message bundle.
+     *
+     * @param s the message key
+     * @param o the value substituted for {0}
+     * @param o2 the value substituted for {1}
+     * @return the localized string
+     */
     private static String _t(String s, Object o, Object o2) {
         return Messages.getString(s, o, o2);
     }
 
-    /** Looks up the localized plural form for n items. */
+    /**
+     * Looks up the localized plural form for n items.
+     *
+     * @param s the singular form
+     * @param p the plural form
+     * @param n the item count selecting the form
+     * @return the localized singular or plural form
+     */
     private static String ngettext(String s, String p, int n) {
         return Messages.getString(n, s, p);
     }
 
     /**
-     * Get all themes.
-     * @return String[] -- Array of all the themes found.
+     * Find all themes installed under docs/themes/susimail.
+     *
+     * @param ctx the app context supplying the base directory
+     * @return array of all the theme directory names found, empty if the
+     *         theme directory is missing
      */
     private static String[] getThemes(I2PAppContext ctx) {
         String[] themes;

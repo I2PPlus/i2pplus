@@ -27,7 +27,7 @@ import org.junit.Test;
  * available tags and only raise the count after {@code tagsAcked}. The
  * acknowledgement is the only evidence that the peer received the tags.
  *
- * @since 0.9.72
+ * @since 0.9.72+
  */
 public class TransientSessionKeyManagerTagAckTest {
 

@@ -130,7 +130,7 @@ public class ProfileOrganizer {
      * Profiles held in RAM, as of the last completed reorganisation.
      *
      * @return the in-RAM profile count
-     * @since 0.9.72
+     * @since 0.9.72+
      */
     public int getProfileCount() {return _profileCount;}
 
@@ -138,7 +138,7 @@ public class ProfileOrganizer {
      * Peers passing the quality gates, as of the last completed reorganisation.
      *
      * @return the quality peer count
-     * @since 0.9.72
+     * @since 0.9.72+
      */
     public int getQualityCount() {return _qualityCount;}
 
@@ -151,7 +151,7 @@ public class ProfileOrganizer {
      * holds the lock.
      *
      * @return the recently active profile count
-     * @since 0.9.72
+     * @since 0.9.72+
      */
     public int getActiveProfileCount() {return _activeProfileCount;}
 
@@ -163,7 +163,7 @@ public class ProfileOrganizer {
      * RouterInfo.  A cycle is opened by {@link #lockedRebuildTiers} and its
      * counters are published by {@link #recordRouterInfoRefreshStats} before the
      * reorg write lock is released.
-     * @since 0.9.72
+     * @since 0.9.72+
      */
     private final RouterInfoRefresher _refresher = new RouterInfoRefresher();
 
@@ -175,7 +175,7 @@ public class ProfileOrganizer {
      * @param profile profile whose send and heard-from timestamps are compared against the cutoff
      * @param hideBefore cutoff time, i.e. now minus {@link #ACTIVE_WINDOW_MS}
      * @return true if the profile is recently active
-     * @since 0.9.72
+     * @since 0.9.72+
      */
     static boolean isActiveInWindow(PeerProfile profile, long hideBefore) {
         return profile.getIsActive(ACTIVE_WINDOW_MS) ||
@@ -184,20 +184,36 @@ public class ProfileOrganizer {
                profile.getLastHeardFrom() >= hideBefore;
     }
 
-    /** True when a peer in the fast tier has proven throughput or is in the high-cap tier. */
+    /**
+     * True when a peer in the fast tier has proven throughput or is in the high-cap tier.
+     *
+     * @param profile the fast-tier profile to test
+     * @param highCap the high-capacity tier, for a membership test by peer hash
+     * @return true if peak 1m throughput is above 0 KBps or the peer is in highCap
+     */
     private static boolean isQualityFastPeer(PeerProfile profile, Map<Hash, PeerProfile> highCap) {
         return profile.getPeakTunnel1mThroughputKBps() > 0 ||
                highCap.containsKey(profile.getPeer());
     }
 
-    /** Add a peer to the fast tier, maintaining the quality counter. */
+    /**
+     * Add a peer to the fast tier, maintaining the quality counter.
+     *
+     * @param peer the peer's hash, the tier map key
+     * @param profile the profile to store for that peer, replacing any earlier entry
+     */
     private void putFastPeer(Hash peer, PeerProfile profile) {
         PeerProfile prev = _fastPeers.put(peer, profile);
         if (prev == null && isQualityFastPeer(profile, _highCapacityPeers))
             _fastQualityCount++;
     }
 
-    /** Remove a peer from the fast tier, maintaining the quality counter. */
+    /**
+     * Remove a peer from the fast tier, maintaining the quality counter.
+     *
+     * @param peer the peer's hash, the tier map key
+     * @return the profile stored for that peer, or null if it was not in the tier
+     */
     private PeerProfile removeFastPeer(Hash peer) {
         PeerProfile removed = _fastPeers.remove(peer);
         if (removed != null && isQualityFastPeer(removed, _highCapacityPeers))
@@ -257,8 +273,8 @@ public class ProfileOrganizer {
     /** Peers demoted via demoteIfUnreachable — excluded from promotion for TUNNEL_DEMOTION_COOLDOWN_MS. */
     private final ConcurrentHashMap<Hash, Long> _demotedPeers = new ConcurrentHashMap<>(64);
     /**
-     * Strike count per peer for demoteIfUnreachable — only demote after DEMOTE_STRIKE_THRESHOLD strikes
-      * within the decay window.
+     * Strike count per peer for demoteIfUnreachable — only demote after
+     * DEMOTE_STRIKE_THRESHOLD strikes within the decay window.
      */
     private final ConcurrentHashMap<Hash, Integer> _demoteStrikes = new ConcurrentHashMap<>(64);
     /** Last strike time per peer, so strikes expire after DEMOTE_STRIKE_DECAY_MS. */
@@ -286,7 +302,7 @@ public class ProfileOrganizer {
     private volatile double _baselineRTT;
       /**
        * Calibrated cohort latency floor across fast peers with data, computed
-       * during each reorganize by {@link #computeAverageLowLatencyRtt} and
+       * during each reorganize by {@link #computeAverageLowLatencyRTT()} and
        * read through {@link #getAverageLowLatencyRTT}.
        * <p>Previously documented as tightening the low-latency threshold to 1.5x
        * the cohort average, but no caller ever consulted it: the value was
@@ -375,12 +391,12 @@ public class ProfileOrganizer {
      * <p>Set to 0 or less to disable the deferral entirely, which restores plain
      * promotion on whatever the netdb holds.
      *
-     * @since 0.9.72
+     * @since 0.9.72+
      */
     public static final String PROP_ROUTERINFO_REFRESH_AGE_MS = "profileOrganizer.routerInfoRefreshAgeMs";
     /**
      * One hour, i.e. one republish interval.
-     * @since 0.9.72
+     * @since 0.9.72+
      */
     public static final long DEFAULT_ROUTERINFO_REFRESH_AGE_MS = 60 * 60 * 1000L;
     private static final long STARTUP_GRACE_PERIOD_MS = 10 * 60 * 1000L;
@@ -1529,6 +1545,8 @@ public class ProfileOrganizer {
      * @param exclude peers to exclude (may be null)
      * @param matches output set populated with selected peer hashes
      * @param onlyNotFailing if true, exclude peers already in high-capacity tier
+     * @param mask bitmask length for /n diversity restriction (0 to disable)
+     * @param ipSet mutable set tracking already-selected subnets, or null when mask is 0
      * @param buildSuccess the build success ratio, fetched once per scan
      */
     private void selectHighBandwidthPeers(int howMany, Set<Hash> exclude, Set<Hash> matches, boolean onlyNotFailing,
@@ -1642,6 +1660,8 @@ public class ProfileOrganizer {
      * @param mask bitmask length for /n diversity restriction (0 to disable)
      * @param ipSet subnets already represented in this tunnel, consulted only
      *              when mask is non-zero
+     * @param buildSuccess the build success ratio, fetched once per scan and
+     *                     consumed by the selectability gate
      * @param preferUnproven if true, prioritize peers with no tunnel test history
      *                       so they accumulate profiling data through exploratory builds
      */
@@ -2202,6 +2222,11 @@ public class ProfileOrganizer {
     /**
      * Record the best RTT any transport reports for this peer, if any.
      *
+     * @param profile the peer to sample; nothing is recorded when it is null
+     * @param transports the peer's transports, each asked for its estimated RTT — the
+     *                   largest reported value wins
+     * @param now router time in ms, stamped onto the sample when the winning transport
+     *            reports no measurement time
      * @return the recorded RTT in ms, or 0 if there was no measurement
      */
     private int sampleFirstHopRtt(PeerProfile profile, Collection<Transport> transports, long now) {
@@ -2528,15 +2553,15 @@ public class ProfileOrganizer {
     /**
      * Whether a profile has expired from its activity tier and should be
      * purged: no activity (send/heard/heard-about) within the tier's
-     * expiration window.  Tiered expiration: Active > Passive > Gossip;
+     * expiration window.  Tiered expiration: Active &gt; Passive &gt; Gossip;
      * profiles with no tunnel history are purged on the tighter untracked
      * window regardless of tier.  A profile with zero timestamps sits in
      * the gossip tier.
      * <p>
      * Pure decision. No context access, safe for unit tests.
      *
-     * @param profile profile to test; its expiration window is picked from its
-     * the newest activity timestamp
+     * @param profile profile to test; its expiration window is picked from its tier,
+     *                the tier of the newest activity timestamp it carries
      * @param now current time in ms
      * @param expireActive active-tier window in ms
      * @param expirePassive passive-tier window in ms
@@ -2570,6 +2595,15 @@ public class ProfileOrganizer {
     /**
      * Builds the candidate profile set for this reorganize round, filtering
      * expired, unreachable, and excluded profiles.
+     *
+     * @param now current time in ms, the reference point for the windows below
+     * @param expireActive active-tier window in ms
+     * @param expirePassive passive-tier window in ms
+     * @param expireGossip gossip-tier window in ms
+     * @param expireUntracked untracked window in ms, the tighter cap applied to
+     *                        profiles with no tunnel history
+     * @return the surviving profiles, with the integration total and the expired and
+     *         kept counts
      */
     private CandidateSet buildCandidateProfiles(long now, long expireActive, long expirePassive,
                                                 long expireGossip, long expireUntracked) {
@@ -2608,8 +2642,9 @@ public class ProfileOrganizer {
     }
 
     /**
-     * Result of {@link #buildCandidateProfiles()}: the candidate set plus the totals
-     * and counts consumed by the threshold and logging sections.
+     * Result of {@link #buildCandidateProfiles(long, long, long, long, long)}: the
+     * candidate set plus the totals and counts consumed by the threshold and
+     * logging sections.
      */
     private static final class CandidateSet {
         final Set<PeerProfile> profiles;
@@ -2635,7 +2670,7 @@ public class ProfileOrganizer {
      *
      * @param candidates the surviving profile set
      * @param buildSuccess cached tunnel build success ratio
-     * @since 0.9.72
+     * @since 0.9.72+
      */
     private void lockedRebuildTiers(Set<PeerProfile> candidates, double buildSuccess) {
         // Fetched once for the whole rebuild; lockedPlaceProfile() would otherwise
@@ -2853,6 +2888,14 @@ public class ProfileOrganizer {
     /**
      * Fills the fast tier to the minimum via up to three fallback passes.
      * Must be called with the write lock held.  Returns the number added.
+     *
+     * @param now current time in ms, the reference for the tier gates and the
+     *            activity cutoff of the last pass
+     * @param activeProfiles profiles surviving this reorganize round; the candidate
+     *                       pool when the high-capacity tier is empty
+     * @param buildSuccess the build success ratio in [0.0, 1.0], fetched once per cycle
+     * @return how many profiles were added to the fast tier, 0 if it already met its
+     *         minimum
      */
     private int fillFastTierFallbacks(long now, Set<PeerProfile> activeProfiles, double buildSuccess) {
         int minFast = getMinimumFastPeers();
@@ -2925,6 +2968,14 @@ public class ProfileOrganizer {
      * Fills the high-capacity tier to the minimum with recently-active
      * selectable peers.  Must be called with the write lock held.  Returns
      * the number added.
+     *
+     * @param now current time in ms, the reference for the activity cutoff
+     * @param activeProfiles profiles surviving this reorganize round, scanned in
+     *                       iteration order until the minimum is reached
+     * @param buildSuccess the build success ratio in [0.0, 1.0], also used to size
+     *                     the activity window during normal operation
+     * @return how many profiles were added to the high-capacity tier, 0 if it already
+     *         met its minimum
      */
     private int fillHighCapFallback(long now, Set<PeerProfile> activeProfiles, double buildSuccess) {
         int minHighCap = getMinimumHighCapacityPeers();
@@ -3081,8 +3132,8 @@ public class ProfileOrganizer {
     /**
      * Count of one eviction reason in this cycle's tally.
      *
-     * @param reasons the tally
-     * @param reason  the reason to read
+     * @param reasons this cycle's eviction counts, keyed by purge reason
+     * @param reason the reason whose count is wanted
      * @return the count, zero if that reason never fired
      * @since 0.9.71+
      */
@@ -3174,7 +3225,7 @@ public class ProfileOrganizer {
      *                     acceptance threshold under stress so the tiers cannot be
      *                     emptied by a network-wide event
      * @param allowSoftEviction whether this tier is above
-     *                           {@link #softPurgeThreshold(int)}, gating the soft reasons
+     *                          {@link #softPurgeThreshold(int)}, gating the soft reasons
      * @param reasons tally shared with the other tier's pass, accumulated in place
      * @since 0.9.71+
      */
@@ -3260,6 +3311,13 @@ private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, P
     /**
      * Re-adds preserved pre-reorganize tier entries when the rebuild shrank
      * the tiers too much.  Must be called with the write lock held.
+     *
+     * @param now current time in ms, the reference for the loss and acceptance checks
+     * @param oldFastPeers the fast tier's peer hashes as they were before the rebuild
+     * @param oldHighCapPeers the high-capacity tier's hashes as they were before the
+     *                        rebuild
+     * @param buildSuccess the build success ratio in [0.0, 1.0], used by the
+     *                     selectability and acceptance gates
      */
     private void restorePreservedPeers(long now, Set<Hash> oldFastPeers,
                                        Set<Hash> oldHighCapPeers, double buildSuccess) {
@@ -3313,6 +3371,10 @@ private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, P
      * Counts profiles with recent activity, over the same set as
      * {@link #countActivePeersInLastHour} so the published gauge and the on-demand scan
      * agree. Called during the reorganise, which already holds the write lock.
+     *
+     * @param now current time in ms; activity is anything at or after
+     *            now minus {@link #ACTIVE_WINDOW_MS}
+     * @return how many not-failing profiles are active inside the window
      */
     private int countActiveProfiles(long now) {
         int activeCount = 0;
@@ -3325,6 +3387,11 @@ private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, P
 
     /**
      * Counts quality peers (fast/high-cap with good acceptance plus recent activity).
+     *
+     * @param now current time in ms; the activity cutoff is 24 hours before it
+     * @param buildSuccess the build success ratio in [0.0, 1.0], which scales the
+     *                     acceptance requirement
+     * @return how many distinct tier peers pass the quality test, each peer counted once
      */
     private int countQualityPeers(long now, double buildSuccess) {
         int qualityCount = 0;
@@ -3372,6 +3439,12 @@ private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, P
     /**
      * Helper to calculate capacity threshold from a pre-filtered set of active profiles.
      * Avoids re-iterating the full set multiple times.
+     *
+     * @param activeProfiles the pre-filtered profiles whose capacity values are sampled
+     * @param totalPeers the size of that set, used as the mean divisor and as the
+     *                   highest index read; 0 skips the sampling entirely
+     * @return the capacity threshold, {@link CapacityCalculator#GROWTH_FACTOR} when
+     *         there are no peers to sample
      */
     private double calculateCapacityThresholdFromSet(Set<PeerProfile> activeProfiles, int totalPeers) {
         if (totalPeers == 0) return CapacityCalculator.GROWTH_FACTOR;
@@ -3865,6 +3938,8 @@ private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, P
     /**
      * Check if a peer has a congestion capability cap (D or E).
      *
+     * @param peer the peer whose advertised capabilities are inspected; a peer with no
+     *             RouterInfo in the database is not treated as congested
      * @return true if the peer is moderately or severely congested
      * @since 0.9.70+
      */
@@ -4280,6 +4355,10 @@ private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, P
      * already passed every gate, so it carries no cryptographic requirement,
      * while {@code _context.random().nextFloat()} is a monitored read on the
      * process-wide Fortuna instance and serialized every concurrent selection.
+     *
+     * @param candidates the entries to choose from, each a peer hash with its profile
+     * @param howMany maximum number of peers to pick; values below one pick nothing
+     * @param matches output set receiving the chosen peer hashes
      */
     private void lockedPickLowestPriority(List<Map.Entry<Hash, PeerProfile>> candidates, int howMany,
                                            Set<Hash> matches) {
@@ -4312,9 +4391,9 @@ private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, P
      * <p>This loop is the reason the peer-selection callers may size a fixed-capacity
      * {@link net.i2p.util.ArraySet} to exactly the number of peers they asked for:
      * <ul>
-     * <li>{@link net.i2p.router.tunnel.pool.ClientPeerSelector} builds four fallback sets as
+     * <li>{@code net.i2p.router.tunnel.pool.ClientPeerSelector} builds four fallback sets as
      * {@code new ArraySet<>(needed)} and passes {@code needed} as {@code howMany}.
-     * <li>{@link net.i2p.router.tunnel.pool.ExploratoryPeerSelector} builds
+     * <li>{@code net.i2p.router.tunnel.pool.ExploratoryPeerSelector} builds
      * {@code new ArraySet<>(1)} and asks for one peer.
      * </ul>
      * An {@link net.i2p.util.ArraySet} throws {@code SetFullException} once written past its
@@ -4354,6 +4433,16 @@ private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, P
      * tier, in {@link RandomIterator} order so the peers examined differ from
      * call to call.  Capped for the same reason as {@link #lockedSelectPeers}:
      * one attempt's worth of lottery, not a walk of the whole list.
+     *
+     * @param connected the connected peers to draw from, in random-iterator order
+     * @param howMany peers to add; the scan stops once matches reaches this count
+     * @param toExclude peers to skip, or null; a peer failing the selectability gate is
+     *                  added here so later passes skip it too
+     * @param matches output set receiving the chosen hashes; its size counts against
+     *                howMany
+     * @param mask leading address bytes to match for /n subnet diversity, 0 to disable
+     * @param ipSet fingerprints claimed so far, consulted only when mask is non-zero
+     * @param buildSuccess the build success ratio in [0.0, 1.0], fetched once per scan
      */
     private void lockedSelectActive(List<Hash> connected, int howMany, Set<Hash> toExclude,
                                     Set<Hash> matches, int mask, MaskedIPSet ipSet, double buildSuccess) {
@@ -4382,10 +4471,20 @@ private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, P
     }
 
     /**
-     * Subnet-diversity gate: reject the peer if any of its masked addresses,
-     * ports, or family option is already represented in {@code ipSet}, and
-     * otherwise claim them.  Claimed in one pass rather than through a
-     * throwaway {@link MaskedIPSet} that was then walked twice.
+     * Subnet-diversity probe: claims the peer's masked addresses, ports and
+     * family option in {@code ipSet} and reports whether any of them was
+     * already present.  Claimed in one pass rather than through a throwaway
+     * {@link MaskedIPSet} that was then walked twice.
+     * <p>
+     * BUG: the polarity is inverted for this method's name and its call sites,
+     * which read true as "allowed".  As written, a peer on a fresh subnet is
+     * skipped and only a peer colliding with an already-claimed fingerprint
+     * passes.  Before the peer-selection refactor this returned the negation.
+     *
+     * @param peer the peer whose addresses, ports and family are fingerprinted
+     * @param ipSet the fingerprints claimed by the peers evaluated so far
+     * @param mask leading address bytes to match, as taken by {@link #maskedIPKey}
+     * @return true if at least one of the peer's fingerprints was already claimed
      */
     private boolean notRestricted(Hash peer, MaskedIPSet ipSet, int mask) {
         return addSameIPFingerprint(ipSet, peer, mask);
@@ -4398,6 +4497,12 @@ private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, P
      * was already present, but <em>all</em> of its keys are added either way, so
      * a peer colliding on its last key still leaves its earlier keys claimed.
      * Claiming conditionally would make selection order-dependent.
+     *
+     * @param keys the fingerprints claimed by the peers accepted so far
+     * @param peer the peer whose IP, port and family keys are claimed
+     * @param mask leading address bytes to match, 1-4
+     * @return true if any of the peer's keys was already claimed, meaning it collides
+     *         with an accepted peer
      */
     private boolean addSameIPFingerprint(MaskedIPSet keys, Hash peer, int mask) {
         RouterContext ctx = _context;
@@ -4465,6 +4570,11 @@ private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, P
     /**
      * Sub-tier slice index for a peer, keyed off the session key so the same
      * key always yields the same slice.
+     *
+     * @param peer the peer to place
+     * @param k0 first half of the session key the slice is keyed off
+     * @param k1 second half of that session key
+     * @return the slice index, 0-3
      */
     private int getSubTier(Hash peer, long k0, long k1) {
         return ((int) SipHashInline.hash24(k0, k1, peer.getData())) & 0x03;
@@ -4489,6 +4599,7 @@ private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, P
     /**
      * Whether the given peer is eligible for selection.
      *
+     * @param peer hash of the peer to judge
      * @param buildSuccess the build success ratio, fetched once per scan
      * @return true if the peer passes every selection gate
      */
@@ -4537,6 +4648,10 @@ private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, P
      * gateway — so that log is not evidence of self-selection. Whether we
      * were being drawn at a mid-hop has not been established.
      *
+     * @param peer the candidate's hash, tested against self, the banlist, the ghost-peer
+     *             set and the first-hop failure list
+     * @return true if the peer is not us, not banlisted, not a ghost, and not recently
+     *         failing as a first hop
      * @since 0.9.71+
      */
     private boolean passesBasicGates(Hash peer) {
@@ -4651,6 +4766,14 @@ private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, P
     /**
      * Checks the RouterInfo for hidden flag, stale proof of life, usable
      * transport address, bandwidth tier, and tunnel exclusion.
+     *
+     * @param peer the peer's hash, used for the established-connection check
+     * @param info the peer's RouterInfo, already looked up and not null
+     * @param buildSuccess the build success ratio in [0.0, 1.0], which scales the
+     *                     tunnel-exclusion check
+     * @param prof the peer's profile, or null if it was never seen; consulted only for
+     *             proof of life when the RouterInfo is stale
+     * @return true if the RouterInfo passes every age, liveness and usability check
      */
     private boolean hasValidRouterInfo(Hash peer, RouterInfo info, double buildSuccess, PeerProfile prof) {
         if (info.isHidden()) return false;
@@ -4731,6 +4854,10 @@ private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, P
 
     /**
      * Returns true when the RouterInfo has a reachable NTCP/NTCP2/SSU/SSU2 address.
+     *
+     * @param info the peer's RouterInfo whose addresses are scanned
+     * @return true if at least one NTCP, NTCP2, SSU or SSU2 address carries a non-null
+     *         IP and a valid port
      */
     private boolean hasUsableTransportAddress(RouterInfo info) {
         boolean hasUsableAddress = false;
@@ -4810,6 +4937,9 @@ private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, P
      * the notFailing structures.  Safe to call between reorganize cycles —
      * does not add duplicates to _notFailingPeersList.
      * Must be called with write lock held.
+     *
+     * @param profile the profile to evaluate for tier placement
+     * @param buildSuccess cached tunnel build success ratio, read once by the caller
      */
     private void lockedPromoteProfileToTiers(PeerProfile profile, double buildSuccess) {
         lockedPromoteProfileToTiers(profile, buildSuccess,
@@ -5041,7 +5171,7 @@ private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, P
      * @param profile the profile being promoted
      * @param now current time in ms
      * @return whether the stored RouterInfo is too old to promote on
-     * @since 0.9.72
+     * @since 0.9.72+
      */
     private boolean promotionNeedsRouterInfoRefresh(PeerProfile profile, long now) {
         // No open cycle means no hold, so skip the netDb read entirely: with the
@@ -5066,7 +5196,7 @@ private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, P
      * @param now current time in ms
      * @param refreshAgeMs staleness threshold in ms
      * @return whether the RouterInfo is too stale to promote on
-     * @since 0.9.72
+     * @since 0.9.72+
      */
     static boolean needsRouterInfoRefresh(RouterInfo info, PeerProfile profile, long now, long refreshAgeMs) {
         if (info == null) return false;
@@ -5092,7 +5222,7 @@ private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, P
      * @param tierSize current size of the tier being joined
      * @param safeFloor size at or above which this tier can leave it out
      * @return whether the promotion must be held back
-     * @since 0.9.72
+     * @since 0.9.72+
      */
     private boolean holdPromotionForRefresh(Hash peer, boolean staleRouterInfo, int tierSize,
                                             int safeFloor) {
@@ -5123,7 +5253,7 @@ private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, P
      * @param tierSize current size of the tier the peer would join
      * @param safeFloor size at or above which the tier can leave it out
      * @return whether the promotion should be held back
-     * @since 0.9.72
+     * @since 0.9.72+
      */
     static boolean shouldDeferPromotionOnStaleRouterInfo(int tierSize, int safeFloor) {
         return tierSize >= safeFloor;
@@ -5145,7 +5275,7 @@ private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, P
      * republished to, or by showing proof of life.
      *
      * @return the staleness threshold in ms; &lt;= 0 disables the hold
-     * @since 0.9.72
+     * @since 0.9.72+
      */
     private long getRouterInfoRefreshAgeMs() {
         return _context.getProperty(PROP_ROUTERINFO_REFRESH_AGE_MS, DEFAULT_ROUTERINFO_REFRESH_AGE_MS);
@@ -5158,7 +5288,7 @@ private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, P
      * is being held back. The stale-promotion count is an event count and
      * follows the existing convention of writing nothing when it is zero.
      *
-     * @since 0.9.72
+     * @since 0.9.72+
      */
     private void recordRouterInfoRefreshStats() {
         int deferred = _refresher.deferredCount();
@@ -5629,6 +5759,9 @@ private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, P
     /**
      * Check whether the peer's profile has low-latency status.
      * Non-blocking — returns the profile's flag without acquiring locks.
+     *
+     * @param peer the peer whose profile flag is read
+     * @return true if a profile was found and it carries the low-latency flag
      */
     private boolean isLowLatency(Hash peer) {
         PeerProfile profile = getProfileNonblocking(peer);
@@ -5890,7 +6023,7 @@ private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, P
      *
      * @param peer the peer whose RouterInfo is missing
      * @return true if recorded, false if the recovery list was already full
-     * @since 0.9.72
+     * @since 0.9.72+
      */
     boolean noteMissingRouterInfo(Hash peer) { return _refresher.noteMissingRouterInfo(peer); }
 
@@ -5899,7 +6032,7 @@ private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, P
      *
      * @param now current time in milliseconds
      * @return true if the drain interval has elapsed
-     * @since 0.9.72
+     * @since 0.9.72+
      */
     boolean mayDrainMissingRouterInfo(long now) { return _refresher.mayDrainMissingRouterInfo(now); }
 
@@ -5908,7 +6041,7 @@ private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, P
      *
      * @param now current time in milliseconds
      * @return the peers to look up, possibly empty
-     * @since 0.9.72
+     * @since 0.9.72+
      */
     List<Hash> takeMissingRouterInfoBatch(long now) { return _refresher.takeMissingRouterInfoBatch(now); }
 
@@ -5916,7 +6049,7 @@ private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, P
      * Peers still waiting for their RouterInfo to be requested.
      *
      * @return the number pending
-     * @since 0.9.72
+     * @since 0.9.72+
      */
     int getMissingRouterInfoPending() { return _refresher.getMissingRouterInfoPending(); }
 
@@ -5924,7 +6057,7 @@ private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, P
      * Peers not recorded because the recovery list was full.
      *
      * @return the number dropped
-     * @since 0.9.72
+     * @since 0.9.72+
      */
     int getMissingRouterInfoDropped() { return _refresher.getMissingRouterInfoDropped(); }
 
@@ -6237,7 +6370,14 @@ private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, P
      * selectable, and recently active. Used by tuner to adjust tier limits
      * based on viable peers, not just raw counts.
      *
-     * @return whether quality peer
+     * @param profile the tier peer's profile to judge
+     * @param recentCutoff the earliest successful send that still counts as recent
+     *                     activity
+     * @param buildSuccess the build success ratio in [0.0, 1.0], passed to the
+     *                     selectability gate
+     * @return true if the peer is selectable, has sent successfully since
+     *         recentCutoff, and clears the acceptance-ratio floor once it has
+     *         MIN_TUNNEL_REQUESTS of tunnel history
      * @since 0.9.70+
      */
     private boolean isQualityPeer(PeerProfile profile, long recentCutoff, double buildSuccess) {
@@ -6271,6 +6411,9 @@ private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, P
      * 1-15 transient failures during a network blip stay in tiers rather
      * than being purged.  This prevents tier collapse during brief
      * network-wide events where many peers experience isolated failures.
+     *
+     * @param profile the peer's profile; a peer with no tunnel history, or no failure
+     *                rate for the last hour, has nothing to report
      * @return true if the peer has sustained recent tunnel failures
      * @since 0.9.70+
      */
@@ -6301,6 +6444,7 @@ private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, P
      *
      * @param profile profile carrying the decayed loss score to test against the threshold
      * @param now current time in ms
+     * @return true if the decayed score is above zero and at or above the lossy threshold
      * @since 0.9.71+
      */
     private boolean hasHighLoss(PeerProfile profile, long now) {
@@ -6318,6 +6462,8 @@ private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, P
      *
      * @param profile profile whose loss demotion flag and loss score are checked
      * @param now current time in ms
+     * @return true if the loss score is at the demotion threshold, or the peer is
+     *         flagged lossy and has not yet shown fresh clean recovery
      * @since 0.9.71+
      */
     private boolean inLossProbation(PeerProfile profile, long now) {
@@ -6841,7 +6987,7 @@ private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, P
      * Short-lived cache for {@link #getTunnelBuildSuccess}.  The 6 RateStat
      * lookups are expensive when called per-candidate in peer selection (up to
      * 400 peers × 6 lookups).  The ratio is a 10-minute rolling average, so
-     * a 15s cache (<2.5% staleness) eliminates ~40x redundant lookups with
+     * a 15s cache (&lt;2.5% staleness) eliminates ~40x redundant lookups with
      * negligible impact on decision accuracy.
      */
     private volatile double _cachedBuildSuccess = 1.0;

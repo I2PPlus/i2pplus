@@ -389,8 +389,11 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
     /**
      * Send one time with a new tid.
      *
-     * @param toWait > 0
-     * @return null on failure or if toWait <= 0
+     * @param tr the tracker to send the connect request to
+     * @param toWait how long to wait for the reply, in ms, greater than zero
+     * @return the waiter to poll for the reply, or null if the request could
+     *         not be sent
+     * @throws IllegalArgumentException if toWait is zero or negative
      */
     private ReplyWaiter sendConnReq(Tracker tr, long toWait) {
         if (toWait <= 0) throw new IllegalArgumentException();
@@ -408,6 +411,8 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
     /**
      * Send one time with given tid.
      *
+     * @param tr the tracker to send the connect request to
+     * @param tid the transaction ID to send, and to match the reply against
      * @return the payload or null on failure
      */
     private byte[] sendConnReq(Tracker tr, int tid) {
@@ -423,8 +428,18 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
     /**
      * Send one time with a new tid.
      *
-     * @param toWait if <= 0 does not register
-     * @return null on failure or if toWait <= 0
+     * @param tr the tracker to announce to
+     * @param connID the connection ID from the connect response
+     * @param ih the 20-byte SHA-1 info hash of the torrent
+     * @param id the 20-byte peer ID to advertise
+     * @param downloaded bytes downloaded so far for this torrent
+     * @param left bytes still to download for this torrent
+     * @param uploaded bytes uploaded so far for this torrent
+     * @param event one of the EVENT_* codes describing why this announce is made
+     * @param numWant maximum number of peers to return
+     * @param toWait how long to wait for the reply, in ms, 0 or less to skip
+     *               registering a waiter
+     * @return null on failure or if toWait &lt;= 0
      */
     private ReplyWaiter sendAnnounce(
             Tracker tr,
@@ -459,6 +474,16 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
     /**
      * Send one time with given tid.
      *
+     * @param tr the tracker to announce to
+     * @param tid the transaction ID to send, and to match the reply against
+     * @param connID the connection ID from the connect response
+     * @param ih the 20-byte SHA-1 info hash of the torrent
+     * @param id the 20-byte peer ID to advertise
+     * @param downloaded bytes downloaded so far for this torrent
+     * @param left bytes still to download for this torrent
+     * @param uploaded bytes uploaded so far for this torrent
+     * @param event one of the EVENT_* codes describing why this announce is made
+     * @param numWant maximum number of peers to return
      * @return the payload or null on failure
      */
     private byte[] sendAnnounce(
@@ -491,6 +516,9 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
     /**
      * Send one time with a new tid.
      *
+     * @param tr the tracker to scrape from
+     * @param connID the connection ID from the connect response
+     * @param ih the 20-byte SHA-1 info hash to scrape
      * @param toWait if &lt;= 0 does not register
      * @return null on failure or if toWait &lt;= 0
      */
@@ -516,6 +544,10 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
     /**
      * Send one time with given tid.
      *
+     * @param tr the tracker to scrape from
+     * @param tid the transaction ID to send, and to match the reply against
+     * @param connID the connection ID from the connect response
+     * @param ih the 20-byte SHA-1 info hash to scrape
      * @return the payload or null on failure
      */
     private byte[] sendScrape(Tracker tr, int tid, long connID, byte[] ih) {
@@ -529,7 +561,14 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
         return rv ? payload : null;
     }
 
-    /** Wait after initial send, resend if necessary. */
+    /**
+     * Wait after initial send, resend if necessary.
+     *
+     * @param w the outstanding query to wait for a reply on, locked throughout
+     * @param untilTime deadline in ms since epoch to keep retransmitting until
+     * @return true if a valid reply was received, false on timeout or resend
+     *         failure
+     */
     private boolean waitAndRetransmit(ReplyWaiter w, long untilTime) {
         synchronized (w) {
             while (true) {
@@ -577,6 +616,8 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
     /**
      * Resend the stored payload.
      *
+     * @param w the outstanding query whose stored payload is sent again
+     * @param toWait the retransmit timeout in ms, used only for logging
      * @return true if the datagram was handed to the session for sending
      */
     private boolean resend(ReplyWaiter w, long toWait) {
@@ -595,7 +636,10 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
      * Lowest-level send message call.
      *
      * @param dest may be null, returns false
-     * @param repliable true for conn request, false for announce
+     * @param toPort the tracker's UDP port to send the datagram to
+     * @param payload the BEP 15 request bytes, wrapped before sending
+     * @param repliable true to wrap in a repliable Datagram2, false for a raw
+     *                  Datagram3 that does not carry our lease set
      * @return true if the session accepted the datagram; false when not
      *         running, when the payload cannot be wrapped in a Datagram2 or
      *         Datagram3, or when the send is rejected
@@ -664,6 +708,8 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
      * Receive a message.
      *
      * @param from dest or null if it didn't come in on signed port
+     * @param fromPort the local port the datagram arrived on, unused
+     * @param payload the raw tracker response, ignored if shorter than 8 bytes
      */
     private void receiveMessage(Destination from, int fromPort, byte[] payload) {
         BandwidthGraph.datagramReceived(payload.length);
@@ -730,6 +776,9 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
      * Receive a connection reply.
      *
      * @param waiter the outstanding request this reply answers
+     * @param payload the connect response: 8-byte action and tid header, an
+     *                8-byte connection ID at offset 8, and an optional 2-byte
+     *                lifetime in seconds at offset 16
      */
     private void receiveConnection(ReplyWaiter waiter, byte[] payload) {
         Tracker tr = waiter.getSentTo();

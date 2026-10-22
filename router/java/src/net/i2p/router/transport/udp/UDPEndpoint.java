@@ -99,7 +99,7 @@ class UDPEndpoint implements SocketListener {
 
     /**
      *  Open socket using requested port in _listenPort and  bind host in _bindAddress.
-     *  If _listenPort <= 0, or requested port is busy, repeatedly try a new random port.
+     *  If _listenPort &lt;= 0, or requested port is busy, repeatedly try a new random port.
      *  @return null on failure
      *          Sets _listenPort to actual port or -1 on failure
      */

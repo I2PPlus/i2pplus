@@ -21,7 +21,8 @@ import net.i2p.util.SystemVersion;
  * supports resizing the buffer size during operation (only effective when buffer is empty),
  * and allows passive flushes after inactivity delays to avoid excessive buffering.
  * <p>
- * MessageOutputStream -> ConnectionDataReceiver -> Connection -> PacketQueue -> I2PSession
+ * MessageOutputStream -&gt; ConnectionDataReceiver -&gt; Connection -&gt;
+ * PacketQueue -&gt; I2PSession
  * <p>
  * Thread safety:
  * - Write operations synchronize on an internal data lock when manipulating the buffer.
@@ -86,8 +87,9 @@ class MessageOutputStream extends OutputStream {
     private volatile int _passiveFlushDelay;
 
     /**
-     * Default passive flush delay optimized for lower latency while maintaining stability.
-     * @return true on a slow system, which raises the delay to 200 ms
+     * Default passive flush delay optimized for lower latency while maintaining
+     * stability: 200 ms on a slow system, 100 ms otherwise.
+     *
      * @since 0.9.70+ mutable for adaptive tuning
      */
     private static volatile int defaultPassiveFlushDelay = SystemVersion.isSlow() ? 200 : 100;

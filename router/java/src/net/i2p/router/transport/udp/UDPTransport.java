@@ -4329,8 +4329,8 @@ if (_alive)
 
     /**
      * 1) Merge IPv4 or IPv6 newStatus into the current IPv4+IPv6 status
-     * 2a) If current status changed, call {@link #rebuildExternalAddress()}
-     * 2b) Otherwise, If we need to retest, call {@link net.i2p.router.transport.udp.PeerTestEvent#forceRunSoon}.
+     * 2a) If current status changed, call {@link #rebuildExternalAddress(boolean)}
+     * 2b) Otherwise, If we need to retest, call {@link net.i2p.router.transport.udp.PeerTestEvent#forceRunSoon(boolean)}.
      *
      * @param isIPv6 Is the change an IPv6 change?
      */

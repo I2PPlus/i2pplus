@@ -87,7 +87,7 @@ public class TimeParser {
      * <p>Ambiguity resolution logic:<br>
      * - After days/weeks/months/years: "m" means months<br>
      * - After seconds/minutes/hours: "m" means minutes<br>
-     * - Otherwise: numbers < 6 mean months, >= 6 mean minutes
+     * - Otherwise: numbers &lt; 6 mean months, &gt;= 6 mean minutes
      *
      * @param doop the operation type (PLUS or MINUS), or -1 to skip processing
      */

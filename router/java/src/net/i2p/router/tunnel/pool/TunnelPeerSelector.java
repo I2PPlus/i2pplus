@@ -340,7 +340,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
 
     /**
      * Effective first-hop fail cooldown.
-     * During ghost cascades (>50 ghosts), shorten from 5 min to 60s
+     * During ghost cascades (&gt;50 ghosts), shorten from 5 min to 60s
      * to rehabilitate peers faster when the network is stressed.
      * @return the effective first hop cooldown
      * @since 0.9.70
@@ -486,7 +486,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
      * @param hops selected peers, modified in place
      * @param from first replaceable slot index
      * @param to index after the last replaceable slot
-     * @param proof peer -> last successful-participation time
+     * @param proof peer -&gt; last successful-participation time
      * @param now current time from the router clock
      * @param window recency window for proof
      * @param replacements eligible proven candidates, most preferred first;
@@ -2175,8 +2175,8 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
     /**
      * Check if a peer's RouterInfo has at least one reachable SSU or NTCP address.
      * Peers without valid transport addresses always fail as first hops and trigger
-      * bans in {@link net.i2p.router.transport.udp.EstablishmentManager#establish} — they should be
-       * excluded from selection.
+     * bans in {@link net.i2p.router.transport.udp.EstablishmentManager#establish} — they should be
+     * excluded from selection.
      *
      * @param ctx the router context
      * @param peer hash of the peer to check

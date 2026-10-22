@@ -1275,7 +1275,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
 
     /**
      * Creates the PeerState and stores in _pstate.
-     * Called from {@link #gotRI()} so that we can pass any I2NP messages
+     * Called from {@link #gotRI(RouterInfo, boolean, boolean)} so that we can pass any I2NP messages
      * or fragments immediately to the PeerState.
      */
     private void createPeerState() {

@@ -482,7 +482,10 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
      * The first Service will be the IPv4 Service.
      * The second Service, if present, will be the IPv6 Service.
      *
-     * @return the list of services, non-empty, one or two entries, or null
+     * @param router the root device of the discovered UPnP router, whose device tree is
+     *               searched for a WAN connection device
+     * @return a list of one (IPv4) or two (IPv4 then IPv6) services, or null if no WAN
+     *         connection device was found
      */
     private List<Service> discoverService(Device router) {
             for (Device current : router.getDeviceList()) {
@@ -878,7 +881,13 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
         super.search();
     }
 
-    /** Compare two strings, either of which could be null. */
+    /**
+     * Compare two strings, either of which could be null.
+     *
+     * @param a the first string, or null
+     * @param b the second string, or null
+     * @return true if both are null, or if a is non-null and equal to b
+     */
     private static boolean stringEquals(String a, String b) {
         if (a != null)
             return a.equals(b);
@@ -968,7 +977,12 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
         }
     }
 
-    /** Append the service state table HTML to the buffer; for debug output only. */
+    /**
+     * Append the service state table HTML to the buffer; for debug output only.
+     *
+     * @param serv the service whose state variables are listed
+     * @param sb the buffer to append the HTML list to
+     */
     private static void listStateTable(Service serv, StringBuilder sb) {
         ServiceStateTable table;
         try {
@@ -989,7 +1003,12 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
         sb.append("</small></ul>");
     }
 
-    /** Append the action's arguments as an HTML list to the buffer; for debug output only. */
+    /**
+     * Append the action's arguments as an HTML list to the buffer; for debug output only.
+     *
+     * @param action the action whose argument names are listed
+     * @param sb the buffer to append the HTML list to
+     */
     private static void listActionsArguments(Action action, StringBuilder sb) {
         ArgumentList ar = action.getArgumentList();
         sb.append("<ol>");
@@ -1002,7 +1021,13 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
         sb.append("</ol>");
     }
 
-    /** Append all actions of the service as an HTML list to the buffer; for debug output only. */
+    /**
+     * Append all actions of the service as an HTML list to the buffer; for debug output
+     * only. Each action's arguments are listed as well.
+     *
+     * @param service the service whose action list is dumped
+     * @param sb the buffer to append the HTML list to
+     */
     private static void listActions(Service service, StringBuilder sb) {
         ActionList al = service.getActionList();
         sb.append("<ul>");
@@ -1019,8 +1044,8 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
     /**
      * A blocking {@link #toString()}. That's interesting.
      * Cache the last ArgumentList to speed it up some.
-     * Count on {@link #listSubServices()} to call multiple combinations of arguments
-     * so we don't get old data.
+     * Count on {@link #listSubServices(Device, StringBuilder)} to call multiple
+     * combinations of arguments so we don't get old data.
      */
     private String _lastAction;
     private Service _lastService;
@@ -1054,6 +1079,13 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
     /**
      * Fetch a UPnP service status variable as a number.
      *
+     * @param action the action to invoke, e.g. GetCommonLinkProperties
+     * @param arg the output argument holding the value
+     * @param serv the service to query
+     * @return the value formatted with {@link DataHelper#formatSize2Decimal(long)}, or
+     *         the raw text if it is not a number, prefixed with "&gt; " when the raw
+     *         value is 2^32 - 1, the largest the device counter can hold; null if the
+     *         action failed, "" if the argument is missing
      * @since 0.9.34
      */
     private String toLong(String action, String arg, Service serv) {
@@ -1071,8 +1103,14 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
     }
 
     /**
-     * Fetch a UPnP service status variable as a date.
+     * Fetch a UPnP service status variable as a duration.
      *
+     * @param action the action to invoke, e.g. GetStatusInfo
+     * @param arg the output argument holding the value
+     * @param serv the service to query
+     * @return the value, given in seconds, formatted as a duration, or the raw text if
+     *         it is not a number; null if the action failed, "" if the argument is
+     *         missing
      * @since 0.9.34
      */
     private String toTime(String action, String arg, Service serv) {
@@ -1089,6 +1127,11 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
     /**
      * Fetch a UPnP service status variable as a boolean.
      *
+     * @param action the action to invoke, e.g. GetFirewallStatus
+     * @param arg the output argument holding the value
+     * @param serv the service to query
+     * @return "true" if the value is exactly "1", "false" for anything else, including a
+     *         failed action or a missing argument
      * @since 0.9.34
      */
     private String toBoolean(String action, String arg, Service serv) {
@@ -1338,6 +1381,11 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
     /**
      * This always requests that the external port == the internal port, for now.
      * Blocking!
+     *
+     * @param protocol "TCP" or "UDP", as the device expects it
+     * @param port the port to open, used for both the external and the internal port
+     * @param description text the device shows next to the mapping
+     * @param fp the port to forward; isIP6 selects the IPv4 or IPv6 service
      * @return true if the NAT accepted the mapping; false if there is no NAT, no
      *         matching service, or the device rejected the action
      */
@@ -1365,6 +1413,11 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
      * This always requests that the external port == the internal port, for now.
      * Blocking!
      *
+     * @param service the WAN IPv4 connection service to send the action to
+     * @param protocol "TCP" or "UDP", as the device expects it
+     * @param port the port to open, used for both the external and the internal port
+     * @param description text the device shows next to the mapping
+     * @param fp the port being forwarded; added to the forwarded set on success
      * @return true if the device accepted the AddPortMapping action; false if
      *         the device has no such action or rejects the request
      * @since 0.9.50 split out from above
@@ -1455,6 +1508,9 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
      * Blocking!
      *
      * @param service WANIPv6FirewallControl
+     * @param port the port to open a pinhole for
+     * @param fp the IPv6 port to forward; its address and protocol are sent, and its UID
+     *           is updated with the value the device returns
      * @return true if the device accepted the AddPinhole action; false if it
      *         does not support pinholing or rejects the request
      * @since 0.9.50
@@ -1593,6 +1649,8 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
      * <p>
      * So return the address of ours that is closest to his.
      *
+     * @param deflt the address to fall back to, normally the interface address
+     *              cybergarage picked; it is also considered as a candidate
      * @return our address or deflt on failure
      * @since 0.8.8
      */
@@ -1637,6 +1695,11 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
 
     /**
      * Removes a mapping through the matching NAT service, blocking on the action.
+     *
+     * @param protocol "TCP" or "UDP", as the device expects it
+     * @param port the external port to close
+     * @param fp the port being un-forwarded; isIP6 selects the IPv4 or IPv6 service
+     * @param noLog true to suppress the log message about the result
      * @return true if the mapping was removed; false if there is no NAT or no
      *         matching service for the address family
      */
@@ -1665,6 +1728,11 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
     /**
      * Removes an IPv4 port mapping.
      *
+     * @param service the WAN IPv4 connection service to send the action to
+     * @param protocol "TCP" or "UDP", as the device expects it
+     * @param port the external port to close
+     * @param fp the port being un-forwarded; dropped from the forwarded set either way
+     * @param noLog true to suppress the log message about the result
      * @return true if the device accepted the DeletePortMapping action; false
      *         if it has no such action or rejects the request
      * @since 0.9.50 split out from above
@@ -1700,6 +1768,11 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
     /**
      * Removes an IPv6 port mapping.
      *
+     * @param service the WANIPv6FirewallControl service to send the action to
+     * @param protocol unused, the pinhole is identified by its unique ID
+     * @param port unused, the pinhole is identified by its unique ID
+     * @param fp the IPv6 port being un-forwarded; a negative UID means nothing to remove
+     * @param noLog true to suppress the log message about the result
      * @return true if the device accepted the DeletePinhole action; false if it
      *         does not support pinholing or rejects the request
      * @since 0.9.50
@@ -1871,10 +1944,12 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
 
     /**
      * Runs port registration in a background thread; postControlAction() can take many seconds,
-     * especially if it's failing, and {@link #onChangePublicPorts()} may be called from threads we
-     * don't want to slow down.
+     * especially if it's failing, and
+     * {@link #onChangePublicPorts(Set, ForwardPortCallback)} may be called from threads
+     * we don't want to slow down.
      *
-     * @param portsToForwardNow if null, renew subscriptions only, then exit.
+     * @param portsToForwardNow the ports to ask the device to forward, or null to renew
+     *                          subscriptions only, then exit
      */
     private void registerPorts(Set<ForwardPort> portsToForwardNow) {
         if (_serviceLacksAPM && portsToForwardNow != null) {
@@ -1959,6 +2034,8 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
      * especially if it's failing,
      * and onChangePublicPorts() may be called from threads we don't want to slow down,
      * so throw this in a thread.
+     *
+     * @param portsToForwardNow the ports to ask the device to stop forwarding, non-null
      */
     private void unregisterPorts(Set<ForwardPort> portsToForwardNow) {
         if (_log.shouldInfo())
@@ -2148,6 +2225,9 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
 
     /**
      * Looks up a localised string in the console bundle.
+     *
+     * @param s the message key to look up
+     * @return the translated string, or s itself when no translation exists
      */
     private final String _t(String s) {
         return Translate.getString(s, _context, BUNDLE_NAME);
@@ -2155,6 +2235,11 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
 
     /**
      * Looks up a localised string and substitutes one argument.
+     *
+     * @param s the message key, containing a {0} placeholder
+     * @param o the value substituted for {0}, not translated
+     * @return the translated string with {0} replaced, or s itself when no
+     *         translation exists
      */
     private final String _t(String s, Object o) {
         return Translate.getString(s, o, _context, BUNDLE_NAME);
@@ -2162,6 +2247,12 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
 
     /**
      * Looks up a localised string and substitutes two arguments.
+     *
+     * @param s the message key, containing {0} and {1} placeholders
+     * @param o the value substituted for {0}, not translated
+     * @param o2 the value substituted for {1}, not translated
+     * @return the translated string with the placeholders replaced, or s itself when
+     *         no translation exists
      */
     private final String _t(String s, Object o, Object o2) {
         return Translate.getString(s, o, o2, _context, BUNDLE_NAME);

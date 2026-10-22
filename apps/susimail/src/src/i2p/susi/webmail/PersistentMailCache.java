@@ -429,7 +429,7 @@ class PersistentMailCache {
 
     /**
      * This is for the initial load only.
-     * Others will use {@link #getMail()}.
+     * Others will use {@link #getMail(Mail, boolean)}.
      *
      * @return null on failure
      */

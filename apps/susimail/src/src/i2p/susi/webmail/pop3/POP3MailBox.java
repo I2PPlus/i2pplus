@@ -339,8 +339,6 @@ public class POP3MailBox implements NewMailListener {
      * If not connected, connect now.
      * Should be called from all public methods before sending a command.
      * Caller must sync.
-     *
-     * @return true or false
      */
     private void checkConnection() throws IOException {
         if (!isConnected()) {
@@ -437,8 +435,6 @@ public class POP3MailBox implements NewMailListener {
 
     /**
      * Caller must sync.
-     *
-     * @throws IOException
      */
     private void updateUIDLs(List<String> lines) {
         uidlToID.clear();
@@ -468,8 +464,6 @@ public class POP3MailBox implements NewMailListener {
 
     /**
      * Caller must sync.
-     *
-     * @throws IOException
      */
     private void updateSizes(List<String> lines) {
         /*

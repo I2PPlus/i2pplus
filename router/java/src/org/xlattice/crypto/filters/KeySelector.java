@@ -287,10 +287,10 @@ public class KeySelector {
          * for Bloom filter operations. Each word offset represents the starting
          * bit position for one of the k hash functions.</p>
          *
-         * <p>Algorithm details:<br/>
-         * - Calculates stride as (m-5) bits between word positions<br/>
-         * - Processes key data in chunks spanning multiple bytes when needed<br/>
-         * - Uses bit manipulation to extract word-aligned bit groups<br/>
+         * <p>Algorithm details:<br>
+         * - Calculates stride as (m-5) bits between word positions<br>
+         * - Processes key data in chunks spanning multiple bytes when needed<br>
+         * - Uses bit manipulation to extract word-aligned bit groups<br>
          * - Handles edge cases where words cross byte boundaries</p>
          *
          * @param b key data as byte array

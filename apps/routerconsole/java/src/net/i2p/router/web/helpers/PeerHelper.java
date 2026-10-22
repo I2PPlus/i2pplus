@@ -96,7 +96,7 @@ public class PeerHelper extends HelperBase {
      * Render the peer summary table into the page being built. The peer page is
      * written straight to the response, so there is no value to hand back.
      *
-     * @return the peer summary
+     * @return the empty string, as the page is written straight to the response
      */
     public String getPeerSummary() {
         try {renderStatusHTML(_out, _urlBase, _sortFlags);}
@@ -105,9 +105,16 @@ public class PeerHelper extends HelperBase {
     }
 
     /**
-     * Warning - blocking, very slow, queries the active UPnP router,
-     * will take many seconds if it has vanished.
+     * Render the whole peer page: nav bar, rings and transport summary, or the
+     * single transport table when a transport is selected. Blocking, and slow
+     * with many peers.
      *
+     * @param out where the peer page markup is streamed to
+     * @param urlBase console URL prefix the transport tab and sort links are
+     *                built from
+     * @param sortFlags sort column, one of the FLAG_ constants in
+     *                  {@link UDPSorters}; negative reverses the order
+     * @throws IOException if the response writer fails while the page is written
      * @since 0.9.31 moved from {@link TransportManager}
      */
     private void renderStatusHTML(Writer out, String urlBase, int sortFlags) throws IOException {
@@ -180,7 +187,9 @@ public class PeerHelper extends HelperBase {
 
     /**
      * Get the 1-minute average of a RateStat, or 0 if unavailable.
-     * @return the stat avg
+     * @param name the rate stat's full dotted name, e.g. {@code router.activePeers}
+     * @return the average value recorded in the last minute, 0 if the stat or
+     *         its 1-minute rate is not registered
      * @since 0.9.70+
      */
     private double getStatAvg(String name) {
@@ -196,7 +205,9 @@ public class PeerHelper extends HelperBase {
      * window. For count-type stats whose event value carries no information
      * (e.g. {@code peer.testTimeout} always records 1), this is the meaningful signal -
      * the average would read a constant 1.0.
-     * @return events in the last minute, 0 if unavailable
+     * @param name dotted rate stat name whose 1-minute window is read
+     * @return events in the last minute, 0 if the stat or its 1-minute rate is
+     *         not registered
      * @since 0.9.71
      */
     private double getStatCount1m(String name) {
@@ -212,6 +223,8 @@ public class PeerHelper extends HelperBase {
      * Render peer-landscape ring dashboard above the transport summary table.
      * Ten rings: Active, Fast, HighCap, Reliable, Floodfill, Known,
      * Profiles, Unreachable, Banned, Test Fail.
+     * @param out where the ring dashboard markup is written
+     * @throws IOException if the rendered dashboard cannot be written to the page
      * @since 0.9.70+
      */
     private void renderPeerRings(Writer out) throws IOException {
@@ -318,6 +331,8 @@ public class PeerHelper extends HelperBase {
     /**
      * Render the peer connectivity summary section.
      *
+     * @param out where the transport summary table is written
+     * @throws IOException if the summary table cannot be written to the page
      * @since 0.9.56
      */
     private void renderSummary(Writer out) throws IOException {
@@ -520,11 +535,12 @@ public class PeerHelper extends HelperBase {
      * Render a named NTCP element in fragment mode: the count heading,
      * the tbody with data-key rows, or the totals tfoot.
      *
-     * @param nt the NTCP transport
-     * @param out the writer to render to
-     * @param id the element id
-     * @param sortFlags the sort flags
-     * @throws IOException if writing fails
+     * @param nt the NTCP transport whose peers are re-rendered
+     * @param out where the fragment markup is written
+     * @param id DOM id of the element to re-render: ntcpcon, peersNTCP or ntcpfoot
+     * @param sortFlags sort column, one of the FLAG_ constants in
+     *                  {@link UDPSorters}; negative reverses the order
+     * @throws IOException if the fragment cannot be written to the page
      * @since 0.9.70+
      */
     private void renderNTCPFragment(NTCPTransport nt, Writer out, String id, int sortFlags) throws IOException {
@@ -577,12 +593,13 @@ public class PeerHelper extends HelperBase {
      * Render a named SSU element in fragment mode: the count heading,
      * the tbody with data-key rows, or the totals tfoot.
      *
-     * @param ut the SSU transport
-     * @param out the writer to render to
-     * @param id the element id
-     * @param sortFlags the sort flags
-     * @param debugmode render the advanced view
-     * @throws IOException if writing fails
+     * @param ut the SSU transport whose peers are re-rendered
+     * @param out where the fragment markup is written
+     * @param id DOM id of the element to re-render: ssucon, peersSSU or ssufoot
+     * @param sortFlags sort column, one of the FLAG_ constants in
+     *                  {@link UDPSorters}; negative reverses the order
+     * @param debugmode true renders the advanced view, with the extra columns
+     * @throws IOException if the fragment cannot be written to the page
      * @since 0.9.70+
      */
     private void renderSSUFragment(UDPTransport ut, Writer out, String id, int sortFlags, boolean debugmode) throws IOException {
@@ -659,6 +676,8 @@ public class PeerHelper extends HelperBase {
     /**
      * Render the peer page navigation bar.
      *
+     * @param out where the tab bar markup is written
+     * @throws IOException if the tab bar cannot be written to the page
      * @since 0.9.38
      */
     private void renderNavBar(Writer out) throws IOException {
@@ -683,11 +702,16 @@ public class PeerHelper extends HelperBase {
         out.append(buf);
     }
 
-    /// begin NTCP
+    /* begin NTCP */
 
     /**
      * Render the NTCP transport peer listing.
      *
+     * @param nt the NTCP transport whose established connections are listed
+     * @param out where the peer table markup is written
+     * @param sortFlags sort column, one of the FLAG_ constants in
+     *                  {@link UDPSorters}; negative reverses the order
+     * @throws IOException if the peer table cannot be written to the page
      * @since 0.9.31 moved from {@link NTCPTransport}
      */
     private void render(NTCPTransport nt, Writer out, int sortFlags) throws IOException {
@@ -735,6 +759,14 @@ public class PeerHelper extends HelperBase {
     /**
      * Append the NTCP peer table header, including the IPv6 column when enabled.
      *
+     * @param buf the buffer the header markup is appended to; the caller writes
+     *            it out and resets it
+     * @param ipv6Enabled true to add the IPv6 column, set from the NTCP or UDP
+     *                    ipv6 property
+     * @param activePeers established connection count shown in the heading
+     * @param maxConnections configured NTCP connection limit shown beside it
+     * @param hasPeers false writes only the heading and the table opener, and
+     *                 skips the column headers
      * @since 0.9.70+
      */
     private void renderNTCPHeader(StringBuilder buf, boolean ipv6Enabled, int activePeers,
@@ -819,6 +851,14 @@ public class PeerHelper extends HelperBase {
     /**
      * Append one NTCP peer row and accumulate its stats into totals.
      *
+     * @param buf the buffer the row markup is appended to
+     * @param con an established NTCP connection to render as one row
+     * @param now current time in ms since the epoch, the base for the idle times
+     * @param ipv6Enabled true to emit the IPv6 cell for this peer
+     * @param peerCount peers listed, which sets the idle window a rate must fall
+     *                  inside to be counted: 60s above 300 peers, 3min above 100
+     * @param totals accumulators this row's rates, uptime and clock skew are
+     *               added to
      * @since 0.9.70+
      */
     private void renderNTCPRow(StringBuilder buf, NTCPConnection con, long now, boolean ipv6Enabled,
@@ -922,6 +962,13 @@ public class PeerHelper extends HelperBase {
     /**
      * Append the NTCP peer table footer with the accumulated totals.
      *
+     * @param buf the buffer the footer markup is appended to
+     * @param ipv6Enabled true widens the label cell to colspan 5 to cover the
+     *                    IPv6 column
+     * @param activePeers established connection count shown in the "n peers" label
+     * @param peerCount rows rendered, the divisor of the average uptime and clock
+     *                  skew, so it must be greater than 0
+     * @param totals per-column sums accumulated from the rendered rows
      * @since 0.9.70+
      */
     private void renderNTCPFooter(StringBuilder buf, boolean ipv6Enabled, int activePeers,
@@ -996,12 +1043,20 @@ public class PeerHelper extends HelperBase {
         }
     }
 
-    /// end NTCP
-    /// begin SSU
+    /* end NTCP */
+    /* begin SSU */
 
     /**
      * Render the SSU/UDP transport peer listing.
      *
+     * @param ut the SSU transport whose peer states are listed
+     * @param out where the peer table markup is written
+     * @param urlBase console URL prefix the sort links are built from
+     * @param sortFlags sort column, one of the FLAG_ constants in
+     *                  {@link UDPSorters}; negative reverses the order
+     * @param debugmode true for the advanced view: the extra columns, the
+     *                  per-column sort links and the wider footer
+     * @throws IOException if the peer table cannot be written to the page
      * @since 0.9.31 moved from {@link UDPTransport}
      */
     private void render(UDPTransport ut, Writer out, String urlBase, int sortFlags, boolean debugmode) throws IOException {
@@ -1033,6 +1088,16 @@ public class PeerHelper extends HelperBase {
     /**
      * Append the SSU peer table header, including the sort links in debug mode.
      *
+     * @param buf the buffer the header markup is appended to
+     * @param urlBase page path the sort links point at, without a query string
+     * @param sortFlags column and direction currently in effect, as passed to
+     *                  {@link UDPSorters#getComparator}; negative means descending
+     * @param debugmode true adds the sort links, the IPv6 column and the
+     *                  advanced-view table class; false adds the link to it
+     * @param activePeers active peer count shown in the heading
+     * @param maxConnections configured UDP connection limit shown beside it
+     * @param hasPeers false writes only the heading and the table opener, and
+     *                 skips the column headers
      * @since 0.9.70+
      */
     private void renderSSUHeader(StringBuilder buf, String urlBase, int sortFlags, boolean debugmode,
@@ -1196,6 +1261,14 @@ public class PeerHelper extends HelperBase {
     /**
      * Append one SSU peer row and accumulate its stats into totals.
      *
+     * @param buf the buffer the row markup is appended to
+     * @param peer the peer state to render as one row
+     * @param now current time in ms since the epoch, the base for the idle
+     *            times and the uptime
+     * @param debugmode true adds the IPv6, ban and failed-send notes and the
+     *                  congestion-window, RTT, RTO and MTU cells
+     * @param totals accumulators this row's rates, timings and packet counts are
+     *               added to
      * @since 0.9.70+
      */
     private void renderSSURow(StringBuilder buf, PeerState peer, long now, boolean debugmode, SSUTotals totals) {
@@ -1366,6 +1439,13 @@ public class PeerHelper extends HelperBase {
     /**
      * Append the SSU peer table footer with the accumulated totals.
      *
+     * @param buf the buffer the footer markup is appended to
+     * @param debugmode true widens the label cell to colspan 5 and adds the
+     *                  congestion-window, RTT, RTO and MTU cells
+     * @param ut transport supplying the active peer count for the label and our
+     *           own MTU for the footer
+     * @param totals sums accumulated from the rendered rows; numPeers is the
+     *               divisor of the averages, so it must be greater than 0
      * @since 0.9.70+
      */
     private void renderSSUFooter(StringBuilder buf, boolean debugmode, UDPTransport ut, SSUTotals totals) {

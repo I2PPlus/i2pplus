@@ -110,7 +110,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
     static final long STAT_PERIOD_LONG = RateConstants.TEN_MINUTES;
     /**
      * Max history samples for sparklines (120 samples @ 15s = 30min; transport thread params sample
-      * every 5s = 10min).
+     * every 5s = 10min).
      */
     static final int MAX_HISTORY = 120;
 
@@ -234,6 +234,11 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      * factory, before the thread starts.  An id whose CPU counter ran backwards
      * is a reused id and is reset to {@link ThreadCpuTable#UNRESOLVED} by
      * {@link #sampleStageCpu}, so its name is read again rather than trusted.
+     *
+     * @param ids thread ids sampled this cycle, in any order; ids below 1 are
+     *            ignored
+     * @param count how many entries at the start of ids are valid, never more
+     *              than ids.length
      */
     private void resolveThreadNames(long[] ids, int count) {
         int unseen = 0;
@@ -586,8 +591,8 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
     /**
      * Records the tuned dispatch age. The startup tunables, the auto-tuner's apply
-     * and the console override all write it here, so the verify and
-     * {@link net.i2p.router.transport.GetBidsJob} read one value.
+     * and the console override all write it here, so the verify and the transport's
+     * GetBidsJob read one value.
      *
      * @param value the max time in ms a message may sit in the outbound dispatch queue
      * @since 0.9.72+
@@ -631,7 +636,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
     private static volatile int buildFailureBuffer = 0;
 
     /**
-     * Minimum INITIAL_RTO target (ms) in the Tuner's {@link #computeTarget()}.
+     * Minimum INITIAL_RTO target (ms) in the Tuner's {@code computeTarget(double)}.
      * Prevents the Tuner from setting RTO too low, which causes
      * spurious retransmits and wasted bandwidth.
      * Default 6000ms — accommodates typical I2P RTT up to ~3s without
@@ -758,6 +763,9 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      * ~1 message per 8MB of max heap, clamped to a sane band. Mirrors the
      * scaling used by {@link MaxConcurrentMessagesParam} so the initial value
      * can never exceed what the JVM can reasonably hold.
+     *
+     * @return one initial concurrent message per 8 MB of max heap, clamped to
+     *         [64, 1024]
      */
     private static int memoryDerivedInitMsgMax() {
         return Math.max(64, Math.min(1024, (int) (SystemVersion.getMaxMemory() / (8 * 1024 * 1024))));
@@ -1223,6 +1231,8 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      * Remove old tuner.* properties from {@code router.config} that were written there
      * before autotune.config was introduced. Only purges keys we know about
      * ({@code tuner.PARAM.value}/default/min/max/step), leaves user-configured props alone.
+     *
+     * @param ctx the context whose router.config is scanned and rewritten
      */
     private void purgeOldTunerProps(RouterContext ctx) {
         String markerKey = "tuner._migrated_to_autotune";
@@ -1252,7 +1262,11 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         slowCycle(now);
     }
 
-    /** Fast 5s cycle: transport worker thread pools react to CPU saturation. */
+    /**
+     * Fast 5s cycle: transport worker thread pools react to CPU saturation.
+     *
+     * @param now current time in ms, compared with the last fast cycle
+     */
     private void fastCycle(long now) {
         if (now - _lastFastCycle >= 5000) {
             _lastFastCycle = now;
@@ -1272,7 +1286,11 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         }
     }
 
-    /** Slow 15s cycle: system health, param updates, crypto pools and derived values. */
+    /**
+     * Slow 15s cycle: system health, param updates, crypto pools and derived values.
+     *
+     * @param now current time in ms, compared with the last slow cycle
+     */
     private void slowCycle(long now) {
         if (now - _lastSlowCycle >= 15000) {
             _lastSlowCycle = now;
@@ -1294,7 +1312,12 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         }
     }
 
-    /** Update all non-fast params on the 15s cycle. */
+    /**
+     * Update all non-fast params on the 15s cycle.
+     *
+     * @param health the system health snapshot computed for this cycle and handed
+     *               to each param
+     */
     private void updateSlowParams(SystemHealth health) {
         for (TunableParam param : _params) {
             try {
@@ -1463,6 +1486,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
     /**
      * 60s rolling average of the named stat, or NaN if unavailable.
      *
+     * @param name the statManager rate name to read
      * @return 60s rolling average of a stat, or NaN if unavailable
      */
     private double getAvgStat(String name) {
@@ -1476,6 +1500,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
     /**
      * Hourly rolling average of the named stat, or NaN if unavailable.
      *
+     * @param name the rate whose hourly average is wanted
      * @return hourly rolling average of a stat, or NaN if unavailable
      */
     private double getHourlyAvgStat(String name) {
@@ -1489,6 +1514,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
     /**
      * Event count in the last 60s for the named stat, or NaN if unavailable.
      *
+     * @param name the rate whose event count is wanted
      * @return event count in the last 60s for a stat, or NaN if unavailable
      */
     private double getEventCountStat(String name) {
@@ -2865,7 +2891,13 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return false;
         }
 
-        /** Dampen the computed target: reduce step size when system is degraded. */
+        /**
+         * Dampen the computed target: reduce step size when system is degraded.
+         *
+         * @param target the target proposed by the param's feedback logic
+         * @return the target moved toward current by the fraction the health score
+         *         allows, and at least one step toward target whenever the two differ
+         */
         private int dampenTarget(int target) {
             int current = getRuntimeValue();
             int rawDelta = target - current;
@@ -2880,7 +2912,12 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         /** Whether the clamp warning was already emitted for this target. */
         private boolean _clampWarned;
 
-        /** Hard clamp the target to [min, max] before comparison. */
+        /**
+         * Hard clamp the target to [min, max] before comparison.
+         *
+         * @param target the proposed target, possibly outside the param's range
+         * @return the target limited to [_min, _max]
+         */
         private int clampTarget(int target) {
             // Hard clamp to [min, max] BEFORE comparison — prevents stale persisted values
             // from exceeding caps after code changes, even when computeTarget() returns
@@ -2924,7 +2961,11 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return null;
         }
 
-        /** Apply the target value, accelerating rollback when diverged from default. */
+        /**
+         * Apply the target value, accelerating rollback when diverged from default.
+         *
+         * @param target the value to move the param to, already clamped to its range
+         */
         private void applyTarget(int target) {
             // Fast rollback: when current has diverged from _defaultValue and the stat
             // has moved against the divergence, snap back faster (2x step)
@@ -3358,9 +3399,11 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return callStaticInt(reflectorTargetClass(methodName), methodName, -1);
         }
 
-        /** Call a static double getter via reflection.
-         *  Returns {@code -1.0d} when the class or method cannot be resolved —
-         *  a sentinel the caller must treat as "no data", not as a measurement. */
+        /**
+         * Call a static double getter via reflection.
+         * Returns {@code -1.0d} when the class or method cannot be resolved —
+         * a sentinel the caller must treat as "no data", not as a measurement.
+         */
         static double invokeGetDouble(String methodName) {
             return callStaticDouble(reflectorTargetClass(methodName), methodName, -1.0d);
         }
@@ -5684,19 +5727,34 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         return CEILING_HOLD;
     }
 
-    /** A value already expressed in percent, as a whole-percent string. */
+    /**
+     * A value already expressed in percent, as a whole-percent string.
+     *
+     * @param percent the value on a 0-100 scale
+     * @return the rounded percent with a % sign, or "no signal" for NaN
+     */
     private static String wholePct(double percent) {
         if (Double.isNaN(percent)) {return "no signal";}
         return Math.round(percent) + "%";
     }
 
-    /** A fraction as a whole-percent string; NaN becomes "no signal". */
+    /**
+     * A fraction as a whole-percent string; NaN becomes "no signal".
+     *
+     * @param rate the fraction on a 0-1 scale
+     * @return the rate as a whole percent with a % sign
+     */
     private static String pct(double rate) {
         if (Double.isNaN(rate)) {return "no signal";}
         return Math.round(rate * 100.0d) + "%";
     }
 
-    /** A millisecond duration as a seconds string with one decimal. */
+    /**
+     * A millisecond duration as a seconds string with one decimal.
+     *
+     * @param ms the duration in milliseconds
+     * @return the duration in seconds with one decimal, or "no signal" for NaN
+     */
     private static String secs(double ms) {
         if (Double.isNaN(ms)) {return "no signal";}
         return String.format(java.util.Locale.US, "%.1fs", ms / 1000.0d);
@@ -6728,8 +6786,8 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      * {@code jobQueue.jobLag}, system load, memory pressure.
      * <p>Increases when push time is high and CPU/system have headroom.
      * Decreases when push time is low and no heavy transit. Supports
-     * dynamic thread addition/removal via
-     * {@link net.i2p.router.transport.udp.PacketHandler#adjustThreads}.
+     * dynamic thread addition/removal via the UDP packet handler's
+     * adjustThreads().
      *
      * @since 0.9.70+
      */
@@ -12461,7 +12519,7 @@ protected int computeTarget(double observed) {
 
         /**
          * Read the live aggregate queue depth across all server tunnel pools.
-         *  Bypasses the 60s Rate average for instant saturation detection.
+         * Bypasses the 60s Rate average for instant saturation detection.
          */
         protected double getObservedStat(RouterContext ctx) {
             return I2PTunnelReflector.invokeGetInt("getLiveServerHandlerQueueDepth");
@@ -12778,7 +12836,7 @@ protected int computeTarget(double observed) {
      * load even though the handler pool is not yet saturated.
      * <p>
      * Policy: grow toward the ceiling as the observed backlog (queueDepth, 60s
-     * avg) approaches the current capacity, grow a little when backlog >50 but
+     * avg) approaches the current capacity, grow a little when backlog &gt;50 but
      * still clear of the cap and no CPU pressure, and shrink back toward the
      * floor when the backlog is consistently near-empty.
      */
@@ -12800,7 +12858,7 @@ protected int computeTarget(double observed) {
 
         /**
          * Read the live aggregate queue depth across all server tunnel pools.
-         *  Bypasses the 60s Rate average for instant saturation detection.
+         * Bypasses the 60s Rate average for instant saturation detection.
          */
         protected double getObservedStat(RouterContext ctx) {
             return I2PTunnelReflector.invokeGetInt("getLiveServerHandlerQueueDepth");
@@ -12865,14 +12923,14 @@ protected int computeTarget(double observed) {
      *  Ten pools sharing one budget means the summed pressure divided by the
      *  budget reads low even when one pool is saturated; the per-pool ratio
      *  makes a saturated pool visible regardless of how quiet the others are.
-     *  Above 90% the step doubles the current budget so a download burst
-     *  cannot wait out a +2-per-cycle crawl; between 70–90% growth is
-     *  still aggressive. Below 20% the budget shrinks by one so a quiet
-     *  router does not hold threads it does not need.
+     * Above 90% the step doubles the current budget so a download burst
+     * cannot wait out a +2-per-cycle crawl; between 70–90% growth is
+     * still aggressive. Below 20% the budget shrinks by one so a quiet
+     * router does not hold threads it does not need.
      *
      * @param current current runtime budget (clamped to [min,max] first)
      * @param observed the busiest pool's utilization rate; NaN or negative
-     *        leaves the value unchanged
+     *                 leaves the value unchanged
      * @param min inclusive lower bound
      * @param max inclusive upper bound
      * @return target budget in [min, max]
@@ -13439,8 +13497,11 @@ protected int computeTarget(double observed) {
         }
 
         /**
-         * Job queue lag: 0ms = 1.0, >50ms = degraded, >200ms = 0.0
-         * Also considers jobRunSlow (jobs >1s) as sustained overload signal.
+         * Job queue lag: 0ms = 1.0, &gt;50ms = degraded, &gt;200ms = 0.0
+         * Also considers jobRunSlow (jobs &gt;1s) as sustained overload signal.
+         *
+         * @return the job-lag health factor in [0,1], or NaN if the period holds
+         *         fewer than three job-lag events
          */
         private double scoreJobLag() {
             RateStat rs = _ctx.statManager().getRate("jobQueue.jobLag");
@@ -13467,7 +13528,10 @@ protected int computeTarget(double observed) {
 
         /**
          * Ready (queued) jobs as a fraction of pool capacity.
-         * >50% of pool capacity queued = overload indicator.
+         * &gt;50% of pool capacity queued = overload indicator.
+         *
+         * @return the ready-jobs health factor in [0,1], or NaN if the period holds
+         *         fewer than three samples
          */
         private double scoreReadyJobs() {
             RateStat rs = _ctx.statManager().getRate("jobQueue.readyJobs");
@@ -13484,6 +13548,9 @@ protected int computeTarget(double observed) {
 
         /**
          * Dropped jobs per interval — any dropped job is a severe overload signal.
+         *
+         * @return the dropped-jobs health factor in [0,1], 1.0 when nothing was
+         *         dropped, or NaN if the stat is unavailable
          */
         private double scoreDroppedJobs() {
             RateStat rs = _ctx.statManager().getRate("jobQueue.droppedJobs");
@@ -13498,6 +13565,9 @@ protected int computeTarget(double observed) {
         /**
          * How long jobs wait in the queue before execution.
          * 0ms→1.0, 500ms→0.5, 2000ms→0.0.
+         *
+         * @return the job-wait health factor in [0,1], or NaN if the period holds
+         *         fewer than three samples
          */
         private double scoreJobWait() {
             RateStat rs = _ctx.statManager().getRate("jobQueue.jobWait");
@@ -13515,6 +13585,9 @@ protected int computeTarget(double observed) {
          * avoids NaN when that window hasn't accumulated events yet.
          * Requires 10+ total events (exploratory + client) for stability.
          * When firewalled, lower thresholds since inbound builds are rejected.
+         *
+         * @return the build-success health factor in [0,1], or NaN if fewer than 10
+         *         build events landed in the period
          */
         private double scoreBuildSuccess() {
             double explS = getEventCount("tunnel.buildExploratorySuccess");
@@ -13537,6 +13610,9 @@ protected int computeTarget(double observed) {
         /**
          * Fraction of registered tunnel pools that are alive.
          * 1.0 = all alive, 0.0 = half or more dead.
+         *
+         * @return the pool-alive health factor in [0,1], or NaN when no tunnel pools
+         *         are configured
          */
         private double scorePoolAlive() {
             TunnelManagerFacade mgr = _ctx.tunnelManager();
@@ -13558,6 +13634,9 @@ protected int computeTarget(double observed) {
          * 1.0 = all pools meet target, 0.0 = none do.
          * Linear ramp: 0%→0.0, 70%→1.0. Pools still building at startup
          * won't penalize until sufficient time has passed to meet targets.
+         *
+         * @return the pool-target health factor in [0,1], or NaN when no tunnel pools
+         *         are configured
          */
         private double scorePoolDeficit() {
             TunnelManagerFacade mgr = _ctx.tunnelManager();
@@ -13592,7 +13671,10 @@ protected int computeTarget(double observed) {
 
         /**
          * Fetch the event count for a stat using the given period (ms).
-         * @return the event count
+         *
+         * @param statName the statManager rate name to read
+         * @param period the rate period in ms, e.g. {@code RateConstants.ONE_HOUR}
+         * @return the event count in that period, 0 if the stat or rate has no data
          */
         private double getEventCount(String statName, long period) {
             RateStat rs = _ctx.statManager().getRate(statName);
@@ -13604,7 +13686,9 @@ protected int computeTarget(double observed) {
 
         /**
          * Fetch the event count for a stat using the 60s period.
-         * @return the event count
+         *
+         * @param statName the statManager rate name to read
+         * @return the event count in the 60s period, 0 if the stat has no data
          */
         private double getEventCount(String statName) {
             return getEventCount(statName, STAT_PERIOD);
@@ -13613,7 +13697,10 @@ protected int computeTarget(double observed) {
         /**
          * Return lifetime event count for a stat.
          * Use for low-frequency stats where 60s window is too narrow.
-         * @return the lifetime event count
+         *
+         * @param statName the statManager rate name to read
+         * @return the number of events recorded since the stat was created, 0 if the
+         *         stat is unavailable
          */
         private double getLifetimeEventCount(String statName) {
             RateStat rs = _ctx.statManager().getRate(statName);
@@ -13627,6 +13714,9 @@ protected int computeTarget(double observed) {
          * Build storms: 0 concurrent = 1.0, linear decay to 0 at 100.
          * Startup bursts (30-50 concurrent) are normal; only penalize
          * sustained high concurrency.
+         *
+         * @return the build-storm health factor in [0,1], or NaN if the period holds
+         *         fewer than five samples
          */
         private double scoreBuildStorms() {
             RateStat rs = _ctx.statManager().getRate("tunnel.concurrentBuilds");
@@ -13643,7 +13733,10 @@ protected int computeTarget(double observed) {
          * Transport send failure rate: failed sends vs total sends.
          * Uses event counts (each send = 1 event, each failure = 1 event).
          * Requires 500+ sends to skip noisy startup window.
-         * <1% = 1.0, >10% = 0.0.
+         * &lt;1% = 1.0, &gt;10% = 0.0.
+         *
+         * @return the send-failure health factor in [0,1], or NaN if fewer than 500
+         *         sends were recorded in the period
          */
         private double scoreSendFailure() {
             double failures = getEventCount("transport.sendMessageFailureLifetime");
@@ -13667,6 +13760,9 @@ protected int computeTarget(double observed) {
          * a 2000ms average.  The old mapping reached 0.0 at 5000ms, only 2.5×
          * the router's own congestion gate, so a plain SSU router sitting at its
          * documented average scored 0.5 and one with slow acks scored 0.0.
+         *
+         * @return the send-latency health factor in [0,1], or NaN if the period holds
+         *         fewer than three samples
          */
         private double scoreLatency() {
             RateStat rs = _ctx.statManager().getRate("transport.sendProcessingTime");
@@ -13722,6 +13818,9 @@ protected int computeTarget(double observed) {
          * Streaming health: multi-signal score combining connection success rate,
          * RTT at close, retransmission overhead, and inbound reset rate.
          * Connection success rate dominates for client-heavy routers.
+         *
+         * @return the weighted streaming health factor in [0,1], or NaN when no
+         *         signal has enough events to score
          */
         private double scoreStreaming() {
             // 1. Connection success rate (40% weight) - outbound connect success vs failure
@@ -13998,6 +14097,9 @@ protected int computeTarget(double observed) {
          * 5% cap would flag healthy routers as congested.
          * &lt;=5% congestion &rarr; 1.0, 25% &rarr; 0.0.
          * <p>Requires at least 100 confirmed sends in the period for a stable ratio.
+         *
+         * @return the worst of the congestion, retransmit, expiry and inbound-drop
+         *         health factors, each in [0,1]
          */
         private double scoreCongestion() {
             double congEvents = getEventCount("udp.congestionOccurred");
@@ -14024,6 +14126,9 @@ protected int computeTarget(double observed) {
          * Crypto: DH queue empty events vs used events.
          * Frequent empty queue = key generation bottleneck.
          * Only evaluates pools with actual activity; returns NaN when no crypto ops.
+         *
+         * @return the worst crypto-pool health factor in [0,1], or NaN when no pool
+         *         did any work in the window
          */
         private double scoreCryptoPressure() {
             double bestScore = Double.NaN;
@@ -14051,7 +14156,10 @@ protected int computeTarget(double observed) {
         /**
          * Read a stat's average value using the given period (ms).
          * Returns NaN if stat unavailable.
-         * @return the stat value
+         *
+         * @param statName the statManager rate name to read
+         * @param period the rate period in ms, e.g. {@code STAT_PERIOD_LONG}
+         * @return the stat's average value over that period, NaN if unavailable
          */
         private double getStatValue(String statName, long period) {
             RateStat rs = _ctx.statManager().getRate(statName);
@@ -14064,7 +14172,9 @@ protected int computeTarget(double observed) {
         /**
          * Read a stat's average value using the 60s period.
          * Returns NaN if stat unavailable.
-         * @return the stat value
+         *
+         * @param statName the statManager rate name to read
+         * @return the stat's average value over 60s, NaN if unavailable
          */
         private double getStatValue(String statName) {
             return getStatValue(statName, STAT_PERIOD);

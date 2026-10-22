@@ -90,7 +90,7 @@ class BanlistRenderer {
      * Read sessionbans.txt once and build all three data structures in a single pass.
      * Replaces the three separate readSessionBans* methods that each opened the file independently.
      *
-     * @return array of [Map<String,String> ipMap, Map<String,String> hostnameMap, List<IPBanEntry> ipOnlyBans]
+     * @return array of [Map&lt;String,String&gt; ipMap, Map&lt;String,String&gt; hostnameMap, List&lt;IPBanEntry&gt; ipOnlyBans]
      */
     private Object[] readSessionBans() {
         Map<String, String> ipMap = new HashMap<>();
@@ -334,8 +334,8 @@ class BanlistRenderer {
     }
 
     /**
-     * Render the compact banlist table; both {@link #renderBanlistCompact()} and
-     * {@link #renderBanlistFragment()} delegate here.
+     * Render the compact banlist table; both {@link #renderBanlistCompact(Writer)} and
+     * {@link #renderBanlistFragment(Writer)} delegate here.
      *
      * @param out the writer to render to
      * @param fragmentKeys when true, emit only the tbody with data-key rows
@@ -629,7 +629,7 @@ class BanlistRenderer {
      *
      * @param s string to be translated containing {0}
      * The {0} will be replaced by the parameter.
-     * Single quotes must be doubled, i.e. ' -> '' in the string.
+     * Single quotes must be doubled, i.e. ' -&gt; '' in the string.
      * @param o parameter, not translated.
      * To translate parameter also, use _t("foo {0} bar", _t("baz"))
      * Do not double the single quotes in the parameter.

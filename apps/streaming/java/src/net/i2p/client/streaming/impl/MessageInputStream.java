@@ -36,7 +36,8 @@ import net.i2p.util.Log;
  * Once closed, no further reads or message receptions are allowed.
  * <p><b>Usage:</b>
  * <pre>
- * I2PSession -> MessageHandler -> PacketHandler -> ConnectionPacketHandler -> MessageInputStream
+ * I2PSession -&gt; MessageHandler -&gt; PacketHandler -&gt;
+ *     ConnectionPacketHandler -&gt; MessageInputStream
  * </pre>
  */
 class MessageInputStream extends InputStream {
@@ -117,7 +118,7 @@ class MessageInputStream extends InputStream {
      * Sentinel used for out-of-order duplicates when stream is closed.
      * When locallyClosed is true and an out-of-order message arrives, we store this sentinel
      * instead of the actual payload to prevent memory accumulation while still allowing
-     * {@link #canAccept()} to return true for retransmits of already-processed messages.
+     * {@link #canAccept(long, int)} to return true for retransmits of already-processed messages.
      * This enables proper handling of late-arriving duplicate packets after stream closure.
      * <p>Note: the payload size of this sentinel is 0, so it does not count toward
      * {@link #_readyDataSize} or buffer limits.  See {@link #canAccept(long, int)}.

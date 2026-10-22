@@ -114,7 +114,7 @@ public class UpdateHandler {
 
     /**
      * These two can be set in either order, so call checkUpdateAction() twice
-     * {@link #storeSession()} MUST be called first.
+     * {@link #storeSession(HttpSession)} MUST be called first.
      */
     private void checkUpdateAction() {
         if (_action == null || _nonce == null) {return;}

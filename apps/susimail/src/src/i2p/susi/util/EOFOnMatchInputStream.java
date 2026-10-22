@@ -110,7 +110,7 @@ public class EOFOnMatchInputStream extends PushbackInputStream implements ReadCo
 
     /**
      *  FIFO output. Pop the oldest (not the newest).
-     *  Only call if pos < size.
+     *  Only call if pos &lt; size.
      *  We never call super.{@link #read()}, it returns the newest.
      */
     private int pop() {

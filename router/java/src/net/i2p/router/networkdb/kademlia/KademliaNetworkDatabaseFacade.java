@@ -109,7 +109,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      * direct-contact evidence before insertion (verify-before-add). Filled by
      * {@link #addContact}, drained by {@link #promoteUnverifiedPeers} and
      * the probe cycle. Capped at {@link #UNVERIFIED_MAX}, entries older than
-     * {@link #UNVERIFIED_MAX_AGE} are dropped. Hash -> time queued.
+     * {@link #UNVERIFIED_MAX_AGE} are dropped. Hash -&gt; time queued.
      *
      * @since 0.9.71+
      */
@@ -184,7 +184,8 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
 
     /**
      * Pending set for batch deduplication — a hash is in this set iff it is in the
-     * batch queue or being processed. Prevents duplicate entries under rapid {@link #publish()} calls.
+     * batch queue or being processed. Prevents duplicate entries under rapid
+     * {@link #publish(LeaseSet)} calls.
      */
     private final Set<Hash> _batchRepublishPending = ConcurrentHashMap.newKeySet(16);
 
@@ -263,8 +264,8 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     protected static final int MIN_REMAINING_ROUTERS = MIN_RESEED;
 
     /**
-     * Limits for accepting a dbStore of a router (unless we don't know anyone or just started up) -- see
-      * {@link #validate()} below.
+     * Limits for accepting a dbStore of a router, unless we don't know anyone
+     * or just started up -- see {@link #validate(RouterInfo)} below.
      */
     private static final long ROUTER_INFO_EXPIRATION = 36*60*60*1000L;
     /** Minimum RouterInfo expiration time in ms. */
@@ -286,6 +287,8 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      * Refresh the cached configuration from properties at most once per
      * CONFIG_REFRESH_MS, or immediately when the context changes.
      * Benign race: duplicate refreshes are idempotent writes.
+     *
+     * @param ctx router context whose properties are read into the cache
      */
     private static void refreshConfig(RouterContext ctx) {
         long now = ctx.clock().now();
@@ -980,6 +983,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     /**
      * Whether the key is one of our own destinations.
      *
+     * @param key destination hash to test, null returns false
      * @return true if the key is a destination currently registered locally
      */
     private boolean isLocalDestination(Hash key) {
@@ -1210,7 +1214,9 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     /**
      * Whether the router advertises the given capability.
      *
-     * @return true if contains
+     * @param ri router whose capability string is examined
+     * @param capability one of the Router.CAPABILITY_* characters, e.g. 'G'
+     * @return true if that character appears in the capability string
      */
     private boolean containsCapability(RouterInfo ri, char capability) {
         String caps = ri.getCapabilities();
@@ -1296,7 +1302,9 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      * - blockMyCountry is enabled
      * - router is in our country (strict country mode).
      *
-     * @return whether banlist based on country
+     * @param _ri router info under consideration, not consulted by the test
+     * @param key router hash, used to look up strict-country membership
+     * @return true if the peer's country makes it banlistable
      */
     private boolean shouldBanlistBasedOnCountry(RouterInfo _ri, Hash key) {
         refreshConfig(_context);
@@ -1452,7 +1460,14 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         return _context.commSystem().getEstablished().contains(key);
     }
 
-    /** Handle banning a router that matches custom capability ban patterns. */
+    /**
+     * Handle banning a router that matches custom capability ban patterns,
+     * for four hours.
+     *
+     * @param ri router info to ban, source of the IP:port in the ban log
+     * @param key router hash to banlist and drop from the netdb
+     * @param onFailedLookupJob queued to fail the pending lookup, or null
+     */
     private void handleCustomCapabilityBan(RouterInfo ri, Hash key, Job onFailedLookupJob) {        String caps = ri.getCapabilities();
         String routerId = key.toBase64().substring(0,6);
         long banDuration = 4*60*60*1000;
@@ -1475,6 +1490,10 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      * Handle banning a router that advertises more introducers on one address
      * than the SSU2 spec allows. Same four-hour term the SSU2 handshake ban
      * uses, so a peer is penalised identically however we learn of it.
+     *
+     * @param ri router info to ban, source of the IP:port in the ban log
+     * @param key router hash to banlist and drop from the netdb
+     * @param onFailedLookupJob job to requeue if the lookup is abandoned, or null
      */
     private void handleIntroducerBan(RouterInfo ri, Hash key, Job onFailedLookupJob) {
         long banDuration = 4*60*60*1000;
@@ -1540,7 +1559,12 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         }
     }
 
-    /** Remove a router from the NetDb without banning it.  Used internally by purge sweep and handleBanlistAndRemove. */
+    /**
+     * Remove a router from the NetDb without banning it. Used internally by
+     * the purge sweep and handleBanlistAndRemove.
+     *
+     * @param key router hash to drop, null is a no-op
+     */
     private void removeFromNetDb(Hash key) {
         if (!_initialized || key == null) return;
         DatabaseEntry data = _ds.get(key);
@@ -1620,6 +1644,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     /**
      * Whether the router is on the permanent blocklist.
      *
+     * @param key router hash to look for in the Banlist
      * @return true if the Banlist holds the key with no expiry
      */
     private boolean isPermanentlyBlocklisted(Hash key) {
@@ -1629,13 +1654,22 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     /**
      * Whether the router is on the hostile blocklist.
      *
+     * @param key router hash to look for in the Banlist
      * @return true if the Banlist holds the key as hostile
      */
     private boolean isHostileBlocklisted(Hash key) {
         return _context.banlist().isBanlistedHostile(key);
     }
 
-    /** Handle banlist and remove. */
+    /**
+     * Banlist a router for one hour as an unreachable low-bandwidth peer
+     * older than {@link #MIN_VERSION}, then drop it from the data store,
+     * the routing buckets and the unverified queue.
+     *
+     * @param ri router info being banned, source of the IP:port in the log
+     * @param key router hash to banlist and drop from the netdb
+     * @param onFailedLookupJob requeued as the lookup's failure, or null
+     */
     private void handleBanlistAndRemove(RouterInfo ri, Hash key, Job onFailedLookupJob) {
         String caps = ri.getCapabilities();
         String routerId = key.toBase64().substring(0,6);
@@ -1659,7 +1693,14 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         if (onFailedLookupJob != null) {_context.jobQueue().addJob(onFailedLookupJob);}
     }
 
-    /** Handle permanent blocklist. */
+    /**
+     * Drop the RouterInfo of a router already on the permanent blocklist;
+     * no new ban entry is written, the existing one stands.
+     *
+     * @param _ri router info being dropped, not consulted
+     * @param key router hash removed from the netdb and the routing tables
+     * @param onFailedLookupJob requeued as the lookup's failure, or null
+     */
     private void handlePermanentBlocklist(RouterInfo _ri, Hash key, Job onFailedLookupJob) {
         if (_log.shouldInfo()) {
             _log.info("Dropping RouterInfo [" + key.toBase64().substring(0,6) + "] -> Permanently blocklisted");
@@ -1673,7 +1714,14 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         }
     }
 
-    /** Handle hostile blocklist. */
+    /**
+     * Drop the RouterInfo of a router tagged hostile on the Banlist, without
+     * extending or adding a ban.
+     *
+     * @param _ri router info being dropped, not consulted
+     * @param key router hash removed from the netdb and the routing tables
+     * @param onFailedLookupJob queued to fail the pending lookup, or null
+     */
     private void handleHostileBlocklist(RouterInfo _ri, Hash key, Job onFailedLookupJob) {
         if (_log.shouldInfo()) {
             _log.info("Dropping RouterInfo [" + key.toBase64().substring(0,6) + "] -> Blocklisted (tagged as hostile)");
@@ -1762,7 +1810,12 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         scheduleRepublish(hash);
     }
 
-    /** Store the local copy, forcing overwrite; propagate IAE to the caller. */
+    /**
+     * Store the local copy, forcing overwrite; propagate IAE to the caller.
+     *
+     * @param localLeaseSet the LeaseSet a local client just published
+     * @throws IllegalArgumentException if storing it fails validation
+     */
     private void storeLocalLeaseSetCopy(LeaseSet localLeaseSet) {
         try {
             store(localLeaseSet.getHash(), localLeaseSet, true); // force overwrite
@@ -1778,6 +1831,8 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      * copy re-minted while it is active.  Client leases last ~6 min but
      * tunnels rotate on a ~10-min cycle, so without a republish schedule
      * the local LeaseSet shows expired in the netdb for minutes at a time.
+     *
+     * @param hash destination hash of a client we host but do not publish
      */
     private void handleNonPublishedLeaseSet(Hash hash) {
         if (_context.clientManager().isLocal(hash) &&
@@ -1805,6 +1860,8 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      * immediately, without waiting for the network to flood the LeaseSet
      * back to us.  The NetDbRenderer dedups the two facades' entries on
      * the netdb page.
+     *
+     * @param localLeaseSet copy to place in the main (floodfill) facade
      */
     private void mirrorToMainFacade(LeaseSet localLeaseSet) {
         if (!isClientDb()) {return;}
@@ -1829,12 +1886,19 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     }
 
     /**
-     * Validates that the LeaseSet has not expired before current publication time.
-     * Throws IllegalArgumentException if LeaseSet is already expired.
+     * Grace period, in ms, a locally-published LeaseSet's lease dates may
+     * already be past before validateLeaseSetExpiry() rejects it.
      */
     private static final long EXPIRY_GRACE_PERIOD = 90*1000L;
 
-    /** Validate lease set expiry. */
+    /**
+     * Reject a LeaseSet whose leases are already in the past, allowing
+     * {@link #EXPIRY_GRACE_PERIOD} of slack for clock skew.
+     *
+     * @param leaseSet the locally-published LeaseSet about to be stored
+     * @throws IllegalArgumentException if either lease date is more than
+     *                                  the grace period in the past
+     */
     private void validateLeaseSetExpiry(LeaseSet leaseSet) {
         long now = _context.clock().now();
         long earliest = leaseSet.getEarliestLeaseDate();
@@ -1853,6 +1917,8 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      * to reduce job queue pressure.
      * <p>Proactively starts republishing 3 minutes before lease expiration to ensure
      * network propagation has ample time before the lease expires.</p>
+     *
+     * @param hash destination hash of the LeaseSet to republish
      */
     private void scheduleRepublish(Hash hash) {
         // Cancel any existing queued job so a fresh one picks up the latest LeaseSet.
@@ -1902,6 +1968,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      * This ensures that the next fresh run picks up the latest LeaseSet
      * rather than using one that was stale when the job was queued.
      *
+     * @param hash destination hash whose queued republish job is withdrawn
      * @return true if a job was cancelled, false if none existed
      */
     private boolean cancelActiveRepublishJob(Hash hash) {
@@ -2472,12 +2539,16 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
 
 
     /**
-     * Determine whether this routerInfo will be accepted as valid and current given what we know now.
-     * Call this only on first store, to check the key and signature once.
+     * Determine whether this routerInfo will be accepted as valid and
+     * current given what we know now. Call this only on first store, to
+     * check the key and signature once.
      * <p>
-     * If the store fails due to unsupported crypto, it will banlist the router hash until restart
-     * and then throw UnsupportedCrytpoException.
+     * If the store fails due to unsupported crypto, it will banlist the
+     * router hash until restart and then throw UnsupportedCryptoException.
      *
+     * @param key hash the entry is stored under, compared against the
+     *            RouterInfo's own identity hash
+     * @param routerInfo the RouterInfo about to be stored
      * @return reason why the entry is not valid, or null if it is valid
      * @throws UnsupportedCryptoException if that's why it failed.
      */
@@ -2754,9 +2825,14 @@ return false;
     }
 
     /**
-     * Whether the router should be XG-banned.
+     * Whether the router should be XG-banned: an X-tier (unlimited bandwidth)
+     * router advertising the G (no tunnels) capability. The ban is one hour.
      *
-     * @return true if XG
+     * @param routerInfo router under validation, source of the IP:port logged
+     * @param caps capability string, checked for 'f' to label the ban log
+     * @param routerId truncated base64 hash, used only in the log line
+     * @param h router hash the ban is written against
+     * @return true if the router is an XG router, banlisted here or already
      */
     private boolean checkXG(RouterInfo routerInfo, String caps, String routerId, Hash h) {
         if (!_context.banlist().isXgBanEnabled()) return false;
@@ -2778,6 +2854,12 @@ return false;
     /**
      * Ban LU (low bandwidth) routers unconditionally for 1 hour.
      * These routers flood the network with no meaningful bandwidth contribution.
+     *
+     * @param routerInfo router under validation, source of the IP:port logged
+     * @param caps capability string, null means no ban is possible
+     * @param routerId truncated base64 hash, used only in the log line
+     * @param h router hash the ban is written against
+     * @return true if the router is a low-tier unreachable peer
      */
     private boolean checkLU(RouterInfo routerInfo, String caps, String routerId, Hash h) {
         if (!_context.banlist().isLuBanEnabled()) return false;
@@ -3004,9 +3086,16 @@ return false;
     }
 
     /**
-     * Why the router's short expiration is disqualifying, or null.
+     * Why the router's short expiration is disqualifying, or null. Once a
+     * RouterInfo is older than {@link #ROUTER_INFO_EXPIRATION_SHORT}, an
+     * SSU-only peer with no introducers, or one unreachable on every
+     * transport, is dropped.
      *
-     * @return reason or null
+     * @param routerInfo router to check, null returns null
+     * @param caps capability string, used only to build the reason text
+     * @param routerId truncated base64 hash, used only in the reason text
+     * @param isUs true to exempt our own RouterInfo from being dropped
+     * @return reason to drop the entry, or null to keep it
      */
     private String checkShortExpiration(RouterInfo routerInfo, String caps, String routerId, boolean isUs) {
         if (routerInfo == null) {return null;}
@@ -3209,6 +3298,8 @@ return false;
     /**
      * Queue a peer for later bucket promotion once it proves itself,
      * sweeping expired entries when the queue is full.
+     *
+     * @param key peer hash to hold pending direct-contact evidence
      */
     private void queueUnverified(Hash key) {
         long now = _context.clock().now();
@@ -3329,6 +3420,10 @@ return false;
 
     /**
      * Does this bucket entry share an IP group with any of the given groups?
+     *
+     * @param groups IP group keys to test against
+     * @param peer bucket entry whose RouterInfo supplies the groups
+     * @return true if the entry is a known RouterInfo matching one of them
      */
     private boolean sharesIPGroup(Set<Long> groups, Hash peer) {
         DatabaseEntry de = lookupLocallyWithoutValidation(peer);
@@ -3343,7 +3438,7 @@ return false;
      * The distinct IP groups of a router's literal-IP addresses.
      * Package private for testing.
      *
-     * @param ri the RouterInfo
+     * @param ri router whose literal-IP addresses are grouped
      * @return non-null set of group keys, empty if no literal IPs
      */
     static Set<Long> ipGroups(RouterInfo ri) {
@@ -3384,6 +3479,8 @@ return false;
      * If so, this will banlist-forever the router hash or permanently negative cache the dest hash,
      * and then throw the exception. Otherwise it does nothing.
      *
+     * @param h hash the failed store was attempted under
+     * @param entry the entry that failed validation, RouterInfo or LeaseSet
      * @throws UnsupportedCryptoException if that's why it failed.
      */
     private void processStoreFailure(Hash h, DatabaseEntry entry) throws UnsupportedCryptoException {
@@ -3400,7 +3497,14 @@ return false;
         }
     }
 
-    /** Reject LeaseSets with unsupported signature types; negative-cache the destination permanently. */
+    /**
+     * Reject LeaseSets with unsupported signature types; negative-cache the
+     * destination permanently.
+     *
+     * @param h destination hash the store was attempted under, log-only
+     * @param ls LeaseSet whose key certificate names the signature type
+     * @throws UnsupportedCryptoException if the sig type is unavailable or RSA
+     */
     private void checkLeaseSetSigType(Hash h, LeaseSet ls) throws UnsupportedCryptoException {
         Destination d = ls.getDestination();
         // will be null for encrypted LS
@@ -3423,7 +3527,13 @@ return false;
         }
     }
 
-    /** Reject RouterInfos with unsupported signature types; ban until restart. */
+    /**
+     * Reject RouterInfos with unsupported signature types; ban until restart.
+     *
+     * @param h router hash the permanent ban is written against
+     * @param ri RouterInfo that failed signature validation
+     * @throws UnsupportedCryptoException if the sig type is unavailable
+     */
     private void checkRouterInfoSigType(Hash h, RouterInfo ri) throws UnsupportedCryptoException {
         RouterIdentity id = ri.getIdentity();
         Certificate c = id.getCertificate();
@@ -3449,6 +3559,8 @@ return false;
     /**
      * Human-readable signature type for log messages.
      *
+     * @param kc key certificate whose sig type code is the fallback text
+     * @param type resolved signature type, null when it is not recognized
      * @return the sig type name, or the raw type code when unnamed
      */
     private static String sigTypeDescription(KeyCertificate kc, SigType type) {
@@ -3841,6 +3953,9 @@ return false;
 
     /**
      * Console translation for the debug page strings.
+     *
+     * @param s English string to look up
+     * @return the localized text, or s itself when no translation exists
      */
     private String _t(String s) {
         return Translate.getString(s, _context, "net.i2p.router.web.messages");
@@ -3934,7 +4049,12 @@ return false;
         return "ClientNetDb [" + _dbid.toBase32().substring(0,8) + "]";
     }
 
-    /** Blocked countries, cached for reuse. */
+    /**
+     * Blocked countries, parsed once from the property and cached.
+     *
+     * @return lower-case country codes from router.blockCountries, empty if
+     *         none are configured
+     */
     private synchronized Set<String> getBlockedCountries() {
         Set<String> cached = _blockedCountries;
         if (cached != null) return cached;
@@ -3964,11 +4084,11 @@ return false;
     }
 
     /**
-     * Refresh client LeaseSets we're actively using and remove stale ones.
-     * Only applies to client NetDB (not main NetDB).
-     * 1. Remove LeaseSets not accessed in 150s
-     * 2. Re-fetch every tracked LeaseSet each cycle (unconditional)
-     * 3. If LeaseSet expires in < 90s, refresh proactively (early-out).
+     * Time to lease expiry, in ms, below which a tracked client LeaseSet is
+     * refreshed proactively instead of waiting for the next access. Only
+     * applies to the client NetDB, not the main NetDB. Each refresh cycle
+     * removes LeaseSets not accessed in 150s, re-fetches every tracked
+     * LeaseSet, and refreshes early when expiry is nearer than this value.
      */
     private static final long PROACTIVE_REFRESH_THRESHOLD = 90 * 1000L;  // Refresh if < 90s to expiry
 
@@ -4066,6 +4186,9 @@ return false;
      * Refresh a tracked LeaseSet early when it is about to expire.  Always
      * uses client tunnels for client subDb refresh.
      *
+     * @param key destination hash of the tracked LeaseSet
+     * @param now current router time in ms, compared with the lease expiry
+     * @param ns naming service used only to name the entry in the log
      * @return true if the proactive refresh was triggered
      */
     private boolean proactivelyRefreshIfExpiring(Hash key, long now, NamingService ns) {
@@ -4091,9 +4214,12 @@ return false;
 
     /**
      * Best-effort display name for a tracked LeaseSet in logs: the registered
-     * hostname when available, otherwise a truncated b32. Never gates refresh.
+     * hostname when available, otherwise a truncated base32. Never gates
+     * refresh.
      *
-     * @param ns may be null
+     * @param ns naming service to reverse-lookup, may be null
+     * @param key LeaseSet hash to name, used for the base32 fallback
+     * @return the registered hostname, or the hash as [8 base32 chars]
      * @since 0.9.71+
      */
     private static String logName(NamingService ns, Hash key) {

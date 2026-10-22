@@ -248,6 +248,7 @@ public class SU3File {
     /**
      * Use this X.509 cert file for verification instead of $I2P/certificates/content_type/foo_at_mail.i2p.
      *
+     * @param certFile the X.509 certificate file to verify the signature against
      * @since 0.9.15
      */
     private void setPublicKeyCertificate(File certFile) {
@@ -343,6 +344,11 @@ public class SU3File {
 
     /**
      * Throws if verify fails.
+     *
+     * @param in the stream positioned at the start of the su3 file
+     * @throws IOException if the magic bytes, file version, or a length field is
+     *                     invalid, or the signer is unknown
+     * @throws DataFormatException not thrown by the current implementation
      */
     private void verifyHeader(InputStream in) throws IOException, DataFormatException {
         byte[] magic = new byte[MAGIC_BYTES.length];
@@ -426,7 +432,13 @@ public class SU3File {
         _headerVerified = true;
     }
 
-    /** Skip the given number of bytes. */
+    /**
+     * Skip the given number of bytes.
+     *
+     * @param in the stream to read from
+     * @param cnt the number of bytes to skip
+     * @throws IOException if the stream ends before cnt bytes are read
+     */
     private static void skip(InputStream in, int cnt) throws IOException {
         for (int i = 0; i < cnt; i++) {
             if (in.read() < 0) throw new EOFException();
@@ -792,6 +804,7 @@ public class SU3File {
 
     /**
      * Display version from a signed SU3 file via CLI.
+     * @param signedFile path of the signed SU3 file to display
      * @return true if version was displayed successfully
      */
     private static final boolean showVersionCLI(String signedFile) {
@@ -833,6 +846,13 @@ public class SU3File {
     /**
      * Zip, xml, and xml.gz only.
      *
+     * @param stype signature type name or code, null for the default
+     * @param ctype content type name or code, null for unknown
+     * @param dir directory containing the .zip, .xml, and .xml.gz files to sign
+     * @param privateKeyFile keystore file containing the private signing key
+     * @param version the version string written into the su3 header
+     * @param signerName key alias in the keystore, also written as the signer string
+     * @param kspass the keystore password
      * @return true on success
      * @since 0.9.9
      */
@@ -901,6 +921,17 @@ public class SU3File {
 
     /**
      * Whether the operation succeeded.
+     * @param stype signature type name or code, null for the default
+     * @param ctype content type name or code, null for unknown
+     * @param ftype file type name (ZIP, XML, HTML, XML_GZ, DMG, EXE) or code
+     *              0-255, null for ZIP
+     * @param inputFile path of the unsigned input file
+     * @param signedFile path of the su3 file to write
+     * @param privateKeyFile keystore file containing the private signing key
+     * @param version the version string written into the su3 header
+     * @param signerName key alias in the keystore, also written as the signer string
+     * @param keypw private key password, prompted for if under 6 characters
+     * @param kspass the keystore password
      * @return true on success
      * @since 0.9.9
      */
@@ -958,6 +989,16 @@ public class SU3File {
 
     /**
      * Whether the operation succeeded.
+     * @param type signature type, overridden by the actual type of the private key
+     * @param ctype content type recorded in the su3 header
+     * @param ftype numeric file type, 0-255
+     * @param inputFile path of the unsigned input file
+     * @param signedFile path of the su3 file to write
+     * @param privateKeyFile keystore file containing the private signing key
+     * @param version the version string written into the su3 header
+     * @param signerName key alias in the keystore, also written as the signer string
+     * @param keypw private key password, prompted for if under 6 characters
+     * @param kspass the keystore password
      * @return true on success
      * @since 0.9.9
      */
@@ -1012,6 +1053,8 @@ public class SU3File {
 
     /**
      * Verify signature on a signed file via CLI.
+     * @param signedFile path of the signed SU3 file to verify
+     * @param pkFile X.509 cert file to verify against, null to use the key rings
      * @return true if the signature verified successfully
      */
     private static final boolean verifySigCLI(String signedFile, String pkFile) {
@@ -1035,7 +1078,10 @@ public class SU3File {
 
     /**
      * If null, will use a name derived from signedFile.
+     * @param signedFile path of the signed SU3 file to extract
      * @param outFile if null, will use a name derived from signedFile
+     * @param verifySig true to verify the signature before extracting
+     * @param pkFile X.509 cert file to verify against, null to use the key rings
      * @return true on success
      * @since 0.9.9
      */
@@ -1099,7 +1145,13 @@ public class SU3File {
 
     /**
      * May be null; non-null to save.
+     * @param stype signature type name or code, null for the default
+     * @param publicKeyFile path of the X.509 certificate file to write, must
+     *                      not already exist
+     * @param privateKeyFile keystore file to store the new private key in
      * @param crlFile may be null; non-null to save
+     * @param alias key name and certificate subject, prompted for if empty
+     * @param kspass the keystore password
      * @return true on success
      * @since 0.9.9
      */
@@ -1117,7 +1169,13 @@ public class SU3File {
     /**
      * Writes Java-encoded keys (X.509 for public and PKCS#8 for private).
      *
+     * @param type signature type for the new key pair
+     * @param publicKeyFile path of the X.509 certificate file to write, must
+     *                      not already exist
+     * @param privateKeyFile keystore file to store the new private key in
      * @param crlFile may be null; non-null to save
+     * @param alias key name and certificate subject, prompted for if empty
+     * @param kspass the keystore password
      * @return true on success
      * @since 0.9.9
      */
@@ -1181,7 +1239,10 @@ public class SU3File {
     /**
      * For the -k CLI option.
      *
+     * @param kd the X.509 certificate file to load the public key from
      * @return non-null, throws IOE on all errors
+     * @throws IOException if the file cannot be read or does not contain a
+     *                     valid certificate
      * @since 0.9.15
      */
     private static PublicKey loadKey(File kd) throws IOException {

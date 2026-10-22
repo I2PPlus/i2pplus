@@ -66,7 +66,7 @@ public class DecayingBloomFilter {
     private final ThreadLocal<byte[]> _extendedBuf;
     /**
      * Thread-local buffer for the long-to-entry conversion, sized _entryBytes.
-     * Only the long overloads of add()/{@link #isKnown()} use it, so it is null when the
+     * Only the long overloads of add()/{@link #isKnown(long)} use it, so it is null when the
      * entries are too wide to hold a long.
      * @since 0.9.71+
      */

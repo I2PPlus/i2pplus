@@ -352,7 +352,7 @@ public class ConfigServiceHandler extends FormHandler {
      * The legacy EnableI2P+Service.bat / DisableI2P+Service.bat shims were
      * removed; the Enable/Disable actions now live in service.ps1.
      *
-     * @since 0.9.74
+     * @since 0.9.72+
      */
     private void execServiceAction(String action) throws IOException {
         String baseDir = _context.getProperty("i2p.dir.base");

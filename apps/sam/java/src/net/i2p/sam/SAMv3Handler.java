@@ -556,7 +556,7 @@ class SAMv3Handler extends SAMv1Handler
     /**
      * Create a stream session for a login.
      *
-     * @throws NPE if login nickname is not registered
+     * @throws NullPointerException if login nickname is not registered
      */
     private static SAMv3StreamSession newSAMStreamSession(String login )
         throws IOException, DataFormatException, SAMException {

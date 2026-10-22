@@ -156,7 +156,8 @@ public class Base64 {
     /**
      * Translates a Base64 value to either its 6-bit reconstruction value
      * or a negative number indicating some other meaning.
-     * As of 0.9.14 this is the decoding for the I2P alphabet. See {@link #safeDecode()}.
+     * As of 0.9.14 this is the decoding for the I2P alphabet. See
+     * {@link #safeDecode(String, boolean)}.
      */
     private final static byte[] DECODABET = {
         -9, -9, -9, -9, -9, -9, -9, -9, -9,                     // Decimal  0 -  8
@@ -337,6 +338,11 @@ public class Base64 {
 
     /**
      * Appends the encoding of the significant source bytes to buf, using alpha.
+     * @param source the array containing the bytes to encode
+     * @param srcOffset the index in source where the bytes to encode begin
+     * @param numSigBytes number of significant bytes to encode, 1-3, any
+     *                    other value appends nothing
+     * @param buf the StringBuilder the four encoded characters are appended to
      * @param alpha the 64 character alphabet to index, plus its '=' padding
      */
     private static void encode3to4(byte[] source, int srcOffset, int numSigBytes, StringBuilder buf, byte[] alpha) {
@@ -386,6 +392,11 @@ public class Base64 {
      * Same as encodeBytes, except uses a filesystem / URL friendly set of characters,
      * replacing / with ~, and + with -.
      *
+     * @param source the byte array to encode
+     * @param off index in source where encoding begins
+     * @param len number of bytes to encode
+     * @param useStandardAlphabet true for the standard +/ alphabet, false
+     *                            for the I2P -~ alphabet
      * @return the Base64 encoded string
      */
     private static String safeEncode(byte[] source, int off, int len, boolean useStandardAlphabet) {
@@ -405,6 +416,9 @@ public class Base64 {
      * Same as decode, except from a filesystem / URL friendly set of characters,
      * replacing / with ~, and + with -.
      *
+     * @param source the encoded string to decode, may be null
+     * @param useStandardAlphabet true if source uses the standard +/ alphabet,
+     *                            false for the I2P -~ alphabet
      * @return the decoded data, null on error
      */
     private static byte[] safeDecode(String source, boolean useStandardAlphabet) {
@@ -436,6 +450,8 @@ public class Base64 {
      * @param off Offset in array where conversion should begin
      * @param len Length of data to convert
      * @param breakLines Break lines at 80 characters or less.
+     * @param out the StringBuilder the encoded text is appended to
+     * @param alpha the 64 character alphabet to index
      */
     private static void encodeBytes(byte[] source, int off, int len, boolean breakLines, StringBuilder out, byte[] alpha) {
         int d = 0;
@@ -472,7 +488,10 @@ public class Base64 {
      * This method does not check that <var>destination</var> is large enough for
      * <var>destOffset</var> + 3.
      *
-     * @param d0..d3 the DECODABET values of the four source chars
+     * @param d0 the DECODABET value of the first source char
+     * @param d1 the DECODABET value of the second source char
+     * @param d2 the DECODABET value of the third char, or '=' padding
+     * @param d3 the DECODABET value of the fourth char, or '=' padding
      * @param destination the array to hold the conversion
      * @param destOffset the index where output will be put
      * @return the number of decoded bytes converted 1-3, or -1 on error, never zero

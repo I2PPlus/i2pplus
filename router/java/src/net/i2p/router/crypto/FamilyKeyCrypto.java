@@ -497,8 +497,8 @@ public class FamilyKeyCrypto {
 
     /**
      * Verify the family keystore can be opened and its aliases used.
+     * Succeeds if it exists and we have a password, or it was created successfully.
      *
-     * @return success if it exists and we have a password, or it was created successfully.
      * @throws GeneralSecurityException on keystore error
      */
     private void verifyKeyStore(File ks) throws GeneralSecurityException {

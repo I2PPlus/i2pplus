@@ -234,8 +234,7 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
      * Recent-traffic test exemptions used.
      * A tunnel with recent verified data gets a few free passes on test
      * failures (reply-path false negatives), but not unlimited — after
-     * {@link TestJob#MAX_RECENT_EXEMPTIONS} exemptions, failures count
-     * normally so the tunnel doesn't become immortal.
+     * one exemption, failures count normally so the tunnel doesn't become immortal.
      * @since 0.9.69+
      */
     private volatile int _recentTestExemptions;
@@ -912,7 +911,7 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
      * (PooledTunnelCreatorConfig) also notify the pool of the failure.
      *
      * @since 0.9.71+ (moved up from PooledTunnelCreatorConfig to break the
-     *        tunnel -> pool package cycle)
+     *        tunnel -&gt; pool package cycle)
      */
     public void tunnelFailedFirstHop() {
         if (isInbound() || getLength() <= 1) {return;}

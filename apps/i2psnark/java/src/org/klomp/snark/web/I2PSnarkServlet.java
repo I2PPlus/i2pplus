@@ -474,11 +474,18 @@ public class I2PSnarkServlet extends BasicServlet {
  * Handle what we can here, calling super.doGet() or super.doPost() for the rest.
  *
  * Routing, in order: gatekeeping (Origin check on POST, CSP, static WARBASE);
- * {@link #handleAjaxRequest()} for the XHR fragment endpoints; /_add; /magnet;
- * {@link #handleUnmanagedPath()} for listings, playlists and passthrough;
- * {@link #handleFormSubmission()} for nonce'd POST actions; then page assembly - head,
- * navbar, search scaffolding, either {@link #writeConfigurePanels()} or
- * {@link #writeTorrentsSection()}, and writePageTail().
+ * {@link #handleAjaxRequest} for the XHR fragment endpoints; /_add; /magnet;
+ * {@link #handleUnmanagedPath} for listings, playlists and passthrough;
+ * {@link #handleFormSubmission} for nonce'd POST actions; then page assembly - head,
+ * navbar, search scaffolding, either {@link #writeConfigurePanels} or
+ * {@link #writeTorrentsSection}, and {@link #writePageTail}.
+ *
+ * @param req the request whose method, servlet path and parameters select
+ *            the handler
+ * @param resp the response the selected handler writes to
+ * @throws ServletException if a passthrough to the container's doGet/doPost
+ *                          or a sendError fails
+ * @throws IOException if writing or flushing the response fails
  */
     private void doGetAndPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         // Get HTTP method and servlet path
@@ -698,6 +705,16 @@ public class I2PSnarkServlet extends BasicServlet {
  * (with optional playlist export) under trailing-slash paths, and container
  * delegation for the rest.
  *
+ * @param req the request whose path info and playlist/sort parameters drive
+ *            the listing
+ * @param resp the response written to
+ * @param method the HTTP method; GET/HEAD/POST delegate to the container,
+ *               anything else gets 405
+ * @param path the servlet path; a trailing slash selects the directory
+ *             listing branch
+ * @throws ServletException if a passthrough to the container's doGet/doPost
+ *                          or a sendError fails
+ * @throws IOException if writing the listing or an error page fails
  * @since 0.9.71+
  */
     private void handleUnmanagedPath(HttpServletRequest req, HttpServletResponse resp,
@@ -749,8 +766,15 @@ public class I2PSnarkServlet extends BasicServlet {
      * Dispatches a nonce-bearing form submission to its action and finishes
      * with the P-R-G redirect (or G-R-G to hide params from the address bar).
      *
+     * @param req the submitted form request; its nonce parameter decides
+     *            whether this method takes over
+     * @param resp the response redirected once the action has run
+     * @param method the HTTP method; only POST, or GET with action=Clear, is
+     *               accepted
+     * @param peerString the peer query string carried into the redirect
      * @return true if a form was submitted and the response is complete;
      *         false when there is no nonce and normal rendering should proceed
+     * @throws IOException if the redirect response cannot be sent
      * @since 0.9.71+
      */
     private boolean handleFormSubmission(HttpServletRequest req, HttpServletResponse resp,
@@ -775,6 +799,13 @@ public class I2PSnarkServlet extends BasicServlet {
  * Renders the navbar: configure variant links back to the torrent list;
  * list variant adds tracker links from the sorted tracker list.
  *
+ * @param buf destination for the navbar markup
+ * @param isConfigure true on the configuration page, which renders only the
+ *                    link back to the torrent list
+ * @param peerString the peer query string appended to the main link's href
+ * @param sortedTrackers trackers whose Postman base URLs become extra nav
+ *                       links; non-http and known-open-tracker entries are
+ *                       skipped
  * @since 0.9.71+
  */
     private void appendNavbar(StringBuilder buf, boolean isConfigure, String peerString,
@@ -822,6 +853,9 @@ public class I2PSnarkServlet extends BasicServlet {
      * Renders the search form when multiple torrents exist; hidden until
      * realtimeSearch.js activates it, functional without JS via GET submit.
      *
+     * @param buf destination for the form markup; nothing is appended when
+     *            one or fewer torrents exist
+     * @param req the request whose search parameter pre-fills the input
      * @since 0.9.71+
      */
     private void appendSearchForm(StringBuilder buf, HttpServletRequest req) {
@@ -841,6 +875,10 @@ public class I2PSnarkServlet extends BasicServlet {
     /**
      * Configuration page panels below the messages area.
      *
+     * @param out writer for the configuration page body
+     * @param req the request passed through to the config, filter and
+     *            tracker forms
+     * @throws IOException if writing the forms fails
      * @since 0.9.71+
      */
     private void writeConfigurePanels(PrintWriter out, HttpServletRequest req) throws IOException {
@@ -853,6 +891,14 @@ public class I2PSnarkServlet extends BasicServlet {
     /**
      * Torrent table plus the add/create forms of the lower section.
      *
+     * @param out writer for the torrents page body
+     * @param req the request passed through to the torrent table and the
+     *            add/create forms
+     * @param sortedTrackers trackers offered in the create form's announce
+     *                       list
+     * @param sortedFilters torrent-create filters offered in the create
+     *                      form
+     * @throws IOException if writing the table or forms fails
      * @since 0.9.71+
      */
     private void writeTorrentsSection(PrintWriter out, HttpServletRequest req,
@@ -876,6 +922,10 @@ public class I2PSnarkServlet extends BasicServlet {
     /**
      * Page scripts and footer, shared by index and configuration pages.
      *
+     * @param out writer positioned just before the footer
+     * @param isConfigure true on the configuration page, which omits the
+     *                    toggleLinks and toggleAddCreate scripts
+     * @throws IOException if writing the scripts or footer fails
      * @since 0.9.71+
      */
     private void writePageTail(PrintWriter out, boolean isConfigure) throws IOException {
@@ -893,7 +943,27 @@ public class I2PSnarkServlet extends BasicServlet {
     }
 
     /**
-     * Renders the full <head> section of the main HTML page.
+     * Renders the full &lt;head&gt; section of the main HTML page.
+     *
+     * @param req the request being rendered; currently unused
+     * @param isConfigure true for the configuration page, which skips the
+     *                    torrent-list scripts and preloads
+     * @param isIndex true for the main index page, which adds the click and
+     *                alert scripts
+     * @param noCollapse true forces nocollapse.css regardless of the
+     *                   collapsePanels setting
+     * @param collapsePanels whether panels are collapsible per the current
+     *                       settings
+     * @param showStatusFilter true adds the filter-bar script preloads
+     * @param peerString the peer query string embedded in the noscript
+     *                   refresh redirect
+     * @param lang the UI language code; zh, ja and ko get a larger-font
+     *             stylesheet
+     * @param delay auto-refresh interval in seconds; &gt; 0 adds a noscript
+     *              meta-refresh, floored at 60
+     * @param pageSize torrents per page, exported to JS as snarkPageSize
+     * @return the doctype, the opening &lt;html&gt; tag and the complete
+     *         &lt;head&gt; section
      * @since 0.9.68+
      */
     private String renderHead(HttpServletRequest req, boolean isConfigure,
@@ -1025,7 +1095,7 @@ public class I2PSnarkServlet extends BasicServlet {
      * @param resp the HttpServletResponse object to which headers will be added
      * @param cspNonce the nonce value for Content Security Policy (CSP)
      * @param allowMedia whether to allow media sources in CSP
-     * @since 0.9.16 moved from {@link #doGetAndPost()}
+     * @since 0.9.16 moved from {@link #doGetAndPost(HttpServletRequest, HttpServletResponse)}
      */
     private void setHTMLHeaders(HttpServletResponse resp, String cspNonce, boolean allowMedia) {
         String mimeType = resp.getContentType();
@@ -1585,6 +1655,12 @@ public class I2PSnarkServlet extends BasicServlet {
     /**
      * Status column: sortable always; pool-aware via {@link #nextStatusSort}.
      *
+     * @param buf destination for the &lt;th&gt; markup
+     * @param hc shared request-derived inputs: request, path, sort state
+     *           and query parts
+     * @param poolSort true when multi-destination mode is active, which
+     *                 extends the sort cycle with the pool keys
+     * @param txtStatus localized label for the status column
      * @since 0.9.71+
      */
     private void appendStatusHeader(StringBuilder buf, SortHeaderContext hc, boolean poolSort, String txtStatus) {
@@ -1599,6 +1675,14 @@ public class I2PSnarkServlet extends BasicServlet {
      * Peer-count column: renders the show/hide peers toggle when connected
      * with peers present; empty cell otherwise.
      *
+     * @param buf destination for the &lt;th&gt; markup
+     * @param hc shared request-derived inputs: request, path, sort state
+     *           and query parts
+     * @param peerParam the p request parameter when peers are currently
+     *                  shown, null when they are hidden
+     * @param isConnected the router is connected to the I2P network
+     * @param noSnarks no torrents are loaded
+     * @param scan activity flags computed from the listed torrents
      * @since 0.9.71+
      */
     private void appendPeerToggleHeader(StringBuilder buf, SortHeaderContext hc, String peerParam,
@@ -1631,6 +1715,10 @@ public class I2PSnarkServlet extends BasicServlet {
      * Torrent name/type column: cycles via {@link #nextTorrentNameTypeSort};
      * active-state detection mirrors the five name/type keys.
      *
+     * @param buf destination for the &lt;th&gt; markup
+     * @param hc shared request-derived inputs: request, path, sort state
+     *           and query parts
+     * @param txtTorrent localized label for the torrent name column
      * @since 0.9.71+
      */
     private void appendNameTypeHeader(StringBuilder buf, SortHeaderContext hc, String txtTorrent) {
@@ -1648,6 +1736,14 @@ public class I2PSnarkServlet extends BasicServlet {
     /**
      * ETA column: sortable only while something on the page is downloading.
      *
+     * @param buf destination for the &lt;th&gt; markup
+     * @param hc shared request-derived inputs: request, path, sort state
+     *           and query parts
+     * @param txtETA localized label for the ETA column
+     * @param isConnected the router is connected to the I2P network
+     * @param noSnarks no torrents are loaded
+     * @param scan activity flags computed from the listed torrents; the
+     *             column is sortable only when isDownloading is set
      * @since 0.9.71+
      */
     private void appendEtaHeader(StringBuilder buf, SortHeaderContext hc, String txtETA,
@@ -1673,6 +1769,11 @@ public class I2PSnarkServlet extends BasicServlet {
      * RX column: four-state cycle via {@link #nextRXSort} whenever the list
      * is sortable; empty cell otherwise.
      *
+     * @param buf destination for the &lt;th&gt; markup
+     * @param hc shared request-derived inputs: request, path, sort state
+     *           and query parts
+     * @param txtRX localized label for the downloaded-bytes column
+     * @param noSnarks no torrents are loaded
      * @since 0.9.71+
      */
     private void appendRxHeader(StringBuilder buf, SortHeaderContext hc, String txtRX, boolean noSnarks) {
@@ -1690,6 +1791,18 @@ public class I2PSnarkServlet extends BasicServlet {
      * Download-rate column: sortable only while downloading; direction icon
      * reflects the current key.
      *
+     * @param buf destination for the &lt;th&gt; markup
+     * @param hc shared request-derived inputs: request, path, sort state
+     *           and query parts
+     * @param txtRXRate localized label for the download-rate column
+     * @param txtRX localized label for the downloaded-bytes column, used in
+     *              the sort tooltip
+     * @param peerParam the p request parameter when peers are shown, null
+     *                  when they are hidden
+     * @param isConnected the router is connected to the I2P network
+     * @param noSnarks no torrents are loaded
+     * @param scan activity flags computed from the listed torrents; the
+     *             column is sortable only when isDownloading is set
      * @since 0.9.71+
      */
     private void appendRateDownHeader(StringBuilder buf, SortHeaderContext hc, String txtRXRate, String txtRX,
@@ -1720,6 +1833,10 @@ public class I2PSnarkServlet extends BasicServlet {
      * TX column: four-state cycle via {@link #nextTXSort} whenever the list
      * is sortable; empty cell otherwise.
      *
+     * @param buf destination for the &lt;th&gt; markup
+     * @param hc shared request-derived inputs: request, path, sort state
+     *           and query parts
+     * @param txtTX localized label for the uploaded-bytes column
      * @since 0.9.71+
      */
     private void appendTxHeader(StringBuilder buf, SortHeaderContext hc, String txtTX) {
@@ -1737,6 +1854,14 @@ public class I2PSnarkServlet extends BasicServlet {
      * Upload-rate column: sortable only while uploading; ascending icon when
      * currently on "9" (note the inverted default versus rateDown).
      *
+     * @param buf destination for the &lt;th&gt; markup
+     * @param hc shared request-derived inputs: request, path, sort state
+     *           and query parts
+     * @param txtTXRate localized label for the upload-rate column
+     * @param isConnected the router is connected to the I2P network
+     * @param noSnarks no torrents are loaded
+     * @param scan activity flags computed from the listed torrents; the
+     *             column is sortable only when isUploading is set
      * @since 0.9.71+
      */
     private void appendRateUpHeader(StringBuilder buf, SortHeaderContext hc, String txtTXRate,
@@ -1764,6 +1889,17 @@ public class I2PSnarkServlet extends BasicServlet {
      * Action column: Stop All always when connected; Start All variants
      * depending on whether any listed torrent is stopped.
      *
+     * @param buf destination for the &lt;th&gt; markup
+     * @param snarks the torrents on the page; the first stopped one
+     *               triggers the Start All button
+     * @param isConnected the router is connected to the I2P network
+     * @param noSnarks no torrents are loaded
+     * @param txtStartAll label of the Start All button
+     * @param txtStopAll label of the Stop All button
+     * @param txtStopAllTitle title attribute for the Stop All button
+     * @param txtStartAllTitle title attribute when no torrent is stopped
+     * @param txtStartStoppedTitle title attribute when a stopped torrent
+     *                             exists
      * @since 0.9.71+
      */
     private void appendActionsHeader(StringBuilder buf, List<Snark> snarks, boolean isConnected, boolean noSnarks,
@@ -1796,7 +1932,7 @@ public class I2PSnarkServlet extends BasicServlet {
      * @param buf the StringBuilder used to append HTML content
      * @param hc shared request-derived inputs (request, path, sort state, query parts)
      * @param newSort the sort parameter value to link to for toggling sorting
-     * @param cssClass CSS class to apply to the <th> element
+     * @param cssClass CSS class to apply to the &lt;th&gt; element
      * @param iconName icon identifier for rendering
      * @param title localized title text for the header cell
      * @param showSort if true, render sorting link and icons; otherwise render plain header
@@ -1905,6 +2041,7 @@ public class I2PSnarkServlet extends BasicServlet {
      *
      * @param out          the PrintWriter to write HTML output to
      * @param buf          a reusable StringBuilder used for generating icon HTML snippets
+     * @param fc           aggregated footer state: counters, totals and flags
      * @throws IOException if writing to the output stream fails
      */
     private void appendSnarkFooter(PrintWriter out, StringBuilder buf, FooterContext fc) throws IOException {
@@ -2072,7 +2209,9 @@ public class I2PSnarkServlet extends BasicServlet {
      *
      * @param out target for the HTML
      * @param dht the DHT, or null if not running
-     * @param peerParam the query parameter
+     * @param peerParam the p request parameter; the row is visible only when
+     *                  it equals 2
+     * @throws IOException if writing the row fails
      */
     private void appendDebugRow(PrintWriter out, DHT dht, String peerParam) throws IOException {
         out.write("\n<tr id=dhtDebug");
@@ -2303,6 +2442,9 @@ public class I2PSnarkServlet extends BasicServlet {
     /**
      * Append a single hidden form input.
      *
+     * @param buf destination for the input markup
+     * @param name the form field name, written unquoted
+     * @param value the field value, sanitized per esc
      * @param esc true to HTML-escape the value (free-text fields such as
      *            search), false to strip HTML (numeric and enum fields)
      */
@@ -2377,6 +2519,7 @@ public class I2PSnarkServlet extends BasicServlet {
      * that are exactly signed integers are emitted, so a free-text search
      * override never round-trips through these URLs.
      *
+     * @param req the current request, for inherited values
      * @param p page override, or null to inherit and sanitize from the request
      * @param st start-index override, or null to inherit and sanitize
      * @param so sort override, or null to inherit and normalize
@@ -2403,7 +2546,7 @@ public class I2PSnarkServlet extends BasicServlet {
      * constants. Emission requires an exact signed integer, matching the
      * validation applied when such links are later parsed.
      *
-     * @param buf destination buffer, prefix '?' or '&' chosen by its state
+     * @param buf destination buffer, prefix '?' or '&amp;' chosen by its state
      * @param req the current request, for inherited values
      * @param name parameter name to emit
      * @param override caller-supplied value, or null to inherit
@@ -2513,6 +2656,11 @@ public class I2PSnarkServlet extends BasicServlet {
     /**
      * Process HTTP request to handle torrent-related actions.
      * Delegates to specific handlers based on the action parameter.
+     *
+     * @param req the request whose action parameter selects the handler
+     * @param resp the response, used by handlers that write it directly
+     * @return true if a handler fully consumed the response and the caller
+     *         must not render; false to continue with normal rendering
      */
     private boolean processRequest(HttpServletRequest req, HttpServletResponse resp) {
         String action = extractAction(req);
@@ -2658,7 +2806,7 @@ public class I2PSnarkServlet extends BasicServlet {
      * noticed; the result is only shown in the browser notification.
      *
      * <p>The magnet arrives in the URL, so the nofilter_ parameter name is
-     * required: the XSS filter strips '&' from filtered parameter values, and
+     * required: the XSS filter strips '&amp;' from filtered parameter values, and
      * every real magnet link contains '&amp;'.
      *
      * <p>GET only; the existing /_add authorization applies to the actual add.
@@ -2707,6 +2855,9 @@ public class I2PSnarkServlet extends BasicServlet {
      * Whether the browser API request is authorized. Requires the API to be
      * enabled and the client to be loopback, on the allowed hosts list, or to
      * present the configured API key.
+     *
+     * @param req the request, for the client address and apiKey parameter
+     * @return true if the request may use the browser API
      */
     private boolean browserApiAuthorized(HttpServletRequest req) {
         if (!_manager.browserApiEnabled()) {return false;}
@@ -2737,7 +2888,7 @@ public class I2PSnarkServlet extends BasicServlet {
 
     /**
      * Validate the browser API payload and extract a display name for the OK reply.
-     * Mirrors the formats accepted by {@link #handleAddURL()}.
+     * Mirrors the formats accepted by {@link #handleAddURL(String, File, RequestWrapper)}.
      *
      * @param url the URL, magnet, info hash, or file path
      * @return a display name, or null if unsupported
@@ -2769,6 +2920,7 @@ public class I2PSnarkServlet extends BasicServlet {
      * Handles adding a torrent from an uploaded file.
      *
      * @param newFile filename from upload
+     * @param torrentDir directory where uploaded .torrent files are kept
      * @param dataDir data directory where torrents are stored
      * @param reqw wrapped request for accessing multipart inputs
      */
@@ -3171,6 +3323,10 @@ public class I2PSnarkServlet extends BasicServlet {
      * Handles saving configuration updates.
      *
      * @param req the HTTP request with config parameters
+     * @param resp the response, used only when an extension install redirect
+     *             is issued
+     * @return true if the response was fully handled (install redirect sent),
+     *         false to continue with normal rendering
      */
     private boolean handleSave(HttpServletRequest req, HttpServletResponse resp) {
         configForms().applySettings(req);
@@ -3241,6 +3397,9 @@ public class I2PSnarkServlet extends BasicServlet {
     /**
      * The console base URL for this request, e.g. http://127.0.0.1:7657/i2psnark
      * (no trailing slash), used as the default endpoint of the installed handler.
+     *
+     * @param req the request whose URL and scheme identify the console origin
+     * @return the scheme, host, port and context path, without a trailing slash
      */
     private String browserApiBaseUrl(HttpServletRequest req) {
         String url = req.getRequestURL().toString();
@@ -4772,7 +4931,7 @@ public class I2PSnarkServlet extends BasicServlet {
      * the left span is closed immediately by the {@code closeLeftSpan} flag.
      *
      * @param formattedSize the size string already formatted (e.g. "123.4 MiB")
-     * @param closeLeftSpan whether to append a closing </span> tag after each unit
+     * @param closeLeftSpan whether to append a closing &lt;/span&gt; tag after each unit
      * @return the formatted string with added HTML span tags for styling unit characters
      *
      * @since 0.9.67+
@@ -4821,6 +4980,9 @@ public class I2PSnarkServlet extends BasicServlet {
     /**
      * Thin-space markup, disabled if requested.
      *
+     * @param disable true to emit a plain " / " separator instead of the
+     *                thin-space markup
+     * @return the separator markup, never null
      * @since 0.8.2
      */
     private static String thinsp(boolean disable) {
@@ -4846,7 +5008,10 @@ public class I2PSnarkServlet extends BasicServlet {
      * Link to the details page if the tracker supports it.
      * Start of anchor only; caller must add anchor text or img and close the anchor.
      *
-     * @return the tracker link url
+     * @param announce the tracker announce URL, may be null
+     * @param infohash the 20-byte info hash, url-encoded into the link
+     * @return the opening anchor tag, or null if the tracker has no details
+     *         page support
      * @since 0.8.4
      */
     private String getTrackerLinkUrl(String announce, byte[] infohash) {
@@ -4880,7 +5045,10 @@ public class I2PSnarkServlet extends BasicServlet {
     /**
      * Full link to the details page with an image.
      *
-     * @return the tracker link
+     * @param announce the tracker announce URL
+     * @param infohash the 20-byte info hash, url-encoded into the link
+     * @return the complete anchor with icon, or null when the tracker has no
+     *         details page support
      * @since 0.8.4
      */
     private String getTrackerLink(String announce, byte[] infohash) {
@@ -4898,7 +5066,10 @@ public class I2PSnarkServlet extends BasicServlet {
     /**
      * Full anchor to the home page or details page with shortened hostname as anchor text.
      *
-     * @return the short tracker link
+     * @param announce the tracker announce URL; the scheme, path and port are
+     *                 stripped for the anchor text
+     * @param infohash the 20-byte info hash, used only for the details-page link
+     * @return the complete anchor, never null
      * @since 0.9.5
      */
     private String getShortTrackerLink(String announce, byte[] infohash) {
@@ -5203,6 +5374,9 @@ public class I2PSnarkServlet extends BasicServlet {
      * literal quote would close the attribute and let the rest of the URL become
      * new attributes - a stored XSS through any URL the user or a tracker supplied.
      *
+     * @param s the full URL to encode
+     * @return the URL with ; &amp; &lt; &gt; quote and brackets encoded, safe
+     *         inside a double-quoted href attribute
      * @since 0.8.13
      */
     private static String urlEncode(String s) {
@@ -6466,6 +6640,8 @@ public class I2PSnarkServlet extends BasicServlet {
     /**
      * Deprecated, use the two-argument variant for testability.
      *
+     * @param url the announce URL to check, may be null
+     * @return true if the URL is an http or udp tracker on a .i2p host
      * @since 0.9.46
      * @deprecated Use {@link #isI2PTracker(String, boolean)} for testability
      */
@@ -6549,6 +6725,13 @@ public class I2PSnarkServlet extends BasicServlet {
      * Whether any complete audio file exists at or below the browsed
      * directory. Answered from Storage metadata instead of recursively
      * listing directories on every page view.
+     *
+     * @param storage the torrent's storage, or null when the torrent has none
+     * @param remainingArray precomputed remaining byte counts, index-aligned
+     *                       with the storage file names
+     * @param prefix '' at the torrent root, else a directory path ending with '/'
+     * @return true when at least one fully downloaded audio file matches the
+     *         prefix
      */
     private boolean hasCompleteAudio(Storage storage, long[] remainingArray, String prefix) {
         if (storage == null || remainingArray == null) {return false;}
@@ -6561,9 +6744,12 @@ public class I2PSnarkServlet extends BasicServlet {
      * The audio files in the resource list as an m3u playlist.
      * https://en.wikipedia.org/wiki/M3U
      *
+     * @param reqURL the encoded request URL for the browsed directory, with
+     *               trailing slash, used as the base for playlist entries
      * @param base The encoded base URL
      * @param sortParam may be null
      * @return String of HTML or null if no files or on error
+     * @throws IOException if the base URL cannot be percent-decoded
      * @since 0.9.44
      */
     private String getPlaylist(String reqURL, String base, String sortParam) throws IOException {
@@ -6608,7 +6794,13 @@ public class I2PSnarkServlet extends BasicServlet {
      * Recursive.
      *
      * @param buf StringBuilder the m3u lines are appended to
+     * @param fileList the files and subdirectories of one directory
      * @param reqURL encoded, WITH trailing slash
+     * @param sort sort key passed to Sorters.getFileComparator for
+     *             subdirectory listings
+     * @param storage the torrent's storage, for per-file remaining counts
+     * @param remainingArray precomputed remaining byte counts, index-aligned
+     *                       with each directory listing
      * @since 0.9.44
      */
     private void getPlaylist(StringBuilder buf, List<Sorters.FileAndIndex> fileList, String reqURL, int sort, Storage storage, long[] remainingArray) {
@@ -6718,9 +6910,11 @@ public class I2PSnarkServlet extends BasicServlet {
     /**
      * Display the ratings and comments section.
      *
+     * @param snark the torrent whose ratings and comments are rendered
      * @param er ratings enabled globally
      * @param ec comments enabled globally
      * @param esc comments enabled this torrent
+     * @param buf destination for the comment table rows
      * @since 0.9.31
      */
     private void displayComments(Snark snark, boolean er, boolean ec, boolean esc, StringBuilder buf) {
@@ -6908,6 +7102,7 @@ public class I2PSnarkServlet extends BasicServlet {
     /**
      * Pick an icon; try to catch the common types in an i2p environment.
      *
+     * @param item the file or directory to choose an icon for
      * @return file name not including ".png"
      * @since 0.7.14
      */
@@ -7102,6 +7297,7 @@ public class I2PSnarkServlet extends BasicServlet {
      * @param icon name without the ".svg"
      * @param altText non-null
      * @param titleText non-null (used as data-tooltip)
+     * @return the complete tooltip span with the icon image inside
      * @since 0.9.51+
      */
     private String toSVGWithDataTooltip(String icon, String altText, String titleText) {
@@ -7311,6 +7507,8 @@ public class I2PSnarkServlet extends BasicServlet {
     /**
      * Save edits from the torrent edit form.
      *
+     * @param snark the stopped torrent being edited
+     * @param postParams the edit form parameters, parsed by parseEditParams
      * @since 0.9.53
      */
     private void saveTorrentEdit(Snark snark, Map<String, String[]> postParams) {
@@ -7493,21 +7691,37 @@ public class I2PSnarkServlet extends BasicServlet {
         return new EditParams(toAdd, toDel, primary, newComment, newCreatedBy);
     }
 
-    /** Warn icon for missing/unrecognized files. */
+    /**
+     * Warn icon for missing/unrecognized files.
+     *
+     * @param alt the img alt text
+     * @param tooltip the hover title text
+     * @return the complete img element markup
+     */
     private String warnIcon(String alt, String tooltip) {
         StringBuilder ico = new StringBuilder();
         appendIcon(ico, "warn", alt, tooltip, false, true, true);
         return ico.toString();
     }
 
-    /** Tick icon for complete files. */
+    /**
+     * Tick icon for complete files.
+     *
+     * @return the complete img element markup, localized alt and title
+     */
     private String tickIcon() {
         StringBuilder ico = new StringBuilder();
         appendIcon(ico, "tick", _t("Complete"), _t("Complete"), false, true, true);
         return ico.toString();
     }
 
-    /** Priority indicator icon (block/skip, clock/normal, red clock/high). */
+    /**
+     * Priority indicator icon (block/skip, clock/normal, red clock/high).
+     *
+     * @param priority the file priority: negative is skipped, 0 is normal,
+     *                 positive is high priority
+     * @return the indicator div with the matching icon inside
+     */
     private String priorityIcon(int priority) {
         StringBuilder ico = new StringBuilder(64);
         ico.append("<div class=priorityIndicator>");

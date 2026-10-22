@@ -383,7 +383,15 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
         return rv;
     }
 
-    /** Single-hop or multi-hop selection for one tunnel length. Never null. */
+    /**
+     * Single-hop or multi-hop selection for one tunnel length. Never null.
+     *
+     * @param settings the pool's settings, deciding the single- or multi-hop path
+     * @param length tunnel length being built; 1 selects a single hop
+     * @param params shared selection parameters for this attempt
+     * @param ex live exclusions, mutated by whichever path runs
+     * @return ordered hops with the endpoint first, empty if nothing usable was found
+     */
     private List<Hash> selectHops(TunnelPoolSettings settings, int length, SelectionParams params,
                                   SelectionExclusions ex) {
         // Room for the hops plus the first-hop candidate batch. ArraySet is fixed-capacity
@@ -394,7 +402,17 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
         return selectMultiHop(settings, length, params, ex, matches);
     }
 
-    /** Compute the shared selection parameters (tier priority, closest-hop checks, hidden flags, IP restriction). */
+    /**
+     * Compute the shared selection parameters: tier priority, closest-hop checks,
+     * hidden flags and the IP restriction.
+     *
+     * @param settings the pool's settings, source of the configured IP restriction
+     * @param length tunnel length being built; a length of 1 or less clears the IP
+     *               restriction outright
+     * @param isInbound true for an inbound tunnel, which decides which of the two
+     *                  hidden flags is set
+     * @return the parameters shared by every hop selection of this attempt
+     */
     private SelectionParams computeSelectionParams(TunnelPoolSettings settings, int length, boolean isInbound) {
         // Cache buildSuccess to avoid repeated expensive calls
         double buildSuccess = ctx.profileOrganizer().getTunnelBuildSuccess();
@@ -444,7 +462,19 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
                                    hidden, hiddenInbound, hiddenOutbound, ipRestriction, ipSet);
     }
 
-    /** Build the lazy Excluder with client/shared cooldowns, first/last peer and pool diversity exclusions. */
+    /**
+     * Build the lazy Excluder with client/shared cooldowns, first/last peer and pool
+     * diversity exclusions.
+     *
+     * @param settings the pool's settings, source of the destination and of the
+     *                 first/last peer exclusions
+     * @param isInbound true to use the inbound pool and its cooldown bookkeeping
+     * @param buildSuccess the tunnel build success ratio in [0.0, 1.0], fetched once
+     *                     per selection
+     * @param length tunnel length being built, used to decide whether first-hop
+     *               cooldowns may be relaxed
+     * @return the exclusions to apply while selecting this tunnel's hops
+     */
     private SelectionExclusions buildExclusions(TunnelPoolSettings settings, boolean isInbound,
                                                 double buildSuccess, int length) {
         // Excluder is lazy — contains() auto-classifies and tracks reasons.
@@ -545,7 +575,7 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
      * and unknown pools (negative count) never relax.
      *
      * @param usableTunnels usable tunnels in this pool, or -1 when the pool
-     * is unknown
+     *                      is unknown
      * @param length tunnel length being selected for
      * @return true when cooldowns should apply to the first hop only
      * @since 0.9.71+
@@ -554,7 +584,18 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
         return length > 1 && usableTunnels >= 0 && usableTunnels <= 1;
     }
 
-    /** Select the single hop of a 1-hop tunnel (with hidden-inbound special case). */
+    /**
+     * Select the single hop of a 1-hop tunnel (with hidden-inbound special case).
+     *
+     * @param settings the pool's settings; not consulted on this path
+     * @param length tunnel length, used as the draw size for the fallback tiers
+     * @param params shared selection parameters, deciding the hidden and closest-hop
+     *               paths
+     * @param ex live exclusions; the wrapped exclude set is written back for the
+     *           shortfall fallback
+     * @param matches the pre-sized accumulator the tier draws fill
+     * @return the hop in a list, empty when no tier could supply a peer
+     */
     private List<Hash> selectSingleHop(TunnelPoolSettings settings, int length, SelectionParams params,
                                        SelectionExclusions ex, ArraySet<Hash> matches) {
         Set<Hash> exclude = ex.exclude;
@@ -612,6 +653,14 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
      * on {@code ex} so a shortfall fill inserts middles before it instead of
      * shifting roles.  A missing first hop is logged and left for that fill —
      * discarding the whole selection would waste a usable endpoint and middles.
+     *
+     * @param settings the pool's settings, source of the random key and the destination
+     *                 used for sub-tier placement
+     * @param length tunnel length being built, two or more
+     * @param params shared selection parameters for this attempt
+     * @param ex live exclusions; the vetted first hop is recorded on it
+     * @param matches scratch accumulator, cleared and reused for each hop group
+     * @return the hops ordered endpoint first, empty if no last hop was found
      */
     private List<Hash> selectMultiHop(TunnelPoolSettings settings, int length, SelectionParams params,
                                       SelectionExclusions ex, ArraySet<Hash> matches) {
@@ -648,7 +697,15 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
         return rv;
     }
 
-    /** Build the last-hop exclusion set (closest-hop wrapped for inbound, OBEP for outbound). */
+    /**
+     * Build the last-hop exclusion set: closest-hop wrapped for inbound, OBEP
+     * wrapped for outbound.
+     *
+     * @param params shared selection parameters, deciding the wrapper and whether the
+     *               closest-hop check applies
+     * @param exclude the live exclusion set to wrap
+     * @return the wrapped exclusions used when picking the last hop
+     */
     private Set<Hash> buildLastHopExclude(SelectionParams params, Set<Hash> exclude) {
         Set<Hash> lastHopExclude;
         if (params.isInbound) {
@@ -675,9 +732,16 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
      * Select the last hop (hidden-inbound closest hop, hidden-outbound OBEP, or
      * normal OBEP).
      *
+     * @param settings the pool's settings, source of the destination whose inbound pool
+     *                 is consulted
+     * @param length tunnel length being built, used for the two-hop sub-tier split
+     * @param params shared selection parameters, deciding which last-hop role applies
+     * @param randomKey the tunnel's random key for sub-tier placement, not consulted
+     *                  here
      * @param lastHopExclude wrapped exclusions (closest-hop / OBEP role checks)
      * @param rawExclude the unwrapped exclusion set, used only for the final
      *                   recovery pass when the wrapper excluded every candidate
+     * @param matches accumulator filled with the chosen last hop
      * @return false to abort the selection
      */
     private boolean selectLastHop(TunnelPoolSettings settings, int length, SelectionParams params,
@@ -842,7 +906,18 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
         return true;
     }
 
-    /** Select the middle hop(s) of a tunnel longer than 2 hops (subtiers 2-3, quality-ordered). */
+    /**
+     * Select the middle hop(s) of a tunnel longer than 2 hops, subtiers 2-3,
+     * quality-ordered.
+     *
+     * @param length tunnel length; the middle count is length minus two
+     * @param params shared selection parameters, deciding which tier leads the draw
+     * @param randomKey key used to order the chosen middles, so their sequence is
+     *                  specific to this tunnel
+     * @param ex live exclusions, extended with the peers chosen here
+     * @param matches accumulator for the middle draws, cleared on the way out
+     * @param rv the hop list built so far; the ordered middles are appended to it
+     */
     private void selectMiddleHops(int length, SelectionParams params, SessionKey randomKey,
                                   SelectionExclusions ex, ArraySet<Hash> matches, List<Hash> rv) {
         // middle hop(s)
@@ -926,7 +1001,19 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
         matches.clear();
     }
 
-    /** Select the first hop (IBGW for inbound, closest outbound otherwise) with quality loop and pre-connect. */
+    /**
+     * Select the first hop, IBGW for inbound and the closest outbound peer otherwise,
+     * with a quality loop and pre-connect.
+     *
+     * @param length tunnel length, not consulted on this path
+     * @param params shared selection parameters: tier priority, hidden flags and the IP
+     *               restriction
+     * @param randomKey the tunnel's random key, used when refilling a rejected first hop
+     * @param ex live exclusions; first-hop cooldowns are read from it and rejections are
+     *           added back to it
+     * @param matches accumulator filled with the chosen first hop, left empty if none
+     *                passed the quality loop
+     */
     private void selectFirstHop(int length, SelectionParams params, SessionKey randomKey,
                                 SelectionExclusions ex, ArraySet<Hash> matches) {
         // IBGW or OB first hop
@@ -1211,12 +1298,24 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
      * <p>Passes the batch's full size and lets the selector compute the shortfall — the
      * same accounting {@link ProfileOrganizer#remainingToSelect} does for every other
      * caller, so the top-up cannot drift from the tiers beneath it.
+     *
+     * @param params shared selection parameters, source of the IP restriction and the
+     *               subnet accumulator the draw must respect
+     * @param exclude peers the batch draw must skip
+     * @param matches the first-hop batch, topped up to FIRST_HOP_CANDIDATES entries
      */
     private void topUpFromFastTier(SelectionParams params, Set<Hash> exclude, ArraySet<Hash> matches) {
         ctx.profileOrganizer().selectFastPeers(FIRST_HOP_CANDIDATES, exclude, matches, params.ipRestriction, params.ipSet);
     }
 
-    /** Add HighCapacity-tier candidates until the batch is full. See {@link #topUpFromFastTier}. */
+    /**
+     * Add HighCapacity-tier candidates until the batch is full.
+     * See {@link #topUpFromFastTier}.
+     *
+     * @param params shared selection parameters, source of the IP restriction and set
+     * @param exclude peers the batch draw must skip
+     * @param matches the first-hop batch being filled
+     */
     private void topUpFromHighCapacityTier(SelectionParams params, Set<Hash> exclude, ArraySet<Hash> matches) {
         ctx.profileOrganizer().selectHighCapacityPeers(FIRST_HOP_CANDIDATES, exclude, matches, params.ipRestriction, params.ipSet);
     }
@@ -1418,6 +1517,7 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
      * @param attempt the attempt number it was accepted on, or -1
      * @param attempts total quality attempts made
      * @param remaining candidates left in the set
+     * @param buildSuccess the tunnel build success ratio, reported in the log line
      * @since 0.9.71+
      */
     private void logAcceptedFirstHopTier(RouterContext ctx, Hash firstHop, int tier,
@@ -1474,7 +1574,7 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
     /**
      * Builds the soft-fallback exclusion set: a copy of the first-hop
      * exclusion set without no-signal-excluded peers that have proven track
-     * records (tunnel acceptance > 50% and at least one successful test),
+     * records (tunnel acceptance &gt; 50% and at least one successful test),
      * giving them a chance when all standard tiers fail.  No side effects.
      *
      * @param exclude the current first-hop exclusion set
@@ -1518,7 +1618,14 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
     /**
      * Progressive fallbacks when the selected peers are short of the requested length.
      *
-     * @return the final rv, or null to abort (returns empty list).
+     * @param settings the pool's settings, source of the minimum acceptable length
+     * @param rv the hops chosen so far, ordered endpoint first
+     * @param length the tunnel length that was requested
+     * @param params shared selection parameters, deciding which stress fallbacks are
+     *               allowed
+     * @param ex live exclusions and the vetted first hop the fills are ordered around
+     * @return the extended hop list, or an empty list when the shortfall cannot be
+     *         filled
      */
     private List<Hash> applyShortfallFallbacks(TunnelPoolSettings settings, List<Hash> rv, int length,
                                                SelectionParams params, SelectionExclusions ex) {
@@ -1620,10 +1727,14 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
     }
 
     /**
-     * One cascading tier selection.  The ProfileOrganizer tiers fall through to
-     * wider tiers internally (Fast -> HighCap -> NotFailing -> all peers), so a
+     * One cascading tier selection.  The ProfileOrganizer tiers fall through to wider
+     * tiers internally (Fast -&gt; HighCap -&gt; NotFailing -&gt; all peers), so a
      * single call with the right entry tier covers the whole ladder.
      *
+     * @param rv the hop list to extend; new peers go in before the vetted first hop
+     * @param min total hops the selection needs, counted against rv's current size
+     * @param params shared selection parameters, deciding whether HighCap or Fast leads
+     * @param ex live exclusions, extended with the peers taken here
      * @return number of hops added
      */
     private int collectFromTier(List<Hash> rv, int min, SelectionParams params, SelectionExclusions ex) {
@@ -1651,6 +1762,9 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
      * cascade at all: a peer with an established transport session but no
      * usable profile still builds fast.
      *
+     * @param rv the hop list to extend
+     * @param min total hops the selection needs, counted against rv's current size
+     * @param ex live exclusions the draw must skip
      * @return number of hops added
      */
     private int collectActive(List<Hash> rv, int min, SelectionExclusions ex) {
@@ -1670,6 +1784,10 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
     /**
      * Index at which a missing middle hop must be inserted: just before the
      * vetted first hop, or at the end when there is none yet.
+     *
+     * @param rv the hop list being filled
+     * @param firstHop the vetted first hop, or null when none was selected
+     * @return the index of firstHop in rv, or rv.size() when it is absent
      */
     private static int firstHopIndex(List<Hash> rv, Hash firstHop) {
         if (firstHop == null)
@@ -1885,7 +2003,10 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
         return rv;
     }
 
-    /** Immutable selection parameters computed once per {@link #selectPeers()} call. */
+    /**
+     * Immutable selection parameters computed once per
+     * {@link #selectPeers(TunnelPoolSettings)} call.
+     */
     private static final class SelectionParams {
         final boolean isInbound;
         final double buildSuccess;
@@ -2110,6 +2231,10 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
     /**
      * Sort peers by quality for tunnel building preference.
      * Higher quality peers (recently tested, active, connected) sort first.
+     *
+     * @param peers the selected peers, reordered in place; nothing happens when the list
+     *              is null or empty
+     * @param exclude peers to push to the end of the list, or null
      */
     private void sortByPeerQuality(List<Hash> peers, Set<Hash> exclude) {
         if (peers == null || peers.isEmpty()) {
@@ -2148,9 +2273,9 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
      * @param exclude peers to deprioritize, or null
      * @param prof1 first peer's profile, or null
      * @param prof2 second peer's profile, or null
-     * @param proven local snapshot of proven-responder timestamps (peer hash to
-     *               time); must not be the live shared map, or the sort's
-     *               contract can be violated mid-flight by build-thread writes
+     * @param proven local snapshot mapping peer hash to proven-responder timestamp; must
+     *               not be the live shared map, or the sort's contract can be violated
+     *               mid-flight by build-thread writes
      * @param now current time from the router clock
      * @param thirtyMinutes activity window in ms
      * @return negative, zero, or positive
@@ -2182,7 +2307,7 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
     }
 
     /**
-     * Compare floodfill reliability: GOOD > OK > UNKNOWN > BAD.
+     * Compare floodfill reliability: GOOD &gt; OK &gt; UNKNOWN &gt; BAD.
      * Unproven floodfills sort lower to reduce load on them until
      * their reliability is established.
      *
@@ -2397,7 +2522,7 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
 
     /**
      * A Set of Hashes that automatically adds to the
-     * Set in the {@link #contains()} check.
+     * Set in the {@link #contains(Object)} check.
      * <p>
      * So we don't need to generate the exclude set up front.
      *

@@ -66,7 +66,9 @@ class ConnectionManager {
     private static final Object DUMMY = new Object();
 
     /**
-     * Lock for interruptible cooldown wait in {@link #connect()} — notified on shutdown.
+     * Lock for interruptible cooldown wait in
+     * {@link #connect(Destination, ConnectionOptions, I2PSession)} — notified on
+     * shutdown.
      */
     private final Object _cooldownLock = new Object();
 
@@ -254,12 +256,13 @@ class ConnectionManager {
     private static final Set<Hash> _globalBlacklist = new ConcurrentHashSet<>();
 
     /**
-     * Temporary bans keyed by destination hash -> bannedUntil epoch ms.
+     * Temporary bans keyed by destination hash -&gt; bannedUntil epoch ms.
      * Autoban hammering dests for 24h (or {@code i2p.streaming.tempBanMinutes}).
-     * Enforced in {@link #shouldRejectConnection()} before the port/budget counters so a
-     * banned dest no longer consumes its per-dest budget or per-peer throttlers.
-     * Expired entries
-     * are removed by BanExpiry. @since 0.9.71+.
+     * Enforced in {@link #shouldRejectConnection(Packet)} before the
+     * port/budget counters so a banned dest no longer consumes its per-dest
+     * budget or per-peer throttlers. Expired entries are removed by BanExpiry.
+     *
+     * @since 0.9.71+
      */
     private final ConcurrentHashMap<Hash, Long> _tempBanUntil = new ConcurrentHashMap<>();
 
@@ -329,7 +332,9 @@ class ConnectionManager {
     /**
      * The sweeper owned by this manager. Held so {@link #shutdown} can stop
      * it: a fired-and-cancelled TimedEvent would otherwise re-arm itself from
-     * inside {@link #timeReached()}, outliving the manager it reads. @since 0.9.71+.
+     * inside {@link BanExpiry#timeReached}, outliving the manager it reads.
+     *
+     * @since 0.9.71+
      */
     private volatile BanExpiry _banExpiry;
 
@@ -771,8 +776,9 @@ class ConnectionManager {
      * here for a connection whose slot was already returned (a hard-disconnect
      * sweep racing an async teardown, or a teardown after the sweeper
      * released it), and the peer fallback would then decrement a DIFFERENT
-     * stream's count. The claim is re-armed by {@link #assignReceiveStreamId()} when a
-     * pooled connection starts a new generation.
+     * stream's count. The claim is re-armed by
+     * {@link #assignReceiveStreamId(Connection, Hash)} when a pooled connection
+     * starts a new generation.
      *
      * @param con the connection leaving the manager, non-null
      * @return the dest hash released, or null if nothing was held
@@ -995,6 +1001,11 @@ class ConnectionManager {
      * from drifting, which would otherwise let a dest accumulate strikes across
      * unrelated hours of traffic.
      *
+     * @param last recorded strike to age-check, non-null
+     * @param now wall-clock ms to measure the strike's age against
+     * @param strikeWindowMs strike forgiveness window (pass {@link #STRIKE_WINDOW_MS})
+     * @return true if the strike is old enough (or future-stamped) to be
+     *         forgiven, false while it still counts toward a ban
      * @since 0.9.71+
      */
     private static boolean strikeForgiven(SynStrike last, long now, long strikeWindowMs) {
@@ -1082,7 +1093,8 @@ class ConnectionManager {
      * distinct window inside the strike window: leave the original strike in
      * place (the ban supersedes further strikes), return true.
      * <p>Autoban is re-checked live here (the callers already gate
-     * {@link #checkSynBurst()} on a per-SYN snapshot): if enforcement is switched off
+     * {@link #checkSynBurst(Hash, long, boolean)} on a per-SYN snapshot): if
+     * enforcement is switched off
      * between the trip and this record, no strike may be stored, or the map
      * would keep evidence recorded under a policy the operator has since
      * disabled. Callers' snapshot decides BAN for the trip in flight; this
@@ -1877,7 +1889,7 @@ class ConnectionManager {
      * @param con the connection to assign an ID to
      * @param destHash the remote dest whose budget admitted this stream; the
      *                 reservation token for the new ID points here
-     * @since 0.9.12 consolidated from {@link #receiveConnection()} and connect();
+     * @since 0.9.12 consolidated from {@link #receiveConnection(Packet)} and connect();
      *        destHash added 0.9.71+ for reservation binding
      */
     private void assignReceiveStreamId(Connection con, Hash destHash) {
@@ -1905,6 +1917,8 @@ class ConnectionManager {
      * Pick a new random stream ID for a ping and assign it,
      * taking care to avoid duplicates, and return it.
      *
+     * @param req the ping request to register under the new ID
+     * @return the fresh receive stream ID the ping is pending under
      * @since 0.9.12
      */
     private long assignPingId(PingRequest req) {
@@ -1925,6 +1939,7 @@ class ConnectionManager {
      * Pick a new random stream ID that we are rejecting,
      * taking care to avoid duplicates, and return it.
      *
+     * @return the fresh stream ID recorded in the recently-closed set
      * @since 0.9.34
      */
     private long assignRejectId() {
@@ -2096,7 +2111,17 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
       /**
        * Common post-creation setup for both pooled and new connections.
        * Handles cooldown, waitForConnect, stats recording.
+       *
+       * @param con the new or pooled connection being set up, non-null
+       * @param peer the remote destination, used for the per-dest cooldown and
+       *             failure bookkeeping
+       * @param opts options supplying the connect delay and timeout passed to
+       *             waitForConnect
+       * @param connectStart wall-clock ms when the connect attempt began, for
+       *                     the elapsed-time stats
        * @param fromPool if true, skip cooldown delay (connection already established)
+       * @return the same con, after waitForConnect; a failed connect is
+       *         reported through getConnectionError(), not a null return
        */
       private Connection finalizeConnection(Connection con, Destination peer,
                                              ConnectionOptions opts, long connectStart,
@@ -2511,6 +2536,10 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
     /**
      * Try to acquire a pooled connection for the given destination.
      * Returns a valid connection or null if none available.
+     *
+     * @param peer the destination whose pool bucket is polled, non-null
+     * @return an established, healthy pooled connection, or null if the bucket
+     *         is empty or every entry was stale or unhealthy
      */
     private Connection acquireFromPool(Destination peer) {
         Hash destHash = peer.calculateHash();
@@ -2550,7 +2579,10 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
 
     /**
      * Return a connection to the pool if healthy.
-     * Called from {@link #removeConnection()}.
+     * Called from {@link #removeConnection(Connection)}.
+     *
+     * @param con the connection being retired; skipped unless it is
+     *            established, healthy and has clean streams, null is ignored
      */
     private void returnToPool(Connection con) {
         if (!isPoolEnabled())

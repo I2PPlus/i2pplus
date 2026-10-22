@@ -141,8 +141,11 @@ public class SybilRenderer {
     /**
      * The whole thing.
      *
+     * @param out the writer receiving the rendered HTML
+     * @param nonce the CSP nonce the emitted markup references
      * @param mode what tab to show
      * @param date only for mode = 12
+     * @throws IOException if the HTML cannot be written to the output
      */
     private void renderRouterInfoHTML(Writer out, String nonce, int mode, long date) throws IOException {
         Hash us = _context.routerHash();
@@ -299,6 +302,11 @@ public class SybilRenderer {
     /**
      * Render the sybil analysis overview section.
      *
+     * @param out the writer receiving the rendered HTML
+     * @param buf the scratch buffer the markup is built in
+     * @param nonce the CSP nonce the emitted markup references
+     * @param analysis supplies the persister the stored analyses are loaded from
+     * @throws IOException if the HTML cannot be written to the output
      * @since 0.9.38
      */
     private void renderOverview(Writer out, StringBuilder buf, String nonce, Analysis analysis) throws IOException {
@@ -342,6 +350,10 @@ public class SybilRenderer {
     /**
      * Render the form to start a new sybil analysis scan.
      *
+     * @param out the writer receiving the rendered HTML
+     * @param buf the scratch buffer the markup is built in
+     * @param nonce the CSP nonce the emitted markup references
+     * @throws IOException if the HTML cannot be written to the output
      * @since 0.9.38
      */
     private static void renderRunForm(Writer out, StringBuilder buf, String nonce) throws IOException {
@@ -369,6 +381,10 @@ public class SybilRenderer {
     /**
      * Render the configuration form for background sybil analysis.
      *
+     * @param out the writer receiving the rendered HTML
+     * @param buf the scratch buffer the markup is built in
+     * @param nonce the CSP nonce the emitted markup references
+     * @throws IOException if the HTML cannot be written to the output
      * @since 0.9.38
      */
     private void renderBackgroundForm(Writer out, StringBuilder buf, String nonce) throws IOException {
@@ -440,7 +456,12 @@ public class SybilRenderer {
     /**
      * Render the floodfill summary section.
      *
-     * @since 0.9.38 split out from {@link #renderRouterInfoHTML()}
+     * @param out the writer receiving the rendered HTML
+     * @param buf the scratch buffer the markup is built in
+     * @param ris the known floodfills, counted but not listed here
+     * @param avgMinDist the average closest-floodfill hash distance
+     * @throws IOException if the HTML cannot be written to the output
+     * @since 0.9.38 split out from renderRouterInfoHTML()
      */
     @SuppressWarnings("PMD.UnsynchronizedStaticFormatter")
     private synchronized void renderFFSummary(Writer out, StringBuilder buf, List<RouterInfo> ris, double avgMinDist) throws IOException {
@@ -457,6 +478,12 @@ public class SybilRenderer {
     /**
      * Render the family group summary section.
      *
+     * @param out the writer receiving the rendered HTML
+     * @param buf the scratch buffer the markup is built in
+     * @param analysis computes the family groups
+     * @param ris the routers to group by family tag
+     * @param points updated with threat points for grouped routers
+     * @throws IOException if the HTML cannot be written to the output
      * @since 0.9.38 split out from renderRouterInfoHTML()
      */
     private void renderFamilySummary(Writer out, StringBuilder buf, Analysis analysis, List<RouterInfo> ris, Map<Hash, Points> points) throws IOException {
@@ -467,6 +494,12 @@ public class SybilRenderer {
     /**
      * Render the IP group summary for our own IP address.
      *
+     * @param out the writer receiving the rendered HTML
+     * @param buf the scratch buffer the markup is built in
+     * @param analysis groups the routers sharing our IP or prefix
+     * @param ris the routers to test against our addresses
+     * @param points updated with threat points for grouped routers
+     * @throws IOException if the HTML cannot be written to the output
      * @since 0.9.38 split out from renderRouterInfoHTML()
      */
     private void renderIPUsSummary(Writer out, StringBuilder buf, Analysis analysis, List<RouterInfo> ris, Map<Hash, Points> points) throws IOException {
@@ -482,6 +515,12 @@ public class SybilRenderer {
     /**
      * Render the /32 IP group summary.
      *
+     * @param out the writer receiving the rendered HTML
+     * @param buf the scratch buffer the markup is built in
+     * @param analysis computes the groups of routers sharing one IPv4
+     * @param ris the routers to group by full IPv4 address
+     * @param points updated with threat points for grouped routers
+     * @throws IOException if the HTML cannot be written to the output
      * @since 0.9.38 split out from renderRouterInfoHTML()
      */
     private void renderIP32Summary(Writer out, StringBuilder buf, Analysis analysis, List<RouterInfo> ris, Map<Hash, Points> points) throws IOException {
@@ -492,6 +531,12 @@ public class SybilRenderer {
     /**
      * Render the /24 IP group summary.
      *
+     * @param out the writer receiving the rendered HTML
+     * @param buf the scratch buffer the markup is built in
+     * @param analysis computes the groups sharing an IPv4 /24
+     * @param ris the routers to group by IPv4 /24 prefix
+     * @param points updated with threat points for grouped routers
+     * @throws IOException if the HTML cannot be written to the output
      * @since 0.9.38 split out from renderRouterInfoHTML()
      */
     private void renderIP24Summary(Writer out, StringBuilder buf, Analysis analysis, List<RouterInfo> ris, Map<Hash, Points> points) throws IOException {
@@ -502,6 +547,12 @@ public class SybilRenderer {
     /**
      * Render the /16 IP group summary.
      *
+     * @param out the writer receiving the rendered HTML
+     * @param buf the scratch buffer the markup is built in
+     * @param analysis computes the groups sharing an IPv4 /16
+     * @param ris the routers to group by IPv4 /16 prefix
+     * @param points updated with threat points for grouped routers
+     * @throws IOException if the HTML cannot be written to the output
      * @since 0.9.38 split out from renderRouterInfoHTML()
      */
     private void renderIP16Summary(Writer out, StringBuilder buf, Analysis analysis, List<RouterInfo> ris, Map<Hash, Points> points) throws IOException {
@@ -512,6 +563,12 @@ public class SybilRenderer {
     /**
      * Render the /64 IPv6 group summary.
      *
+     * @param out the writer receiving the rendered HTML
+     * @param buf the scratch buffer the markup is built in
+     * @param analysis computes the groups sharing an IPv6 /64
+     * @param ris the routers to group by IPv6 /64 prefix
+     * @param points updated with threat points for grouped routers
+     * @throws IOException if the HTML cannot be written to the output
      * @since 0.9.57
      */
     private void renderIP64Summary(Writer out, StringBuilder buf, Analysis analysis, List<RouterInfo> ris, Map<Hash, Points> points) throws IOException {
@@ -522,6 +579,12 @@ public class SybilRenderer {
     /**
      * Render the /48 IPv6 group summary.
      *
+     * @param out the writer receiving the rendered HTML
+     * @param buf the scratch buffer the markup is built in
+     * @param analysis computes the groups sharing an IPv6 /48
+     * @param ris the routers to group by IPv6 /48 prefix
+     * @param points updated with threat points for grouped routers
+     * @throws IOException if the HTML cannot be written to the output
      * @since 0.9.57
      */
     private void renderIP48Summary(Writer out, StringBuilder buf, Analysis analysis, List<RouterInfo> ris, Map<Hash, Points> points) throws IOException {
@@ -532,6 +595,12 @@ public class SybilRenderer {
     /**
      * Render the pairwise distance summary.
      *
+     * @param out the writer receiving the rendered HTML
+     * @param buf the scratch buffer the markup is built in
+     * @param analysis computes the closest floodfill pairs
+     * @param ris the floodfills whose pairwise hash distances are measured
+     * @param points updated with threat points for close pairs
+     * @throws IOException if the HTML cannot be written to the output
      * @since 0.9.38 split out from renderRouterInfoHTML()
      */
     private void renderPairSummary(Writer out, StringBuilder buf, Analysis analysis, List<RouterInfo> ris, Map<Hash, Points> points) throws IOException {
@@ -544,6 +613,13 @@ public class SybilRenderer {
     /**
      * Render the closest floodfills to our routing key.
      *
+     * @param out the writer receiving the rendered HTML
+     * @param buf the scratch buffer the markup is built in
+     * @param analysis scores the floodfills close to our routing key
+     * @param avgMinDist the average minimum floodfill hash distance
+     * @param ris the floodfills, sorted in place by distance to our key
+     * @param points updated with threat points for close floodfills
+     * @throws IOException if the HTML cannot be written to the output
      * @since 0.9.38 split out from renderRouterInfoHTML()
      */
     private void renderCloseSummary(Writer out, StringBuilder buf, Analysis analysis, double avgMinDist, List<RouterInfo> ris, Map<Hash, Points> points) throws IOException {
@@ -558,6 +634,14 @@ public class SybilRenderer {
     /**
      * Render the closest floodfills to tomorrow's routing key.
      *
+     * @param out the writer receiving the rendered HTML
+     * @param buf the scratch buffer the markup is built in
+     * @param analysis scores the floodfills close to tomorrow's key
+     * @param us our router hash, the base tomorrow's routing key is derived from
+     * @param avgMinDist the average minimum floodfill hash distance
+     * @param ris the floodfills, sorted in place by distance to that key
+     * @param points updated with threat points for close floodfills
+     * @throws IOException if the HTML cannot be written to the output
      * @since 0.9.38 split out from renderRouterInfoHTML()
      */
     private void renderCloseTmrwSummary(Writer out, StringBuilder buf, Analysis analysis, Hash us, double avgMinDist, List<RouterInfo> ris, Map<Hash, Points> points) throws IOException {
@@ -573,6 +657,14 @@ public class SybilRenderer {
     /**
      * Render the closest floodfills to our router hash.
      *
+     * @param out the writer receiving the rendered HTML
+     * @param buf the scratch buffer the markup is built in
+     * @param analysis scores the floodfills close to our router hash
+     * @param us our router hash, the reference the distances are measured from
+     * @param avgMinDist the average minimum floodfill hash distance
+     * @param ris the floodfills, sorted in place by distance to our hash
+     * @param points updated with threat points for close floodfills
+     * @throws IOException if the HTML cannot be written to the output
      * @since 0.9.38 split out from renderRouterInfoHTML()
      */
     private void renderDHTSummary(Writer out, StringBuilder buf, Analysis analysis, Hash us, double avgMinDist, List<RouterInfo> ris, Map<Hash, Points> points) throws IOException {
@@ -584,6 +676,13 @@ public class SybilRenderer {
     /**
      * Render the closest floodfills to our published destinations.
      *
+     * @param out the writer receiving the rendered HTML
+     * @param buf the scratch buffer the markup is built in
+     * @param analysis scores the floodfills close to each destination key
+     * @param avgMinDist the average minimum floodfill hash distance
+     * @param ris the floodfills, re-sorted in place for each destination key
+     * @param points updated with threat points for close floodfills
+     * @throws IOException if the HTML cannot be written to the output
      * @since 0.9.38 split out from renderRouterInfoHTML()
      */
     private void renderDestSummary(Writer out, StringBuilder buf, Analysis analysis, double avgMinDist, List<RouterInfo> ris, Map<Hash, Points> points) throws IOException {
@@ -630,6 +729,12 @@ public class SybilRenderer {
     /**
      * Render the threats analysis HTML section.
      *
+     * @param out the writer receiving the rendered HTML
+     * @param buf the scratch buffer the markup is built in
+     * @param date ms since the epoch of the analysis being displayed
+     * @param points threat points per router hash, only those at or above the
+     *               display threshold are rendered
+     * @throws IOException if the HTML cannot be written to the output
      * @since 0.9.38 split out from renderRouterInfoHTML()
      */
     @SuppressWarnings("PMD.UnsynchronizedStaticFormatter")
@@ -688,8 +793,12 @@ public class SybilRenderer {
     /**
      * Render the floodfill pairwise distance table.
      *
+     * @param out the writer receiving the rendered HTML
+     * @param buf the scratch buffer the markup is built in
      * @param pairs the closest floodfill pairs, sorted by ascending hash distance
      *              and capped at PAIRMAX; the loop breaks once MIN_CLOSE is passed
+     * @param avg the average pairwise floodfill hash distance, shown in the header
+     * @throws IOException if the HTML cannot be written to the output
      */
     @SuppressWarnings("PMD.UnsynchronizedStaticFormatter")
     private synchronized void renderPairDistance(Writer out, StringBuilder buf, List<Pair> pairs, double avg) throws IOException {
@@ -754,6 +863,15 @@ public class SybilRenderer {
 
     /**
      * Render the HTML for IP groups matching our own IP address.
+     *
+     * @param out the writer receiving the rendered HTML
+     * @param buf the scratch buffer the markup is built in
+     * @param ri32 routers sharing our exact IPv4 address
+     * @param ri24 routers sharing our IPv4 /24
+     * @param ri16 routers sharing our IPv4 /16
+     * @param ri64 routers sharing our IPv6 /64
+     * @param ri48 routers sharing our IPv6 /48
+     * @throws IOException if the HTML cannot be written to the output
      */
     private void renderIPGroupsUs(Writer out, StringBuilder buf, List<RouterInfo> ri32,
                                   List<RouterInfo> ri24, List<RouterInfo> ri16,
@@ -803,6 +921,11 @@ public class SybilRenderer {
 
     /**
      * Render the HTML for /32 IP groups (same IPv4 address).
+     *
+     * @param out the writer receiving the rendered HTML
+     * @param buf the scratch buffer the markup is built in
+     * @param map groups of 2 or more routers sharing one IPv4, keyed by that address
+     * @throws IOException if the HTML cannot be written to the output
      */
     private void renderIPGroups32(Writer out, StringBuilder buf, Map<Integer, List<RouterInfo>> map) throws IOException {
         buf.append("<h3 id=sameIP class=sybils>").append(_t("Routers with the same IPv4")).append("</h3>\n");
@@ -833,6 +956,11 @@ public class SybilRenderer {
 
     /**
      * Render the HTML for /24 IP groups.
+     *
+     * @param out the writer receiving the rendered HTML
+     * @param buf the scratch buffer the markup is built in
+     * @param map groups of 2 or more routers sharing an IPv4 /24, keyed by the prefix
+     * @throws IOException if the HTML cannot be written to the output
      */
     private void renderIPGroups24(Writer out, StringBuilder buf, Map<Integer, List<RouterInfo>> map) throws IOException {
         buf.append("<h3 id=same24 class=sybils>").append(_t("Routers in the same IPv4 /24")).append("</h3>\n");
@@ -862,6 +990,11 @@ public class SybilRenderer {
 
     /**
      * Render the HTML for /16 IP groups.
+     *
+     * @param out the writer receiving the rendered HTML
+     * @param buf the scratch buffer the markup is built in
+     * @param map groups of 4 or more routers sharing an IPv4 /16, keyed by the prefix
+     * @throws IOException if the HTML cannot be written to the output
      */
     private void renderIPGroups16(Writer out, StringBuilder buf, Map<Integer, List<RouterInfo>> map) throws IOException {
         buf.append("<h3 id=same16 class=sybils>").append(_t("Routers in the same IPv4 /16 (4 minimum)")).append("</h3>\n");
@@ -891,6 +1024,10 @@ public class SybilRenderer {
     /**
      * Render the HTML for /64 IPv6 groups.
      *
+     * @param out the writer receiving the rendered HTML
+     * @param buf the scratch buffer the markup is built in
+     * @param map groups of 2 or more routers sharing an IPv6 /64, keyed by the prefix
+     * @throws IOException if the HTML cannot be written to the output
      * @since 0.9.57
      */
     private void renderIPGroups64(Writer out, StringBuilder buf, Map<Long, List<RouterInfo>> map) throws IOException {
@@ -924,6 +1061,10 @@ public class SybilRenderer {
     /**
      * Render the HTML for /48 IPv6 groups.
      *
+     * @param out the writer receiving the rendered HTML
+     * @param buf the scratch buffer the markup is built in
+     * @param map groups of 4 or more routers sharing an IPv6 /48, keyed by the prefix
+     * @throws IOException if the HTML cannot be written to the output
      * @since 0.9.57
      */
     private void renderIPGroups48(Writer out, StringBuilder buf, Map<Long, List<RouterInfo>> map) throws IOException {
@@ -955,6 +1096,11 @@ public class SybilRenderer {
 
     /**
      * Render the HTML for router family groups.
+     *
+     * @param out the writer receiving the rendered HTML
+     * @param buf the scratch buffer the markup is built in
+     * @param map routers grouped by family tag, single-member families not displayed
+     * @throws IOException if the HTML cannot be written to the output
      */
     private void renderIPGroupsFamily(Writer out, StringBuilder buf, Map<String, List<RouterInfo>> map) throws IOException {
         buf.append("<h3 id=samefamily class=sybils>").append(_t("Routers in the same Family"))
@@ -984,9 +1130,15 @@ public class SybilRenderer {
 
     /**
      * Render routers closer than MIN_CLOSE up to MAX routers.
+     *
+     * @param out the writer receiving the rendered HTML
+     * @param buf the scratch buffer the markup is built in
      * @param us the reference hash distances are measured from, or null to omit
-     * the distance row
-     * @param ris sorted, closest first
+     *           the distance row
+     * @param avgMinDist the average minimum floodfill hash distance, the
+     *                   threshold the sybil warnings compare against
+     * @param ris the routers to render, sorted closest first
+     * @throws IOException if the HTML cannot be written to the output
      */
     @SuppressWarnings("PMD.UnsynchronizedStaticFormatter")
     private synchronized void renderRouterInfoHTML(Writer out, StringBuilder buf, Hash us, double avgMinDist,
@@ -1066,10 +1218,14 @@ public class SybilRenderer {
      * Be careful to use stripHTML for any displayed routerInfo data
      * to prevent vulnerabilities.
      *
+     * @param buf the scratch buffer the router-info table markup is built in
+     * @param info the router to render
      * @param us ROUTING KEY or null
+     * @param isUs true to render this as our own router info, omitting the
+     *             family, country and profile-history links
      * @param full unused; vestigial, every caller passes false and the body
-     * never reads it
-     * @return distance to us if non-null, else 0
+     *             never reads it
+     * @return the log2 hash distance to us, or 0 if us is null
      */
     @SuppressWarnings("PMD.UnsynchronizedStaticFormatter")
     private synchronized double renderRouterInfo(StringBuilder buf, RouterInfo info, Hash us, boolean isUs, boolean full) {
@@ -1344,6 +1500,10 @@ public class SybilRenderer {
     /**
      * Write a network distance in human units.
      *
+     * @param out the writer receiving the formatted distance
+     * @param dist the raw XOR hash distance, written as log2 and highlighted
+     *             in red below MIN_CLOSE
+     * @throws IOException if the text cannot be written to the output
      * @since 0.9.28
      */
     private static void writeDistance(Writer out, BigInteger dist) throws IOException {
@@ -1353,12 +1513,22 @@ public class SybilRenderer {
         if (distance < MIN_CLOSE) {out.write("</span>");}
     }
 
-    /** Translate a string. */
+    /**
+     * Translate a string.
+     *
+     * @param s the translation key, holding the English text when untranslated
+     * @return the translated string, or s itself when no translation exists
+     */
     private String _t(String s) {
         return Messages.getString(s, _context);
     }
 
-    /** Tag only. */
+    /**
+     * Tag only.
+     *
+     * @param s the English text, marked for translators but not translated here
+     * @return the untranslated string, identical to s
+     */
     private static final String _x(String s) {
         return s;
     }
@@ -1369,11 +1539,12 @@ public class SybilRenderer {
      *
      * @param s string to be translated containing {0}
      *          The {0} will be replaced by the parameter.
-     *          Single quotes must be doubled, i.e. ' -> '' in the string.
+     *          Single quotes must be doubled, i.e. ' -&gt; '' in the string.
      * @param o parameter, not translated.
      *          To translate parameter also, use _t("foo {0} bar", _t("baz"))
      *          Do not double the single quotes in the parameter.
      *          Use autoboxing to call with ints, longs, floats, etc.
+     * @return the translated string, with {0} replaced by the parameter
      */
     private String _t(String s, Object o) {
         return Messages.getString(s, o, _context);

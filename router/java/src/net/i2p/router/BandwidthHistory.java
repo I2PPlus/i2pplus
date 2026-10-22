@@ -25,7 +25,7 @@ import net.i2p.util.SimpleTimer2;
  * page refreshes and router restarts.
  * <p>
  * Started automatically during router startup.
- * Accessed by {@link net.i2p.router.web.helpers.SidebarRenderer#getDataAttributes} to populate the
+ * Accessed by {@code net.i2p.router.web.helpers.SidebarRenderer#getDataAttributes} to populate the
  * canvas minigraph with real data instead of interpolated RRD points.
  *
  * @since 0.9.70+

@@ -65,7 +65,7 @@ import java.util.Arrays;
  * </ul>
  * <p><strong>Implementation Notes:</strong></p>
  * <ul>
- * <li><strong>Size Limitation:</strong> Support for keys >256 bytes not yet implemented</li>
+ * <li><strong>Size Limitation:</strong> Support for keys &gt;256 bytes not yet implemented</li>
  * <li><strong>Cache Index:</strong> First 4 bytes used for LRU cache lookup</li>
  * <li><strong>Type Safety:</strong> Algorithm type validation on creation</li>
  * </ul>

@@ -887,7 +887,7 @@ public class BuildHandler implements Runnable {
 
     /**
      * Decrypt the request, lookup the RI locally,
-     * and call {@link #handleReq()} if found or queue a lookup job.
+     * and call {@link #handleReq(RouterInfo, BuildMessageState, BuildRequestRecord, Hash)} if found or queue a lookup job.
      *
      * @return handle time or -1 if it wasn't completely handled
      */

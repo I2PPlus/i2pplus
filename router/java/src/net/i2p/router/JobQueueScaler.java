@@ -20,7 +20,8 @@ import net.i2p.util.SystemVersion;
  * <p>
  * <strong>Scaling Algorithm:</strong>
  * <ul>
- * <li>Scale UP when: readyJobs > activeRunners * scaleUpJobsRatio OR maxLag > scaleUpLagThreshold</li>
+ * <li>Scale UP when: readyJobs &gt; activeRunners * scaleUpJobsRatio OR maxLag
+ * &gt; scaleUpLagThreshold</li>
  * <li>Scale DOWN when: readyJobs &lt; activeRunners AND avgLag &lt; scaleDownLagThreshold (sustained)</li>
  * <li>Bounds: min runners = max(4, cores), max runners = min(2 * {@code router.maxJobRunners}, RAM-based limit)</li>
  * </ul>
@@ -30,10 +31,10 @@ import net.i2p.util.SystemVersion;
  * saturation rather than thread count. Emergency signals (critical lag,
  * wedged jobs, dropped jobs) override the suppression.
  * <ul>
- * <li>CPU saturation: {@code router.cpuLoad} > 85%</li>
- * <li>GC storm: {@code router.gcPauseTime} > 50 ms/min</li>
+ * <li>CPU saturation: {@code router.cpuLoad} &gt; 85%</li>
+ * <li>GC storm: {@code router.gcPauseTime} &gt; 50 ms/min</li>
  * <li>Network congestion: {@code tunnel.buildSuccessRate} &lt; 50%</li>
- * <li>Bandwidth saturation: bwLimiter.outboundDelayedTime > 500ms</li>
+ * <li>Bandwidth saturation: bwLimiter.outboundDelayedTime &gt; 500ms</li>
  * </ul>
  * <p>
  * <strong>Feedback Mechanism:</strong>
@@ -288,6 +289,9 @@ class JobQueueScaler implements Runnable {
 
     /**
      * Compute the median of the message delay history ring buffer.
+     *
+     * @return the median of the recorded message delays in ms, or 0 when no
+     *         samples have been recorded yet
      */
     private long computeMedianBaseline() {
         if (_msgDelayHistoryCount == 0) return 0;
@@ -299,6 +303,9 @@ class JobQueueScaler implements Runnable {
     /**
      * Read the 60s rolling average of tunnel build success rate (0-100 scale).
      * NaN if no data available.
+     *
+     * @return the average tunnel build success percentage for the last minute, or
+     *         NaN when the rate or its 1-minute rate has no data
      */
     private double readBuildSuccessRate() {
         net.i2p.stat.RateStat rs = _context.statManager().getRate("tunnel.buildSuccessRate");
@@ -807,6 +814,15 @@ class JobQueueScaler implements Runnable {
 
     /**
      * Check if we should scale down.
+     *
+     * @param activeRunners the current number of JobQueueRunner threads
+     * @param readyJobs jobs ready to run now, used for the job-to-runner ratio
+     * @param maxLag ms the oldest ready job has waited, logged with the action
+     * @param avgLag ms average lag of the ready jobs, compared with the
+     *               scale-down lag threshold
+     * @param minRunners the floor the runner count may not be reduced below
+     * @param inCooldown true when a scale action happened recently enough to
+     *                   suppress another one
      */
     private void checkScaleDown(int activeRunners, int readyJobs, long maxLag, long avgLag,
                                 int minRunners, boolean inCooldown) {
@@ -853,6 +869,14 @@ class JobQueueScaler implements Runnable {
      * Evaluate whether the last scale-up actually helped.
      * Checks multiple signals: avg lag, max lag, ready jobs, message delay, and dropped jobs.
      * If any signal worsened beyond threshold, rolls back.
+     *
+     * @param currentRunners runner count now, caps how many added runners roll back
+     * @param currentReadyJobs ready jobs now, compared with the pre-scale snapshot
+     * @param currentMaxLag ms, worst ready-job lag now, compared with the snapshot
+     * @param currentAvgLag ms average lag now, compared with the pre-scale average
+     * @param currentMessageDelay ms message delay now, checked against pre-scale lag
+     * @param currentDroppedJobs true when the queue has dropped jobs since the
+     *                           snapshot, which forces a rollback
      */
     private void evaluateScalingFeedback(int currentRunners, int currentReadyJobs,
                                         long currentMaxLag, long currentAvgLag,
@@ -930,7 +954,13 @@ class JobQueueScaler implements Runnable {
     }
 
     /**
-     * Scale up by adding runners.
+     * Scale up by adding runners, and snapshot the current queue metrics so the
+     * feedback check can judge whether the change helped.
+     *
+     * @param count runners to add, already capped at the maximum by the caller
+     * @param readyJobs ready job count now, logged and stored in the snapshot
+     * @param maxLag ms of worst ready-job lag now, stored in the snapshot
+     * @param avgLag ms of average lag now, the snapshot's lag baseline
      */
     private void scaleUp(int count, int readyJobs, long maxLag, long avgLag) {
         _lastScaleTime = _context.clock().now();
@@ -959,7 +989,12 @@ class JobQueueScaler implements Runnable {
     }
 
     /**
-     * Scale down by removing runners.
+     * Scale down by removing runners. The queue retires idle runners only, so
+     * fewer than requested may be removed.
+     *
+     * @param count runners to remove
+     * @param readyJobs ready job count now, logged with the action
+     * @param maxLag ms of worst ready-job lag now, logged with the action
      */
     private void scaleDown(int count, int readyJobs, long maxLag) {
         _lastScaleTime = _context.clock().now();

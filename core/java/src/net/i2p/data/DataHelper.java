@@ -123,7 +123,7 @@ public class DataHelper {
     /** Utility class. */
     private DataHelper() {}
 
-    /** See {@link #storeProps()}. 600-750 ms on RPi. */
+    /** See {@link #storeProps(Properties, File)}. 600-750 ms on RPi. */
     private static final boolean SHOULD_SYNC = !(SystemVersion.isAndroid() || SystemVersion.isARM());
 
     /**
@@ -215,7 +215,6 @@ public class DataHelper {
     /**
      * The default formatting for date/time, current locale, local time zone.
      *
-     * @return the date instance
      * @since 0.9.43
      */
     private static final DateFormat DATE_FORMAT = DateFormat.getDateInstance(DateFormat.MEDIUM);
@@ -2288,7 +2287,7 @@ public class DataHelper {
     }
 
     /**
-     * The shared output buffer for {@link #decompress()}.
+     * The shared output buffer for {@link #decompress(byte[])}.
      * <p>
      * A holder class rather than a static field of DataHelper, so the lookup is
      * done once and I2PAppContext is still not initialized until the first call.
@@ -2543,7 +2542,7 @@ public class DataHelper {
     }
 
     /**
-     * The shared buffer for {@link #copy()}, resolved once for the same reason and in the
+     * The shared buffer for {@link #copy(InputStream, OutputStream)}, resolved once for the same reason and in the
      * same way as {@link DecompressCacheHolder}.
      *
      * @since 0.9.72

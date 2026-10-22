@@ -737,7 +737,7 @@ List<PeerProfile> profiles = new ArrayList<>(Math.min(LIMIT_PROFILES, freshFiles
      * again, so the caller needs the list to go and request it. Empty when no
      * collection has been supplied.
      *
-     * @since 0.9.72
+     * @since 0.9.72+
      */
     private Set<Hash> _missingRouterInfo;
 
@@ -746,7 +746,7 @@ List<PeerProfile> profiles = new ArrayList<>(Math.min(LIMIT_PROFILES, freshFiles
      *
      * @param missingRouterInfo the set to fill during {@link #readProfiles},
      * or null to collect nothing
-     * @since 0.9.72
+     * @since 0.9.72+
      */
     void setMissingRouterInfoSink(Set<Hash> missingRouterInfo) { _missingRouterInfo = missingRouterInfo; }
 

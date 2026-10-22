@@ -793,7 +793,7 @@ class ConnectionHandler {
      * Re-send a SYN-ACK in response to a retransmitted SYN for an existing connection.
      * This prevents the race condition where:
      * 1. Client sends SYN, server creates connection, sends SYN-ACK
-     * 2. Client retransmits SYN before receiving SYN-ACK (RTT > RTO)
+     * 2. Client retransmits SYN before receiving SYN-ACK (RTT &gt; RTO)
      * 3. Server destroys the old connection (which the client already completed handshake on)
      * 4. Client's data arrives on dead stream IDs - dropped forever
      * <p>

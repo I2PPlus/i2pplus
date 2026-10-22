@@ -44,7 +44,7 @@ class SOCKS4aServer extends SOCKSServer {
 
     private boolean setupCompleted;
 
-    /** Sticky proxy cache: host -> selected proxy. */
+    /** Sticky proxy cache: host -&gt; selected proxy. */
     private final ConcurrentHashMap<String, String> _proxyCache = new ConcurrentHashMap<>();
 
     /**

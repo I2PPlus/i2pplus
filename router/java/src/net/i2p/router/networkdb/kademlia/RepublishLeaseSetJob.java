@@ -55,7 +55,7 @@ public class RepublishLeaseSetJob extends JobImpl {
     public static final int RETRY_MAX_DELAY_DEFAULT = (int) (120L * 1000);
     /** Window before lease expiry to trigger a re-mint instead of flooding the
      * dying copy.  Must stay below (lease cap - republish interval) — here
-     * 240s < 600s - 300s — so a freshly re-minted copy (capped at ~600s) still
+     * 240s &lt; 600s - 300s — so a freshly re-minted copy (capped at ~600s) still
      * presents above this window at the next interval check and gets flooded
      * directly; with an equal boundary the check lands at the knife edge and
      * re-mints forever, starving the floodfill. */

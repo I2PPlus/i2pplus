@@ -24,7 +24,7 @@ import org.junit.Test;
  * and stores: any success adds 0 and any failure adds 1. Peer selection reads
  * this rate, so the add-data value of every mutator has to stay exact.
  *
- * @since 0.9.72
+ * @since 0.9.72+
  */
 public class DBHistoryMetricTest {
 

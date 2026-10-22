@@ -32,7 +32,7 @@ public abstract class I2NPMessageImpl implements I2NPMessage {
     protected long _expiration;
 
     /**
-     * Warning, lazily initialized by {@link #readBytes()}, writeBytes(), toByteArray(),
+     * Warning, lazily initialized by {@link #readBytes(byte[], int, int)}, writeBytes(), toByteArray(),
      * {@link #getUniqueId()}, and setUniqueId(). Otherwise will be -1.
      * Extending classes should take care when accessing this field;
      * to ensure initialization, use getUniqueId() instead.

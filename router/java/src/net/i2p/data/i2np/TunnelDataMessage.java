@@ -16,7 +16,7 @@ import net.i2p.util.ByteCache;
 /**
  * Defines the message sent between routers as part of the tunnel delivery
  * <p>
- * The tunnel ID is changed in-place by {@link net.i2p.router.tunnel.TunnelParticipant#send}, so
+ * The tunnel ID is changed in-place by {@code TunnelParticipant.send()}, so
  * we can't reuse the checksum on output, but we still subclass
  * FastI2NPMessageImpl so we don't verify the checksum on input...
  * because this is a high-usage class.

@@ -48,9 +48,9 @@ import net.i2p.util.ObjectCounterUnsafe;
  */
 class TunnelRenderer {
     private static final Pattern TUNNEL_PAREN = Pattern.compile("\\([^)]+\\)");
-    /** "AT&T" followed by anything (whois cleanup). */
+    /** "AT&amp;T" followed by anything (whois cleanup). */
     private static final Pattern ATT_PREFIX = Pattern.compile("(?i)AT\\s*&\\s*T\\s+.*");
-    /** A bare "&T" run (whois cleanup). */
+    /** A bare "&amp;T" run (whois cleanup). */
     private static final Pattern AMP_T_RUN = Pattern.compile("(?i)&\\s*T\\b.*");
     private final RouterContext _context;
 
@@ -868,6 +868,17 @@ class TunnelRenderer {
      * Append one tunnel peer count row: identity cells plus local and transit
      * tunnel bars and the edit link.
      *
+     * @param chunkSb the buffer the row markup is appended to
+     * @param h the peer's router hash
+     * @param info the peer's router info, or null if it is not in the NetDb
+     * @param tunnelCount total local tunnels, the denominator of the local bar
+     * @param partCount total transit tunnels, the denominator of the transit bar
+     * @param localTunnelCount how many local tunnels this peer is in
+     * @param transitTunnelCount how many transit tunnels this peer is in
+     * @param versionTip pre-translated tooltip for the version link
+     * @param unknownLabel pre-translated label when the version is unknown
+     * @param configurePeerTip pre-translated tooltip for the edit link
+     * @param editLabel pre-translated label of the edit link
      * @since 0.9.70+
      */
     private void appendPeerRow(StringBuilder chunkSb, Hash h, RouterInfo info, int tunnelCount, int partCount,
@@ -918,6 +929,10 @@ class TunnelRenderer {
     /**
      * Append the totals footer row of the tunnel peer count table.
      *
+     * @param footerSb the buffer the footer row markup is appended to
+     * @param validPeerCount peers with a router info, shown as "unique peers"
+     * @param tunnelCount total local tunnels, shown as "local"
+     * @param partCount total transit tunnels, shown as "transit", row omitted at 0
      * @since 0.9.70+
      */
     private void appendPeerFooterRow(StringBuilder footerSb, int validPeerCount, int tunnelCount, int partCount) {
@@ -947,6 +962,10 @@ class TunnelRenderer {
     /**
      * Append the closing tfoot and wrapper for the tunnel peer count table.
      *
+     * @param footerSb the buffer the footer row and closing markup are appended to
+     * @param validPeerCount peers with a router info, shown as "unique peers"
+     * @param tunnelCount total local tunnels, shown as "local"
+     * @param partCount total transit tunnels, shown as "transit", row omitted at 0
      * @since 0.9.70+
      */
     private void appendPeerFooter(StringBuilder footerSb, int validPeerCount, int tunnelCount, int partCount) {
@@ -1184,7 +1203,9 @@ class TunnelRenderer {
 
     /**
      * Get display name for the tunnel.
-     * @return the tunnel name
+     *
+     * @param in the inbound pool whose settings provide the destination nickname
+     * @return the escaped nickname, or the base32 destination when unnamed
      * @since 0.9.57
      */
     private String getTunnelName(TunnelPool in) {
@@ -1295,6 +1316,9 @@ class TunnelRenderer {
      * Data, Gateway, Participants, and Endpoint columns. The Participants
      * column spans the longest tunnel minus the first and last hops.
      *
+     * @param buf the buffer the header markup is appended to
+     * @param maxLength the longest tunnel length in hops, deciding which
+     *                  participant and endpoint columns are emitted
      * @since 0.9.70+
      */
     private void appendTableHeader(StringBuilder buf, int maxLength) {
@@ -1337,6 +1361,15 @@ class TunnelRenderer {
      * <p>Terminates the row only - the caller closes {@code </tbody>} once,
      * after the last row.
      *
+     * @param buf the buffer the row markup is appended to
+     * @param info the tunnel to render
+     * @param timeLeft ms until the tunnel expires, greater than 0
+     * @param maxLength the longest tunnel in the table, the peer cells are padded to
+     * @param tib pre-translated "Inbound" label for the direction cell
+     * @param tob pre-translated "Outbound" label for the direction cell
+     * @param localHopTip pre-translated tooltip for the local hop badge
+     * @param localLabel pre-translated label for the local hop badge
+     * @param tunnelIdTip pre-translated tooltip for the hop's tunnel id
      * @return the processed message count, for the bandwidth footer
      * @since 0.9.70+
      */
@@ -1406,6 +1439,14 @@ class TunnelRenderer {
      * render as netdb links with their tunnel ids. Zero-hop and short tunnels
      * are padded with empty cells to align the table columns.
      *
+     * @param buf the buffer the peer cells are appended to
+     * @param info the tunnel whose hops are rendered
+     * @param length the number of hops in this tunnel
+     * @param maxLength the longest tunnel in the table, the number of cells to pad to
+     * @param isAdvanced true to show each hop's tunnel id, from the advanced-mode property
+     * @param localHopTip pre-translated tooltip for the local hop badge
+     * @param localLabel pre-translated label for the local hop badge
+     * @param tunnelIdTip pre-translated tooltip for the hop's tunnel id
      * @since 0.9.70+
      */
     private void appendPeerCells(StringBuilder buf, TunnelInfo info, int length, int maxLength,
@@ -1446,6 +1487,9 @@ class TunnelRenderer {
      * Write the buffered HTML to the output writer and clear the buffer,
      * used to flush large tables in batches so the page paints progressively.
      *
+     * @param out the writer the buffer is written to
+     * @param buf the buffer to write and then clear
+     * @throws IOException if writing fails
      * @since 0.9.70+
      */
     private void flushBuf(Writer out, StringBuilder buf) throws IOException {
@@ -1457,6 +1501,8 @@ class TunnelRenderer {
     /**
      * Append the tunnel test status cell, with the status-specific tooltip.
      *
+     * @param buf the buffer the status cell is appended to
+     * @param info the tunnel whose test status is displayed
      * @since 0.9.70+
      */
     private void renderTestStatus(StringBuilder buf, TunnelInfo info) {
@@ -1705,7 +1751,12 @@ class TunnelRenderer {
         return (int) (pct * Math.min(irateKBps, orateKBps));
     }
 
-    /** Translate a string. */
+    /**
+     * Translate a string.
+     *
+     * @param s the translation key, holding the English text when untranslated
+     * @return the translated string, or s itself when no translation exists
+     */
     private String _t(String s) {return Messages.getString(s, _context);}
 
     /**
@@ -1718,7 +1769,12 @@ class TunnelRenderer {
      */
     public String _t(String s, Object o) {return Messages.getString(s, o, _context);}
 
-    /** Generate a percentage bar for expiry time, appending straight to the row buffer. */
+    /**
+     * Generate a percentage bar for expiry time, appending straight to the row buffer.
+     *
+     * @param buf the buffer the bar markup is appended to
+     * @param timeLeft ms until the tunnel expires, clamped at 0, bar full at 10 minutes
+     */
     private void renderExpiryBar(StringBuilder buf, long timeLeft) {
         if (timeLeft <= 0) {timeLeft = 0;}
         boolean fiveLeft = timeLeft < 5*60*1000;
@@ -1738,6 +1794,12 @@ class TunnelRenderer {
 
     /**
      * Render a summary table for a tunnel pool.
+     *
+     * @param out the writer to render to
+     * @param in the inbound pool, not null
+     * @param outPool the outbound pool, or null for none
+     * @param client the destination the pool serves, unused by the current body
+     * @throws IOException if writing fails
      * @since 0.9.68+
      */
     private void renderPoolSummary(Writer out, TunnelPool in, TunnelPool outPool, Hash client) throws IOException {
@@ -1765,7 +1827,12 @@ class TunnelRenderer {
         out.write("</tr></thead>\n</table>\n");
     }
 
-    /** Get next tunnel expiry from pool (excludes failed tunnels). */
+    /**
+     * Get next tunnel expiry from pool (excludes failed tunnels).
+     *
+     * @param pool the pool scanned for the earliest live tunnel expiry
+     * @return ms since the epoch of that expiry, 0 if no tunnel qualifies
+     */
     private long getNextExpiry(TunnelPool pool) {
         long next = 0;
         for (TunnelInfo ti : pool.listTunnels()) {

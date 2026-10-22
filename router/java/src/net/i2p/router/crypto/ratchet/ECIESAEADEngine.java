@@ -154,7 +154,7 @@ public final class ECIESAEADEngine {
         }
     }
 
-    //// start decrypt ////
+    /* start decrypt */
 
     /**
      * Try to decrypt the message with one or both of the given private keys.
@@ -252,7 +252,8 @@ public final class ECIESAEADEngine {
      * @param data the encrypted CloveSet to decrypt
      * @param targetPrivateKey private key matching the encryption type of the data
      * @param keyManager holds the session tags and key material used to decrypt
-     * @return decrypted data or null on failure
+     * @return the decrypted cloves, null if no key was found for the tag, or an
+     *         empty set if the decrypt or the payload parse failed
      * @throws DataFormatException if the payload cannot be parsed as a garlic clove set
      * @since 0.9.46
      */
@@ -273,7 +274,12 @@ public final class ECIESAEADEngine {
     /**
      * NSR/ES only.
      *
-     * @return decrypted data or null on failure
+     * @param data the encrypted NewSessionReply or ExistingSession message
+     * @param targetPrivateKey our private key matching the message's encryption type
+     * @param keyManager the key manager whose session tags are searched for the tag
+     * @return the decrypted cloves, or null if the 8-byte tag is unknown or the
+     *         data is below the minimum size
+     * @throws DataFormatException if the payload cannot be parsed as a garlic clove set
      * @since 0.9.46
      */
     private CloveSet x_decryptFast(byte[] data, PrivateKey targetPrivateKey,
@@ -299,9 +305,15 @@ public final class ECIESAEADEngine {
     /**
      * NSR/ES only.
      *
-     * @param key non-null
-     * @param data non-null
-     * @return decrypted data or null on failure
+     * @param tag the 8-byte session tag copied out of the start of data
+     * @param st the session tag object built from those 8 bytes
+     * @param key non-null key and nonce the key manager holds for that tag
+     * @param data the encrypted NewSessionReply or ExistingSession message
+     * @param targetPrivateKey our private key matching the message's encryption type
+     * @param keyManager holds the session tags and key material used to decrypt
+     * @return the decrypted cloves, or null if the reply is too short or the MAC
+     *         check fails
+     * @throws DataFormatException if the payload cannot be parsed as a garlic clove set
      * @since 0.9.46
      */
     private CloveSet xx_decryptFast(byte[] tag, RatchetSessionTag st, SessionKeyAndNonce key,
@@ -372,7 +384,13 @@ public final class ECIESAEADEngine {
     /**
      * NS only.
      *
-     * @return decrypted data or null on failure
+     * @param data the encrypted NewSession or NewSession/LeaseSet message
+     * @param targetPrivateKey our private key matching the message's encryption type
+     * @param keyManager holds the session tags and key material; a null destination
+     *                   marks the router variant, NewSession_N
+     * @return the decrypted cloves, or null if the data is below the minimum size
+     *         for the key type or the decrypt fails
+     * @throws DataFormatException if the payload cannot be parsed as a garlic clove set
      * @since 0.9.46
      */
     private CloveSet x_decryptSlow(byte[] data, PrivateKey targetPrivateKey,
@@ -404,6 +422,7 @@ public final class ECIESAEADEngine {
     /**
      * Verify the encryption type is supported by this engine.
      *
+     * @param type the encryption type this engine must be able to handle
      * @throws IllegalArgumentException if type is not one this engine handles
      * @since 0.9.67
      */
@@ -422,7 +441,9 @@ public final class ECIESAEADEngine {
     /**
      * The Noise handshake pattern for the given encryption type.
      *
-     * @return the noise pattern
+     * @param type the encryption type to select a handshake pattern for
+     * @return IK for X25519, or IKHFS_n for the matching ML-KEM hybrid type
+     * @throws IllegalArgumentException if no pattern is defined for the type
      * @since 0.9.67
      */
     private static NoiseInit.PatternID getNoisePattern(EncType type) {
@@ -472,7 +493,9 @@ public final class ECIESAEADEngine {
     /**
      * The minimum New Session message size for the given encryption type.
      *
+     * @param type the encryption type whose New Session minimum is wanted
      * @return the minimum new-session message size in bytes for this type
+     * @throws IllegalArgumentException if no minimum is defined for the type
      * @since 0.9.67
      */
     private static int getMinNSSize(EncType type) {
@@ -493,7 +516,9 @@ public final class ECIESAEADEngine {
     /**
      * The minimum New Session Reply message size for the given encryption type.
      *
+     * @param type the encryption type whose reply minimum is wanted
      * @return the minimum new-session-reply message size in bytes for this type
+     * @throws IllegalArgumentException if no minimum is defined for the type
      * @since 0.9.67
      */
     private static int getMinNSRSize(EncType type) {
@@ -512,9 +537,12 @@ public final class ECIESAEADEngine {
     }
 
     /**
-     * The encryption type set for the given encryption type.
+     * The lease set key types that go with the given encryption type.
      *
-     * @return the enc type set
+     * @param type the encryption type to map to a lease set key set
+     * @return the {@link LeaseSetKeys} set for that type, one of SET_EC, SET_PQ1,
+     *         SET_PQ2 or SET_PQ3
+     * @throws IllegalArgumentException if no set is defined for the type
      * @since 0.9.67
      */
     private static Set<EncType> getEncTypeSet(EncType type) {
@@ -548,7 +576,12 @@ public final class ECIESAEADEngine {
      * </pre>
      *
      * @param data 103 bytes minimum
-     * @return null if decryption fails
+     * @param targetPrivateKey our private key matching the message's encryption type
+     * @param keyManager holds the ephemeral-key replay cache and receives the new
+     *                   session on success
+     * @return the decrypted cloves, null if the Elligator2 decode or the handshake
+     *         fails, or an empty set for a replayed key or a payload with no garlic
+     * @throws DataFormatException if the decrypted payload blocks cannot be parsed
      */
     private CloveSet decryptNewSession(byte[] data, PrivateKey targetPrivateKey, RatchetSKM keyManager)
                                      throws DataFormatException {
@@ -721,7 +754,11 @@ public final class ECIESAEADEngine {
      * </pre>
      *
      * @param data 55 bytes minimum
-     * @return null if decryption fails
+     * @param targetPrivateKey our private key matching the message's encryption type
+     * @param keyManager holds the ephemeral-key replay cache checked before the DH work
+     * @return the decrypted cloves, null if the key or the handshake check fails,
+     *         or an empty set for a replayed key or a payload with no garlic
+     * @throws DataFormatException if the decrypted payload blocks cannot be parsed
      * @since 0.9.49
      */
     private CloveSet decryptNewSession_N(byte[] data, PrivateKey targetPrivateKey, RatchetSKM keyManager)
@@ -844,7 +881,10 @@ public final class ECIESAEADEngine {
      * @param data 72 bytes minimum
      * @param oldState will be cloned here, then destroyed on failure
      * @param keyManager the session key manager for this handshake
-     * @return null if decryption fails
+     * @return the decrypted cloves, null if the state clone, the Elligator2 decode
+     *         or part 1 fails, or an empty set if the payload MAC fails or the
+     *         payload has no garlic block
+     * @throws DataFormatException if the decrypted payload blocks cannot be parsed
      */
     private CloveSet decryptNewSessionReply(byte[] tag, byte[] data, HandshakeState oldState, RatchetSKM keyManager)
                                           throws DataFormatException {
@@ -1003,8 +1043,12 @@ public final class ECIESAEADEngine {
      *
      * @param tag 8 bytes for ad, same as first 8 bytes of data
      * @param data 24 bytes minimum, first 8 bytes will be skipped
+     * @param key the session key and nonce the key manager holds for that tag
+     * @param _targetPrivateKey our private key, unused as the session key is set up
      * @param keyManager for ack callbacks
-     * @return decrypted data or null on failure
+     * @return the decrypted cloves, null if the MAC check fails, or an empty set if
+     *         the payload is empty or carries no garlic block
+     * @throws DataFormatException if the decrypted payload blocks cannot be parsed
      */
     private CloveSet decryptExistingSession(byte[] tag, byte[] data, SessionKeyAndNonce key,
                                             PrivateKey _targetPrivateKey, RatchetSKM keyManager)
@@ -1069,6 +1113,11 @@ public final class ECIESAEADEngine {
      * encrypted[offset:offset + len - 16].
      *
      * @param ad optional associated data, may be null
+     * @param encrypted the ciphertext, overwritten in place with the plaintext
+     * @param offset where the ciphertext starts in encrypted
+     * @param encryptedLen bytes to decrypt at offset, including the 16-byte MAC
+     * @param key the 32-byte ChaCha20-Poly1305 key to decrypt with
+     * @param n the nonce for this message, taken from the session key's counter
      * @return true if the MAC verified and the data was decrypted in place
      */
     private boolean decryptAEADBlock(byte[] ad, byte[] encrypted, int offset, int encryptedLen, SessionKey key,
@@ -1103,7 +1152,7 @@ public final class ECIESAEADEngine {
         }
     }
 
-    //// end decrypt, start encrypt ////
+    /* end decrypt, start encrypt */
 
     /**
      * Encrypt the data to the target using the given key and deliver the specified tags
@@ -1137,13 +1186,16 @@ public final class ECIESAEADEngine {
      * Encrypt the cloves to the target, selecting New Session, New Session Reply, or Existing
      * Session encryption as appropriate.
      *
+     * @param cloves the cloves to encrypt and send
+     * @param target the peer's static public key to encrypt to, never the all-zero key
      * @param to destination to encrypt for, required when priv is non-null
      * @param priv local private key to encrypt with, from the leaseset
      *             may be null for anonymous (N-in-IK)
      *
      * @param keyManager session key manager, required when priv is non-null
      * @param callback may be null, not used when priv is null
-     * @return encrypted data or null on failure
+     * @return the encrypted message, or null if the target is the all-zero key or
+     *         the selected scheme fails
      */
     private byte[] x_encrypt(CloveSet cloves, PublicKey target, Destination to, PrivateKey priv,
                              RatchetSKM keyManager,
@@ -1210,13 +1262,16 @@ public final class ECIESAEADEngine {
      * - 16 byte MAC
      * </pre>
      *
+     * @param cloves the cloves to encrypt and send
+     * @param target the peer's static public key to encrypt to
      * @param to destination to encrypt for, required when priv is non-null
      * @param priv local private key to encrypt with, from the leaseset
      *             may be null for anonymous (N-in-IK)
      *
      * @param keyManager session key manager, required when priv is non-null
      * @param callback may be null, not used when priv is null
-     * @return encrypted data or null on failure
+     * @return the encrypted NewSession message, or null if the handshake or the
+     *         Elligator2 encoding fails
      */
     private byte[] encryptNewSession(CloveSet cloves, PublicKey target, Destination to, PrivateKey priv,
                                      RatchetSKM keyManager,
@@ -1287,7 +1342,9 @@ public final class ECIESAEADEngine {
      * - 16 byte MAC
      * </pre>
      *
-     * @return encrypted data or null on failure
+     * @param cloves the cloves to encrypt and send
+     * @param target the peer's static public key to encrypt to
+     * @return the encrypted anonymous NewSession message, or null if the handshake fails
      * @since 0.9.49
      */
     private byte[] encryptNewSession(CloveSet cloves, PublicKey target) {
@@ -1335,9 +1392,14 @@ public final class ECIESAEADEngine {
      * - 16 byte MAC
      * </pre>
      *
+     * @param cloves the cloves to encrypt and send
+     * @param target the peer's static public key we are replying to
      * @param state must have already been cloned
+     * @param currentTag the 8-byte session tag to prefix the message with, mixed
+     *                   into the handshake hash
+     * @param keyManager updated with the split keys and the callback on success
      * @param callback may be null
-     * @return encrypted data or null on failure
+     * @return the encrypted NewSessionReply, or null if either part of the encrypt fails
      */
     private byte[] encryptNewSessionReply(CloveSet cloves, PublicKey target, HandshakeState state,
                                           RatchetSessionTag currentTag, RatchetSKM keyManager,
@@ -1414,8 +1476,13 @@ public final class ECIESAEADEngine {
      * - 16 byte MAC
      * </pre>
      *
+     * @param cloves the cloves to encrypt and send
      * @param target only used if callback is non-null to register it
-     * @return encrypted data or null on failure
+     * @param re the tag, key and pending next keys and acks taken from the key manager
+     * @param callback may be null, if non-null an ack is requested and the callback
+     *                 registered for this tag
+     * @param keyManager registers the callback for this tag when callback is non-null
+     * @return the encrypted ExistingSession message, or null if the AEAD encrypt fails
      */
     private byte[] encryptExistingSession(CloveSet cloves, PublicKey target, RatchetEntry re,
                                           ReplyCallback callback,
@@ -1483,7 +1550,11 @@ public final class ECIESAEADEngine {
      * Encrypt the data with the given key and nonce.
      *
      * @param ad may be null
-     * @return space will be left at beginning for ad (tag), null on error
+     * @param data the payload to encrypt
+     * @param key the 32-byte ChaCha20-Poly1305 session key
+     * @param n the nonce for this message, 0 for the anonymous netdb replies
+     * @return a buffer with room for the ad, then the ciphertext and the 16-byte
+     *         MAC, or null if the cipher fails
      */
     private final byte[] encryptAEADBlock(byte[] ad, byte[] data, SessionKey key, long n) {
         ChaChaPolyCipherState chacha = _chachaLocal.get();
@@ -1567,12 +1638,12 @@ public final class ECIESAEADEngine {
         }
         /**
          * Process an options field from the payload.
-         * <p>Intentionally a log-only no-op. This router never emits an
-         * OPTIONS block (no option bytes are negotiated in
-         * {@code createPayload()}) and no local state transition, tag,
-         * session key, or acknowledgement behavior is defined in terms of
-         * OPTIONS, so ignoring a received block is protocol-correct. The
-         * length and framing are already validated by the parser.
+         * <p>Intentionally a log-only no-op. This router never emits an OPTIONS
+         * block (no option bytes are negotiated in {@code createPayload()}) and no
+         * local state transition, tag, session key, or acknowledgement behavior is
+         * defined in terms of OPTIONS, so ignoring a received block is
+         * protocol-correct. The length and framing are already validated by the
+         * parser.
          *
          * @param options the option bytes
          * @param isHandshake true only for message 3 part 2
@@ -1662,8 +1733,10 @@ public final class ECIESAEADEngine {
     /**
      * Create the payload, adding a DateTime block if expiration is greater than zero.
      *
+     * @param cloves the garlic cloves to include as payload blocks
      * @param expiration if greater than zero, add a DateTime block
      * @param overhead bytes to be added later, to assist in padding calculation
+     * @return the padded payload blocks, ready for the handshake or AEAD layer
      * @since 0.9.46
      */
     private byte[] createPayload(CloveSet cloves, long expiration, int overhead) {
@@ -1678,12 +1751,15 @@ public final class ECIESAEADEngine {
     /**
      * Create the payload from the given cloves and optional blocks.
      *
+     * @param cloves the garlic cloves to include as payload blocks
      * @param expiration if greater than zero, add a DateTime block
      * @param ackreq to request an ack, must be false for NS/NSR
-     * @param nextKey1 may be null
-     * @param nextKey2 may be null
-     * @param acksToSend may be null
+     * @param nextKey1 next session key block to include, may be null
+     * @param nextKey2 second next session key block, may be null
+     * @param acksToSend acknowledgement ids to send, may be null
      * @param overhead bytes to be added later, to assist in padding calculation
+     * @return the payload blocks, padded to stay under the tunnel message size
+     *         boundaries of 944, 1936 or 2932 bytes
      */
     private byte[] createPayload(CloveSet cloves, long expiration,
                                  boolean ackreq, NextSessionKey nextKey1,
@@ -1922,8 +1998,7 @@ public final class ECIESAEADEngine {
         /**
          * Take a pooled DateTimeBlock for this expiry, or allocate one.
          *
-         * @param time the expiry in milliseconds since the epoch (written to the
-         * wire as 4-byte seconds)
+         * @param time the expiry in ms since the epoch (4-byte seconds on the wire)
          * @return a DateTimeBlock carrying time
          */
         DateTimeBlock acquireDateTime(long time) {

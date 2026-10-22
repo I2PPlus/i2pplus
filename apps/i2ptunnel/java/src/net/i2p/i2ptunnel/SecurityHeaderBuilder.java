@@ -116,7 +116,6 @@ public class SecurityHeaderBuilder {
      *   <li>Existing Cache-Control headers are preserved unless they contain
      *       "none" or "post-check" which are stripped</li>
      * </ul>
-     * </p>
      * <p>
      * If an existing Cache-Control contains "no-cache" and the content is
      * immutable, it is upgraded to immutable caching.

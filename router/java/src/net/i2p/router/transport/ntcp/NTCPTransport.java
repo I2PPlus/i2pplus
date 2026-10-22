@@ -1500,7 +1500,7 @@ public int getEstimatedRTT(Hash peer) {
     }
 
     /**
-     * Only called by {@link #externalAddressReceived()}.
+     * Only called by {@link #externalAddressReceived(byte[], boolean, int)}.
      * Calls replaceAddress() or removeAddress().
      * To remove all addresses, call replaceAddress(null) directly.
      * <p>
@@ -1557,13 +1557,13 @@ public int getEstimatedRTT(Hash peer) {
     public void adjustWriterThreads() { _writer.adjustThreads(); }
 
     /**
-     * Only does something if port > 0 and port != current bound port
+     * Only does something if port &gt; 0 and port != current bound port
      * (or there's no current port, or the configured interface or hostname changed).
      * If we are changing the bound port, this restarts everything, which takes a long time.
      * <p>
      * call from synchronized method.
      *
-     * @param port the requested bind port, does nothing if <= 0
+     * @param port the requested bind port, does nothing if &lt;= 0
      * @return new address ONLY if bound to specific address, otherwise null
      */
     private RouterAddress bindAddress(int port) {

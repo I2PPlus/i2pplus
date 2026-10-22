@@ -1138,7 +1138,7 @@ public class TunnelControllerGroup implements ClientApp {
     }
 
     /**
-     * Start all of the tunnels. Must call {@link #loadControllers()} first.
+     * Start all of the tunnels. Must call {@link #loadControllers(File)} first.
      * @since 0.9.20
      */
     private synchronized void startControllers() {
@@ -1254,7 +1254,7 @@ public class TunnelControllerGroup implements ClientApp {
 
     /**
      * Add the given tunnel to the set of known controllers (but don't add it to a config file or start
-      * it or anything).
+     * it or anything).
      *
      * @param controller the tunnel to add to the known set
      */
@@ -1592,7 +1592,6 @@ public class TunnelControllerGroup implements ClientApp {
      * numbered config file, into properties one for each tunnel.
      *
      * @return non-null, properties loaded, one for each tunnel
-     * @throws IOException if unable to load from file
      * @since 0.9.42
      */
     private List<Properties> splitMonolithicConfig(Properties config) {

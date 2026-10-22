@@ -56,7 +56,7 @@ public final class DSAEngine {
     private static final ThreadLocal<MessageDigest> _sha512 = ThreadLocal.withInitial(DSAEngine::sha512);
 
     /**
-     * dsaq - 2, the Fermat exponent for the constant-time DSA nonce inverse.
+     * Two less than dsaq, the Fermat exponent for the constant-time DSA nonce inverse.
      *
      * @see #signIt
      */
@@ -73,6 +73,11 @@ public final class DSAEngine {
     /**
      * New EdDSA or RedDSA engine for the given type, sharing the caller's
      * (thread-local) SHA-512 digest.
+     *
+     * @param type the signature type; RedDSA_SHA512_Ed25519 selects the RedDSA
+     *             engine, any other type the standard EdDSA engine
+     * @param md the SHA-512 digest the new engine writes into
+     * @return a newly allocated engine, non-null
      */
     private static EdDSAEngine engineFor(SigType type, MessageDigest md) {
         if (type == SigType.RedDSA_SHA512_Ed25519)
@@ -242,8 +247,12 @@ public final class DSAEngine {
     /**
      * Verify using DSA-SHA1 or Syndie DSA-SHA256 ONLY.
      *
+     * @param signature a DSA-SHA1 signature, the only type accepted
      * @param hash either a Hash or a SHA1Hash
+     * @param verifyingKey a DSA-SHA1 public key, the only type accepted
      * @return true if valid, false otherwise
+     * @throws IllegalArgumentException if the signature or the key is not
+     *                                  DSA-SHA1
      * @since 0.8.3
      */
     private boolean verifySig(Signature signature, SimpleDataStructure hash, SigningPublicKey verifyingKey) {
@@ -447,7 +456,9 @@ public final class DSAEngine {
      * Sign using DSA-SHA1 or Syndie DSA-SHA256 ONLY.
      *
      * @param hash either a Hash or a SHA1Hash
-     * @return null on error
+     * @param signingKey a DSA-SHA1 private key, the only type accepted
+     * @return the 40-byte signature (r then s), or null on error
+     * @throws IllegalArgumentException if the key is not DSA-SHA1
      * @since 0.8.3
      */
     private Signature signIt(SimpleDataStructure hash, SigningPrivateKey signingKey) {
@@ -521,7 +532,7 @@ public final class DSAEngine {
      * Prefer calculateHash(byte[], int, int) for byte array inputs.
      *
      * @param in the stream to read to EOF, not closed here
-     * @return hash SHA-1 hash, NOT a SHA-256 hash
+     * @return the SHA-1 hash, NOT a SHA-256 hash, or null on an IO error
      */
     public SHA1Hash calculateHash(InputStream in) {
         MessageDigest digest = _sha1.get();
@@ -558,8 +569,15 @@ public final class DSAEngine {
     /**
      * Generic verify any type.
      *
+     * @param signature the signature to check, of any signature type
+     * @param data the data the signature was made over
+     * @param offset where the signed data starts in data
+     * @param len how many bytes of data to verify
+     * @param verifyingKey the public key to check against, of the same
+     *                     type as the signature
      * @return true if valid, false otherwise
-     * @throws GeneralSecurityException if algorithm unvailable or on other errors
+     * @throws GeneralSecurityException if algorithm unavailable or on other errors
+     * @throws IllegalArgumentException if the signature and key types differ
      * @since 0.9.9 added off/len 0.9.12
      */
     private boolean altVerifySig(Signature signature, byte[] data, int offset, int len, SigningPublicKey verifyingKey) throws GeneralSecurityException {
@@ -590,8 +608,13 @@ public final class DSAEngine {
      * <p>
      * Warning, nonstandard for EdDSA, double-hashes, not recommended.
      *
+     * @param signature the signature to check, of any signature type
+     * @param hash the pre-computed hash, of the signature type's hash length
+     * @param verifyingKey the public key to check against, of the same
+     *                     type as the signature
      * @return true if valid, false otherwise
-     * @throws GeneralSecurityException if algorithm unvailable or on other errors
+     * @throws GeneralSecurityException if algorithm unavailable or on other errors
+     * @throws IllegalArgumentException if the signature and key types differ
      * @since 0.9.9
      */
     private boolean altVerifySigRaw(Signature signature, SimpleDataStructure hash, SigningPublicKey verifyingKey) throws GeneralSecurityException {
@@ -609,9 +632,14 @@ public final class DSAEngine {
      * <p>
      * Warning, nonstandard for EdDSA, double-hashes, not recommended.
      *
-     * @param pubKey Java key
+     * @param signature the signature to check, of any signature type
+     * @param hash the pre-computed hash, of the signature type's hash length
+     * @param pubKey the public key as a Java key, with its own parameters
+     *               intact
      * @return true if valid, false otherwise
-     * @throws GeneralSecurityException if algorithm unvailable or on other errors
+     * @throws GeneralSecurityException if algorithm unavailable or on other errors
+     * @throws IllegalArgumentException if the hash length does not match the
+     *                                  signature type's hash length
      * @since 0.9.9
      */
     private boolean altVerifySigRaw(Signature signature, SimpleDataStructure hash, PublicKey pubKey) throws GeneralSecurityException {
@@ -639,10 +667,16 @@ public final class DSAEngine {
     }
 
     /**
-     * Alternate to {@link #verifySignature()} using java.security libraries.
+     * Alternate to {@link #verifySignature(Signature, byte[], int, int, SigningPublicKey)}
+     * using java.security libraries.
      *
+     * @param signature the DSA-SHA1 signature to check
+     * @param data the data the signature was made over
+     * @param offset where the signed data starts in data
+     * @param len how many bytes of data to verify
+     * @param verifyingKey the DSA public key to check against
      * @return true if valid, false otherwise
-     * @throws GeneralSecurityException if algorithm unvailable or on other errors
+     * @throws GeneralSecurityException if algorithm unavailable or on other errors
      * @since 0.8.7 added off/len 0.9.12
      */
     private boolean altVerifySigSHA1(Signature signature, byte[] data, int offset, int len, SigningPublicKey verifyingKey) throws GeneralSecurityException {
@@ -656,8 +690,12 @@ public final class DSAEngine {
     /**
      * Generic sign any type.
      *
+     * @param data the data to sign
+     * @param offset where the data to sign starts in data
+     * @param len how many bytes of data to sign
+     * @param privateKey the key to sign with, whose type selects the algorithm
      * @return the Signature, or null on error
-     * @throws GeneralSecurityException if algorithm unvailable or on other errors
+     * @throws GeneralSecurityException if algorithm unavailable or on other errors
      * @since 0.9.9 added off/len 0.9.12
      */
     private Signature altSign(byte[] data, int offset, int len, SigningPrivateKey privateKey) throws GeneralSecurityException {
@@ -697,8 +735,9 @@ public final class DSAEngine {
      * Warning, nonstandard for EdDSA, double-hashes, not recommended.
      *
      * @param hash SHA1Hash, Hash, Hash384, or Hash512
+     * @param privateKey the key to sign with, whose type selects the algorithm
      * @return the signature over the hash, of the private key's type
-     * @throws GeneralSecurityException if algorithm unvailable or on other errors
+     * @throws GeneralSecurityException if algorithm unavailable or on other errors
      * @since 0.9.9
      */
     private Signature altSignRaw(SimpleDataStructure hash, SigningPrivateKey privateKey) throws GeneralSecurityException {
@@ -713,10 +752,15 @@ public final class DSAEngine {
      * <p>
      * Warning, nonstandard for EdDSA, double-hashes, not recommended.
      *
+     * @param algo the raw JCA algorithm name, e.g. {@code NONEwithDSA}, ignored
+     *             for EdDSA types
      * @param hash SHA1Hash, Hash, Hash384, or Hash512
+     * @param privKey the key to sign with, as a Java key
      * @param type returns a Signature of this type
      * @return the signature over the hash, of the type named by algo
-     * @throws GeneralSecurityException if algorithm unvailable or on other errors
+     * @throws GeneralSecurityException if algorithm unavailable or on other errors
+     * @throws IllegalArgumentException if the hash length does not match the
+     *                                  type's hash length
      * @since 0.9.9
      */
     private Signature altSignRaw(String algo, SimpleDataStructure hash, PrivateKey privKey, SigType type) throws GeneralSecurityException {
@@ -751,9 +795,15 @@ public final class DSAEngine {
     }
 
     /**
-     * Alternate to {@link #sign()} using java.security libraries.
+     * Alternate to {@link #sign(byte[], int, int, SigningPrivateKey)} using
+     * java.security libraries.
      *
-     * @throws GeneralSecurityException if algorithm unvailable or on other errors
+     * @param data the data to sign
+     * @param offset where the data to sign starts in data
+     * @param len how many bytes of data to sign
+     * @param privateKey the DSA private key to sign with
+     * @return the DSA-SHA1 signature, non-null
+     * @throws GeneralSecurityException if algorithm unavailable or on other errors
      * @since 0.8.7 added off/len args 0.9.12
      */
     private Signature altSignSHA1(byte[] data, int offset, int len, SigningPrivateKey privateKey) throws GeneralSecurityException {
@@ -766,7 +816,11 @@ public final class DSAEngine {
 
     /**
      * Map a signature type to the raw (prehashed) JCA algorithm name.
-     * @return the algorithm name string
+     *
+     * @param type the signature type whose base algorithm selects the name
+     * @return the JCA algorithm name, e.g. {@code NONEwithDSA}
+     * @throws UnsupportedOperationException if the type's base algorithm has
+     *                                       no raw form
      * @since 0.9.9
      */
     private static String getRawAlgo(SigType type) {
@@ -781,7 +835,11 @@ public final class DSAEngine {
 
     /**
      * Map a Java key to the raw (prehashed) JCA algorithm name.
-     * @return the algorithm name string
+     *
+     * @param key the Java key whose class selects the algorithm name
+     * @return the JCA algorithm name, e.g. {@code NONEwithDSA}
+     * @throws UnsupportedOperationException if the key implements none of the
+     *                                       four supported key interfaces
      * @since 0.9.9
      */
     private static String getRawAlgo(Key key) {

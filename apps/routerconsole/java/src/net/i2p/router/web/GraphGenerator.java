@@ -931,7 +931,7 @@ public class GraphGenerator implements Runnable, ClientApp {
      * failure nor a lost Rate registration can silently retire a graph for the
      * remaining life of the router.
      * <p>A detached listener stays in the rate-to-listener map, so it is never rebuilt
-     * by {@link #adjustDatabases()}: that only adds rates missing from the old spec. The same
+     * by {@link #adjustDatabases(String)}: that only adds rates missing from the old spec. The same
      * holds for a listener that kept its open RRD but lost the registration, and for a
      * rate whose mapping lost its listener. This runs on the same tick as the spec
      * sync, reusing the existing scheduled task rather than adding a thread.

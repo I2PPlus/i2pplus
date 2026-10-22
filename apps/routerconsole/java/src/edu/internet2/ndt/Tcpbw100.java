@@ -2448,7 +2448,7 @@ public class Tcpbw100 extends JApplet implements ActionListener {
 
     /**
      * Check if the given key is one whose value is saved by
-     * {@link #save_int_values()}, save_dbl_values(), or save_long_values().
+     * {@link #save_int_values(String, int)}, save_dbl_values(), or save_long_values().
      *
      * @param sSysvarParam key name string from test results
      * @return true if the key is recognized and saved

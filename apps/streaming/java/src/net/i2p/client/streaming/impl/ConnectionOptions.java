@@ -41,7 +41,7 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
     /** Min rtt. Unknown until the first sample: seeding the floor with a
      * guess (e.g. the initial RTT) would fabricate a minimum on any path whose
      * real floor is higher, and _minRtt feeds the bandwidth-derived ssthresh
-     * floor. Like mainline: Integer.MAX_VALUE until {@link #updateRTT()} narrows it. */
+     * floor. Like mainline: Integer.MAX_VALUE until {@link #updateRTT(int)} narrows it. */
     private volatile int _minRtt = Integer.MAX_VALUE;
     /** Rtt deviation. */
     private volatile int _rttDeviation;
@@ -834,7 +834,7 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
 
     /**
      * Apply properties from opts. When onlyIfSet is true, only properties
-     * explicitly present in opts are applied (used by {@link #setProperties()}).
+     * explicitly present in opts are applied (used by {@link #setProperties(Properties)}).
      * When false, defaults are applied for missing properties (used by constructors).
      *
      * @param opts properties to read from, ignored when null

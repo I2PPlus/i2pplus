@@ -1641,7 +1641,7 @@ void noteEstablishmentRtt(int rttMs) {
      * <p>
      *  Fires on the limiter thread when the throttled request completes, and
      *  synchronously on the closing thread when {@link #close()} aborts the request.
-     *  The ownership hand-off in {@link #removeIBRequest()} guarantees the attached
+     *  The ownership hand-off in {@link #removeIBRequest(FIFOBandwidthLimiter.Request)} guarantees the attached
      *  read buffer is delivered or released exactly once across those racers.
      */
     private class InboundListener implements FIFOBandwidthLimiter.CompleteListener {
@@ -2644,7 +2644,7 @@ void noteEstablishmentRtt(int rttMs) {
      * This replaces _curReadState, so no more messages will be received.
      * <p>
      * Call this only on data phase AEAD failure.
-     * For other failures, use {@link #sendTermination()}.
+     * For other failures, use {@link #sendTermination(int, int)}.
      *
      * @param buf possibly with data remaining
      * @param validFramesRcvd to be sent in termination message
@@ -2748,9 +2748,10 @@ void noteEstablishmentRtt(int rttMs) {
 
     /**
      * Little endian.
-     * Same as {@link net.i2p.data.DataHelper#fromlongLE}src, offset, 8) but allows negative result.
+     * Same as {@link net.i2p.data.DataHelper#fromLongLE(byte[], int, int)} called with
+     * 8 bytes, but allows a negative result.
      *
-     * @throws ArrayIndexOutOfBoundsException
+     * @throws ArrayIndexOutOfBoundsException if offset is not inside the array
      * @since 0.9.36
      */
     private static long fromLong8LE(byte[] src, int offset) {
@@ -2764,8 +2765,8 @@ void noteEstablishmentRtt(int rttMs) {
 
     /**
      * Little endian.
-     * Same as {@link net.i2p.data.DataHelper#fromlongLE}target, offset, 8, value) but allows negative value.
-     *
+     * Same as {@link net.i2p.data.DataHelper#toLongLE(byte[], int, int, long)} called
+     * with 8 bytes, but allows a negative value.
      */
     private static void toLong8LE(byte[] target, int offset, long value) {
         int limit = offset + 8;

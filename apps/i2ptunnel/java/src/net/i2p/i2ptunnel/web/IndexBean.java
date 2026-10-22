@@ -346,9 +346,7 @@ public class IndexBean {
     }
 
     /**
-     * Stop all tunnel controllers.
-     *
-     * @return formatted messages from the stop operation
+     * Stop all tunnel controllers and queue the resulting messages for display.
      */
     private void stopAll() {
         List<String> msgs = _group.stopAllControllers();
@@ -356,9 +354,7 @@ public class IndexBean {
     }
 
     /**
-     * Start all tunnel controllers.
-     *
-     * @return formatted messages from the start operation
+     * Start all tunnel controllers and queue the resulting messages for display.
      */
     private void startAll() {
         List<String> msgs = _group.startAllControllers();

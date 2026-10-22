@@ -125,10 +125,9 @@ public class TransportManager implements TransportEventListener {
     private static final long ESTABLISHED_CACHE_TTL = 1000;
 
     /**
-     * Immutable getEstablished() snapshot plus its expiry.
-     *
-     * @param peers unmodifiable peer hash list
-     * @param expiresAt wall-clock ms after which the snapshot is stale
+     * Immutable getEstablished() snapshot plus its expiry, holding an
+     * unmodifiable peer hash list and the wall-clock ms after which the
+     * snapshot is stale.
      */
     private static final class EstablishedSnapshot {
         private final List<Hash> peers;

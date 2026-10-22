@@ -121,7 +121,6 @@ public class Blocklist {
      * Limits of transient (in-memory) blocklists.
      * Note that it's impossible to prevent clogging up
      * the tables by a determined attacker, esp. on IPv6.
-     * @return whether the limits below are halved on a slow system
      */
     private static final int MAX_IPV4_SINGLES = SystemVersion.isSlow() ? 2048 : 8192;
     private static final int MAX_IPV6_SINGLES = SystemVersion.isSlow() ? 1024 : 4096;
@@ -551,7 +550,7 @@ public class Blocklist {
      *
      * @param files the list of blocklist files to read
      * @return the allocated array, or null on out of memory error
-     * @since 0.9.18 split out from {@link #readBlocklistFile()}
+     * @since 0.9.18 split out from {@link #readBlocklistFile(BLFile, long[], int)}
      */
     private long[] allocate(List<BLFile> files) {
         int maxSize = 0;
@@ -588,8 +587,10 @@ public class Blocklist {
     * <a href="https://www.iblocklist.com/support">IBlockList support</a>
     * <a href="https://www.team-cymru.com/bogon-reference-http">Cymru bogon reference</a>
     * <p>
-    * Must call {@link #allocate()} before and merge() after.
+    * Must call {@link #allocate(List)} before and merge() after.
     *
+    * @param blf the file to read, its id and its version; blf.version is set to
+    *            the file's last-modified time when at least one entry was read
     * @param blocklist out parameter, entries stored here
     * @param count current number of entries
     * @return new number of entries
@@ -661,6 +662,7 @@ public class Blocklist {
     /**
      * Merge a new blocklist into the existing one, returning the new entry count.
      *
+     * @param blocklist the entries read so far, sorted and de-overlapped in place
      * @param count valid entries in blocklist before merge
      * @return count valid entries in blocklist after merge
      * @since 0.9.18 split out from readBlocklistFile()
@@ -726,6 +728,11 @@ public class Blocklist {
 
     /**
      * Parse one line, returning a temp data structure with the result.
+     *
+     * @param buf the line to parse, without the line terminator
+     * @param shouldLog true to log a format-error warning for an unparseable line
+     * @return the parsed entry, or null if the line is blank, a comment, or not a
+     *         valid IP, range, CIDR block or router hash
      */
     private Entry parse(String buf, boolean shouldLog) { // NOSONAR S3012: called from readBlocklistFile() and banlistRouter()
         byte[] ip1;
@@ -825,7 +832,7 @@ public class Blocklist {
 
     /**
      * Merge and remove overlapping entries from a sorted list.
-     * Caller must re-sort if return code is > 0.
+     * Caller must re-sort if return code is &gt; 0.
      *
      * @param blist the sorted blocklist array
      * @param count the number of valid entries in the array
@@ -958,6 +965,8 @@ public class Blocklist {
     /**
      * Add a single IPv4 address to the blocklist.
      *
+     * @param ip the IPv4 address packed into an int, network byte order
+     *           (negative for addresses above 127.255.255.255)
      * @return true if it was NOT previously on the list
      */
     private boolean add(int ip) {
@@ -970,6 +979,7 @@ public class Blocklist {
     /**
      * Remove an IP from the in-memory blocklist.
      *
+     * @param ip the IPv4 address packed into an int, network byte order
      * @since 0.9.28
      */
     private void remove(int ip) {
@@ -1022,6 +1032,8 @@ public class Blocklist {
 
     /**
      * Will not contain duplicates.
+     *
+     * @param peer the router whose published addresses are wanted
      * @return the peer's IP addresses with duplicates removed, empty if the
      *         RouterInfo is not held locally
      */
@@ -1034,6 +1046,7 @@ public class Blocklist {
     /**
      * Will not contain duplicates.
      *
+     * @param pinfo the router info whose published addresses are collected
      * @return the addresses published in the RouterInfo, IPv6 ones only when
      *         this router has IPv6 enabled, with duplicates removed
      * @since 0.9.29
@@ -1128,7 +1141,9 @@ public class Blocklist {
     /**
      * First check the single-IP list. Then do a binary search through the in-memory range list which
      * is a sorted array of longs. The array is sorted in signed order, but we don't care.
-     * Each long is ((from << 32) | to).
+     * Each long is ((from &lt;&lt; 32) | to).
+     *
+     * @param ip the IPv4 address packed into an int, network byte order
      * @return true if the IP is on a single-IP, country, permanent or Tor list
      */
     private synchronized boolean isBlocklisted(int ip) {
@@ -1153,8 +1168,11 @@ public class Blocklist {
     /**
      * Do a binary search through the in-memory range list which is a sorted array of longs.
      * The array is sorted in signed order, but we don't care.
-     * Each long is ((from << 32) | to).
+     * Each long is ((from &lt;&lt; 32) | to).
      *
+     * @param ip the IPv4 address packed into an int, network byte order
+     * @param blocklist the sorted range entries, only the first blocklistSize are used
+     * @param blocklistSize how many entries at the start of blocklist are valid
      * @return whether permanently blocklisted
      * @since 0.9.48 split out from above
      */
@@ -1218,10 +1236,16 @@ public class Blocklist {
     public static int getTo(long entry) {return (int) (entry & 0xffffffff);}
 
     /**
-     * The in-memory blocklist is an array of longs, with the format ((from IP) << 32) | (to IP)
-     * The XOR is so the signed sort is in normal (unsigned) order.
+     * The in-memory blocklist is an array of longs, with the format
+     * ((from IP) &lt;&lt; 32) | (to IP).
+     * The array is sorted with a signed sort, so the high addresses come first.
      * <p>
      * So the size is (cough) almost 2MB for the 240,000 line splist.txt.
+     *
+     * @param ip1 the starting IP of the range, 4 bytes
+     * @param ip2 the ending IP of the range, 4 bytes
+     * @return the range as one entry, ip1 in the high 32 bits and ip2 in the low
+     *         32 bits
      */
     private static long toEntry(byte[] ip1, byte[] ip2) {
         long entry = 0;
@@ -1304,6 +1328,9 @@ public class Blocklist {
      * We don't keep the comment field in-memory, so we have to go back out to the file to find it.
      * <p>
      * Put this in a job because we're looking for the actual line in the blocklist file, this could take a while.
+     *
+     * @param peer the router to ban
+     * @param ip the blocklisted address to look up, IPv4 or IPv6
      */
     private void banlist(Hash peer, byte[] ip) {
         banlist(peer, ip, null);
@@ -1371,6 +1398,12 @@ public class Blocklist {
      * Additional jobs can wait.
      * Although could this clog up the job queue runners? Yes.
      * So we also stagger these jobs.
+     *
+     * @param peer the router to ban
+     * @param reason the text recorded in the banlist as the reason for the ban
+     * @param reasonCode the blocklisted IP string stored alongside the reason
+     * @param duration positive to ban for expireInterval() ms, 0 or less to ban
+     *                 forever
      */
     private void banlistRouter( Hash peer, String reason, String reasonCode, long duration) {
         if (duration > 0) {
@@ -1503,6 +1536,7 @@ public class Blocklist {
      * Mark a string for extraction by xgettext and translation.
      * Use this only in static initializers. It does not translate!
      *
+     * @param s the literal to record for translation
      * @return the string unchanged; marking it is what lets xgettext find it
      */
     private static final String _x(String s) {return s;}

@@ -214,7 +214,7 @@ class BlindCache {
     /**
      * Add blinded lookup data to the cache.
      *
-     * @since 0.9.41 from {@link #addToCache()}
+     * @since 0.9.41 from {@link #addToCache(BlindData)}
      */
     private void storeInCache(BlindData bd) {
         _cache.put(bd.getUnblindedPubKey(), bd);

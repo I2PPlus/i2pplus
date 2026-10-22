@@ -62,7 +62,7 @@ public final class ClientID {
         private final String peerIdPrefixStr;
         /** Exact leading peer ID bytes, 5-8 long, e.g. "-AZ5770-" or "TIX34". */
         private final byte[] peerIdPrefix;
-        /** User-Agent base; ";<OS>;Java <ver>" appended when appendOsJava is set. */
+        /** User-Agent base; ";&lt;OS&gt;;Java &lt;ver&gt;" appended when appendOsJava is set. */
         private final String uaBase;
         private final boolean appendOsJava;
         private final String extV;

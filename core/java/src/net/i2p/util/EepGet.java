@@ -1294,7 +1294,7 @@ public class EepGet {
 
     /**
      * The failure reason for a transfer-failed log line. Socket exceptions
-     * frequently carry no message at all, and "-> null" tells the reader
+     * frequently carry no message at all, and "-&gt; null" tells the reader
      * nothing. A bare read timeout is named together with the inactivity
      * budget that expired, so the line says how long the peer stayed quiet;
      * any other message-less exception falls back to its class name - or its

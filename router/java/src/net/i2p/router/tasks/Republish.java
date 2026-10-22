@@ -38,7 +38,7 @@ import net.i2p.util.SimpleTimer2;
  * </ul>
  * <p><strong>Clock Skew Detection:</strong></p>
  * <ul>
- *   <li>Detects large time discrepancies (>60 seconds)</li>
+ *   <li>Detects large time discrepancies (&gt;60 seconds)</li>
  *   <li>Rebuilds RouterInfo with current time</li>
  *   <li>Prevents network database rejection</li>
  *   <li>Maintains router identity continuity</li>

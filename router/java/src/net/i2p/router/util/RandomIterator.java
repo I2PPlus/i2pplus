@@ -63,8 +63,8 @@ public class RandomIterator<E> implements Iterator<E> {
      * See, for instance,
      * <a href="https://web.archive.org/web/20080417004745/http://qbrundage.com/michaelb/pubs/essays/random_number_generation">Michael Brundage's random number generation essay</a>
      * for some implementations, which are faster than java.util.Random.
-     * @return the shared Random, which the JVM may substitute a faster
-     *         implementation for on this platform
+     * This is the shared Random; the JVM may substitute a faster
+     * implementation on this platform.
      */
     private final Random rand = RandomSource.getInstance();
 

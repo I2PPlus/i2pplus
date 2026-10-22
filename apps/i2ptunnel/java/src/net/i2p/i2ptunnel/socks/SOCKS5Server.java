@@ -62,7 +62,7 @@ class SOCKS5Server extends SOCKSServer {
      */
     private static final Map<String, String> _torCache = new LHMCache<>(256);
 
-    /** Sticky proxy cache: host -> selected proxy, for consistent routing. */
+    /** Sticky proxy cache: host -&gt; selected proxy, for consistent routing. */
     private final ConcurrentHashMap<String, String> _proxyCache = new ConcurrentHashMap<>();
 
     /**

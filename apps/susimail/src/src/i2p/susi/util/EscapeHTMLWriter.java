@@ -21,7 +21,7 @@ public class EscapeHTMLWriter extends FilterWriter {
     private static final String MDASH = "&#45;";
     private static final String BR = "<br>\n";
 
-    /** Track state: 0=normal, 1=saw '<', 2=saw '<-', 3=prev was '-'. */
+    /** Track state: 0=normal, 1=saw '&lt;', 2=saw '&lt;-', 3=prev was '-'. */
     private int _commentState;
 
     /**

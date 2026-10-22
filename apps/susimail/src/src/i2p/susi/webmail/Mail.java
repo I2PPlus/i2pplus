@@ -452,7 +452,7 @@ class Mail {
      * Sets the date from a long value.
      *
      * @param dateLong milliseconds since the epoch, never negative
-     * @since 0.9.34 pulled from {@link #parseHeaders()}
+     * @since 0.9.34 pulled from {@link #parseHeaders(InputStream)}
      */
     private synchronized void setDate(long dateLong) {
         date = new Date(dateLong);

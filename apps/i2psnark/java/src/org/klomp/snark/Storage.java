@@ -503,7 +503,7 @@ public class Storage implements Closeable {
     /**
      * Record a file or folder that exists but could not be read, and warn.
      * The creation proceeds with the readable data; if there is none, the
-     * caller fails with {@link #noDataMessage()} naming the unreadable paths.
+     * caller fails with {@link #noDataMessage(File, List)} naming the unreadable paths.
      *
      * @param f the unreadable file or folder
      * @param reason a short human-readable reason
@@ -2191,7 +2191,7 @@ public class Storage implements Closeable {
      * @param shouldPreallocate whether to balloon sparse files
      * @param forceRW if true, open the data files read-write even when the
      *                storage thinks they are complete, and try to make them writable
-     *                if permissions deny it.  Without this, {@link #checkRAF()} opens files
+     *                if permissions deny it.  Without this, {@link TorrentFile#checkRAF()} opens files
      *                read-only for a complete torrent, and the write (or the
      *                pre-allocation ballooning) then fails with EBADF on a healthy
      *                disk.
@@ -2583,7 +2583,7 @@ public class Storage implements Closeable {
 
     /**
      * This is a dup of {@link org.klomp.snark.MetaInfo#getPieceLength} but we need it before the
-      * MetaInfo is created in
+     * MetaInfo is created in
      * our second constructor.
      *
      * @return the piece length

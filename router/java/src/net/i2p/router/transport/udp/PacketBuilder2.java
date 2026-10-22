@@ -41,9 +41,11 @@ class PacketBuilder2 {
 
     /**
      * Per-thread pool of payload block objects and the reusable block list.
-     * Blocks are used only within {@link #buildPacket()} for serialization and are never
-     * retained after the packet is built, so each thread can clear and refill
-     * its own pool across calls without synchronization.
+     * Blocks are used only within {@link #buildPacket(List, List, SSU2Sender)}
+     * for serialization and are never retained after the packet is built, so
+     * each thread can clear and refill its own pool across calls without
+     * synchronization.
+     *
      * @since 0.9.71+
      */
     private static final class BlockPool {
@@ -822,6 +824,10 @@ class PacketBuilder2 {
     /**
      * Build a single new SessionConfirmed packet for the given peer, unfragmented.
      *
+     * @param state the in-progress outbound handshake state, source of the
+     *              connection ID, header encryption keys, MTU and destination
+     *              address
+     * @param block the RouterInfo payload block to carry, not fragmented
      * @return ready to send packet, non-null
      */
     private UDPPacket buildSessionConfirmedPacket(OutboundEstablishState2 state, SSU2Payload.RIBlock block) {
@@ -840,6 +846,12 @@ class PacketBuilder2 {
 
     /**
      * Build all the fragmented SessionConfirmed packets.
+     *
+     * @param state the in-progress outbound handshake state, source of the
+     *              connection ID, header encryption keys, MTU and destination
+     *              address
+     * @param block the RouterInfo payload block to split across the packets
+     * @return one packet per fragment, in fragment order, non-null
      */
     private UDPPacket[] buildSessionConfirmedPackets(OutboundEstablishState2 state, SSU2Payload.RIBlock block) {
         UDPPacket packet0 = buildShortPacketHeader(state.getSendConnID(), 0, SESSION_CONFIRMED_FLAG_BYTE);
@@ -1188,7 +1200,15 @@ class PacketBuilder2 {
     /**
      * Build the header block of a long SSU2 packet.
      *
+     * @param destID peer's connection ID we are addressing, or 0 when not yet
+     *               known
      * @param pktNum 0 - 0xFFFFFFFF
+     * @param type packet type flag byte, written to header offset 12
+     * @param srcID our connection ID, for the peer to address its reply to
+     * @param token token echoed back to the peer, or 0 for none; only
+     *              meaningful for the handshake and test packet types
+     * @param version SSU2 protocol version of the peer, written to header
+     *                offset 13
      * @return a packet with the first 32 bytes filled in
      */
     private UDPPacket buildLongPacketHeader(long destID, long pktNum, byte type, long srcID, long token, int version) {
@@ -1204,7 +1224,10 @@ class PacketBuilder2 {
     /**
      * Build the header block of a short SSU2 packet.
      *
+     * @param destID peer's connection ID we are addressing, or 0 when not yet
+     *               known
      * @param pktNum 0 - 0xFFFFFFFF
+     * @param type packet type flag byte, written to header offset 12
      * @return a packet with the first 16 bytes filled in
      */
     private UDPPacket buildShortPacketHeader(long destID, long pktNum, byte type) {
@@ -1224,7 +1247,15 @@ class PacketBuilder2 {
     }
 
     /**
+     * Encrypt and write out message 1 of the handshake, the SessionRequest.
+     *
      * @param packet containing only 32 byte header
+     * @param state the Noise handshake state, already started with our
+     *              ephemeral key pair
+     * @param hdrKey1 32-byte ChaCha20 key protecting header bytes 0-7
+     * @param hdrKey2 32-byte ChaCha20 key protecting header bytes 8-31
+     * @param needIntro append a relay tag request block, for a peer that asked
+     *                  us to introduce it to a third peer
      */
     private void encryptSessionRequest(UDPPacket packet, HandshakeState state,
                                        byte[] hdrKey1, byte[] hdrKey2, boolean needIntro) {
@@ -1278,8 +1309,18 @@ class PacketBuilder2 {
     }
 
     /**
+     * Encrypt and write out message 2 of the handshake, the SessionCreated.
+     *
      * @param packet containing only 32 byte header
+     * @param state the Noise handshake state, already started with our
+     *              ephemeral key pair
+     * @param hdrKey1 32-byte ChaCha20 key protecting header bytes 0-7
+     * @param hdrKey2 32-byte ChaCha20 key protecting header bytes 8-31
+     * @param relayTag relay tag for the peer to send us, or 0 to omit the relay
+     *                 tag block
      * @param token may be null
+     * @param ip the peer's address for the address block, 4 or 16 bytes
+     * @param port the peer's UDP port for the address block
      */
     private void encryptSessionCreated(UDPPacket packet, HandshakeState state,
                                        byte[] hdrKey1, byte[] hdrKey2, long relayTag,
@@ -1335,7 +1376,16 @@ class PacketBuilder2 {
     }
 
     /**
+     * Encrypt and write out the body of a Retry packet.
+     *
      * @param packet containing only 32 byte header
+     * @param chachaKey 32-byte ChaCha20-Poly1305 key for the payload, the
+     *                  static introduction key
+     * @param n packet number from the header, also the payload nonce
+     * @param hdrKey1 32-byte ChaCha20 key protecting header bytes 0-7
+     * @param hdrKey2 32-byte ChaCha20 key protecting header bytes 8-31
+     * @param ip the peer's address for the address block, 4 or 16 bytes
+     * @param port the peer's UDP port for the address block
      * @param terminationCode 0 normally, nonzero to send termination block
      */
     private void encryptRetry(UDPPacket packet, byte[] chachaKey, long n,
@@ -1355,6 +1405,13 @@ class PacketBuilder2 {
      * Also used for retry with (usually) ptBlock = null.
      *
      * @param packet containing only 32 byte header
+     * @param chachaKey 32-byte ChaCha20-Poly1305 key for the payload, the
+     *                  static introduction key
+     * @param n packet number from the header, also the payload nonce
+     * @param hdrKey1 32-byte ChaCha20 key protecting header bytes 0-7
+     * @param hdrKey2 32-byte ChaCha20 key protecting header bytes 8-31
+     * @param ip the recipient's address for the address block, 4 or 16 bytes
+     * @param port the recipient's UDP port for the address block
      * @param ptBlock Peer Test or Relay Request block. Null for retry.
      */
     private void encryptPeerTest(UDPPacket packet, byte[] chachaKey, long n,
@@ -1402,7 +1459,14 @@ class PacketBuilder2 {
     }
 
     /**
+     * Encrypt and write out the body of a Token Request packet.
+     *
      * @param packet containing only 32 byte header
+     * @param chachaKey 32-byte ChaCha20-Poly1305 key for the payload, the
+     *                  static introduction key
+     * @param n packet number from the header, also the payload nonce
+     * @param hdrKey1 32-byte ChaCha20 key protecting header bytes 0-7
+     * @param hdrKey2 32-byte ChaCha20 key protecting header bytes 8-31
      */
     private void encryptTokenRequest(UDPPacket packet, byte[] chachaKey, long n,
                                      byte[] hdrKey1, byte[] hdrKey2) {
@@ -1445,7 +1509,18 @@ class PacketBuilder2 {
      * that's caller's responsibility.
      *
      * @param packet containing only 16 byte header
+     * @param state the Noise handshake state, still open, that encrypts the
+     *              payload in place
+     * @param mtu peer's MTU in bytes, including the IP and UDP headers, which
+     *            are subtracted here
+     * @param numFragments total SessionConfirmed fragments, 1 - 15, written to
+     *                     the header flags byte
      * @param addPadding force-add exactly this size a padding block, for jumbo only
+     * @param isIPv6 true to subtract the 40-byte IPv6 header from the MTU,
+     *               false for the 20-byte IPv4 header
+     * @param hdrKey1 32-byte ChaCha20 key protecting header bytes 0-7
+     * @param hdrKey2 32-byte ChaCha20 key protecting header bytes 8-15
+     * @param riblock the RouterInfo block to send, already built
      * @param token may be null
      */
     private void encryptSessionConfirmed(UDPPacket packet, HandshakeState state, int mtu, int numFragments, int addPadding,
@@ -1509,6 +1584,11 @@ class PacketBuilder2 {
      * @param packet containing 16 byte header and all data with
      *               length set to the end of the data.
      *               This will extend the length by 16 for the MAC.
+     * @param chacha the peer's send cipher state, locked for the duration of
+     *               the encryption
+     * @param n packet number from the header, also the payload nonce
+     * @param hdrKey1 32-byte ChaCha20 key protecting header bytes 0-7
+     * @param hdrKey2 32-byte ChaCha20 key protecting header bytes 8-15
      */
     private void encryptDataPacket(UDPPacket packet, CipherState chacha, long n,
                                     byte[] hdrKey1, byte[] hdrKey2) {

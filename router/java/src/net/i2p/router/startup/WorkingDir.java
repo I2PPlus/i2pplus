@@ -268,7 +268,7 @@ public class WorkingDir {
     }
 
     /**
-     * Tests if <code>dir</code> has been set up as a I2P working directory.<br/>
+     * Tests if <code>dir</code> has been set up as an I2P working directory.<br>
      * Returns <code>false</code> if a directory is empty, or contains nothing that
      * is usually migrated from the base install.
      * This allows to pre-install plugins before the first router start.

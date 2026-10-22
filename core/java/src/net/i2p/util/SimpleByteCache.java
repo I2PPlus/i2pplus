@@ -229,7 +229,7 @@ public final class SimpleByteCache {
  * occupied slots - every int is a legal key, so there is no value to spare
  * as an empty-slot sentinel - and publishes each cache's fully built internals.
  *
- * @since 0.9.72
+ * @since 0.9.72+
  */
     private static final class IntCacheMap {
 

@@ -58,7 +58,7 @@ public class SingleFileNamingService extends NamingService {
     /** Last write time. */
     private long _lastWrite;
 
-    /** Hostname to base64 key cache, guarded by _fileLock; valid when _cacheStamp >= file mtime. */
+    /** Hostname to base64 key cache, guarded by _fileLock; valid when _cacheStamp &gt;= file mtime. */
     private final Map<String, String> _keyCache = new HashMap<>(64);
     private volatile long _cacheStamp;
 
@@ -162,7 +162,7 @@ public class SingleFileNamingService extends NamingService {
     }
 
     /**
-     * Full-scan parse of the hosts file into _keyCache (hostname -> base64 key).
+     * Full-scan parse of the hosts file into _keyCache (hostname -&gt; base64 key).
      * Caller must hold the read lock. Sets _cacheStamp on success.
      * @since 0.9.71+
      */

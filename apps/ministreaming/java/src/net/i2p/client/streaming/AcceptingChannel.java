@@ -6,8 +6,8 @@ import net.i2p.I2PException;
 
 /**
  * As this does not (yet) extend ServerSocketChannel it cannot be returned by
-  * {@link net.i2p.client.streaming.impl.StandardServerSocket#getChannel} ,
- * until we implement an I2P SocketAddress class.
+ * {@code StandardServerSocket#getChannel}, until we implement an I2P SocketAddress
+ * class.
  *
  * Warning, this interface and implementation is preliminary and subject to change without notice.
  *
