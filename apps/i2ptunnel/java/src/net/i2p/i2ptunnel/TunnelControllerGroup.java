@@ -247,6 +247,22 @@ public class TunnelControllerGroup implements ClientApp {
     public static int getIOTransferActiveCount() { return I2PTunnelHTTPServer.getIOTransferActiveCount(); }
 
     /**
+     * The busiest per-tunnel I/O transfer pool's utilization: its active plus
+     * queued transfers divided by its present maximum, as a rate that may exceed
+     * 1.0 when the queue backs up past the pool's ceiling. Delegates to
+     * {@link I2PTunnelHTTPServer}.
+     *
+     * <p>Per-pool, not a global sum — the tuner grows the shared budget from this
+     * so one saturated pool stays visible however quiet the others are.
+     *
+     * @return the busiest pool's utilization rate, or 0.0 when no pools exist
+     * @since 0.9.72+
+     */
+    public static double getIOMaxPoolUtilization() {
+        return I2PTunnelHTTPServer.getIOMaxPoolUtilization();
+    }
+
+    /**
      * I/O stall timeout in ms for Server→Client transfers.
      *
      * @return the current stall timeout

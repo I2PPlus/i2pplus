@@ -3201,156 +3201,183 @@ public class Tuner extends SimpleTimer2.TimedEvent {
     }
 
     /**
-     * Reflection helper for calling streaming class methods across module boundaries.
-     * <p>The streaming module depends on router, not vice versa, so we use
-     * reflection to call static getters/setters on I2PSocketManagerFull.
-     * Class lookup is cached after first successful resolution.
+     * The class each reflectively-tuned static is declared on, keyed by method name.
+     *
+     * <p>Streaming and i2ptunnel are not on the router's compile classpath, so the
+     * tuner reaches their statics by name. Choosing the class at the call site is
+     * what broke: three params named a real method on the wrong class, the lookup
+     * failed, the failure was swallowed, and the param tuned nothing while its
+     * getter handed back a fallback that read like a live value. The class is
+     * declared once here instead, and TunerReflectorTargetTest pins every entry
+     * against the classes as they are actually compiled.
+     *
+     * @since 0.9.72+
+     */
+    private static final Map<String, String> _reflectorTargets = new HashMap<String, String>(96);
+
+    /**
+     * Record the class that declares a group of reflectively-called statics.
+     *
+     * @param cls the declaring class, by name, so no module need be on the classpath
+     * @param names the static method names the tuner calls on it
+     * @since 0.9.72+
+     */
+    private static void bindReflectorTargets(String cls, String... names) {
+        for (String name : names)
+            _reflectorTargets.put(name, cls);
+    }
+
+    static {
+        bindReflectorTargets("net.i2p.client.streaming.impl.I2PSocketManagerFull",
+                             "getDefaultInactivityTimeout", "getDefaultInitialAckDelay",
+                             "getDefaultPassiveFlushDelay", "getInitialRTO", "getInitialWindowSize",
+                             "getMaxInboundBuffer", "getMaxStreamsOverride",
+                             "getReceiveWorkerThreads", "resizeReceiveWorkers",
+                             "setDefaultInactivityTimeout", "setDefaultInitialAckDelay",
+                             "setDefaultPassiveFlushDelay", "setInitialRTO", "setInitialWindowSize",
+                             "setMaxInboundBuffer", "setMaxStreamsOverride");
+
+        bindReflectorTargets("net.i2p.client.streaming.impl.ConnectionOptions",
+                             "getDefaultCongestionAvoidanceGrowthRateFactorStatic",
+                             "getDefaultResendDelayStatic",
+                             "getDefaultSlowStartGrowthRateFactorStatic",
+                             "getImmediateAckDelayStatic", "getMaxResendDelayStatic",
+                             "getMaxRTOStatic", "getMaxRttStatic", "getMaxSlowStartWindowStatic",
+                             "getMinPacingRateKBps", "getMinResendDelayStatic", "getRTOMultiplier",
+                             "setDefaultCongestionAvoidanceGrowthRateFactor",
+                             "setDefaultResendDelay", "setDefaultSlowStartGrowthRateFactor",
+                             "setImmediateAckDelay", "setMaxResendDelay", "setMaxRTO", "setMaxRtt",
+                             "setMaxSlowStartWindow", "setMinPacingRateKBps", "setMinResendDelay",
+                             "setRTOMultiplier");
+
+        bindReflectorTargets("net.i2p.client.streaming.impl.Connection",
+                             "getConnectTimeoutMultiplier", "getGlobalMaxWindowSize",
+                             "getMaxRetransmissionsStatic", "getMaxSynResendsStatic",
+                             "setConnectTimeoutMultiplier", "setGlobalMaxWindowSize",
+                             "setMaxRetransmissions", "setMaxSynResends");
+
+        bindReflectorTargets("net.i2p.client.streaming.impl.SimpleBandwidthEstimator",
+                             "setDecayFactor");
+
+        bindReflectorTargets("net.i2p.i2ptunnel.TunnelControllerGroup",
+                             "getClientDefaultMaxConnections", "getClientRunnerMax",
+                             "getIOMaxPoolUtilization", "getIOStallTimeoutMs",
+                             "getIOTransferThreads", "getLiveServerHandlerActiveCount",
+                             "getLiveServerHandlerQueueDepth", "getServerBacklogQueueCapacity",
+                             "getServerHandlerThreads", "getServerThreadsPerTunnel",
+                             "getSocketConnectTimeout", "getStallEventCount",
+                             "setClientDefaultMaxConnections", "setClientRunnerMax",
+                             "setIOStallTimeoutMs", "setIOTransferThreads",
+                             "setServerBacklogQueueCapacity", "setServerHandlerThreads",
+                             "setServerThreadsPerTunnel", "setSocketConnectTimeout");
+    }
+
+    /**
+     * The target table, for the test that pins it against the compiled classes.
+     *
+     * @return an unmodifiable view of method name to declaring class name
+     * @since 0.9.72+
+     */
+    static Map<String, String> reflectorTargets() {
+        return Collections.unmodifiableMap(_reflectorTargets);
+    }
+
+    /** Classes named by {@link #_reflectorTargets}, loaded on first use. */
+    private static final Map<String, Class<?>> _reflectorClasses =
+        new java.util.concurrent.ConcurrentHashMap<String, Class<?>>(8);
+
+    /**
+     * The class a reflectively-called static is declared on, loaded on demand.
+     *
+     * <p>A name missing from {@link #_reflectorTargets} is reported the way a failed
+     * lookup is, because the call site cannot tell it apart from a module that is
+     * simply not installed, and an unbound name tunes nothing.
+     *
+     * @param name the static method name a reflector is about to call
+     * @return the declaring class, or null if the name is unbound or its module is
+     *         not installed
+     * @since 0.9.72+
+     */
+    static Class<?> reflectorTargetClass(String name) {
+        String className = _reflectorTargets.get(name);
+        if (className == null) {
+            reportReflectorFailure(null, name,
+                                   new NoSuchMethodException("(no target bound for) " + name));
+            return null;
+        }
+        Class<?> c = _reflectorClasses.get(className);
+        if (c != null)
+            return c;
+        try {
+            c = Class.forName(className);
+        } catch (ClassNotFoundException e) {
+            // The module is not installed - the ordinary case, and silent by design.
+            return null;
+        } catch (Throwable t) {
+            reportReflectorFailure(null, name, t);
+            return null;
+        }
+        _reflectorClasses.put(className, c);
+        return c;
+    }
+
+    /**
+     * Reflection helper for the streaming module's tuned statics.
+     * <p>Streaming depends on router, not vice versa, so the calls are reflective.
+     * Which streaming class declares a name comes from {@link #_reflectorTargets},
+     * not from the call site, and the lookup goes through findStaticMethod() because
+     * ConnectionOptions and Connection are non-public classes whose public statics
+     * throw IllegalAccessException on a bare invoke.
      *
      * @since 0.9.70+
      */
     private static class StreamingReflector {
-        private static final String FULL_CLASS = "net.i2p.client.streaming.impl.I2PSocketManagerFull";
-        private static volatile Class<?> cls;
-        private static volatile boolean resolved;
-
-        private static Class<?> getCLS() {
-            if (!resolved) {
-                try {
-                    cls = Class.forName(FULL_CLASS);
-                    resolved = true;
-                } catch (ClassNotFoundException e) {
-                    // streaming not loaded — retry next cycle
-                }
-            }
-            return cls;
-        }
 
         /** Call a static int getter via reflection. */
         static int invokeGetInt(String methodName) {
-            return callStaticInt(getCLS(), methodName, -1);
+            return callStaticInt(reflectorTargetClass(methodName), methodName, -1);
         }
 
         /** Call a static int setter via reflection. */
         static void invokeSetInt(String methodName, int value) {
-            callStaticSetInt(getCLS(), methodName, value);
-        }
-    }
-
-    /**
-     * Reflection helper for ConnectionOptions and Connection static methods.
-     * <p>Unlike {@link StreamingReflector}, this reflector caches failed
-     * lookups and retries on each cycle. This handles the case where
-     * streaming isn't loaded yet at tuner startup — the reflector will
-     * retry until the classes are available.
-     *
-     * @since 0.9.70+
-     */
-    private static class StreamingConnectionReflector {
-        private static volatile Class<?> connectionOptionsCls;
-        private static volatile Class<?> connectionCls;
-        private static volatile boolean resolved;
-
-        private static void resolve() {
-            if (!resolved) {
-                try {
-                    connectionOptionsCls = Class.forName("net.i2p.client.streaming.impl.ConnectionOptions");
-                    connectionCls = Class.forName("net.i2p.client.streaming.impl.Connection");
-                } catch (Throwable t) {
-                    // Streaming not loaded yet is the ordinary case and says nothing;
-                    // any other failure means the reflector is permanently blind and
-                    // every param that goes through it will silently no-op. Only the
-                    // former may stay quiet.
-                    if (!(t instanceof ClassNotFoundException)) {
-                        I2PAppContext.getGlobalContext().logManager().getLog(Tuner.class)
-                            .warn("Cannot resolve streaming classes for auto-tuning -> "
-                                  + "Streaming params will not be applied", t);
-                    }
-                    return;
-                }
-                resolved = true;
-            }
-        }
-
-        /**
-         * Call a getter on ConnectionOptions via reflection.
-         *
-         * <p>ConnectionOptions is a package-private class with public static
-         * members, so this cannot go through getMethod: the lookup succeeds and the
-         * invoke then throws IllegalAccessException, which used to be turned into
-         * the -1 sentinel and read downstream as a live reading.
-         */
-        static int invokeConnectionOptionsInt(String methodName) {
-            resolve();
-            return callStaticInt(connectionOptionsCls, methodName, -1);
-        }
-
-        /** Call a setter on ConnectionOptions via reflection. */
-        static void invokeConnectionOptionsSet(String methodName, int value) {
-            resolve();
-            callStaticSetInt(connectionOptionsCls, methodName, value);
-        }
-
-        /** Call a getter on Connection via reflection. */
-        static int invokeConnectionInt(String methodName) {
-            resolve();
-            return callStaticInt(connectionCls, methodName, -1);
-        }
-
-        /** Call a setter on Connection via reflection. */
-        static void invokeConnectionSet(String methodName, int value) {
-            resolve();
-            callStaticSetInt(connectionCls, methodName, value);
+            callStaticSetInt(reflectorTargetClass(methodName), methodName, value);
         }
     }
 
     /**
      * Reflection helper for accessing TunnelControllerGroup across module boundaries.
-     * i2ptunnel is not compiled into the router module, so we reflect.
+     * i2ptunnel is not compiled into the router module, so we reflect; the class
+     * behind each name comes from {@link #_reflectorTargets}.
      *
      * @since 0.9.70+
      */
     private static class I2PTunnelReflector {
-        private static final String TCG = "net.i2p.i2ptunnel.TunnelControllerGroup";
-        private static volatile Class<?> cls;
-        private static volatile boolean resolved;
-
-        private static Class<?> getCLS() {
-            if (!resolved) {
-                try {
-                    cls = Class.forName(TCG);
-                    resolved = true;
-                } catch (ClassNotFoundException e) {
-                    // i2ptunnel not loaded — retry next cycle
-                }
-            }
-            return cls;
-        }
 
         /** Call a static int getter via reflection. */
         static int invokeGetInt(String methodName) {
-            return callStaticInt(getCLS(), methodName, -1);
+            return callStaticInt(reflectorTargetClass(methodName), methodName, -1);
         }
 
         /** Call a static double getter via reflection.
          *  Returns {@code -1.0d} when the class or method cannot be resolved —
          *  a sentinel the caller must treat as "no data", not as a measurement. */
         static double invokeGetDouble(String methodName) {
-            return callStaticDouble(getCLS(), methodName, -1.0d);
+            return callStaticDouble(reflectorTargetClass(methodName), methodName, -1.0d);
         }
 
         /** Call a static int setter via reflection. */
         static void invokeSetInt(String methodName, int value) {
-            callStaticSetInt(getCLS(), methodName, value);
+            callStaticSetInt(reflectorTargetClass(methodName), methodName, value);
         }
 
         /** Call a static long getter via reflection. */
         static long invokeGetLong(String methodName) {
-            return callStaticLong(getCLS(), methodName, -1L);
+            return callStaticLong(reflectorTargetClass(methodName), methodName, -1L);
         }
 
         /** Call a static long setter via reflection. */
         static void invokeSetLong(String methodName, long value) {
-            callStaticSetLong(getCLS(), methodName, value);
+            callStaticSetLong(reflectorTargetClass(methodName), methodName, value);
         }
     }
 
@@ -4921,12 +4948,12 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
         /** Apply to Connection's static multiplier, clamped to [50,200]. */
         protected void applyValue(int value) {
-            StreamingConnectionReflector.invokeConnectionSet("setConnectTimeoutMultiplier", value);
+            StreamingReflector.invokeSetInt("setConnectTimeoutMultiplier", value);
         }
 
         /** Read current multiplier from Connection. */
         protected int getRuntimeValue() {
-            int v = StreamingConnectionReflector.invokeConnectionInt("getConnectTimeoutMultiplier");
+            int v = StreamingReflector.invokeGetInt("getConnectTimeoutMultiplier");
             return v >= 0 ? v : 100;
         }
 
@@ -5171,11 +5198,11 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         }
 
         protected void applyValue(int value) {
-            StreamingConnectionReflector.invokeConnectionOptionsSet("setMaxSlowStartWindow", value);
+            StreamingReflector.invokeSetInt("setMaxSlowStartWindow", value);
         }
 
         protected int getRuntimeValue() {
-            int v = StreamingConnectionReflector.invokeConnectionOptionsInt("getMaxSlowStartWindowStatic");
+            int v = StreamingReflector.invokeGetInt("getMaxSlowStartWindowStatic");
             return v > 0 ? v : 1024;
         }
 
@@ -5778,11 +5805,11 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         }
 
         protected void applyValue(int value) {
-            StreamingConnectionReflector.invokeConnectionSet("setGlobalMaxWindowSize", value);
+            StreamingReflector.invokeSetInt("setGlobalMaxWindowSize", value);
         }
 
         protected int getRuntimeValue() {
-            int v = StreamingConnectionReflector.invokeConnectionInt("getGlobalMaxWindowSize");
+            int v = StreamingReflector.invokeGetInt("getGlobalMaxWindowSize");
             return v > 0 ? v : 1024;
         }
 
@@ -7707,11 +7734,11 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         }
 
         protected void applyValue(int value) {
-            StreamingConnectionReflector.invokeConnectionOptionsSet("setMaxRTO", value);
+            StreamingReflector.invokeSetInt("setMaxRTO", value);
         }
 
         protected int getRuntimeValue() {
-            int v = StreamingConnectionReflector.invokeConnectionOptionsInt("getMaxRTOStatic");
+            int v = StreamingReflector.invokeGetInt("getMaxRTOStatic");
             return v > 0 ? v : 10000;
         }
 
@@ -7824,11 +7851,11 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         }
 
         protected void applyValue(int value) {
-            StreamingConnectionReflector.invokeConnectionOptionsSet("setMaxResendDelay", value);
+            StreamingReflector.invokeSetInt("setMaxResendDelay", value);
         }
 
         protected int getRuntimeValue() {
-            int v = StreamingConnectionReflector.invokeConnectionOptionsInt("getMaxResendDelayStatic");
+            int v = StreamingReflector.invokeGetInt("getMaxResendDelayStatic");
             return v > 0 ? v : 15000;
         }
 
@@ -7881,11 +7908,11 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         }
 
         protected void applyValue(int value) {
-            StreamingConnectionReflector.invokeConnectionSet("setMaxRetransmissions", value);
+            StreamingReflector.invokeSetInt("setMaxRetransmissions", value);
         }
 
         protected int getRuntimeValue() {
-            int v = StreamingConnectionReflector.invokeConnectionInt("getMaxRetransmissionsStatic");
+            int v = StreamingReflector.invokeGetInt("getMaxRetransmissionsStatic");
             return v > 0 ? v : 32;
         }
 
@@ -7944,11 +7971,11 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         }
 
         protected void applyValue(int value) {
-            StreamingConnectionReflector.invokeConnectionOptionsSet("setMinResendDelay", value);
+            StreamingReflector.invokeSetInt("setMinResendDelay", value);
         }
 
         protected int getRuntimeValue() {
-            int v = StreamingConnectionReflector.invokeConnectionOptionsInt("getMinResendDelayStatic");
+            int v = StreamingReflector.invokeGetInt("getMinResendDelayStatic");
             return v > 0 ? v : 300;
         }
 
@@ -8007,12 +8034,13 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
         protected void applyValue(int value) {
             // Invert: Tuner treats higher=more aggressive, but code treats higher=slower
-            StreamingConnectionReflector.invokeConnectionOptionsSet("setDefaultCongestionAvoidanceGrowthRateFactor",
-                                                                     _min + _max - value);
+            StreamingReflector.invokeSetInt("setDefaultCongestionAvoidanceGrowthRateFactor",
+                                            _min + _max - value);
         }
 
         protected int getRuntimeValue() {
-            int codeVal = StreamingConnectionReflector.invokeConnectionOptionsInt("getDefaultCongestionAvoidanceGrowthRateFactorStatic");
+            int codeVal = StreamingReflector.invokeGetInt(
+                "getDefaultCongestionAvoidanceGrowthRateFactorStatic");
             if (codeVal <= 0) codeVal = 1;
             return Math.max(_min, Math.min(_max, _min + _max - codeVal));
         }
@@ -8183,12 +8211,13 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
         protected void applyValue(int value) {
             // Invert: Tuner treats higher=more aggressive, but code treats higher=slower
-            StreamingConnectionReflector.invokeConnectionOptionsSet("setDefaultSlowStartGrowthRateFactor",
-                                                                     _min + _max - value);
+            StreamingReflector.invokeSetInt("setDefaultSlowStartGrowthRateFactor",
+                                            _min + _max - value);
         }
 
         protected int getRuntimeValue() {
-            int codeVal = StreamingConnectionReflector.invokeConnectionOptionsInt("getDefaultSlowStartGrowthRateFactorStatic");
+            int codeVal = StreamingReflector.invokeGetInt(
+                "getDefaultSlowStartGrowthRateFactorStatic");
             if (codeVal <= 0) codeVal = 1;
             return Math.max(_min, Math.min(_max, _min + _max - codeVal));
         }
@@ -8331,11 +8360,11 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         }
 
         protected void applyValue(int value) {
-            StreamingConnectionReflector.invokeConnectionOptionsSet("setMinPacingRateKBps", value);
+            StreamingReflector.invokeSetInt("setMinPacingRateKBps", value);
         }
 
         protected int getRuntimeValue() {
-            int v = StreamingConnectionReflector.invokeConnectionOptionsInt("getMinPacingRateKBps");
+            int v = StreamingReflector.invokeGetInt("getMinPacingRateKBps");
             return v >= 0 ? v : 16;
         }
 
@@ -8392,11 +8421,11 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         }
 
         protected void applyValue(int value) {
-            StreamingConnectionReflector.invokeConnectionOptionsSet("setMaxRtt", value);
+            StreamingReflector.invokeSetInt("setMaxRtt", value);
         }
 
         protected int getRuntimeValue() {
-            int v = StreamingConnectionReflector.invokeConnectionOptionsInt("getMaxRttStatic");
+            int v = StreamingReflector.invokeGetInt("getMaxRttStatic");
             return v > 0 ? v : 10000;
         }
 
@@ -8448,11 +8477,11 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         }
 
         protected void applyValue(int value) {
-            StreamingConnectionReflector.invokeConnectionOptionsSet("setDefaultResendDelay", value);
+            StreamingReflector.invokeSetInt("setDefaultResendDelay", value);
         }
 
         protected int getRuntimeValue() {
-            int v = StreamingConnectionReflector.invokeConnectionOptionsInt("getDefaultResendDelayStatic");
+            int v = StreamingReflector.invokeGetInt("getDefaultResendDelayStatic");
             return v > 0 ? v : 1000;
         }
 
@@ -8502,11 +8531,11 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         }
 
         protected void applyValue(int value) {
-            StreamingConnectionReflector.invokeConnectionOptionsSet("setImmediateAckDelay", value);
+            StreamingReflector.invokeSetInt("setImmediateAckDelay", value);
         }
 
         protected int getRuntimeValue() {
-            int v = StreamingConnectionReflector.invokeConnectionOptionsInt("getImmediateAckDelayStatic");
+            int v = StreamingReflector.invokeGetInt("getImmediateAckDelayStatic");
             return v > 0 ? v : 80;
         }
 
@@ -8618,11 +8647,11 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         }
 
         protected void applyValue(int value) {
-            StreamingConnectionReflector.invokeConnectionSet("setMaxSynResends", value);
+            StreamingReflector.invokeSetInt("setMaxSynResends", value);
         }
 
         protected int getRuntimeValue() {
-            int v = StreamingConnectionReflector.invokeConnectionInt("getMaxSynResendsStatic");
+            int v = StreamingReflector.invokeGetInt("getMaxSynResendsStatic");
             return v > 0 ? v : 5;
         }
 

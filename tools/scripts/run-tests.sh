@@ -285,6 +285,7 @@ case "${1:-all}" in
     run_build core/java
     run_build core/java jarTest
     run_build apps/ministreaming/java
+    run_build apps/streaming/java
     run_build apps/i2ptunnel/java
     run_build router/java
     run_test router/java "Router"
