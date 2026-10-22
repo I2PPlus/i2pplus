@@ -2380,6 +2380,52 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
         } catch (IOException ioe) { /* ignored */ }
     }
 
+    /**
+     * Extract the request URL from the client's headers for logging.
+     * <p>
+     * Package-visible and static so a test can drive it with a hostile request
+     * line: the URL is entirely attacker-controlled, and this method used to call
+     * substring(0, 12) on any host merely containing "b32.i2p", so a request for
+     * "/b32.i2p" aborted the handler with StringIndexOutOfBoundsException.
+     *
+     * @param headers the raw request headers, may be null
+     * @return a human-readable request description, never null
+     * @since 0.9.72+
+     */
+    static String extractRequestUrl(String headers) {
+        if (headers == null || headers.isEmpty())
+            return "Unknown request";
+        String[] requestLines = NEWLINE_SPLIT.split(headers);
+        if (requestLines.length == 0)
+            return "Unknown request";
+        String requestLine = requestLines[0];
+        String[] requestParts = SPACE_SPLIT.split(requestLine);
+        String url = requestParts.length > 1 ? requestParts[1] : null;
+        if (url == null)
+            return "Unknown request";
+        if (url.startsWith("http://"))
+            url = url.replace("http://", "");
+        if (url.length() > 100)
+            url = url.substring(0, 48) + "..." + url.substring(url.length() - 48);
+        String[] urlParts = SLASH_SPLIT.split(url);
+        StringBuilder hostBuilder = new StringBuilder();
+        if (urlParts.length > 0) {
+            hostBuilder.append(urlParts[0]);
+            for (int i = 1; i < urlParts.length; i++) {
+                if (!urlParts[i].trim().isEmpty())
+                    hostBuilder.append("/").append(urlParts[i]);
+            }
+        } else {
+            hostBuilder.append(url);
+        }
+        String host = hostBuilder.toString();
+        // Shorten a full base32 address to its first 12 characters. The length
+        // test matters: "b32.i2p" alone is 7 characters and contains the marker.
+        if (host.contains("b32.i2p") && host.length() >= 12)
+            host = host.substring(0, 12) + "...b32.i2p";
+        return host;
+    }
+
     private static class CompressedRequestor implements Runnable {
         /**
          * Far-side label for transfer logs, e.g. {@code [skank / aanoquc2]}.
@@ -2749,42 +2795,6 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 _log.debug("Finished server-to-browser: Compressed? " + _shouldCompress + " KeepAlive? " + _keepalive +
                            urlSuffix(req));
             }
-        }
-
-        /**
-         * Extract the request URL from headers for logging.
-         * @return a human-readable request description, never null
-         */
-        private static String extractRequestUrl(String headers) {
-            if (headers == null || headers.isEmpty())
-                return "Unknown request";
-            String[] requestLines = NEWLINE_SPLIT.split(headers);
-            if (requestLines.length == 0)
-                return "Unknown request";
-            String requestLine = requestLines[0];
-            String[] requestParts = SPACE_SPLIT.split(requestLine);
-            String url = requestParts.length > 1 ? requestParts[1] : null;
-            if (url == null)
-                return "Unknown request";
-            if (url.startsWith("http://"))
-                url = url.replace("http://", "");
-            if (url.length() > 100)
-                url = url.substring(0, 48) + "..." + url.substring(url.length() - 48);
-            String[] urlParts = SLASH_SPLIT.split(url);
-            StringBuilder hostBuilder = new StringBuilder();
-            if (urlParts.length > 0) {
-                hostBuilder.append(urlParts[0]);
-                for (int i = 1; i < urlParts.length; i++) {
-                    if (!urlParts[i].trim().isEmpty())
-                        hostBuilder.append("/").append(urlParts[i]);
-                }
-            } else {
-                hostBuilder.append(url);
-            }
-            String host = hostBuilder.toString();
-            if (host != null && host.contains("b32.i2p"))
-                host = host.substring(0, 12) + "...b32.i2p";
-            return host != null ? host : "Unknown request";
         }
 
         /**
