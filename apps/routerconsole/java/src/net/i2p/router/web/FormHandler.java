@@ -3,7 +3,6 @@ package net.i2p.router.web;
 import java.io.Writer;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -50,61 +49,92 @@ public abstract class FormHandler {
     /** HTTP session for nonce validation. */
     protected HttpSession _session;
 
-    /** Rate limiter for form submissions - prevents brute-force attacks. */
-    private static final int RATE_LIMIT_WINDOW_MS = 60000; // 1 minute
-    private static final int RATE_LIMIT_MAX_POSTS = 30; // max POSTs per minute per IP
-    private static final ConcurrentHashMap<String, RateLimitEntry> RATE_LIMIT_MAP = new ConcurrentHashMap<>();
+    /**
+     * Length of one rate-limit window, in ms.
+     * <p>
+     * The rate limiter for form submissions - it exists to slow down brute-force
+     * nonce guessing on a failed submission. One budget per key; see validate()
+     * for what the key is.
+     */
+    static final int RATE_LIMIT_WINDOW_MS = 60000; // 1 minute
+    /** POSTs admitted per window per key before further ones are refused. */
+    static final int RATE_LIMIT_MAX_POSTS = 30;
+    /** The single budget key the console charges POSTs to. */
+    static final String RATE_LIMIT_GLOBAL_KEY = "global";
+    /** Above this many budgets, drop the idle ones before adding another. */
+    private static final int RATE_LIMIT_SWEEP_SIZE = 1000;
+    /** Live budgets, keyed by the value passed to checkRateLimit(). */
+    static final ConcurrentHashMap<String, RateLimitEntry> RATE_LIMIT_MAP =
+        new ConcurrentHashMap<>();
 
-    private static class RateLimitEntry {
-        final AtomicInteger count = new AtomicInteger(1);
-        final long windowStart = System.currentTimeMillis();
-    }
+    /**
+     * One window's POST count. {@link #windowStart} moves with the window, so a
+     * client that outlives the first one is counted again instead of waved
+     * through forever.
+     */
+    static class RateLimitEntry {
 
-    /** Check and record rate limit for an IP. Returns true if allowed. */
-    private static boolean checkRateLimit(String ip) {
-        if (ip == null || ip.isEmpty()) return true;
-        long now = System.currentTimeMillis();
-        RateLimitEntry entry = RATE_LIMIT_MAP.get(ip);
-        if (entry == null) {
-            RATE_LIMIT_MAP.put(ip, new RateLimitEntry());
-            return true;
-        }
-        // Reset if window expired
-        if (now - entry.windowStart > RATE_LIMIT_WINDOW_MS) {
-            entry.count.set(1);
-            return true;
-        }
-        // Check limit
-        if (entry.count.incrementAndGet() > RATE_LIMIT_MAX_POSTS) {
-            return false;
-        }
-        return true;
-    }
+        /**
+         * An empty window, opened by the call that created it.
+         */
+        RateLimitEntry() {}
 
-    /** Clean up old entries periodically. */
-    static {
-        Thread cleanupThread = new Thread(FormHandler::cleanupRateLimits, "FormHdlrCln");
-        cleanupThread.setDaemon(true);
-        cleanupThread.start();
+        /** POSTs charged to the current window; the creating call charges itself. */
+        final AtomicInteger count = new AtomicInteger(0);
+        /** When the window this count belongs to began, in ms. */
+        volatile long windowStart;
     }
 
     /**
-     * Periodic removal of stale rate-limit entries.
-     * Runs until interrupted.
-     * @since 0.9.70+
+     * Check and record one form submission against the budget for key.
+     * <p>
+     * Package-visible, and takes the clock as an argument, so a test can walk a
+     * whole window and its rollover without sleeping.
+     *
+     * @param key the budget to charge
+     * @param now current time in ms
+     * @return true if the submission is allowed; a null or empty key is allowed
+     *         unconditionally, because there is nothing to charge it against
      */
-    private static void cleanupRateLimits() {
-        while (true) {
-            try { Thread.sleep(120000); } catch (InterruptedException ie) { break; }
-            long now = System.currentTimeMillis();
-            Iterator<Map.Entry<String, RateLimitEntry>> it = RATE_LIMIT_MAP.entrySet().iterator();
-            while (it.hasNext()) {
-                Map.Entry<String, RateLimitEntry> e = it.next();
-                if (now - e.getValue().windowStart > RATE_LIMIT_WINDOW_MS * 2) {
-                    it.remove();
-                }
+    static boolean checkRateLimit(String key, long now) {
+        if (key == null || key.isEmpty()) return true;
+        if (RATE_LIMIT_MAP.size() >= RATE_LIMIT_SWEEP_SIZE) {cleanupRateLimits(now);}
+        RateLimitEntry entry = RATE_LIMIT_MAP.computeIfAbsent(key, k -> {
+            RateLimitEntry e = new RateLimitEntry();
+            e.windowStart = now;
+            return e;
+        });
+        // Per-entry, not per-map: the window roll has to set the start and the
+        // count together, or two concurrent POSTs can each open a new window and
+        // the budget doubles.
+        synchronized (entry) {
+            if (now - entry.windowStart >= RATE_LIMIT_WINDOW_MS) {
+                // Roll the window and charge this POST to the new one. Leaving
+                // windowStart at the original time made every later call take
+                // this branch, so once a minute had passed the limiter allowed
+                // everything until the sweep discarded the entry - a duty cycle,
+                // not a limit.
+                entry.windowStart = now;
+                entry.count.set(1);
+                return true;
             }
+            return entry.count.incrementAndGet() <= RATE_LIMIT_MAX_POSTS;
         }
+    }
+
+    /**
+     * Remove budgets that have seen no POST for two full windows.
+     * <p>
+     * Driven from the map's own size rather than a thread started in a static
+     * initializer: with one budget there is nothing to reclaim, and a thread
+     * that outlives every request and never stops is not a price worth paying
+     * for it.
+     *
+     * @param now current time in ms
+     */
+    static void cleanupRateLimits(long now) {
+        long idle = RATE_LIMIT_WINDOW_MS * 2;
+        RATE_LIMIT_MAP.entrySet().removeIf(e -> now - e.getValue().windowStart >= idle);
     }
 
     /**
@@ -427,8 +457,13 @@ public abstract class FormHandler {
             _valid = false;
             return;
         }
-        // Rate limiting for form submissions - prevent brute-force nonce guessing
-        if (_method != null && "POST".equals(_method) && !checkRateLimit("global")) {
+        // Rate limiting for form submissions - prevent brute-force nonce guessing.
+        // One shared budget for the whole console: FormHandler has no reference to
+        // the request, so the client address is not reachable here. A shared budget
+        // is the stricter of the two against a single attacker, at the cost of
+        // letting one client spend it for the others.
+        if (_method != null && "POST".equals(_method) &&
+            !checkRateLimit(RATE_LIMIT_GLOBAL_KEY, System.currentTimeMillis())) {
             addFormError(_t("Too many form submissions, please try again later"), true);
             _valid = false;
             return;

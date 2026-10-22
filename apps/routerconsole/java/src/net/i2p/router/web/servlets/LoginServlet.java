@@ -3,10 +3,12 @@ package net.i2p.router.web.servlets;
 import java.io.IOException;
 import java.net.URLDecoder;
 import java.security.SecureRandom;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.regex.Pattern;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
@@ -26,6 +28,7 @@ import net.i2p.router.web.CSSHelper;
 import net.i2p.router.web.ConsolePasswordManager;
 import net.i2p.router.web.RouterConsoleRunner;
 import net.i2p.servlet.filters.SessionManager;
+import net.i2p.util.Addresses;
 import net.i2p.util.Log;
 import net.i2p.data.Base64;
 import net.i2p.data.DataHelper;
@@ -54,6 +57,24 @@ public class LoginServlet extends HttpServlet {
     private static final String REALM = "i2prouter";
     private static final String DEFAULT_THEME = "dark";
     private static final String PROP_PERSISTED_SESSIONS = "routerconsole.persistedSessions";
+    /**
+     * Serializes the read-modify-write of the persisted-session list. Two
+     * concurrent logins otherwise read the same list and the later saveConfig()
+     * overwrites the earlier one's entry, so a session that was already issued
+     * silently stops working.
+     */
+    private static final Object _SESSION_LIST_LOCK = new Object();
+    /**
+     * How many "remember me" sessions router.config holds. Every login used to
+     * append one, with no expiry pruning, so the value grew without bound.
+     */
+    static final int MAX_PERSISTED_SESSIONS = 20;
+    /**
+     * Set to true only when the console really does sit behind a reverse proxy
+     * that rewrites the forwarding headers. Left false, the login blocklist keys
+     * on the peer address of the connection, which a client cannot forge.
+     */
+    private static final String PROP_TRUST_FORWARDED_FOR = "routerconsole.trustForwardedFor";
     private static final Pattern COLON_SPLIT = Pattern.compile(":");
     private static final Pattern PIPE_SPLIT = Pattern.compile("\\|");
     private static final SecureRandom CSRF_RANDOM = new SecureRandom();
@@ -377,13 +398,75 @@ public class LoginServlet extends HttpServlet {
     }
 
     private String getClientIP(HttpServletRequest req) {
-        String ip = req.getHeader("X-Forwarded-For");
-        if (ip == null || ip.isEmpty() || "unknown".equalsIgnoreCase(ip)) {
-            ip = req.getHeader("X-Real-IP");
+        boolean trust = false;
+        I2PAppContext ctx = I2PAppContext.getGlobalContext();
+        if (ctx instanceof RouterContext)
+            trust = Boolean.parseBoolean(
+                    ((RouterContext) ctx).getProperty(PROP_TRUST_FORWARDED_FOR));
+        return clientIP(req.getHeader("X-Forwarded-For"),
+                        req.getHeader("X-Real-IP"),
+                        req.getRemoteAddr(),
+                        trust);
+    }
+
+    /**
+     * Choose the address the login blocklist keys on.
+     * <p>
+     * The peer address of the connection is the default. The forwarding headers
+     * are attacker-controlled on a directly-reachable console, and honouring them
+     * let every attempt with a fresh X-Forwarded-For value look like a new client,
+     * so the blocklist never engaged and its map grew one entry per spoofed
+     * address. They are read only when an operator has opted in via
+     * {@link #PROP_TRUST_FORWARDED_FOR}, having put a real proxy in front.
+     * <p>
+     * That proxy must OVERWRITE the forwarding header with the address it saw -
+     * nginx {@code X-Real-IP} from {@code $remote_addr}, for example. A proxy that
+     * appends instead (nginx {@code $proxy_add_x_forwarded_for}, Apache's default)
+     * leaves the client's own text as the leftmost entry, which is exactly the
+     * fresh-identity bypass the header is not trusted for by default. A value
+     * that is not an IP literal is ignored outright, so a hostile header can
+     * neither key the blocklist on text of the sender's choosing nor reach the log
+     * line verbatim.
+     *
+     * @param forwardedFor the X-Forwarded-For header, a comma-separated chain, or null
+     * @param realIp the X-Real-IP header, or null
+     * @param remoteAddr the peer address of the connection, never null in practice
+     * @param trustForwarded true only when a trusted reverse proxy fronts the console
+     * @return the address to rate-limit, never null or empty
+     * @since 0.9.72+
+     */
+    static String clientIP(String forwardedFor, String realIp, String remoteAddr,
+                           boolean trustForwarded) {
+        if (trustForwarded) {
+            String ip = firstForwarded(forwardedFor);
+            if (ip == null)
+                ip = firstForwarded(realIp);
+            if (ip != null && Addresses.isIPAddress(ip))
+                return ip;
         }
-        if (ip == null || ip.isEmpty() || "unknown".equalsIgnoreCase(ip)) {
-            ip = req.getRemoteAddr();
-        }
+        String ip = remoteAddr;
+        if (ip == null || ip.isEmpty() || "unknown".equalsIgnoreCase(ip))
+            ip = "unknown";
+        return ip;
+    }
+
+    /**
+     * The client address from a forwarding header: the leftmost entry of an
+     * X-Forwarded-For chain, since later entries are appended by proxies further
+     * along and the first is the one the nearest proxy saw.
+     *
+     * @param header the raw header value, or null
+     * @return the trimmed address, or null if the header is absent, blank, or the
+     *         literal "unknown" some proxies send
+     * @since 0.9.72+
+     */
+    static String firstForwarded(String header) {
+        if (header == null)
+            return null;
+        int comma = header.indexOf(',');
+        String ip = (comma >= 0 ? header.substring(0, comma) : header).trim();
+        if (ip.isEmpty() || "unknown".equalsIgnoreCase(ip))
+            return null;
         return ip;
     }
 
@@ -472,16 +555,69 @@ public class LoginServlet extends HttpServlet {
         RouterContext rctx = (RouterContext) ctx;
         Router router = rctx.router();
 
-        long expiresAt = expiryMs > 0 ? System.currentTimeMillis() + expiryMs : -1;
-        String sessionData = username + ":" + expiresAt;
+        long now = System.currentTimeMillis();
+        long expiresAt = expiryMs > 0 ? now + expiryMs : -1;
 
-        String existing = rctx.getProperty(PROP_PERSISTED_SESSIONS);
-        StringBuilder sb = new StringBuilder();
-        if (existing != null && !existing.isEmpty()) {
-            sb.append(existing).append("|");
+        synchronized (_SESSION_LIST_LOCK) {
+            String existing = rctx.getProperty(PROP_PERSISTED_SESSIONS);
+            router.saveConfig(PROP_PERSISTED_SESSIONS,
+                              addPersistedSession(existing, token, username, expiresAt, now));
         }
-        sb.append(token).append("=").append(sessionData);
-        router.saveConfig(PROP_PERSISTED_SESSIONS, sb.toString());
+    }
+
+    /**
+     * Rebuild the persisted-session list with one session added.
+     * <p>
+     * The list used to be append-only: every login wrote a new entry, nothing
+     * ever removed one, and the whole value was rewritten each time - so a
+     * router left running accumulated a session token per login in router.config
+     * for ever, including ones that had expired and were never loadable again.
+     * This drops expired and unreadable entries, replaces an existing entry for
+     * the same token instead of adding a second, and caps the list so it cannot
+     * grow without bound.
+     * <p>
+     * Pure and static so a test can drive a hostile stored value without a
+     * router.
+     *
+     * @param existing the stored value, or null
+     * @param token the session token being added
+     * @param username who the session belongs to
+     * @param expiresAt when it expires in ms, or -1 for no expiry
+     * @param now current time in ms
+     * @return the value to store, entries joined with '|'
+     * @since 0.9.72+
+     */
+    static String addPersistedSession(String existing, String token, String username,
+                                      long expiresAt, long now) {
+        List<String> kept = new ArrayList<>();
+        if (existing != null && !existing.isEmpty()) {
+            for (String entry : PIPE_SPLIT.split(existing)) {
+                if (entry.isEmpty()) {continue;}
+                int eq = entry.indexOf('=');
+                if (eq <= 0) {continue;}
+                if (token.equals(entry.substring(0, eq))) {continue;}
+                String data = entry.substring(eq + 1);
+                int colon = data.indexOf(':');
+                if (colon <= 0) {continue;}
+                try {
+                    long exp = Long.parseLong(data.substring(colon + 1));
+                    if (exp > 0 && exp <= now) {continue;}
+                } catch (NumberFormatException e) {
+                    // Unreadable expiry: the loader would skip it too, so drop it
+                    // rather than carry it forward for the router's lifetime.
+                    continue;
+                }
+                kept.add(entry);
+            }
+        }
+        // Entries are appended newest last, so trimming the front drops the
+        // oldest survivors and keeps the cap on the list's total size.
+        int overflow = kept.size() - (MAX_PERSISTED_SESSIONS - 1);
+        if (overflow > 0) {
+            kept = kept.subList(overflow, kept.size());
+        }
+        kept.add(token + "=" + username + ':' + expiresAt);
+        return String.join("|", kept);
     }
 
     private void loadPersistedSessions() {
