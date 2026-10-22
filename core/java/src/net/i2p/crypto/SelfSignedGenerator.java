@@ -659,6 +659,30 @@ public final class SelfSignedGenerator {
     }
 
     /**
+     * Index into a DER-encoded SubjectPublicKeyInfo where the SKI/AKI hash input
+     * begins, i.e. just past the outer SEQUENCE's tag and length.
+     * <p>
+     * A DER length is short-form when the first length octet has bit 8 clear, and
+     * long-form otherwise, in which case that octet's low 7 bits are the number of
+     * <em>following</em> length octets - 1 or 2 in practice. Reading the flag bit
+     * instead of the count advanced the index by 128, so every DSA and RSA
+     * certificate hashed a window starting 127 bytes into the key instead of just
+     * past its header. Ed25519's 44-byte SPKI is short-form and was unaffected.
+     *
+     * @param der the DER-encoded SubjectPublicKeyInfo, at least 2 bytes long
+     * @return the offset the identifier is hashed from
+     * @since 0.9.72+
+     */
+    static int skiOffset(byte[] der) {
+        int pidx = 1;
+        int skip = der[pidx++];
+        if ((skip & 0x80) != 0)
+            pidx += skip & 0x7f;
+        pidx++; // one further header octet
+        return pidx;
+    }
+
+    /**
      * Add the following extensions:
      * 1) Subject Key Identifier
      * 2) Key Usage
@@ -680,10 +704,7 @@ public final class SelfSignedGenerator {
         // RFC 2549 sec. 4.2.1.2
         // subject public key identifier is the sha1 hash of the bit string of the public key
         // without the tag, length, and igore fields
-        int pidx = 1;
-        int skip = pubbytes[pidx++];
-        if ((skip & 0x80) != 0) pidx += skip & 0x80;
-        pidx++; // ignore
+        int pidx = skiOffset(pubbytes);
         MessageDigest md = SHA1.getInstance();
         md.update(pubbytes, pidx, pubbytes.length - pidx);
         byte[] sha = md.digest();

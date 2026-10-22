@@ -14,6 +14,7 @@ import net.i2p.data.SigningPublicKey;
 import java.security.GeneralSecurityException;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.TimeZone;
 import java.util.zip.CRC32;
 import java.util.zip.Checksum;
@@ -65,10 +66,12 @@ public final class Blinding {
      * context never ends up using a HKDF bound to a different one. A racy
      * double build is harmless, as both instances are equivalent.
      *
-     * @param ctx the app context
+     * @param ctx the app context, non-null
      * @return the shared HKDF, never null
+     * @throws NullPointerException if ctx is null
      */
-    private static HKDF hkdf(I2PAppContext ctx) {
+    static HKDF hkdf(I2PAppContext ctx) {
+        Objects.requireNonNull(ctx, "No context for the shared HKDF");
         if (_hkdfCtx != ctx) {
             synchronized (Blinding.class) {
                 if (_hkdfCtx != ctx) {

@@ -599,6 +599,16 @@ try (FileInputStream fileInputStream = new FileInputStream(signedFile);
             return null;
         }
 
+        // sign() reports failure by returning null - a null key, or an I/O error
+        // part-way through hashing the stream - so the write below would throw
+        // NullPointerException out of a method documented to return null on error.
+        if (signature == null) {
+            if (_log.shouldError())
+                _log.error("Signing failed -> No signature produced for " + inputFile);
+
+            return null;
+        }
+
         try (FileOutputStream fileOutputStream = new FileOutputStream(signedFile);
              FileInputStream copyInput = new FileInputStream(inputFile)) {
             fileOutputStream.write(signature.getData());

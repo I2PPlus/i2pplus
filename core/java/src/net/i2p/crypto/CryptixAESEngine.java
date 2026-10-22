@@ -156,16 +156,24 @@ public final class CryptixAESEngine extends AESEngine {
         if (length % 16 != 0) throw new IllegalArgumentException("Only lengths mod 16 are supported here");
 
         if (USE_SYSTEM_AES && length >= MIN_SYSTEM_AES_LENGTH) {
+            Cipher cipher = null;
             try {
                 SecretKeySpec key = getKeySpec(sessionKey);
                 IvParameterSpec ivps = new IvParameterSpec(iv, ivOffset, 16);
-                Cipher cipher = acquire();
+                cipher = acquire();
                 cipher.init(Cipher.ENCRYPT_MODE, key, ivps, _context.random());
                 cipher.doFinal(payload, payloadIndex, length, out, outIndex);
-                release(cipher);
                 return;
             } catch (GeneralSecurityException gse) {
                 if (_log.shouldWarn()) _log.warn("Java encrypt fail", gse);
+            } finally {
+                // Release on every exit: a Cipher dropped on an exception is
+                // re-created by the next acquire(), a provider lookup and a key
+                // schedule per call. The length is guarded mod 16 above, so a
+                // throw here comes from the provider, not from the caller's
+                // length - see the decrypt() path for the routine version.
+                if (cipher != null)
+                    release(cipher);
             }
         }
 
@@ -202,16 +210,23 @@ public final class CryptixAESEngine extends AESEngine {
         else if (out.length - outIndex < length) throw new IllegalArgumentException("Out is too small (out.length=" + out.length + " outIndex=" + outIndex + " length=" + length);
 
         if (USE_SYSTEM_AES && length >= MIN_SYSTEM_AES_LENGTH) {
+            Cipher cipher = null;
             try {
                 SecretKeySpec key = getKeySpec(sessionKey);
                 IvParameterSpec ivps = new IvParameterSpec(iv, ivOffset, 16);
-                Cipher cipher = acquire();
+                cipher = acquire();
                 cipher.init(Cipher.DECRYPT_MODE, key, ivps, _context.random());
                 cipher.doFinal(payload, payloadIndex, length, out, outIndex);
-                release(cipher);
                 return;
             } catch (GeneralSecurityException gse) {
-                if (_log.shouldWarn()) _log.warn("Java decrypt fail", gse);
+                // decrypt() accepts a length that is not a multiple of 16 and
+                // doFinal() rejects that, so this path is routine rather than
+                // exceptional. Keep the message visible but drop the throwable -
+                // capturing a stack trace per call is the amplifiable part.
+                if (_log.shouldWarn()) _log.warn("Java decrypt fail: " + gse.getMessage());
+            } finally {
+                if (cipher != null)
+                    release(cipher);
             }
         }
 
@@ -219,7 +234,9 @@ public final class CryptixAESEngine extends AESEngine {
         if (length % 16 != 0) {
             // may not work, it will overrun payload length and could AIOOBE
             numblock++;
-            if (_log.shouldWarn()) _log.warn("Not %16 " + length, new Exception());
+            // No throwable here: a non-aligned length is a caller property, not a
+            // fault, and capturing a stack trace per call is the costly part.
+            if (_log.shouldWarn()) _log.warn("Not %16 " + length);
         }
 
         byte[] prev = SimpleByteCache.acquire(16);

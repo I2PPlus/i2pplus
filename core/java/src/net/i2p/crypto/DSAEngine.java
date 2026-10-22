@@ -265,11 +265,29 @@ public final class DSAEngine {
             BigInteger s = new NativeBigInteger(1, sbytes);
             BigInteger r = new NativeBigInteger(1, rbytes);
             BigInteger y = new NativeBigInteger(1, verifyingKey.getData());
+            // q is prime and s is read from 20 bytes, so s < 2q and the only
+            // values with no inverse mod q are 0 and q itself. Ruled out here
+            // rather than left to the catch below, because the native
+            // implementation behind modInverse() can take a non-coprime operand
+            // as a divide-by-zero that ends the JVM instead of throwing.
+            if (s.signum() == 0 || s.equals(CryptoConstants.dsaq)) {
+                _log.warnThrottled("dsa-s-modinverse",
+                                   "Invalid signature: s value has no inverse mod q");
+                return false;
+            }
             BigInteger w;
             try {
                 w = s.modInverse(CryptoConstants.dsaq);
             } catch (ArithmeticException ae) {
-                _log.warn("Invalid signature: modInverse() failed for s value", ae);
+                // s == 0 (mod q) has no modular inverse, and the native path
+                // behind modInverse() can take a non-coprime operand as a
+                // divide-by-zero that ends the JVM rather than throwing what
+                // this catch handles - so the value is rejected before the call
+                // (see the guard above), and this catch is the fallback. Anyone
+                // who can send a signature can reach it, so throttle it and skip
+                // the stack trace - the throw site is always this line.
+                _log.warnThrottled("dsa-s-modinverse",
+                                   "Invalid signature: modInverse() failed for s value");
                 return false;
             }
             byte[] data = hash.getData();

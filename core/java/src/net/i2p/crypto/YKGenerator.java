@@ -15,6 +15,7 @@ import net.i2p.util.SystemVersion;
 
 import java.math.BigInteger;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -52,7 +53,18 @@ final class YKGenerator {
      * contends with poll() on the encryption path.
      */
     private final AtomicInteger _size = new AtomicInteger();
-    private Thread _precalcThread;
+    /**
+     * The precalc thread. Volatile so the encryption path can read it without
+     * taking the monitor that start() and shutdown() hold.
+     */
+    private volatile Thread _precalcThread;
+    /**
+     * Whether the precalc thread has already been woken for the current idle
+     * period. A sustained burst misses on every message, and each miss would
+     * otherwise interrupt the precalc thread out of its check sleep and straight
+     * back into it.
+     */
+    private final AtomicBoolean _pinged = new AtomicBoolean();
     private final I2PAppContext ctx;
     private volatile boolean _isRunning;
 
@@ -101,6 +113,15 @@ final class YKGenerator {
         if (_isRunning) {
             return;
         }
+        // A precalc thread caught mid-offer while shutdown() drained the pool can
+        // leave a value queued with the occupancy cache already zeroed, and the
+        // refill loop trusts that cache. Re-sync both before starting.
+        _values.clear();
+        _size.set(0);
+        // A wake-up claim taken by a miss that arrived during the previous
+        // shutdown would otherwise be handed to the new run, swallowing its
+        // first interrupt.
+        _pinged.set(false);
         _precalcThread = new I2PThread(new YKPrecalcRunner(MIN_NUM_BUILDERS, MAX_NUM_BUILDERS), "YKPrecalc", true);
         _precalcThread.setPriority(Thread.NORM_PRIORITY - 2);
         _isRunning = true;
@@ -128,6 +149,9 @@ final class YKGenerator {
      * @return true if successful, false if full
      */
     private final boolean addValues(BigInteger[] yk) {
+        if (!_isRunning) {
+            return false;
+        }
         if (!_values.offer(yk)) {
             return false;
         }
@@ -147,14 +171,33 @@ final class YKGenerator {
             return rv;
         }
         rv = generateYK();
-        Thread precalcThread;
-        synchronized (this) {
-            precalcThread = _precalcThread;
-        }
-        if (precalcThread != null) {
+        Thread precalcThread = _precalcThread;
+        if (precalcThread != null && claimPing()) {
             precalcThread.interrupt();
         }
         return rv;
+    }
+
+    /**
+     * Claim the one wake-up allowed for the current idle period, so a burst of
+     * misses interrupts the precalc thread once instead of per message. The
+     * precalc runner releases the claim when it goes back to sleep.
+     *
+     * @return true if this caller should interrupt the precalc thread
+     * @since 0.9.72+
+     */
+    final boolean claimPing() {
+        return _pinged.compareAndSet(false, true);
+    }
+
+    /**
+     * Release the wake-up claim, called by the precalc runner as it goes back to
+     * sleep so the next drain of the pool can wake it again.
+     *
+     * @since 0.9.72+
+     */
+    final void releasePing() {
+        _pinged.set(false);
     }
 
     private static final BigInteger TWO = new NativeBigInteger(1, new byte[] {0x02});
@@ -246,6 +289,8 @@ final class YKGenerator {
                 // Resample after filling, so the next cycle measures drain only
                 _lastSize = _size.get();
                 _lastSample = ctx.clock().now();
+                // About to idle: let the next drain wake us once.
+                releasePing();
                 try {
                     Thread.sleep(_checkDelay);
                 } catch (InterruptedException ie) {

@@ -132,6 +132,32 @@ public class CryptixAESEngineTest extends TestCase {
         assertTrue(DataHelper.eq(decrypted, orig));
     }
 
+    /**
+     * decrypt()'s contract tolerates a length that is not a multiple of 16: it
+     * rounds the block count up and overruns the tail rather than rejecting the
+     * call. encrypt() has a mod-16 guard and decrypt() deliberately does not, so
+     * adding one would break this. The aligned prefix must still come out right.
+     *
+     * @since 0.9.72+
+     */
+    public void testDecryptToleratesNonAlignedLength() {
+        I2PAppContext ctx = I2PAppContext.getGlobalContext();
+        SessionKey key = ctx.keyGenerator().generateSessionKey();
+        byte[] iv = new byte[16];
+        byte[] orig = new byte[1024];
+        byte[] encrypted = new byte[1024];
+        byte[] decrypted = new byte[1024];
+        ctx.random().nextBytes(iv);
+        ctx.random().nextBytes(orig);
+        CryptixAESEngine aes = new CryptixAESEngine(ctx);
+        aes.encrypt(orig, 0, encrypted, 0, key, iv, orig.length);
+        int len = 1000;   // not a multiple of 16
+        aes.decrypt(encrypted, 0, decrypted, 0, key, iv, len);
+        // 992 = floor(1000/16)*16, the whole blocks the call covered
+        assertTrue(DataHelper.eq(java.util.Arrays.copyOfRange(decrypted, 0, 992),
+                                 java.util.Arrays.copyOfRange(orig, 0, 992)));
+    }
+
     /** Same session key object must reuse the memoized key spec. */
     public void testKeySpecReusedForSameSessionKey() {
         I2PAppContext ctx = I2PAppContext.getGlobalContext();
