@@ -1975,23 +1975,36 @@ public final class ECIESAEADEngine {
 
         /**
          * Return all blocks to their pools and clear the list.
+         * <p>
+         * A pooled block is handed back with whatever it last carried still
+         * reachable from it, so the reference-holding types are cleared on the
+         * way in: a GarlicBlock pins the whole clove and everything the clove
+         * holds, and a NextKeyBlock pins a live session key. The pools are
+         * per-thread, so an uncleared block keeps that object for the life of
+         * the transport thread. Every acquire re-arms the field before the block
+         * is returned to the caller, so a cleared block is never read.
          *
          * @param blocks the block list to recycle, emptied by this call
          */
         void release(List<Block> blocks) {
             for (Block b : blocks) {
-                if (b instanceof GarlicBlock)
-                    cloveBlocks.add((GarlicBlock) b);
-                else if (b instanceof PaddingBlock)
+                if (b instanceof GarlicBlock) {
+                    GarlicBlock gb = (GarlicBlock) b;
+                    gb.setClove(null);
+                    cloveBlocks.add(gb);
+                } else if (b instanceof PaddingBlock) {
                     paddingBlocks.add((PaddingBlock) b);
-                else if (b instanceof DateTimeBlock)
+                } else if (b instanceof DateTimeBlock) {
                     datetimeBlocks.add((DateTimeBlock) b);
-                else if (b instanceof NextKeyBlock)
-                    nextKeyBlocks.add((NextKeyBlock) b);
-                else if (b instanceof AckBlock)
+                } else if (b instanceof NextKeyBlock) {
+                    NextKeyBlock nb = (NextKeyBlock) b;
+                    nb.setNext(null);
+                    nextKeyBlocks.add(nb);
+                } else if (b instanceof AckBlock) {
                     ackBlocks.add((AckBlock) b);
-                else if (b instanceof AckRequestBlock)
+                } else if (b instanceof AckRequestBlock) {
                     ackReqBlocks.add((AckRequestBlock) b);
+                }
             }
             blocks.clear();
         }

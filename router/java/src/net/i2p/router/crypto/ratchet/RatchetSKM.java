@@ -358,6 +358,8 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
             // we are Alice, NSR received
             if (_log.shouldInfo())
                 _log.info("Session " + oldState.hashCode() + " to " + state.hashCode() + " update as Alice. Bob: " + toString(target));
+            OutboundSession sess;
+            List<OutboundSession> stale;
             synchronized (_pendingOutboundSessions) {
                 List<OutboundSession> pending = _pendingOutboundSessions.get(target);
                 if (pending == null) {
@@ -366,47 +368,8 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
                     // Normal case for multiple NSRs, was already removed
                     return false;
                 }
-                boolean found = false;
-                for (Iterator<OutboundSession> iter = pending.iterator(); iter.hasNext(); ) {
-                    OutboundSession sess = iter.next();
-                    HandshakeState pstate = sess.getHandshakeState();
-                    if (oldState.equals(pstate)) {
-                        if (!found) {
-                            found = true;
-                            sess.updateSession(state, null, split);
-                            boolean ok = addSession(sess, false);
-                            if (_log.shouldDebug()) {
-                                if (ok)
-                                    _log.debug("Update Alice session from NSR to ES for "  + target);
-                                else
-                                    _log.debug("Session already updated from NSR to ES for "  + target);
-                            }
-                            iter.remove();
-                        } else {
-                            // won't happen
-                            if (_log.shouldDebug())
-                                _log.debug("Duplicate pending session " + sess + " for "  + target);
-                        }
-                    } else {
-                        if (_log.shouldDebug())
-                            _log.debug("Other pending session " + sess + " for "  + target);
-                    }
-                }
-                if (found) {
-                    _pendingOutboundSessions.remove(target);
-                    if (!pending.isEmpty()) {
-                        for (OutboundSession sess : pending) {
-                            sess.getHandshakeState().destroy();
-                            for (RatchetTagSet ts : sess.getTagSets()) {
-                                for (RatchetSessionTag tag : ts.getRegisteredTags()) {
-                                    _inboundTagSets.remove(tag);
-                                }
-                            }
-                        }
-                        if (_log.shouldDebug())
-                            _log.debug("Cleaned up " + pending.size() + " stale pending sessions for " + target);
-                    }
-                } else {
+                sess = takePendingFor(pending, oldState);
+                if (sess == null) {
                     // Not recoverable, and no recovery is needed. Pending
                     // sessions exist for the target but none matches oldState,
                     // so this is a late or duplicate NSR for a handshake that
@@ -419,9 +382,64 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
                         _log.debug("Update Alice session but no session found (out of " + pending.size() + ") for "  + target);
                     return false;
                 }
+                // Whatever is still queued for this target came from a handshake
+                // that lost the race. Drop it from the map here, destroy it
+                // below.
+                stale = _pendingOutboundSessions.remove(target);
+            }
+            // The derivations and the inbound tagset inserts below cost
+            // microseconds each, and this map monitor is a single lock for every
+            // NSR the router handles, so keep them off it. The session is out of
+            // the pending map by now, so no second NSR for this handshake can
+            // promote it as well.
+            sess.updateSession(state, null, split);
+            boolean ok = addSession(sess, false);
+            if (_log.shouldDebug()) {
+                if (ok)
+                    _log.debug("Update Alice session from NSR to ES for "  + target);
+                else
+                    _log.debug("Session already updated from NSR to ES for "  + target);
+            }
+            if (!stale.isEmpty()) {
+                for (OutboundSession other : stale) {
+                    other.getHandshakeState().destroy();
+                    for (RatchetTagSet ts : other.getTagSets()) {
+                        for (RatchetSessionTag tag : ts.getRegisteredTags()) {
+                            _inboundTagSets.remove(tag);
+                        }
+                        ts.clearRegisteredTags();
+                    }
+                }
+                if (_log.shouldDebug())
+                    _log.debug("Cleaned up " + stale.size() +
+                               " stale pending sessions for " + target);
             }
         }
         return true;
+    }
+
+    /**
+     * Detach the pending session this New Session Reply belongs to, so the
+     * caller can promote it outside the map monitor. The first match wins and is
+     * removed from the list; a second entry for the same handshake is left
+     * behind for the caller to clean up as stale.
+     *
+     * @param pending the sessions queued for one target, not null, modified in
+     *                place
+     * @param oldState the pre-clone handshake state the reply carries
+     * @return the session to promote, or null if none matches, in which case
+     *         pending is left as it was
+     * @since 0.9.72+
+     */
+    static OutboundSession takePendingFor(List<OutboundSession> pending, HandshakeState oldState) {
+        for (Iterator<OutboundSession> iter = pending.iterator(); iter.hasNext(); ) {
+            OutboundSession sess = iter.next();
+            if (oldState.equals(sess.getHandshakeState())) {
+                iter.remove();
+                return sess;
+            }
+        }
+        return null;
     }
 
     /**
@@ -715,6 +733,7 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
                 for (RatchetSessionTag t : tagSet.getRegisteredTags()) {
                     _inboundTagSets.remove(t);
                 }
+                tagSet.clearRegisteredTags();
             }
         } else {
             if (_log.shouldInfo())

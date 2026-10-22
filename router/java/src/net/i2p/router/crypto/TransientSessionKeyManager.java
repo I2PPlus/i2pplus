@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import net.i2p.I2PAppContext;
 import net.i2p.crypto.EncType;
@@ -74,7 +75,12 @@ public class TransientSessionKeyManager extends SessionKeyManager {
     private final Log _log;
     /** Map allowing us to go from the targeted PublicKey to the OutboundSession used. */
     private final Map<PublicKey, OutboundSession> _outboundSessions;
-    /** Map allowing us to go from a SessionTag to the containing TagSet. */
+    /**
+     * Map allowing us to go from a SessionTag to the containing TagSet.
+     * Concurrent: a decrypt takes a tag out of it on every inbound message, so
+     * the map itself is not a lock. What a TagSet's own contents are guarded by
+     * is the TagSet - see consumeTag().
+     */
     private final Map<SessionTag, TagSet> _inboundTagSets;
     /** The router context. */
     protected final I2PAppContext _context;
@@ -106,8 +112,13 @@ public class TransientSessionKeyManager extends SessionKeyManager {
     private static final long SESSION_TAG_EXPIRATION_WINDOW = 90 * 1000L;
 
     /**
-     * A few MB? How about 24 MB!
-     * This is the max size of _inboundTagSets.
+     * Maximum number of entries in _inboundTagSets.
+     * <p>
+     * This is a memory bound, not a count target. Measured on a 64-bit JVM with
+     * compressed oops, an entry costs about 126 bytes - the 32-byte tag and its
+     * wrapper, the map node, and the hash table slot - so this cap is worth
+     * roughly 96 MB. The hourly cleanup only trims once the cap is already
+     * exceeded, so that figure is the steady-state ceiling, not a soft target.
      */
     public static final int MAX_INBOUND_SESSION_TAGS = 800 * 1000;
 
@@ -177,7 +188,7 @@ public class TransientSessionKeyManager extends SessionKeyManager {
         _log = context.logManager().getLog(TransientSessionKeyManager.class);
         _context = context;
         _outboundSessions = new HashMap<>(64);
-        _inboundTagSets = new HashMap<>(128);
+        _inboundTagSets = new ConcurrentHashMap<>(128);
          _alive = true;
         new CleanupEvent().schedule(60L*1000);
     }
@@ -188,7 +199,7 @@ public class TransientSessionKeyManager extends SessionKeyManager {
     @Override
     public void shutdown() {
         _alive = false;
-        synchronized (_inboundTagSets) {_inboundTagSets.clear();}
+        _inboundTagSets.clear();
         synchronized (_outboundSessions) {_outboundSessions.clear();}
     }
 
@@ -211,9 +222,7 @@ public class TransientSessionKeyManager extends SessionKeyManager {
      * @return a snapshot of all inbound tag sets
      */
     private Set<TagSet> getInboundTagSets() {
-        synchronized (_inboundTagSets) {
-            return new HashSet<>(_inboundTagSets.values());
-        }
+        return new HashSet<>(_inboundTagSets.values());
     }
 
     /** OutboundSession - used only by HTML. */
@@ -414,16 +423,8 @@ public class TransientSessionKeyManager extends SessionKeyManager {
      */
     @Override
     public TagSetHandle tagsDelivered(PublicKey target, SessionKey key, Set<SessionTag> sessionTags) {
-        // if this is ever null, this is racy and needs synch
-        OutboundSession sess = getSession(target);
-        if (sess == null) {
-            if (_log.shouldWarn())
-                _log.warn("No session for delivered TagSet to target: " + toString(target));
-            sess = createAndReturnSession(target, key);
-            if (sess == null) return null;
-        } else {
-            sess.setCurrentKey(key);
-        }
+        OutboundSession sess = getOrCreateSession(target, key);
+        if (sess == null) return null;
         TagSet set = new TagSet(sessionTags, key, _context.clock().now(), _sentTagSetID.incrementAndGet());
         sess.addTags(set);
         if (_log.shouldDebug())
@@ -515,30 +516,30 @@ public class TransientSessionKeyManager extends SessionKeyManager {
         }
         TagSet old = null;
         SessionTag dupTag = null;
-        synchronized (_inboundTagSets) {
-            for (SessionTag tag : sessionTags) {
-                old = _inboundTagSets.put(tag, tagSet);
-                if (old != null) {
-                    if (!old.getAssociatedKey().equals(tagSet.getAssociatedKey())) {
-                        _inboundTagSets.remove(tag);
-                        dupTag = tag;
-                        break;
-                    } else {
-                        old = null; // ignore the dup
-                    }
+        for (SessionTag tag : sessionTags) {
+            old = _inboundTagSets.put(tag, tagSet);
+            if (old != null) {
+                if (!old.getAssociatedKey().equals(tagSet.getAssociatedKey())) {
+                    _inboundTagSets.remove(tag);
+                    dupTag = tag;
+                    break;
+                } else {
+                    old = null; // ignore the dup
                 }
             }
         }
 
         if (old != null) {
             // drop both old and tagSet tags
-            synchronized (_inboundTagSets) {
+            // old's tag list is read here, so the tag set is what has to be
+            // locked; the map operations need no lock of their own.
+            synchronized (old) {
                 for (SessionTag tag : old.getTags()) {
                     _inboundTagSets.remove(tag);
                 }
-                for (SessionTag tag : sessionTags) {
-                    _inboundTagSets.remove(tag);
-                }
+            }
+            for (SessionTag tag : sessionTags) {
+                _inboundTagSets.remove(tag);
             }
 
             if (_log.shouldWarn()) {
@@ -566,29 +567,32 @@ public class TransientSessionKeyManager extends SessionKeyManager {
         int toRemove = overage * 2;
         _log.logAlways(Log.WARN, "Session tag limit exceeded -> Starting cleanup; overage: " + overage);
         List<TagSet> removed = new ArrayList<>(toRemove);
-        synchronized (_inboundTagSets) {
-            for (TagSet set : _inboundTagSets.values()) {
-                int size = set.getTags().size();
-                if (size > 1000)
-                    absurd++;
-                if (size > 100)
-                    large++;
-                if (set.getDate() - now < 3*60*1000) {
-                    // expiration is 12 minutes, so these are older than 9 minutes
-                    old++;
-                    removed.add(set);
-                    continue;
-                } else if (set.getDate() - now > 8*60*1000) {
-                    // expiration is 12 minutes, so these were created in last 4 minutes
-                    recent++;
-                    continue;
-                }
-
-                if (removed.size() < toRemove)
-                    removed.add(set);
+        for (TagSet set : _inboundTagSets.values()) {
+            int size;
+            synchronized (set) {
+                size = set.getTags().size();
             }
-            for (int i = 0; i < removed.size(); i++) {
-                TagSet cur = removed.get(i);
+            if (size > 1000)
+                absurd++;
+            if (size > 100)
+                large++;
+            if (set.getDate() - now < 3*60*1000) {
+                // expiration is 12 minutes, so these are older than 9 minutes
+                old++;
+                removed.add(set);
+                continue;
+            } else if (set.getDate() - now > 8*60*1000) {
+                // expiration is 12 minutes, so these were created in last 4 minutes
+                recent++;
+                continue;
+            }
+
+            if (removed.size() < toRemove)
+                removed.add(set);
+        }
+        for (int i = 0; i < removed.size(); i++) {
+            TagSet cur = removed.get(i);
+            synchronized (cur) {
                 for (SessionTag tag : cur.getTags()) {
                     _inboundTagSets.remove(tag);
                     tags++;
@@ -612,14 +616,19 @@ public class TransientSessionKeyManager extends SessionKeyManager {
      */
     @Override
     public SessionKey consumeTag(SessionTag tag) {
-        TagSet tagSet;
-        synchronized (_inboundTagSets) {
-            tagSet = _inboundTagSets.remove(tag);
-            if (tagSet == null) {
-                if (_log.shouldDebug())
-                    _log.debug("Cannot process unknown Inbound Tag [" + tag.toString().substring(0,6) + "]");
-                return null;
-            }
+        // Taking the tag out of the map is atomic by itself, so the map is not
+        // part of this critical section - only the tag set the tag came from,
+        // whose remaining tags have to be updated consistently. This is the
+        // inbound decrypt path: a single monitor around the whole map would put
+        // every legacy decrypt in the router in one queue.
+        TagSet tagSet = _inboundTagSets.remove(tag);
+        if (tagSet == null) {
+            if (_log.shouldDebug())
+                _log.debug("Cannot process unknown Inbound Tag [" +
+                           tag.toString().substring(0,6) + "]");
+            return null;
+        }
+        synchronized (tagSet) {
             tagSet.consume(tag);
         }
 
@@ -632,6 +641,34 @@ public class TransientSessionKeyManager extends SessionKeyManager {
     private OutboundSession getSession(PublicKey target) {
         synchronized (_outboundSessions) {
             return _outboundSessions.get(target);
+        }
+    }
+
+    /**
+     * The session for a target with its current key brought up to date, or a new
+     * one built under key if there is none yet.
+     * <p>
+     * Lookup and insert are one step under the session-map monitor, the same
+     * shape getCurrentOrNewKey() uses. Taken as a lookup and then a create, two
+     * clove threads handing over tags for the same target each found no session
+     * and each built one, and the second put discarded the first along with the
+     * tag sets already waiting on it.
+     *
+     * @param target the peer the session is with, ELGAMAL_2048
+     * @param key the session key the caller's tags are bound to
+     * @return the session to attach the tag set to, or null if none could be built
+     * @since 0.9.72+
+     */
+    private OutboundSession getOrCreateSession(PublicKey target, SessionKey key) {
+        synchronized (_outboundSessions) {
+            OutboundSession sess = _outboundSessions.get(target);
+            if (sess == null) {
+                if (_log.shouldWarn())
+                    _log.warn("No session for delivered TagSet to target: " + toString(target));
+                return createAndReturnSession(target, key);
+            }
+            sess.setCurrentKey(key);
+            return sess;
         }
     }
 
@@ -663,33 +700,34 @@ public class TransientSessionKeyManager extends SessionKeyManager {
         int remaining = 0;
         long now = _context.clock().now();
 
-        synchronized (_inboundTagSets) {
-            for (Iterator<TagSet> iter = _inboundTagSets.values().iterator(); iter.hasNext();) {
-                TagSet ts = iter.next();
-                // for inbound tagsets, getDate() is the expire time
-                if (ts.getDate() <= now) {
-                    iter.remove();
-                    // bug, this counts inbound tags, not tag sets
-                    removed++;
-                }
+        for (Iterator<TagSet> iter = _inboundTagSets.values().iterator(); iter.hasNext();) {
+            TagSet ts = iter.next();
+            // for inbound tagsets, getDate() is the expire time
+            if (ts.getDate() <= now) {
+                iter.remove();
+                // bug, this counts inbound tags, not tag sets
+                removed++;
             }
-            remaining = _inboundTagSets.size();
-            if (remaining > 500) {
-                // find SessionKeys with a large number of TagSets and trim them
-                Map<SessionKey, Set<TagSet>> inboundSets = getInboundTagSetsBySessionKey();
-                for (Map.Entry<SessionKey, Set<TagSet>> e : inboundSets.entrySet()) {
-                    SessionKey skey = e.getKey();
-                    Set<TagSet> sets = e.getValue();
-                    int count = sets.size();
-                    if (count >= 10) {
-                        if (_log.shouldInfo())
-                            _log.info("Session key " + skey.toBase64() + " has " + count + " tag sets");
-                        // for any session key with at least 10 tagsets,
-                       // remove all tagsets larger than 8 tags that haven't been used and
-                        // are old. The more the tagsets, the more aggressively we expire.
-                        // From 9 minutes at 10 down to one minute at 50
-                        long age = Math.min(5*60*1000L, Math.max(60*1000L, 9*60*1000L - ((long) (count - 10) * 8*60*1000L/40)));
-                        for (TagSet ts : sets) {
+        }
+        remaining = _inboundTagSets.size();
+        if (remaining > 500) {
+            // find SessionKeys with a large number of TagSets and trim them
+            Map<SessionKey, Set<TagSet>> inboundSets = getInboundTagSetsBySessionKey();
+            for (Map.Entry<SessionKey, Set<TagSet>> e : inboundSets.entrySet()) {
+                SessionKey skey = e.getKey();
+                Set<TagSet> sets = e.getValue();
+                int count = sets.size();
+                if (count >= 10) {
+                    if (_log.shouldInfo())
+                        _log.info("Session key " + skey.toBase64() + " has " + count + " tag sets");
+                    // for any session key with at least 10 tagsets,
+                    // remove all tagsets larger than 8 tags that haven't been used and
+                    // are old. The more the tagsets, the more aggressively we expire.
+                    // From 9 minutes at 10 down to one minute at 50
+                    long backoff = (long) (count - 10) * 8*60*1000L / 40;
+                    long age = Math.min(5*60*1000L, Math.max(60*1000L, 9*60*1000L - backoff));
+                    for (TagSet ts : sets) {
+                        synchronized (ts) {
                             Set<SessionTag> tags = ts.getTags();
                             int curSize = tags.size();
                             int origSize = ts.getOriginalSize();
@@ -843,11 +881,29 @@ public class TransientSessionKeyManager extends SessionKeyManager {
     private static class TagSetComparator implements Comparator<TagSet>, Serializable {
          /** Compare two entries for ordering. */
          public int compare(TagSet l, TagSet r) {
-             int rv = (int) (l.getDate() - r.getDate());
-             if (rv != 0)
-                 return rv;
-             return l.hashCode() - r.hashCode();
+             return compareTagSets(l.getDate(), r.getDate(), l.hashCode(), r.hashCode());
         }
+    }
+
+    /**
+     * Orders two tag sets by the two values the debug page sorts on: earliest
+     * date first, ties broken by hash.
+     * <p>
+     * Compares instead of subtracting. A date gap over {@code Integer.MAX_VALUE}
+     * ms (24.9 days) flips the sign of a truncated subtraction, and a hash is
+     * any int, so the tie-break overflows routinely rather than never.
+     *
+     * @param leftDate the first candidate's tag-set date, in ms
+     * @param rightDate the second candidate's tag-set date, in ms
+     * @param leftHash the first candidate's hash, consulted only to break a date tie
+     * @param rightHash the second candidate's hash
+     * @return negative, zero or positive as the first sorts before, alongside, or
+     *         after the second
+     * @since 0.9.72+
+     */
+    static int compareTagSets(long leftDate, long rightDate, int leftHash, int rightHash) {
+        int rv = Long.compare(leftDate, rightDate);
+        return rv != 0 ? rv : Integer.compare(leftHash, rightHash);
     }
 
     /**
@@ -1029,14 +1085,13 @@ public class TransientSessionKeyManager extends SessionKeyManager {
                         removed++;
                     }
                 }
-                // failsafe, sometimes these are sticking around, not sure why, so clean them periodically
-                if ((now & 0x0f) == 0) {
-                    for (Iterator<TagSet> iter = _unackedTagSets.iterator(); iter.hasNext(); ) {
-                        TagSet set = iter.next();
-                        if (set.getDate() + SESSION_TAG_DURATION_MS <= now) {
-                            iter.remove();
-                            removed++;
-                        }
+                // Failsafe: an unacked set can be left behind by a path that
+                // never reaches it again, so sweep it on every pass
+                for (Iterator<TagSet> iter = _unackedTagSets.iterator(); iter.hasNext(); ) {
+                    TagSet set = iter.next();
+                    if (set.getDate() + SESSION_TAG_DURATION_MS <= now) {
+                        iter.remove();
+                        removed++;
                     }
                 }
             }

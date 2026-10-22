@@ -23,9 +23,18 @@ public class MuxedSKM extends SessionKeyManager {
     private final RatchetSKM _ec;
     private final AtomicInteger _elgCounter = new AtomicInteger();
     private final AtomicInteger _ecCounter = new AtomicInteger();
-    // ElG is about this much slower than EC
-    private static final int ELG_SLOW_FACTOR = 5;
-    private static final int RESTART_COUNTERS = 500;
+    /**
+     * How much slower the ElGamal slow decrypt is than the ratchet one, so its
+     * success count is divided by this much before the two are compared.
+     */
+    static final int ELG_SLOW_FACTOR = 5;
+
+    /**
+     * Size of the sampling window. Once both counters are individually
+     * meaningful and their sum passes this, the window rolls over so the
+     * ordering tracks recent traffic instead of the whole session.
+     */
+    static final int RESTART_COUNTERS = 500;
     /**
      * Combines ElGamal and ECIES SKMs with adaptive decrypt ordering.
      *
@@ -63,14 +72,57 @@ public class MuxedSKM extends SessionKeyManager {
     boolean preferRatchet() {
         int ec = _ecCounter.get();
         int elg = _elgCounter.get();
-        if (ec > RESTART_COUNTERS / 10 &&
-            elg > RESTART_COUNTERS / 10 &&
-            ec + elg > RESTART_COUNTERS) {
-            _ecCounter.set(0);
-            _elgCounter.set(0);
+        if (needsRestart(ec, elg)) {
+            rollOver(_ecCounter, ec);
+            rollOver(_elgCounter, elg);
             return true;
         }
+        return preferRatchet(ec, elg);
+    }
+
+    /**
+     * Whether the sampling window is full and both counters should start over,
+     * so the ordering tracks recent traffic rather than the whole session.
+     * Both counters have to be individually meaningful, or a one-sided flood
+     * would reset a window that still says something about the other path.
+     *
+     * @param ec successful ratchet decrypts in the current window
+     * @param elg successful ElGamal decrypts in the current window
+     * @return true if the window has run its course
+     * @since 0.9.72+
+     */
+    static boolean needsRestart(int ec, int elg) {
+        return ec > RESTART_COUNTERS / 10 &&
+               elg > RESTART_COUNTERS / 10 &&
+               ec + elg > RESTART_COUNTERS;
+    }
+
+    /**
+     * The ordering the current window favours, with the ElGamal count discounted
+     * because the ratchet slow decrypt is the cheaper of the two to try first.
+     *
+     * @param ec successful ratchet decrypts in the current window
+     * @param elg successful ElGamal decrypts in the current window
+     * @return true if the ratchet slow decrypt should go first
+     * @since 0.9.72+
+     */
+    static boolean preferRatchet(int ec, int elg) {
         return ec >= elg / ELG_SLOW_FACTOR;
+    }
+
+    /**
+     * Reset one counter to start a fresh window, only if nothing was recorded
+     * since the value the decision was taken on. A plain set(0) would discard
+     * any success logged between that read and the reset, which is how the
+     * counters used to lose counts under concurrent decrypts.
+     *
+     * @param counter the counter to roll over
+     * @param expected the value read when the decision was taken
+     * @return true if the counter was reset, false if it moved in the meantime
+     * @since 0.9.72+
+     */
+    static boolean rollOver(AtomicInteger counter, int expected) {
+        return counter.compareAndSet(expected, 0);
     }
 
     /**

@@ -24,9 +24,18 @@ public class MuxedPQSKM extends SessionKeyManager {
     private final AtomicInteger _ecCounter = new AtomicInteger();
     private final AtomicInteger _pqCounter = new AtomicInteger();
     private final Log _log = new Log(MuxedPQSKM.class);
-    // PQ is about this much slower than EC
-    private static final int PQ_SLOW_FACTOR = 2;
-    private static final int RESTART_COUNTERS = 500;
+    /**
+     * How much slower the PQ slow decrypt is than the ratchet one, so its
+     * success count is divided by this much before the two are compared.
+     */
+    static final int PQ_SLOW_FACTOR = 2;
+
+    /**
+     * Size of the sampling window. Once both counters are individually
+     * meaningful and their sum passes this, the window rolls over so the
+     * ordering tracks recent traffic instead of the whole session.
+     */
+    static final int RESTART_COUNTERS = 500;
     /**
      * Combines ECIES and PQ SKMs with adaptive decrypt ordering.
      * @param ec the ECIES ratchet key manager
@@ -60,14 +69,68 @@ public class MuxedPQSKM extends SessionKeyManager {
     boolean preferRatchet() {
         int ec = _ecCounter.get();
         int pq = _pqCounter.get();
-        if (ec > RESTART_COUNTERS / 10 &&
-            pq > RESTART_COUNTERS / 10 &&
-            ec + pq > RESTART_COUNTERS) {
-            _ecCounter.set(0);
-            _pqCounter.set(0);
+        if (needsRestart(ec, pq)) {
+            rollOver(_ecCounter, ec);
+            rollOver(_pqCounter, pq);
             return true;
         }
+        return preferRatchet(ec, pq);
+    }
+
+    /**
+     * The ordering the current window favours, without rolling the sampling
+     * window over. Reporting has to use this rather than preferRatchet(): a
+     * log line that resets the counters changes which decrypt the next message
+     * tries first, and the value it prints is not the one that decision used.
+     *
+     * @return true if the Ratchet decrypt would be tried first right now
+     * @since 0.9.72+
+     */
+    boolean preferRatchetNow() {
+        return preferRatchet(_ecCounter.get(), _pqCounter.get());
+    }
+
+    /**
+     * Whether the sampling window is full and both counters should start over,
+     * so the ordering tracks recent traffic rather than the whole session.
+     *
+     * @param ec successful ratchet decrypts in the current window
+     * @param pq successful PQ decrypts in the current window
+     * @return true if the window has run its course
+     * @since 0.9.72+
+     */
+    static boolean needsRestart(int ec, int pq) {
+        return ec > RESTART_COUNTERS / 10 &&
+               pq > RESTART_COUNTERS / 10 &&
+               ec + pq > RESTART_COUNTERS;
+    }
+
+    /**
+     * The ordering the current window favours, with the PQ count discounted
+     * because the ratchet slow decrypt is the cheaper of the two to try first.
+     *
+     * @param ec successful ratchet decrypts in the current window
+     * @param pq successful PQ decrypts in the current window
+     * @return true if the ratchet slow decrypt should go first
+     * @since 0.9.72+
+     */
+    static boolean preferRatchet(int ec, int pq) {
         return ec >= pq / PQ_SLOW_FACTOR;
+    }
+
+    /**
+     * Reset one counter to start a fresh window, only if nothing was recorded
+     * since the value the decision was taken on. A plain set(0) would discard
+     * any success logged between that read and the reset, which is how the
+     * counters used to lose counts under concurrent decrypts.
+     *
+     * @param counter the counter to roll over
+     * @param expected the value read when the decision was taken
+     * @return true if the counter was reset, false if it moved in the meantime
+     * @since 0.9.72+
+     */
+    static boolean rollOver(AtomicInteger counter, int expected) {
+        return counter.compareAndSet(expected, 0);
     }
 
     /**
@@ -99,7 +162,7 @@ public class MuxedPQSKM extends SessionKeyManager {
             double ecRatio = total > 0 ? (double) ec / total * 100.0 : 0.0;
             double pqRatio = total > 0 ? (double) pq / total * 100.0 : 0.0;
             String status = String.format("PQ vs EC decrypt ratios after %d attempts - EC: %d (%.1f%%) PQ: %d (%.1f%%) - Prefer ratchet: %s",
-                                          total, ec, ecRatio, pq, pqRatio, preferRatchet());
+                                          total, ec, ecRatio, pq, pqRatio, preferRatchetNow());
 
             // Add warnings for concerning patterns
             if (pq == 0 && total >= 50) {

@@ -2,6 +2,7 @@ package net.i2p.router.crypto.ratchet;
 
 import com.southernstorm.noise.protocol.DHState;
 import com.southernstorm.noise.protocol.HandshakeState;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -15,6 +16,7 @@ import net.i2p.data.DataHelper;
 import net.i2p.data.PublicKey;
 import net.i2p.data.SessionKey;
 import net.i2p.router.RouterContext;
+import net.i2p.router.transport.crypto.X25519KeyFactory;
 import net.i2p.util.Log;
 
 /**
@@ -31,6 +33,13 @@ import net.i2p.util.Log;
  * @since 0.9.44
  */
 class RatchetTagSet implements TagSetHandle {
+    /**
+     * Cached once. A tag miss is reachable from remote input, so looking the
+     * logger up through the context on every miss is work an attacker can drive.
+     */
+    private static final Log _log =
+        I2PAppContext.getGlobalContext().logManager().getLog(RatchetTagSet.class);
+
     private final SessionTagListener _lsnr;
     private final PublicKey _remoteKey;
     /** The session key. */
@@ -38,7 +47,9 @@ class RatchetTagSet implements TagSetHandle {
     // NSR only, else null
     private final HandshakeState _state;
     // inbound only, else null
-    // We use object for tags because we must do indexOfValueByValue()
+    // The receive window in tag-number order. A tag is an object wrapper over its
+    // 8 bytes so it can key the _tagNumbers index below; a presented tag is
+    // resolved through that index, not by scanning this array
     private final SparseArray<RatchetSessionTag> _sessionTags;
     // inbound ES only, else null
     // We use byte[] for key to save space, because we don't need indexOfValueByValue()
@@ -89,10 +100,20 @@ class RatchetTagSet implements TagSetHandle {
      * Used for O(tags_in_set) removal in {@link net.i2p.router.crypto.ratchet.RatchetSKM#consumeTag} instead of
      * O(total_tags) scan of the entire _inboundTagSets map.
      * Only populated for inbound tagsets (where _lsnr != null).
+     * Pruned as the ratchet advances and when the handshake finishes, so it
+     * tracks the live window instead of every tag the session ever generated.
      *
      * @since 0.9.70
      */
     private final Set<RatchetSessionTag> _registeredTags = ConcurrentHashMap.newKeySet();
+    /**
+     * What each tag in _sessionTags is numbered by, so consume() can find a
+     * presented tag in constant time. Without it every inbound ES message scans
+     * the whole receive window comparing tags - up to 320 equals() calls per
+     * message. Maintained alongside _sessionTags: every append, removal and
+     * clear does both, so a tag in one is in the other.
+     */
+    private final Map<RatchetSessionTag, Integer> _tagNumbers = new ConcurrentHashMap<>(32);
 
     /**
      * Outbound NSR Tagset.
@@ -258,6 +279,7 @@ class RatchetTagSet implements TagSetHandle {
             _sessionTags.clear();
         if (_sessionKeys != null)
             _sessionKeys.clear();
+        _tagNumbers.clear();
     }
 
     /**
@@ -402,7 +424,7 @@ class RatchetTagSet implements TagSetHandle {
             boolean isFirst = _id == 0;
             if (isFirst || (_id & 0x01) != 0) {
                 // new keys only needed first time and odd times
-                _nextKeys = ((RouterContext) I2PAppContext.getGlobalContext()).commSystem().getXDHFactory().getKeys();
+                _nextKeys = nextKeys(I2PAppContext.getGlobalContext());
                 _nextKey = new NextSessionKey(_nextKeys.getPublic().getData(), _keyid + 1, false, isFirst);
             } else {
                 // even times, just send old ID
@@ -410,6 +432,28 @@ class RatchetTagSet implements TagSetHandle {
             }
         }
         return _nextKey;
+    }
+
+    /**
+     * A fresh XDHE key pair to carry in the next forward key.
+     * <p>
+     * Takes a precalculated pair from the running router when there is one.
+     * Outside a router - tests, tools, early startup - the global context is
+     * not a RouterContext and commSystem() has no factory, so the pair is
+     * generated on the spot, which is what the factory itself does when its
+     * queue runs dry.
+     *
+     * @param ctx the context to work from, normally the global context
+     * @return an X25519 key pair, never null
+     * @since 0.9.72+
+     */
+    static KeyPair nextKeys(I2PAppContext ctx) {
+        if (ctx instanceof RouterContext) {
+            X25519KeyFactory factory = ((RouterContext) ctx).commSystem().getXDHFactory();
+            if (factory != null)
+                return factory.getKeys();
+        }
+        return ctx.keyGenerator().generatePKIKeys(EncType.ECIES_X25519);
     }
 
     /**
@@ -445,17 +489,25 @@ class RatchetTagSet implements TagSetHandle {
     public SessionKeyAndNonce consume(RatchetSessionTag tag) {
         if (_sessionTags == null)
             throw new IllegalStateException("Outbound tagset");
-        // linear search for tag
-        int idx = _sessionTags.indexOfValueByValue(tag);
-        if (idx < 0) {
-            Log log = I2PAppContext.getGlobalContext().logManager().getLog(RatchetTagSet.class);
-            if (log.shouldWarn())
-                log.warn("Tag not found " + tag.toBase64());
+        // Constant-time lookup in the side index, then the array is searched by
+        // key, which is a binary search on a sorted SparseArray.
+        Integer num = _tagNumbers.get(tag);
+        if (num == null) {
+            if (_log.shouldWarn())
+                _log.warn("Tag not found " + tag.toBase64());
             return null;
         }
         _acked = true;
-        int tagnum = _sessionTags.keyAt(idx);
-        _sessionTags.removeAt(idx);
+        int tagnum = num.intValue();
+        int idx = _sessionTags.indexOfKey(tagnum);
+        if (idx >= 0)
+            _sessionTags.removeAt(idx);
+        _tagNumbers.remove(tag);
+        // The caller took this tag out of the SKM's inbound map before asking us
+        // for the key, so it is unreachable there already. Drop it from the index
+        // as well, or the index keeps every tag the session ever spent and the
+        // SKM's two removal loops re-remove them for the rest of the session.
+        _registeredTags.remove(tag);
 
         // NSR
         if (_state != null) {
@@ -482,10 +534,9 @@ class RatchetTagSet implements TagSetHandle {
             return rv;
         } else {
             // dup or some other error
-            Log log = I2PAppContext.getGlobalContext().logManager().getLog(RatchetTagSet.class);
-            if (log.shouldWarn())
-                log.warn("No key found for tag " + tag.toBase64() + " at index " + idx +
-                         " * tagnum = " + tagnum + " * lastkey = " + _lastKey);
+            if (_log.shouldWarn())
+                _log.warn("No key found for tag " + tag.toBase64() + " at index " + idx +
+                          " * tagnum = " + tagnum + " * lastkey = " + _lastKey);
             return null;
         }
     }
@@ -529,8 +580,17 @@ class RatchetTagSet implements TagSetHandle {
                     if (kidx >= 0)
                         _sessionKeys.removeAt(kidx);
                 }
+                RatchetSessionTag old = _sessionTags.valueAt(toTrim);
                 if (_lsnr != null)
-                    _lsnr.expireTag(_sessionTags.valueAt(toTrim), this);
+                    _lsnr.expireTag(old, this);
+                // The SKM no longer maps this tag, so it is no longer reachable
+                // and nothing will ever consume it. Leaving it in the index only
+                // grows it - the two consumers in RatchetSKM iterate the whole
+                // set, and an ES tagset generates a fresh tag for every one it
+                // spends, so an unpruned index reaches roughly the lifetime
+                // total rather than the live window.
+                _registeredTags.remove(old);
+                _tagNumbers.remove(old);
                 toTrim++;
             }
             if (toTrim > 0)
@@ -546,6 +606,7 @@ class RatchetTagSet implements TagSetHandle {
         if (tag == null)
             return;
         _sessionTags.append(_lastTag, tag);
+        _tagNumbers.put(tag, _lastTag);
         if (_lsnr != null) {
             _registeredTags.add(tag);
             _lsnr.addTag(tag, this);
@@ -555,12 +616,27 @@ class RatchetTagSet implements TagSetHandle {
     /**
      * Return the set of tags registered in the SKM's _inboundTagSets map.
      * Used for O(tags_in_set) removal in {@link net.i2p.router.crypto.ratchet.RatchetSKM#consumeTag}.
+     * <p>
+     * Live view only: a tag leaves this set when the SKM expires it, so its size
+     * tracks the ratchet window, not the number of tags the session has used.
      *
-     * @return every tag this set has registered with the session key manager
+     * @return the tags this set currently has registered with the session key manager
      * @since 0.9.70
      */
     Set<RatchetSessionTag> getRegisteredTags() {
         return _registeredTags;
+    }
+
+    /**
+     * Forget every tag this set registered with the SKM, for a caller that has
+     * just removed them all from _inboundTagSets - handshake completion or a
+     * stale-session cleanup. Without this the tags of a finished handshake stay
+     * reachable for the rest of the tagset's life.
+     *
+     * @since 0.9.72+
+     */
+    void clearRegisteredTags() {
+        _registeredTags.clear();
     }
 
     /**

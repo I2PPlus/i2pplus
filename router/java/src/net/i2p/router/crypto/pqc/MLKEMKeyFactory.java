@@ -42,15 +42,30 @@ public class MLKEMKeyFactory extends I2PThread implements KeyFactory {
     private static final String PROP_MLKEM_PRECALC_MIN = "crypto.mlkem.precalc.min";
     private static final String PROP_MLKEM_PRECALC_MAX = "crypto.mlkem.precalc.max";
     private static final String PROP_MLKEM_PRECALC_DELAY = "crypto.mlkem.precalc.delay";
-    // An ML-KEM-768 keypair is ~3.5KB on the heap. The pool scales with
-    // cores/memory, so the scaled defaults are capped by a byte budget
-    // below - an uncapped count scale can reach 100+MB on high-core boxes.
-    private static final int BYTES_PER_PAIR = 4 * 1024;
-    private static final long MAX_POOL_BYTES = 16L * 1024 * 1024;
+    /**
+     * Approximate heap size of one pooled ML-KEM-768 keypair, in bytes. The
+     * pool scales with cores and memory, so the scaled defaults are capped by
+     * the byte budget below - an uncapped count scale can reach 100+ MB on
+     * high-core boxes.
+     * @since 0.9.72+
+     */
+    static final int BYTES_PER_PAIR = 4 * 1024;
+    /**
+     * Ceiling on the whole pool, in bytes.
+     * @since 0.9.72+
+     */
+    static final long MAX_POOL_BYTES = 16L * 1024 * 1024;
     private static final int DEFAULT_MLKEM_PRECALC_MIN = 64;
     private static final int DEFAULT_MLKEM_PRECALC_MAX = 256;
     private static final int DEFAULT_MLKEM_PRECALC_DELAY = 25;
     private static final int HARD_MAX = 32768;
+    /**
+     * The byte budget expressed in keypairs. This, not {@link #HARD_MAX}, is
+     * what bounds the pool - HARD_MAX alone would allow 32768 pairs, about
+     * 128 MB, which is what the demand-driven resize used to be able to reach.
+     * @since 0.9.72+
+     */
+    static final int BYTE_CAP = (int) Math.min(HARD_MAX, MAX_POOL_BYTES / BYTES_PER_PAIR);
 
     /**
      * Alice side only.
@@ -78,12 +93,17 @@ public class MLKEMKeyFactory extends I2PThread implements KeyFactory {
         int factor = Math.max(memFactor, coreFactor);
         if (SystemVersion.isSlow())
             factor *= 2;
-        int byteCap = (int) Math.min(HARD_MAX, MAX_POOL_BYTES / BYTES_PER_PAIR);
+        int byteCap = BYTE_CAP;
         int defaultMin = Math.min(DEFAULT_MLKEM_PRECALC_MIN * factor, byteCap);
         int defaultMax = Math.min(DEFAULT_MLKEM_PRECALC_MAX * factor, byteCap);
-        _minSize = ctx.getProperty(PROP_MLKEM_PRECALC_MIN, defaultMin);
+        // Cap the configured min as well: an unbounded min would let the pool
+        // floor exceed the byte budget no matter what the max is capped at.
+        _minSize = Math.min(ctx.getProperty(PROP_MLKEM_PRECALC_MIN, defaultMin), byteCap);
         int cfgMax = ctx.getProperty(PROP_MLKEM_PRECALC_MAX, defaultMax);
-        _maxSize = Math.max(_minSize + 4, (_minSize + cfgMax) / 2);
+        // The same bound the Tuner's demand path uses. Without it a configured
+        // max above the budget survives construction, so the byte budget would
+        // only start bounding the pool at the first refreshPoolSize() call.
+        _maxSize = boundedPoolSize(_minSize, (_minSize + cfgMax) / 2, byteCap);
         _calcDelay = ctx.getProperty(PROP_MLKEM_PRECALC_DELAY, DEFAULT_MLKEM_PRECALC_DELAY);
 
         if (_log.shouldDebug())
@@ -114,10 +134,11 @@ public class MLKEMKeyFactory extends I2PThread implements KeyFactory {
     /**
      * Minimum precalc queue size.
      *
-     * @param min the floor on the queue, clamped up to at least 1
+     * @param min the floor on the queue, clamped into [1, {@link #BYTE_CAP}] so a
+     *            Tuner value cannot lift the floor past the byte budget
      * @since 0.9.70+
      */
-    public void setMinSize(int min) { _minSize = Math.max(1, min); }
+    public void setMinSize(int min) { _minSize = Math.min(BYTE_CAP, Math.max(1, min)); }
 
     /**
      * Upper bound on the precalculated key queue size.
@@ -133,7 +154,7 @@ public class MLKEMKeyFactory extends I2PThread implements KeyFactory {
      * @param max the ceiling on the queue, raised to the minimum if it is lower
      * @since 0.9.70+
      */
-    public void setMaxSize(int max) { _maxSize = Math.max(_minSize, max); }
+    public void setMaxSize(int max) { _maxSize = boundedPoolSize(_minSize, max, BYTE_CAP); }
 
     /**
      * Returns the current number of precalc keys queued.
@@ -144,8 +165,47 @@ public class MLKEMKeyFactory extends I2PThread implements KeyFactory {
     public int getSize() { return _keys.size(); }
 
     /**
+     * Bound a pool size: at least four above the floor, never above the cap.
+     * <p>
+     * The floor is capped too, so a configured minimum larger than the cap
+     * cannot smuggle the pool past the byte budget by way of the floor.
+     * <p>
+     * Pure and static so the byte budget's reach can be pinned without running
+     * the precalc thread.
+     *
+     * @param minSize the pool floor the pool must stay above
+     * @param demandMax the size the caller wants, from demand or configuration
+     * @param cap the ceiling, in keypairs
+     * @return the size to use, always &le; cap
+     * @since 0.9.72+
+     */
+    static int boundedPoolSize(int minSize, int demandMax, int cap) {
+        int floor = poolFloor(minSize, cap);
+        return Math.max(floor, Math.min(cap, demandMax));
+    }
+
+    /**
+     * The smallest size the pool may be driven to: its floor, never above the
+     * cap. A floor set at the cap pins the pool there instead of letting every
+     * "at least min + 4" margin push it past the byte budget.
+     *
+     * @param minSize the pool floor
+     * @param cap the ceiling, in keypairs
+     * @return the effective floor, always &le; cap
+     * @since 0.9.72+
+     */
+    static int poolFloor(int minSize, int cap) {
+        return Math.min(cap, minSize + 4);
+    }
+
+    /**
      * Called by the Tuner every 15 seconds. Adjusts max pool size
      * based on demand.
+     * <p>
+     * Demand is bounded by the byte budget, not by {@link #HARD_MAX}: the
+     * earlier bound let demand drive the pool to 32768 pairs, roughly 128 MB,
+     * and the memory-pressure halving below only engages above 70% pressure, so
+     * a router with a large heap could sit there indefinitely.
      *
      * @since 0.9.70+
      */
@@ -157,13 +217,33 @@ public class MLKEMKeyFactory extends I2PThread implements KeyFactory {
         double memPressure = 1.0 - ((double) freeMem / Math.max(totalMem, 1));
 
         int demandMax = _minSize + Math.max(256, recentUsage * 4) + recentEmpties;
-        _maxSize = Math.min(HARD_MAX, Math.max(_minSize + 4, demandMax));
+        _maxSize = boundedPoolSize(_minSize, demandMax, BYTE_CAP);
+        _maxSize = pressureAdjustedMax(_maxSize, _minSize, BYTE_CAP, memPressure);
+    }
 
-        if (memPressure > 0.85) {
-            _maxSize = Math.max(_minSize + 4, _maxSize / 2);
-        } else if (memPressure > 0.7) {
-            _maxSize = Math.max(_minSize + 8, _maxSize * 3 / 4);
-        }
+    /**
+     * Shrink the pool ceiling under memory pressure, without letting the shrink
+     * raise it past the byte budget on its way back down.
+     * <p>
+     * The floor of each shrink goes through {@link #poolFloor}, so a floor set
+     * at the budget cannot add its four-pair margin on top of the cap.
+     * <p>
+     * Pure and static so the pressure branches can be pinned without driving the
+     * JVM's free-memory ratio.
+     *
+     * @param maxSize the ceiling demand produced
+     * @param minSize the pool floor
+     * @param cap the ceiling, in keypairs
+     * @param memPressure the fraction of the heap in use, 0 to 1
+     * @return the ceiling to use, never above cap
+     * @since 0.9.72+ split out of {@link #refreshPoolSize()}
+     */
+    static int pressureAdjustedMax(int maxSize, int minSize, int cap, double memPressure) {
+        if (memPressure > 0.85)
+            return Math.max(poolFloor(minSize, cap), maxSize / 2);
+        else if (memPressure > 0.7)
+            return Math.max(poolFloor(minSize, cap), maxSize * 3 / 4);
+        return maxSize;
     }
 
     /**

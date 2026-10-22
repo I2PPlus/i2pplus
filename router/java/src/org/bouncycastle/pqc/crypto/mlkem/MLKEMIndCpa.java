@@ -334,8 +334,11 @@ class MLKEMIndCpa
      */
     public byte[] decrypt(byte[] secretKey, byte[] cipherText)
     {
-        byte[] outputMessage = new byte[MLKEMEngine.getKyberIndCpaMsgBytes()];
-
+        // DELIBERATE DEVIATION from Bouncy Castle 1.81: upstream allocates an
+        // outputMessage array here, never reads it, and reassigns it from
+        // toMsg() at the return. Dropping the dead allocation is inert, and
+        // everything else in this file is kept upstream byte-for-byte so a
+        // future sync stays a clean diff.
         PolyVec bp = new PolyVec(engine), secretKeyPolyVec = new PolyVec(engine);
         Poly v = new Poly(engine), mp = new Poly(engine);
 
@@ -353,9 +356,7 @@ class MLKEMIndCpa
 
         mp.reduce();
 
-        outputMessage = mp.toMsg();
-
-        return outputMessage;
+        return mp.toMsg();
     }
 
 }

@@ -118,7 +118,7 @@ public class FamilyKeyCrypto {
         _ourFamily = (_privkey != null) ? new ConcurrentHashSet<>(4) : Collections.<Hash>emptySet();
         _knownKeys = new HashMap<>(8);
         loadCerts();
-        // Schedule periodic negative cache cleanup (every hour) to prevent unbounded growth
+        // Schedule periodic cache cleanup (every hour) to prevent unbounded growth
         _context.simpleTimer2().addEvent(new SimpleTimer2.TimedEvent(_context.simpleTimer2()) {
             /** Cleans up negative cache and reschedules. */
             @Override
@@ -140,6 +140,16 @@ public class FamilyKeyCrypto {
     }
 
     /**
+     * Bound on the positive verification cache, in entries. One entry per router
+     * whose family signature we have checked, each holding two strings, so the
+     * map has to be bounded the same way the negative cache is. Clearing it only
+     * costs a re-verification on the next lookup, so the bound is enforced by a
+     * clear rather than by an eviction policy.
+     * @since 0.9.72+
+     */
+    static final int MAX_VERIFIED = 4096;
+
+    /**
      * Clears the caches.
      */
     public void shutdown() {
@@ -148,15 +158,41 @@ public class FamilyKeyCrypto {
     }
 
     /**
-     * Periodic cleanup to prevent unbounded growth of the negative cache.
-     * Clears old entries so they can be re-checked on next access.
+     * Run the periodic cache maintenance.
+     * The negative cache is cleared outright, since a miss simply re-checks the
+     * router. The positive cache is only cleared once it passes its bound -
+     * dropping live entries costs a re-verification of every family router on
+     * the next lookup, so while it is inside the bound the entries are worth
+     * keeping, and the bound is enforced by a clear rather than by tracking
+     * which entry to evict.
+     *
+     * @param negative the negative cache
+     * @param verified the positive cache
+     * @param max the bound on the positive cache's entry count
+     * @return the entries cleared from each cache, negative first
+     * @since 0.9.72+
+     */
+    static int[] cleanupCaches(Map<?, ?> negative, Map<?, ?> verified, int max) {
+        int nsz = negative.size();
+        negative.clear();
+        int vsz = 0;
+        if (verified.size() > max) {
+            vsz = verified.size();
+            verified.clear();
+        }
+        return new int[] {nsz, vsz};
+    }
+
+    /**
+     * Periodic cleanup to prevent unbounded growth of the two caches.
      * Runs every hour via {@link SimpleTimer2}.
      */
     private void cleanup() {
-        int sz = _negativeCache.size();
-        _negativeCache.clear();
-        if (sz > 0 && _log.shouldInfo())
-            _log.info("Family negative cache cleared: " + sz + " entries");
+        int[] cleared = cleanupCaches(_negativeCache, _verified, MAX_VERIFIED);
+        if (cleared[0] > 0 && _log.shouldInfo())
+            _log.info("Family negative cache cleared: " + cleared[0] + " entries");
+        if (cleared[1] > 0 && _log.shouldInfo())
+            _log.info("Family verified cache cleared: " + cleared[1] + " entries");
     }
 
     /**
@@ -437,7 +473,7 @@ public class FamilyKeyCrypto {
             // wrong size (type mismatch)
             _negativeCache.put(h, Result.INVALID_SIG);
             if (_log.shouldInfo())
-                _log.info("Bad signature detected for [" + ri.toBase64().substring(0,6) + "]", iae);
+                _log.info("Bad signature detected for [" + h.toBase64().substring(0,6) + "]", iae);
             return Result.INVALID_SIG;
         }
         byte[] nb = DataHelper.getUTF8(name);
