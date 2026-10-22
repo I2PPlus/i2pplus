@@ -316,13 +316,13 @@ public class DatabaseStoreMessage extends FastI2NPMessageImpl {
     public String toString() {
         StringBuilder buf = new StringBuilder();
         buf.append("\n* DatabaseStore Message")
-           .append("\n* Expiration: ").append(new Date(_expiration))
-           .append("\n* Unique ID: ").append(getUniqueId());
+           .append(" * Unique ID: ").append(getUniqueId())
+           .append(" * Expiration: ").append(new Date(_expiration));
         if (_log.shouldInfo()) {
             if (_replyToken != 0) {
                 buf.append("\n* Reply token: ").append(_replyToken)
-                   .append("\n* Reply tunnel: ").append(_replyTunnel)
-                   .append("\n* Reply gateway: ").append(_replyGateway);
+                   .append(" * Reply tunnel: ").append(_replyTunnel)
+                   .append(" * Reply gateway: ").append(_replyGateway);
             }
             if (_dbEntry.getType() != DatabaseEntry.KEY_TYPE_ROUTERINFO) {
                 buf.append("\n* Key: ").append(getKey().toBase32());
