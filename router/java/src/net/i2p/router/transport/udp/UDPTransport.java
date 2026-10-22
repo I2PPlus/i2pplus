@@ -2070,7 +2070,8 @@ public class UDPTransport extends TransportImpl {
             if ( (oldPeer != null) && (oldPeer != peer) ) {
                 // this happens a lot
                 if (_log.shouldInfo())
-                    _log.info("Router already connected (PBID): Old = " + oldPeer.toShortString() + " New = " + peer.toShortString());
+                    _log.info(alreadyConnectedLine("PBID", oldPeer.toShortString(),
+                                                   peer.toShortString()));
                 // transfer over the old state/inbound message fragments/etc
                 peer.loadFrom(oldPeer);
                 oldEstablishedOn = oldPeer.getKeyEstablishedTime();
@@ -2120,7 +2121,8 @@ public class UDPTransport extends TransportImpl {
         if (oldPeer2 != null && oldPeer2 != peer && oldPeer2 != oldPeer) {
             // this shouldn't happen, should have been removed above
             if (_log.shouldWarn())
-                _log.warn("Router already connected (PBRH): old=" + oldPeer2.toShortString() + " new=" + peer.toShortString());
+                _log.warn(alreadyConnectedLine("PBRH", oldPeer2.toShortString(),
+                                               peer.toShortString()));
             // transfer over the old state/inbound message fragments/etc
             // Send destroy before loadFrom(), because loadFrom() sets dead = true
             sendDestroy(oldPeer2, SSU2Util.REASON_REPLACED);
@@ -2174,6 +2176,24 @@ public class UDPTransport extends TransportImpl {
             }
         }
         return true;
+    }
+
+    /**
+     * The entry for a peer replaced while establishing a second session with
+     * the same router. The tag says which map held the previous peer - PBID for
+     * the remote router hash, PBRH for the remote host id. Each peer goes on
+     * its own continuation line so the entry stays readable.
+     *
+     * @param kind PBID or PBRH
+     * @param oldPeer the peer being replaced, as its own short string
+     * @param peer the peer taking its place, as its own short string
+     * @return the log entry, never null
+     * @since 0.9.72+
+     */
+    static String alreadyConnectedLine(String kind, String oldPeer, String peer) {
+        return "Router already connected (" + kind + ") -> Replacing the previous peer" +
+               "\n* Old: " + oldPeer +
+               "\n* New: " + peer;
     }
 
     /**

@@ -1119,11 +1119,18 @@ public class BuildHandler implements Runnable {
                     getContext().statManager().addRateData("tunnel.nextHopLookupSuccessTime", lookupTime);
                 }
                 if (_log.shouldInfo()) {
-                    _log.info("Successful lookup for [" + _nextPeer.toBase64().substring(0,6) + "] took " + lookupTime + "ms");
+                    _log.info("Deferred lookup succeeded for [" +
+                              _nextPeer.toBase64().substring(0, 6) +
+                              "] -> Took: " + lookupTime + "ms");
                 }
             } else if (ri == null) {
                 if (_log.shouldInfo()) {
-                    _log.info("Lookup deferred, but we couldn't find [" + _nextPeer.toBase64().substring(0,6) + "]" + _req);
+                    _log.info("Deferred lookup found no router info for [" +
+                              _nextPeer.toBase64().substring(0, 6) + "] -> Request left pending");
+                }
+                if (_log.shouldDebug()) {
+                    _log.debug("Request " + _state.msg.getUniqueId() +
+                               " left pending after the deferred lookup" + _req);
                 }
                 getContext().statManager().addRateData("tunnel.buildLookupSuccess", 0);
             }

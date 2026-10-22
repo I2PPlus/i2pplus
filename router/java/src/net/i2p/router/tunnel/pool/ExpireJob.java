@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
+import net.i2p.data.DataHelper;
 import net.i2p.router.JobImpl;
 import net.i2p.router.TunnelTestStatus;
 import net.i2p.router.RouterContext;
@@ -100,19 +101,19 @@ class ExpireJob extends JobImpl {
         // Keep tunnel alive for 10 minutes after phase 1 (LeaseSet refresh)
         // so clients with cached LeaseSets can still connect using old tunnel IDs.
         long dropAfter = expire + LEASESET_GRACE_PERIOD;
-        TunnelExpiration te = new TunnelExpiration(cfg, key, expire, dropAfter, ctx.clock().now());
+        long now = ctx.clock().now();
+        TunnelExpiration te = new TunnelExpiration(cfg, key, expire, dropAfter, now);
         _expirations.put(key, te);
 
-        if (ctx.logManager().getLog(ExpireJob.class).shouldInfo()) {
-            ctx.logManager().getLog(ExpireJob.class).info("Scheduled expiration for tunnel " + key +
-                " at " + expire + " (drop at " + dropAfter + ")");
+        Log log = ctx.logManager().getLog(ExpireJob.class);
+        if (log.shouldInfo()) {
+            log.info(expirationLine(key, expire, dropAfter, now));
         }
 
         synchronized (ExpireJob.class) {
             if (!_isScheduled) {
                 _isScheduled = true;
                 ExpireJob job = new ExpireJob(ctx);
-                long now = ctx.clock().now();
                 long delay = expire - now;
                 if (delay < 0) delay = 0;
                 if (delay > BATCH_WINDOW) delay = BATCH_WINDOW;
@@ -120,6 +121,23 @@ class ExpireJob extends JobImpl {
                 ctx.jobQueue().addJob(job);
             }
         }
+    }
+
+    /**
+     * The entry recording when a tunnel expires and when it is dropped for
+     * good, as durations from now rather than raw epoch milliseconds.
+     *
+     * @param key the tunnel's id, as used in the expiration map
+     * @param expire when phase 1 replaces the tunnel, in ms
+     * @param dropAt when the tunnel is dropped, in ms
+     * @param now the current time, in ms
+     * @return the log entry, never null
+     * @since 0.9.72+
+     */
+    static String expirationLine(long key, long expire, long dropAt, long now) {
+        return "Scheduled expiration for TunnelID " + key + " -> Expires in: " +
+               DataHelper.formatDuration(expire - now) + " * Drop in: " +
+               DataHelper.formatDuration(dropAt - now);
     }
 
     /**

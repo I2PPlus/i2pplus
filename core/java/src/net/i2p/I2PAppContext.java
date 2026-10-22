@@ -456,11 +456,13 @@ public class I2PAppContext {
                     if (!SystemVersion.isWindows() && !SystemVersion.isMac() && !SystemVersion.isAndroid())
                         new TempDirScanner(this);
                 } else {
-                    System.err.println("WARNING: Could not create temp dir " + _tmpDir.getAbsolutePath());
+                    System.err.println("Could not create temp dir " + _tmpDir.getAbsolutePath() +
+                                       " -> Trying the router dir");
                     _tmpDir = new SecureDirectory(_routerDir, "tmp");
                     _tmpDir.mkdirs();
                     if (!_tmpDir.exists())
-                        System.err.println("ERROR: Could not create temp dir " + _tmpDir.getAbsolutePath());
+                        System.err.println("Could not create temp dir " +
+                                           _tmpDir.getAbsolutePath());
                 }
             }
             return _tmpDir;

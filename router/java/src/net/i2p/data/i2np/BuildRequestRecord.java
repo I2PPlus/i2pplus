@@ -853,10 +853,10 @@ public class BuildRequestRecord {
     }
 
     /**
-     * Concise one-line summary for log output: crypto type, hop role and
-     * tunnel IDs.  No key material; no expiration (callers log elapsed or
-     * age deltas separately when relevant); no next-identity (callers print
-     * the peer hash in the message header).
+     * Concise summary for log output: crypto type, hop role and tunnel IDs.
+     * No key material; no expiration (callers log elapsed or age deltas
+     * separately when relevant); no next-identity (callers print the peer hash
+     * in the message header).
      * Starts with a newline and an asterisk for multi-line log entries.
      *
      * @return a string representation
@@ -868,12 +868,26 @@ public class BuildRequestRecord {
         buf.append("\n* ").append(_isEC ? "ECIES" : "ElGamal");
         if (_data.length == LENGTH_EC_SHORT)
             buf.append(" Short");
-        buf.append(" record [").append(readIsInboundGateway() ? "IBGW" :
-                                   readIsOutboundEndpoint() ? "OBEP" : "Middle").append(']');
-        buf.append(" In: ").append(readReceiveTunnelId());
+        buf.append(" record for the ").append(role(readIsInboundGateway(),
+                                                   readIsOutboundEndpoint()));
+        buf.append("\n* Receive TunnelID: ").append(readReceiveTunnelId());
         if (!readIsOutboundEndpoint())
-            buf.append("; Out: ").append(readNextTunnelId());
+            buf.append(" * Next TunnelID: ").append(readNextTunnelId());
         return buf.toString();
+    }
+
+    /**
+     * The hop's role in the tunnel, in the plain words the logs use instead of
+     * the IBGW / OBEP shorthands.
+     *
+     * @param inboundGateway true if this hop receives the tunnel from the client
+     * @param outboundEndpoint true if this hop forwards it to the final peer
+     * @return the role name, never null
+     * @since 0.9.72+
+     */
+    static String role(boolean inboundGateway, boolean outboundEndpoint) {
+        return inboundGateway ? "inbound gateway" :
+               outboundEndpoint ? "outbound endpoint" : "middle hop";
     }
 
     /**

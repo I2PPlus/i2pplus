@@ -842,7 +842,7 @@ public class NativeBigInteger extends BigInteger {
     }
 
     private static void info(String s) {
-        if (_doLog) System.err.println("INFO: " + s);
+        if (_doLog) System.err.println(s);
         I2PAppContext.getGlobalContext()
                 .logManager()
                 .getLog(NativeBigInteger.class)
@@ -861,7 +861,7 @@ public class NativeBigInteger extends BigInteger {
      */
     private static void warn(String s, Throwable t) {
         if (_doLog) {
-            System.err.println("WARNING: " + s);
+            System.err.println(s);
             if (t != null) t.printStackTrace();
         }
         I2PAppContext.getGlobalContext()
@@ -888,7 +888,7 @@ public class NativeBigInteger extends BigInteger {
      */
     private static void error(String s, Throwable t) {
         if (_doLog) {
-            System.err.println("ERROR: " + s);
+            System.err.println(s);
             if (t != null) t.printStackTrace();
         }
         I2PAppContext.getGlobalContext()

@@ -30,7 +30,10 @@ public class RrdNioBackend extends ByteBufferBackend implements RrdFileBackend {
     // Path 1: DirectBuffer.cleaner() -> clean() (no Unsafe, preferred on Java 8)
     private static final Method cleanerMethod;
     private static final Method cleanMethod;
-    // Path 2: sun.misc.Unsafe.invokeCleaner(ByteBuffer) (Java 9-25 fallback)
+    // Path 2: sun.misc.Unsafe.invokeCleaner (Java 9+). The JVM reports this call
+    // as terminally deprecated on every use, and on POSIX a live mapping never
+    // blocks the file - it is released when the buffer is collected. Resolve it
+    // only where a mapping does hold the file open, which is Windows.
     private static final Method invokeCleaner;
     private static final Object unsafe;
 
@@ -65,24 +68,27 @@ public class RrdNioBackend extends ByteBufferBackend implements RrdFileBackend {
             cleanMethodTemp = null;
         }
 
-        // Try Unsafe.invokeCleaner path (works on Java 9-25, warns on Java 25)
-        try {
-            Field singletonInstanceField =
-                    RrdRandomAccessFileBackend.class
-                            .getClassLoader()
-                            .loadClass("sun.misc.Unsafe")
-                            .getDeclaredField("theUnsafe");
-            singletonInstanceField.setAccessible(true);
-            unsafeTemp = singletonInstanceField.get(null);
-            invokeCleanerTemp = unsafeTemp.getClass().getMethod("invokeCleaner", ByteBuffer.class);
-        } catch (NoSuchFieldException
-                | SecurityException
-                | IllegalArgumentException
-                | IllegalAccessException
-                | NoSuchMethodException
-                | ClassNotFoundException e) {
-            invokeCleanerTemp = null;
-            unsafeTemp = null;
+        // Try Unsafe.invokeCleaner path (Java 9+, warns on Java 25) - Windows only
+        if (System.getProperty("os.name", "").contains("Windows")) {
+            try {
+                Field singletonInstanceField =
+                        RrdRandomAccessFileBackend.class
+                                .getClassLoader()
+                                .loadClass("sun.misc.Unsafe")
+                                .getDeclaredField("theUnsafe");
+                singletonInstanceField.setAccessible(true);
+                unsafeTemp = singletonInstanceField.get(null);
+                invokeCleanerTemp =
+                        unsafeTemp.getClass().getMethod("invokeCleaner", ByteBuffer.class);
+            } catch (NoSuchFieldException
+                    | SecurityException
+                    | IllegalArgumentException
+                    | IllegalAccessException
+                    | NoSuchMethodException
+                    | ClassNotFoundException e) {
+                invokeCleanerTemp = null;
+                unsafeTemp = null;
+            }
         }
 
         cleanerMethod = cleanerMethodTemp;
@@ -250,7 +256,7 @@ public class RrdNioBackend extends ByteBufferBackend implements RrdFileBackend {
                         return;
                     }
                 }
-                // Path 2: Unsafe.invokeCleaner (Java 9-25 fallback)
+                // Path 2: Unsafe.invokeCleaner (resolved on Windows only)
                 if (invokeCleaner != null) {
                     invokeCleaner.invoke(unsafe, byteBuffer);
                 }

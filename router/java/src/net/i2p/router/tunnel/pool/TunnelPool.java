@@ -7117,7 +7117,7 @@ public class TunnelPool {
             }
 
             if ((peers == null) || (peers.isEmpty())) {
-                logSelectPeersFailure(settings, peers);
+                logSelectPeersFailure(settings);
                 return null;
             }
             // Final gate before dispatch: a peer whose RouterInfo vanished
@@ -7341,12 +7341,12 @@ public class TunnelPool {
     }
 
     /**
-     * Warn when selectPeers returned null or empty, naming the destination.
-     * Rate-limited: every event is logged at debug, one WARN at most per
-     *  interval per pool, silent in the first 3 minutes of uptime while
-     *  peers are still being discovered.
+     * Warn when the peer selector found nothing for a new tunnel, naming the
+     * destination. Rate-limited: every event is logged at debug, one WARN at
+     * most per interval per pool, silent in the first 3 minutes of uptime
+     * while peers are still being discovered.
      */
-    private void logSelectPeersFailure(TunnelPoolSettings settings, List<Hash> peers) {
+    private void logSelectPeersFailure(TunnelPoolSettings settings) {
         long uptime = _context.router().getUptime();
         if (_log.shouldDebug() || _log.shouldWarn()) {
             String nick = settings.getDestinationNickname();
@@ -7355,13 +7355,11 @@ public class TunnelPool {
             if (nick != null) {
                 destName = nick;
             } else if (dest != null) {
-                destName = dest.toBase32();
+                destName = '[' + dest.toBase32().substring(0, 8) + ']';
             } else {
-                destName = "null";
+                destName = "an unnamed client pool";
             }
-            String what = peers == null ? "null" : "empty";
-            String where = "TPool cfgNewTunnel: selectPeers returned " + what + " for " + destName +
-                           " (" + (settings.isInbound() ? "in" : "out") + ")";
+            String where = noPeersSelectedLine(destName, settings.isInbound());
             if (_log.shouldDebug()) {
                 _log.debug(where);
             }
@@ -7371,6 +7369,20 @@ public class TunnelPool {
                 _log.warn(where);
             }
         }
+    }
+
+    /**
+     * The entry naming the pool whose peer selection came up empty, so the
+     * reason a new tunnel could not be built is visible without a debug log.
+     *
+     * @param destName the destination nickname, or the bracketed hash truncation
+     * @param inbound true to name an inbound pool, false for an outbound one
+     * @return the log entry, never null
+     * @since 0.9.72+
+     */
+    static String noPeersSelectedLine(String destName, boolean inbound) {
+        return "No peers selected for " + destName + " (" +
+               (inbound ? "inbound" : "outbound") + " pool) -> Cannot build a new tunnel";
     }
 
     /**

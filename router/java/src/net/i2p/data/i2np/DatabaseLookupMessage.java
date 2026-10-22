@@ -622,7 +622,9 @@ public class DatabaseLookupMessage extends FastI2NPMessageImpl {
     }
 
     /**
-     * String form of the message, suitable for debugging.
+     * String form of the message, suitable for debugging. The INFO form masks
+     * every hash to the house truncation and carries no key material; the full
+     * keys are DEBUG-only, as in {@link BuildRequestRecord#toKeyString()}.
      */
     @Override
     public String toString() {
@@ -634,33 +636,56 @@ public class DatabaseLookupMessage extends FastI2NPMessageImpl {
 
         if (_log.shouldInfo()) {
             buf.append("\n* Search type: ").append(_type);
-            buf.append("\n* Search key: ");
-            if (_type == Type.LS)
-                buf.append(_key.toBase32());
-            else
-                buf.append(_key);
-            if (_replyTunnel != null)
-                buf.append("\n* Reply Gateway: ");
-            else
-                buf.append("\n* From: ");
-            buf.append(_fromHash.toBase64());
+            buf.append("\n* Search key: ").append(shortKey(_type, _key));
+            buf.append(_replyTunnel != null ? "\n* Reply Gateway: " : "\n* From: ");
+            buf.append('[').append(_fromHash.toBase64(), 0, 6).append(']');
             if (_replyTunnel != null)
                 buf.append("\n* Reply Tunnel: ").append(_replyTunnel);
-            if (_replyKey != null)
-                buf.append("\n* Reply Key: ").append(_replyKey);
-            if (_replyTag != null)
-                buf.append("\n* Reply Tag: ").append(_replyTag);
-            else if (_ratchetReplyTag != null)
-                buf.append("\n* RatchetReply Tag: ").append(_ratchetReplyTag);
-            if (_dontIncludePeers != null) {
-                buf.append("\n* Excluded peers: ");
-                buf.append(_dontIncludePeers.size());
-            }
+            if (_dontIncludePeers != null)
+                buf.append("\n* Excluded peers: ").append(_dontIncludePeers.size());
+            if (_log.shouldDebug())
+                buf.append(toKeyString());
         } else if (_log.shouldWarn()) {
             buf.append(msgType);
-            if (msgType.equals("LeaseSet")) {buf.append(" [").append(_key.toBase32().substring(0,8)).append("...]");}
-            else {buf.append(" [").append(_key.toBase64().substring(0,6)).append("]");}
+            if (_key != null)
+                buf.append(' ').append(shortKey(_type, _key));
         }
+        return buf.toString();
+    }
+
+    /**
+     * The search key as the house truncation - 8 base32 characters for a lease
+     * set, 6 base64 for anything else - bracketed so the console links it.
+     *
+     * @param type what is being searched for, deciding the encoding used
+     * @param key the search key to truncate
+     * @return the bracketed truncation, never null
+     */
+    static String shortKey(Type type, Hash key) {
+        return type == Type.LS ? '[' + key.toBase32().substring(0, 8) + ']'
+                               : '[' + key.toBase64().substring(0, 6) + ']';
+    }
+
+    /**
+     * Key material for lookup interop debugging only.
+     * Never log this at INFO or above.
+     * Starts with a newline and an asterisk for multi-line log entries.
+     *
+     * @return the key material dump, never null
+     * @since 0.9.72+
+     */
+    public String toKeyString() {
+        StringBuilder buf = new StringBuilder(128);
+        if (_key != null) {
+            buf.append("\n* Full search key: ")
+               .append(_type == Type.LS ? _key.toBase32() : _key.toBase64());
+        }
+        if (_replyKey != null)
+            buf.append("\n* Reply Key: ").append(_replyKey);
+        if (_replyTag != null)
+            buf.append("\n* Reply Tag: ").append(_replyTag);
+        else if (_ratchetReplyTag != null)
+            buf.append("\n* Ratchet Reply Tag: ").append(_ratchetReplyTag);
         return buf.toString();
     }
 

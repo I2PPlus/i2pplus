@@ -2838,8 +2838,8 @@ public class EstablishmentManager {
                               + "ms in state " + istate
                               + "\n* Budget: " + budget + "ms * Retried: " + isRetrySent
                               + " * Base: " + MAX_IB_ESTABLISH_TIME.get() + "ms"
-                              + "\n* Retry budget: " + IB_RETRY_SENT_MAX_TIME + "ms"
-                              + " * Suppressed: " + getInboundGiveupSuppressed());
+                              + " * Retry budget: " + IB_RETRY_SENT_MAX_TIME + "ms"
+                              + " * Suppressed: " + getInboundGiveupSuppressed() + " events");
                 }
                 iter.remove(); // took too long
                 inboundState = cur;

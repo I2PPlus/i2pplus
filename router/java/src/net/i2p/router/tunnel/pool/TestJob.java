@@ -4221,10 +4221,8 @@ static List<PendingTest> prioritizeBatch(List<PendingTest> scan, long now) {
                 return;
             }
             if (_log.shouldInfo()) {
-                _log.info("Tunnel Test failed -> keeping data-carrying tunnel - " + _cfg +
-                          " -> verified " + _cfg.getVerifiedBytesTransferred() +
-                          " bytes, failures=" + currentFailures + '/' + maxFailures +
-                          ", last transfer " + staleMs + "ms ago");
+                _log.info(keepDataCarryingLine(_cfg.toString(), _cfg.getVerifiedBytesTransferred(),
+                                               currentFailures, maxFailures, staleMs));
             }
             // Normal delay — don't monopolize the test slot with ASAP retries
             if (!scheduleRetest(false)) {
@@ -4530,13 +4528,16 @@ static List<PendingTest> prioritizeBatch(List<PendingTest> scan, long now) {
 
         final RouterContext ctx = getContext();
         int delay = getDelay();
+        // One clock read for the whole scheduling decision - the comparisons
+        // below must agree with each other, and this runs on every test round.
+        long now = ctx.clock().now();
 
         if (deferWhileActive) {
             // Wait for the traffic to ebb, but only for a bounded window:
             // long enough to be worth waiting (floor), short enough that the
             // job comes back while the tunnel is still alive (cap).
             long lastTraffic = _cfg.getLastRealTraffic();
-            long remaining = lastTraffic > 0 ? TRAFFIC_DEFER_MS - (ctx.clock().now() - lastTraffic) : 0;
+            long remaining = lastTraffic > 0 ? TRAFFIC_DEFER_MS - (now - lastTraffic) : 0;
             delay = (int) activeGoodDeferDelay(remaining, delay);
         }
 
@@ -4546,27 +4547,25 @@ static List<PendingTest> prioritizeBatch(List<PendingTest> scan, long now) {
             // defer to the normal delay so replacement builds win the race.
             if (shouldDeferFailingRetest(_pool.size(), _cfg.getTunnelFailures())) {
                 if (_log.shouldDebug()) {
-                    _log.debug("Deferring ASAP retest: pool is thin (" +
-                               _pool.size() + " remaining, failures=" +
-                               _cfg.getTunnelFailures() + ")");
+                    _log.debug(thinPoolRetestLine(_pool.size(), _cfg.getTunnelFailures()));
                 }
-                if (_cfg.getExpiration() > ctx.clock().now() + delay + ((long) 3 * getTestPeriod())) {
-                    getTiming().setStartAfter(ctx.clock().now() + delay);
+                if (_cfg.getExpiration() > now + delay + ((long) 3 * getTestPeriod())) {
+                    getTiming().setStartAfter(now + delay);
                     ctx.jobQueue().addJob(this);
                     return true;
                 }
                 return false;
             }
             // As soon as possible: only skip if tunnel is about to expire
-            if (_cfg.getExpiration() > ctx.clock().now() + (60 * 1000L)) {
-                getTiming().setStartAfter(ctx.clock().now() + delay / 4);
+            if (_cfg.getExpiration() > now + (60 * 1000L)) {
+                getTiming().setStartAfter(now + delay / 4);
                 ctx.jobQueue().addJob(this);
                 return true;
             }
         } else {
             // Normal retest: ensure tunnel will live long enough for the test
-            if (_cfg.getExpiration() > ctx.clock().now() + delay + ((long) 3 * getTestPeriod())) {
-                getTiming().setStartAfter(ctx.clock().now() + delay);
+            if (_cfg.getExpiration() > now + delay + ((long) 3 * getTestPeriod())) {
+                getTiming().setStartAfter(now + delay);
                 ctx.jobQueue().addJob(this);
                 return true;
             }
@@ -4753,6 +4752,42 @@ static List<PendingTest> prioritizeBatch(List<PendingTest> scan, long now) {
         }
         cleanupTunnelTracking();
         decrementIfCounted();
+    }
+
+    /**
+     * The line for a failed test on a tunnel that is still carrying data, kept
+     * because failing it would drop live traffic. Split onto continuation lines
+     * so an emitted line stays readable.
+     *
+     * @param tunnel the tunnel as described by its own toString()
+     * @param verified bytes verified as transferred on this tunnel
+     * @param failures the consecutive test failures so far
+     * @param maxFailures the failures tolerated before the tunnel is failed
+     * @param staleMs ms since the last verified transfer
+     * @return the log entry, never null
+     * @since 0.9.72+
+     */
+    static String keepDataCarryingLine(String tunnel, long verified, int failures,
+                                       int maxFailures, long staleMs) {
+        return "Tunnel test failed -> Keeping a data-carrying tunnel" +
+               "\n* Tunnel: " + tunnel +
+               "\n* Verified: " + verified + " bytes" +
+               " * Failures: " + failures + '/' + maxFailures +
+               " * Last transfer: " + staleMs + "ms ago";
+    }
+
+    /**
+     * The line for an ASAP retest deferred because the pool is too thin to
+     * afford losing another tunnel to a test right now.
+     *
+     * @param poolSize tunnels left in the pool
+     * @param failures the tunnel's consecutive failures
+     * @return the log entry, never null
+     * @since 0.9.72+
+     */
+    static String thinPoolRetestLine(int poolSize, int failures) {
+        return "Deferring the ASAP retest -> Pool is thin" +
+               " * Tunnels: " + poolSize + " * Failures: " + failures;
     }
 
 }

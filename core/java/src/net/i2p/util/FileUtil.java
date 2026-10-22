@@ -120,11 +120,13 @@ public class FileUtil {
             while (entries.hasMoreElements()) {
                 ZipEntry entry =  entries.nextElement();
                 if (entry.getName().contains("..")) {
-                    System.err.println("ERROR: Refusing to extract a zip entry with '..' in it [" + entry.getName() + "]");
+                    System.err.println("Refusing to extract a zip entry with '..' in it [" +
+                                       entry.getName() + "]");
                     return false;
                 }
                 if (entry.getName().indexOf(0) >= 0) {
-                    System.err.println("ERROR: Refusing to extract a zip entry with null in it [" + entry.getName() + "]");
+                    System.err.println("Refusing to extract a zip entry with null in it [" +
+                                       entry.getName() + "]");
                     return false;
                 }
                 File target = new File(targetDir, entry.getName());
@@ -132,7 +134,11 @@ public class FileUtil {
                 if ((parent != null) && (!parent.exists())) {
                     boolean parentsOk = parent.mkdirs();
                     if (!parentsOk) {
-                        if (logLevel <= Log.ERROR) System.err.println("ERROR: Unable to create the parent dir for " + entry.getName() + ": [" + parent.getAbsolutePath() + "]");
+                        if (logLevel <= Log.ERROR) {
+                            System.err.println("Unable to create the parent dir for " +
+                                               entry.getName() + ": [" +
+                                               parent.getAbsolutePath() + "]");
+                        }
                         return false;
                     }
                 }
@@ -140,10 +146,13 @@ public class FileUtil {
                     if (!target.exists()) {
                         boolean created = target.mkdirs();
                         if (!created) {
-                            if (logLevel <= Log.ERROR) System.err.println("ERROR: Unable to create the directory [" + entry.getName() + "]");
+                            if (logLevel <= Log.ERROR) {
+                                System.err.println("Unable to create the directory [" +
+                                                   entry.getName() + "]");
+                            }
                             return false;
                         } else if (logLevel <= Log.INFO) {
-                            System.err.println("INFO: Creating directory [" + entry.getName() + "]");
+                            System.err.println("Creating directory [" + entry.getName() + "]");
                         }
                     }
                 } else {
@@ -153,7 +162,10 @@ public class FileUtil {
                             try (JarOutputStream jos = new JarOutputStream(new FileOutputStream(target))) {
                                 unpack(in, jos);
                             }
-                            if (logLevel <= Log.INFO) System.err.println("INFO: File [" + entry.getName() + "] extracted and unpacked");
+                            if (logLevel <= Log.INFO) {
+                                System.err.println("File [" + entry.getName() +
+                                                   "] extracted and unpacked");
+                            }
                         } else {
                             try (FileOutputStream fos = new FileOutputStream(target)) {
                                 // We do NOT use DataHelper.copy() because it loads new classes
@@ -163,12 +175,16 @@ public class FileUtil {
                                 while ((read = in.read(buf)) != -1) {
                                     fos.write(buf, 0, read);
                                 }
-                                if (logLevel == Log.DEBUG) System.err.println("INFO: File [" + entry.getName() + "] extracted");
+                                if (logLevel == Log.DEBUG) {
+                                    System.err.println("File [" + entry.getName() +
+                                                       "] extracted");
+                                }
                             }
                         }
                     } catch (IOException ioe) {
                         if (logLevel <= Log.ERROR) {
-                            System.err.println("ERROR: Error extracting the zip entry (" + entry.getName() + ')');
+                            System.err.println("Error extracting the zip entry (" +
+                                               entry.getName() + ')');
                             if (ioe.getMessage() != null && ioe.getMessage().indexOf("CAFED00D") >= 0) System.err.println("This may be caused by a packed library that requires Java 1.6, your Java version is: " + System.getProperty("java.version"));
                             ioe.printStackTrace();
                         }
@@ -178,7 +194,8 @@ public class FileUtil {
                         // java.lang.reflect.InvocationTargetException
                         // Caused by: java.util.zip.ZipException: duplicate entry: xxxxx
                         if (logLevel <= Log.ERROR) {
-                            System.err.println("ERROR: Error extracting the zip entry (" + entry.getName() + ')');
+                            System.err.println("Error extracting the zip entry (" +
+                                               entry.getName() + ')');
                             e.printStackTrace();
                         }
                         return false;
@@ -188,7 +205,7 @@ public class FileUtil {
             return true;
         } catch (IOException ioe) {
             if (logLevel <= Log.ERROR) {
-                System.err.println("ERROR: Unable to extract the zip file");
+                System.err.println("Unable to extract the zip file");
                 ioe.printStackTrace();
             }
             return false;
@@ -218,7 +235,8 @@ public class FileUtil {
             while (entries.hasMoreElements()) {
                 ZipEntry entry =  entries.nextElement();
                 if (entry.getName().indexOf("..") != -1) {
-                    System.err.println("ERROR: Refusing to extract a zip entry with '..' in the name [" + entry.getName() + "]");
+                    System.err.println("Refusing to extract a zip entry with '..' in the name [" +
+                                       entry.getName() + "]");
                     return false;
                 }
                 if (entry.isDirectory()) {
@@ -226,7 +244,8 @@ public class FileUtil {
                 } else {
                     if (p200TestRequired && (entry.getName().endsWith(".jar.pack") || entry.getName().endsWith(".war.pack"))) {
                         if (!isPack200Supported()) {
-                            System.err.println("ERROR: Zip verify failed, your JVM does not support unpack200");
+                            System.err.println("Zip verify failed, your JVM does not" +
+                                               " support unpack200");
                             return false;
                         }
                         p200TestRequired = false;
@@ -236,7 +255,8 @@ public class FileUtil {
                             // throw the data away
                         }
                     } catch (IOException ioe) {
-                        System.err.println("ERROR: Error extracting the zip entry (" + entry.getName() + "]");
+                        System.err.println("Error extracting the zip entry (" +
+                                           entry.getName() + "]");
                         ioe.printStackTrace();
                         return false;
                     }
@@ -244,7 +264,7 @@ public class FileUtil {
             }
             return true;
         } catch (IOException ioe) {
-            System.err.println("ERROR: Unable to extract the zip file");
+            System.err.println("Unable to extract the zip file");
             ioe.printStackTrace();
             return false;
         }

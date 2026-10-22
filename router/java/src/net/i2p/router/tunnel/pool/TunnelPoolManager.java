@@ -196,7 +196,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
         if (destination == null) return selectInboundTunnel();
         TunnelPool pool = _clientInboundPools.get(destination);
         if (pool != null) {return pool.selectTunnel();}
-        if (_log.shouldInfo()) {_log.info("No pool available for inbound tunnel for " + destination.toBase32());}
+        if (_log.shouldInfo()) {_log.info(noPoolLine(true, destination));}
         return null;
     }
 
@@ -229,7 +229,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
         if (destination == null) {return selectInboundTunnel();}
         TunnelPool pool = _clientInboundPools.get(destination);
         if (pool != null) {return pool.selectTunnelForTest();}
-        if (_log.shouldInfo()) {_log.info("No pool available for inbound tunnel for " + destination.toBase32());}
+        if (_log.shouldInfo()) {_log.info(noPoolLine(true, destination));}
         return null;
     }
 
@@ -246,7 +246,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
         if (destination == null) {return selectOutboundTunnel();}
         TunnelPool pool = _clientOutboundPools.get(destination);
         if (pool != null) {return pool.selectTunnelForTest();}
-        if (_log.shouldInfo()) {_log.info("No pool available for outbound tunnel for " + destination.toBase32());}
+        if (_log.shouldInfo()) {_log.info(noPoolLine(false, destination));}
         return null;
     }
 
@@ -261,7 +261,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
         if (destination == null) return selectOutboundTunnel();
         TunnelPool pool = _clientOutboundPools.get(destination);
         if (pool != null) {return pool.selectTunnel();}
-        if (_log.shouldInfo()) {_log.info("No pool available for outbound tunnel for " + destination.toBase32());}
+        if (_log.shouldInfo()) {_log.info(noPoolLine(false, destination));}
         return null;
     }
 
@@ -343,7 +343,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
         if (pool != null) {
             return pool.selectTunnel(closestTo);
         }
-        if (_log.shouldInfo()) {_log.info("No pool available for inbound tunnel for " + destination.toBase32());}
+        if (_log.shouldInfo()) {_log.info(noPoolLine(true, destination));}
         return null;
     }
 
@@ -2283,6 +2283,20 @@ public class TunnelPoolManager implements TunnelManagerFacade {
             }
             pool.tunnelFailed(tun, peer);
         }
+    }
+
+    /**
+     * The entry for a destination with no client pool of the given direction,
+     * so a null return from the selector carries a reason in the log.
+     *
+     * @param inbound true to name an inbound pool, false for an outbound one
+     * @param destination the destination whose pool is missing
+     * @return the log entry, never null
+     * @since 0.9.72+
+     */
+    static String noPoolLine(boolean inbound, Hash destination) {
+        return "No " + (inbound ? "inbound" : "outbound") + " client pool for [" +
+               destination.toBase32().substring(0, 8) + "] -> No tunnel selected";
     }
 
 }

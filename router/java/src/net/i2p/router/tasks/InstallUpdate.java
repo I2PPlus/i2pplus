@@ -76,11 +76,12 @@ public class InstallUpdate {
             // do a simple permissions test, if it fails leave the file in place and don't restart
             File test = new File(context.getBaseDir(), "history.txt");
             if ((test.exists() && !test.canWrite()) || (!context.getBaseDir().canWrite())) {
-                System.out.println("ERROR: No write permissions on " + context.getBaseDir() +
-                                   " to extract software update file"); // NOSONAR post-update NCDFE risk
+                System.out.println("No write permissions on " + context.getBaseDir() +
+                                   " -> Not extracting the update"); // NOSONAR post-update
                 return;
             }
-            System.out.println("INFO: Update file exists: " + updateFile + " -> Installing..."); // NOSONAR post-update NCDFE risk
+            System.out.println("Update file exists: " + updateFile +
+                               " -> Installing"); // NOSONAR post-update
             // verify the whole thing first
             boolean ok = FileUtil.verifyZip(updateFile);
             if (ok) {
@@ -99,27 +100,30 @@ public class InstallUpdate {
                 if (ok) {
                     // We do this here so we may delete old jars before we restart
                     deleteListedFiles(context);
-                    System.out.println("INFO: Update installed successfully!"); // NOSONAR post-update NCDFE risk
+                    System.out.println("Update installed successfully"); // NOSONAR post-update
                 } else {
-                    System.out.println("ERROR: Update failed!"); // NOSONAR post-update NCDFE risk
+                    System.out.println("Update failed"); // NOSONAR post-update
                     // we can't leave the file in place or we'll continually restart, so rename it
                     File bad = new File(context.getRouterDir(), "BAD-" + Router.UPDATE_FILE);
                     if (updateFile.renameTo(bad)) {
-                        System.out.println("INFO: Moved update file to " + bad); // NOSONAR post-update NCDFE risk
+                        System.out.println("Moved the update file to " +
+                                           bad); // NOSONAR post-update
                     } else {
-                        System.out.println("WARNING: Could not rename update file to " + bad); // NOSONAR post-update NCDFE risk
+                        System.out.println("Could not rename the update file" +
+                                           " to " + bad); // NOSONAR post-update
                     }
                 }
                 if (ok) {
                     if (!updateFile.delete()) {
-                        System.out.println("WARNING: Unable to delete " + updateFile); // NOSONAR post-update NCDFE risk
+                        System.out.println("Unable to delete " + updateFile); // NOSONAR post-update
                         updateFile.deleteOnExit();
                     }
                 }
                 if (context.hasWrapper())
-                    System.out.println("INFO: Restarting after update..."); // NOSONAR post-update NCDFE risk
+                    System.out.println("Restarting after the update"); // NOSONAR post-update
                 else
-                    System.out.println("WARNING: Exiting after update (no service manager) -> Restart I2P+ manually!"); // NOSONAR post-update NCDFE risk
+                    System.out.println("Exiting after the update -> Restart I2P+ manually" +
+                                       " (no service manager)"); // NOSONAR post-update
             } catch (Throwable t) { // NOSONAR catches NoClassDefFoundError
                 // hopefully the update file got deleted or we will loop
             }
@@ -176,9 +180,11 @@ public class InstallUpdate {
             String path = lib.getAbsolutePath();
             if (FileUtil.copy(path, path + ".bak", true, true)) {
                 if (lib.delete()) {
-                    System.out.println("INFO: New jbigi.jar detected -> Moved " + lib.getName() + " to " + path + ".bak"); // NOSONAR post-update
+                    System.out.println("New jbigi.jar detected -> Moved the native library" +
+                                       "\n* Old copy: " + path + ".bak"); // NOSONAR post-update
                 } else {
-                    System.out.println("WARNING: New jbigi.jar detected but could not delete " + lib.getName()); // NOSONAR post-update
+                    System.out.println("New jbigi.jar detected -> Could not delete " +
+                                       lib.getName()); // NOSONAR post-update
                 }
             }
         }
@@ -224,12 +230,12 @@ public class InstallUpdate {
         } catch (IOException ioe) { /* ignored */ }
         deleteFile.delete();
         if (deleted > 0 || failed > 0) {
-            StringBuilder sb = new StringBuilder("INFO: Deletion summary: ");
-            sb.append(deleted).append(" items deleted");
+            StringBuilder sb = new StringBuilder("Update file deletions -> Deleted: ");
+            sb.append(deleted);
             if (failed > 0) {
-                sb.append(", ").append(failed).append(" FAILED");
+                sb.append(" * Failed: ").append(failed);
             }
-            System.out.println(sb.toString()); // NOSONAR post-update NCDFE risk
+            System.out.println(sb.toString()); // NOSONAR post-update
         }
     }
 

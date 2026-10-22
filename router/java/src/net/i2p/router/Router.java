@@ -337,10 +337,10 @@ public class Router implements RouterClock.ClockShiftListener {
         List<RouterContext> contexts = RouterContext.getContexts();
         if (contexts.isEmpty()) {RouterContext.killGlobalContext();}
         else if (SystemVersion.isAndroid()) {
-            System.err.println("Warning: Killing " + contexts.size() + " other routers in this JVM"); // NOSONAR
+            startupLog("Killing " + contexts.size() + " other routers in this JVM");
             contexts.clear();
             RouterContext.killGlobalContext();
-        } else {System.err.println("Warning: " + contexts.size() + " other routers in this JVM");}
+        } else {startupLog("Found " + contexts.size() + " other routers in this JVM");}
 
         // The important thing that happens here is the directory paths are set and created
         // i2p.dir.router defaults to i2p.dir.config
@@ -360,11 +360,13 @@ public class Router implements RouterClock.ClockShiftListener {
                 // may still be less than LIVELINESS_DELAY (60s) old.
                 // So wait at least 60s to be sure.
                 if (isOnlyRouterRunning()) {
-                    if (i > 0) {System.err.println("INFO: No other router running, proceeding with startup...");} // NOSONAR
+                    if (i > 0) {startupLog("No other router running -> Proceeding with startup");}
                     break;
                 }
                 if (i < 13) {
-                    if (i == 0) {System.err.println("WARN: There may be another router already running... waiting a while to be sure...");} // NOSONAR
+                    if (i == 0) {
+                        startupLog("Another router may be running -> Waiting to be sure");
+                    }
                     // yes this is ugly to sleep in the constructor.
                     try {Thread.sleep(5000);}
                     catch (InterruptedException ie) {
@@ -372,12 +374,15 @@ public class Router implements RouterClock.ClockShiftListener {
                     }
                 } else {
                     _eventLog.addEvent(EventLog.ABORTED, "Another router running");
-                    System.err.println("ERROR: There appears to be another router already running!"); // NOSONAR
-                    System.err.println("       Make sure old instances are shut down before starting up a new one."); // NOSONAR
-                    System.err.println("       If no other instance is running, delete: " + getPingFile().getAbsolutePath()); // NOSONAR
+                    startupLog("Another router appears to be running");
+                    startupLog("Make sure old instances are shut down" +
+                               " before starting up a new one.");
+                    startupLog("If no other instance is running, delete: " +
+                               getPingFile().getAbsolutePath());
                     throw new IllegalStateException(
-                                       "ERROR: There appears to be another router already running!" +
-                                       " Make sure old instances are shut down before starting up a new one." +
+                                       "Another router appears to be running" +
+                                       " - make sure old instances are shut down" +
+                                       " before starting up a new one." +
                                        " If no other instance is running, delete: " + getPingFile().getAbsolutePath());
                 }
             }
@@ -1380,9 +1385,11 @@ public class Router implements RouterClock.ClockShiftListener {
                 boolean removed = f.delete();
                 sb.setLength(0);
                 if (removed) {
-                    _log.info(sb.append("INFO: Removing old identity file: ").append(_rebuildFiles[i]).toString());
+                    _log.info(sb.append("Removing old identity file: ")
+                                .append(_rebuildFiles[i]).toString());
                 } else {
-                    _log.warn(sb.append("ERROR: Could not remove old identity file: ").append(_rebuildFiles[i]).toString());
+                    _log.warn(sb.append("Could not remove old identity file: ")
+                                .append(_rebuildFiles[i]).toString());
                 }
             }
         }
@@ -2036,6 +2043,17 @@ public class Router implements RouterClock.ClockShiftListener {
     private static final long LIVELINESS_DELAY = 60L*1000;
 
     /**
+     * Writes a startup line to stderr, before the log system exists. The
+     * service wrapper prefixes its own level to every stderr line, so the
+     * message carries none.
+     *
+     * @param msg the line to write
+     */
+    private static void startupLog(String msg) {
+        System.err.println(msg); // NOSONAR startup, before the log system is up
+    }
+
+    /**
      * Check the file "{@code router.ping}", but if
      * that file already exists and was recently written to, return false as there is
      * another instance running.
@@ -2052,9 +2070,9 @@ public class Router implements RouterClock.ClockShiftListener {
                 if (downtime > 0 && _downtime < 0) {_downtime = downtime;}
             }
             if (downtime > LIVELINESS_DELAY) {
-                System.err.println("WARN: Old router was not shut down gracefully -> Deleting " + f + "..."); // NOSONAR
+                startupLog("Old router was not shut down gracefully -> Deleting " + f);
                 if (!f.delete()) {
-                    System.err.println("Failed to delete liveness file " + f.getName()); // NOSONAR
+                    startupLog("Failed to delete liveness file " + f.getName());
                 }
                 if (lastWritten > 0) {
                     _eventLog.addEvent(EventLog.CRASHED, Translate.getString("{0} ago",

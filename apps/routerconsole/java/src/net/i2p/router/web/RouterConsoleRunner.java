@@ -85,7 +85,7 @@ public class RouterConsoleRunner implements RouterApp {
         try {
             org.eclipse.jetty.util.log.Log.setLog(new I2PLogger());
         } catch (Throwable t) {
-            System.err.println("WARN: I2P Jetty logging class not found, logging to wrapper log");
+            System.err.println("I2P Jetty logging class not found -> Logging to the wrapper log");
         }
     }
 

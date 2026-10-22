@@ -120,7 +120,7 @@ public class I2PThread extends Thread {
         try {
             super.start();
         } catch (OutOfMemoryError oom) {
-            System.out.println("ERROR: Thread could not be started: " + getName());
+            System.out.println("Thread could not be started: " + getName());
             if (!(SystemVersion.isWindows() || SystemVersion.isAndroid())) {
                 System.out.println("Check ulimit -u, /etc/security/limits.conf, or /proc/sys/kernel/threads-max");
             }

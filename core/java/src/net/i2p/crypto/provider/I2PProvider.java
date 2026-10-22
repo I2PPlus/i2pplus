@@ -115,7 +115,7 @@ public final class I2PProvider extends Provider {
                     Security.addProvider(us);
                     _installed = true;
                 } catch (SecurityException se) {
-                    System.out.println("WARN: Could not install I2P provider: " + se);
+                    System.out.println("Could not install the I2P provider: " + se);
                 }
             }
         }

@@ -3816,15 +3816,16 @@ if (!on) {
           // the same computation available to the SYN give-up budget (getMaxSynSends()).
           long totalTimeout = hasTimeout ? computeEffectiveConnectTimeout(desired,
                               getConnectTimeoutMultiplier(), getMaxConnectTimeout()) : 0;
-          long expiry = hasTimeout ? _context.clock().now() + totalTimeout : 0;
           long start = _context.clock().now();
+          long expiry = hasTimeout ? start + totalTimeout : 0;
+          String peerName = getRemotePeerString();
           if (_log.shouldInfo()) {
-              _log.info("waitForConnect() starting for " + _remotePeer + " (timeout: " + (hasTimeout ? totalTimeout : 0) + "ms)");
+              _log.info(connectWaitLine(peerName, hasTimeout ? totalTimeout : 0));
           }
           while (true) {
               if (_connected.get() && (_receiveStreamId.get() > 0) && (_sendStreamId.get() > 0)) {
                   if (_log.shouldInfo()) {
-                      _log.info("waitForConnect() connected in " + (_context.clock().now() - start) + "ms for " + _remotePeer);
+                      _log.info(connectDoneLine(peerName, _context.clock().now() - start, false));
                   }
                   return;
               }
@@ -3845,7 +3846,8 @@ if (!on) {
                           disconnect(false);
                       }
                       if (_log.shouldInfo()) {
-                          _log.info("waitForConnect() timed out after " + (_context.clock().now() - start) + "ms for " + _remotePeer);
+                          _log.info(connectDoneLine(peerName,
+                                                    _context.clock().now() - start, true));
                       }
                       return;
                   }
@@ -3867,6 +3869,37 @@ if (!on) {
               }
           }
       }
+
+    /**
+     * The entry a blocking connect writes while it waits, naming how long it is
+     * prepared to wait for the handshake to finish.
+     *
+     * @param peer the remote peer as the bracketed hash truncation
+     * @param timeoutMs the wait budget in ms, 0 if the wait is unbounded
+     * @return the log entry, never null
+     * @since 0.9.72+
+     */
+    static String connectWaitLine(String peer, long timeoutMs) {
+        return "Waiting for the connection to open " + peer +
+               " -> Timeout: " + timeoutMs + "ms";
+    }
+
+    /**
+     * The entry for the end of a blocking connect's wait, whether it ended with
+     * a connection or with the timeout giving up.
+     *
+     * @param peer the remote peer as the bracketed hash truncation
+     * @param elapsedMs ms spent waiting
+     * @param timedOut true if the wait ran out instead of connecting
+     * @return the log entry, never null
+     * @since 0.9.72+
+     */
+    static String connectDoneLine(String peer, long elapsedMs, boolean timedOut) {
+        return timedOut ? "Connection still not open " + peer +
+                          " -> Gave up after: " + elapsedMs + "ms"
+                        : "Connection opened while waiting " + peer +
+                          " -> Took: " + elapsedMs + "ms";
+    }
 
     /** Reset activity timer. */
     private void resetActivityTimer() {

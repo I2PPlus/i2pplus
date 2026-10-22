@@ -57,13 +57,16 @@ public class Clock implements Timestamper.UpdateListener {
         if (now < min) {
             // positive offset
             _offset = min - now;
-            System.out.println("ERROR: System clock is INVALID: " + Instant.ofEpochMilli(now));
+            System.out.println("System clock is too far in the past: " + Instant.ofEpochMilli(now) +
+                               " -> Using the build date instead");
             now = min;
             _isSystemClockBad = true;
         } else if (now > max) {
             // negative offset
             _offset = max - now;
-            System.out.println("ERROR: System clock is INVALID: " + Instant.ofEpochMilli(now));
+            System.out.println("System clock is too far in the future: " +
+                               Instant.ofEpochMilli(now) +
+                               " -> Using the build date instead");
             now = max;
             _isSystemClockBad = true;
         } else {

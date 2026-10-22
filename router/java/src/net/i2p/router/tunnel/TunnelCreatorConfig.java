@@ -1464,6 +1464,8 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
 
     /**
      * Render every hop, its peer, and its tunnel IDs, for a full description.
+     * <p>It ends with the garlic reply key and tag, so DEBUG only - never log
+     * the result at INFO or above.
      *
      * @return the multi-line description, never null
      * @since 0.9.51
@@ -1478,7 +1480,8 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
             buf.append(": ").append(_config[i]);
         }
         if (_garlicReplyKeys != null) {
-            buf.append("\n* Garlic Reply Key: ").append(_garlicReplyKeys.key).append("\n* Tag: ").append(_garlicReplyKeys.rtag);
+            buf.append("\n* Garlic Reply Key: ").append(_garlicReplyKeys.key);
+            buf.append("\n* Tag: ").append(_garlicReplyKeys.rtag);
         }
         return buf.toString();
     }

@@ -194,7 +194,8 @@ abstract class MigrateJetty {
         if (rv)
             System.err.println("Backed up file " + from + " to " + to); // NOSONAR migration code
         else
-            System.err.println("WARNING: Failed to back up file " + from + " to " + to); // NOSONAR migration code
+            System.err.println("Failed to back up file " + from +
+                               " to " + to); // NOSONAR migration code
         return rv;
     }
 }

@@ -635,18 +635,21 @@ public class CPUID {
             _nativeOk = loaded;
             if (loaded) {
                 if (_doLog) {
-                    System.err.println("INFO: Native CPUID library " + getLibraryMiddlePart() + " loaded");
+                    System.err.println("Native CPUID library " + getLibraryMiddlePart() +
+                                       " loaded");
                 }
             } else {
                 if (_doLog) {
-                    System.err.println("WARNING: Native CPUID library jcpuid not loaded - will not be able to read CPU information using CPUID");
+                    System.err.println("Native CPUID library jcpuid not loaded" +
+                                       " -> Cannot read CPU information");
                 }
             }
             _jcpuidVersion = fetchJcpuidVersion();
         } catch (Exception e) {
             if (_doLog) {
-                System.err.println("INFO: Native CPUID library jcpuid not loaded\n* Reason: '" + e.getMessage() +
-                                   "' - will not be able to read CPU information using CPUID");
+                System.err.println("Native CPUID library jcpuid not loaded" +
+                                   " -> Cannot read CPU information" +
+                                   "\n* Reason: " + e.getMessage());
             }
         }
     }
@@ -685,7 +688,7 @@ public class CPUID {
         String resourceName = getResourceName();
         boolean success = extractLoadAndCopy(resourceName);
         if (success) {return true;}
-        if (_doLog) {System.err.println("WARNING: Resource name [" + resourceName + "] not found");}
+        if (_doLog) {System.err.println("Resource name [" + resourceName + "] not found");}
         return false;
     }
 
@@ -708,15 +711,16 @@ public class CPUID {
             System.load(outFile.getAbsolutePath());
         } catch (UnsatisfiedLinkError ule) {
             if (_doLog) {
-                System.err.println("WARNING: The resource " + resourceName +
-                                   " was not a valid library for this platform " + ule);
+                System.err.println("The resource " + resourceName +
+                                   " was not a valid library here" +
+                                   "\n* Reason: " + ule);
             }
             outFile.delete();
             return false;
         } catch (IOException ioe) {
             if (_doLog) {
-                System.err.println("ERROR: Problem writing out the temporary native library data");
-                ioe.printStackTrace();
+                System.err.println("Problem writing out the temporary native library data" +
+                                   "\n* Reason: " + ioe);
             }
             outFile.delete();
             return false;
