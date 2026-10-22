@@ -50,6 +50,13 @@ jobs:
       - name: Build all artifacts
         run: ant updaterWithGeoIP installer i2psnark buildDeb
 
+      # Documentation is a bonus artifact, not a gate. javadoc-java8 post-processes
+      # the javadoc for the JDK this job runs on, so it precedes javadoc-zip, and
+      # ant runs the javadoc they both depend on once.
+      - name: Build javadoc
+        continue-on-error: true
+        run: ant javadoc-java8 javadoc-zip
+
       - name: Create source archive
         run: |
           SHA="${{ github.sha }}"
@@ -67,9 +74,8 @@ jobs:
         run: ant jsdoc-zip
 
       - name: Build dev docs
-        run: |
-          pip install --quiet --break-system-packages markdown-it-py
-          ant devdocs-zip
+        continue-on-error: true
+        run: ant devdocs-zip
 
       - name: Run test suites
         continue-on-error: true
@@ -80,6 +86,7 @@ jobs:
         run: ls dist/test-report.html 2>/dev/null || echo "no test report generated"
 
       - name: Upload build artifacts
+        if: always()
         uses: actions/upload-artifact@v7
         with:
           name: i2p-build-artifacts
@@ -174,12 +181,19 @@ jobs:
           # Create the release. If a concurrent run already recreated the tag,
           # create fails with "already exists"; update that release in place
           # instead of retrying a doomed create.
+          # Never --latest: GitHub answers 422 with "Latest release cannot be
+          # draft or prerelease" when the release it is updating was left a
+          # draft or a prerelease by an interrupted run, and a rolling build
+          # is not the release a reader should see as latest anyway.
           if ! gh release create "$TAG" --title "$NAME" --repo "$REPO" \
-              --target "$GITHUB_SHA" --notes "$BODY" --latest; then
+              --target "$GITHUB_SHA" --notes "$BODY"; then
             if gh release view "$TAG" --repo "$REPO" >/dev/null 2>&1; then
               echo "Release $TAG already exists; updating it in place."
+              # Clear a stale draft/prerelease state first, so the edit below
+              # is not rejected for a state this run did not choose.
+              gh release edit "$TAG" --repo "$REPO" --draft=false --prerelease=false || true
               gh release edit "$TAG" --repo "$REPO" --title "$NAME" \
-                --target "$GITHUB_SHA" --notes "$BODY" --latest
+                --target "$GITHUB_SHA" --notes "$BODY" --draft=false --prerelease=false
             else
               echo "gh release create failed and no existing release found" >&2
               exit 1
