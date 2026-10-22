@@ -6607,7 +6607,7 @@ public class TunnelPool {
         if (_log.shouldWarn()) {
             String boost = _consecutiveEmergencies > 0 ?
                 " (dynamic target " + effectiveTarget + ", collapse #" + _consecutiveEmergencies + ")" : "";
-            _log.warn(toString() + " -> EMERGENCY: Zero usable tunnels -> " +
+            _log.warn(toString() + " -> EMERGENCY: Zero usable tunnels\n* " +
                       "Forcing " + needed + " replacement builds" + boost);
         }
         buildReplacementTunnels(needed, true);
