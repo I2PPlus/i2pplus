@@ -44,7 +44,11 @@ public class BuildExecutorPairedBuildsTest {
         return cfg;
     }
 
-    /** Production failure path: increment the counter, then refresh the status. */
+    /**
+     * Production failure path: increment the counter, then refresh the status.
+     *
+     * @param cfg the tunnel config whose test-failure count is bumped and status set to failed
+     */
     private static void failOnce(TCConfig cfg) {
         cfg.incrementTestFailures();
         cfg.setTestFailed();

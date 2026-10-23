@@ -36,14 +36,14 @@ public class PacketLocalRttSampleTest {
         assertEquals(-1, PacketLocal.rttSample(9000, -1));
     }
 
-    /** Packet never ACKed -> no sample. */
+    /** Packet never ACKed -&gt; no sample. */
     @Test
     public void testUnackedPacketYieldsNoSample() {
         assertEquals(-1, PacketLocal.rttSample(0, 8000));
         assertEquals(-1, PacketLocal.rttSample(-1, 8000));
     }
 
-    /** Both times unknown -> no sample. */
+    /** Both times unknown -&gt; no sample. */
     @Test
     public void testNeverTransmittedOrAckedYieldsNoSample() {
         assertEquals(-1, PacketLocal.rttSample(0, 0));

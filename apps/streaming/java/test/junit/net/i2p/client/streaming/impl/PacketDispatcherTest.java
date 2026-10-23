@@ -61,7 +61,7 @@ public class PacketDispatcherTest {
         }
     }
 
-    /** Two shards: even ids -> 0, odd ids -> 1. */
+    /** Two shards: even ids -&gt; 0, odd ids -&gt; 1. */
     @Test
     public void testShardForParity() {
         for (long id = 2; id < 200; id += 2) {
@@ -149,7 +149,13 @@ public class PacketDispatcherTest {
 
     // ---------- real dispatcher behaviour ----------
 
-    /** Per-connection FIFO: same-shard packets process in dispatch order. */
+    /**
+     * Per-connection FIFO: same-shard packets process in dispatch order.
+     *
+     * @throws Exception if a dispatch is interrupted while waiting for queue
+     *                   space, or the polling sleep waiting for the three
+     *                   processed packets is interrupted
+     */
     @Test
     public void testDispatchPreservesOrder() throws Exception {
         List<Long> order = Collections.synchronizedList(new ArrayList<Long>());
@@ -165,7 +171,13 @@ public class PacketDispatcherTest {
         }
     }
 
-    /** Different shards run in parallel: shard 1 proceeds while shard 0 is blocked. */
+    /**
+     * Different shards run in parallel: shard 1 proceeds while shard 0 is blocked.
+     *
+     * @throws Exception if a dispatch is interrupted while waiting for queue
+     *                   space, or a latch await for shard 1's worker to
+     *                   finish is interrupted
+     */
     @Test
     public void testDispatchParallelShards() throws Exception {
         final CountDownLatch shard0Blocked = new CountDownLatch(1);
@@ -201,6 +213,10 @@ public class PacketDispatcherTest {
      * a dead worker would let the shard's queue fill so the producer blocks
      * forever on it, stalling every connection on the destination. The thrown
      * entry's payload is released and the worker keeps taking packets.
+     *
+     * @throws Exception if a dispatch is interrupted while waiting for queue
+     *                   space, or the polling sleep waiting for the second
+     *                   packet to be processed is interrupted
      */
     @Test
     public void testWorkerSurvivesProcessorException() throws Exception {
@@ -219,7 +235,13 @@ public class PacketDispatcherTest {
         }
     }
 
-    /** A fast consumer never loses packets even when produced faster than the shard drains. */
+    /**
+     * A fast consumer never loses packets even when produced faster than the shard drains.
+     *
+     * @throws Exception if a dispatch is interrupted while waiting for space in
+     *                   the 1-slot queue, or the polling sleep waiting for all
+     *                   five packets is interrupted
+     */
     @Test
     public void testDispatchNoDropUnderBacklog() throws Exception {
         List<Long> seen = Collections.synchronizedList(new ArrayList<Long>());
@@ -238,6 +260,10 @@ public class PacketDispatcherTest {
     /**
      * A saturated shard back-pressures the producer: dispatch blocks until the
      * queue drains, then completes with no drop and no reorder.
+     *
+     * @throws Exception if a dispatch is interrupted while waiting for space in
+     *                   the 1-slot queue, or one of the latch awaits on the
+     *                   blocked producer thread is interrupted
      */
     @Test
     public void testDispatchBackpressureBlocksProducer() throws Exception {
@@ -280,7 +306,13 @@ public class PacketDispatcherTest {
         }
     }
 
-    /** After shutdown, dispatch is a no-op: no processing, no hang, no exception. */
+    /**
+     * After shutdown, dispatch is a no-op: no processing, no hang, no exception.
+     *
+     * @throws Exception if a dispatch is interrupted while waiting for queue
+     *                   space, or the sleep that gives the stopped workers a
+     *                   chance to pick up the queued packets is interrupted
+     */
     @Test
     public void testDispatchAfterShutdownIsNoop() throws Exception {
         final AtomicInteger processed = new AtomicInteger();
@@ -295,7 +327,13 @@ public class PacketDispatcherTest {
         assertEquals(1, processed.get());
     }
 
-    /** Worker threads never linger after shutdown. */
+    /**
+     * Worker threads never linger after shutdown.
+     *
+     * @throws Exception if a dispatch is interrupted while waiting for queue
+     *                   space, or the polling sleep waiting for the first
+     *                   packet is interrupted
+     */
     @Test
     public void testShutdownStopsWorkers() throws Exception {
         final AtomicInteger processed = new AtomicInteger();
@@ -309,7 +347,13 @@ public class PacketDispatcherTest {
 
     // ---------- live resize ----------
 
-    /** Resize swaps the shard array in place and the dispatcher keeps processing. */
+    /**
+     * Resize swaps the shard array in place and the dispatcher keeps processing.
+     *
+     * @throws Exception if a dispatch is interrupted while waiting for queue
+     *                   space, or a polling sleep waiting for a dispatched
+     *                   packet is interrupted
+     */
     @Test
     public void testResizeGrowsShrinksAndKeepsProcessing() throws Exception {
         final AtomicInteger processed = new AtomicInteger();
@@ -332,7 +376,13 @@ public class PacketDispatcherTest {
         }
     }
 
-    /** A resize to the current size is a no-op, workers keep running. */
+    /**
+     * A resize to the current size is a no-op, workers keep running.
+     *
+     * @throws Exception if a dispatch is interrupted while waiting for queue
+     *                   space, or a polling sleep waiting for a dispatched
+     *                   packet is interrupted
+     */
     @Test
     public void testResizeSameSizeNoop() throws Exception {
         final AtomicInteger processed = new AtomicInteger();
@@ -349,7 +399,12 @@ public class PacketDispatcherTest {
         }
     }
 
-    /** Non-positive resize targets clamp to a single shard. */
+    /**
+     * Non-positive resize targets clamp to a single shard.
+     *
+     * @throws Exception not expected; the body only constructs the dispatcher,
+     *                   resizes it and reads back the worker count
+     */
     @Test
     public void testResizeClampsNonPositive() throws Exception {
         PacketDispatcher d = new PacketDispatcher(2, 4, (con, p) -> {});
@@ -365,6 +420,10 @@ public class PacketDispatcherTest {
      * A resize drains every old shard to idle before swapping, so in-flight and
      * enqueued packets complete in dispatch order and the post-resize packets
      * append after them — no reorder across the transition.
+     *
+     * @throws Exception if a dispatch is interrupted while waiting for queue
+     *                   space, or a polling sleep waiting for the queued
+     *                   packets is interrupted
      */
     @Test
     public void testResizePreservesOrder() throws Exception {
@@ -383,7 +442,12 @@ public class PacketDispatcherTest {
         }
     }
 
-    /** ResizeAll reaches every live dispatcher; shut-down ones are left alone. */
+    /**
+     * ResizeAll reaches every live dispatcher; shut-down ones are left alone.
+     *
+     * @throws Exception not expected; the body only builds dispatchers, calls
+     *                   the static resize and reads back their worker counts
+     */
     @Test
     public void testResizeAllAppliesToLiveDispatchers() throws Exception {
         PacketDispatcher a = new PacketDispatcher(2, 4, (con, p) -> {});
@@ -404,14 +468,27 @@ public class PacketDispatcherTest {
 
     // ---------- helpers ----------
 
-    /** Build a minimal inbound-style packet carrying the given stream id. */
+    /**
+     * Build a minimal inbound-style packet carrying the given stream id.
+     *
+     * @param sendStreamId the id stored as the packet's send-stream id; the
+     *                     dispatcher uses it as the shard key and the test
+     *                     asserts on it as the processed value
+     * @return a packet with a null payload, ready to hand to dispatch
+     */
     private static Packet packetFor(long sendStreamId) {
         Packet p = new Packet(null);
         p.setSendStreamId(sendStreamId);
         return p;
     }
 
-    /** Wait until the collection has n entries or the timeout elapses. */
+    /**
+     * Wait until the collection has n entries or the timeout elapses.
+     *
+     * @param list the collection the workers append processed stream ids to
+     * @param n the entry count to wait for, 1 or more
+     * @throws InterruptedException if the 10 ms polling sleep is interrupted
+     */
     private static void awaitCount(List<?> list, int n) throws InterruptedException {
         long deadline = System.nanoTime() + TEST_TIMEOUT * 1_000_000L;
         while (list.size() < n) {
@@ -422,7 +499,13 @@ public class PacketDispatcherTest {
         }
     }
 
-    /** Wait until the counter reaches n or the timeout elapses. */
+    /**
+     * Wait until the counter reaches n or the timeout elapses.
+     *
+     * @param counter the counter the workers increment as packets are processed
+     * @param n the count to wait for, 1 or more
+     * @throws InterruptedException if the 10 ms polling sleep is interrupted
+     */
     private static void awaitCount(AtomicInteger counter, int n) throws InterruptedException {
         long deadline = System.nanoTime() + TEST_TIMEOUT * 1_000_000L;
         while (counter.get() < n) {

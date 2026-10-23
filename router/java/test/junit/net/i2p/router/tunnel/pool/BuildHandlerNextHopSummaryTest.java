@@ -113,6 +113,8 @@ public class BuildHandlerNextHopSummaryTest {
      * test.  A bucket nothing writes to always reads zero, which looks like a
      * healthy router and hides the rejections entirely. So assert the source
      * actually records the two drop paths we care about.
+     *
+     * @throws Exception if the BuildHandler source cannot be read back from disk
      */
     @Test
     public void droppedBucketIsWiredToRealDropPaths() throws Exception {

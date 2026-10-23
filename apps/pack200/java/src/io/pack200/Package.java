@@ -136,7 +136,8 @@ class Package {
                                                  "SourceFile", "RUNH").layout();
         attrDefs = Collections.unmodifiableMap(ad);
     }
-    /** Return the highest version number of all classes,
+    /**
+     * Return the highest version number of all classes,
      * or 0 if there are no classes.
      */
     private void setHighestClassVersion() {
@@ -322,7 +323,8 @@ class Package {
                 removeAttribute(a);
         }
 
-        /** Given a global map of ICs (keyed by thisClass),
+        /**
+         * Given a global map of ICs (keyed by thisClass),
          * compute the subset of its Map.values which are
          * required to be present in the local InnerClasses
          * attribute.  Perform this calculation without
@@ -330,6 +332,9 @@ class Package {
          * <p>
          * The order of the resulting list is consistent
          * with that of Package.this.allInnerClasses.
+         *
+         * @return the InnerClass entries that this class's local InnerClasses
+         *         attribute must carry
          */
         public List<InnerClass> computeGloballyImpliedICs() {
             Set<Entry> cpRefs = new HashSet<>();
@@ -408,7 +413,8 @@ class Package {
             return impliedICs;
         }
 
-        /** When packing, anticipate the effect of expandLocalICs.
+        /**
+         * When packing, anticipate the effect of expandLocalICs.
          * Replace the local ICs by their symmetric difference
          * with the globally implied ICs for this class; if this
          * difference is empty, remove the local ICs altogether.
@@ -446,9 +452,13 @@ class Package {
                 Utils.log.fine("keeping local ICs in "+this+": "+localICs);
         }
 
-        /** When unpacking, undo the effect of minimizeLocalICs.
+        /**
+         * When unpacking, undo the effect of minimizeLocalICs.
          * Must return negative if any IC tuples may have been deleted.
          * Otherwise, return positive if any IC tuples were added.
+         *
+         * @return 1 if only IC tuples were added, -1 if tuples may have been
+         *         deleted, 0 if the attribute is unchanged
          */
         int expandLocalICs() {
             List<InnerClass> localICs = innerClasses;
@@ -898,7 +908,12 @@ class Package {
         }
     }
 
-    /** Return a global inner class record for the given thisClass. */
+    /**
+     * Return a global inner class record for the given thisClass.
+     *
+     * @param thisClass the class entry to look up; must be a ClassEntry
+     * @return the InnerClass record indexed by thisClass, or null if none exists
+     */
     public
     InnerClass getGlobalInnerClass(Entry thisClass) {
         assert(thisClass instanceof ClassEntry);

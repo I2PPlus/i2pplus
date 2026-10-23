@@ -38,6 +38,8 @@ public class PacketPayloadReleaseTest {
      * Build a connection-unbound PacketLocal. The trailing cast disambiguates
      * between the {@code (Destination, I2PSession)} and
      * {@code (Destination, Connection)} constructors.
+     *
+     * @return a full-size packet with a null destination and a null session
      */
     private static PacketLocal newPacket() {
         return new PacketLocal(I2PAppContext.getGlobalContext(), null, (I2PSession) null);

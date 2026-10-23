@@ -73,7 +73,13 @@ public class IntroducerCapDecisionTest {
                 Collections.singletonList(new RouterAddress("SSU2", opts, 5))));
     }
 
-    /** The itag/ih property pairs for n introducer slots. */
+    /**
+     * The itag/ih property pairs for n introducer slots.
+     *
+     * @param n how many introducer slots to name; must not be negative
+     * @return an array of {@code 2 * n} property names, alternating {@code itag0} and
+     *         {@code ih0}, then {@code itag1} and {@code ih1}, and so on
+     */
     private static String[] slots(int n) {
         String[] keys = new String[n * 2];
         for (int i = 0; i < n; i++) {
@@ -83,7 +89,12 @@ public class IntroducerCapDecisionTest {
         return keys;
     }
 
-    /** An SSU2 address carrying the given property names, each with a dummy value. */
+    /**
+     * An SSU2 address carrying the given property names, each with a dummy value.
+     *
+     * @param keys the property names to set, typically the output of {@code slots()}
+     * @return an SSU2 address on port 5 with every named key present
+     */
     private static RouterAddress address(String[] keys) {
         OrderedProperties opts = new OrderedProperties();
         for (String k : keys) {

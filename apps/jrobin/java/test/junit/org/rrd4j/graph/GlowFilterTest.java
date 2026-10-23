@@ -32,7 +32,12 @@ public class GlowFilterTest {
         w.makeImage(os);
         return os.toString("UTF-8");    }
 
-    /** The glow filter must blur the graphic, not the alpha channel, to keep the line colour. */
+    /**
+     * The glow filter must blur the graphic, not the alpha channel, to keep the line colour.
+     *
+     * @throws Exception if the SVG worker cannot render the line, or the bytes it wrote
+     *                   cannot be decoded as UTF-8
+     */
     @Test
     public void glowBlursTheGraphicSoTheHaloKeepsTheLineColour() throws Exception {
         String svg = render(true);
@@ -47,7 +52,12 @@ public class GlowFilterTest {
                     filter.contains("SourceAlpha"));
     }
 
-    /** The blur feeds a fade and is merged back under the line, so the line stays crisp. */
+    /**
+     * The blur feeds a fade and is merged back under the line, so the line stays crisp.
+     *
+     * @throws Exception if the SVG worker cannot render the line, or the bytes it wrote
+     *                   cannot be decoded as UTF-8
+     */
     @Test
     public void glowMergesTheFadedBlurBackUnderTheLine() throws Exception {
         String svg = render(true);
@@ -65,7 +75,12 @@ public class GlowFilterTest {
         assertTrue("the halo is merged over the line instead of under it: " + filter, halo < line);
     }
 
-    /** With the glow off no filter is emitted at all, so nothing renders a halo. */
+    /**
+     * With the glow off no filter is emitted at all, so nothing renders a halo.
+     *
+     * @throws Exception if the SVG worker cannot render the glow-free line, or the bytes
+     *                   it wrote cannot be decoded as UTF-8
+     */
     @Test
     public void noGlowFilterWithoutTheGlow() throws Exception {
         assertFalse("a glow filter was emitted with the glow off",

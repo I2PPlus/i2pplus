@@ -53,14 +53,26 @@ public class BuildExecutorUrgentCeilingTest {
         BuildExecutor.setMaxConcurrentBuilds(_savedCeiling);
     }
 
-    /** A pool holding {@code nearExpiry} leases inside the pre-build window. */
+    /**
+     * A pool holding {@code nearExpiry} leases inside the pre-build window.
+     *
+     * @param nearExpiry the value getNearExpiryCount() reports from now on; 0
+     *                   means a pool with nothing urgent to rebuild
+     * @return a mock pool answering only the near-expiry count query
+     */
     private static TunnelPool pool(int nearExpiry) {
         TunnelPool p = mock(TunnelPool.class);
         when(p.getNearExpiryCount()).thenReturn(nearExpiry);
         return p;
     }
 
-    /** {@code n} pools that each hold a lease about to expire. */
+    /**
+     * {@code n} pools that each hold a lease about to expire.
+     *
+     * @param n the number of pools to create, each reporting one near-expiry
+     *          lease
+     * @return a list of mock pools, in creation order
+     */
     private static List<TunnelPool> urgentPools(int n) {
         List<TunnelPool> l = new ArrayList<>(n);
         for (int i = 0; i < n; i++)

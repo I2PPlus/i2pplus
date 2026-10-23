@@ -66,6 +66,16 @@ public class BuildExecutorGhostChargeTest {
      * Drives the contacted hop into a known classification, then asserts the
      * ghost-charge decision.  The transport facade is stubbed on the shared
      * context, so each test restores it to avoid leaking into the next.
+     *
+     * @param inbound true to build an inbound tunnel, so the contacted hop is the
+     *                inbound gateway rather than the outbound endpoint
+     * @param unreachable what the stubbed facade reports for every hop's
+     *                    {@code wasUnreachable()}
+     * @param established what the stubbed facade reports for every hop's
+     *                    {@code isEstablished()}
+     * @param connecting what the stubbed facade reports for every hop's
+     *                   {@code isConnecting()}
+     * @return true if the contacted hop is charged a ghost mark for the timed-out build
      */
     private static boolean chargeWhen(boolean inbound, boolean unreachable,
                                       boolean established, boolean connecting) {

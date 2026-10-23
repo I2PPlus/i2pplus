@@ -11,7 +11,7 @@ import org.junit.Test;
 /**
  * Unit tests for the NTCP2 frame-sizing decisions extracted from
  * {@link NTCPConnection#prepareNextWriteNTCP2} and
- * {@link NTCPConnection.NTCP2ReadState#receive(ByteBuffer, long)}.
+ * {@code NTCP2ReadState.receive()}.
  *
  * <p>Each decision is a pure boolean/int function, so the whole frame-packing and
  * read-side allocation behavior is pin-able without a running connection: message

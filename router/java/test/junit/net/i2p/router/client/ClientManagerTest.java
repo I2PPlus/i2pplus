@@ -148,7 +148,12 @@ public class ClientManagerTest {
         assertSame(rB, _manager.getRunner(destB));
     }
 
-    /** Uses KeyGenerator for real keys so calculateHash() works. */
+    /**
+     * Uses KeyGenerator for real keys so calculateHash() works.
+     *
+     * @return a Destination carrying freshly generated PKI and signing public
+     *         keys and an empty certificate
+     */
     private Destination createDestination() {
         Object[] keypair = KeyGenerator.getInstance().generatePKIKeypair();
         Object[] signingKeypair = KeyGenerator.getInstance().generateSigningKeypair();

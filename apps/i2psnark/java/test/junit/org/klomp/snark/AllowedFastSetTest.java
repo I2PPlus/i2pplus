@@ -19,7 +19,12 @@ import org.junit.Test;
  */
 public class AllowedFastSetTest {
 
-    /** 32-byte destination hash stand-in with every byte set to the given value. */
+    /**
+     * 32-byte destination hash stand-in with every byte set to the given value.
+     *
+     * @param val the byte value written into all 32 bytes
+     * @return the 32-byte stand-in hash, every byte set to val
+     */
     private static byte[] dhash(int val) {
         byte[] b = new byte[32];
         Arrays.fill(b, (byte) val);

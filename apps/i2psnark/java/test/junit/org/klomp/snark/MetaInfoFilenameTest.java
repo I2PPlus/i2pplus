@@ -23,7 +23,12 @@ public class MetaInfoFilenameTest {
     private static final int PIECE_LENGTH = 16384;
     private static final long TOTAL_LENGTH = 30000L;
 
-    /** Assemble a bencoded single-file torrent. */
+    /**
+     * Assemble a bencoded single-file torrent.
+     *
+     * @param name the torrent name to embed in the info dict, any UTF-8 text
+     * @return the complete torrent file as ISO-8859-1 encoded bencode
+     */
     private static byte[] singleFileTorrent(String name) {
         // Keys sorted canonically so the rebuilt info hash matches.
         byte[] nameBytes = name.getBytes(StandardCharsets.UTF_8);
@@ -39,7 +44,17 @@ public class MetaInfoFilenameTest {
         return assemble(head.toString(), nameBytes, mid.toString());
     }
 
-    /** Assemble a bencoded multi-file torrent. */
+    /**
+     * Assemble a bencoded multi-file torrent.
+     *
+     * @param name the torrent directory name to embed in the info dict
+     * @param paths one ordered list of path components per file, index-aligned
+     *              with lengths and attrs
+     * @param lengths the byte length of each file, index-aligned with paths
+     * @param attrs the BEP 47 attribute per file, "p" for a padding file and
+     *              null for a regular file, or null for no attributes at all
+     * @return the complete torrent file as ISO-8859-1 encoded bencode
+     */
     private static byte[] multiFileTorrent(String name, List<List<String>> paths, List<Long> lengths, List<String> attrs) {
         byte[] nameBytes = name.getBytes(StandardCharsets.UTF_8);
         StringBuilder head = new StringBuilder(512);
@@ -70,7 +85,17 @@ public class MetaInfoFilenameTest {
         return assemble(head.toString(), nameBytes, mid.toString());
     }
 
-    /** head + name + mid + 40 zero piece hashes + outer/info closers. */
+    /**
+     * Concatenate the torrent around the raw name bytes:
+     * head + name + mid + 40 zero piece hashes + outer/info closers.
+     *
+     * @param head the bencode written before the name, ending at the name's
+     *             length prefix
+     * @param nameBytes the raw UTF-8 name bytes inserted after head
+     * @param mid the bencode written after the name, ending just before the
+     *            pieces value
+     * @return all the parts concatenated into the complete torrent bytes
+     */
     private static byte[] assemble(String head, byte[] nameBytes, String mid) {
         byte[] headBytes = head.getBytes(StandardCharsets.ISO_8859_1);
         byte[] midBytes = mid.getBytes(StandardCharsets.ISO_8859_1);
@@ -167,6 +192,8 @@ public class MetaInfoFilenameTest {
      * isPaddingFile() on a later file threw "Index 4 out of bounds for length 4"
      * during add. Padding files are typically the last entries, and many
      * releases carry one pad per media file, so two or more pads are common.
+     *
+     * @throws Throwable on torrent parse failure
      */
     @Test
     public void testMultiplePaddingFiles() throws Throwable {

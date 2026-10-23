@@ -19,7 +19,12 @@ import java.util.List;
  */
 public class XORComparatorTest {
 
-    /** Hash with all bytes zero. */
+    /**
+     * Hash with all bytes zero.
+     *
+     * @param b the leading bytes to set, copied in from the front of the hash
+     * @return a hash of full length with b at the front and the rest zero
+     */
     private static Hash h(byte... b) {
         byte[] data = new byte[Hash.HASH_LENGTH];
         System.arraycopy(b, 0, data, 0, b.length);
@@ -101,7 +106,15 @@ public class XORComparatorTest {
         }
     }
 
-    /** Reference XOR distance comparison for verification. */
+    /**
+     * Reference XOR distance comparison for verification.
+     *
+     * @param base the hash both operands are measured against
+     * @param lhs the bytes of the first hash
+     * @param rhs the bytes of the second hash
+     * @return negative if lhs is closer to base than rhs, positive if
+     *         farther, zero if equally distant
+     */
     private static int compareDistance(Hash base, byte[] lhs, byte[] rhs) {
         for (int i = 0; i < Hash.HASH_LENGTH; i++) {
             int ld = (lhs[i] ^ base.getData()[i]) & 0xff;

@@ -98,7 +98,15 @@ public class EventPumperRateTest {
 
     /////////////// what actually reaches the stat manager
 
-    /** Records what would be published, standing in for StatManager. */
+    /**
+     * Records what would be published, standing in for StatManager.
+     *
+     * @param loopCount total pumper iterations counted in the window
+     * @param idleLoopCount the no-work pumper iterations counted in the window
+     * @param elapsedSeconds the window length in seconds, 5 in production
+     * @return the published stat name to value pairs in publication order, both
+     *         values scaled to a per-second rate
+     */
     private static Map<String, Long> capture(int loopCount, int idleLoopCount, int elapsedSeconds) {
         Map<String, Long> published = new LinkedHashMap<>();
         EventPumper.publishLoopRates(published::put, loopCount, idleLoopCount, elapsedSeconds);

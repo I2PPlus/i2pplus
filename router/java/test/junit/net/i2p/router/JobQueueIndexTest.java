@@ -59,6 +59,8 @@ public class JobQueueIndexTest {
      *
      * @param name the private field name on JobQueue
      * @return the field's value
+     * @throws Exception if the field is missing or reflection is not allowed to
+     *                   read it
      */
     private Object field(String name) throws Exception {
         Field f = JobQueue.class.getDeclaredField(name);
@@ -70,6 +72,7 @@ public class JobQueueIndexTest {
      * The queue's index set.
      *
      * @return the live membership index
+     * @throws Exception on reflection failure reading the private index field
      */
     @SuppressWarnings("unchecked")
     private Set<Job> index() throws Exception {
@@ -81,6 +84,7 @@ public class JobQueueIndexTest {
      *
      * @param name the private queue field name
      * @return that queue's contents
+     * @throws Exception if the named queue field is gone or reflection cannot read it
      */
     @SuppressWarnings("unchecked")
     private List<Job> queue(String name) throws Exception {
@@ -92,6 +96,8 @@ public class JobQueueIndexTest {
      * member must be present in at least one ready queue. A duplicate copy of
      * the same job within a queue satisfies both directions - the index is a
      * set, so it answers membership, not multiplicity.
+     *
+     * @throws Exception on reflection failure reading the index or queue fields
      */
     private void assertIndexConsistent() throws Exception {
         List<Job> ready = queue("_readyJobs");
@@ -119,7 +125,9 @@ public class JobQueueIndexTest {
     /**
      * How many copies of the job are queued.
      *
+     * @param job the instance to count occurrences of across the ready queues
      * @return how many copies of job the three ready queues hold
+     * @throws Exception on reflection failure reading the queue fields
      */
     private int copies(Job job) throws Exception {
         int n = 0;
@@ -145,6 +153,8 @@ public class JobQueueIndexTest {
      * A re-adding the same instance repeatedly must leave exactly one copy
      * queued. This is the whole point of the index: a second copy means the
      * job body runs twice.
+     *
+     * @throws Exception on reflection failure reading the private index or queue fields
      */
     @Test
     public void testDuplicateAddAdmitsOneCopy() throws Exception {
@@ -161,6 +171,8 @@ public class JobQueueIndexTest {
      * removeJob() must release the index entry, otherwise the job could never
      * be queued again and would silently stop running for the rest of the
      * router's life.
+     *
+     * @throws Exception on reflection failure reading the private index or queue fields
      */
     @Test
     public void testRemoveJobReleasesIndexEntry() throws Exception {
@@ -182,6 +194,8 @@ public class JobQueueIndexTest {
      * enqueue have to adjust the index, or the job ends up in the index and in
      * the high-priority queue while never having been released - which would
      * block every later add of that instance.
+     *
+     * @throws Exception on reflection failure reading the private index or queue fields
      */
     @Test
     public void testAddJobToTopKeepsIndexInStep() throws Exception {
@@ -199,6 +213,8 @@ public class JobQueueIndexTest {
      * addJobToTop() of an instance that is not queued must claim the index,
      * and must still do so when the instance is already sitting in the
      * future-scheduled skip list.
+     *
+     * @throws Exception on reflection failure reading the private index or queue fields
      */
     @Test
     public void testAddJobToTopOfScheduledJob() throws Exception {
@@ -219,6 +235,8 @@ public class JobQueueIndexTest {
      * is called from runJob() - i.e. while the job is still running - and if
      * the entry survived until updateStats() the requeue would be swallowed and
      * the job would never run again.
+     *
+     * @throws Exception on reflection failure reading the private index or queue fields
      */
     @Test
     public void testDispatchReleasesIndexEntry() throws Exception {
@@ -241,6 +259,8 @@ public class JobQueueIndexTest {
      * A job still sitting in the future-scheduled skip list is deduplicated by
      * removing and re-adding it, not by the ready-queue index. The re-add must
      * not leave a stale entry behind for a job that is only scheduled.
+     *
+     * @throws Exception on reflection failure reading the private index or queue fields
      */
     @Test
     public void testRescheduledJobLeavesNoIndexEntry() throws Exception {
@@ -261,6 +281,9 @@ public class JobQueueIndexTest {
      * drifting from the queues. Distinct instances per thread make this an
      * exact count check. Duplicates admitted inside the check-then-add window
      * are tolerated by design, so only membership is asserted.
+     *
+     * @throws Exception if the latch await or a worker join is interrupted, or on
+     *                   reflection failure reading the private index or queue fields
      */
     @Test
     public void testIndexConsistentUnderConcurrentAdds() throws Exception {
@@ -326,6 +349,8 @@ public class JobQueueIndexTest {
      * tunnel instance slot), so this pins the other half of the contract: the
      * counter must stay at zero for ordinary jobs across every add, promote,
      * dispatch and remove path, i.e. it must not be touched spuriously.
+     *
+     * @throws Exception not expected; the body only drives the queue and asserts
      */
     @Test
     public void testTestJobCounterStaysZeroForOrdinaryJobs() throws Exception {
@@ -345,6 +370,8 @@ public class JobQueueIndexTest {
     /**
      * Shutdown must clear the index and the counter, otherwise a queue that is
      * restarted (or a router that restarts the queue) would reject every job.
+     *
+     * @throws Exception on reflection failure reading the private index or queue fields
      */
     @Test
     public void testShutdownClearsIndex() throws Exception {

@@ -37,6 +37,7 @@ class LocalClientManager extends ClientManager {
      *
      * @param context stub, may be constructed with new RouterContext(null),
      * no initAll() necessary
+     * @param port TCP port the local I2CP server listens on
      */
     public LocalClientManager(RouterContext context, int port) {
         super(context, port);

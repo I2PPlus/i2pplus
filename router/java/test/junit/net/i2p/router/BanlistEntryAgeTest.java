@@ -24,7 +24,14 @@ import net.i2p.data.Hash;
  */
 public class BanlistEntryAgeTest {
 
-    /** Mirror of the accessor arithmetic, for testing the rule without a context. */
+    /**
+     * Mirror of the accessor arithmetic, for testing the rule without a context.
+     *
+     * @param now the current time in ms
+     * @param addedOn when the ban started, in ms; 0 or less means the start time is unknown
+     * @param expireOn when the ban expires, in ms; at or before now it is no longer standing
+     * @return the age of the standing ban in ms, or -1 when it is unknown or expired
+     */
     private static long age(long now, long addedOn, long expireOn) {
         if (addedOn <= 0) {return -1;}
         if (expireOn <= now) {return -1;}

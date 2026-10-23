@@ -59,6 +59,11 @@ public class ProfileOrganizerSubnetDiversityTest {
     /**
      * A RouterInfo publishing one address per host, all on the same port, plus an
      * optional family.
+     *
+     * @param port the port every published NTCP2 address listens on
+     * @param family the family name to publish, or null to set no family option
+     * @param hosts the hosts to publish, one NTCP2 address per entry
+     * @return a router info carrying those addresses and its family option
      */
     private static RouterInfo ri(int port, String family, String... hosts) {
         Set<RouterAddress> addrs = new HashSet<>(hosts.length + 1);

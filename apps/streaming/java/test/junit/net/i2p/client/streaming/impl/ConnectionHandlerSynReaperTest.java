@@ -9,7 +9,7 @@ import org.junit.Test;
  * per-SYN {@code TimedEvent}s (one at enqueue, one at dequeue).
  *
  * <p>The old model posted O(n) timer events per second under a SYN flood on
- * the shared handler timer; the {@link ConnectionHandler.SynReaper} is one
+ * the shared handler timer; the {@code SynReaper} is one
  * self-rescheduling event that scans the enqueue table every
  * {@link ConnectionHandler#SYN_SWEEP_INTERVAL}. These tests pin the expiry
  * boundary (the timeout is snapshotted at enqueue — the reaper and the client

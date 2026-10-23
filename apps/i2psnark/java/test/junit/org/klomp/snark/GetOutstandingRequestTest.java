@@ -27,7 +27,13 @@ public class GetOutstandingRequestTest {
         return new PartialPiece(new Piece(piece), PLEN, null);
     }
 
-    /** PeerState with the private request queue populated via reflection. */
+    /**
+     * PeerState with the private request queue populated via reflection.
+     *
+     * @param requests the requests to install into the private queue
+     * @return a choked, unconnected peer state whose queue holds the given requests
+     * @throws Throwable if the torrent bytes cannot be parsed or the private field is inaccessible
+     */
     private static PeerState stateWith(List<Request> requests) throws Throwable {
         MetaInfo mi = new MetaInfo(new java.io.ByteArrayInputStream(
                 PeerStateTest.buildTorrentBytes(new byte[40])));

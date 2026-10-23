@@ -69,6 +69,10 @@ public class RateConcurrentUpdateTest {
     /**
      * Run {@code body} on {@link #THREADS} threads released together, and fail if
      * any thread throws.
+     *
+     * @param body the work each worker thread runs
+     * @throws Exception if the latch wait for the workers to finish is
+     *                   interrupted
      */
     private static void runConcurrently(Worker body) throws Exception {
         CountDownLatch start = new CountDownLatch(1);
@@ -96,6 +100,8 @@ public class RateConcurrentUpdateTest {
 
     /**
      * Property 1: concurrent increments must neither be lost nor double-counted.
+     *
+     * @throws Exception if the wait for the worker threads is interrupted
      */
     @Test
     public void concurrentAddDataLosesNoEvents() throws Exception {
@@ -113,7 +119,11 @@ public class RateConcurrentUpdateTest {
         assertEquals((double) expected, r.getCurrentTotalValue(), 0.0d);
     }
 
-    /** Property 1 again, for the variant that also accrues event durations. */
+    /**
+     * Property 1 again, for the variant that also accrues event durations.
+     *
+     * @throws Exception if the wait for the worker threads is interrupted
+     */
     @Test
     public void concurrentAddDataWithDurationLosesNoEvents() throws Exception {
         RateStat rs = new RateStat("concurrentDur", "d", "g", new long[] { 60_000L });
@@ -146,6 +156,9 @@ public class RateConcurrentUpdateTest {
      * calls, so a coalesce landing between them would hand the reader a count from
      * one period and an average from the next - a test artefact, not a code defect.
      * A single call cannot be interleaved, so only its own return value is checked.
+     *
+     * @throws Exception if joining the reader or coalescer thread is
+     *                   interrupted
      */
     @Test
     public void averageValueIsNeverTornUnderConcurrentUpdate() throws Exception {
@@ -223,6 +236,8 @@ public class RateConcurrentUpdateTest {
      * A coalesce concurrent with writers must still leave the counters non-negative
      * and the lifetime total consistent with the lifetime count, since the lifetime
      * pair is updated only by addData.
+     *
+     * @throws Exception if joining the coalescer thread is interrupted
      */
     @Test
     public void coalesceConcurrentWithWritersKeepsCountersSane() throws Exception {

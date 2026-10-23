@@ -17,7 +17,12 @@ import org.junit.Test;
  */
 public class UrlifyQuoteTest {
 
-    /** Counts raw double quotes - the anchor's own delimiters are the only legal ones. */
+    /**
+     * Counts raw double quotes - the anchor's own delimiters are the only legal ones.
+     *
+     * @param s the generated anchor markup to scan
+     * @return the number of raw double-quote characters in the markup
+     */
     private static int quotes(String s) {
         int n = 0;
         for (int i = 0; i < s.length(); i++)

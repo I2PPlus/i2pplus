@@ -35,7 +35,11 @@ public class ProfileOrganizerRefreshDecisionTest {
         return info;
     }
 
-    /** A profile that has shown no life at all. */
+    /**
+     * A profile that has shown no life at all.
+     *
+     * @return a mock profile whose three proof-of-life timestamps are all 0, meaning never
+     */
     private PeerProfile silent() {
         PeerProfile profile = mock(PeerProfile.class);
         when(profile.getLastSendSuccessful()).thenReturn(Long.valueOf(0L));

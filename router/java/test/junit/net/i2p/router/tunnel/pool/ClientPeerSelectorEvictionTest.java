@@ -21,7 +21,7 @@ import net.i2p.util.LogManager;
 
 /**
  * Tests for the cooldown exclusion reader: it must admit exactly the entries
- * still inside their cooldown window (value > cutoff) and must never mutate
+ * still inside their cooldown window (value &gt; cutoff) and must never mutate
  * the shared cooldown map. Expiry is handled lazily at read time and by
  * periodic pruning, not by sweeping the map on every selection.
  */

@@ -138,7 +138,11 @@ public class SSUDemo {
         _us.inNetMessagePool().registerHandlerJobBuilder(FooMessage.MESSAGE_TYPE, new FooJobBuilder());
     }
 
-    /** Random place for storing router info files - written as $dir/base64(SHA256(info.getIdentity)). */
+    /**
+     * Random place for storing router info files - written as $dir/base64(SHA256(info.getIdentity)).
+     *
+     * @return the File for /tmp/ssuDemoInfo, which this method does not create
+     */
     private static File getInfoDir() {
         return new File("/tmp/ssuDemoInfo/");
     }
@@ -285,12 +289,20 @@ public class SSUDemo {
             _data = data;
         }
 
-        /** Pull the read data off. */
+        /**
+         * Pull the read data off.
+         *
+         * @return the payload most recently read into, or set on, this message
+         */
         public byte[] getData() {
             return _data;
         }
 
-        /** Specify the payload to be sent. */
+        /**
+         * Specify the payload to be sent.
+         *
+         * @param data the bytes this message carries, copied out when it is written
+         */
         public void setData(byte[] data) {
             _data = data;
         }

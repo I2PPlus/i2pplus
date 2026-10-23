@@ -30,7 +30,7 @@ import net.i2p.data.Hash;
  *
  * <p>{@code getClosest} is deliberately <em>not</em> covered here: bounding its
  * inner loops was measured to make it return the true nearest keys less often
- * (632/800 -> 232/800 over randomised trials) because it collects a whole bucket
+ * (632/800 -&gt; 232/800 over randomised trials) because it collects a whole bucket
  * and then sorts and trims, so the over-collection is load-bearing for its
  * accuracy. It stays as-is.
  *

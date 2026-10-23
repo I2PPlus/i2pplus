@@ -28,13 +28,25 @@ public class ConnectionStallVerdictOutstandingTest {
     private static final double BASELINE = 100_000d;
     private static final double ABS_FLOOR = 1_000d;
 
-    /** Verdict with data known to be in flight. */
+    /**
+     * Verdict with data known to be in flight.
+     *
+     * @param lastProgressAt clock value of the last observed progress, 0 for none
+     * @param bps goodput measured over the sample window, bytes per second
+     * @return the verdict the detector reaches with {@code outstandingData} true
+     */
     private static Connection.StallState withData(long lastProgressAt, double bps) {
         return Connection.stallVerdict(NOW, lastProgressAt, bps, RATIO, SAMPLES, BASELINE,
                                        ABS_FLOOR, GRACE, true);
     }
 
-    /** Verdict for an application-limited connection: nothing in flight. */
+    /**
+     * Verdict for an application-limited connection: nothing in flight.
+     *
+     * @param lastProgressAt clock value of the last observed progress, 0 for none
+     * @param bps goodput measured over the sample window, bytes per second
+     * @return the verdict the detector reaches with {@code outstandingData} false
+     */
     private static Connection.StallState noData(long lastProgressAt, double bps) {
         return Connection.stallVerdict(NOW, lastProgressAt, bps, RATIO, SAMPLES, BASELINE,
                                        ABS_FLOOR, GRACE, false);

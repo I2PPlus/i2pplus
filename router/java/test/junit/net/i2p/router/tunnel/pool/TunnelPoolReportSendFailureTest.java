@@ -207,7 +207,7 @@ public class TunnelPoolReportSendFailureTest {
 
     /**
      * Soft failures from a clean tunnel must not trip the scan gate
-     * (consecutiveFailures > MAX) after four soft timeouts.
+     * (consecutiveFailures &gt; MAX) after four soft timeouts.
      */
     @Test
     public void fourSoftTimeoutsDoNotTripScanGate() {
@@ -281,6 +281,12 @@ public class TunnelPoolReportSendFailureTest {
      * TunnelCreatorConfig. Length 1 keeps tellProfileFailed on its early-return path.
      * getTunnelFailed is driven only by the explicit failed flag — soft
      * status-3 reports must not touch the hard counter at all.
+     *
+     * @param failed the flag getTunnelFailed() reports, flipped true by tunnelFailedCompletely()
+     * @param failures the hard counter getConsecutiveFailures() reports
+     * @param soft the soft counter getSoftFailures() reports
+     * @param length the hop count getLength() reports; 1 exercises the early-return path
+     * @return a mocked config wired to those three counters, typed as a TunnelInfo
      */
     private TunnelInfo stubTunnel(AtomicBoolean failed, AtomicInteger failures,
                                                  AtomicInteger soft, int length) {

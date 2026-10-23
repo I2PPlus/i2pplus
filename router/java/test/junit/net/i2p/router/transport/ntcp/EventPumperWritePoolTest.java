@@ -27,7 +27,13 @@ public class EventPumperWritePoolTest {
     /** The exact size accepted by the pool, mirroring EventPumper.WRITE_BUFSIZE. */
     private static final int WRITE_BUFSIZE = NTCPConnection.BUFFER_SIZE + OutboundNTCP2State.MAC_SIZE + 2;
 
-    /** An Answer that consumes n bytes from the buffer, like a real SocketChannel. */
+    /**
+     * An Answer that consumes n bytes from the buffer, like a real SocketChannel.
+     *
+     * @param n maximum bytes the stub reports writing in one write() call, in bytes
+     * @return an Answer returning the bytes it advanced the buffer by, never more
+     *         than n or the buffer's remaining count
+     */
     private static Answer<Integer> writeBytes(final int n) {
         return new Answer<Integer>() {
             @Override
@@ -43,6 +49,11 @@ public class EventPumperWritePoolTest {
     /**
      * A drained write of a pooled-size array must put the array back in the cache,
      * so the next acquire returns the same instance.
+     *
+     * @param buf the pooled-size buffer the connection offers for the write
+     * @param underlying the byte array backing buf, expected back from the pool
+     * @throws Exception if writeOneBuffer() reports an I/O failure while draining
+     *                   the buffer
      */
     private void assertDrainedPooledBufferReused(ByteBuffer buf, byte[] underlying) throws Exception {
         NTCPConnection con = mock(NTCPConnection.class);

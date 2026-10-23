@@ -221,7 +221,12 @@ public class RemintDecisionTest {
         assertFalse(RepublishLeaseSetJob.effectiveExpiryAnomalouslyShort(-1L));
     }
 
-    /** Builds a LeaseSet from explicit tunnel id numbers, in the given order. */
+    /**
+     * Builds a LeaseSet from explicit tunnel id numbers, in the given order.
+     *
+     * @param ids the tunnel ids to use, one lease per id
+     * @return a LeaseSet holding those leases, each expiring 5 minutes from now
+     */
     private static LeaseSet leaseSetOf(long... ids) {
         LeaseSet ls = new LeaseSet();
         long end = System.currentTimeMillis() + 300_000L;
@@ -240,6 +245,11 @@ public class RemintDecisionTest {
      * Builds a LeaseSet with {@code count} leases. Same {@code seed} yields the
      * same tunnel ids, which is what the identity comparison turns on. Ids start
      * at 1 because {@code TunnelId} rejects zero.
+     *
+     * @param count number of leases to build, one per iteration
+     * @param seed base of the tunnel ids: lease i gets seed * 1000 + i + 1, so
+     *             two calls with the same seed build the same set of ids
+     * @return a LeaseSet with count leases, each expiring 5 minutes from now
      */
     private static LeaseSet leaseSet(int count, int seed) {
         LeaseSet ls = new LeaseSet();

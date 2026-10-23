@@ -21,7 +21,14 @@ import static org.junit.Assert.*;
  */
 public class RrdGraphMetaTest {
 
-    /** Image parameters as a completed render would leave them. */
+    /**
+     * Image parameters as a completed render would leave them.
+     *
+     * @param magfact value-axis divisor applied to every plotted value; 0 or NaN reads as one
+     * @param minval bottom of the y-axis range, in pre-scaling units
+     * @param maxval top of the y-axis range, in pre-scaling units
+     * @return a {@link ImageParameters} with a fixed plot box and time window
+     */
     private static ImageParameters params(double magfact, double minval, double maxval) {
         ImageParameters im = new ImageParameters();
         im.xorigin = 63;
@@ -42,6 +49,9 @@ public class RrdGraphMetaTest {
      * <p>Each call gets its own source name. A shared one would be folded away by the
      * deduplication in {@link RrdGraphMeta#populate}, so asking for "two series" this way would
      * quietly produce one.
+     *
+     * @param values the sample values the series carries, one per plotted period
+     * @return a {@link SourcedPlotElement} under a fresh source name, values set directly
      */
     private static SourcedPlotElement series(double... values) {
         return series("src" + (distinctSource++), Color.ORANGE, values);
@@ -53,6 +63,11 @@ public class RrdGraphMetaTest {
     /**
      * A sourced plot element with an explicit name and paint, so a test can model two elements
      * over one source the way filled-path mode does.
+     *
+     * @param srcName source name the element reports, the key the metadata deduplicates on
+     * @param color paint the element is drawn with, and the colour reported to a client
+     * @param values the sample values the series carries, one per plotted period
+     * @return a {@link SourcedPlotElement} with its values set directly, no data processor
      */
     private static SourcedPlotElement series(String srcName, Paint color, double... values) {
         SourcedPlotElement pe = new SourcedPlotElement(srcName, color);

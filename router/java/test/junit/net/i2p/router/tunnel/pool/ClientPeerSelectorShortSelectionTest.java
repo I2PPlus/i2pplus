@@ -28,7 +28,14 @@ public class ClientPeerSelectorShortSelectionTest {
     private static final int MIN_STRUCTURAL =
         ClientPeerSelector.MIN_STRUCTURAL_NON_SELF_HOPS;
 
-    /** {@code rvSize} includes self, so non-self hops = rvSize - 1. */
+    /**
+     * {@code rvSize} includes self, so non-self hops = rvSize - 1.
+     *
+     * @param nonSelfHops number of selected peers excluding this router, which is
+     *                    always the gateway of its own client tunnel
+     * @return the size the selector reports for that selection, one more than the
+     *         argument
+     */
     private static int rvSizeFor(int nonSelfHops) { return nonSelfHops + 1; }
 
     // ---- the regression: a minor shortfall is no longer discarded ----
@@ -78,7 +85,7 @@ public class ClientPeerSelectorShortSelectionTest {
         assertTrue(ClientPeerSelector.shouldDiscardShortSelection(rvSizeFor(0), 3));
     }
 
-    /** Self only (rvSize 1 => 0 non-self hops) is unbuildable. */
+    /** Self only (rvSize 1 =&gt; 0 non-self hops) is unbuildable. */
     @Test
     public void testSelfOnlyIsDiscarded() {
         assertTrue(ClientPeerSelector.shouldDiscardShortSelection(1, 3));

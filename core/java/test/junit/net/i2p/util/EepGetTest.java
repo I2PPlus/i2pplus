@@ -75,6 +75,9 @@ public class EepGetTest extends TestCase {
 
     /**
      * Generate a deterministic byte pattern.
+     *
+     * @param size number of bytes to generate, must not be negative
+     * @return an array of size bytes with values cycling through (i * 31 + 7) mod 256
      */
     private static byte[] pattern(int size) {
         byte[] rv = new byte[size];
@@ -113,6 +116,12 @@ public class EepGetTest extends TestCase {
     /**
      * Create an EepGet (no retries) writing to a fresh temp file. The caller
      * must call fetch().
+     *
+     * @param url the URL to fetch, normally built by TestServer.url()
+     * @param numRetries number of retries after the first attempt; 0 for a
+     *                   single attempt with no retries
+     * @return a new EepGet writing to a fresh temp file, also stored in
+     *         _outFile so tearDown can delete it
      */
     private EepGet newFetch(String url, int numRetries) {
         try {
@@ -126,6 +135,10 @@ public class EepGetTest extends TestCase {
 
     /**
      * Start a server with the given per-request handler.
+     *
+     * @param handler the handler run for every request the server accepts
+     * @return the started test server, listening on a loopback port
+     * @throws IOException if the loopback server socket cannot be bound
      */
     private TestServer startServer(Handler handler) throws IOException {
         TestServer server = new TestServer(handler);
@@ -152,6 +165,8 @@ public class EepGetTest extends TestCase {
 
     /**
      * Content-Encoding: gzip with a plain URL is transparently decompressed.
+     *
+     * @throws Exception on gzip compression, server bind, or temp-file I/O failure
      */
     public void testGzipTransparent() throws Exception {
         final byte[] body = pattern(64 * 1024);
@@ -172,6 +187,8 @@ public class EepGetTest extends TestCase {
 
     /**
      * A .gz URL is stored raw, not decompressed.
+     *
+     * @throws Exception on gzip compression, server bind, or temp-file I/O failure
      */
     public void testGzipStoredRaw() throws Exception {
         final byte[] body = pattern(64 * 1024);
@@ -192,6 +209,8 @@ public class EepGetTest extends TestCase {
 
     /**
      * Transfer-Encoding: chunked without a Content-Length.
+     *
+     * @throws Exception on server bind or temp-file I/O failure
      */
     public void testChunked() throws Exception {
         final byte[] body = pattern(10 * 1024);
@@ -221,6 +240,8 @@ public class EepGetTest extends TestCase {
 
     /**
      * A 301 redirect is followed.
+     *
+     * @throws Exception on server bind or temp-file I/O failure
      */
     public void testRedirect() throws Exception {
         final byte[] body = pattern(1000);
@@ -245,6 +266,8 @@ public class EepGetTest extends TestCase {
 
     /**
      * More than 5 redirects fails the fetch.
+     *
+     * @throws Exception on server bind failure
      */
     public void testTooManyRedirects() throws Exception {
         TestServer server = startServer(new Handler() {
@@ -261,6 +284,8 @@ public class EepGetTest extends TestCase {
 
     /**
      * A pre-existing partial file resumes with a Range request and a 206 response.
+     *
+     * @throws Exception on temp-file I/O or server bind failure
      */
     public void testRangeResume() throws Exception {
         final byte[] body = pattern(50 * 1024);
@@ -293,6 +318,8 @@ public class EepGetTest extends TestCase {
     /**
      * A Range resume must not be requested after a transparently-gunzipped response,
      * because the stored bytes are decompressed, not raw (regression for the gzip resume).
+     *
+     * @throws Exception if building one of the request strings fails
      */
     public void testNoRangeAfterGzip() throws Exception {
         TestEepGet get = new TestEepGet(_context);
@@ -307,6 +334,8 @@ public class EepGetTest extends TestCase {
     /**
      * A Content-Length over 2 GiB must not wrap the read counter; the served
      * bytes are still stored (regression for the int truncation).
+     *
+     * @throws Exception on server bind failure
      */
     public void testHugeContentLength() throws Exception {
         final int served = 100 * 1024;
@@ -327,6 +356,8 @@ public class EepGetTest extends TestCase {
      * A gzip response that disconnects mid-body must fail cleanly without hanging
      * the decompressor thread or leaking the output file (regression for the
      * failure-path pipe close and join).
+     *
+     * @throws Exception on gzip compression or server bind failure
      */
     public void testTruncatedGzip() throws Exception {
         final byte[] gz = gzip(pattern(64 * 1024));
@@ -345,6 +376,8 @@ public class EepGetTest extends TestCase {
 
     /**
      * A 404 must not write the error body to the file.
+     *
+     * @throws Exception on server bind failure
      */
     public void testErrorStatus() throws Exception {
         final byte[] errBody = pattern(500);
@@ -366,6 +399,8 @@ public class EepGetTest extends TestCase {
      * succeed once the server serves data. This is the client-side counterpart of
      * the "empty response" ("NS_ERROR_NET_EMPTY_RESPONSE") fix: a flaky or
      * unresponsive source must not be declared dead on the first zero-byte reply.
+     *
+     * @throws Exception on server bind or temp-file I/O failure
      */
     public void testRetriesAfterEmptyResponse() throws Exception {
         final byte[] body = pattern(64 * 1024);
@@ -405,6 +440,8 @@ public class EepGetTest extends TestCase {
      * machinery) must wire a non-zero retry count, so a transient empty response
      * does not make the version check fail immediately. Zero is only used when
      * explicitly requested via the retry-taking constructor.
+     *
+     * @throws Exception not expected; the body only builds the object and asserts
      */
     public void testPartialEepGetDefaultRetries() throws Exception {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -416,6 +453,8 @@ public class EepGetTest extends TestCase {
      * The retry-taking PartialEepGet constructor must honor an explicit retry
      * count, including zero (no retries), preserving the previous behavior for
      * callers that want a single attempt.
+     *
+     * @throws Exception not expected; the body only builds the objects and asserts
      */
     public void testPartialEepGetExplicitRetries() throws Exception {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -429,6 +468,8 @@ public class EepGetTest extends TestCase {
      * A data-phase stall that still made progress must be retried at once
      * instead of after the default backoff, and the retry must resume with a
      * Range header so the transfer completes without a multi-second pause.
+     *
+     * @throws Exception on server bind or temp-file I/O failure
      */
     public void testBlockedReadStallRetriesImmediatelyWithRangeResume() throws Exception {
         final byte[] body = pattern(64 * 1024);
@@ -526,6 +567,8 @@ public class EepGetTest extends TestCase {
     /**
      * stopFetching() from attemptFailed must cancel the remaining retries:
      * the fetch loop exits before scheduling another attempt.
+     *
+     * @throws Exception on server bind failure
      */
     public void testStopFetchingCancelsRetries() throws Exception {
         final byte[] body = pattern(64 * 1024);
@@ -579,6 +622,8 @@ public class EepGetTest extends TestCase {
      * timer command from the previous fetch cannot match it and abort this
      * one), the abort flag is reset at the loop top, and the partial file
      * resumes to completion.
+     *
+     * @throws Exception on temp-file I/O or server bind failure
      */
     public void testReusedInstanceFetchesCleanlyAfterWatchdogAbort() throws Exception {
         final byte[] body = pattern(64 * 1024);
@@ -636,6 +681,9 @@ public class EepGetTest extends TestCase {
     /**
      * An external interrupt while waiting out the retry backoff must stop the
      * fetch: the remaining retries are not burned and the fetch returns false.
+     *
+     * @throws Exception on temp-file I/O or server bind failure, or if
+     *                   interrupted while joining the fetcher thread
      */
     public void testExternalInterruptDuringRetrySleepStopsFetch() throws Exception {
         final int[] calls = {0};
@@ -700,6 +748,12 @@ public class EepGetTest extends TestCase {
 
     /**
      * Write a simple response with Content-Length and body.
+     *
+     * @param out the socket output stream to write to
+     * @param code the HTTP status code to send
+     * @param length the Content-Length value and the number of body bytes to write
+     * @param body the body bytes to write, or null to write no body
+     * @throws IOException if writing the headers or body to out fails
      */
     private static void writeResponse(OutputStream out, int code, long length, byte[] body) throws IOException {
         writeResponse(out, code, length, body, 0);
@@ -931,6 +985,8 @@ public class EepGetTest extends TestCase {
      * A 206 must carry a Content-Range whose start matches the resume offset,
      * and a gzip 206 must never append to existing content; anything else
      * throws so the fetch restarts instead of corrupting the output.
+     *
+     * @throws Exception on temp-file creation failure
      */
     public void testValidateResumeResponse206() throws Exception {
         _outFile = File.createTempFile("eepget-test", ".out");
@@ -987,6 +1043,8 @@ public class EepGetTest extends TestCase {
     /**
      * A 416 only completes the fetch when Content-Range proves our offset is
      * the whole file; otherwise it fails without retrying the same Range.
+     *
+     * @throws Exception on temp-file creation failure
      */
     public void testValidateResumeResponse416() throws Exception {
         _outFile = File.createTempFile("eepget-test", ".out");
@@ -1039,6 +1097,8 @@ public class EepGetTest extends TestCase {
     /**
      * A partial file that already matches the whole resource completes on a
      * 416 whose Content-Range proves the offset, leaving the file intact.
+     *
+     * @throws Exception on temp-file I/O or server bind failure
      */
     public void testRangeAlreadyComplete416() throws Exception {
         final byte[] body = pattern(4096);
@@ -1066,6 +1126,8 @@ public class EepGetTest extends TestCase {
      * A 416 to an incomplete partial file fails the fetch and leaves the
      * partial content untouched; the identical Range would only get the same
      * answer, so no retry burns the budget.
+     *
+     * @throws Exception on temp-file I/O or server bind failure
      */
     public void testRangeNotSatisfiable416Incomplete() throws Exception {
         final byte[] body = pattern(4096);
@@ -1093,6 +1155,8 @@ public class EepGetTest extends TestCase {
      * scratch instead of resuming: the persisted marker keeps its
      * decompressed length out of the Range offset (regression for the gzip
      * resume corruption).
+     *
+     * @throws Exception on gzip compression, temp-file I/O, or server bind failure
      */
     public void testGzipPartialRestartsNotResumes() throws Exception {
         final byte[] body = pattern(64 * 1024);
@@ -1144,6 +1208,8 @@ public class EepGetTest extends TestCase {
      * getResumeOffset() must not report a decompressed file's length as a
      * resume offset while its marker exists, and must clear a stale marker
      * left for a file that is gone.
+     *
+     * @throws Exception on temp-file creation failure
      */
     public void testGetResumeOffsetGzipMarker() throws Exception {
         _outFile = File.createTempFile("eepget-test", ".out");
@@ -1171,6 +1237,8 @@ public class EepGetTest extends TestCase {
      * only body bytes read during the attempt count as progress, never the
      * pre-existing file length the Range offset came from (regression for
      * the stall baseline that skipped the delay and retried at once).
+     *
+     * @throws Exception on temp-file I/O or server bind failure
      */
     public void testHeaderTimeoutWithPartialUsesBackoff() throws Exception {
         final byte[] body = pattern(50 * 1024);
@@ -1278,6 +1346,8 @@ public class EepGetTest extends TestCase {
      * The total timeout bounds the whole operation: once the budget is gone,
      * no further backoff sleep or attempt runs (regression for per-attempt
      * totals that let a hung fetch outlive its caller's deadline).
+     *
+     * @throws Exception on temp-file I/O or server bind failure
      */
     public void testTotalTimeoutBoundsOperation() throws Exception {
         final byte[] body = pattern(64 * 1024);
@@ -1321,6 +1391,8 @@ public class EepGetTest extends TestCase {
     /**
      * A fresh fetch answered with 416 (no Range was ever sent) must fail
      * instead of writing the error body as a success.
+     *
+     * @throws Exception on server bind failure
      */
     public void testFreshFile416Fails() throws Exception {
         final String[] rangeSeen = {null};
@@ -1344,6 +1416,8 @@ public class EepGetTest extends TestCase {
      * Content-Range starts at the requested offset, not at a local resume
      * offset; the validator must accept it and the Content-Range/Content-Length
      * span must match.
+     *
+     * @throws Exception on server bind or temp-file I/O failure
      */
     public void testCustomRangeHeader206Accepted() throws Exception {
         final byte[] body = pattern(1000);
@@ -1369,6 +1443,8 @@ public class EepGetTest extends TestCase {
     /**
      * A 206 whose Content-Range start differs from the Range we sent would
      * splice the wrong bytes into the output; reject it before the body.
+     *
+     * @throws Exception on server bind failure
      */
     public void testCustomRangeHeaderWrongStartRejected() throws Exception {
         final byte[] body = pattern(1000);
@@ -1388,6 +1464,8 @@ public class EepGetTest extends TestCase {
     /**
      * A 206 whose Content-Range span disagrees with Content-Length is
      * unusable; reject it before the body.
+     *
+     * @throws Exception on server bind failure
      */
     public void testCustomRange206SpanMismatchRejected() throws Exception {
         TestServer server = startServer(new Handler() {

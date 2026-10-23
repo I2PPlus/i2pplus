@@ -18,7 +18,7 @@ public class ConnectionLogFormatTest {
                      Connection.connectWaitLine("[abcdefgh]", 10000L));
     }
 
-    /** How the wait ended is the part worth reading, so it goes after "-> ". */
+    /** How the wait ended is the part worth reading, so it goes after "-&gt; ". */
     @Test
     public void doneEntrySeparatesConnectedFromGaveUp() {
         assertEquals("Connection opened while waiting [abcdefgh] -> Took: 1234ms",

@@ -20,7 +20,7 @@ import org.junit.Test;
  */
 public class PacketLocalAckStarvationTest {
 
-    /** Packet ACKed -> never starvation, regardless of connection progress. */
+    /** Packet ACKed -&gt; never starvation, regardless of connection progress. */
     @Test
     public void testPacketAckedIsNeverStarvation() {
         assertFalse(PacketLocal.isAckStarvation(true, 100, 100));
@@ -28,7 +28,7 @@ public class PacketLocalAckStarvationTest {
         assertFalse(PacketLocal.isAckStarvation(true, 0, 0));
     }
 
-    /** No forward-ACK progress while unacked -> unambiguous starvation. */
+    /** No forward-ACK progress while unacked -&gt; unambiguous starvation. */
     @Test
     public void testNoProgressIsStarvation() {
         assertTrue(PacketLocal.isAckStarvation(false, 100, 100));
@@ -36,7 +36,7 @@ public class PacketLocalAckStarvationTest {
         assertTrue(PacketLocal.isAckStarvation(false, 42, 42));
     }
 
-    /** Forward-ACK progress during the wait -> slow-but-alive, not starvation. */
+    /** Forward-ACK progress during the wait -&gt; slow-but-alive, not starvation. */
     @Test
     public void testProgressIsNotStarvation() {
         assertFalse(PacketLocal.isAckStarvation(false, 101, 100));
@@ -44,7 +44,7 @@ public class PacketLocalAckStarvationTest {
         assertFalse(PacketLocal.isAckStarvation(false, Long.MAX_VALUE, 0));
     }
 
-    /** Degraded ACK (progress fell behind baseline) -> effectively starvation. */
+    /** Degraded ACK (progress fell behind baseline) -&gt; effectively starvation. */
     @Test
     public void testAckRegressionTreatedAsStarvation() {
         // ackProgressAtStart > now: the far end not only stopped but lost ground;

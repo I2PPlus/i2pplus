@@ -21,7 +21,12 @@ public class PeerConnectionOutPrefetchTest {
 
     private static final int PART_LEN = 1024;
 
-    /** Peer with no socket, mirroring PeerStateTest's construction. */
+    /**
+     * Peer with no socket, mirroring PeerStateTest's construction.
+     *
+     * @return a socketless peer on the shared two-piece test torrent
+     * @throws Throwable on torrent parse or peer id construction failure
+     */
     private static Peer peerFor() throws Throwable {
         MetaInfo mi =
                 new MetaInfo(
@@ -35,7 +40,14 @@ public class PeerConnectionOutPrefetchTest {
         return new PeerConnectionOut(peer, new DataOutputStream(new ByteArrayOutputStream()));
     }
 
-    /** Waits until the condition holds or the deadline passes. */
+    /**
+     * Waits until the condition holds or the deadline passes.
+     *
+     * @param c the condition to re-check every 20 ms
+     * @param timeoutMs how long to keep polling, in milliseconds
+     * @return true if the condition held by the final check
+     * @throws InterruptedException if the polling sleep is interrupted
+     */
     private static boolean waitFor(WaitCondition c, long timeoutMs) throws InterruptedException {
         long deadline = System.currentTimeMillis() + timeoutMs;
         while (System.currentTimeMillis() < deadline) {

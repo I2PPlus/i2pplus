@@ -21,6 +21,8 @@ public class YKGeneratorPingTest {
 
     /**
      * Three drains in a row are one wake-up, not three.
+     *
+     * @throws Exception on reflective access to the precalc thread field
      */
     @Test
     public void testABurstOfMissesWakesThePrecalcThreadOnce() throws Exception {
@@ -40,6 +42,8 @@ public class YKGeneratorPingTest {
      * Once the precalc runner has gone back to sleep, the next drain gets a
      * wake-up of its own - the claim is not a one-shot for the life of the
      * generator.
+     *
+     * @throws Exception on reflective access to the precalc thread field
      */
     @Test
     public void testTheWakeUpIsGoodAgainAfterTheRunnerIdles() throws Exception {
@@ -87,6 +91,8 @@ public class YKGeneratorPingTest {
     /**
      * @param gen the generator whose precalc thread reference to replace
      * @param t the thread to install in its place
+     * @throws Exception if the private precalc thread field cannot be found
+     *                   or set
      */
     private static void setPrecalcThread(YKGenerator gen, Thread t) throws Exception {
         Field field = YKGenerator.class.getDeclaredField("_precalcThread");

@@ -52,6 +52,9 @@ public class TunerReflectorTest {
      * A public static on a non-public class across a package boundary must still be
      * reachable - the exact shape of streaming's ConnectionOptions, and the case
      * that silently tuned nothing before findStaticMethod().
+     *
+     * @throws Exception if the {@code HiddenTarget} fixture class is not on the test
+     *                   classpath
      */
     @Test
     public void reachesPublicStaticOnPackagePrivateClass() throws Exception {
@@ -66,7 +69,12 @@ public class TunerReflectorTest {
         }
     }
 
-    /** A package-private member is invisible to getMethod, so it needs getDeclaredMethod. */
+    /**
+     * A package-private member is invisible to getMethod, so it needs getDeclaredMethod.
+     *
+     * @throws Exception if the {@code HiddenTarget} fixture class is not on the test
+     *                   classpath
+     */
     @Test
     public void reachesPackagePrivateMemberOnPackagePrivateClass() throws Exception {
         Class<?> c = Class.forName(HIDDEN);
@@ -95,6 +103,9 @@ public class TunerReflectorTest {
     /**
      * The lookup walks superclasses, since not every target declares its member -
      * and an inherited package-private member is one getMethod never finds.
+     *
+     * @throws Exception if the {@code DerivedTarget} fixture class is not on the test
+     *                   classpath, or its inherited static cannot be found or invoked
      */
     @Test
     public void walksSuperclasses() throws Exception {
@@ -104,7 +115,12 @@ public class TunerReflectorTest {
         assertEquals(3, Tuner.callStaticInt(c, "inherited", -1));
     }
 
-    /** A genuinely missing method yields the fallback and never throws. */
+    /**
+     * A genuinely missing method yields the fallback and never throws.
+     *
+     * @throws Exception if the {@code HiddenTarget} fixture class is not on the test
+     *                   classpath
+     */
     @Test
     public void missingMethodYieldsFallback() throws Exception {
         Class<?> c = Class.forName(HIDDEN);

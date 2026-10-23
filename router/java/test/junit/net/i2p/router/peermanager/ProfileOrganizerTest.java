@@ -75,7 +75,13 @@ public class ProfileOrganizerTest {
         return info;
     }
 
-    /** Register a router info in the dummy netdb so profiling-exclusion passes. */
+    /**
+     * Register a router info in the dummy netdb so profiling-exclusion passes.
+     *
+     * @param ri the router info to insert, stored under its own identity hash
+     * @throws Exception if the netdb's private _routers field cannot be found in
+     *                   its class hierarchy or cannot be read by reflection
+     */
     private static void seedNetDb(RouterInfo ri) throws Exception {
         Class<?> c = _ctx.netDb().getClass();
         Field routers = null;

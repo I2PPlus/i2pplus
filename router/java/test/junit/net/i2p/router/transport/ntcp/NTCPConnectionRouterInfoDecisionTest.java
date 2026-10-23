@@ -10,7 +10,7 @@ import org.junit.Test;
 
 /**
  * Unit tests for the RouterInfo-aging decisions extracted from
- * {@link NTCPConnection#gotRI}.
+ * {@link NTCP2Payload.PayloadCallback#gotRI}.
  *
  * <p>Covers the peer/self discriminations (used to decide whether to store the
  * received RouterInfo in the network database) and the strictly-newer store

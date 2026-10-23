@@ -110,7 +110,13 @@ class ClassReader {
         return in.readInt();
     }
 
-    /** Read a 2-byte int, and return the <em>global</em> CP entry for it. */
+    /**
+     * Read a 2-byte int, and return the <em>global</em> CP entry for it.
+     *
+     * @return the constant pool entry the index refers to, or null when the
+     *         index read is 0
+     * @throws IOException if the input stream fails before the two bytes are read
+     */
     private Entry readRef() throws IOException {
         int i = in.readUnsignedShort();
         return i == 0 ? null : cls.cpMap[i];
@@ -123,7 +129,15 @@ class ClassReader {
         return e;
     }
 
-    /** Throw a ClassFormatException if the entry does not match the expected tag type. */
+    /**
+     * Throw a ClassFormatException if the entry does not match the expected
+     * tag type.
+     *
+     * @param e the constant pool entry to check, or null for index 0
+     * @param tag the constant tag type the entry is expected to have
+     * @return the entry, once it is known to match the tag
+     * @throws ClassFormatException if the entry is null or its tag does not match
+     */
     private Entry checkTag(Entry e, byte tag) throws ClassFormatException {
         if (e == null || !e.tagMatches(tag)) {
             String where = (inPos == constantPoolLimit

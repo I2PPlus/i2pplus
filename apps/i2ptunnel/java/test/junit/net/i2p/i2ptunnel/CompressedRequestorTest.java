@@ -78,7 +78,21 @@ public class CompressedRequestorTest {
         _executor.shutdownNow();
     }
 
-    /** Construct the private CompressedRequestor via reflection. */
+    /**
+     * Construct the private CompressedRequestor via reflection.
+     *
+     * @param webserver loopback socket already connected to the stub webserver's listener
+     * @param browser I2PSocket stub standing in for the browser
+     * @param headers request line and headers to forward, terminated by CRLF CRLF
+     * @param compress true re-encodes the response body as x-i2p-gzip
+     * @param upgrade true treats the exchange as a 101 protocol upgrade
+     * @param keepalive true leaves the browser socket open after the response
+     * @param waiter cell the requestor sets to 1 (non-keepalive) or 2 (keepalive) when done
+     * @param executor pool the requestor hands non-keepalive transfers to
+     * @return the requestor, ready to run() on the calling thread
+     * @throws Exception if the private class or its constructor is not found, or reflective
+     *                   access to it is refused
+     */
     private static Runnable newRequestor(Socket webserver, BrowserSocket browser, String headers,
                                          boolean compress, boolean upgrade, boolean keepalive,
                                          AtomicInteger waiter, ThreadPoolExecutor executor) throws Exception {
@@ -117,7 +131,21 @@ public class CompressedRequestorTest {
         return Arrays.copyOfRange(response, bodyStart + 4, response.length);
     }
 
-    /** Run a requestor against a server thread that handles one accepted connection. */
+    /**
+     * Run a requestor against a server thread that handles one accepted connection.
+     *
+     * @param browser I2PSocket stub the requestor reads the request from and writes the
+     *                response to
+     * @param requestHeaders request line and headers to send, terminated by CRLF CRLF
+     * @param compress true re-encodes the response body as x-i2p-gzip
+     * @param upgrade true treats the exchange as a 101 protocol upgrade
+     * @param keepalive true leaves the browser socket open after the response
+     * @param waiter cell the requestor sets to 1 (non-keepalive) or 2 (keepalive) when done
+     * @param serverHandler what the accept thread does with the connection it accepts
+     * @param serverError cell the accept thread stores any Throwable it catches in
+     * @throws Exception if opening or closing the loopback sockets fails, or the test
+     *                   thread is interrupted while waiting or joining
+     */
     private void runScenario(BrowserSocket browser, String requestHeaders, boolean compress,
                              boolean upgrade, boolean keepalive, AtomicInteger waiter,
                              final ThrowingConsumer<Socket> serverHandler,

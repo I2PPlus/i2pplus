@@ -5,8 +5,8 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 
 /**
- * Size-scaled retry limits for body-resume: {@link I2PTunnelRunner.stallCycleLimit(long)}
- * and {@link I2PTunnelRunner.totalCycleLimit(long)} add one cycle per 1MB of
+ * Size-scaled retry limits for body-resume: {@link I2PTunnelRunner#stallCycleLimit(long)}
+ * and {@link I2PTunnelRunner#totalCycleLimit(long)} add one cycle per 1MB of
  * verified Content-Length above the baseline, hard-capped at 29x baseline.
  *
  * <p>Pins the ramp unit, the sub-1MB no-op, real-world installer sizes, and

@@ -1144,9 +1144,13 @@ class PackageWriter extends BandStructure {
         }
     }
 
-    /** If there are any extra InnerClasses entries to write which are
+    /**
+     * If there are any extra InnerClasses entries to write which are
      * not already implied by the global table, put them into a
      * local attribute.  This is expected to be rare.
+     *
+     * @param cls the class whose local InnerClasses attribute is written
+     * @throws IOException if the attribute entries cannot be written out
      */
     void writeLocalInnerClasses(Class cls) throws IOException {
         List<InnerClass> localICs = cls.getInnerClasses();

@@ -52,6 +52,8 @@ public class AdaptiveTimeoutRecalcTest {
      * Builds are recorded from several pool threads at once. Each build owns one
      * sequence number, so the periods still each get exactly one recalculation no
      * matter how the threads interleave - the property the counter re-read lost.
+     *
+     * @throws Exception if joining a recorder thread is interrupted
      */
     @Test
     public void testConcurrentRecordersStillFireOncePerPeriod() throws Exception {

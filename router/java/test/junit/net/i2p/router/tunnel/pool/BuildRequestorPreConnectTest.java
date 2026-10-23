@@ -53,6 +53,12 @@ public class BuildRequestorPreConnectTest {
         when(_router.getUptime()).thenReturn(60 * 60 * 1000L);
     }
 
+    /**
+     * A router hash with recognizable leading bytes, to identify a peer.
+     *
+     * @param b the first byte of the hash; the second byte is set to 5 minus it
+     * @return a hash of HASH_LENGTH bytes, distinct for each b
+     */
     private static Hash hash(int b) {
         byte[] data = new byte[Hash.HASH_LENGTH];
         data[0] = (byte) b;
@@ -60,12 +66,22 @@ public class BuildRequestorPreConnectTest {
         return Hash.create(data);
     }
 
-    /** Set the pre-connect enabled property. */
+    /**
+     * Set the pre-connect enabled property.
+     *
+     * @param enabled true to have the mock answer the property lookup with
+     *                "true", which turns the pre-connect fallback on
+     */
     private void setPreConnectEnabled(boolean enabled) {
         when(_ctx.getProperty(eq(BuildRequestor.PROP_PRECONNECT_ENABLED), any())).thenReturn(enabled ? TRUE_STR : FALSE_STR);
     }
 
-    /** Set commSystem state. */
+    /**
+     * Set commSystem state.
+     *
+     * @param established true when the facade reports an established session
+     * @param connecting true when the facade reports a session still being built
+     */
     private void setCommState(boolean established, boolean connecting) {
         CommSystemFacade cs = mock(CommSystemFacade.class);
         when(cs.isEstablished(any(Hash.class))).thenReturn(established);

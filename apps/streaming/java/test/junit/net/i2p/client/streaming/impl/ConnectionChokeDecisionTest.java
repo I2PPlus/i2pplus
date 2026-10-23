@@ -36,7 +36,7 @@ public class ConnectionChokeDecisionTest {
         when(_con.getInputStream()).thenReturn(_inputStream);
     }
 
-    /** Contiguous packet with payload > 512 must unchoke. */
+    /** Contiguous packet with payload &gt; 512 must unchoke. */
     @Test
     public void testContiguousBigPacketUnchokes() {
         when(_inputStream.getHighestReadyBlockId()).thenReturn(9L);
@@ -60,7 +60,7 @@ public class ConnectionChokeDecisionTest {
         assertFalse(ConnectionPacketHandler.shouldRemainChoked(_con, 15, 600));
     }
 
-    /** Small packet (< 512) always stays choked regardless of contiguity. */
+    /** Small packet (&lt; 512) always stays choked regardless of contiguity. */
     @Test
     public void testSmallPacketStaysChoked() {
         when(_inputStream.getHighestReadyBlockId()).thenReturn(9L);

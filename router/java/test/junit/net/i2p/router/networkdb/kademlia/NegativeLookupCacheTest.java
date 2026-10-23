@@ -50,7 +50,15 @@ public class NegativeLookupCacheTest {
         return h;
     }
 
-    /** A Destination with a complete KeysAndCert so calculateHash() works. */
+    /**
+     * A Destination with a complete KeysAndCert so calculateHash() works.
+     *
+     * @param seed written into the last byte of the public key and the first two
+     *             bytes of the signing key, so different seeds hash to different
+     *             destinations
+     * @return a destination with a null certificate and the two keys derived from
+     *         the seed
+     */
     private static Destination destination(int seed) {
         Destination d = new Destination();
         d.setCertificate(new Certificate(Certificate.CERTIFICATE_TYPE_NULL, null));

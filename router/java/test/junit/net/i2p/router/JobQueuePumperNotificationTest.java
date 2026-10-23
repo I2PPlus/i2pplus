@@ -78,10 +78,12 @@ public class JobQueuePumperNotificationTest {
 
     /**
      * Verify that a job scheduled slightly in the future (going through
-     * the pumper path: _timedJobs -> _timedJobsReady) is picked up
+     * the pumper path: _timedJobs -&gt; _timedJobsReady) is picked up
      * promptly. The lag between scheduled start and runner pickup must
      * be well under the 50ms poll timeout, proving the notification
      * wakes runners.
+     *
+     * @throws Exception if the wait for the job to be picked up is interrupted
      */
     @Test
     public void testTimedJobPickedUpPromptly() throws Exception {
@@ -112,6 +114,8 @@ public class JobQueuePumperNotificationTest {
      * Multiple timed jobs scheduled at staggered future times should
      * all be picked up promptly, confirming that the pumper notifies
      * runners each time it moves jobs — not just once.
+     *
+     * @throws Exception if the wait for the five staggered jobs is interrupted
      */
     @Test
     public void testMultipleTimedJobsPickedUp() throws Exception {
@@ -148,6 +152,8 @@ public class JobQueuePumperNotificationTest {
      * directly to _readyJobs (not through the pumper) and be picked
      * up immediately. This confirms the test setup is correct and
      * contrasts with the pumper path.
+     *
+     * @throws Exception if the wait for the immediate job to be picked up is interrupted
      */
     @Test
     public void testImmediateJobPickedUpFast() throws Exception {
@@ -174,6 +180,10 @@ public class JobQueuePumperNotificationTest {
      * Without the fix (numReady = _readyJobs.size()), the seeded
      * _timedJobsReady jobs are invisible and no drop fires.
      * With the fix (numReady = getReadyCount()), the drop triggers.
+     *
+     * @throws Exception if reflection cannot reach the queue's _timedJobsReady
+     *                   field: the field is missing, the JVM denies making it
+     *                   accessible, or its value cannot be read
      */
     @SuppressWarnings("unchecked")
     @Test

@@ -278,6 +278,8 @@ public class SmoothRenderTest {
      * Guards the fixture itself: the archive must resolve to one row per step. If the archive
      * step were accidentally a multiple of the RRD step, the fetch would consolidate to a coarse
      * resolution and every geometry assertion below would pass on a handful of points.
+     *
+     * @throws IOException if the fetch of the stored rows from the in-memory RRD fails
      */
     @Test
     public void testFixtureHasFullResolution() throws IOException {
@@ -348,6 +350,7 @@ public class SmoothRenderTest {
     /**
      * Extract the plotted path from the SVG.
      *
+     * @param svg the rendered document whose body is searched for path data
      * @return the longest path in the document body, which is the plot
      */
     private static String plotPath(String svg) {
@@ -364,6 +367,8 @@ public class SmoothRenderTest {
      * The steps in the default renderer are structural: every sample's x is emitted twice, so each
      * value change lands on a zero-width edge that no curve can cross. Smoothing must switch to
      * one point per sample, which is what turns those vertical steps into curves.
+     *
+     * @throws IOException if the stepped or the smoothed graph cannot be rendered
      */
     @Test
     public void testSmoothingRemovesVerticalSteps() throws IOException {
@@ -378,6 +383,8 @@ public class SmoothRenderTest {
     /**
      * Flat stretches must survive smoothing as flat: a plateau is drawn with a horizontal tangent
      * at both ends, so it stays a straight line rather than bowing.
+     *
+     * @throws IOException if the stepped or the smoothed graph cannot be rendered
      */
     @Test
     public void testSmoothingKeepsPlateausFlat() throws IOException {
@@ -392,6 +399,8 @@ public class SmoothRenderTest {
      * A smoothed area must be stroked as well as filled, exactly like the step renderer, which
      * draws the filled polygon a second time to outline it. Without the stroke every smoothed
      * graph loses its border and does not read the same as the stepped one.
+     *
+     * @throws IOException if the smoothed area graph cannot be rendered
      */
     @Test
     public void testSmoothedAreaIsAlsoOutlined() throws IOException {
@@ -412,7 +421,11 @@ public class SmoothRenderTest {
         assertEquals("the area outline must be stroked once", 1, strokes);
     }
 
-    /** The same outline must be present whether or not smoothing is on. */
+    /**
+     * The same outline must be present whether or not smoothing is on.
+     *
+     * @throws IOException if either the stepped or the smoothed area cannot be rendered
+     */
     @Test
     public void testStepAndSmoothedAreaHaveSameStructure() throws IOException {
         for (String svg : new String[] {render(false, false), render(true, false)}) {
@@ -433,7 +446,11 @@ public class SmoothRenderTest {
         }
     }
 
-    /** The default rendering must contain no curves at all. */
+    /**
+     * The default rendering must contain no curves at all.
+     *
+     * @throws IOException if the stepped graph cannot be rendered
+     */
     @Test
     public void testStepRenderingHasNoCurves() throws IOException {
         String svg = render(false, true);
@@ -443,7 +460,11 @@ public class SmoothRenderTest {
         }
     }
 
-    /** With smoothing on, the plot path must contain curve commands. */
+    /**
+     * With smoothing on, the plot path must contain curve commands.
+     *
+     * @throws IOException if the smoothed graph cannot be rendered
+     */
     @Test
     public void testSmoothRenderingEmitsCurves() throws IOException {
         String svg = render(true, true);
@@ -460,6 +481,8 @@ public class SmoothRenderTest {
      * A smoothed area must be emitted as a single closed subpath. Two open subpaths would each be
      * implicitly closed by the renderer and their windings could cancel under the default nonzero
      * rule, punching a hole in the fill.
+     *
+     * @throws IOException if the smoothed area graph cannot be rendered
      */
     @Test
     public void testSmoothedAreaIsOneClosedSubpath() throws IOException {
@@ -485,6 +508,8 @@ public class SmoothRenderTest {
      * The smoothed fill must not self-intersect. Its upper curve cannot rise above the baseline
      * because the interpolation stays inside the band of the two samples it joins, and all samples
      * sit above the baseline, so the outline is a simple polygon.
+     *
+     * @throws IOException if the smoothed area graph cannot be rendered
      */
     @Test
     public void testSmoothedAreaStaysAboveBaseline() throws IOException {
@@ -521,6 +546,8 @@ public class SmoothRenderTest {
     /**
      * Turning smoothing on must add the antialiasing override, because the global
      * crispEdges rule would otherwise render the curves jagged.
+     *
+     * @throws IOException if either the smoothed or the stepped graph cannot be rendered
      */
     @Test
     public void testSmoothingAddsAntialiasingOverride() throws IOException {
@@ -531,6 +558,8 @@ public class SmoothRenderTest {
     /**
      * With smoothing off, the crispEdges rule must still be the only shape-rendering declaration,
      * so the default rendering is byte-for-byte unaffected.
+     *
+     * @throws IOException if the stepped graph cannot be rendered
      */
     @Test
     public void testStepRenderingKeepsCrispEdges() throws IOException {
@@ -541,6 +570,8 @@ public class SmoothRenderTest {
     /**
      * Smoothing must reduce the vertex count relative to the raw sample count, because flat runs
      * still collapse to single segments. If it did not, the payload would grow rather than shrink.
+     *
+     * @throws IOException if the stepped or the smoothed graph cannot be rendered
      */
     @Test
     public void testSmoothingDoesNotInflateVertexCount() throws IOException {
@@ -585,7 +616,11 @@ public class SmoothRenderTest {
         assertTrue("expected the plot to be drawn", curvePaths > 0);
     }
 
-    /** The rendered document must stay well-formed enough to parse as XML. */
+    /**
+     * The rendered document must stay well-formed enough to parse as XML.
+     *
+     * @throws IOException if one of the four renderings cannot be produced
+     */
     @Test
     public void testRenderedSvgIsWellFormed() throws IOException {
         for (boolean smooth : new boolean[] {false, true}) {
@@ -617,6 +652,8 @@ public class SmoothRenderTest {
      * <p>The window here reaches back past the first stored sample, so the leading period is NaN
      * and the run genuinely starts late. That is the shape a live router graph has whenever its
      * window is longer than its recorded history.
+     *
+     * @throws IOException if the stepped or the smoothed trace cannot be rendered
      */
     @Test
     public void testSmoothedTraceStartsWhereSteppedTraceStarts() throws IOException {
@@ -639,6 +676,8 @@ public class SmoothRenderTest {
      * <p>Widening the run's end interval pushed that furthest column past the plot area's right
      * edge, where it was silently clipped away, so a smoothed line could be drawn longer than its
      * stepped twin.
+     *
+     * @throws IOException if one of the four renderings cannot be produced
      */
     @Test
     public void testSmoothedTraceEndsWhereSteppedTraceEnds() throws IOException {
@@ -661,6 +700,8 @@ public class SmoothRenderTest {
      * <p>Both windows are checked: one covered by data throughout, and one reaching back past the
      * first stored sample. The second is the case that regressed, because the trace was then
      * anchored a whole sample period inside the plot.
+     *
+     * @throws IOException if one of the four renderings cannot be produced
      */
     @Test
     public void testSmoothedTraceCoversTheLeftPlotEdge() throws IOException {

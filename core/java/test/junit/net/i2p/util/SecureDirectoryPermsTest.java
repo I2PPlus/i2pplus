@@ -33,7 +33,11 @@ public class SecureDirectoryPermsTest {
         return Files.getPosixFilePermissions(f.toPath());
     }
 
-    /** A private log directory stays owner-only: the default must not change. */
+    /**
+     * A private log directory stays owner-only: the default must not change.
+     *
+     * @throws Exception on temp-directory creation or permission readback failure
+     */
     @Test
     public void testDefaultDirectoryIsOwnerOnly() throws Exception {
         if (!posix()) return;
@@ -58,6 +62,8 @@ public class SecureDirectoryPermsTest {
     /**
      * The regression: a group-accessible log directory must be created 770,
      * including the group execute bit that makes the files inside reachable.
+     *
+     * @throws Exception on temp-directory creation or permission readback failure
      */
     @Test
     public void testGroupPermsDirectoryIs770() throws Exception {
@@ -84,7 +90,11 @@ public class SecureDirectoryPermsTest {
         }
     }
 
-    /** mkdirs() must apply the same mode as mkdir(). */
+    /**
+     * mkdirs() must apply the same mode as mkdir().
+     *
+     * @throws Exception on temp-directory creation or permission readback failure
+     */
     @Test
     public void testGroupPermsMkdirsIs770() throws Exception {
         if (!posix()) return;
@@ -100,7 +110,11 @@ public class SecureDirectoryPermsTest {
         }
     }
 
-    /** The parent/child constructor overloads must honour the flag too. */
+    /**
+     * The parent/child constructor overloads must honour the flag too.
+     *
+     * @throws Exception on temp-directory creation or permission readback failure
+     */
     @Test
     public void testGroupPermsChildOverloads() throws Exception {
         if (!posix()) return;
@@ -119,6 +133,8 @@ public class SecureDirectoryPermsTest {
     /**
      * A 770 parent is exactly what makes a 660 log file reachable by the group,
      * which is the pairing the writer depends on.
+     *
+     * @throws Exception on temp-directory creation or permission readback failure
      */
     @Test
     public void testGroupTraversableMatchesGroupExecute() throws Exception {
@@ -141,7 +157,11 @@ public class SecureDirectoryPermsTest {
         }
     }
 
-    /** A group-readable file inside a 770 directory is genuinely group-openable. */
+    /**
+     * A group-readable file inside a 770 directory is genuinely group-openable.
+     *
+     * @throws Exception on temp-file creation or permission readback failure
+     */
     @Test
     public void testGroupReadableFileInsideGroupDirectory() throws Exception {
         if (!posix()) return;

@@ -29,7 +29,14 @@ import org.mockito.stubbing.Answer;
  */
 public class EventPumperWriteTest {
 
-    /** An Answer that consumes n bytes from the buffer, like a real SocketChannel. */
+    /**
+     * An Answer that consumes n bytes from the buffer, like a real SocketChannel.
+     *
+     * @param n maximum number of bytes the stub advances the buffer position by,
+     *          in bytes; the answer takes less when the buffer holds less
+     * @return a Mockito Answer returning the byte count it consumed, for stubbing
+     *         a channel's write call
+     */
     private static Answer<Integer> writeBytes(final int n) {
         return new Answer<Integer>() {
             @Override

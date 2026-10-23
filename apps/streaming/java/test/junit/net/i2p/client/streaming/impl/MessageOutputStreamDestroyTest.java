@@ -29,6 +29,9 @@ public class MessageOutputStreamDestroyTest {
 
     /**
      * The buffer is back in the cache where the next stream can pick it up.
+     *
+     * @throws Exception if the stream's {@code _buf} field cannot be found or read
+     *                   reflectively
      */
     @Test
     public void testDestroyReturnsTheBufferToTheCache() throws Exception {
@@ -43,6 +46,9 @@ public class MessageOutputStreamDestroyTest {
     /**
      * Destroying twice does not pool the same array twice - the second call
      * would hand two streams the same buffer.
+     *
+     * @throws Exception if the stream's {@code _buf} field cannot be found or read
+     *                   reflectively
      */
     @Test
     public void testDestroyingTwicePoolsTheBufferOnce() throws Exception {
@@ -59,6 +65,9 @@ public class MessageOutputStreamDestroyTest {
 
     /**
      * A stream with a receiver that never gets used - destroy() must not flush.
+     *
+     * @return a stream sized at {@code BUF} for both its maximum and its initial buffer,
+     *         on the global context and the shared simple timer
      */
     private static MessageOutputStream newStream() {
         I2PAppContext ctx = I2PAppContext.getGlobalContext();
@@ -68,6 +77,8 @@ public class MessageOutputStreamDestroyTest {
     /**
      * @param mos the stream to look inside
      * @return the buffer it acquired from the cache, or null if it has none
+     * @throws Exception if the {@code _buf} field is absent, or reflection into the
+     *                   private field is denied
      */
     private static byte[] bufferOf(MessageOutputStream mos) throws Exception {
         Field field = MessageOutputStream.class.getDeclaredField("_buf");

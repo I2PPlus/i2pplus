@@ -52,7 +52,15 @@ public class AnalysisTest {
         _analysis = ctor.newInstance(_ctx, null, null);
     }
 
-    /** Router identity with a unique hash and the given IPv4 address. */
+    /**
+     * Router identity with a unique hash and the given IPv4 address.
+     *
+     * @param seed varies the last public-key byte and the first two signing-key
+     *             bytes, so each router gets its own hash
+     * @param ipv4 host option of the single TCP address, e.g. "1.2.3.4"
+     * @return a RouterInfo with that identity and one TCP address on the given
+     *         host at port 7654
+     */
     private static RouterInfo routerV4(int seed, String ipv4) {
         RouterInfo info = new RouterInfo();
         RouterIdentity ident = new RouterIdentity();
@@ -69,7 +77,16 @@ public class AnalysisTest {
         return info;
     }
 
-    /** Router with the given IPv6 address. */
+    /**
+     * Router with the given IPv6 address.
+     *
+     * @param seed varies the last public-key byte and the first two signing-key
+     *             bytes, so each router gets its own hash
+     * @param ipv6 host option of the single TCP address, a colon-separated
+     *             IPv6 literal such as "2001:db8::1"
+     * @return a RouterInfo with that identity and one TCP address on the given
+     *         host at port 7654
+     */
     private static RouterInfo routerV6(int seed, String ipv6) {
         RouterInfo info = new RouterInfo();
         RouterIdentity ident = new RouterIdentity();

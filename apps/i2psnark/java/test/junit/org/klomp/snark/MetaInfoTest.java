@@ -23,7 +23,12 @@ public class MetaInfoTest {
     private static final int PIECE_LENGTH = 16384;
     private static final long TOTAL_LENGTH = 30000L;
 
-    /** SHA1 of the piece data used as the stored piece hash. */
+    /**
+     * SHA1 of the piece data used as the stored piece hash.
+     *
+     * @param data the piece bytes to hash
+     * @return the 20-byte SHA-1 digest of the data
+     */
     private static byte[] hashOf(byte[] data) {
         MessageDigest md = SHA1.getInstance();
         return md.digest(data);
@@ -35,7 +40,12 @@ public class MetaInfoTest {
         return data;
     }
 
-    /** Build a bencoded single-file torrent byte stream. */
+    /**
+     * Build a bencoded single-file torrent byte stream.
+     *
+     * @param pieceHashes the raw piece hash bytes, 20 per piece, concatenated
+     * @return the complete torrent file as ISO-8859-1 encoded bencode
+     */
     private static byte[] buildTorrentBytes(byte[] pieceHashes) {
         StringBuilder sb = new StringBuilder(256);
         sb.append('d');
@@ -50,7 +60,16 @@ public class MetaInfoTest {
         return assemble(sb, pieceHashes);
     }
 
-    /** Build a bencoded multi-file torrent byte stream with per-file BEP 47 attributes. */
+    /**
+     * Build a bencoded multi-file torrent byte stream with per-file BEP 47 attributes.
+     *
+     * @param pieceHashes the raw piece hash bytes, 20 per piece, concatenated
+     * @param fileLengths the byte length of each file, one entry per file
+     * @param paths the single-component path name of each file
+     * @param attrs the BEP 47 attribute of each file, "p" for a padding file or
+     *              null for a regular file
+     * @return the complete torrent file as ISO-8859-1 encoded bencode
+     */
     private static byte[] buildMultiFileTorrentBytes(byte[] pieceHashes, long[] fileLengths,
                                                      String[] paths, String[] attrs) {
         StringBuilder sb = new StringBuilder(512);
@@ -77,7 +96,14 @@ public class MetaInfoTest {
         return assemble(sb, pieceHashes);
     }
 
-    /** Close the info dict, append the piece hash bytes, and close the root dict. */
+    /**
+     * Close the info dict, append the piece hash bytes, and close the root dict.
+     *
+     * @param sb the bencode written so far, ending just before the pieces value
+     * @param pieceHashes the raw piece hash bytes appended after the pieces prefix
+     * @return the head bytes, the piece hashes, and the two closing "ee" bytes
+     *         concatenated
+     */
     private static byte[] assemble(StringBuilder sb, byte[] pieceHashes) {
         byte[] head = sb.toString().getBytes(java.nio.charset.StandardCharsets.ISO_8859_1);
         byte[] tail = "ee".getBytes(java.nio.charset.StandardCharsets.ISO_8859_1);
@@ -181,7 +207,11 @@ public class MetaInfoTest {
         }
     }
 
-    /** GetDataLength excludes BEP 47 padding files; getTotalLength includes them. */
+    /**
+     * GetDataLength excludes BEP 47 padding files; getTotalLength includes them.
+     *
+     * @throws Throwable on torrent parse failure
+     */
     @Test
     public void testGetDataLengthExcludesPaddingFiles() throws Throwable {
         long[] lengths = {16384, 16384, 16384};
@@ -193,7 +223,11 @@ public class MetaInfoTest {
         assertEquals(2 * PIECE_LENGTH, mi.getDataLength());
     }
 
-    /** GetDataLength equals getTotalLength for torrents without padding files. */
+    /**
+     * GetDataLength equals getTotalLength for torrents without padding files.
+     *
+     * @throws Throwable on torrent parse failure
+     */
     @Test
     public void testGetDataLengthNoPaddingEqualsTotal() throws Throwable {
         byte[] hashes = new byte[40];

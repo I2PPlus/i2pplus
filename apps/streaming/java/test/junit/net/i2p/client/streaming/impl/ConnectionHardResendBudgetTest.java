@@ -53,7 +53,7 @@ public class ConnectionHardResendBudgetTest {
         assertTrue(Connection.hardResendBudgetExceeded(61, 30, 30));
     }
 
-    /** Soft accounting clamped at zero: soft > total cannot undercount below 0. */
+    /** Soft accounting clamped at zero: soft &gt; total cannot undercount below 0. */
     @Test
     public void testSoftOvercountClampedToZero() {
         assertFalse(Connection.hardResendBudgetExceeded(5, 6, 30));

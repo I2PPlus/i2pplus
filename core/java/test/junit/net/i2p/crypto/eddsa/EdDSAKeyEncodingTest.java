@@ -80,6 +80,8 @@ public class EdDSAKeyEncodingTest {
     /**
      * A private key built from H (no seed) cannot produce a PKCS#8 encoding;
      * pin the current behavior: empty array, not null.
+     *
+     * @throws Exception on curve lookup or private key spec construction failure
      */
     @Test
     public void testUnseededPrivateKeyEncodesEmpty() throws Exception {
@@ -97,6 +99,9 @@ public class EdDSAKeyEncodingTest {
 
     /**
      * Garbage in the X.509 wrapper must be rejected, not silently accepted.
+     *
+     * @throws Exception the InvalidKeySpecException the malformed wrapper must
+     *                   raise, which is also what makes the test pass
      */
     @Test(expected = java.security.spec.InvalidKeySpecException.class)
     public void testGarbageX509Rejected() throws Exception {

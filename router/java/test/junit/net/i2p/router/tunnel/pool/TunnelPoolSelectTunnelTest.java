@@ -15,7 +15,7 @@ import net.i2p.router.TunnelPoolSettings;
 /**
  * Tests the selection orchestration extracted into
  * {@link TunnelPool#selectFromPool(long, long, boolean)} (TUN-022):
- * empty pool -> null, pool with a usable tunnel -> that tunnel.
+ * empty pool -&gt; null, pool with a usable tunnel -&gt; that tunnel.
  *
  * @since 0.9.71+
  */
@@ -28,7 +28,13 @@ public class TunnelPoolSelectTunnelTest {
         _ctx = RouterTestHelper.newContext();
     }
 
-    /** Real pool over a real context; manager and peer selector are mocks. */
+    /**
+     * Real pool over a real context; manager and peer selector are mocks.
+     *
+     * @param settings pool configuration to use: exploratory flag, tunnel length
+     *                 and zero-hop setting
+     * @return a TunnelPool on the shared test context, holding no tunnels yet
+     */
     private static TunnelPool createPool(TunnelPoolSettings settings) {
         TunnelPoolManager mgr = mock(TunnelPoolManager.class);
         TunnelPeerSelector sel = mock(TunnelPeerSelector.class);

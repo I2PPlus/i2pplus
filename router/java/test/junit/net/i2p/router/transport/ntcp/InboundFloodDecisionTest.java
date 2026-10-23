@@ -129,7 +129,7 @@ public class InboundFloodDecisionTest {
     /**
      * The floor is symmetric: a sub-floor last period makes "current" shrink by
      * the deficit, so small totals can legitimately read as zero activity.
-     * rawCurrent=5, rawLast=10 -> last=15, current=0 -> allowed.
+     * rawCurrent=5, rawLast=10 -&gt; last=15, current=0 -&gt; allowed.
      */
     @Test
     public void testLastEventFloorSubtractionShrinksCurrent() {

@@ -51,13 +51,28 @@ public class ConnectionManagerShutdownTest {
         }
     }
 
-    /** The private BanExpiry instance the manager owns. */
+    /**
+     * The private BanExpiry instance the manager owns.
+     *
+     * @return the sweeper as an {@link Object}, since {@code BanExpiry} is a private
+     *         inner class the test cannot name
+     * @throws Exception if the {@code _banExpiry} field is missing or not readable
+     */
     private Object sweeper() throws Exception {
         Field f = ConnectionManager.class.getDeclaredField("_banExpiry");
         f.setAccessible(true);
         return f.get(_manager);
     }
 
+    /**
+     * Calls a no-argument method the test cannot reach directly, because it is
+     * declared on a private class.
+     *
+     * @param target the object to invoke the method on
+     * @param name the method's simple name, e.g. {@code isStopped}
+     * @return whatever the method returns, null for a void one
+     * @throws Exception if the method is missing, or the call itself fails
+     */
     private static Object invokeNoArg(Object target, String name) throws Exception {
         Method m = target.getClass().getDeclaredMethod(name);
         m.setAccessible(true);
@@ -67,6 +82,10 @@ public class ConnectionManagerShutdownTest {
     /**
      * Current SimpleTimer2.TimedEvent state, read by name because the enum is
      * private to SimpleTimer2. Expected values: IDLE, SCHEDULED, RUNNING, CANCELLED.
+     *
+     * @param event the timer event whose state to read, typically the manager's sweeper
+     * @return the enum constant's name, or the string {@code "null"} if the field is unset
+     * @throws Exception if no superclass of the event declares a {@code _state} field
      */
     private static String timerState(Object event) throws Exception {
         for (Class<?> c = event.getClass(); c != null; c = c.getSuperclass()) {

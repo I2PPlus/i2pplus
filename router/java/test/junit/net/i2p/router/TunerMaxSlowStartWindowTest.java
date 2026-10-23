@@ -32,19 +32,45 @@ public class TunerMaxSlowStartWindowTest {
     private static final int RECOVERY_FLOOR = DEFAULT / 2; // 1024
     private static final int BASE = 256;
 
-    /** Neat defaults: everything healthy, no signal. */
+    /**
+     * Neat defaults: everything healthy, no signal.
+     *
+     * @param current  the slow-start cap being re-evaluated, in messages, within
+     *                 {@code MIN} and {@code MAX}
+     * @param observed the outbound RTT sample in ms; above 7000 the cap is pulled back
+     * @return the next cap from {@link Tuner#maxSlowStartWindow}, with the congestion
+     *         and retransmission-loss signals passed as NaN (absent)
+     */
     private static int target(int current, double observed) {
         return Tuner.maxSlowStartWindow(current, MIN, MAX, STEP, DEFAULT,
                                            observed, Double.NaN, Double.NaN);
     }
 
-    /** With congestion signal. */
+    /**
+     * With congestion signal.
+     *
+     * @param current      the slow-start cap being re-evaluated, in messages
+     * @param observed     the outbound RTT sample in ms; above 7000 the cap is pulled back
+     * @param failLifetime the {@code transport.sendMessageFailureLifetime} stat in ms;
+     *                     above 8000 the path counts as congested, NaN means no signal
+     * @return the next cap from {@link Tuner#maxSlowStartWindow}, with the
+     *         retransmission-loss signal passed as NaN (absent)
+     */
     private static int targetCongested(int current, double observed, double failLifetime) {
         return Tuner.maxSlowStartWindow(current, MIN, MAX, STEP, DEFAULT,
                                            observed, failLifetime, Double.NaN);
     }
 
-    /** With the retransmission-loss signal (rate 0.0-1.0, NaN when absent). */
+    /**
+     * With the retransmission-loss signal (rate 0.0-1.0, NaN when absent).
+     *
+     * @param current  the slow-start cap being re-evaluated, in messages
+     * @param observed the outbound RTT sample in ms; above 7000 the cap is pulled back
+     * @param lossRate the streaming retransmission rate, 0.0-1.0; at or above 0.20 the
+     *                 path counts as lossy and the cap shrinks, NaN means no signal
+     * @return the next cap from {@link Tuner#maxSlowStartWindow}, with the congestion
+     *         signal passed as NaN (absent)
+     */
     private static int targetDropping(int current, double observed, double lossRate) {
         return Tuner.maxSlowStartWindow(current, MIN, MAX, STEP, DEFAULT,
                                            observed, Double.NaN, lossRate);

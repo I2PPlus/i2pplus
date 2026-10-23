@@ -36,6 +36,9 @@ public class BEncoderKeyOrderTest {
     /**
      * Bencodes a map of the given keys to the same one-byte value and returns the keys in
      * the order they were written, decoded as UTF-8.
+     *
+     * @param keys the dictionary keys to encode, in any order
+     * @return the keys as written by the encoder, in bencoded order
      */
     private static List<String> orderOf(String... keys) {
         Map<String, byte[]> m = new HashMap<>();
@@ -48,6 +51,9 @@ public class BEncoderKeyOrderTest {
     /**
      * Bencodes a map of the given byte[] keys to the same one-byte value and returns the
      * keys in the order they were written.
+     *
+     * @param keys the dictionary keys to encode, in any order
+     * @return the key bytes as written by the encoder, in bencoded order
      */
     private static List<byte[]> orderOf(byte[]... keys) {
         Map<byte[], byte[]> m = new HashMap<>();
@@ -59,6 +65,9 @@ public class BEncoderKeyOrderTest {
 
     /**
      * Reads back the keys of a bencoded dictionary whose values are all byte strings.
+     *
+     * @param bencoded the bencoded dictionary to scan
+     * @return the key bytes in the order they appear in the encoding
      */
     private static List<byte[]> writtenByteKeys(byte[] bencoded) {
         List<byte[]> rv = new ArrayList<>();
@@ -74,6 +83,8 @@ public class BEncoderKeyOrderTest {
     /**
      * Reads a length-prefixed byte string at the given offset.
      *
+     * @param bencoded the encoding to read from
+     * @param at the offset of the length digits that start the string
      * @return the offset of the first payload byte and the payload length
      */
     private static int[] readByteString(byte[] bencoded, int at) {
@@ -177,6 +188,8 @@ public class BEncoderKeyOrderTest {
     /**
      * A dictionary decoded from the wire and re-encoded must be byte identical, otherwise
      * the info hash recomputed from the re-encoded bytes would not match the original.
+     *
+     * @throws Throwable on bencode or bdecode failure
      */
     @Test
     public void testAsciiDictionaryRoundTrips() throws Throwable {
@@ -194,7 +207,11 @@ public class BEncoderKeyOrderTest {
         assertArrayEquals(encoded, BEncoder.bencode(decoded));
     }
 
-    /** Encoding to a stream and encoding to a byte array produce the same bytes. */
+    /**
+     * Encoding to a stream and encoding to a byte array produce the same bytes.
+     *
+     * @throws IOException if writing the encoded bytes to the stream fails
+     */
     @Test
     public void testBencodeToStreamMatchesBencodeToBytes() throws IOException {
         Map<String, byte[]> m = new HashMap<>();

@@ -191,6 +191,9 @@ public class RequestLeaseSetSignGuardTest {
      * unblinded key, then encrypt and sign the outer with the blinded key),
      * serialize, parse, rebind the destination, and verify both signatures
      * plus the decrypted lease count.
+     *
+     * @throws Exception on key generation failure, or if the destination or the lease
+     *                   set cannot be written to, or read back from, the wire
      */
     @Test
     public void encryptedLeaseSetSignsSerializesAndVerifies() throws Exception {

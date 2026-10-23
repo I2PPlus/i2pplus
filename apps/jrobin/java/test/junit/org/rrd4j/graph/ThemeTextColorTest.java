@@ -31,6 +31,9 @@ public class ThemeTextColorTest {
      *
      * <p>This is the check that was missing. Midnight's absence was invisible in a render on
      * any other theme, because only the missing rule is a problem and only midnight had one.
+     *
+     * @throws Exception if a theme's frame cannot be rendered, or its SVG cannot be
+     *                   decoded as UTF-8
      */
     @Test
     public void everyThemePaintsItsTextInItsOwnColour() throws Exception {
@@ -50,6 +53,9 @@ public class ThemeTextColorTest {
      * <p>Checked for equality, not just presence: {@code --graph_axisColor} is the theme's
      * statement of this colour, so a rule that softened it would be the serialiser
      * overriding the stylesheet rather than falling back to it.
+     *
+     * @throws Exception if a theme's frame cannot be rendered, or its SVG cannot be
+     *                   decoded as UTF-8
      */
     @Test
     public void everyThemeDrawsItsAxisInItsOwnInk() throws Exception {
@@ -71,6 +77,9 @@ public class ThemeTextColorTest {
      *
      * <p>Pinned separately because midnight is the theme that broke: the ink lives in the
      * theme and the serialiser's table must agree with it.
+     *
+     * @throws Exception if midnight's frame cannot be rendered, or its SVG cannot be
+     *                   decoded as UTF-8
      */
     @Test
     public void midnightsTextIsTheInkItsPageUses() throws Exception {
@@ -78,7 +87,15 @@ public class ThemeTextColorTest {
                    styleBlockOf("midnight").contains("text{fill:#c9ceff;"));
     }
 
-    /** Render one empty frame in the given theme and return just its {@code <style>} block. */
+    /**
+     * Render one empty frame in the given theme and return just its {@code <style>} block.
+     *
+     * @param theme theme name handed to the SVG worker, e.g. "midnight"
+     * @return the SVG from the {@code <style>} opener up to, but not including, the
+     *         {@code </style>} closer
+     * @throws Exception if the frame cannot be rendered, or its SVG bytes cannot be
+     *                   decoded as UTF-8
+     */
     private static String styleBlockOf(String theme) throws Exception {
         SVGImageWorker w = new SVGImageWorker(0, 0, false, false, theme);
         w.resize(400, 200);

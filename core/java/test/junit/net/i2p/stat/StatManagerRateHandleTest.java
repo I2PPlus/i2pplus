@@ -137,6 +137,9 @@ public class StatManagerRateHandleTest {
     /**
      * A concurrent first use must produce one stat, not one per thread. Every
      * thread's data has to end up in the same place or counts vanish at startup.
+     *
+     * @throws Exception if the await for the worker threads is interrupted; a worker
+     *                   failure is rethrown as an AssertionError instead
      */
     @Test
     public void concurrentFirstUseYieldsOneStat() throws Exception {
@@ -269,7 +272,12 @@ public class StatManagerRateHandleTest {
                     _sm.isRate("test.empty"));
     }
 
-    /** Counts how many rate stats the table holds under one name. */
+    /**
+     * Counts how many rate stats the table holds under one name.
+     *
+     * @param name the stat name to look for among the manager's registered rate names
+     * @return how many rate stats are registered under that exact name, 0 if none
+     */
     private int countRates(String name) {
         int count = 0;
         for (String n : _sm.getRateNames())

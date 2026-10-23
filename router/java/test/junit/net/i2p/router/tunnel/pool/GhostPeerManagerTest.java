@@ -91,7 +91,13 @@ public class GhostPeerManagerTest {
         return Hash.create(data);
     }
 
-    /** Distinct across the full int range (hash(int) wraps every 256). */
+    /**
+     * Distinct across the full int range (hash(int) wraps every 256).
+     *
+     * @param i the value to derive a hash from; its low four bytes are copied in
+     *          little-endian order, so no two values collide
+     * @return a hash whose first four bytes encode i, distinct for every int
+     */
     private static Hash distinctHash(int i) {
         byte[] data = new byte[Hash.HASH_LENGTH];
         data[0] = (byte) i;
@@ -256,6 +262,10 @@ public class GhostPeerManagerTest {
     /**
      * Rebuild the manager with a custom timeout threshold and cooldown,
      * keeping every other property at its real default.
+     *
+     * @param threshold the timeouts a peer must accumulate before it is marked a
+     *                  ghost; above 1 the first strike is only tracked
+     * @param cooldownMs how long a marked peer stays excluded, in milliseconds
      */
     private void stubThresholdAndCooldown(final int threshold, final int cooldownMs) {
         when(_ctx.getProperty(anyString(), anyInt())).thenAnswer(inv -> {

@@ -159,7 +159,7 @@ public class ConnectionSynBudgetTest {
     /**
      * The effective connect window that the scheduler, waitForConnect and the SYN
      * budget share must:
-     *  - grow (never shrink) the base on slow paths (multiplier > 100), which is
+     *  - grow (never shrink) the base on slow paths (multiplier &gt; 100), which is
      *    exactly the case that used to let the scheduler tear the SYN down early;
      *  - never fall below CONNECT_TIMEOUT_FLOOR_MS no matter how aggressive the
      *    fast-path Tuner multiplier is;

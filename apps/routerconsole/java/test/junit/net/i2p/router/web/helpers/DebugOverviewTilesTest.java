@@ -120,7 +120,7 @@ public class DebugOverviewTilesTest {
 
     /**
      * A backfilled stat can be a per-tunnel rate named after the user's nickname, and
-     * that name is user input: an unescaped & held the query where it sat, and a quote
+     * that name is user input: an unescaped &amp; held the query where it sat, and a quote
      * ended the alt attribute. The urls carry the escaped name, the caption and alt
      * carry it as text.
      */

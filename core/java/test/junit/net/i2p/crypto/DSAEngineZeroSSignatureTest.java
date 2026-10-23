@@ -24,12 +24,22 @@ public class DSAEngineZeroSSignatureTest {
 
     private static final I2PAppContext ctx = I2PAppContext.getGlobalContext();
 
-    /** A fresh Signature whose s half (the second 20 bytes) is zeroed. */
+    /**
+     * A fresh Signature whose s half (the second 20 bytes) is zeroed.
+     *
+     * @param sig the signature to copy and tamper with
+     * @return a new signature of the same type with the s half zeroed
+     */
     private static Signature zeroS(Signature sig) {
         return tamper(sig, true);
     }
 
-    /** A fresh Signature whose r half (the first 20 bytes) is zeroed. */
+    /**
+     * A fresh Signature whose r half (the first 20 bytes) is zeroed.
+     *
+     * @param sig the signature to copy and tamper with
+     * @return a new signature of the same type with the r half zeroed
+     */
     private static Signature zeroR(Signature sig) {
         return tamper(sig, false);
     }
@@ -37,6 +47,11 @@ public class DSAEngineZeroSSignatureTest {
     /**
      * SimpleDataStructure.setData() refuses to overwrite, so the tampered copy
      * has to be a new Signature over the same type.
+     *
+     * @param sig the signature to copy and tamper with
+     * @param zeroSecondHalf true to zero the s half (the second 20 bytes),
+     *                       false to zero the r half (the first 20 bytes)
+     * @return a new Signature of the same type with the selected half zeroed
      */
     private static Signature tamper(Signature sig, boolean zeroSecondHalf) {
         byte[] data = sig.getData();

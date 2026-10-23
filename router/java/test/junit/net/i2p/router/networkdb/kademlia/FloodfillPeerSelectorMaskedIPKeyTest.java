@@ -21,7 +21,7 @@ import net.i2p.util.OrderedProperties;
  * Unit tests for the compact masked-IP fingerprint used by
  * {@link FloodfillPeerSelector} on the floodfill selection path: the packed
  * {@code long} key must reproduce {@code MaskedIPSet} semantics (same masked
- * subnet => same key, IPv4 and IPv6 never collide) without allocating
+ * subnet =&gt; same key, IPv4 and IPv6 never collide) without allocating
  * per-address Strings, and must reject unsupported masks. The accumulator
  * fingerprint must keep the masked-IP / port / family spaces separate exactly
  * like MaskedIPSet's '.' / 'p' / 'x' prefixes did.

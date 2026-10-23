@@ -66,6 +66,8 @@ public class GraphHelperStatUrlTest {
     /**
      * Whatever the encoder emits, the console's request.getParameter() must read the
      * registered name back - otherwise the graph would be drawn for nothing.
+     *
+     * @throws Exception if UTF-8 is not available as a charset name for the decoder
      */
     @Test
     public void everyNameRoundTripsThroughTheDecoder() throws Exception {

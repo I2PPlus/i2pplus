@@ -44,8 +44,11 @@ final class Histogram {
 
     private static final long LOW32 = (long)-1 >>> 32;
 
-    /** Build a histogram given a sequence of values.
+    /**
+     * Build a histogram given a sequence of values.
      * To save work, the input should be sorted, but need not be.
+     *
+     * @param valueSequence the event values to count, in any order
      */
     public
     Histogram(int[] valueSequence) {
@@ -61,7 +64,12 @@ final class Histogram {
         this(sortedSlice(valueSequence, start, end));
     }
 
-    /** Build a histogram given a compact matrix of counts and values. */
+    /**
+     * Build a histogram given a compact matrix of counts and values.
+     *
+     * @param matrix the rows to build from, each row an occurrence count
+     *               followed by the values occurring at that frequency
+     */
     public
     Histogram(int[][] matrix) {
         // sort the rows
@@ -91,7 +99,8 @@ final class Histogram {
         counts = table[0]; //backwards
     }
 
-    /** Histogram of int values, reported compactly as a ragged matrix,
+    /**
+     * Histogram of int values, reported compactly as a ragged matrix,
      * indexed by descending frequency rank.
      * <p>
      * Format of matrix:
@@ -109,6 +118,9 @@ final class Histogram {
      * Each row of the matrix (apart from its first element)
      * is sorted in ascending order, and contains no duplicates.
      * That is, each sequence { valuei1, valuei2, ... } is sorted.
+     *
+     * @return the counts and values of this histogram, in the matrix format
+     *         described above
      */
     public
     int[][] getMatrix() { return matrix; }
@@ -163,7 +175,12 @@ final class Histogram {
             return Histogram.this.getBitLength(value);
         }
     };
-    /** bit-length is negative entropy:  -H(matrix). */
+    /**
+     * Bit-length is negative entropy: -H(matrix).
+     *
+     * @return the bits needed to encode every event under this histogram's own
+     *         coding
+     */
     public
     double getBitLength() {
         double sum = 0;
@@ -174,7 +191,14 @@ final class Histogram {
         return sum;
     }
 
-    /** bit-length in to another coding (cross-entropy) */
+    /**
+     * Bit-length of this histogram's events measured in another coding, the
+     * cross-entropy against that coding.
+     *
+     * @param len the coding to measure the events against
+     * @return the bits that coding needs for every event, weighted by how often
+     *         the event occurs in this histogram
+     */
     public
     double getBitLength(BitMetric len) {
         double sum = 0;
@@ -191,9 +215,14 @@ final class Histogram {
         return Math.round(x * scale) / scale;
     }
 
-    /** Sort rows and columns.
+    /**
+     * Sort rows and columns.
      * Merge adjacent rows with the same key element [0].
      * Make a fresh copy of all of it.
+     *
+     * @param matrix the rows to normalize; none of them is modified
+     * @return a new matrix whose rows are ordered by descending count, each
+     *         row's values in ascending order with duplicates removed
      */
     public int[][] normalizeMatrix(int[][] matrix) {
         long[] rowMap = new long[matrix.length];
@@ -295,21 +324,34 @@ final class Histogram {
         return histTitles;
     }
 
-    /** Print a report of this histogram.
+    /**
+     * Print a report of this histogram, under the default name "hist".
+     *
+     * @param out where to write the report
      */
     public
     void print(PrintStream out) {
         print("hist", out);
     }
 
-    /** Print a report of this histogram.
+    /**
+     * Print a report of this histogram.
+     *
+     * @param name the label to put on each row of the report
+     * @param out where to write the report
      */
     public
     void print(String name, PrintStream out) {
         print(name, getRowTitles(name), out);
     }
 
-    /** Print a report of this histogram.
+    /**
+     * Print a report of this histogram using row titles computed elsewhere.
+     *
+     * @param name the label to put on each row of the report
+     * @param histTitles one title per matrix row, as from getRowTitles(), or
+     *                   null to print only the summary line
+     * @param out where to write the report
      */
     public
     void print(String name, String[] histTitles, PrintStream out) {
@@ -384,20 +426,25 @@ final class Histogram {
         return table;
     }
 
-    /** Simple two-column histogram.  Contains repeated counts.
+    /**
+     * Simple two-column histogram.  Contains repeated counts.
      * Assumes input is sorted.  Does not sort output columns.
      * <p>
      * Format of result:
      *  <pre>
      *  long[] hist = {
-     *    (count1 << 32) | (value1),
-     *    (count2 << 32) | (value2),
+     *    (count1 &lt;&lt; 32) | (value1),
+     *    (count2 &lt;&lt; 32) | (value2),
      *    ...
      *  }
      * </pre>
      * In addition, the sequence {valuei...} is guaranteed to be sorted.
      * Note that resorting this using Arrays.sort() will reorder the
      * entries by increasing count.
+     *
+     * @param sortedValues the values to count, in ascending order
+     * @return one entry per distinct value, its count in the high 32 bits and
+     *         the value itself in the low 32 bits
      */
     private static
     long[] computeHistogram2Col(int[] sortedValues) {
@@ -441,7 +488,15 @@ final class Histogram {
         }
         return hist;
     }
-    /** Slice and sort the given input array. */
+    /**
+     * Slice and sort the given input array.
+     *
+     * @param valueSequence the array to take the slice from
+     * @param start the index of the first element of the slice, inclusive
+     * @param end the index just past the last element of the slice, exclusive
+     * @return the slice in ascending order, or the input array itself when it
+     *         is already that slice and already sorted
+     */
     private static
     int[] sortedSlice(int[] valueSequence, int start, int end) {
         if (start == 0 && end == valueSequence.length &&
@@ -455,7 +510,16 @@ final class Histogram {
         }
     }
 
-    /** Tell if an array is sorted. */
+    /**
+     * Tell if an array is sorted.
+     *
+     * @param values the array to test
+     * @param from the index of the first element to compare; the elements
+     *             before it are ignored
+     * @param strict true to require each element to be less than the one after
+     *               it, false to allow equal neighbours
+     * @return true if the elements from that index on are in ascending order
+     */
     private static
     boolean isSorted(int[] values, int from, boolean strict) {
         for (int i = from+1; i < values.length; i++) {
@@ -467,7 +531,13 @@ final class Histogram {
         return true;  // no witness => sorted
     }
 
-    /** Clone and sort the array, if not already sorted. */
+    /**
+     * Clone and sort the array, if not already sorted.
+     *
+     * @param values the array to sort; it is not modified
+     * @return the values in ascending order, either the array itself or a
+     *         sorted copy of it
+     */
     private static
     int[] maybeSort(int[] values) {
         if (!isSorted(values, 0, false)) {

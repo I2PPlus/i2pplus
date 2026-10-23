@@ -60,13 +60,23 @@ public class ConnectionDuplicateCloseLimiterTest {
         return (Boolean) shouldLog.invoke(null, now);
     }
 
-    /** The first occurrence after an interval is always reported. */
+    /**
+     * The first occurrence after an interval is always reported.
+     *
+     * @throws Exception if the reflective call to shouldLogDuplicateClose fails; the method is
+     *                   resolved in setUp, so this means the reflection setup broke
+     */
     @Test
     public void firstOccurrenceIsReported() throws Exception {
         assertTrue(call(60_000L));
     }
 
-    /** Everything inside the interval is suppressed, not logged. */
+    /**
+     * Everything inside the interval is suppressed, not logged.
+     *
+     * @throws Exception if the reflective call to shouldLogDuplicateClose fails; the method is
+     *                   resolved in setUp, so this means the reflection setup broke
+     */
     @Test
     public void occurrencesInsideTheIntervalAreSuppressed() throws Exception {
         call(60_000L);
@@ -75,7 +85,12 @@ public class ConnectionDuplicateCloseLimiterTest {
         assertFalse(call(119_999L));
     }
 
-    /** Suppressed occurrences are counted, so the report can say how many it stands for. */
+    /**
+     * Suppressed occurrences are counted, so the report can say how many it stands for.
+     *
+     * @throws Exception if the reflective call to shouldLogDuplicateClose fails; the method is
+     *                   resolved in setUp, so this means the reflection setup broke
+     */
     @Test
     public void suppressedOccurrencesAreCounted() throws Exception {
         call(60_000L);
@@ -84,7 +99,12 @@ public class ConnectionDuplicateCloseLimiterTest {
         assertEquals(expected, suppressed.get());
     }
 
-    /** Once the interval passes, the next occurrence reports again. */
+    /**
+     * Once the interval passes, the next occurrence reports again.
+     *
+     * @throws Exception if the reflective call to shouldLogDuplicateClose fails; the method is
+     *                   resolved in setUp, so this means the reflection setup broke
+     */
     @Test
     public void reportsAgainAfterTheInterval() throws Exception {
         call(60_000L);
@@ -95,6 +115,9 @@ public class ConnectionDuplicateCloseLimiterTest {
     /**
      * The steady-state case that motivated this: a busy connection notifies roughly once a
      * second. That must produce one log line, not sixty.
+     *
+     * @throws Exception if any of the sixty reflective calls to shouldLogDuplicateClose fails;
+     *                   the method is resolved in setUp, so this means the reflection setup broke
      */
     @Test
     public void oneNotificationPerSecondYieldsOneReportPerMinute() throws Exception {
@@ -107,7 +130,12 @@ public class ConnectionDuplicateCloseLimiterTest {
         assertTrue("and at least one", reports >= 1);
     }
 
-    /** Suppression must not swallow the count; a report that stands for 59 events says so. */
+    /**
+     * Suppression must not swallow the count; a report that stands for 59 events says so.
+     *
+     * @throws Exception if any of the reflective calls to shouldLogDuplicateClose fails; the
+     *                   method is resolved in setUp, so this means the reflection setup broke
+     */
     @Test
     public void suppressionCountIsNonZeroAfterABusyInterval() throws Exception {
         call(60_000L);

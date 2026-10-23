@@ -60,7 +60,12 @@ public class TunnelPeerSelectorStalePeerTest {
         return Hash.create(data);
     }
 
-    /** A profile last heard from/about long ago (outside the 8h window). */
+    /**
+     * A profile last heard from/about long ago (outside the 8h window).
+     *
+     * @return a mocked PeerProfile with both last-heard times at 0, so it reads as
+     *         never heard of
+     */
     private static PeerProfile oldProfile() {
         PeerProfile p = mock(PeerProfile.class);
         when(p.getLastHeardFrom()).thenReturn(0L);
@@ -68,7 +73,12 @@ public class TunnelPeerSelectorStalePeerTest {
         return p;
     }
 
-    /** A profile heard from within the activity window. */
+    /**
+     * A profile heard from within the activity window.
+     *
+     * @return a mocked PeerProfile heard from 1 second ago and heard about 2
+     *         seconds ago, relative to the test clock
+     */
     private static PeerProfile freshProfile() {
         PeerProfile p = mock(PeerProfile.class);
         when(p.getLastHeardFrom()).thenReturn(NOW - 1000L);

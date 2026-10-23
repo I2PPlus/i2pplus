@@ -121,7 +121,7 @@ public class ConnThrottlerTest {
     }
 
     /**
-     * updateLimits() from 0 to >0 must enable cleanup properly.
+     * updateLimits() from 0 to &gt;0 must enable cleanup properly.
      * The Cleaner was scheduled at construction even when limits were 0.
      */
     @Test

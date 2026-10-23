@@ -26,7 +26,14 @@ public class TunnelRendererFormatTest {
         600_000, 600_001, 900_000, 3_600_000, 86_400_000L
     };
 
-    /** Calls the private static {@code fmt}/{@code fmt0}/{@code fmtTrim} helpers. */
+    /**
+     * Calls the private static {@code fmt}/{@code fmt0}/{@code fmtTrim} helpers.
+     *
+     * @param helper name of the private formatter method to look up, such as {@code fmtTrim}
+     * @param val the number to render, in the unit that helper assumes
+     * @return the text the helper appended to its scratch buffer
+     * @throws ReflectiveOperationException if the private method is not found or the call fails
+     */
     private static String invoke(String helper, double val) throws ReflectiveOperationException {
         Method m = TunnelRenderer.class.getDeclaredMethod(helper, StringBuilder.class, double.class);
         m.setAccessible(true);
@@ -35,20 +42,35 @@ public class TunnelRendererFormatTest {
         return buf.toString();
     }
 
-    /** The pre-optimization formatter, including its rounding mode. */
+    /**
+     * The pre-optimization formatter, including its rounding mode.
+     *
+     * @param val the number to render with the {@code #0.00} pattern
+     * @return the formatted text, always showing two decimal places
+     */
     private static String referenceFmt(double val) {
         java.text.DecimalFormat df = new java.text.DecimalFormat("#0.00");
         return df.format(val);
     }
 
-    /** The pre-optimization zero-decimal formatter, including its rounding mode. */
+    /**
+     * The pre-optimization zero-decimal formatter, including its rounding mode.
+     *
+     * @param val the number to render with the {@code #0} pattern
+     * @return the formatted text, rounded half up to a whole number
+     */
     private static String referenceFmt0(double val) {
         java.text.DecimalFormat df = new java.text.DecimalFormat("#0");
         df.setRoundingMode(java.math.RoundingMode.HALF_UP);
         return df.format(val);
     }
 
-    /** Two-decimal formatting must be unchanged, and the monitor must no longer be involved. */
+    /**
+     * Two-decimal formatting must be unchanged, and the monitor must no longer be involved.
+     *
+     * @throws ReflectiveOperationException if the private formatter method is not found
+     *                                      or the reflective call fails
+     */
     @Test
     public void testFmtMatchesReference() throws ReflectiveOperationException {
         for (double val : VALUES) {
@@ -56,7 +78,12 @@ public class TunnelRendererFormatTest {
         }
     }
 
-    /** Zero-decimal formatting must be unchanged, rounding mode included. */
+    /**
+     * Zero-decimal formatting must be unchanged, rounding mode included.
+     *
+     * @throws ReflectiveOperationException if the private formatter method is not found
+     *                                      or the reflective call fails
+     */
     @Test
     public void testFmt0MatchesReference() throws ReflectiveOperationException {
         for (double val : VALUES) {
@@ -64,7 +91,12 @@ public class TunnelRendererFormatTest {
         }
     }
 
-    /** The trimmed form must drop every ".00", exactly as the old {@code replace} chain did. */
+    /**
+     * The trimmed form must drop every ".00", exactly as the old {@code replace} chain did.
+     *
+     * @throws ReflectiveOperationException if the private formatter method is not found
+     *                                      or the reflective call fails
+     */
     @Test
     public void testFmtTrimMatchesReference() throws ReflectiveOperationException {
         for (double val : VALUES) {
@@ -72,7 +104,12 @@ public class TunnelRendererFormatTest {
         }
     }
 
-    /** The expiry bar markup must be unchanged across every class boundary. */
+    /**
+     * The expiry bar markup must be unchanged across every class boundary.
+     *
+     * @throws ReflectiveOperationException if the private bar renderer is not found
+     *                                      or the reflective call fails
+     */
     @Test
     public void testRenderExpiryBarMatchesReference() throws ReflectiveOperationException {
         Method m = TunnelRenderer.class.getDeclaredMethod("renderExpiryBar", StringBuilder.class, long.class);
@@ -84,7 +121,12 @@ public class TunnelRendererFormatTest {
         }
     }
 
-    /** The pre-optimization expiry bar, verbatim. */
+    /**
+     * The pre-optimization expiry bar, verbatim.
+     *
+     * @param timeLeft milliseconds until the tunnel expires; 0 or less is clamped to 0
+     * @return the nested percent-bar spans, with a width of at most 100 percent
+     */
     private static String referenceRenderExpiryBar(long timeLeft) {
         if (timeLeft <= 0) {timeLeft = 0;}
         boolean fiveLeft = timeLeft < 5*60*1000;

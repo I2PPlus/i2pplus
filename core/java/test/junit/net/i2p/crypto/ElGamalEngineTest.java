@@ -28,7 +28,13 @@ public class ElGamalEngineTest {
     private static final int HALF = 257;
     private static final int KEY_BYTES = 256;
 
-    /** Big-endian, zero-padded (or trimmed) to exactly len bytes. */
+    /**
+     * Big-endian, zero-padded (or trimmed) to exactly len bytes.
+     *
+     * @param v the BigInteger to encode
+     * @param len the exact output length in bytes
+     * @return the big-endian bytes of v, exactly len long
+     */
     private static byte[] toFixed(BigInteger v, int len) {
         byte[] b = v.toByteArray();
         byte[] out = new byte[len];

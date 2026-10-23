@@ -51,7 +51,7 @@ public class ConnectionOptionsRttSampleClampTest {
 
     /** UpdateRTT clamps before the smoother, so a huge single sample only
         reaches the ceiling in the smoothed RTT; the min-RTT tracker sees the
-        raw sample so a slow path (> maxRtt) gets no fabricated floor. */
+        raw sample so a slow path (&gt; maxRtt) gets no fabricated floor. */
     @Test
     public void testUpdateRTTClampsAtIngestion() {
         ConnectionOptions opts = new ConnectionOptions();

@@ -46,6 +46,8 @@ public class I2PTunnelHTTPServerIOTest extends TestCase {
 
     /**
      * Test that Sender tracks bytes transferred correctly.
+     *
+     * @throws Exception not expected; the copy runs between in-memory byte arrays
      */
     public void testSenderBytesTransferred() throws Exception {
         byte[] data = "Hello, World! This is test data for the Sender.".getBytes();
@@ -63,6 +65,8 @@ public class I2PTunnelHTTPServerIOTest extends TestCase {
 
     /**
      * Test that Sender sets _lastReadNanos after a successful read.
+     *
+     * @throws Exception not expected; the copy runs between in-memory byte arrays
      */
     public void testSenderLastReadNanos() throws Exception {
         byte[] data = "Test data".getBytes();
@@ -102,6 +106,8 @@ public class I2PTunnelHTTPServerIOTest extends TestCase {
 
     /**
      * Test that Sender handles empty stream.
+     *
+     * @throws Exception not expected; the copy runs between in-memory byte arrays
      */
     public void testSenderEmptyStream() throws Exception {
         ByteArrayInputStream in = new ByteArrayInputStream(new byte[0]);
@@ -116,6 +122,8 @@ public class I2PTunnelHTTPServerIOTest extends TestCase {
 
     /**
      * Test that Sender handles large data correctly.
+     *
+     * @throws Exception not expected; the 256 KB copy stays in memory end to end
      */
     public void testSenderLargeData() throws Exception {
         byte[] data = new byte[256 * 1024]; // 256KB
@@ -133,6 +141,9 @@ public class I2PTunnelHTTPServerIOTest extends TestCase {
     /**
      * Test Sender stall detection: a Sender that never provides data should
      * be interruptible via {@link java.lang.Thread#interrupt} and eventually stop.
+     *
+     * @throws Exception if the test thread is interrupted while pausing before the
+     *                   interrupt, or while joining the sender thread
      */
     public void testSenderInterruptible() throws Exception {
         // Use a stream that blocks forever on read()
@@ -224,8 +235,10 @@ public class I2PTunnelHTTPServerIOTest extends TestCase {
     }
 
     /**
-     * Test that Sender tracks throughput logging threshold (>5s logs).
+     * Test that Sender tracks throughput logging threshold (&gt;5s logs).
      * Verify getBytesTransferred is 0 before run.
+     *
+     * @throws Exception not expected; the sender is only built and queried here
      */
     public void testSenderInitialStats() throws Exception {
         ByteArrayInputStream in = new ByteArrayInputStream("data".getBytes());
@@ -273,6 +286,9 @@ public class I2PTunnelHTTPServerIOTest extends TestCase {
      * whole transfer, which is what drives the runner pool to zero free threads
      * and stalls every other request to the service. The body is aborted
      * instead, so the client fails fast and can retry.
+     *
+     * @throws Exception not expected; handOffBody records saturation on the Sender
+     *                   rather than throwing, and the pool tasks swallow interrupts
      */
     public void testHandOffAbortsRatherThanPinningHandlerThread() throws Exception {
         final CountDownLatch blocker = new CountDownLatch(1);
@@ -324,6 +340,9 @@ public class I2PTunnelHTTPServerIOTest extends TestCase {
     /**
      * The abort must be prompt: it must not have consumed the body, so the
      * caller's handler thread is free the instant handOffBody returns.
+     *
+     * @throws Exception not expected; handOffBody records any failure on the Sender
+     *                   rather than throwing
      */
     public void testHandOffAbortDoesNotRunTheBody() throws Exception {
         final CountDownLatch blocker = new CountDownLatch(1);

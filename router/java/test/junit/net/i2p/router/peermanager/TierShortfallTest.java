@@ -23,7 +23,7 @@ import org.junit.Test;
  * <p>{@link ProfileOrganizer}'s tier selectors fall through fast &rarr; high-capacity
  * &rarr; not-failing, and each one hands the next the <em>remaining</em> slots rather
  * than the caller's original request. Getting that wrong is not a harmless off-by-one:
- * {@link ClientPeerSelector#selectFirstHop} sizes its candidate set to exactly the
+ * {@code ClientPeerSelector} sizes its candidate set to exactly the
  * request, so the last tier in the cascade writing the full count again overflows it
  * and {@link ArraySet} throws {@code SetFullException} — logged as
  * {@code ProfileOrganizer.pickLowestPriority} crashing, which points at the symptom
@@ -35,6 +35,12 @@ import org.junit.Test;
  */
 public class TierShortfallTest {
 
+    /**
+     * {@code n} hashes built from the loop counter, to fill a candidate set.
+     *
+     * @param n how many hashes to build, 0 for an empty list
+     * @return a list of {@code n} distinct hashes, in counter order
+     */
     private static List<Hash> hashes(int n) {
         List<Hash> list = new ArrayList<>(n);
         for (int i = 0; i < n; i++) {
@@ -48,6 +54,12 @@ public class TierShortfallTest {
         return list;
     }
 
+    /**
+     * The first {@code n} hashes as a set, standing in for a partially filled candidate set.
+     *
+     * @param n how many hashes to include, 0 for an empty set
+     * @return a set holding the same hashes the counter-built list would produce
+     */
     private static Set<Hash> first(int n) {
         return new HashSet<>(hashes(n));
     }
@@ -55,6 +67,10 @@ public class TierShortfallTest {
     /**
      * {@code count} distinct hashes starting at {@code offset}, so a tier can be given a
      * pool that does not overlap what an earlier tier already supplied.
+     *
+     * @param offset the value written into the first hash's four leading bytes
+     * @param count how many hashes to build, 0 for an empty list
+     * @return a list of the requested length, with no duplicate hashes
      */
     private static List<Hash> distinct(int offset, int count) {
         List<Hash> list = new ArrayList<>(count);

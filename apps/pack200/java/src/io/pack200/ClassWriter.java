@@ -77,12 +77,23 @@ class ClassWriter {
         out.writeInt(x);
     }
 
-    /** Write a 2-byte int representing a CP entry, using the local cpIndex. */
+    /**
+     * Write a 2-byte int representing a CP entry, using the local cpIndex.
+     *
+     * @param e the constant pool entry to reference, or null to write index 0
+     * @throws IOException if the output stream fails while writing the index
+     */
     private void writeRef(Entry e) throws IOException {
         writeRef(e, cpIndex);
     }
 
-    /** Write a 2-byte int representing a CP entry, using the given cpIndex. */
+    /**
+     * Write a 2-byte int representing a CP entry, using the given cpIndex.
+     *
+     * @param e the constant pool entry to reference, or null to write index 0
+     * @param cpIndex the index table giving the entry's number in that pool
+     * @throws IOException if the output stream fails while writing the index
+     */
     private void writeRef(Entry e, Index cpIndex) throws IOException {
         int i = (e == null) ? 0 : cpIndex.indexOf(e);
         writeShort(i);

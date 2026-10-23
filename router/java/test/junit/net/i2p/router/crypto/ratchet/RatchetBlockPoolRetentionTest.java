@@ -34,6 +34,8 @@ public class RatchetBlockPoolRetentionTest {
      * @param owner the class declaring the field
      * @param name the field name
      * @return the field's current value
+     * @throws Exception if the class declares no such field, or the JVM refuses
+     *                   to make it accessible
      */
     private static Object field(Object target, Class<?> owner, String name) throws Exception {
         Field field = owner.getDeclaredField(name);
@@ -48,6 +50,8 @@ public class RatchetBlockPoolRetentionTest {
      * @param name the free list's field name
      * @param <T> the block type the list holds
      * @return the live list, not a copy
+     * @throws Exception if the pool has no such free list field, or the JVM
+     *                   refuses to make it accessible
      */
     @SuppressWarnings("unchecked")
     private static <T> List<T> freeList(ECIESAEADEngine.BlockPool pool, String name) throws Exception {
@@ -58,6 +62,9 @@ public class RatchetBlockPoolRetentionTest {
      * A released garlic block must not keep the clove it carried. The pool is
      * per-thread, so a retained clove - and everything it holds - stays pinned
      * for the life of that transport thread.
+     *
+     * @throws Exception if the reflective read of the free list or of the
+     *                   block's clove field fails
      */
     @Test
     public void testReleasedGarlicBlockDropsItsClove() throws Exception {
@@ -76,6 +83,9 @@ public class RatchetBlockPoolRetentionTest {
 
     /**
      * A released next-key block must not keep the session key it carried.
+     *
+     * @throws Exception if the reflective read of the free list or of the
+     *                   block's next-key field fails
      */
     @Test
     public void testReleasedNextKeyBlockDropsItsKey() throws Exception {
@@ -95,6 +105,8 @@ public class RatchetBlockPoolRetentionTest {
      * Clearing must not break reuse: the same instance comes back, carrying the
      * new clove. If it did break, the fix would be a correctness regression
      * dressed up as a memory one.
+     *
+     * @throws Exception if the reflective read of the block's clove field fails
      */
     @Test
     public void testGarlicBlockIsStillReusedAndRearmed() throws Exception {
@@ -116,6 +128,8 @@ public class RatchetBlockPoolRetentionTest {
     /**
      * The caller's list is emptied by the release, as documented - the payload
      * builder reuses that same list for the next payload.
+     *
+     * @throws Exception not expected; the body only exercises the pool and asserts
      */
     @Test
     public void testReleaseEmptiesTheCallersList() throws Exception {

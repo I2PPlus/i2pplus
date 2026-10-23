@@ -28,7 +28,12 @@ public class SecureFileOutputStreamTest {
         _f.deleteOnExit();
     }
 
-    /** POSIX attribute view present? Skip silently otherwise. */
+    /**
+     * POSIX attribute view present? Skip silently otherwise.
+     *
+     * @return true if the default file system exposes the POSIX attribute view, in
+     *         which case the permission assertions below are meaningful
+     */
     private static boolean isPosix() {
         return FileSystems.getDefault().supportedFileAttributeViews().contains("posix");
     }
@@ -37,6 +42,9 @@ public class SecureFileOutputStreamTest {
      * SetGroupPerms must yield exactly 660: owner and group rw, owner/group
      * execute and all other/world bits cleared. This is the permission log
      * rotation relies on for group inspection without opening up to the world.
+     *
+     * @throws IOException if the temporary file's POSIX permissions cannot be set or
+     *                     read back
      */
     @Test
     public void testSetGroupPermsYields660() throws IOException {

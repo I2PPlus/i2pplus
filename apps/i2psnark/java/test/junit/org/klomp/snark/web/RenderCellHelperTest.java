@@ -21,14 +21,29 @@ import static org.junit.Assert.*;
  */
 public class RenderCellHelperTest {
 
-    /** The single concatenation buildStatusString used to hoist and share. */
+    /**
+     * The single concatenation buildStatusString used to hoist and share.
+     *
+     * @param curPeers the number of peers connected right now
+     * @param knownPeers the number of peers known for the torrent
+     * @param noThinsp true to use a plain " / " separator instead of the
+     *                 &thinsp; markup, for locales or browsers without it
+     * @return the peer-count table cell markup, up to but not including the
+     *         closing &lt;/td&gt;
+     */
     private static String refPeerCountHtml(int curPeers, int knownPeers, boolean noThinsp) {
         String thinsp = noThinsp ? " / " : ("&thinsp;/&thinsp;");
         return "</td><td class=peerCount><b><span class=right>" + curPeers + "</span>"
                + thinsp + "<span class=left>" + knownPeers + "</span>";
     }
 
-    /** The linear endsWith scan toIcon used to run over every registered suffix. */
+    /**
+     * The linear endsWith scan toIcon used to run over every registered suffix.
+     *
+     * @param lowerPath the file name already lower-cased, as toIcon passes it
+     * @param suffixes the registered suffix to icon-name map
+     * @return the icon name for the matching suffix, null if no key matches
+     */
     private static String refSuffixScan(String lowerPath, Map<String, String> suffixes) {
         for (Map.Entry<String, String> entry : suffixes.entrySet()) {
             if (lowerPath.endsWith(entry.getKey())) {
@@ -137,6 +152,8 @@ public class RenderCellHelperTest {
      * The whole reason a single lookup may replace the scan: with no suffix
      * suffixed by another, at most one key can match a path, so the scan's
      * iteration order was never observable.
+     *
+     * @throws Exception if reflection on the servlet's suffix icon map fails
      */
     @Test
     public void singleLookupAgreesWithScanOverEveryRegisteredPair() throws Exception {

@@ -113,6 +113,8 @@ public class RateRecentSamplesTest {
      * report a step stamp — a backfilling listener has no other way to know which
      * step a sample is for. Compared against the rate's own getters, since the
      * coalesce path rescales event time by how far over the period the visit was.
+     *
+     * @throws Exception if the brief sleep is interrupted
      */
     @Test
     public void retainedSampleCarriesTheCoalescedValues() throws Exception {
@@ -157,6 +159,9 @@ public class RateRecentSamplesTest {
      * On-time coalesces stamp the due step and leave the grid there, so the stamp is
      * fully determined by the creation instant and the period — independent of when
      * the test happened to run.
+     *
+     * @throws Exception if the sleep waiting for the period to come due is
+     *                   interrupted
      */
     @Test
     public void onTimeCoalesceStampsTheDueStepWithoutCollapsing() throws Exception {
@@ -182,6 +187,8 @@ public class RateRecentSamplesTest {
      * A starved timer cannot be replayed — a rate holds only the current partial
      * period — so the backlog collapses into the current step and is counted. The
      * tell is that the stamp is the current time rather than the missed due step.
+     *
+     * @throws Exception if the sleep past the collapse threshold is interrupted
      */
     @Test
     public void starvedTimerCollapsesTheBacklogIntoTheCurrentStep() throws Exception {
@@ -208,6 +215,8 @@ public class RateRecentSamplesTest {
      * After a collapse the grid is aligned again, so the next visit resumes one step
      * per period instead of collapsing forever. Without the realignment the count
      * would climb on every coalesce and a single stall would cost every later step.
+     *
+     * @throws Exception if the sleep before the first coalesce is interrupted
      */
     @Test
     public void gridRecoversAfterACollapse() throws Exception {
@@ -237,6 +246,8 @@ public class RateRecentSamplesTest {
      * timer jitter — instead of by how long the data actually accrued. The grid
      * error is negative whenever the visit lands before the due instant, which turns
      * the rescale negative and the whole saturation family of statistics with it.
+     *
+     * @throws Exception if one of the pacing sleeps is interrupted
      */
     @Test
     public void eventTimeIsRescaledByRealElapsedTimeNotTheGridError() throws Exception {

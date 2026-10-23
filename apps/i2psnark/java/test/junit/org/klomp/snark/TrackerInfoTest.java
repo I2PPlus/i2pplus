@@ -32,7 +32,12 @@ public class TrackerInfoTest {
         return new TrackerInfo(in, MY_ID, INFOHASH, null, util);
     }
 
-    /** A 32-byte compact peer entry, as a tracker sends it. */
+    /**
+     * A 32-byte compact peer entry, as a tracker sends it.
+     *
+     * @param fill the byte value repeated for all 32 bytes of the entry
+     * @return the 32 fill characters as ISO-8859-1 text, one peer entry
+     */
     private static String compactPeer(char fill) {
         StringBuilder sb = new StringBuilder(32);
         for (int i = 0; i < 32; i++) {
@@ -41,7 +46,11 @@ public class TrackerInfoTest {
         return sb.toString();
     }
 
-    /** A failure response has no peers, and must still hand back an empty set. */
+    /**
+     * A failure response has no peers, and must still hand back an empty set.
+     *
+     * @throws Throwable on tracker response parse failure
+     */
     @Test
     public void testFailureResponseHasEmptyPeerSet() throws Throwable {
         TrackerInfo info = parse("d14:failure reason7:go awaye");
@@ -51,7 +60,11 @@ public class TrackerInfoTest {
         assertEquals(0, info.getPeerCount());
     }
 
-    /** A success response with no peers key hands back an empty set. */
+    /**
+     * A success response with no peers key hands back an empty set.
+     *
+     * @throws Throwable on tracker response parse failure
+     */
     @Test
     public void testNoPeersKeyGivesEmptySet() throws Throwable {
         TrackerInfo info = parse("d8:intervali1800ee");
@@ -61,7 +74,11 @@ public class TrackerInfoTest {
         assertEquals(1800, info.getInterval());
     }
 
-    /** A compact peer list is decoded and handed back unmodifiable. */
+    /**
+     * A compact peer list is decoded and handed back unmodifiable.
+     *
+     * @throws Throwable on tracker response parse failure
+     */
     @Test
     public void testCompactPeersAreUnmodifiable() throws Throwable {
         TrackerInfo info = parse("d8:intervali1800e5:peers32:" + compactPeer('a') + "e");
@@ -77,7 +94,11 @@ public class TrackerInfoTest {
         }
     }
 
-    /** Two compact peer entries are both decoded. */
+    /**
+     * Two compact peer entries are both decoded.
+     *
+     * @throws Throwable on tracker response parse failure
+     */
     @Test
     public void testTwoCompactPeers() throws Throwable {
         TrackerInfo info =
@@ -88,6 +109,8 @@ public class TrackerInfoTest {
     /**
      * The peer count still reflects the scrape numbers when they exceed the peer list size.
      * The sum has one subtracted because it counts us as well.
+     *
+     * @throws Throwable on tracker response parse failure
      */
     @Test
     public void testPeerCountPrefersTheLargerScrape() throws Throwable {
@@ -98,7 +121,11 @@ public class TrackerInfoTest {
         assertEquals(49, info.getPeerCount());
     }
 
-    /** A response with no interval is rejected, as before. */
+    /**
+     * A response with no interval is rejected, as before.
+     *
+     * @throws Throwable on tracker response parse failure
+     */
     @Test(expected = Exception.class)
     public void testMissingIntervalRejected() throws Throwable {
         parse("d5:peers0:e");

@@ -104,7 +104,15 @@ public class TunerReflectorTargetTest {
         assertNull(Tuner.reflectorTargetClass("setNotBoundAnywhere"));
     }
 
-    /** Loads each bound class once, from the classpath or the module build output. */
+    /**
+     * Loads each bound class once, from the classpath or the module build output.
+     *
+     * @param targets bound method name to fully-qualified class name, as the
+     *                Tuner binds them
+     * @param skipped filled in with the bound class names this environment cannot
+     *                see, e.g. a module that was never built
+     * @return the classes that were found, keyed by their fully-qualified name
+     */
     private static Map<String, Class<?>> loadTargets(Map<String, String> targets,
                                                      List<String> skipped) {
         Map<String, Class<?>> loaded = new LinkedHashMap<String, Class<?>>();
@@ -122,6 +130,10 @@ public class TunerReflectorTargetTest {
      * Finds the class by name, falling back to the module's compiled output so the
      * check is not limited to what the router test classpath happens to carry. The
      * test classloader is the parent, so the module class can link against core.
+     *
+     * @param className fully-qualified name of the class to resolve
+     * @return the class, or null if neither the classpath nor the module build
+     *         output under {@code i2p.build.root} carries it
      */
     private static Class<?> load(String className) {
         try {
@@ -150,7 +162,14 @@ public class TunerReflectorTargetTest {
         return null;
     }
 
-    /** The static method of that name declared by the class or any superclass. */
+    /**
+     * The static method of that name declared by the class or any superclass.
+     *
+     * @param c the class whose declaration chain is searched, up to Object
+     * @param name exact method name to match
+     * @return the first static method with that name declared by c or a
+     *         superclass, or null if none declares one
+     */
     private static Method findStatic(Class<?> c, String name) {
         for (Class<?> k = c; k != null; k = k.getSuperclass()) {
             for (Method m : k.getDeclaredMethods()) {

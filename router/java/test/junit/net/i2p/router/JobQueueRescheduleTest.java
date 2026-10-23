@@ -59,6 +59,8 @@ public class JobQueueRescheduleTest {
      *
      * @param name the private field name on JobQueue
      * @return the field's value
+     * @throws Exception if the field is not declared by JobQueue or is not
+     *                   accessible
      */
     private Object field(String name) throws Exception {
         Field f = JobQueue.class.getDeclaredField(name);
@@ -70,6 +72,8 @@ public class JobQueueRescheduleTest {
      * The future-scheduled skip list.
      *
      * @return the live set of not-yet-ready jobs
+     * @throws Exception if the {@code _timedJobs} field is missing or
+     *                   inaccessible
      */
     @SuppressWarnings("unchecked")
     private ConcurrentSkipListSet<Job> timed() throws Exception {
@@ -81,6 +85,7 @@ public class JobQueueRescheduleTest {
      *
      * @param name the private queue field name
      * @return that queue's contents
+     * @throws Exception if the named queue field is missing or inaccessible
      */
     @SuppressWarnings("unchecked")
     private List<Job> queue(String name) throws Exception {
@@ -94,6 +99,7 @@ public class JobQueueRescheduleTest {
      *
      * @param job the instance to count
      * @return copies in {@code _timedJobs}, so 0 means the job was dropped
+     * @throws Exception if reading {@code _timedJobs} reflectively fails
      */
     private int timedCopies(Job job) throws Exception {
         int n = 0;
@@ -108,6 +114,7 @@ public class JobQueueRescheduleTest {
      *
      * @param job the instance to count
      * @return copies in the three ready queues
+     * @throws Exception if a ready-queue field is missing or inaccessible
      */
     private int readyCopies(Job job) throws Exception {
         int n = 0;
@@ -124,6 +131,7 @@ public class JobQueueRescheduleTest {
      *
      * @param job the instance to count
      * @return copies held by the queue, so 0 means the job was dropped
+     * @throws Exception if reading {@code _timedJobs} or a ready queue reflectively fails
      */
     private int copies(Job job) throws Exception {
         return readyCopies(job) + timedCopies(job);
@@ -151,6 +159,9 @@ public class JobQueueRescheduleTest {
      * The core regression: adding a job that is already scheduled must leave it
      * scheduled. Removing it from {@code _timedJobs} without putting it back
      * silently cancels the job for the rest of the router's life.
+     *
+     * @throws Exception if reading {@code _timedJobs} or a ready queue
+     *                   reflectively fails
      */
     @Test
     public void testReAddOfScheduledJobStaysScheduled() throws Exception {
@@ -169,6 +180,8 @@ public class JobQueueRescheduleTest {
      * Re-adding repeatedly must be idempotent, not additive: a periodic job
      * re-added on every pass would otherwise grow {@code _timedJobs} without
      * bound and run its body once per copy.
+     *
+     * @throws Exception if reading {@code _timedJobs} or a ready queue reflectively fails
      */
     @Test
     public void testRepeatedReAddsStayOneCopy() throws Exception {
@@ -185,6 +198,8 @@ public class JobQueueRescheduleTest {
      * The fix must not make removeJob() unable to cancel a scheduled job -
      * otherwise a job removed by a shutdown path would be resurrected by the
      * next re-add and run against a context that has moved on.
+     *
+     * @throws Exception if reading {@code _timedJobs} or a ready queue reflectively fails
      */
     @Test
     public void testRemoveJobStillCancelsScheduledJob() throws Exception {
@@ -202,6 +217,8 @@ public class JobQueueRescheduleTest {
     /**
      * A job that was never scheduled takes the normal path unchanged, so the
      * reschedule branch did not become the only working one.
+     *
+     * @throws Exception if reading {@code _timedJobs} or a ready queue reflectively fails
      */
     @Test
     public void testFirstAddOfFutureJobIsScheduledOnce() throws Exception {

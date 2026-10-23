@@ -204,6 +204,11 @@ public class IVFilterSizerTest {
     /**
      * Roughly the entry count that m is sized for at the target rate, found by
      * walking the sizing helper back down from m.
+     *
+     * @param m number of bits the filter was built with, the upper bound of the
+     *          search
+     * @return the largest entry count for which DecayingBloomFilter.mForEntries
+     *         still fits in m bits
      */
     private static int entriesFor(int m) {
         int lo = 1, hi = 1 << 24;

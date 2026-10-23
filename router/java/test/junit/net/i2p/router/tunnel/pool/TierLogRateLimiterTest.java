@@ -28,7 +28,14 @@ public class TierLogRateLimiterTest {
     private final Map<String, Long> logTime = new ConcurrentHashMap<>(8);
     private final Map<String, Long> logCount = new ConcurrentHashMap<>(8);
 
-    /** Mirrors the production limiter, including the compute-based fix. */
+    /**
+     * Mirrors the production limiter, including the compute-based fix.
+     *
+     * @param key tier name whose limiter slot is consulted, e.g. "tier0"
+     * @param now current time in milliseconds since the epoch
+     * @return true when this call may emit the tier's log line, false while the
+     *         60-second interval since the last emission is still running
+     */
     private boolean allowed(String key, long now) {
         logCount.merge(key, 1L, Long::sum);
         long[] logged = new long[1];

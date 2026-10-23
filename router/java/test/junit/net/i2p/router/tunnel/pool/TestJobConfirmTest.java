@@ -48,7 +48,12 @@ public class TestJobConfirmTest {
         when(_ctx.clock()).thenReturn(clock);
     }
 
-    /** A freshly recorded strike, one window old, inside the strike window. */
+    /**
+     * A freshly recorded strike, one window old, inside the strike window.
+     *
+     * @return a 2-hop mock tunnel that has not failed and whose test status is
+     *         {@link TunnelTestStatus#GOOD}
+     */
     private static TunnelInfo livePartner() {
         TunnelInfo t = mock(TunnelInfo.class);
         when(t.getLength()).thenReturn(2);

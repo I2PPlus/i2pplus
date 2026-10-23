@@ -57,7 +57,12 @@ public class LogsHelperRewritesTest {
         return sb.toString();
     }
 
-    /** {@code formatMessages} rewrites A: escaped entities through the yes/no tick. */
+    /**
+     * {@code formatMessages} rewrites A: escaped entities through the yes/no tick.
+     *
+     * @param msg the log message to rewrite, with its HTML entities still escaped
+     * @return the message after group A's replacements, applied in the original order
+     */
     private static String referenceRewritesA(String msg) {
         msg = msg.replace("&amp;darr;", "&darr;");
         msg = msg.replace("&amp;uarr;", "&uarr;");
@@ -84,7 +89,12 @@ public class LogsHelperRewritesTest {
         return msg;
     }
 
-    /** {@code formatMessages} rewrites B: the un-ticking of "=true" / "=false" and IRC labels. */
+    /**
+     * {@code formatMessages} rewrites B: the un-ticking of "=true" / "=false" and IRC labels.
+     *
+     * @param msg the message already rewritten by group A
+     * @return the message after group B's replacements, ending with the bullet separator
+     */
     private static String referenceRewritesB(String msg) {
         msg = msg.replace("=[&#10004;]", "=true");
         msg = msg.replace("=[&#10008;]", "=false");
@@ -97,7 +107,12 @@ public class LogsHelperRewritesTest {
         return msg;
     }
 
-    /** {@code formatMessages} rewrites C: markup stripping, the ellipsis, and the double bracket. */
+    /**
+     * {@code formatMessages} rewrites C: markup stripping, the ellipsis, and the double bracket.
+     *
+     * @param msg the message already rewritten by groups A and B
+     * @return the message after group C's replacements, with the inline markup removed
+     */
     private static String referenceRewritesC(String msg) {
         msg = msg.replace("\r\n\r\n", "");
         msg = msg.replace("<br>:", " ");
@@ -110,7 +125,12 @@ public class LogsHelperRewritesTest {
         return msg;
     }
 
-    /** {@code getServiceLogs} rewrites: the wrapper-log column fixups, in their original order. */
+    /**
+     * {@code getServiceLogs} rewrites: the wrapper-log column fixups, in their original order.
+     *
+     * @param str one wrapper-log line, as read from the wrapper log file
+     * @return the line with its level column and thread-name padding corrected
+     */
     private static String referenceWrapperRewrites(String str) {
         str = str.replace("| |", "|");
         str = str.replace("| INFO   | INFO:", "| INFO   |");
@@ -134,18 +154,36 @@ public class LogsHelperRewritesTest {
         return str;
     }
 
-    /** The message rewrite tables are private, so drive them through the shared engine. */
+    /**
+     * The message rewrite tables are private, so drive them through the shared engine.
+     *
+     * @param msg the log message to rewrite
+     * @return the message after rewrite groups A, B and C, applied in that order
+     */
     private static String messageRewrites(String msg) {
         msg = LogsHelper.applyRewrites(msg, logsRewrites("MSG_REWRITES_A"));
         msg = LogsHelper.applyRewrites(msg, logsRewrites("MSG_REWRITES_B"));
         return LogsHelper.applyRewrites(msg, logsRewrites("MSG_REWRITES_C"));
     }
 
-    /** Reads a private rewrite table or pattern reflectively so the test cannot drift from the source. */
+    /**
+     * Reads a private rewrite table or pattern reflectively so the test cannot
+     * drift from the source.
+     *
+     * @param name the {@code LogsHelper} field to read, e.g. {@code MSG_REWRITES_A}
+     * @return the field's value as a rewrite table, each row an old-new replacement pair
+     */
     private static String[][] logsRewrites(String name) {
         return (String[][]) logsField(name);
     }
 
+    /**
+     * Fetches a static {@code LogsHelper} field without recompiling against it, so a
+     * renamed or retyped field fails here with a named assertion instead of a cast error.
+     *
+     * @param name the field's simple name, e.g. {@code LOG_HUTD}
+     * @return the field's current value, a rewrite table or a compiled {@link Pattern}
+     */
     private static Object logsField(String name) {
         try {
             java.lang.reflect.Field f = LogsHelper.class.getDeclaredField(name);
@@ -184,7 +222,13 @@ public class LogsHelperRewritesTest {
         assertEquals("\\|.*\\[.*-Connection].*?:", ((Pattern) logsField("LOG_CONNECTION")).pattern());
     }
 
-    /** The wrapper-log pattern for a name, as declared before the hoisting. */
+    /**
+     * The wrapper-log pattern for a name, as declared before the hoisting.
+     *
+     * @param name one of the {@code LOG_*} wrapper-log field names; anything else
+     *             falls through to the queue pattern, as in the original switch
+     * @return the compiled pattern the hoisted {@code LogsHelper} field must equal
+     */
     private static Pattern referenceWrapperPattern(String name) {
         switch (name) {
             case "LOG_HUTD": return Pattern.compile("\\|.*\\[.*hutd.*\\].*?:");

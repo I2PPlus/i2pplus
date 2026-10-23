@@ -19,11 +19,10 @@ import org.junit.Test;
 public class ReduceVerticesTest {
 
     /**
-     * X values 0 through n-1 for the given Y values.
+     * X coordinates to pair with the given Y values, spaced 10 apart from 0.
      *
-     * @param x source x coordinates
-     * @param y source y coordinates
-     * @return evenly spaced x coordinates, one per sample
+     * @param y source y coordinates, one per sample
+     * @return x coordinates at 0, 10, 20 and so on, one per y value
      */
     private static double[] rampX(double... y) {
         double[] x = new double[y.length];
@@ -39,6 +38,8 @@ public class ReduceVerticesTest {
      * @param xv collected x coordinates, trimmed to count
      * @param yv collected y coordinates, trimmed to count
      * @param count number of vertices written
+     * @param expX the x coordinates expected, whose length is the expected vertex count
+     * @param expY the y coordinates expected, one per entry of expX
      */
     private static void assertVertices(int[] xv, int[] yv, int count, int[] expX, int[] expY) {
         assertEquals("vertex count", expX.length, count);

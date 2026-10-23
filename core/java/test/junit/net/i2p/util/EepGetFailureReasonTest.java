@@ -9,7 +9,7 @@ import java.net.SocketTimeoutException;
 import org.junit.Test;
 
 /**
- * The reason string EepGet prints for a failed attempt. A bare "-> null"
+ * The reason string EepGet prints for a failed attempt. A bare "-&gt; null"
  * carries no information, so a message-less timeout names the inactivity
  * budget that expired, and any other message-less exception falls back to
  * its class name.

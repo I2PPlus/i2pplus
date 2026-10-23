@@ -10,9 +10,9 @@ import org.klomp.snark.comments.CommentSet;
 import org.junit.Test;
 
 /**
- * Tests for I2PSnarkServlet displayComments helpers:
- * {@link I2PSnarkServlet#renderCommentsHeader},
- * {@link I2PSnarkServlet#renderCommentsList}.
+ * Tests for the displayComments value types {@link I2PSnarkServlet.CommentsContext}
+ * and {@link I2PSnarkServlet.CommentsHeaderResult}, the state the private
+ * {@code renderCommentsHeader()} and {@code renderCommentsSection()} helpers work on.
  *
  * @since 0.9.71+
  */

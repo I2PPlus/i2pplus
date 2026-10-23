@@ -49,7 +49,7 @@ public class BuildExpiryDecisionTest {
 
     /**
      * The defect. A HopConfig that no caller stamped with setCreation() keeps the
-     * -1 its constructor gave it, and the old `created > 0` guard therefore
+     * -1 its constructor gave it, and the old `created &gt; 0` guard therefore
      * refused to expire it at all. With nothing to age it against, the only
      * correct answer is to expire it rather than hold the slot forever.
      */
@@ -66,7 +66,7 @@ public class BuildExpiryDecisionTest {
 
     /**
      * A creation time in the future, from clock skew, must not expire on age
-     * alone. That is why the comparison is `now >= created + timeout` rather
+     * alone. That is why the comparison is `now &gt;= created + timeout` rather
      * than a difference against zero.
      */
     @Test

@@ -62,12 +62,26 @@ public class TunnelPoolLeaseAssemblyTest {
      * A one-hop tunnel with a distinct identity, expiring far enough ahead that
      * {@code computeLeaseEndDate} clamps it to the lease cap — the condition that made every
      * lease in the pool share one end time.
+     *
+     * @param index selects this tunnel's receive tunnel id and gateway hash, so
+     *              every call yields a distinct tunnel
+     * @return a one-hop tunnel with id {@code 1000 + index} and gateway
+     *         {@code index + 1}
      */
     private static TunnelInfo tunnel(int index) {
         return tunnel(index, 1000 + index, index + 1);
     }
 
-    /**  A one-hop tunnel with the given identity, expiring past the lease cap. */
+    /**
+     * A one-hop tunnel with the given identity, expiring past the lease cap.
+     *
+     * @param index unused by the body; callers pass the tunnel's position in the
+     *              list being offered
+     * @param receiveTunnelId receive tunnel id of the single hop, the value the
+     *                        lease carries
+     * @param gateway ordinal the gateway hash is built from
+     * @return a one-hop tunnel config expiring 60 minutes after the current time
+     */
     private static TunnelInfo tunnel(int index, long receiveTunnelId, int gateway) {
         PooledTunnelCreatorConfig cfg =
             new PooledTunnelCreatorConfig(_ctx, 1, true, null, pool(TUNNELS));
@@ -77,7 +91,12 @@ public class TunnelPoolLeaseAssemblyTest {
         return cfg;
     }
 
-    /**  A gateway hash built from an ordinal, so each test tunnel is distinct. */
+    /**
+     * A gateway hash built from an ordinal, so each test tunnel is distinct.
+     *
+     * @param ordinal written into the hash's first four bytes, big-endian
+     * @return a hash whose first four bytes are the ordinal and the rest zero
+     */
     private static Hash hash(int ordinal) {
         byte[] data = new byte[Hash.HASH_LENGTH];
         data[0] = (byte) (ordinal >>> 24);
@@ -154,7 +173,13 @@ public class TunnelPoolLeaseAssemblyTest {
         assertEquals("a re-offered tunnel must not shrink the LeaseSet", 2, leases.size());
     }
 
-    /**  Distinct receive tunnel ids, in the order offered. */
+    /**
+     * Distinct receive tunnel ids, in the order offered.
+     *
+     * @param tunnels the tunnels as offered, repeats included
+     * @return the tunnels whose receive tunnel id has not been seen yet, in the
+     *         order offered; a tunnel with no receive tunnel id is dropped
+     */
     private static List<TunnelInfo> dedupeByLeaseKey(List<TunnelInfo> tunnels) {
         List<TunnelInfo> out = new ArrayList<>();
         java.util.Set<Long> seen = new java.util.HashSet<>();

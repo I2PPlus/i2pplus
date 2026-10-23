@@ -104,7 +104,12 @@ public class KRPCFilterTest {
         return fill(start, 32);
     }
 
-    /** An exact copy of the given node info, equal but a different object. */
+    /**
+     * An exact copy of the given node info, equal but a different object.
+     *
+     * @param n the node info to duplicate
+     * @return a new NodeInfo equal to n, for self-echo identity checks
+     */
     private static NodeInfo copy(NodeInfo n) {
         return new NodeInfo(new NID(n.getNID().getData()), n.getHash(), n.getPort());
     }
@@ -113,6 +118,11 @@ public class KRPCFilterTest {
      * A valid NodeInfo for the given hash seed and port. The NID must match the
      * hash/port derivation enforced by {@link org.klomp.snark.dht.NodeInfo#verify}: first 4 NID bytes
      * equal the hash, bytes 4-5 are the hash bytes xored with the port.
+     *
+     * @param hashStart the first byte of the ramp that fills the 32-byte node
+     *                  hash, the rest counting up from it
+     * @param port the peer's UDP port, also folded into the NID bytes
+     * @return a NodeInfo whose NID passes {@link org.klomp.snark.dht.NodeInfo#verify}
      */
     private static NodeInfo validNode(byte hashStart, int port) {
         byte[] hb = hash(hashStart);
@@ -150,6 +160,8 @@ public class KRPCFilterTest {
     /**
      * HeardAbout and heardFrom return our own node info for a self echo without
      * storing it, and findClosest never returns an entry equal to ourselves.
+     *
+     * @throws Exception if reflection on the KRPC private node fields fails
      */
     @Test
     public void testSelfNeverStoredNorReturned() throws Exception {

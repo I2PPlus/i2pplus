@@ -50,6 +50,8 @@ public class RatchetTagSetConsumeTest {
      *
      * @param ts the tagset
      * @return its live tag window
+     * @throws Exception if {@code _sessionTags} is not a field of
+     *                   {@link RatchetTagSet} or the reflective read fails
      */
     @SuppressWarnings("unchecked")
     private static SparseArray<RatchetSessionTag> window(RatchetTagSet ts) throws Exception {
@@ -63,6 +65,8 @@ public class RatchetTagSetConsumeTest {
      *
      * @param ts the tagset
      * @return the tag-to-number index
+     * @throws Exception if {@code _tagNumbers} is not a field of
+     *                   {@link RatchetTagSet} or the reflective read fails
      */
     @SuppressWarnings("unchecked")
     private static java.util.Map<RatchetSessionTag, Integer> index(RatchetTagSet ts) throws Exception {
@@ -74,6 +78,8 @@ public class RatchetTagSetConsumeTest {
     /**
      * Every tag in the live window resolves, and resolves only once - a tag
      * spent twice must not hand out a key again.
+     *
+     * @throws Exception if reading the private tag window reflectively fails
      */
     @Test
     public void testEachTagResolvesOnce() throws Exception {
@@ -107,6 +113,8 @@ public class RatchetTagSetConsumeTest {
      * has used. This is the leak the linear scan hid: an unpruned index grows
      * past the window on every spend, and the memory it costs is what the scan
      * was trading away.
+     *
+     * @throws Exception if reading the private window or index reflectively fails
      */
     @Test
     public void testTheIndexStaysProportionalToTheWindow() throws Exception {

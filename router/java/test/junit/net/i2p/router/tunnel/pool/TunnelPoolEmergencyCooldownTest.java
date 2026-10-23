@@ -74,7 +74,7 @@ public class TunnelPoolEmergencyCooldownTest {
 
     /**
      * The short cooldown must NOT apply when only one condition holds —
-     * usable==0 but inProgress>0 uses the standard 30s window so a build
+     * usable==0 but inProgress&gt;0 uses the standard 30s window so a build
      * already underway isn't interrupted.
      */
     @Test

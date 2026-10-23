@@ -84,6 +84,9 @@ public class RatchetTagSetIndexTest {
      *
      * @param ts the tagset
      * @return its live tag window
+     * @throws Exception if the reflective read fails, because the private
+     *                   {@code _sessionTags} field no longer exists or the JVM
+     *                   refuses to make it accessible
      */
     @SuppressWarnings("unchecked")
     private static SparseArray<RatchetSessionTag> window(RatchetTagSet ts) throws Exception {
@@ -99,6 +102,7 @@ public class RatchetTagSetIndexTest {
      * not the case the index has to survive.
      *
      * @param ts the tagset to advance
+     * @throws Exception if the reflective read of the tag window fails
      */
     private static void advance(RatchetTagSet ts) throws Exception {
         for (int i = 0; i < CONSUMED; i++) {
@@ -113,6 +117,8 @@ public class RatchetTagSetIndexTest {
      * The index has to stay near the live window, not the number of tags the
      * session has used. This is the leak: the index was append-only, so after
      * 60 spends it held every tag ever generated.
+     *
+     * @throws Exception if the reflective read of the tag window in advance() fails
      */
     @Test
     public void testIndexStaysProportionalToTheWindow() throws Exception {
@@ -134,6 +140,8 @@ public class RatchetTagSetIndexTest {
      * A tag the SKM has expired must leave the index. The SKM has already
      * dropped it from its inbound map, so the index can only ever hand it back
      * as a redundant remove() - and it never stops doing so.
+     *
+     * @throws Exception if the reflective read of the tag window in advance() fails
      */
     @Test
     public void testExpiredTagsLeaveTheIndex() throws Exception {
@@ -153,6 +161,8 @@ public class RatchetTagSetIndexTest {
      * The index still holds the tags the SKM actually needs: everything in the
      * live window. Emptying the index would silently break the SKM's cleanup of
      * a finished handshake.
+     *
+     * @throws Exception if the reflective read of the tag window fails
      */
     @Test
     public void testIndexStillCoversTheLiveWindow() throws Exception {
@@ -174,6 +184,8 @@ public class RatchetTagSetIndexTest {
      * inbound map before asking for the key, so an index that keeps it can only
      * ever hand it back as a redundant remove() - and it does so on every later
      * cleanup, for the life of the session.
+     *
+     * @throws Exception if the reflective read of the tag window fails
      */
     @Test
     public void testSpentTagsLeaveTheIndex() throws Exception {
@@ -196,6 +208,8 @@ public class RatchetTagSetIndexTest {
     /**
      * Clearing the index after the SKM has removed a whole tagset's tags must
      * actually empty it - that is what releases a finished handshake's tags.
+     *
+     * @throws Exception if the reflective read of the tag window in advance() fails
      */
     @Test
     public void testClearReleasesEveryTag() throws Exception {

@@ -141,7 +141,7 @@ public class DecayingHashSetTest {
      * swap dropped the previous buffer, so a flood of unique values could
      * evict entries that were still well inside their lifetime.
      *
-     * Uses a small injected cap rather than {@link DecayingHashSet#MAX_ENTRIES},
+     * Uses a small injected cap rather than {@link DecayingHashSet#DEFAULT_MAX_ENTRIES},
      * so the test crosses the threshold in ~4k inserts instead of 151k. The
      * production default is exercised by the same code path.
      */

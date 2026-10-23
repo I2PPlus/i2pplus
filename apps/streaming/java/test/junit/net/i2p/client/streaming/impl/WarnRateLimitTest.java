@@ -39,7 +39,7 @@ public class WarnRateLimitTest {
         assertFalse(ConnectionManager.shouldLogCooldownWarn(1_000_000, 1_000_500, COOLDOWN));
     }
 
-    /** Exactly at the window boundary: log again (>= window). */
+    /** Exactly at the window boundary: log again (&gt;= window). */
     @Test
     public void testCooldownAtBoundaryLogs() {
         assertTrue(ConnectionManager.shouldLogCooldownWarn(1_000_000, 1_000_000 + COOLDOWN, COOLDOWN));

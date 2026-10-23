@@ -40,6 +40,9 @@ public class BuildExecutorPacingTest {
      * Real pool over a real context; client (non-exploratory) settings so
      * the constructor's config-map refresh is skipped. Manager and peer
      * selector are mocks — they are never touched by the skipped path.
+     *
+     * @return a live client outbound pool with an empty tunnel list, backed by
+     *         mocked manager and peer selector
      */
     private static TunnelPool createPool() {
         TunnelPoolSettings settings = new TunnelPoolSettings(false);
@@ -48,7 +51,15 @@ public class BuildExecutorPacingTest {
         return new TunnelPool(_ctx, mgr, settings, sel);
     }
 
-    /** Seed the pool's private in-progress list. */
+    /**
+     * Seed the pool's private in-progress list.
+     *
+     * @param pool the pool whose private {@code _inProgress} list is seeded
+     * @param cfg the config appended to that list, as if a build had just been
+     *            dispatched
+     * @throws Exception if the private {@code _inProgress} field is gone or
+     *                   reflection is not allowed to open it
+     */
     @SuppressWarnings("unchecked")
     private static void seedInProgress(TunnelPool pool, PooledTunnelCreatorConfig cfg) throws Exception {
         Field f = TunnelPool.class.getDeclaredField("_inProgress");
@@ -56,7 +67,15 @@ public class BuildExecutorPacingTest {
         ((List<PooledTunnelCreatorConfig>) f.get(pool)).add(cfg);
     }
 
-    /** Seed the executor's building map with an in-flight build. */
+    /**
+     * Seed the executor's building map with an in-flight build.
+     *
+     * @param exec the executor whose private {@code _currentlyBuildingMap} is seeded
+     * @param inFlight the config registered in the map, keyed by its reply message id
+     * @return the map that was seeded, so a test can inspect or clear it
+     * @throws Exception if the private building-map field is gone or reflection is
+     *                   not allowed to open it
+     */
     @SuppressWarnings("unchecked")
     private static ConcurrentHashMap<Long, PooledTunnelCreatorConfig> seedBuildingMap(BuildExecutor exec,
                                                                                       PooledTunnelCreatorConfig inFlight)
@@ -72,6 +91,8 @@ public class BuildExecutorPacingTest {
     /**
      * The removeInProgress() method must remove only the matching config, leaving
      * unrelated in-progress builds untouched.
+     *
+     * @throws Exception on reflection failure seeding the pool's private in-progress list
      */
     @Test
     public void testRemoveInProgressRemovesOnlyMatching() throws Exception {
@@ -92,6 +113,8 @@ public class BuildExecutorPacingTest {
 
     /**
      * Removing a config that is not in the list must be a silent no-op.
+     *
+     * @throws Exception not expected; the body only builds the config and asserts
      */
     @Test
     public void testRemoveInProgressUnknownIsNoOp() throws Exception {
@@ -109,6 +132,8 @@ public class BuildExecutorPacingTest {
      * it is removed from the pool's in-progress list and never added to the
      * executor's building map. Regression test for the leak where a skipped
      * config stayed in _inProgress forever.
+     *
+     * @throws Exception on reflection failure seeding the in-progress list or building map
      */
     @Test
     public void testBuildSkippedWhenFirstHopBusy() throws Exception {
@@ -135,6 +160,8 @@ public class BuildExecutorPacingTest {
     /**
      * A build to a different first hop than every in-flight build is not
      * skipped — bursting to distinct peers is allowed.
+     *
+     * @throws Exception on reflection failure seeding the building map or invoking the guard
      */
     @Test
     public void testBuildNotSkippedWhenFirstHopFree() throws Exception {
@@ -161,6 +188,8 @@ public class BuildExecutorPacingTest {
     /**
      * Emergency builds bypass the guard: with setBypassPacing, a build to a
      * busy first hop is still allowed, so a collapsed pool recovers.
+     *
+     * @throws Exception on reflection failure seeding the building map or invoking the guard
      */
     @Test
     public void testBypassPacingSkipsGuard() throws Exception {
@@ -184,7 +213,15 @@ public class BuildExecutorPacingTest {
         assertEquals(false, !cfg.isBypassPacing() && hasBuildInFlightToFirstHop(exec, cfg));
     }
 
-    /** Reflect the private guard method. */
+    /**
+     * Reflect the private guard method.
+     *
+     * @param exec the executor to invoke the guard on
+     * @param cfg the config whose peer 0 is matched against the building map
+     * @return true when a build to cfg's first hop is already in flight
+     * @throws Exception if the private guard method is gone or reflection cannot
+     *                   invoke it
+     */
     private static boolean hasBuildInFlightToFirstHop(BuildExecutor exec, PooledTunnelCreatorConfig cfg) throws Exception {
         java.lang.reflect.Method m = BuildExecutor.class.getDeclaredMethod("hasBuildInFlightToFirstHop",
                                                                            PooledTunnelCreatorConfig.class);

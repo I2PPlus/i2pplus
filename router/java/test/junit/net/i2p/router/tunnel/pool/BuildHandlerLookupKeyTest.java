@@ -23,7 +23,13 @@ import org.junit.Test;
  */
 public class BuildHandlerLookupKeyTest {
 
-    /** Deterministic 32-byte hash with every byte set to the given value. */
+    /**
+     * Deterministic 32-byte hash with every byte set to the given value.
+     *
+     * @param val byte value copied into all 32 bytes, so different arguments
+     *            give different lookup keys
+     * @return a Hash of Hash.HASH_LENGTH bytes, each one set to the value
+     */
     private static Hash hash(int val) {
         byte[] b = new byte[Hash.HASH_LENGTH];
         Arrays.fill(b, (byte) val);

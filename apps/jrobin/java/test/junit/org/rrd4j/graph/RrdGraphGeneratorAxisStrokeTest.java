@@ -45,6 +45,9 @@ public class RrdGraphGeneratorAxisStrokeTest {
      * in the document. The constant tests above all passed while the tagging matched
      * nothing, because the axis arrives as a bare {@code <line>} and the pattern was
      * written for a {@code <g>}.
+     *
+     * @throws Exception if the SVG worker cannot render the document, or the bytes it
+     *                   wrote cannot be decoded as UTF-8
      */
     @Test
     public void aLineAtTheMarkerWidthComesBackTaggedAsTheAxis() throws Exception {
@@ -55,7 +58,12 @@ public class RrdGraphGeneratorAxisStrokeTest {
                     svg.contains("stroke-width:5"));
     }
 
-    /** A line at some other width must NOT be tagged: it is a gridline or a rule. */
+    /**
+     * A line at some other width must NOT be tagged: it is a gridline or a rule.
+     *
+     * @throws Exception if the SVG worker cannot render the 1px document, or the bytes
+     *                   it wrote cannot be decoded as UTF-8
+     */
     @Test
     public void aLineAtAnOrdinaryWidthIsNotTagged() throws Exception {
         String svg = axisSvg(1f);
@@ -65,6 +73,9 @@ public class RrdGraphGeneratorAxisStrokeTest {
     /**
      * The theme's rule is what makes the axis visible, so it has to be emitted with a sane
      * width. A 5px axis was the visible symptom of the tagging failing.
+     *
+     * @throws Exception if the SVG worker cannot render the document, or the bytes it
+     *                   wrote cannot be decoded as UTF-8
      */
     @Test
     public void theThemeRuleSuppliesAThinAxis() throws Exception {
@@ -83,6 +94,9 @@ public class RrdGraphGeneratorAxisStrokeTest {
      * The axis lines are the graph's bounding box, so they must be solid. A translucent
      * rule reads as a smudge rather than an edge, and the theme colours injected for
      * {@code .axis} carry no alpha.
+     *
+     * @throws Exception if the SVG worker cannot render the document, or the bytes it
+     *                   wrote cannot be decoded as UTF-8
      */
     @Test
     public void theAxisIsSolidNotTranslucent() throws Exception {
@@ -109,6 +123,9 @@ public class RrdGraphGeneratorAxisStrokeTest {
      * number of lines lost grew with the number of groups - fine at 296x60, fatal at
      * 1000x280 where ~62 grid lines feed it. Counting drawn lines against the number
      * emitted pins it regardless of how the grouping falls out.
+     *
+     * @throws Exception if the SVG worker cannot render the 62-line document, or the
+     *                   bytes it wrote cannot be decoded as UTF-8
      */
     @Test
     public void noDrawnLineIsLostToGroupCollapsing() throws Exception {
@@ -141,6 +158,9 @@ public class RrdGraphGeneratorAxisStrokeTest {
      * 1000x200. {@code isLarge} is {@code width >= 600 && height >= 200}, so the tagging
      * was sensitive to a flag that only chooses between a 1px and 2px CSS stroke. Whatever
      * the coupling is, it has to hold on both sides of that boundary.
+     *
+     * @throws Exception if the SVG worker cannot render one of the four sizes, or the
+     *                   bytes it wrote cannot be decoded as UTF-8
      */
     @Test
     public void theAxisIsTaggedAtEverySize() throws Exception {
@@ -152,7 +172,17 @@ public class RrdGraphGeneratorAxisStrokeTest {
         }
     }
 
-    /** Draw two axis lines at the given size and width, and return the finished SVG. */
+    /**
+     * Draw two axis lines at the given size and width, and return the finished SVG.
+     *
+     * @param w canvas width in pixels, passed straight to {@code resize()}
+     * @param h canvas height in pixels; the horizontal axis is drawn at {@code h - 10}
+     * @param width stroke width of both axis lines, in pixels; 5 is the marker the
+     *              post-processor tags as the axis
+     * @return the serialised SVG document, decoded as UTF-8
+     * @throws Exception if the SVG worker cannot render the document, or the bytes it
+     *                   wrote cannot be decoded as UTF-8
+     */
     private static String axisSvg(int w, int h, float width) throws Exception {
         SVGImageWorker worker = new SVGImageWorker(0, 0, false, false, "dark");
         worker.resize(w, h);
@@ -166,14 +196,27 @@ public class RrdGraphGeneratorAxisStrokeTest {
         return os.toString("UTF-8");
     }
 
-    /** Count <line> elements in the output. */
+    /**
+     * Count {@code <line>} elements in the output.
+     *
+     * @param svg the serialised SVG document to scan
+     * @return how many {@code <line>} elements it contains; 0 when none survived
+     */
     private static int countLines(String svg) {
         int n = 0;
         for (int i = svg.indexOf("<line"); i >= 0; i = svg.indexOf("<line", i + 1)) {n++;}
         return n;
     }
 
-    /** Draw one line at the given width and return the finished SVG. */
+    /**
+     * Draw one line at the given width and return the finished SVG.
+     *
+     * @param width stroke width of the line, in pixels; 5 is the marker the
+     *              post-processor tags as the axis
+     * @return the serialised SVG document, decoded as UTF-8
+     * @throws Exception if the SVG worker cannot render the document, or the bytes it
+     *                   wrote cannot be decoded as UTF-8
+     */
     private static String axisSvg(float width) throws Exception {
         SVGImageWorker w = new SVGImageWorker(0, 0, false, false, "dark");
         w.resize(400, 150);

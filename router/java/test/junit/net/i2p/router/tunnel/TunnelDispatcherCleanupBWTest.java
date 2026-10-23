@@ -44,7 +44,12 @@ public class TunnelDispatcherCleanupBWTest {
             _dispatcher.shutdown();
     }
 
-    /** A participant joined with a bandwidth allocation and an expiry an hour out. */
+    /**
+     * A participant joined with a bandwidth allocation and an expiry an hour out.
+     *
+     * @param id the receive tunnel id to join with, unique among the test's participants
+     * @return the config that was joined, for the caller to expire or charge later
+     */
     private HopConfig join(long id) {
         HopConfig cfg = new HopConfig();
         cfg.setReceiveTunnelId(new TunnelId(id));
@@ -60,12 +65,19 @@ public class TunnelDispatcherCleanupBWTest {
      * What the dispatcher actually charged for a joined tunnel. TunnelParticipant
      * raises a small allocation to its own per-tunnel estimate during the join,
      * so the requested BW is not what ends up in the total.
+     *
+     * @param cfg a config that has already been joined
+     * @return the allocation now recorded on the config, in bytes per second
      */
     private static int charged(HopConfig cfg) {
         return cfg.getAllocatedBW();
     }
 
-    /** Move a joined tunnel well past expiration + fudge. */
+    /**
+     * Move a joined tunnel well past expiration + fudge.
+     *
+     * @param cfg the joined config to push 10 minutes into the past
+     */
     private void expire(HopConfig cfg) {
         cfg.setExpiration(_now - 10 * MIN);
     }

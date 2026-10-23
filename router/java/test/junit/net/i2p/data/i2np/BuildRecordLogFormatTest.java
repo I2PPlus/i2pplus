@@ -67,6 +67,11 @@ public class BuildRecordLogFormatTest {
     /**
      * A hash with a known, distinct value, so the truncations and the full
      * encodings can be told apart.
+     *
+     * @param b byte value written to the first byte; the last byte gets b + 1, so
+     *          each argument yields a different hash
+     * @return a hash of Hash.HASH_LENGTH bytes whose first and last bytes come
+     *         from the argument and whose remaining bytes are zero
      */
     private static Hash hash(int b) {
         byte[] data = new byte[Hash.HASH_LENGTH];

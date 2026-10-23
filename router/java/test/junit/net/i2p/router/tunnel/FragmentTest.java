@@ -76,6 +76,8 @@ public class FragmentTest {
     /**
      * Send a message with two fragments through with no delay.
      *
+     * @throws Exception not expected; preprocessQueue declares no checked exceptions, and the
+     *                   UnsupportedOperationException it raises is caught in the body
      */
     @Test
     public void testMultiple() throws Exception {

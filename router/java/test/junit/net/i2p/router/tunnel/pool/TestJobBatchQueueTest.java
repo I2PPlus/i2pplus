@@ -392,6 +392,14 @@ public class TestJobBatchQueueTest {
      * A candidate with a caller-chosen tunnel id, so several distinct
      * candidates can share one fixture style without colliding on the
      * running-test key.
+     *
+     * @param pool the pool the config claims to belong to; null for a config no
+     *             live pool lists, so the pool-membership check fails
+     * @param expiration the absolute expiry time in ms; before NOW for an
+     *                   already expired candidate
+     * @param tunnelId the receive tunnel id the config reports, the key the
+     *                 running-test map is indexed by
+     * @return a mock inbound candidate reported as UNTESTED
      */
     private static PooledTunnelCreatorConfig pendingCfgWithId(TunnelPool pool, long expiration,
                                                                long tunnelId) {

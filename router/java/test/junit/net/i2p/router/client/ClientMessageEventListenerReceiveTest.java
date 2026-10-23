@@ -26,12 +26,22 @@ public class ClientMessageEventListenerReceiveTest {
         I2PAppContext.getGlobalContext();
     }
 
-    /** A live session on the connection. */
+    /**
+     * A live session on the connection.
+     *
+     * @return a non-null SessionConfig, what the listener finds when the message
+     *         names an open session
+     */
     private static SessionConfig liveSession() {
         return new SessionConfig();
     }
 
-    /** A retained, non-null payload. */
+    /**
+     * A retained, non-null payload.
+     *
+     * @return a Payload with four bytes of encrypted data set, standing in for a
+     *         payload retained for a message id
+     */
     private static Payload retainedPayload() {
         Payload payload = new Payload();
         payload.setEncryptedData(new byte[] {1, 2, 3, 4});

@@ -262,7 +262,15 @@ public class FirstHopRttTest {
             profile.getLowLatencyForFirstHopRtt(NOW, 1000));
     }
 
-    /** Helper driving the real profile method. */
+    /**
+     * Helper driving the real profile method.
+     *
+     * @param rtt the first-hop RTT to record on the profile, in milliseconds; it is narrowed to
+     *            an int before storing, so keep it inside the int range
+     * @param ceiling the low-latency ceiling handed to the profile, in milliseconds
+     * @return TRUE when the RTT clears both the ceiling and the profile's absolute floor, FALSE
+     *         when either one rejects it
+     */
     private static Boolean isLow(long rtt, long ceiling) {
         RouterContext ctx = RouterTestHelper.getContext();
         org.junit.Assume.assumeTrue("no RouterContext available", ctx != null);

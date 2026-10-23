@@ -167,6 +167,12 @@ public class ProfileOrganizerSpeedRankDecisionTest {
     /**
      * The pre-optimisation implementation, verbatim: filter, sort the qualifiers
      * by speed descending, read rank min(30% of the qualifying count, 50).
+     *
+     * @param reordered         the profiles to consider, in whatever order the caller has
+     *                          them
+     * @param capacityThreshold the minimum {@code getCapacityValue()} a profile needs to
+     *                          qualify, in the profile's capacity units
+     * @return the profile sitting at the speed cutoff, or null when nothing qualifies
      */
     private static PeerProfile originalBoundary(List<PeerProfile> reordered, double capacityThreshold) {
         List<PeerProfile> candidates = new ArrayList<>();
@@ -181,7 +187,16 @@ public class ProfileOrganizerSpeedRankDecisionTest {
         return candidates.get(cutoff);
     }
 
-    /** The k-th fastest qualifying profile by brute force, 1-based. */
+    /**
+     * The k-th fastest qualifying profile by brute force, 1-based.
+     *
+     * @param all               the profiles to search, in whatever order the caller has them
+     * @param capacityThreshold the minimum {@code getCapacityValue()} a profile needs to
+     *                          qualify, in the profile's capacity units
+     * @param k                 the rank to read back, 1 being the fastest qualifier; the
+     *                          caller must keep it within the qualifying count
+     * @return that qualifier's profile, so the boundary can be compared by identity
+     */
     private static PeerProfile nthFastestQualifying(List<PeerProfile> all, double capacityThreshold, int k) {
         List<PeerProfile> candidates = new ArrayList<>();
         for (PeerProfile profile : all) {
@@ -193,7 +208,15 @@ public class ProfileOrganizerSpeedRankDecisionTest {
         return candidates.get(k - 1);
     }
 
-    /** {@code qualifyingCount} qualifiers followed by {@code decoys} faster non-qualifiers. */
+    /**
+     * {@code qualifyingCount} qualifiers followed by {@code decoys} faster non-qualifiers.
+     *
+     * @param qualifyingCount how many profiles qualify: capacity {@code CAPACITY} and active
+     * @param decoys          how many profiles to add that fail the capacity gate, half of
+     *                        them inactive
+     * @return a fresh mixed set, seeded from the two counts so the same counts give the
+     *         same speeds
+     */
     private static List<PeerProfile> mixedSet(int qualifyingCount, int decoys) {
         return mixedSet(qualifyingCount, decoys, new Random(qualifyingCount * 31L + decoys));
     }
@@ -202,6 +225,12 @@ public class ProfileOrganizerSpeedRankDecisionTest {
      * Speeds are unique across the whole set, so the sorted boundary is a single
      * well-defined peer; half of the decoys are active and half inactive, and all
      * are faster than every qualifier.
+     *
+     * @param qualifyingCount how many profiles qualify: capacity {@code CAPACITY} and active
+     * @param decoys          how many profiles to add that fail the capacity gate, half of
+     *                        them active and half inactive
+     * @param rnd             the shuffle source, so a randomized sweep can be replayed
+     * @return a fresh mixed set whose speeds are unique across the whole set
      */
     private static List<PeerProfile> mixedSet(int qualifyingCount, int decoys, Random rnd) {
         List<PeerProfile> all = new ArrayList<>(qualifyingCount + decoys);

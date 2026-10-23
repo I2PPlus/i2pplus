@@ -26,6 +26,15 @@ public class ProfileOrganizerActiveWindowTest {
     /**
      * A profile with the four signals the window considers. {@code isActive} is separate from the
      * three timestamps because it is a peer-test-derived flag rather than a contact time.
+     *
+     * @param isActive what the mock reports from getIsActive() over the one-hour window
+     * @param sendOk what the mock reports as the last successful send time, in ms, or 0
+     *               when it never sent successfully
+     * @param sendFailed what the mock reports as the last failed send time, in ms, or 0
+     *                   when it never failed a send
+     * @param heard what the mock reports as the last time it heard from the peer, in ms,
+     *              or 0 when it never did
+     * @return a mocked PeerProfile answering the four activity getters with those values
      */
     private static PeerProfile profile(
             boolean isActive, long sendOk, long sendFailed, long heard) {
@@ -73,7 +82,7 @@ public class ProfileOrganizerActiveWindowTest {
         assertTrue(ProfileOrganizer.isActiveInWindow(profile(true, 0, 0, 0), HIDE_BEFORE));
     }
 
-    /** Exactly on the boundary is inside the window: the comparison is >=. */
+    /** Exactly on the boundary is inside the window: the comparison is &gt;=. */
     @Test
     public void boundaryInstantCounts() {
         assertTrue(ProfileOrganizer.isActiveInWindow(profile(false, HIDE_BEFORE, 0, 0), HIDE_BEFORE));

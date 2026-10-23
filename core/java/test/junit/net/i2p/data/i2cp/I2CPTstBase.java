@@ -26,10 +26,19 @@ import java.io.ByteArrayOutputStream;
  */
 public abstract class I2CPTstBase {
 
-    /** Create a populated structure for writing. */
+    /**
+     * Create a populated structure for writing.
+     *
+     * @return an I2CP message with every field set to a test value
+     * @throws DataFormatException if the test values cannot be encoded into a message
+     */
     public abstract I2CPMessageImpl createDataStructure() throws DataFormatException;
 
-    /** Create an unpopulated structure for reading. */
+    /**
+     * Create an unpopulated structure for reading.
+     *
+     * @return an empty I2CP message of the type under test, to be filled in by readBytes()
+     */
     public abstract I2CPMessageImpl createStructureToRead();
 
     @Test

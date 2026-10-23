@@ -60,7 +60,14 @@ public class TransientDataStoreTest {
         return ri;
     }
 
-    /** A single-lease LeaseSet whose sole lease ends at endDate. */
+    /**
+     * A single-lease LeaseSet whose sole lease ends at endDate.
+     *
+     * @param endDate absolute time in ms on the context clock when the lease
+     *                expires; a value in the past makes the lease expired
+     * @return a LeaseSet holding one lease on an all-zero gateway hash, with
+     *         tunnel id 1234
+     */
     private LeaseSet createLeaseSet(long endDate) {
         LeaseSet ls = new LeaseSet();
         Lease l = new Lease();

@@ -31,6 +31,10 @@ public class PeerQualityFilterTest {
      * Deterministic 32-byte hash seeded from the given string, built
      * without an I2PAppContext: {@link net.i2p.data.Hash#create} routes through SDSCache,
      * which requires a live context and fails standalone.
+     *
+     * @param s text whose bytes are repeated across the 32 hash bytes, so equal
+     *          strings give equal hashes
+     * @return a Hash usable as a peer key with no running context
      */
     private static Hash h(String s) {
         byte[] seed = s.getBytes();

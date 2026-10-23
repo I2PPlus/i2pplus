@@ -47,6 +47,8 @@ public class SelfSignedGeneratorSkiOffsetTest {
     /**
      * A real RSA SPKI is long-form with two length octets. Before the fix the
      * offset was 131, which for a 294-byte encoding hashed the wrong 163 bytes.
+     *
+     * @throws Exception on RSA key pair generation failure
      */
     @Test
     public void testRealRsaKeyIsLongFormAndStaysInTheHeader() throws Exception {
@@ -58,7 +60,11 @@ public class SelfSignedGeneratorSkiOffsetTest {
         assertTrue("offset " + off + " must stay inside the encoding", off < der.length);
     }
 
-    /** A real DSA SPKI is long form, so it went through the broken branch. */
+    /**
+     * A real DSA SPKI is long form, so it went through the broken branch.
+     *
+     * @throws Exception on DSA key pair generation failure
+     */
     @Test
     public void testRealDsaKeyIsLongFormAndStaysInTheHeader() throws Exception {
         byte[] der = encoded("DSA", 1024);
@@ -70,7 +76,12 @@ public class SelfSignedGeneratorSkiOffsetTest {
         assertTrue("offset " + off + " must stay inside the encoding", off < der.length);
     }
 
-    /** Ed25519's 44-byte SPKI is short form, which is why it never showed the bug. */
+    /**
+     * Ed25519's 44-byte SPKI is short form, which is why it never showed the bug.
+     *
+     * @throws Exception on key pair generation failure other than a missing
+     *                   Ed25519 algorithm, which is caught and skipped
+     */
     @Test
     public void testEd25519IsShortForm() throws Exception {
         byte[] der;
@@ -86,6 +97,9 @@ public class SelfSignedGeneratorSkiOffsetTest {
     /**
      * The general invariant over several real key types: the offset is always
      * just past the header, never a fixed 128-byte jump.
+     *
+     * @throws Exception on key pair generation failure other than a missing
+     *                   algorithm, which is caught and skipped
      */
     @Test
     public void testOffsetIsAlwaysJustPastTheHeader() throws Exception {

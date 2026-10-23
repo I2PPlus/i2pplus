@@ -61,6 +61,9 @@ public class EdDSABlindingTest {
      * blind then unblind must recover a key with the same public point.
      * The recovered scalar is the original reduced mod l, which is
      * cryptographically equivalent (same point, same signatures).
+     *
+     * @throws Exception on hash algorithm or key setup failure, or if the cross-check
+     *                   signature cannot be signed or verified
      */
     @Test
     public void testBlindUnblindRoundTrip() throws Exception {

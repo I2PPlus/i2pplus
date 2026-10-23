@@ -115,6 +115,9 @@ public class ConnectCooldownWaitTest {
     /**
      * An interrupt is a deliberate cancellation, so it does end the wait - and
      * the flag is left set for the caller to see.
+     *
+     * @throws Exception if the main thread's sleep or join is interrupted before the
+     *                   waiter finishes, so the test cannot observe the outcome
      */
     @Test
     public void testInterruptEndsTheWait() throws Exception {

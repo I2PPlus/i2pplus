@@ -27,7 +27,11 @@ public class GraphStallDecisionTest {
     /** A typical 60s rate period. */
     private static final long PERIOD = 60_000L;
 
-    /** A write that just landed, so only the elapsed time can make it stale. */
+    /**
+     * A write that just landed, so only the elapsed time can make it stale.
+     *
+     * @return a last-write timestamp 1s before NOW, far below the 2x-period stall threshold
+     */
     private static long freshWrite() { return NOW - 1000L; }
 
     ///////////// classifyStaleness
@@ -463,7 +467,11 @@ public class GraphStallDecisionTest {
         }
     }
 
-    /** A summary listener stub; identity is all the ownership test cares about. */
+    /**
+     * A summary listener stub; identity is all the ownership test cares about.
+     *
+     * @return a stateless listener, told apart only by its object identity
+     */
     private static RateSummaryListener stubListener() {
         return new RateSummaryListener() {
             @Override

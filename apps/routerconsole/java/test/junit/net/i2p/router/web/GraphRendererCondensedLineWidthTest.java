@@ -13,7 +13,14 @@ import org.junit.Test;
  */
 public class GraphRendererCondensedLineWidthTest {
 
-    /** A tile as the graphs page builds it. The smoothing flag is varied only where it matters. */
+    /**
+     * A tile as the graphs page builds it. The smoothing flag is varied only where it matters.
+     *
+     * @param width the frame width in pixels, 400 or less counts as narrow
+     * @param periods the number of periods the tile plots, the density being tested
+     * @param smooth true to draw a bezier-smoothed plot; the predicate ignores it
+     * @return a configuration with these three values set, the rest at the builder's defaults
+     */
     private static GraphRenderer.GraphRenderConfig cfg(int width, int periods, boolean smooth) {
         return GraphRenderer.GraphRenderConfig.builder()
                 .width(width)

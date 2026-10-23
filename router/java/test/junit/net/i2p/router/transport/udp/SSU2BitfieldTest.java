@@ -91,7 +91,16 @@ public class SSU2BitfieldTest {
         }
     }
 
-    /** A range array of rangeCount pairs of (255 nacked, 1 acked). */
+    /**
+     * A range array of rangeCount pairs of (255 nacked, 1 acked).
+     *
+     * @param thru the highest acked message number, unused - the array does not
+     *             depend on it, the parameter only mirrors the call sites
+     * @param acnt the acked message count, likewise unused here
+     * @param rangeCount the number of nack/ack pairs to emit, 1 or more
+     * @return a two-byte-per-pair ACK block body, each pair being 255 nacked
+     *         followed by 1 acked
+     */
     private static byte[] ranges(int thru, int acnt, int rangeCount) {
         byte[] rv = new byte[rangeCount * 2];
         for (int i = 0; i < rv.length; i += 2) {

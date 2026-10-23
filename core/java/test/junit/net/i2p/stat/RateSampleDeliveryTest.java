@@ -101,12 +101,24 @@ public class RateSampleDeliveryTest {
         }
     }
 
-    /** Stamp placing a sample in archive step {@code step}. */
+    /**
+     * Stamp placing a sample in archive step {@code step}.
+     *
+     * @param step the zero-based archive step index
+     * @return the timestamp at the start of that step, step * PERIOD ms
+     */
     private static long atStep(long step) {
         return step * PERIOD;
     }
 
-    /** Wait for a listener to have recorded {@code n} samples. */
+    /**
+     * Wait for a listener to have recorded {@code n} samples.
+     *
+     * @param values the listener's recorded-value list being polled
+     * @param n the number of samples to wait for
+     * @param what the assertion message label used if the wait times out
+     * @throws Exception if the poll sleep is interrupted
+     */
     private static void awaitSize(List<Double> values, int n, String what) throws Exception {
         long deadline = System.currentTimeMillis() + 10000;
         while (System.currentTimeMillis() < deadline) {
@@ -163,6 +175,8 @@ public class RateSampleDeliveryTest {
      * FIFO across distinct steps. Timestamps are spread one period apart so no two
      * samples compete for the same archive step and supersession cannot mask an
      * ordering defect.
+     *
+     * @throws Exception if the latch await for the delivered samples is interrupted
      */
     @Test
     public void preservesSubmissionOrder() throws Exception {
@@ -189,6 +203,8 @@ public class RateSampleDeliveryTest {
      * Two samples for one archive step are not two pieces of history: storage keeps
      * one value per step, so the older is unwritable and the queue must replace it
      * rather than grow. The replacement is also the correct value to deliver.
+     *
+     * @throws Exception if a latch await or poll sleep is interrupted
      */
     @Test
     public void sameStepSupersedesTheTailRatherThanGrowing() throws Exception {
@@ -221,6 +237,8 @@ public class RateSampleDeliveryTest {
     /**
      * Supersession must not fire across a step boundary: consecutive steps are
      * separate history and both must be delivered.
+     *
+     * @throws Exception if a latch await or poll sleep is interrupted
      */
     @Test
     public void differentStepIsNotSuperseded() throws Exception {
@@ -248,6 +266,8 @@ public class RateSampleDeliveryTest {
      * The step is only mergeable for the listener that owns it. Two distinct
      * listeners for one rate compare equal by rate name, so this also pins the
      * identity test the supersession check relies on.
+     *
+     * @throws Exception if a latch await or poll sleep is interrupted
      */
     @Test
     public void differentListenerIsNotSuperseded() throws Exception {
@@ -280,6 +300,8 @@ public class RateSampleDeliveryTest {
      * keeps the newest samples, because a graph whose tail is frozen is the
      * failure this class exists to prevent. The overrun is counted exactly, so it
      * cannot be quietly absorbed.
+     *
+     * @throws Exception if a latch await or poll sleep is interrupted
      */
     @Test
     public void hardOverflowEvictsOldestAndCountsTheOverrun() throws Exception {
@@ -342,6 +364,8 @@ public class RateSampleDeliveryTest {
      * A listener that throws must not kill the consumer: the remaining samples
      * belong to other rates, and losing the thread would silently stop delivery
      * for all of them.
+     *
+     * @throws Exception if the latch await for a failed or delivered sample is interrupted
      */
     @Test
     public void throwingListenerDoesNotStopTheConsumer() throws Exception {
@@ -366,6 +390,8 @@ public class RateSampleDeliveryTest {
      * A rate with no listener is the normal case when no console is attached, so a
      * null listener must be skipped rather than throwing on the consumer — which
      * would otherwise be logged once per rate per period.
+     *
+     * @throws Exception if the latch await for the delivered sample is interrupted
      */
     @Test
     public void nullListenerIsSkippedAndTheConsumerSurvives() throws Exception {
@@ -386,6 +412,8 @@ public class RateSampleDeliveryTest {
      * The queue's staleness is the live signal that the consumer has stopped
      * making progress, and it keeps rising while a listener is wedged — which is
      * when the overrun counter can no longer report anything useful.
+     *
+     * @throws Exception if the latch await is interrupted
      */
     @Test
     public void oldestPendingAgeReportsQueueStaleness() throws Exception {
@@ -411,6 +439,8 @@ public class RateSampleDeliveryTest {
      * A stamp from the step just past the current wall clock is normal for a rate
      * whose period has only just turned over, so the age must clamp at zero rather
      * than read as negative.
+     *
+     * @throws Exception if the latch await is interrupted
      */
     @Test
     public void oldestPendingAgeClampsAFutureStepStampToZero() throws Exception {
@@ -458,6 +488,9 @@ public class RateSampleDeliveryTest {
      * <p>The listener deliberately ignores {@link Thread#interrupt}: a write
      * blocked on a stalled disk is not interruptible, which is the whole reason
      * delivery cannot simply be abandoned at shutdown.
+     *
+     * @throws Exception if the test thread is interrupted while sleeping or
+     *                   joining the shutdown caller
      */
     @Test
     public void shutdownWaitsForTheConsumerToStop() throws Exception {
@@ -513,6 +546,8 @@ public class RateSampleDeliveryTest {
      * listener-less rate - the overwhelming majority - enqueued a null listener that
      * threw on the consumer thread once per coalesce cycle, producing thousands of
      * logged NullPointerExceptions.
+     *
+     * @throws Exception not expected; the body only submits and asserts
      */
 @Test
 public void nullListenerIsRefusedRatherThanEnqueued() throws Exception {
@@ -529,6 +564,8 @@ public void nullListenerIsRefusedRatherThanEnqueued() throws Exception {
 /**
  * The consumer must survive a burst of null submissions, which is what the
  * missing guard produced in production.
+ *
+ * @throws Exception if the latch await for the delivered sample is interrupted
  */
 @Test
 public void burstOfNullSubmissionsDoesNotKillTheConsumer() throws Exception {

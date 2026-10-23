@@ -80,7 +80,14 @@ public class RouterInfoValidationBanDecisionTest {
         assertNull(KademliaNetworkDatabaseFacade.invalidRouterInfoBanReason(null, true, true, true));
     }
 
-    /** A RouterInfo carrying the given version and capability options. */
+    /**
+     * A RouterInfo carrying the given version and capability options.
+     *
+     * @param version the router.version option value, e.g. "0.9.70"
+     * @param caps the capabilities option value, a string of single-letter caps such as "PDXU"
+     * @param published publication time in ms since the epoch; negative is the impossible-date case
+     * @return a key-less RouterInfo carrying only those three option values
+     */
     private static RouterInfo ri(String version, String caps, long published) {
         Properties opts = new Properties();
         opts.setProperty("router.version", version);

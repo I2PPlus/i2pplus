@@ -17,13 +17,13 @@ import org.klomp.snark.web.RedirectQuery;
  * Smoke tests guarding the robustness and presentation rules of the web UI:
  *
  * <ul>
- *   <li>Status messages are HTML-escaped so torrent/error text can never inject markup,
- *       while intentional '&amp;nbsp;' spacers still render as a single space.</li>
- *   <li>Post-action redirect query strings are strictly validated so a crafted query
- *       can never turn into an open redirect, while normal pagination and sort
- *       links ("?p=1&amp;sort=-1") keep working.</li>
- *   <li>Bencoded byte-array lengths are capped so a malicious peer cannot trigger a
- *       huge allocation (or a negative array size) with a bogus length prefix.</li>
+ * <li>Status messages are HTML-escaped so torrent/error text can never inject markup,
+ *   while intentional '&amp;nbsp;' spacers still render as a single space.</li>
+ * <li>Post-action redirect query strings are strictly validated so a crafted query
+ *   can never turn into an open redirect, while normal pagination and sort links
+ * ("?p=1&amp;sort=-1") keep working.</li>
+ * <li>Bencoded byte-array lengths are capped so a malicious peer cannot trigger a huge allocation
+ *   (or a negative array size) with a bogus length prefix.</li>
  * </ul>
  *
  * @since 0.9.71+
@@ -129,6 +129,9 @@ public class I2PSnarkEscapingAndValidationTest {
     /**
      * Decode a bencoded string via reflection.
      *
+     * @param bencoded the ASCII bencoded text to decode, e.g. {@code 6:foobar}
+     * @return the decoded bytes as a US-ASCII string, or null if the stream holds no value
+     * @throws Throwable if the text is not a valid bencoded byte string
      * @since 0.9.71+
      */
     private static String decodeBencoded(String bencoded) throws Throwable {

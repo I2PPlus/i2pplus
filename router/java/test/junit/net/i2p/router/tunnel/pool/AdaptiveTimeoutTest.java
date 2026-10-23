@@ -21,7 +21,7 @@ public class AdaptiveTimeoutTest {
 
     /** Lengths 0..5: lengths above 3 add 5s per extra hop. */
     private static final int[] LENGTHS = {0, 1, 2, 3, 4, 5};
-    /** Tiers bracketing the >80 (+2s) and >90 (+3s) boundaries. */
+    /** Tiers bracketing the &gt;80 (+2s) and &gt;90 (+3s) boundaries. */
     private static final int[] CPU_LOADS = {0, 80, 81, 90, 91};
     private static final boolean[] DIRECTIONS = {true, false};
 
@@ -29,6 +29,15 @@ public class AdaptiveTimeoutTest {
      * Verbatim copy of the pre-hoisting inline logic, used as the oracle: the
      * extracted arithmetic must be bit-identical to it for every combination
      * of length, direction, load tier and floor.
+     *
+     * @param baseTimeout starting timeout in ms, before any adjustment
+     * @param length number of hops in the tunnel, 0-5 in these tests; lengths
+     *               above 3 add 5s per extra hop
+     * @param isInbound true for an inbound tunnel, which takes no extra time,
+     *                  false for an outbound one, which adds 8s
+     * @param cpuLoad CPU load percentage; above 80 adds 2s, above 90 adds 3s
+     * @param rttFloor minimum timeout in ms the result is raised to, 0 for none
+     * @return the adjusted timeout in ms, capped at 45s
      */
     private static long referenceAdaptiveTimeout(long baseTimeout, int length, boolean isInbound,
                                                  int cpuLoad, long rttFloor) {
@@ -101,7 +110,7 @@ public class AdaptiveTimeoutTest {
         assertEquals(BASE + 10 * 1000L, BuildExecutor.computeAdaptiveTimeout(BASE, 5, true, 0, 0));
     }
 
-    /** Load tiers are exclusive: >90 takes +3s and does not also take +2s. */
+    /** Load tiers are exclusive: &gt;90 takes +3s and does not also take +2s. */
     @Test
     public void testCpuLoadTiers() {
         assertEquals(BASE, BuildExecutor.computeAdaptiveTimeout(BASE, 3, true, 0, 0));

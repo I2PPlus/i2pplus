@@ -20,6 +20,9 @@ public class Elligator2Test {
     /**
      * Compare two X25519 public keys, ignoring the two high bits of byte 31
      * which are randomized during Elligator2 encoding.
+     *
+     * @param expected the reference key the caller wants to see
+     * @param actual the decoded key produced by the code under test
      */
     private void assertKeysEqual(PublicKey expected, PublicKey actual) {
         byte[] eb = expected.getData().clone();
@@ -32,6 +35,10 @@ public class Elligator2Test {
     /**
      * Encode a key, retrying if encode returns null (happens when
      * Legendre symbol is -1, ~50% of keys).
+     *
+     * @param e2 the Elligator2 encoder to use
+     * @param pub the X25519 public key to encode
+     * @return the 32-byte representative, or null if all 20 attempts failed
      */
     private byte[] encodeWithRetry(Elligator2 e2, PublicKey pub) {
         for (int i = 0; i < 20; i++) {

@@ -112,7 +112,13 @@ public class ProfileOrganizerBanFilterTest {
         m.put(ri.getIdentity().getHash(), ri);
     }
 
-    /** Registers a selectable peer: valid RouterInfo in netdb plus a profile. */
+    /**
+     * Registers a selectable peer: valid RouterInfo in netdb plus a profile.
+     *
+     * @param seed the byte pattern written into this peer's keys, making its identity unique
+     * @return the {@link Hash} of the peer, as the selection calls know it
+     * @throws Exception if reflection into the netdb's peer map fails while seeding it
+     */
     private static Hash register(int seed) throws Exception {
         RouterInfo ri = routerInfo(seed);
         seedNetDb(ri);
@@ -129,6 +135,8 @@ public class ProfileOrganizerBanFilterTest {
     /**
      * The core contract, on the direct entry point every path funnels through:
      * selectable before the ban, not selectable after it.
+     *
+     * @throws Exception if reflection into the netdb's peer map fails while seeding a peer
      */
     @Test
     public void banIsWhatMakesAPeerUnselectable() throws Exception {
@@ -144,6 +152,8 @@ public class ProfileOrganizerBanFilterTest {
      * The last-resort pool is the path most likely to bypass a gate, because it
      * runs when the tiers could not supply enough peers and is documented as
      * willing to consider peers the tier drawers would reject.
+     *
+     * @throws Exception if reflection into the netdb's peer map fails while seeding a peer
      */
     @Test
     public void lastResortPoolSkipsBannedPeers() throws Exception {
@@ -162,6 +172,8 @@ public class ProfileOrganizerBanFilterTest {
      * documented as independent of the exclusion set, because a caller handing
      * over a plain set used to reduce {@code contains()} to a membership test
      * and silently skip the banlist.
+     *
+     * @throws Exception if reflection into the netdb's peer map fails while seeding a peer
      */
     @Test
     public void nullExcludeSetStillFiltersBans() throws Exception {
@@ -177,7 +189,11 @@ public class ProfileOrganizerBanFilterTest {
                    matches.contains(allowed));
     }
 
-    /** Repeated scans must stay clean: selection retries, it does not ask once. */
+    /**
+     * Repeated scans must stay clean: selection retries, it does not ask once.
+     *
+     * @throws Exception if reflection into the netdb's peer map fails while seeding a peer
+     */
     @Test
     public void repeatedScansStayClean() throws Exception {
         Hash banned = register(0xB006);
@@ -198,6 +214,8 @@ public class ProfileOrganizerBanFilterTest {
      * and whether a just-unbanned peer is immediately selectable again depends on
      * those, not on the ban filter. What must hold is that the ban is gone, or
      * {@code tearDown} has nothing to clean up and the next test inherits it.
+     *
+     * @throws Exception if reflection into the netdb's peer map fails while seeding a peer
      */
     @Test
     public void unbanClearsTheBanlistEntry() throws Exception {
@@ -213,6 +231,8 @@ public class ProfileOrganizerBanFilterTest {
      * The rejection log needs the ban cause: without it a burst of
      * {@code tunnel.buildBanHit} cannot be attributed to whichever subsystem is
      * banning peers, and the only alternative is temporary logging in each.
+     *
+     * @throws Exception if reflection into the netdb's peer map fails while seeding a peer
      */
     @Test
     public void banCauseIsReported() throws Exception {
@@ -221,14 +241,22 @@ public class ProfileOrganizerBanFilterTest {
         assertEquals("cause-for-test", _ctx.banlist().getBanCause(peer));
     }
 
-    /** No cause accessor value when there is no standing ban, so callers can test null once. */
+    /**
+     * No cause accessor value when there is no standing ban, so callers can test null once.
+     *
+     * @throws Exception if reflection into the netdb's peer map fails while seeding a peer
+     */
     @Test
     public void unbannedPeerHasNoCause() throws Exception {
         Hash peer = register(0xB00A);
         assertNull(_ctx.banlist().getBanCause(peer));
     }
 
-    /** A lifted ban must stop reporting a cause. */
+    /**
+     * A lifted ban must stop reporting a cause.
+     *
+     * @throws Exception if reflection into the netdb's peer map fails while seeding a peer
+     */
     @Test
     public void unbanClearsCause() throws Exception {
         Hash peer = register(0xB00B);
@@ -243,6 +271,8 @@ public class ProfileOrganizerBanFilterTest {
      * to leave every other candidate selectable, or a single ban would silently
      * empty the pool and look exactly like the starvation this gate exists to
      * avoid.
+     *
+     * @throws Exception if reflection into the netdb's peer map fails while seeding a peer
      */
     @Test
     public void banDoesNotAffectOtherPeers() throws Exception {

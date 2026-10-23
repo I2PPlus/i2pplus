@@ -21,7 +21,12 @@ import org.klomp.snark.I2PSnarkUtil;
  */
 public class I2PSnarkUtilHexTest {
 
-    /** The former implementation: one Integer.toHexString per byte. */
+    /**
+     * The former implementation: one Integer.toHexString per byte.
+     *
+     * @param b the raw bytes to format, any length
+     * @return the lower-case hex string, exactly two digits per byte
+     */
     private static String refToHex(byte[] b) {
         StringBuilder buf = new StringBuilder(40);
         for (int i = 0; i < b.length; i++) {

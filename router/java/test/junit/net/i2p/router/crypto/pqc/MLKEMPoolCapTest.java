@@ -98,6 +98,8 @@ public class MLKEMPoolCapTest {
      * The resize itself, not only the helper it calls: a huge demand must not
      * leave the pool above the byte budget. This is the exact path the Tuner
      * runs every 15 seconds.
+     *
+     * @throws Exception if reading the pool's private counters reflectively fails
      */
     @Test
     public void testResizeHonoursTheBudget() throws Exception {
@@ -192,6 +194,12 @@ public class MLKEMPoolCapTest {
         }
     }
 
+    /**
+     * Puts a system property back the way the test found it.
+     *
+     * @param key the property name to restore
+     * @param saved the value read before the test overwrote it, null when it was unset
+     */
     private static void restore(String key, String saved) {
         if (saved != null)
             System.setProperty(key, saved);

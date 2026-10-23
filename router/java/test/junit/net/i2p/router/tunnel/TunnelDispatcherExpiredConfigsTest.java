@@ -28,12 +28,22 @@ public class TunnelDispatcherExpiredConfigsTest {
     private static final long NOW = 10_000_000L;
     private static final long MIN = 60 * 1000L;
 
-    /** A config clearly past expiration plus the fudge. */
+    /**
+     * A config clearly past expiration plus the fudge.
+     *
+     * @return a HopConfig expiring FUDGE plus one minute before NOW, so the
+     *         LeaveTunnel job must retire it
+     */
     private static HopConfig dead() {
         return cfg(NOW - FUDGE - MIN);
     }
 
-    /** A config clearly inside the fudge window, so still live. */
+    /**
+     * A config clearly inside the fudge window, so still live.
+     *
+     * @return a HopConfig expiring one minute after NOW, so the job leaves it
+     *         queued
+     */
     private static HopConfig live() {
         return cfg(NOW + MIN);
     }

@@ -78,7 +78,12 @@ class BandStructure {
     // Local copy of highest class version.
     private Package.Version highestClassVersion = null;
 
-    /** Call this exactly once, early, to specify the archive major version. */
+    /**
+     * Call this exactly once, early, to specify the archive major version.
+     *
+     * @param highestClassVersion the newest class version used by any class in the archive
+     * @throws IOException if the version has already been initialized
+     */
     public void initHighestClassVersion(Package.Version highestClassVersion) throws IOException {
         if (this.highestClassVersion != null) {
             throw new IOException(
@@ -325,7 +330,8 @@ class BandStructure {
         return p0 - p1;
     }
 
-    /** The packed file is divided up into a number of segments.
+    /**
+     * The packed file is divided up into a number of segments.
      * Most segments are typed as ValueBand, strongly-typed sequences
      * of integer values, all interpreted in a single way.
      * A few segments are ByteBands, which heterogeneous sequences
@@ -384,13 +390,25 @@ class BandStructure {
         int phase() { return phase; }
         String name() { return name; }
 
-        /** Return -1 if data buffer not allocated, else max length. */
+        /**
+         * Return -1 if data buffer not allocated, else max length.
+         *
+         * @return the maximum length of the data buffer, or -1 if it is not allocated
+         */
         public abstract int capacity();
 
-        /** Allocate data buffer to specified length. */
+        /**
+         * Allocate data buffer to specified length.
+         *
+         * @param cap the number of values to make room for; ValueBand uses -1 to free the buffer
+         */
         protected abstract void setCapacity(int cap);
 
-        /** Return current number of values in buffer, which must exist. */
+        /**
+         * Return current number of values in buffer, which must exist.
+         *
+         * @return the number of values collected or read so far
+         */
         public abstract int length();
 
         protected abstract int valuesRemainingForDebug();
@@ -399,7 +417,12 @@ class BandStructure {
             return valuesExpected;
         }
 
-        /** Write out bytes, encoding the values. */
+        /**
+         * Write out bytes, encoding the values.
+         *
+         * @param out the stream the encoded band bytes are written to
+         * @throws IOException if the band's bytes cannot be written
+         */
         public final void writeTo(OutputStream out) throws IOException {
             assert(assertReadyToWriteTo(this, out));
             setPhase(WRITE_PHASE);
@@ -423,14 +446,22 @@ class BandStructure {
 
         protected abstract void writeDataTo(OutputStream out) throws IOException;
 
-        /** Expect a certain number of values. */
+        /**
+         * Expect a certain number of values.
+         *
+         * @param l the total number of values the band will hold, never negative
+         */
         void expectLength(int l) {
             assert(assertPhase(this, EXPECT_PHASE));
             assert(valuesExpected == 0);  // all at once
             assert(l >= 0);
             valuesExpected = l;
         }
-        /** Expect more values.  (Multiple calls accumulate.) */
+        /**
+         * Expect more values.  (Multiple calls accumulate.)
+         *
+         * @param l the number of values to add to the expected count, never negative
+         */
         void expectMoreLength(int l) {
             assert(assertPhase(this, EXPECT_PHASE));
             valuesExpected += l;
@@ -449,7 +480,12 @@ class BandStructure {
         private void readyToExpect() { // called implicitly by constructor
             setPhase(EXPECT_PHASE);
         }
-        /** Read in bytes, decoding the values. */
+        /**
+         * Read in bytes, decoding the values.
+         *
+         * @param in the stream the encoded band bytes are read from
+         * @throws IOException if the band's bytes cannot be read
+         */
         public final void readFrom(InputStream in) throws IOException {
             assert(assertReadyToReadFrom(this, in));
             setCapacity(valuesExpected());
@@ -551,7 +587,11 @@ class BandStructure {
             this.length = values.length;
         }
 
-        /** Collect one value, or store one decoded value. */
+        /**
+         * Collect one value, or store one decoded value.
+         *
+         * @param x the value to append to the end of the band
+         */
         protected void addValue(int x) {
             assert(assertCanChangeLength(this));
             if (length == values.length)
@@ -758,7 +798,11 @@ class BandStructure {
             }
         }
 
-        /** Disburse one value. */
+        /**
+         * Disburse one value.
+         *
+         * @return the next value in the band, or 0 if it is empty and band debugging is on
+         */
         protected int getValue() {
             assert(phase() == DISBURSE_PHASE);
             // when debugging return a zero if lengths are zero
@@ -950,7 +994,11 @@ class BandStructure {
         public int getInt() {
             return getValue();
         }
-        /** Return the sum of all values in this band. */
+        /**
+         * Return the sum of all values in this band.
+         *
+         * @return the sum of every value; the band is rewound for a second pass
+         */
         public int getIntTotal() {
             assert(phase() == DISBURSE_PHASE);
             // assert that this is the whole pass; no other reads allowed
@@ -962,7 +1010,12 @@ class BandStructure {
             resetForSecondPass();
             return total;
         }
-        /** Return the occurrence count of a specific value in this band. */
+        /**
+         * Return the occurrence count of a specific value in this band.
+         *
+         * @param value the integer to count occurrences of
+         * @return how many values in the band equal value; the band is then rewound
+         */
         public int getIntCount(int value) {
             assert(phase() == DISBURSE_PHASE);
             // assert that this is the whole pass; no other reads allowed
@@ -1012,7 +1065,11 @@ class BandStructure {
             assert(assertValidCPRefs(this));
         }
 
-        /** Write a constant pool reference. */
+        /**
+         * Write a constant pool reference.
+         *
+         * @param e the entry to store, or null if this band allows null references
+         */
         public void putRef(Entry e) {
             addValue(encodeRefOrNull(e, index));
         }

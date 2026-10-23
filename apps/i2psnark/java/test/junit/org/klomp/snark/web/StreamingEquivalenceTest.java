@@ -102,7 +102,14 @@ public class StreamingEquivalenceTest {
         makeTorrent(dataRoot, "SmallTorrent", 12);
     }
 
-    /** InvocationHandler: mapped methods return their value; everything else type-defaults. */
+    /**
+     * InvocationHandler: mapped methods return their value; everything else type-defaults.
+     *
+     * @param results method name to return value, for the calls that must not
+     *                fall back to the type default
+     * @return a handler answering mapped methods from results and defaulting
+     *         the rest
+     */
     private static InvocationHandler defaults(Map<String, Object> results) {
         return (Object proxy, Method m, Object[] args) -> {
             if (results.containsKey(m.getName())) {return results.get(m.getName());}
@@ -124,6 +131,14 @@ public class StreamingEquivalenceTest {
      * via Storage's create-from-directory constructor, writes the .torrent,
      * boots a stopped-mode Snark from it (running {@link org.klomp.snark.Storage#check}), and
      * registers it with the manager under the directory name.
+     *
+     * @param dataRoot the manager's data directory the torrent dir and .torrent
+     *                 file are created under
+     * @param name the torrent's base name, used for the directory, the
+     *             .torrent file, and the manager registration key
+     * @param n the number of 64-byte files to generate in the torrent dir
+     * @throws Exception if fixture file I/O fails or reflection on the
+     *                   manager's private snark maps fails
      */
     private static void makeTorrent(File dataRoot, String name, int n) throws Exception {
         File base = new File(dataRoot, name);
@@ -166,7 +181,12 @@ public class StreamingEquivalenceTest {
         return (SnarkManager) f.get(servlet);
     }
 
-    /** Proxied GET for a torrent dir page; only parameters dir pages read are modeled. */
+    /**
+     * Proxied GET for a torrent dir page; only parameters dir pages read are modeled.
+     *
+     * @param path the page path below the servlet context, e.g. "/TestTorrent/"
+     * @return a proxied GET request whose URI and URL carry context plus path
+     */
     private HttpServletRequest get(String path) {
         Map<String, String[]> params = new HashMap<>();
         Map<String, Object> results = new HashMap<>();

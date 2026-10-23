@@ -93,6 +93,9 @@ public class I2PTunnelHTTPServerBodyStartTest {
     /**
      * Body phase must start the Sender on a worker and release the submitting
      * thread without waiting for the transfer to finish.
+     *
+     * @throws Exception if the test thread is interrupted while awaiting the caller-released or
+     *                   body-started latches, or during the sleep that waits for the copy
      */
     @Test
     public void testHandOffReleasesCallerBeforeTransferCompletes() throws Exception {
@@ -175,6 +178,9 @@ public class I2PTunnelHTTPServerBodyStartTest {
      *
      * <p>Saturation is established with a latch rather than a sleep, so
      * rejection is deterministic and the test costs no wall-clock time.
+     *
+     * @throws Exception if the test thread is interrupted while awaiting workerBusy, the latch
+     *                   that waits for the pool's single worker to start
      */
     @Test
     public void testHandOffAbortsBodyWhenPoolRejects() throws Exception {
@@ -220,7 +226,12 @@ public class I2PTunnelHTTPServerBodyStartTest {
         }
     }
 
-    /** Sender flushes every chunk so partial bodies reach the browser promptly. */
+    /**
+     * Sender flushes every chunk so partial bodies reach the browser promptly.
+     *
+     * @throws Exception not expected; the streams here never fail, and the transfer run records
+     *                   an error on itself instead of throwing
+     */
     @Test
     public void testSenderFlushesEachChunk() throws Exception {
         final AtomicInteger flushes = new AtomicInteger();

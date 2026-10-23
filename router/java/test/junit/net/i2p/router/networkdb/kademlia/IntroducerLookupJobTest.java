@@ -222,7 +222,13 @@ public class IntroducerLookupJobTest {
 
     // ---- helpers ------------------------------------------------------------
 
-    /** An SSU2-style address with exactly the given option keys/values. */
+    /**
+     * An SSU2-style address with exactly the given option keys/values.
+     *
+     * @param keys option key names, paired by index with values
+     * @param values option values, same length and order as keys
+     * @return an SSU2 router address with cost 5 ms and those options set
+     */
     private static RouterAddress ssu2Address(String[] keys, String[] values) {
         OrderedProperties opts = new OrderedProperties();
         for (int i = 0; i < keys.length; i++) {
@@ -231,7 +237,13 @@ public class IntroducerLookupJobTest {
         return new RouterAddress("SSU2", opts, 5);
     }
 
-    /** A RouterInfo whose published capabilities string is the given value. */
+    /**
+     * A RouterInfo whose published capabilities string is the given value.
+     *
+     * @param caps the capabilities string to publish in the router's options,
+     *             an empty string meaning no capabilities
+     * @return a RouterInfo carrying that caps value and no addresses
+     */
     private static RouterInfo routerInfo(String caps) {
         RouterInfo ri = new RouterInfo();
         Properties opts = new Properties();
@@ -244,7 +256,12 @@ public class IntroducerLookupJobTest {
         return Base64.encode(h.getData());
     }
 
-    /** Deterministic 32-byte hash with every byte set to the given value. */
+    /**
+     * Deterministic 32-byte hash with every byte set to the given value.
+     *
+     * @param val the byte value to fill all 32 bytes with, truncated to 8 bits
+     * @return a Hash of HASH_LENGTH bytes, each one equal to val
+     */
     private static Hash hash(int val) {
         byte[] b = new byte[Hash.HASH_LENGTH];
         Arrays.fill(b, (byte) val);

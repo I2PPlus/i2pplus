@@ -87,7 +87,12 @@ public class IOPoolSizingTest {
                    I2PTunnelHTTPServer.getIOTransferThreads() >= I2PTunnelHTTPServer.ioPoolFloor());
     }
 
-    /** Restore the process-wide budget so the value does not leak between tests. */
+    /**
+     * Restore the process-wide budget so the value does not leak between tests.
+     *
+     * @param v the total I/O transfer thread budget to ask for; the setter clamps it between
+     *          IO_THREADS_MIN and IO_THREADS_MAX before rebalancing every tunnel's pool
+     */
     private static void ioTransferBudget(int v) {
         I2PTunnelHTTPServer.setIOTransferThreads(v);
     }

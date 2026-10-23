@@ -76,7 +76,14 @@ public class SSU2PayloadTest {
         public void gotPathResponse(RemoteHostId from, byte[] data) { events.add("pathresponse:" + hx(data)); }
     }
 
-    /** One block: [type][2-byte length][data]. */
+    /**
+     * One block: [type][2-byte length][data].
+     *
+     * @param type SSU2 block type number, written in the first byte
+     * @param data block payload, up to 65535 bytes; its length is written in the
+     *             two bytes after the type
+     * @return the encoded block, ready to be concatenated into a frame
+     */
     private static byte[] blk(int type, byte[] data) {
         byte[] b = new byte[3 + data.length];
         b[0] = (byte) type;
@@ -86,7 +93,12 @@ public class SSU2PayloadTest {
         return b;
     }
 
-    /** Concatenate blocks into one payload frame. */
+    /**
+     * Concatenate blocks into one payload frame.
+     *
+     * @param blocks the encoded blocks to join, in the order they are to appear
+     * @return one frame holding every block back to back
+     */
     private static byte[] frame(byte[]... blocks) {
         int n = 0;
         for (byte[] b : blocks)
@@ -100,7 +112,14 @@ public class SSU2PayloadTest {
         return f;
     }
 
-    /** Big-endian encoding of the value in the given number of bytes. */
+    /**
+     * Big-endian encoding of the value in the given number of bytes.
+     *
+     * @param nBytes number of bytes to emit, 1 to 8; the value is truncated to
+     *               this width
+     * @param v the value to encode, big-endian, low nBytes bytes kept
+     * @return the value as nBytes bytes, most significant byte first
+     */
     private static byte[] be(int nBytes, long v) {
         byte[] b = new byte[nBytes];
         for (int i = nBytes - 1; i >= 0; i--) {
@@ -742,6 +761,8 @@ public class SSU2PayloadTest {
      * but the contract - checked failure, same dfe instance - is pinned here
      * and the guard covers any future sig type where sigLen exceeds a minimal
      * identity (e.g. Ed448: 94-byte identity vs 114-byte sig).
+     *
+     * @throws Exception if the keypair generation or the identity's byte output fails
      */
     @Test
     public void testRecoverRouterInfoIdentityOnlyThrowsOriginalDfe() throws Exception {

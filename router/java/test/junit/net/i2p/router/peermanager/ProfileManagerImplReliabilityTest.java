@@ -18,6 +18,11 @@ public class ProfileManagerImplReliabilityTest {
     /**
      * Simulates updateFloodfillReliability logic directly,
      * since the method is package-private and testable.
+     *
+     * @param data the profile being scored; nothing is set unless it is already expanded for DB use
+     * @param success successful DB lookups to score, 0 or more
+     * @param failed failed DB lookups to score, 0 or more; with both counts 0 the
+     *               profile is scored UNKNOWN rather than rated
      */
     private static void simulateUpdateFloodfillReliability(PeerProfile data, long success, long failed) {
         if (!data.getIsExpandedDB()) return;

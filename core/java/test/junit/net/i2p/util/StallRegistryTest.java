@@ -27,7 +27,13 @@ public class StallRegistryTest {
     private Hash _a;
     private Hash _b;
 
-    /** Deterministic distinct destination, so key collisions cannot pass silently. */
+    /**
+     * Deterministic distinct destination, so key collisions cannot pass silently.
+     *
+     * @param seed written big-endian into the first four bytes of the hash, so every
+     *             distinct seed yields a different destination
+     * @return a destination of Hash.HASH_LENGTH bytes, the last 28 of them zero
+     */
     private static Hash hashOf(int seed) {
         byte[] b = new byte[Hash.HASH_LENGTH];
         b[0] = (byte) (seed >>> 24);

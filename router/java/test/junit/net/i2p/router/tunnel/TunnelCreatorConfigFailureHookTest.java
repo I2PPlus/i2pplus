@@ -18,7 +18,7 @@ import net.i2p.util.LogManager;
 
 /**
  * The tunnelFailedFirstHop() hook lives on the base TunnelCreatorConfig
- * (TUN-001: breaks the tunnel -> pool package cycle); PooledTunnelCreatorConfig
+ * (TUN-001: breaks the tunnel -&gt; pool package cycle); PooledTunnelCreatorConfig
  * only adds the pool callback.  Verifies the base hook semantics and that the
  * data plane (OutboundReceiver) accepts a non-pooled config.
  */

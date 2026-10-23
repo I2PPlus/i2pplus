@@ -140,6 +140,8 @@ public class FixupsTest extends TestCase {
      * finishRefs() rewrites each fixup location in place. Every other byte must
      * come through untouched, which is what the original self-test checked by
      * printing mismatches.
+     *
+     * @throws Exception never thrown; declared for the JUnit test-method signature
      */
     public void testFinishRefsLeavesUnfixedBytesIntact() throws Exception {
         build();

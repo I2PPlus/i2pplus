@@ -25,7 +25,11 @@ import org.junit.Test;
  */
 public class SAMHandlerPoolTeardownTest {
 
-    /** A live pool accepts the teardown and runs it elsewhere. */
+    /**
+     * A live pool accepts the teardown and runs it elsewhere.
+     *
+     * @throws Exception on interruption while awaiting the latch or the pool
+     */
     @Test
     public void testAcceptedAndRunOffCallerThread() throws Exception {
         ExecutorService pool = Executors.newSingleThreadExecutor();
@@ -71,7 +75,11 @@ public class SAMHandlerPoolTeardownTest {
         }));
     }
 
-    /** The teardown body runs exactly once - no double close. */
+    /**
+     * The teardown body runs exactly once - no double close.
+     *
+     * @throws Exception on interruption while awaiting pool termination
+     */
     @Test
     public void testRunsExactlyOnce() throws Exception {
         ExecutorService pool = Executors.newFixedThreadPool(4);
@@ -90,6 +98,8 @@ public class SAMHandlerPoolTeardownTest {
      * A live pool runs its teardowns on the pool built for that work - not on
      * the caller, and not on the connector pool, whose four threads are what a
      * user-facing STREAM CONNECT or FORWARD waits on.
+     *
+     * @throws Exception on interruption while awaiting the teardown latch
      */
     @Test
     public void testTeardownRunsOnTheTeardownPool() throws Exception {

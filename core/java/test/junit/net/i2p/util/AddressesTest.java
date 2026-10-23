@@ -63,6 +63,9 @@ public class AddressesTest {
 
     /**
      * Should always return false when the address isn't in the cache.
+     *
+     * @throws UnknownHostException if the loopback Inet6Address cannot be built from
+     *                              the host name given to getByAddress()
      */
     @Test
     public void isDynamic() throws UnknownHostException {
@@ -73,6 +76,9 @@ public class AddressesTest {
 
     /**
      * Should always return false when the address isn't in the cache.
+     *
+     * @throws UnknownHostException if the loopback Inet6Address cannot be built from
+     *                              the host name given to getByAddress()
      */
     @Test
     public void isDeprecated() throws UnknownHostException {

@@ -32,14 +32,24 @@ import static org.junit.Assert.*;
  */
 public class TimeAxisGridOverlapTest {
 
-    /** The tick-settings table, private and static. */
+    /**
+     * The tick-settings table, private and static.
+     *
+     * @return the live static table read out of {@link TimeAxis} by reflection
+     * @throws Exception if the field is absent or reflection on it is refused
+     */
     private static TimeAxisSetting[] tickSettings() throws Exception {
         Field f = TimeAxis.class.getDeclaredField("tickSettings");
         f.setAccessible(true);
         return (TimeAxisSetting[]) f.get(null);
     }
 
-    /** Calendar units have no fixed length, so they are excluded from the arithmetic. */
+    /**
+     * Calendar units have no fixed length, so they are excluded from the arithmetic.
+     *
+     * @param unit the tick unit to classify
+     * @return true for units with a fixed length in seconds, false for MONTH and YEAR
+     */
     private static boolean isFixedLength(TimeUnit unit) {
         return unit != TimeUnit.MONTH && unit != TimeUnit.YEAR;
     }
@@ -55,7 +65,12 @@ public class TimeAxisGridOverlapTest {
         }
     }
 
-    /** Names a setting for a failure message. */
+    /**
+     * Names a setting for a failure message.
+     *
+     * @param s the tick setting to name
+     * @return the setting as "minorUnit xN / majorUnit xN", for assertion messages
+     */
     private static String where(TimeAxisSetting s) {
         return s.minorUnit + " x" + s.minorUnitCount + " / " + s.majorUnit + " x" + s.majorUnitCount;
     }
@@ -69,6 +84,8 @@ public class TimeAxisGridOverlapTest {
      * where they are the same one - that covers the 1-month-per-1-month and 1-year-per-1-year
      * settings, where the multiple holds trivially. Mixed calendar/fixed pairs (a week minor
      * under a month major) have no fixed length to divide and are left alone.
+     *
+     * @throws Exception if the private tick-settings table cannot be read by reflection
      */
     @Test
     public void theMajorUnitIsAWholeMultipleOfTheMinorUnitInEverySetting() throws Exception {
@@ -90,6 +107,8 @@ public class TimeAxisGridOverlapTest {
      * The overlap is total: every major position is also a minor position, which is why the
      * minor pass can exclude by coordinate rather than by testing timestamps. Guards the
      * reasoning in the fix's comment rather than any rendered output.
+     *
+     * @throws Exception if the private tick-settings table cannot be read by reflection
      */
     @Test
     public void theMajorUnitIsNeverSmallerThanTheMinorUnit() throws Exception {

@@ -49,7 +49,7 @@ public class ClientMaxConnectionsTest {
         assertEquals(1, I2PTunnelClientBase.resolveEffectiveMaxConnections(false, 96, 1));
     }
 
-    /** An uninitialized (<= 0) shared default must not regress the gate; keep ownCap. */
+    /** An uninitialized (&lt;= 0) shared default must not regress the gate; keep ownCap. */
     @Test
     public void testUninitializedDefaultFallsBackToOwnCap() {
         assertEquals(I2PTunnelClientBase.DEFAULT_MAX_CONNECTIONS,

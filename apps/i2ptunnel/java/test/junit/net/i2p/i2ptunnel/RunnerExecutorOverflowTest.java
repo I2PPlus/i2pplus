@@ -25,7 +25,11 @@ import org.junit.Test;
  */
 public class RunnerExecutorOverflowTest {
 
-    /** After workers and the burst queue are full, reject — not run inline. */
+    /**
+     * After workers and the burst queue are full, reject — not run inline.
+     *
+     * @throws InterruptedException if the await for the worker to start is interrupted
+     */
     @Test
     public void testSaturatedPoolRejectsNotInlines() throws InterruptedException {
         int threads = 1;
@@ -60,6 +64,8 @@ public class RunnerExecutorOverflowTest {
      * A micro-burst larger than the worker count but within the burst queue
      * must be accepted (no RejectedExecutionException) and later run — this is
      * the browser parallel-open case that previously shed as "server is busy".
+     *
+     * @throws InterruptedException if the await for both workers to enter is interrupted
      */
     @Test
     public void testBurstQueueAbsorbsMicroBurst() throws InterruptedException {
@@ -112,7 +118,11 @@ public class RunnerExecutorOverflowTest {
         }
     }
 
-    /** Worker threads are daemon and named TunnelCln.*. */
+    /**
+     * Worker threads are daemon and named TunnelCln.*.
+     *
+     * @throws InterruptedException if the await for the worker thread is interrupted
+     */
     @Test
     public void testWorkerThreadsAreDaemonAndNamed() throws InterruptedException {
         ThreadPoolExecutor exec = TunnelControllerGroup.createRunnerExecutor(1, new AtomicLong());

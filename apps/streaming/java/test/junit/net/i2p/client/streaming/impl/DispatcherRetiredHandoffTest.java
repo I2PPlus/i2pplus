@@ -66,6 +66,8 @@ public class DispatcherRetiredHandoffTest {
      * A worker retired while the packet was in flight must not end up holding
      * it: the dispatcher notices the refusal and hands the packet to the shard's
      * replacement.
+     *
+     * @throws Exception if the wait for the replacement worker to drain the queue is interrupted
      */
     @Test
     public void testHandoffIsRetriedOnTheReplacementShard() throws Exception {
@@ -123,6 +125,8 @@ public class DispatcherRetiredHandoffTest {
      * A queue that is genuinely full is still a full queue, not a retired
      * worker: the entry is refused for capacity and the dispatcher waits for
      * space rather than dropping the packet.
+     *
+     * @throws Exception if the wait for the worker to enter process() is interrupted
      */
     @Test
     public void testAFullQueueStillWaitsForSpace() throws Exception {

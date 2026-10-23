@@ -134,6 +134,8 @@ public class TorrentKRPCTest {
      * A TorrentKRPC has its own ports, NID, and token maps, and registers its listeners
      * on its own session and ports, but shares the routing table, tracker, and blacklist
      * with the main instance.
+     *
+     * @throws Exception if a private KRPC field cannot be read via reflection
      */
     @Test
     public void testIdentityIsolation() throws Exception {
@@ -186,6 +188,8 @@ public class TorrentKRPCTest {
      * A token issued for one torrent's destination cannot be used to announce a peer on
      * another torrent's destination; both torrents share the same tracker, so the peer
      * must end up in the tracker only when the announce uses the right token.
+     *
+     * @throws Exception if a private KRPC method or field cannot be accessed via reflection
      */
     @Test
     public void testTokenIsolation() throws Exception {
@@ -235,7 +239,11 @@ public class TorrentKRPCTest {
         }
     }
 
-    /** start() and stop() register and unregister the listeners and are idempotent. */
+    /**
+     * start() and stop() register and unregister the listeners and are idempotent.
+     *
+     * @throws Exception if a private KRPC field cannot be read via reflection
+     */
     @Test
     public void testStartStop() throws Exception {
         FakeSession mainSess = new FakeSession();

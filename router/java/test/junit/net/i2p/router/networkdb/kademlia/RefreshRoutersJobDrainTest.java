@@ -55,6 +55,9 @@ public class RefreshRoutersJobDrainTest {
      * @param floodfills what getFloodfillPeers() reports, in order
      * @param all what getAllRouters() reports
      * @return the queue the job would drain, head first
+     * @throws Exception if the private initializeRouterListIfNeeded() method or
+     *                   the _routers field of RefreshRoutersJob cannot be
+     *                   reached by reflection, or the call fails
      */
     private Deque<Hash> buildQueue(List<Hash> floodfills, java.util.Set<Hash> all) throws Exception {
         FloodfillNetworkDatabaseFacade facade = mock(FloodfillNetworkDatabaseFacade.class);
@@ -73,6 +76,9 @@ public class RefreshRoutersJobDrainTest {
      * Floodfills go first, in the order the facade lists them, and every known
      * router appears exactly once - a floodfill counted a second time as an
      * ordinary router would be refreshed twice per cycle.
+     *
+     * @throws Exception if the reflective setup in buildQueue() cannot reach
+     *                   RefreshRoutersJob's private members
      */
     @Test
     public void testFloodfillsLeadTheQueueAndNothingIsDuplicated() throws Exception {
@@ -97,6 +103,9 @@ public class RefreshRoutersJobDrainTest {
     /**
      * With no floodfills known the queue is still the whole netdb, so a router
      * is never skipped just because it is not a floodfill.
+     *
+     * @throws Exception if the reflective setup in buildQueue() cannot reach
+     *                   RefreshRoutersJob's private members
      */
     @Test
     public void testQueueHoldsEveryRouterWhenNoFloodfills() throws Exception {
@@ -112,6 +121,9 @@ public class RefreshRoutersJobDrainTest {
     /**
      * An empty netdb must leave nothing to drain rather than an empty queue the
      * job would then treat as work.
+     *
+     * @throws Exception if the reflective setup in buildQueue() cannot reach
+     *                   RefreshRoutersJob's private members
      */
     @Test
     public void testEmptyNetDbLeavesAnEmptyQueue() throws Exception {
@@ -125,6 +137,9 @@ public class RefreshRoutersJobDrainTest {
      * cost this replaces was a property of the type - an ArrayList drained with
      * remove(0) copied every remaining entry, up to the whole netdb, on every
      * visit - and no single call shows it.
+     *
+     * @throws Exception if the reflective setup in buildQueue() cannot reach
+     *                   RefreshRoutersJob's private members
      */
     @Test
     public void testWorkQueueIsAHeadDrainingDeque() throws Exception {

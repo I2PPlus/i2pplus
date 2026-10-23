@@ -47,7 +47,13 @@ public class DBHistoryMetricTest {
         }
     }
 
-    /** Total event count recorded in the 1 hour bucket. */
+    /**
+     * Total event count recorded in the 1 hour bucket.
+     *
+     * @param hist the history whose combined lookup and store rate is sampled
+     * @return the number of events added to the 1 hour rate bucket, lookups and
+     *         stores together
+     */
     private long hourEvents(DBHistory hist) {
         RateStat rs = hist.getFailedLookupRate();
         assertNotNull(rs);
@@ -58,6 +64,10 @@ public class DBHistoryMetricTest {
      * Fraction of the 1 hour bucket that was recorded as a failure. The lifetime
      * average is used because {@link Rate#getAverageValue} only reflects data
      * that has already been coalesced into a completed period.
+     *
+     * @param hist the history whose combined lookup and store rate is sampled
+     * @return the ratio of failure events to all events in the 1 hour rate
+     *         bucket, 0 when nothing was recorded
      */
     private double hourFailRate(DBHistory hist) {
         return hist.getFailedLookupRate().getRate(RateConstants.ONE_HOUR).getLifetimeAverageValue();

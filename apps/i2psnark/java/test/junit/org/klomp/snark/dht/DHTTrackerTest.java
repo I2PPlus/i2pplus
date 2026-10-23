@@ -15,14 +15,22 @@ public class DHTTrackerTest {
 
     private static final InfoHash IH = new InfoHash(new byte[20]);
 
-    /** An InfoHash distinct from {@link #IH}. */
+    /**
+     * An InfoHash distinct from {@link #IH}.
+     *
+     * @return a fresh info hash differing from {@link #IH} in the first byte
+     */
     private static InfoHash otherHash() {
         byte[] b = new byte[20];
         b[0] = 1;
         return new InfoHash(b);
     }
 
-    /** Filters are built from the stored seed/peer split and cached until they age out. */
+    /**
+     * Filters are built from the stored seed/peer split and cached until they age out.
+     *
+     * @throws Exception if the 200 ms ageing sleep is interrupted
+     */
     @Test
     public void testBloomFilterCache() throws Exception {
         DHTTracker tracker = new DHTTracker(I2PAppContext.getGlobalContext(), 150);

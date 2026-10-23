@@ -40,12 +40,21 @@ class OutboundClientMessageStatus {
         _start = ctx.clock().now();
     }
 
-    /** Raw payload. */
+    /**
+     * Raw payload.
+     *
+     * @return the payload carried by the wrapped message, never null
+     */
     public Payload getPayload() {
         return _msg.getPayload();
     }
 
-    /** Clove, if we've built it. */
+    /**
+     * Clove, if we've built it.
+     *
+     * @return the garlic clove built for this message, or null until
+     *         {@link #setClove} has been called
+     */
     public PayloadGarlicConfig getClove() {
         return _clove;
     }
@@ -58,7 +67,12 @@ class OutboundClientMessageStatus {
         return _msg;
     }
 
-    /** Date we started the process on. */
+    /**
+     * Date we started the process on.
+     *
+     * @return the start time in ms since the epoch, read from the router clock when
+     *         this status was created
+     */
     public long getStart() {
         return _start;
     }
@@ -78,17 +92,31 @@ class OutboundClientMessageStatus {
         }
     }
 
-    /** Who sent the message? */
+    /**
+     * Who sent the message?
+     *
+     * @return the sender's {@link Destination}, as set on the wrapped message
+     */
     public Destination getFrom() {
         return _msg.getFromDestination();
     }
 
-    /** Who is the message going to? */
+    /**
+     * Who is the message going to?
+     *
+     * @return the recipient's {@link Destination}, or null when the message only
+     *         carries the recipient's hash
+     */
     public Destination getTo() {
         return _msg.getDestination();
     }
 
-    /** What is the target's current leaseSet (or null if we don't know yet)? */
+    /**
+     * What is the target's current leaseSet (or null if we don't know yet)?
+     *
+     * @return the {@link LeaseSet} found for the target, or null while the destination
+     *         lookup is still running
+     */
     public LeaseSet getLeaseSet() {
         return _leaseSet;
     }
@@ -97,7 +125,14 @@ class OutboundClientMessageStatus {
         _leaseSet = ls;
     }
 
-    /** Have we already sent the message down this tunnel? */
+    /**
+     * Have we already sent the message down this tunnel?
+     *
+     * @param gateway  the {@link Hash} of the tunnel's gateway, identifying which tunnel
+     *                 we are asking about
+     * @param tunnelId the id of the tunnel behind that gateway
+     * @return true if this gateway and tunnel id pair is already in the sent set
+     */
     public boolean alreadySent(Hash gateway, TunnelId tunnelId) {
         Tunnel t = new Tunnel(gateway, tunnelId);
         synchronized (_sent) {
@@ -112,31 +147,56 @@ class OutboundClientMessageStatus {
         }
     }
 
-    /** How many messages have we sent through various leases? */
+    /**
+     * How many messages have we sent through various leases?
+     *
+     * @return the tunnels this message has gone down, including those dropped from the
+     *         live set by {@link #clearAlreadySent}
+     */
     public int getNumSent() {
         synchronized (_sent) {
             return _sent.size() + _previousSent;
         }
     }
 
-    /** Did we totally fail? */
+    /**
+     * Did we totally fail?
+     *
+     * @return true once {@link #failed()} has been called for this send, false while the
+     *         send is still in progress or succeeded
+     */
     public boolean getFailure() {
         return _failure;
     }
 
-    /** We failed.  Returns true if we had already failed before. */
+    /**
+     * We failed.  Returns true if we had already failed before.
+     *
+     * @return true if the failure was already recorded, false if this call is the first
+     *         failure for this send
+     */
     public boolean failed() {
         boolean already = _failure;
         _failure = true;
         return already;
     }
 
-    /** Have we totally succeeded? */
+    /**
+     * Have we totally succeeded?
+     *
+     * @return true once {@link #success()} has been called, i.e. at least one tunnel has
+     *         accepted the message
+     */
     public boolean getSuccess() {
         return _success;
     }
 
-    /** We succeeded.  Returns true if we had already succeeded before. */
+    /**
+     * We succeeded.  Returns true if we had already succeeded before.
+     *
+     * @return true if a success was already recorded, false if this call is the first
+     *         success for this send
+     */
     public boolean success() {
         boolean already = _success;
         _success = true;

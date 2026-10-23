@@ -127,7 +127,9 @@ public class AxisClassRenderTest {
     /**
      * Extract the SVG group with the given CSS class.
      *
-     * @param svg the document @param cssClass the group's class @return its body, or null
+     * @param svg the rendered SVG text to search
+     * @param cssClass the group's class
+     * @return its body, or null
      */
     private static String group(String svg, String cssClass) {
         String open = "<g class=\"" + cssClass + "\">";
@@ -142,7 +144,8 @@ public class AxisClassRenderTest {
     /**
      * Count the rendered lines in the SVG.
      *
-     * @param svg the document @return the number of {@code <line>} elements it contains
+     * @param svg the rendered SVG text to scan
+     * @return the number of {@code <line>} elements it contains
      */
     private static int countLines(String svg) {
         int n = 0;
@@ -154,6 +157,8 @@ public class AxisClassRenderTest {
      * The regression: on the sizes that draw an MRTG axis the axis must come back in its own
      * group. The classed gridline drawn last used to take the whole run, axis included, so the
      * bounding box rendered as a dashed gridline instead of a solid edge.
+     *
+     * @throws IOException if the in-memory RRD cannot be rendered to SVG
      */
     @Test
     public void theAxisKeepsItsClassNextToTheLastGridline() throws IOException {
@@ -175,6 +180,8 @@ public class AxisClassRenderTest {
     /**
      * Below the threshold the console draws a plain axis, whose labels separate the gridlines
      * from the axis. The axis must hold there too - the class must not depend on graph size.
+     *
+     * @throws IOException if the in-memory RRD cannot be rendered to SVG
      */
     @Test
     public void theAxisKeepsItsClassOnASmallGraph() throws IOException {
@@ -188,6 +195,8 @@ public class AxisClassRenderTest {
      * groupless lines, so if they sit between the last gridline group and the axis with nothing
      * but lines in between, all three were consecutive when the document was written - which is
      * the stretch of lines the grouping has to split correctly.
+     *
+     * @throws IOException if the in-memory RRD cannot be rendered to SVG
      */
     @Test
     public void theGridlineInFrontOfTheAxisIsClassed() throws IOException {
@@ -205,9 +214,10 @@ public class AxisClassRenderTest {
     }
 
     /**
-     * The first line of the SVG.
+     * A short prefix of the rendered SVG, for failure messages.
      *
-     * @param svg @return the first 600 characters, for failure messages
+     * @param svg the rendered SVG text to truncate
+     * @return the first 600 characters, or the whole text if it is shorter
      */
     private static String head(String svg) {
         return svg.length() > 600 ? svg.substring(0, 600) : svg;

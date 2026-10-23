@@ -42,7 +42,14 @@ public class PeerStateInboundEvictionTest {
         return new InboundMessageState(ctx, id, new Hash(h), data, 0, data.length, frag, false);
     }
 
-    /** Backdate the first-fragment time so the state is past MAX_RECEIVE_TIME. */
+    /**
+     * Backdate the first-fragment time so the state is past MAX_RECEIVE_TIME.
+     *
+     * @param st the inbound state whose receive-begin time is moved
+     * @param ms how far back to move it, in milliseconds before the current time
+     * @throws Exception if the private {@code _receiveBegin} field is missing or
+     *                   cannot be set
+     */
     private static void backdate(InboundMessageState st, long ms) throws Exception {
         Field f = InboundMessageState.class.getDeclaredField("_receiveBegin");
         f.setAccessible(true);
@@ -57,7 +64,11 @@ public class PeerStateInboundEvictionTest {
         assertTrue(map.isEmpty());
     }
 
-    /** Expired entries are dead weight and go before any live one. */
+    /**
+     * Expired entries are dead weight and go before any live one.
+     *
+     * @throws Exception if the private {@code _receiveBegin} field cannot be set
+     */
     @Test
     public void testExpiredEvictedBeforeLive() throws Exception {
         ConcurrentMap<Long, InboundMessageState> map = new ConcurrentHashMap<>();
@@ -76,7 +87,11 @@ public class PeerStateInboundEvictionTest {
         assertNotNull(map.get(1L));
     }
 
-    /** With nothing expired, the entry waiting longest is the one least likely to finish. */
+    /**
+     * With nothing expired, the entry waiting longest is the one least likely to finish.
+     *
+     * @throws Exception if the private {@code _receiveBegin} field cannot be set
+     */
     @Test
     public void testOldestLiveEvictedWhenNoneExpired() throws Exception {
         ConcurrentMap<Long, InboundMessageState> map = new ConcurrentHashMap<>();
@@ -99,7 +114,12 @@ public class PeerStateInboundEvictionTest {
         assertNotNull(map.get(12L));
     }
 
-    /** Repeated eviction drains one entry at a time and never goes past empty. */
+    /**
+     * Repeated eviction drains one entry at a time and never goes past empty.
+     *
+     * @throws Exception not expected; the body only builds valid inbound states
+     *                   and asserts
+     */
     @Test
     public void testEvictionDrainsOneAtATime() throws Exception {
         ConcurrentMap<Long, InboundMessageState> map = new ConcurrentHashMap<>();
@@ -114,7 +134,12 @@ public class PeerStateInboundEvictionTest {
         assertTrue(map.isEmpty());
     }
 
-    /** Every evicted state must have released its buffers, or the cap saves nothing. */
+    /**
+     * Every evicted state must have released its buffers, or the cap saves nothing.
+     *
+     * @throws Exception not expected; the body only builds valid inbound states
+     *                   and asserts
+     */
     @Test
     public void testEveryVictimReleasesBuffers() throws Exception {
         ConcurrentMap<Long, InboundMessageState> map = new ConcurrentHashMap<>();
@@ -135,7 +160,12 @@ public class PeerStateInboundEvictionTest {
         assertTrue(PeerState.MAX_INBOUND_MESSAGES <= 1024);
     }
 
-    /** A single-entry map evicts that entry rather than returning null. */
+    /**
+     * A single-entry map evicts that entry rather than returning null.
+     *
+     * @throws Exception not expected; the body only builds a valid inbound state
+     *                   and asserts
+     */
     @Test
     public void testSingleEntryEvicted() throws Exception {
         ConcurrentMap<Long, InboundMessageState> map = new ConcurrentHashMap<>();
@@ -146,7 +176,11 @@ public class PeerStateInboundEvictionTest {
         assertTrue(map.isEmpty());
     }
 
-    /** Eviction must not disturb the identity of the survivors. */
+    /**
+     * Eviction must not disturb the identity of the survivors.
+     *
+     * @throws Exception if the private {@code _receiveBegin} field cannot be set
+     */
     @Test
     public void testSurvivorsUnchanged() throws Exception {
         ConcurrentMap<Long, InboundMessageState> map = new ConcurrentHashMap<>();

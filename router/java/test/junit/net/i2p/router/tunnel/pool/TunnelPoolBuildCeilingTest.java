@@ -143,7 +143,12 @@ public class TunnelPoolBuildCeilingTest {
      * Mirrors TunnelPool.shouldSkipDueToInProgress's cap computation, including
      * the timeout-rate scaling added for thin pools.
      *
+     * @param safeActive the count of safe, non soft-degraded tunnels in the pool,
+     *                   0 meaning the pool has collapsed to zero usable tunnels
+     * @param target the base tunnel count from the pool's configuration
      * @param timeoutRate fraction of builds timing out in [0.0, 1.0], clamped
+     * @return the maximum number of builds that may be in flight for the pool,
+     *         never above TunnelPool.MAX_INPROGRESS_PER_POOL_DIR
      */
     private static int effectiveCap(int safeActive, int target, double timeoutRate) {
         int cap;

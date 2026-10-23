@@ -20,20 +20,42 @@ public class GraphRendererExtraSeriesColorTest {
 
     private static final String[] THEMES = { "light", "dark", "midnight", "classic" };
 
+    /**
+     * The colour's hue, saturation and brightness components.
+     *
+     * @param c the colour to convert
+     * @return hue, saturation and brightness, each a float from 0.0 to 1.0
+     */
     private static float[] hsb(Color c) {
         float[] out = new float[3];
         Color.RGBtoHSB(c.getRed(), c.getGreen(), c.getBlue(), out);
         return out;
     }
 
+    /**
+     * The colour's hue as an angle rather than a fraction.
+     *
+     * @param c the colour to convert
+     * @return the hue in degrees, from 0 up to but not including 360
+     */
     private static float hue(Color c) { return hsb(c)[0] * 360f; }
 
-    /** The primary is plot 0. */
+    /**
+     * The primary is plot 0.
+     *
+     * @param theme console theme name, e.g. {@code dark}; an unknown name falls back to light
+     * @return the theme's first-plot stroke colour
+     */
     private static Color primary(String theme) {
         return GraphRenderer.paletteColorForTest(theme);
     }
 
-    /** The extra series is plot 1. */
+    /**
+     * The extra series is plot 1.
+     *
+     * @param theme console theme name, e.g. {@code dark}; an unknown name falls back to light
+     * @return the colour of the first extra series drawn as a line, never a filled area
+     */
     private static Color second(String theme) {
         return GraphRenderer.extraSeriesColor(theme, true, 0);
     }

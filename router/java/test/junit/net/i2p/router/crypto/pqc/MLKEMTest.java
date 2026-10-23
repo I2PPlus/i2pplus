@@ -162,6 +162,9 @@ public class MLKEMTest {
      * FIPS 203 decapsulation uses implicit rejection, so a tampered ciphertext
      * must not raise: it yields a different 32 byte key instead. Callers that
      * need authentication must compare the key, not catch an exception.
+     *
+     * @throws GeneralSecurityException not expected; the type passed is an ML-KEM type, and
+     *                                  decaps() rejects a tampered ciphertext implicitly
      */
     @Test
     public void testDecapTamperedCiphertextDoesNotThrow() throws GeneralSecurityException {
@@ -180,6 +183,9 @@ public class MLKEMTest {
      * Implicit rejection is deterministic: the same rejected ciphertext against
      * the same decapsulation key always yields the same pseudorandom key, so a
      * peer that retries cannot learn anything new from the failure.
+     *
+     * @throws GeneralSecurityException not expected; both calls pass a valid ML-KEM type, and a
+     *                                  rejected ciphertext yields a key rather than an error
      */
     @Test
     public void testImplicitRejectionIsDeterministic() throws GeneralSecurityException {
@@ -195,6 +201,9 @@ public class MLKEMTest {
     /**
      * Every bit of the ciphertext feeds the rejection key, so two different
      * corruptions of the same ciphertext are rejected to different values.
+     *
+     * @throws GeneralSecurityException not expected; the ML-KEM1024 type is supported, and
+     *                                  decaps() never raises for a corrupted ciphertext
      */
     @Test
     public void testImplicitRejectionDependsOnCiphertext() throws GeneralSecurityException {
@@ -213,6 +222,9 @@ public class MLKEMTest {
      * A ciphertext from a different key pair is also rejected silently rather
      * than raising, so a peer cannot distinguish a wrong key from a bad
      * ciphertext by the exception it gets back.
+     *
+     * @throws GeneralSecurityException not expected; both key pairs use a supported ML-KEM
+     *                                  type, and decaps() only raises for an unsupported type
      */
     @Test
     public void testDecapWrongKeyDoesNotThrow() throws GeneralSecurityException {

@@ -47,9 +47,14 @@ class ConstantPool {
         return Utils.currentPropMap().getInteger(Utils.DEBUG_VERBOSE);
     }
 
-    /** Factory for Utf8 string constants.
+    /**
+     * Factory for Utf8 string constants.
      * Used for well-known strings like "SourceFile", "{@code &lt;init&gt;}", etc.
      * Also used to back up more complex constant pool entries, like Class.
+     *
+     * @param value the string carried by the entry
+     * @return the cached {@link Utf8Entry} for {@code value}, created on
+     *         first use
      */
     public static synchronized Utf8Entry getUtf8Entry(String value) {
         Map<String, Utf8Entry> utf8Entries  = Utils.getTLGlobals().getUtf8Entries();
@@ -60,7 +65,13 @@ class ConstantPool {
         }
         return e;
     }
-    /** Factory for Class constants. */
+    /**
+     * Factory for Class constants.
+     *
+     * @param name the class name, in internal slash-separated form
+     * @return the cached {@link ClassEntry} for {@code name}, created on
+     *         first use
+     */
     public static ClassEntry getClassEntry(String name) {
         Map<String, ClassEntry> classEntries = Utils.getTLGlobals().getClassEntries();
         ClassEntry e = classEntries.get(name);
@@ -71,7 +82,14 @@ class ConstantPool {
         }
         return e;
     }
-    /** Factory for literal constants (String, Integer, etc.). */
+    /**
+     * Factory for literal constants (String, Integer, etc.).
+     *
+     * @param value the literal value; a String becomes a
+     *              {@link StringEntry}, a Number a {@link NumberEntry}
+     * @return the cached {@link LiteralEntry} for {@code value}, created
+     *         on first use
+     */
     public static LiteralEntry getLiteralEntry(Comparable<?> value) {
         Map<Object, LiteralEntry> literalEntries = Utils.getTLGlobals().getLiteralEntries();
         LiteralEntry e = literalEntries.get(value);
@@ -84,12 +102,24 @@ class ConstantPool {
         }
         return e;
     }
-    /** Factory for literal constants (String, Integer, etc.). */
+    /**
+     * Factory for literal constants (String, Integer, etc.).
+     *
+     * @param value the string carried by the constant
+     * @return the {@link StringEntry} for {@code value}
+     */
     public static StringEntry getStringEntry(String value) {
         return (StringEntry) getLiteralEntry(value);
     }
 
-    /** Factory for signature (type) constants. */
+    /**
+     * Factory for signature (type) constants.
+     *
+     * @param type the field type or method signature, e.g. {@code I} or
+     *             {@code (II)V}
+     * @return the cached {@link SignatureEntry} for {@code type}, created
+     *         on first use
+     */
     public static SignatureEntry getSignatureEntry(String type) {
         Map<String, SignatureEntry> signatureEntries = Utils.getTLGlobals().getSignatureEntries();
         SignatureEntry e = signatureEntries.get(type);
@@ -105,7 +135,14 @@ class ConstantPool {
         return getSignatureEntry(SignatureEntry.stringValueOf(formRef, classRefs));
     }
 
-    /** Factory for descriptor (name-and-type) constants. */
+    /**
+     * Factory for descriptor (name-and-type) constants.
+     *
+     * @param nameRef the simple name of the member
+     * @param typeRef the signature of the member
+     * @return the cached {@link DescriptorEntry} for the pair, created on
+     *         first use
+     */
     public static DescriptorEntry getDescriptorEntry(Utf8Entry nameRef, SignatureEntry typeRef) {
         Map<String, DescriptorEntry> descriptorEntries = Utils.getTLGlobals().getDescriptorEntries();
         String key = DescriptorEntry.stringValueOf(nameRef, typeRef);
@@ -123,7 +160,15 @@ class ConstantPool {
         return getDescriptorEntry(nameRef, getSignatureEntry(typeRef.stringValue()));
     }
 
-    /** Factory for member reference constants. */
+    /**
+     * Factory for member reference constants.
+     *
+     * @param tag the member tag, one of Fieldref, Methodref or InterfaceMethodref
+     * @param classRef the {@link ClassEntry} naming the declaring class
+     * @param descRef the {@link DescriptorEntry} naming the member
+     * @return the cached {@link MemberEntry} for the triple, created on
+     *         first use
+     */
     public static MemberEntry getMemberEntry(byte tag, ClassEntry classRef, DescriptorEntry descRef) {
         Map<String, MemberEntry> memberEntries = Utils.getTLGlobals().getMemberEntries();
         String key = MemberEntry.stringValueOf(tag, classRef, descRef);
@@ -137,7 +182,14 @@ class ConstantPool {
         return e;
     }
 
-    /** Factory for MethodHandle constants. */
+    /**
+     * Factory for MethodHandle constants.
+     *
+     * @param refKind the reference kind, one of the REF_ constants
+     * @param memRef the {@link MemberEntry} naming the referenced member
+     * @return the cached {@link MethodHandleEntry} for the pair, created
+     *         on first use
+     */
     public static MethodHandleEntry getMethodHandleEntry(byte refKind, MemberEntry memRef) {
         Map<String, MethodHandleEntry> methodHandleEntries = Utils.getTLGlobals().getMethodHandleEntries();
         String key = MethodHandleEntry.stringValueOf(refKind, memRef);
@@ -150,7 +202,13 @@ class ConstantPool {
         return e;
     }
 
-    /** Factory for MethodType constants. */
+    /**
+     * Factory for MethodType constants.
+     *
+     * @param sigRef the {@link SignatureEntry} for the method signature
+     * @return the cached {@link MethodTypeEntry} for {@code sigRef},
+     *         created on first use
+     */
     public static MethodTypeEntry getMethodTypeEntry(SignatureEntry sigRef) {
         Map<String, MethodTypeEntry> methodTypeEntries = Utils.getTLGlobals().getMethodTypeEntries();
         String key = sigRef.stringValue();
@@ -166,7 +224,14 @@ class ConstantPool {
         return getMethodTypeEntry(getSignatureEntry(typeRef.stringValue()));
     }
 
-    /** Factory for InvokeDynamic constants. */
+    /**
+     * Factory for InvokeDynamic constants.
+     *
+     * @param bssRef the {@link BootstrapMethodEntry} linking the call site
+     * @param descRef the {@link DescriptorEntry} for the call site signature
+     * @return the cached {@link InvokeDynamicEntry} for the pair, created
+     *         on first use
+     */
     public static InvokeDynamicEntry getInvokeDynamicEntry(BootstrapMethodEntry bssRef, DescriptorEntry descRef) {
         Map<String, InvokeDynamicEntry> invokeDynamicEntries = Utils.getTLGlobals().getInvokeDynamicEntries();
         String key = InvokeDynamicEntry.stringValueOf(bssRef, descRef);
@@ -179,7 +244,15 @@ class ConstantPool {
         return e;
     }
 
-    /** Factory for BootstrapMethod pseudo-constants. */
+    /**
+     * Factory for BootstrapMethod pseudo-constants.
+     *
+     * @param bsmRef the {@link MethodHandleEntry} for the bootstrap method
+     * @param argRefs the static arguments of the call site; the entry
+     *                copies the array
+     * @return the cached {@link BootstrapMethodEntry} for the pair,
+     *         created on first use
+     */
     public static BootstrapMethodEntry getBootstrapMethodEntry(MethodHandleEntry bsmRef, Entry[] argRefs) {
         Map<String, BootstrapMethodEntry> bootstrapMethodEntries = Utils.getTLGlobals().getBootstrapMethodEntries();
         String key = BootstrapMethodEntry.stringValueOf(bsmRef, argRefs);
@@ -1210,7 +1283,11 @@ class ConstantPool {
         return new Index(debugName, cpMapList);
     }
 
-    /** Sort this index (destructively) into canonical order. */
+    /**
+     * Sort this index (destructively) into canonical order.
+     *
+     * @param ix the index whose entry array is sorted in place
+     */
     public static
     void sort(Index ix) {
         // %%% Should move this into class Index.
@@ -1220,10 +1297,17 @@ class ConstantPool {
             System.out.println("sorted "+ix.dumpString());
     }
 
-    /** Return a set of indexes partitioning these entries.
-     * The keys array must of length this.size(), and marks entries.
+    /**
+     * Return a set of indexes partitioning these entries.
+     * The keys array must be of length this.size(), and marks entries.
      * The result array is as long as one plus the largest key value.
      * Entries with a negative key are dropped from the partition.
+     *
+     * @param ix the index whose entries are partitioned
+     * @param keys one key per entry of {@code ix}, the partition each
+     *             entry belongs to; negative keys drop the entry
+     * @return sub-indexes indexed by key value, with null for keys no
+     *         entry carried
      */
     public static
     Index[] partition(Index ix, int[] keys) {
@@ -1287,7 +1371,16 @@ class ConstantPool {
 
         private Index[][] indexByTagAndClass;
 
-        /** Index of all CP entries of all types, in definition order. */
+        /**
+         * Index of all CP entries of a tag group, in definition order.
+         *
+         * @param tagGroupTag the tag-group pseudo-tag naming the index
+         *                    to build
+         * @param tagsInGroup the member tags of the group, in the order
+         *                    their entries are concatenated
+         * @return the newly built index for the group, also cached for
+         *         later lookups
+         */
         private Index makeTagGroupIndex(byte tagGroupTag, byte[] tagsInGroup) {
             if (indexByTagGroup == null)
                 indexByTagGroup = new Index[CONSTANT_GroupLimit - CONSTANT_GroupFirst];
@@ -1366,7 +1459,14 @@ class ConstantPool {
                 indexByTagAndClass[tag] = null;
         }
 
-        /** Index of all CP entries of a given tag. */
+        /**
+         * Index of all CP entries of a given tag.
+         *
+         * @param tag the constant tag, or a tag-group pseudo-tag
+         * @return the index for {@code tag}; an empty one is created when
+         *         none exists, and null is returned for the
+         *         context-specific FieldSpecific group
+         */
         public Index getIndexByTag(byte tag) {
             if (tag >= CONSTANT_GroupFirst)
                 return getIndexByTagGroup(tag);
@@ -1399,7 +1499,15 @@ class ConstantPool {
             throw new AssertionError("Bad tag group "+tag);
         }
 
-        /** Index of all CP entries of a given tag and class. */
+        /**
+         * Index of all CP entries of a given tag and class.
+         *
+         * @param tag the member tag: Fieldref, Methodref or InterfaceMethodref
+         * @param classRef the class whose members are wanted, not null
+         * @return the index of members of {@code classRef} under
+         *         {@code tag}, or null when the class has none
+         * @throws RuntimeException if {@code classRef} is null
+         */
         public Index getMemberIndex(byte tag, ClassEntry classRef) {
             if (classRef == null)
                 throw new RuntimeException("Missing class reference for " + tagName(tag));
@@ -1476,10 +1584,15 @@ class ConstantPool {
 
     }
 
-    /** Close the set cpRefs under the getRef(*) relation.
+    /**
+     * Close the set cpRefs under the getRef(*) relation.
      * Also, if flattenSigs, replace all signatures in cpRefs
      * by their equivalent Utf8s.
      * Also, discard null from cpRefs.
+     *
+     * @param cpRefs the entries to close over their references, in place
+     * @param flattenSigs true to replace signature entries with their
+     *                    equivalent Utf8 entries
      */
     public static void completeReferencesIn(Set<Entry> cpRefs, boolean flattenSigs) {
          completeReferencesIn(cpRefs, flattenSigs, null);

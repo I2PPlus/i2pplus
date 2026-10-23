@@ -19,7 +19,12 @@ import static org.junit.Assert.*;
  */
 public class LegendEntryTest {
 
-    /** Legend rows recorded on the definition. */
+    /**
+     * Legend rows recorded on the definition.
+     *
+     * @param def the graph definition whose comments are inspected
+     * @return how many of the definition's comments are legend rows, i.e. LegendText instances
+     */
     private static int legendRows(RrdGraphDef def) {
         int n = 0;
         List<CommentText> comments = def.comments;
@@ -29,6 +34,12 @@ public class LegendEntryTest {
         return n;
     }
 
+    /**
+     * A bare definition with a fixed start and end time, so the tests never
+     * depend on the wall clock.
+     *
+     * @return a definition with no plottables and no legend text yet
+     */
     private static RrdGraphDef def() {
         RrdGraphDef d = new RrdGraphDef();
         d.setStartTime(0);

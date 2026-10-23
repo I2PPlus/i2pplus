@@ -32,7 +32,11 @@ public class PieceStallTest {
         assertTrue(p.getLastActive() >= now - 1000);
     }
 
-    /** setActive() advances the activity time. */
+    /**
+     * setActive() advances the activity time.
+     *
+     * @throws Exception if the 5 ms sleep is interrupted
+     */
     @Test
     public void testSetActiveAdvances() throws Exception {
         Piece p = new Piece(0);
@@ -42,7 +46,11 @@ public class PieceStallTest {
         assertTrue(p.getLastActive() > before);
     }
 
-    /** Marking a piece requested stamps the activity time. */
+    /**
+     * Marking a piece requested stamps the activity time.
+     *
+     * @throws Exception if the peer ID cannot be created
+     */
     @Test
     public void testRequestStampsActivity() throws Exception {
         I2PSnarkUtil util = new I2PSnarkUtil(I2PAppContext.getGlobalContext());
@@ -53,7 +61,11 @@ public class PieceStallTest {
         assertTrue(p.getLastActive() >= now - 1000);
     }
 
-    /** An unrequested piece is never stalled, even after the timeout. */
+    /**
+     * An unrequested piece is never stalled, even after the timeout.
+     *
+     * @throws Exception if the peer ID cannot be created
+     */
     @Test
     public void testUnrequestedNotStalled() throws Exception {
         Piece p = new Piece(0);
@@ -64,7 +76,11 @@ public class PieceStallTest {
         assertFalse(PeerCoordinator.isStalled(p, now, TIMEOUT));
     }
 
-    /** A requested piece that received no data past the timeout is stalled. */
+    /**
+     * A requested piece that received no data past the timeout is stalled.
+     *
+     * @throws Exception if the peer ID cannot be created
+     */
     @Test
     public void testStaleRequestIsStalled() throws Exception {
         I2PSnarkUtil util = new I2PSnarkUtil(I2PAppContext.getGlobalContext());
@@ -75,7 +91,11 @@ public class PieceStallTest {
         assertTrue(PeerCoordinator.isStalled(p, now, TIMEOUT));
     }
 
-    /** Receiving a chunk stamps the piece activity. */
+    /**
+     * Receiving a chunk stamps the piece activity.
+     *
+     * @throws Exception if the 5 ms sleep is interrupted or the chunk read fails
+     */
     @Test
     public void testChunkReadStampsActivity() throws Exception {
         Piece piece = new Piece(0);

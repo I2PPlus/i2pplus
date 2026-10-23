@@ -26,7 +26,13 @@ import net.i2p.data.SessionKey;
  */
 public class CryptixAESEngineCipherPoolTest {
 
-    /** The engine's Cipher cache, reached reflectively so the leak is observable. */
+    /**
+     * The engine's Cipher cache, reached reflectively so the leak is observable.
+     *
+     * @param aes the engine whose private _ciphers field is read
+     * @return the engine's live Cipher cache queue
+     * @throws Exception if the private field is missing or inaccessible by reflection
+     */
     @SuppressWarnings("unchecked")
     private static Queue<Cipher> poolOf(CryptixAESEngine aes) throws Exception {
         Field f = CryptixAESEngine.class.getDeclaredField("_ciphers");
@@ -39,6 +45,9 @@ public class CryptixAESEngineCipherPoolTest {
      * from the engine's own constant instead of re-deriving it from AES-NI
      * alone: a JVM with AES-NI but a restricted JCE policy has the branch off,
      * and must skip these tests rather than drive a path the engine never takes.
+     *
+     * @return true if the engine's USE_SYSTEM_AES constant is set, false if it
+     *         cannot be read reflectively
      */
     private static boolean systemAESActive() {
         try {
@@ -53,6 +62,8 @@ public class CryptixAESEngineCipherPoolTest {
     /**
      * A decrypt whose length is not a multiple of 16 makes doFinal() throw. The
      * Cipher taken for that attempt must still be back in the cache afterwards.
+     *
+     * @throws Exception if a seeded Cipher instance cannot be created
      */
     @Test
     public void testNonAlignedDecryptReturnsCipherToPool() throws Exception {
@@ -83,7 +94,11 @@ public class CryptixAESEngineCipherPoolTest {
                    pool.contains(seed1) || pool.contains(seed2));
     }
 
-    /** Same invariant on the encrypt side, whose length guard makes the throw rare. */
+    /**
+     * Same invariant on the encrypt side, whose length guard makes the throw rare.
+     *
+     * @throws Exception if the seeded Cipher instance cannot be created
+     */
     @Test
     public void testAlignedEncryptReturnsCipherToPool() throws Exception {
         org.junit.Assume.assumeTrue("system AES path inactive on this JVM", systemAESActive());
@@ -108,6 +123,8 @@ public class CryptixAESEngineCipherPoolTest {
     /**
      * Repeated non-aligned decrypts must not drain the cache: each one borrows a
      * Cipher and puts it back, so the cache size stays flat instead of churning.
+     *
+     * @throws Exception if a seeded Cipher instance cannot be created
      */
     @Test
     public void testRepeatedNonAlignedDecryptsDoNotDrainCache() throws Exception {
@@ -133,7 +150,11 @@ public class CryptixAESEngineCipherPoolTest {
                      3, pool.size());
     }
 
-    /** The cache is bounded; seeding past the cap must not grow it unboundedly. */
+    /**
+     * The cache is bounded; seeding past the cap must not grow it unboundedly.
+     *
+     * @throws Exception if the private cache field is inaccessible by reflection
+     */
     @Test
     public void testCacheIsBounded() throws Exception {
         org.junit.Assume.assumeTrue("system AES path inactive on this JVM", systemAESActive());

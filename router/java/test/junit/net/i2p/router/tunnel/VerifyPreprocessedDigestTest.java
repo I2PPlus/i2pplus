@@ -132,6 +132,8 @@ public class VerifyPreprocessedDigestTest {
     /**
      * Hashing the IV before the payload gives a different digest, which is what
      * makes a reversal of the two updates detectable rather than invisible.
+     *
+     * @throws Exception if the digest provider fails while hashing either ordering
      */
     @Test
     public void testIvFirstDiffersFromPayloadFirst() throws Exception {
@@ -186,6 +188,7 @@ public class VerifyPreprocessedDigestTest {
      * @param offset where the message starts inside the buffer
      * @param paddingEnd one past the last padding byte
      * @param payloadLength how many payload bytes follow the padding
+     * @throws Exception if the digest provider fails while hashing the two ranges
      */
     private void assertRangesHashAsPayloadThenIV(int offset, int paddingEnd, int payloadLength) throws Exception {
         byte[] buf = syntheticMessage(offset, paddingEnd, payloadLength);
@@ -209,6 +212,7 @@ public class VerifyPreprocessedDigestTest {
      * @param buf the buffer holding the message
      * @param ranges {offset, length} of the first range, then of the second
      * @return the 32 byte digest
+     * @throws Exception if the digest provider fails to write those bytes into v
      */
     private byte[] twoRangeDigest(byte[] buf, int[] ranges) throws Exception {
         byte[] v = new byte[Hash.HASH_LENGTH];

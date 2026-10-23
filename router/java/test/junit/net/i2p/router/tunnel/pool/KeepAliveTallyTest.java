@@ -32,6 +32,11 @@ public class KeepAliveTallyTest {
      * cycle sends anything, so it is supply, and {@code actedOn()} is delivery. The previous
      * single "delivered" field sat on the candidate count and read as a fall in successful
      * keepalives when only the pool above budget had shrunk.
+     *
+     * @param candidates number of peers the selector offered for keepalive before
+     *                   the cycle sent anything, the supply side of the tally
+     * @return a tally holding that candidate count with a budget of 400 peers,
+     *         every other bucket left at zero
      */
     private static TunnelPeerSelector.KeepAliveTally full(int candidates) {
         TunnelPeerSelector.KeepAliveTally t = new TunnelPeerSelector.KeepAliveTally();

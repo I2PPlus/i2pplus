@@ -19,7 +19,11 @@ import org.junit.Test;
  */
 public class TorrentCreateFilterTest {
 
-    /** A plain data round trip must reproduce every field. */
+    /**
+     * A plain data round trip must reproduce every field.
+     *
+     * @throws Exception if the filter cannot be serialized or read back
+     */
     @Test
     public void testSerializationRoundTrip() throws Exception {
         TorrentCreateFilter original = new TorrentCreateFilter("Mine", "*.pdf", "exclude", true);
@@ -33,7 +37,11 @@ public class TorrentCreateFilterTest {
         assertEquals(original.isDefault, copy.isDefault);
     }
 
-    /** The default filter (isDefault=true) must serialize and come back as the default. */
+    /**
+     * The default filter (isDefault=true) must serialize and come back as the default.
+     *
+     * @throws Exception if the filter cannot be serialized or read back
+     */
     @Test
     public void testSerializationOfDefaultFilter() throws Exception {
         TorrentCreateFilter original = new TorrentCreateFilter("Default", "*", "include", true);
@@ -59,7 +67,11 @@ public class TorrentCreateFilterTest {
         assertEquals(-4345254904315868015L, suid);
     }
 
-    /** Empty pattern/value fields must survive a round trip unchanged. */
+    /**
+     * Empty pattern/value fields must survive a round trip unchanged.
+     *
+     * @throws Exception if the filter cannot be serialized or read back
+     */
     @Test
     public void testSerializationOfEmptyFields() throws Exception {
         TorrentCreateFilter original = new TorrentCreateFilter("", "", "", false);

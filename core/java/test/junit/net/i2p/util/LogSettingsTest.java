@@ -80,6 +80,9 @@ public class LogSettingsTest extends TestCase {
      * therefore look unchanged and the second is silently dropped, so a level
      * change now and then never reached the Log. Nudging the mtime past the clock
      * removes the race.
+     *
+     * @throws IOException if the properties cannot be written to the scratch
+     *                     config file
      */
     private void reread() throws IOException {
         DataHelper.storeProps(p, f);
@@ -88,7 +91,11 @@ public class LogSettingsTest extends TestCase {
         log = _context.logManager().getLog(LogSettingsTest.class);
     }
 
-    /** An exact entry for this class applies to it. */
+    /**
+     * An exact entry for this class applies to it.
+     *
+     * @throws IOException if the scratch logger config cannot be written
+     */
     public void testExactEntryApplies() throws IOException {
         p.setProperty("logger.record." + US, Log.toLevelString(Log.ERROR));
         reread();
@@ -100,6 +107,8 @@ public class LogSettingsTest extends TestCase {
     /**
      * The most specific matching entry wins over a broader one. A router config
      * routinely sets a package-wide level and then overrides one noisy class.
+     *
+     * @throws IOException if the scratch logger config cannot be written
      */
     public void testLongerPrefixWins() throws IOException {
         p.setProperty("logger.record.net.i2p", Log.toLevelString(Log.WARN));
@@ -120,6 +129,8 @@ public class LogSettingsTest extends TestCase {
      * to CRIT and ERROR would be suppressed; not captured, it keeps the default
      * and ERROR still passes. Asserting DEBUG instead would be vacuous, since
      * DEBUG fails under the default too.
+     *
+     * @throws IOException if the scratch logger config cannot be written
      */
     public void testPartialPrefixDoesNotMatch() throws IOException {
         p.setProperty("logger.record.net.i2p.util.LogSettingsTes", Log.toLevelString(Log.CRIT));
@@ -130,7 +141,11 @@ public class LogSettingsTest extends TestCase {
                     log.shouldLog(Log.WARN));
     }
 
-    /** A longer sibling name that merely shares this prefix is also not captured. */
+    /**
+     * A longer sibling name that merely shares this prefix is also not captured.
+     *
+     * @throws IOException if the scratch logger config cannot be written
+     */
     public void testSiblingWithSharedPrefixNotMatched() throws IOException {
         p.setProperty("logger.record.net.i2p.util.LogSettingsTestHelper",
                       Log.toLevelString(Log.CRIT));
@@ -141,7 +156,11 @@ public class LogSettingsTest extends TestCase {
                     log.shouldLog(Log.WARN));
     }
 
-    /** With no matching entry the class falls back to {@code logger.defaultLevel}. */
+    /**
+     * With no matching entry the class falls back to {@code logger.defaultLevel}.
+     *
+     * @throws IOException if the scratch logger config cannot be written
+     */
     public void testNoEntryUsesDefaultLevel() throws IOException {
         reread();
         assertFalse("default is ERROR, so INFO must be suppressed", log.shouldLog(Log.INFO));

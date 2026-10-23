@@ -39,6 +39,8 @@ public class GradientStopOpacityTest {
      *
      * <p>Checked by parsing each value rather than by matching text, because the failure was a
      * malformed number: "0." looks plausible in a diff and is not a number at all.
+     *
+     * @throws Exception not expected; the SVG writer used here declares no checked exceptions
      */
     @Test
     public void aTwoStopGradientKeepsBothAlphas() throws Exception {
@@ -49,7 +51,11 @@ public class GradientStopOpacityTest {
         assertAlphasParseable(gradient, 0.251d, 0.031d);
     }
 
-    /** Three stops is the case that only became reachable with multi-stop gradients. */
+    /**
+     * Three stops is the case that only became reachable with multi-stop gradients.
+     *
+     * @throws Exception not expected; the SVG writer used here declares no checked exceptions
+     */
     @Test
     public void aThreeStopGradientKeepsEveryAlpha() throws Exception {
         String gradient = gradientDef(new LinearGradientPaint(
@@ -61,7 +67,11 @@ public class GradientStopOpacityTest {
         assertAlphasParseable(gradient, 0.251d, 0.031d, 0.031d);
     }
 
-    /** An opaque stop needs no attribute at all, which is how the writer has always done it. */
+    /**
+     * An opaque stop needs no attribute at all, which is how the writer has always done it.
+     *
+     * @throws Exception not expected; the SVG writer used here declares no checked exceptions
+     */
     @Test
     public void anOpaqueStopCarriesNoOpacityAttribute() throws Exception {
         String gradient = gradientDef(new GradientPaint(
@@ -77,6 +87,8 @@ public class GradientStopOpacityTest {
      * <p>#08 is the floor in every shipped fill, and it is the value that rounded away. A
      * regression to whole-number rounding would fail here rather than at the first translucent
      * gradient somebody themes.
+     *
+     * @throws Exception not expected; the SVG writer used here declares no checked exceptions
      */
     @Test
     public void theThinnestThemeAlphaIsNotRoundedAway() throws Exception {
@@ -94,7 +106,12 @@ public class GradientStopOpacityTest {
                    opacity > 0d && opacity < 0.05d);
     }
 
-    /** A flat fill of the same colour is unaffected, which is the asymmetry that hid this. */
+    /**
+     * A flat fill of the same colour is unaffected, which is the asymmetry that hid this.
+     *
+     * @throws Exception not expected; drawing a flat fill and reading the SVG back throws
+     *                   nothing checked
+     */
     @Test
     public void aFlatFillStillWritesItsOwnAlpha() throws Exception {
         StringBuilder sb = new StringBuilder();
@@ -106,7 +123,13 @@ public class GradientStopOpacityTest {
         assertTrue("a flat fill lost its alpha: " + svg, svg.contains("fill-opacity:.03"));
     }
 
-    /** Assert each written opacity parses and matches the expected fraction, in order. */
+    /**
+     * Assert each written opacity parses and matches the expected fraction, in order.
+     *
+     * @param gradient the gradient definition whose stop-opacity attributes are checked
+     * @param expected the opacity each stop must write, as a fraction of 1 in stop order; its
+     *                 length is also how many opacities the definition must contain
+     */
     private static void assertAlphasParseable(String gradient, double... expected) {
         Matcher m = STOP_OPACITY.matcher(gradient);
         int i = 0;
@@ -121,7 +144,14 @@ public class GradientStopOpacityTest {
                      expected.length, i);
     }
 
-    /** Whether the text is a number a renderer will accept. */
+    /**
+     * Whether the text is a number a renderer will accept.
+     *
+     * @param text the stop-opacity attribute value as written, for example ".03" or the
+     *             malformed "0." this test exists to catch
+     * @return true when the text parses as a fraction between 0 and 1 inclusive, false when it
+     *         does not parse at all
+     */
     private static boolean isNumber(String text) {
         try {
             double d = Double.parseDouble(text);
@@ -131,11 +161,24 @@ public class GradientStopOpacityTest {
         }
     }
 
+    /**
+     * Count the stop elements the writer emitted inside one gradient definition.
+     *
+     * @param gradient the gradient definition to count the stops of
+     * @return how many stop elements the definition contains, zero when the gradient has none
+     */
     private static int countStops(String gradient) {
         return gradient.split("<stop ").length - 1;
     }
 
-    /** Render one filled shape and return just its gradient definition. */
+    /**
+     * Render one filled shape and return just its gradient definition.
+     *
+     * @param paint the paint to fill the shape with, either a gradient or a flat colour
+     * @return the text between the opening {@code <linearGradient} tag and its closing tag, so
+     *         the stop attributes can be inspected on their own
+     * @throws Exception not expected; the SVG writer used here declares no checked exceptions
+     */
     private static String gradientDef(java.awt.Paint paint) throws Exception {
         StringBuilder sb = new StringBuilder();
         SVGGraphics2D g = new SVGGraphics2D(400, 200, sb);

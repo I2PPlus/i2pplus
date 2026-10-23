@@ -22,7 +22,12 @@ public class PeerStateTest {
     private static final int PIECE_LENGTH = 16384;
     private static final long TOTAL_LENGTH = 30000L;
 
-    /** Build a bencoded single-file torrent byte stream. */
+    /**
+     * Build a bencoded single-file torrent byte stream.
+     *
+     * @param pieceHashes the raw piece hash bytes, 20 per piece, concatenated
+     * @return the complete torrent file as ISO-8859-1 encoded bencode
+     */
     static byte[] buildTorrentBytes(byte[] pieceHashes) {
         StringBuilder sb = new StringBuilder(256);
         sb.append('d');
@@ -43,13 +48,26 @@ public class PeerStateTest {
         return rv;
     }
 
-    /** Peer with no socket, so getI2PSocket() returns null. */
+    /**
+     * Peer with no socket, so getI2PSocket() returns null.
+     *
+     * @param mi the torrent metadata the peer belongs to
+     * @return a socketless peer with an all-zero 32-byte peer id
+     * @throws Throwable on peer id construction failure
+     */
     private static Peer peerFor(MetaInfo mi) throws Throwable {
         PeerID pid = new PeerID(new byte[32], (I2PSnarkUtil) null);
         return new Peer(pid, new byte[20], mi.getInfoHash(), mi);
     }
 
-    /** PeerState for a two-piece torrent, unchoked and with the given expected set. */
+    /**
+     * PeerState for a two-piece torrent, unchoked and with the given expected set.
+     *
+     * @param expected the allowed-fast set the peer destination is expected to
+     *                 produce, null for an unverifiable destination
+     * @return an unchoked two-piece peer state ready for allowed-fast messages
+     * @throws Throwable on torrent parse failure
+     */
     private static PeerState stateFor(Set<Integer> expected) throws Throwable {
         MetaInfo mi = new MetaInfo(new ByteArrayInputStream(buildTorrentBytes(new byte[40])));
         PeerState ps = new PeerState(peerFor(mi), null, null, mi, null, null);

@@ -34,7 +34,7 @@ public class ConnectionSoftFailureRescheduleTest {
         assertFalse(Connection.shouldRateLimitSoftRetransmit(1000, -1, 5000));
     }
 
-    /** A report exactly at the spacing boundary is allowed (strict < gate). */
+    /** A report exactly at the spacing boundary is allowed (strict &lt; gate). */
     @Test
     public void testAtBoundaryAllowed() {
         assertFalse(Connection.shouldRateLimitSoftRetransmit(6000, 1000, 5000));
@@ -77,7 +77,7 @@ public class ConnectionSoftFailureRescheduleTest {
 
     // ---- synGiveUpBudgetExceeded ----
 
-    /** Give-up is strict >= (SYN give-up after the budget is covered). */
+    /** Give-up is strict &gt;= (SYN give-up after the budget is covered). */
     @Test
     public void testAtBudgetBoundaryNotExceeded() {
         assertFalse(Connection.synGiveUpBudgetExceeded(11, 0, 12));
@@ -108,14 +108,14 @@ public class ConnectionSoftFailureRescheduleTest {
         assertTrue(Connection.synGiveUpBudgetExceeded(20, 7, 12));
     }
 
-    /** Soft accounting clamped at zero: soft > total cannot undercount below 0. */
+    /** Soft accounting clamped at zero: soft &gt; total cannot undercount below 0. */
     @Test
     public void testSoftOvercountClampedToZero() {
         assertFalse(Connection.synGiveUpBudgetExceeded(5, 6, 12));
         assertFalse(Connection.synGiveUpBudgetExceeded(5, 500, 12));
     }
 
-    /** Degenerate budgets: a budget of zero gives up on any send (>= semantics
+    /** Degenerate budgets: a budget of zero gives up on any send (&gt;= semantics
      * mirror the original {@code numSends >= maxSynSends}). */
     @Test
     public void testDegenerateBudget() {

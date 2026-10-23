@@ -47,7 +47,12 @@ public class StandardSocketContractTest {
         assertEquals(_socket.getReceiveBufferSize(), _socket.getSendBufferSize());
     }
 
-    /** close() must set isClosed() to true. */
+    /**
+     * close() must set isClosed() to true.
+     *
+     * @throws IOException if close() finds the socket already closed, or the
+     *                     underlying I2PSocket's close() fails
+     */
     @Test
     public void testCloseSetsClosed() throws IOException {
         assertFalse(_socket.isClosed());
@@ -55,7 +60,12 @@ public class StandardSocketContractTest {
         assertTrue(_socket.isClosed());
     }
 
-    /** close() must set isConnected() to false. */
+    /**
+     * close() must set isConnected() to false.
+     *
+     * @throws IOException if close() finds the socket already closed, or the
+     *                     underlying I2PSocket's close() fails
+     */
     @Test
     public void testCloseSetsDisconnected() throws IOException {
         assertTrue(_socket.isConnected());
@@ -63,7 +73,12 @@ public class StandardSocketContractTest {
         assertFalse(_socket.isConnected());
     }
 
-    /** close() must set isInputShutdown() to true. */
+    /**
+     * close() must set isInputShutdown() to true.
+     *
+     * @throws IOException if close() finds the socket already closed, or the
+     *                     underlying I2PSocket's close() fails
+     */
     @Test
     public void testCloseSetsInputShutdown() throws IOException {
         assertFalse(_socket.isInputShutdown());
@@ -71,7 +86,12 @@ public class StandardSocketContractTest {
         assertTrue(_socket.isInputShutdown());
     }
 
-    /** close() must set isOutputShutdown() to true. */
+    /**
+     * close() must set isOutputShutdown() to true.
+     *
+     * @throws IOException if close() finds the socket already closed, or the
+     *                     underlying I2PSocket's close() fails
+     */
     @Test
     public void testCloseSetsOutputShutdown() throws IOException {
         assertFalse(_socket.isOutputShutdown());
@@ -79,14 +99,24 @@ public class StandardSocketContractTest {
         assertTrue(_socket.isOutputShutdown());
     }
 
-    /** Double close must throw IOException. */
+    /**
+     * Double close must throw IOException.
+     *
+     * @throws IOException expected here: the second close() finds the socket
+     *                     already closed and reports "Already closed"
+     */
     @Test(expected = IOException.class)
     public void testDoubleCloseThrows() throws IOException {
         _socket.close();
         _socket.close();
     }
 
-    /** shutdownInput() must set isInputShutdown() and isConnected(). */
+    /**
+     * shutdownInput() must set isInputShutdown() and isConnected().
+     *
+     * @throws IOException propagated from close(): the socket was already
+     *                     closed, or the underlying I2PSocket's close() fails
+     */
     @Test
     public void testShutdownInputSetsFlags() throws IOException {
         assertFalse(_socket.isInputShutdown());
@@ -97,7 +127,12 @@ public class StandardSocketContractTest {
         assertTrue(_socket.isClosed());
     }
 
-    /** shutdownOutput() must set isOutputShutdown() and isConnected(). */
+    /**
+     * shutdownOutput() must set isOutputShutdown() and isConnected().
+     *
+     * @throws IOException propagated from close(): the socket was already
+     *                     closed, or the underlying I2PSocket's close() fails
+     */
     @Test
     public void testShutdownOutputSetsFlags() throws IOException {
         assertFalse(_socket.isOutputShutdown());
@@ -108,7 +143,12 @@ public class StandardSocketContractTest {
         assertTrue(_socket.isClosed());
     }
 
-    /** isConnected() must return false after close. */
+    /**
+     * isConnected() must return false after close.
+     *
+     * @throws IOException if close() finds the socket already closed, or the
+     *                     underlying I2PSocket's close() fails
+     */
     @Test
     public void testIsConnectedAfterClose() throws IOException {
         _socket.close();

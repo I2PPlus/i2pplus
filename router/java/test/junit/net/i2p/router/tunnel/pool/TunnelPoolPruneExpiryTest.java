@@ -25,6 +25,13 @@ public class TunnelPoolPruneExpiryTest {
     /**
      * Context answering the two prune properties; unmentioned properties
      * fall through to the supplied default (RouterContext contract).
+     *
+     * @param canonical value for {@code router.pruneEarlyExpiryDelay} in ms, or
+     *                  -1 when the property should read as absent
+     * @param legacy value for {@code router.tunnel.pruneEarlyExpiryDelay} in ms,
+     *               or -1 when the property should read as absent
+     * @return a mocked RouterContext answering those two properties and nothing
+     *         else
      */
     private static RouterContext ctxWith(final long canonical, final long legacy) {
         RouterContext ctx = mock(RouterContext.class);

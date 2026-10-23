@@ -33,6 +33,9 @@ public class BuildCorrelationIdTest {
      * <p>The constructor only reads {@code getSettings().getDestinationNickname()},
      * so a mock pool with a real settings object is enough. No router context is
      * dereferenced on this path.
+     *
+     * @return a fresh three-hop outbound config with a null destination and a null router
+     *         context, backed by the stubbed pool
      */
     private PooledTunnelCreatorConfig config() {
         TunnelPool pool = mock(TunnelPool.class);

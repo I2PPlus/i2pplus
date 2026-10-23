@@ -24,6 +24,9 @@ class LocalClientConnectionRunner extends ClientConnectionRunner {
     /**
      * Create a new runner with the given queues.
      *
+     * @param context the router context the runner operates in
+     * @param manager the client manager that owns this runner's queues
+     * @param socket the connected client socket the message reader reads from
      */
     public LocalClientConnectionRunner(RouterContext context, ClientManager manager, Socket socket) {
         super(context, manager, socket);
@@ -78,6 +81,10 @@ class LocalClientConnectionRunner extends ClientConnectionRunner {
 
     /**
      * So LocalClientMessageEventListener can lookup other local dests.
+     *
+     * @param h hash of the destination to look up
+     * @return the local destination whose hash matches, null if no runner holds
+     *         it
      */
     public Destination localLookup(Hash h) {
         for (Destination d : _manager.getRunnerDestinations()) {

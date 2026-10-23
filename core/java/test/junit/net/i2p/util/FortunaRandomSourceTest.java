@@ -89,7 +89,7 @@ public class FortunaRandomSourceTest {
         assertTrue(sawNeg);
     }
 
-    /** nextInt(n) never returns a value >= n even at the power-of-two edge. */
+    /** nextInt(n) never returns a value &gt;= n even at the power-of-two edge. */
     @Test
     public void testPowerOfTwoEdge() {
         for (int i = 0; i < 10000; i++) {

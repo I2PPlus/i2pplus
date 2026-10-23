@@ -29,7 +29,15 @@ public class TunnelPoolReuseCandidateTest {
     private static final long NOW = 1_000_000L;
     private static final long THREE_MIN = 3L * 60 * 1000;
 
-    /** An eligible tunnel of the given length, expiring at {@code expiresAt}. */
+    /**
+     * An eligible tunnel of the given length, expiring at {@code expiresAt}.
+     *
+     * @param length number of hops the tunnel reports
+     * @param expiresAt absolute expiration time, in ms on the router clock
+     * @param reused true to report the tunnel as already reused, false for a
+     *               tunnel never reused
+     * @return a mock TunnelInfo carrying those three values
+     */
     private static TunnelInfo tunnel(int length, long expiresAt, boolean reused) {
         TunnelInfo ti = mock(TunnelInfo.class);
         when(ti.getLength()).thenReturn(length);
@@ -38,7 +46,12 @@ public class TunnelPoolReuseCandidateTest {
         return ti;
     }
 
-    /** A tunnel expiring well inside the reuse window. */
+    /**
+     * A tunnel expiring well inside the reuse window.
+     *
+     * @param length number of hops the tunnel reports
+     * @return a mock TunnelInfo expiring 60s after NOW and not yet reused
+     */
     private static TunnelInfo eligible(int length) {
         return tunnel(length, NOW + 60_000L, false);
     }

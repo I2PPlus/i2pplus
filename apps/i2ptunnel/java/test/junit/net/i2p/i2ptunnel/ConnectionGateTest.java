@@ -142,7 +142,7 @@ public class ConnectionGateTest {
     // Queue-depth admission gate (shouldRejectOnQueue)
     // =====================================================================
 
-    /** Disabled gate (capacity or threads <= 0) never rejects. */
+    /** Disabled gate (capacity or threads &lt;= 0) never rejects. */
     @Test
     public void testQueueGateDisabled() {
         assertFalse(I2PTunnelServer.shouldRejectOnQueue(10000, 0, 0, 8));
@@ -201,7 +201,7 @@ public class ConnectionGateTest {
         assertTrue(I2PTunnelServer.shouldRejectOnQueue(50, 2048, 16, 16, 60_000));
     }
 
-    /** parseServerThreadOverride: null / garbage / below-floor -> -1; valid passthrough. */
+    /** parseServerThreadOverride: null / garbage / below-floor -&gt; -1; valid passthrough. */
     @Test
     public void testParseServerThreadOverride() {
         assertEquals(-1, I2PTunnelServer.parseServerThreadOverride(null));

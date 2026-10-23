@@ -24,7 +24,13 @@ public class SVGImageWorkerThemeResizeTest {
     private static final String CLASSIC_TEXT = "#33333f";
     private static final String MIDNIGHT_TEXT = "#c9ceff";
 
-    /** Build at 0x0 with a theme, resize like the renderer does, and emit. */
+    /**
+     * Build at 0x0 with a theme, resize like the renderer does, and emit.
+     *
+     * @param w the worker as the renderer constructs it, at 0x0 with the theme under test
+     * @return the emitted document, decoded from the worker's output stream as UTF-8
+     * @throws Exception if the resize, the drawing, or emitting or decoding the image fails
+     */
     private static String svgAfterResize(SVGImageWorker w) throws Exception {
         w.resize(300, 120);
         w.fillRect(10, 10, 120, 60, Color.WHITE);
@@ -33,7 +39,11 @@ public class SVGImageWorkerThemeResizeTest {
         return os.toString("UTF-8");
     }
 
-    /** The regression, in the exact shape the renderer triggers. */
+    /**
+     * The regression, in the exact shape the renderer triggers.
+     *
+     * @throws Exception if the worker cannot be resized or its SVG cannot be emitted
+     */
     @Test
     public void aLineOnlyGraphKeepsTheThemeAcrossAResize() throws Exception {
         SVGImageWorker w = new SVGImageWorker(0, 0, false, false, "dark");
@@ -43,6 +53,12 @@ public class SVGImageWorkerThemeResizeTest {
         assertFalse("the classic text colour leaked in", svg.contains(CLASSIC_TEXT));
     }
 
+    /**
+     * Control for the resize itself: a worker built at the real size never has its graphics
+     * object rebuilt, so the theme must apply without one.
+     *
+     * @throws Exception if the drawing, or emitting or decoding the image, fails
+     */
     @Test
     public void withoutAResizeTheThemeStillApplies() throws Exception {
         SVGImageWorker w = new SVGImageWorker(300, 120, false, false, "dark");
@@ -57,6 +73,8 @@ public class SVGImageWorkerThemeResizeTest {
      * Midnight has its own font colour rather than the dark beige, so what matters is
      * that it is not the classic one: a line-only graph that kept its theme cannot have
      * fallen through to the classic branch.
+     *
+     * @throws Exception if the worker cannot be resized or its SVG cannot be emitted
      */
     @Test
     public void midnightAlsoSurvivesTheResize() throws Exception {
@@ -68,7 +86,11 @@ public class SVGImageWorkerThemeResizeTest {
                    svg.contains(MIDNIGHT_TEXT));
     }
 
-    /** No theme means infer from the drawing, which is the pre-existing behaviour. */
+    /**
+     * No theme means infer from the drawing, which is the pre-existing behaviour.
+     *
+     * @throws Exception if the worker cannot be resized or its SVG cannot be emitted
+     */
     @Test
     public void aNullThemeIsNotForcedToDark() throws Exception {
         SVGImageWorker w = new SVGImageWorker(0, 0, false, false, null);
@@ -77,7 +99,11 @@ public class SVGImageWorkerThemeResizeTest {
                     svg.contains(DARK_TEXT));
     }
 
-    /** Resizing repeatedly must not lose it either. */
+    /**
+     * Resizing repeatedly must not lose it either.
+     *
+     * @throws Exception if a resize fails, or emitting or decoding the image fails
+     */
     @Test
     public void repeatedResizesKeepTheTheme() throws Exception {
         SVGImageWorker w = new SVGImageWorker(0, 0, false, false, "dark");
@@ -89,6 +115,12 @@ public class SVGImageWorkerThemeResizeTest {
         assertTrue(os.toString("UTF-8").contains(DARK_TEXT));
     }
 
+    /**
+     * Trims the rendered document so a failure message stays readable.
+     *
+     * @param s the emitted SVG document
+     * @return the first 300 characters, or the whole document when it is shorter
+     */
     private static String head(String s) {
         return s.length() > 300 ? s.substring(0, 300) : s;
     }

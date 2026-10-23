@@ -184,7 +184,16 @@ class Coding implements Comparable<Coding>, CodingMethod, Histogram.BitMetric {
             sum += H_i;
         return sum;
     }
-    /** Largest int representable by (B,H,S) in up to nMax bytes. */
+    /**
+     * Largest int representable by (B,H,S) in up to nMax bytes.
+     *
+     * @param B the maximum code length in bytes, 1 to 5
+     * @param H the number of byte values that signal a continuation byte, 1 to 256
+     * @param S the number of low-order bits used for the sign, 0 to 3
+     * @param nMax the number of code bytes to consider, 0 to B
+     * @return the largest signed value codable in nMax bytes; -1 if no positive
+     *         value is codable
+     */
     public static int codeMax(int B, int H, int S, int nMax) {
         long range = codeRangeLong(B, H, nMax);
         if (range == 0)
@@ -202,9 +211,16 @@ class Coding implements Comparable<Coding>, CodingMethod, Histogram.BitMetric {
             return Integer.MAX_VALUE;
         return smax;
     }
-    /** Smallest int representable by (B,H,S) in up to nMax bytes.
-        Returns Integer.MIN_VALUE if 32-bit wraparound covers
-        the entire negative range.
+    /**
+     * Smallest int representable by (B,H,S) in up to nMax bytes.
+     *
+     * @param B the maximum code length in bytes, 1 to 5
+     * @param H the number of byte values that signal a continuation byte, 1 to 256
+     * @param S the number of low-order bits used for the sign, 0 to 3
+     * @param nMax the number of code bytes to consider, 0 to B
+     * @return the smallest signed value codable in nMax bytes; 0 if no negative
+     *         value is codable, Integer.MIN_VALUE if 32-bit wraparound covers
+     *         the entire negative range
      */
     public static int codeMin(int B, int H, int S, int nMax) {
         long range = codeRangeLong(B, H, nMax);
@@ -412,20 +428,27 @@ class Coding implements Comparable<Coding>, CodingMethod, Histogram.BitMetric {
         return of(B, H, S, 0);
     }
 
-    /** Can this coding represent a single value, possibly a delta?
-     *  This ignores the D property.  That is, for delta codings,
-     *  this tests whether a delta value of 'x' can be coded.
-     *  For signed delta codings which produce unsigned end values,
-     *  use canRepresentUnsigned.
+    /**
+     * Can this coding represent a single value, possibly a delta?
+     * This ignores the D property.  That is, for delta codings,
+     * this tests whether a delta value of 'x' can be coded.
+     * For signed delta codings which produce unsigned end values,
+     * use canRepresentUnsigned.
+     *
+     * @param x the value to test; for delta codings this is a delta, not a
+     *          final value
+     * @return true if x lies within this coding's signed range, min to max
      */
     public boolean canRepresentSigned(int x) {
         return (x >= min && x <= max);
     }
-    /** Can this coding, apart from its S property,
-     *  represent a single value?  (Negative values
-     *  can only be represented via 32-bit overflow,
-     *  so this returns true for negative values
-     *  if isFullRange is true.)
+    /**
+     * Can this coding, apart from its S property, represent a single value?
+     * Negative values can only be represented via 32-bit overflow,
+     * so this returns true for negative values if isFullRange is true.
+     *
+     * @param x the value to test as an unsigned code
+     * @return true if x lies within this coding's unsigned range, umin to umax
      */
     public boolean canRepresentUnsigned(int x) {
         return (x >= umin && x <= umax);
@@ -493,23 +516,34 @@ class Coding implements Comparable<Coding>, CodingMethod, Histogram.BitMetric {
         }
     }
 
-    /** Tell if the range of this coding (number of distinct
-     *  representable values) can be expressed in 32 bits.
+    /**
+     * Tell if the range of this coding, the number of distinct
+     * representable values, can be expressed in 32 bits.
+     *
+     * @return true if this coding encodes a count of values that fits in a
+     *         positive 32-bit value
      */
     boolean isSubrange() {
         return max < Integer.MAX_VALUE
             && ((long)max - (long)min + 1) <= Integer.MAX_VALUE;
     }
 
-    /** Tell if this coding can represent all 32-bit values.
-     *  Note:  Some codings, such as unsigned ones, can be neither
-     *  subranges nor full-range codings.
+    /**
+     * Tell if this coding can represent all 32-bit values.
+     * Note:  Some codings, such as unsigned ones, can be neither
+     * subranges nor full-range codings.
+     *
+     * @return true if both Integer.MIN_VALUE and Integer.MAX_VALUE are codable
      */
     boolean isFullRange() {
         return max == Integer.MAX_VALUE && min == Integer.MIN_VALUE;
     }
 
-    /** Return the number of values this coding (a subrange) can represent. */
+    /**
+     * Return the number of values this coding (a subrange) can represent.
+     *
+     * @return the count of distinct codable values, min to max inclusive
+     */
     int getRange() {
         assert(isSubrange());
         return (max - min) + 1;  // range includes both min & max
@@ -522,7 +556,12 @@ class Coding implements Comparable<Coding>, CodingMethod, Histogram.BitMetric {
     Coding setD(int del) { return Coding.of(B, H, S, del); }
     Coding getDeltaCoding() { return setD(del+1); }
 
-    /** Return a coding suitable for representing summed, modulo-reduced values. */
+    /**
+     * Return a coding suitable for representing summed, modulo-reduced values.
+     *
+     * @return the non-delta coding one level below this one, with S forced to
+     *         zero, or this coding itself if it is not a delta coding
+     */
     Coding getValueCoding() {
         if (isDelta())
             return Coding.of(B, H, 0, del-1);
@@ -530,8 +569,12 @@ class Coding implements Comparable<Coding>, CodingMethod, Histogram.BitMetric {
             return this;
     }
 
-    /** Reduce the given value to be within this coding's unsigned range,
-     *  by adding or subtracting a multiple of (max-min+1).
+    /**
+     * Reduce the given value to be within this coding's unsigned range,
+     * by adding or subtracting a multiple of (max-min+1).
+     *
+     * @param value the value to reduce; it may lie outside the 32-bit range
+     * @return the value modulo the coding's range, shifted into umin to umax
      */
     int reduceToUnsignedRange(long value) {
         if (value == (int)value && canRepresentUnsigned((int)value))
@@ -568,9 +611,11 @@ class Coding implements Comparable<Coding>, CodingMethod, Histogram.BitMetric {
         return value;
     }
 
-    /** Does this coding support at least one negative value?
-        Includes codings that can do so via 32-bit wraparound.
-    /** Does this coding code arrays by making successive differences? */
+    /**
+     * Does this coding code arrays by making successive differences?
+     *
+     * @return true if each stored value is the difference from the previous one
+     */
     boolean isDelta() {
         return del != 0;
     }
@@ -596,7 +641,13 @@ class Coding implements Comparable<Coding>, CodingMethod, Histogram.BitMetric {
         return dkey;
     }
 
-    /** Heuristic measure of the difference between two codings. */
+    /**
+     * Heuristic measure of the difference between two codings.
+     *
+     * @param that the coding to compare against
+     * @return the weighted parameter distance; zero only when the two codings
+     *         are equal
+     */
     public int distanceFrom(Coding that) {
         int diffdel = this.del - that.del;
         if (diffdel < 0)  diffdel = -diffdel;
@@ -630,7 +681,12 @@ class Coding implements Comparable<Coding>, CodingMethod, Histogram.BitMetric {
         return 128*256;
     }
 
-    /** ceiling(log[2](x)): {1->0, 2->1, 3->2, 4->2, ...} */
+    /**
+     * ceiling(log[2](x)): {1-&gt;0, 2-&gt;1, 3-&gt;2, 4-&gt;2, ...}
+     *
+     * @param x the value to take the base-2 logarithm of, 1 or greater
+     * @return the smallest number of bits needed to hold x
+     */
     static int ceil_lg2(int x) {
         assert(x-1 >= 0);  // x in range (int.MIN_VALUE -> 32)
         x -= 1;
@@ -652,8 +708,12 @@ class Coding implements Comparable<Coding>, CodingMethod, Histogram.BitMetric {
         }
     }
 
-    /** Number of significant bits in i, not counting sign bits.
-     *  For positive i, it is ceil_lg2(i + 1).
+    /**
+     * Number of significant bits in i, not counting sign bits.
+     * For positive i, it is ceil_lg2(i + 1).
+     *
+     * @param i the value to measure; a negative value is bit-complemented first
+     * @return the number of bits needed to hold i, zero for 0 and -1
      */
     static int bitWidth(int i) {
         if (i < 0)  i = ~i;  // change sign
@@ -676,12 +736,20 @@ class Coding implements Comparable<Coding>, CodingMethod, Histogram.BitMetric {
         return w;
     }
 
-    /** Create an array of successive differences.
-     *  If min==max, accept any and all 32-bit overflow.
-     *  Otherwise, avoid 32-bit overflow, and reduce all differences
-     *  to a value in the given range, by adding or subtracting
-     *  multiples of the range cardinality (max-min+1).
-     *  Also, the values are assumed to be in the range [0..(max-min)].
+    /**
+     * Create an array of successive differences.
+     * If min==max, accept any and all 32-bit overflow.
+     * Otherwise, avoid 32-bit overflow, and reduce all differences
+     * to a value in the given range, by adding or subtracting
+     * multiples of the range cardinality (max-min+1).
+     * Also, the values are assumed to be in the range [0..(max-min)].
+     *
+     * @param values the source array holding the sequence to difference
+     * @param start the first index of values to include
+     * @param end one past the last index to include
+     * @param min the low end of the delta range; equal to max to allow overflow
+     * @param max the high end of the delta range
+     * @return a new array of end-start successive differences
      */
     static int[] makeDeltas(int[] values, int start, int end,
                             int min, int max) {
@@ -747,10 +815,14 @@ class Coding implements Comparable<Coding>, CodingMethod, Histogram.BitMetric {
         return (double) getLength(value) * 8;
     }
 
-    /** How many bytes are in the coding of this value?
-     *  Returns Integer.MAX_VALUE if the value has no coding.
-     *  The coding must not be a delta coding, since there is no
-     *  definite size for a single value apart from its context.
+    /**
+     * How many bytes are in the coding of this value?
+     * Returns Integer.MAX_VALUE if the value has no coding.
+     * The coding must not be a delta coding, since there is no
+     * definite size for a single value apart from its context.
+     *
+     * @param value the value whose coded length is wanted
+     * @return the coded length in bytes, Integer.MAX_VALUE if uncodable
      */
     public int getLength(int value) {
         if (isDelta() && isSubrange()) {

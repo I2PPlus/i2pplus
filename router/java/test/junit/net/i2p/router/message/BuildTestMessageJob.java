@@ -50,7 +50,9 @@ public class BuildTestMessageJob extends JobImpl {
     /**
      * Send a ping to the target router and invoke the appropriate callbacks on success or failure.
      *
+     * @param ctx the context the job runs in, source of the job queue, clock and randomness
      * @param target router being tested
+     * @param replyTo hash of the router the delivery-status acknowledgement is sent back to
      * @param onSendJob after the ping is successful
      * @param onSendFailedJob after the ping fails or times out
      * @param timeoutMs how long to wait before timing out
@@ -121,6 +123,9 @@ public class BuildTestMessageJob extends JobImpl {
 
     /**
      * Build a clove that sends a DeliveryStatusMessage to us.
+     *
+     * @return the clove carrying that message, routed to the reply-to hash and addressed
+     *         to the target router
      */
     private PayloadGarlicConfig buildAckClove() {
 

@@ -23,6 +23,9 @@ public class DataHelperTest {
     /**
      * Test to/from/read/writeLong with every 1, 2, and 4 byte value, as
      * well as some 8 byte values.
+     *
+     * @throws Exception if a value cannot be written to, or read back from, the
+     *                   in-memory byte stream
      */
     @Test
     public void testLong() throws Exception {
@@ -214,6 +217,7 @@ public class DataHelperTest {
      * DataHelper.copyOfRange: happy path, full-copy, empty range,
      * and the invalid-bounds error paths.
      *
+     * @throws Exception not expected; every invalid-bounds call is caught and asserted
      * @since 0.9.70+
      */
     @Test

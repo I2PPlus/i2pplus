@@ -84,6 +84,10 @@ public class ProfileOrganizerPurgeLockTest {
      *
      * @param stored the stored-file count the helper should report
      * @return a two-element array: the organizer and its reorganize lock
+     * @throws Exception if reflection on ProfileOrganizer fails - the
+     *                   {@code _reorganizeLock} or
+     *                   {@code _persistenceHelper} field is missing, or
+     *                   {@code setAccessible()} is denied
      */
     private Object[] organizerWith(int stored) throws Exception {
         ProfileOrganizer org = new ProfileOrganizer(_ctx);
@@ -102,6 +106,10 @@ public class ProfileOrganizerPurgeLockTest {
      * The purge must still run on a reorganize cycle - dropping it would let the
      * profile directory grow forever - and it must run after the write lock has
      * been released, not inside the locked region.
+     *
+     * @throws Exception if the recording helper cannot be installed - the
+     *                   organizer's private reorganize lock or persistence
+     *                   helper is unreachable by reflection
      */
     @Test
     public void testPurgeRunsAfterTheWriteLockIsReleased() throws Exception {
@@ -121,6 +129,10 @@ public class ProfileOrganizerPurgeLockTest {
      * Below the retention margin there is nothing to purge, and the walk - which
      * materializes every tracked hash and stats every file - must be skipped
      * outright rather than run on every reorganize.
+     *
+     * @throws Exception if the recording helper cannot be installed - the
+     *                   organizer's private reorganize lock or persistence
+     *                   helper is unreachable by reflection
      */
     @Test
     public void testPurgeSkippedWellBelowRetentionFloor() throws Exception {
@@ -138,6 +150,10 @@ public class ProfileOrganizerPurgeLockTest {
      * The purge is reachable on its own (the console and the store job both have
      * reasons to ask for it), and called that way it must not take the write lock
      * either - it only needs the read lock that selectAllPeers() already takes.
+     *
+     * @throws Exception if the recording helper cannot be installed - the
+     *                   organizer's private reorganize lock or persistence
+     *                   helper is unreachable by reflection
      */
     @Test
     public void testDirectPurgeDoesNotTakeTheWriteLock() throws Exception {

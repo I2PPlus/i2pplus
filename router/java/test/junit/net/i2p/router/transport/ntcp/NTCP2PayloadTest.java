@@ -30,8 +30,8 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 /**
- *  Tests for NTCP2 payload generation and parsing (NTCP2Payload),
- *  and for the per-writer-thread block pooling (NTCPConnection.BlockPool).
+ * Tests for NTCP2 payload generation and parsing (NTCP2Payload),
+ * and for the per-writer-thread block pooling (NTCPConnection.BlockPool).
  */
 public class NTCP2PayloadTest {
 
@@ -43,7 +43,12 @@ public class NTCP2PayloadTest {
     }
 
     /**
-     *  A DataMessage with the given payload and unique id.
+     * A DataMessage with the given payload and unique id.
+     *
+     * @param data the payload bytes, copied into the message
+     * @param uniqueId the I2CP unique id set on the message, checked to survive
+     *                 the write and parse round trip unchanged
+     * @return a DataMessage ready to be wrapped in an I2NP block
      */
     private DataMessage createMessage(byte[] data, long uniqueId) {
         DataMessage msg = new DataMessage(_ctx);
@@ -53,16 +58,29 @@ public class NTCP2PayloadTest {
     }
 
     /**
-     *  Write the blocks and parse them back, recording the callbacks.
+     * Write the blocks and parse them back, recording the callbacks.
+     *
+     * @param blocks the blocks to serialize into one frame, in order
+     * @return the recorder holding every callback the parser made
+     * @throws IOException if the frame breaks the block ordering or length rules
+     * @throws DataFormatException if a RouterInfo, options or datetime block is malformed
+     * @throws I2NPMessageException if the I2NP block's message type is unknown or
+     *                              its bytes are truncated
      */
     private Recorder writeAndParse(NTCP2Payload.Block... blocks) throws IOException, DataFormatException, I2NPMessageException {
         return writeAndParse(false, blocks);
     }
 
     /**
-     *  Write the blocks and parse them back, recording the callbacks.
+     * Write the blocks and parse them back, recording the callbacks.
      *
-     *  @param isHandshake true for the NTCP2 message 3 part 2 handshake frame
+     * @param isHandshake true for the NTCP2 message 3 part 2 handshake frame
+     * @param blocks the blocks to serialize into one frame, in order
+     * @return the recorder holding every callback the parser made
+     * @throws IOException if the frame breaks the block ordering or length rules
+     * @throws DataFormatException if a RouterInfo, options or datetime block is malformed
+     * @throws I2NPMessageException if the I2NP block's message type is unknown or
+     *                              its bytes are truncated
      */
     private Recorder writeAndParse(boolean isHandshake, NTCP2Payload.Block... blocks) throws IOException, DataFormatException, I2NPMessageException {
         List<NTCP2Payload.Block> list = new ArrayList<>(blocks.length);
@@ -76,7 +94,7 @@ public class NTCP2PayloadTest {
     }
 
     /**
-     *  Records every PayloadCallback invocation.
+     * Records every PayloadCallback invocation.
      */
     private static class Recorder implements NTCP2Payload.PayloadCallback {
         private final List<I2NPMessage> i2np = new ArrayList<>(4);
@@ -129,9 +147,12 @@ public class NTCP2PayloadTest {
     }
 
     /**
-     *  A small RouterInfo with one address, valid for serialization.
-     *  Compact enough that the flood flag survives the 3 KB limit
-     *  imposed by the NTCP2 payload parser.
+     * A small RouterInfo with one address, valid for serialization.
+     * Compact enough that the flood flag survives the 3 KB limit
+     * imposed by the NTCP2 payload parser.
+     *
+     * @return a signed RouterInfo with a fresh keypair and one NTCP2 address
+     * @throws DataFormatException if the identity cannot be signed
      */
     private static RouterInfo createRouterInfo() throws DataFormatException {
         RouterInfo info = new RouterInfo();
@@ -155,7 +176,11 @@ public class NTCP2PayloadTest {
     }
 
     /**
-     *  A byte array filled with a deterministic pattern.
+     * A byte array filled with a deterministic pattern.
+     *
+     * @param size number of bytes in the returned array, 0 or more
+     * @param start the value of the first byte, each following byte one greater
+     * @return an array of size bytes holding start, start + 1, and so on
      */
     private static byte[] fill(int size, byte start) {
         byte[] data = new byte[size];

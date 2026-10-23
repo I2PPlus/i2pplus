@@ -31,6 +31,8 @@ public class ServerExecutorOverflowTest {
      * The bounded queue (1024) must be FULL before a submission is rejected; a
      * rejection must surface as a {@link RejectedExecutionException} rather than
      * running the handler inline on the submitting (accept-loop) thread.
+     *
+     * @throws InterruptedException if the wait for the pool workers is interrupted
      */
     @Test
     public void testSaturatedPoolRejectsNotInlines() throws InterruptedException {
@@ -88,7 +90,12 @@ public class ServerExecutorOverflowTest {
         }
     }
 
-    /** Worker threads are daemon (verified across normal test runs) and named. */
+    /**
+     * Worker threads are daemon (verified across normal test runs) and named.
+     *
+     * @throws InterruptedException if the wait for the task to report its thread is
+     *                              interrupted
+     */
     @Test
     public void testWorkerThreadsAreDaemonAndNamed() throws InterruptedException {
         ThreadPoolExecutor exec = TunnelControllerGroup.createServerExecutor(1, new AtomicLong());
@@ -111,6 +118,8 @@ public class ServerExecutorOverflowTest {
      * forever.  Without {@code allowCoreThreadTimeOut(true)}, the
      * core==max pool with LinkedBlockingQueue never reclaims threads,
      * causing unbounded growth (1200+ TunnelSrv threads under load).
+     *
+     * @throws InterruptedException if the poll for reclaimed threads is interrupted
      */
     @Test
     public void testIdleCoreThreadsExpireAfterKeepalive() throws InterruptedException {
@@ -146,6 +155,12 @@ public class ServerExecutorOverflowTest {
         }
     }
 
+    /**
+     * Blocks a pool worker until the test releases it, restoring the interrupt flag
+     * rather than letting an interrupt escape the task.
+     *
+     * @param l the latch the worker waits on until the test counts it down
+     */
     private static void await(CountDownLatch l) {
         try { l.await(); } catch (InterruptedException ie) { Thread.currentThread().interrupt(); }
     }

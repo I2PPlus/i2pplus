@@ -105,6 +105,9 @@ public class SeriesValueShadeTest {
      * <p>The two-stop gradient type holds exactly two colours, so a theme naming a third - the
      * usual reason is to fade out faster at the top - would be silently truncated to the first
      * pair. Three stops route through the multi-stop type instead, so all of them are painted.
+     *
+     * @throws Exception if the private {@code valueShadePaint} helper or the generator's
+     *                   constructor cannot be found or invoked
      */
     @Test
     public void threeStopsProduceAThreeStopGradient() throws Exception {
@@ -121,7 +124,12 @@ public class SeriesValueShadeTest {
         assertEquals(STOPS[2], lgp.getColors()[2]);
     }
 
-    /** Two stops use the two-colour type, which is all it holds. */
+    /**
+     * Two stops use the two-colour type, which is all it holds.
+     *
+     * @throws Exception if the private {@code valueShadePaint} helper or the generator's
+     *                   constructor cannot be found or invoked
+     */
     @Test
     public void twoStopsProduceATwoStopGradient() throws Exception {
         java.lang.reflect.Method m =
@@ -140,6 +148,9 @@ public class SeriesValueShadeTest {
      * only means value if the ends of the gradient are the ends of the plot area. Spanning the
      * frame instead would make the same colour mean different values on differently sized
      * tiles.
+     *
+     * @throws Exception if the private {@code valueShadePaint} helper or the generator's
+     *                   constructor cannot be found or invoked
      */
     @Test
     public void theGradientSpansThePlotArea() throws Exception {
@@ -161,6 +172,9 @@ public class SeriesValueShadeTest {
      *
      * <p>A gradient across a zero-length span is refused outright by the gradient types, so a
      * degenerate frame has to leave the line flat instead of losing it.
+     *
+     * @throws Exception if the private {@code valueShadePaint} helper, the generator's
+     *                   constructor or its plot box field cannot be found or invoked
      */
     @Test
     public void aPlotAreaWithNoHeightLeavesTheLineFlat() throws Exception {
@@ -173,14 +187,28 @@ public class SeriesValueShadeTest {
         assertNull(m.invoke(gen, (Object) new Color[] { Color.RED, Color.BLUE }));
     }
 
-    /** The plot box of a generator that has not been given one, so a test can set it. */
+    /**
+     * The plot box of a generator that has not been given one, so a test can set it.
+     *
+     * @param gen the generator whose plot box field is read back
+     * @return the generator's plot box, built by its constructor and never null
+     * @throws Exception if the generator's package-private {@code im} field cannot be
+     *                   found or read
+     */
     private static ImageParameters plotAreaOf(RrdGraphGenerator gen) throws Exception {
         java.lang.reflect.Field f = RrdGraphGenerator.class.getDeclaredField("im");
         f.setAccessible(true);
         return (ImageParameters) f.get(gen);
     }
 
-    /** A generator whose plot box is set, without needing a full graph definition. */
+    /**
+     * A generator whose plot box is set, without needing a full graph definition.
+     *
+     * @return a generator whose plot area is 60 pixels tall, based at y 100 and reaching
+     *         up to y 40
+     * @throws Exception if the generator's package-private constructor cannot be found or
+     *                   invoked, or if its plot box field cannot be read
+     */
     private static RrdGraphGenerator generatorWithPlotArea() throws Exception {
         java.lang.reflect.Constructor<RrdGraphGenerator> ctor =
             RrdGraphGenerator.class.getDeclaredConstructor(RrdGraphDef.class, ImageWorker.class,

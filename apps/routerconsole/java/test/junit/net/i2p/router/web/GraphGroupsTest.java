@@ -233,7 +233,13 @@ public class GraphGroupsTest {
         assertUnitsAgree("i2ptunnelServerTime", "ms");
     }
 
-    /** Asserts every member of a group is listed under the same unit bucket. */
+    /**
+     * Asserts every member of a group is listed under the same unit bucket.
+     *
+     * @param groupId the group to check; it must have at least one member
+     * @param unit the unit its members are expected to share, e.g. {@code ms} or
+     *             {@code B/s}; the assertions check the grouping, not this label
+     */
     private void assertUnitsAgree(String groupId, String unit) {
         assertFalse("group " + groupId + " is empty", GraphGroups.members(groupId).isEmpty());
         for (String stat : GraphGroups.members(groupId)) {

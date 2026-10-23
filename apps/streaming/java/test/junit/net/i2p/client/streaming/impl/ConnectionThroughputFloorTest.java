@@ -8,7 +8,7 @@ import org.junit.Test;
  * Tests the adaptive throughput-floor decision used to detect a connection that
  * is still delivering bytes but far below its own established rate.
  *
- * <p>{@link Connection#stallVerdict(long, long, double, double, int, long, long, long)}
+ * <p>{@link Connection#stallVerdict(long, long, double, double, int, double, double, long)}
  * is pure so the arming rules are testable without a router. The thresholds
  * exist because a fixed bytes-per-second floor is wrong in both directions: it
  * never fires on a slow-but-healthy link and thrashes on a fast one.

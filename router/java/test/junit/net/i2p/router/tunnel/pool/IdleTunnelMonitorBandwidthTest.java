@@ -37,7 +37,15 @@ public class IdleTunnelMonitorBandwidthTest {
         ctx = RouterTestHelper.newContext();
     }
 
-    /** A participant hop that joinParticipant() will accept. */
+    /**
+     * A participant hop that joinParticipant() will accept.
+     *
+     * @param recvId receive tunnel id set on the hop; the send tunnel id is
+     *               {@code recvId + 1}
+     * @param requestedBW bandwidth asked for, in bytes per second; TunnelParticipant
+     *                    recomputes the allocation actually granted
+     * @return a hop config with a random peer at both ends, valid for 10 minutes
+     */
     private static HopConfig hop(long recvId, int requestedBW) {
         byte[] h = new byte[Hash.HASH_LENGTH];
         RandomSource.getInstance().nextBytes(h, 0, h.length);
@@ -56,6 +64,11 @@ public class IdleTunnelMonitorBandwidthTest {
     /**
      * The monitor reads its dispatcher from the context, so point it at the one
      * this test controls.
+     *
+     * @param disp the dispatcher the returned monitor drops tunnels from
+     * @return a monitor whose private {@code _dispatcher} field points at disp
+     * @throws Exception if the {@code _dispatcher} field is missing or cannot
+     *                   be set
      */
     private static IdleTunnelMonitor monitorFor(TunnelDispatcher disp) throws Exception {
         IdleTunnelMonitor mon = new IdleTunnelMonitor(ctx);
@@ -65,7 +78,11 @@ public class IdleTunnelMonitorBandwidthTest {
         return mon;
     }
 
-    /** One drop must free exactly one tunnel's allocation - no more. */
+    /**
+     * One drop must free exactly one tunnel's allocation - no more.
+     *
+     * @throws Exception if the monitor's {@code _dispatcher} field cannot be set
+     */
     @Test
     public void testDropFreesBandwidthExactlyOnce() throws Exception {
         TunnelDispatcher disp = new TunnelDispatcher(ctx);
@@ -82,7 +99,11 @@ public class IdleTunnelMonitorBandwidthTest {
                      0, disp.getAllocatedBW());
     }
 
-    /** Other tunnels' allocations must survive an unrelated drop. */
+    /**
+     * Other tunnels' allocations must survive an unrelated drop.
+     *
+     * @throws Exception if the monitor's {@code _dispatcher} field cannot be set
+     */
     @Test
     public void testDropLeavesOtherTunnelsAllocated() throws Exception {
         TunnelDispatcher disp = new TunnelDispatcher(ctx);
@@ -97,7 +118,11 @@ public class IdleTunnelMonitorBandwidthTest {
         assertEquals(b.getAllocatedBW(), disp.getAllocatedBW());
     }
 
-    /** Repeated drops of distinct tunnels must land exactly on zero, never below. */
+    /**
+     * Repeated drops of distinct tunnels must land exactly on zero, never below.
+     *
+     * @throws Exception if the monitor's {@code _dispatcher} field cannot be set
+     */
     @Test
     public void testRepeatedDropsLandOnZero() throws Exception {
         TunnelDispatcher disp = new TunnelDispatcher(ctx);
@@ -119,7 +144,11 @@ public class IdleTunnelMonitorBandwidthTest {
         assertEquals("20 drops must not drift the total", 0, disp.getAllocatedBW());
     }
 
-    /** Dropping the same tunnel twice must not decrement twice. */
+    /**
+     * Dropping the same tunnel twice must not decrement twice.
+     *
+     * @throws Exception if the monitor's {@code _dispatcher} field cannot be set
+     */
     @Test
     public void testDoubleDropDoesNotDecrementTwice() throws Exception {
         TunnelDispatcher disp = new TunnelDispatcher(ctx);

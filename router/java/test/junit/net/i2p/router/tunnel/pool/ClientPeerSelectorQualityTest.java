@@ -26,7 +26,12 @@ public class ClientPeerSelectorQualityTest {
     private static final long NOW = 1_000_000L;
     private static final long THIRTY_MINUTES = 30 * 60 * 1000L;
 
-    /** Peer A: good acceptance, active, fast latency. */
+    /**
+     * Peer A: good acceptance, active, fast latency.
+     *
+     * @return a mock profile passing every cascade stage: acceptance ratio 0.8,
+     *         heard from 1s ago, 1000ms tunnel test average
+     */
     private static PeerProfile goodActiveFast() {
         PeerProfile p = mock(PeerProfile.class);
         when(p.getTunnelAcceptanceRatio()).thenReturn(0.8);
@@ -35,12 +40,22 @@ public class ClientPeerSelectorQualityTest {
         return p;
     }
 
-    /** Peer B: null profile (unknown peer). */
+    /**
+     * Peer B: null profile (unknown peer).
+     *
+     * @return null, the value the cascade stages must tolerate for a peer that
+     *         has no profile yet
+     */
     private static PeerProfile nullProfile() {
         return null;
     }
 
-    /** Peer C: dead acceptance ratio, active, fast. */
+    /**
+     * Peer C: dead acceptance ratio, active, fast.
+     *
+     * @return a mock profile in the dead acceptance tier (ratio 0.0) but active
+     *         1s ago with a 1000ms tunnel test average
+     */
     private static PeerProfile deadActiveFast() {
         PeerProfile p = mock(PeerProfile.class);
         when(p.getTunnelAcceptanceRatio()).thenReturn(0.0);
@@ -49,7 +64,12 @@ public class ClientPeerSelectorQualityTest {
         return p;
     }
 
-    /** Peer D: good acceptance, inactive, slow latency. */
+    /**
+     * Peer D: good acceptance, inactive, slow latency.
+     *
+     * @return a mock profile with acceptance ratio 0.8 and a 30000ms tunnel
+     *         test average, never heard from (last heard 0, so inactive)
+     */
     private static PeerProfile goodInactiveSlow() {
         PeerProfile p = mock(PeerProfile.class);
         when(p.getTunnelAcceptanceRatio()).thenReturn(0.8);
@@ -64,7 +84,15 @@ public class ClientPeerSelectorQualityTest {
         return new Hash(data);
     }
 
-    /** Compare two peers through the full cascade. */
+    /**
+     * Compare two peers through the full cascade.
+     *
+     * @param exclude peers to sort last, or null for nothing excluded
+     * @param pa the left peer's profile, or null for an unprofiled peer
+     * @param pb the right peer's profile, or null for an unprofiled peer
+     * @return the cascade result for the fixed pair hash(1) versus hash(2),
+     *         negative when pa sorts ahead of pb
+     */
     private static int cascadeCompare(Set<Hash> exclude, PeerProfile pa, PeerProfile pb) {
         return ClientPeerSelector.compareQuality(hash(1), hash(2), exclude, pa, pb,
                                                  java.util.Collections.emptyMap(), NOW, THIRTY_MINUTES);

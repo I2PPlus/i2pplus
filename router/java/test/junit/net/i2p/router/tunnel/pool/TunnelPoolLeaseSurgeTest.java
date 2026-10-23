@@ -56,12 +56,25 @@ public class TunnelPoolLeaseSurgeTest {
      * default: a freshly constructed config reports itself recently active,
      * which would mask every prune decision, so the last-activity stamp is
      * aged out unless the test asks otherwise.
+     *
+     * @param remaining life left before the tunnel expires, in ms
+     * @param status test status the tunnel reports
+     * @return a pooled config with that remaining life and status, aged out so
+     *         it reads as idle
      */
     private static TunnelCreatorConfig config(long remaining, TunnelTestStatus status) {
         return config(remaining, status, true);
     }
 
-    /** As {@link #config(long, TunnelTestStatus)}, controlling recency. */
+    /**
+     * As {@link #config(long, TunnelTestStatus)}, controlling recency.
+     *
+     * @param remaining life left before the tunnel expires, in ms
+     * @param status test status the tunnel reports
+     * @param idle true to age the last-activity stamp 10 minutes back so the
+     *             config reads as idle, false to record activity now
+     * @return a pooled config with that remaining life, status and recency
+     */
     private static TunnelCreatorConfig config(long remaining, TunnelTestStatus status,
                                               boolean idle) {
         TunnelPool pool = createPool(3);

@@ -27,6 +27,11 @@ public class EepGetUsageTest {
     /**
      * The help must mention each option as a standalone token, so a letter
      * that is part of a word (as in "outputFile") does not count.
+     *
+     * @param tool the tool name to prefix the failure message with, eepget or eeppost
+     * @param usage the help text to search for the option tokens
+     * @param spec the Getopt spec of every letter the parser accepts, a colon after
+     *             a letter marking one that takes an argument
      */
     private static void assertDocumentsOptions(String tool, String usage, String spec) {
         for (int i = 0; i < spec.length(); i++) {

@@ -66,7 +66,11 @@ public class MessagePrefetchTest {
         }
     }
 
-    /** Simulates PeerConnectionOut's prefetch task: claim, load, publish. */
+    /**
+     * Simulates PeerConnectionOut's prefetch task: claim, load, publish.
+     *
+     * @param m the message whose deferred load is claimed, run and published
+     */
     private static void runPrefetch(Message m) {
         if (!m.claimLoad()) return;
         if (m.abortIfDiscarded()) return;
@@ -214,6 +218,8 @@ public class MessagePrefetchTest {
     /**
      * Races send, discard, and prefetch across threads; whatever interleaving occurs, the loader
      * must never run more than once per message.
+     *
+     * @throws Exception if the expected wire bytes cannot be built
      */
     @Test(timeout = 60000)
     public void testConcurrentSendDiscardExactlyOneLoad() throws Exception {
@@ -276,7 +282,11 @@ public class MessagePrefetchTest {
         }
     }
 
-    /** Deterministic variant: pre-claimed message; discard must wake an awaiting sender. */
+    /**
+     * Deterministic variant: pre-claimed message; discard must wake an awaiting sender.
+     *
+     * @throws Exception if the latch await or the 50 ms sleep is interrupted
+     */
     @Test(timeout = 15000)
     public void testDiscardWakesAwaitingSender() throws Exception {
         final Message m = new Message(PIECE, BEGIN, SHORT_LEN, new CountingLoader(null));

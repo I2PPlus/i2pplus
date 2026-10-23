@@ -25,7 +25,14 @@ public class TunerSendWindowTargetTest {
     private static final int IDLE_FLOOR = Math.max(DEFAULT, MIN);
     private static final int BASE = 512 * 1024;
 
-    /** Neat defaults: everything healthy, no signal. */
+    /**
+     * Neat defaults: everything healthy, no signal.
+     *
+     * @param current the CWIN being adjusted, in bytes
+     * @param observed the {@code udp.avgSendWindow} usage in bytes, also fed to the
+     *                 collapse check as the current send window; NaN means no data
+     * @return the new CWIN target for those inputs, already clamped to [MIN, MAX]
+     */
     private static int target(int current, double observed) {
         return Tuner.sendWindowTarget(current, MIN, MAX, STEP, IDLE_FLOOR,
                                       observed, 0.0, 0.2,

@@ -379,7 +379,7 @@ public class ProfileOrganizerSelectionCostTest {
         assertNull(ProfileOrganizer.selectNthFastest(all, NOW, 1.0, 2));
     }
 
-    /** k<=0 has no meaningful rank and must not throw. */
+    /** k&lt;=0 has no meaningful rank and must not throw. */
     @Test
     public void returnsNullForNonPositiveK() {
         assertNull(ProfileOrganizer.selectNthFastest(new ArrayList<PeerProfile>(), NOW, 0.0, 0));

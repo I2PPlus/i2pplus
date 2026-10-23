@@ -39,8 +39,6 @@ import java.util.Objects;
  * <p>
  * As a Collection, it can be iterated over, but it is not a List,
  * since it does not natively support indexed access.
- * <p>
- *
  */
 final class Fixups extends AbstractCollection<Fixups.Fixup> {
     byte[] bytes;    // the subject of the relocations

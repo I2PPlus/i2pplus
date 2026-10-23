@@ -438,6 +438,10 @@ public class EstablishmentDecisionTest {
     /**
      * An SSU2 address with no introducers, or with a single hash introducer
      * whose tag and (optional) expiration are given.
+     *
+     * @param tag introducer tag to advertise; null builds an address with no introducers
+     * @param exp introducer expiration in ms since the epoch, 0 to omit it (never expires)
+     * @return an SSU2 address for 9.9.9.9:12345 carrying that introducer, if any
      */
     private static UDPAddress ssu2Addr(String tag, long exp) {
         OrderedProperties opts = new OrderedProperties();

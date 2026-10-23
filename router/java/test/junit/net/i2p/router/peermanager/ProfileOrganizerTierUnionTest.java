@@ -23,7 +23,13 @@ public class ProfileOrganizerTierUnionTest {
      * The union cardinality, computed the way {@code fastOrHighCapCount} does: walk the
      * smaller set and count membership in the larger.
      */
-    /** Java 8 has no {@link java.util.Set#of}; the project compiles at source 8. */
+    /**
+     * Java 8 has no {@code Set.of()}; the project compiles at source 8.
+     *
+     * @param values the strings to put in the set, in varargs form; duplicates
+     *               collapse into a single entry
+     * @return a mutable HashSet holding the given strings
+     */
     private static Set<String> setOf(String... values) {
         return new HashSet<>(Arrays.asList(values));
     }

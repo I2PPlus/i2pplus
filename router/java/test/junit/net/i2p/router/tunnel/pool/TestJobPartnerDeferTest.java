@@ -28,7 +28,14 @@ import org.junit.Test;
  */
 public class TestJobPartnerDeferTest {
 
-    /** A partner stub of the given length in the given test state. */
+    /**
+     * A partner stub of the given length in the given test state.
+     *
+     * @param length the hop count getLength() reports; 1 or less makes the partner unusable
+     * @param hardFailed the flag getTunnelFailed() reports; true means already condemned
+     * @param status the test status getTestStatus() reports; an unusable one defers the round
+     * @return a mocked tunnel answering with exactly those three values
+     */
     private static TunnelInfo partner(int length, boolean hardFailed,
                                       TunnelTestStatus status) {
         TunnelInfo t = mock(TunnelInfo.class);

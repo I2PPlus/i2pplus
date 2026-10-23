@@ -143,6 +143,8 @@ public class MessageStreamBufferDecayTest {
      * End to end: growth from a rejected packet, then a reader that catches up,
      * has to give the memory back. This is the regression - the cap used to stay
      * at the grown value for the life of the connection.
+     *
+     * @throws IOException if draining the fed bytes back out of the stream fails
      */
     @Test
     public void testDrainingDecaysAGrownCap() throws IOException {
@@ -160,6 +162,8 @@ public class MessageStreamBufferDecayTest {
      * The peak, not the level at the moment of the check, decides. At the instant
      * the buffer empties the level is always zero, so a decay keyed on that would
      * shrink every connection back to the floor and re-choke the fast ones.
+     *
+     * @throws IOException if draining the full grown buffer out of the stream fails
      */
     @Test
     public void testABusyConnectionKeepsItsGrownCap() throws IOException {
@@ -174,6 +178,8 @@ public class MessageStreamBufferDecayTest {
 
     /**
      * A stream that never grew is left exactly where it was configured.
+     *
+     * @throws IOException if draining the fed bytes back out of the stream fails
      */
     @Test
     public void testAnUngrownStreamIsUntouched() throws IOException {
@@ -190,6 +196,8 @@ public class MessageStreamBufferDecayTest {
     /**
      * The check runs when the reader empties the buffer, not on every read. A
      * partial read must not start the decay early.
+     *
+     * @throws IOException if draining the fed bytes back out of the stream fails
      */
     @Test
     public void testPartialReadsDoNotDecayEarly() throws IOException {

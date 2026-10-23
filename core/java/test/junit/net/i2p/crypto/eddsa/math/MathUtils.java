@@ -31,6 +31,8 @@ public class MathUtils {
 
     /**
      * Q = 2^255 - 19 as a BigInteger.
+     *
+     * @return the curve field prime, 2^255 - 19
      */
     public static BigInteger getQ() {
         return new BigInteger("7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffed", 16);
@@ -38,6 +40,8 @@ public class MathUtils {
 
     /**
      * Group order = 2^252 + 27742317777372353535851937790883648493 as a BigInteger.
+     *
+     * @return the order of the ed25519 group
      */
     public static BigInteger getGroupOrder() {
         return groupOrder;
@@ -193,6 +197,7 @@ public class MathUtils {
     /**
      * A random group element in P3 representation, with precmp and dblPrecmp populated.
      *
+     * @param precompute true to populate the precmp and dblPrecmp tables
      * @return The group element.
      */
     public static GroupElement getRandomGroupElement(boolean precompute) {

@@ -26,6 +26,10 @@ public class FileUtilRmdirTest {
      * Build {@code root/a/b/c} and return {@code root}. Every directory in the
      * chain is created, so the test fails loudly if the fixture is malformed
      * rather than silently testing a shallower tree than intended.
+     *
+     * @param root the temporary directory the nested tree is built under
+     * @param name the leaf path below root, intermediate directories included
+     * @return root unchanged, so the caller can assert and clean up against it
      */
     private static File makeTree(File root, String name) {
         File leaf = new File(root, name);
@@ -49,6 +53,8 @@ public class FileUtilRmdirTest {
     /**
      * The original scenario: a nested tree disappears completely, and the
      * deepest leaf - which is deleted before any of its parents - is gone too.
+     *
+     * @throws Exception on temp-directory creation or cleanup failure
      */
     @Test
     public void testRecursiveDeleteRemovesNestedTree() throws Exception {
@@ -73,6 +79,8 @@ public class FileUtilRmdirTest {
     /**
      * A plain file is deleted directly rather than descended into; this is the
      * {@code !target.isDirectory()} branch.
+     *
+     * @throws Exception on temp-file creation or cleanup failure
      */
     @Test
     public void testSingleFileIsDeleted() throws Exception {
@@ -95,6 +103,8 @@ public class FileUtilRmdirTest {
      * {@code failIfNotEmpty=true} must refuse a populated directory and leave it
      * fully intact. The original commented helper never passed {@code true},
      * so nothing pinned this behaviour.
+     *
+     * @throws Exception on temp-directory creation or cleanup failure
      */
     @Test
     public void testFailIfNotEmptyRefusesPopulatedDirectory() throws Exception {
@@ -118,7 +128,11 @@ public class FileUtilRmdirTest {
         }
     }
 
-    /** An empty directory is removable even when failIfNotEmpty is set. */
+    /**
+     * An empty directory is removable even when failIfNotEmpty is set.
+     *
+     * @throws Exception on temp-directory creation or cleanup failure
+     */
     @Test
     public void testEmptyDirectoryIsDeletedWithFailIfNotEmpty() throws Exception {
         File dir = new File(System.getProperty("java.io.tmpdir"),
@@ -135,6 +149,8 @@ public class FileUtilRmdirTest {
     /**
      * A path that does not exist reports success. This keeps repeated cleanup
      * idempotent, which is what lets callers use it without checking first.
+     *
+     * @throws Exception on temp-directory path setup failure
      */
     @Test
     public void testMissingPathReportsSuccess() throws Exception {

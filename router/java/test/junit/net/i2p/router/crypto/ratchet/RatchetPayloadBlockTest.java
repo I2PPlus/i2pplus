@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *  Tests for RatchetPayload block serialization and deserialization.
+ * Tests for RatchetPayload block serialization and deserialization.
  */
 public class RatchetPayloadBlockTest {
 
@@ -199,7 +199,9 @@ public class RatchetPayloadBlockTest {
     }
 
     /**
-     *  Test that released blocks are reused by the pool, no new instances.
+     * Test that released blocks are reused by the pool, no new instances.
+     *
+     * @throws Exception not expected; the body only acquires and releases pooled blocks
      */
     @Test
     public void testBlockPoolReuse() throws Exception {
@@ -237,7 +239,10 @@ public class RatchetPayloadBlockTest {
     }
 
     /**
-     *  Test that reused blocks carry the new state after the setters.
+     * Test that reused blocks carry the new state after the setters.
+     *
+     * @throws Exception if re-parsing the re-written block fails, i.e. the bytes
+     *                   {@code processPayload} was handed are rejected as malformed
      */
     @Test
     public void testBlockPoolStateReset() throws Exception {
@@ -288,7 +293,10 @@ public class RatchetPayloadBlockTest {
     }
 
     /**
-     *  A clove with an instructions and data of the given payload size.
+     * A clove with an instructions and data of the given payload size.
+     *
+     * @param size payload size in bytes of the data message the clove carries
+     * @return a clove with delivery instructions and a data message of {@code size} zero bytes
      */
     private static GarlicClove makeClove(int size) {
         I2PAppContext ctx = I2PAppContext.getGlobalContext();

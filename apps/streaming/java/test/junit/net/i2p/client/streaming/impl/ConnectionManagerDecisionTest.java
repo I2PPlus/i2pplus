@@ -15,6 +15,9 @@ public class ConnectionManagerDecisionTest {
     /**
      * Verify that trimDestFailures method exists on ConnectionManager.
      * This is a behavioral verification that the memory leak fix works.
+     *
+     * @throws Exception the NoSuchMethodException from getDeclaredMethod when trimDestFailures
+     *                   has been renamed or removed from ConnectionManager
      */
     @Test
     public void testTrimDestFailuresExists() throws Exception {
@@ -26,6 +29,9 @@ public class ConnectionManagerDecisionTest {
 
     /**
      * Verify that _destFailures is a ConcurrentHashMap.
+     *
+     * @throws Exception the NoSuchFieldException from getDeclaredField when _destFailures has
+     *                   been renamed or removed from ConnectionManager
      */
     @Test
     public void testDestFailuresIsConcurrentHashMap() throws Exception {
@@ -38,6 +44,9 @@ public class ConnectionManagerDecisionTest {
 
     /**
      * Verify that _cooldownWarned is a ConcurrentHashMap.
+     *
+     * @throws Exception the NoSuchFieldException from getDeclaredField when _cooldownWarned has
+     *                   been renamed or removed from ConnectionManager
      */
     @Test
     public void testCooldownWarnedIsConcurrentHashMap() throws Exception {
@@ -51,6 +60,9 @@ public class ConnectionManagerDecisionTest {
     /**
      * Verify that _resendEventPool exists on Connection and is a
      * ConcurrentLinkedQueue for reuse of ResendPacketEvent instances.
+     *
+     * @throws Exception the ClassNotFoundException when Connection has moved package, or the
+     *                   NoSuchFieldException when _resendEventPool is renamed or removed
      */
     @Test
     public void testResendPacketEventPoolExists() throws Exception {
@@ -64,6 +76,9 @@ public class ConnectionManagerDecisionTest {
 
     /**
      * Verify that {@code ResendPacketEvent.timeReached()} is public.
+     *
+     * @throws Exception the ClassNotFoundException when the inner class ResendPacketEvent is
+     *                   renamed, or the NoSuchMethodException when timeReached() is removed
      */
     @Test
     public void testResendPacketEventTimeReachedIsPublic() throws Exception {

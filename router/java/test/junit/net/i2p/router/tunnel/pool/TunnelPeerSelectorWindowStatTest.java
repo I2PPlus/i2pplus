@@ -88,6 +88,9 @@ public class TunnelPeerSelectorWindowStatTest {
      * The log manager is resolved into a local first: calling a mock inside a
      * {@code when(...)} argument leaves that mock's stubbing unfinished and
      * Mockito then fails the next test.
+     *
+     * @return a mock context whose statManager() throws IllegalStateException while its
+     *         logManager() still returns a working one
      */
     private RouterContext contextWithoutStatManager() {
         LogManager logs = _ctx.logManager();

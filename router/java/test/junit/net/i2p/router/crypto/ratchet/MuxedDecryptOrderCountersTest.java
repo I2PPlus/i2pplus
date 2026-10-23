@@ -41,6 +41,8 @@ public class MuxedDecryptOrderCountersTest {
      * @param muxed the instance to read
      * @param name the counter's field name
      * @return its current value
+     * @throws Exception if the named field is missing, cannot be made accessible,
+     *                   or its value cannot be read
      */
     private static int counter(Object muxed, String name) throws Exception {
         Field field = muxed.getClass().getDeclaredField(name);
@@ -119,6 +121,9 @@ public class MuxedDecryptOrderCountersTest {
      * Reporting the current preference must not consume the rollover. A log line
      * that reset the counters both lost the window and printed a decision the
      * next decrypt would not make.
+     *
+     * @throws Exception if reading the muxer's private counters by reflection
+     *                   fails: the field is missing or cannot be made accessible
      */
     @Test
     public void testReportingLeavesTheWindowAlone() throws Exception {
@@ -146,6 +151,9 @@ public class MuxedDecryptOrderCountersTest {
     /**
      * The real decision does roll the window over, so the ordering keeps
      * tracking recent traffic instead of a session-total ratio.
+     *
+     * @throws Exception if reading the muxer's private counters by reflection
+     *                   fails: the field is missing or cannot be made accessible
      */
     @Test
     public void testDecisionRollsTheWindowOver() throws Exception {

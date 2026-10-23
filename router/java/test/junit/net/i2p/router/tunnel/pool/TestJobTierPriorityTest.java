@@ -38,6 +38,12 @@ public class TestJobTierPriorityTest {
     /**
      * A candidate whose first hop is {@code first}, and which is or is not
      * last-chance. {@code lastChance} false means far from expiry.
+     *
+     * @param first hash used as the candidate's only hop, so a test can identify
+     *              the candidate by it
+     * @param lastChance true to report the tunnel as last-chance admitted, false
+     *                   to report it far from expiry
+     * @return a pending test over a 1-hop mock config expiring 1s after NOW
      */
     private static TestJob.PendingTest pending(Hash first, boolean lastChance) {
         PooledTunnelCreatorConfig cfg = mock(PooledTunnelCreatorConfig.class);
@@ -51,6 +57,11 @@ public class TestJobTierPriorityTest {
     /**
      * A context whose profile organizer reports the given peers as fast or
      * high-capacity; everything else is untiered.
+     *
+     * @param fast the one peer the organizer reports as fast, null for none
+     * @param highCap the one peer the organizer reports as high-capacity, null
+     *                for none
+     * @return a mock context whose organizer tiers only those two peers
      */
     private static RouterContext ctxWithTiers(Hash fast, Hash highCap) {
         RouterContext ctx = mock(RouterContext.class);

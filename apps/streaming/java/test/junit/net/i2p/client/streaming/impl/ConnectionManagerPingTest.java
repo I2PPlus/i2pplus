@@ -13,7 +13,11 @@ import org.junit.Test;
  */
 public class ConnectionManagerPingTest {
 
-    /** Verify the subsession ping overloads exist and are callable. */
+    /**
+     * Verify the subsession ping overloads exist and are callable.
+     *
+     * @throws Exception if reflection cannot resolve one of the ping overloads on ConnectionManager
+     */
     @Test
     public void testSubsessionPingMethodsExist() throws Exception {
         // Use reflection to verify the methods exist on ConnectionManager

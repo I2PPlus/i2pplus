@@ -25,7 +25,13 @@ import org.junit.Test;
  */
 public class StreamReservationTest {
 
-    /** Deterministic distinct 32-byte dest hash. */
+    /**
+     * Deterministic distinct 32-byte dest hash.
+     *
+     * @param seed destination index; its low byte becomes the hash's first byte and its
+     *             next byte the hash's last
+     * @return a 32-byte hash, distinct for every seed below 65536
+     */
     private static Hash hash(int seed) {
         byte[] b = new byte[32];
         b[0] = (byte) seed;

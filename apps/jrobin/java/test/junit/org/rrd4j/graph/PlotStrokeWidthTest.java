@@ -63,7 +63,12 @@ public class PlotStrokeWidthTest {
         }
     }
 
-    /** A base definition bound to the in-memory series, without any plot elements. */
+    /**
+     * A base definition bound to the in-memory series, without any plot elements.
+     *
+     * @return a fresh 400 by 200 pixel definition with the legend, signature and
+     *         anti-aliasing switched off, reading the one in-memory datasource
+     */
     private RrdGraphDef baseDef() {
         RrdGraphDef def = new RrdGraphDef(END - (long) ROWS * STEP, END);
         def.setWidth(400);
@@ -77,13 +82,23 @@ public class PlotStrokeWidthTest {
         return def;
     }
 
-    /** Renders a definition and returns the SVG. */
+    /**
+     * Renders a definition and returns the SVG.
+     *
+     * @param def the definition holding the datasource and the plot elements to draw
+     * @return the rendered document as UTF-8 text
+     * @throws IOException if the renderer cannot read the in-memory series back
+     */
     private String render(RrdGraphDef def) throws IOException {
         return new String(new RrdGraph(def, new SVGImageWorker(0, 0, false, false, "dark"))
                 .getRrdGraphInfo().getBytes(), StandardCharsets.UTF_8);
     }
 
-    /** A declared line carries the width the definition asked for. */
+    /**
+     * A declared line carries the width the definition asked for.
+     *
+     * @throws IOException if the renderer fails to read the in-memory series back
+     */
     @Test
     public void aDeclaredLineCarriesItsStrokeWidth() throws IOException {
         RrdGraphDef def = baseDef();
@@ -99,6 +114,8 @@ public class PlotStrokeWidthTest {
      * <p>Pins the reason a theme's width was ignored: nothing in the definition carries one, so
      * the series falls back to the SVG default. Not a defect in itself - an area is not a line -
      * but it is the whole explanation.
+     *
+     * @throws IOException if the renderer fails to read the in-memory series back
      */
     @Test
     public void anAreaAloneStatesNoStrokeWidth() throws IOException {
@@ -118,7 +135,11 @@ public class PlotStrokeWidthTest {
                    render(withLine).contains("stroke-width:2"));
     }
 
-    /** With a line added beside the area, the themed width is emitted. */
+    /**
+     * With a line added beside the area, the themed width is emitted.
+     *
+     * @throws IOException if the renderer fails to read the in-memory series back
+     */
     @Test
     public void anAreaWithALineStatesTheWidth() throws IOException {
         RrdGraphDef def = baseDef();
@@ -130,7 +151,11 @@ public class PlotStrokeWidthTest {
                    svg.contains("stroke-width:2"));
     }
 
-    /** The width is the one asked for, not a rounded or rewritten form of it. */
+    /**
+     * The width is the one asked for, not a rounded or rewritten form of it.
+     *
+     * @throws IOException if the renderer fails to read the in-memory series back
+     */
     @Test
     public void anUnusualWidthIsEmittedVerbatim() throws IOException {
         for (float width : new float[] { 1.5f, 2f, 2.5f, 4f }) {

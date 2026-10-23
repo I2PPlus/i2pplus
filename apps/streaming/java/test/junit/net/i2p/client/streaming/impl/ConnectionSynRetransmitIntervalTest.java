@@ -73,7 +73,7 @@ public class ConnectionSynRetransmitIntervalTest {
                      Connection.computeSynRetransmitInterval(500, 5000));
     }
 
-    /** Integer headroom truncation: 1.5 * 999 -> 1498 (integer division), still sane. */
+    /** Integer headroom truncation: 1.5 * 999 -&gt; 1498 (integer division), still sane. */
     @Test
     public void testHeadroomTruncation() {
         assertEquals(1498, Connection.computeSynRetransmitInterval(999, 5000));

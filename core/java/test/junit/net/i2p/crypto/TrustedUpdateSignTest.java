@@ -35,7 +35,13 @@ public class TrustedUpdateSignTest {
         ctx = I2PAppContext.getGlobalContext();
     }
 
-    /** A small payload file to sign. */
+    /**
+     * A small payload file to sign.
+     *
+     * @param contents the exact text to write into the file, as UTF-8
+     * @return a temp file holding contents, marked deleteOnExit
+     * @throws IOException if the temp file cannot be created or written
+     */
     private static File tempFile(String contents) throws IOException {
         File f = File.createTempFile("tu-sign-", ".dat");
         f.deleteOnExit();
@@ -45,14 +51,23 @@ public class TrustedUpdateSignTest {
         return f;
     }
 
-    /** The file the signature is written to, next to the payload. */
+    /**
+     * The file the signature is written to, next to the payload.
+     *
+     * @param in the payload file the signed copy is named after
+     * @return in's absolute path with .signed appended, marked deleteOnExit
+     */
     private static File outFileFor(File in) {
         File out = new File(in.getAbsolutePath() + ".signed");
         out.deleteOnExit();
         return out;
     }
 
-    /** A fresh DSA-SHA1 keypair, public key first, as generateSigningKeypair() returns it. */
+    /**
+     * A fresh DSA-SHA1 keypair, public key first, as generateSigningKeypair() returns it.
+     *
+     * @return a two-element array: the SigningPublicKey, then the SigningPrivateKey
+     */
     private static Object[] keypair() {
         return KeyGenerator.getInstance().generateSigningKeypair();
     }
@@ -60,6 +75,8 @@ public class TrustedUpdateSignTest {
     /**
      * The crash: a null private key makes DSAEngine.sign() return null, and the
      * write that followed dereferenced it. Must return null, not throw.
+     *
+     * @throws IOException if the payload temp file cannot be written
      */
     @Test
     public void testNullKeyReturnsNullNotNpe() throws IOException {
@@ -78,7 +95,11 @@ public class TrustedUpdateSignTest {
                                                (SigningPrivateKey) keys[1], "1.0"));
     }
 
-    /** A real keypair signs, and the result verifies against the matching public key. */
+    /**
+     * A real keypair signs, and the result verifies against the matching public key.
+     *
+     * @throws IOException if the payload temp file cannot be written
+     */
     @Test
     public void testSignThenVerifyRoundTrip() throws IOException {
         File in = tempFile("the update payload");
@@ -92,7 +113,11 @@ public class TrustedUpdateSignTest {
                    new TrustedUpdate(ctx).verify(out, (SigningPublicKey) keys[0]));
     }
 
-    /** Appending to the signed file breaks verification. */
+    /**
+     * Appending to the signed file breaks verification.
+     *
+     * @throws IOException if the payload temp file or the append to the signed file fails
+     */
     @Test
     public void testTamperedSignedFileFailsVerify() throws IOException {
         File in = tempFile("the update payload");
@@ -107,7 +132,11 @@ public class TrustedUpdateSignTest {
         assertFalse(new TrustedUpdate(ctx).verify(out, (SigningPublicKey) keys[0]));
     }
 
-    /** An over-long version is truncated as documented, and still round-trips. */
+    /**
+     * An over-long version is truncated as documented, and still round-trips.
+     *
+     * @throws IOException if the payload temp file cannot be written
+     */
     @Test
     public void testLongVersionIsTruncatedAndStillVerifies() throws IOException {
         File in = tempFile("payload");
@@ -121,7 +150,11 @@ public class TrustedUpdateSignTest {
         assertTrue(new TrustedUpdate(ctx).verify(out, (SigningPublicKey) keys[0]));
     }
 
-    /** A failed sign must not leave a half-written signed file behind. */
+    /**
+     * A failed sign must not leave a half-written signed file behind.
+     *
+     * @throws IOException if the payload temp file cannot be written
+     */
     @Test
     public void testFailedSignWritesNoFile() throws IOException {
         File in = tempFile("payload");

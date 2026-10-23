@@ -41,6 +41,9 @@ public class PacketPayloadReleaseRaceTest {
     /**
      * releasePayload() must not slip in while the send path holds the packet's
      * monitor to serialize it.
+     *
+     * @throws Exception if the wait for the thread that releases the payload is
+     *                   interrupted
      */
     @Test
     public void testReleaseWaitsForTheSerialize() throws Exception {
@@ -82,6 +85,8 @@ public class PacketPayloadReleaseRaceTest {
      * to a new owner that fills it with something else. The ACK has to wait for
      * the copy, and what goes out has to be the payload the packet was built
      * with.
+     *
+     * @throws Exception if a latch await or a thread join in the race is interrupted
      */
     @Test
     public void testAckMidCopyCannotCorruptTheRetransmit() throws Exception {

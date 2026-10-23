@@ -334,10 +334,11 @@ class Attribute implements Comparable<Attribute> {
         return null;
     }
 
-    /** Base class for any attributed object (Class, Field, Method, Code).
-     *  Flags are included because they are used to help transmit the
-     *  presence of attributes.  That is, flags are a mix of modifier
-     *  bits and attribute indicators.
+    /**
+     * Base class for any attributed object (Class, Field, Method, Code).
+     * Flags are included because they are used to help transmit the
+     * presence of attributes.  That is, flags are a mix of modifier
+     * bits and attribute indicators.
      */
     public abstract static
     class Holder {
@@ -498,8 +499,9 @@ class Attribute implements Comparable<Attribute> {
     static final byte EF_BACK  = 1<<3;   // call, callable, case is backward
     static final int NO_BAND_INDEX = -1;
 
-    /** A "class" of attributes, characterized by a context-type, name
-     *  and format.  The formats are specified in a "little language".
+    /**
+     * A "class" of attributes, characterized by a context-type, name
+     * and format.  The formats are specified in a "little language".
      */
     public static
     class Layout implements Comparable<Layout> {
@@ -688,8 +690,16 @@ class Attribute implements Comparable<Attribute> {
             }
         }
 
-        /** Return a sequence of tokens from the given attribute bytes.
-         *  Sequence elements will be 1-1 correspondent with my layout tokens.
+        /**
+         * Return a sequence of tokens from the given attribute bytes.
+         * Sequence elements will be 1-1 correspondent with my layout tokens.
+         *
+         * @param holder the attributed object whose constant pool resolves the refs
+         * @param bytes the attribute bytes to tokenize
+         * @param pos the index in bytes of the first byte to parse
+         * @param len the number of bytes to parse, starting at pos
+         * @param out the stream each decoded token is handed to
+         * @throws InternalError if the layout does not consume exactly len bytes
          */
         public void parse(Holder holder,
                           byte[] bytes, int pos, int len, ValueStream out) {
@@ -698,10 +708,15 @@ class Attribute implements Comparable<Attribute> {
             if (end != pos + len)
                 throw new InternalError("layout parsed "+(end-pos)+" out of "+len+" bytes");
         }
-        /** Given a sequence of tokens, return the attribute bytes.
-         *  Sequence elements must be 1-1 correspondent with my layout tokens.
-         *  The returned object is a cookie for Fixups.finishRefs, which
-         *  must be used to harden any references into integer indexes.
+        /**
+         * Given a sequence of tokens, return the attribute bytes.
+         * Sequence elements must be 1-1 correspondent with my layout tokens.
+         * The returned object is a cookie for Fixups.finishRefs, which
+         * must be used to harden any references into integer indexes.
+         *
+         * @param in the stream the layout tokens are read from
+         * @param out the stream the attribute bytes are written to
+         * @return the fixups cookie for the references written, or null if none
          */
         public Object unparse(ValueStream in, ByteArrayOutputStream out) {
             Object[] fixups = { null };
@@ -767,9 +782,26 @@ class Attribute implements Comparable<Attribute> {
             });
     }
 
+    /**
+     * Parse the bytes of this attribute, putting values into bands.
+     *
+     * @param holder the attributed object whose constant pool resolves the refs
+     * @param bytes the attribute bytes to tokenize
+     * @param pos the index in bytes of the first byte to parse
+     * @param len the number of bytes to parse, starting at pos
+     * @param out the stream each decoded token is handed to
+     * @throws InternalError if the layout does not consume exactly len bytes
+     */
     public void parse(Holder holder, byte[] bytes, int pos, int len, ValueStream out) {
         def.parse(holder, bytes, pos, len, out);
     }
+    /**
+     * Format the bytes of this attribute, drawing values from bands.
+     *
+     * @param in the stream the layout tokens are read from
+     * @param out the stream the attribute bytes are written to
+     * @return the fixups cookie for the references written, or null if none
+     */
     public Object unparse(ValueStream in, ByteArrayOutputStream out) {
         return def.unparse(in, out);
     }
@@ -781,11 +813,15 @@ class Attribute implements Comparable<Attribute> {
             +(fixups == null? "": fixups.toString());
     }
 
-    /** Remove any informal "pretty printing" from the layout string.
-     *  Removes blanks and control chars.
-     *  Removes '#' comments (to end of line).
-     *  Replaces '\c' by the decimal code of the character c.
-     *  Replaces '0xNNN' by the decimal code of the hex number NNN.
+    /**
+     * Remove any informal "pretty printing" from the layout string.
+     * Removes blanks and control chars.
+     * Removes '#' comments (to end of line).
+     * Replaces '\c' by the decimal code of the character c.
+     * Replaces '0xNNN' by the decimal code of the hex number NNN.
+     *
+     * @param layout the layout specification to clean up
+     * @return the equivalent layout, with no blanks, comments or character escapes
      */
     public static
     String normalizeLayoutString(String layout) {
@@ -839,7 +875,8 @@ class Attribute implements Comparable<Attribute> {
 
     /// Subroutines for parsing and unparsing:
 
-    /** Parse the attribute layout language.
+    /**
+     * Parse the attribute layout language.
 <pre>
   attribute_layout:
         ( layout_element )* | ( callable )+
@@ -897,7 +934,12 @@ class Attribute implements Comparable<Attribute> {
   digit:
         ( '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' )
  </pre>
-    */
+     *
+     * @param self the layout being tokenized, which owns the new elements
+     * @param curCble index of the callable body being parsed, or -1 if there are no callables
+     * @param layout the layout text to tokenize
+     * @return one element for each token in the layout text
+     */
     static //private
     Layout.Element[] tokenizeLayout(Layout self, int curCble, String layout) {
         List<Layout.Element> col = new ArrayList<>(layout.length());
@@ -1183,7 +1225,13 @@ class Attribute implements Comparable<Attribute> {
         return c >= '0' && c <= '9';
     }
 
-    /** Find an occurrence of hyphen '-' between two numerals. */
+    /**
+     * Find an occurrence of hyphen '-' between two numerals.
+     *
+     * @param layout the layout text to scan
+     * @param fromIndex the index to start the scan at; values below 1 are raised to 1
+     * @return the index of the dash, or -1 if there is none
+     */
     static //private
     int findCaseDash(String layout, int fromIndex) {
         if (fromIndex <= 0)  fromIndex = 1;  // minimum dash pos
@@ -1228,7 +1276,12 @@ class Attribute implements Comparable<Attribute> {
         if (beg == end)  return Integer.parseInt("empty");
         return Integer.parseInt(layout.substring(beg, end));
     }
-    /** For compatibility with 1.5 pack, expand 1-5 into 1,2,3,4,5. */
+    /**
+     * For compatibility with 1.5 pack, expand 1-5 into 1,2,3,4,5.
+     *
+     * @param layout the layout text, which may contain case ranges like 1-5
+     * @return the layout with each case range expanded, or the input if it has no dashes
+     */
     static
     String expandCaseDashNotation(String layout) {
         int dash = findCaseDash(layout, 0);

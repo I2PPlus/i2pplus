@@ -108,7 +108,7 @@ public class DecayingFilterSizingTest {
     /**
      * A lowered cap must bound growth immediately. The default cap is only a
      * backstop and waits for the scheduled decay, so it cannot bound anything
-     * within one interval; a cap set through {@link #setMaxEntries} is
+     * within one interval; a cap set through {@link DecayingHashSet#setMaxEntries(int)} is
      * enforced at once because the caller has declared memory to be the harder
      * constraint.
      */

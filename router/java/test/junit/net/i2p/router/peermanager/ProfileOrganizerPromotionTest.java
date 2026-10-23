@@ -71,7 +71,13 @@ public class ProfileOrganizerPromotionTest {
         return info;
     }
 
-    /** Register a router info in the dummy netdb so profiling-exclusion passes. */
+    /**
+     * Register a router info in the dummy netdb so profiling-exclusion passes.
+     *
+     * @param ri the router info to register, keyed by its identity hash
+     * @throws Exception if the netdb's {@code _routers} map cannot be reached
+     *                   reflectively
+     */
     private static void seedNetDb(RouterInfo ri) throws Exception {
         Class<?> c = _ctx.netDb().getClass();
         Field routers = null;
@@ -91,7 +97,17 @@ public class ProfileOrganizerPromotionTest {
         m.put(ri.getIdentity().getHash(), ri);
     }
 
-    /** Build a profile for a peer seeded in the netdb; returns the profile. */
+    /**
+     * Build a profile for a peer seeded in the netdb; returns the profile.
+     *
+     * @param seed written into the identity's key material so each call yields a
+     *             distinct peer
+     * @param caps capability string for the router info, e.g. {@code "fOD"} marks
+     *             a moderately congested floodfill
+     * @return a profile for the newly seeded peer
+     * @throws Exception if the peer's router info cannot be seeded into the
+     *                   dummy netdb
+     */
     private static PeerProfile seedProfile(int seed, String caps) throws Exception {
         RouterInfo ri = routerInfo(seed, caps);
         seedNetDb(ri);
@@ -105,6 +121,8 @@ public class ProfileOrganizerPromotionTest {
     /**
      * Give a profile a clean acceptance record, so the acceptance gate is not the
      * reason a peer built to fail some *other* gate reports.
+     *
+     * @param profile the profile whose tunnel history is given 50 agreements
      */
     private static void acceptAll(PeerProfile profile) {
         TunnelHistory th = profile.getTunnelHistory();
@@ -251,6 +269,8 @@ public class ProfileOrganizerPromotionTest {
      * passed" while the peer was in fact skipped. The three below are exactly the
      * cases that were silently misattributed, plus the one that was reported from
      * the wrong object.
+     *
+     * @throws Exception if a peer cannot be seeded into the dummy netdb
      */
     @Test
     public void everyGateNamesItsOwnReason() throws Exception {
@@ -292,8 +312,10 @@ public class ProfileOrganizerPromotionTest {
 
     /**
      * A peer that clears every gate has no reason to report, and
-     * {@link #skipsPromotion} agrees with the reason: it is null exactly when the
+     * {@link #skips} agrees with the reason: it is null exactly when the
      * boolean is false, so the two cannot drift.
+     *
+     * @throws Exception if a peer cannot be seeded into the dummy netdb
      */
     @Test
     public void reasonIsNullExactlyWhenNotSkipped() throws Exception {
@@ -311,9 +333,11 @@ public class ProfileOrganizerPromotionTest {
     }
 
     /**
-     * {@link #skipsPromotion} and {@link #promotionSkipReason} are the same
+     * {@link #skips} and {@link ProfileOrganizer#promotionSkipReason} are the same
      * decision, not two implementations. Swept over the profiles the other tests
      * build so a divergence at any combination fails here.
+     *
+     * @throws Exception if a peer cannot be seeded into the dummy netdb
      */
     @Test
     public void skipsPromotionIsTheReasonDecision() throws Exception {

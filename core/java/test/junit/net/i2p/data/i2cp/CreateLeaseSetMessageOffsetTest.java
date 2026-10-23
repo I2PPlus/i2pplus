@@ -39,8 +39,8 @@ import net.i2p.data.TunnelId;
  * wrong offsets.
  *
  * These tests pin that behavior:
- *  - ElGamal + DSA round-trips byte-for-byte.
- *  - ECIES private key corrupts the parsed LeaseSet (different lease data).
+ * - ElGamal + DSA round-trips byte-for-byte.
+ * - ECIES private key corrupts the parsed LeaseSet (different lease data).
  *
  * @since 0.9.70+
  */
@@ -75,6 +75,15 @@ public class CreateLeaseSetMessageOffsetTest {
     /**
      * Serializes the message exactly as the client-side producer would and
      * parses it back exactly as the router-side listener would.
+     *
+     * @param pk the encryption private key to put on the wire
+     * @param spk the signing private key to put on the wire
+     * @param ls the LeaseSet to embed in the message
+     * @return the message as re-parsed by the router-side reader
+     * @throws DataFormatException if a field is unset for writing, or the
+     *                             re-parsed payload does not decode as a
+     *                             valid message
+     * @throws java.io.IOException on stream write or read failure
      */
     private static CreateLeaseSetMessage roundTrip(PrivateKey pk, SigningPrivateKey spk,
                                                    LeaseSet ls) throws DataFormatException,java.io.IOException {

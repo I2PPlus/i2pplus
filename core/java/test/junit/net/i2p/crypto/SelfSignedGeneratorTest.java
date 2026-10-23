@@ -44,6 +44,10 @@ public class SelfSignedGeneratorTest {
      * with "Unsupported" because a RedDSA signature cannot be encoded into an
      * X.509 certificate. Filtering here keeps the loop aligned with the
      * generator's own switch rather than with key availability.
+     *
+     * @return the available signature types {@code generate()} can build a
+     *         certificate for; empty only if the JVM provides no usable
+     *         signature type at all
      */
     private static java.util.List<SigType> supportedTypes() {
         java.util.List<SigType> out = new java.util.ArrayList<>();
@@ -62,6 +66,9 @@ public class SelfSignedGeneratorTest {
      * leading element and may or may not carry a literal {@code CN=} prefix, so
      * the first comma-delimited element is stripped rather than split on the
      * tag.
+     *
+     * @param cert the certificate whose subject DN is parsed
+     * @return the common name, stripped of any leading {@code CN=} tag
      */
     private static String commonName(X509Certificate cert) {
         String dn = cert.getSubjectX500Principal().getName(
@@ -77,6 +84,9 @@ public class SelfSignedGeneratorTest {
      * <p>This is the core of the removed helper: the DER is assembled by hand in
      * {@code genTBS()} and {@code genCRL()}, so a malformed length or a wrong
      * algorithm OID shows up here as a verification failure or a parse error.
+     *
+     * @throws Exception on key generation, certificate parsing or signature
+     *                   verification failure
      */
     @Test
     public void testGenerateForEveryAvailableSigType() throws Exception {
@@ -112,6 +122,9 @@ public class SelfSignedGeneratorTest {
      * The generated certificate carries the requested common name and is valid
      * now. A certificate whose notBefore/notAfter are wrong would still parse and
      * verify, so check the dates and the subject explicitly.
+     *
+     * @throws Exception on certificate generation, validity check or signature
+     *                   verification failure
      */
     @Test
     public void testSubjectAndValidity() throws Exception {
@@ -131,6 +144,9 @@ public class SelfSignedGeneratorTest {
      * The returned CRL is a real CRL signed by the certificate key, and is not
      * the certificate bytes re-parsed. {@code genCRL()} rebuilds the structure by
      * hand, so this is the check that its TBS encoding is coherent.
+     *
+     * @throws Exception on certificate or CRL generation, or CRL verification
+     *                   failure
      */
     @Test
     public void testGeneratedCRLIsUsable() throws Exception {
@@ -155,6 +171,8 @@ public class SelfSignedGeneratorTest {
     /**
      * The altNames overload adds the requested names. The no-altNames overload
      * must still work and must not fail when the set is absent.
+     *
+     * @throws Exception on key generation or certificate verification failure
      */
     @Test
     public void testAltNamesOverload() throws Exception {
@@ -176,6 +194,9 @@ public class SelfSignedGeneratorTest {
     /**
      * {@code renew()} reuses the existing private key rather than making a new
      * one, so the renewed certificate must carry the same public key.
+     *
+     * @throws Exception on certificate generation, renewal or signature
+     *                   verification failure
      */
     @Test
     public void testRenewKeepsKeyPair() throws Exception {

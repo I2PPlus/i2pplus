@@ -129,7 +129,17 @@ public class GraphCoalesceStallDecisionTest {
 
     /////////////// the reported line
 
-    /** A tally with {@code count} entries, built through the real record path. */
+    /**
+     * A tally with {@code count} entries, built through the real record path.
+     *
+     * @param cause the cause the tally blames each entry for
+     * @param count how many entries to record, 0 or more
+     * @param ageMs age of each entry in ms, as {@code CauseTally.record} takes it;
+     *              the tally keeps the largest age it is given
+     * @param sinceLastWrite true when {@code ageMs} is measured from the last
+     *                       successful write rather than from graphing start
+     * @return the tally, holding {@code count} entries and the largest age given
+     */
     private static GraphGenerator.CauseTally tally(StaleCause cause, int count, long ageMs,
                                                   boolean sinceLastWrite) {
         GraphGenerator.CauseTally t = new GraphGenerator.CauseTally(cause);

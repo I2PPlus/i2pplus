@@ -136,6 +136,7 @@ public class FIFOBandwidthLimiterTest {
      * A fully-allocated, non-aborted request is reset and reused (same object
      * returned) instead of allocating a new one.
      *
+     * @throws Exception if the wait for the refiller to grant the request is interrupted
      * @since 0.9.71+
      */
     @Test

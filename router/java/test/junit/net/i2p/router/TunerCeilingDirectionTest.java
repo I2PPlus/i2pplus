@@ -12,7 +12,7 @@ import org.junit.Test;
  * <p>Before this, one threshold served both directions, so a small-sample loss
  * ratio sitting on it crossed it repeatedly and the ceiling banged between the
  * hard floor and cap every 50 seconds without ever resting in between — a
- * measured path of 5120 -> 7168 -> 6912 -> 8192 -> 7936 -> 8192.
+ * measured path of 5120 -&gt; 7168 -&gt; 6912 -&gt; 8192 -&gt; 7936 -&gt; 8192.
  *
  * <p>The dead-band is what lets it rest: shrink at the full lossy threshold,
  * climb at half of it, hold in between.
@@ -116,8 +116,8 @@ public class TunerCeilingDirectionTest {
 
     /**
      * The band is monotone in the rate: as the reading rises the decision can only
-     * move climb -> hold -> shrink, never the other way. The direction values are
-     * ordered CLIMB(-1) < HOLD(0) < SHRINK(1), so the sequence must be
+     * move climb -&gt; hold -&gt; shrink, never the other way. The direction values are
+     * ordered CLIMB(-1) &lt; HOLD(0) &lt; SHRINK(1), so the sequence must be
      * non-decreasing in the rate.
      */
     @Test

@@ -33,7 +33,12 @@ public class TunnelPoolTargetTest {
         _ctx = RouterTestHelper.newContext();
     }
 
-    /** Real pool over a real context; manager and peer selector are mocks. */
+    /**
+     * Real pool over a real context; manager and peer selector are mocks.
+     *
+     * @param settings pool configuration (quantity, length, nickname) the pool is built with
+     * @return a live TunnelPool over the shared test context
+     */
     private static TunnelPool createPool(TunnelPoolSettings settings) {
         TunnelPoolManager mgr = mock(TunnelPoolManager.class);
         TunnelPeerSelector sel = mock(TunnelPeerSelector.class);
@@ -104,6 +109,17 @@ public class TunnelPoolTargetTest {
     /**
      * Build a real tunnel config with the given age, latency and failure
      * count for comparator ordering tests.
+     *
+     * @param expiration absolute end time of the tunnel, in ms since the epoch
+     * @param latency build latency sample, in ms, added to the config; a
+     *                negative value adds no sample, so the tunnel's latency
+     *                stays unknown
+     * @param failures number of build failures to install, 0 or more; 0
+     *                 leaves the counter at its initial value
+     * @return a pooled tunnel config carrying the requested expiry, latency
+     *         and failure count
+     * @throws Exception if the pool or config cannot be built, or if
+     *                   reflection on the private {@code _failures} counter fails
      */
     private static TunnelCreatorConfig config(long expiration, int latency, int failures) throws Exception {
         TunnelPool pool = createPool(new TunnelPoolSettings(false));
@@ -120,7 +136,11 @@ public class TunnelPoolTargetTest {
         return cfg;
     }
 
-    /** Fresher tunnels sort first — the LeaseSet should hold the longest-lived leases. */
+    /**
+     * Fresher tunnels sort first — the LeaseSet should hold the longest-lived leases.
+     *
+     * @throws Exception if the pool or a tunnel config cannot be built
+     */
     @Test
     public void testComparatorFreshestFirst() throws Exception {
         Assume.assumeTrue("No RouterContext available", _ctx != null);
@@ -134,7 +154,11 @@ public class TunnelPoolTargetTest {
         assertSame(fresh, list.get(0));
     }
 
-    /** Among same-age tunnels, lower latency wins. */
+    /**
+     * Among same-age tunnels, lower latency wins.
+     *
+     * @throws Exception if the pool or a tunnel config cannot be built
+     */
     @Test
     public void testComparatorLatencyTiebreak() throws Exception {
         Assume.assumeTrue("No RouterContext available", _ctx != null);
@@ -148,7 +172,11 @@ public class TunnelPoolTargetTest {
         assertSame(fast, list.get(0));
     }
 
-    /** Tunnels without latency measurements sort after measured ones. */
+    /**
+     * Tunnels without latency measurements sort after measured ones.
+     *
+     * @throws Exception if the pool or a tunnel config cannot be built
+     */
     @Test
     public void testComparatorUnknownLatencyLast() throws Exception {
         Assume.assumeTrue("No RouterContext available", _ctx != null);
@@ -162,7 +190,11 @@ public class TunnelPoolTargetTest {
         assertSame(measured, list.get(0));
     }
 
-    /** Among tunnels with identical age and latency, fewer failures wins. */
+    /**
+     * Among tunnels with identical age and latency, fewer failures wins.
+     *
+     * @throws Exception if reflection on the private {@code _failures} counter fails
+     */
     @Test
     public void testComparatorFailureTiebreak() throws Exception {
         Assume.assumeTrue("No RouterContext available", _ctx != null);

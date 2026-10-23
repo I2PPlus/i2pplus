@@ -47,7 +47,17 @@ public class TunnelPoolPoolStateTest {
         return new TunnelPool(_ctx, mgr, new TunnelPoolSettings(false), sel);
     }
 
-    /** A pooled config with the given remaining life and test status, idle. */
+    /**
+     * A pooled config with the given remaining life and test status, idle.
+     *
+     * @param remaining milliseconds of life left, measured from the context clock,
+     *                  negative meaning the tunnel has already expired
+     * @param status the test status to report; GOOD clears the failure count,
+     *               UNTESTED leaves the field at its default, any other value is
+     *               written in by reflection
+     * @return a 3-hop inbound exploratory config in a fresh pool, with its last
+     *         activity aged 10 minutes back so it reads as idle
+     */
     private static TunnelCreatorConfig config(long remaining, TunnelTestStatus status) {
         TunnelCreatorConfig cfg =
             new PooledTunnelCreatorConfig(_ctx, 3, true, null, createPool());

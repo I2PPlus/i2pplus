@@ -27,6 +27,11 @@ public class SimpleTimer2WorkDueDecisionTest {
     /**
      * A timer that has completed one task ever, and has never run anything since.
      * This is the exact shape the live false positive had.
+     *
+     * @param workDue true if a task is due and has not run, the only way this timer
+     *                shape can be a genuine fault
+     * @return the watchdog's verdict for it: OK when nothing is due, REPORT when
+     *         work is waiting and no progress was made
      */
     private static SimpleTimer2.WatchdogDecision quietShard(boolean workDue) {
         return SimpleTimer2.evaluateStall(1L, 1L, WATCHDOG_STALL_SAMPLES, WATCHDOG_STALL_SAMPLES,

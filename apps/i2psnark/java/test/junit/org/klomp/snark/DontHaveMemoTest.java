@@ -18,7 +18,11 @@ public class DontHaveMemoTest {
         assertTrue(memo.contains(7));
     }
 
-    /** Re-adding refreshes the expiry, so an expired piece can be re-remembered. */
+    /**
+     * Re-adding refreshes the expiry, so an expired piece can be re-remembered.
+     *
+     * @throws Exception if the 70 ms sleep is interrupted
+     */
     @Test
     public void testReAddRefreshes() throws Exception {
         DontHaveMemo memo = new DontHaveMemo(50);
@@ -29,7 +33,11 @@ public class DontHaveMemoTest {
         assertTrue(memo.contains(7));
     }
 
-    /** Expired entries are dropped, and other pieces are unaffected. */
+    /**
+     * Expired entries are dropped, and other pieces are unaffected.
+     *
+     * @throws Exception if the 70 ms sleep is interrupted
+     */
     @Test
     public void testExpiryDropsOnlyTheEntry() throws Exception {
         DontHaveMemo memo = new DontHaveMemo(50);

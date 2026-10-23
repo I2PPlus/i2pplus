@@ -115,7 +115,11 @@ public class ClientPeerSelectorOrderTest {
         _tmpDir.delete();
     }
 
-    /** A RouterInfo carrying a public SSU IPv4 address: connectable both ways. */
+    /**
+     * A RouterInfo carrying a public SSU IPv4 address: connectable both ways.
+     *
+     * @return a RouterInfo whose only address is SSU at 1.2.3.4:1234, cost 42
+     */
     private static RouterInfo ssuRouterInfo() {
         OrderedProperties opts = new OrderedProperties();
         opts.setProperty("host", "1.2.3.4");
@@ -126,6 +130,12 @@ public class ClientPeerSelectorOrderTest {
         return ri;
     }
 
+    /**
+     * A router hash with recognizable leading bytes, to identify a peer.
+     *
+     * @param b the first byte of the hash; the second byte is set to 5 minus it
+     * @return a hash of HASH_LENGTH bytes, distinct for each b
+     */
     private static Hash hash(int b) {
         byte[] data = new byte[Hash.HASH_LENGTH];
         data[0] = (byte) b;

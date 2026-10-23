@@ -32,7 +32,12 @@ public class TunerTest {
         Assume.assumeTrue("No RouterContext available", _ctx != null);
     }
 
-    /** Inline clamp to match SystemHealth.clamp (private static). */
+    /**
+     * Inline clamp to match SystemHealth.clamp (private static).
+     *
+     * @param v the score to constrain, any finite double
+     * @return {@code v} forced into the 0.0 to 1.0 score range
+     */
     private static double clamp01(double v) {
         return Math.max(0.0, Math.min(1.0, v));
     }
@@ -250,6 +255,11 @@ public class TunerTest {
      * Mirrors Tuner.SystemHealth.scoreGhostPeers' ratio mapping, taking the band
      * constants from Tuner rather than repeating them, so a change to either
      * constant fails here instead of being silently mirrored away.
+     *
+     * @param ghostsInTier how many of the tier's peers are ghosted, 0 or more
+     * @param tierSize     how many peers the tier holds, the denominator of the ratio
+     * @return the score for that ghost ratio: 1.0 at or below the free band, falling
+     *         linearly to 0.0 at the zero band
      */
     private static double ghostTierScore(int ghostsInTier, int tierSize) {
         final double free = Tuner.SystemHealth.GHOST_TIER_FREE;
@@ -702,7 +712,13 @@ public class TunerTest {
     /**
      * Inline the RequestHighLoadLagParam computeTarget logic.
      * Params: min=200, max=5000, step=100.
-     * Dead-band: observed > 200 → tighten, observed < 50 → loosen.
+     * Dead-band: observed &gt; 200 → tighten, observed &lt; 50 → loosen.
+     *
+     * @param observed the request high-load lag stat in ms, or NaN when nothing is
+     *                 recorded
+     * @param current  the parameter's current value in ms, within 200 and 5000
+     * @return the next value: one 100 ms step tighter above a 200 ms lag, one step
+     *         looser below 50 ms, otherwise unchanged
      */
     private static int highLoadLagTarget(double observed, int current) {
         int min = 200, max = 5000, step = 100;
@@ -765,8 +781,18 @@ public class TunerTest {
     /**
      * Inline the RequestModerateLoadLagParam computeTarget logic.
      * Params: min=100, max=3000, step=50.
-     * Primary: jobLag > 100 → tighten, jobLag < 30 AND readyJobs < 5 → loosen.
+     * Primary: jobLag &gt; 100 → tighten, jobLag &lt; 30 AND readyJobs &lt; 5 → loosen.
      * Ceiling: always stays below highLoadLagMs - step.
+     *
+     * @param observed  the moderate job-lag stat in ms, or NaN when nothing is recorded
+     * @param current   the parameter's current value in ms, within 100 and 3000
+     * @param highLag   the high-load lag parameter's value in ms; this one may never
+     *                  reach it, only come within one step
+     * @param readyJobs the ready-jobs count, or NaN when nothing is recorded; above 20
+     *                  the queue counts as high, below 5 as low
+     * @return the next value: one 50 ms step tighter on a high lag or a deep queue, one
+     *         step looser only when the lag and the queue are both low, otherwise
+     *         unchanged
      */
     private static int moderateLoadLagTarget(double observed, int current,
                                               int highLag, double readyJobs) {
@@ -945,7 +971,7 @@ public class TunerTest {
     }
 
     /**
-     * CPU pressure (jobLag > 100) vetoes growth even under saturation: we must not
+     * CPU pressure (jobLag &gt; 100) vetoes growth even under saturation: we must not
      * add handler threads to a box that is already swap/busy.
      */
     @Test
@@ -960,7 +986,7 @@ public class TunerTest {
     }
 
     /**
-     * Handlers blocking >10s (local connect path) triggers the largest growth,
+     * Handlers blocking &gt;10s (local connect path) triggers the largest growth,
      * matching the pre-existing emergency branch.
      */
     @Test
@@ -1075,7 +1101,7 @@ public class TunerTest {
     /**
      * Mid-size pool with a backlog above the relative saturation floor but below
      * the old fixed-50 threshold: must grow so Tuner stays ahead of the accept
-     * gate's drain-ETA (gate denies at ~30s drain while old Tuner waited for >50).
+     * gate's drain-ETA (gate denies at ~30s drain while old Tuner waited for &gt;50).
      */
     @Test
     public void testServerHandlerGrowsBeforeOldFixedThreshold() {
@@ -1163,8 +1189,8 @@ public class TunerTest {
     }
 
     /**
-     * CPU pressure (jobLag > 100) vetoes the >50 backlog growth, but NOT the
-     * crowding case (queueDepth >= current): at/over capacity we must still widen
+     * CPU pressure (jobLag &gt; 100) vetoes the &gt;50 backlog growth, but NOT the
+     * crowding case (queueDepth &gt;= current): at/over capacity we must still widen
      * the admission buffer to avoid rejecting connections, even on a busy box.
      */
     @Test
@@ -1331,7 +1357,7 @@ public class TunerTest {
                            Double.NaN, Double.NaN, 1024));
     }
 
-    /** Unknown executor ceiling (maxRunner <= 0) is treated as not saturated. */
+    /** Unknown executor ceiling (maxRunner &lt;= 0) is treated as not saturated. */
     @Test
     public void testClientMaxConnectionsUnknownMaxRunner() {
         // maxRunner = -1 (reflector not resolved) must not send us into a shed-no-op
@@ -1383,7 +1409,7 @@ public class TunerTest {
         assertEquals(RX_MIN, Tuner.computeReceiveWorkers(RX_MIN, RX_MIN, RX_MAX, Double.NaN, 0.0, Double.NaN, Double.NaN));
     }
 
-    /** A lossy path (rtxRatio > 50 = >5% resends) holds the pool: retransmit work still needs capacity (reliability). */
+    /** A lossy path (rtxRatio &gt; 50 = &gt;5% resends) holds the pool: retransmit work still needs capacity (reliability). */
     @Test
     public void testReceiveWorkersLossyHoldsDecay() {
         assertEquals(5, Tuner.computeReceiveWorkers(5, RX_MIN, RX_MAX, Double.NaN, 0.0, 75.0, Double.NaN));
@@ -1516,7 +1542,7 @@ public class TunerTest {
         assertEquals(128, Tuner.computeStreamingBdpTarget(1000.0, 1000.0, 1730, 128, 4096));
     }
 
-    /** The runtime clamps the configured message size to >= 512 before calling us;
+    /** The runtime clamps the configured message size to &gt;= 512 before calling us;
      * 1 MB/s at 1 s RTT then yields 1953 slots and stays within range. */
     @Test
     public void testBdpTargetSaneWithFloorMessageSize() {
@@ -1530,7 +1556,7 @@ public class TunerTest {
         assertEquals(-1, Tuner.computeStreamingBdpTarget(0.0, 1000.0, 1730, 128, 4096));
     }
 
-    /** RTT too short to measure (<= 100 ms) → no usable target. */
+    /** RTT too short to measure (&lt;= 100 ms) → no usable target. */
     @Test
     public void testBdpTargetShortRttReturnsNoSignal() {
         assertEquals(-1, Tuner.computeStreamingBdpTarget(1_000_000.0, 100.0, 1730, 128, 4096));
@@ -1728,6 +1754,7 @@ public class TunerTest {
      * case backdates the rate's coalesce timestamp instead of sleeping through
      * five minutes.
      *
+     * @throws Exception if the rate's private coalesce field is unreachable by reflection
      * @since 0.9.71+
      */
     @Test

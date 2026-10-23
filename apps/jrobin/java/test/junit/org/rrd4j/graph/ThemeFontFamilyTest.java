@@ -34,6 +34,9 @@ public class ThemeFontFamilyTest {
      *
      * <p>This is the check that was missing. It fails on the old behaviour, and it keeps
      * failing if the hardcoded stacks are ever pasted back in.
+     *
+     * @throws Exception if the sample graph cannot be rendered, including the I/O
+     *                   error writing the SVG into the in-memory buffer
      */
     @Test
     public void theFontClassesReadTheConsoleVariables() throws Exception {
@@ -56,6 +59,9 @@ public class ThemeFontFamilyTest {
      * <p>An unresolved {@code var()} makes the whole declaration invalid at computed-value
      * time, so a missing stylesheet would leave the text with no family at all rather than a
      * generic one.
+     *
+     * @throws Exception if the sample graph cannot be rendered, including the I/O
+     *                   error writing the SVG into the in-memory buffer
      */
     @Test
     public void eachVariableHasAGenericFallback() throws Exception {
@@ -71,6 +77,9 @@ public class ThemeFontFamilyTest {
      *
      * <p>This is what makes the whole approach work, and it is a link rather than an inherited
      * property precisely because the document is isolated.
+     *
+     * @throws Exception if the sample graph cannot be rendered, including the I/O
+     *                   error writing the SVG into the in-memory buffer
      */
     @Test
     public void theConsoleFontStylesheetIsLinked() throws Exception {
@@ -84,6 +93,9 @@ public class ThemeFontFamilyTest {
      *
      * <p>The extraction only rewrites the two generic spellings, so naming a physical face
      * keeps it - which is the escape hatch for a graph that wants to differ from the page.
+     *
+     * @throws Exception if the sample graph cannot be rendered, including the I/O
+     *                   error writing the SVG into the in-memory buffer
      */
     @Test
     public void aNamedFamilySurvivesOnTheElement() throws Exception {
@@ -92,13 +104,28 @@ public class ThemeFontFamilyTest {
                    svg.contains("font-family:" + NAMED_FAMILY));
     }
 
-    /** The body of one rule from the emitted style block, or "" when it is absent. */
+    /**
+     * The body of one rule from the emitted style block, or "" when it is absent.
+     *
+     * @param style the style block to search, as emitted by the SVG serializer
+     * @param selector the rule to look for, with its leading dot, e.g. {@code .mono}
+     * @return the text from the selector's opening brace up to the next closing
+     *         brace, or "" when the selector does not appear in the block
+     */
     private static String rule(String style, String selector) {
         int at = style.indexOf(selector + "{");
         if (at < 0) {return "";}
         return style.substring(at, style.indexOf('}', at));
     }
 
+    /**
+     * The whole style block of a graph drawn in the monospace family.
+     *
+     * @return the opening style tag and the rules that follow it, stopping just
+     *         before the closing style tag
+     * @throws Exception if the sample graph cannot be rendered, including the I/O
+     *                   error writing the SVG into the in-memory buffer
+     */
     private static String styleBlockOf() throws Exception {
         String svg = svgWithFontFamily(Font.MONOSPACED);
         int from = svg.indexOf("<style>");
@@ -112,6 +139,8 @@ public class ThemeFontFamilyTest {
      *
      * @param family the family to ask for, in the form {@code new Font} would take
      * @return the SVG as a string
+     * @throws Exception if the SVG cannot be written to the in-memory buffer, or the
+     *                   buffer cannot be read back as UTF-8
      */
     private static String svgWithFontFamily(String family) throws Exception {
         SVGImageWorker w = new SVGImageWorker(0, 0, false, false, "light");

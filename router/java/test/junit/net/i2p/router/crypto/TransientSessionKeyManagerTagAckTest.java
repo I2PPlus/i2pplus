@@ -56,7 +56,11 @@ public class TransientSessionKeyManagerTagAckTest {
         }
     }
 
-    /** A fresh set of tags of the size this manager normally sends. */
+    /**
+     * A fresh set of tags of the size this manager normally sends.
+     *
+     * @return five distinct random session tags, the number one delivery carries (TAG_COUNT)
+     */
     private static Set<SessionTag> newTags() {
         Set<SessionTag> tags = new HashSet<>(TAG_COUNT);
         for (int i = 0; i < TAG_COUNT; i++) {

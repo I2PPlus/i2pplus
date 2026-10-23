@@ -30,7 +30,11 @@ public class TunnelCreatorConfigPreConnectRetryTest {
         ctx = RouterTestHelper.newContext();
     }
 
-    /** TunnelCreatorConfig is abstract with no abstract members, so a bare subclass will do. */
+    /**
+     * TunnelCreatorConfig is abstract with no abstract members, so a bare subclass will do.
+     *
+     * @return a fresh anonymous 3-hop inbound config, carrying its own retry budget
+     */
     private static TunnelCreatorConfig cfg() {
         return new TunnelCreatorConfig(ctx, 3, true) {};
     }

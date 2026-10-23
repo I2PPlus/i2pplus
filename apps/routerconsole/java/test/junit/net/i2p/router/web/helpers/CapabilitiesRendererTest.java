@@ -42,7 +42,15 @@ public class CapabilitiesRendererTest {
         return buf.toString();
     }
 
-    /** The original {@code applyTierState}, which built every replacement string per call. */
+    /**
+     * The original {@code applyTierState}, which built every replacement string per call.
+     *
+     * @param caps the linkified capability string
+     * @param tier tier letter to strip and mark up, or 0 to return the input unchanged
+     * @param suffix reachability letter to carry on the links, or 0 for none
+     * @param suffixAll if true, suffix every capability link, not only the tier links
+     * @return the capability string with that tier's markup written into it
+     */
     private static String referenceApplyTierState(String caps, char tier, char suffix, boolean suffixAll) {
         if (tier == 0) {return caps;}
         String rv = caps.replace(String.valueOf(tier), "");

@@ -41,6 +41,12 @@ private static final double ATTACK = TunnelPeerSelector.ATTACK_THRESHOLD;
   /**
    * Minimal PeerProfile stub exposing only the four facts the pre-qualification
    * signal check reads.
+   *
+   * @param lastHeardFrom last time we heard from the peer, ms since the epoch, 0 for never
+   * @param lastSendSuccessful last successful send to the peer, ms since the epoch, 0 for never
+   * @param lastTested last successful test in the tunnel history, ms since the epoch, 0 for never
+   * @param acceptanceRatio fraction of the peer's build requests it accepted, 0.0 - 1.0
+   * @return a mock profile answering only those four getters with the given values
    */
   private static PeerProfile profile(long lastHeardFrom, long lastSendSuccessful,
                                      long lastTested, double acceptanceRatio) {

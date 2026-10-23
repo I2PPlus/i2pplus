@@ -65,6 +65,7 @@ public class BuildMessageTestStandalone extends TestCase {
     /**
      * Test building a message of the given type.
      *
+     * @param ctx the router context supplying the key generator and the log
      * @param testType outbound: 1=ElG; 2=ECIES; 3=ECIES short; inbound: 4-6
      */
     private void x_testBuildMessage(RouterContext ctx, int testType) {
@@ -245,6 +246,13 @@ public class BuildMessageTestStandalone extends TestCase {
      * The first entry in the outbound config is the gateway (us),
      * and is mostly ignored.
      * Ditto last entry in inbound config.
+     *
+     * @param ctx the router context supplying the key generator and clock
+     * @param testType 1 selects ElGamal-2048 hop keys, any other value ECIES
+     *                 X25519; 3 and 6 leave the per-hop keys unset
+     * @param isInbound true to build an inbound tunnel config, false for an
+     *                  outbound one
+     * @return a 4-entry config with peers, keys and tunnel ids filled in
      */
     private TunnelCreatorConfig createConfig(I2PAppContext ctx, int testType, boolean isInbound) {
         _peers = new Hash[4];
@@ -287,6 +295,7 @@ public class BuildMessageTestStandalone extends TestCase {
     /**
      * Run the standalone tunnel build message test.
      *
+     * @param args ignored, all six build message types are always run
      * @since 0.9.51
      */
     public static void main(String[] args) {

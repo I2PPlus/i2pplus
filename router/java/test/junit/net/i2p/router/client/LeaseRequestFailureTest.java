@@ -166,6 +166,8 @@ public class LeaseRequestFailureTest {
      * The requested LeaseSet is null: the job fails early, delivers onFailed
      * once, and clears the slot. A second run (a retry re-run) must not fire
      * a second callback.
+     *
+     * @throws Exception on crypto setup failure generating the test destination's keys
      */
     @Test
     public void earlyFailureDeliversOnFailedExactlyOnce() throws Exception {
@@ -188,6 +190,8 @@ public class LeaseRequestFailureTest {
     /**
      * SessionId exists but there is no output stream: doSend() throws
      * I2CPMessageException and the catch must resolve exactly once.
+     *
+     * @throws Exception on crypto setup failure generating the test destination's keys
      */
     @Test
     public void sendFailureDeliversOnFailedExactlyOnce() throws Exception {
@@ -213,6 +217,8 @@ public class LeaseRequestFailureTest {
      * the LeaseSet request outright, and the request was then written off as a 61s
      * timeout followed by a tunnel rebuild. The queue is drained every few milliseconds,
      * so waiting briefly keeps the request and costs a fraction of the drop.
+     *
+     * @throws Exception on crypto setup failure, or if the drain thread is interrupted
      */
     @Test
     public void fullClientQueueDoesNotLoseTheRequest() throws Exception {
@@ -247,6 +253,8 @@ public class LeaseRequestFailureTest {
     /**
      * A client that never drains must still be failed promptly rather than hanging the
      * job queue thread for the whole request timeout.
+     *
+     * @throws Exception on crypto setup failure generating the test destination's keys
      */
     @Test
     public void wedgedClientFailsWithoutLosingTheRequestSlot() throws Exception {
@@ -277,6 +285,8 @@ public class LeaseRequestFailureTest {
     /**
      * Once the request has been resolved elsewhere (slot cleared), a delayed
      * job run must bail out without delivering a second resolution.
+     *
+     * @throws Exception on crypto setup failure generating the test destination's keys
      */
     @Test
     public void resolvedRequestIsNotAccountedAgain() throws Exception {
@@ -298,6 +308,8 @@ public class LeaseRequestFailureTest {
     /**
      * The rerequest path re-runs the same state so the slot, callbacks, and
      * deadline survive, and stops after the bound.
+     *
+     * @throws Exception on crypto setup failure generating the test destination's keys
      */
     @Test
     public void rerequestRequeuesSameStateWithinBound() throws Exception {
@@ -318,7 +330,11 @@ public class LeaseRequestFailureTest {
         assertEquals(4, countRequestJobs());
     }
 
-    /** No pending lease request, no session, or null dest: no requeue. */
+    /**
+     * No pending lease request, no session, or null dest: no requeue.
+     *
+     * @throws Exception on crypto setup failure generating the test destination's keys
+     */
     @Test
     public void rerequestRequiresPendingRequest() throws Exception {
         Destination dest = createDestination();
@@ -333,6 +349,8 @@ public class LeaseRequestFailureTest {
      * Netdb publish() rejects the client's LeaseSet as expired: the pending
      * request is promptly re-queued (seed + one retry per call) until the
      * bound, without disconnecting the client or failing the request.
+     *
+     * @throws Exception on crypto setup failure generating the test destination's keys
      */
     @Test
     public void expiredLeaseSetRequeuesPendingRequest() throws Exception {
@@ -363,7 +381,11 @@ public class LeaseRequestFailureTest {
         assertFalse(_runner.getIsDead());
     }
 
-    /** Expiry rejection with no pending request must not queue or disconnect. */
+    /**
+     * Expiry rejection with no pending request must not queue or disconnect.
+     *
+     * @throws Exception on crypto setup failure generating the test destination's keys
+     */
     @Test
     public void expiredLeaseSetWithoutPendingRequestDoesNothing() throws Exception {
         Destination dest = createDestination();
@@ -401,6 +423,11 @@ public class LeaseRequestFailureTest {
     /**
      * An LS2 with no leases is "in the past" by definition (earliest is -1),
      * so publish() throws before storing anything.
+     *
+     * @param dest the client's {@link Destination}, set as the lease set's owner
+     * @param id   the session the message arrives on, echoed back in any reply
+     * @return a {@link CreateLeaseSet2Message} carrying an empty lease set, which the
+     *         netdb rejects as expired
      */
     private static CreateLeaseSet2Message expiredLeaseSetMessage(Destination dest, SessionId id) {
         LeaseSet2 ls = new LeaseSet2();

@@ -87,9 +87,9 @@ public class LiveStreamStatsCadenceTest {
 
     /**
      * Registration against a fresh StatManager, the reason
-     * {@link #registerLiveStreamStats} exists. A name StatManager was never told
-     * about is dropped silently, which is how a registered-but-never-fed stat
-     * reads as absent rather than wrong.
+     * {@link ConnectionPacketHandler#registerLiveStreamStats} exists. A name
+     * StatManager was never told about is dropped silently, which is how a
+     * registered-but-never-fed stat reads as absent rather than wrong.
      */
     @Test
     public void testRegistrationCoversBothStats() {

@@ -33,6 +33,9 @@ public class I2PTunnelRunnerRaceTest {
      * The supplied stream (a race winner's pushback wrapper) must win over a
      * fresh socket stream: reacquiring would hand the forwarder a stream that
      * never saw the byte the race already consumed.
+     *
+     * @throws Exception if the picked stream cannot be read; the mocks are byte arrays in
+     *                   memory, so it should not fail
      */
     @Test
     public void testPickPrefersSuppliedOverSocketStream() throws Exception {
@@ -47,6 +50,9 @@ public class I2PTunnelRunnerRaceTest {
 
     /**
      * With no caller-supplied stream the picker falls back to the live socket.
+     *
+     * @throws Exception if the socket's input stream cannot be opened or read; the mock
+     *                   proxy hands out an in-memory stream, so it should not fail
      */
     @Test
     public void testPickFallsBackToSocketStreamWhenAbsent() throws Exception {
@@ -60,6 +66,9 @@ public class I2PTunnelRunnerRaceTest {
 
     /**
      * Neither side available: null, no throw.
+     *
+     * @throws Exception not expected; the body only calls the picker with two nulls and
+     *                   asserts the result
      */
     @Test
     public void testPickNullWhenBothAbsent() throws Exception {
@@ -70,6 +79,9 @@ public class I2PTunnelRunnerRaceTest {
      * The socket holding first-byte data wins; its pushback stream still
      * delivers that byte; the loser is closed and the winner stays open;
      * both legs received the buffered request.
+     *
+     * @throws Exception if reading the winner's pushback stream fails; the mock legs are
+     *                   in memory, so it should not fail
      */
     @Test
     public void testRaceWinnerKeepsFirstByteAndClosesLoser() throws Exception {
@@ -88,6 +100,9 @@ public class I2PTunnelRunnerRaceTest {
 
     /**
      * Both legs empty: nothing returned, both sockets closed.
+     *
+     * @throws Exception not expected; raceEmptyPair swallows its own I/O and latch
+     *                   failures, and the body only asserts on what it returned
      */
     @Test
     public void testRaceBothEmptyClosesBoth() throws Exception {
@@ -104,6 +119,9 @@ public class I2PTunnelRunnerRaceTest {
      * End-to-end pin for the header-corruption bug: the redrive stream
      * picker must return the race winner's pushback wrapper (still holding
      * the first byte), not a freshly acquired socket stream without it.
+     *
+     * @throws Exception if reading the redrive stream fails; the mock legs are in
+     *                   memory, so it should not fail
      */
     @Test
     public void testRaceWinnerFirstByteSurvivesRedrivePick() throws Exception {
@@ -121,6 +139,8 @@ public class I2PTunnelRunnerRaceTest {
     /**
      * Construct a never-started base runner; raceEmptyPair only touches its
      * pair arguments and the logger.
+     *
+     * @return a base runner built from throwaway socket and stream mocks, never started
      */
     private static I2PTunnelRunner newRunner() {
         return new I2PTunnelRunner(new Socket(),

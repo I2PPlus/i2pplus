@@ -83,6 +83,8 @@ public class TransientSessionKeyManagerTagConsumeTest {
     /**
      * Many threads consuming the tags of one tag set at once: every tag has to
      * be delivered to exactly one of them, no matter which one wins.
+     *
+     * @throws InterruptedException if the join waiting for a consumer thread is interrupted
      */
     @Test
     public void testConcurrentConsumesDeliverEachTagExactlyOnce() throws Exception {

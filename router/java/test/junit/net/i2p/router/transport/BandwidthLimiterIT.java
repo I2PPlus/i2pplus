@@ -63,6 +63,10 @@ public class BandwidthLimiterIT {
      * numBytes through a BandwidthLimitedOutputStream (broken up into numBytesPerWrite)
      * chunks.
      *
+     * @param numBytes total number of bytes to push through the stream
+     * @param numBytesPerWrite size of each write call, in bytes; the final write
+     *                         is shortened to the remainder
+     * @return how long the whole push took, in ms
      */
     private long testOutboundThrottle(int numBytes, int numBytesPerWrite) {
         byte[] source = new byte[numBytesPerWrite];
@@ -87,6 +91,9 @@ public class BandwidthLimiterIT {
      * numBytes through a BandwidthLimitedInputStream (broken up into numBytesPerRead)
      * chunks.
      *
+     * @param numBytes total number of bytes to read through the stream
+     * @param numBytesPerRead size of each read buffer, in bytes
+     * @return how long the whole read took, in ms
      */
     private long testInboundThrottle(int numBytes, int numBytesPerRead) {
         FakeInputStream source = new FakeInputStream(numBytes);

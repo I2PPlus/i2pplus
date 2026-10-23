@@ -48,7 +48,7 @@ public class ConnectionSynAckResendDecisionTest {
         assertFalse(Connection.shouldResendSynAck(sent, 1, sent + 1, MIN_SPACING, MAX_RESENDS));
     }
 
-    /** A re-send exactly at the min spacing boundary is allowed (>=). */
+    /** A re-send exactly at the min spacing boundary is allowed (&gt;=). */
     @Test
     public void testSpacingBoundaryAllowed() {
         long sent = 100000;

@@ -92,6 +92,8 @@ public class RateCoalesceSkipTest {
      * before any successful coalesce they are still zero. A skipped coalesce must
      * leave them untouched at zero and must not consume the current period that
      * the next successful coalesce will read.
+     *
+     * @throws Exception if the 150ms sleep waiting for the period to fall due is interrupted
      */
     @Test
     public void skipDoesNotConsumeTheDataTheNextCoalesceNeeds() throws Exception {

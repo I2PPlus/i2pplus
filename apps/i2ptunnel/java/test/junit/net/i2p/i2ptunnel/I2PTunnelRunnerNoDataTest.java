@@ -50,22 +50,40 @@ public class I2PTunnelRunnerNoDataTest {
         assertFalse(I2PTunnelRunner.shouldFireNoDataFailure(0L, true));
     }
 
-    /** "GET / HTTP/1.1\r\nHost: x\r\n\r\n". */
+    /**
+     * "GET / HTTP/1.1\r\nHost: x\r\n\r\n".
+     *
+     * @return the request as bytes, in the platform's default charset
+     */
     private static byte[] get() {
         return "GET / HTTP/1.1\r\nHost: x\r\n\r\n".getBytes();
     }
 
-    /** "HEAD /path HTTP/1.1\r\n\r\n". */
+    /**
+     * "HEAD /path HTTP/1.1\r\n\r\n".
+     *
+     * @return the request as bytes, in the platform's default charset
+     */
     private static byte[] head() {
         return "HEAD /path HTTP/1.1\r\n\r\n".getBytes();
     }
 
-    /** "POST /submit HTTP/1.1\r\nContent-Length: 3\r\n\r\nabc". */
+    /**
+     * "POST /submit HTTP/1.1\r\nContent-Length: 3\r\n\r\nabc".
+     *
+     * @return the request and its 3-byte body as bytes, in the platform's default
+     *         charset
+     */
     private static byte[] post() {
         return "POST /submit HTTP/1.1\r\nContent-Length: 3\r\n\r\nabc".getBytes();
     }
 
-    /** "PUT /r HTTP/1.1\r\nContent-Length: 0\r\n\r\n". */
+    /**
+     * "PUT /r HTTP/1.1\r\nContent-Length: 0\r\n\r\n".
+     *
+     * @return the request, with an empty body, as bytes in the platform's default
+     *         charset
+     */
     private static byte[] put() {
         return "PUT /r HTTP/1.1\r\nContent-Length: 0\r\n\r\n".getBytes();
     }
@@ -397,12 +415,24 @@ public class I2PTunnelRunnerNoDataTest {
     /**
      * Construct a never-started base runner around a mock I2PSocket whose
      * close() flips the supplied flag.
+     *
+     * @param closed the flag the mock socket's close() sets to true, so the
+     *               caller can observe that the runner closed the socket
+     * @return a base runner over an unconnected socket and the mock I2PSocket,
+     *         never started
      */
     private static I2PTunnelRunner newRunner(final AtomicBoolean closed) {
         return new I2PTunnelRunner(new Socket(), mockI2PSocket(closed), new Object(),
                                    null, null, null, null, false, false);
     }
 
+    /**
+     * A dynamic-proxy I2PSocket that records close() and answers every other
+     * call with a type-appropriate default.
+     *
+     * @param closed the flag set to true when the proxy's close() is invoked
+     * @return an object implementing I2PSocket, backed by the given flag
+     */
     private static I2PSocket mockI2PSocket(final AtomicBoolean closed) {
         return (I2PSocket) Proxy.newProxyInstance(I2PSocket.class.getClassLoader(),
                 new Class<?>[]{I2PSocket.class}, new InvocationHandler() {

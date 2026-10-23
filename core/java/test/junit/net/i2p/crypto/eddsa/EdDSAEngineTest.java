@@ -75,6 +75,9 @@ public class EdDSAEngineTest {
      * CVE-2020-36843 regression: signatures whose S scalar is at or above the
      * group order l are malleable (S, S+l, S+2l... all verify without a range
      * check) and MUST be rejected per RFC 8032 8.2 / 5.1.7.
+     *
+     * @throws Exception on hash algorithm or public key setup failure, or if the
+     *                   canonical signature cannot be verified at all
      */
     @Test
     public void testVerifyRejectsSAtOrAboveOrder() throws Exception {
@@ -136,6 +139,8 @@ public class EdDSAEngineTest {
 
     /**
      * Checks that a wrong-length signature throws an IAE.
+     *
+     * @throws Exception on hash algorithm or public key setup failure
      */
     @Test
     public void testVerifyWrongSigLength() throws Exception {

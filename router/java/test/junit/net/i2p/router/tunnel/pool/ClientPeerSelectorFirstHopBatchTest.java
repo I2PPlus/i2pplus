@@ -24,7 +24,13 @@ import static org.junit.Assert.*;
  */
 public class ClientPeerSelectorFirstHopBatchTest {
 
-    /** A distinct, well-formed Hash per index; the content is never inspected. */
+    /**
+     * A distinct, well-formed Hash per index; the content is never inspected.
+     *
+     * @param i index identifying the peer, written into the last four bytes of the
+     *          hash so each index gives a different key
+     * @return a 32-byte Hash whose other bytes are zero
+     */
     private static Hash peer(int i) {
         java.nio.ByteBuffer buf = java.nio.ByteBuffer.allocate(32);
         buf.position(24);

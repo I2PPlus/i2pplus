@@ -75,6 +75,8 @@ public class SessionEncryptionTest extends TestCase {
      * 3       yes (2)         yes     no
      * 4       no              yes     no
      * 5       no              yes     no.
+     *
+     * @throws Exception if a decrypt() call reports a malformed message
      */
     public void testSessions() throws Exception {
         Object[] keys = KeyGenerator.getInstance().generatePKIKeypair();
@@ -165,6 +167,8 @@ public class SessionEncryptionTest extends TestCase {
      * 3   yes (2)         yes     yes
      * 4   no              yes     no
      * 5   no              yes     no.
+     *
+     * @throws Exception if a decrypt() call reports a malformed message
      */
     public void testRekeying() throws Exception {
         Object[] keys = KeyGenerator.getInstance().generatePKIKeypair();
@@ -251,6 +255,8 @@ public class SessionEncryptionTest extends TestCase {
 
     /**
      * 20 tags every 10 messages, rekey every 50.
+     *
+     * @throws Exception if a decrypt() call reports a malformed message in any round
      */
     public void testLongSession() throws Exception {
         Object[] keys = KeyGenerator.getInstance().generatePKIKeypair();

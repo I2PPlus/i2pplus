@@ -294,6 +294,14 @@ public class ParticipatingThrottlerCacheTest {
     /**
      * The limit for a peer with both relaxations switched off, so the
      * assertions can be compared against a hand-computed share.
+     *
+     * @param numTunnels the current count of participating tunnels
+     * @param isUnreachable true to treat the router as unreachable, cutting a
+     *                      peer's share and flooring the limit at 2
+     * @param isLowShare true to treat the router's bandwidth share as low, with
+     *                   the same cut and floor as an unreachable router
+     * @return the per-peer participation limit at full bandwidth use and a fully
+     *         loaded system, so no capacity or load relaxation applies
      */
     private static int limit(int numTunnels, boolean isUnreachable, boolean isLowShare) {
         return limit(numTunnels, isUnreachable, isLowShare, BW_BUSY, LOAD_BUSY);

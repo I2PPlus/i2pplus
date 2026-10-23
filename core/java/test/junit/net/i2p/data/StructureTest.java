@@ -22,10 +22,19 @@ import java.io.ByteArrayOutputStream;
  */
 public abstract class StructureTest {
 
-    /** Create a populated structure for writing. */
+    /**
+     * Create a populated structure for writing.
+     *
+     * @return a fully populated structure of the type under test
+     * @throws DataFormatException if the populated fixture cannot be built
+     */
     public abstract DataStructure createDataStructure() throws DataFormatException;
 
-    /** Create an unpopulated structure for reading. */
+    /**
+     * Create an unpopulated structure for reading.
+     *
+     * @return an empty structure of the type under test, ready to be read into
+     */
     public abstract DataStructure createStructureToRead();
 
     @Test

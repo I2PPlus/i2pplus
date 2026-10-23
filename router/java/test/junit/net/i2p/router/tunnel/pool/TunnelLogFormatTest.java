@@ -11,7 +11,7 @@ import static org.junit.Assert.assertTrue;
 /**
  * Pins the tunnel-pool log entries to the house style the router log audit
  * found them breaking: key: value rather than key=value, a capital after
- * "-> ", hashes truncated and bracketed, durations rather than raw epoch
+ * "-&gt; ", hashes truncated and bracketed, durations rather than raw epoch
  * milliseconds, and no emitted line over 100 characters.
  */
 public class TunnelLogFormatTest {
@@ -87,6 +87,11 @@ public class TunnelLogFormatTest {
     /**
      * A hash with a known, distinct value, so the truncation the entries use
      * can be pinned exactly.
+     *
+     * @param b the byte value written to the first position of the hash, and one less than the
+     *          value written to the last
+     * @return a hash whose first byte is b and whose last byte is b + 1, so a different b gives
+     *         a different hash
      */
     private static Hash hash(int b) {
         byte[] data = new byte[Hash.HASH_LENGTH];
@@ -98,6 +103,8 @@ public class TunnelLogFormatTest {
     /**
      * Asserts every emitted line of a multi-line entry is at most 100
      * characters, the house maximum.
+     *
+     * @param entry the entry as emitted by one of the log-line builders, split on its newlines
      */
     private static void assertWithinLimit(String entry) {
         for (String line : entry.split("\n")) {

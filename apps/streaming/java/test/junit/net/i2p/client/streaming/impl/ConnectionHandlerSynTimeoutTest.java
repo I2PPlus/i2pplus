@@ -110,7 +110,7 @@ public class ConnectionHandlerSynTimeoutTest {
         assertEquals(-1, ConnectionHandler.getAdaptiveSynTimeout(-1, 0.0, 100, 10000));
     }
 
-    /** Tuner disabling the expire threshold (>=100) turns the clamp off entirely. */
+    /** Tuner disabling the expire threshold (&gt;=100) turns the clamp off entirely. */
     @Test
     public void testDisableClampViaThreshold100() {
         I2PSocketManagerFull.setSynExprExpireThresh(100);

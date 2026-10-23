@@ -8,7 +8,7 @@ import net.i2p.data.Hash;
 
 /**
  * Tests for the pure decision helpers extracted from
- * {@link ConnectionManager#receiveConnection(net.i2p.client.streaming.Packet)}:
+ * {@link ConnectionManager#receiveConnection(Packet)}:
  * the reject-response payload selector ({@link ConnectionManager#limitResponse})
  * and the NACK-vs-local-hash check ({@link ConnectionManager#synNacksMatch}).
  *

@@ -21,12 +21,23 @@ public class HTTPResponseOutputStreamTest {
     private static final String RESPONSE_LINE = "HTTP/1.1 200 OK\r\n";
     private static final String CONNECTION_CLOSE = "Connection: close\r\n";
 
-    /** Plain stream, no keepalive. */
+    /**
+     * Plain stream, no keepalive.
+     *
+     * @param baos the buffer the filtered response is written to
+     * @return a stream with keepalive disallowed in both directions and no done callback
+     */
     private static HTTPResponseOutputStream newPlain(ByteArrayOutputStream baos) {
         return new HTTPResponseOutputStream(baos);
     }
 
-    /** Keepalive-enabled stream with a counting callback. */
+    /**
+     * Keepalive-enabled stream with a counting callback.
+     *
+     * @param baos the buffer the filtered response is written to
+     * @param done incremented by the done callback when the response stream completes
+     * @return a stream allowing keepalive in and out, for a response that carries a body
+     */
     private static HTTPResponseOutputStream newKeepAlive(ByteArrayOutputStream baos, AtomicInteger done) {
         return new HTTPResponseOutputStream(baos, true, true, false, new DoneCallback() {
             public void streamDone() {
@@ -149,6 +160,13 @@ public class HTTPResponseOutputStreamTest {
         assertFalse(out.canRangeResume());
     }
 
+    /**
+     * Counts how many times a needle occurs in a haystack.
+     *
+     * @param haystack the response text to search
+     * @param needle the substring to count; occurrences never overlap
+     * @return the number of occurrences, 0 when the needle is absent
+     */
     private static int countOccurrences(String haystack, String needle) {
         int n = 0;
         int i = haystack.indexOf(needle);
@@ -176,7 +194,11 @@ public class HTTPResponseOutputStreamTest {
     /**
      * A transient status on the Range attempt latches the fallback flag and
      * resets header-written state without disturbing delivered progress —
-     * the preconditions for the non-Range re-request. */
+     * the preconditions for the non-Range re-request.
+     *
+     * @throws IOException if the initial response write or the resume preparation fails;
+     *                     the 503 status error is caught and asserted in the body
+     */
     @Test
     public void testTransientStatusLatchesResumeFailure() throws IOException {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -205,7 +227,11 @@ public class HTTPResponseOutputStreamTest {
     /**
      * Full recovery after a transient failure: the loop re-prepares and
      * re-requests without Range; the fresh 200's already-delivered prefix is
-     * dropped so the browser sees one contiguous body and one status line. */
+     * dropped so the browser sees one contiguous body and one status line.
+     *
+     * @throws IOException if the initial response write or the resume preparation fails;
+     *                     the 502 status error is caught and discarded in the body
+     */
     @Test
     public void testNonRangeFallback200SkipsDeliveredPrefix() throws IOException {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();

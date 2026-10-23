@@ -45,6 +45,7 @@ public class SendGarlicJob extends JobImpl {
     /**
      * Send a garlic message and invoke the appropriate callbacks on reply, failure, or timeout.
      *
+     * @param ctx the router context the job runs in; it supplies the log and must not be null
      * @param config ???
      * @param onSend after the ping is successful
      * @param onSendFailed after the ping fails or times out

@@ -108,6 +108,8 @@ public class RateListenerOwnershipTest {
     /**
      * A registration that was never set must never deliver, and clearing must not
      * resurrect it.
+     *
+     * @throws Exception on rate fixture setup or coalesce failure
      */
     @Test
     public void clearedListenerReceivesNoSamples() throws Exception {
@@ -125,6 +127,8 @@ public class RateListenerOwnershipTest {
     /**
      * The ordering the whole mechanism depends on: a listener registered after a
      * clear is delivered to, proving the guard is not leaving the rate inert.
+     *
+     * @throws Exception on rate fixture setup or coalesce failure
      */
     @Test
     public void liveListenerStillReceivesSamples() throws Exception {
@@ -149,6 +153,9 @@ public class RateListenerOwnershipTest {
      * then followed by a legitimate re-register is not a defect — the register came
      * later. The invariant is directional: a clear of the wrong listener never
      * displaces the right one.
+     *
+     * @throws Exception if joining the registrar or clearer thread is
+     *                   interrupted
      */
     @Test
     public void staleClearNeverDisplacesTheLiveListenerUnderContention() throws Exception {
@@ -189,6 +196,8 @@ public class RateListenerOwnershipTest {
     /**
      * Repeated clears of the same listener must not resurrect it, and a clear
      * racing a clear of a different listener must be idempotent.
+     *
+     * @throws Exception if the wait for the clearing threads is interrupted
      */
     @Test
     public void concurrentClearsOfOneListenerDoNotResurrectIt() throws Exception {

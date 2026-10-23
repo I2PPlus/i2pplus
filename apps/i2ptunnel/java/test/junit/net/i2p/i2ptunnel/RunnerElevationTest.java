@@ -128,7 +128,7 @@ public class RunnerElevationTest {
      * <p>This is a live-measured regression: on a tracker, every elevation fired
      * with {@code queued 1} — a submit that finds every worker busy plus one task
      * in flight is indistinguishable, at that instant, from real backlog. The
-     * result was 256->384 three times in twenty minutes with the decay clawing it
+     * result was 256-&gt;384 three times in twenty minutes with the decay clawing it
      * back each time: pure churn. Half the 64-slot burst queue is the first honest
      * signal that the burst is not micro.
      */

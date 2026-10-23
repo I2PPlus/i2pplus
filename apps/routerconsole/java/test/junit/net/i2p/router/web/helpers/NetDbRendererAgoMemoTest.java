@@ -25,6 +25,12 @@ public class NetDbRendererAgoMemoTest {
     private static final class Counting {
         final AtomicInteger calls = new AtomicInteger();
 
+        /**
+         * Builds the "{0} ago" text and records that the expensive path ran.
+         *
+         * @param duration the formatted age, e.g. {@code 5m}
+         * @return the translated text, here just the age followed by " ago"
+         */
         String apply(String duration) {
             calls.incrementAndGet();
             return duration + " ago";
@@ -96,6 +102,8 @@ public class NetDbRendererAgoMemoTest {
     /**
      * The netdb renderer runs its rows on the common pool, so the memo has to hold up under
      * concurrent readers: every thread must observe its own correct translation.
+     *
+     * @throws InterruptedException if the wait for the reader threads is interrupted
      */
     @Test
     public void testConcurrentUseIsConsistent() throws InterruptedException {

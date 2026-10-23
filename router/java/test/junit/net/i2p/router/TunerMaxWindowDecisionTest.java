@@ -124,7 +124,7 @@ public class TunerMaxWindowDecisionTest {
         assertTrue("a missing driver must not climb: " + r, r.startsWith("Hold"));
     }
 
-    /** The threshold is inclusive, matching isStreamLossy's >= comparison. */
+    /** The threshold is inclusive, matching isStreamLossy's &gt;= comparison. */
     @Test
     public void lossThresholdIsInclusive() {
         assertTrue("exactly at the gate is lossy",
@@ -278,7 +278,7 @@ public class TunerMaxWindowDecisionTest {
      * The named seam puts each rate in its own slot, and the verdict follows the
      * driver rather than the label.
      *
-     * <p>Every other test in this class calls {@link #maxWindowDecision} with the
+     * <p>Every other test in this class calls {@link Tuner#maxWindowDecision} with the
      * driver already in the driver position, so a transposition of the two rates at
      * the <em>call site</em> is invisible to them — which is exactly how the previous
      * bug shipped. This test pins the seam itself.
