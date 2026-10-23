@@ -1,4 +1,6 @@
-# Test dependency jars - downloaded by download-test-deps.sh
+# Test dependency jars, fetched on demand by ensure-testdeps.sh and left here as
+# a local cache - once downloaded they stay put across builds, branches and
+# suites, and are only refetched when missing, stale or unreadable.
 hamcrest/*.jar
 hamcrest/version.txt
 junit/*.jar
@@ -6,3 +8,4 @@ junit/version.txt
 mockito/*.jar
 mockito/version.txt
 scala/*.jar
+scala/version.txt

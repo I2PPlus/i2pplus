@@ -1,19 +1,32 @@
 #!/usr/bin/env bash
 #
-# Download test dependencies (JUnit, Hamcrest, Mockito, Scala) for `ant test`.
-# Downloads from Maven Central to tools/test/{hamcrest,junit,mockito,scala}.
-# Tracks versions in version.txt per group; re-downloads if versions change.
+# Download or update the test libraries used by `ant test` (JUnit, Hamcrest,
+# Mockito, Scala). Fetches from Maven Central into tools/test/{hamcrest,junit,
+# mockito,scala} under the exact names the build files put on the classpath, and
+# records the version in version.txt per group, so repeat runs are a no-op and
+# the jars stay gitignored.
 #
-# Usage:
-#   ensure-testdeps.sh              Download if missing or stale
-#   ensure-testdeps.sh --force      Re-download even if present
-#   ensure-testdeps.sh --check      Report status without downloading
-#   ensure-testdeps.sh --quiet      Suppress per-file output
+# The versions pinned below are the source of truth. Nothing already current is
+# ever refetched: a group is fetched only when its pinned version is newer than
+# the one recorded in version.txt, or when a cached jar is not a readable
+# archive, and the new jar then replaces the old one in place. `ant test` runs
+# the check every time, which costs a version comparison when the cache is good,
+# so a fresh clone works and a stale or partial cache cannot survive into a build.
+#
+# Usage: ensure-testdeps.sh [--force] [--check] [--quiet]
+#
+#   --force    refetch every group even when the cache looks good
+#   --check    report status without downloading
+#   --quiet    suppress per-file output
 
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
-REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
+# This script lives in tools/scripts, so the repo root is two levels up. Going up
+# only once makes TEST_DIR tools/tools/test, which silently downloads the jars
+# where nothing looks for them: `ant test` then runs with -Djunit.home pointing at
+# an empty tools/test/junit and every module reports zero tests.
+REPO_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
 FORCE=false
 CHECK_ONLY=false
 QUIET=false
@@ -37,12 +50,14 @@ JUNIT_VERSION="4.13.2"
 MOCKITO_VERSION="2.28.2"
 SCALA_VERSION="2.12.18"
 
+# Only the artifacts the test classpaths name. Hamcrest is core plus library:
+# junit needs core at runtime (org.hamcrest.Matcher, Description), and the tests
+# that use org.hamcrest.Matchers need library. -integration is not imported
+# anywhere, and -all is a superset of the two we already fetch.
 DEPS=(
   # Hamcrest
   "hamcrest|${HAMCREST_VERSION}|org/hamcrest:hamcrest-core:${HAMCREST_VERSION}:hamcrest-core.jar"
   "hamcrest|${HAMCREST_VERSION}|org/hamcrest:hamcrest-library:${HAMCREST_VERSION}:hamcrest-library.jar"
-  "hamcrest|${HAMCREST_VERSION}|org/hamcrest:hamcrest-integration:${HAMCREST_VERSION}:hamcrest-integration.jar"
-  "hamcrest|${HAMCREST_VERSION}|org/hamcrest:hamcrest-all:${HAMCREST_VERSION}:hamcrest-all.jar"
   # JUnit
   "junit|${JUNIT_VERSION}|junit:junit:${JUNIT_VERSION}:junit4.jar"
   # Mockito
@@ -59,10 +74,34 @@ DEPS=(
   "scala|${SCALA_VERSION}|org/scalatest:scalatest_2.12:3.0.1:scalatest.jar"
 )
 
+# A jar counts as present only if it is a readable archive. curl -o leaves
+# whatever bytes it managed to write when a transfer dies, and ant silently
+# ignores a classpath entry it cannot read, so a truncated jar reads as a green
+# run with zero tests. Testing the archive rather than the filename makes the
+# gitignored cache self-healing: a bad entry is simply fetched again.
+jar_ok() {
+  local f="$1"
+  [ -s "$f" ] || return 1
+  if command -v unzip > /dev/null 2>&1; then
+    unzip -tqq "$f" > /dev/null 2>&1
+  else
+    # No unzip: fall back to the zip local-file-header magic.
+    [ "$(head -c 2 "$f" 2>/dev/null | od -An -tx1 | tr -d ' \n')" = "504b" ]
+  fi
+}
+
 download() {
   local group_path="$1" artifact="$2" version="$3" dest="$4"
   local url="${MAVEN_CENTRAL}/${group_path}/${artifact}/${version}/${artifact}-${version}.jar"
-  curl -sfL -o "$dest" "$url"
+  local tmp="${dest}.part"
+  # Fetch aside and only then move it into place, so replacing a prior version
+  # can never leave a half-written jar where a usable one was.
+  if curl -sfL -o "$tmp" "$url" && jar_ok "$tmp"; then
+    mv -f "$tmp" "$dest"
+    return 0
+  fi
+  rm -f "$tmp"
+  return 1
 }
 
 get_installed_version() {
@@ -113,8 +152,9 @@ if [ "$CHECK_ONLY" = true ]; then
     rest="${rest#*|}"
     IFS=: read -r group_path artifact version dest_name <<< "$rest"
     dest="${TEST_DIR}/${subdir}/${dest_name}"
-    if [ ! -f "$dest" ]; then
-      if [ "$QUIET" = false ]; then echo "  MISSING: ${subdir}/${dest_name}"; fi
+    if ! jar_ok "$dest"; then
+      if [ -f "$dest" ]; then kind=CORRUPT; else kind=MISSING; fi
+      if [ "$QUIET" = false ]; then echo "  ${kind}: ${subdir}/${dest_name}"; fi
       missing=$((missing + 1))
     fi
   done
@@ -135,14 +175,15 @@ for group in "${stale_groups[@]}"; do
   needs_download["$group"]=true
 done
 
-# If any jar is missing, mark its group for download
+# Mark any group holding an unusable jar for download, so a truncated or empty
+# entry in the cache is refetched rather than trusted.
 for dep in "${DEPS[@]}"; do
   subdir="${dep%%|*}"
   rest="${dep#*|}"
   rest="${rest#*|}"
   IFS=: read -r group_path artifact version dest_name <<< "$rest"
   dest="${TEST_DIR}/${subdir}/${dest_name}"
-  if [ ! -f "$dest" ]; then
+  if ! jar_ok "$dest"; then
     needs_download["$subdir"]=true
   fi
 done
