@@ -283,8 +283,8 @@
         <pathelement path="${javac.classpath}"/>
         <pathelement location="${core.java.build.dir}/i2p.jar"/>
         <pathelement location="${junit.home}/junit4.jar"/>
-        <pathelement location="${hamcrest.home}/hamcrest.jar"/>
-        <pathelement location="${hamcrest.home}/hamcrest-all.jar"/>
+        <pathelement location="${hamcrest.home}/hamcrest-core.jar"/>
+        <pathelement location="${hamcrest.home}/hamcrest-library.jar"/>
         <pathelement location="${mockito.home}/byte-buddy.jar"/>
         <pathelement location="${mockito.home}/objenesis.jar"/>
         <pathelement location="${mockito.home}/mockito-core.jar"/>
@@ -340,8 +340,6 @@
         <pathelement path="${javac.classpath}"/>
         <pathelement location="${hamcrest.home}/hamcrest-core.jar"/>
         <pathelement location="${hamcrest.home}/hamcrest-library.jar"/>
-        <pathelement location="${hamcrest.home}/hamcrest-integration.jar"/>
-        <pathelement location="${hamcrest.home}/hamcrest-all.jar"/>
         <pathelement location="${mockito.home}/byte-buddy.jar"/>
         <pathelement location="${mockito.home}/objenesis.jar"/>
         <pathelement location="${mockito.home}/mockito-core.jar"/>

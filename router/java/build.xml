@@ -214,8 +214,6 @@
         <pathelement location="${core.java.build.dir}/i2ptest.jar"/>
         <pathelement location="${hamcrest.home}/hamcrest-core.jar"/>
         <pathelement location="${hamcrest.home}/hamcrest-library.jar"/>
-        <pathelement location="${hamcrest.home}/hamcrest-integration.jar"/>
-        <pathelement location="${hamcrest.home}/hamcrest-all.jar"/>
         <pathelement location="${junit.home}/junit4.jar"/>
         <!-- following are only for debian builds -->
         <pathelement location="${core.java.build.dir}/libintl.jar"/>
@@ -328,8 +326,6 @@
         <pathelement path="${javac.classpath}"/>
         <pathelement location="${hamcrest.home}/hamcrest-core.jar"/>
         <pathelement location="${hamcrest.home}/hamcrest-library.jar"/>
-        <pathelement location="${hamcrest.home}/hamcrest-integration.jar"/>
-        <pathelement location="${hamcrest.home}/hamcrest-all.jar"/>
         <pathelement location="${junit.home}/junit4.jar"/>
         <pathelement location="${mockito.home}/mockito-core.jar"/>
         <pathelement location="${core.java.build.dir}/i2ptest.jar"/>
@@ -483,8 +479,6 @@
         <pathelement path="${javac.classpath}"/>
         <pathelement location="${hamcrest.home}/hamcrest-core.jar"/>
         <pathelement location="${hamcrest.home}/hamcrest-library.jar"/>
-        <pathelement location="${hamcrest.home}/hamcrest-integration.jar"/>
-        <pathelement location="${hamcrest.home}/hamcrest-all.jar"/>
         <pathelement location="${junit.home}/junit4.jar"/>
         <pathelement location="${mockito.home}/mockito-core.jar"/>
         <pathelement location="${mockito.home}/byte-buddy.jar"/>

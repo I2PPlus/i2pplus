@@ -148,7 +148,11 @@
   </target>
 
   <target name="compileTest" depends="builddeptest, compile">
-    <property name="junit.home" value="${ant.home}/lib/"/>
+    <!-- The repo's own test libs, as every other module uses. ${ant.home}/lib
+         holds no junit4.jar or hamcrest jar, and ant ignores a classpath entry
+         it cannot find, so pointing there failed silently with no test classes
+         on the path at all. -->
+    <property name="junit.home" value="../../tools/test/junit"/>
     <mkdir dir="${build}/testobj"/>
     <javac srcdir="./java/test/junit" debug="true" source="${javac.version}" target="${javac.version}"
       release="${javac.release}"
@@ -171,8 +175,9 @@
 
   <target name="junit.test" depends="compileTest">
     <property name="junit.reports.dir" value="${java.io.tmpdir}/build-i2p/reports"/>
-    <property name="junit.home" value="${ant.home}/lib/"/>
-    <property name="hamcrest.home" value="${ant.home}/lib/"/>
+    <!-- Repo's own test libs; see compileTest for why not ${ant.home}/lib. -->
+    <property name="junit.home" value="../../tools/test/junit"/>
+    <property name="hamcrest.home" value="../../tools/test/hamcrest"/>
     <mkdir dir="${junit.reports.dir}/addressbook/junit/"/>
     <delete>
       <fileset dir="${junit.reports.dir}/addressbook/junit">
@@ -188,7 +193,6 @@
         <pathelement location="${junit.home}/junit4.jar"/>
         <pathelement location="${hamcrest.home}/hamcrest-core.jar"/>
         <pathelement location="${hamcrest.home}/hamcrest-library.jar"/>
-        <pathelement location="${hamcrest.home}/hamcrest-all.jar"/>
         <pathelement location="${build}"/>
         <pathelement location="${build}/testobj"/>
       </classpath>

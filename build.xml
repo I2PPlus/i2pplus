@@ -1830,8 +1830,17 @@
     <mkdir dir="${build.dir}"/>
     <mkdir dir="${build.dir}/javadoc-test"/>
 
-    <!-- Set junit home to the old default unless overridden elsewhere -->
-    <property name="junit.home" value="${ant.home}/lib/"/>
+    <!-- The repo's own test libs, as every module's test target uses. The old
+         ${ant.home}/lib default named a directory that holds no junit jar on any
+         Debian or Ubuntu install, and ant ignores a classpath entry it cannot
+         find, so this target silently ran without junit at all. hamcrest.home and
+         mockito.home are not defined in this project at all, so the classpath
+         entries below resolved to a literal ${hamcrest.home}/... and matched
+         nothing: test sources using org.hamcrest or org.mockito failed to
+         document. Define all three here rather than leaving them to chance. -->
+    <property name="junit.home" value="tools/test/junit"/>
+    <property name="hamcrest.home" value="tools/test/hamcrest"/>
+    <property name="mockito.home" value="tools/test/mockito"/>
     <javadoc access="package"
       destdir="${build.dir}/javadoc-test"
       packagenames="*"
@@ -1850,7 +1859,11 @@
         <pathelement location="${build.root}build/i2p.jar"/>
         <pathelement location="${build.root}build/router.jar"/>
         <pathelement location="${junit.home}/junit4.jar"/>
-        <pathelement location="${hamcrest.home}/hamcrest-all.jar"/>
+        <!-- Test sources are in the sourcepath, and core's use org.hamcrest.Matchers,
+             so this needs library as well as the core jar junit itself requires. -->
+        <pathelement location="${hamcrest.home}/hamcrest-core.jar"/>
+        <pathelement location="${hamcrest.home}/hamcrest-library.jar"/>
+        <pathelement location="${mockito.home}/mockito-core.jar"/>
       </classpath>
       <!--
          These variables are stored in build.properties.

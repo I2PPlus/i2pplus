@@ -633,7 +633,6 @@
         <pathelement location="${junit.home}/junit4.jar"/>
         <pathelement location="${hamcrest.home}/hamcrest-core.jar"/>
         <pathelement location="${hamcrest.home}/hamcrest-library.jar"/>
-        <pathelement location="${hamcrest.home}/hamcrest-all.jar"/>
         <pathelement location="${mockito.home}/mockito-core.jar"/>
         <pathelement location="${mockito.home}/byte-buddy.jar"/>
         <pathelement location="${mockito.home}/byte-buddy-agent.jar"/>
