@@ -2298,13 +2298,13 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         if (_log.shouldWarn()) {
             long earliest = leaseSet.getEarliestLeaseDate();
             _log.warn("Rejecting LeaseSet with future expiration [" + idShort + "]" +
-                      "\n* type: " + type +
-                      "\n* now: " + now +
-                      "\n* latest: " + latest + " (age: " + DataHelper.formatDuration(age) + ")" +
-                      "\n* earliest: " + earliest +
-                      " (age: " + DataHelper.formatDuration(earliest - now) + ")" +
-                      "\n* leaseCount: " + leaseSet.getLeaseCount() +
-                      "\n* futureLimit: " + futureLimit);
+                      "\n* Type: " + type +
+                      "\n* Now: " + now +
+                      "\n* Latest: " + latest + " (age: " + DataHelper.formatDuration(age) + ")" +
+                      "\n* Earliest: " + earliest +
+                      " (Age: " + DataHelper.formatDuration(earliest - now) + ")" +
+                      "\n* LeaseCount: " + leaseSet.getLeaseCount() +
+                      "\n* FutureLimit: " + futureLimit);
         }
         return "Future LeaseSet for [" + idShort + "] expiring in " + DataHelper.formatDuration(age);
     }

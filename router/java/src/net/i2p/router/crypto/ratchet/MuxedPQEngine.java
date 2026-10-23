@@ -122,7 +122,7 @@ final class MuxedPQEngine {
                 return rv;
             }
             if (debug)
-                _log.debug("Ratchet new session decryption failed before PQ - attempting PQ new session");
+                _log.debug("Ratchet new session decryption failed before PQ -> Attempting PQ new session...");
         }
 
         // PQ DH
@@ -139,7 +139,7 @@ final class MuxedPQEngine {
             String msg = "PQ new session decryption failed";
             int minSize = getMinNSSize(pqKey.getType());
             if (data.length < minSize) {
-                msg += " -> Data too small (" + data.length + " < " + minSize + ")";
+                msg += " -> Data too small (" + data.length + " < " + minSize + " bytes)";
             } else {
                 msg += " -> Cryptographic failure";
             }
@@ -147,7 +147,7 @@ final class MuxedPQEngine {
                 // Throttled - this fires on every junk NewSession message.
                 // The key must not vary per occurrence (no data.length in it)
                 // or the suppressor cannot collapse it.
-                _log.warnThrottled("pq-ns-fail", msg + " after all tag attempts failed");
+                _log.warnThrottled("pq-ns-fail", msg + "\n* All tag attempts failed");
             } else {
                 _log.debug(msg);
             }
