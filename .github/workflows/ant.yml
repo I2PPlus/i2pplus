@@ -77,13 +77,36 @@ jobs:
         continue-on-error: true
         run: ant devdocs-zip
 
+      # Tests are a report, not a gate: a failing suite must never stop the
+      # artifact upload or the continuous release. continue-on-error keeps the job
+      # green so every later step runs; the failure is surfaced by the summary step
+      # below and by the log artifact, not by a red job.
+      # Called directly rather than through `ant test` because the ant target passes
+      # a fixed argument list and cannot carry the logging flags.
       - name: Run test suites
         continue-on-error: true
-        run: ant test
+        run: bash tools/scripts/run-tests.sh --logs --logs-dir dist/test-logs all
 
-      - name: Check test report exists
+      - name: Summarize test results
         if: always()
-        run: ls dist/test-report.html 2>/dev/null || echo "no test report generated"
+        run: |
+          tally="$(grep -oE '[0-9]+ tests, [0-9]+ failed, [0-9]+ errors[^)]*' dist/test-report.html 2>/dev/null | head -1)"
+          if [ -n "$tally" ]; then
+            echo "Tests: $tally" | tee -a "$GITHUB_STEP_SUMMARY"
+          else
+            echo "No test report generated" | tee -a "$GITHUB_STEP_SUMMARY"
+          fi
+
+      # Separate artifact on purpose: the continuous job downloads only
+      # i2p-build-artifacts, so per-module ant logs never end up in a release.
+      - name: Upload test logs
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: i2p-test-logs
+          path: dist/test-logs/
+          if-no-files-found: ignore
+          retention-days: 7
 
       - name: Upload build artifacts
         if: always()
@@ -121,13 +144,18 @@ jobs:
           generate_release_notes: true
 
   continuous:
-    if: github.ref_name == 'master' || github.ref_name == 'dev'
+    # always(): a failed build job must not strand this job without a chance to
+    # run. The step below re-checks that the run actually produced artifacts
+    # before touching the release, so a build with nothing to publish leaves the
+    # existing continuous release exactly as it was.
+    if: always() && (github.ref_name == 'master' || github.ref_name == 'dev')
     needs: [build]
     runs-on: ubuntu-latest
     permissions:
       contents: write
     steps:
       - uses: actions/download-artifact@v8
+        continue-on-error: true
         with:
           name: i2p-build-artifacts
           path: artifacts/
@@ -147,6 +175,13 @@ jobs:
           TAG=continuous
           REPO="$GITHUB_REPOSITORY"
           NAME="${GITHUB_SHA:0:8}"
+
+          # Nothing to publish: keep the previous continuous release rather than
+          # delete it. Reached when the build job failed before it wrote dist/.
+          if ! compgen -G "artifacts/*" > /dev/null; then
+            echo "No artifacts from the build job; leaving the existing release untouched."
+            exit 0
+          fi
 
           # Recreate on every run: a PATCH keeps the original published_at, so
           # the sidebar date would stay at the first build. Deleting the release
@@ -198,12 +233,6 @@ jobs:
               echo "gh release create failed and no existing release found" >&2
               exit 1
             fi
-          fi
-
-          # Upload artifacts; skip cleanly when there are none.
-          if ! compgen -G "artifacts/*" > /dev/null; then
-            echo "No artifacts found to upload; skipping."
-            exit 0
           fi
 
           # Upload with retries for transient API failures (rate limits etc.).
