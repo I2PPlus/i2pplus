@@ -13,15 +13,6 @@ Utility scripts for I2P+ development and administration.
 - **`build-wrapper-windows.sh`** — Cross-compile Tanuki Java Service Wrapper for Windows using mingw-w64.
   `build-wrapper-windows.sh /path/to/src [--clean] [--arch x64|win32] [--install-dir PATH] [--no-dll]`
 
-- **`compare-updaters.sh`** — Compare the ant and gradle updater payloads (and the current branch against mainline) as an HTML size table in `dist/compare-updaters.html`.
-
-- **`compress-jsp.sh`** — Minify a JSP file with `html-minifier-terser`, leaving `<% %>` fragments intact.
-  `compress-jsp.sh <file>`
-
-- **`download-ant.sh`** — Download the minimal Ant jars used by the build into `tools/ant/`.
-
-- **`run-ant.sh`** — Run Ant for I2P+ builds, downloading the jars first if they are missing.
-
 - **`maven-dev-release.sh`** — Build and deploy a Maven development release.
   Run from project root.
 
@@ -78,11 +69,7 @@ Utility scripts for I2P+ development and administration.
 
 - **`i2prouter-test.sh`** — Test harness for `installer/resources/platform-specific/unix/i2prouter`, the daemon control script.
 
-- **`streaming-test.sh`** — Fetch one or more eepsites through the HTTP proxy and report streaming-layer health indicators.
-
 - **`asn-smoke-test.py`** — Smoke-test the ASN / GeoIP display by inspecting the console `/profiles` page.
-
-- **`pool-stability-test.py`** — Watch tunnel pool health and auto-tune router PROPs to find better settings.
 
 ## Diagnostics
 
@@ -96,33 +83,12 @@ Utility scripts for I2P+ development and administration.
 
 - **`i2p-cpu-prof.sh`** — Attribute router CPU to threads and Java frames; the CPU-focused companion to `i2p-diag-dump.sh`.
 
-- **`monitor.sh`** — Every 10 minutes, tally tunnel build successes, failures, timeouts and disconnects from the current router log.
-
-- **`router-stats.py`** — Read live values off the console `/stats` page.
-
-- **`router-stats-sample.py`** — Sample router stats on a schedule and report a locally computed mean.
-
-- **`transit-stats.py`** — Sample transit-participation and build statistics into a CSV trend.
-
-- **`graph-stat-period-check.py`** — Check every stat rendered on the graphs page for a 60-second period.
-
-- **`stat-period-audit.py`** — Find `RateStat` registrations whose periods lack a 60-second window.
-
-- **`normalize-rdns-cache.py`** — Rewrite hostnames in the persistent RDNS cache using the same `GeoIP.normalizeOrgName()` logic as the running router.
-
 ## Translation
 
 - **`cleanup_po.sh`** — Clean up PO translation files.
   `cleanup_po.sh <directory> [--no-wrap] [--no-location] [--no-comments]`
 
-- **`extract_untranslated.py`** — Extract untranslated strings from a PO file.
-  `extract_untranslated.py <file.po>`
-
 - **`poupdate-man.sh`** — Generate translated man pages from PO files. Internal; run from `installer/resources/`.
-
-- **`translate_po.py`** — Translate the untranslated entries of `messages_<lang>.po` for the given languages.
-
-- **`batch_translate.py`** — Translate all `msgstr == msgid` entries in `.po` files using batched API calls.
 
 - **`translation_status.sh`** — Show translation status for a locale directory.
   `translation_status.sh <folder_path>`
@@ -130,8 +96,6 @@ Utility scripts for I2P+ development and administration.
 - **`validate-po.sh`** — Validate every `.po` file for structural integrity with `msgfmt`.
 
 - **`validate-po.py`** — Validate `.po` files with `polib`: syntax, duplicate `msgid`s, orphan bare-quote lines, and unbalanced `{0}` placeholders.
-
-- **`validate_translations.py`** — Check translated entries for placeholders, HTML tags, empty strings and back-translation consistency; reports for manual review.
 
 ## Administration
 
@@ -163,6 +127,3 @@ run by the ant `javadoc` target, and `tools/javadoc/jdk8/navigation-jav8.js` is
 copied over the generated `navigation.js` so the frames work on Java 8 browsers.
 See [`tools/javadoc/`](../javadoc/).
 
-## Development Tools
-
-- **`strata-ask.py`** — Query the local Strata model as a review companion.

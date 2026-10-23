@@ -45,8 +45,8 @@ untranslated = po.untranslated_entries()   # msgid list, in file order
 
 Write the translations to a small `trans_de.py` file holding a `t` list, then
 loop `entry.msgstr = t[i]` and `po.save()`. Bash heredocs truncate silently on
-large datasets - write the data as a file instead. Helper scripts live in
-`tools/scripts/`: `extract_untranslated.py`, `batch_translate.py`.
+large datasets - write the data as a file instead. For counts instead of the
+list itself, use `tools/scripts/translation_status.sh --stats <locale_folder>`.
 
 ## Diagnostics
 
