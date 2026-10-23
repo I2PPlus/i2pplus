@@ -4,9 +4,16 @@
 # then runs ant with the correct classpath properties.
 #
 # Usage:
-#   tools/scripts/run-tests.sh             Run all tests (via ant test)
-#   tools/scripts/run-tests.sh core        Run core tests only
-#   tools/scripts/run-tests.sh router      Run router tests only
+#   tools/scripts/run-tests.sh                  Run all tests (via ant test)
+#   tools/scripts/run-tests.sh core             Run core tests only
+#   tools/scripts/run-tests.sh router           Run router tests only
+#   tools/scripts/run-tests.sh --logs all       Keep ant's console output and
+#                                               leave every per-module logfile
+#                                               behind (what CI should use)
+#   tools/scripts/run-tests.sh --logs-dir DIR   Where those logfiles go
+#                                               (default: /tmp/test-i2p/logs)
+#
+# A flag may appear anywhere; the first non-flag argument selects the suite.
 
 set -euo pipefail
 
@@ -18,9 +25,20 @@ JUNIT="${REPO_ROOT}/tools/test/junit"
 MOCKITO="${REPO_ROOT}/tools/test/mockito"
 SCALA="${REPO_ROOT}/tools/test/scala"
 
-# Download deps if missing
-if [ ! -f "${HAMCREST}/hamcrest-core.jar" ] || [ ! -f "${JUNIT}/junit4.jar" ]; then
-  "${SCRIPT_DIR}/ensure-testdeps.sh" --quiet
+# Always check the test libraries. A pin that moved to a newer version, or a
+# cached jar that is not a readable archive, is refetched and replaces what is
+# there; a current cache is a no-op that touches no network. Nothing already
+# current is refetched.
+"${SCRIPT_DIR}/ensure-testdeps.sh" --quiet || true
+
+# Diagnostic only, and it stays that way: ant ignores a <pathelement> whose jar
+# does not exist, so a missing junit4.jar means the junit task has no classes,
+# every module reports zero tests, and the run still exits 0. Say so, loudly,
+# without changing what the script goes on to do.
+if ! deps_out="$("${SCRIPT_DIR}/ensure-testdeps.sh" --check 2>&1)"; then
+  echo "WARNING: test dependencies are not all present:" >&2
+  printf '%s\n' "$deps_out" >&2
+  echo "Without them ant runs zero tests and still reports success." >&2
 fi
 
 # Ensure the python dep for HTML report generation is present. Kept here so
@@ -37,10 +55,64 @@ fi
 RESULTS_DIR="/tmp/test-i2p"
 ANT_PROPS="-Dhamcrest.home=${HAMCREST} -Djunit.home=${JUNIT} -Dmockito.home=${MOCKITO} -Dscalatest.libs=${SCALA} -Djunit.reports.dir=${RESULTS_DIR}"
 
+# --- logging override -------------------------------------------------------
+# Every ant call in this script is quiet by default: its console output goes to
+# /dev/null and its -logfile is deleted afterwards. That is fine when a test
+# fails, because the JUnit XML says so, and useless when a module fails to
+# BUILD, which is indistinguishable from a module with no tests at all - the
+# tally just reads 0 and nothing explains why. --logs keeps ant's own output on
+# stdout and leaves each per-module logfile in ${LOG_DIR} for CI to show.
+LOGS=false
+LOG_DIR="${RESULTS_DIR}/logs"
+SUITE="all"
+while [ $# -gt 0 ]; do
+  case "$1" in
+    -l|--logs) LOGS=true; shift ;;
+    --logs-dir) LOGS=true; LOG_DIR="${2:?--logs-dir needs a directory}"; shift 2 ;;
+    -h|--help) sed -n '2,/^$/s/^# \?//p' "$0"; exit 0 ;;
+    *) SUITE="$1"; shift ;;
+  esac
+done
+# Resolve to an absolute path: each ant call runs with the module directory as its
+# working directory, and ant resolves -logfile against that, so a relative
+# --logs-dir would be written beside the module instead of where it was asked for.
+case "$LOG_DIR" in
+  /*) ;;
+  *) LOG_DIR="${REPO_ROOT}/${LOG_DIR}" ;;
+esac
+
 BOLD='\033[1m'
 RESET='\033[0m'
 RED='\033[0;31m'
 GREEN='\033[0;32m'
+
+# One ant invocation, from the module's directory, with the shared properties.
+# Quiet unless --logs. Either way a failed run keeps its logfile and echoes its
+# tail, so a build failure is never silent. ANT_STREAM=false (set by the
+# background test runner) keeps the console copy out of the terminal so parallel
+# modules do not interleave; -logfile holds it either way.
+ant_run() {
+  local dir="$1" log="$2"; shift 2
+  local rc=0
+  # Created here, not at startup: the suite clears RESULTS_DIR part-way through.
+  mkdir -p "$(dirname "$log")"
+  if [ "$LOGS" = true ] && [ "${ANT_STREAM:-true}" = true ]; then
+    (cd "${REPO_ROOT}/${dir}" && ant "$@" -logfile "$log") || rc=$?
+  else
+    (cd "${REPO_ROOT}/${dir}" && ant "$@" -logfile "$log" > /dev/null 2>&1) || rc=$?
+  fi
+  if [ "$rc" -ne 0 ]; then
+    echo -e "  ${RED}ant failed -> exit ${rc}${RESET} in ${dir}" >&2
+    if [ -s "$log" ]; then
+      echo "  Last lines of ${log}:" >&2
+      tail -n 20 "$log" | sed 's/^/  | /' >&2
+    fi
+    echo "  Full log: ${log}" >&2
+  elif [ "$LOGS" = false ]; then
+    rm -f "$log"
+  fi
+  return $rc
+}
 
 total_tests=0
 total_failures=0
@@ -106,19 +178,28 @@ get_test_target() {
 
 run_build() {
   local dir="$1" target="${2:-jar}"
-  local logfile=$(mktemp /tmp/i2p_build_XXXXX.log)
-  (cd "${REPO_ROOT}/${dir}" && ant $ANT_PROPS $(get_build_props "$dir") "$target" -logfile "$logfile" > /dev/null 2>&1)
-  rm -f "$logfile"
+  # The target is in the log name because some modules are built twice with
+  # different targets (core/java jar jarTest); one name would lose the first.
+  ant_run "$dir" "${LOG_DIR}/${dir//\//_}-${target}-build.log" $ANT_PROPS $(get_build_props "$dir") "$target"
 }
 
 # Build jetty-i2p.jar without invoking jetty's ant build (which tries to download distro).
-# Compiles java/src against pre-checked-in jars in jettylib/.
+# Compiles java/src against the jars in jettylib/.
 build_jetty() {
   local build_root="${TMPDIR:-/tmp}/build-i2p"
   local out="${build_root}/apps/jetty/build"
   local jettylib="${REPO_ROOT}/apps/jetty/jettylib"
   local cp="${jettylib}/javax.servlet.jar:${jettylib}/jetty-util.jar:${jettylib}/jetty-http.jar:${jettylib}/jetty-io.jar:${jettylib}/jetty-security.jar:${jettylib}/jetty-servlet.jar:${jettylib}/jetty-webapp.jar:${jettylib}/jetty-xml.jar:${jettylib}/org.mortbay.jetty.jar:${jettylib}/commons-logging.jar:${jettylib}/jasper-runtime.jar:${jettylib}/tomcat-api.jar:${jettylib}/jsp-api.jar:${jettylib}/jetty-deploy.jar:${build_root}/core/java/build/i2p.jar"
   mkdir -p "$out"
+  # jettylib/ is not checked in - it is generated from the checked-in
+  # jetty-distribution and apache-tomcat trees - so a fresh clone has none of it
+  # and the javac below would compile against classpath entries that do not
+  # exist. Assemble it the canonical way first; that target only copies and
+  # renames from the trees in the repo, so it needs no network.
+  if [ ! -f "${jettylib}/javax.servlet.jar" ] || [ ! -f "${jettylib}/jetty-http.jar" ]; then
+    echo "  jettylib/ absent -> assembling it from the checked-in distributions"
+    ant_run "" "${LOG_DIR}/root-buildJetty.log" -Dbuild.root="${build_root}/" buildJetty || return 1
+  fi
   # jetty-util.jar is not shipped in jettylib (the ant build assembles it into
   # the pkg dir); materialize the checked-in distribution jar so the classpath
   # and the copy loop below resolve it like the other jetty libs.
@@ -158,8 +239,15 @@ build_desktopgui() {
   local out="${build_root}/apps/desktopgui/build"
   local dist="${build_root}/apps/desktopgui/dist"
   mkdir -p "$out" "$dist"
-  cd "${REPO_ROOT}/apps/desktopgui" && ant -Dbuild.dir="$out" -Ddist="$dist" -Dcore.java.build.dir="${build_root}/core/java/build" -Drouter.java.build.dir="${build_root}/router/java/build" -Dsystray.java.build.dir="${build_root}/apps/systray/java/build" -Dwrapper.dir="${REPO_ROOT}/installer/lib/wrapper/all" -Dhamcrest.home="${HAMCREST}" -Djunit.home="${JUNIT}" -Dmockito.home="${MOCKITO}" -Dscalatest.libs="${SCALA}" -Djunit.reports.dir="${RESULTS_DIR}" jar -logfile /tmp/i2p_build_desktopgui.log > /dev/null 2>&1
-  rm -f /tmp/i2p_build_desktopgui.log
+  ant_run apps/desktopgui "${LOG_DIR}/apps_desktopgui-build.log" \
+    -Dbuild.dir="$out" -Ddist="$dist" \
+    -Dcore.java.build.dir="${build_root}/core/java/build" \
+    -Drouter.java.build.dir="${build_root}/router/java/build" \
+    -Dsystray.java.build.dir="${build_root}/apps/systray/java/build" \
+    -Dwrapper.dir="${REPO_ROOT}/installer/lib/wrapper/all" \
+    -Dhamcrest.home="${HAMCREST}" -Djunit.home="${JUNIT}" \
+    -Dmockito.home="${MOCKITO}" -Dscalatest.libs="${SCALA}" \
+    -Djunit.reports.dir="${RESULTS_DIR}" jar
 }
 
 # Run ant test for a module in the background.
@@ -167,7 +255,7 @@ build_desktopgui() {
 run_test_bg() {
   local dir="$1"
   local result_file="$2"
-  local logfile=$(mktemp /tmp/i2p_test_XXXXX.log)
+  local logfile="${LOG_DIR}/${dir//\//_}-test.log"
 
   (
     local test_dir="${dir}/test"
@@ -178,11 +266,13 @@ run_test_bg() {
     fi
     if [ ! -d "${REPO_ROOT}/${test_dir}" ]; then
       echo "0 0 0" > "$result_file"
-      rm -f "$logfile"
       exit 0
     fi
 
-    cd "${REPO_ROOT}/${dir}" && ant $ANT_PROPS $(get_build_props "$dir") $(get_test_target "$dir") -logfile "$logfile" > /dev/null 2>&1 || true
+    # Parallel modules must not interleave on the console; -logfile has the
+    # whole run either way.
+    ANT_STREAM=false
+    ant_run "$dir" "$logfile" $ANT_PROPS $(get_build_props "$dir") $(get_test_target "$dir") || true
 
     local report_name
     report_name=$(get_report_name "$dir")
@@ -198,7 +288,6 @@ run_test_bg() {
       done
     fi
     echo "$tests $failures $errors" > "$result_file"
-    rm -f "$logfile"
   ) &
 }
 
@@ -218,10 +307,8 @@ run_test() {
     return 0
   fi
 
-  local logfile=$(mktemp /tmp/i2p_test_XXXXX.log)
   echo -e "${BOLD}${label}${RESET}"
-  (cd "${REPO_ROOT}/${dir}" && ant $ANT_PROPS $(get_build_props "$dir") $(get_test_target "$dir") -logfile "$logfile" > /dev/null 2>&1) || true
-  rm -f "$logfile"
+  ant_run "$dir" "${LOG_DIR}/${dir//\//_}-test.log" $ANT_PROPS $(get_build_props "$dir") $(get_test_target "$dir") || true
 
   local report_name
   report_name=$(get_report_name "$dir")
@@ -284,7 +371,7 @@ read_result() {
 rm -rf "${RESULTS_DIR}"
 mkdir -p "${RESULTS_DIR}"
 
-case "${1:-all}" in
+case "$SUITE" in
   core)
     run_build core/java
     run_test core/java "Core"
@@ -442,8 +529,15 @@ case "${1:-all}" in
 esac
 
 # Generate consolidated HTML report only for full suite runs
-if [ "${1:-all}" = "all" ] && [ -d "${RESULTS_DIR}" ]; then
-  python3 "${REPO_ROOT}/tools/test/unit-tests-to-html.py" "${RESULTS_DIR}" "${REPO_ROOT}/dist/test-report.html"
+if [ "$SUITE" = "all" ] && [ -d "${RESULTS_DIR}" ]; then
+  if ! python3 "${REPO_ROOT}/tools/test/unit-tests-to-html.py" "${RESULTS_DIR}" "${REPO_ROOT}/dist/test-report.html"; then
+    echo "ERROR: report generation failed -> test results are still in ${RESULTS_DIR}" >&2
+    exit 1
+  fi
+fi
+
+if [ "$LOGS" = true ]; then
+  echo "Ant logs kept in ${LOG_DIR}"
 fi
 
 # Tidy up any leftover workspace artifacts
