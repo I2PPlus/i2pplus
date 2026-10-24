@@ -46,6 +46,11 @@ public class TunerObservedStatContextTest {
         assertTrue(_tmpDir.mkdirs());
         _ctx = mock(RouterContext.class);
         when(_ctx.getConfigDir()).thenReturn(_tmpDir);
+        // AutotuneConfig writes to the ROUTER dir, not the config dir. An
+        // unstubbed mock returns null there, and new File(null, name) is a
+        // relative path - the file then lands in the current working
+        // directory, i.e. the source tree.
+        when(_ctx.getRouterDir()).thenReturn(_tmpDir);
         when(_ctx.getProperty(anyString(), anyString()))
                 .thenReturn(new File(_tmpDir, "logger.config").getAbsolutePath());
         // Build the LogManager before stubbing: LogManager's constructor calls

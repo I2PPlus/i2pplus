@@ -2,6 +2,8 @@ package net.i2p.router;
 
 import static org.junit.Assert.*;
 
+import java.io.File;
+
 import org.junit.Assume;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -58,6 +60,24 @@ public class TunerAutotuneKeyTest {
     public void setUp() {
         _param = "i2p.tunnel.testKeyProbe." + System.nanoTime();
         _autotune = new Tuner.AutotuneConfig(_ctx);
+    }
+
+    /**
+     * The autotune file must resolve under the context's router directory.
+     * A context that answers {@code getRouterDir()} with null - a mock left
+     * half-stubbed, say - turns {@code new File(null, name)} into a relative
+     * path, and the file is then created in the current working directory,
+     * i.e. the source tree, on every save.
+     */
+    @Test
+    public void autotuneFileIsAbsoluteAndUnderTheRouterDir() {
+        File file = _autotune.getFile();
+        assertNotNull(file);
+        assertTrue("autotune.config must not be a path relative to the cwd: " + file,
+                   file.isAbsolute());
+        File routerDir = _ctx.getRouterDir();
+        assertTrue("autotune.config must live in the router dir " + routerDir + ", not " + file,
+                   file.toPath().startsWith(routerDir.toPath()));
     }
 
     @Test
