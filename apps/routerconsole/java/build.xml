@@ -941,7 +941,15 @@
     <property name="mockito.home" value="../../../tools/test/mockito"/>
     <mkdir dir="${junit.reports.dir}/routerconsole/junit"/>
     <mkdir dir="${java.io.tmpdir}/build-i2p/junit-tmp"/>
+    <!-- Scratch I2P base for the forked test JVM. I2PAppContext defaults
+         i2p.dir.base to user.dir (this module dir), so a test that builds a
+         context writes its runtime state into the workspace. Fresh for every
+         run and removed afterwards, as in the i2psnark target. -->
+    <property name="junit.test.base" value="${build.root}routerconsole-junit-base"/>
+    <delete dir="${junit.test.base}"/>
+    <mkdir dir="${junit.test.base}"/>
     <junit fork="yes" maxmemory="384M" tempdir="${java.io.tmpdir}/build-i2p/junit-tmp" timeout="15000">
+      <sysproperty key="i2p.dir.base" value="${junit.test.base}"/>
       <classpath>
         <pathelement location="${build.dir}/obj"/>
         <pathelement location="${build.dir}/testobj"/>
@@ -972,6 +980,7 @@
         <fileset dir="./test/junit" includes="**/*Test.java"/>
       </batchtest>
     </junit>
+    <delete dir="${junit.test.base}"/>
   </target>
 
   <!-- JS harness (tools/test/js) covers the console js/ corpus among all webapps.

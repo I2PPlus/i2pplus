@@ -497,8 +497,16 @@
       </fileset>
     </delete>
     <mkdir dir="${java.io.tmpdir}/build-i2p/junit-tmp"/>
+    <!-- Scratch I2P base for the forked test JVM. I2PAppContext defaults
+         i2p.dir.base to user.dir (this module dir), so a test that builds a
+         context writes its runtime state into the workspace. Fresh for every
+         run and removed afterwards, as in the i2psnark target. -->
+    <property name="junit.test.base" value="${build.root}core-junit-base"/>
+    <delete dir="${junit.test.base}"/>
+    <mkdir dir="${junit.test.base}"/>
     <junit printsummary="withOutAndErr" fork="yes" maxmemory="384m" showoutput="yes" tempdir="${java.io.tmpdir}/build-i2p/junit-tmp" timeout="15000">
       <sysproperty key="net.sourceforge.cobertura.datafile" file="./cobertura.ser"/>
+      <sysproperty key="i2p.dir.base" value="${junit.test.base}"/>
       <classpath>
         <pathelement location="../../installer/resources/"/>
         <pathelement path="${javac.classpath.mod}"/>
@@ -531,6 +539,7 @@
       </batchtest>
       <formatter type="xml"/>
     </junit>
+    <delete dir="${junit.test.base}"/>
     <!-- set if unset -->
     <property name="host.fakename" value="i2ptester"/>
     <!-- replace hostname that junit inserts into reports with fake one -->

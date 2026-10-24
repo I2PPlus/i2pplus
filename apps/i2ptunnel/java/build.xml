@@ -621,7 +621,15 @@
     <property name="hamcrest.home" value="${basedir}/../../../tools/test/hamcrest"/>
     <property name="mockito.home" value="${basedir}/../../../tools/test/mockito"/>
     <mkdir dir="${java.io.tmpdir}/build-i2p/junit-tmp"/>
+    <!-- Scratch I2P base for the forked test JVM. I2PAppContext defaults
+         i2p.dir.base to user.dir (this module dir), so a test that builds a
+         context writes its runtime state into the workspace. Fresh for every
+         run and removed afterwards, as in the i2psnark target. -->
+    <property name="junit.test.base" value="${build.root}i2ptunnel-junit-base"/>
+    <delete dir="${junit.test.base}"/>
+    <mkdir dir="${junit.test.base}"/>
     <junit printsummary="withOutAndErr" fork="yes" showoutput="yes" tempdir="${java.io.tmpdir}/build-i2p/junit-tmp" timeout="15000">
+      <sysproperty key="i2p.dir.base" value="${junit.test.base}"/>
       <classpath>
         <pathelement path="${classpath}"/>
         <pathelement location="${build.dir}/obj"/>
@@ -645,6 +653,7 @@
       </batchtest>
       <formatter type="xml"/>
     </junit>
+    <delete dir="${junit.test.base}"/>
   </target>
 
   <target name="clean">
