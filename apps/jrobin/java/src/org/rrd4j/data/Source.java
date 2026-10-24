@@ -82,22 +82,4 @@ abstract class Source {
         Aggregator agg = new Aggregator(timestamps, values);
         return agg.getAggregates(tStart, tEnd);
     }
-
-    /**
-     * Compute the percentile value over the window.
-     *
-     * @param tStart start of the percentile window, in seconds since the epoch
-     * @param tEnd end of the percentile window, in seconds since the epoch
-     * @param percentile the percentile to compute, from 0.0 through 100.0
-     * @return the value at that percentile within the window
-     * @deprecated This method is deprecated. Uses instance of {@link
-     * org.rrd4j.data.Variable.PERCENTILE}, used with {@link
-     * org.rrd4j.data.DataProcessor#addDatasource(String, String, Variable)}
-     */
-    @Deprecated
-    double getPercentile(long tStart, long tEnd, double percentile) {
-        Variable vpercent = new Variable.PERCENTILE((float) percentile);
-        vpercent.calculate(this, tStart, tEnd);
-        return vpercent.getValue().value;
-    }
 }

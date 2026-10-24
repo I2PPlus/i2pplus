@@ -104,21 +104,6 @@ public class ProfileManagerImpl implements ProfileManager {
     }
 
     /**
-     * Note that there was some sort of communication error talking with the peer.
-     *
-     * @deprecated unused
-     */
-    @Deprecated
-    @Override
-    public void commErrorOccurred(Hash peer) {
-        if (_log.shouldInfo())
-            _log.info("Comm error occurred for peer " + peer.toBase64());
-        PeerProfile data = getProfile(peer);
-        if (data == null) return;
-        data.setLastSendFailed(_context.clock().now());
-    }
-
-    /**
      * Note that the router agreed to participate in a tunnel.
      */
     @Override

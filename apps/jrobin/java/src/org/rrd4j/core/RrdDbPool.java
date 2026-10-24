@@ -668,33 +668,6 @@ public class RrdDbPool {
     }
 
     /**
-     * Sets the default factory to use when obtaining RrdDb reference from simple path and not URI.
-     *
-     * @param defaultFactory The factory to use.
-     * @throws IllegalStateException if called while the pool is not empty or the thread was
-     *                               interrupted
-     * @throws java.lang.IllegalStateException if the thread was interrupted
-     * @deprecated the pool is no longer a singleton, create a new pool instead of changing it.
-     */
-    @Deprecated
-    public void setDefaultFactory(RrdBackendFactory defaultFactory) {
-        try {
-            usageWLock.lockInterruptibly();
-            if (usage.availablePermits() != maxCapacity) {
-                throw new IllegalStateException("Can only be done on a empty pool");
-            }
-            this.defaultFactory = defaultFactory;
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-            throw new IllegalStateException("Factory not changed");
-        } finally {
-            if (usageWLock.isHeldByCurrentThread()) {
-                usageWLock.unlock();
-            }
-        }
-    }
-
-    /**
      * Sets the maximum number of simultaneously open RRD.
      *
      * @param newCapacity Maximum number of simultaneously open RRD.

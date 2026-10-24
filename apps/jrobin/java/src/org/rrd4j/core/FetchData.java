@@ -8,7 +8,6 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import org.rrd4j.ConsolFun;
 import org.rrd4j.data.DataProcessor;
-import org.rrd4j.data.Variable;
 
 /**
  * Class used to represent data fetched from the RRD. Object of this class is created when the
@@ -308,53 +307,6 @@ public class FetchData {
         }
         buff.append(input);
         return buff.toString();
-    }
-
-    /**
-     * Returns single aggregated value from the fetched data for a single datasource.
-     *
-     * @param dsName Datasource name to consolidate, which must appear in the fetched data
-     * @param consolFun Consolidation function to be applied to fetched datasource values. Valid
-     * @return the consolidated value as a double
-     * @throws java.lang.IllegalArgumentException Thrown if the given datasource name cannot be
-     *                                            found in fetched data.
-     *                                            with {@link org.rrd4j.data.DataProcessor#addDatasource(String, String, Variable)}
-     *                                            string constants are conveniently defined in the {@link org.rrd4j.ConsolFun} class)
-     *                                            consolidation functions are "MIN", "MAX", "LAST", "FIRST", "AVERAGE" and "TOTAL" (these
-     * @deprecated This method is deprecated. Uses instance of {@link org.rrd4j.data.Variable}, used
-     */
-    @Deprecated
-    public double getAggregate(String dsName, ConsolFun consolFun) {
-        DataProcessor dp = createDataProcessor(null);
-        return dp.getAggregate(dsName, consolFun);
-    }
-
-    /**
-    /**
-     * Used by ISPs which charge for bandwidth utilization on a "95th percentile" basis.
-     *
-     * <p>The 95th percentile is the highest source value left when the top 5% of a numerically
-     * sorted set of source data is discarded. It is used as a measure of the peak value used when
-     * one discounts a fair amount for transitory spikes. This makes it markedly different from the
-     * average.
-     *
-     * <p>Read more about this topic at:
-     *
-     * <p><a href="https://www.bytemark.co.uk/support/tech/95thpercentile.html">Bytemark</a>
-     * or<br>
-     * <a href="http://www.bytemark.co.uk/support/tech/95thpercentile.html">Bytemark</a>.
-     *
-     * @param dsName Datasource name to take the percentile of
-     * @return 95th percentile of fetched source values
-     * @throws java.lang.IllegalArgumentException Thrown if invalid source name is supplied
-     * @deprecated This method is deprecated. Uses instance of {@link
-     *             org.rrd4j.data.Variable.PERCENTILE}, used with {@link
-     *             org.rrd4j.data.DataProcessor#addDatasource(String, String, Variable)}
-     */
-    @Deprecated
-    public double get95Percentile(String dsName) {
-        DataProcessor dataProcessor = createDataProcessor(null);
-        return dataProcessor.get95Percentile(dsName);
     }
 
     /**

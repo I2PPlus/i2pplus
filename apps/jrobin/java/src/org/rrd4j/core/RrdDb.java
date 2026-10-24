@@ -420,8 +420,8 @@ public class RrdDb implements RrdUpdater<RrdDb>, Closeable {
      * will be used to resolve the needed factory. If not, or a relative URI was given, this RRD
      * object will be backed with a storage (backend) of the default type. Initially, storage type
      * defaults to "NIO" (RRD bytes will be put in a file on the disk). Default storage type can be
-     * changed with a static {@link org.rrd4j.core.RrdBackendFactory#setDefaultFactory(String)}
-     * method call.
+     * changed with a static {@link
+     * org.rrd4j.core.RrdBackendFactory#setActiveFactories(RrdBackendFactory...)} method call.
      *
      * <p>New RRD file structure is specified with an object of class {@link RrdDef <b>RrdDef</b>}.
      * The underlying RRD storage is created as soon as the constructor returns.
@@ -462,7 +462,8 @@ public class RrdDb implements RrdUpdater<RrdDb>, Closeable {
      * resolve the needed factory. If not, or a relative URI was given, this RRD object will be
      * backed with a storage (backend) of the default type. Initially, storage type defaults to
      * "NIO" (RRD bytes will be put in a file on the disk). Default storage type can be changed with
-     * a static {@link org.rrd4j.core.RrdBackendFactory#setDefaultFactory(String)} method call.
+     * a static {@link org.rrd4j.core.RrdBackendFactory#setActiveFactories(RrdBackendFactory...)}
+     * method call.
      *
      * <p>New RRD file structure is specified with an object of class {@link RrdDef <b>RrdDef</b>}.
      * The underlying RRD storage is created as soon as the method returns.
@@ -1669,20 +1670,6 @@ public class RrdDb implements RrdUpdater<RrdDb>, Closeable {
      */
     public synchronized byte[] getBytes() throws IOException {
         return backend.readAll();
-    }
-
-    /**
-     * Sets default backend factory to be used. This method is just an alias for {@link
-     * org.rrd4j.core.RrdBackendFactory#setDefaultFactory(String)}.
-     *
-     * @param factoryName Name of the backend factory to be set as default.
-     * @throws java.lang.IllegalArgumentException Thrown if invalid factory name is supplied, or not
-     *                                            called before the first backend object (before the first RrdDb object) is created.
-     * @deprecated uses {@link RrdBackendFactory#setActiveFactories(RrdBackendFactory...)} instead.
-     */
-    @Deprecated
-    public static void setDefaultFactory(String factoryName) {
-        RrdBackendFactory.setDefaultFactory(factoryName);
     }
 
     /**

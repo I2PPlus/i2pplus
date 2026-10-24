@@ -52,13 +52,6 @@ public interface ProfileManager {
     void messageFailed(Hash peer);
 
     /**
-     * Note that there was some sort of communication error talking with the peer.
-     *
-     * @param peer hash of the peer the error occurred talking to
-     */
-    void commErrorOccurred(Hash peer);
-
-    /**
      * Note that the router agreed to participate in a tunnel.
      *
      * @param peer hash of the peer that agreed to join

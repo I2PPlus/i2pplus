@@ -49,11 +49,6 @@ import org.rrd4j.core.Util;
  */
 public class DataProcessor implements DataHolder {
 
-    /** Not used any more. */
-    @Deprecated public static final int DEFAULT_PIXEL_COUNT = 600;
-
-    /** Constant <code>DEFAULT_PERCENTILE=95.0</code> */
-    public static final double DEFAULT_PERCENTILE = 95.0; // %
     /** Pixel count */
 
     private int pixelCount = 0;
@@ -307,42 +302,6 @@ public class DataProcessor implements DataHolder {
     }
 
     /**
-     * Returns single aggregated value for a single datasource.
-     *
-     * @param sourceName Datasource name
-     * @param consolFun Consolidation function to be applied to fetched datasource values. Valid
-     * @return a aggregate value as a double calculated from the source.
-     * @throws java.lang.IllegalArgumentException Thrown if invalid datasource name is specified, or
-     * if datasource values are not yet calculated (method {@link #processData} was not
-     * called)
-     * called)
-     * called)
-     * called)
-     * constants are conveniently defined in the {@link org.rrd4j.ConsolFun} class)
-     * consolidation functions are MIN, MAX, LAST, FIRST, AVERAGE and TOTAL (these string
-     * called)
-     * called)
-     * called)
-     * called)
-     * called)
-     * called)
-     * called)
-     * called)
-     * called)
-     * called)
-     * called)
-     * called)
-     * @deprecated Use {@link Variable} based method instead.
-     */
-    @Deprecated
-    public double getAggregate(String sourceName, ConsolFun consolFun) {
-        Variable v = consolFun.getVariable();
-        Source source = getSource(sourceName);
-        v.calculate(source, tStart, tEnd);
-        return v.getValue().value;
-    }
-
-    /**
      * Returns all (MIN, MAX, LAST, FIRST, AVERAGE and TOTAL) aggregated values for a single
      * datasource.
      *
@@ -386,70 +345,6 @@ public class DataProcessor implements DataHolder {
         Source source = getSource(sourceName);
         var.calculate(source, tStart, tEnd);
         return var.getValue();
-    }
-
-    /**
-     * This method is just an alias for {@link #getPercentile(String)} method.
-     *
-     * <p>Used by ISPs which charge for bandwidth utilization on a "95th percentile" basis.
-     *
-     * <p>The 95th percentile is the highest source value left when the top 5% of a numerically
-     * sorted set of source data is discarded. It is used as a measure of the peak value used when
-     * one discounts a fair amount for transitory spikes. This makes it markedly different from the
-     * average.
-     *
-     * <p>Read more about this topic at <a
-     * href="https://www.bytemark.co.uk/support/tech/95thpercentile.html">Bytemark</a> or <a
-     * href="http://www.bytemark.co.uk/support/tech/95thpercentile.html">Bytemark</a>.
-     *
-     * @param sourceName Datasource name
-     * @return 95th percentile of fetched source values
-     * @deprecated Use {@link Variable} based method instead.
-     */
-    @Deprecated
-    public double get95Percentile(String sourceName) {
-        return getPercentile(sourceName);
-    }
-
-    /**
-     * Used by ISPs which charge for bandwidth utilization on a "95th percentile" basis.
-     *
-     * <p>The 95th percentile is the highest source value left when the top 5% of a numerically
-     * sorted set of source data is discarded. It is used as a measure of the peak value used when
-     * one discounts a fair amount for transitory spikes. This makes it markedly different from the
-     * average.
-     *
-     * <p>Read more about this topic at <a
-     * href="https://www.bytemark.co.uk/support/tech/95thpercentile.html">Bytemark</a> or <a
-     * href="http://www.bytemark.co.uk/support/tech/95thpercentile.html">Bytemark</a>.
-     *
-     * @param sourceName Datasource name
-     * @return 95th percentile of fetched source values
-     * @deprecated Use {@link Variable} based method instead.
-     */
-    @Deprecated
-    public double getPercentile(String sourceName) {
-        return getPercentile(sourceName, DEFAULT_PERCENTILE);
-    }
-
-    /**
-     * The same as {@link #getPercentile(String)} but with a possibility to define custom percentile
-     * boundary (different from 95).
-     *
-     * @param sourceName Datasource name.
-     * @param percentile Boundary percentile. Value of 95 (%) is suitable in most cases, but you are
-     *                   free to provide your own percentile boundary between zero and 100.
-     * @return Requested percentile of fetched source values
-     * @deprecated Use {@link Variable} based method instead.
-     */
-    @Deprecated
-    public double getPercentile(String sourceName, double percentile) {
-        if (percentile <= 0.0 || percentile > 100.0) {
-            throw new IllegalArgumentException(
-                    "Invalid percentile [" + percentile + "], should be between 0 and 100");
-        }
-        Source source = getSource(sourceName);
-        return source.getPercentile(tStart, tEnd, percentile);
     }
 
     /**

@@ -1,9 +1,5 @@
 package org.rrd4j.data;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 /**
  * Aggregates RRD data values over specified time periods.<br>
  * Provides statistical aggregation functions for time-series data with configurable time steps and
@@ -82,44 +78,5 @@ class Aggregator {
         }
 
         return agg;
-    }
-
-    /**
-     * Calculates percentile value for data in time range.
-     *
-     * @param tStart start of the range, in seconds since the Unix epoch
-     * @param tEnd end of the range, in seconds since the Unix epoch
-     * @param percentile percentile to calculate (0-100)
-     * @return percentile value
-     */
-    double getPercentile(long tStart, long tEnd, double percentile) {
-        List<Double> valueList = new ArrayList<>();
-        // create a list of included datasource values (different from NaN)
-        for (int i = 0; i < timestamps.length; i++) {
-            long left = Math.max(timestamps[i] - step, tStart);
-            long right = Math.min(timestamps[i], tEnd);
-            if (right > left && !Double.isNaN(values[i])) {
-                valueList.add(values[i]);
-            }
-        }
-        // create an array to work with
-        int count = valueList.size();
-        if (count > 1) {
-            double[] valuesCopy = new double[count];
-            for (int i = 0; i < count; i++) {
-                valuesCopy[i] = valueList.get(i);
-            }
-            // sort array
-            Arrays.sort(valuesCopy);
-            // skip top (100% - percentile) values
-            double topPercentile = (100.0 - percentile) / 100.0;
-            count -= (int) Math.ceil(count * topPercentile);
-            // if we have anything left...
-            if (count > 0) {
-                return valuesCopy[count - 1];
-            }
-        }
-        // not enough data available
-        return Double.NaN;
     }
 }

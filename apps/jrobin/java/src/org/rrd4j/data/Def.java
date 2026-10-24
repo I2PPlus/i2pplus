@@ -183,14 +183,6 @@ class Def extends Source {
         return new Aggregator(t, v).getAggregates(tStart, tEnd);
     }
 
-    @Override
-    @Deprecated
-    double getPercentile(long tStart, long tEnd, double percentile) {
-        long[] t = getRrdTimestamps();
-        double[] v = getRrdValues();
-        return new Aggregator(t, v).getPercentile(tStart, tEnd, percentile);
-    }
-
     /**
      * Is loaded
      *

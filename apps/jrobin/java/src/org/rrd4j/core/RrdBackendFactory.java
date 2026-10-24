@@ -154,28 +154,6 @@ public abstract class RrdBackendFactory implements Closeable {
     }
 
     /**
-     * Replaces the default backend factory with a new one. This method must be called before the
-     * first RRD gets created.
-     *
-     * <p>It also clear the list of actives factories and set it to the default factory.
-     *
-     * @deprecated Uses active factory instead
-     * @param factoryName Name of the default factory..
-     */
-    @Deprecated
-    public static synchronized void setDefaultFactory(String factoryName) {
-        // We will allow this only if no RRDs are created
-        if (!RrdBackend.isInstanceCreated()) {
-            activeFactories.clear();
-            activeFactories.add(getFactory(factoryName));
-        } else {
-            throw new IllegalStateException(
-                    "Could not change the default backend factory. "
-                            + "This method must be called before the first RRD gets created");
-        }
-    }
-
-    /**
      * Set the list of active factories, i.e. the factory used to resolve URI.
      *
      * @param newFactories the new active factories.

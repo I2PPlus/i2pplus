@@ -65,8 +65,6 @@ public abstract class RrdBackend {
     /** Largest value held in an unsigned short. */
     private static final int MAXUNSIGNEDSHORT = Short.MAX_VALUE - Short.MIN_VALUE;
 
-    /** True once a single use backend was created. */
-    private static volatile boolean instanceCreated = false;
     /** The path of the backend's storage. */
     private final String path;
     /** The factory that created the backend. */
@@ -84,7 +82,6 @@ public abstract class RrdBackend {
      */
     protected RrdBackend(String path) {
         this.path = path;
-        instanceCreated = true;
     }
 
     /**
@@ -576,14 +573,5 @@ public abstract class RrdBackend {
     private static double getDouble(byte[] b) {
         assert b.length == 8 : "Invalid number of bytes for double conversion";
         return Double.longBitsToDouble(getLong(b));
-    }
-
-    /**
-     * Checks if a backend instance has been created.
-     *
-     * @return true if a backend instance has been created, false otherwise.
-     */
-    static boolean isInstanceCreated() {
-        return instanceCreated;
     }
 }
