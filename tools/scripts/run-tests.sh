@@ -365,6 +365,34 @@ read_result() {
   fi
 }
 
+# Fail the run if a test wrote router runtime state into the source tree.
+# Every junit target passes i2p.dir.base at the build root, so one of these
+# names appearing under the workspace means something built an I2PAppContext
+# that ignored them - and a stray netDb/ or autotune.config is then one
+# `git add -A` away from being committed. The prunes are not test output: the
+# installer's sample data is tracked, and a logs/ under a vendored tool
+# distribution belongs to that tool. ant's distclean removes them all
+# (cleanTestArtifacts); keep the two name sets in step.
+check_no_runtime_artifacts() {
+  local found
+  found=$(find "$REPO_ROOT" -maxdepth 5 \
+            \( -name .git -o -name dist -o -name node_modules -o -name sonarqube \
+               -o -name 'jetty-distribution-*' -o -path "${REPO_ROOT}/installer/resources" \) -prune -o \
+            \( -name autotune.config -o -name sessionbans -o -name peerProfiles \
+               -o -name netDb -o -name logs -o -name dht.dat -o -name '*.config.d' \
+               -o -name test-i2psnark-lookup \) -print 2>/dev/null |
+            sed "s|^${REPO_ROOT}/||" || true)
+  if [ -n "$found" ]; then
+    echo "ERROR: a test left runtime state in the source tree:" >&2
+    while IFS= read -r artifact; do
+      echo "  ${artifact}" >&2
+    done <<< "$found"
+    echo "Something built an I2PAppContext without i2p.dir.* set - point it at" >&2
+    echo "the build root, as RouterTestHelper.dataDir() does." >&2
+    exit 1
+  fi
+}
+
 # --- Main ---
 
 # Ant writes JUnit XML directly to RESULTS_DIR via junit.reports.dir property.
@@ -527,6 +555,10 @@ case "$SUITE" in
     print_summary "$total_t" "$total_f" "$total_e"
     ;;
 esac
+
+# Nothing a test writes may stay in the source tree - check before the report
+# step, so a red suite still reports where it leaked.
+check_no_runtime_artifacts
 
 # Generate consolidated HTML report only for full suite runs
 if [ "$SUITE" = "all" ] && [ -d "${RESULTS_DIR}" ]; then
